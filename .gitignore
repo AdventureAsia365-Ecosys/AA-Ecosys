@@ -1,0 +1,17 @@
+# AA-Ecosys — repo GỐC chỉ version-control tài liệu cấp hệ (docs/, README, skill, .claude).
+# Các repo con là git repo ĐỘC LẬP, KHÔNG track ở đây (multi-repo).
+apps/
+infra/
+
+# Tài liệu nguồn AAA (binary nặng) — giữ local, không commit
+apps/AA-TripPlanner-Web/docs/AAA/
+
+# Scratch / temp
+*.out
+*.tmp
+.DS_Store
+Thumbs.db
+.claude/scheduled_tasks.lock
+
+# DBeaver artifacts (nếu không muốn track)
+# DBeaver/
