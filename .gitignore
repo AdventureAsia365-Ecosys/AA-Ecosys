@@ -1,7 +1,10 @@
-# AA-Ecosys — repo GỐC chỉ version-control tài liệu cấp hệ (docs/, README, skill, .claude).
+# AA-Ecosys — repo GỐC version-control tài liệu cấp hệ (docs/, README, .claude).
 # Các repo con là git repo ĐỘC LẬP, KHÔNG track ở đây (multi-repo).
 apps/
 infra/
+
+# skill/ — context nội bộ cho Claude, giữ LOCAL, KHÔNG push lên GitHub
+skill/
 
 # Tài liệu nguồn AAA (binary nặng) — giữ local, không commit
 apps/AA-TripPlanner-Web/docs/AAA/
