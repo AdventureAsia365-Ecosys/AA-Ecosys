@@ -9,6 +9,9 @@ skill/
 # Tài liệu nguồn AAA (binary nặng) — giữ local, không commit
 apps/AA-TripPlanner-Web/docs/AAA/
 
+# MCP config — chứa token (Notion), KHÔNG commit
+.kiro/settings/mcp.json
+
 # Scratch / temp
 *.out
 *.tmp
