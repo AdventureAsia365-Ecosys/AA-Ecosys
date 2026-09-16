@@ -1,5 +1,7 @@
 # G5 — Gỡ trust tên org cũ khỏi OIDC (bản chuẩn bị, CHƯA apply)
 
+> **Linear: AA-588** (Backlog/Low) — https://linear.app/aa-ecosys/issue/AA-588
+
 > **CHỈ áp dụng sau khi:** org đã đổi tên sang `AdventureAsia365-Ecosys`, remote đã cập nhật,
 > và đã có **vài ngày** deploy xanh ổn định **chỉ với org mới** (không còn workflow nào chạy dưới tên cũ).
 > Gỡ sớm sẽ làm hỏng deploy nếu còn ref/redirect nào dùng tên cũ.
