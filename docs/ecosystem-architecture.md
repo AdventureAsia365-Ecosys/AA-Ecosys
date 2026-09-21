@@ -150,16 +150,17 @@ Nguồn: `docs/implementation-notes/AA-TripPlanner-backend.md`, `accounts/acc1-b
 
 | Role | File | sub hiện tại | Repo dùng |
 |------|------|--------------|-----------|
-| `aa-cis-dev-role` | `accounts/aa365/cicd.tf` | `repo:AdventureAsia365-CIS/*:*` (org-wide, phẳng) | AA-CIS-App, AA-CIS-Infra |
-| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | `repo:AdventureAsia365-CIS*/AA-TripPlanner-Web*:*` (có `*` do "include repo ID in subject") | AA-TripPlanner-Web |
+| `aa-cis-dev-role` | `accounts/aa365/cicd.tf` | `repo:AdventureAsia365-Ecosys/*:*` (org-wide, phẳng) | AA-CIS-App, AA-CIS-Infra |
+| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | `repo:AdventureAsia365-Ecosys*/AA-TripPlanner-Web*:*` (có `*` do "include repo ID in subject") | AA-TripPlanner-Web |
 
 **Nguyên tắc đổi tên an toàn:** mở rộng trust để chấp nhận **cả** org cũ **và** org mới (additive) **TRƯỚC**,
 đổi tên org **SAU**, gỡ trust cũ ở bước cuối. Role ARN trong workflow lấy từ `secrets`/`vars`, tên tài
 nguyên dùng prefix `aa-cis-*`/`aa-tripplanner-*` (độc lập tên GitHub) → chỉ phần khớp `sub` chịu ảnh hưởng.
 
-> **[FACT — xác minh 15/09/2026]** OIDC subject customization KHÔNG bật ở cấp org (Subject claim
-> template trống, immutable subject claim tắt). Dạng `@<id>` chỉ do repo `AA-TripPlanner-Web` tự bật
-> (repo-level). Vì vậy `cicd.tf` giữ pattern phẳng `repo:<org>/*:*` là đúng; ở G5 bỏ biến thể wildcard dư.
+> **[FACT — G5 hoàn tất 21/09/2026, AA-588]** Trust org cũ `AdventureAsia365-CIS` đã gỡ khỏi cả 2 role;
+> `sub` giờ chỉ khớp org mới `AdventureAsia365-Ecosys` (verify live qua `aws iam get-role`). OIDC subject
+> customization KHÔNG bật ở cấp org (xác minh 15/09) → `cicd.tf` dùng pattern phẳng `repo:<org>/*:*`
+> (không còn wildcard dư); `AA-TripPlanner-Web` tự bật `@<id>` (repo-level) nên `tripplanner.tf` giữ `*`.
 
 ## 6. Nợ / mở rộng tương lai
 
