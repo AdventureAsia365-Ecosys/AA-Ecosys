@@ -12,9 +12,13 @@ apps/AA-TripPlanner-Web/docs/AAA/
 # MCP config — chứa token (Notion), KHÔNG commit
 .kiro/settings/mcp.json
 
+# DB backups (pg_dump từ audit — chứa data thật, KHÔNG commit)
+docs/backups/
+
 # Scratch / temp
 *.out
 *.tmp
+.tmp-session/
 .DS_Store
 Thumbs.db
 .claude/scheduled_tasks.lock
