@@ -150,7 +150,7 @@ Nguồn: `docs/implementation-notes/AA-TripPlanner-backend.md`, `accounts/acc1-b
 
 | Role | File | sub hiện tại | Repo dùng |
 |------|------|--------------|-----------|
-| `aa-cis-dev-role` | `accounts/aa365/cicd.tf` | `repo:AdventureAsia365-Ecosys/*:*` (org-wide, phẳng) | AA-CIS-App, AA-CIS-Infra |
+| `aa-cis-dev-role` | `accounts/aa365/cicd.tf` | `repo:AdventureAsia365-Ecosys*/*:*` (org-wide, có `*` sau tên org do "include repo ID in subject") | AA-CIS-App, AA-CIS-Infra |
 | `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | `repo:AdventureAsia365-Ecosys*/AA-TripPlanner-Web*:*` (có `*` do "include repo ID in subject") | AA-TripPlanner-Web |
 
 **Nguyên tắc đổi tên an toàn:** mở rộng trust để chấp nhận **cả** org cũ **và** org mới (additive) **TRƯỚC**,
@@ -158,9 +158,14 @@ Nguồn: `docs/implementation-notes/AA-TripPlanner-backend.md`, `accounts/acc1-b
 nguyên dùng prefix `aa-cis-*`/`aa-tripplanner-*` (độc lập tên GitHub) → chỉ phần khớp `sub` chịu ảnh hưởng.
 
 > **[FACT — G5 hoàn tất 21/09/2026, AA-588]** Trust org cũ `AdventureAsia365-CIS` đã gỡ khỏi cả 2 role;
-> `sub` giờ chỉ khớp org mới `AdventureAsia365-Ecosys` (verify live qua `aws iam get-role`). OIDC subject
-> customization KHÔNG bật ở cấp org (xác minh 15/09) → `cicd.tf` dùng pattern phẳng `repo:<org>/*:*`
-> (không còn wildcard dư); `AA-TripPlanner-Web` tự bật `@<id>` (repo-level) nên `tripplanner.tf` giữ `*`.
+> `sub` giờ chỉ khớp org mới `AdventureAsia365-Ecosys` (verify live qua `aws iam get-role`).
+>
+> **Đính chính fact OIDC (kiểm qua CloudTrail 21/09/2026, AA-588):** org `AdventureAsia365-Ecosys` **CÓ**
+> bật "include repo ID in the subject" (precheck trong doc g5 ghi "org KHÔNG bật" là **SAI**). `sub` thật
+> có dạng `repo:AdventureAsia365-Ecosys@<orgid>/<repo>@<repoid>:<ref>`, nên trust **bắt buộc** dùng wildcard
+> sau tên org: `cicd.tf` → `repo:AdventureAsia365-Ecosys*/*:*`, `tripplanner.tf` →
+> `repo:AdventureAsia365-Ecosys*/AA-TripPlanner-Web*:*`. Pattern phẳng `repo:AdventureAsia365-Ecosys/*:*`
+> (không `*`) **fail AccessDenied** — đã tái hiện qua CI Terraform Plan #94, fix + apply + CI xanh lại.
 
 ## 6. Nợ / mở rộng tương lai
 
@@ -170,7 +175,12 @@ nguyên dùng prefix `aa-cis-*`/`aa-tripplanner-*` (độc lập tên GitHub) �
 
 ## 7. Nguồn tham chiếu
 
-- `apps/AA-CIS-App/CONTEXT.md` — glossary + bảng Ownership/cross-tenant (AA-540).
+- `apps/AA-CIS-App/CONTEXT.md` — Repo Context (stack/deploy/ranh giới) + glossary + bảng
+  Ownership/cross-tenant (AA-540).
+- `apps/AA-TripPlanner-Web/CONTEXT.md` — Repo Context: B2C map planner, Next.js FE + 2 Lambda
+  (browse stateless/cacheable, assembly stateful+Bedrock), trip event-sourced, schema `tripplanner.*`.
+- `infra/AA-CIS-Infra/CONTEXT.md` — Repo Context: mô hình 3 account, state S3, OIDC/CI-CD,
+  cách apply, ranh giới "App owns code, Infra owns resources".
 - `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md` — báo cáo Terraform TripPlanner.
 - `infra/AA-CIS-Infra/accounts/aa365/{cicd.tf, tripplanner.tf}` — OIDC roles.
 - `apps/AA-TripPlanner-Web/docs/{vercel-setup,architecture-overview,smoke-test-runbook}.md`.
