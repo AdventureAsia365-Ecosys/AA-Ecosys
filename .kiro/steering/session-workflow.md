@@ -68,3 +68,18 @@ Khi Nghiệp nói "dừng session này":
   đọc file NGOÀI workspace, kể cả khi autopilot bật (autopilot chỉ bỏ xác nhận cho hành động TRONG workspace) — ghi ra
   `~/` làm phiền vì mỗi `read_file` bị hỏi. Ưu tiên đọc output ngắn thẳng qua `get_process_output`; chỉ ghi-file-rồi-đọc
   khi output dài. Dọn `.tmp-session/` sau khi dùng.
+
+## Chờ CI/deploy — KHÔNG poll liên tục (Nghiệp chốt 23/09/2026)
+
+Khi chờ CI (`gh pr checks`), deploy (ECS rollout, Vercel), hay bất kỳ job chạy nền dài:
+
+- **KHÔNG** tạo nhiều lệnh `sleep N; check` chồng chéo nhau, không tạo terminal mới liên tục để poll dồn dập.
+- Chờ **1 khoảng đủ dài** dựa trên thời gian trung bình đã biết (CI full ~3-5 phút, ECS deploy ~2-5 phút,
+  Vercel ~1-2 phút) rồi kiểm **1 lần**. Nếu chưa xong, chờ thêm 1 khoảng dài nữa — không rút ngắn dần
+  xuống kiểu 30s/60s/90s liên tiếp.
+- Dùng `control_bash_process` với `sleep <thời gian dài>` MỘT LẦN, không mở thêm terminal song song
+  để "kiểm nhanh hơn" trong lúc cái cũ vẫn đang chờ.
+- Nếu cần theo dõi tiến trình dài (nhiều job), ưu tiên `gh pr checks <n> --watch` (tự poll đúng nhịp)
+  thay vì tự viết loop sleep/check thủ công.
+- Mục tiêu: để CI/deploy chạy đúng nhịp tự nhiên của nó, không tạo cảm giác dồn dập/rối cho Nghiệp
+  theo dõi qua tool call log.
