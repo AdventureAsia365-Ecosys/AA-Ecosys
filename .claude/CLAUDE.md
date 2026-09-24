@@ -63,3 +63,18 @@ PENDING INFRA: Lambda aa-cis-dev-acp-s3-campaign-planner + migration 031 (Sessio
   straight to `main` (human-only, via PR review).
 - DO NOT merge to main yourself — human does that manually after CI green
 - Before starting: git checkout main && git pull origin main
+## KIRO STEERING RULES — BẮT BUỘC (import, added 24/09/2026)
+Nguồn sự thật duy nhất là `.kiro/steering/` (dùng chung Kiro + Claude Code) — import trực tiếp để
+không lệch nhau; sửa quy tắc thì sửa file steering, KHÔNG chép lại vào đây.
+
+@../.kiro/steering/session-workflow.md
+@../.kiro/steering/language-convention.md
+
+### Điều chỉnh khi chạy trong Claude Code (thay phần đặc thù Kiro)
+- Notion/Linear: dùng connector **claude.ai Notion / claude.ai Linear** (không phải `.kiro/settings/mcp.json`).
+  Nếu connector không có trong phiên → nói rõ với Nghiệp, không tự đoán state.
+- `control_bash_process` / `get_process_output` (Kiro) → Bash `run_in_background` / Monitor; vẫn giữ quy tắc
+  "chờ 1 khoảng dài, kiểm 1 lần" khi chờ CI/deploy.
+- File scratch: dùng `.tmp-session/` trong workspace hoặc scratchpad của Claude Code — không ghi ra `~/`.
+- Git từ PowerShell/UNC path báo "dubious ownership" → chạy git qua WSL (`wsl -- bash script.sh`).
+- Session log ghi rõ **Tác nhân: Claude Code**.
