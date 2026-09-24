@@ -25,3 +25,6 @@ Thumbs.db
 
 # DBeaver artifacts (nếu không muốn track)
 # DBeaver/
+
+# Local editor config (SQLTools connections, etc.)
+.vscode/
