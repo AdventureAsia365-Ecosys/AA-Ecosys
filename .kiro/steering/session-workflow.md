@@ -54,8 +54,8 @@ Khi Nghiệp nói "dừng session này":
 4. Đảm bảo 3 nguồn (Notion memory, log local, Linear) + trạng thái repo nhất quán với nhau.
 
 ## Đánh số phiên
-- Tiếp nối chuỗi trong memory Notion. Phiên gần nhất: **S181** (15/09/2026, Kiro, AA-Ecosys restructure).
-  Phiên tiếp theo là S182...
+- Tiếp nối chuỗi trong memory Notion (nguồn chuẩn — số dưới đây chỉ để tham khảo nhanh).
+  Phiên gần nhất: **S196** (25/09/2026, Claude Code). Phiên tiếp theo là S197...
 - Ghi rõ tác nhân (Kiro / Claude Chat / Claude Code) trong mỗi entry vì memory dùng chung nhiều agent.
 
 ## Lưu ý kỹ thuật (môi trường)
@@ -68,6 +68,21 @@ Khi Nghiệp nói "dừng session này":
   đọc file NGOÀI workspace, kể cả khi autopilot bật (autopilot chỉ bỏ xác nhận cho hành động TRONG workspace) — ghi ra
   `~/` làm phiền vì mỗi `read_file` bị hỏi. Ưu tiên đọc output ngắn thẳng qua `get_process_output`; chỉ ghi-file-rồi-đọc
   khi output dài. Dọn `.tmp-session/` sau khi dùng.
+
+## Script gọi LLM chạy tay — PHẢI ghi log chi phí (Nghiệp chốt 24/09/2026, từ AA-635)
+
+Mọi script chạy tay có gọi Bedrock/OpenAI (A/B so model, đo threshold, thử prompt, backfill…),
+dù chạy local hay qua ECS exec:
+
+- **Gọi qua `LLMClient.generate()`** (`shared/llm_client/client.py`), KHÔNG gọi thẳng
+  `boto3 bedrock-runtime` / `invoke_model` / `invoke_claude()`.
+- **Ghi `shared.llm_call_log`** cho từng lời gọi bằng `record_call_sync()` /
+  `record_call_with_pool()` (`shared/llm_client/call_log.py`), `stage="adhoc_<issue>"`
+  (vd `adhoc_aa619`), `role` chỉ được `writer`/`judge`/`validate` (CHECK constraint — tên khác bị
+  từ chối âm thầm, mất log).
+- Lý do: AWS vẫn tính tiền, nhưng nếu không log thì trang External Spend thấp hơn hoá đơn và
+  không truy được nguồn. Bằng chứng: 18/09 script A/B (AA-619/620) gọi thẳng Bedrock → $0.83 trên
+  bill acc3 không có dòng log nào (AA-635).
 
 ## Chờ CI/deploy — KHÔNG poll liên tục (Nghiệp chốt 23/09/2026)
 
