@@ -1,8 +1,8 @@
 # AA-Ecosys — Kiến trúc hệ sinh thái (bản nháp)
 
-> **Trạng thái:** nháp G0. Các mục đánh dấu **[FACT]** đã xác minh bằng đọc code/migration trong repo;
-> **[CẦN XÁC NHẬN]** là suy luận/khoảng trống cần Nghiệp xác nhận. Không dùng làm nguồn sự thật vận hành
-> cho tới khi review.
+> **Trạng thái:** cập nhật 25/09/2026 (đồng bộ công việc 15–25/09, S181–S196). Các mục đánh dấu
+> **[FACT]** đã xác minh bằng đọc code/migration trong repo; **[CẦN XÁC NHẬN]** là suy luận/khoảng trống
+> cần Nghiệp xác nhận.
 
 ## 1. Tổng quan
 
@@ -100,15 +100,19 @@ Nguồn: `apps/AA-CIS-App/CONTEXT.md` (bảng Ownership AA-540).
 
 - **Master Content (Admin, A-series):** tính **một lần, dùng chung** mọi tenant. Gồm A0 Upload → A3
   Master Content Pool (`gold_aa_internal.published_tours`) + **Atom** (`owner_scope='platform'`).
-- **Tenant Content (T-series):** Segment / Score / Route / Hub / Slate / Subject / Piece — **per-tenant**.
-  > **[CẦN XÁC NHẬN — tech debt]** Segment/Score/Route/Hub hiện per-tenant được `CONTEXT.md` đánh dấu là
-  > **nợ kỹ thuật cần chuyển platform-wide** (ADR-0003), KHÔNG phải thiết kế cuối. Đừng xây feature mới
-  > giả định per-tenant vĩnh viễn.
+- **Dữ liệu dẫn xuất platform-wide:** **Segment / Score / Route / Hub** — đã chuyển platform-wide từ
+  AA-545 (migration 146, 06/09/2026), không còn cột `tenant_id`. Score = rank-sum 4 chiều (Demand /
+  Recurrence / Questions / Said, AA-610), mỗi buyer market 1 lượt.
+- **Tenant Content (T-series):** từ **Slate** trở đi — Slate / Subject / Goal / Angle / Piece / Publish —
+  **per-tenant**. Slate có thêm tầng **Debate** (AA-631: contested + brand-fit, advisory, không cắt quá 50%).
 
-**3 cơ chế cross-tenant duy nhất (đã kiểm đếm) [FACT]:**
+**Phần dùng chung giữa các tenant [FACT]:**
+
 1. **Master Content pool + Atom pool** — nguồn dùng chung mọi tenant đọc trực tiếp (không phải cache).
-2. **Search Demand + research log** — cache thật, khoá `(keyword, market)`/`(place, market)`, **không có cột `tenant_id`**.
-3. **Facts Entry `scope='platform'`** — chia sẻ có chủ đích, cưỡng chế bằng RLS.
+2. **Segment / Score / Route / Hub** — row platform-wide.
+3. **Search Demand + research log** — cache thật, khoá `(keyword, market)`/`(place, market)`, **không có cột
+   `tenant_id`**; từ AA-631 lưu thêm `serp_domains`.
+4. **Facts Entry `scope='platform'`** — chia sẻ có chủ đích, cưỡng chế bằng RLS.
 
 Ngoài ra 1 **cross-tenant read (không cache):** Gate cannibalization F10 so embedding Piece với mọi tenant khác.
 
@@ -145,6 +149,27 @@ Nguồn: `docs/implementation-notes/AA-TripPlanner-backend.md`, `accounts/acc1-b
   - acc1 role `AA-Bedrock-Invoker`, ExternalId `aa296-satellite-bedrock`.
 - Trust cross-account tham chiếu **role ARN** `aa-tripplanner-dev-lambda-exec` (KHÔNG dính tên GitHub) →
   đổi tên org không ảnh hưởng các trust này.
+- Role satellite chỉ trust **ECS task role** → không gọi Claude từ máy local được; đo/A-B thật phải chạy qua
+  ECS exec trong container `api`.
+- **Model theo stage (CIS) do DB quyết** (`shared.llm_role_config`): S1 admin + atomize = Haiku 4.5,
+  T2 tenant rewrite = Sonnet (AA-620), judge = GPT-4.1 (OpenAI, khác vendor có chủ đích).
+- **Bedrock Batch (AA-606):** S3 prefix `batch-*/s1-rewrite/*` + batch service role acc1/acc3 đã có đủ, NHƯNG
+  AWS **chưa bật Batch Inference cho acc3** (case 178979743800653, blocker AA-624) → chưa chạy job thật lần nào.
+
+### 4.4 Giám sát chi phí (cross-account) [FACT]
+
+Nguồn: epic AA-616 (AA-617/618/619/620/622/623/625/627/635), `infra/AA-CIS-Infra/CONTEXT.md`.
+
+- **Ước tính theo token:** `shared.llm_call_log` (có account acc1/acc3, provider, fallback) +
+  `shared.dfs_call_log` (cost thật DFS trả về, cache hit). Cache DFS TTL 7 ngày.
+- **Hoá đơn thật AWS:** acc2 là **member account**, không phải payer của AWS Organizations → không có lệnh
+  Cost Explorer gộp. Mỗi account có role đọc CE riêng (`AA-CostExplorer-Reader` acc1,
+  `AA3-CostExplorer-Reader` acc3), ECS task role acc2 assume sang; acc2 gọi CE trực tiếp. Snapshot lưu ở
+  `shared.cost_explorer_snapshot`, refresh tay qua `POST /admin/cost-explorer/check`.
+- **Trang admin "External Spend"** (`/admin/llm-usage`): so ước tính vs hoá đơn thật, tách Bedrock khỏi hạ
+  tầng theo từng account, lọc theo khoảng ngày.
+- **Cảnh báo số dư DFS:** Lambda `aa-cis-dev-dfs-balance-check` + EventBridge Scheduler hằng ngày (group
+  `aa-cis-dev-acp`).
 
 ## 5. OIDC / CI-CD (điểm rủi ro #1 của restructure)
 
@@ -172,6 +197,9 @@ nguyên dùng prefix `aa-cis-*`/`aa-tripplanner-*` (độc lập tên GitHub) �
 - **AA-Booking (AAA):** sản phẩm B2C mới, sẽ thêm repo `AA-Booking` sau. Điểm bàn giao TripPlanner → AAA:
   xem `docs/tripplanner-to-aaa-handoff.md`.
 - **[CẦN XÁC NHẬN]** CloudFront trước các route browse của TripPlanner (nêu là "later change").
+- **Rerun dữ liệu CIS (epic AA-594):** DB Dev đã reset dẫn xuất ngày 16/09 (giữ 793 raw tours). G4/G5/G6
+  (AA-599/600/601 — chạy lại S1 → atomize → social, rebuild extraction TripPlanner, audit UI) chưa chạy; phụ
+  thuộc AA-624 (Batch acc3) hoặc quyết định chạy đồng bộ.
 
 ## 7. Nguồn tham chiếu
 
