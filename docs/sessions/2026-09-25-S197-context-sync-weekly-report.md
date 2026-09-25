@@ -50,15 +50,16 @@ Không có. Không start/stop NAT/RDS/ECS (hạ tầng chạy suốt tháng 9 đ
 1. **Chốt cách rerun 763 tour** (AA-599/600/601) sau buổi họp với chị Thư: chờ AWS bật Batch (AA-624) hay chạy đồng bộ theo từng nước.
 2. **AA-641:** Nghiệp đọc mô tả rồi chốt.
 3. **AA-634 Jev:** chờ API key.
-4. Lần merge tới: thử rule `gh pr merge`. Nếu auto mode vẫn chặn thì Nghiệp merge tay.
+4. **PR #6 (log phiên này, repo gốc):** Nghiệp merge tay.
+5. Merge PR: vẫn do Nghiệp làm tay khi chạy auto mode. Có thể gỡ 2 rule `gh pr merge` khỏi `settings.local.json` vì không có tác dụng, hoặc giữ nếu sau này chạy chế độ khác.
 
 ## Lưu ý kỹ thuật cho phiên sau
 
 - **Auto mode của Claude Code chặn 2 loại hành động, kể cả khi Nghiệp đã đồng ý trong chat:**
   - `gh pr merge` (lý do "Merge Without Review");
   - agent tự sửa settings quyền (lý do "Self-Modification").
-  Đồng ý trong chat không mở khoá được. Chỉ có rule trong settings, và rule đó Nghiệp phải tự thêm.
-- **Rule chỉ khớp khi gọi gh trực tiếp.** Khi merge, gọi `wsl -d Ubuntu -- gh pr merge <n> --repo AdventureAsia365-Ecosys/<repo> --squash --delete-branch`, mỗi PR một lệnh. Gọi gh qua `bash script.sh` sẽ không khớp rule.
+  Đồng ý trong chat không mở khoá được, và rule allow trong settings cũng không (đã thử thật ở PR #6).
+  → Merge PR: agent mở PR + báo CI, Nghiệp merge tay.
 - **Dán rule vào `/permissions`:** mỗi rule một ô. Dán 2 rule chung một ô thì dấu ngoặc bị escape và rule hỏng.
 - **Từ Bash tool (Git Bash) gọi `wsl -- bash /home/...`:** path bị đổi thành `C:/Program Files/Git/home/...`. Dùng PowerShell tool gọi `wsl -d Ubuntu -- bash <file>`.
 - **TripPlanner local trước đó đứng ở nhánh `docs/context-md` (PR #47 cũ).** Đã chuyển về `main`.
