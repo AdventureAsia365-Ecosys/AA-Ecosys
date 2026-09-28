@@ -18,6 +18,17 @@ Quy tắc vận hành session do Nghiệp chốt (16/09/2026). Áp dụng cho M�
 - Khi thay đổi kiến trúc/chức năng/ranh giới của repo → cập nhật `CONTEXT.md` repo đó (và
   `ecosystem-architecture.md` nếu ảnh hưởng liên-repo) trong cùng phiên, giữ 4 file này luôn khớp thực tế.
 
+## ADR đặt ở repo nào (BẮT BUỘC — Nghiệp chốt 28/09/2026)
+Kiểm bằng câu hỏi: *"nếu đảo ngược quyết định này thì repo nào phải sửa?"*
+- **Từ 2 repo trở lên** (hợp đồng giữa app, sở hữu DB/schema dùng chung, account, Model Gateway
+  mức hệ sinh thái) → `AA-Ecosys/docs/adr/`.
+- **Chỉ hạ tầng** (IAM pattern, network, Terraform root, account) → `infra/AA-CIS-Infra/docs/adr/`
+  (tạo thư mục khi có ADR đầu tiên).
+- **Chỉ trong 1 app** → `apps/<repo>/docs/adr/`.
+- ADR repo con PHẢI trích dẫn ADR hệ sinh thái mà nó triển khai (vd App ADR 0005 → root ADR 0001 quyết định 2).
+- Chỉ viết ADR khi đủ 3 điều kiện: khó đảo ngược + gây bất ngờ nếu thiếu bối cảnh + là kết quả
+  của trade-off thật (skill `domain-modeling`).
+
 ## Quyền MCP (Nghiệp đã cấp)
 - Notion: đọc + ghi (update memory, comment).
 - Linear: đọc + **cập nhật trạng thái + tạo issue + comment**.
@@ -43,6 +54,19 @@ Khi Nghiệp nói "bắt đầu session mới", TRƯỚC KHI làm gì khác:
 - **1 project tối đa 50 issue.** Trước khi tạo issue, kiểm số issue của project đích; nếu tạo sẽ vượt 50 → HỎI Nghiệp + tạo project mới.
 - Vẫn giữ quy tắc: HỎI Nghiệp trước khi tạo issue Linear mới.
 
+## Quy tắc comment Jira (BẮT BUỘC — Nghiệp chốt 28/09/2026)
+
+Jira (`adventure-asia.atlassian.net`, project KAN) là nơi chị Thư và người ngoài team kỹ thuật đọc —
+khác với Linear (nội bộ). Khi comment vào 1 issue Jira để báo cáo tiến độ:
+
+- **Ngắn gọn.** Không viết dài như log session/Linear.
+- **Không nhắc "Claude Code" / tên agent** — comment đứng tên Nghiệp trên Jira.
+- **Không liệt kê mã issue Linear nội bộ** (AA-xxx) — người đọc Jira không biết mã đó, vô nghĩa với họ.
+- **Chỉ nêu:** nguyên nhân (root cause), các fix đã làm, tính năng/endpoint liên quan (mô tả bằng lời,
+  không cần link code/file), kèm số liệu bằng chứng verify live nếu có.
+- **Không liệt kê việc CHƯA làm** trừ khi Nghiệp yêu cầu — comment tiến độ không phải TODO list.
+- **KHÔNG tự chuyển trạng thái issue Jira** khi comment báo cáo tiến độ — để Nghiệp tự quyết.
+
 ## Lệnh "dừng session này"
 Khi Nghiệp nói "dừng session này":
 1. **Ghi log local**: tạo `docs/sessions/YYYY-MM-DD-<chu-de>.md` (mục: Trạng thái, Thay đổi Codebase,
@@ -55,7 +79,7 @@ Khi Nghiệp nói "dừng session này":
 
 ## Đánh số phiên
 - Tiếp nối chuỗi trong memory Notion (nguồn chuẩn — số dưới đây chỉ để tham khảo nhanh).
-  Phiên gần nhất: **S197** (25/09/2026, Claude Code). Phiên tiếp theo là S198...
+  Phiên gần nhất: **S200** (28/09/2026, Claude Code). Phiên tiếp theo là S201...
 - Ghi rõ tác nhân (Kiro / Claude Chat / Claude Code) trong mỗi entry vì memory dùng chung nhiều agent.
 
 ## Lưu ý kỹ thuật (môi trường)
