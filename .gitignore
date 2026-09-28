@@ -28,3 +28,4 @@ Thumbs.db
 
 # Local editor config (SQLTools connections, etc.)
 .vscode/
+secret_manager/
