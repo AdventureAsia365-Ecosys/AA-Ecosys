@@ -102,6 +102,44 @@ Không có.
 4. `aws sso login --profile aa-dev-admin` để audit các account AAA.
 5. Merge PR docs của repo gốc (Nghiệp merge tay).
 
+## Phần 2 — Quyết định của Nghiệp, Jev chạy thật, DFS điều tra sâu, tạo issue
+
+**Quyết định (28/09):**
+- Judge = **GPT-5.6 Luna**; lớp model tách riêng, điều hướng theo stage (AA-642).
+- acc3 là account chính cho model mới.
+- TripPlanner **cho ghép nhiều tour** để ra Trip Case hoàn chỉnh.
+- AA-Booking **code từ đầu**, dùng hạ tầng acc2 hiện tại (cùng RDS, schema `booking`). Account/profile AAA cũ đã đóng.
+
+**Jev chạy thật** (Nghiệp duyệt, model `jev-1.13.0`, ~270 ms/lần gọi):
+- F9 bài tốt: brand_fit 0.79, generic_ai 0.09. Bài xấu: 0.04 / 0.97.
+- Phân loại atom → trek 1.00; TripPlanner → trekking 0.84 / strenuous 0.91.
+
+**DFS điều tra sâu** (trả lời chị Thư: "batch có chạy đàng hoàng không?"):
+1. **Batch gần như không có tác dụng.**
+   - 678 task volume, trung bình 4,5 keyword/task (tối đa 13).
+   - Giá DFS tính theo task (~$0.057–0.059/task, không đổi theo số keyword; 1 task nhận tới 1.000 keyword).
+   - Nguyên nhân: `CONCURRENCY=4` + linger 5s, trong khi repo chị Thư chạy 16 worker dạng batch riêng.
+2. **Cache bị hỏng.**
+   - DFS hết tiền khoảng 09h UTC. Giờ 09–10 ghi **14.691 dòng `search_volume` NULL** (0 dòng có volume), và 1.795 địa điểm bị đánh dấu "đã research" trong 182 ngày.
+   - Tổng cộng 18.214/19.305 dòng của ngày 25/09 là NULL.
+   - Nguyên nhân: `fetch_volumes_bulk()` nuốt lỗi.
+3. `keywords_for_keywords` mỗi địa điểm tốn 1 task ($0.09). Nếu chạy cho khoảng 1.800 địa điểm không có volume thì có thể vượt $150/lượt.
+4. Đề xuất:
+   - chuyển research sang job admin;
+   - chia 2 pha để gom bulk thật;
+   - dùng chế độ Standard (queue) của DFS vì việc không gấp;
+   - thêm budget guard;
+   - sửa dữ liệu 25/09.
+
+**Linear:** tạo 3 project mới:
+- P-AA-12 Ecosystem Foundation;
+- P-AA-13 CIS UI v2;
+- P-AA-14 AA-Booking Foundation.
+
+Thêm **38 issue AA-646 → AA-683**, có gắn quan hệ blocked-by. AA-644 đổi tiêu đề sang GPT-5.6 Luna (kèm comment đính chính agreement acc3). Bản đồ issue ở §10.3 của bản review.
+
+**Jira:** chị Thư muốn nhận báo cáo trên Jira. Connector Atlassian chưa được authorize trong phiên này → Nghiệp dán tay bản báo cáo (tiếng Việt) em soạn trong chat.
+
 ## Lưu ý kỹ thuật
 
 - ECS exec: dùng `python3 -u` + `timeout` (`.tmp-session/ecsrun.sh`). Không có `-u` thì output bị

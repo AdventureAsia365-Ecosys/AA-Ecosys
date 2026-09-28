@@ -161,9 +161,9 @@ not only reporting.
   - audit / soft-delete columns;
   - supplier bills;
   - payment schedule.
-- AAA's AWS accounts are in **ap-southeast-1**, while CIS and TripPlanner live in acc2 **us-west-1**. A
-  shared-database handoff (option B in `tripplanner-to-aaa-handoff.md`) is therefore not viable.
-- The AAA accounts could not be inspected this session: the `aa-sso` SSO token was missing.
+- **Update 28/09 (Nghiệp):** AAA is built **from scratch** — only the PRD, ERD and Figma exist. It runs
+  on the **existing acc2 infrastructure**: same RDS, new schema `booking`, no separate account or region.
+  The old AAA accounts (ap-southeast-1) are closed and out of scope.
 
 ### F7 — Documentation debt [FACT]
 
@@ -491,7 +491,58 @@ Tabs:
 
 P4 and P6 can run in parallel with P2/P3, because they touch different code. P5 depends on P3 data.
 
-## 10. Open questions for Nghiệp / Ms. Thư
+## 10. Decisions taken 28/09/2026 (Nghiệp) — these supersede the earlier proposals above
+
+| Topic | Decision | Effect on this document |
+|---|---|---|
+| Judge model | **GPT-5.6 Luna** on Bedrock acc3. Model routing lives in its own layer (AA-642) | §5.1: Luna replaces "Luna or Astra" |
+| Accounts | **acc3 is primary** for the new models. acc1/acc2 lack some agreements | Fallback within acc3 first, then acc1 only for models it has |
+| TripPlanner | **Multiple tours may be combined** into one trip, producing a complete Trip Case | §6.1: "legs" (day-spans of real tours) chained at junctions, replacing "one tour" |
+| AA-Booking | From scratch, **same acc2 infra, same RDS, schema `booking`** | §6.2/§7: in-database transactional outbox, no cross-region webhook. Golden records (`shared.*`) are reused, not copied |
+| Jev thresholds | Needs research | AA-661: calibration study + 3-zone policy (pass / abstain → Luna / fail) |
+| Job runner | Explained. Postgres queue + worker recommended | AA-650 / AA-651 / AA-652 |
+
+### 10.1 DFS deep-dive (S199, answers Ms. Thư's "is the batch/cache working?")
+
+1. **Trigger bug (AA-646).** Every tenant rewrite researched the whole platform (2,215 places × AU/US/UK on 25/09).
+2. **Batching ineffective (AA-648).**
+   - 678 volume tasks averaged **4.5 keywords** (max 13), at a flat ~$0.057–0.059 per task.
+   - DFS prices per task; one task accepts up to 1,000 keywords.
+   - Ms. Thư's reference ran 16 workers as a standalone batch; ours used 4 concurrent places with a 5 s linger.
+3. **Cache poisoning (AA-647).**
+   - The balance ran out around 09:00 UTC. From 09–10h, **14,691** `search_demand` rows were stored with NULL volume, and 1,795 places were marked "researched" for 182 days with no data bought.
+   - 18,214 of the 19,305 rows written that day are NULL.
+   - Cause: `fetch_volumes_bulk()` swallows errors.
+4. **No budget (AA-649).** Only a balance alert existed.
+5. **Standard (queued) DFS mode** fits this non-urgent work (Ms. Thư: "not urgent, batch is fine"). Use it for research jobs; keep Live for interactive calls.
+
+### 10.2 Jev smoke test (real API, 28/09)
+
+Model `jev-1.13.0`, ~270 ms per call:
+
+| Question | Good piece | Bad piece |
+|---|---|---|
+| brand_fit | 0.79 | 0.04 |
+| generic_ai | 0.09 | 0.97 |
+| cta_clear | 0.88 | 0.01 |
+
+Classification was correct: atom → trek 1.00; TripPlanner → trekking 0.84 / strenuous 0.91.
+
+Separation is strong on clear cases. Thresholds for borderline content still need the calibration study (AA-661).
+
+### 10.3 Issue map (created 28/09)
+
+| Phase | Issues |
+|---|---|
+| P0 DFS + cost | AA-646, AA-647, AA-648, AA-649 (parent AA-616) |
+| P1 Foundation | AA-650, AA-651, AA-652 (jobs); AA-654 (docs); AA-655 (design system); AA-656 (staff auth) |
+| P1 Model layer (AA-642) | AA-657 (acc3 IAM), AA-658 (Converse + catalog), AA-659 (routing/fallback/shadow), AA-660 (Jev decide + decision_log), AA-661 (Jev thresholds); AA-644 (Luna A/B), AA-645 (Sonnet 5 A/B) |
+| P2–P3 Flow + rerun | AA-653 (Bhutan pilot + runbook) → AA-594/599/600/601 |
+| P4 CIS UI v2 | AA-662 (UI kit) → AA-663, AA-664, AA-665, AA-666, AA-667 (admin); AA-668, AA-669, AA-670, AA-671, AA-672 (portal) |
+| P5 TripPlanner | AA-673 (Tour Graph), AA-674 (multi-tour composition), AA-675 (re-extraction), AA-676 (hand-off to Booking) |
+| P6 AA-Booking | AA-677 (ERD v2), AA-678 (bootstrap), AA-679 (catalog sync), AA-680 (identity), AA-681 (trip case), AA-682 (operations), AA-683 (UI spec) |
+
+## 11. Remaining open questions
 
 1. Judge target: GPT-5.6 Luna or GPT-6 Astra (or split by gate criticality)?
 2. Fallback policy: accept the agreements on acc1, or fall back within acc3 to the previous model?

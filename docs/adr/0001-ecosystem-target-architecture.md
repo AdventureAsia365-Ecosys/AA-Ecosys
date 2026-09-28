@@ -45,15 +45,24 @@ can solve on its own:
    - Every external spend (DFS, LLM, Jev) checks a DB-configured budget per run and per day, and stops
      hard when it is exceeded.
    - DFS research is admin-triggered and scoped; a tenant action never triggers it.
-5. **Route-constrained trip planning.** TripPlanner only offers destinations that keep the trip
-   covered by at least one real AA tour, taken from the Tour Graph. Drafts carry their source tour ids.
+5. **Route-constrained, multi-tour trip planning.**
+   - TripPlanner only offers destinations that keep the trip covered by a chain of **legs**. A leg is a
+     day-span of a real AA tour; legs are chained at junctions (same or nearby destination) in the Tour
+     Graph.
+   - Combining several tours is allowed (decided 28/09/2026).
+   - Drafts carry the leg chain, so AA-Booking can open a complete Trip Case.
 6. **Contracts between apps.**
    - Versioned JSON contracts live in `docs/contracts/`.
-   - Transport is a signed webhook (HMAC) with an idempotency key and a sender-side outbox.
-   - First contracts: `catalog.tour.*` (CIS → AAA) and `inquiry.submitted` (TripPlanner → AAA).
-   - AAA owns the customer identity (OTP).
+   - AA-Booking shares the acc2 RDS (schema `booking`, decided 28/09/2026), so the transport is a
+     **transactional outbox table** consumed by the receiving app's job runner, with an idempotency key.
+   - Apps never write each other's schemas. They read only published views (read models) and
+     `shared.*` golden records.
+   - First contracts: `catalog.tour.*` (CIS → AA-Booking) and `inquiry.submitted` (TripPlanner →
+     AA-Booking, carrying the multi-tour leg chain).
+   - AA-Booking owns the customer identity (OTP).
 7. **One IaC repo, one design system.**
-   - AA-CIS-Infra also manages the AAA accounts, as new roots.
+   - AA-CIS-Infra provisions AA-Booking inside acc2: ECS service, ECR, DB role, API route. There are no
+     new accounts.
    - All frontends consume one token source and one shared component set.
 8. **Language.** Everything in Git is English, including root docs, READMEs and CONTEXT files.
    Session logs and the Notion memory stay in Vietnamese.
@@ -73,7 +82,9 @@ can solve on its own:
   - an outbox and webhook infrastructure to maintain;
   - the Jev dependency needs a DPA/ZDR agreement before tenant content is sent.
 - **Rejected alternatives:**
-  - a shared database between CIS and AAA (cross-region, blurred ownership);
+  - direct cross-schema writes between apps. The database is shared on acc2, but each schema keeps a
+    single writer;
+  - separate AWS accounts and a separate region for AA-Booking (closed 28/09/2026);
   - waiting for Bedrock Batch (blocked by AWS with no date);
   - letting TripPlanner suggest any place (creates unsellable trips);
   - calling OpenAI models through the OpenAI API only (a second billing/key path, no acc3 governance).
