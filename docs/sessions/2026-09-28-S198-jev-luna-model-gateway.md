@@ -104,10 +104,45 @@ Không có. Riêng cloud environment của Claude Code (không phải AWS): Netw
    ```
 2. Họp chị Thư về P-AA-11, ADR 0007 (verdict không kèm trích dẫn), DPA/ZDR khi gửi nội dung tenant sang TypeSafe.
 3. AA-644: kéo khối lượng gọi GPT theo stage từ `llm_call_log` trước khi hứa con số tiết kiệm.
-4. Việc tồn: PR #6 (S197), AA-599/600/601, AA-641.
+4. Việc tồn: AA-599/600/601, AA-641. (PR #6 của S197 đã merge.)
+
+## Phần 2 — Đồng bộ git local ↔ GitHub (28/09/2026, Claude Code trên VSCode/WSL)
+
+Nghiệp yêu cầu kiểm tra codebase local so với GitHub ở 4 repo, rồi dọn sạch.
+
+### Đã làm
+- **Repo gốc:** local đang đứng trên nhánh `docs/s197-session-log` (đã merge), `master` thiếu 5 commit (PR #6, PR #7).
+  - Checkout `master`, fast-forward lên `41a5752` (kéo về log S197/S198 + `docs/research/jev/jev_smoke.py`).
+  - Xoá 2 nhánh local đã merge (`docs/s197-session-log`, `docs/s191-context-and-session-logs`).
+  - `git remote set-head origin -a` (local chưa có `origin/HEAD`).
+  - Grep `apikey_` trong `docs/`: không có key Jev nào trong repo.
+- **TripPlanner:** `origin/HEAD` local còn trỏ `spec/v0.3-map-first` → set về `main`.
+- **App — stash 09/09 (để lại trước AA-573):** notes verify sau merge AA-535/545/553/562/572 + 5 e2e spec live-verify (AA-561/565/567). Chưa có trong main.
+  - **PR #450** (merged): áp đúng patch của stash lên main. Lần đầu chép đè cả file làm mất 37 dòng mới của `AA-572.md` → đã sửa bằng `git apply`, diff PR khớp stash từng dòng (+363/−2).
+  - Không đưa lại mục LIVE STATE cũ (AA-551/554) trong `.claude/CLAUDE.md` của stash.
+- **Infra PR #73** (merged): `.gitignore` thêm `accounts/*/lambda_src/*.zip` (output `archive_file.dfs_balance_check`). Không ignore `*.zip` toàn cục vì `dist/lambdas/*.zip` và `artifacts/placeholder.zip` đang được track.
+- **Dọn nhánh local** (script do Nghiệp tự chạy vì auto mode chặn `git branch -D`/`git stash drop`):
+  - Xoá nhánh đã merge/squash-equivalent với `origin/main`, hoặc còn nguyên trên origin mà local không đi trước. App còn ~440 nhánh → 10.
+  - `git worktree prune`: 7 worktree cũ trỏ `projects/aa-cis/...`.
+  - Drop stash sau khi PR #450 merge.
+- **11 nhánh chỉ có ở local** (App 9: aa-103-e2e-ui, aa-156, aa-170-ui-v3, aa-437/438/439/440 audit, aa-477, aa-515; Infra 2: nat-instance, fix-account1-decommission) → Nghiệp chọn **push lên GitHub dạng `archive/<tên>`**, đối chiếu SHA remote = local rồi mới xoá local.
+
+### Trạng thái cuối (verify)
+| Repo | Nhánh | HEAD | vs origin | Nhánh local | Stash |
+|---|---|---|---|---|---|
+| AA-Ecosys | master | `41a5752` | 0/0 | 1 | 0 |
+| AA-CIS-App | main | `fa062bc` | 0/0 | 1 | 0 |
+| AA-TripPlanner-Web | main | `b60d14e` | 0/0 | 1 | 0 |
+| AA-CIS-Infra | main | `594f8d6` | 0/0 | 1 | 0 |
+
+Working tree sạch cả 4 repo, 1 worktree/repo, `.tmp-session/` trống.
 
 ## Lưu ý kỹ thuật
 
+- **Auto mode chặn `git branch -D` và `git stash drop`** (Irreversible Local Destruction), kể cả trong script lớn → agent viết script, Nghiệp tự chạy. Riêng "push archive rồi xoá local sau khi đối chiếu SHA" thì chạy được khi Nghiệp yêu cầu rõ.
+- Khôi phục stash lên main mới hơn: dùng `git diff stash^1 stash | git apply`, **không** `git checkout stash -- file` (ghi đè cả file, mất thay đổi mới của main).
+- Terminal VSCode của Nghiệp là zsh trong Ubuntu → chạy thẳng `bash <file>`; tiền tố `wsl -d Ubuntu --` chỉ dùng từ PowerShell.
+- Nhánh lưu trữ: `git checkout archive/<tên>` trên App/Infra.
 - **Network access của cloud env:** menu environment → Edit.
   - Ô Environment variables chỉ nhận dạng `KEY=value`; domain phải nhập vào ô **Allowed domains** (mode Custom).
   - Sau khi chuyển sang Custom, kiểm tra GitHub/PyPI vẫn truy cập được.
