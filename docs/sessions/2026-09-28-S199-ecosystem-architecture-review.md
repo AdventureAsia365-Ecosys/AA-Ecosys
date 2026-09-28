@@ -140,6 +140,35 @@ Thêm **38 issue AA-646 → AA-683**, có gắn quan hệ blocked-by. AA-644 đ�
 
 **Jira:** chị Thư muốn nhận báo cáo trên Jira. Connector Atlassian chưa được authorize trong phiên này → Nghiệp dán tay bản báo cáo (tiếng Việt) em soạn trong chat.
 
+## Phần 3 — Code P0 DFS: AA-646 / 647 / 648 / 649 (đều Done, verify live)
+
+| Issue | PR App | Nội dung | Verify live (Dev) |
+|---|---|---|---|
+| AA-646 | #451 | Tenant rewrite không còn tự mua DFS. Research chỉ admin chạy: `/admin/segment-research/{preview,run,status}`, bắt buộc chọn market + phạm vi, tối đa 200 địa điểm/lượt | taskdef :349; preview 200; 0 lệnh gọi DFS sau deploy |
+| AA-647 | #451 | `DFSCallError` (401/402/403, status 401xx/402xx là lỗi nghiêm trọng), không ghi cache khi DFS lỗi, circuit breaker dừng cả lượt | **Repair data 25/09** (Nghiệp duyệt): xoá 16.311 dòng NULL `search_demand` + 5.859 dòng `research_log` (1.953 địa điểm), reset cache 2.870 segment. Bhutan cần research 0 → 141 |
+| AA-649 | #452 (+ #454 mở) | **Migration 168** `shared.spend_budget` (DFS $10/ngày; research $5 DFS + $2 Bedrock mỗi lượt), `shared/cost_guard.py`, `/admin/budgets`, kiểm số dư trước khi chạy, cảnh báo admin | taskdef :350; migration 168 đã apply; **test trần $0.20: dừng sau $0.18, 0 địa điểm bị đánh dấu, có cảnh báo** |
+| AA-648 | #453 | Research theo lô (5 pha): 15 địa điểm/lần gọi Haiku, ≤1.000 từ khoá/task volume, SERP chỉ cho từ khoá có volume, 20 seed/task gợi ý. `strategy=batch` mặc định | taskdef :351; **pilot Bhutan 50 địa điểm: $0.55 DFS (ước tính ≤ $0.80) + $0.015 Haiku; 3 task × 152 từ khoá** (trước đây 4,5); ~$0.011/địa điểm, rẻ hơn khoảng 10 lần |
+
+**Kết luận điều tra:** DFS bị kích hoạt từ **tenant portal**, không phải admin.
+- WanderLux rewrite xong lúc 05:04:21, và 35 giây sau có lần gọi research đầu tiên.
+- Chỉ có 3 market (US/UK/AU) vì research lấy market của tenant đã kích hoạt.
+- Luồng A3 của admin không mua DFS.
+
+**Chi phí test trong ngày:** DFS $0.73, Haiku khoảng $0.03. Số dư DFS còn khoảng $49.1.
+
+**Khác trong phần 3:**
+- AA-665 nhận thêm yêu cầu UI của Nghiệp: lịch sử research runs, filter/sort cho các bảng, Search demand explorer (keyword / PAA / SERP), hiện tên tenant thay vì UUID.
+- AA-650 ghi chú: `segment_research` là loại job đầu tiên phải chuyển sang job runner.
+- PR #454 (sửa nhỏ AA-649): nâng ước tính giá task volume lên $0.09 và thêm log cho task gợi ý từ khoá. CI xanh, **chờ merge**.
+- Jira KAN-90: connector Atlassian chưa authorize nên chưa đọc được.
+
+## Lưu ý kỹ thuật (bổ sung phần 3)
+- **Merge kiểu squash làm hỏng PR xếp chồng.** #453 bị conflict sau khi #452 được squash. Cách xử lý: `git rebase --onto origin/main <nhánh cũ>` rồi `push --force-with-lease`.
+- `gh pr edit --base` lỗi vì GitHub đã bỏ Projects classic → dùng `gh api -X PATCH repos/.../pulls/N -f base=main`.
+- Script chạy trong container dùng `ADMIN_SECRET` từ biến môi trường (không in ra) để gọi endpoint admin qua `localhost:8000`.
+- asyncpg: tham số kiểu `date` phải truyền `datetime.date`, không nhận chuỗi.
+- Auto mode trên extension VSCode (Windows/UNC) đôi khi không trả kết quả kiểm quyền, và chặn `gh pr merge` / gửi key ra ngoài. Nên mở VSCode trong WSL và dùng chế độ quyền hỏi-duyệt.
+
 ## Lưu ý kỹ thuật
 
 - ECS exec: dùng `python3 -u` + `timeout` (`.tmp-session/ecsrun.sh`). Không có `-u` thì output bị
