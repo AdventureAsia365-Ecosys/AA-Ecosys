@@ -79,7 +79,7 @@ Khi Nghiệp nói "dừng session này":
 
 ## Đánh số phiên
 - Tiếp nối chuỗi trong memory Notion (nguồn chuẩn — số dưới đây chỉ để tham khảo nhanh).
-  Phiên gần nhất: **S200** (28/09/2026, Claude Code). Phiên tiếp theo là S201...
+  Phiên gần nhất: **S201** (29/09/2026, Claude Code). Phiên tiếp theo là S202...
 - Ghi rõ tác nhân (Kiro / Claude Chat / Claude Code) trong mỗi entry vì memory dùng chung nhiều agent.
 
 ## Lưu ý kỹ thuật (môi trường)
