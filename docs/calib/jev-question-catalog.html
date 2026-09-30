@@ -1,0 +1,232 @@
+<title>Jev Question Catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#f5f6f8; --paper:#ffffff; --ink:#16202c; --ink2:#3b4656; --muted:#6a7483; --line:#dde1e7; --line2:#eceff3;
+  --accent:#0f6e6a; --accent-soft:#e3f1ef;
+  --enforce:#b45309; --shadow:#1d4ed8; --planned:#5b6472; --rule:#047857; --none:#9aa3af; --danger:#b91c1c;
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161d; --paper:#18202a; --ink:#e7ecf2; --ink2:#c2cbd6; --muted:#8f9aa8; --line:#2a3542; --line2:#212b36;
+    --accent:#4fb8b1; --accent-soft:#16302f;
+    --enforce:#f59e0b; --shadow:#6b93f5; --planned:#9aa3af; --rule:#34d399; --none:#6b7280; --danger:#f87171;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161d; --paper:#18202a; --ink:#e7ecf2; --ink2:#c2cbd6; --muted:#8f9aa8; --line:#2a3542; --line2:#212b36;
+  --accent:#4fb8b1; --accent-soft:#16302f;
+  --enforce:#f59e0b; --shadow:#6b93f5; --planned:#9aa3af; --rule:#34d399; --none:#6b7280; --danger:#f87171;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:1180px;margin:0 auto}
+header{padding-block:36px 18px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,4vw,44px);line-height:1.1;margin:.25em 0 .3em;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:26px;margin:0 0 .4em;text-wrap:balance}
+h3{font-size:15px;font-weight:700;margin:0 0 .3em}
+p{max-width:72ch;margin:.4em 0}
+.lede{color:var(--ink2);font-size:16px;max-width:78ch}
+.meta{font-size:13px;color:var(--muted);margin-top:10px}
+code,.k{font-family:var(--mono);font-size:12.5px}
+.k{font-weight:600;color:var(--ink)}
+.vi{background:var(--accent-soft);border-radius:10px;padding:16px 18px;margin:22px 0 6px;display:grid;gap:6px}
+.vi h3{color:var(--accent)}
+.vi ul{margin:0;padding-left:18px}
+section{padding-block:30px 6px}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:13px;color:var(--ink2);margin:10px 0 4px}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:700;letter-spacing:.02em;color:#fff;white-space:nowrap}
+.p-enforce{background:var(--enforce)} .p-shadow{background:var(--shadow)} .p-planned{background:var(--planned)}
+.p-rule{background:var(--rule)} .p-none{background:var(--none)}
+.t{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:0 6px;font-family:var(--mono);font-size:11.5px;color:var(--ink2);background:var(--paper)}
+.filters{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters button{font-family:var(--sans);font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--paper);color:var(--ink2);border-radius:999px;padding:6px 12px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.filters button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.filters .count{font-size:12.5px;color:var(--muted);margin-left:auto}
+.stage{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-top:18px;overflow:hidden}
+.stage-head{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--line2)}
+.stage-head .code{font-family:var(--mono);font-weight:600;color:var(--accent)}
+.stage-head .what{color:var(--muted);font-size:13.5px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:980px;font-size:13.5px}
+th{text-align:left;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.q{max-width:300px} td.q .ask{font-weight:600;color:var(--ink)}
+td.small{font-size:12.5px;color:var(--ink2)}
+.floor{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:12px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.card p{font-size:14px}
+.num{font-variant-numeric:tabular-nums}
+ol.agenda{padding-left:20px;display:grid;gap:12px;margin-top:10px}
+ol.agenda li{max-width:88ch}
+ol.agenda b{color:var(--ink)}
+.opt{color:var(--muted);font-size:13.5px}
+footer{margin-top:36px;font-size:12.5px;color:var(--muted)}
+[hidden]{display:none!important}
+@media (max-width:640px){ header{padding-block:24px 14px} .filters .count{margin-left:0;width:100%} }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">AA-CIS · A/T series v2 · for discussion with Ms. Thư</div>
+  <h1>Jev Question Catalog</h1>
+  <p class="lede">Every place in the A/T pipeline where a typed Jev judgment helps: the node in the code, the exact question and its type, the state sent, what happens on a confident answer, which way the floor should lean, and where each one stands today. Written after reading Ms. Thư's <code>add-the-typesafe-skill</code> branch (demand-that-belongs, tickets 01–05) and after our first calibration.</p>
+  <div class="meta">Status as of 29/09/2026 (S203) · Dev · design doc: <code>apps/AA-CIS-App/docs/architecture/at-series-v2-design.md</code></div>
+
+  <div class="vi" lang="vi">
+    <h3>Tóm tắt (tiếng Việt)</h3>
+    <ul>
+      <li><b>Đang chạy thật (enforce):</b> 1 câu hỏi — <span class="k">a3_keyword_belongs</span>, bỏ keyword khi Jev ≤ 0.30 trước khi mua DataForSEO. Đã hiệu chỉnh 200 mẫu; anh Nghiệp kiểm 69 dòng, sai 2 (2,9%).</li>
+      <li><b>Đang chạy shadow (chỉ ghi, chưa tác động):</b> 4 câu hỏi — A3 lọc ý tưởng DFS, A0 loại dòng / itinerary / quốc gia.</li>
+      <li><b>Kế hoạch:</b> khoảng 30 câu hỏi khác, chia theo từng stage/node bên dưới. Mỗi câu phải hiệu chỉnh trước khi bật enforce.</li>
+      <li><b>Học từ chị Thư:</b> luật miễn phí chạy trước Jev; gộp nhiều câu hỏi trong 1 lần gọi; lưu đáp án theo câu hỏi để không hỏi lại; ngưỡng đặt theo chiều sai nào đắt hơn; không dùng Jev cho viết văn, trích xuất atom, và rank-sum.</li>
+      <li><b>Cần chốt với chị Thư:</b> 9 điểm ở cuối trang.</li>
+    </ul>
+  </div>
+</header>
+
+<section id="lessons">
+  <h2>What we take from Ms. Thư's research</h2>
+  <p>Her branch uses Jev as <b>Noul gates that stop bad data before it is bought or counted</b> (keyword belongs, question in country scope, landing belongs), behind a separate judgment seam, with every probability kept. Measured on the Japan export: 52% of question landings hit transit, 34% of the rest landed on the wrong entity, 10.6% of questions were about another country, and generic keywords such as <code>hot springs</code> (368k/mo) were bought for one named onsen.</p>
+  <div class="cards">
+    <div class="card"><h3>1. Rules first, judgments second</h3><p>Anything a free rule can decide runs before Jev and shrinks what Jev is asked. Her ticket 01 (transit stays out of the match index) removed 52% of pairs at no cost. <b>Adopt:</b> we build the transit rule before the landing question (A3-5).</p></div>
+    <div class="card"><h3>2. Several asks in one request</h3><p>Her seam's contract: independent questions over one state travel together, so two answers cost about one. Keywords of one place go in a single call, keyed by keyword. <b>Adopt:</b> our <code>decide()</code> sends one subject per call today; add a batch form (one state, N keyed asks) before the high-volume stages.</p></div>
+    <div class="card"><h3>3. Judge once, store beside the subject</h3><p>A question is foreign once and stays foreign; she stores the verdict keyed on the question and the country set it was judged against, and a wider country set re-opens it. <b>Adopt:</b> a verdict cache keyed on (question, subject, question version); today every call is re-asked.</p></div>
+    <div class="card"><h3>4. The floor follows the costlier mistake</h3><p>Keyword gate and landing gate: a false reject is invisible later (never bought, never counted), so the floor sits low (0.15). Question scope: a foreign question left in is a vote in the score, so the floor is 0.5. <b>Adopt:</b> each question in this catalog states which error is costlier.</p></div>
+    <div class="card"><h3>5. Keep every judgment, delete nothing</h3><p>Her ADR 0023: a gate flags rather than blocks; a rejected landing keeps its row and stops counting. <b>Adopt, with one change:</b> we act on confident verdicts (enforce), but "act" means exclude from a purchase or a count, never delete data. The ledger (<code>decision_log</code>) keeps every probability.</p></div>
+    <div class="card"><h3>6. Where Jev must not go</h3><p>Not in <code>score</code> (a rank-sum with nothing to tune), not in atom extraction, not in any prose writer, and judges only as a prefilter, because a judge's value is its quoted evidence. <b>Adopt as is.</b></p></div>
+    <div class="card"><h3>7. Version the wording</h3><p>A probability moves when the wording moves; her judge carries a signature so a stored answer from other wording is not reused. <b>Adopt:</b> add a question-wording hash to <code>decision_log</code> and to the cache key.</p></div>
+    <div class="card"><h3>8. Ask the human the same question</h3><p>Her blind check of 60 landings agreed with Jev only 51%, one-directionally; the likely cause was a human question different from Jev's. <b>Adopted in our first calibration:</b> one operational meaning written down first (see the code list in the keyword record). Result: 67/69 agreement on review.</p></div>
+  </div>
+</section>
+
+<section id="catalog">
+  <h2>The catalog, stage by stage</h2>
+  <div class="legend">
+    <span><span class="pill p-enforce">Enforce</span> live, acts on confident answers</span>
+    <span><span class="pill p-shadow">Shadow</span> live, logged only</span>
+    <span><span class="pill p-planned">Planned</span> designed, not built</span>
+    <span><span class="pill p-rule">Rule</span> no Jev: a free rule does it</span>
+    <span><span class="pill p-none">No Jev</span> deliberately out</span>
+    <span><span class="t">noul</span> yes/no probability · <span class="t">choice</span> pick one label + confidence · <span class="t">score</span> level on a scale</span>
+  </div>
+
+  <div class="filters" role="toolbar" aria-label="Filter by status">
+    <button type="button" data-f="all" aria-pressed="true">All</button>
+    <button type="button" data-f="enforce" aria-pressed="false">Enforce</button>
+    <button type="button" data-f="shadow" aria-pressed="false">Shadow</button>
+    <button type="button" data-f="planned" aria-pressed="false">Planned</button>
+    <button type="button" data-f="rule" aria-pressed="false">Rules &amp; out of scope</button>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div id="stages"></div>
+</section>
+
+<section id="agenda">
+  <h2>To settle with Ms. Thư</h2>
+  <ol class="agenda">
+    <li><b>Keyword floor: 0.30 or 0.15?</b> Ours is from 200 labelled pairs (55/55 correct at ≤ 0.30); hers from 1,070 unlabelled keywords, with false rejects at 0.42–0.50 and <code>hot springs</code> at 0.17. <span class="opt">Proposal: keep 0.30 and read the rejects of the first enforced runs on /admin/decisions; drop toward 0.15 at the first false reject.</span></li>
+    <li><b>Generic questions are out, platform-wide?</b> Her marketer decision: a question that names nowhere and fits any country ("What do Buddhists eat?") stops counting. <span class="opt">Proposal: adopt for all countries (it is why her strict rule exists).</span></li>
+    <li><b>Country scope: the export or the tour?</b> Her scope is the export's country set (Japan only). We run 21 countries in one pool, so "about Vietnam" is in scope for the platform but not for a Bhutan Segment. <span class="opt">Proposal: judge against the Segment's own tour countries, stored with that set.</span></li>
+    <li><b>Landing question: re-adjudicate first.</b> Her 51% agreement leaves the floor unset. <span class="opt">Proposal: we label only same-entity-type pairs (temple↔temple), ~200, with the question written as Jev's, before any floor.</span></li>
+    <li><b>Flag vs act.</b> Her ADR 0023 never blocks; we act on confident verdicts only, never delete. <span class="opt">Agree which stages may act (proposal: purchases and counts yes; published content no).</span></li>
+    <li><b>Batch asks.</b> Adopt her "several asks per request" contract in our seam before the landing and T10 questions go live.</li>
+    <li><b>Specific keyword, imperfect place.</b> She notes <code>tokyo hotel</code> claimed by <code>Karuizawa to Tokyo</code> is a matching problem, not genericness. <span class="opt">Proposal: a separate demand-ownership question (A3-6) instead of loading it onto the keyword gate.</span></li>
+    <li><b>Master-content grounding (new on our side).</b> S1 has no check that the rewrite is supported by the source; her repo writes from atoms, so it did not need one. <span class="opt">Ask whether her write stage checks support sentence by sentence and how.</span></li>
+    <li><b>Tenant content and the DPA.</b> Jev reads tenant content only for AA test tenants until a DPA/ZDR is in place. Who contacts TypeSafe?</li>
+  </ol>
+</section>
+
+<footer>Sources: AA-CIS-App code on main (29/09/2026); <code>docs/calibration/a3_keyword_belongs.md</code>; Ms. Thư's <code>aa-soscial-media</code> branch <code>add-the-typesafe-skill</code> (spec and tickets under <code>.scratch/demand-that-belongs/</code>, <code>output/jev-blind-sample.md</code>). Prices: TypeSafe $0.042 per 1M input tokens, output free.</footer>
+</div>
+
+<script>
+const S = {enforce:"Enforce",shadow:"Shadow",planned:"Planned",rule:"Rule",none:"No Jev"};
+// [node, key, type, question, state, on confident answer, costlier error -> floor, status, calibration sample]
+const DATA = [
+ {code:"A0", name:"Upload / ingest", what:"Excel rows → raw_tours. services/ingestion/jev_gates.py (preview + commit share it).", rows:[
+  ["jev_gates.assess_rows","a0_row_kind","choice","What kind of product is this uploaded row? (multi-day tour / day tour / POI / accommodation / transfer or service / other)","name, country, duration, summary, itinerary","Non-tour pick → row dropped as not_a_tour","False drop loses a real tour → high confidence floor (≥ 0.9)","shadow","Needs real negatives: next supplier file, or a known POI/hotel file (100 real tours: 99 judged tours)"],
+  ["jev_gates.assess_rows","a0_itinerary_usable","noul","Does this itinerary describe real day-by-day activities that a writer could turn into a tour page?","same state","Confident no → row dropped as thin_itinerary","False drop loses a tour → low reject ceiling","shadow","Same as above"],
+  ["jev_gates.assess_rows","a0_country","choice","Which country is this tour in? (21 AA countries + other)","same state; asked only when the alias table found none","Confident pick fills the empty country","Wrong country misfiles the tour → high floor","shadow","Rows with a known country, hidden"],
+  ["handler.process_file dedup","a0_same_product","noul","Are these two rows the same bookable product?","both rows, shortlisted by name trigram / itinerary embedding","Confident yes → goes to upload_staging for a human; never auto-dropped","Cheap either way (a human decides)","planned","Pairs from past uploads"],
+  ["column_mapper","a0_column_field","choice","Which raw_tours field does this spreadsheet column hold? (19 fields + none)","column header + 5 sample values","Replaces the Haiku mapping when confident","A wrong map corrupts a whole file → shadow only","planned","Past uploads with known mapping"],
+ ]},
+ {code:"A1", name:"S1 master rewrite", what:"LangGraph: generate → validate → judge → brand_audit → flag_fix → revalidate. Master content is shared by every tenant.", rows:[
+  ["generate / flag_fix / itinerary_nudge","—","—","Prose writers","—","—","—","none","Her rule: Jev never writes"],
+  ["new grounding step after generate","a1_claim_supported","noul","Is this sentence supported by the source itinerary (paraphrase, unit conversion or sums allowed)?","source itinerary + one sentence (batch: all sentences keyed by index)","Confident no → hard code UNSUPPORTED_CLAIM, sentence quoted to flag_fix","A missed fabrication reaches every tenant; a false flag costs one repair → moderate","planned","Sentences from published tours, labelled against source"],
+  ["validate_node (numbers)","—","—","Numbers in the rewrite that the source never states","—","Deterministic: find_novel_numeric_claims, as T3 already does","—","rule","—"],
+  ["validate_node soft codes","a1_copy_generic","noul","Would this text fit any destination unchanged?","one field (subtitle / summary / highlights), batched","Second signal for SUBTITLE_GENERIC / HIGHLIGHTS_TOO_GENERIC / SUMMARY_OFF_BRAND (codes stay soft)","Soft either way → 0.5 is fine","planned","Fields with and without the phrase-list hit"],
+  ["brand_audit_node pre-checks","a1_logistics_claim","noul","Is this a meal or clock-time logistics claim the source does not make, rather than narrative?","the regex-hit sentence + source day","Only asked on a regex hit; confident no clears ITIN_MEAL_INVENTED / ITIN_CLOCK_TIME","The regex has a false-positive history (AA-608) → clearing needs high confidence","planned","Past regex hits with reviewer outcome"],
+  ["brand_audit_node (GPT-4.1)","a1_audit_item_*","noul","One question per audit item (e.g. hype language, off-brand register, promise not in source)","the rewrite","All confident passes → skip the GPT call; else call GPT for flagged_phrases","A missed issue skips the audit → high accept floor","planned","Audit results already in llm_call_log"],
+  ["judge_node (Luna)","a1_brand_fit, a1_mission_present","noul","Does this rewrite read as this brand's angle? Does the mission surface day by day?","rewrite + brand profile","Only when the judge score is within ±0.5 of 7.0: decides retry vs pass","Tie-break only → 0.5","planned","Judge scores near 7.0 with A2 outcomes"],
+  ["A2 Review Queue","(reuses the above)","—","Sort by Jev uncertainty; show Jev reasons","—","Ordering only","—","planned","—"],
+ ]},
+ {code:"T2–T3", name:"Tenant rewrite + QA", what:"Same graph as A1 per tenant brand; T3 re-checks the final text. Tenant content → allow-listed test tenants only until the DPA.", rows:[
+  ["T3 _t3_grounding_check","t3_number_supported","noul","Is this number supported by the source (unit conversion, sums, rephrasing)?","source fields + the flagged sentence","Confident yes → no full rewrite for that hit","A wrong yes lets a wrong number through → high accept floor","planned","Past T3 regex hits"],
+  ["T3 non-numeric","a1_claim_supported","noul","(same as A1)","master content + tenant sentence","Flag in T3","as A1","planned","as A1"],
+ ]},
+ {code:"A3", name:"Atomize, research, Segment / Score / Route", what:"Platform data. Her tickets 01, 03, 04, 05 live here.", rows:[
+  ["segment_research_batch._gate_keywords","a3_keyword_belongs","noul","Is this search keyword about this particular place, not just the kind of thing the place is?","place + keyword","Confident no (≤ 0.30) → keyword not bought","False reject is invisible later → floor below every seen false reject","enforce","200 labelled pairs; 55/55 correct at ≤ 0.30; reviewed 67/69"],
+  ["segment_research_batch._gate_ideas","a3_idea_traveller","noul","Is this a traveller wanting to see or do something here, rather than a hotel / resort / homestay or booking search?","idea + seed places","Confident no → idea not stored","Cheap either way","shadow","The 22 ideas of the S203 probe + future runs"],
+  ["matching (index)","—","—","Transit atoms stay out of the question match index","—","Rule (her ticket 01): removed 52% of pairs for free","—","rule","—"],
+  ["research harvest (PAA)","a3_question_foreign","noul","Does this question name a place, landmark or region outside the tour's countries?","question + country set (stored with the verdict)","Confident yes → question stops counting","A foreign question left in is a vote → 0.5 (her choice)","planned","Harvested PAA per country"],
+  ["research harvest (PAA)","a3_question_about_here","noul","Does it name a place in those countries, or an activity, custom or subject particular to them?","same state, same request","Confident no → stops counting (generic questions are out)","as above","planned","as above"],
+  ["land_questions_for_segment","a3_landing_belongs","noul","Would someone searching this query be well served by an article about this moment on a guided trip?","query + moment (place, activity), once per query × Segment","Confident no → landing kept but not counted; a query may land nowhere","A lost landing is invisible → low floor (her 0.15, uncalibrated)","planned","Same-entity-type pairs only (her lesson), ~200"],
+  ["compute_demand","a3_demand_belongs","noul","Does this keyword's search demand belong to this moment?","keyword + place + action","Confident no → next claimed keyword is used","Over-credit inflates Score → moderate","planned","Claimed keywords per Segment"],
+  ["t5_atomize (verify, not extract)","a3_atom_in_text","noul","Is this place-and-activity stated in this day's itinerary text?","day text + atom","Confident no → atom not stored (logged)","A lost atom is a lost topic → low reject ceiling","planned","Atoms of 20 tours vs source"],
+  ["classify_exclusion vs atomize","a3_activity_type","choice","Primary activity type (trek, culture, food, stay, transit, other…)","atom text","Only when the rule and Haiku disagree","Transit mislabels move landings → high floor","planned","Disagreements only"],
+  ["segment_matching","a3_same_place","noul","Are these the same real-world place?","two place names + context","Borderline Jaccard pairs only; stored once so ids stay stable","A wrong merge fuses two places → high floor","planned","Measure borderline count first"],
+  ["score (rank-sum), route / hub","—","—","—","—","—","—","none","Her rule: nothing to tune"],
+ ]},
+ {code:"T0–T7", name:"Tenant brand, Slate, Debate", what:"Tenant content → allow-list only until the DPA.", rows:[
+  ["acp_brand_brief_parser","t0_brief_section","choice","Which brief section is this paragraph? (8 sections + none)","one paragraph","Only when fewer than 8 sections were found by headings","Low stakes","planned","Real briefs"],
+  ["debate.apply_debate","t7_topic_fit","noul","Does this topic suit this brand's travellers?","topic + evidence + brand profile","Confident pass → skip the Luna call; Luna only in grey","Cheap either way","planned","The Luna rulings in debate_brand_fit_cache"],
+ ]},
+ {code:"T8–T10", name:"Angle, write, gates", what:"Tenant content → allow-list only until the DPA.", rows:[
+  ["ranking.rank_angles","t8_angle_answers","noul","Does this angle actually answer this question?","angle + PAA question (batched per angle)","Replaces the verbatim-copy check","Ranking only → 0.5","planned","Past angle sets"],
+  ["facts.fetch_facts_for_writing","t9_fact_relevant","noul","Is this fact relevant to this trip / moment / angle?","fact + angle + moment (batched)","Irrelevant facts left out of the writer prompt","A dropped fact can matter → low reject ceiling","planned","Facts × recent pieces"],
+  ["t9_write, angle prose","—","—","Prose","—","—","—","none","—"],
+  ["gate_framework (F8, warn)","t10_framework_*","noul","One question per rubric item of the goal's framework","piece","Replaces the GPT call (warn only)","Warn only → 0.5","planned","F8 verdicts in llm_call_log"],
+  ["gate_brand_voice (F9)","t10_brand_style, t10_cta_clear, t10_fact_supported","noul","Style fits the brand? CTA present and single? Facts supported?","piece + CTA + brand","Style → Jev; CTA/fact: Jev prefilter, GPT on doubt","CTA/fact block → high floors","planned","F9 verdicts"],
+  ["gate_cannibalization (F10)","t10_same_copy","noul","Would a reader see these two pieces as the same copy?","two pieces (cosine ≥ 0.85)","Confirm blocks ≥ 0.92, catch 0.85–0.92","A false block costs a rewrite → high floor","planned","Pairs from content_piece"],
+  ["gate_promises_an_option","t10_promise_certain","noul","Does this sentence state the offered moment as certain?","sentence + offered moment","Clears hedge-phrase false positives","Moderate","planned","Past hits"],
+  ["gate_faq_dedup (F7)","t10_faq_same","noul","Do these two FAQ questions ask the same thing?","two questions","Shadow","Low","planned","—"],
+ ]},
+ {code:"TP", name:"TripPlanner extraction", what:"Reads the same RDS; component extraction from atoms.", rows:[
+  ["extraction/prompts.py","tp_activity / tp_intensity / tp_duration","choice","Activity category · physical intensity · duration","atom text","Replaces the LLM's enum picks when confident","Low","planned","Existing components"],
+  ["extraction/verify.py","tp_atom_is_activity","noul","Is this atom text about <activity>?","atom + activity","Removes the retry LLM call","Low","planned","Verify failures"],
+ ]},
+];
+const root = document.getElementById("stages"), count = document.getElementById("count");
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(f){
+  root.innerHTML = ""; let n = 0;
+  for (const st of DATA){
+    const rows = st.rows.filter(r => f==="all" || r[7]===f || (f==="rule" && (r[7]==="rule"||r[7]==="none")));
+    if (!rows.length) continue; n += rows.length;
+    const el = document.createElement("div"); el.className = "stage";
+    el.innerHTML = `<div class="stage-head"><span class="code">${esc(st.code)}</span><h3>${esc(st.name)}</h3><span class="what">${esc(st.what)}</span></div>
+      <div class="tbl"><table><thead><tr><th>Node (code)</th><th>Question key</th><th>Type</th><th>Question asked</th><th>State sent</th><th>On a confident answer</th><th>Costlier error → floor</th><th>Status</th><th>Calibration sample</th></tr></thead><tbody>
+      ${rows.map(r=>`<tr><td class="small"><code>${esc(r[0])}</code></td><td><span class="k">${esc(r[1])}</span></td><td>${r[2]==="—"?"—":`<span class="t">${esc(r[2])}</span>`}</td><td class="q"><span class="ask">${esc(r[3])}</span></td><td class="small">${esc(r[4])}</td><td class="small">${esc(r[5])}</td><td class="small">${esc(r[6])}</td><td><span class="pill p-${r[7]}">${S[r[7]]}</span></td><td class="small">${esc(r[8])}</td></tr>`).join("")}
+      </tbody></table></div>`;
+    root.appendChild(el);
+  }
+  count.textContent = `${n} rows`;
+}
+document.querySelectorAll(".filters button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x===b ? "true" : "false"));
+  render(b.dataset.f);
+}));
+render("all");
+</script>
