@@ -29,3 +29,6 @@ Thumbs.db
 # Local editor config (SQLTools connections, etc.)
 .vscode/
 secret_manager/
+# Calibration review files (xlsx/csv) — live on Google Drive (AdventureAsia folder), see docs/calib/README.md
+docs/calib/*.xlsx
+docs/calib/*.csv
