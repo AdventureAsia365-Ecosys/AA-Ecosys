@@ -67,6 +67,24 @@ khác với Linear (nội bộ). Khi comment vào 1 issue Jira để báo cáo t
 - **Không liệt kê việc CHƯA làm** trừ khi Nghiệp yêu cầu — comment tiến độ không phải TODO list.
 - **KHÔNG tự chuyển trạng thái issue Jira** khi comment báo cáo tiến độ — để Nghiệp tự quyết.
 
+## Quy tắc Jira — thời điểm báo cáo, tạo issue, liên kết Linear (Nghiệp chốt 30/09/2026)
+
+**Khi nào comment**
+- Yêu cầu tính năng từ Jira (vd PR-11): KHÔNG comment kiểu "đã nhận / sẽ làm như sau".
+  Ghi yêu cầu vào issue Linear tương ứng, chỉ comment Jira khi đã làm xong (báo cáo kết quả).
+- Câu hỏi trực tiếp của chị Thư (vd KAN-90): soạn câu trả lời.
+- MỌI comment Jira: đưa bản nháp cho Nghiệp duyệt TRƯỚC khi đăng.
+
+**Tạo issue Jira**
+- KHÔNG tự tạo issue Jira. Việc nội bộ kỹ thuật → Linear.
+- Chỉ tạo khi Nghiệp yêu cầu rõ; soạn nháp (tiêu đề + mô tả theo văn phong comment ở trên:
+  ngắn, không tên agent, không mã AA-xxx) → Nghiệp duyệt → mới tạo.
+
+**Liên kết Jira ↔ Linear**
+- Mỗi issue Jira đang làm phải có issue Linear tương ứng; ghi mã Jira (vd `Jira: PR-11`) trong
+  mô tả hoặc comment của issue Linear. Chiều ngược lại KHÔNG ghi mã Linear lên Jira.
+- Việc "chờ báo cáo Jira" ghi vào log session + memory Notion (vd "PR-11: báo khi AA-674 xong").
+
 ## Lệnh "dừng session này"
 Khi Nghiệp nói "dừng session này":
 1. **Ghi log local**: tạo `docs/sessions/YYYY-MM-DD-<chu-de>.md` (mục: Trạng thái, Thay đổi Codebase,
@@ -79,7 +97,7 @@ Khi Nghiệp nói "dừng session này":
 
 ## Đánh số phiên
 - Tiếp nối chuỗi trong memory Notion (nguồn chuẩn — số dưới đây chỉ để tham khảo nhanh).
-  Phiên gần nhất: **S205** (30/09/2026, Claude Code). Phiên tiếp theo là S206...
+  Phiên gần nhất: **S206** (30/09/2026, Claude Code). Phiên tiếp theo là S207...
 - Ghi rõ tác nhân (Kiro / Claude Chat / Claude Code) trong mỗi entry vì memory dùng chung nhiều agent.
 
 ## Lưu ý kỹ thuật (môi trường)
