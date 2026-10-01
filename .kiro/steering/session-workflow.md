@@ -61,6 +61,9 @@ khác với Linear (nội bộ). Khi comment vào 1 issue Jira để báo cáo t
 
 - **Ngắn gọn.** Không viết dài như log session/Linear.
 - **Không nhắc "Claude Code" / tên agent** — comment đứng tên Nghiệp trên Jira.
+- **Luôn tag chị Thư** (mention `@thule`, accountId `70121:5793bdd5-44b1-4623-97d4-43c35d440869`) ở đầu
+  mọi comment báo cáo để chị nhận thông báo (Nghiệp chốt 01/10/2026). Qua connector: gửi `contentFormat: "adf"`
+  với node `{"type":"mention","attrs":{"id":"<accountId>","text":"@thule"}}` — markdown `@thule` không tạo mention thật.
 - **Không liệt kê mã issue Linear nội bộ** (AA-xxx) — người đọc Jira không biết mã đó, vô nghĩa với họ.
 - **Chỉ nêu:** nguyên nhân (root cause), các fix đã làm, tính năng/endpoint liên quan (mô tả bằng lời,
   không cần link code/file), kèm số liệu bằng chứng verify live nếu có.
@@ -97,7 +100,7 @@ Khi Nghiệp nói "dừng session này":
 
 ## Đánh số phiên
 - Tiếp nối chuỗi trong memory Notion (nguồn chuẩn — số dưới đây chỉ để tham khảo nhanh).
-  Phiên gần nhất: **S206** (30/09/2026, Claude Code). Phiên tiếp theo là S207...
+  Phiên gần nhất: **S207** (01/10/2026, Claude Code). Phiên tiếp theo là S208...
 - Ghi rõ tác nhân (Kiro / Claude Chat / Claude Code) trong mỗi entry vì memory dùng chung nhiều agent.
 
 ## Lưu ý kỹ thuật (môi trường)
