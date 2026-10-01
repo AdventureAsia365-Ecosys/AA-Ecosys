@@ -123,6 +123,11 @@ Nguồn: `apps/AA-TripPlanner-Web/migrations/001_tripplanner_schema.sql`.
 - Schema `tripplanner` **độc lập hoàn toàn** với CIS, bật `pgvector`.
 - Có phụ thuộc thứ tự migration `shared` với CIS (`002_shared_destinations.sql` phải áp trước vì FK) —
   **[CẦN XÁC NHẬN]** phối hợp đánh số migration `shared` giữa 2 app (nêu trong `docs/smoke-test-runbook.md`).
+- **Ảnh (AA-708, 01/10/2026):** CIS sở hữu `shared.place_photo` (migration 198 của CIS, FK tới
+  `shared.destinations`) và job `photo_sync`. CIS **chỉ ghi `shared.destinations.cover_image_url`**
+  (ô trống, hoặc ô do chính job này đặt trước đó) với URL public `…/content/photos/{id}?size=large`;
+  TripPlanner vẫn sở hữu việc tạo/geocode destination. Điền cover chỉ bật sau khi TripPlanner trích
+  xuất lại destination từ các tour của đợt chạy lại.
 
 ## 4. Data contracts
 
@@ -170,6 +175,33 @@ Nguồn: epic AA-616 (AA-617/618/619/620/622/623/625/627/635), `infra/AA-CIS-Inf
   tầng theo từng account, lọc theo khoảng ngày.
 - **Cảnh báo số dư DFS:** Lambda `aa-cis-dev-dfs-balance-check` + EventBridge Scheduler hằng ngày (group
   `aa-cis-dev-acp`).
+
+### 4.0 Quy tắc ghi dữ liệu — chỉ CIS ghi nội dung (ADR 0002, 01/10/2026) [FACT]
+
+- **Nội dung** (tour, atom, địa danh `shared.destinations`, địa danh theo lịch trình / tour graph, ảnh) chỉ do
+  **CIS** tạo/sửa/xoá — bằng job hoặc thao tác admin có trang theo dõi.
+- App khác (TripPlanner, AA-Booking) **chỉ đọc qua view** và chỉ ghi schema riêng của mình
+  (+ `shared.llm_call_log`, log chi phí). Cưỡng chế bằng quyền DB: role `tripplanner` chỉ `SELECT` trên
+  `shared.destinations` (CIS migration 201).
+- Pipeline địa danh (trích xuất lịch trình, geocode Mapbox, tour graph) hiện còn ở TripPlanner → **đóng băng**,
+  chuyển sang CIS (AA-712).
+
+### 4.5 Ảnh AA (AA-708, 01/10/2026) [FACT]
+
+Một nguồn ảnh cho cả hệ sinh thái, theo ADR 0001 quyết định 1 (CIS là nguồn nội dung, app khác đọc read model):
+
+| Thành phần | Chủ sở hữu | Ghi chú |
+|---|---|---|
+| Ảnh gốc | Team nội dung | Thư mục PHOTOS trên Jira CON (Google Drive, public link) |
+| Đồng bộ + match | CIS — job `photo_sync`, trang Admin › Photos | Drive → S3 (WebP 1600/600) → `shared.place_photo` |
+| Đọc ảnh | Mọi app | **Chỉ qua view** `shared.v_tour_photos` (theo tour) và `shared.v_destination_photos` (theo địa danh, cover = `position` 1); không đọc bảng |
+| URL ảnh | CIS API public | `{CIS_API_BASE}{path}?size=large\|small` (302 → S3; sau này CloudFront, giữ nguyên path) |
+| Cover địa danh TripPlanner | CIS ghi `shared.destinations.cover_image_url` | Chỉ ô trống hoặc ô do chính job đặt |
+
+Thứ tự theo từng nước (đợt chạy lại): S1 viết lại → A3 atom hoá → **trích xuất lại địa danh** (hiện ở TripPlanner, chuyển sang CIS theo AA-712)
+(`tripplanner.itinerary_components` / `tour_stop`) → Admin › Photos: "Sync <nước>" + "Match places + covers".
+Ảnh chỉ được so với địa danh trong **lịch trình của chính tour** đó. AA-Booking (AA-679 catalog sync) lấy ảnh tour
+qua `shared.v_tour_photos` theo `tour_id`.
 
 ## 5. OIDC / CI-CD (điểm rủi ro #1 của restructure)
 
