@@ -68,19 +68,26 @@ steering: luôn tag chị Thư trên Jira, số phiên S207.
 ## Jira (đều tag chị Thư)
 - PR-15: báo cáo dữ liệu thô + hỏi Bhutan 2 NCC (Druk Path 8N, Jomolhari/Yaksa 11N) + Pakistan/Philippines thứ tự.
 - PR-14: bảng giá dịch vụ đăng nhập (đề xuất Cognito). KAN-20: benchmark Asian Trails (Leigh + Thư), để mở.
-- PR-11: báo ảnh đã sync tự động từ Drive CON (3.232 ảnh, 7 nước, 162 tour) + hỏi: quyền dùng ảnh public/credit; thẻ LAOS chưa có link thư mục; thư mục "Seoul to Seorak" thuộc tour nào.
-- **PR-16 (mới, chị Thư):** đổi "gpt-4.0-mini" sang GPT-5.6/6 Luna. Hệ thống không dùng gpt-4o-mini; judge mặc định gpt-4.1, `s1_judge` route DB đã sang gpt-5.6-luna nhưng còn lẫn gpt-4.1 (146/391 lời gọi 2 ngày). Temperature đã xử lý (AA-659). → AA-714, chưa comment Jira.
+- PR-11 (**đăng thẳng, không đưa draft — sai quy trình; đã ghi lại quy tắc**): báo ảnh đã sync tự động từ Drive CON (3.232 ảnh, 7 nước, 162 tour) + hỏi: quyền dùng ảnh public/credit; thẻ LAOS chưa có link thư mục; thư mục "Seoul to Seorak" thuộc tour nào.
+- **PR-16 (mới, chị Thư):** đổi "gpt-4.0-mini" sang GPT-5.6/6 Luna. Hệ thống không dùng gpt-4o-mini; judge mặc định gpt-4.1, `s1_judge` route DB đã sang gpt-5.6-luna nhưng còn lẫn gpt-4.1 (146/391 lời gọi 2 ngày). Temperature đã xử lý (AA-659). → AA-714 (đã comment kết quả điều tra), draft trả lời Jira chờ Nghiệp duyệt.
 
 ## Còn lại
 - Các đợt tiếp: Mongolia → China → Thailand → Bhutan (chờ chị Thư về 2 NCC) → Laos → Nepal → Sri Lanka → India.
 - AA-712: chuyển pipeline địa danh (trích xuất lịch trình, geocode, tour graph) sang CIS → rồi bật "Match places + covers".
 - Ảnh: thư mục "South Korea: Seoul to Seorak, Seven Days" chưa có tour khớp (hỏi chị Thư); các nước khác gán tay thư mục còn lại.
 - Thay Google API key (đã lộ trong log trước #535).
-- Merge TripPlanner PR #64. Root PR (branch `docs/s207-jira-mention-rule`).
+- Root PR #19 + TripPlanner PR #64: đã merge.
+- Notion memory S207: đã ghi (lần đầu Notion API lỗi 500 tạm thời "Cross-cell memcached access is not allowed", thử lại được).
 - Jev a1_seo (shadow) toàn grey — cần nhãn để hiệu chỉnh trước khi enforce.
 - **AA-713** (High): atom của tour inactive/trashed vẫn được segment/ranking/slate dùng — đầu phiên sau.
 - **AA-714**: judge sang GPT Luna + tìm đường gpt-4.1 còn sót; A/B gpt-6-luna.
 - AA-651: viết lại S1 (`run-tour-async`) vẫn là task trong process API, không bền — deploy/OOM giữa chừng làm mất lần chạy.
+
+## Điều tra gpt-4.1 còn trong s1_judge (AA-714, Jira PR-16)
+- Route (`shared.llm_role_config`, mig 171 từ S200): s1/t10/n7_judge = gpt-5.6-luna → fallback gpt-6-luna → gpt-6-luna-openai, **shadow gpt-4.1 100%**; s1_brand_audit = **gpt-4.1 chính (OpenAI direct), không fallback**, shadow luna.
+- Mọi quyết định judge là gpt-5.6-luna (Bedrock acc3, fallback_used=false). Dòng gpt-4.1 = **shadow** (`LLMClient._run_shadow`), ghi cả vào `llm_call_log` cùng stage → số đếm 1:1 theo giờ.
+- **Tài khoản OpenAI direct hết credit từ 08:21 UTC 01/10** (429 "no credits remaining", 113 lỗi trong `llm_shadow_log`) → không ảnh hưởng quyết định judge. **Rủi ro:** brand_audit LLM (chưa gọi từ 29/09 nhờ prefilter) sẽ lỗi ở lần gọi tới.
+- Temperature của Luna đã xử lý (catalog `supports_temperature=false`, AA-659). Không stage nào dùng gpt-4o-mini.
 
 ## Jev ở đâu (kiểm llm_call_log 2 ngày)
 - S1: `s1_grounding` (6.140 lời gọi — mỗi câu có căn cứ trong nguồn), `a1_seo` (1.595, shadow — keyword liên quan tour), `s1_judge_tiebreak` (3). Judge chính vẫn là GPT.
