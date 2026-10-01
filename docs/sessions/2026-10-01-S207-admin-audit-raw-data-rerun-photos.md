@@ -68,8 +68,9 @@ steering: luôn tag chị Thư trên Jira, số phiên S207.
 ## Jira (đều tag chị Thư)
 - PR-15: báo cáo dữ liệu thô + hỏi Bhutan 2 NCC (Druk Path 8N, Jomolhari/Yaksa 11N) + Pakistan/Philippines thứ tự.
 - PR-14: bảng giá dịch vụ đăng nhập (đề xuất Cognito). KAN-20: benchmark Asian Trails (Leigh + Thư), để mở.
-- PR-11 (**đăng thẳng, không đưa draft — sai quy trình; đã ghi lại quy tắc**): báo ảnh đã sync tự động từ Drive CON (3.232 ảnh, 7 nước, 162 tour) + hỏi: quyền dùng ảnh public/credit; thẻ LAOS chưa có link thư mục; thư mục "Seoul to Seorak" thuộc tour nào.
-- **PR-16 (mới, chị Thư):** đổi "gpt-4.0-mini" sang GPT-5.6/6 Luna. Hệ thống không dùng gpt-4o-mini; judge mặc định gpt-4.1, `s1_judge` route DB đã sang gpt-5.6-luna nhưng còn lẫn gpt-4.1 (146/391 lời gọi 2 ngày). Temperature đã xử lý (AA-659). → AA-714 (đã comment kết quả điều tra), draft trả lời Jira chờ Nghiệp duyệt.
+- PR-11 comment 10447: lần đầu **đăng thẳng, không đưa draft (sai quy trình)**, sau đó **sửa lại theo bản Nghiệp duyệt**, tiếng Việt, **chỉ tag chị Thư** (Nghiệp bỏ tag Trang). Nội dung: không cần điền ảnh tay nữa; nguồn Drive CON qua API; giữ ảnh gốc + 1600/600; 3.232 ảnh / 7 nước / 162 tour theo từng nước; 4,33 GB ~$0,10/tháng; vận hành; mức sẵn sàng trip planner; bước tiếp (CloudFront, sync hằng ngày, hiển thị trên planner); cách marketing cập nhật; 3 câu hỏi (quyền ảnh public/credit, thư mục Laos, thư mục "Seoul to Seorak").
+- PR-15 comment 10448: tiến độ chạy lại (Korea 27/30, Taiwan 34/36, Master 64, đã atom hoá), các sửa trong lúc chạy, cơ chế Regenerate thay sửa tay, 5 tour chờ, chi phí ~$9,5.
+- **PR-16 (mới, chị Thư):** đổi "gpt-4.0-mini" sang GPT-5.6/6 Luna. Hệ thống không dùng gpt-4o-mini; judge mặc định gpt-4.1, `s1_judge` route DB đã sang gpt-5.6-luna nhưng còn lẫn gpt-4.1 (146/391 lời gọi 2 ngày). Temperature đã xử lý (AA-659). → AA-714. **Đã trả lời PR-16 (comment 10449)**: judge chạy GPT-5.6 Luna **qua AWS Bedrock** (không qua OpenAI platform) từ 28/09, fallback GPT-6 Luna Bedrock → OpenAI; GPT-4.1 chỉ chạy song song; Luna không nhận temperature/seed nên hệ thống bỏ hai tham số (không cố định được như GPT-4.1 0.1 + seed 42) → sẽ đo độ ổn định bằng chấm lặp 2–3 lần; brand audit vẫn GPT-4.1 qua OpenAI đã hết credit. Nghiệp duyệt: brand audit → gpt-5.6-luna + fallback gpt-6-luna; shadow gpt-4.1 → gpt-6-luna. Nghiệp tự báo chị Thư việc hết credit OpenAI.
 
 ## Còn lại
 - Các đợt tiếp: Mongolia → China → Thailand → Bhutan (chờ chị Thư về 2 NCC) → Laos → Nepal → Sri Lanka → India.
@@ -80,7 +81,7 @@ steering: luôn tag chị Thư trên Jira, số phiên S207.
 - Notion memory S207: đã ghi (lần đầu Notion API lỗi 500 tạm thời "Cross-cell memcached access is not allowed", thử lại được).
 - Jev a1_seo (shadow) toàn grey — cần nhãn để hiệu chỉnh trước khi enforce.
 - **AA-713** (High): atom của tour inactive/trashed vẫn được segment/ranking/slate dùng — đầu phiên sau.
-- **AA-714**: judge sang GPT Luna + tìm đường gpt-4.1 còn sót; A/B gpt-6-luna.
+- **AA-714** (đã duyệt): brand audit sang gpt-5.6-luna + fallback gpt-6-luna; shadow judge gpt-4.1 → gpt-6-luna; màn hình xem model theo thời gian (primary / fallback / shadow, lịch sử đổi route); báo lại PR-16 khi có kết quả A/B.
 - AA-651: viết lại S1 (`run-tour-async`) vẫn là task trong process API, không bền — deploy/OOM giữa chừng làm mất lần chạy.
 
 ## Điều tra gpt-4.1 còn trong s1_judge (AA-714, Jira PR-16)
