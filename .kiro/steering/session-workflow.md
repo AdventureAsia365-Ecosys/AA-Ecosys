@@ -39,6 +39,9 @@ Khi Nghiệp nói "bắt đầu session mới", TRƯỚC KHI làm gì khác:
 2. Đọc **log session local** mới nhất trong `docs/sessions/`.
 3. Xem **Linear** — list issues (backlog + in-progress + todo) để biết việc đang mở.
 4. Tổng hợp ngắn gọn (bảng/gạch đầu dòng) cho Nghiệp: state hiện tại + đề xuất việc làm phiên này. Chờ Nghiệp chốt.
+5. **Đưa ra danh sách 5–10 issue/task sẽ làm trong phiên (BẮT BUỘC — Nghiệp chốt 02/10/2026):** sau khi
+   đọc 3 nguồn, đề xuất một list 5–10 issue/task cụ thể cho phiên (ưu tiên theo việc đang mở + việc-cần-làm-đầu-phiên),
+   làm định hướng chính để hoàn thành phiên tốt hơn. Chờ Nghiệp chốt/điều chỉnh rồi mới bắt tay.
 
 ## Trong khi làm
 - Khi cần tạo task/lưu việc/plan → **HỎI Nghiệp trước khi tạo issue Linear mới**. Không tự ý tạo.
@@ -96,7 +99,15 @@ Khi Nghiệp nói "dừng session này":
    (format bảng/gạch đầu dòng; việc đã làm + việc cần làm đầu phiên sau + lưu ý). KHÔNG tự rotate HOT→Archive
    (Nghiệp tự làm tay; nếu trang quá dài thì HỎI trước).
 3. **Đồng bộ Linear**: cập nhật trạng thái issue đã đụng, comment tiến độ, tạo issue cho việc còn treo (sau khi hỏi).
-4. Đảm bảo 3 nguồn (Notion memory, log local, Linear) + trạng thái repo nhất quán với nhau.
+4. **Đóng nhánh — repo về main/master sạch (BẮT BUỘC — Nghiệp chốt 02/10/2026):**
+   - **Merge root PR** đang chờ (vd steering/docs/workspace) ngay cuối phiên, đừng để treo sang phiên sau.
+     Root merge là tay (lệ root PR): `gh pr merge <n> --squash` (không cần CI gate như AA-CIS-App).
+     Nếu Nghiệp muốn tự merge thì HỎI; mặc định merge luôn để phiên sạch.
+   - **Mọi repo (gốc + 3 con) phải quay về `main`/`master`, cây sạch** (`git checkout main && git pull`):
+     không để một repo đứng ở feature branch cuối phiên — phiên sau mở ra đứng nhầm nhánh dễ tưởng còn việc dở.
+   - Feature branch của PR đã merge thì bỏ lại trên remote (GitHub tự xoá khi merge nếu bật), local checkout về main.
+   - Nếu còn PR chưa merge được (CI đỏ, chờ review) → ghi rõ trong log + memory là "PR #… chờ", và vẫn đưa repo về main.
+5. Đảm bảo 3 nguồn (Notion memory, log local, Linear) + trạng thái repo nhất quán với nhau; `git status` cả 4 repo sạch.
 
 ## Đánh số phiên
 - Tiếp nối chuỗi trong memory Notion (nguồn chuẩn — số dưới đây chỉ để tham khảo nhanh).
@@ -113,6 +124,9 @@ Khi Nghiệp nói "dừng session này":
   đọc file NGOÀI workspace, kể cả khi autopilot bật (autopilot chỉ bỏ xác nhận cho hành động TRONG workspace) — ghi ra
   `~/` làm phiền vì mỗi `read_file` bị hỏi. Ưu tiên đọc output ngắn thẳng qua `get_process_output`; chỉ ghi-file-rồi-đọc
   khi output dài. Dọn `.tmp-session/` sau khi dùng.
+- **Google API key `aa-cis/dev/gdrive-photo-reader` KHÔNG cần đổi (Nghiệp chốt 02/10/2026):** key từng lộ
+  trong URL `?key=` ở log/lỗi trước PR #535 của AA-708, nhưng đã bịt (truyền qua header từ #535). Nghiệp quyết
+  không cần tạo key thay thế — bỏ việc "thay Google API key" khỏi mọi danh sách việc còn treo.
 
 ## Script gọi LLM chạy tay — PHẢI ghi log chi phí (Nghiệp chốt 24/09/2026, từ AA-635)
 

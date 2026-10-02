@@ -1,0 +1,44 @@
+{
+  // Multi-root workspace: one folder per git repo, so Source Control and the
+  // GitHub Actions extension see each repo (and its workflows) separately.
+  // Open with: File > Open Workspace from File... > AA-Ecosys.code-workspace
+  "folders": [
+    { "name": "AA-Ecosys (root)", "path": "." },
+    { "name": "AA-CIS-App", "path": "apps/AA-CIS-App" },
+    { "name": "AA-TripPlanner-Web", "path": "apps/AA-TripPlanner-Web" },
+    { "name": "AA-CIS-Infra", "path": "infra/AA-CIS-Infra" }
+  ],
+  "settings": {
+    // The sub-repos already have their own folder above; hide them inside the root
+    // folder so files are not listed (and searched) twice.
+    "files.exclude": {
+      "apps/AA-CIS-App": true,
+      "apps/AA-TripPlanner-Web": true,
+      "infra/AA-CIS-Infra": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/.venv": true,
+      "**/.next": true,
+      "**/.claude/worktrees": true
+    },
+    "git.autoRepositoryDetection": true,
+
+    // Window-scoped settings moved from .vscode/settings.json (folder settings of a
+    // multi-root workspace cannot set them).
+    "sqltools.connections": [
+      {
+        "name": "AA RDS (tunnel)",
+        "driver": "PostgreSQL",
+        "server": "localhost",
+        "port": 5432,
+        "database": "aa_cis_dev",
+        "username": "aa_cis_admin",
+        "askForPassword": true,
+        "connectionTimeout": 15,
+        "pgOptions": {}
+      }
+    ],
+    "atlascode.jira.explorer.fetchAllQueryResults": true
+  }
+}
