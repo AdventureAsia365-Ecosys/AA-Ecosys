@@ -99,7 +99,15 @@ Khi Nghiệp nói "dừng session này":
    (format bảng/gạch đầu dòng; việc đã làm + việc cần làm đầu phiên sau + lưu ý). KHÔNG tự rotate HOT→Archive
    (Nghiệp tự làm tay; nếu trang quá dài thì HỎI trước).
 3. **Đồng bộ Linear**: cập nhật trạng thái issue đã đụng, comment tiến độ, tạo issue cho việc còn treo (sau khi hỏi).
-4. Đảm bảo 3 nguồn (Notion memory, log local, Linear) + trạng thái repo nhất quán với nhau.
+4. **Đóng nhánh — repo về main/master sạch (BẮT BUỘC — Nghiệp chốt 02/10/2026):**
+   - **Merge root PR** đang chờ (vd steering/docs/workspace) ngay cuối phiên, đừng để treo sang phiên sau.
+     Root merge là tay (lệ root PR): `gh pr merge <n> --squash` (không cần CI gate như AA-CIS-App).
+     Nếu Nghiệp muốn tự merge thì HỎI; mặc định merge luôn để phiên sạch.
+   - **Mọi repo (gốc + 3 con) phải quay về `main`/`master`, cây sạch** (`git checkout main && git pull`):
+     không để một repo đứng ở feature branch cuối phiên — phiên sau mở ra đứng nhầm nhánh dễ tưởng còn việc dở.
+   - Feature branch của PR đã merge thì bỏ lại trên remote (GitHub tự xoá khi merge nếu bật), local checkout về main.
+   - Nếu còn PR chưa merge được (CI đỏ, chờ review) → ghi rõ trong log + memory là "PR #… chờ", và vẫn đưa repo về main.
+5. Đảm bảo 3 nguồn (Notion memory, log local, Linear) + trạng thái repo nhất quán với nhau; `git status` cả 4 repo sạch.
 
 ## Đánh số phiên
 - Tiếp nối chuỗi trong memory Notion (nguồn chuẩn — số dưới đây chỉ để tham khảo nhanh).
