@@ -39,6 +39,9 @@ Khi Nghiệp nói "bắt đầu session mới", TRƯỚC KHI làm gì khác:
 2. Đọc **log session local** mới nhất trong `docs/sessions/`.
 3. Xem **Linear** — list issues (backlog + in-progress + todo) để biết việc đang mở.
 4. Tổng hợp ngắn gọn (bảng/gạch đầu dòng) cho Nghiệp: state hiện tại + đề xuất việc làm phiên này. Chờ Nghiệp chốt.
+5. **Đưa ra danh sách 5–10 issue/task sẽ làm trong phiên (BẮT BUỘC — Nghiệp chốt 02/10/2026):** sau khi
+   đọc 3 nguồn, đề xuất một list 5–10 issue/task cụ thể cho phiên (ưu tiên theo việc đang mở + việc-cần-làm-đầu-phiên),
+   làm định hướng chính để hoàn thành phiên tốt hơn. Chờ Nghiệp chốt/điều chỉnh rồi mới bắt tay.
 
 ## Trong khi làm
 - Khi cần tạo task/lưu việc/plan → **HỎI Nghiệp trước khi tạo issue Linear mới**. Không tự ý tạo.
@@ -113,6 +116,9 @@ Khi Nghiệp nói "dừng session này":
   đọc file NGOÀI workspace, kể cả khi autopilot bật (autopilot chỉ bỏ xác nhận cho hành động TRONG workspace) — ghi ra
   `~/` làm phiền vì mỗi `read_file` bị hỏi. Ưu tiên đọc output ngắn thẳng qua `get_process_output`; chỉ ghi-file-rồi-đọc
   khi output dài. Dọn `.tmp-session/` sau khi dùng.
+- **Google API key `aa-cis/dev/gdrive-photo-reader` KHÔNG cần đổi (Nghiệp chốt 02/10/2026):** key từng lộ
+  trong URL `?key=` ở log/lỗi trước PR #535 của AA-708, nhưng đã bịt (truyền qua header từ #535). Nghiệp quyết
+  không cần tạo key thay thế — bỏ việc "thay Google API key" khỏi mọi danh sách việc còn treo.
 
 ## Script gọi LLM chạy tay — PHẢI ghi log chi phí (Nghiệp chốt 24/09/2026, từ AA-635)
 
