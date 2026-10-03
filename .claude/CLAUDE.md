@@ -69,6 +69,7 @@ không lệch nhau; sửa quy tắc thì sửa file steering, KHÔNG chép lại
 
 @../.kiro/steering/session-workflow.md
 @../.kiro/steering/language-convention.md
+@../.kiro/steering/db-schema.md
 
 ### Điều chỉnh khi chạy trong Claude Code (thay phần đặc thù Kiro)
 - Notion/Linear: dùng connector **claude.ai Notion / claude.ai Linear** (không phải `.kiro/settings/mcp.json`).
