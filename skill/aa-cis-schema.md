@@ -465,6 +465,26 @@ Mấy lỗi này đã làm mất nhiều lượt dò; phiên sau LÀM THEO LUÔN
   deploy. Dùng để phân biệt "deploy chưa xong" vs "secret sai".
 - Deploy Dev từ merge main: workflow "Deploy Dev" ~5-6 phút → ECS rollout COMPLETED (kiểm
   `describe-services ... deployments[].rolloutState`, 1 PRIMARY, running=desired). taskDef tăng số.
+- 422 `{"detail":[{"type":"missing","loc":["query",...]}]}` khi gọi 1 endpoint vừa sửa = **route
+  bind nhầm** (xem learning decorator ngay dưới), KHÁC 403/404.
+
+### BÀI HỌC decorator FastAPI (S211, AA-718) — gây 422 trên Dev
+KHÔNG chèn một helper function GIỮA `@router.get(...)` (hoặc comment của nó) và `async def <route>`.
+Decorator áp vào function NGAY SAU nó — nếu chèn helper vào giữa, decorator bind vào HELPER, route
+thật mất đường, và endpoint trả **422 đòi đúng các tham số của helper**. Đặt mọi helper TRƯỚC cả
+block comment + decorator của route. (S211 #558 chèn `_derive_run_display_status` giữa decorator và
+`get_tenant_details` → endpoint 422 live → hotfix #559.)
+
+### BÀI HỌC worker deploy name (S211, AA-651) — worker kẹt task-def cũ âm thầm
+`deploy-dev.yml` suy ra `ECS_WORKER_SERVICE = ${ECS_SERVICE}-worker`. Nhưng `ECS_SERVICE =
+aa-cis-dev-api` (api service có hậu tố `-api`), nên worker-name tính ra `aa-cis-dev-api-worker` ≠
+service thật `aa-cis-dev-worker` → `describe-services` không khớp → step "Deploy worker" in
+"not found yet — skipping" và **bỏ qua worker mỗi lần deploy** (worker kẹt task-def `:1` từ lúc tạo,
+chạy code cũ, trong khi api lên :44x). Fix: `ECS_WORKER_SERVICE=${ECS_SERVICE%-api}-worker`.
+Kiểm nhanh lệch bản: `describe-services ... --query 'services[0].taskDefinition'` cho api vs worker
+— nếu worker revision thấp hơn api nhiều/kẹt `:1` thì nghi worker không được deploy.
+Nhắc: api + worker CHUNG 1 image; mỗi deploy đăng ký task-def revision mới cho CẢ HAI (image ghim
+sha) → sửa code chỉ api vẫn roll worker (cùng `shared/`), đó là đúng/an toàn.
 
 ### Thêm top-level package/module mới vào AA-CIS-App (S210, AA-651)
 Hai chỗ PHẢI sửa khi thêm một package Python top-level mới (vd `worker/`), nếu quên thì CI xanh
