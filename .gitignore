@@ -3,8 +3,9 @@
 apps/
 infra/
 
-# skill/ — context nội bộ cho Claude, giữ LOCAL, KHÔNG push lên GitHub
-skill/
+# skill/ — tri thức vận hành dùng chung (Kiro + Claude Code): schema reference, ECS exec
+# patterns, repo map. KHÔNG chứa secret (chỉ TÊN secret) nên version-control ở root.
+# (Trước S210 từng ignore local-only; bỏ ignore để learning được chia sẻ + review qua PR.)
 
 # Tài liệu nguồn AAA (binary nặng) — giữ local, không commit
 apps/AA-TripPlanner-Web/docs/AAA/
