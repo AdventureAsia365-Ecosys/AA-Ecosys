@@ -46,8 +46,8 @@ comment mốc. Kích thước cuối: 9 skill = 56.1 KB (cũ 114 KB); mỗi `SKI
 - Draft ADR dùng số `ADR-2026-NNN` → thực tế `NNNN` 4 chữ số, 2 cấp repo, số trùng nhau.
 - Draft "S1 rewrite/revalidate/recompute đang chuyển (AA-723)" → đã Done, có job kind thật.
 
-## Câu hỏi cần Nghiệp quyết
+## Câu hỏi đã được Nghiệp quyết (06/10/2026)
 
-1. **Mr. Manh / QuanSolution** còn liên quan AA không? Nếu có, thêm vào `stakeholders-english.md`; nếu không, giữ nguyên 3 người.
-2. Kích thước cuối 56.1 KB — nhỉnh hơn mục tiêu ~55 KB khoảng 1 KB. Chấp nhận, hay cần cắt thêm (ứng viên: gộp bớt reference `aa-ecosys-repos`)?
-3. dead-table-registry.md đặt ở root AA-Ecosys (không phải AA-CIS-App) — xác nhận hướng này đúng (nhất quán với db-schema-reference).
+1. **Mr. Manh / QuanSolution** — KHÔNG còn liên quan AA. Giữ nguyên 3 người (chị Thư/Leigh/Trang) trong `stakeholders-english.md`.
+2. Kích thước 56.1 KB (so với mục tiêu ~55 KB) — **chấp nhận**, không cắt thêm.
+3. dead-table-registry.md đặt ở **root AA-Ecosys** (cạnh db-schema-reference) — **xác nhận đúng**.
