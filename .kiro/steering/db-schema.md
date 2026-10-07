@@ -8,14 +8,14 @@ schema tách bạch. Tên bảng/cột thay đổi theo migration nên **không 
   file này là dump thật từ `information_schema` (mọi schema, mọi cột, enum, FK, migration mới nhất).
   Nó là nguồn sự thật về tên bảng/cột cho CẢ Kiro và Claude Code. KHÔNG introspect cột lại từ đầu
   nếu file đã có — chỉ introspect khi file thiếu bảng mới hoặc nghi file lỗi thời.
-- Skill `skill/aa-cis-schema.md` giữ phần GIẢI THÍCH (vai trò bảng, Dead Table Registry, gotcha,
+- Skill `skill/aa-cis-schema/SKILL.md` giữ phần GIẢI THÍCH (vai trò bảng, Dead Table Registry, gotcha,
   ECS exec pattern) — nhưng danh sách cột trong skill là tóm tắt lịch sử, có thể lệch. Khi lệch,
   `db-schema-reference.md` thắng (nó là dump live).
 
 ## Khi nào regenerate file reference
 Sau MỖI migration đổi cấu trúc (CREATE/ALTER/DROP TABLE/VIEW, thêm cột). Cách làm:
 1. Chạy dump: `.tmp-session/s209_schema_dump.py` (asyncpg + `information_schema`, ghi JSON ra S3,
-   chạy qua ECS exec vì RDS private — xem skill `aa-cis-schema` mục "S3-Mediated ECS Exec").
+   chạy qua ECS exec vì RDS private — xem `skill/aa-cis-schema/references/ecs-exec.md`).
 2. Sinh lại Markdown: `.tmp-session/s209_gen_schema_md.py` (đọc JSON → ghi
    `docs/architecture/db-schema-reference.md`).
 3. Cập nhật dòng "Verified / Latest migration" ở đầu file.
@@ -31,4 +31,5 @@ Sau MỖI migration đổi cấu trúc (CREATE/ALTER/DROP TABLE/VIEW, thêm cộ
   KHÔNG đọc thẳng `acp_contract.tour_atoms` ở các read A3.
 - LLM gateway: `shared.llm_call_log` (có cả shadow dưới cùng stage — đọc route thật ở
   `shared.llm_role_config` + `shared.llm_shadow_log`), `shared.llm_model_catalog`.
-- Job runner: `shared.job` (6 kind); S1 rewrite in-process ở `shared.pipeline_jobs` (KHÁC `shared.job`).
+- Job runner: mọi tác vụ nền ở `shared.job` (số kind đổi theo thời gian — đọc `/admin/job-runner/summary`
+  hoặc `shared.job`, không nhớ số cứng); `shared.pipeline_jobs` chỉ còn dữ liệu lịch sử, KHÔNG ghi mới.
