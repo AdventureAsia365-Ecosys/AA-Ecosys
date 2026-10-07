@@ -23,10 +23,10 @@
 
 Gateway định tuyến theo stage (`shared.llm_role_config`): acc3-first, fallback acc1, rồi model ngoài (OpenAI API). Writer chạy model Anthropic; judge và brand audit chạy GPT (vendor khác writer có chủ ý). Đọc route thật trong DB, không ghi số/model vào skill (đang đổi theo A/B).
 
-## Start / stop môi trường
+## Môi trường — CHẠY LIÊN TỤC (Nghiệp chốt 07/10/2026, S217)
 
-- `cis-start` (NAT → RDS → ECS api scale 1), `cis-stop` (ECS api scale 0 → RDS → NAT), `cis-status`. NAT instance cần ~60–90 giây mới có outbound.
-- Cả hai alias chỉ scale service `aa-cis-dev-api`, KHÔNG đụng `aa-cis-dev-worker` — worker giữ nguyên desired count khi dừng/khởi động môi trường bằng alias.
+- **Hệ thống Dev để chạy liên tục, ổn định. Agent TUYỆT ĐỐI KHÔNG tự bật/tắt hạ tầng:** không `cis-start`, không `cis-stop`, không `aws ecs update-service --desired-count`, không `rds stop/start-db-instance`, không `ec2 start/stop-instances`. Đây là hành động của Nghiệp. Muốn bật/tắt → HỎI Nghiệp, chỉ làm khi Nghiệp yêu cầu rõ.
+- `cis-status` (chỉ ĐỌC trạng thái NAT) thì được dùng để kiểm tra.
 - STS hết hạn sau 8h → `eval "$(aws configure export-credentials --profile aa365-admin --format env)"` + MFA (chỉ Nghiệp).
 
 ## CLI rules
