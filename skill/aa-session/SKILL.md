@@ -1,6 +1,6 @@
 ---
 name: aa-session
-description: Nghi thức bắt đầu và kết thúc một phiên làm việc AA_Ecosys — đọc memory.md HOT, kiểm job/ECS/STS, chốt danh sách việc; cuối phiên ghi session block, rotation, cập nhật Linear, dừng môi trường. Dùng khi Nghiệp nói bắt đầu phiên, "S2xx", "đầu phiên", "kết thúc phiên", "chốt phiên", "wrap up", hoặc khi một phiên AA bắt đầu mà chưa có bối cảnh.
+description: Nghi thức bắt đầu và kết thúc một phiên làm việc AA_Ecosys — đọc memory.md HOT, kiểm job/ECS/STS, chốt danh sách việc; cuối phiên prepend session block (không rotate), cập nhật Linear, dừng môi trường. Dùng khi Nghiệp nói bắt đầu phiên, "S2xx", "đầu phiên", "kết thúc phiên", "chốt phiên", "wrap up", hoặc khi một phiên AA bắt đầu mà chưa có bối cảnh.
 ---
 
 # aa-session

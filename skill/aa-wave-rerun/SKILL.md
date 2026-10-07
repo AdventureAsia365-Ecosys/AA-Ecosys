@@ -1,6 +1,6 @@
 ---
 name: aa-wave-rerun
-description: Runbook chạy lại pipeline A1→A3 (S1 rewrite, review, Master, atomize) cho một nước hoặc một nhóm tour trong AA-CIS — pilot 3 tour, expected_set, không merge giữa wave, đếm đúng, báo cáo 4 cột + Jev coverage, chờ duyệt giữa các wave. Dùng khi Nghiệp nói rerun, chạy lại <nước>, wave, pilot, hoặc AA-653.
+description: Runbook chạy lại pipeline A1→A3 (S1 rewrite, review, Master, atomize) cho một nước hoặc một nhóm tour trong AA-CIS — pilot 3 tour, expected_set, không merge giữa wave, đếm đúng, báo cáo 4 cột + Jev coverage, chờ duyệt giữa các wave. Dùng khi Nghiệp nói rerun, chạy lại một nước, wave, pilot, hoặc AA-653.
 ---
 
 # aa-wave-rerun
