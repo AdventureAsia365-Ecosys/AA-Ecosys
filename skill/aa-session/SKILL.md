@@ -10,7 +10,7 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
 1. **Đọc Notion `memory.md` HOT** (Program Brain). Lấy: phiên gần nhất, "việc cần làm đầu phiên sau", lưu ý kỹ thuật, ECS revision cuối. Không đọc archive trừ khi cần lịch sử cũ.
 2. **Kiểm trạng thái thật**, so với memory:
    - STS còn hạn: `aws sts get-caller-identity --profile aa365-admin`
-   - Môi trường đang chạy? (`cis-status`; nếu cần thì `cis-start`, chờ NAT ~90s)
+   - Môi trường đang chạy? (`cis-status`). Nếu môi trường đang tắt → **KHÔNG tự `cis-start`**; báo Nghiệp và chờ Nghiệp bật. Agent không bao giờ tự bật/tắt hạ tầng.
    - api và worker cùng image SHA, đúng revision memory ghi
    - `shared.job` có job queued/running không (query không lọc thời gian)
    - Jev canary `credit_ok` và số dư DFS, nếu phiên có chạy pipeline
@@ -39,5 +39,5 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
 3. **Lưu ý kỹ thuật lặp lại ≥2 phiên** → đưa vào skill phù hợp (thường `ai-nghiep/references/lessons.md`), rồi xoá khỏi memory.
 4. **Linear:** issue đã verify → Done kèm comment bằng chứng; đang dở → In Progress kèm ghi chú.
 5. **Log local:** `docs/sessions/<yyyy-mm-dd>-S<nnn>-<slug>.md`.
-6. **Dừng môi trường** nếu không còn job: `cis-stop`. Có job đang chạy thì để nguyên và ghi vào session block.
+6. **KHÔNG dừng môi trường.** Hệ thống để chạy liên tục, ổn định. Agent TUYỆT ĐỐI không tự `cis-stop`/`cis-start`/scale ECS/stop RDS/stop NAT — mọi bật/tắt hạ tầng chỉ Nghiệp làm, hoặc Nghiệp yêu cầu rõ. Cuối phiên để nguyên môi trường đang chạy.
 7. **Tóm tắt 3 dòng** cho Nghiệp: đã làm / còn lại / phiên sau bắt đầu từ đâu.
