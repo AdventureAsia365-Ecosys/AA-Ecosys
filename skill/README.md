@@ -23,7 +23,7 @@ Issue: AA-733. Nguồn phân tích: tài liệu "Harness Engineering → AA-CIS"
 | `ai-nghiep` §3 Session ritual | `aa-session` |
 | `ai-nghiep` §4 AWS | `ai-nghiep/references/aws.md` |
 | `ai-nghiep` §5 CI/CD, git | `aa-ship`, `ai-nghiep/references/handoff-prompt.md` |
-| `ai-nghiep` §6 FastAPI, frontend notes | `ai-nghiep/references/lessons.md`, `aa-ui-verify` |
+| `ai-nghiep` §6 FastAPI, frontend notes | `aa-lessons/lessons.md`, `aa-ui-verify` |
 | `ai-nghiep` §7 schema rules | AAA → `aa-ecosys-repos/references/booking.md`; CIS → `aa-cis-schema` |
 | `ai-nghiep` §8 pipeline Step Functions | **xoá** (thay bằng `aa-ecosys-repos/references/pipeline.md`) |
 | `ai-nghiep` §9–10 ADR, techstack | `ai-nghiep/references/adr.md` |
@@ -42,7 +42,8 @@ Issue: AA-733. Nguồn phân tích: tài liệu "Harness Engineering → AA-CIS"
 ## Cấu trúc
 
 ```
-ai-nghiep/        SKILL.md + references/{aws, lessons, adr, stakeholders-english, handoff-prompt}.md
+ai-nghiep/        SKILL.md + references/{aws, adr, stakeholders-english, handoff-prompt}.md
+aa-lessons/       SKILL.md + lessons.md (sổ bài học — ghi ngay khi gặp lỗi do làm sai cách)
 aa-session/       SKILL.md
 aa-ship/          SKILL.md
 aa-ui-verify/     SKILL.md

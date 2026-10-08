@@ -16,6 +16,7 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
    - Jev canary `credit_ok` và số dư DFS, nếu phiên có chạy pipeline
 3. **Đưa danh sách 5–10 issue sẽ làm**, theo thứ tự ưu tiên. Mỗi issue `get_issue` để chắc title đúng.
 4. **Báo lệch:** nếu state thật khác memory (revision, job treo, issue đã đóng), nói ngay trước khi làm.
+5. **Đọc bài học:** lướt các mục trong `aa-lessons/lessons.md` liên quan tới các issue đã chốt.
 
 Đầu ra: một khối ngắn gồm trạng thái (3–5 dòng), lệch nếu có, danh sách việc.
 
@@ -36,7 +37,7 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
    **Lưu ý kỹ thuật** — chỉ điều mới, chưa có trong skill
    ```
 2. **Chỉ prepend.** Agent không cắt, không di chuyển, không xoá session block cũ. Nghiệp tự chuyển phiên cũ sang `memory_archive_2026H2` bằng tay (rotate tự động từng gây lỗi).
-3. **Lưu ý kỹ thuật lặp lại ≥2 phiên** → đưa vào skill phù hợp (thường `ai-nghiep/references/lessons.md`), rồi xoá khỏi memory.
+3. **Bài học:** lỗi do làm sai cách đã ghi ngay vào `aa-lessons/lessons.md` trong phiên (xem `aa-lessons`); cuối phiên rà lại, ghi nốt cái còn thiếu. Lưu ý kỹ thuật khác lặp lại ≥2 phiên → đưa vào skill phù hợp rồi xoá khỏi memory.
 4. **Linear:** issue đã verify → Done kèm comment bằng chứng; đang dở → In Progress kèm ghi chú.
 5. **Log local:** `docs/sessions/<yyyy-mm-dd>-S<nnn>-<slug>.md`.
 6. **KHÔNG dừng môi trường.** Hệ thống để chạy liên tục, ổn định. Agent TUYỆT ĐỐI không tự `cis-stop`/`cis-start`/scale ECS/stop RDS/stop NAT — mọi bật/tắt hạ tầng chỉ Nghiệp làm, hoặc Nghiệp yêu cầu rõ. Cuối phiên để nguyên môi trường đang chạy.

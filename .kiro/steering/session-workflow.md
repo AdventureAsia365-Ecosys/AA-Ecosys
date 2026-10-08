@@ -25,6 +25,11 @@ Trước khi thiết kế/sửa code một repo, ĐỌC `CONTEXT.md` của repo 
 `docs/ecosystem-architecture.md` cho cả hệ sinh thái. Thay đổi kiến trúc/ranh giới → cập nhật CONTEXT.md cùng phiên.
 Code lệch CONTEXT.md = mâu thuẫn cần làm rõ, không bỏ qua.
 
+## Bài học (lesson log) → `skill/aa-lessons/SKILL.md`
+Gặp lỗi do làm/code sai cách hoặc giả định sai → **ghi ngay** 1 nguyên tắc vào `skill/aa-lessons/lessons.md`
+(nguyên tắc — triệu chứng → nguyên nhân (phiên, issue). Bắt bằng: …). Trước khi sửa một vùng code, đọc mục của vùng đó.
+Bài học kiểm được bằng test/CI → làm guard, rồi xoá dòng.
+
 ## ADR đặt ở repo nào → `skill/ai-nghiep/references/adr.md`
 Hỏi "đảo ngược quyết định này thì repo nào phải sửa?": ≥2 repo → `AA-Ecosys/docs/adr/`; chỉ hạ tầng →
 `infra/AA-CIS-Infra/docs/adr/`; chỉ 1 app → `apps/<repo>/docs/adr/`. ADR con trích dẫn ADR hệ sinh thái nó triển khai.
