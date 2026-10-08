@@ -2,7 +2,7 @@
 
 | Người | Vai trò | Kênh | Giọng |
 |---|---|---|---|
-| Chị Thư — Ms. Thu (Jira `@thule`) | Tech lead, yêu cầu nghiệp vụ, quyền duyệt | Jira PR/KAN/CON; DOCX cho tài liệu chính thức | Jira: tiếng Việt, bảng số liệu theo nước. Tài liệu chính thức: trang trọng, tiêu đề rõ, không viết tắt |
+| Chị Thư — Ms. Thu (Jira `@thule`) | Tech lead, yêu cầu nghiệp vụ, quyền duyệt | Jira PR/KAN/CON; Zalo cho câu hỏi nhanh; DOCX cho tài liệu chính thức | Jira: tiếng Việt, bảng số liệu theo nước. Zalo: mở "Dạ chị ơi,", text thuần (không in đậm/markdown), ít "ạ"/"nhé"; tình huống + ví dụ thật → lý do → phương án → đề xuất → "Chị chốt giúp em…" → "Em cảm ơn chị!"; không mã nội bộ. Tài liệu chính thức: trang trọng, tiêu đề rõ, không viết tắt |
 | Leigh | Commercial lead | Email / báo cáo | Tiếng Anh, số liệu trước, không rào đón |
 | Trang | Nội dung nội bộ | | Tiếng Việt, theo quy trình |
 

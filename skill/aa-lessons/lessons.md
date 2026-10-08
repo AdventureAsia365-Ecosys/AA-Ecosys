@@ -32,6 +32,8 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Bước sửa tất định phải chạy sau lần sửa LLM cuối cùng, không chỉ lúc viết** — strip forbidden lúc viết vẫn để lọt vì flag_fix/re-repair seo_meta viết lại "Explore …" (S218, 8 tour). Bắt bằng: test gọi `revalidate_node` với nội dung vừa bị repair đưa từ cấm vào.
 - **Validator chỉ quét nội dung do writer viết, không quét cả dict** — `json.dumps(generated)` quét luôn `seo_keywords_used` (từ khoá DFS "cheap summer getaways") → FORBIDDEN_WORD không sửa được, chặn Master vĩnh viễn, 13/538 bản (S218, AA-738). Bắt bằng: liệt kê field metadata và loại khỏi mọi scan nội dung.
 - **Dữ liệu lưu phải là dữ liệu đã được validate** — seo_meta bị cắt lúc ghi DB nên bản lưu 153 ký tự mà mã vẫn là SEO_META_TOO_LONG, chẩn đoán dễ sai (S218). Bắt bằng: khi điều tra mã độ dài, so `issues` của validate, đừng đo field đã lưu.
+- **Một giá trị được tính ở hai đường code thì phải dùng chung một hàm** — `_audit_from_judge` tự đặt "flagged nếu có mã", bỏ qua `derive_status`, nên FACT_CHECK (cưỡi voi) thành "lỗi brand sửa được" thay vì `manual_check`: flag_fix chạy không có gì để sửa, người duyệt thấy sai lý do (S218 India, 8 tour). Bắt bằng: grep chỗ gán cùng một field trạng thái; test cùng input qua mọi đường.
+- **Đo lại sau khi sửa trước khi làm thêm** — định "bỏ seo_meta khỏi flag_fix", đo lại thấy AA-740 đã tự giảm flag_fix 79% → 25% (seo_meta 488/681 → 4/66), không cần code thêm (S218).
 - **Một model mạnh hơn không sửa được từ mà prompt/brand list cấm nhưng ngôn ngữ dùng tự nhiên** — Sonnet retry (AA-736) vẫn viết "explore" → thay từ tất định rẻ và chắc hơn (S218).
 - Nhiễu giữa hai lần chạy cùng prompt có thể lớn hơn hiệu ứng của thay đổi prompt — AA-346. Cần đo lặp, không kết luận từ 1 lần.
 - Đếm rerun theo distinct tour: master / review-pending / not-run; không đếm superseded; `ingested` trong review ≠ chưa chạy.
@@ -50,6 +52,9 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - 0 row không chứng minh "chưa từng dùng" — kiểm `git ls-files`.
 - Trước DROP TABLE: grep tên bảng trong `tests/integration/` (CI replay migration thật).
 - STEP0 phải hỏi "đường mới đã làm được việc này chưa", không chỉ "còn ai dùng không" (AA-473).
+- Bước "best-effort" nuốt lỗi bằng `logger.warning` thì phải để lại dấu vết trong kết quả job — không thì lỗi chạy âm thầm hàng ngày: segment không được dựng cho 566 tour từ 05/10 trong khi mọi job `a3_atomize` báo thành công (S218, AA-695). Báo cáo wave phải đếm sản phẩm đầu ra (segment/ranking/route theo tour), không chỉ trạng thái job. Bắt bằng: wave report đếm `tours_with_segment` theo nước.
+- Một UPDATE đổi khoá con (`SET segment_id = …`) trên bảng có PK ghép dễ đụng PK khi dòng đích đã có — dùng INSERT … ON CONFLICT DO NOTHING + DELETE (S218, AA-695).
+- Index phủ (`INCLUDE`) chỉ có tác dụng khi truy vấn KHÔNG chạm cột nào ngoài index — kể cả `count(l.id)`. Thêm index xong phải EXPLAIN lại, thấy `Index Only Scan` + `Heap Fetches: 0` mới tính là xong — summary Jev vẫn 22 s sau migration 205 vì `count(l.id)` (S218, AA-660). Bắt bằng: EXPLAIN (ANALYZE, BUFFERS) trước/sau.
 
 ## Frontend
 
