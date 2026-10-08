@@ -28,6 +28,8 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
 
 1. Vercel deployment của PR = **READY/SUCCESS**.
 2. Mở trang bằng browser (Claude in Chrome, hoặc Playwright khi có AA-732), đăng nhập đúng vai (admin / tenant test).
+   Tài khoản admin test: secret `aa-cis/dev/e2e-test-admin` (acc2, JSON username/password; user `e2e-claude-code`).
+   Đọc vào biến môi trường lúc chạy, không in hay ghi mật khẩu ra file/log/PR.
 3. Với **mỗi trang đã đổi**, ghi lại:
    - Screenshot desktop 1440px và mobile 390px; light + dark.
    - Console: 0 error. Liệt kê warning mới.
