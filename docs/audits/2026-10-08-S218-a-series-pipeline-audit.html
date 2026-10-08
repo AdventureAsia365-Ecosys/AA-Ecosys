@@ -1,0 +1,361 @@
+<title>Audit pipeline A1–A3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~72ch) with wide tables that scroll in their own box; a sticky
+   section index on wide screens. Palette: slate ink + teal "pass" + amber "review" + brick "block". */
+:root{
+  --bg:#f6f7f6; --panel:#ffffff; --ink:#1d2a2c; --muted:#5d6b6d; --line:#dfe4e3;
+  --accent:#0f6b63; --accent-soft:#e1f0ee; --warn:#a46a0b; --warn-soft:#f8eed9; --bad:#a3392b; --bad-soft:#f6e3df;
+  --bar:#0f6b63; --bar2:#c9d6d4;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121819; --panel:#192223; --ink:#e3ebea; --muted:#9aaaa9; --line:#2b3637;
+  --accent:#5cc2b5; --accent-soft:#183331; --warn:#e2ad4f; --warn-soft:#352a14; --bad:#e3826f; --bad-soft:#3a201b;
+  --bar:#5cc2b5; --bar2:#2f3d3e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121819; --panel:#192223; --ink:#e3ebea; --muted:#9aaaa9; --line:#2b3637;
+  --accent:#5cc2b5; --accent-soft:#183331; --warn:#e2ad4f; --warn-soft:#352a14; --bad:#e3826f; --bad-soft:#3a201b;
+  --bar:#5cc2b5; --bar2:#2f3d3e; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);align-self:start;font-size:13px}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:4px 0;border-left:2px solid var(--line);padding-left:10px}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--accent);border-left-color:var(--accent);outline:none}
+main{min-width:0}
+header.top{margin-bottom:28px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-size:30px;line-height:1.2;margin:.3em 0 .4em;text-wrap:balance;font-weight:700}
+h2{font-size:21px;margin:44px 0 12px;padding-top:12px;border-top:1px solid var(--line);text-wrap:balance}
+h3{font-size:16px;margin:24px 0 8px}
+p,li{max-width:72ch}
+.lede{color:var(--muted);font-size:16px}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:20px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.kpi b{display:block;font-size:24px;font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi span{color:var(--muted);font-size:12.5px}
+.tbl{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.n,th.n{text-align:right}
+.pill{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:99px;white-space:nowrap}
+.ok{background:var(--accent-soft);color:var(--accent)} .wn{background:var(--warn-soft);color:var(--warn)} .bd{background:var(--bad-soft);color:var(--bad)}
+.bars{display:grid;gap:6px;margin:12px 0}
+.bar{display:grid;grid-template-columns:minmax(120px,210px) minmax(0,1fr) 64px;gap:10px;align-items:center;font-size:13px}
+.bar .t{height:12px;background:var(--bar2);border-radius:3px;overflow:hidden}
+.bar .t i{display:block;height:100%;background:var(--bar)}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:6px;padding:10px 14px;margin:14px 0;font-size:14px}
+.find{display:grid;gap:10px;margin:12px 0}
+.find>div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.find h4{margin:0 0 4px;font-size:14.5px}
+.find p{margin:4px 0;font-size:14px}
+.meta{color:var(--muted);font-size:12.5px}
+@media (max-width:820px){.wrap{grid-template-columns:minmax(0,1fr)}nav.toc{display:none}h1{font-size:25px}.bar{grid-template-columns:110px minmax(0,1fr) 54px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Mục lục">
+  <a href="#tomtat">Tóm tắt</a>
+  <a href="#dot">Các đợt chạy</a>
+  <a href="#ketqua">Kết quả theo nước</a>
+  <a href="#a1">A1 — viết Master</a>
+  <a href="#a3">A3 — atom, segment, route</a>
+  <a href="#jev">Jev</a>
+  <a href="#vanhanh">Vận hành &amp; job</a>
+  <a href="#chiphi">Chi phí</a>
+  <a href="#india">India đợt 1</a>
+  <a href="#coche">Đánh giá từng cơ chế</a>
+  <a href="#giaiphap">Lộ trình nâng cấp</a>
+  <a href="#nguon">Nguồn số liệu</a>
+</nav>
+<main>
+<header class="top">
+  <div class="eyebrow">AA-CIS · Dev · audit S218 · 08/10/2026</div>
+  <h1>Audit pipeline viết Master (A1) và sinh atom (A3) sau đợt chạy lại sạch</h1>
+  <p class="lede">Phạm vi: mọi lần chạy kể từ khi reset dữ liệu ngày 01/10/2026 (S207 → S218), 9 nước đã chạy xong cộng India đang chạy. Số liệu lấy trực tiếp từ RDS Dev và log job/LLM, không ước lượng.</p>
+</header>
+
+<section id="tomtat">
+<div class="kpis">
+  <div class="kpi"><b>523 / 537</b><span>tour lên Master ở 9 nước đã chạy (97,4%)</span></div>
+  <div class="kpi"><b>14</b><span>tour còn chờ duyệt (Sri Lanka 11, Nepal 3), cộng India đợt 1: 10</span></div>
+  <div class="kpi"><b>14.091</b><span>atom đang hoạt động trên 511 tour</span></div>
+  <div class="kpi"><b>$0,135</b><span>chi phí trung bình mỗi Master (LLM + DFS, gồm atomize)</span></div>
+  <div class="kpi"><b>0 / 563</b><span>Master còn từ cấm sau khi vá S218 (trước đó 181)</span></div>
+</div>
+<p><strong>Kết luận ngắn.</strong> Pipeline viết hiện chạy ổn định ở quy mô wave: 97% tour lên Master, gần như không lỗi job, chi phí khoảng 13,5 cent mỗi tour. Phần lớn lỗi chất lượng trước đây đến từ <em>cách kiểm tra</em> chứ không phải từ bản viết: gate từng cho lọt từ cấm (181 Master), validator có dương tính giả và điểm mù, mã độ dài meta bị chặn cứng mà không có bước sửa. Các lỗi này đã được vá và kiểm chứng trong S217–S218.</p>
+<p>Phần atom (A3) là nơi còn nhiều việc nhất: atom đầy đủ và có bằng chứng, nhưng lớp gom nhóm phía sau còn yếu. 76% segment chỉ có 1 atom, 60% tour dài không có route, và mọi atom platform có cùng một giá trị <code>distinctiveness</code>.</p>
+<p><strong>Đánh giá thiết kế.</strong> Trong 17 cơ chế được đối chiếu, 4 cơ chế đúng và nên giữ (grounding, gate publish, atomize, job runner). 9 cơ chế đúng hướng nhưng cần chỉnh: writer, validate, judge, nudge, prefetch, ranking, recompute, Jev, quan sát. 4 cơ chế chưa phù hợp với cách hệ thống thực sự chạy:</p>
+<ul>
+<li>flag_fix đang chủ yếu sửa độ dài meta;</li>
+<li>review queue không có người duyệt;</li>
+<li>segment bị phân mảnh;</li>
+<li>route thiếu ở tour dài.</li>
+</ul>
+<p>Chi tiết ở mục <a href="#coche">Đánh giá từng cơ chế</a>, đề xuất theo ba mốc ở mục <a href="#giaiphap">Lộ trình nâng cấp</a>.</p>
+</section>
+
+<section id="dot">
+<h2>Các đợt chạy</h2>
+<div class="tbl"><table>
+<thead><tr><th>Ngày</th><th>Phiên</th><th>Nước / đợt</th><th>Kết quả</th><th>Thay đổi pipeline đi kèm</th></tr></thead>
+<tbody>
+<tr><td>01/10</td><td>S207</td><td>Korea 30, Taiwan 36</td><td>27/30 và 34/36 lên Master, sau regenerate đủ</td><td>Reset dữ liệu sạch; judge/brand audit đọc mọi ngày; keyword theo nguyên từ</td></tr>
+<tr><td>02/10</td><td>S208</td><td>Mongolia 17</td><td>17/17</td><td>AA-714 judge + brand audit sang GPT Luna; brand audit fail-closed; AA-713 atom theo trạng thái Master</td></tr>
+<tr><td>03/10</td><td>S209</td><td>China 121 (pilot 3 + 3 wave)</td><td>118 tự đạt, 3 regenerate → 121/121</td><td>Tài liệu schema DB; Jev hết credit (402) giữa chừng</td></tr>
+<tr><td>05/10</td><td>S212</td><td>Bhutan 32, Thailand 41</td><td>32/32, 41 Master</td><td>Phát hiện deploy giết 16 job S1 của Thailand → AA-723</td></tr>
+<tr><td>06/10</td><td>S213–S214</td><td>Laos 46</td><td>45/46 → 46/46</td><td>AA-723 mọi tác vụ nền thành job bền; AA-734 ranking không bị "trống" khi recompute</td></tr>
+<tr><td>07/10</td><td>S216</td><td>Thailand hype-tone (3 tour, Sonnet)</td><td>Lên Master</td><td>AA-724 prompt trung tính; AA-716 ngừng tour nguồn lan tới Master/atom</td></tr>
+<tr><td>07/10</td><td>S217</td><td>Nepal 86</td><td>70 Master, 16 review</td><td>AA-736 mã lỗi cứng chặn Master + thử lại Sonnet một lần</td></tr>
+<tr><td>08/10</td><td>S218</td><td>Sri Lanka 126 + regenerate Nepal 16, Sonnet 23 tour, chạy lại 16 tour độ dài</td><td>Sri Lanka 115/126, Nepal 83/86</td><td>AA-738 xoá từ cấm tất định (4 PR), AA-737 slot worker, AA-740 fit độ dài meta</td></tr>
+<tr><td>08/10</td><td>S218</td><td>India đợt 1 (50/236)</td><td id="india-row">40/50 Master; 8 tour giữ lại vì cưỡi voi trong nguồn</td><td>Chạy trên toàn bộ bản vá S218</td></tr>
+</tbody></table></div>
+<p class="meta">Japan (80 tour) đang chờ chị Thư trả lời PR-15. Philippines (46), Pakistan (18), Vietnam (1) chưa vào kế hoạch.</p>
+</section>
+
+<section id="ketqua">
+<h2>Kết quả theo nước</h2>
+<div class="tbl"><table>
+<thead><tr><th>Nước</th><th class="n">Active</th><th class="n">Master</th><th class="n">Review</th><th class="n">Tỉ lệ</th><th class="n">Điểm TB</th><th class="n">Số lần viết</th><th class="n">Atom</th><th class="n">Atom/tour (min·trung vị·max)</th><th>Model của bản Master</th></tr></thead>
+<tbody>
+<tr><td>China</td><td class="n">121</td><td class="n">121</td><td class="n">0</td><td class="n">100%</td><td class="n">7,76</td><td class="n">126</td><td class="n">3.054</td><td class="n">3 · 22 · 82</td><td>Haiku 121</td></tr>
+<tr><td>Sri Lanka</td><td class="n">126</td><td class="n">115</td><td class="n">11</td><td class="n">91,3%</td><td class="n">7,57</td><td class="n">159</td><td class="n">2.630</td><td class="n">3 · 24 · 85</td><td>Haiku 90, Sonnet 14</td></tr>
+<tr><td>Nepal</td><td class="n">86</td><td class="n">83</td><td class="n">3</td><td class="n">96,5%</td><td class="n">7,89</td><td class="n">105</td><td class="n">2.783</td><td class="n">3 · 35 · 79</td><td>Haiku 52, Sonnet 30</td></tr>
+<tr><td>Laos</td><td class="n">46</td><td class="n">46</td><td class="n">0</td><td class="n">100%</td><td class="n">7,65</td><td class="n">58</td><td class="n">1.475</td><td class="n">6 · 30 · 59</td><td>Haiku 45, Sonnet 1</td></tr>
+<tr><td>Thailand</td><td class="n">43</td><td class="n">43</td><td class="n">0</td><td class="n">100%</td><td class="n">7,56</td><td class="n">78</td><td class="n">1.276</td><td class="n">5 · 32 · 59</td><td>Haiku 41, Sonnet 2</td></tr>
+<tr><td>Taiwan</td><td class="n">36</td><td class="n">36</td><td class="n">0</td><td class="n">100%</td><td class="n">7,81</td><td class="n">42</td><td class="n">504</td><td class="n">3 · 10 · 33</td><td>Haiku 36</td></tr>
+<tr><td>Bhutan</td><td class="n">32</td><td class="n">32</td><td class="n">0</td><td class="n">100%</td><td class="n">7,63</td><td class="n">42</td><td class="n">919</td><td class="n">15 · 27 · 53</td><td>Haiku 32</td></tr>
+<tr><td>South Korea</td><td class="n">30</td><td class="n">30</td><td class="n">0</td><td class="n">100%</td><td class="n">7,57</td><td class="n">54</td><td class="n">1.116</td><td class="n">10 · 36 · 85</td><td>Haiku 30</td></tr>
+<tr><td>Mongolia</td><td class="n">17</td><td class="n">17</td><td class="n">0</td><td class="n">100%</td><td class="n">7,88</td><td class="n">17</td><td class="n">334</td><td class="n">3 · 13 · 52</td><td>Haiku 17</td></tr>
+<tr><td><strong>Tổng 9 nước</strong></td><td class="n"><strong>537</strong></td><td class="n"><strong>523</strong></td><td class="n"><strong>14</strong></td><td class="n"><strong>97,4%</strong></td><td class="n">—</td><td class="n"><strong>681</strong></td><td class="n"><strong>14.091</strong></td><td class="n">—</td><td>Haiku 464, Sonnet 47</td></tr>
+</tbody></table></div>
+<p class="meta">India đợt 1: 50 tour, 40 Master, 10 giữ lại (xem mục India). Cột atom, số lần viết và model đo trước 2 lượt chạy lại cuối (16 tour độ dài, 23 tour Sonnet). "Số lần viết" = số phiên bản nội dung tạo ra từ 01/10 (gồm regenerate). Korea và Thailand có 5–6 tour viết từ 4 lần trở lên, đúng nhóm tour giọng quảng cáo nặng mà AA-724 xử lý. Atom lấy từ <code>v_active_tour_atoms</code>.</p>
+</section>
+
+<section id="a1">
+<h2>A1 — viết Master: lỗi gặp ở đâu</h2>
+<p>Từ 01/10 có 681 lần chấm (validate + judge) trên 538 tour. Tần suất mã lỗi trên mọi lần chấm:</p>
+<div class="bars" role="img" aria-label="Tần suất mã lỗi trên 681 lần chấm">
+  <div class="bar"><span>FORBIDDEN_WORD</span><span class="t"><i style="width:100%"></i></span><span class="v">272 · 40%</span></div>
+  <div class="bar"><span>SEO_META_TOO_LONG</span><span class="t"><i style="width:37.5%"></i></span><span class="v">102 · 15%</span></div>
+  <div class="bar"><span>ITINERARY_STILL_COMPRESSED</span><span class="t"><i style="width:34.2%"></i></span><span class="v">93 · 14%</span></div>
+  <div class="bar"><span>DFS_INTENT_UNDERUSED</span><span class="t"><i style="width:26.5%"></i></span><span class="v">72 · 11%</span></div>
+  <div class="bar"><span>META_TOO_SHORT</span><span class="t"><i style="width:18.4%"></i></span><span class="v">50 · 7%</span></div>
+  <div class="bar"><span>HIGHLIGHTS_TOO_GENERIC</span><span class="t"><i style="width:18%"></i></span><span class="v">49 · 7%</span></div>
+  <div class="bar"><span>SEO_TITLE_TOO_LONG</span><span class="t"><i style="width:9.6%"></i></span><span class="v">26 · 4%</span></div>
+  <div class="bar"><span>UNSUPPORTED_NUMBER</span><span class="t"><i style="width:5.5%"></i></span><span class="v">15 · 2%</span></div>
+</div>
+<p>Brand audit: 482 lần (71%) cần một lượt sửa (<code>fixed</code>), 81 đạt ngay, 57 phải chuyển người duyệt (<code>manual_check</code>). Nghĩa là gần ba phần tư tour tốn thêm một lời gọi flag_fix.</p>
+
+<h3>Nguyên nhân gốc và cách đã xử lý</h3>
+<div class="find">
+  <div><h4><span class="pill bd">Đã vá</span> Gate để lọt từ cấm lên Master (181 Master)</h4>
+  <p>Trước 07/10, gate publish tự động chỉ xét điểm và brand audit, không đọc mã lỗi. Mọi wave trước Nepal có 50–73% tour dính FORBIDDEN_WORD nhưng vẫn lên Master. Từ của brand list như <code>explore</code> nằm trong itinerary của 181/497 Master.</p>
+  <p class="meta">Xử lý: AA-736 chặn mã cứng (S217). Ở S218, sửa tất định 181 Master (289 chỗ thay từ, không xoá câu nào, có file khôi phục trên S3) → còn 0/503.</p></div>
+  <div><h4><span class="pill bd">Đã vá</span> Từ cấm đến từ brand list, không phải danh sách lõi; Sonnet cũng không tránh được</h4>
+  <p>Issue AA-738 giả định writer phát từ cấm lõi. Dữ liệu thật: 0/15 lỗi thuộc danh sách lõi, 100% là từ brand list (explore ×10, package, nestled, vibrant). Thử lại bằng Sonnet (40 lần ngày 07/10) không cứu được tour nào vì Sonnet cũng viết những từ này.</p>
+  <p class="meta">Xử lý: thay từ tất định lúc viết và sau lần sửa LLM cuối, prompt có ràng buộc cứng, bỏ thử lại Sonnet cho mã này (#583, #585). S218: 0 lần gọi Sonnet nâng cấp, 0 tour review vì từ cấm.</p></div>
+  <div><h4><span class="pill bd">Đã vá</span> Validator có dương tính giả và điểm mù</h4>
+  <p>Validator quét <code>json.dumps</code> của cả bản viết. (1) Nó quét luôn từ khoá DFS (<code>seo_keywords_used</code>, ví dụ "cheap summer getaways"), nên chặn vĩnh viễn 13/538 bản mà không field nào sửa được. (2) Ký tự escape của JSON làm mất từ đứng sau <code>\n</code> hoặc dấu "—", nên một Master đã lên với "…wish—explore the city".</p>
+  <p class="meta">Xử lý: #586 chỉ quét nội dung writer viết; #587 quét text gốc thay vì JSON.</p></div>
+  <div><h4><span class="pill wn">Đã vá, đang kiểm</span> Mã độ dài meta/title chặn Master mà không có bước sửa</h4>
+  <p>Tỉ lệ meta sai độ dài gần như không đổi giữa các wave (Bhutan 16%, Thailand 14%, China 11%, Sri Lanka 17%). Trước 07/10 nó chỉ trừ điểm; AA-736 biến nó thành chặn cứng, trong khi flag_fix (AA-608) chỉ "cố gắng" và bước salvage không xử lý được meta là một câu dài, hoặc meta quá ngắn. Sri Lanka có 13 tour điểm ≥ 7 kẹt chỉ vì độ dài. Thêm nữa, DB cắt meta lúc ghi nên bản lưu khác bản đã chấm.</p>
+  <p class="meta">Xử lý: AA-740 (#588): cắt tại ranh giới mệnh đề hoặc từ, nối mệnh đề lấy từ dữ kiện tour, chạy sau lần sửa LLM cuối; bỏ cắt lúc ghi. Kết quả chạy lại 16 tour nằm ở mục India.</p></div>
+  <div><h4><span class="pill wn">Mở</span> Judge chấm thấp vì nguồn định vị đối tượng khách quá mạnh</h4>
+  <p>Sri Lanka có 23 tour judge chấm 4–6: nhóm family/honeymoon/budget giữ giọng "dành cho gia đình / tuần trăng mật", và itinerary nguồn lặp ngày hoặc sai thứ tự. Chạy Sonnet cứu được 14/23. 7 tour còn lại là vấn đề của nguồn.</p>
+  <p class="meta">Đề xuất: để Nghiệp duyệt tay hoặc trash (raw_insufficient). Về dài hạn, thêm cổng A0 phát hiện itinerary nguồn mâu thuẫn (AA-690).</p></div>
+  <div><h4><span class="pill">Mềm, chưa xử lý</span> ITINERARY_STILL_COMPRESSED, DFS_INTENT_UNDERUSED, HIGHLIGHTS_TOO_GENERIC</h4>
+  <p>Ở bản mới nhất của mỗi tour vẫn còn 72, 56 và 40 tour mang các mã mềm này. Chúng không chặn Master (Nghiệp chốt S217 giữ ITINERARY_STILL_COMPRESSED là mềm), nhưng ảnh hưởng chất lượng thật: itinerary bị nén, keyword SEO không xuất hiện ở title/meta, highlights chung chung.</p>
+  <p class="meta">Đề xuất: đo trên golden set (AA-729) trước khi quyết có siết hay không.</p></div>
+</div>
+</section>
+
+<section id="a3">
+<h2>A3 — atom, segment, route</h2>
+<div class="kpis">
+  <div class="kpi"><b>14.091</b><span>atom active · trung bình 47 ký tự</span></div>
+  <div class="kpi"><b>0</b><span>atom thiếu ngày, thiếu bằng chứng (<code>evidence</code>) hoặc rỗng</span></div>
+  <div class="kpi"><b>3.871</b><span>segment · 301 segment rỗng</span></div>
+  <div class="kpi"><b>318</b><span>route hiện hành trên 174 tour · 399 hub</span></div>
+</div>
+<p>Phần trích atom chạy tốt: mọi atom đều gắn ngày, có câu bằng chứng từ nguồn, có địa điểm (chỉ 1 atom thiếu) và hành động. Atomize xong 511/511 Master, 532 job thành công và không job nào lỗi. Vấn đề nằm ở các lớp dựng trên atom.</p>
+<p>Phân bố loại hoạt động: culture 3.978 · transit 2.840 · trek 2.357 · stay 1.985 · food 1.151 · bike 921 · other 845. Atom transit chiếm 20%; chúng bị loại khỏi ranking theo thiết kế (ADR 0019/0020).</p>
+
+<div class="find">
+  <div><h4><span class="pill bd">Lỗi thật</span> Segment bị phân mảnh: 76% chỉ có 1 atom</h4>
+  <p>2.712/3.570 segment có thành viên chỉ chứa 1 atom. 1.355 trong số đó trùng địa điểm với segment khác, chỉ khác câu chữ hành động: ở Yangshuo, "participate in a tai chi class with a local master" và "join a tai chi class with a local instructor" là hai segment riêng. Có 301 segment không còn atom nào, và <code>hotel</code> bị coi là một địa điểm (22 segment).</p>
+  <p class="meta">Hệ quả: chỉ số "recurrence" của ranking (cùng trải nghiệm xuất hiện ở nhiều tour) gần như không có tín hiệu, Hub/Route ít. Đề xuất: AA-695 đo và gom segment "cùng một chỗ thật", chuẩn hoá hành động; dọn segment rỗng; đưa <code>hotel</code> và các địa điểm chung chung vào danh sách loại.</p></div>
+  <div><h4><span class="pill bd">Lỗi thật</span> 60% tour dài không có route</h4>
+  <p>Route cần ≥ 2 ngày liền nhau có segment đã rank và ≥ 2 địa điểm. Tour 1 ngày không có route là đúng thiết kế (77 tour). Nhưng 168/279 tour 8+ ngày cũng không có route. Giả thuyết (chưa kiểm): ngày bị loại khỏi ranking (transit, địa điểm không tên — 36% dòng ranking) làm đứt chuỗi ngày, kết hợp với segment phân mảnh.</p>
+  <p class="meta">Đề xuất: đo trên 10 tour 8+ ngày xem ngày nào làm đứt chuỗi trước khi sửa luật route.</p></div>
+  <div><h4><span class="pill wn">Đã có hướng</span> 863 atom chứa từ cấm của brand</h4>
+  <p>Atom được trích từ itinerary trước khi bước xoá từ cấm tồn tại, nên giữ chữ <code>explore</code> (854 atom). Atom là đầu vào cho nội dung T-series của tenant.</p>
+  <p class="meta">Đề xuất: chạy cùng hàm xoá từ cấm lúc atomize và sửa tất định 863 atom (cùng quy trình DRY RUN như 181 Master).</p></div>
+  <div><h4><span class="pill wn">Trường chết</span> <code>distinctiveness</code> = MED cho cả 14.091 atom</h4>
+  <p>Điểm khác biệt chỉ được tính ở đường T5 của tenant (có chỉ mục đối thủ, AA-445-02). Atom platform luôn để mặc định nên trường này không mang thông tin.</p>
+  <p class="meta">Đề xuất: hoặc chấm ở A3 (dùng lại chỉ mục đối thủ theo nước), hoặc ẩn khỏi UI/ranking để không ai dựa vào nó.</p></div>
+  <div><h4><span class="pill ok">Đã vá</span> Recompute toàn platform</h4>
+  <p>2 lần recompute lỗi (khoá trùng <code>route_pkey</code>, <code>idx_atom_ranking_current_identity</code>) đã sửa trong AA-723/AA-734; ranking không còn bị "trống" khi recompute. a3_atomize giữ cap 1 có chủ đích.</p></div>
+</div>
+</section>
+
+<section id="jev">
+<h2>Jev (lớp quyết định)</h2>
+<p>Jev trả lời câu hỏi có cấu trúc ở các stage. Chỉ vùng <em>accept</em>/<em>reject</em> thay đổi kết quả; vùng <em>grey</em> và <em>error</em> giữ luật cũ (fail-open).</p>
+<div class="tbl"><table>
+<thead><tr><th>Stage</th><th>Chế độ</th><th class="n">Số lần hỏi</th><th class="n">Quyết định được</th><th class="n">Grey</th><th class="n">Lỗi</th></tr></thead>
+<tbody>
+<tr><td>a3_demand</td><td>enforce</td><td class="n">252.540</td><td class="n">59%</td><td class="n">35%</td><td class="n">6,3%</td></tr>
+<tr><td>a3_segment_type</td><td>enforce</td><td class="n">242.705</td><td class="n">42%</td><td class="n">51%</td><td class="n">7,1%</td></tr>
+<tr><td>s1_grounding</td><td>enforce</td><td class="n">94.160</td><td class="n">32%</td><td class="n">57%</td><td class="n">11,7%</td></tr>
+<tr><td>a3_question_scope</td><td>enforce</td><td class="n">40.786</td><td class="n">39%</td><td class="n">60%</td><td class="n">1,2%</td></tr>
+<tr><td>a3_question_landing</td><td>enforce</td><td class="n">37.194</td><td class="n">61%</td><td class="n">36%</td><td class="n">2,6%</td></tr>
+<tr><td>a3_atomize</td><td>enforce</td><td class="n">9.319</td><td class="n">0,5%</td><td class="n">89%</td><td class="n">10,5%</td></tr>
+<tr><td>a3_segment_match</td><td>enforce</td><td class="n">1.602</td><td class="n">28%</td><td class="n">56%</td><td class="n">16%</td></tr>
+<tr><td>a1_seo</td><td>shadow</td><td class="n">9.495</td><td class="n">0%</td><td class="n">90%</td><td class="n">10,5%</td></tr>
+</tbody></table></div>
+<p><strong>Nhận xét.</strong> Jev rẻ (tổng khoảng $5 từ 01/10) nhưng ở nhiều stage hiếm khi đủ chắc để quyết. a3_atomize chỉ quyết được 0,5%, nên thực chất là luật cũ đang chạy. Tỉ lệ lỗi 6–16% gồm cả đợt Jev hết credit (402) ngày 03/10. a3_segment_match chỉ quyết được 28%, khớp với hiện tượng segment phân mảnh.</p>
+<p class="meta">Đề xuất: hiệu chỉnh ngưỡng (calibration) cho a3_segment_match và a3_atomize dựa trên nhãn tay; theo dõi tỉ lệ lỗi theo ngày trên trang Jev Decisions.</p>
+</section>
+
+<section id="vanhanh">
+<h2>Vận hành và job</h2>
+<ul>
+<li><strong>Độ bền:</strong> từ 01/10, s1_rewrite thành công 329 / lỗi 1 / huỷ tay 2; a3_atomize thành công 532 / lỗi 0. Lỗi job còn lại là photo_sync (OOM 1 lần, hết quota Drive 1 lần) và 2 recompute đã vá.</li>
+<li><strong>Thông lượng (AA-737):</strong> trước S218, worker có 4 slot dùng chung, s1_rewrite chiếm hết nên atomize phải chờ tới 59 phút. Sau khi lên 8 slot, Sri Lanka 123 tour chạy S1 trong 73,6 phút với atomize song song (chờ tối đa 180 giây), CPU worker đỉnh 85% trên 0,5 vCPU.</li>
+<li><strong>An toàn deploy:</strong> gate deploy chặn roll ECS khi còn job (AA-725). api và worker luôn cùng image SHA. Trong S218 deploy 6 lần, không mất job nào.</li>
+<li><strong>Prefetch SEO</strong> chạy tuần tự (cap 1): 24 phút cho 123 tour mới. Với India (236 tour), đây là phần đuôi đáng kể của wave.</li>
+</ul>
+</section>
+
+<section id="chiphi">
+<h2>Chi phí từ 01/10</h2>
+<p>LLM <strong>$55,76</strong> + DataForSEO <strong>$13,13</strong> ≈ <strong>$68,9</strong> cho 511 Master và toàn bộ atom/segment, tức khoảng $0,135 mỗi Master.</p>
+<div class="bars" role="img" aria-label="Chi phí LLM theo stage">
+  <div class="bar"><span>t5_atomize (Haiku)</span><span class="t"><i style="width:100%"></i></span><span class="v">$18,23</span></div>
+  <div class="bar"><span>s1_generate (Haiku)</span><span class="t"><i style="width:73.1%"></i></span><span class="v">$13,33</span></div>
+  <div class="bar"><span>s1_itinerary_nudge</span><span class="t"><i style="width:26.6%"></i></span><span class="v">$4,85</span></div>
+  <div class="bar"><span>s1_judge (Luna 5.6 + 6 shadow)</span><span class="t"><i style="width:25.3%"></i></span><span class="v">$4,61</span></div>
+  <div class="bar"><span>s1_generate (Sonnet)</span><span class="t"><i style="width:23.2%"></i></span><span class="v">$4,24</span></div>
+  <div class="bar"><span>s1_flag_fix (Haiku + Sonnet)</span><span class="t"><i style="width:26.4%"></i></span><span class="v">$4,82</span></div>
+  <div class="bar"><span>Jev (mọi stage)</span><span class="t"><i style="width:27%"></i></span><span class="v">$4,93</span></div>
+  <div class="bar"><span>DFS keywords_for_keywords</span><span class="t"><i style="width:64.2%"></i></span><span class="v">$11,70</span></div>
+</div>
+<ul>
+<li><strong>Atomize là khoản lớn nhất</strong> (33% chi phí LLM, 4.348 lời gọi). Đây là nơi đáng tối ưu trước, ví dụ gom theo tour hoặc Bedrock Batch khi AA-624 được mở khoá.</li>
+<li><strong>Judge shadow</strong> gpt-6-luna chạy 100% mẫu ($1,58). Khi AA-714 chốt xong A/B, hạ xuống 10–20% mẫu.</li>
+<li><strong>Itinerary nudge</strong> gọi 3.092 lần ($4,85): mỗi ngày bị nén là một lời gọi.</li>
+<li>Sonnet: $5,18 tổng, gồm $2,6 cho 23 tour cứu có chủ đích ở S218. Thử lại Sonnet tự động đã bỏ cho từ cấm.</li>
+</ul>
+</section>
+
+<section id="india">
+<h2>India đợt 1 và chạy lại 16 tour lỗi độ dài</h2>
+<div id="india-body"><div class="kpis">
+  <div class="kpi"><b>40 / 50</b><span>India đợt 1 lên Master (80%)</span></div>
+  <div class="kpi"><b>8</b><span>tour giữ lại vì nguồn có cưỡi voi (quy tắc brand)</span></div>
+  <div class="kpi"><b>12 / 16</b><span>tour từng kẹt vì độ dài nay lên Master (AA-740)</span></div>
+  <div class="kpi"><b>0</b><span>lần gọi Sonnet nâng cấp · 0 tour review vì từ cấm hoặc độ dài</span></div>
+</div>
+<h3>India đợt 1 (50 tour)</h3>
+<p>Thời gian: prefetch SEO 8,4 phút, S1 cho 50 tour cùng 16 tour chạy lại xong trong 36,5 phút, atomize chạy song song (chờ tối đa 285 giây). Chi phí LLM khoảng $4,5 cho cả 66 lần viết cộng atomize. Không có job lỗi.</p>
+<div class="tbl"><table>
+<thead><tr><th>Nguyên nhân không lên Master</th><th class="n">Tour</th><th>Chi tiết</th><th>Cách xử lý</th></tr></thead>
+<tbody>
+<tr><td><span class="pill wn">Chính sách nội dung</span> Cưỡi voi trong nguồn</td><td class="n">8</td><td>Delhi–Agra–Jaipur (4, 5, 8 ngày), Essence / Colors / Citadel Rajasthan: đi voi lên Amber Fort. Best of Kerala: elephant safari ở Kodanad. Best of wildlife South India: cưỡi voi ở Nagarhole. Writer chép đúng nguồn; brand audit gắn <code>FACT_CHECK_MANUAL_CHECK</code> đúng quy tắc "Elephant riding: always manual check".</td><td>Cần quyết định chính sách (xem bên dưới). Không phải lỗi kỹ thuật.</td></tr>
+<tr><td><span class="pill wn">Nguồn</span> Bản viết mang thương hiệu đơn vị khác</td><td class="n">1</td><td>Essential India: nguồn là tour G Adventures (G for Good, Women With Wheels); judge chấm 6 vì nội dung gắn thương hiệu nhà điều hành khác.</td><td>Làm sạch nguồn hoặc trash; thêm cổng A0 phát hiện tên thương hiệu đơn vị khác.</td></tr>
+<tr><td><span class="pill">Grounding</span> Con số không có trong nguồn</td><td class="n">1</td><td>Bangalore–Cochin Cycling: câu "Days 6 and 9" có số 9 không khớp nguồn.</td><td>Regenerate.</td></tr>
+</tbody></table></div>
+<p><strong>Quyết định cần có:</strong> AA có giữ trải nghiệm cưỡi voi trong bản Master không? Ba hướng:</p>
+<ol>
+<li>Bỏ câu/highlight về cưỡi voi một cách tất định (chỉ xoá, không bịa thay thế) rồi cho lên Master.</li>
+<li>Giữ nguyên, người duyệt từng tour.</li>
+<li>Loại hẳn các tour có cưỡi voi khỏi catalogue.</li>
+</ol>
+<p>Nếu không quyết, mỗi đợt Rajasthan/Kerala sẽ có khoảng 15% tour bị giữ lại.</p>
+<h3>Chạy lại 16 tour kẹt vì độ dài (kiểm AA-740)</h3>
+<p>12/16 lên Master. Chỉ 1 tour còn lỗi độ dài: Ghorepani Poonhill, meta 127 ký tự, đã nêu cả số ngày lẫn tên nước nên không còn dữ kiện để nối thêm. 3 tour còn lại rớt vì lý do khác: judge 6 vì itinerary chung chung, judge 6 vì tên và itinerary không khớp nhau, và 1 lỗi grounding.</p>
+<p class="meta">Một điểm lệch nhỏ: quy tắc <code>derive_status</code> lẽ ra trả <code>manual_check</code> khi có mã FACT_CHECK, nhưng 8 tour được lưu <code>flagged</code>. Cả hai đều chặn Master nên kết quả không đổi; nên thống nhất để màn review hiển thị đúng lý do.</p></div>
+</section>
+
+<section id="coche">
+<h2>Đánh giá từng cơ chế</h2>
+<p>Mỗi cơ chế được đối chiếu giữa mục đích thiết kế và hành vi thật trong đợt chạy lớn này (681 bản viết, 538 tour, 14.091 atom). Nhãn đánh giá: <span class="pill ok">Đúng, giữ</span> <span class="pill wn">Đúng hướng, cần chỉnh</span> <span class="pill bd">Chưa phù hợp</span>.</p>
+<div class="tbl"><table>
+<thead><tr><th>Cơ chế</th><th>Thiết kế để</th><th>Đợt chạy cho thấy</th><th>Đánh giá</th><th>Cải tiến / nâng cấp</th></tr></thead>
+<tbody>
+<tr><td><strong>Writer S1</strong> (Haiku, prompt trung tính)</td><td>Viết bản Master trung tính, rẻ, một lần</td><td>464/511 Master viết bằng Haiku. Nhưng 71% bản viết phải sửa câu vì chi tiết không có trong nguồn, và gần như mọi seo_meta lệch độ dài.</td><td><span class="pill wn">Đúng hướng, cần chỉnh</span></td><td>Đưa cho writer dữ kiện có cấu trúc (ngày, địa điểm, con số từ nguồn) thay vì văn bản thô. Để seo_meta/title do bước fit tất định lo, không bắt LLM đếm ký tự.</td></tr>
+<tr><td><strong>Validate</strong> (mã cứng / mã mềm)</td><td>Chặn lỗi đo được bằng luật, không tốn LLM</td><td>Đúng ý tưởng nhưng có 3 lỗi cài đặt: quét cả metadata (13 bản bị chặn sai), mất từ sau ký tự escape, mã cứng không có đường sửa.</td><td><span class="pill wn">Đúng hướng, cần chỉnh</span></td><td>Luật bắt buộc, có test kiểm: mỗi mã cứng phải gắn một hàm sửa tất định, không có thì để mềm. Validator chỉ quét danh sách field nội dung tường minh.</td></tr>
+<tr><td><strong>Judge</strong> (GPT-5.6 Luna, điểm = min với validate)</td><td>Chấm brand-fit và độ chuẩn của bản Master</td><td>Điểm nguyên, 82% là 7 hoặc 8. Nhận xét khi chấm 3–6 có giá trị thật (persona, itinerary mâu thuẫn). Shadow gpt-6-luna chạy 100% mẫu.</td><td><span class="pill wn">Đúng hướng, cần chỉnh</span></td><td>Cho judge trả mã lý do có cấu trúc (persona / mâu thuẫn nguồn / quảng cáo / thiếu dữ kiện) để định tuyến hành động thay vì chỉ một con số. Chốt A/B AA-714 rồi hạ shadow xuống 10–20%.</td></tr>
+<tr><td><strong>Brand audit + flag_fix</strong></td><td>Sửa giọng văn lệch brand bằng một lượt LLM</td><td>Chạy trên 79% bản viết; 91% số lượt (488/538) là để sửa độ dài seo_meta, không phải giọng văn.</td><td><span class="pill bd">Chưa phù hợp</span></td><td>Sau AA-740, bỏ seo_meta khỏi danh sách field flag_fix khi bước fit đã đưa vào khoảng. Ước tính bớt khoảng 80% lượt flag_fix và một phần độ trễ mỗi tour.</td></tr>
+<tr><td><strong>Grounding</strong> (Jev + sửa câu)</td><td>Không publish câu không có căn cứ (ADR 0007)</td><td>Hiệu quả: chỉ 15 bản còn vi phạm. Nhưng phải sửa câu ở 71% bản viết, và Jev s1_grounding chỉ quyết được 32% (57% grey, 11,7% lỗi).</td><td><span class="pill ok">Đúng, giữ</span></td><td>Giữ. Giảm lượng phải sửa từ gốc (writer nhận dữ kiện có cấu trúc). Hiệu chỉnh ngưỡng Jev để bớt grey.</td></tr>
+<tr><td><strong>Itinerary nudge</strong> (sửa từng ngày bị nén)</td><td>Giữ độ dài từng ngày gần với nguồn</td><td>Trung bình 5,5 lời gọi mỗi tour, tối đa 34; vẫn còn 13% tour mang ITINERARY_STILL_COMPRESSED.</td><td><span class="pill wn">Đúng hướng, cần chỉnh</span></td><td>Viết itinerary theo cấu trúc từng ngày với độ dài mục tiêu ngay trong lời gọi chính; đặt trần số lần nudge mỗi tour (ví dụ 3).</td></tr>
+<tr><td><strong>Gate publish</strong> (AA-736) + thử lại Sonnet</td><td>Không để bản lỗi đè bản đạt; cứu bằng model mạnh hơn</td><td>Gate giờ đúng (0/503 Master có từ cấm). Thử lại Sonnet không cứu được từ cấm (S217: 40 lần), nhưng Sonnet chủ động cứu được 14/23 tour lệch giọng.</td><td><span class="pill ok">Đúng, giữ</span></td><td>Giữ gate. Dùng Sonnet có chủ đích theo mã lý do của judge (persona/quảng cáo), không dùng cho lỗi định dạng.</td></tr>
+<tr><td><strong>Review queue</strong> (HITL)</td><td>Người duyệt xử lý tour không tự đạt</td><td>155 dòng từ 01/10, 0 quyết định của người (reviewed_by trống hết). Mọi dòng được giải quyết bằng regenerate, supersede hoặc dismiss tự động. UI không phân trang được.</td><td><span class="pill bd">Chưa phù hợp</span></td><td>Thiết kế lại thành hàng đợi theo loại lỗi (AA-728): lỗi định dạng/tạm thời → tự xử lý; lệch giọng → Sonnet; lỗi nguồn → người quyết (sửa nguồn hoặc trash). Người chỉ thấy những gì cần người.</td></tr>
+<tr><td><strong>SEO prefetch</strong> (DataForSEO)</td><td>Mua keyword một lần cho cả nhóm tour, dùng cache</td><td>$13 cho 511 tour, ổn. Chạy tuần tự (cap 1): 24 phút cho 123 tour mới, S1 phải chờ hết.</td><td><span class="pill wn">Đúng hướng, cần chỉnh</span></td><td>Cho S1 bắt đầu với tour đã có dữ liệu SEO trong khi prefetch chạy tiếp (theo lô nhỏ), thay vì chờ toàn bộ.</td></tr>
+<tr><td><strong>Atomize</strong> (Haiku t5 + Jev)</td><td>Tách itinerary thành atom có ngày, địa điểm, bằng chứng</td><td>532 job, 0 lỗi; 100% atom có ngày và bằng chứng. 8,2 lời gọi mỗi tour, $0,034/tour, khoản LLM lớn nhất. Jev a3_atomize chỉ quyết được 0,5%. 863 atom có từ cấm. distinctiveness luôn MED.</td><td><span class="pill ok">Đúng, giữ</span></td><td>Giữ lõi. Thêm xoá từ cấm, chấm distinctiveness hoặc bỏ, gom lời gọi theo tour hoặc Batch khi AA-624 mở. Xem lại có cần câu hỏi Jev a3_atomize không.</td></tr>
+<tr><td><strong>Segment</strong> (gom atom cùng trải nghiệm)</td><td>Một segment = một trải nghiệm thật, xuất hiện ở nhiều tour</td><td>76% segment chỉ có 1 atom; 1.355 trùng địa điểm, khác câu chữ hành động; 301 segment rỗng; "hotel" thành địa điểm. Jev a3_segment_match chỉ quyết được 28%.</td><td><span class="pill bd">Chưa phù hợp</span></td><td>Khoá segment theo (địa điểm chuẩn hoá + hành động chuẩn hoá từ từ vựng cố định) cộng độ tương đồng embedding, Jev xác nhận "cùng một chỗ thật" (AA-695). Job gộp định kỳ và dọn segment rỗng.</td></tr>
+<tr><td><strong>Ranking</strong> (demand · recurrence · questions · said)</td><td>Xếp hạng trải nghiệm đáng viết cho tenant</td><td>36% dòng bị loại (transit, địa điểm không tên), đúng thiết kế. Chiều recurrence gần như không có tín hiệu vì segment phân mảnh.</td><td><span class="pill wn">Đúng hướng, cần chỉnh</span></td><td>Sửa segment trước; sau đó đo lại đóng góp của từng chiều trước khi đổi trọng số.</td></tr>
+<tr><td><strong>Route / Hub</strong></td><td>Chuỗi ngày ≥ 2 địa điểm thành hành trình; gom route thành hub</td><td>Tour 1 ngày không có route là đúng. Nhưng 168/279 tour 8+ ngày không có route.</td><td><span class="pill bd">Chưa phù hợp</span></td><td>Cho phép chuỗi đi qua ngày transit thay vì đứt chuỗi; đo trên 10 tour dài trước khi đổi luật.</td></tr>
+<tr><td><strong>Recompute toàn platform</strong> sau mỗi atomize</td><td>Segment/score/route luôn mới</td><td>Atomize phải chạy tuần tự (cap 1, khoảng 45–80 giây/tour); đây là phần đuôi cố định của mỗi wave. 2 lỗi khoá trùng đã sửa.</td><td><span class="pill wn">Đúng hướng, cần chỉnh</span></td><td>Recompute tăng dần theo segment bị ảnh hưởng, hoặc một lần cuối mỗi wave. Khi đó atomize có thể chạy song song.</td></tr>
+<tr><td><strong>Job runner + worker</strong></td><td>Tác vụ nền bền qua deploy, có giới hạn theo loại</td><td>6 lần deploy trong S218, không mất job. Sau AA-737, atomize chạy song song với S1.</td><td><span class="pill ok">Đúng, giữ</span></td><td>Scale worker theo độ dài hàng đợi (hiện autoscale theo CPU). Thêm ưu tiên theo kind khi có nhiều loại job cùng lúc.</td></tr>
+<tr><td><strong>Jev</strong> (lớp quyết định)</td><td>Quyết định có cấu trúc thay luật cứng</td><td>Rẻ (khoảng $5). Tỉ lệ quyết được 0,5–61% tuỳ stage; lỗi 1–16%.</td><td><span class="pill wn">Đúng hướng, cần chỉnh</span></td><td>Hiệu chỉnh ngưỡng bằng nhãn tay, bắt đầu với segment_match và atomize. Câu hỏi nào sau hiệu chỉnh vẫn quyết được dưới 10% thì tắt.</td></tr>
+<tr><td><strong>Quan sát</strong> (log, metadata)</td><td>Truy được vì sao một tour đạt hay rớt</td><td>Cột <code>revalidate_passed</code> không được ghi lần nào (0/681) dù metadata có; log xoá từ cấm từng thiếu tên tour; báo cáo wave phải viết script tay mỗi lần.</td><td><span class="pill wn">Đúng hướng, cần chỉnh</span></td><td>Mỗi lần chạy tour sinh một bản ghi kết quả chuẩn (bước, mã, hành động, chi phí); wave là một đối tượng có báo cáo tự động (AA-727).</td></tr>
+</tbody></table></div>
+<p class="meta">Các con số "71% sửa câu", "79% chạy flag_fix", "0 quyết định của người" đọc từ <code>generated_content.metadata</code>, <code>fix_pass_fields</code> và <code>review_queue.reviewed_by</code>, tính từ 01/10.</p>
+</section>
+
+<section id="giaiphap">
+<h2>Lộ trình nâng cấp</h2>
+<h3>Ngay (trong tuần, chi phí thấp, đã có dữ liệu chứng minh)</h3>
+<div class="tbl"><table>
+<thead><tr><th>Việc</th><th>Kỳ vọng đo được</th><th>Issue</th></tr></thead>
+<tbody>
+<tr><td>Kiểm AA-740 trên India + 16 tour, rồi chạy 4 đợt India còn lại</td><td>Review do độ dài ≤ 2% mỗi wave</td><td>AA-740, AA-653</td></tr>
+<tr><td>Quyết định chính sách cưỡi voi (bỏ câu tất định / duyệt tay / loại tour) trước các đợt India còn lại</td><td>Khoảng 15% tour Rajasthan/Kerala không bị giữ lại</td><td>cần Nghiệp/chị Thư quyết</td></tr>
+<tr><td>Bỏ seo_meta khỏi flag_fix khi bước fit đã đưa vào khoảng</td><td>Bớt khoảng 80% lượt flag_fix (488/538 hiện là vì seo_meta)</td><td>đề xuất mới</td></tr>
+<tr><td>Xoá từ cấm lúc atomize + sửa tất định 863 atom (DRY RUN như 181 Master)</td><td>0 atom có từ cấm</td><td>đề xuất mới</td></tr>
+<tr><td>Test bắt buộc: mỗi mã cứng phải gắn hàm sửa tất định</td><td>Không lặp lại lỗi kiểu AA-736/740</td><td>đề xuất mới</td></tr>
+<tr><td>Ghi cột <code>revalidate_passed</code>; hạ judge shadow xuống 10–20% sau AA-714</td><td>Quan sát đúng; −$1,3 mỗi 500 tour</td><td>AA-714</td></tr>
+<tr><td>UI Review Queue / Master Content phân trang và filter ở server</td><td>Người duyệt thấy đủ 54 dòng, đủ nước</td><td>AA-739</td></tr>
+</tbody></table></div>
+
+<h3>Ngắn hạn (1–2 tuần)</h3>
+<div class="tbl"><table>
+<thead><tr><th>Việc</th><th>Kỳ vọng đo được</th><th>Issue</th></tr></thead>
+<tbody>
+<tr><td>Review queue theo loại lỗi: tự xử lý lỗi định dạng/tạm thời, Sonnet cho lệch giọng, người chỉ xử lý lỗi nguồn</td><td>Người chỉ thấy tour cần người</td><td>AA-728</td></tr>
+<tr><td>Judge trả mã lý do có cấu trúc (persona / mâu thuẫn nguồn / quảng cáo / thiếu dữ kiện)</td><td>Định tuyến tự động cho 23 kiểu tour như Sri Lanka</td><td>AA-714, AA-692</td></tr>
+<tr><td>Gộp segment cùng trải nghiệm, chuẩn hoá hành động, dọn 301 segment rỗng, loại "hotel"</td><td>Tỉ lệ segment 1 atom từ 76% xuống dưới 40%</td><td>AA-695</td></tr>
+<tr><td>Đo và sửa luật route cho tour dài (cho phép đi qua ngày transit)</td><td>Tỉ lệ tour 8+ ngày có route từ 40% lên trên 70%</td><td>đề xuất mới</td></tr>
+<tr><td>Cổng A0: itinerary nguồn mâu thuẫn, nguồn định vị đối tượng quá mạnh</td><td>Phát hiện trước khi viết, thay vì rớt judge</td><td>AA-690</td></tr>
+<tr><td>S1 chạy song song với prefetch SEO theo lô</td><td>Bớt khoảng 20 phút mỗi 120 tour</td><td>đề xuất mới</td></tr>
+</tbody></table></div>
+
+<h3>Trung hạn (nâng cấp kiến trúc)</h3>
+<div class="tbl"><table>
+<thead><tr><th>Việc</th><th>Vì sao</th><th>Issue</th></tr></thead>
+<tbody>
+<tr><td>Writer nhận dữ kiện có cấu trúc (ngày, địa điểm, con số) thay vì văn bản nguồn thô</td><td>Gốc của 71% bản phải sửa grounding và phần lớn itinerary bị nén</td><td>đề xuất mới</td></tr>
+<tr><td>Recompute tăng dần theo segment bị ảnh hưởng hoặc một lần mỗi wave, mở cap atomize</td><td>Atomize tuần tự là phần đuôi cố định của mỗi wave</td><td>AA-735</td></tr>
+<tr><td>Hiệu chỉnh Jev bằng nhãn tay, tắt câu hỏi quyết được dưới 10%</td><td>Nhiều stage Jev đang là luật cũ trá hình</td><td>AA-694, AA-695</td></tr>
+<tr><td>Golden set ~30 tour + script hồi quy cho mọi thay đổi prompt/gate</td><td>Đo trước khi siết, tránh lặp lại AA-736/AA-740</td><td>AA-729</td></tr>
+<tr><td>Wave là một đối tượng: expected set, trạng thái cuối, báo cáo tự động</td><td>Bỏ script đếm tay mỗi lần</td><td>AA-727</td></tr>
+<tr><td>Giảm chi phí atomize (gom theo tour, Bedrock Batch)</td><td>33% chi phí LLM</td><td>AA-616, AA-624</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="nguon">
+<h2>Nguồn số liệu</h2>
+<p class="meta">Truy vấn chỉ đọc trên RDS Dev (acc2) ngày 08/10/2026 qua ECS exec: <code>raw_tours</code>, <code>generated_content</code>, <code>quality_scores</code>, <code>review_queue</code>, <code>published_tours</code>, <code>v_active_tour_atoms</code>, <code>atom_segment(_member)</code>, <code>atom_ranking</code>, <code>route</code>, <code>hub</code>, <code>shared.job</code>, <code>llm_call_log</code>, <code>dfs_call_log</code>, <code>decision_log</code>. Mốc thời gian: từ 01/10/2026 00:00 UTC. Log phiên: <code>docs/sessions/</code> S207–S218. Script: <code>.tmp-session/s218_audit*.py</code>.</p>
+</section>
+</main>
+</div>
