@@ -74,11 +74,11 @@ Khi hai nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Bá
 | Chạy lại pipeline cho một nước | `aa-wave-rerun` |
 | Query DB, ECS exec, xoá bảng | `aa-cis-schema` |
 | Tìm file/router/page, Terraform, repo nào | `aa-ecosys-repos` |
+| Phát hiện lỗi do làm sai cách; trước khi sửa một vùng code | `aa-lessons` |
 
 ## 7. References (load khi cần)
 
 - `references/aws.md` — account map, profile, chain Bedrock, start/stop môi trường, CLI rules
-- `references/lessons.md` — các nguyên tắc rút ra từ sự cố thật (ngắn, mỗi dòng một nguyên tắc)
 - `references/adr.md` — format ADR, khi nào phải viết, các quyết định đã khoá
 - `references/stakeholders-english.md` — người liên quan, giọng văn theo người đọc, review tiếng Anh
 - `references/handoff-prompt.md` — template giao việc cho Claude Code/Kiro
