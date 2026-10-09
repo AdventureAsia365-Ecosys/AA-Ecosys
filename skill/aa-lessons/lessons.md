@@ -16,6 +16,7 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Atom hoá không có nghĩa là không bịa. Atom cần grounding riêng — 30/07, 1/2 mẫu có chi tiết ngoài nguồn.
 - Trước khi viết validator mới, tìm cái đã có ở nhánh khác — `find_novel_numeric_claims()` đã tồn tại khi cần quét 58 tour.
 - Đọc code thật trước khi đặt giả thuyết — S65 mất nhiều lượt vì giả định có node "finalize" không tồn tại.
+- **Báo cáo/chỉ số mới phải chạy trên dữ liệu thật trước khi báo xong** — AA-686 báo cáo A/B shadow: unit test xanh nhưng `agreement_rate` của `s1_judge` (5.135 cặp, số quan trọng nhất) luôn `null` vì judge A1 chỉ trả điểm, không có `status`; docstring nói "pass derived" mà code không suy ra (S222, #616). Bắt bằng: gọi endpoint live, kiểm mỗi cột chính có giá trị ở nhóm lớn nhất.
 
 ## Vận hành
 
@@ -24,6 +25,8 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Deploy phải cập nhật cả worker — S211: worker kẹt task-def `:1`, chạy code cũ.
 - Thêm module top-level phải thêm `COPY` vào Dockerfile và path filter `deploy-dev.yml` — S210.
 - Merge PR có `[AA-xxx]` tự đóng issue → dùng `Refs AA-xxx` — S207 phải mở lại AA-653, AA-708.
+- **Nhiều PR backend cùng lúc: merge nối tiếp, mỗi PR chờ Deploy Dev xong mới cập nhật nhánh + auto-merge PR sau** — branch protection đòi nhánh up-to-date (`mergeStateStatus: BEHIND` chặn auto-merge im lặng) và 2 lần deploy song song đua roll ECS (S222, #614–#619). `gh pr update-branch` không có ở gh cũ → `gh api -X PUT repos/{owner}/{repo}/pulls/<n>/update-branch`.
+- **Mặc định an toàn trong code (`SAFE_DEFAULTS`) phải tự chạy được khi DB/catalog sập** — model tra qua catalog DB bị bỏ qua "not in catalog" lúc DB lỗi; muốn ưu tiên Bedrock thì để route Luna trước và giữ key legacy (GPT-4.1) cuối chuỗi, không thay hẳn (S222, #617). Bắt bằng: unit test `get_model_sync → None` vẫn ra kết quả.
 
 ## Pipeline và chất lượng
 

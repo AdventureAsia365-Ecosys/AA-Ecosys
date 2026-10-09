@@ -39,7 +39,7 @@ Thư mục `.tmp-session/kiro/<task-id>/`: `meta.txt` (exit, credit, `FLAGS: n`)
 4. Xanh + ảnh ổn → Claude mở PR ("code written by Kiro (aa-worker), gated by Claude Code"), theo `aa-ship` (merge/deploy/verify live). Ghi `kiro_credits_task` vào implementation notes.
 
 ## 4. Giữ token Claude thấp
-- **Một issue lớn (hoặc nhóm nhỏ) = một phiên Claude mới**, nối bằng memory + session log + Linear. Phiên dài làm MỌI lượt đắt hơn — đây là khoản tiết kiệm lớn nhất.
+- **Một phiên làm 3–5 issue** (Nghiệp chốt S222, thay quy tắc "một issue một phiên" của v3). Giữ token thấp bằng brief ngắn, đọc ít, chạy song song task Kiro bằng worktree; chỉ kết thúc phiên khi Nghiệp nói.
 - Không đọc transcript/diff nguyên khối; không tự đo/screenshot khi smoke đã xanh trừ bước xem 2–4 ảnh.
 - Output khi Claude tự chạy: `-q` + `tail`.
 
@@ -48,3 +48,6 @@ Thư mục `.tmp-session/kiro/<task-id>/`: `meta.txt` (exit, credit, `FLAGS: n`)
 - `/usage` cũng tạo session; script chọn session có đường dẫn brief.
 - Một task = một branch = một thư mục log; không chạy 2 task Kiro cùng repo cùng lúc; không sửa `kiro-run.sh` khi Kiro đang chạy. Dọn `.tmp-session/kiro/<task-id>` sau khi PR merge.
 - Smoke chỉ chạy khi có Vercel preview (thay đổi frontend). Backend-only: CI unit/integration là cổng; verify live sau deploy vẫn là việc của Claude.
+- Chạy song song 2 task cùng repo: dùng `git worktree` riêng cho task thứ hai (S222). Worktree không có `node_modules`: `tsc` chạy được với symlink, nhưng `next build` (Turbopack) từ chối symlink trỏ ra ngoài thư mục → dùng `cp -al` (hardlink), không commit.
+- `## Files in scope` trong brief: viết từng đường dẫn, không dùng `{a,b}` — `kiro_check.py` không mở rộng ngoặc nhọn, sinh flag "outside scope" giả (S222).
+- 5 job CI bắt buộc chỉ chạy trên PR, không chạy khi push nhánh → backend-only, cổng của Kiro là bộ test local; Claude mở PR để CI chạy.
