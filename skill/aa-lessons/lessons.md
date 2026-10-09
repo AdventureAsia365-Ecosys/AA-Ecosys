@@ -43,6 +43,7 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 
 - **Cap theo kind phải nhỏ hơn tổng slot của worker** — s1_rewrite cap 4 = `max_parallel` 4 → chiếm hết slot, a3_atomize (cap 1) không chạy được suốt pha rewrite (S217/S218, AA-737). Bắt bằng: test `test_aa737_worker_throughput` (cap s1 + cap a3 < slot).
 - **Tăng slot thì tăng cả thread executor và pool DB** — LangGraph chạy node sync trên default executor (6 thread ở 0.5 vCPU); thêm slot mà không thêm thread thì nghẽn âm thầm (AA-737).
+- **Job chạy song song bên trong (asyncio.gather / Semaphore) không được dùng chung MỘT connection** — A3/recompute chạy trên `_SingleConnAsPool`, trong khi gate Jev gọi `decide()` 8 luồng → "another operation is in progress" hàng nghìn lần mỗi recompute, decide fail-open → loại transit/demand/landing đổi theo từng lần chạy, route lật version (có identity 14 version) (S219). Bắt bằng: CloudWatch đếm `decide_config_unavailable` = 0 sau mỗi recompute; job mở pool thật (`open_job_pool`).
 - **Script theo dõi wave phải chịu được lỗi mạng tạm thời** — 1 lần 502 từ API Gateway làm runner local chết giữa wave (job vẫn chạy). Poll trong try/except, lưu state để resume (S218).
 
 ## Dữ liệu
@@ -51,6 +52,7 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Cùng thư mục không cùng số phận — xoá từng file, verify import chain riêng (AA-477).
 - 0 row không chứng minh "chưa từng dùng" — kiểm `git ls-files`.
 - Trước DROP TABLE: grep tên bảng trong `tests/integration/` (CI replay migration thật).
+- **File khôi phục (restore) phải nằm ở key riêng, cố định — không phải output của lần DRY RUN** — script AA-744 ghi snapshot ra `s219_aa744_{MODE}.json`; chạy lại DRY RUN sau khi apply đã ghi đè file "dry" đang là file khôi phục của 924 atom (S219). Cứu được nhờ bản `apply_atoms` + S3 versioning. Bắt bằng: bước apply copy snapshot sang `scripts/restore/<issue>_<ngày>.json` trước khi ghi DB.
 - STEP0 phải hỏi "đường mới đã làm được việc này chưa", không chỉ "còn ai dùng không" (AA-473).
 - Bước "best-effort" nuốt lỗi bằng `logger.warning` thì phải để lại dấu vết trong kết quả job — không thì lỗi chạy âm thầm hàng ngày: segment không được dựng cho 566 tour từ 05/10 trong khi mọi job `a3_atomize` báo thành công (S218, AA-695). Báo cáo wave phải đếm sản phẩm đầu ra (segment/ranking/route theo tour), không chỉ trạng thái job. Bắt bằng: wave report đếm `tours_with_segment` theo nước.
 - Một UPDATE đổi khoá con (`SET segment_id = …`) trên bảng có PK ghép dễ đụng PK khi dòng đích đã có — dùng INSERT … ON CONFLICT DO NOTHING + DELETE (S218, AA-695).
