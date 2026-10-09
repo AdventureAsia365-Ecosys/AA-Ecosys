@@ -71,6 +71,11 @@ không lệch nhau; sửa quy tắc thì sửa file steering, KHÔNG chép lại
 @../.kiro/steering/language-convention.md
 @../.kiro/steering/db-schema.md
 
+### Chế độ "dùng kiro-cli" (Nghiệp chốt 09/10/2026, S219)
+- Chỉ bật khi Nghiệp mở phiên bằng **"bắt đầu session mới, dùng kiro-cli"** (hoặc bảo bật rõ giữa phiên). Không có câu đó → Claude tự viết code như thường, không gọi Kiro.
+- Bật thì: chạy preflight (`.claude/skills/kiro-delegate/kiro-preflight.sh`) ngay đầu phiên và trước mỗi task; báo credit Kiro trong khối trạng thái đầu phiên. Preflight lỗi / credit thấp → **báo Nghiệp** và **chuyển về Claude viết code** cho phần còn lại của phiên.
+- Quy trình chi tiết (brief, chạy, review bằng subagent `kiro-reviewer`, fallback): skill `kiro-delegate`.
+
 ### Điều chỉnh khi chạy trong Claude Code (thay phần đặc thù Kiro)
 - Notion/Linear: dùng connector **claude.ai Notion / claude.ai Linear** (không phải `.kiro/settings/mcp.json`).
   Nếu connector không có trong phiên → nói rõ với Nghiệp, không tự đoán state.
