@@ -52,6 +52,9 @@ PROMPT="Read and follow the task brief at $OUT/brief.md exactly. Work in $WORKDI
 # round so Kiro keeps its context (no re-reading the code from scratch). Falls back to a fresh session
 # when there is no previous session or the resume fails to start.
 FEEDBACK="${3:-}"
+# S221: resolve a relative feedback path against the caller's cwd (OLDPWD — we already cd'd into
+# WORKDIR above), so `.tmp-session/kiro/<task>/feedback-1.md` from the workspace root works.
+if [ -n "$FEEDBACK" ] && [ "${FEEDBACK#/}" = "$FEEDBACK" ]; then FEEDBACK="$OLDPWD/$FEEDBACK"; fi
 PREV_SESSION=$(sed -n 's/^session=//p' "$OUT/meta.txt" 2>/dev/null | grep -v MISSING | tail -1)
 RESUMED=no
 if [ -n "$FEEDBACK" ]; then
