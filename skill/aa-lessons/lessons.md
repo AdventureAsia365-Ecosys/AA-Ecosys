@@ -61,6 +61,9 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 ## Frontend
 
 - **Trang list phải phân trang và lấy option filter ở server** — Review Queue gọi API không kèm `page_size` (mặc định 20) rồi phân trang client trên 20 dòng → luôn 1/1, chọn 100/page vô tác dụng, dropdown nước chỉ có nước của 20 dòng; Master Content cũng vậy (S218, AA-739). Bắt bằng: aa-ui-verify với dữ liệu > 1 trang: chọn page size lớn, sang trang 2, đếm option filter.
+- **Mọi bước chờ trong Playwright phải có trần riêng** — `waitForFunction(fn, { timeout })` đặt options sai vị trí (là tham số thứ 3, sau `arg`) nên chờ vô hạn; `networkidle` không bao giờ tới trên trang có polling; cả hai đốt hết 60 s test timeout ở Master Content, trong khi trang hiển thị bình thường (S220, AA-732). Bắt bằng: chạy smoke thật trên Dev trước khi merge (`BASE_URL=… --project=smoke`), đo thời gian từng bước khi timeout.
+- **Selector smoke không giả định layout mới** — trang legacy không có `<main>`, nên `main table tbody tr` không bao giờ khớp dù bảng có 20 dòng (S220, AA-732).
+- **Workflow CI phải chạy thật một lần trước khi báo xong** — `npm ci` ở root fail vì `package-lock.json` root bị gitignore; review + test local không lộ ra được. `workflow_dispatch --ref <branch>` chạy được bản workflow trên branch, miễn workflow đã có trên main (S220, AA-732).
 - FastAPI: không đặt helper giữa `@router.get` và `async def` → decorator bind nhầm, endpoint 422 (S211, #559).
 - Next 16 React Compiler: lint lỗi `set-state-in-effect` → dùng lazy init / key-remount / useMemo / react-query.
 - Luôn chạy `npm run build` đầy đủ; tsc bắt lỗi prop mà eslint bỏ sót.

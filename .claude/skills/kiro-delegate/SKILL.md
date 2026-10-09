@@ -24,7 +24,7 @@ description: Chế độ "dùng kiro-cli" — Claude Code điều phối, kiro-c
 Khi script xong, thư mục `.tmp-session/kiro/<task-id>/` có: `meta.txt` (exit code, credit task tiêu, dòng `FLAGS: n`), `checks.md` (kiểm tra cơ học toàn bộ session), `transcript.md` (mọi lệnh + output thật; đọc/ghi file chỉ ghi đường dẫn), `session.jsonl` (bản gốc đầy đủ), `diff.patch`, `commits.txt`, `git_status.txt`, `result.md` (lời khai của Kiro).
 1. Gọi subagent **`kiro-reviewer`** (Sonnet) với đường dẫn thư mục task. Nó đọc HẾT brief/checks/transcript/diff/result, tự chạy lại test, trả VERDICT ≤ 40 dòng.
 2. Phiên chính chỉ đọc: `meta.txt` + VERDICT + các hunk reviewer chỉ ra (đọc từ `diff.patch` hoặc file trong repo). Không đọc lại transcript/diff toàn bộ trừ khi VERDICT ≠ PASS mà lý do chưa rõ.
-3. `NEEDS_CHANGES` → viết `feedback-<n>.md` (file:dòng, việc phải làm), thêm mục "Round n feedback" vào brief, đổi tên log cũ (`run.<n>.log`, `transcript.<n>.md`), chạy lại script cùng task-id. Tối đa 3 vòng; quá thì Claude tự làm nốt và ghi lý do.
+3. `NEEDS_CHANGES` → viết `feedback-<n>.md` (file:dòng, việc phải làm), đổi tên log cũ (`run.<n>.log`, `transcript.<n>.md`, `checks.<n>.md`; giữ `meta.txt`), chạy `kiro-run.sh <task-id> <workdir> <feedback-n.md>` — script **resume đúng session Kiro vòng trước** (`--resume-id`, đọc `session=` trong meta.txt) nên Kiro nhớ ngữ cảnh, không đọc lại từ đầu; resume không khởi động được thì tự chạy session mới (meta ghi `resumed=yes|no`). Tối đa 3 vòng; quá thì Claude tự làm nốt và ghi lý do.
 4. `PASS` → Claude mở PR (mô tả do Claude viết, ghi "code written by Kiro (aa-worker), reviewed by kiro-reviewer + Claude Code"), rồi theo `aa-ship` (merge/deploy/verify live). Ghi `kiro_credits_task` vào implementation notes.
 
 ## 3. Giữ token Claude thấp
