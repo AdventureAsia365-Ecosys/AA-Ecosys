@@ -14,6 +14,7 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
    - api và worker cùng image SHA, đúng revision memory ghi
    - `shared.job` có job queued/running không (query không lọc thời gian)
    - Jev canary `credit_ok` và số dư DFS, nếu phiên có chạy pipeline
+   - **Chỉ khi Nghiệp nói "dùng kiro-cli"** (Claude Code): chạy `.claude/skills/kiro-delegate/kiro-preflight.sh`, ghi credit Kiro còn lại vào khối trạng thái. Lỗi / credit thấp → báo và làm phiên này bằng Claude như thường (skill `kiro-delegate`).
 3. **Đưa danh sách 5–10 issue sẽ làm**, theo thứ tự ưu tiên. Mỗi issue `get_issue` để chắc title đúng.
 4. **Báo lệch:** nếu state thật khác memory (revision, job treo, issue đã đóng), nói ngay trước khi làm.
 5. **Đọc bài học:** lướt các mục trong `aa-lessons/lessons.md` liên quan tới các issue đã chốt.
