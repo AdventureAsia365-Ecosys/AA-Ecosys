@@ -1,41 +1,40 @@
 ---
 name: kiro-delegate
-description: Giao việc viết code cho kiro-cli (Kiro là "tay chân", Claude Code điều phối + review + verify). Dùng khi một issue AA đã có phạm vi rõ và phần việc chính là viết/sửa code + test — để token viết code tiêu ở Kiro (free) thay vì Claude. Không dùng cho điều tra nguyên nhân gốc, ghi DB, deploy, Terraform.
+description: Chế độ "dùng kiro-cli" — Claude Code điều phối, kiro-cli (Kiro) viết code. CHỈ dùng khi Nghiệp mở phiên bằng "bắt đầu session mới, dùng kiro-cli" (hoặc bật rõ giữa phiên). Gồm preflight kiểm credit Kiro, brief, chạy headless, kiểm tra cơ học, review bằng subagent kiro-reviewer, fallback về Claude khi Kiro hết credit/lỗi.
 ---
 
 # kiro-delegate
 
-Claude Code giữ: plan, brief, review, chạy lại test, PR, merge/deploy (aa-ship), verify live, Linear, trao đổi với Nghiệp.
-Kiro (`kiro-cli`, agent `aa-worker`) làm: viết code + test trên branch riêng, ghi báo cáo.
+## Khi nào bật
+- **Chỉ khi Nghiệp nói** "bắt đầu session mới, dùng kiro-cli" (hoặc bảo bật giữa phiên). Không có câu đó → Claude tự viết code như thường, KHÔNG gọi Kiro.
+- Bật rồi thì mọi phần **viết/sửa code + test** đi qua Kiro. Claude giữ: điều tra nguyên nhân gốc, DRY RUN/ghi DB, AWS/Terraform, deploy, verify live, Linear/Jira/Notion, ADR, trao đổi với Nghiệp.
 
-## Điều kiện
-- `~/.local/bin/kiro-cli whoami` ra tài khoản (chưa login → nhờ Nghiệp chạy `kiro-cli login`).
-- Agent: `.kiro/agents/aa-worker.json` (script tự symlink vào `~/.kiro/agents/`). Cấm aws/terraform/merge/deploy/push main/psql.
+## 0. Preflight (đầu phiên + trước mỗi task)
+`bash .claude/skills/kiro-delegate/kiro-preflight.sh` → exit 0 = sẵn sàng (in credit còn lại).
+- Exit 3 (credit thấp: còn < 100 hoặc đã dùng ≥ 95%), 4 (chưa cài/chưa login), 5 (`/usage` hoặc ping lỗi, rate limit):
+  **báo Nghiệp ngay** (trạng thái + credit + ngày reset) và **chuyển về Claude viết code như bình thường** cho phần còn lại của phiên. Không thử lại vòng vo.
+- Login hết hạn: Nghiệp chạy trong terminal WSL `kiro-cli login --license pro --identity-provider https://noventiq-aws-lab.awsapps.com/start --region us-east-1`.
 
-## Quy trình
-1. **Branch trước:** trong repo đích `git checkout main && git pull && git checkout -b <feat|fix>/<issue>-<slug>`. Script từ chối chạy trên main/master.
-2. **Brief** `.tmp-session/kiro/<task-id>/brief.md` (tiếng Anh), đủ các mục:
-   - Issue + mục tiêu (1–3 câu), **phạm vi và ngoài phạm vi**;
-   - repo/branch, file liên quan (đường dẫn thật), CONTEXT.md + mục lessons cần đọc;
-   - ràng buộc (không đổi schema nếu không nói, không đụng file X…);
-   - **lệnh test phải chạy** (vd `python3 -m pytest -q tests/unit -p no:cacheprovider`, `python3 -m flake8 <files>`);
-   - điều kiện xong (đo được); có commit hay không (`Refs AA-xxx`);
-   - đường dẫn result: `.tmp-session/kiro/<task-id>/result.md` + các mục bắt buộc (Summary, Files changed, Commands run, Test results, Decisions not in the brief, Open questions / risks).
-3. **Chạy nền:** `bash .claude/skills/kiro-delegate/kiro-run.sh <task-id> <workdir>` với `run_in_background: true`. Không poll; chờ thông báo.
-4. **Review ĐẦY ĐỦ (không chỉ đọc tóm tắt của Kiro):**
-   - `meta.txt` (exit code, result/session/transcript có hay MISSING — MISSING = coi như chưa xong);
-   - **`transcript.md` — nguồn chính**: mọi tool call của Kiro + output thật (stdout/stderr/exit status, nội dung file đọc/ghi), dựng từ `session.jsonl` của kiro-cli. Đọc hết, đối chiếu từng lệnh và kết quả. (`run.clean.log` chỉ ghi tên lệnh, không có output — S219 smoke test);
-   - `diff.patch` — đọc toàn bộ, so với brief: thừa / thiếu / đụng file ngoài phạm vi;
-   - `git_status.txt` (file chưa commit), `commits.txt`;
-   - `result.md` chỉ là lời khai — mọi khẳng định phải khớp log + diff. Lệch → ghi vào feedback.
-5. **Tự chạy lại test** trong workdir (không tin số trong result.md). Lint đúng như CI.
-6. **Chưa đạt:** viết `feedback-<n>.md` cùng thư mục (lỗi cụ thể, file:dòng, việc phải làm), thêm vào brief mục "Round n feedback", chạy lại script (task-id giữ nguyên, log cũ đổi tên `run.<n>.log` trước khi chạy).
-7. **Đạt:** Claude mở PR (mô tả do Claude viết), theo `aa-ship` để merge/deploy/verify; ghi Linear. Ghi trong implementation notes / PR: "code written by Kiro (kiro-cli aa-worker), reviewed + verified by Claude Code".
+## 1. Giao việc (một task = một issue trọn vẹn, không chia vụn)
+1. Repo đích: `git checkout main && git pull && git checkout -b <feat|fix|chore>/<aa-xxx>-<slug>` (script từ chối main/master).
+2. Brief: chép `brief-template.md` → `.tmp-session/kiro/<task-id>/brief.md`, chỉ điền phần riêng. Bắt buộc có `## Files in scope` và `## Test commands` dạng ``- `...` `` (kiro_check.py đọc 2 mục này). Yêu cầu Kiro tự lặp sửa → test + lint xanh rồi mới báo.
+3. Chạy nền: `bash .claude/skills/kiro-delegate/kiro-run.sh <task-id> <workdir>` (`run_in_background: true`). Không poll.
 
-## Giữ cho Claude (không giao Kiro)
-Điều tra nguyên nhân gốc qua log/DB; DRY RUN + ghi DB; Terraform/AWS; deploy; verify live; Jira/Linear/Notion; quyết định kiến trúc (ADR).
+## 2. Review (đọc đầy đủ — trên model rẻ)
+Khi script xong, thư mục `.tmp-session/kiro/<task-id>/` có: `meta.txt` (exit code, credit task tiêu, dòng `FLAGS: n`), `checks.md` (kiểm tra cơ học toàn bộ session), `transcript.md` (mọi lệnh + output thật; đọc/ghi file chỉ ghi đường dẫn), `session.jsonl` (bản gốc đầy đủ), `diff.patch`, `commits.txt`, `git_status.txt`, `result.md` (lời khai của Kiro).
+1. Gọi subagent **`kiro-reviewer`** (Sonnet) với đường dẫn thư mục task. Nó đọc HẾT brief/checks/transcript/diff/result, tự chạy lại test, trả VERDICT ≤ 40 dòng.
+2. Phiên chính chỉ đọc: `meta.txt` + VERDICT + các hunk reviewer chỉ ra (đọc từ `diff.patch` hoặc file trong repo). Không đọc lại transcript/diff toàn bộ trừ khi VERDICT ≠ PASS mà lý do chưa rõ.
+3. `NEEDS_CHANGES` → viết `feedback-<n>.md` (file:dòng, việc phải làm), thêm mục "Round n feedback" vào brief, đổi tên log cũ (`run.<n>.log`, `transcript.<n>.md`), chạy lại script cùng task-id. Tối đa 3 vòng; quá thì Claude tự làm nốt và ghi lý do.
+4. `PASS` → Claude mở PR (mô tả do Claude viết, ghi "code written by Kiro (aa-worker), reviewed by kiro-reviewer + Claude Code"), rồi theo `aa-ship` (merge/deploy/verify live). Ghi `kiro_credits_task` vào implementation notes.
+
+## 3. Giữ token Claude thấp
+- Một brief = một issue trọn (gom việc), Kiro tự lặp tới khi xanh — ít vòng review.
+- Phiên chính không đọc transcript/diff nguyên khối; để `kiro-reviewer` đọc.
+- Mỗi giai đoạn/issue lớn là một phiên Claude mới (nối tiếp bằng memory + session log) — context dài làm mọi lượt đắt hơn.
+- Output test khi Claude tự chạy: `-q` + `tail`.
 
 ## Bẫy
-- Kiro chạy với `--trust-tools` → chặn bằng `deniedCommands` trong agent, nhưng vẫn phải đọc `run.clean.log` để chắc nó không làm việc ngoài brief.
-- `.tmp-session/` bị gitignore — log không lên git; dọn thư mục task sau khi PR merge.
-- Một task = một branch = một thư mục log. Không chạy 2 task Kiro cùng repo cùng lúc.
+- Log headless (`run.clean.log`) chỉ ghi tên lệnh, KHÔNG có output → nguồn sự thật là `session.jsonl`/`transcript.md` (S219 smoke test).
+- `/usage` cũng tạo session; script chọn session có chứa đường dẫn brief, không lấy "mới nhất".
+- `--trust-tools` + `deniedCommands` chặn aws/terraform/psql/sudo/merge/workflow/secret/push main; `checks.md` vẫn báo nếu Kiro thử.
+- Một task = một branch = một thư mục log; không chạy 2 task Kiro cùng repo cùng lúc. Dọn `.tmp-session/kiro/<task-id>` sau khi PR merge.
