@@ -1,10 +1,10 @@
 # AA-Ecosys DB Schema Reference (live dump)
 
-**Verified:** 2026-10-10 (S209) — live `information_schema` dump of the shared RDS (`aa-cis/dev/rds`, acc2 `005097885195`, us-west-1). Latest migration: **208**.
+**Verified:** 2026-10-10 (S209) — live `information_schema` dump of the shared RDS (`aa-cis/dev/rds`, acc2 `005097885195`, us-west-1). Latest migration: **209**.
 
 > This file is generated from a real DB dump, not hand-maintained. It is the **single source of truth** for table/column names across both CIS and TripPlanner (same RDS, separate schemas). Kiro and Claude Code should read THIS before introspecting columns. Regenerate after any migration: re-run the dump script (`.tmp-session/s209_schema_dump.py` pattern) and `s209_gen_schema_md.py`.
 
-**Totals:** 12 non-empty schemas, 99 tables/views, 93 FKs, 13 enums. Empty schemas (exist, 0 objects): acp_gold_output, acp_silver_s3, acp_silver_s4.
+**Totals:** 12 non-empty schemas, 100 tables/views, 93 FKs, 13 enums. Empty schemas (exist, 0 objects): acp_gold_output, acp_silver_s3, acp_silver_s4.
 
 ## Conventions
 - Column format: `name type` — `NN` suffix = NOT NULL. `_enum` / udt types shown by their udt name. `rows` = approximate (`pg_class.reltuples`), not exact.
@@ -34,7 +34,7 @@ succeeded_count integer
 failed_count integer
 ```
 
-### `acp_contract.atom_embedding` (table, ~5756 rows)
+### `acp_contract.atom_embedding` (table, ~6106 rows)
 ```
 atom_id text NN
 view text NN
@@ -42,7 +42,7 @@ embedding vector NN
 created_at timestamp with time zone NN
 ```
 
-### `acp_contract.atom_matches` (table, ~8915 rows)
+### `acp_contract.atom_matches` (table, ~9247 rows)
 ```
 id bigint NN
 query text NN
@@ -53,7 +53,7 @@ matched_by text NN
 matched_at timestamp with time zone NN
 ```
 
-### `acp_contract.atom_ranking` (table, ~131628 rows)
+### `acp_contract.atom_ranking` (table, ~108000 rows)
 ```
 tour_id uuid NN
 segment_id text NN
@@ -74,7 +74,7 @@ version integer NN
 superseded_at timestamp with time zone
 ```
 
-### `acp_contract.atom_segment` (table, ~14988 rows)
+### `acp_contract.atom_segment` (table, ~10281 rows)
 ```
 segment_id text NN
 canonical_place text NN
@@ -86,21 +86,21 @@ contested real
 contested_computed_at timestamp with time zone
 ```
 
-### `acp_contract.atom_segment_alias` (table, ~1368 rows)
+### `acp_contract.atom_segment_alias` (table, ~51 rows)
 ```
 segment_id_old text NN
 segment_id_canonical text NN
 merged_at timestamp with time zone NN
 ```
 
-### `acp_contract.atom_segment_member` (table, ~25721 rows)
+### `acp_contract.atom_segment_member` (table, ~21266 rows)
 ```
 segment_id text NN
 atom_id text NN
 is_alias boolean NN
 ```
 
-### `acp_contract.atomize_day_fingerprint` (table, ~7285 rows)
+### `acp_contract.atomize_day_fingerprint` (table, ~7550 rows)
 ```
 tenant_tour_version_id uuid NN
 day_number integer NN
@@ -124,7 +124,7 @@ embedding vector NN
 created_at timestamp with time zone NN
 ```
 
-### `acp_contract.route` (table, ~2654 rows)
+### `acp_contract.route` (table, ~2970 rows)
 ```
 route_id text NN
 tour_id uuid NN
@@ -187,7 +187,7 @@ market text NN
 researched_at timestamp with time zone NN
 ```
 
-### `acp_contract.tour_atoms` (table, ~25833 rows)
+### `acp_contract.tour_atoms` (table, ~27036 rows)
 ```
 atom_id text NN
 tour_id uuid NN
@@ -604,7 +604,7 @@ delivered_at timestamp with time zone
 v integer NN
 ```
 
-## `shared` (40 objects)
+## `shared` (41 objects)
 
 ### `shared.acp_runs` (table)
 ```
@@ -655,7 +655,7 @@ hits bigint NN
 updated_at timestamp with time zone NN
 ```
 
-### `shared.decision_log` (table, ~217222 rows)
+### `shared.decision_log` (table, ~228181 rows)
 ```
 id bigint NN
 created_at timestamp with time zone NN
@@ -737,6 +737,16 @@ meta jsonb
 created_at timestamp with time zone NN
 ```
 
+### `shared.jev_credit_topup` (table)
+```
+id bigint NN
+topped_up_on date NN
+amount_usd numeric NN
+note text
+created_by text
+created_at timestamp with time zone NN
+```
+
 ### `shared.jev_tenant_allowlist` (table)
 ```
 tenant_id uuid NN
@@ -745,7 +755,7 @@ added_at timestamp with time zone NN
 added_by text NN
 ```
 
-### `shared.job` (table, ~1829 rows)
+### `shared.job` (table, ~1964 rows)
 ```
 id uuid NN
 kind text NN
@@ -770,7 +780,7 @@ started_at timestamp with time zone
 finished_at timestamp with time zone
 ```
 
-### `shared.job_worker` (table, ~78 rows)
+### `shared.job_worker` (table, ~83 rows)
 ```
 worker_id text NN
 host text NN
@@ -787,7 +797,7 @@ last_reaped jsonb
 task_revision integer
 ```
 
-### `shared.llm_call_log` (table, ~200603 rows)
+### `shared.llm_call_log` (table, ~210812 rows)
 ```
 id uuid NN
 tenant_id uuid
@@ -1018,7 +1028,7 @@ updated_at timestamp with time zone NN
 updated_by text
 ```
 
-### `shared.tenant_api_usage` (table, ~72500 rows)
+### `shared.tenant_api_usage` (table, ~80055 rows)
 ```
 id uuid NN
 tenant_id uuid
@@ -1243,7 +1253,7 @@ position bigint
 
 ## `silver_aa_internal` (7 objects)
 
-### `silver_aa_internal.generated_content` (table, ~1112 rows)
+### `silver_aa_internal.generated_content` (table, ~1208 rows)
 ```
 id uuid NN
 tour_id uuid NN
@@ -1282,7 +1292,7 @@ satellite_used boolean NN
 satellite_account text
 ```
 
-### `silver_aa_internal.quality_scores` (table, ~1151 rows)
+### `silver_aa_internal.quality_scores` (table, ~1205 rows)
 ```
 id uuid NN
 generated_content_id uuid NN
@@ -1667,6 +1677,7 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 
 | version | applied_at | description |
 |---|---|---|
+| 209 | 2026-10-10 08:28:34.358843+00:00 | AA-756: shared.jev_credit_topup — manual Jev credit top-ups for the Settings estimated-balance card |
 | 208 | 2026-10-10 03:36:46.995974+00:00 | AA-754: drop tour_atoms.distinctiveness (+ index, view recreated) and the Competitors tables |
 | 207 | 2026-10-10 02:27:09.421692+00:00 | AA-753: delete the dead N7 stages (n7_adapt/n7_draft/n7_faq/n7_gap_research/n7_judge/n7_repair) from shared.llm_role_config |
 | 206 | 2026-10-08 23:41:45.703921+00:00 | AA-742: shared.decision_cache_hits_daily — Jev cache hits counted per day/stage/question/mode/zone instead of one decision_log row per hit |
@@ -1681,4 +1692,3 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 | 197 | 2026-10-01 04:33:42.739593+00:00 | AA-653: chk_raw_tours_country adds Pakistan and Philippines (20 values) |
 | 196 | 2026-10-01 02:19:36.662918+00:00 | AA-706: a1_keyword_about_tour Jev question (shadow) |
 | 195 | 2026-10-01 00:12:53.351452+00:00 | AA-702: v_trip_registry excludes superseded sources (active only) |
-| 194 | 2026-09-30 11:00:52.390383+00:00 | AA-701: T10 gate Jev questions (shadow, observe only) |
