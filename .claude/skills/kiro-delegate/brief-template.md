@@ -1,9 +1,10 @@
 # Task <task-id> — <AA-xxx> <one-line title>
 
 ## Contract
-Implement Linear **<AA-xxx>** — its "Scope" and "Done when" are the contract (read it with your Linear
-tool; if you cannot reach Linear, the summary below is enough). <1–3 lines only for what the issue
-does not say: a decision Nghiệp made, a pointer to the exact file/function, a known trap.>
+Implement Linear **<AA-xxx>** — read it first with `@linear/get_issue` (and `@linear/list_comments` for
+decisions made in comments); its Scope, Done when and any Design / Decision section are the contract.
+Linear is read-only for you — never try to write it.
+<Then 1–3 lines for what the issue does not say: a decision Nghiệp made, file/function pointers, a known trap.>
 
 ## Repo / branch
 <absolute repo path> on `<feat|fix|chore>/<aa-xxx>-<slug>` (already checked out by Claude Code).

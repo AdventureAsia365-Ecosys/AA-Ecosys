@@ -61,7 +61,7 @@ if [ -n "$FEEDBACK" ]; then
   [ -f "$FEEDBACK" ] || { echo "missing feedback file $FEEDBACK" >&2; exit 2; }
   PROMPT="Review round feedback for this same task: read $FEEDBACK and apply every item on branch $BRANCH in $WORKDIR. It overrides the brief where they differ. Re-run the brief's test commands until green, make ONE new commit (do not amend), and append a new round section to $OUT/result.md."
   if [ -n "$PREV_SESSION" ] && [ -f "$PREV_SESSION" ]; then
-    "$KIRO" chat --no-interactive --agent aa-worker --trust-tools=fs_read,fs_write,execute_bash \
+    "$KIRO" chat --no-interactive --agent aa-worker --trust-tools=fs_read,fs_write,execute_bash,@linear/get_issue,@linear/list_comments \
       --resume-id "$(basename "$PREV_SESSION" .jsonl)" "$PROMPT" > "$OUT/run.log" 2>&1
     RC=$?
     # A resume that could not start writes almost nothing; retry fresh in that case.
@@ -69,7 +69,7 @@ if [ -n "$FEEDBACK" ]; then
   fi
 fi
 if [ "$RESUMED" = no ]; then
-  "$KIRO" chat --no-interactive --agent aa-worker --trust-tools=fs_read,fs_write,execute_bash \
+  "$KIRO" chat --no-interactive --agent aa-worker --trust-tools=fs_read,fs_write,execute_bash,@linear/get_issue,@linear/list_comments \
     "$PROMPT" > "$OUT/run.log" 2>&1
   RC=$?
 fi

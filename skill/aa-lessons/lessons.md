@@ -8,6 +8,8 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Kiểm tiền đề của issue bằng dữ liệu thật trước khi thiết kế** — AA-738 ghi "writer phát forbidden word lõi"; query 9 tour thật cho thấy 0 từ lõi, 100% là từ của brand list (explore/package/nestled) → thiết kế khác hẳn (S218). Bắt bằng: 1 query mẫu trên dữ liệu thật trước khi code.
 - **Đo trước khi chỉnh hiệu năng** — AA-737 định tăng cap s1_rewrite; đo `shared.job` cho thấy nút thắt là slot worker dùng chung (`max_parallel=4`) làm a3_atomize đói 59 phút (S218). Bắt bằng: timeline running/queued theo kind từ `shared.job`.
 - **Siết một gate thì phải đối chiếu quyết định cũ và đường sửa hiện có** — AA-736 biến mã độ dài meta thành chặn Master, nhưng AA-608 từng chủ ý để chúng "soft" vì flag_fix không đảm bảo sửa được → S218 Sri Lanka 11 tour điểm ≥7 kẹt review. Bắt bằng: với mỗi code chuyển sang hard-block, chỉ ra bước nào sửa được nó một cách tất định.
+- **Trước khi "sửa cho đúng chữ Done-when", đọc implementation notes của chính issue** — wave AA-747 thấy 9 nudge/tour (> 3), suýt sửa trần thành per-tour, nhưng notes S222 ghi rõ chọn per-version có chủ đích (regenerate là version mới) (S223). Bắt bằng: mâu thuẫn notes ↔ Done-when → hỏi Nghiệp, không tự sửa code.
+- **Trước khi báo chi phí "LLM fallback" của một stage, kiểm `provider`/`model` trong `llm_call_log`** — S223 báo `a1_claim_supported` có 60k lời gọi LLM dự phòng ("$12.5"), thực ra là chính các lời gọi Jev (provider `typesafe`) được ghi song song vào `llm_call_log` dưới tên stage; vùng xám không gọi LLM (S223, AA-756). Bắt bằng: `GROUP BY stage, provider, model` trước khi gọi tên một khoản chi.
 
 ## Verify và "Done"
 
@@ -41,6 +43,7 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Nhiễu giữa hai lần chạy cùng prompt có thể lớn hơn hiệu ứng của thay đổi prompt — AA-346. Cần đo lặp, không kết luận từ 1 lần.
 - Đếm rerun theo distinct tour: master / review-pending / not-run; không đếm superseded; `ingested` trong review ≠ chưa chạy.
 - Jev fail-open: `llm_call_log` ghi cả lần lỗi → đọc `decision_log.zone`, không dùng số call làm bằng chứng.
+- **Loại trừ theo luật ở một bước mới phải khớp quyết định CUỐI của bước sau, không chỉ luật gốc** — AA-695 định cho atom transit không tạo Segment bằng `classify_exclusion`, nhưng ranking cho Jev `a3_activity_type` cứu moment luật gọi transit; 199 Segment thật (Nanta show, yoga…) sẽ bị xoá nhầm (S223). Bắt bằng: đối chiếu với `atom_ranking.excluded_reason` (lý do cuối) trước khi dùng luật ở chỗ khác.
 
 ## Job runner
 

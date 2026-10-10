@@ -1,10 +1,10 @@
 # AA-Ecosys DB Schema Reference (live dump)
 
-**Verified:** 2026-10-08 (S218) — live `information_schema` dump of the shared RDS (`aa-cis/dev/rds`, acc2 `005097885195`, us-west-1). Latest migration: **205**.
+**Verified:** 2026-10-10 (S209) — live `information_schema` dump of the shared RDS (`aa-cis/dev/rds`, acc2 `005097885195`, us-west-1). Latest migration: **208**.
 
 > This file is generated from a real DB dump, not hand-maintained. It is the **single source of truth** for table/column names across both CIS and TripPlanner (same RDS, separate schemas). Kiro and Claude Code should read THIS before introspecting columns. Regenerate after any migration: re-run the dump script (`.tmp-session/s209_schema_dump.py` pattern) and `s209_gen_schema_md.py`.
 
-**Totals:** 12 non-empty schemas, 100 tables/views, 95 FKs, 13 enums. Empty schemas (exist, 0 objects): acp_gold_output, acp_silver_s3, acp_silver_s4.
+**Totals:** 12 non-empty schemas, 99 tables/views, 93 FKs, 13 enums. Empty schemas (exist, 0 objects): acp_gold_output, acp_silver_s3, acp_silver_s4.
 
 ## Conventions
 - Column format: `name type` — `NN` suffix = NOT NULL. `_enum` / udt types shown by their udt name. `rows` = approximate (`pg_class.reltuples`), not exact.
@@ -34,7 +34,7 @@ succeeded_count integer
 failed_count integer
 ```
 
-### `acp_contract.atom_embedding` (table, ~5430 rows)
+### `acp_contract.atom_embedding` (table, ~5756 rows)
 ```
 atom_id text NN
 view text NN
@@ -42,7 +42,7 @@ embedding vector NN
 created_at timestamp with time zone NN
 ```
 
-### `acp_contract.atom_matches` (table, ~8608 rows)
+### `acp_contract.atom_matches` (table, ~8915 rows)
 ```
 id bigint NN
 query text NN
@@ -53,7 +53,7 @@ matched_by text NN
 matched_at timestamp with time zone NN
 ```
 
-### `acp_contract.atom_ranking` (table, ~129078 rows)
+### `acp_contract.atom_ranking` (table, ~131628 rows)
 ```
 tour_id uuid NN
 segment_id text NN
@@ -74,7 +74,7 @@ version integer NN
 superseded_at timestamp with time zone
 ```
 
-### `acp_contract.atom_segment` (table, ~14340 rows)
+### `acp_contract.atom_segment` (table, ~14988 rows)
 ```
 segment_id text NN
 canonical_place text NN
@@ -86,21 +86,21 @@ contested real
 contested_computed_at timestamp with time zone
 ```
 
-### `acp_contract.atom_segment_alias` (table, ~1326 rows)
+### `acp_contract.atom_segment_alias` (table, ~1368 rows)
 ```
 segment_id_old text NN
 segment_id_canonical text NN
 merged_at timestamp with time zone NN
 ```
 
-### `acp_contract.atom_segment_member` (table, ~23841 rows)
+### `acp_contract.atom_segment_member` (table, ~25721 rows)
 ```
 segment_id text NN
 atom_id text NN
 is_alias boolean NN
 ```
 
-### `acp_contract.atomize_day_fingerprint` (table, ~6888 rows)
+### `acp_contract.atomize_day_fingerprint` (table, ~7285 rows)
 ```
 tenant_tour_version_id uuid NN
 day_number integer NN
@@ -108,7 +108,7 @@ fingerprint_hash text NN
 atomized_at timestamp with time zone NN
 ```
 
-### `acp_contract.hub` (table, ~399 rows)
+### `acp_contract.hub` (table, ~416 rows)
 ```
 hub_id uuid NN
 hub_name text NN
@@ -124,7 +124,7 @@ embedding vector NN
 created_at timestamp with time zone NN
 ```
 
-### `acp_contract.route` (table, ~1885 rows)
+### `acp_contract.route` (table, ~2654 rows)
 ```
 route_id text NN
 tour_id uuid NN
@@ -187,7 +187,7 @@ market text NN
 researched_at timestamp with time zone NN
 ```
 
-### `acp_contract.tour_atoms` (table, ~23087 rows)
+### `acp_contract.tour_atoms` (table, ~25833 rows)
 ```
 atom_id text NN
 tour_id uuid NN
@@ -198,7 +198,6 @@ emotional_hook text
 visual_potential smallint NN
 persona_fit jsonb NN
 season_note text
-distinctiveness text NN
 media jsonb NN
 starred boolean NN
 deleted boolean NN
@@ -227,7 +226,6 @@ emotional_hook text
 visual_potential smallint
 persona_fit jsonb
 season_note text
-distinctiveness text
 media jsonb
 starred boolean
 deleted boolean
@@ -284,7 +282,7 @@ url_alive boolean
 last_checked_at timestamp with time zone
 ```
 
-## `acp_shared` (17 objects)
+## `acp_shared` (16 objects)
 
 ### `acp_shared.acp_output_rules` (table)
 ```
@@ -361,15 +359,6 @@ resource_id text
 details jsonb
 created_at timestamp with time zone
 actor_type audit_actor_type
-```
-
-### `acp_shared.competitor_index_cache` (table)
-```
-tenant_id uuid NN
-country character varying NN
-phrases jsonb NN
-competitors jsonb NN
-fetched_at timestamp with time zone NN
 ```
 
 ### `acp_shared.content_piece` (table, ~1 rows)
@@ -518,21 +507,6 @@ year integer NN
 created_at timestamp with time zone NN
 ```
 
-## `acp_silver_s2` (1 objects)
-
-### `acp_silver_s2.competitor_inputs` (table)
-```
-id uuid NN
-tenant_id uuid NN
-country character varying NN
-url text NN
-label character varying
-is_active boolean NN
-added_by uuid
-created_at timestamp with time zone NN
-updated_at timestamp with time zone NN
-```
-
 ## `gold_aa_internal` (4 objects)
 
 ### `gold_aa_internal.content_exports` (table)
@@ -553,7 +527,7 @@ created_at timestamp with time zone NN
 completed_at timestamp with time zone
 ```
 
-### `gold_aa_internal.published_tours` (table, ~830 rows)
+### `gold_aa_internal.published_tours` (table, ~883 rows)
 ```
 id uuid NN
 tour_id uuid NN
@@ -630,7 +604,7 @@ delivered_at timestamp with time zone
 v integer NN
 ```
 
-## `shared` (39 objects)
+## `shared` (40 objects)
 
 ### `shared.acp_runs` (table)
 ```
@@ -657,7 +631,7 @@ created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
 
-### `shared.cost_explorer_snapshot` (table, ~2396 rows)
+### `shared.cost_explorer_snapshot` (table, ~4864 rows)
 ```
 id uuid NN
 account_id text NN
@@ -670,7 +644,18 @@ raw jsonb
 fetched_at timestamp with time zone NN
 ```
 
-### `shared.decision_log` (table, ~827341 rows)
+### `shared.decision_cache_hits_daily` (table, ~162 rows)
+```
+day date NN
+stage text NN
+question_key text NN
+mode text NN
+zone text NN
+hits bigint NN
+updated_at timestamp with time zone NN
+```
+
+### `shared.decision_log` (table, ~217222 rows)
 ```
 id bigint NN
 created_at timestamp with time zone NN
@@ -760,7 +745,7 @@ added_at timestamp with time zone NN
 added_by text NN
 ```
 
-### `shared.job` (table, ~1674 rows)
+### `shared.job` (table, ~1829 rows)
 ```
 id uuid NN
 kind text NN
@@ -785,7 +770,7 @@ started_at timestamp with time zone
 finished_at timestamp with time zone
 ```
 
-### `shared.job_worker` (table, ~54 rows)
+### `shared.job_worker` (table, ~78 rows)
 ```
 worker_id text NN
 host text NN
@@ -802,7 +787,7 @@ last_reaped jsonb
 task_revision integer
 ```
 
-### `shared.llm_call_log` (table, ~190987 rows)
+### `shared.llm_call_log` (table, ~200603 rows)
 ```
 id uuid NN
 tenant_id uuid
@@ -1033,7 +1018,7 @@ updated_at timestamp with time zone NN
 updated_by text
 ```
 
-### `shared.tenant_api_usage` (table, ~59450 rows)
+### `shared.tenant_api_usage` (table, ~72500 rows)
 ```
 id uuid NN
 tenant_id uuid
@@ -1258,7 +1243,7 @@ position bigint
 
 ## `silver_aa_internal` (7 objects)
 
-### `silver_aa_internal.generated_content` (table, ~1040 rows)
+### `silver_aa_internal.generated_content` (table, ~1112 rows)
 ```
 id uuid NN
 tour_id uuid NN
@@ -1297,7 +1282,7 @@ satellite_used boolean NN
 satellite_account text
 ```
 
-### `silver_aa_internal.quality_scores` (table, ~1055 rows)
+### `silver_aa_internal.quality_scores` (table, ~1151 rows)
 ```
 id uuid NN
 generated_content_id uuid NN
@@ -1377,7 +1362,7 @@ lifecycle_stage tour_lifecycle_stage_enum NN
 country_raw_unresolved text
 ```
 
-### `silver_aa_internal.review_queue` (table, ~156 rows)
+### `silver_aa_internal.review_queue` (table, ~196 rows)
 ```
 id uuid NN
 tour_id uuid NN
@@ -1600,7 +1585,6 @@ acp_shared.acp_quota_ledger.tenant_id -> shared.tenants.tenant_id
 acp_shared.angle_gate_option.request_id -> acp_shared.angle_gate_request.request_id
 acp_shared.angle_gate_request.subject_id -> acp_shared.subject.subject_id
 acp_shared.angle_gate_request.tenant_id -> shared.tenants.tenant_id
-acp_shared.competitor_index_cache.tenant_id -> shared.tenants.tenant_id
 acp_shared.content_piece.angle_gate_option_id -> acp_shared.angle_gate_option.option_id
 acp_shared.content_piece.angle_gate_request_id -> acp_shared.angle_gate_request.request_id
 acp_shared.content_piece.job_id -> shared.job.id
@@ -1619,7 +1603,6 @@ acp_shared.tenant_atom_state.tenant_id -> shared.tenants.tenant_id
 acp_shared.tenant_atom_state.tour_id -> silver_aa_internal.raw_tours.tour_id
 acp_shared.tenant_config.tenant_id -> shared.tenants.tenant_id
 acp_shared.year_plan.tenant_id -> shared.tenants.tenant_id
-acp_silver_s2.competitor_inputs.tenant_id -> shared.tenants.tenant_id
 gold_aa_internal.content_exports.tenant_id -> shared.tenants.tenant_id
 gold_aa_internal.published_tours.generated_content_id -> silver_aa_internal.generated_content.id
 gold_aa_internal.published_tours.tenant_id -> shared.tenants.tenant_id
@@ -1684,6 +1667,9 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 
 | version | applied_at | description |
 |---|---|---|
+| 208 | 2026-10-10 03:36:46.995974+00:00 | AA-754: drop tour_atoms.distinctiveness (+ index, view recreated) and the Competitors tables |
+| 207 | 2026-10-10 02:27:09.421692+00:00 | AA-753: delete the dead N7 stages (n7_adapt/n7_draft/n7_faq/n7_gap_research/n7_judge/n7_repair) from shared.llm_role_config |
+| 206 | 2026-10-08 23:41:45.703921+00:00 | AA-742: shared.decision_cache_hits_daily — Jev cache hits counted per day/stage/question/mode/zone instead of one decision_log row per hit |
 | 205 | 2026-10-08 10:27:08.632027+00:00 | AA-660 follow-up: covering indexes on shared.decision_log (question_key|stage, created_at) INCLUDE the aggregated columns, so /admin/decisions/summary uses index-only scans (504 at 7d) |
 | 204 | 2026-10-06 08:39:46.254699+00:00 | AA-734: acp_contract.atom_ranking.version/superseded_at — run_atom_ranking versioned-swap |
 | 203 | 2026-10-02 10:44:03.636578+00:00 | AA-713: v_active_tour_atoms — atom reads follow published_tours.master_status |
@@ -1696,6 +1682,3 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 | 196 | 2026-10-01 02:19:36.662918+00:00 | AA-706: a1_keyword_about_tour Jev question (shadow) |
 | 195 | 2026-10-01 00:12:53.351452+00:00 | AA-702: v_trip_registry excludes superseded sources (active only) |
 | 194 | 2026-09-30 11:00:52.390383+00:00 | AA-701: T10 gate Jev questions (shadow, observe only) |
-| 193 | 2026-09-30 10:56:26.303479+00:00 | AA-700: T-series Jev questions t7_topic_fits_brand, t8_angle_answers, t9_fact_relevant (shadow) |
-| 192 | 2026-09-30 10:19:35.059279+00:00 | AA-695: Segment same-place Jev question a3_same_place (shadow) |
-| 191 | 2026-09-30 10:10:55.212093+00:00 | AA-692: A1 judge tie-break Jev question a1_brand_fit (shadow) |
