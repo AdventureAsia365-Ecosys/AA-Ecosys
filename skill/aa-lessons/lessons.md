@@ -10,12 +10,15 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Siết một gate thì phải đối chiếu quyết định cũ và đường sửa hiện có** — AA-736 biến mã độ dài meta thành chặn Master, nhưng AA-608 từng chủ ý để chúng "soft" vì flag_fix không đảm bảo sửa được → S218 Sri Lanka 11 tour điểm ≥7 kẹt review. Bắt bằng: với mỗi code chuyển sang hard-block, chỉ ra bước nào sửa được nó một cách tất định.
 - **Trước khi "sửa cho đúng chữ Done-when", đọc implementation notes của chính issue** — wave AA-747 thấy 9 nudge/tour (> 3), suýt sửa trần thành per-tour, nhưng notes S222 ghi rõ chọn per-version có chủ đích (regenerate là version mới) (S223). Bắt bằng: mâu thuẫn notes ↔ Done-when → hỏi Nghiệp, không tự sửa code.
 - **Trước khi báo chi phí "LLM fallback" của một stage, kiểm `provider`/`model` trong `llm_call_log`** — S223 báo `a1_claim_supported` có 60k lời gọi LLM dự phòng ("$12.5"), thực ra là chính các lời gọi Jev (provider `typesafe`) được ghi song song vào `llm_call_log` dưới tên stage; vùng xám không gọi LLM (S223, AA-756). Bắt bằng: `GROUP BY stage, provider, model` trước khi gọi tên một khoản chi.
+- **Số chi phí từ `llm_call_log` phải đối chiếu với dashboard nhà cung cấp trước khi báo** — S223 báo Jev $8,44 từ 29/09; dashboard Jev 03–10/10 ghi $11,8 / 408k request, `llm_call_log` chỉ có $7,05 / 139k. Phần thiếu đúng bằng `llm_call_log_write_failed` + `decision_log_write_failed` (lỗi một-connection S219, sửa ở #600 lúc 09/10 01:00 UTC): đã gọi Jev và đã trả tiền nhưng không ghi được log, và vì cache cũng không được ghi nên mỗi lần recompute lại hỏi Jev lại từ đầu (S224, AA-756). Bắt bằng: CloudWatch đếm `*_log_write_failed` = 0 trong khoảng thời gian báo cáo, cộng một con số tổng từ dashboard nhà cung cấp.
 
 ## Verify và "Done"
 
 - Build pass ≠ chạy đúng. Verify trên domain thật (curl 200 + shape) — S212: SEO 500 tưởng 401, nút Live view không hiện, đếm Thailand sai.
 - Có phép kiểm ≠ phép kiểm đúng. Check mang tên "invented/fabricated" phải đối chiếu source thật — 30/07: `ITIN_MEAL_INVENTED` chỉ dò từ khoá output.
 - Atom hoá không có nghĩa là không bịa. Atom cần grounding riêng — 30/07, 1/2 mẫu có chi tiết ngoài nguồn.
+- **Atomize chỉ có ở A3 platform (1 lần khi tour lên Master; tenant không bao giờ atomize — họ dùng atom/Segment/route/hub của platform)** — tên `run_t5_atomize(tenant_id…)`, file `tenant_pipeline.py`, stage `t5_atomize` là di tích trước AA-526; S224 suy ra sai "tenant T5 atomize nhân chi phí theo tenant". Bắt bằng: trước khi nói về một bước pipeline, grep người gọi thật (`run_t5_atomize(` chỉ có `"platform"`), không suy từ tên.
+- **"Đã lên gateway" phải kiểm theo đường gọi, không theo việc có ghi cost** — AA-685 chỉ chuyển các call chưa ghi cost; `t5_atomize` có ghi cost nên còn gọi thẳng `invoke_claude` (không route/fallback/shadow, chỉ Claude) tới S224, chặn việc đổi model trên admin (AA-757). Bắt bằng: `grep -rn "invoke_claude(" services api` chỉ được ra `shared/llm_client/`.
 - Trước khi viết validator mới, tìm cái đã có ở nhánh khác — `find_novel_numeric_claims()` đã tồn tại khi cần quét 58 tour.
 - Đọc code thật trước khi đặt giả thuyết — S65 mất nhiều lượt vì giả định có node "finalize" không tồn tại.
 - **Báo cáo/chỉ số mới phải chạy trên dữ liệu thật trước khi báo xong** — AA-686 báo cáo A/B shadow: unit test xanh nhưng `agreement_rate` của `s1_judge` (5.135 cặp, số quan trọng nhất) luôn `null` vì judge A1 chỉ trả điểm, không có `status`; docstring nói "pass derived" mà code không suy ra (S222, #616). Bắt bằng: gọi endpoint live, kiểm mỗi cột chính có giá trị ở nhóm lớn nhất.
@@ -23,6 +26,7 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 ## Vận hành
 
 - Không merge/deploy backend khi job đang chạy — S212: deploy giết 16 job S1 của wave Thailand.
+- **Wave S1 xong chưa phải là queue sạch**: `a3_atomize` sau publish sinh `recompute` tự động, recompute chỉ chạy sau vài phút (S224: wave xong 07:14, recompute 07:17–07:20) → merge ngay lúc 07:18 thì Deploy Dev bị guard chặn, phải chạy lại (S224, #630). Bắt bằng: query `shared.job` queued/running ngay trước khi bật auto-merge, chờ cả recompute.
 - Task chạy trong process API chết khi deploy và không hiện trên trang Jobs — gốc của AA-723.
 - Deploy phải cập nhật cả worker — S211: worker kẹt task-def `:1`, chạy code cũ.
 - Thêm module top-level phải thêm `COPY` vào Dockerfile và path filter `deploy-dev.yml` — S210.
@@ -33,6 +37,8 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 ## Pipeline và chất lượng
 
 - Regenerate không cứu được lỗi nằm ở input (raw nghèo) hay prompt (writer tone) — AA-724.
+- **Tham số gửi cho model phải kiểm ở request thật, không chỉ ở LLMRequest** — `S1_WRITER_TEMPERATURE=0.4` không có tác dụng vì cả hai đường Claude native (`_call_bedrock`, `invoke_claude`) dựng body không có `temperature`; arm "0.4" thực chất là arm mặc định (S224, #643). Bắt bằng: unit test assert body gửi Bedrock có/không có tham số; trước A/B một tham số, log request thật 1 lần.
+- **A/B S1 trên ~30 tour phải có arm đối chứng chạy lặp lại trước khi kết luận** — AA-748 vòng 1 thấy câu sai nguồn −45% (5,00 → 2,77/tour); chạy lại đúng arm đối chứng (cờ TẮT, cùng code) đã ra 3,20 (−36%) và điểm −0,20. Hiệu ứng gần bằng dao động giữa hai lần chạy (S224). Bắt bằng: mọi A/B writer có A và A' (cùng cấu hình); chỉ tin chênh lệch B−A lớn hơn rõ |A'−A|, và so B với arm đối chứng chạy liền kề.
 - Repair step có thể tạo lỗi mới (flag_fix thêm forbidden word) → guard sau repair — AA-641.
 - **Bước sửa tất định phải chạy sau lần sửa LLM cuối cùng, không chỉ lúc viết** — strip forbidden lúc viết vẫn để lọt vì flag_fix/re-repair seo_meta viết lại "Explore …" (S218, 8 tour). Bắt bằng: test gọi `revalidate_node` với nội dung vừa bị repair đưa từ cấm vào.
 - **Validator chỉ quét nội dung do writer viết, không quét cả dict** — `json.dumps(generated)` quét luôn `seo_keywords_used` (từ khoá DFS "cheap summer getaways") → FORBIDDEN_WORD không sửa được, chặn Master vĩnh viễn, 13/538 bản (S218, AA-738). Bắt bằng: liệt kê field metadata và loại khỏi mọi scan nội dung.

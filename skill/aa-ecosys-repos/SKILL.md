@@ -31,6 +31,12 @@ A0 ingest → A1 generic rewrite + DFS → A2 QA (review queue) → A3 Master Co
 T0 brand → T1 chọn tour → T2 rewrite → T3 QA (auto-pass sau 2 vòng, có badge) → T4 pool → Slate → Goal → Angle (chọn 1/3) → Write → Gate F1–F10 → Publish.
 
 Nguyên tắc phân tầng: **bước nào đọc brand voice thì per-tenant**; các bước còn lại dùng chung.
+
+**⚠ Atomize chỉ ở A3 platform** (Nghiệp chốt S224): mỗi tour atomize **1 lần khi lên Master** (job
+`a3_atomize` từ publish) hoặc khi admin chạy lại. **Tenant không bao giờ atomize** — tenant viết lại tour
+(T2/T3) rồi dùng atom/Segment/route/hub **của platform** để sinh topic, angle, viết social content. Thêm/bỏ
+tour chỉ **recompute** Segment/Score/Route/Hub, không atomize lại. Tên `run_t5_atomize`, `tenant_pipeline.py`,
+stage `t5_atomize` là di tích trước AA-526 (đổi tên ở AA-757) — kiểm người gọi thật, đừng suy từ tên.
 Bảng đầy đủ stage → file → bảng DB: `references/pipeline.md`.
 
 ## Quy ước chung
