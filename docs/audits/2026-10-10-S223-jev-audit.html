@@ -1,0 +1,220 @@
+<title>Audit Jev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~72ch) with wide tables that scroll in their own box; a sticky
+   section index on wide screens. Palette: slate ink + teal "pass" + amber "review" + brick "block". */
+:root{
+  --bg:#f6f7f6; --panel:#ffffff; --ink:#1d2a2c; --muted:#5d6b6d; --line:#dfe4e3;
+  --accent:#0f6b63; --accent-soft:#e1f0ee; --warn:#a46a0b; --warn-soft:#f8eed9; --bad:#a3392b; --bad-soft:#f6e3df;
+  --bar:#0f6b63; --bar2:#c9d6d4;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121819; --panel:#192223; --ink:#e3ebea; --muted:#9aaaa9; --line:#2b3637;
+  --accent:#5cc2b5; --accent-soft:#183331; --warn:#e2ad4f; --warn-soft:#352a14; --bad:#e3826f; --bad-soft:#3a201b;
+  --bar:#5cc2b5; --bar2:#2f3d3e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121819; --panel:#192223; --ink:#e3ebea; --muted:#9aaaa9; --line:#2b3637;
+  --accent:#5cc2b5; --accent-soft:#183331; --warn:#e2ad4f; --warn-soft:#352a14; --bad:#e3826f; --bad-soft:#3a201b;
+  --bar:#5cc2b5; --bar2:#2f3d3e; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);align-self:start;font-size:13px}
+nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:4px 0;border-left:2px solid var(--line);padding-left:10px}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--accent);border-left-color:var(--accent);outline:none}
+main{min-width:0}
+header.top{margin-bottom:28px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-size:30px;line-height:1.2;margin:.3em 0 .4em;text-wrap:balance;font-weight:700}
+h2{font-size:21px;margin:44px 0 12px;padding-top:12px;border-top:1px solid var(--line);text-wrap:balance}
+h3{font-size:16px;margin:24px 0 8px}
+p,li{max-width:72ch}
+.lede{color:var(--muted);font-size:16px}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:20px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.kpi b{display:block;font-size:24px;font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi span{color:var(--muted);font-size:12.5px}
+.tbl{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.n,th.n{text-align:right}
+.pill{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:99px;white-space:nowrap}
+.ok{background:var(--accent-soft);color:var(--accent)} .wn{background:var(--warn-soft);color:var(--warn)} .bd{background:var(--bad-soft);color:var(--bad)}
+.bars{display:grid;gap:6px;margin:12px 0}
+.bar{display:grid;grid-template-columns:minmax(120px,210px) minmax(0,1fr) 64px;gap:10px;align-items:center;font-size:13px}
+.bar .t{height:12px;background:var(--bar2);border-radius:3px;overflow:hidden}
+.bar .t i{display:block;height:100%;background:var(--bar)}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:6px;padding:10px 14px;margin:14px 0;font-size:14px}
+.find{display:grid;gap:10px;margin:12px 0}
+.find>div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.find h4{margin:0 0 4px;font-size:14.5px}
+.find p{margin:4px 0;font-size:14px}
+.meta{color:var(--muted);font-size:12.5px}
+@media (max-width:820px){.wrap{grid-template-columns:minmax(0,1fr)}nav.toc{display:none}h1{font-size:25px}.bar{grid-template-columns:110px minmax(0,1fr) 54px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Mục lục">
+  <a href="#tomtat">Tóm tắt</a>
+  <a href="#cachhoatdong">Jev quyết định thế nào</a>
+  <a href="#tungcau">Từng câu hỏi</a>
+  <a href="#nguong">Đề xuất ngưỡng</a>
+  <a href="#claim">a1_claim_supported</a>
+  <a href="#themsbo">Thêm, giữ, bỏ</a>
+  <a href="#vonglap">Khép vòng dữ liệu</a>
+  <a href="#hanche">Giới hạn của số liệu</a>
+  <a href="#buoc">Bước tiếp theo</a>
+  <a href="#nguon">Nguồn số liệu</a>
+</nav>
+<main>
+<header class="top">
+  <div class="eyebrow">AA-CIS · Dev · audit S223 · AA-756 · 10/10/2026</div>
+  <h1>Audit Jev toàn hệ thống: hiệu quả từng câu hỏi và ngưỡng mới</h1>
+  <p class="lede">Phạm vi: mọi quyết định Jev (TypeSafe, <code>jev-1.13.0</code>) trong 30 ngày tới 10/10/2026, trên RDS Dev. Độ chính xác tính lại từ các mẫu đã gán nhãn trong <code>docs/calibration/data/</code> (30/09, mỗi câu 132–200 mẫu). Chưa đổi ngưỡng nào trên Dev; mọi thay đổi chờ Nghiệp duyệt.</p>
+</header>
+
+<section id="tomtat">
+<h2>Tóm tắt</h2>
+<div class="kpis">
+  <div class="kpi"><b>24</b><span>câu hỏi: 14 enforce, 10 shadow (9 câu T-series gần như chưa có dữ liệu)</span></div>
+  <div class="kpi"><b>~225k</b><span>quyết định trong 30 ngày (không tính các lượt chạy adhoc)</span></div>
+  <div class="kpi"><b>$8,40</b><span>chi phí Jev 30 ngày = 6,5% tổng chi LLM ($130,23)</span></div>
+  <div class="kpi"><b>74%</b><span>chi phí Jev nằm ở một câu: <code>a1_claim_supported</code> ($6,23)</span></div>
+  <div class="kpi"><b>0%</b><span>quyết định có ghi <code>outcome</code>: hệ thống chưa lưu sự thật để đối chiếu</span></div>
+</div>
+<ul>
+  <li><b>Jev đang chạy đúng và rẻ.</b> Ở mọi câu enforce, độ chính xác trên mẫu tại ngưỡng hiện tại là 99–100%. Không có câu nào chặn sai đáng kể.</li>
+  <li><b>Ngưỡng hiện tại thận trọng hơn mức cần.</b> 7 câu có thể nới ngưỡng mà vẫn giữ độ chính xác ≥ 97% trên mẫu. Jev sẽ tự quyết nhiều hơn 8–20 điểm phần trăm ở các câu đó, <b>không tốn thêm tiền</b> vì câu hỏi vẫn được hỏi như cũ.</li>
+  <li><b>"Vùng xám cao" không có nghĩa là lãng phí.</b> Ngưỡng chỉ đặt một phía, nên xám nghĩa là "để luật mặc định". <code>a3_atom_in_text</code> xám 94% nhưng bắt đúng 100% atom sai trên mẫu; atom sai chỉ hiếm (1,9%).</li>
+  <li><b>Vùng xám không gọi LLM.</b> Các dòng <code>s1_grounding</code> trong <code>llm_call_log</code> chính là lời gọi Jev (provider <code>typesafe</code>), không phải LLM dự phòng. Bản nháp đầu của AA-756 hiểu sai chỗ này và đã sửa.</li>
+  <li><b>Cần Nghiệp quyết một đánh đổi:</b> thêm ngưỡng reject cho <code>a1_claim_supported</code> sẽ bắt 81% câu sai dữ kiện trên mẫu, nhưng trên dữ liệu thật sẽ gắn cờ 19,5% số câu (xem mục riêng).</li>
+</ul>
+</section>
+
+<section id="cachhoatdong">
+<h2>Jev quyết định thế nào</h2>
+<p>Mỗi câu hỏi trả về một xác suất. Theo ADR 0007 và AA-661, Jev chỉ được tự quyết khi câu ở chế độ <b>enforce</b> và xác suất vượt ngưỡng đã hiệu chỉnh:</p>
+<ul>
+  <li><b>accept</b> (p ≥ accept_floor): Jev xác nhận, ví dụ "câu này đúng với nguồn", "nhãn hoạt động này đúng".</li>
+  <li><b>reject</b> (p ≤ reject_ceiling): Jev chặn, ví dụ bỏ một từ khoá không thuộc địa điểm, giữ hai địa điểm tách nhau.</li>
+  <li><b>grey</b> (giữa hai ngưỡng, hoặc phía không đặt ngưỡng): Jev không làm gì, luật tất định hoặc hành vi mặc định quyết. Ở <code>a1_claim_supported</code>, xám chỉ thành ghi chú cho reviewer.</li>
+</ul>
+<p>Hầu hết các câu chỉ đặt <b>một</b> ngưỡng, nên tỉ lệ xám tự nhiên cao. Chỉ số có ý nghĩa là <b>tỉ lệ Jev tự quyết</b> và <b>độ chính xác của những quyết định đó</b>.</p>
+</section>
+
+<section id="tungcau">
+<h2>Từng câu hỏi (enforce)</h2>
+<p class="meta">Quyết định 30 ngày lấy từ <code>shared.decision_log</code>. "Tự quyết" = tỉ lệ subject rơi vào vùng có hành động (bản mới nhất mỗi subject). Độ chính xác trên mẫu = tỉ lệ đúng trong các mẫu đã gán nhãn rơi vào vùng đó.</p>
+<div class="tbl"><table>
+<thead><tr><th>Câu hỏi</th><th>Dùng ở</th><th>Ngưỡng hiện tại</th><th class="n">Quyết định 30 ngày</th><th class="n">Tự quyết (live)</th><th>Độ chính xác (mẫu)</th><th class="n">Chi phí</th><th>Đánh giá</th></tr></thead>
+<tbody>
+<tr><td><code>a1_claim_supported</code></td><td>A1 grounding (+T3)</td><td>accept ≥ 0,90</td><td class="n">71.021</td><td class="n">31,1%</td><td>100% · bắt 43% câu đúng</td><td class="n">$6,23</td><td><span class="pill wn">Cần quyết</span></td></tr>
+<tr><td><code>a3_demand_belongs</code></td><td>A3 ranking: từ khoá nhu cầu</td><td>reject ≤ 0,40</td><td class="n">41.989</td><td class="n">63,2%</td><td>100% · bắt 64% sai</td><td class="n">$0,43</td><td><span class="pill wn">Nới</span></td></tr>
+<tr><td><code>a3_activity_type</code></td><td>A3 loại Segment</td><td>accept ≥ 0,95</td><td class="n">30.536</td><td class="n">77%</td><td>100% (81/160 mẫu)</td><td class="n">$0,26</td><td><span class="pill wn">Nới</span></td></tr>
+<tr><td><code>a3_landing_belongs</code></td><td>A3 câu hỏi PAA</td><td>reject ≤ 0,30</td><td class="n">22.391</td><td class="n">67,1%</td><td>100% · bắt 73% sai</td><td class="n">$0,35</td><td><span class="pill wn">Nới</span></td></tr>
+<tr><td><code>a3_atom_in_text</code></td><td>T5 atomize</td><td>reject ≤ 0,30</td><td class="n">17.982</td><td class="n">1,9%</td><td>100% · bắt 100% sai</td><td class="n">$0,35</td><td><span class="pill ok">Giữ</span></td></tr>
+<tr><td><code>a3_same_place</code></td><td>A3 gộp Segment</td><td>reject ≤ 0,10</td><td class="n">5.099</td><td class="n">24,1%</td><td>100% · bắt 29% khác chỗ</td><td class="n">$0,08</td><td><span class="pill wn">Thêm accept</span></td></tr>
+<tr><td><code>a3_question_about_here</code></td><td>A3 phạm vi câu hỏi</td><td>reject ≤ 0,20</td><td class="n">4.401</td><td class="n">61%</td><td>99% (132/133)</td><td class="n">$0,04</td><td><span class="pill wn">Nới</span></td></tr>
+<tr><td><code>a3_question_foreign</code></td><td>A3 phạm vi câu hỏi</td><td>accept ≥ 0,95</td><td class="n">4.401</td><td class="n">47%</td><td>99% (115/116)</td><td class="n">$0,04</td><td><span class="pill wn">Nới</span></td></tr>
+<tr><td><code>a3_keyword_belongs</code></td><td>A3 research</td><td>reject ≤ 0,30 · accept ≥ 0,95</td><td class="n">441</td><td class="n">24,5% / 28,9%</td><td>100% / 100%</td><td class="n">$0,01</td><td><span class="pill wn">Nới</span></td></tr>
+<tr><td><code>a3_idea_traveller</code></td><td>A3 research</td><td>reject ≤ 0,20</td><td class="n">264</td><td class="n">—</td><td>100% · bắt 95% sai</td><td class="n">&lt;$0,01</td><td><span class="pill ok">Giữ</span></td></tr>
+<tr><td><code>a0_row_kind</code> · <code>a0_itinerary_usable</code> · <code>a0_country</code></td><td>A0 nạp file</td><td>accept ≥ 0,95 · reject ≤ 0,20 · accept ≥ 0,95</td><td class="n">455 mỗi câu</td><td class="n">—</td><td>đã hiệu chỉnh trên 793 tour (S206)</td><td class="n">$0,02</td><td><span class="pill ok">Giữ</span></td></tr>
+</tbody></table></div>
+</section>
+
+<section id="nguong">
+<h2>Đề xuất ngưỡng mới</h2>
+<p>Chọn ngưỡng rộng nhất mà độ chính xác trên mẫu vẫn ≥ 97–98%, chặt hơn mức sàn 95% của AA-661 để chừa biên cho cỡ mẫu nhỏ. Đổi ngưỡng <b>không đổi chi phí</b>: câu hỏi vẫn được hỏi, chỉ khác Jev được tự quyết ở đâu.</p>
+<div class="tbl"><table>
+<thead><tr><th>Câu hỏi</th><th>Hiện tại</th><th>Đề xuất</th><th>Độ chính xác (mẫu)</th><th>Bắt được (mẫu)</th><th class="n">Tự quyết live</th><th>Ý nghĩa</th></tr></thead>
+<tbody>
+<tr><td><code>a3_demand_belongs</code></td><td>reject ≤ 0,40</td><td><b>reject ≤ 0,70</b></td><td>100% → 98%</td><td>64% → 85%</td><td class="n">63,2% → 77,9%</td><td>Bớt từ khoá nhu cầu không thuộc moment trong ranking</td></tr>
+<tr><td><code>a3_landing_belongs</code></td><td>reject ≤ 0,30</td><td><b>reject ≤ 0,40</b></td><td>100% → 99%</td><td>73% → 81%</td><td class="n">67,1% → 75,3%</td><td>Bớt câu PAA gắn nhầm moment</td></tr>
+<tr><td><code>a3_keyword_belongs</code></td><td>reject ≤ 0,30 · accept ≥ 0,95</td><td><b>reject ≤ 0,45 · accept ≥ 0,85</b></td><td>99% · 96%</td><td>67% · 86%</td><td class="n">24,5% → 30,5% · 28,9% → 48,6%</td><td>Research ít phải đoán</td></tr>
+<tr><td><code>a3_activity_type</code></td><td>accept ≥ 0,95</td><td><b>accept ≥ 0,90</b></td><td>100% → 98%</td><td>81 → 92 / 160</td><td class="n">chưa đo</td><td>Thêm Segment có loại do Jev chọn</td></tr>
+<tr><td><code>a3_question_about_here</code></td><td>reject ≤ 0,20</td><td><b>reject ≤ 0,30</b></td><td>99% → 99%</td><td>132 → 135 / 149</td><td class="n">tăng nhẹ</td><td>Bớt câu hỏi không về địa điểm</td></tr>
+<tr><td><code>a3_question_foreign</code></td><td>accept ≥ 0,95</td><td><b>accept ≥ 0,90</b></td><td>99% → 97%</td><td>115 → 125 / 149</td><td class="n">tăng nhẹ</td><td>Bắt thêm câu hỏi về nước khác</td></tr>
+<tr><td><code>a3_same_place</code></td><td>reject ≤ 0,10</td><td><b>thêm accept ≥ 0,70</b> (shadow trước)</td><td>97% (n = 30)</td><td>64% cặp cùng chỗ</td><td class="n">0% → 13,5%</td><td>Cho phép gộp biến thể tên (AA-695); mẫu quá nhỏ để enforce ngay</td></tr>
+<tr><td><code>a1_claim_supported</code></td><td>accept ≥ 0,90</td><td><b>accept ≥ 0,85</b></td><td>100% → 97%</td><td>43% → 52%</td><td class="n">31,1% → 41,9%</td><td>Bớt <code>UNSUPPORTED_NUMBER</code> giả (đổi đơn vị, cộng dồn)</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="claim">
+<h2>Quyết định riêng: <code>a1_claim_supported</code></h2>
+<p>Câu này chiếm 74% chi phí Jev nhưng hiện chỉ dùng được một nửa. Nó chỉ có ngưỡng accept, dùng để <b>gỡ</b> cờ con số mới; nó chưa bao giờ <b>chặn</b> câu sai. Câu sai thật sự hiện chỉ bị bắt bởi luật con số và bởi judge.</p>
+<div class="tbl"><table>
+<thead><tr><th>Phương án</th><th>Trên mẫu (200 câu)</th><th>Trên dữ liệu thật</th><th>Hệ quả</th></tr></thead>
+<tbody>
+<tr><td>Giữ nguyên (không có reject)</td><td>0 câu sai bị chặn</td><td>0%</td><td>Jev chỉ gỡ cờ con số; câu sai không có số lọt qua tới judge</td></tr>
+<tr><td>Thêm reject ≤ 0,30</td><td>97% đúng, bắt 81% câu sai</td><td><b>19,5%</b> số câu bị gắn <code>UNSUPPORTED_CLAIM</code></td><td>Gần như mọi tour vào flag_fix; chất lượng tăng, chi phí flag_fix và tỉ lệ vào review tăng</td></tr>
+<tr><td>Thêm reject ≤ 0,05</td><td>100% đúng, bắt 8% câu sai</td><td>rất ít</td><td>An toàn nhưng gần như không có tác dụng</td></tr>
+</tbody></table></div>
+<p><b>Đã đo shadow trên wave 2 của AA-747</b> (50 tour India, 2.630 câu, cùng ngày): reject ≤ 0,30 sẽ gắn cờ <b>646 câu (24,6%) ở 49/50 tour</b>, trung vị <b>10 câu mỗi tour</b>, nhiều nhất 54. Với độ chính xác 97% trên mẫu, nghĩa là writer đang viết khoảng 10 câu không có trong nguồn mỗi tour.</p>
+<p><b>Quyết định (Nghiệp, S223):</b> chưa bật. Bật bây giờ thì gần như mọi tour vào flag_fix. Sửa ở gốc trước: AA-748 cho writer đọc dữ kiện có cấu trúc, rồi đo lại con số 24,6%.</p>
+</section>
+
+<section id="themsbo">
+<h2>Thêm, giữ, bỏ</h2>
+<div class="find">
+  <div><h4><span class="pill ok">Thêm</span> <code>a3_same_moment</code> (AA-695)</h4>
+  <p>"Ở cùng địa điểm, hai hoạt động này có phải cùng một trải nghiệm khách tìm không?" Chỉ hỏi các cặp Segment cùng nước, cùng tên địa điểm. Thay cho gộp bằng cosine trên embedding, vốn gộp sai cả ở ngưỡng 0,90 ("visit the fortress" với "welcome dinner"). Ước tính 10–20k cặp, khoảng $1–2, lưu một lần nên <code>segment_id</code> ổn định.</p></div>
+  <div><h4><span class="pill wn">Gán nhãn rồi quyết</span> <code>a1_keyword_about_tour</code> (shadow)</h4>
+  <p>18.086 quyết định shadow, 94% xám, $0,30 trong 30 ngày, chưa từng có mẫu gán nhãn. Cần 100 nhãn để biết nên enforce hay bỏ; nếu không gán nhãn trong tháng này thì tắt để khỏi trả tiền cho log không ai đọc.</p></div>
+  <div><h4><span class="pill ok">Giữ</span> <code>a3_atom_in_text</code>, <code>a3_idea_traveller</code>, các câu A0</h4>
+  <p>Đã đúng 100% trên mẫu ở ngưỡng hiện tại. Tỉ lệ tự quyết thấp vì trường hợp xấu hiếm, không phải vì Jev yếu.</p></div>
+  <div><h4><span class="pill">Chờ dữ liệu</span> 9 câu T-series và <code>a1_brand_fit</code></h4>
+  <p>Mỗi câu chưa tới 20 quyết định. Đánh giá sau khi AA-741 chạy T0→T11 trên tenant kiểm soát.</p></div>
+</div>
+</section>
+
+<section id="vonglap">
+<h2>Khép vòng dữ liệu</h2>
+<p>Cột <code>decision_log.outcome</code> chưa bao giờ được ghi, nên lần hiệu chỉnh này phải dùng mẫu gán nhãn cũ từ 30/09. Những chỗ sau đã biết sự thật về sau và có thể ghi ngược vào <code>outcome</code>:</p>
+<ul>
+  <li><code>a1_claim_supported</code>: câu bị <code>grounding_repair</code> sửa hoặc reviewer sửa trong Review Queue → "không được nguồn hỗ trợ".</li>
+  <li><code>a3_same_place</code> / <code>a3_same_moment</code>: Segment bị admin tách hoặc gộp tay ở Atom Curation.</li>
+  <li><code>a3_activity_type</code>: loại bị admin đổi tay.</li>
+</ul>
+<p>Với <code>outcome</code>, lần hiệu chỉnh sau chỉ cần chạy lại script trên dữ liệu thật, không cần gán nhãn tay.</p>
+</section>
+
+<section id="hanche">
+<h2>Giới hạn của số liệu</h2>
+<ul>
+  <li>Mẫu gán nhãn có 132–200 dòng mỗi câu, lấy ngày 30/09. Với 1 lỗi trên 67 quyết định, độ chính xác 99% có cận dưới 95% (khoảng tin cậy 95%).</li>
+  <li>Mẫu được lấy có chủ đích nhiều ca khó, nên tỉ lệ "bắt được" trên mẫu cao hơn trên dữ liệu thật. Cột "Tự quyết live" là con số thật.</li>
+  <li>Sau khi đổi ngưỡng, cần kiểm tay 30 quyết định mới cho mỗi câu đã đổi trước khi coi là xong.</li>
+</ul>
+</section>
+
+<section id="buoc">
+<h2>Bước tiếp theo</h2>
+<div class="tbl"><table>
+<thead><tr><th>Việc</th><th>Ai</th><th>Cần</th></tr></thead>
+<tbody>
+<tr><td>Áp 7 ngưỡng mới (<code>threshold_version</code> 2), cập nhật file calibration</td><td>Claude</td><td>Nghiệp duyệt bảng đề xuất</td></tr>
+<tr><td>Thêm reject 0,30 shadow cho <code>a1_claim_supported</code>, đo trên wave kế</td><td>Claude</td><td>Nghiệp duyệt</td></tr>
+<tr><td><code>a3_same_place</code> accept 0,70 shadow + câu mới <code>a3_same_moment</code> shadow, Sheet 150 cặp</td><td>Kiro code, Claude chạy</td><td>Nghiệp gán nhãn</td></tr>
+<tr><td>Ghi <code>decision_log.outcome</code> từ grounding_repair, Review Queue, Atom Curation</td><td>Kiro</td><td>—</td></tr>
+<tr><td>Gán nhãn 100 mẫu <code>a1_keyword_about_tour</code> hoặc tắt</td><td>Nghiệp</td><td>Quyết định</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="nguon">
+<h2>Nguồn số liệu</h2>
+<ul class="meta">
+  <li><code>shared.decision_log</code>, <code>shared.decision_question</code>, <code>shared.llm_call_log</code> (RDS Dev, 30 ngày tới 10/10/2026 03:50 UTC).</li>
+  <li>Mẫu gán nhãn: <code>apps/AA-CIS-App/docs/calibration/data/*.json</code> (S205–S206, 30/09/2026).</li>
+  <li>Script chỉ đọc: <code>docs/audits/scripts-s223/</code>.</li>
+</ul>
+</section>
+</main>
+</div>
