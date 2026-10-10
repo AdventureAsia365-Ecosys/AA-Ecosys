@@ -1,6 +1,6 @@
 # S223 — Dọn N7 + distinctiveness, trang Jobs mới, đo wave S1, audit Jev (10/10/2026)
 
-**Tác nhân:** Claude Code (VSCode/WSL), chế độ "dùng kiro-cli" · **ECS cuối phiên:** `aa-cis-dev-api:506` / `worker:61` (cùng SHA `5307549`, rollout COMPLETED, /health 200) · **Migration mới:** 207, 208 (đã áp Dev) · **Job queue:** sạch · **Kiro credit:** còn ~755/2.000 (dùng ~162 trong phiên, reset 01/11) · **Jev:** HẾT CREDIT từ 11:09 (VN) — breaker mở.
+**Tác nhân:** Claude Code (VSCode/WSL), chế độ "dùng kiro-cli" · **ECS cuối phiên:** `aa-cis-dev-api:506` / `worker:61` (cùng SHA `5307549`, rollout COMPLETED, /health 200) · **Migration mới:** 207, 208 (đã áp Dev) · **Job queue:** sạch · **Kiro credit:** còn ~728/2.000 (dùng ~189 trong phiên, reset 01/11) · **Jev:** HẾT CREDIT từ 11:09 (VN) — breaker mở.
 
 ## Trạng thái đầu phiên
 Khớp memory S222: api `:498` / worker `:53` cùng SHA `f298b05`, queue 0, /health 200, Kiro preflight OK (917 credit). Lệch nhỏ: AA-714 log ghi "In Review", Linear "In Progress" (giữ nguyên).
@@ -29,7 +29,7 @@ Khớp memory S222: api `:498` / worker `:53` cùng SHA `f298b05`, queue 0, /hea
 
 **AA-695 — In Progress.** Đo: containment gộp sai ('tokyo' ⊂ 'tokyo tower'), cosine sai cả ở 0,90 → NO-GO. **#628** (Kiro 11 credit, brief sửa giữa chừng): atom chỉ bị loại khỏi Segment khi `unnamed_place` hoặc luật transit VÀ chính atom có loại transit/NULL — giữ 198/199 Segment Jev đã cứu (Nanta, yoga…). **Dọn 5.045 Segment** (2.242 rỗng + 2.803 toàn atom bị loại), 23.958 ranking + 5.502 member + 1.375 alias; snapshot `scripts/restore/s223_aa695_segment_cleanup_apply.json`. Sau: 8.517 Segment thật, tỉ lệ một tour 81,7% (đuôi dài thật).
 
-**AA-756 — In Progress.** Audit Jev: `docs/audits/2026-10-10-S223-jev-audit.html` · artifact https://claude.ai/artifact/8A5XBeeUU5n7B8potPMt5q. Jev $8,44 từ 29/09 (6,5% chi LLM), 80% ở `a1_claim_supported` (gửi cả nguồn cho từng câu, TB 2.408 token). **Áp 7 ngưỡng v2** qua API (restore S3, hồ sơ **#627**). Shadow reject 0,30 `a1_claim_supported`: 24,6% câu, 49/50 tour → không bật; mẫu câu cho thấy 2 loại A/B → **#629** đổi luật writer. **#630** (Kiro 17 credit, chưa merge): ghi `outcome` khi duyệt Review Queue + xoá atom, API `/admin/decisions/outcomes/summary`. Kiro đang làm (chưa gác cổng) tối ưu token grounding trên branch `feat/aa-756-grounding-token-trim` (dựa trên #630).
+**AA-756 — In Progress.** Audit Jev: `docs/audits/2026-10-10-S223-jev-audit.html` · artifact https://claude.ai/artifact/8A5XBeeUU5n7B8potPMt5q. Jev $8,44 từ 29/09 (6,5% chi LLM), 80% ở `a1_claim_supported` (gửi cả nguồn cho từng câu, TB 2.408 token). **Áp 7 ngưỡng v2** qua API (restore S3, hồ sơ **#627**). Shadow reject 0,30 `a1_claim_supported`: 24,6% câu, 49/50 tour → không bật; mẫu câu cho thấy 2 loại A/B → **#629** đổi luật writer. **#630** (Kiro 17 credit, chưa merge): ghi `outcome` khi duyệt Review Queue + xoá atom, API `/admin/decisions/outcomes/summary`. **#631** (Kiro 2 vòng ~24 credit, xếp chồng lên #630): grounding gửi mỗi câu nguồn của đúng ngày đó (+ ngày trước/sau + inclusions/exclusions) — đo trên 50 tour thật: nguồn gửi Jev 20,3M → 8,75M ký tự (−57%). Vòng 1 có luật bỏ qua câu "mô tả" theo từ khoá → đo thấy bỏ sót đúng loại B ("wildlife cruise… sightings", "full-day excursion") → đã bỏ hẳn.
 
 **Kiro đọc Linear:** `aa-worker` thêm MCP `linear` chỉ `get_issue` + `list_comments` (test headless: đọc được, không có tool ghi); `kiro-run.sh` trust-tools + brief-template cập nhật.
 
@@ -44,7 +44,7 @@ Khớp memory S222: api `:498` / worker `:53` cùng SHA `f298b05`, queue 0, /hea
 
 ## Kế hoạch phiên sau (S224)
 1. **Sau khi chị Thư nạp Jev:** chạy canary (`POST /admin/jev-canary/check`) → recompute toàn hệ → chạy lại thử 10 tour cho #629 (`.tmp-session/s223/s223_promise_cmp.py`) → merge **#630**.
-2. **Gác cổng Kiro tối ưu token grounding** (`feat/aa-756-grounding-token-trim`, result ở `.tmp-session/kiro/s223-aa756-trim/`): kiểm offline trên 200 câu calibration (độ chính xác không giảm) rồi PR sau #630.
+2. **#631** (giảm token grounding): sau khi có credit, chạy lại 200 câu calibration với nguồn theo ngày, kiểm độ chính xác accept ≥ 0,85 vẫn ≥ 97% → merge sau #630.
 3. AA-756: kiểm tay 30 quyết định/câu sau ngưỡng v2; cảnh báo credit thấp; tìm hiểu OpenAI Decisions API; `a1_keyword_about_tour` gán nhãn hoặc tắt; câu Jev mới chỉ nhắm loại B.
 4. **AA-748** (writer đọc dữ kiện có cấu trúc) — ưu tiên cao, gắn với chính sách A/B.
 5. AA-695: `a3_same_moment` shadow + Sheet 150 cặp. Rồi AA-741.
@@ -58,3 +58,4 @@ Khớp memory S222: api `:498` / worker `:53` cùng SHA `f298b05`, queue 0, /hea
 - PR backend xanh nhưng `BEHIND` → auto-merge đứng im; `update-branch` trước.
 - `run_script.sh` dùng chung `/tmp/s.py` trong container → không chạy song song 2 script (output lẫn).
 - Mode Jev đặt theo cả câu hỏi — muốn "shadow một phía" thì đo offline từ xác suất đã log.
+- Không đóng phiên khi Kiro còn chạy: chờ xong, gác cổng, mở PR rồi mới ghi log (Nghiệp nhắc S223).
