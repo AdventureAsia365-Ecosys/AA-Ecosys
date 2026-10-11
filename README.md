@@ -1,43 +1,53 @@
 # AA-Ecosys
 
-Thư mục gốc gom các repo của hệ sinh thái Adventure Asia. **Multi-repo**: mỗi app có `.git` riêng,
-deploy độc lập; thư mục này chỉ để gom lại cho dễ làm việc. Tất cả nằm dưới org GitHub
-**`AdventureAsia365-Ecosys`** (đổi tên từ `AdventureAsia365-CIS`).
+Root workspace of the Adventure Asia ecosystem. **Multi-repo**: every app keeps its own `.git` and
+deploys on its own; this root only gathers them and holds the ecosystem-wide docs, ADRs, skills and
+session logs. All repos live under the GitHub org **`AdventureAsia365-Ecosys`**.
 
-## Cấu trúc
+## Layout
 
 ```
-AA-Ecosys/
+AA-Ecosys/                      (this repo — default branch master)
 ├── apps/
-│   ├── AA-CIS-App/          # repo AA-CIS-App — FastAPI backend (CIS + ACPv2) + Admin FE + Tenant Portal
-│   └── AA-TripPlanner-Web/  # repo AA-TripPlanner-Web — B2C map-first trip planner (Next.js FE + 2 Lambda)
+│   ├── AA-CIS-App/             content system of record: FastAPI + job worker (ECS), admin + tenant portal (Vercel)
+│   └── AA-TripPlanner-Web/     B2C map-first trip planner: Next.js (Vercel) + 2 Lambdas
 ├── infra/
-│   └── AA-CIS-Infra/        # repo AA-CIS-Infra — Terraform: VPC, RDS, ECS, Lambda, API GW, OIDC, Bedrock
-├── docs/                    # tài liệu cấp hệ sinh thái (không thuộc repo con)
-└── skill/                   # ghi chú/skill nội bộ
+│   └── AA-CIS-Infra/           Terraform (acc2 live stack, acc1/acc3 Bedrock roots) + DB Migrate workflow
+├── docs/                       ecosystem docs, ADRs, database ownership, sessions, audits, research
+├── skill/                      runbooks and skills shared by Kiro and Claude Code
+└── .kiro/steering/             always-loaded rules (session workflow, language, DB schema)
 ```
 
-> Tên thư mục local khớp **chính xác** tên repo GitHub để nhìn là biết map sang repo nào.
+Local folder names match the GitHub repo names exactly. On WSL the path is
+`~/projects/AA-Ecosys/`.
 
-## Repo & deploy
+## Repos and deploy
 
-| Thư mục | Repo | Deploy |
-|---------|------|--------|
-| `apps/AA-CIS-App` | `AdventureAsia365-Ecosys/AA-CIS-App` | ECS Fargate (api) + Vercel (frontend) |
-| `apps/AA-TripPlanner-Web` | `AdventureAsia365-Ecosys/AA-TripPlanner-Web` | Vercel (FE) + Lambda (BE) |
-| `infra/AA-CIS-Infra` | `AdventureAsia365-Ecosys/AA-CIS-Infra` | GitHub Actions (aa365) + human/MFA (acc1/acc3) |
+| Folder | Repo | Deploy |
+|---|---|---|
+| `apps/AA-CIS-App` | `AdventureAsia365-Ecosys/AA-CIS-App` | ECS Fargate (api + worker) via `Deploy Dev`; Vercel (frontend) |
+| `apps/AA-TripPlanner-Web` | `AdventureAsia365-Ecosys/AA-TripPlanner-Web` | Vercel (frontend); Lambdas via `deploy-lambdas.yml` |
+| `infra/AA-CIS-Infra` | `AdventureAsia365-Ecosys/AA-CIS-Infra` | `Terraform Apply Prod` (acc2); acc1/acc3 by a human with MFA; `DB Migrate` for migrations |
 
-Sắp có: `AA-Booking` (AAA) — xem `docs/tripplanner-to-aaa-handoff.md`.
+Coming: **AA-Booking (AAA)** on acc2, schema `booking` — see
+[`docs/tripplanner-to-aaa-handoff.md`](docs/tripplanner-to-aaa-handoff.md) and ADR 0001.
 
-## Tài liệu cấp hệ
+## Ecosystem docs
 
-- [`docs/ecosystem-architecture.md`](docs/ecosystem-architecture.md) — kiến trúc toàn hệ (sơ đồ, phân vai schema, data contracts, OIDC).
-- [`docs/tripplanner-to-aaa-handoff.md`](docs/tripplanner-to-aaa-handoff.md) — spec bàn giao TripPlanner → AA-Booking (nháp, chờ AAA).
-- [`docs/inventory-old-refs.md`](docs/inventory-old-refs.md) — kiểm kê tham chiếu tên org/repo/path cũ (phục vụ đổi tên org).
+- [`docs/ecosystem-architecture.md`](docs/ecosystem-architecture.md) — accounts, diagram, schema
+  roles, data contracts, OIDC, Bedrock routing.
+- [`docs/adr/`](docs/adr/) — ecosystem decisions (0001 target architecture, 0002 only CIS writes
+  content, 0003 one durable job model, …).
+- [`docs/database/schema-ownership.md`](docs/database/schema-ownership.md) — owner repo per schema,
+  migration version keys, how migrations reach Dev.
+- [`docs/architecture/db-schema-reference.md`](docs/architecture/db-schema-reference.md) — live
+  column-level dump of the shared RDS.
+- [`docs/sessions/`](docs/sessions/) — session logs (Vietnamese, by convention).
 
-## Lưu ý vận hành
+## Working rules
 
-- Mỗi thư mục con là một git repo độc lập — `cd` vào đó để chạy git/CI của riêng nó.
-- Đổi tên org đang theo nguyên tắc **OIDC trust mở rộng (chấp nhận cả tên cũ + mới) TRƯỚC, đổi tên SAU,
-  gỡ trust cũ sau cùng**. Chi tiết trong `docs/`.
-- Trên WSL, đường dẫn thật là `~/projects/AA-Ecosys/` (không phải `~/projects/aa-cis/` như một số ghi chú cũ).
+- Each sub-folder is an independent git repo — `cd` into it to run its git and CI.
+- Language: talk to Nghiệp in Vietnamese; code, commits, PRs, Linear and technical docs in English;
+  session logs and Notion memory stay Vietnamese (`.kiro/steering/language-convention.md`).
+- Session start/end, Done definition, Linear and Jira rules: `.kiro/steering/session-workflow.md`
+  and the skills it points to.

@@ -4,6 +4,9 @@ Shared RDS acc2 (`aa-cis/dev/rds`, `005097885195`, us-west-1) dùng chung bởi 
 schema tách bạch. Tên bảng/cột thay đổi theo migration nên **không nhớ bằng đầu, không đoán**.
 
 ## Quy tắc BẮT BUỘC
+- **Chủ sở hữu schema** (repo nào được viết migration cho schema/bảng nào, key version `NNN`/`tp-NNN`/`bk-NNN`):
+  `docs/database/schema-ownership.md`. App không bao giờ migrate schema của app khác. Migration áp lên Dev qua
+  workflow **DB Migrate** của AA-CIS-Infra (bản copy y hệt ở `db/migrations/<owner>/`), không chạy từ máy cá nhân.
 - **Trước khi viết query / dùng tên bảng-cột, ĐỌC `docs/architecture/db-schema-reference.md`** —
   file này là dump thật từ `information_schema` (mọi schema, mọi cột, enum, FK, migration mới nhất).
   Nó là nguồn sự thật về tên bảng/cột cho CẢ Kiro và Claude Code. KHÔNG introspect cột lại từ đầu
