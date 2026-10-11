@@ -1,63 +1,85 @@
-# Spec (nháp) — Bàn giao TripPlanner → AA-Booking (AAA)
+# Spec (draft) — TripPlanner → AA-Booking (AAA) handoff
 
-> **Trạng thái:** spec nháp G0, **CHƯA code**. Chờ repo/sản phẩm **AA-Booking (AAA)** hình thành.
-> **[FACT]** = đã xác minh từ code TripPlanner hiện có; **[TODO-AAA]** = phụ thuộc phía AAA, chưa chốt;
-> **[CẦN XÁC NHẬN]** = giả định cần Nghiệp duyệt.
-> Nguồn AAA: `apps/AA-TripPlanner-Web/docs/AAA/` — `Adventure Asia PRD and Technical Spec Doc [Final].pdf`,
-> `AA ERD.pdf`, `AAA_Quanskill_Handover_Review.docx`, `figma_AAA/` (screens). Các file này là binary,
-> spec dưới đây tham chiếu chúng làm nguồn nhưng chưa trích nội dung chi tiết.
+> **Status:** G0 draft, **no AAA code yet**. Waiting for the **AA-Booking (AAA)** repo/product.
+> Updated 11/10/2026 (S225, AA-654 — translated to English; transport and data placement now follow
+> ADR 0001). **[FACT]** = verified in current TripPlanner code; **[TODO-AAA]** = depends on AAA, not
+> settled; **[TO CONFIRM]** = an assumption Nghiệp has to approve.
+> AAA sources: `apps/AA-TripPlanner-Web/docs/AAA/` — `Adventure Asia PRD and Technical Spec Doc [Final].pdf`,
+> `AA ERD.pdf`, `AAA_Quanskill_Handover_Review.docx`, `figma_AAA/` (screens). They are binary files;
+> this spec cites them as sources but does not extract their details yet.
 
-## 1. Bối cảnh & mục tiêu
+## 1. Context and goal
 
-- **TripPlanner** [FACT]: web B2C map-first. Khách vô danh (guest) duyệt điểm đến, ghim component
-  (place + activity), ráp itinerary theo ngày, rồi **"Send to advisor"** + đăng ký thông tin liên hệ.
-  Kết thúc luồng TripPlanner là một **draft trip + customer record**, KHÔNG phải booking hoàn chỉnh.
-- **AA-Booking (AAA)** [TODO-AAA]: hệ quản trị Adventure Asia (admin: activity/hotel/supplier/trip,
-  audit log — theo `figma_AAA/`) nơi advisor **nhận draft**, tư vấn, chốt và quản lý booking.
-- **Điểm bàn giao:** draft trip do khách tạo ở TripPlanner → advisor xử lý ở AAA. Đây là ranh giới spec này mô tả.
+- **TripPlanner** [FACT]: B2C map-first web app. An anonymous guest browses destinations, pins
+  components (place + activity), assembles a day-by-day itinerary, then **"Send to advisor"** and leaves
+  contact details. The TripPlanner flow ends with a **draft trip + customer record**, not a booking.
+- **AA-Booking (AAA)** [TODO-AAA]: Adventure Asia's operations system (admin: activity / hotel / supplier /
+  trip, audit log — per `figma_AAA/`) where an advisor **receives the draft**, advises, confirms and
+  manages the booking.
+- **Handoff point:** a draft trip created by the guest in TripPlanner → handled by an advisor in AAA.
+  This spec describes that boundary.
 
-## 2. Trạng thái hiện tại của điểm bàn giao (phía TripPlanner) [FACT]
+## 2. Current state of the handoff (TripPlanner side) [FACT]
 
-Nguồn: `apps/AA-TripPlanner-Web/docs/architecture-overview.md`, `backend/assembly/{registration,notify,events}.py`.
+Source: `apps/AA-TripPlanner-Web/docs/architecture-overview.md`,
+`backend/assembly/{handler,registration,notify,events}.py`.
 
-- `send-to-advisor` là một route trong Lambda B (Assembly), cùng nhóm add/remove/reorder/narrate.
-- `registration.py`: dedupe khách theo **phone/email** + gán (claim) session cho customer.
-- `notify.py`: thông báo advisor hiện là **stub ghi log** — email thật (SES + domain verified) **deferred**.
-- Dữ liệu draft nằm ở schema `tripplanner`: `trip_events` (append-only), `trip_drafts` (projection),
+- `send-to-advisor` is a route in Lambda B (assembly), next to add / remove / reorder / narrate.
+- It is **idempotent** (AA-731): one transaction serialized per trip by
+  `pg_advisory_xact_lock(hashtext('tp_send:<trip_id>'))`. If the trip's latest event is already `sent`, the
+  call returns that handoff (`handoff_id`, `already_sent: true`) without a second event or email. Sending
+  again after a real edit is a new handoff by design.
+- `registration.py`: dedupes the customer by **phone / email** and claims the session for that customer.
+- `notify.py`: the advisor notification is still a **logging stub** — real email (SES + verified domain)
+  is deferred; `ADVISOR_NOTIFY_EMAIL` still defaults to a test address.
+- Draft data lives in schema `tripplanner`: `trip_events` (append-only), `trip_drafts` (projection),
   `customers`, `sessions`, `itinerary_components`.
 
-→ **Kết luận:** phía TripPlanner đã có "đầu ra" (draft + customer) nhưng **chưa có kênh bàn giao thật** sang AAA.
-Hiện chỉ dừng ở log stub. Đây chính là phần spec này cần định nghĩa.
+→ **Conclusion:** TripPlanner already produces the output (draft + customer) but has **no real channel**
+to AAA yet; it stops at the logging stub. That channel is what this spec defines.
 
-## 3. Interface bàn giao dự kiến
+## 3. Handoff interface
 
-### 3.1 Phương án tích hợp [CẦN XÁC NHẬN — chọn 1]
+### 3.1 Transport — decided by ADR 0001 (28/09/2026) [FACT]
 
-| PA | Mô tả | Ưu | Nhược |
-|----|-------|-----|-------|
-| **A. Push webhook** | TripPlanner gọi API AAA khi khách Send-to-advisor | Realtime; đơn giản phía đọc | Cần AAA expose endpoint + auth; retry/idempotency |
-| **B. Shared DB read** | AAA đọc trực tiếp `tripplanner.trip_drafts`/`customers` (cùng RDS acc2) | Không cần API mới; tận dụng RDS chung | Ghép chặt schema 2 hệ; ranh giới sở hữu mờ |
-| **C. Event/queue** | TripPlanner phát event (SNS/SQS/EventBridge) → AAA tiêu thụ | Lỏng ghép, retry sẵn | Hạ tầng thêm; phức tạp hơn cho MVP |
+AA-Booking shares the acc2 RDS with its own schema `booking` (ADR 0001 decision 6). The transport is a
+**transactional outbox**:
 
-> Khuyến nghị nháp: **PA A (webhook)** cho MVP — rõ ranh giới sở hữu, khớp với việc `notify.py` vốn đã là
-> điểm "báo cho advisor". PA B chỉ nên là fallback tạm vì làm mờ ranh giới app/app. **[CẦN XÁC NHẬN]**
+- TripPlanner writes an `inquiry.submitted` event into an outbox table in its own schema, **in the same
+  transaction** as the `sent` event (so a handoff is never lost or duplicated).
+- AA-Booking's job runner consumes the outbox and creates the Trip Case, using the event's
+  **idempotency key** so one draft never creates two leads.
+- Neither app writes the other's schema; AA-Booking reads the outbox through a granted view.
+- **[TO CONFIRM]** outbox placement (`tripplanner` schema, read by AA-Booking through a view) — ADR 0001
+  fixes the outbox pattern, not the table's location.
 
-### 3.2 Payload bàn giao dự kiến (draft → AAA) [TODO-AAA]
+The earlier options — A: push webhook, B: AAA reads `tripplanner.trip_drafts` directly, C: SNS/SQS/
+EventBridge — are superseded: B blurs ownership, and A/C add an endpoint or infrastructure that the
+shared database makes unnecessary.
 
-Dựa trên dữ liệu TripPlanner đang có (schema `tripplanner`), payload tối thiểu:
+### 3.2 Payload — `inquiry.submitted` v1 (draft) [TODO-AAA]
+
+Based on data TripPlanner already has. Versioned JSON contracts will live in `docs/contracts/`.
 
 ```jsonc
 {
+  "contract": "inquiry.submitted",
+  "version": 1,
+  "idempotency_key": "string",      // e.g. <trip_id>:<handoff_id>
   "source": "tripplanner",
-  "draft_id": "uuid",              // trip_drafts
+  "trip_id": "uuid",
+  "handoff_id": "uuid",             // the `sent` event in trip_events
   "created_at": "iso8601",
-  "customer": {                    // từ customers (dedupe phone/email)
+  "customer": {                     // from customers (deduped by phone/email)
     "name": "string",
     "phone": "string|null",
     "email": "string|null",
-    "consent": true                // [CẦN XÁC NHẬN] cơ chế đồng ý liên hệ
+    "consent": true                 // [TO CONFIRM] contact-consent mechanism
   },
   "itinerary": {
+    "legs": [                       // ADR 0001 decision 5: chain of legs over real AA tours
+      { "tour_id": "string", "from_day": 1, "to_day": 3 }
+    ],
     "days": [
       {
         "day": 1,
@@ -67,59 +89,70 @@ Dựa trên dữ liệu TripPlanner đang có (schema `tripplanner`), payload t�
             "place": "string",
             "activity": "string",
             "country": "string",
-            "lat": 0.0, "lng": 0.0,       // [FACT] geocoded, có thể sai số nhỏ
-            "source_tour_atom": "uuid|null" // trace về acp_contract.tour_atoms
+            "lat": 0.0, "lng": 0.0,       // [FACT] geocoded, may be slightly off
+            "source_tour_atom": "string|null" // trace to acp_contract.v_active_tour_atoms
           }
         ]
       }
     ],
-    "narration": "string|null"      // bản AI compose/renarrate (nếu có)
+    "narration": "string|null"      // AI compose / renarrate text, if any (grounded, AA-731)
   }
 }
 ```
 
-### 3.3 Ánh xạ dữ liệu TripPlanner ↔ AAA [TODO-AAA]
+### 3.3 Data mapping TripPlanner ↔ AAA [TODO-AAA]
 
-| TripPlanner | AAA (dự kiến, theo `AA ERD.pdf`) | Ghi chú |
-|-------------|----------------------------------|---------|
-| `customers` | Customer/Lead entity của AAA | Dedupe phone/email — cần thống nhất khoá định danh |
-| `trip_drafts` | Draft booking / enquiry | Trạng thái khởi tạo trong pipeline booking của AAA |
-| `itinerary_components` | Activity/Destination của AAA | **[CẦN XÁC NHẬN]** component TripPlanner (từ tour atom) có map 1-1 với "Activity" trong AAA không |
-| `shared.destinations` | Destination golden record | Ứng viên bản ghi vàng dùng chung — xem architecture-overview §4 |
+| TripPlanner | AAA (expected, per `AA ERD.pdf`) | Notes |
+|---|---|---|
+| `customers` | AAA Customer / Lead | AA-Booking owns the customer identity (OTP, ADR 0001); agree on the identity key used to match TripPlanner's phone/email dedupe |
+| `trip_drafts` + legs | Trip Case / enquiry | Initial state in AAA's booking pipeline |
+| `itinerary_components` | AAA Activity / Destination | **[TO CONFIRM]** whether a TripPlanner component (from a tour atom) maps 1-1 to an AAA "Activity" |
+| `shared.destinations` | Destination golden record | Owned by CIS (ADR 0002); both apps read it |
+| tours, photos | `catalog.tour.*` from CIS, `shared.v_tour_photos` | AA-Booking catalog sync (AA-679) |
 
-## 4. Ranh giới sở hữu [CẦN XÁC NHẬN]
+## 4. Ownership
 
-- **TripPlanner sở hữu:** guest session, draft, customer capture, narration. KHÔNG quản lý booking/thanh toán.
-- **AAA sở hữu:** advisor workflow, booking lifecycle, supplier/hotel/activity master, audit log.
-- **Dùng chung:** RDS acc2 (schema tách biệt), có thể `shared.destinations` làm golden record.
-- **Nguyên tắc:** giữ đúng "app owns code, infra owns resources" — nếu thêm hạ tầng cho kênh bàn giao
-  (webhook endpoint, queue), Terraform nằm ở `AA-CIS-Infra` (hoặc root mới cho AAA khi có).
+- **TripPlanner owns:** guest session, draft, customer capture, narration, the outbox rows it writes. No
+  booking or payment.
+- **AAA owns:** advisor workflow, booking lifecycle, customer identity, supplier / hotel / activity
+  master data, audit log; schema `booking` (version key `bk-NNN`).
+- **CIS owns:** tours, atoms, places (`shared.destinations`), photos — content is written only by CIS
+  (ADR 0002).
+- **Shared:** the acc2 RDS (separate schemas). Any infrastructure for AAA (ECS service, ECR, DB role, API
+  route) is Terraform in `AA-CIS-Infra` — "apps own code, Infra owns resources". Schema owners:
+  `docs/database/schema-ownership.md`.
 
-## 5. Bảo mật / auth điểm bàn giao [TODO-AAA]
+## 5. Security / auth [TODO-AAA]
 
-- TripPlanner hiện dùng **edge shared-secret** (`X-TripPlanner-Key`) giữa BFF và Lambda [FACT].
-- Kênh bàn giao TripPlanner → AAA cần cơ chế auth riêng: **[CẦN XÁC NHẬN]** shared secret / OIDC service-to-service / signed webhook.
-- Xử lý PII (phone/email khách) qua ranh giới 2 hệ cần tuân thủ đồng ý liên hệ (consent) — **[CẦN XÁC NHẬN]**.
+- TripPlanner uses an **edge shared secret** (`X-TripPlanner-Key`) between the BFF and the Lambdas [FACT].
+- With an outbox there is no service-to-service HTTP call; access is a DB grant: the AA-Booking role gets
+  `SELECT` on the outbox view only (and an ack/cursor in its own schema). **[TO CONFIRM]** exact grant
+  shape.
+- Customer PII (phone / email) crossing the boundary must follow contact consent — **[TO CONFIRM]**.
 
-## 6. Open items (chờ AA-Booking)
+## 6. Open items (waiting on AA-Booking)
 
-- [ ] **[TODO-AAA]** Chốt phương án tích hợp (A/B/C ở §3.1).
-- [ ] **[TODO-AAA]** AAA expose endpoint nhận draft (nếu PA A) + schema xác nhận.
-- [ ] **[TODO-AAA]** Ánh xạ entity chi tiết dựa trên `AA ERD.pdf` (đọc ERD khi bắt đầu AAA).
-- [ ] **[TODO-AAA]** Thay `notify.py` stub bằng kênh bàn giao thật.
-- [ ] **[CẦN XÁC NHẬN]** Cơ chế consent + xử lý PII qua ranh giới.
-- [ ] **[TODO-AAA]** Repo `AA-Booking` được tạo dưới org `AdventureAsia365-Ecosys`, thêm vào bảng kiến trúc.
-- [ ] **[CẦN XÁC NHẬN]** Idempotency/retry cho bàn giao (một draft không tạo trùng lead ở AAA).
+- [ ] **[TODO-AAA]** Create the outbox table + view in `tripplanner` (migration `tp-NNN`) and write the
+      `inquiry.submitted` row in the send-to-advisor transaction.
+- [ ] **[TODO-AAA]** Publish `inquiry.submitted` v1 in `docs/contracts/` and agree on it with AAA.
+- [ ] **[TODO-AAA]** Detailed entity mapping from `AA ERD.pdf` (read the ERD when AAA starts).
+- [ ] **[TODO-AAA]** Replace the `notify.py` stub (real advisor email, or AAA's own notification).
+- [ ] **[TO CONFIRM]** Consent mechanism and PII handling across the boundary.
+- [ ] **[TODO-AAA]** Create repo `AA-Booking` in org `AdventureAsia365-Ecosys` and add it to the
+      architecture table.
 
-## 7. Không thuộc phạm vi spec này
+## 7. Out of scope
 
-- Booking lifecycle, thanh toán, supplier management (thuộc AAA).
-- Auto-refresh extraction khi có tour mới (đã tracked riêng trong TripPlanner deferred list).
-- Chi tiết UI advisor phía AAA (xem `figma_AAA/`).
+- Booking lifecycle, payment, supplier management (AAA).
+- Auto-refresh of extraction when new tours arrive (tracked in TripPlanner's deferred list; the place
+  pipeline moves to CIS under AA-712).
+- Advisor UI details on the AAA side (see `figma_AAA/`).
 
-## 8. Nguồn tham chiếu
+## 8. References
 
-- `apps/AA-TripPlanner-Web/docs/architecture-overview.md` — kiến trúc TripPlanner (§2/§3/§4).
-- `apps/AA-TripPlanner-Web/backend/assembly/{registration,notify,events}.py` — code điểm bàn giao hiện tại.
-- `apps/AA-TripPlanner-Web/docs/AAA/*` — PRD, ERD, Handover Review, Figma screens của AAA.
-- `docs/ecosystem-architecture.md` — kiến trúc tổng hệ AA-Ecosys.
+- `docs/adr/0001-ecosystem-target-architecture.md` — decisions 5 (legs), 6 (contracts, outbox), 7 (IaC).
+- `docs/adr/0002-only-cis-writes-content.md` — content write rule.
+- `apps/AA-TripPlanner-Web/docs/architecture-overview.md` — TripPlanner architecture.
+- `apps/AA-TripPlanner-Web/backend/assembly/{handler,registration,notify,events}.py` — current handoff code.
+- `apps/AA-TripPlanner-Web/docs/AAA/*` — AAA PRD, ERD, handover review, Figma screens.
+- `docs/ecosystem-architecture.md` — ecosystem architecture.

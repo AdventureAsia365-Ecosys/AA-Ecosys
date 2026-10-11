@@ -57,6 +57,9 @@ can solve on its own:
      **transactional outbox table** consumed by the receiving app's job runner, with an idempotency key.
    - Apps never write each other's schemas. They read only published views (read models) and
      `shared.*` golden records.
+   - Each schema's migrations live in its owner repo; an app never migrates another app's schema.
+     Owners, `shared.*` table owners and the per-owner version key (`NNN` / `tp-NNN` / `bk-NNN`):
+     `docs/database/schema-ownership.md` (AA-684, 11/10/2026).
    - First contracts: `catalog.tour.*` (CIS → AA-Booking) and `inquiry.submitted` (TripPlanner →
      AA-Booking, carrying the multi-tour leg chain).
    - AA-Booking owns the customer identity (OTP).
