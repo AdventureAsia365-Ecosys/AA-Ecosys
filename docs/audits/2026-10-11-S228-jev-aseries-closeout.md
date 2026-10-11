@@ -285,3 +285,107 @@ Part 2 items 1–5 stand. One correction and one addition from full coverage:
 No other A-series question needs a change: the enforcing a3 gates (`demand_belongs`,
 `landing_belongs`, `question_about_here`, `activity_type`) calibrated cleanly at v2 and are firing
 well; the a0 and research gates have no new traffic to recalibrate against.
+
+---
+
+# Part 4 — End-to-end downstream analysis (what the gates actually did to the data)
+
+Parts 1–3 looked at Jev's own probabilities. This part reads the **real downstream tables** the
+gates feed — atoms → segments → `atom_ranking` (the Score) → routes → hubs — to judge calibration by
+its effect on the product, not just the probability curve. Read-only, no DB change. Snapshot:
+`.tmp-session/s228_down.json` + `s3://aa-cis-bronze-005097885195/scripts/s228_down.json`.
+
+## On "score": there is no Jev `kind=score`
+
+Jev questions have three kinds, but across all 25 questions only **choice** (3) and **noul** (22)
+exist — **no `kind=score`**. The 0–10 scoring in the pipeline is `s1_judge`, which is a plain LLM
+judge, not a Jev `decide()` question, so it is not in `decision_question` and not part of this audit.
+The "Score" that the A3 gates feed is `acp_contract.atom_ranking` (demand/questions/said ranks), a
+computed table — not a Jev score question. So nothing was missed: there is no score-kind to analyse.
+
+## The pipeline funnel (platform, live)
+
+```
+892 active tours
+  → 24,302 live atoms            (+ 8,033 deleted/soft-deleted)
+  → 11,306 segments              (25,158 members, 163 merge aliases)
+  → 108,198 ranking rows         ← this is the Score table
+       82,446 ranked
+       21,774 excluded 'transit'       ← a3_activity_type's work
+        3,978 excluded 'unnamed_place'
+  → 1,331 routes → 419 hubs
+```
+
+Each Jev A3 gate maps to a visible effect here:
+
+### `a3_activity_type` (choice) — biggest downstream footprint
+It decides transit-vs-experience. In the Score table, **21,774 of 108,198 ranking rows (20%) are
+excluded as `transit`** and 3,978 as `unnamed_place`. That is exactly the gate doing its job: a fifth
+of all moments are logistics kept out of ranking. The live atom mix confirms it — `transit` is the
+2nd-largest activity_type (4,897 atoms) and all of it is held out of Score. **Verdict: keep** — this
+is the gate with the clearest, largest real effect, and 65% confident picks is healthy.
+
+### `a3_demand_belongs` + `a3_landing_belongs` — shape the Score axes
+Of 82,446 ranked rows: **6,393 carry demand (search volume), 11,076 carry questions (PAA)**, every
+row carries `said` (recurrence). avg questions/row = 0.57, avg demand = 2,905. These two gates are
+the reason demand and questions are *sparse and selective* rather than attached to everything — they
+reject keyword/PAA claims that don't belong to the moment. The low attach rate is the gate working
+(most moments legitimately have no bought demand), not a miss. **Verdict: keep** (already firm at v2).
+
+### `a3_atom_in_text` — the drop gate, confirmed working
+24,302 atoms survived; 8,033 are deleted. This gate rejects off-day/logistics atoms before they are
+stored (124 enforce-rejects/30d, Part 1). Its 99.8% grey is fine precisely because the upstream
+prompt already keeps atoms on-day — the gate only has to catch the rare leak. **Verdict: keep.**
+
+### `a3_same_place` — the fragmentation lever (confirms Part 3)
+Real segments 10,327: **8,275 single-tour (80.1%)**, 2,052 multi-tour, 163 merge aliases. The 80%
+single-tour share is the under-merge AA-695 flagged. As Part 3 argued, this gate's *reject* only
+splits — raising its ceiling makes 80% worse. The merge side needs an accept floor it does not have
+(= deferred `a3_same_moment`). **Verdict: hold reject 0.10; merge is AA-695 work, not a floor tweak.**
+
+## The two shadow questions — read against their real data + their actual wording
+
+I pulled each question's instructions to get the **direction of p right** (this corrects a risk in
+Part 2):
+
+### `a1_promise_unsupported` — p HIGH = BAD (promise the source doesn't make)
+Wording: *"Does this sentence promise the traveller something about THIS tour that the source does
+not state?"* So **true (p→1) = an unsupported promise = the thing we want to catch**; p→0 = clean.
+
+30-day distribution (n=13,421, non-cached): **avg p 0.296, 63% ≤ 0.30, only 9.6% ≥ 0.70.** Most
+rewritten sentences make no unsupported promise — good news about the writer.
+
+**Correction to Part 2:** because true=bad here, the useful enforcing floor is an **accept_floor**
+(confident "yes, this is an unsupported promise" → act), NOT a reject_ceiling. My Part 2 line "acc
+0.70 / rej 0.30" had the reject side backwards in meaning. The right setup for a *shadow signal to a
+writer rule* is: **accept_floor ≈ 0.70** to mark the ~9.6% confident unsupported promises; keep it
+shadow (it informs the #629 writer policy, it should not block). A reject_ceiling (confident "not a
+promise") carries no action — the writer rule only cares about the positive catches.
+
+### `a1_brand_fit` — genuinely no data, correctly held
+Wording: *"Does this tour copy fit this brand?"* Asked only when `s1_judge` lands within ±0.5 of 7.0.
+In 30 days there were **0 judge runs with a score in that band** (and only **3 `a1_brand_fit`
+decisions ever**, all historical). The tie-break simply never triggers on current data. **There is
+nothing to calibrate** — any floor would be guessing from 3 points. **Verdict: keep shadow, revisit
+only if judge-score-in-band volume appears.** This is not a gap; it is a rare-by-design tie-break.
+
+## Net calibration judgement (grounded in downstream effect)
+
+| Gate | Downstream effect seen | Calibrate? |
+|---|---|---|
+| `a3_activity_type` | 20% of ranking rows excluded as transit | no — working, largest effect |
+| `a3_demand_belongs` / `a3_landing_belongs` | selective demand/question attach | no — firm at v2 |
+| `a3_atom_in_text` | 8k atoms dropped; rare leak-catcher | no — keep guard |
+| `a3_same_place` | 80% single-tour segments (under-merge) | not via floor — merge = AA-695 |
+| `a1_claim_supported` | 61% grey, biggest cost, accept-only | **yes** — add reject_ceiling (Part 2 #1), apply-after-wave |
+| `a1_keyword_about_tour` | keyword filter, no v2 traffic | yes — floors ready (Part 2 #2) |
+| `a1_promise_unsupported` | shadow signal, p-high=bad | **yes but** accept_floor ≈ 0.70 (corrected), stay shadow |
+| `a1_brand_fit` | tie-break never fires (0 in band) | no — hold, no data |
+| a0_* / a3_idea_traveller / a3_keyword_belongs | upload/research gates, no v2 traffic | no — floors stand |
+
+**Bottom line:** only **one** gate genuinely needs a threshold change for grey/cost
+(`a1_claim_supported`), one has floors ready to apply (`a1_keyword_about_tour`), one shadow signal
+should get a corrected accept_floor (`a1_promise_unsupported`). Everything else is either working as
+measured on real downstream data, or has no traffic to calibrate against. The system is in better
+shape than the blended 30-day grey numbers first suggested — most "high grey" is either a rare-leak
+guard or a selective filter doing its job.
