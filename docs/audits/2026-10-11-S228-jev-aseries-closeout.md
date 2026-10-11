@@ -389,3 +389,114 @@ should get a corrected accept_floor (`a1_promise_unsupported`). Everything else 
 measured on real downstream data, or has no traffic to calibrate against. The system is in better
 shape than the blended 30-day grey numbers first suggested — most "high grey" is either a rare-leak
 guard or a selective filter doing its job.
+
+---
+
+# Part 5 — Data quality judged by eye (my own read of real DB content + Jev)
+
+Nghiệp's ask: don't just count — read the real master/atom/segment/route/hub content and judge
+quality, my own view, cross-referenced with Jev. Read-only, $0. Samples:
+`.tmp-session/s228_q.json`, `s228_hub.json` + the same files on S3 `scripts/`.
+
+## Atom layer — GOOD
+
+30 random live atoms read cleanly. Every one is a genuine place+activity pair, verbatim-ish, with a
+sensible `activity_type`:
+- `[culture] Yangshuo — take a morning Tai Chi class with a local master`
+- `[trek] Yala National Park — participate in early morning game drive`
+- `[transit] Beijing railway station to Xi'an — travel by overnight sleeper train` (A→B written as one place, correct)
+- `[food] Elephant Crossing Hotel rooftop bar — have a drink overlooking the valley`
+
+Red-flag scan over all 24,302 live atoms: `long_place` 68 (0.3%), `vague_place` ("the trail/village")
+21 (0.1%), `empty_action` 0, `no_evidence` 0, `lodging_like` 1,342 (5.5%). The lodging-like share is
+the only soft spot (hotel/check-in atoms still stored) but those are correctly typed `stay`/`transit`
+and held out of Score, so they don't pollute ranking. **My verdict: atom extraction quality is high.**
+This is the AA-694 A3-1 prompt + `a3_atom_in_text` gate working.
+
+## Segment layer — GOOD at the top, UNDER-MERGED in the tail (known AA-695)
+
+The top multi-tour segments are exactly right — real shared hubs the catalog revolves around:
+Dal Lake (367 tours), Taj Mahal (105), Hawa Mahal (68), Amber fort (65), Jama Masjid (56). These are
+genuine cross-tour places; the merging worked.
+
+But the under-merge is visible and real. The same place sits in many separate segments because the
+segment key is place + free-text action:
+- **delhi** → 37 segments, **jaipur** → 32, **udaipur** → 29, **kathmandu** → 29, **taj mahal** → 25.
+- The actions that fragment them are mostly logistics phrased differently: "arrive" / "check in" /
+  "airport transfer to hotel" / "attend pre-departure briefing" — each spawns its own segment.
+
+Also note two **logistics segments leaked into the top-20 as if they were attractions**: "hotel —
+check in" (130 tours) and "airport — meet and transfer" (110 tours). Those should not be
+cross-tour ranked places. `a3_activity_type` excludes them from *Score*, but they still *form
+segments* — a cosmetic/graph-noise issue, not a ranking one. **My verdict: segment quality is good
+for real attractions, but ~80% single-tour share + logistics-as-segment is genuine debt — exactly
+AA-695's merge-side work (accept-floor same-place / same-moment), not a threshold tweak.**
+
+## Route layer — GOOD
+
+1,331 live routes, avg 9.6 segments/route (min 2, max 31), **0 tiny (≤1) routes**, avg day span 4.0.
+Reads healthy: a route is an ordered run of real segments within a tour. No degenerate single-segment
+routes. **My verdict: route construction is sound.**
+
+## Hub layer — BUG (real finding, worth an issue)
+
+This is the one place the data is clearly wrong:
+- 419 hubs exist, but **only 14 distinct hub_ids are actually linked by live routes**, and
+  **405 hubs are orphans** (no live route points at them).
+- Of 1,331 routes, 945 carry a hub_id but they collapse onto **14 hub_ids** — and **one hub_id holds
+  862 routes** (`Lingshi basin → Doupchu La Pass → …`, a Bhutan trek name). 386 routes have no
+  hub_id at all.
+- Meanwhile `hub_name` is distinct on 400 values. So **hub_name and hub_id are out of sync**: routes
+  are being pinned to a tiny set of hub_ids (one dominating) while 405 freshly-named hubs sit unused.
+
+That 862-on-one-hub_id pattern is not a real geography — it looks like a hub-assignment/dedup bug
+(routes attaching to a stale or wrongly-reused hub_id row during recompute). Jev is not involved here
+(hubs are deterministic), so this is a pipeline bug independent of calibration. **My verdict: hub
+assignment is broken and should be a separate bug issue** (propose: investigate route→hub_id linkage
+in the recompute; the 419 vs 14 vs 862 split is the smoking gun). I did not change anything.
+
+## Tour master layer — THIN TAIL
+
+892 active tours, avg 27.2 atoms, median 25, max 86. But the low tail is heavy:
+**60 tours have ≤5 atoms, 191 have ≤10** (≈21% of the catalog). A 5-atom tour produces almost no
+Segment/Score/Route signal — these are the "thin itinerary" cases `a0_itinerary_usable` is meant to
+flag at ingest, but they predate the gate or came in another way. **My verdict: ~20% thin tours is
+real quality debt at the source**, not a Jev calibration problem — it is an upstream data-coverage
+issue (the source itineraries themselves are sparse). Known limitation per the TripPlanner tech
+rules (atom count per tour-day varies 1–8; some days have zero atoms).
+
+## Answering "why no `kind=score` question per A-series stage?"
+
+Now that the data is read, the answer is concrete. A `score`-kind Jev question would return a 0–10
+quality number per unit. The A-series stages don't use one because:
+1. **The scoring that exists is `s1_judge`** (0–10 on the whole rewritten tour) — already an LLM
+   judge, and the A1-4 tie-break (`a1_brand_fit`) already defers to Jev only in the ±0.5 band. Adding
+   a Jev score-question would duplicate it.
+2. **The A3 decisions are naturally binary or categorical, not graded**: "is this atom in the day's
+   text?" (yes/no), "transit or experience?" (choice), "does this keyword belong?" (yes/no). A score
+   adds no leverage — you still need a cut to act, i.e. a floor, which is what the noul/choice floors
+   already are.
+3. **Where a graded signal WOULD help**: segment-merge confidence and atom "distinctiveness"/richness.
+   But distinctiveness scoring was removed end-to-end (AA-754), and merge confidence is better served
+   by the deferred `a3_same_moment` accept-floor than by a free-floating 0–10.
+
+So the absence of a score-kind is defensible, **except** possibly one place: a per-tour or per-day
+**"itinerary richness" score** could formalise the thin-tour problem (Part 5 tour layer) into a
+gradeable signal instead of the single `a0_itinerary_usable` yes/no. That is a genuine design idea
+worth a ticket — not a calibration change. Flagged, not built.
+
+## My overall quality verdict
+
+| Layer | Quality | Jev's role | Action |
+|---|---|---|---|
+| Atom | **High** | A3-1 gate + prompt keep atoms on-day, verbatim | none |
+| Segment | **Good top / under-merged tail** | same-place reject splits; merge side missing | AA-695 (merge accept-floor) |
+| Route | **Sound** | n/a (deterministic) | none |
+| Hub | **Broken** (405/419 orphan, 862-on-one) | n/a (deterministic) | **new bug issue** |
+| Tour master | **~20% thin** | a0_itinerary_usable flags at ingest | upstream data; maybe a richness-score ticket |
+
+Jev is doing its job well where it is wired (atoms, Score exclusions, demand/question selectivity).
+The two real quality problems — the hub bug and the thin-tour tail — are **not** Jev calibration
+issues; they are a deterministic pipeline bug and an upstream data-coverage gap respectively.
+Calibration (Parts 1–4) remains a small, well-scoped change; the bigger quality wins are the hub bug
+and segment merge.
