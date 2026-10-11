@@ -211,3 +211,77 @@ agree/disagree/precision per question — the read side is done.
 
 Nothing above is applied until these are answered. The paid measurement wave for Item 1 is the only
 Jev spend, and it waits for the Y on Item 1.
+
+---
+
+# Part 3 — Full A-series coverage (all 16 questions)
+
+Part 2 covered the three loudest questions. For completeness, here is **every** A-series question
+(a0_* / a1_* / a3_*) with its current state and a keep / adjust / hold verdict. Numbers are since
+threshold-v2 (2026-10-10 04:09 UTC), non-cached — the current behaviour. Offline, $0.
+
+Source: `.tmp-session/s228_all.json`.
+
+| question | mode | kind | floors | grey% | verdict |
+|---|---|---|---|---:|---|
+| `a1_claim_supported` | enforce | noul | acc 0.85 | **61.0** | **adjust** — add reject ≤ 0.20 (Part 2 #1) |
+| `a3_same_place` | enforce | noul | rej 0.10 | **93.7** | **adjust** — see below (new; missed in Part 2) |
+| `a1_promise_unsupported` | shadow | noul | none | 100.0 | **adjust** — acc 0.70 / rej 0.30, stay shadow (Part 2 #3) |
+| `a1_keyword_about_tour` | enforce | noul | acc 0.80 / rej 0.30 | — (n=0) | **adjust** — acc 0.65 / rej 0.40 (Part 2 #2); no v2 traffic yet |
+| `a1_brand_fit` | shadow | noul | none | — (n=0) | **hold** — tie-break never hit the band; cannot calibrate without a sample |
+| `a3_atom_in_text` | enforce | noul | rej 0.30 | 99.8 | **keep** — even rej 0.70 only reaches 3.1%; last-line guard, firing right (124 rejects/30d) |
+| `a3_demand_belongs` | enforce | noul | rej 0.70 | 12.3 | **keep** — v2 already firm (reject 87.7%) |
+| `a3_landing_belongs` | enforce | noul | rej 0.40 | 24.2 | **keep** — reject 75.8%, healthy |
+| `a3_question_about_here` | enforce | noul | rej 0.30 | 16.7 | **keep** — reject 83.3% (n=42, low volume) |
+| `a3_question_foreign` | enforce | noul | acc 0.90 | 50.0 | **watch** — 50% grey but n=42; revisit at volume |
+| `a3_activity_type` | enforce | choice | acc 0.90 | 34.5 | **keep** — choice question, 65.5% confident picks |
+| `a3_keyword_belongs` | enforce | noul | acc 0.85 / rej 0.45 | — (n=0) | **keep** — idle since 09-30, trims generic keywords when it runs |
+| `a0_row_kind` | enforce | choice | acc 0.95 | — (n=0) | **keep** — fires on upload only; calibrated S205 |
+| `a0_itinerary_usable` | enforce | noul | rej 0.20 | — (n=0) | **keep** — upload-only; calibrated S205 |
+| `a0_country` | enforce | choice | acc 0.95 | — (n=0) | **keep** — upload-only; calibrated S205 |
+| `a3_idea_traveller` | enforce | noul | rej 0.20 | — (n=0) | **keep** — idea filter; calibrated S205 |
+
+(The `n=0` rows are questions whose stage simply has not run since v2 — upload gates and the
+research/prefetch keyword gates. Their floors are the S204/S205 calibrated values; nothing to change
+without fresh traffic.)
+
+## New finding — `a3_same_place` is the second grey-heavy question (missed in Part 2)
+
+`a3_same_place` (A3-7, "are these two differently-written places the same real-world place?") is
+enforce at **reject ≤ 0.10** and sits at **93.7% grey** since v2. The floor was set in S205 to only
+*split* confidently-different places (reject ≤ 0.10 → 30/30 correct on a 150-pair sample), never to
+merge — so by design it rarely acts, and the under-merge is exactly what AA-695 flagged.
+
+Reject-ceiling sweep (offline):
+
+| reject ≤ | reject% |
+|---|---:|
+| 0.10 (now) | 6.3 |
+| 0.15 | 14.3 |
+| 0.20 | 25.2 |
+| 0.25 | 36.6 |
+| 0.30 | 43.8 |
+
+Raising the ceiling splits (keeps apart) more borderline pairs, but **direction matters**: for
+`a3_same_place` a *reject* means "NOT the same place → keep them as separate segments". Raising it to
+0.20 would split 25% of borderline pairs instead of 6%, i.e. *more* fragmentation — the opposite of
+AA-695's under-merge goal. So this question should **not** simply have its ceiling raised. The right
+lever for merging is an *accept* floor (confident "yes, same place" → merge), which it does not have
+today. That is the `a3_same_moment` / merge-side work AA-695 deferred.
+
+**Proposed (Item 6, add to the decision set): hold the reject ceiling at 0.10** (do not raise — it
+would fragment), and treat the merge side as the deferred AA-695 item. No change now; flagged so the
+93.7% grey is understood, not mistaken for a calibration miss.
+
+## Updated decision set
+
+Part 2 items 1–5 stand. One correction and one addition from full coverage:
+
+- **Item 6 (new):** `a3_same_place` — **keep reject ≤ 0.10 as-is** (raising it fragments, against
+  AA-695). Y/N to confirm hold.
+- **`a1_brand_fit`:** confirmed **hold** (shadow, no volume to calibrate) — folds into the existing
+  Item 4 "hold" posture.
+
+No other A-series question needs a change: the enforcing a3 gates (`demand_belongs`,
+`landing_belongs`, `question_about_here`, `activity_type`) calibrated cleanly at v2 and are firing
+well; the a0 and research gates have no new traffic to recalibrate against.
