@@ -1,7 +1,7 @@
-# AA-Booking (AAA) — ERD v2 (draft)
+# AA-Booking (AAA) — ERD v2
 
-Draft for AA-677, written in S225. It moves to the AA-Booking repo (`docs/erd/`) once that repo
-exists (AA-678). Schema `booking.*` on the shared acc2 RDS; owner repo AA-Booking; migration key
+Written for AA-677 (S225), decisions confirmed S226 (AA builds AA-Booking in-house). It moves to
+the AA-Booking repo (`docs/erd/`) once that repo exists (AA-678). Schema `booking.*` on the shared acc2 RDS; owner repo AA-Booking; migration key
 `bk-NNN` (`docs/database/schema-ownership.md`). The DBML is in [`booking.dbml`](booking.dbml);
 paste it into dbdiagram.io to render it.
 
@@ -86,11 +86,15 @@ Enums: `user_role` → `staff_role` (no `customer`); `payment_type` → `payment
 `other`); new `trip_case_status`, `record_status`, `payment_status`, `supplier_booking_status`,
 `invoice_status`, `bill_status`, `source_system`. Enum values are lower-case.
 
-## The 6 open business questions — proposed answers (TO CONFIRM with Ms. Thư / Mr. Mạnh)
+## The 6 open business questions — decided (we build AA-Booking ourselves)
 
-| # | Question (handover §3.2) | Proposed answer in v2 |
+Confirmed by Nghiệp (S226): AA builds AA-Booking in-house, so these are no longer "ask the
+external handover team" items (Mr. Mạnh is no longer involved in AAA). The v2 schema encodes the
+answers below; revisit only if a concrete requirement contradicts one.
+
+| # | Question (handover §3.2) | Decision in v2 |
 |---|---|---|
-| 1 | Does a customer enter an OTP every time the app opens? | No. OTP once per device, then a refresh-token session (`customer_sessions`, e.g. 30 days, revocable). OTP again on a new device or after revoke |
+| 1 | Does a customer enter an OTP every time the app opens? | No. OTP once per device, then a refresh-token session (`customer_sessions`, 30 days, revocable). OTP again on a new device or after revoke |
 | 2 | How do trip plans link to destinations? | Many-to-many, ordered: `trip_plan_destinations` → CIS `shared.destinations`. Countries follow from the destinations |
 | 3 | Can one trip case cover several countries? | Yes: `trip_case_countries` (M:N), plus `trip_case_legs` when the case comes from a multi-tour TripPlanner draft |
 | 4 | Are customer accounts managed in the admin dashboard? | Yes: staff with role `admin` see and block customers (`customers.is_blocked`); customers are created by their first OTP or by an inquiry, never with a password |
