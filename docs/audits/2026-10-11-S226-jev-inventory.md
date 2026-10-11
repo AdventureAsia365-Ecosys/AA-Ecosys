@@ -79,3 +79,40 @@ be read off the current all-grey distribution.
    (95.7% grey), `a1_keyword_about_tour` (94.5%), `a3_keyword_belongs` (96.5%), the T-series
    shadows with single-digit volume.
 4. Then label + recalibrate + measure on a wave (the paid part, ~<$1 Jev).
+
+---
+
+## Correction (S227, 2026-10-11) — "every question is shadow" was WRONG
+
+The S226 headline above ("Every question is in `shadow` mode — nothing is enforcing today") is a
+mis-read and is **retracted**. Re-checked against the source-of-truth config table
+`shared.decision_question` (25 rows — the schema-ref "~5 rows" estimate was stale) **and** the
+actual run mode in `shared.decision_log.mode` over 30 days, cross-referenced with the live admin UI
+(confirmed by Nghiệp). Findings:
+
+- **14 A-series questions are `enforce` and genuinely blocking today**, run mode confirmed in
+  `decision_log` right up to 2026-10-11: `a1_claim_supported` (87,883 enforce decisions/30d),
+  `a3_demand_belongs` (47,967), `a3_landing_belongs` (23,734), `a3_activity_type` (31,237),
+  `a3_atom_in_text` (29,657), `a3_question_about_here` / `a3_question_foreign` (4,443 each),
+  `a3_same_place` (5,745), plus `a0_*` / `a3_idea_traveller`. Set by `admin:nghiep (S205)` and
+  `admin:claude-code-s223-aa756` (2026-10-10 04:05) — intentional.
+- **3 questions are `enforce` in config but showed only `shadow` in `decision_log` over 30 days**
+  (threshold never fired / very low volume): `a0_country`, `a1_keyword_about_tour`,
+  `a3_keyword_belongs`. Worth a separate look, not "dead".
+- **11 T-series + brand questions are `shadow` with `tv=0`, created that way by migrations**
+  (`migration-19x/211`), never calibrated, single-digit volume. **This is correct** — the T-series
+  has not been audited yet, so it is expected to be non-active (Nghiệp, S227). Not a defect.
+
+### So the real AA-756 problem is NOT "turn enforcing back on"
+The 14 A-series gates already enforce. The real problem is **too much grey** on the enforcing
+questions → the thresholds need calibration so decisions land in accept/reject instead of grey. Grey
+rate from the S226 inventory on the live enforcing questions, e.g. `a1_claim_supported` 56.8% grey
+(and 72% of total Jev cost), `a3_demand_belongs` 20.2% grey, `a3_landing_belongs` 31.2% grey.
+
+### Corrected next step (dedicated AA-756 session, needs Nghiệp + paid LLM)
+1. Keep the 14 A-series enforcing (no change needed — they already work).
+2. **Audit + calibrate the high-grey enforcing questions** (priority by cost/grey:
+   `a1_claim_supported` first) — hand-label ~100/question, set `accept_floor` / `reject_ceiling` so
+   grey shrinks, measure on a wave (~<$1 Jev).
+3. Leave the T-series shadow until its own audit (not part of this calibration).
+4. `decision_log.outcome` backfill (§5) still open.
