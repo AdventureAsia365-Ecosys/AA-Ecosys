@@ -32,6 +32,7 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Thêm module top-level phải thêm `COPY` vào Dockerfile và path filter `deploy-dev.yml` — S210.
 - Merge PR có `[AA-xxx]` tự đóng issue → dùng `Refs AA-xxx` — S207 phải mở lại AA-653, AA-708.
 - **Nhiều PR backend cùng lúc: merge nối tiếp, mỗi PR chờ Deploy Dev xong mới cập nhật nhánh + auto-merge PR sau** — branch protection đòi nhánh up-to-date (`mergeStateStatus: BEHIND` chặn auto-merge im lặng) và 2 lần deploy song song đua roll ECS (S222, #614–#619). `gh pr update-branch` không có ở gh cũ → `gh api -X PUT repos/{owner}/{repo}/pulls/<n>/update-branch`.
+- **Terraform xoá IAM role cần `iam:ListInstanceProfilesForRole`; thêm quyền cho CI role trong cùng PR với thao tác cần nó thì apply đầu lỗi** — #88 gỡ 7 Lambda, xoá 2 role rỗng bị AccessDenied; #89 thêm quyền nhưng Terraform xoá role song song với lúc sửa `cicd_inline` → lỗi y hệt, chạy lại apply mới xong (S225, AA-750). Bắt bằng: plan có `aws_iam_role` bị destroy → kiểm `IAMRoleManage` trong `cicd.tf` có quyền đó trước khi merge; PR thêm quyền CI thì dự tính chạy apply 2 lần.
 - **Mặc định an toàn trong code (`SAFE_DEFAULTS`) phải tự chạy được khi DB/catalog sập** — model tra qua catalog DB bị bỏ qua "not in catalog" lúc DB lỗi; muốn ưu tiên Bedrock thì để route Luna trước và giữ key legacy (GPT-4.1) cuối chuỗi, không thay hẳn (S222, #617). Bắt bằng: unit test `get_model_sync → None` vẫn ra kết quả.
 
 ## Pipeline và chất lượng

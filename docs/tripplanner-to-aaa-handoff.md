@@ -50,8 +50,8 @@ AA-Booking shares the acc2 RDS with its own schema `booking` (ADR 0001 decision 
 - AA-Booking's job runner consumes the outbox and creates the Trip Case, using the event's
   **idempotency key** so one draft never creates two leads.
 - Neither app writes the other's schema; AA-Booking reads the outbox through a granted view.
-- **[TO CONFIRM]** outbox placement (`tripplanner` schema, read by AA-Booking through a view) — ADR 0001
-  fixes the outbox pattern, not the table's location.
+- **Placement (decided S225, AA-676):** `tripplanner.outbox` (append-only), read by AA-Booking
+  through `tripplanner.v_inquiry_outbox` (migration tp-008).
 
 The earlier options — A: push webhook, B: AAA reads `tripplanner.trip_drafts` directly, C: SNS/SQS/
 EventBridge — are superseded: B blurs ownership, and A/C add an endpoint or infrastructure that the
@@ -59,7 +59,8 @@ shared database makes unnecessary.
 
 ### 3.2 Payload — `inquiry.submitted` v1 (draft) [TODO-AAA]
 
-Based on data TripPlanner already has. Versioned JSON contracts will live in `docs/contracts/`.
+Normative schema: [`contracts/inquiry.submitted.v1.json`](contracts/inquiry.submitted.v1.json) (AA-676). The sketch below predates it;
+when they differ, the JSON Schema wins (v1 has no narration; consent carries `consent_at`; legs carry `position`).
 
 ```jsonc
 {
@@ -132,9 +133,9 @@ Based on data TripPlanner already has. Versioned JSON contracts will live in `do
 
 ## 6. Open items (waiting on AA-Booking)
 
-- [ ] **[TODO-AAA]** Create the outbox table + view in `tripplanner` (migration `tp-NNN`) and write the
-      `inquiry.submitted` row in the send-to-advisor transaction.
-- [ ] **[TODO-AAA]** Publish `inquiry.submitted` v1 in `docs/contracts/` and agree on it with AAA.
+- [x] Outbox table + view in `tripplanner` (tp-008) and the `inquiry.submitted` row written in the
+      send-to-advisor transaction (AA-676).
+- [x] `inquiry.submitted` v1 published in `docs/contracts/` — [ ] **[TODO-AAA]** agree on it with AAA.
 - [ ] **[TODO-AAA]** Detailed entity mapping from `AA ERD.pdf` (read the ERD when AAA starts).
 - [ ] **[TODO-AAA]** Replace the `notify.py` stub (real advisor email, or AAA's own notification).
 - [ ] **[TO CONFIRM]** Consent mechanism and PII handling across the boundary.
