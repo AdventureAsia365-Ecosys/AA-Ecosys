@@ -33,6 +33,8 @@ Cloud container không có aws CLI, key trong env bị STS từ chối → khôn
   - TripPlanner #66: `tp-007` (áp 06:13Z) đăng ký `tp-001…006` theo đối tượng có thật.
   - Chờ Nghiệp xác nhận `shared.destinations` thuộc CIS.
 
+- **AA-654 — In Progress (docs xong, Nghiệp duyệt + merge).** App #648 (`df89241`: README viết lại, `.claude/CLAUDE.md` 518 → ~90 dòng, bỏ LIVE STATE, CONTEXT thêm bảng contracts); TripPlanner #67 (`8366317`: README, CONTEXT contracts, sửa câu cũ "ghi shared.destinations"); Infra #84 (`a76844e`: README; plan **No changes**, không cần apply); root #43 (README gốc tiếng Anh, `ecosystem-architecture.md` + `tripplanner-to-aaa-handoff.md` dịch + cập nhật: worker, DB Migrate, schema ownership, AA-Booking acc2, alarm, waves; bàn giao theo ADR 0001 outbox, `inquiry.submitted` v1 có legs).
+
 ## Việc cần kiểm từ local/WSL (cloud không làm được)
 1. **AA-726** — `SELECT status, count(*) FROM acp_shared.publish_log GROUP BY 1;` không có dòng `requested` treo > 2 phút. Khi có site WordPress thật (không anti-bot): publish 1 piece → 1 bài + dòng `published` có `idempotency_key`; publish lại → `replayed: true`, vẫn 1 bài.
 2. **AA-731** — invoke `aa-tripplanner-dev-assembly` `{"extraction": {"op": "orphans"}}` → xem `orphan_components` (dọn bằng `prune {"include_components": true}` nếu > 0). Chạy `{"op": "components", "tour_ids": ["<1 tour>"]}` để chắc role `tripplanner` đọc được view `v_active_tour_atoms` qua RLS (lỗi permission/0 atom = báo lại). Gửi thử Send-to-advisor 2 lần trên preview → 1 email (LoggingSender) và 1 event `sent`.
@@ -40,6 +42,7 @@ Cloud container không có aws CLI, key trong env bị STS từ chối → khôn
 4. **AA-684** — `SELECT version FROM shared.schema_versions WHERE version LIKE 'tp-%' ORDER BY 1;` → mong tp-001…tp-007; thiếu tp-00N = bước đó chưa từng chạy trên Dev.
 5. **AA-727** — sau lần chạy probe hằng ngày đầu tiên: log Lambda `aa-cis-dev-dfs-balance-check` có `/admin/waves/check` 200.
 6. **Schema reference** — regenerate `docs/architecture/db-schema-reference.md` (mig 215 cột mới `publish_log`, mig 217 bảng `shared.rerun_wave`).
+7. **AA-654 (kiểm sâu)** — đối chiếu các README mới với thực tế: danh sách biến môi trường (App/TripPlanner) khớp task def ECS / Lambda config / Vercel; lệnh setup/test chạy được trên máy local. `.claude/CLAUDE.md` của App đã bỏ LIVE STATE — đọc lại bản cũ (git `df89241^`) xem có quy tắc còn hiệu lực nào bị rơi. Chốt chỗ đặt bảng outbox `inquiry.submitted` (đề xuất: schema `tripplanner`, AA-Booking đọc qua view — đang **[TO CONFIRM]** trong spec bàn giao). `docs/contracts/` chưa tạo.
 
 ## Lưu ý kỹ thuật
 - Mỗi repo chỉ có 1 branch phiên → mỗi repo 1 PR một lúc; gộp nhiều việc Infra vào 1 PR để Nghiệp duyệt một lần.
