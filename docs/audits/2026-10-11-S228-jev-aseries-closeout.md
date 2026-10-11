@@ -500,3 +500,142 @@ The two real quality problems — the hub bug and the thin-tour tail — are **n
 issues; they are a deterministic pipeline bug and an upstream data-coverage gap respectively.
 Calibration (Parts 1–4) remains a small, well-scoped change; the bigger quality wins are the hub bug
 and segment merge.
+
+---
+
+# Part 6 — a1_claim_supported threshold over the FULL grey set + the outcome-nhãn dead end
+
+Nghiệp's direction: no small sample (sampling error on a 44,919-row grey zone is real); compute the
+threshold offline over the **whole** distribution, and build the outcome loop as the ground-truth
+base first. Both done below. Read-only, $0.
+
+## Full probability distribution (76,607 non-cached calls, 0.05 bins)
+
+```
+0.00-0.05   787      0.50-0.55  2024
+0.05-0.10  4045      0.55-0.60  2628
+0.10-0.15  4332      0.60-0.65  2377
+0.15-0.20  2153      0.65-0.70  3187
+0.20-0.25  2383      0.70-0.75  3268
+0.25-0.30  2270      0.75-0.80  3691
+0.30-0.35  2100      0.80-0.85  5722
+0.35-0.40  1664      0.85-0.90  7001
+0.40-0.45  2078      0.90-0.95 15087   ← high mass (confident supported)
+0.45-0.50  2072      0.95-1.00 10266
+```
+
+The shape: a **high mass** at p ≥ 0.85 (32,354 calls, 42%, accepted today), a **steep low tail**
+through p ≤ 0.15 (9,164 calls — the 0.05-0.10 and 0.10-0.15 bins are the two densest in the lower
+half), and a **flat ambiguous middle** 0.15–0.85 (~2,000–2,300 per bin). The knee is at **~0.15**:
+below it the bins are tall (real low tail), above it the curve goes flat (genuine uncertainty).
+
+## Reject-ceiling sweep over the WHOLE set (accept stays 0.85)
+
+| reject ≤ | reject % (n) | grey left |
+|---|---:|---:|
+| 0.10 | 7.5% (5,727) | 51.2% |
+| **0.15** | **12.0% (9,164)** | **46.7%** |
+| 0.20 | 15.4% (11,824) | 43.2% |
+| 0.30 | 21.4% (16,418) | 37.2% |
+
+**Revised proposal from the full distribution: reject ≤ 0.15** (not the 0.20 guessed in Part 2).
+0.15 catches the steep low tail and stops at the knee, before the flat ambiguous band — so it
+rejects what the model is genuinely confident is unsupported, and leaves the real "not sure" cases
+grey. 0.20+ starts eating into the flat middle (higher false-reject risk per extra point).
+
+## The blocker: there is NO trustworthy sentence-level ground truth to measure precision
+
+The sweep says *how many* calls reject at each ceiling. It cannot say whether those rejects are
+*right* (precision) without labelled truth. Investigating every candidate source, each one fails:
+
+- **Review-Queue approve** (the one wired truth=True path): `approved_versions = 0`. Per Nghiệp,
+  reviewers don't approve — they hit Regenerate to make a new version. So this path will stay empty
+  by workflow design. It cannot be the base.
+- **Review-Queue reject**: a reject is a whole-version quality judgement (off-brand, generic), NOT a
+  per-sentence "this claim is unsupported". Writing truth=False per sentence would mislabel en masse.
+  Not usable.
+- **Soft-deleted atoms** (`a3_atom_in_text`, 8,033 rows): these are deleted by tour lifecycle
+  (deactivate / trash / regenerate → recompute re-atomizes), NOT by a human saying "not in the day's
+  text". `admin_atom_delete` outcomes written to date = **0** (the Atom-Curation delete hook has
+  never been used). So the 8,033 carry no usable label either — backfilling truth=False from them
+  would mislabel just like the reject path.
+- **flag_fix**: repairs by FIELD (subtitle/summary/itineraries) for mixed reasons (SEO length, brand,
+  forbidden words), not per sentence for "unsupported". No sentence-level label.
+
+**Conclusion (honest):** the real blocker for `a1_claim_supported` calibration is not the threshold
+number — the full distribution clearly supports reject ≤ 0.15 — it is that **no sentence-level
+ground-truth signal exists in the current workflow**. Applying reject ≤ 0.15 blind would reject
+9,164 sentences into flag_fix with unmeasured precision. That is exactly the sampling/mislabel risk
+Nghiệp flagged, one layer up.
+
+## What this means for the plan
+
+1. The threshold is **ready as a number** (reject ≤ 0.15, from the whole set) but **should not be
+   applied** until precision can be measured. It is not a guess anymore; it is un-verifiable yet.
+2. The outcome loop cannot be bootstrapped from existing data — every candidate source mislabels.
+   A real ground-truth source would need a deliberate workflow signal, e.g. a reviewer action that
+   marks a specific sentence as unsupported, or a one-off human-labelled set built on purpose (not
+   derived from lifecycle events). That is a product/workflow decision, not a backfill script.
+3. So `a1_claim_supported` calibration is **correctly blocked** pending a ground-truth source. The
+   audit's value here is proving that — and proving the threshold is 0.15 the moment a label source
+   exists.
+
+**Items 2 (`a1_keyword_about_tour`) and 3 (`a1_promise_unsupported`) are unaffected** — they are
+shadow / low-risk and their floors can be set from the distribution without the same precision bar,
+whenever Nghiệp wants. Only the enforcing, content-blocking `a1_claim_supported` needs the label
+first.
+
+---
+
+# Part 7 — Jev audit/calibration PARKED; hub bug status (S228 close)
+
+## Why Jev calibration is parked (Nghiệp's call, and it is right)
+
+A reject/accept threshold is meaningless on its own. What matters is **what the system DOES at that
+threshold** — and that differs per question:
+
+- `a3_atom_in_text` reject → the atom is **not stored** (vanishes from Segment / Score / Route).
+- `a3_demand_belongs` / `a3_landing_belongs` reject → a keyword's demand / a PAA question **drops
+  off the Score axis** for that moment.
+- `a3_same_place` reject → two places are **kept as separate Segments** (more fragmentation).
+- `a1_claim_supported` reject → the sentence is flagged **UNSUPPORTED → flag_fix rewrites it**.
+
+Tuning a threshold to "reduce grey %" without modelling that downstream action is optimising a
+number with no business meaning. Doing it right means, per question: map the exact pipeline reaction
+at accept / grey / reject, then decide the threshold against the product outcome (an atom lost, a
+rank changed, a rewrite triggered) — AND against a trustworthy ground-truth label, which Part 6
+showed does not exist in the current workflow for the content-blocking questions.
+
+**Decision (S228):** park the Jev effectiveness-audit + recalibration work. Not because the numbers
+are wrong (they are measured and correct for their window — see the reconciliation note below) but
+because the missing pieces are (1) a per-question downstream-action model and (2) a real
+ground-truth source. Both are design work, not a threshold tweak. Tracked under AA-756, which stays
+In Progress with this as its explicit blocker.
+
+## Data-source note (reconciliation with the admin UI)
+
+All DB numbers in Parts 1–6 come from `shared.decision_log`, mostly a 30-day window, `NOT cached`.
+The admin **Jev Decisions** page shows **Last 7 days** and **includes cache hits**, which since
+AA-742 are NOT rows in `decision_log` — they are counted in `shared.decision_cache_hits_daily` and
+added back by the summary endpoint. So the UI's larger VERDICTS/CACHED numbers and the per-30-day
+numbers here are both correct, just different cuts. Verified they reconcile exactly, e.g.
+`a1_claim_supported` 7-day UI = 130,992 verdicts / 64,136 cached / 46,224 accept / 84,025 grey /
+**0 reject** (the 743 in the UI is the **ERROR** column, not reject — `a1_claim_supported` has no
+reject_ceiling, so it cannot produce a reject). For calibration the right population is the
+`NOT cached` originals (one verdict per subject, not inflated by cache re-reads), so Parts 1–6's
+distribution stands.
+
+## Hub bug (AA-758) — the one thing that shipped this session
+
+- **Root cause: `min()` denominator in BOTH `best_hub_match()` (hub reuse) AND `families()` (family
+  forming).** On the full catalog, a single shared segment scored 1.0 and union-find chained
+  unrelated tours into one 455-tour family → one hub → one journey name on 862 of 1,331 routes;
+  405 orphan hubs.
+- **Fix: Jaccard over the union at both layers**, with regression tests.
+  - PR #653 (hub reuse) — merged + deployed (api:526/worker:81, SHA 9155b12). A platform recompute
+    on Dev (job ef24cbca, $0, 232s) still showed 862-on-one → proved the collapse is in `families()`.
+  - PR #654 (family forming) — the real fix; auto-merge.
+- **Still to do (after #654 deploys):** re-run the platform recompute and verify the 862-hub breaks
+  into real families, orphans drop, routes spread. $0 (route detection makes no model calls — the
+  33 prior recompute jobs all cost $0.0000). Confirm with Nghiệp before running (platform-wide
+  write, versioned/reversible).
