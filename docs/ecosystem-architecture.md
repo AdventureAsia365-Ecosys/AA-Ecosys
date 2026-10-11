@@ -1,26 +1,34 @@
-# AA-Ecosys — Kiến trúc hệ sinh thái (bản nháp)
+# AA-Ecosys — Ecosystem architecture
 
-> **Trạng thái:** cập nhật 25/09/2026 (đồng bộ công việc 15–25/09, S181–S196). Các mục đánh dấu
-> **[FACT]** đã xác minh bằng đọc code/migration trong repo; **[CẦN XÁC NHẬN]** là suy luận/khoảng trống
-> cần Nghiệp xác nhận.
+> **Status:** updated 11/10/2026 (S225, AA-654 — translated to English and refreshed; previous
+> revision 25/09/2026). Items marked **[FACT]** were verified by reading code, migrations or live
+> state; **[TO CONFIRM]** marks an inference or gap that Nghiệp still has to confirm.
+> Target direction and decisions: [ADR 0001](adr/0001-ecosystem-target-architecture.md),
+> [ADR 0002](adr/0002-only-cis-writes-content.md), [ADR 0003](adr/0003-one-durable-job-model.md).
 
-## 1. Tổng quan
+## 1. Overview
 
-AA-Ecosys là một **multi-repo**: mỗi app deploy độc lập, gom chung một thư mục local `~/projects/AA-Ecosys/`,
-tất cả nằm dưới org GitHub `AdventureAsia365-Ecosys` (đổi tên từ `AdventureAsia365-CIS`).
+AA-Ecosys is a **multi-repo**: each app deploys on its own; locally they are gathered under one folder
+`~/projects/AA-Ecosys/`, and all repos live in the GitHub org `AdventureAsia365-Ecosys` (renamed from
+`AdventureAsia365-CIS`).
 
-| Thư mục local | Repo GitHub | Vai trò | Deploy |
-|---------------|-------------|---------|--------|
-| `apps/AA-CIS-App` | `AA-CIS-App` | FastAPI backend (CIS core + ACPv2 T-series) + Admin frontend + Tenant Portal | ECS Fargate (api) + Vercel (frontend) |
-| `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse điểm đến + lập kế hoạch chuyến đi (Next.js FE + 2 Lambda BE) | Vercel (FE) + Lambda (BE) |
-| `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform — VPC, RDS, ECS, Lambda, API GW, OIDC, Bedrock cross-account | GitHub Actions (aa365 root) + human/MFA (acc1/acc3 roots) |
+| Local folder | GitHub repo | Role | Deploy |
+|---|---|---|---|
+| `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series), durable job worker, admin frontend + tenant portal | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel (frontend) |
+| `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations and plan a trip (Next.js FE + 2 Lambda BE) | Vercel (FE) + Lambda (BE) |
+| `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform — VPC, RDS, ECS, Lambda, API GW, OIDC, alarms, cross-account Bedrock; DB Migrate workflow | GitHub Actions (`accounts/aa365` root) + a human with MFA (acc1/acc3 roots) |
+| — (coming) | `AA-Booking` | AAA: advisor workflow and booking lifecycle | acc2, inside the same VPC (ADR 0001) |
 
-**Nguyên tắc ranh giới [FACT]:** *App owns code, Infra owns resources.* Ví dụ rõ nhất là TripPlanner —
-`infra/AA-CIS-Infra/accounts/aa365/tripplanner.tf` tạo 2 Lambda từ một zip placeholder 209 byte; repo
-`AA-TripPlanner-Web` mới build code thật và đẩy qua `lambda:UpdateFunctionCode` (Terraform `ignore_changes`
-phần code nên không ghi đè). Nguồn: `docs/implementation-notes/AA-TripPlanner-backend.md`.
+**Boundary rule [FACT]:** *apps own code, Infra owns resources.* The clearest example is TripPlanner:
+`infra/AA-CIS-Infra/accounts/aa365/tripplanner.tf` creates the 2 Lambdas from a 209-byte placeholder zip;
+the `AA-TripPlanner-Web` repo builds the real code and ships it with `lambda:UpdateFunctionCode`
+(Terraform `ignore_changes` covers the code attributes, so it never overwrites them). Source:
+`infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md`.
 
-## 2. Sơ đồ hệ thống
+**AWS accounts [FACT]:** acc2 `005097885195` (us-west-1) holds all infrastructure. acc3 `786888028788`
+(primary) and acc1 `867490540162` (fallback) only host Bedrock invoker roles and Cost Explorer readers.
+
+## 2. System diagram
 
 ```mermaid
 flowchart TB
@@ -31,14 +39,16 @@ flowchart TB
   end
 
   subgraph acc2[AWS acc2 · 005097885195 · us-west-1]
-    subgraph vpc[VPC dùng chung]
+    subgraph vpc[Shared VPC]
       ECS[ECS Fargate: aa-cis-dev-api]
+      WRK[ECS Fargate: aa-cis-dev-worker]
       RDS[(RDS Postgres · pgvector)]
       L1[Lambda: aa-tripplanner-dev-browse]
       L2[Lambda: aa-tripplanner-dev-assembly]
+      MIG[One-off Fargate task: DB Migrate]
     end
-    APIG1[API GW REST + VPC Link → ECS]
-    APIG2[API GW HTTP v2 → 2 Lambda]
+    APIG1[API GW REST + VPC Link → ALB → ECS]
+    APIG2[API GW HTTP v2 → 2 Lambdas]
     S3TP[(S3: tripplanner artifacts)]
     OIDC[GitHub OIDC provider]
     RCICD[role: aa-cis-dev-role]
@@ -46,27 +56,28 @@ flowchart TB
     RLEX[role: aa-tripplanner-dev-lambda-exec]
   end
 
-  VERCEL_CIS[Vercel: CIS Admin + Portal]
+  VERCEL_CIS[Vercel: CIS admin + portal]
   VERCEL_TP[Vercel: aa-tripplanner FE]
 
   subgraph bedrock[Bedrock cross-account]
-    ACC3[acc3 AA3-Bedrock-Invoker · primary Claude]
-    ACC1[acc1 AA-Bedrock-Invoker · fallback Claude]
-    COHERE[acc2 Cohere Embed v4 · trực tiếp]
+    ACC3[acc3 AA3-Bedrock-Invoker · primary]
+    ACC1[acc1 AA-Bedrock-Invoker · fallback]
+    COHERE[acc2 Cohere Embed v4 · direct]
   end
 
-  R1 -->|deploy-dev.yml OIDC| RCICD --> ECS
+  R1 -->|deploy-dev.yml OIDC| RCICD --> ECS & WRK
   R2 -->|deploy-lambdas.yml OIDC| RTP --> S3TP --> L1 & L2
-  R3 -->|terraform-apply.yml OIDC| RCICD
+  R3 -->|terraform-apply.yml / db-migrate.yml OIDC| RCICD
+  RCICD --> MIG
   RCICD & RTP -.assume.-> OIDC
 
-  ECS --> RDS
+  ECS & WRK & MIG --> RDS
   L1 & L2 --> RDS
   L1 & L2 -.assume.-> RLEX
   RLEX -->|sts:AssumeRole| ACC3
   RLEX -->|fallback| ACC1
   RLEX --> COHERE
-  ECS -.assume.-> ACC3 & ACC1
+  ECS & WRK -.assume.-> ACC3 & ACC1
 
   APIG1 --> ECS
   APIG2 --> L1 & L2
@@ -74,174 +85,214 @@ flowchart TB
   VERCEL_TP --> APIG2
 ```
 
-## 3. Phân vai schema database (RDS dùng chung, acc2)
+## 3. Database schema roles (shared RDS, acc2)
 
-Cả CIS và TripPlanner dùng **cùng một RDS Postgres** trong VPC acc2, nhưng **schema tách bạch hoàn toàn**.
+CIS, TripPlanner and (later) AA-Booking use **one RDS Postgres** in the acc2 VPC, with **fully separate
+schemas**. Each schema has exactly one owner repo, and only that repo writes migrations for it — see
+[`database/schema-ownership.md`](database/schema-ownership.md) (owners, `shared.*` table owners, version
+keys `NNN` / `tp-NNN` / `bk-NNN`). Migrations reach Dev through the **DB Migrate** workflow of
+AA-CIS-Infra (an identical copy in `db/migrations/<owner>/`, check → apply), never from a laptop.
+Column-level truth: [`architecture/db-schema-reference.md`](architecture/db-schema-reference.md).
 
-### 3.1 CIS — mô hình medallion + multi-tenant RLS [FACT]
+### 3.1 CIS — medallion + multi-tenant RLS [FACT]
 
-Nguồn: `infra/AA-CIS-Infra/modules/rds/migrations/003_schema_v3.sql`, `apps/AA-CIS-App/api/migrations/*`.
+Source: `apps/AA-CIS-App/api/migrations/*` (the old `infra/AA-CIS-Infra/modules/rds/migrations/` copy
+was deleted in S225).
 
-| Schema | Vai trò | Phạm vi |
-|--------|---------|---------|
-| `shared` | Bảng nền tảng: tenants, brand rules, seo config, api usage | Platform-wide |
-| `silver_aa_internal` / `gold_aa_internal` | Medallion cho tenant nội bộ `aa_internal` (Master Content) | Platform (sentinel tenant) |
-| `silver_{id}` / `gold_{id}` | Medallion tạo động mỗi khi thêm tenant mới | Per-tenant |
-| `acp_contract` | Atom / Segment / Ranking / Route / Hub / Search Demand | Hỗn hợp (xem 3.2) |
-| `acp_shared` | Subject (Slate) / Piece / Gate / Facts / tenant_config / marketplace | Hỗn hợp |
-| `acp_deliver` | Trang giao cho tenant (`tenant_tour_pages`) | Per-tenant |
+| Schema | Role | Scope |
+|---|---|---|
+| `shared` | Platform tables: tenants, brand rules, SEO config, API usage, jobs (`shared.job`), LLM gateway + cost logs, destinations, photos | Platform-wide |
+| `silver_aa_internal` / `gold_aa_internal` | Medallion for the internal tenant `aa_internal` (Master Content) | Platform (sentinel tenant) |
+| `silver_{id}` / `gold_{id}` | Medallion created dynamically for each new tenant | Per tenant |
+| `acp_contract` | Atom / Segment / Ranking / Route / Hub / Search Demand | Mixed (see 3.2) |
+| `acp_shared` | Subject (Slate) / Piece / Gate / Facts / tenant_config / marketplace / publish log | Mixed |
+| `acp_deliver` | Pages delivered to tenants (`tenant_tour_pages`) | Per tenant |
 
-Cô lập tenant bằng **RLS** (`SET LOCAL app.tenant_id` mỗi transaction) và, nơi có nguy cơ trùng khoá,
-bằng cách **gấp `tenant_id` vào chính identity** của row (vd `segment_id = sha256(tenant_id, place, action)`).
+Tenants are isolated with **RLS** (`SET LOCAL app.tenant_id` per transaction) and, where keys could
+collide, by **folding `tenant_id` into the row identity** (e.g. `segment_id = sha256(tenant_id, place, action)`).
 
 ### 3.2 CIS — Master Content (platform-wide) vs Tenant Content [FACT]
 
-Nguồn: `apps/AA-CIS-App/CONTEXT.md` (bảng Ownership AA-540).
+Source: `apps/AA-CIS-App/CONTEXT.md` (ownership table, AA-540).
 
-- **Master Content (Admin, A-series):** tính **một lần, dùng chung** mọi tenant. Gồm A0 Upload → A3
-  Master Content Pool (`gold_aa_internal.published_tours`) + **Atom** (`owner_scope='platform'`).
-- **Dữ liệu dẫn xuất platform-wide:** **Segment / Score / Route / Hub** — đã chuyển platform-wide từ
-  AA-545 (migration 146, 06/09/2026), không còn cột `tenant_id`. Score = rank-sum 4 chiều (Demand /
-  Recurrence / Questions / Said, AA-610), mỗi buyer market 1 lượt.
-- **Tenant Content (T-series):** từ **Slate** trở đi — Slate / Subject / Goal / Angle / Piece / Publish —
-  **per-tenant**. Slate có thêm tầng **Debate** (AA-631: contested + brand-fit, advisory, không cắt quá 50%).
+- **Master Content (admin, A-series):** computed **once, shared** by every tenant. A0 Upload → A3
+  Master Content Pool (`gold_aa_internal.published_tours`) + **Atoms** (`owner_scope='platform'`). Atom
+  reads go through `acp_contract.v_active_tour_atoms`, which follows the Master status (AA-713).
+- **Platform-wide derived data:** **Segment / Score / Route / Hub** — platform-wide since AA-545
+  (migration 146, 06/09/2026), no `tenant_id` column. Score = rank-sum over 4 dimensions (Demand /
+  Recurrence / Questions / Said, AA-610), one pass per buyer market.
+- **Tenant Content (T-series):** from **Slate** onward — Slate / Subject / Goal / Angle / Piece /
+  Publish — **per tenant**. Slate has a **Debate** layer (AA-631: contested + brand-fit, advisory, never
+  cuts more than 50%).
 
-**Phần dùng chung giữa các tenant [FACT]:**
+**Shared across tenants [FACT]:**
 
-1. **Master Content pool + Atom pool** — nguồn dùng chung mọi tenant đọc trực tiếp (không phải cache).
-2. **Segment / Score / Route / Hub** — row platform-wide.
-3. **Search Demand + research log** — cache thật, khoá `(keyword, market)`/`(place, market)`, **không có cột
-   `tenant_id`**; từ AA-631 lưu thêm `serp_domains`.
-4. **Facts Entry `scope='platform'`** — chia sẻ có chủ đích, cưỡng chế bằng RLS.
+1. **Master Content pool + Atom pool** — a shared source every tenant reads directly (not a cache).
+2. **Segment / Score / Route / Hub** — platform-wide rows.
+3. **Search Demand + research log** — a real cache keyed `(keyword, market)` / `(place, market)`, **no
+   `tenant_id` column**; stores `serp_domains` since AA-631.
+4. **Facts Entry `scope='platform'`** — deliberate sharing, enforced by RLS.
 
-Ngoài ra 1 **cross-tenant read (không cache):** Gate cannibalization F10 so embedding Piece với mọi tenant khác.
+Plus one **cross-tenant read (not a cache):** Gate F10 (cannibalization) compares a Piece's embedding
+with every other tenant's.
 
-### 3.3 TripPlanner — schema riêng biệt [FACT]
+### 3.3 TripPlanner — separate schema [FACT]
 
-Nguồn: `apps/AA-TripPlanner-Web/migrations/001_tripplanner_schema.sql`.
+Source: `apps/AA-TripPlanner-Web/migrations/*`.
 
-- Schema `tripplanner` **độc lập hoàn toàn** với CIS, bật `pgvector`.
-- Có phụ thuộc thứ tự migration `shared` với CIS (`002_shared_destinations.sql` phải áp trước vì FK) —
-  **[CẦN XÁC NHẬN]** phối hợp đánh số migration `shared` giữa 2 app (nêu trong `docs/smoke-test-runbook.md`).
-- **Ảnh (AA-708, 01/10/2026):** CIS sở hữu `shared.place_photo` (migration 198 của CIS, FK tới
-  `shared.destinations`) và job `photo_sync`. CIS **chỉ ghi `shared.destinations.cover_image_url`**
-  (ô trống, hoặc ô do chính job này đặt trước đó) với URL public `…/content/photos/{id}?size=large`;
-  TripPlanner vẫn sở hữu việc tạo/geocode destination. Điền cover chỉ bật sau khi TripPlanner trích
-  xuất lại destination từ các tour của đợt chạy lại.
+- Schema `tripplanner` is **fully independent** of CIS and uses `pgvector`. Its migrations register
+  `tp-NNN` in `shared.schema_versions` (from tp-007).
+- `shared.destinations` is **owned by CIS** (ADR 0002, CIS migration 201). The DB role `tripplanner` only
+  has `SELECT` on it; TripPlanner also reads `gold_aa_internal.published_tours`,
+  `acp_contract.v_active_tour_atoms` (CIS migration 216) and the photo views.
+- **Photos (AA-708, 01/10/2026):** CIS owns `shared.place_photo` (CIS migration 198, FK to
+  `shared.destinations`) and the `photo_sync` job. See 4.5.
+
+### 3.4 AA-Booking — schema `booking` (coming) [FACT]
+
+Decided 28/09/2026 (ADR 0001 decisions 6–7): AA-Booking runs on acc2 and shares the RDS with its own
+schema `booking` (version key `bk-NNN`). AA-CIS-Infra provisions it inside acc2 (ECS service, ECR, DB
+role, API route); there are no new accounts. It never writes another app's schema. Contracts are
+versioned JSON in `docs/contracts/` (folder not created yet), carried by a **transactional outbox table** consumed by the
+receiving app's job runner with an idempotency key: `catalog.tour.*` (CIS → AA-Booking, photos via
+`shared.v_tour_photos`) and `inquiry.submitted` (TripPlanner → AA-Booking, with the multi-tour leg
+chain). AA-Booking owns the customer identity (OTP).
 
 ## 4. Data contracts
 
-### 4.1 Frontend ⇄ Backend
+### 4.0 Write rule — only CIS writes content (ADR 0002, 01/10/2026) [FACT]
 
-| Cạnh | Contract | Nguồn |
-|------|----------|-------|
-| CIS FE (Vercel) ⇄ CIS API | REST qua API GW (REST + VPC Link) → ECS. Auth: JWT tenant + admin secret | `AA-CIS-App/.github/workflows`, CONTEXT.md |
-| TripPlanner FE (Vercel) ⇄ BE | BFF Next.js gọi 2 URL Lambda qua API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly. Env `BROWSE_API_URL`/`TRIP_API_URL` | `tripplanner.tf`, `docs/vercel-setup.md` |
+- **Content** (tours, atoms, places in `shared.destinations`, itinerary places / tour graph, photos) is
+  created, changed and deleted **only by CIS** — through a job or an admin action with a tracking page.
+- Other apps (TripPlanner, AA-Booking) **read through views only** and write only their own schema
+  (+ `shared.llm_call_log`, cost logs). Enforced with DB grants: role `tripplanner` has only `SELECT` on
+  `shared.destinations` (CIS migration 201).
+- The place pipeline (itinerary extraction, Mapbox geocode, tour graph) still lives in TripPlanner and is
+  **frozen**; it moves to CIS under AA-712.
 
-### 4.2 Ranh giới app/infra (deploy contract) [FACT]
+### 4.1 Frontend ⇄ backend
 
-- **TripPlanner:** Infra tạo Lambda từ placeholder zip; App build + `UpdateFunctionCode`. Terraform
-  `ignore_changes` code attrs. Bucket artifacts `aa-tripplanner-dev-lambda-artifacts-<acct>`.
-- **CIS:** Infra tạo ECS/RDS/API GW; App build image → ECR → cập nhật ECS service.
+| Edge | Contract | Source |
+|---|---|---|
+| CIS FE (Vercel) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT, admin secret added by the BFF | `AA-CIS-App/CONTEXT.md` |
+| TripPlanner FE (Vercel) ⇄ BE | The Next.js BFF calls 2 Lambda URLs through API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly; header `X-TripPlanner-Key`. Env `BROWSE_API_URL` / `TRIP_API_URL` | `tripplanner.tf`, `docs/vercel-setup.md` |
+
+Contracts between apps (views, grants, events) are listed in each repo's `CONTEXT.md`
+("Contracts with other apps").
+
+### 4.2 App / infra boundary (deploy contract) [FACT]
+
+- **TripPlanner:** Infra creates the Lambdas from a placeholder zip; the app builds and calls
+  `UpdateFunctionCode`. Terraform `ignore_changes` on code attributes. Artifacts bucket
+  `aa-tripplanner-dev-lambda-artifacts-<acct>`.
+- **CIS:** Infra creates ECS / RDS / API GW; the app builds an image → ECR → new task definitions for api
+  and worker on the same image (`Deploy Dev`, blocked while `shared.job` has queued/running jobs).
+- **Migrations:** the owner repo authors them; Infra's DB Migrate applies them to Dev before the app code
+  that needs them merges.
 
 ### 4.3 Bedrock (cross-account) [FACT]
 
-Nguồn: `docs/implementation-notes/AA-TripPlanner-backend.md`, `accounts/acc1-bedrock`, `accounts/acc3-bedrock`.
+Source: `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md`, `accounts/acc1-bedrock`,
+`accounts/acc3-bedrock`.
 
-- **Embeddings (Cohere Embed v4):** acc2 gọi trực tiếp `bedrock:InvokeModel`, không satellite.
-- **Claude:** acc2 KHÔNG gọi trực tiếp được → `sts:AssumeRole` sang **acc3 (primary)** / **acc1 (fallback)**.
+- **Embeddings (Cohere Embed v4):** acc2 calls `bedrock:InvokeModel` directly, no satellite.
+- **Claude / other chat models:** acc2 cannot call them directly → `sts:AssumeRole` into
+  **acc3 (primary)** / **acc1 (fallback)**.
   - acc3 role `AA3-Bedrock-Invoker`, ExternalId `aa296-satellite-bedrock-acc3`.
   - acc1 role `AA-Bedrock-Invoker`, ExternalId `aa296-satellite-bedrock`.
-- Trust cross-account tham chiếu **role ARN** `aa-tripplanner-dev-lambda-exec` (KHÔNG dính tên GitHub) →
-  đổi tên org không ảnh hưởng các trust này.
-- Role satellite chỉ trust **ECS task role** → không gọi Claude từ máy local được; đo/A-B thật phải chạy qua
-  ECS exec trong container `api`.
-- **Model theo stage (CIS) do DB quyết** (`shared.llm_role_config`): S1 admin + atomize = Haiku 4.5,
-  T2 tenant rewrite = Sonnet (AA-620), judge = GPT-4.1 (OpenAI, khác vendor có chủ đích).
-- **Bedrock Batch (AA-606):** S3 prefix `batch-*/s1-rewrite/*` + batch service role acc1/acc3 đã có đủ, NHƯNG
-  AWS **chưa bật Batch Inference cho acc3** (case 178979743800653, blocker AA-624) → chưa chạy job thật lần nào.
+- Cross-account trust references the **role ARNs** (`aa-tripplanner-dev-lambda-exec`, the ECS task role) —
+  nothing tied to GitHub names, so the org rename did not affect them.
+- The satellite roles trust only the **ECS task role** (and the TripPlanner Lambda exec role) → Claude
+  cannot be called from a laptop; real measurements / A-B runs go through ECS exec in the `api` container.
+- **The model per stage is decided by the DB (Model Gateway)**: `shared.llm_role_config` +
+  `shared.llm_model_catalog`, editable in CIS admin Settings → LLM Models (shadow switch and sample %),
+  every call logged to `shared.llm_call_log`. Do not memorize the current routing — read the Settings
+  page. Policy (S222): every LLM path prefers Bedrock; judges default to GPT Luna via Bedrock acc3, OpenAI
+  kept as a fallback; one judge model is picked by 31/10/2026.
+- **Bedrock Batch (AA-606):** the S3 prefix `batch-*/s1-rewrite/*` and the acc1/acc3 batch service roles
+  exist, but AWS **has not enabled Batch Inference for acc3** (case 178979743800653, blocker AA-624) → no
+  real batch job has run yet. **[TO CONFIRM]** current status of the AWS case.
 
-### 4.4 Giám sát chi phí (cross-account) [FACT]
+### 4.4 Cost monitoring (cross-account) [FACT]
 
-Nguồn: epic AA-616 (AA-617/618/619/620/622/623/625/627/635), `infra/AA-CIS-Infra/CONTEXT.md`.
+Source: epic AA-616 (AA-617/618/619/620/622/623/625/627/635), `infra/AA-CIS-Infra/CONTEXT.md`.
 
-- **Ước tính theo token:** `shared.llm_call_log` (có account acc1/acc3, provider, fallback) +
-  `shared.dfs_call_log` (cost thật DFS trả về, cache hit). Cache DFS TTL 7 ngày.
-- **Hoá đơn thật AWS:** acc2 là **member account**, không phải payer của AWS Organizations → không có lệnh
-  Cost Explorer gộp. Mỗi account có role đọc CE riêng (`AA-CostExplorer-Reader` acc1,
-  `AA3-CostExplorer-Reader` acc3), ECS task role acc2 assume sang; acc2 gọi CE trực tiếp. Snapshot lưu ở
-  `shared.cost_explorer_snapshot`, refresh tay qua `POST /admin/cost-explorer/check`.
-- **Trang admin "External Spend"** (`/admin/llm-usage`): so ước tính vs hoá đơn thật, tách Bedrock khỏi hạ
-  tầng theo từng account, lọc theo khoảng ngày.
-- **Cảnh báo số dư DFS:** Lambda `aa-cis-dev-dfs-balance-check` + EventBridge Scheduler hằng ngày (group
-  `aa-cis-dev-acp`).
+- **Token-based estimate:** `shared.llm_call_log` (account acc1/acc3, provider, fallback) +
+  `shared.dfs_call_log` (real DataForSEO cost, cache hits). DFS cache TTL 7 days. Ad-hoc scripts must log
+  too (`stage="adhoc_<issue>"`).
+- **Real AWS bills:** acc2 is a **member account**, not the AWS Organizations payer → no consolidated Cost
+  Explorer call. Each account has its own CE reader role (`AA-CostExplorer-Reader` acc1,
+  `AA3-CostExplorer-Reader` acc3) that the acc2 ECS task role assumes; acc2 calls CE directly. Snapshots
+  live in `shared.cost_explorer_snapshot`, refreshed by `POST /admin/cost-explorer/check`.
+- **Admin page "External Spend"** (`/admin/llm-usage`): estimate vs real bill, Bedrock split from
+  infrastructure per account, date-range filter.
+- **DFS balance alert:** Lambda `aa-cis-dev-dfs-balance-check` + a daily EventBridge Scheduler (group
+  `aa-cis-dev-acp`); the same probe also calls `/admin/waves/check` (AA-727).
+- **Log-write failure alarms (AA-756):** CloudWatch metric filters + alarms on `/ecs/aa-cis-dev` for
+  `llm_call_log` / `decision_log` / `llm_shadow_log` / `dfs_call_log` write failures (namespace
+  `aa-cis/ops`).
 
-### 4.0 Quy tắc ghi dữ liệu — chỉ CIS ghi nội dung (ADR 0002, 01/10/2026) [FACT]
+### 4.5 AA photos (AA-708, 01/10/2026) [FACT]
 
-- **Nội dung** (tour, atom, địa danh `shared.destinations`, địa danh theo lịch trình / tour graph, ảnh) chỉ do
-  **CIS** tạo/sửa/xoá — bằng job hoặc thao tác admin có trang theo dõi.
-- App khác (TripPlanner, AA-Booking) **chỉ đọc qua view** và chỉ ghi schema riêng của mình
-  (+ `shared.llm_call_log`, log chi phí). Cưỡng chế bằng quyền DB: role `tripplanner` chỉ `SELECT` trên
-  `shared.destinations` (CIS migration 201).
-- Pipeline địa danh (trích xuất lịch trình, geocode Mapbox, tour graph) hiện còn ở TripPlanner → **đóng băng**,
-  chuyển sang CIS (AA-712).
+One photo source for the whole ecosystem, per ADR 0001 decision 1 (CIS is the content source, other apps
+read a read model):
 
-### 4.5 Ảnh AA (AA-708, 01/10/2026) [FACT]
-
-Một nguồn ảnh cho cả hệ sinh thái, theo ADR 0001 quyết định 1 (CIS là nguồn nội dung, app khác đọc read model):
-
-| Thành phần | Chủ sở hữu | Ghi chú |
+| Part | Owner | Notes |
 |---|---|---|
-| Ảnh gốc | Team nội dung | Thư mục PHOTOS trên Jira CON (Google Drive, public link) |
-| Đồng bộ + match | CIS — job `photo_sync`, trang Admin › Photos | Drive → S3 (WebP 1600/600) → `shared.place_photo` |
-| Đọc ảnh | Mọi app | **Chỉ qua view** `shared.v_tour_photos` (theo tour) và `shared.v_destination_photos` (theo địa danh, cover = `position` 1); không đọc bảng |
-| URL ảnh | CIS API public | `{CIS_API_BASE}{path}?size=large\|small` (302 → S3; sau này CloudFront, giữ nguyên path) |
-| Cover địa danh TripPlanner | CIS ghi `shared.destinations.cover_image_url` | Chỉ ô trống hoặc ô do chính job đặt |
+| Originals | Content team | PHOTOS folder on Jira CON (Google Drive, public link) |
+| Sync + match | CIS — job `photo_sync`, page Admin › Photos | Drive → S3 (WebP 1600/600) → `shared.place_photo` |
+| Reading photos | Every app | **Views only:** `shared.v_tour_photos` (per tour) and `shared.v_destination_photos` (per place, cover = `position` 1); never the tables |
+| Photo URL | CIS public API | `{CIS_API_BASE}{path}?size=large\|small` (302 → S3; later CloudFront, same path) |
+| TripPlanner destination cover | CIS writes `shared.destinations.cover_image_url` | Only empty cells, or cells this job set earlier |
 
-Thứ tự theo từng nước (đợt chạy lại): S1 viết lại → A3 atom hoá → **trích xuất lại địa danh** (hiện ở TripPlanner, chuyển sang CIS theo AA-712)
-(`tripplanner.itinerary_components` / `tour_stop`) → Admin › Photos: "Sync <nước>" + "Match places + covers".
-Ảnh chỉ được so với địa danh trong **lịch trình của chính tour** đó. AA-Booking (AA-679 catalog sync) lấy ảnh tour
-qua `shared.v_tour_photos` theo `tour_id`.
+Order per country (rerun wave): S1 rewrite → A3 atomize → **re-extract places** (still in TripPlanner,
+moving to CIS under AA-712) (`tripplanner.itinerary_components` / `tour_stop`) → Admin › Photos:
+"Sync <country>" + "Match places + covers". A photo is only matched against places in **that tour's own
+itinerary**. Filling destination covers stays off until places are re-extracted. AA-Booking (AA-679
+catalog sync) gets tour photos from `shared.v_tour_photos` by `tour_id`.
 
-## 5. OIDC / CI-CD (điểm rủi ro #1 của restructure)
+## 5. OIDC / CI-CD
 
-| Role | File | sub hiện tại | Repo dùng |
-|------|------|--------------|-----------|
-| `aa-cis-dev-role` | `accounts/aa365/cicd.tf` | `repo:AdventureAsia365-Ecosys*/*:*` (org-wide, có `*` sau tên org do "include repo ID in subject") | AA-CIS-App, AA-CIS-Infra |
-| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | `repo:AdventureAsia365-Ecosys*/AA-TripPlanner-Web*:*` (có `*` do "include repo ID in subject") | AA-TripPlanner-Web |
+| Role | File | Current `sub` | Used by |
+|---|---|---|---|
+| `aa-cis-dev-role` | `accounts/aa365/cicd.tf` | `repo:AdventureAsia365-Ecosys*/*:*` (org-wide; the `*` after the org name is required by "include repo ID in subject") | AA-CIS-App, AA-CIS-Infra (Terraform, DB Migrate) |
+| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | `repo:AdventureAsia365-Ecosys*/AA-TripPlanner-Web*:*` | AA-TripPlanner-Web |
 
-**Nguyên tắc đổi tên an toàn:** mở rộng trust để chấp nhận **cả** org cũ **và** org mới (additive) **TRƯỚC**,
-đổi tên org **SAU**, gỡ trust cũ ở bước cuối. Role ARN trong workflow lấy từ `secrets`/`vars`, tên tài
-nguyên dùng prefix `aa-cis-*`/`aa-tripplanner-*` (độc lập tên GitHub) → chỉ phần khớp `sub` chịu ảnh hưởng.
+**Safe rename rule:** widen trust to accept **both** the old and the new org (additive) **first**, rename
+the org **after**, remove the old trust last. Role ARNs in workflows come from `secrets` / `vars`, and
+resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of GitHub names) → only the
+`sub` match is affected.
 
-> **[FACT — G5 hoàn tất 21/09/2026, AA-588]** Trust org cũ `AdventureAsia365-CIS` đã gỡ khỏi cả 2 role;
-> `sub` giờ chỉ khớp org mới `AdventureAsia365-Ecosys` (verify live qua `aws iam get-role`).
+> **[FACT — G5 done 21/09/2026, AA-588]** Trust for the old org `AdventureAsia365-CIS` was removed from
+> both roles; `sub` now matches only `AdventureAsia365-Ecosys` (verified live with `aws iam get-role`).
 >
-> **Đính chính fact OIDC (kiểm qua CloudTrail 21/09/2026, AA-588):** org `AdventureAsia365-Ecosys` **CÓ**
-> bật "include repo ID in the subject" (precheck trong doc g5 ghi "org KHÔNG bật" là **SAI**). `sub` thật
-> có dạng `repo:AdventureAsia365-Ecosys@<orgid>/<repo>@<repoid>:<ref>`, nên trust **bắt buộc** dùng wildcard
-> sau tên org: `cicd.tf` → `repo:AdventureAsia365-Ecosys*/*:*`, `tripplanner.tf` →
-> `repo:AdventureAsia365-Ecosys*/AA-TripPlanner-Web*:*`. Pattern phẳng `repo:AdventureAsia365-Ecosys/*:*`
-> (không `*`) **fail AccessDenied** — đã tái hiện qua CI Terraform Plan #94, fix + apply + CI xanh lại.
+> **OIDC correction (checked in CloudTrail 21/09/2026, AA-588):** the org `AdventureAsia365-Ecosys`
+> **does** enable "include repo ID in the subject". The real `sub` looks like
+> `repo:AdventureAsia365-Ecosys@<orgid>/<repo>@<repoid>:<ref>`, so trust **must** use a wildcard after the
+> org name. The flat pattern `repo:AdventureAsia365-Ecosys/*:*` (no `*`) **fails with AccessDenied** —
+> reproduced in CI Terraform Plan #94, then fixed, applied and green again.
 
-## 6. Nợ / mở rộng tương lai
+## 6. Debt / future work
 
-- **AA-Booking (AAA):** sản phẩm B2C mới, sẽ thêm repo `AA-Booking` sau. Điểm bàn giao TripPlanner → AAA:
-  xem `docs/tripplanner-to-aaa-handoff.md`.
-- **[CẦN XÁC NHẬN]** CloudFront trước các route browse của TripPlanner (nêu là "later change").
-- **Rerun dữ liệu CIS (epic AA-594):** DB Dev đã reset dẫn xuất ngày 16/09 (giữ 793 raw tours). G4/G5/G6
-  (AA-599/600/601 — chạy lại S1 → atomize → social, rebuild extraction TripPlanner, audit UI) chưa chạy; phụ
-  thuộc AA-624 (Batch acc3) hoặc quyết định chạy đồng bộ.
+- **AA-Booking (AAA):** new product and repo `AA-Booking` on acc2 (3.4). Handoff from TripPlanner:
+  [`tripplanner-to-aaa-handoff.md`](tripplanner-to-aaa-handoff.md).
+- **Place pipeline to CIS (AA-712):** required before destination covers are switched on.
+- **[TO CONFIRM]** CloudFront in front of TripPlanner browse routes (listed as a later change).
+- **CIS data rerun:** waves are registered and reported through `/admin/waves` (`shared.rerun_wave`,
+  AA-727); Batch Inference on acc3 (AA-624) is still blocked.
+- `AA-Bedrock-Invoker` on acc1 was created by hand and is not in Terraform state — import or recreate it
+  through IaC.
 
-## 7. Nguồn tham chiếu
+## 7. References
 
-- `apps/AA-CIS-App/CONTEXT.md` — Repo Context (stack/deploy/ranh giới) + glossary + bảng
-  Ownership/cross-tenant (AA-540).
-- `apps/AA-TripPlanner-Web/CONTEXT.md` — Repo Context: B2C map planner, Next.js FE + 2 Lambda
-  (browse stateless/cacheable, assembly stateful+Bedrock), trip event-sourced, schema `tripplanner.*`.
-- `infra/AA-CIS-Infra/CONTEXT.md` — Repo Context: mô hình 3 account, state S3, OIDC/CI-CD,
-  cách apply, ranh giới "App owns code, Infra owns resources".
-- `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md` — báo cáo Terraform TripPlanner.
+- `apps/AA-CIS-App/CONTEXT.md` — repo context (stack, deploy, boundaries), glossary, ownership /
+  cross-tenant table (AA-540), contracts with other apps.
+- `apps/AA-TripPlanner-Web/CONTEXT.md` — B2C map planner, Next.js FE + 2 Lambdas (browse stateless /
+  cacheable, assembly stateful + Bedrock), event-sourced trip, schema `tripplanner.*`.
+- `infra/AA-CIS-Infra/CONTEXT.md` — 3-account model, S3 state, OIDC / CI-CD, how to apply, DB Migrate,
+  the "apps own code, Infra owns resources" boundary.
+- `docs/adr/` — ecosystem ADRs; `docs/database/schema-ownership.md` — schema owners.
+- `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md` — TripPlanner Terraform report.
 - `infra/AA-CIS-Infra/accounts/aa365/{cicd.tf, tripplanner.tf}` — OIDC roles.
 - `apps/AA-TripPlanner-Web/docs/{vercel-setup,architecture-overview,smoke-test-runbook}.md`.
-- `docs/inventory-old-refs.md` — kiểm kê tham chiếu tên cũ.
+- `docs/inventory-old-refs.md` — inventory of references to old names.
