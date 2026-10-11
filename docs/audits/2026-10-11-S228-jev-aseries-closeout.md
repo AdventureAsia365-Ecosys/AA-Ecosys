@@ -635,7 +635,18 @@ distribution stands.
   - PR #653 (hub reuse) — merged + deployed (api:526/worker:81, SHA 9155b12). A platform recompute
     on Dev (job ef24cbca, $0, 232s) still showed 862-on-one → proved the collapse is in `families()`.
   - PR #654 (family forming) — the real fix; auto-merge.
-- **Still to do (after #654 deploys):** re-run the platform recompute and verify the 862-hub breaks
-  into real families, orphans drop, routes spread. $0 (route detection makes no model calls — the
-  33 prior recompute jobs all cost $0.0000). Confirm with Nghiệp before running (platform-wide
-  write, versioned/reversible).
+- **VERIFIED (after #654 deploy, api:527 SHA 773d591):** platform recompute job 7f747ea5 ($0, 227s)
+  broke the collapse:
+
+  | metric | before | after #653 | after #654 |
+  |---|---:|---:|---:|
+  | largest hub (routes) | 862 | 862 | **84** |
+  | max tours in one hub | 455 | 455 | **55** |
+  | hubs linked by live routes | 14 | 22 | 21 |
+
+  The largest remaining hub (84 routes / 55 tours) is now a REAL journey — "Jama Masjid → India
+  Gate → Lakshmi Narayan Temple → Shanti Vana" (Delhi), which 55 India tours genuinely pass through
+  — not the old 455-tour Bhutan-trek-name collapse. Fix confirmed correct at the root.
+- **Left as cleanup (not a bug):** orphan hubs rose 405 → 425 (the old collapsed hubs are now
+  unreferenced). Orphan hubs are "expected, not cleaned" (migration 131); a one-off prune of
+  unreferenced hub rows is a tidy-up, tracked on AA-758, no urgency.
