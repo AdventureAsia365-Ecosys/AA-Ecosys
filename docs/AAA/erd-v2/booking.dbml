@@ -1,0 +1,606 @@
+// AA-Booking (AAA) — ERD v2, schema booking.* on the shared acc2 RDS (AA-677, draft S225).
+// Paste into dbdiagram.io to render. Rationale and the v1 → v2 mapping: README.md (same folder).
+//
+// Conventions: uuid PKs (gen_random_uuid()); every business table has created_at / updated_at,
+// and deleted_at where a row can be removed by a user (soft delete). Money is numeric(12,2) +
+// currency char(3). Media is never a URL column: rows point at booking.media_files (s3_bucket +
+// s3_key), and the API builds the CDN URL at read time.
+// Golden records are referenced, not copied: places are CIS shared.destinations, tours / atoms are
+// CIS published_tours / v_active_tour_atoms (external_ref), photos come from shared.v_tour_photos.
+
+Project aa_booking {
+  database_type: 'PostgreSQL'
+  Note: 'Schema booking.* — owner repo AA-Booking, migration key bk-NNN'
+}
+
+// ── Enums ────────────────────────────────────────────────────────────────────
+
+Enum booking.staff_role {
+  admin
+  sales
+  content_creator
+}
+
+Enum booking.record_status {
+  active
+  inactive
+}
+
+Enum booking.trip_case_status {
+  new_inquiry
+  discovery
+  building
+  proposal_sent
+  confirmed
+  supplier_confirming
+  invoice_sent
+  payment_pending
+  paid
+  pre_departure
+  on_trip
+  completed
+  cancelled
+}
+
+Enum booking.activity_intensity {
+  rest
+  low
+  medium
+  high
+  extreme
+}
+
+Enum booking.activity_experience_type {
+  hiking
+  biking
+  culture
+  wildlife
+  food
+  nature
+  boat
+  adventure
+  urban
+  relaxation
+}
+
+Enum booking.activity_period {
+  morning
+  afternoon
+  evening
+}
+
+Enum booking.location_type {
+  start
+  end
+  overnight
+}
+
+Enum booking.payment_kind {
+  deposit
+  second
+  final
+  other
+}
+
+Enum booking.payment_status {
+  scheduled
+  due
+  paid
+  overdue
+  cancelled
+}
+
+Enum booking.supplier_booking_status {
+  requested
+  confirmed
+  changed
+  cancelled
+}
+
+Enum booking.invoice_status {
+  draft
+  sent
+  partially_paid
+  paid
+  cancelled
+}
+
+Enum booking.bill_status {
+  received
+  approved
+  paid
+  cancelled
+}
+
+Enum booking.source_system {
+  cis
+  tripplanner
+  manual
+}
+
+// ── Identity ─────────────────────────────────────────────────────────────────
+// Customers: OTP only (PRD). Staff: the ecosystem staff model (CIS AA-656 — admin / reviewer /
+// content map to admin / sales / content_creator); staff never log in through customer OTP.
+
+Table booking.customers {
+  id uuid [pk]
+  name varchar
+  email varchar [unique, note: 'nullable; at least one of email / phone required (check)']
+  phone varchar [unique]
+  address varchar
+  gender varchar
+  marital_status varchar
+  profession varchar
+  profile_media_id uuid [ref: > booking.media_files.id]
+  is_blocked boolean [not null, default: false]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  deleted_at timestamptz
+  Note: 'Was users (role customer). Matched to TripPlanner customers by verified phone/email on inquiry.'
+}
+
+Table booking.customer_otps {
+  id uuid [pk]
+  customer_id uuid [not null, ref: > booking.customers.id]
+  otp_hash varchar [not null, note: 'hash, never the plain code']
+  channel varchar [not null, note: 'email | sms']
+  expires_at timestamptz [not null]
+  used_at timestamptz
+  attempts smallint [not null, default: 0]
+  created_at timestamptz [not null]
+}
+
+Table booking.customer_sessions {
+  id uuid [pk]
+  customer_id uuid [not null, ref: > booking.customers.id]
+  refresh_token_hash varchar [not null]
+  expires_at timestamptz [not null]
+  revoked_at timestamptz
+  created_at timestamptz [not null]
+  Note: 'Answers "OTP every time the app opens?": no — OTP once, then a refresh token (proposed, TO CONFIRM).'
+}
+
+Table booking.staff_users {
+  id uuid [pk]
+  name varchar [not null]
+  email varchar [unique, not null]
+  role booking.staff_role [not null]
+  is_blocked boolean [not null, default: false]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  deleted_at timestamptz
+  Note: 'Was users (role admin/sales/content_creator). Permissions = the role matrix in README (code, not tables).'
+}
+
+// ── Geography (golden records from CIS + commercial attributes here) ─────────
+
+Table booking.areas {
+  id uuid [pk]
+  name varchar [not null, unique]
+  description text
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+}
+
+Table booking.country_profiles {
+  country_code char(2) [pk, note: 'ISO 3166-1; joins CIS place data by country']
+  area_id uuid [ref: > booking.areas.id]
+  name varchar [not null]
+  subtitle varchar
+  description text
+  cover_media_id uuid [ref: > booking.media_files.id]
+  faqs jsonb
+  festivals jsonb
+  weather jsonb
+  status booking.record_status [not null, default: 'active']
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  Note: 'Commercial country page. Coordinates are not stored here (CIS owns places).'
+}
+
+Table booking.destination_profiles {
+  destination_id uuid [pk, note: 'CIS shared.destinations.id (golden record, read-only)']
+  country_code char(2) [not null, ref: > booking.country_profiles.country_code]
+  description text
+  cover_media_id uuid [ref: > booking.media_files.id]
+  status booking.record_status [not null, default: 'active']
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  Note: 'Was destinations. Name and lat/lng come from shared.destinations; only AAA copy lives here.'
+}
+
+// ── Suppliers and inventory (AAA-owned commercial data) ──────────────────────
+
+Table booking.suppliers {
+  id uuid [pk]
+  company_name varchar [not null]
+  address varchar
+  contact_name varchar
+  contact_email varchar
+  contact_phone varchar
+  status booking.record_status [not null, default: 'active']
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  deleted_at timestamptz
+}
+
+Table booking.hotels {
+  id uuid [pk]
+  name varchar [not null]
+  destination_id uuid [not null, note: 'CIS shared.destinations.id']
+  supplier_id uuid [ref: > booking.suppliers.id]
+  hotel_style varchar
+  links jsonb
+  description text
+  status booking.record_status [not null, default: 'active']
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  deleted_at timestamptz
+  Note: 'country is derived from the destination (no separate country_id).'
+}
+
+Table booking.activities {
+  id uuid [pk]
+  title varchar [not null]
+  description text
+  intensity booking.activity_intensity
+  experience_type booking.activity_experience_type
+  destination_id uuid [note: 'CIS shared.destinations.id; replaces country_id + city + lat/lng']
+  source_system booking.source_system [not null, default: 'manual']
+  source_id varchar [note: 'CIS atom / segment id when synced from CIS']
+  status booking.record_status [not null, default: 'active']
+  is_draft boolean [not null, default: true]
+  created_by uuid [ref: > booking.staff_users.id]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  deleted_at timestamptz
+  indexes {
+    (source_system, source_id) [unique, note: 'idempotent catalog sync']
+  }
+}
+
+// ── Catalog templates (Trip Plans) ───────────────────────────────────────────
+
+Table booking.trip_plans {
+  id uuid [pk]
+  sku varchar [unique]
+  slug varchar [unique, note: 'takes over legacy meta_data slug/title/description']
+  title varchar [not null]
+  summary text
+  what_it_has jsonb
+  what_it_does_not_have jsonb
+  trip_style varchar
+  duration_days smallint [not null]
+  duration_nights smallint [not null]
+  source_system booking.source_system [not null, default: 'manual']
+  source_id varchar [note: 'CIS published_tours.tour_id when synced']
+  supplier_id uuid [ref: > booking.suppliers.id]
+  is_published boolean [not null, default: false]
+  status booking.record_status [not null, default: 'active']
+  created_by uuid [ref: > booking.staff_users.id]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  deleted_at timestamptz
+  indexes {
+    (source_system, source_id) [unique]
+  }
+  Note: 'No lat/lng, no single country_id (multi-country via trip_plan_destinations). No start/end date: a template has a duration; dates belong to a trip case.'
+}
+
+Table booking.trip_plan_destinations {
+  trip_plan_id uuid [ref: > booking.trip_plans.id]
+  destination_id uuid [note: 'CIS shared.destinations.id']
+  position smallint [not null]
+  indexes {
+    (trip_plan_id, destination_id) [pk]
+  }
+}
+
+Table booking.trip_plan_prices {
+  id uuid [pk]
+  trip_plan_id uuid [not null, ref: > booking.trip_plans.id]
+  season varchar [note: 'e.g. low / high / peak, or a date range below']
+  valid_from date
+  valid_to date
+  pax_min smallint [not null]
+  pax_max smallint [not null]
+  price numeric(12,2) [not null]
+  currency char(3) [not null]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  Note: 'Replaces trip_plans.price json.'
+}
+
+Table booking.trip_plan_itinerary {
+  id uuid [pk]
+  trip_plan_id uuid [not null, ref: > booking.trip_plans.id]
+  day_number smallint [not null]
+  activity_id uuid [ref: > booking.activities.id]
+  hotel_id uuid [ref: > booking.hotels.id]
+  destination_id uuid [note: 'CIS shared.destinations.id — replaces item lat/lng']
+  activity_period booking.activity_period
+  location_type booking.location_type
+  transfer_type varchar
+  travel_hours numeric(4,1)
+  note text
+  status booking.record_status [not null, default: 'active']
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  deleted_at timestamptz
+}
+
+// ── Trip Case (customer container) ───────────────────────────────────────────
+
+Table booking.trip_cases {
+  id uuid [pk]
+  code varchar [unique, not null, note: 'human reference shown to customer and suppliers']
+  customer_id uuid [not null, ref: > booking.customers.id]
+  trip_plan_id uuid [ref: > booking.trip_plans.id, note: 'null when built from a TripPlanner draft or from scratch']
+  status booking.trip_case_status [not null, default: 'new_inquiry']
+  trip_style varchar
+  start_date date
+  end_date date
+  pax smallint
+  currency char(3)
+  source_system booking.source_system [not null, default: 'manual']
+  source_id varchar [note: 'TripPlanner trip_id for inquiry.submitted']
+  idempotency_key varchar [unique, note: 'from the inquiry.submitted event']
+  created_by uuid [ref: > booking.staff_users.id]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  deleted_at timestamptz
+  Note: 'No price column (price lives on the approved version / invoices), no lat/lng, no single country_id.'
+}
+
+Table booking.trip_case_countries {
+  trip_case_id uuid [ref: > booking.trip_cases.id]
+  country_code char(2) [ref: > booking.country_profiles.country_code]
+  indexes {
+    (trip_case_id, country_code) [pk]
+  }
+}
+
+Table booking.trip_case_legs {
+  id uuid [pk]
+  trip_case_id uuid [not null, ref: > booking.trip_cases.id]
+  position smallint [not null]
+  source_tour_id uuid [not null, note: 'CIS published_tours.tour_id']
+  day_from smallint [not null]
+  day_to smallint [not null]
+  created_at timestamptz [not null]
+  Note: 'TripPlanner leg chain (ADR 0001 decision 5) — lets V1 be pre-filled from real AA tours.'
+}
+
+Table booking.trip_case_status_history {
+  id uuid [pk]
+  trip_case_id uuid [not null, ref: > booking.trip_cases.id]
+  from_status booking.trip_case_status
+  to_status booking.trip_case_status [not null]
+  changed_by uuid [ref: > booking.staff_users.id]
+  note text
+  changed_at timestamptz [not null]
+}
+
+Table booking.trip_case_versions {
+  id uuid [pk]
+  trip_case_id uuid [not null, ref: > booking.trip_cases.id]
+  version_number smallint [not null]
+  notes text
+  total_price numeric(12,2)
+  currency char(3)
+  is_sent_to_customer boolean [not null, default: false]
+  is_approved boolean [not null, default: false]
+  approved_at timestamptz
+  created_by uuid [ref: > booking.staff_users.id]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  indexes {
+    (trip_case_id, version_number) [unique]
+    trip_case_id [unique, note: 'partial: WHERE is_approved — at most one approved version (locked)']
+  }
+}
+
+Table booking.trip_case_version_itinerary {
+  id uuid [pk]
+  trip_case_version_id uuid [not null, ref: > booking.trip_case_versions.id]
+  day_number smallint [not null]
+  date date
+  activity_id uuid [ref: > booking.activities.id]
+  hotel_id uuid [ref: > booking.hotels.id]
+  destination_id uuid [note: 'CIS shared.destinations.id']
+  activity_period booking.activity_period
+  location_type booking.location_type
+  transfer_type varchar
+  travel_hours numeric(4,1)
+  unit_price numeric(12,2)
+  note text
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+}
+
+Table booking.trip_case_checks {
+  trip_case_id uuid [pk, ref: - booking.trip_cases.id]
+  hotel_confirmed boolean [not null, default: false]
+  tour_confirmed boolean [not null, default: false]
+  pre_trip_recheck boolean [not null, default: false]
+  emergency_contact varchar
+  insurance_check boolean [not null, default: false]
+  payment_verified boolean [not null, default: false]
+  updated_by uuid [ref: > booking.staff_users.id]
+  updated_at timestamptz [not null]
+}
+
+Table booking.staff_assignments {
+  id uuid [pk]
+  trip_case_id uuid [not null, ref: > booking.trip_cases.id]
+  staff_user_id uuid [not null, ref: > booking.staff_users.id]
+  role varchar [not null, note: 'sales | ops | guide …']
+  assigned_by uuid [ref: > booking.staff_users.id]
+  assigned_at timestamptz [not null]
+  unassigned_at timestamptz
+}
+
+// ── Operations: supplier bookings and bills ──────────────────────────────────
+
+Table booking.supplier_bookings {
+  id uuid [pk]
+  trip_case_id uuid [not null, ref: > booking.trip_cases.id]
+  version_item_id uuid [ref: > booking.trip_case_version_itinerary.id, note: 'the approved-version item being booked']
+  supplier_id uuid [not null, ref: > booking.suppliers.id]
+  item_description varchar [not null]
+  service_date date
+  price numeric(12,2)
+  currency char(3)
+  voucher_media_id uuid [ref: > booking.media_files.id]
+  confirmation_ref varchar
+  status booking.supplier_booking_status [not null, default: 'requested']
+  created_by uuid [ref: > booking.staff_users.id]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+}
+
+Table booking.supplier_bills {
+  id uuid [pk]
+  supplier_id uuid [not null, ref: > booking.suppliers.id]
+  trip_case_id uuid [ref: > booking.trip_cases.id]
+  bill_number varchar
+  amount numeric(12,2) [not null]
+  currency char(3) [not null]
+  due_date date
+  paid_at timestamptz
+  document_media_id uuid [ref: > booking.media_files.id]
+  status booking.bill_status [not null, default: 'received']
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+}
+
+Table booking.supplier_bill_items {
+  supplier_bill_id uuid [ref: > booking.supplier_bills.id]
+  supplier_booking_id uuid [ref: > booking.supplier_bookings.id]
+  amount numeric(12,2) [not null]
+  indexes {
+    (supplier_bill_id, supplier_booking_id) [pk]
+  }
+}
+
+// ── Customer money: invoices, schedule, payments ─────────────────────────────
+
+Table booking.invoices {
+  id uuid [pk]
+  trip_case_id uuid [not null, ref: > booking.trip_cases.id]
+  invoice_number varchar [unique, not null]
+  amount numeric(12,2) [not null]
+  currency char(3) [not null]
+  status booking.invoice_status [not null, default: 'draft']
+  issued_at timestamptz
+  cancelled_at timestamptz
+  cancel_reason text
+  created_by uuid [ref: > booking.staff_users.id]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+}
+
+Table booking.invoice_items {
+  id uuid [pk]
+  invoice_id uuid [not null, ref: > booking.invoices.id]
+  description varchar [not null]
+  quantity numeric(8,2) [not null, default: 1]
+  unit_price numeric(12,2) [not null]
+  amount numeric(12,2) [not null]
+  Note: 'Replaces invoices.items json.'
+}
+
+Table booking.payment_schedule {
+  id uuid [pk]
+  invoice_id uuid [not null, ref: > booking.invoices.id]
+  kind booking.payment_kind [not null]
+  sequence smallint [not null]
+  amount numeric(12,2) [not null]
+  due_date date [not null]
+  status booking.payment_status [not null, default: 'scheduled']
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+}
+
+Table booking.payments {
+  id uuid [pk]
+  payment_schedule_id uuid [ref: > booking.payment_schedule.id]
+  invoice_id uuid [not null, ref: > booking.invoices.id]
+  amount numeric(12,2) [not null]
+  currency char(3) [not null]
+  payment_method varchar
+  payment_description text [note: 'Mr. Mạnh: note on the evidence']
+  evidence_media_id uuid [ref: > booking.media_files.id, note: 'receipt image / pdf']
+  received_at timestamptz
+  recorded_by uuid [ref: > booking.staff_users.id]
+  created_at timestamptz [not null]
+  updated_at timestamptz [not null]
+  Note: 'trip_case reached through the invoice (no duplicate trip_case_id).'
+}
+
+// ── Cross-cutting ────────────────────────────────────────────────────────────
+
+Table booking.media_files {
+  id uuid [pk]
+  s3_bucket varchar [not null]
+  s3_key varchar [not null]
+  content_type varchar [not null]
+  bytes bigint
+  width integer
+  height integer
+  sha256 varchar
+  uploaded_by uuid [note: 'staff_users.id or customers.id']
+  created_at timestamptz [not null]
+  deleted_at timestamptz
+  indexes {
+    (s3_bucket, s3_key) [unique]
+  }
+}
+
+Table booking.entity_media {
+  id uuid [pk]
+  entity_type varchar [not null, note: 'activity | hotel | trip_plan | country_profile | destination_profile']
+  entity_id uuid [not null]
+  media_file_id uuid [not null, ref: > booking.media_files.id]
+  position smallint [not null]
+  caption varchar
+  indexes {
+    (entity_type, entity_id, position) [unique]
+  }
+  Note: 'Galleries. Tour photos from CIS are read from shared.v_tour_photos, not copied here.'
+}
+
+Table booking.notifications {
+  id uuid [pk]
+  recipient_type varchar [not null, note: 'customer | staff']
+  recipient_id uuid [not null]
+  title varchar [not null]
+  message text
+  type varchar
+  read_at timestamptz
+  created_at timestamptz [not null]
+}
+
+Table booking.audit_logs {
+  id uuid [pk]
+  actor_type varchar [not null, note: 'staff | customer | system']
+  actor_id uuid
+  action varchar [not null]
+  entity_type varchar [not null]
+  entity_id uuid
+  before jsonb
+  after jsonb
+  created_at timestamptz [not null]
+}
+
+Table booking.inbox_events {
+  id uuid [pk]
+  source varchar [not null, note: 'tripplanner | cis']
+  contract varchar [not null, note: 'inquiry.submitted | catalog.tour.*']
+  idempotency_key varchar [unique, not null]
+  payload jsonb [not null]
+  received_at timestamptz [not null]
+  processed_at timestamptz
+  error text
+  Note: 'Consumer side of the ADR 0001 outbox contracts: one row per event, processed once.'
+}
