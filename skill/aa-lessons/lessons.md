@@ -22,6 +22,8 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Calib/threshold vô nghĩa nếu chưa biết hệ thống PHẢN ỨNG gì tại ngưỡng đó và nó ảnh hưởng chất lượng SẢN PHẨM ra sao** — S228: agent định tối ưu "giảm grey %" của các câu Jev; Nghiệp chỉ ra phải phân tích hành động downstream (reject atom → mất khỏi Segment/Score/Route; reject a1 → flag_fix rewrite) và tác động tới chất lượng nội dung, thay vì chỉnh con số. Bắt bằng: trước khi đề xuất một ngưỡng, viết ra "zone X → hệ thống làm Y → chất lượng đổi thế nào"; không có mục đó thì chưa được đề xuất số.
 
 ## Verify và "Done"
+- **SQL mới phải có integration test trên Postgres thật — mock không bắt được lỗi kiểu tham số** — offboard tenant 500 từ ngày viết vì `$1` dùng cho cả cột varchar và text (`AmbiguousParameterError`); unit test mock pass (S229, AA-741 #658). Bắt bằng: endpoint ghi DB mới → test trong `tests/integration/` gọi đúng hàm với pool thật.
+- **Đổi chữ ký hàm phải grep MỌI caller, kể cả caller bọc `try/except` fail-open** — #631 đổi `judge_units(units, sources: dict)`, `brand_audit_node` vẫn truyền `str` → lỗi bị nuốt, Jev không bao giờ chạy cho bữa ăn (S229, #655); test mock `judge_units` nên không lộ. Bắt bằng: hàm nhận kiểu cụ thể thì `raise TypeError` khi sai kiểu, trước mọi `try`.
 
 - Build pass ≠ chạy đúng. Verify trên domain thật (curl 200 + shape) — S212: SEO 500 tưởng 401, nút Live view không hiện, đếm Thailand sai.
 - Có phép kiểm ≠ phép kiểm đúng. Check mang tên "invented/fabricated" phải đối chiếu source thật — 30/07: `ITIN_MEAL_INVENTED` chỉ dò từ khoá output.
@@ -33,6 +35,8 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Báo cáo/chỉ số mới phải chạy trên dữ liệu thật trước khi báo xong** — AA-686 báo cáo A/B shadow: unit test xanh nhưng `agreement_rate` của `s1_judge` (5.135 cặp, số quan trọng nhất) luôn `null` vì judge A1 chỉ trả điểm, không có `status`; docstring nói "pass derived" mà code không suy ra (S222, #616). Bắt bằng: gọi endpoint live, kiểm mỗi cột chính có giá trị ở nhóm lớn nhất.
 
 ## Vận hành
+- **File nhị phân qua API Gateway (REST, không `binaryMediaTypes`) bị hỏng** — `multipart/form-data` bị coi là text: .docx 15.191 byte tới S3 thành 25.187 byte; mọi file brand portal từng lưu đều hỏng (S229, #660). Bắt bằng: upload qua API → gửi base64 JSON (hoặc thêm `binaryMediaTypes` bằng Terraform); verify bằng so sha256 file gốc với bản lưu.
+- **"Lưu được" chưa phải "pipeline dùng được"** — form Brand lưu `target_markets` vào `tenant_brand_rules` nhưng T2/T7 đọc `tenant_seo_config` (tenant không ghi được) → mọi tenant viết cho US; style guide bị cắt ngầm 300 ký tự (S229, #659). Bắt bằng: mỗi trường cấu hình tenant → grep nơi ĐỌC nó trong pipeline, không chỉ nơi ghi; cắt/bỏ dữ liệu phải báo lỗi, không im lặng.
 
 - Không merge/deploy backend khi job đang chạy — S212: deploy giết 16 job S1 của wave Thailand.
 - **Wave S1 xong chưa phải là queue sạch**: `a3_atomize` sau publish sinh `recompute` tự động, recompute chỉ chạy sau vài phút (S224: wave xong 07:14, recompute 07:17–07:20) → merge ngay lúc 07:18 thì Deploy Dev bị guard chặn, phải chạy lại (S224, #630). Bắt bằng: query `shared.job` queued/running ngay trước khi bật auto-merge, chờ cả recompute.
