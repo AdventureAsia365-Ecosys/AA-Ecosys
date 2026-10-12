@@ -57,8 +57,21 @@ September), but **DE/FR/NL only 96 each, from 1–3 Sep** (one early trial, neve
 supports all six (in `DFS_LOCATION_MAP`). So the fix is operational — run `segment_research` for
 DE/FR/NL (G2) — not a code change.
 
-Tenants trigger no DFS spend: 0 tenant-tagged DFS rows since 29/09 (AA-646). A tenant market with
-no research falls back to US keywords (T2) or fails the demand bar (T7 blog).
+**Design intent (confirmed with Nghiệp, S229):** admin buys the per-market data once; a tenant
+NEVER runs DFS when writing. Tenants only READ what the platform already has, to filter topics,
+pick goal/angle and write. 0 tenant-tagged DFS rows since 29/09 (AA-646).
+
+**Unknown / unresearched market — how the system reacts (verified in code):**
+- T2 keywords (`tenant_market_seo`): if `search_demand` has nothing for that market, returns
+  `(market, None)` → rewrite proceeds with the brand voice but no SEO keywords, logs
+  `t2_seo_context_missing`. Never falls back to buying DFS.
+- T7 Slate: low/zero demand → blog candidates fail the `needs_demand ≥ 1000` bar (fewer/no blog
+  topics); social (said-based) still works. Declared-but-unsupported countries come back as
+  `unmatched_markets` and are recorded in `unmapped_market_requests` for admin.
+- T8/T9: use whatever PAA/keywords exist; with none, proceed on atom text without SEO signal.
+
+**Open product question (not a bug):** T2 writes for ONE market (highest-ranked). If AA wants a
+tenant's content generated for several of its markets, that is a product change to add here.
 
 ## 3. LLM — all via the gateway; per-tenant cost is under-counted (fix = G1)
 
