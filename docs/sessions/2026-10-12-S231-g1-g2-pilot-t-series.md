@@ -58,14 +58,21 @@ tới khi xong, chưa có issue thì tạo mới, cuối phiên báo cáo tổng
 - **Workspace Linear hết hạn mức issue gói free** → các phát hiện 502 / shadow / T9 held ghi
   thành comment AA-741.
 - AA-741 vẫn In Progress (G1–G3 xong; G4+ còn).
+- **Dọn Linear (cuối phiên, Nghiệp duyệt):** gom 8 project → **3**: `CIS Core — Pipeline, LLM & Platform`
+  (đổi tên từ Pipeline Rerun P2, gộp LLM Gateway + Ecosystem Foundation + Data Reset),
+  `CIS Portal — Admin & Tenant UI`, `TripPlanner & AA-Booking`. Chuyển mọi issue mở (+14 Done của
+  LLM Gateway); Nghiệp xoá 5 project cũ + lưu trữ issue cũ → **104/250** issue chưa lưu trữ.
+  Đóng lỗi thời/trùng: AA-670→dup AA-760, AA-672→dup AA-761, AA-160/621/624 Canceled.
+  Tạo **AA-768** (T9 bịa số liệu, High); thêm số liệu slate 504 vào AA-764. Skill
+  `aa-linear-issue` cập nhật 3 project.
 
 ## Còn lại / phiên sau (S232)
-1. **T9 bịa số liệu (5/5 held)** — áp luật writer A/B (S223) cho T9: chỉ số liệu có trong seed;
-   đo lại 5 bài. Đây là chặn lớn nhất trước khi tenant nhận được bài.
+1. **AA-768 — T9 bịa số liệu (5/5 held)** — áp luật writer A/B (S223) cho T9: chỉ số liệu có trong
+   seed; đo lại 5 bài. Đây là chặn lớn nhất trước khi tenant nhận được bài.
 2. **AA-764 (G5)** — T7/T8 sang worker; `GET /v1/slate` chỉ đọc, không propose lại (504 + tốn tiền mỗi lần tải).
 3. AA-763 (G4) stage key T-series; Debate cờ 82–90% → calib (AA-696/699).
 4. G7 chạy đủ 48 sau khi 1–3 xong; dùng tenant-market keyword (#664).
-5. Linear: Nghiệp lưu trữ ~90 issue đóng trước 12/09 trên UI (connector không có thao tác archive) + bật auto-archive 1 tháng.
+5. Linear: bật auto-archive 1 tháng (Settings → Teams → AA_Ecosys → Workflow) nếu chưa bật.
 6. Kiểm metric ALB `HTTPCode_ELB_502_Count` = 0 cả tuần (đóng phần #662).
 
 ## Lưu ý kỹ thuật
