@@ -70,8 +70,9 @@ pick goal/angle and write. 0 tenant-tagged DFS rows since 29/09 (AA-646).
   `unmatched_markets` and are recorded in `unmapped_market_requests` for admin.
 - T8/T9: use whatever PAA/keywords exist; with none, proceed on atom text without SEO signal.
 
-**Open product question (not a bug):** T2 writes for ONE market (highest-ranked). If AA wants a
-tenant's content generated for several of its markets, that is a product change to add here.
+**Decided (Nghiệp, S231 12/10/2026):** T2 keeps writing for ONE market per tenant (the
+highest-ranked of its markets). No per-market T2 versions; revisit only with G7 numbers. Since
+#664 (S231) that market's keywords come from `search_demand` matched on the tour's atom places.
 
 ## 3. LLM — all via the gateway; per-tenant cost is under-counted (fix = G1)
 
