@@ -69,6 +69,9 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 
 - **Khớp keyword theo thị trường phải dùng đúng đơn vị mà dữ liệu được MUA theo** — T2 (AA-707) khớp `search_demand` bằng từ trong TÊN tour ("CULINARY GEMS OF BHUTAN" → `culinary`), trong khi segment_research mua theo địa danh atom → 12/12 tenant rơi về keyword admin US (S231 pilot, #664). Bắt bằng: thêm một tính năng dùng dữ liệu cache → đếm thật tỉ lệ hit trên vài tour (`seo_source` trong `job.result`) trước khi coi là xong.
 
+- **Trước khi sửa prompt/gate của một writer, in ra đúng nguồn writer nhận được** — T9 (AA-768) chỉnh luật A/B, judge F9 hai vòng mà vẫn 5/5 held; nguyên nhân thật là seed bài social chỉ là NHÃN atom ("Pawangka Monastery — visit", 26 ký tự) trong khi atom có sẵn `evidence`/`emotional_hook` → writer buộc phải bịa (đặt Pawangka "above Luang Prabang", "Ladakh") (S232, #669). Bắt bằng: query `length(seed)` + in seed của 3 request mẫu trước vòng sửa đầu tiên.
+- **Judge kiểm sự thật phải được xem nguồn và phải nêu claim + lý do** — F9 T10 chỉ thấy bài + CTA, prompt bảo "không chắc thì manual_check" → mọi bài có fact đều held, rewrite không sửa được; cho xem nguồn rồi judge lại gắn cờ cả câu có nguyên văn trong nguồn cho tới khi bắt buộc `unsupported_claims {claim, why_not_in_source}` (S232, #665/#670). Bắt bằng: test prompt judge có chứa nguồn; đọc 5 câu bị gắn cờ thật trước khi chỉnh ngưỡng.
+
 ## Job runner
 
 - **Cap theo kind phải nhỏ hơn tổng slot của worker** — s1_rewrite cap 4 = `max_parallel` 4 → chiếm hết slot, a3_atomize (cap 1) không chạy được suốt pha rewrite (S217/S218, AA-737). Bắt bằng: test `test_aa737_worker_throughput` (cap s1 + cap a3 < slot).
