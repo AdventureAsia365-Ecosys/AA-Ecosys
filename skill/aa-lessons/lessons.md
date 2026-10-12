@@ -34,6 +34,8 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Đọc code thật trước khi đặt giả thuyết — S65 mất nhiều lượt vì giả định có node "finalize" không tồn tại.
 - **Báo cáo/chỉ số mới phải chạy trên dữ liệu thật trước khi báo xong** — AA-686 báo cáo A/B shadow: unit test xanh nhưng `agreement_rate` của `s1_judge` (5.135 cặp, số quan trọng nhất) luôn `null` vì judge A1 chỉ trả điểm, không có `status`; docstring nói "pass derived" mà code không suy ra (S222, #616). Bắt bằng: gọi endpoint live, kiểm mỗi cột chính có giá trị ở nhóm lớn nhất.
 
+- **Integration test "xanh" không chứng minh query đọc một view/bảng chạy được — kiểm migration tạo nó có thật sự áp trong DB test** — conftest nuốt lỗi migration; DB test thiếu role `aa_app_user` nên migration 203 (`v_active_tour_atoms`) + ~50 GRANT chưa bao giờ áp, không test nào chạm view (S231, AA-741 #664). Bắt bằng: test mới đọc view/bảng mới → chạy câu SQL thật trong `tests/integration/` (UndefinedTable sẽ lộ ngay).
+
 ## Vận hành
 - **File nhị phân qua API Gateway (REST, không `binaryMediaTypes`) bị hỏng** — `multipart/form-data` bị coi là text: .docx 15.191 byte tới S3 thành 25.187 byte; mọi file brand portal từng lưu đều hỏng (S229, #660). Bắt bằng: upload qua API → gửi base64 JSON (hoặc thêm `binaryMediaTypes` bằng Terraform); verify bằng so sha256 file gốc với bản lưu.
 - **"Lưu được" chưa phải "pipeline dùng được"** — form Brand lưu `target_markets` vào `tenant_brand_rules` nhưng T2/T7 đọc `tenant_seo_config` (tenant không ghi được) → mọi tenant viết cho US; style guide bị cắt ngầm 300 ký tự (S229, #659). Bắt bằng: mỗi trường cấu hình tenant → grep nơi ĐỌC nó trong pipeline, không chỉ nơi ghi; cắt/bỏ dữ liệu phải báo lỗi, không im lặng.
@@ -64,6 +66,8 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Đếm rerun theo distinct tour: master / review-pending / not-run; không đếm superseded; `ingested` trong review ≠ chưa chạy.
 - Jev fail-open: `llm_call_log` ghi cả lần lỗi → đọc `decision_log.zone`, không dùng số call làm bằng chứng.
 - **Loại trừ theo luật ở một bước mới phải khớp quyết định CUỐI của bước sau, không chỉ luật gốc** — AA-695 định cho atom transit không tạo Segment bằng `classify_exclusion`, nhưng ranking cho Jev `a3_activity_type` cứu moment luật gọi transit; 199 Segment thật (Nanta show, yoga…) sẽ bị xoá nhầm (S223). Bắt bằng: đối chiếu với `atom_ranking.excluded_reason` (lý do cuối) trước khi dùng luật ở chỗ khác.
+
+- **Khớp keyword theo thị trường phải dùng đúng đơn vị mà dữ liệu được MUA theo** — T2 (AA-707) khớp `search_demand` bằng từ trong TÊN tour ("CULINARY GEMS OF BHUTAN" → `culinary`), trong khi segment_research mua theo địa danh atom → 12/12 tenant rơi về keyword admin US (S231 pilot, #664). Bắt bằng: thêm một tính năng dùng dữ liệu cache → đếm thật tỉ lệ hit trên vài tour (`seo_source` trong `job.result`) trước khi coi là xong.
 
 ## Job runner
 
