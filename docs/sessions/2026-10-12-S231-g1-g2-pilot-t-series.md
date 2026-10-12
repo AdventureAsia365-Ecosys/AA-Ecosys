@@ -13,8 +13,8 @@ tới khi xong, chưa có issue thì tạo mới, cuối phiên báo cáo tổng
 - Số goal: **8** (đúng như code `goals.py`).
 - Đồng ý danh sách S231; "làm tất cả tới khi xong", việc chưa có issue thì tạo issue mới.
 - Sửa MCP GitHub "làm luôn, tôi duyệt tay" (sửa `~/.zshrc`).
-- (Câu hỏi T2 đa thị trường: Nghiệp chưa hiểu → đã giải thích a/b/c, khuyến nghị giữ (a) 1
-  thị trường tới khi có số G7; chưa chốt.)
+- T2 đa thị trường: **giữ 1 thị trường như hiện tại** (chốt sau giải thích a/b/c).
+- Linear hết hạn mức: **dọn issue cũ** (lưu trữ issue đã đóng), không nâng gói.
 
 ## Thay đổi Codebase (AA-CIS-App — tất cả merged, CI xanh, deploy Dev)
 - **#661 G1** — `call_log.bind_tenant` (ContextVar như job_id); worker bind tenant từ payload
@@ -65,7 +65,7 @@ tới khi xong, chưa có issue thì tạo mới, cuối phiên báo cáo tổng
 2. **AA-764 (G5)** — T7/T8 sang worker; `GET /v1/slate` chỉ đọc, không propose lại (504 + tốn tiền mỗi lần tải).
 3. AA-763 (G4) stage key T-series; Debate cờ 82–90% → calib (AA-696/699).
 4. G7 chạy đủ 48 sau khi 1–3 xong; dùng tenant-market keyword (#664).
-5. Linear hết hạn mức issue — Nghiệp quyết: nâng gói / dọn issue cũ.
+5. Linear: Nghiệp lưu trữ ~90 issue đóng trước 12/09 trên UI (connector không có thao tác archive) + bật auto-archive 1 tháng.
 6. Kiểm metric ALB `HTTPCode_ELB_502_Count` = 0 cả tuần (đóng phần #662).
 
 ## Lưu ý kỹ thuật
