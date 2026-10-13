@@ -1,10 +1,10 @@
 # AA-Ecosys DB Schema Reference (live dump)
 
-**Verified:** 2026-10-11 (S226) — live `information_schema` dump of the shared RDS (`aa-cis/dev/rds`, acc2 `005097885195`, us-west-1). Latest migration applied: **tp-008** (latest CIS numeric: 218; TripPlanner: tp-008).
+**Verified:** 2026-10-13 (S234) — live `information_schema` dump of the shared RDS (`aa-cis/dev/rds`, acc2 `005097885195`, us-west-1). Latest migration applied: **222** (latest CIS numeric: 222; TripPlanner: tp-008).
 
 > This file is generated from a real DB dump, not hand-maintained. It is the **single source of truth** for table/column names across both CIS and TripPlanner (same RDS, separate schemas). Kiro and Claude Code should read THIS before introspecting columns. Regenerate after any migration: re-run the dump script (`.tmp-session/s209_schema_dump.py` pattern, S3-mediated ECS exec) and `s209_gen_schema_md.py`.
 
-**Totals:** 12 non-empty schemas, 103 tables/views, 93 FKs, 13 enums. Empty schemas (exist, 0 objects): acp_gold_output, acp_silver_s3, acp_silver_s4.
+**Totals:** 12 non-empty schemas, 107 tables/views, 96 FKs, 13 enums. Empty schemas (exist, 0 objects): acp_gold_output, acp_silver_s3, acp_silver_s4.
 
 ## Conventions
 - Column format: `name type` — `NN` suffix = NOT NULL. `_enum` / udt types shown by their udt name. `rows` = approximate (`pg_class.reltuples`), not exact.
@@ -42,7 +42,7 @@ embedding vector NN
 created_at timestamp with time zone NN
 ```
 
-### `acp_contract.atom_matches` (table, ~9463 rows)
+### `acp_contract.atom_matches` (table, ~9526 rows)
 ```
 id bigint NN
 query text NN
@@ -53,7 +53,7 @@ matched_by text NN
 matched_at timestamp with time zone NN
 ```
 
-### `acp_contract.atom_ranking` (table, ~107736 rows)
+### `acp_contract.atom_ranking` (table, ~108198 rows)
 ```
 tour_id uuid NN
 segment_id text NN
@@ -74,7 +74,7 @@ version integer NN
 superseded_at timestamp with time zone
 ```
 
-### `acp_contract.atom_segment` (table, ~11231 rows)
+### `acp_contract.atom_segment` (table, ~11306 rows)
 ```
 segment_id text NN
 canonical_place text NN
@@ -100,7 +100,7 @@ atom_id text NN
 is_alias boolean NN
 ```
 
-### `acp_contract.atomize_day_fingerprint` (table, ~9577 rows)
+### `acp_contract.atomize_day_fingerprint` (table, ~10062 rows)
 ```
 tenant_tour_version_id uuid NN
 day_number integer NN
@@ -108,7 +108,7 @@ fingerprint_hash text NN
 atomized_at timestamp with time zone NN
 ```
 
-### `acp_contract.hub` (table, ~419 rows)
+### `acp_contract.hub` (table, ~59 rows)
 ```
 hub_id uuid NN
 hub_name text NN
@@ -124,7 +124,7 @@ embedding vector NN
 created_at timestamp with time zone NN
 ```
 
-### `acp_contract.route` (table, ~6998 rows)
+### `acp_contract.route` (table, ~8058 rows)
 ```
 route_id text NN
 tour_id uuid NN
@@ -170,7 +170,7 @@ error_message text
 created_at timestamp with time zone NN
 ```
 
-### `acp_contract.search_demand` (table, ~4470 rows)
+### `acp_contract.search_demand` (table, ~5089 rows)
 ```
 keyword text NN
 market text NN
@@ -180,7 +180,7 @@ retrieved_on timestamp with time zone NN
 serp_domains jsonb
 ```
 
-### `acp_contract.segment_research_log` (table, ~1068 rows)
+### `acp_contract.segment_research_log` (table, ~1337 rows)
 ```
 canonical_place text NN
 market text NN
@@ -282,7 +282,7 @@ url_alive boolean
 last_checked_at timestamp with time zone
 ```
 
-## `acp_shared` (16 objects)
+## `acp_shared` (20 objects)
 
 ### `acp_shared.acp_output_rules` (table)
 ```
@@ -316,7 +316,7 @@ created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
 
-### `acp_shared.angle_gate_option` (table, ~0 rows)
+### `acp_shared.angle_gate_option` (table, ~33 rows)
 ```
 option_id uuid NN
 request_id uuid NN
@@ -331,7 +331,7 @@ answers jsonb
 violations jsonb
 ```
 
-### `acp_shared.angle_gate_request` (table, ~0 rows)
+### `acp_shared.angle_gate_request` (table, ~15 rows)
 ```
 request_id uuid NN
 tenant_id uuid NN
@@ -348,7 +348,15 @@ subject_id uuid
 route_segment_ids jsonb
 ```
 
-### `acp_shared.audit_log` (table, ~0 rows)
+### `acp_shared.atom_place_card` (table, ~118 rows)
+```
+atom_id text NN
+card_id uuid
+resolved_at timestamp with time zone NN
+miss_reason text
+```
+
+### `acp_shared.audit_log` (table, ~652 rows)
 ```
 id uuid NN
 tenant_id character varying
@@ -361,7 +369,7 @@ created_at timestamp with time zone
 actor_type audit_actor_type
 ```
 
-### `acp_shared.content_piece` (table, ~1 rows)
+### `acp_shared.content_piece` (table, ~150 rows)
 ```
 piece_id uuid NN
 tenant_id uuid NN
@@ -385,9 +393,10 @@ route_segment_count smallint
 flags jsonb
 discarded_attempts jsonb NN
 job_id uuid
+writer_input jsonb
 ```
 
-### `acp_shared.debate_brand_fit_cache` (table)
+### `acp_shared.debate_brand_fit_cache` (table, ~237 rows)
 ```
 id uuid NN
 tenant_id uuid NN
@@ -413,6 +422,7 @@ stated_on date
 provenance text NN
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
+country text
 ```
 
 ### `acp_shared.marketplace_portfolios` (table)
@@ -424,6 +434,46 @@ atom_snapshot jsonb
 status text NN
 created_at timestamp with time zone NN
 finalized_at timestamp with time zone
+```
+
+### `acp_shared.place_card` (table, ~102 rows)
+```
+card_id uuid NN
+place_key text NN
+display_name text NN
+locality text
+region text
+country text NN
+naming_note text
+facts jsonb NN
+status text NN
+cost_usd numeric NN
+verified_by text
+verified_at timestamp with time zone
+created_at timestamp with time zone NN
+updated_at timestamp with time zone NN
+```
+
+### `acp_shared.place_card_alias` (table, ~361 rows)
+```
+alias_norm text NN
+country_norm text NN
+card_id uuid NN
+source text NN
+created_at timestamp with time zone NN
+```
+
+### `acp_shared.place_card_miss` (table)
+```
+place_norm text NN
+country_norm text NN
+reason text NN
+attempts integer NN
+rule_version integer NN
+prompt_sha text NN
+model text
+last_tried_at timestamp with time zone NN
+retry_after timestamp with time zone NN
 ```
 
 ### `acp_shared.publish_log` (table)
@@ -468,7 +518,7 @@ approved_at timestamp with time zone
 created_at timestamp with time zone NN
 ```
 
-### `acp_shared.subject` (table, ~0 rows)
+### `acp_shared.subject` (table, ~105 rows)
 ```
 subject_id uuid NN
 tenant_id uuid NN
@@ -633,7 +683,7 @@ created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
 
-### `shared.cost_explorer_snapshot` (table, ~6340 rows)
+### `shared.cost_explorer_snapshot` (table, ~6923 rows)
 ```
 id uuid NN
 account_id text NN
@@ -646,7 +696,7 @@ raw jsonb
 fetched_at timestamp with time zone NN
 ```
 
-### `shared.decision_cache_hits_daily` (table, ~165 rows)
+### `shared.decision_cache_hits_daily` (table, ~181 rows)
 ```
 day date NN
 stage text NN
@@ -723,7 +773,7 @@ raw jsonb
 fetched_at timestamp with time zone NN
 ```
 
-### `shared.dfs_call_log` (table, ~2375 rows)
+### `shared.dfs_call_log` (table, ~2545 rows)
 ```
 id uuid NN
 tenant_id uuid
@@ -757,7 +807,7 @@ added_at timestamp with time zone NN
 added_by text NN
 ```
 
-### `shared.job` (table, ~2264 rows)
+### `shared.job` (table, ~2407 rows)
 ```
 id uuid NN
 kind text NN
@@ -782,7 +832,7 @@ started_at timestamp with time zone
 finished_at timestamp with time zone
 ```
 
-### `shared.job_worker` (table, ~95 rows)
+### `shared.job_worker` (table, ~119 rows)
 ```
 worker_id text NN
 host text NN
@@ -799,7 +849,7 @@ last_reaped jsonb
 task_revision integer
 ```
 
-### `shared.llm_call_log` (table, ~232704 rows)
+### `shared.llm_call_log` (table, ~244387 rows)
 ```
 id uuid NN
 tenant_id uuid
@@ -1045,7 +1095,7 @@ updated_at timestamp with time zone NN
 updated_by text
 ```
 
-### `shared.tenant_api_usage` (table, ~88303 rows)
+### `shared.tenant_api_usage` (table, ~107717 rows)
 ```
 id uuid NN
 tenant_id uuid
@@ -1091,6 +1141,7 @@ rewrite_language text
 target_markets _text
 brand_name text NN
 good_examples text
+default_cta text
 ```
 
 ### `shared.tenant_brand_rules_deleted_aa404` (table)
@@ -1635,12 +1686,15 @@ acp_shared.acp_quota_ledger.tenant_id -> shared.tenants.tenant_id
 acp_shared.angle_gate_option.request_id -> acp_shared.angle_gate_request.request_id
 acp_shared.angle_gate_request.subject_id -> acp_shared.subject.subject_id
 acp_shared.angle_gate_request.tenant_id -> shared.tenants.tenant_id
+acp_shared.atom_place_card.atom_id -> acp_contract.tour_atoms.atom_id
+acp_shared.atom_place_card.card_id -> acp_shared.place_card.card_id
 acp_shared.content_piece.angle_gate_option_id -> acp_shared.angle_gate_option.option_id
 acp_shared.content_piece.angle_gate_request_id -> acp_shared.angle_gate_request.request_id
 acp_shared.content_piece.job_id -> shared.job.id
 acp_shared.content_piece.tenant_id -> shared.tenants.tenant_id
 acp_shared.debate_brand_fit_cache.tenant_id -> shared.tenants.tenant_id
 acp_shared.facts.tenant_id -> shared.tenants.tenant_id
+acp_shared.place_card_alias.card_id -> acp_shared.place_card.card_id
 acp_shared.publish_log.piece_id -> acp_shared.content_piece.piece_id
 acp_shared.publish_log.tenant_id -> shared.tenants.tenant_id
 acp_shared.quarter_plan.current_version_id -> acp_shared.quarter_plan_version.version_id
@@ -1717,18 +1771,18 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 
 | version | applied_at | description |
 |---|---|---|
+| 222 | 2026-10-13 08:17:11.690231+00:00 | AA-772: a3_place_card -> validate on gpt-5.6-luna (sonnet fallback); a3_place_card_check -> validate on haiku (sonnet fallback) |
+| 221 | 2026-10-13 06:09:43.781885+00:00 | S234: place_card_miss + place_card_alias + atom_place_card.miss_reason (AA-772), stage keys t9_repair (haiku) and t10_claims (gpt-6-luna) |
+| 220 | 2026-10-13 01:31:50.038109+00:00 | S233: tenant_brand_rules.default_cta (AA-771), place_card + atom_place_card (AA-772), content_piece.writer_input (AA-769), facts.country, stage keys a3_place_card / a3_place_card_check |
+| 219 | 2026-10-12 10:19:19.911620+00:00 | AA-763: T-series stage keys (t2_judge, t2_brand_audit, t2_flag_fix, t2_itinerary_nudge, t7_debate_judge) copied from their A1 twins |
 | tp-008 | 2026-10-11 07:53:26.830946+00:00 | AA-676: tripplanner.outbox + v_inquiry_outbox (inquiry.submitted) + customer contact consent |
 | 218 | 2026-10-11 07:02:16.241876+00:00 | AA-656: shared.admin_role gains content (staff JWT for the content team) |
 | tp-007 | 2026-10-11 06:13:05.415731+00:00 | AA-684: TripPlanner migrations register with the tp- prefix (+ backfill 001-006) |
-| tp-005 | 2026-10-11 06:13:05.415731+00:00 | backfill: destinations.located_by / located_at |
 | tp-006 | 2026-10-11 06:13:05.415731+00:00 | backfill: trip_events add_day / remove_day |
-| tp-003 | 2026-10-11 06:13:05.415731+00:00 | backfill: tripplanner.tour_day |
 | tp-004 | 2026-10-11 06:13:05.415731+00:00 | backfill: Tour Graph tables |
-| tp-001 | 2026-10-11 06:13:05.415731+00:00 | backfill: tripplanner schema (components, customers, sessions, events, drafts) |
 | tp-002 | 2026-10-11 06:13:05.415731+00:00 | backfill: shared.destinations (owner CIS since ADR 0002) |
+| tp-005 | 2026-10-11 06:13:05.415731+00:00 | backfill: destinations.located_by / located_at |
+| tp-001 | 2026-10-11 06:13:05.415731+00:00 | backfill: tripplanner schema (components, customers, sessions, events, drafts) |
+| tp-003 | 2026-10-11 06:13:05.415731+00:00 | backfill: tripplanner.tour_day |
 | 217 | 2026-10-11 06:10:05.539175+00:00 | AA-727: shared.rerun_wave — rerun wave as an object (expected set + status) |
 | 216 | 2026-10-11 05:31:26.134711+00:00 | AA-731: tripplanner may read v_active_tour_atoms place/activity columns |
-| 215 | 2026-10-11 05:28:00.191848+00:00 | AA-726: publish_log idempotency_key + requested status + unique in-flight/published key |
-| 214 | 2026-10-10 17:50:57.811004+00:00 | AA-757: rename LLM stage key t5_atomize -> a3_atomize (A3 atomize; config only) |
-| 213 | 2026-10-10 14:34:36.048694+00:00 | AA-757: t5_atomize (A3 atomize) -> validate role on gpt-6-luna, haiku fallback |
-| 212 | 2026-10-10 10:22:56.767350+00:00 | AA-748: s1_source_facts -> validate role on gpt-6-luna (ADR 0008), haiku fallback |
