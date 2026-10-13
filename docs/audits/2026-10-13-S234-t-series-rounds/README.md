@@ -36,4 +36,7 @@ Hard-error totals are re-measured with `measure_r4.py` on every set, so they dif
 - `02-panel-round1.md` … `07-panel-round4.md` — panel reports per round (per-piece votes, defect classes, next fixes).
 - `05-f9v2-replay.md` — F9 v2 offline replay (typed claims + code rules) vs current F9: cheaper and steadier, below the 90% bar; not wired.
 - `06-place-card-model-ab.md` — drafter A/B (Sonnet / Haiku / GPT-5.6 Luna / GPT-6 Luna) → migration 222.
+- `08-pipeline-stats-thu-jev.md` — how T9 writes a piece (inputs, steps, LLM calls, every gate, retry logic, outputs), failure/retry statistics from the DB, comparison with chị Thư's repo, Jev audit.
+- `09-next-step-plan.md` — concrete next-step plan: issues, paste-ready prompt changes, builds, Jev actions, measurement targets.
+- `10-agent-team-design.md` — multi-app agent team: feasibility, roles, protocol, pilot for the next session.
 - Scratch (not committed): `.tmp-session/s234/` — pieces_r{1..4}.json, measure scripts, panel raw votes.
