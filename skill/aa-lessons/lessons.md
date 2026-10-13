@@ -22,6 +22,7 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Calib/threshold vô nghĩa nếu chưa biết hệ thống PHẢN ỨNG gì tại ngưỡng đó và nó ảnh hưởng chất lượng SẢN PHẨM ra sao** — S228: agent định tối ưu "giảm grey %" của các câu Jev; Nghiệp chỉ ra phải phân tích hành động downstream (reject atom → mất khỏi Segment/Score/Route; reject a1 → flag_fix rewrite) và tác động tới chất lượng nội dung, thay vì chỉnh con số. Bắt bằng: trước khi đề xuất một ngưỡng, viết ra "zone X → hệ thống làm Y → chất lượng đổi thế nào"; không có mục đó thì chưa được đề xuất số.
 
 ## Verify và "Done"
+- **Trước khi chuyển Done, đọc lại "Done when" trong mô tả issue, không dựa vào việc PR đã merge** — S233: chuyển AA-769/771/772 sang Done rồi phải trả lại In Progress vì còn thiếu nút "cut sentence", brand voice LinkedIn ≥7 và A/B place card. Bắt bằng: comment Done phải nêu từng gạch Done-when kèm bằng chứng.
 - **SQL mới phải có integration test trên Postgres thật — mock không bắt được lỗi kiểu tham số** — offboard tenant 500 từ ngày viết vì `$1` dùng cho cả cột varchar và text (`AmbiguousParameterError`); unit test mock pass (S229, AA-741 #658). Bắt bằng: endpoint ghi DB mới → test trong `tests/integration/` gọi đúng hàm với pool thật.
 - **Đổi chữ ký hàm phải grep MỌI caller, kể cả caller bọc `try/except` fail-open** — #631 đổi `judge_units(units, sources: dict)`, `brand_audit_node` vẫn truyền `str` → lỗi bị nuốt, Jev không bao giờ chạy cho bữa ăn (S229, #655); test mock `judge_units` nên không lộ. Bắt bằng: hàm nhận kiểu cụ thể thì `raise TypeError` khi sai kiểu, trước mọi `try`.
 
@@ -51,6 +52,9 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Mặc định an toàn trong code (`SAFE_DEFAULTS`) phải tự chạy được khi DB/catalog sập** — model tra qua catalog DB bị bỏ qua "not in catalog" lúc DB lỗi; muốn ưu tiên Bedrock thì để route Luna trước và giữ key legacy (GPT-4.1) cuối chuỗi, không thay hẳn (S222, #617). Bắt bằng: unit test `get_model_sync → None` vẫn ra kết quả.
 
 ## Pipeline và chất lượng
+- **Bước LLM làm giàu dữ liệu (enrichment) phải có cache âm + gom theo khoá trước khi gọi + model rẻ** — S233 place card: 169 lần gọi Sonnet ($1,24) ra 74 thẻ; atom chung chung/bị từ chối bị soạn lại ở mỗi job T8/T9, cùng địa danh soạn nhiều lần. Bắt bằng: đếm lời gọi/kết quả trong `llm_call_log` sau lượt đầu; tỷ lệ > 1,2 là có lặp.
+- **Keyword DFS là chuỗi truy vấn thô, không được ép nguyên văn vào title/meta** — S233: "khovsgol and gobi tour mongolia price/reviews" ép vào title ra "Price of Memory", F4 chặn 6/8 blog; sửa bằng kiểm độ phủ từ + chỉ chọn keyword khớp địa danh của bài (#682–#685). Bắt bằng: test `choose_keyword`/`keyword_covered`.
+- **LLM đếm ký tự kém: đặt đích thấp hơn band của gate** — S233: đích meta 140–155 ra 157–185 qua 29 lời gọi fit; đích 130–145 → 139–154 (#686).
 
 - Regenerate không cứu được lỗi nằm ở input (raw nghèo) hay prompt (writer tone) — AA-724.
 - **Tham số gửi cho model phải kiểm ở request thật, không chỉ ở LLMRequest** — `S1_WRITER_TEMPERATURE=0.4` không có tác dụng vì cả hai đường Claude native (`_call_bedrock`, `invoke_claude`) dựng body không có `temperature`; arm "0.4" thực chất là arm mặc định (S224, #643). Bắt bằng: unit test assert body gửi Bedrock có/không có tham số; trước A/B một tham số, log request thật 1 lần.
