@@ -69,7 +69,25 @@
 ## Linear
 - **AA-769 Done.** AA-768, AA-771, AA-772 In Progress (đã comment bằng chứng + phần còn lại). AA-763 vẫn chờ job S1.
 
+## Phần cuối phiên (sau báo cáo)
+- **Gộp thẻ trùng** (Nghiệp duyệt): snapshot S3 → 8 nhóm / 11 thẻ gộp qua endpoint merge (audit) + xoá 1 thẻ mồ côi
+  (transaction, audit) → verify độc lập: thẻ 122 → 110, atom có thẻ 146 → 146, alias 361 → 371, còn 0 nhóm trùng.
+- **Jev trục T tắt hẳn** (Nghiệp duyệt): 9 câu hỏi T → `off` qua admin API; `jev_tenant_allowlist` 4 → 0 (backup S3).
+  A-series giữ enforce (~72k phán quyết/14 ngày). Rủi ro: ~48k lỗi 402 trên A-series/14 ngày.
+- **Báo cáo chi tiết** (`docs/audits/2026-10-13-S234-t-series-rounds/08`–`11`): cách T9 viết bài + 26 gate, thống kê
+  lỗi/retry từ DB (F9 47→15 bài, sửa câu cứu 49%, 20% retry làm hỏng thêm, judge F9 gắn cờ lại câu không đổi ở 10/15
+  bài bị hoàn tác), so sánh repo chị Thư, audit Jev, kế hoạch issue + prompt dán sẵn, thiết kế đội agent.
+- **Linear:** tạo AA-773…AA-784 (issue con của AA-768/771/772/729) theo kế hoạch 09; comment AA-756 (Jev).
+- **Quy trình:** định dạng commit `Refs AA-xxx` (sửa `~/.claude/CLAUDE.md`); hook `.claude/hooks/subagent-guardrails.sh`
+  chặn agent con push/merge/deploy (khoá theo `agent_id`, verify live); orchestrator được `gh pr merge` khi auto mode;
+  nới "CIS trước" cho chế độ nhiều làn.
+
 ## Việc phiên sau (S235)
+**S235 = thử nghiệm đội agent nhiều làn** — kế hoạch: `docs/audits/2026-10-13-S234-t-series-rounds/11-next-session-team-pilot.md`
+(làn A CIS backend AA-776/773/774/775/778/780 + đo r5; làn B portal; làn C **Booking từ đầu** sau review tài liệu; làn D docs;
+agent kiến trúc sư hệ sinh thái review trước và trước merge).
+
+### Danh sách cũ (đã chuyển thành issue AA-773…AA-784)
 1. Nghiệp duyệt gộp 8 nhóm thẻ trùng + xoá thẻ mồ côi (DRY RUN có sẵn) → chạy theo destructive-ops.
 2. Writer blog: cờ `optional` đi từ seed tới writer + kiểm sau viết; chặn hứa hẹn nhịp/độ khó không có trong seed; FAQ
    answer phải chứa chủ thể câu hỏi.
