@@ -40,4 +40,5 @@ Hard-error totals are re-measured with `measure_r4.py` on every set, so they dif
 - `09-next-step-plan.md` — concrete next-step plan: issues, paste-ready prompt changes, builds, Jev actions, measurement targets.
 - `10-agent-team-design.md` — multi-app agent team: feasibility, roles, protocol, pilot for the next session.
 - `11-next-session-team-pilot.md` — what Nghiệp approved for S235 (lanes, architect agent, Booking bootstrap, guardrails).
+- `12-gates-t2-tenants.md` — evaluation of all T9 gates vs the panel (keep/tune/merge/drop/new), why T2 scores are low (root causes + fixes), metric-by-metric audit and redesign of /admin/tenants, 15 PROPOSED issues for S235.
 - Scratch (not committed): `.tmp-session/s234/` — pieces_r{1..4}.json, measure scripts, panel raw votes.

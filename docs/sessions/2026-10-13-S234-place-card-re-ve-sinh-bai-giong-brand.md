@@ -82,6 +82,8 @@
   chặn agent con push/merge/deploy (khoá theo `agent_id`, verify live); orchestrator được `gh pr merge` khi auto mode;
   nới "CIS trước" cho chế độ nhiều làn.
 
+- **Câu hỏi cuối của Nghiệp** (gate, T2 điểm thấp, trang /admin/tenants) → điều tra read-only, báo cáo `12-gates-t2-tenants.md` + 15 issue ĐỀ XUẤT (chưa tạo, chờ duyệt).
+
 ## Việc phiên sau (S235)
 **S235 = thử nghiệm đội agent nhiều làn** — kế hoạch: `docs/audits/2026-10-13-S234-t-series-rounds/11-next-session-team-pilot.md`
 (làn A CIS backend AA-776/773/774/775/778/780 + đo r5; làn B portal; làn C **Booking từ đầu** sau review tài liệu; làn D docs;
