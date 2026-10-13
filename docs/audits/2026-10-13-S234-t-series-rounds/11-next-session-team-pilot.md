@@ -30,8 +30,8 @@ lane plan for S235. Language for the session: Vietnamese with Nghiệp; English 
 ## Lanes for S235
 | Lane | Repo | Issues | Merge path |
 |---|---|---|---|
-| A — CIS backend (serial on hot files) | AA-CIS-App | AA-776 (XS bug), AA-773, AA-774, AA-775, AA-778, AA-780 → checkpoint r5 (≈$1.15, one paid window) | orchestrator train, one PR at a time, no merge while `shared.job` busy |
-| B — CIS portal (parallel) | AA-CIS-App `frontend/` | small admin items (e.g. Place cards per-country progress for AA-784, Content Quality polish) | frontend-only PRs merge any time |
+| A — CIS backend (serial on hot files) | AA-CIS-App | **AA-792 (T2 tenant-voice prompt, Urgent)** + AA-794 (T2 meta) → T2 rerun 14 pairs (≤$5, approved); AA-785 (F1 years), AA-786 (F9 v1.1), AA-776, AA-773, AA-774, AA-775 → checkpoint r5 (≈$1.15) | orchestrator train, one PR at a time, no merge while `shared.job` busy |
+| B — CIS portal (parallel) | AA-CIS-App `frontend/` + admin API | AA-797 (tenant admin bugs + plan_id), AA-796 (AA-770 compliance for T2), AA-798 (real billing cost) → AA-766 Tenant 360 redesign (multi-session) | frontend-only PRs merge any time |
 | C — Booking bootstrap (parallel, after doc review + architect) | new `AA-Booking` repo + AA-CIS-Infra | repo scaffold + CI + branch protection; Infra (ECR, ECS service, OIDC, DB role `booking`, API route); `bk-001` from ERD v2; health endpoint | Infra PR + DB Migrate need Nghiệp's approval (batched); repo creation is orchestrator-only |
 | D — docs (parallel) | AA-Ecosys | Booking stack ADR, stale-doc fixes, ecosystem diagram update | root PR, orchestrator merges |
 
@@ -51,3 +51,10 @@ TripPlanner is not a lane in S235 (pilot 2 if S235 meets the criteria).
 - ≥6 issues Done (baseline 3–5), Booking repo + CI green + `bk-001` applied on Dev (or a written blocker).
 - 0 rebases caused by shared files; 0 false Done; Nghiệp approvals ≤5 batches.
 - Orchestrator context not compacted (or recovered from the journal); LLM spend ≤$10 recorded.
+
+## Added at the very end of S234 (Nghiệp approved all 5)
+- 14 issues AA-785…AA-798 from `12-gates-t2-tenants.md`; AA-766 scope extended (Tenant 360 redesign).
+- T2 must have its **own prompt that writes in the tenant's brand** (AA-792, Urgent) — the tenant's product.
+- `promises_an_option` drop approved (AA-787, ADR note). T2 rerun ≤$5 approved (verify AA-792/793/794).
+- plan_id backfill for 5 tenants approved — script `.tmp-session/s234/planid_apply.py` (auto mode blocked it in S234; run at Gate 0 if not done).
+- Human labelling: Nghiệp labels 40 pieces with `label-pack/HUONG-DAN-CHAM.md` + `S234-label-40.xlsx` (AA-783).
