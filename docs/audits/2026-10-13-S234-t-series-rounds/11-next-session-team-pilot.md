@@ -56,5 +56,5 @@ TripPlanner is not a lane in S235 (pilot 2 if S235 meets the criteria).
 - 14 issues AA-785…AA-798 from `12-gates-t2-tenants.md`; AA-766 scope extended (Tenant 360 redesign).
 - T2 must have its **own prompt that writes in the tenant's brand** (AA-792, Urgent) — the tenant's product.
 - `promises_an_option` drop approved (AA-787, ADR note). T2 rerun ≤$5 approved (verify AA-792/793/794).
-- plan_id backfill for 5 tenants approved — script `.tmp-session/s234/planid_apply.py` (auto mode blocked it in S234; run at Gate 0 if not done).
+- plan_id backfill for 5 tenants: **done at the end of S234** (transaction + audit; 0 tenants with NULL plan_id).
 - Human labelling: Nghiệp labels 40 pieces with `label-pack/HUONG-DAN-CHAM.md` + `S234-label-40.xlsx` (AA-783).
