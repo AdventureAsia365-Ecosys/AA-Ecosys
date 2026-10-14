@@ -1,0 +1,2739 @@
+{
+ "sets": [
+  {
+   "label": "r4",
+   "pieces": [
+    {
+     "idx": 0,
+     "piece_id": "49ed3642-30d5-4696-a228-479c017665a7",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate woodcarving, paintings",
+       "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.030136,
+     "has_ledger": true,
+     "f1_year_forms": [
+      "sentence states ['38'] not present in the content seed: 'When Zhabdrung Ngawang Namgyal founded the dzong in 1637–38, the confluence was not simply a dramati'"
+     ],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 1,
+     "piece_id": "91e4b9d2-157a-4a5f-90b3-332b6d9f5338",
+     "tenant": "WildKind Travel",
+     "t": "WildKind",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate woodcarving, paintings",
+       "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.035975,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 2,
+     "piece_id": "1376c2c3-7560-4394-bed8-97063f4d5564",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [
+      "Terra Family Expeditions plans trips where days like this are thought through from the start — pacing, cultural expectations, and all."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('pacing') — cut it, or say only what the source says: 'Terra Family Expeditions plans trips where days like this are thought through from the start — pacing, cultural expectations, and all.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The hike to the monastery from the base-area car park follows a forested trail and takes most visitors roughly two to th",
+       "Visitors must leave cameras and bags at a checkpoint before entering the inner temples, and modest, respectful dress is "
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.021951,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 3,
+     "piece_id": "7c8bc7df-5de4-402b-8ffc-2b3b72afc67a",
+     "tenant": "Trail Pulse",
+     "t": "Trail",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [
+      "Swim time and rest time, built in deliberately, not offered as a consolation if someone gets tired.",
+      "Trail Pulse is built on the idea that energy lasts longer when a trip is paced honestly — movement and rest designed together, not movement until you stop."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('paced') — cut it, or say only what the source says: 'Trail Pulse is built on the idea that energy lasts longer when a trip is paced honestly — movement and rest designed together, not movement until you stop.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "A bear rescue centre operated by Free the Bears is located at the entrance to the falls area, housing rescued Asiatic bl",
+       "Visitors can swim in the lower tiered pools; the upper reaches and the main falls themselves are generally off-limits fo",
+       "Trails lead up alongside the falls to viewpoints at the top, passing through forest.",
+       "The road from Luang Prabang to the falls is paved and passes through rural villages and rice paddies.",
+       "Water levels and flow are strongest during and just after the rainy season (roughly May to October), while the dry seaso"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.022687,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 4,
+     "piece_id": "3fd85285-7010-4338-9172-34d4acbe4b0a",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F9_cta_fact"
+     ],
+     "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Overnight is in a standard ger — the traditional Mongolian round dwelling — giving families their first experience of camp life before the main days at the lake.\" (claims: The Sod Camp overnight is the family's first experience of camp life.; source: The source states that the group arrives at Sod Camp, stays overnight in a standard ger camp, and later continues to Lake Khövsgöl. It does not state that this is the family's first experience of camp life.)",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [
+      "Access to the taiga camps requires a permit issued through the local district government office in Tsagaannuur."
+     ],
+     "pace_sentences": [
+      "Each of these activities operates at a different pace and asks something different of each family member — the boat rides offer a sense of the lake's scale, the horseback riding covers ground across the terrain that rings it, and the shoreline and forest treks bring the steppe-taiga boundary into direct, physical contact."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('pace') — cut it, or say only what the source says: 'Each of these activities operates at a different pace and asks something different of each family member — the boat rides offer a sense of the lake's scale, the horseback riding covers ground across the terrain that rings it, and the shoreline and forest treks bring the steppe-taiga boundary into di'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on foot.",
+       "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of th",
+       "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry poin",
+       "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outs",
+       "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continental subarctic climate",
+       "Visitors typically arrive via the nearby town of Khatgal at the lake's southern tip, which serves as the main gateway an",
+       "Summers are short and cool; sudden storms can arise quickly on the lake, making navigation in small boats potentially ha",
+       "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic ",
+       "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for",
+       "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (distric"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": true
+     },
+     "cost_usd": 0.108922,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {
+       "fact_check": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": true,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 5,
+     "piece_id": "bb776a54-93cc-4f10-a108-6e26f9f05324",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F17_trip_fact"
+     ],
+     "held_reason": "F17_trip_fact: closes on a thin moment (one source fact) with an interpretation the source does not give — say it in one plain sentence, or cut the added clause: 'The journey through this section of northern Mongolia includes a visit to the ruins of a monastery destroyed during the political purges of 1937.'",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [
+      "Access to the eastern and western taiga camps requires a permit issued through the local district government office in Tsagaannuur."
+     ],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on foot.",
+       "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of th",
+       "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry poin",
+       "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outs",
+       "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continental subarctic climate",
+       "Visitors typically arrive via the nearby town of Khatgal at the lake's southern tip, which serves as the main gateway an",
+       "Summers are short and cool; sudden storms can arise quickly on the lake, making navigation in small boats potentially ha",
+       "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic ",
+       "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for",
+       "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (distric"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": true
+     },
+     "cost_usd": 0.094598,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": true,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 6,
+     "piece_id": "71ad6b1f-9eb5-4509-915c-5c7644a5b71a",
+     "tenant": "Trail Pulse",
+     "t": "Trail",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [
+      "Planning a trip well means building in rest before you need it — not scrambling to add it later.",
+      "The itinerary keeps you there — time to swim, time to rest — before lunch at the View Café overlooking the cascade.",
+      "If you want to see how the rest of the pacing holds up, get the full Trail Pulse itinerary and dates."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('pacing') — cut it, or say only what the source says: 'If you want to see how the rest of the pacing holds up, get the full Trail Pulse itinerary and dates.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "A bear rescue centre operated by Free the Bears is located at the entrance to the falls area, housing rescued Asiatic bl",
+       "Visitors can swim in the lower tiered pools; the upper reaches and the main falls themselves are generally off-limits fo",
+       "Trails lead up alongside the falls to viewpoints at the top, passing through forest.",
+       "The road from Luang Prabang to the falls is paved and passes through rural villages and rice paddies.",
+       "Water levels and flow are strongest during and just after the rainy season (roughly May to October), while the dry seaso"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.019071,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "(none)",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 7,
+     "piece_id": "6961b261-6956-4b66-b563-9d34b8f8b5da",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [
+      "For a family, that means the day needs honest pacing — not rushing the ascent, building in rest, and arriving at the checkpoint prepared rather than scrambling."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('pacing') — cut it, or say only what the source says: 'For a family, that means the day needs honest pacing — not rushing the ascent, building in rest, and arriving at the checkpoint prepared rather than scrambling.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The hike to the monastery from the base-area car park follows a forested trail and takes most visitors roughly two to th",
+       "Visitors must leave cameras and bags at a checkpoint before entering the inner temples, and modest, respectful dress is "
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.017632,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 8,
+     "piece_id": "e980728e-f77a-47ba-8b59-0b63a28e301c",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "linkedin",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F9_cta_fact"
+     ],
+     "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"The wooden cantilever bridge connecting the dzong to solid ground makes the logic visible: the site is defined by water on three sides, and the bridge is the single point of passage between land and fortress.\" (claims: The bridge is the single point of passage between land and fortress, and the site is defined by water on three sides.; source: The source confirms that the dzong spans a peninsula between two rivers and is connected to land by a wooden cantilever bridge, but it does not explicitly establish that the bridge is the single point of passage or that the site is surrounded by water on exactly three sides.)",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate woodcarving, paintings",
+       "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.031257,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {
+       "fact_check": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": true
+    },
+    {
+     "idx": 9,
+     "piece_id": "d8990697-4227-4ddc-9541-793c8ae59993",
+     "tenant": "WildKind Travel",
+     "t": "WildKind",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate woodcarving, paintings",
+       "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.028395,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 10,
+     "piece_id": "68a56edf-32df-477c-b0c1-2413a1360472",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 1,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [
+      "For families with children, the pace matters as much as the destination.",
+      "Terra Family Expeditions plans trips around the real details — cultural protocols, physical demands, and the natural pace of a family moving through a place with care."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('pace') — cut it, or say only what the source says: 'For families with children, the pace matters as much as the destination.'",
+      "states a pace or rest promise the source does not make ('pace') — cut it, or say only what the source says: 'Terra Family Expeditions plans trips around the real details — cultural protocols, physical demands, and the natural pace of a family moving through a place with care.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The hike to the monastery from the base-area car park follows a forested trail and takes most visitors roughly two to th",
+       "Visitors must leave cameras and bags at a checkpoint before entering the inner temples, and modest, respectful dress is "
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.015105,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 11,
+     "piece_id": "6599b514-4fbb-4c45-ba22-f29b234e4143",
+     "tenant": "Trail Pulse",
+     "t": "Trail",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [
+      "Swim time is already written into Day 2, with space to rest before lunch.",
+      "That is where the itinerary keeps you, with time set aside to swim and rest before lunch."
+     ],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "A bear rescue centre operated by Free the Bears is located at the entrance to the falls area, housing rescued Asiatic bl",
+       "Visitors can swim in the lower tiered pools; the upper reaches and the main falls themselves are generally off-limits fo",
+       "Trails lead up alongside the falls to viewpoints at the top, passing through forest.",
+       "The road from Luang Prabang to the falls is paved and passes through rural villages and rice paddies.",
+       "Water levels and flow are strongest during and just after the rainy season (roughly May to October), while the dry seaso"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.029708,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 12,
+     "piece_id": "bf00c670-4496-409c-b8ef-9938c339685c",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "linkedin",
+     "status": "held",
+     "attempt": 2,
+     "failed": [
+      "F9_cta_fact"
+     ],
+     "held_reason": "F9_cta_fact: audit flagged: The piece is generally elegant, specific, and aligned with the Atlas & Hearth voice. However, the sentence 'where the context arrived with shapes everything encountered after' is grammatically malformed and unclear, which prevents a full human-read score.",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate woodcarving, paintings",
+       "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.024048,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {
+       "other": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": true
+    },
+    {
+     "idx": 13,
+     "piece_id": "e61ad7bc-6684-49d9-9727-cafec9de28b8",
+     "tenant": "WildKind Travel",
+     "t": "WildKind",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate woodcarving, paintings",
+       "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.036821,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 14,
+     "piece_id": "67f08753-4c50-4962-a8bd-10224ac2df78",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F9_cta_fact"
+     ],
+     "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"For a family travelling through this region, that boundary is not an abstraction. It is something you cross — on foot, and by boat, and optionally on horseback — across a sequence of days that moves gradually deeper into the taiga and the lives of the people who have always called it home.\" (claims: Travellers physically cross the steppe-taiga boundary on foot, by boat, and optionally on horseback over a gradual sequence of days.; source: The SOURCE supports visiting the ecological boundary and separately lists boating, horseback riding, and trekking as activities, but it does not state that travellers cross the boundary itself or that these activities form a gradual crossing over successive days.); \"The descent from open green steppe, past patches of forest, and down into the dark volcanic rock of the cone makes the earth's deep history tangible in a way that no diagram or photograph quite replicates.\" (claims: The descent route passes from open steppe through forest patches and into dark volcanic rock.; source: The SOURCE describes a surrounding landscape combining steppe, forest patches, and dark volcanic rock, and says visitors can walk down into the caldera, but it does not describe this specific route sequence or what travellers pass during the descent.)",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [
+      "The territory lies deep in the taiga, and access to the eastern and western taiga camps requires a permit issued through the local district government office in Tsagaannuur."
+     ],
+     "pace_sentences": [
+      "The structure of days in this region gives families room to move and room to pause, without the schedule tipping into either idleness or exhaustion.",
+      "The overnight at Sod Camp settles the pace."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('exhaustion') — cut it, or say only what the source says: 'The structure of days in this region gives families room to move and room to pause, without the schedule tipping into either idleness or exhaustion.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on foot.",
+       "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of th",
+       "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry poin",
+       "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outs",
+       "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continental subarctic climate",
+       "Visitors typically arrive via the nearby town of Khatgal at the lake's southern tip, which serves as the main gateway an",
+       "Summers are short and cool; sudden storms can arise quickly on the lake, making navigation in small boats potentially ha",
+       "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic ",
+       "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for",
+       "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (distric"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": true
+     },
+     "cost_usd": 0.118674,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {
+       "fact_check": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": true,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 15,
+     "piece_id": "9594430b-93c7-425d-ac19-9dde2c33fe88",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F17_trip_fact"
+     ],
+     "held_reason": "F17_trip_fact: closes on a thin moment (one source fact) with an interpretation the source does not give — say it in one plain sentence, or cut the added clause: 'The journey through this part of northern Mongolia includes a visit to the ruins of an ancient monastery destroyed during the political purges of 1937.'",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [
+      "Access to the taiga camps requires a permit issued through the local district government office in Tsagaannuur."
+     ],
+     "pace_sentences": [
+      "Northern Mongolia from Bulgan Province to the Tsaatan taiga is a journey that rewards careful planning and a considered pace."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('pace') — cut it, or say only what the source says: 'Northern Mongolia from Bulgan Province to the Tsaatan taiga is a journey that rewards careful planning and a considered pace.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on foot.",
+       "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of th",
+       "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry poin",
+       "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outs",
+       "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continental subarctic climate",
+       "Visitors typically arrive via the nearby town of Khatgal at the lake's southern tip, which serves as the main gateway an",
+       "Summers are short and cool; sudden storms can arise quickly on the lake, making navigation in small boats potentially ha",
+       "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic ",
+       "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for",
+       "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (distric"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": true
+     },
+     "cost_usd": 0.094885,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": true,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 16,
+     "piece_id": "2fc0a2fb-7708-4a38-a3b5-b1275c1e3089",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "blog",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [
+      "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.",
+      "Access to the taiga camps requires a permit issued through the local district government office in Tsagaannuur."
+     ],
+     "pace_sentences": [
+      "The days here are full without being relentless, and the variety keeps the pace from flattening out.",
+      "Terra Family Expeditions designs journeys like this one for families who want active, educational travel with the structure and safety that makes it manageable for everyone."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('relentless') — cut it, or say only what the source says: 'The days here are full without being relentless, and the variety keeps the pace from flattening out.'",
+      "states a pace or rest promise the source does not make ('manageable') — cut it, or say only what the source says: 'Terra Family Expeditions designs journeys like this one for families who want active, educational travel with the structure and safety that makes it manageable for everyone.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on foot.",
+       "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of th",
+       "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry poin",
+       "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outs",
+       "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continental subarctic climate",
+       "Visitors typically arrive via the nearby town of Khatgal at the lake's southern tip, which serves as the main gateway an",
+       "Summers are short and cool; sudden storms can arise quickly on the lake, making navigation in small boats potentially ha",
+       "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic ",
+       "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for",
+       "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (distric"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": true
+     },
+     "cost_usd": 0.114519,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": true,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 17,
+     "piece_id": "9b65bd97-0e42-4ceb-96c3-2e50c3bb8058",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F9_cta_fact",
+      "F13_repeat"
+     ],
+     "held_reason": "F13_repeat: says again what an earlier sentence says — cut it or say something new: 'The lake holds an estimated seventy percent of Mongolia's fresh water and roughly 0.4 percent of the world's fresh surface water.'",
+     "hard_total": 2,
+     "hard_counts": {
+      "repeat": 2,
+      "x_journey_end": 1
+     },
+     "permit_sentences": [
+      "Access to the camps requires a permit issued through the local district government office at Tsagaannuur."
+     ],
+     "pace_sentences": [
+      "Each stop speaks to the same underlying geography — a corner of the country where ecological and cultural conditions from two very different worlds have come together, and where slow, attentive travel is the only pace that does it justice."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('pace') — cut it, or say only what the source says: 'Each stop speaks to the same underlying geography — a corner of the country where ecological and cultural conditions from two very different worlds have come together, and where slow, attentive travel is the only pace that does it justice.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on foot.",
+       "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of th",
+       "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry poin",
+       "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outs",
+       "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continental subarctic climate",
+       "Visitors typically arrive via the nearby town of Khatgal at the lake's southern tip, which serves as the main gateway an",
+       "Summers are short and cool; sudden storms can arise quickly on the lake, making navigation in small boats potentially ha",
+       "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic ",
+       "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for",
+       "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (distric"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": true
+     },
+     "cost_usd": 0.108778,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {
+       "fact_check": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": true,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 18,
+     "piece_id": "4c2bb8c1-dfaf-4369-b349-36bde9e9e5c9",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F9_cta_fact"
+     ],
+     "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Children can see the line between worlds, which makes it far more memorable than a number on a signpost.\" (claims: Children can visibly see a distinct line between the steppe and taiga, and this makes the experience more memorable.; source: The SOURCE supports that Lake Khövsgöl lies in an ecological transition zone between steppe and taiga and that the area has unusually high biodiversity, but it does not state that children can see a literal line between the biomes or that this makes the experience more memorable.)",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [
+      "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.",
+      "Access to the eastern and western taiga camps requires a permit issued through the local district government office in Tsagaannuur."
+     ],
+     "pace_sentences": [
+      "Terra Family Expeditions builds journeys so that active discovery is balanced with time to rest, giving both children and parents space to absorb what they are actually seeing."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('balanced') — cut it, or say only what the source says: 'Terra Family Expeditions builds journeys so that active discovery is balanced with time to rest, giving both children and parents space to absorb what they are actually seeing.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on foot.",
+       "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of th",
+       "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry poin",
+       "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outs",
+       "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continental subarctic climate",
+       "Visitors typically arrive via the nearby town of Khatgal at the lake's southern tip, which serves as the main gateway an",
+       "Summers are short and cool; sudden storms can arise quickly on the lake, making navigation in small boats potentially ha",
+       "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic ",
+       "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for",
+       "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (distric"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": true
+     },
+     "cost_usd": 0.10992,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {
+       "fact_check": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": true,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 19,
+     "piece_id": "5939df86-f8d4-491e-affc-348d0618ddcd",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F17_trip_fact"
+     ],
+     "held_reason": "F17_trip_fact: closes on a thin moment (one source fact) with an interpretation the source does not give — say it in one plain sentence, or cut the added clause: 'The journey through the lake region passes the ruins of an ancient monastery destroyed during the political purges of 1937.'",
+     "hard_total": 2,
+     "hard_counts": {
+      "repeat": 2
+     },
+     "permit_sentences": [
+      "Access to the taiga camps where the Tsaatan live requires a permit issued through the local district government office in Tsagaannuur."
+     ],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [
+       "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on foot.",
+       "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of th",
+       "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry poin",
+       "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outs",
+       "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continental subarctic climate",
+       "Visitors typically arrive via the nearby town of Khatgal at the lake's southern tip, which serves as the main gateway an",
+       "Summers are short and cool; sudden storms can arise quickly on the lake, making navigation in small boats potentially ha",
+       "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic ",
+       "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for",
+       "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (distric"
+      ],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": true
+     },
+     "cost_usd": 0.082505,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": true,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    }
+   ],
+   "summary": {
+    "n": 20,
+    "blogs": 8,
+    "linkedin": 12,
+    "approved": 11,
+    "held": 9,
+    "failed": 0,
+    "blog_held": "7/8",
+    "li_held": "2/12",
+    "hard_errors_core": 4,
+    "pieces_clean_core": 18,
+    "permit_blogs": "8/8",
+    "permit_sentences": 10,
+    "pace_sentences_by_tenant": {
+     "A&H": 2,
+     "WildKind": 0,
+     "Terra": 10,
+     "Trail": 7
+    },
+    "pace_sentences_by_cell": {
+     "A&H linkedin": 0,
+     "WildKind linkedin": 0,
+     "Terra linkedin": 4,
+     "Trail linkedin": 7,
+     "Terra blog": 6,
+     "A&H blog": 2
+    },
+    "pace_wired_offline_blog": 7,
+    "optional_as_fixed_offline_blogs": "0/8",
+    "optional_as_fixed_offline_sentences": 0,
+    "seed_practical_bullets": 113,
+    "seed_kind_source": [
+     "place_card kinds"
+    ],
+    "blogs_with_status_offered": "0/8",
+    "li_with_status_offered": "0/12",
+    "cost_total": 1.1456,
+    "cost_mean_blog": 0.1041,
+    "cost_mean_li": 0.0261,
+    "ledger_pieces": 20,
+    "f1_year_form_hits": 1,
+    "f9_failed_final": 6,
+    "f9_classes_final": {
+     "fact_check": 5,
+     "other": 1
+    },
+    "f9_citation_notes": 0,
+    "f9_prompt_versions": [],
+    "f9_judge_tagged_calls": 0,
+    "f9_waived": 0,
+    "li_held_on_f9": 2,
+    "li_held_on_f9_with_sentences_left": 0,
+    "repair_modes": {
+     "sentences": 32,
+     "(none)": 13
+    },
+    "f4_only_entries": 0,
+    "f4_only_seo_fields": 0,
+    "f4_only_not_seo": [],
+    "f17_optional_as_plan_final": 0,
+    "f17_optional_as_plan_pieces": 0,
+    "f17_pace_promise_final": 0,
+    "promises_an_option_blogs": "8/8",
+    "held_only_on_pace": 0,
+    "li_pace_promise_in_ledger": 0
+   }
+  },
+  {
+   "label": "r5",
+   "pieces": [
+    {
+     "idx": 0,
+     "piece_id": "d075fa29-983c-4587-ac0f-8a2707cc90e8",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "linkedin",
+     "status": "held",
+     "attempt": 2,
+     "failed": [
+      "F9_cta_fact"
+     ],
+     "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"#PadiDistrict\" (claims: The destination is associated with Padi District.; source: The source identifies the location as Paro District, Bhutan, and does not mention Padi District.)",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.027254,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": 0,
+      "sentences_left": [
+       "#PadiDistrict"
+      ],
+      "classes": {
+       "fact_check": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "(none)",
+       "f9_cut_refused"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": true
+    },
+    {
+     "idx": 1,
+     "piece_id": "fb086ed1-f6af-4cc6-b360-98918e835292",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "blog",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {
+      "x_journey_end": 1
+     },
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 3,
+      "status_included_lines": 3,
+      "seed_permit": true
+     },
+     "cost_usd": 0.102895,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 2,
+     "piece_id": "22f7d8d5-4748-4066-9eae-e6b9fb42e2f3",
+     "tenant": "Trail Pulse",
+     "t": "Trail",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [
+      "Kuang Si Falls is already on Day 2 — swim time built in, rest included, before lunch.",
+      "Time is set aside to swim and rest in those pools before lunch at the View Café overlooking the cascade.",
+      "That's an operator who understands pacing — who knows that active days land better when recovery is part of the design, not a last-minute addition.",
+      "Day 2 at Kuang Si Falls shows how active travel works best: a trek to the falls is balanced with time to swim and rest before lunch, so energy and recovery move together.",
+      "Get the full Trail Pulse itinerary and dates to see how the rest of the trip is structured."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('pacing') — cut it, or say only what the source says: 'That's an operator who understands pacing — who knows that active days land better when recovery is part of the design, not a last-minute addition.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.021022,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 3,
+     "piece_id": "83df67f9-7775-4eb5-9485-46453923906f",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F9_cta_fact"
+     ],
+     "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"In geological terms, that is a recent event — the crater floor has had time to soften into green growth, but the dark volcanic rock of the cone remains, creating a striking contrast with the open steppe grasslands and patches of forest that surround it.\" (claims: The crater floor has softened into green growth.; source: The SOURCE supports green steppe grasslands, patches of forest, and dark volcanic rock surrounding Uran Togoo, but it does not state that the crater floor has green growth.); \"The excursions to Tsaatan settlements included in this journey are an encounter with a culture that is actively navigating those pressures — not a performance of tradition, but the real and continuing life of one of Mongolia's most distinct indigenous communities.\" (claims: The Tsaatan excursions are not a performance of tradition and present the community's real and continuing life.; source: The SOURCE supports that the excursions are included and that the Tsaatan community faces the listed social and economic pressures, but it does not characterize the excursions as non-performative or verify the nature of the visitor encounter.)",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 3,
+      "status_included_lines": 3,
+      "seed_permit": true
+     },
+     "cost_usd": 0.094671,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {
+       "fact_check": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 4,
+     "piece_id": "db4cf81e-d5a2-4ddf-8529-7c180259ba4d",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.028911,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 5,
+     "piece_id": "bfb3456e-1fe8-4466-9bc7-691c3291e380",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F9_cta_fact"
+     ],
+     "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Day four brings a stop for lunch in Mörön, the capital of Khövsgöl Province and the main hub for travellers heading north toward the lake.\" (claims: The itinerary's day-four lunch stop takes place in Mörön.; source: The source itinerary says to stop for lunch near Moron, not in Mörön. The source does support that Mörön is the capital and a gateway town.)",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [
+      "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain."
+     ],
+     "pace_sentences": [
+      "The pace across these two lake days is deliberately unhurried."
+     ],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 3,
+      "status_included_lines": 3,
+      "seed_permit": true
+     },
+     "cost_usd": 0.111201,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {
+       "fact_check": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 6,
+     "piece_id": "d46c030b-1be6-4618-858a-840319481de8",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 1,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.016529,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 7,
+     "piece_id": "adc2cd04-14ca-4cee-bf54-e88946301e31",
+     "tenant": "Trail Pulse",
+     "t": "Trail",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 1,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [
+      "A lot of trips treat rest as something you negotiate for.",
+      "Rest built into the structure is how that actually happens."
+     ],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.0131,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 8,
+     "piece_id": "a1e1f1f4-2b2b-44ba-ba76-8e91641ce435",
+     "tenant": "WildKind Travel",
+     "t": "WildKind",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.022653,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 9,
+     "piece_id": "a8f147e9-a9bd-436f-86d1-87ef1fcf8b99",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.019919,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 10,
+     "piece_id": "ad01f4b5-937c-42f9-96c2-afc3c319bad3",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.025926,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 11,
+     "piece_id": "ea9786a6-4733-4f98-8d0f-97727c1bc740",
+     "tenant": "Trail Pulse",
+     "t": "Trail",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [
+      "Good trip planning is invisible — you only notice it when the rest was already there before you needed it.",
+      "What makes this work as a day isn't the destination alone — it's that swim and rest time is already built into the plan before lunch.",
+      "Get the full Trail Pulse itinerary and dates to see how the whole trip is paced."
+     ],
+     "pace_wired_offline": [
+      "states a pace or rest promise the source does not make ('paced') — cut it, or say only what the source says: 'Get the full Trail Pulse itinerary and dates to see how the whole trip is paced.'"
+     ],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.018769,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 12,
+     "piece_id": "7b4b75c1-6cdb-47d9-b4d8-7b6fe23903a8",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.032666,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 13,
+     "piece_id": "83d14812-c209-4690-a7a7-318d10ac152c",
+     "tenant": "WildKind Travel",
+     "t": "WildKind",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.021686,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 14,
+     "piece_id": "73035732-8541-4c22-806c-6d92da331cb7",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "blog",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 3,
+      "status_included_lines": 3,
+      "seed_permit": true
+     },
+     "cost_usd": 0.071311,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 15,
+     "piece_id": "bb53cb48-1fee-4f4e-95a9-f3dbc507feb2",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "blog",
+     "status": "held",
+     "attempt": 3,
+     "failed": [
+      "F9_cta_fact"
+     ],
+     "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"The included activity is trekking along the lake's shorelines and forest paths — a route that keeps the water in sight while moving through the taiga that surrounds it.\" (claims: The trekking route keeps the lake visible throughout.; source: The SOURCE supports trekking along shorelines and forest paths but does not state that the water remains in sight throughout the route.); \"The combination of lakeshore and forest trail means the terrain changes as the walk progresses, which tends to hold attention across a wider range of ages than a single-environment hike.\" (claims: The terrain changes as the walk progresses and the route holds attention across a wider range of ages.; source: The SOURCE identifies shoreline and forest-path trekking but does not provide these route details or support the claim about attention across age groups.); \"Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.\" (claims: Visiting the local nomadic families described in the preceding paragraph requires a multi-hour horse or reindeer ride across rivers and boggy forest.; source: The SOURCE gives this access information for Tsaatan settlements specifically, not for the separate optional visits to unspecified local nomadic families.)",
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [
+      "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain."
+     ],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 3,
+      "status_included_lines": 3,
+      "seed_permit": true
+     },
+     "cost_usd": 0.103324,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": true,
+      "blocking": true,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {
+       "fact_check": 1
+      },
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences",
+       "(none)"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 16,
+     "piece_id": "3d5631b1-1a6b-41ec-a350-c60b556c4adf",
+     "tenant": "WildKind Travel",
+     "t": "WildKind",
+     "channel": "linkedin",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 0,
+      "status_included_lines": 0,
+      "seed_permit": false
+     },
+     "cost_usd": 0.030178,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 17,
+     "piece_id": "ccb0843c-bb8d-4050-a6e9-2a163f8adb4b",
+     "tenant": "Atlas & Hearth",
+     "t": "A&H",
+     "channel": "blog",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 3,
+      "status_included_lines": 3,
+      "seed_permit": true
+     },
+     "cost_usd": 0.088537,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 18,
+     "piece_id": "206433a2-8998-4ecc-8797-165c19bd9510",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "blog",
+     "status": "approved",
+     "attempt": 2,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 2,
+     "hard_counts": {
+      "social_proof": 1,
+      "repeat": 1
+     },
+     "permit_sentences": [
+      "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain."
+     ],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 3,
+      "status_included_lines": 3,
+      "seed_permit": true
+     },
+     "cost_usd": 0.087767,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    },
+    {
+     "idx": 19,
+     "piece_id": "f810ddd0-c2d0-4199-8b29-5ae527d78f9a",
+     "tenant": "Terra Family Expeditions",
+     "t": "Terra",
+     "channel": "blog",
+     "status": "approved",
+     "attempt": 3,
+     "failed": [],
+     "held_reason": null,
+     "hard_total": 0,
+     "hard_counts": {},
+     "permit_sentences": [
+      "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain."
+     ],
+     "pace_sentences": [],
+     "pace_wired_offline": [],
+     "optional_as_fixed_offline": [],
+     "seed": {
+      "bg_practical_bullets": [],
+      "bg_kind_source": "place_card kinds",
+      "status_offered_lines": 3,
+      "status_included_lines": 3,
+      "seed_permit": true
+     },
+     "cost_usd": 0.093638,
+     "has_ledger": true,
+     "f1_year_forms": [],
+     "f9": {
+      "present": true,
+      "failed": false,
+      "blocking": false,
+      "waived": false,
+      "sentences_cut": null,
+      "sentences_left": null,
+      "classes": {},
+      "citation_notes": 0,
+      "prompt_versions": [
+       "f9_v1.1"
+      ],
+      "judge_tagged_calls": 0
+     },
+     "repair": {
+      "modes": [
+       "sentences",
+       "sentences"
+      ],
+      "f4_only": 0,
+      "f4_only_seo_fields": 0,
+      "f4_only_not_seo": [],
+      "f4_slug_only": 0
+     },
+     "f17_optional_as_plan": [],
+     "f17_pace_promise": [],
+     "promises_an_option": false,
+     "held_only_on_pace": false,
+     "li_held_f9": false
+    }
+   ],
+   "summary": {
+    "n": 20,
+    "blogs": 8,
+    "linkedin": 12,
+    "approved": 16,
+    "held": 4,
+    "failed": 0,
+    "blog_held": "3/8",
+    "li_held": "1/12",
+    "hard_errors_core": 2,
+    "pieces_clean_core": 19,
+    "permit_blogs": "4/8",
+    "permit_sentences": 4,
+    "pace_sentences_by_tenant": {
+     "Terra": 1,
+     "A&H": 0,
+     "Trail": 10,
+     "WildKind": 0
+    },
+    "pace_sentences_by_cell": {
+     "Terra linkedin": 0,
+     "A&H blog": 0,
+     "Trail linkedin": 10,
+     "A&H linkedin": 0,
+     "Terra blog": 1,
+     "WildKind linkedin": 0
+    },
+    "pace_wired_offline_blog": 0,
+    "optional_as_fixed_offline_blogs": "0/8",
+    "optional_as_fixed_offline_sentences": 0,
+    "seed_practical_bullets": 0,
+    "seed_kind_source": [
+     "place_card kinds"
+    ],
+    "blogs_with_status_offered": "8/8",
+    "li_with_status_offered": "0/12",
+    "cost_total": 1.032,
+    "cost_mean_blog": 0.0942,
+    "cost_mean_li": 0.0232,
+    "ledger_pieces": 20,
+    "f1_year_form_hits": 0,
+    "f9_failed_final": 4,
+    "f9_classes_final": {
+     "fact_check": 4
+    },
+    "f9_citation_notes": 0,
+    "f9_prompt_versions": [
+     "f9_v1.1"
+    ],
+    "f9_judge_tagged_calls": 0,
+    "f9_waived": 0,
+    "li_held_on_f9": 1,
+    "li_held_on_f9_with_sentences_left": 1,
+    "repair_modes": {
+     "sentences": 26,
+     "(none)": 4,
+     "f9_cut_refused": 1
+    },
+    "f4_only_entries": 0,
+    "f4_only_seo_fields": 0,
+    "f4_only_not_seo": [],
+    "f17_optional_as_plan_final": 0,
+    "f17_optional_as_plan_pieces": 0,
+    "f17_pace_promise_final": 0,
+    "promises_an_option_blogs": "0/8",
+    "held_only_on_pace": 0,
+    "li_pace_promise_in_ledger": 0
+   }
+  }
+ ],
+ "verdicts": [
+  [
+   "hygiene",
+   "core hard errors (S234 measure_r4)",
+   "2",
+   "met"
+  ],
+  [
+   "AA-785",
+   "F1 year-form hits",
+   "0",
+   "met"
+  ],
+  [
+   "AA-786",
+   "F9 citation/marker notes",
+   "0",
+   "met"
+  ],
+  [
+   "AA-786",
+   "t10_judge prompt_version",
+   "['f9_v1.1']",
+   "met"
+  ],
+  [
+   "AA-786",
+   "judge calls with tagged text",
+   "0",
+   "met"
+  ],
+  [
+   "AA-786",
+   "LinkedIn held on F9 (with sentences_left)",
+   "1 (1)",
+   "met"
+  ],
+  [
+   "AA-776",
+   "F4-only repair entries -> seo_fields",
+   "0/0",
+   "no F4-only ledger in r5 (close on unit tests)"
+  ],
+  [
+   "AA-774",
+   "seed visiting/practical bullets",
+   "0",
+   "met"
+  ],
+  [
+   "AA-774",
+   "blogs with permit/access sentences",
+   "4/8",
+   "not met (target 0/8)"
+  ],
+  [
+   "AA-773",
+   "blogs whose seed has Status: OFFERED",
+   "8/8",
+   "met"
+  ],
+  [
+   "AA-773",
+   "F17 optional-as-plan in final ledgers",
+   "0",
+   "met"
+  ],
+  [
+   "AA-773",
+   "promises_an_option warn per blog (≤2/8, Nghiệp's call)",
+   "0/8",
+   "met"
+  ],
+  [
+   "AA-775",
+   "pace sentences Terra (≤2)",
+   "1",
+   "met"
+  ],
+  [
+   "AA-775",
+   "pace sentences A&H (≤1)",
+   "0",
+   "met"
+  ],
+  [
+   "AA-775",
+   "holds only on a pace_promise",
+   "0",
+   "met"
+  ],
+  [
+   "AA-775",
+   "LinkedIn pace_promise in ledger",
+   "0",
+   "met"
+  ],
+  [
+   "cost",
+   "pipeline cost total",
+   "$1.032",
+   "met"
+  ]
+ ]
+}

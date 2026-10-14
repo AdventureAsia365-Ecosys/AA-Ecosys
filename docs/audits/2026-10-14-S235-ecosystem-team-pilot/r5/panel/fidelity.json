@@ -1,0 +1,97 @@
+{"pieces": [
+{"idx":0,"fidelity":9,"unsupported":[
+ {"claim":"Hashtag '#PadiDistrict' (no such place; the seed says Paro District)","kind":"wrong_place_or_scope"},
+ {"claim":"The site has been 'rebuilt with intention, not simply preserved by time' (a judgement on the restoration that the seed does not make)","kind":"invented_place_fact"}]},
+{"idx":1,"fidelity":7,"unsupported":[
+ {"claim":"The lake 'holds the better part of an entire country's water' (the seed says 70% of Mongolia's FRESH water)","kind":"number_not_in_source"},
+ {"claim":"Mörön's valley is where steppe 'gives way to the forested hills that mark the approach of the taiga' (the seed only says 'distant forested hills')","kind":"invented_place_fact"},
+ {"claim":"'this long, cold shoreline' (a temperature and climate claim that is not in the seed)","kind":"invented_place_fact"},
+ {"claim":"The Tsaatan have faced pressures 'over recent decades' (the seed gives no timeframe)","kind":"invented_place_fact"},
+ {"claim":"'The journey closes with a visit to the ruins' (the seed says day 14, not that the trip ends there)","kind":"invented_trip_detail"},
+ {"claim":"'talk to an Atlas & Hearth travel designer' (a travel-designer service that is not in the brand pack)","kind":"promise"}]},
+{"idx":2,"fidelity":7,"unsupported":[
+ {"claim":"'Most trips layer activity on activity ... Trail Pulse builds the pause into the structure' (a claim about the whole trip and the operator's pacing; the seed covers day 2 only)","kind":"promise"},
+ {"claim":"'That's an operator who understands pacing'","kind":"promise"},
+ {"claim":"'Get the full Trail Pulse itinerary and dates ... how the rest of the trip is structured' (assumes published dates; points outside the one-moment scope)","kind":"promise"}]},
+{"idx":3,"fidelity":7,"unsupported":[
+ {"claim":"'the crater floor has had time to soften into green growth' (vegetation in the caldera is not in the seed)","kind":"invented_place_fact"},
+ {"claim":"'the afternoon arrival allows the landscape to settle around the traveller without hurry' (an unhurried-pace claim; the seed only says they arrive in the afternoon)","kind":"promise"},
+ {"claim":"'the northern leg of the Khövsgöl Lake journey' (a trip name and structure that the seed does not give)","kind":"invented_trip_detail"},
+ {"claim":"Tsaatan visit is 'not a performance of tradition, but the real and continuing life' (an authenticity guarantee)","kind":"promise"},
+ {"claim":"'On day fourteen, the route PASSES the ruins' (CONTRADICTS the seed, which says 'visit the ruins')","kind":"invented_trip_detail"},
+ {"claim":"'how it might be shaped to suit the time and depth you are looking for' plus 'talk to an Atlas & Hearth travel designer' (customisation and a travel-designer service, neither in the brand pack)","kind":"promise"}]},
+{"idx":4,"fidelity":7,"unsupported":[
+ {"claim":"'Punakha was chosen with precision ... The geometry of that choice was inseparable from the dzong's purpose' (the seed gives no siting intent)","kind":"invented_place_fact"},
+ {"claim":"'The space holds both governance and devotion' in the present tense (the seed says it has not been the seat of government since 1955)","kind":"invented_place_fact"},
+ {"claim":"'Atlas & Hearth plans each journey around why a place exists' plus 'Talk to an Atlas & Hearth travel designer' (a planning promise and a service that are not in the brand pack)","kind":"promise"}]},
+{"idx":5,"fidelity":6,"unsupported":[
+ {"claim":"The boundary is 'one of the most legible geographical facts on the planet' (a superlative that is not in the seed)","kind":"invented_place_fact"},
+ {"claim":"'Day four brings a stop for lunch IN Mörön' (the seed says lunch NEAR Moron)","kind":"invented_trip_detail"},
+ {"claim":"'The pace across these two lake days is deliberately unhurried' (the seed has no pace statement)","kind":"promise"},
+ {"claim":"'Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain. Day five includes excursions...' (a Place background fact turned into trip logistics; it implies families make a multi-hour ride on day 5)","kind":"invented_trip_detail"},
+ {"claim":"'Children who have just walked through volcanic steppe will register the shift immediately' (a reaction the seed does not support)","kind":"promise"}]},
+{"idx":6,"fidelity":8,"unsupported":[
+ {"claim":"Hashtag '#PamiTaktsang' (a misspelled place name)","kind":"wrong_place_or_scope"},
+ {"claim":"'carefully restored' / 'a living place ... still in active use' (the seed says only that it was restored and reopened in 2004)","kind":"invented_place_fact"},
+ {"claim":"'Terra Family Expeditions plans days like this one with that kind of depth in mind'","kind":"promise"}]},
+{"idx":7,"fidelity":7,"unsupported":[
+ {"claim":"'Trail Pulse builds it in before you need it' (an operator-wide rest claim; the seed covers day 2 only)","kind":"promise"},
+ {"claim":"'Rest built into the structure is how that actually happens' (you arrive at the next thing with energy left)","kind":"promise"},
+ {"claim":"'Get the full Trail Pulse itinerary and dates to see how Day 2 — and every day — is put together' (implies every day is paced this way and that dates exist)","kind":"promise"}]},
+{"idx":8,"fidelity":8,"unsupported":[
+ {"claim":"'The placement was deliberate ... The site where two rivers meet was chosen deliberately' (the seed gives no siting intent)","kind":"invented_place_fact"},
+ {"claim":"'The courtyards and assembly hall that visitors may enter' (a general access rule; the seed only says this trip visits them)","kind":"invented_place_fact"}]},
+{"idx":9,"fidelity":7,"unsupported":[
+ {"claim":"Zhabdrung positioned it at the confluence 'where the landscape itself seemed to amplify its purpose'; 'a choice that has never stopped mattering' (an invented siting rationale)","kind":"invented_place_fact"},
+ {"claim":"'Its formal name ... carries the weight of that founding ambition' (a link between the name and the founding that the seed does not make)","kind":"invented_place_fact"},
+ {"claim":"'Atlas & Hearth plans cultural journeys at precisely this level of context' plus 'Talk to an Atlas & Hearth travel designer'","kind":"promise"}]},
+{"idx":10,"fidelity":8,"unsupported":[
+ {"claim":"'The restoration work that followed was careful and considered' (the seed only says it was restored and reopened in 2004)","kind":"invented_place_fact"},
+ {"claim":"'Terra Family Expeditions plans each detail with this kind of care'","kind":"promise"}]},
+{"idx":11,"fidelity":8,"unsupported":[
+ {"claim":"'Get the full Trail Pulse itinerary and dates to see how the whole trip is paced' (assumes dates and a whole-trip pacing beyond the day-2 scope)","kind":"promise"}]},
+{"idx":12,"fidelity":8,"unsupported":[
+ {"claim":"'required ground that carried its own symbolic weight, and a confluence ... provided precisely that' (an invented siting rationale)","kind":"invented_place_fact"},
+ {"claim":"'talk to an Atlas & Hearth travel designer'","kind":"promise"}]},
+{"idx":13,"fidelity":8,"unsupported":[
+ {"claim":"'that geography was as much a statement as a structure ... Zhabdrung chose the confluence ... shaped around them, not placed despite them' (an invented siting intent)","kind":"invented_place_fact"},
+ {"claim":"'At WildKind Travel, we plan journeys around places like this'","kind":"promise"}]},
+{"idx":14,"fidelity":7,"unsupported":[
+ {"claim":"Taiga with 'the boggy terrain that defines this northern landscape' (this borrows the Tsaatan access fact as a regional trait)","kind":"invented_place_fact"},
+ {"claim":"'the people who have built their lives along it for generations' and 'one of the most geographically consequential landscapes on the continent' (a timeframe and a superlative that are not in the seed)","kind":"invented_place_fact"},
+ {"claim":"Lake days are 'time shaped by the landscape rather than a fixed programme' (the seed gives no schedule flexibility)","kind":"promise"},
+ {"claim":"'the quality of guiding and the comfort of carefully chosen stays' (the seed says only a standard ger camp; guiding is not in the seed)","kind":"promise"},
+ {"claim":"FAQ: 'one of the most distinctive herding practices remaining anywhere in the world' (the seed says 'distinct from many other traditions')","kind":"invented_place_fact"},
+ {"claim":"'shaped around your interests and pace' plus 'talk to an Atlas & Hearth travel designer'","kind":"promise"}]},
+{"idx":15,"fidelity":6,"unsupported":[
+ {"claim":"'The air changes ... The light changes'; 'a vast, cold lake' (sensory and climate claims that are not in the seed)","kind":"invented_place_fact"},
+ {"claim":"Sod Camp is 'a practical and unhurried place to spend the night' (a pace claim)","kind":"promise"},
+ {"claim":"Mörön has 'a distinct character among Mongolian provincial towns' (a comparison that is not in the seed)","kind":"invented_place_fact"},
+ {"claim":"The trek 'keeps the water in sight' and 'tends to hold attention across a wider range of ages' (route details and an effect that are not in the seed)","kind":"invented_trip_detail"},
+ {"claim":"'Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain' placed right after the visit to local nomadic families (CONTRADICTS the seed: that is the Tsaatan access fact, attached to the wrong activity)","kind":"wrong_place_or_scope"}]},
+{"idx":16,"fidelity":8,"unsupported":[
+ {"claim":"'that placement was a decision, not a convenience ... something beyond a defensible position: it grounded the country's political and spiritual life' (an invented siting rationale and defensive purpose)","kind":"invented_place_fact"},
+ {"claim":"'moving through places with local knowledge and a light footprint' (a light-footprint claim for this trip; it echoes the brand example but is not verified for the itinerary)","kind":"promise"}]},
+{"idx":17,"fidelity":8,"unsupported":[
+ {"claim":"'a crater that the surrounding steppe seems to have almost reclaimed' (vegetation in the caldera is not in the seed)","kind":"invented_place_fact"},
+ {"claim":"'A lunch stop HERE' in Mörön (the seed says lunch NEAR Moron)","kind":"invented_trip_detail"},
+ {"claim":"Reindeer traditions 'across the circumpolar north' / 'circumpolar world' (a framing that is not in the seed; Khövsgöl is not circumpolar)","kind":"invented_place_fact"},
+ {"claim":"'a resource of planetary significance' (an overstated reading of the 2% figure)","kind":"invented_place_fact"},
+ {"claim":"'shaped around your own interests and timing' plus 'talk to an Atlas & Hearth travel designer'","kind":"promise"}]},
+{"idx":18,"fidelity":6,"unsupported":[
+ {"claim":"'The protected area takes its full name ... from this landscape of preserved volcanic geology' (an invented etymology)","kind":"invented_place_fact"},
+ {"claim":"'Sleeping in a ger — the traditional circular felt dwelling of the Mongolian steppe' (a description of a ger that is not in the seed)","kind":"invented_place_fact"},
+ {"claim":"'with a lunch stop IN Mörön' (the seed says NEAR)","kind":"invented_trip_detail"},
+ {"claim":"Tsaatan excursion 'is the one that tends to stay with families the longest' (implies past-traveller experience)","kind":"social_proof"},
+ {"claim":"'Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain' (a Place background fact presented as trip logistics for families with children aged 7-16)","kind":"invented_trip_detail"},
+ {"claim":"'Visiting their settlements is not a performance put on for travellers' (an authenticity guarantee)","kind":"promise"},
+ {"claim":"'The journey through the Khövsgöl region also includes a visit to the ruins' (the seed places the ruins only in 'Mongolia', on day 14, not in the Khövsgöl region)","kind":"wrong_place_or_scope"},
+ {"claim":"'designed to be navigated by families' / 'build an itinerary around the places and pace that suit you' / 'For parents, it offers structure alongside space'","kind":"promise"},
+ {"claim":"'some of the most ecologically and culturally layered terrain in Central and North Asia' (a superlative)","kind":"invented_place_fact"}]},
+{"idx":19,"fidelity":7,"unsupported":[
+ {"claim":"'Children who have walked the open volcanic steppe at Uran Togoo TWO days earlier' (CONTRADICTS the seed: Uran Togoo is day 3 and the lake arrival is day 4)","kind":"number_not_in_source"},
+ {"claim":"'A lunch stop here' in Mörön (the seed says NEAR Moron)","kind":"invented_trip_detail"},
+ {"claim":"'North of the lake ... Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain' (a Place background fact presented as trip logistics)","kind":"invented_trip_detail"},
+ {"claim":"Meta: 'Discover why families choose this ecological crossroads' (implies families already choose it)","kind":"social_proof"},
+ {"claim":"'each day builds on the one before' / a 'completely different climatic ... zone'","kind":"promise"}]}
+]}

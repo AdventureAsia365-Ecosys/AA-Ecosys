@@ -1,0 +1,345 @@
+{
+ "lens": "editor",
+ "pieces": [
+  {
+   "idx": 0,
+   "verdict": "light",
+   "overall": 6.3,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Hashtag '#PadiDistrict' is a typo/invented place tag (seed: Paro District) — embarrassing on a live post",
+    "'rebuilt with intention, not simply preserved by time' contrast frame + invented intent",
+    "Children's experience absent for a family brand; otherwise accurate and well-paced"
+   ]
+  },
+  {
+   "idx": 1,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 8,
+   "ai_tells": 4,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "H2 'Mörön: The Gateway Province' — Mörön is a city (provincial capital), not a province",
+    "'The journey closes with' the monastery visit — seed only says day 14; invented sequencing",
+    "Heavy 'not X but Y' frames throughout ('not as an affectation but as a direct and practical response', 'not as an abstraction but as a physical... fact'); opening 'does not reveal itself in a single gesture. It accumulates' is stock"
+   ]
+  },
+  {
+   "idx": 2,
+   "verdict": "heavy",
+   "overall": 5.0,
+   "brand_voice": 5,
+   "channel_fit": 5,
+   "fidelity": 7,
+   "ai_tells": 3,
+   "hook": 4,
+   "clarity": 5,
+   "commercial_value": 5,
+   "top_issues": [
+    "S233 stock line back: 'That's not filler. That's an operator who understands pacing'",
+    "Paragraph 5 restates paragraph 3/4 almost verbatim (repair duplicate) — reads padded",
+    "Clunky hook 'Kuang Si Falls is already on Day 2 — swim time built in, rest included, before lunch.'; generic strawman 'Most trips layer activity on activity'"
+   ]
+  },
+  {
+   "idx": 3,
+   "verdict": "light",
+   "overall": 5.8,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 6,
+   "ai_tells": 4,
+   "hook": 5,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "Invented place fact: 'the crater floor has had time to soften into green growth'",
+    "Clichés: 'one of those rare places where the physical world makes an argument', 'gradually, then all at once'; H2 'Mörön: The Gateway Province' wrong (city)",
+    "Mörön section drops the lunch stop; FAQ answer 1 is thin; 'not a performance of tradition' unsupported claim"
+   ]
+  },
+  {
+   "idx": 4,
+   "verdict": "light",
+   "overall": 6.1,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "Invented siting intent: 'Punakha was chosen with precision', 'geometry of that choice was inseparable from the dzong's purpose'",
+    "Redundancy: 'return here each winter from Thimphu, as they do each year'; verbless fragment 'A long peninsula between two named rivers...' and odd 'two named rivers'",
+    "Two stacked brand lines before the CTA"
+   ]
+  },
+  {
+   "idx": 5,
+   "verdict": "heavy",
+   "overall": 4.7,
+   "brand_voice": 5,
+   "channel_fit": 5,
+   "fidelity": 5,
+   "ai_tells": 4,
+   "hook": 6,
+   "clarity": 4,
+   "commercial_value": 5,
+   "top_issues": [
+    "FAQ 'What can we do at Lake Khövsgöl beyond trekking?' answers 'These activities are available...' — orphan referent, non-answer",
+    "Orphan one-line paragraphs: 'Each section builds on the last...' and 'The pace across these two lake days is deliberately unhurried.' (unsupported pace promise)",
+    "Logistics sentence 'Access requires a multi-hour horse or reindeer ride...' presented as the family's day-5 burden; superlative 'one of the most legible geographical facts on the planet'"
+   ]
+  },
+  {
+   "idx": 6,
+   "verdict": "light",
+   "overall": 6.4,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Hashtag typo '#PamiTaktsang' (all lenses will catch it)",
+    "'still in active use' / 'living place that has been renewed' not in seed; 'carefully restored' embellishment",
+    "'not a relic held together by its age, but...' contrast frame; children's angle missing for Terra"
+   ]
+  },
+  {
+   "idx": 7,
+   "verdict": "light",
+   "overall": 5.6,
+   "brand_voice": 6,
+   "channel_fit": 5,
+   "fidelity": 7,
+   "ai_tells": 4,
+   "hook": 5,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "Stock frames: 'That's operational thinking — ... not recovery bolted on after the fact'",
+    "Never names Luang Prabang or the lunch in the body (only hashtags); 'Then the schedule simply gives you the water' is vague",
+    "Generic strawman opener paragraph 'A lot of trips treat rest as something you negotiate for'"
+   ]
+  },
+  {
+   "idx": 8,
+   "verdict": "light",
+   "overall": 5.7,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 4,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "Weak 4-word hook 'The placement was deliberate.' then repeated 'was chosen deliberately' one paragraph later",
+    "Never names the two rivers or the 1637–1638 date — the confluence point is left vague",
+    "Brand tie-in sentence ('Reading a place this carefully... is central to how WildKind Travel approaches landscape') is forced"
+   ]
+  },
+  {
+   "idx": 9,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 6,
+   "ai_tells": 5,
+   "hook": 5,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "Paragraph 2 opening restates the hook ('converge precisely where the dzong stands')",
+    "Invented interpretation 'where the landscape itself seemed to amplify its purpose'; 'a choice that has never stopped mattering' vague",
+    "'precisely' used twice; 'Walking the courtyards... rewards that prior understanding' slightly stiff"
+   ]
+  },
+  {
+   "idx": 10,
+   "verdict": "light",
+   "overall": 6.3,
+   "brand_voice": 6,
+   "channel_fit": 5,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Duplicate hashtag '#ParoTaktsang ... #ParoTaktsang'",
+    "'built in 1692' in hook simplifies seed (main temple structures built around the cave); 'restoration work ... careful and considered' invented",
+    "'a considered way to close it' / 'genuinely layered' filler; children's experience absent"
+   ]
+  },
+  {
+   "idx": 11,
+   "verdict": "light",
+   "overall": 5.8,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "Paragraph 4 restates paragraph 3 ('you move, you arrive...' twice) — delete one",
+    "'It's a proper natural system, and it earns your full attention.' filler",
+    "Hook is abstract ('Good trip planning is invisible') — fine but generic"
+   ]
+  },
+  {
+   "idx": 12,
+   "verdict": "light",
+   "overall": 6.4,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 6,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Invented siting intent: 'required ground that carried its own symbolic weight... provided precisely that'",
+    "Hook is a flat fact line; post is at the short end (133 words)",
+    "CTA folded into a lead-in clause ('To plan a journey built around this quality of attention, talk to...') reads stiff"
+   ]
+  },
+  {
+   "idx": 13,
+   "verdict": "light",
+   "overall": 6.1,
+   "brand_voice": 7,
+   "channel_fit": 5,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "'geography was as much a statement as a structure' + 'still in conversation with each other' stock lines",
+    "Long sentences; 221 words, slightly dense",
+    "CTA clunky: 'Ask WildKind Travel for the full itinerary if you want to understand what it means to read a place this carefully.'"
+   ]
+  },
+  {
+   "idx": 14,
+   "verdict": "heavy",
+   "overall": 5.0,
+   "brand_voice": 6,
+   "channel_fit": 5,
+   "fidelity": 5,
+   "ai_tells": 4,
+   "hook": 4,
+   "clarity": 5,
+   "commercial_value": 5,
+   "top_issues": [
+    "Broken opening: paragraph 2 starts 'Beyond it, Siberian taiga takes over' — 'it' has no referent (the steppe sentence is missing)",
+    "Seed naming note leaks into copy: 'correctly spelled with the umlaut, though itineraries often render it phonetically'",
+    "Unsupported claims: 'people who have built their lives along it for generations', 'time shaped by the landscape rather than a fixed programme', 'one of the most geographically consequential landscapes on the continent'; access sentence ('reaching their camps requires passing through the forest terrain'); 'These are not incidental statistics.' AI-tell"
+   ]
+  },
+  {
+   "idx": 15,
+   "verdict": "heavy",
+   "overall": 4.4,
+   "brand_voice": 5,
+   "channel_fit": 4,
+   "fidelity": 5,
+   "ai_tells": 3,
+   "hook": 2,
+   "clarity": 4,
+   "commercial_value": 4,
+   "top_issues": [
+    "Broken opening: 'That picture is accurate, right up until it isn't.' — 'that picture' has no referent (lost first sentence)",
+    "Misplaced logistics: 'Access requires a multi-hour horse or reindeer ride...' attached to the optional nomadic-family visit (wrong attachment, and an access fact)",
+    "FAQ Mörön answer 'The route stops here for lunch' — orphan 'here'; triad AI-tell 'The air changes. The geography changes. The light changes.'; 'and this is very much that age' awkward"
+   ]
+  },
+  {
+   "idx": 16,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "Contrast stock line 'a decision, not a convenience'; 'something beyond a defensible position' introduces an unsupported defensive motive",
+    "Overloaded sentence listing relics + courtyards ('...and the courtyards and assembly hall are among the spaces visitors move through')",
+    "Brand tie-in 'reading what a landscape actually holds' generic"
+   ]
+  },
+  {
+   "idx": 17,
+   "verdict": "light",
+   "overall": 6.1,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "Overclaim: 'a resource of planetary significance'; 'circumpolar north' framing not in seed",
+    "Grammar: 'Mörön, the capital of Khövsgöl Province and the northernmost aimag' makes the city the aimag; dangling 'Standing at the water's edge, both ecosystems are present'",
+    "AI-tells: 'That is, in precise terms, what makes this place geographically unusual.', 'These are not abstract historical notes'"
+   ]
+  },
+  {
+   "idx": 18,
+   "verdict": "heavy",
+   "overall": 4.7,
+   "brand_voice": 5,
+   "channel_fit": 5,
+   "fidelity": 5,
+   "ai_tells": 4,
+   "hook": 6,
+   "clarity": 5,
+   "commercial_value": 5,
+   "top_issues": [
+    "FAQ broken: 'What animals do the Tsaatan use their reindeer for?' answered 'Unlike many other reindeer-herding cultures, meat production is not the primary purpose.' — non-answer",
+    "Invented social proof/promise: 'the one that tends to stay with families the longest', 'designed to be navigated by families', 'some of the most ... layered terrain in Central and North Asia'; access sentence 'Access requires a multi-hour horse or reindeer ride'",
+    "Monastery misplaced 'The journey through the Khövsgöl region also includes...' (seed gives no location); stock 'The reindeer are not backdrop. They are central to everything.'"
+   ]
+  },
+  {
+   "idx": 19,
+   "verdict": "light",
+   "overall": 5.5,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 6,
+   "ai_tells": 5,
+   "hook": 3,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "Broken opening: 'Lake Khövsgöl reframes that picture entirely.' — 'that picture' has no referent",
+    "Logistics sentence 'Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain' reads as a family burden (seed fact is place background, not trip plan)",
+    "Otherwise clean: options hedged correctly, day order right; minor 'freshwater inland sea' and 'natural spectacle' flourishes"
+   ]
+  }
+ ]
+}

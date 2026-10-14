@@ -1,0 +1,542 @@
+[
+ {
+  "card_id": "e51bc876-3091-4fd5-b1e2-b5e11c1789a5",
+  "card": "Dochula Pass",
+  "index": 3,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "medium",
+  "reason": "Panoramic-view promise; weather and stop dependent."
+ },
+ {
+  "card_id": "fe5ee678-ff82-4fb8-bbfd-476693c50a5a",
+  "card": "Jampa Lhakhang",
+  "index": 5,
+  "current": "history",
+  "proposed": "visiting",
+  "confidence": "medium",
+  "reason": "Annual night festival; writer may imply the tour attends it."
+ },
+ {
+  "card_id": "fe5ee678-ff82-4fb8-bbfd-476693c50a5a",
+  "card": "Jampa Lhakhang",
+  "index": 7,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "\"Often visited together\" is an itinerary pattern, not a place fact."
+ },
+ {
+  "card_id": "1a7e8f0d-0a6c-4e93-928a-531397ce155b",
+  "card": "Kuensel Phodrang Nature Park",
+  "index": 6,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "medium",
+  "reason": "\"Offers panoramic views\" is a visitor-experience promise."
+ },
+ {
+  "card_id": "1a7e8f0d-0a6c-4e93-928a-531397ce155b",
+  "card": "Kuensel Phodrang Nature Park",
+  "index": 8,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "medium",
+  "reason": "Walking trails imply a visitor activity."
+ },
+ {
+  "card_id": "d5ce147d-3209-4473-9242-8f264164d62a",
+  "card": "Kyichu Lhakhang",
+  "index": 6,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "\"Standard inclusion on visits\" is itinerary advice."
+ },
+ {
+  "card_id": "ec49a381-34d0-4372-856d-69b35e352f7f",
+  "card": "Mongar",
+  "index": 6,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "Drive-as-experience is a trip fact; tour route may differ."
+ },
+ {
+  "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+  "card": "Mongar Dzong",
+  "index": 2,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "low",
+  "reason": "\"Offering views\" leans toward visitor experience."
+ },
+ {
+  "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+  "card": "Mongar Dzong",
+  "index": 5,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Staging point for onward travel is access logistics."
+ },
+ {
+  "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+  "card": "Mongar Dzong",
+  "index": 6,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "medium",
+  "reason": "Road over high passes describes the journey, not the place."
+ },
+ {
+  "card_id": "97ab3cfc-7dd5-4b0e-9ed0-c7d2348b725a",
+  "card": "National Handloom Development Corporation, Khaling",
+  "index": 7,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Describes the drive to reach the centre."
+ },
+ {
+  "card_id": "e240883a-addd-4959-802a-ee8514866083",
+  "card": "National Institute for Zorig Chusum",
+  "index": 5,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "\"Easily combined with visits\" is itinerary advice."
+ },
+ {
+  "card_id": "9bb802e4-fbf1-4bb8-8262-4108696bb670",
+  "card": "Paro Taktsang (Tiger's Nest Monastery)",
+  "index": 7,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "medium",
+  "reason": "Describes the approach trail visitors hike."
+ },
+ {
+  "card_id": "ed737fb2-069c-43ef-b7dc-67436239f636",
+  "card": "Paro Town",
+  "index": 1,
+  "current": "what_it_is",
+  "proposed": "practical",
+  "confidence": "medium",
+  "reason": "Main entry/exit for international travellers is logistics."
+ },
+ {
+  "card_id": "a796bce1-1612-496b-84e5-3f9c2f951f8d",
+  "card": "Samdrup Jongkhar Border Crossing",
+  "index": 2,
+  "current": "what_it_is",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Tourist entry point / overland gateway is access and permit info."
+ },
+ {
+  "card_id": "a796bce1-1612-496b-84e5-3f9c2f951f8d",
+  "card": "Samdrup Jongkhar Border Crossing",
+  "index": 3,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Arrival hub and distance for travellers is logistics."
+ },
+ {
+  "card_id": "a796bce1-1612-496b-84e5-3f9c2f951f8d",
+  "card": "Samdrup Jongkhar Border Crossing",
+  "index": 6,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Starting point for overland journeys is route logistics."
+ },
+ {
+  "card_id": "623391df-654b-438f-a875-3fe6ee97309f",
+  "card": "Taktsang Monastery",
+  "index": 3,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "Trek route and viewpoint cafe are visitor experience."
+ },
+ {
+  "card_id": "2b50e6b5-9bb4-4623-b587-bffa009511b7",
+  "card": "Gyatso La",
+  "index": 3,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "low",
+  "reason": "Snow-peak views phrasing; mostly physical setting."
+ },
+ {
+  "card_id": "3386a249-214e-4586-ba20-dd746937c352",
+  "card": "Old Tingri",
+  "index": 3,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "Everest/Cho Oyu views promise, weather dependent."
+ },
+ {
+  "card_id": "df110217-735a-4e61-ac1e-503c0a9fb511",
+  "card": "Peiku Tso",
+  "index": 2,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "Shishapangma views from lake is a sightseeing promise."
+ },
+ {
+  "card_id": "e6ba6775-603f-4eee-ad99-b5749dadcd8d",
+  "card": "Lokpriya Gopinath Bordoloi International Airport",
+  "index": 2,
+  "current": "what_it_is",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Air gateway and road links to Bhutan border are travel logistics."
+ },
+ {
+  "card_id": "a15f1358-90b5-4475-820e-df396cea5df2",
+  "card": "Kuang Si Falls",
+  "index": 0,
+  "current": "what_it_is",
+  "proposed": "practical",
+  "confidence": "low",
+  "reason": "Distance from city borders on access info."
+ },
+ {
+  "card_id": "e6155626-978a-439f-b828-4d5aea320bae",
+  "card": "Luang Prabang",
+  "index": 5,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "Panoramic/sunset viewpoint is a visitor activity."
+ },
+ {
+  "card_id": "bb5aac7d-ce3c-493a-9030-3610ed850432",
+  "card": "Muang Khua",
+  "index": 2,
+  "current": "what_it_is",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Transit hub for travellers on the river is logistics."
+ },
+ {
+  "card_id": "af118e0f-bd38-40f7-9530-b11ff0a365e8",
+  "card": "Nong Khiaw",
+  "index": 4,
+  "current": "history",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "States the cave is accessible to visitors."
+ },
+ {
+  "card_id": "37780561-3908-4629-b0e7-55ead3eeba49",
+  "card": "Nong Khouay",
+  "index": 2,
+  "current": "what_it_is",
+  "proposed": "practical",
+  "confidence": "medium",
+  "reason": "No grid power is a traveller-conditions fact."
+ },
+ {
+  "card_id": "a45397b1-b7cd-4ce5-bae4-73db4ffaeb1c",
+  "card": "Darkhan",
+  "index": 2,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "medium",
+  "reason": "Road distance from Ulaanbaatar is travel info."
+ },
+ {
+  "card_id": "de67c383-97bf-4848-b807-011f97c3b5a2",
+  "card": "Mandalgovi",
+  "index": 1,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "\"Natural stopping point on the road\" is trip logistics."
+ },
+ {
+  "card_id": "de67c383-97bf-4848-b807-011f97c3b5a2",
+  "card": "Mandalgovi",
+  "index": 2,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Road distance and highway route is access info."
+ },
+ {
+  "card_id": "27f61930-2a5d-4a7b-8030-62e0fd16a8e1",
+  "card": "Mörön",
+  "index": 1,
+  "current": "what_it_is",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Gateway town for travellers plus distance is access info."
+ },
+ {
+  "card_id": "1aeac5d7-b77b-465f-9116-79b8461a590e",
+  "card": "Sod Camp",
+  "index": 2,
+  "current": "setting",
+  "proposed": "visiting",
+  "confidence": "high",
+  "reason": "\"Offers trekking routes\" promises an activity."
+ },
+ {
+  "card_id": "f85e2c35-b36c-4c58-98e4-9cde6d26b1b3",
+  "card": "Tsaatan Reindeer Herder Settlements",
+  "index": 3,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Multi-hour horse ride access is logistics and hardship."
+ },
+ {
+  "card_id": "fa89ac75-3595-495d-b50b-b6140bd3eb05",
+  "card": "Nậm Cắn / Nam Khan Border Crossing",
+  "index": 0,
+  "current": "what_it_is",
+  "proposed": "practical",
+  "confidence": "medium",
+  "reason": "\"Open to foreign nationals\" is access/permit info."
+ },
+ {
+  "card_id": "fa89ac75-3595-495d-b50b-b6140bd3eb05",
+  "card": "Nậm Cắn / Nam Khan Border Crossing",
+  "index": 1,
+  "current": "setting",
+  "proposed": "practical",
+  "confidence": "high",
+  "reason": "Significant bicycle climb is traveller hardship."
+ },
+ {
+  "card_id": "fe5ee678-ff82-4fb8-bbfd-476693c50a5a",
+  "card": "Jampa Lhakhang",
+  "index": 4,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "medium",
+  "reason": "Temple contents are background, no visitor action."
+ },
+ {
+  "card_id": "1a7e8f0d-0a6c-4e93-928a-531397ce155b",
+  "card": "Kuensel Phodrang Nature Park",
+  "index": 5,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "medium",
+  "reason": "Physical fact about the statue interior."
+ },
+ {
+  "card_id": "679f5f2d-28ad-4445-9bf8-f5582e62ba07",
+  "card": "Kurje Lhakhang",
+  "index": 3,
+  "current": "visiting",
+  "proposed": "history",
+  "confidence": "medium",
+  "reason": "Juniper legend is background lore."
+ },
+ {
+  "card_id": "d5ce147d-3209-4473-9242-8f264164d62a",
+  "card": "Kyichu Lhakhang",
+  "index": 3,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "medium",
+  "reason": "Enshrined statues describe what the temple is."
+ },
+ {
+  "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+  "card": "Mongar Dzong",
+  "index": 4,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "medium",
+  "reason": "Architecture description, no visitor action."
+ },
+ {
+  "card_id": "e240883a-addd-4959-802a-ee8514866083",
+  "card": "National Institute for Zorig Chusum",
+  "index": 3,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "medium",
+  "reason": "Programme structure of the institute is background."
+ },
+ {
+  "card_id": "ed4fe4f3-df73-415b-a01b-c7b560bfeef0",
+  "card": "Mount Kailash",
+  "index": 5,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "medium",
+  "reason": "Not climbed for religious reasons is background."
+ },
+ {
+  "card_id": "935d1cde-024a-45cf-956d-931183a34c71",
+  "card": "Potala Palace",
+  "index": 3,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "medium",
+  "reason": "Palace components describe what it is."
+ },
+ {
+  "card_id": "567e3f49-85d1-44a9-8337-3c313732c881",
+  "card": "Baga Gazriin Chuluu",
+  "index": 4,
+  "current": "practical",
+  "proposed": "what_it_is",
+  "confidence": "medium",
+  "reason": "Protected-area status is background, not practical."
+ },
+ {
+  "card_id": "97ab3cfc-7dd5-4b0e-9ed0-c7d2348b725a",
+  "card": "National Handloom Development Corporation, Khaling",
+  "index": 4,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Textile type produced is background."
+ },
+ {
+  "card_id": "d3cee865-c907-44ed-8c11-83e42d093c39",
+  "card": "National Textile Museum of Bhutan",
+  "index": 2,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Collection contents describe the museum."
+ },
+ {
+  "card_id": "d3cee865-c907-44ed-8c11-83e42d093c39",
+  "card": "National Textile Museum of Bhutan",
+  "index": 3,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Exhibit scope describes the museum."
+ },
+ {
+  "card_id": "78f69a62-1327-4f9f-bc72-1d91901abcd7",
+  "card": "Paro",
+  "index": 4,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Museum housed in Ta Dzong is a place fact."
+ },
+ {
+  "card_id": "ed737fb2-069c-43ef-b7dc-67436239f636",
+  "card": "Paro Town",
+  "index": 4,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Museum housed in Ta Dzong is a place fact."
+ },
+ {
+  "card_id": "ed737fb2-069c-43ef-b7dc-67436239f636",
+  "card": "Paro Town",
+  "index": 2,
+  "current": "visiting",
+  "proposed": "setting",
+  "confidence": "low",
+  "reason": "Street architecture is physical setting."
+ },
+ {
+  "card_id": "4ca00c2e-d14b-47ba-92e2-108302894128",
+  "card": "Punakha Dzong",
+  "index": 6,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Courtyards and utse describe the building."
+ },
+ {
+  "card_id": "40a50a24-d496-4995-a69c-d354d4ebb0ed",
+  "card": "Trashigang",
+  "index": 5,
+  "current": "visiting",
+  "proposed": "history",
+  "confidence": "low",
+  "reason": "Regional weaving tradition is background."
+ },
+ {
+  "card_id": "e4be28e7-a71b-413e-9269-278add6de2eb",
+  "card": "Gyirong",
+  "index": 3,
+  "current": "practical",
+  "proposed": "setting",
+  "confidence": "low",
+  "reason": "Nearby border port is location background."
+ },
+ {
+  "card_id": "1cef13d6-bb98-47bd-804c-2b3aa6d28156",
+  "card": "Paryang",
+  "index": 2,
+  "current": "visiting",
+  "proposed": "setting",
+  "confidence": "low",
+  "reason": "Location on G219 is geography."
+ },
+ {
+  "card_id": "e6155626-978a-439f-b828-4d5aea320bae",
+  "card": "Luang Prabang",
+  "index": 3,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Temple count and Wat Xieng Thong are background."
+ },
+ {
+  "card_id": "9e0b5312-d8dd-403e-b6d9-091d2b4bf584",
+  "card": "Erdene Zuu Monastery",
+  "index": 5,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Surviving temples as museums is background."
+ },
+ {
+  "card_id": "45e737a3-f5e6-41fd-b365-c1b2e153d657",
+  "card": "Kharkhorin",
+  "index": 4,
+  "current": "visiting",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Wall with 108 stupas is physical description."
+ },
+ {
+  "card_id": "45e737a3-f5e6-41fd-b365-c1b2e153d657",
+  "card": "Kharkhorin",
+  "index": 7,
+  "current": "visiting",
+  "proposed": "history",
+  "confidence": "low",
+  "reason": "Stone tortoise boundary marker is background."
+ },
+ {
+  "card_id": "5780c50c-e699-420a-8a00-7c40eb4bf0cd",
+  "card": "Amarbayasgalant Monastery",
+  "index": 5,
+  "current": "naming",
+  "proposed": "what_it_is",
+  "confidence": "low",
+  "reason": "Significance claim, not a naming fact (no risk)."
+ },
+ {
+  "card_id": "40fb53f7-0352-41f3-866c-8fac8a6bbdc6",
+  "card": "Ulaanbaatar",
+  "index": 3,
+  "current": "practical",
+  "proposed": "setting",
+  "confidence": "low",
+  "reason": "Coldest capital is climate background."
+ }
+]

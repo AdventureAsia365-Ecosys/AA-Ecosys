@@ -1,0 +1,523 @@
+{
+ "round": "r5",
+ "source": "/home/nghiep/projects/AA-Ecosys/.tmp-session/s234/checkpoint_r4.json",
+ "hard_stop_usd": 1.5,
+ "requests": [
+  {
+   "slug": "atlas-hearth",
+   "channel": "blog",
+   "request_id": "1dfbf5e6-bf67-45a3-84c8-7fc37d62868a",
+   "r4_request_id": "1dfbf5e6-bf67-45a3-84c8-7fc37d62868a",
+   "chosen": 0,
+   "chosen_angle": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia",
+   "angles": [
+    {
+     "idx": 0,
+     "name": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia",
+     "best_final_style": "Structure the piece around the idea of convergence — geographic, ecological, and cultural — as the organising logic for this section of the journey. Lead with Lake Khövsgöl and its position at the boundary between Central Asian steppes and Siberian taiga forests as the central anchor. Develop the freshwater significance of the lake (70 percent of Mongolia's fresh water, 0.4 percent of the world's fresh surface water) as a measure of the landscape's scale and consequence. Move outward from there: the volcanic caldera at Uran Togoo, geologically recent at 20,000–24,000 years old, as another marker of northern Mongolia's distinctive physical character; Mörön as the gateway that frames the journey north; the Tsaatan in the remote taiga as a human echo of this same ecological threshold — a semi-nomadic indigenous community whose seasonal camps of urts move through the forest as the reindeer require. Use the Sod Camp at the edge of Khövsgöl National Park as evidence of how a journey here is structured around the landscape. Close with a brief reference to the monastery ruins (Day 14) as a single sentence. The piece should be structured with clear H2 sections: one per major stop. End with a CTA paragraph that invites considered planning rather than urgency. Include a short FAQ section drawing on the Tsaatan, the lake, and the national park."
+    },
+    {
+     "idx": 1,
+     "name": "The Tsaatan as Cultural Anchor: Why Northern Mongolia's Most Telling Story Is Still Being Written",
+     "best_final_style": "Build the piece around the Tsaatan settlements as the destination the entire preceding sequence — Uran Togoo, Mörön, Lake Khövsgöl, Sod Camp — is travelling toward. Lead with what distinguishes the Tsaatan (Dukha): a small semi-nomadic indigenous community numbering only a few hundred people, herding reindeer in the remote taiga forest of northern Khövsgöl Province, living in seasonal camps of teepee-style urts that move several times a year as the reindeer require. Use the journey north — Mörön as the province capital and gateway, the national park at Khövsgöl, the ecological boundary between steppe and taiga — to establish the physical remoteness and cultural distinctiveness that makes reaching the Tsaatan meaningful. Include the volcanic landscape of Uran Togoo as part of the route's character. Use the Sod Camp within the national park as an illustration of how nights on this journey are organised. Mention the monastery ruins (Day 14) in one sentence only. Structure the piece with H2 sections organised by journey progression rather than theme. Close with a CTA paragraph and a short FAQ anchored in the Tsaatan, Khövsgöl Province, and what to expect on the journey north."
+    },
+    {
+     "idx": 2,
+     "name": "Northern Mongolia's Route Logic: What the Journey from Uran Togoo to Khövsgöl Actually Traverses",
+     "best_final_style": "Frame the piece as a considered explanation of what this northern Mongolia route actually covers and why each section connects logically to the next — useful for a reader trying to understand what distinguishes this journey from a generic Mongolia itinerary. Lead with the Uran Togoo volcanic landscape (last erupted 20,000–24,000 years ago, centerpiece of a protected natural monument) as the journey's opening northern anchor. Move through Mörön (capital of Khövsgöl Province, the northernmost aimag, gateway to the lake roughly 100 km north) as the route's logistical and cultural midpoint. Develop Lake Khövsgöl — its freshwater volume, its position near the Russian border, the steppe-taiga boundary — as the journey's geographic climax. Frame the Tsaatan settlements in the remote taiga as the final cultural encounter before the route turns south. Use the Sod Camp at the edge of the national park to illustrate how the journey is accommodated within the landscape. Include the monastery ruins (Day 14) in one sentence as part of the route's southern continuation. Structure with H2 sections per stop, sequenced by day order. Close with a CTA inviting deeper enquiry and include a FAQ section addressing route logic, the Tsaatan, and the lake."
+    }
+   ],
+   "place": null,
+   "hub": "a local Buddhist monastery → Sod Camp → Uran Togoo → Moron"
+  },
+  {
+   "slug": "atlas-hearth",
+   "channel": "linkedin",
+   "request_id": "f5e6aa33-4113-496b-9567-3591e9cbdef4",
+   "r4_request_id": "f5e6aa33-4113-496b-9567-3591e9cbdef4",
+   "chosen": 2,
+   "chosen_angle": "A Site at the Confluence: Why Setting Is Not Incidental in Bhutanese Sacred Architecture",
+   "angles": [
+    {
+     "idx": 0,
+     "name": "Why Punakha Dzong Is Still a Living Institution",
+     "best_final_style": "Tone: measured, intelligent, quietly authoritative — never reverential or breathless. Open with the tension between appearance and reality: a fortress that looks like the past but functions as the present. Lead with the fact that the Je Khenpo and the Central Monk Body still winter here, and that this is not a restored monument but a place with a living calendar. Move to the dzong's founding role — built by Zhabdrung Ngawang Namgyal in 1637–38 as the administrative and religious centre — to show the continuity. One short paragraph on the courtyards and assembly hall as spaces shaped by that ongoing purpose. Close with a single, understated Atlas & Hearth sentence on how the brand shapes journeys around cultural depth rather than itinerary length. No emojis. No markdown. No list format."
+    },
+    {
+     "idx": 1,
+     "name": "The Architecture of Devotion: Reading a Dzong's Spaces",
+     "best_final_style": "Tone: cultured, precise, atmospheric — like a well-read guide sharing an observation, not a lecture. Open with the observation that the courtyards of Punakha Dzong are structured to hold two things at once: religious ceremony and the administration of a kingdom. Move through the specific spatial elements the seed confirms — the utse (central tower), the assembly hall, the woodcarving, the paintings, the gilded roofs — framing each as a deliberate choice, not decoration. Weave in the founding moment: Zhabdrung Ngawang Namgyal, 1637–38, a single act of architecture intended to unify a country. Note the dress requirement (traditional Bhutanese gho or kira, or equivalent formal attire) as a detail that signals the space has not been flattened into a tourist attraction. Close with one sentence on how Atlas & Hearth builds journeys that give each place time to reveal itself. No emojis, no markdown, no list format."
+    },
+    {
+     "idx": 2,
+     "name": "A Site at the Confluence: Why Setting Is Not Incidental in Bhutanese Sacred Architecture",
+     "best_final_style": "Tone: calm, intelligent, slightly contemplative — not mystical or over-spiritual. Open with the geography as a thinking problem: why, in a mountain kingdom of many possible sites, was this peninsula chosen? Anchor the question in the confirmed physical facts — the two named rivers, the narrow peninsula, the wooden cantilever bridge. Move to the founder, Zhabdrung Ngawang Namgyal, and the 1637–38 founding, noting that the choice of site was inseparable from the institution's purpose as the country's religious and governmental heart. Reference the dzong's role as the winter home of the Je Khenpo to show the site's significance endures. Bring the visitor's experience in at the end — what the courtyards and assembly hall feel like once the setting is understood. One brief Atlas & Hearth sentence on how the brand approaches cultural journeys with this level of attention to context. No emojis, no markdown, no list format."
+    }
+   ],
+   "place": "Punakha Dzong",
+   "hub": null
+  },
+  {
+   "slug": "terra-family",
+   "channel": "blog",
+   "request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+   "r4_request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+   "chosen": 0,
+   "chosen_angle": "Where Two Worlds Meet: Lake Khövsgöl as Mongolia's Family Anchor",
+   "angles": [
+    {
+     "idx": 0,
+     "name": "Where Two Worlds Meet: Lake Khövsgöl as Mongolia's Family Anchor",
+     "best_final_style": "A pillar-style blog post structured around Lake Khövsgöl as the geographic and thematic centrepiece, with H2 sections that build outward from the lake: the volcanic approach through Uran Togoo, the provincial hub of Mörön as a practical gateway, the ecological significance of the lake's boundary zone, and the Tsaatan settlements as the deepest expression of life in the taiga. Lead with the lake's freshwater scale — 70 percent of Mongolia's fresh water — and the steppe-taiga boundary as the core insight. The Sod Camp overnight earns its own section as the base from which families experience the Khövsgöl region. The ancient monastery ruins appear once, briefly, as a further layer of the region's depth. Each section should draw out both the natural and logistical dimension: what a family sees, how far things are, and how the pace is structured across days 3 to 5. Close with a CTA connecting to the broader 15-day itinerary."
+    },
+    {
+     "idx": 1,
+     "name": "Mongolia in Five Moments: A Route That Makes Sense for Families",
+     "best_final_style": "A structured hub-page blog post with five H2 sections, one per anchor moment: the Uran Togoo volcanic landscape, the Sod Camp ger overnight, the Mörön lunch stop as a practical gateway beat, Lake Khövsgöl and its ecological boundary, and the Tsaatan settlements in the taiga. Lead with the breadth of the route — volcanic terrain to reindeer-herding communities — as the hook, then let each section carry its own set of concrete details from the seed: eruption age, freshwater statistics, the Tsaatan community's small size and seasonal movement, and the ger camp's position at Khövsgöl National Park's edge. The monastery ruins appear in one sentence under the day-14 context, not as a section. Emphasise variety of terrain and pace across sections, and note the logistical function of Mörön as a mid-route town. Close with a CTA toward the full 15-day itinerary."
+    },
+    {
+     "idx": 2,
+     "name": "The Tsaatan Question: Why This Corner of Mongolia Matters for Families",
+     "best_final_style": "A blog post that opens with the Tsaatan settlement as the route's most distinctive stop and then works backward and forward through the itinerary to show what leads there and what follows. Lead with the concrete facts about the Tsaatan: their small population, the seasonal movement of their camps, the taiga forest setting of northern Khövsgöl Province, and the teepee-style urts. Use H2 sections to move through the journey's earlier anchors — Uran Togoo as a geological marker, Mörön as the practical gateway, Lake Khövsgöl as the ecological transition zone, and the Sod Camp as the overnight base for the region — before returning to what the Tsaatan visit represents as a culmination. The monastery ruins appear briefly as a single sentence noting a later stop on day 14. Each section should make the terrain and logistical shape of that day legible, including distances (Mörön as 100 km from the lake) and natural features (the steppe-taiga boundary). Close with a CTA to explore the full 15-day route."
+    }
+   ],
+   "place": null,
+   "hub": "a local Buddhist monastery → Sod Camp → Uran Togoo → Moron"
+  },
+  {
+   "slug": "terra-family",
+   "channel": "linkedin",
+   "request_id": "158072bf-773f-4a32-be54-8d4f1590091e",
+   "r4_request_id": "ff45fd8a-a9e9-4881-ac8b-25aa25cee014",
+   "chosen": 0,
+   "chosen_angle": "Built Into the Cliff, Restored From Ash",
+   "angles": [
+    {
+     "idx": 0,
+     "name": "Built Into the Cliff, Restored From Ash",
+     "recommended": true
+    },
+    {
+     "idx": 1,
+     "name": "What the Climb Actually Asks of a Family",
+     "recommended": false
+    },
+    {
+     "idx": 2,
+     "name": "A Pilgrimage Site, Not a Viewpoint",
+     "recommended": false
+    }
+   ],
+   "place": "Paro",
+   "hub": null,
+   "confound": "angle regenerated for r5 (AA-774), r4 angle: The Checkpoint Before the Temple"
+  },
+  {
+   "slug": "trail-pulse",
+   "channel": "linkedin",
+   "request_id": "d940d26f-a991-4a56-a7a8-aeae63f5c7b4",
+   "r4_request_id": "d940d26f-a991-4a56-a7a8-aeae63f5c7b4",
+   "chosen": 0,
+   "chosen_angle": "Built-In Recovery: Why Rest Is Part the Plan",
+   "angles": [
+    {
+     "idx": 0,
+     "name": "Built-In Recovery: Why Rest Is Part the Plan",
+     "best_final_style": "Calm, considered LinkedIn voice — direct sentences, no hype. Open with the operational tension: active travel brands often stack too much into a day. Lead immediately with the concrete seed detail — a short trek on Day 2 ends at turquoise limestone pools, with time set aside to swim and rest before lunch. Use this as the proof of a planning principle: rest built in before it is needed. Close with one light, reflective CTA inviting professionals planning or recommending active travel to consider what good pacing actually looks like. One brand sentence maximum, grounded only in Trail Pulse's core idea of movement and energy delivered well. No emojis beyond one optional at close."
+    },
+    {
+     "idx": 1,
+     "name": "What the Turquoise Actually Tells You",
+     "best_final_style": "Measured, curious tone — think informed practitioner, not tour operator. Open with the question any switched-on traveller might ask: why is the water that colour? Answer it directly using the limestone and calcium carbonate detail from the seed. Pivot to the planning point: Trail Pulse builds a stop here on Day 2 specifically to swim in those pools and rest, not just photograph them. Keep paragraphs short. No scene details beyond what the seed states — limestone terraces, turquoise pools, forested setting. Close with a reflective question for the LinkedIn audience about what it means to really know a destination before you put travellers in it. No emojis."
+    },
+    {
+     "idx": 2,
+     "name": "Lunch Has to Be Earned: Sequencing That Builds a Day Right",
+     "best_final_style": "Confident, structured LinkedIn voice — reads like a practitioner sharing a real observation. Open with the structural insight: the best active travel days have an arc, not just a list. Then walk through the Day 2 sequence exactly as the seed gives it — trek, pools, swim, rest, lunch with a view — without embellishment. Note that the limestone pools and the café with a view of the cascade are the two concrete endpoints the seed names; use both. Keep it brief and direct. Close with one sentence on how Trail Pulse approaches days with this kind of movement-and-recovery logic, then a light CTA asking LinkedIn readers how they think about sequencing when they plan or recommend active travel. One emoji maximum at the close."
+    }
+   ],
+   "place": "Kuang Si Falls",
+   "hub": null
+  },
+  {
+   "slug": "wildkind-travel",
+   "channel": "linkedin",
+   "request_id": "3524ad2d-76f8-43ae-a84b-a4ecec7978a8",
+   "r4_request_id": "3524ad2d-76f8-43ae-a84b-a4ecec7978a8",
+   "chosen": 2,
+   "chosen_angle": "Built at a Confluence: What Punakha Dzong's Location Tells You About Bhutanese Thinking",
+   "angles": [
+    {
+     "idx": 0,
+     "name": "Why Punakha Dzong Is Still a Living Institution, Not a Monument",
+     "best_final_style": "Tone: grounded, informative, calm — founder or senior voice thinking aloud. Open with the insight that distinguishes a living institution from a historic site (draw from the Je Khenpo winter residence fact). Follow with one short paragraph on what the dzong was built to be — administrative and religious centre, built by Zhabdrung Ngawang Namgyal — and one on what it still is today. Close with a single reflective sentence on how WildKind approaches visits to places where daily religious life continues. CTA: a question or light prompt inviting reflection on what responsible cultural access looks like. No emojis. No itinerary listing. Do not invent any scene detail not in the seed."
+    },
+    {
+     "idx": 1,
+     "name": "The Detail That Earns Respect Before You Cross the Bridge",
+     "best_final_style": "Tone: thoughtful, direct, grounded — a considered professional observation rather than promotional copy. Open with the attire requirement as a concrete detail (draw from the gho/kira fact in the seed), framing it not as a curiosity but as a signal of what the dzong still means to the people who use it. One short paragraph on the dzong's history and its continuing role. One sentence maximum on WildKind's approach — only what the brand identity states about low-impact, respectful travel. CTA: a quiet, reflective prompt about what genuine preparation for a place looks like. No emojis. No dramatic language. Lead with the attire detail as the concrete proof."
+    },
+    {
+     "idx": 2,
+     "name": "Built at a Confluence: What Punakha Dzong's Location Tells You About Bhutanese Thinking",
+     "best_final_style": "Tone: observational, landscape-led, calm — the voice of someone who reads a place before describing it. Open with the confluence itself: the Pho Chhu and Mo Chhu meeting at the peninsula where the dzong stands. Build one short paragraph on what that siting meant historically — administrative and religious centre, founded by Zhabdrung Ngawang Namgyal. One paragraph on what it still means: the Je Khenpo's winter residence, a functioning monastic institution. One sentence at most on WildKind's approach, drawn only from the brand's core idea about landscape, local knowledge, and light-footprint travel. CTA: a reflective question about how geography shapes meaning in a place. No emojis. Do not invent river symbolism or spiritual claims beyond what the seed states."
+    }
+   ],
+   "place": "Punakha Dzong",
+   "hub": null
+  }
+ ],
+ "pieces": [
+  {
+   "slug": "terra-family",
+   "channel": "linkedin",
+   "request_id": "158072bf-773f-4a32-be54-8d4f1590091e",
+   "piece_id": "d075fa29-983c-4587-ac0f-8a2707cc90e8",
+   "n": 1,
+   "enqueued_at": 1791955513.975385,
+   "trial": true,
+   "job_id": "17902e74-0277-42a5-b404-b7a1e7ba6ff3",
+   "done": true,
+   "status": "held",
+   "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"#PadiDistrict\" (claims: The destination is associated with Padi District.; source: The source identifies the location as Paro District, Bhutan, and does not mention Padi District.)",
+   "job_status": "succeeded",
+   "cost_usd": 0.027254,
+   "cost_final": true
+  },
+  {
+   "slug": "atlas-hearth",
+   "channel": "blog",
+   "request_id": "1dfbf5e6-bf67-45a3-84c8-7fc37d62868a",
+   "piece_id": "fb086ed1-f6af-4cc6-b360-98918e835292",
+   "n": 1,
+   "enqueued_at": 1791955516.7875016,
+   "trial": true,
+   "job_id": "ba2d2a94-5839-4b79-a2b4-dd0884960bbe",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.102895,
+   "cost_final": true
+  },
+  {
+   "slug": "trail-pulse",
+   "channel": "linkedin",
+   "request_id": "d940d26f-a991-4a56-a7a8-aeae63f5c7b4",
+   "piece_id": "22f7d8d5-4748-4066-9eae-e6b9fb42e2f3",
+   "n": 1,
+   "enqueued_at": 1791955519.264496,
+   "trial": true,
+   "job_id": "6c4310c3-9c6f-4d53-a395-f1f2cf55d0aa",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.021022,
+   "cost_final": true
+  },
+  {
+   "slug": "atlas-hearth",
+   "channel": "blog",
+   "request_id": "1dfbf5e6-bf67-45a3-84c8-7fc37d62868a",
+   "piece_id": "83df67f9-7775-4eb5-9485-46453923906f",
+   "n": 2,
+   "enqueued_at": 1791955694.1949313,
+   "trial": false,
+   "job_id": "de5be54f-7510-4feb-84e8-0c1f9781fae8",
+   "done": true,
+   "status": "held",
+   "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"In geological terms, that is a recent event — the crater floor has had time to soften into green growth, but the dark volcanic rock of the cone remains, creating a striking contrast with the open steppe grasslands and patches of forest that surround it.\" (claims: The crater floor has softened into green growth.; source: The SOURCE supports green steppe grasslands, patches of forest, and dark volcanic rock surrounding Uran Togoo, but it does not state that the crater floor has green growth.); \"The excursions to Tsaatan settlements included in this journey are an encounter with a culture that is actively navigating those pressures — not a performance of tradition, but the real and continuing life of one of Mongolia's most distinct indigenous communities.\" (claims: The Tsaatan excursions are not a performance of tradition and present the community's real and continuing life.; source: The SOURCE supports that the excursions are included and that the Tsaatan community faces the listed social and economic pressures, but it does not characterize the excursions as non-performative or verify the nature of the visitor encounter.)",
+   "job_status": "succeeded",
+   "cost_usd": 0.094671,
+   "cost_final": true
+  },
+  {
+   "slug": "atlas-hearth",
+   "channel": "linkedin",
+   "request_id": "f5e6aa33-4113-496b-9567-3591e9cbdef4",
+   "piece_id": "db4cf81e-d5a2-4ddf-8529-7c180259ba4d",
+   "n": 1,
+   "enqueued_at": 1791955694.8959436,
+   "trial": false,
+   "job_id": "9583fe28-1512-46be-bf78-9882ce9e801b",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.028911,
+   "cost_final": true
+  },
+  {
+   "slug": "terra-family",
+   "channel": "blog",
+   "request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+   "piece_id": "bfb3456e-1fe8-4466-9bc7-691c3291e380",
+   "n": 1,
+   "enqueued_at": 1791955697.5359054,
+   "trial": false,
+   "job_id": "e5ec83e0-2f2e-4b97-9854-8708a8e4f0ff",
+   "done": true,
+   "status": "held",
+   "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Day four brings a stop for lunch in Mörön, the capital of Khövsgöl Province and the main hub for travellers heading north toward the lake.\" (claims: The itinerary's day-four lunch stop takes place in Mörön.; source: The source itinerary says to stop for lunch near Moron, not in Mörön. The source does support that Mörön is the capital and a gateway town.)",
+   "job_status": "succeeded",
+   "cost_usd": 0.111201,
+   "cost_final": true
+  },
+  {
+   "slug": "terra-family",
+   "channel": "linkedin",
+   "request_id": "158072bf-773f-4a32-be54-8d4f1590091e",
+   "piece_id": "d46c030b-1be6-4618-858a-840319481de8",
+   "n": 2,
+   "enqueued_at": 1791955698.4485068,
+   "trial": false,
+   "job_id": "7fb7015b-b45d-48c9-a034-0bbe2c3e8132",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.016529,
+   "cost_final": true
+  },
+  {
+   "slug": "trail-pulse",
+   "channel": "linkedin",
+   "request_id": "d940d26f-a991-4a56-a7a8-aeae63f5c7b4",
+   "piece_id": "adc2cd04-14ca-4cee-bf54-e88946301e31",
+   "n": 2,
+   "enqueued_at": 1791955701.0820932,
+   "trial": false,
+   "job_id": "7e236fc0-4a92-47a8-89c2-508e8a131271",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.0131,
+   "cost_final": true
+  },
+  {
+   "slug": "wildkind-travel",
+   "channel": "linkedin",
+   "request_id": "3524ad2d-76f8-43ae-a84b-a4ecec7978a8",
+   "piece_id": "a1e1f1f4-2b2b-44ba-ba76-8e91641ce435",
+   "n": 1,
+   "enqueued_at": 1791955703.5149589,
+   "trial": false,
+   "job_id": "a0ef88fc-b88c-4add-acae-5d9699fa5602",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.022653,
+   "cost_final": true
+  },
+  {
+   "slug": "atlas-hearth",
+   "channel": "linkedin",
+   "request_id": "f5e6aa33-4113-496b-9567-3591e9cbdef4",
+   "piece_id": "a8f147e9-a9bd-436f-86d1-87ef1fcf8b99",
+   "n": 2,
+   "enqueued_at": 1791955752.7294376,
+   "trial": false,
+   "job_id": "57387e0b-c018-413f-85fb-611958c63077",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.019919,
+   "cost_final": true
+  },
+  {
+   "slug": "terra-family",
+   "channel": "linkedin",
+   "request_id": "158072bf-773f-4a32-be54-8d4f1590091e",
+   "piece_id": "ad01f4b5-937c-42f9-96c2-afc3c319bad3",
+   "n": 3,
+   "enqueued_at": 1791955753.4419103,
+   "trial": false,
+   "job_id": "d7b266e3-0b6f-42ed-b55f-ae746c43e8e3",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.025926,
+   "cost_final": true
+  },
+  {
+   "slug": "trail-pulse",
+   "channel": "linkedin",
+   "request_id": "d940d26f-a991-4a56-a7a8-aeae63f5c7b4",
+   "piece_id": "ea9786a6-4733-4f98-8d0f-97727c1bc740",
+   "n": 3,
+   "enqueued_at": 1791955754.1036377,
+   "trial": false,
+   "job_id": "2ad270eb-1bcb-441d-98ce-152b060ccc89",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.018769,
+   "cost_final": true
+  },
+  {
+   "slug": "atlas-hearth",
+   "channel": "linkedin",
+   "request_id": "f5e6aa33-4113-496b-9567-3591e9cbdef4",
+   "piece_id": "7b4b75c1-6cdb-47d9-b4d8-7b6fe23903a8",
+   "n": 3,
+   "enqueued_at": 1791955802.322869,
+   "trial": false,
+   "job_id": "28e7fe03-0b48-4fc8-b5bc-6813b9b83a1d",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.032666,
+   "cost_final": true
+  },
+  {
+   "slug": "wildkind-travel",
+   "channel": "linkedin",
+   "request_id": "3524ad2d-76f8-43ae-a84b-a4ecec7978a8",
+   "piece_id": "83d14812-c209-4690-a7a7-318d10ac152c",
+   "n": 2,
+   "enqueued_at": 1791955802.9690692,
+   "trial": false,
+   "job_id": "c576b24a-7491-405c-98ab-1158ccf9d9d6",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.021686,
+   "cost_final": true
+  },
+  {
+   "slug": "atlas-hearth",
+   "channel": "blog",
+   "request_id": "1dfbf5e6-bf67-45a3-84c8-7fc37d62868a",
+   "piece_id": "73035732-8541-4c22-806c-6d92da331cb7",
+   "n": 3,
+   "enqueued_at": 1791955850.5130765,
+   "trial": false,
+   "job_id": "b2643ca9-ea2f-46df-9876-1cb111578b45",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.071311,
+   "cost_final": true
+  },
+  {
+   "slug": "terra-family",
+   "channel": "blog",
+   "request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+   "piece_id": "bb53cb48-1fee-4f4e-95a9-f3dbc507feb2",
+   "n": 2,
+   "enqueued_at": 1791955895.5807657,
+   "trial": false,
+   "job_id": "45426e77-1aec-4e73-8c23-779d803fd6c8",
+   "done": true,
+   "status": "held",
+   "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"The included activity is trekking along the lake's shorelines and forest paths — a route that keeps the water in sight while moving through the taiga that surrounds it.\" (claims: The trekking route keeps the lake visible throughout.; source: The SOURCE supports trekking along shorelines and forest paths but does not state that the water remains in sight throughout the route.); \"The combination of lakeshore and forest trail means the terrain changes as the walk progresses, which tends to hold attention across a wider range of ages than a single-environment hike.\" (claims: The terrain changes as the walk progresses and the route holds attention across a wider range of ages.; source: The SOURCE identifies shoreline and forest-path trekking but does not provide these route details or support the claim about attention across age groups.); \"Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.\" (claims: Visiting the local nomadic families described in the preceding paragraph requires a multi-hour horse or reindeer ride across rivers and boggy forest.; source: The SOURCE gives this access information for Tsaatan settlements specifically, not for the separate optional visits to unspecified local nomadic families.)",
+   "job_status": "succeeded",
+   "cost_usd": 0.103324,
+   "cost_final": true
+  },
+  {
+   "slug": "wildkind-travel",
+   "channel": "linkedin",
+   "request_id": "3524ad2d-76f8-43ae-a84b-a4ecec7978a8",
+   "piece_id": "3d5631b1-1a6b-41ec-a350-c60b556c4adf",
+   "n": 3,
+   "enqueued_at": 1791955896.2426357,
+   "trial": false,
+   "job_id": "cd6136e5-92d7-42d7-9f5a-52ab2771ad0b",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.030178,
+   "cost_final": true
+  },
+  {
+   "slug": "atlas-hearth",
+   "channel": "blog",
+   "request_id": "1dfbf5e6-bf67-45a3-84c8-7fc37d62868a",
+   "piece_id": "ccb0843c-bb8d-4050-a6e9-2a163f8adb4b",
+   "n": 4,
+   "enqueued_at": 1791955976.8662806,
+   "trial": false,
+   "job_id": "4d2a548d-34f6-4ec2-8ef0-63877104aa84",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.088537,
+   "cost_final": true
+  },
+  {
+   "slug": "terra-family",
+   "channel": "blog",
+   "request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+   "piece_id": "206433a2-8998-4ecc-8797-165c19bd9510",
+   "n": 3,
+   "enqueued_at": 1791956052.1973832,
+   "trial": false,
+   "job_id": "00306db5-9703-4152-b6ad-e097704c38b9",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.087767,
+   "cost_final": true
+  },
+  {
+   "slug": "terra-family",
+   "channel": "blog",
+   "request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+   "piece_id": "f810ddd0-c2d0-4199-8b29-5ae527d78f9a",
+   "n": 4,
+   "enqueued_at": 1791956195.5043576,
+   "trial": false,
+   "job_id": "6f56eacc-6fd8-49ae-a51c-957341625530",
+   "done": true,
+   "status": "approved",
+   "held_reason": null,
+   "job_status": "succeeded",
+   "cost_usd": 0.093638,
+   "cost_final": true
+  }
+ ],
+ "regen": {
+  "old_request_id": "ff45fd8a-a9e9-4881-ac8b-25aa25cee014",
+  "new_request_id": "158072bf-773f-4a32-be54-8d4f1590091e",
+  "job_id": "3e94ed25-bbd4-4954-aef4-99ba521293c2",
+  "old_angle": "The Checkpoint Before the Temple",
+  "why": "r4 angle rests on a practical card fact AA-774 removes (confound)",
+  "chosen": 0,
+  "chosen_angle": "Built Into the Cliff, Restored From Ash",
+  "angles": [
+   {
+    "idx": 0,
+    "name": "Built Into the Cliff, Restored From Ash",
+    "recommended": true
+   },
+   {
+    "idx": 1,
+    "name": "What the Climb Actually Asks of a Family",
+    "recommended": false
+   },
+   {
+    "idx": 2,
+    "name": "A Pilgrimage Site, Not a Viewpoint",
+    "recommended": false
+   }
+  ],
+  "job_status": "succeeded",
+  "cost_usd": 0.032195,
+  "cost_final": true
+ },
+ "skipped": [],
+ "events": []
+}

@@ -1,0 +1,9 @@
+E2E outbox [{'idempotency_key': 'c14c07ae-7cc4-4bf9-945b-8c5922b23c89:116', 'schema_version': 1, 'customer': '{"name": "S235 E2E Test", "email": "e2e-s235+booking@adventure.asia", "phone": null, "consent": true, "verified": false, "consent_at": "2026-10-14T04:29:44.825891+00:00", "customer_id": "a6b2932c-c448-4804-9837-1dadd14a151e"}', 'legs': 4, 'days': 5}]
+E2E inbox [{'status': 'processed', 'contract_version': '1', 'processed_at': datetime.datetime(2026, 10, 14, 4, 30, 54, 364264, tzinfo=datetime.timezone.utc), 'error': None}]
+E2E case [{'id': UUID('9cf65df1-66ce-499d-a102-98db18d3ec47'), 'code': 'TC-000001', 'status': 'new_inquiry', 'source_system': 'tripplanner', 'customer_id': UUID('162b16ab-08e2-4c8c-a0e0-7d2386487673')}]
+E2E legs [{'position': 1, 'source_tour_id': '22174c35-6cab-408d-b0f1-1d5c6e6c2885', 'day_from': 3, 'day_to': 4}, {'position': 2, 'source_tour_id': '22174c35-6cab-408d-b0f1-1d5c6e6c2885', 'day_from': 7, 'day_to': 7}, {'position': 3, 'source_tour_id': '22174c35-6cab-408d-b0f1-1d5c6e6c2885', 'day_from': 2, 'day_to': 2}, {'position': 4, 'source_tour_id': '22174c35-6cab-408d-b0f1-1d5c6e6c2885', 'day_from': 1, 'day_to': 1}]
+E2E customer [{'name': 'S235 E2E Test', 'email': 'e2e-s235+booking@adventure.asia', 'verified': False, 'source': 'tripplanner_lead', 'needs_merge_review': False}]
+E2E notif [{'type': 'trip_case.new_inquiry', 'title': 'New inquiry TC-000001', 'recipient_type': 'staff'}]
+E2E jobs [{'kind': 'bk_inquiry_pull', 'status': 'succeeded', 'n': 11}, {'kind': 'bk_inquiry_process', 'status': 'succeeded', 'n': 1}]
+
+[exited with code 0]

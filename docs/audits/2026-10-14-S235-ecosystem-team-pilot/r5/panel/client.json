@@ -1,0 +1,345 @@
+{
+ "lens": "client",
+ "pieces": [
+  {
+   "idx": 0,
+   "verdict": "light",
+   "overall": 6.2,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Hashtag #PadiDistrict is a wrong place name (seed: Paro District) - visible, embarrassing error; gate held it correctly",
+    "'rebuilt with intention, not simply preserved by time' - contrast-frame AI tell, mild interpretive claim",
+    "Little for children specifically; family-aware voice thin beyond 'families arriving on Day 9'"
+   ]
+  },
+  {
+   "idx": 1,
+   "verdict": "light",
+   "overall": 6.6,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 8,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 7,
+   "top_issues": [
+    "Heading 'Mörön: The Gateway Province' - Mörön is a city, not a province",
+    "Heavy 'not as X but as Y' phrasing (intro, ger camp, lake) reads as AI; intro paragraph is abstract",
+    "Product truth handled well: offered boat/horse/families hedged 'for those who choose it', Tsaatan stated as included, monastery one sentence"
+   ]
+  },
+  {
+   "idx": 2,
+   "verdict": "light",
+   "overall": 5.6,
+   "brand_voice": 4,
+   "channel_fit": 7,
+   "fidelity": 7,
+   "ai_tells": 4,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "'That's not filler. That's an operator who understands pacing' - operator-to-operator voice, off-brand for a young B2C active brand",
+    "Paragraph 5 restates paragraph 3 almost verbatim (swim/rest before lunch) - repetition",
+    "Hook is about scheduling rather than the falls; low energy for 'energetic, lightly playful'"
+   ]
+  },
+  {
+   "idx": 3,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 6,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "'the crater floor has had time to soften into green growth' - invented place detail",
+    "'not a performance of tradition, but the real and continuing life' - unverifiable promise about the encounter",
+    "Heading 'The Gateway Province' for a city; 'gradually, then all at once' cliché; monastery reduced to 'route passes the ruins'"
+   ]
+  },
+  {
+   "idx": 4,
+   "verdict": "light",
+   "overall": 6.8,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 6,
+   "clarity": 7,
+   "commercial_value": 7,
+   "top_issues": [
+    "'as they do each year' redundant after 'each winter'",
+    "Dangling modifier: 'Arriving with that history already in mind, the courtyards ... read as'",
+    "Fragment line 'A long peninsula between two named rivers, connected...' - fine for LinkedIn but reads clipped"
+   ]
+  },
+  {
+   "idx": 5,
+   "verdict": "heavy",
+   "overall": 4.9,
+   "brand_voice": 5,
+   "channel_fit": 5,
+   "fidelity": 5,
+   "ai_tells": 4,
+   "hook": 6,
+   "clarity": 4,
+   "commercial_value": 5,
+   "top_issues": [
+    "Orphan sentence 'Each section builds on the last...' after intro plus orphan 'The pace across these two lake days is deliberately unhurried.' - unsupported pace promise",
+    "'lunch in Mörön' - seed says lunch near Mörön (gate correctly flagged); 'Access requires a multi-hour horse or reindeer ride' stated as trip logistics for a family product",
+    "Broken FAQ: 'What can we do at Lake Khövsgöl beyond trekking?' answered 'These activities are available...' with no list"
+   ]
+  },
+  {
+   "idx": 6,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 6,
+   "channel_fit": 5,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Hashtag #PamiTaktsang is a misspelling - approved by the gate, would embarrass the brand",
+    "'a living place ... still in active use' - not in seed (minor)",
+    "Brand name twice in the close ('Terra Family Expeditions plans days... Ask Terra Family Expeditions...')"
+   ]
+  },
+  {
+   "idx": 7,
+   "verdict": "light",
+   "overall": 5.8,
+   "brand_voice": 5,
+   "channel_fit": 7,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "'That's operational thinking' - consultancy/B2B register, off-voice for Trail Pulse",
+    "'A lot of trips treat rest as something you negotiate for' - generic contrast framing",
+    "Light on what the traveller actually does/feels at the falls; little energy"
+   ]
+  },
+  {
+   "idx": 8,
+   "verdict": "light",
+   "overall": 6.2,
+   "brand_voice": 5,
+   "channel_fit": 7,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 5,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Hook 'The placement was deliberate.' then 'chosen deliberately' two paragraphs later - repetition; rivers never named",
+    "Nature-led brand but the piece is architecture/governance; landscape barely present",
+    "149 words, thin; CTA plain but fine"
+   ]
+  },
+  {
+   "idx": 9,
+   "verdict": "light",
+   "overall": 6.4,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 5,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "Hook and next sentence both say the dzong stands where the rivers meet - redundant opening",
+    "'where the landscape itself seemed to amplify its purpose' / 'a choice that has never stopped mattering' - interpretive filler",
+    "Otherwise accurate; usable after trimming one sentence"
+   ]
+  },
+  {
+   "idx": 10,
+   "verdict": "light",
+   "overall": 6.2,
+   "brand_voice": 6,
+   "channel_fit": 5,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Duplicate hashtag '#ParoTaktsang #Bhutan #ParoTaktsang' - sloppy, approved",
+    "'The restoration work that followed was careful and considered' - unsupported characterisation",
+    "No family/child angle beyond the CTA for a family brand"
+   ]
+  },
+  {
+   "idx": 11,
+   "verdict": "light",
+   "overall": 6.3,
+   "brand_voice": 6,
+   "channel_fit": 7,
+   "fidelity": 8,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Paragraph 4 restates paragraph 3 ('you move, you arrive...' twice)",
+    "Hook is abstract ('Good trip planning is invisible') rather than the falls",
+    "Good factual use (terraces, 50 m drop, calcium carbonate); closest Trail Pulse piece to on-voice"
+   ]
+  },
+  {
+   "idx": 12,
+   "verdict": "as_is",
+   "overall": 7.0,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 9,
+   "ai_tells": 7,
+   "hook": 5,
+   "clarity": 8,
+   "commercial_value": 7,
+   "top_issues": [
+    "Hook is a flat date/fact statement - low scroll-stopping power",
+    "133 words, at the short end",
+    "CTA phrasing 'built around this quality of attention' slightly mannered but on-brand"
+   ]
+  },
+  {
+   "idx": 13,
+   "verdict": "light",
+   "overall": 6.4,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 6,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "221 words, near the upper limit; one long run-on paragraph about the founding",
+    "CTA 'if you want to understand what it means to read a place this carefully' is clunky",
+    "Architecture-led for a nature brand; 'Your visit takes in the courtyards' good product clarity"
+   ]
+  },
+  {
+   "idx": 14,
+   "verdict": "heavy",
+   "overall": 5.4,
+   "brand_voice": 6,
+   "channel_fit": 5,
+   "fidelity": 6,
+   "ai_tells": 4,
+   "hook": 3,
+   "clarity": 5,
+   "commercial_value": 5,
+   "top_issues": [
+    "Broken intro: 'Beyond it, Siberian taiga takes over' - 'it' refers to nothing (sentence missing); first visible paragraph reads as an error",
+    "Seed naming note leaked into copy: 'correctly spelled with the umlaut, though itineraries often render it phonetically'",
+    "'not a gradual transition but a genuine threshold' / 'time shaped by the landscape rather than a fixed programme' - unsupported; 'ruins of an ancient monastery in Mongolia' awkward"
+   ]
+  },
+  {
+   "idx": 15,
+   "verdict": "heavy",
+   "overall": 4.4,
+   "brand_voice": 5,
+   "channel_fit": 4,
+   "fidelity": 4,
+   "ai_tells": 3,
+   "hook": 2,
+   "clarity": 4,
+   "commercial_value": 4,
+   "top_issues": [
+    "Opens with orphan 'That picture is accurate, right up until it isn't.' - refers to a missing sentence; broken hook",
+    "'Access requires a multi-hour horse or reindeer ride' attached to the optional nomadic-family visits - wrong logistics claim (gate flagged)",
+    "Invented route details: trek 'keeps the water in sight', 'tends to hold attention across a wider range of ages'; 'this is very much that age'; FAQ Mörön answer 'The route stops here' with no referent"
+   ]
+  },
+  {
+   "idx": 16,
+   "verdict": "light",
+   "overall": 6.3,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 6,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "'a decision, not a convenience' contrast frame; 'beyond a defensible position' - defensibility not in seed",
+    "Long relic sentence crams three clauses",
+    "'light footprint' brand claim fine; nature angle via rivers is reasonable"
+   ]
+  },
+  {
+   "idx": 17,
+   "verdict": "light",
+   "overall": 6.2,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "'the capital of Khövsgöl Province and the northernmost aimag of Mongolia' - grammatically calls Mörön an aimag",
+    "'the route passes through Mörön ... A lunch stop here' - seed says lunch near Mörön",
+    "Dangling 'Standing at the water's edge, both ecosystems are present'; 'circumpolar north' not in seed"
+   ]
+  },
+  {
+   "idx": 18,
+   "verdict": "heavy",
+   "overall": 4.9,
+   "brand_voice": 5,
+   "channel_fit": 5,
+   "fidelity": 4,
+   "ai_tells": 4,
+   "hook": 6,
+   "clarity": 5,
+   "commercial_value": 5,
+   "top_issues": [
+    "Invented social proof: Tsaatan excursion 'is the one that tends to stay with families the longest'; 'not a performance put on for travellers' promise",
+    "Brand segment leaked: 'children between the ages of seven and sixteen'; 'Access requires a multi-hour horse or reindeer ride' as trip logistics for families",
+    "Broken FAQ: 'What animals do the Tsaatan use their reindeer for?' answered with one incomplete sentence; gate APPROVED it (false pass)"
+   ]
+  },
+  {
+   "idx": 19,
+   "verdict": "light",
+   "overall": 5.7,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 6,
+   "ai_tells": 5,
+   "hook": 3,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "Opens with orphan 'Lake Khövsgöl reframes that picture entirely.' - refers to a missing sentence; broken hook",
+    "'Children who have walked ... Uran Togoo two days earlier' - wrong, lake arrival is day 4 (one day later)",
+    "'Access requires a multi-hour horse or reindeer ride' as logistics for a family trip - needs operator confirmation"
+   ]
+  }
+ ]
+}

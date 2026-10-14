@@ -1,0 +1,835 @@
+{
+ "rule": {
+  "regex": "\\b(pace[ds]?|relentless|exhaust\\w*|rest(?:ful|ing)?|rush\\w*|manageable|balanced?)\\b",
+  "window": 6,
+  "support_share": 0.6
+ },
+ "by_tenant_channel": {
+  "Atlas & Hearth|blog": {
+   "hits": 17,
+   "rest_of_excluded": 1,
+   "would_fire": 15,
+   "seed_supported": 1
+  },
+  "Terra Family Expeditions|blog": {
+   "hits": 34,
+   "would_fire": 31,
+   "rest_of_excluded": 1,
+   "seed_supported": 2
+  },
+  "Terra Family Expeditions|linkedin": {
+   "hits": 9,
+   "would_fire": 9
+  },
+  "Trail Pulse|linkedin": {
+   "hits": 28,
+   "seed_supported": 19,
+   "rest_of_excluded": 6,
+   "would_fire": 3
+  }
+ },
+ "would_fire": [
+  {
+   "round": 1,
+   "i": 1,
+   "piece": "b229d690",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Northern Mongolia rewards travellers who are willing to let a landscape make its own argument at its own pace.",
+   "share": 0.0
+  },
+  {
+   "round": 1,
+   "i": 1,
+   "piece": "b229d690",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "rushed",
+   "sentence": "The convergence of steppe and taiga, the scale of the lake, the particular culture of the Tsaatan — these are not things that yield to a rushed itinerary.",
+   "share": 0.25
+  },
+  {
+   "round": 1,
+   "i": 2,
+   "piece": "d614d2d5",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "The pace is deliberate, not relentless, and the variety — geological, ecological, cultural — means both adults and children have genuine reasons to pay attention.",
+   "share": 0.0
+  },
+  {
+   "round": 1,
+   "i": 2,
+   "piece": "d614d2d5",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "exhausting",
+   "sentence": "Terra Family Expeditions designs journeys like this one for families who want active, educational travel that is structured without being rigid, and ambitious without being exhausting.",
+   "share": 0.0
+  },
+  {
+   "round": 1,
+   "i": 9,
+   "piece": "f09734c1",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "The pace here is active but not relentless; the crater's scale is large enough to be impressive, contained enough to feel manageable.",
+   "share": 0.0
+  },
+  {
+   "round": 1,
+   "i": 9,
+   "piece": "f09734c1",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "exhaust",
+   "sentence": "This is not a day designed to exhaust — it is designed to give the lake proper attention.",
+   "share": 0.2
+  },
+  {
+   "round": 1,
+   "i": 9,
+   "piece": "f09734c1",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "balance",
+   "sentence": "Each day builds on the last, and the pacing across days three to fourteen is designed to balance active discovery with time to absorb what a family has seen.",
+   "share": 0.12
+  },
+  {
+   "round": 1,
+   "i": 16,
+   "piece": "e9f6934a",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Talk to an Atlas & Hearth travel designer about this journey, and how it might be shaped around your particular interests and pace.",
+   "share": 0.2
+  },
+  {
+   "round": 1,
+   "i": 17,
+   "piece": "ad1783e5",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Terra Family Expeditions builds journeys where the pace, the sequence, and the natural and cultural depth of each place are considered together, so that children and adults are engaged in equal measure.",
+   "share": 0.29
+  },
+  {
+   "round": 1,
+   "i": 18,
+   "piece": "c9789476",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "The convergence of landscapes, ecologies, and cultures described here — from the geological to the deeply human — is best encountered at a pace that allows each place to give itself properly.",
+   "share": 0.17
+  },
+  {
+   "round": 2,
+   "i": 2,
+   "piece": "863e7012",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "word": "pace",
+   "sentence": "Knowing them in advance — and building the pace around them — is what makes the difference between a family that arrives settled and one that arrives flustered.",
+   "share": 0.2
+  },
+  {
+   "round": 2,
+   "i": 2,
+   "piece": "863e7012",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "For a family with children, that means planning for rest, for water, for the right footwear, and for honest conversations about what the trail asks.",
+   "share": 0.14
+  },
+  {
+   "round": 2,
+   "i": 4,
+   "piece": "75313b8c",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Northern Mongolia rewards the kind of travel that Atlas & Hearth is built around — private, considered, shaped by cultural intelligence and the particular quality of expert guiding that lets a place reveal itself at its own pace.",
+   "share": 0.4
+  },
+  {
+   "round": 2,
+   "i": 5,
+   "piece": "c125b461",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "That range matters for a family travelling with children of different ages and interests: the lake itself, the forest edge, and the living cultures of the region are all accessible within the same day, at a pace that can be adjusted.",
+   "share": 0.4
+  },
+  {
+   "round": 2,
+   "i": 5,
+   "piece": "c125b461",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Lake Khövsgöl and its surrounding region — the volcanic approach through Bulgan Province, the provincial gateway of Mörön, the ecological boundary at the lake's shore, and the taiga settlements of the Tsaatan — form a route with a clear geographic logic and real variety in pace and experience.",
+   "share": 0.17
+  },
+  {
+   "round": 2,
+   "i": 6,
+   "piece": "d5156ec3",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "word": "pace",
+   "sentence": "Good planning means families arrive knowing the cultural expectations, carrying what they'll actually need, and with a pace that suits everyone — not just the adults.",
+   "share": 0.0
+  },
+  {
+   "round": 2,
+   "i": 10,
+   "piece": "6ac7e39f",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "word": "pace",
+   "sentence": "The pace matters, especially with children.",
+   "share": 0.25
+  },
+  {
+   "round": 2,
+   "i": 10,
+   "piece": "6ac7e39f",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "word": "rushed",
+   "sentence": "So does knowing that the main temple structures date to 1692 and were carefully restored after a fire damaged much of the complex in 1998 — that history deserves more than a rushed arrival.",
+   "share": 0.0
+  },
+  {
+   "round": 2,
+   "i": 14,
+   "piece": "9e9116a6",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Talk to an Atlas & Hearth travel designer about this journey and how it might be shaped around your own interests and pace.",
+   "share": 0.2
+  },
+  {
+   "round": 2,
+   "i": 15,
+   "piece": "d45e9381",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "The pace is deliberate: each day introduces something genuinely new without making the journey feel relentless.",
+   "share": 0.2
+  },
+  {
+   "round": 2,
+   "i": 17,
+   "piece": "ca38a799",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "It is a natural break in pace: the volcanic trek is done, the evening is in a traditional ger, and the next morning the route continues north.",
+   "share": 0.5
+  },
+  {
+   "round": 2,
+   "i": 17,
+   "piece": "ca38a799",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Terra Family Expeditions plans active, educational journeys for families who want meaningful time together, with attention to pace, safety, and the kind of learning that happens when children and parents explore something genuinely unfamiliar side by side.",
+   "share": 0.25
+  },
+  {
+   "round": 3,
+   "i": 4,
+   "piece": "530aec31",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "If this part of the world has your attention, talk to an Atlas & Hearth travel designer about this journey and how it might be shaped around your interests and pace.",
+   "share": 0.25
+  },
+  {
+   "round": 3,
+   "i": 5,
+   "piece": "72cc7ba9",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "pace",
+   "sentence": "That's what Trail Pulse is built around: movement and energy delivered at a pace that keeps you going.",
+   "share": 0.0
+  },
+  {
+   "round": 3,
+   "i": 8,
+   "piece": "5e04de7a",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "word": "pace",
+   "sentence": "Terra Family Expeditions plans for exactly this — the trail, the checkpoint, the dress code, the pace.",
+   "share": 0.5
+  },
+  {
+   "round": 3,
+   "i": 9,
+   "piece": "89a6cf5d",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "paces",
+   "sentence": "That's how Trail Pulse paces active travel: energy delivered sustainably, for presence across the full trip.",
+   "share": 0.25
+  },
+  {
+   "round": 3,
+   "i": 12,
+   "piece": "c134808c",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "These are not diversions from the journey's central subject — they are ways of reading the landscape directly, at the pace it requires.",
+   "share": 0.4
+  },
+  {
+   "round": 3,
+   "i": 14,
+   "piece": "9bf33724",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "rest",
+   "sentence": "After the physical demands of a caldera walk, arriving to the quiet of a ger camp in the afternoon gives families time to settle, rest, and take stock before the longer drive north the following morning.",
+   "share": 0.44
+  },
+  {
+   "round": 3,
+   "i": 14,
+   "piece": "9bf33724",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Each of these activities runs at its own pace and demands a different level of physical effort, which gives a family with a range of abilities and energy levels genuine room to move.",
+   "share": 0.29
+  },
+  {
+   "round": 3,
+   "i": 14,
+   "piece": "9bf33724",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "rest",
+   "sentence": "Families move out into the landscape and return to rest.",
+   "share": 0.33
+  },
+  {
+   "round": 3,
+   "i": 14,
+   "piece": "9bf33724",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "The pace is not continuous motion; it is structured exploration with recovery built in.",
+   "share": 0.0
+  },
+  {
+   "round": 3,
+   "i": 14,
+   "piece": "9bf33724",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "rest",
+   "sentence": "It is more useful to understand how the days are shaped — when the energy is spent and where the rest comes.",
+   "share": 0.0
+  },
+  {
+   "round": 3,
+   "i": 16,
+   "piece": "6eafd4d0",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Northern Mongolia — from the volcanic caldera at Uran Togoo to the remote taiga of the Tsaatan — is a route that rewards patience and curiosity, and that moves at the pace of the landscape rather than against it.",
+   "share": 0.33
+  },
+  {
+   "round": 3,
+   "i": 17,
+   "piece": "60f66a72",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "balance",
+   "sentence": "For families thinking about Mongolia, Lake Khövsgöl is the natural anchor point: geographically legible, ecologically distinct, and surrounded by experiences — a dormant volcano approach, a provincial gateway city, days on the lakeshore, and a journey to one of the world's last reindeer-herding communities — that balance active discovery with genuine depth.",
+   "share": 0.4
+  },
+  {
+   "round": 3,
+   "i": 17,
+   "piece": "60f66a72",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "The days covering this region move at a pace that gives children and adults alike time to absorb what they are actually seeing.",
+   "share": 0.12
+  },
+  {
+   "round": 3,
+   "i": 17,
+   "piece": "60f66a72",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "balance",
+   "sentence": "Day 5 is the richest day of the Khövsgöl sequence, and deliberately so — it offers the most varied range of ways to engage with the lake and the landscape around it, letting families find their own balance between activity and stillness.",
+   "share": 0.25
+  },
+  {
+   "round": 3,
+   "i": 17,
+   "piece": "60f66a72",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "rest",
+   "sentence": "The Lake Khövsgöl region — approached through a volcanic caldera, introduced through Mörön's provincial character, explored across a full day on the lakeshore, and extended into the taiga with the Tsaatan — makes up the heart of a Mongolia itinerary that balances active discovery with genuine rest and pacing.",
+   "share": 0.0
+  },
+  {
+   "round": 3,
+   "i": 17,
+   "piece": "60f66a72",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "rushed",
+   "sentence": "Each section of the route gives children and adults something specific to engage with, and nothing about it is rushed.",
+   "share": 0.5
+  },
+  {
+   "round": 3,
+   "i": 17,
+   "piece": "60f66a72",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Terra Family Expeditions plans itineraries for families who want to explore places with real depth, at a pace that works for children and adults alike.",
+   "share": 0.14
+  },
+  {
+   "round": 3,
+   "i": 17,
+   "piece": "60f66a72",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Ask Terra Family Expeditions to plan this trip for your family and find out how the full itinerary is structured around your children's ages and your family's pace.",
+   "share": 0.0
+  },
+  {
+   "round": 3,
+   "i": 18,
+   "piece": "37047c45",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "The days spent here move at the pace the lake itself suggests — time on the water, movement through shoreline and forest paths, and, optionally, the possibility of meeting nomadic families who keep their seasonal patterns close to the lakeshore.",
+   "share": 0.38
+  },
+  {
+   "round": 3,
+   "i": 18,
+   "piece": "37047c45",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "rushed",
+   "sentence": "The convergences here, ecological and cultural, are not the kind that yield to a rushed itinerary.",
+   "share": 0.5
+  },
+  {
+   "round": 3,
+   "i": 18,
+   "piece": "37047c45",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Talk to an Atlas & Hearth travel designer about this journey, and how it can be shaped around your pace and interests.",
+   "share": 0.25
+  },
+  {
+   "round": 3,
+   "i": 19,
+   "piece": "4e4f0e0f",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Day 5 is structured around the lake and the terrain immediately surrounding it, with several optional activities that allow families to choose their own pace.",
+   "share": 0.2
+  },
+  {
+   "round": 3,
+   "i": 19,
+   "piece": "4e4f0e0f",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "The pace across Days 3 to 5 balances active discovery — crater walks, horse treks, and optional boat rides — with the kind of rest that makes longer journeys sustainable.",
+   "share": 0.25
+  },
+  {
+   "round": 4,
+   "i": 3,
+   "piece": "7c8bc7df",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "paced",
+   "sentence": "Trail Pulse is built on the idea that energy lasts longer when a trip is paced honestly — movement and rest designed together, not movement until you stop.",
+   "share": 0.25
+  },
+  {
+   "round": 4,
+   "i": 4,
+   "piece": "3fd85285",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Each of these activities operates at a different pace and asks something different of each family member — the boat rides offer a sense of the lake's scale, the horseback riding covers ground across the terrain that rings it, and the shoreline and forest treks bring the steppe-taiga boundary into direct, physical contact.",
+   "share": 0.14
+  },
+  {
+   "round": 4,
+   "i": 7,
+   "piece": "6961b261",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "word": "rushing",
+   "sentence": "For a family, that means the day needs honest pacing — not rushing the ascent, building in rest, and arriving at the checkpoint prepared rather than scrambling.",
+   "share": 0.12
+  },
+  {
+   "round": 4,
+   "i": 10,
+   "piece": "68a56edf",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "word": "pace",
+   "sentence": "For families with children, the pace matters as much as the destination.",
+   "share": 0.33
+  },
+  {
+   "round": 4,
+   "i": 10,
+   "piece": "68a56edf",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "word": "pace",
+   "sentence": "Terra Family Expeditions plans trips around the real details — cultural protocols, physical demands, and the natural pace of a family moving through a place with care.",
+   "share": 0.0
+  },
+  {
+   "round": 4,
+   "i": 14,
+   "piece": "67f08753",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "exhaustion",
+   "sentence": "The structure of days in this region gives families room to move and room to pause, without the schedule tipping into either idleness or exhaustion.",
+   "share": 0.0
+  },
+  {
+   "round": 4,
+   "i": 15,
+   "piece": "9594430b",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Northern Mongolia from Bulgan Province to the Tsaatan taiga is a journey that rewards careful planning and a considered pace.",
+   "share": 0.2
+  },
+  {
+   "round": 4,
+   "i": 16,
+   "piece": "2fc0a2fb",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "relentless",
+   "sentence": "The days here are full without being relentless, and the variety keeps the pace from flattening out.",
+   "share": 0.14
+  },
+  {
+   "round": 4,
+   "i": 16,
+   "piece": "2fc0a2fb",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "manageable",
+   "sentence": "Terra Family Expeditions designs journeys like this one for families who want active, educational travel with the structure and safety that makes it manageable for everyone.",
+   "share": 0.2
+  },
+  {
+   "round": 4,
+   "i": 16,
+   "piece": "2fc0a2fb",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Ask Terra Family Expeditions to plan this trip for your family, and we will talk through the itinerary, the pace, and how it works for the ages and interests of the children travelling with you.",
+   "share": 0.4
+  },
+  {
+   "round": 4,
+   "i": 17,
+   "piece": "9b65bd97",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Each stop speaks to the same underlying geography — a corner of the country where ecological and cultural conditions from two very different worlds have come together, and where slow, attentive travel is the only pace that does it justice.",
+   "share": 0.2
+  },
+  {
+   "round": 4,
+   "i": 17,
+   "piece": "9b65bd97",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Talk to an Atlas & Hearth travel designer about this journey and how it might be shaped around your own pace and priorities.",
+   "share": 0.2
+  },
+  {
+   "round": 4,
+   "i": 18,
+   "piece": "4c2bb8c1",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "balanced",
+   "sentence": "Terra Family Expeditions builds journeys so that active discovery is balanced with time to rest, giving both children and parents space to absorb what they are actually seeing.",
+   "share": 0.5
+  }
+ ],
+ "suppressed_as_seed_supported": [
+  {
+   "round": 1,
+   "i": 3,
+   "piece": "82af5983",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "Rest",
+   "sentence": "Rest placed before it becomes necessary means you arrive at the afternoon sharp, not already running low.",
+   "share": 0.2
+  },
+  {
+   "round": 1,
+   "i": 7,
+   "piece": "9712922e",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "It's a genuinely striking place — and the itinerary builds in time to swim and rest there before lunch.",
+   "share": 0.8
+  },
+  {
+   "round": 1,
+   "i": 7,
+   "piece": "9712922e",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "Rest",
+   "sentence": "Rest before fatigue sets in.",
+   "share": 0.33
+  },
+  {
+   "round": 1,
+   "i": 14,
+   "piece": "d1305823",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "On Day 2, a short trek ends at the tiered limestone pools of Kuang Si Falls — and the plan keeps you there to swim and rest before lunch.",
+   "share": 0.75
+  },
+  {
+   "round": 1,
+   "i": 14,
+   "piece": "d1305823",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "Rest",
+   "sentence": "Rest before the body asks for it.",
+   "share": 0.33
+  },
+  {
+   "round": 2,
+   "i": 3,
+   "piece": "24d17fc1",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "The itinerary keeps you there — time set aside to get in the water and rest before lunch.",
+   "share": 0.75
+  },
+  {
+   "round": 2,
+   "i": 8,
+   "piece": "a9f966c5",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "Building swim time into a trek keeps active travel moving — you rest when your body needs it, not when fatigue forces you to stop.",
+   "share": 0.29
+  },
+  {
+   "round": 2,
+   "i": 8,
+   "piece": "a9f966c5",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "Time is built into the day to do exactly that, and to rest, before lunch at the View Café overlooking the cascade.",
+   "share": 0.8
+  },
+  {
+   "round": 2,
+   "i": 8,
+   "piece": "a9f966c5",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "Rest",
+   "sentence": "Rest placed before exhaustion keeps energy consistent across a trip — not just on one good day.",
+   "share": 0.17
+  },
+  {
+   "round": 2,
+   "i": 8,
+   "piece": "a9f966c5",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "Get the full Trail Pulse itinerary and dates to see how the rest of the trip is paced.",
+   "share": 0.4
+  },
+  {
+   "round": 2,
+   "i": 11,
+   "piece": "a2eeb182",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "Rest",
+   "sentence": "Rest lands before fatigue does.",
+   "share": 0.33
+  },
+  {
+   "round": 3,
+   "i": 5,
+   "piece": "72cc7ba9",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "And the plan gives it to you — swim, rest, take it in — before the day moves forward.",
+   "share": 0.5
+  },
+  {
+   "round": 3,
+   "i": 9,
+   "piece": "89a6cf5d",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "The itinerary builds in time to swim and rest here before lunch.",
+   "share": 0.8
+  },
+  {
+   "round": 3,
+   "i": 12,
+   "piece": "c134808c",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Time at Khövsgöl moves at the pace of the lake itself.",
+   "share": 0.67
+  },
+  {
+   "round": 3,
+   "i": 15,
+   "piece": "2b093845",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "Time is set aside to swim and rest in the lower tiered pools before the day continues.",
+   "share": 0.86
+  },
+  {
+   "round": 4,
+   "i": 3,
+   "piece": "7c8bc7df",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "Swim time and rest time, built in deliberately, not offered as a consolation if someone gets tired.",
+   "share": 0.57
+  },
+  {
+   "round": 4,
+   "i": 4,
+   "piece": "3fd85285",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "Ask Terra Family Expeditions to plan this trip for your family, and start with the details that matter to you: the days at the lake, the excursion into the taiga, the pace across the full journey.",
+   "share": 0.83
+  },
+  {
+   "round": 4,
+   "i": 6,
+   "piece": "71ad6b1f",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "Planning a trip well means building in rest before you need it — not scrambling to add it later.",
+   "share": 0.33
+  },
+  {
+   "round": 4,
+   "i": 6,
+   "piece": "71ad6b1f",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "The itinerary keeps you there — time to swim, time to rest — before lunch at the View Café overlooking the cascade.",
+   "share": 1.0
+  },
+  {
+   "round": 4,
+   "i": 11,
+   "piece": "6599b514",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "Swim time is already written into Day 2, with space to rest before lunch.",
+   "share": 0.75
+  },
+  {
+   "round": 4,
+   "i": 11,
+   "piece": "6599b514",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "word": "rest",
+   "sentence": "That is where the itinerary keeps you, with time set aside to swim and rest before lunch.",
+   "share": 0.83
+  },
+  {
+   "round": 4,
+   "i": 14,
+   "piece": "67f08753",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "word": "pace",
+   "sentence": "The overnight at Sod Camp settles the pace.",
+   "share": 0.6
+  }
+ ]
+}

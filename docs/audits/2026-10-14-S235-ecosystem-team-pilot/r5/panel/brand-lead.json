@@ -1,0 +1,345 @@
+{
+ "lens": "brand-lead",
+ "pieces": [
+  {
+   "idx": 0,
+   "verdict": "light",
+   "overall": 6.3,
+   "brand_voice": 6.5,
+   "channel_fit": 6.5,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Hashtag '#PadiDistrict' is a non-existent tag; would embarrass the brand",
+    "Children's experience absent: no word on how the climb works for a 7-16 year old (style guide: 'do not write only for parents')",
+    "Pace/effort of the hike never explained (brand rule 'Explain the pace clearly'); only the hot stone bath reassurance is on-brand"
+   ]
+  },
+  {
+   "idx": 1,
+   "verdict": "light",
+   "overall": 6.6,
+   "brand_voice": 7.5,
+   "channel_fit": 7,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 6.5,
+   "clarity": 7,
+   "commercial_value": 6.5,
+   "top_issues": [
+    "Repeated 'not as X but as Y' constructions (3+) - AI tell that undercuts the 'precise' voice",
+    "'Access to their territory ... is part of what makes this section distinctive' edges toward the rare-access overpromise the brand forbids",
+    "Strong on-brand CTA and correctly hedged options; ruins sentence fine"
+   ]
+  },
+  {
+   "idx": 2,
+   "verdict": "heavy",
+   "overall": 5.3,
+   "brand_voice": 5,
+   "channel_fit": 5.5,
+   "fidelity": 8,
+   "ai_tells": 4.5,
+   "hook": 5,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "Operator-to-operator voice ('That's an operator who understands pacing') instead of the energetic, traveller-facing Trail Pulse voice",
+    "Paragraph 5 restates paragraph 3-4 almost verbatim (repetition); 'That's not filler.' contrast tic",
+    "No social/group element - Trail Pulse core idea is movement + meeting people; clunky hook 'Kuang Si Falls is already on Day 2'"
+   ]
+  },
+  {
+   "idx": 3,
+   "verdict": "light",
+   "overall": 6.3,
+   "brand_voice": 7,
+   "channel_fit": 6.5,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 5.5,
+   "clarity": 6.5,
+   "commercial_value": 6,
+   "top_issues": [
+    "Cliché opener 'gradually, then all at once' / 'the physical world makes an argument'",
+    "'the route passes the ruins' downgrades an included visit; 'arrival allows the landscape to settle around the traveller without hurry' unsupported pace line",
+    "Thin FAQ (3, first answer one sentence); CTA 'we would welcome the conversation' is nicely on-voice"
+   ]
+  },
+  {
+   "idx": 4,
+   "verdict": "light",
+   "overall": 7.1,
+   "brand_voice": 7.5,
+   "channel_fit": 7,
+   "fidelity": 8,
+   "ai_tells": 6.5,
+   "hook": 7,
+   "clarity": 7.5,
+   "commercial_value": 7,
+   "top_issues": [
+    "'A long peninsula between two named rivers' - odd fragment ('named')",
+    "'as they do each year' redundant after 'each winter'",
+    "Slightly lecture-like ('The geometry of that choice'); otherwise on-voice and I would sign it"
+   ]
+  },
+  {
+   "idx": 5,
+   "verdict": "heavy",
+   "overall": 5.0,
+   "brand_voice": 5,
+   "channel_fit": 5.5,
+   "fidelity": 5.5,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 5,
+   "commercial_value": 5,
+   "top_issues": [
+    "School-trip framing ('rather than through a textbook', 'the landscape does a great deal of the teaching') - brand says do not make it sound like a school trip",
+    "FAQ 'What can we do beyond trekking?' answer lists nothing ('These activities are available to choose from...') - broken",
+    "'Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain' put to families with no pace/comfort framing; 'pace ... deliberately unhurried' unsupported"
+   ]
+  },
+  {
+   "idx": 6,
+   "verdict": "light",
+   "overall": 6.3,
+   "brand_voice": 6.5,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Hashtag '#PamiTaktsang' is a misspelling",
+    "'a living place that has been renewed and is still in active use' - unsupported claim under the brand's name",
+    "Brand name twice in the last two sentences ('Terra Family Expeditions plans days like this... Ask Terra Family Expeditions...'); no child-level framing of the hike"
+   ]
+  },
+  {
+   "idx": 7,
+   "verdict": "light",
+   "overall": 6.4,
+   "brand_voice": 6.5,
+   "channel_fit": 7,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 6.5,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "'That's operational thinking' still talks like an industry post, not to a 25-40 traveller",
+    "No social/group or food flavour that the brand leads with",
+    "'designed together, not recovery bolted on' - contrast-frame tic"
+   ]
+  },
+  {
+   "idx": 8,
+   "verdict": "heavy",
+   "overall": 5.2,
+   "brand_voice": 5,
+   "channel_fit": 5,
+   "fidelity": 7.5,
+   "ai_tells": 5,
+   "hook": 4,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "Hook 'The placement was deliberate.' is 29 chars, contextless and weak",
+    "Nature-led brand but the two rivers are never named and no landscape description - reads as civic history, off-core for WildKind",
+    "'chosen deliberately' repeats the hook; would need hook + landscape paragraph rewritten (>3 sentences)"
+   ]
+  },
+  {
+   "idx": 9,
+   "verdict": "light",
+   "overall": 6.6,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 6.5,
+   "clarity": 7,
+   "commercial_value": 6.5,
+   "top_issues": [
+    "'where the landscape itself seemed to amplify its purpose' - invented interpretation",
+    "'a choice that has never stopped mattering' hook is vague",
+    "'precisely this level of context' - mild self-praise; otherwise elegant and on-brand"
+   ]
+  },
+  {
+   "idx": 10,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 6.0,
+   "channel_fit": 5.5,
+   "fidelity": 7,
+   "ai_tells": 5.5,
+   "hook": 6.5,
+   "clarity": 7,
+   "commercial_value": 5.5,
+   "top_issues": [
+    "Duplicate hashtag '#ParoTaktsang ... #ParoTaktsang'",
+    "Families/children never mentioned in the body - reads as a history note, not a family brand post",
+    "'The restoration work that followed was careful and considered' invented; 'Terra Family Expeditions plans each detail with this kind of care' + CTA repeats brand name"
+   ]
+  },
+  {
+   "idx": 11,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 6,
+   "channel_fit": 6.5,
+   "fidelity": 8,
+   "ai_tells": 5.5,
+   "hook": 5.5,
+   "clarity": 6.5,
+   "commercial_value": 5.5,
+   "top_issues": [
+    "Generic aphorism hook ('Good trip planning is invisible') - weak for an energetic brand",
+    "Paragraph 4 restates paragraph 3 ('That's how the day is built...')",
+    "'It's a proper natural system, and it earns your full attention' filler; no social element"
+   ]
+  },
+  {
+   "idx": 12,
+   "verdict": "light",
+   "overall": 6.6,
+   "brand_voice": 7,
+   "channel_fit": 6.5,
+   "fidelity": 7,
+   "ai_tells": 6.5,
+   "hook": 6.5,
+   "clarity": 7,
+   "commercial_value": 6.5,
+   "top_issues": [
+    "'required ground that carried its own symbolic weight' - invented symbolism",
+    "CTA is clunky and doubled ('To plan a journey built around this quality of attention, talk to ... about this journey')",
+    "Short (133 words) - thin on the visit itself; no guiding/privacy note the brand leads with"
+   ]
+  },
+  {
+   "idx": 13,
+   "verdict": "light",
+   "overall": 6.7,
+   "brand_voice": 7,
+   "channel_fit": 6.5,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6.5,
+   "top_issues": [
+    "221 words - at the top of the LinkedIn band",
+    "CTA tail 'if you want to understand what it means to read a place this carefully' slightly preachy",
+    "'this was a place defined by rivers, shaped around them, not placed despite them' - contrast tic, but landscape-led and on-voice"
+   ]
+  },
+  {
+   "idx": 14,
+   "verdict": "light",
+   "overall": 6.1,
+   "brand_voice": 7,
+   "channel_fit": 6.5,
+   "fidelity": 6.5,
+   "ai_tells": 5,
+   "hook": 5,
+   "clarity": 5.5,
+   "commercial_value": 6,
+   "top_issues": [
+    "Broken opening: 'Beyond it, Siberian taiga takes over' has no antecedent - visible defect in paragraph 2",
+    "'the people who have built their lives along it for generations' unsupported",
+    "CTA promise of 'quality of guiding and carefully chosen stays' is on-brand; options hedged correctly"
+   ]
+  },
+  {
+   "idx": 15,
+   "verdict": "heavy",
+   "overall": 4.6,
+   "brand_voice": 5,
+   "channel_fit": 4.5,
+   "fidelity": 5,
+   "ai_tells": 4.5,
+   "hook": 3.5,
+   "clarity": 4.5,
+   "commercial_value": 4.5,
+   "top_issues": [
+    "Opening 'That picture is accurate, right up until it isn't.' has no antecedent - broken first line",
+    "'Access requires a multi-hour horse or reindeer ride' misplaced into the nomadic-families option paragraph - confusing and alarming for parents",
+    "Broken FAQ answer ('The route stops here for lunch'); classroom/science framing ('abstract science', 'no museum or classroom')"
+   ]
+  },
+  {
+   "idx": 16,
+   "verdict": "light",
+   "overall": 6.3,
+   "brand_voice": 6.5,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 5.5,
+   "hook": 6.5,
+   "clarity": 6.5,
+   "commercial_value": 6,
+   "top_issues": [
+    "'a decision, not a convenience' contrast-frame hook",
+    "'provided something beyond a defensible position' - invented framing",
+    "Long relic sentence is clunky; 'light footprint' brand line is appropriate"
+   ]
+  },
+  {
+   "idx": 17,
+   "verdict": "light",
+   "overall": 6.6,
+   "brand_voice": 7.5,
+   "channel_fit": 7,
+   "fidelity": 7,
+   "ai_tells": 5.5,
+   "hook": 6.5,
+   "clarity": 6.5,
+   "commercial_value": 6.5,
+   "top_issues": [
+    "'a resource of planetary significance' overstatement - not the brand's measured register",
+    "Dangling modifier 'Standing at the water's edge, both ecosystems are present'",
+    "Options hedged correctly and CTA on-voice; FAQ solid"
+   ]
+  },
+  {
+   "idx": 18,
+   "verdict": "heavy",
+   "overall": 4.8,
+   "brand_voice": 4.5,
+   "channel_fit": 5,
+   "fidelity": 5,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 5.5,
+   "commercial_value": 4.5,
+   "top_issues": [
+    "Segment leak 'children between the ages of seven and sixteen' and school framing ('studied volcanoes in school', 'no classroom can replicate')",
+    "Invented social proof 'the one that tends to stay with families the longest'; 'Wild North' title",
+    "Broken FAQ ('What animals do the Tsaatan use their reindeer for?' answer does not answer); multi-hour horse/reindeer ride stated with no family/comfort framing"
+   ]
+  },
+  {
+   "idx": 19,
+   "verdict": "heavy",
+   "overall": 5.1,
+   "brand_voice": 5,
+   "channel_fit": 5.5,
+   "fidelity": 6,
+   "ai_tells": 5,
+   "hook": 3.5,
+   "clarity": 5.5,
+   "commercial_value": 5,
+   "top_issues": [
+    "Opening 'Lake Khövsgöl reframes that picture entirely.' has no antecedent - broken first line",
+    "Lesson framing ('a biological lesson', 'make a word like dormant mean something') and 'natural spectacle' - off Terra's style guide",
+    "Multi-hour horse/reindeer ride to the Tsaatan with no pace, rest or comfort note - brand requires pace/comfort to be explained"
+   ]
+  }
+ ]
+}

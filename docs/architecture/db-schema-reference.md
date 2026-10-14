@@ -1,10 +1,10 @@
 # AA-Ecosys DB Schema Reference (live dump)
 
-**Verified:** 2026-10-13 (S234) — live `information_schema` dump of the shared RDS (`aa-cis/dev/rds`, acc2 `005097885195`, us-west-1). Latest migration applied: **222** (latest CIS numeric: 222; TripPlanner: tp-008).
+**Verified:** 2026-10-14 (S235) — live `information_schema` dump of the shared RDS (`aa-cis/dev/rds`, acc2 `005097885195`, us-west-1). Latest migration applied: **224** (latest CIS numeric: 224; TripPlanner: tp-009; Booking: bk-002).
 
 > This file is generated from a real DB dump, not hand-maintained. It is the **single source of truth** for table/column names across both CIS and TripPlanner (same RDS, separate schemas). Kiro and Claude Code should read THIS before introspecting columns. Regenerate after any migration: re-run the dump script (`.tmp-session/s209_schema_dump.py` pattern, S3-mediated ECS exec) and `s209_gen_schema_md.py`.
 
-**Totals:** 12 non-empty schemas, 107 tables/views, 96 FKs, 13 enums. Empty schemas (exist, 0 objects): acp_gold_output, acp_silver_s3, acp_silver_s4.
+**Totals:** 13 non-empty schemas, 119 tables/views, 103 FKs, 13 enums. Empty schemas (exist, 0 objects): acp_gold_output, acp_silver_s3, acp_silver_s4.
 
 ## Conventions
 - Column format: `name type` — `NN` suffix = NOT NULL. `_enum` / udt types shown by their udt name. `rows` = approximate (`pg_class.reltuples`), not exact.
@@ -348,7 +348,7 @@ subject_id uuid
 route_segment_ids jsonb
 ```
 
-### `acp_shared.atom_place_card` (table, ~118 rows)
+### `acp_shared.atom_place_card` (table, ~163 rows)
 ```
 atom_id text NN
 card_id uuid
@@ -356,7 +356,7 @@ resolved_at timestamp with time zone NN
 miss_reason text
 ```
 
-### `acp_shared.audit_log` (table, ~652 rows)
+### `acp_shared.audit_log` (table, ~930 rows)
 ```
 id uuid NN
 tenant_id character varying
@@ -369,7 +369,7 @@ created_at timestamp with time zone
 actor_type audit_actor_type
 ```
 
-### `acp_shared.content_piece` (table, ~150 rows)
+### `acp_shared.content_piece` (table, ~188 rows)
 ```
 piece_id uuid NN
 tenant_id uuid NN
@@ -436,7 +436,7 @@ created_at timestamp with time zone NN
 finalized_at timestamp with time zone
 ```
 
-### `acp_shared.place_card` (table, ~102 rows)
+### `acp_shared.place_card` (table, ~110 rows)
 ```
 card_id uuid NN
 place_key text NN
@@ -559,6 +559,181 @@ year integer NN
 created_at timestamp with time zone NN
 ```
 
+## `booking` (12 objects)
+
+### `booking.audit_logs` (table)
+```
+id uuid NN
+actor_type text NN
+actor_id uuid
+action text NN
+entity_type text NN
+entity_id uuid
+before jsonb
+after jsonb
+created_at timestamp with time zone NN
+```
+
+### `booking.customer_otps` (table)
+```
+id uuid NN
+customer_id uuid NN
+otp_hash text NN
+channel text NN
+expires_at timestamp with time zone NN
+used_at timestamp with time zone
+attempts smallint NN
+created_at timestamp with time zone NN
+```
+
+### `booking.customer_sessions` (table)
+```
+id uuid NN
+customer_id uuid NN
+refresh_token_hash text NN
+expires_at timestamp with time zone NN
+revoked_at timestamp with time zone
+created_at timestamp with time zone NN
+```
+
+### `booking.customers` (table)
+```
+id uuid NN
+name text
+email text
+phone text
+address text
+gender text
+marital_status text
+profession text
+profile_media_id uuid
+is_blocked boolean NN
+created_at timestamp with time zone NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+verified boolean NN
+source text NN
+needs_merge_review boolean NN
+merge_candidate_id uuid
+external_ref text
+contact_consent boolean NN
+contact_consent_at timestamp with time zone
+```
+
+### `booking.inbox_cursor` (table, ~1 rows)
+```
+source text NN
+contract text NN
+safe_id bigint NN
+updated_at timestamp with time zone NN
+```
+
+### `booking.inbox_events` (table)
+```
+id uuid NN
+source text NN
+contract text NN
+idempotency_key text NN
+payload jsonb NN
+received_at timestamp with time zone NN
+processed_at timestamp with time zone
+error text
+status text NN
+contract_version text
+source_position bigint
+```
+
+### `booking.job` (table, ~70 rows)
+```
+id uuid NN
+kind text NN
+payload jsonb NN
+status text NN
+attempt integer NN
+max_attempts integer NN
+run_after timestamp with time zone NN
+locked_by text
+locked_until timestamp with time zone
+idempotency_key text
+result jsonb
+error text
+created_by text
+created_at timestamp with time zone NN
+updated_at timestamp with time zone NN
+started_at timestamp with time zone
+finished_at timestamp with time zone
+```
+
+### `booking.media_files` (table)
+```
+id uuid NN
+s3_bucket text NN
+s3_key text NN
+content_type text NN
+bytes bigint
+width integer
+height integer
+sha256 text
+uploaded_by uuid
+created_at timestamp with time zone NN
+deleted_at timestamp with time zone
+```
+
+### `booking.notifications` (table)
+```
+id uuid NN
+recipient_type text NN
+recipient_id uuid
+type text NN
+title text NN
+message text
+entity_type text
+entity_id uuid
+data jsonb NN
+read_at timestamp with time zone
+created_at timestamp with time zone NN
+```
+
+### `booking.trip_case_legs` (table)
+```
+id uuid NN
+trip_case_id uuid NN
+position smallint NN
+source_tour_id text NN
+day_from smallint NN
+day_to smallint NN
+created_at timestamp with time zone NN
+```
+
+### `booking.trip_cases` (table)
+```
+id uuid NN
+code text NN
+customer_id uuid NN
+status text NN
+trip_style text
+start_date date
+end_date date
+pax smallint
+currency character
+source_system text NN
+source_id text
+idempotency_key text
+inbox_event_id uuid
+inquiry_snapshot jsonb
+created_by uuid
+created_at timestamp with time zone NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+```
+
+### `booking.v_schema_versions` (VIEW)
+```
+version character varying
+description text
+applied_at timestamp with time zone
+```
+
 ## `gold_aa_internal` (4 objects)
 
 ### `gold_aa_internal.content_exports` (table)
@@ -607,7 +782,7 @@ deleted_at timestamp with time zone
 deleted_by text
 ```
 
-### `gold_aa_internal.tenant_tour_versions` (table, ~3 rows)
+### `gold_aa_internal.tenant_tour_versions` (table, ~22 rows)
 ```
 id uuid NN
 tenant_id uuid NN
@@ -696,7 +871,7 @@ raw jsonb
 fetched_at timestamp with time zone NN
 ```
 
-### `shared.decision_cache_hits_daily` (table, ~181 rows)
+### `shared.decision_cache_hits_daily` (table, ~190 rows)
 ```
 day date NN
 stage text NN
@@ -807,7 +982,7 @@ added_at timestamp with time zone NN
 added_by text NN
 ```
 
-### `shared.job` (table, ~2407 rows)
+### `shared.job` (table, ~2460 rows)
 ```
 id uuid NN
 kind text NN
@@ -832,7 +1007,7 @@ started_at timestamp with time zone
 finished_at timestamp with time zone
 ```
 
-### `shared.job_worker` (table, ~119 rows)
+### `shared.job_worker` (table, ~131 rows)
 ```
 worker_id text NN
 host text NN
@@ -1095,7 +1270,7 @@ updated_at timestamp with time zone NN
 updated_by text
 ```
 
-### `shared.tenant_api_usage` (table, ~107717 rows)
+### `shared.tenant_api_usage` (table, ~113157 rows)
 ```
 id uuid NN
 tenant_id uuid
@@ -1707,6 +1882,13 @@ acp_shared.tenant_atom_state.tenant_id -> shared.tenants.tenant_id
 acp_shared.tenant_atom_state.tour_id -> silver_aa_internal.raw_tours.tour_id
 acp_shared.tenant_config.tenant_id -> shared.tenants.tenant_id
 acp_shared.year_plan.tenant_id -> shared.tenants.tenant_id
+booking.customer_otps.customer_id -> booking.customers.id
+booking.customer_sessions.customer_id -> booking.customers.id
+booking.customers.merge_candidate_id -> booking.customers.id
+booking.customers.profile_media_id -> booking.media_files.id
+booking.trip_case_legs.trip_case_id -> booking.trip_cases.id
+booking.trip_cases.customer_id -> booking.customers.id
+booking.trip_cases.inbox_event_id -> booking.inbox_events.id
 gold_aa_internal.content_exports.tenant_id -> shared.tenants.tenant_id
 gold_aa_internal.published_tours.generated_content_id -> silver_aa_internal.generated_content.id
 gold_aa_internal.published_tours.tenant_id -> shared.tenants.tenant_id
@@ -1771,6 +1953,11 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 
 | version | applied_at | description |
 |---|---|---|
+| 224 | 2026-10-14 04:43:32.072220+00:00 | S235: OpenAI API only as last-resort fallback (never primary/shadow); gpt-4.1 removed from routes and disabled in llm_model_catalog |
+| bk-002 | 2026-10-14 04:13:51.166899+00:00 | AA-681 slice 2: booking.job (O3, bk_ kinds O9), inbox_cursor + inbox_events.status, customer leads (verified, needs_merge_review, email/phone unique among verified only), trip_cases, trip_case_legs, notifications |
+| tp-009 | 2026-10-14 04:10:18.997918+00:00 | AA-681: grant role booking USAGE on schema tripplanner + SELECT on v_inquiry_outbox (inquiry.submitted pull consumer) |
+| 223 | 2026-10-14 01:54:55.216953+00:00 | AA-798: v_tenant_monthly_usage.llm_cost_usd = real llm_call_log month-to-date cost (shadow excluded); baseline capture of membership_plans + tenants.plan_id + the live view |
+| bk-001 | 2026-10-14 00:59:38.818160+00:00 | AA-678: booking schema foundation — role booking NOLOGIN, grants, default privileges FOR ROLE aa_cis_admin, customers/otps/sessions, media_files, audit_logs, inbox_events, v_schema_versions |
 | 222 | 2026-10-13 08:17:11.690231+00:00 | AA-772: a3_place_card -> validate on gpt-5.6-luna (sonnet fallback); a3_place_card_check -> validate on haiku (sonnet fallback) |
 | 221 | 2026-10-13 06:09:43.781885+00:00 | S234: place_card_miss + place_card_alias + atom_place_card.miss_reason (AA-772), stage keys t9_repair (haiku) and t10_claims (gpt-6-luna) |
 | 220 | 2026-10-13 01:31:50.038109+00:00 | S233: tenant_brand_rules.default_cta (AA-771), place_card + atom_place_card (AA-772), content_piece.writer_input (AA-769), facts.country, stage keys a3_place_card / a3_place_card_check |
@@ -1781,8 +1968,3 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 | tp-006 | 2026-10-11 06:13:05.415731+00:00 | backfill: trip_events add_day / remove_day |
 | tp-004 | 2026-10-11 06:13:05.415731+00:00 | backfill: Tour Graph tables |
 | tp-002 | 2026-10-11 06:13:05.415731+00:00 | backfill: shared.destinations (owner CIS since ADR 0002) |
-| tp-005 | 2026-10-11 06:13:05.415731+00:00 | backfill: destinations.located_by / located_at |
-| tp-001 | 2026-10-11 06:13:05.415731+00:00 | backfill: tripplanner schema (components, customers, sessions, events, drafts) |
-| tp-003 | 2026-10-11 06:13:05.415731+00:00 | backfill: tripplanner.tour_day |
-| 217 | 2026-10-11 06:10:05.539175+00:00 | AA-727: shared.rerun_wave — rerun wave as an object (expected set + status) |
-| 216 | 2026-10-11 05:31:26.134711+00:00 | AA-731: tripplanner may read v_active_tour_atoms place/activity columns |
