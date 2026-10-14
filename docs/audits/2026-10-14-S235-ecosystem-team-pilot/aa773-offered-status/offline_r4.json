@@ -1,0 +1,150 @@
+{
+ "route": {
+  "moments": 10,
+  "status_lines": 6,
+  "offered": [
+   [
+    5,
+    "Khövsgöl Lake — take boat rides on the water"
+   ],
+   [
+    5,
+    "Khövsgöl Lake — horseback riding across surrounding terrain"
+   ],
+   [
+    5,
+    "Khövsgöl Lake — visit local nomadic families"
+   ],
+   [
+    5,
+    "Khövsgöl Lake — trek along shorelines and forest paths"
+   ]
+  ],
+  "included_line": [
+   [
+    4,
+    "Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests"
+   ],
+   [
+    5,
+    "Tsaatan reindeer herders' settlements — excursions to Tsaatan reindeer herders' settlements"
+   ]
+  ],
+  "unknown": []
+ },
+ "single": [
+  {
+   "label": "Punakha Dzong — visit courtyards and assembly hall",
+   "status_lines": 0
+  },
+  {
+   "label": "Tiger's Nest Monastery — hike to the cliffside",
+   "status_lines": 0
+  },
+  {
+   "label": "Kuang Si Falls — swim and rest at pools",
+   "status_lines": 0
+  }
+ ],
+ "blogs": [
+  {
+   "piece": "3fd85285",
+   "tenant": "Terra Family Expeditions",
+   "status": "held",
+   "f17_old": 0,
+   "f17_new": 0,
+   "f17_examples": [],
+   "promise_old": 3,
+   "promise_new": 0,
+   "promise_new_examples": []
+  },
+  {
+   "piece": "bb776a54",
+   "tenant": "Atlas & Hearth",
+   "status": "held",
+   "f17_old": 0,
+   "f17_new": 0,
+   "f17_examples": [],
+   "promise_old": 4,
+   "promise_new": 0,
+   "promise_new_examples": []
+  },
+  {
+   "piece": "67f08753",
+   "tenant": "Terra Family Expeditions",
+   "status": "held",
+   "f17_old": 0,
+   "f17_new": 0,
+   "f17_examples": [],
+   "promise_old": 2,
+   "promise_new": 0,
+   "promise_new_examples": []
+  },
+  {
+   "piece": "9594430b",
+   "tenant": "Atlas & Hearth",
+   "status": "held",
+   "f17_old": 0,
+   "f17_new": 0,
+   "f17_examples": [],
+   "promise_old": 2,
+   "promise_new": 0,
+   "promise_new_examples": []
+  },
+  {
+   "piece": "2fc0a2fb",
+   "tenant": "Terra Family Expeditions",
+   "status": "approved",
+   "f17_old": 0,
+   "f17_new": 0,
+   "f17_examples": [],
+   "promise_old": 4,
+   "promise_new": 0,
+   "promise_new_examples": []
+  },
+  {
+   "piece": "9b65bd97",
+   "tenant": "Atlas & Hearth",
+   "status": "held",
+   "f17_old": 0,
+   "f17_new": 0,
+   "f17_examples": [],
+   "promise_old": 3,
+   "promise_new": 0,
+   "promise_new_examples": []
+  },
+  {
+   "piece": "4c2bb8c1",
+   "tenant": "Terra Family Expeditions",
+   "status": "held",
+   "f17_old": 0,
+   "f17_new": 0,
+   "f17_examples": [],
+   "promise_old": 3,
+   "promise_new": 0,
+   "promise_new_examples": []
+  },
+  {
+   "piece": "5939df86",
+   "tenant": "Atlas & Hearth",
+   "status": "held",
+   "f17_old": 0,
+   "f17_new": 0,
+   "f17_examples": [],
+   "promise_old": 2,
+   "promise_new": 0,
+   "promise_new_examples": []
+  }
+ ],
+ "totals": {
+  "blogs": 8,
+  "blogs_f17_old": 0,
+  "blogs_f17_new": 0,
+  "f17_old": 0,
+  "f17_new": 0,
+  "blogs_promise_old": 8,
+  "blogs_promise_new": 0,
+  "promise_old": 23,
+  "promise_new": 0
+ }
+}

@@ -1,0 +1,17 @@
+{
+  "session_id": "7bce579f-ee6f-42eb-be1d-d19968a3ac62",
+  "trip_id": "c14c07ae-7cc4-4bf9-945b-8c5922b23c89",
+  "country": "Bhutan",
+  "component_ids": [
+    "18639643-1e8e-4f54-ae70-bbc86ccc5053",
+    "9feb0163-c6a4-4cdc-955e-de9380009b17",
+    "230a213b-f325-4c55-947e-a79fb3d0b57b",
+    "231561fe-609b-4879-8c0a-2427e4dbc8f2",
+    "a65c7de7-8c4c-4590-85bc-9c58b6755da6"
+  ],
+  "dry_run": false,
+  "sent": true,
+  "send_attempted": true,
+  "handoff_id": 116,
+  "idempotency_key": "c14c07ae-7cc4-4bf9-945b-8c5922b23c89:116"
+}

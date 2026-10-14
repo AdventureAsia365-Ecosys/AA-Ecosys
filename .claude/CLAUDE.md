@@ -5,6 +5,7 @@
 ~/projects/AA-Ecosys/
 ├── apps/
 │   ├── AA-CIS-App/          → FastAPI backend + LangGraph pipeline (see apps/AA-CIS-App/.claude/CLAUDE.md)
+│   ├── AA-Booking/          → Booking (FastAPI + asyncpg, ECS in the CIS cluster; own git repo, S235)
 │   └── AA-TripPlanner-Web/  → B2C map-first trip planner (Next.js FE + 2 Lambda)
 ├── infra/
 │   └── AA-CIS-Infra/        → Terraform ECS/RDS/Lambda/API GW (see infra/AA-CIS-Infra/.claude/CLAUDE.md)

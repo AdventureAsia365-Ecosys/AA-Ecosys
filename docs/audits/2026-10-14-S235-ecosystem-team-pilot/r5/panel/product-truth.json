@@ -1,0 +1,560 @@
+{
+ "role": "product-truth",
+ "round": "S235 r5",
+ "summary": {
+  "reverse_flips_total": 0,
+  "reverse_flips_blogs": "0/8 (r4: 4/8)",
+  "invented_sub_activities_blogs": "6/8 (all = Mörön lunch near->in/here; clear 'in Mörön': #5,#18; 'lunch stop here' in Mörön section: #14,#15,#17,#19). Excluding the near->here wording: 2/8. No other invented sub-activity (no rim walk, town tour, sunrise, first-night-in-ger).",
+  "invented_sub_activities_linkedin": "0/12",
+  "permit_access_blogs_any": "7/8 (#1,#5,#14,#15,#17,#18,#19; only #3 clean)",
+  "permit_access_blogs_multi_hour_ride_verbatim": "4/8 = all 4 Terra (#5,#15,#18,#19); A&H 0/4 verbatim, 3/4 softened paraphrase (#1 soft, #14, #17)",
+  "permit_access_linkedin": "0/12 (Terra Taktsang: no checkpoint/camera/dress code)",
+  "access_classification": "permit_access with in_seed=TRUE. The fact survives in the seed because it is stored as a Tsaatan 'Place background' (setting) bullet, not a practical card, so the AA-774 practical-card removal never touched it: a card KIND defect upstream (access/logistics fact mis-kinded as setting), not writer invention. Product-truth risk: in #5, #18, #19 it sits next to the included day-5 Tsaatan excursion and reads as a trip logistics promise (multi-hour horse/reindeer ride the itinerary never states); in #15 it is attached to the wrong referent (the OFFERED nomadic-family visit). Fix = re-kind/strip access-type sentences from Place background (or add an access/permit filter to background bullets), not a writer prompt change.",
+  "pace_unsupported_terra_blogs": "sentences 4 (#5 'deliberately unhurried', #15 'unhurried place to spend the night', #15 'most room…within a structured day' [borderline], #18 'structure alongside space' [borderline]); pieces 3/4; clear-cut only: 2 sentences / 2 pieces (#5,#15)",
+  "pace_unsupported_ah_blogs": "sentences 3 (#3 'without hurry', #14 'without pressure' [CTA paragraph], #14 'rather than a fixed programme'); pieces 2/4; clear-cut 'hurry/pressure' only: 2",
+  "pace_linkedin": "Trail Pulse Day-2 rest claims seed_supported (3/3); unsupported operator-level generalisations in #2 (x2), #7, #11 (borderline). CTA lines excluded.",
+  "other": "#3 downgrades the day-14 'visit' to 'passes the ruins'; #18 places the ruins in the Khövsgöl region (scope). No included->optional hedge anywhere (Tsaatan always included)."
+ },
+ "pieces": [
+  {
+   "idx": 0,
+   "brand": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "status": "held",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [],
+   "notes": [
+    "Hot stone bath called 'already part of the plan/itinerary/day' — supported (seed: 'then soak in a traditional herbal hot stone bath'). No checkpoint/permit/dress-code sentence (AA-774 card facts absent).",
+    "Hashtag typo '#PadiDistrict' (not product-truth)."
+   ]
+  },
+  {
+   "idx": 1,
+   "brand": "Atlas & Hearth",
+   "channel": "blog",
+   "status": "approved",
+   "offered": [
+    "Day 5 of the trip: Khövsgöl Lake — take boat rides on the water — Source itinerary: Optional activities include boat rides on the water  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — horseback riding across surrounding terrain — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — visit local nomadic families — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local no  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local nomadic families\"). Describe it as available, never as something the reade"
+   ],
+   "included_flagged": [
+    "Day 4: Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests (Status: included)",
+    "Day 5: Khövsgöl Lake — trek along shorelines and forest paths (Status: included)",
+    "Day 5: Tsaatan reindeer herders' settlements — excursions (Status: included)"
+   ],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [
+    {
+     "sentence": "Access to their territory, deep in the forest north of the lake, is part of what makes this section of the trip distinctive",
+     "in_seed": true,
+     "seed_line": "Tsaatan Place background bullet: 'Their territory lies deep in the taiga, typically reached from the town of Tsagaannuur, and access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.'",
+     "kind": "soft_access",
+     "note": "No logistics detail; derived from the access bullet."
+    }
+   ],
+   "pace_promises": [],
+   "notes": [
+    "Clean on flips: all three OFFERED items hedged ('for those who choose it', FAQ 'available as a choice'). Lunch correctly 'near Mörön'."
+   ]
+  },
+  {
+   "idx": 2,
+   "brand": "Trail Pulse",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [
+    {
+     "sentence": "Kuang Si Falls is already on Day 2 — swim time built in, rest included, before lunch.",
+     "seed_supported": true,
+     "note": "Seed: 'Time is left for swimming and resting before lunch'."
+    },
+    {
+     "sentence": "Trail Pulse builds the pause into the structure before that point arrives.",
+     "seed_supported": false,
+     "note": "Generalises Day-2 rest to the whole trip/operator."
+    },
+    {
+     "sentence": "That's an operator who understands pacing — who knows that active days land better when recovery is part of the design, not a last-minute addition.",
+     "seed_supported": false,
+     "note": "Operator-level pacing claim beyond Day 2."
+    }
+   ],
+   "notes": []
+  },
+  {
+   "idx": 3,
+   "brand": "Atlas & Hearth",
+   "channel": "blog",
+   "status": "held",
+   "offered": [
+    "Day 5 of the trip: Khövsgöl Lake — take boat rides on the water — Source itinerary: Optional activities include boat rides on the water  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — horseback riding across surrounding terrain — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — visit local nomadic families — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local no  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local nomadic families\"). Describe it as available, never as something the reade"
+   ],
+   "included_flagged": [
+    "Day 4: Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests (Status: included)",
+    "Day 5: Khövsgöl Lake — trek along shorelines and forest paths (Status: included)",
+    "Day 5: Tsaatan reindeer herders' settlements — excursions (Status: included)"
+   ],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [
+    {
+     "sentence": "The camp is a standard ger camp, and the afternoon arrival allows the landscape to settle around the traveller without hurry.",
+     "seed_supported": false,
+     "note": "Seed says only 'Arrive at Sod Camp in the afternoon'."
+    }
+   ],
+   "notes": [
+    "Not a flip but a downgrade: 'On day fourteen, the route passes the ruins of an ancient monastery' — seed says 'visit the ruins'.",
+    "Only blog with no access sentence and no Mörön lunch claim. Options hedged ('you can choose to')."
+   ]
+  },
+  {
+   "idx": 4,
+   "brand": "Atlas & Hearth",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [],
+   "notes": [
+    "Seed has no Status lines; no flips possible. Visit described as courtyards + assembly hall only — no invented sub-activity, no access/dress-code sentence."
+   ]
+  },
+  {
+   "idx": 5,
+   "brand": "Terra Family Expeditions",
+   "channel": "blog",
+   "status": "held",
+   "offered": [
+    "Day 5 of the trip: Khövsgöl Lake — take boat rides on the water — Source itinerary: Optional activities include boat rides on the water  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — horseback riding across surrounding terrain — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — visit local nomadic families — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local no  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local nomadic families\"). Describe it as available, never as something the reade"
+   ],
+   "included_flagged": [
+    "Day 4: Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests (Status: included)",
+    "Day 5: Khövsgöl Lake — trek along shorelines and forest paths (Status: included)",
+    "Day 5: Tsaatan reindeer herders' settlements — excursions (Status: included)"
+   ],
+   "reverse_flips": [],
+   "invented_sub_activities": [
+    {
+     "sentence": "Day four brings a stop for lunch in Mörön, the capital of Khövsgöl Province and the main hub for travellers heading north toward the lake.",
+     "activity": "lunch IN Mörön (seed: near)",
+     "seed_line": "Moron: 'Stop for lunch near Moron, capital of Khövsgöl province' (seed says NEAR, not in)",
+     "severity": "clear"
+    }
+   ],
+   "permit_access": [
+    {
+     "sentence": "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.",
+     "in_seed": true,
+     "seed_line": "Tsaatan Place background bullet: 'Their territory lies deep in the taiga, typically reached from the town of Tsagaannuur, and access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.'",
+     "kind": "multi_hour_ride_verbatim",
+     "note": "Placed immediately before 'Day five includes excursions to their settlements' -> reads as a day-5 logistics promise (a multi-hour ride the trip itinerary never states)."
+    },
+    {
+     "sentence": "The community lives in the remote taiga of Tsagaannuur district in Khövsgöl Province, with their territory typically accessed from the town of Tsagaannuur.",
+     "in_seed": true,
+     "seed_line": "Tsaatan Place background bullet: 'Their territory lies deep in the taiga, typically reached from the town of Tsagaannuur, and access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.'",
+     "kind": "soft_access",
+     "note": ""
+    }
+   ],
+   "pace_promises": [
+    {
+     "sentence": "The pace across these two lake days is deliberately unhurried.",
+     "seed_supported": false,
+     "note": "No pace fact in seed."
+    }
+   ],
+   "notes": [
+    "FAQ 'What can we do at Lake Khövsgöl beyond trekking?' answer 'These activities are available to choose from…' has a dangling referent (activities not named) — not a flip."
+   ]
+  },
+  {
+   "idx": 6,
+   "brand": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [],
+   "notes": [
+    "Hot stone bath called 'already part of the plan/itinerary/day' — supported (seed: 'then soak in a traditional herbal hot stone bath'). No checkpoint/permit/dress-code sentence (AA-774 card facts absent).",
+    "Hashtag typo '#PamiTaktsang' (not product-truth)."
+   ]
+  },
+  {
+   "idx": 7,
+   "brand": "Trail Pulse",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [
+    {
+     "sentence": "A trek on Day 2 ends at the tiered limestone pools of Kuang Si Falls — swim time already in the plan, before lunch.",
+     "seed_supported": true,
+     "note": "Seed: 'Time is left for swimming and resting before lunch'."
+    },
+    {
+     "sentence": "Trail Pulse builds it in before you need it.",
+     "seed_supported": false,
+     "note": "Generalises to the operator. CTA 'how Day 2 — and every day — is put together' excluded."
+    }
+   ],
+   "notes": []
+  },
+  {
+   "idx": 8,
+   "brand": "WildKind Travel",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [],
+   "notes": [
+    "Seed has no Status lines; no flips possible. Visit described as courtyards + assembly hall only — no invented sub-activity, no access/dress-code sentence."
+   ]
+  },
+  {
+   "idx": 9,
+   "brand": "Atlas & Hearth",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [],
+   "notes": [
+    "Seed has no Status lines; no flips possible. Visit described as courtyards + assembly hall only — no invented sub-activity, no access/dress-code sentence."
+   ]
+  },
+  {
+   "idx": 10,
+   "brand": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [],
+   "notes": [
+    "Hot stone bath called 'already part of the plan/itinerary/day' — supported (seed: 'then soak in a traditional herbal hot stone bath'). No checkpoint/permit/dress-code sentence (AA-774 card facts absent).",
+    "'a considered way to close it' — bath as end of day is mild inference, not counted."
+   ]
+  },
+  {
+   "idx": 11,
+   "brand": "Trail Pulse",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [
+    {
+     "sentence": "What makes this work as a day isn't the destination alone — it's that swim and rest time is already built into the plan before lunch.",
+     "seed_supported": true,
+     "note": "Seed: 'Time is left for swimming and resting before lunch'."
+    },
+    {
+     "sentence": "Good trip planning is invisible — you only notice it when the rest was already there before you needed it.",
+     "seed_supported": false,
+     "note": "Hook-level generalisation; borderline. CTA 'how the whole trip is paced' excluded."
+    }
+   ],
+   "notes": []
+  },
+  {
+   "idx": 12,
+   "brand": "Atlas & Hearth",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [],
+   "notes": [
+    "Seed has no Status lines; no flips possible. Visit described as courtyards + assembly hall only — no invented sub-activity, no access/dress-code sentence."
+   ]
+  },
+  {
+   "idx": 13,
+   "brand": "WildKind Travel",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [],
+   "notes": [
+    "Seed has no Status lines; no flips possible. Visit described as courtyards + assembly hall only — no invented sub-activity, no access/dress-code sentence."
+   ]
+  },
+  {
+   "idx": 14,
+   "brand": "Atlas & Hearth",
+   "channel": "blog",
+   "status": "approved",
+   "offered": [
+    "Day 5 of the trip: Khövsgöl Lake — take boat rides on the water — Source itinerary: Optional activities include boat rides on the water  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — horseback riding across surrounding terrain — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — visit local nomadic families — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local no  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local nomadic families\"). Describe it as available, never as something the reade"
+   ],
+   "included_flagged": [
+    "Day 4: Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests (Status: included)",
+    "Day 5: Khövsgöl Lake — trek along shorelines and forest paths (Status: included)",
+    "Day 5: Tsaatan reindeer herders' settlements — excursions (Status: included)"
+   ],
+   "reverse_flips": [],
+   "invented_sub_activities": [
+    {
+     "sentence": "A lunch stop here marks the transition — a moment to understand the scale of what separates the Mongolian interior from its far north before the road continues to the lakeshore.",
+     "activity": "lunch stop 'here' = in Mörön (seed: near)",
+     "seed_line": "Moron: 'Stop for lunch near Moron, capital of Khövsgöl province' (seed says NEAR, not in)",
+     "severity": "mild"
+    }
+   ],
+   "permit_access": [
+    {
+     "sentence": "Their territory lies in the taiga north of the lake, accessible from the town of Tsagaannuur, and reaching their camps requires passing through the forest terrain that defines their world.",
+     "in_seed": true,
+     "seed_line": "Tsaatan Place background bullet: 'Their territory lies deep in the taiga, typically reached from the town of Tsagaannuur, and access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.'",
+     "kind": "softened_access",
+     "note": "Paraphrase of the access bullet minus the horse/reindeer ride."
+    }
+   ],
+   "pace_promises": [
+    {
+     "sentence": "These are choices available here, not obligations — time shaped by the landscape rather than a fixed programme.",
+     "seed_supported": false,
+     "note": "Implies unstructured free time; seed has no schedule/pace fact."
+    },
+    {
+     "sentence": "Atlas & Hearth is built for travellers who want that depth, with the quality of guiding and the comfort of carefully chosen stays that allow the place to reveal itself without pressure.",
+     "seed_supported": false,
+     "note": "In the CTA paragraph but not the CTA line itself; 'without pressure' is a pace promise."
+    }
+   ],
+   "notes": []
+  },
+  {
+   "idx": 15,
+   "brand": "Terra Family Expeditions",
+   "channel": "blog",
+   "status": "held",
+   "offered": [
+    "Day 5 of the trip: Khövsgöl Lake — take boat rides on the water — Source itinerary: Optional activities include boat rides on the water  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — horseback riding across surrounding terrain — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — visit local nomadic families — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local no  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local nomadic families\"). Describe it as available, never as something the reade"
+   ],
+   "included_flagged": [
+    "Day 4: Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests (Status: included)",
+    "Day 5: Khövsgöl Lake — trek along shorelines and forest paths (Status: included)",
+    "Day 5: Tsaatan reindeer herders' settlements — excursions (Status: included)"
+   ],
+   "reverse_flips": [],
+   "invented_sub_activities": [
+    {
+     "sentence": "The stop here is for lunch before continuing on to the lakeshore camp — a practical pause in a town that frames what the province is, and what lies ahead to the north.",
+     "activity": "lunch stop in Mörön (seed: near); repeated in FAQ 'The route stops here for lunch on day 4'",
+     "seed_line": "Moron: 'Stop for lunch near Moron, capital of Khövsgöl province' (seed says NEAR, not in)",
+     "severity": "mild"
+    }
+   ],
+   "permit_access": [
+    {
+     "sentence": "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.",
+     "in_seed": true,
+     "seed_line": "Tsaatan Place background bullet: 'Their territory lies deep in the taiga, typically reached from the town of Tsagaannuur, and access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.'",
+     "kind": "multi_hour_ride_verbatim",
+     "note": "WRONG REFERENT: sits inside the OFFERED-options paragraph right after 'the opportunity to visit local nomadic families', so it tells the reader the nomadic-family visit needs a multi-hour horse/reindeer ride. Seed bullet is about the Tsaatan territory."
+    }
+   ],
+   "pace_promises": [
+    {
+     "sentence": "The camp sits opposite a mountain range with trekking access and proximity to a mineral spring said to have healing properties, making it a practical and unhurried place to spend the night in a standard ger.",
+     "seed_supported": false,
+     "note": ""
+    },
+    {
+     "sentence": "Day 5 is the section of the route that gives families the most room to follow their own interests within a structured day.",
+     "seed_supported": false,
+     "note": "Borderline (flexibility rather than rest)."
+    }
+   ],
+   "notes": [
+    "Options well hedged ('All three are optional'). Trek embellished ('keeps the water in sight') — fidelity, not a sub-activity."
+   ]
+  },
+  {
+   "idx": 16,
+   "brand": "WildKind Travel",
+   "channel": "linkedin",
+   "status": "approved",
+   "offered": [],
+   "included_flagged": [],
+   "reverse_flips": [],
+   "invented_sub_activities": [],
+   "permit_access": [],
+   "pace_promises": [],
+   "notes": [
+    "Seed has no Status lines; no flips possible. Visit described as courtyards + assembly hall only — no invented sub-activity, no access/dress-code sentence."
+   ]
+  },
+  {
+   "idx": 17,
+   "brand": "Atlas & Hearth",
+   "channel": "blog",
+   "status": "approved",
+   "offered": [
+    "Day 5 of the trip: Khövsgöl Lake — take boat rides on the water — Source itinerary: Optional activities include boat rides on the water  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — horseback riding across surrounding terrain — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — visit local nomadic families — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local no  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local nomadic families\"). Describe it as available, never as something the reade"
+   ],
+   "included_flagged": [
+    "Day 4: Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests (Status: included)",
+    "Day 5: Khövsgöl Lake — trek along shorelines and forest paths (Status: included)",
+    "Day 5: Tsaatan reindeer herders' settlements — excursions (Status: included)"
+   ],
+   "reverse_flips": [],
+   "invented_sub_activities": [
+    {
+     "sentence": "A lunch stop here marks that threshold.",
+     "activity": "lunch stop 'here' = in Mörön (seed: near)",
+     "seed_line": "Moron: 'Stop for lunch near Moron, capital of Khövsgöl province' (seed says NEAR, not in)",
+     "severity": "mild"
+    }
+   ],
+   "permit_access": [
+    {
+     "sentence": "Their territory lies in the taiga north of the lake, in the area of Tsagaannuur district, and it is accessed from that direction.",
+     "in_seed": true,
+     "seed_line": "Tsaatan Place background bullet: 'Their territory lies deep in the taiga, typically reached from the town of Tsagaannuur, and access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.'",
+     "kind": "softened_access",
+     "note": ""
+    }
+   ],
+   "pace_promises": [],
+   "notes": []
+  },
+  {
+   "idx": 18,
+   "brand": "Terra Family Expeditions",
+   "channel": "blog",
+   "status": "approved",
+   "offered": [
+    "Day 5 of the trip: Khövsgöl Lake — take boat rides on the water — Source itinerary: Optional activities include boat rides on the water  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — horseback riding across surrounding terrain — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — visit local nomadic families — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local no  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local nomadic families\"). Describe it as available, never as something the reade"
+   ],
+   "included_flagged": [
+    "Day 4: Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests (Status: included)",
+    "Day 5: Khövsgöl Lake — trek along shorelines and forest paths (Status: included)",
+    "Day 5: Tsaatan reindeer herders' settlements — excursions (Status: included)"
+   ],
+   "reverse_flips": [],
+   "invented_sub_activities": [
+    {
+     "sentence": "Day four moves the family northward through Khövsgöl Province, with a lunch stop in Mörön — the provincial capital and the main gateway for travellers heading to the lake.",
+     "activity": "lunch IN Mörön (seed: near)",
+     "seed_line": "Moron: 'Stop for lunch near Moron, capital of Khövsgöl province' (seed says NEAR, not in)",
+     "severity": "clear"
+    }
+   ],
+   "permit_access": [
+    {
+     "sentence": "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.",
+     "in_seed": true,
+     "seed_line": "Tsaatan Place background bullet: 'Their territory lies deep in the taiga, typically reached from the town of Tsagaannuur, and access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.'",
+     "kind": "multi_hour_ride_verbatim",
+     "note": "Follows 'the excursion to Tsaatan reindeer herder settlements' -> reads as how the included excursion is done."
+    }
+   ],
+   "pace_promises": [
+    {
+     "sentence": "For parents, it offers structure alongside space.",
+     "seed_supported": false,
+     "note": "Borderline. CTA 'build an itinerary around the places and pace that suit you' excluded (CTA line)."
+    }
+   ],
+   "notes": [
+    "Options hedged ('you can take a boat ride… None of these additional activities are obligatory') — 'you can' + explicit optional, so not a flip.",
+    "Scope: 'The journey through the Khövsgöl region also includes a visit to the ruins…' — seed does not place the day-14 ruins in Khövsgöl."
+   ]
+  },
+  {
+   "idx": 19,
+   "brand": "Terra Family Expeditions",
+   "channel": "blog",
+   "status": "approved",
+   "offered": [
+    "Day 5 of the trip: Khövsgöl Lake — take boat rides on the water — Source itinerary: Optional activities include boat rides on the water  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — horseback riding across surrounding terrain — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain\"). Describe it as available, never as something the reader will do.",
+    "Day 5 of the trip: Khövsgöl Lake — visit local nomadic families — Source itinerary: Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local no  ->  Status: OFFERED, NOT INCLUDED (the itinerary says: \"Optional activities include boat rides on the water, horseback riding across surrounding terrain, visits to local nomadic families\"). Describe it as available, never as something the reade"
+   ],
+   "included_flagged": [
+    "Day 4: Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests (Status: included)",
+    "Day 5: Khövsgöl Lake — trek along shorelines and forest paths (Status: included)",
+    "Day 5: Tsaatan reindeer herders' settlements — excursions (Status: included)"
+   ],
+   "reverse_flips": [],
+   "invented_sub_activities": [
+    {
+     "sentence": "A lunch stop here marks a practical transition point between the volcanic steppe of Bulgan Province and the forested north.",
+     "activity": "lunch stop 'here' = in Mörön (seed: near)",
+     "seed_line": "Moron: 'Stop for lunch near Moron, capital of Khövsgöl province' (seed says NEAR, not in)",
+     "severity": "mild"
+    }
+   ],
+   "permit_access": [
+    {
+     "sentence": "Access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.",
+     "in_seed": true,
+     "seed_line": "Tsaatan Place background bullet: 'Their territory lies deep in the taiga, typically reached from the town of Tsagaannuur, and access requires a multi-hour horse or reindeer ride, often crossing rivers and boggy forest terrain.'",
+     "kind": "multi_hour_ride_verbatim",
+     "note": "Directly follows 'the journey reaches its most culturally distinct moment: excursions to Tsaatan reindeer herders' settlements' -> reads as a trip logistics fact."
+    }
+   ],
+   "pace_promises": [],
+   "notes": []
+  }
+ ]
+}
