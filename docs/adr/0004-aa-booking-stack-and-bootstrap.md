@@ -252,7 +252,7 @@ All eight steps were completed in this order on 14/10/2026.
 | O4 | **Stack confirmation** | **Confirmed:** FastAPI + asyncpg backend, Next.js on Vercel (decision 1). |
 | O5 | **`bk-001` scope** | **First slice** (decision 7). Applied 14/10/2026; live `/booking/health/ready`. |
 | O6 | Guest inquiries | **Guests must give name + email (phone optional) + consent; no registration.** Contract `inquiry.submitted` v1.1 (`docs/contracts/inquiry.submitted.v1.1.json`). Booking creates a trip case at once with a lead customer (unverified email) and merges it into the customer on OTP sign-in. Contact-less legacy hand-offs are parked in `inbox_events`. |
-| O7 | Content boundary | **All customer-facing content (activities, country text) is authored in CIS** (ADR 0002). Booking keeps commercial fields only (see ADR 0005 for prices and suppliers). |
+| O7 | Content boundary | **All customer-facing content (activities, country text) is authored in CIS** (ADR 0002). Booking keeps commercial fields only (see ADR 0005 for prices and suppliers). **Amended S236:** supply data for hotels/services is owned by Booking; CIS writes the customer-facing text and photos from it — see `0004a-supply-content-ownership.md`. |
 | O8 | Customer surface | **TripPlanner is the customer front door** (discovery and inquiry). Booking's customer app = sign-in, My Trips, payments. |
 | O9 | Job kind prefix | **`bk_*`.** |
 
