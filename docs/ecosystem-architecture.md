@@ -1,12 +1,13 @@
 # AA-Ecosys — Ecosystem architecture
 
-> **Status:** updated 14/10/2026 (S235 — AA-Booking bootstrap live, OIDC trust narrowed, ADRs
+> **Status:** updated 14/10/2026 (S236 — ADR 0007 place pipeline in CIS; S235 — AA-Booking bootstrap live, OIDC trust narrowed, ADRs
 > 0001/0004/0005 Accepted; previous revisions 11/10/2026 S225 AA-654, 25/09/2026). Items marked **[FACT]** were verified by reading code, migrations or live
 > state; **[TO CONFIRM]** marks an inference or gap that Nghiệp still has to confirm.
 > Target direction and decisions: [ADR 0001](adr/0001-ecosystem-target-architecture.md),
 > [ADR 0002](adr/0002-only-cis-writes-content.md), [ADR 0003](adr/0003-one-durable-job-model.md),
 > [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (AA-Booking stack and bootstrap),
-> [ADR 0005](adr/0005-pricing-and-supplier-rates.md) (pricing and supplier rates). Contract rules
+> [ADR 0005](adr/0005-pricing-and-supplier-rates.md) (pricing and supplier rates),
+> [ADR 0007](adr/0007-place-pipeline-in-cis.md) (place pipeline in CIS: `geo` schema, `catalog.*` views). Contract rules
 > between apps: [`contracts/README.md`](contracts/README.md).
 
 ## 1. Overview
@@ -156,6 +157,10 @@ Source: `apps/AA-TripPlanner-Web/migrations/*`.
   `acp_contract.v_active_tour_atoms` (CIS migration 216) and the photo views.
 - **Photos (AA-708, 01/10/2026):** CIS owns `shared.place_photo` (CIS migration 198, FK to
   `shared.destinations`) and the `photo_sync` job. See 4.5.
+- **Place read models (ADR 0007, 14/10/2026):** `tripplanner.itinerary_components`, `tour_day`,
+  `tour_stop`, `tour_graph_*`, `tour_leg`, `tour_junction` are frozen. CIS rebuilds them in its own schema
+  `geo` (CIS 226+) and TripPlanner reads them through `catalog.*` views (CIS 227) behind a runtime flag;
+  the legacy tables are dropped 14 days after the cut-over.
 
 ### 3.4 AA-Booking — schema `booking` [FACT]
 
@@ -190,8 +195,13 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 - Other apps (TripPlanner, AA-Booking) **read through views only** and write only their own schema
   (+ `shared.llm_call_log`, cost logs). Enforced with DB grants: role `tripplanner` has only `SELECT` on
   `shared.destinations` (CIS migration 201).
-- The place pipeline (itinerary extraction, Mapbox geocode, tour graph) still lives in TripPlanner and is
-  **frozen**; it moves to CIS under AA-712.
+- The place pipeline (itinerary extraction, geocode, tour graph) still lives in TripPlanner and is
+  **frozen**; it moves to CIS under AA-712 as designed in [ADR 0007](adr/0007-place-pipeline-in-cis.md):
+  CIS-owned schema `geo`, job kinds `place_extract` / `place_geocode` / `tour_graph_build` on `shared.job`
+  (background priority, cap 1), `shared.destinations` unique on `(name_norm, country)`, geocoder behind an
+  adapter with storage rights (provider pending: Amazon Location vs Mapbox Permanent), and TripPlanner
+  reading `catalog.*` place and graph views. TripPlanner cuts over only when the views cover every tour the
+  legacy tables cover.
 
 ### 4.1 Frontend ⇄ backend
 
@@ -275,7 +285,9 @@ read a read model):
 | TripPlanner destination cover | CIS writes `shared.destinations.cover_image_url` | Only empty cells, or cells this job set earlier |
 
 Order per country (rerun wave): S1 rewrite → A3 atomize → **re-extract places** (still in TripPlanner,
-moving to CIS under AA-712) (`tripplanner.itinerary_components` / `tour_stop`) → Admin › Photos:
+moving to CIS under AA-712 / ADR 0007, where it becomes the `place_extract` job enqueued by atomize and
+the graph build enqueues cover/photo match) (`tripplanner.itinerary_components` / `tour_stop`, later
+`geo.*`) → Admin › Photos:
 "Sync <country>" + "Match places + covers". A photo is only matched against places in **that tour's own
 itinerary**. Filling destination covers stays off until places are re-extracted. AA-Booking (AA-679
 catalog sync) gets tour photos from `shared.v_tour_photos` by `tour_id`.
@@ -307,7 +319,10 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
 - **AA-Booking (AAA):** health-only bootstrap live (3.4); next slices: inquiry intake (`inquiry.submitted`
   v1.1, `booking.job`), staff identity via CIS (ADR 0004 O1), catalog sync (AA-679). Handoff from TripPlanner:
   [`tripplanner-to-aaa-handoff.md`](tripplanner-to-aaa-handoff.md).
-- **Place pipeline to CIS (AA-712):** required before destination covers are switched on.
+- **Place pipeline to CIS (AA-712, [ADR 0007](adr/0007-place-pipeline-in-cis.md)):** required before
+  destination covers are switched on. Open: geocoding provider (Amazon Location vs Mapbox Permanent);
+  TripPlanner vector search must be rewritten (HNSW top-k or destination centroid) before the
+  catalog-wide run.
 - **[TO CONFIRM]** CloudFront in front of TripPlanner browse routes (listed as a later change).
 - **CIS data rerun:** waves are registered and reported through `/admin/waves` (`shared.rerun_wave`,
   AA-727); Batch Inference on acc3 (AA-624) is still blocked.
