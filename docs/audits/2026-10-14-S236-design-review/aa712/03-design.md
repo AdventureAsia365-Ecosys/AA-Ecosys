@@ -286,6 +286,18 @@ for queries. If either side changes model/dimension, both change in one coordina
 | 5 | CIS | `/admin/places` page + job domain links | aa-ui-verify screenshots |
 | 6 | TP | Readers behind flag; writers removed; fallback kept | preview + UI smoke |
 | 7 | TP | id-map migration + flag → cis in one window (after the §7 b2 coverage check); drop migration 14 days later | coverage SQL check; live map/suggestions/routes; drafts keep pins |
+| 8 | CIS (+ Infra copy) | Migration that drops `destinations_lower_name_uidx` — **only after slice 6 has removed TP's writers** | TP extraction no longer writes `shared.destinations`; DB Migrate green |
+
+**Global `lower(name)` index (build review, finding 1).** TP's live extraction writers upsert
+`ON CONFLICT (lower(name))` (`backend/extraction/locate.py` `UPSERT_SQL`, `geocode.py`), so migration 226
+**keeps** `destinations_lower_name_uidx` next to the new `(name_norm, country, locality_norm)` key; dropping it
+would break every TP extraction run. Until slice 8, CIS's `upsert_destination` stores a second place whose
+plain name is taken as `"<name> (<locality|country>)"` (its `name_norm` / key stay the plain name), and adopts
+a same-country row TP wrote after 226 without `name_norm`. TP rows written meanwhile stay invisible to the
+CIS key lookups until CIS geocodes the same name (then adopted). While TP's writers run, TP's upsert can
+still overwrite a CIS row's point by name (`DO UPDATE SET lat/lng…`, admin-fixed rows included) — so the
+backfill's real runs (§7 runs b/c) should wait for slice 6's writer removal, or accept that TP may
+overwrite until then.
 
 **Runs:** (a) **trial 3 tours** of one country already in the 56-tour set (parity: overnight ids, stop count,
 geocode distance vs TP ≤ 25 km, embeddings present, cost/tour; 30-destination spot check §4);

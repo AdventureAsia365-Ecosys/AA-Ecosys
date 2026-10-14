@@ -10,11 +10,11 @@ Team: `AA_Ecosys`. Issue viết bằng **tiếng Anh**; comment trao đổi vớ
 ## Trước khi tạo
 
 1. **Kiểm trùng:** `list_issues` với `query` là 2–3 từ khoá chính, kể cả Backlog. Có issue gần giống → comment hoặc mở rộng scope issue đó, không tạo mới.
-2. **Chọn 1 trong 3 project** (gom lại S231, 12/10/2026; mọi issue phải gắn 1 project; 1 project tối đa 50 issue MỞ — gần ngưỡng thì hỏi Nghiệp):
+2. **Chọn 1 trong 3 project** (gom lại S231, 12/10/2026; mọi issue phải gắn 1 project; 1 project **không quá 100 issue chưa lưu trữ** (cả mở lẫn đã đóng; Nghiệp chốt S236) — gần ngưỡng thì báo Nghiệp và đề xuất lưu trữ/gộp trước khi tạo thêm):
    - `CIS Core — Pipeline, LLM & Platform` — backend App + Infra: A/T pipeline, rerun, review, LLM gateway, judge, Jev, eval, jobs, CI, bảo mật, auth, docs/skill
    - `CIS Portal — Admin & Tenant UI` — trang admin/portal, UI kit, design system
    - `TripPlanner & AA-Booking` — AA-TripPlanner-Web + AA-Booking (AAA)
-   - Workspace Linear gói Free: trần 250 issue chưa lưu trữ — issue đóng >1 tháng phải được lưu trữ (auto-archive).
+   - Workspace Linear gói Free: trần 250 issue chưa lưu trữ. **Issue Done đã xong hẳn (verify live, không còn follow-up) nên được lưu trữ sớm để trống quota** (S236). Connector MCP không lưu trữ được → nhắc Nghiệp lưu trữ trên UI (lọc Done → chọn hết → Archive) hoặc bật auto-archive ngắn nhất; cuối mỗi phiên báo số issue chưa lưu trữ theo project.
 3. **Ưu tiên:** Urgent = đang hỏng production hoặc mất dữ liệu; High = chặn wave/việc kế tiếp hoặc rủi ro bảo mật; Medium = cải tiến có ích; Low = để sau.
 
 ## Template

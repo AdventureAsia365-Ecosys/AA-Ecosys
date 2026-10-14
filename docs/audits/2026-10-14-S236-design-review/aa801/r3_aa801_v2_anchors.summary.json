@@ -1,0 +1,37 @@
+{
+ "mode": "anchors",
+ "summary": {
+  "SUMMARY": "AA-801",
+  "mode": "anchors",
+  "gate": "brand_fit_mission",
+  "model_override": null,
+  "versions": 9,
+  "versions_in_set": 9,
+  "versions_complete": 9,
+  "judgements": 45,
+  "comparable": true,
+  "max_verdict_spread": 1.0,
+  "versions_verdict_spread_le_1": 9,
+  "max_brand_fit_spread": 1.0,
+  "mission_stable_versions": 9,
+  "mission_true_share": 1.0,
+  "evidence_verified_share": 1.0,
+  "evidence_overruled": 0,
+  "evidence_samples": [
+   "The road hugs the Nam Ou River valley and passes through Pak Mong village for lunch.",
+   "After a Laos-style lunch of grilled meat and vegetables, leave the bikes and head into the forest on foot.",
+   "The turquoise pools are made for a swim.",
+   "The road hugs the Nam Ou River valley and passes through Pak Mong village for lunch.",
+   "The road hugs the Nam Ou River valley and passes through Pak Mong village for lunch."
+  ],
+  "mean_brand_fit": 7.58,
+  "billed_calls": 135,
+  "calls_per_judgement": 3.0,
+  "total_cost_usd": 0.1175,
+  "cost_per_judgement_usd": 0.00261,
+  "errors": 0,
+  "skipped": {},
+  "aborted": null,
+  "aborted_versions": null
+ }
+}

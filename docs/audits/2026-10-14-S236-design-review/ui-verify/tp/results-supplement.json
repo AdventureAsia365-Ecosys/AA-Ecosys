@@ -1,0 +1,157 @@
+{
+  "plan_deploy": {
+    "nav_error": null,
+    "secs": 10,
+    "req": 41,
+    "tiles": 0,
+    "status": {
+      "200": 27,
+      "204": 2,
+      "403": 12
+    },
+    "failed": {},
+    "console_errors": {
+      "Failed to load resource: the server responded with a status of 403 ()": 12,
+      "[mapbox error] ": 24
+    },
+    "page_errors": [],
+    "mapbox": {
+      "200": 3,
+      "204": 2,
+      "403": 12
+    }
+  },
+  "plan_alias": {
+    "nav_error": null,
+    "secs": 8,
+    "req": 10285,
+    "tiles": 10220,
+    "status": {
+      "200": 374,
+      "204": 4,
+      "503": 1052
+    },
+    "failed": {
+      "net::ERR_INSUFFICIENT_RESOURCES": 8855
+    },
+    "console_errors": {
+      "Failed to load resource: net::ERR_INSUFFICIENT_RESOURCES": 8855,
+      "Failed to load resource: the server responded with a status of 503 ()": 1052
+    },
+    "page_errors": [
+      "TypeError: Failed to fetch"
+    ],
+    "mapbox": {
+      "200": 37,
+      "204": 4
+    }
+  },
+  "alias_tour_srilanka": {
+    "req": 26,
+    "tiles": 0,
+    "status": {
+      "200": 26
+    },
+    "failed": {},
+    "console_errors": {},
+    "page_errors": [],
+    "mapbox": {
+      "200": 1
+    },
+    "images": [
+      {
+        "src": "https://aa-tripplanner.vercel.app/brand/logo.jpg",
+        "ok": true
+      },
+      {
+        "src": "https://api.mapbox.com/styles/v1/mapbox/light-v11/static/geojson(%7B%22type%22%3A%22Featur",
+        "ok": true
+      }
+    ]
+  },
+  "customise_kailash": {
+    "href": "/plan?tour=9829e6e2-a214-4625-92a8-4b22af4f78f4&source=98624d92-5102-4642-9462-05fe02864cf2&country=Nepal&days=24",
+    "url_after": "/plan?tour=9829e6e2-a214-4625-92a8-4b22af4f78f4&source=98624d92-5102-4642-9462-05fe02864cf2&country=Nepal&days=24",
+    "status_box": [
+      "This tour isn't on the planner map yet — pick a route below or send your ideas to an advisor. OK"
+    ],
+    "trip_panel": "Your trip",
+    "api": [
+      {
+        "s": 200,
+        "u": "/api/browse?resource=countries",
+        "b": "{\"countries\": [{\"country\": \"Bhutan\", \"component_count\": 538}, {\"country\": \"China\", \"component_count\": 356}, {\"country\": \"India\", \"component_count\": 180}, {\"country\": \"Japan\", \"component_count\": 170}, "
+      },
+      {
+        "s": 200,
+        "u": "/api/trip?trip_id=bfda9895-5485-47f1-931c-c96501451e09",
+        "b": "{\"trip_id\": \"bfda9895-5485-47f1-931c-c96501451e09\", \"itinerary\": [], \"custom_days\": []}"
+      }
+    ],
+    "req": 52,
+    "tiles": 0,
+    "status": {
+      "200": 36,
+      "204": 2,
+      "403": 12,
+      "404": 1
+    },
+    "failed": {
+      "net::ERR_ABORTED": 2,
+      "net::ERR_BLOCKED_BY_ORB": 1
+    },
+    "console_errors": {
+      "Failed to load resource: the server responded with a status of 403 ()": 12,
+      "[mapbox error] ": 24,
+      "Failed to load resource: the server responded with a status of 404 ()": 1
+    },
+    "page_errors": [],
+    "mapbox": {
+      "200": 3,
+      "204": 2,
+      "403": 12
+    }
+  },
+  "customise_agra": {
+    "href": "/plan?tour=bd3bd566-9d18-41b1-b979-a001e5f5c08f&source=ea434fb6-d980-4e3c-9bb8-88743a2bc20d&country=India&days=2",
+    "url_after": "/plan?tour=bd3bd566-9d18-41b1-b979-a001e5f5c08f&source=ea434fb6-d980-4e3c-9bb8-88743a2bc20d&country=India&days=2",
+    "status_box": [
+      "This tour isn't on the planner map yet — pick a route below or send your ideas to an advisor. OK"
+    ],
+    "trip_panel": "Your trip",
+    "api": [
+      {
+        "s": 200,
+        "u": "/api/browse?resource=countries",
+        "b": "{\"countries\": [{\"country\": \"Bhutan\", \"component_count\": 538}, {\"country\": \"China\", \"component_count\": 356}, {\"country\": \"India\", \"component_count\": 180}, {\"country\": \"Japan\", \"component_count\": 170}, "
+      },
+      {
+        "s": 200,
+        "u": "/api/trip?trip_id=1f55e39f-6447-4943-bf85-c6eb55e8be1a",
+        "b": "{\"trip_id\": \"1f55e39f-6447-4943-bf85-c6eb55e8be1a\", \"itinerary\": [], \"custom_days\": []}"
+      }
+    ],
+    "req": 52,
+    "tiles": 0,
+    "status": {
+      "200": 36,
+      "204": 2,
+      "403": 12,
+      "404": 1
+    },
+    "failed": {
+      "net::ERR_BLOCKED_BY_ORB": 1
+    },
+    "console_errors": {
+      "Failed to load resource: the server responded with a status of 403 ()": 12,
+      "[mapbox error] ": 24,
+      "Failed to load resource: the server responded with a status of 404 ()": 1
+    },
+    "page_errors": [],
+    "mapbox": {
+      "200": 3,
+      "204": 2,
+      "403": 12
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+ "alias-dest-vietnam-desktop": {
+  "performance": 100,
+  "accessibility": 96,
+  "seo": 100
+ },
+ "alias-dest-vietnam-mobile": {
+  "performance": 100,
+  "accessibility": 96,
+  "seo": 100
+ },
+ "alias-home-desktop": {
+  "performance": 86,
+  "accessibility": 96,
+  "seo": 100
+ },
+ "alias-home-mobile": {
+  "performance": 100,
+  "accessibility": 96,
+  "seo": 100
+ },
+ "alias-tour-srilanka-desktop": {
+  "performance": 99,
+  "accessibility": 96,
+  "seo": 100
+ },
+ "alias-tour-srilanka-mobile": {
+  "performance": 100,
+  "accessibility": 96,
+  "seo": 100
+ },
+ "dest-vietnam-desktop": {
+  "performance": 100,
+  "accessibility": 96,
+  "seo": 61
+ },
+ "dest-vietnam-mobile": {
+  "performance": 100,
+  "accessibility": 96,
+  "seo": 61
+ },
+ "home-desktop": {
+  "performance": 88,
+  "accessibility": 96,
+  "seo": 61
+ },
+ "home-mobile": {
+  "performance": 100,
+  "accessibility": 96,
+  "seo": 61
+ },
+ "tour-srilanka-desktop": {
+  "performance": 100,
+  "accessibility": 96,
+  "seo": 61
+ },
+ "tour-srilanka-mobile": {
+  "performance": 75,
+  "accessibility": 96,
+  "seo": 61
+ }
+}
