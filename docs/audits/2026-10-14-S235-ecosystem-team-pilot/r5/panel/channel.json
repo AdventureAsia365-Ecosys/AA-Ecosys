@@ -1,0 +1,346 @@
+{
+ "lens": "channel",
+ "round": "S235 r5",
+ "pieces": [
+  {
+   "idx": 0,
+   "verdict": "light",
+   "overall": 6.5,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Hashtag '#PadiDistrict' is wrong (seed: Paro District) - the gate held it for this; swap the tag",
+    "197 words, 3 hashtags, first line 105 chars: channel limits met",
+    "Hook 'its story gives the hike real weight' is serviceable but generic; 'rebuilt with intention, not simply preserved by time' contrast frame"
+   ]
+  },
+  {
+   "idx": 1,
+   "verdict": "light",
+   "overall": 6.6,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 8,
+   "ai_tells": 5,
+   "hook": 5,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "SEO title 57 chars and meta 132 chars OK, but the H1 repeats the long angle name and the first paragraph is abstract (no 'Lake Khövsgöl' in the first 100 words)",
+    "H2 'Mörön: The Gateway Province' mislabels a city as a province",
+    "AI-tell openers: 'does not reveal itself in a single gesture', 'not as an abstraction but as'; FAQ (4 Qs) is solid and the offered options are hedged correctly"
+   ]
+  },
+  {
+   "idx": 2,
+   "verdict": "light",
+   "overall": 5.8,
+   "brand_voice": 5,
+   "channel_fit": 6,
+   "fidelity": 8,
+   "ai_tells": 5,
+   "hook": 4,
+   "clarity": 5,
+   "commercial_value": 5,
+   "top_issues": [
+    "Hook 'Kuang Si Falls is already on Day 2 — swim time built in, rest included, before lunch.' is clumsy and reads as a fragment",
+    "Paragraph 5 restates paragraph 3 almost verbatim (repair-style duplication); cut it",
+    "'That's not filler. That's an operator who understands pacing' is B2B operator voice on a young-traveller brand; 183 words, 3 hashtags OK"
+   ]
+  },
+  {
+   "idx": 3,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 6,
+   "ai_tells": 5,
+   "hook": 4,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "H1 'Where Two Worlds Meet' (21 chars) carries no keyword; H2s are fine; meta 151 OK",
+    "Invented claims: 'crater floor has had time to soften into green growth' and 'not a performance of tradition' (gate held it for these)",
+    "Only 3 FAQs and the first answer is one thin sentence; 'the route passes the ruins' contradicts the seed 'visit'; 'northern leg of the Khövsgöl Lake journey' leans on the trip name"
+   ]
+  },
+  {
+   "idx": 4,
+   "verdict": "as_is",
+   "overall": 7.3,
+   "brand_voice": 8,
+   "channel_fit": 8,
+   "fidelity": 9,
+   "ai_tells": 7,
+   "hook": 7,
+   "clarity": 8,
+   "commercial_value": 7,
+   "top_issues": [
+    "181 words, 3 hashtags, first line 99 chars with a clear thesis hook: strongest LinkedIn post in the set",
+    "Minor redundancy: 'return here each winter from Thimphu, as they do each year'",
+    "Fragment 'A long peninsula between two named rivers, connected...' is a stylistic choice a tenant would likely keep"
+   ]
+  },
+  {
+   "idx": 5,
+   "verdict": "heavy",
+   "overall": 5.4,
+   "brand_voice": 6,
+   "channel_fit": 5,
+   "fidelity": 5,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 5,
+   "commercial_value": 5,
+   "top_issues": [
+    "Broken FAQ: 'What can we do at Lake Khövsgöl beyond trekking?' answered with 'These activities are available to choose from...' without naming them",
+    "Orphan transition paragraph 'Each section builds on the last...' after the intro; unsupported pace promise 'The pace across these two lake days is deliberately unhurried.'",
+    "'Access requires a multi-hour horse or reindeer ride...' logistics sentence and lunch 'in Mörön' (seed: near Moron); title 59 / meta 130 are fine"
+   ]
+  },
+  {
+   "idx": 6,
+   "verdict": "light",
+   "overall": 6.4,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "Misspelt hashtag '#PamiTaktsang' plus '#ParoTaktsang' = one wasted/garbled tag",
+    "CTA names the brand twice in two sentences ('Terra Family Expeditions plans days like this... Ask Terra Family Expeditions...')",
+    "208 words, first line 113 chars, story hook works; 'not a relic held together by its age, but a living place' contrast frame"
+   ]
+  },
+  {
+   "idx": 7,
+   "verdict": "light",
+   "overall": 6.8,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 7,
+   "commercial_value": 7,
+   "top_issues": [
+    "Best Trail Pulse hook: concrete (trek, pools, swim, before lunch), 115 chars; 163 words, 3 hashtags",
+    "'That's operational thinking — movement and recovery designed together' is consultancy voice, not the brand's energetic tone",
+    "Drops the lunch/View Café detail and 'near Luang Prabang' from the body (only the hashtag locates it)"
+   ]
+  },
+  {
+   "idx": 8,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 4,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "First line 'The placement was deliberate.' (29 chars) is cryptic out of context in a feed - no place named above the fold",
+    "Repeats itself: 'The site where two rivers meet was chosen deliberately' restates the hook; river names never given",
+    "146 words, 3 hashtags OK; WildKind nature/landscape angle is thin (architecture/institution post)"
+   ]
+  },
+  {
+   "idx": 9,
+   "verdict": "light",
+   "overall": 6.7,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 6,
+   "clarity": 7,
+   "commercial_value": 7,
+   "top_issues": [
+    "Hook '— a choice that has never stopped mattering' is vague; first line 100 chars",
+    "Redundant: 'converge precisely where the dzong stands... positioning it at the confluence of two rivers'",
+    "192 words, 3 hashtags, good use of the formal name; CTA 'at precisely this level of context and attention' slightly self-congratulatory"
+   ]
+  },
+  {
+   "idx": 10,
+   "verdict": "light",
+   "overall": 6.3,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 6,
+   "top_issues": [
+    "Duplicate hashtag '#ParoTaktsang ... #ParoTaktsang' (only 2 unique tags)",
+    "First line 137 chars is a date list (1692/1998/2004) - informative but low on curiosity; restoration 'careful and considered' is not in the seed",
+    "CTA names the brand twice; 201 words OK"
+   ]
+  },
+  {
+   "idx": 11,
+   "verdict": "light",
+   "overall": 6.0,
+   "brand_voice": 6,
+   "channel_fit": 6,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 5,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "Hook is a generic aphorism ('Good trip planning is invisible...') with no place in the first line",
+    "Paragraph 4 restates paragraph 3 ('you move, you arrive...' twice)",
+    "'It's a proper natural system, and it earns your full attention' filler; 158 words, 3 hashtags OK; '50 metres' is seed-supported"
+   ]
+  },
+  {
+   "idx": 12,
+   "verdict": "light",
+   "overall": 6.2,
+   "brand_voice": 7,
+   "channel_fit": 6,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 5,
+   "clarity": 7,
+   "commercial_value": 6,
+   "top_issues": [
+    "131 words - near the floor; first line is a flat founding-date fact, weak scroll-stop",
+    "'a confluence of two named rivers' awkward; no closing insight before the CTA",
+    "3 hashtags, CTA correct; clean and accurate otherwise"
+   ]
+  },
+  {
+   "idx": 13,
+   "verdict": "light",
+   "overall": 6.6,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 7,
+   "clarity": 6,
+   "commercial_value": 7,
+   "top_issues": [
+    "218 words, first line 127 chars, good hook; long middle sentence ('this was a place defined by rivers, shaped around them, not placed despite them') is a contrast-frame AI tell",
+    "Clunky CTA: 'Ask WildKind Travel for the full itinerary if you want to understand what it means to read a place this carefully.'",
+    "'Your visit takes in the courtyards and assembly hall' - correct trip anchoring"
+   ]
+  },
+  {
+   "idx": 14,
+   "verdict": "heavy",
+   "overall": 5.6,
+   "brand_voice": 6,
+   "channel_fit": 5,
+   "fidelity": 7,
+   "ai_tells": 5,
+   "hook": 4,
+   "clarity": 5,
+   "commercial_value": 5,
+   "top_issues": [
+    "Broken intro: paragraph 2 opens 'Beyond it, Siberian taiga takes over' with no antecedent (a setup sentence is missing)",
+    "CTA opens 'It is, from the volcanic caldera...' - another dangling referent; 'Day 14 brings a visit to the ruins of an ancient monastery in Mongolia' awkward",
+    "Title 51 chars lacks 'Khövsgöl'; meta 152 OK; only 3 FAQs; lunch placed 'here' in Mörön (seed: near)"
+   ]
+  },
+  {
+   "idx": 15,
+   "verdict": "heavy",
+   "overall": 5.0,
+   "brand_voice": 6,
+   "channel_fit": 4,
+   "fidelity": 4,
+   "ai_tells": 5,
+   "hook": 2,
+   "clarity": 5,
+   "commercial_value": 4,
+   "top_issues": [
+    "Opener 'That picture is accurate, right up until it isn't.' refers to a picture never drawn - the hook is broken",
+    "'Access requires a multi-hour horse or reindeer ride...' is attached to the optional nomadic-family visits (wrong subject) - gate held it",
+    "Invented route claims ('keeps the water in sight', 'holds attention across a wider range of ages'); FAQ 'The route stops here for lunch' has a dangling 'here'; title 60 / meta 136 good"
+   ]
+  },
+  {
+   "idx": 16,
+   "verdict": "light",
+   "overall": 7.0,
+   "brand_voice": 7,
+   "channel_fit": 8,
+   "fidelity": 8,
+   "ai_tells": 6,
+   "hook": 8,
+   "clarity": 6,
+   "commercial_value": 7,
+   "top_issues": [
+    "Strong first line (136 chars) stating thesis and place; 200 words, 3 hashtags",
+    "Run-on relic sentence ('houses sacred relics, including..., and the relic..., and the courtyards and assembly hall are among the spaces visitors move through on a visit')",
+    "'a decision, not a convenience' contrast frame; on-brand nature/landscape tie-in in the closing paragraph"
+   ]
+  },
+  {
+   "idx": 17,
+   "verdict": "light",
+   "overall": 6.8,
+   "brand_voice": 7,
+   "channel_fit": 7,
+   "fidelity": 7,
+   "ai_tells": 6,
+   "hook": 5,
+   "clarity": 7,
+   "commercial_value": 7,
+   "top_issues": [
+    "Best blog SEO: title 'Lake Khövsgöl & Northern Mongolia: A Cultural Guide' (51) front-loads the keyword; meta 140; 4 useful FAQs",
+    "Lunch placed in Mörön ('passes through Mörön... A lunch stop here'; seed: near); 'the capital of Khövsgöl Province and the northernmost aimag' misattributes aimag to the city",
+    "'a resource of planetary significance' hype; offered options correctly hedged"
+   ]
+  },
+  {
+   "idx": 18,
+   "verdict": "heavy",
+   "overall": 5.2,
+   "brand_voice": 5,
+   "channel_fit": 5,
+   "fidelity": 4,
+   "ai_tells": 5,
+   "hook": 6,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "Broken FAQ: 'What animals do the Tsaatan use their reindeer for?' answered only 'meat production is not the primary purpose'",
+    "'Access requires a multi-hour horse or reindeer ride' logistics sentence; segment leak 'children between the ages of seven and sixteen'",
+    "Social-proof/promise 'the one that tends to stay with families the longest', 'not a performance put on for travellers'; lunch 'in Mörön'"
+   ]
+  },
+  {
+   "idx": 19,
+   "verdict": "heavy",
+   "overall": 5.6,
+   "brand_voice": 6,
+   "channel_fit": 5,
+   "fidelity": 6,
+   "ai_tells": 5,
+   "hook": 3,
+   "clarity": 6,
+   "commercial_value": 5,
+   "top_issues": [
+    "Opener 'Lake Khövsgöl reframes that picture entirely.' refers to a picture never drawn - broken hook",
+    "'Access requires a multi-hour horse or reindeer ride' logistics sentence after the Tsaatan intro",
+    "Title 'Lake Khövsgöl: Mongolia's Family Anchor Point' (45) uses angle jargon, no search intent; FAQs (3) are fine; lunch 'here' in Mörön"
+   ]
+  }
+ ]
+}
