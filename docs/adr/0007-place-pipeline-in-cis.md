@@ -38,7 +38,8 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   a rebuild from scratch touches nothing else.
 - `shared.destinations` stays the golden record of places (ADR 0002), keeps every existing `id`
   (photos, covers and TripPlanner trip events point at them) and gains geo-quality columns
-  (`geo_status` ok / suspect / manual, `confidence`, provider id, `geo_checked_at`, `name_norm`).
+  (`geo_status` ok / suspect / manual, `located_by`, `precision` point / area, `confidence`, provider,
+  provider id, `result_type`, `geocoded_at`, `name_norm`), which decision 9 fills.
 
 ### 2. `catalog.*` views are the TripPlanner contract
 
@@ -47,6 +48,8 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   `v_tour_component` (TripPlanner's component shape incl. `embedding`), `v_tour_day_route`,
   `v_tour_stop`, `v_tour_leg`, `v_graph_node`, `v_graph_edge`, `v_tour_junction`, and `v_destination`
   with `geo_status` / `located_by`.
+- `v_destination` and `v_tour_place` carry `located_by` and `precision` (appended columns, see below),
+  so TripPlanner can draw an unconfirmed point as an area and show the provider attribution.
 - Views are `security_barrier`, owned by the dedicated NOLOGIN role `catalog_owner` exactly as in
   migration 225 (on RDS `aa_cis_admin` is not BYPASSRLS; a view over a FORCE-RLS table needs its own owner
   role + policy), and granted to `aa_app_user`, `tripplanner`, `booking`.
