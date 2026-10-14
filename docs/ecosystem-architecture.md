@@ -5,8 +5,10 @@
 > state; **[TO CONFIRM]** marks an inference or gap that Nghiệp still has to confirm.
 > Target direction and decisions: [ADR 0001](adr/0001-ecosystem-target-architecture.md),
 > [ADR 0002](adr/0002-only-cis-writes-content.md), [ADR 0003](adr/0003-one-durable-job-model.md),
-> [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (AA-Booking stack and bootstrap),
+> [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (AA-Booking stack and bootstrap) with
+> [amendment A1](adr/0004a-supply-content-ownership.md) (supply content ownership),
 > [ADR 0005](adr/0005-pricing-and-supplier-rates.md) (pricing and supplier rates),
+> [ADR 0006](adr/0006-ecosystem-identity.md) (ecosystem identity on Cognito),
 > [ADR 0007](adr/0007-place-pipeline-in-cis.md) (place pipeline in CIS: `geo` schema, `catalog.*` views). Contract rules
 > between apps: [`contracts/README.md`](contracts/README.md).
 
@@ -198,7 +200,7 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 - The place pipeline (itinerary extraction, geocode, tour graph) still lives in TripPlanner and is
   **frozen**; it moves to CIS under AA-712 as designed in [ADR 0007](adr/0007-place-pipeline-in-cis.md):
   CIS-owned schema `geo`, job kinds `place_extract` / `place_geocode` / `tour_graph_build` on `shared.job`
-  (background priority, cap 1), `shared.destinations` unique on `(name_norm, country)`, geocoder behind an
+  (background priority, cap 1), `shared.destinations` unique on `(name_norm, country, locality_norm)`, geocoder behind an
   adapter with storage rights (provider pending: Amazon Location vs Mapbox Permanent), and TripPlanner
   reading `catalog.*` place and graph views. TripPlanner cuts over only when the views cover every tour the
   legacy tables cover.

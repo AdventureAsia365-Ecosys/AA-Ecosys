@@ -94,20 +94,24 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   (coverage per country, pending / unknown / suspect names with a fix action, graph build stats,
   per-tour rebuild, backfill with dry-run cost).
 
-### 5. Destinations unique on `(name_norm, country)`
+### 5. Destinations unique on `(name_norm, country, locality_norm)`
 
-- Replace the global `UNIQUE lower(name)` with **`UNIQUE (name_norm, country)`**; ids are kept. Blank or
-  NULL `country` rows are fixed or marked `suspect` before the index is created.
-- Generic names (`is_generic_name()`: "Ban Na", "Base Camp") are keyed with a locality (place card, else
-  the day's overnight town); without one they stay `unknown` (no point) rather than borrow another
-  tour's coordinates.
+- Replace the global `UNIQUE lower(name)` with **`UNIQUE (name_norm, country, locality_norm)`**; ids are
+  kept. `locality_norm` is `text NOT NULL DEFAULT ''`: empty for every non-generic name, so for them the
+  key is effectively `(name_norm, country)`. `geo.place_name` uses the **same three-column key**.
+- `country` becomes **`NOT NULL`** on both tables. Blank or NULL `country` rows are fixed (or the row is
+  set aside) before migration 226 adds the constraint and the index; marking a row `suspect` is not
+  enough, because NULLs are distinct in a unique index.
+- Generic names (`is_generic_name()`: "Ban Na", "Base Camp") get a non-empty `locality_norm` (place card
+  locality, else the day's overnight town), so two "Ban Na" in Laos with different localities are two
+  rows; without a locality they stay `unknown` (no point) rather than borrow another tour's coordinates.
 - Legacy rows are reused only when `located_by IS NOT NULL` and not `suspect`; everything else is
   re-resolved. `geo_status='manual'` is never overwritten by a job.
 
 ### 6. Place cards are used when present, not built
 
 - When an atom has a place card (`acp_shared.place_card`), the card's identity and display name/country
-  are preferred over `(name_norm, country)` and its destination is reused (zero calls); an optional
+  are preferred over the name key and its destination is reused (zero calls); an optional
   `place_card.destination_id` FK makes the join by id. `card_skip_reason()` is the one lodging/transit
   rule set for components.
 - AA-712 does **not** create cards. A catalog-wide card backfill is a separate decision (T9 quality).
@@ -170,7 +174,10 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   outside deploy windows.
 - Before the catalog-wide run (not before the trial), TripPlanner's vector search (`MIN(embedding <=> q)
   GROUP BY destination`, a full scan) must be rewritten to an HNSW top-k subquery or a per-destination
-  centroid.
+  centroid. The planner may not push `ORDER BY embedding <=> q LIMIT k` into the HNSW index through a
+  `security_barrier` view joined to `catalog.v_tour`, so the top-k may need its own view or SQL function
+  over `geo.tour_place` (owner `catalog_owner`); the plan is checked with `EXPLAIN` as the `tripplanner`
+  role.
 - Accepted risks: a "replace" re-upload hides the tour from `catalog.v_tour` until the new version
   publishes (AA-679 behaviour); true homonyms without card or overnight context stay unlocated; the
   background slot reserve is per worker task and must be re-checked on horizontal scale-out.

@@ -71,7 +71,7 @@ Every `shared` table is **owned by AA-CIS-App** unless the row says otherwise.
 | `dfs_call_log`, `dfs_balance_snapshot`, `cost_explorer_snapshot`, `spend_budget` | CIS | Cost tracking and guard. |
 | `notifications` | CIS | Admin bell. |
 | `place_photo` (+ photo views) | CIS | Photo sync and matching (AA-708); TripPlanner reads the views (CIS 201). |
-| `destinations` | **CIS** (since ADR 0002) | Golden record of places. Created by TripPlanner migrations 002 / 005 (history); since CIS 201 the `tripplanner` role is read-only on it and only CIS writes it. Future column changes are CIS migrations. The place pipeline moves to CIS in AA-712 (ADR 0007): uniqueness changes from global `lower(name)` to `(name_norm, country)` (ids kept), new geo-quality columns, and only the CIS job `place_geocode` writes coordinates. |
+| `destinations` | **CIS** (since ADR 0002) | Golden record of places. Created by TripPlanner migrations 002 / 005 (history); since CIS 201 the `tripplanner` role is read-only on it and only CIS writes it. Future column changes are CIS migrations. The place pipeline moves to CIS in AA-712 (ADR 0007): uniqueness changes from global `lower(name)` to `(name_norm, country, locality_norm)` (`locality_norm` NOT NULL DEFAULT '', non-empty only for generic names; `country` NOT NULL; same key on `geo.place_name`; ids kept), new geo-quality columns, and only the CIS job `place_geocode` writes coordinates. |
 | `schema_versions` | CIS (table), every owner (its rows) | Each owner registers its own versions with its prefix (rule 4). |
 | `pipeline_jobs`, `pipeline_runs`, `acp_runs`, `pipeline_lessons`, `prompt_eval_runs`, `unmapped_market_requests` | CIS | `pipeline_jobs` is history only (no new writes, ADR 0003). |
 
