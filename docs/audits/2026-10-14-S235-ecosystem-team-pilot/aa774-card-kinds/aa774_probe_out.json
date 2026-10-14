@@ -1,0 +1,851 @@
+{
+ "kinds": [
+  {
+   "kind": "setting",
+   "facts": 176,
+   "cards": 103
+  },
+  {
+   "kind": "what_it_is",
+   "facts": 161,
+   "cards": 109
+  },
+  {
+   "kind": "visiting",
+   "facts": 139,
+   "cards": 96
+  },
+  {
+   "kind": "practical",
+   "facts": 124,
+   "cards": 95
+  },
+  {
+   "kind": "history",
+   "facts": 121,
+   "cards": 78
+  },
+  {
+   "kind": "naming",
+   "facts": 11,
+   "cards": 11
+  }
+ ],
+ "cards": [
+  {
+   "cards": 110,
+   "cards_losing_facts": 107,
+   "cards_falling_below_rich": 5,
+   "cards_left_with_no_writer_fact": 1,
+   "total_facts": "732",
+   "writer_facts": "469",
+   "dropped_facts": "263"
+  }
+ ],
+ "below_rich": [
+  {
+   "display_name": "Babesa Village",
+   "country": "Bhutan",
+   "status": "auto_checked",
+   "total_facts": 3,
+   "writer_facts": 2
+  },
+  {
+   "display_name": "Darchen",
+   "country": "China",
+   "status": "auto_checked",
+   "total_facts": 4,
+   "writer_facts": 2
+  },
+  {
+   "display_name": "Paryang",
+   "country": "China",
+   "status": "auto_checked",
+   "total_facts": 5,
+   "writer_facts": 2
+  },
+  {
+   "display_name": "Rongbuk Valley",
+   "country": "China",
+   "status": "auto_checked",
+   "total_facts": 4,
+   "writer_facts": 2
+  },
+  {
+   "display_name": "Tashilhunpo Monastery",
+   "country": "China",
+   "status": "auto_checked",
+   "total_facts": 4,
+   "writer_facts": 2
+  }
+ ],
+ "dropped_sample": [
+  {
+   "display_name": "Babesa Village",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Because it lies just a few kilometres from central Thimphu, Babesa is frequently included in day itineraries that also cover other Thimphu-area attractions."
+  },
+  {
+   "display_name": "Dewathang",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Road access to Dewathang is via the east\u2013west highway that connects Samdrup Jongkhar to Trashigang; the road can be affected by landslides during the monsoon season."
+  },
+  {
+   "display_name": "Dewathang",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Visitors travelling the eastern Bhutan circuit typically pass through Dewathang en route between Samdrup Jongkhar town and the higher-altitude areas of Trashigang District."
+  },
+  {
+   "display_name": "Dochula Pass",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Visitors typically stop to walk among the 108 chortens, visit the lhakhang, and use the small caf\u00e9 facilities available at the pass."
+  },
+  {
+   "display_name": "Dochula Pass",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "The road over Dochula Pass is the main highway connecting Thimphu to Punakha and the wider eastern regions of Bhutan, making it a frequently travelled route."
+  },
+  {
+   "display_name": "Dochula Pass",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "At high altitude, the pass is frequently shrouded in mist or cloud, especially during the monsoon season (June\u2013September), which can obscure mountain views entirely."
+  },
+  {
+   "display_name": "Jampa Lhakhang",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Visitors are expected to dress modestly and remove shoes before entering the inner sanctum; photography restrictions may apply inside."
+  },
+  {
+   "display_name": "Jampa Lhakhang",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The complex is an active place of worship and contains religious statues, butter lamps, and murals that have been renovated over the centuries."
+  },
+  {
+   "display_name": "Kuensel Phodrang Nature Park",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Visitors are expected to dress modestly and behave respectfully, as is standard at religious sites throughout Bhutan."
+  },
+  {
+   "display_name": "Kuensel Phodrang Nature Park",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The site holds religious significance for Bhutanese Buddhists and is considered a place of pilgrimage as well as a visitor attraction."
+  },
+  {
+   "display_name": "Kuensel Phodrang Nature Park",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The statue is hollow and houses over one hundred thousand smaller Buddha statues made of bronze and gilded in gold, installed inside the throne structure."
+  },
+  {
+   "display_name": "Kurje Lhakhang",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "As with all lhakhangs in Bhutan, visitors are required to dress modestly and remove shoes before entering the temple buildings."
+  },
+  {
+   "display_name": "Kurje Lhakhang",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "A large juniper tree within the complex is traditionally believed to have grown from Guru Rinpoche's walking staff, and is considered sacred."
+  },
+  {
+   "display_name": "Kurje Lhakhang",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Visitors typically see monks performing rituals, elaborate murals and statues inside the temples, and the rock bearing the reputed body imprint of Guru Rinpoche in the inner sanctum of the oldest temp"
+  },
+  {
+   "display_name": "Kurje Lhakhang",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "An annual tshechu (religious festival) is held at Kurje Lhakhang, featuring sacred mask dances and attended by large numbers of Bhutanese pilgrims."
+  },
+  {
+   "display_name": "Kyichu Lhakhang",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The original lhakhang enshrines a revered statue of Jowo Shakyamuni, and the newer temple houses a statue of Guru Rinpoche."
+  },
+  {
+   "display_name": "Kyichu Lhakhang",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Visitors are expected to dress modestly, remove shoes before entering the temple shrines, and seek permission before photographing religious interiors."
+  },
+  {
+   "display_name": "Mebar Tsho (Burning Lake)",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "The rocky path down to the lake's edge can be slippery, particularly when wet, so sturdy footwear is advisable."
+  },
+  {
+   "display_name": "Mebar Tsho (Burning Lake)",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "The site is actively used as a place of worship by Bhutanese Buddhists, and visitors are expected to behave respectfully and quietly."
+  },
+  {
+   "display_name": "Mongar",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Mongar is a gateway town for travellers heading further east toward Trashigang, and roads in the region are narrow, winding mountain highways that require careful driving."
+  },
+  {
+   "display_name": "Mongar Dzong",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The dzong features traditional Bhutanese whitewashed stone and rammed-earth construction, with characteristic tapering walls, a central tower (utse), and decorated woodwork."
+  },
+  {
+   "display_name": "National Handloom Development Corporation, Khaling",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Visitors can observe weavers at work on looms and see demonstrations of the intricate supplementary-weft patterning techniques used in Bhutanese textiles."
+  },
+  {
+   "display_name": "National Handloom Development Corporation, Khaling",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Finished textiles and woven products are typically available for purchase at the centre, making it a point of interest for those seeking authentic Bhutanese handicrafts."
+  },
+  {
+   "display_name": "National Handloom Development Corporation, Khaling",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The centre produces a range of traditional Bhutanese fabrics, including kishuthara (raw silk patterned cloth), which is characteristic of eastern Bhutan."
+  },
+  {
+   "display_name": "National Institute for Zorig Chusum",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Students typically enroll for a multi-year programme, spending years mastering a single craft discipline under experienced master craftspeople."
+  },
+  {
+   "display_name": "National Institute for Zorig Chusum",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Visitors can walk through the classrooms and observe students at work on thangka paintings, wood carvings, and other crafts in progress."
+  },
+  {
+   "display_name": "National Institute for Zorig Chusum",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Works produced by students are sometimes available for purchase, offering visitors an opportunity to acquire authentic, traditionally made Bhutanese crafts."
+  },
+  {
+   "display_name": "National Library of Bhutan",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Photography inside the manuscript galleries is typically restricted to protect fragile documents; visitors should follow staff guidance on camera use."
+  },
+  {
+   "display_name": "National Library of Bhutan",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "A public reading and reference section makes modern books and periodicals available, serving students and researchers alongside tourists."
+  },
+  {
+   "display_name": "National Textile Museum of Bhutan",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Exhibits cover the tools, dyes, looms, and techniques used in Bhutanese weaving, as well as the ceremonial and social contexts in which textiles are used."
+  },
+  {
+   "display_name": "National Textile Museum of Bhutan",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The collection includes antique and contemporary examples of kishuthara, mathra, and yathra \u2014 distinct regional weaving styles from different parts of Bhutan."
+  },
+  {
+   "display_name": "National Textile Museum of Bhutan",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "The museum also sells high-quality Bhutanese textiles and handicrafts, making it a reputable place to purchase authentic woven goods."
+  },
+  {
+   "display_name": "National Textile Museum of Bhutan",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Visitors can sometimes observe weaving demonstrations by artisans on traditional backstrap or frame looms on the premises."
+  },
+  {
+   "display_name": "Paro",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Taktsang Palphug Monastery\u2014popularly known as the Tiger's Nest\u2014clings to a cliff face about 900 metres above the Paro Valley floor and is one of the most sacred pilgrimage sites in Bhutan."
+  },
+  {
+   "display_name": "Paro",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Paro hosts the Paro Tsechu, an annual religious festival featuring masked dances (cham) and the unfurling of a giant thangka; its timing follows the Bhutanese lunar calendar."
+  },
+  {
+   "display_name": "Paro",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Visitors require a valid Bhutan visa to enter the country, and independent travel is not permitted; all foreign tourists must be accompanied by a licensed Bhutanese guide."
+  },
+  {
+   "display_name": "Paro",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The National Museum of Bhutan is housed in a former watchtower called Ta Dzong, overlooking Rinpung Dzong, and holds collections of thangkas, textiles, weaponry, and natural history."
+  },
+  {
+   "display_name": "Paro Taktsang (Tiger's Nest Monastery)",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The hike to the monastery from the base-area car park follows a forested trail and takes most visitors roughly two to three hours each way, with a significant elevation gain."
+  },
+  {
+   "display_name": "Paro Taktsang (Tiger's Nest Monastery)",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Visitors must leave cameras and bags at a checkpoint before entering the inner temples, and modest, respectful dress is required."
+  },
+  {
+   "display_name": "Paro Town",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The National Museum of Bhutan, housed in a former watchtower (Ta Dzong) above Rinpung Dzong, holds collections of thangkas, armour, textiles, and natural history specimens."
+  },
+  {
+   "display_name": "Paro Town",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Paro District is the site of the famous Tiger's Nest Monastery (Paro Taktsang), perched on a cliff above the valley, which draws visitors from across the world."
+  },
+  {
+   "display_name": "Paro Town",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Altitude and mountain weather mean temperatures can be cool to cold even in spring and autumn; layered clothing is advisable for strolls around town."
+  },
+  {
+   "display_name": "Paro Town",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The main street is lined with traditional Bhutanese wooden-fronted shop-houses painted with characteristic decorative motifs, giving the town a well-preserved vernacular architectural character."
+  },
+  {
+   "display_name": "Punakha",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Modest dress is required to enter the dzong; arms and legs must be covered, and shoes are removed before entering the interior temples."
+  },
+  {
+   "display_name": "Punakha Dzong",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when entering the dzong."
+  },
+  {
+   "display_name": "Punakha Dzong",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate woodcarving, paintings, and gilded roofs typical of Bhutanese architecture."
+  },
+  {
+   "display_name": "Samdrup Jongkhar Border Crossing",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The border crossing involves both Bhutanese immigration and customs procedures as well as Indian immigration checks on the Assam side."
+  },
+  {
+   "display_name": "Samdrup Jongkhar Border Gate",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Visitors passing through the gate typically see immigration and customs facilities on both the Bhutanese and Indian sides, with a clear demarcated boundary between the two countries."
+  },
+  {
+   "display_name": "Samdrup Jongkhar Border Gate",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "The nearest major Indian city with an airport is Guwahati in Assam, roughly 180 km from the border gate, making it the common onward travel hub for visitors using this crossing."
+  },
+  {
+   "display_name": "Samdrup Jongkhar Border Gate",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "The border gate is the only official entry and exit point in the southeastern corner of Bhutan and is open to both Bhutanese citizens and foreign nationals who hold the required permits."
+  },
+  {
+   "display_name": "Ta Dzong National Museum",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Photography restrictions apply inside the museum galleries, as many artefacts are of religious significance."
+  },
+  {
+   "display_name": "Ta Dzong National Museum",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Visitors typically walk up a short but steep path from the road below to reach the Ta Dzong building, with views of Paro valley along the way."
+  },
+  {
+   "display_name": "Ta Dzong National Museum",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The museum's collections include thangka paintings, weapons, armour, textiles, stamps, coins, and natural history specimens illustrating Bhutanese culture and history."
+  },
+  {
+   "display_name": "Takin Preserve (Motithang Takin Preserve)",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "The site is located a short distance from central Thimphu and is typically reached by road, making it a convenient stop on a Thimphu city tour."
+  },
+  {
+   "display_name": "Takin Preserve (Motithang Takin Preserve)",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The preserve also occasionally houses other Himalayan wildlife such as sambar deer and barking deer."
+  },
+  {
+   "display_name": "Takin Preserve (Motithang Takin Preserve)",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Visitors can observe takin at relatively close range along walking paths through the preserve's forested grounds."
+  },
+  {
+   "display_name": "Taktsang Monastery",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "Horses can be hired for part of the ascent as far as the midpoint viewpoint, but the final stretch to the monastery must be completed on foot."
+  },
+  {
+   "display_name": "Taktsang Monastery",
+   "country": "Bhutan",
+   "kind": "visiting",
+   "text": "The trek is steep and involves uneven stone steps; altitude at the monastery is approximately 3,120 metres (about 10,240 feet) above sea level."
+  },
+  {
+   "display_name": "Taktsang Monastery",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Modest, respectful dress is required; shoulders and knees should be covered when entering the temples."
+  },
+  {
+   "display_name": "Taktsang Monastery",
+   "country": "Bhutan",
+   "kind": "practical",
+   "text": "Visitors must leave bags, cameras, and mobile phones at the entrance gate before entering the monastery buildings."
+  }
+ ],
+ "misses": [
+  {
+   "prompt_sha": "6b2ef32fe2cb38fa",
+   "reason": "no_name",
+   "n": 2,
+   "still_blocking": 2
+  }
+ ],
+ "r4_bullet_kinds": {
+  "A bear rescue centre operated by Free the Bears is located at the entrance to th": "visiting",
+  "A fire in 1998 severely damaged much of the complex; it was subsequently restore": "history",
+  "Access to the eastern and western Taiga camps where Tsaatan live requires a perm": "practical",
+  "According to Bhutanese tradition, Guru Rinpoche (Padmasambhava) flew to this sit": "history",
+  "It holds an estimated 70 percent of Mongolia's fresh water and about 0.4 percent": null,
+  "It is the centerpiece of the Uran Togoo-Tulga Uul Natural Monument, a protected ": "what_it_is",
+  "It lies at the ecological transition zone between Central Asian steppe grassland": null,
+  "It remains the winter residence of the Je Khenpo (Chief Abbot of Bhutan) and the": "what_it_is",
+  "It served as the capital and seat of government of Bhutan for 318 years (1637\u201319": null,
+  "It serves as the main hub and gateway town for travellers heading to Kh\u00f6vsg\u00f6l La": "what_it_is",
+  "It was built in 1637\u20131638 by Zhabdrung Ngawang Namgyal, the unifier of Bhutan, w": "history",
+  "Kuang Si Falls is a multi-tiered limestone waterfall system located approximatel": "what_it_is",
+  "Lake Kh\u00f6vsg\u00f6l is a large freshwater lake in northern Mongolia, near the Russian ": null,
+  "M\u00f6r\u00f6n developed as an administrative and trade centre during the Soviet era and ": "history",
+  "M\u00f6r\u00f6n has a small domestic airport with scheduled flights connecting it to Ulaan": "practical",
+  "M\u00f6r\u00f6n is the capital city of Kh\u00f6vsg\u00f6l Province, the northernmost aimag (province": "what_it_is",
+  "Paro Taktsang is a sacred Buddhist monastery complex built into a sheer granite ": "what_it_is",
+  "Paro Taktsang is one of Bhutan's most revered pilgrimage sites; Bhutanese Buddhi": "history",
+  "Punakha Dzong is a large Buddhist monastery-fortress (dzong) located at the conf": "what_it_is",
+  "Punakha Dzong served as the capital and seat of government of Bhutan until 1955,": "history",
+  "Reindeer in Tsaatan culture are used for riding and as pack animals as well as f": "what_it_is",
+  "Summers are short and cool; sudden storms can arise quickly on the lake, making ": null,
+  "The Delgerm\u00f6r\u00f6n River flows near the town, and the surrounding landscape is char": "setting",
+  "The Tsaatan (Dukha) are a small semi-nomadic indigenous community, numbering onl": "what_it_is",
+  "The Tsaatan (Dukha) people, a small community of reindeer herders, live in the r": null,
+  "The Tsaatan are ethnically and linguistically related to Tuvan peoples of southe": "history",
+  "The Tsaatan community has faced pressures including population decline, restrict": "history",
+  "The building spans a long peninsula between the two rivers and is connected to t": "setting",
+  "The city sits in a broad valley at an elevation of approximately 1,283 metres ab": "setting",
+  "The complex comprises four main temples, several sacred caves, and a series of s": "what_it_is",
+  "The crater is roughly 600 metres wide and 50\u201360 metres deep, and its caldera flo": "visiting",
+  "The dzong has been damaged and rebuilt multiple times due to fire and floods, mo": "history",
+  "The dzong houses the sacred relic of Zhabdrung Ngawang Namgyal and important rel": "history",
+  "The falls cascade over a series of travertine limestone terraces, creating a seq": "what_it_is",
+  "The hike to the monastery from the base-area car park follows a forested trail a": "visiting",
+  "The interior courtyards contain a utse (central tower) and several temples adorn": "visiting",
+  "The lake freezes solidly in winter, typically from January through April, and wa": null,
+  "The lake sits at an elevation of roughly 1,645 metres (5,397 feet) above sea lev": null,
+  "The main temple structures were built around the sacred cave in 1692 under the d": "history",
+  "The main upper fall drops roughly 50 metres into a large pool at the base.": "setting",
+  "The region experiences extremely cold winters and the taiga terrain is marshy in": "practical",
+  "The road from Luang Prabang to the falls is paved and passes through rural villa": "practical",
+  "The site is set within forested hills and is part of a protected area; the surro": "setting",
+  "The surrounding area is protected as Kh\u00f6vsg\u00f6l Nuur National Park, established in": null,
+  "The surrounding forest is composed largely of blue pine and rhododendron, and pr": "setting",
+  "The surrounding landscape combines open green steppe grasslands with patches of ": "setting",
+  "The town has a typical Mongolian provincial layout with a central square, a mark": "visiting",
+  "The vivid turquoise colour of the water is caused by high calcium carbonate cont": "setting",
+  "The volcano last erupted approximately 20,000\u201324,000 years ago, making it geolog": "history",
+  "Their settlements are not permanent villages but seasonal camps of teepee-style ": "what_it_is",
+  "Their territory lies deep in the taiga, typically reached from the town of Tsaga": "setting",
+  "Trails lead up alongside the falls to viewpoints at the top, passing through for": "visiting",
+  "Uran Togoo is considered the largest of several dormant volcanoes in the surroun": "what_it_is",
+  "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for": "practical",
+  "Visitors can swim in the lower tiered pools; the upper reaches and the main fall": "visiting",
+  "Visitors can trek across the volcanic terrain, including walking down into the w": "visiting",
+  "Visitors must leave cameras and bags at a checkpoint before entering the inner t": "practical",
+  "Visitors typically arrive via the nearby town of Khatgal at the lake's southern ": null,
+  "Visitors typically see the teepee camps, interact with families, observe reindee": "visiting",
+  "Water levels and flow are strongest during and just after the rainy season (roug": "practical",
+  "Winters are severe, with temperatures regularly dropping well below \u221230 \u00b0C, refl": "practical"
+ },
+ "requests": [
+  {
+   "request_id": "1dfbf5e6-bf67-45a3-84c8-7fc37d62868a",
+   "channel": "blog",
+   "route": true,
+   "moments": [
+    {
+     "label": "Uran Togoo \u2014 trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50\u201360 metres deep, and its caldera floor is accessible on foot.",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of the crater."
+     ],
+     "atom_id": "9ff1c9baf0759943"
+    },
+    {
+     "label": "Sod Camp \u2014 overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [],
+     "atom_id": "93e6e09d991a354c"
+    },
+    {
+     "label": "Moron \u2014 stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "M\u00f6r\u00f6n has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry point for air travellers",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outskirts.",
+      "Winters are severe, with temperatures regularly dropping well below \u221230 \u00b0C, reflecting the continental subarctic climate of northern Mongoli"
+     ],
+     "atom_id": "5b1777bdf9243a9e"
+    },
+    {
+     "label": "Lake Kh\u00f6vsg\u00f6l \u2014 visit the boundary between Central Asian steppes and Siberian Ta",
+     "facts_before": 14,
+     "facts_after": 11,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "Visitors typically see the lake's famously clear, deep blue water, forested shorelines, and abundant wildlife including moose, wolf, brown b",
+      "The lake freezes solidly enough in winter that vehicles and horses have historically crossed it on the ice, but summer and early autumn are ",
+      "Weather at the lake is highly variable and can turn cold even in summer due to the altitude and northern latitude, so warm and waterproof la"
+     ],
+     "atom_id": "2c33e4f8b211f2bd"
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements \u2014 excursions to Tsaatan reindeer herders' ",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic practices, as shaman",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for unpredictable weath",
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (district) government office"
+     ],
+     "atom_id": "4b8ea88ba03f5eef"
+    },
+    {
+     "label": "ruins of an ancient monastery \u2014 visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [],
+     "atom_id": "17296f7026d87e2c"
+    }
+   ],
+   "digest_before": {
+    "anchors": [
+     "Uran Togoo \u2014 trek into the caldera of a dormant volcano",
+     "Sod Camp \u2014 overnight in a standard ger camp",
+     "Moron \u2014 stop for lunch",
+     "Lake Kh\u00f6vsg\u00f6l \u2014 visit the boundary between Central Asian ste",
+     "Tsaatan reindeer herders' settlements \u2014 excursions to Tsaata"
+    ],
+    "thin": [
+     "ruins of an ancient monastery \u2014 visit"
+    ]
+   },
+   "digest_after": {
+    "anchors": [
+     "Uran Togoo \u2014 trek into the caldera of a dormant volcano",
+     "Sod Camp \u2014 overnight in a standard ger camp",
+     "Moron \u2014 stop for lunch",
+     "Lake Kh\u00f6vsg\u00f6l \u2014 visit the boundary between Central Asian ste",
+     "Tsaatan reindeer herders' settlements \u2014 excursions to Tsaata"
+    ],
+    "thin": [
+     "ruins of an ancient monastery \u2014 visit"
+    ]
+   },
+   "thin_changed": 0,
+   "facts_removed": 11
+  },
+  {
+   "request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+   "channel": "blog",
+   "route": true,
+   "moments": [
+    {
+     "label": "Uran Togoo \u2014 trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50\u201360 metres deep, and its caldera floor is accessible on foot.",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and around the rim of the crater."
+     ],
+     "atom_id": "9ff1c9baf0759943"
+    },
+    {
+     "label": "Sod Camp \u2014 overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [],
+     "atom_id": "93e6e09d991a354c"
+    },
+    {
+     "label": "Moron \u2014 stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "M\u00f6r\u00f6n has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it the primary entry point for air travellers",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) districts on its outskirts.",
+      "Winters are severe, with temperatures regularly dropping well below \u221230 \u00b0C, reflecting the continental subarctic climate of northern Mongoli"
+     ],
+     "atom_id": "5b1777bdf9243a9e"
+    },
+    {
+     "label": "Lake Kh\u00f6vsg\u00f6l \u2014 visit the boundary between Central Asian steppes and Siberian Ta",
+     "facts_before": 14,
+     "facts_after": 11,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "Visitors typically see the lake's famously clear, deep blue water, forested shorelines, and abundant wildlife including moose, wolf, brown b",
+      "The lake freezes solidly enough in winter that vehicles and horses have historically crossed it on the ice, but summer and early autumn are ",
+      "Weather at the lake is highly variable and can turn cold even in summer due to the altitude and northern latitude, so warm and waterproof la"
+     ],
+     "atom_id": "2c33e4f8b211f2bd"
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements \u2014 excursions to Tsaatan reindeer herders' ",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may witness shamanistic practices, as shaman",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors should be prepared for unpredictable weath",
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through the local sum (district) government office"
+     ],
+     "atom_id": "4b8ea88ba03f5eef"
+    },
+    {
+     "label": "ruins of an ancient monastery \u2014 visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [],
+     "atom_id": "17296f7026d87e2c"
+    }
+   ],
+   "digest_before": {
+    "anchors": [
+     "Uran Togoo \u2014 trek into the caldera of a dormant volcano",
+     "Sod Camp \u2014 overnight in a standard ger camp",
+     "Moron \u2014 stop for lunch",
+     "Lake Kh\u00f6vsg\u00f6l \u2014 visit the boundary between Central Asian ste",
+     "Tsaatan reindeer herders' settlements \u2014 excursions to Tsaata"
+    ],
+    "thin": [
+     "ruins of an ancient monastery \u2014 visit"
+    ]
+   },
+   "digest_after": {
+    "anchors": [
+     "Uran Togoo \u2014 trek into the caldera of a dormant volcano",
+     "Sod Camp \u2014 overnight in a standard ger camp",
+     "Moron \u2014 stop for lunch",
+     "Lake Kh\u00f6vsg\u00f6l \u2014 visit the boundary between Central Asian ste",
+     "Tsaatan reindeer herders' settlements \u2014 excursions to Tsaata"
+    ],
+    "thin": [
+     "ruins of an ancient monastery \u2014 visit"
+    ]
+   },
+   "thin_changed": 0,
+   "facts_removed": 11
+  },
+  {
+   "request_id": "f5e6aa33-4113-496b-9567-3591e9cbdef4",
+   "channel": "linkedin",
+   "route": false,
+   "moments": [
+    {
+     "label": "Punakha Dzong \u2014 visit courtyards and assembly hall",
+     "facts_before": 10,
+     "facts_after": 8,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate woodcarving, paintings, and gilded roofs t",
+      "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when entering the dzong."
+     ],
+     "atom_id": "11fd1460477ede5d"
+    }
+   ],
+   "thin_changed": 0,
+   "facts_removed": 2
+  },
+  {
+   "request_id": "ff45fd8a-a9e9-4881-ac8b-25aa25cee014",
+   "channel": "linkedin",
+   "route": false,
+   "moments": [
+    {
+     "label": "Tiger's Nest Monastery \u2014 hike to the cliffside",
+     "facts_before": 10,
+     "facts_after": 8,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "The hike to the monastery from the base-area car park follows a forested trail and takes most visitors roughly two to three hours each way, ",
+      "Visitors must leave cameras and bags at a checkpoint before entering the inner temples, and modest, respectful dress is required."
+     ],
+     "atom_id": "01e04f10e1019971"
+    }
+   ],
+   "thin_changed": 0,
+   "facts_removed": 2
+  },
+  {
+   "request_id": "d940d26f-a991-4a56-a7a8-aeae63f5c7b4",
+   "channel": "linkedin",
+   "route": false,
+   "moments": [
+    {
+     "label": "Kuang Si Falls \u2014 swim and rest at pools",
+     "facts_before": 12,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "A bear rescue centre operated by Free the Bears is located at the entrance to the falls area, housing rescued Asiatic black bears confiscate",
+      "Visitors can swim in the lower tiered pools; the upper reaches and the main falls themselves are generally off-limits for swimming.",
+      "Trails lead up alongside the falls to viewpoints at the top, passing through forest.",
+      "The road from Luang Prabang to the falls is paved and passes through rural villages and rice paddies.",
+      "Water levels and flow are strongest during and just after the rainy season (roughly May to October), while the dry season produces clearer, "
+     ],
+     "atom_id": "0b8177a7ac5a031a"
+    }
+   ],
+   "thin_changed": 0,
+   "facts_removed": 5
+  },
+  {
+   "request_id": "3524ad2d-76f8-43ae-a84b-a4ecec7978a8",
+   "channel": "linkedin",
+   "route": false,
+   "moments": [
+    {
+     "label": "Punakha Dzong \u2014 visit courtyards and assembly hall",
+     "facts_before": 10,
+     "facts_after": 8,
+     "thin_before": false,
+     "thin_after": false,
+     "siblings_before": 0,
+     "siblings_after": 0,
+     "removed": [
+      "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate woodcarving, paintings, and gilded roofs t",
+      "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when entering the dzong."
+     ],
+     "atom_id": "11fd1460477ede5d"
+    }
+   ],
+   "thin_changed": 0,
+   "facts_removed": 2
+  }
+ ],
+ "summary": {
+  "requests_with_thin_change": 0,
+  "facts_removed_per_request": {
+   "1dfbf5e6": 11,
+   "3bf7a5f7": 11,
+   "f5e6aa33": 2,
+   "ff45fd8a": 2,
+   "d940d26f": 5,
+   "3524ad2d": 2
+  }
+ }
+}

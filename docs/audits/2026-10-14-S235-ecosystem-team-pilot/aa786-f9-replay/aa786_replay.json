@@ -1,0 +1,1247 @@
+{
+ "meta": {
+  "started": "2026-10-14 03:34:34",
+  "mode": "PAID",
+  "model": "gpt-5.6-luna",
+  "prompt_version": "f9_v1.1",
+  "runs": 3,
+  "pieces": 23,
+  "missing": [],
+  "est_usd": 0.2746,
+  "cap_usd": 0.5
+ },
+ "budget": {
+  "cap": 0.5,
+  "charged": 0.133586,
+  "calls": 69,
+  "stopped": false
+ },
+ "summary": {
+  "calls": 69,
+  "marker_notes": 0,
+  "prompt_with_tags": 0,
+  "fallback_unquoted_block": [],
+  "classes": {
+   "pass": 49,
+   "block_quoted": 19,
+   "warn_title_meta": 1
+  },
+  "mean_agreement": 0.87,
+  "unanimous_pieces": 15,
+  "mean_jaccard": 0.676,
+  "table": [
+   {
+    "label": "r1#9",
+    "fallback": true,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r3#4",
+    "fallback": true,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "block_quoted",
+     "block_quoted"
+    ],
+    "agreement": 0.67,
+    "jaccard": 0.0
+   },
+   {
+    "label": "r3#12",
+    "fallback": true,
+    "runs": 3,
+    "classes": [
+     "block_quoted",
+     "block_quoted",
+     "block_quoted"
+    ],
+    "agreement": 1.0,
+    "jaccard": 0.45
+   },
+   {
+    "label": "r4#12",
+    "fallback": true,
+    "runs": 3,
+    "classes": [
+     "block_quoted",
+     "block_quoted",
+     "block_quoted"
+    ],
+    "agreement": 1.0,
+    "jaccard": 0.67
+   },
+   {
+    "label": "r4#0",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#1",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "block_quoted",
+     "pass",
+     "pass"
+    ],
+    "agreement": 0.67,
+    "jaccard": 0.33
+   },
+   {
+    "label": "r4#2",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#3",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#4",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#5",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "block_quoted",
+     "pass",
+     "pass"
+    ],
+    "agreement": 0.67,
+    "jaccard": 0.33
+   },
+   {
+    "label": "r4#6",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#7",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "block_quoted"
+    ],
+    "agreement": 0.67,
+    "jaccard": 0.33
+   },
+   {
+    "label": "r4#8",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#9",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "block_quoted",
+     "pass"
+    ],
+    "agreement": 0.67,
+    "jaccard": 0.33
+   },
+   {
+    "label": "r4#10",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#11",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#13",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#14",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "block_quoted",
+     "pass",
+     "warn_title_meta"
+    ],
+    "agreement": 0.33,
+    "jaccard": 0.17
+   },
+   {
+    "label": "r4#15",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "block_quoted",
+     "block_quoted",
+     "pass"
+    ],
+    "agreement": 0.67,
+    "jaccard": 0.17
+   },
+   {
+    "label": "r4#16",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "block_quoted",
+     "block_quoted",
+     "block_quoted"
+    ],
+    "agreement": 1.0,
+    "jaccard": 0.44
+   },
+   {
+    "label": "r4#17",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "block_quoted",
+     "pass",
+     "pass"
+    ],
+    "agreement": 0.67,
+    "jaccard": 0.33
+   },
+   {
+    "label": "r4#18",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   },
+   {
+    "label": "r4#19",
+    "fallback": false,
+    "runs": 3,
+    "classes": [
+     "pass",
+     "pass",
+     "pass"
+    ],
+    "agreement": 1.0,
+    "jaccard": 1.0
+   }
+  ]
+ },
+ "results": [
+  {
+   "pid": "f09734c1-d07c-4c17-a181-801e28daba92",
+   "label": "r1#9",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, readable, family-aware, and aligned with Terra Family Expeditions' educational and practical brand voice. The required CTA is present as a clear action, and the factual claims are supported by the source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "530aec31-ac34-45a2-9018-7233ad61ef2a",
+   "label": "r3#4",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is coherent, factually aligned with the supplied source, and consistent with the brand's elegant, considered voice. The required call to action is present and unambiguous.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "67f08753-4c50-4962-a8bd-10224ac2df78",
+   "label": "r4#14",
+   "run": 1,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"If you are ready to start planning, ask Terra Family Expeditions to plan this trip for your family — and begin with the full Mongolia itinerary to see how these days fit into the wider journey.\" (claims: A full Mongolia itinerary is available for readers to consult.; source: The SOURCE requires the CTA to ask Terra Family Expeditions to plan the trip, but it does not state that a full Mongolia itinerary exists or is available.)",
+    "meta unsupported claim: \"Discover Lake Khövsgöl's steppe-taiga boundary, volcanic craters, and Tsaatan reindeer camps on a family journey through northern Mongolia.\" (claims: The journey includes or features multiple volcanic craters.; source: The SOURCE supports visiting Uran Togoo and descending into its single crater/caldera. It mentions several dormant volcanoes in the surrounding valleys but does not support a plural itinerary claim about volcanic craters.)"
+   ],
+   "sentences": [
+    "discover lake khövsgöl's steppe-taiga boundary, volcanic craters, and tsaatan reindeer camps on a family journey through northern mongolia.",
+    "if you are ready to start planning, ask terra family expeditions to plan this trip for your family — and begin with the full mongolia itinerary to see how these days fit into the wider journey."
+   ],
+   "notes": "The piece is clear, human-readable, family-aware, and aligned with Terra Family Expeditions' practical, educational voice. The required CTA is present as a single unambiguous action. Manual fact checking is needed for the availability of a 'full Mongolia itinerary' and for the meta description's plural reference to 'volcanic craters.'",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "5939df86-f8d4-491e-affc-348d0618ddcd",
+   "label": "r4#19",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is polished, specific, atmospheric, and aligned with Atlas & Hearth's elegant, culturally attentive voice. The required CTA is present as a clear action, and the factual claims are supported by the supplied source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "4c2bb8c1-dfaf-4369-b349-36bde9e9e5c9",
+   "label": "r4#18",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, specific, family-aware, and aligned with the Terra Family Expeditions voice. The required CTA is present as a single unambiguous action. Factual claims are supported by the supplied source, and the title and meta description are consistent with the body and source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "c134808c-cbf5-428a-a178-62f8a60c1826",
+   "label": "r3#12",
+   "run": 1,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Mörön marks the point where the open steppe gives way to something denser and more northern — a useful place to pause before the landscape shifts.\" (claims: Mörön is the geographic point where open steppe transitions into denser northern terrain.; source: The SOURCE supports Mörön's broad valley setting, surrounding steppe grasslands, forested hills, and role as a gateway to Lake Khövsgöl, but does not state that the biome transition occurs at Mörön.)",
+    "TEXT_INTEGRITY: 'Talk to an Atlas & Hearth travel designer about how this journey might be arranged.'",
+    "TEXT_INTEGRITY: 'Talk to an Atlas & Hearth travel designer about this journey.'",
+    "meta unsupported claim: \"Discover northern Mongolia's convergence of steppe, taiga, volcanic geology, and Tsaatan reindeer culture around Lake Khövsgöl.\" (claims: Volcanic geology, steppe, taiga, and Tsaatan culture converge around Lake Khövsgöl.; source: The SOURCE places Uran Togoo's volcanic landscape in Bulgan Province and describes it as part of the journey toward Lake Khövsgöl; it does not place the volcanic geology around the lake itself.)"
+   ],
+   "sentences": [
+    "discover northern mongolia's convergence of steppe, taiga, volcanic geology, and tsaatan reindeer culture around lake khövsgöl.",
+    "mörön marks the point where the open steppe gives way to something denser and more northern — a useful place to pause before the landscape shifts.",
+    "talk to an atlas & hearth travel designer about how this journey might be arranged.",
+    "talk to an atlas & hearth travel designer about this journey."
+   ],
+   "notes": "The piece is generally elegant, specific, atmospheric, and aligned with the Atlas & Hearth voice. Manual fact review is needed for the unsupported geographic transition claim about Mörön and for the meta description's implication that volcanic geology converges around Lake Khövsgöl. The duplicated call to action is a text-integrity problem.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "7c8bc7df-5de4-402b-8ffc-2b3b72afc67a",
+   "label": "r4#3",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, readable, energetic, and aligned with Trail Pulse's voice. The required CTA is present as a clear action, and the factual claims are supported by the source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "1376c2c3-7560-4394-bed8-97063f4d5564",
+   "label": "r4#2",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, practical, family-aware, and grounded in the supplied source. The required CTA is present as a single unambiguous action, and no unsupported factual claims or generic templated wording are evident.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "49ed3642-30d5-4696-a228-479c017665a7",
+   "label": "r4#0",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, polished, culturally informed, and aligned with the Atlas & Hearth voice. Its factual claims are supported by the source, and the required CTA is present as a clear single action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "91e4b9d2-157a-4a5f-90b3-332b6d9f5338",
+   "label": "r4#1",
+   "run": 1,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"A peninsula shaped by two rivers was never an accident of Bhutanese geography — it was a considered foundation.\" (claims: The peninsula's location was a deliberate, considered foundation rather than an accident of geography.; source: The source confirms that the dzong stands on a peninsula between two rivers and was founded there, but it does not support a claim about the deliberate rationale or intent behind choosing that geography.)"
+   ],
+   "sentences": [
+    "a peninsula shaped by two rivers was never an accident of bhutanese geography — it was a considered foundation."
+   ],
+   "notes": "The piece is clear, specific, on-brand, and uses the required call to action. One historical implication about the deliberate rationale behind the site's geography is not established by the provided source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "71ad6b1f-9eb5-4509-915c-5c7644a5b71a",
+   "label": "r4#6",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece uses concrete, source-supported details, maintains a clear and readable structure, and includes the required CTA as a direct action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "6961b261-6956-4b66-b563-9d34b8f8b5da",
+   "label": "r4#7",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, practical, family-aware, and aligned with Terra Family Expeditions' reassuring adventure-travel voice. It uses supported place facts and includes the required CTA exactly.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "e980728e-f77a-47ba-8b59-0b63a28e301c",
+   "label": "r4#8",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, cultivated, and aligned with the brand's calm, intelligent voice. It uses concrete historical and architectural details, includes the required CTA exactly, and contains no unsupported checkable claims requiring manual review.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "d8990697-4227-4ddc-9541-793c8ae59993",
+   "label": "r4#9",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, grounded, informative, and consistent with the brand voice. The required call to action is present as a clear request.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "bf00c670-4496-409c-b8ef-9938c339685c",
+   "label": "r4#12",
+   "run": 1,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "TEXT_INTEGRITY: 'Atlas & Hearth builds journeys around precisely this kind of cultural attention, where the context arrived with shapes everything encountered after.'"
+   ],
+   "sentences": [
+    "atlas & hearth builds journeys around precisely this kind of cultural attention, where the context arrived with shapes everything encountered after."
+   ],
+   "notes": "The piece is specific, culturally informed, and aligned with the brand's elegant, considered voice. The required CTA is present exactly and reads as a clear action. Human readability is reduced by the broken final brand-positioning sentence.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "68a56edf-32df-477c-b0c1-2413a1360472",
+   "label": "r4#10",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, practical, family-aware, and grounded in the supplied facts. The required CTA is present as a single unambiguous action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "3fd85285-7010-4338-9172-34d4acbe4b0a",
+   "label": "r4#4",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "Brand fit is supported by the family-aware framing in \"Each of these activities operates at a different pace and asks something different of each family member\" and the practical closing advice to consider \"the days at the lake, the excursion into the taiga, the pace across the full journey.\" The CTA is clear and unambiguous: \"Ask Terra Family Expeditions to plan this trip for your family.\" The piece is coherent and readable, with a clear geographic structure stated in \"That ecological crossing — from grassland to boreal forest, from volcanic rock to mountain-rimmed lakeshore — is the organising logic of this route.\"",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "6599b514-4fbb-4c45-ba22-f29b234e4143",
+   "label": "r4#11",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece uses specific, supported details about Day 2 and Kuang Si Falls, maintains a direct and confident Trail Pulse voice, and includes the required CTA as a clear action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "bb776a54-93cc-4f10-a108-6e26f9f05324",
+   "label": "r4#5",
+   "run": 1,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Time on the lake itself — by boat on the water — and time moving through the terrain on foot along shorelines and forest paths are part of how this section of the journey unfolds, with horseback riding across the surrounding terrain available as an optional addition.\" (claims: Boat travel on Lake Khövsgöl is presented as an included part of the journey.; source: The SOURCE says boat rides are optional activities. It supports the horseback riding being optional, but does not support presenting the boat ride as a definite included element.); \"The physical character of the journey to the Tsaatan is part of what gives the encounter its weight — the camps are where they are because the forest requires it, and the culture has endured because the people have continued to move with it.\" (claims: The camps exist where they do because the forest requires it, and the Tsaatan culture has endured because the people continue to move with the forest.; source: The SOURCE states that the camps move as the reindeer graze through the forest, but it does not support these broader causal claims about the camps' location or the culture's endurance.)"
+   ],
+   "sentences": [
+    "the physical character of the journey to the tsaatan is part of what gives the encounter its weight — the camps are where they are because the forest requires it, and the culture has endured because the people have continued to move with it.",
+    "time on the lake itself — by boat on the water — and time moving through the terrain on foot along shorelines and forest paths are part of how this section of the journey unfolds, with horseback riding across the surrounding terrain available as an optional addition."
+   ],
+   "notes": "The piece is polished, specific, atmospheric, and aligned with the Atlas & Hearth voice. The CTA is clear and unambiguous. Manual fact checking is required for the presentation of boat travel as part of the journey rather than explicitly optional, and for unsupported causal claims about why the Tsaatan camps exist and how the culture has endured.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "e61ad7bc-6684-49d9-9727-cafec9de28b8",
+   "label": "r4#13",
+   "run": 1,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, grounded, and aligned with WildKind Travel's thoughtful, place-focused voice. Its factual claims are supported by the source, and the required call to action is present as a single, unambiguous action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "9594430b-93c7-425d-ac19-9dde2c33fe88",
+   "label": "r4#15",
+   "run": 1,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Northern Mongolia is where two of the world's great ecological systems meet at a visible, crossable boundary.\" (claims: Northern Mongolia as a whole contains a visible, crossable boundary between two major ecological systems.; source: The SOURCE supports Lake Khövsgöl as lying at the boundary between Central Asian steppe grasslands and Siberian taiga, but it does not make this broader claim about northern Mongolia as a whole or describe the boundary as crossable.); \"A lunch stop here before continuing north offers something more than a pause — a chance to settle into the particular character of a provincial Mongolian town before the landscape shifts again.\" (claims: The itinerary includes a lunch stop in Mörön itself.; source: The SOURCE says the trip stops for lunch near Moron, not necessarily in the city. The cultural impression and landscape transition are interpretive, but the location of the lunch stop requires confirmation.)"
+   ],
+   "sentences": [
+    "a lunch stop here before continuing north offers something more than a pause — a chance to settle into the particular character of a provincial mongolian town before the landscape shifts again.",
+    "northern mongolia is where two of the world's great ecological systems meet at a visible, crossable boundary."
+   ],
+   "notes": "The piece is coherent, polished, specific, and aligned with the Atlas & Hearth voice. The required CTA is present as a clear action. Manual fact checking is needed for claims that broaden the source's geographic framing or place the lunch stop directly in Mörön rather than near it.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "9b65bd97-0e42-4ceb-96c3-2e50c3bb8058",
+   "label": "r4#17",
+   "run": 1,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"What gives Uran Togoo its particular weight in this journey is the evidence written into its form: a volcanic cone young enough, in geological terms, to be considered an active feature of the deep past, sitting in open steppe as an unremarked fact of the terrain.\" (claims: Uran Togoo can be considered an active feature of the deep past.; source: The source describes Uran Togoo as dormant and geologically recent in volcanic terms, but does not describe it as an active feature.)",
+    "meta unsupported claim: \"Explore where steppe meets taiga in northern Mongolia, from volcanic craters to the Tsaatan reindeer herders and Lake Khövsgöl.\" (claims: The journey includes or proceeds from multiple volcanic craters.; source: The source supports a visit to the crater of Uran Togoo and mentions several dormant volcanoes, but does not support visiting multiple volcanic craters.)"
+   ],
+   "sentences": [
+    "explore where steppe meets taiga in northern mongolia, from volcanic craters to the tsaatan reindeer herders and lake khövsgöl.",
+    "what gives uran togoo its particular weight in this journey is the evidence written into its form: a volcanic cone young enough, in geological terms, to be considered an active feature of the deep past, sitting in open steppe as an unremarked fact of the terrain."
+   ],
+   "notes": "The piece is elegant, atmospheric, specific, and aligned with the Atlas & Hearth voice. The required CTA is present as a clear action. Manual fact review is required for the unsupported or potentially misleading claims identified.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "2fc0a2fb-7708-4a38-a3b5-b1275c1e3089",
+   "label": "r4#16",
+   "run": 1,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Mörön — the capital of Khövsgöl Province and the main gateway for travellers heading north — serves as a practical midpoint on day four.\" (claims: Mörön is a practical midpoint on day four of the itinerary.; source: The SOURCE supports a lunch stop near Mörön on day four and identifies the city as a gateway to Lake Khövsgöl, but it does not describe Mörön as a midpoint.); \"Overnight in a traditional ger gives families their first experience of the accommodation style that defines this part of Mongolia.\" (claims: The overnight stay at Sod Camp is the family's first experience of ger accommodation on the journey.; source: The SOURCE supports an overnight stay in a standard ger camp but does not establish that this is the family's first ger accommodation experience.)"
+   ],
+   "sentences": [
+    "mörön — the capital of khövsgöl province and the main gateway for travellers heading north — serves as a practical midpoint on day four.",
+    "overnight in a traditional ger gives families their first experience of the accommodation style that defines this part of mongolia."
+   ],
+   "notes": "The piece is clear, specific, family-aware, and aligned with Terra Family Expeditions' warm and practical voice. The required CTA is present as a direct action. Manual fact checking is needed for itinerary claims that go beyond the supplied source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "f09734c1-d07c-4c17-a181-801e28daba92",
+   "label": "r1#9",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is warm, clear, practical, family-aware, and consistent with Terra Family Expeditions' educational adventure positioning. The required CTA is present as a single, unambiguous action. The checkable claims are supported by the provided source, and the prose is readable without visible text-integrity problems.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "530aec31-ac34-45a2-9018-7233ad61ef2a",
+   "label": "r3#4",
+   "run": 2,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"The ecological transition zone that surrounds the lake is a documented boundary, and its consequences are visible in the diversity of the terrain, the richness of its waters, and the communities whose lives have been organised around it for generations.\" (claims: The boundary is documented and directly accounts for the richness of the waters and the lives of multiple communities organised around it for generations.; source: The SOURCE supports the ecological transition zone and unusually high biodiversity, and separately supports the Tsaatan's relationship with the taiga. It does not support the claims about the richness of the waters, multiple communities, or the stated causal relationship.); \"The difficulty of that access is, in a sense, part of its meaning: the Tsaatan live where they live because the taiga sustains them, not because the place is easy to reach.\" (claims: The Tsaatan live in this location because the taiga sustains them, rather than because it is difficult to reach.; source: The SOURCE describes the taiga as their environment, says access is physically demanding, and explains that the taiga supports their reindeer-herding culture. It does not establish this contrast or the stated reason for their location.); \"An encounter here is not a performance of tradition but a meeting with people navigating real and ongoing difficulty with considerable resilience.\" (claims: An encounter with the Tsaatan is not a performance of tradition, and the community is demonstrating considerable resilience.; source: The SOURCE supports the community's ongoing social and economic pressures but does not support the assertion about encounters not being performances or the characterisation of their resilience.)"
+   ],
+   "sentences": [
+    "an encounter here is not a performance of tradition but a meeting with people navigating real and ongoing difficulty with considerable resilience.",
+    "the difficulty of that access is, in a sense, part of its meaning: the tsaatan live where they live because the taiga sustains them, not because the place is easy to reach.",
+    "the ecological transition zone that surrounds the lake is a documented boundary, and its consequences are visible in the diversity of the terrain, the richness of its waters, and the communities whose lives have been organised around it for generations."
+   ],
+   "notes": "The piece is elegant, specific, and consistent with the Atlas & Hearth voice. The required CTA is present as a clear action. Manual fact checking is needed for several interpretive claims that go beyond the supplied source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "67f08753-4c50-4962-a8bd-10224ac2df78",
+   "label": "r4#14",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, readable, and aligned with Terra Family Expeditions' warm, practical, educational family-adventure voice. It includes clear pacing and suitability considerations for parents and children, uses supported destination facts, and contains the required CTA as a direct action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "5939df86-f8d4-491e-affc-348d0618ddcd",
+   "label": "r4#19",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, atmospheric, and aligned with Atlas & Hearth's elegant, cultured, and considered voice. The required CTA is present as a clear action. Claims are supported by the supplied source, including the background facts and itinerary details. The search title and meta description are also consistent with the source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "4c2bb8c1-dfaf-4369-b349-36bde9e9e5c9",
+   "label": "r4#18",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, specific, family-aware, and aligned with Terra Family Expeditions' educational and practical voice. The required CTA is present as a single unambiguous action. The factual claims are supported by the supplied source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "c134808c-cbf5-428a-a178-62f8a60c1826",
+   "label": "r3#12",
+   "run": 2,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"To the north, the Siberian taiga begins: dense boreal forest, boggy terrain, and a landscape shaped by its proximity to the Russian border, where the ecology and the logic of movement belong more to the far north than to the open steppe below.\" (claims: The landscape's ecology and movement patterns are shaped by proximity to the Russian border and belong more to the far north.; source: The SOURCE supports that the taiga lies north of Lake Khövsgöl near the Russian border and describes marshy terrain in the Tsaatan territory, but it does not support the broader claim about the landscape's 'logic of movement' or that it belongs more to the far north.); \"Mörön marks the point where the open steppe gives way to something denser and more northern — a useful place to pause before the landscape shifts.\" (claims: Mörön is the point where the open steppe transitions into a denser, more northern landscape.; source: The SOURCE describes Mörön as a broad-valley hub surrounded by steppe grasslands and distant forested hills, but identifies the ecological transition between steppe and taiga at Lake Khövsgöl, not at Mörön.)",
+    "TEXT_INTEGRITY: 'Talk to an Atlas & Hearth travel designer about this journey.'"
+   ],
+   "sentences": [
+    "mörön marks the point where the open steppe gives way to something denser and more northern — a useful place to pause before the landscape shifts.",
+    "talk to an atlas & hearth travel designer about this journey.",
+    "to the north, the siberian taiga begins: dense boreal forest, boggy terrain, and a landscape shaped by its proximity to the russian border, where the ecology and the logic of movement belong more to the far north than to the open steppe below."
+   ],
+   "notes": "The piece is generally aligned with the brand's elegant, cultured, and atmospheric voice, and the required call to action is present clearly. Manual fact checking is needed for two geographic transition claims that go beyond the supplied source. The duplicated call to action is a text-integrity issue.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "7c8bc7df-5de4-402b-8ffc-2b3b72afc67a",
+   "label": "r4#3",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, energetic, and aligned with Trail Pulse's active, direct voice. The required CTA is present as a clear single action, and the factual claims are supported by the source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "1376c2c3-7560-4394-bed8-97063f4d5564",
+   "label": "r4#2",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, practical, family-aware, factually supported by the source, and uses the required CTA exactly.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "49ed3642-30d5-4696-a228-479c017665a7",
+   "label": "r4#0",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is elegant, specific, culturally informed, and aligned with the Atlas & Hearth voice. The historical and architectural claims are supported by the source, and the required CTA is present as a clear single action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "91e4b9d2-157a-4a5f-90b3-332b6d9f5338",
+   "label": "r4#1",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, grounded, on-brand, and uses a clear required call to action. Place history, geography, current religious use, and visitor access are supported by the source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "71ad6b1f-9eb5-4509-915c-5c7644a5b71a",
+   "label": "r4#6",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, readable, on-brand, and uses supported details from the source. The required CTA is present as a clear action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "6961b261-6956-4b66-b563-9d34b8f8b5da",
+   "label": "r4#7",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, family-aware, practical, and grounded in the supplied facts. The required CTA is present as a single, unambiguous action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "e980728e-f77a-47ba-8b59-0b63a28e301c",
+   "label": "r4#8",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, factually aligned with the source, and consistent with the brand's elegant, cultured, precise voice. The required CTA is present exactly and reads as a clear action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "d8990697-4227-4ddc-9541-793c8ae59993",
+   "label": "r4#9",
+   "run": 2,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Where two rivers meet, Bhutanese builders chose a peninsula to anchor their nation's spiritual and political centre.\" (claims: The builders deliberately selected the peninsula to anchor Bhutan's spiritual and political centre.; source: The source states that the dzong spans a peninsula at the confluence of two rivers and that it was founded to serve as the country's administrative and religious centre, but it does not state that builders deliberately chose the peninsula for that purpose.); \"The siting was deliberate: a peninsula defined by two converging rivers gave natural boundaries to a place designed to hold both administrative authority and religious life.\" (claims: The siting was deliberate and the peninsula's natural boundaries were part of the design for the dzong's administrative and religious role.; source: The source supports the peninsula setting, the river confluence, and the dzong's administrative and religious functions, but is silent on whether the siting was deliberate or whether the natural boundaries were intended to serve those functions.)"
+   ],
+   "sentences": [
+    "the siting was deliberate: a peninsula defined by two converging rivers gave natural boundaries to a place designed to hold both administrative authority and religious life.",
+    "where two rivers meet, bhutanese builders chose a peninsula to anchor their nation's spiritual and political centre."
+   ],
+   "notes": "The piece is clear, specific, calm, and aligned with the brand voice. The required call to action is present and unambiguous. Manual fact checking is needed for claims that the builders deliberately chose the peninsula and that its natural boundaries were intended to serve the stated administrative and religious purpose; the source supports the location and institutional role but does not explicitly establish that intention.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "bf00c670-4496-409c-b8ef-9938c339685c",
+   "label": "r4#12",
+   "run": 2,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Walking the interior courtyards and the assembly hall with that context in place changes what you notice — the utse rising from the peninsula, the elaborate woodcarving and gilded roofs, the sacred relics housed within.\" (claims: The dzong houses multiple sacred relics.; source: The source specifies the sacred relic of Zhabdrung Ngawang Namgyal in the singular, along with other important religious artefacts; it does not support the plural claim.)",
+    "TEXT_INTEGRITY: 'Atlas & Hearth builds journeys around precisely this kind of cultural attention, where the context arrived with shapes everything encountered after.'"
+   ],
+   "sentences": [
+    "atlas & hearth builds journeys around precisely this kind of cultural attention, where the context arrived with shapes everything encountered after.",
+    "walking the interior courtyards and the assembly hall with that context in place changes what you notice — the utse rising from the peninsula, the elaborate woodcarving and gilded roofs, the sacred relics housed within."
+   ],
+   "notes": "The piece is specific, atmospheric, and aligned with the brand voice. The CTA is present and unambiguous. Human readability is reduced by the broken sentence, and the plural \"sacred relics\" requires factual checking because the source specifies a sacred relic in the singular.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "68a56edf-32df-477c-b0c1-2413a1360472",
+   "label": "r4#10",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, practical, family-aware, and grounded in the supplied facts. The required CTA is present as a single unambiguous action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "3fd85285-7010-4338-9172-34d4acbe4b0a",
+   "label": "r4#4",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, family-aware, informative, and aligned with the Terra Family Expeditions voice. The required CTA is present as a clear action. The source supports the factual claims presented, including those in the title and meta description.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "6599b514-4fbb-4c45-ba22-f29b234e4143",
+   "label": "r4#11",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece uses supported details from the source, presents a clear required CTA, and maintains a direct, modern travel-brand voice.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "bb776a54-93cc-4f10-a108-6e26f9f05324",
+   "label": "r4#5",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is elegant, atmospheric, precise, and well aligned with Atlas & Hearth's luxury cultural travel positioning. The required CTA is present as a single, unambiguous action. The stated place, itinerary, activity, and background claims are supported by the source, and the prose is coherent and readable.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "e61ad7bc-6684-49d9-9727-cafec9de28b8",
+   "label": "r4#13",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, grounded, informative, and aligned with WildKind Travel's thoughtful and respectful voice. Its factual claims are supported by the source, and the required call to action is present and unambiguous.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "9594430b-93c7-425d-ac19-9dde2c33fe88",
+   "label": "r4#15",
+   "run": 2,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Northern Mongolia is where two of the world's great ecological systems meet at a visible, crossable boundary.\" (claims: The ecological boundary in northern Mongolia is visibly apparent and can be crossed.; source: The SOURCE supports that Lake Khövsgöl lies at the ecological transition zone between Central Asian steppe grasslands and Siberian taiga, but it does not state that the boundary is visible or crossable.)"
+   ],
+   "sentences": [
+    "northern mongolia is where two of the world's great ecological systems meet at a visible, crossable boundary."
+   ],
+   "notes": "The piece is generally polished, specific, and aligned with the brand's calm cultural-travel voice. It contains one vague, reusable promotional phrase and one sentence making a checkable claim about the boundary being visibly crossable that is not supported by the provided source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "9b65bd97-0e42-4ceb-96c3-2e50c3bb8058",
+   "label": "r4#17",
+   "run": 2,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is elegant, specific, atmospheric, and aligned with the Atlas & Hearth voice. The required CTA is present as a clear single action. Claims are supported by the supplied source, and the prose reads as coherent human editorial writing rather than templated filler.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "2fc0a2fb-7708-4a38-a3b5-b1275c1e3089",
+   "label": "r4#16",
+   "run": 2,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Overnight in a traditional ger gives families their first experience of the accommodation style that defines this part of Mongolia.\" (claims: The trip gives families their first ger-accommodation experience, and ger accommodation defines this part of Mongolia.; source: The source supports only an overnight stay at Sod Camp in a standard ger camp; it does not state that this is the family's first ger experience or that the accommodation style defines the region.); \"A lunch stop here, before continuing north, gives families time to stretch and take in a working Mongolian provincial town rather than passing through it as a blur.\" (claims: The Mörön stop includes time for families to stretch and take in the provincial town.; source: The source supports a lunch stop near Mörön before continuing to the lakeshore, but does not specify stretching time, sightseeing, or an intentional town experience.)"
+   ],
+   "sentences": [
+    "a lunch stop here, before continuing north, gives families time to stretch and take in a working mongolian provincial town rather than passing through it as a blur.",
+    "overnight in a traditional ger gives families their first experience of the accommodation style that defines this part of mongolia."
+   ],
+   "notes": "The piece is clear, specific, family-aware, and uses the required CTA as an unambiguous action. It needs manual fact review for itinerary claims that go beyond the supplied source, plus a generic promotional superlative.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "f09734c1-d07c-4c17-a181-801e28daba92",
+   "label": "r1#9",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, specific, family-aware, and aligned with Terra Family Expeditions' warm, practical, educational voice. The required CTA is present as a direct action. The factual claims are supported by the provided source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "530aec31-ac34-45a2-9018-7233ad61ef2a",
+   "label": "r3#4",
+   "run": 3,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "TEXT_INTEGRITY: 'They mean that this single body of water, set in a mountain-rimmed basin at an elevation of roughly sixteen hundred and forty-five metres, carries a consequence that extends far beyond its shores.'"
+   ],
+   "sentences": [
+    "they mean that this single body of water, set in a mountain-rimmed basin at an elevation of roughly sixteen hundred and forty-five metres, carries a consequence that extends far beyond its shores."
+   ],
+   "notes": "The piece is generally specific, calm, cultured, and aligned with the Atlas & Hearth voice. The required CTA is present as a clear action. One sentence contains a clear pronoun and agreement error that interrupts readability.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "67f08753-4c50-4962-a8bd-10224ac2df78",
+   "label": "r4#14",
+   "run": 3,
+   "class": "warn_title_meta",
+   "blocking": false,
+   "violations": [
+    "meta unsupported claim: \"Discover Lake Khövsgöl's steppe-taiga boundary, volcanic craters, and Tsaatan reindeer camps on a family journey through northern Mongolia.\" (claims: The family journey includes multiple volcanic craters.; source: The source supports a visit to Uran Togoo, a dormant volcano with one described crater and caldera, but does not support an itinerary activity involving multiple volcanic craters.)"
+   ],
+   "sentences": [
+    "discover lake khövsgöl's steppe-taiga boundary, volcanic craters, and tsaatan reindeer camps on a family journey through northern mongolia."
+   ],
+   "notes": "The piece is clear, specific, family-aware, and uses the required CTA as an unambiguous action. Manual fact checking is needed because the meta description refers to multiple volcanic craters, while the source supports the itinerary's visit to Uran Togoo and its single crater.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "5939df86-f8d4-491e-affc-348d0618ddcd",
+   "label": "r4#19",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is coherent, atmospheric, precise, and aligned with Atlas & Hearth's calm luxury-cultural voice. The required CTA is present as a clear, single action. The factual claims are supported by the supplied source, including the search title and meta description.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "4c2bb8c1-dfaf-4369-b349-36bde9e9e5c9",
+   "label": "r4#18",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, readable, family-aware, and aligned with Terra Family Expeditions' warm, practical, educational positioning. The required CTA is present as a clear action. The checkable claims are supported by the provided source, including the search title and meta description.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "c134808c-cbf5-428a-a178-62f8a60c1826",
+   "label": "r3#12",
+   "run": 3,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "TEXT_INTEGRITY: 'Talk to an Atlas & Hearth travel designer about how this journey might be arranged.'",
+    "TEXT_INTEGRITY: 'Talk to an Atlas & Hearth travel designer about this journey.'",
+    "meta unsupported claim: \"Discover northern Mongolia's convergence of steppe, taiga, volcanic geology, and Tsaatan reindeer culture around Lake Khövsgöl.\" (claims: Volcanic geology and Tsaatan reindeer culture converge around Lake Khövsgöl.; source: The SOURCE places Uran Togoo in Bulgan Province and describes it as a separate itinerary stop. It supports the steppe-taiga transition at Lake Khövsgöl and the Tsaatan settlements in the taiga north of the lake, but it does not state that volcanic geology converges around Lake Khövsgöl.)"
+   ],
+   "sentences": [
+    "discover northern mongolia's convergence of steppe, taiga, volcanic geology, and tsaatan reindeer culture around lake khövsgöl.",
+    "talk to an atlas & hearth travel designer about how this journey might be arranged.",
+    "talk to an atlas & hearth travel designer about this journey."
+   ],
+   "notes": "Brand fit is supported by the precise, atmospheric treatment of the destination, including the phrase \"The journey north begins with evidence of a different kind of upheaval.\" CTA clarity is supported by the unambiguous sentence \"Talk to an Atlas & Hearth travel designer about this journey.\" The duplicated CTA is a text-integrity issue, while the meta description makes an unsupported geographic association.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "7c8bc7df-5de4-402b-8ffc-2b3b72afc67a",
+   "label": "r4#3",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is energetic, specific, readable, and aligned with Trail Pulse's active travel voice. The required CTA is present as a clear action. Place and itinerary claims are supported by the source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "1376c2c3-7560-4394-bed8-97063f4d5564",
+   "label": "r4#2",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, practical, family-aware, and grounded in the supplied source. The required CTA is present as a single unambiguous action, and the factual claims are supported.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "49ed3642-30d5-4696-a228-479c017665a7",
+   "label": "r4#0",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is elegant, specific, culturally informed, and aligned with the Atlas & Hearth voice. The historical and architectural claims are supported by the source, and the required CTA is present verbatim.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "91e4b9d2-157a-4a5f-90b3-332b6d9f5338",
+   "label": "r4#1",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, grounded, and aligned with WildKind Travel's thoughtful, low-impact positioning. The required call to action is present as a clear single action. Place facts are supported by the source, and the prose is coherent and readable.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "71ad6b1f-9eb5-4509-915c-5c7644a5b71a",
+   "label": "r4#6",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, specific, on-brand, and uses the required CTA. All factual claims are supported by the source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "6961b261-6956-4b66-b563-9d34b8f8b5da",
+   "label": "r4#7",
+   "run": 3,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Terra Family Expeditions plans days like this with the logistics already mapped: what to carry, what to wear, and how to move through a sacred site respectfully with children in tow.\" (claims: Terra Family Expeditions has already mapped the logistics for this type of day, including what travellers should carry and wear and how they should move through the sacred site.; source: The SOURCE provides the site's requirements but does not state that Terra Family Expeditions maps or provides these specific logistics.)"
+   ],
+   "sentences": [
+    "terra family expeditions plans days like this with the logistics already mapped: what to carry, what to wear, and how to move through a sacred site respectfully with children in tow."
+   ],
+   "notes": "The piece is clear, family-aware, practical, and aligned with the brand voice. The required CTA is present and unambiguous. Manual fact checking is needed for the specific service claim about Terra mapping the day's logistics.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "e980728e-f77a-47ba-8b59-0b63a28e301c",
+   "label": "r4#8",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is elegant, specific, atmospheric, and well aligned with Atlas & Hearth's cultured, precise voice. It uses supported historical and architectural details without generic filler, and the required CTA is present as a clear action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "d8990697-4227-4ddc-9541-793c8ae59993",
+   "label": "r4#9",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, calm, informative, and aligned with the brand voice. The historical and current-use claims are supported by the source, and the required call to action is clear.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "bf00c670-4496-409c-b8ef-9938c339685c",
+   "label": "r4#12",
+   "run": 3,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "TEXT_INTEGRITY: 'Atlas & Hearth builds journeys around precisely this kind of cultural attention, where the context arrived with shapes everything encountered after.'"
+   ],
+   "sentences": [
+    "atlas & hearth builds journeys around precisely this kind of cultural attention, where the context arrived with shapes everything encountered after."
+   ],
+   "notes": "The piece is specific, culturally grounded, and aligned with the brand voice. The required CTA is present and unambiguous. One sentence contains a clear textual error.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "68a56edf-32df-477c-b0c1-2413a1360472",
+   "label": "r4#10",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, specific, family-aware, and aligned with the brand voice. It uses supported place details and includes the required CTA exactly. The optional herbal hot stone bath from the itinerary is omitted, but nothing requires every itinerary element to appear.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "3fd85285-7010-4338-9172-34d4acbe4b0a",
+   "label": "r4#4",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, specific, family-aware, and aligned with Terra Family Expeditions' educational adventure positioning. The required call to action is present as a direct, unambiguous instruction. Claims are supported by the supplied source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "6599b514-4fbb-4c45-ba22-f29b234e4143",
+   "label": "r4#11",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, readable, and aligned with the required CTA. The Day 2 sequencing, location, pool details, and swimming and rest time are supported by the source.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "bb776a54-93cc-4f10-a108-6e26f9f05324",
+   "label": "r4#5",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is factually aligned with the supplied source, maintains an elegant and culturally focused brand voice, and includes the required CTA as a clear action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "e61ad7bc-6684-49d9-9727-cafec9de28b8",
+   "label": "r4#13",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is clear, specific, grounded in the supplied facts, and consistent with the brand voice. The required CTA is present as a single, unambiguous action.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "9594430b-93c7-425d-ac19-9dde2c33fe88",
+   "label": "r4#15",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is specific, atmospheric, and aligned with the brand's elegant, cultured voice. The required CTA is present as a clear action. The factual claims are supported by the provided source, and the search title and meta description are consistent with the body.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "9b65bd97-0e42-4ceb-96c3-2e50c3bb8058",
+   "label": "r4#17",
+   "run": 3,
+   "class": "pass",
+   "blocking": true,
+   "violations": [],
+   "sentences": [],
+   "notes": "The piece is coherent, atmospheric, precise, and aligned with Atlas & Hearth's discreet luxury cultural-travel voice. The required CTA is present as a clear single action. Factual claims are supported by the provided source or permitted place background, and the prose contains no clearly generic AI filler or text-integrity problems.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  },
+  {
+   "pid": "2fc0a2fb-7708-4a38-a3b5-b1275c1e3089",
+   "label": "r4#16",
+   "run": 3,
+   "class": "block_quoted",
+   "blocking": true,
+   "violations": [
+    "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Overnight in a traditional ger gives families their first experience of the accommodation style that defines this part of Mongolia.\" (claims: The ger stay at Sod Camp is the family's first experience of this accommodation style.; source: The SOURCE confirms an overnight stay in a standard ger camp on day 3, but does not state that it is the family's first ger experience.)"
+   ],
+   "sentences": [
+    "overnight in a traditional ger gives families their first experience of the accommodation style that defines this part of mongolia."
+   ],
+   "notes": "The piece is clear, readable, family-aware, and generally aligned with Terra Family Expeditions' warm, practical, educational voice. The CTA is explicit and unambiguous. One broad superlative reads as generic promotional filler. One itinerary claim requires manual fact checking because the source confirms an overnight ger stay but does not establish that it is the family's first experience of that accommodation style.",
+   "marker_note": false,
+   "prompt_has_tags": false
+  }
+ ]
+}
