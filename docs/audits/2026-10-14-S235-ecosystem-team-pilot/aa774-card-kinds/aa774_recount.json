@@ -1,0 +1,890 @@
+{
+ "summary": {
+  "mode": "probe",
+  "pieces": 20,
+  "distinct_seeds": 4,
+  "bullets_removed_per_distinct_seed": [
+   2,
+   2,
+   5,
+   8
+  ],
+  "pieces_with_thin_change": 0,
+  "removed_total_over_pieces": 97
+ },
+ "pieces": [
+  {
+   "blocks": [
+    {
+     "label": "Punakha Dzong — visit courtyards and assembly hall",
+     "facts_before": 11,
+     "facts_after": 9,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate wo",
+      "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalen"
+     ],
+     "unknown": 1
+    }
+   ],
+   "removed": 2,
+   "thin_changed": 0,
+   "piece_id": "49ed3642-30d5-4696-a228-479c017665a7",
+   "tenant": "Atlas & Hearth",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Punakha Dzong — visit courtyards and assembly hall",
+     "facts_before": 11,
+     "facts_after": 9,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate wo",
+      "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalen"
+     ],
+     "unknown": 1
+    }
+   ],
+   "removed": 2,
+   "thin_changed": 0,
+   "piece_id": "91e4b9d2-157a-4a5f-90b3-332b6d9f5338",
+   "tenant": "WildKind Travel",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Tiger's Nest Monastery — hike to the cliffside",
+     "facts_before": 10,
+     "facts_after": 8,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The hike to the monastery from the base-area car park follows a forested trail and takes most visito",
+      "Visitors must leave cameras and bags at a checkpoint before entering the inner temples, and modest, "
+     ],
+     "unknown": 0
+    }
+   ],
+   "removed": 2,
+   "thin_changed": 0,
+   "piece_id": "1376c2c3-7560-4394-bed8-97063f4d5564",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Kuang Si Falls — swim and rest at pools",
+     "facts_before": 12,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "A bear rescue centre operated by Free the Bears is located at the entrance to the falls area, housin",
+      "The road from Luang Prabang to the falls is paved and passes through rural villages and rice paddies",
+      "Trails lead up alongside the falls to viewpoints at the top, passing through forest.",
+      "Visitors can swim in the lower tiered pools; the upper reaches and the main falls themselves are gen",
+      "Water levels and flow are strongest during and just after the rainy season (roughly May to October),"
+     ],
+     "unknown": 0
+    }
+   ],
+   "removed": 5,
+   "thin_changed": 0,
+   "piece_id": "7c8bc7df-5de4-402b-8ffc-2b3b72afc67a",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Uran Togoo — trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on ",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Sod Camp — overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 0
+    },
+    {
+     "label": "Moron — stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it th",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) d",
+      "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continent"
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Lake Khövsgöl — visit the boundary between Central Asian ste",
+     "facts_before": 14,
+     "facts_after": 14,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 9
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements — excursions to Tsaata",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through th",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors sh",
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "ruins of an ancient monastery — visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "removed": [],
+     "unknown": 0
+    }
+   ],
+   "removed": 8,
+   "thin_changed": 0,
+   "piece_id": "3fd85285-7010-4338-9172-34d4acbe4b0a",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "status": "held"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Uran Togoo — trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on ",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Sod Camp — overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 0
+    },
+    {
+     "label": "Moron — stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it th",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) d",
+      "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continent"
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Lake Khövsgöl — visit the boundary between Central Asian ste",
+     "facts_before": 14,
+     "facts_after": 14,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 9
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements — excursions to Tsaata",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through th",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors sh",
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "ruins of an ancient monastery — visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "removed": [],
+     "unknown": 0
+    }
+   ],
+   "removed": 8,
+   "thin_changed": 0,
+   "piece_id": "bb776a54-93cc-4f10-a108-6e26f9f05324",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "status": "held"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Kuang Si Falls — swim and rest at pools",
+     "facts_before": 12,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "A bear rescue centre operated by Free the Bears is located at the entrance to the falls area, housin",
+      "The road from Luang Prabang to the falls is paved and passes through rural villages and rice paddies",
+      "Trails lead up alongside the falls to viewpoints at the top, passing through forest.",
+      "Visitors can swim in the lower tiered pools; the upper reaches and the main falls themselves are gen",
+      "Water levels and flow are strongest during and just after the rainy season (roughly May to October),"
+     ],
+     "unknown": 0
+    }
+   ],
+   "removed": 5,
+   "thin_changed": 0,
+   "piece_id": "71ad6b1f-9eb5-4509-915c-5c7644a5b71a",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Tiger's Nest Monastery — hike to the cliffside",
+     "facts_before": 10,
+     "facts_after": 8,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The hike to the monastery from the base-area car park follows a forested trail and takes most visito",
+      "Visitors must leave cameras and bags at a checkpoint before entering the inner temples, and modest, "
+     ],
+     "unknown": 0
+    }
+   ],
+   "removed": 2,
+   "thin_changed": 0,
+   "piece_id": "6961b261-6956-4b66-b563-9d34b8f8b5da",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Punakha Dzong — visit courtyards and assembly hall",
+     "facts_before": 11,
+     "facts_after": 9,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate wo",
+      "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalen"
+     ],
+     "unknown": 1
+    }
+   ],
+   "removed": 2,
+   "thin_changed": 0,
+   "piece_id": "e980728e-f77a-47ba-8b59-0b63a28e301c",
+   "tenant": "Atlas & Hearth",
+   "channel": "linkedin",
+   "status": "held"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Punakha Dzong — visit courtyards and assembly hall",
+     "facts_before": 11,
+     "facts_after": 9,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate wo",
+      "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalen"
+     ],
+     "unknown": 1
+    }
+   ],
+   "removed": 2,
+   "thin_changed": 0,
+   "piece_id": "d8990697-4227-4ddc-9541-793c8ae59993",
+   "tenant": "WildKind Travel",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Tiger's Nest Monastery — hike to the cliffside",
+     "facts_before": 10,
+     "facts_after": 8,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The hike to the monastery from the base-area car park follows a forested trail and takes most visito",
+      "Visitors must leave cameras and bags at a checkpoint before entering the inner temples, and modest, "
+     ],
+     "unknown": 0
+    }
+   ],
+   "removed": 2,
+   "thin_changed": 0,
+   "piece_id": "68a56edf-32df-477c-b0c1-2413a1360472",
+   "tenant": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Kuang Si Falls — swim and rest at pools",
+     "facts_before": 12,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "A bear rescue centre operated by Free the Bears is located at the entrance to the falls area, housin",
+      "The road from Luang Prabang to the falls is paved and passes through rural villages and rice paddies",
+      "Trails lead up alongside the falls to viewpoints at the top, passing through forest.",
+      "Visitors can swim in the lower tiered pools; the upper reaches and the main falls themselves are gen",
+      "Water levels and flow are strongest during and just after the rainy season (roughly May to October),"
+     ],
+     "unknown": 0
+    }
+   ],
+   "removed": 5,
+   "thin_changed": 0,
+   "piece_id": "6599b514-4fbb-4c45-ba22-f29b234e4143",
+   "tenant": "Trail Pulse",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Punakha Dzong — visit courtyards and assembly hall",
+     "facts_before": 11,
+     "facts_after": 9,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate wo",
+      "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalen"
+     ],
+     "unknown": 1
+    }
+   ],
+   "removed": 2,
+   "thin_changed": 0,
+   "piece_id": "bf00c670-4496-409c-b8ef-9938c339685c",
+   "tenant": "Atlas & Hearth",
+   "channel": "linkedin",
+   "status": "held"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Punakha Dzong — visit courtyards and assembly hall",
+     "facts_before": 11,
+     "facts_after": 9,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The interior courtyards contain a utse (central tower) and several temples adorned with elaborate wo",
+      "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalen"
+     ],
+     "unknown": 1
+    }
+   ],
+   "removed": 2,
+   "thin_changed": 0,
+   "piece_id": "e61ad7bc-6684-49d9-9727-cafec9de28b8",
+   "tenant": "WildKind Travel",
+   "channel": "linkedin",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Uran Togoo — trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on ",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Sod Camp — overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 0
+    },
+    {
+     "label": "Moron — stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it th",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) d",
+      "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continent"
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Lake Khövsgöl — visit the boundary between Central Asian ste",
+     "facts_before": 14,
+     "facts_after": 14,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 9
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements — excursions to Tsaata",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through th",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors sh",
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "ruins of an ancient monastery — visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "removed": [],
+     "unknown": 0
+    }
+   ],
+   "removed": 8,
+   "thin_changed": 0,
+   "piece_id": "67f08753-4c50-4962-a8bd-10224ac2df78",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "status": "held"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Uran Togoo — trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on ",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Sod Camp — overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 0
+    },
+    {
+     "label": "Moron — stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it th",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) d",
+      "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continent"
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Lake Khövsgöl — visit the boundary between Central Asian ste",
+     "facts_before": 14,
+     "facts_after": 14,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 9
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements — excursions to Tsaata",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through th",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors sh",
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "ruins of an ancient monastery — visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "removed": [],
+     "unknown": 0
+    }
+   ],
+   "removed": 8,
+   "thin_changed": 0,
+   "piece_id": "9594430b-93c7-425d-ac19-9dde2c33fe88",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "status": "held"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Uran Togoo — trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on ",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Sod Camp — overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 0
+    },
+    {
+     "label": "Moron — stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it th",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) d",
+      "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continent"
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Lake Khövsgöl — visit the boundary between Central Asian ste",
+     "facts_before": 14,
+     "facts_after": 14,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 9
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements — excursions to Tsaata",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through th",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors sh",
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "ruins of an ancient monastery — visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "removed": [],
+     "unknown": 0
+    }
+   ],
+   "removed": 8,
+   "thin_changed": 0,
+   "piece_id": "2fc0a2fb-7708-4a38-a3b5-b1275c1e3089",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "status": "approved"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Uran Togoo — trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on ",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Sod Camp — overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 0
+    },
+    {
+     "label": "Moron — stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it th",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) d",
+      "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continent"
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Lake Khövsgöl — visit the boundary between Central Asian ste",
+     "facts_before": 14,
+     "facts_after": 14,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 9
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements — excursions to Tsaata",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through th",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors sh",
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "ruins of an ancient monastery — visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "removed": [],
+     "unknown": 0
+    }
+   ],
+   "removed": 8,
+   "thin_changed": 0,
+   "piece_id": "9b65bd97-0e42-4ceb-96c3-2e50c3bb8058",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "status": "held"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Uran Togoo — trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on ",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Sod Camp — overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 0
+    },
+    {
+     "label": "Moron — stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it th",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) d",
+      "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continent"
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Lake Khövsgöl — visit the boundary between Central Asian ste",
+     "facts_before": 14,
+     "facts_after": 14,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 9
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements — excursions to Tsaata",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through th",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors sh",
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "ruins of an ancient monastery — visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "removed": [],
+     "unknown": 0
+    }
+   ],
+   "removed": 8,
+   "thin_changed": 0,
+   "piece_id": "4c2bb8c1-dfaf-4369-b349-36bde9e9e5c9",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "status": "held"
+  },
+  {
+   "blocks": [
+    {
+     "label": "Uran Togoo — trek into the caldera of a dormant volcano",
+     "facts_before": 8,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "The crater is roughly 600 metres wide and 50–60 metres deep, and its caldera floor is accessible on ",
+      "Visitors can trek across the volcanic terrain, including walking down into the walkable caldera and "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Sod Camp — overnight in a standard ger camp",
+     "facts_before": 3,
+     "facts_after": 3,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 0
+    },
+    {
+     "label": "Moron — stop for lunch",
+     "facts_before": 9,
+     "facts_after": 6,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Mörön has a small domestic airport with scheduled flights connecting it to Ulaanbaatar, making it th",
+      "The town has a typical Mongolian provincial layout with a central square, a market, and ger (yurt) d",
+      "Winters are severe, with temperatures regularly dropping well below −30 °C, reflecting the continent"
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "Lake Khövsgöl — visit the boundary between Central Asian ste",
+     "facts_before": 14,
+     "facts_after": 14,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [],
+     "unknown": 9
+    },
+    {
+     "label": "Tsaatan reindeer herders' settlements — excursions to Tsaata",
+     "facts_before": 10,
+     "facts_after": 7,
+     "thin_before": false,
+     "thin_after": false,
+     "removed": [
+      "Access to the eastern and western Taiga camps where Tsaatan live requires a permit issued through th",
+      "The region experiences extremely cold winters and the taiga terrain is marshy in summer; visitors sh",
+      "Visitors typically see the teepee camps, interact with families, observe reindeer up close, and may "
+     ],
+     "unknown": 0
+    },
+    {
+     "label": "ruins of an ancient monastery — visit",
+     "facts_before": 1,
+     "facts_after": 1,
+     "thin_before": true,
+     "thin_after": true,
+     "removed": [],
+     "unknown": 0
+    }
+   ],
+   "removed": 8,
+   "thin_changed": 0,
+   "piece_id": "5939df86-f8d4-491e-affc-348d0618ddcd",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "status": "held"
+  }
+ ]
+}

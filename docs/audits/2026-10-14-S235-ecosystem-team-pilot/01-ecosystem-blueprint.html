@@ -85,7 +85,7 @@ footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--line);font-si
   <p class="lede">Ba app (CIS, TripPlanner, AA-Booking) đang chạy trên cùng một tài khoản AWS và một cơ sở dữ liệu. Trang này nhìn cả ba cùng lúc qua ba lớp hạ tầng, dữ liệu và app, chỉ ra chỗ chưa khớp, và đề xuất một hình thái đích cùng lộ trình để đi tới đó.</p>
   <div class="meta"><span>acc2 005097885195 · us-west-1</span><span>RDS dùng chung aa-cis-dev-db</span><span>Nguồn: 7 agent review chỉ-đọc + kiểm live trong phiên</span></div>
   <nav class="toc" aria-label="Mục lục">
-    <a href="#ket-luan">Kết luận</a><a href="#hien-trang">Hiện trạng</a><a href="#so-huu">Ai sở hữu gì</a><a href="#lech">Chỗ chưa khớp</a><a href="#dich">Hình thái đích</a><a href="#hanh-trinh">Hành trình khách</a><a href="#app">Hướng từng app</a><a href="#lo-trinh">Lộ trình</a><a href="#quyet-dinh">Cần Nghiệp chốt</a>
+    <a href="#ket-luan">Kết luận</a><a href="#hien-trang">Hiện trạng</a><a href="#so-huu">Ai sở hữu gì</a><a href="#lech">Chỗ chưa khớp</a><a href="#dich">Hình thái đích</a><a href="#hanh-trinh">Hành trình khách</a><a href="#app">Hướng từng app</a><a href="#lo-trinh">Lộ trình</a><a href="#ai-first">AI-first</a><a href="#quyet-dinh">Cần Nghiệp chốt</a>
   </nav>
 </header>
 
@@ -337,6 +337,52 @@ flowchart LR
     </ol>
   </section>
 </div>
+
+<h2 id="ai-first">AI-first cho toàn hệ sinh thái</h2>
+<p>AI-first ở AA nghĩa là AI làm phần đọc, soạn, đối chiếu và kiểm trên cả ba mảng: chuỗi nội dung (CIS), cửa trước của khách (TripPlanner) và sales/vận hành (Booking). Trong khi đó <b>mọi con số do code tất định quyết</b> (giá, biên, tỷ giá, ngày, số khách), và giữa đầu ra của AI với khách, tenant, nhà cung cấp hay khoản tiền luôn có một người có tên hoặc một bước kiểm tất định. Việc đầu tiên không phải thêm model. Hiện AI đã tự quyết nhiều thứ: atom, thẻ địa điểm, mua keyword, gate T2/F9, khoảng 25 câu hỏi Jev có trả phí. Việc trước tiên là làm cho phần AI này quan sát được, có ngân sách, được đánh giá và tắt được, qua <b>một gateway chung</b>.</p>
+<h3>Mười nguyên tắc</h3>
+<ol>
+  <li><b>Số không bao giờ do model sinh ra.</b> Giá, biên, tỷ giá, thuế, ngày, số khách lấy từ dữ liệu có cấu trúc (ADR 0005). Số trong văn bản AI phải nằm trong tập cho phép, nếu không thì chặn.</li>
+  <li><b>AI soạn và kiểm, người hoặc luật tất định phát hành.</b> AI không bao giờ đóng vai người duyệt trong cơ chế hai người duyệt (maker-checker).</li>
+  <li><b>Một gateway, một sổ cái.</b> Mọi lời gọi LLM, Jev và embedding ở cả 3 app đi qua Model Gateway của CIS, đóng gói thành thư viện. Gateway tự ghi mỗi lần gọi có tính tiền, kể cả lần lỗi, và gắn nhãn app.</li>
+  <li><b>Không trả tiền cho AI vô tác dụng.</b> Mỗi shadow hay câu hỏi Jev phải có người chịu trách nhiệm, ngày kết thúc và một hành động phía sau, nếu không thì tắt.</li>
+  <li><b>Không cho AI chặn khi chưa hiệu chỉnh.</b> Judge hay quyết định chỉ được chặn nội dung khi đã đo độ ổn định và độ khớp với nhãn người (≥95%). Trước đó chỉ được kích hoạt chạy lại hoặc gắn nhãn cho admin.</li>
+  <li><b>Loại dữ liệu quyết định nhà cung cấp model.</b> Nội dung tenant và PII của khách chỉ gửi tới nhà cung cấp đã có DPA/ZDR. Luật này do gateway thực thi.</li>
+  <li><b>Văn bản bên ngoài là dữ liệu, không phải mệnh lệnh.</b> File nhà cung cấp, tin nhắn khách và SERP chỉ đi vào các bước trích xuất theo schema, không có công cụ thay đổi trạng thái, có trần chi phí.</li>
+  <li><b>Tất định trước, AI ở chỗ có lời.</b> Sửa dữ liệu và form trước khi thêm model. Mỗi tính năng AI phải thắng phương án không dùng AI trên một chỉ số kinh doanh cụ thể.</li>
+  <li><b>AI nằm trong các pha của lộ trình, không chạy song song lấn sang.</b></li>
+  <li><b>Thời gian duyệt của người là ngân sách.</b> Mỗi tính năng AI khai báo số phút cần người duyệt mỗi tuần, có cảnh báo khi hàng đợi duyệt bị dồn.</li>
+</ol>
+<h3>Việc AI theo pha</h3>
+<div class="tbl"><table>
+<thead><tr><th>Pha</th><th>Việc</th><th>App</th><th>Vai trò AI</th></tr></thead>
+<tbody>
+<tr><td><span class="chip hi">Ngay</span></td><td>Tắt các câu hỏi Jev và shadow judge không có người phụ trách (~$11,8/tuần Jev đang chỉ quan sát)</td><td>CIS</td><td>quan sát</td></tr>
+<tr><td><span class="chip hi">Ngay</span></td><td>Ổn định judge T2 (trung vị 3 lần, AA-801) và F9 (độ nhất quán 0,87 → ≥0,95)</td><td>CIS</td><td>quyết định</td></tr>
+<tr><td><span class="chip hi">Ngay</span></td><td>Kiểm 20 thẻ địa điểm "auto_checked" bằng người, sau đó chỉ thẻ đã xác minh mới tới khách B2C</td><td>CIS</td><td>quyết định</td></tr>
+<tr><td><span class="chip hi">Ngay</span></td><td>Chấm mức đủ dữ liệu của tour thô trước khi tốn tiền viết A1/A3</td><td>CIS</td><td>soạn, người duyệt</td></tr>
+<tr><td><span class="chip hi">Ngay</span></td><td>TripPlanner: trần chi phí, cache lời kể theo lịch trình, kiểm phiên sở hữu trip, nhãn "AI-assisted"; sửa tìm kiếm ngữ nghĩa (đang embed sai loại câu truy vấn, chưa lọc tour ngừng bán)</td><td>TripPlanner</td><td>hỗ trợ</td></tr>
+<tr><td><span class="chip hi">Ngay</span></td><td>Sửa hook guardrail của agent: hiện lọt được <code>git -C … push</code> và <code>gh api -XPOST</code></td><td>Kỹ thuật</td><td>—</td></tr>
+<tr><td><span class="chip mid">Kế tiếp</span></td><td>Bộ golden set để đánh giá A3 atomize, vì atom sẽ thành contract cho TripPlanner và Booking</td><td>CIS</td><td>quyết định</td></tr>
+<tr><td><span class="chip mid">Kế tiếp</span></td><td>Hiệu chỉnh 2–3 câu hỏi Jev có hành động rõ để chuyển sang chặn thật</td><td>CIS</td><td>quyết định</td></tr>
+<tr><td><span class="chip mid">Kế tiếp</span></td><td>Gợi ý tuyến theo sở thích, lý do "vì sao hợp" sinh tất định</td><td>TripPlanner</td><td>hỗ trợ</td></tr>
+<tr><td><span class="chip mid">Kế tiếp</span></td><td><b>Tóm tắt yêu cầu cho tư vấn viên</b> (AI đầu tiên của Booking): chỉ nội bộ, chỉ là bản nháp, không báo giá, không gửi đi</td><td>Booking</td><td>soạn, người duyệt</td></tr>
+<tr><td><span class="chip lo">Sau</span></td><td>Soạn thư trả lời khách đa ngôn ngữ (tư vấn viên bấm gửi; số và ngày kiểm tất định)</td><td>Booking</td><td>soạn, người duyệt</td></tr>
+<tr><td><span class="chip lo">Sau</span></td><td>Map tiêu đề cột file giá của nhà cung cấp (dùng mẫu tĩnh trước, LLM chỉ làm dự phòng, giá trị chép nguyên văn)</td><td>Booking</td><td>hỗ trợ</td></tr>
+<tr><td><span class="chip lo">Sau</span></td><td>Thẻ địa điểm đã xác minh hiện trên TripPlanner</td><td>CIS + TripPlanner</td><td>hỗ trợ</td></tr>
+</tbody></table></div>
+<p class="note">Bị hoãn hoặc loại sau phản biện: chat thiết kế chuyến đi (chưa có số liệu phễu và trần chi phí), trích giá nhà cung cấp từ PDF/email (rủi ro báo giá lỗ, ADR 0005 đã chọn mẫu Excel), AI soạn phiên bản báo giá V1…Vn (phải có engine giá tất định trước), chấm điểm lead bằng Jev (chưa có nhãn, gửi PII ra ngoài), bản địa hoá DE/FR/NL (chưa có người duyệt bản ngữ và đánh giá EU AI Act).</p>
+<h3>Nền tảng AI cần có</h3>
+<ul>
+  <li><b>Gateway chung</b> đóng gói thành thư viện có version, control plane nằm trong RDS acc2. Sửa ngay bản fork của TripPlanner: đang bỏ qua shadow, chỉ ghi khi gọi thành công, và giá NULL bị ghi thành 0.</li>
+  <li><b>Sổ cái v2</b> cho <code>llm_call_log</code>: thêm cột app, shadow, status, attempt, prompt_hash. Gateway tự ghi cả lần lỗi; ghi sổ thất bại thì có alarm.</li>
+  <li><b>Sổ đăng ký AI:</b> mỗi stage có người phụ trách, golden set, ngân sách và nút tắt. Không còn stage chưa khai báo hay ghim cứng model.</li>
+  <li><b>Chính sách dữ liệu theo nhà cung cấp</b> thực thi trong gateway. Bước đầu: đếm số lời gọi gửi nội dung tenant sang OpenAI API.</li>
+  <li><b>Trần chi phí cứng</b> cho mọi endpoint công khai và mọi loại job; AWS Budgets trên acc1/acc3.</li>
+  <li><b>Bộ đánh giá</b>: đưa harness chạy lại T2 và replay F9 của S235 vào repo thành bộ test có trần chi phí; ghim hash prompt cho mọi stage.</li>
+</ul>
+<h3>Chỉ số đo</h3>
+<p>Lệch giữa chi phí ghi sổ và Cost Explorer ≤5%. Độ dao động brand_fit ≤1 điểm (hiện 4–8). Độ nhất quán F9 ≥0,95. Số câu bịa lọt tới tenant/khách = 0. Không có dữ liệu tenant nào đi tới nhà cung cấp chưa có DPA. Chi phí AI tính trên mỗi tour, mỗi bài, mỗi phiên, mỗi yêu cầu, đặt cạnh kết quả kinh doanh tương ứng.</p>
 
 <h2 id="quyet-dinh">Cần Nghiệp chốt</h2>
 <ul class="decisions">
