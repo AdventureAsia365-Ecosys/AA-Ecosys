@@ -16,6 +16,8 @@ patterns=(
   'aws rds (stop|start|delete|modify)' 'aws secretsmanager (put|create|delete|update)' 'aws s3 rm'
   'git reset --hard' 'git clean -[a-z]*f' 'git branch -D' 'git checkout \.( |$)' 'git restore \.( |$)'
   'git rebase .*(main|master)$' 'git commit .*--no-verify'
+  'gh api .* -(f|F) ' 'gh api .*--(field|raw-field|input)' 'aws ecs execute-command' 'aws iam ' 'aws lambda (invoke|update|create|delete)'
+  'aws ssm (put|delete|send-command)' 'aws ecr (put|delete|batch-delete)'
 )
 for p in "${patterns[@]}"; do
   if echo "$cmd" | grep -Eq "$p"; then
