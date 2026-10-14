@@ -1,0 +1,355 @@
+<title>Bản thiết kế hệ sinh thái AA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column (~72ch) with wide tables/diagrams allowed to scroll; sections numbered only where order matters (roadmap). */
+:root{
+  --bg:#f5f7f6; --surface:#ffffff; --ink:#18232a; --muted:#56656d; --line:#d6dfdf;
+  --accent:#1d6a72; --accent-soft:#e2efef;
+  --hi:#b3412e; --hi-soft:#f7e3de; --mid:#9a6b12; --mid-soft:#f5ecd6; --lo:#3d6b3f; --lo-soft:#e3eee2;
+  --display:"Spectral", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11181c; --surface:#172126; --ink:#e3eaec; --muted:#9aabb2; --line:#2b3a40;
+    --accent:#5fb3ba; --accent-soft:#1c3337;
+    --hi:#ef8a74; --hi-soft:#3a221d; --mid:#d9ae5c; --mid-soft:#352b18; --lo:#8fc48f; --lo-soft:#1f3020;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11181c; --surface:#172126; --ink:#e3eaec; --muted:#9aabb2; --line:#2b3a40;
+  --accent:#5fb3ba; --accent-soft:#1c3337;
+  --hi:#ef8a74; --hi-soft:#3a221d; --mid:#d9ae5c; --mid-soft:#352b18; --lo:#8fc48f; --lo-soft:#1f3020;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.62;margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+header.top{display:grid;gap:10px;padding-block:8px 22px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,4.4vw,40px);line-height:1.15;margin:0;text-wrap:balance}
+.lede{color:var(--muted);max-width:68ch;margin:0}
+.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
+h2{font-family:var(--display);font-weight:700;font-size:25px;line-height:1.25;margin:44px 0 8px;text-wrap:balance}
+h3{font-size:16px;font-weight:600;margin:22px 0 6px}
+p{margin:8px 0;max-width:72ch}
+ul,ol{margin:8px 0;padding-left:22px;max-width:72ch}
+li{margin:4px 0}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+nav.toc{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px}
+nav.toc a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+nav.toc a:hover,nav.toc a:focus-visible{border-bottom-color:var(--accent);outline:none}
+.verdicts{display:grid;gap:10px;margin-top:14px}
+.verdict{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.verdict .k{font-family:var(--mono);font-size:12px;color:var(--accent);padding-top:2px}
+.verdict p{margin:0}
+.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip{display:inline-block;font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.chip.hi{background:var(--hi-soft);color:var(--hi)}
+.chip.mid{background:var(--mid-soft);color:var(--mid)}
+.chip.lo{background:var(--lo-soft);color:var(--lo)}
+.chip.own{background:var(--accent-soft);color:var(--accent)}
+.diagram{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;margin:12px 0}
+pre.mermaid{margin:0;background:transparent;font-family:var(--body)}
+.phases{display:grid;gap:14px;margin-top:12px}
+.phase{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.phase header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.phase h3{margin:0;font-family:var(--display);font-size:19px}
+.phase .when{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.phase ol{margin-top:8px}
+.apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
+.app{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
+.app h3{margin:0 0 4px;font-family:var(--display);font-size:19px}
+.app .role{font-size:13px;color:var(--muted);margin:0 0 6px}
+.app ul{padding-left:18px;font-size:14.5px}
+.decisions li{margin:8px 0}
+.note{font-size:13px;color:var(--muted)}
+footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+@media (max-width:520px){ .verdict{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">AA_Ecosys · tư vấn kiến trúc · S235 · 14/10/2026</div>
+  <h1>Bản thiết kế hệ sinh thái AA</h1>
+  <p class="lede">Ba app (CIS, TripPlanner, AA-Booking) đang chạy trên cùng một tài khoản AWS và một cơ sở dữ liệu. Trang này nhìn cả ba cùng lúc qua ba lớp hạ tầng, dữ liệu và app, chỉ ra chỗ chưa khớp, và đề xuất một hình thái đích cùng lộ trình để đi tới đó.</p>
+  <div class="meta"><span>acc2 005097885195 · us-west-1</span><span>RDS dùng chung aa-cis-dev-db</span><span>Nguồn: 7 agent review chỉ-đọc + kiểm live trong phiên</span></div>
+  <nav class="toc" aria-label="Mục lục">
+    <a href="#ket-luan">Kết luận</a><a href="#hien-trang">Hiện trạng</a><a href="#so-huu">Ai sở hữu gì</a><a href="#lech">Chỗ chưa khớp</a><a href="#dich">Hình thái đích</a><a href="#hanh-trinh">Hành trình khách</a><a href="#app">Hướng từng app</a><a href="#lo-trinh">Lộ trình</a><a href="#quyet-dinh">Cần Nghiệp chốt</a>
+  </nav>
+</header>
+
+<h2 id="ket-luan">Năm kết luận chính</h2>
+<div class="verdicts">
+  <div class="verdict"><span class="k">BẢO MẬT</span><p>Lớp ngoài cùng đang hở hơn mình tưởng. WAF gắn ở ALB có một luật cho phép cả dải IP nội bộ VPC, nên <b>mọi request đi qua API Gateway đều bỏ qua bộ lọc</b>. Role CI của CIS vẫn được tạo role IAM bất kỳ. TripPlanner gắn chuyến đi vào khách cũ chỉ dựa trên email hoặc điện thoại trùng mà không xác minh. Ba việc này nên làm trước mọi tính năng mới.</p></div>
+  <div class="verdict"><span class="k">DỮ LIỆU</span><p>Mỗi schema đã có chủ (CIS, <code>tripplanner</code>, <code>booking</code>), nhưng <b>mọi thứ vẫn chạy bằng user master</b> <code>aa_cis_admin</code>. TripPlanner còn đọc thẳng bảng nội bộ của CIS, và DB có thể lệch khỏi migration mà không ai biết. Vụ view usage bịa số trong phiên này là ví dụ.</p></div>
+  <div class="verdict"><span class="k">KHÁI NIỆM</span><p>Khách hàng, địa điểm, quốc gia và ảnh đang bị <b>nhân bản ở 2–4 nơi</b>, mỗi nơi một luật. Cần quy ước một chủ cho mỗi khái niệm: CIS giữ nội dung và danh mục, Booking giữ khách và giao dịch, TripPlanner giữ phiên lập kế hoạch.</p></div>
+  <div class="verdict"><span class="k">TÍCH HỢP</span><p>Giữa các app nên chỉ có <b>một kiểu nói chuyện</b>: outbox → consumer → inbox, với contract có version nằm trong <code>docs/contracts</code>. Hiện mới có đúng một contract (<code>inquiry.submitted.v1</code>), và chưa có quy tắc nâng version.</p></div>
+  <div class="verdict"><span class="k">VẬN HÀNH</span><p>Cả hệ thống <b>chỉ có môi trường Dev</b>, một NAT t4g.nano cho toàn bộ traffic ra ngoài, RDS chạy một AZ và không bật chống xoá. Booking và TripPlanner chưa có alarm nào. Hoá đơn AWS tháng 9 khoảng $135, tức là rẻ. Trước khi AAA go-live cần có kế hoạch staging và prod.</p></div>
+</div>
+
+<h2 id="hien-trang">Hiện trạng: ba app, một nền chung</h2>
+<p>Ba app có cổng vào riêng nhưng dùng chung VPC link, ALB, cluster ECS, NAT và RDS. Một sự cố ở lớp dùng chung sẽ kéo cả ba xuống.</p>
+<div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  subgraph Edge["Cổng vào"]
+    V1["Vercel: admin + portal CIS"]
+    V2["Vercel: TripPlanner FE"]
+    G1["API GW REST · api-cis.lumiguides.it.com"]
+    G2["API GW HTTP v2 · TripPlanner (execute-api)"]
+    G3["API GW REST · Booking (execute-api)"]
+  end
+  subgraph Net["Mạng dùng chung · VPC 10.2/16"]
+    NLB["NLB + VPC link"]
+    ALB["ALB · WAF (đang bị vượt qua)"]
+    NAT["NAT t4g.nano · điểm hỏng đơn"]
+  end
+  subgraph Compute["Cluster aa-cis-dev"]
+    API["CIS api"]
+    WK["CIS worker · shared.job"]
+    BK["Booking api"]
+    L1["TripPlanner Lambda ×2"]
+  end
+  DB[("RDS db.t3.micro · 1 AZ<br/>schema CIS · tripplanner · booking")]
+  LLM["Bedrock acc3 / acc1 · OpenAI"]
+  V1 --> G1 --> NLB --> ALB --> API
+  G3 --> NLB
+  ALB --> BK
+  V2 --> G2 --> L1
+  API --> DB
+  WK --> DB
+  BK --> DB
+  L1 --> DB
+  WK --> NAT --> LLM
+  L1 --> NAT
+</pre>
+</div>
+
+<div class="tbl"><table>
+<thead><tr><th>Lớp</th><th>CIS</th><th>TripPlanner</th><th>AA-Booking</th></tr></thead>
+<tbody>
+<tr><td>Chạy trên</td><td>ECS api + worker (cùng SHA)</td><td>2 Lambda trong VPC</td><td>ECS 1 task, nằm trong cluster CIS</td></tr>
+<tr><td>Cổng vào</td><td>REST API + domain riêng</td><td>HTTP API v2, URL execute-api</td><td>REST API riêng, URL execute-api</td></tr>
+<tr><td>Xác thực</td><td>JWT tenant / staff; BFF gắn admin secret</td><td>Một API key dùng chung, chưa có đăng nhập theo người</td><td>Mới có health; staff sẽ dùng login CIS (O1)</td></tr>
+<tr><td>Deploy</td><td>Guard job → ECR → ECS, kiểm SHA</td><td>Zip → Lambda, chưa có kiểm live</td><td>ECR bất biến → ECS → smoke <code>/booking/health</code></td></tr>
+<tr><td>Role CI</td><td>Trust đã siết theo ID (S235), quyền vẫn rộng</td><td>Trust theo tên repo, mọi nhánh</td><td>Ghim ID repo, chỉ <code>main</code>/<code>dev</code>, quyền hẹp</td></tr>
+<tr><td>Alarm</td><td>16 alarm, gửi email</td><td>Không có</td><td>Không có</td></tr>
+</tbody></table></div>
+<p class="note">Booking là app mới nhất và cũng là mẫu sạch nhất: ECR bất biến, role deploy hẹp, có smoke test sau deploy, role DB riêng chỉ có quyền USAGE. Nên lấy Booking làm khuôn cho hai app còn lại.</p>
+
+<h2 id="so-huu">Một chủ cho mỗi khái niệm</h2>
+<p>Đây là quy ước đề xuất. Khái niệm nào có nhiều bản sao thì chỉ một app được ghi, các app khác đọc qua view có contract.</p>
+<div class="tbl"><table>
+<thead><tr><th>Khái niệm</th><th>Đang nằm ở</th><th>Chủ đề xuất</th><th>Các app khác làm gì</th></tr></thead>
+<tbody>
+<tr><td>Khách hàng (B2C)</td><td><code>tripplanner.customers</code> (unique phân biệt hoa thường) · <code>booking.customers</code> (<code>lower(email)</code>)</td><td><span class="chip own">Booking</span></td><td>TripPlanner chỉ giữ phiên + <code>booking_customer_id</code>; đăng nhập OTP do Booking cấp</td></tr>
+<tr><td>Nhân viên</td><td><code>shared.admin_users</code> (CIS)</td><td><span class="chip own">CIS</span></td><td>Booking giữ hồ sơ mỏng + vai trò sales/content, xác thực bằng JWT do CIS cấp (O1)</td></tr>
+<tr><td>Tenant B2B</td><td><code>shared.tenants</code></td><td><span class="chip own">CIS</span></td><td>Không ai khác dùng</td></tr>
+<tr><td>Tour, ngày tour, atom/hoạt động</td><td><code>gold.published_tours</code> · <code>tripplanner.tour_day</code> · ERD Booking</td><td><span class="chip own">CIS</span></td><td>Đọc qua view danh mục + contract <code>catalog.tour.v1</code> (AA-679); Booking chỉ thêm trường thương mại</td></tr>
+<tr><td>Địa điểm</td><td><code>shared.destinations</code> · <code>place_card</code> · <code>hub</code> · TripPlanner graph</td><td><span class="chip own">CIS</span></td><td><code>destinations</code> là bản ghi gốc, các bảng khác trỏ về <code>destination_id</code></td></tr>
+<tr><td>Quốc gia (ISO)</td><td>Chưa có bảng nào; đang là text tự do ở nhiều nơi</td><td><span class="chip own">CIS</span></td><td>Tạo <code>shared.countries</code> ISO-3166; mở khoá O7 và AA-679</td></tr>
+<tr><td>Ảnh nội dung</td><td><code>place_photo</code> + view · <code>cover_image_url</code> · <code>booking.media_files</code></td><td><span class="chip own">CIS</span></td><td>Đọc <code>v_tour_photos</code> / <code>v_destination_photos</code>; Booking chỉ giữ file tự upload</td></tr>
+<tr><td>Phiên lập kế hoạch, sở thích, bản nháp</td><td><code>tripplanner.*</code></td><td><span class="chip own">TripPlanner</span></td><td>Gửi đi bằng outbox khi khách bấm gửi</td></tr>
+<tr><td>Trip case, báo giá, nhà cung cấp, thanh toán</td><td>ERD v2 (chưa làm)</td><td><span class="chip own">Booking</span></td><td>Đẩy trạng thái ngược về để khách xem "My Trips"</td></tr>
+</tbody></table></div>
+
+<h2 id="lech">Chỗ chưa khớp, theo lớp</h2>
+<h3>Hạ tầng và bảo mật</h3>
+<div class="tbl"><table>
+<thead><tr><th>Mức</th><th>Vấn đề</th><th>Hướng xử lý</th></tr></thead>
+<tbody>
+<tr><td><span class="chip hi">Cao</span></td><td>WAF có luật cho phép cả dải IP VPC. Traffic đi qua API Gateway đến ALB từ IP của NLB nên bỏ qua toàn bộ rate-limit, geo và rule managed. ALB còn mở cổng 80 ra Internet.</td><td>Chỉ cho NLB/VPC vào ALB, đóng cổng 80 public, gắn WAF ở stage REST API</td></tr>
+<tr><td><span class="chip hi">Cao</span></td><td>Role CI của CIS: <code>CreateRole</code>/<code>PassRole</code> trên <code>*</code> cộng 10 policy FullAccess. Push từ bất kỳ nhánh nào cũng dùng được role này.</td><td>Tách role deploy app (hẹp, theo khuôn Booking) và role Terraform; thêm permissions boundary</td></tr>
+<tr><td><span class="chip mid">TB</span></td><td>Trust của TripPlanner khớp theo tên repo, mọi nhánh</td><td>Ghim ID repo + <code>environment:dev</code></td></tr>
+<tr><td><span class="chip mid">TB</span></td><td>NAT t4g.nano là đường ra duy nhất, kể cả mọi lời gọi LLM; không có alarm</td><td>Thêm alarm status check ngay; prod dùng NAT Gateway</td></tr>
+<tr><td><span class="chip mid">TB</span></td><td>RDS 1 AZ, 20 GB, <code>deletion_protection=false</code></td><td>Bật chống xoá ngay; prod chạy Multi-AZ</td></tr>
+<tr><td><span class="chip lo">Thấp</span></td><td>Tag không thống nhất, chưa bật cost-allocation tag nên không tách được chi phí theo app; log Lambda/API GW không có thời hạn lưu</td><td><code>default_tags</code> {Project, App, Environment}; lưu log 14 ngày</td></tr>
+<tr><td><span class="chip lo">Thấp</span></td><td>Tài liệu cũ: AA-Bedrock-Invoker <b>đã</b> nằm trong Terraform; sơ đồ OIDC trong <code>ecosystem-architecture.md</code> đã lỗi thời sau S235</td><td>Sửa tài liệu cùng đợt</td></tr>
+</tbody></table></div>
+
+<h3>Dữ liệu</h3>
+<div class="tbl"><table>
+<thead><tr><th>Mức</th><th>Vấn đề</th><th>Hướng xử lý</th></tr></thead>
+<tbody>
+<tr><td><span class="chip hi">Cao</span></td><td>Mọi app và mọi migration đều chạy bằng <code>aa_cis_admin</code> (BYPASSRLS). Bảng của TripPlanner và Booking cũng thuộc sở hữu user master của CIS.</td><td>Mỗi app có một role owner riêng cho DDL; CIS chạy runtime bằng role không phải master (hoàn tất AA-544)</td></tr>
+<tr><td><span class="chip hi">Cao</span></td><td>Role <code>tripplanner</code> được tạo tay. Các lệnh grant có điều kiện "nếu role tồn tại", nên nếu role chưa có thì bị bỏ qua mãi mãi mà migration vẫn ghi là đã chạy.</td><td>Đưa role vào migration; mọi grant về sau không có điều kiện</td></tr>
+<tr><td><span class="chip mid">TB</span></td><td>TripPlanner đọc thẳng <code>gold_aa_internal.published_tours</code> và cột của <code>raw_tours</code>/<code>tour_atoms</code>, trái ADR 0001</td><td>CIS mở view danh mục; thu hồi grant cũ</td></tr>
+<tr><td><span class="chip mid">TB</span></td><td>Không phát hiện được lệch giữa DB live và migration; <code>schema_versions</code> ~160 dòng so với 217 file CIS. Dựng lại DB mới từ repo không chắc ra đúng.</td><td>Workflow dump hằng đêm + so với DB dựng từ migration; migration baseline</td></tr>
+<tr><td><span class="chip mid">TB</span></td><td>Bản sao migration ở Infra hiện khớp từng byte, nhưng không có CI kiểm</td><td>Thêm check byte-copy và check "chỉ đụng schema của mình"</td></tr>
+<tr><td><span class="chip lo">Thấp</span></td><td>Còn 3 schema rỗng và khoảng 7 bảng legacy; file Dead Table Registry mà skill trỏ tới không tồn tại</td><td>Tạo registry rồi dọn theo quy trình DRY RUN</td></tr>
+</tbody></table></div>
+
+<h3>App và contract</h3>
+<div class="tbl"><table>
+<thead><tr><th>Mức</th><th>Vấn đề</th><th>Hướng xử lý</th></tr></thead>
+<tbody>
+<tr><td><span class="chip hi">Cao</span></td><td>TripPlanner gắn phiên vào khách cũ chỉ dựa trên email/điện thoại trùng, không xác minh. Payload gửi Booking mang tên và consent của khách cũ.</td><td>Xác minh bằng OTP trước khi gắn; Booking không tin <code>customer</code> chưa xác minh</td></tr>
+<tr><td><span class="chip mid">TB</span></td><td>Khách vãng lai gửi yêu cầu với <code>customer = null</code>, nên mất lead</td><td>Đã chốt O6: bắt buộc tên và email, contract v1.1</td></tr>
+<tr><td><span class="chip mid">TB</span></td><td>Chưa có quy tắc version contract. v1 khoá <code>additionalProperties:false</code>, nên thêm một trường là vỡ consumer.</td><td>Viết <code>docs/contracts/README.md</code>: thay đổi cộng thêm thì giữ version, thay đổi phá vỡ thì lên vN+1 và ghi kép một thời gian</td></tr>
+<tr><td><span class="chip mid">TB</span></td><td>Khoá idempotency mô tả hai kiểu: <code>external_ref</code> và <code>(source_system, source_id)</code></td><td>Chọn một kiểu, ghi vào README contract</td></tr>
+<tr><td><span class="chip lo">Thấp</span></td><td>Không có chiều ngược: TripPlanner không biết tư vấn viên đã nhận yêu cầu; thông báo cho tư vấn viên vẫn là log giả</td><td>Event <code>trip_case.status_changed</code> từ Booking</td></tr>
+</tbody></table></div>
+
+<h2 id="dich">Hình thái đích</h2>
+<p>Bảy nguyên tắc. Mỗi nguyên tắc trả lời được câu hỏi "khi thêm một app thứ tư thì làm theo đâu":</p>
+<ol>
+  <li><b>Một chủ cho mỗi schema và mỗi khái niệm.</b> App khác chỉ đọc qua view có tên trong <code>docs/contracts</code>, không bao giờ đọc bảng nội bộ.</li>
+  <li><b>Một kiểu tích hợp:</b> app sản xuất ghi outbox trong cùng transaction, app tiêu thụ chạy job kéo về inbox với khoá idempotency. Hàm dùng chung đặt cạnh thư viện job.</li>
+  <li><b>Mỗi app một role DB:</b> role runtime quyền tối thiểu, role owner cho DDL. User master chỉ dùng khi khẩn cấp.</li>
+  <li><b>Mỗi app một khuôn hạ tầng:</b> module <code>ecs-service</code> rút ra từ <code>booking.tf</code> (ECR bất biến, role hẹp, target group + listener rule, alarm, role deploy OIDC ghim ID repo).</li>
+  <li><b>Một cổng vào có bảo vệ:</b> domain riêng cho từng app trên một chứng chỉ, WAF đặt trước API Gateway, ALB chỉ nhận traffic nội bộ.</li>
+  <li><b>Một danh tính cho mỗi loại người dùng:</b> staff đăng nhập qua CIS (JWT, các app khác kiểm bằng khoá công khai), khách qua OTP của Booking, tenant qua JWT tenant của CIS.</li>
+  <li><b>Môi trường là biến, không phải bản sao:</b> <code>env = dev | stg | prod</code> dựng từ cùng module; prod chạy Multi-AZ, NAT Gateway, 2 task và có duyệt tay khi apply.</li>
+</ol>
+<div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  subgraph CIS["CIS · nội dung + danh mục"]
+    C1["Tour · atom · địa điểm · quốc gia ISO · ảnh"]
+    CV["View danh mục<br/>catalog.tour.v1"]
+    CS["Staff login (JWT)"]
+  end
+  subgraph TP["TripPlanner · cửa trước của khách"]
+    T1["Phiên lập kế hoạch"]
+    TO["Outbox<br/>inquiry.submitted.v1.1"]
+  end
+  subgraph BKG["AA-Booking · khách + giao dịch"]
+    BI["Inbox"]
+    B1["Khách (OTP) · trip case · báo giá · thanh toán"]
+    BO["Outbox<br/>trip_case.status_changed · giá 'từ'"]
+  end
+  C1 --> CV
+  CV -- đọc view --> T1
+  CV -- đọc view --> B1
+  T1 --> TO -- job kéo --> BI --> B1
+  B1 --> BO -- job kéo --> T1
+  CS -. JWT staff .-> B1
+  B1 -. OTP khách .-> T1
+</pre>
+</div>
+
+<h2 id="hanh-trinh">Hành trình khách mục tiêu</h2>
+<ol>
+  <li><b>Khám phá:</b> khách đọc nội dung CIS (blog, trang tour) và trang AA, có link sâu vào TripPlanner theo tour hoặc điểm đến.</li>
+  <li><b>Lập kế hoạch:</b> TripPlanner ghép chuyến đi từ các chặng tour thật, dữ liệu lấy qua view danh mục của CIS kèm ảnh. Giá "từ" lấy từ view giá do Booking công bố, TripPlanner không tự tính giá.</li>
+  <li><b>Gửi yêu cầu:</b> khách vãng lai nhập tên, email (bắt buộc), điện thoại (tuỳ chọn) và đồng ý liên hệ, không phải đăng ký (O6). Hệ thống phát event <code>inquiry.submitted.v1.1</code>.</li>
+  <li><b>Tư vấn:</b> Booking tạo trip case ngay, gắn khách dạng lead, rồi báo cho sales. Sales soạn các phiên bản V1…Vn của chuyến đi.</li>
+  <li><b>Xác nhận:</b> khách đăng nhập OTP bằng cùng email, hệ thống gộp lead vào tài khoản. Khách xem "My Trips", duyệt phiên bản và thanh toán theo lịch.</li>
+  <li><b>Phản hồi:</b> trạng thái trip case chảy ngược về, khách thấy "tư vấn viên đã nhận" ngay trên TripPlanner.</li>
+</ol>
+
+<h2 id="app">Hướng phát triển từng app</h2>
+<div class="apps">
+  <section class="app">
+    <h3>CIS</h3>
+    <p class="role">Nhà máy nội dung và danh mục; nguồn sự thật về tour và địa điểm.</p>
+    <ul>
+      <li>Nội dung tenant đạt mức bán được: AA-792 (T2 giọng tenant) và AA-801 (ổn định judge), sau đó AA-800 (từ thương hiệu riêng của tenant), rồi đo lại T9 vòng r5.</li>
+      <li>Mở danh mục cho app khác: <code>shared.countries</code>, <code>v_destinations</code>, view tour + contract <code>catalog.tour.v1</code> (AA-679); chuyển pipeline địa điểm và Tour Graph từ TripPlanner về CIS (AA-712).</li>
+      <li>Phát hành JWT staff dùng được cho Booking (O1).</li>
+      <li>Admin quan sát được mọi thứ: Tenant 360 (AA-766), một view chi phí dùng chung cho cả 3 app.</li>
+    </ul>
+  </section>
+  <section class="app">
+    <h3>TripPlanner</h3>
+    <p class="role">Cửa trước cho khách (O8): khám phá, ghép chuyến đi, gửi yêu cầu.</p>
+    <ul>
+      <li>Sửa ngay lỗ hổng định danh, rồi làm form khách vãng lai theo O6 và contract v1.1.</li>
+      <li>Chuyển sang đọc view danh mục và view ảnh của CIS, bỏ đọc bảng nội bộ.</li>
+      <li>Đăng nhập OTP qua Booking; dần bỏ <code>tripplanner.customers</code>.</li>
+      <li>Trải nghiệm kiểu Trip.com (AA-689 pha A–D), ảnh marketing, lưu và chia sẻ chuyến đi, mobile, giá "từ".</li>
+      <li>Vận hành: ghim trust, WAF/rate limit, khoá Mapbox theo URL, alarm cho Lambda.</li>
+    </ul>
+  </section>
+  <section class="app">
+    <h3>AA-Booking</h3>
+    <p class="role">Khách, trip case, báo giá, nhà cung cấp, thanh toán. Đã chạy được lát health trên Dev.</p>
+    <ul>
+      <li>Lát 2 "Nhận yêu cầu": <code>tp-009</code>, <code>booking.job</code> (O3), job kéo về inbox, <code>trip_cases</code> (bk-002), lead theo O6, báo cho sales.</li>
+      <li>Lát 3 "Danh tính": staff qua JWT của CIS, khách qua OTP và API cho TripPlanner (AA-680).</li>
+      <li>Lát 4 "Tư vấn": phiên bản chuyến đi, duyệt, xác nhận đơn (AA-681); UI theo Figma (AA-683).</li>
+      <li>Lát 5 "Vận hành": đặt dịch vụ với nhà cung cấp, hoá đơn, lịch thanh toán (AA-682).</li>
+    </ul>
+  </section>
+  <section class="app">
+    <h3>Nền tảng (AA-CIS-Infra)</h3>
+    <p class="role">Một lớp dùng chung, mỗi app chỉ là một file mỏng.</p>
+    <ul>
+      <li>Các module <code>platform-network</code>, <code>ecs-service</code>, <code>edge</code>; môi trường là biến.</li>
+      <li>Role owner DB theo app, workflow phát hiện DB lệch, CI kiểm quyền sở hữu migration.</li>
+      <li>Alarm, budget và tag theo app; một workflow CI dùng chung (pip-audit chặn, gitleaks, Trivy, smoke sau deploy).</li>
+      <li>Kế hoạch staging và prod trước khi AAA go-live.</li>
+    </ul>
+  </section>
+</div>
+
+<h2 id="lo-trinh">Lộ trình theo phụ thuộc</h2>
+<p>Thứ tự dưới đây là phụ thuộc thật: pha sau cần pha trước. Pha 0 và pha 1 làm song song với việc CIS hằng ngày được.</p>
+<div class="phases">
+  <section class="phase">
+    <header><h3>Pha 0 · Bịt lỗ, nói đúng sự thật</h3><span class="when">1–2 phiên · gần như $0</span></header>
+    <ol>
+      <li>Chỉ cho NLB/VPC vào ALB, đóng cổng 80 public; gắn WAF ở stage REST của CIS và Booking.</li>
+      <li>Tách role CI của CIS thành role deploy hẹp và role Terraform, thêm permissions boundary; ghim trust TripPlanner theo ID và <code>environment:dev</code>.</li>
+      <li>TripPlanner: không gắn khách cũ nếu chưa xác minh (tạm thời coi là khách mới, chờ OTP).</li>
+      <li>Bật chống xoá cho RDS; alarm NAT, Booking và Lambda TripPlanner; lưu log 14 ngày; bật tag chi phí.</li>
+      <li>Sửa tài liệu cũ; tạo Dead Table Registry.</li>
+    </ol>
+  </section>
+  <section class="phase">
+    <header><h3>Pha 1 · Nền dữ liệu và contract</h3><span class="when">2–4 phiên</span></header>
+    <ol>
+      <li><code>docs/contracts/README.md</code>: version, khoá idempotency, ack; chọn một kiểu khoá.</li>
+      <li>Đưa role <code>tripplanner</code> vào migration; grant không điều kiện; role owner cho từng app; DB Migrate chạy bằng role migrator.</li>
+      <li>CI: kiểm bản sao migration khớp từng byte và chỉ đụng schema của mình; workflow dump schema hằng đêm, so với DB dựng từ migration.</li>
+      <li><code>shared.countries</code> ISO; <code>destinations</code> là bản ghi gốc; view danh mục + <code>catalog.tour.v1</code>.</li>
+      <li>Hàm outbox/inbox dùng chung trong thư viện job; tạo <code>booking.job</code>.</li>
+    </ol>
+  </section>
+  <section class="phase">
+    <header><h3>Pha 2 · Luồng khách đầu-cuối</h3><span class="when">3–5 phiên</span></header>
+    <ol>
+      <li>Contract v1.1 (O6); form khách vãng lai trên TripPlanner; <code>tp-009</code>.</li>
+      <li>Booking bk-002: <code>trip_cases</code>, lead khách, job nhận yêu cầu, báo cho sales.</li>
+      <li>Danh tính: JWT staff do CIS cấp, Booking kiểm bằng khoá công khai; OTP khách của Booking + bước đăng nhập trên TripPlanner.</li>
+      <li>Chiều ngược: <code>trip_case.status_changed</code>, "My Trips".</li>
+      <li>TripPlanner bỏ đọc bảng nội bộ của CIS; thu hồi grant cũ.</li>
+    </ol>
+  </section>
+  <section class="phase">
+    <header><h3>Pha 3 · Sản phẩm và quy mô</h3><span class="when">liên tục</span></header>
+    <ol>
+      <li>CIS: chất lượng nội dung tenant đạt mức bán; Tenant 360; view chi phí cho cả 3 app.</li>
+      <li>TripPlanner: pha A–D kiểu Trip.com, ảnh, giá "từ".</li>
+      <li>Booking: phiên bản chuyến đi, thanh toán, nhà cung cấp; UI theo Figma.</li>
+      <li>Nền tảng: module <code>ecs-service</code>, domain riêng (O2), môi trường staging, rồi prod.</li>
+    </ol>
+  </section>
+</div>
+
+<h2 id="quyet-dinh">Cần Nghiệp chốt</h2>
+<ul class="decisions">
+  <li><b>Prod đặt ở đâu.</b> ADR 0001 nói không mở tài khoản mới; file CLAUDE.md toàn cục lại liệt kê ba tài khoản AAA dev/stg/prod ở ap-southeast-1. Hai nguồn này mâu thuẫn, cần chọn một trước Pha 3.</li>
+  <li><b>Domain (O2).</b> Dùng tiếp <code>lumiguides.it.com</code> với <code>api-booking.*</code> / <code>api-trip.*</code>, hay chuyển sang domain của AA.</li>
+  <li><b>Thời điểm tách role CI của CIS.</b> Việc này đụng vào mọi lần deploy CIS, nên làm trong một khung không có job chạy.</li>
+  <li><b>Redis.</b> Hiện chỉ dùng cho cờ và tài nguyên job, tốn khoảng $16/tháng. Giữ lại hay chuyển sang Postgres.</li>
+  <li><b>O7</b> (hoạt động và mô tả quốc gia do AAA tự viết thì nằm ở đâu) và <b>O9</b> (tiền tố job <code>bk_*</code>).</li>
+  <li>Chuyển ADR 0001 và ADR 0004 sang trạng thái <b>Accepted</b> sau khi chốt các điểm trên.</li>
+</ul>
+<p class="note">Đã chốt trong S235: O1 (staff dùng login CIS), O3 (bảng <code>booking.job</code> riêng), O6 (khách vãng lai phải nhập tên và email), O8 (TripPlanner là cửa trước).</p>
+
+<footer>
+  Nguồn: review kiến trúc Gate 0.5 (CIS, portal, hệ sinh thái/hạ tầng, Booking) và ba agent chỉ-đọc ngày 14/10/2026 (TripPlanner và hành trình khách; dữ liệu và event; hạ tầng và vận hành), cùng các lần kiểm live trong S235: apply Terraform, bk-001, migration 223, probe <code>/v1/pipeline</code>, Cost Explorer tháng 9/2026. Ghi chú gốc: <code>AA-Ecosys/.tmp-session/team/S235/advisory/</code>.
+</footer>
+</div>
