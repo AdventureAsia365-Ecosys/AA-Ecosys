@@ -171,7 +171,7 @@ Each item is a proposal until this ADR is Accepted. Items that need an explicit 
 
      | Part | Contents | Condition |
      |---|---|---|
-     | Foundation | `CREATE SCHEMA booking`; role `booking` NOLOGIN if missing; `USAGE, CREATE` on the schema; default privileges `FOR ROLE aa_cis_admin`; `INSERT 'bk-001'` into `shared.schema_versions` | Always. This is all `/booking/health/ready` needs |
+     | Foundation | `CREATE SCHEMA booking`; role `booking` NOLOGIN if missing; `USAGE` only on the schema (all DDL goes through `bk-NNN` run by DB Migrate; least privilege, matches AA-Booking bk-001); default privileges `FOR ROLE aa_cis_admin`; `INSERT 'bk-001'` into `shared.schema_versions` | Always. This is all `/booking/health/ready` needs |
      | Tier A | `customers`, `customer_otps`, `customer_sessions`, `media_files`, `audit_logs`, `inbox_events` (unique on `(source, contract, idempotency_key)`) | No open decision blocks them |
      | Tier B | `staff_users` + enum `staff_role` | Only if O1 (staff identity) is answered before `bk-001` is authored; otherwise `created_by`/`changed_by` stay plain `uuid` with no FK |
      | Tier B | `trip_cases` (without `trip_plan_id`), `trip_case_countries`, `trip_case_legs`, `trip_case_status_history`, `trip_case_status_transitions` + trigger rejecting illegal jumps (AA-678 harness comment), enums `trip_case_status`, `source_system` | Only if O6 (guest inquiries vs `customer_id NOT NULL`) and the building/proposal-sent status question are answered; otherwise `bk-002` |
