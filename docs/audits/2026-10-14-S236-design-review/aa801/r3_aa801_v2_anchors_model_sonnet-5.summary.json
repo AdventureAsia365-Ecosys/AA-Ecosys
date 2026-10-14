@@ -1,0 +1,31 @@
+{
+ "mode": "anchors+model:sonnet-5",
+ "summary": {
+  "SUMMARY": "AA-801",
+  "mode": "anchors+model:sonnet-5",
+  "gate": "brand_fit_mission",
+  "model_override": "sonnet-5",
+  "versions": 1,
+  "versions_in_set": 9,
+  "versions_complete": 0,
+  "judgements": 4,
+  "comparable": false,
+  "max_verdict_spread": 0.0,
+  "versions_verdict_spread_le_1": 1,
+  "max_brand_fit_spread": 0.0,
+  "mission_stable_versions": 1,
+  "mission_true_share": 0.0,
+  "evidence_verified_share": 0.0,
+  "evidence_overruled": 1,
+  "evidence_samples": [],
+  "mean_brand_fit": 6.0,
+  "billed_calls": 12,
+  "calls_per_judgement": 3.0,
+  "total_cost_usd": 0.4263,
+  "cost_per_judgement_usd": 0.10657,
+  "errors": 0,
+  "skipped": {},
+  "aborted": "budget: mode $0.4263/0.45, total $0.5438/0.60 before 893bc4f7-afa7-457f-acbd-9fb737158756 run 4",
+  "aborted_versions": "1/9"
+ }
+}

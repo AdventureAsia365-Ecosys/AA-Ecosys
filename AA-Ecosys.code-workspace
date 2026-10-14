@@ -6,6 +6,7 @@
     { "name": "AA-Ecosys (root)", "path": "." },
     { "name": "AA-CIS-App", "path": "apps/AA-CIS-App" },
     { "name": "AA-TripPlanner-Web", "path": "apps/AA-TripPlanner-Web" },
+    { "name": "AA-Booking", "path": "apps/AA-Booking" },
     { "name": "AA-CIS-Infra", "path": "infra/AA-CIS-Infra" }
   ],
   "settings": {
@@ -14,6 +15,7 @@
     "files.exclude": {
       "apps/AA-CIS-App": true,
       "apps/AA-TripPlanner-Web": true,
+      "apps/AA-Booking": true,
       "infra/AA-CIS-Infra": true
     },
     "search.exclude": {

@@ -1,0 +1,233 @@
+{
+  "runs": [
+    {
+      "width": 1440,
+      "scheme": "light",
+      "console_errors": [],
+      "console_warnings": [],
+      "page_errors": [],
+      "failed_requests": [],
+      "http_errors": [],
+      "api": [
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/rewrite-activity",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/details",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/cost",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/quality?days=30",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/markets",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/config"
+      ],
+      "tabs": {
+        "Cost": {
+          "screenshot": "cis/tab-cost-1440-light.jpg",
+          "panel_text": "Total Rewrites\n7\nLLM Cost (all time)\n$8.535\nAPI Calls (Mo)\n431\nAPI Quota\n2.2%\nRate Limit\n300/min\nPlan\ngrowth\nMember Since\n2026-10-12\nTours (7)\nActivity (7)\nAPI Usage\nBrand\nSocial Content\nUsage & Billing\nCost\nQuality\nMarkets\nAudit\nSettings\nLLM cost (2026-10, MTD)\n$8.49\nPlan revenue (MTD)\n$799.00\n$799.00 plan + $0.00 overage\nLLM margin\n$790.51\n98.9% of revenue\n$ / tour (T2 rewrite)\n$0.3824\n$2.68 over 7 tours\n$ / blog piece\n$0.0060\n1 piece\n$ / social piece\n—\nno social pieces\n$ PER PIECE BY CHANNEL\nColumns\nCHANNEL\tKIND\tPIECES\tCOST\t$ / PIECE\nblog\tBLOG\t1\t$0.0060\t$0.0060\n1–1 of 1\n10 / page\n25 / page\n50 / page\n100 / page\nPage 1 / 1\nCOST BY STAGE\nColumns\nCSV\nSTAGE\tCALLS\tCOST\tSHARE\nt9_write\t202\t$4.5660\t54%\nt2_generate\t50\t$2.5952\t31%\nt10_judge\t338\t$0.6150\t7%\nt9_repair\t75\t$0.1803\t2%\nt8_angle_gen\t5\t$0.1402\t2%\nt10_gates\t1,239\t$0.0871\t1%\na3_place_card\t20\t$0.0723\t1%\ns1_judge\t94\t$0.0656\t1%\nt2_judge\t26\t$0.0494\t1%\nt2_itinerary_nudge\t31\t$0.0283\t0%\ns1_itinerary_nudge\t32\t$0.0267\t0%\nadhoc_aa768_faq\t4\t$0.0239\t0%\nf10_embed\t167\t$0.0235\t0%\nadhoc_aa801\t2\t$0.0039\t0%\nt2_flag_fix\t2\t$0.0036\t0%\na3_place_card_check\t3\t$0.0022\t0%\nt3_grounding\t18\t$0.0019\t0%\nt7_debate\t68\t$0.0017\t0%\nt9_facts\t6\t$0.0002\t0%\nt8_angle_rank\t6\t$0.0001\t0%\nt2_judge_tiebreak\t2\t$0.0001\t0%\n1–21 of 21\n10 / page\n25 / page\n50 / page\n100 / page\nPage 1 / 1\nshared.llm_call_log.cost_usd, this calendar month, Jev included, shadow rows excluded (AA-798). LLM cost only: infra and DataForSEO are not in it. $8.4812this month is not linked to a content piece (T2 rewrites, planning, angle generation). Revenue = the plan's full monthly price + overage, not prorated; margin is revenue minus LLM cost only.",
+          "overflow_x": false,
+          "cost_kpi": "LLM cost (2026-10, MTD) $8.49",
+          "has_error_state": false
+        },
+        "Quality": {
+          "screenshot": "cis/tab-quality-1440-light.jpg",
+          "panel_text": "Total Rewrites\n7\nLLM Cost (all time)\n$8.535\nAPI Calls (Mo)\n431\nAPI Quota\n2.2%\nRate Limit\n300/min\nPlan\ngrowth\nMember Since\n2026-10-12\nTours (7)\nActivity (7)\nAPI Usage\nBrand\nSocial Content\nUsage & Billing\nCost\nQuality\nMarkets\nAudit\nSettings\nWindow\n7 days\n30 days\n90 days\nPieces written\n74\n46 held · 28 approved\nHeld rate\n62.2%\n46 held of 74 shipped\nTenant edit rate (T2 tours)\n0.0%\n0 of 3 rewritten tours edited · 0 edit versions\nT10 GATES — LAST 30 DAYS\nColumns\nGATE\tEVALUATED\tPASSED\tPASS RATE\tBLOCKING FAIL\tWARN\tHELD PIECES\nF9_cta_fact\t74\t41\t55%\t33\t0\t33\nF4_seo_surface\t46\t32\t70%\t14\t0\t14\nF3_structural_variance\t46\t27\t59%\t5\t14\t13\nF16_faq\t16\t12\t75%\t4\t0\t4\nF1_grounding\t74\t71\t96%\t3\t0\t3\nF17_trip_fact\t21\t18\t86%\t3\t0\t3\nF5_atom_density\t46\t42\t91%\t2\t2\t4\nF13_repeat\t21\t20\t95%\t1\t0\t1\nF10_cannibalization_cross_tenant\t74\t74\t100%\t0\t0\t0\nF2_banned_patterns\t74\t74\t100%\t0\t0\t0\nF4_extreme_length\t74\t74\t100%\t0\t0\t0\nF6_cta_present\t74\t74\t100%\t0\t0\t0\nF8_framework\t74\t18\t24%\t0\t56\t33\nF9_brand_style\t74\t67\t91%\t0\t7\t6\npromises_an_option\t74\t52\t70%\t0\t22\t15\nF0_complete\t54\t54\t100%\t0\t0\t0\nF11_brand_name\t54\t54\t100%\t0\t0\t0\nF2_brand_forbidden\t54\t54\t100%\t0\t0\t0\nF7_faq_dedup\t46\t46\t100%\t0\t0\t0\nF12_scope\t35\t28\t80%\t0\t7\t3\nF13_hygiene\t35\t29\t83%\t0\t6\t5\nF14_social_shape\t35\t34\t97%\t0\t1\t1\nF15_voice\t35\t31\t89%\t0\t4\t3\nF15_voice_warn\t35\t35\t100%\t0\t0\t0\nF13_leak\t28\t28\t100%\t0\t0\t0\n1–25 of 27\n10 / page\n25 / page\n50 / page\n100 / page\nPage 1 / 2\nHELD REASONS\nF16_faq: the blog ends with 1 FAQ pair(s) after unanswerable and restated ones were dropped; it needs at least 3\n2\nF16_faq: the blog ends with 2 FAQ pair(s) after unanswerable and restated ones were dropped; it needs at least 3\n2\nF9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK\n2\nF17_trip_fact: closes on a thin moment (one source fact) with an interpretation the source does not give — say it in one plain sentence, or cut the added clause: 'The journey through this section of northern Mongolia includes a visit to the ruins of a monastery destroyed during the political purges of 1937.'\n1\nF4_seo_surface: meta description is 179 characters — outside 120-158; meta description does not contain the keyword 'Khovsgol and gobi tour mongolia reviews'\n1\nF1_grounding: sentence states ['38'] not present in the content seed: 'Siting a religious and governmental centre at a river confluence is a decision that carries meaning '\n1\nF5_atom_density: words 900-1054: zero atom citations in this stretch — that's where AI-voice lives; add a specific, verifiable detail or cut it. First 80 chars: 'a dire",
+          "overflow_x": false,
+          "has_error_state": false
+        },
+        "Markets": {
+          "screenshot": "cis/tab-markets-1440-light.jpg",
+          "panel_text": "Total Rewrites\n7\nLLM Cost (all time)\n$8.535\nAPI Calls (Mo)\n431\nAPI Quota\n2.2%\nRate Limit\n300/min\nPlan\ngrowth\nMember Since\n2026-10-12\nTours (7)\nActivity (7)\nAPI Usage\nBrand\nSocial Content\nUsage & Billing\nCost\nQuality\nMarkets\nAudit\nSettings\nDeclared (Brand Identity)\nUS\nUK\nUAE\nSAUDI ARABIA\nSINGAPORE\nHONG KONG\nSEO research markets\nUS\nUK\nNot supported yet\nAE\nSA\nSG\nHK\nPlanning markets\nnot configured (planner uses US) — set it in Settings\nRESEARCH COVERAGE (FRESH = RESEARCHED IN THE LAST 182 DAYS)\nColumns\nMARKET\tPLACES IN TOURS\tRESEARCHED\tFRESH\tFRESH %\tLAST RESEARCHED\nUS\t73\t30\t30\t41.1%\t30 Sept 2026\nUK\t73\t24\t24\t32.9%\t28 Sept 2026\n1–2 of 2\n10 / page\n25 / page\n50 / page\n100 / page\nPage 1 / 1\nUNMAPPED MARKET REQUESTS (0 OPEN)\nColumns\nNo unmapped market requests\nEvery market this tenant declared is supported.",
+          "overflow_x": false,
+          "has_error_state": false
+        },
+        "Settings": {
+          "screenshot": "cis/tab-settings-1440-light.jpg",
+          "panel_text": "Total Rewrites\n7\nLLM Cost (all time)\n$8.535\nAPI Calls (Mo)\n431\nAPI Quota\n2.2%\nRate Limit\n300/min\nPlan\ngrowth\nMember Since\n2026-10-12\nTours (7)\nActivity (7)\nAPI Usage\nBrand\nSocial Content\nUsage & Billing\nCost\nQuality\nMarkets\nAudit\nSettings\nPlan & rate limit\nChanging the plan resets the rate limit to that plan's default unless you also change the rate limit.\nPLAN\nstarter\ngrowth\nbusiness\nRATE LIMIT (REQUESTS/MIN)\nSave plan\nCurrent: growth · 300/min\nPlanning config\nMarkets, channels and capacity the T7 planner uses for this tenant (acp_shared.tenant_config + posts/week).\nMARKETS (2-LETTER CODES, COMMA-SEPARATED)\nCHANNELS\nblog\nfacebook\ninstagram\ntiktok\nlinkedin\nemail\nlanding_page\nads\nPOSTS PER WEEK\nSave planning config\nSaved:\nUS\n· blog · 3/wk\nStatus (suspend / resume), offboard / restore and key rotation stay on the tenant row. Every save here is audited (Audit tab).",
+          "overflow_x": false,
+          "has_error_state": false
+        }
+      },
+      "data_theme": "light",
+      "cost_api": {
+        "total_cost_usd": 8.4872,
+        "billing_month": "2026-10",
+        "margin": {
+          "plan_attached": true,
+          "plan_price_usd": 799,
+          "overage_usd": 0,
+          "revenue_usd": 799,
+          "llm_cost_usd": 8.4872,
+          "margin_usd": 790.5128,
+          "margin_pct": 98.9,
+          "revenue_basis": "full_month_price_plus_overage"
+        }
+      }
+    },
+    {
+      "width": 1440,
+      "scheme": "dark",
+      "console_errors": [],
+      "console_warnings": [],
+      "page_errors": [],
+      "failed_requests": [],
+      "http_errors": [],
+      "api": [
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/details",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/rewrite-activity",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/cost",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/quality?days=30",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/markets",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/config"
+      ],
+      "tabs": {
+        "Cost": {
+          "screenshot": "cis/tab-cost-1440-dark.jpg",
+          "overflow_x": false,
+          "cost_kpi": "LLM cost (2026-10, MTD) $8.49",
+          "has_error_state": false
+        },
+        "Quality": {
+          "screenshot": "cis/tab-quality-1440-dark.jpg",
+          "overflow_x": false,
+          "has_error_state": false
+        },
+        "Markets": {
+          "screenshot": "cis/tab-markets-1440-dark.jpg",
+          "overflow_x": false,
+          "has_error_state": false
+        },
+        "Settings": {
+          "screenshot": "cis/tab-settings-1440-dark.jpg",
+          "overflow_x": false,
+          "has_error_state": false
+        }
+      },
+      "data_theme": "dark",
+      "cost_api": {
+        "total_cost_usd": 8.4872,
+        "billing_month": "2026-10",
+        "margin": {
+          "plan_attached": true,
+          "plan_price_usd": 799,
+          "overage_usd": 0,
+          "revenue_usd": 799,
+          "llm_cost_usd": 8.4872,
+          "margin_usd": 790.5128,
+          "margin_pct": 98.9,
+          "revenue_basis": "full_month_price_plus_overage"
+        }
+      }
+    },
+    {
+      "width": 390,
+      "scheme": "light",
+      "console_errors": [],
+      "console_warnings": [],
+      "page_errors": [],
+      "failed_requests": [],
+      "http_errors": [],
+      "api": [
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/rewrite-activity",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/details",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/cost",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/quality?days=30",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/markets",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/config"
+      ],
+      "tabs": {
+        "Cost": {
+          "screenshot": "cis/tab-cost-390-light.jpg",
+          "overflow_x": false,
+          "cost_kpi": "LLM cost (2026-10, MTD) $8.49",
+          "has_error_state": false
+        },
+        "Quality": {
+          "screenshot": "cis/tab-quality-390-light.jpg",
+          "overflow_x": false,
+          "has_error_state": false
+        },
+        "Markets": {
+          "screenshot": "cis/tab-markets-390-light.jpg",
+          "overflow_x": false,
+          "has_error_state": false
+        },
+        "Settings": {
+          "screenshot": "cis/tab-settings-390-light.jpg",
+          "overflow_x": false,
+          "has_error_state": false
+        }
+      },
+      "data_theme": "light",
+      "cost_api": {
+        "total_cost_usd": 8.4872,
+        "billing_month": "2026-10",
+        "margin": {
+          "plan_attached": true,
+          "plan_price_usd": 799,
+          "overage_usd": 0,
+          "revenue_usd": 799,
+          "llm_cost_usd": 8.4872,
+          "margin_usd": 790.5128,
+          "margin_pct": 98.9,
+          "revenue_basis": "full_month_price_plus_overage"
+        }
+      }
+    },
+    {
+      "width": 390,
+      "scheme": "dark",
+      "console_errors": [],
+      "console_warnings": [],
+      "page_errors": [],
+      "failed_requests": [],
+      "http_errors": [],
+      "api": [
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/rewrite-activity",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/details",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/cost",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/quality?days=30",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/markets",
+        "200 GET /api/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/config"
+      ],
+      "tabs": {
+        "Cost": {
+          "screenshot": "cis/tab-cost-390-dark.jpg",
+          "overflow_x": false,
+          "cost_kpi": "LLM cost (2026-10, MTD) $8.49",
+          "has_error_state": false
+        },
+        "Quality": {
+          "screenshot": "cis/tab-quality-390-dark.jpg",
+          "overflow_x": false,
+          "has_error_state": false
+        },
+        "Markets": {
+          "screenshot": "cis/tab-markets-390-dark.jpg",
+          "overflow_x": false,
+          "has_error_state": false
+        },
+        "Settings": {
+          "screenshot": "cis/tab-settings-390-dark.jpg",
+          "overflow_x": false,
+          "has_error_state": false
+        }
+      },
+      "data_theme": "dark",
+      "cost_api": {
+        "total_cost_usd": 8.4872,
+        "billing_month": "2026-10",
+        "margin": {
+          "plan_attached": true,
+          "plan_price_usd": 799,
+          "overage_usd": 0,
+          "revenue_usd": 799,
+          "llm_cost_usd": 8.4872,
+          "margin_usd": 790.5128,
+          "margin_pct": 98.9,
+          "revenue_basis": "full_month_price_plus_overage"
+        }
+      }
+    }
+  ],
+  "tenant": {
+    "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+    "name": "Atlas & Hearth",
+    "slug": "atlas-hearth"
+  }
+}

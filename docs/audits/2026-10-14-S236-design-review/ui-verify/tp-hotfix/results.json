@@ -1,0 +1,176 @@
+{
+ "check": "TripPlanner hotfix PR #73 (AA-812) live UI verify",
+ "date": "2026-10-14",
+ "base": "https://aa-tripplanner.vercel.app",
+ "viewport": "1440x900 desktop, headless Chromium (Playwright), persistent profile in scratchpad",
+ "api_browse_per_view": {
+  "plan-initial": {
+   "browse": 16,
+   "status": {
+    "200": 16
+   },
+   "tiles": 15,
+   "other": 0
+  },
+  "zoom-in-1": {
+   "browse": 0,
+   "status": {},
+   "tiles": 0,
+   "other": 0
+  },
+  "zoom-in-2": {
+   "browse": 0,
+   "status": {},
+   "tiles": 0,
+   "other": 0
+  },
+  "pan": {
+   "browse": 0,
+   "status": {},
+   "tiles": 0,
+   "other": 0
+  },
+  "tour-kailash": {
+   "browse": 0,
+   "status": {},
+   "tiles": 0,
+   "other": 0
+  },
+  "customise-kailash": {
+   "browse": 17,
+   "status": {
+    "200": 17
+   },
+   "tiles": 15,
+   "other": 0
+  },
+  "tour-srilanka": {
+   "browse": 0,
+   "status": {},
+   "tiles": 0,
+   "other": 0
+  },
+  "customise-srilanka": {
+   "browse": 17,
+   "status": {
+    "200": 16,
+    "404": 1
+   },
+   "tiles": 15,
+   "other": 0
+  }
+ },
+ "console_errors": [
+  {
+   "view": "customise-srilanka",
+   "text": "Failed to load resource: the server responded with a status of 404 ()"
+  }
+ ],
+ "failed_requests": [
+  {
+   "view": "zoom-in-2",
+   "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/4/14/6.vector.pbf?sku=101BbO8VRx0Zt&access_token=REDACTED",
+   "err": "net::ERR_ABORTED"
+  },
+  {
+   "view": "zoom-in-2",
+   "url": "https://api.mapbox.com/v4/mapbox.country-boundaries-v1/4/14/6.vector.pbf?sku=101BbO8VRx0Zt&access_token=REDACTED",
+   "err": "net::ERR_ABORTED"
+  },
+  {
+   "view": "customise-kailash",
+   "url": "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12?sdk=js-3.7.0&access_token=REDACTED",
+   "err": "net::ERR_ABORTED"
+  },
+  {
+   "view": "customise-srilanka",
+   "url": "https://aa-tripplanner.vercel.app/plan?tour=0b3514be-312b-4ad0-8ab5-f6247935ae9f&source=63d21f32-b94e-48e9-84bd-d322707af6ff&country=Sri+Lanka&days=10&_rsc=m7zhq",
+   "err": "net::ERR_ABORTED"
+  }
+ ],
+ "dom_probe": {
+  "plan_initial": {
+   "pins": {
+    "markers": 0,
+    "canvas": 1
+   }
+  },
+  "zoom_in_1": {
+   "pins": {
+    "markers": 0,
+    "canvas": 1
+   }
+  },
+  "zoom_in_2": {
+   "pins": {
+    "markers": 0,
+    "canvas": 1
+   }
+  },
+  "pan": {
+   "pins": {
+    "markers": 0,
+    "canvas": 1
+   }
+  },
+  "customise_kailash": {
+   "button_found": true,
+   "url": "https://aa-tripplanner.vercel.app/plan?country=Nepal&days=24",
+   "pins": {
+    "markers": 0,
+    "canvas": 1
+   },
+   "day_mentions": 0
+  },
+  "customise_srilanka": {
+   "button_found": true,
+   "url": "https://aa-tripplanner.vercel.app/plan?tour=0b3514be-312b-4ad0-8ab5-f6247935ae9f&source=63d21f32-b94e-48e9-84bd-d322707af6ff&country=Sri+Lanka&days=10",
+   "pins": {
+    "markers": 0,
+    "canvas": 1
+   },
+   "day_mentions": 10
+  }
+ },
+ "results": {
+  "step1_plan_initial": {
+   "pass": true,
+   "browse_requests": 16,
+   "tile_requests": 15,
+   "statuses": {
+    "200": 16
+   },
+   "console_errors": 0,
+   "pins": "cluster pins render (WebGL layer, screenshot 1-plan-initial.jpg)"
+  },
+  "step2_zoom_pan": {
+   "pass": true,
+   "zoom_in_1": 0,
+   "zoom_in_2": 0,
+   "pan": 0,
+   "note": "No new /api/browse after 2x zoom-in + pan: tiles fetched at load are reused client-side; clusters re-split correctly (2-*.png). No 503, no ERR_INSUFFICIENT_RESOURCES. Only failures: 2 Mapbox vector tiles ERR_ABORTED (normal cancel on zoom)."
+  },
+  "step3_kailash_customise": {
+   "pass": true,
+   "landed": "/plan?country=Nepal&days=24",
+   "notes": [
+    "Banner: tour 'is on your trip, built from its places and our experiences there'",
+    "Trip panel: 12 days, 3 countries, ~1052 km, stops start Kathmandu; coverage warnings listed (2 'no AA link' gaps)",
+    "12 pinned days vs 24-day tour (built from matched places, not 1:1 days)",
+    "Map stays at Asia overview, does not fit to Nepal route",
+    "/api/browse 17 requests, all 200"
+   ]
+  },
+  "step4_srilanka_fallback": {
+   "pass": true,
+   "landed": "/plan?tour=...&source=...&country=Sri+Lanka&days=10",
+   "notes": [
+    "Fallback banner renders with Day 1-10 list",
+    "Route finder pre-filled Sri Lanka + 10 days (verified in a fresh context, 4-srilanka-fresh-profile.jpg)",
+    "In the main run the sidebar still showed the Kailash trip from step 3 (trip persists in browser), so route finder was hidden behind existing trip",
+    "Expected 404 on /api/browse?resource=tour-route (tour not on map) is logged as 1 console error 'Failed to load resource: 404'"
+   ]
+  }
+ },
+ "extra_traffic": "One supplementary fresh-context page load of the Sri Lanka /plan URL (~3 browse requests) to identify the 404 and confirm prefill."
+}

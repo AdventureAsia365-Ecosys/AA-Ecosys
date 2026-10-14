@@ -1,0 +1,31 @@
+{
+ "mode": "anchors",
+ "summary": {
+  "SUMMARY": "AA-801",
+  "mode": "anchors",
+  "gate": "brand_fit_mission",
+  "model_override": null,
+  "versions": 9,
+  "versions_in_set": 9,
+  "versions_complete": 9,
+  "judgements": 45,
+  "comparable": true,
+  "max_verdict_spread": 0.0,
+  "versions_verdict_spread_le_1": 9,
+  "max_brand_fit_spread": 1.0,
+  "mission_stable_versions": 9,
+  "mission_true_share": 0.0,
+  "evidence_verified_share": null,
+  "evidence_overruled": 0,
+  "evidence_samples": [],
+  "mean_brand_fit": 7.18,
+  "billed_calls": 135,
+  "calls_per_judgement": 3.0,
+  "total_cost_usd": 0.1093,
+  "cost_per_judgement_usd": 0.00243,
+  "errors": 0,
+  "skipped": {},
+  "aborted": null,
+  "aborted_versions": null
+ }
+}
