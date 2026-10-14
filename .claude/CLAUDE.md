@@ -35,8 +35,7 @@ History: account 1 (867490540162) — compute/network hạ tầng CŨ đã xoá 
 (ADR-2026-022, amended) để chạy Bedrock cross-account satellite pattern (role
 AA-Bedrock-Invoker, dùng bởi AA-296 — xem shared/llm_client/bedrock_satellite.py
 trong AA-CIS-App). KHÔNG coi account này là "đã đóng" khi audit/plan hạ tầng mới.
-TODO/tech debt: AA-Bedrock-Invoker hiện tạo TAY, KHÔNG nằm trong Terraform state
-— cần import hoặc tái tạo qua IaC khi có thời gian.
+AA-Bedrock-Invoker đã nằm trong Terraform (accounts/acc1-bedrock/bedrock_invoker_import.tf) — S235.
 AA-517 (02/09/2026): dọn 1 RDS snapshot lạc + 20 Secrets Manager secrets lạc trên acc1 (nguyên
 nhân: `default` profile từng trỏ acc1) — xem memory `project_aa517_acc1_orphan_cleanup`.
 
@@ -50,12 +49,10 @@ ECS cluster: aa-cis-dev-cluster | service: aa-cis-dev-api
 RDS: aa-cis-dev-db (PostgreSQL 15) | secret: aa-cis/dev/rds
 S3 scripts bucket: aa-cis-bronze-005097885195
 
-## ACTIVE PROJECT — ACP
-Linear project: ACP | Active sprint: M2 | Session: 22 (closed)
-AA-45: Done ✅ | ECS api:151 | AWS: STOPPED
-P0: AA-89 (B2B self-approval, migration 021)
-HIGH: AA-90 (S1 trigger page), AA-43 (S2 LangGraph)
-PENDING INFRA: Lambda aa-cis-dev-acp-s3-campaign-planner + migration 031 (Session 23)
+## ACTIVE WORK
+Ba app trên acc2: AA-CIS-App, AA-TripPlanner-Web, AA-Booking (repo AdventureAsia365-Ecosys/AA-Booking, live /booking/health từ S235).
+Kiến trúc & lộ trình: docs/ecosystem-architecture.md, docs/adr/0001–0005, bản thiết kế S235 docs/audits/2026-10-14-S235-ecosystem-team-pilot/.
+Trạng thái phiên: memory Notion (Program Brain/memory.md) + docs/sessions/. Không ghi số ECS/issue cứng ở đây.
 
 ## Git Rules — NON-NEGOTIABLE
 - ADR-2026-023 (trunk-based, effective 09/07/2026): `develop` branch REMOVED in all 3 repos

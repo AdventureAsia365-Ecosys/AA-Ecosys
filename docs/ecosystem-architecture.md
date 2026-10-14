@@ -1,11 +1,13 @@
 # AA-Ecosys — Ecosystem architecture
 
-> **Status:** updated 11/10/2026 (S225, AA-654 — translated to English and refreshed; previous
-> revision 25/09/2026). Items marked **[FACT]** were verified by reading code, migrations or live
+> **Status:** updated 14/10/2026 (S235 — AA-Booking bootstrap live, OIDC trust narrowed, ADRs
+> 0001/0004/0005 Accepted; previous revisions 11/10/2026 S225 AA-654, 25/09/2026). Items marked **[FACT]** were verified by reading code, migrations or live
 > state; **[TO CONFIRM]** marks an inference or gap that Nghiệp still has to confirm.
 > Target direction and decisions: [ADR 0001](adr/0001-ecosystem-target-architecture.md),
 > [ADR 0002](adr/0002-only-cis-writes-content.md), [ADR 0003](adr/0003-one-durable-job-model.md),
-> [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (AA-Booking stack and bootstrap, Proposed).
+> [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (AA-Booking stack and bootstrap),
+> [ADR 0005](adr/0005-pricing-and-supplier-rates.md) (pricing and supplier rates). Contract rules
+> between apps: [`contracts/README.md`](contracts/README.md).
 
 ## 1. Overview
 
@@ -18,7 +20,7 @@ AA-Ecosys is a **multi-repo**: each app deploys on its own; locally they are gat
 | `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series), durable job worker, admin frontend + tenant portal | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel (frontend) |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations and plan a trip (Next.js FE + 2 Lambda BE) | Vercel (FE) + Lambda (BE) |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform — VPC, RDS, ECS, Lambda, API GW, OIDC, alarms, cross-account Bedrock; DB Migrate workflow | GitHub Actions (`accounts/aa365` root) + a human with MFA (acc1/acc3 roots) |
-| — (coming) | `AA-Booking` | AAA: advisor workflow and booking lifecycle | acc2, inside the same VPC (ADR 0001) |
+| — (separate checkout) | `AA-Booking` | AAA: advisor workflow and booking lifecycle (health-only bootstrap live, 14/10/2026) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) |
 
 **Boundary rule [FACT]:** *apps own code, Infra owns resources.* The clearest example is TripPlanner:
 `infra/AA-CIS-Infra/accounts/aa365/tripplanner.tf` creates the 2 Lambdas from a 209-byte placeholder zip;
@@ -37,12 +39,14 @@ flowchart TB
     R1[AA-CIS-App]
     R2[AA-TripPlanner-Web]
     R3[AA-CIS-Infra]
+    R4[AA-Booking]
   end
 
   subgraph acc2[AWS acc2 · 005097885195 · us-west-1]
     subgraph vpc[Shared VPC]
       ECS[ECS Fargate: aa-cis-dev-api]
       WRK[ECS Fargate: aa-cis-dev-worker]
+      BK[ECS Fargate: aa-booking-dev-api]
       RDS[(RDS Postgres · pgvector)]
       L1[Lambda: aa-tripplanner-dev-browse]
       L2[Lambda: aa-tripplanner-dev-assembly]
@@ -50,10 +54,12 @@ flowchart TB
     end
     APIG1[API GW REST + VPC Link → ALB → ECS]
     APIG2[API GW HTTP v2 → 2 Lambdas]
+    APIG3[API GW REST aa-booking-dev-api → same VPC Link → ALB /booking/*]
     S3TP[(S3: tripplanner artifacts)]
     OIDC[GitHub OIDC provider]
     RCICD[role: aa-cis-dev-role]
     RTP[role: aa-tripplanner-dev-app-deploy]
+    RBK[role: aa-booking-dev-app-deploy]
     RLEX[role: aa-tripplanner-dev-lambda-exec]
   end
 
@@ -69,10 +75,11 @@ flowchart TB
   R1 -->|deploy-dev.yml OIDC| RCICD --> ECS & WRK
   R2 -->|deploy-lambdas.yml OIDC| RTP --> S3TP --> L1 & L2
   R3 -->|terraform-apply.yml / db-migrate.yml OIDC| RCICD
+  R4 -->|deploy-dev.yml OIDC| RBK --> BK
   RCICD --> MIG
-  RCICD & RTP -.assume.-> OIDC
+  RCICD & RTP & RBK -.assume.-> OIDC
 
-  ECS & WRK & MIG --> RDS
+  ECS & WRK & MIG & BK --> RDS
   L1 & L2 --> RDS
   L1 & L2 -.assume.-> RLEX
   RLEX -->|sts:AssumeRole| ACC3
@@ -82,6 +89,7 @@ flowchart TB
 
   APIG1 --> ECS
   APIG2 --> L1 & L2
+  APIG3 --> BK
   VERCEL_CIS --> APIG1
   VERCEL_TP --> APIG2
 ```
@@ -149,7 +157,7 @@ Source: `apps/AA-TripPlanner-Web/migrations/*`.
 - **Photos (AA-708, 01/10/2026):** CIS owns `shared.place_photo` (CIS migration 198, FK to
   `shared.destinations`) and the `photo_sync` job. See 4.5.
 
-### 3.4 AA-Booking — schema `booking` (coming) [FACT]
+### 3.4 AA-Booking — schema `booking` [FACT]
 
 Decided 28/09/2026 (ADR 0001 decisions 6–7): AA-Booking runs on acc2 and shares the RDS with its own
 schema `booking` (version key `bk-NNN`). AA-CIS-Infra provisions it inside acc2 (ECS service, ECR, DB
@@ -157,9 +165,21 @@ role, API route); there are no new accounts. It never writes another app's schem
 versioned JSON in `docs/contracts/`, carried by a **transactional outbox table** consumed by the
 receiving app's job runner with an idempotency key: `catalog.tour.*` (CIS → AA-Booking, photos via
 `shared.v_tour_photos`; contract not written yet, AA-679) and `inquiry.submitted` (TripPlanner →
-AA-Booking, with the multi-tour leg chain; v1 published as `docs/contracts/inquiry.submitted.v1.json`).
-AA-Booking owns the customer identity (OTP). Stack, runtime and the health-only bootstrap slice are
-proposed in [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (Proposed, open decisions pending).
+AA-Booking, with the multi-tour leg chain; current version v1.1,
+`docs/contracts/inquiry.submitted.v1.1.json`: the guest always gives name + email + consent). Contract
+rules: [`contracts/README.md`](contracts/README.md). AA-Booking owns the customer identity (OTP).
+Stack, runtime and decisions O1–O9: [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (Accepted
+14/10/2026); prices and suppliers: [ADR 0005](adr/0005-pricing-and-supplier-rates.md).
+
+Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking.tf`):
+
+| Item | Value |
+|---|---|
+| Repo | `AdventureAsia365-Ecosys/AA-Booking` (repo id `1418188499`) |
+| Runtime | ECS service `aa-booking-dev-api` on `aa-cis-dev-cluster`, own ECR `aa-booking-dev-api`, log group `/ecs/aa-booking-dev`, own execution/task roles |
+| Entry | Separate REST API `aa-booking-dev-api` (`9z3xnalp59`) on the **shared VPC link** → NLB → ALB listener rule `/booking`, `/booking/*` → Booking target group. Custom sub-domain `api-booking.lumiguides.it.com` planned (ADR 0004 O2); execute-api URL until the certificate covers it |
+| Database | Schema `booking`, login role `booking` (created by `bk-001`, password set out-of-band; DSN in Secrets Manager `booking/dev/database-url`). `bk-001` applied 14/10/2026 |
+| Health | `/booking/health` (liveness), `/booking/health/ready` (DB + `bk-001`) |
 
 ## 4. Data contracts
 
@@ -178,6 +198,7 @@ proposed in [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (Proposed, op
 | Edge | Contract | Source |
 |---|---|---|
 | CIS FE (Vercel) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT, admin secret added by the BFF | `AA-CIS-App/CONTEXT.md` |
+| AA-Booking ⇄ clients | REST through API GW `9z3xnalp59` (shared VPC Link) → ALB `/booking/*` → ECS `aa-booking-dev-api`. Staff auth: CIS-issued JWT verified by Booking (`aud=booking`, ADR 0004 O1) — not built yet | `booking.tf`, ADR 0004 |
 | TripPlanner FE (Vercel) ⇄ BE | The Next.js BFF calls 2 Lambda URLs through API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly; header `X-TripPlanner-Key`. Env `BROWSE_API_URL` / `TRIP_API_URL` | `tripplanner.tf`, `docs/vercel-setup.md` |
 
 Contracts between apps (views, grants, events) are listed in each repo's `CONTEXT.md`
@@ -190,6 +211,10 @@ Contracts between apps (views, grants, events) are listed in each repo's `CONTEX
   `aa-tripplanner-dev-lambda-artifacts-<acct>`.
 - **CIS:** Infra creates ECS / RDS / API GW; the app builds an image → ECR → new task definitions for api
   and worker on the same image (`Deploy Dev`, blocked while `shared.job` has queued/running jobs).
+- **AA-Booking:** Infra creates ECR / ECS service / roles / REST API (`booking.tf`, task definition and
+  desired count in `ignore_changes`); the app builds an image tagged with the git SHA and deploys through
+  its own least-privilege role `aa-booking-dev-app-deploy`. No job guard yet (Booking will use its own
+  `booking.job` table, ADR 0004 O3, so the CIS guard is unaffected).
 - **Migrations:** the owner repo authors them; Infra's DB Migrate applies them to Dev before the app code
   that needs them merges.
 
@@ -202,7 +227,8 @@ Source: `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md`
 - **Claude / other chat models:** acc2 cannot call them directly → `sts:AssumeRole` into
   **acc3 (primary)** / **acc1 (fallback)**.
   - acc3 role `AA3-Bedrock-Invoker`, ExternalId `aa296-satellite-bedrock-acc3`.
-  - acc1 role `AA-Bedrock-Invoker`, ExternalId `aa296-satellite-bedrock`.
+  - acc1 role `AA-Bedrock-Invoker`, ExternalId `aa296-satellite-bedrock`. Created by hand for AA-296,
+    now imported into Terraform (`accounts/acc1-bedrock/bedrock_invoker_import.tf`, AA-302).
 - Cross-account trust references the **role ARNs** (`aa-tripplanner-dev-lambda-exec`, the ECS task role) —
   nothing tied to GitHub names, so the org rename did not affect them.
 - The satellite roles trust only the **ECS task role** (and the TripPlanner Lambda exec role) → Claude
@@ -258,8 +284,9 @@ catalog sync) gets tour photos from `shared.v_tour_photos` by `tour_id`.
 
 | Role | File | Current `sub` | Used by |
 |---|---|---|---|
-| `aa-cis-dev-role` | `accounts/aa365/cicd.tf` | `repo:AdventureAsia365-Ecosys*/*:*` (org-wide; the `*` after the org name is required by "include repo ID in subject") | AA-CIS-App, AA-CIS-Infra (Terraform, DB Migrate) |
-| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | `repo:AdventureAsia365-Ecosys*/AA-TripPlanner-Web*:*` | AA-TripPlanner-Web |
+| `aa-cis-dev-role` | `accounts/aa365/cicd.tf` | Only `repo:AdventureAsia365-Ecosys@276539096/AA-CIS-App@1212291079:*` and `…/AA-CIS-Infra@1212290412:*` — pinned to the immutable org and repo ids (Infra #95, 14/10/2026). Was org-wide `repo:AdventureAsia365-Ecosys*/*:*` | AA-CIS-App, AA-CIS-Infra (Terraform, DB Migrate) |
+| `aa-booking-dev-app-deploy` | `accounts/aa365/booking.tf` | `repo:AdventureAsia365-Ecosys@276539096/AA-Booking@1418188499:` + `environment:dev` or `ref:refs/heads/main` only (Infra #97) | AA-Booking |
+| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | `repo:AdventureAsia365-Ecosys*/AA-TripPlanner-Web*:*` — still name-based; to be pinned to the repo id in Phase 0 | AA-TripPlanner-Web |
 
 **Safe rename rule:** widen trust to accept **both** the old and the new org (additive) **first**, rename
 the org **after**, remove the old trust last. Role ARNs in workflows come from `secrets` / `vars`, and
@@ -277,14 +304,14 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
 
 ## 6. Debt / future work
 
-- **AA-Booking (AAA):** new product and repo `AA-Booking` on acc2 (3.4). Handoff from TripPlanner:
+- **AA-Booking (AAA):** health-only bootstrap live (3.4); next slices: inquiry intake (`inquiry.submitted`
+  v1.1, `booking.job`), staff identity via CIS (ADR 0004 O1), catalog sync (AA-679). Handoff from TripPlanner:
   [`tripplanner-to-aaa-handoff.md`](tripplanner-to-aaa-handoff.md).
 - **Place pipeline to CIS (AA-712):** required before destination covers are switched on.
 - **[TO CONFIRM]** CloudFront in front of TripPlanner browse routes (listed as a later change).
 - **CIS data rerun:** waves are registered and reported through `/admin/waves` (`shared.rerun_wave`,
   AA-727); Batch Inference on acc3 (AA-624) is still blocked.
-- `AA-Bedrock-Invoker` on acc1 was created by hand and is not in Terraform state — import or recreate it
-  through IaC.
+- TripPlanner deploy-role OIDC trust is still name-based (section 5) — pin it to the repo id (Phase 0).
 
 ## 7. References
 
@@ -296,6 +323,7 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
   the "apps own code, Infra owns resources" boundary.
 - `docs/adr/` — ecosystem ADRs; `docs/database/schema-ownership.md` — schema owners.
 - `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md` — TripPlanner Terraform report.
-- `infra/AA-CIS-Infra/accounts/aa365/{cicd.tf, tripplanner.tf}` — OIDC roles.
+- `infra/AA-CIS-Infra/accounts/aa365/{cicd.tf, tripplanner.tf, booking.tf}` — OIDC roles, Booking runtime.
+- `docs/contracts/README.md` — contract rules between apps; `docs/adr/0005-pricing-and-supplier-rates.md`.
 - `apps/AA-TripPlanner-Web/docs/{vercel-setup,architecture-overview,smoke-test-runbook}.md`.
 - `docs/inventory-old-refs.md` — inventory of references to old names.

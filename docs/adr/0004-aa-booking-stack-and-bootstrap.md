@@ -1,14 +1,14 @@
 # ADR 0004 — AA-Booking: stack, repo layout, runtime and bootstrap on acc2
 
-- **Status:** Proposed (14/10/2026, S235). Accepted once Nghiệp answers the items marked
-  **Open — Nghiệp** below. Until then, only the health-only bootstrap slice (see "Bootstrap scope")
-  may be built, and nothing is applied to Dev before the hard preconditions are met.
+- **Status:** Accepted (14/10/2026, Nghiệp, S235). Proposed the same day; the open decisions O1–O9
+  were answered by Nghiệp on 14/10/2026 (see "Open decisions", now "Decisions on the open items").
+  The health-only bootstrap is **done** (see "Bootstrap scope").
 - **Scope:** AA-Ecosys (new repo AA-Booking; AA-CIS-Infra for the runtime and DB Migrate; AA-CIS-App
   and AA-TripPlanner-Web only later, for the read grants they own).
 - **Implements:** ADR 0001 decisions 6–7 (placement on acc2, contracts, one IaC repo) and ADR 0002
-  (only CIS writes content). Defers ADR 0003 (one durable job model) for Booking until open decision
-  O3 is answered. Answers ecosystem review §11 open question 5 ("Does AAA follow the CIS stack?") as a
-  proposal, pending O4.
+  (only CIS writes content). Applies ADR 0003 (one durable job model) to Booking through its own
+  `booking.job` table on the same runner library (O3). Answers ecosystem review §11 open question 5
+  ("Does AAA follow the CIS stack?"): yes (O4).
 - **Related Linear:** AA-677 (ERD v2, done), AA-678 (bootstrap), AA-679 (catalog sync), AA-680
   (identity), AA-681 (trip case), AA-682 (operations), AA-683 (UI spec), AA-751 (second repo on
   `shared.job`).
@@ -37,7 +37,8 @@ What already exists:
   does not filter by job kind (`apps/AA-CIS-App/.github/workflows/deploy-dev.yml`).
 - The OIDC trust on `aa-cis-dev-role` matches every repo in the org
   (`repo:AdventureAsia365-Ecosys*/*:*`, `accounts/aa365/cicd.tf`), and that role has broad IAM write.
-  A new repo in the org would inherit it.
+  A new repo in the org would inherit it. (Fixed before the repo was created: Infra #95 pins the trust
+  to AA-CIS-App and AA-CIS-Infra by immutable org/repo ids.)
 
 Statements this ADR supersedes: the AAA region/accounts in `docs/architecture/ecosystem-review-2026-09.md`
 §4 diagram and §7 (`accounts/aaa-{dev,stg,prod}`, ap-southeast-1), and the signed-webhook hand-off in
@@ -46,12 +47,12 @@ Statements this ADR supersedes: the AAA region/accounts in `docs/architecture/ec
 What it costs to differ from CIS: a second CI, deploy, auth and testing toolchain for a solo-run
 program.
 
-## Decisions (proposed)
+## Decisions
 
-Each item is a proposal until this ADR is Accepted. Items that need an explicit answer are marked
-**Open — Nghiệp** and are listed again in "Open decisions".
+The items that needed an explicit answer (O1–O9) are listed in "Decisions on the open items", with
+the answer Nghiệp gave on 14/10/2026.
 
-1. **Stack = the CIS stack.** **Open — Nghiệp (O4: confirm).**
+1. **Stack = the CIS stack.** Confirmed (O4).
    - Backend: Python 3.12, FastAPI, Pydantic v2, asyncpg with plain SQL repositories (no ORM in
      request paths).
    - Frontend (later, not in the bootstrap): Next.js 16 / React 19 / TypeScript with
@@ -64,7 +65,7 @@ Each item is a proposal until this ADR is Accepted. Items that need an explicit 
    ```
    backend/        FastAPI app (app/main.py, app/routers/, app/db.py, app/settings.py), tests/unit, tests/integration, Dockerfile
    migrations/     NNN_<name>.sql — owner key bk-NNN
-   frontend/       placeholder only until O1 (staff identity) and the customer-surface scope are answered
+   frontend/       placeholder until the first UI slice (staff identity O1 and customer surface O8 are decided)
    docs/adr/       repo ADRs; 0001 cites this ADR
    docs/erd/       ERD v2 (moved from AA-Ecosys/docs/AAA/erd-v2)
    CONTEXT.md, README.md, .claude/CLAUDE.md   (English)
@@ -120,15 +121,14 @@ Each item is a proposal until this ADR is Accepted. Items that need an explicit 
      `modules/api_gateway` or `modules/alb` resources. The Terraform plan for `booking.tf` must show
      no change to any existing CIS resource; the only new object attached to a CIS resource is the
      `/booking/*` listener rule.
-   - Routing (the entry point itself is **Open — Nghiệp, O2**):
+   - Routing (entry point decided in O2):
      - ALB target group (port 8000, health check `/booking/health`);
      - listener rule `path-pattern /booking/*` on the ALB **HTTP** listener (the NLB → ALB hop is
        port 80; the alb module only exports `https_listener_arn` today, hence the new output);
-     - proposed entry: a separate REST API `aa-booking-dev` reusing the existing VPC link,
-       `ANY /booking/{proxy+}` → `http://<nlb>/booking/{proxy}`, reached on its execute-api URL for
-       Dev. A custom domain such as `api-booking.lumiguides.it.com` needs an ACM certificate that
-       covers it (unverified; the Terraform `domain_name` differs from the live CIS hostname) and a
-       Namecheap DNS record.
+     - entry: a separate REST API `aa-booking-dev-api` (id `9z3xnalp59`) reusing the existing VPC
+       link, `ANY /booking/{proxy+}` → `http://<nlb>/booking/{proxy}`, reached on its execute-api URL
+       for Dev until the custom sub-domain `api-booking.lumiguides.it.com` (O2) has an ACM certificate
+       that covers it and a Namecheap DNS record.
    - No worker service until Booking has a job model (decision 8).
    - Rough cost: one 0.25 vCPU / 0.5 GB Fargate task, mostly on Spot, a few USD per month. No new
      ALB, NLB or NAT.
@@ -164,8 +164,9 @@ Each item is a proposal until this ADR is Accepted. Items that need an explicit 
    - Applied to Dev by **DB Migrate** (`check` → `apply`) from `main` of AA-CIS-Infra, before any app
      code that needs it merges.
    - `docs/architecture/db-schema-reference.md` is regenerated after each structural migration.
-   - `bk-001` is a **first slice**, not the whole ERD v2 (scope: **Open — Nghiệp, O5**, because
-     AA-678's Done-when literally says "schema v2"). Reason: PostgreSQL enum values cannot be removed
+   - `bk-001` is a **first slice**, not the whole ERD v2 (O5; this amends AA-678's Done-when, which
+     literally says "schema v2"). The applied `bk-001` holds the Foundation and Tier A rows below;
+     the Tier B rows move to later `bk-NNN` files. Reason: PostgreSQL enum values cannot be removed
      or renamed cheaply, and several FKs depend on contracts and decisions that do not exist yet.
      Proposed split:
 
@@ -179,17 +180,17 @@ Each item is a proposal until this ADR is Accepted. Items that need an explicit 
      | `bk-002` | `suppliers`, `hotels`, `activities`, `trip_plans*`, `destination_profiles`, `entity_media`; `trip_cases.trip_plan_id` | After the `catalog.tour.v1` contract, the CIS catalog views and the ISO decision (AA-679) |
      | `bk-003` | `trip_case_versions*`, `trip_case_checks`, `staff_assignments`, `supplier_*`, `invoices`, `invoice_items`, `payment_schedule`, `payments`, `notifications` | With AA-681/682 |
 
-8. **Booking has no deferred jobs in the bootstrap.** **Open — Nghiệp (O3: job model).**
-   - ADR 0003 makes `shared.job` + a worker the single mechanism for deferred work. Booking does not
-     adopt it yet: today the CIS Deploy Dev guard counts every `shared.job` row, so a queued Booking
-     job would block CIS deploys (and a CIS wave would block Booking's).
-   - Not accepted until the CIS deploy guard filters on CIS kinds: Booking kinds in `shared.job`, a
-     Booking-owned worker service (same image, `python -m worker`) claiming only Booking kinds, and the
-     AA-751 grant.
-   - Alternative to weigh in O3: a Booking-owned `booking.job` table with the same runner library
-     (`shared/jobs/`, ADR 0003 decision 4).
-   - Either way: no in-process `asyncio.create_task` in request paths, and `inbox_events` stays the
-     durable record of what was consumed.
+8. **Booking jobs run on its own `booking.job` table** (O3, kind prefix `bk_*`, O9).
+   - ADR 0003 makes a Postgres queue + a worker the single mechanism for deferred work. Booking uses
+     the same runner library (`shared/jobs/`, ADR 0003 decision 4) on a Booking-owned `booking.job`
+     table, not `shared.job`.
+   - Reason: the CIS Deploy Dev guard counts every `shared.job` row, so a queued Booking job would
+     block CIS deploys (and a CIS wave would block Booking's). With its own table, the CIS deploy
+     guard stays untouched and Booking's own deploy guard counts only `booking.job`.
+   - The bootstrap has no jobs. The first Booking job (inquiry intake) brings the `booking.job`
+     migration and a Booking-owned worker service (same image, `python -m worker`).
+   - No in-process `asyncio.create_task` in request paths, and `inbox_events` stays the durable record
+     of what was consumed.
 
 9. **Health and readiness are separate.**
    - `/booking/health` = process liveness, with no DB call. The ALB health check uses it, so a DB
@@ -197,7 +198,16 @@ Each item is a proposal until this ADR is Accepted. Items that need an explicit 
    - `/booking/health/ready` = DB connectivity + `bk-001` present in `shared.schema_versions`. Smoke
      tests and alarms use it.
 
-## Bootstrap scope (first slice)
+## Bootstrap scope (first slice) — done 14/10/2026
+
+**Done (AA-678, S235):** Infra #95 (narrowed `aa-cis-dev-role` OIDC trust, Booking IAM prep, ALB
+`http_listener_arn` output), Infra #96 (`booking.tf`: ECR, log group, roles, secret, task definition,
+target group, `/booking/*` listener rule, ECS service, REST API `9z3xnalp59`; plan/apply 24 added,
+0 changed) and Infra #97 (deploy-role trust pinned to the AA-Booking repo id `1418188499`). Repo
+`AdventureAsia365-Ecosys/AA-Booking` created with the five required checks and branch protection.
+`bk-001` applied by DB Migrate at 00:59:38Z on 14/10/2026 (registered, role `booking`, six Tier A
+tables). Nghiệp set the role password out-of-band; first Deploy Dev succeeded and
+`/booking/health` and `/booking/health/ready` return 200 live (`db: ok`, `bk-001`).
 
 The first deliverable is a **health-only** service: repo scaffold, 5-check CI, the `bk-001`
 foundation, the Infra resources above, and `/booking/health` + `/booking/health/ready` live on Dev.
@@ -230,24 +240,21 @@ Explicitly **out of scope** for the bootstrap:
 7. Nghiệp sets the role password and the `booking/dev/database-url` value out-of-band.
 8. `deploy-dev.yml`, scale to 1, first deploy, live verify.
 
-If O1, O2 and O5 are not answered, stop at "PRs open, nothing applied". Do not apply partially.
+All eight steps were completed in this order on 14/10/2026.
 
-## Open decisions
+## Decisions on the open items (Nghiệp, 14/10/2026)
 
-| # | Decision | Options | Recommendation | Owner |
-|---|---|---|---|---|
-| O1 | **Staff identity** | (a) one store: Booking staff log in through the CIS staff login (`shared.admin_users`, AA-656); `booking.staff_users` becomes a thin profile keyed by `admin_users.id` (Booking role `admin`/`sales`/`content_creator`, no password). (b) Booking keeps its own `staff_users` with its own auth | (a): matches AA-680 "no separate staff user store". Needs a CIS change (email + Booking roles, or a role-mapping table) and a token-verification contract; the Figma password-reset and "Super Admin" screens must be mapped onto it | **Open — Nghiệp** |
-| O2 | **API entry** | Separate REST API on the existing VPC link with `/booking/*` path routing, on the execute-api URL for Dev; or a custom domain (ACM certificate + Namecheap DNS) | Execute-api URL for Dev; custom domain once a certificate covers it | **Open — Nghiệp** |
-| O3 | **Job model** | `shared.job` with Booking kinds (after the CIS guard filters by CIS kinds and AA-751 grants access); or an own `booking.job` table on the same runner library | Decide before the first Booking job (inquiry intake). Nothing in the bootstrap needs it | **Open — Nghiệp** |
-| O4 | **Stack confirmation** | FastAPI + asyncpg backend, Next.js on Vercel (decision 1) | Confirm | **Open — Nghiệp** |
-| O5 | **`bk-001` scope** | The first slice (decision 7), amending AA-678's Done-when "schema v2"; or the whole ERD v2 in `bk-001` | First slice | **Open — Nghiệp** |
-| O6 | Guest inquiries (`customer: null` in the contract) | Park in `inbox_events` until contact data exists; or nullable `trip_cases.customer_id` | Decide before intake | Open — Nghiệp (not needed for the bootstrap) |
-| O7 | Content boundary for AAA-authored activities and country text | Commercial data owned by Booking; or content authored in CIS (ADR 0002 "Revisit") | Decide before `country_profiles`/`activities` | Open — Nghiệp (not needed for the bootstrap) |
-| O8 | Customer surface | Booking builds PRD §7.3 Discovery; or TripPlanner stays the discovery/inquiry front and Booking's customer app is sign-in, My Trips, My Payments | Decide before the frontend | Open — Nghiệp (not needed for the bootstrap) |
-| O9 | Job kind prefix | `bk_*` vs AA-751's `aab_*` | Pick with O3 | Open — Nghiệp (not needed for the bootstrap) |
-
-ADR 0001 is itself still "Proposed"; whether it moves to Accepted is Nghiệp's call and is not
-changed by this ADR.
+| # | Decision | Answer |
+|---|---|---|
+| O1 | **Staff identity** | **(a) one store.** Booking staff log in through the CIS staff login (`shared.admin_users`, AA-656). `booking.staff_users` becomes a thin profile keyed by `admin_users.id` (Booking role, no password). CIS issues the JWT; Booking verifies it, preferably with an asymmetric key published as JWKS, and requires `aud=booking`. |
+| O2 | **API entry** | **Custom sub-domains of `lumiguides.it.com`** (e.g. `api-booking.lumiguides.it.com`), as for CIS. The REST API execute-api URL is used until the ACM certificate covers the sub-domain. |
+| O3 | **Job model** | **Own `booking.job` table** on the same runner library (decision 8). The CIS deploy guard is untouched. |
+| O4 | **Stack confirmation** | **Confirmed:** FastAPI + asyncpg backend, Next.js on Vercel (decision 1). |
+| O5 | **`bk-001` scope** | **First slice** (decision 7). Applied 14/10/2026; live `/booking/health/ready`. |
+| O6 | Guest inquiries | **Guests must give name + email (phone optional) + consent; no registration.** Contract `inquiry.submitted` v1.1 (`docs/contracts/inquiry.submitted.v1.1.json`). Booking creates a trip case at once with a lead customer (unverified email) and merges it into the customer on OTP sign-in. Contact-less legacy hand-offs are parked in `inbox_events`. |
+| O7 | Content boundary | **All customer-facing content (activities, country text) is authored in CIS** (ADR 0002). Booking keeps commercial fields only (see ADR 0005 for prices and suppliers). |
+| O8 | Customer surface | **TripPlanner is the customer front door** (discovery and inquiry). Booking's customer app = sign-in, My Trips, payments. |
+| O9 | Job kind prefix | **`bk_*`.** |
 
 ## Consequences
 
@@ -264,7 +271,7 @@ changed by this ADR.
   - path-prefix routing ties Booking's public paths to `/booking/*`;
   - grants depend on CIS and TripPlanner migrations applied after the role exists, so cross-repo
     ordering must be planned;
-  - no deferred work until O3 is answered, which blocks inquiry intake;
+  - a second job table and worker to operate (`booking.job`, O3), instead of one shared queue;
   - the UI kit is copied until AA-655 ships;
   - the `bk-001` first slice means later `ALTER`s on a young schema.
 
@@ -281,7 +288,7 @@ changed by this ADR.
   name, so the client's Host header does not reach the ALB.
 - **Guarded (`IF EXISTS role`) cross-owner grants.** Rejected: a guarded no-op still registers its
   version, so the grant is silently never applied (decision 6).
-- **Booking kinds in `shared.job` now.** Rejected until the CIS deploy guard filters by kind
-  (decision 8).
+- **Booking kinds in `shared.job`.** Rejected (O3): it needs the CIS deploy guard to filter by kind
+  and couples the two apps' deploys; Booking uses its own `booking.job` table (decision 8).
 - **Whole ERD v2 in `bk-001`.** Rejected as the default (decision 7, O5).
 - **Separate database or account.** Rejected by ADR 0001.
