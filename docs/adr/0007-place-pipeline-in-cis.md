@@ -57,8 +57,11 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   not trashed, source active), so trash or supersede needs no delete and a trashed tour stops routing at
   once. Suspect destinations are excluded from the graph views.
 - Changes to the 225 views only **append** columns (`CREATE OR REPLACE VIEW` cannot reorder or retype).
-  Additive to contract `catalog.tour.v1`; the graph views are documented as `catalog.graph.v1` in
-  `docs/contracts/`.
+  Additive to contract `catalog.tour.v1` (`catalog.tour.v1.1.json`); the graph views are documented as
+  `catalog.graph.v1` in `docs/contracts/catalog.graph.v1.json`.
+- Implemented by **CIS migration 228** (S237; 227 went to `sonnet5_no_temperature`): views only, no top-k
+  function (S237 decision D7 — TripPlanner keeps its exact `MIN(embedding <=> q)` on the cis read path until
+  the catalog-wide run, see Consequences).
 
 ### 3. Identity: `source_id`, stable `component_id`
 
