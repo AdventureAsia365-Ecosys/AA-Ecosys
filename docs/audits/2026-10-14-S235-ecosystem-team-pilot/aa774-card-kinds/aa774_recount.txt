@@ -1,0 +1,12 @@
+     "unknown": 0
+    }
+   ],
+   "removed": 8,
+   "thin_changed": 0,
+   "piece_id": "5939df86-f8d4-491e-affc-348d0618ddcd",
+   "tenant": "Atlas & Hearth",
+   "channel": "blog",
+   "status": "held"
+  }
+ ]
+}

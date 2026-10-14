@@ -10,14 +10,22 @@ print(d.get("agent_id") or "-", (d.get("tool_input") or {}).get("command", "").r
 ' "$input")
 [ "$agent" = "-" ] && exit 0
 patterns=(
-  'git push' 'gh pr merge' 'gh pr close' 'gh pr create' 'gh pr ready' 'gh workflow run' 'gh run rerun' 'gh secret'
-  'gh api -X (PUT|POST|PATCH|DELETE)' 'gh api --method (PUT|POST|PATCH|DELETE)' 'gh repo (create|delete)'
-  'terraform (apply|destroy|import|state)' 'aws ecs (update-service|run-task|stop-task|register-task-definition)'
-  'aws rds (stop|start|delete|modify)' 'aws secretsmanager (put|create|delete|update)' 'aws s3 rm'
-  'git reset --hard' 'git clean -[a-z]*f' 'git branch -D' 'git checkout \.( |$)' 'git restore \.( |$)'
-  'git rebase .*(main|master)$' 'git commit .*--no-verify'
-  'gh api .* -(f|F) ' 'gh api .*--(field|raw-field|input)' 'aws ecs execute-command' 'aws iam ' 'aws lambda (invoke|update|create|delete)'
-  'aws ssm (put|delete|send-command)' 'aws ecr (put|delete|batch-delete)'
+  # git: allow any global options before the subcommand (e.g. git -C <dir> push)
+  'git( +-[cC] +[^ ]+| +--[a-z-]+(=[^ ]+)?)* +push' 'git( +-[cC] +[^ ]+| +--[a-z-]+(=[^ ]+)?)* +reset +--hard'
+  'git( +-[cC] +[^ ]+| +--[a-z-]+(=[^ ]+)?)* +clean +-[a-z]*f' 'git( +-[cC] +[^ ]+| +--[a-z-]+(=[^ ]+)?)* +branch +-D'
+  'git( +-[cC] +[^ ]+)* +checkout +\.( |$)' 'git( +-[cC] +[^ ]+)* +restore +\.( |$)'
+  'git( +-[cC] +[^ ]+)* +rebase .*(main|master)$' 'git( +-[cC] +[^ ]+)* +commit .*--no-verify'
+  'gh +pr +(merge|close|create|ready)' 'gh +workflow +run' 'gh +run +rerun' 'gh +secret' 'gh +repo +(create|delete|edit)'
+  'gh +api .*(-X *|--method[ =]+)(PUT|POST|PATCH|DELETE)' 'gh +api .* -(f|F) ' 'gh +api .*--(field|raw-field|input)'
+  # terraform / aws: allow global options (--profile X --region Y …) before the service
+  'terraform( +-[a-z-]+(=[^ ]+)?)* +(apply|destroy|import|state)'
+  'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +ecs +(update-service|run-task|stop-task|register-task-definition|execute-command)'
+  'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +rds +(stop|start|delete|modify)'
+  'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +secretsmanager +(put|create|delete|update)'
+  'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +s3 +rm' 'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +iam '
+  'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +lambda +(invoke|update|create|delete)'
+  'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +ssm +(put|delete|send-command)'
+  'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +ecr +(put|delete|batch-delete)'
 )
 for p in "${patterns[@]}"; do
   if echo "$cmd" | grep -Eq "$p"; then
