@@ -60,8 +60,22 @@ version V3, the V3 price cannot change.
 - TripPlanner shows "from" prices only via the Booking view; it never computes prices.
 - Margin numbers are policy and editable (pricing rules table), not code constants.
 
-## Open
+## Open — recommendations (S235, to confirm with Nghiệp / Ms. Thư / the AA accountant)
 
-- Confirm who enters prices and the supplier file formats (Ms. Thư).
-- Whether CIS tenants resell AA tours (B2B net price list per tenant) — assumed yes.
-- Tax/VAT handling per selling country.
+1. **Who enters prices.** A new staff role `contracting` (next to admin / sales / content_creator) owns supplier
+   contracts and net rates; Ms. Thư or a named ops/product person holds it at first. **Maker-checker:** one person
+   uploads or edits, another publishes; every change is audited. Sales never edit net rates — they quote and may
+   override the selling price within the floor. Ops checks availability and books suppliers.
+   **Format:** one AA Excel template, one sheet per service type (hotel, transport, guide, entrance, activity,
+   meal); each row = supplier, service, variant (room type / vehicle / language), season or date range, unit
+   (per pax / room-night / vehicle-day / group), net price, currency, supplements, child policy. Upload validates
+   and reports errors per row. Later: a supplier extranet, still behind the publish step.
+2. **Tenant resale.** Yes, after AA-Booking can quote (AA-681): tenants see a B2B net price list (15% margin) per
+   tour in their portal and set their own retail price; bookings arrive through a B2B channel carrying
+   `tenant_id`; AA invoices the tenant, not the end customer. **Rate parity:** a tenant may not advertise below
+   AA's public B2C "from" price. A second revenue line next to the subscription.
+3. **Tax / VAT.** Rates depend on the selling entity and the service, so the accountant confirms them; the system
+   never hard-codes tax: a `tax_rules` table keyed by selling entity × country of consumption × service type ×
+   validity. B2C prices are shown tax-inclusive (all-in) and invoices itemise tax; B2B net prices state whether tax
+   is included, per the agent contract. If an EU entity or EU sales appear later, check the EU tour-operator
+   margin scheme (TOMS) with the accountant.
