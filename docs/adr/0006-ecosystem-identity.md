@@ -1,6 +1,6 @@
 # ADR 0006 — Ecosystem identity on Amazon Cognito (staff, tenant users, travellers)
 
-- **Status:** Accepted (14/10/2026, S236 — Nghiệp: Cognito on acc2, Google + email code for staff, AA-703 as the epic).
+- **Status:** Accepted (14/10/2026, S236 — Nghiệp: Cognito on acc2, email code for staff (Google dropped: mail is on DreamHost, not Workspace), AA-703 as the epic).
 - **Scope:** AA-Ecosys as a whole: AA-CIS-App (staff admin, tenant portal), AA-Booking (staff app,
   customer app), AA-TripPlanner-Web (traveller sign-in), AA-CIS-Infra (pools, triggers, domains, SES).
 - **Amends:** ADR 0001 decision 6 (the clause "AA-Booking owns the customer identity (OTP)") and
@@ -458,7 +458,7 @@ Cost surprises to plan for:
 
 ## Decisions on open items (S236)
 
-- Staff sign-in: Google (Internal consent screen, adventure.asia org) + email code — Nghiệp creates the Google OAuth client.
+- Staff sign-in: **email one-time code only** (amended S236). adventure.asia mail is hosted on DreamHost (MX mailchannels.net, SPF dreamhost), not Google Workspace, so there is no Workspace organization, no Internal consent screen and no `hd` claim — Google sign-in for staff would let a personal Google account registered on an @adventure.asia address pass. The WORKFORCE Google IdP stays disabled (`count = 0` in Infra #105). Passkeys may be added once the production auth domain is fixed. Nothing to register with Google.
 - EXTERNAL pool shape: one pool with the client-aware pre sign-up (item 4).
 - SES sender for Dev: `no-reply@lumiguides.it.com` (item 5); production domain decided with AA-811.
 - Plus tier for WORKFORCE: later (item 9). Break-glass custodian: Nghiệp (item 7).
