@@ -49,6 +49,7 @@ assigns owners and states the rules. Tracked in AA-684.
 | `acp_deliver` | AA-CIS-App | `tenant_tour_pages` (only table left after AA-603) | — |
 | `tripplanner` | AA-TripPlanner-Web | Trip user state (`sessions`, `customers`, `trip_events`, `trip_drafts`) and its read models (`itinerary_components`, `tour_day`, Tour Graph tables) | — |
 | `booking` | AA-Booking | Customers, OTPs/sessions, media, audit, `inbox_events` (`bk-001`, 14/10/2026, ADR 0004); later trip cases, suppliers and prices (ADR 0005). DB role `booking` created by `bk-001` (NOLOGIN, then LOGIN with a password set out-of-band, DSN in `booking/dev/database-url`), `USAGE` only on the schema | — |
+| `catalog` | AA-CIS-App | Catalog read model for other apps (AA-679, CIS 225): views only — `v_tour`, `v_tour_day`, `v_tour_place`, `v_tour_photo`, `v_destination`, `v_destination_photo` over the CIS pipeline tables. Contract `docs/contracts/catalog.tour.v1.json` | AA-Booking, TripPlanner (and `aa_app_user`): `USAGE` + `SELECT` on every view (225, unguarded) |
 | `public` | — | `checkpoint_migrations` (LangGraph checkpointer, CIS) and enums created before schemas existed | — |
 | `shared` | per table, below | Platform tables every app may need | see below |
 
