@@ -100,6 +100,8 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Một UPDATE đổi khoá con (`SET segment_id = …`) trên bảng có PK ghép dễ đụng PK khi dòng đích đã có — dùng INSERT … ON CONFLICT DO NOTHING + DELETE (S218, AA-695).
 - Index phủ (`INCLUDE`) chỉ có tác dụng khi truy vấn KHÔNG chạm cột nào ngoài index — kể cả `count(l.id)`. Thêm index xong phải EXPLAIN lại, thấy `Index Only Scan` + `Heap Fetches: 0` mới tính là xong — summary Jev vẫn 22 s sau migration 205 vì `count(l.id)` (S218, AA-660). Bắt bằng: EXPLAIN (ANALYZE, BUFFERS) trước/sau.
 
+- **Trên RDS, kiểm RLS bằng hành vi (đếm dòng dưới tenant lạ), không bằng thuộc tính role** — migration 225 giả định `aa_cis_admin` bypass RLS theo 007b; thực tế `rolbypassrls=false` nên guard chặn apply. Khi đó view đọc bảng FORCE RLS cần role chủ riêng NOLOGIN + policy riêng cho role đó (`catalog_owner`). Sau khi áp lại thấy ngược: `aa_cis_admin` (role runtime CIS API, thành viên `rds_superuser`) vẫn đọc mọi dòng dưới tenant lạ dù FORCE RLS, còn `aa_app_user` bị lọc đúng (S236, AA-679). Bắt bằng: `SET LOCAL app.tenant_id` = uuid lạ rồi `count(*)` cho từng role trước khi dựa vào RLS.
+
 ## Frontend
 
 - **Trang list phải phân trang và lấy option filter ở server** — Review Queue gọi API không kèm `page_size` (mặc định 20) rồi phân trang client trên 20 dòng → luôn 1/1, chọn 100/page vô tác dụng, dropdown nước chỉ có nước của 20 dòng; Master Content cũng vậy (S218, AA-739). Bắt bằng: aa-ui-verify với dữ liệu > 1 trang: chọn page size lớn, sang trang 2, đếm option filter.

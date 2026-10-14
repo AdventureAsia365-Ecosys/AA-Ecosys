@@ -1,0 +1,1106 @@
+{
+ "payload": [
+  {
+   "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): Dzong card: remove the town and road facts (ec49a381 covers them) and fix the doubtful 'ridge above town' location so it matches the town card ('dominates the town').",
+   "edits": [
+    {
+     "index": 2,
+     "expected_text": "It is situated on a ridge above Mongar town, offering views over the surrounding forested valleys of eastern Bhutan.",
+     "text": "It stands in Mongar town, overlooking the surrounding forested valleys of eastern Bhutan.",
+     "kind": "visiting"
+    },
+    {
+     "index": 5,
+     "expected_text": "Mongar town itself is a staging point for travel into the remote eastern districts of Bhutan, including Lhuentse and Trashigang.",
+     "drop": true
+    },
+    {
+     "index": 6,
+     "expected_text": "The road to Mongar crosses high mountain passes, and the town sits at an elevation that gives the area a cooler climate than lower eastern valleys.",
+     "drop": true
+    }
+   ]
+  },
+  {
+   "card_id": "ec49a381-34d0-4372-856d-69b35e352f7f",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): Town card: drop the unverified dzong construction date and turn the dzong fact into a pointer. Soften the doubtful 1,800 m elevation, since no sourced figure exists.",
+   "edits": [
+    {
+     "index": 3,
+     "expected_text": "Mongar Dzong, a whitewashed fortress-monastery built in the 1930s, dominates the town and serves as the seat of the district's civil and religious administration.",
+     "text": "The town is dominated by Mongar Dzong, the seat of the district's civil and religious administration.",
+     "kind": "what_it_is"
+    },
+    {
+     "index": 1,
+     "expected_text": "It sits at an elevation of roughly 1,800 metres (about 5,900 feet) above sea level, giving it a relatively mild climate compared with lower eastern valleys.",
+     "text": "It sits at a mid-hill elevation, giving it a cooler climate than the lower eastern valleys.",
+     "kind": "setting"
+    }
+   ]
+  },
+  {
+   "card_id": "ed737fb2-069c-43ef-b7dc-67436239f636",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): This is the surviving Paro card after the merge. The airport sentence overstated the town's scope. The Tiger's Nest fact repeated monastery details that belong on card 9bb802e4.",
+   "edits": [
+    {
+     "index": 1,
+     "expected_text": "The town is home to Bhutan's only international airport, making it the country's main entry and exit point for international travellers.",
+     "text": "Bhutan's only international airport lies in the Paro Valley near the town, making Paro the country's main entry and exit point for international travellers; the approach between the surrounding mountains is known as a demanding one for pilots."
+    },
+    {
+     "index": 6,
+     "expected_text": "Paro District is the site of the famous Tiger's Nest Monastery (Paro Taktsang), perched on a cliff above the valley, which draws visitors from across the world.",
+     "text": "Paro is the usual base for visiting Paro Taktsang (Tiger's Nest Monastery), which sits on a cliff above the valley."
+    }
+   ]
+  },
+  {
+   "card_id": "9bb802e4-fbf1-4bb8-8262-4108696bb670",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): The forest fact had the wrong kind. The panel flagged the 2004 reopening year as uncertain because 2005 is also cited, and gave no source for either.",
+   "edits": [
+    {
+     "index": 3,
+     "expected_text": "A fire in 1998 severely damaged much of the complex; it was subsequently restored and reopened in 2004.",
+     "text": "A fire in 1998 severely damaged much of the complex; it was subsequently restored and reopened in the mid-2000s."
+    },
+    {
+     "index": 7,
+     "expected_text": "The surrounding forest is composed largely of blue pine and rhododendron, and prayer flags line much of the approach trail.",
+     "kind": "setting"
+    }
+   ]
+  },
+  {
+   "card_id": "bd978f98-1698-4e28-b6d8-1e8a459a6dda",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): Town card (Punakha) had dzong facts leak in: 5 of 8 facts describe Punakha Dzong, which has its own card (4ca00c2e). Turn the what_it_is into a town-level fact, drop the 3 dzong-only setting/history facts and the dzong dress code, and normalise the river gloss.",
+   "edits": [
+    {
+     "index": 1,
+     "expected_text": "The town sits at the confluence of the Pho Chhu (Father River) and Mo Chhu (Mother River), giving it a fertile, relatively warm climate compared with most of Bhutan.",
+     "text": "The town sits at the confluence of the Pho Chhu (male river) and Mo Chhu (female river), giving it a fertile, relatively warm climate compared with most of Bhutan."
+    },
+    {
+     "index": 2,
+     "expected_text": "Punakha Dzong, officially known as Pungtang Dechen Photrang Dzong, is the dominant landmark — a massive fortress-monastery built in 1637–1638 by Zhabdrung Ngawang Namgyal.",
+     "text": "Punakha is a historic valley town in Punakha District, central Bhutan; its dominant landmark is Punakha Dzong, a fortress-monastery."
+    },
+    {
+     "index": 3,
+     "expected_text": "The dzong sits on a narrow tongue of land at the river confluence and is connected to the riverbank by a traditional cantilever bridge.",
+     "drop": true
+    },
+    {
+     "index": 4,
+     "expected_text": "Punakha Dzong houses the embalmed body of Zhabdrung Ngawang Namgyal and remains an active monastic and administrative center.",
+     "drop": true
+    },
+    {
+     "index": 5,
+     "expected_text": "The dzong suffered several major floods and fires over the centuries and has been substantially restored; restoration work is ongoing in parts of the complex.",
+     "drop": true
+    },
+    {
+     "index": 7,
+     "expected_text": "Modest dress is required to enter the dzong; arms and legs must be covered, and shoes are removed before entering the interior temples.",
+     "drop": true
+    }
+   ]
+  },
+  {
+   "card_id": "4ca00c2e-d14b-47ba-92e2-108302894128",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): Dzong card: normalise the river gloss. Soften the dress code, which likely overstates the rule for foreign visitors, to the modest-dress wording already in this cluster (from the town card), so one consistent dress-code fact remains.",
+   "edits": [
+    {
+     "index": 0,
+     "expected_text": "Punakha Dzong is a large Buddhist monastery-fortress (dzong) located at the confluence of the Pho Chhu (Male River) and Mo Chhu (Female River) in Punakha.",
+     "text": "Punakha Dzong is a large Buddhist monastery-fortress (dzong) located at the confluence of the Pho Chhu (male river) and Mo Chhu (female river) in Punakha."
+    },
+    {
+     "index": 8,
+     "expected_text": "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when entering the dzong.",
+     "text": "Modest dress is required to enter the dzong; arms and legs must be covered, and shoes are removed before entering the interior temples."
+    }
+   ]
+  },
+  {
+   "card_id": "e4be28e7-a71b-413e-9269-278add6de2eb",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): The town card calls Gyirong a county seat. That contradicts the sibling county card, whose locality is Zongga Town, and makes the town and county look like one place. Removing the county-seat claim and placing the town inside Gyirong County uses only data already on the card (its locality field).",
+   "edits": [
+    {
+     "index": 0,
+     "expected_text": "Gyirong is a town and county seat in southern Tibet, near the Nepal border.",
+     "text": "Gyirong is a town in Gyirong County, southern Tibet, near the Nepal border."
+    }
+   ]
+  },
+  {
+   "card_id": "e88b8cef-ff78-4134-a866-89fbe7a9d5c5",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): The panel kept this card separate from the Lake Manasarovar card (c58ab644) because the eastern shore is part of the lake, not a duplicate of it. Its what_it_is, setting and history facts repeated content about the whole lake. They are reworded so each one is about the eastern shore as part of the lake, using only information already on the card. The visiting fact (Kailash view) and the practical ",
+   "edits": [
+    {
+     "index": 0,
+     "expected_text": "The eastern shore is part of Lake Manasarovar in Burang County, in Tibet’s Ngari region.",
+     "text": "The eastern shore is the eastern side of Lake Manasarovar in Burang County, in Tibet’s Ngari region, with viewpoints from which Mount Kailash can be seen across the lake when visibility allows.",
+     "kind": "what_it_is"
+    },
+    {
+     "index": 1,
+     "expected_text": "Lake Manasarovar is a high-altitude freshwater lake on the Tibetan Plateau, near Mount Kailash and Lake Rakshastal.",
+     "text": "The eastern shore borders Lake Manasarovar, a high-altitude freshwater lake on the Tibetan Plateau near Mount Kailash and Lake Rakshastal.",
+     "kind": "setting"
+    },
+    {
+     "index": 2,
+     "expected_text": "The lake and its shores are sacred in Hinduism, Buddhism, Jainism and the Bon tradition.",
+     "text": "As part of Lake Manasarovar, the eastern shore shares the lake’s sacred status in Hinduism, Buddhism, Jainism and the Bon tradition.",
+     "kind": "history"
+    }
+   ]
+  },
+  {
+   "card_id": "bc5669aa-2e96-4a2f-8a7e-2360f724b115",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): Valley card carries two monastery facts (one native, one appended from merged-away e3883058). Rewrite the native what_it_is to describe the valley, mentioning the monastery only as a landmark. Drop the merged Nyingma monastery fact, which is unverified and belongs to a different entity. Tidy the merged setting fact so it names the valley and both county spellings.",
+   "edits": [
+    {
+     "index": 1,
+     "expected_text": "Rongbuk Monastery is a Tibetan Buddhist monastery in the valley and is commonly associated with the Rongbuk area.",
+     "text": "Rongbuk Valley is a high valley on the northern approach to Mount Everest, leading toward the north-side Everest Base Camp; Rongbuk Monastery stands within the valley.",
+     "kind": "what_it_is"
+    },
+    {
+     "index": 4,
+     "expected_text": "Rongbuk is a high-altitude valley and settlement in Tingri County, Tibet.",
+     "text": "Rongbuk Valley is a high-altitude valley with a settlement in Tingri (Dingri) County, Tibet.",
+     "kind": "setting"
+    },
+    {
+     "index": 5,
+     "expected_text": "Rongbuk Monastery is a Tibetan Buddhist monastery associated with the Nyingma tradition.",
+     "drop": true
+    }
+   ]
+  },
+  {
+   "card_id": "ab4afb74-39a9-4cee-bece-81ccc8fe5f39",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): Town card carries county-level facts (one mis-tagged naming) and an unverified county-seat claim; narrow to the town and soften the seat claim per panel.",
+   "edits": [
+    {
+     "index": 0,
+     "expected_text": "Zhongba is the county seat of Zhongba County in western Tibet.",
+     "text": "Zhongba is a settlement in Zhongba County, under Shigatse, in western Tibet."
+    },
+    {
+     "index": 1,
+     "expected_text": "Zhongba County is administered by Shigatse, a prefecture-level city in the Tibet Autonomous Region.",
+     "drop": true
+    },
+    {
+     "index": 3,
+     "expected_text": "The wider county is in southwestern Tibet near the China–Nepal border.",
+     "drop": true
+    }
+   ]
+  },
+  {
+   "card_id": "36f4777f-c925-4c98-9659-7591f32d0a2c",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): Setting fact uses bare 'Zhongba', which is the town's name per both naming notes; make it explicit it is about the county.",
+   "edits": [
+    {
+     "index": 2,
+     "expected_text": "Zhongba is a remote, sparsely populated high-altitude area with broad plateau landscapes and mountain views.",
+     "text": "Zhongba County is a remote, sparsely populated high-altitude area with broad plateau landscapes and mountain views."
+    }
+   ]
+  },
+  {
+   "card_id": "45e737a3-f5e6-41fd-b365-c1b2e153d657",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): Town card: two landmark facts were mis-tagged as what_it_is, the Ögedei founding claim was oversimplified, and the distance contradicted the museum card. Cards stay separate (town vs museum), so nothing is merged. Verified: all expected_text values match the file verbatim, and every new name or figure (Genghis Khan, son, 1235, Erdene Zuu, 360-370 km) already appears in the card data or the panel r",
+   "edits": [
+    {
+     "index": 0,
+     "expected_text": "Kharkhorin is the modern town built adjacent to the ruins of Karakorum, the 13th-century capital of the Mongol Empire founded by Ögedei Khan, son of Genghis Khan, around 1235.",
+     "text": "Kharkhorin is the modern town built adjacent to the ruins of Karakorum, the 13th-century Mongol imperial capital first established under Genghis Khan and developed into the imperial capital by his son Ögedei Khan from about 1235."
+    },
+    {
+     "index": 4,
+     "expected_text": "The monastery's enclosing wall, approximately 400 metres on each side, is punctuated by 108 white stupas, a number of great significance in Tibetan Buddhism.",
+     "text": "Erdene Zuu Monastery's enclosing wall, approximately 400 metres on each side, is punctuated by 108 white stupas, a number of great significance in Tibetan Buddhism.",
+     "kind": "visiting"
+    },
+    {
+     "index": 7,
+     "expected_text": "A large stone tortoise sculpture, one of several originally marking the boundaries of Karakorum, still stands near Erdene Zuu and is a well-known landmark of the site.",
+     "kind": "visiting"
+    },
+    {
+     "index": 8,
+     "expected_text": "The town is roughly 370 kilometres southwest of Ulaanbaatar and is typically reached by road, passing through rolling steppe and river valley landscapes.",
+     "text": "The town is roughly 360-370 kilometres southwest of Ulaanbaatar and is typically reached by road, passing through rolling steppe and river valley landscapes."
+    }
+   ]
+  },
+  {
+   "card_id": "dcc9089a-c46c-40ad-8228-69fb0bc291d8",
+   "reason": "S236 duplicate-card review (3-lens panel + verifier): Museum card: the Ögedei wording was ambiguous and the distance contradicted the town card. Verified: both expected_text values match the file verbatim and add no new data.",
+   "edits": [
+    {
+     "index": 1,
+     "expected_text": "It was established to preserve and display finds from the Karakorum archaeological site, which served as the capital of the Mongol Empire founded by Ögedei Khan in the 13th century.",
+     "text": "It was established to preserve and display finds from the Karakorum archaeological site, the Mongol imperial capital that Ögedei Khan built up in the 13th century."
+    },
+    {
+     "index": 8,
+     "expected_text": "Kharkhorin is roughly 360 kilometres southwest of Ulaanbaatar, making it accessible as a multi-day overland trip or by domestic transport along the main central highway.",
+     "text": "Kharkhorin is roughly 360-370 kilometres southwest of Ulaanbaatar, making it accessible as a multi-day overland trip or by domestic transport along the main central highway."
+    }
+   ]
+  }
+ ],
+ "skipped": [
+  "c0: baafad3c index 1, construction date: the panel asked to check it against a primary source, but the data has no sourced date (the lenses' 1953 and 1930s conflict). The panel's fallback applies, so '20th century' stays unchanged.",
+  "c0: ec49a381 elevation: the panel's '~1,600 m' option was not used, because it is an unsourced figure from memory. The softened 'mid-hill elevation' version is applied instead.",
+  "c0: Verifier note: all 5 edits were checked. Every expected_text matches the file verbatim at its index, and no new number, date, name or superlative is introduced. The only content loss is the 'Lhuentse' mention in the dropped baafad3c index 5. That is a town-level routing detail, not a dzong fact, so the drop is accepted.",
+  "c1: ed737fb2 fact_fix 'Add the Paro Tsechu fact (masked cham dances, giant thangka, lunar-calendar dates)': edits may only drop, re-kind or reword. The donor card 78f69a62 is no longer in the file, and the merge did not append its facts to ed737fb2, so there is no current fact to reword. Adding it would create a new fact. If it is wanted, add it separately from the donor's source text.",
+  "c1: 78f69a62 fact_fix (visa / no independent travel / mandatory guide): the card was merged away and the fact was not carried onto ed737fb2, so there is nothing to edit. This matches the panel's intent of not carrying it over.",
+  "c1: Merge duplicate check: ed737fb2 has no donor facts appended (still the original 9 facts, indices 0-8), so there are no merge-created duplicates or contradictions to drop. The 'valley monastery concentration' donor note is not in the data, so it was not added.",
+  "c1: Verifier: all 4 proposed edits checked. Each expected_text matches the file verbatim at its index. No edit adds a name, number, date or superlative that is absent from the cards or the panel reasoning. Kinds are valid, and every text is under 600 characters. No edits were removed or changed.",
+  "c2: Verifier change to bd978f98 index 2: removed 'covered on its own card' from the new text. It is an internal cross-reference, and writers cite card facts as truth, so it could leak into customer copy. Also used 'dominant landmark' from the original fact instead of 'best-known' to avoid a new superlative. All other edits checked: expected_text matches the file verbatim, and no new facts are added.",
+  "c2: 4ca00c2e suspension-bridge clarifying fact: the allowed actions are only drop/reword/rekind, and the panel itself only says the Po Chhu suspension bridge is 'probably' separate. Adding that claim would introduce an unverified entity. Instead, flag atoms 0a16b0bdac1bba1e and 1b6ee19df7755250 for human review.",
+  "c2: bd978f98 panel-suggested what_it_is wording 'administrative seat of Punakha District in western-central Bhutan': not in the cluster data, so a softer town-level wording from the region and naming_note was used instead.",
+  "c2: 4ca00c2e dress-code suggested text ('Bhutanese wear gho/kira with a ceremonial scarf. Hats off'): adds claims not in the data. Used the existing modest-dress wording; human verification is still recommended.",
+  "c2: No relinks needed: all 6 atoms already sit on the correct card (panel confirmed). Cards stay separate (town vs dzong), no merge.",
+  "c3: e4be28e7 alias 'jilong' qualify/mark ambiguous: this changes an alias, not a fact, so it is outside the fact-edit scope (drop/reword/rekind). The panel marked it optional; handle it in alias review if wanted.",
+  "c3: 3c4dea30 add fact 'The county seat is Zongga Town; Gyirong Town lies further south...': the rules allow no new facts, only drop/rekind/reword. The panel itself says the county-seat claim comes from outside knowledge the file cannot prove. The card's locality field (Zongga Town) already carries this context.",
+  "c3: e4be28e7 panel suggestion wording '(Gyirong Town) ... in the Gyirong Valley': not used in the index 0 reword. 'Gyirong Town' is a name that appears only in the panel's outside-knowledge reasoning, and the valley setting is already stated in fact index 1, so adding it would duplicate that fact.",
+  "c4: Fix 1 (e88b8cef, change 'Mapham Yutso' to 'Mapham Yumtso' in the naming_note and alias): this targets the naming_note and aliases, not the facts array, so a fact edit cannot apply it. None of the card's facts contain the misspelling. It needs a separate naming_note/alias update.",
+  "c4: Fix 2 (e88b8cef, Burang vs Purang county spelling): this targets the card's locality field and the parent card c58ab644, which is not in this file. The shore card's facts already match its own locality ('Burang County'), so no fact edit is needed. The spelling has to be made consistent in the locality and naming_note fields.",
+  "c5: Verifier: all 3 proposed edits checked. Each expected_text matches the file verbatim, no new names, numbers or claims are introduced, and every edit fixes the problem the panel stated. The payload is approved unchanged.",
+  "c5: 16110d12 (Rongbuk Monastery): panel says to move the bare itinerary alias 'rongbuk' to bc5669aa and change no facts. That is an alias or relink operation, not a fact edit, so it is out of scope here. No fact changes are needed.",
+  "c5: bc5669aa alias work (delete the two 'rongbuk monastery' draft_alias rows; add rongbuk, rongphu, rongbu and the itinerary alias 'rongbuk to lhatse'; optionally standardize locality and region): these are alias and metadata operations, not fact edits, so they are not expressed here. They still need to be applied separately.",
+  "c5: e3883058 'The monastery stands near the northern base' setting fact: it is not in bc5669aa's current facts array after the merge (only the 'Tingri County' setting fact and the Nyingma what_it_is fact were appended), so there is nothing to drop.",
+  "c5: Adding the Nyingma claim to 16110d12: skipped. The panel makes it conditional on verification, and adding it would put an unsourced claim on the card.",
+  "c6: ab4afb74 alias cleanup (remove 'zhongba county'/'drongpa county' and duplicate alias rows): alias change, not a fact edit; handle it in the alias/relink step.",
+  "c6: 36f4777f alias additions ('zhongba county', 'drongpa county'), removal of route-phrase aliases 'kailash to zhongba'/'saga to zhongba', review of 'drongpa dzong', and the locality change: alias/metadata changes, not fact edits.",
+  "c6: Relink of atom 3bbf13a0d8e52612 to town card ab4afb74: atom relink, not a fact edit.",
+  "c6: Verifying the county-seat claim: no source in the data, so the claim was softened (index 0) instead of kept. Note: the town card's naming_note still says 'Use Zhongba for the county seat'; that is metadata, so it is left for the metadata step.",
+  "c6: ab4afb74 index 4 ('The area is associated with Tibetan communities and culture.'): vague but no panel fix targets it; kept.",
+  "c6: Verifier: all proposed edits checked. Each expected_text matches the file exactly, no new names, numbers or claims are introduced, and no correct town-level fact is dropped. Payload accepted unchanged.",
+  "c7: Panel suggestion to move the 108-stupa fact to an Erdene Zuu card: no such card is in this cluster, so the fact stays on the town card. It is re-tagged and names the monastery instead.",
+  "c7: Panel date 'Genghis Khan established the site around 1220': left out. The figure is not sourced anywhere in the card data, so the reworded fact names Genghis Khan without a date.",
+  "c7: Relinks or merges: the panel voted keep_separate unanimously and the atoms are already linked correctly. No merge happened, so there are no duplicates to remove.",
+  "c7: Verifier: all six proposed edits passed. Each expected_text matches its index exactly, no new number, date or name is introduced, and each edit fixes the problem it targets. No edits were removed or changed."
+ ],
+ "raw": [
+  {
+   "cluster": 0,
+   "draft": {
+    "cards": [
+     {
+      "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+      "reason": "Dzong card: remove town/road facts (covered on ec49a381) and correct the doubtful 'ridge above town' location to match the town card ('dominates the town').",
+      "edits": [
+       {
+        "index": 2,
+        "expected_text": "It is situated on a ridge above Mongar town, offering views over the surrounding forested valleys of eastern Bhutan.",
+        "action": "reword",
+        "kind": "visiting",
+        "text": "It stands in Mongar town, overlooking the surrounding forested valleys of eastern Bhutan.",
+        "why": "The panel flagged 'ridge above Mongar town' as doubtful. The town card says the dzong dominates the town, so the fact now places it in the town."
+       },
+       {
+        "index": 5,
+        "expected_text": "Mongar town itself is a staging point for travel into the remote eastern districts of Bhutan, including Lhuentse and Trashigang.",
+        "action": "drop",
+        "why": "Describes the town, not the dzong. Card ec49a381 index 5 already covers this."
+       },
+       {
+        "index": 6,
+        "expected_text": "The road to Mongar crosses high mountain passes, and the town sits at an elevation that gives the area a cooler climate than lower eastern valleys.",
+        "action": "drop",
+        "why": "Describes the road and the town, not the dzong. Card ec49a381 indexes 1 and 6 already cover this."
+       }
+      ]
+     },
+     {
+      "card_id": "ec49a381-34d0-4372-856d-69b35e352f7f",
+      "reason": "Town card: drop the unverified dzong construction date and turn the dzong fact into a pointer. Soften the doubtful 1,800 m elevation figure, since no sourced figure is available.",
+      "edits": [
+       {
+        "index": 3,
+        "expected_text": "Mongar Dzong, a whitewashed fortress-monastery built in the 1930s, dominates the town and serves as the seat of the district's civil and religious administration.",
+        "action": "reword",
+        "kind": "what_it_is",
+        "text": "The town is dominated by Mongar Dzong, the seat of the district's civil and religious administration.",
+        "why": "The 'built in the 1930s' date is unverified and conflicts with the dzong card ('20th century'). The dzong's history belongs on baafad3c, so this fact now only points to it."
+       },
+       {
+        "index": 1,
+        "expected_text": "It sits at an elevation of roughly 1,800 metres (about 5,900 feet) above sea level, giving it a relatively mild climate compared with lower eastern valleys.",
+        "action": "reword",
+        "kind": "setting",
+        "text": "It sits at a mid-hill elevation, giving it a cooler climate than the lower eastern valleys.",
+        "why": "Two lenses flagged the 1,800 m figure as probably high, and it has no source. The figure is dropped rather than replaced with another number. The 'cooler than lower eastern valleys' wording comes from the dzong card's own text, and it fixes the odd phrasing 'mild compared with lower valleys'."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "baafad3c index 1 construction date: the panel asked to check it against a primary source, but no sourced date exists in the data (the lenses gave 1953 and 1930s, which conflict). Per the panel's own fallback, '20th century' stays unchanged.",
+     "ec49a381 elevation: the panel's '~1,600 m' option was not used. It is a figure from memory with no source, so the softened 'mid-hill elevation' version was applied instead."
+    ]
+   },
+   "final": {
+    "cards": [
+     {
+      "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+      "reason": "Dzong card: remove the town and road facts (ec49a381 covers them) and fix the doubtful 'ridge above town' location so it matches the town card ('dominates the town').",
+      "edits": [
+       {
+        "index": 2,
+        "expected_text": "It is situated on a ridge above Mongar town, offering views over the surrounding forested valleys of eastern Bhutan.",
+        "action": "reword",
+        "kind": "visiting",
+        "text": "It stands in Mongar town, overlooking the surrounding forested valleys of eastern Bhutan.",
+        "why": "The panel flagged 'ridge above Mongar town' as doubtful. The town card says the dzong dominates the town, so the fact now places it in the town. The new text adds no new claims."
+       },
+       {
+        "index": 5,
+        "expected_text": "Mongar town itself is a staging point for travel into the remote eastern districts of Bhutan, including Lhuentse and Trashigang.",
+        "action": "drop",
+        "why": "This describes the town, not the dzong. Card ec49a381 index 5 already covers the gateway role."
+       },
+       {
+        "index": 6,
+        "expected_text": "The road to Mongar crosses high mountain passes, and the town sits at an elevation that gives the area a cooler climate than lower eastern valleys.",
+        "action": "drop",
+        "why": "This describes the road and the town, not the dzong. Card ec49a381 indexes 1 and 6 already cover it."
+       }
+      ]
+     },
+     {
+      "card_id": "ec49a381-34d0-4372-856d-69b35e352f7f",
+      "reason": "Town card: drop the unverified dzong construction date and turn the dzong fact into a pointer. Soften the doubtful 1,800 m elevation, since no sourced figure exists.",
+      "edits": [
+       {
+        "index": 3,
+        "expected_text": "Mongar Dzong, a whitewashed fortress-monastery built in the 1930s, dominates the town and serves as the seat of the district's civil and religious administration.",
+        "action": "reword",
+        "kind": "what_it_is",
+        "text": "The town is dominated by Mongar Dzong, the seat of the district's civil and religious administration.",
+        "why": "The 'built in the 1930s' date is unverified and conflicts with the dzong card ('20th century'). The dzong's history belongs on baafad3c, so this fact becomes a pointer. The new text adds no new claims."
+       },
+       {
+        "index": 1,
+        "expected_text": "It sits at an elevation of roughly 1,800 metres (about 5,900 feet) above sea level, giving it a relatively mild climate compared with lower eastern valleys.",
+        "action": "reword",
+        "kind": "setting",
+        "text": "It sits at a mid-hill elevation, giving it a cooler climate than the lower eastern valleys.",
+        "why": "Two lenses flagged the 1,800 m figure as probably high, and it has no source. The figure is dropped and not replaced with another number, following the panel's fallback ('mid-hill elevation'). The 'cooler than lower eastern valleys' wording already exists in the cluster data (dzong card index 6)."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "baafad3c index 1, construction date: the panel asked to check it against a primary source, but the data has no sourced date (the lenses' 1953 and 1930s conflict). The panel's fallback applies, so '20th century' stays unchanged.",
+     "ec49a381 elevation: the panel's '~1,600 m' option was not used, because it is an unsourced figure from memory. The softened 'mid-hill elevation' version is applied instead.",
+     "Verifier note: all 5 edits were checked. Every expected_text matches the file verbatim at its index, and no new number, date, name or superlative is introduced. The only content loss is the 'Lhuentse' mention in the dropped baafad3c index 5. That is a town-level routing detail, not a dzong fact, so the drop is accepted."
+    ]
+   }
+  },
+  {
+   "cluster": 1,
+   "draft": {
+    "cards": [
+     {
+      "card_id": "ed737fb2-069c-43ef-b7dc-67436239f636",
+      "reason": "This is the surviving Paro card after the merge. The airport sentence overstated the town's scope. The Tiger's Nest fact repeated monastery details that belong on card 9bb802e4.",
+      "edits": [
+       {
+        "index": 1,
+        "expected_text": "The town is home to Bhutan's only international airport, making it the country's main entry and exit point for international travellers.",
+        "action": "reword",
+        "text": "Bhutan's only international airport lies in the Paro Valley near the town, making Paro the country's main entry and exit point for international travellers; the approach between the surrounding mountains is known as a demanding one for pilots.",
+        "why": "The airport is on the valley floor, not in the town (panel fact_fix). The approach clause carries over the donor 78f69a62 fact the panel named ('demanding airport approach'), worded softly. No new figures are added."
+       },
+       {
+        "index": 6,
+        "expected_text": "Paro District is the site of the famous Tiger's Nest Monastery (Paro Taktsang), perched on a cliff above the valley, which draws visitors from across the world.",
+        "action": "reword",
+        "text": "Paro is the usual base for visiting Paro Taktsang (Tiger's Nest Monastery), which sits on a cliff above the valley.",
+        "why": "The panel asked to shorten this to a pointer so writers cite card 9bb802e4 for monastery details."
+       }
+      ]
+     },
+     {
+      "card_id": "9bb802e4-fbf1-4bb8-8262-4108696bb670",
+      "reason": "The forest fact had the wrong kind. The panel flagged the 2004 reopening year as uncertain because 2005 is also cited, and gave no source for either.",
+      "edits": [
+       {
+        "index": 3,
+        "expected_text": "A fire in 1998 severely damaged much of the complex; it was subsequently restored and reopened in 2004.",
+        "action": "reword",
+        "text": "A fire in 1998 severely damaged much of the complex; it was subsequently restored and reopened in the mid-2000s.",
+        "why": "Softens a year that has no source (2004 vs 2005), using the panel's own wording. No new figure is added."
+       },
+       {
+        "index": 7,
+        "expected_text": "The surrounding forest is composed largely of blue pine and rhododendron, and prayer flags line much of the approach trail.",
+        "action": "rekind",
+        "kind": "setting",
+        "why": "It describes the surroundings, not practical visitor information."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "ed737fb2 fact_fix 'Add the Paro Tsechu fact (masked cham dances, giant thangka, lunar-calendar dates)': edits may only drop, re-kind or reword. The donor card 78f69a62 no longer exists in the file, and the merge did not append its facts to ed737fb2, so there is no current fact to reword. Adding it would create a new fact. If it is wanted, add it separately from the donor's source text.",
+     "78f69a62 fact_fix (visa / no independent travel / mandatory guide): the card was merged away and the fact was not carried onto ed737fb2, so there is nothing to edit. This matches the panel's intent of not carrying it over.",
+     "Merge duplicate check: ed737fb2 has no donor facts appended (still the original 9 facts), so there are no merge-created duplicates or contradictions to drop. The 'valley monastery concentration' donor note is not in the data, so it was not added."
+    ]
+   },
+   "final": {
+    "cards": [
+     {
+      "card_id": "ed737fb2-069c-43ef-b7dc-67436239f636",
+      "reason": "This is the surviving Paro card after the merge. The airport sentence overstated the town's scope. The Tiger's Nest fact repeated monastery details that belong on card 9bb802e4.",
+      "edits": [
+       {
+        "index": 1,
+        "expected_text": "The town is home to Bhutan's only international airport, making it the country's main entry and exit point for international travellers.",
+        "action": "reword",
+        "text": "Bhutan's only international airport lies in the Paro Valley near the town, making Paro the country's main entry and exit point for international travellers; the approach between the surrounding mountains is known as a demanding one for pilots.",
+        "why": "The airport is on the valley floor, not in the town (panel fact_fix). The approach clause carries over the donor 78f69a62 fact the panel named ('demanding airport approach'), worded more softly than the panel's superlative. No new figures are added."
+       },
+       {
+        "index": 6,
+        "expected_text": "Paro District is the site of the famous Tiger's Nest Monastery (Paro Taktsang), perched on a cliff above the valley, which draws visitors from across the world.",
+        "action": "reword",
+        "text": "Paro is the usual base for visiting Paro Taktsang (Tiger's Nest Monastery), which sits on a cliff above the valley.",
+        "why": "The panel asked to shorten this to a pointer so writers cite card 9bb802e4 for monastery details."
+       }
+      ]
+     },
+     {
+      "card_id": "9bb802e4-fbf1-4bb8-8262-4108696bb670",
+      "reason": "The forest fact had the wrong kind. The panel flagged the 2004 reopening year as uncertain because 2005 is also cited, and gave no source for either.",
+      "edits": [
+       {
+        "index": 3,
+        "expected_text": "A fire in 1998 severely damaged much of the complex; it was subsequently restored and reopened in 2004.",
+        "action": "reword",
+        "text": "A fire in 1998 severely damaged much of the complex; it was subsequently restored and reopened in the mid-2000s.",
+        "why": "Softens a year that has no source (2004 vs 2005), using the panel's own wording. No new figure is added."
+       },
+       {
+        "index": 7,
+        "expected_text": "The surrounding forest is composed largely of blue pine and rhododendron, and prayer flags line much of the approach trail.",
+        "action": "rekind",
+        "kind": "setting",
+        "why": "It describes the surroundings, not practical visitor information."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "ed737fb2 fact_fix 'Add the Paro Tsechu fact (masked cham dances, giant thangka, lunar-calendar dates)': edits may only drop, re-kind or reword. The donor card 78f69a62 is no longer in the file, and the merge did not append its facts to ed737fb2, so there is no current fact to reword. Adding it would create a new fact. If it is wanted, add it separately from the donor's source text.",
+     "78f69a62 fact_fix (visa / no independent travel / mandatory guide): the card was merged away and the fact was not carried onto ed737fb2, so there is nothing to edit. This matches the panel's intent of not carrying it over.",
+     "Merge duplicate check: ed737fb2 has no donor facts appended (still the original 9 facts, indices 0-8), so there are no merge-created duplicates or contradictions to drop. The 'valley monastery concentration' donor note is not in the data, so it was not added.",
+     "Verifier: all 4 proposed edits checked. Each expected_text matches the file verbatim at its index. No edit adds a name, number, date or superlative that is absent from the cards or the panel reasoning. Kinds are valid, and every text is under 600 characters. No edits were removed or changed."
+    ]
+   }
+  },
+  {
+   "cluster": 2,
+   "draft": {
+    "cards": [
+     {
+      "card_id": "bd978f98-1698-4e28-b6d8-1e8a459a6dda",
+      "reason": "Town card (Punakha) had dzong facts leak in: 5 of 8 facts describe Punakha Dzong, which has its own card (4ca00c2e). Turn the what_it_is into a town-level fact, drop the 3 dzong-only setting/history facts and the dzong dress code, and normalise the river gloss.",
+      "edits": [
+       {
+        "index": 1,
+        "expected_text": "The town sits at the confluence of the Pho Chhu (Father River) and Mo Chhu (Mother River), giving it a fertile, relatively warm climate compared with most of Bhutan.",
+        "action": "reword",
+        "text": "The town sits at the confluence of the Pho Chhu (male river) and Mo Chhu (female river), giving it a fertile, relatively warm climate compared with most of Bhutan.",
+        "why": "Normalise river gloss across both cards (panel fix); 'male/female' already used on the dzong card."
+       },
+       {
+        "index": 2,
+        "expected_text": "Punakha Dzong, officially known as Pungtang Dechen Photrang Dzong, is the dominant landmark — a massive fortress-monastery built in 1637–1638 by Zhabdrung Ngawang Namgyal.",
+        "action": "reword",
+        "text": "Punakha is a historic valley town in Punakha District, central Bhutan; its best-known landmark is Punakha Dzong, the fortress-monastery covered on its own card.",
+        "why": "The only what_it_is described the dzong, not the town. Reworded to a town-level fact using only card data (region, naming_note). Dropped the panel's 'administrative seat' claim because it is not in the data. The dzong's name and build date already sit on card 4ca00c2e."
+       },
+       {
+        "index": 3,
+        "expected_text": "The dzong sits on a narrow tongue of land at the river confluence and is connected to the riverbank by a traditional cantilever bridge.",
+        "action": "drop",
+        "why": "Dzong-only fact that duplicates 4ca00c2e index 5 (peninsula + cantilever bridge)."
+       },
+       {
+        "index": 4,
+        "expected_text": "Punakha Dzong houses the embalmed body of Zhabdrung Ngawang Namgyal and remains an active monastic and administrative center.",
+        "action": "drop",
+        "why": "Dzong-only fact that duplicates 4ca00c2e index 3/4 (Zhabdrung relic, monastic body)."
+       },
+       {
+        "index": 5,
+        "expected_text": "The dzong suffered several major floods and fires over the centuries and has been substantially restored; restoration work is ongoing in parts of the complex.",
+        "action": "drop",
+        "why": "Dzong-only fact that duplicates 4ca00c2e index 7. 'Ongoing' is an unsourced, time-sensitive claim and is not carried over."
+       },
+       {
+        "index": 7,
+        "expected_text": "Modest dress is required to enter the dzong; arms and legs must be covered, and shoes are removed before entering the interior temples.",
+        "action": "drop",
+        "why": "This is the dzong's entry rule, not the town's. Its content moves to 4ca00c2e index 8, which keeps the single dress-code fact."
+       }
+      ]
+     },
+     {
+      "card_id": "4ca00c2e-d14b-47ba-92e2-108302894128",
+      "reason": "Dzong card: normalise the river gloss. Soften the dress code, which likely overstates the rule for foreign visitors, to the modest-dress wording already in this cluster (from the town card), so one consistent dress-code fact remains.",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "Punakha Dzong is a large Buddhist monastery-fortress (dzong) located at the confluence of the Pho Chhu (Male River) and Mo Chhu (Female River) in Punakha.",
+        "action": "reword",
+        "text": "Punakha Dzong is a large Buddhist monastery-fortress (dzong) located at the confluence of the Pho Chhu (male river) and Mo Chhu (female river) in Punakha.",
+        "why": "Normalise river gloss to one form across both cards (panel fix)."
+       },
+       {
+        "index": 8,
+        "expected_text": "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when entering the dzong.",
+        "action": "reword",
+        "text": "Modest dress is required to enter the dzong; arms and legs must be covered, and shoes are removed before entering the interior temples.",
+        "why": "The panel says gho/kira 'or equivalent formal attire' likely overstates the rule for foreign visitors. Replaced it with the softer modest-dress rule that the merge already brought in from the town card. Did not add the panel's new claims (ceremonial scarf, hats off). A human should still verify the rule."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "4ca00c2e suspension-bridge clarifying fact: the allowed actions are only drop/reword/rekind, and the panel itself only says the Po Chhu suspension bridge is 'probably' separate. Adding that claim would introduce an unverified entity. Instead, flag atoms 0a16b0bdac1bba1e and 1b6ee19df7755250 for human review.",
+     "bd978f98 panel-suggested what_it_is wording 'administrative seat of Punakha District in western-central Bhutan': not in the cluster data, so a softer town-level wording from the region and naming_note was used instead.",
+     "4ca00c2e dress-code suggested text ('Bhutanese wear gho/kira with a ceremonial scarf. Hats off'): adds claims not in the data. Used the existing modest-dress wording; human verification is still recommended.",
+     "No relinks needed: all 6 atoms already sit on the correct card (panel confirmed). Cards stay separate (town vs dzong), no merge."
+    ]
+   },
+   "final": {
+    "cards": [
+     {
+      "card_id": "bd978f98-1698-4e28-b6d8-1e8a459a6dda",
+      "reason": "Town card (Punakha) had dzong facts leak in: 5 of 8 facts describe Punakha Dzong, which has its own card (4ca00c2e). Turn the what_it_is into a town-level fact, drop the 3 dzong-only setting/history facts and the dzong dress code, and normalise the river gloss.",
+      "edits": [
+       {
+        "index": 1,
+        "expected_text": "The town sits at the confluence of the Pho Chhu (Father River) and Mo Chhu (Mother River), giving it a fertile, relatively warm climate compared with most of Bhutan.",
+        "action": "reword",
+        "text": "The town sits at the confluence of the Pho Chhu (male river) and Mo Chhu (female river), giving it a fertile, relatively warm climate compared with most of Bhutan.",
+        "why": "Normalise the river gloss across both cards (panel fix). 'Male/Female River' is already on the dzong card, so no new data."
+       },
+       {
+        "index": 2,
+        "expected_text": "Punakha Dzong, officially known as Pungtang Dechen Photrang Dzong, is the dominant landmark — a massive fortress-monastery built in 1637–1638 by Zhabdrung Ngawang Namgyal.",
+        "action": "reword",
+        "text": "Punakha is a historic valley town in Punakha District, central Bhutan; its dominant landmark is Punakha Dzong, a fortress-monastery.",
+        "why": "The only what_it_is described the dzong, not the town. The new town-level wording uses only card data: region, naming_note, and 'dominant landmark' from the original text. Left out the panel's 'administrative seat' (not in the data) and the earlier draft's 'covered on its own card' (an internal note a writer could copy into customer copy). The dzong's name and build date already sit on card 4ca00c2e."
+       },
+       {
+        "index": 3,
+        "expected_text": "The dzong sits on a narrow tongue of land at the river confluence and is connected to the riverbank by a traditional cantilever bridge.",
+        "action": "drop",
+        "why": "Dzong-only fact that duplicates 4ca00c2e index 5 (peninsula + cantilever bridge)."
+       },
+       {
+        "index": 4,
+        "expected_text": "Punakha Dzong houses the embalmed body of Zhabdrung Ngawang Namgyal and remains an active monastic and administrative center.",
+        "action": "drop",
+        "why": "Dzong-only fact that duplicates 4ca00c2e index 3/4 (Zhabdrung relic, monastic body)."
+       },
+       {
+        "index": 5,
+        "expected_text": "The dzong suffered several major floods and fires over the centuries and has been substantially restored; restoration work is ongoing in parts of the complex.",
+        "action": "drop",
+        "why": "Dzong-only fact that duplicates 4ca00c2e index 7. 'Ongoing' is an unsourced, time-sensitive claim and is not carried over."
+       },
+       {
+        "index": 7,
+        "expected_text": "Modest dress is required to enter the dzong; arms and legs must be covered, and shoes are removed before entering the interior temples.",
+        "action": "drop",
+        "why": "This is the dzong's entry rule, not the town's. Its content moves to 4ca00c2e index 8, which keeps the single dress-code fact."
+       }
+      ]
+     },
+     {
+      "card_id": "4ca00c2e-d14b-47ba-92e2-108302894128",
+      "reason": "Dzong card: normalise the river gloss. Soften the dress code, which likely overstates the rule for foreign visitors, to the modest-dress wording already in this cluster (from the town card), so one consistent dress-code fact remains.",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "Punakha Dzong is a large Buddhist monastery-fortress (dzong) located at the confluence of the Pho Chhu (Male River) and Mo Chhu (Female River) in Punakha.",
+        "action": "reword",
+        "text": "Punakha Dzong is a large Buddhist monastery-fortress (dzong) located at the confluence of the Pho Chhu (male river) and Mo Chhu (female river) in Punakha.",
+        "why": "Normalise the river gloss to one form across both cards (panel fix)."
+       },
+       {
+        "index": 8,
+        "expected_text": "Visitors are required to wear traditional Bhutanese dress (gho for men, kira for women) or equivalent formal attire when entering the dzong.",
+        "action": "reword",
+        "text": "Modest dress is required to enter the dzong; arms and legs must be covered, and shoes are removed before entering the interior temples.",
+        "why": "The panel says gho/kira 'or equivalent formal attire' likely overstates the rule for foreign visitors. Replaced it with the softer modest-dress wording already in the cluster (town card index 7, which is dropped there). Did not add the panel's new claims (ceremonial scarf, hats off). A human should still verify the rule."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "Verifier change to bd978f98 index 2: removed 'covered on its own card' from the new text. It is an internal cross-reference, and writers cite card facts as truth, so it could leak into customer copy. Also used 'dominant landmark' from the original fact instead of 'best-known' to avoid a new superlative. All other edits checked: expected_text matches the file verbatim, and no new facts are added.",
+     "4ca00c2e suspension-bridge clarifying fact: the allowed actions are only drop/reword/rekind, and the panel itself only says the Po Chhu suspension bridge is 'probably' separate. Adding that claim would introduce an unverified entity. Instead, flag atoms 0a16b0bdac1bba1e and 1b6ee19df7755250 for human review.",
+     "bd978f98 panel-suggested what_it_is wording 'administrative seat of Punakha District in western-central Bhutan': not in the cluster data, so a softer town-level wording from the region and naming_note was used instead.",
+     "4ca00c2e dress-code suggested text ('Bhutanese wear gho/kira with a ceremonial scarf. Hats off'): adds claims not in the data. Used the existing modest-dress wording; human verification is still recommended.",
+     "No relinks needed: all 6 atoms already sit on the correct card (panel confirmed). Cards stay separate (town vs dzong), no merge."
+    ]
+   }
+  },
+  {
+   "cluster": 3,
+   "draft": {
+    "cards": [
+     {
+      "card_id": "e4be28e7-a71b-413e-9269-278add6de2eb",
+      "reason": "The town card calls Gyirong a county seat. That contradicts the sibling county card, whose locality is Zongga Town, and makes the town and county look like one place. Removing the county-seat claim and placing the town inside Gyirong County uses only data already on the card (its locality field).",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "Gyirong is a town and county seat in southern Tibet, near the Nepal border.",
+        "action": "reword",
+        "text": "Gyirong is a town in Gyirong County, southern Tibet, near the Nepal border.",
+        "why": "Remove the wrong 'county seat' claim, which conflicts with card 3c4dea30's locality (Zongga Town). 'In Gyirong County' comes from this card's own locality field, so nothing new is added."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "e4be28e7 alias 'jilong' qualify/mark ambiguous: this changes an alias, not a fact, so it is outside the fact-edit scope (drop/reword/rekind). The panel marked it optional; handle it in alias review if wanted.",
+     "3c4dea30 add fact 'The county seat is Zongga Town; Gyirong Town lies further south...': the rules allow no new facts, only drop/rekind/reword. The panel itself says the county-seat claim comes from outside knowledge the file cannot prove. The card's locality field (Zongga Town) already carries this context."
+    ]
+   },
+   "final": {
+    "cards": [
+     {
+      "card_id": "e4be28e7-a71b-413e-9269-278add6de2eb",
+      "reason": "The town card calls Gyirong a county seat. That contradicts the sibling county card, whose locality is Zongga Town, and makes the town and county look like one place. Removing the county-seat claim and placing the town inside Gyirong County uses only data already on the card (its locality field).",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "Gyirong is a town and county seat in southern Tibet, near the Nepal border.",
+        "action": "reword",
+        "text": "Gyirong is a town in Gyirong County, southern Tibet, near the Nepal border.",
+        "why": "Remove the wrong 'county seat' claim, which conflicts with card 3c4dea30's locality (Zongga Town). 'In Gyirong County' comes from this card's own locality field, so nothing new is added. Verified: expected_text matches index 0 verbatim, the new text adds no new name, number or claim, and kind what_it_is is unchanged."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "e4be28e7 alias 'jilong' qualify/mark ambiguous: this changes an alias, not a fact, so it is outside the fact-edit scope (drop/reword/rekind). The panel marked it optional; handle it in alias review if wanted.",
+     "3c4dea30 add fact 'The county seat is Zongga Town; Gyirong Town lies further south...': the rules allow no new facts, only drop/rekind/reword. The panel itself says the county-seat claim comes from outside knowledge the file cannot prove. The card's locality field (Zongga Town) already carries this context.",
+     "e4be28e7 panel suggestion wording '(Gyirong Town) ... in the Gyirong Valley': not used in the index 0 reword. 'Gyirong Town' is a name that appears only in the panel's outside-knowledge reasoning, and the valley setting is already stated in fact index 1, so adding it would duplicate that fact."
+    ]
+   }
+  },
+  {
+   "cluster": 4,
+   "draft": {
+    "cards": [
+     {
+      "card_id": "e88b8cef-ff78-4134-a866-89fbe7a9d5c5",
+      "reason": "Panel kept this card separate from the Lake Manasarovar card (c58ab644) because one is part of the other. Its what_it_is, setting and history facts repeated lake-wide content, so they are reworded to present the eastern shore as a sub-place of the lake. The reworded facts use only information already on the card. The visiting fact (Kailash view) and the practical fact (about 4,600 m) are unchanged.",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "The eastern shore is part of Lake Manasarovar in Burang County, in Tibet’s Ngari region.",
+        "action": "reword",
+        "kind": "what_it_is",
+        "text": "The eastern shore is a sub-place of Lake Manasarovar in Burang County, in Tibet’s Ngari region, with viewpoints looking across the lake toward Mount Kailash.",
+        "why": "Panel fix 3: say the card is a sub-place of the lake, centred on the Kailash viewpoint. The viewpoint detail comes from this card's visiting fact."
+       },
+       {
+        "index": 1,
+        "expected_text": "Lake Manasarovar is a high-altitude freshwater lake on the Tibetan Plateau, near Mount Kailash and Lake Rakshastal.",
+        "action": "reword",
+        "kind": "setting",
+        "text": "The eastern shore borders Lake Manasarovar, a high-altitude freshwater lake on the Tibetan Plateau near Mount Kailash and Lake Rakshastal.",
+        "why": "Panel fix 3: the setting fact described the whole lake. It now ties the setting to the shore, using the same facts and no new claims."
+       },
+       {
+        "index": 2,
+        "expected_text": "The lake and its shores are sacred in Hinduism, Buddhism, Jainism and the Bon tradition.",
+        "action": "reword",
+        "kind": "history",
+        "text": "As part of Lake Manasarovar, the eastern shore shares the lake’s sacred status in Hinduism, Buddhism, Jainism and the Bon tradition.",
+        "why": "Panel fix 3: the history fact was lake-wide. It now says the sacred status comes from the parent lake. The same four traditions are kept and nothing is added."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "Fix 1 (e88b8cef, 'Mapham Yutso' to 'Mapham Yumtso' in naming_note and alias): this targets naming_note and aliases, not the facts array, so a fact edit can't apply it. None of the card's facts contain the misspelling. It needs a separate naming_note/alias update.",
+     "Fix 2 (e88b8cef, Burang vs Purang county spelling): this targets the card's locality field and the parent card c58ab644, which isn't in this file. The shore card's facts already match its own locality ('Burang County'), so no fact edit is needed. The spelling has to be harmonised at the locality/naming_note level."
+    ]
+   },
+   "final": {
+    "cards": [
+     {
+      "card_id": "e88b8cef-ff78-4134-a866-89fbe7a9d5c5",
+      "reason": "The panel kept this card separate from the Lake Manasarovar card (c58ab644) because the eastern shore is part of the lake, not a duplicate of it. Its what_it_is, setting and history facts repeated content about the whole lake. They are reworded so each one is about the eastern shore as part of the lake, using only information already on the card. The visiting fact (Kailash view) and the practical fact (about 4,600 m) are unchanged. The verifier changed edit 0: it dropped the internal word 'sub-place', which writers would copy into tour text, and kept the visibility condition from the visiting fact so the Kailash view is not stated as guaranteed.",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "The eastern shore is part of Lake Manasarovar in Burang County, in Tibet’s Ngari region.",
+        "action": "reword",
+        "kind": "what_it_is",
+        "text": "The eastern shore is the eastern side of Lake Manasarovar in Burang County, in Tibet’s Ngari region, with viewpoints from which Mount Kailash can be seen across the lake when visibility allows.",
+        "why": "Panel fix 3: describe the card as one part of the lake, centred on the Kailash viewpoint. The viewpoint detail and the visibility condition come from this card's visiting fact (index 3). The verifier removed the internal word 'sub-place' and put back the weather/visibility condition, which the proposed text had dropped."
+       },
+       {
+        "index": 1,
+        "expected_text": "Lake Manasarovar is a high-altitude freshwater lake on the Tibetan Plateau, near Mount Kailash and Lake Rakshastal.",
+        "action": "reword",
+        "kind": "setting",
+        "text": "The eastern shore borders Lake Manasarovar, a high-altitude freshwater lake on the Tibetan Plateau near Mount Kailash and Lake Rakshastal.",
+        "why": "Panel fix 3: the setting fact described the whole lake. It now describes the shore's setting, using the same facts and no new claims."
+       },
+       {
+        "index": 2,
+        "expected_text": "The lake and its shores are sacred in Hinduism, Buddhism, Jainism and the Bon tradition.",
+        "action": "reword",
+        "kind": "history",
+        "text": "As part of Lake Manasarovar, the eastern shore shares the lake’s sacred status in Hinduism, Buddhism, Jainism and the Bon tradition.",
+        "why": "Panel fix 3: the history fact was about the whole lake. It now says the shore's sacred status comes from the lake. The original text already stated that the shores are sacred, and the same four traditions are kept with nothing added."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "Fix 1 (e88b8cef, change 'Mapham Yutso' to 'Mapham Yumtso' in the naming_note and alias): this targets the naming_note and aliases, not the facts array, so a fact edit cannot apply it. None of the card's facts contain the misspelling. It needs a separate naming_note/alias update.",
+     "Fix 2 (e88b8cef, Burang vs Purang county spelling): this targets the card's locality field and the parent card c58ab644, which is not in this file. The shore card's facts already match its own locality ('Burang County'), so no fact edit is needed. The spelling has to be made consistent in the locality and naming_note fields."
+    ]
+   }
+  },
+  {
+   "cluster": 5,
+   "draft": {
+    "cards": [
+     {
+      "card_id": "bc5669aa-2e96-4a2f-8a7e-2360f724b115",
+      "reason": "Valley card carries two monastery facts (one native, one appended from merged-away e3883058). Rewrite the native what_it_is to describe the valley, mentioning the monastery only as a landmark. Drop the merged Nyingma monastery fact, which is unverified and belongs to a different entity. Tidy the merged setting fact so it names the valley and both county spellings.",
+      "edits": [
+       {
+        "index": 1,
+        "expected_text": "Rongbuk Monastery is a Tibetan Buddhist monastery in the valley and is commonly associated with the Rongbuk area.",
+        "action": "reword",
+        "kind": "what_it_is",
+        "text": "Rongbuk Valley is a high valley on the northern approach to Mount Everest, leading toward the north-side Everest Base Camp; Rongbuk Monastery stands within the valley.",
+        "why": "Panel: what_it_is described the monastery, not the valley. Rewritten to describe the valley, using only facts already on the cluster cards (northern approach, north-side Base Camp, monastery in the valley). Left out the panel's example word 'glacial' because no card supports it."
+       },
+       {
+        "index": 4,
+        "expected_text": "Rongbuk is a high-altitude valley and settlement in Tingri County, Tibet.",
+        "action": "reword",
+        "kind": "setting",
+        "text": "Rongbuk Valley is a high-altitude valley with a settlement in Tingri (Dingri) County, Tibet.",
+        "why": "Panel keeps this merged setting fact. Reworded to name the card's entity and to reconcile the merged Tingri locality with the card's 'Dingri' locality, which are two spellings of one county."
+       },
+       {
+        "index": 5,
+        "expected_text": "Rongbuk Monastery is a Tibetan Buddhist monastery associated with the Nyingma tradition.",
+        "action": "drop",
+        "why": "Panel: this monastery fact came in with merged-away e3883058 and must not sit on the valley card. The Nyingma claim is unverified, so it is not moved to 16110d12 either. It also duplicates the monastery framing that was removed from index 1."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "16110d12 (Rongbuk Monastery): panel says to move the bare itinerary alias 'rongbuk' to bc5669aa and change no facts. That is an alias or relink operation, not a fact edit, so it is out of scope here. No fact changes are needed.",
+     "bc5669aa alias work (delete the two 'rongbuk monastery' draft_alias rows; add rongbuk, rongphu, rongbu and the itinerary alias 'rongbuk to lhatse'; optionally standardize locality and region): these are alias and metadata operations, not fact edits, so they are not expressed here. They still need to be applied separately.",
+     "e3883058 'The monastery stands near the northern base' setting fact: it is not in bc5669aa's current facts array after the merge (only the 'Tingri County' setting fact and the Nyingma what_it_is fact were appended), so there is nothing to drop.",
+     "Adding the Nyingma claim to 16110d12: skipped. The panel makes it conditional on verification, and adding it would put an unsourced claim on the card."
+    ]
+   },
+   "final": {
+    "cards": [
+     {
+      "card_id": "bc5669aa-2e96-4a2f-8a7e-2360f724b115",
+      "reason": "Valley card carries two monastery facts (one native, one appended from merged-away e3883058). Rewrite the native what_it_is to describe the valley, mentioning the monastery only as a landmark. Drop the merged Nyingma monastery fact, which is unverified and belongs to a different entity. Tidy the merged setting fact so it names the valley and both county spellings.",
+      "edits": [
+       {
+        "index": 1,
+        "expected_text": "Rongbuk Monastery is a Tibetan Buddhist monastery in the valley and is commonly associated with the Rongbuk area.",
+        "action": "reword",
+        "kind": "what_it_is",
+        "text": "Rongbuk Valley is a high valley on the northern approach to Mount Everest, leading toward the north-side Everest Base Camp; Rongbuk Monastery stands within the valley.",
+        "why": "Panel: what_it_is described the monastery, not the valley. Rewritten to describe the valley, using only facts already on the cluster cards (northern approach and high Himalayan valley from 16110d12, north-side Base Camp access from index 2, monastery in the valley). Left out the panel's example word 'glacial' because no card supports it."
+       },
+       {
+        "index": 4,
+        "expected_text": "Rongbuk is a high-altitude valley and settlement in Tingri County, Tibet.",
+        "action": "reword",
+        "kind": "setting",
+        "text": "Rongbuk Valley is a high-altitude valley with a settlement in Tingri (Dingri) County, Tibet.",
+        "why": "Panel keeps this merged setting fact. Reworded to name the card's entity and to reconcile the merged Tingri locality with the card's 'Dingri' locality. The panel reasoning states these are two spellings of one county."
+       },
+       {
+        "index": 5,
+        "expected_text": "Rongbuk Monastery is a Tibetan Buddhist monastery associated with the Nyingma tradition.",
+        "action": "drop",
+        "why": "Panel: this monastery fact came in with merged-away e3883058 and must not sit on the valley card. The Nyingma claim is unverified, so it is not moved to 16110d12 either. It also duplicates the monastery framing removed from index 1."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "Verifier: all 3 proposed edits checked. Each expected_text matches the file verbatim, no new names, numbers or claims are introduced, and every edit fixes the problem the panel stated. The payload is approved unchanged.",
+     "16110d12 (Rongbuk Monastery): panel says to move the bare itinerary alias 'rongbuk' to bc5669aa and change no facts. That is an alias or relink operation, not a fact edit, so it is out of scope here. No fact changes are needed.",
+     "bc5669aa alias work (delete the two 'rongbuk monastery' draft_alias rows; add rongbuk, rongphu, rongbu and the itinerary alias 'rongbuk to lhatse'; optionally standardize locality and region): these are alias and metadata operations, not fact edits, so they are not expressed here. They still need to be applied separately.",
+     "e3883058 'The monastery stands near the northern base' setting fact: it is not in bc5669aa's current facts array after the merge (only the 'Tingri County' setting fact and the Nyingma what_it_is fact were appended), so there is nothing to drop.",
+     "Adding the Nyingma claim to 16110d12: skipped. The panel makes it conditional on verification, and adding it would put an unsourced claim on the card."
+    ]
+   }
+  },
+  {
+   "cluster": 6,
+   "draft": {
+    "cards": [
+     {
+      "card_id": "ab4afb74-39a9-4cee-bece-81ccc8fe5f39",
+      "reason": "Town card carries county-level facts (one mis-tagged naming) and an unverified county-seat claim; narrow to the town and soften the seat claim per panel.",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "Zhongba is the county seat of Zhongba County in western Tibet.",
+        "action": "reword",
+        "text": "Zhongba is a settlement in Zhongba County, under Shigatse, in western Tibet.",
+        "why": "Panel: county-seat claim unverified, soften to 'a settlement in Zhongba County'; folds in the Shigatse context from index 1 so that county-level fact can be dropped."
+       },
+       {
+        "index": 1,
+        "expected_text": "Zhongba County is administered by Shigatse, a prefecture-level city in the Tibet Autonomous Region.",
+        "action": "drop",
+        "why": "Describes the county, not the town, and is mis-tagged kind=naming; same fact already on county card 36f4777f (index 0) and the Shigatse context is now in index 0 here."
+       },
+       {
+        "index": 3,
+        "expected_text": "The wider county is in southwestern Tibet near the China–Nepal border.",
+        "action": "drop",
+        "why": "County-level fact on the town card (panel fix); county card already covers its routes toward Nepal."
+       }
+      ]
+     },
+     {
+      "card_id": "36f4777f-c925-4c98-9659-7591f32d0a2c",
+      "reason": "Setting fact uses bare 'Zhongba', which is the town's name per both naming notes; make it explicit it is about the county.",
+      "edits": [
+       {
+        "index": 2,
+        "expected_text": "Zhongba is a remote, sparsely populated high-altitude area with broad plateau landscapes and mountain views.",
+        "action": "reword",
+        "text": "Zhongba County is a remote, sparsely populated high-altitude area with broad plateau landscapes and mountain views.",
+        "why": "Disambiguate from the town card; 'Zhongba' alone refers to the settlement per naming_note."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "ab4afb74 alias cleanup (remove 'zhongba county'/'drongpa county' and duplicate alias rows): alias change, not a fact edit; handle it in the alias/relink step.",
+     "36f4777f alias additions ('zhongba county', 'drongpa county'), removal of route-phrase aliases 'kailash to zhongba'/'saga to zhongba', review of 'drongpa dzong', and the locality change: alias/metadata changes, not fact edits.",
+     "Relink of atom 3bbf13a0d8e52612 to town card ab4afb74: atom relink, not a fact edit.",
+     "Verifying the county-seat claim: no source in the data, so the claim was softened (index 0) instead of kept.",
+     "ab4afb74 index 4 ('The area is associated with Tibetan communities and culture.'): vague but no panel fix targets it; kept."
+    ]
+   },
+   "final": {
+    "cards": [
+     {
+      "card_id": "ab4afb74-39a9-4cee-bece-81ccc8fe5f39",
+      "reason": "Town card carries county-level facts (one mis-tagged naming) and an unverified county-seat claim; narrow to the town and soften the seat claim per panel.",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "Zhongba is the county seat of Zhongba County in western Tibet.",
+        "action": "reword",
+        "text": "Zhongba is a settlement in Zhongba County, under Shigatse, in western Tibet.",
+        "why": "Panel: county-seat claim unverified, soften to 'a settlement in Zhongba County'; folds in the Shigatse context (already on index 1 and county card index 0) so the county-level fact at index 1 can be dropped. Adds no new fact."
+       },
+       {
+        "index": 1,
+        "expected_text": "Zhongba County is administered by Shigatse, a prefecture-level city in the Tibet Autonomous Region.",
+        "action": "drop",
+        "why": "Describes the county, not the town, and is mis-tagged kind=naming; same fact already on county card 36f4777f (index 0) and the Shigatse context is now in index 0 here."
+       },
+       {
+        "index": 3,
+        "expected_text": "The wider county is in southwestern Tibet near the China–Nepal border.",
+        "action": "drop",
+        "why": "County-level fact on the town card (panel fix); county card index 1 already covers its routes toward Nepal."
+       }
+      ]
+     },
+     {
+      "card_id": "36f4777f-c925-4c98-9659-7591f32d0a2c",
+      "reason": "Setting fact uses bare 'Zhongba', which is the town's name per both naming notes; make it explicit it is about the county.",
+      "edits": [
+       {
+        "index": 2,
+        "expected_text": "Zhongba is a remote, sparsely populated high-altitude area with broad plateau landscapes and mountain views.",
+        "action": "reword",
+        "text": "Zhongba County is a remote, sparsely populated high-altitude area with broad plateau landscapes and mountain views.",
+        "why": "Disambiguate from the town card; 'Zhongba' alone refers to the settlement per naming_note."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "ab4afb74 alias cleanup (remove 'zhongba county'/'drongpa county' and duplicate alias rows): alias change, not a fact edit; handle it in the alias/relink step.",
+     "36f4777f alias additions ('zhongba county', 'drongpa county'), removal of route-phrase aliases 'kailash to zhongba'/'saga to zhongba', review of 'drongpa dzong', and the locality change: alias/metadata changes, not fact edits.",
+     "Relink of atom 3bbf13a0d8e52612 to town card ab4afb74: atom relink, not a fact edit.",
+     "Verifying the county-seat claim: no source in the data, so the claim was softened (index 0) instead of kept. Note: the town card's naming_note still says 'Use Zhongba for the county seat'; that is metadata, so it is left for the metadata step.",
+     "ab4afb74 index 4 ('The area is associated with Tibetan communities and culture.'): vague but no panel fix targets it; kept.",
+     "Verifier: all proposed edits checked. Each expected_text matches the file exactly, no new names, numbers or claims are introduced, and no correct town-level fact is dropped. Payload accepted unchanged."
+    ]
+   }
+  },
+  {
+   "cluster": 7,
+   "draft": {
+    "cards": [
+     {
+      "card_id": "45e737a3-f5e6-41fd-b365-c1b2e153d657",
+      "reason": "Town card: two landmark facts were mis-tagged as what_it_is, the Ögedei founding claim was oversimplified, and the distance contradicted the museum card. Cards stay separate (town vs museum), so nothing is merged.",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "Kharkhorin is the modern town built adjacent to the ruins of Karakorum, the 13th-century capital of the Mongol Empire founded by Ögedei Khan, son of Genghis Khan, around 1235.",
+        "action": "reword",
+        "text": "Kharkhorin is the modern town built adjacent to the ruins of Karakorum, the 13th-century Mongol imperial capital first established under Genghis Khan and developed into the imperial capital by his son Ögedei Khan from about 1235.",
+        "why": "The panel found the old wording oversimplified: Ögedei built up an existing site rather than founding it. The new wording uses only the panel's suggested phrasing. It leaves out the panel's unsourced 'around 1220' date and keeps the 1235 figure that was already there."
+       },
+       {
+        "index": 4,
+        "expected_text": "The monastery's enclosing wall, approximately 400 metres on each side, is punctuated by 108 white stupas, a number of great significance in Tibetan Buddhism.",
+        "action": "reword_rekind",
+        "kind": "visiting",
+        "text": "Erdene Zuu Monastery's enclosing wall, approximately 400 metres on each side, is punctuated by 108 white stupas, a number of great significance in Tibetan Buddhism.",
+        "why": "This describes Erdene Zuu, not the town. It is re-tagged from what_it_is to visiting, and the monastery is named so the fact stands alone. No new data was added."
+       },
+       {
+        "index": 7,
+        "expected_text": "A large stone tortoise sculpture, one of several originally marking the boundaries of Karakorum, still stands near Erdene Zuu and is a well-known landmark of the site.",
+        "action": "rekind",
+        "kind": "visiting",
+        "why": "This describes a nearby landmark, not the town itself, so what_it_is is the wrong kind."
+       },
+       {
+        "index": 8,
+        "expected_text": "The town is roughly 370 kilometres southwest of Ulaanbaatar and is typically reached by road, passing through rolling steppe and river valley landscapes.",
+        "action": "reword",
+        "text": "The town is roughly 360-370 kilometres southwest of Ulaanbaatar and is typically reached by road, passing through rolling steppe and river valley landscapes.",
+        "why": "The two cards disagreed (370 km here, 360 km on the museum card). Both now use the range built from those two figures, as the panel suggested."
+       }
+      ]
+     },
+     {
+      "card_id": "dcc9089a-c46c-40ad-8228-69fb0bc291d8",
+      "reason": "Museum card: the Ögedei wording was ambiguous and the distance contradicted the town card.",
+      "edits": [
+       {
+        "index": 1,
+        "expected_text": "It was established to preserve and display finds from the Karakorum archaeological site, which served as the capital of the Mongol Empire founded by Ögedei Khan in the 13th century.",
+        "action": "reword",
+        "text": "It was established to preserve and display finds from the Karakorum archaeological site, the Mongol imperial capital that Ögedei Khan built up in the 13th century.",
+        "why": "The old wording could be read as saying Ögedei founded the Mongol Empire, which Genghis Khan did. This uses the panel's suggested wording."
+       },
+       {
+        "index": 8,
+        "expected_text": "Kharkhorin is roughly 360 kilometres southwest of Ulaanbaatar, making it accessible as a multi-day overland trip or by domestic transport along the main central highway.",
+        "action": "reword",
+        "text": "Kharkhorin is roughly 360-370 kilometres southwest of Ulaanbaatar, making it accessible as a multi-day overland trip or by domestic transport along the main central highway.",
+        "why": "This matches the distance range now used on the town card. The range comes from the two figures already in the data."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "Panel suggestion to move the 108-stupa fact to an Erdene Zuu card: no such card is in this cluster, so the fact stays on the town card. It is re-tagged and names the monastery instead.",
+     "Panel date 'Genghis Khan established the site around 1220': left out. The figure is not sourced anywhere in the card data, so the reworded fact names Genghis Khan without a date.",
+     "Relinks or merges: the panel voted keep_separate unanimously and the atoms are already linked correctly. No merge happened, so there are no duplicates to remove."
+    ]
+   },
+   "final": {
+    "cards": [
+     {
+      "card_id": "45e737a3-f5e6-41fd-b365-c1b2e153d657",
+      "reason": "Town card: two landmark facts were mis-tagged as what_it_is, the Ögedei founding claim was oversimplified, and the distance contradicted the museum card. Cards stay separate (town vs museum), so nothing is merged. Verified: all expected_text values match the file verbatim, and every new name or figure (Genghis Khan, son, 1235, Erdene Zuu, 360-370 km) already appears in the card data or the panel reasoning.",
+      "edits": [
+       {
+        "index": 0,
+        "expected_text": "Kharkhorin is the modern town built adjacent to the ruins of Karakorum, the 13th-century capital of the Mongol Empire founded by Ögedei Khan, son of Genghis Khan, around 1235.",
+        "action": "reword",
+        "text": "Kharkhorin is the modern town built adjacent to the ruins of Karakorum, the 13th-century Mongol imperial capital first established under Genghis Khan and developed into the imperial capital by his son Ögedei Khan from about 1235.",
+        "why": "The panel found the old wording oversimplified: Ögedei built up an existing site rather than founding it. The new wording uses only the panel's suggested phrasing. It leaves out the panel's unsourced 'around 1220' date and keeps the 1235 figure that was already there."
+       },
+       {
+        "index": 4,
+        "expected_text": "The monastery's enclosing wall, approximately 400 metres on each side, is punctuated by 108 white stupas, a number of great significance in Tibetan Buddhism.",
+        "action": "reword_rekind",
+        "kind": "visiting",
+        "text": "Erdene Zuu Monastery's enclosing wall, approximately 400 metres on each side, is punctuated by 108 white stupas, a number of great significance in Tibetan Buddhism.",
+        "why": "This describes Erdene Zuu, not the town. It is re-tagged from what_it_is to visiting, and the monastery is named so the fact stands alone. The name comes from fact 3; no new data was added."
+       },
+       {
+        "index": 7,
+        "expected_text": "A large stone tortoise sculpture, one of several originally marking the boundaries of Karakorum, still stands near Erdene Zuu and is a well-known landmark of the site.",
+        "action": "rekind",
+        "kind": "visiting",
+        "why": "This describes a nearby landmark, not the town itself, so what_it_is is the wrong kind."
+       },
+       {
+        "index": 8,
+        "expected_text": "The town is roughly 370 kilometres southwest of Ulaanbaatar and is typically reached by road, passing through rolling steppe and river valley landscapes.",
+        "action": "reword",
+        "text": "The town is roughly 360-370 kilometres southwest of Ulaanbaatar and is typically reached by road, passing through rolling steppe and river valley landscapes.",
+        "why": "The two cards disagreed (370 km here, 360 km on the museum card). Both now use the range built from those two figures, as the panel suggested."
+       }
+      ]
+     },
+     {
+      "card_id": "dcc9089a-c46c-40ad-8228-69fb0bc291d8",
+      "reason": "Museum card: the Ögedei wording was ambiguous and the distance contradicted the town card. Verified: both expected_text values match the file verbatim and add no new data.",
+      "edits": [
+       {
+        "index": 1,
+        "expected_text": "It was established to preserve and display finds from the Karakorum archaeological site, which served as the capital of the Mongol Empire founded by Ögedei Khan in the 13th century.",
+        "action": "reword",
+        "text": "It was established to preserve and display finds from the Karakorum archaeological site, the Mongol imperial capital that Ögedei Khan built up in the 13th century.",
+        "why": "The old wording could be read as saying Ögedei founded the Mongol Empire, which Genghis Khan did. This uses the panel's suggested wording."
+       },
+       {
+        "index": 8,
+        "expected_text": "Kharkhorin is roughly 360 kilometres southwest of Ulaanbaatar, making it accessible as a multi-day overland trip or by domestic transport along the main central highway.",
+        "action": "reword",
+        "text": "Kharkhorin is roughly 360-370 kilometres southwest of Ulaanbaatar, making it accessible as a multi-day overland trip or by domestic transport along the main central highway.",
+        "why": "This matches the distance range now used on the town card. The range comes from the two figures already in the data."
+       }
+      ]
+     }
+    ],
+    "skipped": [
+     "Panel suggestion to move the 108-stupa fact to an Erdene Zuu card: no such card is in this cluster, so the fact stays on the town card. It is re-tagged and names the monastery instead.",
+     "Panel date 'Genghis Khan established the site around 1220': left out. The figure is not sourced anywhere in the card data, so the reworded fact names Genghis Khan without a date.",
+     "Relinks or merges: the panel voted keep_separate unanimously and the atoms are already linked correctly. No merge happened, so there are no duplicates to remove.",
+     "Verifier: all six proposed edits passed. Each expected_text matches its index exactly, no new number, date or name is introduced, and each edit fixes the problem it targets. No edits were removed or changed."
+    ]
+   }
+  }
+ ]
+}

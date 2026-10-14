@@ -1,0 +1,444 @@
+[
+ {
+  "cluster": 0,
+  "final": {
+   "action": "fix_card",
+   "confidence": "high",
+   "reasoning": "All three lenses (geo, usage, risk) voted keep_separate with high confidence, and the cluster file supports that. Card ec49a381 is Mongar, the town and HQ of Mongar District. Card baafad3c is Mongar Dzong, a single fortress-monastery inside the town. This is the case of a town and a monument inside it. The cluster was flagged only by name_contains, and it has no aliases. The town card itself treats the dzong as a separate landmark ('dominates the town'). Both atoms already cite the correct entity. Both are in tour fe697018, day 3: atom 8d45bddcce3ff937 'Mongar Dzong — visit' is on the dzong card, and atom c9f36ed628251901 'Mongar — drive to' is on the town card. So no merge and no relink are needed. The only action needed is cleaning up card content, which is why the action is fix_card and not keep_separate. Two of the dzong card's 'practical' facts describe the town and the road, not the dzong. The two cards also disagree on when the dzong was built ('20th century' vs 'built in the 1930s'). The lenses gave different 'commonly cited' dates for that (geo says 1953, usage says 1930s), so neither date is reliable here, and the fix is to check a source rather than assert one. The town elevation of about 1,800 m is also flagged as probably high by two lenses. Merging would put fortress facts (monk bodies, utse) and town facts (terraced fields, highway) on one place, and the 'drive to' and 'visit' atoms would point to the same ambiguous place. Both cards stay. Fact fixes only.",
+   "merge_into": "",
+   "merge_from": [],
+   "relinks": [],
+   "fact_fixes": [
+    {
+     "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+     "problem": "Two 'practical' facts describe Mongar town and the road, not the dzong: 'Mongar town itself is a staging point for travel into the remote eastern districts...' and 'The road to Mongar crosses high mountain passes, and the town sits at an elevation...'. Card ec49a381 already covers both.",
+     "suggestion": "Remove both facts from the dzong card. Keep the town and road content only on ec49a381."
+    },
+    {
+     "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+     "problem": "The 'visiting' fact says the dzong is 'situated on a ridge above Mongar town'. That is doubtful, because the dzong stands within the town (the town card says it 'dominates the town').",
+     "suggestion": "Reword it to say the dzong stands in Mongar town, overlooking the surrounding valleys."
+    },
+    {
+     "card_id": "baafad3c-c976-417c-8fef-096dd90e5b77",
+     "problem": "The construction date ('20th century') is inconsistent with the town card ('built in the 1930s'). The panel's 'commonly cited' dates conflict (1953 vs 1930s), so neither date is verified.",
+     "suggestion": "Verify the date of the current structure against a primary source and put one sourced date on this card. If it cannot be verified, keep '20th century'."
+    },
+    {
+     "card_id": "ec49a381-34d0-4372-856d-69b35e352f7f",
+     "problem": "A 'what_it_is' fact describes another entity (Mongar Dzong) and gives an unverified construction date ('built in the 1930s') that conflicts with the dzong card.",
+     "suggestion": "Shorten it to a pointer such as 'The town is dominated by Mongar Dzong, the district's administrative and religious seat', and drop the date. The dzong's history belongs on baafad3c."
+    },
+    {
+     "card_id": "ec49a381-34d0-4372-856d-69b35e352f7f",
+     "problem": "The elevation 'roughly 1,800 metres (about 5,900 feet)' is probably high. References commonly give about 1,600–1,700 m for Mongar town.",
+     "suggestion": "Verify the figure and change it to about 1,600 m, or soften it to 'mid-hill elevation' if no source is found."
+    }
+   ]
+  },
+  "votes": [
+   {
+    "lens": "geo",
+    "action": "keep_separate",
+    "confidence": "high"
+   },
+   {
+    "lens": "usage",
+    "action": "keep_separate",
+    "confidence": "high"
+   },
+   {
+    "lens": "risk",
+    "action": "keep_separate",
+    "confidence": "high"
+   }
+  ]
+ },
+ {
+  "cluster": 1,
+  "final": {
+   "action": "merge_partial",
+   "confidence": "high",
+   "merge_into": "ed737fb2-069c-43ef-b7dc-67436239f636",
+   "merge_from": [
+    "78f69a62-1327-4f9f-bc72-1d91901abcd7"
+   ],
+   "reasoning": "I re-read cluster1.json and checked the panel's claims against it. The vote was 2 to 1 for merge_partial. I am going with the majority, and I address the risk lens's objection below.\n\n1. Paro Town (ed737fb2) and Paro (78f69a62) are the same entity.\n- Both cards share locality Paro, region Paro District, about 2,200 m, the Paro Chhu, Rinpung Dzong, the National Museum in Ta Dzong, the international airport and rice farming.\n- 78f69a62's own what_it_is calls Paro \"a town and river valley\", so it does not cover a separate valley entity.\n- ed737fb2 already covers the valley as well: it is \"situated in the broad, fertile Paro Valley\", has rice paddies around the town, and the dzong \"dominates the valley\".\n- The alias 'paro' (itinerary) sits on ed737fb2 and collides with 78f69a62's place_key paro|paro|bhutan. That collision is the real defect. Plain \"Paro\" atoms are split between the cards: 5 go to ed737fb2 (0141e094c1ea4520, 1565d0e126266462, 1af55d4c2069258b, 21f3d888cd08e2ee, 22304a9db05f26bc) and 2 go to 78f69a62 (bb46e0d2b415ba28, 44d04d2740cb3e0e).\n- No atom tells town from valley. They are all drive-to, return, transfer, airport departure, shop, eat or stroll stops.\n- Tour fe697018 shows the split directly: on day 9, 44d04d2740cb3e0e goes to 78f69a62 while 'Paro town — stroll through' (bfac79291f6e0210) goes to ed737fb2.\n\nThe risk lens proposed relink_only, which means removing the alias, renaming 78f69a62 to 'Paro Valley' and moving 3 atoms. That would invent a town/valley boundary that neither the cards nor the atoms support. It would also leave which card each atom belongs on to guesswork, and it touches more atoms (3) than the merge does (2). The risk lens worried that merging would put valley-level facts on a town card. That concern is weak here because ed737fb2 already holds valley-level facts. I therefore merge 78f69a62 into ed737fb2, since ed737fb2 holds the 'paro' alias and 7 of the 9 Paro atoms.\n\n2. Paro Taktsang (9bb802e4) is a separate monument and stays separate. All 3 lenses agree. It has 4 atoms (01e04f10e1019971, 1197879a8e1692c4, 1f0b3c22a583bcfa, 21a0b49aca219716). The geo lens says 5, but the file shows 4. Those atoms and its alias 'tigers nest monastery' are linked correctly. Merging it would attach monastery history to a town.\n\nWhen merging, carry over 78f69a62's unique facts to ed737fb2: the Paro Tsechu festival, the demanding airport approach and the note on valley monastery concentration. Do not carry over the visa and guide fact.",
+   "relinks": [
+    {
+     "atom_id": "bb46e0d2b415ba28",
+     "from_card": "78f69a62-1327-4f9f-bc72-1d91901abcd7",
+     "to_card": "ed737fb2-069c-43ef-b7dc-67436239f636",
+     "why": "This is a generic 'Paro — drive to' stop. Plain 'Paro' resolves to ed737fb2 through the itinerary alias 'paro', and other plain 'Paro' travel legs (21f3d888cd08e2ee, 1565d0e126266462) are already on ed737fb2."
+    },
+    {
+     "atom_id": "44d04d2740cb3e0e",
+     "from_card": "78f69a62-1327-4f9f-bc72-1d91901abcd7",
+     "to_card": "ed737fb2-069c-43ef-b7dc-67436239f636",
+     "why": "Eating a local meal is a town activity. The same tour and day (fe697018, day 9) already links 'Paro town — stroll through' (bfac79291f6e0210) to ed737fb2."
+    }
+   ],
+   "fact_fixes": [
+    {
+     "card_id": "ed737fb2-069c-43ef-b7dc-67436239f636",
+     "problem": "The sentence 'The town is home to Bhutan's only international airport' overstates the town's scope. The airport is on the valley floor, a few km from the town centre.",
+     "suggestion": "Reword to: 'Bhutan's only international airport lies in the Paro Valley, a short drive from town; its approach between mountains is one of the most demanding in commercial aviation' (the second clause merges the fact from 78f69a62)."
+    },
+    {
+     "card_id": "ed737fb2-069c-43ef-b7dc-67436239f636",
+     "problem": "After the merge, this card is missing the Paro Tsechu fact that 78f69a62 holds. Its 'visiting' fact also describes Tiger's Nest in detail, but Tiger's Nest has its own card (9bb802e4).",
+     "suggestion": "Add the Paro Tsechu fact (masked cham dances, giant thangka, dates follow the lunar calendar). Cut the Tiger's Nest fact down to a pointer such as 'Paro is the usual base for the hike to Paro Taktsang (Tiger's Nest)', so writers cite 9bb802e4 for monastery details."
+    },
+    {
+     "card_id": "78f69a62-1327-4f9f-bc72-1d91901abcd7",
+     "problem": "The practical fact says a visa is required for all visitors, independent travel is not permitted and a licensed guide is mandatory. This is country-level policy, not specific to Paro, it changes over time (SDF rules since 2022, and Indian nationals enter on a permit), and it may be out of date.",
+     "suggestion": "Do not carry it onto the surviving card. Country-level entry and guide rules belong in country content, not on a place card."
+    },
+    {
+     "card_id": "9bb802e4-fbf1-4bb8-8262-4108696bb670",
+     "problem": "The fact about the blue pine and rhododendron forest and prayer flags is tagged kind=practical, but it describes the setting. The 2004 reopening year is also uncertain, since 2005 is often cited.",
+     "suggestion": "Re-tag the forest fact as kind=setting. Either verify the restoration year or reword it as 'restored and reopened in the mid-2000s'."
+    }
+   ]
+  },
+  "votes": [
+   {
+    "lens": "geo",
+    "action": "merge_partial",
+    "confidence": "high"
+   },
+   {
+    "lens": "usage",
+    "action": "merge_partial",
+    "confidence": "medium"
+   },
+   {
+    "lens": "risk",
+    "action": "relink_only",
+    "confidence": "medium"
+   }
+  ]
+ },
+ {
+  "cluster": 2,
+  "final": {
+   "action": "fix_card",
+   "confidence": "high",
+   "reasoning": "All three lenses (geo, usage, risk) recommend fix_card with high confidence, and I re-read cluster2.json to confirm. These are two different entities. bd978f98 is Punakha, the town and valley (key punakha|punakha|bhutan, alias 'punakha'). 4ca00c2e is Punakha Dzong, also called Pungtang Dechen Photrang Dzong, the fortress-monastery inside the town (key punakha dzong|punakha|bhutan, alias 'punakha dzong'). They were grouped only because one name contains the other (name_contains). Merging them in either direction would be wrong: monument facts would describe the whole town, or the valley-drive and cycling atoms would end up on a single building.\n\nAll 6 atoms already point to the right card, so no relinks are needed:\n- On the town card: 03601af2691967ff ('drive through green valleys') and 0ad55ac25663abe3 ('bicycle').\n- On the dzong card: fac0d8c4eb6922cb, 11fd1460477ede5d, 0a16b0bdac1bba1e and 1b6ee19df7755250.\n\nThe real defect is that dzong facts have leaked into the town card. 5 of its 8 facts are about the dzong:\n- what_it_is (the dzong's official name and the 1637–38 build)\n- setting (the tongue of land and the cantilever bridge)\n- history (the Zhabdrung's embalmed body)\n- history (floods, fires and 'ongoing' restoration)\n- practical (the dress code for entering the dzong)\n\nThat leaves the town card with no what_it_is fact about the town itself. A writer citing it for the valley or cycling atoms could put monastery claims into those paragraphs. The 3 remaining facts can stay: capital until 1955, the confluence and warm climate, and rice and jacarandas.\n\nThere are also small inconsistencies on the dzong card:\n- Its dress code ('gho/kira or equivalent formal attire') probably overstates the rule for foreign visitors and contradicts the town card. A human should verify it.\n- Its river glosses ('Male/Female River') differ from the town card's 'Father/Mother River'. Both are valid renderings of the same names, so this is a style fix, not an error.\n\nTwo atoms, 0a16b0bdac1bba1e and 1b6ee19df7755250, mention a 'suspension bridge'. That is probably the separate Punakha Suspension Bridge over the Po Chhu, not the dzong's cantilever bridge. Leave them on the dzong card for now. Add a clarifying fact so writers do not mix up the two bridges, and flag the atoms for review if a card is ever created for the suspension bridge.",
+   "merge_into": "",
+   "merge_from": [],
+   "relinks": [],
+   "fact_fixes": [
+    {
+     "card_id": "bd978f98-1698-4e28-b6d8-1e8a459a6dda",
+     "problem": "The only what_it_is fact describes Punakha Dzong (official name Pungtang Dechen Photrang, built 1637–1638 by Zhabdrung Ngawang Namgyal), not the town. The town card has no fact saying what the town itself is.",
+     "suggestion": "Replace it with a town-level what_it_is, e.g. 'Punakha is a valley town and the administrative seat of Punakha District in western-central Bhutan, best known for Punakha Dzong (see its own card).'"
+    },
+    {
+     "card_id": "bd978f98-1698-4e28-b6d8-1e8a459a6dda",
+     "problem": "Three dzong-only facts are on the town card and duplicate card 4ca00c2e: the setting fact (the dzong on a narrow tongue of land, cantilever bridge), the history fact (the Zhabdrung's embalmed body, active monastic centre) and the history fact (floods, fires, 'restoration ongoing', which is an unsourced time-sensitive claim).",
+     "suggestion": "Remove all three from the town card. Do not carry 'ongoing' over to the dzong card without a source."
+    },
+    {
+     "card_id": "bd978f98-1698-4e28-b6d8-1e8a459a6dda",
+     "problem": "The practical fact (modest dress, arms and legs covered, shoes off) is the entry rule for the dzong, not for the town. It also contradicts the dzong card's dress-code wording.",
+     "suggestion": "Remove it from the town card. Keep one verified dress-code fact on 4ca00c2e only. Keep the town's capital-until-1955, confluence/climate and rice/jacaranda facts, phrased as claims about the town."
+    },
+    {
+     "card_id": "4ca00c2e-d14b-47ba-92e2-108302894128",
+     "problem": "The practical fact says visitors must wear gho/kira 'or equivalent formal attire'. For foreign visitors the usual rule is modest dress (long sleeves, long trousers or skirt), so this likely overstates the requirement.",
+     "suggestion": "After human verification, reword to: 'Visitors must dress modestly, with long sleeves and long trousers or skirts; Bhutanese wear gho/kira with a ceremonial scarf. Hats off and shoes removed in temples.'"
+    },
+    {
+     "card_id": "4ca00c2e-d14b-47ba-92e2-108302894128",
+     "problem": "Linked atoms 0a16b0bdac1bba1e and 1b6ee19df7755250 mention a 'suspension bridge', but the card only describes the dzong's wooden cantilever bridge. The Punakha Suspension Bridge over the Po Chhu is a separate structure, so writers may mix up the two bridges.",
+     "suggestion": "Add a setting/practical fact that distinguishes the dzong's cantilever bridge from the nearby Punakha Suspension Bridge, or flag these atoms for review if a separate card for the suspension bridge is created."
+    },
+    {
+     "card_id": "4ca00c2e-d14b-47ba-92e2-108302894128",
+     "problem": "The river glosses 'Male River / Female River' differ from the town card's 'Father River / Mother River'. These are translation variants of the same names.",
+     "suggestion": "Normalise both cards to one gloss, e.g. 'Pho Chhu (male river) and Mo Chhu (female river)'."
+    }
+   ]
+  },
+  "votes": [
+   {
+    "lens": "geo",
+    "action": "fix_card",
+    "confidence": "high"
+   },
+   {
+    "lens": "usage",
+    "action": "fix_card",
+    "confidence": "high"
+   },
+   {
+    "lens": "risk",
+    "action": "fix_card",
+    "confidence": "high"
+   }
+  ]
+ },
+ {
+  "cluster": 3,
+  "final": {
+   "action": "fix_card",
+   "confidence": "high",
+   "reasoning": "I re-read cluster3.json. All three lenses (geo, usage, risk) voted fix_card with high confidence, and the file supports them. Keep both cards; they are not duplicates.\n\n1. **Two different places at different levels.** Card 3c4dea30 is Gyirong County, the administrative county in Shigatse; its locality is \"Zongga Town\". Card e4be28e7 is Gyirong, the town in the Gyirong Valley near Gyirong Port; its locality is \"Gyirong County\", so the data already puts the town inside the county. The only reason the cluster was flagged is \"name_contains\".\n\n2. **Every atom already cites the right card.** All five atoms come from tour 9829e6e2.\n   - The four \"Kyirung Thil\" atoms (8248b39d0541853e on day 2, 4f3c39ed64a6352b and 7cfab797d61a4f68 on day 3, e690c569e84f1516 on day 20) are an overnight stay, acclimatisation and a departure. Those describe a settlement, so they belong on the town card e4be28e7, where they already are.\n   - Atom 9602e7c461a5aa52, \"Kyirung County — ride motorbike through\" on day 4, is a transit through the county. It belongs on the county card 3c4dea30, where it already is.\n   - No relinks are needed.\n\n3. **The aliases are already split cleanly.** The county card has the \"... county\" forms (kyirung/kyirong/jilong/gyirong county). The town card has the bare forms plus \"kyirung thil\".\n\n4. **Merging would do harm.** Town facts (in the valley, near the port, gateway stop) would land on the county, or county facts (the plateau terrain) would land on the town. The merged card would also contradict itself about the county seat.\n\n5. **One fact on the town card is wrong.** It says \"Gyirong is a town and county seat\". That conflicts with the sibling card's locality, Zongga Town. Zongga is the actual county seat; this comes from the panel's outside knowledge and is consistent with the file, but the file cannot prove it. The wrong claim is what makes the two cards look like one place. Fix it, or send it to human review before publishing.\n\nThe other fixes are optional: an \"is the county seat\" fact on the county card, and marking the bare \"jilong\" alias on the town card as ambiguous.",
+   "merge_into": "",
+   "merge_from": [],
+   "relinks": [],
+   "fact_fixes": [
+    {
+     "card_id": "e4be28e7-a71b-413e-9269-278add6de2eb",
+     "problem": "The what_it_is fact says 'Gyirong is a town and county seat in southern Tibet, near the Nepal border.' The seat of Gyirong County is Zongga Town, which is the locality on sibling card 3c4dea30. Gyirong Town (Jilong Zhen) is a separate town further south, in the Gyirong Valley near the border port. The two cards contradict each other, and a writer would wrongly call the overnight stop the county seat.",
+     "suggestion": "Reword to: 'Gyirong (Gyirong Town) is a town in Gyirong County, southern Tibet, in the Gyirong Valley near the Nepal border.' Remove the 'county seat' claim, or send the card to human review before publishing."
+    },
+    {
+     "card_id": "e4be28e7-a71b-413e-9269-278add6de2eb",
+     "problem": "The draft_alias 'jilong' is also the Chinese name of the county, whose card has 'jilong county'. A resolver matching the bare alias could send county-level mentions to the town card.",
+     "suggestion": "Optional. Keep the alias, but qualify it as 'jilong town' or mark it ambiguous, so that any mention containing 'county' resolves to 3c4dea30."
+    },
+    {
+     "card_id": "3c4dea30-c038-4ca7-83df-b9670e515139",
+     "problem": "The facts never say that Zongga Town (the locality) is the county seat, so readers cannot easily tell the county apart from Gyirong Town.",
+     "suggestion": "Optional. Add a fact: 'The county seat is Zongga Town; Gyirong Town lies further south in the Gyirong Valley near the border port.' Leave the atom links unchanged."
+    }
+   ]
+  },
+  "votes": [
+   {
+    "lens": "geo",
+    "action": "fix_card",
+    "confidence": "high"
+   },
+   {
+    "lens": "usage",
+    "action": "fix_card",
+    "confidence": "high"
+   },
+   {
+    "lens": "risk",
+    "action": "fix_card",
+    "confidence": "high"
+   }
+  ]
+ },
+ {
+  "cluster": 4,
+  "final": {
+   "action": "fix_card",
+   "confidence": "high",
+   "reasoning": "I re-read cluster4.json, and all three lenses agree: keep both cards, with no merge and no relinks. Card c58ab644 (place_key \"manasarovar|china\") is Lake Manasarovar as a whole. Card e88b8cef (place_key \"manasarovar eastern shore|china\") is the lake's eastern shore. Its display name, every alias and its naming_note (\"this refers specifically to the lake's eastern shore\") limit it to the shore, so the two cards are a part and its whole, not duplicates. The cluster was flagged only because one name contains the other (\"name_contains\").\n\nThe atom links are already correct. All three atoms come from tour 9829e6e2:\n- 9275574e4c003b12 (day 15, \"eastern shore — view Mount Kailash\") cites the shore card. That card's 'visiting' fact (Kailash visible across the lake from the eastern shore, weather permitting) is the only evidence for this atom, and the lake card has no such fact.\n- 0f6162372653e616 (day 15, \"ride to the lake\") and e62f5b94c0717fa8 (day 16, \"wander\") cite the lake card. Both refer to the lake in general.\n\nA merge would make the Kailash-view claim apply to the whole lake. It would also put two different elevation figures on one card (about 4,600 m and above 4,500 m) and make day 15 show the same place twice.\n\nNo facts contradict each other. Two consistency defects are confirmed in the file, plus one wording issue:\n- The shore card spells the Tibetan name 'Mapham Yutso' in its naming_note and in the alias 'mapham yutso eastern shore'. The lake card uses 'mapham yumtso', so this looks like a typo.\n- The county is 'Burang' on one card and 'Purang' on the other.\n- The shore card's what_it_is, setting and history facts repeat lake-wide content instead of describing it as a sub-place.\n\nRecommended action: keep_separate with the card fixes below (labelled fix_card). If the data model supports a parent link between places, link e88b8cef to c58ab644 instead of merging.",
+   "merge_into": "",
+   "merge_from": [],
+   "relinks": [],
+   "fact_fixes": [
+    {
+     "card_id": "e88b8cef-ff78-4134-a866-89fbe7a9d5c5",
+     "problem": "The naming_note says 'Mapham Yutso' and the draft alias is 'mapham yutso eastern shore'. This looks like a garbled form of 'Mapham Yumtso', the spelling on the parent card c58ab644.",
+     "suggestion": "Change 'Mapham Yutso' to 'Mapham Yumtso' in the naming_note, and replace the alias 'mapham yutso eastern shore' with 'mapham yumtso eastern shore'."
+    },
+    {
+     "card_id": "e88b8cef-ff78-4134-a866-89fbe7a9d5c5",
+     "problem": "The locality is 'Burang' but the parent lake card c58ab644 has 'Purang'. Both spell the same county, but locality-based grouping or dedupe will treat them as different places.",
+     "suggestion": "Use one county spelling (Burang or Purang) on both cards and mention the other in the naming_note."
+    },
+    {
+     "card_id": "e88b8cef-ff78-4134-a866-89fbe7a9d5c5",
+     "problem": "The what_it_is, setting and history facts repeat lake-wide content without saying the card is a sub-place. That is why this card looks like a duplicate of c58ab644.",
+     "suggestion": "Reword what_it_is to describe the eastern shore as a sub-place of Lake Manasarovar, centred on the viewpoint toward Mount Kailash. Leave lake-wide history and setting to the parent card."
+    }
+   ]
+  },
+  "votes": [
+   {
+    "lens": "geo",
+    "action": "keep_separate",
+    "confidence": "medium"
+   },
+   {
+    "lens": "usage",
+    "action": "keep_separate",
+    "confidence": "medium"
+   },
+   {
+    "lens": "risk",
+    "action": "keep_separate",
+    "confidence": "high"
+   }
+  ]
+ },
+ {
+  "cluster": 5,
+  "final": {
+   "action": "merge_partial",
+   "confidence": "high",
+   "merge_into": "bc5669aa-2e96-4a2f-8a7e-2360f724b115",
+   "merge_from": [
+    "e3883058-93a7-44f6-b3f5-c66363f8e7b9"
+   ],
+   "reasoning": "All three lenses voted the same way: merge_partial into bc5669aa from e3883058, with the monastery card 16110d12 kept separate. I re-read cluster5.json and it supports this. The cluster contains two real entities. The first is the Rongbuk (Rongphu) Valley area in Tingri/Dingri County, Shigatse, Tibet. The second is Rongbuk Monastery, a single gompa inside that valley.\n\nCard e3883058 (\"Rongbuk\") says in its own naming_note \"Use Rongbuk for the settlement and valley area\". Its first setting fact reads \"a high-altitude valley and settlement in Tingri County\". That is the same area as bc5669aa \"Rongbuk Valley\", which already has the itinerary alias \"rongbuk area\". Dingri and Tingri are two spellings of one county. Shigatse and Tibet are the prefecture and the region it belongs to, so they do not conflict.\n\n16110d12 is a point-of-interest card with facts that only fit the monastery: about 5,000 m altitude and Cultural Revolution damage. Its naming_note also separates the monastery from the valley, so it stays as its own card.\n\nAll 3 atoms come from tour 9829e6e2, days 5–6. None of them mentions the monastery building:\n- 5d6f99bc \"Rongbuk area — overnight in\" is already on bc5669aa.\n- b6144e0a \"Rongbuk — ride motorbike to\" was linked to the monastery by the bare itinerary alias \"rongbuk\". It must move to the area card, otherwise a writer would promise a monastery visit that the source does not contain.\n- 1d7d1bf0 \"Rongbuk to Lhatse\" moves with the merge.\n\nI raised confidence to high because the file evidence is unambiguous and the panel was unanimous. The risk is only in the facts: bc5669aa and e3883058 both carry what_it_is/setting facts about the monastery, and those must not pile up on the valley card. If a merge is blocked operationally, a lossless fallback is relink_only (both relinks to bc5669aa) plus the fact fixes below.",
+   "relinks": [
+    {
+     "atom_id": "b6144e0afe1e5166",
+     "from_card": "16110d12-16c5-4f30-bd95-6ec48072c715",
+     "to_card": "bc5669aa-2e96-4a2f-8a7e-2360f724b115",
+     "why": "The day-5 ride goes to bare 'Rongbuk', and the group stays that night in the 'Rongbuk area' (atom 5d6f99bc, already on bc5669aa). The atom means the area, not the monastery. It was misrouted by the bare itinerary alias 'rongbuk' on the monastery card."
+    },
+    {
+     "atom_id": "1d7d1bf0e73f0a65",
+     "from_card": "e3883058-93a7-44f6-b3f5-c66363f8e7b9",
+     "to_card": "bc5669aa-2e96-4a2f-8a7e-2360f724b115",
+     "why": "The day-6 leg 'Rongbuk to Lhatse' starts from the valley area. It follows the merge of e3883058 into bc5669aa."
+    }
+   ],
+   "fact_fixes": [
+    {
+     "card_id": "bc5669aa-2e96-4a2f-8a7e-2360f724b115",
+     "problem": "Two draft_alias rows give 'rongbuk monastery' to the valley card. They collide with the monastery card 16110d12, so mentions of the monastery would resolve to the area. Its what_it_is fact describes Rongbuk Monastery instead of the valley.",
+     "suggestion": "Delete both 'rongbuk monastery' draft_alias rows. Rewrite what_it_is to describe the valley, for example: a high glacial valley on the north side of Everest that leads to the north-side Base Camp. Mention the monastery only as a landmark in it. After the merge, add the aliases 'rongbuk', 'rongphu' and 'rongbu' and the itinerary alias 'rongbuk to lhatse'. Optionally standardize locality to Tingri (Dingri) County and region to Shigatse, Tibet Autonomous Region."
+    },
+    {
+     "card_id": "16110d12-16c5-4f30-bd95-6ec48072c715",
+     "problem": "The itinerary alias 'rongbuk' is the bare name of the area, but it sits on the monastery card. This is what caused the b6144e0a mislink, and future mentions of bare 'Rongbuk' would keep resolving to the monastery.",
+     "suggestion": "Move the 'rongbuk' alias to bc5669aa. Keep 'rongbuk gompa', 'rongbuk temple' and 'rongphuk monastery' on the monastery card. Do not change its facts."
+    },
+    {
+     "card_id": "e3883058-93a7-44f6-b3f5-c66363f8e7b9",
+     "problem": "The card mixes two entities. Its name, naming_note and first setting fact describe the valley/settlement. Its what_it_is fact ('Rongbuk Monastery ... Nyingma tradition') and second setting fact ('The monastery stands near the northern base') describe the monastery. The naming_note also lists 'Rongbuk' as an alternate spelling of itself.",
+     "suggestion": "On merge, carry over only the setting fact 'valley and settlement in Tingri County' and the aliases rongphu and rongbu. Drop both monastery facts. Add the Nyingma claim to 16110d12 only after it has been verified."
+    }
+   ]
+  },
+  "votes": [
+   {
+    "lens": "geo",
+    "action": "merge_partial",
+    "confidence": "medium"
+   },
+   {
+    "lens": "usage",
+    "action": "merge_partial",
+    "confidence": "medium"
+   },
+   {
+    "lens": "risk",
+    "action": "merge_partial",
+    "confidence": "medium"
+   }
+  ]
+ },
+ {
+  "cluster": 6,
+  "final": {
+   "action": "relink_only",
+   "confidence": "high",
+   "reasoning": "All three lenses voted relink_only, and I re-read cluster6.json to confirm their evidence. The cards are two different entities at different levels. ab4afb74 is Zhongba, the settlement: place_key 'zhongba|china', locality 'Zhongba Town', and the first fact calls it the county seat. 36f4777f is Zhongba County, the administrative area under Shigatse: place_key 'zhongba county|china'. Each card's naming_note states this split itself. A merge would mix area-level and town-level claims, so the cards stay separate.\n\nAll three atoms come from tour 9829e6e2 and use Zhongba as a ride destination and overnight stop, which is the town:\n- Day 14, 'Saga to Zhongba' (baabd9caa5c5eb89), is on the town card. Correct.\n- Day 19, 'Zhongba — overnight stay' (30f03d336aa773d3), is on the town card. Correct.\n- Day 19, 'Kailash to Zhongba — motorbike descent' (3bbf13a0d8e52612), is on the county card. This is wrong: it is the same day's leg ending at the same overnight town.\n\nThe only relink needed is to move 3bbf13a0d8e52612 to the town card. The county card then has no atoms, but it remains a valid area-level card and should not be deleted.\n\nThe cleanup the panel flagged is real and is listed under fact_fixes. The town card carries the draft aliases 'zhongba county' and 'drongpa county', each stored twice. 'zhongba county' collides with card B's place_key. Card A also holds two county-level facts, and one of them is mis-tagged as kind=naming.",
+   "merge_into": "",
+   "merge_from": [],
+   "relinks": [
+    {
+     "atom_id": "3bbf13a0d8e52612",
+     "from_card": "36f4777f-c925-4c98-9659-7591f32d0a2c",
+     "to_card": "ab4afb74-39a9-4cee-bece-81ccc8fe5f39",
+     "why": "'Kailash to Zhongba' is the day-19 leg that ends at the Zhongba overnight stop. Atom 30f03d336aa773d3 links that same stop to the town card on the same day, and the day-14 leg 'Saga to Zhongba' is already on the town card. The atom refers to the settlement, not the administrative county."
+    }
+   ],
+   "fact_fixes": [
+    {
+     "card_id": "ab4afb74-39a9-4cee-bece-81ccc8fe5f39",
+     "problem": "The town card has the county-level draft aliases 'zhongba county' and 'drongpa county', each stored twice. 'zhongba county' is identical to card 36f4777f's place_key, so a lookup on it would resolve to the town. The aliases 'zhongba', 'drongpa', 'zhongba town' and 'zhongba county seat' are also duplicated.",
+     "suggestion": "Remove 'zhongba county' and 'drongpa county' from this card and add them to 36f4777f. Remove the duplicate alias rows. Keep 'zhongba', 'zhongba town', 'zhongba county seat' and 'drongpa'."
+    },
+    {
+     "card_id": "ab4afb74-39a9-4cee-bece-81ccc8fe5f39",
+     "problem": "Two facts describe the county rather than the town: 'Zhongba County is administered by Shigatse...', which is also mis-tagged kind=naming, and 'The wider county is in southwestern Tibet near the China–Nepal border'. The 'county seat' claim has not been checked against a source.",
+     "suggestion": "Drop these two facts or rewrite them to be about the town, for example 'the town is the seat of Zhongba County, Shigatse', and fix the kind tag. Verify the county-seat claim, or soften it to 'a settlement in Zhongba County'."
+    },
+    {
+     "card_id": "36f4777f-c925-4c98-9659-7591f32d0a2c",
+     "problem": "The county card has no 'zhongba county' or 'drongpa county' alias of its own. Its itinerary alias 'kailash to zhongba' is a route phrase that belongs to the atom being relinked to the town. Its locality 'Zhongba' points at the town. The alias 'drongpa dzong' historically names the seat or fort settlement, not the whole county.",
+     "suggestion": "Add the aliases 'zhongba county' and 'drongpa county'. Remove or move the itinerary alias 'kailash to zhongba' along with atom 3bbf13a0d8e52612; route phrases should not be place aliases. The same applies to 'saga to zhongba' on the town card. Set locality to the county or Shigatse context. Review 'drongpa dzong' and consider moving it to the town card. Keep the card even though it has no atoms."
+    }
+   ]
+  },
+  "votes": [
+   {
+    "lens": "geo",
+    "action": "relink_only",
+    "confidence": "high"
+   },
+   {
+    "lens": "usage",
+    "action": "relink_only",
+    "confidence": "medium"
+   },
+   {
+    "lens": "risk",
+    "action": "relink_only",
+    "confidence": "medium"
+   }
+  ]
+ },
+ {
+  "cluster": 7,
+  "final": {
+   "action": "keep_separate",
+   "confidence": "high",
+   "merge_into": "",
+   "merge_from": [],
+   "relinks": [],
+   "reasoning": "All three lenses vote keep_separate with high confidence, and re-reading cluster7.json supports it. Card 45e737a3 is the town of Kharkhorin (locality 'Kharkhorin'). Card dcc9089a is the Kharkhorin Museum, a building whose locality is 'Kharkhorin (Karakorum)'. The town card also describes the museum as a separate attraction inside the town. The cluster was flagged only by name_contains, with no aliases, so these are a town and a site inside it, not the same place. A merge would put building-level facts on the town (for example 'archaeological and historical museum' as what_it_is, and the Japanese-funded building), or put town and monastery facts on the museum.\n\nAtoms are already linked correctly. Both are in tour 4e35f6b4, day 8. ce4b3f79e1c9f03a 'Kharkhorin — drive toward' links to the town card, and ad00b4131228fc6c 'Kharkhorin Museum — visit artifacts' links to the museum card. No relinks are needed.\n\nThe fact fixes below are minor hygiene changes that were checked against the file and need no structural change:\n- The town card tags the 108-stupa wall and the stone tortoise as what_it_is, though both describe other landmarks.\n- The distance from Ulaanbaatar differs: 360 km on the museum card and 370 km on the town card.\n- The Ögedei founding wording is oversimplified on the town card and ambiguous on the museum card.",
+   "fact_fixes": [
+    {
+     "card_id": "45e737a3-f5e6-41fd-b365-c1b2e153d657",
+     "problem": "The fact 'The monastery's enclosing wall, approximately 400 metres on each side, is punctuated by 108 white stupas' is tagged kind=what_it_is. It describes Erdene Zuu Monastery, not the town.",
+     "suggestion": "Re-tag it as visiting or setting and name Erdene Zuu explicitly in the sentence, or move it to an Erdene Zuu card if one exists."
+    },
+    {
+     "card_id": "45e737a3-f5e6-41fd-b365-c1b2e153d657",
+     "problem": "The stone tortoise sculpture fact is tagged kind=what_it_is. It describes a nearby landmark, not the town itself.",
+     "suggestion": "Re-tag it as visiting or setting."
+    },
+    {
+     "card_id": "45e737a3-f5e6-41fd-b365-c1b2e153d657",
+     "problem": "This card gives the distance from Ulaanbaatar as about 370 km, while card dcc9089a gives about 360 km.",
+     "suggestion": "Use the same wording on both cards, e.g. 'roughly 360-370 km southwest of Ulaanbaatar by road'."
+    },
+    {
+     "card_id": "dcc9089a-c46c-40ad-8228-69fb0bc291d8",
+     "problem": "This card gives the distance from Ulaanbaatar as about 360 km, while the town card 45e737a3 gives about 370 km.",
+     "suggestion": "Use the same wording on both cards, e.g. 'roughly 360-370 km'."
+    },
+    {
+     "card_id": "45e737a3-f5e6-41fd-b365-c1b2e153d657",
+     "problem": "'Karakorum ... founded by Ögedei Khan ... around 1235' is oversimplified. Genghis Khan established the site around 1220, and Ögedei built it into the walled capital from about 1235.",
+     "suggestion": "Reword to: 'established under Genghis Khan and developed into the imperial capital by Ögedei Khan from about 1235'."
+    },
+    {
+     "card_id": "dcc9089a-c46c-40ad-8228-69fb0bc291d8",
+     "problem": "'the capital of the Mongol Empire founded by Ögedei Khan' can be read as saying Ögedei founded the empire, which Genghis Khan did.",
+     "suggestion": "Reword to: 'the Mongol imperial capital that Ögedei Khan built up in the 13th century'."
+    }
+   ]
+  },
+  "votes": [
+   {
+    "lens": "geo",
+    "action": "keep_separate",
+    "confidence": "high"
+   },
+   {
+    "lens": "usage",
+    "action": "keep_separate",
+    "confidence": "high"
+   },
+   {
+    "lens": "risk",
+    "action": "keep_separate",
+    "confidence": "high"
+   }
+  ]
+ }
+]

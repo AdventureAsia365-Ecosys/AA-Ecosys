@@ -1,0 +1,19 @@
+{
+ "mode": "median3",
+ "summary": {
+  "SUMMARY": "AA-801",
+  "mode": "median3",
+  "gate": "brand_fit_mission",
+  "versions": 9,
+  "max_verdict_spread": 2.0,
+  "versions_verdict_spread_le_1": 5,
+  "max_brand_fit_spread": 2.0,
+  "mission_stable_versions": 5,
+  "total_cost_usd": 0.0751,
+  "estimated_failed_cost_usd": 0.0,
+  "skipped": {},
+  "tenants_missing": null,
+  "cost_per_judgement_usd": 0.00167,
+  "aborted": null
+ }
+}

@@ -1,0 +1,1237 @@
+{
+  "base": "https://aa-booking-admin-gbq1xbbrv-pqnghiep1354-5974s-projects.vercel.app",
+  "commit": "e91788cbc15723d30ec42c0066b40596f1b9534d",
+  "startedAt": "2026-10-14T12:29:16.499Z",
+  "login": {
+    "wrongPassword": {
+      "status": 401,
+      "errorShown": true,
+      "message": "That username and password do not match a CIS staff account.",
+      "url": "/login",
+      "note": "re-run in a clean context; first run matched the Next.js route announcer, superseded"
+    },
+    "success": {
+      "url": "/",
+      "ok": true
+    },
+    "console": [
+      "error: Failed to load resource: the server responded with a status of 401 ()"
+    ],
+    "bff": [
+      "POST 401 /api/auth/login",
+      "POST 200 /api/auth/login"
+    ],
+    "failed": [],
+    "variants": [
+      {
+        "w": 390,
+        "theme": "light",
+        "shot": "login-390-light.jpg",
+        "console": [],
+        "overflow": false,
+        "sw": 390,
+        "cw": 390
+      },
+      {
+        "w": 390,
+        "theme": "dark",
+        "shot": "login-390-dark.jpg",
+        "console": [],
+        "overflow": false,
+        "sw": 390,
+        "cw": 390
+      },
+      {
+        "w": 1440,
+        "theme": "dark",
+        "shot": "login-1440-dark.jpg",
+        "console": [],
+        "overflow": false,
+        "sw": 1440,
+        "cw": 1440
+      }
+    ],
+    "emptyFieldValidation": "Enter your CIS username and password.",
+    "console_note": "The single console error at login is the browser logging the expected 401 from the wrong-password attempt."
+  },
+  "pages": [
+    {
+      "name": "dashboard",
+      "path": "/",
+      "viewport": 1440,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/trip-cases?assignee=me&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending",
+        "GET 200 /api/booking/staff?active=false",
+        "GET 200 /api/booking/trip-cases?sort=-updated_at&limit=5",
+        "GET 200 /api/booking/trip-cases/summary",
+        "GET 200 /api/booking/trip-cases?assignee=me&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [
+        "FAILED net::ERR_ABORTED /_next/static/chunks/0mn3tu-6fbjhv.js",
+        "FAILED net::ERR_ABORTED /api/booking/trip-cases/summary",
+        "FAILED net::ERR_ABORTED /_next/static/chunks/0jmoq1jk~-d48.js",
+        "FAILED net::ERR_ABORTED /api/booking/trip-cases?sort=-updated_at&limit=5",
+        "FAILED net::ERR_ABORTED /_next/static/chunks/0_avrtkuwp432.js",
+        "FAILED net::ERR_ABORTED /api/booking/staff?active=false",
+        "FAILED net::ERR_ABORTED /_next/static/chunks/11s9mfyuodqdf.js",
+        "FAILED net::ERR_ABORTED /api/booking/notifications?limit=5"
+      ],
+      "status": 200,
+      "finalUrl": "/",
+      "ms": 5240,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Dashboard Search pages, trip cases, customers\u2026 Ctrl K Admin E Dashboard Welcome back, e2e-claude-code. Here is what needs your attention today. New inquiries 1 Needs attention In progress 0 1 open \u00b7 +1 vs last month Proposals sent 0 Waiti",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "dashboard-1440-light.jpg"
+    },
+    {
+      "name": "cases",
+      "path": "/cases",
+      "viewport": 1440,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/trip-cases?sort=-updated_at&limit=25&offset=0",
+        "GET 200 /api/booking/trip-cases/summary",
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/staff/directory"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/cases",
+      "ms": 5387,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Trip Cases Search pages, trip cases, customers\u2026 Ctrl K Admin E Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All1 Inquiries1 Mine Unassigned Active1 Closed0 Search c",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "cases-1440-light.jpg"
+    },
+    {
+      "name": "case-TC-000001",
+      "path": "/cases/TC-000001",
+      "viewport": 1440,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/trip-cases/TC-000001",
+        "GET 200 /api/booking/countries"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/cases/TC-000001",
+      "ms": 4506,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Trip Cases Search pages, trip cases, customers\u2026 Ctrl K Admin E Haa valley New inquiry TripPlanner TC-000001 Dates not set \u00b7 7 days Pax not set Assign Edit details Decline CONVERT TO DISCOVERY INQUIRY New inquiry Discovery PROPOSAL Buildin",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "case-TC-000001-1440-light.jpg"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "viewport": 1440,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/customers?status=active&limit=1",
+        "GET 200 /api/booking/customers?status=past&limit=1",
+        "GET 200 /api/booking/customers?status=blocked&limit=1",
+        "GET 200 /api/booking/customers?limit=1",
+        "GET 200 /api/booking/customers?status=lead&limit=1",
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/customers?sort=-last_activity_at&limit=25&offset=0"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/customers",
+      "ms": 4094,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Customers Search pages, trip cases, customers\u2026 Ctrl K Admin E Customers Everyone who asked us for a trip: TripPlanner leads, verified customers and past clients. NEW LEAD All1 Leads1 Active0 Past clients0 Blocked0 Search name, e-mail, pho",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "customers-1440-light.jpg"
+    },
+    {
+      "name": "staff",
+      "path": "/staff",
+      "viewport": 1440,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/staff"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/staff",
+      "ms": 3225,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Staff Search pages, trip cases, customers\u2026 Ctrl K Admin E Staff Booking profiles of CIS staff accounts: their Booking role and whether they can use Booking. Staff accounts and passwords are managed in CIS admin. A person appears here afte",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "staff-1440-light.jpg"
+    },
+    {
+      "name": "settings",
+      "path": "/settings",
+      "viewport": 1440,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/settings",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/settings",
+      "ms": 3167,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Settings Search pages, trip cases, customers\u2026 Ctrl K Admin E Settings Your profile, how Booking looks for you, and what you are notified about. General Notifications Profile information You sign in with your CIS account. Name, e-mail and ",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "settings-1440-light.jpg"
+    },
+    {
+      "name": "notifications",
+      "path": "/notifications",
+      "viewport": 1440,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/notifications?limit=20"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/notifications",
+      "ms": 3917,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Notifications Search pages, trip cases, customers\u2026 Ctrl K Admin E Notifications 1 unread. New inquiries, assignments, status changes and approvals that concern you. MARK ALL AS READ Search notifications STATUS All statuses Unread Read TYP",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "notifications-1440-light.jpg"
+    },
+    {
+      "name": "pricing-calculator",
+      "path": "/pricing/calculator",
+      "viewport": 1440,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "POST 200 /api/booking/pricing/quote-preview"
+      ],
+      "failed": [],
+      "calcResult": "Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note sells 1,492.54 USD Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-made Fixed departure B2B Selling currency USD EUR GBP AUD SGD Peak season dates (adds the rule's peak uplift) Override total (optional, in USD) Non-USD costs and selling currencies need a dated FX rate. Booking cannot enter rates yet (Pricing rules & FX ships in wave 2), so unless an admin has added rates for this environment, only USD costs priced in USD work. Result Rule in force, FX rates used, each line in USD and selling currency, rounding, margin and the floor check. TOTAL 1,495.00 USD Net cost (USD) 1,000.00 USD Subtotal 1,492.54 USD Computed total (rounded up to 5) 1,495.00 USD Margin applied 30% Effective margin 30.11% (floor 20%) Rule, FX and lines",
+      "currencyOptions": [
+        [
+          "b2c_tailor_made",
+          "fixed_departure",
+          "b2b"
+        ],
+        [
+          "USD",
+          "EUR",
+          "GBP",
+          "AUD",
+          "SGD"
+        ]
+      ],
+      "status": 200,
+      "finalUrl": "/pricing/calculator",
+      "ms": 7045,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Pricing calculator Search pages, trip cases, customers\u2026 Ctrl K Admin E Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cos",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "pricing-calculator-1440-light.jpg"
+    },
+    {
+      "name": "proposals",
+      "path": "/proposals",
+      "viewport": 1440,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/versions?sort=-updated_at&limit=25&offset=0"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/proposals",
+      "ms": 3477,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Proposals Search pages, trip cases, customers\u2026 Ctrl K Admin E Proposals Every proposal version across trip cases: drafts, sent, approved and superseded. NEW PROPOSAL Search case code, customer or version title STATUS All statuses Draft Se",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "proposals-1440-light.jpg"
+    },
+    {
+      "name": "dashboard",
+      "path": "/",
+      "viewport": 390,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/staff?active=false",
+        "GET 200 /api/booking/trip-cases?assignee=me&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending",
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/trip-cases?sort=-updated_at&limit=5",
+        "GET 200 /api/booking/trip-cases/summary"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/",
+      "ms": 4514,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Dashboard E Dashboard Welcome back, e2e-claude-code. Here is what needs your attention today. New inquiries 1 Needs attention In progress 0 1 open \u00b7 +1 vs last month Proposals sent 0 Waiting for the customer Awaiting activation 0 Nobody waiting Recent trip cases The five cases updated most recently. View all cases TC-000001 New inquiry S235 E2E Test Haa valley +3 legs Unassigned 7 h ago Pipeline b",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "dashboard-390-light.jpg"
+    },
+    {
+      "name": "cases",
+      "path": "/cases",
+      "viewport": 390,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/trip-cases?sort=-updated_at&limit=25&offset=0",
+        "GET 200 /api/booking/staff/directory",
+        "GET 200 /api/booking/trip-cases/summary",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/cases",
+      "ms": 3525,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Trip Cases E Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All1 Inquiries1 Mine Unassigned Active1 Closed0 Search case code, customer name or e-mail SALES REP All reps Unassigned e2e-claude-code SOURCE All sources TripPlanner Manual CREATED \u2013 STATUS All statuses Columns CSV TC-000001 CUSTOMER SE S235 E2E Test Unverified e2e-s",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "cases-390-light.jpg"
+    },
+    {
+      "name": "case-TC-000001",
+      "path": "/cases/TC-000001",
+      "viewport": 390,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/trip-cases/TC-000001",
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/countries"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/cases/TC-000001",
+      "ms": 3836,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Trip Cases E Haa valley New inquiry TripPlanner TC-000001 Dates not set \u00b7 7 days Pax not set Assign Edit details Decline CONVERT TO DISCOVERY INQUIRY New inquiry PROPOSAL BOOKING TRAVEL Overview Proposals0 Billing Checks Activity Inquiry What the customer built in TripPlanner, as received. Read-only. TripPlanner Received 14 Oct 2026, 11:30 Day 1 Haa valley Day 2 Haa valley Day 3 Chele La Pass Day ",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "case-TC-000001-390-light.jpg"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "viewport": 390,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/customers?sort=-last_activity_at&limit=25&offset=0",
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/customers?limit=1",
+        "GET 200 /api/booking/customers?status=active&limit=1",
+        "GET 200 /api/booking/customers?status=past&limit=1",
+        "GET 200 /api/booking/customers?status=lead&limit=1",
+        "GET 200 /api/booking/customers?status=blocked&limit=1"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/customers",
+      "ms": 3270,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Customers E Customers Everyone who asked us for a trip: TripPlanner leads, verified customers and past clients. NEW LEAD All1 Leads1 Active0 Past clients0 Blocked0 Search name, e-mail, phone or CUS- code MERGE REVIEW Any Needs review SOURCE Any source TripPlanner Added by staff Signed up (OTP) Columns CSV SE S235 E2E Test e2e-s235+booking@adventure.asia PHONE \u2014 LOCATION \u2014 STATUS Lead TRIP CASES 1 ",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "customers-390-light.jpg"
+    },
+    {
+      "name": "staff",
+      "path": "/staff",
+      "viewport": 390,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/staff",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/staff",
+      "ms": 2996,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Staff E Staff Booking profiles of CIS staff accounts: their Booking role and whether they can use Booking. Staff accounts and passwords are managed in CIS admin. A person appears here after their first sign-in to Booking. Open CIS admin Total staff 1 Active 1 Pending activation 0 Search name or e-mail STATUS All statuses Active Pending / inactive ROLE All roles Admin Sales Contracting Content crea",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "staff-390-light.jpg"
+    },
+    {
+      "name": "settings",
+      "path": "/settings",
+      "viewport": 390,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/settings"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/settings",
+      "ms": 3014,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Settings E Settings Your profile, how Booking looks for you, and what you are notified about. General Notifications Profile information You sign in with your CIS account. Name, e-mail and password are managed in CIS. Manage in CIS Name e2e-claude-code CIS role admin E-mail address \u2014 Change your e-mail in CIS; Booking copies it at sign-in. Booking role Admin Set by a Booking admin on the Staff page",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "settings-390-light.jpg"
+    },
+    {
+      "name": "notifications",
+      "path": "/notifications",
+      "viewport": 390,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=20",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/notifications",
+      "ms": 3835,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Notifications E Notifications 1 unread. New inquiries, assignments, status changes and approvals that concern you. MARK ALL AS READ Search notifications STATUS All statuses Unread Read TYPE All types New inquiry Case assigned Status changed Proposal approved New inquiry TC-000001 New inquiry Unread 14 Oct 2026, 11:30 S235 E2E Test sent a trip with 4 AA tour leg(s). Open case Mark as read Showing 1",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "notifications-390-light.jpg"
+    },
+    {
+      "name": "pricing-calculator",
+      "path": "/pricing/calculator",
+      "viewport": 390,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "POST 200 /api/booking/pricing/quote-preview"
+      ],
+      "failed": [],
+      "calcResult": "Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note sells 1,492.54 USD Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-made Fixed departure B2B Selling currency USD EUR GBP AUD SGD Peak season dates (adds the rule's peak uplift) Override total (optional, in USD) Non-USD costs and selling currencies need a dated FX rate. Booking cannot enter rates yet (Pricing rules & FX ships in wave 2), so unless an admin has added rates for this environment, only USD costs priced in USD work. Result Rule in force, FX rates used, each line in USD and selling currency, rounding, margin and the floor check. TOTAL 1,495.00 USD Net cost (USD) 1,000.00 USD Subtotal 1,492.54 USD Computed total (rounded up to 5) 1,495.00 USD Margin applied 30% Effective margin 30.11% (floor 20%) Rule, FX and lines",
+      "currencyOptions": [
+        [
+          "b2c_tailor_made",
+          "fixed_departure",
+          "b2b"
+        ],
+        [
+          "USD",
+          "EUR",
+          "GBP",
+          "AUD",
+          "SGD"
+        ]
+      ],
+      "status": 200,
+      "finalUrl": "/pricing/calculator",
+      "ms": 6783,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Pricing calculator E Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note sells 1,492.54 USD Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "pricing-calculator-390-light.jpg"
+    },
+    {
+      "name": "proposals",
+      "path": "/proposals",
+      "viewport": 390,
+      "theme": "light",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/versions?sort=-updated_at&limit=25&offset=0"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/proposals",
+      "ms": 3791,
+      "dataTheme": "light",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Proposals E Proposals Every proposal version across trip cases: drafts, sent, approved and superseded. NEW PROPOSAL Search case code, customer or version title STATUS All statuses Draft Sent Approved Superseded SALES Anyone Mine Unassigned UPDATED \u2013 Columns No proposals match Proposals are created from a trip case. Change the filters to widen the list. Dashboard Cases Customers Alerts More",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "proposals-390-light.jpg"
+    },
+    {
+      "name": "dashboard",
+      "path": "/",
+      "viewport": 1440,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/trip-cases?sort=-updated_at&limit=5",
+        "GET 200 /api/booking/trip-cases?assignee=me&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending",
+        "GET 200 /api/booking/staff?active=false",
+        "GET 200 /api/booking/trip-cases/summary",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/",
+      "ms": 4702,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Dashboard Search pages, trip cases, customers\u2026 Ctrl K Admin E Dashboard Welcome back, e2e-claude-code. Here is what needs your attention today. New inquiries 1 Needs attention In progress 0 1 open \u00b7 +1 vs last month Proposals sent 0 Waiti",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "dashboard-1440-dark.jpg"
+    },
+    {
+      "name": "cases",
+      "path": "/cases",
+      "viewport": 1440,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/trip-cases/summary",
+        "GET 200 /api/booking/trip-cases?sort=-updated_at&limit=25&offset=0",
+        "GET 200 /api/booking/staff/directory"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/cases",
+      "ms": 3987,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Trip Cases Search pages, trip cases, customers\u2026 Ctrl K Admin E Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All1 Inquiries1 Mine Unassigned Active1 Closed0 Search c",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "cases-1440-dark.jpg"
+    },
+    {
+      "name": "case-TC-000001",
+      "path": "/cases/TC-000001",
+      "viewport": 1440,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/trip-cases/TC-000001",
+        "GET 200 /api/booking/countries"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/cases/TC-000001",
+      "ms": 3719,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Trip Cases Search pages, trip cases, customers\u2026 Ctrl K Admin E Haa valley New inquiry TripPlanner TC-000001 Dates not set \u00b7 7 days Pax not set Assign Edit details Decline CONVERT TO DISCOVERY INQUIRY New inquiry Discovery PROPOSAL Buildin",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "case-TC-000001-1440-dark.jpg"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "viewport": 1440,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/customers?status=past&limit=1",
+        "GET 200 /api/booking/customers?status=active&limit=1",
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/customers?sort=-last_activity_at&limit=25&offset=0",
+        "GET 200 /api/booking/customers?status=lead&limit=1",
+        "GET 200 /api/booking/customers?limit=1",
+        "GET 200 /api/booking/customers?status=blocked&limit=1"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/customers",
+      "ms": 3138,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Customers Search pages, trip cases, customers\u2026 Ctrl K Admin E Customers Everyone who asked us for a trip: TripPlanner leads, verified customers and past clients. NEW LEAD All1 Leads1 Active0 Past clients0 Blocked0 Search name, e-mail, pho",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "customers-1440-dark.jpg"
+    },
+    {
+      "name": "staff",
+      "path": "/staff",
+      "viewport": 1440,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/staff"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/staff",
+      "ms": 2995,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Staff Search pages, trip cases, customers\u2026 Ctrl K Admin E Staff Booking profiles of CIS staff accounts: their Booking role and whether they can use Booking. Staff accounts and passwords are managed in CIS admin. A person appears here afte",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "staff-1440-dark.jpg"
+    },
+    {
+      "name": "settings",
+      "path": "/settings",
+      "viewport": 1440,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/settings",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/settings",
+      "ms": 3089,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Settings Search pages, trip cases, customers\u2026 Ctrl K Admin E Settings Your profile, how Booking looks for you, and what you are notified about. General Notifications Profile information You sign in with your CIS account. Name, e-mail and ",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "settings-1440-dark.jpg"
+    },
+    {
+      "name": "notifications",
+      "path": "/notifications",
+      "viewport": 1440,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=20",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/notifications",
+      "ms": 3830,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Notifications Search pages, trip cases, customers\u2026 Ctrl K Admin E Notifications 1 unread. New inquiries, assignments, status changes and approvals that concern you. MARK ALL AS READ Search notifications STATUS All statuses Unread Read TYP",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "notifications-1440-dark.jpg"
+    },
+    {
+      "name": "pricing-calculator",
+      "path": "/pricing/calculator",
+      "viewport": 1440,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "POST 200 /api/booking/pricing/quote-preview"
+      ],
+      "failed": [],
+      "calcResult": "Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note sells 1,492.54 USD Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-made Fixed departure B2B Selling currency USD EUR GBP AUD SGD Peak season dates (adds the rule's peak uplift) Override total (optional, in USD) Non-USD costs and selling currencies need a dated FX rate. Booking cannot enter rates yet (Pricing rules & FX ships in wave 2), so unless an admin has added rates for this environment, only USD costs priced in USD work. Result Rule in force, FX rates used, each line in USD and selling currency, rounding, margin and the floor check. TOTAL 1,495.00 USD Net cost (USD) 1,000.00 USD Subtotal 1,492.54 USD Computed total (rounded up to 5) 1,495.00 USD Margin applied 30% Effective margin 30.11% (floor 20%) Rule, FX and lines",
+      "currencyOptions": [
+        [
+          "b2c_tailor_made",
+          "fixed_departure",
+          "b2b"
+        ],
+        [
+          "USD",
+          "EUR",
+          "GBP",
+          "AUD",
+          "SGD"
+        ]
+      ],
+      "status": 200,
+      "finalUrl": "/pricing/calculator",
+      "ms": 7123,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Pricing calculator Search pages, trip cases, customers\u2026 Ctrl K Admin E Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cos",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "pricing-calculator-1440-dark.jpg"
+    },
+    {
+      "name": "proposals",
+      "path": "/proposals",
+      "viewport": 1440,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/versions?sort=-updated_at&limit=25&offset=0"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/proposals",
+      "ms": 3276,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Adventure Asia BOOKING OVERVIEW Dashboard SALES Trip Cases Proposals Customers Pricing calculator ADMIN Staff Settings E e2e-claude-code Admin Collapse Booking / Proposals Search pages, trip cases, customers\u2026 Ctrl K Admin E Proposals Every proposal version across trip cases: drafts, sent, approved and superseded. NEW PROPOSAL Search case code, customer or version title STATUS All statuses Draft Se",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "proposals-1440-dark.jpg"
+    },
+    {
+      "name": "dashboard",
+      "path": "/",
+      "viewport": 390,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/staff?active=false",
+        "GET 200 /api/booking/trip-cases?assignee=me&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending",
+        "GET 200 /api/booking/trip-cases/summary",
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/trip-cases?sort=-updated_at&limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/",
+      "ms": 3990,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Dashboard E Dashboard Welcome back, e2e-claude-code. Here is what needs your attention today. New inquiries 1 Needs attention In progress 0 1 open \u00b7 +1 vs last month Proposals sent 0 Waiting for the customer Awaiting activation 0 Nobody waiting Recent trip cases The five cases updated most recently. View all cases TC-000001 New inquiry S235 E2E Test Haa valley +3 legs Unassigned 8 h ago Pipeline b",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "dashboard-390-dark.jpg"
+    },
+    {
+      "name": "cases",
+      "path": "/cases",
+      "viewport": 390,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/trip-cases?sort=-updated_at&limit=25&offset=0",
+        "GET 200 /api/booking/trip-cases/summary",
+        "GET 200 /api/booking/staff/directory",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/cases",
+      "ms": 3595,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Trip Cases E Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All1 Inquiries1 Mine Unassigned Active1 Closed0 Search case code, customer name or e-mail SALES REP All reps Unassigned e2e-claude-code SOURCE All sources TripPlanner Manual CREATED \u2013 STATUS All statuses Columns CSV TC-000001 CUSTOMER SE S235 E2E Test Unverified e2e-s",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "cases-390-dark.jpg"
+    },
+    {
+      "name": "case-TC-000001",
+      "path": "/cases/TC-000001",
+      "viewport": 390,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/trip-cases/TC-000001",
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/countries"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/cases/TC-000001",
+      "ms": 3739,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Trip Cases E Haa valley New inquiry TripPlanner TC-000001 Dates not set \u00b7 7 days Pax not set Assign Edit details Decline CONVERT TO DISCOVERY INQUIRY New inquiry PROPOSAL BOOKING TRAVEL Overview Proposals0 Billing Checks Activity Inquiry What the customer built in TripPlanner, as received. Read-only. TripPlanner Received 14 Oct 2026, 11:30 Day 1 Haa valley Day 2 Haa valley Day 3 Chele La Pass Day ",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "case-TC-000001-390-dark.jpg"
+    },
+    {
+      "name": "customers",
+      "path": "/customers",
+      "viewport": 390,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/customers?limit=1",
+        "GET 200 /api/booking/customers?status=blocked&limit=1",
+        "GET 200 /api/booking/customers?status=active&limit=1",
+        "GET 200 /api/booking/customers?status=lead&limit=1",
+        "GET 200 /api/booking/customers?sort=-last_activity_at&limit=25&offset=0",
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/customers?status=past&limit=1"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/customers",
+      "ms": 3187,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Customers E Customers Everyone who asked us for a trip: TripPlanner leads, verified customers and past clients. NEW LEAD All1 Leads1 Active0 Past clients0 Blocked0 Search name, e-mail, phone or CUS- code MERGE REVIEW Any Needs review SOURCE Any source TripPlanner Added by staff Signed up (OTP) Columns CSV SE S235 E2E Test e2e-s235+booking@adventure.asia PHONE \u2014 LOCATION \u2014 STATUS Lead TRIP CASES 1 ",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "customers-390-dark.jpg"
+    },
+    {
+      "name": "staff",
+      "path": "/staff",
+      "viewport": 390,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/staff",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/staff",
+      "ms": 2979,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Staff E Staff Booking profiles of CIS staff accounts: their Booking role and whether they can use Booking. Staff accounts and passwords are managed in CIS admin. A person appears here after their first sign-in to Booking. Open CIS admin Total staff 1 Active 1 Pending activation 0 Search name or e-mail STATUS All statuses Active Pending / inactive ROLE All roles Admin Sales Contracting Content crea",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "staff-390-dark.jpg"
+    },
+    {
+      "name": "settings",
+      "path": "/settings",
+      "viewport": 390,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/settings"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/settings",
+      "ms": 3000,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Settings E Settings Your profile, how Booking looks for you, and what you are notified about. General Notifications Profile information You sign in with your CIS account. Name, e-mail and password are managed in CIS. Manage in CIS Name e2e-claude-code CIS role admin E-mail address \u2014 Change your e-mail in CIS; Booking copies it at sign-in. Booking role Admin Set by a Booking admin on the Staff page",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "settings-390-dark.jpg"
+    },
+    {
+      "name": "notifications",
+      "path": "/notifications",
+      "viewport": 390,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=20",
+        "GET 200 /api/booking/notifications?limit=5"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/notifications",
+      "ms": 3875,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Notifications E Notifications 1 unread. New inquiries, assignments, status changes and approvals that concern you. MARK ALL AS READ Search notifications STATUS All statuses Unread Read TYPE All types New inquiry Case assigned Status changed Proposal approved New inquiry TC-000001 New inquiry Unread 14 Oct 2026, 11:30 S235 E2E Test sent a trip with 4 AA tour leg(s). Open case Mark as read Showing 1",
+      "hasTC000001": true,
+      "errorText": null,
+      "shot": "notifications-390-dark.jpg"
+    },
+    {
+      "name": "pricing-calculator",
+      "path": "/pricing/calculator",
+      "viewport": 390,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "POST 200 /api/booking/pricing/quote-preview"
+      ],
+      "failed": [],
+      "calcResult": "Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note sells 1,492.54 USD Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-made Fixed departure B2B Selling currency USD EUR GBP AUD SGD Peak season dates (adds the rule's peak uplift) Override total (optional, in USD) Non-USD costs and selling currencies need a dated FX rate. Booking cannot enter rates yet (Pricing rules & FX ships in wave 2), so unless an admin has added rates for this environment, only USD costs priced in USD work. Result Rule in force, FX rates used, each line in USD and selling currency, rounding, margin and the floor check. TOTAL 1,495.00 USD Net cost (USD) 1,000.00 USD Subtotal 1,492.54 USD Computed total (rounded up to 5) 1,495.00 USD Margin applied 30% Effective margin 30.11% (floor 20%) Rule, FX and lines",
+      "currencyOptions": [
+        [
+          "b2c_tailor_made",
+          "fixed_departure",
+          "b2b"
+        ],
+        [
+          "USD",
+          "EUR",
+          "GBP",
+          "AUD",
+          "SGD"
+        ]
+      ],
+      "status": 200,
+      "finalUrl": "/pricing/calculator",
+      "ms": 7069,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Pricing calculator E Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note sells 1,492.54 USD Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "pricing-calculator-390-dark.jpg"
+    },
+    {
+      "name": "proposals",
+      "path": "/proposals",
+      "viewport": 390,
+      "theme": "dark",
+      "console": [],
+      "bff": [
+        "GET 200 /api/booking/notifications?limit=5",
+        "GET 200 /api/booking/versions?sort=-updated_at&limit=25&offset=0"
+      ],
+      "failed": [],
+      "status": 200,
+      "finalUrl": "/proposals",
+      "ms": 3346,
+      "dataTheme": "dark",
+      "layout": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "overflow": false,
+        "offenders": []
+      },
+      "textSample": "Proposals E Proposals Every proposal version across trip cases: drafts, sent, approved and superseded. NEW PROPOSAL Search case code, customer or version title STATUS All statuses Draft Sent Approved Superseded SALES Anyone Mine Unassigned UPDATED \u2013 Columns No proposals match Proposals are created from a trip case. Change the filters to widen the list. Dashboard Cases Customers Alerts More",
+      "hasTC000001": false,
+      "errorText": null,
+      "shot": "proposals-390-dark.jpg"
+    }
+  ],
+  "finishedAt": "2026-10-14T12:31:56.311Z",
+  "pricingCalculator": {
+    "input": "1 cost line: 1000 USD, B2C tailor-made, USD, no peak, no override",
+    "quotePreview": {
+      "status": 200,
+      "body": {
+        "channel": "b2c_tailor_made",
+        "currency": "USD",
+        "peak": false,
+        "priced_on": "2026-10-14",
+        "rule": {
+          "channel": "b2c_tailor_made",
+          "target_margin": "0.3000",
+          "floor_margin": "0.2000",
+          "peak_uplift_pts": "0.0300",
+          "card_fee_pct": "0.0300",
+          "valid_from": "2026-10-14"
+        },
+        "fx_rates": [],
+        "margin_applied": "0.3000",
+        "lines": [
+          {
+            "net_amount": "1000",
+            "net_currency": "USD",
+            "net_usd": "1000.00",
+            "sell_usd": "1492.54",
+            "sell_amount": "1492.54"
+          }
+        ],
+        "net_total_usd": "1000.00",
+        "subtotal": "1492.54",
+        "rounding_increment": "5",
+        "total": "1495.00",
+        "override_total": null,
+        "final_total": "1495.00",
+        "effective_margin": "0.3011",
+        "floor_margin": "0.2000",
+        "below_floor": false
+      }
+    },
+    "shot": "pricing-calculator-1440-light-details.jpg"
+  },
+  "mobileBottomCheck390": [
+    {
+      "name": "dashboard",
+      "scroller": "MAIN.aa-admin-main flex-1 overflow-y-auto px-8 py-6",
+      "totalH": 1342,
+      "unclippedOverflow": [],
+      "bottomNavTop": 784,
+      "lastContentBottom": 760,
+      "shot": "dashboard-390-light-bottom.jpg"
+    },
+    {
+      "name": "cases",
+      "scroller": "MAIN.aa-admin-main flex-1 overflow-y-auto px-8 py-6",
+      "totalH": 1045,
+      "unclippedOverflow": [],
+      "bottomNavTop": 784,
+      "lastContentBottom": 760,
+      "shot": "cases-390-light-bottom.jpg"
+    },
+    {
+      "name": "case-TC-000001",
+      "scroller": "MAIN.aa-admin-main flex-1 overflow-y-auto",
+      "totalH": 2246,
+      "unclippedOverflow": [],
+      "bottomNavTop": 784,
+      "lastContentBottom": 760,
+      "shot": "case-TC-000001-390-light-bottom.jpg"
+    },
+    {
+      "name": "customers",
+      "scroller": "MAIN.aa-admin-main flex-1 overflow-y-auto px-8 py-6",
+      "totalH": 846,
+      "unclippedOverflow": [],
+      "bottomNavTop": 784,
+      "lastContentBottom": 760,
+      "shot": "customers-390-light-bottom.jpg"
+    },
+    {
+      "name": "staff",
+      "scroller": "MAIN.aa-admin-main flex-1 overflow-y-auto px-8 py-6",
+      "totalH": 1146,
+      "unclippedOverflow": [],
+      "bottomNavTop": 784,
+      "lastContentBottom": 760,
+      "shot": "staff-390-light-bottom.jpg"
+    },
+    {
+      "name": "settings",
+      "scroller": "MAIN.aa-admin-main flex-1 overflow-y-auto px-8 py-6",
+      "totalH": 1430,
+      "unclippedOverflow": [],
+      "bottomNavTop": 784,
+      "lastContentBottom": 760,
+      "shot": "settings-390-light-bottom.jpg"
+    },
+    {
+      "name": "notifications",
+      "scroller": "document",
+      "totalH": 844,
+      "unclippedOverflow": [],
+      "bottomNavTop": 784,
+      "lastContentBottom": 593,
+      "shot": "notifications-390-light-bottom.jpg"
+    },
+    {
+      "name": "pricing-calculator",
+      "scroller": "MAIN.aa-admin-main flex-1 overflow-y-auto px-8 py-6",
+      "totalH": 1350,
+      "unclippedOverflow": [],
+      "bottomNavTop": 784,
+      "lastContentBottom": 760,
+      "shot": "pricing-calculator-390-light-bottom.jpg"
+    },
+    {
+      "name": "proposals",
+      "scroller": "document",
+      "totalH": 844,
+      "unclippedOverflow": [],
+      "bottomNavTop": 784,
+      "lastContentBottom": 723,
+      "shot": "proposals-390-light-bottom.jpg"
+    }
+  ],
+  "notes": [
+    "Dashboard first load after sign-in shows ERR_ABORTED for a few chunk/BFF requests: router.replace+refresh cancels in-flight requests; every BFF call then completes 200."
+  ]
+}

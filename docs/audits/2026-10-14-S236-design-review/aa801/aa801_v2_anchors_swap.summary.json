@@ -1,0 +1,286 @@
+{
+ "mode": "anchors+swap_brand",
+ "summary": {
+  "SUMMARY": "AA-801",
+  "mode": "anchors+swap_brand",
+  "gate": "brand_fit_mission",
+  "model_override": null,
+  "versions": 9,
+  "versions_in_set": 9,
+  "versions_complete": 9,
+  "judgements": 9,
+  "comparable": true,
+  "max_verdict_spread": 0.0,
+  "versions_verdict_spread_le_1": 9,
+  "max_brand_fit_spread": 0.0,
+  "mission_stable_versions": 9,
+  "mission_true_share": 0.444,
+  "evidence_verified_share": 1.0,
+  "evidence_overruled": 0,
+  "evidence_samples": [
+   "Visit Khaling National Handloom — a working weaving center where traditional textile knowledge supports local livelihoods.",
+   "A full day at the lake with no fixed schedule — families can choose from boat rides on the water, horseback riding across the surrounding terrain, walks along shorelines and forest paths, visits to lo",
+   "An 80-kilometer cycling day follows the Ma River through working agricultural land where subsistence farming and seasonal cultivation remain the rhythm of daily life.",
+   "The afternoon begins with a short sunset ride around town — a gentle way to stretch legs after travel, get a feel for the bikes, and let the guide assess the group's pace before the longer days ahead."
+  ],
+  "single_call": false,
+  "raw_calls": 21,
+  "raw_unparsed": 0,
+  "raw_mission_yes_share": 0.524,
+  "raw_mission_key_missing": 0,
+  "raw_evidence_key_missing": 0,
+  "raw_mission_samples": [
+   {
+    "mission_present": true,
+    "mission_evidence": "Visit Khaling National Handloom — a working weaving center where traditional textile knowledge supports local livelihoods.",
+    "brand_fit": 6,
+    "stop_reason": "end_turn"
+   },
+   {
+    "mission_present": true,
+    "mission_evidence": "Khaling National Handloom — a working weaving center where traditional textile knowledge supports local livelihoods.",
+    "brand_fit": 7,
+    "stop_reason": "end_turn"
+   },
+   {
+    "mission_present": true,
+    "mission_evidence": "A full day at the lake with no fixed schedule — families can choose from boat rides on the water, horseback riding across the surrounding terrain, walks along shorelines and forest paths, visits to local nomadic families, or excursions to T",
+    "brand_fit": 6,
+    "stop_reason": "end_turn"
+   },
+   {
+    "mission_present": false,
+    "mission_evidence": "Breakfast with your homestay family, then a 9-kilometer walk through the valley",
+    "brand_fit": 4,
+    "stop_reason": "end_turn",
+    "keys": [
+     "brand_fit_score",
+     "cross_brand_distinct",
+     "feedback",
+     "mission_evidence",
+     "mission_present"
+    ]
+   },
+   {
+    "mission_present": false,
+    "mission_evidence": "The pace remains unhurried, the camp your comfortable base.",
+    "brand_fit": 6,
+    "stop_reason": "end_turn",
+    "keys": [
+     "brand_fit_score",
+     "cross_brand_distinct",
+     "feedback",
+     "mission_evidence",
+     "mission_present"
+    ]
+   },
+   {
+    "mission_present": false,
+    "mission_evidence": "The pace remains unhurried, the camp your comfortable base.",
+    "brand_fit": 6,
+    "stop_reason": "end_turn",
+    "keys": [
+     "brand_fit_score",
+     "cross_brand_distinct",
+     "feedback",
+     "mission_evidence",
+     "mission_present"
+    ]
+   }
+  ],
+  "mean_brand_fit": 5.67,
+  "billed_calls": 21,
+  "calls_per_judgement": 2.33,
+  "total_cost_usd": 0.025,
+  "cost_per_judgement_usd": 0.00278,
+  "errors": 0,
+  "skipped": {},
+  "aborted": null,
+  "aborted_versions": null,
+  "swap_brand": true,
+  "pairing": [
+   {
+    "own": "atlas-hearth",
+    "judged_as": "wildkind-travel"
+   },
+   {
+    "own": "terra-family",
+    "judged_as": "trail-pulse"
+   },
+   {
+    "own": "trail-pulse",
+    "judged_as": "terra-family"
+   },
+   {
+    "own": "wildkind-travel",
+    "judged_as": "atlas-hearth"
+   }
+  ],
+  "per_version": [
+   {
+    "version_id": "893bc4f7",
+    "own_tenant": "trail-pulse",
+    "judged_as": "terra-family",
+    "skipped": null,
+    "mission": [
+     false
+    ],
+    "brand_fit": [
+     4.0
+    ],
+    "evidence": [
+     ""
+    ],
+    "evidence_verified": [
+     null
+    ]
+   },
+   {
+    "version_id": "d5a48151",
+    "own_tenant": "atlas-hearth",
+    "judged_as": "wildkind-travel",
+    "skipped": null,
+    "mission": [
+     false
+    ],
+    "brand_fit": [
+     6.0
+    ],
+    "evidence": [
+     ""
+    ],
+    "evidence_verified": [
+     null
+    ]
+   },
+   {
+    "version_id": "c62d6d00",
+    "own_tenant": "wildkind-travel",
+    "judged_as": "atlas-hearth",
+    "skipped": null,
+    "mission": [
+     true
+    ],
+    "brand_fit": [
+     6.0
+    ],
+    "evidence": [
+     "Visit Khaling National Handloom — a working weaving center where traditional textile knowledge supports local livelihoods."
+    ],
+    "evidence_verified": [
+     true
+    ]
+   },
+   {
+    "version_id": "313f1cb1",
+    "own_tenant": "terra-family",
+    "judged_as": "trail-pulse",
+    "skipped": null,
+    "mission": [
+     true
+    ],
+    "brand_fit": [
+     6.0
+    ],
+    "evidence": [
+     "A full day at the lake with no fixed schedule — families can choose from boat rides on the water, horseback riding across the surrounding terrain, walks along shorelines and forest paths, visits to lo"
+    ],
+    "evidence_verified": [
+     true
+    ]
+   },
+   {
+    "version_id": "3ddf595e",
+    "own_tenant": "trail-pulse",
+    "judged_as": "terra-family",
+    "skipped": null,
+    "mission": [
+     false
+    ],
+    "brand_fit": [
+     4.0
+    ],
+    "evidence": [
+     ""
+    ],
+    "evidence_verified": [
+     null
+    ]
+   },
+   {
+    "version_id": "75116f75",
+    "own_tenant": "atlas-hearth",
+    "judged_as": "wildkind-travel",
+    "skipped": null,
+    "mission": [
+     true
+    ],
+    "brand_fit": [
+     8.0
+    ],
+    "evidence": [
+     "An 80-kilometer cycling day follows the Ma River through working agricultural land where subsistence farming and seasonal cultivation remain the rhythm of daily life."
+    ],
+    "evidence_verified": [
+     true
+    ]
+   },
+   {
+    "version_id": "477ef0ce",
+    "own_tenant": "terra-family",
+    "judged_as": "trail-pulse",
+    "skipped": null,
+    "mission": [
+     true
+    ],
+    "brand_fit": [
+     6.0
+    ],
+    "evidence": [
+     "The afternoon begins with a short sunset ride around town — a gentle way to stretch legs after travel, get a feel for the bikes, and let the guide assess the group's pace before the longer days ahead."
+    ],
+    "evidence_verified": [
+     true
+    ]
+   },
+   {
+    "version_id": "588aa1f8",
+    "own_tenant": "atlas-hearth",
+    "judged_as": "wildkind-travel",
+    "skipped": null,
+    "mission": [
+     false
+    ],
+    "brand_fit": [
+     6.0
+    ],
+    "evidence": [
+     ""
+    ],
+    "evidence_verified": [
+     null
+    ]
+   },
+   {
+    "version_id": "5bf41e73",
+    "own_tenant": "terra-family",
+    "judged_as": "trail-pulse",
+    "skipped": null,
+    "mission": [
+     false
+    ],
+    "brand_fit": [
+     5.0
+    ],
+    "evidence": [
+     ""
+    ],
+    "evidence_verified": [
+     null
+    ]
+   }
+  ],
+  "mission_false_versions": "5/9",
+  "CONTROL_PASS": false
+ }
+}
