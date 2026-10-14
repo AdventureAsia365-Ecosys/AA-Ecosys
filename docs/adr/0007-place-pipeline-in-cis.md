@@ -1,10 +1,10 @@
 # ADR 0007 — Place pipeline in CIS: `geo` schema, `catalog.*` views, background jobs
 
 - **Status:** Accepted (14/10/2026, S236 — Nghiệp approved the AA-712 design with every recommendation
-  Q1–Q7; the geocoding provider is still open, see decision 9).
+  Q1–Q7, and chose Geoapify as the geocoder the same session, see decision 9).
 - **Scope:** AA-Ecosys: AA-CIS-App (schema `geo`, job kinds, admin page, `catalog` views),
   AA-TripPlanner-Web (readers move to views, writers removed, legacy tables dropped), AA-CIS-Infra
-  (migration copies, geocoder secret / IAM on the worker task role). AA-Booking reads the same views later.
+  (migration copies, the `aa-cis/dev/geoapify` secret readable by the worker task role). AA-Booking reads the same views later.
 - **Implements:** ADR 0002 consequence 1 ("The place pipeline moves to CIS"). Uses ADR 0003 (one durable
   job model) as is. **Amends nothing else.**
 - **Linear:** AA-712. **Design:** `docs/audits/2026-10-14-S236-design-review/aa712/03-design.md`
@@ -133,19 +133,55 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   suspect names < 5%, LLM cost/tour < $0.05, geocoder on its own budget row; a report per country
   replaces a manual approval per batch.
 
-### 9. Geocoder behind an adapter; storage rights required
+### 9. Geocoder: Geoapify behind an adapter; storage rights required
 
-- CIS calls the geocoder through one adapter (forward geocode with proximity + country filter, returns
-  point, provider id, confidence). The method is TripPlanner's (S202): the model proposes a point, the
-  provider confirms within 25 km, else the model point is kept with lower confidence.
+- CIS calls the geocoder through one adapter (forward geocode with country filter, returns point,
+  provider id, `result_type`, raw confidence). The method is TripPlanner's (S202): the model proposes a
+  point, the provider confirms it, else the model point is kept with lower precision.
 - **Only a provider/mode whose terms allow storing results indefinitely may be used**, because
-  coordinates live forever in `shared.destinations`. Mapbox Temporary geocoding may not be stored, so
-  TripPlanner's stored `located_by='mapbox'` rows are re-confirmed with the chosen provider during the
-  backfill.
-- **Provider decision pending** (Nghiệp): **Amazon Location Service** (acc2, IAM on the worker task role,
-  no third-party key; geocode with intended use `Storage`) vs **Mapbox Permanent geocoding** (`permanent=true`, card on
-  file; ≈ $5 / 1,000 requests). The jobs, schema and budget are built provider-neutral; the chosen
-  provider is wired before the trial run.
+  coordinates live forever in `shared.destinations`.
+- **Provider: Geoapify** (Nghiệp, S236) is the confirming geocoder for **all countries**. OpenStreetMap
+  data; Free plan 3,000 credits/day, commercial use allowed; results may be stored. Mapbox is the
+  **basemap only** (no Mapbox geocoding is called or stored); Amazon Location is not used. Evidence:
+  [`04-geocoder-research.md`](../audits/2026-10-14-S236-design-review/aa712/04-geocoder-research.md)
+  (terms, prices, coverage) and
+  [`05-geocoder-bakeoff.md`](../audits/2026-10-14-S236-design-review/aa712/05-geocoder-bakeoff.md)
+  (64 real names, 13 countries: Geoapify named-or-related 38/64, Amazon Location Geocode 14/64; hard
+  names 18/29 vs 1/29).
+- Rejected:
+  - **Amazon Location Places v2 (Stored)** — the bake-off found almost only cities (0 correct in
+    BT/CN/MN/LA, homonyms in NP/TW), several AA countries are *Unsupported*, Japan results may not be
+    stored (HERE §82.5.a), and there is no endpoint in us-west-1.
+  - **Mapbox Permanent geocoding** — Product Terms §2.7.3 allow Permanent geocodes in an app only as an
+    ancillary feature, with one request per end-user account and no lat/lng exposed to end users;
+    TripPlanner's public map breaks all three (and there is no free tier).
+- **Acceptance rule** (from the bake-off; the adapter implements it, the design doc holds the detail):
+  - Query `/v1/geocode/search?text=<normalised name>&filter=countrycode:<iso2>&format=json&limit=3`.
+    Normalise first: drop "(5,164m)"-style altitudes, split "X to Y" into its endpoints, split
+    "X, City". Generic phrases with no proper noun ("ger camp", "local market", "village center",
+    "fishing village") are not geocoded; they take the day's town point. Taiwan / Korea: when the model
+    supplied a native-script name (中文 / 한글), query it as a second attempt.
+  - Scan the top 3 and accept the **first** candidate that passes all of: (a) name similarity
+    (diacritics, parentheses and altitudes stripped; generic words such as temple/lake/pass/village
+    dropped) = 1.0, or ≥ 0.5 when the query has ≥ 2 distinctive tokens; (b) `result_type` not
+    country/state/county/postcode, and `city` only when the query itself is a settlement; (c) distance to
+    the model point ≤ 25 km, or ≤ 50 km for lake/river/valley/park/trail/road.
+  - `rank.confidence` is **not** a gate (correct POIs often score 0); it is recorded for audit only.
+  - Accepted → `located_by='geoapify'`, with provider, `geocoded_at`, raw confidence and `result_type`
+    stored for audit (a later re-run on another provider is a job, not a migration). None accepted → keep
+    the model point, `located_by='llm'`, precision **area** (shown as an area, not a pin); hard types
+    (monastery, pass, lake, village, …) go on the `/admin/places` review list.
+- Operation: ≤ 5 requests/s, retry with backoff on 429/5xx, a daily credit guard (stop at 2,500/day,
+  configurable) on top of the geocoder's `shared.spend_budget` row. The API key is the Secrets Manager
+  secret `aa-cis/dev/geoapify` (plain string), read through CIS's existing secrets helper; the key and
+  full request URLs are never logged. The provider setting defaults to `geoapify`; `model_only` remains
+  for tests and emergencies.
+- **Attribution is required wherever these coordinates are shown**: a "Powered by Geoapify" link near
+  the map or place information (Free-plan condition) plus "© OpenStreetMap contributors". The source
+  is kept with every stored row (`located_by`, provider).
+- TripPlanner's stored `located_by='mapbox'` rows came from Mapbox **Temporary** geocoding, which may
+  not be stored; the backfill re-confirms every one of them with Geoapify (or replaces it with the
+  model point as `llm`).
 
 ### 10. TripPlanner cut-over and legacy drop
 
@@ -153,8 +189,8 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   views cover every `source_id` the frozen TripPlanner tables cover** (one SQL check), and in the same
   window as a TripPlanner migration that maps old component ids to the new stable ids (unmatched pins are
   dropped; Dev only).
-- TripPlanner extraction writers (Lambda ops, geocode/locate/backfill scripts, Mapbox secret,
-  `tp_extract` grant) are removed. The S236 "places fallback" stays until `/admin/places` shows 100%
+- TripPlanner extraction writers (Lambda ops, geocode/locate/backfill scripts, the server-side
+  Mapbox geocoding secret, `tp_extract` grant) are removed. The S236 "places fallback" stays until `/admin/places` shows 100%
   coverage of live tours.
 - Rollback = flag back to `legacy` (tables frozen, not dropped). **The legacy tables**
   (`tripplanner.itinerary_components`, `tour_day`, `tour_stop`, `tour_graph_*`, `tour_leg`,
@@ -167,9 +203,16 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
 - The `tripplanner` read-model tables disappear from the schema-ownership table after the drop; `geo` is
   added as a CIS schema.
 - Destination covers (AA-708) can be switched on once a country is built.
-- Cost for the whole catalog ≈ $13–35 LLM + embeddings, plus the geocoder (Mapbox Permanent estimate
-  $21–41; Amazon Location to be priced in the provider decision). Steady state ≈ $0.025 per new or
-  rewritten tour.
+- Cost for the whole catalog ≈ $13–35 LLM + embeddings; the geocoder is $0 on the Geoapify Free plan
+  (≈ 6,000–8,200 requests = 2–3 days of the 3,000/day quota under the 2,500/day guard). Steady state
+  ≈ $0.025 per new or rewritten tour. If the free tier changes, Geoapify API 10 ($59/month) is the paid
+  fallback.
+- Every surface that shows place coordinates (TripPlanner map and place cards, later AA-Booking) must
+  carry "Powered by Geoapify" + "© OpenStreetMap contributors". Points that no provider confirmed
+  (`located_by='llm'`) are drawn as an area, not a pin.
+- Geoapify Free has no SLA and its terms can change; storing provider + `geocoded_at` per row keeps a
+  switch to another storable provider a re-run job. Mapbox Temporary coordinates stop being a source of
+  stored points.
 - Deploy gate: each 50-tour batch holds the gate ≈ 40–55 min (debounced follow-ups included); batches run
   outside deploy windows.
 - Before the catalog-wide run (not before the trial), TripPlanner's vector search (`MIN(embedding <=> q)
@@ -181,5 +224,5 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
 - Accepted risks: a "replace" re-upload hides the tour from `catalog.v_tour` until the new version
   publishes (AA-679 behaviour); true homonyms without card or overnight context stay unlocated; the
   background slot reserve is per worker task and must be re-checked on horizontal scale-out.
-- **Revisit** if the geocoder decision finds no provider with storage rights at an acceptable price, or
-  if a second app needs to author places.
+- **Revisit** if Geoapify's terms stop allowing storage or the free tier, if the confirm rate per
+  country after the trial is too low to be useful, or if a second app needs to author places.

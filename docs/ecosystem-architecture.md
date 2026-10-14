@@ -200,8 +200,9 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 - The place pipeline (itinerary extraction, geocode, tour graph) still lives in TripPlanner and is
   **frozen**; it moves to CIS under AA-712 as designed in [ADR 0007](adr/0007-place-pipeline-in-cis.md):
   CIS-owned schema `geo`, job kinds `place_extract` / `place_geocode` / `tour_graph_build` on `shared.job`
-  (background priority, cap 1), `shared.destinations` unique on `(name_norm, country, locality_norm)`, geocoder behind an
-  adapter with storage rights (provider pending: Amazon Location vs Mapbox Permanent), and TripPlanner
+  (background priority, cap 1), `shared.destinations` unique on `(name_norm, country, locality_norm)`,
+  Geoapify (OSM data, storable) as the confirming geocoder for all countries with Mapbox as basemap only,
+  and TripPlanner
   reading `catalog.*` place and graph views. TripPlanner cuts over only when the views cover every tour the
   legacy tables cover.
 
@@ -322,9 +323,9 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
   v1.1, `booking.job`), staff identity via CIS (ADR 0004 O1), catalog sync (AA-679). Handoff from TripPlanner:
   [`tripplanner-to-aaa-handoff.md`](tripplanner-to-aaa-handoff.md).
 - **Place pipeline to CIS (AA-712, [ADR 0007](adr/0007-place-pipeline-in-cis.md)):** required before
-  destination covers are switched on. Open: geocoding provider (Amazon Location vs Mapbox Permanent);
-  TripPlanner vector search must be rewritten (HNSW top-k or destination centroid) before the
-  catalog-wide run.
+  destination covers are switched on. Geocoder decided (Geoapify, S236; surfaces showing coordinates need
+  "Powered by Geoapify" + "© OpenStreetMap contributors"). Open: TripPlanner vector search must be
+  rewritten (HNSW top-k or destination centroid) before the catalog-wide run.
 - **[TO CONFIRM]** CloudFront in front of TripPlanner browse routes (listed as a later change).
 - **CIS data rerun:** waves are registered and reported through `/admin/waves` (`shared.rerun_wave`,
   AA-727); Batch Inference on acc3 (AA-624) is still blocked.
