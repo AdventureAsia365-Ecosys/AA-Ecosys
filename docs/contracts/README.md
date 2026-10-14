@@ -33,5 +33,5 @@ Every event or read model one app exposes to another is described here as a JSON
 |---|---|---|---|
 | `inquiry.submitted.v1.json` | TripPlanner → AA-Booking | `tripplanner.v_inquiry_outbox` (tp-008) | superseded by 1.1 (additive) |
 | `inquiry.submitted.v1.1.json` | TripPlanner → AA-Booking | same | current; grant to `booking` pending (tp-009) |
-| `catalog.tour.v1.json` | CIS → AA-Booking, TripPlanner | schema `catalog` (CIS 225): `v_tour` + `v_tour_day`, `v_tour_place`, `v_tour_photo`; also `v_destination`, `v_destination_photo` | read model drafted (AA-679, migration 225 not yet applied); consumers poll `v_tour` and re-sync on `content_hash`. Events `catalog.tour.published/updated/trashed` (outbox) = next additive minor |
+| `catalog.tour.v1.json` | CIS → AA-Booking, TripPlanner | schema `catalog` (CIS 225): `v_tour` + `v_tour_day`, `v_tour_place`, `v_tour_photo`; also `v_destination`, `v_destination_photo` | read model drafted (AA-679, migration 225 not yet applied); consumers poll `v_tour` and re-sync on `content_hash` (`updated_at` is not a change cursor: an in-place content edit does not move it). Events `catalog.tour.published/updated/trashed` (outbox) = next additive minor |
 | `trip_case.status_changed.v1` | AA-Booking → TripPlanner | `booking.v_trip_case_status_outbox` | planned |

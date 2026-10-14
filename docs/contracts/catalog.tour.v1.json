@@ -29,7 +29,7 @@
       "enum": [
         1
       ],
-      "description": "major.minor; consumers must accept every minor of major 1"
+      "description": "Contract version. 1 = this file. An additive minor (e.g. 1.1 with the outbox events) is a new file whose enum adds its value; consumers accept every value of major 1 (contracts README rule 2)."
     },
     "source_system": {
       "const": "cis"
@@ -164,7 +164,7 @@
     "updated_at": {
       "type": "string",
       "format": "date-time",
-      "description": "Latest of published_at and the tour's photo updates"
+      "description": "Latest of published_at and the tour's photo updates. Informative only, NOT a change cursor: published_tours has no updated_at, so an in-place Master Content edit changes content_hash without moving updated_at. Detect changes by diffing content_hash."
     },
     "content_hash": {
       "type": "string",
@@ -198,7 +198,7 @@
             "items": {
               "type": "string"
             },
-            "description": "place_name of this day's `places`, in position order"
+            "description": "place_name of this day's `places`, in position order (see places[].position)"
           }
         }
       }
@@ -225,11 +225,12 @@
           },
           "position": {
             "type": "integer",
-            "minimum": 1
+            "minimum": 1,
+            "description": "1-based order within the day: order of first mention (case-insensitive) in the day's title + body, i.e. itinerary order. Places the day text does not name come after, in a stable order that carries no itinerary meaning."
           },
           "place_name": {
             "type": "string",
-            "description": "Place as the tour's content names it"
+            "description": "Place as the tour's content names it: the spelling written in the day text, else the most frequent spelling among the tour's atoms (deterministic)."
           },
           "place_card_id": {
             "type": [
