@@ -1,7 +1,8 @@
 # ADR 0001 — Ecosystem target architecture: shared platform services and contracts between apps
 
-- **Status:** Proposed (28/09/2026, S199). Accepted once Nghiệp signs off the open decisions in
-  `docs/architecture/ecosystem-review-2026-09.md` §10.
+- **Status:** Accepted (14/10/2026, Nghiệp, S235), together with the S235 ecosystem blueprint
+  (`docs/audits/2026-10-14-S235-ecosystem-team-pilot/01-ecosystem-blueprint.html`). Proposed
+  28/09/2026 (S199). See "Amendments (S235)" below.
 - **Scope:** AA-Ecosys as a whole (AA-CIS-App, AA-TripPlanner-Web, AA-CIS-Infra, future AA-Booking).
   Repo-level ADRs (for example `apps/AA-CIS-App/docs/adr/0001..0004`) stay in their repos. This series
   covers only cross-repo decisions.
@@ -69,6 +70,18 @@ can solve on its own:
    - All frontends consume one token source and one shared component set.
 8. **Language.** Everything in Git is English, including root docs, READMEs and CONTEXT files.
    Session logs and the Notion memory stay in Vietnamese.
+
+## Amendments (S235, 14/10/2026)
+
+Approved by Nghiệp with the S235 ecosystem blueprint:
+
+- **Production also runs on acc2** (`005097885195`) when it comes. No new AWS account is created for
+  any environment. The old Quanskill AAA accounts (dev/stg/prod in ap-southeast-1) are **not part of the
+  ecosystem**.
+- **Dev hostnames are sub-domains of `lumiguides.it.com`** (pattern of `api-cis.lumiguides.it.com`,
+  e.g. `api-booking.lumiguides.it.com`).
+- **Frontend reviews happen on Vercel domains** (preview and project URLs); no custom domain is needed
+  for review.
 
 ## Consequences
 
