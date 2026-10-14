@@ -220,6 +220,12 @@ flowchart LR
   GW -.-> OAI[OpenAI API, legacy judge]
 ```
 
+> **Superseded (AA-Booking box and the webhook edge):** the diagram predates the 28/09 decisions.
+> AA-Booking runs on **acc2** (same RDS, schema `booking`), not on AAA accounts in ap-southeast-1,
+> and `inquiry.submitted` travels through an in-database transactional outbox, not a webhook. See
+> §10, [ADR 0001](../adr/0001-ecosystem-target-architecture.md) decisions 6–7 and
+> [ADR 0004](../adr/0004-aa-booking-stack-and-bootstrap.md).
+
 Principles, each recorded as a decision in ADR 0001:
 
 1. **CIS is the content system of record.** TripPlanner and AAA consume a **Catalog & Tour Graph read
@@ -413,6 +419,13 @@ Tabs:
 
 ### 6.2 Hand-off to AA-Booking (finalises `tripplanner-to-aaa-handoff.md`)
 
+> **Superseded (transport and idempotency key):** the signed HMAC webhook (option A) and
+> `Idempotency-Key = draft_id + revision` below were replaced on 28/09 by an in-database
+> transactional outbox (`tripplanner.outbox` + `v_inquiry_outbox`, tp-008) with the contract key
+> `<trip_id>:<handoff_id>` (`docs/contracts/inquiry.submitted.v1.json`). See §10,
+> [ADR 0001](../adr/0001-ecosystem-target-architecture.md) decision 6 and
+> `docs/tripplanner-to-aaa-handoff.md`. The payload and identity points below still stand.
+
 - **Transport — option A:** a signed webhook with an outbox on the TripPlanner side.
   - HMAC-SHA256 signature header.
   - `Idempotency-Key = draft_id + revision`.
@@ -429,6 +442,13 @@ Tabs:
   of the AAA identity API once it exists. Until then, dedupe on email/phone.
 
 ## 7. AA-Booking (AAA) — how to start
+
+> **Superseded in part:** item 2's Terraform roots `accounts/aaa-{dev,stg,prod}` are replaced by
+> `accounts/aa365/booking.tf` on acc2 (no new accounts), and item 4's webhook endpoint by the
+> outbox consumer (`booking.inbox_events`). The stack recommendation in item 2 is carried into
+> [ADR 0004](../adr/0004-aa-booking-stack-and-bootstrap.md) (Proposed), which also answers open
+> question 5 in §11 pending Nghiệp's confirmation. ERD v2 (`docs/AAA/erd-v2/`) replaces the ERD gap
+> list in item 1; it uses `(source_system, source_id)` in place of `external_ref`.
 
 1. **Close the ERD P0 gaps first**, per the handover review:
    - media as `s3_bucket` + `s3_key` (or a `media_files` table);
@@ -549,5 +569,6 @@ Separation is strong on clear cases. Thresholds for borderline content still nee
 3. Job runner: Postgres queue + worker service (recommended) or SQS?
 4. TripPlanner feasibility: one tour only, or combinations of tours within one country?
 5. AAA stack and vendor: did Quanskill deliver code? Does AAA follow the CIS stack?
+   *(No vendor code was delivered; the CIS-stack answer is proposed in ADR 0004, pending Nghiệp.)*
 6. Jev promotion threshold (agreement vs human labels) and the DPA/ZDR status with TypeSafe.
 7. Billing provider for the tenant portal (Stripe or invoice-only) — needed for the Billing page.

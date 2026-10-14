@@ -4,7 +4,7 @@
 > Updated 11/10/2026 (S225, AA-654 — translated to English; transport and data placement now follow
 > ADR 0001). **[FACT]** = verified in current TripPlanner code; **[TODO-AAA]** = depends on AAA, not
 > settled; **[TO CONFIRM]** = an assumption Nghiệp has to approve.
-> AAA sources: `apps/AA-TripPlanner-Web/docs/AAA/` — `Adventure Asia PRD and Technical Spec Doc [Final].pdf`,
+> AAA sources: `docs/AAA/` (AA-Ecosys root) — `Adventure Asia PRD and Technical Spec Doc [Final].pdf`,
 > `AA ERD.pdf`, `AAA_Quanskill_Handover_Review.docx`, `figma_AAA/` (screens). They are binary files;
 > this spec cites them as sources but does not extract their details yet.
 
@@ -155,5 +155,6 @@ when they differ, the JSON Schema wins (v1 has no narration; consent carries `co
 - `docs/adr/0002-only-cis-writes-content.md` — content write rule.
 - `apps/AA-TripPlanner-Web/docs/architecture-overview.md` — TripPlanner architecture.
 - `apps/AA-TripPlanner-Web/backend/assembly/{handler,registration,notify,events}.py` — current handoff code.
-- `apps/AA-TripPlanner-Web/docs/AAA/*` — AAA PRD, ERD, handover review, Figma screens.
+- `docs/AAA/*` — AAA PRD, ERD, handover review, Figma screens; ERD v2 in `docs/AAA/erd-v2/`.
+- `docs/adr/0004-aa-booking-stack-and-bootstrap.md` — AA-Booking stack, runtime and bootstrap (Proposed).
 - `docs/ecosystem-architecture.md` — ecosystem architecture.

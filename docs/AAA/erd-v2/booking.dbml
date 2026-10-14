@@ -157,7 +157,7 @@ Table booking.customer_sessions {
   expires_at timestamptz [not null]
   revoked_at timestamptz
   created_at timestamptz [not null]
-  Note: 'Answers "OTP every time the app opens?": no — OTP once, then a refresh token (proposed, TO CONFIRM).'
+  Note: 'Answers "OTP every time the app opens?": no — OTP once per device, then a 30-day refresh token (decided S226, README question 1).'
 }
 
 Table booking.staff_users {
@@ -169,7 +169,7 @@ Table booking.staff_users {
   created_at timestamptz [not null]
   updated_at timestamptz [not null]
   deleted_at timestamptz
-  Note: 'Was users (role admin/sales/content_creator). Permissions = the role matrix in README (code, not tables).'
+  Note: 'Was users (role admin/sales/content_creator). Permissions = the role matrix in README (code, not tables). Identity source is open (ADR 0004 O1): thin profile keyed by shared.admin_users.id vs own store.'
 }
 
 // ── Geography (golden records from CIS + commercial attributes here) ─────────

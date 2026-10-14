@@ -4,7 +4,8 @@
 > revision 25/09/2026). Items marked **[FACT]** were verified by reading code, migrations or live
 > state; **[TO CONFIRM]** marks an inference or gap that Nghiệp still has to confirm.
 > Target direction and decisions: [ADR 0001](adr/0001-ecosystem-target-architecture.md),
-> [ADR 0002](adr/0002-only-cis-writes-content.md), [ADR 0003](adr/0003-one-durable-job-model.md).
+> [ADR 0002](adr/0002-only-cis-writes-content.md), [ADR 0003](adr/0003-one-durable-job-model.md),
+> [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (AA-Booking stack and bootstrap, Proposed).
 
 ## 1. Overview
 
@@ -153,10 +154,12 @@ Source: `apps/AA-TripPlanner-Web/migrations/*`.
 Decided 28/09/2026 (ADR 0001 decisions 6–7): AA-Booking runs on acc2 and shares the RDS with its own
 schema `booking` (version key `bk-NNN`). AA-CIS-Infra provisions it inside acc2 (ECS service, ECR, DB
 role, API route); there are no new accounts. It never writes another app's schema. Contracts are
-versioned JSON in `docs/contracts/` (folder not created yet), carried by a **transactional outbox table** consumed by the
+versioned JSON in `docs/contracts/`, carried by a **transactional outbox table** consumed by the
 receiving app's job runner with an idempotency key: `catalog.tour.*` (CIS → AA-Booking, photos via
-`shared.v_tour_photos`) and `inquiry.submitted` (TripPlanner → AA-Booking, with the multi-tour leg
-chain). AA-Booking owns the customer identity (OTP).
+`shared.v_tour_photos`; contract not written yet, AA-679) and `inquiry.submitted` (TripPlanner →
+AA-Booking, with the multi-tour leg chain; v1 published as `docs/contracts/inquiry.submitted.v1.json`).
+AA-Booking owns the customer identity (OTP). Stack, runtime and the health-only bootstrap slice are
+proposed in [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (Proposed, open decisions pending).
 
 ## 4. Data contracts
 

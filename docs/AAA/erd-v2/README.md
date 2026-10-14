@@ -104,8 +104,12 @@ answers below; revisit only if a concrete requirement contradicts one.
 ## Not decided here
 
 - Hotel and supplier sync with an external system (Lemax-style back office, AA-710) — out of scope.
-- Exact `inquiry.submitted` / `catalog.tour.*` payloads: `docs/contracts/` (not created yet) and
-  the handoff spec.
+- Exact `catalog.tour.*` payload: not written yet (AA-679). `inquiry.submitted` v1 is published in
+  `docs/contracts/inquiry.submitted.v1.json` (see also the handoff spec).
+- Staff identity: decision 7 above (`staff_users` on the AA-656 staff model) is not final.
+  ERD v2, AA-680 ("no separate staff user store") and CIS `shared.admin_users` disagree; it is open
+  decision O1 in `docs/adr/0004-aa-booking-stack-and-bootstrap.md`, and `staff_users` stays out of
+  `bk-001` until it is answered.
 - `country_profiles` keys by ISO code, but `shared.destinations.country` is a country name today.
   CIS needs a name → ISO mapping (or a `shared.countries` table owned by CIS) before AAA reads
   countries from places.
