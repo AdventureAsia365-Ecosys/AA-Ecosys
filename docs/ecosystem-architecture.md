@@ -202,8 +202,7 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
   CIS-owned schema `geo`, job kinds `place_extract` / `place_geocode` / `tour_graph_build` on `shared.job`
   (background priority, cap 1), `shared.destinations` unique on `(name_norm, country, locality_norm)`,
   Geoapify (OSM data, storable) as the confirming geocoder for all countries with Mapbox as basemap only,
-  and TripPlanner
-  reading `catalog.*` place and graph views. TripPlanner cuts over only when the views cover every tour the
+  and TripPlanner reading `catalog.*` place and graph views. TripPlanner cuts over only when the views cover every tour the
   legacy tables cover.
 
 ### 4.1 Frontend ⇄ backend

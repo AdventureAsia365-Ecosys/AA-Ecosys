@@ -105,7 +105,8 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
 - Generic names (`is_generic_name()`: "Ban Na", "Base Camp") get a non-empty `locality_norm` (place card
   locality, else the day's overnight town), so two "Ban Na" in Laos with different localities are two
   rows; without a locality they stay `unknown` (no point) rather than borrow another tour's coordinates.
-- Legacy rows are reused only when `located_by IS NOT NULL` and not `suspect`; everything else is
+- Legacy rows are reused only when `located_by` is `geoapify`, `llm` or `manual` and not `suspect`;
+  `located_by='mapbox'` rows are re-confirmed with Geoapify (decision 9); everything else is
   re-resolved. `geo_status='manual'` is never overwritten by a job.
 
 ### 6. Place cards are used when present, not built
@@ -204,7 +205,7 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   added as a CIS schema.
 - Destination covers (AA-708) can be switched on once a country is built.
 - Cost for the whole catalog ≈ $13–35 LLM + embeddings; the geocoder is $0 on the Geoapify Free plan
-  (≈ 6,000–8,200 requests = 2–3 days of the 3,000/day quota under the 2,500/day guard). Steady state
+  (≈ 6,000–8,200 requests = 3–4 days of the 3,000/day quota under the 2,500/day guard). Steady state
   ≈ $0.025 per new or rewritten tour. If the free tier changes, Geoapify API 10 ($59/month) is the paid
   fallback.
 - Every surface that shows place coordinates (TripPlanner map and place cards, later AA-Booking) must
