@@ -63,7 +63,7 @@ can solve on its own:
      `docs/database/schema-ownership.md` (AA-684, 11/10/2026).
    - First contracts: `catalog.tour.*` (CIS → AA-Booking) and `inquiry.submitted` (TripPlanner →
      AA-Booking, carrying the multi-tour leg chain).
-   - AA-Booking owns the customer identity (OTP).
+   - AA-Booking owns the customer identity (OTP). **Superseded S236 by ADR 0006:** one ecosystem identity on Amazon Cognito (staff, tenant users, travellers).
 7. **One IaC repo, one design system.**
    - AA-CIS-Infra provisions AA-Booking inside acc2: ECS service, ECR, DB role, API route. There are no
      new accounts.
