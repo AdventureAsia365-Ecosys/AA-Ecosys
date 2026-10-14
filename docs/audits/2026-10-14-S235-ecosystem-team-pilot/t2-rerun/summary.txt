@@ -1,0 +1,17 @@
+tenant          country    S234bf newbf  miss judge saved calls   cost
+atlas-hearth    Bhutan        6.0   7.0     T   7.0   7.0     2  0.089
+terra-family    Bhutan        7.0   8.0     T   8.0   8.0     6  0.262
+trail-pulse     Bhutan        5.0   6.0     F   6.0   6.0    10  0.305
+wildkind-travel Bhutan        6.0   5.0     F   5.0   5.0     3  0.128
+atlas-hearth    Laos          5.0   6.0     T   6.0   6.0     9  0.459
+atlas-hearth    Mongolia      7.0   8.0     T   8.0   8.0     9  0.508
+terra-family    Laos          7.0   8.0     T   8.0   8.0     7  0.374
+terra-family    Mongolia      7.0   8.0     T   8.0   8.0     3  0.232
+trail-pulse     Laos          6.0   7.0     T   7.0   7.0     1  0.053
+
+versions after fix (waves 2+4): 9; judge_score>=7: 6/9; mission true (last): 7/9
+mean brand_fit S234 vs new on same pairs: 6.22 -> 7.0
+mission_present all judge calls after fix: 19/50 (wave 1 before fix 0/27; S234 baseline 72/104 absent)
+
+AA-794 metas over 13 rerun versions: out_of_band 1 ['2b0321f8']; suspect_cut 0 []; wrong_country 0 []
+cost: 13 versions, $3.492 total, $0.269/version (S234 $0.372)

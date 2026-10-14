@@ -1,0 +1,13 @@
+# Lens: data + events (agent, S235)
+- Schemas: shared 42, acp_shared 20, acp_contract 18, silver_aa_internal 7, gold_aa_internal 4, acp_deliver 1, public 1 (CIS); tripplanner 14; booking 7 (bk-001). db-schema-reference stale (pre-223, no booking; header "12 schemas" wrong).
+- Dead: empty acp_gold_output, acp_silver_s3, acp_silver_s4; likely legacy pipeline_jobs, tenant_brand_rules_deleted_aa404, atom_decompose_jobs, acp_runs, pipeline_runs, tenant_atom_state, quarter_plan_version. Dead Table Registry file referenced by skill DOES NOT EXIST.
+- Cross-schema: TP reads gold.published_tours direct (no contract), raw_tours column grant (179), tour_atoms column grant legacy (180), v_active_tour_atoms view (no contract doc), destinations raw table + photo views (201), llm tables (173). Only contract file: inquiry.submitted.v1.
+- Drift: hand-made objects (223 example); schema_versions ~160 rows vs 217 CIS files; TP 001–006 retro-registered → fresh DB not rebuildable with confidence.
+- Everything runs as master aa_cis_admin (BYPASSRLS): CIS api/worker + DB Migrate for all owners; all TP/Booking objects owned by CIS master.
+- Roles: aa_app_user only AA-544 tenant pool behind flag; tripplanner role created out-of-band, grants guarded IF EXISTS (silent skip forever); booking = only clean least-privilege role.
+- Naming: 3 generations (medallion, acp_*, app-named); audit_log vs audit_logs; tenant_id text vs uuid; NNN vs tp-/bk-.
+- Reference dup: places in destinations / place_card / hub / tripplanner tour_stop+components+graph; NO countries/ISO table (blocks O7, AA-679); photos URL vs bucket/key.
+- Migration copies byte-identical today but no CI check.
+- Eventing: adopt one pattern outbox → pull consumer (job) → inbox, registry docs/contracts/<event>.vN.json checked in CI both sides; helpers in shared/jobs; booking.job (O3); next contract catalog.tour.v1.
+- Observability: llm_call_log lacks app column (TP tagged in quality_signal.app), no Booking grant; shadow in same table; no cross-app spend view; 3 audit shapes; no lineage; schema dump scripts unowned in .tmp-session.
+- Target steps: migrator/owner roles + break-glass master; capture tripplanner role + unguarded grants + revoke legacy; CIS non-master runtime role (finish AA-544); CI migration ownership + byte-copy checks; nightly drift workflow + auto-commit schema reference; baseline version registry; dead cleanup (DRY RUN) + registry file; shared.countries ISO + destinations golden record + v_destinations/v_countries contracts; eventing standard; app column + common audit contract + spend view.

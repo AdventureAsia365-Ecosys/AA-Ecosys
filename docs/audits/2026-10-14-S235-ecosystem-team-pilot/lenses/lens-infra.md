@@ -1,0 +1,12 @@
+# Lens: infra/deploy/ops (agent, S235)
+- Topology: CIS ECS api+worker (REST 4ylo382khg → VPC link → NLB → ALB, custom domains api-cis*), TP 2 Lambdas (HTTP API v2 9vqkfbukvh, execute-api), Booking ECS in CIS cluster (REST 9z3xnalp59 → same VPC link/NLB/ALB, rule /booking/*). Dev only everywhere; envs/ dead scaffold.
+- Shared blast radius: 1 VPC, 1 NAT t4g.nano (SPOF, all egress incl LLM), 1 ALB internet-facing + :80 open, 1 NLB/VPC link, 1 cluster, RDS db.t3.micro single-AZ 20GB deletion_protection=false, Redis t3.micro, shared sg-app, 1 WAF on ALB only.
+- WAF bypass: rule VpcLinkInternalAllow allows whole VPC CIDR → all API GW traffic skips rate/geo/managed rules; no WAF on any API GW; ALB reachable directly.
+- CIS REST API explicit path allowlist (new routes need infra).
+- Tags inconsistent; no cost-allocation tags → no per-app cost. Secrets naming inconsistent; several CIS secrets not in TF.
+- AA-Bedrock-Invoker IS in Terraform now (acc1 import) → docs stale. Unused: EFS, langfuse, envs/, STEP_FUNCTIONS_ARN, AA-272 diagnostics, REPLACE_ME tfvars.
+- CI differs: CIS pip-audit report-only; Booking failing pip-audit + gitleaks; TP no security scan.
+- Security: CIS role IAMRoleManage *, 10 FullAccess policies, any branch; TP trust name wildcard any branch; env branch policies unverified (except Booking dev=main set S235). Identity: need CIS-issued staff JWT verified by Booking (JWKS, aud=booking); Booking-owned customer OTP; no service-to-service auth.
+- Logs: TP Lambda + API GW execution logs no retention (146MB); alarms 16 all CIS, none for Booking/TP/NAT; one SNS email.
+- Cost Sep 2026 acc2 ≈ $135 (budget 250): ELB 36.4, ECS 21.1, RDS 20.4, Redis 15.8, VPC 10.8, WAF 9.5, CW 7.9, Secrets 4.4, NAT ~7.4. LLM on acc3/acc1.
+- Steps: split CIS role (app-deploy vs infra-tf) + permissions boundary; pin TP trust; fix WAF bypass (ALB SG/internal, WAF on REST stages); custom domains (O2); modules/ecs-service from booking.tf; alarms/budgets/tags/retention; cost hygiene; IaC import + doc truth; identity ADR; reusable CI; staging/prod plan + account conflict (ADR 0001 vs global CLAUDE.md AAA accounts ap-southeast-1).

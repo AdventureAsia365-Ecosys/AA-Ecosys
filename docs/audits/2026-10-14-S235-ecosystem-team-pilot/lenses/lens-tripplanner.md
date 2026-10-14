@@ -1,0 +1,11 @@
+# Lens: TripPlanner + journey + contracts (agent, S235)
+- Discovery: no joined entry; CIS publishes to tenant WP only; TP separate Vercel site.
+- TP: guest session 90d; event-sourced trips; Tour Graph + tour_day in tripplanner schema (frozen, moves to CIS AA-712).
+- Hand-off: send-to-advisor idempotent + advisory lock; registration required by default (flag); outbox v_inquiry_outbox (tp-008); booking grant tp-009 missing; advisor notify = logging stub.
+- Identity: tripplanner.customers (case-sensitive unique phone/email) vs booking.customers (lower(email)); shared.admin_users staff; tenants B2B.
+- SECURITY: register_and_claim reuses any customer matching phone/email and attaches session without proof → can attach trips to someone else's identity; payload carries stored name/consent.
+- TP reads gold_aa_internal.published_tours via RLS tenant + acp_contract.v_active_tour_atoms → breaks ADR 0001 decision 1 (no direct *_aa_internal reads). No catalog views yet.
+- Contract: v1 const version + additionalProperties false → no evolution policy; external_ref vs (source_system, source_id) mismatch; consumer cursor on BIGSERIAL may skip out-of-order commits (use anti-join); no ack back; thin payload (no pax/dates/budget/locale).
+- Duplicates/owners: Customer→Booking; Tour/place/activity/photo/tour-day/country ISO→CIS; planning session/taste/outbox→TP; trip case/price/supplier/payment→Booking.
+- TP debt: itinerary_components not refreshed after reruns; shared X-TripPlanner-Key (no per-user auth); Mapbox token unrestricted; no WAF/rate limit; no photo views used; no pricing; S202 verdict "chưa giống Trip.com", AA-689 phases A–D.
+- Next: contract rules doc; CIS catalog views + catalog.tour.v1 (AA-679) + AA-712; TP reads off internal tables; tp-009 + lower(email); bk-002 trip_cases + consumer + staff notify; shared OTP (Booking auth API) + inquiry v2 verified customer; back-channel trip_case.status_changed + My Trips + price view.

@@ -1,0 +1,452 @@
+{
+ "AA-785": {
+  "id": "AA-785",
+  "title": "[T10 F1] Year-format tolerance: accept \"YYYY–YY\" / \"YYYYs\" when the seed supports the year",
+  "already_done_or_stale": "Not started. The issue is in Backlog with no comments. No commit or branch for AA-785 exists (git log --all, origin/main = 20a2387, the same SHA report 12 audited). The premise matches the S234 evidence (.tmp-session/s234/final/joined2.json). The 22 F1 ledger strings are about 11 distinct sentences, each logged twice (attempt ledger plus final ledger), in three forms: (a) '38' from \"1637–38\" in r1#5, r1#12, r1#15, r2#1, r2#7, r2#12, r3#2, r3#7 and r4#0; (b) '1630' from \"late 1630s\" in r1#11, r2#13 and r4#1; (c) '1990' from \"since the early 1990s\" in r1#19, where the seed has \"established in 1992\" (r2#4's F9 claim quotes that seed line). Root cause: `_NUM_RE` at services/acp_shared/grounding.py:38 has a lookbehind of `(?<![\\w.,])` and no decade or range handling, so after an en dash \"38\" is read as a standalone number, and \"1630s\" yields the number 1630. Several callers share this function: T9 gate_grounding (quality_gates.py:250-268), the admin sentence check (sentence_repair.py:463), T3 (acp_produce/tenant_pipeline.py:84), A1 grounding (content_generation/grounding.py:315,362) and source_facts.py:175. CONTEXT.md:469 records that it is shared. The \"warn until fixed\" step in the scope does not apply if the tolerance ships in the same PR, because F1 can stay blocking, as report 12 §1.4 ('then back to blocking') expects.",
+  "done_when": [
+   "Unit tests in a new tests/unit/test_aa785_f1_year_forms.py turn the 11 distinct S234 sentences and their seed years into fixtures. With seed '1637' or '1637–38', the sentence '… in 1637–38 …' passes. With seed 1637, '… late 1630s …' passes. With seed 'established in 1992', '… early 1990s …' passes.",
+   "Negative tests still flag invented numbers: '1637–52' with seed 1637 flags 1652 (the full year, not '52'); '1880s' with seed 1637 flags; '1990s' with no 199x year in the seed flags; 'a 38 km walk' with seed 1637 still flags 38. The existing fixture in tests/unit/test_aa298_aa325_grounding.py is unchanged (79 real units, 0 false positives, the '22-meter' fabrication still flagged), which shows T3 and A1 behave as before.",
+   "The F1 violation message format is unchanged (\"sentence states [...] not present in the content seed: '...'\"), so sentence_repair._F1_QUOTE_RE (sentence_repair.py:35) still parses it. A test asserts this.",
+   "Offline replay ($0, read-only): pull writer_input, content_text and discarded_attempts for the 80 S234 piece ids (the IDS list in .tmp-session/s234/final/g_pull.py) with a SELECT via ECS exec. Rebuild the grounding with service.grounding_from_writer_input() (service.py:395) and run gate_grounding on every stored text, final and discarded. Result: 0 year-format F1 violations, where the stored ledgers have 22. Every other F1 result is unchanged and listed as a diff. If any of the 11 sentences is not in a stored text, it is covered by its unit-test fixture.",
+   "The PR is merged with `Refs AA-785` and the 5 CI jobs are green. Deploy Dev rollout is COMPLETED on both aa-cis-dev-api and aa-cis-dev-worker at the same SHA, and no shared.job was queued or running at merge time.",
+   "Live check: re-run the same replay script inside the deployed worker container (ECS exec, read-only SELECT, deployed code imported) and get the same 0. Paste the output into the Linear comment, together with docs/implementation-notes/AA-785.md."
+  ],
+  "approach": "1) In services/acp_shared/grounding.py, add an opt-in year-form normaliser and keep the default behaviour for T3, A1 and source_facts. Add a keyword-only `year_forms: bool = False` to find_novel_numeric_claims, or add a sibling function `find_novel_numeric_claims_t9`; prefer the kwarg so there is one implementation, per the lesson that a value computed in two code paths must share one function. When year_forms=True, before diffing: (a) find year ranges `\\b(1[0-9]{3}|20[0-9]{2})\\s*[–—\\-/]\\s*(\\d{2})\\b`, expand the tail to the full year (same century), drop the raw 2-digit tail from sentence_nums, and keep the start year plus the full end year. Accept the end year when it is in the source, or when it is start+1 and the start is in the source (a founding that spans two calendar years). Otherwise report the FULL end year, e.g. '1652'. (b) Treat a decade `\\b(1[0-9]{2}0|20[0-9]0)s\\b` as supported when the source contains any 4-digit year in [YYY0, YYY9] or the literal decade. Otherwise report 'YYY0s'. Leave 'Day N' and citation-tag stripping unchanged. 2) In services/acp_content_writing/quality_gates.py:260, have gate_grounding pass year_forms=True. This also covers the AA-769 admin sentence check (sentence_repair.check_replacement, sentence_repair.py:463), because it calls the same gate. 3) Do not add an interim F1 warn downgrade: the tolerance ships in the same PR and F1 stays blocking. State this in the implementation notes as a decision that differs from the issue scope. 4) In CONTEXT.md, extend the Gate paragraph at CONTEXT.md:469: T9's F1 accepts year ranges and decades the seed supports; T3 and A1 keep the strict reading. 5) Write docs/implementation-notes/AA-785.md incrementally. 6) Out of scope: turning year_forms on for A1 or T3. Report 12 §2 says the A1/T2 grounding also counts background years as invented. That belongs to the T2 lane (AA-792/794) and should be raised there.",
+  "files": [
+   "apps/AA-CIS-App/services/acp_shared/grounding.py",
+   "apps/AA-CIS-App/services/acp_content_writing/quality_gates.py",
+   "apps/AA-CIS-App/tests/unit/test_aa785_f1_year_forms.py",
+   "apps/AA-CIS-App/tests/unit/test_aa450_quality_gates.py",
+   "apps/AA-CIS-App/CONTEXT.md",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-785.md",
+   "AA-Ecosys/.tmp-session/s235/aa785_replay.py (scratch, gitignored; based on .tmp-session/s234/final/g_pull.py)"
+  ],
+  "tests": [
+   "test_range_tail_accepted_when_start_in_seed (the 9 '1637–38' sentences as fixtures)",
+   "test_range_tail_accepted_when_full_end_year_in_seed",
+   "test_range_far_end_flags_full_year ('1637–52' -> ['1652'])",
+   "test_decade_accepted_when_seed_has_year_in_decade ('late 1630s' with 1637; 'early 1990s' with 1992)",
+   "test_decade_flags_without_seed_year ('1880s', '1990s' without 199x)",
+   "test_non_year_two_digit_still_flags ('38 km')",
+   "test_default_off_keeps_T3_A1_behaviour (year_forms=False flags '38', i.e. identical to today)",
+   "test_f1_message_still_parsed_by_sentence_repair (_F1_QUOTE_RE round-trip)",
+   "existing tests/unit/test_aa298_aa325_grounding.py unchanged and green"
+  ],
+  "needs_migration": false,
+  "migration_note": "None. The change is code only and adds no table or column. Nothing goes to AA-CIS-Infra db/migrations.",
+  "paid_run_needed": "None. The replay is deterministic: a read-only SELECT of writer_input via ECS exec plus offline gate_grounding, $0. Optionally run one Dev T9 Punakha blog (about $0.05, report 12 §1.1: $4.231 / 80 pieces) to watch F1 in a live ledger, but the in-container replay is enough for the live check.",
+  "risk": "low",
+  "size": "S"
+ },
+ "AA-786": {
+  "id": "AA-786",
+  "title": "[T10 F9] F9_cta_fact v1.1: strip citation tags, quote-the-sentence fallback, judge title/meta, LinkedIn repair-not-hold",
+  "already_done_or_stale": "Not started. Backlog, no comments, no commit or branch. The line references in the issue still match main@20a2387: the judge prompt embeds the raw tagged `content_text` at quality_gates.py:796 (`f\"PIECE:\\n{content_text}\"`); the notes-only fallback that turns into a blocking fact failure is at quality_gates.py:875-876; run_quality_gates passes the tagged text at quality_gates.py:1717. Evidence from joined2.json: the judge complained about 'visible citation markers' / 'inline reference markers' on r1#9 and r3#4. The 4 notes-only holds are r1#9 and r3#4 (markers plus a grammar error), r3#12 (doubled CTA) and r4#12 (LinkedIn, garbled brand line). LinkedIn F9 holds are r2#7, r4#8 and r4#12, all rated Light by the panel, and each flag named a real defect. Two points matter for the Done-when. First, the stored content_text and discarded_attempts are tag-stripped (service.py:1484-1486 and 1505-1508), so a replay of stored texts cannot reproduce the citation-marker bug. That part has to be shown with a prompt unit test and one live blog. Second, sentence_repair.plan's F9 branch (sentence_repair.py:140-147) returns None, which means a full rewrite, for any F9 violation without 'unsupported claim(s)'. Notes-only and CTA cases therefore go to a full rewrite, which fixed F9 0 of 6 times (report 08 §line 314/326). Overlap: AA-777 edits the same function (sticky pass, attempt-3 cut on blogs, judge A/B), and AA-787 removes F8 (whose prompt at quality_gates.py:683 has the same tag leak) from the same run_quality_gates list.",
+  "done_when": [
+   "Unit test: run_quality_gates with a tagged blog text ('… [R:abc] …[F:x]') calls invoke_judge with a PIECE block that contains no `[R:` or `[F:` (patch qg.invoke_judge and inspect the prompt). The SOURCE block is unchanged.",
+   "Unit test: a judge reply with status flagged, no recognised code, and notes quoting a sentence that exists in the text produces an F9_cta_fact violation in a quotable form (new code TEXT_INTEGRITY, \"TEXT_INTEGRITY: '<sentence>'\"). sentence_repair.plan() turns it into a repair item, not None. A reply that gives no locatable sentence gives a NON-blocking F9 flag ('judge gave no checkable reason'), never a hold. A reply whose only failure is CTA_NOT_REFLECTED behaves exactly as today.",
+   "Unit test: when seo_title and meta_description are given, they appear in the judge prompt. An unsupported claim whose sentence is the title or meta becomes a violation prefixed 'title ' / 'meta '. When those are the only violations, F9_cta_fact is non-blocking (the same body_blocking rule F17 uses at quality_gates.py:1363-1366) and plan() never sends the piece to a full rewrite for it.",
+   "Unit test: for channel='linkedin', an F9_cta_fact FACT_CHECK or TEXT_INTEGRITY failure left after the last try is cut with sentence_repair.delete_flagged and the piece is approved with the remaining flag stored `blocking:false, waived:true`. Status is never 'held' because of F9 on LinkedIn. The blog path is unchanged (AA-777 owns the blog cut).",
+   "Offline replay (one-off ECS task, not inside api/worker, reusing the .tmp-session/s234/f9v2_replay.py harness: adhoc stage, --max-usd cap, results to S3). Run the deployed gate_brand_voice v1.1 on the 20 r4 final texts plus the 4 fallback pieces (r1#9, r3#4, r3#12, r4#12), 3 runs each, with writer_input grounding and stored title/meta. Results: 0 notes mentioning 'citation' or 'marker'; each of the 4 fallback pieces gets a quoted sentence (TEXT_INTEGRITY or claim) or passes, and none ends as an unquoted fail; a 3-run stability table (per-piece verdict agreement and claim-sentence Jaccard) published in docs/audits (S235) and linked on Linear.",
+   "The PR is merged with `Refs AA-786` and CI is green. Deploy Dev rollout is COMPLETED on api and worker at the same SHA, with no shared.job busy at merge.",
+   "Live check on Dev: one blog and one LinkedIn T9 job for a test tenant, for example Atlas & Hearth, Punakha moment. The blog piece's gate_ledger F9 entries contain no citation or marker notes, and the judge prompt reached the model tag-free (log line or llm_call_log t10_judge row present). The LinkedIn piece is not held because of F9_cta_fact. Both are verified by a read-only SELECT on acp_shared.content_piece (gate_ledger, flags, status, held_reason) and on the admin /admin/content-quality drawer."
+  ],
+  "approach": "All edits are in the F9 path. 1) Tag strip: in quality_gates.py:1717 pass `strip_citation_tags(content_text)` to gate_brand_voice. Keep the tagged text for F1 and F5, which need the tags (docstring at :1648-1655). Also add `content_text = strip_citation_tags(content_text)` at the top of gate_brand_voice as defence in depth. 2) Quote-the-sentence fallback: add 'TEXT_INTEGRITY' to _BRAND_VOICE_FAILURE_CODES (quality_gates.py:179) as a product-truth code covering broken or garbled grammar, a doubled CTA, visible markup, and a sentence cut mid-thought. Require a flagged_phrases quote in the prompt (:807-812) and the contract (:774-786). In _viol (:856-869), emit one violation per quoted phrase in the form \"TEXT_INTEGRITY: '<sentence>'\". Replace the fallback at :875-876: if notes contain a quoted string that sentence_repair.locate_sentence can find, emit a TEXT_INTEGRITY violation; otherwise return a NON-blocking F9 result. This follows the AA-770 precedent at :817-822 that an outage, or here a verdict with no reason, is not a hold. Record it in the implementation notes as a policy decision for Nghiệp. 3) sentence_repair.plan (sentence_repair.py:140-147): parse the TEXT_INTEGRITY form, either by adding a branch or by routing through _BRAND_QUOTE_RE, with the problem 'is broken or garbled — rewrite as one clean sentence, or return empty to cut'. Keep CTA_NOT_REFLECTED on the full rewrite. 4) Title and meta: add `seo_title`/`meta_description` kwargs to gate_brand_voice and pass them from run_quality_gates (:1611-1624 already receives them). Add a 'SEARCH TITLE / META' block to the PIECE section. Map claims whose sentence copies the title or meta (hygiene.copies) to 'title …' / 'meta …' violations, and make F9 blocking only when a body violation remains (mirroring F17 body_blocking at :1363-1366). sentence_repair._seo_fields_only (:105-113) must treat such F9 violations as SEO-owned. Feeding them into _fit_seo_meta (service.py:456) is optional and should be left to a follow-up. 5) LinkedIn repair-not-hold: give service._hold_or_ship (service.py:369-377) a `channel` argument and call sites at :1255 and :1471. On LinkedIn, when hold_failure returns F9_cta_fact with FACT_CHECK or TEXT_INTEGRITY items, run sentence_repair.delete_flagged (sentence_repair.py:306) and re-run final_pass, then ship approved with the F9 result marked waived (reuse _waive_style_only at service.py:598). Build this as a small helper `_cut_truth_items(...)` so that AA-777 item 2 can extend it to blogs without rewriting it. 6) Gate grep: lesson 'Đổi chữ ký hàm phải grep MỌI caller' (when a function signature changes, grep every caller). Callers of gate_brand_voice are quality_gates.py:1717 and tests that patch it (test_aa771_s234_voice_contract.py:586,595,647; test_aa768_t9_source_fidelity.py; test_aa450; test_aa770). 7) Update CONTEXT.md Gate paragraph (lines 461-469) with F9 v1.1, and write docs/implementation-notes/AA-786.md incrementally. No frontend change is needed: shared.ts:180 already labels F9_cta_fact 'Unsupported claim / CTA'. Leave label work to AA-787.",
+  "files": [
+   "apps/AA-CIS-App/services/acp_content_writing/quality_gates.py",
+   "apps/AA-CIS-App/services/acp_content_writing/sentence_repair.py",
+   "apps/AA-CIS-App/services/acp_content_writing/service.py",
+   "apps/AA-CIS-App/tests/unit/test_aa786_f9_v11.py",
+   "apps/AA-CIS-App/tests/unit/test_aa768_t9_source_fidelity.py",
+   "apps/AA-CIS-App/tests/unit/test_aa771_s234_voice_contract.py",
+   "apps/AA-CIS-App/CONTEXT.md",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-786.md",
+   "AA-Ecosys/.tmp-session/s235/aa786_replay.py (scratch; copy of .tmp-session/s234/f9v2_replay.py pattern: adhoc stage, cost cap, S3 output)",
+   "AA-Ecosys/docs/audits/<S235 folder>/aa786-f9-stability.md (replay report)"
+  ],
+  "tests": [
+   "test_f9_prompt_has_no_citation_tags (tagged blog through run_quality_gates; inspect invoke_judge user_prompt)",
+   "test_f9_text_integrity_code_is_quoted_and_repairable (TEXT_INTEGRITY -> plan() returns an item)",
+   "test_f9_notes_only_with_locatable_quote_becomes_text_integrity",
+   "test_f9_notes_only_without_quote_is_warn_not_hold (blocking False; hold_failure returns None)",
+   "test_f9_cta_not_reflected_unchanged (still blocking, plan() -> None for full rewrite)",
+   "test_f9_prompt_includes_title_and_meta",
+   "test_f9_title_meta_only_claim_is_non_blocking_and_seo_owned (_seo_fields_only True)",
+   "test_linkedin_f9_truth_failure_is_cut_not_held (service-level with patched judge/repair; status approved, F9 waived)",
+   "test_linkedin_f9_cut_impossible_ships_flagged (hook-only sentence -> approved + flag; documents the policy)",
+   "test_blog_f9_hold_path_unchanged (guard for the AA-777 boundary)",
+   "existing F9 tests updated for the new kwargs (test_aa768_t9_source_fidelity.py:65-257, test_aa771_s234_voice_contract.py:586-647)"
+  ],
+  "needs_migration": false,
+  "migration_note": "None. TEXT_INTEGRITY is a new code inside gate_ledger JSON and acp_shared.content_piece already stores gate_ledger/flags as jsonb (docs/architecture/db-schema-reference.md:372-395). Nothing goes to AA-CIS-Infra db/migrations, and the t10_judge route is unchanged (no llm_role_config migration).",
+  "paid_run_needed": "Yes, small. (a) Replay: 24 pieces × 3 runs = 72 F9 judge calls at about $0.005 each (report 12 §1.1: F9 $0.403 / 80 pieces) is about $0.36. Set the cap at $0.50 and run it as a one-off ECS task, logged under stage adhoc_aa786 with role judge (silence the t10_judge log the way f9v2_replay.py:367 does). (b) Live check: 1 blog + 1 LinkedIn T9 job is about $0.05 each, so about $0.10. Total ≤ $0.60. The gpt-5.6-luna 3-run data from (a) is the new-prompt baseline AA-777's judge A/B should reuse instead of paying for it again.",
+  "risk": "medium",
+  "size": "M"
+ },
+ "AA-792": {
+  "id": "AA-792",
+  "title": "[T2] Tenant-voice writer prompt + judge gates on brand fit only (mission/distinct logged, not capped)",
+  "already_done_or_stale": "Nothing is implemented yet. AA-CIS-App origin/main @20a2387 has no AA-792 commit or branch. Linear shows In Progress, but no code exists and there are no comments. The issue's premise needs two corrections. (1) The 4 pilot tenants DO have a full brand profile. The active v3 rows have core_idea, customer_segment, customer_mindset, voice_examples, style_guide and good_examples filled; only system_prompt is empty (.tmp-session/s234/final/t2_scores.json 'brands'). So the AA-202 brand-diff block (batch_prompt.py:45-83) is already sent to the T2 writer. The 'mission' the judge asks for (brand_fit.py:158-159, 'mission-hook') is really core_idea under another name, not a missing T0 field. (2) Today's T2 writer gets contradictory orders. Against it: the neutral system prompt (prompts.py:112-134), the user prompt opening 'for a master content catalog' (prompts.py:337), and the itinerary body told twice to be 'NEUTRAL third-person editorial' (prompts.py:374-383). For it: the diff block's 'CONTRAST REQUIREMENT'. The neutral side outnumbers it 3:1. The brand system_prompt append ('append only', batch_prompt.py:105) is never even rendered for these tenants, because system_prompt is NULL. The report does NOT mention a third cause. The itinerary length nudge rewrites single days 'in the same brand voice (calm, factual, editorial…)' for 'Adventure Asia' (itinerary_utils.py:45-48), and it ran 130 times across the 14 S234 jobs (s1_/t2_itinerary_nudge rows in t2_scores.json). That re-neutralises days after the writer. Also, the T2 brand load in _prepare uses its own SELECT (t2_rewrite_job.py:81-87, ORDER BY version DESC) instead of the AA-771 brand pack (brand_pack.py:38-45, which resolves 'default' first). It also never reads brand_name, brand_type or default_cta. Precedent: AA-698 already made A1 gate on brand_fit alone (judge_node.py:41-48; docs/implementation-notes/AA-698.md). T2 only needs to join that rule.",
+  "done_when": [
+   "PR (subject 'feat: …', body 'Refs AA-792') merged to main; all 5 required CI jobs green; Deploy Dev rollout COMPLETED on aa-cis-dev-api AND aa-cis-dev-worker at the same SHA (aa-ship).",
+   "Unit guard: the A1 (non-tenant) system + user prompts are byte-identical to before the change (golden prompt_version hash captured before editing). The T2 system prompt contains the tenant brand block (voice, style guide, good examples, forbidden words) and does NOT contain 'never adopt a persona', 'append only' or 'master content catalog'. Rule 6 SOURCE FIDELITY text is still present.",
+   "Live: CloudWatch event `llm_prompt_built` for one rerun t2_rewrite job shows the new T2 base marker plus that tenant's brand block in system_prompt_text, and no neutral-voice rules in user_prompt_text.",
+   "Rerun (14 job runs, design in notes): every new version ends non-failed with job.result.brand_loaded=true. Mean judge brand_fit_score is ≥ 7.0 for EACH of the 4 tenants (atlas-hearth, terra-family, trail-pulse, wildkind-travel). It is read from the last shared.llm_call_log row per rerun job_id with stage='t2_judge' and quality_signal ? 'brand_fit_score'.",
+   "Rerun: 0 versions where brand_fit ≥ 7 and validate ≥ 7 but tenant_tour_versions.quality_score < 7, which proves no mission or distinct cap. mission_present and cross_brand_distinct are still present in quality_signal (logged as diagnostics).",
+   "Rerun total cost ≤ $5.00 (sum of llm_call_log.cost_usd over the rerun job_ids).",
+   "Nghiệp reads the 3 new Trail Pulse and 3 new Atlas & Hearth versions next to the S234 ones (9a4b7959, 453c0a24, 7ef62541, cbba9416, b25e4411, 39d1e38c) and confirms the voice in a Linear comment.",
+   "apps/AA-CIS-App/CONTEXT.md T2/T3 paragraphs (lines 686-699) are updated and docs/implementation-notes/AA-792.md exists (Decisions / Changed / Tradeoffs / Should know)."
+  ],
+  "approach": "1) Brand load (single source). In t2_rewrite_job._prepare, replace the hand-written SELECT with services.acp_shared.brand_pack.fetch_brand_pack_conn. Map the pack into brand_rules, which keeps the existing keys and adds brand_name, brand_type and default_cta. Keep the AA-741 rule: a DB error raises, and the no-row path still carries rewrite_language and _brand_loaded=False. Add brand_name and brand_type to _rewrite_tour's initial_state (api/routers/v1_pipeline.py:111-136) and to ContentState (graph.py:204-280). The T3 repair rounds reuse the same brand_rules dict (tenant_pipeline.py:261), so they inherit this.\n2) Writer system prompt. Add T2_SYSTEM_PROMPT to prompts.py: the role is 'you write this tour as THIS client brand'. Keep these rules verbatim from SYSTEM_PROMPT: rule 1 (core forbidden list, enforced by validate FORBIDDEN_WORD), rules 2-5 (name/subtitle/highlights/itinerary structure, no invented meals or times), rule 6 SOURCE FIDELITY, and rule 8 (meta band). Keep rule 7's budget-word ban, because validate enforces it (graph.py:781-786), but drop 'base catalog' from its wording. Drop the EDITORIAL VOICE and NEUTRALIZE PROMOTIONAL SOURCE COPY blocks. build_s1_system_prompt (batch_prompt.py:86) branches on state['is_tenant_rewrite']. The T2 prompt is: T2 base, then language, then render_brand_block(pack rebuilt from the state's brand_* fields, heading 'CLIENT BRAND'), then brand_system_prompt when present (as brand context, no 'append only'), then build_brand_diff_block (kept for the contrast requirement), then the forbidden-words hard constraint. The A1 branch stays untouched and byte-identical. The Bedrock Batch path is A1-only and is unaffected.\n3) User prompt. Add build_rewrite_prompt(..., voice='neutral'|'tenant'). The tenant variant changes four things. The opening line becomes 'Rewrite … in this client's brand voice'. The name/summary/itinerary-body instructions say 'brand voice in EVERY day, same facts, no neutral register'. The seo_meta GOOD example loses its editorial bias. The style guide is not duplicated, because it is already in the brand block. The per-day length and SOURCE FACTS blocks are unchanged.\n4) Itinerary nudge. Add nudge_itinerary_day(..., voice_hint: str | None = None). Both T2 call sites pass 'keep the CURRENT DRAFT's brand voice (<voice words>)' instead of 'calm, factual, editorial': graph.py:135 via _process_itineraries, called from generate_node:476 and seed:654, and flag_fix_node.py:358. The A1 nudge prompt is unchanged.\n5) Judge. In judge_node.py, gate on brand_fit for both A1 and T2: generalise a1_judge_score at judge_node.py:41-48/134 and drop the min(brand_fit, distinct) T2 rule at :134. Pass mission_absent_cap=None from judge_node (:132) and remove _MISSION_ABSENT_CAP (:33). cross_brand_distinct and mission_present are still requested, returned in state and logged in quality_signal (:155-168); they feed AA-795. Leave the judge prompt (brand_fit.py:133-164) and the repeat-median unchanged, so brand_fit stays comparable with S234 (32 of 104 S234 calls would pass on brand_fit alone). The tie-break is unchanged and now keys on brand_fit for T2 too.\n6) Write implementation notes as you go. Decisions to record: the CTA is not used in the T2 tour (there is no CTA field, and default_cta is empty for 4/4 tenants); 'luxury' stays core-banned (forbidden_words) and is flagged for Nghiệp; the judge prompt is deliberately unchanged. Update CONTEXT.md lines 686-699.\nLessons: before editing, print one real S234 T2 prompt from the CloudWatch `llm_prompt_built` event to confirm the conflict ('in ra đúng nguồn writer nhận được', AA-768). Make sure there is ONE brand loader (two code paths for one value must share a function). 'Lưu được ≠ pipeline dùng được': brand_name and default_cta are saved but T2 never read them. An A1 guard test is mandatory because the prompt module is shared.",
+  "files": [
+   "apps/AA-CIS-App/services/content_generation/prompts.py",
+   "apps/AA-CIS-App/services/content_generation/batch_prompt.py",
+   "apps/AA-CIS-App/services/content_generation/itinerary_utils.py",
+   "apps/AA-CIS-App/services/content_generation/graph.py",
+   "apps/AA-CIS-App/services/content_generation/flag_fix_node.py",
+   "apps/AA-CIS-App/services/content_generation/judge_node.py",
+   "apps/AA-CIS-App/services/content_generation/brand_fit.py (docstring only; score_brand_fit param kept)",
+   "apps/AA-CIS-App/services/jobs/t2_rewrite_job.py",
+   "apps/AA-CIS-App/api/routers/v1_pipeline.py",
+   "apps/AA-CIS-App/CONTEXT.md",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-792.md",
+   "apps/AA-CIS-App/tests/unit/test_aa792_t2_tenant_voice.py (new)",
+   "apps/AA-CIS-App/tests/unit/test_aa206_judge.py (update :167 T2 rule)"
+  ],
+  "tests": [
+   "NEW tests/unit/test_aa792_t2_tenant_voice.py: A1 golden. Hash build_s1_system_prompt and build_s1_user_prompt for a non-tenant branded state and compare against a hash captured on main before the edit.",
+   "NEW (same file): the T2 system prompt contains the voice words, style guide, good-examples and forbidden-words lines. It lacks 'never adopt a persona', 'append only' and 'master content catalog'. It still contains 'SOURCE FIDELITY' and 'HARD CONSTRAINT — FORBIDDEN WORDS'.",
+   "NEW (same file): the T2 user prompt's itinerary instruction asks for the brand voice and does not contain 'NEUTRAL third-person'. The style guide is not duplicated.",
+   "NEW (same file): the nudge system prompt for T2 (voice_hint set) has no 'calm, factual, editorial'. The A1 nudge prompt is byte-identical.",
+   "NEW (same file): with a fake conn, _prepare resolves the brand through brand_pack (the 'default' row wins, brand_name/default_cta are present) and still raises on a DB error.",
+   "UPDATE tests/unit/test_aa206_judge.py::test_a1_judge_ignores_mission_and_t2_keeps_both_gates. Now T2 (brand_fit 8, distinct 3, mission False, validate 9.75) gives quality_score 8.0. Add: T2 brand_fit 6 gives a retry with the judge feedback merged.",
+   "Run unchanged and keep green: tests/unit/test_aa724_writer_neutral_voice.py (A1 neutral rules), test_aa606_bedrock_batch.py (A1 batch prompt), test_aa714_judge_repeat_median.py, test_aa692_judge_tiebreak.py, test_aa612a_tenant_brand_judge_gate.py, test_aa763_t_series_stage_keys.py, test_aa771_brand_pack.py.",
+   "Integration: extend tests/integration/test_compiled_graph_state_propagation.py with a T2 state (mocked LLM). Assert that brand_name and the brand block reach generate_node's system prompt and that judge_score equals brand_fit."
+  ],
+  "needs_migration": false,
+  "migration_note": "None. No schema change: tenant_brand_rules already has every T0 column (db-schema-reference.md:1122-1145), and the judge breakdown stays in llm_call_log.quality_signal. Persisting a per-version breakdown is AA-795. If done as a column, that migration goes to infra/AA-CIS-Infra/db/migrations/cis/ via the DB Migrate workflow, not this issue.",
+  "paid_run_needed": "Yes: one shared T2 rerun for AA-792 + AA-794, Nghiệp-approved at ≤ $5 (design in notes). Expected cost: $0.20–0.30 per version, about $2.8–4.2 for 14 runs. Basis: the S234 actual was $5.21 / 14 = $0.372 per version. Of that, t2_generate on Sonnet was 101 calls = $4.91; the judge was $0.175; the nudge $0.116; Jev $0.008. The judge fix should remove most of the graph retries (each failed judge makes another Sonnet write). T3 grounding repair rounds remain until AA-793 (12 of 14 escalated on novel numbers). Worst case is S234 again (~$5.2), so the driver must hard-stop at $4.50 cumulative.",
+  "risk": "medium",
+  "size": "M"
+ },
+ "AA-794": {
+  "id": "AA-794",
+  "title": "[T2] SEO meta cut mid-sentence + wrong-country suffix",
+  "already_done_or_stale": "Nothing is done: no commit or branch, Linear status Backlog. The issue's line refs are accurate. The fragments come from the last-resort word-boundary cut in _cut_long_meta (seo_meta_utils.py:213-222). It is reached through graph._apply_seo_meta_fit → fit_seo_meta_final (graph.py:590-615, again in revalidate at graph.py:1003) and through flag_fix (flag_fix_node.py:156-159). meta_complete_sentence (seo_meta_utils.py:54-66) accepts the result because it rejects only connector endings. The wrong country comes from _extend_short_meta appending ', in {country}.' (seo_meta_utils.py:254-255). Here country = raw_tours.country, a single value ('Laos') for the Laos→Vietnam tour (t2_rewrite_job.py:33,52). raw_tours has no multi-country column; it has only country and country_raw_unresolved (db-schema-reference.md). T3 uses the weaker fit_seo_meta (salvage only, tenant_pipeline.py:234-235). The 7 S234 cases come from .tmp-session/s234/final/t2_content.json. Fragments: cbba9416 '…mountain valleys with expert.', 9a4b7959 '…Punakha Dzong with active daily.', 81102180 '…mountain farming and valley.', 26e0ba34 '…ancient monastic ruins across fragile.', 5b442cdf '…farmhouse food traditions across distinct mountain.'. Wrong country: 79038b8c and 00cf8f28 '…Cuc Phuong National Park, in Laos.'. The same functions run on A1 (S1 Master hard codes, graph.py:184-201), so A1 is affected too.",
+  "done_when": [
+   "PR (subject 'fix: …', body 'Refs AA-794') merged to main; 5 CI jobs green; Deploy Dev rollout COMPLETED on api and worker at the same SHA.",
+   "Unit tests cover all 7 S234 cases (5 fragments, 2 wrong countries) plus the single-country regression; the existing SEO-fit tests are still green.",
+   "Rerun (the same 14 runs as AA-792): all 14 seo_meta are 140–155 chars and end in '.'. 0 end on a cut content word (the new detector flags 0, and the 14 metas are listed in the rerun report for a human read). 0 carry an 'in <country>' suffix on a multi-country tour (none of the 3 Laos→Vietnam versions ends ', in Laos.').",
+   "$0 read-only sizing: count active A1 published_tours.seo_meta that end on a cut content word (S3-mediated ECS exec SELECT). The number goes in the implementation notes. A backfill, if needed, is a separate issue.",
+   "docs/implementation-notes/AA-794.md exists."
+  ],
+  "approach": "1) Never cut between two content words. In _cut_long_meta's last-resort loop (seo_meta_utils.py:213-222), accept a word-boundary cut only when the original's NEXT word is a phrase boundary. The boundary set is BAD_META_ENDINGS ∪ _META_WEAK_ENDINGS ∪ {across, through, along, past, toward, towards, while, where, which, before, after, during, among, via, into, around}. So '…valleys | with expert guides' may cut before 'with', but never between 'expert | guides' or 'fragile | ecosystems'. The existing trailing-connector pop still applies. If no clean cut lands in band, return None. The SEO_META_TOO_LONG code then stays, and the existing LLM meta repair runs (flag_fix _rerepair_meta, flag_fix_node.py:203+, stage t2_flag_fix/s1_flag_fix on Haiku, about $0.001 per call). That is the 'short re-ask', with no new LLM path.\n2) No country tail on multi-country tours. Facts gain 'name': graph._apply_seo_meta_fit (graph.py:606) and flag_fix (flag_fix_node.py:156) pass tour.get('name'). _extend_short_meta skips every 'in {country}' tail when name + meta together name ≥ 2 countries from shared/country_resolver.COUNTRY_MASTER (country_resolver.py:8-33), or when the meta names a country other than facts.country. Days-only tails are still allowed.\n3) Narrow tightening of meta_complete_sentence: also reject _META_WEAK_ENDINGS (a, an, the, of, by, via, into, through, between, as). The deterministic fit already strips these, so the hard code keeps a repair path (lesson S218/AA-736: 'every hard-block code must name its deterministic fix'). Do NOT add a noun or adjective heuristic to the global check. META_INCOMPLETE_SENTENCE hard-blocks A1 Master (graph.py:184-201, 821-825) and human-edit approve (admin_pipeline.py:2341), and no deterministic fix exists for a noun ending.\n4) T3 parity: at tenant_pipeline.py:234-235, call fit_seo_meta_final(meta, {duration, country, name}, forbidden) instead of fit_seo_meta. T3 then applies the same deterministic fit as the graph before a length code triggers a whole-tour Sonnet rewrite.\n5) Observability: log the structlog event `seo_meta_fit_unresolved` (reason too_long/too_short, len) when the fit returns the meta unchanged. This counts LLM fallbacks on the rerun and on A1.\nLessons: 'Siết một gate phải chỉ ra bước sửa tất định' (S218), which is why the cut is fixed and not the global check. 'Validator chỉ quét nội dung writer viết'. 'LLM đếm ký tự kém' (S233): the meta aim in the prompt is out of scope here.",
+  "files": [
+   "apps/AA-CIS-App/services/content_generation/seo_meta_utils.py",
+   "apps/AA-CIS-App/services/content_generation/graph.py (_apply_seo_meta_fit facts += name)",
+   "apps/AA-CIS-App/services/content_generation/flag_fix_node.py (facts += name, ~line 156)",
+   "apps/AA-CIS-App/services/acp_produce/tenant_pipeline.py (lines 233-235)",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-794.md",
+   "apps/AA-CIS-App/tests/unit/test_aa794_seo_meta_cut_country.py (new)"
+  ],
+  "tests": [
+   "NEW tests/unit/test_aa794_seo_meta_cut_country.py: 5 fragment cases. Each original is the S234 meta with a plausible cut tail restored, >155 chars (e.g. '…mountain valleys with expert guides and private drivers throughout the route.'). fit_seo_meta_final must never return text ending on the word before a content word: the output is either a clean in-band cut or the unchanged meta (None path).",
+   "NEW (same file): 2 wrong-country cases. A short body '…via Dien Bien Phu and Cuc Phuong National Park' with facts {country:'Laos', name:'Laos to Vietnam by Bicycle: …', duration:'12 days'} gets no ', in Laos.' tail. A days-only tail is allowed.",
+   "NEW (same file): single-country regression. A Bhutan meta under 140 still gets ', over 10 days in Bhutan.'.",
+   "NEW (same file): meta_complete_sentence rejects '… of.' and '… the.' and still accepts the existing good examples.",
+   "NEW (same file): T3 run_t3_qa_gate (LLM mocked) applies fit_seo_meta_final, so an over-long meta with a clean clause cut does not trigger a repair rewrite.",
+   "Keep green: tests/unit/test_aa740_seo_length_fit.py, test_aa747_flag_fix_seo_fit.py, test_aa226_meta_floor_hitl.py, test_aa724_writer_neutral_voice.py (apply_seo_meta_fit cases), test_s218_hard_code_repair.py, test_aa231_meta_prompt_band.py."
+  ],
+  "needs_migration": false,
+  "migration_note": "None. The code change is pure functions. The A1 sizing query is a read-only SELECT; any backfill of A1 Master metas would be a separate issue with a DRY RUN.",
+  "paid_run_needed": "No dedicated run. It is verified by the shared AA-792 rerun ($0 extra). The A1 sizing is a $0 SELECT.",
+  "risk": "medium",
+  "size": "S"
+ },
+ "AA-797": {
+  "id": "AA-797",
+  "title": "[Admin tenants] status toggle, plan_id on create/patch, wire offboard + restore, audit every write, fix /usage 500",
+  "already_done_or_stale": "(1) The plan_id backfill is DONE. Per the S234 Linear comment, 5 tenants were mapped from plan_tier with audit rows `tenant.plan_id_backfill` and `plan_id IS NULL` = 0 (script .tmp-session/s234/planid_apply.py). Do not re-run it. (2) The offboard backend already exists and works: apps/AA-CIS-App/api/routers/admin.py:1065-1131 revokes the key (`REVOKED_`||id), sets cancelled_at, writes `agency.offboard` audit and removes the Jev allow-list row, all in one transaction. It is covered by tests/integration/test_aa741_offboard.py. What is missing is the UI wiring plus a restore path. (3) Suspension enforcement already exists: api/middleware/rate_limit.py:19-26 and :92-100 return 403 'Tenant is deactivated' when is_active=false (30s Redis TTL key `tenant_meta:{id}`). The toggle fails only because PATCH reads `plan_tier`/`is_active` as query params (admin.py:406-436, params at :411-412). The frontend already sends a JSON body (frontend/app/admin/tenants/page.tsx:920-930), so the fix is backend-only. (4) create_tenant already writes the `agency.onboard` audit (admin.py:216-224). It only lacks plan_id (INSERT at admin.py:169-173). (5) Line refs in the issue have drifted slightly: INSERT is at :170, not :171, and the PATCH UPDATE is at :424-428.",
+  "done_when": [
+   "PR merged to AA-CIS-App main, all 5 CI jobs green, Deploy Dev rollout COMPLETED with api and worker on the same SHA (aa-ship).",
+   "Live check: POST /admin/tenants creates a throwaway tenant (e.g. slug s235-aa797-check). Its shared.tenants.plan_id equals membership_plans.id for its plan_tier (read-only SQL).",
+   "Live check: PATCH /admin/tenants/{id} with JSON body {\"plan_tier\":\"business\"} updates plan_tier, plan_id and rate_limit_rpm together. SQL `SELECT count(*) FROM shared.tenants WHERE plan_id IS NULL` = 0. `SELECT tenant_id FROM shared.v_tenant_monthly_usage WHERE tours_quota_monthly IS NULL OR price_usd_monthly IS NULL` returns 0 rows.",
+   "Live check: PATCH with body {\"is_active\":false} sets the DB row to is_active=false. A tenant-JWT call (e.g. GET /v1/quota) then returns 403 'Tenant is deactivated'. PATCH {\"is_active\":true} restores access. Each PATCH writes an acp_shared.audit_log row (`tenant.status_changed` / `tenant.plan_changed`, details holding before/after and actor admin:<id>).",
+   "Live check: the Offboard action in /admin/tenants (with a required reason) produces api_key_hash LIKE 'REVOKED_%', cancelled_at set and an `agency.offboard` audit row. POST /admin/tenants/{id}/restore sets is_active=true and cancelled_at=NULL, returns a new key once and writes an `agency.restore` audit row. PATCH is_active=true on an offboarded tenant returns 409 (restore is the only way back).",
+   "Live check: generate-key, PUT brand-identity and PUT config each write one audit row, visible in the Tenant 360 Audit tab.",
+   "Live check: GET /admin/tenants/{id}/usage returns 200 with the documented shape for all 8 tenants (curl loop over `SELECT tenant_id FROM shared.tenants`).",
+   "Live check: the bare DELETE /admin/tenants/{id} (unaudited soft delete) is gone (404/405). No frontend caller remains (grep).",
+   "aa-ui-verify on /admin/tenants against the Vercel preview, then Dev: list shows Active/Suspended/Offboarded with a filter, toggle persists across reload, offboard and restore work. Desktop, mobile 390px (scrollWidth <= innerWidth), light and dark; 0 console errors.",
+   "Linear Done comment cites each Done-when bullet with evidence (lesson S233)."
+  ],
+  "approach": "Backend in api/routers/admin.py: (a) Replace the query params on update_tenant (:406-436) with a Pydantic body UpdateTenantRequest {plan_tier?, is_active?, rate_limit_rpm?, posts_per_week?}; empty body → 422. Resolve plan_id with `SELECT id FROM shared.membership_plans WHERE plan_name=$1 AND is_active` and return 400 if no row. Write plan_tier, plan_id and rpm in one UPDATE, inside conn.transaction() together with the audit rows. Read the before-row first so details hold before/after. Best-effort `redis.delete('tenant_meta:{id}')` makes suspend/resume take effect at once instead of within 30s. An offboarded tenant (cancelled_at NOT NULL) with is_active=true → 409. (b) create_tenant (:138-235): resolve plan_id the same way through one shared helper `_resolve_plan_id(conn, plan_tier)` and add it to the INSERT. (c) Audit through services/acp_shared/audit_log.write_audit_log. Add an `AdminTenantAuditAction` constant class (tenant.plan_changed, tenant.status_changed, tenant.key_rotated, tenant.brand_updated, tenant.config_updated, agency.restore) next to the existing AdminAuditAction. Actor is `admin:{x_admin_user_id}`, following admin_content_quality.py:497. Wire it into generate_api_key (:1024-1050), update_tenant_brand_identity (:902-975) and update_tenant_config (:1177-1210). (d) New POST /tenants/{id}/restore: 409 if not offboarded. Clear cancelled_at and cancellation_reason, set is_active=true, issue a new key (sha256) and return it once, write the audit row, all in one transaction. Do NOT re-add jev_tenant_allowlist automatically; say so in the response note. (e) Delete the delete_tenant route (:457-472). The UI uses /offboard instead. (f) list_tenants (:241-336): add opt-in `include_inactive: bool = False`, which keeps other callers unchanged (atom-curation/page.tsx:1134, tenant-activity/page.tsx:194, CommandPalette). Return `cancelled_at` and a derived `status` (active / suspended / offboarded). (g) get_tenant_usage (:342-403): it 500s because it selects month/total_calls/... from the view, whose live definition has none of those columns. Compute the monthly series straight from shared.tenant_api_usage: date_trunc month, count, status<400, status=429, avg response_ms, with a `called_at >= now() - make_interval(months => $2)` window. Replace the always-0 `published_tours WHERE tenant_id` count with T2 version and tour counts from gold_aa_internal.tenant_tour_versions. Read the quota by plan_id, not plan_tier. Frontend in frontend/app/admin/tenants/page.tsx (legacy 1251-line page; keep the change minimal, because AA-766 rebuilds it): load with ?include_inactive=true, add a status chip and filter, replace the Delete button (:933-940, :1002-1005 and the desktop row twin) with Offboard behind a reason field using the kit ConfirmModal from app/_kit, add Restore for offboarded rows that shows the new key in the existing key modal, and disable the toggle for offboarded tenants. Cards: Active / Suspended / Offboarded, replacing Total==Active (:1157). Keep the implementation notes in docs/implementation-notes/AA-797.md.",
+  "files": [
+   "apps/AA-CIS-App/api/routers/admin.py",
+   "apps/AA-CIS-App/services/acp_shared/audit_log.py",
+   "apps/AA-CIS-App/frontend/app/admin/tenants/page.tsx",
+   "apps/AA-CIS-App/tests/integration/test_aa797_tenant_admin.py (new)",
+   "apps/AA-CIS-App/tests/unit/test_aa797_tenant_admin.py (new)",
+   "apps/AA-CIS-App/tests/unit/test_aa309_tenant_onboarding.py (update: plan_id in INSERT)",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-797.md (new)",
+   "apps/AA-CIS-App/CONTEXT.md (tenant lifecycle: suspend vs offboard vs restore)"
+  ],
+  "tests": [
+   "Integration (real Postgres, tests/integration/test_aa797_tenant_admin.py, fixture pattern from test_aa741_offboard.py). create_tenant sets plan_id. PATCH body {is_active:false} then {is_active:true} changes the DB and writes 2 audit rows with before/after. PATCH {plan_tier:'business'} updates plan_id and rpm. PATCH is_active=true on an offboarded tenant → 409. Restore after offboard: is_active true, cancelled_at NULL, new key hash, `agency.restore` row. generate_api_key writes `tenant.key_rotated`. get_tenant_usage returns 200 and the right counts after inserting 3 tenant_api_usage rows. This runs the real SQL and catches the S229-type AmbiguousParameterError: when $1 is bound to both a varchar and a text column, add explicit casts.",
+   "Unit: update_tenant with an invalid plan_tier → 400. Empty body → 422. list_tenants derives status (active / suspended / offboarded) correctly. include_inactive=false keeps the old WHERE is_active filter.",
+   "Frontend: `npm run build` (full tsc), eslint (React Compiler set-state-in-effect rule), aa-ui-verify smoke at 390px."
+  ],
+  "needs_migration": false,
+  "migration_note": "No schema change: plan_id, cancelled_at, cancellation_reason and api_key_hash already exist on shared.tenants (docs/architecture/db-schema-reference.md:1217-1236), and acp_shared.audit_log has the needed columns (:359-370). audit_log.actor_type stays NULL (enum hitl_reviewer/tenant_admin/tenant_reviewer has no admin value, per audit_log.py docstring). The live check creates one throwaway Dev tenant via POST /admin/tenants. It ends offboarded, i.e. soft data that stays in shared.tenants; mention this in the session log.",
+  "paid_run_needed": "None ($0). No LLM calls.",
+  "risk": "medium",
+  "size": "M"
+ },
+ "AA-796": {
+  "id": "AA-796",
+  "title": "[Portal] AA-770 compliance for T2 — tenant status no longer derives from score; remove quality fields from tenant APIs",
+  "already_done_or_stale": "Partly done by AA-770 (S233, docs/implementation-notes/AA-770.md:9-11). /v1/tours/versions/{id} already strips quality_score/qa_* (api/routers/v1_tours.py:740-783, so the issue's :740/:781 refs are done). /v1/tours/my-versions no longer selects scores (v1_tours.py:548-558). /v1/marketplace maps ai_generated and needs_review to 'ready' via tenant_version_state (api/routers/v1_marketplace.py:96-107). Still open: (1) the T2 job still sets tenant-visible status from the score (services/jobs/t2_rewrite_job.py:230-235: <7.0 → needs_review). (2) Raw `status` leaks 'needs_review' through /v1/tours/my-versions (v1_tours.py:548, plus the status filter at :528-530), /v1/tours/versions/{id} and its version_history (:752-777), and /v1/billing activity (v1_tours.py:289, rendered by DashboardTab.tsx:204 and PlaceholderTabs.tsx:51 through ui.tsx statusLabel :91 'Needs review'). (3) /v1/tours/pool selects pt.quality_score (:127), filters on min_quality (:53, :92-94) and sorts by quality (:109). The portal offers 'Best quality first' (PoolFilters.tsx:31) and types quality_score (PoolTab.tsx:30). (4) The tenant-JWT branch of /v1/tours/{id}/full returns `quality` (a silver quality_scores row), `generated` (generated_content incl. metadata llm_cost/model) and published.quality_score (v1_tours.py:617-702). The generic tenant BFF proxy frontend/app/api/tenant/[...path]/route.ts:69-72 forwards any path, so a tenant can reach it. (5) GET /v1/tours/{id} returns pt.* incl. quality_score and quality_score_id (:706-735). CONTEXT.md:532-533 already claims 'no score / QA fields on tenant APIs' for T2, and CONTEXT.md:690-692 (T3 'status=approved is T3's own automatic result') is stale against the code.",
+  "done_when": [
+   "PR merged to AA-CIS-App main, CI green, Deploy Dev rollout COMPLETED (api and worker on the same SHA).",
+   "Live curl as a test tenant (JWT) of /v1/tours/pool?sort=quality, /v1/tours/my-versions, /v1/tours/versions/{id}, /v1/tours/{id}, /v1/tours/{id}/full, /v1/billing and /v1/marketplace: a jq walk over all keys and string values finds 0 matches for quality|score|qa_|needs_review|judge (excluding plain content text).",
+   "DB check after deploy: `SELECT status, count(*) FROM gold_aa_internal.tenant_tour_versions WHERE created_at > '<deploy ts>' AND edit_source='ai_generated' GROUP BY 1` has no needs_review row. This is verified on the T2 versions from Lane A's 14-pair rerun (AA-792/794), which must run after this deploy. The low-score versions keep quality_score < 7 and are flagged in admin /admin/content-quality/tour-versions (derived needs_review flag) and in /admin/tenants/{id}/rewrite-activity.",
+   "aa-ui-verify on the portal (preview, then Dev): Browse Tours sort has no 'Best quality first'. Dashboard recent activity, the Activity tab and My Catalog show 'Ready to review' for the 3 existing needs_review versions. No score is visible anywhere. Desktop, mobile, light and dark; 0 console errors.",
+   "CONTEXT.md updated: T2/T3 bullet says the tenant status is ai_generated for every finished version and the admin derives the review flag from score/qa_status.",
+   "Linear Done comment lists each bullet with evidence."
+  ],
+  "approach": "(1) One shared projection helper, per the lesson that one value computed on two code paths must use one function. Move tenant_version_state out of v1_marketplace.py into a small module (e.g. api/routers/_tenant_projection.py or services/acp_shared/tenant_projection.py). Add `tenant_version_status(status)`: needs_review → 'ai_generated', everything else unchanged. Add `TENANT_HIDDEN_TOUR_FIELDS = {quality_score, quality_score_id}` and reuse the existing _TENANT_HIDDEN_VERSION_FIELDS. v1_marketplace imports the moved function. (2) Job: in t2_rewrite_job.py:224-235, every finished rewrite writes status='ai_generated'. quality_score, qa_status, qa_auto_passed and the escalate_t3_failure review_queue row stay as they are, because they are the admin signal. Update the AA-436 comment. No data UPDATE of the existing needs_review rows: read-time mapping covers them and keeps the history honest. (3) Tenant reads in v1_tours.py: map status in my-versions rows, the get_version row and version_history, and billing activity (:289 query, mapped when built at ~:372). In the my-versions filter, status=ai_generated becomes `ttv.status IN ('ai_generated','needs_review')`, and status=needs_review is treated the same way. (4) Pool: drop pt.quality_score from the SELECT (:127). Drop the min_quality param and its condition (:53, :92-94); FastAPI ignores unknown query params, so old clients do not break. Any sort other than 'newest' falls back to newest (:109). (5) /full tenant branch: return only `published` (minus the hidden fields), `raw` and `seo`. Omit `quality` and `generated` for tenant callers; the admin branch is unchanged (it is used by admin tour-full/[id]/route.ts). (6) GET /v1/tours/{id}: strip the hidden fields. (7) Admin side: add a derived `needs_review: bool` (quality_score < 7.0 OR qa_status='escalated') to admin_content_quality.py:660-676 and :687-690, and to admin.py rewrite-activity (:977-1018), so admins keep the signal. Add an optional `flag=needs_review` filter in list_tour_versions (:643-650) that maps to the derived condition. (8) Portal: in ui.tsx:91 and :100, map needs_review to 'Ready to review' with the default variant (defence in depth). Remove the 'Best quality first' option from PoolFilters.tsx:29-32 (the sort type becomes 'newest' only) and remove quality_score from the PoolTab.tsx:30 type. Keep the implementation notes in docs/implementation-notes/AA-796.md.",
+  "files": [
+   "apps/AA-CIS-App/services/jobs/t2_rewrite_job.py",
+   "apps/AA-CIS-App/api/routers/v1_tours.py",
+   "apps/AA-CIS-App/api/routers/v1_marketplace.py",
+   "apps/AA-CIS-App/api/routers/_tenant_projection.py (new; or services/acp_shared/tenant_projection.py)",
+   "apps/AA-CIS-App/api/routers/admin_content_quality.py",
+   "apps/AA-CIS-App/api/routers/admin.py (rewrite-activity derived flag only)",
+   "apps/AA-CIS-App/frontend/app/(tenant)/portal/_components/ui.tsx",
+   "apps/AA-CIS-App/frontend/app/(tenant)/portal/_components/PoolFilters.tsx",
+   "apps/AA-CIS-App/frontend/app/(tenant)/portal/_components/PoolTab.tsx",
+   "apps/AA-CIS-App/tests/unit/test_aa796_t2_tenant_status.py (new)",
+   "apps/AA-CIS-App/tests/unit/test_aa770_tenant_receives.py (extend)",
+   "apps/AA-CIS-App/tests/unit/test_aa496_tenant_billing.py (activity status mapping)",
+   "apps/AA-CIS-App/CONTEXT.md",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-796.md (new)"
+  ],
+  "tests": [
+   "Unit: the t2 job writes status 'ai_generated' for both score 4.0 and 8.0 (mock run_t3_qa_gate and _do_rewrite as in the existing t2 job tests), with quality_score and qa_status still written.",
+   "Unit: tenant_version_status / tenant_version_state cover every status value. The my-versions filter status=ai_generated builds the IN ('ai_generated','needs_review') condition.",
+   "Unit: browse_pool SQL has no quality_score, and sort=quality orders by published_at. /full with a tenant JWT returns no 'quality'/'generated' keys and no quality_score. GET /v1/tours/{id} strips the hidden fields. A generic test walks the keys of each tenant response for /quality|score|qa_/.",
+   "Unit: the /v1/billing activity status of needs_review is returned as ai_generated.",
+   "Integration: re-run tests/integration/test_aa544_stage1_tenant_pool_leak.py (touches the pool query) to confirm the SQL still executes on real Postgres.",
+   "Frontend: npm run build; aa-ui-verify on portal Browse, Dashboard, Activity and Catalog."
+  ],
+  "needs_migration": false,
+  "migration_note": "None. The tenant_tour_versions.status CHECK already allows ai_generated and needs_review (api/migrations/108, 175). No backfill UPDATE of the existing needs_review rows: they are mapped at read time.",
+  "paid_run_needed": "None of its own. Verification of the new-version status piggybacks on Lane A's approved 14-pair T2 rerun (≤ $5, AA-792/794), so AA-796 must deploy BEFORE that rerun. If the order slips, one T2 rewrite on a test tenant costs about $0.10-0.18 per version (CONTEXT.md:690-692), well inside the session cap.",
+  "risk": "medium",
+  "size": "M"
+ },
+ "AA-798": {
+  "id": "AA-798",
+  "title": "[Billing] Replace fabricated llm_cost_usd view column and starter defaults with real llm_call_log cost",
+  "already_done_or_stale": "Nothing done. The live view definition is NOT in git. The only migration defining shared.v_tenant_monthly_usage is api/migrations/007_tenant_usage.sql:12-22, which has different columns (month, total_calls, ...). The live definition was evidently created by hand and was captured in S234 in .tmp-session/s234/final/t360_audit.json under sql.viewdef. Live: billing_month = now() only; llm_cost_usd = pipeline_runs.cost_usd + 0.018 × count(ttv ai_generated); plans via LEFT JOIN membership_plans ON mp.id = t.plan_id; rows for every tenant. The plan_id backfill (S234) already fixed the NULL quota/price part. Fabricated defaults are still present in two places: admin api/routers/admin_pipeline.py:4981-4990 ($299 / 50 tours / starter) and tenant api/routers/v1_tours.py:352-361, plus the portal fallback `plan_tier ?? 'starter'` in frontend/app/(tenant)/portal/_components/PlaceholderTabs.tsx:105. The tenant /v1/billing also returns llm_cost_usd (kept 'no API break' per docs/implementation-notes/AA-636.md:7-8, not rendered). Once the view carries the REAL cost, that becomes a leak of internal cost to tenants.",
+  "done_when": [
+   "The migration (next free CIS number, currently 223) is in AA-CIS-App api/migrations/ with an identical copy in AA-CIS-Infra db/migrations/cis/. The Infra PR is approved by Nghiệp (batched with Lane C's Infra approvals). DB Migrate mode=check then mode=apply succeeds and shared.schema_versions has the version. docs/architecture/db-schema-reference.md is regenerated.",
+   "Read-only SQL on Dev: for every tenant, view.llm_cost_usd equals SUM(shared.llm_call_log.cost_usd) for the current UTC month within ±$0.01. aa_internal also includes tenant_id IS NULL rows, matching admin.py:612-618. Jev (provider='typesafe') is included.",
+   "Live: curl /admin/billing?tenant_id=<atlas-hearth> gives llm_cost_usd within ±$0.01 of that SQL (the AA-766 done-when). The Admin Tenant 360 Billing tab shows the same number (aa-ui-verify).",
+   "Live: /admin/billing?tenant_id=<random uuid> → 404, not the $299/50 defaults. `grep -n '299' api/routers/admin_pipeline.py api/routers/v1_tours.py` finds nothing in the billing paths. A tenant whose plan_id is NULL returns plan_attached=false with null quotas/price. The admin Billing tab shows 'No plan attached' and the tenant Billing page shows a 'No plan attached, contact us' state instead of 'starter' (unit test plus UI check with a mocked response).",
+   "Live: tenant /v1/billing no longer contains llm_cost_usd (decision below), and the portal Billing and Dashboard render unchanged otherwise.",
+   "PR merged, CI green, Deploy Dev COMPLETED. The migration is applied BEFORE the app PR merges (AA-CIS-Infra db/README.md rule)."
+  ],
+  "approach": "Migration: inside BEGIN/COMMIT, self-register in shared.schema_versions. First run read-only pre-checks via ECS exec: dependents (pg_depend/pg_rewrite on the view, expected none) and the current grants (information_schema.role_table_grants for shared.v_tenant_monthly_usage). Then `DROP VIEW IF EXISTS shared.v_tenant_monthly_usage; CREATE VIEW ...` and re-GRANT exactly the privileges found. CREATE OR REPLACE cannot be used, because the test DB (replaying 007) and live have different column lists. Keep every live column name and order, since 6 readers depend on them: admin.py:277 and :636, admin_settings.py:61, admin_overview.py:143, admin_pipeline.py:4967, v1_tours.py:284. Redefine llm_cost_usd as `COALESCE((SELECT sum(l.cost_usd) FROM shared.llm_call_log l WHERE (l.tenant_id = t.tenant_id OR (t.plan_tier = 'internal' AND l.tenant_id IS NULL)) AND l.created_at >= date_trunc('month', now()) AND l.created_at < date_trunc('month', now()) + interval '1 month'), 0)`. Use a range predicate so idx_llm_call_log_tenant_created (api/migrations/137:68) is used, and do not wrap created_at in date_trunc. Append new columns at the end: jev_cost_usd (same filter plus provider='typesafe'), plan_attached (t.plan_id IS NOT NULL). Commit the live definition into git for the first time; this fixes the drift. App: in admin_pipeline.get_admin_billing (:4947-5003), remove the defaults and return 404 when the tenant is missing. Add plan_attached and make the quota/price fields null when it is false. In v1_tours.get_my_billing (:270-385), remove the defaults: no row means 404, which cannot happen for an authenticated tenant. Drop llm_cost_usd and jev_cost_usd from the tenant response (recommended, consistent with AA-770 'tenant sees content only' and AA-636 'tenant money view = plan fee + overage'; flag it to the orchestrator as a small reversal of AA-636's 'kept in response'). Remove the field from the DashboardTab.tsx:25 type. Frontend admin tenants page BillingTabContent (page.tsx:771-812): label 'LLM cost (MTD, llm_call_log)', show a Jev split if present, show 'No plan attached' when plan_attached=false, and stop showing '∞' for a null quota. Portal PlaceholderTabs.tsx:105-106: no 'starter' fallback; render a no-plan state. Keep the implementation notes in docs/implementation-notes/AA-798.md, including the decision record that llm_call_log may undercount before 09/10 because of write failures (lesson S224). Billing compares to llm_call_log by definition.",
+  "files": [
+   "apps/AA-CIS-App/api/migrations/223_tenant_usage_real_llm_cost.sql (new; number assigned at PR time)",
+   "infra/AA-CIS-Infra/db/migrations/cis/223_tenant_usage_real_llm_cost.sql (identical copy, separate Infra PR)",
+   "apps/AA-CIS-App/api/routers/admin_pipeline.py",
+   "apps/AA-CIS-App/api/routers/v1_tours.py",
+   "apps/AA-CIS-App/frontend/app/admin/tenants/page.tsx (BillingTabContent only)",
+   "apps/AA-CIS-App/frontend/app/(tenant)/portal/_components/PlaceholderTabs.tsx",
+   "apps/AA-CIS-App/frontend/app/(tenant)/portal/_components/DashboardTab.tsx (type only)",
+   "apps/AA-CIS-App/tests/integration/test_aa798_tenant_usage_view.py (new)",
+   "apps/AA-CIS-App/tests/unit/test_aa496_tenant_billing.py (rewrite test_get_my_billing_no_usage_row_yet_returns_defaults at :81; assert no llm_cost_usd in the tenant response)",
+   "apps/AA-CIS-App/tests/unit/test_aa798_admin_billing.py (new)",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-798.md (new)",
+   "docs/architecture/db-schema-reference.md (root repo, regenerate after apply)"
+  ],
+  "tests": [
+   "Integration (real Postgres; the conftest replays api/migrations, so 007 then 223 runs). Insert a tenant with a plan_id plus llm_call_log rows: this month for the tenant, last month for the tenant, a NULL-tenant row, and a provider='typesafe' row. Assert view.llm_cost_usd and jev_cost_usd exactly, and that the internal tenant includes the NULL row. This must SELECT from the view for real. Lesson S231: a green integration test proves nothing if the migration silently fails in conftest, so assert the column exists first.",
+   "Integration: run every existing reader's SQL against the new view: list_tenants, get_tenant_details usage (ORDER BY billing_month), admin_overview _QUOTA_SQL, get_admin_billing, get_my_billing. This proves the column-name contract.",
+   "Unit: get_admin_billing returns 404 for an unknown tenant and plan_attached=false with null quotas when plan_id is NULL. get_my_billing has no defaults and no llm_cost_usd key.",
+   "Frontend: npm run build; aa-ui-verify on the admin Billing tab and the portal Billing page."
+  ],
+  "needs_migration": true,
+  "migration_note": "CIS migration owned by AA-CIS-App (api/migrations/), copied verbatim to AA-CIS-Infra db/migrations/cis/ and applied by the DB Migrate workflow (one-off ECS task), never from a laptop (infra/AA-CIS-Infra/db/README.md). Number: latest applied is 222 (db-schema-reference.md:3; db/migrations/cis/222_s234_place_card_luna.sql), so use the next free number at PR time. The orchestrator must serialize numbers with Lane A, which may also add migrations. Use DROP + CREATE VIEW in one transaction and re-apply the existing GRANTs, after read-only checks of grants and dependents. Apply BEFORE merging the app PR. The Infra PR needs Nghiệp's approval: include it in the single Gate-1 batch with Lane C's Infra PRs. Regenerate db-schema-reference.md afterwards.",
+  "paid_run_needed": "None ($0). The pre-checks and verification are read-only SQL via S3-mediated ECS exec, with no LLM.",
+  "risk": "medium",
+  "size": "M"
+ },
+ "AA-776": {
+  "id": "AA-776",
+  "title": "[T9 repair] F4-only ledger triggers a full Sonnet rewrite instead of the SEO-fields repair",
+  "done_when": [
+   "Unit: sentence_repair.plan(text, [F4-only blocking ledger]) == [] when every F4 violation is a title/meta one; still None when an F4 violation is slug-only ('no slug' / 'slug ... not lowercase-kebab' / 'slug is N characters') because _fit_seo_meta never regenerates the slug (service.py:456-520)",
+   "Unit (service loop, mocked writer): attempt-1 F4-only -> repair_log[0].repair_mode == 'seo_fields', rewrite_with_feedback NOT called; attempt-2 F4-only -> last_try is False (service.py:1458-1459), so attempt 3 re-runs the SEO fit",
+   "PR merged to main with 'Refs AA-776' body, CI green (5 required jobs), Deploy Dev rollout COMPLETED on BOTH aa-cis-dev-api and aa-cis-dev-worker (same SHA; t9_write runs on the worker)",
+   "Live: in the r5 checkpoint, every repair_log entry whose feedback names only F4_seo_surface is followed by repair_mode 'seo_fields' (read via GET /admin/content-quality/pieces/{id}, which returns repair_log, admin_content_quality.py:70,261). If r5 produces no F4-only ledger, say so explicitly and close on the unit tests plus the absence of an F4-only full rewrite; do not pay for a run just for this"
+  ],
+  "approach": "Problem confirmed in code. _seo_fields_only (sentence_repair.py:99-105) takes F4 out of `failed`, so failed == []. The [] branch at :118-119 requires a blocking gate that is neither F4 nor OWNED_ELSEWHERE, so an F4-only ledger reaches `return None` at :120-121. None sends service.py:1202 into the full rewrite_with_feedback at :1262-1271 on attempt 2. It also makes last_try true at attempt 2 (:1458-1459), so an F4-only piece is held without the attempt-3 SEO fit. Data from the S234 DB dump (.tmp-session/s234/explain/s234_fr_dump.json, 124 pieces) has 10 F4-only ledgers: 3 at attempt 1 went to a full rewrite, 5 at attempt 2 were held at once, 2 at attempt 3. Fix: in plan(), after computing `failed`, return [] when `not failed` and every blocking gate is F4_seo_surface (or an SEO-field-only F12) and no F4 violation is about the slug. Keep the OWNED_ELSEWHERE-only case (F16_faq / F14_first_line alone) returning None. That case is a deliberate decision: F16 alone holds at once, see docs/implementation-notes/AA-768.md:510-517 and tests/unit/test_aa768_s234_round2.py:209. LESSON (read implementation notes before fixing to the Done-when): docs/implementation-notes/AA-768.md:270-273 says 'F4 alone keeps the old behaviour (None)', and tests/unit/test_aa768_s234_hygiene.py:328 asserts it ('F4 alone: unchanged (full rewrite)'). That was a conservative 'unchanged' choice. The plan() comment at :113-116 and the approved issue contradict it, so reverse it on purpose and record the reversal in docs/implementation-notes/AA-776.md.",
+  "files": [
+   "apps/AA-CIS-App/services/acp_content_writing/sentence_repair.py (plan :108-121, _seo_fields_only :99-105)",
+   "apps/AA-CIS-App/tests/unit/test_aa768_s234_hygiene.py (:320-331, flip the F4-alone assertion on purpose)",
+   "apps/AA-CIS-App/tests/unit/test_aa776_f4_only_seo_fields.py (new)",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-776.md (new)"
+  ],
+  "tests": [
+   "plan(text,[F4 title/meta only]) == []",
+   "plan(text,[F4 with only a slug violation]) is None",
+   "plan(text,[F4, F3_structure]) is None (non-repairable still rewrites)",
+   "plan(text,[F16_faq]) is None (unchanged, owned-elsewhere alone)",
+   "service loop with mocked write/fit: attempt-1 F4-only -> repair_mode 'seo_fields', rewrite_with_feedback mock not called; attempt-2 F4-only reaches attempt 3"
+  ],
+  "needs_migration": false,
+  "migration_note": "None.",
+  "paid_run_needed": "No dedicated run. Verified inside the shared r5 checkpoint (≈$1.15, see r5-checkpoint). Saves one Sonnet rewrite per F4-only blog.",
+  "risk": "low",
+  "size": "S",
+  "already_done_or_stale": "Not done (AA-CIS-App main @ 20a2387, no branch, Linear Backlog, no comments). Linear line refs are correct (:102 is inside _seo_fields_only; :118-120). Stale point: the existing test and impl note encode the opposite decision, so both must be updated on purpose."
+ },
+ "AA-774": {
+  "id": "AA-774",
+  "title": "[Place cards] Keep visiting/practical card facts out of the writer seed; drafter writes only what_it_is/history/setting/naming",
+  "done_when": [
+   "Pre-deploy (read-only, $0, S3-mediated ECS exec): (a) kind distribution of stored card facts (jsonb_array_elements(acp_shared.place_card.facts)->>'kind' grouped, status <> 'rejected') reported, with 0 facts lacking kind or the fallback documented; (b) per-request report for the 6 checkpoint requests (2 route blogs + 4 LinkedIn) of moment fact counts, thin tags and sibling-line counts before vs after the filter. Thin-moment count changes on ≤2/6 requests, or the change is shown to Nghiệp before merge",
+   "PR merged ('Refs AA-774'), CI green, Deploy Dev COMPLETED on api + worker, same SHA",
+   "Live: an r5 piece's writer_input.seed (GET /admin/content-quality/pieces/{id}) has no 'Place background' bullet of kind visiting/practical (e.g. no permit / 'Visitors must…' / 'access requires…' line) and keeps what_it_is/history/setting/naming facts; the admin place-card view still lists all kinds",
+   "r5: permit/access sentences in 0/8 blogs (regex over final text: permit|access requires|multi-hour (horse|reindeer) ride); panel 'invented sub-activity' ≤1/8 blogs; LinkedIn light count does not drop below r4 (10/12)"
+  ],
+  "approach": "1) Check Dev first, read-only: place_cards._clean_facts (place_cards.py:298-304) always writes a kind and defaults an unknown kind to what_it_is. merged_facts (:769-784) and seed_canon._facts_of / canonical_facts (seed_canon.py:159-185) keep the fact dicts, so stored facts should carry a kind. Confirm with the query in Done-when (a). The prerequisite card merge (plan §0.1) is already done: S234 log docs/sessions/2026-10-13-S234-…md:73, cards 122→110. 2) atom_seed.py: add WRITER_FACT_KINDS = {what_it_is, history, setting, naming} and a _writer_facts(card) that filters on f.get('kind'), treating a missing kind as what_it_is to match _clean_facts. Use it only where facts are RENDERED: compose_seed (:191-193) and compose_route_moment's background, including the richest-card choice (:291-293). IMPORTANT: keep the RICH_CARD_FACTS sibling gate on the UNFILTERED checked-fact count (compose_seed :194-195 pick_siblings card_fact_count, atom_seed_parts :308). Otherwise single-atom LinkedIn cards that lose 1-3 practical facts drop below 3 and bring back 'Other trips' sibling lines, the S233 borrowed-places regression (module docstring :16-21). 3) Drafter prompt place_cards.py:90-92 gets the plan §3.5 text (09-next-step-plan.md:284-289). PROMPT_SHA (:110) changes automatically, so stored misses are retried (Luna drafter, negligible cost). Keep FACT_KINDS (:62) unchanged so old cards and the admin view still validate. 4) Offline recount before deploy, with a read-only ECS script modelled on .tmp-session/s234/aa772_probe.py: compose the 6 requests' seeds with and without the filter (route: route_moment_seeds; single: atom_seed_text) and report moment_fact_count (:205-220), thin_note tags and route_digest anchors/thin (route_digest.py:61-80). RISK found: the r4 Terra LinkedIn chosen angle 'The Checkpoint Before the Temple' (checkpoint_r4.json) is anchored on a practical fact ('Visitors must leave cameras and bags at a checkpoint…'), and the Tiger's Nest hike-duration fact is practical too. The filter removes both from T8/T9 seeds, so that r5 cell needs a regenerated angle (see r5-checkpoint).",
+  "files": [
+   "apps/AA-CIS-App/services/acp_shared/atom_seed.py (_card_facts :112-116, compose_seed :169-198, compose_route_moment :272-298, atom_seed_parts :301-316)",
+   "apps/AA-CIS-App/services/acp_shared/place_cards.py (_CARD_SYSTEM :90-92; PROMPT_SHA :110 auto)",
+   "apps/AA-CIS-App/tests/unit/test_aa768_atom_seed.py",
+   "apps/AA-CIS-App/tests/unit/test_aa768_s234_seed_route.py",
+   "apps/AA-CIS-App/tests/unit/test_aa772_place_cards.py",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-774.md (new)",
+   ".tmp-session/s235/aa774_kinds_probe.py (new, read-only ECS script)"
+  ],
+  "tests": [
+   "compose_seed with a card of mixed kinds renders only what_it_is/history/setting/naming bullets; a fact without kind is kept (what_it_is default)",
+   "sibling lines are NOT added when the card has ≥3 checked facts in total even if <3 writer facts remain (RICH_CARD_FACTS gate on the unfiltered count)",
+   "compose_route_moment richest-card choice and moment_fact_count use writer facts; thin tag appears when writer facts + source sentences < THIN_FACTS",
+   "drafter prompt contains no 'visitors typically see' / 'practical or safety' and lists the 4 kinds; PROMPT_SHA differs from the old value",
+   "claim_rules round-trip test still parses the filtered seed (P lines only from writer kinds)"
+  ],
+  "needs_migration": false,
+  "migration_note": "None. The filter is applied at read time and stored cards are untouched. The admin card view reads acp_shared.place_card directly and keeps every kind.",
+  "paid_run_needed": "$0 for the change, the Dev kind query and the offline recount (read-only ECS exec). Verified in the shared r5 (≈$1.15). New card drafts after the PROMPT_SHA bump are Luna and negligible.",
+  "risk": "medium",
+  "size": "M",
+  "already_done_or_stale": "Not done (no branch; main @ 20a2387). Prerequisite card merge done end of S234 (cards 122→110, 0 duplicate groups). Linear refs correct: atom_seed._card_facts :112-116, place_cards.py:90-92. r4 seeds confirm the problem: practical/visiting bullets appear in both blog seeds (permit, 'access requires a multi-hour horse or reindeer ride', 'Visitors can trek… around the rim') and in 3 LinkedIn seeds (dress code, checkpoint, hike duration, swimming)."
+ },
+ "AA-773": {
+  "id": "AA-773",
+  "title": "[T9 seed] Offered vs included Status line on every moment + writer rule",
+  "done_when": [
+   "Pre-deploy ($0, read-only ECS): the 2 route blog seeds printed with the new Status lines. The Khövsgöl block marks boat rides, horseback riding, visits to nomadic families AND the lower-case continuation 'trekking along shorelines and forest paths' as OFFERED, marks the Day-4 'boundary between steppes and taiga' moment included, and marks no other moment OFFERED (sentence-level, not day-level)",
+   "PR merged ('Refs AA-773'), CI green, Deploy Dev COMPLETED on api + worker, same SHA",
+   "Live: r5 piece writer_input.seed (admin API) contains 'Status: OFFERED, NOT INCLUDED (the itinerary says: \"…\")' on the offered moments",
+   "r5 (n=20, same 6 requests): F17 'presents … as part of the plan' (optional-as-plan) = 0 in final gate_ledgers; 0 reverse flips found by the panel (offered written as included, or included called optional)",
+   "promises_an_option warn ≤2/8 blogs: NEEDS NGHIỆP'S CALL. The gate checks the whole merged route block (quality_gates.py:428-439), so every unhedged Khövsgöl sentence warns whatever the writer does. Either make _is_offered Status-aware (below) and keep the target, or drop this bullet in favour of AA-787, where removing promises_an_option is already approved"
+  ],
+  "approach": "1) Put the offered detection in one light place, e.g. services/acp_shared/offered.py: move OFFERED_PHRASES there and keep quality_gates._OFFERED_PHRASES (:88-96) as a re-export. atom_seed must not import quality_gates, which pulls judge_client/llm_client (quality_gates.py:54-64). Match at SENTENCE level against the evidence sentence that names this moment's label. Also mark OFFERED a lower-case evidence fragment that directly follows an offered member of the same place group. This is the A3 split rule trip_facts.optional_activities already uses (trip_facts.py:179-212), and the r4 seed has exactly this case: 'trekking along shorelines and forest paths'. 2) Compute status per part in route_moment_seeds (atom_seed.py:357-375), before grouping, so 'a day with offered items' is known across blocks. Render it in compose_seed (after 'Source itinerary:', :184-185) and in compose_route_moment's per-member lines (:282-285) as its OWN line, starting 'Status:'. Never append it to the 'Source itinerary:' line: _SOURCE_RE (:201) captures to end of line and would count it as a fact in moment_fact_count. Texts as in plan §3.4 (09-next-step-plan.md:273-282). 3) Keep Status out of the parsers. claim_rules: add 'Status:' to _SKIP_PREFIXES (claim_rules.py:84), or give it its own kind, and update the round-trip test. trip_facts.parse_moments ignores it (_TRIP_LINE_PREFIXES trip_facts.py:37). route_digest only reads Source/Place background (route_digest.py:47-58), so it is safe. 4) CRITICAL interplay: quality_gates._is_offered (:451-453) matches 'optional' and 'not included' anywhere in the seed. The included text 'Never call it optional' would turn every single-atom seed with an included-status line into 'offered' (:440), so promises_an_option warnings would RISE. Strip 'Status:' lines before _is_offered, or better: when Status lines exist, a block is offered only if it has a 'Status: OFFERED' line. 5) prompts.py SYSTEM_PROMPT: insert the plan §3.1 second bullet only (the em-dash bullet belongs to the separate em-dash issue) before line 217 ('- Avoid generic AI-style writing'). Update the sha guard in tests/unit/test_aa771_s234_voice_contract.py:450 on purpose; SYSTEM_PROMPT is shared by every channel. Lessons that apply: print the writer's real input before tuning (S232); a value computed in two code paths must use one function (S218: F17 and the seed both decide 'optional'); measure before adding more.",
+  "files": [
+   "apps/AA-CIS-App/services/acp_shared/offered.py (new, light module: phrases + sentence-level status)",
+   "apps/AA-CIS-App/services/acp_shared/atom_seed.py (compose_seed :169-198, compose_route_moment :272-298, route_moment_seeds :357-375)",
+   "apps/AA-CIS-App/services/acp_content_writing/quality_gates.py (_OFFERED_PHRASES :88-96 re-export, _is_offered :451-453 / promised_sentences :421-448 Status-aware)",
+   "apps/AA-CIS-App/services/acp_content_writing/claim_rules.py (_SKIP_PREFIXES :84)",
+   "apps/AA-CIS-App/services/acp_content_writing/prompts.py (SYSTEM_PROMPT, insert before :217)",
+   "apps/AA-CIS-App/tests/unit/test_aa768_atom_seed.py",
+   "apps/AA-CIS-App/tests/unit/test_aa768_s234_seed_route.py",
+   "apps/AA-CIS-App/tests/unit/test_aa768_claim_rules.py",
+   "apps/AA-CIS-App/tests/unit/test_aa771_s234_voice_contract.py (:450 sha)",
+   "apps/AA-CIS-App/tests/unit/test_aa773_offered_status.py (new)",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-773.md (new)"
+  ],
+  "tests": [
+   "sentence-level: evidence 'Day starts at the lake. Optional boat rides are available.' -> only the boat-ride moment OFFERED; the lake moment on the same day gets 'included' (no reverse flip)",
+   "merged Khövsgöl fixture from r4 seed: boat/horse/nomadic + lower-case 'trekking along shorelines…' continuation -> OFFERED; Day-4 boundary moment -> included",
+   "moment_fact_count(block with Status lines) == moment_fact_count(same block without) and thin tagging unchanged",
+   "claim_rules.number_source_lines skips 'Status:' lines (round-trip test)",
+   "promised_sentences / gate_promises_an_option: a single-atom seed whose only 'optional' is in 'Status: included… Never call it optional.' is NOT treated as offered",
+   "SYSTEM_PROMPT contains the Status rule; sha guard updated deliberately"
+  ],
+  "needs_migration": false,
+  "migration_note": "None. The stored offered_moments column (plan §4 build 1) is explicitly out of scope. If it is ever built it is a CIS-owned migration that goes to AA-CIS-Infra db/migrations/cis via the DB Migrate workflow.",
+  "paid_run_needed": "$0 per piece; offline seed preview $0 (read-only ECS). Verified in shared r5 (≈$1.15).",
+  "risk": "medium",
+  "size": "M",
+  "already_done_or_stale": "Not done. Linear refs are slightly loose but valid (compose_route_moment :272-298; compose_seed is :169-198). Not stated in Linear: (a) the continuation-fragment case that plain _OFFERED_PHRASES matching misses; (b) _is_offered would count the Status text itself as offered; (c) AA-787 (approved) drops promises_an_option, which makes Done-when bullet 2 conflict with another approved issue."
+ },
+ "AA-775": {
+  "id": "AA-775",
+  "title": "[Brand pack] Fence the style guide as 'never a source' + F17 pace_promise finding",
+  "done_when": [
+   "Pre-wiring ($0, local): replay the pace rule offline on pieces.json + pieces_r2..r4.json (80 S234 pieces, .tmp-session/s234/) with the deployed hygiene/trip_facts code, and report per tenant: hits, seed-supported hits suppressed, false positives. 0 false positives on seed-supported sentences (e.g. Trail Pulse 'time to swim and rest before lunch') and on the CTA sentence before wiring",
+   "PR merged ('Refs AA-775'), CI green, Deploy Dev COMPLETED on api + worker, same SHA",
+   "Live: an r5 blog with an unsupported pace sentence shows an F17_trip_fact violation with the pace_promise message in gate_ledger (admin API), repaired on t9_repair; a LinkedIn piece never holds on pace_promise",
+   "r5: Terra pace sentences ≤2 and A&H ≤1 (same regex over sentences, CTA excluded); 0 holds whose only reason is pace_promise on a seed-supported sentence"
+  ],
+  "approach": "1) brand_pack.render_brand_block (brand_pack.py:124-126): replace with the plan §3.3 text (09-next-step-plan.md:266-271). This changes the T9 user prompt AND the T8 angle prompt (acp_angle_gate/prompts.py:122), so the byte-identical guard hashes for `single` and `route` change (tests/unit/test_aa771_s234_voice_contract.py:451-452; the fixture pack has a style_guide). Update them on purpose; test_aa771_brand_pack.py:44 may need its assertion text updated. Coordinate with AA-792: if the T2 tenant-voice prompt starts reusing render_brand_block, the fence reaches T2 too. That is intended, but state it. 2) trip_facts.py: add pace_claims(text, ctx). Regex as in plan §3 #3. Exclude: the CTA sentence (_body_spans(cta) already does), FAQ answers if needed, 'the rest of', and sentences whose matched clause content words are in the seed's own half (ctx.source / split_seed). Message prefix e.g. \"states a pace or rest promise the source does not make — cut it or say only what the source says: '<sentence>'\" via _quoted (trip_facts.py:130), so sentence_repair can parse it (_QUOTED_GATES, sentence_repair.py:43-44). Blocking on blog only: add `channel` to TripFactContext (trip_facts.py:1270-1284; built at service.py:1118-1121, where `channel` is in scope) and append pace findings to trip_fact only when channel == 'blog'. F17 is already cheap-repairable (CHEAP_REPAIR_GATES quality_gates.py:1388) and blocking (F17_BLOCKING :1352). Wire it in find_trip_fact_issues (:1287-1309). 3) Note F15_voice already catches VERBATIM brand-pack/brief phrases (hygiene.brief_texts, service.py:1122). pace_promise is for paraphrases. Risk: Terra's own style guide says 'Explain the pace clearly' (pieces_r4.json brand_pack), so the fence and that rule pull against each other; the fence text resolves it with 'unless the content seed says so'. My quick r4 replay of the raw regex (no seed check) gives Terra 11, Trail Pulse 7, A&H 3. Most Trail Pulse hits are seed-backed ('swim and rest before lunch'), and one A&H hit is the CTA ('your own pace'). So the FP filter is mandatory. Lesson: a new blocking rule must name its deterministic fix (S218 AA-736): here it is the t9_repair sentence repair, plus the attempt-3 cut (service.py:1244-1250).",
+  "files": [
+   "apps/AA-CIS-App/services/acp_shared/brand_pack.py (render_brand_block :124-126)",
+   "apps/AA-CIS-App/services/acp_content_writing/trip_facts.py (new pace_claims; TripFactContext :1270-1284; find_trip_fact_issues :1287-1309; __all__)",
+   "apps/AA-CIS-App/services/acp_content_writing/service.py (TripFactContext(... channel=channel) :1118-1121)",
+   "apps/AA-CIS-App/tests/unit/test_aa771_s234_voice_contract.py (:451-452 sha)",
+   "apps/AA-CIS-App/tests/unit/test_aa771_brand_pack.py",
+   "apps/AA-CIS-App/tests/unit/test_aa775_pace_promise.py (new)",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-775.md (new)",
+   ".tmp-session/s235/aa775_pace_replay.py (new, offline)"
+  ],
+  "tests": [
+   "render_brand_block contains 'never a source' and 'never repeat one of its example sentences'; guard sha updated",
+   "pace_claims flags 'The days here are full without being relentless' when the seed has no pace words",
+   "pace_claims does not flag a seed-supported 'time to swim and rest before lunch' when the seed says so",
+   "pace_claims ignores the CTA sentence ('…shaped around your own pace…') and 'the rest of the …'",
+   "channel='linkedin' -> pace findings not added to F17 (no block); channel='blog' -> blocking F17 violation parsed by sentence_repair.plan as a quoted item",
+   "_style_only_repair stays True for an F17-only ledger (t9_repair stage)"
+  ],
+  "needs_migration": false,
+  "migration_note": "None.",
+  "paid_run_needed": "$0 for the offline regex replay. Live effect measured in shared r5 (≈$1.15); about +$0.002 per blog that needs a Haiku repair.",
+  "risk": "medium",
+  "size": "M",
+  "already_done_or_stale": "Not done. Linear ref brand_pack.py:124-126 is correct (line 125 holds the current text). There is no stored pace-count script (09-next-step-plan.md:107 says the counts came from an ad-hoc recount), so the r5 measure must add the same counter to measure_r5.py for a comparable number."
+ },
+ "r5-checkpoint": {
+  "id": "r5-checkpoint",
+  "title": "Checkpoint r5 (n=20, same 6 requests) after AA-776/774/773/775 are deployed",
+  "done_when": [
+   "Pre-flight: shared.job has 0 queued/running jobs; api and worker on the same SHA containing all 4 PRs (plus AA-785/786 if the lane merged them first; record which); the AA-774 kind probe and AA-773 seed preview are already reported",
+   "20 pieces written (blog 4×2, LinkedIn 3×4) through the public tenant API on the worker; total pipeline cost recorded from llm_call_log (cost.py pattern) and ≤$1.40",
+   "Report docs/audits/<S235 folder>/r5 (panel + metrics) with r4 vs r5 for: F17 optional-as-plan in final ledgers, promises_an_option warn per blog, permit/access sentences per blog, Terra/A&H/Trail Pulse pace sentences, F4-only repair modes, blog light/held, LinkedIn light/false passes, reverse flips and invented sub-activities from the panel",
+   "Each Done-when bullet of AA-773/774/775/776 marked met/not met with the number; Linear comments drafted for the orchestrator"
+  ],
+  "approach": "Reuse the S234 harness in .tmp-session/s234 (the s233 scripts are older copies). Copy s234_checkpoint_r4.py → .tmp-session/s235/s235_checkpoint_r5.py with STATE s235/checkpoint_r5.json. Seed `requests` from checkpoint_r4.json (same request_ids and chosen angles) with empty `pieces`, then run phase `write` only. It runs client-side: polling from the laptop, jobs on the worker, so it is NOT an adhoc script in the api task. EXCEPTION: regenerate the angles of the Terra LinkedIn request (POST /admin/content-quality/requests/{id}/regenerate-angles, ≈$0.02 T8), because its r4 angle 'The Checkpoint Before the Temple' rests on a practical card fact that AA-774 removes. Record it as a confound. After writing: s233/export_pieces.py → s235/pieces_r5.json. s234_analyze_r4.py → s235 analyze (admin API, CQ_SECRET env, never printed). Add these counts: F17 violations starting 'presents ' (optional-as-plan) and pace_promise in final gate_ledger; promises_an_option in flags per blog; permit/access regex per blog; pace regex per tenant (CTA excluded); repair_log modes for F4-only feedback. measure_r4.py → measure_r5.py for hard errors on the same code. panel_r4.js → panel_r5.js with P=pieces_r5.json, output 06-…-r5.md, and the lens prompts extended to list each piece's Status: OFFERED moments and ask for reverse flips and invented sub-activities. The panel runs as local Claude Code agents ($0 on the gateway). Lesson (A/A' noise, S224/AA-346): n=8 blogs is small; trust only the large deltas the Done-when uses (8/8→≤2/8, 7/8→0/8, 12→≤2) and do not tune on smaller ones. r5 also includes the S234 card merge (cards 122→110), so seed changes are not only from these PRs. Do not deploy anything while r5 jobs run.",
+  "files": [
+   ".tmp-session/s235/s235_checkpoint_r5.py",
+   ".tmp-session/s235/checkpoint_r5.json",
+   ".tmp-session/s235/s235_analyze_r5.py",
+   ".tmp-session/s235/measure_r5.py",
+   ".tmp-session/s235/panel_r5.js",
+   ".tmp-session/s233/export_pieces.py (reuse)",
+   ".tmp-session/s234/cost.py (reuse via ecs.sh, read-only)"
+  ],
+  "tests": [
+   "Dry run of the analyze/measure scripts on pieces_r4.json reproduces the r4 numbers (promises_an_option 8/8 blogs, Terra pace ~11-12, permit 7/8) before r5 is paid for"
+  ],
+  "needs_migration": false,
+  "migration_note": "None.",
+  "paid_run_needed": "≈$1.15 pipeline (r4 actual $1.15/20 pieces) + ≈$0.02 Terra LinkedIn angle regeneration. Panel $0 on the gateway. Within the S235 ≤$10 cap and the subset rule.",
+  "risk": "low",
+  "size": "S",
+  "already_done_or_stale": "Prerequisites from plan §0 are done (card merge, Jev T axis off: S234 log :73-75). The em-dash (#5) and LinkedIn (#7) targets in 09-next-step-plan §6 do not apply, because those issues are not in this lane."
+ }
+}

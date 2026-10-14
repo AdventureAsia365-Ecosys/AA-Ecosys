@@ -1,0 +1,233 @@
+{
+ "top_risks": [
+  "R1 (high): Lane B is NOT frontend-only. Deploy Dev runs on push to main for 'frontend/**' as well as api/services/shared/worker (apps/AA-CIS-App/.github/workflows/deploy-dev.yml:2-12), behind the shared.job preflight guard. AA-797 edits api/routers/admin.py, AA-798 needs migration 223 plus admin_pipeline.py and v1_tours.py, and AA-796 edits v1_tours.py. So EVERY AA-CIS-App PR, including frontend-only ones, joins the ONE serial train, and none merges during the T2 rerun or r5 windows. The plan-11 line 'frontend-only PRs merge any time' must be withdrawn. Only docs/tests/CONTEXT.md-only PRs skip the deploy, because those paths are not in the trigger list.",
+  "R2 (high): AA-792 edits the writer prompt builder shared by A1, T2 and Bedrock Batch (services/content_generation/batch_prompt.py:24 imports SYSTEM_PROMPT and build_rewrite_prompt from .prompts). Nothing pins the A1 prompt bytes. The first commit of the AA-792 branch must add an A1 golden SHA test captured on main@20a2387 BEFORE any prompt edit. The T2 variant must be a separate branch chosen only when state['is_tenant_rewrite'] is true. Otherwise A1 waves (AA-653) change silently.",
+  "R3 (high): the T2 rerun cannot attribute its results, and it overruns its budget. AA-792 changes the writer AND the judge gate in one release. AA-793 (best-draft-wins, ≤$0.20/version) is not scheduled, yet plan 11 says the rerun verifies 792/793/794. S234 cost $5.21 for 14 versions ($0.372 each), which is above the ≤$5 cap. Use judge brand_fit_score from llm_call_log.quality_signal as the before/after metric, not quality_score. Hard-stop the driver at $4.50. Drop AA-793 from the rerun Done-when.",
+  "R4 (high): schema drift on shared.v_tenant_monthly_usage. The live view (billing_month, llm_cost_usd, quota_*_pct), shared.membership_plans and shared.tenants.plan_id are not in any repo migration. The only definition is api/migrations/007_tenant_usage.sql:12-22, which has different columns. This drift causes the /usage 500 (admin.py:359-368). It also means AA-798 must DROP+CREATE the view as a baseline with explicit re-GRANTs, because CREATE OR REPLACE fails on the 007-shaped CI database.",
+  "R5 (high): the CIS CI/CD role aa-cis-dev-role trusts every repo in the org: sub 'repo:AdventureAsia365-Ecosys*/*:*' (infra/AA-CIS-Infra/accounts/aa365/cicd.tf:34). It has RDS/Secrets/ECS full access and iam:CreateRole/PassRole on '*'. If AA-Booking were created now it would inherit near-admin rights. Narrow the trust before `gh repo create`. Only AA-CIS-App (deploy-dev, eval-regression) and AA-CIS-Infra (terraform-plan/apply, db-migrate) assume this role. TripPlanner already uses its own aa-tripplanner-dev-app-deploy (apps/AA-TripPlanner-Web/.github/workflows/deploy-lambdas.yml:35), so narrowing is safe if the '*' after the org name is kept for the '@id' segment (cicd.tf:30-33 comment).",
+  "R6 (high): the subagent guardrail hook matches only Bash (.claude/settings.json:10). GitHub MCP merge_pull_request, create_repository and push_files, Linear save_*, and Vercel create_project are not blocked, so the pilot's 'subagents cannot merge or create repos' assumption is false. Before any implementer is spawned, the orchestrator must widen the matcher, or add an agent_id-gated deny for MCP write tools, and also add `gh api ... -f`, `aws ecs execute-command`, `aws iam` and `aws lambda invoke|update` to the Bash patterns.",
+  "R7 (medium): tenant data and cost leaks surface once Lane B makes things real. (a) AA-798 turns /v1/billing llm_cost_usd (v1_tours.py:270-285) into real AA LLM spend visible to tenants, so drop it from the tenant projection. (b) Once AA-797 makes suspend/offboard work, any staff role can PATCH, DELETE or offboard tenants through the BFF (frontend/lib/rbac.ts:66,75-85). Add a tenants write rule restricted to admin. (c) The AA-796 scope misses /v1/tours/{id} (pt.*) and the tenant branch of /v1/tours/{id}/full, which returns the full quality_scores and generated_content rows (v1_tours.py:613-735).",
+  "R8 (medium): the A-T9 issues collide pairwise on hot files: sentence_repair.py (776/786), quality_gates.py (785/786/773), atom_seed.py (774/773), claim_rules.py (773/786), and the single SHA-guard block tests/unit/test_aa771_s234_voice_contract.py:450-452 (773/775). render_brand_block (services/acp_shared/brand_pack.py:107) feeds T9, T8 and (after AA-792) T2. Exactly one implementer must own this track and work strictly serially.",
+  "R9 (medium): seed line format. AA-773 adds a 'Status:' line that contains 'optional' and 'not included'. quality_gates._is_offered (:451-453) would treat it as offered, unused_source_facts (:1256-1277) could inject it into FAQ answers, and moment_fact_count/claim_rules/trip_facts would mis-parse it. All parsers must be updated in the same PR, with a test that runs a Status line through unused_source_facts.",
+  "R10 (medium): Booking shares acc2 RDS, ALB/NLB/VPC link and the CIS job gate. The CIS deploy guard counts every queued/running shared.job row (deploy-dev.yml:29-63), so Booking jobs in shared.job would freeze CIS deploys. DB Migrate runs as the CIS api task's DATABASE_URL (infra/AA-CIS-Infra/.github/workflows/db-migrate.yml:88-105). Per tfvars:21 that is the master user aa_cis_admin, so it can CREATE ROLE/SCHEMA, but every booking.* object is owned by aa_cis_admin, and bk-001 must ALTER DEFAULT PRIVILEGES FOR ROLE aa_cis_admin.",
+  "R11 (low): there are stale orphan worktree folders under apps/AA-CIS-App/.claude/worktrees/* (gitdir deleted). Repo-wide grep returns old copies of quality_gates.py, prompts.py and migrations. Agent briefs must exclude that path, and new worktrees must use other names/locations."
+ ],
+ "lane_ownership": [
+  {
+   "lane": "A-T2 (one implementer, serial: AA-794 then AA-792; CIS-App)",
+   "owns": [
+    "apps/AA-CIS-App/services/content_generation/prompts.py (separate module from acp_content_writing/prompts.py, so no clash with AA-773)",
+    "services/content_generation/batch_prompt.py",
+    "services/content_generation/graph.py",
+    "services/content_generation/flag_fix_node.py",
+    "services/content_generation/itinerary_utils.py",
+    "services/content_generation/judge_node.py",
+    "services/content_generation/seo_meta_utils.py",
+    "services/content_generation/brand_fit.py (docstring only)",
+    "services/acp_produce/tenant_pipeline.py",
+    "services/jobs/t2_rewrite_job.py (EXCLUSIVE for S235; AA-796 must not touch it)",
+    "api/routers/v1_pipeline.py (_rewrite_tour initial_state only)",
+    "tests/unit/test_aa792_*, test_aa794_*, test_aa206_judge.py, tests/integration/test_compiled_graph_state_propagation.py",
+    "docs/implementation-notes/AA-792.md, AA-794.md",
+    ".tmp-session/s235/t2_rerun/* (driver + scoring, gitignored)"
+   ],
+   "must_not_touch": [
+    "services/acp_shared/brand_pack.py (call fetch_brand_pack_conn/render_brand_block read-only; text changes belong to AA-775)",
+    "services/acp_shared/grounding.py",
+    "services/acp_content_writing/**",
+    "brand_fit.py scoring internals (shared with T7 debate)",
+    "api/routers/admin*.py, api/routers/v1_tours.py, frontend/**",
+    "api/migrations/** (no migration needed)",
+    "CONTEXT.md (send the T2/T3 paragraph text to the orchestrator)"
+   ]
+  },
+  {
+   "lane": "A-T9 (one implementer, strictly serial: AA-776 → AA-785 → AA-786 → AA-774 → AA-773 → AA-775, then the r5 checkpoint; CIS-App)",
+   "owns": [
+    "services/acp_content_writing/{quality_gates.py, sentence_repair.py, service.py, claim_rules.py, trip_facts.py, prompts.py, hygiene.py}",
+    "services/acp_shared/{atom_seed.py, place_cards.py, brand_pack.py, grounding.py (AA-785 opt-in year_forms kwarg only), offered.py (new)}",
+    "services/acp_angle_gate/route_digest.py (read; edit only if Status parsing needs it)",
+    "tests/unit/test_aa771_s234_voice_contract.py (sole owner of SHA lines 450-452), test_aa768_*, test_aa772_place_cards.py, test_aa771_brand_pack.py, test_aa298_aa325_grounding.py (must stay unchanged), test_aa450_quality_gates.py, new test_aa773/774/775/776/785/786_*",
+    "docs/implementation-notes/AA-773..776, AA-785, AA-786.md",
+    ".tmp-session/s235/{aa774_kinds_probe.py, aa775_pace_replay.py, aa785_replay.py, aa786_replay.py, s235_checkpoint_r5.py, measure_r5.py, panel_r5.js}"
+   ],
+   "must_not_touch": [
+    "services/content_generation/** and services/jobs/t2_rewrite_job.py",
+    "grounding.py default behaviour (year_forms must default False; T3 and A1 stay strict)",
+    "frontend/**, api/routers/**",
+    "api/migrations/**",
+    "CONTEXT.md (orchestrator applies the gate/seed paragraph text)"
+   ]
+  },
+  {
+   "lane": "B (one implementer, serial: AA-797 → AA-796 → AA-798; CIS-App portal + admin API)",
+   "owns": [
+    "api/routers/admin.py tenant routes (:103-472, :1021-1210) excluding get_tenant_details (:550-900, shared with Master Content; read-only additions only)",
+    "api/routers/admin_pipeline.py get_admin_billing block only (~:4946-5003)",
+    "api/routers/v1_tours.py tenant projections (/pool, /{id}, /{id}/full tenant branch, /my-versions, /versions/*, /billing)",
+    "api/routers/v1_marketplace.py (move tenant_version_state to a shared projection module)",
+    "api/routers/_tenant_projection.py (new)",
+    "api/routers/admin_content_quality.py (derived needs_review flag on tour-versions list only)",
+    "api/routers/admin_overview.py _QUOTA_SQL only if view columns change",
+    "services/acp_shared/audit_log.py (new AdminTenantAuditAction constants)",
+    "api/migrations/223_tenant_usage_real_llm_cost.sql (number reserved for AA-798)",
+    "frontend/app/admin/tenants/page.tsx (minimal edits; AA-766 rebuilds later)",
+    "frontend/app/(tenant)/portal/_components/{ui.tsx, PoolTab.tsx, PoolFilters.tsx, DashboardTab.tsx, PlaceholderTabs.tsx}",
+    "tests/unit/test_aa496_tenant_billing.py, test_aa770_tenant_receives.py, test_aa309_tenant_onboarding.py; new tests/integration/test_aa797_*, test_aa798_*; tests/unit/test_aa796_*, test_aa797_*, test_aa798_*",
+    "docs/implementation-notes/AA-796.md, AA-797.md, AA-798.md"
+   ],
+   "must_not_touch": [
+    "services/jobs/t2_rewrite_job.py (AA-796 is projection-only; the stored status stays needs_review as an admin label)",
+    "services/content_generation/**, services/acp_content_writing/**, services/acp_shared/{brand_pack,atom_seed,grounding}.py",
+    "get_tenant_details refactor",
+    "frontend/lib/rbac.ts (propose the diff; the orchestrator applies it)",
+    "infra/AA-CIS-Infra/** (the 223 copy goes to the orchestrator as a patch)",
+    "CONTEXT.md"
+   ]
+  },
+  {
+   "lane": "C (Booking bootstrap; starts only after Gate 1 answers + R5/R6 fixes)",
+   "owns": [
+    "New repo AA-Booking contents (backend/, migrations/001_booking_foundation.sql, frontend/ placeholder only, .github/workflows/ci.yml + deploy-dev.yml, CONTEXT.md, README.md, .claude/CLAUDE.md, docs/adr/0001-implements-root-0004.md, docs/erd/ moved from root docs/AAA/erd-v2)",
+    "AA-CIS-Infra patches (returned to the orchestrator, not PRs): accounts/aa365/booking.tf (new), cicd.tf (trust narrowing + BookingRoleTagging), modules/alb/outputs.tf (new http_listener_arn output only), db/migrations/booking/001_booking_foundation.sql (byte copy), stale Infra comments (modules/alb/main.tf:73, modules/ecs/main.tf:272,460, accounts/aa365/main.tf:5-6)"
+   ],
+   "must_not_touch": [
+    "modules/ecs, modules/api_gateway, modules/alb resources (only the one output may be added)",
+    "any AA-CIS-App or AA-TripPlanner-Web file (CIS grant migration and tp-009 are deferred)",
+    "shared.job / CIS deploy gate",
+    "secrets (booking/dev/database-url value is set by Nghiệp)",
+    "repo creation, branch protection, Vercel project, Infra merge/apply, DB Migrate runs (orchestrator/Nghiệp only)"
+   ]
+  },
+  {
+   "lane": "D (root docs; one agent, finishes early, then its slot goes to C)",
+   "owns": [
+    "docs/adr/0004-aa-booking-stack-and-bootstrap.md (from the Booking review draft, with the corrections below)",
+    "docs/ecosystem-architecture.md (:156 contracts line; Booking rows in §2/§5 only after the Infra apply)",
+    "docs/architecture/ecosystem-review-2026-09.md (mark §4 diagram :208, §6.2 :416-419, §7 :446 superseded by ADR 0001/0004)",
+    "docs/tripplanner-to-aaa-handoff.md (:7-9, :158 path → docs/AAA/)",
+    "docs/AAA/erd-v2/README.md (:107-108) and booking.dbml (:160 TO CONFIRM)",
+    "docs/adr/0001 status line only if Nghiệp accepts it"
+   ],
+   "must_not_touch": [
+    "docs/database/schema-ownership.md, docs/architecture/db-schema-reference.md, docs/sessions/**, skill/aa-lessons/lessons.md, .claude/**, any CONTEXT.md (orchestrator-only)",
+    "~/.claude/CLAUDE.md (Nghiệp's private file)",
+    "any app or infra code"
+   ]
+  },
+  {
+   "lane": "Orchestrator (main session)",
+   "owns": [
+    "All merges, update-branch, deploy windows, DB Migrate runs, Linear writes, root PR merges",
+    ".claude/settings.json + .claude/hooks/subagent-guardrails.sh (R6 fix before spawning)",
+    "frontend/lib/rbac.ts (tenants write rule = admin)",
+    "apps/AA-CIS-App/CONTEXT.md (fix :532-535 T2 claim after AA-796, :686-699 after AA-792, :256-259 manual-migration line, gate/seed paragraphs after the A-T9 train). It can ride in one docs-only PR, which does not trigger Deploy Dev",
+    "docs/database/schema-ownership.md (role-SQL-in-owner's-bk-001 rule), db-schema-reference.md regeneration after 223 and bk-001",
+    "Migration number registry: CIS 223 → AA-798; nothing else in S235. Booking bk-001",
+    "Batched AA-CIS-Infra PR assembly (223 copy + Booking phase 1/phase 2)",
+    "Rerun and r5 window control (no merges while jobs run)"
+   ],
+   "must_not_touch": [
+    "Feature code in any lane's owned files (review only)"
+   ]
+  }
+ ],
+ "merge_train_order": [
+  "0. Pre-train (no deploy): orchestrator commits the guardrail hook widening (root repo) and adds a .claude/worktrees exclusion to the agent briefs. No CIS-App deploy.",
+  "1. AA-794 (A-T2 PR1, 'fix: …', Refs AA-794). Deterministic, $0. Deploy + live unit-level check. Before merge, record the read-only A1 meta sizing SELECT in the notes.",
+  "2. AA-776 (A-T9 PR1). Small, sentence_repair.plan only.",
+  "3. AA-785 (A-T9 PR2). Opt-in year_forms in grounding.py plus one line in gate_grounding. Do the in-container replay live check after deploy.",
+  "4. AA-797 (B PR1). admin.py tenant writes + UI. Live check uses a throwaway tenant, which ends offboarded.",
+  "5. AA-796 (B PR2). Tenant projection only, no t2_rewrite_job.py change. It must be live BEFORE the T2 rerun so the rerun's tenant reads are covered.",
+  "6. AA-792 (A-T2 PR2, Urgent; it jumps ahead of 3-5 if ready earlier, but always after AA-794). Deploy, confirm api and worker are on the same SHA, then OPEN WINDOW W1.",
+  "W1 = T2 rerun window (14 real t2_rewrite jobs, waves 4/8/2, $4.50 hard stop). NO CIS-App merge of any kind until shared.job is empty and scoring is done.",
+  "7. AA-786 (A-T9 PR3). Then the F9 replay as a one-off ECS task with a $0.50 cap, run outside api/worker and not during a merge.",
+  "8. AA-774 (A-T9 PR4). First run the kind probe + offline recount ($0) and report them. The PROMPT_SHA bump must not trigger a platform-wide card rebuild.",
+  "9. AA-773 (A-T9 PR5). Needs Nghiệp's call on the promises_an_option bullet first. Rebase it on AA-774 (atom_seed.py) and update the SHA guard line :450.",
+  "10. AA-775 (A-T9 PR6). Rebase on AA-773 and update the SHA guard lines :451-452. Run the offline pace replay ($0) before wiring.",
+  "W2 = r5 checkpoint window (20 pieces, ≈$1.17 incl. the Terra LinkedIn angle regen). NO CIS-App merges.",
+  "11. AA-798: the Infra copy of 223 is approved in the Gate-1 batch → DB Migrate check → apply (in any gap outside W1/W2, single DB Migrate concurrency group) → then the AA-798 app PR (B PR3), rebased on AA-797 and AA-796. It may slot between W1 and W2 if the apply is done by then.",
+  "12. CIS-App docs-only PR by the orchestrator (CONTEXT.md updates); no deploy is triggered. Root PRs: S235 T2 rerun report, AA-786 stability report, r5 report, ADR 0004 + stale docs (Lane D), db-schema-reference regen. Merged by hand per the root PR convention.",
+  "Infra/Booking train (independent of CIS-App, but never during a DB Migrate run or a CIS Terraform apply): Infra PR-1 = cicd.tf trust narrowing + BookingRoleTagging + alb http_listener_arn output + the 223 copy → Nghiệp merges → terraform-apply → verify that a CIS Deploy Dev and DB Migrate still assume the role (a no-op dispatch or the next train deploy). Infra PR-2 = booking.tf (service desired_count 0) → apply → bk-001 copy → DB Migrate check/apply → Nghiệp sets the role password/secret → AA-Booking deploy-dev → scale to 1 → health curl."
+ ],
+ "parallel_batches": [
+  {
+   "batch": "Batch 0 (orchestrator only, before spawning)",
+   "items": [
+    "Widen the PreToolUse guardrail to MCP write tools (GitHub/Linear/Vercel) and add the missing Bash patterns (.claude/settings.json:10 currently 'Bash' only)",
+    "Agent briefs: exclude apps/AA-CIS-App/.claude/worktrees/** from grep/find; new worktrees under a distinct path",
+    "Reserve CIS migration 223 for AA-798; record that no other CIS migration is planned in S235",
+    "Send the single Gate-1 approval message to Nghiệp (see needs_nghiep)"
+   ],
+   "why_safe": "No code edits in the app repos; only the root repo's guardrail config, which no lane touches."
+  },
+  {
+   "batch": "Batch 1 (4 implementers in flight, start right after Batch 0; Gate-1 answers are not needed for these)",
+   "items": [
+    "A-T2: add the A1 prompt golden-SHA test on main first, then code AA-794, then AA-792 (print one real S234 T2 prompt from the CloudWatch llm_prompt_built event before editing)",
+    "A-T9: AA-776 code, then AA-785 code. In parallel and $0: the AA-775 offline pace replay on stored pieces, and the read-only AA-774 kind probe",
+    "B: AA-797 code + tests; read-only dump of pg_get_viewdef/grants/pg_depend for shared.v_tenant_monthly_usage, membership_plans DDL and plan_id; draft the 223 SQL",
+    "D: ADR 0004 (draft with the corrections in plan_corrections) + stale-doc fixes"
+   ],
+   "why_safe": "The file sets are disjoint. A-T2 is confined to services/content_generation/*, t2_rewrite_job.py, tenant_pipeline.py and v1_pipeline.py. A-T9 is confined to services/acp_content_writing/* and acp_shared/{grounding,atom_seed,place_cards,brand_pack}. B is confined to api/routers/admin*.py, v1_tours.py, v1_marketplace.py, audit_log.py and frontend tenants/portal. D touches root docs only. content_generation/prompts.py and acp_content_writing/prompts.py are different modules (verified: batch_prompt.py:24 imports from .prompts), so AA-792 and AA-773 do not collide. AA-785 adds only an opt-in kwarg in grounding.py, and A-T2 does not edit grounding.py. AA-792 reads brand_pack read-only. One implementer per track keeps the hot files single-writer."
+  },
+  {
+   "batch": "Batch 2 (after D finishes and Gate-1 answers arrive; still ≤4 in flight)",
+   "items": [
+    "C replaces D: AA-Booking scaffold in a local worktree/scratch (pushed after the orchestrator creates the repo), ci.yml, bk-001 first slice, booking.tf + cicd.tf patches returned to the orchestrator",
+    "A-T9 continues: AA-786, then AA-774, AA-773, AA-775 (each starts from main after the previous one merges, or is stacked and rebased)",
+    "B continues: AA-796 projection, then the AA-798 app half (branch kept unmerged until 223 is applied)",
+    "A-T2: after AA-792 merges, runs the T2 rerun driver/scoring (no coding), then writes the rerun report"
+   ],
+   "why_safe": "C works in a new repo plus Infra patches that no CIS lane touches. B's AA-796 no longer touches t2_rewrite_job.py. AA-798 rebases on AA-797/796 inside the same lane. A-T9 stays single-writer on acp_content_writing/*. The rerun is run-only, and it blocks merges, not coding."
+  },
+  {
+   "batch": "Batch 3 (windows, no coding conflicts)",
+   "items": [
+    "W1 T2 rerun: coding continues in worktrees, merges are frozen",
+    "W2 r5 checkpoint after AA-775 deploys; the panel runs as local agents ($0)",
+    "Orchestrator docs-only PRs (CONTEXT.md, root reports, schema reference)"
+   ],
+   "why_safe": "Only merges and deploys are frozen during paid job windows (deploy guard + lesson S212). Docs-only CIS PRs do not trigger Deploy Dev (deploy-dev.yml:4-12 paths exclude *.md/docs/tests)."
+  }
+ ],
+ "plan_corrections": [
+  "Plan 11 'frontend-only PRs merge any time' is wrong for CIS-App: frontend/** triggers Deploy Dev and its shared.job guard (deploy-dev.yml:2-12). All CIS-App code PRs go through one serial train. Only *.md/docs/tests-only PRs bypass the deploy.",
+  "Portal lens claim 'prompts.py is edited by both AA-792 and AA-773' is wrong. AA-792 edits services/content_generation/prompts.py, while AA-773 edits services/acp_content_writing/prompts.py (SYSTEM_PROMPT at :175). These are different files, so the two tracks can be coded in parallel.",
+  "AA-796 (B plan) proposed changing t2_rewrite_job.py:224-235 to always write ai_generated and deploying before the rerun. Corrected to projection-only (the portal lens' approach). Map needs_review → ai_generated/'Ready to review' at read time in /my-versions (including the ?status= filter), /versions/{id} + history, the /v1/billing activity and ui.tsx. Keep the stored status as the admin signal. t2_rewrite_job.py stays exclusive to A-T2, and the rerun's stored data keeps its meaning. Drop the Done-when bullet 'no needs_review rows after deploy' and replace it with 'no tenant-JWT /v1/* response contains needs_review|quality|score|qa_|judge keys' (key-walk test + live curl). If Nghiệp still wants the stored status changed, it becomes a one-line follow-up in A-T2's train AFTER W1 is scored.",
+  "AA-796 scope must be widened to include GET /v1/tours/{id} (strip quality_score/quality_score_id) and the tenant-JWT branch of /v1/tours/{id}/full (no quality/generated rows), v1_tours.py:613-735. Both are reachable via the generic tenant BFF proxy.",
+  "AA-798: drop llm_cost_usd (and jev_cost_usd) from the tenant /v1/billing response. This is a deliberate reversal of AA-636's 'kept in response' and must be recorded in the notes. Migration 223 = baseline DROP VIEW IF EXISTS + CREATE VIEW keeping the live column names and order, with explicit re-GRANTs, written after a read-only dump of the live viewdef/grants/dependents. Its integration test must first assert that the view column exists (lesson S231).",
+  "AA-797: add an admin-only tenants write rule in rbac.ts (orchestrator-applied). Use x-admin-user-id as the audit actor. Make include_inactive opt-in (3 other callers of GET /admin/tenants). generate-key returns 409 on a cancelled tenant (restore is the only way back). Remove or fix the stale acc1 bucket note in the offboard response (admin.py:1122,1133).",
+  "AA-785: the opt-in `year_forms` kwarg (default False) resolves cis-core's 'shared util with 5 consumers' risk. T3/A1/source_facts behaviour is unchanged, so AA-785 does not need to avoid the T2 rerun window for semantic reasons, only for the deploy guard.",
+  "AA-792: brand loading must go through services/acp_shared/brand_pack.fetch_brand_pack_conn (brand_pack.py:93), and the T2 prompt may call render_brand_block (:107) read-only. AA-775 will later change render_brand_block's text, which also changes T2 (intended: the style guide is 'never a source'). The T2 rerun measures the pre-fence text, so record this as a known confound. Also, the T2 brand-audit fallback that grades tenant copy against Adventure Asia standards (brand_audit_node.py:271-278) must be replaced with the compiled tenant rubric or skipped for is_tenant_rewrite. The A1-T2 lane plan omitted this.",
+  "AA-792 Done-when: change 'mean brand_fit ≥ 7.0 for EACH tenant' into the primary target and add a rule that a delta smaller than the A/A' repeat-run spread is not claimed. Remove any reference to verifying AA-793. Keep the $4.50 hard stop; cost ≤ $5 is a cap, not a target.",
+  "AA-773: the 'promises_an_option ≤2/8' bullet conflicts with approved AA-787 (drop the gate). Nghiệp must pick: make _is_offered Status-aware in AA-773, or drop the bullet. Default if no answer: make the gate Status-aware (it is needed anyway, so the Status text is not matched as offered) and keep the bullet.",
+  "AA-774: keep the RICH_CARD_FACTS sibling gate on the UNFILTERED fact count (prevents the S233 sibling regression). The PROMPT_SHA bump must not trigger a platform-wide paid card rebuild; the next card build is a ≤50 subset.",
+  "r5 checkpoint: it will include AA-785 and AA-786 (merged earlier in the train), the S234 card merge, and a regenerated Terra LinkedIn angle. Record all of these as confounds and trust only the large deltas.",
+  "ADR 0004 draft corrections: (a) cross-owner grant migrations must NOT be guarded by IF EXISTS(role) (a guarded no-op still registers its version permanently, as in tp-008:43-58). Apply them only after the role exists, and let them fail loudly. (b) Decision 8 (Booking kinds in shared.job) must not be accepted until the CIS deploy guard filters by CIS kinds. Until then Booking has no jobs; list it as an open decision. (c) Routing adds one new output to modules/alb; this is the single allowed module edit, and the plan must show no change to CIS resources except the new listener rule. (d) bk-001 must include ALTER DEFAULT PRIVILEGES FOR ROLE aa_cis_admin, because DB Migrate runs as the CIS DATABASE_URL (master user per terraform.tfvars:21).",
+  "Booking bootstrap step order: the trust narrowing (cicd.tf:34) and the guardrail MCP fix must happen BEFORE the AA-Booking repo is created (the review's step 3 came before the Infra steps).",
+  "CONTEXT.md edits are taken out of the lane PRs. Lanes put the text in their implementation notes, and the orchestrator lands one docs-only CIS-App PR (no deploy trigger). This avoids rebase churn across 9 serial PRs.",
+  "Paid spend for S235: T2 rerun ≤$4.50 + AA-786 replay/live ≤$0.60 + r5 ≈$1.17 + optional one-off T2 ≈$0.15 = ≤$6.42, within the $10 cap. Lane B, C and D spend $0 on LLM."
+ ],
+ "needs_nghiep": [
+  "Approve the agent-team run itself (Workflow/Ultracode or plain subagents) and the lane split + merge train above.",
+  "T2 (AA-792): gate on brand_fit only, with mission/distinct logged but not gating? Or keep mission as a gate driven by tenant_brand_rules.core_idea (already filled for the 4 pilot tenants)?",
+  "T2: does Adventure Asia's core forbidden-word list (forbidden_words.py:19-22, incl. 'luxury', 'curated', 'tailored') still bind a tenant's own voice? Default: keep it banned.",
+  "T2 rerun: OK to create new tenant_tour_versions on the 4 test tenants (counts toward quota and adds AA-798 noise), with a $4.50 hard stop and 14 runs in 3 waves? Confirm AA-793 is dropped from the rerun Done-when.",
+  "AA-796: projection-only (tenant sees 'Ready to review', stored needs_review stays as the admin label) instead of changing t2_rewrite_job.py. Also: does the A1 quality score in the tenant pool (the 'Best quality first' sort, min_quality, quality_score) count as a forbidden tenant field? Default: yes, remove it.",
+  "AA-798: remove llm_cost_usd from the tenant /v1/billing (a reversal of AA-636)? Is the quota counted in T2 versions or in distinct tours per month?",
+  "AA-798: approve migration 223 as a baseline that captures the hand-made live view, membership_plans and plan_id, applied via DB Migrate (Infra copy in the batched Infra PR).",
+  "AA-797: three tenant states (active/suspended/offboarded). Is restore after offboard allowed? Should suspend/offboard cancel the tenant's queued T2/T9 jobs? Are tenant writes admin-role only (rbac.ts)? Delete or fix GET /admin/tenants/{id}/usage? Is GDPR S3 deletion (the offboard note points to the destroyed acc1 bucket) in scope or a follow-up issue?",
+  "AA-773: make promises_an_option Status-aware, or drop that Done-when bullet in favour of AA-787?",
+  "AA-774/r5: OK to regenerate the Terra LinkedIn angle (~$0.02) because its r4 angle rests on a practical card fact that AA-774 removes?",
+  "AA-786 policy: a reason-less F9 verdict becomes a warn, not a hold; on LinkedIn the flagged sentence is cut and the piece ships, never held.",
+  "AA-785: the year tolerance applies to T9 F1 only (opt-in), with T3/A1 left strict. Drop the interim 'F1 warn' step because the tolerance ships in the same PR.",
+  "Infra PR batch (one review): narrow the aa-cis-dev-role OIDC trust to AA-CIS-App + AA-CIS-Infra only; BookingRoleTagging; the alb http_listener_arn output; the 223 copy; then booking.tf (desired_count 0). Each needs a manual terraform-apply.",
+  "Booking ADR 0004 open decisions: staff identity (shared.admin_users thin profile vs booking.staff_users); bk-001 = first slice (amend AA-678's Done-when 'schema v2'); API entry (separate REST API on the existing VPC link + /booking/* path, execute-api URL for Dev vs a custom domain needing an ACM cert + Namecheap DNS); the job model (own booking.job vs shared.job after the CIS gate filters kinds); the stack (FastAPI+asyncpg / Next.js on Vercel); whether ADR 0001 moves to Accepted.",
+  "Booking human-only actions: create repo AA-Booking + branch protection; set the booking role LOGIN password and the booking/dev/database-url secret out-of-band; GitHub 'dev' environment vars (underscore env var names: enter them manually in VSCode/GitHub UI); scale the service to 1 (billable); later the Vercel project.",
+  "Linear: OK to create follow-up issues (CIS grant migration for booking, tp-009, AA-796 stored-status follow-up if wanted, GDPR deletion, ALB internal) in the right projects? Check the 50-issue cap.",
+  "Housekeeping: OK to delete the orphan folders apps/AA-CIS-App/.claude/worktrees/*? Will you update your own stale files (~/.claude/CLAUDE.md lines 6, 35-37 with the AAA ap-southeast-1 accounts; the root .claude/CLAUDE.md 'ACTIVE PROJECT — ACP' block lines 53-55)?",
+  "Gate-0 live checks that need your session: the live RDS instance class / max_connections (Terraform default db.t3.micro), and the ACM cert SANs (tfvars says api-cis-aa365.lumiguides.it.com, live is api-cis.lumiguides.it.com)."
+ ],
+ "booking_go_no_go": "CONDITIONAL GO, minimal slice only. S235 target: ADR 0004 merged (root), the AA-Booking repo with scaffold + 5-check CI green, bk-001 first slice authored, and the Infra PR(s) opened. Stretch goal, only if Nghiệp answers Gate 1 early and approves the Infra batch: Infra phase 1+2 applied, bk-001 applied via DB Migrate, password set by Nghiệp, and /booking/health + /booking/health/ready live (aa-ship Done for AA-678's bootstrap part).\n\nWhy GO:\n- Placement, ownership and the migration path are settled: ADR 0001 decisions 6-7 (acc2, schema booking); schema-ownership.md:31,47; DB Migrate already maps booking/NNN → bk-NNN (db-migrate.yml:52-61).\n- tripplanner.tf is a proven self-contained pattern for booking.tf.\n- The health-only bootstrap needs no catalog contract, staff model or job runner.\n- It touches no AA-CIS-App code, so it does not compete with the CIS merge train.\n\nHard preconditions (NO-GO until met):\n1. Narrow the OIDC trust on aa-cis-dev-role before the repo exists (cicd.tf:34 trusts every org repo, with IAM write on '*').\n2. Extend the subagent guardrail to MCP write tools (settings.json:10 matcher is Bash only).\n3. Apply BookingRoleTagging before booking.tf (IAM propagation trap).\n4. No password in Git. The role is created in bk-001, and its LOGIN password is set out-of-band by Nghiệp.\n\nExplicitly OUT of S235:\n- staff tables (identity undecided: ERD v2 vs AA-680 vs shared.admin_users);\n- catalog/trip_plans (no catalog.tour.v1 contract or CIS views; no country ISO mapping);\n- guest intake (customer:null in the contract vs NOT NULL customer_id);\n- any shared.job use (the CIS deploy guard counts all rows, deploy-dev.yml:29-63);\n- the CIS grant migration and tp-009;\n- the Vercel frontend;\n- a custom domain unless the ACM cert covers it.\n\nIf Gate-1 answers on staff identity, API entry and bk-001 scope are not in by mid-session, stop at \"PRs open, nothing applied\". Do not apply partially."
+}
