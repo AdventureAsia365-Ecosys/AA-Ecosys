@@ -1,7 +1,8 @@
 # ADR 0005 — Pricing and supplier rates
 
-- **Status:** Proposed (S235, 14/10/2026). Direction and margins approved by Nghiệp in chat; numbers to be confirmed
-  with Ms. Thư before the first price load.
+- **Status:** Accepted (14/10/2026, Nghiệp, S235), including the former open recommendations (decisions 8–10).
+  Tax rates are still to be confirmed by the AA accountant; margin numbers are policy data and are checked with
+  Ms. Thư before the first price load.
 - **Scope:** AA-Booking (owner), CIS and TripPlanner (readers). Answers AA-709.
 - **Related:** ADR 0001 (Booking owns commercial data), ADR 0002 (only CIS writes content), ADR 0004 (Booking
   bootstrap, O7: all customer-facing content in CIS), ERD v2 `docs/AAA/erd-v2/booking.dbml`
@@ -51,7 +52,7 @@ version V3, the V3 price cannot change.
 7. **Loading.** Phase 1: supplier rate sheets uploaded as an Excel template → validation → staff review → publish
    (versioned). Phase 2: edit in the admin UI. Later: supplier extranet/API. Existing `price_raw` strings may be
    parsed once into a **reference price** with a review flag, used as the "from" price only until a cost sheet
-   exists. Default owner of price entry: AA ops/product team (to confirm).
+   exists. Price entry is owned by the `contracting` role (decision 8).
 
 ## Consequences
 
@@ -60,9 +61,9 @@ version V3, the V3 price cannot change.
 - TripPlanner shows "from" prices only via the Booking view; it never computes prices.
 - Margin numbers are policy and editable (pricing rules table), not code constants.
 
-## Open — recommendations (S235, to confirm with Nghiệp / Ms. Thư / the AA accountant)
+## Decisions on the former open items (approved by Nghiệp, 14/10/2026)
 
-1. **Who enters prices.** A new staff role `contracting` (next to admin / sales / content_creator) owns supplier
+8. **Who enters prices.** A new staff role `contracting` (next to admin / sales / content_creator) owns supplier
    contracts and net rates; Ms. Thư or a named ops/product person holds it at first. **Maker-checker:** one person
    uploads or edits, another publishes; every change is audited. Sales never edit net rates — they quote and may
    override the selling price within the floor. Ops checks availability and books suppliers.
@@ -70,12 +71,12 @@ version V3, the V3 price cannot change.
    meal); each row = supplier, service, variant (room type / vehicle / language), season or date range, unit
    (per pax / room-night / vehicle-day / group), net price, currency, supplements, child policy. Upload validates
    and reports errors per row. Later: a supplier extranet, still behind the publish step.
-2. **Tenant resale.** Yes, after AA-Booking can quote (AA-681): tenants see a B2B net price list (15% margin) per
+9. **Tenant resale.** Yes, after AA-Booking can quote (AA-681): tenants see a B2B net price list (15% margin) per
    tour in their portal and set their own retail price; bookings arrive through a B2B channel carrying
    `tenant_id`; AA invoices the tenant, not the end customer. **Rate parity:** a tenant may not advertise below
    AA's public B2C "from" price. A second revenue line next to the subscription.
-3. **Tax / VAT.** Rates depend on the selling entity and the service, so the accountant confirms them; the system
-   never hard-codes tax: a `tax_rules` table keyed by selling entity × country of consumption × service type ×
-   validity. B2C prices are shown tax-inclusive (all-in) and invoices itemise tax; B2B net prices state whether tax
-   is included, per the agent contract. If an EU entity or EU sales appear later, check the EU tour-operator
-   margin scheme (TOMS) with the accountant.
+10. **Tax / VAT.** Rates depend on the selling entity and the service, so the accountant confirms them
+    (still open). The system never hard-codes tax: a `tax_rules` table keyed by selling entity × country of
+    consumption × service type × validity. B2C prices are shown tax-inclusive (all-in) and invoices itemise tax;
+    B2B net prices state whether tax is included, per the agent contract. If an EU entity or EU sales appear
+    later, check the EU tour-operator margin scheme (TOMS) with the accountant.

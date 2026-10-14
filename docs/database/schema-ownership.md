@@ -28,10 +28,14 @@ assigns owners and states the rules. Tracked in AA-684.
    |---|---|---|
    | AA-CIS-App | plain number, `217` (kept for history) | `api/migrations/NNN_*.sql` |
    | AA-TripPlanner-Web | `tp-NNN` | `migrations/NNN_*.sql` |
-   | AA-Booking (AAA) | `bk-NNN` | (when the repo exists) |
+   | AA-Booking (AAA) | `bk-NNN` | `migrations/NNN_*.sql` (first: `bk-001`, applied 14/10/2026) |
 
    Without the prefix two repos' `007` would collide and the second one would silently not register.
-5. **Destructive changes** (DROP, DELETE of data) follow the DRY RUN procedure in
+5. **Cross-owner grant migrations do not wrap the grant in `IF EXISTS (role)`.** Apply them only after
+   the grantee role exists. A guarded no-op still registers its version permanently, so the grant would
+   never be retried (what tp-008 did for role `tripplanner`); an unguarded grant fails loudly and DB
+   Migrate does not register a failed file, so it can be re-run (ADR 0004 decision 6).
+6. **Destructive changes** (DROP, DELETE of data) follow the DRY RUN procedure in
    `skill/aa-cis-schema/references/destructive-ops.md`, whoever the owner is.
 
 ## Owners by schema
@@ -44,7 +48,7 @@ assigns owners and states the rules. Tracked in AA-684.
 | `acp_shared` | AA-CIS-App | Tenant T-series: plans, angle gate, `content_piece`, `publish_log`, quota, audit | — |
 | `acp_deliver` | AA-CIS-App | `tenant_tour_pages` (only table left after AA-603) | — |
 | `tripplanner` | AA-TripPlanner-Web | Trip user state (`sessions`, `customers`, `trip_events`, `trip_drafts`) and its read models (`itinerary_components`, `tour_day`, Tour Graph tables) | — |
-| `booking` | AA-Booking | Trip cases, orders, suppliers (not created yet — ADR 0001) | — |
+| `booking` | AA-Booking | Customers, OTPs/sessions, media, audit, `inbox_events` (`bk-001`, 14/10/2026, ADR 0004); later trip cases, suppliers and prices (ADR 0005). DB role `booking` created by `bk-001` (NOLOGIN, then LOGIN with a password set out-of-band, DSN in `booking/dev/database-url`), `USAGE` only on the schema | — |
 | `public` | — | `checkpoint_migrations` (LangGraph checkpointer, CIS) and enums created before schemas existed | — |
 | `shared` | per table, below | Platform tables every app may need | see below |
 
@@ -81,3 +85,7 @@ Every `shared` table is **owned by AA-CIS-App** unless the row says otherwise.
       Migrate workflow applies).
 - [ ] Every repo's `CONTEXT.md` links this page.
 - [ ] ADR 0001 decision 6 / steering mention rule 1 (an app never migrates another app's schema).
+- [ ] **Dead Table Registry** — `docs/architecture/dead-table-registry.md` is referenced (skill
+      `aa-cis-schema`, `skill/README.md`) but does not exist yet; create it (S235 data lens: empty
+      `acp_gold_output` / `acp_silver_s3` / `acp_silver_s4`, likely-legacy `pipeline_jobs`, `acp_runs`,
+      `pipeline_runs`, …).
