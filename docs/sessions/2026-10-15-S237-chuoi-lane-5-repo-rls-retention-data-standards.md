@@ -108,6 +108,43 @@ artifact "AA Data Platform Standards" (song ngữ Anh–Việt, riêng tư): htt
 - **Tự đồng bộ key tenant test:** xoay key 4 tenant test → app tự ghi key mới vào `aa-cis/dev/e2e-tenant/<slug>`; đã thử xoay atlas-hearth → đăng nhập 200.
 - **AA-810 Done:** duyệt 2 người live (e2e tạo, tự duyệt bị 403, Nghiệp duyệt, báo giá EUR 1.410).
 - **Billing:** TrueIDC đã bật 5 cost allocation tag; tài khoản tự tạo được Budgets (số liệu sau ~24 giờ).
-- **Quy trình:** thêm bước soạn draft Jira cho Nghiệp duyệt cuối phiên (skill `aa-session` 4b + steering). Draft S237: `docs/audits/2026-10-14-S237-lane-backlog/jira-drafts.md` (PR-17, PR-12, PR-11, PR-14, PR-7) — chưa đăng.
+- **Quy trình:** thêm bước soạn draft Jira cho Nghiệp duyệt cuối phiên (skill `aa-session` 4b + steering). Draft S237: `docs/audits/2026-10-14-S237-lane-backlog/jira-drafts.md` (PR-17, PR-12, PR-11, PR-14, PR-7) — đã đăng 10467–10471 (xem phần 3).
 - **Memory:** cách nhắn Zalo cho TrueIDC (`zalo-message-to-trueidc`).
 - Trạng thái cuối: ECS CIS api :616 / worker :173 (`dev-02f5592`), Booking :15, TP Lambda pool 1 + concurrency 15/5; CIS migration mới nhất 234.
+
+## Phần 3 (tối 15/10) — Jira có bằng chứng, Facebook trọn vòng, chốt phiên
+- **Jira đã đăng (Nghiệp duyệt):** PR-17 10467, PR-12 10468, PR-11 10469, PR-14 10470, PR-7 10471 (sửa lại cho đúng mức đã
+  kiểm, kèm 4 ảnh WordPress), PR-7 10472 (Facebook trọn vòng, 4 ảnh), PR-18 10473 (giới hạn bài đăng/ngày, 1 ảnh).
+- **Nghiệp sửa cách báo cáo:** comment PR-7 đầu tiên nói "gỡ thật trên WordPress/Facebook" khi Facebook chưa thử và WordPress
+  chỉ thử qua API. Làm lại WordPress qua UI portal có ảnh (`aa815/`), rồi thử Facebook thật. Memory
+  `jira-claims-need-live-evidence` + lesson.
+- **AA-815 Facebook trọn vòng:** page "Đọc và Ngẫm" của Nghiệp (1322105971158088), app Meta `AA Publish Test` (Development).
+  Dev chưa có piece kênh facebook → nhân bản 1 piece LinkedIn đã duyệt của terra-family thành piece facebook
+  (`d67e3178…`, `flags.s237_test`, vẫn còn trên Dev). Kết nối → Đăng (Graph 200, ảnh admin) → Gỡ ("Removed from
+  Facebook.", Graph "Object does not exist", ảnh admin page) → ngắt kết nối, xoá secret thử. Ảnh: `aa815/facebook/`.
+- **Phát hiện:** bài do app Development đăng chỉ người có vai trò trong app thấy (ẩn danh: "This content isn't available").
+  Tenant thật cần app Live → chưa thử; đã hứa với chị Thư ở PR-7 sẽ thử và viết hướng dẫn kết nối.
+- **PR-18:** bị sót ở lần rà Jira đầu. Kiểm live giới hạn bài đăng/ngày trong Tenant 360 → Settings (lưu 25 → tải lại 25 →
+  xoá → 20 mặc định). Skill `aa-session` 4b giờ rà mọi issue Jira chưa Done.
+- **KAN-20 (Asian Trails):** lưu làm benchmark B2B: `docs/research/2026-10-15-asian-trails-b2b-benchmark.md` + memory
+  `asian-trails-b2b-benchmark`. Ticket để mở, cập nhật khi thiết kế giá/đặt chỗ B2B cho đại lý.
+- **Lesson mới:** app Facebook Development chỉ hiện bài cho vai trò trong app; script UI chờ trạng thái server thay vì chữ
+  thông báo tạm.
+- Root PR #77, #78, #79 (+ PR ghi phần 3 này) đã merge. Cuối phiên: ECS CIS api :616 / worker :173, Booking :15, tất cả
+  COMPLETED; `shared.job` + `booking.job` 0 job active. 5 repo ở main/master sạch (root chỉ còn `.claude/settings.json`).
+
+## Phiên sau (S238) — đề xuất theo thứ tự
+1. **PR-17 (đã hứa chị Thư):** gửi vài bản Trail Pulse + Atlas & Hearth để chị đọc thử giọng văn.
+2. **Facebook Live (đã hứa ở PR-7):** chuyển app thử sang Live (cần URL chính sách riêng tư), đăng/gỡ, kiểm ẩn danh thấy bài;
+   sửa chữ hướng dẫn trong form kết nối Facebook (đủ 3 quyền + yêu cầu app Live) = mục D5 trong `ui-verify/README.md`.
+3. **AA-828:** tạo AWS Budgets theo tag App (tag đã bật 15/10, đủ ~24 giờ).
+4. **SES production access** → MAIL FROM → Cognito #105 (PR-14: đăng nhập mã email cho nhân viên trước).
+5. **Trỏ app sang domain mới:** TP FE → `api-tripplanner.`, client Booking → `api-booking.`; giữ domain cũ chạy song song.
+6. **AA-817:** bật cờ `aa817:content_piece_reads_pool` có theo dõi, rồi tách role CIS (X1).
+7. **AA-825:** DRY RUN xoá theo từng kind, đọc số, bật xoá thật; lifecycle `archive/` bucket bronze.
+8. **AA-712:** tối ưu view catalog (L4) để TripPlanner chuyển sang nguồn `cis` (PR-11 đã hứa); 142 tên pending.
+9. **Booking đợt 3 (PR-12):** hoá đơn, lịch thanh toán, kiểm tra chuyến đi.
+10. **AA-820:** hoàn thiện điều khoản AI cho tenant trước 12/11; AA-819 test lỗi 429 ở lần đăng thứ 21; AA-791 bộ 30 piece
+    fault-injection trong CI.
+- **Nghiệp làm tay:** bật auto-renew tên miền Namecheap (hết hạn 04/04/2027); lưu trữ issue Done trên Linear; xoá hoặc giữ app
+  Meta `AA Publish Test` (giữ nếu làm mục 2); `.wslconfig` 12 GB.
