@@ -172,8 +172,9 @@ role, API route); there are no new accounts. It never writes another app's schem
 versioned JSON in `docs/contracts/`, carried by a **transactional outbox table** consumed by the
 receiving app's job runner with an idempotency key: `catalog.tour.*` (CIS → AA-Booking, photos via
 `shared.v_tour_photos`; contract not written yet, AA-679) and `inquiry.submitted` (TripPlanner →
-AA-Booking, with the multi-tour leg chain; current version v1.1,
-`docs/contracts/inquiry.submitted.v1.1.json`: the guest always gives name + email + consent). Contract
+AA-Booking, with the multi-tour leg chain; current version v1.2,
+`docs/contracts/inquiry.submitted.v1.2.json`: the guest always gives name + email + consent, each leg carries the
+catalog tour key `source_system` + `source_id`). Contract
 rules: [`contracts/README.md`](contracts/README.md). AA-Booking owns the customer identity (OTP).
 Stack, runtime and decisions O1–O9: [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (Accepted
 14/10/2026); prices and suppliers: [ADR 0005](adr/0005-pricing-and-supplier-rates.md).
