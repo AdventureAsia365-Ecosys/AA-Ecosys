@@ -161,7 +161,7 @@ Source: `apps/AA-TripPlanner-Web/migrations/*`.
   `shared.destinations`) and the `photo_sync` job. See 4.5.
 - **Place read models (ADR 0007, 14/10/2026):** `tripplanner.itinerary_components`, `tour_day`,
   `tour_stop`, `tour_graph_*`, `tour_leg`, `tour_junction` are frozen. CIS rebuilds them in its own schema
-  `geo` (CIS 226+) and TripPlanner reads them through `catalog.*` views (CIS 227) behind a runtime flag;
+  `geo` (CIS 226+) and TripPlanner reads them through `catalog.*` views (CIS 228) behind a runtime flag;
   the legacy tables are dropped 14 days after the cut-over.
 
 ### 3.4 AA-Booking — schema `booking` [FACT]

@@ -95,7 +95,7 @@ parity baseline (§7). Keep all `shared.destinations` rows and ids; new names be
 (name_norm, country) key is new. TP's 51 `trip_events` / 21 drafts: one TP-side migration maps old component
 ids → new stable ids by (tour, day, destination, activity); unmatched pins are dropped (Dev data, tiny).
 
-### 2.5 Views TripPlanner reads (CIS migration 227, catalog_owner dance as in 225)
+### 2.5 Views TripPlanner reads (CIS migration 228 — renumbered S237: 227 is sonnet5_no_temperature; views only, no top-k function; catalog_owner dance as in 225)
 Extend the `catalog` schema (one read contract, `security_barrier`, granted to `aa_app_user`, `tripplanner`,
 `booking`); `catalog_owner` gets SELECT on `geo.*` and the new destinations columns.
 - `catalog.v_tour_place` — swap the name-match LATERAL for `geo.tour_place.destination_id` (additive columns:
@@ -109,6 +109,11 @@ Extend the `catalog` schema (one read contract, `security_barrier`, granted to `
 - `catalog.v_tour_stop`, `v_tour_leg`, `v_graph_node`, `v_graph_edge`, `v_tour_junction` — current build only.
 - `catalog.v_destination` — add `geo_status`, `located_by`; suspect places excluded from graph views.
 Contract: additive to `catalog.tour.v1`; graph views documented as `catalog.graph.v1` in `docs/contracts/`.
+**As built (S237, CIS 228):** views only; `v_destination` appends `geo_status`, `located_by`, `precision` and
+`v_tour_place` appends `located_by`, `precision` (its `destination_id` now comes from the pipeline link, then the
+place card, then 225's name match). The component attributes listed above for `v_tour_place` (activity,
+intensity, season, duration) live in `v_tour_component` instead. The views keep CIS names (`source_id`,
+`component_id`, `day_index`); the TripPlanner column mapping is in `catalog.graph.v1.json`.
 
 ## 3. Job design (ADR 0003: enqueue-only triggers, stage registry, swap-safe writes)
 
@@ -282,7 +287,7 @@ for queries. If either side changes model/dimension, both change in one coordina
 | 1 | CIS (+ Infra copy) | Migration 226: `geo` schema + tables, destinations columns + (name_norm,country) key, card→destination FK, stage keys `a3_place_days` (sonnet, luna shadow), `a3_place_locate` (sonnet), `a3_place_embed` (cohere) + `SAFE_DEFAULTS`, spend_budget rows | DB Migrate green; schema ref regenerated; no duplicate (name_norm,country) before the index |
 | 2 | Infra | Secret `aa-cis/dev/mapbox`, worker task-role read | `get_mapbox_token()` from ECS exec |
 | 3 | CIS | `services/places/` (ported pure modules + TP unit tests), three job kinds, hooks, backfill endpoint, budget | unit + 5 CI jobs; worker claims kinds; deploy api+worker same SHA |
-| 4 | CIS (+ Infra copy) | Migration 227 catalog views; contract docs; photo `itinerary_places()` → `geo` | `SELECT` as `tripplanner` role; 225 view tests |
+| 4 | CIS (+ Infra copy) | Migration 228 catalog views (views only); contracts `catalog.graph.v1` + `catalog.tour.v1.1`; photo `itinerary_places()` → `geo` | `SELECT` as `tripplanner` role; 225 view tests |
 | 5 | CIS | `/admin/places` page + job domain links | aa-ui-verify screenshots |
 | 6 | TP | Readers behind flag; writers removed; fallback kept | preview + UI smoke |
 | 7 | TP | id-map migration + flag → cis in one window (after the §7 b2 coverage check); drop migration 14 days later | coverage SQL check; live map/suggestions/routes; drafts keep pins |
@@ -310,7 +315,7 @@ tour of the 56-tour set off the TP map):** flip `PLACES_SOURCE=cis` only when th
 (≤ 50 per batch, ≈ $1–2), then run the id-map migration (§6.4) and flip in the same window; then curl
 `/browse/routes`, `/trip/{id}/suggestions`, UI "Customise this trip" on 5 tours. Rollback = flag back to
 `legacy` (TP tables frozen, not dropped). No TP downtime: views exist before the TP deploy (slice 4 before
-6), the flag is runtime config, and migrations 226/227 are additive (227 must only *append* columns to the
+6), the flag is runtime config, and migrations 226/228 are additive (228 must only *append* columns to the
 225 views — `CREATE OR REPLACE VIEW` cannot reorder/retype them).
 (c) **whole catalog by country, batches ≤ 50**, each batch gated automatically (failed < 5%, suspect names
 < 5%, **LLM cost/tour < $0.05; Mapbox tracked on its own budget row**) before the next is enqueued, and only
@@ -369,7 +374,7 @@ backfill**; hard stop on (`stopped_budget`).
 - **Q7 TP draft pins.** Rec: **map the 51 events to stable ids**, drop unmatched (Dev only).
 
 **Risks:**
-- `catalog_owner` dance on view changes (227) — follow the 225 header exactly; test as `tripplanner` role.
+- `catalog_owner` dance on view changes (228) — follow the 225 header exactly; test as `tripplanner` role.
 - Wrong geocodes poisoning junctions — mitigated by hard country/bbox guard, transit-aware outlier rule,
   generic-name locality key, `suspect` exclusion + admin fix list, and the 30-destination spot check.
 - Deploy gate during the catalog run — 40–55 min per batch incl. debounced follow-ups; schedule outside
@@ -420,7 +425,7 @@ Adversarial review against 01/02 maps, ADR 0001–0005, CIS `origin/main` @ 1a10
     30-destination spot check in the trial.
 13. **§6.4 / §7 cut-over** — flag flip gated on views ⊇ legacy coverage (draft flipped after one country and
     would have dropped the other 56-set tours from TP); id-map migration runs *with* the flip, not later;
-    227 appends columns only; rollback path stated.
+    228 appends columns only; rollback path stated.
 14. **§6.5** — vector search must be rewritten (top-k HNSW subquery or destination centroid) before the
     catalog run.
 15. **§8 cost** — recomputed from code + catalog prices: **$34–78 total ($0.04–0.09/tour)**, of which LLM
