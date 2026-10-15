@@ -58,15 +58,27 @@ Figures are from S237 (14–15/10/2026) runs and live checks. Status: draft.
 </ul>
 ```
 
-## PR-7 — AA social media automation pipeline (last comment 14/10: quality r5)
+## PR-7 — AA social media automation pipeline (comment 10471, corrected 15/10 with 4 inline screenshots)
+
+First version overstated it ("posts really removed on WordPress/Facebook"): only WordPress was run live, via API,
+with no screenshots. Redone through the portal UI (screenshots in `aa815/`), then the comment was edited to:
+
+- WordPress: full round trip tested in the portal (connect, publish, post on the site, unpublish, link gone).
+- Facebook Page: connect + token check exist; publish/unpublish shipped but not tested on a real Page yet.
+- AI policy line, 20 posts/day cap, no AI-written reviews; CTA review warning + admin notice.
+- Next: Facebook round trip once a test Page exists; tenant AI terms before 12/11.
+
+## PR-7 — follow-up: Facebook round trip (DRAFT, new comment, not posted)
+
+Attach inline: `aa815/facebook/03-portal-published-list-facebook.jpg`, `04b-facebook-post-on-page-admin-view.png`,
+`06-portal-unpublished-facebook.jpg`, `08-facebook-page-post-gone-admin-view.png`.
 
 ```html
-<p><span data-type="mention" data-user-id="70121:5793bdd5-44b1-4623-97d4-43c35d440869">@thule</span> Cập nhật phần đăng bài của tenant ngày 15/10/2026:</p>
+<p><span data-type="mention" data-user-id="70121:5793bdd5-44b1-4623-97d4-43c35d440869">@thule</span> Cập nhật thêm phần Facebook ngày 15/10/2026:</p>
 <ul>
-<li><p>Tenant kết nối được Facebook Page trong portal, bên cạnh WordPress.</p></li>
-<li><p>Tenant tự gỡ được bài đã đăng: bài bị gỡ thật trên WordPress/Facebook chứ không chỉ đổi trạng thái. Đã thử trọn vòng trên một trang WordPress thử nghiệm: đăng, kiểm bài hiện trên site, gỡ, bài không còn công khai.</p></li>
-<li><p>Theo chính sách AI mới (hiệu lực 12/11): portal hiện dòng nhắc "nội dung do AI tạo, tenant chịu trách nhiệm" ở bước duyệt, đăng và xuất bài; mỗi tenant tối đa 20 bài/ngày (admin chỉnh được); AI không viết review, đánh giá hay lời khách hàng.</p></li>
-<li><p>Mới thêm: khi tenant nhập câu kêu gọi cuối bài có nhắc review hay số sao, portal nhắc tenant chỉ dùng nếu review là thật, và báo cho admin AA để theo dõi.</p></li>
-<li><p>Bước tiếp: hoàn thiện điều khoản sử dụng AI cho tenant trước 12/11.</p></li>
+<li><p><strong>Facebook Page — đã thử trọn vòng</strong> trên một fanpage thật, thao tác trong portal như tenant: kết nối page → bấm Đăng, bài hiện trên page → bấm Gỡ, bài bị xoá khỏi page. Ảnh từng bước đính kèm bên dưới.</p></li>
+<li><p>Lưu ý: app Facebook dùng để thử đang ở chế độ thử nghiệm nên chỉ admin page thấy bài. Để bài hiện công khai cho người theo dõi, app cần chuyển sang chế độ công khai; em sẽ thử chế độ này và viết hướng dẫn kết nối Facebook cho tenant.</p></li>
+<li><p>Như vậy cả WordPress và Facebook đều đã thử đăng và gỡ thật.</p></li>
 </ul>
+<p>Ảnh theo thứ tự: (1) bài đã đăng trong portal, (2) bài trên fanpage, (3) portal sau khi gỡ, (4) fanpage sau khi gỡ.</p>
 ```
