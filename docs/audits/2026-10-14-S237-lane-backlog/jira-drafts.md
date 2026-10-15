@@ -68,7 +68,7 @@ with no screenshots. Redone through the portal UI (screenshots in `aa815/`), the
 - AI policy line, 20 posts/day cap, no AI-written reviews; CTA review warning + admin notice.
 - Next: Facebook round trip once a test Page exists; tenant AI terms before 12/11.
 
-## PR-7 — follow-up: Facebook round trip (DRAFT, new comment, not posted)
+## PR-7 — follow-up: Facebook round trip (POSTED 15/10, comment 10472, 4 inline screenshots)
 
 Attach inline: `aa815/facebook/03-portal-published-list-facebook.jpg`, `04b-facebook-post-on-page-admin-view.png`,
 `06-portal-unpublished-facebook.jpg`, `08-facebook-page-post-gone-admin-view.png`.
