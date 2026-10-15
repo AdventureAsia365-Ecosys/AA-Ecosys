@@ -17,7 +17,7 @@ Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo l�
 - "bắt đầu session mới": đọc memory HOT + log local + Linear, kiểm trạng thái thật (STS, ECS api/worker cùng SHA,
   `shared.job` queued/running), rồi **đề xuất 5–10 issue** chờ Nghiệp chốt trước khi làm.
 - "dừng session này": prepend session block vào memory HOT (chỉ prepend, không rotate tay), log local,
-  đồng bộ Linear, đưa **mọi repo (gốc + 3 con) về main/master cây sạch**; root PR chờ thì merge tay
+  đồng bộ Linear, soạn draft cập nhật cho các issue Jira tương ứng để Nghiệp duyệt (không tự đăng, S237), đưa **mọi repo (gốc + 3 con) về main/master cây sạch**; root PR chờ thì merge tay
   (`gh pr merge <n> --squash`) hoặc hỏi Nghiệp.
 
 ## Nguồn sự thật khi thiết kế — CONTEXT.md (BẮT BUỘC)

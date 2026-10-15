@@ -1,0 +1,53 @@
+{
+ "1_connect": {
+  "status": 200,
+  "body": "{\"connected\":true,\"site_url\":\"https://fightcanvas.s3-tastewp.com\",\"connected_at\":\"2026-10-15T08:23:41.213822+00:00\",\"last_verified_at\":\"2026-10-15T08:23:42.734518+00:00\",\"last_verify_error\":null}"
+ },
+ "2_test": {
+  "status": 200,
+  "body": "{\"connected\":true,\"site_url\":\"https://fightcanvas.s3-tastewp.com\",\"connected_at\":\"2026-10-15T08:23:41.213822+00:00\",\"last_verified_at\":\"2026-10-15T08:24:04.578956+00:00\",\"last_verify_error\":null,\"success\":true}"
+ },
+ "3_status": {
+  "status": 200,
+  "body": "{\"connected\":true,\"site_url\":\"https://fightcanvas.s3-tastewp.com\",\"connected_at\":\"2026-10-15T08:23:41.213822+00:00\",\"last_verified_at\":\"2026-10-15T08:24:04.578956+00:00\",\"last_verify_error\":null}"
+ },
+ "4_pending": {
+  "status": 200,
+  "body": "{\"data\":[{\"piece_id\":\"f810ddd0-c2d0-4199-8b29-5ae527d78f9a\",\"title\":\"Where Two Worlds Meet: Lake Kh\u00f6vsg\u00f6l as Mongolia's Family Anchor\",\"content_preview\":\"## Where Central Asia Ends and Siberia Begins\\n\\nLake Kh\u00f6vsg\u00f6l reframes that picture entirely.\\n\\nThe lake holds an estimated 70 percent of Mongolia's fresh water and roughly two percent of the world's unfrozen surface fresh water. It is approxim"
+ },
+ "piece_id": "f810ddd0-c2d0-4199-8b29-5ae527d78f9a",
+ "5_publish": {
+  "status": 200,
+  "body": "{\"publish_id\":\"fb043d51-4405-4ff9-af8f-175e3bf8b286\",\"success\":true,\"status\":\"published\",\"external_id\":\"7\",\"external_url\":\"https://fightcanvas.s3-tastewp.com/2026/10/15/lake-khovsgol-mongolia-family-travel-guide-23cbc3e2/\",\"published_at\":\"2026-10-15T08:24:08.108565+00:00\",\"last_error\":null,\"replayed\":false}"
+ },
+ "post_url": "https://fightcanvas.s3-tastewp.com/2026/10/15/lake-khovsgol-mongolia-family-travel-guide-23cbc3e2/",
+ "publish_id": "fb043d51-4405-4ff9-af8f-175e3bf8b286",
+ "6_post_live": 200,
+ "7_unpublish": {
+  "status": 200,
+  "body": "{\"publish_id\":\"fb043d51-4405-4ff9-af8f-175e3bf8b286\",\"channel\":\"blog\",\"status\":\"unpublished\",\"unpublished_at\":\"2026-10-15T08:24:17.627976+00:00\",\"unpublished_by\":\"tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf\",\"remote\":\"trashed\"}"
+ },
+ "8_post_after_unpublish": 404,
+ "9_publish_log": {
+  "status": 200,
+  "body": "{\"data\":[{\"publish_id\":\"fb043d51-4405-4ff9-af8f-175e3bf8b286\",\"piece_id\":\"f810ddd0-c2d0-4199-8b29-5ae527d78f9a\",\"title\":\"Where Two Worlds Meet: Lake Kh\u00f6vsg\u00f6l as Mongolia's Family Anchor\",\"channel\":\"blog\",\"status\":\"unpublished\",\"external_url\":\"https://fightcanvas.s3-tastewp.com/2026/10/15/lake-khovsgol-mongolia-family-travel-guide-23cbc3e2/\",\"published_at\":\"2026-10-15T08:24:08.108565+00:00\",\"unpubl"
+ },
+ "10_disconnect": {
+  "status": 200,
+  "body": "{\"connected\":false,\"site_url\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null,\"disconnected\":true}"
+ },
+ "11_status_after": {
+  "status": 200,
+  "body": "{\"connected\":false,\"site_url\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+ },
+ "wp_post_status_after_unpublish": "trash",
+ "fb_fake_connect": {
+  "status": 200,
+  "body": "{\"connected\":true,\"page_id\":\"000000000000000\",\"connected_at\":\"2026-10-15T08:24:42.820521+00:00\",\"last_verified_at\":null,\"last_verify_error\":null}"
+ },
+ "fb_test": {
+  "status": 200,
+  "body": "{\"connected\":true,\"page_id\":\"000000000000000\",\"connected_at\":\"2026-10-15T08:24:42.820521+00:00\",\"last_verified_at\":null,\"last_verify_error\":\"Invalid or expired Page Access Token\",\"success\":false}"
+ },
+ "fb_disconnect": 200
+}

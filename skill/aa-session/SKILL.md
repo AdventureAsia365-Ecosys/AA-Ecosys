@@ -1,6 +1,6 @@
 ---
 name: aa-session
-description: Nghi thức bắt đầu và kết thúc một phiên làm việc AA_Ecosys — đọc memory.md HOT, kiểm job/ECS/STS, chốt danh sách việc; cuối phiên prepend session block (không rotate), cập nhật Linear, dừng môi trường. Dùng khi Nghiệp nói bắt đầu phiên, "S2xx", "đầu phiên", "kết thúc phiên", "chốt phiên", "wrap up", hoặc khi một phiên AA bắt đầu mà chưa có bối cảnh.
+description: Nghi thức bắt đầu và kết thúc một phiên làm việc AA_Ecosys — đọc memory.md HOT, kiểm job/ECS/STS, chốt danh sách việc; cuối phiên prepend session block (không rotate), cập nhật Linear, soạn draft Jira cho Nghiệp duyệt, để nguyên môi trường. Dùng khi Nghiệp nói bắt đầu phiên, "S2xx", "đầu phiên", "kết thúc phiên", "chốt phiên", "wrap up", hoặc khi một phiên AA bắt đầu mà chưa có bối cảnh.
 ---
 
 # aa-session
@@ -40,6 +40,11 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
 2. **Chỉ prepend.** Agent không cắt, không di chuyển, không xoá session block cũ. Nghiệp tự chuyển phiên cũ sang `memory_archive_2026H2` bằng tay (rotate tự động từng gây lỗi).
 3. **Bài học:** lỗi do làm sai cách đã ghi ngay vào `aa-lessons/lessons.md` trong phiên (xem `aa-lessons`); cuối phiên rà lại, ghi nốt cái còn thiếu. Lưu ý kỹ thuật khác lặp lại ≥2 phiên → đưa vào skill phù hợp rồi xoá khỏi memory.
 4. **Linear:** issue đã verify → Done kèm comment bằng chứng; đang dở → In Progress kèm ghi chú.
+4b. **Jira (Nghiệp chốt S237, 15/10/2026):** sau khi xong việc dở dang, rà các issue Jira (PR, KAN, CON) khớp
+   với việc của phiên (`searchJiraIssuesUsingJql` + đọc comment gần nhất để không lặp lại), rồi **soạn draft**
+   cập nhật cho từng issue theo `aa-jira-update` (tiếng Việt, mention @thule, không mã nội bộ, số liệu lấy trong
+   phiên). Đưa Nghiệp duyệt trong chat; **không tự đăng**. Chỉ báo việc đã ship (memory `jira-report-when-done`).
+   Ghi các draft vào `docs/audits/<date>-S<nnn>-…/jira-drafts.md` để phiên sau còn thấy cái chưa đăng.
 5. **Log local:** `docs/sessions/<yyyy-mm-dd>-S<nnn>-<slug>.md`.
 6. **KHÔNG dừng môi trường.** Hệ thống để chạy liên tục, ổn định. Agent TUYỆT ĐỐI không tự `cis-stop`/`cis-start`/scale ECS/stop RDS/stop NAT — mọi bật/tắt hạ tầng chỉ Nghiệp làm, hoặc Nghiệp yêu cầu rõ. Cuối phiên để nguyên môi trường đang chạy.
 7. **Tóm tắt 3 dòng** cho Nghiệp: đã làm / còn lại / phiên sau bắt đầu từ đâu.
