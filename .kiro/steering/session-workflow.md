@@ -14,8 +14,11 @@ trỏ tới skill là nguồn sự thật. Khi lệch, skill thắng.
 Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo lệch cho Nghiệp, không tự im lặng.
 
 ## Bắt đầu / kết thúc phiên → `skill/aa-session/SKILL.md`
-- "bắt đầu session mới": đọc memory HOT + log local + Linear, kiểm trạng thái thật (STS, ECS api/worker cùng SHA,
-  `shared.job` queued/running), rồi **đề xuất 5–10 issue** chờ Nghiệp chốt trước khi làm.
+- "bắt đầu session mới": đọc memory HOT + log local + **backlog sống `docs/backlog/README.md`** (danh sách việc đã
+  sắp thứ tự, mục "Time-gated checks" + "Waiting on Nghiệp"), kiểm trạng thái thật (STS, ECS api/worker cùng SHA,
+  `shared.job` queued/running), rồi **đề xuất 5–10 issue lấy từ backlog sống** chờ Nghiệp chốt. KHÔNG audit lại toàn bộ
+  Linear (S238: tốn token) — chỉ audit lại khi file cũ > ~2 tuần.
+- Cuối phiên: cập nhật `docs/backlog/README.md` (cột Status, chuyển issue đóng sang §5, thêm issue mới) cùng root PR.
 - "dừng session này": prepend session block vào memory HOT (chỉ prepend, không rotate tay), log local,
   đồng bộ Linear, soạn draft cập nhật cho các issue Jira tương ứng để Nghiệp duyệt (không tự đăng, S237), đưa **mọi repo (gốc + 3 con) về main/master cây sạch**; root PR chờ thì merge tay
   (`gh pr merge <n> --squash`) hoặc hỏi Nghiệp.
