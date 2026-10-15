@@ -1,0 +1,2495 @@
+{
+ "base": "https://aa-booking-admin.vercel.app",
+ "started": "2026-10-15T06:16:31.386Z",
+ "pages": [
+  {
+   "name": "dashboard",
+   "path": "/",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/staff?active=false",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/summary",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?sort=-updated_at&limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?assignee=me&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip&sort=-updated_at&limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [
+    "GET /cases?tab=mine&_rsc=p37cr net::ERR_ABORTED"
+   ],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Dashboard",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Dashboard Welcome back, e2e-claude-code. Here is what needs your attention today. New inquiries 2 Needs attention In progress 0 In discovery or building Proposals sent 0 Waiting for the customer Awaiting activation 0 Nobody waiting Recent trip cases The five cases updated most recently. View all cases Columns CASE CUSTOMER TRIP STATUS SALES UPDATED TC-000003 SD S237 Demo Customer Unverified s237-d",
+   "screenshot": "dashboard-1440-light.jpg"
+  },
+  {
+   "name": "dashboard",
+   "path": "/",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/staff?active=false",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?assignee=me&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip&sort=-updated_at&limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/summary",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?sort=-updated_at&limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [
+    "GET /cases?tab=mine&_rsc=p37cr net::ERR_ABORTED",
+    "GET /cases?status=discovery%2Cbuilding&_rsc=p37cr net::ERR_ABORTED",
+    "GET /cases?status=proposal_sent&_rsc=p37cr net::ERR_ABORTED",
+    "GET /cases?status=new_inquiry&_rsc=p37cr net::ERR_ABORTED"
+   ],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Dashboard",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Dashboard Welcome back, e2e-claude-code. Here is what needs your attention today. New inquiries 2 Needs attention In progress 0 In discovery or building Proposals sent 0 Waiting for the customer Awaiting activation 0 Nobody waiting Recent trip cases The five cases updated most recently. View all cases Columns CASE CUSTOMER TRIP STATUS SALES UPDATED TC-000003 SD S237 Demo Customer Unverified s237-d",
+   "screenshot": "dashboard-1440-dark.jpg"
+  },
+  {
+   "name": "dashboard",
+   "path": "/",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/staff?active=false",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/summary",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?assignee=me&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip&sort=-updated_at&limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?sort=-updated_at&limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Dashboard",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Dashboard Welcome back, e2e-claude-code. Here is what needs your attention today. New inquiries 2 Needs attention In progress 0 In discovery or building Proposals sent 0 Waiting for the customer Awaiting activation 0 Nobody waiting Recent trip cases The five cases updated most recently. View all cases TC-000003 Confirmed S237 Demo Customer Custom trip e2e-claude-code 6 h ago TC-000002 New inquiry ",
+   "screenshot": "dashboard-390-light.jpg"
+  },
+  {
+   "name": "dashboard",
+   "path": "/",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?sort=-updated_at&limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/summary",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?assignee=me&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip&sort=-updated_at&limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/staff?active=false",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [
+    "GET /cases?_rsc=p37cr net::ERR_ABORTED",
+    "GET /cases?status=discovery%2Cbuilding&_rsc=p37cr net::ERR_ABORTED"
+   ],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Dashboard",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Dashboard Welcome back, e2e-claude-code. Here is what needs your attention today. New inquiries 2 Needs attention In progress 0 In discovery or building Proposals sent 0 Waiting for the customer Awaiting activation 0 Nobody waiting Recent trip cases The five cases updated most recently. View all cases TC-000003 Confirmed S237 Demo Customer Custom trip e2e-claude-code 6 h ago TC-000002 New inquiry ",
+   "screenshot": "dashboard-390-dark.jpg"
+  },
+  {
+   "name": "cases",
+   "path": "/cases",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?sort=-updated_at&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/summary",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/staff/directory",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [
+    "GET /cases/TC-000003?_rsc=thm8h net::ERR_ABORTED",
+    "GET /cases/TC-000001?_rsc=thm8h net::ERR_ABORTED"
+   ],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Trip cases",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All3 Inquiries2 Mine Unassigned Active2 Closed0 Search case code, customer name or e-mail SALES REP All reps Unassigned admin e2e-claude-code SOURCE All sources TripPlanner Manual CIS trip plan CREATED \u2013 STATUS All statuses Columns CSV CASE CUSTOMER TRIP DATES PAX STATUS SALES UPD",
+   "screenshot": "cases-1440-light.jpg"
+  },
+  {
+   "name": "cases",
+   "path": "/cases",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/summary",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?sort=-updated_at&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/staff/directory",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Trip cases",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All3 Inquiries2 Mine Unassigned Active2 Closed0 Search case code, customer name or e-mail SALES REP All reps Unassigned admin e2e-claude-code SOURCE All sources TripPlanner Manual CIS trip plan CREATED \u2013 STATUS All statuses Columns CSV CASE CUSTOMER TRIP DATES PAX STATUS SALES UPD",
+   "screenshot": "cases-1440-dark.jpg"
+  },
+  {
+   "name": "cases",
+   "path": "/cases",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/summary",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?sort=-updated_at&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/staff/directory",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Trip cases",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All3 Inquiries2 Mine Unassigned Active2 Closed0 Search case code, customer name or e-mail SALES REP All reps Unassigned admin e2e-claude-code SOURCE All sources TripPlanner Manual CIS trip plan CREATED \u2013 STATUS All statuses Columns CSV TC-000003 CUSTOMER SD S237 Demo Customer Unve",
+   "screenshot": "cases-390-light.jpg"
+  },
+  {
+   "name": "cases",
+   "path": "/cases",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/summary",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?sort=-updated_at&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/staff/directory",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Trip cases",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All3 Inquiries2 Mine Unassigned Active2 Closed0 Search case code, customer name or e-mail SALES REP All reps Unassigned admin e2e-claude-code SOURCE All sources TripPlanner Manual CIS trip plan CREATED \u2013 STATUS All statuses Columns CSV TC-000003 CUSTOMER SD S237 Demo Customer Unve",
+   "screenshot": "cases-390-dark.jpg"
+  },
+  {
+   "name": "case-TC-000003",
+   "path": "/cases/TC-000003",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/TC-000003",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/countries",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Custom trip",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Custom trip Confirmed TC-000003 1 Dec 2026 2 adults Assign Edit details CHANGE STATUS INQUIRY New inquiry Discovery PROPOSAL Building Proposal sent BOOKING Confirmed Supplier confirming Invoice sent Payment pending Paid TRAVEL Pre-departure On trip Completed Overview Proposals2 Billing Checks Activity Trip legs The CIS tours this case is built from, in day order. FROM CIS A custom trip: no CIS tou",
+   "screenshot": "case-TC-000003-1440-light.jpg"
+  },
+  {
+   "name": "case-TC-000003",
+   "path": "/cases/TC-000003",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/TC-000003",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/countries",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Custom trip",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Custom trip Confirmed TC-000003 1 Dec 2026 2 adults Assign Edit details CHANGE STATUS INQUIRY New inquiry Discovery PROPOSAL Building Proposal sent BOOKING Confirmed Supplier confirming Invoice sent Payment pending Paid TRAVEL Pre-departure On trip Completed Overview Proposals2 Billing Checks Activity Trip legs The CIS tours this case is built from, in day order. FROM CIS A custom trip: no CIS tou",
+   "screenshot": "case-TC-000003-1440-dark.jpg"
+  },
+  {
+   "name": "case-TC-000003",
+   "path": "/cases/TC-000003",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/TC-000003",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/countries",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Custom trip",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Custom trip Confirmed TC-000003 1 Dec 2026 2 adults Assign Edit details CHANGE STATUS INQUIRY PROPOSAL BOOKING Confirmed TRAVEL Overview Proposals2 Billing Checks Activity Trip legs The CIS tours this case is built from, in day order. FROM CIS A custom trip: no CIS tour is linked yet. People CUSTOMER SD S237 Demo Customer Unverified s237-demo@example.com ASSIGNED SALES Change E e2e-claude-code Sal",
+   "screenshot": "case-TC-000003-390-light.jpg"
+  },
+  {
+   "name": "case-TC-000003",
+   "path": "/cases/TC-000003",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/TC-000003",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/countries",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Custom trip",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Custom trip Confirmed TC-000003 1 Dec 2026 2 adults Assign Edit details CHANGE STATUS INQUIRY PROPOSAL BOOKING Confirmed TRAVEL Overview Proposals2 Billing Checks Activity Trip legs The CIS tours this case is built from, in day order. FROM CIS A custom trip: no CIS tour is linked yet. People CUSTOMER SD S237 Demo Customer Unverified s237-demo@example.com ASSIGNED SALES Change E e2e-claude-code Sal",
+   "screenshot": "case-TC-000003-390-dark.jpg"
+  },
+  {
+   "name": "customers",
+   "path": "/customers",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=blocked&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?sort=-last_activity_at&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=active&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=past&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=lead&limit=1",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Customers",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Customers Everyone who asked us for a trip: TripPlanner leads, verified customers and past clients. NEW LEAD All3 Leads2 Active1 Past clients0 Blocked0 Search name, e-mail, phone or CUS- code MERGE REVIEW Any Needs review SOURCE Any source TripPlanner Added by staff Signed up (OTP) Columns CSV CUSTOMER PHONE LOCATION STATUS TRIP CASES LAST ACTIVITY ACTIONS SD S237 Demo Customer s237-demo@example.c",
+   "screenshot": "customers-1440-light.jpg"
+  },
+  {
+   "name": "customers",
+   "path": "/customers",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=past&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=active&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?sort=-last_activity_at&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=lead&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=blocked&limit=1",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Customers",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Customers Everyone who asked us for a trip: TripPlanner leads, verified customers and past clients. NEW LEAD All3 Leads2 Active1 Past clients0 Blocked0 Search name, e-mail, phone or CUS- code MERGE REVIEW Any Needs review SOURCE Any source TripPlanner Added by staff Signed up (OTP) Columns CSV CUSTOMER PHONE LOCATION STATUS TRIP CASES LAST ACTIVITY ACTIONS SD S237 Demo Customer s237-demo@example.c",
+   "screenshot": "customers-1440-dark.jpg"
+  },
+  {
+   "name": "customers",
+   "path": "/customers",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=lead&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=blocked&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=past&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?sort=-last_activity_at&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=active&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Customers",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Customers Everyone who asked us for a trip: TripPlanner leads, verified customers and past clients. NEW LEAD All3 Leads2 Active1 Past clients0 Blocked0 Search name, e-mail, phone or CUS- code MERGE REVIEW Any Needs review SOURCE Any source TripPlanner Added by staff Signed up (OTP) Columns CSV SD S237 Demo Customer s237-demo@example.com PHONE \u2014 LOCATION \u2014 STATUS Active TRIP CASES 1 LAST ACTIVITY 6",
+   "screenshot": "customers-390-light.jpg"
+  },
+  {
+   "name": "customers",
+   "path": "/customers",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?sort=-last_activity_at&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=lead&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=active&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=past&limit=1",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/customers?status=blocked&limit=1",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Customers",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Customers Everyone who asked us for a trip: TripPlanner leads, verified customers and past clients. NEW LEAD All3 Leads2 Active1 Past clients0 Blocked0 Search name, e-mail, phone or CUS- code MERGE REVIEW Any Needs review SOURCE Any source TripPlanner Added by staff Signed up (OTP) Columns CSV SD S237 Demo Customer s237-demo@example.com PHONE \u2014 LOCATION \u2014 STATUS Active TRIP CASES 1 LAST ACTIVITY 6",
+   "screenshot": "customers-390-dark.jpg"
+  },
+  {
+   "name": "pricing-calculator",
+   "path": "/pricing/calculator",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Pricing calculator",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-made Fixed departure B2B Selling currenc",
+   "screenshot": "pricing-calculator-1440-light.jpg"
+  },
+  {
+   "name": "pricing-calculator",
+   "path": "/pricing/calculator",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Pricing calculator",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-made Fixed departure B2B Selling currenc",
+   "screenshot": "pricing-calculator-1440-dark.jpg"
+  },
+  {
+   "name": "pricing-calculator",
+   "path": "/pricing/calculator",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Pricing calculator",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-made Fixed departure B2B Selling currenc",
+   "screenshot": "pricing-calculator-390-light.jpg"
+  },
+  {
+   "name": "pricing-calculator",
+   "path": "/pricing/calculator",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Pricing calculator",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing calculator Price a set of net costs with the rule and FX rates in force today, without a trip case. Nothing is saved. Reset Net costs One line per supplier cost: the net amount and the supplier's currency. Net amount Currency Supplier note Add net cost Settings Channel, selling currency, peak season and an optional override total. Channel B2C tailor-made Fixed departure B2B Selling currenc",
+   "screenshot": "pricing-calculator-390-dark.jpg"
+  },
+  {
+   "name": "trip-plans",
+   "path": "/catalog/trip-plans",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/facets",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans?limit=25&offset=0",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Trip plans",
+   "table_rows": 25,
+   "images_visible": 4,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (32) China (121) India (218) Japan (79) Laos (46) Mongolia (17) Nepal (85) Pakistan (18) Philippines (44) South Korea (30) Sri Lanka (122) Taiwan (36) T",
+   "screenshot": "trip-plans-1440-light.jpg"
+  },
+  {
+   "name": "trip-plans",
+   "path": "/catalog/trip-plans",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans?limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/facets",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Trip plans",
+   "table_rows": 25,
+   "images_visible": 4,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (32) China (121) India (218) Japan (79) Laos (46) Mongolia (17) Nepal (85) Pakistan (18) Philippines (44) South Korea (30) Sri Lanka (122) Taiwan (36) T",
+   "screenshot": "trip-plans-1440-dark.jpg"
+  },
+  {
+   "name": "trip-plans",
+   "path": "/catalog/trip-plans",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/facets",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans?limit=25&offset=0",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Trip plans",
+   "table_rows": 0,
+   "images_visible": 4,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (32) China (121) India (218) Japan (79) Laos (46) Mongolia (17) Nepal (85) Pakistan (18) Philippines (44) South Korea (30) Sri Lanka (122) Taiwan (36) T",
+   "screenshot": "trip-plans-390-light.jpg"
+  },
+  {
+   "name": "trip-plans",
+   "path": "/catalog/trip-plans",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/facets",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans?limit=25&offset=0",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Trip plans",
+   "table_rows": 0,
+   "images_visible": 4,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (32) China (121) India (218) Japan (79) Laos (46) Mongolia (17) Nepal (85) Pakistan (18) Philippines (44) South Korea (30) Sri Lanka (122) Taiwan (36) T",
+   "screenshot": "trip-plans-390-dark.jpg"
+  },
+  {
+   "name": "trip-plan-detail",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinera",
+   "screenshot": "trip-plan-detail-1440-light.jpg"
+  },
+  {
+   "name": "trip-plan-detail",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [
+    "GET /catalog/trip-plans?_rsc=86at2 net::ERR_ABORTED",
+    "GET /catalog/trip-plans?_rsc=brx0m net::ERR_ABORTED"
+   ],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinera",
+   "screenshot": "trip-plan-detail-1440-dark.jpg"
+  },
+  {
+   "name": "trip-plan-detail",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinera",
+   "screenshot": "trip-plan-detail-390-light.jpg"
+  },
+  {
+   "name": "trip-plan-detail",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinera",
+   "screenshot": "trip-plan-detail-390-dark.jpg"
+  },
+  {
+   "name": "pricing-rules",
+   "path": "/pricing/rules",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-rules-1440-light.jpg"
+  },
+  {
+   "name": "pricing-rules",
+   "path": "/pricing/rules",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-rules-1440-dark.jpg"
+  },
+  {
+   "name": "pricing-rules",
+   "path": "/pricing/rules",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-rules-390-light.jpg"
+  },
+  {
+   "name": "pricing-rules",
+   "path": "/pricing/rules",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-rules-390-dark.jpg"
+  },
+  {
+   "name": "pricing-rules-fx",
+   "path": "/pricing/rules?tab=fx",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-rules-fx-1440-light.jpg"
+  },
+  {
+   "name": "pricing-rules-fx",
+   "path": "/pricing/rules?tab=fx",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-rules-fx-1440-dark.jpg"
+  },
+  {
+   "name": "pricing-rules-fx",
+   "path": "/pricing/rules?tab=fx",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-rules-fx-390-light.jpg"
+  },
+  {
+   "name": "pricing-rules-fx",
+   "path": "/pricing/rules?tab=fx",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-rules-fx-390-dark.jpg"
+  }
+ ],
+ "interactions": [
+  {
+   "name": "trip-plans-filter-bhutan",
+   "path": "/catalog/trip-plans?country=Bhutan",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/facets",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans?country=Bhutan&limit=25&offset=0",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "h1=Trip plans; rows=25",
+    "kpi/total text: Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (32) China (121) India (218) Japan (79) Laos (46) Mo",
+    "row click \"Bhutan: Buddhist Sites and Meditation Centers \u2014 10 Days No SKU Bhutan 10 Not for sale \u2014 \u2014\" -> /catalog/trip-plans/252b1557-7652-4072-837f-ce9e88c33ddb"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Trip plans",
+   "table_rows": 25,
+   "images_visible": 24,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (32) China (121) India (218) Japan (79) Laos (46) Mongolia (17) Nepal (85) Pakistan (18) Philippines (44) South Korea (30) Sri Lanka (122) Taiwan (36) T",
+   "screenshot": "trip-plans-bhutan-1440-light.jpg"
+  },
+  {
+   "name": "trip-plans-filter-bhutan",
+   "path": "/catalog/trip-plans?country=Bhutan",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/facets",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans?country=Bhutan&limit=25&offset=0",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "h1=Trip plans; rows=0",
+    "kpi/total text: Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (32) China (121) India (218) Japan (79) Laos (46) Mo"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Trip plans",
+   "table_rows": 0,
+   "images_visible": 24,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (32) China (121) India (218) Japan (79) Laos (46) Mongolia (17) Nepal (85) Pakistan (18) Philippines (44) South Korea (30) Sri Lanka (122) Taiwan (36) T",
+   "screenshot": "trip-plans-bhutan-390-light.jpg"
+  },
+  {
+   "name": "trip-plans-search",
+   "path": "/catalog/trip-plans?sellable=yes",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/facets",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans?sellable=true&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "sellable=yes rows=0; text=Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (3"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Trip plans",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans CIS tours, and which of them Booking sells. Tour content is read-only here: edit it in CIS. Open CIS content CIS tours 892 FROM CIS Sellable 0 892 not for sale Countries 14 Search title, SKU or CIS source id COUNTRY All countries Bhutan (32) China (121) India (218) Japan (79) Laos (46) Mongolia (17) Nepal (85) Pakistan (18) Philippines (44) South Korea (30) Sri Lanka (122) Taiwan (36) T",
+   "screenshot": "trip-plans-sellable-empty-1440-light.jpg"
+  },
+  {
+   "name": "trip-plan-detail-actions",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "Use for trip case visible=true disabled=true title=Mark the plan sellable first",
+    "tab Day by day: images=1 broken=0; Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FRO",
+    "tab Photos: images=43 broken=0; Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FRO",
+    "Edit visible=true",
+    "drawer open=true text=Commercial details Booking-owned fields of Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days. The tour itself (title, days, photos) is edited in CIS. Sellable Sales can start trip cases from this plan. Untick to mark it not for sale. Trip style Free text for now, for example Private o",
+    "after cancel drawer visible=false"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinera",
+   "screenshot": "trip-plan-commercial-drawer-1440-light.jpg"
+  },
+  {
+   "name": "trip-plan-detail-actions",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "Use for trip case visible=true disabled=true title=Mark the plan sellable first",
+    "Edit visible=true",
+    "drawer open=true text=Commercial details Booking-owned fields of Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days. The tour itself (title, days, photos) is edited in CIS. Sellable Sales can start trip cases from this plan. Untick to mark it not for sale. Trip style Free text for now, for example Private o",
+    "after cancel drawer visible=false"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinera",
+   "screenshot": "trip-plan-commercial-drawer-390-light.jpg"
+  },
+  {
+   "name": "trip-plan-detail-actions",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "Use for trip case visible=true disabled=true title=Mark the plan sellable first",
+    "Edit visible=true",
+    "drawer open=true text=Commercial details Booking-owned fields of Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days. The tour itself (title, days, photos) is edited in CIS. Sellable Sales can start trip cases from this plan. Untick to mark it not for sale. Trip style Free text for now, for example Private o",
+    "after cancel drawer visible=false"
+   ],
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinera",
+   "screenshot": "trip-plan-commercial-drawer-1440-dark.jpg"
+  },
+  {
+   "name": "trip-plan-detail-actions",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "Use for trip case visible=true disabled=true title=Mark the plan sellable first",
+    "Edit visible=true",
+    "drawer open=true text=Commercial details Booking-owned fields of Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days. The tour itself (title, days, photos) is edited in CIS. Sellable Sales can start trip cases from this plan. Untick to mark it not for sale. Trip style Free text for now, for example Private o",
+    "after cancel drawer visible=false"
+   ],
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Not for sale FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinera",
+   "screenshot": "trip-plan-commercial-drawer-390-dark.jpg"
+  },
+  {
+   "name": "trip-plan-commercial-route",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296/commercial",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "drawer open on load=true"
+   ],
+   "screenshot": "trip-plan-commercial-route-1440-light.jpg"
+  },
+  {
+   "name": "use-for-trip-case-modal (mocked sellable)",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "button disabled=false",
+    "modal=true text=Use for trip case The proposal starts with the 12 day items of Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days, titled from CIS. It is not priced: add cost lines and price it in the builder. New trip case Add to an existing case Existing customer + New lead Search customers Type at least 2 characters. Start date Optional Currency USD EUR GBP AUD SGD Adults * Children Cancel CREATE",
+    "existing-case mode text=Use for trip case The proposal starts with the 12 day items of Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days, titled from CIS. It is not priced: add cost lines and price it in the builder. New trip case Add to an existing case Trip case code * The plan's days become a new version ",
+    "after Cancel modal visible=false"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Sellable FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinerary m",
+   "screenshot": "use-for-trip-case-modal-1440-light.jpg"
+  },
+  {
+   "name": "use-for-trip-case-modal (mocked sellable)",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "button disabled=false",
+    "modal=true text=Use for trip case The proposal starts with the 12 day items of Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days, titled from CIS. It is not priced: add cost lines and price it in the builder. New trip case Add to an existing case Existing customer + New lead Search customers Type at least 2 characters. Start date Optional Currency USD EUR GBP AUD SGD Adults * Children Cancel CREATE",
+    "after Cancel modal visible=false"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Sellable FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinerary m",
+   "screenshot": "use-for-trip-case-modal-390-light.jpg"
+  },
+  {
+   "name": "use-for-trip-case-modal (mocked sellable)",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "button disabled=false",
+    "modal=true text=Use for trip case The proposal starts with the 12 day items of Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days, titled from CIS. It is not priced: add cost lines and price it in the builder. New trip case Add to an existing case Existing customer + New lead Search customers Type at least 2 characters. Start date Optional Currency USD EUR GBP AUD SGD Adults * Children Cancel CREATE",
+    "after Cancel modal visible=false"
+   ],
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Sellable FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinerary m",
+   "screenshot": "use-for-trip-case-modal-1440-dark.jpg"
+  },
+  {
+   "name": "use-for-trip-case-modal (mocked sellable)",
+   "path": "/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+   "width": 390,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/catalog/trip-plans/51b36891-10bb-404f-ba33-f2baeb50d296",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "button disabled=false",
+    "modal=true text=Use for trip case The proposal starts with the 12 day items of Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days, titled from CIS. It is not priced: add cost lines and price it in the builder. New trip case Add to an existing case Existing customer + New lead Search customers Type at least 2 characters. Start date Optional Currency USD EUR GBP AUD SGD Adults * Children Cancel CREATE",
+    "after Cancel modal visible=false"
+   ],
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+   "table_rows": 0,
+   "images_visible": 2,
+   "images_broken": 0,
+   "text_excerpt": "Trip plans/Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days BB Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days Sellable FROM CIS Bhutan 12 days Edit in CIS USE FOR TRIP CASE Overview Day by day(12) Photos(42) About this tour FROM CIS Central Bhutan's monasteries, high passes, and the annual Jambay Lhakhang Drup festival in the Chokhor Valley This 12-day itinerary m",
+   "screenshot": "use-for-trip-case-modal-390-dark.jpg"
+  },
+  {
+   "name": "cases-source-filter",
+   "path": "/cases",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?sort=-updated_at&limit=25&offset=0",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases/summary",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/staff/directory",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/trip-cases?source=cis&sort=-updated_at&limit=25&offset=0",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "elements mentioning 'trip plan': [\"Trip Plans\",\"SourceAll sourcesTripPlannerManualCIS trip plan\",\"CIS trip plan\"]",
+    "filter CIS trip plan -> url=/cases?source=cis rows=0 text=Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All3 Inquiries2 Mine Unassigned Active2 Closed0 Search case code, customer name o"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Trip cases",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Trip cases Every inquiry and booking in one list, from the first TripPlanner inquiry to the trip itself. NEW TRIP CASE All3 Inquiries2 Mine Unassigned Active2 Closed0 Search case code, customer name or e-mail SALES REP All reps Unassigned admin e2e-claude-code SOURCE All sources TripPlanner Manual CIS trip plan CREATED \u2013 STATUS All statuses Reset filters Columns CSV No trip cases yet Cases appear ",
+   "screenshot": "cases-source-cis-trip-plan-1440-light.jpg"
+  },
+  {
+   "name": "pricing-rules-drawers",
+   "path": "/pricing/rules",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "New rule: open=true text=New pricing rule A rule is never edited. This adds a new row for the channel; once approved by a second person it is in force from its date (the newest approved rule on or before the pricing day wins). Channel * B2C tailor-made Fixed departure B2B Target margin * % Gross margin on the selling price.",
+    "New FX rate: open=true text=New FX rate Rates are dated and never edited. Supplier costs convert to USD at the plain rate; a quote sold in this currency adds the buffer. A second person approves the row before any quote uses it. Currency * ISO code, e.g. EUR, GBP, VND. Units per 1 USD * EUR 0.92 \u00b7 VND 25400 Selling buffer % AD"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new "
+  },
+  {
+   "name": "pricing-rules-drawers",
+   "path": "/pricing/rules",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "New rule: open=true text=New pricing rule A rule is never edited. This adds a new row for the channel; once approved by a second person it is in force from its date (the newest approved rule on or before the pricing day wins). Channel * B2C tailor-made Fixed departure B2B Target margin * % Gross margin on the selling price.",
+    "New FX rate: open=true text=New FX rate Rates are dated and never edited. Supplier costs convert to USD at the plain rate; a quote sold in this currency adds the buffer. A second person approves the row before any quote uses it. Currency * ISO code, e.g. EUR, GBP, VND. Units per 1 USD * EUR 0.92 \u00b7 VND 25400 Selling buffer % AD"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new "
+  },
+  {
+   "name": "pricing-rules-drawers",
+   "path": "/pricing/rules",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "New rule: open=true text=New pricing rule A rule is never edited. This adds a new row for the channel; once approved by a second person it is in force from its date (the newest approved rule on or before the pricing day wins). Channel * B2C tailor-made Fixed departure B2B Target margin * % Gross margin on the selling price.",
+    "New FX rate: open=true text=New FX rate Rates are dated and never edited. Supplier costs convert to USD at the plain rate; a quote sold in this currency adds the buffer. A second person approves the row before any quote uses it. Currency * ISO code, e.g. EUR, GBP, VND. Units per 1 USD * EUR 0.92 \u00b7 VND 25400 Selling buffer % AD"
+   ],
+   "data_theme": "dark",
+   "main_theme": "dark",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 3,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new "
+  },
+  {
+   "name": "pricing-fx-approve-dialog (mocked pending row)",
+   "path": "/pricing/rules?tab=fx",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "fx rows=1",
+    "approve dialog open=true text=Approve FX rate Approve EUR at 0.92 per USD (buffer 2.5%), as of 15 Oct 2026, source MOCK \u2014 UI verify only? Quotes priced from then on use it. Cancel APPROVE",
+    "after Cancel dialog count=0"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 1,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-fx-approve-dialog-mock-1440-light.jpg"
+  },
+  {
+   "name": "pricing-fx-approve-dialog (mocked pending row)",
+   "path": "/pricing/rules?tab=fx",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "fx rows=0",
+    "approve dialog open=true text=Approve FX rate Approve EUR at 0.92 per USD (buffer 2.5%), as of 15 Oct 2026, source MOCK \u2014 UI verify only? Quotes priced from then on use it. Cancel APPROVE",
+    "after Cancel dialog count=0"
+   ],
+   "data_theme": "light",
+   "main_theme": "light",
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "overflow_offenders": [],
+   "h1": "Pricing rules & FX",
+   "table_rows": 0,
+   "images_visible": 1,
+   "images_broken": 0,
+   "text_excerpt": "Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-checker. Every new rule or FX rate starts as Pending approval and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never edited: enter a new ",
+   "screenshot": "pricing-fx-approve-dialog-mock-390-light.jpg"
+  },
+  {
+   "name": "pricing-calculator-quote",
+   "path": "/pricing/calculator",
+   "width": 1440,
+   "theme": "light",
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 422 ()"
+   ],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "POST",
+     "u": "/api/booking/pricing/quote-preview",
+     "s": 200
+    },
+    {
+     "m": "POST",
+     "u": "/api/booking/pricing/quote-preview",
+     "s": 422
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/rules",
+     "s": 200
+    },
+    {
+     "m": "GET",
+     "u": "/api/booking/pricing/fx-rates",
+     "s": 200
+    }
+   ],
+   "api_non2xx": [
+    {
+     "m": "POST",
+     "u": "/api/booking/pricing/quote-preview",
+     "s": 422,
+     "body": "{\"detail\":\"no FX rate for EUR\"}"
+    }
+   ],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "FxNotice link: 1",
+    "USD result: e B2B Selling currency USD EUR GBP AUD SGD Peak season dates (adds the rule's peak uplift) Override total (optional, in USD) Non-USD costs and selling currencies need a dated FX rate that a second person has approved. Add or approve rates in Pricing rules & FX. Result Rule in force, FX rates used, each line in USD and selling currency, rounding, margin and the floor check. TOTAL 1,495.00 USD Net cost (USD) 1,000.00 USD Subtotal 1,492.54 USD Computed total (rounded up to 5) 1,495.00 USD Margin ap",
+    "EUR alert: Missing FX rate: EUR No approved row is in force for today. Add it in Pricing rules & FX and have a second person approve it, or price in USD. Open Pricing rules & FX",
+    "EUR alert link href=/pricing/rules?tab=fx",
+    "link -> /pricing/rules?tab=fx ; Pricing rules & FX Margin policy per channel and dated FX rates against USD. Append-only: a change is a new row, and a second person approves it before it prices anything. New FX rate New rule Maker-c"
+   ],
+   "screenshot": "pricing-calculator-eur-missing-fx-1440-light.jpg"
+  },
+  {
+   "name": "pricing-calculator-quote",
+   "path": "/pricing/calculator",
+   "width": 390,
+   "theme": "light",
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 422 ()"
+   ],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "POST",
+     "u": "/api/booking/pricing/quote-preview",
+     "s": 200
+    },
+    {
+     "m": "POST",
+     "u": "/api/booking/pricing/quote-preview",
+     "s": 422
+    }
+   ],
+   "api_non2xx": [
+    {
+     "m": "POST",
+     "u": "/api/booking/pricing/quote-preview",
+     "s": 422,
+     "body": "{\"detail\":\"no FX rate for EUR\"}"
+    }
+   ],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "FxNotice link: 1",
+    "USD result: e B2B Selling currency USD EUR GBP AUD SGD Peak season dates (adds the rule's peak uplift) Override total (optional, in USD) Non-USD costs and selling currencies need a dated FX rate that a second person has approved. Add or approve rates in Pricing rules & FX. Result Rule in force, FX rates used, each line in USD and selling currency, rounding, margin and the floor check. TOTAL 1,495.00 USD Net cost (USD) 1,000.00 USD Subtotal 1,492.54 USD Computed total (rounded up to 5) 1,495.00 USD Margin ap",
+    "EUR alert: Missing FX rate: EUR No approved row is in force for today. Add it in Pricing rules & FX and have a second person approve it, or price in USD. Open Pricing rules & FX",
+    "EUR alert link href=/pricing/rules?tab=fx"
+   ],
+   "screenshot": "pricing-calculator-eur-missing-fx-390-light.jpg"
+  },
+  {
+   "name": "pricing-calculator-quote",
+   "path": "/pricing/calculator",
+   "width": 1440,
+   "theme": "dark",
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 422 ()"
+   ],
+   "console_warnings": 0,
+   "api": [
+    {
+     "m": "GET",
+     "u": "/api/booking/notifications?limit=5",
+     "s": 200
+    },
+    {
+     "m": "POST",
+     "u": "/api/booking/pricing/quote-preview",
+     "s": 200
+    },
+    {
+     "m": "POST",
+     "u": "/api/booking/pricing/quote-preview",
+     "s": 422
+    }
+   ],
+   "api_non2xx": [
+    {
+     "m": "POST",
+     "u": "/api/booking/pricing/quote-preview",
+     "s": 422,
+     "body": "{\"detail\":\"no FX rate for EUR\"}"
+    }
+   ],
+   "request_failed": [],
+   "http": 200,
+   "kind": "interaction",
+   "steps": [
+    "FxNotice link: 1",
+    "USD result: e B2B Selling currency USD EUR GBP AUD SGD Peak season dates (adds the rule's peak uplift) Override total (optional, in USD) Non-USD costs and selling currencies need a dated FX rate that a second person has approved. Add or approve rates in Pricing rules & FX. Result Rule in force, FX rates used, each line in USD and selling currency, rounding, margin and the floor check. TOTAL 1,495.00 USD Net cost (USD) 1,000.00 USD Subtotal 1,492.54 USD Computed total (rounded up to 5) 1,495.00 USD Margin ap",
+    "EUR alert: Missing FX rate: EUR No approved row is in force for today. Add it in Pricing rules & FX and have a second person approve it, or price in USD. Open Pricing rules & FX",
+    "EUR alert link href=/pricing/rules?tab=fx"
+   ],
+   "screenshot": "pricing-calculator-eur-missing-fx-1440-dark.jpg"
+  }
+ ],
+ "blocked_writes": [],
+ "notes": [],
+ "health_ready": {
+  "status": "ok",
+  "db": "ok",
+  "schema_version": "bk-010"
+ },
+ "staff": {
+  "name": "e2e-claude-code",
+  "role": "admin"
+ },
+ "api": {
+  "facets_total": 892,
+  "facets_sellable": 0,
+  "list_total": 892,
+  "bhutan_total": 32
+ },
+ "plan": {
+  "source_id": "51b36891-10bb-404f-ba33-f2baeb50d296",
+  "title": "Bhutan: Bumthang Drup Festival & the Spiritual Valleys \u2014 12 Days",
+  "photo_count": 42,
+  "days": 12,
+  "sellable": false,
+  "cases_started": 0
+ },
+ "cases_on_dev": [
+  {
+   "code": "TC-000003",
+   "status": "confirmed",
+   "source_system": "manual"
+  },
+  {
+   "code": "TC-000002",
+   "status": "new_inquiry",
+   "source_system": "tripplanner"
+  },
+  {
+   "code": "TC-000001",
+   "status": "new_inquiry",
+   "source_system": "tripplanner"
+  }
+ ],
+ "finished": "2026-10-15T06:22:43.611Z",
+ "target": {
+  "url": "https://aa-booking-admin.vercel.app",
+  "deployment": "dpl_77mttbRbUS1sAJoxskyezsK2654h",
+  "git": "51bb196 (main)",
+  "vercel_team": "pqnghiep1354-5974s-projects"
+ },
+ "account": "e2e-claude-code (Booking role admin)",
+ "mocks": [
+  "GET /api/booking/catalog/trip-plans/51b36891-... answered with sellable=true in-browser to open the Use-for-trip-case modal",
+  "GET /api/booking/pricing/fx-rates answered with one fake pending EUR row in-browser to open the Approve dialog"
+ ],
+ "verdicts": {
+  "AA-679": {
+   "verdict": "PASS_WITH_DEFECTS",
+   "not_verifiable": [
+    "POST trip-cases from a plan (create case / add version)",
+    "Save commercial"
+   ],
+   "defects": [
+    "Use-for-trip-case modal footer below the fold at 390 (Low)"
+   ]
+  },
+  "AA-810": {
+   "verdict": "PASS_WITH_DEFECTS",
+   "not_verifiable": [
+    "create rule/FX (pending)",
+    "403 own_row",
+    "second-person approve",
+    "EUR-priced quote (0 FX rows on Dev)"
+   ],
+   "defects": [
+    "/pricing/rules table overflows container at 1440; Note column 82px, rows 164px tall (Low)"
+   ]
+  },
+  "regression": {
+   "verdict": "PASS"
+  }
+ }
+}

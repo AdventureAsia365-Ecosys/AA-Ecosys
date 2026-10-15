@@ -1,0 +1,767 @@
+{
+ "runs": [
+  {
+   "width": 1440,
+   "scheme": "light",
+   "pages": {
+    "overview": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 4,
+     "req_failed": [
+      "net::ERR_ABORTED /api/admin/notifications/count",
+      "net::ERR_ABORTED /api/admin/overview",
+      "net::ERR_ABORTED /api/admin/review-queue?status=pending&page=1&page_size=1",
+      "net::ERR_ABORTED /api/admin/review-queue?status=pending&page=1&page_size=1"
+     ],
+     "path": "/admin/overview",
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_pieces": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 5,
+     "req_failed": [],
+     "path": "/admin/content-quality",
+     "rows": 50,
+     "headers": [
+      "WRITTEN",
+      "TENANT",
+      "CHANNEL",
+      "TITLE / ANGLE",
+      "STATUS",
+      "BLOCKING FAILS",
+      "WARNINGS",
+      "ATT.",
+      "COST",
+      "LABEL"
+     ],
+     "label_filter": 1,
+     "label_filter_options": [
+      "Any label",
+      "Labelled",
+      "Not labelled",
+      "As-is",
+      "Light edit",
+      "Heavy edit",
+      "Reject"
+     ],
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_piece_drawer": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?piece=ccb0843c-bb8d-4050-a6e9-2a163f8adb4b",
+     "drawer_title": "Lake Khövsgöl & Northern Mongolia: A Cultural Guide | APPROVED | Atlas & Hearth · blog · attempt 3 · $0.089 · Oct 14, 12:32 PM | TEXT · 0 FLAGGED SPANS | BLOCKING | WARNI",
+     "label_form": 1,
+     "label_unavailable": 0,
+     "label_buttons": [
+      "cq-label-form",
+      "cq-label-as_is",
+      "cq-label-light",
+      "cq-label-heavy",
+      "cq-label-reject",
+      "cq-label-save"
+     ],
+     "label_save_present": 1,
+     "label_section_text": "As-is | Publishable without a change | Light edit | ≤10 min, ≤3 sentences, no research | Heavy edit | More than a light edit | Reject | Not worth fixing | Fact | — | none | light | heavy | Voice | — | none | light | heavy | Format | — | none | light | heavy | AI phrasing | — | none | light | heavy | Minutes to fix | Save label",
+     "attempt_ledgers": 0,
+     "older_copy_notice": 0,
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_versions": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 6,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=versions",
+     "rows": 29,
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_version_drawer": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=versions&version=75116f75-588b-49d8-acf8-78dd326cba35",
+     "drawer_title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Atlas & Hearth v2 | Status needs_review · score 6 · QA escalated (auto-passed) · repairs 2 · ai_generated | Edits change the tenant's copy in ",
+     "older_copy_notice": 0,
+     "edit_note": "Edits change the tenant's copy in place: no new version, no notice and no flag for the tenant. Each edit is kept under Admin edits with the text before and after.",
+     "flag_rows": 3,
+     "cut_buttons": 3,
+     "rewrite_buttons": 3,
+     "sections": [
+      "FLAGGED SENTENCES · 3",
+      "TEXT — CLICK A SENTENCE TO EDIT IT",
+      "ESCALATIONS · 1",
+      "COST BY STAGE",
+      "STORED REWRITTEN CONTENT"
+     ],
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_stats": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 5,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=stats",
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "tenants": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 8,
+     "req_failed": [],
+     "path": "/admin/tenants?tenant=9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "publish_limit_stat": 1,
+     "publish_limit_stat_value": "Publish Limit\n20/day (default)",
+     "dpl_section": 1,
+     "dpl_input_disabled": false,
+     "dpl_input_value": "",
+     "dpl_placeholder": "default 20",
+     "save_disabled_initial": true,
+     "use_default_present": 0,
+     "current_text": "Current: growth · 300/min",
+     "hint": "Daily publish limit | Publishes this tenant can make per UTC day. Leave empty to use the default (20/day). | PUBLISHES PER DAY (OVERRIDE) | Save limit | Current: 20/day (default)",
+     "save_disabled_after_typing_2": false,
+     "validation_5000": "true",
+     "save_disabled_5000": true,
+     "error_text_5000": "Daily publish limit | Publishes this tenant can make per UTC day. Leave empty to use the default (20/day). | PUBLISHES PER DAY (OVERRIDE) | Daily publish limit must be an integer from 1 to 1000, or empty for the default. | Save limit | Current: 20/day (default)",
+     "save_disabled_after_clear": true,
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "portal_slate": {
+     "console_errors": [
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()"
+     ],
+     "console_warnings": [],
+     "api_fail": [
+      {
+       "status": 401,
+       "url": "/api/tenant/me",
+       "body": "{\"error\":\"Unauthorized\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/slate",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/billing",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/tours/my-versions?page_size=50",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/tours/pool?page_size=1",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      }
+     ],
+     "api_ok": 0,
+     "req_failed": [],
+     "path": "/portal/t7-planning",
+     "url": "/portal/t7-planning",
+     "text": "Adventure Asia | CIS PLATFORM | WORKSPACE | Dashboard | Browse Tours | My Catalog Tours | Brand Identity | Social Content | My Content | Publish | Marketplace | API Access | ACCOUNT | Activity Log | Billing | Settings | P | Partner | Growth Plan | Workspace | / | Social Content | ⌘K | Social Content |  | Channel-scoped content picks, ranked by score and cleared against each channel’s bar — pick one below to start writing. |  | SOCIAL CONTENT |  | Every m",
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    }
+   }
+  },
+  {
+   "width": 1440,
+   "scheme": "dark",
+   "pages": {
+    "overview": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 4,
+     "req_failed": [
+      "net::ERR_ABORTED /api/admin/notifications/count",
+      "net::ERR_ABORTED /api/admin/review-queue?status=pending&page=1&page_size=1",
+      "net::ERR_ABORTED /api/admin/overview",
+      "net::ERR_ABORTED /api/admin/review-queue?status=pending&page=1&page_size=1"
+     ],
+     "path": "/admin/overview",
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_pieces": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 5,
+     "req_failed": [],
+     "path": "/admin/content-quality",
+     "rows": 50,
+     "headers": [
+      "WRITTEN",
+      "TENANT",
+      "CHANNEL",
+      "TITLE / ANGLE",
+      "STATUS",
+      "BLOCKING FAILS",
+      "WARNINGS",
+      "ATT.",
+      "COST",
+      "LABEL"
+     ],
+     "label_filter": 1,
+     "label_filter_options": [
+      "Any label",
+      "Labelled",
+      "Not labelled",
+      "As-is",
+      "Light edit",
+      "Heavy edit",
+      "Reject"
+     ],
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_piece_drawer": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?piece=ccb0843c-bb8d-4050-a6e9-2a163f8adb4b",
+     "drawer_title": "Lake Khövsgöl & Northern Mongolia: A Cultural Guide | APPROVED | Atlas & Hearth · blog · attempt 3 · $0.089 · Oct 14, 12:32 PM | TEXT · 0 FLAGGED SPANS | BLOCKING | WARNI",
+     "label_form": 1,
+     "label_unavailable": 0,
+     "label_buttons": [
+      "cq-label-form",
+      "cq-label-as_is",
+      "cq-label-light",
+      "cq-label-heavy",
+      "cq-label-reject",
+      "cq-label-save"
+     ],
+     "label_save_present": 1,
+     "label_section_text": "As-is | Publishable without a change | Light edit | ≤10 min, ≤3 sentences, no research | Heavy edit | More than a light edit | Reject | Not worth fixing | Fact | — | none | light | heavy | Voice | — | none | light | heavy | Format | — | none | light | heavy | AI phrasing | — | none | light | heavy | Minutes to fix | Save label",
+     "attempt_ledgers": 0,
+     "older_copy_notice": 0,
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_versions": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 6,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=versions",
+     "rows": 29,
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_version_drawer": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=versions&version=75116f75-588b-49d8-acf8-78dd326cba35",
+     "drawer_title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Atlas & Hearth v2 | Status needs_review · score 6 · QA escalated (auto-passed) · repairs 2 · ai_generated | Edits change the tenant's copy in ",
+     "older_copy_notice": 0,
+     "edit_note": "Edits change the tenant's copy in place: no new version, no notice and no flag for the tenant. Each edit is kept under Admin edits with the text before and after.",
+     "flag_rows": 3,
+     "cut_buttons": 3,
+     "rewrite_buttons": 3,
+     "sections": [
+      "FLAGGED SENTENCES · 3",
+      "TEXT — CLICK A SENTENCE TO EDIT IT",
+      "ESCALATIONS · 1",
+      "COST BY STAGE",
+      "STORED REWRITTEN CONTENT"
+     ],
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_stats": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 5,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=stats",
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "tenants": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 8,
+     "req_failed": [],
+     "path": "/admin/tenants?tenant=9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "publish_limit_stat": 1,
+     "publish_limit_stat_value": "Publish Limit\n20/day (default)",
+     "dpl_section": 1,
+     "dpl_input_disabled": false,
+     "dpl_input_value": "",
+     "dpl_placeholder": "default 20",
+     "save_disabled_initial": true,
+     "use_default_present": 0,
+     "current_text": "Current: growth · 300/min",
+     "hint": "Daily publish limit | Publishes this tenant can make per UTC day. Leave empty to use the default (20/day). | PUBLISHES PER DAY (OVERRIDE) | Save limit | Current: 20/day (default)",
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "portal_slate": {
+     "console_errors": [
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()"
+     ],
+     "console_warnings": [],
+     "api_fail": [
+      {
+       "status": 401,
+       "url": "/api/tenant/me",
+       "body": "{\"error\":\"Unauthorized\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/billing",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/slate",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/tours/pool?page_size=1",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/tours/my-versions?page_size=50",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      }
+     ],
+     "api_ok": 0,
+     "req_failed": [],
+     "path": "/portal/t7-planning",
+     "url": "/portal/t7-planning",
+     "text": "Adventure Asia | CIS PLATFORM | WORKSPACE | Dashboard | Browse Tours | My Catalog Tours | Brand Identity | Social Content | My Content | Publish | Marketplace | API Access | ACCOUNT | Activity Log | Billing | Settings | P | Partner | Growth Plan | Workspace | / | Social Content | ⌘K | Social Content |  | Channel-scoped content picks, ranked by score and cleared against each channel’s bar — pick one below to start writing. |  | SOCIAL CONTENT |  | Every m",
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    }
+   }
+  },
+  {
+   "width": 390,
+   "scheme": "light",
+   "pages": {
+    "overview": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 4,
+     "req_failed": [
+      "net::ERR_ABORTED /api/admin/review-queue?status=pending&page=1&page_size=1",
+      "net::ERR_ABORTED /api/admin/overview",
+      "net::ERR_ABORTED /api/admin/notifications/count",
+      "net::ERR_ABORTED /api/admin/review-queue?status=pending&page=1&page_size=1"
+     ],
+     "path": "/admin/overview",
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_pieces": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 6,
+     "req_failed": [],
+     "path": "/admin/content-quality",
+     "rows": 0,
+     "headers": [],
+     "label_filter": 1,
+     "label_filter_options": [
+      "Any label",
+      "Labelled",
+      "Not labelled",
+      "As-is",
+      "Light edit",
+      "Heavy edit",
+      "Reject"
+     ],
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_piece_drawer": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?piece=ccb0843c-bb8d-4050-a6e9-2a163f8adb4b",
+     "drawer_title": "Lake Khövsgöl & Northern Mongolia: A Cultural Guide | APPROVED | Atlas & Hearth · blog · attempt 3 · $0.089 · Oct 14, 12:32 PM | TEXT · 0 FLAGGED SPANS | BLOCKING | WARNI",
+     "label_form": 1,
+     "label_unavailable": 0,
+     "label_buttons": [
+      "cq-label-form",
+      "cq-label-as_is",
+      "cq-label-light",
+      "cq-label-heavy",
+      "cq-label-reject",
+      "cq-label-save"
+     ],
+     "label_save_present": 1,
+     "label_section_text": "As-is | Publishable without a change | Light edit | ≤10 min, ≤3 sentences, no research | Heavy edit | More than a light edit | Reject | Not worth fixing | Fact | — | none | light | heavy | Voice | — | none | light | heavy | Format | — | none | light | heavy | AI phrasing | — | none | light | heavy | Minutes to fix | Save label",
+     "attempt_ledgers": 0,
+     "older_copy_notice": 0,
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_versions": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=versions",
+     "rows": 0,
+     "theme": "light",
+     "overflow_px": 69,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_version_drawer": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=versions&version=75116f75-588b-49d8-acf8-78dd326cba35",
+     "drawer_title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Atlas & Hearth v2 | Status needs_review · score 6 · QA escalated (auto-passed) · repairs 2 · ai_generated | Edits change the tenant's copy in ",
+     "older_copy_notice": 0,
+     "edit_note": "Edits change the tenant's copy in place: no new version, no notice and no flag for the tenant. Each edit is kept under Admin edits with the text before and after.",
+     "flag_rows": 3,
+     "cut_buttons": 3,
+     "rewrite_buttons": 3,
+     "sections": [
+      "FLAGGED SENTENCES · 3",
+      "TEXT — CLICK A SENTENCE TO EDIT IT",
+      "ESCALATIONS · 1",
+      "COST BY STAGE",
+      "STORED REWRITTEN CONTENT"
+     ],
+     "theme": "light",
+     "overflow_px": 69,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "cq_stats": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 5,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=stats",
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "tenants": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 8,
+     "req_failed": [],
+     "path": "/admin/tenants?tenant=9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "publish_limit_stat": 1,
+     "publish_limit_stat_value": "Publish Limit\n20/day (default)",
+     "dpl_section": 1,
+     "dpl_input_disabled": false,
+     "dpl_input_value": "",
+     "dpl_placeholder": "default 20",
+     "save_disabled_initial": true,
+     "use_default_present": 0,
+     "current_text": "Current: growth · 300/min",
+     "hint": "Daily publish limit | Publishes this tenant can make per UTC day. Leave empty to use the default (20/day). | PUBLISHES PER DAY (OVERRIDE) | Save limit | Current: 20/day (default)",
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    },
+    "portal_slate": {
+     "console_errors": [
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()"
+     ],
+     "console_warnings": [],
+     "api_fail": [
+      {
+       "status": 401,
+       "url": "/api/tenant/me",
+       "body": "{\"error\":\"Unauthorized\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/tours/pool?page_size=1",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/slate",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/billing",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/tours/my-versions?page_size=50",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      }
+     ],
+     "api_ok": 0,
+     "req_failed": [],
+     "path": "/portal/t7-planning",
+     "url": "/portal/t7-planning",
+     "text": "Adventure Asia | CIS PLATFORM | WORKSPACE | Dashboard | Browse Tours | My Catalog Tours | Brand Identity | Social Content | My Content | Publish | Marketplace | API Access | ACCOUNT | Activity Log | Billing | Settings | P | Partner | Growth Plan | Workspace | / | Social Content | Social Content |  | Channel-scoped content picks, ranked by score and cleared against each channel’s bar — pick one below to start writing. |  | SOCIAL CONTENT |  | Every mome",
+     "theme": "light",
+     "overflow_px": 0,
+     "bodyBg": "rgb(244, 241, 236)"
+    }
+   }
+  },
+  {
+   "width": 390,
+   "scheme": "dark",
+   "pages": {
+    "overview": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 4,
+     "req_failed": [
+      "net::ERR_ABORTED /api/admin/review-queue?status=pending&page=1&page_size=1",
+      "net::ERR_ABORTED /api/admin/overview",
+      "net::ERR_ABORTED /api/admin/review-queue?status=pending&page=1&page_size=1",
+      "net::ERR_ABORTED /api/admin/notifications/count"
+     ],
+     "path": "/admin/overview",
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_pieces": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 6,
+     "req_failed": [],
+     "path": "/admin/content-quality",
+     "rows": 0,
+     "headers": [],
+     "label_filter": 1,
+     "label_filter_options": [
+      "Any label",
+      "Labelled",
+      "Not labelled",
+      "As-is",
+      "Light edit",
+      "Heavy edit",
+      "Reject"
+     ],
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_piece_drawer": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?piece=ccb0843c-bb8d-4050-a6e9-2a163f8adb4b",
+     "drawer_title": "Lake Khövsgöl & Northern Mongolia: A Cultural Guide | APPROVED | Atlas & Hearth · blog · attempt 3 · $0.089 · Oct 14, 12:32 PM | TEXT · 0 FLAGGED SPANS | BLOCKING | WARNI",
+     "label_form": 1,
+     "label_unavailable": 0,
+     "label_buttons": [
+      "cq-label-form",
+      "cq-label-as_is",
+      "cq-label-light",
+      "cq-label-heavy",
+      "cq-label-reject",
+      "cq-label-save"
+     ],
+     "label_save_present": 1,
+     "label_section_text": "As-is | Publishable without a change | Light edit | ≤10 min, ≤3 sentences, no research | Heavy edit | More than a light edit | Reject | Not worth fixing | Fact | — | none | light | heavy | Voice | — | none | light | heavy | Format | — | none | light | heavy | AI phrasing | — | none | light | heavy | Minutes to fix | Save label",
+     "attempt_ledgers": 0,
+     "older_copy_notice": 0,
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_versions": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=versions",
+     "rows": 0,
+     "theme": "dark",
+     "overflow_px": 69,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_version_drawer": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 7,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=versions&version=75116f75-588b-49d8-acf8-78dd326cba35",
+     "drawer_title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Atlas & Hearth v2 | Status needs_review · score 6 · QA escalated (auto-passed) · repairs 2 · ai_generated | Edits change the tenant's copy in ",
+     "older_copy_notice": 0,
+     "edit_note": "Edits change the tenant's copy in place: no new version, no notice and no flag for the tenant. Each edit is kept under Admin edits with the text before and after.",
+     "flag_rows": 3,
+     "cut_buttons": 3,
+     "rewrite_buttons": 3,
+     "sections": [
+      "FLAGGED SENTENCES · 3",
+      "TEXT — CLICK A SENTENCE TO EDIT IT",
+      "ESCALATIONS · 1",
+      "COST BY STAGE",
+      "STORED REWRITTEN CONTENT"
+     ],
+     "theme": "dark",
+     "overflow_px": 69,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "cq_stats": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 5,
+     "req_failed": [],
+     "path": "/admin/content-quality?tab=stats",
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "tenants": {
+     "console_errors": [],
+     "console_warnings": [],
+     "api_fail": [],
+     "api_ok": 8,
+     "req_failed": [],
+     "path": "/admin/tenants?tenant=9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "publish_limit_stat": 1,
+     "publish_limit_stat_value": "Publish Limit\n20/day (default)",
+     "dpl_section": 1,
+     "dpl_input_disabled": false,
+     "dpl_input_value": "",
+     "dpl_placeholder": "default 20",
+     "save_disabled_initial": true,
+     "use_default_present": 0,
+     "current_text": "Current: growth · 300/min",
+     "hint": "Daily publish limit | Publishes this tenant can make per UTC day. Leave empty to use the default (20/day). | PUBLISHES PER DAY (OVERRIDE) | Save limit | Current: 20/day (default)",
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    },
+    "portal_slate": {
+     "console_errors": [
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()",
+      "Failed to load resource: the server responded with a status of 401 ()"
+     ],
+     "console_warnings": [],
+     "api_fail": [
+      {
+       "status": 401,
+       "url": "/api/tenant/me",
+       "body": "{\"error\":\"Unauthorized\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/slate",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/tours/pool?page_size=1",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/billing",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      },
+      {
+       "status": 401,
+       "url": "/api/tenant/v1/tours/my-versions?page_size=50",
+       "body": "{\"detail\":\"Not authenticated\"}"
+      }
+     ],
+     "api_ok": 0,
+     "req_failed": [],
+     "path": "/portal/t7-planning",
+     "url": "/portal/t7-planning",
+     "text": "Adventure Asia | CIS PLATFORM | WORKSPACE | Dashboard | Browse Tours | My Catalog Tours | Brand Identity | Social Content | My Content | Publish | Marketplace | API Access | ACCOUNT | Activity Log | Billing | Settings | P | Partner | Growth Plan | Workspace | / | Social Content | Social Content |  | Channel-scoped content picks, ranked by score and cleared against each channel’s bar — pick one below to start writing. |  | SOCIAL CONTENT |  | Every mome",
+     "theme": "dark",
+     "overflow_px": 0,
+     "bodyBg": "rgb(15, 20, 27)"
+    }
+   }
+  }
+ ]
+}

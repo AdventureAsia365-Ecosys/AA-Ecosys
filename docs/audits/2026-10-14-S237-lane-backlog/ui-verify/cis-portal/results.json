@@ -1,0 +1,989 @@
+{
+ "run": "S237 UI verify — CIS tenant portal (AA-815, AA-819)",
+ "base": "https://aa-cis.lumiguides.it.com",
+ "tenant": "atlas-hearth (Atlas & Hearth, 9149d3c6-fcaf-4400-8e7a-4ed5e557e146)",
+ "build": {
+  "vercel_production_sha": "35d305c5",
+  "ecs_dev_sha": "35d305c5",
+  "includes_prs": [
+   727,
+   730,
+   731
+  ]
+ },
+ "started": "2026-10-15T06:02:37.566Z",
+ "finished": "2026-10-15T06:04:29.766Z",
+ "login": {
+  "status": 200,
+  "landed": "/portal",
+  "method": "API key form at /tenant-login -> POST /api/auth/tenant-login (only write performed)"
+ },
+ "write_guard": "every non-GET request except the login POST was aborted by a Playwright route; blocked_writes lists any that were attempted",
+ "blocked_writes": [],
+ "tenant_state_probe": {
+  "note": "read-only GETs through the portal BFF after logging in as each E2E tenant",
+  "atlas-hearth": {
+   "wordpress_connected": false,
+   "facebook_connected": false,
+   "publish_log_total": 0,
+   "pending": 46,
+   "pending_unique_titles": 3,
+   "my_content_rows": 5
+  },
+  "terra-family": {
+   "wordpress_connected": false,
+   "facebook_connected": false,
+   "publish_log_total": 0,
+   "pending": 46,
+   "pending_unique_titles": 3,
+   "my_content_rows": 6
+  },
+  "trail-pulse": {
+   "wordpress_connected": false,
+   "facebook_connected": false,
+   "publish_log_total": 0,
+   "pending": 0
+  },
+  "wildkind-travel": {
+   "wordpress_connected": false,
+   "facebook_connected": false,
+   "publish_log_total": 0,
+   "pending": 0
+  }
+ },
+ "t11_geometry_1440": {
+  "wp_card": {
+   "top": 187,
+   "bottom": 602
+  },
+  "fb_card": {
+   "top": 187,
+   "bottom": 546
+  },
+  "ready_card": {
+   "top": 622
+  },
+  "note": "20px gap in layout, but the Ready to Publish StickyBar paints ~27px above its card and covers the WordPress card's bottom edge"
+ },
+ "pages": [
+  {
+   "page": "t11-publish",
+   "path": "/portal/t11-publish",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/t11-publish",
+   "data_theme": "light",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 0,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 46,
+    "pending_cards_connect_fb": 0,
+    "published_empty": true,
+    "has_fb_connect_form": true,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t11-publish-1440-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/integrations/facebook 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/publish-log 200",
+    "GET /api/tenant/v1/publish-log/pending 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t11-publish",
+   "path": "/portal/t11-publish",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/t11-publish",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 0,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 46,
+    "pending_cards_connect_fb": 0,
+    "published_empty": true,
+    "has_fb_connect_form": true,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t11-publish-1440-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/integrations/facebook 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/publish-log 200",
+    "GET /api/tenant/v1/publish-log/pending 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t11-publish",
+   "path": "/portal/t11-publish",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/t11-publish",
+   "data_theme": "light",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 46,
+    "pending_cards_connect_fb": 0,
+    "published_empty": true,
+    "has_fb_connect_form": true,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t11-publish-390-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/integrations/facebook 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/publish-log 200",
+    "GET /api/tenant/v1/publish-log/pending 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t11-publish",
+   "path": "/portal/t11-publish",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/t11-publish",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 46,
+    "pending_cards_connect_fb": 0,
+    "published_empty": true,
+    "has_fb_connect_form": true,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t11-publish-390-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/integrations/facebook 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/publish-log 200",
+    "GET /api/tenant/v1/publish-log/pending 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t11-connection",
+   "path": "/portal/t11-publish/connection",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/t11-publish/connection",
+   "data_theme": "light",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 0,
+   "notice": [],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": true,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t11-connection-1440-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/integrations/facebook 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t11-connection",
+   "path": "/portal/t11-publish/connection",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/t11-publish/connection",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 0,
+   "notice": [],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": true,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t11-connection-1440-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/integrations/facebook 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t11-connection",
+   "path": "/portal/t11-publish/connection",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/t11-publish/connection",
+   "data_theme": "light",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": true,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t11-connection-390-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/integrations/facebook 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t11-connection",
+   "path": "/portal/t11-publish/connection",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/t11-publish/connection",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": true,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t11-connection-390-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/integrations/facebook 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t10-review",
+   "path": "/portal/t10-review",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/t10-review",
+   "data_theme": "light",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 5,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": false,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t10-review-1440-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/content-writing/reviews 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t10-review",
+   "path": "/portal/t10-review",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/t10-review",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 5,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": false,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t10-review-1440-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/content-writing/reviews 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t10-review",
+   "path": "/portal/t10-review",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/t10-review",
+   "data_theme": "light",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": false,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t10-review-390-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/content-writing/reviews 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t10-review",
+   "path": "/portal/t10-review",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/t10-review",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": false,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t10-review-390-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/content-writing/reviews 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t4-pool",
+   "path": "/portal/t4-pool",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/t4-pool",
+   "data_theme": "light",
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 ()"
+   ],
+   "page_errors": [],
+   "api_failed": [
+    {
+     "method": "GET",
+     "url": "/api/tenant/v1/tours/pool/caf4bf16-cb55-4f2e-ba52-0736f2cdbe62",
+     "status": 404,
+     "body": "{\"detail\":\"Not Found\"}"
+    }
+   ],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 3,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": false,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t4-pool-1440-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200",
+    "GET /api/tenant/v1/tours/pool/caf4bf16-cb55-4f2e-ba52-0736f2cdbe62 404",
+    "GET /api/tenant/v1/tours/versions/d5a48151-db11-44b4-9312-b876164ceeb8 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t4-pool",
+   "path": "/portal/t4-pool",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/t4-pool",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 3,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": false,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t4-pool-1440-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t4-pool",
+   "path": "/portal/t4-pool",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/t4-pool",
+   "data_theme": "light",
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 ()"
+   ],
+   "page_errors": [],
+   "api_failed": [
+    {
+     "method": "GET",
+     "url": "/api/tenant/v1/tours/pool/caf4bf16-cb55-4f2e-ba52-0736f2cdbe62",
+     "status": 404,
+     "body": "{\"detail\":\"Not Found\"}"
+    }
+   ],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": false,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t4-pool-390-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200",
+    "GET /api/tenant/v1/tours/pool/caf4bf16-cb55-4f2e-ba52-0736f2cdbe62 404",
+    "GET /api/tenant/v1/tours/versions/d5a48151-db11-44b4-9312-b876164ceeb8 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "t4-pool",
+   "path": "/portal/t4-pool",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/t4-pool",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [
+    "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+   ],
+   "leak_hits": [],
+   "limit_hits": [],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": false,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "t4-pool-390-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "dashboard",
+   "path": "/portal/dashboard",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/dashboard",
+   "data_theme": "light",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 0,
+   "notice": [],
+   "leak_hits": [],
+   "limit_hits": [
+    "billed monthly TOURS/MO 200 API CALLS 20,000 RATE LIMIT 300 RPM QUOTA USAGE Details → Tours rewritten 7 /",
+    "s 681 / 20,000 3% used 19,319 remaining API calls per day peak 347 1 Oct today · 250 Resets in 17 days · 20"
+   ],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "dashboard-1440-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/admin/brand-identity 200",
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/content-writing/reviews 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/quota 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "dashboard",
+   "path": "/portal/dashboard",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/dashboard",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 1440,
+   "innerWidth": 1440,
+   "rows": 0,
+   "notice": [],
+   "leak_hits": [],
+   "limit_hits": [
+    "billed monthly TOURS/MO 200 API CALLS 20,000 RATE LIMIT 300 RPM QUOTA USAGE Details → Tours rewritten 7 /",
+    "s 691 / 20,000 4% used 19,309 remaining API calls per day peak 347 1 Oct today · 260 Resets in 17 days · 20"
+   ],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "dashboard-1440-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/admin/brand-identity 200",
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/content-writing/reviews 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/quota 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "dashboard",
+   "path": "/portal/dashboard",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "final_url": "/portal/dashboard",
+   "data_theme": "light",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [],
+   "leak_hits": [],
+   "limit_hits": [
+    "billed monthly TOURS/MO 200 API CALLS 20,000 RATE LIMIT 300 RPM QUOTA USAGE Details → Tours rewritten 7 /",
+    "s 699 / 20,000 4% used 19,301 remaining API calls per day peak 347 1 Oct today · 268 Resets in 17 days · 20"
+   ],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "dashboard-390-light.jpg",
+   "api_calls": [
+    "GET /api/tenant/admin/brand-identity 200",
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/content-writing/reviews 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/quota 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  },
+  {
+   "page": "dashboard",
+   "path": "/portal/dashboard",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "final_url": "/portal/dashboard",
+   "data_theme": "dark",
+   "console_errors": [],
+   "page_errors": [],
+   "api_failed": [],
+   "req_failed": [],
+   "overflow": false,
+   "scrollWidth": 390,
+   "innerWidth": 390,
+   "rows": 0,
+   "notice": [],
+   "leak_hits": [],
+   "limit_hits": [
+    "billed monthly TOURS/MO 200 API CALLS 20,000 RATE LIMIT 300 RPM QUOTA USAGE Details → Tours rewritten 7 /",
+    "s 714 / 20,000 4% used 19,286 remaining API calls per day peak 347 1 Oct today · 283 Resets in 17 days · 20"
+   ],
+   "extra": {
+    "pending_cards_connect_wp": 0,
+    "pending_cards_connect_fb": 0,
+    "published_empty": false,
+    "has_fb_connect_form": false,
+    "has_wp_connect_form": true,
+    "disconnect_buttons": [],
+    "unpublish_buttons": 0,
+    "manage_connections_link": false
+   },
+   "screenshot": "dashboard-390-dark.jpg",
+   "api_calls": [
+    "GET /api/tenant/admin/brand-identity 200",
+    "GET /api/tenant/me 200",
+    "GET /api/tenant/v1/billing 200",
+    "GET /api/tenant/v1/content-writing/reviews 200",
+    "GET /api/tenant/v1/integrations/wordpress 200",
+    "GET /api/tenant/v1/quota 200",
+    "GET /api/tenant/v1/tours/my-versions 200",
+    "GET /api/tenant/v1/tours/pool 200"
+   ],
+   "console_warnings_count": 0
+  }
+ ],
+ "interactions": [
+  {
+   "page": "t11-publish",
+   "width": 1440,
+   "action": "Unpublish",
+   "note": "no Unpublish button on page"
+  },
+  {
+   "page": "t11-publish",
+   "width": 390,
+   "action": "Unpublish",
+   "note": "no Unpublish button on page"
+  },
+  {
+   "page": "t10-review",
+   "width": 1440,
+   "action": "open first row drawer (then Escape)",
+   "drawer_open": true,
+   "notice_in_drawer": 1,
+   "leak_hits_in_drawer": [],
+   "screenshot": "t10-review-drawer-1440-light.jpg"
+  },
+  {
+   "page": "t10-review",
+   "width": 390,
+   "action": "open first row drawer (then Escape)",
+   "drawer_open": true,
+   "notice_in_drawer": 1,
+   "leak_hits_in_drawer": [],
+   "screenshot": "t10-review-drawer-390-light.jpg"
+  },
+  {
+   "page": "t4-pool",
+   "width": 1440,
+   "action": "open first row drawer (then Escape)",
+   "drawer_open": true,
+   "notice_in_drawer": 1,
+   "leak_hits_in_drawer": [],
+   "screenshot": "t4-pool-drawer-1440-light.jpg"
+  },
+  {
+   "page": "t4-pool",
+   "width": 390,
+   "action": "open first row drawer (then Escape)",
+   "drawer_open": true,
+   "notice_in_drawer": 1,
+   "leak_hits_in_drawer": [],
+   "screenshot": "t4-pool-drawer-390-light.jpg"
+  }
+ ],
+ "extra_screenshots": [
+  "t11-publish-{1440,390}-{light,dark}.jpg (viewport, replaces full-page)",
+  "t11-published-empty-{1440,390}-{light,dark}.jpg",
+  "t11-ready-cards-390-light.jpg",
+  "t10-review-drawer-notice-{1440,390}-light.jpg",
+  "t4-pool-drawer-notice-{1440,390}-light.jpg"
+ ]
+}

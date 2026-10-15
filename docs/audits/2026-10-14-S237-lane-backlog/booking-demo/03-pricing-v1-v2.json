@@ -1,0 +1,90 @@
+{
+  "v1": {
+    "quote": {
+      "channel": "b2c_tailor_made",
+      "currency": "USD",
+      "peak": false,
+      "priced_on": "2026-10-14",
+      "rule": {
+        "channel": "b2c_tailor_made",
+        "target_margin": "0.3000",
+        "floor_margin": "0.2000",
+        "peak_uplift_pts": "0.0300",
+        "card_fee_pct": "0.0300",
+        "valid_from": "2026-10-14"
+      },
+      "fx_rates": [],
+      "margin_applied": "0.3000",
+      "lines": [
+        {
+          "net_amount": "600.00",
+          "net_currency": "USD",
+          "net_usd": "600.00",
+          "sell_usd": "895.52",
+          "sell_amount": "895.52"
+        },
+        {
+          "net_amount": "400.00",
+          "net_currency": "USD",
+          "net_usd": "400.00",
+          "sell_usd": "597.01",
+          "sell_amount": "597.01"
+        }
+      ],
+      "net_total_usd": "1000.00",
+      "subtotal": "1492.54",
+      "rounding_increment": "5",
+      "total": "1495.00",
+      "override_total": null,
+      "final_total": "1495.00",
+      "effective_margin": "0.3011",
+      "floor_margin": "0.2000",
+      "below_floor": false
+    },
+    "saved_total": "1495.00"
+  },
+  "v2": {
+    "quote": {
+      "channel": "b2c_tailor_made",
+      "currency": "USD",
+      "peak": false,
+      "priced_on": "2026-10-14",
+      "rule": {
+        "channel": "b2c_tailor_made",
+        "target_margin": "0.3000",
+        "floor_margin": "0.2000",
+        "peak_uplift_pts": "0.0300",
+        "card_fee_pct": "0.0300",
+        "valid_from": "2026-10-14"
+      },
+      "fx_rates": [],
+      "margin_applied": "0.3000",
+      "lines": [
+        {
+          "net_amount": "600.00",
+          "net_currency": "USD",
+          "net_usd": "600.00",
+          "sell_usd": "895.52",
+          "sell_amount": "895.52"
+        },
+        {
+          "net_amount": "520.00",
+          "net_currency": "USD",
+          "net_usd": "520.00",
+          "sell_usd": "776.12",
+          "sell_amount": "776.12"
+        }
+      ],
+      "net_total_usd": "1120.00",
+      "subtotal": "1671.64",
+      "rounding_increment": "5",
+      "total": "1675.00",
+      "override_total": null,
+      "final_total": "1675.00",
+      "effective_margin": "0.3013",
+      "floor_margin": "0.2000",
+      "below_floor": false
+    },
+    "saved_total": "1675.00"
+  }
+}

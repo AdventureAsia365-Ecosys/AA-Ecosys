@@ -1,0 +1,337 @@
+{
+ "area": "CIS admin",
+ "base": "https://aa-cis.lumiguides.it.com",
+ "account": "e2e-claude-code",
+ "deployed": "api/worker dev-1eb2dd0",
+ "date": "2026-10-15",
+ "issues": [
+  {
+   "issue": "AA-791",
+   "pr": 735,
+   "verdict": "PASS_WITH_DEFECTS",
+   "seen": "Label column + Label filter (Any/Labelled/Not labelled/As-is/Light/Heavy/Reject) on Pieces; drawer Label section with as-is/light/heavy/reject, 4 defect classes, minutes, reason, Save label (not clicked); labels_enabled=true (migration 231 live); label GET 200.",
+   "not_verifiable": "Per-attempt gate ledger: 0 of the newest 100 T9 pieces have repair_log[].gate_ledger; newest piece is 2026-10-14 05:36 UTC, before the AA-791 deploy. Attempts section shows the raw repair_log only."
+  },
+  {
+   "issue": "AA-802",
+   "pr": 732,
+   "verdict": "NOT_VERIFIABLE",
+   "seen": "Tour version drawer (Atlas & Hearth, Laos to Vietnam v2, needs_review): in-place edit note, 3 flagged sentences with Cut/Rewrite/Edit, clickable Text sections, Escalations, Cost, Stored content. tenant_copy key present in piece + version detail.",
+   "not_verifiable": "Older-copy notice: no T9 piece (100 scanned) or T2 version (29/29) has older_copy=true and no version has admin_edits; producing one needs an admin edit (write). Tenant-side silent correction needs a write too."
+  },
+  {
+   "issue": "AA-668",
+   "pr": 737,
+   "verdict": "NOT_VERIFIABLE",
+   "seen": "Writer panel is a tenant-portal feature (Social Content Slate), not an admin page. /portal/t7-planning as admin renders the shell but every /api/tenant/* call returns 401 Not authenticated.",
+   "not_verifiable": "Needs a tenant login and a Subject pick (POST /v1/subjects/{id}/pick) + paid T8/T9 run."
+  },
+  {
+   "issue": "AA-819",
+   "pr": "727+730",
+   "verdict": "PASS",
+   "seen": "Tenant 360 header stat 'Publish Limit 20/day (default)'; Settings > Daily publish limit: empty input placeholder 'default 20', 'Current: 20/day (default)', Save limit disabled until edited, enabled after typing 2, 5000 -> inline error and Save disabled; 'Use default' hidden when no override. GET /admin/tenants returns daily_publish_limit (null for all 6 tenants). Nothing saved."
+  }
+ ],
+ "defects": [
+  {
+   "id": "D1",
+   "sev": "Low",
+   "page": "/admin/content-quality?tab=versions @390",
+   "desc": "Page scrolls horizontally by 69 px: the Tour versions toolbar (search + All tenants select) does not wrap. Pre-existing (AA-769, 13/10), not from the S237 PRs.",
+   "evidence": "cq-versions-390-light.jpg"
+  },
+  {
+   "id": "D2",
+   "sev": "Info",
+   "page": "/portal/* as admin",
+   "desc": "RBAC lets admin open /portal ('for support') but every tenant API returns 401, so the page shows 'Couldn't load Social Content'. Pre-existing; blocks admin-side verification of portal features.",
+   "evidence": "portal-t7-planning-as-admin-1440-light.jpg"
+  }
+ ],
+ "matrix": {
+  "overview": {
+   "1440-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 4
+   },
+   "1440-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 4
+   },
+   "390-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 4
+   },
+   "390-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 4
+   }
+  },
+  "cq_pieces": {
+   "1440-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 5
+   },
+   "1440-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 5
+   },
+   "390-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 6
+   },
+   "390-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 6
+   }
+  },
+  "cq_piece_drawer": {
+   "1440-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   },
+   "1440-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   },
+   "390-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   },
+   "390-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   }
+  },
+  "cq_versions": {
+   "1440-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 6
+   },
+   "1440-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 6
+   },
+   "390-light": {
+    "theme": "light",
+    "overflow_px": 69,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   },
+   "390-dark": {
+    "theme": "dark",
+    "overflow_px": 69,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   }
+  },
+  "cq_version_drawer": {
+   "1440-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   },
+   "1440-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   },
+   "390-light": {
+    "theme": "light",
+    "overflow_px": 69,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   },
+   "390-dark": {
+    "theme": "dark",
+    "overflow_px": 69,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 7
+   }
+  },
+  "cq_stats": {
+   "1440-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 5
+   },
+   "1440-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 5
+   },
+   "390-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 5
+   },
+   "390-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 5
+   }
+  },
+  "tenants": {
+   "1440-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 8
+   },
+   "1440-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 8
+   },
+   "390-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 8
+   },
+   "390-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 0,
+    "api_non2xx": [],
+    "api_2xx": 8
+   }
+  },
+  "portal_slate": {
+   "1440-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 5,
+    "api_non2xx": [
+     "401 /api/tenant/me",
+     "401 /api/tenant/v1/slate",
+     "401 /api/tenant/v1/billing",
+     "401 /api/tenant/v1/tours/my-versions?page_size=50",
+     "401 /api/tenant/v1/tours/pool?page_size=1"
+    ],
+    "api_2xx": 0
+   },
+   "1440-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 5,
+    "api_non2xx": [
+     "401 /api/tenant/me",
+     "401 /api/tenant/v1/billing",
+     "401 /api/tenant/v1/slate",
+     "401 /api/tenant/v1/tours/pool?page_size=1",
+     "401 /api/tenant/v1/tours/my-versions?page_size=50"
+    ],
+    "api_2xx": 0
+   },
+   "390-light": {
+    "theme": "light",
+    "overflow_px": 0,
+    "console_errors": 5,
+    "api_non2xx": [
+     "401 /api/tenant/me",
+     "401 /api/tenant/v1/tours/pool?page_size=1",
+     "401 /api/tenant/v1/slate",
+     "401 /api/tenant/v1/billing",
+     "401 /api/tenant/v1/tours/my-versions?page_size=50"
+    ],
+    "api_2xx": 0
+   },
+   "390-dark": {
+    "theme": "dark",
+    "overflow_px": 0,
+    "console_errors": 5,
+    "api_non2xx": [
+     "401 /api/tenant/me",
+     "401 /api/tenant/v1/slate",
+     "401 /api/tenant/v1/tours/pool?page_size=1",
+     "401 /api/tenant/v1/billing",
+     "401 /api/tenant/v1/tours/my-versions?page_size=50"
+    ],
+    "api_2xx": 0
+   }
+  }
+ },
+ "fixtures": {
+  "piece": "ccb0843c-bb8d-4050-a6e9-2a163f8adb4b",
+  "version": "75116f75-588b-49d8-acf8-78dd326cba35",
+  "tenant": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146 (atlas-hearth)"
+ },
+ "data_scan": {
+  "t9_pieces_total": 193,
+  "pieces_scanned": 100,
+  "pieces_with_repair_log": 83,
+  "pieces_with_attempt_gate_ledger": 0,
+  "newest_piece_utc": "2026-10-14T05:36:37Z",
+  "pieces_older_copy": 0,
+  "t2_versions_total": 29,
+  "versions_older_copy": 0,
+  "versions_with_admin_edits": 0,
+  "versions_editable": 12,
+  "labels_enabled": true,
+  "labelled_pieces": 0
+ }
+}
