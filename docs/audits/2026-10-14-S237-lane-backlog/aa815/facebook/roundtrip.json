@@ -1,0 +1,17 @@
+{
+ "date": "2026-10-15",
+ "tenant": "terra-family",
+ "page": {"name": "Đọc và Ngẫm", "page_id": "1322105971158088"},
+ "meta_app": "AA Publish Test (Development mode, use case: Manage everything on your Page; pages_show_list, pages_read_engagement, pages_manage_posts)",
+ "test_piece": {"piece_id": "d67e3178-26e7-4a4d-882c-d6de65ce2593", "channel": "facebook",
+   "note": "cloned from approved LinkedIn piece 863e7012-929f-416c-b785-96e0abdabbaf (no facebook-channel piece existed on Dev); flags.s237_test set"},
+ "connect": {"connected_at": "2026-10-15T10:30:25Z", "last_verified_at": "2026-10-15T10:30:26Z"},
+ "publish": {"published_at": "2026-10-15T10:31:57Z", "post_id": "1322105971158088_1113995851137104",
+   "permalink_url": "https://www.facebook.com/1113997091136980/posts/1113995851137104", "graph_read_back": 200},
+ "logged_out_view": "This content isn't available (dev-mode app: only app roles see the post)",
+ "admin_view_live": "04b-facebook-post-on-page-admin-view.png",
+ "unpublish": {"portal_row": "FACEBOOK UNPUBLISHED Removed 10/15/2026", "toast": "Removed from Facebook.",
+   "graph_after": "400 (#10) Object does not exist (same token read it with 200 before)"},
+ "admin_view_gone": "08-facebook-page-post-gone-admin-view.png (latest page post is 18 April 2017)",
+ "cleanup": ["Facebook disconnected in portal (07)", "secret aa-cis/dev/e2e-facebook-test deleted"]
+}
