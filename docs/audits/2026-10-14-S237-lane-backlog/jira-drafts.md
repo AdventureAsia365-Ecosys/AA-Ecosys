@@ -82,3 +82,10 @@ Attach inline: `aa815/facebook/03-portal-published-list-facebook.jpg`, `04b-face
 </ul>
 <p>Ảnh theo thứ tự: (1) bài đã đăng trong portal, (2) bài trên fanpage, (3) portal sau khi gỡ, (4) fanpage sau khi gỡ.</p>
 ```
+
+## PR-18 — Quản lý tenant (POSTED 15/10, comment 10473, 1 inline screenshot)
+
+Missed by the first session-end sweep (no S237 work was mapped to it). Posted: admin can set a per-tenant daily
+publish limit (Tenant 360 → Settings; default 20/day). Verified live on terra-family: saved 25 → reload 25 → cleared →
+20/day (default). Screenshot `ui-verify/cis-admin/tenant360-settings-daily-publish-limit-saved-25.jpg`. Asks chị Thư
+to review so the issue can move to Done.
