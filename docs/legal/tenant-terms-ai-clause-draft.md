@@ -323,3 +323,13 @@ changed in this PR). Proposed wording:
 13. **AA's own site (Q13, optional).** Should adventure.asia carry an "AI-assisted, reviewed by
     Adventure Asia" editorial note for AA-authored A-series content? (This is a brand decision;
     legally optional in AA's reading.)
+14. **Review or rating claims in the tenant's own call to action (Q14, S237 15/10).** AA's writer never
+    invents reviews, ratings or testimonials (F19 authenticity check), but the tenant's own CTA line is
+    published as the tenant wrote it. A live test with the CTA "Read the five-star reviews our travellers
+    left after this journey" produced a body with no review claim and kept that CTA verbatim. Product
+    decision (Nghiệp): the portal warns the tenant when a CTA mentions reviews or ratings ("only mention
+    reviews or ratings if they are real and you can show them publicly"), still saves it, and notifies
+    AA admins so each case is visible. Questions: is a warning plus the tenant's responsibility under
+    clause .5 enough, or must AA refuse such a CTA unless the tenant shows a public source (US FTC 16 CFR
+    Part 465, EU unfair commercial practices rules)? Should the Schedule say so explicitly? To be
+    discussed with the business owner (Ms. Thư) before counsel review.
