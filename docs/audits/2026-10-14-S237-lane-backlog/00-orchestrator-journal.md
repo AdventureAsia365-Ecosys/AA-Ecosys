@@ -80,3 +80,17 @@ Decisions locked (all recommendations of the cross-lane review):
 - ECS exec output truncation (SSM) → exec_s3out.sh uploads runner stdout to S3 (lesson).
 - Lane X (laneX.sh): 233 CIS #739 → Infra #119 → apply 05:51:59Z; live checks OK (range-predicate view, 16 cols, llm_call_daily + tenant_api_usage_monthly, indexes valid). Code PR #740 in train; then bk-010, Infra 824 (targeted apply with delete guard), 807n, 818 (round-1 apply deferred to NS switch).
 - UI verify workflow wf_dd57cfa2-340 (4 areas × verify + refute, 2 at a time, read-only).
+
+## Part 2 (15/10 afternoon) — the 7 follow-ups after the first report
+- NS Namecheap → Route 53 (Nghiệp). Pre-switch parity 10/10; panel showed extra records: acp/langfuse (not needed, #126 reverted by #127), www/api dead (#128 destroyed), 6 ACM CNAMEs of unused acc1 certs (4 certs deleted). Public resolvers on awsdns; MX/api-cis/aa-cis OK.
+- AA-818: ACM round 1 (6 add) → both certs ISSUED; round 2 (#130, 9 add) → api-booking / api-tripplanner / tripplanner.lumiguides.it.com live. SES: verified + DKIM SUCCESS, MAIL FROM pending (DNS correct); production access requested (PENDING).
+- AA-824 Done: RDS reboot now (t4g.small, pg15 group in-sync, max_connections 181), mig 234 (pg_stat_statements + CONNECTION LIMIT tp 30 / bk 15 / aa_app_user 15), application_name per pool (CIS #742, Booking #15, TP #80) verified in pg_stat_activity.
+- AA-807 N1 live: ROOT_REPO_DOCS_TOKEN (Nghiệp) → DB Schema Dump publish → root PR #73 merged.
+- Mapbox token tripplanner-frontend: + tripplanner.lumiguides.it.com (wildcards refused); /plan map renders on the new domain.
+- AA-815 Done: TasteWP test site (Nghiệp), round trip on terra-family (atlas-hearth key rotated by Nghiệp 07:11Z): publish → live → unpublish → 404 + WP trash → disconnect; FB fake token classified error. Temp secret deleted.
+- AA-819: CTA review warning + admin bell (CIS #743), AA-820 Q14 (root #74); Zalo draft for Ms. Thư kept by Nghiệp.
+- /admin/api-docs (CIS #744; review found + fixed a pre-existing BFF path-traversal with the admin secret attached). CI-only failure: newest FastAPI nests included routers (_IncludedRouter) → route-order test made behavioural.
+- E2E tenant key sync (Infra #131 IAM Describe+PutSecretValue on aa-cis/dev/e2e-tenant/*, CIS #745): live rotate of atlas-hearth → test_secret_sync=synced, login 200.
+- AA-810 Done (maker e2e, self-approve 403, checker Nghiệp, EUR quote 1,410). AA-793 Done earlier.
+- TrueIDC activated the 5 cost allocation tags; Budgets can be created on 005097885195 (data in ~24 h).
+- Session process: aa-session skill 4b + steering — draft Jira updates for Nghiệp's approval at session end (jira-drafts.md).
