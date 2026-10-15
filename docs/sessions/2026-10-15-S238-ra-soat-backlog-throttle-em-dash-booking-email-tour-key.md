@@ -68,7 +68,8 @@ aa802/, pr17/*.docx, jira-drafts.md). **Backlog sống mới:** `docs/backlog/RE
 ## Còn lại (phiên sau) → xem `docs/backlog/README.md`
 - §1 Time-gated: AA-843 (≥16/10), AA-828 Cost Explorer (≥17/10), AA-801 (≥21/10), AA-833 (≥22/10), AA-714 (31/10),
   AA-820 (≤11/11), AA-819 (12/11).
-- §2 Chờ Nghiệp: duyệt nháp Jira S238 (PR-7, PR-17 + upload .docx lên GDrive, PR-12, PR-11); AA-820 luật sư; các
+- Jira S238 đã đăng (Nghiệp duyệt): PR-7 10474, PR-17 10475 (kèm .docx), PR-12 10476, PR-11 10477 — có ảnh/file chèn.
+- §2 Chờ Nghiệp: AA-820 luật sư; các
   quyết định đóng/đổi phạm vi; các lượt chạy tốn tiền.
 - §3 Hàng đợi: AA-703 Cognito Phase 0, AA-817, AA-806, AA-708 CloudFront, AA-802 silent correction, AA-834, AA-712 L4,
   AA-800/777/780, Booking 822/823/679 → 682, AA-832, AA-827, AA-825, AA-751, AA-836/837 (frontend, gộp PR vì giới hạn

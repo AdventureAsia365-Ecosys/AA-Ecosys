@@ -1,9 +1,9 @@
-# S238 — Jira update drafts (NOT posted; Nghiệp approves each before posting)
+# S238 — Jira updates (approved by Nghiệp and POSTED 15/10/2026)
 
 Site `adventure-asia.atlassian.net`, cloudId `78f9a2ea-f228-4ff6-b37d-7079434d2cef`. Post with `contentFormat: html`;
 the mention is `<span data-type="mention" data-user-id="70121:5793bdd5-44b1-4623-97d4-43c35d440869">@thule</span>`.
 Tone (Nghiệp, S238): describe the feature that was built; no "như đã hứa", no trailing "ạ". Every claim below was
-checked live on Dev in S238 (screenshots in this folder). Status: draft.
+checked live on Dev in S238 (screenshots in this folder). Status: posted — PR-7 comment 10474 (3 inline images), PR-17 10475 (.docx), PR-12 10476 (TC-000005 email screenshot), PR-11 10477 (home 1440 screenshot).
 
 ---
 
