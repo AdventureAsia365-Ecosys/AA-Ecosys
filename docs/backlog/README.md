@@ -20,7 +20,7 @@ _Last updated: S238, 15/10/2026 (Claude Code)._
 
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
-- **Jira drafts S238** (`docs/audits/2026-10-15-S238-backlog-audit/jira-drafts.md`): approve → post PR-7, PR-17 (upload the .docx to the GDrive AdventureAsia folder first), PR-14, PR-11.
+- ~~Jira drafts S238~~ — posted 15/10 with inline images/docx: PR-7 (10474), PR-17 (10475), PR-12 (10476), PR-11 (10477).
 - AA-820: engage counsel this week.
 - Close-or-keep decisions from the audit: AA-768 (accept r5 as evidence), AA-771, AA-763, AA-678, AA-681, AA-683, AA-710, AA-772, AA-729 (rewrite or cancel), AA-701 (dead-code chore then cancel).
 - Re-scopes: AA-751 → X6 per-owner job tables; AA-703 / AA-813 / AA-816 rewritten per ADR 0006; AA-679 Done-when → D4.
@@ -33,8 +33,8 @@ _Last updated: S238, 15/10/2026 (Claude Code)._
 | # | Issue | Work | Lane | Size | Status after S238 / next action | Needs Nghiệp |
 |---|---|---|---|---|---|---|
 | 1 | AA-833 | TripPlanner browse still throttles at concurrency 15 + throttle alarms page on every 5-min blip | Infra/ops + TripPlanner | M | Shipped (CIS mig 235, TP #81, Infra #133). 7-day watch: no alarm flips, Throttles≈0 → close ≥22/10. | Approve creating the issue and the targeted alarm apply. Any raise in browse concurrency must stay within the tripplanner CONNECTION LIMIT 30. |
-| 2 | AA-792 | T2 tenant voice: export Trail Pulse / A&H versions for the voice read, then send PR-17 samples to Ms. Thư | CIS T-series | S | PR-17 voice samples ready (docs/audits/2026-10-15-S238-backlog-audit/pr17/*.docx). Waits on Ms. Thư voice read via Jira PR-17. | Voice read of the Trail Pulse and A&H versions. Approve the PR-17 Jira draft. |
-| 3 | AA-831 | Facebook Page connect: tenant guide (promised on PR-7) + correct connect-card help text | CIS portal | S | Shipped + UI-verified (CIS #747/#748). Remaining: post Jira PR-7 guide comment after Nghiệp approves the draft. | Approve creating the issue and the PR-7 Jira draft. |
+| 2 | AA-792 | T2 tenant voice: export Trail Pulse / A&H versions for the voice read, then send PR-17 samples to Ms. Thư | CIS T-series | S | PR-17 voice samples ready (docs/audits/2026-10-15-S238-backlog-audit/pr17/*.docx). Samples posted to Jira PR-17 (comment 10475, .docx attached). Waits on Ms. Thư voice read. | Voice read of the Trail Pulse and A&H versions. |
+| 3 | AA-831 | Facebook Page connect: tenant guide (promised on PR-7) + correct connect-card help text | CIS portal | S | Shipped + UI-verified (CIS #747/#748). PR-7 guide comment posted (10474). Close once Nghiệp confirms. | — |
 | 4 | AA-819 | AUP 2026-11: live evidence for the daily publish limit (429), F19 block path, TripPlanner AI badge audit | CIS portal | S | 429 live evidence done. Remaining: F19 block/rewrite live evidence, TP AI-badge audit, CTA review-claim policy (Nghiệp + Ms. Thư). AUP deadline 12/11. | Policy on review claims in a tenant's own CTA, with Ms. Thư. Decide whether a visible daily-quota counter is wanted. |
 | 5 | AA-820 | Tenant Terms AUP clause: counsel review + Booking high-risk boundary line in CONTEXT.md | Legal/docs | M | No change. Nghiệp: counsel review this week (due 11/11). | Engage counsel this week, approve the clause, and have Ms. Thư notify tenants before 11/11. |
 | 6 | AA-778 | Em-dash: deterministic autofix, strip em-dashes from prompts, residue guard | CIS T-series | S | T9 (#749) + T2 (#752) shipped, live 0 em-dash. Remaining: panel AI-tells ≥5.5 at the next n=20 checkpoint (paid); colon density watch. |  |
