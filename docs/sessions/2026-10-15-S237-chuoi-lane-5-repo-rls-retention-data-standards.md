@@ -95,3 +95,19 @@ artifact "AA Data Platform Standards" (song ngữ Anh–Việt, riêng tư): htt
 - WSL 7,6 GB: tối đa ~3 agent song song (OOM đã giết phiên 3 lần).
 - Lessons mới trong `skill/aa-lessons/lessons.md`: ECS exec cắt output, Vercel Preview thiếu env, concurrency + pool, SET ROLE vs
   session_user, stand-in conftest toàn cục.
+
+## Phần 2 (chiều 15/10) — làm nốt 7 việc sau báo cáo đầu
+- **DNS:** Nghiệp đổi NS Namecheap → Route 53. Trước khi đổi đã so 10/10 bản ghi; bảng Namecheap có thêm `acp`, `langfuse` (không cần, bỏ), `www`/`api` (đích chết, xoá khỏi Route 53), 6 CNAME ACM của chứng chỉ acc1 không dùng (đã xoá 4 chứng chỉ). Mail Zoho, api-cis, aa-cis chạy bình thường sau khi đổi. Lưu ý: auto-renew tên miền đang tắt (hết hạn 04/04/2027).
+- **AA-818:** chứng chỉ ACM ISSUED; custom domain chạy: `api-booking.`, `api-tripplanner.`, `tripplanner.lumiguides.it.com`. SES đã verified + DKIM; MAIL FROM chờ AWS kiểm; đã xin production access (PENDING).
+- **AA-824 Done:** reboot RDS ngay (t4g.small, max_connections 181), migration 234 (pg_stat_statements + giới hạn kết nối theo role), `application_name` cho mọi pool (CIS/Booking/TP).
+- **AA-807 N1:** Nghiệp thêm token GitHub → dump schema tự mở root PR #73 (đã merge).
+- **Mapbox:** thêm domain mới vào token `tripplanner-frontend`; bản đồ chạy trên domain mới (preview nhánh không có map vì Mapbox không nhận `*`).
+- **AA-815 Done:** site WordPress test (TasteWP), vòng đăng → gỡ → bài vào thùng rác → ngắt kết nối; Facebook token giả báo lỗi đúng.
+- **AA-819:** cảnh báo khi CTA của tenant nhắc review/số sao + báo admin; Q14 vào bản nháp điều khoản; tin Zalo cho chị Thư Nghiệp giữ để trao đổi sau.
+- **Trang /admin/api-docs** (admin-only, đọc spec qua BFF). Review phát hiện và sửa lỗ hổng có sẵn: proxy BFF có thể bị `..%2F` leo ra khỏi tiền tố khi kèm admin secret.
+- **Tự đồng bộ key tenant test:** xoay key 4 tenant test → app tự ghi key mới vào `aa-cis/dev/e2e-tenant/<slug>`; đã thử xoay atlas-hearth → đăng nhập 200.
+- **AA-810 Done:** duyệt 2 người live (e2e tạo, tự duyệt bị 403, Nghiệp duyệt, báo giá EUR 1.410).
+- **Billing:** TrueIDC đã bật 5 cost allocation tag; tài khoản tự tạo được Budgets (số liệu sau ~24 giờ).
+- **Quy trình:** thêm bước soạn draft Jira cho Nghiệp duyệt cuối phiên (skill `aa-session` 4b + steering). Draft S237: `docs/audits/2026-10-14-S237-lane-backlog/jira-drafts.md` (PR-17, PR-12, PR-11, PR-14, PR-7) — chưa đăng.
+- **Memory:** cách nhắn Zalo cho TrueIDC (`zalo-message-to-trueidc`).
+- Trạng thái cuối: ECS CIS api :616 / worker :173 (`dev-02f5592`), Booking :15, TP Lambda pool 1 + concurrency 15/5; CIS migration mới nhất 234.
