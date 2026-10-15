@@ -45,6 +45,9 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
    cập nhật cho từng issue theo `aa-jira-update` (tiếng Việt, mention @thule, không mã nội bộ, số liệu lấy trong
    phiên). Đưa Nghiệp duyệt trong chat; **không tự đăng**. Chỉ báo việc đã ship (memory `jira-report-when-done`).
    Ghi các draft vào `docs/audits/<date>-S<nnn>-…/jira-drafts.md` để phiên sau còn thấy cái chưa đăng.
+   Rà **mọi issue Jira chưa Done** (`project in (PR, KAN, CON) AND statusCategory != Done`), không chỉ issue có
+   việc trong phiên: mỗi issue đối chiếu commit/PR của phiên theo chủ đề (S237 bỏ sót PR-18 dù có thêm giới hạn
+   bài đăng/ngày cho tenant). Mỗi câu khẳng định trong draft kèm bằng chứng live + ảnh (memory `jira-claims-need-live-evidence`).
 5. **Log local:** `docs/sessions/<yyyy-mm-dd>-S<nnn>-<slug>.md`.
 6. **KHÔNG dừng môi trường.** Hệ thống để chạy liên tục, ổn định. Agent TUYỆT ĐỐI không tự `cis-stop`/`cis-start`/scale ECS/stop RDS/stop NAT — mọi bật/tắt hạ tầng chỉ Nghiệp làm, hoặc Nghiệp yêu cầu rõ. Cuối phiên để nguyên môi trường đang chạy.
 7. **Tóm tắt 3 dòng** cho Nghiệp: đã làm / còn lại / phiên sau bắt đầu từ đâu.
