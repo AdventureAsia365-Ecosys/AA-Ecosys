@@ -1,0 +1,905 @@
+{
+ "lanes": [
+  {
+   "lane": "cis-backend",
+   "repo": "/home/nghiep/projects/AA-Ecosys/apps/AA-CIS-App",
+   "chain": [
+    {
+     "order": 1,
+     "issue_id": "AA-712",
+     "title": "Place pipeline in CIS: rollout (dry-run, 3-tour trial, migration 228 catalog graph views early, first-country batch at the end)",
+     "what_this_session": "Prerequisites are confirmed live: migration 226 is applied (schema ref, 14:52Z), #726 is deployed (dev-44443ec), Infra #109 is merged, and the secret aa-cis/dev/geoapify exists. (a) At the start, run POST /admin/places/backfill with dry_run=true. Pick the trial country by SQL, not by hardcoding Korea: it must be one country already in the frozen 56-tour TripPlanner set, because the design 03 §7 run (a) parity check needs one (overnight ids, stop count, geocode distance vs TripPlanner <=25 km, embeddings present, cost per tour). (b) Run the 3-tour trial (place_extract -> place_geocode -> tour_graph_build) and post the report on AA-712. (c) Write migration 228 right after the trial starts, not mid-lane, because the TripPlanner lane is blocked on it. It is owned by catalog_owner and uses security_barrier. It adds v_tour_component (with embedding), v_tour_day_route, v_tour_stop, v_tour_leg, v_graph_node, v_graph_edge and v_tour_junction, and only APPENDS located_by/precision to v_destination and v_tour_place (CREATE OR REPLACE cannot reorder 225 columns). Also add the Infra byte copy and the catalog.graph.v1 contract doc. (d) At the end of the lane, once the AA-819/817/793 deploys have shipped, run batch (b): the rest of that same country (<=50). PLACE_PIPELINE_AUTO stays off. The /admin/places UI goes to the portal lane, and the flag flip / cut-over goes to the TripPlanner lane.",
+     "why_now": "High and In Progress. The code, migration 226 and the Geoapify key are all live, so nothing blocks it. The Tour Graph covers 56/892 tours, and TripPlanner Customise (AA-812) plus the Booking catalog wait on it. Migration 228 is the cross-lane unblocker for TripPlanner, so it should land early.",
+     "depends_on": [],
+     "done_when": "(1) The trial report is posted on AA-712. It shows geo.tour_build ok/suspect, geo.tour_place rows and located_by (geoapify/llm) for the 3 tours, parity against the frozen TripPlanner rows, and real cost from shared.llm_call_log (a3_place_* stage keys from 226) plus geo.geocode_call. (2) Migration 228 is applied on Dev through DB Migrate. As the tripplanner and booking roles, SELECT count(*) works on every new catalog.v_* view and returns rows for the 3 trial tours. The schema reference is regenerated. (3) After batch (b), geo.tour_build is ok for every live source_id of that country (rows reported). Issue Done stays gated on the photo covers and the TripPlanner map reading the views.",
+     "size": "L",
+     "llm_cost_usd": "Trial 3 tours ~$0.10-0.30; first-country batch <=50 tours ~$0.75-2.00; Geoapify $0 (free tier)",
+     "needs_nghiep": "Approve the choice of trial country and the paid 3-tour trial, then the batch after reading the report. Approve the Infra PR and the DB Migrate apply of 228. Before batch (b), confirm that TripPlanner extraction stays frozen (no TripPlanner writer runs). Design 03 §7 warns that TripPlanner's ON CONFLICT(lower(name)) upsert can overwrite CIS destination points until TripPlanner slice 6 removes those writers; the alternative is to explicitly accept that risk. PLACE_PIPELINE_AUTO is not decided this session.",
+     "code_evidence": "git log 44443ec8 (#726); Infra 26035d2 (#109, copy of 226); docs/architecture/db-schema-reference.md L2503 (226 applied 14:52Z) and geo.* tables L1042-1200; Secrets Manager aa-cis/dev/geoapify exists (describe-secret, created 14/10); api/routers/admin_places.py (dry_run default true, limit le=50); services/places/geocoder.py (GEOCODER_PROVIDER default geoapify); services/places/enqueue.py (PLACE_PIPELINE_AUTO); docs/audits/2026-10-14-S236-design-review/aa712/03-design.md §2.5 (view list), §7 runs (a)/(b)/(b2) (trial country must be in the 56-tour set; TripPlanner writer overwrite caveat); docs/adr/0007 L41-60 (located_by/precision, catalog.graph.v1); Linear AA-712 S236 comments"
+    },
+    {
+     "order": 2,
+     "issue_id": "AA-801",
+     "title": "T2 judge stability: first live evidence of anchors + brand_fit gate on worker :152 (also AA-792 evidence)",
+     "what_this_session": "Enqueue 2-3 t2_rewrite jobs in the same drain window as the AA-712 trial. Use the tenants that still fail AA-792 (Trail Pulse and WildKind; Terra is already at 8/8/8) x Bhutan tours from the S235 set, so the run is also AA-792 evidence. Read the T2 judge rows in shared.llm_call_log.quality_signal: judge_anchors=true, gate='brand_fit', mission_gated=false, mission_evidence/evidence_verified present, plus retries per job and cost per version. T2_JUDGE_REPEAT is not set on the worker (only ANCHORS and GATE are in modules/ecs/main.tf), so judge_runs/brand_fit_spread are NOT written by natural jobs. Spread is not a criterion here; it was already measured 9/9 in S236. Post the evidence on AA-801 and the per-tenant brand_fit on AA-792. The 1-week watch stays open.",
+     "why_now": "No T2 job has run since worker :152 enabled anchors and the brand_fit gate. AA-793 needs this baseline, and AA-792 (Urgent, In Progress) still lacks brand_fit >=7 for Trail Pulse and WildKind.",
+     "depends_on": [],
+     "done_when": "For each of 2-3 new T2 versions on Dev, the T2 judge llm_call_log row has quality_signal.judge_anchors=true, gate='brand_fit' and mission_gated=false, and the total cost per version (writer + judge rows of the job) is <= $0.30. The job ids and per-tenant brand_fit are commented on AA-801 and AA-792. Done after the 1-week watch (retry rate, brand_fit distribution).",
+     "size": "S",
+     "llm_cost_usd": "~$0.27-0.30/job x 2-3 = ~$0.60-0.90",
+     "needs_nghiep": "Approve about $1 of paid T2 jobs on the test tenants (Trail Pulse, WildKind).",
+     "code_evidence": "services/content_generation/judge_node.py L201-270 (quality_signal on llm_call_log: gate, mission_gated, judge_anchors, mission_evidence; judge_runs only when repeat_mode != default); services/content_generation/brand_fit.py L153-167 runs_signal (brand_fit_spread only inside judge_runs); infra/AA-CIS-Infra/modules/ecs/main.tf L465-466 (T2_JUDGE_ANCHORS=on, T2_JUDGE_GATE=brand_fit, no T2_JUDGE_REPEAT); Linear AA-801 S236 comment (enabled on :151/:152, spread <=1 9/9 offline); Linear AA-792 S235 comment (Trail Pulse 6.5, WildKind 5 below target)"
+    },
+    {
+     "order": 3,
+     "issue_id": "AA-819",
+     "title": "AUP 2026-11 backend: T9 guard against reviews/testimonials/first-person-customer copy + per-tenant daily publish limit",
+     "what_this_session": "Backend half only. (a) T9 writer prompt rule in services/acp_content_writing/prompts.py (+ claim_rules.py): no reviews or testimonials, no first-person customer or traveller voice, no claim of independence. (b) A deterministic check in quality_gates.py (testimonial markers, first-person traveller voice, 'independent review') that triggers a repair, with ledger evidence admin-only (tenant-sees-content-only). (c) Migration 230: shared.tenants.daily_publish_limit integer NOT NULL DEFAULT 20. v1_publish.publish() (L236) counts the tenant's publish_log rows for today and returns 429 once the limit is reached. The admin tenant PATCH in api/routers/admin.py (the AA-766 rate_limit_rpm override pattern, ~L502-517) accepts an override. The portal notice line goes to the portal lane, and the TripPlanner badge audit goes to the TripPlanner lane.",
+     "why_now": "Hard deadline: due 11/11 (AUP effective 12/11). It is M-sized, independent and pure backend, so it goes BEFORE the L-sized AA-817; otherwise an AA-817 overrun would push the dated item out. The two do not collide: the AA-817 slice moves content-piece/facts/T2-version reads, not publish().",
+     "depends_on": [],
+     "done_when": "On Dev: (1) a unit test of the deterministic check, plus one T9 test piece prompted toward a testimonial that shows a gate_ledger entry and a repaired body; (2) admin PATCH sets the test tenant's daily_publish_limit=2 (curl), and the 3rd publish that day returns 429 with the limit message (curl + publish_log count). This replaces the literal '21st publish', which would need 21 approved pieces generated at LLM cost. Deploy rollout COMPLETED. The issue stays open until the portal notice screenshots and the TripPlanner badge audit are done in the other lanes.",
+     "size": "M",
+     "llm_cost_usd": "~$0.10-0.30 (1-2 T9 test pieces)",
+     "needs_nghiep": "Approve migration 230 (Infra PR + DB Migrate). Confirm the default of 20/day. AA-820 legal text is out of this lane.",
+     "code_evidence": "api/routers/v1_publish.py L236 publish() (only checks status approved/held, L287; no volume limit); grep testimonial/first-person in services/acp_content_writing finds nothing (only acp_angle_gate/prompts.py:61 for T8 and content_generation/prompts.py:340 for A1); grep daily_publish_limit finds nothing; api/routers/admin.py L101, L502-517 (AA-766 per-tenant override pattern); Linear AA-819 (Backlog, due 2026-11-11)"
+    },
+    {
+     "order": 4,
+     "issue_id": "AA-817",
+     "title": "RLS for tenant paths: prove the aa_cis_admin mechanism, CI guard, RLS on tenant_tour_versions, move one route group to the aa_app_user pool",
+     "what_this_session": "(1) Read-only one-off ECS task: the pg_auth_members chain of aa_cis_admin, owner vs FORCE behaviour, and a matrix of RLS table x role (aa_cis_admin, aa_app_user, tripplanner, booking, catalog_owner) with master/foreign/empty GUC counts. (2) Inventory of the routes and jobs on app.state.pool vs tenant_pool. Today only Stage 1 (v1_publish list_pending) and Stage 5 (fetch_piece) use the tenant pool. (3) A CI integration test: a non-owner, non-bypass role with a forged app.tenant_id and a query missing its WHERE tenant_id reads 0 foreign rows from each tenant-scoped RLS table. (4) Migration 229, REQUIRED, not 'if needed': gold_aa_internal.tenant_tour_versions has NO RLS at all (no ENABLE ROW LEVEL SECURITY in any migration), so moving T2 version reads to aa_app_user alone isolates nothing. 229 = ENABLE + FORCE + a tenant_isolation policy with NULLIF(current_setting('app.tenant_id', true), '') + GRANT to aa_app_user. (5) Move ONE route group this session: the tenant content-piece list/review reads (acp_shared.content_piece already has RLS, and the Stage 5 precedent is in service.py:1910) behind a new STAGE flag. Turn the flag on in Dev only after Nghiep confirms, following AA-544's per-route report-then-confirm rule. T2 version and facts reads move after 229 is applied, as the next stage (backup if time remains). No ADR unless the connection model changes.",
+     "why_now": "High security issue. Tenant isolation rests only on app WHERE clauses, and the main tenant-owned T2 table has no RLS policy at all, which the scout missed. The AA-544 two-pool scaffolding and the aa-cis/dev/rds-app-user secret already exist. No LLM cost, so it fits while the paid runs drain.",
+     "depends_on": [],
+     "done_when": "(1) The role x table matrix is posted on AA-817 (mechanism confirmed). (2) The integration test runs in the CI Integration Tests job and is green. (3) Migration 229 is applied through DB Migrate. As aa_app_user with a foreign app.tenant_id, gold_aa_internal.tenant_tour_versions returns 0 rows, the owning tenant returns its rows, and an empty GUC returns 0 rows with no error. (4) Flag on for the moved content-piece route: curl as the owning tenant returns 200 with the same shape; the forged foreign tenant gets 0 rows (log used_tenant_pool=true). Deploy rollout COMPLETED. Full Done (every tenant-scoped table through the tenant path) spans later sessions.",
+     "size": "L",
+     "llm_cost_usd": "$0",
+     "needs_nghiep": "Approve migration 229 (Infra PR + DB Migrate). Confirm each route-group flag flip (AA-544 rule: picking the next route is a decision). Approve an ADR only if table ownership is split from the runtime role.",
+     "code_evidence": "api/core/aa544_tenant_pool.py (2-pool design; docstring forbids new routes without the report-then-confirm ritual; STAGE1/STAGE5 flags; secret aa-cis/dev/rds-app-user exists per describe-secret); api/routers/v1_publish.py L47, L138; services/acp_content_writing/service.py L1910; api/migrations: ENABLE RLS present for content_piece (115), facts (145), publish_log (116), published_tours/raw_tours (004/008), but none for gold_aa_internal.tenant_tour_versions (001/107/108/175 only); 115/145 policies use current_setting('app.tenant_id', true); Linear AA-817 scope 1-4"
+    },
+    {
+     "order": 5,
+     "issue_id": "AA-793",
+     "title": "T2 best draft wins + targeted repair + background-fact allowance in grounding (rerun closes AA-792 too)",
+     "what_this_session": "In tenant_pipeline.py (the self-repair loop at L205-270 currently returns 'latest rewrite result') and t2_rewrite_job.py, keep the highest-scoring grounded draft across attempts. Repair rounds edit the previous draft with judge and T3 feedback (t3_repair_feedback L175) instead of a full rewrite. Apply A1's background-fact allowance in T2 grounding, per the writer-source-fidelity policy. Unit tests cover best-draft selection and the repair path. After the deploy, in the final drain window with the AA-712 batch: a 3-pair trial, then the 14 S235 pairs. The same rerun reports per-tenant brand_fit, which is AA-792's Done criterion, so AA-792 does not need a separate rerun.",
+     "why_now": "High. T2 loses passing drafts, and 12/14 versions take 2 full rewrites (about 2.5x writer cost). The judge is now stable (AA-801 anchors), so it can choose the best draft. One rerun also closes AA-792 (Urgent, In Progress), which no lane otherwise owns.",
+     "depends_on": [
+      "AA-801"
+     ],
+     "done_when": "Rerun of the S235 pairs on Dev: escalations <=2/14, cost per version <=$0.20 (llm_call_log), and no saved draft scores below an earlier passing draft (per-attempt judge rows). Per-tenant mean brand_fit is posted on AA-792 for Nghiep's voice read. Deploy rollout COMPLETED.",
+     "size": "M",
+     "llm_cost_usd": "Trial 3 pairs ~$0.60; full 14-pair rerun ~$2.80-4.00",
+     "needs_nghiep": "Approve the paid rerun (3 pairs, then 14). Do the AA-792 voice read of the Trail Pulse / Atlas & Hearth versions.",
+     "code_evidence": "services/acp_produce/tenant_pipeline.py L175 t3_repair_feedback, L205-221 (returns 'latest rewrite result'; no best-draft selection); services/jobs/t2_rewrite_job.py (356 lines, no best-draft logic); Linear AA-793 scope (tenant_pipeline.py:74-89,226-270; t2_rewrite_job.py:208,223; graph.py:944,1102); Linear AA-792 S235 comment (Done needs brand_fit >=7 per tenant + voice read)"
+    }
+   ],
+   "backup": [
+    {
+     "order": 6,
+     "issue_id": "AA-817",
+     "title": "AA-817 stage 2: move T2 version + facts tenant reads to the aa_app_user pool",
+     "what_this_session": "After migration 229 is applied: add a STAGE flag for the tenant T2 version reads (v1_tours) and the tenant facts reads, wire them to acquire_scoped_conn, flip the flags after Nghiep confirms, and verify with a forged tenant.",
+     "why_now": "It finishes the highest-value part of AA-817 (T2 versions are the largest tenant-owned table) once 229 exists. $0 LLM, a good fill-in while paid runs wait for approval.",
+     "depends_on": [
+      "AA-817"
+     ],
+     "done_when": "Curl as the owning tenant returns 200 with the same shape. The forged foreign app.tenant_id gets 0 rows on tenant_tour_versions and on facts (scope='tenant'); the log shows used_tenant_pool=true. Deploy rollout COMPLETED.",
+     "size": "S",
+     "llm_cost_usd": "$0",
+     "needs_nghiep": "Confirm each flag flip (AA-544 rule).",
+     "code_evidence": "api/core/aa544_tenant_pool.py; api/migrations/145_acp_shared_facts.sql L69-70 (policy allows scope='platform'); tenant_tour_versions has no RLS before 229"
+    },
+    {
+     "order": 7,
+     "issue_id": "AA-679",
+     "title": "Catalog sync, CIS side: catalog.outbox + v_tour_outbox for Booking (contract catalog.tour.v1.1)",
+     "what_this_session": "CIS half only. Migration with catalog.outbox (contract, version, idempotency_key UNIQUE, emitted_at, source_id, change) and a catalog.v_tour_outbox view owned by catalog_owner and granted to booking. Events are emitted in the same transaction as the master publish/update/trash paths. A backfill endpoint emits 'published' for the current v_tour set. The contract is a NEW additive file docs/contracts/catalog.tour.v1.1.json; v1 is already merged (#65) and says the events come in an additive minor.",
+     "why_now": "Fill-in work. Booking is NOT blocked: the v1 contract says consumers poll catalog.v_tour by content_hash until the outbox exists, so this ranks below the chain.",
+     "depends_on": [],
+     "done_when": "On Dev, trashing and republishing a test tour writes the matching events (rows shown). The booking role can SELECT catalog.v_tour_outbox and nothing else in CIS. Rerunning the backfill creates no duplicates.",
+     "size": "M",
+     "llm_cost_usd": "$0",
+     "needs_nghiep": "Approve the migration (Infra PR + DB Migrate) and the v1.1 contract shape.",
+     "code_evidence": "docs/contracts/catalog.tour.v1.json L5, L32 (outbox events = later additive minor; poll until then); Linear AA-679 S236 comment (225 live, remaining = outbox + Booking consumer); no outbox code in CIS"
+    }
+   ],
+   "new_issues_needed": [],
+   "changes_vs_scout": [
+    "AA-712: the trial and first-batch country is no longer hardcoded Korea. Design 03 §7 run (a) requires a country already in the frozen 56-tour TripPlanner set for the parity check; it is chosen by SQL at dry-run time.",
+    "AA-712: migration 228 moves from mid-lane to right after the trial starts, because the TripPlanner lane is blocked on it. Added the constraint that 228 may only append columns to the 225 views.",
+    "AA-712: added a Nghiep confirmation before batch (b). Design 03 §7 says TripPlanner's lower(name) upsert can overwrite CIS destination points until TripPlanner slice 6 removes its writers, so either TripPlanner extraction stays frozen or the risk is accepted. Prerequisites verified live: 226 applied (schema ref L2503), Infra #109 merged, secret aa-cis/dev/geoapify exists.",
+    "AA-801: fixed done_when. quality_signal lives on shared.llm_call_log judge rows, not on the version, and brand_fit_spread/judge_runs are only written when T2_JUDGE_REPEAT is set. The worker has only ANCHORS and GATE (modules/ecs/main.tf L465-466), so the spread criterion is dropped in favour of judge_anchors/gate/mission_gated flags.",
+    "AA-801: test tenants changed from WildKind/Terra to Trail Pulse/WildKind, the tenants still failing AA-792 (Terra is already 8/8/8), so the same paid jobs give AA-792 evidence.",
+    "AA-819 moves ahead of AA-817 and its depends_on AA-817 is removed. AA-819 has a hard 11/11 deadline and is M-sized, while AA-817 is L. The v1_publish.py conflict is not real because the AA-817 slice does not move publish().",
+    "AA-819: done_when uses an admin override limit of 2 with a 429 on the 3rd publish, instead of a literal 21st publish that would need 21 LLM-generated approved pieces.",
+    "AA-817: migration 229 is REQUIRED, not 'if grants missing'. gold_aa_internal.tenant_tour_versions has no RLS at all in any migration, so moving T2 version reads to aa_app_user without ENABLE/FORCE/policy would isolate nothing.",
+    "AA-817: cut to the mechanism matrix + CI test + 229 + ONE route group (content-piece reads, already under RLS). T2 version and facts reads move to the backup stage 2. Each flag flip needs Nghiep's confirmation, per the AA-544 module rule.",
+    "AA-793: its 14-pair rerun is explicitly also AA-792's (Urgent, In Progress) Done evidence (per-tenant brand_fit + Nghiep voice read), so AA-792 needs no separate rerun or lane slot.",
+    "Backup: AA-795 is replaced by AA-817 stage 2 (higher security value, $0). AA-795's premise was wrong: brand_fit.py's spread block is written to llm_call_log only in median3 mode, not persisted per version, so it would need a new column and is not a quick fill-in.",
+    "Backup AA-679: the contract is a new additive file catalog.tour.v1.1 (v1 is already merged in #65), and Booking is not blocked because v1 tells consumers to poll v_tour by content_hash. It is ranked as fill-in only."
+   ],
+   "notes": "Verification sources: CIS git log (HEAD 44443ec8), Infra git log (26035d2, #109 merged), migrations dir (latest 227, so 228/229/230 are free), docs/architecture/db-schema-reference.md (226 applied 14:52Z), read-only describe-secret for aa-cis/dev/geoapify and aa-cis/dev/rds-app-user (both exist), and Linear AA-712/801/817/819/793/792/679 with their comments. None of the 5 chain items is already done in code. No Linear issues were created or modified, no files were changed, and no AWS writes were made.\n\nExecution order for one long thread. (A) AA-712 dry-run, then the 3-tour trial, plus 2-3 AA-801 T2 jobs (Trail Pulse/WildKind), about $1-1.2. (B) While those drain, write migration 228 and open its Infra PR; this unblocks the TripPlanner lane. (C) AA-819, then AA-817. Merge and deploy only when shared.job is empty. (D) AA-793 code and deploy. (E) Final drain window: the first-country batch for AA-712 (<=50, ~$0.75-2) and the AA-793 rerun (3 pairs, then 14, ~$3.4-4.6). Total paid LLM is about $5-8 if every step is approved.\n\nMigrations: 228 views (AA-712), 229 RLS+grants on tenant_tour_versions (AA-817), 230 daily_publish_limit (AA-819). None auto-merges. Regenerate db-schema-reference.md after each one.\n\nCross-lane: TripPlanner owns the cut-over and needs 228 applied; it must also confirm its extraction writers stay frozen during the AA-712 batch. Portal owns the AA-819 notice UI, the admin field for daily_publish_limit, and the /admin/places page.\n\nOpen risk: the AA-801 T2 judge stage key comes from stage_for(state, 's1_judge') through the migration 219 T-series keys; read the actual stage name from llm_call_log rather than assuming 't2_judge'."
+  },
+  {
+   "lane": "cis-portal",
+   "repo": "/home/nghiep/projects/AA-Ecosys/apps/AA-CIS-App",
+   "chain": [
+    {
+     "order": 1,
+     "issue_id": "AA-819",
+     "title": "[AUP 2026-11] Tenant AI notice at review/publish, T9 guard against reviews/testimonials/first-person-customer copy, per-tenant daily publish limit",
+     "what_this_session": "CIS parts 1-3 only (part 4, the TripPlanner AI badge audit, goes to the TripPlanner lane). (a) Portal: one neutral line, using the issue wording, at T10 review (ReviewDrawer/ReviewList), at T11 publish (PublishPendingList) and on the My Catalog export (CatalogTab CSV/XLSX/DOCX). No gate or score wording. (b) Publish limit, shipped in two layers so the guard is live before 11/11 even if migration approval lags. First, v1_publish.publish() counts the tenant's publish_log rows for the current UTC day with status in ('requested','published'). AA-726 idempotent replays and 409 in-flight retries do not count. The 21st returns 429 with a clear message, using a code default of 20. Second, a migration (next free CIS number after 228) adds shared.tenants.daily_publish_limit int NULL as a per-tenant override. The Tenant 360 Settings tab (#720, the same PATCH route as rate_limit_rpm) edits it, audited. (c) T9: a prompt rule, plus a deterministic check in services/acp_content_writing/quality_gates.py for testimonial/review framing: attributed quotes ('— Sarah, UK'), star ratings, 'verified review', guest-says patterns, first-person traveller voice ('I booked') and independence claims. The check must not flag the brand's own 'we/our team' voice. Flagged sentences are cut or repaired inside the existing write/check loop, with unit tests and a fault fixture.",
+     "why_now": "Hard deadline 11/11 (Anthropic AUP effective 12/11 on Bedrock acc3), High priority, due date set in Linear. Confirmed nothing exists: grep finds no notice, no publish limit and no testimonial check. The only related line is 'Never invent ... testimonials' in services/acp_angle_gate/prompts.py L61. The code-default limit removes the dependency on an Infra approval for the deadline.",
+     "depends_on": [
+      "AA-CIS-Infra DB Migrate for the daily_publish_limit override column (Nghiep approval). The code default of 20 ships without it"
+     ],
+     "done_when": "Dev portal screenshots (desktop + mobile) show the notice at T10 review, T11 publish and catalog export. One T9 test piece, prompted toward a testimonial, shows the new check firing in gate_ledger/repair_log, and its final content_text has no testimonial (DB query). On a test tenant with the override set to 1 (or default 20 before the migration), curl of the second (or 21st) POST /v1/publish-log/{piece_id}/publish returns 429, and a replayed publish of the same revision does not count. Admin Tenant 360 shows and saves the override. shared.schema_versions lists the new migration.",
+     "size": "L",
+     "llm_cost_usd": "~$0.10-0.30 (2-3 T9 test writes on a test tenant)",
+     "needs_nghiep": "Approve the migration (Infra PR plus DB Migrate check/apply). Confirm the default of 20/day and UTC-day counting. Confirm the notice wording. Legal terms stay in AA-820.",
+     "code_evidence": "api/routers/v1_publish.py L235 publish() has no limit and claims an idempotency row via services/acp_publish/idempotency.py; docs/architecture/db-schema-reference.md L1877 shared.tenants has rate_limit_rpm and posts_per_week but no publish cap; frontend/app/admin/tenants/page.tsx L47 (rate_limit_rpm already edited, #720 8c0af09c); services/acp_content_writing/quality_gates.py has no testimonial gate; services/acp_angle_gate/prompts.py L61; api/migrations latest is 227 (228 claimed by AA-712)"
+    },
+    {
+     "order": 2,
+     "issue_id": "AA-815",
+     "title": "[Portal] Facebook connect UI + tenant self-unpublish",
+     "what_this_session": "(a) Portal Connections: a FacebookConnect component next to WordPressConnect. The tenant pastes page_id and a Page Access Token. It shows status and last_verified_at/last_verify_error, and a Test button calls the existing GET/POST /v1/integrations/facebook and /facebook/test. Record in the implementation notes that the backend takes a pasted token, not OAuth. (b) Unpublish must actually remove the post. Today DELETE /v1/publish-log/{id} only sets publish_log.status='unpublished', and the post stays live on the channel. Add delete_post(external_id) to WordPressAdapter (DELETE /wp-json/wp/v2/posts/{id}, which moves the post to trash) and to FacebookAdapter (Graph DELETE /{post_id}). Call it from the unpublish route before flipping the row, using publish_log.external_id. On a remote failure, return a clear error and leave the row as published. Then wire an Unpublish action with a confirm step into My Content / the publish log. (c) Disconnect with DELETE /v1/integrations/{wordpress|facebook}: delete the shared.tenant_integrations row and overwrite the secret with an empty tombstone via PutSecretValue. Do not call DeleteSecret, because the ECS task role has no DeleteSecret on acp/cms/* or acp/social/*. Audit the action and use acquire_scoped_conn so it survives AA-817 RLS. (d) Delete portal/page.tsx.bak.old and the stale 'static mockup' comment in WordPressConnect.tsx.",
+     "why_now": "The backend is mostly there, and this closes the T11 self-serve loop ('Cheap, now' in the S236 design review). Facebook pieces already appear in the pending list, but tenants cannot connect Facebook. Without the remote delete, a portal Unpublish button would tell tenants a post is gone while it is still public, a trust and AUP-adjacent problem.",
+     "depends_on": [],
+     "done_when": "On Dev a test tenant connects a test Facebook Page in the portal (status shows verified), publishes one piece, then unpublishes it from the portal. The post is gone from the Page / WordPress (screenshot or curl of the post URL showing 404/trash), and publish_log moves from published to unpublished with unpublished_by='tenant:<id>'. Disconnect makes GET /v1/integrations/facebook return connected=false. If no FB test Page is available, verify unpublish end to end on the WordPress test site and show the FB connect test returning its classified error.",
+     "size": "M",
+     "llm_cost_usd": "$0",
+     "needs_nghiep": "Provide a test Facebook Page plus Page Access Token (Meta developer app), or accept WordPress-only evidence for unpublish. Confirm the WordPress test app password can delete posts.",
+     "code_evidence": "api/routers/v1_publish.py L76-104: unpublish() only UPDATEs publish_log, with no remote call; services/acp_s4_blog/cms/wordpress.py and services/acp_publish/facebook.py have create_post/find_* but no delete_post; acp_shared.publish_log has external_id (db-schema-reference L487); api/routers/v1_integrations.py L327/344/398 (FB GET/POST/test, token paste, no DELETE); infra/AA-CIS-Infra/modules/ecs/main.tf L139-160 (task role has only CreateSecret/PutSecretValue on acp/cms/* and acp/social/*); frontend PublishPendingList.tsx has no unpublish; portal/page.tsx.bak.old exists"
+    },
+    {
+     "order": 3,
+     "issue_id": "AA-668",
+     "title": "[Portal] Writer panel — Goal → Angle → auto-write with live streaming in a right-side drawer (Social Content slice)",
+     "what_this_session": "Social Content only. Split tour rewrite (CatalogDrawer LiveWriter) into a follow-up if time runs out. (1) Fix the actual extra CTA step first, in a small separate PR. AngleGateWizard's write-step effect calls setNeedsCtaInput(true) whenever req.cta is null, so the tenant is asked for a CTA even when the brand has default_cta. The server would fill it (service.py L917-919, AA-771). Instead, always call writeContent() and show the inline CTA field only on the server's 422 MissingCTAError. (2) Move the wizard from its inline expansion under the Slate into the kit Drawer (full-screen sheet on mobile): context header, then Goal cards (8), then Angle cards (3), then auto-write on angle pick, then LiveWriter steps/stream with Retry on failure, then actions (copy/export, publish, save, regenerate angle). Closing the panel keeps the job running and a toast fires on completion. The panel shows the AA-819 AI notice beside its publish/export actions.",
+     "why_now": "High, and this is Ms. Thu's direct UX feedback on the main tenant content loop. No migration and no backend change. Part 1 is a one-line behaviour fix with immediate value, so the panel refactor can land second.",
+     "depends_on": [
+      "AA-819 (notice component reused in the panel)"
+     ],
+     "done_when": "On a tenant whose brand has default_cta and whose request has cta NULL, choosing an angle starts writing with no CTA prompt (Playwright). Playwright on the Vercel preview at 1440x900: pick segment, goal, angle, see streamed text, piece saved in My Content, with no page scroll. Mobile sheet screenshot. aa-ui-verify passes (light/dark, console clean).",
+     "size": "L",
+     "llm_cost_usd": "~$0.20-0.50 (2-3 T8 angle + T9 write runs on a test tenant)",
+     "needs_nghiep": "none (optional: Ms. Thu looks at the preview)",
+     "code_evidence": "frontend/app/(tenant)/portal/_components/AngleGateWizard.tsx L466-468 ('if (req.cta) writeContent(...) else setNeedsCtaInput(true)', which ignores brand default_cta) and L415 (422 fallback already handled); services/acp_content_writing/service.py L917-925 (cta = req.cta or override or brand default_cta); frontend/app/_kit/Drawer.tsx exists; LiveWriter.tsx already renders job steps"
+    },
+    {
+     "order": 4,
+     "issue_id": "AA-791",
+     "title": "[Gate eval data] Persist every attempt's gate ledger + 'Label' action on Content Quality",
+     "what_this_session": "Parts 1-2 only. (1) In the T9 loop, the repair_log entry already appended on each failed attempt (service.py L1485) also gets that attempt's full gate_ledger (verdict/gate/blocking/violations only, trimmed), so there is no schema change. (2) A migration content_piece_label (piece_id FK, label as-is/light/heavy/reject, reason, labelled_by, labelled_at), bundled into the same Infra PR as AA-819's migration. Add admin-only POST/GET /admin/content-quality/pieces/{id}/label, a Label control in PieceDrawer, and a label column plus filter in the Content Quality DataTable. Part 3 (the 30-piece fault-injection CI set) stays with the CIS quality lane.",
+     "why_now": "High. Lets AA-783 human calibration happen in the UI instead of a spreadsheet, and gives AA-801/790 per-attempt data. Verified as not started: no label route, no label table, and repair_log entries store only the first failing gate plus feedback, not the ledger.",
+     "depends_on": [
+      "AA-CIS-Infra DB Migrate for content_piece_label (same PR/approval round as AA-819)",
+      "Coordination with the CIS quality lane (AA-792/801/790) on the T9 loop file"
+     ],
+     "done_when": "On Dev an admin labels a piece in the Content Quality drawer. GET /admin/content-quality/pieces/{id}/label returns the label, the table filter works (screenshot), and the row is in content_piece_label. A T9 piece written after deploy that needed 2+ attempts has a gate_ledger inside each repair_log entry (DB query).",
+     "size": "M",
+     "llm_cost_usd": "$0 (uses pieces written in AA-819/AA-668 tests)",
+     "needs_nghiep": "Approve the content_piece_label migration (same Infra PR as AA-819).",
+     "code_evidence": "services/acp_content_writing/service.py L1485-1490 (repair_log entry has gate_targeted/violations/feedback, no ledger); api/routers/admin_content_quality.py routes L123-938 have no label endpoint; grep content_piece_label finds nothing; frontend/app/admin/content-quality/PieceDrawer.tsx; acp_shared.content_piece gate_ledger/repair_log jsonb (db-schema-reference L381-382)"
+    },
+    {
+     "order": 5,
+     "issue_id": "AA-802",
+     "title": "[T2/T9] Silent correction — remaining slice (published-copy indicator + T2 path)",
+     "what_this_session": "T9 in-place edit already exists (sentences/apply UPDATEs content_text and writes a before/after audit row), so do only what remains. (a) In the admin PieceDrawer, when the edited piece is already published or exported, show 'tenant has an older copy (WordPress not re-synced)' using the published flag the apply route already computes. (b) The T2 path: add admin sentence edit/apply for gold_aa_internal.tenant_tour_versions, with an audited before/after and the same section text the tenant API reads, wired into the Content Quality tour-versions drawer. (c) Extend the AA-796 key-walk test to the touched tenant responses. The optional 'updated version available' tenant marker is deferred unless trivial.",
+     "why_now": "High, and it makes the AA-770 'tenant always receives content' rule real for T2. Promoted over AA-671 (Medium, needs a product decision and backend filters). No migration and no LLM spend.",
+     "depends_on": [],
+     "done_when": "On Dev an admin edits a sentence in a held, unpublished T2 tour version. The tenant tour API (curl) returns the repaired text, the audit row has before/after, and the key-walk test is green. For a published T9 piece the admin drawer shows the 'older copy' warning (screenshot).",
+     "size": "M",
+     "llm_cost_usd": "$0 (an AI rewrite suggestion is ~$0.01 per sentence if used)",
+     "needs_nghiep": "none",
+     "code_evidence": "api/routers/admin_content_quality.py L416-500 (sentences/apply UPDATE content_text + write_audit_log, computes published, 'WordPress is not re-synced'); L634/L682 tour-versions are GET only, with no apply; gold_aa_internal.tenant_tour_versions (db-schema-reference L1258)"
+    }
+   ],
+   "backup": [
+    {
+     "order": 6,
+     "issue_id": "AA-671",
+     "title": "[Portal] Browse Tours redesign (Marketplace issue) — kit card grid + detail drawer over the existing pool API",
+     "what_this_session": "Re-scoped. The page to rebuild is PoolTab (/portal/t1-rewrite, 'Browse Tours', 372 lines, hand-rolled), not MarketplaceTab. MarketplaceTab is a read-only rollup of the tenant's own versions (v1_marketplace) with no master catalog in it. Rebuild PoolTab as a kit card grid (cover, country, duration, 'in my catalog' from already_rewritten) with the filters the API already supports (search, country, duration_min/max, sort) and a kit Drawer showing the itinerary summary, highlights and a quota-aware rewrite CTA. Activity and intensity filters need backend fields that /v1/tours/pool lacks, so defer them until AA-712's catalog views land. Recommend folding the Marketplace rollup into My Catalog Tours (one catalog, two views).",
+     "why_now": "Pure frontend for this slice, $0 and no migration. A safe filler if approvals for the chain stall.",
+     "depends_on": [],
+     "done_when": "On the Vercel preview a test tenant filters the grid, opens the drawer and requests a rewrite, and the card flips to 'in my catalog' without a reload. Desktop/mobile/dark screenshots; Playwright smoke for /portal/t1-rewrite.",
+     "size": "M",
+     "llm_cost_usd": "$0 (one T1 rewrite if exercised, from quota)",
+     "needs_nghiep": "Decide what happens to the Marketplace page (fold it into My Catalog Tours, recommended, or keep it). Ideally a quick check with Ms. Thu.",
+     "code_evidence": "frontend/app/(tenant)/portal/_components/MarketplaceTab.tsx header (read-only rollup, 'Deliberately no action buttons'); PoolTab.tsx + PoolFilters.tsx (country/duration only); Sidebar.tsx L29 'Browse Tours' -> /portal/t1-rewrite; api/routers/v1_tours.py L51 browse_pool params (country, search, duration_min/max, sort; no activity/intensity)"
+    },
+    {
+     "order": 7,
+     "issue_id": "NEW",
+     "title": "[Admin] Self-operation buttons — regenerate angles, stuck-run recovery, segment research run (wire existing endpoints)",
+     "what_this_session": "Wire existing endpoints into kit UI: GET /admin/acp/stuck-runs as a panel on Jobs/Tenant 360 with a recover action, POST /admin/content-quality/requests/{id}/regenerate-angles in the request drawer, and a segment research trigger with a cost preview. Admin-only in lib/rbac.ts.",
+     "why_now": "The S236 design review lists 'admins still need SQL/scripts' as the main CIS gap. The endpoints exist, and grep confirms no frontend calls them.",
+     "depends_on": [],
+     "done_when": "On Dev an admin sees the stuck-runs list and regenerates angles for one request: a new shared.job row appears and the angles change. The buttons are hidden for reviewer/content roles (screenshot per role).",
+     "size": "M",
+     "llm_cost_usd": "~$0.05 per angle regeneration; segment research priced per run (preview before confirm)",
+     "needs_nghiep": "Approve creating the Linear issue (CIS Portal project; check the per-project quota first).",
+     "code_evidence": "api/routers/admin_pipeline.py L5015 GET /acp/stuck-runs; api/routers/admin_content_quality.py L517 regenerate-angles; grep for stuck-runs/regenerate-angles in frontend/app returns nothing"
+    }
+   ],
+   "new_issues_needed": [
+    {
+     "title": "[Admin] Self-operation buttons — segment research run, regenerate angles, stuck-run recovery (wire existing endpoints)",
+     "reason": "Only needed if backup #7 is used. The endpoints exist (admin_pipeline.py /acp/stuck-runs, admin_content_quality.py regenerate-angles) with no UI and no tracking issue."
+    }
+   ],
+   "changes_vs_scout": [
+    "AA-815 corrected: DELETE /v1/publish-log/{id} only sets publish_log.status='unpublished'. Neither WordPressAdapter nor FacebookAdapter has delete_post, so a portal Unpublish button would leave the post live while telling the tenant it was removed. Added remote delete via publish_log.external_id (WP trash, FB Graph DELETE) before the row flips.",
+    "AA-815 disconnect changed: the ECS task role only has CreateSecret/PutSecretValue on acp/cms/* and acp/social/* (infra modules/ecs/main.tf L139-160), so 'delete the Secrets Manager secret' would fail without an Infra IAM change. It now deletes the row and tombstones the secret via PutSecretValue, with no Infra dependency.",
+    "AA-668 corrected: the CTA problem is still in the frontend. AngleGateWizard L466-468 prompts for a CTA whenever req.cta is null and never reaches the server-side brand default_cta fallback (AA-771). Added a small first PR that always calls write and relies on the 422 fallback. The panel refactor is limited to Social Content; tour rewrite goes to a follow-up.",
+    "AA-671 moved to backup and re-scoped: MarketplaceTab is a read-only rollup of the tenant's own versions, not the master catalog. Master browse/add-to-catalog lives in PoolTab (/portal/t1-rewrite 'Browse Tours'). /v1/tours/pool has no activity/intensity filters, so it is not pure UI, and it still needs a product decision.",
+    "AA-802 promoted into the chain at #5 (High vs AA-671 Medium; no migration, no decision needed). Confirmed T2 tour-versions have only GET routes in admin_content_quality.py, so the T2 apply path is real work. The T9 in-place edit already exists.",
+    "AA-819 de-risked for the 11/11 deadline: the daily limit ships with a code default (20) counting publish_log rows (requested/published, UTC day, replays excluded), and the migration column becomes a nullable per-tenant override. The AUP guard no longer waits on Infra approval. Added the notice on the My Catalog export (CatalogTab CSV/XLSX/DOCX) and a requirement that the testimonial check not flag the brand's own 'we' voice.",
+    "AA-791 kept with explicit depends_on (Infra DB Migrate, coordination with the quality lane). Confirmed repair_log entries store only gate_targeted/violations/feedback (service.py L1485), not the ledger.",
+    "depends_on now names the cross-repo Infra DB Migrate approvals for AA-819 (override column only) and AA-791.",
+    "Dropped the proposed new issue '[Admin] Editable Pipeline Gates thresholds': it is not for this session, and Linear is near the per-project quota. Mention it in the session log instead."
+   ],
+   "notes": "Verified on master 44443ec8 (CIS), read-only. Migration numbering: CIS api/migrations ends at 227 and AA-712 claims 228. AA-817 (RLS, security lane) and AA-807 may also claim numbers, so agree on numbers across lanes before opening the single Infra PR (db/migrations/cis/ copies of AA-819 override + AA-791 content_piece_label, plus the app-side api/migrations copies). Open that Infra PR first. AA-819's code-default limit, AA-815, AA-668 part 1 and AA-802 need no migration and can merge while it waits. Conflict risk: the T9 loop (services/acp_content_writing/service.py + quality_gates.py) is touched by AA-819(c) and AA-791(1); keep the commits small and tell the quality lane (AA-792/801/790). New tenant endpoints (disconnect, publish-limit count) should use acquire_scoped_conn so they survive AA-817 RLS. The existing unpublish/publish routes still use pool.acquire and are left for the RLS lane. Deploy guard: no backend merge while shared.job has queued/running jobs, so time merges around AA-712 place_* trial jobs. Vercel-only PRs are not blocked. Paid LLM for the chain is about $0.30-0.80, all on test tenants. Every UI item needs aa-ui-verify (preview, light/dark, mobile) before Done. ADR 0006: AA-813/AA-816 stay out until Cognito Phase 0 (#105 apply after AA-818/AA-811); no new password-based login paths. Kiro mode is off."
+  },
+  {
+   "lane": "tripplanner",
+   "repo": "/home/nghiep/projects/AA-Ecosys/apps/AA-TripPlanner-Web",
+   "chain": [
+    {
+     "order": 1,
+     "issue_id": "AA-805",
+     "title": "[TripPlanner] AI Phase 0: collect the missing Done-when evidence and close",
+     "what_this_session": "Evidence only, plus at most one small PR. (a) Cache-hit visibility: show the SQL summary over tripplanner.narration_cache (rows, sum(hits), max(last_hit_at)) by running ECS exec as the tripplanner role, and add a short 'how to read cache hits' section to the README. Do not add a new public endpoint, because the browse/assembly APIs only have the edge key. (b) Owner check and cap shown live: call /narrate with a foreign session and get 403, and read llm_gateway.budget_status / spend_budget rows for the tp_* stages. Today only '400 empty_trip' has been verified live. (c) The 30-query labelled set goes in backend/tests/fixtures/search_labelled_30.json. Label it with the Claude panel, then run it against live /browse/search and confirm that no returned tour is inactive or soft-deleted. Save the report under docs/audits/2026-10-14-S237-*/. (d) Booking E2E: Bhutan 7-day apply-route, then Send to advisor. Read the Booking trip case legs in ascending day order, and read the outbox payload version (1.1).",
+     "why_now": "Code shipped in #71 and the throttle went live in Infra #103 (Linear comment 14/10). What is missing is evidence, so this is the cheapest High close. The owner-check 403 and the spend cap have never been shown live, and the scout left them out.",
+     "depends_on": [
+      "Booking intake poller live on aa-booking-dev-api:6 (AA-681). The Booking lane must not redeploy intake during the E2E."
+     ],
+     "done_when": "Live: the narration_cache summary shows hits>0 after two identical /narrate calls; /narrate with a foreign session returns 403; budget_status is shown for tp_* stages; the 30-query run returns 0 inactive or deleted tours (report in docs/audits); the new Booking trip case has legs in ascending day order and the outbox payload has version 1.1. An evidence comment is on AA-805 and Done is set by hand.",
+     "size": "S",
+     "llm_cost_usd": "~$0.05 (30 Cohere query embeds <$0.01 + 1-2 tp_compose narrations ~$0.02)",
+     "needs_nghiep": "none",
+     "code_evidence": "backend/assembly/narration_cache.py:58 (hits/last_hit_at written, no read surface); backend/assembly/handler.py:190-231 (owner check, budget_status); Linear AA-805 comments 14/10 (S236: remaining = throttle [now done], Booking E2E, cache-hit visibility, 30-query set); git 28b21e3 (#71)."
+    },
+    {
+     "order": 2,
+     "issue_id": "AA-712",
+     "title": "[ADR 0007 slice 6a] Remove TripPlanner extraction writers (shared.destinations / place tables), with no dependency on CIS 228",
+     "what_this_session": "Remove the writer ops tour_days, components, relink, tour_graph and prune from backend/extraction/lambda_entry.py. Keep the read-only ops list, orphans and neighbours if still used. Delete invoke_tour_days.py, locate.py, regeocode_outliers.py, backfill_country.py, backfill_embeddings.py, run.py, run_deterministic.py and the geocode.py upsert path. First move the helpers that readers still import, set_catalog_tenant and fetch_catalog from extraction/tour_days.py, into backend/shared/. They are imported by browse/search.py:27, browse/routes.py:141 and assembly/coverage.py:130. Check assembly/handler.py:470, which calls run_extraction_event. Add a guard test that no module under backend/ contains INSERT/UPDATE on shared.destinations or the tripplanner place tables. Update CONTEXT.md and the implementation notes.",
+     "why_now": "The design (03-design.md §7, 'Global lower(name) index') says the CIS backfill real runs should wait for this writer removal. Until it lands, a TripPlanner extraction run can overwrite CIS-geocoded points by name. It is also the precondition for CIS slice 8. Unlike the reader switch, it needs neither migration 228 nor geo rows, so it unblocks the CIS lane's country run today.",
+     "depends_on": [],
+     "done_when": "The PR is merged and CI is green. Lambdas are deployed from master. Live /browse/routes, /browse/tiles, /browse/search and /trip/{id}/suggestions return 200 with the same counts as before. The extraction event with op=tour_days returns 'unknown op' (aws lambda invoke, read-only payload). The grep guard test passes in CI. Linear AA-712 gets a comment saying slice 6a is done.",
+     "size": "M",
+     "llm_cost_usd": "$0",
+     "needs_nghiep": "Merge the TripPlanner PR. Later, approve the Infra change that removes the Mapbox geocoding secret (tripplanner.tf:115-123) and the tp_extract grant. That is a separate Infra PR and terraform apply.",
+     "code_evidence": "backend/extraction/lambda_entry.py:84-138 (ops prune/orphans/list/tour_graph/neighbours/relink/components/tour_days); cross-imports from extraction in browse/search.py:27, browse/routes.py:141, assembly/coverage.py:130, assembly/handler.py:470; infra accounts/aa365/tripplanner.tf:115-123 Mapbox secret for extraction; 03-design.md §6.2 + §7."
+    },
+    {
+     "order": 3,
+     "issue_id": "AA-812",
+     "title": "[TripPlanner] Tour/destination pages: photo fallbacks, contrast, month filter, re-verify and close",
+     "what_this_session": "D3 (tofu icons) was already fixed in #73 ('planner emoji icons replaced with kit SVG icons'), so drop it. D4/D5: the hero and List thumbnails are blank because catalog.v_tour has no cover_photo_path for many tours (this is a data gap, see AA-708), not a rendering bug. Fall back to the first catalog.v_destination_photo of the tour's country or main destination, both in the API (backend/browse/catalog.py cover_url) and in the List view, and keep the placeholder only when neither exists. D6: fix the color-contrast tokens until Lighthouse a11y has no contrast failure. Scope item 3: add a travel-month filter to TourListPane, since the backend already parses best_time_to_go into months (catalog.py months_from_text) and getTours accepts month. Do NOT add intensity: catalog.v_tour (mig 225) has no intensity column, so it waits for the place-level intensity in CIS 228. Then run aa-ui-verify again on the prod alias.",
+     "why_now": "High and In Progress. Pure frontend/BFF work with no cross-repo dependency, and it can run while CIS 228 waits for approval.",
+     "depends_on": [],
+     "done_when": "On the Vercel prod alias: curl of 3 /tours/* and 2 /destinations/* returns HTML containing the itinerary. Lighthouse SEO ≥90 and no color-contrast failure. Mobile and desktop screenshots in docs/audits show a hero photo or a destination fallback on all 3 tours. The List view filters by month (the count changes). A grep shows no gold_aa_internal in the new code. AA-812 is set to Done with intensity and the 'from $X' price recorded as follow-ups.",
+     "size": "M",
+     "llm_cost_usd": "$0",
+     "needs_nghiep": "Merge the TripPlanner PR. Accept closing AA-812 without the 'from $X' price (it waits for Booking v_from_prices, AA-810/679) and without the intensity filter (it waits for CIS 228). Both are scope items in the Linear issue.",
+     "code_evidence": "git 4c4f84f (#73) body lists D3 fixed; frontend/app/tours/[slug]/page.tsx:92-95 Gallery falls back to cover_url only; frontend/components/TourListPane.tsx:21-99 duration sort only, :123 thumbnail only if cover_url_small; backend/browse/catalog.py:48,197-229 (cover_photo_path, months_from_text); AA-CIS-App api/migrations/225_catalog_views.sql has best_time_to_go but no intensity; ui-verify/README.md defects D3-D7."
+    },
+    {
+     "order": 4,
+     "issue_id": "AA-712",
+     "title": "[ADR 0007 slice 6b] Browse readers behind PLACES_SOURCE=legacy|cis (assembly readers deferred to the id-map slice)",
+     "what_this_session": "Add a runtime flag PLACES_SOURCE (Lambda env, default legacy). Behind it, switch only the browse readers to the CIS catalog views: tiles, countries, destinations, filters, routes and search, with search using the 228 top-k function. Leave assembly (events._current_components, suggestions, coverage, activities, apply-route, handoff leg_chain) on legacy. On the cis path those readers would lose saved pins without the tp-011 id-map, so they belong with slice 7 (03-design.md §6.4: the id-map 'must run in the same step as the flag flip'). On the cis path, draw llm-located points as an area and add the Geoapify + OSM attribution to the map.",
+     "why_now": "This is the first TripPlanner consumer of the CIS views. Splitting browse from assembly turns an L slice into an M slice that ships in one session and carries no risk to drafts.",
+     "depends_on": [
+      "CIS lane: migration 228 (catalog place/graph views + top-k function) merged, copied to Infra and applied via DB Migrate, with the views granted to the tripplanner role",
+      "CIS lane: the 3-tour trial has run, so geo.* has rows for verification"
+     ],
+     "done_when": "The PR is merged, CI is green, and Lambdas are deployed with PLACES_SOURCE=legacy, with prod unchanged (same counts on /browse/routes, /browse/tiles and /browse/search). A local_server run with PLACES_SOURCE=cis against Dev as the tripplanner role returns tiles, routes and search results for the trial-country tours (output saved in the implementation notes). The Vercel preview UI smoke passes.",
+     "size": "M",
+     "llm_cost_usd": "$0",
+     "needs_nghiep": "Merge the PR. Approve migration 228 in the CIS lane.",
+     "code_evidence": "grep PLACES_SOURCE in backend/ and frontend/ is empty; backend/browse/{tiles,countries,destinations,filters,routes,search}.py and backend/shared/vector_topk.py (#74); AA-CIS-App api/migrations goes up to 227 (no 228); 03-design.md §6.1, §6.4, §7 slice 4 is assigned to repo 'CIS (+ Infra copy)'."
+    },
+    {
+     "order": 5,
+     "issue_id": "AA-818",
+     "title": "[Infra] Custom domains: TripPlanner half (tripplanner. + api-tripplanner.lumiguides.it.com)",
+     "what_this_session": "TripPlanner hostnames only, in ONE Infra PR shared with the Booking lane's half: a single acc2 us-west-1 ACM cert whose SANs cover all four hosts, so DNS validation is done once. Add an API GW HTTP v2 custom domain plus API mapping for api-tripplanner. In Vercel, add tripplanner.lumiguides.it.com to aa-tripplanner. App side: no code change is needed for canonical/sitemap, because they already read NEXT_PUBLIC_SITE_URL (frontend/lib/catalog.ts:73). Change only the BFF browse/trip base URL env and the CORS origins. Restrict the Mapbox token by URL to the new host plus the alias.",
+     "why_now": "The canonical points at aa-tripplanner.vercel.app, so the 892 SSR pages are indexed on a throwaway host. The sub-domains also unblock AA-811 (SES sender) and the Cognito callbacks (#105).",
+     "depends_on": [
+      "Nghiep: where the lumiguides.it.com DNS zone lives. It is not in Terraform (no route53 resources in AA-CIS-Infra), so the records are manual at the registrar",
+      "Booking lane: same Infra PR / ACM cert",
+      "AA-812 closed (canonical host changes after the pages are final)"
+     ],
+     "done_when": "Live: curl https://tripplanner.lumiguides.it.com/ returns 200 with valid TLS. The canonical and sitemap.xml URLs use the new host. curl https://api-tripplanner.lumiguides.it.com/browse/catalog/countries with the edge key returns 200. The /plan map loads on the new host (Mapbox 200).",
+     "size": "M",
+     "llm_cost_usd": "$0",
+     "needs_nghiep": "Confirm the hostnames and the DNS zone location. Add the DNS validation and CNAME records if the zone is outside Route 53. Run terraform apply. Change the Mapbox token URL restriction in the Mapbox account. Edit NEXT_PUBLIC_SITE_URL and the BFF base-URL env in Vercel by hand. ⚠️ This contains underscore env vars, so edit them manually in VSCode or the Vercel UI.",
+     "code_evidence": "frontend/lib/catalog.ts:73 (canonical from NEXT_PUBLIC_SITE_URL, fallback vercel.app); AA-CIS-Infra: modules/api_gateway/variables.tf:52 (api-cis only), accounts/aa365/booking.tf:35-37 (cert covers only api-cis-aa365), no route53 resources in any .tf; Linear AA-818 scope items 1-4."
+    }
+   ],
+   "backup": [
+    {
+     "order": 6,
+     "issue_id": "AA-712",
+     "title": "[ADR 0007 slices 6c+7] Assembly readers behind the flag + tp-011 component id-map, flipped together",
+     "what_this_session": "Switch the assembly readers (events._current_components, suggestions, coverage, activities, apply-route, handoff leg_chain) behind PLACES_SOURCE together with the TripPlanner migration tp-011 tripplanner.component_id_map(old_id,new_id). The map is built from tour_id→source_id via catalog.v_tour, day, name_norm and activity (DRY RUN). Run the §7 b2 coverage SQL. Apply tp-011 and flip the flag in the same window only when 0 source_ids are missing.",
+     "why_now": "This finishes the cut-over. Only 56 of 892 tours are on the planner graph, so Customise mostly falls back today.",
+     "depends_on": [
+      "AA-712 slice 6b",
+      "CIS lane: the 56-tour legacy set built by place_extract/geocode/tour_graph_build (paid, ≤50/batch)"
+     ],
+     "done_when": "The coverage SQL returns 0 missing. tp-011 is applied via DB Migrate. With the flag set to cis, /browse/routes and /trip/{id}/suggestions return 200 and Customise works on 5 tours. An existing draft keeps its pins. Rollback is documented.",
+     "size": "M",
+     "llm_cost_usd": "$0 TripPlanner side (CIS 56-tour build ≈ $1-2 counted in the CIS lane)",
+     "needs_nghiep": "Approve tp-011 and the flip window. Approve the CIS paid batch.",
+     "code_evidence": "03-design.md §6.4, §7 b2; backend/assembly/events.py _current_components."
+    },
+    {
+     "order": 7,
+     "issue_id": "AA-811",
+     "title": "[Platform] SES: TripPlanner SesSender behind a transport switch (code slice, unblocked)",
+     "what_this_session": "notify.py already has a Sender Protocol, and handler.py:71 defaults to LoggingSender. Add a SesSender (boto3 ses:SendEmail) selected by a NOTIFY_TRANSPORT=log|ses config, with default log. Add unit tests with a fake client and send only after the outbox commit. Add the IAM ses:SendEmail permission for the assembly Lambda to the AA-818/SES Infra PR, but do not switch to ses until the identity is verified.",
+     "why_now": "This is the only backup with no hard cross-repo dependency for the code part. The Done-when of AA-811 ('Send to an advisor delivers a real email') then becomes just a config flip once the SES identity exists.",
+     "depends_on": [
+      "Live delivery: SES identity Terraform + AA-818 sender sub-domain"
+     ],
+     "done_when": "Code slice: PR merged, CI green, Lambdas deployed with transport=log, and Send to advisor still returns 200 with the log line present. Full Done (later): a Dev Send to advisor delivers an email (SES message id) and get-identity-verification-attributes returns Success.",
+     "size": "S",
+     "llm_cost_usd": "$0",
+     "needs_nghiep": "Merge the PR. Choose the sender domain. Later, approve the SES apply and the sandbox exit.",
+     "code_evidence": "backend/assembly/notify.py (Sender Protocol, LoggingSender only); backend/assembly/handler.py:71,174; backend/config.py:71 ADVISOR_NOTIFY_EMAIL."
+    }
+   ],
+   "new_issues_needed": [],
+   "changes_vs_scout": [
+    "Item 2 (CIS migration 228 / slice 4) was removed from the TripPlanner chain. It is CIS-repo work (03-design.md §7 assigns slice 4 to 'CIS (+ Infra copy)', and schema-ownership forbids TripPlanner from authoring catalog migrations). It is now an explicit cross-repo depends_on of TripPlanner item 4. The CIS lane must own 228 and confirm the number.",
+    "A new item 2 was added: AA-712 slice 6a, removal of the TripPlanner extraction writers. It does not need 228. The design says the CIS backfill real runs should wait for it, because TripPlanner's upsert can overwrite CIS points by name. It needs a helper move first, since set_catalog_tenant/fetch_catalog in extraction/tour_days.py are imported by browse/search.py, browse/routes.py and assembly/coverage.py.",
+    "AA-812: D3 was dropped because #73 already fixed it ('planner emoji icons replaced with kit SVG icons'). D4/D5 were re-diagnosed as a data gap (no cover_photo_path in catalog.v_tour), so the fix is a destination-photo fallback in the API and the List view. The intensity filter was dropped because catalog.v_tour (225) has no intensity column; only the month filter is kept (the backend already parses months). needs_nghiep now includes accepting the close without the 'from $X' price and without intensity.",
+    "AA-712 slice 6 was cut from L to M: only the browse readers go behind PLACES_SOURCE now. The assembly readers (_current_components, suggestions, coverage, activities, apply-route, leg_chain) move to the backup with tp-011, because on the cis path they lose saved pins without the id-map (03-design.md §6.4). depends_on now names the CIS 228 apply and the CIS 3-tour trial rows.",
+    "AA-805: the cache-hit visibility is now a DB summary via ECS exec plus a README note instead of a new endpoint, because there is no TripPlanner ops surface and a public stats endpoint would only be protected by the edge key. Live evidence was added for the owner-check 403 and the spend cap: the Done-when needs 'throttle + ownership + cap verified live', and only '400 empty_trip' has been verified so far. A dependency on the Booking intake staying stable during the E2E was added.",
+    "AA-818: one shared ACM cert and Infra PR with the Booking lane. The DNS zone is not in Terraform (no route53 resources), so the records are manual and Nghiep must say where the zone lives. Canonical and sitemap need no code change, since they already read NEXT_PUBLIC_SITE_URL. The Mapbox URL restriction is a manual step for Nghiep in the Mapbox account.",
+    "Backup AA-811 was reframed as an unblocked code slice (a SesSender behind a transport switch, default log), since the Sender Protocol already exists. Live delivery stays blocked on SES identity and AA-818."
+   ],
+   "notes": "Checked 14/10. TripPlanner master is 8149f46 (#74) with a clean tree and no open PRs. CIS is at 44443ec8 with migrations up to 227 and no 228. Infra latest is #109 (226 copy), with no route53 resources anywhere in the .tf files.\n\nOrder:\n1. AA-805 evidence close (no deps).\n2. Writer removal (no deps; unblocks the CIS backfill and CIS slice 8).\n3. AA-812 frontend close (no deps).\n4. Browse readers behind the flag. This is the only item gated on another lane: CIS 228 applied plus trial rows.\n5. AA-818, gated on Nghiep's DNS decision.\n\nIf 228 is not applied by the time items 1–3 are done, swap item 4 for backup 7 (AA-811 code slice), which has no cross-repo dependency. Items 2 and 4 must not be in flight in the same PR, because both touch backend/browse/routes.py and search.py. Ship 2 first.\n\nRisks:\n- Lambda concurrency is still 10 (quota case open), so avoid load tests.\n- The AA-805 E2E creates a real Dev Booking trip case. Tell the Booking lane before it runs.\n- D4/D5 fallback photos are destination-level, so call them 'destination photo' in alt text and do not imply they show the tour.\n- Underscore env vars (NEXT_PUBLIC_SITE_URL, NOTIFY_TRANSPORT, PLACES_SOURCE in Lambda env via Terraform) must be edited by hand by Nghiep where they live in Vercel or the env files."
+  },
+  {
+   "lane": "booking",
+   "repo": "/home/nghiep/projects/AA-Ecosys/apps/AA-Booking",
+   "chain": [
+    {
+     "order": 1,
+     "issue_id": "AA-683 + AA-681 (Done-when demo)",
+     "title": "Wave 1 close-out: dashboard tile/hint fix, card-fee row, per-entry nav flag + /audit-log page over the existing API, ui-spec.md into the repo, then the AA-681 USD Dev demo",
+     "what_this_session": "Frontend only, no migration. (a) In frontend/app/(staff)/page.tsx:138 the 'In progress' tile shows the hint `${s.open} open · ±delta vs last month`. Move that hint to a tile it matches, or relabel it. (b) In PricePanel.tsx (~l.326 'Margin applied'), add a separate 'Card fee 3%' summary row from the quote-preview response (q.rule.card_fee_pct is already returned). The frontend still computes nothing. (c) Replace the single global SHIPPED_WAVE gate in ui/nav.tsx:34 with a per-entry `shipped` flag. Use it to ship /audit-log, today a WaveFrame stub (audit-log/page.tsx), as a real list over the existing GET /booking/audit-logs (filters actor/entity_type/entity_id/from/to, cursor `before`). This also gives the demo a visible audit trail. (d) Copy the reviewed spec docs/audits/2026-10-14-S236-design-review/booking-ui-spec/ui-spec.md into AA-Booking docs/ui-spec.md, because AA-683's output is defined as 'docs/ui-spec.md in the AA-Booking repo'. Fix its stale 'W2 = bk-006 / W3 = bk-007' numbering to bk-007+ / later keys. (e) After the Vercel deploy, run the AA-681 demo on Dev in USD through the staff UI: TC-000001 (from TripPlanner) → V1 → cost lines → price → V2 → send → approve → confirmed. Save the screenshots and the activity/audit trail to AA-Ecosys docs/audits/<date>-S237-*/booking-demo/. Check the Vercel production-branch setting (S236 ui-verify defect 3).",
+     "why_now": "No migration and no cross-repo dependency. It clears the 2 minor W1 bugs and closes AA-681, whose only Done-when left is the Dev demo; its S236 comment says USD-only is enough. It moves AA-683 to 'only the review with Ms. Thư left'. The per-entry nav flag has to exist before any single W2 page can ship, and /audit-log is the cheapest one because its backend is already live.",
+     "depends_on": [],
+     "done_when": "PR merged, Frontend Build green, Vercel deployment READY on aa-booking-admin (production alias on the main build). Screenshots at 1440/390, light and dark, show: the dashboard tile and hint consistent; the calculator summary with a 'Card fee 3%' row (1000 USD → 1,495.00 USD unchanged); /audit-log listing real rows and filtering by entity_type=trip_case, with 0 console errors. The Dev demo on TC-000001 reaches status confirmed. GET /booking/trip-cases/TC-000001/activity shows new_inquiry→…→confirmed, and GET /booking/audit-logs?entity_id=<case> shows priced/sent/approved rows. AA-681 → Done per aa-ship, with a Linear comment noting that the customer 'My Trips' part of its description waits on customer identity (AA-680 / ADR 0006 Cognito). AA-683 stays open until Ms. Thư reviews docs/ui-spec.md.",
+     "size": "S",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "Merge the PR (agents never merge). Approve writing demo data (V1/V2, confirmed) on Dev case TC-000001, or name a fresh test case. Fix the Vercel production-branch setting if it needs dashboard access. Confirm that AA-681 may close while 'My Trips' is deferred to the identity work, or split it out.",
+     "code_evidence": "frontend/app/(staff)/page.tsx:131-139; frontend/ui/booking/PricePanel.tsx:326,346 (card_fee_pct only in the collapsed rule line); frontend/ui/nav.tsx:33-34,124 (global SHIPPED_WAVE); frontend/app/(staff)/audit-log/page.tsx (WaveFrame stub); backend/app/routers/reference.py GET /audit-logs (live); docs/ has only adr/ + implementation-notes/ (no ui-spec.md); AA-Ecosys docs/audits/2026-10-14-S236-design-review/booking-ui-spec/ui-spec.md; Linear AA-681 comment 12:36Z (remaining = Dev demo), AA-683 comment (follow-ups)"
+    },
+    {
+     "order": 2,
+     "issue_id": "AA-810",
+     "title": "FX rates + pricing rules admin with maker-checker (bk-007, /pricing/rules), the last Done-when of the pricing engine",
+     "what_this_session": "Migration bk-007 adds a separate append-only table booking.policy_approvals(entity_type pricing_rule|fx_rate, entity_id, approved_by, approved_at), with GRANT SELECT, INSERT only. Do not add an UPDATE grant on pricing_rules/fx_rates; bk-004 deliberately REVOKEs UPDATE/DELETE and test_policy_tables_are_append_only guards that. The migration back-fills approval rows for the bk-004 seeded rules (approved_by='seed:bk-004'), so live quotes do not change. repository.fx_rates_in_force and the rules lookup read only approved rows. Endpoints: GET/POST /booking/pricing/rules, GET/POST /booking/pricing/fx-rates, POST …/{id}/approve (403 when created_by == caller, per spec Q19). Writes need a new permission pricing.write (admin + contracting); pricing.read reads. Every write is audited. Frontend: /pricing/rules with the rules table, FX table, add-row drawer and Approve action, using the per-entry nav flag from item 1. FxNotice links to the new page.",
+     "why_now": "High priority, In Progress. Its only Done-when left is 'price a version in USD and one other currency on Dev'; today EUR/GBP/AUD/SGD return fx_rate_missing. Supplier rates in wave 2 are quoted in supplier currency, so FX has to work first.",
+     "depends_on": [
+      "AA-683 + AA-681 (Done-when demo) — per-entry nav flag",
+      "AA-CIS-Infra: byte-copy PR db/migrations/booking/007_*.sql + DB Migrate check→apply (Nghiep)"
+     ],
+     "done_when": "bk-007 applied via the AA-CIS-Infra DB Migrate (check → apply). /booking/health/ready → schema_version bk-007. db-schema-reference.md regenerated. CI 5/5 green, Dev rollout COMPLETED. An existing USD quote-preview is unchanged (1000 → 1,495.00). Live: POST fx-rates EUR by user A → 201; approve by A → 403; approve by B → 200. POST /booking/trip-cases/{ref}/versions/{n}/price with ≥2 items and currency EUR returns a total with fx_rate_locked/fx_as_of set. /pricing/rules renders on Vercel at 1440/390, light and dark. AA-810 → Done.",
+     "size": "M",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "Approve the bk-007 DB Migrate apply and merge the Booking PR and the Infra byte-copy PR. Act as the second approver: Claude creates the FX row as the e2e-claude-code staff user and Nghiep approves it with his own login (or a second staff account gets activated). Give real EUR/GBP/AUD/SGD rates and buffer %, or accept dated placeholder rows marked source='manual-dev'.",
+     "code_evidence": "migrations/004_pricing_rules_fx.sql:176-185 (GRANT SELECT, INSERT; REVOKE UPDATE/DELETE/TRUNCATE on pricing_rules/fx_rates; no approval columns); backend/app/routers/pricing.py (only POST /quote-preview); backend/app/pricing/repository.py:26,61 (fx_rates_in_force reads every row); backend/app/auth/staff.py:42 (pricing.read only); frontend/app/(staff)/pricing/rules/page.tsx (stub); ui-spec §6.3 l.606/613 + Q19; Linear AA-810 comment 'Remaining for Done: FX rates entry'"
+    },
+    {
+     "order": 3,
+     "issue_id": "NEW",
+     "title": "[AAA] Wave 2a — suppliers + supplier contracts (bk-008): API + /suppliers list, form, detail (Profile/Contracts)",
+     "what_this_session": "Migration bk-008 creates booking.suppliers with the spec §6.3 fields: company_name, categories[] from hotel/transport/guide/entrance/activity/meal (Q20), website, internal_notes, contact_*, address, region, postal_code, destination_id, country_code, status. destination_id is a plain id validated against catalog.v_destination in the API; there is no cross-schema FK into shared/CIS. It also creates booking.supplier_contracts (valid_from/to, currency, payment_terms, cancellation_policy, status draft/published/expired). Suppliers are never hard-deleted: deactivate/activate only, and deactivate returns 409 while a published contract is in force. Endpoints: GET/POST /booking/suppliers, GET/PATCH /{id}, deactivate/activate, GET/POST …/{id}/contracts, PATCH /booking/contracts/{id}. New permission supply.write for admin + contracting; sales reads. Every write is audited. Frontend: /suppliers list, new/edit form, and /suppliers/[id] with Profile + Contracts tabs (Rates/Bookings/Bills stay as frames), behind the per-entry nav flag. Rates and rate sheets are out of scope.",
+     "why_now": "Nghiep decided in S236 to build all 3 waves. Suppliers are the FK root for hotels, services, trip-plan supplier links and the wave-3 supplier bookings/bills. No Linear issue covers them today: AA-709 is research and AA-682 is wave 3.",
+     "depends_on": [
+      "AA-810 (FX: contracts carry supplier currency)",
+      "Linear issue creation approved by Nghiep",
+      "AA-CIS-Infra byte-copy PR + DB Migrate apply bk-008 (Nghiep)"
+     ],
+     "done_when": "bk-008 applied via DB Migrate, /health/ready → bk-008, schema reference regenerated. CI 5/5 green, Dev rollout COMPLETED. Live, as admin/contracting: POST /booking/suppliers → 201; PATCH → 200; a contract created then published; deactivate with a published in-force contract → 409, without one → status inactive; audit_logs rows present (visible in /audit-log). Sales: GET 200, POST 403. /suppliers pages on Vercel at 1440/390, light and dark, with 0 console errors.",
+     "size": "M",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "Approve creating this Linear issue (project TripPlanner & AA-Booking, under the 100-issue quota). Approve the bk-008 apply and merge the PRs. Confirm Q20 (no 'awaiting document check' state) unless Ms. Thư says otherwise.",
+     "code_evidence": "migrations/001-006: no supplier/contract table; frontend/app/(staff)/suppliers = WaveFrame stub; frontend/lib/rbac.ts:26 contracting role exists; backend/app/auth/staff.py:27-42 (no supply.* permission); ui-spec §3, §6.3, §8 Wave 2, Q20"
+    },
+    {
+     "order": 4,
+     "issue_id": "AA-679",
+     "title": "Booking half of AA-679: sellable trip plans over catalog.v_tour — bk-009 trip_plans (commercial only), /catalog/trip-plans list/detail, 'Use for trip case'",
+     "what_this_session": "Migration bk-009 creates booking.trip_plans, unique on the CIS (source_system, source_id), with commercial columns only: is_published (sellable), supplier_id nullable FK → booking.suppliers, trip_style free text (Q16 is open), commercial_notes. Per O7 there are no title/summary/itinerary copies. Endpoints: GET /booking/catalog/trip-plans (catalog.v_tour LEFT JOIN trip_plans, filters q/country/sellable, keyset pagination); GET …/{source_id} (v_tour + v_tour_day + v_tour_photo + the commercial row); PUT …/{source_id}/commercial (upsert, audited); POST …/{source_id}/trip-cases, which creates a case whose V1 items are pre-filled from v_tour_day. Frontend: list, detail with a 'From CIS' tag, commercial edit drawer, and the Use-for-trip-case modal, behind the per-entry nav flag. Out of this slice: the trip_plan_prices matrix and the from-price view (v_from_prices, needed by AA-812), as a follow-up.",
+     "why_now": "An existing In Progress issue whose read side is unblocked: CIS 225 is applied and booking reads v_tour 892 / v_tour_day 6,978 / v_tour_photo 2,642. 'Use for trip case' gives sales a second way into the workflow besides TripPlanner inquiries. The commercial row is also the prerequisite for the from-price that TripPlanner PDP (AA-812) needs. Moved ahead of hotels/services because it maps to an existing issue and has cross-app value.",
+     "depends_on": [
+      "NEW wave 2a suppliers (supplier_id FK)",
+      "AA-CIS-Infra byte-copy PR + DB Migrate apply bk-009 (Nghiep)",
+      "CIS: catalog views 225 (done); CIS 228 place views (AA-712) NOT required for this slice"
+     ],
+     "done_when": "bk-009 applied via DB Migrate, /health/ready → bk-009, schema reference regenerated. CI 5/5 green, Dev rollout COMPLETED. Live: GET /booking/catalog/trip-plans total = 892 (= catalog.v_tour). Marking one Bhutan tour sellable persists, and re-saving it creates no second trip_plans row. 'Use for trip case' run twice creates 2 cases whose V1 day count equals v_tour_day for that source_id. Pages on Vercel at 1440/390, light and dark. A Linear comment records what stays open: the price matrix/from-price, and the outbox consumer or the reworded Done-when.",
+     "size": "M",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "AA-679's Done-when describes outbox events plus a sync job that copies templates into Booking. The approved S236 spec uses live reads of catalog views plus a commercial-only row instead. Approve rewording the Done-when, or split the outbox/trash-unpublish consumer into its own issue. Approve the bk-009 apply and merge the PRs. Q16: trip_style stays free text until a source is decided.",
+     "code_evidence": "Linear AA-679 description (outbox + sync, 'draft template per Bhutan tour'); ui-spec §7 l.659 (trip_plans commercial only, ERD content columns not created); frontend/app/(staff)/catalog = frames; no trip_plans table in migrations/; AA-Ecosys docs/adr/0007 l.46-55 (catalog views granted to booking)"
+    },
+    {
+     "order": 5,
+     "issue_id": "NEW",
+     "title": "[AAA] Wave 2b — hotels + services supply records per ADR 0004a (bk-010): API + /hotels grid/drawer + /services",
+     "what_this_session": "Migration bk-010 creates booking.hotels with the ADR 0004a decision-1 facts: name, address, destination_id (validated against catalog.v_destination, no cross-schema FK), geo point, star rating, room types, amenities, check-in/out, status, supplier_id, internal_notes, links. It also creates booking.services with service_type activity/transfer/guide/entrance/meal, internal title, destination_id, supplier_id, max_group_size, duration, inclusions, internal_notes and status. There is no customer-facing description or photo column (ADR 0004a decision 2 / O7). Endpoints: GET/POST/PATCH /booking/hotels and /booking/services, plus deactivate (no hard delete), all with supply.write; sales reads. Frontend: /hotels grid + view/edit/new drawer and /services list + detail. Out of this slice: booking.outbox, v_supply_outbox, the v_supply_* views and the supply.hotel.v1/service.v1 contracts. Those are cross-repo work (root contracts + a CIS consumer) and need their own issue.",
+     "why_now": "Second half of wave-2 supply, carrying out Nghiep's S236 hybrid decision (ADR 0004a, accepted). Typed builder items and per-service rates (backup item) need these records.",
+     "depends_on": [
+      "NEW wave 2a suppliers",
+      "AA-CIS-Infra byte-copy PR + DB Migrate apply bk-010 (Nghiep)",
+      "AA-817 (CIS lane) for DB-level protection: until then aa_cis_admin can read all of booking (ADR 0004a known gap)"
+     ],
+     "done_when": "bk-010 applied via DB Migrate, /health/ready → bk-010, schema reference regenerated. CI 5/5 green, Dev rollout COMPLETED. Live: create a hotel linked to a supplier and a catalog destination (the name resolves from v_destination); create an activity service; deactivate one; audit rows present. Sales gets read-only. A test asserts there is no description/photo column on hotels/services. Pages on Vercel at 1440/390, light and dark, with 0 console errors.",
+     "size": "M",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "Approve creating this Linear issue. Approve the bk-010 apply and merge the PRs. Confirm Q17: no customer-facing hotel photos in v1.",
+     "code_evidence": "AA-Ecosys docs/adr/0004a-supply-content-ownership.md l.27-76 (facts list, outbox, known gap); ui-spec §6.3 l.604 (hotel contract poorer than the ADR; the ADR is newer and wins); frontend/app/(staff)/hotels, services = WaveFrame stubs; no hotels/services table in migrations/"
+    }
+   ],
+   "backup": [
+    {
+     "order": 6,
+     "issue_id": "AA-679 (follow-up slice)",
+     "title": "Trip plan price matrix + booking.v_from_prices for TripPlanner 'from $X'",
+     "what_this_session": "Migration bk-0xx creates booking.trip_plan_prices (season × pax band × currency × validity, ADR 0005 §3) plus GET/PUT /booking/catalog/trip-plans/{source_id}/prices. It also adds booking.v_from_prices (lowest current published USD price per sellable source_id) with a grant to tripplanner, written down as contract price.from.v1 in the root repo.",
+     "why_now": "This is the piece AA-812 (High, TripPlanner PDP) needs from Booking. It is cut out of chain item 4 to keep that item at M.",
+     "depends_on": [
+      "AA-679 chain item 4",
+      "AA-810 (FX for non-USD prices)",
+      "TripPlanner lane must consume it (AA-812)"
+     ],
+     "done_when": "Migration applied, /health/ready shows the new key. A price row on one sellable tour → SELECT on booking.v_from_prices as role tripplanner returns that source_id with the expected from-price. Prices tab on Vercel at 1440/390.",
+     "size": "M",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "Approve the migration apply and the root contract PR. Supply or approve sample season/pax-band prices for 1–2 Bhutan tours.",
+     "code_evidence": "ui-spec §7 l.659 (trip_plan_prices, from-price derived); §8 Wave 2 l.696 (booking.v_from_prices)"
+    },
+    {
+     "order": 7,
+     "issue_id": "AA-682",
+     "title": "Wave 3 first slice — invoices + payment schedule (deposit 30%) + manual payment recording, no tax, no evidence upload",
+     "what_this_session": "Migration bk-0xx creates invoices and invoice_items (derived from the approved, locked version; free lines only as audited adjustments, Q24), payment_schedule (deposit from settings.deposit_pct = 30, then balance) and payments (manual, with reference; status received/voided; void needs a reason). It adds a post-sale transition edge confirmed → deposit_paid. Endpoints: POST /booking/trip-cases/{ref}/invoices (409 without an approved version), GET invoices, payments, void. Frontend: case Billing tab, /billing list, Record payment. Tax waits for the accountant (ADR 0005 §10). Evidence upload waits for the S3 bucket (Infra), and email waits for AA-811.",
+     "why_now": "This is the next step after 'confirmed' once the item-1 demo produces an approved version.",
+     "depends_on": [
+      "AA-683 + AA-681 demo (approved version)",
+      "AA-810 (non-USD invoices)"
+     ],
+     "done_when": "Migration applied, CI 5/5, Dev rollout COMPLETED. Live: on the demo case, an invoice with a 30% deposit + balance schedule; a manual deposit payment recorded; the balance updates and the status edge fires; void without a reason → 422. Billing tab on Vercel at 1440/390.",
+     "size": "L",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "AA-682 is Low and in Backlog: confirm moving it up and splitting it (invoices/payments now; supplier bookings, trip checks and bills later). Name the post-sale status edges. Approve the migration apply and the merges. Confirm no tax lines until the accountant confirms.",
+     "code_evidence": "Linear AA-682 (Backlog, Low); ui-spec §6.4 + §8 Wave 3 + Q22–Q24; migrations/005_w1_extras.sql (deposit_pct 30, quote_validity_days 14)"
+    }
+   ],
+   "new_issues_needed": [
+    {
+     "title": "[AAA] Wave 2a — suppliers + supplier contracts (bk-008): API + /suppliers list, form, detail (Profile/Contracts)",
+     "reason": "Nghiep decided in S236 to build wave 2, and no Linear issue covers suppliers (AA-709 is research, AA-682 is wave 3). Suppliers are the FK root for hotels, services, trip plans and the wave-3 supplier bookings/bills."
+    },
+    {
+     "title": "[AAA] Wave 2b — hotels + services supply records per ADR 0004a (bk-010): API + /hotels grid/drawer + /services",
+     "reason": "ADR 0004a (accepted S236) makes Booking the owner of hotel/service facts, but no issue implements them."
+    },
+    {
+     "title": "[AAA] Supply outbox + supply.hotel.v1/supply.service.v1 contracts to CIS (ADR 0004a decision 4)",
+     "reason": "This is cross-repo: Booking outbox and views, root contracts, a CIS consumer. It should not be hidden inside wave 2b, and it is the place to record the aa_cis_admin known gap that AA-817 closes. Create it only once 2b ships."
+    }
+   ],
+   "changes_vs_scout": [
+    "Item 1: added a per-entry nav flag plus a real /audit-log page. Evidence: GET /booking/audit-logs is already live (backend/app/routers/reference.py) and the page is only a WaveFrame stub. It is cheap, shows the AA-681 demo's audit trail, and puts the nav flag in a no-migration slice rather than in AA-810.",
+    "Item 1: added copying docs/audits/.../booking-ui-spec/ui-spec.md into AA-Booking docs/ui-spec.md. AA-683's output is defined as that file in the Booking repo, and the repo's docs/ currently has only adr/ and implementation-notes/.",
+    "Item 1: AA-681's description also promises a customer 'My Trips' app, which needs customer identity (AA-680 / Cognito, ADR 0006, Infra #105 draft, AA-818 domain). Closing on the demo-only Done-when needs a Linear note or a split, and this is flagged to Nghiep.",
+    "Item 2 (AA-810): approval is fixed to a separate append-only policy_approvals table, not a column UPDATE grant. bk-004 REVOKEs UPDATE/DELETE/TRUNCATE on both policy tables and a test guards it. Also added the pricing.write permission (only pricing.read exists), a USD no-regression check, and the concrete second-approver path: Claude as e2e-claude-code creates, Nghiep approves.",
+    "Item 4 and 5 swapped: AA-679 trip plans moves ahead of hotels/services because it is an existing In Progress issue with an unblocked read side and value for TripPlanner (AA-812). Migration keys renumbered: trip_plans = bk-009, hotels/services = bk-010.",
+    "AA-679 cut from L to M: the trip_plan_prices matrix and v_from_prices move to a new backup item (AA-679 follow-up slice), since 4 migrations plus 4 Infra byte-copy PRs plus 4 DB Migrate applies in one session is already the S236 maximum.",
+    "Every migration item now lists the cross-repo dependency explicitly (AA-CIS-Infra byte-copy PR + DB Migrate check→apply, a Nghiep step). Wave 2b also lists AA-817 (CIS lane) as the dependency that closes the ADR 0004a 'aa_cis_admin reads all of booking' gap.",
+    "destination_id on suppliers/hotels/services: there is no cross-schema FK into shared/CIS; it is validated against catalog.v_destination in the API (the booking role has SELECT on views, not REFERENCES).",
+    "Supplier deactivate rule changed from 'soft delete 409 when contracts are active' to 'deactivate 409 while a published in-force contract exists', so it is consistent with no hard delete.",
+    "Backup: replaced Wave 2c rates/rate-sheets (L, needs a sample sheet from Ms. Thư) with the AA-679 price-matrix/from-price slice. AA-682 wave-3 invoices stays as the second backup. Added a NEW issue suggestion for the supply outbox/contracts as a separate cross-repo issue.",
+    "Item 1 Done-when now requires the docs/ui-spec.md wave numbering to be fixed: the spec says W2 = bk-006 and W3 = bk-007, but bk-006 is already used (cost sent-lock)."
+   ],
+   "notes": "I checked the proposal against the code, the git log and Linear. Nothing in the chain is already done. AA-Booking main is at 0933378 (PR #5) and Infra has booking migration copies 001–006 only. Routers are health/trip_cases/customers/pricing (quote-preview only)/reference (settings, countries, audit-logs)/notifications/staff. There is no supplier/hotel/service/trip_plan/invoice table and no FX/rules write endpoint. Every W2/W3 page under frontend/app/(staff)/ is a 22-line WaveFrame stub.\n\nLinear: AA-810 Done-when = 'a Dev endpoint returns the price for a version with ≥2 items in USD and one other currency'. Maker-checker is not in AA-810's text; it comes from ui-spec Q19, which S236 accepted by recommendation. If time is short, the minimum to close AA-810 is the FX write and approve path; the rules admin UI can be read-only. AA-681's Done-when is only the Dev demo, but its body also lists customer 'My Trips', which is blocked on identity (AA-680, Cognito ADR 0006, Infra #105 draft, AA-818 domains). AA-679's Done-when (outbox sync, draft templates, trash → unpublish) does not match the approved spec's live-read design, so it needs rewording before it can ever be Done.\n\nSession load: items 2–5 mean 4 Booking migrations (bk-007..bk-010), each with an Infra byte-copy PR, a DB Migrate check→apply by Nghiep, a deploy and a schema-reference regen. That equals S236's pace (bk-003..006). The natural cut point is after item 4. Item 5 (hotels/services) can roll to S238 without blocking anything else in this lane.\n\nThe AA-801/AA-712/AA-817 work lives in the CIS lane. Only AA-817 touches this lane: until it lands, CIS's master user can read booking net rates and supplier data. No paid LLM calls ($0). No underscore env vars expected; if the frontend needs a new public env var, Nghiep edits it by hand."
+  },
+  {
+   "lane": "infra",
+   "repo": "/home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra",
+   "chain": [
+    {
+     "order": 1,
+     "issue_id": "AA-811",
+     "title": "SES transactional email on acc2 (infra half) + ONE bootstrap grant PR on aa-cis-infra-tf-apply for items 1, 3 and 4",
+     "what_this_session": "Two PRs. (a) Bootstrap PR, applied locally once with MFA: add INLINE statements, not managed attachments, to aws_iam_role_policy.tf_apply. The role already has 10 AWS-managed policies, which is the default per-role quota (cicd_split.tf:514 comment), so a new attachment would fail. The statements are: ses:* scoped to identities and configuration sets in acc2/us-west-1; acm:RequestCertificate/DescribeCertificate/DeleteCertificate/AddTagsToCertificate/ListTagsForCertificate (both us-west-1 and us-east-1); cognito-idp:*; and wafv2:CreateWebACL/DeleteWebACL/CheckCapacity, which PR #105 needs and the WAFv2Manage sid in cicd.tf:217 lacks. Before writing, check the 10,240-char aggregate inline limit: the inline policy is already about 5.5k chars of HCL before ARN expansion. If it gets close, keep the new statements minimal or ask Nghiep to raise the managed-policies-per-role quota. The same local apply also carries the agent-session boundary from item 2. (b) ses.tf in accounts/aa365: an SES v2 domain identity with Easy DKIM, a custom MAIL FROM sub-domain with its own MX and SPF, and DMARC p=none. Add 2 configuration sets per ADR 0006 (identity/WORKFORCE and transactional) with an event destination on the existing aws_sns_topic.alerts (observability.tf:45), or on a small dedicated topic, plus a BounceRate alarm. Grant ses:SendEmail/SendRawEmail with a ses:FromAddress condition to the CIS ECS task role, the Booking task role and the TripPlanner Lambda exec role. This part goes through CI apply, because all 3 roles match aa-*-dev-*. Output the exact Namecheap records. SNS is probably already covered by CloudWatchFullAccess (sns:*). The TripPlanner notify.py consumer stays in the TripPlanner lane.",
+     "why_now": "This is the root of the auth chain. ADR 0006 §10 says the SES identity must be in acc2 us-west-1 and out of the sandbox for every OTP phase. Live check today: sesv2 list-email-identities returns [], and the account is in the sandbox (ProductionAccessEnabled=false, 200/day, 1/s). The sandbox-exit request usually takes about 24 h, and DKIM propagation on Namecheap also takes time, so both clocks should start first. Putting all bootstrap grants in one PR means Nghiep does one MFA local apply instead of three.",
+     "depends_on": [
+      "Nghiep sender decision (apex lumiguides.it.com identity per ADR 0006 item 5 vs a sub-domain identity per the AA-811 Linear scope)",
+      "Nghiep adds DNS records on Namecheap (no Route 53 zone)"
+     ],
+     "done_when": "`aws sesv2 get-email-identity --email-identity <identity> --profile aa365-admin --region us-west-1` shows DkimAttributes.Status=SUCCESS, VerifiedForSendingStatus=true and MailFromAttributes.MailFromDomainStatus=SUCCESS. A boto3 send_email run from the CIS task through ECS exec, while still in the sandbox and sent to a verified staff inbox, returns a MessageId, and the received mail shows dkim=pass. `aws iam get-role-policy` on aa-cis-infra-tf-apply shows the new sids (orchestrator/Nghiep runs this; subagent IAM reads are hook-blocked). The SES sandbox-exit case is filed. CI Plan is green and the apply adds only SES/IAM/alarm resources.",
+     "size": "M",
+     "llm_cost_usd": "0 (SES $0.10/1,000 emails; alarm under $1/month)",
+     "needs_nghiep": "(1) Choose the sender: apex identity with no-reply@lumiguides.it.com (ADR 0006 item 5), or a sub-domain identity (Linear AA-811 scope; isolates reputation from the Zoho apex mail). Also choose the MAIL FROM sub-domain. (2) Add the DKIM x3 / MAIL FROM MX+TXT / DMARC records on Namecheap. (3) Run the local MFA apply of the bootstrap PR from a reviewed plan. (4) Submit the SES production-access request in the console.",
+     "code_evidence": "accounts/aa365/cicd.tf:61-73 (10 managed policies), cicd_split.tf:512-518 (tf_apply_managed uses the same 10, 'the default per-role quota') and :520-580 (inline tf_apply policy, no ses/acm/cognito), cicd.tf:217-235 (WAFv2Manage has no CreateWebACL). No ses.tf exists. Live (read-only): sesv2 list-email-identities = [], get-account ProductionAccessEnabled=false. dig: NS registrar-servers.com, no _dmarc, no apex A record. ADR 0006:338-343, :463, :493."
+    },
+    {
+     "order": 2,
+     "issue_id": "AA-806",
+     "title": "CI role split step 4: permissions boundary on every existing aa-*-dev-* workload role (phase-3 flag stays OFF until step 3)",
+     "what_this_session": "Add `permissions_boundary = aws_iam_policy.workload_boundary.arn` to 12 roles: modules/ecs ecs_execution and ecs_task (via a new module variable), modules/eventbridge scheduler, booking_ecs_execution/task/app_deploy, tripplanner_lambda_exec/app_deploy, dfs_balance_exec/scheduler, and diag_flow_logs/diag_apigw_cloudwatch. Also add it to modules/vpc nat_instance (aa-cis-nat-instance-role is inside tf_managed_role_arns, so the phase-3 deny would hit it later). These are in-place updates the CI apply role is allowed to make (IAMRoleManageStack includes PutRolePermissionsBoundary, and the boundary only requires the workload ARN), so apply through terraform-apply.yml. The agent_session boundary is a protected/bootstrap object, so it rides item 1's local apply. Do NOT set tf_apply_require_boundary_on_role_policy_writes=true here: that statement denies Detach/DeleteRolePolicy on any role without the workload boundary, so it would block the step-3 CI removal of the legacy aa-cis-dev-role. Flip it in the step-3 PR or after it. Grep confirmed that no app repo creates a boto3 iam/organizations/account client, so the 'no IAM writes' boundary does not break runtime. Clean up the eventbridge-tags and dfs_balance zip-hash drift only if it is trivial.",
+     "why_now": "Security, High. This closes most of the documented escalation path (rewrite an unbounded workload role, then PassRole it) without waiting for the time-gated step 3 or the WAF window. It needs no Nghiep decision and no DNS, so it fills the wait while item 1's DNS propagates.",
+     "depends_on": [],
+     "done_when": "The orchestrator runs `aws iam list-roles --query \"Roles[?starts_with(RoleName,'aa-')].[RoleName,PermissionsBoundary.PermissionsBoundaryArn]\"` and sees aa-workload-boundary on every aa-*-dev-* workload role plus aa-cis-nat-instance-role (subagents are hook-blocked from aws iam). After apply, these smokes are green: CIS Deploy Dev rollout COMPLETED (api + worker on one SHA), Booking force-new-deployment with /booking/health/ready 200, TripPlanner deploy-lambdas green with /browse/search 200, DB Migrate check mode green, and a terraform-apply dispatch reporting 'No changes'.",
+     "size": "M",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "Approve the prod-environment CI apply (required reviewer). The agent-session boundary is in item 1's local apply. Approve the smoke deploys.",
+     "code_evidence": "docs/ci-role-split.md:89-110 (step 4, residual risk). cicd_split.tf:112-136 (workload boundary = Allow * minus IAM writes/account/org), :50-53 (tf_managed_role_arns includes the NAT role), :59-61 (agent-session protected), :198-235 (CreateRole/PutRolePermissionsBoundary need the workload ARN; the phase-3 deny on Put/Delete/Attach/DetachRolePolicy covers Resource *). variables.tf:170-178 (flag default false). `grep permissions_boundary` = 2 hits across 17 roles in accounts/aa365 + modules. Grep across app repos: no boto3 iam client."
+    },
+    {
+     "order": 3,
+     "issue_id": "AA-818",
+     "title": "Custom API domains api-booking + api-tripplanner (ACM + API GW custom domains), plus the us-east-1 cert for the Cognito auth domains",
+     "what_this_session": "Infra part only, in 2 DNS rounds (one is not possible: an API GW domain name needs an ISSUED cert, and its d-xxx target only exists after it is created). Round 1, together with item 1's SES records: request ACM certs with DNS validation. Prefer one us-west-1 cert with SANs api-booking + api-tripplanner (or a *.lumiguides.it.com wildcard) and one us-east-1 cert for auth. + staff-auth.; the us-east-1 cert needs a new `provider \"aws\" { alias = \"us_east_1\" }`, since versions.tf has only one provider. Round 2: aws_api_gateway_domain_name (REGIONAL) for api-booking with an empty base path mapping to aa-booking-dev-api stage dev, and aws_apigatewayv2_domain_name + api_mapping for api-tripplanner to the $default stage. Output the target CNAMEs. Optionally import the hand-made api-cis.lumiguides.it.com domain + cert, which are live but not in state (tfvars only knows api-cis-aa365). Vercel domains and app env/canonical/CORS go to the TripPlanner/Booking lanes.",
+     "why_now": "ADR 0004 O2 already fixed api-booking. Round 1 shares a Namecheap batch with SES. Cognito callback/logout hosts (item 4) need the final names, though not the live domains.",
+     "depends_on": [
+      "AA-811 bootstrap PR (acm grant on aa-cis-infra-tf-apply)",
+      "Nghiep hostname approval",
+      "2 Namecheap rounds (validation CNAMEs, then target CNAMEs)"
+     ],
+     "done_when": "Both certs show ISSUED in `aws acm describe-certificate` (us-west-1 and us-east-1). `curl -s -o /dev/null -w '%{http_code}' https://api-booking.lumiguides.it.com/booking/health/ready` returns 200. `curl https://api-tripplanner.lumiguides.it.com/browse/search?q=vietnam` returns 200 with the same JSON shape as the execute-api URL. CI Plan green.",
+     "size": "M",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "Approve the hostnames (api-booking., api-tripplanner., and auth./staff-auth. for later). Add the Namecheap records in 2 rounds. Note that Cognito custom domains need an apex A record, which does not exist today (www still points at the old Quanskill ap-southeast-1 ALB). Underscore env vars (NEXT_PUBLIC_SITE_URL, BOOKING_API_URL, CIS_API_URL) are edited by hand in VSCode/Vercel.",
+     "code_evidence": "modules/api_gateway/main.tf:512-526 (REGIONAL domain + empty base path pattern), booking.tf:33-38 + :412-430 (REST API /booking, /booking/{proxy+}; no custom domain yet), tripplanner.tf:400-462 (HTTP API, $default stage), versions.tf:39 (single aws provider, no us-east-1 alias). Live (read-only): acm us-west-1 has only api-cis and api-cis-aa365 (single-name certs), us-east-1 has none; apigateway get-domain-names lists api-cis + api-cis-aa365, but terraform.tfvars:25-26 only manages api-cis-aa365."
+    },
+    {
+     "order": 4,
+     "issue_id": "AA-703",
+     "title": "Cognito Phase 0: rework draft Infra PR #105 to the accepted ADR 0006 (plan green, tests in CI); apply on Dev once the SES identity is verified",
+     "what_this_session": "Rebase feat/aa-703-cognito-identity (1 commit, 2,234 lines, predates #103) on main. Add permissions_boundary = workload_boundary to aws_iam_role.identity_trigger; its name, aa-identity-dev-*-trigger, already matches the aa-*-dev-* pattern. Align with the accepted ADR and the S236 amendment: WORKFORCE Google IdP count=0 and staff app clients on email code only. PASSWORD is a pool-level first factor, so keep it only for the breakglass client's explicit auth flows. Fix the PR body, which still says 'proposed' and Google-restricted. Set identity_ses_identity_arn, the from address and the WORKFORCE/EXTERNAL configuration sets from item 1. Callback/logout URLs use the hostnames approved in item 3 (they do not need to resolve yet); keep the prefix domains. Add a workflow job that runs the 78 trigger tests; no pytest job exists today. Must-ship: PR out of draft, CI Plan green (about 63 aa-identity-* adds only), tests green. Stretch: apply and test users, only if item 1's identity is already SUCCESS and Nghiep approves.",
+     "why_now": "This is the epic that AA-680/813/816 hang on. The PR is written and only blocked on the ADR (now Accepted), SES and the hostnames. The cognito-idp/wafv2 grants come from item 1's bootstrap PR.",
+     "depends_on": [
+      "AA-811 bootstrap grant (cognito-idp, wafv2:CreateWebACL)",
+      "AA-811 SES identity verified (for the apply stretch; Cognito DEVELOPER mode needs a verified in-region identity)",
+      "AA-818 hostname decision only (not its apply)"
+     ],
+     "done_when": "Must: PR #105 out of draft, Terraform Plan CI green with only aa-identity-*/aa-workforce-*/aa-external-* adds, and the trigger-test job green. Stretch (after apply): a test staff user signs in through the WORKFORCE prefix-domain managed login with an email code, and the access token carries the group claim. A user with no group is denied by the pre-token trigger. Self sign-up on WORKFORCE is rejected. `aws wafv2 get-web-acl-for-resource` returns the ACL for both pools. While in the sandbox, the test inbox must be a verified SES identity.",
+     "size": "L",
+     "llm_cost_usd": "0 (Cognito Essentials free tier; WAF about $5/month + $1/rule)",
+     "needs_nghiep": "Approve the apply (username_attributes and case sensitivity cannot change later). Give the staff test email address, which must be verified in SES while in the sandbox. Set the break-glass secret out-of-band.",
+     "code_evidence": "gh pr view 105: draft, head feat/aa-703-cognito-identity, 10 files, title 'ADR 0006 proposed'. identity.tf (branch): :50-51 (CI role lacks cognito-idp/wafv2 create), :58 id_prefix aa-identity-dev, :68-69 first factors PASSWORD+EMAIL_OTP gated on SES, :186 identity_trigger role with no boundary, :339-343/:428-432 DEVELOPER email, :660/:746 wafv2 web ACL + association. .github/workflows has only terraform-plan/apply/db-migrate (no pytest job). ADR 0006:338-352, :461-463."
+    },
+    {
+     "order": 5,
+     "issue_id": "AA-807",
+     "title": "Data phase 1 slice: Infra CI guard that DB Migrate copies are byte-identical to the owner repo main",
+     "what_this_session": "Add a workflow on pull_request for paths db/migrations/** plus a nightly schedule. For each changed or added file under db/migrations/<owner>/, fetch the same file from the owner repo's main (AA-CIS-App api/migrations, AA-TripPlanner-Web, AA-Booking) and fail on any byte difference, or on a filename/version outside the owner's prefix (NNN / tp-NNN / bk-NNN, per docs/database/schema-ownership.md and the existing prefix logic in db-migrate.yml:56-80). AA-CIS-App, AA-Booking and AA-TripPlanner-Web are all PUBLIC, so raw.githubusercontent / `gh api` with the default GITHUB_TOKEN can read them and no PAT secret is needed. Prove it with the next real copy (CIS 228 from AA-712, or an AA-817 RLS migration) and a deliberately broken test commit. Per-app owner roles, the drift job and shared.countries are later AA-807 slices.",
+     "why_now": "8 of the last 25 Infra commits are migration-copy PRs, and more are coming (228 catalog geo views, AA-817 RLS). Nothing checks a copy against the reviewed source today. It is a cheap guard with no AWS change and no human secret.",
+     "depends_on": [],
+     "done_when": "The workflow is green on a PR with a correct copy (e.g. CIS 228, or a re-check of 226 which `cmp` already confirms is identical locally) and red on a test commit with one changed byte. Run URLs are recorded in an AA-807 Linear comment.",
+     "size": "S",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "None required. Optionally add the check to AA-CIS-Infra branch protection (repo settings are human-only).",
+     "code_evidence": "git log: #100, #101, #102, #104, #106, #107, #109 are copy PRs. .github/workflows = db-migrate.yml, terraform-apply.yml, terraform-plan.yml (no byte-compare). db-migrate.yml:56-80 (owner prefix computed at dispatch only). `gh repo view`: AA-CIS-App, AA-Booking, AA-TripPlanner-Web = PUBLIC, AA-CIS-Infra = PRIVATE. cmp db/migrations/cis/226 vs apps/AA-CIS-App/api/migrations/226 = identical."
+    }
+   ],
+   "backup": [
+    {
+     "order": 6,
+     "issue_id": "AA-806",
+     "title": "WAF CommonRuleSet enforce + WAF on CIS/Booking REST stages: read-only count review now, PR later",
+     "what_this_session": "Read-only: follow docs/waf-count-review.md to pull CountedRequests and sampled requests for aa-cis-dev-waf CommonRuleSet since the #99 apply (14/10 11:04 +07). S237 is on the same day, so the 24–48 h window is not met. Post the interim numbers to AA-806 and draft (do not apply) the PR with waf_common_rules_count_only=false + waf_protect_rest_api_stages=true. apigateway:SetWebACL is already on the apply role (cicd_split.tf:570-576), so no extra grant is needed.",
+     "why_now": "Second half of the High AA-806. Prep work if the chain blocks on DNS or Nghiep decisions.",
+     "depends_on": [
+      "48h count window since #99 apply (earliest ~16/10)",
+      "Nghiep geo-list decision for Booking"
+     ],
+     "done_when": "Interim CountedRequests/sampled-request summary posted on AA-806. Draft PR with CI Plan green showing only the WAF override + 2 associations. Enforce and apply happen in S238+.",
+     "size": "S",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "Geo list for Booking customers; the enforce decision after the full window; approve the apply.",
+     "code_evidence": "accounts/aa365/main.tf:201-208, variables.tf:156-165, cicd_split.tf:566-576 (APIGatewaySetWebACL already granted), docs/waf-count-review.md, git log 5e05244 (#99)."
+    },
+    {
+     "order": 7,
+     "issue_id": "AA-806",
+     "title": "Step 3 prep: retire legacy aa-cis-dev-role and flip the phase-3 boundary flag in the same PR (draft only)",
+     "what_this_session": "Prep only. The orchestrator runs a CloudTrail lookup for AssumeRoleWithWebIdentity on aa-cis-dev-role since the step-2 switch (14/10 ~12:00Z) and lists the remaining consumers (the CIS repo-level AWS_ROLE_ARN rollback secret). Draft the removal PR: aws_iam_role.cicd + attachments + inline, re-point time_sleep to aws_iam_role_policy.tf_apply, keep local.cicd_inline_statements, and set tf_apply_require_boundary_on_role_policy_writes=true here. The flag and tf_apply_boundary are bootstrap objects, so this is a local MFA apply after the removal, or flip it in a follow-up local apply. Merge only after a few green days (~17/10+).",
+     "why_now": "Together with item 2 it closes the escalation path. Bundling the flag here avoids the deny blocking the legacy role's Detach/DeleteRolePolicy.",
+     "depends_on": [
+      "AA-806 step 4 (item 2)",
+      "a few green days after 14/10"
+     ],
+     "done_when": "Draft PR with CI Plan green showing only removal of the legacy role objects + the boundary flag. CloudTrail evidence (0 AssumeRole on aa-cis-dev-role since the switch) attached to Linear.",
+     "size": "S",
+     "llm_cost_usd": "0",
+     "needs_nghiep": "Move the CIS repo-level AWS_ROLE_ARN off the legacy role (secrets are human-only). Approve the merge + local apply after the window.",
+     "code_evidence": "docs/ci-role-split.md:79-88, cicd.tf:35 aws_iam_role.cicd, cicd_split.tf:172-182 (legacy role: only Delete/Detach/DeleteRolePolicy allowed) and :219-235 (phase-3 deny on Resource * without the workload boundary). Linear AA-806 comment 14/10 12:14Z."
+    }
+   ],
+   "new_issues_needed": [
+    {
+     "title": "[Infra] Move lumiguides.it.com DNS from Namecheap to a Terraform-managed Route 53 hosted zone (optional)",
+     "reason": "Live: NS = registrar-servers.com and there is no Route 53 hosted zone on acc2. The zone carries Zoho MX/SPF and www pointing at the old Quanskill ap-southeast-1 ALB. Without Route 53, every SES/ACM/API record is a hand step for Nghiep, and AA-818 alone takes 2 rounds. Create this only if Nghiep wants Terraform-owned DNS (full Namecheap export first). Otherwise AA-811/AA-818 proceed with manual records."
+    }
+   ],
+   "changes_vs_scout": [
+    "Bootstrap grant must be INLINE statements on aws_iam_role_policy.tf_apply, not more managed policies: the apply role already has 10 AWS-managed attachments, which is the default per-role quota (cicd_split.tf:514 comment), so 'add a managed policy' would fail. Also flagged the 10,240-char aggregate inline limit to check before writing.",
+    "Made it ONE bootstrap PR, covering ses + acm + cognito-idp + wafv2:CreateWebACL/DeleteWebACL (#105 creates a web ACL and WAFv2Manage in cicd.tf:217 lacks CreateWebACL), plus the agent-session boundary, so Nghiep does a single MFA local apply instead of one each for items 1, 2 and 4.",
+    "AA-806 step 4: the phase-3 flag tf_apply_require_boundary_on_role_policy_writes must NOT be flipped in the step-4 PR. Its deny covers Resource * without the workload boundary, so it would block the step-3 CI removal of the legacy aa-cis-dev-role (Detach/DeleteRolePolicy on an unbounded role). Moved the flag into the step-3 PR (backup 7).",
+    "AA-806 step 4: added aa-cis-nat-instance-role (inside tf_managed_role_arns) to the boundary list. Step 4 is applied through CI (IAMRoleManageStack includes PutRolePermissionsBoundary), not locally; only the agent_session role is protected and needs the local apply.",
+    "Moved AA-806 step 4 from order 3 to order 2: it needs no Nghiep decision and no DNS, so it fills the wait while SES/ACM records propagate.",
+    "AA-818: one Namecheap batch is not possible. An API GW custom domain needs an ISSUED cert, and its d-xxx target only exists after creation, so it takes 2 rounds (validation CNAMEs with the SES batch, then target CNAMEs). Also added the missing us-east-1 provider alias (versions.tf has a single provider) and suggested SAN/wildcard certs to cut records. Noted that the live api-cis.lumiguides.it.com domain + cert are not in Terraform state.",
+    "AA-703: dependency on AA-818 reduced to the hostname decision only; callback URLs need not resolve. Split done_when into must-ship (PR out of draft, plan + new trigger-test job green) and stretch (apply + sign-in), because the apply needs a SUCCESS SES identity and, in the sandbox, a verified test inbox. Added the pool-level PASSWORD factor note (breakglass only).",
+    "AA-807: removed the PAT/secret requirement. AA-CIS-App, AA-Booking and AA-TripPlanner-Web are all PUBLIC (gh repo view), so the default GITHUB_TOKEN can read them and needs_nghiep becomes none.",
+    "AA-811: flagged the sender conflict. The Linear scope says a sub-domain identity, while ADR 0006 item 5 says no-reply@lumiguides.it.com on the apex. Nghiep must choose. Suggested reusing aws_sns_topic.alerts for bounce/complaint events; SNS is likely covered by CloudWatchFullAccess. Confirmed live: no SES identities and the account is in the sandbox (200/day).",
+    "Backup WAF: noted that apigateway:SetWebACL is already granted (cicd_split.tf:566-576), so no grant is needed. S237 is the same day as the #99 apply, so it is read-only review + draft PR only."
+   ],
+   "notes": "I verified the scout's facts and found most of them correct. Already confirmed: no Route 53 zone and DNS on Namecheap; #105 still draft and predating #103; the identity_trigger role has no boundary; only 2 permissions_boundary hits; step 2 is done per the AA-806 comment of 14/10 12:14Z; the WAF window and step 3 are time-gated. Nothing in the chain is already done.\n\nRead-only checks run this session: sesv2 list-email-identities returns [] and get-account shows ProductionAccessEnabled=false. ACM: us-west-1 has only the api-cis and api-cis-aa365 single-name certs; us-east-1 has none. gh repo visibility: the 3 app repos are PUBLIC and AA-CIS-Infra is PRIVATE. Worth a mention to Nghiep, since public app repos also expose migrations and workflow names. cmp shows the 226 copy is identical to the source. Grep found no boto3 iam/organizations/account client in any app repo, so the workload boundary is safe at runtime.\n\n`aws iam get-role-policy` / `list-roles` are hook-blocked for subagents, so the orchestrator must run the inline-size check and the boundary verification.\n\nSuggested DNS flow:\n- Round 1: SES DKIM x3, MAIL FROM MX+TXT, DMARC, ACM validation for us-west-1 + us-east-1.\n- Round 2: the api-booking/api-tripplanner targets.\n\nDo item 2 (boundaries, CI apply) and item 5 (CI guard) while DNS propagates.\n\nRecurring support work: byte-identical DB Migrate copies for CIS 228 (AA-712) and any AA-817 RLS migration. Item 5 should guard these. Dispatch is orchestrator/Nghiep only.\n\nEvery new aws_iam_role from now on needs permissions_boundary = workload_boundary and an aa-*-dev-* name; the item 1/3 roles and the #105 trigger role do.\n\nThe Lambda concurrency quota (CASE_OPENED) is not Terraform-managed.\n\nThe underscore env vars in AA-818 are edited by Nghiep by hand."
+  }
+ ],
+ "cross": {
+  "summary": "Cross-lane review of the five S237 lanes (read-only). The lanes mostly fit together, but six things must be fixed before they run.\n\n(1) AA-819 is planned twice, in cis-backend #3 and cis-portal #1. The two plans give different migration designs: 230 NOT NULL DEFAULT 20, versus a nullable override with a code default. Both lanes would also edit v1_publish.publish() and quality_gates.py. Pick one owner per part.\n\n(2) The AA-817 migration 229 as written (ENABLE + FORCE + NULLIF policy on gold_aa_internal.tenant_tour_versions) would hide every row from aa_cis_admin, which owns the table. Migration 225's header and schema-ownership.md both say aa_cis_admin is neither superuser nor BYPASSRLS. So the T2 worker, admin Content Quality, v1_tours on the main pool, AA-801/AA-793 jobs and portal AA-802 would all see 0 rows. 229 must follow the 115/116/145 pattern (ENABLE, no FORCE) or add an explicit admin policy. (Old 007b says aa_cis_admin has BYPASSRLS; the newer 225 header contradicts it. AA-817 step 1 settles which is true.)\n\n(3) CIS migration numbers need fixing up front: 228 views (AA-712), 229 RLS (AA-817), 230 publish limit (AA-819), 231 content_piece_label (AA-791), 232 reserved for the AA-679 outbox. Several root docs still say views = \"227\", but 227 is already taken by sonnet5_no_temperature.\n\n(4) TripPlanner slice 6b assumes a \"228 top-k function\", which the CIS 228 scope does not include.\n\n(5) AA-818, AA-811, AA-679 and AA-712 each appear in two lanes, with overlapping Infra/IAM work that needs one owner.\n\n(6) Two ordering rules clash and need an agreed migration flow. The AA-807 byte-copy guard needs the owner repo's main merged first. But Booking's REQUIRED_SCHEMA_VERSIONS check, and any CIS code that reads a new column, fail if the code deploys before the apply.\n\nTwo deploy constraints also shape the order. The deploy guard means every CIS backend merge (two lanes share one Deploy Dev) needs an empty shared.job, so paid runs and merges must alternate in planned windows. Booking backend deploys must wait until the TripPlanner AA-805 E2E is done.",
+  "cross_dependencies": [
+   {
+    "from": "tripplanner #4 (AA-712 slice 6b, browse readers behind PLACES_SOURCE)",
+    "to": "cis-backend #1(c) (migration 228 merged, Infra copy, DB Migrate applied, grants to tripplanner)",
+    "note": "Hard block. The CIS lane already moves 228 to right after the trial starts. The TripPlanner fallback (swap to backup AA-811 code slice) is correct if 228 is late."
+   },
+   {
+    "from": "tripplanner #4 (AA-712 slice 6b)",
+    "to": "cis-backend #1(b) (3-tour trial rows in geo.*)",
+    "note": "The local PLACES_SOURCE=cis verification needs geo rows for the trial country. The trial country must be in the frozen 56-tour set (the CIS lane already requires this). TripPlanner should verify on that same country."
+   },
+   {
+    "from": "cis-backend #1(d) (AA-712 first-country batch b)",
+    "to": "tripplanner #2 (AA-712 slice 6a, writer removal, deployed to Lambdas)",
+    "note": "Design 03 §7: real backfill runs should wait for slice 6's writer removal. Use the TripPlanner 6a deploy as the gate instead of Nghiep 'accepting the risk'. The trial (run a) does not need it."
+   },
+   {
+    "from": "cis-backend AA-712 slice 8 (drop destinations_lower_name_uidx, not in any lane)",
+    "to": "tripplanner #2 (slice 6a)",
+    "note": "Follow-up only. Slice 8 can be scheduled once 6a is live. It takes the next free CIS number after the agreed block."
+   },
+   {
+    "from": "tripplanner backup #6 (slices 6c+7, tp-011 id-map + flag flip)",
+    "to": "cis-backend #1(d) + a 56-tour legacy-set build",
+    "note": "The CIS lane's batch (b) covers one country (<=50), not the 56-tour set needed by the §7 b2 coverage check. 6c+7 cannot flip this session unless CIS runs the 56-set build, which is not in the CIS lane."
+   },
+   {
+    "from": "tripplanner #4 search on the cis path",
+    "to": "cis-backend 228 scope",
+    "note": "TripPlanner expects a '228 top-k function'. The CIS 228 scope lists only views (v_tour_component with embedding). Design 03 §6.5 needs the top-k rewrite only before the catalog-wide run. Either add the function to 228 now or keep TripPlanner on the brute-force MIN(<=>) path for 6b."
+   },
+   {
+    "from": "cis-portal #1 (AA-819 notice UI + Tenant 360 daily_publish_limit field)",
+    "to": "cis-backend #3 (AA-819 backend: limit + migration 230 + T9 guard)",
+    "note": "The portal admin field needs the 230 column and the PATCH route. The notice UI has no backend dependency and can ship first."
+   },
+   {
+    "from": "cis-portal #3 (AA-668 writer panel)",
+    "to": "cis-portal #1 (AA-819 notice component)",
+    "note": "Order inside the lane is already right."
+   },
+   {
+    "from": "cis-portal #4 (AA-791 repair_log ledger in the T9 loop)",
+    "to": "cis-backend #3 (AA-819 T9 guard in quality_gates.py / service.py)",
+    "note": "Same T9 loop files. Land AA-819(c) first, then rebase AA-791 on it."
+   },
+   {
+    "from": "cis-portal #5 (AA-802 T2 admin sentence apply on tenant_tour_versions)",
+    "to": "cis-backend #4 (AA-817 migration 229)",
+    "note": "If 229 uses FORCE RLS, the admin UPDATE as aa_cis_admin hits 0 rows. 229 must be ENABLE without FORCE, or AA-802 must set app.tenant_id to the row's tenant."
+   },
+   {
+    "from": "cis-backend #2/#5 (AA-801 jobs, AA-793 rerun: T2 worker writes tenant_tour_versions)",
+    "to": "cis-backend #4 (AA-817 migration 229)",
+    "note": "Same FORCE-RLS risk for the worker. Apply 229 in a window with no T2 jobs, and smoke one T2 job after it."
+   },
+   {
+    "from": "booking #5 (wave 2b hotels/services, 'DB-level protection')",
+    "to": "cis-backend #4 (AA-817)",
+    "note": "Not satisfied this session. ADR 0004a's known gap closes only when CIS stops connecting as the owner aa_cis_admin. The AA-817 slice moves one tenant route group to aa_app_user and does not touch schema booking. Make this a documented known gap, not a dependency."
+   },
+   {
+    "from": "booking #2..#5 (bk-007..bk-010)",
+    "to": "infra (byte-copy PRs + DB Migrate, and infra #5 AA-807 guard)",
+    "note": "AA-807 compares the copy to owner main, so the owner PR must merge first. Booking db.py REQUIRED_SCHEMA_VERSIONS makes /health/ready not_ready until the apply. Ship each bk migration as migration-file-only first, or bump REQUIRED in a follow-up PR after the apply."
+   },
+   {
+    "from": "tripplanner #1 (AA-805 Booking E2E: apply-route, Send to advisor)",
+    "to": "booking lane (no backend redeploy of intake during the E2E)",
+    "note": "Booking #1 is frontend-only and safe. Run AA-805(d) before the Booking #2 (bk-007) backend deploy and before infra #2's Booking force-new-deployment smoke."
+   },
+   {
+    "from": "tripplanner #3 (AA-812 'from $X')",
+    "to": "booking backup #6 (v_from_prices)",
+    "note": "Not this session. AA-812 closes without the price (TripPlanner needs_nghiep already says so)."
+   },
+   {
+    "from": "tripplanner #5 (AA-818 TripPlanner half: Vercel host, BFF env, CORS, Mapbox restriction)",
+    "to": "infra #3 (AA-818 ACM + API GW custom domains)",
+    "note": "The Infra lane owns all Terraform: one us-west-1 SAN cert (api-booking + api-tripplanner) and one us-east-1 cert (auth/staff-auth). tripplanner.lumiguides.it.com is a Vercel domain, so it needs only a Namecheap CNAME, not ACM. The TripPlanner lane's 'one Infra PR shared with Booking' is replaced by infra #3."
+   },
+   {
+    "from": "infra #3 (AA-818) and infra #4 (AA-703)",
+    "to": "infra #1 (bootstrap grant PR: acm, cognito-idp, wafv2, local MFA apply by Nghiep)",
+    "note": "Hard block inside the Infra lane. It also gates AA-703's apply stretch on a verified SES identity."
+   },
+   {
+    "from": "tripplanner backup #7 (AA-811 SesSender)",
+    "to": "infra #1 (SES identity + ses:SendEmail grant with a ses:FromAddress condition on the TripPlanner Lambda exec role)",
+    "note": "The grant belongs only to infra #1. The TripPlanner From address must equal the FromAddress condition, which depends on Nghiep's sender decision."
+   },
+   {
+    "from": "infra #2 (AA-806 step 4 boundaries on CIS/Booking/TripPlanner roles, plus a CIS Deploy Dev smoke)",
+    "to": "CIS deploy guard (shared.job empty)",
+    "note": "The smoke needs a CIS deploy, and a bad boundary would hit the worker during paid runs. Apply only in an empty-job window, never during the AA-712/AA-801/AA-793 drain windows."
+   },
+   {
+    "from": "infra #5 (AA-807 byte-identical guard)",
+    "to": "all migration items (CIS 228-231, bk-007..010)",
+    "note": "If merged early, it validates every copy this session. The owner-main-first ordering then becomes mandatory (see the Booking note)."
+   },
+   {
+    "from": "cis-backend backup #7 (AA-679 catalog.outbox)",
+    "to": "booking #4 (AA-679 Booking half, live reads of v_tour)",
+    "note": "The Booking lane proposes rewording AA-679 away from outbox sync. If Nghiep accepts, the CIS outbox has no consumer this session. Decide before either lane touches AA-679."
+   }
+  ],
+  "conflicts": [
+   "AA-819 is in two lanes. cis-backend #3 does the T9 guard, migration 230 (daily_publish_limit NOT NULL DEFAULT 20) and the publish() 429. cis-portal #1 does the same three, plus a code-default limit and a NULLABLE override column 'next free after 228'. Same files: v1_publish.py publish(), quality_gates.py, prompts.py, admin.py PATCH. Resolution: cis-backend owns the T9 guard, limit logic and migration 230. cis-portal owns the notice line (T10/T11/export) and the Tenant 360 field only. Use the portal's design (nullable override + code default 20 + replays excluded): it keeps the 11/11 deadline independent of the Infra approval and keeps the code safe before 230 is applied.",
+   "CIS migration number clash. cis-backend uses 229 = AA-817 RLS and 230 = AA-819. cis-portal says AA-819's column is 'next free after 228' (= 229), and AA-791's content_piece_label has no number. Proposed allocation: 228 AA-712 catalog place/graph views; 229 AA-817 tenant_tour_versions RLS; 230 AA-819 daily_publish_limit; 231 AA-791 content_piece_label; 232 reserved for AA-679 catalog.outbox (backup); the next free number for AA-712 slice 8. DB Migrate applies one file at a time, so 230/231 may apply before 229 without breaking anything.",
+   "Stale numbering in the source-of-truth docs. ADR 0007 / design 03 §2.5, §7 slice 4 and §6.4 notes, plus docs/database/schema-ownership.md (catalog row 'ADR 0007 (CIS 227) adds the place/graph views'), all say 227. Live 227 is 227_sonnet5_no_temperature.sql. The 228 PR must fix these in a root PR. schema-ownership.md also still mentions Mapbox-era wording elsewhere.",
+   "AA-817 migration 229 design conflicts with the runtime role. 225's header and schema-ownership state that aa_cis_admin owns the tables and is neither superuser nor BYPASSRLS. ENABLE + FORCE with tenant_id = NULLIF(current_setting('app.tenant_id', true), '') would return 0 rows to the API main pool, the T2 worker and admin cross-tenant lists on gold_aa_internal.tenant_tour_versions, and would block INSERT WITH CHECK in t2_rewrite. Existing tenant tables 115/116/145 use ENABLE without FORCE (owner exempt, aa_app_user isolated), and that is the pattern 229 needs. (007b_create_app_user.sql still claims aa_cis_admin has SUPERUSER/BYPASSRLS, which contradicts 225; AA-817 step 1 must settle this before 229 is written.)",
+   "Migration flow vs AA-807 guard vs readiness checks. The AA-807 guard (infra #5) requires the owner repo main to hold the file first. CIS merges auto-deploy, and Booking db.py REQUIRED_SCHEMA_VERSIONS makes /health/ready not_ready until the version is applied. Any PR that bundles a migration with code that reads it breaks between merge and apply. Needed rule: code must tolerate the missing object until the apply, or the migration-only PR merges first and the code/REQUIRED bump follows the apply.",
+   "CIS deploy guard collision. Two lanes (cis-backend, cis-portal) share one Deploy Dev on AA-CIS-App, and roughly 8 backend merges are planned (AA-819 x2 parts, AA-817, AA-793, AA-815 routes, AA-791 route, AA-802 route, the AA-668 part-1 frontend excepted). Every merge needs shared.job empty. Paid work fills the worker: the AA-712 trial and batch with place_* jobs at cap 1 (the batch of <=50 tours can take hours), 2-3 AA-801 t2_rewrite jobs, AA-819/AA-668 T9/T8 test writes in the portal lane, and AA-793's 3+14 pair rerun. These must be scheduled as alternating drain/merge windows owned by the orchestrator, not per lane.",
+   "Shared files across the two CIS lanes: api/routers/v1_publish.py (AA-819 limit, AA-815 unpublish remote delete, later AA-817 stages); services/acp_content_writing/service.py + quality_gates.py (AA-819 T9 guard, AA-791 ledger); api/routers/admin_content_quality.py (AA-791 label routes, AA-802 T2 apply); api/routers/admin.py tenant PATCH (AA-819 override); frontend admin/tenants page (AA-819 field). Serialize in that order and rebase.",
+   "AA-818 is in two lanes. tripplanner #5 plans 'one Infra PR shared with the Booking lane, single us-west-1 cert covering four hosts'. infra #3 plans a us-west-1 SAN cert (api-booking + api-tripplanner) plus a us-east-1 cert (auth/staff-auth) in two Namecheap rounds. The Booking lane has no AA-818 item at all. Infra #3 owns all Terraform; the TripPlanner lane keeps only the Vercel domain, env, CORS and Mapbox steps.",
+   "AA-811 is in two lanes. infra #1 grants ses:SendEmail to the TripPlanner Lambda exec role. tripplanner backup #7 also says to 'add the IAM ses:SendEmail permission ... to the AA-818/SES Infra PR'. Drop it from TripPlanner.",
+   "AA-712 appears in cis-backend (#1) and tripplanner (#2, #4, backup #6). These are distinct slices, which is fine, but each Linear progress comment must name its slice so AA-712 Done is not set early. Done also needs the photo covers plus TripPlanner reading the views, which only happens with slices 6c+7 (backup).",
+   "AA-679 is in cis-backend backup #7 (CIS outbox + catalog.tour.v1.1) and booking #4 (live reads, proposing to reword the Done-when away from outbox sync). Contradictory designs for the same issue.",
+   "Infra Terraform shared files and the apply queue. infra #1 (SES grants to the CIS ECS task role, Booking and TripPlanner roles) and infra #2 (permissions_boundary on the same roles via a new modules/ecs variable) both edit the role resources. terraform-apply is a single concurrency group (terraform-apply-prod), so PRs must merge and apply one at a time with a re-plan in between. Put the SES grants in accounts/aa365/ses.tf as separate aws_iam_role_policy resources, not inside modules/ecs, to avoid a merge conflict with step 4.",
+   "DB Migrate is a single concurrency group, and it starts its one-off task from the CIS api task definition. It is blocked if aa-cis-dev-api is scaled to 0 and is affected by infra #2's boundary on the CIS task role. About 4 CIS + 4 Booking applies this session, all by Nghiep dispatch.",
+   "Root repo shared files: docs/contracts/ (catalog.graph.v1 from AA-712 228, catalog.tour.v1.1 from AA-679 backup, price.from.v1 from Booking backup), docs/database/schema-ownership.md, and docs/architecture/db-schema-reference.md (regenerated after every CIS/bk/tp migration by up to three lanes). Bundle them into one root PR per merge window and merge it by hand.",
+   "Linear quota wording conflicts. .kiro/steering/session-workflow.md says 50 issues per project, while skill/aa-linear-issue (S236, newer) says 100 unarchived per project and 250 per workspace (Free plan). Up to 5 new issues are proposed (Booking wave 2a, 2b and supply outbox; portal admin self-operation buttons; Infra Route 53 move). Nghiep has not archived the roughly 83 Done issues yet.",
+   "Paid-run total across lanes is about $6-9 (cis-backend ~$5-8 including the AA-712 batch and AA-793 rerun, cis-portal ~$0.3-0.8, TripPlanner ~$0.05), and each batch needs its own approval. Within the paid-runs-subset rule (<=50 tours/batch)."
+  ],
+  "suggested_global_order": [
+   "0. Decision checkpoint with Nghiep before any lane writes code (see nghiep_decisions_needed): AA-819 ownership split, CIS migration number block 228-232, 229 without FORCE, SES sender, hostname list, AA-679 direction, the migration-flow rule, and approval of the trial country and the first paid window.",
+   "1. Infra #1 bootstrap grant PR (local MFA apply by Nghiep) plus the SES/ACM DNS round 1 at Namecheap. Start these first because the DKIM, cert-validation and sandbox-exit clocks run in the background.",
+   "2. Drain window 1 (paid): CIS AA-712 dry-run, then the 3-tour trial, plus AA-801's 2-3 T2 jobs (Trail Pulse/WildKind). In parallel, with no CIS deploy: TripPlanner #1 AA-805 evidence (run the Booking E2E now, while Booking is frontend-only), TripPlanner #2 slice 6a writer removal (Lambda deploy, not gated by shared.job), Booking #1 (Vercel-only), Infra #5 AA-807 guard PR, and drafting of the Infra #2 step-4 PR.",
+   "3. While window 1 drains: write CIS 228 (views only, append-only to the 225 views, plus the docs 227->228 fix and the catalog.graph.v1 contract in the root PR), merge it into CIS main (views only, no code depends on it), then the Infra copy PR (checked by AA-807) and DB Migrate check->apply. Regenerate the schema reference. This unblocks TripPlanner #4.",
+   "4. Merge window A (shared.job empty): CIS AA-819 backend (code default 20, tolerant of a missing column) + portal AA-819 notice + AA-815 + AA-668 part 1. Apply Infra #2 step 4 (AA-806 boundaries) in the same quiet window and run the CIS/Booking/TripPlanner smokes. Then migrations 230 (and 231 for AA-791) via one Infra copy PR and DB Migrate.",
+   "5. TripPlanner #3 AA-812 and TripPlanner #4 slice 6b (now unblocked by 228 + trial rows). Booking #2 AA-810 bk-007: migration-only PR, then Infra copy, then apply, then the code PR that bumps REQUIRED_SCHEMA_VERSIONS. Run this only after the AA-805 E2E is done.",
+   "6. CIS AA-817: role x table matrix first (it settles the BYPASSRLS question), then write 229 (ENABLE without FORCE, per the decision), apply it in a window with no T2 jobs, smoke one T2 job and the admin tour-versions list, then the content-piece route flag flip after Nghiep confirms. Portal AA-791 and AA-802 merge after 229 is applied and verified.",
+   "7. Infra round 2: once the certs are ISSUED, the api-booking and api-tripplanner domains (Infra #3), then the TripPlanner AA-818 Vercel/env steps (after AA-812 closes). Infra #4 AA-703: PR #105 out of draft with plan green (apply only if SES is SUCCESS).",
+   "8. CIS AA-793 code + deploy (merge window B).",
+   "9. Final drain window (paid): AA-712 first-country batch (b), gated on the TripPlanner 6a deploy, plus the AA-793 rerun (3 pairs, then 14), which also closes AA-792. No CIS merges during this window.",
+   "10. Booking #3-#5 (bk-008..bk-010) proceed serially through the DB Migrate queue whenever Nghiep is available. The natural cut is after bk-009; bk-010 can roll to S238."
+  ],
+  "nghiep_decisions_needed": [
+   "AA-819 split: cis-backend owns the T9 guard, the publish limit and migration 230; cis-portal owns only the notice UI and the Tenant 360 field. Also choose the column shape: a nullable override with code default 20 (recommended, deadline-safe), or NOT NULL DEFAULT 20. Confirm 20/day, UTC-day counting, and that replays are excluded.",
+   "Lock the CIS migration numbers: 228 AA-712 views, 229 AA-817 RLS, 230 AA-819, 231 AA-791, 232 reserved for AA-679 outbox. Approve fixing the stale '227' references in ADR 0007 / design 03 / schema-ownership.md in the 228 root PR.",
+   "AA-817 229 shape: ENABLE ROW LEVEL SECURITY without FORCE (owner aa_cis_admin stays exempt and only aa_app_user is isolated, matching 115/116/145), versus FORCE plus explicit app.tenant_id setting on every worker/admin path. FORCE as written would empty the T2 worker and admin reads.",
+   "Migration flow rule for this session, given the AA-807 guard plus Booking REQUIRED_SCHEMA_VERSIONS: migration-file-only PR to the owner main first, then the Infra copy, then the apply, then the code that depends on it. The alternative is to make the guard compare against the owner PR head instead of main.",
+   "Whether CIS 228 also ships a top-k search function for TripPlanner (TripPlanner #4 assumes one), or TripPlanner stays on the MIN(<=>) path until the catalog-wide run (design 03 §6.5 allows this).",
+   "AA-712 batch (b) gate: wait for the TripPlanner slice 6a deploy (recommended), or accept that TripPlanner's lower(name) upsert can overwrite CIS points. Pick the trial country (SQL, from the 56-tour set) and approve the ~$1-1.2 first paid window (AA-712 trial + AA-801).",
+   "SES sender: apex no-reply@lumiguides.it.com (ADR 0006 item 5) or a sub-domain identity (AA-811 Linear scope). Choose the MAIL FROM sub-domain. This also fixes the ses:FromAddress condition used by CIS, Booking and TripPlanner.",
+   "Hostname list in one place: api-booking., api-tripplanner., tripplanner. (Vercel), auth. and staff-auth. (Cognito, us-east-1 cert), and the Booking staff admin frontend host (no lane names one). Also decide whether the apex A record needed by the Cognito custom domains replaces the old Quanskill www ALB record, and whether to move DNS to Route 53 (optional new issue).",
+   "AA-679 direction: Booking live-reads catalog views plus a commercial-only trip_plans row (reword the Done-when or split the outbox consumer out), versus building the CIS catalog.outbox now (cis-backend backup #7). Do not run both.",
+   "Linear: archive the ~83 Done issues before creating new ones. Approve creating Booking wave 2a and 2b (and optionally the supply outbox, the portal admin buttons and the Route 53 move). Settle the 50 vs 100 per-project rule mismatch between steering and the skill (the skill is newer and wins per steering, but the steering file should be updated).",
+   "Paid approvals in sequence: AA-712 trial, then batch (b); AA-801 ~$1; AA-819/AA-668 T9/T8 test writes ~$0.3-0.8; AA-793 rerun 3, then 14 pairs (~$3.4). The total is about $6-9 if everything is approved.",
+   "Booking demo data: write V1/V2/confirmed on TC-000001 or a fresh case; act as the second approver for the AA-810 maker-checker; supply FX rates or accept placeholder rows marked manual-dev.",
+   "Infra local MFA apply of the bootstrap grant PR (ses/acm/cognito-idp/wafv2 + agent-session boundary), and prod-environment approval for the CI applies of SES and AA-806 step 4."
+  ],
+  "lane_edits": [
+   {
+    "lane": "cis-backend",
+    "edit": "#4 AA-817: change 229 from 'ENABLE + FORCE' to ENABLE without FORCE + tenant_isolation policy (NULLIF GUC) + GRANT to aa_app_user, matching 115/116/145. Add to step (1) proving whether aa_cis_admin is BYPASSRLS (007b says yes, 225 header says no). If FORCE is chosen anyway, list every worker/admin path on tenant_tour_versions that must set app.tenant_id first (t2_rewrite_job, admin_content_quality tour-versions, v1_tours main pool, portal AA-802 apply). Apply 229 only in a window with no T2 jobs, then smoke one T2 job plus the admin tour-versions list."
+   },
+   {
+    "lane": "cis-backend",
+    "edit": "#3 AA-819: keep the T9 guard, the limit logic and migration 230, but adopt the portal's design: a nullable shared.tenants.daily_publish_limit override, code default 20, counting publish_log status in ('requested','published') per UTC day with replays and 409 in-flight retries excluded, and code that tolerates the column being absent until the 230 apply. Coordinate the PATCH route with the portal Tenant 360 field."
+   },
+   {
+    "lane": "cis-backend",
+    "edit": "#1 AA-712: the 228 PR also fixes '227' -> '228' in the root docs (docs/adr/0007, design 03 §2.5/§7, docs/database/schema-ownership.md catalog row) and adds docs/contracts/catalog.graph.v1 in the same root PR. Decide (with Nghiep) whether 228 includes a top-k search function. TripPlanner #4 currently assumes it."
+   },
+   {
+    "lane": "cis-backend",
+    "edit": "#1(d) AA-712 batch (b): replace 'Nghiep confirms TripPlanner extraction stays frozen' with depends_on 'tripplanner #2 slice 6a deployed (Lambda returns unknown op for tour_days)'. Keep risk acceptance as the fallback only."
+   },
+   {
+    "lane": "cis-backend",
+    "edit": "Backup #7 AA-679 outbox: hold until Nghiep decides the AA-679 direction (the Booking lane proposes live reads and a reworded Done-when). Reserve migration 232 for it."
+   },
+   {
+    "lane": "cis-backend",
+    "edit": "Notes: the orchestrator owns drain/merge windows for both CIS lanes. Do not enqueue paid jobs from this lane while a portal-lane merge is queued, and the reverse."
+   },
+   {
+    "lane": "cis-portal",
+    "edit": "#1 AA-819: cut to (a) the notice line at T10/T11/export and (b-UI) the Tenant 360 daily_publish_limit field. Remove the publish() limit and the T9 testimonial check; cis-backend #3 owns them. Size L -> S/M. depends_on: cis-backend #3 (PATCH route + 230) for the field only."
+   },
+   {
+    "lane": "cis-portal",
+    "edit": "#4 AA-791: content_piece_label is migration 231 (not 'same Infra PR as AA-819' by default; it can share the 230 copy PR only if both owner PRs have merged first, because of the AA-807 guard). Rebase the T9-loop change after cis-backend AA-819(c)."
+   },
+   {
+    "lane": "cis-portal",
+    "edit": "#5 AA-802: depends_on cis-backend #4 (229 shape). The admin UPDATE on tenant_tour_versions runs as aa_cis_admin and fails silently under FORCE RLS. Add a post-229 re-verification of the apply path."
+   },
+   {
+    "lane": "cis-portal",
+    "edit": "#2 AA-815: the unpublish route sits in v1_publish.py next to the AA-819 limit. Merge after cis-backend AA-819 lands, or rebase on it."
+   },
+   {
+    "lane": "tripplanner",
+    "edit": "#4 slice 6b: remove the '228 top-k function' assumption unless the CIS lane adds it. Keep the brute-force MIN(<=>) search on the cis path for the trial country, and record that the top-k rewrite is required before the catalog-wide run (design 03 §6.5). depends_on also names the trial country chosen by CIS."
+   },
+   {
+    "lane": "tripplanner",
+    "edit": "#5 AA-818: drop 'one Infra PR / ACM cert shared with the Booking lane'. Infra #3 owns the certs and API GW domains (api-tripplanner, api-booking, and the us-east-1 auth certs). TripPlanner keeps only the Vercel domain tripplanner.lumiguides.it.com (Namecheap CNAME, no ACM), BFF env, CORS and Mapbox URL restriction, and depends on infra #3 round 2 plus AA-812 closed."
+   },
+   {
+    "lane": "tripplanner",
+    "edit": "Backup #7 AA-811: remove 'add IAM ses:SendEmail for the assembly Lambda to the SES Infra PR'; infra #1 already grants it. The SesSender From address must equal the infra ses:FromAddress condition (Nghiep's sender decision)."
+   },
+   {
+    "lane": "tripplanner",
+    "edit": "#1 AA-805(d): run the Booking E2E before Booking #2 (bk-007 backend deploy) and before infra #2's Booking force-new-deployment smoke. Tell the orchestrator when it starts and ends."
+   },
+   {
+    "lane": "tripplanner",
+    "edit": "Backup #6 slices 6c+7: note that the CIS lane builds only one country (<=50) this session, not the 56-tour legacy set, so the §7 b2 coverage check cannot pass in S237 without an extra CIS paid batch."
+   },
+   {
+    "lane": "booking",
+    "edit": "#2-#5 migrations bk-007..bk-010: split each into (i) a migration-file-only PR to Booking main (no REQUIRED_SCHEMA_VERSIONS bump), (ii) an Infra byte-copy PR (checked by AA-807), (iii) DB Migrate check->apply, (iv) the code PR that bumps REQUIRED_SCHEMA_VERSIONS and uses the tables. Otherwise /health/ready goes not_ready between deploy and apply."
+   },
+   {
+    "lane": "booking",
+    "edit": "#5 wave 2b: change the 'AA-817 (CIS lane)' dependency to a documented known gap (ADR 0004a). The AA-817 slice this session does not change the CIS runtime role and does not touch schema booking."
+   },
+   {
+    "lane": "booking",
+    "edit": "#2 AA-810: depends_on 'tripplanner #1 AA-805 Booking E2E finished' before the backend deploy."
+   },
+   {
+    "lane": "booking",
+    "edit": "#4 AA-679: hold until Nghiep decides the AA-679 direction (reword the Done-when vs the CIS outbox in cis-backend backup #7)."
+   },
+   {
+    "lane": "infra",
+    "edit": "#1 AA-811: put the ses:SendEmail grants for the CIS ECS task, Booking task and TripPlanner Lambda roles as standalone aws_iam_role_policy resources in accounts/aa365/ses.tf, not inside modules/ecs, so they do not conflict with #2's modules/ecs boundary variable. Merge and apply #1 and #2 serially (terraform-apply-prod concurrency group) with a re-plan in between."
+   },
+   {
+    "lane": "infra",
+    "edit": "#2 AA-806 step 4: the apply plus the CIS Deploy Dev smoke happen only in an orchestrator-declared empty-shared.job window, never during the AA-712 / AA-801 / AA-793 drain windows. Note that DB Migrate one-off tasks also run under the CIS task role, so smoke a DB Migrate check after the apply (already listed)."
+   },
+   {
+    "lane": "infra",
+    "edit": "#3 AA-818: become the single owner of all AA-818 Terraform (the TripPlanner and Booking lanes only do Vercel/env). Add the Booking staff admin frontend host to the hostname decision if Nghiep wants one."
+   },
+   {
+    "lane": "infra",
+    "edit": "#5 AA-807: document in the PR that the guard forces 'owner main first'. Allow migration-only owner PRs (see the Booking edit). Land it before the 228 copy so 228 is the first real proof."
+   }
+  ]
+ }
+}

@@ -3,6 +3,7 @@
 - **Status:** Accepted (14/10/2026, Nghiệp, S235), together with the S235 ecosystem blueprint
   (`docs/audits/2026-10-14-S235-ecosystem-team-pilot/01-ecosystem-blueprint.html`). Proposed
   28/09/2026 (S199). See "Amendments (S235)" below.
+- **Tightened by:** ADR 0008 (S237): decision 6 contracts are views only; new-app integration follows ADR 0008's gate and playbook.
 - **Scope:** AA-Ecosys as a whole (AA-CIS-App, AA-TripPlanner-Web, AA-CIS-Infra, future AA-Booking).
   Repo-level ADRs (for example `apps/AA-CIS-App/docs/adr/0001..0004`) stay in their repos. This series
   covers only cross-repo decisions.

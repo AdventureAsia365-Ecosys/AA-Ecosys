@@ -1,0 +1,16 @@
+{
+  "id": "4542b70e-3483-40d6-b7ce-c7d2c6c24427",
+  "code": "TC-000003",
+  "status": "discovery",
+  "customer_code": "CUS-000003",
+  "customer_name": "S237 Demo Customer",
+  "currency": "USD",
+  "countries": [
+    "VN"
+  ],
+  "pax_adults": 2,
+  "start_date": "2026-12-01",
+  "notes": "[S237 demo] AA-681 Done-when walk-through; safe to cancel.",
+  "source_system": "manual",
+  "assignments": []
+}

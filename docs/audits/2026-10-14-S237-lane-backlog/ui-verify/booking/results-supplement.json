@@ -1,0 +1,99 @@
+{
+ "scrolled": [
+  {
+   "name": "trip-plans",
+   "tag": "mid",
+   "sh": 6979,
+   "ch": 784,
+   "top": 2788,
+   "docSW": 390,
+   "file": "trip-plans-390-light-mid.jpg"
+  },
+  {
+   "name": "trip-plans",
+   "tag": "bottom",
+   "sh": 6979,
+   "ch": 784,
+   "top": 6195,
+   "docSW": 390,
+   "file": "trip-plans-390-light-bottom.jpg"
+  },
+  {
+   "name": "trip-plan-detail",
+   "tag": "mid",
+   "sh": 3420,
+   "ch": 784,
+   "top": 1186,
+   "docSW": 390,
+   "file": "trip-plan-detail-390-light-mid.jpg"
+  },
+  {
+   "name": "trip-plan-detail",
+   "tag": "bottom",
+   "sh": 3420,
+   "ch": 784,
+   "top": 2636,
+   "docSW": 390,
+   "file": "trip-plan-detail-390-light-bottom.jpg"
+  },
+  {
+   "name": "pricing-rules",
+   "tag": "mid",
+   "sh": 1831,
+   "ch": 784,
+   "top": 471,
+   "docSW": 390,
+   "file": "pricing-rules-390-light-mid.jpg"
+  },
+  {
+   "name": "pricing-rules",
+   "tag": "bottom",
+   "sh": 1831,
+   "ch": 784,
+   "top": 1047,
+   "docSW": 390,
+   "file": "pricing-rules-390-light-bottom.jpg"
+  },
+  {
+   "name": "cases",
+   "tag": "mid",
+   "sh": 1667,
+   "ch": 784,
+   "top": 397,
+   "docSW": 390,
+   "file": "cases-390-light-mid.jpg"
+  },
+  {
+   "name": "cases",
+   "tag": "bottom",
+   "sh": 1667,
+   "ch": 784,
+   "top": 883,
+   "docSW": 390,
+   "file": "cases-390-light-bottom.jpg"
+  }
+ ],
+ "rules_table": {
+  "table_w": 1207,
+  "scroller": {
+   "sw": 1207,
+   "cw": 1084,
+   "ovx": "auto"
+  },
+  "columns": [
+   "Channel:99",
+   "Target margin:142",
+   "Floor margin:132",
+   "Peak uplift:113",
+   "Card fee:94",
+   "Valid from:111",
+   "Status:110",
+   "Entered by:109",
+   "Approved by:122",
+   "Note:82",
+   "Actions:93"
+  ],
+  "first_row_h": 164
+ },
+ "console_errors": []
+}

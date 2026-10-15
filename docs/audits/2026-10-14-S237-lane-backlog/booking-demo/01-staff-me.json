@@ -1,0 +1,18 @@
+{
+  "cis_user_id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+  "role": "admin",
+  "active": true,
+  "permissions": [
+    "audit.read",
+    "customer.admin",
+    "customer.read",
+    "customer.write",
+    "pricing.read",
+    "staff.admin",
+    "staff.directory",
+    "trip_case.assign",
+    "trip_case.read",
+    "trip_case.write",
+    "version.write"
+  ]
+}

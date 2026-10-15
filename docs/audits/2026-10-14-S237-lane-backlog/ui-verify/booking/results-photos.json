@@ -1,0 +1,46 @@
+{
+ "detail_imgs_total": 42,
+ "detail_loaded": 42,
+ "detail_broken": 0,
+ "detail_pending": 0,
+ "sample_broken": [],
+ "sample_ok": [
+  "https://api-cis.lumiguides.it.com/content/photos/fc3123ce-e289-4d93-b2b8-60a5c8a87574?size=small",
+  "https://api-cis.lumiguides.it.com/content/photos/05e4f199-c9fc-4f32-a4a7-315ecc986a0d?size=small"
+ ],
+ "photo_response_status_counts": {
+  "200": 65,
+  "302": 65
+ },
+ "sample_non200": [
+  {
+   "s": 302,
+   "u": "https://api-cis.lumiguides.it.com/content/photos/84a4457a-2362-4a5d-9cfb-5fcf27ece3a3?size=small",
+   "ct": "application/json"
+  },
+  {
+   "s": 302,
+   "u": "https://api-cis.lumiguides.it.com/content/photos/4a8153f3-ceee-43d4-9648-3ddb35063d55?size=small",
+   "ct": "application/json"
+  },
+  {
+   "s": 302,
+   "u": "https://api-cis.lumiguides.it.com/content/photos/49c58e35-ec01-4f59-9651-6687b83bdef1?size=small",
+   "ct": "application/json"
+  },
+  {
+   "s": 302,
+   "u": "https://api-cis.lumiguides.it.com/content/photos/c0fd4161-7314-44d7-a6af-6b0c9a5b705c?size=small",
+   "ct": "application/json"
+  },
+  {
+   "s": 302,
+   "u": "https://api-cis.lumiguides.it.com/content/photos/fc3123ce-e289-4d93-b2b8-60a5c8a87574?size=small",
+   "ct": "application/json"
+  }
+ ],
+ "request_failed": [],
+ "request_failed_count": 0,
+ "list_bhutan_imgs": 23,
+ "list_loaded": 23
+}

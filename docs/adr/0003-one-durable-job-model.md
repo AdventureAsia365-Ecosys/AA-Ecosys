@@ -2,6 +2,7 @@
 
 - **Status:** Accepted (06/10/2026, S213 — Nghiệp: module hóa job cho toàn hệ, làm tuần tự nhiều phiên).
 - **Scope:** AA-Ecosys (AA-CIS-App, AA-TripPlanner-Web, AA-CIS-Infra, future AA-Booking).
+- **Amended by:** ADR 0003a (S237): one job table per owner schema from a shared DDL template; decision 4 ("a non-CIS repo enqueues into `shared.job`") no longer holds.
 - **Implements / tightens:** ADR 0001 (ecosystem architecture). Related: AA-650/651/652 (durable runner + worker ECS), AA-723 (move the remaining in-process tasks).
 
 ## Context

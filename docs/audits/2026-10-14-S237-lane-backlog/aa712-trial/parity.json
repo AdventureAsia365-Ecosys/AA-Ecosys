@@ -1,0 +1,1189 @@
+{
+ "report": "aa712_parity_trial_a",
+ "trial_start": "2026-10-14T15:30:00+00:00",
+ "km_limit": 25.0,
+ "db_now": "2026-10-14 15:46:48.980636+00:00",
+ "tours": [
+  {
+   "tour_id": "fde65bf0-e521-4ca5-8c4a-f0e6cc28b76e",
+   "source_id": "664086a9-df2d-481c-a4fa-af67f782a6a8",
+   "cis_build": [
+    {
+     "source_id": "664086a9-df2d-481c-a4fa-af67f782a6a8",
+     "tour_id": "fde65bf0-e521-4ca5-8c4a-f0e6cc28b76e",
+     "country": "Laos",
+     "status": "ok",
+     "rule_version": 1,
+     "counts": {
+      "atoms": 58,
+      "skipped": {
+       "transit": 5,
+       "unnamed": 8,
+       "logistics_place": 2
+      },
+      "components": 35,
+      "nights_linked": 7,
+      "places_linked": 14,
+      "embeddings_new": 35,
+      "stay_lever_fills": 1,
+      "days_model_called": true,
+      "days_model_failed": false,
+      "embeddings_reused": 0,
+      "names_new_pending": 24,
+      "rule_missed_nights": 5,
+      "generic_without_locality": 0
+     },
+     "cost_usd": "0.017418",
+     "built_at": "2026-10-14 15:39:11.082131+00:00",
+     "job_id": "0ad5020d-0da5-4044-83e2-7bf1a2ea4fe1",
+     "has_days_hash": true
+    }
+   ],
+   "tp_component_keys": {
+    "fde65bf0-e521-4ca5-8c4a-f0e6cc28b76e": 72
+   },
+   "tp_key": "fde65bf0-e521-4ca5-8c4a-f0e6cc28b76e",
+   "tp_key_kind": "tour_id",
+   "days": {
+    "cis": 10,
+    "tp": 0,
+    "cis_index_range": [
+     1,
+     10
+    ],
+    "tp_index_range": null,
+    "cis_extracted_by": {
+     "llm": 5,
+     "rule+llm": 5
+    },
+    "cis_transit_days": 1
+   },
+   "places": {
+    "cis_components": 35,
+    "tp_components": 72,
+    "cis_distinct_destinations": 21,
+    "tp_distinct_destinations": 33,
+    "shared_destination_ids": 15,
+    "cis_unlinked_components": 8,
+    "cis_with_place_card": 0,
+    "cis_activity": {
+     "cultural_heritage": 23,
+     "culinary": 4,
+     "wellness_relaxation": 3,
+     "wildlife_nature": 1,
+     "trekking": 4
+    },
+    "tp_activity": {
+     "wildlife_nature": 12,
+     "local_immersion": 5,
+     "water_activities": 1,
+     "trekking": 8,
+     "culinary": 9,
+     "cultural_heritage": 30,
+     "wellness_relaxation": 6,
+     "adventure_sport": 1
+    }
+   },
+   "embeddings": {
+    "cis_present": 35,
+    "cis_total": 35,
+    "tp_present": 72,
+    "tp_total": 72
+   },
+   "cis_located_by": {
+    "llm": 16,
+    "mapbox": 2,
+    "geoapify": 3
+   },
+   "cis_precision": {
+    "area": 5,
+    "null": 13,
+    "point": 3
+   },
+   "cis_geo_status": {
+    "ok": 21
+   },
+   "cis_suspect_destinations": [],
+   "cis_review_reasons": [
+    "Ban Chan Pottery Village: unconfirmed_hard_type"
+   ],
+   "place_name_status": {
+    "resolved": 21,
+    "pending": 8
+   },
+   "place_name_not_resolved": [
+    {
+     "name": "Socialization Area",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Bamboo Experience",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "residential streets of Luang Prabang",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Information Center",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Mekong River waterfront",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Male Elephants Socialization Area",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Elephant Conservation Center forest",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Bear Sanctuary",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    }
+   ],
+   "overnight": {
+    "day_index_offset_applied": 0,
+    "same_id": 0,
+    "same_name_diff_id": 0,
+    "both_null": 0,
+    "mismatch": 10,
+    "cis_null": 0,
+    "tp_null": 10,
+    "km_compared": 0,
+    "km_le_25": 0,
+    "km_gt_25": [],
+    "per_day": [
+     {
+      "day": 1,
+      "cis": "Vientiane",
+      "cis_id": "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 2,
+      "cis": "Vientiane",
+      "cis_id": "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 3,
+      "cis": "Vang Vieng",
+      "cis_id": "2a5b8df3-5212-41ae-8f63-76986418c075",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 4,
+      "cis": "Elephant Conservation Center",
+      "cis_id": "052f353a-0e04-45c1-9b39-f2a2f856a3d1",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 5,
+      "cis": "Elephant Conservation Center",
+      "cis_id": "052f353a-0e04-45c1-9b39-f2a2f856a3d1",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 6,
+      "cis": "Luang Prabang",
+      "cis_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 7,
+      "cis": "Luang Prabang",
+      "cis_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 8,
+      "cis": "Luang Prabang",
+      "cis_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 9,
+      "cis": "Luang Prabang",
+      "cis_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 10,
+      "cis": "Luang Prabang International Airport",
+      "cis_id": "2b9a969b-8efc-4bff-a15d-13154e4f2c8c",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     }
+    ]
+   },
+   "geocode_distance": {
+    "matched": 17,
+    "matched_by_id": 15,
+    "matched_by_name": 2,
+    "km_compared": 17,
+    "km_le_25": 16,
+    "km_gt_25": [
+     {
+      "cis": "Night Market (Vientiane)",
+      "tp": "Night Market",
+      "match": "name",
+      "km": 219.34,
+      "tp_point_src": "destinations_live",
+      "located_by": "llm",
+      "precision": "area",
+      "geo_status": "ok"
+     }
+    ],
+    "max_km": 219.34,
+    "tp_point_src": {
+     "destinations_live": 12,
+     "tp_graph_node": 2,
+     "destinations_live_overwritten_since_trial": 3
+    },
+    "cis_only_places": [
+     "Morning Market (Luang Prabang)",
+     "National Museum (Hor Kham or Royal Palace)",
+     "Wat Xieng Khuan, known locally as Buddha Park",
+     "local eatery and café near the Mekong River at Buddha Park"
+    ],
+    "tp_only_places": [
+     "Bamboo Experience",
+     "Bear Sanctuary",
+     "Information Center",
+     "Male Elephants Socialization Area",
+     "Mekong River waterfront",
+     "Morning Market, Luang Prabang",
+     "Royal Palace Museum",
+     "Socialization Area, Elephant Conservation Center",
+     "Vientiane",
+     "Vientiane's local markets",
+     "center's restaurant",
+     "countryside surrounding Luang Prabang",
+     "local house",
+     "local household",
+     "local riverside café at Buddha Park",
+     "nursery"
+    ]
+   },
+   "graph": {
+    "cis_current_build": "7c2c5b56-7b6f-46e6-997a-50407eabe73c",
+    "cis_build_at": "2026-10-14 15:45:56.818383+00:00",
+    "cis_stops": 10,
+    "cis_stops_by_source": {
+     "overnight": 10
+    },
+    "cis_legs": 45,
+    "cis_nodes": 5,
+    "cis_edges": 4,
+    "cis_stop_ids": [
+     "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+     "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+     "2a5b8df3-5212-41ae-8f63-76986418c075",
+     "052f353a-0e04-45c1-9b39-f2a2f856a3d1",
+     "052f353a-0e04-45c1-9b39-f2a2f856a3d1",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "2b9a969b-8efc-4bff-a15d-13154e4f2c8c"
+    ],
+    "tp_stops": 0,
+    "tp_stops_by_source": {},
+    "tp_stop_ids": [],
+    "tp_legs": 0,
+    "tp_nodes": 0,
+    "tp_edges": 0,
+    "stop_ids_shared": 0,
+    "stop_ids_cis_only": [
+     "Elephant Conservation Center",
+     "Luang Prabang",
+     "Luang Prabang International Airport",
+     "Vang Vieng",
+     "Vientiane"
+    ],
+    "stop_ids_tp_only": []
+   },
+   "jobs": [
+    {
+     "id": "0ad5020d-0da5-4044-83e2-7bf1a2ea4fe1",
+     "kind": "place_extract",
+     "status": "succeeded",
+     "cost_usd": "0.000000",
+     "created_at": "2026-10-14 15:39:01.530691+00:00",
+     "finished_at": "2026-10-14 15:39:11.235936+00:00",
+     "error": "",
+     "result_status": "ok"
+    }
+   ],
+   "llm_cost_by_job": [
+    {
+     "stage": "a3_place_days",
+     "calls": 1,
+     "cost_usd": "0.017364",
+     "unpriced": 0
+    },
+    {
+     "stage": "a3_place_embed",
+     "calls": 1,
+     "cost_usd": "0.000054",
+     "unpriced": 0
+    }
+   ],
+   "llm_cost_by_job_total": 0.017418
+  },
+  {
+   "tour_id": "2bc45c55-fb32-4ca1-818a-62c3353ec556",
+   "source_id": "bd183835-73ef-494e-baf7-fb88e74b57f4",
+   "cis_build": [
+    {
+     "source_id": "bd183835-73ef-494e-baf7-fb88e74b57f4",
+     "tour_id": "2bc45c55-fb32-4ca1-818a-62c3353ec556",
+     "country": "Laos",
+     "status": "ok",
+     "rule_version": 1,
+     "counts": {
+      "atoms": 59,
+      "skipped": {
+       "transit": 11,
+       "unnamed": 4,
+       "logistics_place": 1
+      },
+      "components": 43,
+      "nights_linked": 13,
+      "places_linked": 26,
+      "embeddings_new": 43,
+      "stay_lever_fills": 1,
+      "days_model_called": true,
+      "days_model_failed": false,
+      "embeddings_reused": 0,
+      "names_new_pending": 19,
+      "rule_missed_nights": 10,
+      "generic_without_locality": 0
+     },
+     "cost_usd": "0.025406",
+     "built_at": "2026-10-14 15:39:22.694442+00:00",
+     "job_id": "ec2c2e30-52ec-4473-a8ff-42c2bcde0ade",
+     "has_days_hash": true
+    }
+   ],
+   "tp_component_keys": {
+    "2bc45c55-fb32-4ca1-818a-62c3353ec556": 47
+   },
+   "tp_key": "2bc45c55-fb32-4ca1-818a-62c3353ec556",
+   "tp_key_kind": "tour_id",
+   "days": {
+    "cis": 16,
+    "tp": 16,
+    "cis_index_range": [
+     1,
+     16
+    ],
+    "tp_index_range": [
+     1,
+     16
+    ],
+    "cis_extracted_by": {
+     "llm": 10,
+     "rule+llm": 6
+    },
+    "cis_transit_days": 1
+   },
+   "places": {
+    "cis_components": 43,
+    "tp_components": 47,
+    "cis_distinct_destinations": 31,
+    "tp_distinct_destinations": 25,
+    "shared_destination_ids": 16,
+    "cis_unlinked_components": 9,
+    "cis_with_place_card": 1,
+    "cis_activity": {
+     "local_immersion": 5,
+     "culinary": 2,
+     "trekking": 7,
+     "cultural_heritage": 26,
+     "wellness_relaxation": 3
+    },
+    "tp_activity": {
+     "cultural_heritage": 22,
+     "water_activities": 11,
+     "trekking": 1,
+     "culinary": 4,
+     "wellness_relaxation": 2,
+     "local_immersion": 6,
+     "wildlife_nature": 1
+    }
+   },
+   "embeddings": {
+    "cis_present": 43,
+    "cis_total": 43,
+    "tp_present": 47,
+    "tp_total": 47
+   },
+   "cis_located_by": {
+    "geoapify": 4,
+    "llm": 25,
+    "mapbox": 2
+   },
+   "cis_precision": {
+    "point": 4,
+    "null": 23,
+    "area": 4
+   },
+   "cis_geo_status": {
+    "ok": 31
+   },
+   "cis_suspect_destinations": [],
+   "cis_review_reasons": [],
+   "place_name_status": {
+    "resolved": 31,
+    "pending": 9
+   },
+   "place_name_not_resolved": [
+    {
+     "name": "Hmong village",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Hmong villages",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Wat Phra Baht",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Tham Theung",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Hor Tay Phidok Library",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Tad E-Tu Waterfall",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "old French Quarter downtown and Mekong River bank",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Morning Market in the old town",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Wat Phonsan",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    }
+   ],
+   "overnight": {
+    "day_index_offset_applied": 0,
+    "same_id": 12,
+    "same_name_diff_id": 0,
+    "both_null": 1,
+    "mismatch": 3,
+    "cis_null": 1,
+    "tp_null": 3,
+    "km_compared": 13,
+    "km_le_25": 13,
+    "km_gt_25": [],
+    "per_day": [
+     {
+      "day": 1,
+      "cis": "Luang Prabang",
+      "cis_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "tp": "Luang Prabang",
+      "tp_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 2,
+      "cis": "Luang Prabang",
+      "cis_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "tp": "Luang Prabang",
+      "tp_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 3,
+      "cis": "Luang Prabang",
+      "cis_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "tp": "Luang Prabang",
+      "tp_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 4,
+      "cis": "Luang Prabang",
+      "cis_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "tp": "Luang Prabang",
+      "tp_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 5,
+      "cis": "Vang Vieng",
+      "cis_id": "2a5b8df3-5212-41ae-8f63-76986418c075",
+      "tp": "Vang Vieng",
+      "tp_id": "2a5b8df3-5212-41ae-8f63-76986418c075",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 6,
+      "cis": "Vientiane",
+      "cis_id": "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+      "tp": "Vientiane",
+      "tp_id": "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 7,
+      "cis": "Vientiane",
+      "cis_id": "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+      "tp": "Vientiane",
+      "tp_id": "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 8,
+      "cis": "Kong Lor",
+      "cis_id": "a33778d7-6623-48aa-8f9d-fd86ccf9ee0b",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 9,
+      "cis": "Thakhek",
+      "cis_id": "9baa9cb4-e735-4e38-9396-2ec5dca3f4d0",
+      "tp": "Thakhek",
+      "tp_id": "9baa9cb4-e735-4e38-9396-2ec5dca3f4d0",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 10,
+      "cis": "Savannakhet",
+      "cis_id": "7c027d27-9765-42af-9c10-49a687f61394",
+      "tp": "Savannakhet",
+      "tp_id": "7c027d27-9765-42af-9c10-49a687f61394",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 11,
+      "cis": "Tad Lo",
+      "cis_id": "9377359c-c357-432b-94e6-2ec3566eb73c",
+      "tp": "Tad Lo",
+      "tp_id": "9377359c-c357-432b-94e6-2ec3566eb73c",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 12,
+      "cis": null,
+      "cis_id": null,
+      "tp": null,
+      "tp_id": null,
+      "match": "both_null",
+      "km": null
+     },
+     {
+      "day": 13,
+      "cis": "Don Khong",
+      "cis_id": "6548a6c2-fd13-42ca-a944-373bbee7d656",
+      "tp": "Don Khong",
+      "tp_id": "6548a6c2-fd13-42ca-a944-373bbee7d656",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 14,
+      "cis": "Don Khong",
+      "cis_id": "6548a6c2-fd13-42ca-a944-373bbee7d656",
+      "tp": null,
+      "tp_id": null,
+      "match": null,
+      "km": null
+     },
+     {
+      "day": 15,
+      "cis": "Pakse",
+      "cis_id": "80cdb07e-e9da-4e09-aa9a-cb980438daeb",
+      "tp": "Pakse",
+      "tp_id": "80cdb07e-e9da-4e09-aa9a-cb980438daeb",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 16,
+      "cis": "Pakse Airport",
+      "cis_id": "bceec34a-6273-4bdb-ac54-a06bf966ee8f",
+      "tp": "Pakse International Airport",
+      "tp_id": "30f62683-d5d0-449f-9768-e79f042b1131",
+      "match": null,
+      "km": 2.79
+     }
+    ]
+   },
+   "geocode_distance": {
+    "matched": 16,
+    "matched_by_id": 16,
+    "matched_by_name": 0,
+    "km_compared": 16,
+    "km_le_25": 16,
+    "km_gt_25": [],
+    "max_km": 0.0,
+    "tp_point_src": {
+     "tp_graph_node": 2,
+     "destinations_live": 14
+    },
+    "cis_only_places": [
+     "Ban Xang Khong",
+     "Champasak",
+     "Hor Phra Keo",
+     "Patuxay Monument",
+     "Royal Palace Museum (Hor Kham)",
+     "Tad Fane",
+     "Tad Lo Waterfall",
+     "Tad Yuang Waterfall",
+     "Tham Kong Lor",
+     "Tham Ting",
+     "That Luang Stupa",
+     "Vang Vieng",
+     "Wat Mai Suwannaphumaham",
+     "Wat Sisaket",
+     "Wat Visounnalath"
+    ],
+    "tp_only_places": [
+     "4000 Islands (Si Phan Don)",
+     "Bolaven Plateau",
+     "Kong Lor Cave",
+     "Mekong riverbank",
+     "Si Phan Don (Four Thousand Islands)",
+     "Tham Kong Lor Cave",
+     "Vientiane",
+     "local café at Buddha Park",
+     "old French Quarter"
+    ]
+   },
+   "graph": {
+    "cis_current_build": "7c2c5b56-7b6f-46e6-997a-50407eabe73c",
+    "cis_build_at": "2026-10-14 15:45:56.818383+00:00",
+    "cis_stops": 16,
+    "cis_stops_by_source": {
+     "component": 1,
+     "overnight": 15
+    },
+    "cis_legs": 120,
+    "cis_nodes": 11,
+    "cis_edges": 10,
+    "cis_stop_ids": [
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "2a5b8df3-5212-41ae-8f63-76986418c075",
+     "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+     "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+     "a33778d7-6623-48aa-8f9d-fd86ccf9ee0b",
+     "9baa9cb4-e735-4e38-9396-2ec5dca3f4d0",
+     "7c027d27-9765-42af-9c10-49a687f61394",
+     "9377359c-c357-432b-94e6-2ec3566eb73c",
+     "c01d83ec-2683-4b09-8b82-fa399bfd792b",
+     "6548a6c2-fd13-42ca-a944-373bbee7d656",
+     "6548a6c2-fd13-42ca-a944-373bbee7d656",
+     "80cdb07e-e9da-4e09-aa9a-cb980438daeb",
+     "bceec34a-6273-4bdb-ac54-a06bf966ee8f"
+    ],
+    "tp_stops": 15,
+    "tp_stops_by_source": {
+     "component": 2,
+     "overnight": 13
+    },
+    "tp_stop_ids": [
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+     "2a5b8df3-5212-41ae-8f63-76986418c075",
+     "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+     "15a1f88c-e7e3-43fb-a55a-cf596b17263b",
+     "2be3ec87-2b22-45d9-b81d-6049ceb3134a",
+     "9baa9cb4-e735-4e38-9396-2ec5dca3f4d0",
+     "7c027d27-9765-42af-9c10-49a687f61394",
+     "9377359c-c357-432b-94e6-2ec3566eb73c",
+     "6548a6c2-fd13-42ca-a944-373bbee7d656",
+     "785bd622-b284-49ca-8511-bf98e20f6952",
+     "80cdb07e-e9da-4e09-aa9a-cb980438daeb",
+     "30f62683-d5d0-449f-9768-e79f042b1131"
+    ],
+    "tp_legs": 105,
+    "tp_nodes": 11,
+    "tp_edges": 10,
+    "stop_ids_shared": 8,
+    "stop_ids_cis_only": [
+     "Kong Lor",
+     "Pakse Airport",
+     "Tad Fane"
+    ],
+    "stop_ids_tp_only": [
+     "4000 Islands (Si Phan Don)",
+     "Don Khone",
+     "Pakse International Airport"
+    ]
+   },
+   "jobs": [
+    {
+     "id": "ec2c2e30-52ec-4473-a8ff-42c2bcde0ade",
+     "kind": "place_extract",
+     "status": "succeeded",
+     "cost_usd": "0.000000",
+     "created_at": "2026-10-14 15:39:01.547515+00:00",
+     "finished_at": "2026-10-14 15:39:22.890307+00:00",
+     "error": "",
+     "result_status": "ok"
+    }
+   ],
+   "llm_cost_by_job": [
+    {
+     "stage": "a3_place_days",
+     "calls": 1,
+     "cost_usd": "0.025344",
+     "unpriced": 0
+    },
+    {
+     "stage": "a3_place_embed",
+     "calls": 1,
+     "cost_usd": "0.000062",
+     "unpriced": 0
+    }
+   ],
+   "llm_cost_by_job_total": 0.025405999999999998
+  },
+  {
+   "tour_id": "16548cba-a702-483d-bbe5-33349c77fdfe",
+   "source_id": "87f71e29-a38b-4c66-9be3-2ead018f8ff8",
+   "cis_build": [
+    {
+     "source_id": "87f71e29-a38b-4c66-9be3-2ead018f8ff8",
+     "tour_id": "16548cba-a702-483d-bbe5-33349c77fdfe",
+     "country": "Laos",
+     "status": "ok",
+     "rule_version": 1,
+     "counts": {
+      "atoms": 19,
+      "skipped": {
+       "unnamed": 3,
+       "logistics_place": 1
+      },
+      "components": 15,
+      "nights_linked": 2,
+      "places_linked": 7,
+      "embeddings_new": 15,
+      "stay_lever_fills": 2,
+      "days_model_called": true,
+      "days_model_failed": false,
+      "embeddings_reused": 0,
+      "names_new_pending": 10,
+      "rule_missed_nights": 4,
+      "generic_without_locality": 0
+     },
+     "cost_usd": "0.006888",
+     "built_at": "2026-10-14 15:39:27.968123+00:00",
+     "job_id": "e3d995d6-9c9c-4634-8390-be675027bed0",
+     "has_days_hash": true
+    }
+   ],
+   "tp_component_keys": {
+    "16548cba-a702-483d-bbe5-33349c77fdfe": 9
+   },
+   "tp_key": "16548cba-a702-483d-bbe5-33349c77fdfe",
+   "tp_key_kind": "tour_id",
+   "days": {
+    "cis": 5,
+    "tp": 5,
+    "cis_index_range": [
+     1,
+     5
+    ],
+    "tp_index_range": [
+     1,
+     5
+    ],
+    "cis_extracted_by": {
+     "rule+llm": 2,
+     "llm": 3
+    },
+    "cis_transit_days": 1
+   },
+   "places": {
+    "cis_components": 15,
+    "tp_components": 9,
+    "cis_distinct_destinations": 4,
+    "tp_distinct_destinations": 4,
+    "shared_destination_ids": 4,
+    "cis_unlinked_components": 8,
+    "cis_with_place_card": 1,
+    "cis_activity": {
+     "adventure_sport": 6,
+     "trekking": 4,
+     "water_activities": 1,
+     "wellness_relaxation": 2,
+     "cultural_heritage": 2
+    },
+    "tp_activity": {
+     "adventure_sport": 3,
+     "water_activities": 2,
+     "wellness_relaxation": 1,
+     "cultural_heritage": 2,
+     "culinary": 1
+    }
+   },
+   "embeddings": {
+    "cis_present": 15,
+    "cis_total": 15,
+    "tp_present": 9,
+    "tp_total": 9
+   },
+   "cis_located_by": {
+    "llm": 3,
+    "mapbox": 1
+   },
+   "cis_precision": {
+    "null": 4
+   },
+   "cis_geo_status": {
+    "ok": 4
+   },
+   "cis_suspect_destinations": [],
+   "cis_review_reasons": [],
+   "place_name_status": {
+    "resolved": 4,
+    "pending": 5
+   },
+   "place_name_not_resolved": [
+    {
+     "name": "Long Lao Mai",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "the valley to Nong Khouay",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Pak Lueang village",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Kiao Niao Farmstay",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    },
+    {
+     "name": "Houay Fai",
+     "status": "pending",
+     "tries": 1,
+     "last_error": "unknown_to_model"
+    }
+   ],
+   "overnight": {
+    "day_index_offset_applied": 0,
+    "same_id": 2,
+    "same_name_diff_id": 0,
+    "both_null": 3,
+    "mismatch": 0,
+    "cis_null": 3,
+    "tp_null": 3,
+    "km_compared": 2,
+    "km_le_25": 2,
+    "km_gt_25": [],
+    "per_day": [
+     {
+      "day": 1,
+      "cis": "Kiao Niao Farmstay",
+      "cis_id": null,
+      "tp": "Kiao Niao Farmstay",
+      "tp_id": null,
+      "match": "both_null",
+      "km": null
+     },
+     {
+      "day": 2,
+      "cis": "Long Lao Mai",
+      "cis_id": null,
+      "tp": "Long Lao Mai",
+      "tp_id": null,
+      "match": "both_null",
+      "km": null
+     },
+     {
+      "day": 3,
+      "cis": "Nong Khouay",
+      "cis_id": "63ff6322-bf36-4f61-a2aa-98369e923b4f",
+      "tp": "Nong Khouay",
+      "tp_id": "63ff6322-bf36-4f61-a2aa-98369e923b4f",
+      "match": "id",
+      "km": 0.0
+     },
+     {
+      "day": 4,
+      "cis": "Houay Fai",
+      "cis_id": null,
+      "tp": "Houay Fai",
+      "tp_id": null,
+      "match": "both_null",
+      "km": null
+     },
+     {
+      "day": 5,
+      "cis": "Luang Prabang",
+      "cis_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "tp": "Luang Prabang",
+      "tp_id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d",
+      "match": "id",
+      "km": 0.0
+     }
+    ]
+   },
+   "geocode_distance": {
+    "matched": 4,
+    "matched_by_id": 4,
+    "matched_by_name": 0,
+    "km_compared": 4,
+    "km_le_25": 4,
+    "km_gt_25": [],
+    "max_km": 0.0,
+    "tp_point_src": {
+     "tp_graph_node": 2,
+     "destinations_live": 2
+    },
+    "cis_only_places": [],
+    "tp_only_places": []
+   },
+   "graph": {
+    "cis_current_build": "7c2c5b56-7b6f-46e6-997a-50407eabe73c",
+    "cis_build_at": "2026-10-14 15:45:56.818383+00:00",
+    "cis_stops": 5,
+    "cis_stops_by_source": {
+     "component": 3,
+     "overnight": 2
+    },
+    "cis_legs": 10,
+    "cis_nodes": 4,
+    "cis_edges": 3,
+    "cis_stop_ids": [
+     "c1a46992-c0d2-49b9-8d71-cdae564f29be",
+     "70930247-6aab-4234-bfae-18b2cc5a6783",
+     "63ff6322-bf36-4f61-a2aa-98369e923b4f",
+     "63ff6322-bf36-4f61-a2aa-98369e923b4f",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d"
+    ],
+    "tp_stops": 5,
+    "tp_stops_by_source": {
+     "component": 3,
+     "overnight": 2
+    },
+    "tp_stop_ids": [
+     "c1a46992-c0d2-49b9-8d71-cdae564f29be",
+     "c1a46992-c0d2-49b9-8d71-cdae564f29be",
+     "63ff6322-bf36-4f61-a2aa-98369e923b4f",
+     "63ff6322-bf36-4f61-a2aa-98369e923b4f",
+     "a213cca5-b186-45ea-bfa1-97b27c67ed3d"
+    ],
+    "tp_legs": 10,
+    "tp_nodes": 3,
+    "tp_edges": 2,
+    "stop_ids_shared": 3,
+    "stop_ids_cis_only": [
+     "Kuang Si Falls"
+    ],
+    "stop_ids_tp_only": []
+   },
+   "jobs": [
+    {
+     "id": "e3d995d6-9c9c-4634-8390-be675027bed0",
+     "kind": "place_extract",
+     "status": "succeeded",
+     "cost_usd": "0.000000",
+     "created_at": "2026-10-14 15:39:01.550484+00:00",
+     "finished_at": "2026-10-14 15:39:28.060650+00:00",
+     "error": "",
+     "result_status": "ok"
+    }
+   ],
+   "llm_cost_by_job": [
+    {
+     "stage": "a3_place_days",
+     "calls": 2,
+     "cost_usd": "0.007870",
+     "unpriced": 0
+    },
+    {
+     "stage": "a3_place_embed",
+     "calls": 1,
+     "cost_usd": "0.000021",
+     "unpriced": 0
+    }
+   ],
+   "llm_cost_by_job_total": 0.007891
+  }
+ ],
+ "overall": {
+  "llm_by_stage": [
+   {
+    "stage": "a3_place_days",
+    "role": "validate",
+    "calls": 4,
+    "cost_usd": "0.050578",
+    "tokens_in": 7474,
+    "tokens_out": 2675,
+    "unpriced": 0,
+    "fallbacks": 0,
+    "models": [
+     "gpt-5.6-luna",
+     "sonnet-4-6"
+    ]
+   },
+   {
+    "stage": "a3_place_embed",
+    "role": "embed",
+    "calls": 3,
+    "cost_usd": "0.000137",
+    "tokens_in": 1137,
+    "tokens_out": 0,
+    "unpriced": 0,
+    "fallbacks": 0,
+    "models": [
+     "cohere-embed-v4"
+    ]
+   },
+   {
+    "stage": "a3_place_locate",
+    "role": "validate",
+    "calls": 2,
+    "cost_usd": "0.020088",
+    "tokens_in": 1991,
+    "tokens_out": 941,
+    "unpriced": 0,
+    "fallbacks": 0,
+    "models": [
+     "sonnet-4-6"
+    ]
+   }
+  ],
+  "llm_total_usd": 0.070803,
+  "llm_cost_per_tour_usd": 0.023601,
+  "llm_calls": 9,
+  "geocoder_since_trial": [
+   {
+    "provider": "geoapify",
+    "rows": 1,
+    "requests": 18,
+    "cost_usd": "0.000000"
+   }
+  ],
+  "geocoder_all_time": [
+   {
+    "provider": "geoapify",
+    "rows": 1,
+    "requests": 18,
+    "cost_usd": "0.000000"
+   }
+  ],
+  "tour_build_cost": {
+   "builds": 3,
+   "cost_usd": "0.049712"
+  },
+  "place_name_status_all": {
+   "pending": 22,
+   "resolved": 53
+  },
+  "destinations_written_since_trial": {
+   "geoapify/point/ok": 9,
+   "llm/area/ok": 10
+  }
+ }
+}

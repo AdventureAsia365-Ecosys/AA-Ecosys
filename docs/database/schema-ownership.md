@@ -13,10 +13,13 @@ assigns owners and states the rules. Tracked in AA-684.
 1. **A schema has one owner repo.** Its migrations live in that repo, next to the code that uses
    the schema, so schema and code change in one PR. An app never migrates another app's schema and
    never writes another app's rows.
-2. **Other apps read through grants the owner gives** — a column list or a view, granted in the
-   owner's own migration (examples: CIS 173 gateway tables, 180 / 216 atoms, 201 destinations to the
-   `tripplanner` role). Prefer a view (read model) over a raw table, so the owner can change the
-   table without breaking readers.
+2. **Other apps read only through contract views the owner grants** in its own migration
+   (ADR 0008 decision 5, S237): tenant/catalog contract views live in `catalog`, others are
+   `<schema>.v_<entity>` or `v_<event>_outbox`. No new table or column grant to another app's role.
+   Existing table/column grants (CIS 173 gateway tables, 180 / 216 atoms, 201 destinations to the
+   `tripplanner` role) are grandfathered until the TripPlanner decoupling (data standards roadmap X4)
+   revokes them. The one standing write exception is INSERT on `shared.llm_call_log`. Rules in full:
+   `docs/architecture/data-standards/` (Part A, CON-1..5 and SEC-3..5).
 3. **AA-CIS-Infra owns the instance, not the schema**: RDS, parameter groups, backups, DB roles and
    the **DB Migrate** workflow that applies a reviewed file. Infra keeps no schema SQL of its own;
    `db/migrations/<owner>/` holds byte-identical copies of the owner's files for the workflow to
@@ -64,7 +67,7 @@ Every `shared` table is **owned by AA-CIS-App** unless the row says otherwise.
 | Table(s) | Owner | Notes |
 |---|---|---|
 | `tenants`, `membership_plans`, `admin_users`, `tenant_*` (brand rules, configs, integrations, usage) | CIS | Tenant and admin identity of the CIS platform. AA-Booking owns *customer* identity (ADR 0001). |
-| `job`, `job_worker` | CIS | Durable job runner (ADR 0003). A second repo enqueuing is deferred (AA-751). |
+| `job`, `job_worker` | CIS | Durable job runner of CIS (ADR 0003). Other owners do not enqueue here: each owner has its own job table from the shared DDL template (ADR 0003a; `booking.job` bk-002, `tripplanner.job` when needed). |
 | `llm_role_config`, `llm_model_catalog` | CIS | Model Gateway config; TripPlanner has SELECT (CIS 173). |
 | `llm_call_log`, `llm_shadow_log` | CIS | Cost log; TripPlanner has INSERT on `llm_call_log` only, rows tagged `quality_signal.app = "tripplanner"` (CIS 173). |
 | `decision_log`, `decision_question`, `decision_cache_hits_daily`, `jev_*` | CIS | Jev decision layer. |

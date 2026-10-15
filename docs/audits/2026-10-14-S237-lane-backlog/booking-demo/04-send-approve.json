@@ -1,0 +1,52 @@
+{
+  "v1_send": {
+    "badge": "sent",
+    "trip_case": {
+      "id": "4542b70e-3483-40d6-b7ce-c7d2c6c24427",
+      "code": "TC-000003",
+      "status": "proposal_sent"
+    },
+    "email_sent": false
+  },
+  "v2_send": {
+    "badge": "sent",
+    "trip_case": {
+      "id": "4542b70e-3483-40d6-b7ce-c7d2c6c24427",
+      "code": "TC-000003",
+      "status": "proposal_sent"
+    },
+    "email_sent": false
+  },
+  "v2_approve": {
+    "badge": "approved",
+    "trip_case": {
+      "id": "4542b70e-3483-40d6-b7ce-c7d2c6c24427",
+      "code": "TC-000003",
+      "status": "confirmed"
+    }
+  },
+  "v1_approve_negative_http409": {
+    "detail": "version_superseded",
+    "message": "a later version was sent; approve that one"
+  },
+  "versions_after_v2_send": [
+    {
+      "version_number": 2,
+      "badge": "sent"
+    },
+    {
+      "version_number": 1,
+      "badge": "superseded"
+    }
+  ],
+  "versions_final": [
+    {
+      "version_number": 2,
+      "badge": "approved"
+    },
+    {
+      "version_number": 1,
+      "badge": "superseded"
+    }
+  ]
+}

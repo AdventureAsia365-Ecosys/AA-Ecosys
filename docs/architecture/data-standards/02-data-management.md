@@ -1,0 +1,379 @@
+# Data standards, Part B: data management and governance
+
+**Purpose.** These are the binding rules for owning, documenting, protecting, keeping and changing data on the shared AA_Ecosys PostgreSQL 15 RDS (`aa-cis-dev-db`, acc2 `005097885195`, us-west-1). AA-CIS-App, AA-TripPlanner-Web and AA-Booking share it today, on Dev. Prod will be a separate instance, also on acc2.
+
+- **Status:** binding from 15/10/2026 (S237). Every recommendation of the data-architecture review `docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md` was approved (journal decisions E1-E11 in `docs/audits/2026-10-14-S237-lane-backlog/00-orchestrator-journal.md`). [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and data platform rules, accepted 15/10/2026) is the host ADR for this file; its decision gate and playbook are the gate this file refers to as "ADR 0008". Version 1.0; index and golden rules in [`README.md`](README.md).
+- **Companions:** `01-engineering.md` (Part A: naming, keys, migration mechanics MIG-*, RLS template, queries) and `03-scaling.md` (Part C: connection budget C2.x, timeouts, retention mechanics, triggers, job guard). Each number has one home: PII classes and retention windows here; pool sizes, connection limits, timeouts and alarm thresholds in Part C; migration runner rules in Part A. The other parts cite, not repeat.
+- **Consistent with:** ADR 0001-0007 (including 0004a), `docs/database/schema-ownership.md`, the D8 migration flow and the AA-807 copy guard in `infra/AA-CIS-Infra/db/`, the AA-817 RLS plan (`docs/audits/2026-10-14-S237-lane-backlog/aa817/aa817_design.md`, decision D2) and `.kiro/steering/*.md`.
+- **Precedence:** if this file and a source above disagree, an accepted ADR wins. Open a PR to fix this file and tell Nghiệp. Do not ignore the conflict (steering: repo > Notion canonical > memory > skill).
+
+## Contents
+
+0. [How to read the rules](#0-how-to-read-the-rules)
+1. [Ownership model](#1-ownership-model)
+2. [Entity source of truth](#2-entity-source-of-truth)
+3. [Data catalog and documentation](#3-data-catalog-and-documentation)
+4. [Data quality](#4-data-quality)
+5. [Lineage](#5-lineage)
+6. [PII and privacy](#6-pii-and-privacy)
+7. [Retention and archival](#7-retention-and-archival)
+8. [Access management](#8-access-management)
+9. [Backup, restore and DR](#9-backup-restore-and-dr)
+10. [Cost ownership](#10-cost-ownership)
+11. [Change management](#11-change-management)
+12. [Enforcement still to build](#12-enforcement-still-to-build)
+
+---
+
+## 0. How to read the rules
+
+- **MUST / MUST NOT** is mandatory. An exception needs Nghiệp's written approval, recorded in the PR and the session log.
+- **SHOULD / SHOULD NOT** is the default. A deviation is explained in the PR description.
+- **MAY** is allowed but not required.
+- Every rule has an ID (`DM-<section>.<n>`), a one-line **Why**, and **Enforced by**:
+  - `CI`: an automated check that exists today.
+  - `Review`: the PR reviewer checklist (`skill/REVIEW-CHECKLIST.md` plus this file).
+  - `Alarm`: a CloudWatch alarm or budget.
+  - `Runbook`: a documented manual procedure.
+  - `to build (Xn)`: the control does not exist yet. Xn is its roadmap id in the review (§7: N1-N7, X1-X10, L1-L10). Until it lands, `Review` is the control.
+  - `to build (Xn+)`: the control is a **proposed extension** of roadmap item Xn that the review did not list in Xn's scope. It is added to that item's issue only with Nghiệp's OK when the issue is cut; until then `Review` is the control.
+- **Scope.** The naming and shape rules bind **new** objects. Existing names stay (review §4.1). A rename touches hundreds of SQL sites and buys only clarity.
+
+---
+
+## 1. Ownership model
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-1.1 | Each schema MUST have exactly one owner repo. The owner is the only repo that writes migrations for the schema and the only app that writes its rows. `shared.*` is owned per table (`schema-ownership.md`, "shared.* by table"). | One writer means one place for fixes, reruns and audit (ADR 0002). | Review; CI (Migration Copy Guard rejects an owner dir/prefix mismatch) |
+| DM-1.2 | Ownership MUST be recorded in **one registry**, `infra/AA-CIS-Infra/db/owners.yaml`. Each entry holds: dir, repo, path, version-key prefix, owner role, runtime role(s), allowed consumer grants (review §6.2 step 2) and job-kind prefix (X6). It MAY later carry the steward (§1.1) and the retention rows (§7); until it does, those tables in this file are their registry. DB Migrate, the copy guard and the schema dump read it. Until it exists, `schema-ownership.md`, `check_migration_copies.py` (`OWNERS`, `PATH_RE`) and the `db-migrate.yml` regex/case are the registry, and they MUST change in the same PR train. | Today the same facts are hard-coded in 3 places and drift. | to build (X1; playbook step 2, AA-807) |
+| DM-1.3 | Ownership MUST also be a **permission**. The objects of a schema are owned by a NOLOGIN `<app>_owner` role, and runtime roles do not own objects. Order (E2): `booking.*` → `bk_owner` and `tripplanner.*` → `tp_owner` first, then CIS after AA-817 D2 (`cis_app` runtime, `cis_owner` objects). `catalog.*` stays on `catalog_owner`. | Today `aa_cis_admin` owns every object, including Booking PII and pricing (review P1, ADR 0004a known gap). | to build (X1); Runbook after the change: aa817 probe `tables[].owner` |
+| DM-1.4 | Every data domain MUST have a named **steward**, recorded in §1.1 below. The steward approves the domain's quality rules (§4), retention row (§7) and consumer grants. | A small team still needs one person who decides for each domain. | Review |
+| DM-1.5 | New CIS-private tables MUST NOT go in `shared`, and new objects MUST NOT go in `public`. `shared` is reserved for the platform kernel: tenants and `tenant_*`, tenant members (AA-813), destinations, countries, the LLM gateway (`llm_*` config, ledger and its rollup), `schema_versions`. A rollup of an existing `shared` ledger MAY sit next to it (e.g. `decision_cache_hits_daily`). A new CIS-private table goes in the CIS schema of its domain (`geo`, `acp_contract`, `acp_shared`, `silver_aa_internal`, `gold_aa_internal`); if none fits, ask Nghiệp (a new schema is an ADR 0008 decision). Existing CIS-private tables in `shared` stay (§0 scope). | Mixing kernel and private ops in `shared` hides who may change what (review §2.1, §4.4). | Review; to build (X2+: catalogue guard flags a new `shared`/`public` table not on the kernel list) |
+| DM-1.6 | A new app or domain MUST pass the decision gate of ADR 0008 (review §6.1 until it is accepted) before it gets any schema or role. Is it an API client of an existing app (no schema)? A module of an existing domain (the owner's schema)? Or a new domain (own schema, full playbook)? | A schema that exists only because a repo exists multiplies roles, grants and contracts. | Review (ADR 0008 checklist copied into the epic) |
+| DM-1.7 | Infra (AA-CIS-Infra) MUST own the **instance** (RDS, parameter group, backups, DB roles, DB Migrate) and MUST NOT own schema SQL. `db/migrations/<owner>/` holds byte copies only. | The instance is shared, but the schemas are not (`schema-ownership.md` rule 3). | CI (Migration Copy Guard, nightly `--all`) |
+
+### 1.1 Domains and stewards (until `owners.yaml` carries them)
+
+| Domain | Schemas / tables | Owner repo | Data steward | Business steward |
+|---|---|---|---|---|
+| Tour content (A0-A3, atoms, segments, routes) | `silver_aa_internal`, `gold_aa_internal`, `acp_contract` | AA-CIS-App | Nghiệp | chị Thư (content policy, e.g. source fidelity, elephant riding) |
+| Places and tour graph | `geo`, `shared.destinations`, `shared.place_photo` | AA-CIS-App | Nghiệp | — |
+| Catalog read model | `catalog` (owner `catalog_owner`) | AA-CIS-App | Nghiệp | — |
+| Tenants and tenant content (T0-T11) | `shared.tenants`, `shared.tenant_*`, `acp_shared`, `gold_aa_internal.tenant_tour_versions` | AA-CIS-App | Nghiệp | — (each tenant controls its own brand content) |
+| LLM / Jev / spend ledgers | `shared.llm_*`, `shared.decision_*`, `shared.dfs_*`, `shared.spend_budget` | AA-CIS-App | Nghiệp | — |
+| Trip planning state, inquiries | `tripplanner` | AA-TripPlanner-Web | Nghiệp | — |
+| Customers, trip cases, suppliers, pricing | `booking` | AA-Booking | Nghiệp | Booking sales/contracting lead (to be named before prod) |
+| Instance, roles, backups | RDS `aa-cis-dev-db` | AA-CIS-Infra | Nghiệp | — |
+
+All stewards are Nghiệp today. The column exists so that a domain can be handed over without changing the rules.
+
+---
+
+## 2. Entity source of truth
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-2.1 | Each entity below MUST have exactly one system of record. Other apps MUST read it only through the listed interface and MUST NOT keep a writable copy. | Two writers means no single place for fixes (ADR 0002, P10/P11). | Review; to build (X2: no cross-owner FK, grants checked against the allowlist) |
+| DM-2.2 | Cross-app references MUST use the listed **cross-app key**. They MUST NOT use a version id or a producer's surrogate BIGSERIAL. | `tour_id` changes on re-upload, so Booking trip cases would break silently (P6). | Review; CI (contract sample validation, `docs/contracts/README.md` rule 7) |
+| DM-2.3 | There MUST be no **new** FK between schemas of different owners. A soft key plus a catalog view is the pattern (Booking already does this). The 12 existing `tripplanner.*` → `shared.destinations` FKs are retired by X4. | Every schema must stay liftable into its own database (review §4.1). | to build (X2) |
+| DM-2.4 | **One pattern per cross-cutting concept** (this is the one list; Part A KEY-9 cites it). A new app or table MUST copy the listed pattern and MUST NOT start a parallel one: jobs = `<schema>.job` from the shared DDL template (ADR 0003a); audit = a per-owner `<schema>.audit_log`, append-only for the runtime role (no ecosystem audit table); notifications = per owner; places = `shared.destinations.id`, with `geo.place_name` as the one name resolver (ADR 0007); photos = `catalog.v_*_photo` (`shared.v_*_photos` is retired after X4); countries = `shared.countries` (X5). | Today there are 4 job models, 2 audit tables, 2 notification tables and 2 photo-view layers, and every new app copies the first precedent it finds (P11). | Review; to build (X6 for the job template) |
+
+| Entity | System of record (owner) | Cross-app key | Others read via | Converge / retire |
+|---|---|---|---|---|
+| Tour | `silver_aa_internal.raw_tours` → `gold_aa_internal.published_tours` (CIS) | `(source_system, source_id)`, where `source_id = COALESCE(raw_tours.source_group_id, tour_id)` | `catalog.v_tour`, `v_tour_day`, `v_tour_place`, `v_tour_photo` | `inquiry.submitted` v1.2 (E7, X3) adds `source_system` + `source_id` per leg; Booking adds them to `booking.trip_case_legs` (today only `source_tour_id`); TP normalises `source_tour_id` |
+| Place / destination | `shared.destinations.id` (CIS, ADR 0002/0007) | `destination_id` | `catalog.v_destination`, `v_destination_photo` | `geo.place_name` is the one name resolver; frozen `tripplanner.*` place tables and their 12 FKs are dropped (X4) |
+| Tour graph / route | `geo.*` (CIS, ADR 0007) | `source_id`, `component_id` | `catalog.v_tour_component`, `v_tour_leg`, `v_graph_*` (228) | — |
+| Country | `shared.countries` (ISO-3166, new) | `iso2` | catalog view (e.g. `catalog.v_country`) | `booking.countries` = "markets we sell", keyed by iso2; additive `country_iso2` columns (X5) |
+| Tenant | `shared.tenants.id` (CIS) | `tenant_id uuid` | CIS code; other apps use a membership view in `catalog` (E4, with AA-813) | New tables use `tenant_id uuid NOT NULL` |
+| Tenant user / membership | CIS membership table (AA-813, planned, e.g. `shared.tenant_members`) keyed by Cognito `(iss, sub)` | `(iss, sub)` (never `sub` alone: it is unique only inside one pool, ADR 0006 decision 9) | read-only view in `catalog` (E4) | Created only after N7 (no default-ACL exposure) |
+| Staff identity | Cognito `aa-workforce` (ADR 0006); profiles in `shared.admin_users` (gains `email`, `cognito_sub` in Phase 1; today username + `password_hash`) and `booking.staff_users` (today keyed by `cis_user_id`; by `(iss, sub)` from Phase 2) | `(iss, sub)` | tokens only | — |
+| Customer (B2C traveller) | **`booking.customers`** (E8); identity table `booking.customer_identities (iss, sub)` is **planned** (ADR 0006 decision 9, Phase 4) | `customer_id` (`booking.customers.id`); `(iss, sub)` after Phase 4 | Booking API / events | After ADR 0006 Phase 4, `tripplanner.customers` holds no profile of a signed-in traveller (the session carries `(iss, sub)`), only guest contact + consent needed to send an inquiry (DM-6.2, L3). `booking.customer_otps` / `customer_sessions` are dropped in Phase 4 |
+| Inquiry | `tripplanner.outbox` (producer) → `booking.inbox_events` (consumer) | `idempotency_key` | `tripplanner.v_inquiry_outbox` | Reverse event `trip_case.status_changed.v1` (planned) |
+| Background job | `<schema>.job` per owner (`shared.job`, `booking.job`), shape from the shared DDL template (ADR 0003a, E1) | `id`, kind prefix per app | own admin views | Legacy `shared.pipeline_jobs` is history only (archive, L1) |
+| LLM call / cost | `shared.llm_call_log` (CIS gateway ledger) | `app` (today `quality_signal.app`; a column after AA-804), `stage`, `job_id` | INSERT-only for other apps; read back via `shared.llm_call_daily` filtered by `app` (to build, N4) | Retire `tripplanner.llm_spend_daily` |
+| Other paid-call ledgers | `shared.decision_log` (Jev), `shared.dfs_call_log` (DataForSEO), `geo.geocode_call` (geocoder) — CIS | `job_id`, `stage` / `endpoint` | CIS admin cost pages only | — |
+| Audit | per owner: `acp_shared.audit_log` (CIS), `booking.audit_logs` (Booking) | — | not shared | No ecosystem audit table (DM-2.4); pgaudit only for prod forensics (later) |
+| Tenant CRM contact (if built, AA-821) | `crm.contact` (own `crm` schema, `crm-` key space, E9) | `contact_id` | not shared | Never derived from `booking.customers` / `tripplanner.customers` (§6) |
+
+---
+
+## 3. Data catalog and documentation
+
+### 3.1 Schema reference and drift
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-3.1 | `docs/architecture/db-schema-reference.md` MUST be **generated**, never hand-edited. It is regenerated after every DB Migrate apply and every night, and the result is an auto-PR to the root repo. | Agents are told to trust it, so a stale file produces wrong designs (P8). | to build (N1, AA-807). Today: manual `.tmp-session/s209_schema_dump.py` + `s209_gen_schema_md.py` (steering `db-schema.md`) |
+| DM-3.2 | The dump MUST cover, per object: columns, constraints, **RLS policies**, **indexes**, **grants (including column grants)**, owners, default ACLs, sizes, `pg_stat_user_tables` activity, `pii:` tags (§6), and the list of tenant tables without RLS. | Policy drift (P3) went unnoticed because policies were not dumped. | to build (N1) |
+| DM-3.3 | The nightly run MUST **fail** on an object that no migration manages (live/repo drift). Examples: `gold_aa_internal.tenant_tour_versions_isolation`, `acp_shared.acp_output_rules.output_rules_rls`. | An unmanaged object cannot be reviewed, reproduced or rolled back. | to build (N1 drift job; N2 fixes the two known cases) |
+| DM-3.4 | The header line "Verified / Latest migration" MUST name the latest version per prefix (`NNN`, `tp-NNN`, `bk-NNN`). Ownership notes in the header MUST match `schema-ownership.md`. For example, `shared.destinations` is CIS-owned, not the "TripPlanner golden record". | Mixed prefixes break `max(version)`, and stale ownership text misleads readers. | to build (N1, N5 "latest per prefix"); Review until then |
+| DM-3.5 | New tables, contract views and non-obvious columns SHOULD carry `COMMENT ON`, covering purpose, owner and (for columns) the `pii:` tag. | The dump publishes comments, so documentation lives next to the object. | Review |
+| DM-3.6 | Contracts MUST be registered in `docs/contracts/README.md` in the **same PR** as the view that serves them, and the registry status MUST be updated when the migration applies. | The registry still showed 225/228/tp-009 as pending after they shipped (P8). | Review; CI (contract sample tests, contracts rule 7); to build (X7 hash guard on consumer copies) |
+| DM-3.7 | Each repo's `CONTEXT.md` MUST link `schema-ownership.md` and be updated in the same session as any ownership or boundary change. | Steering rule: CONTEXT.md is the design source of truth. | Review |
+
+### 3.2 Dead Table Registry
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-3.8 | `docs/architecture/dead-table-registry.md` MUST exist. Every candidate, quarantined or dropped object gets one row: object, owner, evidence (exact count, 14 days of `pg_stat_user_tables`, code grep incl. `tests/integration/`), status (`candidate` / `quarantined` / `dropped`), migration, date, reason, archive location. | The file is referenced by the `aa-cis-schema` skill but does not exist (P8, P13). | to build (N6, AA-807) |
+| DM-3.9 | Retirement MUST go candidate → **quarantine** (`ALTER … SET SCHEMA retired`, reversible) → drop after ≥ 14 days, under the DRY RUN procedure (`skill/aa-cis-schema/references/destructive-ops.md`). Rows with real data MUST be archived to S3 first (§7). | A quarantine is the only cheap undo on a shared instance. | Runbook (destructive-ops.md); Review |
+
+### 3.3 Glossary of keys and homonyms (normative)
+
+These meanings are binding. A new column MUST NOT reuse a name below with a different meaning.
+
+| Term | Meaning | Trap |
+|---|---|---|
+| `tour_id` | `raw_tours` PK; a **version snapshot** of a tour. Changes on re-upload. | Never a cross-app key (`docs/contracts/catalog.tour.v1.json`: "changes on re-upload; never use it as the key"). |
+| `source_id` (catalog, text) | Stable tour identity = `COALESCE(raw_tours.source_group_id, tour_id)`. Paired with `source_system`. `external_ref` in older CIS docs means the same thing. | — |
+| `raw_tours.source_id` (uuid) | FK to `raw_sources`: the upload source, **not** the tour identity. | Homonym of the catalog `source_id`. Joining on it is a bug. |
+| `source_tour_id` (TripPlanner, `booking.trip_case_legs`) | Historically holds either `source_id` or `tour_id`. | Normalised by X3. Do not copy the pattern. |
+| `booking.trip_cases.source_system` / `source_id` | Where the **trip case** came from (`cis` / `tripplanner` / `manual`, CHECK in bk-002) and its id there. | Not a tour key, despite the same column names as the catalog tour key. |
+| `component_id` | Stable id of an itinerary component in `geo.tour_place` (ADR 0007). | — |
+| `destination_id` | `shared.destinations.id`. Stable across dedupe; `duplicate_of` points to the survivor. | Follow `duplicate_of` before joining. |
+| `tenant_id` | `shared.tenants.id` (uuid). Some legacy tables hold varchar/text. | New tables: `uuid NOT NULL`. |
+| `app.tenant_id` | The **only** tenant GUC. AA master rows use the master tenant id. | `app.current_tenant` (019/031) is legacy. A self-set GUC is not an authorization boundary (P7). |
+| `(iss, sub)` | Cognito identity of a person (ADR 0006). | Never an email as identity. |
+| `idempotency_key` | Unique per producer + contract. Stored in the consumer inbox `UNIQUE (source, contract, idempotency_key)`. | Never a BIGSERIAL cursor alone (contracts rule 4). |
+| version key | `NNN` (CIS), `tp-NNN`, `bk-NNN`, `crm-NNN` (if built) in `shared.schema_versions`. | CIS has duplicate 007/008/019 numbers: resolved in the registry, not renumbered (N5). |
+| job kind prefix | `<prefix>_<verb>`, e.g. `bk_inquiry_pull`. Recorded in `owners.yaml` (X6). | — |
+| `app` (LLM ledger) | The calling app on `shared.llm_call_log`. Today it is in `quality_signal.app` (jsonb); it becomes a v2 column (AA-804). | Filter on the column once it exists. |
+| `master_status` | Gate on `published_tours` that controls atom visibility (`acp_contract.v_active_tour_atoms`). | Read atoms through the view, not `tour_atoms`. |
+
+---
+
+## 4. Data quality
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-4.1 | **Constraints first.** Invariants that the database can hold MUST be declared in the database: `NOT NULL`, `CHECK` (text + CHECK, not new enum types), `UNIQUE`, and FKs **inside** the owner's schema. Code checks are added on top, never instead. | A constraint holds for every writer, including ad-hoc scripts. | Review; CI (integration tests replay all migrations on real Postgres) |
+| DM-4.2 | Cross-app soft keys (DM-2.3) SHOULD be checked by a job or by the nightly dump, which reports the **orphan rate**. Example (after X3 adds the columns): `booking.trip_case_legs` whose `(source_system, source_id)` is not in `catalog.v_tour`. It becomes MUST once the check exists. | Without an FK, nothing else notices an orphan. | to build (N1+: orphan query in the nightly run, after X3) |
+| DM-4.3 | Each job stage MUST declare the tables it reads and writes (ADR 0003 layer B), and SHOULD assert its postconditions (expected counts, no dip). A recompute MUST publish through a current pointer (the `route.superseded_at` model), never by delete-then-insert visible to readers (ADR 0003 decision 3). | Readers must never see a half-built set. | Review; job tests |
+| DM-4.4 | Quality gates MUST persist their verdicts as data, not only in logs: Jev ingest gates (`services/ingestion/jev_gates.py`), A2 `review_queue`, `silver_aa_internal.quality_scores` (accepted row via `published_tours.quality_score_id`), T9 `content_piece.gate_ledger` (F1-F10, severity block/warn/note). | Gate results are audit evidence and the input to quality trends. | Review |
+| DM-4.5 | Gate, held and flag state MUST be visible only in admin (`/admin/atom-curation` tabs and admin pages). The tenant sees content only. | Product rule ("tenant sees content only"). | Review; UI verify (`aa-ui-verify`) |
+| DM-4.6 | LLM-produced data SHOULD carry its quality signal (`shared.llm_call_log.quality_signal`, judge/validate rows), linked by `job_id` / `stage`. | Lets a bad output be traced to model, prompt and stage. | Review |
+| DM-4.7 | Every domain SHOULD publish the measures below on an admin page or in the nightly dump, with a threshold its steward sets. A breach SHOULD alarm or appear on the admin overview. A new domain (playbook) MUST ship at least a job backlog-age alarm (review §6.3). Many measures already exist on CIS admin pages (Jobs, cost, place coverage per ADR 0007); the rest are added when the domain's owner touches that area, not as one project. | Quality nobody measures decays silently, but a small team cannot build every gauge at once. | Review; to build (N1+ for the dump-based rows) |
+| DM-4.8 | Wave and backfill reports MUST count from the database (exact counts and an expected set), not from logs. | Lost-tour incidents (S212) were found by counting. | Runbook (`aa-wave-rerun`) |
+
+**What to measure per domain**
+
+| Domain | Completeness | Freshness | Validity |
+|---|---|---|---|
+| Tours (A0-A3) | % published tours with `seo_context`, an accepted `quality_scores` row, atoms in `v_active_tour_atoms` | Age of the last A3 publish per country; catalog consumers re-sync on `content_hash` change | Jev gate pass rate; `review_queue` open count; A2 repair rounds ≤ 2 |
+| Places / graph (ADR 0007) | % `geo.tour_place` rows with a `destination_id`; % published tours with a `geo.tour_build` | `geo.tour_build.built_at` and the current `geo.graph_build.built_at` vs. last tour publish | `shared.destinations.geo_status = 'suspect'` share (ADR 0007 target < 5%); `located_by` / `geo_precision` mix (exposed as `precision` in the catalog views); open `duplicate_of` chains |
+| Tenant content (T0-T11) | % pieces with a gate ledger | Job backlog age per tenant | F1-F10 `block` rate; T3 auto-pass badge rate |
+| Inquiries (TP → Booking) | Outbox rows without an inbox row | Outbox → inbox lag (p95) | Payload validates against `inquiry.submitted` schema; orphan legs (DM-4.2) |
+| Customers / trip cases | % `booking.customers` with `verified = true` (with an `(iss, sub)` identity after Phase 4); `needs_merge_review` backlog | Trip case status age per status | Illegal status jumps rejected (trigger `booking.trip_case_check_transition` over `trip_case_status_transitions`, bk-003) |
+| LLM / spend ledger | % rows with `app` (today `quality_signal.app`; rows without it are CIS), `stage`, `cost_usd` set | Rollup lag (`llm_call_daily`) | `role` ∈ {writer, judge, validate}; ad-hoc rows use `stage = adhoc_<issue>` (steering) |
+| Jobs | — | Backlog age per kind (alarm) | Failed-rate per kind; jobs stuck in `running` past the reaper window |
+
+---
+
+## 5. Lineage
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-5.1 | The stage → code → table map in `skill/aa-ecosys-repos/references/pipeline.md` is the lineage register. A PR that makes a stage write a new table, or read a new upstream, MUST update it. | Lineage that lives only in code is invisible to reviewers and agents. | Review |
+| DM-5.2 | The **`catalog` views are the lineage boundary.** Everything upstream (silver, gold, `acp_*`, `geo`) is CIS-internal and may change. A consumer's lineage starts at a catalog view plus a contract version. Consumers MUST NOT trace or depend on anything behind it. | The owner can change tables without breaking readers (ADR 0001 decision 1, ADR 0002). | Review; to build (X2 grant allowlist; X4 removes the remaining TP direct reads) |
+| DM-5.3 | Derived rows SHOULD carry their upstream key and build/version id, for example `geo.tour_build` / `graph_build`, the `route.superseded_at` current pointer, the `atom_ranking` current pointer and `job_id`. | Answers "which run produced this row?" without guessing. | Review |
+| DM-5.4 | Cross-app lineage MUST run only through contracts: `tripplanner.outbox` → `v_inquiry_outbox` → `booking.inbox_events` → `booking.trip_cases`, and `catalog.*` → consumers. Writes into another app go only through its HTTP API. | A hidden path is untraceable and breaks on refactor (P7). | Review; to build (X2) |
+
+**Pipeline stages to tables (summary; the full table is in `pipeline.md`)**
+
+| Stage | Writes | Read by (downstream) |
+|---|---|---|
+| A0 ingest (+ Jev gate) | `silver_aa_internal.raw_tours` | A1 |
+| A1 rewrite + DFS | `silver_aa_internal.generated_content`, `seo_context` | A2 |
+| A2 QA | `silver_aa_internal.review_queue`, `quality_scores` | A3 |
+| A3 Master | `gold_aa_internal.published_tours` | Atomize, `catalog.v_tour*`, place pipeline |
+| Atomize → Segment / Score / Route / Hub | `acp_contract.tour_atoms` (read through `v_active_tour_atoms`), `atom_segment_member`, `atom_ranking`, `route` | T-series, admin |
+| Place pipeline (`place_extract`, `place_geocode`, `tour_graph_build`) | `geo.*`, `shared.destinations` coordinates | `catalog.v_tour_component`, `v_tour_leg`, `v_graph_*`, `v_destination` |
+| A4 oversight | — (read-only) | — |
+| T0 brand | `shared.tenant_brand_rules` | T2+ |
+| T1-T4 rewrite → QA → pool | `gold_aa_internal.tenant_tour_versions` | Slate |
+| Slate / Goal / Angle | `acp_shared.subject`, `angle_gate_*` | Write |
+| T9 Write + Gate F1-F10 | `acp_shared.content_piece` (+ `gate_ledger`) | Publish |
+| Publish (T11) | `acp_shared.publish_log` | tenant channels |
+| Every LLM call | `shared.llm_call_log` (+ `llm_shadow_log`) | cost pages, rollup |
+| Every Jev decision / DFS call / geocoder call | `shared.decision_log` / `shared.dfs_call_log` / `geo.geocode_call` | cost pages |
+
+---
+
+## 6. PII and privacy
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-6.1 | Every column that holds personal data MUST carry `COMMENT ON COLUMN … IS 'pii:<class>; <free text>'`. Classes: `contact` (email, phone), `name`, `address`, `profile` (gender, marital status, profession, date of birth, photo — e.g. `booking.customers.gender`, `marital_status`, `profession`, `profile_media_id`), `online_id` (`(iss, sub)`, IP), `free_text` (notes or messages that may contain PII), `travel` (dates, party, preferences tied to a person), `payment` (tokens or references only; card numbers are never stored). Commercial secrets (net rates, margins, internal notes, ADR 0004a) use `conf:commercial`. Credentials and their hashes (`password_hash`, `otp_hash`, `refresh_token_hash`, `guest_token`, API keys, invitation tokens) use `conf:credential`. Existing columns are tagged by their owner when the owner next touches the table (Booking and TripPlanner first, L3). | The dump collects the tags (DM-3.2), which makes erasure and access reviews mechanical. | Review; to build (N1 dump; X2+ lint: new columns named like `email`/`phone`/`name`/`address` without a tag fail) |
+| DM-6.2 | `booking.customers` MUST be the single customer master (E8). Other apps MUST NOT create a parallel customer profile. After ADR 0006 Phase 4, TripPlanner keeps no profile of a signed-in traveller (the session carries `(iss, sub)`) and keeps in `tripplanner.customers` only the guest contact + consent it needs to send `inquiry.submitted` (ADR 0006 decision 9: "guest contact data only"), under a retention window set in L3. | Customer PII is copied 4 times today (P10). | Review; to build (L3) |
+| DM-6.3 | **Minimise.** Event payloads, job payloads and logs MUST carry ids, not personal details, unless the consumer needs the detail to act. Example: CRM outbox payloads carry `contact_id`. | Every copy extends the erasure and breach scope. | Review; CI (contract JSON Schema review) |
+| DM-6.4 | Identifying personal data (`contact`, `name`, `address`, `profile`, `online_id`, `payment`, `conf:credential`) MUST NOT be sent in LLM prompts or Jev requests. A traveller's `travel` / `free_text` input MAY go to the Model Gateway when the feature needs it (e.g. trip assembly), never with an identifier attached, and never to Jev. No personal data MAY be written to `shared.llm_call_log` (incl. `quality_signal`), `llm_shadow_log`, `decision_log` or application logs. Tenant content sent to Jev requires the DPA/ZDR agreement (ADR 0001 consequences). | The LLM ledger is shared, long-lived (180 days) and read by admin pages across apps. | Review (prompt builders and log lines); CI only for "every call goes through the gateway" (CIS `tests/unit/test_aa685_no_raw_model_calls.py`). No automated PII check exists or is on the roadmap (open point) |
+| DM-6.5 | Consent MUST be stored with value, timestamp and source (`contact_consent`, `contact_consent_at` on `booking.customers` and `tripplanner.customers`). It MUST be checked before marketing use. Booking's record is the master. | Consent proof is per person and per purpose. | Review |
+| DM-6.6 | Outbox/inbox payload PII (`tripplanner.outbox.payload`, `booking.inbox_events.payload`) MUST be redacted after 90 days (E3). The row and its `idempotency_key` stay, so dedupe keeps working. Each owner redacts its own table (DM-7.2). | The payload is a copy; the master record is in Booking. | to build (L3; window approved in E3, MAY be pulled into the N4 issue) |
+| DM-6.7 | **Erasure** of a traveller MUST cover, in one runbook: `booking.customers` (+ `customer_identities` once it exists, `customer_otps` / `customer_sessions` until Phase 4 drops them), `booking.inbox_events.payload`, free text and snapshots that may name the person (`booking.trip_cases.notes`, `inquiry_snapshot`, `booking.notifications`, the `before` / `after` jsonb of `booking.audit_logs`, which is redacted, not deleted), `tripplanner.customers` + `tripplanner.outbox.payload` + `tripplanner.sessions`, the Cognito user, and S3 archives (§7). It is executed under DRY RUN with a verification query, and recorded in the Booking audit log. | Erasure spans 2 schemas, jsonb and S3 today. | to build (L3); Runbook until then (destructive-ops.md) |
+| DM-6.8 | **Tenant CRM data (AA-821, only if built — E9: research first).** The tenant is the data controller and AA is the processor. CRM data MUST live only in schema `crm` (key space `crm-NNN`; if HubSpot/Zoho is chosen, only `crm.integration_link` + an outbox). It MUST NOT be joined with, copied to or read from `booking.customers` / `tripplanner.customers`. AA staff access, if any, is read-only through an explicit policy (e.g. role `crm_staff`). A hand-off to AA goes only through an event with captured consent (e.g. `crm.lead.handoff_requested.v1`), and Booking creates its **own** customer. Retention is set per tenant, with hard delete on erasure or offboarding. A DPA template is required before the first tenant. Until the CIS role split (X1/AA-817), `aa_cis_admin` can still read `crm.*` through `pg_read_all_data`; the isolation is partial until then. | A different controller: AA sales must never see a tenant's leads. | Review (ADR 0008 playbook); to build (L10, isolation probe) |
+| DM-6.9 | Secrets and tokens (`conf:credential`) MUST NOT be stored in plaintext or be guessable; store a hash (as `customer_otps.otp_hash`, `customer_sessions.refresh_token_hash` and ADR 0006 tenant invitation tokens already do). `tripplanner.sessions.guest_token` MUST be a separate random token, stored hashed, before ADR 0006 Phase 4 guest claiming ships. | `guest_token = id::text` is guessable today (P10). | to build (X8) |
+| DM-6.10 | Real-data dumps MUST NOT live on laptops or in repo trees. `docs/backups/2026-09-16` moves to an encrypted private S3 location and is then removed locally (E10). Schema, RLS and role details in the public repos MUST NOT contain secrets or data. | The repos are public, and laptops are not a controlled store. | Runbook (E10, once); `.gitignore` (`docs/backups/`); Review |
+
+---
+
+## 7. Retention and archival
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-7.1 | Every log, event, job, ledger, credential and versioned-history table MUST have a row in the retention table below. A new table gets its row in the same PR that creates it; an existing table without a row keeps all its rows until its owner proposes a window (N4 for CIS, L3 for Booking/TripPlanner PII). This section is the registry (DM-1.2). | Nothing is retained or rolled up today. The only cleanup was a manual delete of 695,728 rows (AA-742). | Review |
+| DM-7.2 | Deletion and redaction MUST be done by an **owner-run TTL job kind** (in the owner's `<schema>.job`) with batched `DELETE` / `UPDATE` (bounded rows per batch and per run), and a count in the job result. The **first** run of each kind, and the first run after a window change, goes through the DRY RUN procedure (`destructive-ops.md`: count, Nghiệp approves). Later scheduled runs need no approval but MUST stop and report when a run would touch more than 2x the previous run's count. `VACUUM FULL` MUST NOT be used. TripPlanner has no job table today: it gets `tripplanner.job` from the X6 template before its first TTL kind (ADR 0003a decision 4; until then its outbox redaction waits; nothing else is deleted). The batch mechanics are Part C C5.4. | Batches avoid long locks on a shared instance, a job is visible and retryable, and a per-run DRY RUN approval would not be sustainable for a recurring job. | to build (N4, X6); Runbook (first-run DRY RUN) |
+| DM-7.3 | Rows with business or audit value MUST be **archived to S3 as Parquet before delete**: an encrypted, private prefix defined in AA-CIS-Infra, partitioned by `table/yyyy/mm`. Tables that carry PII are archived **after** redaction. | Restore of history without restoring the shared instance; also the future Athena source (L6). | to build (N4, bucket/prefix in Infra; L6 for query) |
+| DM-7.4 | Rollups MUST be written before raw rows expire, and readers of history (cost and usage pages) MUST read the rollup. | Pages stay fast and keep their history past the raw window. | to build (N4) |
+| DM-7.5 | A retention window change MUST be approved by Nghiệp and land as an amendment to this table. | Retention is a cost, audit and privacy decision. | Review |
+
+**Retention table (bold windows are approved in E3; rows marked "proposed" need the owner's confirmation and Nghiệp's approval (DM-7.5) in N4 for CIS or L3 for TripPlanner/Booking PII; until then nothing in a "proposed" row is deleted)**
+
+| Table | Owner | Raw window | Rollup / after expiry | Archive before delete |
+|---|---|---|---|---|
+| `shared.llm_call_log` | CIS | **180 days** | `shared.llm_call_daily` (by day, `app`, `stage`, `role`, model, tenant), kept | Yes |
+| `shared.llm_shadow_log` | CIS | 180 days (proposed, follows `llm_call_log`) | included in the daily rollup | Yes |
+| `shared.tenant_api_usage` | CIS | **90 days** | monthly rollup per tenant, kept | Yes |
+| `shared.job` | CIS | succeeded **30 days**; failed / cancelled **90 days**; queued / running never | — | Failed rows only |
+| `booking.job` (and every `<schema>.job`) | owner | same as `shared.job` | — | Failed rows only |
+| `shared.job_worker` | CIS | already pruned (`shared/jobs/queue.py:440`) | — | No |
+| `tripplanner.outbox` payload | TripPlanner | PII redacted after **90 days**; row kept | — | After redaction |
+| `booking.inbox_events` payload | Booking | PII redacted after **90 days**; row + `idempotency_key` kept | — | After redaction |
+| `shared.decision_log` | CIS | Decided in N4 after the cache TTL in code is confirmed (180 days is cited but not found in `181_jev_decision_layer.sql`) | `decision_cache_hits_daily` | Yes |
+| `shared.cost_explorer_snapshot` | CIS | latest snapshot per day kept; intra-day rows deleted | — | No |
+| `shared.dfs_call_log`, `geo.geocode_call` | CIS | 180 days (proposed, same as `llm_call_log`) | daily cost rollup (proposed, N4) | Yes |
+| `shared.dfs_balance_snapshot` | CIS | latest per day kept (proposed) | — | No |
+| `acp_contract.atom_ranking`, `acp_contract.route` (superseded rows, `superseded_at IS NOT NULL`) | CIS | proposed: superseded rows older than 90 days deleted; current rows never | — | No |
+| `shared.notifications`, `booking.notifications` (+ `notification_reads`) | owner | proposed: read rows after 90 days, unread after 180 days | — | No |
+| `booking.customer_otps`, `booking.customer_sessions` | Booking | proposed: 7 days after `expires_at` / `used_at` / `revoked_at`; tables dropped in ADR 0006 Phase 4 | — | No (`conf:credential`) |
+| `tripplanner.sessions` | TripPlanner | proposed in L3 (guest claiming in ADR 0006 Phase 4 needs `guest_token` while the guest trip lives) | — | No |
+| `tripplanner.trip_events` | TripPlanner | proposed in L3 | — | Yes |
+| `booking.trip_case_status_history`, `acp_shared.publish_log` | owner | kept (audit evidence); a window is set before prod | — | — |
+| `shared.pipeline_jobs` (legacy) | CIS | no new writes; archive, then retire (L1) | — | Yes |
+| `acp_shared.audit_log`, `booking.audit_logs` | owner | kept (append-only); a window is set before prod | — | — |
+| CloudWatch `postgresql` log export | Infra | 14 days | — | No |
+| RDS automated backups | Infra | Dev 7 days; prod 14 days | — | — |
+| S3 archive objects | Infra | Proposed: lifecycle to an infrequent-access class after 90 days; expiry per table set in N4 | — | — |
+
+---
+
+## 8. Access management
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-8.1 | **Roles per app.** Each app has a NOLOGIN `<app>_owner` (owns objects), one or more LOGIN runtime roles (`<app>_app`, tenant pool, Lambda pools) with a `CONNECTION LIMIT` and their own `application_name`, and optionally a NOLOGIN `<app>_reader` that owns the app's contract views. Role definitions MUST be in git, never created by hand: an owner migration MAY create its own NOLOGIN roles; LOGIN and role attributes live in the Infra role bootstrap (X1), with the single N3 interim CIS migration for the 3 existing runtime roles (Part A MIG-6, Part C C2.3a). Passwords are set out of band and never enter git. | `tripplanner` was created out of band, `booking` got LOGIN and its password out of band (bk-001 creates it NOLOGIN), and neither has a `CONNECTION LIMIT` (review §2.1). | to build (X1); Review |
+| DM-8.2 | Migrations MUST run as a separate `db_migrator` role from its **own** task definition, using `SET ROLE <owner>` per owner dir, with an `environment` input. Runtime roles MUST NOT hold DDL rights. | A broken CIS task def must not block TP/Booking migrations, and runtime compromise must not mean DDL (P1). | to build (X1, E2) |
+| DM-8.3 | **Least privilege.** Grants are per object, issued by the producer's own migration, unguarded (`schema-ownership.md` rule 5). New `ALTER DEFAULT PRIVILEGES … TO <app role>` MUST NOT be added. The existing ones are grandfathered: 007b to `aa_app_user` is removed by N7, and bk-001 `FOR ROLE aa_cis_admin` is replaced at the X1 reassignment. Consumers get `USAGE` + `SELECT` on contract views only. TripPlanner's one write is `INSERT` on `shared.llm_call_log`. | Default ACLs exposed new tenant tables on creation (P2). | Review; to build (X2: grants checked against `owners.yaml`) |
+| DM-8.4 | **Tenant isolation.** Tenant tables use the RLS template (`tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid`, USING + WITH CHECK, scoped `TO <runtime role>`). New apps use FORCE from day one. CIS tables get FORCE only after its role split (AA-817 D2; 229 = ENABLE without FORCE). A new app's tenant pool MUST fail closed: no tenant context gives a 503, never a fallback to another pool. CIS's per-route flag rollout (`api/core/aa544_tenant_pool.py`, flag off → main pool) is a known gap, closed route by route under AA-817; no new CIS route MAY add a main-pool fallback for tenant data. An app MUST set `app.tenant_id` only for its own schema's tables, after its own membership check; it MUST NOT set it to read another owner's tables (TripPlanner's `set_catalog_tenant` is removed by X4). | One missing WHERE clause otherwise leaks across tenants (P2), and a self-set GUC is not an authorization boundary (P7). | CI (CIS `tests/integration/test_tenant_rls.py`, `test_007_rls_isolation.py`; `test_aa817_rls_tenant_isolation.py` once the AA-817 branch `chore/aa-817-role-matrix` merges); to build (X2 catalogue guard); Runbook (aa817 probe before the first tenant of a new app) |
+| DM-8.5 | **Connection budget.** Every LOGIN role except the RDS master `aa_cis_admin` (break-glass, `03-scaling.md` C2.3b) MUST have a `CONNECTION LIMIT` set in git. Limits, pool sizes, Lambda reserved concurrency and the rule for changing them live only in `03-scaling.md` C2.2-C2.3; they ship **before** the Lambda quota of 1000 is applied (E6). | A TP burst can exhaust `max_connections` for all 3 apps (P4). | to build (N3); Alarm (exists: `rds_connections_high` > 70 for 10 min in `accounts/aa365/observability_ecosys.tf`; N3 sets the `03-scaling.md` C4.1 thresholds) |
+| DM-8.6 | **No shared credentials.** One DSN per role, in Secrets Manager at `<app>/<env>/<purpose>` (e.g. `booking/dev/database-url`, `tripplanner/dev/database-url`). Legacy CIS names `aa-cis/dev/rds` and `aa-cis/dev/rds-app-user` stay. An app's execution role MUST be able to read only its own prefix (`booking/dev/*`, ADR 0004 decision 5). Secret values are never printed, copied into chat, or written to files. Env vars with underscores are edited by hand by Nghiệp in VSCode. | Per-app secrets make revocation and audit per app. | Terraform (IAM per prefix); Review |
+| DM-8.7 | Before any secret or resource write, run `aws sts get-caller-identity --profile aa365-admin` and confirm it is acc2. | Two real wrong-account Secrets Manager writes happened (AA-517). | Runbook (global rules) |
+| DM-8.8 | **Human access.** No personal DB logins and no public endpoint (`publicly_accessible = false`). Humans reach the DB only through the S3-mediated ECS exec pattern over SSM, never SSH. Ad-hoc analysis SHOULD use a read-only role, not the master. | Every human query is then an auditable task session. | Terraform; Runbook (`skill/aa-cis-schema/references/ecs-exec.md`); to build (X1+: read-only ops role) |
+| DM-8.9 | **Break-glass.** Once the CIS runtime has moved to `cis_app` (X1 step 4, behind AA-817 D2), `aa_cis_admin` (RDS master) is break-glass only. Until then it is the CIS runtime, and DDL through it outside DB Migrate is break-glass use. Every use names its reason in the session log and on the Linear issue. Its password rotates after use (prod). App-level break-glass is the Cognito `breakglass` account (ADR 0006). | A master credential in daily use is no longer break-glass (P1). | to build (X1); Runbook |
+| DM-8.10 | **Quarterly access review.** List roles, memberships, attributes, grants and default ACLs (from the dump), the IAM roles that can read each DB secret, and the Cognito `aa-workforce` users (AA-816 directory). Remove anything unused. Record the result in `docs/audits/<date>-S<nnn>-access-review/`. | Grants accumulate silently. | Runbook (calendar: first session of each quarter); to build (N1 provides the grant data) |
+
+---
+
+## 9. Backup, restore and DR
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-9.1 | The instance MUST keep `storage_encrypted = true`, `deletion_protection = true` and automated backups (PITR). Dev: 7 days. `skip_final_snapshot` MUST be `false` and `copy_tags_to_snapshot = true`. | A final snapshot is the last undo when an instance is deleted. | Terraform (`infra/AA-CIS-Infra/modules/rds/main.tf`: encryption, deletion protection and 7-day backups exist today); to build (N3: `skip_final_snapshot = false` — today `true` — and `copy_tags_to_snapshot`) |
+| DM-9.2 | A destructive migration (header `-- migrate: destructive`) MUST take a manual snapshot before it runs. Until the runner does this, the DRY RUN step 2 snapshot is done by hand. | On a shared instance, PITR rolls back all three apps; a snapshot plus a table export does not. | to build (N5); Runbook (destructive-ops.md) |
+| DM-9.3 | **Restore drill on Dev:** PITR to a new instance, smoke queries per schema, record the RTO, delete the copy. Run it once now (X10), then before prod and quarterly in prod. | An untested backup is a guess. | to build (X10); Runbook |
+| DM-9.4 | **Single-schema restore** is done by PITR to a new instance, then `pg_dump --schema <s>` / copy of the affected tables back, under DRY RUN. It is never an in-place PITR of the shared instance unless every owner agrees. | Isolates one app's mistake from the other two. | Runbook (written with X10) |
+| DM-9.5 | DSNs SHOULD point to a private CNAME, not the RDS endpoint, so that a restore or a split can cut over without editing every secret. | Shorter RTO; prepares the Booking split trigger (review §5.2). | to build (X10) |
+| DM-9.6 | **Prod targets** (proposed; confirmed in the L9 blueprint): separate instance on acc2, Multi-AZ, 14-day PITR, AWS Backup with a cross-region copy, final snapshot on. RPO ≤ 15 min for instance loss (PITR) and ≤ 24 h for region loss (daily cross-region copy). RTO ≤ 1 h for AZ or instance failure and ≤ 4 h for region loss. Quarterly restore drill. | The current Dev setup (7-day PITR, same account and region, no drill) blocks prod (P12). | to build (L9); Review of the prod Terraform root |
+
+---
+
+## 10. Cost ownership
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-10.1 | Every AWS resource MUST carry an `App` tag (`cis`, `tripplanner`, `booking`, `crm`, or `shared` for the RDS instance and network) next to `Project` / `Environment` / `ManagedBy` (`local.common_tags` / `local.ecosys_tags`). New resources MUST have it from their first PR. Nghiệp activates the tags as cost allocation tags in the Billing console (E5). | Without them, per-app cost is a guess. | Terraform review; partial today (S235 Phase 0: `booking.tf`, `tripplanner.tf`, `observability_ecosys.tf`); to build (X9: the rest, incl. `modules/rds`) |
+| DM-10.2 | Each app SHOULD have its own monthly budget alert next to the account total (`aws_budgets_budget.total_monthly`, $250, `observability.tf`). | The total budget does not say which app overspent. | Alarm (total, exists); to build (X9, per app) |
+| DM-10.3 | The shared RDS is owned and paid for by Infra (`App=shared`). Per-app attribution SHOULD use schema size and connection share from the nightly dump. | One instance cannot be tagged per schema. | to build (N1 sizes) |
+| DM-10.4 | Every paid external call MUST go through its seam and land in its ledger with `cost_usd` and `job_id` (when run by a job): LLM → Model Gateway `LLMClient.generate()` / `embed` → `shared.llm_call_log` (with `stage`, `role` and `app`, today `quality_signal.app`); Jev → `decide()` → `shared.decision_log`; DataForSEO → `shared.dfs_call_log`; geocoder → `geo.geocode_call`. Ad-hoc scripts use `stage = adhoc_<issue>` and `role` ∈ {writer, judge, validate}. Direct boto3 model calls are not allowed. | AWS bills anyway; an unlogged call cannot be traced (AA-635, ADR 0001 decision 2). | Review (steering); CI in CIS (`tests/unit/test_aa685_no_raw_model_calls.py`) |
+| DM-10.5 | Per-app LLM spend MUST be read from the rollup filtered by `app` (N4), and every external spend MUST check a DB-configured budget (`shared.spend_budget`, ADR 0001 decision 4). | Spend stays bounded and visible per app. | Existing cost guard; to build (N4 rollup, AA-804 `app` column) |
+| DM-10.6 | Paid batch runs on Dev start with a trial of ~3 items, then at most ~50 tours, never the whole catalog without Nghiệp's approval. | Keeps experiments cheap. | Review (session rule) |
+| DM-10.7 | Spend changes need Nghiệp's approval. Approved: Dev t3.micro → t4g.small + Performance Insights (E5, ~+$10-15/month, checked in the AWS calculator). RDS Proxy and other trigger items (review §5.2) are added only when their trigger fires. | Spending is a decision, not a side effect of a PR. | Review |
+
+---
+
+## 11. Change management
+
+| ID | Rule | Why | Enforced by |
+|---|---|---|---|
+| DM-11.1 | **ADR placement.** A decision that would force ≥ 2 repos to change if reversed goes in `AA-Ecosys/docs/adr/`. Infra-only goes in `infra/AA-CIS-Infra/docs/adr/`. Single-app goes in `apps/<repo>/docs/adr/`, citing the root ADR it implements (`skill/ai-nghiep/references/adr.md`). Numbers: 0008 = new-app integration and data platform rules (`docs/adr/0008-new-app-integration-and-data-platform-rules.md`, hosts this file); 0009 = AI platform (AA-804, not written yet); amendment `docs/adr/0003a-per-owner-job-tables.md` = one job table per owner schema from a shared DDL template (supersedes AA-751's premise). An amendment to an accepted ADR is a separate `<nnnn>a-<slug>.md` file (pattern 0004a). | Decisions are found where their blast radius is. | Review |
+| DM-11.2 | **Migrations follow D8** (the steps are Part A **MIG-4**): migration-only PR → byte copy in `infra/AA-CIS-Infra/db/migrations/<owner>/` → DB Migrate `check` → `apply` → regenerate the schema reference (manual today; D8 step 5 via N1) → the code PR that depends on it. | Schema and code changes are reviewed once and applied from CI, never from a laptop. | CI (Migration Copy Guard, DB Migrate fails if the version is not registered) |
+| DM-11.3 | Migrations MUST be expand/contract and lock-safe. The rules and the runner defaults (`lock_timeout`, `statement_timeout`, `application_name`, `-- migrate:` headers) are Part A **MIG-7** to **MIG-12** (one home, not repeated here). | An ALTER queued behind a job transaction blocks a hot table for all apps (P9). | Review; to build (N5 runner defaults, lint, unique-number check) |
+| DM-11.4 | **Job guard.** A backend deploy waits until the deploying owner's job table is idle; a DB Migrate `apply` or an instance change waits until **all** job tables are idle; nothing of either kind runs during a wave. The rule and its enforcement are `03-scaling.md` **C6.3a/b**. Only Nghiệp may override, with a recorded reason. | A deploy or lock mid-wave loses work. | CI for CIS deploys only (`apps/AA-CIS-App/.github/workflows/deploy-dev.yml`, counts `shared.job`); Runbook for the rest (`skill/aa-ship/SKILL.md` queries plus `booking.job`) until X6/N5 add the guards |
+| DM-11.5 | Agents MUST NOT merge to `main`. A human merges after green CI (trunk-based, ADR-2026-023). An issue is Done only after merge + CI + deploy rollout completed + live verify (aa-ship). Commits use `Refs AA-xxx`, never `Fixes`/`Closes`. | Review is the approval; Linear must not auto-close. | Branch protection; hook blocking subagent merges; Review |
+
+**Who approves what**
+
+| Change | Author | Approves | Extra condition |
+|---|---|---|---|
+| New table/column in own schema | owner repo | PR reviewer (human merge) | retention row (§7), `pii:` tags (§6), regenerate the reference |
+| Cross-owner grant / new contract view | producer repo | producer reviewer + consumer acknowledgement | contract registered (DM-3.6); grantee role exists (unguarded) |
+| Contract minor (additive), e.g. `inquiry.submitted` v1.2 | producer | Nghiệp (approved E7 for v1.2) | consumers accept every minor of their major |
+| Contract major | producer | Nghiệp | dual-write two views ≥ 30 days |
+| New schema / new app / new domain | owning repo | Nghiệp | ADR 0008 decision gate + 12-step playbook + isolation probe |
+| Role, RLS or default-ACL change | owner + Infra | Nghiệp | aa817 probe rerun before/after; D2 respected for CIS |
+| Destructive change (DROP, bulk DELETE) | owner | Nghiệp | DRY RUN 5 steps; Dead Table Registry row; snapshot |
+| Retention window, instance size, new paid service | Infra / owner | Nghiệp | amend §7 / §10 |
+| New Linear issue | anyone | Nghiệp (ask first) | project quota ≤ 100 unarchived issues |
+| These standards | anyone | Nghiệp | PR to the root repo; steering and skills updated in the same PR when they restate a rule |
+
+Mistakes that come from a wrong assumption are logged at once in `skill/aa-lessons/lessons.md`. A lesson that can be checked by a test or CI becomes a guard, and its line is then removed (steering).
+
+---
+
+## 12. Enforcement still to build
+
+Until each item ships, the rule it backs is enforced by review only. Items marked **+** in the "Rules it backs" column are proposed extensions beyond the review's scope for that item (§0); they are added to its issue only with Nghiệp's OK.
+
+| Roadmap | What it adds | Rules it backs | Linear |
+|---|---|---|---|
+| N1 | Automated dump + nightly drift check (policies, indexes, grants, owners, ACLs, sizes, `pii:` tags, tenant tables without RLS) | DM-3.1-3.4, 6.1, 8.10, 10.3; **+** 4.2 (orphan query), 4.7 (dump-based measures) | AA-807 |
+| N2 | 229 fix; bring the two unmanaged policies under migration | DM-3.3 | AA-817 |
+| N3 | Guardrails, connection limits, reserved concurrency, final snapshot, alarms | DM-8.5, 9.1 | AA-824 |
+| N4 | TTL job kinds, rollups, S3 Parquet archive, sargable usage view | DM-7.2-7.4, 10.5; **+** 6.6 (if pulled in from L3), rollups of `dfs_call_log` / `geocode_call` | AA-825 (+ AA-804 for the `app` / `is_shadow` columns) |
+| N5 | Runner defaults, no-transaction mode, destructive pre-snapshot, latest per prefix, unique-number check | DM-3.4, 9.2, 11.3 | AA-807 |
+| N6 | Dead Table Registry + wave-1 quarantine | DM-3.8, 3.9 | AA-807 |
+| N7 | Remove the 007b default ACL to `aa_app_user` | DM-8.3 | AA-817 / AA-813 |
+| X1 | `owners.yaml`, owner roles (Booking/TripPlanner first, E2), `db_migrator` task def, roles in git, CIS runtime switch behind AA-817 D2, break-glass master | DM-1.2, 1.3, 8.1, 8.2, 8.9; **+** 8.8 (read-only ops role) | AA-807, AA-817 |
+| X2 | Catalogue CI guard (RLS, PUBLIC policy, GUC name, NULLIF, cross-owner FK, grant allowlist) | DM-2.1, 2.3, 5.2, 5.4, 8.3, 8.4; **+** 1.5 (kernel list), 6.1 (PII tag lint) | AA-817 / AA-807 |
+| X3 | Tour key `inquiry.submitted` v1.2, `trip_case_legs` key columns, TP backfill, glossary, contracts registry | DM-2.2, 3.6 | related AA-679 |
+| X4 | TripPlanner decoupling (photo_sync, catalog reads, drop frozen tables + 12 FKs, revoke direct grants) | DM-2.3, 5.2, 8.4 (`set_catalog_tenant`) | AA-712 |
+| X5 | `shared.countries` + catalog country view + `country_iso2` | DM-2.4 | AA-807 |
+| X6 | Shared job DDL template (ADR 0003a, accepted), missing `booking.job` columns, `acp_runs` readers moved, Booking deploy job guard | DM-2.4, 7.2 (TripPlanner job table), 11.4 | AA-751 (re-scope to X6 or close — Nghiệp) |
+| X7 | ADR 0008 (accepted 15/10/2026) done; remaining: `owners.yaml`-driven playbook tooling, role bootstrap template, consumer contract hash guard | DM-3.6 | AA-826 |
+| X8 | Hashed `guest_token` | DM-6.9 | AA-827 |
+| X9 | `App` tags, per-app budgets, t4g.small + PI | DM-10.1, 10.2, 10.7 | AA-828 |
+| X10 | Restore drill, private CNAME, single-schema restore runbook, `docs/backups` cleanup (E10) | DM-6.10, 9.3-9.5 | AA-829 |
+| L3 | Customer PII consolidation, payload redaction, TP/Booking retention rows, erasure runbook | DM-6.1 (existing columns), 6.2, 6.6, 6.7, 7.1 | — (ADR 0006 Phase 4) |
+| L6 | S3/Athena query over archives | DM-7.3 | — |
+| L9 | Prod blueprint (Multi-AZ, cross-region backup, targets) | DM-9.6 | — |
+| L10 | CRM build through the playbook | DM-6.8 | AA-821, AA-813 |
+
+No roadmap item covers an automated PII check on prompts or logs (DM-6.4); it stays review-only unless Nghiệp approves an issue for it.
+
+### 12.1 Coverage of the review's problems
+
+| Problem (review §3) | Rules in this file |
+|---|---|
+| P1 one master credential | DM-1.3, 8.1, 8.2, 8.9 |
+| P2 tenant isolation in WHERE clauses, default ACL | DM-8.3, 8.4 |
+| P3 live/repo RLS drift | DM-3.2, 3.3, 8.4 |
+| P4 instance and connection budget | DM-8.5, 10.7 (details in `03-scaling.md`) |
+| P5 no retention or rollups | §7 (DM-7.1-7.5) |
+| P6 tour key | DM-2.2, §3.3 glossary |
+| P7 TripPlanner coupling, self-set GUC | DM-2.3, 5.2, 5.4, 8.4 |
+| P8 stale source of truth | DM-3.1-3.8 |
+| P9 unsafe migration runner | DM-9.2, 11.3 |
+| P10 customer PII copies, guessable token | DM-6.1-6.7, 6.9 |
+| P11 duplicated concepts | DM-2.4 |
+| P12 backup, DR, prod readiness, real-data dumps | DM-6.10, 9.1-9.6 |
+| P13 dead or legacy objects | DM-3.8, 3.9 |

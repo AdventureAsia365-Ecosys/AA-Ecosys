@@ -1,0 +1,54 @@
+{
+  "items": [
+    {
+      "id": "509863fd-da0b-4bf9-8dce-b3e43bab76ff",
+      "at": "2026-10-14T23:47:16.848739Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case.assigned",
+      "entity_type": "trip_case",
+      "entity_id": "4542b70e-3483-40d6-b7ce-c7d2c6c24427",
+      "entity_label": "TC-000003",
+      "summary": "sales: - -> 2d8e5a2f-3722-4571-9327-177d10b74127",
+      "before": {
+        "role": "sales",
+        "staff_user_id": null
+      },
+      "after": {
+        "role": "sales",
+        "staff_user_id": "2d8e5a2f-3722-4571-9327-177d10b74127"
+      }
+    },
+    {
+      "id": "51b1df2e-2bda-42ce-b6c6-b415f08a11be",
+      "at": "2026-10-14T23:47:15.987472Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case.created",
+      "entity_type": "trip_case",
+      "entity_id": "4542b70e-3483-40d6-b7ce-c7d2c6c24427",
+      "entity_label": "TC-000003",
+      "summary": "Created TC-000003 (discovery)",
+      "before": null,
+      "after": {
+        "pax": 2,
+        "status": "discovery",
+        "currency": "USD",
+        "countries": [
+          "VN"
+        ],
+        "pax_adults": 2,
+        "start_date": "2026-12-01",
+        "trip_style": null,
+        "customer_id": "d058abf7-4610-4f72-8048-9597bc84ad3a",
+        "source_system": "manual"
+      }
+    }
+  ]
+}

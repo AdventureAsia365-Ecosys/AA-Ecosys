@@ -1,0 +1,2772 @@
+{
+ "probe": "aa817_role_matrix",
+ "foreign_uuid": "ab41b569-0589-49ad-9793-2fc267b97df1",
+ "master_uuid": "00000000-0000-0000-0000-000000000001",
+ "main_secret_user": "aa_cis_admin",
+ "api_env_database_url_user": "aa_cis_admin",
+ "api_env_database_url_same_host": true,
+ "identity": {
+  "cu": "aa_cis_admin",
+  "su": "aa_cis_admin",
+  "db": "aa_cis_dev",
+  "ver": "15.17",
+  "row_security": "on",
+  "is_superuser": "off",
+  "rolsuper": false,
+  "rolbypassrls": false,
+  "rolcreaterole": true,
+  "rolcreatedb": true,
+  "rolinherit": true,
+  "rolcanlogin": true
+ },
+ "membership_chain": [
+  {
+   "role": "rds_superuser",
+   "depth": 1,
+   "path": "aa_cis_admin > rds_superuser",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "pg_checkpoint",
+   "depth": 2,
+   "path": "aa_cis_admin > rds_superuser > pg_checkpoint",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "pg_monitor",
+   "depth": 2,
+   "path": "aa_cis_admin > rds_superuser > pg_monitor",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "pg_read_all_data",
+   "depth": 2,
+   "path": "aa_cis_admin > rds_superuser > pg_read_all_data",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "pg_signal_backend",
+   "depth": 2,
+   "path": "aa_cis_admin > rds_superuser > pg_signal_backend",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "pg_write_all_data",
+   "depth": 2,
+   "path": "aa_cis_admin > rds_superuser > pg_write_all_data",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "rds_password",
+   "depth": 2,
+   "path": "aa_cis_admin > rds_superuser > rds_password",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "rds_replication",
+   "depth": 2,
+   "path": "aa_cis_admin > rds_superuser > rds_replication",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "pg_read_all_settings",
+   "depth": 3,
+   "path": "aa_cis_admin > rds_superuser > pg_monitor > pg_read_all_settings",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "pg_read_all_stats",
+   "depth": 3,
+   "path": "aa_cis_admin > rds_superuser > pg_monitor > pg_read_all_stats",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  },
+  {
+   "role": "pg_stat_scan_tables",
+   "depth": 3,
+   "path": "aa_cis_admin > rds_superuser > pg_monitor > pg_stat_scan_tables",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "inherits_privs": true,
+   "can_set_role": true
+  }
+ ],
+ "roles": [
+  {
+   "rolname": "aa_app_user",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": false,
+   "rolcanlogin": true,
+   "members": [],
+   "member_of": []
+  },
+  {
+   "rolname": "aa_cis_admin",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": true,
+   "rolinherit": true,
+   "rolcanlogin": true,
+   "members": [],
+   "member_of": [
+    "rds_superuser"
+   ]
+  },
+  {
+   "rolname": "booking",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": true,
+   "rolcanlogin": true,
+   "members": [],
+   "member_of": []
+  },
+  {
+   "rolname": "catalog_owner",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "members": [],
+   "member_of": []
+  },
+  {
+   "rolname": "rds_ad",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "members": [],
+   "member_of": []
+  },
+  {
+   "rolname": "rds_extension",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": false,
+   "rolcanlogin": false,
+   "members": [],
+   "member_of": []
+  },
+  {
+   "rolname": "rds_iam",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "members": [],
+   "member_of": []
+  },
+  {
+   "rolname": "rds_password",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "members": [
+    "rds_superuser"
+   ],
+   "member_of": []
+  },
+  {
+   "rolname": "rds_replication",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "members": [
+    "rds_superuser"
+   ],
+   "member_of": []
+  },
+  {
+   "rolname": "rds_reserved",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": false,
+   "rolcanlogin": false,
+   "members": [],
+   "member_of": []
+  },
+  {
+   "rolname": "rds_superuser",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": true,
+   "rolcanlogin": false,
+   "members": [
+    "aa_cis_admin"
+   ],
+   "member_of": [
+    "pg_checkpoint",
+    "pg_monitor",
+    "pg_read_all_data",
+    "pg_signal_backend",
+    "pg_write_all_data",
+    "rds_password",
+    "rds_replication"
+   ]
+  },
+  {
+   "rolname": "rdsadmin",
+   "rolsuper": true,
+   "rolbypassrls": true,
+   "rolcreaterole": true,
+   "rolinherit": true,
+   "rolcanlogin": true,
+   "members": [],
+   "member_of": []
+  },
+  {
+   "rolname": "tripplanner",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcreaterole": false,
+   "rolinherit": true,
+   "rolcanlogin": true,
+   "members": [],
+   "member_of": []
+  }
+ ],
+ "probe_roles_existing": [
+  "aa_app_user",
+  "tripplanner",
+  "booking",
+  "catalog_owner"
+ ],
+ "aa_app_user_chain": [],
+ "schemas": {
+  "gold_aa_internal": {
+   "owner": "aa_cis_admin",
+   "usage": {
+    "aa_app_user": true,
+    "tripplanner": true,
+    "booking": false,
+    "catalog_owner": true
+   }
+  },
+  "silver_aa_internal": {
+   "owner": "aa_cis_admin",
+   "usage": {
+    "aa_app_user": true,
+    "tripplanner": true,
+    "booking": false,
+    "catalog_owner": true
+   }
+  },
+  "acp_shared": {
+   "owner": "aa_cis_admin",
+   "usage": {
+    "aa_app_user": true,
+    "tripplanner": false,
+    "booking": false,
+    "catalog_owner": true
+   }
+  },
+  "acp_contract": {
+   "owner": "aa_cis_admin",
+   "usage": {
+    "aa_app_user": false,
+    "tripplanner": true,
+    "booking": false,
+    "catalog_owner": true
+   }
+  },
+  "shared": {
+   "owner": "aa_cis_admin",
+   "usage": {
+    "aa_app_user": true,
+    "tripplanner": true,
+    "booking": false,
+    "catalog_owner": true
+   }
+  },
+  "catalog": {
+   "owner": "aa_cis_admin",
+   "usage": {
+    "aa_app_user": true,
+    "tripplanner": true,
+    "booking": true,
+    "catalog_owner": true
+   }
+  },
+  "geo": {
+   "owner": "aa_cis_admin",
+   "usage": {
+    "aa_app_user": false,
+    "tripplanner": false,
+    "booking": false,
+    "catalog_owner": true
+   }
+  }
+ },
+ "tables": [
+  {
+   "s": "acp_contract",
+   "t": "atom_decompose_jobs",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 0,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "atom_embedding",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 6744,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "atom_matches",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 9526,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "atom_ranking",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 108198,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "atom_segment",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 11306,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "atom_segment_alias",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 149,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "atom_segment_member",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 25072,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "atomize_day_fingerprint",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 10062,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "hub",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 59,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "question_embedding",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 847,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "route",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 8058,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "route_pick",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "s1_from_atom_runs",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "search_demand",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 5089,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "segment_research_log",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 1337,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_contract",
+   "t": "tour_atoms",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 32019,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "acp_contract",
+   "t": "v_active_tour_atoms",
+   "k": "v",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "acp_contract",
+   "t": "v_trip_registry",
+   "k": "v",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "acp_output_rules",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": false,
+   "tenant_col": "character varying(50)",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "acp_quota_ledger",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "angle_gate_option",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 33,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "SIU"
+   }
+  },
+  {
+   "s": "acp_shared",
+   "t": "angle_gate_request",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 15,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "SIU"
+   }
+  },
+  {
+   "s": "acp_shared",
+   "t": "atom_place_card",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 291,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "acp_shared",
+   "t": "audit_log",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "character varying(50)",
+   "est_rows": 930,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "content_piece",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 188,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "SIU"
+   }
+  },
+  {
+   "s": "acp_shared",
+   "t": "debate_brand_fit_cache",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 237,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "facts",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "SIU"
+   }
+  },
+  {
+   "s": "acp_shared",
+   "t": "marketplace_portfolios",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "SIU"
+   }
+  },
+  {
+   "s": "acp_shared",
+   "t": "place_card",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 111,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "acp_shared",
+   "t": "place_card_alias",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 361,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "place_card_miss",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "publish_log",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "SIU"
+   }
+  },
+  {
+   "s": "acp_shared",
+   "t": "quarter_plan",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 6,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "quarter_plan_version",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 0,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "subject",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 105,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "tenant_atom_state",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 0,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "SIU"
+   }
+  },
+  {
+   "s": "acp_shared",
+   "t": "tenant_config",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "acp_shared",
+   "t": "year_plan",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "SIU"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "_tour_day_text",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_destination",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_destination_photo",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_graph_edge",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_graph_node",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_tour",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_tour_component",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_tour_day",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_tour_day_route",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_tour_junction",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_tour_leg",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_tour_photo",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_tour_place",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "catalog",
+   "t": "v_tour_stop",
+   "k": "v",
+   "owner": "catalog_owner",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "opts": [
+    "security_barrier=true"
+   ],
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "booking": "S",
+    "catalog_owner": "SIUD"
+   }
+  },
+  {
+   "s": "geo",
+   "t": "geocode_call",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "geo",
+   "t": "graph_build",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "geo",
+   "t": "graph_edge",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 209,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "geo",
+   "t": "graph_node",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 143,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "geo",
+   "t": "place_name",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 573,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "geo",
+   "t": "place_outlier",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "geo",
+   "t": "tour_build",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 27,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "geo",
+   "t": "tour_day",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 392,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "geo",
+   "t": "tour_junction",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 2854,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "geo",
+   "t": "tour_leg",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 1971,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "geo",
+   "t": "tour_place",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 967,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "geo",
+   "t": "tour_stop",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 407,
+   "rls_active_for_me": false,
+   "privs": {
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "gold_aa_internal",
+   "t": "content_exports",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": true,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "gold_aa_internal",
+   "t": "published_tours",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": true,
+   "tenant_col": "uuid",
+   "est_rows": 886,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "gold_aa_internal",
+   "t": "tenant_tour_versions",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 22,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "gold_aa_internal",
+   "t": "webhook_deliveries",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": true,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "acp_runs",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "admin_users",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "cost_explorer_snapshot",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 6923,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "decision_cache_hits_daily",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 190,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "decision_log",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 314376,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "decision_question",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 5,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "destinations",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 1469,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "dfs_balance_snapshot",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "dfs_call_log",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 2545,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "jev_credit_topup",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "jev_tenant_allowlist",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "job",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 2519,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "job_worker",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 140,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "llm_call_log",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 244387,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "I"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "llm_model_catalog",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "llm_role_config",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "llm_shadow_log",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 5554,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "membership_plans",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "notifications",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 12,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "pipeline_jobs",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 523,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "pipeline_lessons",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "pipeline_runs",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": true,
+   "tenant_col": "uuid",
+   "est_rows": 46,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "SIU"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "place_photo",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 3232,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "prompt_eval_runs",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "rerun_wave",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "schema_versions",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": 160,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "spend_budget",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "tenant_api_usage",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 113157,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "tenant_brand_rule_versions",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "tenant_brand_rules",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "tenant_brand_rules_deleted_aa404",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "tenant_export_config",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "tenant_integrations",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "tenant_rewrite_usage",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "tenant_seo_config",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "tenants",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 4,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "unmapped_market_requests",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "v_batch_stats",
+   "k": "v",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "v_destination_photos",
+   "k": "v",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "v_pipeline_summary",
+   "k": "v",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "privs": {}
+  },
+  {
+   "s": "shared",
+   "t": "v_tenant_monthly_usage",
+   "k": "v",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "shared",
+   "t": "v_tour_photos",
+   "k": "v",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": null,
+   "est_rows": -1,
+   "rls_active_for_me": null,
+   "privs": {
+    "aa_app_user": "S",
+    "tripplanner": "S",
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "generated_content",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": true,
+   "tenant_col": "uuid",
+   "est_rows": 1423,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "quality_scores",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": true,
+   "tenant_col": "uuid",
+   "est_rows": 1432,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "raw_sources",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 34,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "raw_tours",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": true,
+   "tenant_col": "uuid",
+   "est_rows": 987,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S",
+    "catalog_owner": "S"
+   }
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "review_queue",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": 229,
+   "rls_active_for_me": false,
+   "privs": {}
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "seo_context",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": true,
+   "force": true,
+   "tenant_col": "uuid",
+   "est_rows": 898,
+   "rls_active_for_me": false,
+   "privs": {
+    "aa_app_user": "S"
+   }
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "upload_staging",
+   "k": "r",
+   "owner": "aa_cis_admin",
+   "rls": false,
+   "force": false,
+   "tenant_col": "uuid",
+   "est_rows": -1,
+   "rls_active_for_me": false,
+   "privs": {}
+  }
+ ],
+ "policies": [
+  {
+   "s": "acp_shared",
+   "t": "acp_output_rules",
+   "p": "output_rules_rls",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "((tenant_id IS NULL) OR ((tenant_id)::text = current_setting('app.current_tenant'::text, true)))",
+   "with_check": null
+  },
+  {
+   "s": "acp_shared",
+   "t": "angle_gate_request",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "((tenant_id)::text = current_setting('app.tenant_id'::text, true))",
+   "with_check": null
+  },
+  {
+   "s": "acp_shared",
+   "t": "content_piece",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "((tenant_id)::text = current_setting('app.tenant_id'::text, true))",
+   "with_check": null
+  },
+  {
+   "s": "acp_shared",
+   "t": "facts",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "((scope = 'platform'::text) OR ((tenant_id)::text = current_setting('app.tenant_id'::text, true)))",
+   "with_check": null
+  },
+  {
+   "s": "acp_shared",
+   "t": "publish_log",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "((tenant_id)::text = current_setting('app.tenant_id'::text, true))",
+   "with_check": null
+  },
+  {
+   "s": "gold_aa_internal",
+   "t": "content_exports",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "(tenant_id = (current_setting('app.tenant_id'::text, true))::uuid)",
+   "with_check": null
+  },
+  {
+   "s": "gold_aa_internal",
+   "t": "published_tours",
+   "p": "catalog_owner_aa_master_read",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "catalog_owner"
+   ],
+   "cmd": "SELECT",
+   "qual": "(tenant_id = '00000000-0000-0000-0000-000000000001'::uuid)",
+   "with_check": null
+  },
+  {
+   "s": "gold_aa_internal",
+   "t": "published_tours",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)",
+   "with_check": null
+  },
+  {
+   "s": "gold_aa_internal",
+   "t": "tenant_tour_versions",
+   "p": "tenant_tour_versions_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "((tenant_id)::text = current_setting('app.tenant_id'::text, true))",
+   "with_check": null
+  },
+  {
+   "s": "gold_aa_internal",
+   "t": "webhook_deliveries",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "(tenant_id = (current_setting('app.tenant_id'::text, true))::uuid)",
+   "with_check": null
+  },
+  {
+   "s": "shared",
+   "t": "pipeline_runs",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "(tenant_id = (current_setting('app.tenant_id'::text, true))::uuid)",
+   "with_check": null
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "generated_content",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "(tenant_id = (current_setting('app.tenant_id'::text, true))::uuid)",
+   "with_check": null
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "quality_scores",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "(tenant_id = (current_setting('app.tenant_id'::text, true))::uuid)",
+   "with_check": null
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "raw_tours",
+   "p": "catalog_owner_aa_master_read",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "catalog_owner"
+   ],
+   "cmd": "SELECT",
+   "qual": "(tenant_id = '00000000-0000-0000-0000-000000000001'::uuid)",
+   "with_check": null
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "raw_tours",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)",
+   "with_check": null
+  },
+  {
+   "s": "silver_aa_internal",
+   "t": "seo_context",
+   "p": "tenant_isolation",
+   "permissive": "PERMISSIVE",
+   "roles": [
+    "public"
+   ],
+   "cmd": "ALL",
+   "qual": "(tenant_id = (current_setting('app.tenant_id'::text, true))::uuid)",
+   "with_check": null
+  }
+ ],
+ "default_acl": [
+  {
+   "for_role": "aa_cis_admin",
+   "s": "gold_aa_internal",
+   "objtype": "r",
+   "acl": "{aa_app_user=r/aa_cis_admin}"
+  },
+  {
+   "for_role": "aa_cis_admin",
+   "s": "shared",
+   "objtype": "r",
+   "acl": "{aa_app_user=r/aa_cis_admin}"
+  },
+  {
+   "for_role": "aa_cis_admin",
+   "s": "silver_aa_internal",
+   "objtype": "r",
+   "acl": "{aa_app_user=r/aa_cis_admin}"
+  }
+ ],
+ "matrix_targets": [
+  "acp_shared.acp_output_rules",
+  "acp_shared.angle_gate_request",
+  "acp_shared.content_piece",
+  "acp_shared.facts",
+  "acp_shared.publish_log",
+  "gold_aa_internal.content_exports",
+  "gold_aa_internal.published_tours",
+  "gold_aa_internal.tenant_tour_versions",
+  "gold_aa_internal.webhook_deliveries",
+  "shared.pipeline_runs",
+  "silver_aa_internal.generated_content",
+  "silver_aa_internal.quality_scores",
+  "silver_aa_internal.raw_tours",
+  "silver_aa_internal.seo_context"
+ ],
+ "own_tenant_per_table": {
+  "acp_shared.acp_output_rules": "00000000-0000-0000-0000-000000000001",
+  "acp_shared.angle_gate_request": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+  "acp_shared.content_piece": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+  "acp_shared.facts": "00000000-0000-0000-0000-000000000001",
+  "acp_shared.publish_log": "00000000-0000-0000-0000-000000000001",
+  "gold_aa_internal.content_exports": "00000000-0000-0000-0000-000000000001",
+  "gold_aa_internal.published_tours": "00000000-0000-0000-0000-000000000001",
+  "gold_aa_internal.tenant_tour_versions": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+  "gold_aa_internal.webhook_deliveries": "00000000-0000-0000-0000-000000000001",
+  "shared.pipeline_runs": "00000000-0000-0000-0000-000000000001",
+  "silver_aa_internal.generated_content": "00000000-0000-0000-0000-000000000001",
+  "silver_aa_internal.quality_scores": "00000000-0000-0000-0000-000000000001",
+  "silver_aa_internal.raw_tours": "00000000-0000-0000-0000-000000000001",
+  "silver_aa_internal.seo_context": "00000000-0000-0000-0000-000000000001"
+ },
+ "matrix_runner": {
+  "acp_shared.acp_output_rules": {
+   "unset": "guc=None 0/0",
+   "empty": "0/0",
+   "foreign": "0/0",
+   "master": "0/0",
+   "own": "0/0"
+  },
+  "acp_shared.angle_gate_request": {
+   "unset": "guc='' 16/4",
+   "empty": "16/4",
+   "foreign": "16/4",
+   "master": "16/4",
+   "own": "16/4"
+  },
+  "acp_shared.content_piece": {
+   "unset": "guc='' 193/4",
+   "empty": "193/4",
+   "foreign": "193/4",
+   "master": "193/4",
+   "own": "193/4"
+  },
+  "acp_shared.facts": {
+   "unset": "guc='' 2/1",
+   "empty": "2/1",
+   "foreign": "2/1",
+   "master": "2/1",
+   "own": "2/1"
+  },
+  "acp_shared.publish_log": {
+   "unset": "guc='' 0/0",
+   "empty": "0/0",
+   "foreign": "0/0",
+   "master": "0/0",
+   "own": "0/0"
+  },
+  "gold_aa_internal.content_exports": {
+   "unset": "guc='' 0/0",
+   "empty": "0/0",
+   "foreign": "0/0",
+   "master": "0/0",
+   "own": "0/0"
+  },
+  "gold_aa_internal.published_tours": {
+   "unset": "guc='' 892/1",
+   "empty": "892/1",
+   "foreign": "892/1",
+   "master": "892/1",
+   "own": "892/1"
+  },
+  "gold_aa_internal.tenant_tour_versions": {
+   "unset": "guc='' 29/4",
+   "empty": "29/4",
+   "foreign": "29/4",
+   "master": "29/4",
+   "own": "29/4"
+  },
+  "gold_aa_internal.webhook_deliveries": {
+   "unset": "guc='' 0/0",
+   "empty": "0/0",
+   "foreign": "0/0",
+   "master": "0/0",
+   "own": "0/0"
+  },
+  "shared.pipeline_runs": {
+   "unset": "guc='' 46/1",
+   "empty": "46/1",
+   "foreign": "46/1",
+   "master": "46/1",
+   "own": "46/1"
+  },
+  "silver_aa_internal.generated_content": {
+   "unset": "guc='' 1481/1",
+   "empty": "1481/1",
+   "foreign": "1481/1",
+   "master": "1481/1",
+   "own": "1481/1"
+  },
+  "silver_aa_internal.quality_scores": {
+   "unset": "guc='' 1481/1",
+   "empty": "1481/1",
+   "foreign": "1481/1",
+   "master": "1481/1",
+   "own": "1481/1"
+  },
+  "silver_aa_internal.raw_tours": {
+   "unset": "guc='' 987/1",
+   "empty": "987/1",
+   "foreign": "987/1",
+   "master": "987/1",
+   "own": "987/1"
+  },
+  "silver_aa_internal.seo_context": {
+   "unset": "guc='' 918/1",
+   "empty": "918/1",
+   "foreign": "918/1",
+   "master": "918/1",
+   "own": "918/1"
+  }
+ },
+ "as_role": {
+  "aa_app_user": {
+   "current_user": "aa_app_user",
+   "chain_effective": "aa_app_user",
+   "matrix": {
+    "acp_shared.acp_output_rules": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules"
+    },
+    "acp_shared.angle_gate_request": {
+     "unset": "guc='' 0/0",
+     "empty": "0/0",
+     "foreign": "0/0",
+     "master": "0/0",
+     "own": "6/1"
+    },
+    "acp_shared.content_piece": {
+     "unset": "guc='' 0/0",
+     "empty": "0/0",
+     "foreign": "0/0",
+     "master": "0/0",
+     "own": "74/1"
+    },
+    "acp_shared.facts": {
+     "unset": "guc='' 1/0",
+     "empty": "1/0",
+     "foreign": "1/0",
+     "master": "1/0",
+     "own": "1/0"
+    },
+    "acp_shared.publish_log": {
+     "unset": "guc='' 0/0",
+     "empty": "0/0",
+     "foreign": "0/0",
+     "master": "0/0",
+     "own": "0/0"
+    },
+    "gold_aa_internal.content_exports": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "0/0",
+     "master": "0/0",
+     "own": "0/0"
+    },
+    "gold_aa_internal.published_tours": {
+     "unset": "guc='' 0/0",
+     "empty": "0/0",
+     "foreign": "0/0",
+     "master": "892/1",
+     "own": "892/1"
+    },
+    "gold_aa_internal.tenant_tour_versions": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions"
+    },
+    "gold_aa_internal.webhook_deliveries": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "0/0",
+     "master": "0/0",
+     "own": "0/0"
+    },
+    "shared.pipeline_runs": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "0/0",
+     "master": "46/1",
+     "own": "46/1"
+    },
+    "silver_aa_internal.generated_content": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "0/0",
+     "master": "1481/1",
+     "own": "1481/1"
+    },
+    "silver_aa_internal.quality_scores": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "0/0",
+     "master": "1481/1",
+     "own": "1481/1"
+    },
+    "silver_aa_internal.raw_tours": {
+     "unset": "guc='' 0/0",
+     "empty": "0/0",
+     "foreign": "0/0",
+     "master": "987/1",
+     "own": "987/1"
+    },
+    "silver_aa_internal.seo_context": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "0/0",
+     "master": "918/1",
+     "own": "918/1"
+    }
+   }
+  },
+  "tripplanner": {
+   "current_user": "tripplanner",
+   "chain_effective": "tripplanner",
+   "matrix": {
+    "acp_shared.acp_output_rules": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "acp_shared.angle_gate_request": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "acp_shared.content_piece": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "acp_shared.facts": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "acp_shared.publish_log": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "gold_aa_internal.content_exports": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table content_exports",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table content_exports",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table content_exports"
+    },
+    "gold_aa_internal.published_tours": {
+     "unset": "guc='' 0/0",
+     "empty": "0/0",
+     "foreign": "0/0",
+     "master": "892/1",
+     "own": "892/1"
+    },
+    "gold_aa_internal.tenant_tour_versions": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions"
+    },
+    "gold_aa_internal.webhook_deliveries": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table webhook_deliveries",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table webhook_deliveries",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table webhook_deliveries"
+    },
+    "shared.pipeline_runs": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table pipeline_runs",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table pipeline_runs",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table pipeline_runs"
+    },
+    "silver_aa_internal.generated_content": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table generated_content",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table generated_content",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table generated_content"
+    },
+    "silver_aa_internal.quality_scores": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table quality_scores",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table quality_scores",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table quality_scores"
+    },
+    "silver_aa_internal.raw_tours": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table raw_tours",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table raw_tours",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table raw_tours",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table raw_tours",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table raw_tours"
+    },
+    "silver_aa_internal.seo_context": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table seo_context",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table seo_context",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table seo_context"
+    }
+   }
+  },
+  "booking": {
+   "current_user": "booking",
+   "chain_effective": "booking",
+   "matrix": {
+    "acp_shared.acp_output_rules": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "acp_shared.angle_gate_request": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "acp_shared.content_piece": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "acp_shared.facts": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "acp_shared.publish_log": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema acp_shared"
+    },
+    "gold_aa_internal.content_exports": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal"
+    },
+    "gold_aa_internal.published_tours": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal"
+    },
+    "gold_aa_internal.tenant_tour_versions": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal"
+    },
+    "gold_aa_internal.webhook_deliveries": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema gold_aa_internal"
+    },
+    "shared.pipeline_runs": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema shared",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema shared",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema shared",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema shared",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema shared"
+    },
+    "silver_aa_internal.generated_content": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal"
+    },
+    "silver_aa_internal.quality_scores": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal"
+    },
+    "silver_aa_internal.raw_tours": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal"
+    },
+    "silver_aa_internal.seo_context": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "master": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal",
+     "own": "ERR InsufficientPrivilegeError: permission denied for schema silver_aa_internal"
+    }
+   }
+  },
+  "catalog_owner": {
+   "current_user": "catalog_owner",
+   "chain_effective": "catalog_owner",
+   "matrix": {
+    "acp_shared.acp_output_rules": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table acp_output_rules"
+    },
+    "acp_shared.angle_gate_request": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table angle_gate_request",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table angle_gate_request",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table angle_gate_request",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table angle_gate_request",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table angle_gate_request"
+    },
+    "acp_shared.content_piece": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table content_piece",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table content_piece",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table content_piece",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table content_piece",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table content_piece"
+    },
+    "acp_shared.facts": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table facts",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table facts",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table facts",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table facts",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table facts"
+    },
+    "acp_shared.publish_log": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table publish_log",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table publish_log",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table publish_log",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table publish_log",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table publish_log"
+    },
+    "gold_aa_internal.content_exports": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table content_exports",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table content_exports",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table content_exports"
+    },
+    "gold_aa_internal.published_tours": {
+     "unset": "guc='' 892/1",
+     "empty": "892/1",
+     "foreign": "892/1",
+     "master": "892/1",
+     "own": "892/1"
+    },
+    "gold_aa_internal.tenant_tour_versions": {
+     "unset": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "empty": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table tenant_tour_versions"
+    },
+    "gold_aa_internal.webhook_deliveries": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table webhook_deliveries",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table webhook_deliveries",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table webhook_deliveries"
+    },
+    "shared.pipeline_runs": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table pipeline_runs",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table pipeline_runs",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table pipeline_runs"
+    },
+    "silver_aa_internal.generated_content": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table generated_content",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table generated_content",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table generated_content"
+    },
+    "silver_aa_internal.quality_scores": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table quality_scores",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table quality_scores",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table quality_scores"
+    },
+    "silver_aa_internal.raw_tours": {
+     "unset": "guc='' 987/1",
+     "empty": "987/1",
+     "foreign": "987/1",
+     "master": "987/1",
+     "own": "987/1"
+    },
+    "silver_aa_internal.seo_context": {
+     "unset": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "empty": "ERR InvalidTextRepresentationError: invalid input syntax for type uuid: \"\"",
+     "foreign": "ERR InsufficientPrivilegeError: permission denied for table seo_context",
+     "master": "ERR InsufficientPrivilegeError: permission denied for table seo_context",
+     "own": "ERR InsufficientPrivilegeError: permission denied for table seo_context"
+    }
+   }
+  }
+ }
+}
