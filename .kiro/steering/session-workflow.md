@@ -40,7 +40,7 @@ Merge + CI xanh CHƯA đủ. Issue có code backend chỉ Done khi: merge + CI x
 Không merge/deploy backend khi `shared.job` còn job hoặc đang có wave (CI tự chặn; override chỉ Nghiệp, ghi lý do).
 
 ## Linear → `skill/aa-linear-issue/SKILL.md`
-HỎI Nghiệp trước khi tạo issue mới. MỌI issue gắn 1 project; 1 project tối đa 50 issue (gần ngưỡng → hỏi).
+HỎI Nghiệp trước khi tạo issue mới. MỌI issue gắn 1 project; 1 project tối đa 100 issue chưa lưu trữ (S236; gần ngưỡng → hỏi; Done hẳn → lưu trữ sớm).
 Cập nhật trạng thái khi có tiến độ thật + bằng chứng, không Done khống.
 
 ## Jira (chị Thư / người ngoài team) → `skill/aa-jira-update/SKILL.md`

@@ -1,0 +1,1979 @@
+{
+ "check": "S237 TripPlanner UI verify (read-only)",
+ "date": "2026-10-15",
+ "targets": {
+  "prod": "https://aa-tripplanner.vercel.app",
+  "preview_pr78": "https://aa-tripplanner-git-feat-aa-7-67b7ca-pqnghiep1354-5974s-projects.vercel.app (head cf4ed03, includes #77)"
+ },
+ "tooling": "Playwright chromium headless, axe-core color-contrast, curl; non-GET /api calls aborted by a route guard",
+ "preview_runs": [
+  {
+   "key": "home",
+   "url": "/",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-home-1440-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://aa-tripplanner-git-feat-aa-7-67b7ca-pqnghiep1354-5974s-projects.vercel.app/plan?_rsc=1wtp7",
+     "err": "net::ERR_ABORTED"
+    }
+   ],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Plan your Asia adventure, tailor-made with an advisor",
+    "imgs_visible": 13,
+    "imgs_loaded": 13,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 6,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "home",
+   "url": "/",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "preview-home-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Plan your Asia adventure, tailor-made with an advisor",
+    "imgs_visible": 13,
+    "imgs_loaded": 13,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 6,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "home",
+   "url": "/",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-home-390-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Plan your Asia adventure, tailor-made with an advisor",
+    "imgs_visible": 13,
+    "imgs_loaded": 13,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 6,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "home",
+   "url": "/",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "preview-home-390-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Plan your Asia adventure, tailor-made with an advisor",
+    "imgs_visible": 13,
+    "imgs_loaded": 13,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 6,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-laos",
+   "url": "/destinations/laos",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-dest-laos-1440-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-s-1+db9628(102.1388,19.8932),pin-s-2+db9628(102.6167,17.9667),pin-s-3+db9628(102.6167,20.5667),pin-s-4+db9628(102.2167,20.0667),pin-s-5+db9628(102.4476,18.9261",
+     "err": "net::ERR_BLOCKED_BY_ORB"
+    }
+   ],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Laos",
+    "imgs_visible": 2,
+    "imgs_loaded": 1,
+    "imgs_broken": [
+     "Map: Places in Laos"
+    ],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 12,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-laos",
+   "url": "/destinations/laos",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "preview-dest-laos-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-s-1+db9628(102.1388,19.8932),pin-s-2+db9628(102.6167,17.9667),pin-s-3+db9628(102.6167,20.5667),pin-s-4+db9628(102.2167,20.0667),pin-s-5+db9628(102.4476,18.9261",
+     "err": "net::ERR_BLOCKED_BY_ORB"
+    }
+   ],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Laos",
+    "imgs_visible": 2,
+    "imgs_loaded": 1,
+    "imgs_broken": [
+     "Map: Places in Laos"
+    ],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 12,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-laos",
+   "url": "/destinations/laos",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-dest-laos-390-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://aa-tripplanner-git-feat-aa-7-67b7ca-pqnghiep1354-5974s-projects.vercel.app/plan?_rsc=mhmln",
+     "err": "net::ERR_ABORTED"
+    },
+    {
+     "url": "https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-s-1+db9628(102.1388,19.8932),pin-s-2+db9628(102.6167,17.9667),pin-s-3+db9628(102.6167,20.5667),pin-s-4+db9628(102.2167,20.0667),pin-s-5+db9628(102.4476,18.9261",
+     "err": "net::ERR_BLOCKED_BY_ORB"
+    }
+   ],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Laos",
+    "imgs_visible": 2,
+    "imgs_loaded": 1,
+    "imgs_broken": [
+     "Map: Places in Laos"
+    ],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 12,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-laos",
+   "url": "/destinations/laos",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "preview-dest-laos-390-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://aa-tripplanner-git-feat-aa-7-67b7ca-pqnghiep1354-5974s-projects.vercel.app/plan?_rsc=mhmln",
+     "err": "net::ERR_ABORTED"
+    },
+    {
+     "url": "https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-s-1+db9628(102.1388,19.8932),pin-s-2+db9628(102.6167,17.9667),pin-s-3+db9628(102.6167,20.5667),pin-s-4+db9628(102.2167,20.0667),pin-s-5+db9628(102.4476,18.9261",
+     "err": "net::ERR_BLOCKED_BY_ORB"
+    }
+   ],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Laos",
+    "imgs_visible": 2,
+    "imgs_loaded": 1,
+    "imgs_broken": [
+     "Map: Places in Laos"
+    ],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 12,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-laos",
+   "url": "/tours/laos-north-to-south-16-days-laos-bd183835",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-tour-laos-1440-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://api.mapbox.com/styles/v1/mapbox/light-v11/static/geojson(%7B%22type%22%3A%22Feature%22%2C%22properties%22%3A%7B%22stroke%22%3A%22%23db9628%22%2C%22stroke-width%22%3A3%2C%22stroke-opacity%22%3A0.8%7D%2C%22geometry",
+     "err": "net::ERR_BLOCKED_BY_ORB"
+    },
+    {
+     "url": "https://aa-tripplanner-git-feat-aa-7-67b7ca-pqnghiep1354-5974s-projects.vercel.app/plan?tour=2bc45c55-fb32-4ca1-818a-62c3353ec556&source=bd183835-73ef-494e-baf7-fb88e74b57f4&country=Laos&days=16&_rsc=1hhqe",
+     "err": "net::ERR_ABORTED"
+    }
+   ],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Laos: North to South — 16 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 1,
+    "imgs_broken": [
+     "Map: Laos: North to South — 16 Days route"
+    ],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-laos",
+   "url": "/tours/laos-north-to-south-16-days-laos-bd183835",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "preview-tour-laos-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://api.mapbox.com/styles/v1/mapbox/light-v11/static/geojson(%7B%22type%22%3A%22Feature%22%2C%22properties%22%3A%7B%22stroke%22%3A%22%23db9628%22%2C%22stroke-width%22%3A3%2C%22stroke-opacity%22%3A0.8%7D%2C%22geometry",
+     "err": "net::ERR_BLOCKED_BY_ORB"
+    }
+   ],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Laos: North to South — 16 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 1,
+    "imgs_broken": [
+     "Map: Laos: North to South — 16 Days route"
+    ],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-laos",
+   "url": "/tours/laos-north-to-south-16-days-laos-bd183835",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-tour-laos-390-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://api.mapbox.com/styles/v1/mapbox/light-v11/static/geojson(%7B%22type%22%3A%22Feature%22%2C%22properties%22%3A%7B%22stroke%22%3A%22%23db9628%22%2C%22stroke-width%22%3A3%2C%22stroke-opacity%22%3A0.8%7D%2C%22geometry",
+     "err": "net::ERR_BLOCKED_BY_ORB"
+    }
+   ],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Laos: North to South — 16 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 1,
+    "imgs_broken": [
+     "Map: Laos: North to South — 16 Days route"
+    ],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-laos",
+   "url": "/tours/laos-north-to-south-16-days-laos-bd183835",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "preview-tour-laos-390-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://api.mapbox.com/styles/v1/mapbox/light-v11/static/geojson(%7B%22type%22%3A%22Feature%22%2C%22properties%22%3A%7B%22stroke%22%3A%22%23db9628%22%2C%22stroke-width%22%3A3%2C%22stroke-opacity%22%3A0.8%7D%2C%22geometry",
+     "err": "net::ERR_BLOCKED_BY_ORB"
+    }
+   ],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Laos: North to South — 16 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 1,
+    "imgs_broken": [
+     "Map: Laos: North to South — 16 Days route"
+    ],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "plan",
+   "url": "/plan",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-plan-1440-light.jpg",
+   "error": null,
+   "console_error_count": 40,
+   "console_errors_sample": [
+    "[mapbox error] ",
+    "[mapbox error] ",
+    "[mapbox error] "
+   ],
+   "api_status": {
+    "200": 17
+   },
+   "api_by_resource": {
+    "countries": 1,
+    "tiles": 15,
+    "/api/trip": 1
+   },
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 5,
+    "204": 4,
+    "403": 20
+   },
+   "mapbox_errors": [
+    {
+     "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/3/6/3.vector.pbf?sku=101kzP82XzrO8&access_token=REDACTED",
+     "status": 403
+    },
+    {
+     "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/3/5/2.vector.pbf?sku=101kzP82XzrO8&access_token=REDACTED",
+     "status": 403
+    }
+   ],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": null,
+    "imgs_visible": 1,
+    "imgs_loaded": 1,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 1
+   }
+  },
+  {
+   "key": "plan",
+   "url": "/plan",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-plan-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 36,
+   "console_errors_sample": [
+    "Failed to load resource: the server responded with a status of 403 ()",
+    "[mapbox error] ",
+    "[mapbox error] "
+   ],
+   "api_status": {
+    "200": 2
+   },
+   "api_by_resource": {
+    "countries": 1,
+    "/api/trip": 1
+   },
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 3,
+    "204": 2,
+    "403": 12
+   },
+   "mapbox_errors": [
+    {
+     "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/3/7/4.vector.pbf?sku=101S2mKngD4SX&access_token=REDACTED",
+     "status": 403
+    },
+    {
+     "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/3/5/2.vector.pbf?sku=101S2mKngD4SX&access_token=REDACTED",
+     "status": 403
+    }
+   ],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": null,
+    "imgs_visible": 1,
+    "imgs_loaded": 1,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 1
+   }
+  },
+  {
+   "key": "plan",
+   "url": "/plan",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-plan-390-light.jpg",
+   "error": null,
+   "console_error_count": 18,
+   "console_errors_sample": [
+    "Failed to load resource: the server responded with a status of 403 ()",
+    "[mapbox error] ",
+    "[mapbox error] "
+   ],
+   "api_status": {
+    "200": 2
+   },
+   "api_by_resource": {
+    "countries": 1,
+    "/api/trip": 1
+   },
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 3,
+    "204": 2,
+    "403": 6
+   },
+   "mapbox_errors": [
+    {
+     "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/3/6/3.vector.pbf?sku=101cr6YwM5dlM&access_token=REDACTED",
+     "status": 403
+    },
+    {
+     "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/3/5/3.vector.pbf?sku=101cr6YwM5dlM&access_token=REDACTED",
+     "status": 403
+    }
+   ],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": null,
+    "imgs_visible": 1,
+    "imgs_loaded": 1,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 1
+   }
+  },
+  {
+   "key": "plan",
+   "url": "/plan",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "preview-plan-390-dark.jpg",
+   "error": null,
+   "console_error_count": 18,
+   "console_errors_sample": [
+    "Failed to load resource: the server responded with a status of 403 ()",
+    "[mapbox error] ",
+    "[mapbox error] "
+   ],
+   "api_status": {
+    "200": 2
+   },
+   "api_by_resource": {
+    "countries": 1,
+    "/api/trip": 1
+   },
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 3,
+    "204": 2,
+    "403": 6
+   },
+   "mapbox_errors": [
+    {
+     "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/3/6/3.vector.pbf?sku=101GIrlc2PZ8b&access_token=REDACTED",
+     "status": 403
+    },
+    {
+     "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/3/5/2.vector.pbf?sku=101GIrlc2PZ8b&access_token=REDACTED",
+     "status": 403
+    }
+   ],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": null,
+    "imgs_visible": 1,
+    "imgs_loaded": 1,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 1
+   }
+  }
+ ],
+ "prod_runs": [
+  {
+   "key": "home",
+   "url": "/",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-home-1440-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Plan your Asia adventure, tailor-made with an advisor",
+    "imgs_visible": 13,
+    "imgs_loaded": 13,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 6,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "home",
+   "url": "/",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-home-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Plan your Asia adventure, tailor-made with an advisor",
+    "imgs_visible": 13,
+    "imgs_loaded": 13,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 6,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "home",
+   "url": "/",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-home-390-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Plan your Asia adventure, tailor-made with an advisor",
+    "imgs_visible": 13,
+    "imgs_loaded": 13,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 6,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "home",
+   "url": "/",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-home-390-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {},
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Plan your Asia adventure, tailor-made with an advisor",
+    "imgs_visible": 13,
+    "imgs_loaded": 13,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 6,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-laos",
+   "url": "/destinations/laos",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-dest-laos-1440-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Laos",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 12,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-laos",
+   "url": "/destinations/laos",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-dest-laos-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://aa-tripplanner.vercel.app/plan?_rsc=mhmln",
+     "err": "net::ERR_ABORTED"
+    }
+   ],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Laos",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 12,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-laos",
+   "url": "/destinations/laos",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-dest-laos-390-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Laos",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 12,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-laos",
+   "url": "/destinations/laos",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-dest-laos-390-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Laos",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 12,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-vietnam",
+   "url": "/destinations/vietnam",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-dest-vietnam-1440-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Vietnam",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 1,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-vietnam",
+   "url": "/destinations/vietnam",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-dest-vietnam-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Vietnam",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 1,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-vietnam",
+   "url": "/destinations/vietnam",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-dest-vietnam-390-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Vietnam",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 1,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "dest-vietnam",
+   "url": "/destinations/vietnam",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-dest-vietnam-390-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Vietnam",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 1,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-laos",
+   "url": "/tours/laos-north-to-south-16-days-laos-bd183835",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-tour-laos-1440-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Laos: North to South — 16 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-laos",
+   "url": "/tours/laos-north-to-south-16-days-laos-bd183835",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-tour-laos-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Laos: North to South — 16 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-laos",
+   "url": "/tours/laos-north-to-south-16-days-laos-bd183835",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-tour-laos-390-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Laos: North to South — 16 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-laos",
+   "url": "/tours/laos-north-to-south-16-days-laos-bd183835",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-tour-laos-390-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Laos: North to South — 16 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-vietnam",
+   "url": "/tours/vietnam-the-ho-chi-minh-trail-by-bicycle-14-days-vietnam-ca1d7500",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-tour-vietnam-1440-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://aa-tripplanner.vercel.app/plan?tour=3fa33633-8502-4b53-a775-a0491fd2e509&source=ca1d7500-a3a6-4278-83ad-fee7a9e5f670&country=Vietnam&days=14&_rsc=124bv",
+     "err": "net::ERR_ABORTED"
+    }
+   ],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Vietnam: The Ho Chi Minh Trail by Bicycle — 14 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-vietnam",
+   "url": "/tours/vietnam-the-ho-chi-minh-trail-by-bicycle-14-days-vietnam-ca1d7500",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-tour-vietnam-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": "Vietnam: The Ho Chi Minh Trail by Bicycle — 14 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-vietnam",
+   "url": "/tours/vietnam-the-ho-chi-minh-trail-by-bicycle-14-days-vietnam-ca1d7500",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-tour-vietnam-390-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Vietnam: The Ho Chi Minh Trail by Bicycle — 14 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "tour-vietnam",
+   "url": "/tours/vietnam-the-ho-chi-minh-trail-by-bicycle-14-days-vietnam-ca1d7500",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "dark",
+   "screenshot": "prod-tour-vietnam-390-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {},
+   "api_by_resource": {},
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 1
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [
+    {
+     "url": "https://aa-tripplanner.vercel.app/plan?tour=3fa33633-8502-4b53-a775-a0491fd2e509&source=ca1d7500-a3a6-4278-83ad-fee7a9e5f670&country=Vietnam&days=14&ask=1&_rsc=124bv",
+     "err": "net::ERR_ABORTED"
+    }
+   ],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": "Vietnam: The Ho Chi Minh Trail by Bicycle — 14 Days",
+    "imgs_visible": 2,
+    "imgs_loaded": 2,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 0
+   }
+  },
+  {
+   "key": "plan",
+   "url": "/plan",
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-plan-1440-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {
+    "200": 17
+   },
+   "api_by_resource": {
+    "countries": 1,
+    "/api/trip": 1,
+    "tiles": 15
+   },
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 38,
+    "204": 4
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": null,
+    "imgs_visible": 1,
+    "imgs_loaded": 1,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 1
+   }
+  },
+  {
+   "key": "plan",
+   "url": "/plan",
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-plan-1440-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {
+    "200": 17
+   },
+   "api_by_resource": {
+    "countries": 1,
+    "/api/trip": 1,
+    "tiles": 15
+   },
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 38,
+    "204": 4
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": null,
+   "probe": {
+    "h1": null,
+    "imgs_visible": 1,
+    "imgs_loaded": 1,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 1
+   }
+  },
+  {
+   "key": "plan",
+   "url": "/plan",
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-plan-390-light.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {
+    "200": 11
+   },
+   "api_by_resource": {
+    "countries": 1,
+    "/api/trip": 1,
+    "tiles": 9
+   },
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 26,
+    "204": 4
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": null,
+    "imgs_visible": 1,
+    "imgs_loaded": 1,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 1
+   }
+  },
+  {
+   "key": "plan",
+   "url": "/plan",
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "data_theme": "light",
+   "screenshot": "prod-plan-390-dark.jpg",
+   "error": null,
+   "console_error_count": 0,
+   "console_errors_sample": [],
+   "api_status": {
+    "200": 11
+   },
+   "api_by_resource": {
+    "countries": 1,
+    "/api/trip": 1,
+    "tiles": 9
+   },
+   "api_errors": [],
+   "mapbox_status": {
+    "200": 26,
+    "204": 4
+   },
+   "mapbox_errors": [],
+   "failed_requests_sample": [],
+   "overflow_px_390": 0,
+   "probe": {
+    "h1": null,
+    "imgs_visible": 1,
+    "imgs_loaded": 1,
+    "imgs_broken": [],
+    "fallback_captions": [],
+    "fallback_alts": 0,
+    "tour_links": 0,
+    "mapbox_canvas": 1
+   }
+  }
+ ],
+ "prod_contrast_axe": [
+  {
+   "page": "home",
+   "scheme": "light",
+   "tokens": {
+    "theme": "light",
+    "accent_deep": "#875d12",
+    "muted": "#656d7a",
+    "on_accent": "#1a1206",
+    "hero_bg": "#1f2933"
+   },
+   "color_contrast_violations": 0,
+   "examples": []
+  },
+  {
+   "page": "home",
+   "scheme": "dark",
+   "tokens": {
+    "theme": "dark",
+    "accent_deep": "#f0c070",
+    "muted": "#9099a6",
+    "on_accent": "#1a1206",
+    "hero_bg": "#19212c"
+   },
+   "color_contrast_violations": 0,
+   "examples": []
+  },
+  {
+   "page": "dest-laos",
+   "scheme": "light",
+   "tokens": {
+    "theme": "light",
+    "accent_deep": "#875d12",
+    "muted": "#656d7a",
+    "on_accent": "#1a1206",
+    "hero_bg": "#1f2933"
+   },
+   "color_contrast_violations": 0,
+   "examples": []
+  },
+  {
+   "page": "dest-laos",
+   "scheme": "dark",
+   "tokens": {
+    "theme": "dark",
+    "accent_deep": "#f0c070",
+    "muted": "#9099a6",
+    "on_accent": "#1a1206",
+    "hero_bg": "#19212c"
+   },
+   "color_contrast_violations": 0,
+   "examples": []
+  },
+  {
+   "page": "tour-laos",
+   "scheme": "light",
+   "tokens": {
+    "theme": "light",
+    "accent_deep": "#875d12",
+    "muted": "#656d7a",
+    "on_accent": "#1a1206",
+    "hero_bg": "#1f2933"
+   },
+   "color_contrast_violations": 0,
+   "examples": []
+  },
+  {
+   "page": "tour-laos",
+   "scheme": "dark",
+   "tokens": {
+    "theme": "dark",
+    "accent_deep": "#f0c070",
+    "muted": "#9099a6",
+    "on_accent": "#1a1206",
+    "hero_bg": "#19212c"
+   },
+   "color_contrast_violations": 0,
+   "examples": []
+  },
+  {
+   "page": "plan",
+   "scheme": "light",
+   "tokens": {
+    "theme": "light",
+    "accent_deep": "#875d12",
+    "muted": "#656d7a",
+    "on_accent": "#1a1206",
+    "hero_bg": "#1f2933"
+   },
+   "color_contrast_violations": 7,
+   "examples": [
+    {
+     "target": ".border-aa-gold\\/40",
+     "summary": "Element has insufficient color contrast of 3.59 (foreground color: #b87a1a, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected co"
+    },
+    {
+     "target": ".tracking-\\[0\\.18em\\]",
+     "summary": "Element has insufficient color contrast of 2.49 (foreground color: #db9628, background color: #ffffff, font size: 8.3pt (11px), font weight: normal). Expected c"
+    },
+    {
+     "target": ".mt-1",
+     "summary": "Element has insufficient color contrast of 4.47 (foreground color: #6b7280, background color: #f8f6f2, font size: 9.0pt (12px), font weight: normal). Expected c"
+    },
+    {
+     "target": "li:nth-child(1) > div > .leading-relaxed.mt-0\\.5.text-\\[11px\\]",
+     "summary": "Element has insufficient color contrast of 4.47 (foreground color: #6b7280, background color: #f8f6f2, font size: 8.3pt (11px), font weight: normal). Expected c"
+    }
+   ]
+  },
+  {
+   "page": "plan",
+   "scheme": "dark",
+   "tokens": {
+    "theme": "light",
+    "accent_deep": "#875d12",
+    "muted": "#656d7a",
+    "on_accent": "#1a1206",
+    "hero_bg": "#1f2933"
+   },
+   "color_contrast_violations": 7,
+   "examples": [
+    {
+     "target": ".border-aa-gold\\/40",
+     "summary": "Element has insufficient color contrast of 3.59 (foreground color: #b87a1a, background color: #ffffff, font size: 6.8pt (9px), font weight: normal). Expected co"
+    },
+    {
+     "target": ".tracking-\\[0\\.18em\\]",
+     "summary": "Element has insufficient color contrast of 2.49 (foreground color: #db9628, background color: #ffffff, font size: 8.3pt (11px), font weight: normal). Expected c"
+    },
+    {
+     "target": ".mt-1",
+     "summary": "Element has insufficient color contrast of 4.47 (foreground color: #6b7280, background color: #f8f6f2, font size: 9.0pt (12px), font weight: normal). Expected c"
+    },
+    {
+     "target": "li:nth-child(1) > div > .leading-relaxed.mt-0\\.5.text-\\[11px\\]",
+     "summary": "Element has insufficient color contrast of 4.47 (foreground color: #6b7280, background color: #f8f6f2, font size: 8.3pt (11px), font weight: normal). Expected c"
+    }
+   ]
+  }
+ ],
+ "prod_d1_plan_tiles": {
+  "phases_cumulative_api_calls": {
+   "after_load_12s": 17,
+   "after_zoom_in": 32,
+   "after_pan": 32,
+   "after_zoom_in_more": 38
+  },
+  "api_total": 38,
+  "tiles_total": 36,
+  "api_status": {
+   "200": 38
+  },
+  "mapbox_status": {
+   "200": 85,
+   "204": 4
+  },
+  "failed_requests": 8,
+  "console_errors": [],
+  "console_error_count": 0,
+  "dom": {
+   "markers": 0,
+   "canvas": 1
+  }
+ },
+ "prod_list_month_filter_first_run": [
+  {
+   "width": 1440,
+   "any": {
+    "heading": "All Adventure Asia tours(892)",
+    "total": 892,
+    "cards": 24,
+    "empty": null
+   },
+   "october": {
+    "heading": "All Adventure Asia tours",
+    "total": null,
+    "cards": 0,
+    "empty": null
+   },
+   "january": {
+    "heading": "All Adventure Asia tours",
+    "total": null,
+    "cards": 0,
+    "empty": null
+   },
+   "july": {
+    "heading": "All Adventure Asia tours",
+    "total": null,
+    "cards": 0,
+    "empty": null
+   },
+   "overflow_px": 0,
+   "data_theme": "light",
+   "catalog_calls": [
+    {
+     "status": 200,
+     "url": "/api/browse?resource=catalog-tours&sort=duration_asc&limit=24"
+    },
+    {
+     "status": 200,
+     "url": "/api/browse?resource=catalog-tours&month=10&sort=duration_asc&limit=24"
+    },
+    {
+     "status": 200,
+     "url": "/api/browse?resource=catalog-tours&month=1&sort=duration_asc&limit=24"
+    }
+   ],
+   "api_errors": [],
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()"
+   ]
+  },
+  {
+   "width": 390,
+   "any": {
+    "heading": "All Adventure Asia tours(892)",
+    "total": 892,
+    "cards": 24,
+    "empty": null
+   },
+   "october": {
+    "heading": "All Adventure Asia tours(874)",
+    "total": 874,
+    "cards": 24,
+    "empty": null
+   },
+   "january": {
+    "heading": "All Adventure Asia tours(828)",
+    "total": 828,
+    "cards": 24,
+    "empty": null
+   },
+   "july": {
+    "heading": "All Adventure Asia tours(842)",
+    "total": 842,
+    "cards": 24,
+    "empty": null
+   },
+   "overflow_px": 0,
+   "data_theme": "light",
+   "catalog_calls": [
+    {
+     "status": 200,
+     "url": "/api/browse?resource=catalog-tours&sort=duration_asc&limit=24"
+    },
+    {
+     "status": 200,
+     "url": "/api/browse?resource=catalog-tours&month=10&sort=duration_asc&limit=24"
+    },
+    {
+     "status": 200,
+     "url": "/api/browse?resource=catalog-tours&month=1&sort=duration_asc&limit=24"
+    },
+    {
+     "status": 200,
+     "url": "/api/browse?resource=catalog-tours&month=7&sort=duration_asc&limit=24"
+    }
+   ],
+   "api_errors": [],
+   "console_errors": []
+  }
+ ],
+ "prod_list_month_filter_rerun_1440": {
+  "cached_urls": [
+   {
+    "t": 10836,
+    "s": 200,
+    "u": "/api/browse?resource=catalog-tours&sort=duration_asc&limit=24",
+    "b": "{\"filters\": {\"country\": null, \"min_days\": null, \"max_days\": "
+   },
+   {
+    "t": 16780,
+    "lbl": "any",
+    "s": "All Adventure Asia tours(892)\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSep"
+   },
+   {
+    "t": 16857,
+    "s": 200,
+    "u": "/api/browse?resource=catalog-tours&month=10&sort=duration_asc&limit=24",
+    "b": "{\"filters\": {\"country\": null, \"min_days\": null, \"max_days\": "
+   },
+   {
+    "t": 22796,
+    "lbl": "month=10",
+    "s": "All Adventure Asia tours(874)\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSep"
+   },
+   {
+    "t": 22876,
+    "s": 200,
+    "u": "/api/browse?resource=catalog-tours&month=1&sort=duration_asc&limit=24",
+    "b": "{\"filters\": {\"country\": null, \"min_days\": null, \"max_days\": "
+   },
+   {
+    "t": 28810,
+    "lbl": "month=1",
+    "s": "All Adventure Asia tours(828)\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSep"
+   },
+   {
+    "t": 28892,
+    "s": 200,
+    "u": "/api/browse?resource=catalog-tours&month=7&sort=duration_asc&limit=24",
+    "b": "{\"filters\": {\"country\": null, \"min_days\": null, \"max_days\": "
+   },
+   {
+    "t": 36890,
+    "lbl": "month=7",
+    "s": "All Adventure Asia tours(842)\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSep"
+   },
+   {
+    "t": 36959,
+    "s": 200,
+    "u": "/api/browse?resource=catalog-tours&sort=duration_asc&limit=24",
+    "b": "{\"filters\": {\"country\": null, \"min_days\": null, \"max_days\": "
+   },
+   {
+    "t": 42898,
+    "lbl": "month=0",
+    "s": "All Adventure Asia tours(892)\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSep"
+   }
+  ],
+  "uncached_desc_sort": [
+   {
+    "t": 8659,
+    "s": 200,
+    "u": "/api/browse?resource=catalog-tours&sort=duration_asc&limit=24",
+    "b": "{\"filters\": {\"country\": null, \"min_days\": null, \"max_days\": "
+   },
+   {
+    "t": 16649,
+    "lbl": "any",
+    "s": "All Adventure Asia tours(892)\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSep"
+   },
+   {
+    "t": 18578,
+    "s": 200,
+    "u": "/api/browse?resource=catalog-tours&sort=duration_desc&limit=24",
+    "b": "{\"filters\": {\"country\": null, \"min_days\": null, \"max_days\": "
+   },
+   {
+    "t": 22668,
+    "lbl": "sort=desc",
+    "s": "All Adventure Asia tours(892)\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSep"
+   },
+   {
+    "t": 24122,
+    "s": 500,
+    "u": "/tours/north-india-delhi-to-varanasi-22-days-india-2f134c99?_rsc=1c1gx",
+    "b": "<!DOCTYPE html><html><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width\"/><title>500: Internal Server Error</title><meta name=\"next-"
+   },
+   {
+    "t": 24872,
+    "s": 500,
+    "u": "/tours/rajasthan-forts-havelis-desert-22-days-india-35f6b607?_rsc=1c1gx",
+    "b": "<!DOCTYPE html><html><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width\"/><title>500: Internal Server Error</title><meta name=\"next-"
+   },
+   {
+    "t": 25230,
+    "s": 200,
+    "u": "/api/browse?resource=catalog-tours&month=3&sort=duration_desc&limit=24",
+    "b": "{\"filters\": {\"country\": null, \"min_days\": null, \"max_days\": "
+   },
+   {
+    "t": 28689,
+    "lbl": "month=3",
+    "s": "All Adventure Asia tours(850)\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSep"
+   },
+   {
+    "t": 34706,
+    "lbl": "month=8",
+    "s": "All Adventure Asia tours\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptembe"
+   },
+   {
+    "t": 36445,
+    "s": 200,
+    "u": "/api/browse?resource=catalog-tours&month=12&sort=duration_desc&limit=24",
+    "b": "{\"filters\": {\"country\": null, \"min_days\": null, \"max_days\": "
+   },
+   {
+    "t": 40721,
+    "lbl": "month=12",
+    "s": "All Adventure Asia tours(831)\nChange the country on the Map view.\n\nTravel in\nAny month\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSep"
+   }
+  ]
+ },
+ "prod_d2_customise": [
+  {
+   "tour": "laos",
+   "slug": "laos-north-to-south-16-days-laos-bd183835",
+   "tour_http": 200,
+   "button_found": true,
+   "href": "/plan?tour=2bc45c55-fb32-4ca1-818a-62c3353ec556&source=bd183835-73ef-494e-baf7-fb88e74b57f4&country=Laos&days=16",
+   "plan_url": "/plan?tour=2bc45c55-fb32-4ca1-818a-62c3353ec556&source=bd183835-73ef-494e-baf7-fb88e74b57f4&country=Laos&days=16",
+   "tour_route": [
+    {
+     "status": 200,
+     "body": "{\"tour_id\": \"2bc45c55-fb32-4ca1-818a-62c3353ec556\", \"proposal\": {\"total_days\": 16, \"transfers\": 0, \"transfer_km\": 0.0, \"whole_tour\": true, \"match\": \"tour_graph\""
+    }
+   ],
+   "ui": {
+    "toast": null,
+    "day_mentions": 0,
+    "your_trip_empty": true,
+    "heading_to": "Any intensity"
+   },
+   "api_errors": [],
+   "console_errors": [
+    "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+   ],
+   "blocked_writes_so_far": 1
+  },
+  {
+   "tour": "vietnam",
+   "slug": "vietnam-the-ho-chi-minh-trail-by-bicycle-14-days-vietnam-ca1d7500",
+   "tour_http": 200,
+   "button_found": true,
+   "href": "/plan?tour=3fa33633-8502-4b53-a775-a0491fd2e509&source=ca1d7500-a3a6-4278-83ad-fee7a9e5f670&country=Vietnam&days=14",
+   "plan_url": "/plan?tour=3fa33633-8502-4b53-a775-a0491fd2e509&source=ca1d7500-a3a6-4278-83ad-fee7a9e5f670&country=Vietnam&days=14",
+   "tour_route": [
+    {
+     "status": 404,
+     "body": "{\"error\": \"no planner route for this tour\", \"tour\": {\"title\": \"Vietnam: The Ho Chi Minh Trail by Bicycle \\u2014 14 Days\", \"country\": \"Vietnam\", \"duration_days\":"
+    }
+   ],
+   "ui": {
+    "toast": "Vietnam: The Ho Chi Minh Trail by Bicycle — 14 Days isn't on the planner map yet. We've set Vietnam and 14 days in the route finder — pick a route, or send this tour to an advisor to tailor it.",
+    "day_mentions": 12,
+    "your_trip_empty": true,
+    "heading_to": "Any intensity"
+   },
+   "api_errors": [
+    {
+     "res": "tour-route",
+     "status": 404,
+     "body": "{\"error\": \"no planner route for this tour\", \"tour\": {\"title\": \"Vietnam: The Ho Chi Minh Trail by Bicycle \\u2014 14 Days\""
+    }
+   ],
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 ()"
+   ],
+   "blocked_writes_so_far": 1
+  },
+  {
+   "tour": "srilanka",
+   "slug": "sri-lanka-elephant-orphanage-ancient-cities-indian-ocean-10-days-sri-lanka-63d21f32",
+   "tour_http": 200,
+   "button_found": true,
+   "href": "/plan?tour=0b3514be-312b-4ad0-8ab5-f6247935ae9f&source=63d21f32-b94e-48e9-84bd-d322707af6ff&country=Sri+Lanka&days=10",
+   "plan_url": "/plan?tour=0b3514be-312b-4ad0-8ab5-f6247935ae9f&source=63d21f32-b94e-48e9-84bd-d322707af6ff&country=Sri+Lanka&days=10",
+   "tour_route": [
+    {
+     "status": 404,
+     "body": "{\"error\": \"no planner route for this tour\", \"tour\": {\"title\": \"Sri Lanka: Elephant Orphanage, Ancient Cities & Indian Ocean \\u2014 10 Days\", \"country\": \"Sri Lan"
+    }
+   ],
+   "ui": {
+    "toast": "Sri Lanka: Elephant Orphanage, Ancient Cities & Indian Ocean — 10 Days isn't on the planner map yet. We've set Sri Lanka and 10 days in the route finder — pick a route, or send this tour to an advisor to tailor it.",
+    "day_mentions": 10,
+    "your_trip_empty": true,
+    "heading_to": "Any intensity"
+   },
+   "api_errors": [
+    {
+     "res": "tour-route",
+     "status": 404,
+     "body": "{\"error\": \"no planner route for this tour\", \"tour\": {\"title\": \"Sri Lanka: Elephant Orphanage, Ancient Cities & Indian Oc"
+    }
+   ],
+   "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 ()"
+   ],
+   "blocked_writes_so_far": 1
+  },
+  {
+   "tour": "kailash",
+   "slug": "kathmandu-to-kailash-by-motorbike-tibet-s-high-passes-and-sacred-circuit-24-days-98624d92",
+   "tour_http": 200,
+   "button_found": true,
+   "href": "/plan?tour=9829e6e2-a214-4625-92a8-4b22af4f78f4&source=98624d92-5102-4642-9462-05fe02864cf2&country=Nepal&days=24",
+   "plan_url": "/plan?tour=9829e6e2-a214-4625-92a8-4b22af4f78f4&source=98624d92-5102-4642-9462-05fe02864cf2&country=Nepal&days=24",
+   "tour_route": [
+    {
+     "status": 200,
+     "body": "{\"tour_id\": \"9829e6e2-a214-4625-92a8-4b22af4f78f4\", \"proposal\": {\"total_days\": 21, \"transfers\": 0, \"transfer_km\": 0.0, \"whole_tour\": true, \"match\": \"places\", \"s"
+    }
+   ],
+   "ui": {
+    "toast": null,
+    "day_mentions": 0,
+    "your_trip_empty": true,
+    "heading_to": "Any intensity"
+   },
+   "api_errors": [],
+   "console_errors": [
+    "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector"
+   ],
+   "blocked_writes_so_far": 2
+  }
+ ],
+ "blocked_writes": [
+  {
+   "method": "POST",
+   "path": "/api/trip",
+   "action": null
+  },
+  {
+   "method": "POST",
+   "path": "/api/trip",
+   "action": null
+  }
+ ],
+ "preview_plan": {
+  "api": {
+   "/api/trip:200": 1,
+   "countries:200": 1
+  },
+  "mapbox_status": {
+   "200": 3,
+   "204": 2,
+   "403": 12
+  },
+  "mapbox_first_error": {
+   "url": "https://api.mapbox.com/v4/mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,mapbox.mapbox-bathymetry-v2/3/7/3.vector.pbf?sku=101FU6Ikj9BXD&access_token=REDACTED",
+   "status": 403,
+   "body": "{\"message\":\"Forbidden\"}"
+  },
+  "list": {
+   "heading": "All Adventure Asia tours(892)",
+   "total": 892,
+   "cards": 24,
+   "empty": null
+  },
+  "console_error_count": 36
+ },
+ "prod_cover_source_census": {
+  "by_source": {
+   "tour": 161,
+   "None": 731
+  },
+  "examples": [],
+  "note": "all 892 catalog tours via /api/browse?resource=catalog-tours, 14 countries"
+ },
+ "vercel_runtime_errors_last_3h": [
+  {
+   "error": "tour read failed (503)",
+   "count": 40,
+   "route": "/tours/[slug].rsc",
+   "first": "2026-10-15T05:51:08Z",
+   "last": "2026-10-15T06:25:31Z"
+  },
+  {
+   "error": "destination read failed (503)",
+   "count": 30,
+   "route": "/destinations/[country](.rsc)",
+   "first": "2026-10-15T04:41:42Z",
+   "last": "2026-10-15T06:12:55Z"
+  }
+ ]
+}

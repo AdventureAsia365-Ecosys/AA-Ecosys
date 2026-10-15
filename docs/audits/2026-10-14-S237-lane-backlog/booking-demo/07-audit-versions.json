@@ -1,0 +1,350 @@
+{
+  "items": [
+    {
+      "id": "d9f899b3-38a2-4a10-baad-e9470363198a",
+      "at": "2026-10-14T23:48:09.600215Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case_version.approved",
+      "entity_type": "trip_case_version",
+      "entity_id": "f3ee8f4d-855c-4dce-8a93-810cde8063fe",
+      "entity_label": "TC-000003 V2",
+      "summary": "Recorded approval of V2; case confirmed",
+      "before": {
+        "case_status": "proposal_sent",
+        "is_approved": false
+      },
+      "after": {
+        "case_status": "confirmed",
+        "is_approved": true,
+        "approval_note": "[S237 demo] customer approved by phone"
+      }
+    },
+    {
+      "id": "6f5f5f21-18c0-4e32-b38a-aebf42b308e1",
+      "at": "2026-10-14T23:47:57.451862Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case_version.sent",
+      "entity_type": "trip_case_version",
+      "entity_id": "f3ee8f4d-855c-4dce-8a93-810cde8063fe",
+      "entity_label": "TC-000003 V2",
+      "summary": "Marked V2 as sent (valid until 2026-10-28); no e-mail sent",
+      "before": {
+        "case_status": "proposal_sent",
+        "is_sent_to_customer": false
+      },
+      "after": {
+        "to": "s237-demo@example.com",
+        "message": "Demo proposal V2, no e-mail is sent.",
+        "subject": "[S237 demo] Your Vietnam proposal V2",
+        "currency": "USD",
+        "case_status": "proposal_sent",
+        "total_price": "1675.00",
+        "valid_until": "2026-10-28",
+        "notification_id": "5df61d45-7b6f-413e-b48d-ffa0d5134418",
+        "is_sent_to_customer": true
+      }
+    },
+    {
+      "id": "ce011271-dbee-42f3-bbd7-594a28a4e5a1",
+      "at": "2026-10-14T23:47:49.002813Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case_version.priced",
+      "entity_type": "trip_case_version",
+      "entity_id": "f3ee8f4d-855c-4dce-8a93-810cde8063fe",
+      "entity_label": "TC-000003 V2",
+      "summary": "Priced V2 at 1675.00 USD",
+      "before": {
+        "channel": "b2c_tailor_made",
+        "currency": "USD",
+        "total_price": null
+      },
+      "after": {
+        "peak": false,
+        "channel": "b2c_tailor_made",
+        "currency": "USD",
+        "fx_as_of": "2026-10-14",
+        "cost_lines": 2,
+        "below_floor": false,
+        "total_price": "1675.00",
+        "floor_margin": "0.2000",
+        "net_total_usd": "1120.00",
+        "computed_total": "1675.00",
+        "fx_rate_locked": "1",
+        "override_total": null,
+        "override_reason": null,
+        "rule_valid_from": "2026-10-14",
+        "effective_margin": "0.3013"
+      }
+    },
+    {
+      "id": "91e1c296-3b18-413b-b655-e957de0ffe5e",
+      "at": "2026-10-14T23:47:48.295782Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case_version.items_replaced",
+      "entity_type": "trip_case_version",
+      "entity_id": "f3ee8f4d-855c-4dce-8a93-810cde8063fe",
+      "entity_label": "TC-000003 V2",
+      "summary": "Saved 2 item(s), removed 0",
+      "before": {
+        "items": [
+          {
+            "id": "6c28b932-98f3-4cce-8db1-fd8cd0636e99",
+            "costs": [
+              {
+                "id": "5744dc60-6e98-4eb2-8c11-3a273c61d1cb",
+                "net_amount": "600.00",
+                "net_currency": "USD",
+                "supplier_note": "hotel 2N + guide"
+              }
+            ],
+            "notes": null,
+            "title": "Hanoi city and Old Quarter",
+            "day_to": 2,
+            "day_from": 1,
+            "position": 1,
+            "source_tour_id": null
+          },
+          {
+            "id": "ed4ee021-620b-442e-b43b-757861c2cb09",
+            "costs": [
+              {
+                "id": "4ef32156-64b8-4600-87d2-61b97a703a06",
+                "net_amount": "400.00",
+                "net_currency": "USD",
+                "supplier_note": "cruise cabin"
+              }
+            ],
+            "notes": null,
+            "title": "Ha Long Bay cruise",
+            "day_to": 4,
+            "day_from": 3,
+            "position": 2,
+            "source_tour_id": null
+          }
+        ]
+      },
+      "after": {
+        "items": [
+          {
+            "id": "6c28b932-98f3-4cce-8db1-fd8cd0636e99",
+            "costs": [
+              {
+                "id": "5744dc60-6e98-4eb2-8c11-3a273c61d1cb",
+                "net_amount": "600.00",
+                "net_currency": "USD",
+                "supplier_note": "hotel 2N + guide"
+              }
+            ],
+            "notes": null,
+            "title": "Hanoi city and Old Quarter",
+            "day_to": 2,
+            "day_from": 1,
+            "position": 1,
+            "source_tour_id": null
+          },
+          {
+            "id": "ed4ee021-620b-442e-b43b-757861c2cb09",
+            "costs": [
+              {
+                "id": "d22e9ca9-10f3-4adc-b943-3c16b7f9b90d",
+                "net_amount": "520.00",
+                "net_currency": "USD",
+                "supplier_note": "cruise suite (upgrade)"
+              }
+            ],
+            "notes": null,
+            "title": "Ha Long Bay cruise",
+            "day_to": 4,
+            "day_from": 3,
+            "position": 2,
+            "source_tour_id": null
+          }
+        ],
+        "removed": [],
+        "price_cleared": false,
+        "costs_replaced": 1
+      }
+    },
+    {
+      "id": "699c85ee-83fa-4636-9828-bb997954fbcc",
+      "at": "2026-10-14T23:47:46.938492Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case_version.created",
+      "entity_type": "trip_case_version",
+      "entity_id": "f3ee8f4d-855c-4dce-8a93-810cde8063fe",
+      "entity_label": "TC-000003 V2",
+      "summary": "Created V2 from V1",
+      "before": null,
+      "after": {
+        "item_count": 2,
+        "copied_from": 1,
+        "trip_case_id": "4542b70e-3483-40d6-b7ce-c7d2c6c24427",
+        "version_number": 2
+      }
+    },
+    {
+      "id": "faa5f069-aa72-45cf-beb7-bfd843500925",
+      "at": "2026-10-14T23:47:36.073390Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case_version.sent",
+      "entity_type": "trip_case_version",
+      "entity_id": "53adad3c-cd91-4923-a870-64fae30b6b68",
+      "entity_label": "TC-000003 V1",
+      "summary": "Marked V1 as sent (valid until 2026-10-28); no e-mail sent",
+      "before": {
+        "case_status": "discovery",
+        "is_sent_to_customer": false
+      },
+      "after": {
+        "to": "s237-demo@example.com",
+        "message": "Demo proposal, no e-mail is sent.",
+        "subject": "[S237 demo] Your Vietnam proposal V1",
+        "currency": "USD",
+        "case_status": "proposal_sent",
+        "total_price": "1495.00",
+        "valid_until": "2026-10-28",
+        "notification_id": "e76cc19d-a427-469a-871b-74d10d2ff66d",
+        "is_sent_to_customer": true
+      }
+    },
+    {
+      "id": "b434d3e0-b9dd-486d-8fad-7cc9f0364687",
+      "at": "2026-10-14T23:47:27.598605Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case_version.priced",
+      "entity_type": "trip_case_version",
+      "entity_id": "53adad3c-cd91-4923-a870-64fae30b6b68",
+      "entity_label": "TC-000003 V1",
+      "summary": "Priced V1 at 1495.00 USD",
+      "before": {
+        "channel": null,
+        "currency": "USD",
+        "total_price": null
+      },
+      "after": {
+        "peak": false,
+        "channel": "b2c_tailor_made",
+        "currency": "USD",
+        "fx_as_of": "2026-10-14",
+        "cost_lines": 2,
+        "below_floor": false,
+        "total_price": "1495.00",
+        "floor_margin": "0.2000",
+        "net_total_usd": "1000.00",
+        "computed_total": "1495.00",
+        "fx_rate_locked": "1",
+        "override_total": null,
+        "override_reason": null,
+        "rule_valid_from": "2026-10-14",
+        "effective_margin": "0.3011"
+      }
+    },
+    {
+      "id": "cbce2ef1-68f4-40f3-84ca-fe93e45b6efe",
+      "at": "2026-10-14T23:47:26.911859Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case_version.items_replaced",
+      "entity_type": "trip_case_version",
+      "entity_id": "53adad3c-cd91-4923-a870-64fae30b6b68",
+      "entity_label": "TC-000003 V1",
+      "summary": "Saved 2 item(s), removed 0",
+      "before": {
+        "items": []
+      },
+      "after": {
+        "items": [
+          {
+            "id": "f98effcb-712a-40fe-97eb-274c211039a1",
+            "costs": [
+              {
+                "id": "70c9fa10-b1aa-4990-9b32-52d333b67474",
+                "net_amount": "600.00",
+                "net_currency": "USD",
+                "supplier_note": "hotel 2N + guide"
+              }
+            ],
+            "notes": null,
+            "title": "Hanoi city and Old Quarter",
+            "day_to": 2,
+            "day_from": 1,
+            "position": 1,
+            "source_tour_id": null
+          },
+          {
+            "id": "2fb0995a-49b6-4df1-9189-d2f19fe1a296",
+            "costs": [
+              {
+                "id": "3c8cae76-6f1d-4d34-acec-abe82baa20b3",
+                "net_amount": "400.00",
+                "net_currency": "USD",
+                "supplier_note": "cruise cabin"
+              }
+            ],
+            "notes": null,
+            "title": "Ha Long Bay cruise",
+            "day_to": 4,
+            "day_from": 3,
+            "position": 2,
+            "source_tour_id": null
+          }
+        ],
+        "removed": [],
+        "price_cleared": false,
+        "costs_replaced": 2
+      }
+    },
+    {
+      "id": "1eaae61e-099b-4bcd-a57a-0ed6f3a1ab2a",
+      "at": "2026-10-14T23:47:26.240277Z",
+      "actor": {
+        "type": "staff",
+        "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+        "name": "e2e-claude-code"
+      },
+      "action": "trip_case_version.created",
+      "entity_type": "trip_case_version",
+      "entity_id": "53adad3c-cd91-4923-a870-64fae30b6b68",
+      "entity_label": "TC-000003 V1",
+      "summary": "Created V1 from the trip legs",
+      "before": null,
+      "after": {
+        "item_count": 0,
+        "copied_from": null,
+        "trip_case_id": "4542b70e-3483-40d6-b7ce-c7d2c6c24427",
+        "version_number": 1
+      }
+    }
+  ]
+}
