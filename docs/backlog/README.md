@@ -18,7 +18,7 @@ _Last updated: S239, 16/10/2026 (Claude Code)._
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
 - **AA-777:** close on outcome metrics (r7: 20/20 approved, 0 F9 holds, AA-768 set 5/5) and track the retry re-flag rate (13% vs 8%) in a small follow-up — or keep open.
-- **Jira drafts S239** (PR-11, PR-12, PR-7, PR-16): `docs/sessions/2026-10-16-S239-jira-drafts.md` — approve, then post.
+- ~~Jira drafts S239~~ — posted 16/10: PR-11 (10478), PR-12 (10479), PR-7 (10480), PR-16 (10481).
 - AA-858 Ops overview: priorities with Ms. Thư. AA-855 UAT videos: when Nghiệp says (after the tech work).
 - acc1 SSO (`aws sso login --profile pqnghiep-admin`) only if acc1 is needed again (dropped from the Cohere chain).
 - Product questions still open from S238: T2 day separator per tenant catalog; "— N Days" vs ", N Days" (AA-778 closed; ask Ms. Thư if it matters).
