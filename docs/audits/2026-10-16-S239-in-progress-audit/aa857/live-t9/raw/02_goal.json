@@ -1,0 +1,31 @@
+{
+ "at": "2026-10-16T08:35:28+00:00",
+ "method": "POST",
+ "path": "/v1/angle-gate/requests/41e94397-aa14-45f6-9e23-337a0362fd19/goal",
+ "status": 202,
+ "body": {
+  "request_id": "41e94397-aa14-45f6-9e23-337a0362fd19",
+  "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+  "atom_id": "c64ebfc5d8c3b815",
+  "trip_id": "fe697018-6d81-456f-8082-e44a8dcfe566",
+  "channel": "linkedin",
+  "goal": "introduction_awareness",
+  "cta": null,
+  "status": "pending_goal",
+  "generating": true,
+  "generation_failed": false,
+  "dfs_paa_snapshot": null,
+  "route_segment_ids": null,
+  "created_at": "2026-10-16T08:35:29.041358+00:00",
+  "updated_at": "2026-10-16T08:35:29.803656+00:00",
+  "angles": [],
+  "subject_id": "3833fa3d-9587-4e18-9dff-804652bf717d",
+  "subject_score": 2203.0,
+  "subject_place": "Traditional Arts & Craft School",
+  "subject_action": "visit",
+  "subject_hub_name": null
+ },
+ "request_body": {
+  "goal": "introduction_awareness"
+ }
+}

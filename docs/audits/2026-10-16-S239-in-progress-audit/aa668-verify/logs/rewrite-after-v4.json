@@ -1,0 +1,22 @@
+{
+ "det": {
+  "status": 200,
+  "version_number": 4,
+  "state": "ai_generated",
+  "edit_source": "ai_generated",
+  "job_status": "succeeded",
+  "history": [
+   "v1:ai_generated",
+   "v2:ai_generated",
+   "v3:ai_generated",
+   "v4:ai_generated"
+  ],
+  "rewritten_chars": 10735
+ },
+ "rowText": " Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days Laos READY Open →",
+ "drawer_head": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days\nen-US\nCreated: 16 Oct, 09:27\nSUMMARY\n✏ Edit\nThis 12-day route takes families with older children and teenagers from Luang Prabang to Hanoi by bicycle and boat, crossing one of Southeast Asia",
+ "drawer_mentions_v4": false,
+ "console_errors": [
+  "Failed to load resource: the server responded with a status of 404 ()"
+ ]
+}

@@ -1,0 +1,433 @@
+{
+ "started": "2026-10-16T04:02:59.739Z",
+ "tenant": "terra-family",
+ "A": {
+  "console_errors": [
+   "Failed to load resource: the server responded with a status of 404 ()",
+   "Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "http_errors": [
+   "404 GET /api/tenant/v1/tours/pool/2cf487be-2a9a-4a64-b1d0-1cceaebd9361",
+   "404 GET /api/tenant/v1/tours/pool/2cf487be-2a9a-4a64-b1d0-1cceaebd9361"
+  ],
+  "list_mode": "table",
+  "row_before": " Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days Laos READY Open →",
+  "source_drawer": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days en-US Created: 16 Oct, 09:27 SUMMARY ✏ Edit This 12-day route takes families with older children and teenagers from Luang Prabang to Hanoi by bicycle and boat, crossing one of Southeast Asia's most varied stretches of landscape and living c",
+  "panel_header": {
+   "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days",
+   "context": "Rewriting in en-US · for Tour catalog"
+  },
+  "dialogs_after_request": 1,
+  "layout_start_1440": {
+   "vw": 1440,
+   "vh": 900,
+   "dialog": {
+    "x": 720,
+    "y": 0,
+    "w": 720,
+    "h": 900
+   },
+   "dialog_fits": true,
+   "page_overflow_x": 0,
+   "scrollY": 0
+  },
+  "progress_before_close": {
+   "found": true,
+   "status": "running",
+   "revision": 1,
+   "steps": [
+    "research:done",
+    "write:active",
+    "check:pending",
+    "revise:pending",
+    "polish:pending",
+    "save:pending"
+   ],
+   "text_chars": 1621,
+   "keys": [
+    "name",
+    "subtitle",
+    "summary",
+    "highlights"
+   ]
+  },
+  "layout_writing_1440": {
+   "vw": 1440,
+   "vh": 900,
+   "dialog": {
+    "x": 720,
+    "y": 0,
+    "w": 720,
+    "h": 900
+   },
+   "dialog_fits": true,
+   "page_overflow_x": 0,
+   "scrollY": 0
+  },
+  "closed_mid_write": {
+   "at": "2026-10-16T04:03:29.241Z",
+   "remembered_chars": 1780,
+   "remembered_revision": 1
+  },
+  "row_after_close": " Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days Laos WRITING View progress →",
+  "reopen": {
+   "panel_ms": 53,
+   "first_text_ms": 56,
+   "progress_requests_held_so_far": 1,
+   "starting_seen": 0,
+   "remembered_snippet": "Laos to Vietnam by Bicycle and Boat: Nam Ou River ",
+   "remembered_tail_shown": true,
+   "text_shown_at_once": true,
+   "samples": [
+    {
+     "ms": 56,
+     "chars": 2166,
+     "has_snippet": true,
+     "starting": 0
+    },
+    {
+     "ms": 430,
+     "chars": 2166,
+     "has_snippet": true,
+     "starting": 0
+    },
+    {
+     "ms": 741,
+     "chars": 2166,
+     "has_snippet": true,
+     "starting": 0
+    },
+    {
+     "ms": 1055,
+     "chars": 2166,
+     "has_snippet": true,
+     "starting": 0
+    },
+    {
+     "ms": 1367,
+     "chars": 2166,
+     "has_snippet": true,
+     "starting": 0
+    },
+    {
+     "ms": 1679,
+     "chars": 2166,
+     "has_snippet": true,
+     "starting": 0
+    },
+    {
+     "ms": 1988,
+     "chars": 2166,
+     "has_snippet": true,
+     "starting": 0
+    },
+    {
+     "ms": 2297,
+     "chars": 2166,
+     "has_snippet": true,
+     "starting": 0
+    },
+    {
+     "ms": 2610,
+     "chars": 2166,
+     "has_snippet": true,
+     "starting": 0
+    }
+   ]
+  },
+  "final_state": "ready",
+  "final_at": "2026-10-16T04:04:48.823Z",
+  "layout_ready_1440": {
+   "vw": 1440,
+   "vh": 900,
+   "dialog": {
+    "x": 720,
+    "y": 0,
+    "w": 720,
+    "h": 900
+   },
+   "dialog_fits": true,
+   "page_overflow_x": 0,
+   "scrollY": 0
+  },
+  "ready_buttons": [
+   "Export DOCX",
+   "Open in My Catalog"
+  ],
+  "ready_text_head": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days\nRewriting in en-US · for Tour catalog\nYour new version is ready and saved in My Catalog Tours, where you can edit and export it.\nWRITING YOUR TOUR\nReading the original tour and search keywords\nWriting your version\nChecking facts, tone and SEO\nRevising what the checks flagged\nPolishing the details\nSaving to My Catalog Tours\nTITLE\nLaos to Vietnam by Bicycle and Boat: Nam Ou River to Hanoi in 12 Days\nSUBTITLE\nA 12-day cycling and boat jour",
+  "toast_while_open": 0,
+  "layout_ready_390": {
+   "vw": 390,
+   "vh": 844,
+   "dialog": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 844
+   },
+   "dialog_fits": true,
+   "page_overflow_x": 0,
+   "scrollY": 0
+  },
+  "opened_in_catalog": {
+   "dialogs": 1,
+   "writer_panel_open": 0,
+   "text": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days en-US Created: 16 Oct, 11:03 SUMMARY ✏ Edit This 12-day route is built for families with older children and teenagers who cycle regularly and want a journey that asks something of them. Starting in Luang Prabang, the route heads north along the Nam Ou River valley, passes through Khmu and Hmong villages, and crosses into northern Vietnam."
+  }
+ },
+ "B": {
+  "console_errors": [],
+  "http_errors": [],
+  "list_mode": "cards",
+  "card_text": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days COUNTRY Laos STATUS WRITING ACTIONS View progress →",
+  "layout_list_390": {
+   "vw": 390,
+   "vh": 844,
+   "dialog": null,
+   "dialog_fits": null,
+   "page_overflow_x": 0,
+   "scrollY": 0
+  },
+  "layout_writing_390": {
+   "vw": 390,
+   "vh": 844,
+   "dialog": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 844
+   },
+   "dialog_fits": true,
+   "page_overflow_x": 0,
+   "scrollY": 0
+  },
+  "panel_header": {
+   "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days",
+   "context": "Rewriting in en-US · for Tour catalog"
+  },
+  "progress_at_view": {
+   "found": true,
+   "status": "running",
+   "revision": 1,
+   "steps": [
+    "research:done",
+    "write:active",
+    "check:pending",
+    "revise:pending",
+    "polish:pending",
+    "save:pending"
+   ],
+   "text_chars": 7783,
+   "keys": [
+    "name",
+    "subtitle",
+    "summary",
+    "highlights",
+    "itineraries"
+   ]
+  },
+  "closed_at": "2026-10-16T04:03:43.939Z",
+  "toasts": [
+   "\"Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days\" is ready — find it in My Catalog Tours."
+  ],
+  "toast": {
+   "text": "\"Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days\" is ready — find it in My Catalog Tours.",
+   "at": "2026-10-16T04:04:49.712Z"
+  },
+  "card_after_toast": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days COUNTRY Laos STATUS READY ACTIONS Open →"
+ },
+ "events": [
+  "2026-10-16T04:03:15.988Z A: POST rewrite 200 version=5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2 v5 job=e360282e-690f-40fd-906b-e5c75fe225da",
+  "2026-10-16T04:03:30.786Z A: closed mid-write; row=\" Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days Laos WRITING View progress →\" remembered=1780 chars",
+  "2026-10-16T04:03:33.498Z A: reopen {\"panel_ms\":53,\"first_text_ms\":56,\"progress_requests_held_so_far\":1,\"starting_seen\":0,\"remembered_snippet\":\"Laos to Vietnam by Bicycle and Boat: Nam Ou River \",\"remembered_tail_shown\":true,\"text_shown_at_once\":true}",
+  "2026-10-16T04:03:43.939Z B: panel at 390 {\"vw\":390,\"vh\":844,\"dialog\":{\"x\":0,\"y\":0,\"w\":390,\"h\":844},\"dialog_fits\":true,\"page_overflow_x\":0,\"scrollY\":0}; closed mid-write, waiting for toast",
+  "2026-10-16T04:04:49.711Z B: toast \"\"Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days\" is ready — find it in My Catalog Tours.\"",
+  "2026-10-16T04:04:54.446Z A: ready; buttons=[\"Export DOCX\",\"Open in My Catalog\"]",
+  "2026-10-16T04:04:59.228Z final compare all_equal=true poller={\"label\":\"script poller ~0.5 s\",\"responses\":105,\"statuses\":{\"not_found\":2,\"running\":99,\"done\":4},\"revisions\":[0,1,2],\"max_chars\":10233,\"with_replacements\":0,\"section_starts_with_brace\":0,\"json_key_in_text\":0,\"bad\":[]}"
+ ],
+ "rewrite_post": {
+  "status": 200,
+  "path": "/api/tenant/v1/tours/pool/2cf487be-2a9a-4a64-b1d0-1cceaebd9361/rewrite",
+  "body": {
+   "version_id": "5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+   "published_tour_id": "2cf487be-2a9a-4a64-b1d0-1cceaebd9361",
+   "version_number": 5,
+   "status": "pending",
+   "job_id": "e360282e-690f-40fd-906b-e5c75fe225da",
+   "message": "Rewrite started — check My Catalog in ~30 seconds for results"
+  },
+  "at": "2026-10-16T04:03:15.988Z"
+ },
+ "version_id": "5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+ "job_id": "e360282e-690f-40fd-906b-e5c75fe225da",
+ "progress_poller": {
+  "label": "script poller ~0.5 s",
+  "responses": 105,
+  "statuses": {
+   "not_found": 2,
+   "running": 99,
+   "done": 4
+  },
+  "revisions": [
+   0,
+   1,
+   2
+  ],
+  "max_chars": 10233,
+  "with_replacements": 0,
+  "section_starts_with_brace": 0,
+  "json_key_in_text": 0,
+  "bad": []
+ },
+ "progress_panel_A": {
+  "label": "panel polls (A)",
+  "responses": 76,
+  "statuses": {
+   "not_found": 2,
+   "running": 70,
+   "done": 4
+  },
+  "revisions": [
+   0,
+   1,
+   2
+  ],
+  "max_chars": 10233,
+  "with_replacements": 0,
+  "section_starts_with_brace": 0,
+  "json_key_in_text": 0,
+  "bad": []
+ },
+ "progress_panel_B": {
+  "label": "panel polls (B)",
+  "responses": 3,
+  "statuses": {
+   "running": 3
+  },
+  "revisions": [
+   1
+  ],
+  "max_chars": 7991,
+  "with_replacements": 0,
+  "section_starts_with_brace": 0,
+  "json_key_in_text": 0,
+  "bad": []
+ },
+ "final_compare": {
+  "version_status": 200,
+  "version_number": 5,
+  "version_state": "ai_generated",
+  "job_status": "succeeded",
+  "edit_source": "ai_generated",
+  "rewritten_keys": [
+   "name",
+   "status",
+   "summary",
+   "seo_meta",
+   "subtitle",
+   "seo_title",
+   "trip_type",
+   "highlights",
+   "itineraries"
+  ],
+  "progress_status": "done",
+  "progress_revision": 2,
+  "steps": [
+   "research:done",
+   "write:done",
+   "check:done",
+   "revise:done",
+   "polish:done",
+   "save:done"
+  ],
+  "expected_keys": [
+   "name",
+   "summary",
+   "seo_meta",
+   "subtitle",
+   "seo_title",
+   "highlights",
+   "itineraries"
+  ],
+  "progress_keys": [
+   "name",
+   "subtitle",
+   "summary",
+   "highlights",
+   "itineraries",
+   "seo_title",
+   "seo_meta"
+  ],
+  "extra_progress_keys": [],
+  "all_equal": true,
+  "per_section": [
+   {
+    "key": "name",
+    "expected_chars": 69,
+    "progress_chars": 69,
+    "equal": true,
+    "first_diff": null
+   },
+   {
+    "key": "summary",
+    "expected_chars": 1544,
+    "progress_chars": 1544,
+    "equal": true,
+    "first_diff": null
+   },
+   {
+    "key": "seo_meta",
+    "expected_chars": 150,
+    "progress_chars": 150,
+    "equal": true,
+    "first_diff": null
+   },
+   {
+    "key": "subtitle",
+    "expected_chars": 174,
+    "progress_chars": 174,
+    "equal": true,
+    "first_diff": null
+   },
+   {
+    "key": "seo_title",
+    "expected_chars": 44,
+    "progress_chars": 44,
+    "equal": true,
+    "first_diff": null
+   },
+   {
+    "key": "highlights",
+    "expected_chars": 977,
+    "progress_chars": 977,
+    "equal": true,
+    "first_diff": null
+   },
+   {
+    "key": "itineraries",
+    "expected_chars": 6727,
+    "progress_chars": 6727,
+    "equal": true,
+    "first_diff": null
+   }
+  ]
+ },
+ "after": {
+  "my_versions_status": 200,
+  "row": {
+   "id": "5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+   "version_number": 5,
+   "status": "ai_generated",
+   "job_status": "succeeded"
+  },
+  "quota": {
+   "plan_tier": "growth",
+   "tours_per_month": 200,
+   "rewrites_used": 14,
+   "rewrites_remaining": 186,
+   "resets_at": "2026-11-01"
+  }
+ },
+ "rewrite_posts": 1,
+ "finished": "2026-10-16T04:04:59.229Z"
+}

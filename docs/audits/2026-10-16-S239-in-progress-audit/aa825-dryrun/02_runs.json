@@ -1,0 +1,439 @@
+[
+ {
+  "kind": "retention_llm_call_log",
+  "enqueue_status": 200,
+  "enqueue": {
+   "job_id": "ba11ec53-3a20-4650-95ec-27f21d176cb2",
+   "kind": "retention_llm_call_log",
+   "dry_run": true,
+   "max_rows": null
+  },
+  "enqueued_at": "2026-10-16T03:18:41.331403+00:00",
+  "wall_seconds": 6.4,
+  "job": {
+   "id": "ba11ec53-3a20-4650-95ec-27f21d176cb2",
+   "kind": "retention_llm_call_log",
+   "status": "succeeded",
+   "attempt": 1,
+   "max_attempts": 2,
+   "payload": {
+    "dry_run": true,
+    "trigger": "manual"
+   },
+   "progress": {
+    "mode": "dry_run",
+    "phase": "done",
+    "candidates": 0
+   },
+   "result": {
+    "kind": "retention_llm_call_log",
+    "mode": "dry_run",
+    "parts": [
+     {
+      "part": "raw",
+      "cursor": null,
+      "cutoff": "2026-04-19T00:00:00+00:00",
+      "newest": null,
+      "oldest": null,
+      "archive": true,
+      "batches": 0,
+      "deleted": 0,
+      "objects": 0,
+      "candidates": 0,
+      "object_keys": [],
+      "window_days": 180,
+      "archived_rows": 0
+     }
+    ],
+    "table": "shared.llm_call_log",
+    "reason": "manual dry run",
+    "rollup": "llm_call_daily",
+    "trigger": "manual",
+    "windows": {
+     "raw": 180
+    },
+    "limit_rows": 0,
+    "rollup_rows": 0,
+    "deleted_total": 0,
+    "archived_total": 0,
+    "rollup_pending": 0,
+    "fk_protected_by": [],
+    "candidates_total": 0,
+    "previous_live_deleted": null
+   },
+   "cost_usd": 0.0,
+   "llm_cost_usd": 0.0,
+   "error": null,
+   "cancel_requested": false,
+   "created_by": "admin:claude-code-s239",
+   "parent_job_id": null,
+   "locked_by": null,
+   "locked_until": null,
+   "run_after": "2026-10-16T03:18:41.526812+00:00",
+   "created_at": "2026-10-16T03:18:41.526812+00:00",
+   "started_at": "2026-10-16T03:18:43.629214+00:00",
+   "finished_at": "2026-10-16T03:18:43.695732+00:00",
+   "links": {
+    "tour_versions": [],
+    "content_pieces": [],
+    "tour_id": null,
+    "version_id": null,
+    "place_builds": [],
+    "graph_builds": []
+   }
+  }
+ },
+ {
+  "kind": "retention_tenant_api_usage",
+  "enqueue_status": 200,
+  "enqueue": {
+   "job_id": "13cb13c9-1267-44a1-86fa-8e2fce8dc800",
+   "kind": "retention_tenant_api_usage",
+   "dry_run": true,
+   "max_rows": null
+  },
+  "enqueued_at": "2026-10-16T03:18:47.658502+00:00",
+  "wall_seconds": 6.3,
+  "job": {
+   "id": "13cb13c9-1267-44a1-86fa-8e2fce8dc800",
+   "kind": "retention_tenant_api_usage",
+   "status": "succeeded",
+   "attempt": 1,
+   "max_attempts": 2,
+   "payload": {
+    "dry_run": true,
+    "trigger": "manual"
+   },
+   "progress": {
+    "mode": "dry_run",
+    "phase": "done",
+    "candidates": 0
+   },
+   "result": {
+    "kind": "retention_tenant_api_usage",
+    "mode": "dry_run",
+    "parts": [
+     {
+      "part": "raw",
+      "cursor": null,
+      "cutoff": "2026-07-18T00:00:00+00:00",
+      "newest": null,
+      "oldest": null,
+      "archive": true,
+      "batches": 0,
+      "deleted": 0,
+      "objects": 0,
+      "candidates": 0,
+      "object_keys": [],
+      "window_days": 90,
+      "archived_rows": 0
+     }
+    ],
+    "table": "shared.tenant_api_usage",
+    "reason": "manual dry run",
+    "rollup": "tenant_api_usage_monthly",
+    "trigger": "manual",
+    "windows": {
+     "raw": 90
+    },
+    "limit_rows": 0,
+    "rollup_rows": 0,
+    "deleted_total": 0,
+    "archived_total": 0,
+    "rollup_pending": 0,
+    "fk_protected_by": [],
+    "candidates_total": 0,
+    "previous_live_deleted": null
+   },
+   "cost_usd": 0.0,
+   "llm_cost_usd": 0.0,
+   "error": null,
+   "cancel_requested": false,
+   "created_by": "admin:claude-code-s239",
+   "parent_job_id": null,
+   "locked_by": null,
+   "locked_until": null,
+   "run_after": "2026-10-16T03:18:47.744064+00:00",
+   "created_at": "2026-10-16T03:18:47.744064+00:00",
+   "started_at": "2026-10-16T03:18:48.660659+00:00",
+   "finished_at": "2026-10-16T03:18:48.693249+00:00",
+   "links": {
+    "tour_versions": [],
+    "content_pieces": [],
+    "tour_id": null,
+    "version_id": null,
+    "place_builds": [],
+    "graph_builds": []
+   }
+  }
+ },
+ {
+  "kind": "retention_job",
+  "enqueue_status": 200,
+  "enqueue": {
+   "job_id": "e83f37ac-9b33-4424-bc6e-d442c42d77a1",
+   "kind": "retention_job",
+   "dry_run": true,
+   "max_rows": null
+  },
+  "enqueued_at": "2026-10-16T03:18:53.968280+00:00",
+  "wall_seconds": 6.5,
+  "job": {
+   "id": "e83f37ac-9b33-4424-bc6e-d442c42d77a1",
+   "kind": "retention_job",
+   "status": "succeeded",
+   "attempt": 1,
+   "max_attempts": 2,
+   "payload": {
+    "dry_run": true,
+    "trigger": "manual"
+   },
+   "progress": {
+    "mode": "dry_run",
+    "phase": "done",
+    "candidates": 0
+   },
+   "result": {
+    "kind": "retention_job",
+    "mode": "dry_run",
+    "parts": [
+     {
+      "part": "succeeded",
+      "cursor": null,
+      "cutoff": "2026-09-16T00:00:00+00:00",
+      "newest": null,
+      "oldest": null,
+      "archive": false,
+      "batches": 0,
+      "deleted": 0,
+      "objects": 0,
+      "candidates": 0,
+      "object_keys": [],
+      "window_days": 30,
+      "archived_rows": 0
+     },
+     {
+      "part": "failed",
+      "cursor": null,
+      "cutoff": "2026-07-18T00:00:00+00:00",
+      "newest": null,
+      "oldest": null,
+      "archive": true,
+      "batches": 0,
+      "deleted": 0,
+      "objects": 0,
+      "candidates": 0,
+      "object_keys": [],
+      "window_days": 90,
+      "archived_rows": 0
+     }
+    ],
+    "table": "shared.job",
+    "reason": "manual dry run",
+    "rollup": null,
+    "trigger": "manual",
+    "windows": {
+     "failed": 90,
+     "succeeded": 30
+    },
+    "limit_rows": 0,
+    "rollup_rows": 0,
+    "deleted_total": 0,
+    "archived_total": 0,
+    "fk_protected_by": [
+     "acp_shared.content_piece.job_id",
+     "gold_aa_internal.tenant_tour_versions.job_id",
+     "shared.job.parent_job_id"
+    ],
+    "candidates_total": 0,
+    "previous_live_deleted": null
+   },
+   "cost_usd": 0.0,
+   "llm_cost_usd": 0.0,
+   "error": null,
+   "cancel_requested": false,
+   "created_by": "admin:claude-code-s239",
+   "parent_job_id": null,
+   "locked_by": null,
+   "locked_until": null,
+   "run_after": "2026-10-16T03:18:54.007402+00:00",
+   "created_at": "2026-10-16T03:18:54.007402+00:00",
+   "started_at": "2026-10-16T03:18:58.718301+00:00",
+   "finished_at": "2026-10-16T03:18:58.781219+00:00",
+   "links": {
+    "tour_versions": [],
+    "content_pieces": [],
+    "tour_id": null,
+    "version_id": null,
+    "place_builds": [],
+    "graph_builds": []
+   }
+  }
+ },
+ {
+  "kind": "retention_decision_log",
+  "enqueue_status": 200,
+  "enqueue": {
+   "job_id": "d0eec71e-5791-4a16-ae30-05b7a0798670",
+   "kind": "retention_decision_log",
+   "dry_run": true,
+   "max_rows": null
+  },
+  "enqueued_at": "2026-10-16T03:19:00.475006+00:00",
+  "wall_seconds": 6.3,
+  "job": {
+   "id": "d0eec71e-5791-4a16-ae30-05b7a0798670",
+   "kind": "retention_decision_log",
+   "status": "succeeded",
+   "attempt": 1,
+   "max_attempts": 2,
+   "payload": {
+    "dry_run": true,
+    "trigger": "manual"
+   },
+   "progress": {
+    "mode": "dry_run",
+    "phase": "done",
+    "candidates": 0
+   },
+   "result": {
+    "kind": "retention_decision_log",
+    "mode": "dry_run",
+    "parts": [
+     {
+      "part": "unlabelled",
+      "cursor": null,
+      "cutoff": "2026-04-19T00:00:00+00:00",
+      "newest": null,
+      "oldest": null,
+      "archive": true,
+      "batches": 0,
+      "deleted": 0,
+      "objects": 0,
+      "candidates": 0,
+      "object_keys": [],
+      "window_days": 180,
+      "archived_rows": 0
+     }
+    ],
+    "table": "shared.decision_log",
+    "reason": "manual dry run",
+    "rollup": null,
+    "trigger": "manual",
+    "windows": {
+     "unlabelled": 180
+    },
+    "limit_rows": 0,
+    "rollup_rows": 0,
+    "deleted_total": 0,
+    "archived_total": 0,
+    "fk_protected_by": [],
+    "candidates_total": 0,
+    "previous_live_deleted": null
+   },
+   "cost_usd": 0.0,
+   "llm_cost_usd": 0.0,
+   "error": null,
+   "cancel_requested": false,
+   "created_by": "admin:claude-code-s239",
+   "parent_job_id": null,
+   "locked_by": null,
+   "locked_until": null,
+   "run_after": "2026-10-16T03:19:00.555470+00:00",
+   "created_at": "2026-10-16T03:19:00.555470+00:00",
+   "started_at": "2026-10-16T03:19:03.744102+00:00",
+   "finished_at": "2026-10-16T03:19:03.775443+00:00",
+   "links": {
+    "tour_versions": [],
+    "content_pieces": [],
+    "tour_id": null,
+    "version_id": null,
+    "place_builds": [],
+    "graph_builds": []
+   }
+  }
+ },
+ {
+  "kind": "retention_cost_explorer_snapshot",
+  "enqueue_status": 200,
+  "enqueue": {
+   "job_id": "d909a01e-6bc7-4831-b737-c8dcfddd11de",
+   "kind": "retention_cost_explorer_snapshot",
+   "dry_run": true,
+   "max_rows": null
+  },
+  "enqueued_at": "2026-10-16T03:19:06.755726+00:00",
+  "wall_seconds": 6.3,
+  "job": {
+   "id": "d909a01e-6bc7-4831-b737-c8dcfddd11de",
+   "kind": "retention_cost_explorer_snapshot",
+   "status": "succeeded",
+   "attempt": 1,
+   "max_attempts": 2,
+   "payload": {
+    "dry_run": true,
+    "trigger": "manual"
+   },
+   "progress": {
+    "mode": "dry_run",
+    "phase": "done",
+    "candidates": 5991
+   },
+   "result": {
+    "kind": "retention_cost_explorer_snapshot",
+    "mode": "dry_run",
+    "parts": [
+     {
+      "part": "superseded",
+      "cursor": null,
+      "cutoff": "2026-10-15T00:00:00+00:00",
+      "newest": "2026-10-12T09:24:48.692290+00:00",
+      "oldest": "2026-09-23T11:06:50.214360+00:00",
+      "archive": false,
+      "batches": 0,
+      "deleted": 0,
+      "objects": 0,
+      "candidates": 5991,
+      "object_keys": [],
+      "window_days": 1,
+      "archived_rows": 0
+     }
+    ],
+    "table": "shared.cost_explorer_snapshot",
+    "reason": "manual dry run",
+    "rollup": null,
+    "trigger": "manual",
+    "windows": {
+     "superseded": 1
+    },
+    "limit_rows": 0,
+    "rollup_rows": 0,
+    "deleted_total": 0,
+    "archived_total": 0,
+    "fk_protected_by": [],
+    "candidates_total": 5991,
+    "previous_live_deleted": null
+   },
+   "cost_usd": 0.0,
+   "llm_cost_usd": 0.0,
+   "error": null,
+   "cancel_requested": false,
+   "created_by": "admin:claude-code-s239",
+   "parent_job_id": null,
+   "locked_by": null,
+   "locked_until": null,
+   "run_after": "2026-10-16T03:19:06.886833+00:00",
+   "created_at": "2026-10-16T03:19:06.886833+00:00",
+   "started_at": "2026-10-16T03:19:08.784122+00:00",
+   "finished_at": "2026-10-16T03:19:08.813806+00:00",
+   "links": {
+    "tour_versions": [],
+    "content_pieces": [],
+    "tour_id": null,
+    "version_id": null,
+    "place_builds": [],
+    "graph_builds": []
+   }
+  }
+ }
+]

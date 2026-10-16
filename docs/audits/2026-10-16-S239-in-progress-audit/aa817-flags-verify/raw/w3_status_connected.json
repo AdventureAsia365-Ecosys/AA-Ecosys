@@ -1,0 +1,14 @@
+{
+ "at": "2026-10-16T05:15:46+00:00",
+ "method": "GET",
+ "path": "/v1/integrations/wordpress",
+ "status": 200,
+ "x_request_id": "46968dd9-d7d1-47fc-afa9-9f15bbe903d9",
+ "body": {
+  "connected": true,
+  "site_url": "https://fightcanvas.s3-tastewp.com",
+  "connected_at": "2026-10-16T05:15:45.350224+00:00",
+  "last_verified_at": "2026-10-16T05:15:46.948150+00:00",
+  "last_verify_error": null
+ }
+}

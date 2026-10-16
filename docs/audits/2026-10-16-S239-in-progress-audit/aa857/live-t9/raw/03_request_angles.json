@@ -1,0 +1,63 @@
+{
+ "request_id": "41e94397-aa14-45f6-9e23-337a0362fd19",
+ "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+ "atom_id": "c64ebfc5d8c3b815",
+ "trip_id": "fe697018-6d81-456f-8082-e44a8dcfe566",
+ "channel": "linkedin",
+ "goal": "introduction_awareness",
+ "cta": null,
+ "status": "pending_choice",
+ "generating": false,
+ "generation_failed": false,
+ "dfs_paa_snapshot": {
+  "relevance": "MED",
+  "people_also_ask": [],
+  "related_keywords": []
+ },
+ "route_segment_ids": null,
+ "created_at": "2026-10-16T08:35:29.041358+00:00",
+ "updated_at": "2026-10-16T08:35:48.354329+00:00",
+ "angles": [
+  {
+   "option_id": "1629e3ec-3780-484d-b852-15087ab9ac86",
+   "idx": 0,
+   "name": "Watching Craft Become Skill Over Years",
+   "why_it_works": "Introducing the institute's multi-year training model gives parents an immediate, concrete reason why this stop is worth time on a culinary trail itinerary \u2014 it reframes a cultural visit as a genuine window into Bhutanese creative life that children can observe and understand.",
+   "formula_fit": "Hook-Insight-CTA: the hook is the scale of commitment students make (years mastering a single craft); the insight is what Zorig Chusum is, why the institute exists, and what families actually see there; the CTA invites the reader to consider the broader trip.",
+   "best_final_style": "Structured as one punchy opening sentence, two short paragraphs, one reassuring practical note, and a light CTA. Lead with the fact that students spend years mastering a single craft discipline \u2014 thangka painting, wood carving, weaving, embroidery among the thirteen arts \u2014 and let that specificity carry the hook. The middle paragraph explains what Zorig Chusum means (Bhutan's thirteen traditional arts and crafts) and how the institute was established to formally transmit skills that supply artisans for dzongs and monasteries. Emphasise what a visiting family observes: training in progress, the range of disciplines, the connection to living religious and cultural structures. The reassuring practical note touches on this being a government-run school in Thimphu, making it an accessible, structured stop. Close with a brief CTA tied to the 10-day Bhutan Culinary Trail. Do not invent what the visit format involves beyond what the seed states.",
+   "recommended": true,
+   "chosen": false,
+   "answers": [],
+   "violations": []
+  },
+  {
+   "option_id": "b5e5b0b1-211d-49d8-82e2-c572f1d92fbc",
+   "idx": 1,
+   "name": "Thirteen Arts, One School: What Zorig Chusum Actually Means",
+   "why_it_works": "Many families researching Bhutan will encounter the term Zorig Chusum without knowing what it means; grounding the piece in the full name, the number thirteen, and the specific crafts listed in the seed directly answers that knowledge gap and establishes the brand as a clear, informed guide.",
+   "formula_fit": "5W1H: Who (students and master craftspeople), What (the thirteen traditional arts including thangka painting, wood carving, sculpture, weaving, embroidery, lacquerwork), Where (Thimphu), Why (preservation against modernisation, supply of artisans for religious structures), When (Day 6 of the itinerary), How (a government-run institute with multi-year programmes).",
+   "best_final_style": "Structure: one-sentence hook naming the thirteen arts and the school, two focused paragraphs, one practical reassurance, one CTA. Lead with the full count \u2014 thirteen distinct arts \u2014 and name several from the seed (thangka painting, wood carving, weaving, embroidery, lacquerwork, sculpture) so the piece is immediately specific rather than generic. Second paragraph explains the institute's role in keeping these crafts alive for dzongs, monasteries, and Bhutanese cultural life, and notes that students train under master craftspeople for years in a single discipline. The practical note confirms it is a government-run school in Thimphu, a tangible and accessible point for families planning logistics. CTA links lightly to the broader 10-day trip. Do not set a mood or prescribe scene detail beyond what the seed provides.",
+   "recommended": false,
+   "chosen": false,
+   "answers": [],
+   "violations": []
+  },
+  {
+   "option_id": "cf130664-835f-476b-bbdb-d6bff5aacbbc",
+   "idx": 2,
+   "name": "A Living Craft Tradition That Still Has Work to Do",
+   "why_it_works": "Framing the institute through its active, functional purpose \u2014 training artisans who go on to restore and decorate real dzongs and monasteries \u2014 gives both adults and children a concrete reason to pay attention, making the visit feel purposeful rather than merely observational.",
+   "formula_fit": "Hook-Insight-CTA: the hook is the direct line between students training here and the decorated religious structures families may have already visited earlier in the trip; the insight covers Zorig Chusum, the thirteen arts, and why a formal school was needed; the CTA points to the trip.",
+   "best_final_style": "One-sentence hook, two short paragraphs, one reassuring practical sentence, brief CTA. Lead with the functional role the institute plays: the artisans it trains go on to restore and decorate Bhutan's dzongs and monasteries. Use this as the thread that makes the school visit feel connected to the broader landscape of the trip. The first paragraph explains Zorig Chusum \u2014 the thirteen traditional arts, including thangka painting, wood carving, sculpture, weaving, embroidery, lacquerwork \u2014 and why the institute was established to prevent these skills from being lost to modernisation. The second paragraph covers the training model: students dedicate years to a single craft under experienced master craftspeople. Practical note: the school is government-run and located in Thimphu. Close with a light CTA referencing the 10-day Bhutan Culinary Trail. Do not describe what the visit experience looks or feels like beyond what the seed confirms.",
+   "recommended": false,
+   "chosen": false,
+   "answers": [],
+   "violations": []
+  }
+ ],
+ "subject_id": "3833fa3d-9587-4e18-9dff-804652bf717d",
+ "subject_score": 2203.0,
+ "subject_place": "Traditional Arts & Craft School",
+ "subject_action": "visit",
+ "subject_hub_name": null
+}

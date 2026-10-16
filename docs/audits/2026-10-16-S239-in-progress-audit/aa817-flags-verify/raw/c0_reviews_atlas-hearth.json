@@ -1,0 +1,226 @@
+{
+ "at": "2026-10-16T05:15:23+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/reviews",
+ "status": 200,
+ "x_request_id": "b7a798c8-9d86-4243-a3f3-16f23f64cba9",
+ "body": {
+  "data": [
+   {
+    "request_id": "e6919aa3-576e-420d-90eb-57c36cdbc513",
+    "piece_id": "a7e18faf-4b68-4453-8020-000e38109674",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "Pawangka Monastery, built in the seventh century by Songtsen Gampo, marks the origin of Tibetan written language.\n\nThe c...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "The Monastery That Refuses to Be Found Easily",
+     "why_it_works": "High-net-worth travelers are motivated by genuine exclusivity and the sense of having gone beyond the tourist circuit \u2014 framing Pawangka as a place that resists casual discovery positions AA as the curator of access, not just logistics.",
+     "formula_fit": "Hook-Insight-CTA: Hook on the paradox that the most meaningful monastery in the region is one most visitors never reach; Insight into what makes Pawangka culturally and spiritually distinct (its setting, its atmosphere, its remove from the standard monastery trail); CTA inviting the reader to ask AA how they arrange private access.",
+     "best_final_style": "Quiet authority \u2014 no superlatives, no hype. Opens with a single specific sensory or physical detail that places the reader at Pawangka before naming it. Unfolds as a slow reveal: where it sits, why it matters, what a private visit actually feels like. Ends with a low-pressure but confident invitation. The tone should feel like a well-traveled friend giving a considered recommendation, not a sales pitch."
+    },
+    "atom": {
+     "text": "Pawangka Monastery \u2014 visit",
+     "activity_type": "culture",
+     "emotional_hook": "ancient sacred site connected to the origins of Tibetan writing",
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "HIGH",
+     "people_also_ask": [
+      "What is the hardest hike in Hong Kong?",
+      "How hard is Teapot Hill?",
+      "What is the most famous hike in Hong Kong?",
+      "How tall is Mount Jomolhari?",
+      "What is the most challenging trek in Bhutan?",
+      "What is the highest mountain in Bhutan?",
+      "Can I see the Himalayas from Bhutan?"
+     ],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-16T00:21:48.092155+00:00"
+   },
+   {
+    "request_id": "41e41098-ffa7-472a-bdb2-da0922f80c0a",
+    "piece_id": "1f02cecb-efd6-4f9c-bf32-1c6efbf3c77b",
+    "channel": "blog",
+    "ready_state": "ready",
+    "content_text": "## What a Bolt of Woven Silk Can Tell You About a Country\n\nIn Bhutanese society, weaving proficiency has historically be...",
+    "route_hub_name": "Khaling National Handloom \u2192 Tashigang dzong \u2192 Chorten Kora \u2192 Mongar Dzong",
+    "route_segment_count": 7,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "The Market as Cultural Decoder",
+     "why_it_works": "High-net-worth travellers who have seen bazaars across Asia need a reason to slow down in Bhutan's \u2014 framing the craft bazaar as a living index of the country's values (not just a shopping stop) gives culturally intelligent travellers the interpretive lens they actually want.",
+     "formula_fit": "Hook-Insight-CTA: Hook \u2014 the surprising idea that wandering a Bhutanese craft bazaar tells you more about GNH policy than any guidebook; Insight \u2014 each object (hand-loomed textiles, incense, carved masks) carries a traceable cultural logic tied to Bhutan's deliberate choices about modernity and preservation; CTA \u2014 invites readers to experience this living cultural document themselves on the Culinary Trail East to West.",
+     "best_final_style": "Measured and curious in tone \u2014 not breathless, not listy. Opens with one precise, unexpected detail from the bazaar (a specific craft object or transaction) that immediately signals 'this is not a generic market story.' Unfolds as a layered observation: what you see on the surface, what it means underneath, why Bhutan is one of the only places this layer still exists intact. Ends with a quiet but confident invitation rather than a hard sell."
+    },
+    "atom": {
+     "text": "Craft Bazaar \u2014 wander",
+     "activity_type": "culture",
+     "emotional_hook": null,
+     "season_note": null
+    },
+    "tour": {
+     "name": "Bhutan: Culinary Trail East to West \u2014 10 Days",
+     "destination": "Bhutan"
+    },
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-16T00:21:45.441757+00:00"
+   },
+   {
+    "request_id": "f5e6aa33-4113-496b-9567-3591e9cbdef4",
+    "piece_id": "b5943c24-bd04-47fe-9c9f-e54b6bd11e0c",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "Punakha Dzong sits on a narrow peninsula where the Pho Chhu and Mo Chhu converge: a site chosen with the full weight of ...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "trust_building",
+     "label": "Trust-building"
+    },
+    "angle": {
+     "name": "A Site at the Confluence: Why Setting Is Not Incidental in Bhutanese Sacred Architecture",
+     "why_it_works": "The confluence of the Pho Chhu and Mo Chhu is a verifiable, distinctive fact that separates Punakha Dzong from every other dzong \u2014 and the reasoning behind siting a religious-administrative centre at a river confluence is the kind of cultural intelligence that differentiates a well-planned journey from a well-photographed one. This angle builds trust by showing the brand operates at that level of understanding.",
+     "formula_fit": "Problem-Insight-Proof-Action (FAB): Problem \u2014 the physical setting of Punakha Dzong appears incidental to first-time visitors; Insight \u2014 in Bhutanese Buddhist tradition, the confluence of rivers carries specific symbolic and protective significance, making the location a deliberate act of sacred geography; Proof \u2014 the confirmed fact that the dzong sits on a long peninsula between the Pho Chhu (Male River) and Mo Chhu (Female River), connected to land only by a wooden cantilever bridge, and was chosen by Zhabdrung Ngawang Namgyal as the country's religious and administrative centre; Action \u2014 a reflective prompt on what it means to plan a journey around places whose every detail was chosen intentionally.",
+     "best_final_style": "Tone: calm, intelligent, slightly contemplative \u2014 not mystical or over-spiritual. Open with the geography as a thinking problem: why, in a mountain kingdom of many possible sites, was this peninsula chosen? Anchor the question in the confirmed physical facts \u2014 the two named rivers, the narrow peninsula, the wooden cantilever bridge. Move to the founder, Zhabdrung Ngawang Namgyal, and the 1637\u201338 founding, noting that the choice of site was inseparable from the institution's purpose as the country's religious and governmental heart. Reference the dzong's role as the winter home of the Je Khenpo to show the site's significance endures. Bring the visitor's experience in at the end \u2014 what the courtyards and assembly hall feel like once the setting is understood. One brief Atlas & Hearth sentence on how the brand approaches cultural journeys with this level of attention to context. No emojis, no markdown, no list format."
+    },
+    "atom": {
+     "text": "Punakha Dzong \u2014 visit courtyards and assembly hall",
+     "activity_type": "culture",
+     "emotional_hook": "fortress-monastery at the confluence of two rivers",
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "HIGH",
+     "people_also_ask": [
+      "How much does a Buddhist retreat cost?",
+      "Is there a meditation center in Bhutan?",
+      "How much does it cost to stay at Kopan monastery?",
+      "What is the famous monastery in Bhutan?"
+     ],
+     "related_keywords": [
+      "Bhutan meditation retreat",
+      "Bhutan monastery retreat",
+      "Bhutan retreat",
+      "Meditation centre in Bhutan",
+      "Bhutan spiritual retreat",
+      "Bhutan yoga retreat",
+      "Meditation in Bhutan",
+      "Himalayan monastery retreat"
+     ]
+    },
+    "cta": null,
+    "created_at": "2026-10-15T13:13:49.024729+00:00"
+   },
+   {
+    "request_id": "1dfbf5e6-bf67-45a3-84c8-7fc37d62868a",
+    "piece_id": "f625de46-78d4-468b-8e86-4f1058184770",
+    "channel": "blog",
+    "ready_state": "ready",
+    "content_text": "## Where Two Worlds Meet\n\nNorthern Mongolia is not one landscape but two, pressed against each other along a boundary th...",
+    "route_hub_name": "a local Buddhist monastery \u2192 Sod Camp \u2192 Uran Togoo \u2192 Moron",
+    "route_segment_count": 10,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia",
+     "why_it_works": "The boundary between Central Asian steppe and Siberian taiga at Kh\u00f6vsg\u00f6l is a genuinely distinctive geographic fact that signals intellectual depth and rarity of experience \u2014 exactly what high-net-worth travellers who have already seen the world's standard destinations are searching for. Anchoring awareness content in a striking, verifiable insight rather than scenery alone gives this piece SEO traction while matching the brand's cultured, precise voice.",
+     "formula_fit": "Hook-Insight-CTA: the Hook is the ecological crossroads at Kh\u00f6vsg\u00f6l \u2014 two biomes meeting in one landscape \u2014 as a concrete, unexpected threshold that re-frames what northern Mongolia actually is. The Insight develops through each stop: the volcanic caldera at Uran Togoo, the freshwater volume of Kh\u00f6vsg\u00f6l, the Tsaatan whose culture sits precisely at this taiga boundary, and the ger camp as a base within the national park. The CTA invites the reader to consider what a journey shaped around this convergence might feel like.",
+     "best_final_style": "Structure the piece around the idea of convergence \u2014 geographic, ecological, and cultural \u2014 as the organising logic for this section of the journey. Lead with Lake Kh\u00f6vsg\u00f6l and its position at the boundary between Central Asian steppes and Siberian taiga forests as the central anchor. Develop the freshwater significance of the lake (70 percent of Mongolia's fresh water, 0.4 percent of the world's fresh surface water) as a measure of the landscape's scale and consequence. Move outward from there: the volcanic caldera at Uran Togoo, geologically recent at 20,000\u201324,000 years old, as another marker of northern Mongolia's distinctive physical character; M\u00f6r\u00f6n as the gateway that frames the journey north; the Tsaatan in the remote taiga as a human echo of this same ecological threshold \u2014 a semi-nomadic indigenous community whose seasonal camps of urts move through the forest as the reindeer require. Use the Sod Camp at the edge of Kh\u00f6vsg\u00f6l National Park as evidence of how a journey here is structured around the landscape. Close with a brief reference to the monastery ruins (Day 14) as a single sentence. The piece should be structured with clear H2 sections: one per major stop. End with a CTA paragraph that invites considered planning rather than urgency. Include a short FAQ section drawing on the Tsaatan, the lake, and the national park."
+    },
+    "atom": {
+     "text": "ruins of an ancient monastery \u2014 visit",
+     "activity_type": "culture",
+     "emotional_hook": "encounter historical loss and cultural memory",
+     "season_note": null
+    },
+    "tour": {
+     "name": "Mongolia: Kh\u00f6vsg\u00f6l Lake and Gobi Desert \u2014 15 Days",
+     "destination": "Mongolia"
+    },
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": [
+      "Khovsgol and gobi tour mongolia price",
+      "Khovsgol and gobi tour mongolia reviews",
+      "Khovsgol and gobi tour mongolia cost",
+      "Gobi tour Tourist camp",
+      "Mongolia adventure tour",
+      "Tour operators in Mongolia",
+      "Travel buddies mongolia reviews",
+      "Gobi travel"
+     ]
+    },
+    "cta": null,
+    "created_at": "2026-10-15T13:13:48.272003+00:00"
+   },
+   {
+    "request_id": "15e682d0-160d-4104-8476-56ad983b2807",
+    "piece_id": "18b85893-e849-4335-abcf-ca94e39be78a",
+    "channel": "blog",
+    "ready_state": "ready",
+    "content_text": "## The Weight of 1937\n\n1937.\n\nFor a moment, let the year stand alone. Across Mongolia, the political purges of the 1930s...",
+    "route_hub_name": "a local Buddhist monastery \u2192 Sod Camp \u2192 Uran Togoo \u2192 Moron",
+    "route_segment_count": 10,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "What Silence Leaves Behind: Understanding Mongolia Through Its Ruins",
+     "why_it_works": "High-net-worth travelers who have seen many famous monuments are rarely introduced to Mongolia through the lens of what was deliberately erased \u2014 this angle positions the country's layered grief and memory as the reason serious cultural travelers choose it over more predictable destinations.",
+     "formula_fit": "Hook-Insight-CTA: Hook \u2014 the jarring fact that a monastery was not abandoned but destroyed in a specific political moment (1937); Insight \u2014 visiting ruins of deliberate destruction is a different act than visiting preserved heritage, and Mongolia carries this distinction quietly; CTA \u2014 this is the kind of cultural depth that shapes an itinerary worth pursuing.",
+     "best_final_style": "Open with the weight of the date \u2014 1937 \u2014 without explaining it immediately, letting the reader sit with it for a sentence before the context arrives. Tone should be measured, contemplative, and never mournful in a melodramatic way. Lead with the ruins themselves as a physical fact on Day 14, then widen to why the 1937 purges matter to understanding Mongolia's cultural memory. Structure: a reflective opening paragraph, one H2 on what the ruins represent historically, one H2 on why encountering historical loss is different from encountering heritage that survived, and a closing paragraph gesturing toward the full 15-day journey without operational detail. Do not invent sensory details, guide dialogue, or any scene not grounded in the content seed."
+    },
+    "atom": {
+     "text": "ruins of an ancient monastery \u2014 visit",
+     "activity_type": "culture",
+     "emotional_hook": "encounter historical loss and cultural memory",
+     "season_note": null
+    },
+    "tour": {
+     "name": "Mongolia: Kh\u00f6vsg\u00f6l Lake and Gobi Desert \u2014 15 Days",
+     "destination": "Mongolia"
+    },
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": [
+      "Khovsgol and gobi tour mongolia price",
+      "Khovsgol and gobi tour mongolia reviews",
+      "Khovsgol and gobi tour mongolia cost",
+      "Gobi tour Tourist camp",
+      "Mongolia adventure tour",
+      "Tour operators in Mongolia",
+      "Travel buddies mongolia reviews",
+      "Gobi travel"
+     ]
+    },
+    "cta": null,
+    "created_at": "2026-10-13T04:00:34.824981+00:00"
+   }
+  ],
+  "total": 5
+ }
+}

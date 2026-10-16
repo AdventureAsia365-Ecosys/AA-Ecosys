@@ -1,0 +1,54 @@
+**AA-817 plan review: the plan needs corrections before work starts. PR-1 and PR-2 fit in this session. PR-3 fits only once its guards are fixed and if Nghiệp approves the Infra PR early. PR-4 does not fit.**
+
+I checked the plan against CIS `origin/main` `4646b6f7` (the plan read `90387fb4`), Infra `2a88b38`, `db-schema-reference.md` and `probe-after-229.json`. I ran nothing against AWS or the DB.
+
+## A. Factual errors in the plan
+1. **Migration number.** 238 is taken: `api/migrations/238_cohere_embed_global_profile.sql` (#763, AA-856). The master-read + NULLIF migration is **239** or later. Fix §3 item 1, §5 and PR-3 ("238" appears in all three).
+2. **Flag #3 state.** §1A row 3 says `aa544:stage5:get_piece_pool` is OFF. The live verify shows it is **ON**, with `used_tenant_pool=True` and 404 for other tenants. W1 is therefore not "flip #3" but "make the live, non-fail_closed #3 fail_closed" (`services/acp_content_writing/service.py:2113-2115`), which raises its priority. Flags #4 and #5 still need a GET.
+3. **Live proof for #1 and #2 already exists** (`docs/audits/2026-10-16-S239-in-progress-audit/aa817-flags-verify/`). W0 shrinks to the code change plus one more DELETE to get the log line.
+4. **Why the runner is "exempt".** §0 and the pools section say aa_cis_admin is exempt as owner (D2). That is only true for the 229/237 tables. On the 8 FORCE tables, the probe shows the runner still reads everything (`rls_active_for_me=false`, foreign == total), even though it is NOSUPERUSER and NOBYPASSRLS. The only role it inherits is `rds_superuser` (RDS behaviour). In CI the runner `cistest` is a SUPERUSER (`ci.yml:141`, `tests/integration/conftest.py:7`). Neither case is the owner exemption, and this breaks X1 (see D).
+5. **Guard contradiction in §3 item 3 and §5.1.** `seo_context` is both one of the 6 "no-NULLIF" tables (expected `''` → 0/0) and one of the 3 master-read tables (master rows visible under any GUC). After the master-read policy, aa_app_user under `''` sees about 918 master rows on seo_context, and also on pt/rt. The guard must say: `''` gives 0 non-master rows, and 0/0 only on generated_content, quality_scores, content_exports, webhook_deliveries and pipeline_runs.
+6. **"No test references the flags" (§1A) is wrong.** `tests/integration/test_aa544_stage1_tenant_pool_leak.py` exists. `tests/unit/test_aa815_unpublish_disconnect.py:74` and `tests/integration/test_aa815_publish_log_sql.py:48` exercise the path with the pool off.
+7. **Table count.** §6 says "all 14 RLS tables"; §0 and X1.2 count 15. Use 15.
+
+## B. Tenant-reachable routes the inventory missed
+They take a tenant JWT directly, not under `/v1`:
+- `api/routers/admin_pipeline.py:4675` `_resolve_brand_tenant_id` (tenant JWT first) → GET `/admin/brand-identity` (:4708), POST `/admin/brand-identity` (:4781, INSERT/UPDATE `shared.tenant_brand_rules` :4823-4839, INSERT `shared.tenant_seo_config` :4850), POST `/upload` (:4884), POST `/parse` (:4939). There is a tenant BFF route for it: `frontend/app/api/tenant/pipeline/brand-identity`. The tables have no RLS; aa_app_user has SELECT only.
+- `api/routers/admin_atoms.py:74-88` `_resolve_atom_owner_scope` (tenant JWT → `owner_scope`) → GET `/admin/atoms` (:203), GET `/admin/atoms/summary` (:320), **PATCH `/admin/atoms/{atom_id}` (:414), a tenant write on `acp_contract.tour_atoms`**. W7 plans only `FOR SELECT TO aa_app_user` on tour_atoms, so this route either stays on MAIN as a documented exception or W7 also needs an UPDATE policy and grant.
+- Add both groups to §1 (1C/1E) and to F2.
+
+## C. Grants and policies the plan forgot
+1. **Write grants on tables with no RLS.** aa_app_user already has INSERT/UPDATE on `acp_shared.angle_gate_option`, `acp_shared.tenant_atom_state` and `acp_shared.year_plan`. A tenant-pool connection can write any tenant's rows there today. Cheap hardening now: REVOKE INSERT, UPDATE until each table gets RLS (W3/W8). Don't wait for the route moves.
+2. **The no-RLS list in §0 is incomplete.** aa_app_user also has SELECT with no RLS on:
+   - `shared.tenants`, including `api_key_hash`, read by #14 and /v1/quota;
+   - `shared.tenant_brand_rules`, `shared.tenant_seo_config`, `shared.tenant_export_config`;
+   - `shared.llm_call_log`, `shared.decision_log`, `shared.dfs_call_log`, `shared.jev_tenant_allowlist`, `shared.unmapped_market_requests`.
+
+   A forgotten WHERE on these under the tenant pool leaks other tenants' rows. List them in §0, and either add them to the AA-848 guard scope or revoke.
+3. **W0 `_disconnect`** (`api/routers/v1_integrations.py:506`, `:523`): besides `fail_closed=True` and the log, check that the DELETE result is `DELETE 1`. Under RLS a mismatched GUC deletes 0 rows silently after the secret was tombstoned at :516. The row would then still say "connected" while the credentials are gone.
+4. **Connection limit before any more flips.** Migration 234 set `aa_app_user` CONNECTION LIMIT 15. The tenant pool is `max_size=5` per api task (`api/core/aa544_tenant_pool.py:77`), and api autoscale goes up to `max_capacity = 10` (Infra `modules/ecs/main.tf:428`). From the 4th api task on, `create_tenant_pool` returns None, so every fail_closed route there returns 503 and every non-fail_closed one silently uses the admin pool. Before W1 flips, add a precondition: raise the limit, cap api autoscale, or use lazy `min_size=0` with a per-route 503 alert.
+5. **Remaining fallback.** `_flag_enabled` (`aa544_tenant_pool.py:88-93`) returns False on a Redis error even with `fail_closed=True`, so a route can still fall back to the admin pool. The Done-when evidence therefore has to be the per-request `used_tenant_pool=True` log, not the flag state.
+
+## D. X1 steps that would break things
+1. **X1.5 owner-rights views over FORCE tables** (TripPlanner break). `acp_contract.v_active_tour_atoms` filters on `published_tours.master_status`, has a column grant to tripplanner and SELECT to aa_app_user. `v_trip_registry`, `shared.v_tour_photos` and `shared.v_destination_photos` are owner `aa_cis_admin` and granted to tripplanner and catalog_owner. Today they read the FORCE tables only through the rds_superuser bypass. Owned by `cis_owner` (no bypass), FORCE `tenant_isolation TO public` filters them to 0 rows without the master GUC. The plan's line "stay owner-exempt as long as cis_owner owns the base tables" is wrong for the 8 FORCE tables. Fix: before X1.5, add a `cis_owner` master-read policy (or `cis_owner_platform_all`) on the 8 FORCE tables, or drop FORCE there.
+2. **X1.5 scope.** The `catalog` schema is owned by aa_cis_admin, but its views must stay owned by `catalog_owner`; the `catalog_owner_aa_master_read` policy depends on that. `booking` and `tripplanner` schemas and objects are also owned by aa_cis_admin. Write "per-object" as `WHERE owner = 'aa_cis_admin' AND schema IN (<CIS list>)`, explicitly excluding catalog_owner-owned objects and booking/tripplanner.
+3. **Migrator under FORCE.** Old data migrations update FORCE tables without setting the GUC (`149_normalize_country_srilanka_okinawa.sql`, `152_backfill_null_country.sql`). As `db_migrator`/`cis_owner` without the bypass, such a migration silently touches 0 rows. Migrations also need `rds_superuser` for `CREATE EXTENSION` (234, 041) and CREATEROLE for `ALTER ROLE … CONNECTION LIMIT` (234). X1.0 must give the migrator these or a bypass policy, not only catalog_owner and ADMIN on aa_app_user.
+4. **Schema dump.** `.github/workflows/db-schema-dump.yml:94-104` also reuses the **api service task def** and its DATABASE_URL, not only DB Migrate. As cis_app, `information_schema` hides objects cis_app has no grant on (booking.*, tripplanner.*), which produces a bogus "structure changed" root PR. Move it to the migrator task def in X1.3.
+5. **Secret access stays wide open.** The ECS task role has `secretsmanager:GetSecretValue` on `Resource = "*"` (`modules/ecs/main.tf:115-120`). The api and worker can still read `aa-cis/dev/rds` (admin) after the split, which defeats it. X1.3/X1.6 must scope this. Doing so breaks the CLAUDE.md S3-mediated ECS-exec pattern, which reads `aa-cis/dev/rds` inside the api container, so break-glass exec has to move to the migrator task def. `accounts/aa365/agent_session.tf:21` documents the same limit.
+6. **Silent cross-schema failure.** `services/photos/sync.py:99-104` reads `tripplanner.itinerary_components` and `tripplanner.tour_stop` and swallows errors (`except Exception` → `{}`). As cis_app with no tripplanner grant, photo sync degrades silently. X1.2 needs a TripPlanner-owner GRANT; X1.4 smoke must look for `photo_sync_itinerary_places_unavailable`, not only 42501.
+7. **Missed Lambda.** X1.3 lists the sweeper and canary but misses `api/lambda/s4_trigger/handler.py:19` (`DATABASE_URL`, optional).
+8. **Connection limit for cis_app.** "api max + worker max + margin" is above `max_connections` 181 at full autoscale: 10 tasks × 10 main pool, plus the worker `max(5, parallel+2)` (`shared/jobs/worker.py:323`), plus per-job pools (`services/export/handler.py:77-82` max 5, `services/ingestion/jev_gates.py:112` max 4, `shared/llm_client/decide.py:650/682` direct connects). Budget it as 181 − tripplanner 30 − booking 15 − aa_app_user 15 − reserved − break-glass, and cap autoscale to match.
+9. **CI for X1.**
+   - `tests/integration/conftest.py:83-103` and `ci.yml:141-144` must create `cis_owner`/`cis_app`.
+   - The superuser CI runner cannot show "silent 0 rows", so the X1.2 tests must `SET ROLE cis_app`.
+   - The 237 guard 1 refuses any other grantee on `shared.tenant_integrations` (`api/migrations/237_tenant_integrations_rls.sql:69-100`), and the tests re-apply 237 per test (`conftest.py:326-330`). Granting cis_app there breaks `test_aa817_*` unless that guard and the conftest change in the same PR.
+
+## E. Is the "finish this session" list realistic?
+- **PR-1:** realistic and smaller than planned, since the live proof for #1/#2 exists. Remaining: `_disconnect` fail_closed + log + DELETE-count check, fail_closed on #3 (live now), #4 and #5, unit tests, deploy, one more DELETE for the log proof. Settle C4 (connection limit) before flipping #4 and #5.
+- **PR-2:** realistic, but needs the fixed `''` expectations from A5.
+- **PR-3:** only if the migration is numbered 239+, the guards are fixed, and Nghiệp approves the Infra byte-copy PR early with `shared.job` idle. Otherwise ship the file-only PR and apply next session.
+- **PR-4:** not realistic. Move it to F1/F2.
+- **New follow-up items:**
+  - F2 gets the brand-identity and admin_atoms groups from B.
+  - F4 (X1) gets D1–D9 as prerequisites. X1 also depends on AA-807/AA-826, so it cannot finish this session.
+  - The REVOKE hardening in C1 fits as a tiny migration alongside PR-3.

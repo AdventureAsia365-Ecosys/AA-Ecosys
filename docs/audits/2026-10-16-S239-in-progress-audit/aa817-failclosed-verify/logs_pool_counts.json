@@ -1,0 +1,56 @@
+{
+    "queryLanguage": "CWLI",
+    "results": [
+        [
+            {
+                "field": "evt",
+                "value": "aa817_integration_disconnect"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "n",
+                "value": "3"
+            }
+        ],
+        [
+            {
+                "field": "evt",
+                "value": "aa544_stage5_fetch_piece"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "n",
+                "value": "4"
+            }
+        ],
+        [
+            {
+                "field": "evt",
+                "value": "aa817_latest_piece"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "n",
+                "value": "17"
+            }
+        ]
+    ],
+    "statistics": {
+        "recordsMatched": 24.0,
+        "recordsScanned": 70.0,
+        "estimatedRecordsSkipped": 0.0,
+        "bytesScanned": 10028.0,
+        "estimatedBytesSkipped": 0.0,
+        "logGroupsScanned": 1.0
+    },
+    "status": "Complete"
+}

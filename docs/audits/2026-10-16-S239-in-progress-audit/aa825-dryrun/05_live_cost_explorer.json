@@ -1,0 +1,82 @@
+{
+ "id": "5fb98b63-efb8-4e6a-9d78-d19b9ed1f34e",
+ "kind": "retention_cost_explorer_snapshot",
+ "status": "succeeded",
+ "attempt": 1,
+ "max_attempts": 2,
+ "payload": {
+  "dry_run": false,
+  "trigger": "manual",
+  "max_rows": 5991
+ },
+ "progress": {
+  "mode": "live",
+  "part": "superseded",
+  "phase": "done",
+  "cursors": {
+   "superseded": {
+    "id": "ffcba837-0849-4f93-aa60-6967b5badc4b",
+    "ts": "2026-10-12T09:24:48.692290+00:00"
+   }
+  },
+  "deleted_total": 5991
+ },
+ "result": {
+  "kind": "retention_cost_explorer_snapshot",
+  "mode": "live",
+  "parts": [
+   {
+    "part": "superseded",
+    "cursor": {
+     "id": "ffcba837-0849-4f93-aa60-6967b5badc4b",
+     "ts": "2026-10-12T09:24:48.692290+00:00"
+    },
+    "cutoff": "2026-10-15T00:00:00+00:00",
+    "newest": "2026-10-12T09:24:48.692290+00:00",
+    "oldest": "2026-09-23T11:06:50.214360+00:00",
+    "archive": false,
+    "batches": 2,
+    "deleted": 5991,
+    "objects": 0,
+    "candidates": 5991,
+    "object_keys": [],
+    "window_days": 1,
+    "archived_rows": 0
+   }
+  ],
+  "table": "shared.cost_explorer_snapshot",
+  "reason": "manual live run, approved max_rows",
+  "rollup": null,
+  "trigger": "manual",
+  "windows": {
+   "superseded": 1
+  },
+  "limit_rows": 5991,
+  "rollup_rows": 0,
+  "deleted_total": 5991,
+  "archived_total": 0,
+  "fk_protected_by": [],
+  "candidates_total": 5991,
+  "previous_live_deleted": null
+ },
+ "cost_usd": 0.0,
+ "llm_cost_usd": 0.0,
+ "error": null,
+ "cancel_requested": false,
+ "created_by": "admin:claude-code-s239",
+ "parent_job_id": null,
+ "locked_by": null,
+ "locked_until": null,
+ "run_after": "2026-10-16T04:21:54.370888+00:00",
+ "created_at": "2026-10-16T04:21:54.370888+00:00",
+ "started_at": "2026-10-16T04:21:55.074439+00:00",
+ "finished_at": "2026-10-16T04:21:55.640541+00:00",
+ "links": {
+  "tour_versions": [],
+  "content_pieces": [],
+  "tour_id": null,
+  "version_id": null,
+  "place_builds": [],
+  "graph_builds": []
+ }
+}

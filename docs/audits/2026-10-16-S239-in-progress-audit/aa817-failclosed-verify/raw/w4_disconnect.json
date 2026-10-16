@@ -1,0 +1,15 @@
+{
+ "at": "2026-10-16T06:48:39+00:00",
+ "method": "DELETE",
+ "path": "/v1/integrations/wordpress",
+ "status": 200,
+ "x_request_id": "31c418d7-72c1-4656-975d-c5bbe67ea5ee",
+ "body": {
+  "connected": false,
+  "site_url": null,
+  "connected_at": null,
+  "last_verified_at": null,
+  "last_verify_error": null,
+  "disconnected": true
+ }
+}

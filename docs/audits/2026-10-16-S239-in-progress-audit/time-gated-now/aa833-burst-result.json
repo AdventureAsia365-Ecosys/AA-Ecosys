@@ -1,0 +1,44 @@
+{
+  "started_utc": "2026-10-16T03:56:30.635428+00:00",
+  "ended_utc": "2026-10-16T03:57:41.544435+00:00",
+  "concurrency": 15,
+  "duration_s": 60.0,
+  "requests": 1770,
+  "rps": 29.5,
+  "status_counts": {
+    "200": 1660,
+    "503": 49,
+    "500": 61
+  },
+  "count_4xx": 0,
+  "count_429": 0,
+  "count_5xx": 110,
+  "count_err": 0,
+  "by_resource": {
+    "resource=catalog-tours": {
+      "200": 381
+    },
+    "resource=tiles": {
+      "200": 630
+    },
+    "resource=routes": {
+      "200": 126
+    },
+    "resource=countries": {
+      "200": 127
+    },
+    "resource=by-country": {
+      "200": 380
+    },
+    "resource=search": {
+      "503": 49,
+      "500": 61,
+      "200": 16
+    }
+  },
+  "latency_s": {
+    "p50": 0.189,
+    "p95": 0.76,
+    "max": 13.668
+  }
+}

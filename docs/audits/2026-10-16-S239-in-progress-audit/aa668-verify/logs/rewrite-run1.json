@@ -1,0 +1,120 @@
+{
+ "started": "2026-10-16T02:27:02.504Z",
+ "tenant": "terra-family",
+ "A": {
+  "console_errors": [
+   "Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "http_errors": [
+   "404 GET /api/tenant/v1/tours/pool/2cf487be-2a9a-4a64-b1d0-1cceaebd9361"
+  ],
+  "before_drawer_text": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days\nen-US\nCreated: 15 Oct, 13:54\nSUMMARY\n✏ Edit\nThis 12-day journey takes families from Luang Prabang across northern Laos and into Vietnam by b",
+  "panel_header": {
+   "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days",
+   "context": "Rewriting in en-US · for Tour catalog"
+  },
+  "dialog_count_after_request": 1,
+  "layout_starting": {
+   "vw": 1440,
+   "vh": 900,
+   "dialog": {
+    "x": 720,
+    "y": 0,
+    "w": 720,
+    "h": 900
+   },
+   "dialog_fits": true,
+   "page_overflow_x": 0,
+   "scrollY": 0
+  },
+  "progress_writing": {
+   "found": true,
+   "status": "running",
+   "revision": 1,
+   "steps": [
+    "Reading the original tour and search keywords:done",
+    "Writing your version:active",
+    "Checking facts, tone and SEO:pending",
+    "Revising what the checks flagged:pending",
+    "Polishing the details:pending",
+    "Saving to My Catalog Tours:pending"
+   ],
+   "text_chars": 1518
+  },
+  "panel_text_writing": "WRITING YOUR TOUR\nReading the original tour and search keywords\nWriting your version\nChecking facts, tone and SEO\nRevising what the checks flagged\nPolishing the details\nSaving to My Catalog Tours\nTITLE\nLaos to Vietnam by Bicycle and River: Luang Prabang to Hanoi in 12 Days\nSUBTITLE\nA 12-day cycling and boat journey from Luang Prabang through the Nam Ou gorge, across the Laos-Vietnam border, and down to Hanoi via Pha Din Pass and Cuc Phuong National Park\nSUMMARY\nThis 12-day route takes families with older children and teenagers from Luang Prabang to Hanoi by bicycle and boat, crossing one of So",
+  "layout_writing": {
+   "vw": 1440,
+   "vh": 900,
+   "dialog": {
+    "x": 720,
+    "y": 0,
+    "w": 720,
+    "h": 900
+   },
+   "dialog_fits": true,
+   "page_overflow_x": 0,
+   "scrollY": 0
+  },
+  "after_close": {
+   "dialogs": 0,
+   "row": {
+    "status_code": 200,
+    "id": "554ab6e8-1047-40cc-8c91-516b81c834a6",
+    "version_number": 4,
+    "status": "pending",
+    "edit_source": "ai_generated",
+    "job_status": "running",
+    "rewrite_language": "en-US"
+   },
+   "progress": {
+    "found": true,
+    "status": "running",
+    "revision": 1,
+    "steps": [
+     "Reading the original tour and search keywords:done",
+     "Writing your version:active",
+     "Checking facts, tone and SEO:pending",
+     "Revising what the checks flagged:pending",
+     "Polishing the details:pending",
+     "Saving to My Catalog Tours:pending"
+    ],
+    "text_chars": 3670
+   },
+   "row_text": " Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days Laos WRITING View progress →"
+  },
+  "reopened": {
+   "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days",
+   "context": "Rewriting in en-US · for Tour catalog",
+   "text": "WRITING YOUR TOUR\nReading the original tour and search keywords\nWriting your version\nChecking facts, tone and SEO\nRevising what the checks flagged\nPolishing the details\nSaving to My Catalog Tours\nTITLE\nLaos to Vietnam by Bicycle and River: Luang Prabang to Hanoi in 12 Days\nSUBTITLE\nA 12-day cycling "
+  },
+  "closed_again_at": "2026-10-16T02:27:48.707Z"
+ },
+ "B": {
+  "console_errors": [],
+  "http_errors": []
+ },
+ "events": [
+  "2026-10-16T02:27:24.404Z A: version drawer open, requesting rewrite",
+  "2026-10-16T02:27:24.955Z A: POST rewrite 200 version=554ab6e8-1047-40cc-8c91-516b81c834a6 job=a966eb32-93f5-4f4a-bc62-54a45d78403f",
+  "2026-10-16T02:27:41.170Z A: live progress {\"found\":true,\"status\":\"running\",\"revision\":1,\"steps\":[\"Reading the original tour and search keywords:done\",\"Writing your version:active\",\"Checking facts, tone and SEO:pending\",\"Revising what the checks flagged:pending\",\"Polishing the details:pending\",\"Saving to My Catalog Tours:pending\"],\"text_chars\":1518}",
+  "2026-10-16T02:27:44.539Z A: closed mid-write {\"status_code\":200,\"id\":\"554ab6e8-1047-40cc-8c91-516b81c834a6\",\"version_number\":4,\"status\":\"pending\",\"edit_source\":\"ai_generated\",\"job_status\":\"running\",\"rewrite_language\":\"en-US\"}",
+  "2026-10-16T02:27:48.707Z A: reopened via View progress and closed again; waiting for toast",
+  "2026-10-16T02:28:28.504Z ERROR TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('tr').filter({ hasText: 'Laos to Vietnam by Bicycle' }).first()\u001b[22m\n"
+ ],
+ "rewrite_post": {
+  "status": 200,
+  "path": "/api/tenant/v1/tours/pool/2cf487be-2a9a-4a64-b1d0-1cceaebd9361/rewrite",
+  "body": {
+   "version_id": "554ab6e8-1047-40cc-8c91-516b81c834a6",
+   "published_tour_id": "2cf487be-2a9a-4a64-b1d0-1cceaebd9361",
+   "version_number": 4,
+   "status": "pending",
+   "job_id": "a966eb32-93f5-4f4a-bc62-54a45d78403f",
+   "message": "Rewrite started — check My Catalog in ~30 seconds for results"
+  }
+ },
+ "version_id": "554ab6e8-1047-40cc-8c91-516b81c834a6",
+ "job_id": "a966eb32-93f5-4f4a-bc62-54a45d78403f",
+ "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('tr').filter({ hasText: 'Laos to Vietnam by Bicycle' }).first()\u001b[22m\n",
+ "finished": "2026-10-16T02:28:28.505Z"
+}

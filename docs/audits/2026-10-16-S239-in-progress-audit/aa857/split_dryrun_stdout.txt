@@ -1,0 +1,56 @@
+{
+ "mixed_live_segments_before": 96,
+ "mixed_live_segments_after_simulated": 22,
+ "member_rows_to_detach": 1678,
+ "live_member_rows_to_detach": 1610,
+ "affected_active_tours": 543,
+ "segments_minted": 857,
+ "segments_touched_for_platform_recompute": 8188,
+ "jev_same_place_pairs": 1725,
+ "jev_pairs_cached": 1267,
+ "jev_pairs_new": 458,
+ "jev_avg_cost_usd_30d": 1.5229093865484109e-05,
+ "jev_calls_30d": 6765,
+ "jev_cost_estimate_usd": 0.007,
+ "recent_recompute_jobs": [
+  {
+   "scope": "platform",
+   "n": 35,
+   "avg_cost": "0.0000",
+   "max_cost": "0.0000",
+   "avg_s": "181"
+  }
+ ],
+ "subjects_on_mixed": 27,
+ "subjects_new_rule": {
+  "no_member_on_tenant_tours": 15,
+  "seed": 12
+ },
+ "seed_rule_source": "deployed",
+ "slate_pool_at_deploy": {
+  "candidates": 240,
+  "kept": 220,
+  "skipped:no_member_matches_subject_place": 20
+ },
+ "slate_pool_after_repair": {
+  "candidates": 240,
+  "kept": 220,
+  "skipped:no_live_member": 4,
+  "skipped:no_member_on_tenant_tours": 12,
+  "skipped:no_member_matches_subject_place": 4
+ },
+ "proposed_subjects_at_deploy": {
+  "kept": 118,
+  "no_member_matches_subject_place": 19
+ },
+ "proposed_subjects_after_repair": {
+  "kept": 118,
+  "no_member_on_tenant_tours": 11,
+  "no_live_member": 2,
+  "no_member_matches_subject_place": 6
+ },
+ "inactive_member_rows_to_detach": 68,
+ "inactive_tours_with_detached_rows": 23,
+ "job_queue_now": []
+}
+OK scripts/out/s239_aa857_split_dryrun.json

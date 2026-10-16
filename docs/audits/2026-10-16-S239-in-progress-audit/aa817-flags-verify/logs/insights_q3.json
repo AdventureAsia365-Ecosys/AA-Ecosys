@@ -1,0 +1,86 @@
+{
+    "queryLanguage": "CWLI",
+    "results": [
+        [
+            {
+                "field": "evt",
+                "value": "DELETE /v1/integrations/facebook HTTP/1.1\" 200"
+            },
+            {
+                "field": "count()",
+                "value": "1"
+            }
+        ],
+        [
+            {
+                "field": "evt",
+                "value": "DELETE /v1/integrations/wordpress HTTP/1.1\" 200"
+            },
+            {
+                "field": "count()",
+                "value": "2"
+            }
+        ],
+        [
+            {
+                "field": "evt",
+                "value": "integration_disconnected"
+            },
+            {
+                "field": "count()",
+                "value": "1"
+            }
+        ],
+        [
+            {
+                "field": "evt",
+                "value": "aa544_stage5_fetch_piece"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "count()",
+                "value": "36"
+            }
+        ],
+        [
+            {
+                "field": "evt",
+                "value": "aa817_latest_piece"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "count()",
+                "value": "17"
+            }
+        ],
+        [
+            {
+                "field": "evt",
+                "value": "aa817_latest_piece"
+            },
+            {
+                "field": "pool",
+                "value": "False"
+            },
+            {
+                "field": "count()",
+                "value": "9"
+            }
+        ]
+    ],
+    "statistics": {
+        "recordsMatched": 66.0,
+        "recordsScanned": 12835.0,
+        "estimatedRecordsSkipped": 0.0,
+        "bytesScanned": 1421055.0,
+        "estimatedBytesSkipped": 0.0,
+        "logGroupsScanned": 1.0
+    },
+    "status": "Complete"
+}

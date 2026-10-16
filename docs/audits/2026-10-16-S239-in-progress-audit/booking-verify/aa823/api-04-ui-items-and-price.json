@@ -1,0 +1,180 @@
+{
+ "put_items": {
+  "status": 200,
+  "body": {
+   "id": "c08b67d5-e57e-44ec-9edd-e784a9308b07",
+   "version_number": 1,
+   "title": null,
+   "notes": "ZZ S239 test V1 (supply items)",
+   "total_price": null,
+   "currency": "USD",
+   "channel": null,
+   "valid_until": null,
+   "is_sent_to_customer": false,
+   "sent_at": null,
+   "sent_by": null,
+   "is_approved": false,
+   "approved_at": null,
+   "approved_by": null,
+   "approval_note": null,
+   "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "created_at": "2026-10-16T01:49:36.508472Z",
+   "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "updated_at": "2026-10-16T01:50:12.756835Z",
+   "badge": "draft",
+   "fx_locked": null,
+   "items": [
+    {
+     "id": "9d9cbc8b-80dc-4cf1-9e4a-ae2fe57fa998",
+     "position": 1,
+     "title": "ZZ S239 Hotel Thimphu, Deluxe Double, 2 nights",
+     "day_from": 1,
+     "day_to": 3,
+     "source_tour_id": null,
+     "notes": null,
+     "hotel_room_type_id": "209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+     "service_id": null,
+     "costs": [
+      {
+       "id": "d00c02bb-5b28-4246-9ba7-156d30a77daa",
+       "net_amount": "240.00",
+       "net_currency": "USD",
+       "supplier_note": "HTL-000001 ZZ S239 test Hotel Thimphu · ZZ S239 Deluxe Double BB ZZ S239 2026-27: 120.00 USD x 2 night",
+       "supplier_rate_id": "54b937e1-f263-4b0f-8602-5f60830ed76c"
+      }
+     ],
+     "supply": {
+      "kind": "room_type",
+      "id": "209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+      "code": "HTL-000001",
+      "label": "ZZ S239 test Hotel Thimphu · ZZ S239 Deluxe Double",
+      "active": true
+     }
+    },
+    {
+     "id": "042e3cdd-afdb-4ea8-9632-8416a08ca92d",
+     "position": 2,
+     "title": "ZZ S239 Thimphu valley guided day walk",
+     "day_from": 3,
+     "day_to": 3,
+     "source_tour_id": null,
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": "fabe33de-5293-48ae-b68d-16f753886531",
+     "costs": [
+      {
+       "id": "24bc5ef4-0ac7-443f-b7a4-888ae790f5d9",
+       "net_amount": "90.00",
+       "net_currency": "EUR",
+       "supplier_note": "SVC-000001 ZZ S239 test Thimphu valley guided day walk ZZ S239 2026-27: 45.00 EUR x 2 pax",
+       "supplier_rate_id": "074c7f37-464c-4839-b51a-12c63e183e13"
+      }
+     ],
+     "supply": {
+      "kind": "service",
+      "id": "fabe33de-5293-48ae-b68d-16f753886531",
+      "code": "SVC-000001",
+      "label": "ZZ S239 test Thimphu valley guided day walk",
+      "active": true
+     }
+    }
+   ],
+   "rate_defaults": [
+    {
+     "position": 1,
+     "on": "2026-12-01",
+     "rate_id": "54b937e1-f263-4b0f-8602-5f60830ed76c",
+     "net_amount": "240.00",
+     "net_currency": "USD"
+    },
+    {
+     "position": 2,
+     "on": "2026-12-03",
+     "rate_id": "074c7f37-464c-4839-b51a-12c63e183e13",
+     "net_amount": "90.00",
+     "net_currency": "EUR"
+    }
+   ]
+  }
+ },
+ "price": {
+  "status": 200,
+  "body": {
+   "quote": {
+    "channel": "b2c_tailor_made",
+    "currency": "USD",
+    "peak": false,
+    "priced_on": "2026-10-16",
+    "rule": {
+     "channel": "b2c_tailor_made",
+     "target_margin": "0.3000",
+     "floor_margin": "0.2000",
+     "peak_uplift_pts": "0.0300",
+     "card_fee_pct": "0.0300",
+     "valid_from": "2026-10-14"
+    },
+    "fx_rates": [
+     {
+      "currency": "EUR",
+      "rate_per_usd": "0.92000000",
+      "buffer_pct": "0.0250",
+      "as_of": "2026-10-15",
+      "source": "manual-dev S237 maker-checker test (AA-810)"
+     }
+    ],
+    "margin_applied": "0.3000",
+    "lines": [
+     {
+      "net_amount": "240.00",
+      "net_currency": "USD",
+      "net_usd": "240.00",
+      "sell_usd": "358.21",
+      "sell_amount": "358.21"
+     },
+     {
+      "net_amount": "90.00",
+      "net_currency": "EUR",
+      "net_usd": "97.83",
+      "sell_usd": "146.01",
+      "sell_amount": "146.01"
+     }
+    ],
+    "net_total_usd": "337.83",
+    "subtotal": "504.22",
+    "rounding_increment": "5",
+    "total": "505.00",
+    "override_total": null,
+    "final_total": "505.00",
+    "effective_margin": "0.3010",
+    "floor_margin": "0.2000",
+    "below_floor": false
+   },
+   "version": {
+    "id": "c08b67d5-e57e-44ec-9edd-e784a9308b07",
+    "version_number": 1,
+    "title": null,
+    "notes": "ZZ S239 test V1 (supply items)",
+    "total_price": "505.00",
+    "currency": "USD",
+    "channel": "b2c_tailor_made",
+    "valid_until": null,
+    "is_sent_to_customer": false,
+    "sent_at": null,
+    "sent_by": null,
+    "is_approved": false,
+    "approved_at": null,
+    "approved_by": null,
+    "approval_note": null,
+    "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "created_at": "2026-10-16T01:49:36.508472Z",
+    "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "updated_at": "2026-10-16T01:50:16.338604Z",
+    "badge": "draft",
+    "fx_locked": {
+     "rate": "1.00000000",
+     "as_of": "2026-10-16"
+    }
+   }
+  }
+ }
+}

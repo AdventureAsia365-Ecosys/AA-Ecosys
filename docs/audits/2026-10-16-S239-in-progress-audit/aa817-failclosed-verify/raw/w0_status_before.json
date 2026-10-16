@@ -1,0 +1,14 @@
+{
+ "at": "2026-10-16T06:48:35+00:00",
+ "method": "GET",
+ "path": "/v1/integrations/wordpress",
+ "status": 200,
+ "x_request_id": "0535dd27-bbee-41c2-afe3-ba540be753bf",
+ "body": {
+  "connected": false,
+  "site_url": null,
+  "connected_at": null,
+  "last_verified_at": null,
+  "last_verify_error": null
+ }
+}

@@ -1,0 +1,59 @@
+{
+ "at": "2026-10-16T06:48:17+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/reviews",
+ "status": 200,
+ "x_request_id": "2333bd42-fd02-4247-8477-130496f63bee",
+ "body": {
+  "data": [
+   {
+    "request_id": "3524ad2d-76f8-43ae-a84b-a4ecec7978a8",
+    "piece_id": "4b7826fd-e3b6-4742-9463-ebf3f0d034bf",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "Punakha Dzong was built where the Pho Chhu and Mo Chhu rivers meet, and that placement carried meaning from the start.\n\n...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "trust_building",
+     "label": "Trust-building"
+    },
+    "angle": {
+     "name": "Built at a Confluence: What Punakha Dzong's Location Tells You About Bhutanese Thinking",
+     "why_it_works": "The geographic and symbolic logic of siting a monastery-fortress at the meeting of two rivers is an intellectually substantive angle that positions WildKind as a brand that reads landscapes carefully \u2014 appealing directly to the thought-leadership purpose of LinkedIn and to conservation-minded partners who value contextual understanding over surface-level tourism.",
+     "formula_fit": "Problem-Insight-Proof-Action: Problem \u2014 most coverage of Punakha Dzong describes what it looks like rather than why it is where it is; Insight \u2014 the siting of a major religious and administrative centre at the confluence of the Pho Chhu and Mo Chhu reflects a deliberate relationship between landscape and institution; Proof \u2014 Punakha Dzong spans a peninsula between the Male and Female Rivers, connected to land by a wooden cantilever bridge, and was founded in 1637\u20131638 as the administrative and religious centre of Bhutan; Action \u2014 an invitation to consider how landscape-aware itinerary design changes what travellers understand.",
+     "best_final_style": "Tone: observational, landscape-led, calm \u2014 the voice of someone who reads a place before describing it. Open with the confluence itself: the Pho Chhu and Mo Chhu meeting at the peninsula where the dzong stands. Build one short paragraph on what that siting meant historically \u2014 administrative and religious centre, founded by Zhabdrung Ngawang Namgyal. One paragraph on what it still means: the Je Khenpo's winter residence, a functioning monastic institution. One sentence at most on WildKind's approach, drawn only from the brand's core idea about landscape, local knowledge, and light-footprint travel. CTA: a reflective question about how geography shapes meaning in a place. No emojis. Do not invent river symbolism or spiritual claims beyond what the seed states."
+    },
+    "atom": {
+     "text": "Punakha Dzong \u2014 visit courtyards and assembly hall",
+     "activity_type": "culture",
+     "emotional_hook": "fortress-monastery at the confluence of two rivers",
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "HIGH",
+     "people_also_ask": [
+      "How much does a Buddhist retreat cost?",
+      "Is there a meditation center in Bhutan?",
+      "How much does it cost to stay at Kopan monastery?",
+      "What is the famous monastery in Bhutan?"
+     ],
+     "related_keywords": [
+      "Bhutan meditation retreat",
+      "Bhutan monastery retreat",
+      "Bhutan retreat",
+      "Meditation centre in Bhutan",
+      "Bhutan spiritual retreat",
+      "Bhutan yoga retreat",
+      "Meditation in Bhutan",
+      "Himalayan monastery retreat"
+     ]
+    },
+    "cta": null,
+    "created_at": "2026-10-16T05:46:41.572575+00:00"
+   }
+  ],
+  "total": 1
+ }
+}

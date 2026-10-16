@@ -1,0 +1,51 @@
+{
+ "hotel": {
+  "id": "e8dfea00-4781-4ce9-ab43-f45778066a64",
+  "code": "HTL-000001"
+ },
+ "rooms": [
+  {
+   "id": "209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+   "name": "ZZ S239 Deluxe Double"
+  },
+  {
+   "id": "649b555a-e5fb-4d6e-8091-d8aba6753be7",
+   "name": "ZZ S239 Family Suite"
+  }
+ ],
+ "service": {
+  "id": "fabe33de-5293-48ae-b68d-16f753886531",
+  "code": "SVC-000001",
+  "unit": "person"
+ },
+ "contract_eur": {
+  "id": "f0241f6b-6f85-4367-8359-043c29cd26c5",
+  "currency": "EUR"
+ },
+ "rates": [
+  {
+   "id": "54b937e1-f263-4b0f-8602-5f60830ed76c",
+   "contract": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+   "target": "room_type:209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+   "net": "120.00",
+   "currency": "USD",
+   "unit": "room_night"
+  },
+  {
+   "id": "aba2f124-a34e-4f06-83dc-a83f67449823",
+   "contract": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+   "target": "room_type:649b555a-e5fb-4d6e-8091-d8aba6753be7",
+   "net": "210.00",
+   "currency": "USD",
+   "unit": "room_night"
+  },
+  {
+   "id": "074c7f37-464c-4839-b51a-12c63e183e13",
+   "contract": "f0241f6b-6f85-4367-8359-043c29cd26c5",
+   "target": "service:fabe33de-5293-48ae-b68d-16f753886531",
+   "net": "45.00",
+   "currency": "EUR",
+   "unit": "person"
+  }
+ ]
+}

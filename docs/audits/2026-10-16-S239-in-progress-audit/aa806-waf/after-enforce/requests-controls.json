@@ -1,0 +1,53 @@
+{
+  "window_start_utc": "2026-10-16T04:38:27.241+00:00",
+  "requests": [
+    {
+      "id": "C3",
+      "label": "HTML intro with every ../ link made absolute (otherwise identical to C1)",
+      "path": "/v1/content-writing/pieces/17da8923-45c7-4843-8223-cd4d88054bd6",
+      "body_bytes": 1590,
+      "status": 404,
+      "at": "2026-10-16T04:38:27.883+00:00"
+    },
+    {
+      "id": "C4",
+      "label": "one markdown link with ../ only",
+      "path": "/v1/content-writing/pieces/65654446-484a-499b-a3af-33604c0350e7",
+      "body_bytes": 75,
+      "status": 404,
+      "at": "2026-10-16T04:38:29.509+00:00"
+    },
+    {
+      "id": "C5",
+      "label": "one markdown link with ./ only",
+      "path": "/v1/content-writing/pieces/494fb8d0-0d3d-4f22-8bd6-dbc46c9185f0",
+      "body_bytes": 74,
+      "status": 404,
+      "at": "2026-10-16T04:38:31.172+00:00"
+    },
+    {
+      "id": "C6",
+      "label": "prose with ellipsis and slashes, no ../",
+      "path": "/v1/content-writing/pieces/0c9e60f0-ff6e-4c2c-af33-2af640da580d",
+      "body_bytes": 119,
+      "status": 404,
+      "at": "2026-10-16T04:38:32.822+00:00"
+    },
+    {
+      "id": "C7",
+      "label": "one HTML link with ../ only",
+      "path": "/v1/content-writing/pieces/88eae9e8-b383-4183-b647-8b00f40c297a",
+      "body_bytes": 91,
+      "status": 404,
+      "at": "2026-10-16T04:38:34.752+00:00"
+    },
+    {
+      "id": "C8",
+      "label": "one HTML img with ../ only",
+      "path": "/v1/content-writing/pieces/57faedb8-8913-4e20-b9c8-e246eedee62c",
+      "body_bytes": 81,
+      "status": 404,
+      "at": "2026-10-16T04:38:36.666+00:00"
+    }
+  ]
+}

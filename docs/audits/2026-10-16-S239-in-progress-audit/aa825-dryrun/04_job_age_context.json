@@ -1,0 +1,76 @@
+{
+ "succeeded": {
+  "total": 2547,
+  "oldest": [
+   {
+    "kind": "segment_research",
+    "created_at": "2026-09-28T16:34:54.440023+00:00",
+    "finished_at": "2026-09-28T16:35:39.323583+00:00"
+   },
+   {
+    "kind": "segment_research",
+    "created_at": "2026-09-28T16:38:03.414703+00:00",
+    "finished_at": "2026-09-28T16:38:24.822108+00:00"
+   },
+   {
+    "kind": "t2_rewrite",
+    "created_at": "2026-09-28T23:32:25.000825+00:00",
+    "finished_at": "2026-09-28T23:32:55.505647+00:00"
+   }
+  ]
+ },
+ "failed": {
+  "total": 4,
+  "oldest": [
+   {
+    "kind": "photo_sync",
+    "created_at": "2026-10-01T08:24:20.202024+00:00",
+    "finished_at": "2026-10-01T08:30:18.507938+00:00"
+   },
+   {
+    "kind": "recompute",
+    "created_at": "2026-10-06T04:47:23.166220+00:00",
+    "finished_at": "2026-10-06T04:57:56.525758+00:00"
+   },
+   {
+    "kind": "recompute",
+    "created_at": "2026-10-06T08:56:09.217928+00:00",
+    "finished_at": "2026-10-06T09:02:35.519015+00:00"
+   }
+  ]
+ },
+ "cancelled": {
+  "total": 4,
+  "oldest": [
+   {
+    "kind": "photo_sync",
+    "created_at": "2026-10-01T06:45:27.712027+00:00",
+    "finished_at": "2026-10-01T07:37:32.421288+00:00"
+   },
+   {
+    "kind": "photo_sync",
+    "created_at": "2026-10-01T09:52:22.814593+00:00",
+    "finished_at": "2026-10-01T10:13:30.911907+00:00"
+   },
+   {
+    "kind": "s1_rewrite",
+    "created_at": "2026-10-06T10:03:10.372251+00:00",
+    "finished_at": "2026-10-06T10:09:56.541578+00:00"
+   }
+  ]
+ },
+ "stopped_budget": {
+  "total": 0,
+  "oldest": []
+ },
+ "oldest_created_any": [
+  {
+   "kind": "segment_research",
+   "status": "succeeded",
+   "created_at": "2026-09-28T16:34:54.440023+00:00",
+   "finished_at": "2026-09-28T16:35:39.323583+00:00"
+  }
+ ],
+ "succeeded_created_before_2026-09-16": 0,
+ "failed_created_before_2026-07-18": 0
+}

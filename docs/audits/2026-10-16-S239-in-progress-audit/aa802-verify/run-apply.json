@@ -1,0 +1,71 @@
+{
+ "step": "apply",
+ "piece": "1f02cecb-efd6-4f9c-bf32-1c6efbf3c77b",
+ "request": "41e41098-ffa7-472a-bdb2-da0922f80c0a",
+ "tenant": "atlas-hearth",
+ "admin": {
+  "before": {
+   "status": 200,
+   "piece_status": "held",
+   "published": false,
+   "exported": false,
+   "tenant_copy": {
+    "published_at": null,
+    "exported_at": null,
+    "delivered_at": null,
+    "older_copy": false,
+    "edits_after_delivery": 0
+   },
+   "admin_edits": 0,
+   "len": 7083,
+   "flagged": 4
+  },
+  "row_found": true,
+  "cut_enabled": true,
+  "apply": {
+   "status": 200,
+   "method": "POST",
+   "mode": "cut",
+   "warnings": [],
+   "len_after": 6888,
+   "piece_status_after": "held"
+  },
+  "after": {
+   "status": 200,
+   "piece_status": "held",
+   "admin_edits": 1,
+   "tenant_copy": {
+    "published_at": null,
+    "exported_at": null,
+    "delivered_at": null,
+    "older_copy": false,
+    "edits_after_delivery": 0
+   },
+   "len": 6888,
+   "has_target": false,
+   "flagged": 3,
+   "audit_row": {
+    "keys": [
+     "action",
+     "actor",
+     "details",
+     "created_at"
+    ],
+    "action": "content_piece.admin_sentence_cut",
+    "actor": "admin:2d8e5a2f-3722-4571-9327-177d10b74127",
+    "created_at": "2026-10-16T01:40:00.374051+00:00",
+    "mode": "cut",
+    "gate": "F9_cta_fact",
+    "before": "The shift from museum to market is not a step down in cultural seriousness; if anything, it sharpens the question of wha",
+    "after": "",
+    "length_before": 7083,
+    "length_after": 6888,
+    "published": false
+   }
+  },
+  "admin_edits_heading": "ADMIN EDITS · 1",
+  "console_errors": []
+ },
+ "cut_offset": 1369,
+ "after_anchor": "ar, a further stop on a day shaped around Bhutanese making and craft."
+}

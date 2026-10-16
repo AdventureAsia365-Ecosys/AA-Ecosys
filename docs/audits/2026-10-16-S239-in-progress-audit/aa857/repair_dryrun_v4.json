@@ -1,0 +1,158 @@
+{
+ "mixed_live_segments_before": 96,
+ "mixed_live_segments_after_simulated": 0,
+ "member_rows_to_detach": 2870,
+ "live_member_rows_to_detach": 2551,
+ "affected_active_tours": 652,
+ "inactive_member_rows_to_detach": 319,
+ "segments_minted": 1095,
+ "ids_reminted": 135,
+ "ids_reminted_by_reason": {
+  "alias_old": 98,
+  "foreign": 23,
+  "plan_id_fresh_mint": 14
+ },
+ "unclaimed_same_country_writes": 25,
+ "alias_merges": 357,
+ "alias_was_ids": 357,
+ "alias_was_ids_that_are_split_segments": 0,
+ "excluded_memberships_deleted": 665,
+ "existing_segments_renamed": 324,
+ "plan_segments_renamed": 0,
+ "plan_segments_renamed_place": 0,
+ "plan_segments_renamed_action_only": 0,
+ "plan_segments_renamed_action_only_ids": [],
+ "plan_segments_multi_place_after_simulated": 0,
+ "plan_member_violations_after_simulated": 0,
+ "plan_ids_retired": [
+  "81091842d86de755",
+  "9988d6cf9a982232",
+  "b08e0d016c05ff5a",
+  "d4609da3fd664e6e",
+  "dd2f86ff35d6ec39",
+  "e4cf412529213044",
+  "f14fb578a57c5eb8",
+  "f60a56fbf58add32",
+  "f734d599923500c2",
+  "f8aaa42206663558"
+ ],
+ "plan_ids_retired_count": 10,
+ "subjects_on_retired_plan_ids": {
+  "used": 2,
+  "proposed": 7,
+  "picked": 1
+ },
+ "plan_ids_emptied_by_rerun": [
+  "92a9a99ae4f0125b",
+  "a546f71244b7b1cc",
+  "af96d6b42ad1b638",
+  "ca7755283253c5c4",
+  "cd808c58723f7fde",
+  "d3cc492c20e806ff",
+  "d97b105781a19626",
+  "e37ac03172ceb3e4",
+  "e4a3c0873aaf9921",
+  "efa211a4658818c3",
+  "f1ce0648e75934f1",
+  "fdd61fc74750beba",
+  "fe1d5b0a5d58142e",
+  "fe8c48341e917ea0"
+ ],
+ "memberless_plan_ids_resolving_elsewhere": 2,
+ "subjects_on_memberless_plan_ids_resolving_elsewhere": {},
+ "member_rows_to_detach_by_reason": {
+  "other_country": 1678,
+  "retired": 187,
+  "same_country_other_place": 1005
+ },
+ "plan_guard_tours": 266,
+ "plan_guard_ids_reminted": 14,
+ "plan_guard_round1_aliases_dropped": 317,
+ "deployed_guard_remints_after_wrapper": 0,
+ "non_plan_segments_renamed_other_place": 140,
+ "segments_touched_for_platform_recompute": 1851,
+ "subjects_on_alias_was_ids": {
+  "proposed": 2
+ },
+ "subjects_on_split_segments": {
+  "used": 5,
+  "proposed": 20,
+  "picked": 2
+ },
+ "subjects_on_membership_changed": {
+  "used": 3,
+  "proposed": 16,
+  "picked": 1
+ },
+ "subjects_on_renamed_segments": {},
+ "subjects_predicted_after": {
+  "used": {
+   "seed": 5,
+   "no_live_member": 2,
+   "no_member_on_tenant_tours": 1
+  },
+  "proposed": {
+   "seed": 25,
+   "no_live_member": 7,
+   "on_alias_old_id": 2,
+   "no_member_on_tenant_tours": 4
+  },
+  "picked": {
+   "seed": 2,
+   "no_live_member": 1
+  }
+ },
+ "inflight_subject_requests": 3,
+ "subject_side_effects": {
+  "picked_used_subjects_on_alias_was_ids": 0,
+  "inflight_requests_need_decision": 3
+ },
+ "current_routes_on_alias_was_ids": 449,
+ "inflight_route_requests_on_watch_ids": 6,
+ "snapshot_members_bytes_estimate": 2113272,
+ "estimated_resegment_minutes_at_5s_per_tour": 54.3,
+ "blocking_jobs_now": [
+  {
+   "id": "be4a50cb-3eaf-49db-9c9f-9e109b7820a0",
+   "kind": "t9_write",
+   "status": "running",
+   "created_at": "2026-10-16 07:52:30.926216+00:00",
+   "created_by": "adhoc:s239_aa777_r7"
+  },
+  {
+   "id": "d008bc47-1026-4227-9c46-bec027267e59",
+   "kind": "t9_write",
+   "status": "running",
+   "created_at": "2026-10-16 07:52:31.098398+00:00",
+   "created_by": "adhoc:s239_aa777_r7"
+  }
+ ],
+ "job_queue_now": [],
+ "apply_would_refuse_on_jobs": true,
+ "gate": {
+  "mixed_live_segments_after_simulated == MAX_RESIDUAL": true,
+  "plan_segments_renamed_place == 0": true,
+  "plan_segments_multi_place_after_simulated == 0": true
+ },
+ "apply_allowed_by_dry_run": true,
+ "set_for_apply": {
+  "EXPECTED_DETACH_ROWS": 2870,
+  "APPROVED_RETIRED_PLAN_IDS": [
+   "81091842d86de755",
+   "9988d6cf9a982232",
+   "b08e0d016c05ff5a",
+   "d4609da3fd664e6e",
+   "dd2f86ff35d6ec39",
+   "e4cf412529213044",
+   "f14fb578a57c5eb8",
+   "f60a56fbf58add32",
+   "f734d599923500c2",
+   "f8aaa42206663558"
+  ],
+  "APPROVED_SUBJECT_SIDE_EFFECTS": {
+   "picked_used_subjects_on_alias_was_ids": 0,
+   "inflight_requests_need_decision": 3
+  }
+ }
+}
+RESULT: OK s3://aa-cis-bronze-005097885195/scripts/out/s239_aa857_repair_dry_run.json

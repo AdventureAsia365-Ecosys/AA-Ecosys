@@ -1,0 +1,428 @@
+{
+ "rif_room1": {
+  "path": "/supply/rate-in-force?on=2026-12-01&hotel_room_type_id=209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+  "status": 200,
+  "body": {
+   "rate": {
+    "id": "54b937e1-f263-4b0f-8602-5f60830ed76c",
+    "contract_id": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+    "contract_title": "ZZ S239 test contract 2026-27 USD",
+    "contract_status": "published",
+    "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+    "hotel_room_type_id": "209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+    "room_type_name": "ZZ S239 Deluxe Double",
+    "hotel_id": "e8dfea00-4781-4ce9-ab43-f45778066a64",
+    "hotel_code": "HTL-000001",
+    "hotel_name": "ZZ S239 test Hotel Thimphu",
+    "service_id": null,
+    "service_code": null,
+    "service_title": null,
+    "season": "ZZ S239 2026-27",
+    "valid_from": "2026-10-01",
+    "valid_to": "2027-12-31",
+    "unit": "room_night",
+    "meal_plan": "BB",
+    "pax_min": null,
+    "pax_max": null,
+    "net_amount": "120.00",
+    "currency": "USD",
+    "notes": null,
+    "in_force": true,
+    "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "created_at": "2026-10-16T01:47:24.927878Z",
+    "updated_at": "2026-10-16T01:47:24.927878Z"
+   }
+  }
+ },
+ "rif_room2": {
+  "path": "/supply/rate-in-force?on=2026-12-01&hotel_room_type_id=649b555a-e5fb-4d6e-8091-d8aba6753be7",
+  "status": 200,
+  "body": {
+   "rate": {
+    "id": "aba2f124-a34e-4f06-83dc-a83f67449823",
+    "contract_id": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+    "contract_title": "ZZ S239 test contract 2026-27 USD",
+    "contract_status": "published",
+    "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+    "hotel_room_type_id": "649b555a-e5fb-4d6e-8091-d8aba6753be7",
+    "room_type_name": "ZZ S239 Family Suite",
+    "hotel_id": "e8dfea00-4781-4ce9-ab43-f45778066a64",
+    "hotel_code": "HTL-000001",
+    "hotel_name": "ZZ S239 test Hotel Thimphu",
+    "service_id": null,
+    "service_code": null,
+    "service_title": null,
+    "season": "ZZ S239 2026-27",
+    "valid_from": "2026-10-01",
+    "valid_to": "2027-12-31",
+    "unit": "room_night",
+    "meal_plan": "BB",
+    "pax_min": null,
+    "pax_max": null,
+    "net_amount": "210.00",
+    "currency": "USD",
+    "notes": null,
+    "in_force": true,
+    "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "created_at": "2026-10-16T01:47:28.172841Z",
+    "updated_at": "2026-10-16T01:47:28.172841Z"
+   }
+  }
+ },
+ "rif_svc": {
+  "path": "/supply/rate-in-force?on=2026-12-03&service_id=fabe33de-5293-48ae-b68d-16f753886531&pax=2",
+  "status": 200,
+  "body": {
+   "rate": {
+    "id": "074c7f37-464c-4839-b51a-12c63e183e13",
+    "contract_id": "f0241f6b-6f85-4367-8359-043c29cd26c5",
+    "contract_title": "ZZ S239 test contract 2026-27 EUR (services)",
+    "contract_status": "published",
+    "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+    "hotel_room_type_id": null,
+    "room_type_name": null,
+    "hotel_id": null,
+    "hotel_code": null,
+    "hotel_name": null,
+    "service_id": "fabe33de-5293-48ae-b68d-16f753886531",
+    "service_code": "SVC-000001",
+    "service_title": "ZZ S239 test Thimphu valley guided day walk",
+    "season": "ZZ S239 2026-27",
+    "valid_from": "2026-10-01",
+    "valid_to": "2027-12-31",
+    "unit": "person",
+    "meal_plan": null,
+    "pax_min": null,
+    "pax_max": null,
+    "net_amount": "45.00",
+    "currency": "EUR",
+    "notes": null,
+    "in_force": true,
+    "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "created_at": "2026-10-16T01:47:31.463707Z",
+    "updated_at": "2026-10-16T01:47:31.463707Z"
+   }
+  }
+ },
+ "contracts": {
+  "path": "/suppliers/SUP-000001/contracts",
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "f0241f6b-6f85-4367-8359-043c29cd26c5",
+     "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+     "title": "ZZ S239 test contract 2026-27 EUR (services)",
+     "reference": null,
+     "valid_from": "2026-10-01",
+     "valid_to": "2027-12-31",
+     "currency": "EUR",
+     "payment_terms": null,
+     "cancellation_policy": null,
+     "notes": null,
+     "status": "published",
+     "phase": "in_force",
+     "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "created_by_name": "e2e-claude-code",
+     "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "updated_by_name": "e2e-claude-code",
+     "published_by": "58a130c7-5f39-4eec-8297-8a36c3318a63",
+     "published_by_name": "e2e-claude-code-2",
+     "published_at": "2026-10-16T01:49:01.362994Z",
+     "expired_by": null,
+     "expired_by_name": null,
+     "expired_at": null,
+     "created_at": "2026-10-16T01:46:59.597354Z",
+     "updated_at": "2026-10-16T01:49:01.362994Z"
+    },
+    {
+     "id": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+     "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+     "title": "ZZ S239 test contract 2026-27 USD",
+     "reference": "ZZ-S239-REF-1",
+     "valid_from": "2026-10-01",
+     "valid_to": "2027-12-31",
+     "currency": "USD",
+     "payment_terms": "ZZ S239 test: 30% deposit",
+     "cancellation_policy": "ZZ S239 test (edited): free until 30 days",
+     "notes": null,
+     "status": "published",
+     "phase": "in_force",
+     "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "created_by_name": "e2e-claude-code",
+     "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "updated_by_name": "e2e-claude-code",
+     "published_by": "58a130c7-5f39-4eec-8297-8a36c3318a63",
+     "published_by_name": "e2e-claude-code-2",
+     "published_at": "2026-10-16T01:48:58.016065Z",
+     "expired_by": null,
+     "expired_by_name": null,
+     "expired_at": null,
+     "created_at": "2026-10-16T01:39:47.472220Z",
+     "updated_at": "2026-10-16T01:48:58.016065Z"
+    }
+   ]
+  }
+ },
+ "hotel": {
+  "path": "/hotels/HTL-000001",
+  "status": 200,
+  "body": {
+   "id": "e8dfea00-4781-4ce9-ab43-f45778066a64",
+   "code": "HTL-000001",
+   "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+   "supplier_code": "SUP-000001",
+   "supplier_name": "ZZ S239 test Supplier AA-822",
+   "supplier_status": "active",
+   "destination_id": null,
+   "country_code": "BT",
+   "country_name": "Bhutan",
+   "internal_notes": "ZZ S239 test record (AA-823). Safe to deactivate.",
+   "status": "active",
+   "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "created_at": "2026-10-16T01:46:16.574910Z",
+   "updated_at": "2026-10-16T01:46:16.574910Z",
+   "name": "ZZ S239 test Hotel Thimphu",
+   "hotel_style": "Boutique",
+   "star_rating": 4,
+   "address": null,
+   "latitude": null,
+   "longitude": null,
+   "check_in_time": null,
+   "check_out_time": null,
+   "amenities": [],
+   "links": [],
+   "room_type_count": 2,
+   "rates_in_force": 2,
+   "destination": null,
+   "room_types": [
+    {
+     "id": "209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+     "hotel_id": "e8dfea00-4781-4ce9-ab43-f45778066a64",
+     "name": "ZZ S239 Deluxe Double",
+     "max_occupancy": 2,
+     "bed_types": [
+      "Queen"
+     ],
+     "internal_notes": null,
+     "status": "active",
+     "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "created_at": "2026-10-16T01:46:44.374712Z",
+     "updated_at": "2026-10-16T01:46:44.374712Z",
+     "rates_in_force": 1
+    },
+    {
+     "id": "649b555a-e5fb-4d6e-8091-d8aba6753be7",
+     "hotel_id": "e8dfea00-4781-4ce9-ab43-f45778066a64",
+     "name": "ZZ S239 Family Suite",
+     "max_occupancy": 4,
+     "bed_types": [
+      "King",
+      "Twin"
+     ],
+     "internal_notes": null,
+     "status": "active",
+     "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "created_at": "2026-10-16T01:46:46.553863Z",
+     "updated_at": "2026-10-16T01:46:46.553863Z",
+     "rates_in_force": 1
+    }
+   ],
+   "recent_activity": [
+    {
+     "id": "90e8f3e1-15e0-451e-b1ef-d08e4242b1b9",
+     "at": "2026-10-16T01:46:46.553863Z",
+     "action": "hotel_room_type.created",
+     "entity_type": "hotel_room_type",
+     "entity_label": "HTL-000001 \u00b7 ZZ S239 Family Suite",
+     "summary": "Added room type ZZ S239 Family Suite",
+     "actor": {
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     }
+    },
+    {
+     "id": "c1c77f23-6d87-4d04-a4ae-9927d85aae90",
+     "at": "2026-10-16T01:46:44.374712Z",
+     "action": "hotel_room_type.created",
+     "entity_type": "hotel_room_type",
+     "entity_label": "HTL-000001 \u00b7 ZZ S239 Deluxe Double",
+     "summary": "Added room type ZZ S239 Deluxe Double",
+     "actor": {
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     }
+    },
+    {
+     "id": "c131f8d1-d17e-4a6d-9ea9-75786baa3564",
+     "at": "2026-10-16T01:46:16.574910Z",
+     "action": "hotel.created",
+     "entity_type": "hotel",
+     "entity_label": "HTL-000001 ZZ S239 test Hotel Thimphu",
+     "summary": "Created hotel ZZ S239 test Hotel Thimphu (SUP-000001)",
+     "actor": {
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     }
+    }
+   ]
+  }
+ },
+ "hotel_rates": {
+  "path": "/hotels/HTL-000001/rates",
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "54b937e1-f263-4b0f-8602-5f60830ed76c",
+     "contract_id": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+     "contract_title": "ZZ S239 test contract 2026-27 USD",
+     "contract_status": "published",
+     "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+     "hotel_room_type_id": "209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+     "room_type_name": "ZZ S239 Deluxe Double",
+     "hotel_id": "e8dfea00-4781-4ce9-ab43-f45778066a64",
+     "hotel_code": "HTL-000001",
+     "hotel_name": "ZZ S239 test Hotel Thimphu",
+     "service_id": null,
+     "service_code": null,
+     "service_title": null,
+     "season": "ZZ S239 2026-27",
+     "valid_from": "2026-10-01",
+     "valid_to": "2027-12-31",
+     "unit": "room_night",
+     "meal_plan": "BB",
+     "pax_min": null,
+     "pax_max": null,
+     "net_amount": "120.00",
+     "currency": "USD",
+     "notes": null,
+     "in_force": true,
+     "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "created_at": "2026-10-16T01:47:24.927878Z",
+     "updated_at": "2026-10-16T01:47:24.927878Z"
+    },
+    {
+     "id": "aba2f124-a34e-4f06-83dc-a83f67449823",
+     "contract_id": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+     "contract_title": "ZZ S239 test contract 2026-27 USD",
+     "contract_status": "published",
+     "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+     "hotel_room_type_id": "649b555a-e5fb-4d6e-8091-d8aba6753be7",
+     "room_type_name": "ZZ S239 Family Suite",
+     "hotel_id": "e8dfea00-4781-4ce9-ab43-f45778066a64",
+     "hotel_code": "HTL-000001",
+     "hotel_name": "ZZ S239 test Hotel Thimphu",
+     "service_id": null,
+     "service_code": null,
+     "service_title": null,
+     "season": "ZZ S239 2026-27",
+     "valid_from": "2026-10-01",
+     "valid_to": "2027-12-31",
+     "unit": "room_night",
+     "meal_plan": "BB",
+     "pax_min": null,
+     "pax_max": null,
+     "net_amount": "210.00",
+     "currency": "USD",
+     "notes": null,
+     "in_force": true,
+     "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "created_at": "2026-10-16T01:47:28.172841Z",
+     "updated_at": "2026-10-16T01:47:28.172841Z"
+    }
+   ]
+  }
+ },
+ "service": {
+  "path": "/services/SVC-000001",
+  "status": 200,
+  "body": {
+   "id": "fabe33de-5293-48ae-b68d-16f753886531",
+   "code": "SVC-000001",
+   "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+   "supplier_code": "SUP-000001",
+   "supplier_name": "ZZ S239 test Supplier AA-822",
+   "supplier_status": "active",
+   "destination_id": null,
+   "country_code": "BT",
+   "country_name": "Bhutan",
+   "internal_notes": null,
+   "status": "active",
+   "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "created_at": "2026-10-16T01:46:52.943387Z",
+   "updated_at": "2026-10-16T01:46:52.943387Z",
+   "service_type": "activity",
+   "title": "ZZ S239 test Thimphu valley guided day walk",
+   "unit": "person",
+   "source_system": null,
+   "source_id": null,
+   "max_group_size": 12,
+   "duration_minutes": 240,
+   "inclusions": [],
+   "rates_in_force": 1,
+   "destination": null,
+   "recent_activity": [
+    {
+     "id": "87d53a11-1ca3-4e49-b848-980ac325b26d",
+     "at": "2026-10-16T01:46:52.943387Z",
+     "action": "service.created",
+     "entity_type": "service",
+     "entity_label": "SVC-000001 ZZ S239 test Thimphu valley guided day walk",
+     "summary": "Created service ZZ S239 test Thimphu valley guided day walk (SUP-000001)",
+     "actor": {
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     }
+    }
+   ]
+  }
+ },
+ "service_rates": {
+  "path": "/services/SVC-000001/rates",
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "074c7f37-464c-4839-b51a-12c63e183e13",
+     "contract_id": "f0241f6b-6f85-4367-8359-043c29cd26c5",
+     "contract_title": "ZZ S239 test contract 2026-27 EUR (services)",
+     "contract_status": "published",
+     "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+     "hotel_room_type_id": null,
+     "room_type_name": null,
+     "hotel_id": null,
+     "hotel_code": null,
+     "hotel_name": null,
+     "service_id": "fabe33de-5293-48ae-b68d-16f753886531",
+     "service_code": "SVC-000001",
+     "service_title": "ZZ S239 test Thimphu valley guided day walk",
+     "season": "ZZ S239 2026-27",
+     "valid_from": "2026-10-01",
+     "valid_to": "2027-12-31",
+     "unit": "person",
+     "meal_plan": null,
+     "pax_min": null,
+     "pax_max": null,
+     "net_amount": "45.00",
+     "currency": "EUR",
+     "notes": null,
+     "in_force": true,
+     "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "created_at": "2026-10-16T01:47:31.463707Z",
+     "updated_at": "2026-10-16T01:47:31.463707Z"
+    }
+   ]
+  }
+ }
+}

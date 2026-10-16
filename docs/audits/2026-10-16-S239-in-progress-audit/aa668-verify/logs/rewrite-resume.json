@@ -1,0 +1,44 @@
+{
+ "started": "2026-10-16T02:29:17.045Z",
+ "tenant": "terra-family",
+ "A": {
+  "console_errors": [],
+  "http_errors": [],
+  "row_resume": {
+   "status_code": 200,
+   "id": "554ab6e8-1047-40cc-8c91-516b81c834a6",
+   "version_number": 4,
+   "status": "ai_generated",
+   "edit_source": "ai_generated",
+   "job_status": "succeeded",
+   "rewrite_language": "en-US"
+  },
+  "progress_resume": {
+   "found": true,
+   "status": "done",
+   "revision": 2,
+   "steps": [
+    "Reading the original tour and search keywords:done",
+    "Writing your version:done",
+    "Checking facts, tone and SEO:done",
+    "Revising what the checks flagged:done",
+    "Polishing the details:done",
+    "Saving to My Catalog Tours:done"
+   ],
+   "text_chars": 10905
+  }
+ },
+ "B": {
+  "console_errors": [],
+  "http_errors": []
+ },
+ "events": [
+  "2026-10-16T02:29:27.844Z A(resume): {\"status_code\":200,\"id\":\"554ab6e8-1047-40cc-8c91-516b81c834a6\",\"version_number\":4,\"status\":\"ai_generated\",\"edit_source\":\"ai_generated\",\"job_status\":\"succeeded\",\"rewrite_language\":\"en-US\"} {\"found\":true,\"status\":\"done\",\"revision\":2,\"steps\":[\"Reading the original tour and search keywords:done\",\"Writing your version:done\",\"Checking facts, tone and SEO:done\",\"Revising what the checks flagged:done\",\"Polishing the details:done\",\"Saving to My Catalog Tours:done\"],\"text_chars\":10905}",
+  "2026-10-16T02:29:57.850Z ERROR TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('tr').filter({ hasText: 'Laos to Vietnam by Bicycle' }).first().getByRole('button', { name: /View progress/ })\u001b[22m\n"
+ ],
+ "version_id": "554ab6e8-1047-40cc-8c91-516b81c834a6",
+ "job_id": "a966eb32-93f5-4f4a-bc62-54a45d78403f",
+ "resume": true,
+ "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('tr').filter({ hasText: 'Laos to Vietnam by Bicycle' }).first().getByRole('button', { name: /View progress/ })\u001b[22m\n",
+ "finished": "2026-10-16T02:29:57.851Z"
+}

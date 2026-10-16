@@ -1,0 +1,13 @@
+{
+ "request": "GET https://booking.lumiguides.it.com/api/booking/trip-cases?limit=5 (signed in as e2e-claude-code via /api/auth/login)",
+ "http_status": 200,
+ "total": 8,
+ "items_case_and_status_only": [
+  ["TC-000008", "new_inquiry"],
+  ["TC-000007", "discovery"],
+  ["TC-000006", "new_inquiry"],
+  ["TC-000005", "new_inquiry"],
+  ["TC-000004", "new_inquiry"]
+ ],
+ "note": "Customer fields removed from the evidence on purpose."
+}

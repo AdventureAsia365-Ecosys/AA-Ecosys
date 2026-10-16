@@ -1,0 +1,31 @@
+{
+ "create": {
+  "status": 201,
+  "body": {
+   "id": "e4cd95e1-6ebe-481c-a8e1-6d1155a37f96",
+   "status": "pending",
+   "created_by": {
+    "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "name": "e2e-claude-code"
+   },
+   "created_at": "2026-10-16T01:56:41.756456Z",
+   "approved_by": null,
+   "approved_at": null,
+   "can_approve": false,
+   "channel": "b2b",
+   "target_margin": "0.1500",
+   "floor_margin": "0.1000",
+   "peak_uplift_pts": "0.0300",
+   "card_fee_pct": "0.0300",
+   "valid_from": "2027-01-01",
+   "note": "ZZ S239 test rule row (AA-683 pending-row layout check); same values as the b2b seed, so prices do not change"
+  }
+ },
+ "self_approve": {
+  "status": 403,
+  "body": {
+   "detail": "own_row",
+   "message": "maker-checker: a second person must approve a row you created"
+  }
+ }
+}

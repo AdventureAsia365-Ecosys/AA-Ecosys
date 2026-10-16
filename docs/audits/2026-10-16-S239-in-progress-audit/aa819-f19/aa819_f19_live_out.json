@@ -1,0 +1,61 @@
+{
+ "image": "",
+ "gate_before": {
+  "gate": "F19_authenticity",
+  "passed": false,
+  "violations": [
+   "reads as a customer review, rating or testimonial ('\"This was the best trip of my life, the guides were incredib') \u2014 the brand never publishes reviews or customer quotes; say it in the brand's own voice or cut it: '\"This was the best trip of my life, the guides were incredible,\" says Sarah from London, who travelled with us last spring.'",
+   "speaks as a customer or traveller in the first person ('I booked') \u2014 write in the brand's own voice, or cut it: 'I booked this tour with my husband and we were blown away by every single day.'",
+   "claims to be independent, unbiased or unsponsored ('independent travel reviewer') \u2014 the brand publishes this itself; cut the claim: 'As an independent travel reviewer with no ties to any operator, I can say this itinerary is the finest in Bhutan.'"
+  ],
+  "repairable": true,
+  "blocking": true
+ },
+ "status_before_cut": "held",
+ "held_reason_before_cut": "F19_authenticity: reads as a customer review, rating or testimonial ('\"This was the best trip of my life, the guides were incredib') \u2014 the brand never publishes reviews or customer quotes; say it in the brand's own voice or cut it: '\"This was the best trip of my life, the guides were incredible,\" says Sarah from London, who travelled with us last spring.'; speaks as a customer or traveller in the first person ('I booked') \u2014 write in the brand's own voice, or cut it: 'I booked this tour with my husband and we were blown away by every single day.'; claims to be independent, unbiased or unsponsored ('independent travel reviewer') \u2014 the brand publishes this itself; cut the claim: 'As an independent travel reviewer with no ties to any operator, I can say this itinerary is the finest in Bhutan.'",
+ "repair_entry": {
+  "gate_targeted": "F19_authenticity",
+  "repair_mode": "aup_cut",
+  "sentences_cut": 3,
+  "cut_sentences": [
+   "\"This was the best trip of my life, the guides were incredible,\" says Sarah from London, who travelled with us last spring.",
+   "I booked this tour with my husband and we were blown away by every single day.",
+   "As an independent travel reviewer with no ties to any operator, I can say this itinerary is the finest in Bhutan."
+  ],
+  "violations": [
+   "3 sentence(s) cut in code after the repair (AA-819 AUP guard)"
+  ],
+  "repairable": false
+ },
+ "status_after_cut": "approved",
+ "f19_after_cut": [
+  {
+   "gate": "F19_authenticity",
+   "passed": false,
+   "violations": [
+    "reads as a customer review, rating or testimonial ('\"This was the best trip of my life, the guides were incredib') \u2014 the brand never publishes reviews or customer quotes; say it in the brand's own voice or cut it: '\"This was the best trip of my life, the guides were incredible,\" says Sarah from London, who travelled with us last spring.'",
+    "speaks as a customer or traveller in the first person ('I booked') \u2014 write in the brand's own voice, or cut it: 'I booked this tour with my husband and we were blown away by every single day.'",
+    "claims to be independent, unbiased or unsponsored ('independent travel reviewer') \u2014 the brand publishes this itself; cut the claim: 'As an independent travel reviewer with no ties to any operator, I can say this itinerary is the finest in Bhutan.'"
+   ],
+   "repairable": true,
+   "blocking": false,
+   "sentences_cut": 3,
+   "cut_sentences": [
+    "\"This was the best trip of my life, the guides were incredible,\" says Sarah from London, who travelled with us last spring.",
+    "I booked this tour with my husband and we were blown away by every single day.",
+    "As an independent travel reviewer with no ties to any operator, I can say this itinerary is the finest in Bhutan."
+   ],
+   "waived": true,
+   "waived_reason": "3 sentence(s) cut in code after the repair (AA-819 AUP guard)"
+  }
+ ],
+ "gate_rerun_on_final_text": {
+  "gate": "F19_authenticity",
+  "passed": true,
+  "violations": [],
+  "repairable": true,
+  "blocking": true
+ },
+ "final_text": "Paro Taktsang clings to a granite cliff 900 metres above the valley floor.\n\nThe climb takes most of a morning, through blue pine and prayer flags, to the monastery's gate.\n\nRead the five-star reviews our travellers left, then talk to an Atlas & Hearth travel designer",
+ "cta_kept": true
+}

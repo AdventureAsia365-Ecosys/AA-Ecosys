@@ -33,3 +33,6 @@ secret_manager/
 # Calibration review files (xlsx/csv) — live on Google Drive (AdventureAsia folder), see docs/calib/README.md
 docs/calib/*.xlsx
 docs/calib/*.csv
+
+# Audit videos live in S3 (see each audit folder VIDEOS.md), not in git
+docs/audits/**/*.webm

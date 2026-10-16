@@ -1,0 +1,15 @@
+{
+ "at": "2026-10-16T08:35:27+00:00",
+ "method": "POST",
+ "path": "/v1/subjects/3833fa3d-9587-4e18-9dff-804652bf717d/pick",
+ "status": 200,
+ "body": {
+  "subject_id": "3833fa3d-9587-4e18-9dff-804652bf717d",
+  "channel": "linkedin",
+  "request_id": "41e94397-aa14-45f6-9e23-337a0362fd19",
+  "atom_id": "c64ebfc5d8c3b815",
+  "trip_id": "fe697018-6d81-456f-8082-e44a8dcfe566",
+  "status": "pending_goal",
+  "route_segment_ids": null
+ }
+}

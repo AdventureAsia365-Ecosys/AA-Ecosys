@@ -1,0 +1,17 @@
+# next free CIS migration number (S239, git fetch 16/10)
+CIS origin/main 2090bb22:
+api/migrations/230_tenant_daily_publish_limit.sql
+api/migrations/231_content_piece_label.sql
+api/migrations/233_retention_rollups_sargable_usage.sql
+api/migrations/234_connection_limits_pg_stat_statements.sql
+api/migrations/235_catalog_v_tour_place_lateral_day_text.sql
+api/migrations/236_tenant_config_all_channels.sql
+Infra origin/main 78736be:
+db/migrations/cis/230_tenant_daily_publish_limit.sql
+db/migrations/cis/231_content_piece_label.sql
+db/migrations/cis/233_retention_rollups_sargable_usage.sql
+db/migrations/cis/234_connection_limits_pg_stat_statements.sql
+db/migrations/cis/235_catalog_v_tour_place_lateral_day_text.sql
+db/migrations/cis/236_tenant_config_all_channels.sql
+No local/remote branch in AA-CIS-App holds 237+; open PRs: CIS #759 (no migration), Infra #105 (no migration).
+Dev shared.schema_versions max numeric CIS version: 236; '237' rows: 0 (dev-probe-before-237.json)

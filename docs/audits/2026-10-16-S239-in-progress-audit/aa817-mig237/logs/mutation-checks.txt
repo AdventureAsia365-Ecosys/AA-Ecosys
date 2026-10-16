@@ -1,0 +1,12 @@
+# Mutation checks of migration 237 (local throwaway PG16, S239). Each mutation applied to the file,
+# then tests/integration/test_aa817_rls_tenant_isolation.py + test_aa817_migration_237.py run; file restored
+# (cmp against the saved original) after each.
+baseline                         : 30 passed
+M1 ENABLE RLS line removed       : 6 failed, 24 passed   (isolation tests on seeded rows)
+M2 DELETE not granted            : apply aborted by guard 5 "aa_app_user lacks SELECT or DELETE" -> 1 failed, 29 errors
+M3 policy without NULLIF         : apply aborted by guard 3 "invalid input syntax for type uuid: """ -> 1 failed, 29 errors
+M4 policy TO public              : apply aborted by guard 4 "not TO aa_app_user only" -> 1 failed, 29 errors
+M5 USING (true)                  : apply aborted by guard 4 shape check "not the 229 template" -> 1 failed, 29 errors
+                                   (before the shape check was added: 5 isolation tests failed, guard silent on an empty table)
+M6 WITH CHECK (true)             : apply aborted by guard 4 shape check -> 1 failed, 29 errors
+M7 GRANT ... TRUNCATE            : apply aborted by guard 5 "has TRUNCATE ... (bypasses RLS)" -> 1 failed, 29 errors

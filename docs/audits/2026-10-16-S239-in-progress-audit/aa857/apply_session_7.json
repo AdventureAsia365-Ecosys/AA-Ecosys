@@ -1,0 +1,43 @@
+t7_slate requested for 4 tenants
+{
+ "mode": "apply",
+ "phase": "done",
+ "halted": null,
+ "result": "OK",
+ "progress": {
+  "done": 652,
+  "tours": 652,
+  "failed": {}
+ },
+ "remints": 123,
+ "jobs": {
+  "recompute": {
+   "id": "004a2983-ce3a-43b2-8ae0-69599a838d90",
+   "created": true,
+   "segments": 1962,
+   "at": "2026-10-16T08:18:53.439848+00:00"
+  },
+  "t7_slate": {
+   "20d07d32-ed98-405f-81d5-0c2399c9fcdf": {
+    "id": "bf12e0ab-71b1-4669-9ae7-856b76223702",
+    "status": "queued"
+   },
+   "692a3214-5cc2-46c6-a5ca-265389747269": {
+    "id": "e796e819-485e-4c87-a43d-8bcbfd075eee",
+    "status": "queued"
+   },
+   "885d4916-007b-415e-9261-909ad43c6d00": {
+    "id": "46a62fd4-1a5b-49a7-aa77-53c47d033a1e",
+    "status": "queued"
+   },
+   "9149d3c6-fcaf-4400-8e7a-4ed5e557e146": {
+    "id": "a9ef5f6d-6e63-4330-9ebc-2b2ba40d4e42",
+    "status": "queued"
+   }
+  }
+ },
+ "snapshot_key": "scripts/restore/aa857_20261016T080718Z.json",
+ "state_key": "scripts/out/s239_aa857_repair_state.json",
+ "elapsed_s": 1.6
+}
+RESULT: OK s3://aa-cis-bronze-005097885195/scripts/out/s239_aa857_repair_apply.json

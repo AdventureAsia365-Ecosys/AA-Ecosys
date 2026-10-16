@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T06:48:25+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/f5e6aa33-4113-496b-9567-3591e9cbdef4/latest-piece",
+ "status": 200,
+ "x_request_id": "80e8e741-8805-491b-a871-e9abc574bfd9",
+ "body": {
+  "piece": {
+   "piece_id": "f15221c8-3285-4b37-b552-5ef620574ee4",
+   "angle_gate_request_id": "f5e6aa33-4113-496b-9567-3591e9cbdef4",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "The site chosen for Punakha Dzong in 1637 raises a question that architecture alone cannot answer.\n\nZhabdrung Ngawang Na...",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-16T05:46:41.389676+00:00"
+  }
+ }
+}

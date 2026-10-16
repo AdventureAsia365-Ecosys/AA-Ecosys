@@ -1,0 +1,404 @@
+{
+ "contract_usd": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "f6031b78-1ad9-4ca6-9038-df171895b8df",
+     "at": "2026-10-16T01:48:58.016065Z",
+     "actor": {
+      "type": "staff",
+      "id": "58a130c7-5f39-4eec-8297-8a36c3318a63",
+      "name": "e2e-claude-code-2"
+     },
+     "action": "supplier_contract.published",
+     "entity_type": "supplier_contract",
+     "entity_id": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+     "entity_label": "SUP-000001 \u00b7 ZZ S239 test contract 2026-27 USD",
+     "summary": "Published contract ZZ S239 test contract 2026-27 USD",
+     "before": {
+      "status": "draft"
+     },
+     "after": {
+      "status": "published"
+     }
+    },
+    {
+     "id": "e5e31680-3129-4c68-bfe2-da08912d4302",
+     "at": "2026-10-16T01:42:05.732203Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "supplier_contract.updated",
+     "entity_type": "supplier_contract",
+     "entity_id": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+     "entity_label": "SUP-000001 \u00b7 ZZ S239 test contract 2026-27 USD",
+     "summary": "Updated cancellation_policy",
+     "before": {
+      "cancellation_policy": null
+     },
+     "after": {
+      "cancellation_policy": "ZZ S239 test (edited): free until 30 days"
+     }
+    },
+    {
+     "id": "55618384-02b6-4658-a30c-362af61e86ea",
+     "at": "2026-10-16T01:39:47.472220Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "supplier_contract.created",
+     "entity_type": "supplier_contract",
+     "entity_id": "16d66dfa-51d6-4aad-9703-88ab29688beb",
+     "entity_label": "SUP-000001 \u00b7 ZZ S239 test contract 2026-27 USD",
+     "summary": "Created draft contract ZZ S239 test contract 2026-27 USD (USD)",
+     "before": null,
+     "after": {
+      "notes": null,
+      "title": "ZZ S239 test contract 2026-27 USD",
+      "status": "draft",
+      "currency": "USD",
+      "valid_to": "2027-12-31",
+      "reference": "ZZ-S239-REF-1",
+      "valid_from": "2026-10-01",
+      "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+      "payment_terms": "ZZ S239 test: 30% deposit",
+      "cancellation_policy": null
+     }
+    }
+   ],
+   "next_before": null
+  }
+ },
+ "contract_eur": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "14fb8905-075f-45d5-a817-de0eda6c5372",
+     "at": "2026-10-16T01:49:01.362994Z",
+     "actor": {
+      "type": "staff",
+      "id": "58a130c7-5f39-4eec-8297-8a36c3318a63",
+      "name": "e2e-claude-code-2"
+     },
+     "action": "supplier_contract.published",
+     "entity_type": "supplier_contract",
+     "entity_id": "f0241f6b-6f85-4367-8359-043c29cd26c5",
+     "entity_label": "SUP-000001 \u00b7 ZZ S239 test contract 2026-27 EUR (services)",
+     "summary": "Published contract ZZ S239 test contract 2026-27 EUR (services)",
+     "before": {
+      "status": "draft"
+     },
+     "after": {
+      "status": "published"
+     }
+    },
+    {
+     "id": "71d32b17-7f02-4905-a237-dce097aa24c0",
+     "at": "2026-10-16T01:46:59.597354Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "supplier_contract.created",
+     "entity_type": "supplier_contract",
+     "entity_id": "f0241f6b-6f85-4367-8359-043c29cd26c5",
+     "entity_label": "SUP-000001 \u00b7 ZZ S239 test contract 2026-27 EUR (services)",
+     "summary": "Created draft contract ZZ S239 test contract 2026-27 EUR (services) (EUR)",
+     "before": null,
+     "after": {
+      "notes": null,
+      "title": "ZZ S239 test contract 2026-27 EUR (services)",
+      "status": "draft",
+      "currency": "EUR",
+      "valid_to": "2027-12-31",
+      "reference": null,
+      "valid_from": "2026-10-01",
+      "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+      "payment_terms": null,
+      "cancellation_policy": null
+     }
+    }
+   ],
+   "next_before": null
+  }
+ },
+ "hotel": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "c131f8d1-d17e-4a6d-9ea9-75786baa3564",
+     "at": "2026-10-16T01:46:16.574910Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "hotel.created",
+     "entity_type": "hotel",
+     "entity_id": "e8dfea00-4781-4ce9-ab43-f45778066a64",
+     "entity_label": "HTL-000001 ZZ S239 test Hotel Thimphu",
+     "summary": "Created hotel ZZ S239 test Hotel Thimphu (SUP-000001)",
+     "before": null,
+     "after": {
+      "code": "HTL-000001",
+      "name": "ZZ S239 test Hotel Thimphu",
+      "links": [],
+      "address": null,
+      "latitude": null,
+      "amenities": [],
+      "longitude": null,
+      "hotel_style": "Boutique",
+      "star_rating": 4,
+      "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+      "country_code": "BT",
+      "check_in_time": null,
+      "check_out_time": null,
+      "destination_id": null,
+      "internal_notes": "ZZ S239 test record (AA-823). Safe to deactivate."
+     }
+    }
+   ],
+   "next_before": null
+  }
+ },
+ "service": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "87d53a11-1ca3-4e49-b848-980ac325b26d",
+     "at": "2026-10-16T01:46:52.943387Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "service.created",
+     "entity_type": "service",
+     "entity_id": "fabe33de-5293-48ae-b68d-16f753886531",
+     "entity_label": "SVC-000001 ZZ S239 test Thimphu valley guided day walk",
+     "summary": "Created service ZZ S239 test Thimphu valley guided day walk (SUP-000001)",
+     "before": null,
+     "after": {
+      "code": "SVC-000001",
+      "unit": "person",
+      "title": "ZZ S239 test Thimphu valley guided day walk",
+      "source_id": null,
+      "inclusions": [],
+      "supplier_id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+      "country_code": "BT",
+      "service_type": "activity",
+      "destination_id": null,
+      "internal_notes": null,
+      "max_group_size": 12,
+      "duration_minutes": 240
+     }
+    }
+   ],
+   "next_before": null
+  }
+ },
+ "case_TC-000007": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "075ce894-ce61-4faf-a91c-8339a495c9a0",
+     "at": "2026-10-16T01:49:35.802164Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "trip_case.created",
+     "entity_type": "trip_case",
+     "entity_id": "3f6f9fd1-43c7-40b3-956e-ca61f595f0e1",
+     "entity_label": "TC-000007",
+     "summary": "Created TC-000007 (discovery)",
+     "before": null,
+     "after": {
+      "pax": 2,
+      "status": "discovery",
+      "currency": "USD",
+      "countries": [
+       "BT"
+      ],
+      "pax_adults": 2,
+      "start_date": "2026-12-01",
+      "trip_style": null,
+      "customer_id": "c7eeafa0-8ff5-4e63-a695-f4ccf08eecfe",
+      "source_system": "manual"
+     }
+    }
+   ],
+   "next_before": null
+  }
+ },
+ "version_TC-000007_v1": {
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "2d18ef4d-5363-4324-840e-06cfb2b0ea04",
+     "at": "2026-10-16T01:50:16.338604Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "trip_case_version.priced",
+     "entity_type": "trip_case_version",
+     "entity_id": "c08b67d5-e57e-44ec-9edd-e784a9308b07",
+     "entity_label": "TC-000007 V1",
+     "summary": "Priced V1 at 505.00 USD",
+     "before": {
+      "channel": null,
+      "currency": "USD",
+      "total_price": null
+     },
+     "after": {
+      "peak": false,
+      "channel": "b2c_tailor_made",
+      "currency": "USD",
+      "fx_as_of": "2026-10-16",
+      "cost_lines": 2,
+      "below_floor": false,
+      "total_price": "505.00",
+      "floor_margin": "0.2000",
+      "net_total_usd": "337.83",
+      "computed_total": "505.00",
+      "fx_rate_locked": "1",
+      "override_total": null,
+      "override_reason": null,
+      "rule_valid_from": "2026-10-14",
+      "effective_margin": "0.3010"
+     }
+    },
+    {
+     "id": "a1803776-97c4-4393-8348-1f95745fe8ac",
+     "at": "2026-10-16T01:50:12.756835Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "trip_case_version.items_replaced",
+     "entity_type": "trip_case_version",
+     "entity_id": "c08b67d5-e57e-44ec-9edd-e784a9308b07",
+     "entity_label": "TC-000007 V1",
+     "summary": "Saved 2 item(s), removed 0",
+     "before": {
+      "items": []
+     },
+     "after": {
+      "items": [
+       {
+        "id": "9d9cbc8b-80dc-4cf1-9e4a-ae2fe57fa998",
+        "costs": [
+         {
+          "id": "d00c02bb-5b28-4246-9ba7-156d30a77daa",
+          "net_amount": "240.00",
+          "net_currency": "USD",
+          "supplier_note": "HTL-000001 ZZ S239 test Hotel Thimphu \u00b7 ZZ S239 Deluxe Double BB ZZ S239 2026-27: 120.00 USD x 2 night",
+          "supplier_rate_id": "54b937e1-f263-4b0f-8602-5f60830ed76c"
+         }
+        ],
+        "notes": null,
+        "title": "ZZ S239 Hotel Thimphu, Deluxe Double, 2 nights",
+        "day_to": 3,
+        "supply": {
+         "id": "209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+         "code": "HTL-000001",
+         "kind": "room_type",
+         "label": "ZZ S239 test Hotel Thimphu \u00b7 ZZ S239 Deluxe Double",
+         "active": true
+        },
+        "day_from": 1,
+        "position": 1,
+        "service_id": null,
+        "source_tour_id": null,
+        "hotel_room_type_id": "209a97cc-e5fe-4f1d-bf4e-a87d4257c685"
+       },
+       {
+        "id": "042e3cdd-afdb-4ea8-9632-8416a08ca92d",
+        "costs": [
+         {
+          "id": "24bc5ef4-0ac7-443f-b7a4-888ae790f5d9",
+          "net_amount": "90.00",
+          "net_currency": "EUR",
+          "supplier_note": "SVC-000001 ZZ S239 test Thimphu valley guided day walk ZZ S239 2026-27: 45.00 EUR x 2 pax",
+          "supplier_rate_id": "074c7f37-464c-4839-b51a-12c63e183e13"
+         }
+        ],
+        "notes": null,
+        "title": "ZZ S239 Thimphu valley guided day walk",
+        "day_to": 3,
+        "supply": {
+         "id": "fabe33de-5293-48ae-b68d-16f753886531",
+         "code": "SVC-000001",
+         "kind": "service",
+         "label": "ZZ S239 test Thimphu valley guided day walk",
+         "active": true
+        },
+        "day_from": 3,
+        "position": 2,
+        "service_id": "fabe33de-5293-48ae-b68d-16f753886531",
+        "source_tour_id": null,
+        "hotel_room_type_id": null
+       }
+      ],
+      "removed": [],
+      "price_cleared": false,
+      "rate_defaults": [
+       {
+        "on": "2026-12-01",
+        "rate_id": "54b937e1-f263-4b0f-8602-5f60830ed76c",
+        "position": 1,
+        "net_amount": "240.00",
+        "net_currency": "USD"
+       },
+       {
+        "on": "2026-12-03",
+        "rate_id": "074c7f37-464c-4839-b51a-12c63e183e13",
+        "position": 2,
+        "net_amount": "90.00",
+        "net_currency": "EUR"
+       }
+      ],
+      "costs_replaced": 2
+     }
+    },
+    {
+     "id": "ae205a9f-895b-4e0c-89e0-89d3b5e0e99a",
+     "at": "2026-10-16T01:49:36.508472Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "trip_case_version.created",
+     "entity_type": "trip_case_version",
+     "entity_id": "c08b67d5-e57e-44ec-9edd-e784a9308b07",
+     "entity_label": "TC-000007 V1",
+     "summary": "Created V1 from the trip legs",
+     "before": null,
+     "after": {
+      "item_count": 0,
+      "copied_from": null,
+      "trip_case_id": "3f6f9fd1-43c7-40b3-956e-ca61f595f0e1",
+      "version_number": 1
+     }
+    }
+   ],
+   "next_before": null
+  }
+ }
+}

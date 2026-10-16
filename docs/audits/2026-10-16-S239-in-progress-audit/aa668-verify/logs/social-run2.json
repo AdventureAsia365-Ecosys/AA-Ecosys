@@ -1,0 +1,325 @@
+{
+ "started": "2026-10-16T02:29:29.792Z",
+ "tenant": "terra-family",
+ "subject": "Uran Togoo — walk into the volcanic crater",
+ "console_errors": [],
+ "http_errors": [],
+ "posts": {
+  "pick": 1,
+  "goal": 1,
+  "write": 1
+ },
+ "events": [
+  "2026-10-16T02:29:41.304Z pick 200 request=72082375-edc4-44f1-a2d8-3317be6eb325",
+  "2026-10-16T02:29:43.645Z goal 202",
+  "2026-10-16T02:30:03.773Z angles ready (3)",
+  "2026-10-16T02:30:05.037Z write 202 piece=788f3568-f4d2-4a12-9572-982efb41aa56 job=undefined",
+  "2026-10-16T02:30:12.588Z streaming {\"found\":true,\"status\":\"running\",\"revision\":1,\"steps\":[\"Reading your topic and brand voice:done\",\"Writing your post:active\",\"Checking facts, tone and quality:pending\",\"Revising what the checks flagged:pending\",\"Saving to My Content:pending\"],\"text_chars\":832}",
+  "2026-10-16T02:30:33.791Z result shown",
+  "2026-10-16T02:30:39.464Z my content opened"
+ ],
+ "brand_before": {
+  "status": 200,
+  "version": 4,
+  "default_cta": "Message us to start planning your family trip."
+ },
+ "pick": {
+  "status": 200,
+  "path": "/v1/subjects/f886d436-4d2e-4ec1-b413-05d7ee1229e7/pick",
+  "body": {
+   "subject_id": "f886d436-4d2e-4ec1-b413-05d7ee1229e7",
+   "channel": "linkedin",
+   "request_id": "72082375-edc4-44f1-a2d8-3317be6eb325",
+   "atom_id": "6c3f2d32fd12acbe",
+   "trip_id": "60423d1c-ae4c-4697-845c-19e4c99b764a",
+   "status": "pending_goal",
+   "route_segment_ids": null
+  }
+ },
+ "request_id": "72082375-edc4-44f1-a2d8-3317be6eb325",
+ "goal_testids": [
+  "goal-promotion",
+  "goal-lead_generation",
+  "goal-conversion",
+  "goal-introduction_awareness",
+  "goal-trust_building",
+  "goal-engagement_conversation",
+  "goal-event_announcement",
+  "goal-product_service_explanation"
+ ],
+ "panel_header": {
+  "title": "Uran Togoo — walk into the volcanic crater",
+  "context": "Writing for LinkedIn · Segment"
+ },
+ "layout_goal": {
+  "vw": 1440,
+  "vh": 900,
+  "dialog": {
+   "x": 720,
+   "y": 0,
+   "w": 720,
+   "h": 900
+  },
+  "dialog_fits": true,
+  "page_overflow_x": 0,
+  "scrollY": 0
+ },
+ "goal_post": {
+  "status": 202,
+  "goal": "introduction_awareness",
+  "generating": true,
+  "status_field": "pending_goal",
+  "cta": null,
+  "keys": [
+   "request_id",
+   "tenant_id",
+   "atom_id",
+   "trip_id",
+   "channel",
+   "goal",
+   "cta",
+   "status",
+   "generating",
+   "generation_failed",
+   "dfs_paa_snapshot",
+   "route_segment_ids",
+   "created_at",
+   "updated_at",
+   "angles",
+   "subject_id",
+   "subject_score",
+   "subject_place",
+   "subject_action",
+   "subject_hub_name"
+  ]
+ },
+ "angles": [
+  "The Volcano That Shaped the Steppe RECOMMENDED Why it works: Leading with the geological fact that Uran Togoo last erupted 20,000–24,000 years ago gives parents",
+  "Two Landscapes, One Morning on Day 3 Why it works: Framing the steppe-and-forest contrast as a single trekking day makes the experience concrete and time-bound ",
+  "What a Protected Volcanic Landscape Teaches Without Trying Why it works: Centering the natural monument's protected status positions the trekking day as inheren"
+ ],
+ "layout_angles": {
+  "vw": 1440,
+  "vh": 900,
+  "dialog": {
+   "x": 720,
+   "y": 0,
+   "w": 720,
+   "h": 900
+  },
+  "dialog_fits": true,
+  "page_overflow_x": 0,
+  "scrollY": 0
+ },
+ "write_post": {
+  "status": 202,
+  "request_body": "{}",
+  "body": {
+   "piece_id": "788f3568-f4d2-4a12-9572-982efb41aa56",
+   "angle_gate_request_id": "72082375-edc4-44f1-a2d8-3317be6eb325",
+   "channel": null,
+   "ready_state": "in_progress"
+  }
+ },
+ "piece_id": "788f3568-f4d2-4a12-9572-982efb41aa56",
+ "t9_job_id": null,
+ "cta_prompt_seen_during_write": 0,
+ "progress_streaming": {
+  "found": true,
+  "status": "running",
+  "revision": 1,
+  "steps": [
+   "Reading your topic and brand voice:done",
+   "Writing your post:active",
+   "Checking facts, tone and quality:pending",
+   "Revising what the checks flagged:pending",
+   "Saving to My Content:pending"
+  ],
+  "text_chars": 832
+ },
+ "panel_text_writing": "Choose a content goal, then pick 1 of the 3 angles the system generates. You always choose — Adventure Asia never approves or blocks this for you.\n\n1 · Goal\n2 · Angle\n3 · Write\n3 · WRITE\nAngle: The Volcano That Shaped the Steppe · Goal: introduction_awareness · Channel: linkedin\nWRITING YOUR POST\nReading your topic and brand voice\nWriting your post\nChecking facts, tone and quality\nRevising what the checks flagged\nSaving to My Content\nUran Togoo last erupted roughly 20,000 to 24,000 years ago, and the steppe around it still carries that geological story.\n\nPreserved within the Uran Togoo-Tulga Uul Natural Monument in Bulgan Province, this dormant volcano is the largest of several in the surrou",
+ "layout_writing": {
+  "vw": 1440,
+  "vh": 900,
+  "dialog": {
+   "x": 720,
+   "y": 0,
+   "w": 720,
+   "h": 900
+  },
+  "dialog_fits": true,
+  "page_overflow_x": 0,
+  "scrollY": 0
+ },
+ "layout_writing_390": {
+  "vw": 390,
+  "vh": 844,
+  "dialog": {
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 844
+  },
+  "dialog_fits": true,
+  "page_overflow_x": 0,
+  "scrollY": 0
+ },
+ "cta_prompt_seen_final": 0,
+ "layout_result": {
+  "vw": 1440,
+  "vh": 900,
+  "dialog": {
+   "x": 720,
+   "y": 0,
+   "w": 720,
+   "h": 900
+  },
+  "dialog_fits": true,
+  "page_overflow_x": 0,
+  "scrollY": 0
+ },
+ "result_actions": [
+  "2 · Angle",
+  "Change angle",
+  "Export text",
+  "Open in My Content"
+ ],
+ "result_text_preview": "Uran Togoo last erupted roughly 20,000 to 24,000 years ago, and the steppe around it still carries that geological story.\n\nPreserved within the Uran Togoo-Tulga Uul Natural Monument in Bulgan Province, this dormant volcano is the largest of several in the surrounding valleys. Trekking here moves through open green steppe grasslands and patches of forest, with the dark volcanic rock of the cone vis",
+ "layout_result_390": {
+  "vw": 390,
+  "vh": 844,
+  "dialog": {
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 844
+  },
+  "dialog_fits": true,
+  "page_overflow_x": 0,
+  "scrollY": 0
+ },
+ "api_piece": {
+  "status": 200,
+  "keys": [
+   "piece_id",
+   "angle_gate_request_id",
+   "channel",
+   "ready_state",
+   "content_text",
+   "seo_title",
+   "meta_description",
+   "slug",
+   "route_hub_name",
+   "route_segment_count",
+   "created_at"
+  ],
+  "ready_state": "ready",
+  "channel": "linkedin",
+  "version": null,
+  "angle_gate_request_id": "72082375-edc4-44f1-a2d8-3317be6eb325",
+  "content_chars": 977,
+  "created_at": "2026-10-16T02:30:04.976199+00:00"
+ },
+ "api_latest_piece": {
+  "status": 200,
+  "piece_id": "788f3568-f4d2-4a12-9572-982efb41aa56",
+  "ready_state": "ready"
+ },
+ "api_request": {
+  "status": 200,
+  "req_status": "approved",
+  "goal": "introduction_awareness",
+  "channel": "linkedin",
+  "cta": null,
+  "chosen": [
+   "The Volcano That Shaped the Steppe"
+  ],
+  "angle_count": 3,
+  "subject_id": "f886d436-4d2e-4ec1-b413-05d7ee1229e7"
+ },
+ "api_review": {
+  "status": 200,
+  "keys": [
+   "request_id",
+   "channel",
+   "ready_state",
+   "content_text",
+   "route_hub_name",
+   "route_segment_count",
+   "goal",
+   "angle",
+   "atom",
+   "tour",
+   "dfs_paa_snapshot",
+   "cta",
+   "created_at"
+  ]
+ },
+ "api_reviews": {
+  "status": 200,
+  "total_rows": 7,
+  "has_request": true,
+  "row": {
+   "request_id": "72082375-edc4-44f1-a2d8-3317be6eb325",
+   "piece_id": "788f3568-f4d2-4a12-9572-982efb41aa56",
+   "channel": "linkedin",
+   "ready_state": "ready",
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "goal": {
+    "key": "introduction_awareness",
+    "label": "Introduction / Awareness"
+   },
+   "angle": {
+    "name": "The Volcano That Shaped the Steppe",
+    "why_it_works": "Leading with the geological fact that Uran Togoo last erupted 20,000–24,000 years ago gives parents and older children a concrete, memorable hook that frames trekking as discovery rather than exercise, directly supporting the brand's educational-journey positioning.",
+    "formula_fit": "Hook-Insight-CTA: the volcanic age is the hook (an unexpected fact about a landscape families will walk through); the insight is that the contrast between dark volcanic rock, open steppe, and forest patches makes this trekking ground genuinely unusual; the CTA invites families to find out how Day 3 fits into the broader trip.",
+    "best_final_style": "Lead with the single geological fact from the seed — the approximate age of the last eruption — then build one short paragraph on what the protected natural area actually is: a dormant volcano in Bulgan Province that is the largest of several in its surrounding valleys, preserved within the Uran Togoo-Tulga Uul Natural Monument. A second paragraph describes what trekking looks like here by drawing only on the seed's confirmed landscape details: open green steppe grasslands, patches of forest, and the contrast with dark volcanic rock. One reassuring practical sentence should address pacing across the day without inventing logistics. Close with a light CTA pointing toward the wider itinerary. The piece should be written in short, unhurried paragraphs suited to LinkedIn's professional scroll; no bullet lists, no markdown, no more than two emojis if any."
+   },
+   "atom": {
+    "text": "Uran Togoo — trek the surrounding steppes and forests",
+    "activity_type": "trek",
+    "emotional_hook": null,
+    "season_note": null
+   },
+   "tour": null,
+   "dfs_paa_snapshot": {
+    "relevance": "MED",
+    "people_also_ask": [
+     "Can you swim in Lake Khuvsgul?",
+     "Which country has 50% of the world's lakes?",
+     "What is the most famous lake in Mongolia?",
+     "What is technically the largest lake in the world?"
+    ],
+    "related_keywords": [
+     "Khuvsgul lake by land mongolia map",
+     "Khuvsgul lake by land mongolia for sale",
+     "Khuvsgul lake by land mongolia fishing",
+     "Khuvsgul Lake Hotel",
+     "Khuvsgul lake map",
+     "Khuvsgul Lake tour",
+     "Khuvsgul Lake depth",
+     "Khuvsgul lake photos"
+    ]
+   },
+   "cta": null,
+   "created_at": "2026-10-16T02:30:04.976199+00:00"
+  }
+ },
+ "api_progress_final": {
+  "found": true,
+  "status": "done",
+  "revision": 2,
+  "steps": [
+   "Reading your topic and brand voice:done",
+   "Writing your post:done",
+   "Checking facts, tone and quality:done",
+   "Revising what the checks flagged:done",
+   "Saving to My Content:done"
+  ],
+  "text_chars": 165
+ },
+ "my_content_url": "/portal/t10-review?piece=788f3568-f4d2-4a12-9572-982efb41aa56",
+ "my_content_text": "My Content\n\nSee everything you’ve written — where it came from and whether it’s ready — before you publish.\n\nThis content was generated with AI. Review it before publishing; you are responsible for what you publish.\n\nAll channels\nLinkedin\nBlog\nFacebook\nAll statuses\nReady\nWriting…\nNot ready\nAll goals\nIntroduction / Awareness\nTrust-building\nViews\nColumns\nCSV\n\tTITLE\tCHANNEL\tGOAL\tSTATUS\tCREATED\n\t\nThe Volcano That Shaped the Steppe\n\t\nLINKEDIN\tIntroduction / Awareness\t\nREADY\t10/16/2026\n\t\nSacred Stilln",
+ "finished": "2026-10-16T02:30:39.464Z"
+}

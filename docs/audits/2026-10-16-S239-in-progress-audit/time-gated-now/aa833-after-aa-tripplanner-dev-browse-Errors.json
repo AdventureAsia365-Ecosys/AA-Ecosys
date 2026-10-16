@@ -1,0 +1,15 @@
+{
+    "Label": "Errors",
+    "Datapoints": [
+        {
+            "Timestamp": "2026-10-16T10:57:00+07:00",
+            "Sum": 38.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-10-16T10:56:00+07:00",
+            "Sum": 79.0,
+            "Unit": "Count"
+        }
+    ]
+}

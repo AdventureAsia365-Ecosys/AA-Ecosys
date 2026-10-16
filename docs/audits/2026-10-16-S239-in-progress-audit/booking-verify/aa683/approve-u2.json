@@ -1,0 +1,76 @@
+{
+ "steps": [
+  {
+   "s": "checker view rules",
+   "overflow": {
+    "doc": [
+     1440,
+     1440
+    ],
+    "wraps": [
+     {
+      "sw": 1078,
+      "cw": 1078,
+      "tw": 1078
+     }
+    ]
+   },
+   "tabstrip": {
+    "sw": 1116,
+    "cw": 1116,
+    "sh": 32,
+    "ch": 31,
+    "ox": "auto",
+    "oy": "auto"
+   }
+  },
+  {
+   "s": "confirm",
+   "t": "Approve pricing rule\nApprove B2B: target 15%, floor 10%, peak +3 pts, card fee 3%, valid from 1 Jan 2027? Quotes priced on or after that day use it.\nCancel\nAPPROVE"
+  },
+  {
+   "s": "approve rules",
+   "status": 200,
+   "row_status": "scheduled",
+   "approved_by": "e2e-claude-code-2"
+  },
+  {
+   "s": "checker view fx",
+   "overflow": {
+    "doc": [
+     1440,
+     1440
+    ],
+    "wraps": [
+     {
+      "sw": 1084,
+      "cw": 1084,
+      "tw": 1084
+     }
+    ]
+   },
+   "tabstrip": {
+    "sw": 1122,
+    "cw": 1122,
+    "sh": 32,
+    "ch": 31,
+    "ox": "auto",
+    "oy": "auto"
+   }
+  },
+  {
+   "s": "confirm",
+   "t": "Approve FX rate\nApprove BTN at 84.1 per USD (buffer 2%), as of 16 Oct 2026, source ZZ S239 test FX row (AA-683 pending-row screenshot, maker-checker)? Quotes priced from then on use it.\nCancel\nAPPROVE"
+  },
+  {
+   "s": "approve fx",
+   "status": 200,
+   "row_status": "in_force",
+   "approved_by": "e2e-claude-code-2"
+  }
+ ],
+ "log": {
+  "console": [],
+  "network": []
+ }
+}

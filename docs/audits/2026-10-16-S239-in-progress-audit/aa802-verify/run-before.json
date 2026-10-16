@@ -1,0 +1,69 @@
+{
+ "step": "before",
+ "piece": "1f02cecb-efd6-4f9c-bf32-1c6efbf3c77b",
+ "request": "41e41098-ffa7-472a-bdb2-da0922f80c0a",
+ "tenant": "atlas-hearth",
+ "tenant_before": {
+  "piece": {
+   "status": 200,
+   "forbidden_keys": [
+    "$.angle_gate_request_id"
+   ]
+  },
+  "latest": {
+   "status": 200,
+   "forbidden_keys": [
+    "$.piece.angle_gate_request_id"
+   ]
+  },
+  "review": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "reviews": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "pending": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "summary": {
+   "piece_keys": [
+    "piece_id",
+    "angle_gate_request_id",
+    "channel",
+    "ready_state",
+    "content_text",
+    "seo_title",
+    "meta_description",
+    "slug",
+    "route_hub_name",
+    "route_segment_count",
+    "created_at"
+   ],
+   "piece_text_len": 7083,
+   "piece_text_has_target": true,
+   "my_content_items": 5,
+   "my_content_has_piece": true,
+   "my_content_text_len": 7083,
+   "my_content_text_has_target": true,
+   "latest_piece_id": null,
+   "review_piece_id": null,
+   "pending_total": 3,
+   "pending_cards_same_angle": 1,
+   "pending_piece_ids_same_angle": [
+    "1f02cecb-efd6-4f9c-bf32-1c6efbf3c77b"
+   ],
+   "pending_card_preview_has_target": [
+    false
+   ]
+  },
+  "ui": {
+   "drawer_open": true,
+   "drawer_has_target": true,
+   "drawer_bad_words": [],
+   "console_errors": []
+  }
+ }
+}

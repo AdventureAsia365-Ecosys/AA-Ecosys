@@ -1,0 +1,158 @@
+{
+ "suppliers-filtered-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/suppliers?q=ZZ%20S239&category=hotel",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1195,
+     "cw": 1084,
+     "tw": 1195
+    }
+   ]
+  },
+  "h1": "Suppliers"
+ },
+ "supplier-contracts-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/suppliers/SUP-000001?tab=contracts",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1150,
+     "cw": 1092,
+     "tw": 1150
+    }
+   ]
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "_log-1440-light": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ },
+ "suppliers-filtered-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/suppliers?q=ZZ%20S239&category=hotel",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Suppliers"
+ },
+ "supplier-contracts-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/suppliers/SUP-000001?tab=contracts",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "_log-390-light": {
+  "console": [],
+  "network": [],
+  "aborted": 3
+ },
+ "suppliers-filtered-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/suppliers?q=ZZ%20S239&category=hotel",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1195,
+     "cw": 1084,
+     "tw": 1195
+    }
+   ]
+  },
+  "h1": "Suppliers"
+ },
+ "supplier-contracts-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/suppliers/SUP-000001?tab=contracts",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1150,
+     "cw": 1092,
+     "tw": 1150
+    }
+   ]
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "_log-1440-dark": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ },
+ "suppliers-filtered-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/suppliers?q=ZZ%20S239&category=hotel",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Suppliers"
+ },
+ "supplier-contracts-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/suppliers/SUP-000001?tab=contracts",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "_log-390-dark": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ }
+}

@@ -1,0 +1,10 @@
+aa-tripplanner-dev-browse-throttles state=ALARM flips_since_15/10_12:35Z=1
+aa-tripplanner-dev-assembly-throttles state=OK flips_since_15/10_12:35Z=0
+aa-tripplanner-dev-browse Throttles Sum 99.0
+aa-tripplanner-dev-browse Invocations Sum 191.0
+aa-tripplanner-dev-browse Errors Sum 117.0
+aa-tripplanner-dev-browse ConcurrentExecutions Maximum 15.0
+aa-tripplanner-dev-assembly Throttles Sum 0
+aa-tripplanner-dev-assembly Invocations Sum 0
+aa-tripplanner-dev-assembly Errors Sum 0
+aa-tripplanner-dev-assembly ConcurrentExecutions Maximum 0

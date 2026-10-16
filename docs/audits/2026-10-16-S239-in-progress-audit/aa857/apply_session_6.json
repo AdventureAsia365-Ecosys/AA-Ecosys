@@ -1,0 +1,25 @@
+recompute job not finished: {'id': '004a2983-ce3a-43b2-8ae0-69599a838d90', 'status': 'running', 'error': None} — run apply again later
+{
+ "mode": "apply",
+ "phase": "slates",
+ "halted": null,
+ "result": "OK",
+ "progress": {
+  "done": 652,
+  "tours": 652,
+  "failed": {}
+ },
+ "remints": 123,
+ "jobs": {
+  "recompute": {
+   "id": "004a2983-ce3a-43b2-8ae0-69599a838d90",
+   "created": true,
+   "segments": 1962,
+   "at": "2026-10-16T08:18:53.439848+00:00"
+  }
+ },
+ "snapshot_key": "scripts/restore/aa857_20261016T080718Z.json",
+ "state_key": "scripts/out/s239_aa857_repair_state.json",
+ "elapsed_s": 1.6
+}
+RESULT: OK s3://aa-cis-bronze-005097885195/scripts/out/s239_aa857_repair_apply.json

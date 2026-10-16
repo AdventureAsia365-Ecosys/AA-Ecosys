@@ -1,0 +1,20 @@
+{
+ "at": "2026-10-16T06:48:30+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/pieces/c8e0f755-d620-4e5e-af30-22aac0817685",
+ "status": 200,
+ "x_request_id": "465b99aa-1a70-4e5a-99a5-41894db26dfc",
+ "body": {
+  "piece_id": "c8e0f755-d620-4e5e-af30-22aac0817685",
+  "angle_gate_request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+  "channel": "blog",
+  "ready_state": "ready",
+  "content_text": "## Where Central Asia Ends and Siberia Begins\n\nMost of what people picture when they think of Mongolia is steppe: a vast...",
+  "seo_title": "Lake Kh\u00f6vsg\u00f6l: Mongolia's Steppe-Taiga Frontier",
+  "meta_description": "Explore Lake Kh\u00f6vsg\u00f6l where Central Asian steppe meets Siberian taiga, including Tsaatan reindeer camps and volcanic Bulgan Province landscapes.",
+  "slug": "lake-khovsgol-mongolia-family-expedition-guide",
+  "route_hub_name": "a local Buddhist monastery \u2192 Sod Camp \u2192 Uran Togoo \u2192 Moron",
+  "route_segment_count": 10,
+  "created_at": "2026-10-16T05:49:05.988274+00:00"
+ }
+}

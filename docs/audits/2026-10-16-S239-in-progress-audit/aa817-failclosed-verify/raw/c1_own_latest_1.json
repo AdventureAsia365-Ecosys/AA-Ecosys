@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T06:48:18+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/158072bf-773f-4a32-be54-8d4f1590091e/latest-piece",
+ "status": 200,
+ "x_request_id": "4902af86-4327-4a94-8732-8f82ac010b21",
+ "body": {
+  "piece": {
+   "piece_id": "582cd11d-d8b3-44ce-9426-dbd9d3f958fa",
+   "angle_gate_request_id": "158072bf-773f-4a32-be54-8d4f1590091e",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "The cliff face at Paro Taktsang has held its ground for centuries, and knowing why makes the hike to it a different expe...",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-16T05:44:16.523292+00:00"
+  }
+ }
+}

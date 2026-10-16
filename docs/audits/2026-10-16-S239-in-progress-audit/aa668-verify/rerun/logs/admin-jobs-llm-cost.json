@@ -1,0 +1,191 @@
+{
+ "list_status": 200,
+ "list_keys": [
+  "jobs",
+  "total",
+  "pagination"
+ ],
+ "jobs": [
+  {
+   "id": "e360282e-690f-40fd-906b-e5c75fe225da",
+   "kind": "t2_rewrite",
+   "status": "succeeded",
+   "created_at": "2026-10-16T04:03:15.785746+00:00",
+   "finished_at": "2026-10-16T04:04:46.158953+00:00",
+   "payload_keys": [
+    "tenant_id",
+    "version_id",
+    "rewrite_language",
+    "published_tour_id"
+   ],
+   "payload_ids": {
+    "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+    "version_id": "5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+    "published_tour_id": "2cf487be-2a9a-4a64-b1d0-1cceaebd9361"
+   },
+   "llm": {
+    "status": 200,
+    "totals": {
+     "calls": 7,
+     "cost_usd": 0.123948,
+     "tokens_in": 29783,
+     "tokens_out": 10109,
+     "first_at": "2026-10-16T04:03:44.555364+00:00",
+     "last_at": "2026-10-16T04:04:45.968452+00:00"
+    },
+    "calls": [
+     "t2_judge/judge/gpt-5.6-luna:0.003219",
+     "t2_judge/judge/gpt-6-luna:0.000682",
+     "t2_generate/writer/sonnet-4-6:0.059323",
+     "t2_itinerary_nudge/writer/haiku-4-5:0.001132",
+     "t2_itinerary_nudge/writer/haiku-4-5:0.001412",
+     "t2_judge/judge/gpt-5.6-luna:0.003141",
+     "t2_generate/writer/sonnet-4-6:0.055039"
+    ]
+   }
+  },
+  {
+   "id": "28ab6260-ee48-4654-9c5a-bfbb62593095",
+   "kind": "t9_write",
+   "status": "succeeded",
+   "created_at": "2026-10-16T03:33:17.763782+00:00",
+   "finished_at": "2026-10-16T03:33:50.649583+00:00",
+   "payload_keys": [
+    "context",
+    "piece_id",
+    "tenant_id",
+    "request_id"
+   ],
+   "payload_ids": {
+    "piece_id": "269682ec-ddff-4249-bd7e-af8a42bf6a28",
+    "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+    "request_id": "3fa8495d-64c0-4948-8910-c9f599691389"
+   },
+   "llm": {
+    "status": 200,
+    "totals": {
+     "calls": 14,
+     "cost_usd": 0.025348,
+     "tokens_in": 15440,
+     "tokens_out": 4981,
+     "first_at": "2026-10-16T03:33:24.545431+00:00",
+     "last_at": "2026-10-16T03:34:04.828109+00:00"
+    },
+    "calls": [
+     "t10_judge/judge/gpt-6-luna:0.001175",
+     "t10_judge/judge/gpt-5.6-luna:0.000828",
+     "t10_judge/judge/gpt-5.6-luna:0.000478",
+     "f10_embed/embed/cohere-embed-v4:0.000018",
+     "t9_write/writer/sonnet-4-6:0.004086",
+     "t10_judge/judge/gpt-5.6-luna:0.001043",
+     "t10_judge/judge/gpt-5.6-luna:0.000503",
+     "f10_embed/embed/cohere-embed-v4:0.000021",
+     "t9_write/writer/sonnet-4-6:0.003462",
+     "t10_judge/judge/gpt-5.6-luna:0.001329",
+     "t10_judge/judge/gpt-5.6-luna:0.00049",
+     "t9_repair/writer/haiku-4-5:0.00115",
+     "f10_embed/embed/cohere-embed-v4:0.000025",
+     "t9_write/writer/sonnet-4-6:0.01074"
+    ]
+   }
+  },
+  {
+   "id": "550a3b34-8926-4cec-a58e-bdce42708865",
+   "kind": "t8_angles",
+   "status": "succeeded",
+   "created_at": "2026-10-16T03:32:50.731879+00:00",
+   "finished_at": "2026-10-16T03:33:12.398264+00:00",
+   "payload_keys": [
+    "goal",
+    "tenant_id",
+    "request_id"
+   ],
+   "payload_ids": {
+    "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+    "request_id": "3fa8495d-64c0-4948-8910-c9f599691389"
+   },
+   "llm": {
+    "status": 200,
+    "totals": {
+     "calls": 3,
+     "cost_usd": 0.022508,
+     "tokens_in": 2478,
+     "tokens_out": 1667,
+     "first_at": "2026-10-16T03:32:58.313069+00:00",
+     "last_at": "2026-10-16T03:33:12.382630+00:00"
+    },
+    "calls": [
+     "t8_angle_gen/writer/sonnet-4-6:0.021082",
+     "a3_place_card_check/validate/haiku-4-5:0.000677",
+     "a3_place_card/validate/gpt-5.6-luna:0.000749"
+    ]
+   }
+  },
+  {
+   "id": "a94a884a-25cd-4f3c-aac7-f8946a40a79f",
+   "kind": "t9_write",
+   "status": "succeeded",
+   "created_at": "2026-10-16T03:32:06.589343+00:00",
+   "finished_at": "2026-10-16T03:32:24.642984+00:00",
+   "payload_keys": [
+    "context",
+    "piece_id",
+    "tenant_id",
+    "request_id"
+   ],
+   "payload_ids": {
+    "piece_id": "4ebda814-b6f1-4a3b-80e3-727f866220fb",
+    "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+    "request_id": "b353d044-060b-4c65-84c2-44f64f30a0d1"
+   },
+   "llm": {
+    "status": 200,
+    "totals": {
+     "calls": 5,
+     "cost_usd": 0.018922,
+     "tokens_in": 6207,
+     "tokens_out": 1010,
+     "first_at": "2026-10-16T03:32:14.863853+00:00",
+     "last_at": "2026-10-16T03:32:24.569356+00:00"
+    },
+    "calls": [
+     "t10_judge/judge/gpt-5.6-luna:0.000971",
+     "t10_judge/judge/gpt-5.6-luna:0.000475",
+     "t9_repair/writer/haiku-4-5:0.001267",
+     "f10_embed/embed/cohere-embed-v4:0.000028",
+     "t9_write/writer/sonnet-4-6:0.016181"
+    ]
+   }
+  },
+  {
+   "id": "55ea7b37-4bf2-4694-bea2-fbc931b51561",
+   "kind": "t8_angles",
+   "status": "succeeded",
+   "created_at": "2026-10-16T03:31:42.133379+00:00",
+   "finished_at": "2026-10-16T03:32:01.017333+00:00",
+   "payload_keys": [
+    "goal",
+    "tenant_id",
+    "request_id"
+   ],
+   "payload_ids": {
+    "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+    "request_id": "b353d044-060b-4c65-84c2-44f64f30a0d1"
+   },
+   "llm": {
+    "status": 200,
+    "totals": {
+     "calls": 1,
+     "cost_usd": 0.029465,
+     "tokens_in": 1469,
+     "tokens_out": 1387,
+     "first_at": "2026-10-16T03:32:00.968523+00:00",
+     "last_at": "2026-10-16T03:32:00.968523+00:00"
+    },
+    "calls": [
+     "t8_angle_gen/writer/sonnet-4-6:0.029465"
+    ]
+   }
+  }
+ ]
+}

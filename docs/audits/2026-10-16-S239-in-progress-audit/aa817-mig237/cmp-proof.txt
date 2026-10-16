@@ -1,0 +1,8 @@
+# cmp proof (S239)
+CIS  : AA-CIS-App feat/aa817-mig237-tenant-integrations-rls 932e1697 api/migrations/237_tenant_integrations_rls.sql
+Infra: AA-CIS-Infra chore/aa817-copy-237 e4b3e71 db/migrations/cis/237_tenant_integrations_rls.sql
+cmp: no difference (exit 0)
+c5be2bc7a9634a55858ec8fda8f54efd8700106ec280540e2beea47cd23c307e  api/migrations/237_tenant_integrations_rls.sql
+c5be2bc7a9634a55858ec8fda8f54efd8700106ec280540e2beea47cd23c307e  db/migrations/cis/237_tenant_integrations_rls.sql
+git blob CIS : 87b1b7526e0320a06bcc3397bdbbc5bb0bc478f5
+git blob Infra: 87b1b7526e0320a06bcc3397bdbbc5bb0bc478f5

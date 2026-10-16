@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T06:48:25+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/d940d26f-a991-4a56-a7a8-aeae63f5c7b4/latest-piece",
+ "status": 200,
+ "x_request_id": "e0732474-e94d-4c3c-8e80-9b1c355981bc",
+ "body": {
+  "piece": {
+   "piece_id": "263e5a5a-e4d8-4cdc-ad9e-2545a26c757d",
+   "angle_gate_request_id": "d940d26f-a991-4a56-a7a8-aeae63f5c7b4",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "Swim time at Kuang Si Falls is in the Day 2 schedule before you need it.\n\nA short trek on Day 2 leads to Kuang Si Falls,...",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-16T05:46:41.482031+00:00"
+  }
+ }
+}

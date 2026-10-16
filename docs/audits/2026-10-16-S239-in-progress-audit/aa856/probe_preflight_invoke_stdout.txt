@@ -1,0 +1,72 @@
+{
+  "mode": "preflight",
+  "invoke_requested": true,
+  "identity": {
+    "account": "005097885195",
+    "arn": "arn:aws:sts::005097885195:assumed-role/aa-cis-dev-ecs-task-role/b931286ceb9d445183d068d5669d3b30"
+  },
+  "catalog": [
+    {
+      "model_key": "cohere-embed-v4",
+      "bedrock_profile_ids": {
+        "acc2": "us.cohere.embed-v4:0"
+      },
+      "enabled": true,
+      "blocked_reason": null,
+      "updated_at": "2026-09-28 14:55:42.668256+00:00",
+      "updated_by": "migration-172"
+    }
+  ],
+  "routes": [
+    {
+      "stage": "a3_place_embed",
+      "role": "embed",
+      "model_id": "cohere-embed-v4",
+      "fallback_model_ids": [],
+      "account_route": null,
+      "is_active": true
+    },
+    {
+      "stage": "f10_embed",
+      "role": "embed",
+      "model_id": "cohere-embed-v4",
+      "fallback_model_ids": [],
+      "account_route": null,
+      "is_active": true
+    },
+    {
+      "stage": "tp_component_embed",
+      "role": "embed",
+      "model_id": "cohere-embed-v4",
+      "fallback_model_ids": [],
+      "account_route": null,
+      "is_active": true
+    },
+    {
+      "stage": "tp_search_embed",
+      "role": "embed",
+      "model_id": "cohere-embed-v4",
+      "fallback_model_ids": [],
+      "account_route": null,
+      "is_active": true
+    }
+  ],
+  "jobs_in_flight": [],
+  "invoke": {
+    "ok": true,
+    "model_id": "global.cohere.embed-v4:0",
+    "dimensions": 1536,
+    "input_tokens": 7,
+    "tokens_estimated": false,
+    "cost_usd": 1e-06,
+    "ms": 790
+  },
+  "gate": {
+    "catalog_acc2_profile": "us.cohere.embed-v4:0",
+    "catalog_profile_expected": true,
+    "global_invoke_ok": true,
+    "no_jobs_in_flight": true,
+    "apply_238": true
+  }
+}
+uploaded s3://aa-cis-bronze-005097885195/scripts/aa856-probe-preflight.json

@@ -1,0 +1,74 @@
+{
+ "steps": [
+  {
+   "s": "actions column visibility (user must scroll table)",
+   "trigger_right": 1476,
+   "wrapper_right": 1391,
+   "hidden": true
+  },
+  {
+   "s": "menu as checker",
+   "title": "ZZ S239 test contract 2026-27 USD",
+   "menu": [
+    {
+     "t": "Edit draft",
+     "dis": false
+    },
+    {
+     "t": "Publish",
+     "dis": false
+    }
+   ]
+  },
+  {
+   "s": "confirm text",
+   "t": "Publish contract\nPublish ZZ S239 test contract 2026-27 USD (USD)? You confirm you checked the terms entered by e2e-claude-code. Once published the contract is fixed.\nCancel\nPUBLISH"
+  },
+  {
+   "s": "publish",
+   "title": "ZZ S239 test contract 2026-27 USD",
+   "status": 200,
+   "contract_status": "published",
+   "published_by_name": "e2e-claude-code-2"
+  },
+  {
+   "s": "actions column visibility (user must scroll table)",
+   "trigger_right": 1359,
+   "wrapper_right": 1391,
+   "hidden": false
+  },
+  {
+   "s": "menu as checker",
+   "title": "ZZ S239 test contract 2026-27 EUR (services)",
+   "menu": [
+    {
+     "t": "Edit draft",
+     "dis": false
+    },
+    {
+     "t": "Publish",
+     "dis": false
+    }
+   ]
+  },
+  {
+   "s": "confirm text",
+   "t": "Publish contract\nPublish ZZ S239 test contract 2026-27 EUR (services) (EUR)? You confirm you checked the terms entered by e2e-claude-code. Once published the contract is fixed.\nCancel\nPUBLISH"
+  },
+  {
+   "s": "publish",
+   "title": "ZZ S239 test contract 2026-27 EUR (services)",
+   "status": 200,
+   "contract_status": "published",
+   "published_by_name": "e2e-claude-code-2"
+  }
+ ],
+ "console": [],
+ "network": [
+  "[publish] FAILED net::ERR_ABORTED /api/booking/trip-cases?sort=-updated_at&limit=5",
+  "[publish] FAILED net::ERR_ABORTED /api/booking/notifications?limit=5",
+  "[publish] FAILED net::ERR_ABORTED /api/booking/trip-cases/summary",
+  "[publish] FAILED net::ERR_ABORTED /api/booking/staff?active=false"
+ ],
+ "phase": "publish"
+}

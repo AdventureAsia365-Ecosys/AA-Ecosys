@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T06:48:26+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/3524ad2d-76f8-43ae-a84b-a4ecec7978a8/latest-piece",
+ "status": 200,
+ "x_request_id": "35c0d64d-93ed-4e27-aa89-b346a458a7ba",
+ "body": {
+  "piece": {
+   "piece_id": "4b7826fd-e3b6-4742-9463-ebf3f0d034bf",
+   "angle_gate_request_id": "3524ad2d-76f8-43ae-a84b-a4ecec7978a8",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "Punakha Dzong was built where the Pho Chhu and Mo Chhu rivers meet, and that placement carried meaning from the start.\n\n...",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-16T05:46:41.572575+00:00"
+  }
+ }
+}

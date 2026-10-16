@@ -1,0 +1,37 @@
+[
+ {
+  "slug": "atlas-hearth",
+  "channel": "blog",
+  "request_id": "41e41098-ffa7-472a-bdb2-da0922f80c0a",
+  "piece_id": "1f02cecb-efd6-4f9c-bf32-1c6efbf3c77b",
+  "status": 202
+ },
+ {
+  "slug": "atlas-hearth",
+  "channel": "linkedin",
+  "request_id": "e6919aa3-576e-420d-90eb-57c36cdbc513",
+  "piece_id": "a7e18faf-4b68-4453-8020-000e38109674",
+  "status": 202
+ },
+ {
+  "slug": "terra-family",
+  "channel": "blog",
+  "request_id": "e42adb08-8f39-430e-b82f-4c9d78a58d56",
+  "piece_id": "dde74641-455f-4d9d-9c8e-696dc3a456c8",
+  "status": 202
+ },
+ {
+  "slug": "terra-family",
+  "channel": "linkedin",
+  "request_id": "9e957fac-596a-4238-8b89-4aa775dab78f",
+  "piece_id": "26a20425-95e7-48c1-9c80-01e76948a38e",
+  "status": 202
+ },
+ {
+  "slug": "trail-pulse",
+  "channel": "linkedin",
+  "request_id": "55670945-ff4f-48eb-bb2c-857dfcdf1b05",
+  "piece_id": "7594ffed-d1a9-4f6e-9bba-95d18d403b7c",
+  "status": 202
+ }
+]

@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T06:48:19+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/9e957fac-596a-4238-8b89-4aa775dab78f/latest-piece",
+ "status": 200,
+ "x_request_id": "c13f619e-703f-496d-acfc-f79e2f95a8fd",
+ "body": {
+  "piece": {
+   "piece_id": "dfeeccba-1805-4b0b-935a-87f850c96781",
+   "angle_gate_request_id": "9e957fac-596a-4238-8b89-4aa775dab78f",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "A child who has only ever seen writing in textbooks may not have considered that it had to be invented somewhere.\n\nPawan...",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-16T05:40:45.826143+00:00"
+  }
+ }
+}

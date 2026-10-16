@@ -1,0 +1,180 @@
+{
+  "window_start_utc": "2026-10-16T04:02:54.764+00:00",
+  "window_end_utc": "2026-10-16T04:03:15.792+00:00",
+  "tour_id": "3fa33633-8502-4b53-a775-a0491fd2e509",
+  "tenant": "atlas-hearth",
+  "tenant_version_used": {
+    "id": "9122ca5f-0bc0-4792-b4fc-bf5a46c1730e",
+    "rewritten_content_bytes": 13369
+  },
+  "requests": [
+    {
+      "id": "A1",
+      "label": "A1 admin raw PATCH, real fields unchanged (plain text)",
+      "channel": "BFF->api-cis",
+      "method": "PATCH",
+      "path": "/api/admin/tours/598b2041-54a6-4fd4-b0b3-19d5ab3088eb/raw",
+      "body_bytes": 10023,
+      "status": 404,
+      "response": "{\"detail\":\"Tour 598b2041-54a6-4fd4-b0b3-19d5ab3088eb not found\"}",
+      "at": "2026-10-16T04:02:55.253+00:00"
+    },
+    {
+      "id": "A2",
+      "label": "A2 admin raw PATCH, HTML description",
+      "channel": "BFF->api-cis",
+      "method": "PATCH",
+      "path": "/api/admin/tours/62100b31-ca0c-40a0-a35b-37a39e2c25a5/raw",
+      "body_bytes": 11232,
+      "status": 404,
+      "response": "{\"detail\":\"Tour 62100b31-ca0c-40a0-a35b-37a39e2c25a5 not found\"}",
+      "at": "2026-10-16T04:02:56.630+00:00"
+    },
+    {
+      "id": "A3",
+      "label": "A3 admin generated-content PATCH, HTML",
+      "channel": "BFF->api-cis",
+      "method": "PATCH",
+      "path": "/api/admin/tours/ff663663-813c-4c81-b5fe-f595e534e3a2/generated/ce70d69c-8073-421a-937d-72b618343d27",
+      "body_bytes": 19927,
+      "status": 404,
+      "response": "{\"detail\":\"Content ce70d69c-8073-421a-937d-72b618343d27 not found\"}",
+      "at": "2026-10-16T04:02:58.309+00:00"
+    },
+    {
+      "id": "T1",
+      "label": "T1 tenant version edit, real rewritten_content unchanged",
+      "channel": "direct api-cis",
+      "method": "PATCH",
+      "path": "/v1/tours/versions/9e246b87-4813-455d-8d34-effb369c0564",
+      "body_bytes": 13430,
+      "status": 404,
+      "response": "{\"detail\":\"Version not found\"}",
+      "at": "2026-10-16T04:03:00.419+00:00"
+    },
+    {
+      "id": "T2",
+      "label": "T2 tenant version edit, HTML summary",
+      "channel": "direct api-cis",
+      "method": "PATCH",
+      "path": "/v1/tours/versions/1117fba6-8902-4a4a-9c71-6cac0ebff835",
+      "body_bytes": 14953,
+      "status": 404,
+      "response": "{\"detail\":\"Version not found\"}",
+      "at": "2026-10-16T04:03:02.287+00:00"
+    },
+    {
+      "id": "T3",
+      "label": "T3 tenant piece edit, markdown blog",
+      "channel": "direct api-cis",
+      "method": "PATCH",
+      "path": "/v1/content-writing/pieces/07e1bd41-b3c9-401d-aa58-c48fba0a47f6",
+      "body_bytes": 9903,
+      "status": 404,
+      "response": "{\"detail\":\"piece_id=07e1bd41-b3c9-401d-aa58-c48fba0a47f6 not found for this tenant, or not in an editable state\"}",
+      "at": "2026-10-16T04:03:03.986+00:00"
+    },
+    {
+      "id": "T4",
+      "label": "T4 tenant version edit via portal BFF, HTML summary",
+      "channel": "BFF->api-cis",
+      "method": "PATCH",
+      "path": "/api/tenant/v1/tours/versions/0a7759ac-149c-453e-86cc-7292abf246dd",
+      "body_bytes": 14953,
+      "status": 404,
+      "response": "{\"detail\":\"Version not found\"}",
+      "at": "2026-10-16T04:03:05.644+00:00"
+    },
+    {
+      "id": "T5",
+      "label": "T5 tenant piece edit via portal BFF, markdown blog",
+      "channel": "BFF->api-cis",
+      "method": "PATCH",
+      "path": "/api/tenant/v1/content-writing/pieces/cb2d3299-e1dc-4ead-8ba5-ba124a87daeb",
+      "body_bytes": 9903,
+      "status": 404,
+      "response": "{\"detail\":\"piece_id=cb2d3299-e1dc-4ead-8ba5-ba124a87daeb not found for this tenant, or not in an editable state\"}",
+      "at": "2026-10-16T04:03:07.200+00:00"
+    },
+    {
+      "id": "C1",
+      "label": "C1 control: small HTML (< 8 KB) piece edit",
+      "channel": "direct api-cis",
+      "method": "PATCH",
+      "path": "/v1/content-writing/pieces/1e53966e-0841-4a39-bfaf-b03f416de73c",
+      "body_bytes": 1521,
+      "status": 404,
+      "response": "{\"detail\":\"piece_id=1e53966e-0841-4a39-bfaf-b03f416de73c not found for this tenant, or not in an editable state\"}",
+      "at": "2026-10-16T04:03:09.382+00:00"
+    },
+    {
+      "id": "C2",
+      "label": "C2 control: large plain text (> 8 KB) piece edit",
+      "channel": "direct api-cis",
+      "method": "PATCH",
+      "path": "/v1/content-writing/pieces/0d335d4c-6ea2-43ac-af61-6bc189c7f360",
+      "body_bytes": 17528,
+      "status": 404,
+      "response": "{\"detail\":\"piece_id=0d335d4c-6ea2-43ac-af61-6bc189c7f360 not found for this tenant, or not in an editable state\"}",
+      "at": "2026-10-16T04:03:11.239+00:00"
+    },
+    {
+      "id": "B1",
+      "label": "B1 Booking trip case notes PATCH",
+      "channel": "direct api-booking",
+      "method": "PATCH",
+      "path": "/booking/trip-cases/TC-923374",
+      "body_bytes": 9896,
+      "status": 404,
+      "response": "{\"detail\":\"trip_case_not_found\",\"message\":\"trip case TC-923374 not found\"}",
+      "at": "2026-10-16T04:03:12.920+00:00"
+    },
+    {
+      "id": "B2",
+      "label": "B2 Booking contract terms PATCH",
+      "channel": "direct api-booking",
+      "method": "PATCH",
+      "path": "/booking/contracts/8c947aab-b2bc-4895-be1a-3faf110daa6e",
+      "body_bytes": 11844,
+      "status": 404,
+      "response": "{\"detail\":\"contract_not_found\",\"message\":\"contract 8c947aab-b2bc-4895-be1a-3faf110daa6e not found\"}",
+      "at": "2026-10-16T04:03:14.792+00:00"
+    }
+  ],
+  "hash_before": {
+    "cis_tour_detail_raw": "a82eec06fd56209e04d342e7090742f83b7e21e0d17b7c3d215e13c20a6e3b0d",
+    "cis_tour_detail_generated": "7d235e2f6a9da92ea24b765d8735edb756d60c2340d10ecc2c6d242037a8cdda",
+    "cis_tour_detail_published": "3501a98792da67a452d7f7e340da6becab49ec9c0a45867d9ba9994db4b103a8",
+    "tenant_my_versions": "866e1bd168a490e8aba5b2e4f2ed9c5b1ed8899dc593d54505b98375e8ed6b0f",
+    "tenant_my_versions_total": 12,
+    "tenant_reviews": "dc3b0bc375bb20e5d95e77be9a35d24bf827708dced44b0db9b63bc3cd9f7c93",
+    "tenant_reviews_total": 5,
+    "booking_trip_cases": "2fa0f7729378bd440ae8914edc3c68ee77f1f2f7aa07af033ccc558fe6441e55",
+    "booking_suppliers": "7bab393e3f671faae945bf058c7e2577d5ed6fdb80fab47ed8160c1463412867",
+    "booking_audit_logs_latest20": "3d23c56469850c4767be646c45ff5a4ace5d8e9fd61e4cd3d12c435757137837"
+  },
+  "hash_after": {
+    "cis_tour_detail_raw": "a82eec06fd56209e04d342e7090742f83b7e21e0d17b7c3d215e13c20a6e3b0d",
+    "cis_tour_detail_generated": "7d235e2f6a9da92ea24b765d8735edb756d60c2340d10ecc2c6d242037a8cdda",
+    "cis_tour_detail_published": "3501a98792da67a452d7f7e340da6becab49ec9c0a45867d9ba9994db4b103a8",
+    "tenant_my_versions": "866e1bd168a490e8aba5b2e4f2ed9c5b1ed8899dc593d54505b98375e8ed6b0f",
+    "tenant_my_versions_total": 12,
+    "tenant_reviews": "dc3b0bc375bb20e5d95e77be9a35d24bf827708dced44b0db9b63bc3cd9f7c93",
+    "tenant_reviews_total": 5,
+    "booking_trip_cases": "2fa0f7729378bd440ae8914edc3c68ee77f1f2f7aa07af033ccc558fe6441e55",
+    "booking_suppliers": "7bab393e3f671faae945bf058c7e2577d5ed6fdb80fab47ed8160c1463412867",
+    "booking_audit_logs_latest20": "3d23c56469850c4767be646c45ff5a4ace5d8e9fd61e4cd3d12c435757137837"
+  },
+  "unchanged": {
+    "cis_tour_detail_raw": true,
+    "cis_tour_detail_generated": true,
+    "cis_tour_detail_published": true,
+    "tenant_my_versions": true,
+    "tenant_my_versions_total": true,
+    "tenant_reviews": true,
+    "tenant_reviews_total": true,
+    "booking_trip_cases": true,
+    "booking_suppliers": true,
+    "booking_audit_logs_latest20": true
+  }
+}
