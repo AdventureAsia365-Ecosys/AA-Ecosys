@@ -20,11 +20,13 @@ Mục tiêu: "Done" luôn nghĩa là đã chạy đúng trên môi trường th�
 ## 2. Guard trước merge backend
 
 - CI (`deploy-dev.yml`) tự chặn deploy khi `shared.job` còn queued/running. Override chỉ Nghiệp, phải ghi lý do.
+  Kind có cờ `deploy_gate_exempt` (hiện chỉ `ops_rds_role_connections`, chạy mỗi 5 phút, AA-832) không tính; `/admin/job-runner/deploy-gate` liệt kê ở `exempt_kinds`.
 - Bị chặn → không override để "cho nhanh". Chờ job xong, hoặc hỏi Nghiệp nếu job treo.
 - Có wave đang chạy → không merge PR backend/pipeline dù CI cho qua (`aa-wave-rerun`). PR chỉ FE thì được merge.
 - Kiểm tay khi cần:
   ```sql
-  SELECT kind, status, count(*) FROM shared.job WHERE status IN ('queued','running') GROUP BY 1,2;
+  SELECT kind, status, count(*) FROM shared.job WHERE status IN ('queued','running')
+     AND kind <> 'ops_rds_role_connections' GROUP BY 1,2;   -- kind 5 phút, deploy-gate bỏ qua
   ```
 
 ## 3. Sau deploy — verify live

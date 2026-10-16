@@ -97,8 +97,8 @@ always confirm with `SHOW max_connections` after a resize):
 
 | Class | RAM | `max_connections` (approx.) | 75 % ceiling |
 |---|---|---|---|
-| db.t3.micro (today) | 1 GiB | ~85 (review: 80-110) | ~64 |
-| db.t4g.small (approved, X9) | 2 GiB | ~190 | ~140 |
+| db.t3.micro (until 15/10/2026) | 1 GiB | ~85 (review: 80-110) | ~64 |
+| db.t4g.small (today, since 15/10/2026) | 2 GiB | **181** (measured 16/10/2026, AA-832; 3 superuser-reserved) | **~135** |
 | db.t4g.medium | 4 GiB | ~400 | ~300 |
 | db.m7g.large | 8 GiB | ~850 | ~640 |
 
@@ -107,6 +107,8 @@ Today's worst case (code and Terraform as of 15/10/2026) is ~235 against ~85: CI
 account Lambda quota of 10 and `desired_count = 1` hide it.
 
 ### C2.2 Budget (target, on db.t4g.small)
+
+**Re-checked 16/10/2026 (AA-832)** against the measured `max_connections` = 181 (75 % ceiling ≈ 135): the target total below (~136) sits at the ceiling, so any pool increase needs an offsetting cut (AA-859 sizing: tenant pool 2/task with api `max_capacity` 7). Live `CONNECTION LIMIT`s: `tripplanner` 30, `booking` **15** (migration 234; the row below still shows the target 10), `aa_app_user` 15. Per-role usage is now a CloudWatch metric (`AA/RDS RoleConnections` / `RoleConnectionLimitPct`, every 5 min).
 
 | Pool (`application_name`) | DB role (today → after X1) | Pool `max_size` | Max processes | Worst case | `CONNECTION LIMIT` | Statement timeout (pool-level, C2.3f) | Lock timeout (pool-level) |
 |---|---|---|---|---|---|---|---|
@@ -175,20 +177,21 @@ CIS has no recurring job scheduler today (Booking has recurring kinds in its wor
 "nightly" or "custom metric" item in this part (N1 dump, per-role connection metric, retention
 kinds, backlog age) is triggered by an EventBridge Scheduler rule that only **enqueues** a job
 (ADR 0003 decision 5; existing pattern `accounts/aa365/dfs_balance.tf` `aws_scheduler_schedule`).
-To build (N1/N3/N4). Publishing a custom metric needs `cloudwatch:PutMetricData` on the worker task
-role, added in the same Infra PR.
+Built for the per-role metric (AA-832); N1/N4 still to build. Publishing a custom metric needs `cloudwatch:PutMetricData` on the CIS
+task role (shared by api and worker), scoped by `cloudwatch:namespace`, added in the same Infra PR.
 
 | Alarm | Threshold | Status |
 |---|---|---|
-| `rds-connections-high` (`DatabaseConnections`) | > 60 for 5 min on t3.micro; after a resize, 60 % of `max_connections` for 5 min | Exists as > 70 for 10 min → tighten (N3) |
-| `rds-free-storage-low` (`FreeStorageSpace`) | < 50 % of allocated storage | Exists as < 4 GiB → change with autoscaling (N3) |
-| `FreeableMemory` | < 100 MB (t3.micro), < 200 MB (t4g.small), < 10 % of RAM (larger) | To build (N3) |
-| `CPUUtilization` | > 80 % for 15 min | To build (N3) |
-| `CPUSurplusCreditsCharged` | > 0 (T-class runs Unlimited, so the symptom is cost) | To build (N3) |
-| `ReadLatency` / `WriteLatency` | > 20 ms for 15 min | To build (N3) |
-| `DiskQueueDepth` | > 10 for 15 min | To build (N3) |
-| `MaximumUsedTransactionIDs` | > 1,000,000,000 | To build (N3) — wraparound guard |
-| Per-role connections | > 80 % of `CONNECTION LIMIT` | To build (N3, custom metric from a CIS job reading `pg_stat_activity`) |
+| `rds-connections-high` (`DatabaseConnections`) | > 60 for 5 min on t3.micro; after a resize, 60 % of `max_connections` for 5 min | **Exists**: > 108 (60 % of 181) for 5 min, `local.rds_max_connections` (AA-832, Infra #155) |
+| `rds-free-storage-low` (`FreeStorageSpace`) | < 50 % of allocated storage | **Exists** (AA-824, Infra #121) |
+| `FreeableMemory` | < 100 MB (t3.micro), < 200 MB (t4g.small), < 10 % of RAM (larger) | **Exists**: < 200 MiB for 10 min (AA-824 #121, raised by AA-832 #155; live floor 523 MB) |
+| `CPUUtilization` | > 80 % for 15 min | **Exists** (#121; `notBreaching` since #155) |
+| `CPUSurplusCreditsCharged` | > 0 (T-class runs Unlimited, so the symptom is cost) | **Exists** (AA-824, #121) |
+| `ReadLatency` / `WriteLatency` | > 20 ms for 15 min | **Exists** (AA-832, Infra #155) |
+| `DiskQueueDepth` | > 10 for 15 min | **Exists** (AA-832, Infra #155) |
+| `MaximumUsedTransactionIDs` | > 1,000,000,000 | **Exists** (AA-832, Infra #155) — wraparound guard |
+| Per-role connections | > 80 % of `CONNECTION LIMIT` | **Exists** (AA-832): CIS job `ops_rds_role_connections` (CIS #771) every 5 min → `AA/RDS RoleConnectionLimitPct{Role}`, one alarm per limited role, 1 of 2 periods (Infra #155). SNS fire + recover tested 16/10/2026 |
+| Per-role sampling stopped | no `RoleConnections` sample for 45 min | **Exists** (AA-832, Infra #155). The one alarm that treats missing data as **breaching** (exception to C4.1a): its job is to notice missing data |
 | Job backlog age, per owner (`shared.job`, `booking.job`, later `<schema>.job`) | oldest `queued` (by `run_after`) > 15 min, or any `running` past 2 × the kind's `expected_seconds` (a registry attribute in `shared/jobs/registry.py`, not a column, so the owner's app computes it, e.g. behind `/admin/job-runner/summary`) | To build (X6, playbook checklist) |
 | Existing app alarms (Lambda errors/throttles, Booking health/5xx/CPU, NAT status) | as defined | Keep |
 
