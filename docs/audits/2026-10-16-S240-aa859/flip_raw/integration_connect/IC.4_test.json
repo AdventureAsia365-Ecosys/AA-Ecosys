@@ -1,0 +1,15 @@
+{
+ "at": "2026-10-16T13:35:57+00:00",
+ "tenant": "terra-family",
+ "method": "POST",
+ "path": "/v1/integrations/wordpress/test",
+ "status": 200,
+ "body": {
+  "connected": true,
+  "site_url": "https://fightcanvas.s3-tastewp.com",
+  "connected_at": "2026-10-16T13:35:54.312430+00:00",
+  "last_verified_at": "2026-10-16T13:35:57.052144+00:00",
+  "last_verify_error": null,
+  "success": true
+ }
+}

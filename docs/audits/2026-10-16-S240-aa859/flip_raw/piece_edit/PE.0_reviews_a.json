@@ -1,0 +1,408 @@
+{
+ "at": "2026-10-16T13:31:07+00:00",
+ "tenant": "terra-family",
+ "method": "GET",
+ "path": "/v1/content-writing/reviews",
+ "status": 200,
+ "body": {
+  "data": [
+   {
+    "request_id": "41e94397-aa14-45f6-9e23-337a0362fd19",
+    "piece_id": "6925acce-b2ed-49bd-a52b-41a74a2e6d60",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "At the National Institute for Zorig Chusum, students master a single craft over years of study.\n\nZorig Chusum refers to Bhutan's thirteen traditional arts and c...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "Watching Craft Become Skill Over Years",
+     "why_it_works": "Introducing the institute's multi-year training model gives parents an immediate, concrete reason why this stop is worth time on a culinary trail itinerary \u2014 it...",
+     "formula_fit": "Hook-Insight-CTA: the hook is the scale of commitment students make (years mastering a single craft); the insight is what Zorig Chusum is, why the institute exi...",
+     "best_final_style": "Structured as one punchy opening sentence, two short paragraphs, one reassuring practical note, and a light CTA. Lead with the fact that students spend years ma..."
+    },
+    "atom": {
+     "text": "Traditional School of Arts and Craft \u2014 visit",
+     "activity_type": "culture",
+     "emotional_hook": "learn traditional crafts",
+     "season_note": null
+    },
+    "tour": {
+     "name": "Bhutan: Culinary Trail East to West \u2014 10 Days",
+     "destination": "Bhutan"
+    },
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-16T08:35:53.173229+00:00"
+   },
+   {
+    "request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+    "piece_id": "b1ddcfab-ab1a-472e-b5e8-977db6a15138",
+    "channel": "blog",
+    "ready_state": "ready",
+    "content_text": "## Where the Steppe Ends and the Taiga Begins\n\nLake Kh\u00f6vsg\u00f6l asks them to revise that picture entirely.\n\nSitting in the far north of Kh\u00f6vsg\u00f6l Province, the lake...",
+    "route_hub_name": "a local Buddhist monastery \u2192 Sod Camp \u2192 Uran Togoo \u2192 Moron",
+    "route_segment_count": 10,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "Where Two Worlds Meet: Lake Kh\u00f6vsg\u00f6l as Mongolia's Family Anchor",
+     "why_it_works": "Lake Kh\u00f6vsg\u00f6l's ecological boundary \u2014 where Central Asian steppe gives way to Siberian taiga \u2014 is a concrete, visually striking fact that makes Mongolia's geogr...",
+     "formula_fit": "Hook-Insight-CTA: The hook is the striking ecological boundary itself (steppe meeting taiga at one lake's edge); the insight unpacks what that boundary means in...",
+     "best_final_style": "A pillar-style blog post structured around Lake Kh\u00f6vsg\u00f6l as the geographic and thematic centrepiece, with H2 sections that build outward from the lake: the volc..."
+    },
+    "atom": {
+     "text": "ruins of an ancient monastery \u2014 visit",
+     "activity_type": "culture",
+     "emotional_hook": "encounter historical loss and cultural memory",
+     "season_note": null
+    },
+    "tour": {
+     "name": "Mongolia: Kh\u00f6vsg\u00f6l Lake and Gobi Desert \u2014 15 Days",
+     "destination": "Mongolia"
+    },
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": [
+      "Khovsgol and gobi tour mongolia price",
+      "Khovsgol and gobi tour mongolia reviews",
+      "Khovsgol and gobi tour mongolia cost",
+      "Gobi tour Tourist camp",
+      "Mongolia adventure tour",
+      "Tour operators in Mongolia",
+      "Travel buddies mongolia reviews",
+      "Gobi travel"
+     ]
+    },
+    "cta": null,
+    "created_at": "2026-10-16T08:07:53.606787+00:00"
+   },
+   {
+    "request_id": "158072bf-773f-4a32-be54-8d4f1590091e",
+    "piece_id": "21697065-39c8-4642-a7db-f214ed2ee9f9",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "Paro Taktsang, built into a sheer granite cliff above the Paro Valley, holds centuries of spiritual significance.\n\nThe site traces to the 8th century, when Guru...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "trust_building",
+     "label": "Trust-building"
+    },
+    "angle": {
+     "name": "Built Into the Cliff, Restored From Ash",
+     "why_it_works": "The 1998 fire and 2004 restoration is a concrete, verifiable historical fact that gives the brand a genuine proof point: understanding a site's full story \u2014 not...",
+     "formula_fit": "Problem-Insight-Proof-Action: Problem \u2014 families arrive at iconic sites without context and leave with only a photograph; Insight \u2014 Paro Taktsang carries a laye...",
+     "best_final_style": "Structured as: one-sentence hook anchored in the monastery's dramatic physical position on the cliff. Then one short paragraph on the founding tradition \u2014 Guru ..."
+    },
+    "atom": {
+     "text": "Tiger's Nest Monastery \u2014 hike to the cliffside",
+     "activity_type": "trek",
+     "emotional_hook": "spiritual pilgrimage to a dramatically perched monastery",
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-16T08:01:54.064739+00:00"
+   },
+   {
+    "request_id": "9e957fac-596a-4238-8b89-4aa775dab78f",
+    "piece_id": "7e36dd46-b141-41eb-bcba-84b6086b7b64",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "At Pawangka Monastery, children encounter where Tibetan writing began.\n\nThat shift in thinking is not something a classroom exercise tends to produce. It requir...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "Sacred Stillness: What Pawangka Teaches Kids That Classrooms Can't",
+     "why_it_works": "Affluent parents choosing educational travel respond to content that frames a destination as a meaningful learning moment \u2014 not just a stop on a list. Positioni...",
+     "formula_fit": "Hook-Insight-CTA: Hook = a child standing at the monastery gates, facing something ancient and quiet \u2014 a world utterly unlike their own. Insight = Pawangka isn'...",
+     "best_final_style": "Warm but intellectually grounded \u2014 the tone of a knowledgeable friend who also happens to be a parent. Opens with a sensory or observational scene that a child ..."
+    },
+    "atom": {
+     "text": "Pawangka Monastery \u2014 visit",
+     "activity_type": "culture",
+     "emotional_hook": "ancient sacred site connected to the origins of Tibetan writing",
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "HIGH",
+     "people_also_ask": [
+      "What is the hardest hike in Hong Kong?",
+      "How hard is Teapot Hill?",
+      "What is the most famous hike in Hong Kong?",
+      "How tall is Mount Jomolhari?",
+      "What is the most challenging trek in Bhutan?",
+      "What is the highest mountain in Bhutan?",
+      "Can I see the Himalayas from Bhutan?"
+     ],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-16T07:58:23.435455+00:00"
+   },
+   {
+    "request_id": "e42adb08-8f39-430e-b82f-4c9d78a58d56",
+    "piece_id": "31706a16-c8c7-436c-b7cc-6f9a4ccd3c74",
+    "channel": "blog",
+    "ready_state": "ready",
+    "content_text": "## The Evening That Sets the Tone\n\nFamilies gather at Khaiphaen Restaurant for dinner and an informal briefing. It is a small, telling moment: the food arrives,...",
+    "route_hub_name": "Khaiphaen Restaurant \u2192 Luang Prabang \u2192 Kuang Si Falls \u2192 Ban Long Lao Mai",
+    "route_segment_count": 12,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "The Family Dinner That Reframes the Whole Route",
+     "why_it_works": "Families researching this route need a concrete, reassuring moment to trust that 'active cycling holiday' can also mean real comfort and cultural depth \u2014 a rest...",
+     "formula_fit": "Hook-Insight-CTA: Hook = an unexpected scene (sit-down dinner + trip briefing at a real Luang Prabang restaurant before Day 1 even starts); Insight = this is ho...",
+     "best_final_style": "Warm, scene-setting narrative that opens mid-moment \u2014 the table, the food, the guide unrolling a map. Tone is reassuring but not soft; it communicates confidenc..."
+    },
+    "atom": {
+     "text": "Khaiphaen Restaurant \u2014 informal briefing and dinner",
+     "activity_type": "food",
+     "emotional_hook": null,
+     "season_note": null
+    },
+    "tour": {
+     "name": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi \u2014 12 Days",
+     "destination": "Laos"
+    },
+    "dfs_paa_snapshot": {
+     "relevance": "HIGH",
+     "people_also_ask": [
+      "What country is famous for cycling?",
+      "Is $100 USD a lot in Laos?",
+      "Can beginners do Shimanami Kaido?",
+      "What is the 75 rule in cycling?"
+     ],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-16T07:58:22.846229+00:00"
+   },
+   {
+    "request_id": "3fa8495d-64c0-4948-8910-c9f599691389",
+    "piece_id": "269682ec-ddff-4249-bd7e-af8a42bf6a28",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "Lok Virsa Museum in Islamabad gathers Pakistan's folk traditions from communities across the country.\n\nIts collections span textiles, costumes, jewellery, woodw...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "Pakistan's Living Traditions, Made Visible",
+     "why_it_works": "Introducing a museum dedicated to folk and traditional heritage directly addresses the brand's educational promise \u2014 parents searching for culturally rich trave...",
+     "formula_fit": "Hook-Insight-CTA: The hook surfaces the surprise that a single museum holds traditions from communities across all of Pakistan; the insight explains what collec...",
+     "best_final_style": "Structure: one sharp hook sentence about what Lok Virsa Museum represents, then two short paragraphs \u2014 first describing the scope of the collections (textiles, ..."
+    },
+    "atom": {
+     "text": "Lok Virsa Folk & Heritage Museum \u2014 visit for insight into Pakistan's living traditions",
+     "activity_type": "culture",
+     "emotional_hook": null,
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [
+      "Is Hunza better or Fairy Meadows?",
+      "Is Fairy Meadows Trek difficult?",
+      "Is it safe to go to Hunza right now?",
+      "What is Fairy Meadows famous for?"
+     ],
+     "related_keywords": [
+      "Fairy meadows rakaposhi trek & hunza pakistan reviews",
+      "Fairy meadows rakaposhi trek & hunza pakistan tour",
+      "Fairy meadows rakaposhi trek & hunza pakistan package"
+     ]
+    },
+    "cta": null,
+    "created_at": "2026-10-16T03:33:17.737361+00:00"
+   },
+   {
+    "request_id": "b353d044-060b-4c65-84c2-44f64f30a0d1",
+    "piece_id": "4ebda814-b6f1-4a3b-80e3-727f866220fb",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplin...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "What the Institute Teaches Families About Bhutan",
+     "why_it_works": "Positioning the visit around what students at the institute actually spend years learning gives parents a concrete, credible reason to value the stop \u2014 it conne...",
+     "formula_fit": "Hook-Insight-CTA: the hook surfaces the surprising depth of craft mastery at the institute (multi-year programmes, master craftspeople); the insight explains wh...",
+     "best_final_style": "Lead with the concrete fact that students at the National Institute for Zorig Chusum spend years mastering a single discipline \u2014 thangka painting, wood carving,..."
+    },
+    "atom": {
+     "text": "Traditional Arts & Craft School \u2014 visit",
+     "activity_type": "culture",
+     "emotional_hook": null,
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-16T03:32:06.572002+00:00"
+   },
+   {
+    "request_id": "72082375-edc4-44f1-a2d8-3317be6eb325",
+    "piece_id": "788f3568-f4d2-4a12-9572-982efb41aa56",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "Uran Togoo last erupted roughly 20,000 to 24,000 years ago, and the steppe around it still carries that geological story.\n\nPreserved within the Uran Togoo-Tulga...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "The Volcano That Shaped the Steppe",
+     "why_it_works": "Leading with the geological fact that Uran Togoo last erupted 20,000\u201324,000 years ago gives parents and older children a concrete, memorable hook that frames tr...",
+     "formula_fit": "Hook-Insight-CTA: the volcanic age is the hook (an unexpected fact about a landscape families will walk through); the insight is that the contrast between dark ...",
+     "best_final_style": "Lead with the single geological fact from the seed \u2014 the approximate age of the last eruption \u2014 then build one short paragraph on what the protected natural are..."
+    },
+    "atom": {
+     "text": "Uran Togoo \u2014 trek the surrounding steppes and forests",
+     "activity_type": "trek",
+     "emotional_hook": null,
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [
+      "Can you swim in Lake Khuvsgul?",
+      "Which country has 50% of the world's lakes?",
+      "What is the most famous lake in Mongolia?",
+      "What is technically the largest lake in the world?"
+     ],
+     "related_keywords": [
+      "Khuvsgul lake by land mongolia map",
+      "Khuvsgul lake by land mongolia for sale",
+      "Khuvsgul lake by land mongolia fishing",
+      "Khuvsgul Lake Hotel",
+      "Khuvsgul lake map",
+      "Khuvsgul Lake tour",
+      "Khuvsgul Lake depth",
+      "Khuvsgul lake photos"
+     ]
+    },
+    "cta": null,
+    "created_at": "2026-10-16T02:30:04.976199+00:00"
+   },
+   {
+    "request_id": "ff45fd8a-a9e9-4881-ac8b-25aa25cee014",
+    "piece_id": "d67e3178-26e7-4a4d-882c-d6de65ce2593",
+    "channel": "facebook",
+    "ready_state": "ready",
+    "content_text": "Paro Taktsang asks something of every visitor\u2014and the more prepared your family is, the more it gives back.\n\nAt a checkpoint before the sacred inner complex, ca...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "trust_building",
+     "label": "Trust-building"
+    },
+    "angle": {
+     "name": "The Checkpoint Before the Temple",
+     "why_it_works": "Parents researching Bhutan with children will have specific concerns about how a demanding hike and a sacred site with strict entry rules is managed for a famil...",
+     "formula_fit": "Problem-Insight-Proof-Action: Problem = a cliffside monastery with strict rules and a multi-hour ascent sounds logistically fraught for families; Insight = know...",
+     "best_final_style": "Tone: calm, considered, quietly authoritative \u2014 the voice of someone who has thought hard about a day others gloss over. Open with the concrete operational fact..."
+    },
+    "atom": {
+     "text": "Tiger's Nest Monastery \u2014 hike to the cliffside",
+     "activity_type": "trek",
+     "emotional_hook": "spiritual pilgrimage to a dramatically perched monastery",
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-15T10:29:37.696481+00:00"
+   },
+   {
+    "request_id": "b96797b8-3547-4c49-b48b-707979788a77",
+    "piece_id": "5ce24c74-229c-44cc-a520-b2a6c643a44d",
+    "channel": "blog",
+    "ready_state": "ready",
+    "content_text": "## What One Ruined Monastery Tells Families About Mongolia\n\nOn Day 14 of this fifteen-day journey, families visit the ruins of an ancient monastery destroyed du...",
+    "route_hub_name": "a local Buddhist monastery \u2192 Sod Camp \u2192 Uran Togoo \u2192 Moron",
+    "route_segment_count": 10,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "What One Ruined Monastery Tells Families About Mongolia",
+     "why_it_works": "Framing the monastery ruins as a window into Mongolia's wider history gives parents a clear, intellectually credible reason to include this trip in their thinki...",
+     "formula_fit": "Hook-Insight-CTA: Hook on the surprise that a ruined monastery on Day 14 carries more historical weight than most purpose-built museum visits; Insight into what...",
+     "best_final_style": "Tone: thoughtful, warm, grounded \u2014 the voice of a well-traveled parent writing to another well-traveled parent. Open with the concrete image the seed provides: ..."
+    },
+    "atom": {
+     "text": "ruins of an ancient monastery \u2014 visit",
+     "activity_type": "culture",
+     "emotional_hook": "encounter historical loss and cultural memory",
+     "season_note": null
+    },
+    "tour": {
+     "name": "Mongolia: Kh\u00f6vsg\u00f6l Lake and Gobi Desert \u2014 15 Days",
+     "destination": "Mongolia"
+    },
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": [
+      "Khovsgol and gobi tour mongolia price",
+      "Khovsgol and gobi tour mongolia reviews",
+      "Khovsgol and gobi tour mongolia cost",
+      "Gobi tour Tourist camp",
+      "Mongolia adventure tour",
+      "Tour operators in Mongolia",
+      "Travel buddies mongolia reviews",
+      "Gobi travel"
+     ]
+    },
+    "cta": null,
+    "created_at": "2026-10-13T04:00:33.440891+00:00"
+   }
+  ],
+  "total": 10
+ }
+}

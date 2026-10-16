@@ -1,0 +1,52 @@
+{
+ "at": "2026-10-16T13:34:48+00:00",
+ "tenant": "terra-family",
+ "method": "GET",
+ "path": "/v1/publish-log?limit=200",
+ "status": 200,
+ "body": {
+  "data": [
+   {
+    "publish_id": "4989ac13-6784-4c75-a008-d295b96a9768",
+    "piece_id": "5ce24c74-229c-44cc-a520-b2a6c643a44d",
+    "title": "What One Ruined Monastery Tells Families About Mongolia",
+    "channel": "blog",
+    "status": "unpublished",
+    "external_url": "https://fightcanvas.s3-tastewp.com/2026/10/16/mongolia-family-travel-khovsgol-gobi-guide-0b7aa38a/",
+    "published_at": "2026-10-16T13:34:40.274065+00:00",
+    "unpublished_at": "2026-10-16T13:34:43.503754+00:00"
+   },
+   {
+    "publish_id": "a371b8f4-3373-487b-a704-87863c153fd6",
+    "piece_id": "d67e3178-26e7-4a4d-882c-d6de65ce2593",
+    "title": "The Checkpoint Before the Temple",
+    "channel": "facebook",
+    "status": "unpublished",
+    "external_url": "https://www.facebook.com/1322105971158088_1113995851137104",
+    "published_at": "2026-10-15T10:31:57.192520+00:00",
+    "unpublished_at": "2026-10-15T10:35:42.562463+00:00"
+   },
+   {
+    "publish_id": "8699a499-cb5c-4fe7-bcad-1fa4e9d32429",
+    "piece_id": "f810ddd0-c2d0-4199-8b29-5ae527d78f9a",
+    "title": "Where Two Worlds Meet: Lake Kh\u00f6vsg\u00f6l as Mongolia's Family Anchor",
+    "channel": "blog",
+    "status": "unpublished",
+    "external_url": "https://fightcanvas.s3-tastewp.com/2026/10/15/lake-khovsgol-mongolia-family-travel-guide-23cbc3e2/",
+    "published_at": "2026-10-15T09:52:25.209840+00:00",
+    "unpublished_at": "2026-10-15T09:53:58.979644+00:00"
+   },
+   {
+    "publish_id": "fb043d51-4405-4ff9-af8f-175e3bf8b286",
+    "piece_id": "f810ddd0-c2d0-4199-8b29-5ae527d78f9a",
+    "title": "Where Two Worlds Meet: Lake Kh\u00f6vsg\u00f6l as Mongolia's Family Anchor",
+    "channel": "blog",
+    "status": "unpublished",
+    "external_url": "https://fightcanvas.s3-tastewp.com/2026/10/15/lake-khovsgol-mongolia-family-travel-guide-23cbc3e2/",
+    "published_at": "2026-10-15T08:24:08.108565+00:00",
+    "unpublished_at": "2026-10-15T08:24:17.627976+00:00"
+   }
+  ],
+  "total": 4
+ }
+}

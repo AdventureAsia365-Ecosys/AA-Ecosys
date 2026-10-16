@@ -1,0 +1,9 @@
+{
+ "at": "2026-10-16T12:16:13+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/pieces/6925acce-b2ed-49bd-a52b-41a74a2e6d60",
+ "status": 404,
+ "body": {
+  "detail": "piece_id=6925acce-b2ed-49bd-a52b-41a74a2e6d60 not found for this tenant"
+ }
+}

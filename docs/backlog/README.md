@@ -4,46 +4,47 @@
 
 **Rules:** at session start read §1–§3 and pick 3–5 items from §3 top-down (skip items blocked in §2). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S239, 16/10/2026 (Claude Code)._
+_Last updated: S240, 16–17/10/2026 (Claude Code)._
 
 ## 1. Time-gated checks (do these first when due)
 
 | Due | Issue | Check |
 |---|---|---|
-| ≥17/10 | chore (WAF follow-up) | **Rotate the CIS admin secret**: old WAF logs (30-day retention) hold the old value in plain text. 5 places in one go: Secrets Manager `aa-cis/dev/admin-secret`, ECS api + worker force-new-deployment, Vercel `aa-cis-frontend` `ADMIN_SECRET` (prod + preview) + redeploy, GitHub secret `ADMIN_SECRET` (AA-CIS-App), Lambda `aa-cis-dev-dfs-balance-check` (targeted apply re-reads the data source). Only when Vercel has free deploy slots; auto mode off. Verify old secret → 401, new → 200, admin UI loads, deploy guard works. |
-| ≥01/11 | (new, cost) | **Infra cost audit Aug/Sep/Oct 2026**: Cost Explorer per month by `App` tag and per service (acc2) + acc3 Bedrock + AWS Lift credits; explain each jump by the change that caused it; savings options. `docs/audits/<date>-S<nnn>-cost-audit/`. |
-| ≤11/11 | AA-820 | Tenant terms AI clause — Ms. Thư decides whether counsel is needed (no pressure). |
-| ~mid-Nov | AA-862 follow-up | Re-request acc2 quotas in small steps (Cohere 20 → 100 rpm; Claude/GPT only once TrueIDC allows). acc2 is first in the embed chain already. |
+| ≥17/10 | chore (WAF follow-up) | **Rotate the CIS admin secret** (old WAF logs hold the old value). 5 places in one go: Secrets Manager `aa-cis/dev/admin-secret`, ECS api + worker force-new-deployment, Vercel `aa-cis-frontend` `ADMIN_SECRET` (prod + preview) + redeploy, GitHub secret `ADMIN_SECRET` (AA-CIS-App), Lambda `aa-cis-dev-dfs-balance-check`. Needs a free Vercel slot; auto mode off. |
+| ≥17/10 ~07:30 VN | Vercel | Deployment cap (~100 / 24 h, team-wide, canceled ones count) frees from 00:22Z. Batch the frontend work below into few deploys. |
+| ≥01/11 | (new, cost) | Infra cost audit Aug/Sep/Oct 2026 per `App` tag and service (acc2) + acc3 Bedrock + AWS Lift credits. |
+| ≤11/11 | AA-820 | Tenant terms AI clause — Ms. Thư decides whether counsel is needed. |
+| ~mid-Nov | AA-862 follow-up | Re-request acc2 quotas in small steps (Cohere 20 → 100 rpm). |
+| **before prod** | chore (security) | **Rotate the GitHub OAuth token (`gh`/MCP) and the RDS master password**: both were printed into the local S240 Claude Code transcript (MFA-expired `export $(…)`). Nghiệp: keep until prod. Run `.tmp-session/s240/redact_leaked_env.sh` after closing S240 to scrub the local copies. |
 
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
-- **AA-777:** close on outcome metrics (r7: 20/20 approved, 0 F9 holds, AA-768 set 5/5) and track the retry re-flag rate (13% vs 8%) in a small follow-up — or keep open.
-- ~~Jira drafts S239~~ — posted 16/10: PR-11 (10478), PR-12 (10479), PR-7 (10480), PR-16 (10481).
 - AA-858 Ops overview: priorities with Ms. Thư. AA-855 UAT videos: when Nghiệp says (after the tech work).
-- acc1 SSO (`aws sso login --profile pqnghiep-admin`) only if acc1 is needed again (dropped from the Cohere chain).
-- Product questions still open from S238: T2 day separator per tenant catalog; "— N Days" vs ", N Days" (AA-778 closed; ask Ms. Thư if it matters).
+- Product questions still open from S238: T2 day separator per tenant catalog; "— N Days" vs ", N Days".
+- acc1 SSO only if acc1 is needed again.
 
 ## 3. Ordered work queue (next sessions)
 
-| # | Issue | Work | Lane | Size | Status after S239 / next action | Needs Nghiệp |
+| # | Issue | Work | Lane | Size | Status after S240 / next action | Needs Nghiệp |
 |---|---|---|---|---|---|---|
-| 1 | chore | Admin secret rotation (see §1) | Infra/security | S | Plan ready (S239 log). Blocked 16/10 by the Vercel deploy cap. | Auto mode off for the secret writes. |
-| 2 | AA-836 | Portal at 390 px + My Catalog source 404 + raw markdown previews | CIS portal | M | Not started. Frontend: Vercel preview builds now skip backend-only PRs (Ignored Build Step). | — |
-| 3 | AA-832 | Remaining RDS alarms: latency, disk queue, XID, per-role connections vs CONNECTION LIMIT (aa_app_user 15 since AA-817) | Infra/data | M | Not started. State the alarm cost before applying. | Cost OK. |
-| 4 | AA-859 | Tenant pool wave 2: tenant writes, atoms/subject/planning RLS, brand-identity + admin_atoms paths, grant hardening, 2 PR-A follow-ups | Data platform / CIS | L | New (S239). One route group per PR behind a flag. | Flag flips (report-then-confirm). |
-| 5 | AA-751 | X6 per-owner job tables (unblocks AA-861) | Data platform / Booking / TP | M | Re-scoped S238. | — |
-| 6 | AA-834 | Flaky AA-752 smoke test (click before hydration) | CIS portal/CI | S | Not started. | — |
-| 7 | AA-863 | Admin: seed place + country next to each Subject / T9 piece | CIS portal | S | New (split from AA-857). | — |
-| 8 | AA-703 | Cognito identity epic, Phase 0 | Identity/infra | XL | Unblocked (SES prod). | Rewrite per ADR 0006. |
-| 9 | AA-712 | Place pipeline: L4 read-model latency, PLACES_SOURCE flip, content checks, a3_place_days shadow decision | CIS platform | M | Partly shipped (mig 235). | — |
-| 10 | AA-800 | Tenant signature vocabulary | CIS T-series | M | No change. | Paid run (<$1). |
-| 11 | AA-780 | LinkedIn: Trail Pulse voice fields, broetry, hashtag check | CIS T-series | S | No change. | Review voice fields. |
-| 12 | AA-816 | Staff directory + Cognito groups | Identity / CIS admin | L | No change. | Done-when rewrite. |
-| 13 | AA-682 | Booking wave 3: supplier bookings + trip checks, invoices/payment schedule | Booking | XL | No change. | Payment marking, tax. |
-| 14 | AA-858 | Ops overview on /admin/overview | CIS admin | M | Waits for Ms. Thư's priorities. | Priorities. |
-| 15 | AA-860 | X1 runtime role split (cis_owner / cis_app) | Data platform | L | New (S239); after AA-807/AA-826; consider doing it on the AA-864 target account. | Secrets, MFA Terraform. |
-| 16 | chore | TripPlanner `.claude/CLAUDE.md`: Cohere chain is acc2 → acc3 (acc1 dropped); Mapbox URL restriction done | Docs | XS | — | — |
-| 17 | AA-855 | UAT videos for all apps | QA | M | After the tech work, when Nghiệp says. | Go signal. |
+| 1 | chore (Vercel) | **CIS admin pollers** (Fluid Active CPU 52 % of the Hobby cap): Jobs page poll only while active, 30 s, page size 25, no payload in the list; Topbar on react-query 120 s; one shared review-queue key; admin verify cache 20 s → ~5 min; proxy routes stream the body. Report: `docs/audits/2026-10-16-S240-vercel/README.md`. | CIS frontend | M | New (S240). Needs Vercel slots. | — |
+| 2 | chore (Vercel) | CI-created previews only when `frontend/**` changes (Git-integration previews off), all 3 repos; UI smoke keeps working | CI | M | New (S240): `git.deploymentEnabled` cannot filter by path. | — |
+| 3 | AA-836 + AA-863 + AA-834 | Portal at 390 px / My Catalog 404 / raw markdown; seed place next to Subject; flaky smoke | CIS portal | M | Not started (Vercel cap). | — |
+| 4 | chore | Admin secret rotation (§1) | Security | S | Plan ready (S239 log). | Auto mode off. |
+| 5 | AA-751 | Remaining X6: Booking deploy gate (GitHub OIDC, `deploy-dev.yml` preflight, seeded probe blocks then passes); R1 data-standard flips (C5.1b autovacuum, C6 rows) | Booking / Infra / docs | M | First wave Done on Dev (S240: idle check, 242, bk-013, release-on-shutdown, acp_runs readers, in-process job metrics + 6 alarms). | — |
+| 6 | AA-861 | `tripplanner.job` from the template + scheduled Lambda worker + kind `tp_outbox_pii_redact` | TripPlanner | M–L | Unblocked (S240). TP merges need auto mode off. | TP merges. |
+| 7 | AA-859 | D5b (`/v1/tours/{id}/full` tenant branch, `/{id}`, `/versions/{id}/export-docx`); wave 3 (RLS brand rules / seo config, brand identity, publish); wave 4 (subject / quarter_plan / tenant_tour_pages / tour_atoms RLS + routes, main-pool shrink from the gauge) | Data platform / CIS | L | Wave 2 live: 6 flags ON (S240), 241 applied. | Wave 4 route hub retire (Q3). |
+| 8 | chore (Infra) | Remove `ok_actions` from the 2 TripPlanner Lambda alarms (left out of #160 so the apply did not touch the TP artifact S3 objects' tags) | Infra | XS | — | — |
+| 9 | AA-865 | Pooled F9_cta_fact re-flag rate (n ≥ 60) | CIS T-series | S | New (S240). | — |
+| 10 | AA-703 | Cognito identity epic, Phase 0 (Infra #105 open since 14/10) | Identity/infra | XL | Unblocked. | Rewrite per ADR 0006. |
+| 11 | AA-712 | Place pipeline: L4 read-model latency, PLACES_SOURCE flip, content checks | CIS platform | M | Partly shipped. | — |
+| 12 | AA-800 | Tenant signature vocabulary | CIS T-series | M | — | Paid run (<$1). |
+| 13 | AA-780 | LinkedIn: Trail Pulse voice fields, broetry, hashtag check | CIS T-series | S | — | Review voice fields. |
+| 14 | AA-816 | Staff directory + Cognito groups | Identity / CIS admin | L | — | Done-when rewrite. |
+| 15 | AA-682 | Booking wave 3: supplier bookings + trip checks, invoices/payment schedule | Booking | XL | — | Payment marking, tax. |
+| 16 | AA-858 | Ops overview on /admin/overview | CIS admin | M | Waits for Ms. Thư. | Priorities. |
+| 17 | AA-860 | X1 runtime role split (cis_owner / cis_app) | Data platform | L | After AA-807/AA-826. | Secrets, MFA Terraform. |
+| 18 | AA-855 | UAT videos for all apps | QA | M | After the tech work. | Go signal. |
 
 ## 4. Later / parked
 
@@ -83,20 +84,19 @@ _Last updated: S239, 16/10/2026 (Claude Code)._
 | AA-839 | Erasure runbook + DRY RUN job for a traveller and an offboarded tenant | parked | Parked until ADR 0006 Phase 4 / before prod. | Approve creating it as a parked Low issue. |
 | AA-842 | OTel gen_ai tracing investigation | parked | Report on Notion (Program Brain) + AA-CIS-App docs/investigations/llm-otel-tracing.md. | Decided S238: keep Backlog; build option B (gateway span, ~15–20 h) only when slow/unexplained jobs justify it |
 | AA-864 | Research: consolidate all of acc2 (services, data, connections) on acc3 or one designated account — complexity, cost, time | later | Seed notes on the issue. Do with AA-860 on the target account. | Pick the target account when the research is done. |
-| AA-861 | TripPlanner outbox PII redaction after 90 d | later | Blocked on AA-751 (tripplanner.job). | |
 
-## 5. Closed in S239
+## 5. Closed in S240
 
-- Done with live evidence (comments on each issue): AA-792, AA-778, AA-771, AA-772, AA-681, AA-708, AA-756, AA-763, AA-807, AA-843, AA-701, AA-791, AA-683, AA-822, AA-823, AA-679, AA-802, AA-668, AA-831, AA-768, AA-801, AA-828, AA-833, AA-827, AA-806, AA-841, AA-714, **AA-856, AA-818, AA-819, AA-817, AA-825, AA-857, AA-862, AA-678**.
-- New in S239: AA-844 → AA-864 (open ones: AA-855, AA-858, AA-859, AA-860, AA-861, AA-863, AA-864).
+- Done with live evidence: **AA-777** (r7 outcome metrics; residual → AA-865), **AA-832** (RDS alarms; sampling later moved in process).
+- In Progress with shipped waves: **AA-859** (wave 2 live, 6 flags ON), **AA-751** (X6 first wave live).
+- New in S240: AA-865.
 
 ## 6. Environment notes for the next session
 
-- ECS CIS api :642 / worker :199 (image b478a18b, #770); Booking :21 (bk-012); CIS migrations up to **240**; TP tp-012; TripPlanner Lambdas from #92.
-- **LLM accounts:** acc2 (payer TrueIDC) cannot use Bedrock LLMs → every LLM call goes to **acc3** (payer eCloudvalley, AWS Lift credits). Cohere Embed v4: cache → acc2 (20 rpm) → acc3 (2,000 rpm; Marketplace agreement accepted 16/10) → keyword fallback. acc1 = Nghiệp personal, not in any chain.
-- **Cost rule:** state the monthly cost of any new AWS service/resource before applying.
-- **Vercel:** Hobby cap ~100 deployments / 24 h (rolling, team-wide). Ignored Build Step on all 3 projects skips frontend builds for backend-only commits (production deploy shows CANCELED). Still batch frontend PRs.
-- AA-857 snapshot for restore: `s3://aa-cis-bronze-005097885195/scripts/restore/aa857_20261016T080718Z.json` (+ `.tmp-session/s239/aa857_repair_restore.py`).
-- Test channel credentials: `aa-cis/dev/e2e-wordpress-test`, `aa-cis/dev/e2e-facebook-test`; e2e admins `aa-cis/dev/e2e-test-admin` and `-2`.
-- Terraform: always targeted plans, read before apply; acc3 root `accounts/acc3-bedrock` with profile `nghiep_aa365`.
-- Merge backend PRs one at a time (merge train script `.tmp-session/s239/merge_train.sh`), update BEHIND branches via `gh api -X PUT …/update-branch`. Never run two job-producing drivers at once on `shared.job`.
+- ECS CIS api :657 / worker :214 (image 353c328d, #786); Booking :26 (bk-013); CIS migrations up to **242**; TP tp-012.
+- **Tenant pool:** all `aa859:*` flags ON (piece_edit, t2_version_write, angle_gate_decide, unpublish, t2_version_reads, integration_connect) + the 5 earlier flags. Rollback = `DEL` the key (tool: `docs/audits/2026-10-16-S240-aa859/aa859_flag.py`, automated flip: `aa859_flip_verify.py`). Pool max 2 / task, api autoscale max 7.
+- **Ops metrics:** in process (CIS api `ops_metrics_sampler`, Booking `JobMetricsSampler`), every 5 min → `AA/RDS` (per role) and `AA/Jobs/CIS` / `AA/Jobs/Booking`. No Lambda schedule for it any more. Alarms e-mail **only on ALARM** (no OK e-mails). 10 custom metrics = free tier; the AA-296 `ACP/Pipeline` filter was deleted.
+- **DB Migrate** refuses apply while any `<schema>.job` has non-exempt queued/running rows (exit 7); exempt: `bk_inquiry_pull`. Override input `override_busy_jobs` (Nghiệp only).
+- **Terraform:** plan/apply only from merged `main`; a targeted plan can pull in dependencies (RDS parameter group, TP S3 artifact objects) — read and exclude.
+- **Vercel:** 3 projects left (aa-cis-frontend, aa-tripplanner, aa-booking-admin); deploy hook removed (#783).
+- Terraform acc3 root `accounts/acc3-bedrock` with profile `nghiep_aa365`. Merge backend PRs one at a time (`.tmp-session/s240/train.sh`, `TRAIN_DIR` / `TRAIN_REPO` for other repos).

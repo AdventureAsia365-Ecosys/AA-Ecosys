@@ -1,0 +1,10 @@
+{
+ "at": "2026-10-16T13:40:23+00:00",
+ "tenant": "atlas-hearth",
+ "method": "PATCH",
+ "path": "/v1/tours/versions/5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+ "status": 404,
+ "body": {
+  "detail": "Version not found"
+ }
+}

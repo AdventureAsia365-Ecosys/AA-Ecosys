@@ -1,0 +1,10 @@
+{
+ "at": "2026-10-16T13:33:29+00:00",
+ "tenant": "terra-family",
+ "method": "POST",
+ "path": "/v1/angle-gate/requests/41e94397-aa14-45f6-9e23-337a0362fd19/choose",
+ "status": 409,
+ "body": {
+  "detail": "request_id=41e94397-aa14-45f6-9e23-337a0362fd19 is status='approved', expected 'pending_choice' or 'reusable'."
+ }
+}

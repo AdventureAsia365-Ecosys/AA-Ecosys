@@ -1,0 +1,8 @@
+{
+ "aa859:piece_edit_pool": "true",
+ "aa859:t2_version_write_pool": "true",
+ "aa859:angle_gate_decide_pool": "true",
+ "aa859:unpublish_pool": "true",
+ "aa859:t2_version_reads_pool": "true",
+ "aa859:integration_connect_pool": "true"
+}

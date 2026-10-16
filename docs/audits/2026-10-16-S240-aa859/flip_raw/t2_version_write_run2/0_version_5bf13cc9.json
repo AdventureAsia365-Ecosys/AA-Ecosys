@@ -1,0 +1,75 @@
+{
+ "at": "2026-10-16T13:40:01+00:00",
+ "tenant": "terra-family",
+ "method": "GET",
+ "path": "/v1/tours/versions/5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+ "status": 200,
+ "body": {
+  "id": "5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+  "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+  "published_tour_id": "2cf487be-2a9a-4a64-b1d0-1cceaebd9361",
+  "version_number": 5,
+  "parent_version_id": null,
+  "rewritten_content": "{\"name\": \"Laos to Vietnam by Bicycle and Boat: Nam Ou River to Hanoi in 12 Days\", \"status\": \"done\", \"summary\": \"This 12-day route is built for families with old...",
+  "status": "ai_generated",
+  "edit_source": "ai_generated",
+  "rewrite_language": "en-US",
+  "seo_mode": "standard",
+  "edited_at": null,
+  "edited_by_user": null,
+  "created_at": "2026-10-16T04:03:15.757701+00:00",
+  "job_id": "e360282e-690f-40fd-906b-e5c75fe225da",
+  "tour_id": "2aa6e292-c82c-4380-a87e-1585933ff3df",
+  "aa_name": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi \u2014 12 Days",
+  "aa_subtitle": "A 12-day cycling route from Luang Prabang through the Nam Ou valley and across the Vietnam border to Hanoi, combining tarmac and dirt-road riding with village s...",
+  "aa_summary": "This 12-day cycling route connects Laos and Vietnam by bicycle and boat, covering mixed terrain. The journey begins in Luang Prabang, follows the Nam Ou River v...",
+  "aa_description": "",
+  "aa_highlights": "[\"Boat journey through Nam Ou River gorge with stops at remote villages (4\u20135 hours)\", \"Kuang Si Waterfalls near Luang Prabang with swimming in freshwater pools\"...",
+  "aa_itineraries": "Day 1 \u2014 Arrival and Orientation Cycling in Luang Prabang\nMeet the guide and team upon arrival in Luang Prabang. A short sunset ride around the town provides acc...",
+  "aa_seo_title": "Laos to Vietnam Cycling: 12 Days via Nam Ou River",
+  "aa_seo_meta": "Cycle 500 kilometers from Luang Prabang through the Nam Ou River valley to northern Vietnam over 12 days with village accommodation and boat transfers.",
+  "country": "Laos",
+  "duration": "12 days",
+  "price_raw": "Valid 1st March 26 - 28th Feb 2027\n\nPAX             PRICE IN USD / PERSON                 PRICE IN USD / PERSON\n                      Laos Section ONLY         ...",
+  "inclusions": "- All sightseeing as described in program above\n- Transportation in private a /c vehicles\n- Accommodation in hotels (twin shared)\n- English speaking biking guid...",
+  "exclusions": "- International air tickets to/from Laos \n- Visa fee (approximately US$30/pax, depending on nationality)\n- Travel insurance of any kind\n- Meals not mentioned in...",
+  "job_status": "succeeded",
+  "version_history": [
+   {
+    "id": "79038b8c-9b8b-4b8d-b3a8-364f3c53cb0b",
+    "version_number": 1,
+    "status": "ai_generated",
+    "edit_source": "ai_generated",
+    "created_at": "2026-10-12T07:00:40.433470+00:00"
+   },
+   {
+    "id": "477ef0ce-a133-49c2-9e3e-cb22db1a8b18",
+    "version_number": 2,
+    "status": "ai_generated",
+    "edit_source": "ai_generated",
+    "created_at": "2026-10-14T02:50:39.681788+00:00"
+   },
+   {
+    "id": "5c79de77-9c7e-4ad8-8f3e-175307fc5fc3",
+    "version_number": 3,
+    "status": "ai_generated",
+    "edit_source": "ai_generated",
+    "created_at": "2026-10-15T06:54:49.270645+00:00"
+   },
+   {
+    "id": "554ab6e8-1047-40cc-8c91-516b81c834a6",
+    "version_number": 4,
+    "status": "ai_generated",
+    "edit_source": "ai_generated",
+    "created_at": "2026-10-16T02:27:24.840751+00:00"
+   },
+   {
+    "id": "5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+    "version_number": 5,
+    "status": "ai_generated",
+    "edit_source": "ai_generated",
+    "created_at": "2026-10-16T04:03:15.757701+00:00"
+   }
+  ]
+ }
+}

@@ -1,0 +1,10 @@
+{
+ "at": "2026-10-16T13:33:31+00:00",
+ "tenant": "terra-family",
+ "method": "POST",
+ "path": "/v1/angle-gate/requests/17ed1a18-80d7-4795-b7d7-14c080b70a79/choose",
+ "status": 404,
+ "body": {
+  "detail": "request_id=17ed1a18-80d7-4795-b7d7-14c080b70a79 not found for this tenant"
+ }
+}

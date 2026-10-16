@@ -1,0 +1,13 @@
+{
+ "at": "2026-10-16T12:16:15+00:00",
+ "method": "POST",
+ "path": "/v1/integrations/wordpress",
+ "status": 200,
+ "body": {
+  "connected": true,
+  "site_url": "https://fightcanvas.s3-tastewp.com",
+  "connected_at": "2026-10-16T12:16:16.887259+00:00",
+  "last_verified_at": null,
+  "last_verify_error": null
+ }
+}
