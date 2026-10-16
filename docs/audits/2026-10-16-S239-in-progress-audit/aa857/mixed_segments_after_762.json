@@ -1,0 +1,7 @@
+{"segments_with_members": 10327, "mixed_live_segments": 96, "mixed_all_segments": 96, "mixed_live_member_rows": 3103, "minority_live_member_rows": 1437, "subjects_on_mixed": 27, "subjects_by_state": {"picked": 2, "proposed": 20, "used": 5}, "current_routes_with_mixed_segment": 475}
+f59272229436fbe4 Delhi {'India': 37, 'Thailand': 34, 'Sri Lanka': 30, 'Laos': 15, 'China': 14, 'Philippines': 14, 'Japan': 14, 'South Korea': 4, 'Nepal': 4, 'Taiwan': 3, 'Pakistan': 2, 'Mongolia': 1, 'Bhutan': 1}
+fe9452782e900af1 Dal Lake {'Sri Lanka': 182, 'India': 140, 'China': 81, 'Nepal': 73, 'Thailand': 32, 'Philippines': 30, 'Laos': 27, 'Pakistan': 21, 'Bhutan': 15, 'South Korea': 10, 'Taiwan': 8, 'Mongolia': 7}
+fc9267910ce55fec Ganish {'Pakistan': 14, 'South Korea': 9, 'Sri Lanka': 9, 'India': 7, 'China': 6, 'Laos': 6, 'Philippines': 6, 'Bhutan': 3, 'Nepal': 2, 'Taiwan': 1, 'Thailand': 1, 'Japan': 1}
+fd5d0701f1d6a57f airport {'China': 42, 'India': 25, 'Sri Lanka': 18, 'Nepal': 10, 'Thailand': 6, 'Mongolia': 3, 'Taiwan': 2, 'Laos': 2, 'Pakistan': 2, 'Bhutan': 1, 'Japan': 1}
+fe1d5b0a5d58142e bridge {'Nepal': 35, 'India': 6, 'Taiwan': 4, 'Japan': 4, 'China': 3, 'Bhutan': 3, 'Sri Lanka': 3, 'Pakistan': 3, 'South Korea': 2, 'Thailand': 1}
+OK scripts/out/s239_aa857_mixed_segments.json

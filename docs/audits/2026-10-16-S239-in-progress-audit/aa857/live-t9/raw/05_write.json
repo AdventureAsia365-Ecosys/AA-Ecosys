@@ -1,0 +1,13 @@
+{
+ "at": "2026-10-16T08:35:51+00:00",
+ "method": "POST",
+ "path": "/v1/content-writing/requests/41e94397-aa14-45f6-9e23-337a0362fd19/write",
+ "status": 202,
+ "body": {
+  "piece_id": "6925acce-b2ed-49bd-a52b-41a74a2e6d60",
+  "angle_gate_request_id": "41e94397-aa14-45f6-9e23-337a0362fd19",
+  "channel": null,
+  "ready_state": "in_progress"
+ },
+ "request_body": {}
+}

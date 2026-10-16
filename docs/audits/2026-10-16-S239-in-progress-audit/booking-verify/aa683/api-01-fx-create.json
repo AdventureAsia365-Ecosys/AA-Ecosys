@@ -1,0 +1,29 @@
+{
+ "create": {
+  "status": 201,
+  "body": {
+   "id": "2a255cca-bfaa-4d3d-96aa-b8bb3e2f795a",
+   "status": "pending",
+   "created_by": {
+    "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "name": "e2e-claude-code"
+   },
+   "created_at": "2026-10-16T01:55:00.790363Z",
+   "approved_by": null,
+   "approved_at": null,
+   "can_approve": false,
+   "currency": "BTN",
+   "rate_per_usd": "84.10000000",
+   "buffer_pct": "0.0200",
+   "as_of": "2026-10-16",
+   "source": "ZZ S239 test FX row (AA-683 pending-row screenshot, maker-checker)"
+  }
+ },
+ "self_approve": {
+  "status": 403,
+  "body": {
+   "detail": "own_row",
+   "message": "maker-checker: a second person must approve a row you created"
+  }
+ }
+}

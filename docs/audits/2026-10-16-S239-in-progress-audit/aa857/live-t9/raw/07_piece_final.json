@@ -1,0 +1,19 @@
+{
+ "at": "2026-10-16T08:36:29+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/pieces/6925acce-b2ed-49bd-a52b-41a74a2e6d60",
+ "status": 200,
+ "body": {
+  "piece_id": "6925acce-b2ed-49bd-a52b-41a74a2e6d60",
+  "angle_gate_request_id": "41e94397-aa14-45f6-9e23-337a0362fd19",
+  "channel": "linkedin",
+  "ready_state": "ready",
+  "content_text": "At the National Institute for Zorig Chusum, students master a single craft over years of study.\n\nZorig Chusum refers to Bhutan's thirteen traditional arts and crafts, among them thangka painting, wood carving, weaving, and embroidery. The institute was established by the government to ensure these skills pass formally from one generation to the next, not informally or by chance. Its graduates go on to restore and decorate Bhutan's dzongs and monasteries, meaning the training here has a direct and visible purpose in the country's living religious and cultural landscape.\n\nA visit offers families an introduction to these disciplines and the structured, long-term training through which they are passed on. For parents, the context behind each discipline makes the observation genuinely informative rather than purely visual.\n\nBecause this is a government-run school in Thimphu dedicated to formal craft education, it carries a clear educational thread that fits naturally into a family itinerary.\n\nTerra Family Expeditions brings together moments like this into journeys that hold meaning for adults and children equally. Message us to start planning your family trip.\n\n#Thimphu #ZorigChusum #Bhutan",
+  "seo_title": null,
+  "meta_description": null,
+  "slug": null,
+  "route_hub_name": null,
+  "route_segment_count": null,
+  "created_at": "2026-10-16T08:35:53.173229+00:00"
+ }
+}

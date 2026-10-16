@@ -1,0 +1,1350 @@
+{
+ "4ebda814-b6f1-4a3b-80e3-727f866220fb": {
+  "status": 200,
+  "j": {
+   "piece_id": "4ebda814-b6f1-4a3b-80e3-727f866220fb",
+   "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+   "tenant_name": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "status": "held",
+   "held_reason": "F14_first_line: first line is 163 characters, over 140: 'Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.'",
+   "attempt_number": 1,
+   "created_at": "2026-10-16T03:32:06.572002+00:00",
+   "job_id": "a94a884a-25cd-4f3c-aac7-f8946a40a79f",
+   "content_text": "Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.\n\nZorig Chusum means Bhutan's thirteen traditional arts and crafts, and this government-run school in Thimphu exists for one clear purpose: to make sure those skills pass to the next generation rather than disappear. Each student follows a multi-year programme under experienced master craftspeople, which is why the standard of work inside is serious and deliberate.\n\nThere is a direct connection to the dzongs and monasteries families see elsewhere in Bhutan. The institute trains the artisans who restore and decorate those very buildings, so what looks like a separate stop starts to feel like a thread running through the whole journey.\n\nFor families, that context matters. Children can watch a discipline being learned at the same pace that craft has always demanded, and parents can see how Bhutanese cultural life holds together across centuries.\n\nThis visit sits within a broader morning in Thimphu. Message us to start planning your family trip.\n\n#Thimphu #ZorigChusum #Bhutan",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "gate_ledger": [
+    {
+     "gate": "F6_cta_present",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F1_grounding",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F2_banned_patterns",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F2_brand_forbidden",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F11_brand_name",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F19_authenticity",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F10_cannibalization_cross_tenant",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "promises_an_option",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F4_extreme_length",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F0_complete",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F12_scope",
+     "passed": true,
+     "blocking": false,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F13_hygiene",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F13_leak",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F13_repeat",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F17_trip_fact",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F18_rarity",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F14_social_shape",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F15_voice",
+     "passed": true,
+     "blocking": false,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F15_voice_warn",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F8_framework",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F9_cta_fact",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F9_brand_style",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F14_first_line",
+     "passed": false,
+     "blocking": true,
+     "repairable": false,
+     "violations": [
+      "first line is 163 characters, over 140: 'Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.'"
+     ]
+    }
+   ],
+   "flags": [
+    {
+     "gate": "F13_autofix",
+     "passed": false,
+     "blocking": false,
+     "repairable": false,
+     "violations": [
+      "first-line rewrite not kept (still 365 characters)"
+     ]
+    }
+   ],
+   "repair_log": [
+    {
+     "attempt": 1,
+     "feedback": [
+      "F14_first_line: first line is 163 characters, over 140: 'Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.'"
+     ],
+     "repairable": false,
+     "violations": [
+      "first line is 163 characters, over 140: 'Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.'"
+     ],
+     "gate_ledger": [
+      {
+       "gate": "F6_cta_present",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F1_grounding",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F2_banned_patterns",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F2_brand_forbidden",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F11_brand_name",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F19_authenticity",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F10_cannibalization_cross_tenant",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "promises_an_option",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F4_extreme_length",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F0_complete",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F12_scope",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F13_hygiene",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F13_leak",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F13_repeat",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F17_trip_fact",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F18_rarity",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F14_social_shape",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F15_voice",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F15_voice_warn",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F8_framework",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F9_cta_fact",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F9_brand_style",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F14_first_line",
+       "passed": false,
+       "blocking": true,
+       "violations": [
+        "first line is 163 characters, over 140: 'Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.'"
+       ]
+      }
+     ],
+     "gate_targeted": "F14_first_line"
+    }
+   ],
+   "discarded_attempts": [],
+   "writer_input": {
+    "cta": "Message us to start planning your family trip.",
+    "goal": "introduction_awareness",
+    "seed": "Traditional Arts & Craft School — visit\nLocation: National Institute for Zorig Chusum, Thimphu, Thimphu District, Bhutan (the itinerary calls it Traditional Arts & Craft School) (do not place it in any other town, region or country)\nNaming: Commonly referred to as the 'Traditional School of Arts and Crafts' or 'Zorig Chusum School' by guides and travel writers; its official name is the National Institute for Zorig Chusum. Zorig Chusum refers to Bhutan's thirteen traditional arts and crafts.\nDay 3 of the trip\nSource itinerary: Morning sightseeing in Thimphu includes Kuenselphodrang (the largest Buddha statue in Bhutan), the Traditional Arts & Craft School, and the National Library.\nPlace background (checked facts about the place itself — you may use these; they say nothing about what this trip does):\n- The National Institute for Zorig Chusum is a government-run school in Thimphu dedicated to preserving and teaching Bhutan's thirteen traditional arts and crafts, collectively known as Zorig Chusum.\n- The thirteen arts taught include thangka painting, wood carving, sculpture, weaving, embroidery, lacquerwork, and other crafts that are central to Bhutanese cultural and religious life.\n- The institute was established to ensure that traditional Bhutanese craft skills are formally transmitted to new generations and not lost to modernisation.\n- Students typically enroll for a multi-year programme, spending years mastering a single craft discipline under experienced master craftspeople.\n- The institute plays a direct role in supplying skilled artisans for the restoration and decoration of Bhutan's dzongs, monasteries, and other religious structures.",
+    "trip": null,
+    "angle": {
+     "name": "What the Institute Teaches Families About Bhutan",
+     "formula_fit": "Hook-Insight-CTA: the hook surfaces the surprising depth of craft mastery at the institute (multi-year programmes, master craftspeople); the insight explains why Zorig Chusum — the thirteen traditional arts — matters to Bhutanese cultural and religious life; the CTA invites families to consider what a morning like this looks like on a real itinerary.",
+     "why_it_works": "Positioning the visit around what students at the institute actually spend years learning gives parents a concrete, credible reason to value the stop — it connects to the brand's educational pillar without framing the trip as a school outing.",
+     "best_final_style": "Lead with the concrete fact that students at the National Institute for Zorig Chusum spend years mastering a single discipline — thangka painting, wood carving, weaving, or one of the other thirteen arts — under experienced master craftspeople. The body explains briefly what Zorig Chusum means (Bhutan's thirteen traditional arts and crafts) and notes the institute's founding purpose: to keep these skills alive across generations. Include one sentence on how the institute connects directly to the dzongs and monasteries families will already have seen or will see on this trip, giving the visit a natural through-line rather than a standalone stop. Close with a reassuring, practical CTA — one sentence pointing toward the broader Thimphu morning it sits within."
+    },
+    "facts": "[Fact id=fact_visa_sea01]\nLaos visa: Most nationalities can get a 30-day Laos e-visa online for about $30-45, processed in 3 business days.",
+    "scope": "SCOPE: this piece is about one moment of the trip (day 3): Traditional Arts & Craft School. Do not promise, name or imply any other part of the trip in the title, headings or body.",
+    "channel": "linkedin",
+    "keyword": null,
+    "brand_pack": {
+     "voice": [
+      "Warm",
+      "Reassuring",
+      "Clear",
+      "Practical",
+      "Family-aware",
+      "Encouraging",
+      "Trustworthy"
+     ],
+     "version": 4,
+     "core_idea": "Safe, active, educational journeys for families who want meaningful time together. Terra Family Expeditions helps families explore the world through nature, culture, and shared discovery. The brand should feel warm, reassuring, practical, and intelligent. It should not speak down to parents or children.",
+     "brand_name": "Terra Family Expeditions",
+     "brand_type": "Premium family adventure travel brand",
+     "default_cta": "Message us to start planning your family trip.",
+     "style_guide": "Explain the pace clearly.\nMention comfort, safety, learning, and variety.\nShow how the trip works for both adults and children.\nUse simple but polished language.\nAvoid childish language.\n\nWrite like this:\n“Each day balances active discovery with time to rest, making the journey engaging for children and manageable for parents.”\n“Families can explore villages, rivers, local food, and nature trails with guides who understand both safety and curiosity.”\n\nAvoid:\nDo not make the tour sound like a school trip.\nDo not use childish words like “kiddos,” “little explorers,” or “fun for the whole gang.”\nDo not overpromise safety with absolute phrases like “completely safe,” “risk-free,” or “guaranteed safe.”\nDo not describe activities as too intense unless they really are.\nDo not write only for parents and forget the children’s experience.\nDo not make the itinerary sound exhausting with phrases like “packed schedule,” “non-stop adventure,” or “full-throttle family fun.”\nDo not use generic family travel clichés like “memories that last a lifetime.”",
+     "good_examples": "“Walk gentle forest trails, meet local makers, and give younger travellers enough discovery without making the days feel overloaded.”\n“Each day balances active discovery with time to rest, making the journey engaging for children and manageable for parents.”\n“Families can explore villages, rivers, local food, and nature trails with guides who understand both safety and curiosity.”",
+     "system_prompt": null,
+     "forbidden_words": [
+      "kiddos",
+      "little explorers",
+      "fun for the whole gang",
+      "completely safe",
+      "risk-free",
+      "guaranteed safe",
+      "packed schedule",
+      "non-stop adventure",
+      "full-throttle family fun",
+      "memories that last a lifetime"
+     ],
+     "customer_mindset": "Parents want their children to experience nature and culture, but they also care about safety, pacing, food, rest time, and logistics. They want adventure, but not chaos.",
+     "customer_segment": "Affluent families with children aged 7–16\nParents who want active holidays with safety, learning, and comfort"
+    },
+    "destination": null,
+    "trip_places": [
+     "Chele La Pass",
+     "Craft Bazaar",
+     "Dochula Pass",
+     "Hotel",
+     "Kila Goenpa monastery",
+     "Lungchoetse Hike",
+     "Paro",
+     "Paro Airport to Thimphu",
+     "Paro International Airport",
+     "Paro town",
+     "Tashichhodzong",
+     "Tiger's Nest Monastery"
+    ],
+    "writer_trip": null,
+    "brand_rubric": "BRAND IDENTITY: Terra Family Expeditions\nBrand type: Premium family adventure travel brand\nCore idea: Safe, active, educational journeys for families who want meaningful time together. Terra Family Expeditions helps families explore the world through nature, culture, and shared discovery. The brand should feel warm, reassuring, practical, and intelligent. It should not speak down to parents or children.\nAudience: Affluent families with children aged 7–16\nParents who want active holidays with safety, learning, and comfort\nAudience mindset: Parents want their children to experience nature and culture, but they also care about safety, pacing, food, rest time, and logistics. They want adventure, but not chaos.\nVoice: Warm, Reassuring, Clear, Practical, Family-aware, Encouraging, Trustworthy\nCall to action: Message us to start planning your family trip.\n\nSTYLE GUIDE:\nExplain the pace clearly.\nMention comfort, safety, learning, and variety.\nShow how the trip works for both adults and children.\nUse simple but polished language.\nAvoid childish language.\n\nWrite like this:\n“Each day balances active discovery with time to rest, making the journey engaging for children and manageable for parents.”\n“Families can explore villages, rivers, local food, and nature trails with guides who understand both safety and curiosity.”\n\nAvoid:\nDo not make the tour sound like a school trip.\nDo not use childish words like “kiddos,” “little explorers,” or “fun for the whole gang.”\nDo not overpromise safety with absolute phrases like “completely safe,” “risk-free,” or “guaranteed safe.”\nDo not describe activities as too intense unless they really are.\nDo not write only for parents and forget the children’s experience.\nDo not make the itinerary sound exhausting with phrases like “packed schedule,” “non-stop adventure,” or “full-throttle family fun.”\nDo not use generic family travel clichés like “memories that last a lifetime.”\n\nFORBIDDEN WORDS/PHRASES: kiddos, little explorers, fun for the whole gang, completely safe, risk-free, guaranteed safe, packed schedule, non-stop adventure, full-throttle family fun, memories that last a lifetime\n\nGOOD EXAMPLES (real, on-brand — do not flag writing like this as generic):\n“Walk gentle forest trails, meet local makers, and give younger travellers enough discovery without making the days feel overloaded.”\n“Each day balances active discovery with time to rest, making the journey engaging for children and manageable for parents.”\n“Families can explore villages, rivers, local food, and nature trails with guides who understand both safety and curiosity.”",
+    "route_moments": []
+   },
+   "route_hub_name": null,
+   "goal": "introduction_awareness",
+   "atom_id": "00480b6b9d0bfedd",
+   "request_id": "b353d044-060b-4c65-84c2-44f64f30a0d1",
+   "angle_name": "What the Institute Teaches Families About Bhutan",
+   "angle_why": "Positioning the visit around what students at the institute actually spend years learning gives parents a concrete, credible reason to value the stop — it connects to the brand's educational pillar without framing the trip as a school outing.",
+   "angle_style": "Lead with the concrete fact that students at the National Institute for Zorig Chusum spend years mastering a single discipline — thangka painting, wood carving, weaving, or one of the other thirteen arts — under experienced master craftspeople. The body explains briefly what Zorig Chusum means (Bhutan's thirteen traditional arts and crafts) and notes the institute's founding purpose: to keep these skills alive across generations. Include one sentence on how the institute connects directly to the dzongs and monasteries families will already have seen or will see on this trip, giving the visit a natural through-line rather than a standalone stop. Close with a reassuring, practical CTA — one sentence pointing toward the broader Thimphu morning it sits within.",
+   "published": false,
+   "published_at": null,
+   "exported_at": null,
+   "cost_usd": 0.018922,
+   "highlights": [
+    {
+     "start": 0,
+     "end": 163,
+     "gate": "F14_first_line",
+     "blocking": true,
+     "problem": "first line is 163 characters, over 140",
+     "text": "Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.",
+     "sentence_start": 0,
+     "sentence_end": 163,
+     "sentence": "Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.",
+     "key": "e76aabf8929e"
+    }
+   ],
+   "flagged_sentences": [
+    {
+     "key": "e76aabf8929e",
+     "start": 0,
+     "end": 163,
+     "text": "Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.",
+     "sentence": "Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.",
+     "gates": [
+      "F14_first_line"
+     ],
+     "problems": [
+      {
+       "gate": "F14_first_line",
+       "problem": "first line is 163 characters, over 140",
+       "blocking": true
+      }
+     ],
+     "blocking": true
+    }
+   ],
+   "cost_by_stage": [
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "calls": 1,
+     "cost_usd": 0.016181
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "calls": 2,
+     "cost_usd": 0.001446
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "calls": 1,
+     "cost_usd": 0.001267
+    },
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "calls": 1,
+     "cost_usd": 0.000028
+    }
+   ],
+   "other_pieces_for_request": [],
+   "admin_edits": [],
+   "exported": false,
+   "tenant_copy": {
+    "published_at": null,
+    "exported_at": null,
+    "delivered_at": null,
+    "older_copy": false,
+    "edits_after_delivery": 0
+   }
+  }
+ },
+ "269682ec-ddff-4249-bd7e-af8a42bf6a28": {
+  "status": 200,
+  "j": {
+   "piece_id": "269682ec-ddff-4249-bd7e-af8a42bf6a28",
+   "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+   "tenant_name": "Terra Family Expeditions",
+   "channel": "linkedin",
+   "status": "approved",
+   "held_reason": null,
+   "attempt_number": 3,
+   "created_at": "2026-10-16T03:33:17.737361+00:00",
+   "job_id": "28ab6260-ee48-4654-9c5a-bfbb62593095",
+   "content_text": "Lok Virsa Museum in Islamabad gathers Pakistan's folk traditions from communities across the country.\n\nIts collections span textiles, costumes, jewellery, woodwork, ceramics, and musical instruments, representing cultural traditions from communities and regions across Pakistan. For families, that breadth matters: there is genuine variety here, and the objects themselves carry the stories of the people who made and used them. The museum sits in Islamabad's Shakarparian area and is associated with the National Institute of Folk and Traditional Heritage.\n\nTerra Family Expeditions designs journeys where cultural discovery like this sits naturally alongside the rest of a family trip.\n\nMessage us to start planning your family trip.\n\n#Pakistan #Islamabad #LokVirsaMuseum",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "gate_ledger": [
+    {
+     "gate": "F6_cta_present",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F1_grounding",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F2_banned_patterns",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F2_brand_forbidden",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F11_brand_name",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F19_authenticity",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F10_cannibalization_cross_tenant",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "promises_an_option",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F4_extreme_length",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F0_complete",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F12_scope",
+     "passed": true,
+     "blocking": false,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F13_hygiene",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F13_leak",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F13_repeat",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F17_trip_fact",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F18_rarity",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F14_social_shape",
+     "passed": false,
+     "blocking": false,
+     "repairable": false,
+     "violations": [
+      "post is 105 words, under the 120–250-word band for this brand on LinkedIn"
+     ]
+    },
+    {
+     "gate": "F15_voice",
+     "passed": true,
+     "blocking": false,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F15_voice_warn",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F8_framework",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F9_cta_fact",
+     "passed": true,
+     "blocking": true,
+     "repairable": true,
+     "violations": []
+    },
+    {
+     "gate": "F9_brand_style",
+     "passed": true,
+     "blocking": false,
+     "repairable": false,
+     "violations": []
+    },
+    {
+     "gate": "F14_first_line",
+     "passed": true,
+     "blocking": true,
+     "repairable": false,
+     "violations": []
+    }
+   ],
+   "flags": [
+    {
+     "gate": "F14_social_shape",
+     "passed": false,
+     "blocking": false,
+     "repairable": false,
+     "violations": [
+      "post is 105 words, under the 120–250-word band for this brand on LinkedIn"
+     ]
+    },
+    {
+     "gate": "F13_autofix",
+     "passed": false,
+     "blocking": false,
+     "repairable": false,
+     "violations": [
+      "normalised whitespace (blank lines, leading / trailing spaces)"
+     ]
+    }
+   ],
+   "repair_log": [
+    {
+     "attempt": 1,
+     "feedback": [
+      "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"This is a day that gives children and adults room to look closely, ask questions, and take things in at their own pace without the day feeling rushed.\" (claims: The museum visit gives children and adults time to look closely, ask questions, and explore at an unhurried pace.; source: The SOURCE identifies the museum and its collections but does not provide itinerary details about pacing, available time, asking questions, or how the day feels for travellers.)"
+     ],
+     "repairable": true,
+     "violations": [
+      "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"This is a day that gives children and adults room to look closely, ask questions, and take things in at their own pace without the day feeling rushed.\" (claims: The museum visit gives children and adults time to look closely, ask questions, and explore at an unhurried pace.; source: The SOURCE identifies the museum and its collections but does not provide itinerary details about pacing, available time, asking questions, or how the day feels for travellers.)"
+     ],
+     "gate_ledger": [
+      {
+       "gate": "F6_cta_present",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F1_grounding",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F2_banned_patterns",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F2_brand_forbidden",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F11_brand_name",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F19_authenticity",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F10_cannibalization_cross_tenant",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "promises_an_option",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F4_extreme_length",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F0_complete",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F12_scope",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F13_hygiene",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F13_leak",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F13_repeat",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F17_trip_fact",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F18_rarity",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F14_social_shape",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F15_voice",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F15_voice_warn",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F8_framework",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F9_cta_fact",
+       "passed": false,
+       "blocking": true,
+       "violations": [
+        "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"This is a day that gives children and adults room to look closely, ask questions, and take things in at their own pace without the day feeling rushed.\" (claims: The museum visit gives children and adults time to look closely, ask q"
+       ]
+      },
+      {
+       "gate": "F9_brand_style",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F14_first_line",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      }
+     ],
+     "repair_mode": "sentences",
+     "gate_targeted": "F9_cta_fact",
+     "integrity_reverts": 1,
+     "integrity_problems": [
+      "repeats a phrase and most of the words of the sentence before it: 'Terra Family Expeditions designs journeys where cultural discovery like this sits naturally alongside the rest of a family trip.'"
+     ],
+     "sentences_repaired": 1
+    },
+    {
+     "attempt": 2,
+     "feedback": [
+      "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Its collections move across textiles, costumes, jewellery, woodwork, ceramics, and musical instruments, each one representing a specific community or region.\" (claims: Each individual collection item represents a specific community or region.; source: The source supports that the museum's displays represent traditions from communities and regions across Pakistan, but it does not state that every individual item represents a specific community or region.); \"This is a day that gives children and adults room to look closely, ask questions, and take things in at their own pace without the day feeling rushed.\" (claims: The itinerary provides an unhurried day in which children and adults can explore at their own pace.; source: The source only identifies the museum visit as Day 12 and says it offers insight into Pakistan's living traditions; it does not provide claims about pacing, duration, activities for children, or how rushed the day feels.)"
+     ],
+     "repairable": true,
+     "violations": [
+      "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Its collections move across textiles, costumes, jewellery, woodwork, ceramics, and musical instruments, each one representing a specific community or region.\" (claims: Each individual collection item represents a specific community or region.; source: The source supports that the museum's displays represent traditions from communities and regions across Pakistan, but it does not state that every individual item represents a specific community or region.); \"This is a day that gives children and adults room to look closely, ask questions, and take things in at their own pace without the day feeling rushed.\" (claims: The itinerary provides an unhurried day in which children and adults can explore at their own pace.; source: The source only identifies the museum visit as Day 12 and says it offers insight into Pakistan's living traditions; it does not provide claims about pacing, duration, activities for children, or how rushed the day feels.)"
+     ],
+     "gate_ledger": [
+      {
+       "gate": "F6_cta_present",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F1_grounding",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F2_banned_patterns",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F2_brand_forbidden",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F11_brand_name",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F19_authenticity",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F10_cannibalization_cross_tenant",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "promises_an_option",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F4_extreme_length",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F0_complete",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F12_scope",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F13_hygiene",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F13_leak",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F13_repeat",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F17_trip_fact",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F18_rarity",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      },
+      {
+       "gate": "F14_social_shape",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F15_voice",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F15_voice_warn",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F8_framework",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F9_cta_fact",
+       "passed": false,
+       "blocking": true,
+       "violations": [
+        "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Its collections move across textiles, costumes, jewellery, woodwork, ceramics, and musical instruments, each one representing a specific community or region.\" (claims: Each individual collection item represents a specific community"
+       ]
+      },
+      {
+       "gate": "F9_brand_style",
+       "passed": true,
+       "blocking": false,
+       "violations": []
+      },
+      {
+       "gate": "F14_first_line",
+       "passed": true,
+       "blocking": true,
+       "violations": []
+      }
+     ],
+     "repair_mode": "sentences",
+     "gate_targeted": "F9_cta_fact",
+     "sentences_repaired": 2
+    }
+   ],
+   "discarded_attempts": [
+    {
+     "gate_ledger": [
+      {
+       "gate": "F6_cta_present",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F1_grounding",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F2_banned_patterns",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F2_brand_forbidden",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F11_brand_name",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F19_authenticity",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F10_cannibalization_cross_tenant",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "promises_an_option",
+       "passed": true,
+       "blocking": false,
+       "repairable": false,
+       "violations": []
+      },
+      {
+       "gate": "F4_extreme_length",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F0_complete",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F12_scope",
+       "passed": true,
+       "blocking": false,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F13_hygiene",
+       "passed": true,
+       "blocking": false,
+       "repairable": false,
+       "violations": []
+      },
+      {
+       "gate": "F13_leak",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F13_repeat",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F17_trip_fact",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F18_rarity",
+       "passed": true,
+       "blocking": true,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F14_social_shape",
+       "passed": true,
+       "blocking": false,
+       "repairable": false,
+       "violations": []
+      },
+      {
+       "gate": "F15_voice",
+       "passed": true,
+       "blocking": false,
+       "repairable": true,
+       "violations": []
+      },
+      {
+       "gate": "F15_voice_warn",
+       "passed": true,
+       "blocking": false,
+       "repairable": false,
+       "violations": []
+      },
+      {
+       "gate": "F8_framework",
+       "passed": true,
+       "blocking": false,
+       "repairable": false,
+       "violations": []
+      },
+      {
+       "gate": "F9_cta_fact",
+       "passed": false,
+       "blocking": true,
+       "repairable": true,
+       "violations": [
+        "audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"Its collections move across textiles, costumes, jewellery, woodwork, ceramics, and musical instruments, each one representing a specific community or region.\" (claims: Each individual collection item represents a specific community or region.; source: The source supports that the museum's displays represent traditions from communities and regions across Pakistan, but it does not state that every individual item represents a specific community or region.); \"This is a day that gives children and adults room to look closely, ask questions, and take things in at their own pace without the day feeling rushed.\" (claims: The itinerary provides an unhurried day in which children and adults can explore at their own pace.; source: The source only identifies the museum visit as Day 12 and says it offers insight into Pakistan's living traditions; it does not provide claims about pacing, duration, activities for children, or how rushed the day feels.)"
+       ]
+      },
+      {
+       "gate": "F9_brand_style",
+       "passed": true,
+       "blocking": false,
+       "repairable": false,
+       "violations": []
+      },
+      {
+       "gate": "F14_first_line",
+       "passed": true,
+       "blocking": true,
+       "repairable": false,
+       "violations": []
+      }
+     ],
+     "content_text": "Lok Virsa Museum in Islamabad gathers Pakistan's folk traditions from communities across the country.\n\nIts collections move across textiles, costumes, jewellery, woodwork, ceramics, and musical instruments, each one representing a specific community or region. For families, that breadth matters: there is genuine variety here, and the objects themselves carry the stories of the people who made and used them. The museum sits in Islamabad's Shakarparian area and is associated with the National Institute of Folk and Traditional Heritage.\n\nThis is a day that gives children and adults room to look closely, ask questions, and take things in at their own pace without the day feeling rushed.\n\nTerra Family Expeditions designs journeys where cultural discovery like this sits naturally alongside the rest of a family trip.\n\nMessage us to start planning your family trip.\n\n#Pakistan #Islamabad #LokVirsaMuseum",
+     "attempt_number": 2
+    }
+   ],
+   "writer_input": {
+    "cta": "Message us to start planning your family trip.",
+    "goal": "introduction_awareness",
+    "seed": "Lok Virsa Folk & Heritage Museum — visit for insight into Pakistan's living traditions\nLocation: Lok Virsa Museum, Islamabad, Islamabad Capital Territory, Pakistan (the itinerary calls it Lok Virsa Folk & Heritage Museum) (do not place it in any other town, region or country)\nNaming: For an international audience, use Lok Virsa Museum; it is also associated with the National Institute of Folk and Traditional Heritage.\nDay 12 of the trip\nSource itinerary: The Lok Virsa Folk & Heritage Museum offers insight into Pakistan's living traditions.\nPlace background (checked facts about the place itself — you may use these; they say nothing about what this trip does):\n- Lok Virsa Museum is a cultural museum devoted to the folk and traditional heritage of Pakistan.\n- The museum’s collections include traditional textiles, costumes, jewellery, woodwork, ceramics and musical instruments.\n- Lok Virsa was established in 1974 and is associated with the National Institute of Folk and Traditional Heritage.\n- The museum is in Islamabad’s Shakarparian area, a hilltop setting in the Islamabad Capital Territory.\n- Its displays represent cultural traditions from communities and regions across Pakistan.",
+    "trip": null,
+    "angle": {
+     "name": "Pakistan's Living Traditions, Made Visible",
+     "formula_fit": "Hook-Insight-CTA: The hook surfaces the surprise that a single museum holds traditions from communities across all of Pakistan; the insight explains what collections like textiles, instruments and jewellery reveal about living culture; the CTA invites families to picture this as a grounding moment on Day 12.",
+     "why_it_works": "Introducing a museum dedicated to folk and traditional heritage directly addresses the brand's educational promise — parents searching for culturally rich travel can see exactly what this day delivers for the whole family.",
+     "best_final_style": "Structure: one sharp hook sentence about what Lok Virsa Museum represents, then two short paragraphs — first describing the scope of the collections (textiles, costumes, jewellery, woodwork, ceramics, musical instruments) and what they reveal about Pakistan's regional communities; second noting that the museum sits in Islamabad's Shakarparian area and has been devoted to folk and traditional heritage since 1974. Close with a single reassuring practical point about the day's character before a light CTA. Lead with the breadth of what the collections span — traditions from communities and regions across Pakistan — as the central insight. Do not describe the visit as a lesson or classroom experience."
+    },
+    "facts": "[Fact id=fact_visa_sea01]\nLaos visa: Most nationalities can get a 30-day Laos e-visa online for about $30-45, processed in 3 business days.",
+    "scope": "SCOPE: this piece is about one moment of the trip (day 12): Lok Virsa Folk & Heritage Museum. Do not promise, name or imply any other part of the trip in the title, headings or body.",
+    "channel": "linkedin",
+    "keyword": null,
+    "brand_pack": {
+     "voice": [
+      "Warm",
+      "Reassuring",
+      "Clear",
+      "Practical",
+      "Family-aware",
+      "Encouraging",
+      "Trustworthy"
+     ],
+     "version": 4,
+     "core_idea": "Safe, active, educational journeys for families who want meaningful time together. Terra Family Expeditions helps families explore the world through nature, culture, and shared discovery. The brand should feel warm, reassuring, practical, and intelligent. It should not speak down to parents or children.",
+     "brand_name": "Terra Family Expeditions",
+     "brand_type": "Premium family adventure travel brand",
+     "default_cta": "Message us to start planning your family trip.",
+     "style_guide": "Explain the pace clearly.\nMention comfort, safety, learning, and variety.\nShow how the trip works for both adults and children.\nUse simple but polished language.\nAvoid childish language.\n\nWrite like this:\n“Each day balances active discovery with time to rest, making the journey engaging for children and manageable for parents.”\n“Families can explore villages, rivers, local food, and nature trails with guides who understand both safety and curiosity.”\n\nAvoid:\nDo not make the tour sound like a school trip.\nDo not use childish words like “kiddos,” “little explorers,” or “fun for the whole gang.”\nDo not overpromise safety with absolute phrases like “completely safe,” “risk-free,” or “guaranteed safe.”\nDo not describe activities as too intense unless they really are.\nDo not write only for parents and forget the children’s experience.\nDo not make the itinerary sound exhausting with phrases like “packed schedule,” “non-stop adventure,” or “full-throttle family fun.”\nDo not use generic family travel clichés like “memories that last a lifetime.”",
+     "good_examples": "“Walk gentle forest trails, meet local makers, and give younger travellers enough discovery without making the days feel overloaded.”\n“Each day balances active discovery with time to rest, making the journey engaging for children and manageable for parents.”\n“Families can explore villages, rivers, local food, and nature trails with guides who understand both safety and curiosity.”",
+     "system_prompt": null,
+     "forbidden_words": [
+      "kiddos",
+      "little explorers",
+      "fun for the whole gang",
+      "completely safe",
+      "risk-free",
+      "guaranteed safe",
+      "packed schedule",
+      "non-stop adventure",
+      "full-throttle family fun",
+      "memories that last a lifetime"
+     ],
+     "customer_mindset": "Parents want their children to experience nature and culture, but they also care about safety, pacing, food, rest time, and logistics. They want adventure, but not chaos.",
+     "customer_segment": "Affluent families with children aged 7–16\nParents who want active holidays with safety, learning, and comfort"
+    },
+    "destination": null,
+    "trip_places": [
+     "a hotel in the city",
+     "Altit Fort",
+     "Andra Fort",
+     "Attabad Lake",
+     "Baltit Fort",
+     "Bang-i-Das waterfall",
+     "bazaar",
+     "Beyal and the base camp region of Nanga Parbat",
+     "Borith Lake",
+     "Chalt",
+     "Chilas",
+     "Daman-e-Koh viewpoint",
+     "Duikar",
+     "Fairy Meadows",
+     "Fairy Meadows to Tatto Village",
+     "Faisal Mosque",
+     "Ganish village",
+     "Gilgit",
+     "Gilgit to Besham or Naran",
+     "Gulmit",
+     "Gulmit Museum",
+     "Gulmit or Passu area",
+     "Hapakun",
+     "Hoper Glacier",
+     "irrigation channels in Gulmit",
+     "Islamabad",
+     "Islamabad International Airport",
+     "Karakoram Highway",
+     "Kargah Buddha sculptural site",
+     "Karimabad Bazaar",
+     "Khunjerab Pass",
+     "Khunjerab region",
+     "Lok Virsa heritage museum",
+     "Minapin Glacier cliffs",
+     "Minapin guesthouse",
+     "Minapin River",
+     "Minapin village",
+     "Nagar Valley",
+     "Naran and Babusar Pass",
+     "Old Gulmit House",
+     "Pakistan Monument",
+     "Passu Glacier",
+     "Passu Glacier to Borith Lake route",
+     "Raikot Bridge",
+     "Rakaposhi Viewpoint",
+     "Rawalpindi",
+     "Rohtas Fort",
+     "sacred carved rocks near Haldeikish",
+     "Saidpur village",
+     "Sawab Ha",
+     "Skardu or Gilgit",
+     "Sost",
+     "Tagaphari (Rakaposhi Base Camp)",
+     "Tatto",
+     "Taxila",
+     "traditional water channels"
+    ],
+    "writer_trip": null,
+    "brand_rubric": "BRAND IDENTITY: Terra Family Expeditions\nBrand type: Premium family adventure travel brand\nCore idea: Safe, active, educational journeys for families who want meaningful time together. Terra Family Expeditions helps families explore the world through nature, culture, and shared discovery. The brand should feel warm, reassuring, practical, and intelligent. It should not speak down to parents or children.\nAudience: Affluent families with children aged 7–16\nParents who want active holidays with safety, learning, and comfort\nAudience mindset: Parents want their children to experience nature and culture, but they also care about safety, pacing, food, rest time, and logistics. They want adventure, but not chaos.\nVoice: Warm, Reassuring, Clear, Practical, Family-aware, Encouraging, Trustworthy\nCall to action: Message us to start planning your family trip.\n\nSTYLE GUIDE:\nExplain the pace clearly.\nMention comfort, safety, learning, and variety.\nShow how the trip works for both adults and children.\nUse simple but polished language.\nAvoid childish language.\n\nWrite like this:\n“Each day balances active discovery with time to rest, making the journey engaging for children and manageable for parents.”\n“Families can explore villages, rivers, local food, and nature trails with guides who understand both safety and curiosity.”\n\nAvoid:\nDo not make the tour sound like a school trip.\nDo not use childish words like “kiddos,” “little explorers,” or “fun for the whole gang.”\nDo not overpromise safety with absolute phrases like “completely safe,” “risk-free,” or “guaranteed safe.”\nDo not describe activities as too intense unless they really are.\nDo not write only for parents and forget the children’s experience.\nDo not make the itinerary sound exhausting with phrases like “packed schedule,” “non-stop adventure,” or “full-throttle family fun.”\nDo not use generic family travel clichés like “memories that last a lifetime.”\n\nFORBIDDEN WORDS/PHRASES: kiddos, little explorers, fun for the whole gang, completely safe, risk-free, guaranteed safe, packed schedule, non-stop adventure, full-throttle family fun, memories that last a lifetime\n\nGOOD EXAMPLES (real, on-brand — do not flag writing like this as generic):\n“Walk gentle forest trails, meet local makers, and give younger travellers enough discovery without making the days feel overloaded.”\n“Each day balances active discovery with time to rest, making the journey engaging for children and manageable for parents.”\n“Families can explore villages, rivers, local food, and nature trails with guides who understand both safety and curiosity.”",
+    "route_moments": []
+   },
+   "route_hub_name": null,
+   "goal": "introduction_awareness",
+   "atom_id": "021bfcdfd62b82c1",
+   "request_id": "3fa8495d-64c0-4948-8910-c9f599691389",
+   "angle_name": "Pakistan's Living Traditions, Made Visible",
+   "angle_why": "Introducing a museum dedicated to folk and traditional heritage directly addresses the brand's educational promise — parents searching for culturally rich travel can see exactly what this day delivers for the whole family.",
+   "angle_style": "Structure: one sharp hook sentence about what Lok Virsa Museum represents, then two short paragraphs — first describing the scope of the collections (textiles, costumes, jewellery, woodwork, ceramics, musical instruments) and what they reveal about Pakistan's regional communities; second noting that the museum sits in Islamabad's Shakarparian area and has been devoted to folk and traditional heritage since 1974. Close with a single reassuring practical point about the day's character before a light CTA. Lead with the breadth of what the collections span — traditions from communities and regions across Pakistan — as the central insight. Do not describe the visit as a lesson or classroom experience.",
+   "published": false,
+   "published_at": null,
+   "exported_at": null,
+   "cost_usd": 0.025348,
+   "highlights": [],
+   "flagged_sentences": [],
+   "cost_by_stage": [
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "calls": 3,
+     "cost_usd": 0.018288
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "calls": 7,
+     "cost_usd": 0.005846
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "calls": 1,
+     "cost_usd": 0.00115
+    },
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "calls": 3,
+     "cost_usd": 0.000064
+    }
+   ],
+   "other_pieces_for_request": [],
+   "admin_edits": [],
+   "exported": false,
+   "tenant_copy": {
+    "published_at": null,
+    "exported_at": null,
+    "delivered_at": null,
+    "older_copy": false,
+    "edits_after_delivery": 0
+   }
+  }
+ }
+}

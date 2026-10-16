@@ -1,0 +1,147 @@
+{
+ "verdict": "PASS",
+ "fail": [],
+ "incomplete": [],
+ "needs_decision": 0,
+ "mixed_live_segments": 0,
+ "mixed_variants": {
+  "live_not_deleted_not_marker": 0,
+  "all_members_any_state_casefolded": 0
+ },
+ "plan_segments_relabelled": 0,
+ "plan_segments_action_changed": 0,
+ "plan_segments_multi_place": 0,
+ "plan_member_violations": 0,
+ "plan_ids_retired": 10,
+ "plan_guard_tours": 258,
+ "reminted_ids": 123,
+ "reminted_ids_mixed": 0,
+ "segment_subjects": 335,
+ "subjects_outcome_by_state": {
+  "picked": {
+   "seed": 2,
+   "no_live_member": 1
+  },
+  "proposed": {
+   "seed": 322
+  },
+  "used": {
+   "seed": 7,
+   "no_live_member": 2,
+   "no_member_on_tenant_tours": 1
+  }
+ },
+ "subjects_on_dead_ids_by_state": {
+  "used": 2,
+  "picked": 1
+ },
+ "subjects_rule_seed_foreign_by_state": {},
+ "proposed_fail_after_t7": 0,
+ "proposed_waiting_for_t7": 0,
+ "proposed_without_seed_outside_repair": 0,
+ "inflight_requests_need_decision": 0,
+ "inflight_requests_accepted": 3,
+ "done_requests_with_problems_by_state": {
+  "used": 11
+ },
+ "subjects_request_seed_foreign": {
+  "used": 1
+ },
+ "subjects_on_mixed_segments": 0,
+ "dry_run_prediction_vs_now": {
+  "used:match": 8,
+  "proposed:gone": 27,
+  "picked:match": 3,
+  "proposed:match": 11
+ },
+ "dry_run_prediction_generated_at": "2026-10-16T07:57:22.644373+00:00",
+ "route_subjects": [
+  {
+   "state": "proposed",
+   "route_superseded": false,
+   "n": 3
+  },
+  {
+   "state": "used",
+   "route_superseded": false,
+   "n": 1
+  },
+  {
+   "state": "used",
+   "route_superseded": true,
+   "n": 3
+  }
+ ],
+ "apply_phase": "done",
+ "apply_halted": null,
+ "apply_progress": {
+  "done": 652,
+  "tours": 652,
+  "failed": 0
+ },
+ "t7_by_tenant": {
+  "20d07d32-ed98-405f-81d5-0c2399c9fcdf": "succeeded",
+  "692a3214-5cc2-46c6-a5ca-265389747269": "succeeded",
+  "885d4916-007b-415e-9261-909ad43c6d00": "succeeded",
+  "9149d3c6-fcaf-4400-8e7a-4ed5e557e146": "succeeded"
+ },
+ "jobs_enqueued_by_apply": [
+  {
+   "id": "004a2983-ce3a-43b2-8ae0-69599a838d90",
+   "kind": "recompute",
+   "status": "succeeded",
+   "attempt": 1,
+   "created_at": "2026-10-16 08:18:53.435218+00:00",
+   "started_at": "2026-10-16 08:18:56.234433+00:00",
+   "finished_at": "2026-10-16 08:25:45.180016+00:00",
+   "cost_usd": "0.000000",
+   "error": null
+  },
+  {
+   "id": "bf12e0ab-71b1-4669-9ae7-856b76223702",
+   "kind": "t7_slate",
+   "status": "succeeded",
+   "attempt": 1,
+   "created_at": "2026-10-16 08:27:44.692598+00:00",
+   "started_at": "2026-10-16 08:27:47.706945+00:00",
+   "finished_at": "2026-10-16 08:30:41.567857+00:00",
+   "cost_usd": "0.000000",
+   "error": null
+  },
+  {
+   "id": "e796e819-485e-4c87-a43d-8bcbfd075eee",
+   "kind": "t7_slate",
+   "status": "succeeded",
+   "attempt": 1,
+   "created_at": "2026-10-16 08:27:44.709117+00:00",
+   "started_at": "2026-10-16 08:27:47.710330+00:00",
+   "finished_at": "2026-10-16 08:28:45.101539+00:00",
+   "cost_usd": "0.000000",
+   "error": null
+  },
+  {
+   "id": "46a62fd4-1a5b-49a7-aa77-53c47d033a1e",
+   "kind": "t7_slate",
+   "status": "succeeded",
+   "attempt": 1,
+   "created_at": "2026-10-16 08:27:44.719345+00:00",
+   "started_at": "2026-10-16 08:28:46.797312+00:00",
+   "finished_at": "2026-10-16 08:29:43.033788+00:00",
+   "cost_usd": "0.000000",
+   "error": null
+  },
+  {
+   "id": "a9ef5f6d-6e63-4330-9ebc-2b2ba40d4e42",
+   "kind": "t7_slate",
+   "status": "succeeded",
+   "attempt": 1,
+   "created_at": "2026-10-16 08:27:44.729917+00:00",
+   "started_at": "2026-10-16 08:29:44.340558+00:00",
+   "finished_at": "2026-10-16 08:30:16.385033+00:00",
+   "cost_usd": "0.000000",
+   "error": null
+  }
+ ],
+ "job_queue_now": []
+}
+RESULT: OK s3://aa-cis-bronze-005097885195/scripts/out/s239_aa857_repair_verify.json

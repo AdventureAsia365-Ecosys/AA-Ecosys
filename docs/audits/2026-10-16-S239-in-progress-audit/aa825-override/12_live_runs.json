@@ -1,0 +1,230 @@
+[
+ {
+  "kind": "retention_llm_call_log",
+  "body": {
+   "kind": "retention_llm_call_log",
+   "older_than": "2026-09-18",
+   "dry_run": false,
+   "max_rows": 200
+  },
+  "enqueue_status": 200,
+  "enqueue": {
+   "job_id": "a309a2c4-9602-4711-8c51-218fb89765d1",
+   "kind": "retention_llm_call_log",
+   "trigger": "manual_override",
+   "older_than": "2026-09-18",
+   "dry_run": false,
+   "max_rows": 200
+  },
+  "enqueued_at": "2026-10-16T07:09:00.335782+00:00",
+  "job": {
+   "id": "a309a2c4-9602-4711-8c51-218fb89765d1",
+   "kind": "retention_llm_call_log",
+   "status": "succeeded",
+   "attempt": 1,
+   "max_attempts": 2,
+   "payload": {
+    "dry_run": false,
+    "trigger": "manual_override",
+    "max_rows": 200,
+    "older_than": "2026-09-18"
+   },
+   "progress": {
+    "mode": "live",
+    "part": "raw",
+    "phase": "done",
+    "cursors": {
+     "raw": {
+      "id": "6d6912b9-a877-47b4-9b57-bae7701566be",
+      "ts": "2026-09-17T07:28:30.530260+00:00"
+     }
+    },
+    "deleted_total": 200
+   },
+   "result": {
+    "kind": "retention_llm_call_log",
+    "mode": "live",
+    "parts": [
+     {
+      "part": "raw",
+      "cursor": {
+       "id": "6d6912b9-a877-47b4-9b57-bae7701566be",
+       "ts": "2026-09-17T07:28:30.530260+00:00"
+      },
+      "cutoff": "2026-09-18T00:00:00+00:00",
+      "newest": "2026-09-17T10:59:48.143981+00:00",
+      "oldest": "2026-09-17T07:18:41.782953+00:00",
+      "archive": true,
+      "batches": 1,
+      "deleted": 200,
+      "objects": 1,
+      "candidates": 2676,
+      "object_keys": [
+       "archive/llm_call_log/2026/09/a309a2c4-9602-4711-8c51-218fb89765d1-20261016T070903369258Z-raw-b00001.jsonl.gz"
+      ],
+      "window_days": 180,
+      "archived_rows": 200
+     }
+    ],
+    "table": "shared.llm_call_log",
+    "reason": "manual override live run (explicit cutoff), approved max_rows",
+    "rollup": "llm_call_daily",
+    "trigger": "manual_override",
+    "windows": {
+     "raw": 180
+    },
+    "override": {
+     "cutoff": "2026-09-18T00:00:00+00:00",
+     "older_than": "2026-09-18",
+     "max_rows_cap": 1000,
+     "min_age_days": 21,
+     "policy_cutoffs": {
+      "raw": "2026-04-19T00:00:00+00:00"
+     }
+    },
+    "limit_rows": 200,
+    "rollup_rows": 5,
+    "deleted_total": 200,
+    "archived_total": 200,
+    "rollup_pending": 1,
+    "fk_protected_by": [],
+    "candidates_total": 2676,
+    "previous_live_deleted": null
+   },
+   "cost_usd": 0.0,
+   "llm_cost_usd": 0.0,
+   "error": null,
+   "cancel_requested": false,
+   "created_by": "admin:claude-code-s239",
+   "parent_job_id": null,
+   "locked_by": null,
+   "locked_until": null,
+   "run_after": "2026-10-16T07:09:00.625806+00:00",
+   "created_at": "2026-10-16T07:09:00.625806+00:00",
+   "started_at": "2026-10-16T07:09:03.124093+00:00",
+   "finished_at": "2026-10-16T07:09:03.752596+00:00",
+   "links": {
+    "tour_versions": [],
+    "content_pieces": [],
+    "tour_id": null,
+    "version_id": null,
+    "place_builds": [],
+    "graph_builds": []
+   }
+  }
+ },
+ {
+  "kind": "retention_tenant_api_usage",
+  "body": {
+   "kind": "retention_tenant_api_usage",
+   "older_than": "2026-09-17",
+   "dry_run": false,
+   "max_rows": 200
+  },
+  "enqueue_status": 200,
+  "enqueue": {
+   "job_id": "0609cb2b-d87c-4cee-9570-9be1b3edba15",
+   "kind": "retention_tenant_api_usage",
+   "trigger": "manual_override",
+   "older_than": "2026-09-17",
+   "dry_run": false,
+   "max_rows": 200
+  },
+  "enqueued_at": "2026-10-16T07:09:06.613275+00:00",
+  "job": {
+   "id": "0609cb2b-d87c-4cee-9570-9be1b3edba15",
+   "kind": "retention_tenant_api_usage",
+   "status": "succeeded",
+   "attempt": 1,
+   "max_attempts": 2,
+   "payload": {
+    "dry_run": false,
+    "trigger": "manual_override",
+    "max_rows": 200,
+    "older_than": "2026-09-17"
+   },
+   "progress": {
+    "mode": "live",
+    "part": "raw",
+    "phase": "done",
+    "cursors": {
+     "raw": {
+      "id": "f592312d-409a-4118-986d-d911d9dd3c4b",
+      "ts": "2026-09-16T13:52:52.968498+00:00"
+     }
+    },
+    "deleted_total": 200
+   },
+   "result": {
+    "kind": "retention_tenant_api_usage",
+    "mode": "live",
+    "parts": [
+     {
+      "part": "raw",
+      "cursor": {
+       "id": "f592312d-409a-4118-986d-d911d9dd3c4b",
+       "ts": "2026-09-16T13:52:52.968498+00:00"
+      },
+      "cutoff": "2026-09-17T00:00:00+00:00",
+      "newest": "2026-09-16T14:33:41.949251+00:00",
+      "oldest": "2026-09-16T11:28:30.487844+00:00",
+      "archive": true,
+      "batches": 1,
+      "deleted": 200,
+      "objects": 1,
+      "candidates": 260,
+      "object_keys": [
+       "archive/tenant_api_usage/2026/09/0609cb2b-d87c-4cee-9570-9be1b3edba15-20261016T070908180275Z-raw-b00001.jsonl.gz"
+      ],
+      "window_days": 90,
+      "archived_rows": 200
+     }
+    ],
+    "table": "shared.tenant_api_usage",
+    "reason": "manual override live run (explicit cutoff), approved max_rows",
+    "rollup": "tenant_api_usage_monthly",
+    "trigger": "manual_override",
+    "windows": {
+     "raw": 90
+    },
+    "override": {
+     "cutoff": "2026-09-17T00:00:00+00:00",
+     "older_than": "2026-09-17",
+     "max_rows_cap": 1000,
+     "min_age_days": 21,
+     "policy_cutoffs": {
+      "raw": "2026-07-18T00:00:00+00:00"
+     }
+    },
+    "limit_rows": 200,
+    "rollup_rows": 3,
+    "deleted_total": 200,
+    "archived_total": 200,
+    "rollup_pending": 1,
+    "fk_protected_by": [],
+    "candidates_total": 260,
+    "previous_live_deleted": null
+   },
+   "cost_usd": 0.0,
+   "llm_cost_usd": 0.0,
+   "error": null,
+   "cancel_requested": false,
+   "created_by": "admin:claude-code-s239",
+   "parent_job_id": null,
+   "locked_by": null,
+   "locked_until": null,
+   "run_after": "2026-10-16T07:09:06.971518+00:00",
+   "created_at": "2026-10-16T07:09:06.971518+00:00",
+   "started_at": "2026-10-16T07:09:08.140217+00:00",
+   "finished_at": "2026-10-16T07:09:08.520519+00:00",
+   "links": {
+    "tour_versions": [],
+    "content_pieces": [],
+    "tour_id": null,
+    "version_id": null,
+    "place_builds": [],
+    "graph_builds": []
+   }
+  }
+ }
+]

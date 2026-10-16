@@ -1,0 +1,29 @@
+{
+ "step": "probe",
+ "console_errors": [],
+ "net_errors": [],
+ "admin_username": "e2e-claude-code",
+ "probe": {
+  "dde74641-455f-4d9d-9c8e-696dc3a456c8": {
+   "label_status": 200,
+   "labels": 0,
+   "mine": null,
+   "detail_status": 200,
+   "piece_status": "held",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "title": "Cycling Laos with Family: Luang Prabang to Nong Khiaw"
+  },
+  "a7e18faf-4b68-4453-8020-000e38109674": {
+   "label_status": 200,
+   "labels": 0,
+   "mine": null,
+   "detail_status": 200,
+   "piece_status": "held",
+   "tenant": "Atlas & Hearth",
+   "channel": "linkedin",
+   "title": null
+  }
+ },
+ "piece": "dde74641-455f-4d9d-9c8e-696dc3a456c8"
+}

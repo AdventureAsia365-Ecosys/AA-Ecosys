@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T05:15:31+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/ff45fd8a-a9e9-4881-ac8b-25aa25cee014/latest-piece",
+ "status": 200,
+ "x_request_id": "9531d0ef-0d32-4fb3-b212-e5adb34897e2",
+ "body": {
+  "piece": {
+   "piece_id": "d67e3178-26e7-4a4d-882c-d6de65ce2593",
+   "angle_gate_request_id": "ff45fd8a-a9e9-4881-ac8b-25aa25cee014",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "Paro Taktsang asks something of every visitor\u2014and the more prepared your family is, the more it gives back.\n\nAt a checkp...",
+   "seo_title": "Visiting Paro Taktsang with Family: Preparation Guide",
+   "meta_description": "Prepare your family for Paro Taktsang with practical tips on dress, pacing, and trail conditions before you visit Bhutan's sacred cliff temples.",
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-15T10:29:37.696481+00:00"
+  }
+ }
+}

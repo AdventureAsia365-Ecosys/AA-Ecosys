@@ -1,0 +1,41 @@
+{
+ "at": "2026-10-16T08:36:30+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/41e94397-aa14-45f6-9e23-337a0362fd19/review",
+ "status": 200,
+ "body": {
+  "request_id": "41e94397-aa14-45f6-9e23-337a0362fd19",
+  "channel": "linkedin",
+  "ready_state": "ready",
+  "content_text": "At the National Institute for Zorig Chusum, students master a single craft over years of study.\n\nZorig Chusum refers to Bhutan's thirteen traditional arts and crafts, among them thangka painting, wood carving, weaving, and embroidery. The institute was established by the government to ensure these skills pass formally from one generation to the next, not informally or by chance. Its graduates go on to restore and decorate Bhutan's dzongs and monasteries, meaning the training here has a direct and visible purpose in the country's living religious and cultural landscape.\n\nA visit offers families an introduction to these disciplines and the structured, long-term training through which they are passed on. For parents, the context behind each discipline makes the observation genuinely informative rather than purely visual.\n\nBecause this is a government-run school in Thimphu dedicated to formal craft education, it carries a clear educational thread that fits naturally into a family itinerary.\n\nTerra Family Expeditions brings together moments like this into journeys that hold meaning for adults and children equally. Message us to start planning your family trip.\n\n#Thimphu #ZorigChusum #Bhutan",
+  "route_hub_name": null,
+  "route_segment_count": null,
+  "goal": {
+   "key": "introduction_awareness",
+   "label": "Introduction / Awareness"
+  },
+  "angle": {
+   "name": "Watching Craft Become Skill Over Years",
+   "why_it_works": "Introducing the institute's multi-year training model gives parents an immediate, concrete reason why this stop is worth time on a culinary trail itinerary \u2014 it reframes a cultural visit as a genuine window into Bhutanese creative life that children can observe and understand.",
+   "formula_fit": "Hook-Insight-CTA: the hook is the scale of commitment students make (years mastering a single craft); the insight is what Zorig Chusum is, why the institute exists, and what families actually see there; the CTA invites the reader to consider the broader trip.",
+   "best_final_style": "Structured as one punchy opening sentence, two short paragraphs, one reassuring practical note, and a light CTA. Lead with the fact that students spend years mastering a single craft discipline \u2014 thangka painting, wood carving, weaving, embroidery among the thirteen arts \u2014 and let that specificity carry the hook. The middle paragraph explains what Zorig Chusum means (Bhutan's thirteen traditional arts and crafts) and how the institute was established to formally transmit skills that supply artisans for dzongs and monasteries. Emphasise what a visiting family observes: training in progress, the range of disciplines, the connection to living religious and cultural structures. The reassuring practical note touches on this being a government-run school in Thimphu, making it an accessible, structured stop. Close with a brief CTA tied to the 10-day Bhutan Culinary Trail. Do not invent what the visit format involves beyond what the seed states."
+  },
+  "atom": {
+   "text": "Traditional School of Arts and Craft \u2014 visit",
+   "activity_type": "culture",
+   "emotional_hook": "learn traditional crafts",
+   "season_note": null
+  },
+  "tour": {
+   "name": "Bhutan: Culinary Trail East to West \u2014 10 Days",
+   "destination": "Bhutan"
+  },
+  "dfs_paa_snapshot": {
+   "relevance": "MED",
+   "people_also_ask": [],
+   "related_keywords": []
+  },
+  "cta": null,
+  "created_at": "2026-10-16T08:35:53.173229+00:00"
+ }
+}

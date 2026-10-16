@@ -1,0 +1,202 @@
+[
+ {
+  "kind": "retention_llm_call_log",
+  "body": {
+   "kind": "retention_llm_call_log",
+   "older_than": "2026-09-18",
+   "dry_run": true
+  },
+  "enqueue_status": 200,
+  "enqueue": {
+   "job_id": "a326b2f0-20e9-462d-9348-91af63f62d31",
+   "kind": "retention_llm_call_log",
+   "trigger": "manual_override",
+   "older_than": "2026-09-18",
+   "dry_run": true,
+   "max_rows": null
+  },
+  "enqueued_at": "2026-10-16T07:08:35.712673+00:00",
+  "job": {
+   "id": "a326b2f0-20e9-462d-9348-91af63f62d31",
+   "kind": "retention_llm_call_log",
+   "status": "succeeded",
+   "attempt": 1,
+   "max_attempts": 2,
+   "payload": {
+    "dry_run": true,
+    "trigger": "manual_override",
+    "older_than": "2026-09-18"
+   },
+   "progress": {
+    "mode": "dry_run",
+    "phase": "done",
+    "candidates": 2676
+   },
+   "result": {
+    "kind": "retention_llm_call_log",
+    "mode": "dry_run",
+    "parts": [
+     {
+      "part": "raw",
+      "cursor": null,
+      "cutoff": "2026-09-18T00:00:00+00:00",
+      "newest": "2026-09-17T10:59:48.143981+00:00",
+      "oldest": "2026-09-17T07:18:41.782953+00:00",
+      "archive": true,
+      "batches": 0,
+      "deleted": 0,
+      "objects": 0,
+      "candidates": 2676,
+      "object_keys": [],
+      "window_days": 180,
+      "archived_rows": 0
+     }
+    ],
+    "table": "shared.llm_call_log",
+    "reason": "manual override dry run (explicit cutoff)",
+    "rollup": "llm_call_daily",
+    "trigger": "manual_override",
+    "windows": {
+     "raw": 180
+    },
+    "override": {
+     "cutoff": "2026-09-18T00:00:00+00:00",
+     "older_than": "2026-09-18",
+     "max_rows_cap": 1000,
+     "min_age_days": 21,
+     "policy_cutoffs": {
+      "raw": "2026-04-19T00:00:00+00:00"
+     }
+    },
+    "limit_rows": 0,
+    "rollup_rows": 0,
+    "deleted_total": 0,
+    "archived_total": 0,
+    "rollup_pending": 1,
+    "fk_protected_by": [],
+    "candidates_total": 2676,
+    "previous_live_deleted": null
+   },
+   "cost_usd": 0.0,
+   "llm_cost_usd": 0.0,
+   "error": null,
+   "cancel_requested": false,
+   "created_by": "admin:claude-code-s239",
+   "parent_job_id": null,
+   "locked_by": null,
+   "locked_until": null,
+   "run_after": "2026-10-16T07:08:36.014429+00:00",
+   "created_at": "2026-10-16T07:08:36.014429+00:00",
+   "started_at": "2026-10-16T07:08:38.062466+00:00",
+   "finished_at": "2026-10-16T07:08:38.129896+00:00",
+   "links": {
+    "tour_versions": [],
+    "content_pieces": [],
+    "tour_id": null,
+    "version_id": null,
+    "place_builds": [],
+    "graph_builds": []
+   }
+  }
+ },
+ {
+  "kind": "retention_tenant_api_usage",
+  "body": {
+   "kind": "retention_tenant_api_usage",
+   "older_than": "2026-09-17",
+   "dry_run": true
+  },
+  "enqueue_status": 200,
+  "enqueue": {
+   "job_id": "720ed9fa-6e78-4fa1-87b1-62549a0076ca",
+   "kind": "retention_tenant_api_usage",
+   "trigger": "manual_override",
+   "older_than": "2026-09-17",
+   "dry_run": true,
+   "max_rows": null
+  },
+  "enqueued_at": "2026-10-16T07:08:42.254978+00:00",
+  "job": {
+   "id": "720ed9fa-6e78-4fa1-87b1-62549a0076ca",
+   "kind": "retention_tenant_api_usage",
+   "status": "succeeded",
+   "attempt": 1,
+   "max_attempts": 2,
+   "payload": {
+    "dry_run": true,
+    "trigger": "manual_override",
+    "older_than": "2026-09-17"
+   },
+   "progress": {
+    "mode": "dry_run",
+    "phase": "done",
+    "candidates": 260
+   },
+   "result": {
+    "kind": "retention_tenant_api_usage",
+    "mode": "dry_run",
+    "parts": [
+     {
+      "part": "raw",
+      "cursor": null,
+      "cutoff": "2026-09-17T00:00:00+00:00",
+      "newest": "2026-09-16T14:33:41.949251+00:00",
+      "oldest": "2026-09-16T11:28:30.487844+00:00",
+      "archive": true,
+      "batches": 0,
+      "deleted": 0,
+      "objects": 0,
+      "candidates": 260,
+      "object_keys": [],
+      "window_days": 90,
+      "archived_rows": 0
+     }
+    ],
+    "table": "shared.tenant_api_usage",
+    "reason": "manual override dry run (explicit cutoff)",
+    "rollup": "tenant_api_usage_monthly",
+    "trigger": "manual_override",
+    "windows": {
+     "raw": 90
+    },
+    "override": {
+     "cutoff": "2026-09-17T00:00:00+00:00",
+     "older_than": "2026-09-17",
+     "max_rows_cap": 1000,
+     "min_age_days": 21,
+     "policy_cutoffs": {
+      "raw": "2026-07-18T00:00:00+00:00"
+     }
+    },
+    "limit_rows": 0,
+    "rollup_rows": 0,
+    "deleted_total": 0,
+    "archived_total": 0,
+    "rollup_pending": 1,
+    "fk_protected_by": [],
+    "candidates_total": 260,
+    "previous_live_deleted": null
+   },
+   "cost_usd": 0.0,
+   "llm_cost_usd": 0.0,
+   "error": null,
+   "cancel_requested": false,
+   "created_by": "admin:claude-code-s239",
+   "parent_job_id": null,
+   "locked_by": null,
+   "locked_until": null,
+   "run_after": "2026-10-16T07:08:42.630979+00:00",
+   "created_at": "2026-10-16T07:08:42.630979+00:00",
+   "started_at": "2026-10-16T07:08:43.081260+00:00",
+   "finished_at": "2026-10-16T07:08:43.104697+00:00",
+   "links": {
+    "tour_versions": [],
+    "content_pieces": [],
+    "tour_id": null,
+    "version_id": null,
+    "place_builds": [],
+    "graph_builds": []
+   }
+  }
+ }
+]

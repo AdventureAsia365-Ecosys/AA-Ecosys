@@ -1,0 +1,83 @@
+{
+ "at": "2026-10-16T05:15:25+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/reviews",
+ "status": 200,
+ "x_request_id": "06e400b1-9551-4aff-a278-f4fd49cf0b03",
+ "body": {
+  "data": [
+   {
+    "request_id": "55670945-ff4f-48eb-bb2c-857dfcdf1b05",
+    "piece_id": "7594ffed-d1a9-4f6e-9bba-95d18d403b7c",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "Legs burning, lungs working, prayer flags lining the trail around you: this is how you reach Tiger's Nest.\n\nThe trail to...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "introduction_awareness",
+     "label": "Introduction / Awareness"
+    },
+    "angle": {
+     "name": "The Climb That Earns the View",
+     "why_it_works": "This audience values effort-as-reward \u2014 they want stories worth sharing, not just sights worth seeing. Framing the hike itself as the transformative part (not just the destination) speaks directly to their active, experience-first mindset and gives them a compelling reason to book rather than just browse.",
+     "formula_fit": "Hook-Insight-CTA \u2014 Hook: open with the visceral, unexpected reality of the climb (burning legs, thin air, prayer flags snapping in wind before the monastery even comes into view). Insight: reframe Tiger's Nest not as a 'tick-box UNESCO site' but as a place that genuinely requires and rewards physical presence \u2014 you cannot experience it passively, and that is exactly the point. CTA: invite the audience to put this on their Bhutan itinerary with AA, where the logistics are handled so the only thing they have to carry is themselves.",
+     "best_final_style": "Kinetic and honest in tone \u2014 write like someone who just came back, slightly out of breath and grinning. Open mid-movement, not mid-description. Resist the urge to lead with monastery history; instead drop the reader onto the trail first, then let the context unfold as the altitude climbs. The narrative arc should mirror the hike: gradual build, one sharp moment of doubt, then arrival payoff."
+    },
+    "atom": {
+     "text": "Tiger's Nest Monastery \u2014 hike to the cliffside",
+     "activity_type": "trek",
+     "emotional_hook": "spiritual pilgrimage to a dramatically perched monastery",
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "MED",
+     "people_also_ask": [],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-16T00:21:56.756427+00:00"
+   },
+   {
+    "request_id": "d940d26f-a991-4a56-a7a8-aeae63f5c7b4",
+    "piece_id": "56706cfa-8893-46fb-b7bb-5678e5154e9b",
+    "channel": "linkedin",
+    "ready_state": "ready",
+    "content_text": "Day 2 includes dedicated swim time at Kuang Si Falls, built into the plan before lunch.\n\nThe falls cascade over traverti...",
+    "route_hub_name": null,
+    "route_segment_count": null,
+    "goal": {
+     "key": "trust_building",
+     "label": "Trust-building"
+    },
+    "angle": {
+     "name": "Built-In Recovery: Why Rest Is Part the Plan",
+     "why_it_works": "LinkedIn professionals respond to evidence that a travel brand thinks operationally, not just visually. Showing that swim and rest time at the pools is a deliberate structural choice \u2014 not downtime filler \u2014 builds confidence in how Trail Pulse plans pacing across a trip.",
+     "formula_fit": "Problem-Insight-Proof-Action: Problem = travellers distrust active trip brands that overpromise and under-deliver on recovery time; Insight = real pacing means building rest into the itinerary before fatigue sets in; Proof = Day 2 specifically schedules time to swim and rest at the tiered limestone pools before lunch, a concrete itinerary choice; Action = follow a brand that treats pacing as planning, not an afterthought.",
+     "best_final_style": "Calm, considered LinkedIn voice \u2014 direct sentences, no hype. Open with the operational tension: active travel brands often stack too much into a day. Lead immediately with the concrete seed detail \u2014 a short trek on Day 2 ends at turquoise limestone pools, with time set aside to swim and rest before lunch. Use this as the proof of a planning principle: rest built in before it is needed. Close with one light, reflective CTA inviting professionals planning or recommending active travel to consider what good pacing actually looks like. One brand sentence maximum, grounded only in Trail Pulse's core idea of movement and energy delivered well. No emojis beyond one optional at close."
+    },
+    "atom": {
+     "text": "Kuang Si Falls \u2014 swim and rest at pools",
+     "activity_type": "trek",
+     "emotional_hook": "turquoise tiered pools in limestone landscape",
+     "season_note": null
+    },
+    "tour": null,
+    "dfs_paa_snapshot": {
+     "relevance": "HIGH",
+     "people_also_ask": [
+      "Is Vang Vieng safe for tourists?",
+      "Is Vang Vieng still a party town?",
+      "Is Vang Vieng worth it?",
+      "What is the best time to visit Vang Vieng?"
+     ],
+     "related_keywords": []
+    },
+    "cta": null,
+    "created_at": "2026-10-15T13:13:51.853344+00:00"
+   }
+  ],
+  "total": 2
+ }
+}

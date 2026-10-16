@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T06:48:20+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/e42adb08-8f39-430e-b82f-4c9d78a58d56/latest-piece",
+ "status": 200,
+ "x_request_id": "09a6375f-0a5c-4683-b6d8-286971c35b37",
+ "body": {
+  "piece": {
+   "piece_id": "35ee6a3d-061f-4d33-be56-28f792318675",
+   "angle_gate_request_id": "e42adb08-8f39-430e-b82f-4c9d78a58d56",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "## The Dinner Before the Route Begins\n\nThe sunset ride around Luang Prabang is done, bicycles are leaned against a wall,...",
+   "seo_title": "Cycling Northern Laos Days 1\u20134: Luang Prabang to Nong Khiaw",
+   "meta_description": "From Luang Prabang's UNESCO old town to the limestone valleys of Nong Khiaw, here is what the first four days of cycling northern Laos look like for families.",
+   "slug": "cycling-northern-laos-luang-prabang-nong-khiaw-family",
+   "route_hub_name": "Khaiphaen Restaurant \u2192 Luang Prabang \u2192 Kuang Si Falls \u2192 Ban Long Lao Mai",
+   "route_segment_count": 12,
+   "created_at": "2026-10-16T05:40:45.241831+00:00"
+  }
+ }
+}

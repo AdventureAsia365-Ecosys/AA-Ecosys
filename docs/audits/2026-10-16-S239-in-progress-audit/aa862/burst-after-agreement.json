@@ -1,0 +1,31 @@
+{
+  "started_utc": "2026-10-16T08:58:41.557201+00:00",
+  "ended_utc": "2026-10-16T08:59:42.598036+00:00",
+  "run_id": "6ad1e741",
+  "concurrency": 15,
+  "duration_s": 60.0,
+  "repeat_share": 0.2,
+  "requests": 1561,
+  "rpm": 1561.0,
+  "status_counts": {
+    "200": 605,
+    "429": 956
+  },
+  "count_5xx": 0,
+  "count_err": 0,
+  "ranking_on_200_by_query_kind": {
+    "unique": {
+      "semantic": 99,
+      "keyword": 389
+    },
+    "repeat": {
+      "semantic": 76,
+      "keyword": 41
+    }
+  },
+  "latency_s": {
+    "p50": 0.468,
+    "p95": 0.997,
+    "max": 5.756
+  }
+}

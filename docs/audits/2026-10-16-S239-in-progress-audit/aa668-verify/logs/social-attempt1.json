@@ -1,0 +1,44 @@
+{
+ "started": "2026-10-16T02:28:00.938Z",
+ "tenant": "terra-family",
+ "subject": "Punakha Dzong — visit",
+ "console_errors": [],
+ "http_errors": [],
+ "posts": {
+  "pick": 1
+ },
+ "events": [
+  "2026-10-16T02:28:15.339Z brand default_cta set: v3 -> v4",
+  "2026-10-16T02:28:22.510Z pick 200 request=aa001cf7-6f04-4493-965b-b0ecf4fdf237",
+  "2026-10-16T02:28:42.517Z ERROR TimeoutError: locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('goal-inspiration') to be visible\u001b[22m\n"
+ ],
+ "brand_before": {
+  "status": 200,
+  "version": 3,
+  "default_cta": ""
+ },
+ "brand_save": {
+  "status": 200
+ },
+ "brand_after": {
+  "status": 200,
+  "version": 4,
+  "default_cta": "Message us to start planning your family trip."
+ },
+ "pick": {
+  "status": 200,
+  "path": "/v1/subjects/afdc091e-1448-4ffc-8aea-2ae92fd131f2/pick",
+  "body": {
+   "subject_id": "afdc091e-1448-4ffc-8aea-2ae92fd131f2",
+   "channel": "linkedin",
+   "request_id": "aa001cf7-6f04-4493-965b-b0ecf4fdf237",
+   "atom_id": "11fd1460477ede5d",
+   "trip_id": "5a6201bb-b7ab-43aa-82f0-d6c2acbff9c2",
+   "status": "pending_goal",
+   "route_segment_ids": null
+  }
+ },
+ "request_id": "aa001cf7-6f04-4493-965b-b0ecf4fdf237",
+ "error": "TimeoutError: locator.waitFor: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('goal-inspiration') to be visible\u001b[22m\n",
+ "finished": "2026-10-16T02:28:42.578Z"
+}

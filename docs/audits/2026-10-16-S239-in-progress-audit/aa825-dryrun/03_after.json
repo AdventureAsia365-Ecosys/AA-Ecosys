@@ -1,0 +1,184 @@
+{
+ "at": "2026-10-16T03:19:13.920704+00:00",
+ "retention_after": [
+  200,
+  {
+   "kinds": [
+    {
+     "kind": "retention_llm_call_log",
+     "table": "shared.llm_call_log",
+     "rows_estimate": 252375,
+     "rollup": "shared.llm_call_daily",
+     "rollup_rows_estimate": 0,
+     "parts": [
+      {
+       "part": "raw",
+       "window_days": 180,
+       "archive": true
+      }
+     ],
+     "scheduled_mode": "dry_run",
+     "last": {
+      "dry_run": {
+       "job_id": "ba11ec53-3a20-4650-95ec-27f21d176cb2",
+       "status": "succeeded",
+       "created_at": "2026-10-16T03:18:41.526812+00:00",
+       "finished_at": "2026-10-16T03:18:43.695732+00:00",
+       "mode": "dry_run",
+       "reason": "manual dry run",
+       "trigger": "manual",
+       "candidates_total": 0,
+       "deleted_total": 0,
+       "archived_total": 0,
+       "rollup_rows": 0,
+       "rollup_pending": 0,
+       "limit_rows": 0
+      }
+     }
+    },
+    {
+     "kind": "retention_tenant_api_usage",
+     "table": "shared.tenant_api_usage",
+     "rows_estimate": 126367,
+     "rollup": "shared.tenant_api_usage_monthly",
+     "rollup_rows_estimate": 0,
+     "parts": [
+      {
+       "part": "raw",
+       "window_days": 90,
+       "archive": true
+      }
+     ],
+     "scheduled_mode": "dry_run",
+     "last": {
+      "dry_run": {
+       "job_id": "13cb13c9-1267-44a1-86fa-8e2fce8dc800",
+       "status": "succeeded",
+       "created_at": "2026-10-16T03:18:47.744064+00:00",
+       "finished_at": "2026-10-16T03:18:48.693249+00:00",
+       "mode": "dry_run",
+       "reason": "manual dry run",
+       "trigger": "manual",
+       "candidates_total": 0,
+       "deleted_total": 0,
+       "archived_total": 0,
+       "rollup_rows": 0,
+       "rollup_pending": 0,
+       "limit_rows": 0
+      }
+     }
+    },
+    {
+     "kind": "retention_job",
+     "table": "shared.job",
+     "rows_estimate": 2533,
+     "rollup": null,
+     "rollup_rows_estimate": null,
+     "parts": [
+      {
+       "part": "succeeded",
+       "window_days": 30,
+       "archive": false
+      },
+      {
+       "part": "failed",
+       "window_days": 90,
+       "archive": true
+      }
+     ],
+     "scheduled_mode": "dry_run",
+     "last": {
+      "dry_run": {
+       "job_id": "e83f37ac-9b33-4424-bc6e-d442c42d77a1",
+       "status": "succeeded",
+       "created_at": "2026-10-16T03:18:54.007402+00:00",
+       "finished_at": "2026-10-16T03:18:58.781219+00:00",
+       "mode": "dry_run",
+       "reason": "manual dry run",
+       "trigger": "manual",
+       "candidates_total": 0,
+       "deleted_total": 0,
+       "archived_total": 0,
+       "rollup_rows": 0,
+       "limit_rows": 0
+      }
+     }
+    },
+    {
+     "kind": "retention_decision_log",
+     "table": "shared.decision_log",
+     "rows_estimate": 280310,
+     "rollup": null,
+     "rollup_rows_estimate": null,
+     "parts": [
+      {
+       "part": "unlabelled",
+       "window_days": 180,
+       "archive": true
+      }
+     ],
+     "scheduled_mode": "dry_run",
+     "last": {
+      "dry_run": {
+       "job_id": "d0eec71e-5791-4a16-ae30-05b7a0798670",
+       "status": "succeeded",
+       "created_at": "2026-10-16T03:19:00.555470+00:00",
+       "finished_at": "2026-10-16T03:19:03.775443+00:00",
+       "mode": "dry_run",
+       "reason": "manual dry run",
+       "trigger": "manual",
+       "candidates_total": 0,
+       "deleted_total": 0,
+       "archived_total": 0,
+       "rollup_rows": 0,
+       "limit_rows": 0
+      }
+     }
+    },
+    {
+     "kind": "retention_cost_explorer_snapshot",
+     "table": "shared.cost_explorer_snapshot",
+     "rows_estimate": 7876,
+     "rollup": null,
+     "rollup_rows_estimate": null,
+     "parts": [
+      {
+       "part": "superseded",
+       "window_days": 1,
+       "archive": false
+      }
+     ],
+     "scheduled_mode": "dry_run",
+     "last": {
+      "dry_run": {
+       "job_id": "d909a01e-6bc7-4831-b737-c8dcfddd11de",
+       "status": "succeeded",
+       "created_at": "2026-10-16T03:19:06.886833+00:00",
+       "finished_at": "2026-10-16T03:19:08.813806+00:00",
+       "mode": "dry_run",
+       "reason": "manual dry run",
+       "trigger": "manual",
+       "candidates_total": 5991,
+       "deleted_total": 0,
+       "archived_total": 0,
+       "rollup_rows": 0,
+       "limit_rows": 0
+      }
+     }
+    }
+   ],
+   "run_max_rows": 200000,
+   "growth_factor": 2,
+   "growth_floor_rows": 5000,
+   "archive": "s3://aa-cis-bronze-005097885195/archive/<table>/yyyy/mm/"
+  }
+ ],
+ "deploy_gate": [
+  200,
+  {
+   "active": 0,
+   "by_status": {},
+   "safe_to_deploy": true
+  }
+ ]
+}

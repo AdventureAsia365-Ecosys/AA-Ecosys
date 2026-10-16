@@ -1,0 +1,586 @@
+{
+ "case": {
+  "status": 200,
+  "body": {
+   "id": "509c154f-fdd6-40f3-ad65-108fd4f67fd9",
+   "code": "TC-000008",
+   "status": "new_inquiry",
+   "customer_id": "1376fac5-1f04-4ea9-b4bb-633b95e4f550",
+   "trip_style": "Trekking",
+   "start_date": "2027-04-05",
+   "end_date": null,
+   "pax": 2,
+   "pax_adults": 2,
+   "pax_children": 0,
+   "currency": "USD",
+   "notes": null,
+   "source_system": "cis",
+   "source_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+   "created_at": "2026-10-16T01:53:53.478369Z",
+   "updated_at": "2026-10-16T01:53:53.478369Z",
+   "customer_code": "CUS-000008",
+   "customer_name": "ZZ S239 test Customer AA-679",
+   "customer_email": "zz-s239-aa679@example.com",
+   "customer_phone": null,
+   "customer_verified": false,
+   "customer_needs_merge_review": false,
+   "assignees": [],
+   "countries": [
+    "BT"
+   ],
+   "inquiry_snapshot": null,
+   "inbox_event_id": null,
+   "legs": [],
+   "trip_title": null,
+   "leg_titles": [],
+   "leg_count": 0,
+   "duration_days": null,
+   "trip_end_date": null,
+   "versions": [
+    {
+     "id": "119361b2-2b6e-417b-812c-1d75573f9674",
+     "version_number": 1,
+     "title": "Bhutan: Bumdra Trek & Valley Monasteries \u2014 7 Days",
+     "notes": null,
+     "total_price": null,
+     "currency": "USD",
+     "channel": "b2c_tailor_made",
+     "valid_until": null,
+     "is_sent_to_customer": false,
+     "sent_at": null,
+     "sent_by": null,
+     "is_approved": false,
+     "approved_at": null,
+     "approved_by": null,
+     "approval_note": null,
+     "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "created_at": "2026-10-16T01:53:53.478369Z",
+     "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "updated_at": "2026-10-16T01:53:53.478369Z",
+     "badge": "draft",
+     "item_count": 7,
+     "fx_locked": null
+    },
+    {
+     "id": "58d5adbf-92fa-4c32-90d8-8ac62f567811",
+     "version_number": 2,
+     "title": "Bhutan: Bumdra Trek & Valley Monasteries \u2014 7 Days",
+     "notes": null,
+     "total_price": null,
+     "currency": "USD",
+     "channel": "b2c_tailor_made",
+     "valid_until": null,
+     "is_sent_to_customer": false,
+     "sent_at": null,
+     "sent_by": null,
+     "is_approved": false,
+     "approved_at": null,
+     "approved_by": null,
+     "approval_note": null,
+     "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "created_at": "2026-10-16T01:54:26.893730Z",
+     "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "updated_at": "2026-10-16T01:54:26.893730Z",
+     "badge": "draft",
+     "item_count": 7,
+     "fx_locked": null
+    }
+   ],
+   "status_history": [
+    {
+     "from_status": null,
+     "to_status": "new_inquiry",
+     "changed_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "note": null,
+     "changed_at": "2026-10-16T01:53:53.478369Z"
+    }
+   ],
+   "assignments": [],
+   "allowed_transitions": [
+    "cancelled",
+    "discovery"
+   ]
+  }
+ },
+ "v1_items": {
+  "status": 200,
+  "body": {
+   "id": "119361b2-2b6e-417b-812c-1d75573f9674",
+   "version_number": 1,
+   "title": "Bhutan: Bumdra Trek & Valley Monasteries \u2014 7 Days",
+   "notes": null,
+   "total_price": null,
+   "currency": "USD",
+   "channel": "b2c_tailor_made",
+   "valid_until": null,
+   "is_sent_to_customer": false,
+   "sent_at": null,
+   "sent_by": null,
+   "is_approved": false,
+   "approved_at": null,
+   "approved_by": null,
+   "approval_note": null,
+   "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "created_at": "2026-10-16T01:53:53.478369Z",
+   "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "updated_at": "2026-10-16T01:53:53.478369Z",
+   "badge": "draft",
+   "fx_locked": null,
+   "items": [
+    {
+     "id": "6b4f5c25-261a-4d8e-8c10-9c4117ee48bc",
+     "position": 1,
+     "title": "Arrival in Paro and Drive to Thimphu",
+     "day_from": 1,
+     "day_to": 1,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "df0ac60e-9ac3-450c-8f50-65028eeb76a1",
+     "position": 2,
+     "title": "Thimphu Sightseeing",
+     "day_from": 2,
+     "day_to": 2,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "0dbd59b4-8c75-444a-bc77-239f1bc1bfbc",
+     "position": 3,
+     "title": "Dochu La Pass to Punakha Dzong",
+     "day_from": 3,
+     "day_to": 3,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "06490c11-4961-410a-a6ac-2daf52120f61",
+     "position": 4,
+     "title": "Return to Paro",
+     "day_from": 4,
+     "day_to": 4,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "aba3a1c9-3633-4b90-8a3a-08abd3dbd4dc",
+     "position": 5,
+     "title": "Bumdra Trek: Sang Choekor to High Mountain Camp",
+     "day_from": 5,
+     "day_to": 5,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "5fab758e-7dff-4d75-8fc2-9bc2dd5678f5",
+     "position": 6,
+     "title": "Bumdra to Taktsang: Mountain Descent and Sacred Monastery",
+     "day_from": 6,
+     "day_to": 6,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "e571fd52-85e2-4de7-ba82-cee12810f36e",
+     "position": 7,
+     "title": "Departure from Paro",
+     "day_from": 7,
+     "day_to": 7,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    }
+   ]
+  }
+ },
+ "v2_items": {
+  "status": 200,
+  "body": {
+   "id": "58d5adbf-92fa-4c32-90d8-8ac62f567811",
+   "version_number": 2,
+   "title": "Bhutan: Bumdra Trek & Valley Monasteries \u2014 7 Days",
+   "notes": null,
+   "total_price": null,
+   "currency": "USD",
+   "channel": "b2c_tailor_made",
+   "valid_until": null,
+   "is_sent_to_customer": false,
+   "sent_at": null,
+   "sent_by": null,
+   "is_approved": false,
+   "approved_at": null,
+   "approved_by": null,
+   "approval_note": null,
+   "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "created_at": "2026-10-16T01:54:26.893730Z",
+   "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "updated_at": "2026-10-16T01:54:26.893730Z",
+   "badge": "draft",
+   "fx_locked": null,
+   "items": [
+    {
+     "id": "77c04cc4-3f71-4082-b8b4-486e623def2e",
+     "position": 1,
+     "title": "Arrival in Paro and Drive to Thimphu",
+     "day_from": 1,
+     "day_to": 1,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "ced8a7bd-f9c7-4a1f-8842-6bca739b4282",
+     "position": 2,
+     "title": "Thimphu Sightseeing",
+     "day_from": 2,
+     "day_to": 2,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "0b07d462-c5a6-4779-ac3f-dec675f9b75a",
+     "position": 3,
+     "title": "Dochu La Pass to Punakha Dzong",
+     "day_from": 3,
+     "day_to": 3,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "b853dd64-2477-4f38-9b54-9931644fc730",
+     "position": 4,
+     "title": "Return to Paro",
+     "day_from": 4,
+     "day_to": 4,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "98246b1a-d6c5-4f02-aff9-107b2dd46ad8",
+     "position": 5,
+     "title": "Bumdra Trek: Sang Choekor to High Mountain Camp",
+     "day_from": 5,
+     "day_to": 5,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "d65cb696-0401-468a-918b-04ebe40c5fe6",
+     "position": 6,
+     "title": "Bumdra to Taktsang: Mountain Descent and Sacred Monastery",
+     "day_from": 6,
+     "day_to": 6,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    },
+    {
+     "id": "d83c5f74-cc2a-4b95-9150-fd9b584e5c86",
+     "position": 7,
+     "title": "Departure from Paro",
+     "day_from": 7,
+     "day_to": 7,
+     "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "notes": null,
+     "hotel_room_type_id": null,
+     "service_id": null,
+     "costs": [],
+     "supply": null
+    }
+   ]
+  }
+ },
+ "plan": {
+  "status": 200,
+  "body": {
+   "source_system": "cis",
+   "source_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+   "tour_id": "2e1fd11d-0ba6-4388-9091-716a3e719da8",
+   "source_version": 1,
+   "sku": null,
+   "slug": "bhutan-bumdra-trek-valley-monasteries-7-days-bhutan-4a2411b2",
+   "title": "Bhutan: Bumdra Trek & Valley Monasteries \u2014 7 Days",
+   "subtitle": "Two-day high-altitude trek from Paro to Bumdra Monastery at 3,800m, descending via Taktsang and the Paro Valley",
+   "summary": "This seven-day itinerary pairs valley time in Bhutan's capital and western regions with a two-day mountain trek. The centrepiece is the Bumdra trek, which climbs from Sang Choekor Buddhist College through blue pine and juniper forest to a high camp near Bumdra Monastery, then descends past Taktsang \u2014 the famous Tiger's Nest \u2014 to Paro. In between, days in Thimphu and Punakha introduce the country's political heart and its oldest dzong, separated by Dochu La Pass. The trek itself covers two days, with elevations from 2,800m to 3,800m, and suits trekkers with moderate fitness and acclimatization.",
+   "description": "",
+   "country": "Bhutan",
+   "duration_raw": "7 days",
+   "duration_days": 7,
+   "inclusions": null,
+   "exclusions": null,
+   "best_time_to_go": "April \u2013 June\nSept \u2013 Nov",
+   "group_size": null,
+   "lifecycle_stage": "active",
+   "itinerary_text": "Day 1 \u2014 Arrival in Paro and Drive to Thimphu\nArrive at Paro International Airport and drive to Thimphu for overnight.\n\nDay 2 \u2014 Thimphu Sightseeing\nVisit Thimphu's key monasteries, temples, and monuments.\n\nDay 3 \u2014 Dochu La Pass to Punakha Dzong\nCross Dochu La Pass, then descend to Punakha Dzong at the river confluence.\n\nDay 4 \u2014 Return to Paro\nTravel back to Paro for the night.\n\nDay 5 \u2014 Bumdra Trek: Sang Choekor to High Mountain Camp\nFrom Paro, a one-hour drive takes you to Sang Choekor Buddhist College, where the trek begins at 2,800 meters. The path climbs gradually through blue pine and juniper forest \u2014 sections marked by a recent forest fire \u2014 toward Chhoe Chhoe Tse Lhakhang temple after roughly three hours of walking. Beyond the temple, another twenty minutes of ascent leads back into forest; forty minutes more brings you to a broad meadow dotted with chortens and prayer flags. Your camp lies just below Bumdra Monastery, at approximately 3,800 meters, with open views across the Himalayan range. From camp, you can visit the monastery or, if the altitude and conditions allow, ascend to the 4,000-meter peak nearby before returning to rest. Trek distance: 7 kilometers; approximate trekking time: 4 hours.\n\nDay 6 \u2014 Bumdra to Taktsang: Mountain Descent and Sacred Monastery\nThe descent retraces the forest, passing numerous temples as you lose elevation. From the gardens near Sangtopelri, you gain views down the valley toward Taktsang Monastery \u2014 the Tiger's Nest \u2014 perched on a cliff above. According to Buddhist tradition, Guru Rinpoche, the eighth-century saint who introduced Buddhism to Bhutan, flew to this site on the back of a tigress and meditated here for three months. Taktsang remains one of Asia's holiest pilgrimage destinations, drawing devotees from Bhutan and neighbouring Buddhist countries. You visit the monastery itself before continuing the descent, a further hour on foot, to meet your vehicle in Paro. Trek distance: 7 kilometers; approximate trekking time: 4 hours.\n\nDay 7 \u2014 Departure from Paro\nDepart Bhutan from Paro International Airport.",
+   "cover_photo_path": "/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef",
+   "photo_count": 13,
+   "published_at": "2026-10-05T12:33:16.088972Z",
+   "updated_at": "2026-10-05T12:33:16.088972Z",
+   "content_hash": "b76f0bee84abbb77ad68434b4cd750e2",
+   "plan_id": "75b1bdfe-ed69-4459-a22e-e96cf2e68805",
+   "sellable": true,
+   "trip_style": "Trekking",
+   "default_channel": "b2c_tailor_made",
+   "commercial_notes": "ZZ S239 test commercial row (AA-679 live verify). Revert sellable=false when done.",
+   "price_hint": {
+    "amount": "2450.00",
+    "currency": "USD",
+    "basis": "per_person"
+   },
+   "has_commercial_row": true,
+   "highlights": [
+    "Two-day trek to Bumdra Monastery at 3,800 meters, camping at altitude with Himalayan views",
+    "Descent past Taktsang (Tiger's Nest) Monastery, one of Asia's most important Buddhist pilgrimage sites",
+    "Sightseeing in Thimphu, Bhutan's capital, including visits to monasteries and the National Memorial Chorten",
+    "Drive across Dochu La Pass, straddling two valleys with vistas of the eastern Himalayas.",
+    "Visits to Punakha Dzong, Bhutan's oldest fortress monastery, on the second-longest river in the country"
+   ],
+   "days": [
+    {
+     "day_number": 1,
+     "title": "Arrival in Paro and Drive to Thimphu",
+     "body": "Arrive at Paro International Airport and drive to Thimphu for overnight.",
+     "places": [
+      "Paro International Airport",
+      "Paro to Thimphu"
+     ]
+    },
+    {
+     "day_number": 2,
+     "title": "Thimphu Sightseeing",
+     "body": "Visit Thimphu's key monasteries, temples, and monuments.",
+     "places": [
+      "Thimphu"
+     ]
+    },
+    {
+     "day_number": 3,
+     "title": "Dochu La Pass to Punakha Dzong",
+     "body": "Cross Dochu La Pass, then descend to Punakha Dzong at the river confluence.",
+     "places": [
+      "Dochu La Pass",
+      "Punakha Dzong"
+     ]
+    },
+    {
+     "day_number": 4,
+     "title": "Return to Paro",
+     "body": "Travel back to Paro for the night.",
+     "places": [
+      "Paro"
+     ]
+    },
+    {
+     "day_number": 5,
+     "title": "Bumdra Trek: Sang Choekor to High Mountain Camp",
+     "body": "From Paro, a one-hour drive takes you to Sang Choekor Buddhist College, where the trek begins at 2,800 meters. The path climbs gradually through blue pine and juniper forest \u2014 sections marked by a recent forest fire \u2014 toward Chhoe Chhoe Tse Lhakhang temple after roughly three hours of walking. Beyond the temple, another twenty minutes of ascent leads back into forest; forty minutes more brings you to a broad meadow dotted with chortens and prayer flags. Your camp lies just below Bumdra Monastery, at approximately 3,800 meters, with open views across the Himalayan range. From camp, you can visit the monastery or, if the altitude and conditions allow, ascend to the 4,000-meter peak nearby before returning to rest. Trek distance: 7 kilometers; approximate trekking time: 4 hours.",
+     "places": [
+      "Paro",
+      "Sang Choekor Buddhist College",
+      "Chhoe Chhoe Tse Lhakhang temple",
+      "Bumdra Monastery",
+      "4,000-meter peak nearby",
+      "high mountain camp below Bumdra Monastery"
+     ]
+    },
+    {
+     "day_number": 6,
+     "title": "Bumdra to Taktsang: Mountain Descent and Sacred Monastery",
+     "body": "The descent retraces the forest, passing numerous temples as you lose elevation. From the gardens near Sangtopelri, you gain views down the valley toward Taktsang Monastery \u2014 the Tiger's Nest \u2014 perched on a cliff above. According to Buddhist tradition, Guru Rinpoche, the eighth-century saint who introduced Buddhism to Bhutan, flew to this site on the back of a tigress and meditated here for three months. Taktsang remains one of Asia's holiest pilgrimage destinations, drawing devotees from Bhutan and neighbouring Buddhist countries. You visit the monastery itself before continuing the descent, a further hour on foot, to meet your vehicle in Paro. Trek distance: 7 kilometers; approximate trekking time: 4 hours.",
+     "places": [
+      "forest",
+      "gardens near Sangtopelri",
+      "Taktsang Monastery",
+      "Taktsang to Paro"
+     ]
+    },
+    {
+     "day_number": 7,
+     "title": "Departure from Paro",
+     "body": "Depart Bhutan from Paro International Airport.",
+     "places": [
+      "Paro International Airport"
+     ]
+    }
+   ],
+   "photos": [
+    {
+     "photo_id": "1a5619c5-6be0-4eeb-8885-8da207336aef",
+     "path": "/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef",
+     "place_label": "7. Places to visit in Punakha Bhutan",
+     "position": 1
+    },
+    {
+     "photo_id": "500f0bfd-2428-40fc-ad3d-af492725f542",
+     "path": "/content/photos/500f0bfd-2428-40fc-ad3d-af492725f542",
+     "place_label": "bhutan hiking tiger nest hike bhutan luxury holiday",
+     "position": 2
+    },
+    {
+     "photo_id": "d23d2a06-65ad-46d7-983a-279ea5ca7848",
+     "path": "/content/photos/d23d2a06-65ad-46d7-983a-279ea5ca7848",
+     "place_label": "Bhutan Punakha suspension bridge 1097574620 Website 1920x1080 fill gravityauto",
+     "position": 3
+    },
+    {
+     "photo_id": "4d194a02-8def-4b7c-8c89-7cc366631f36",
+     "path": "/content/photos/4d194a02-8def-4b7c-8c89-7cc366631f36",
+     "place_label": "Paro International Airport",
+     "position": 4
+    },
+    {
+     "photo_id": "e0844504-25e4-4d40-acec-7dccfa299c2a",
+     "path": "/content/photos/e0844504-25e4-4d40-acec-7dccfa299c2a",
+     "place_label": "Paro International Airport",
+     "position": 5
+    },
+    {
+     "photo_id": "497468e2-460e-43fc-838d-330a5612a282",
+     "path": "/content/photos/497468e2-460e-43fc-838d-330a5612a282",
+     "place_label": "Punakha",
+     "position": 6
+    },
+    {
+     "photo_id": "f0bfa73a-42db-4cb7-bc18-2c2768b0ce73",
+     "path": "/content/photos/f0bfa73a-42db-4cb7-bc18-2c2768b0ce73",
+     "place_label": "Punakha",
+     "position": 7
+    },
+    {
+     "photo_id": "6c8196b5-2fda-4961-ae59-632ea93265e6",
+     "path": "/content/photos/6c8196b5-2fda-4961-ae59-632ea93265e6",
+     "place_label": "Punakha",
+     "position": 8
+    },
+    {
+     "photo_id": "1e39acf2-4642-494b-afa3-3287dd00661d",
+     "path": "/content/photos/1e39acf2-4642-494b-afa3-3287dd00661d",
+     "place_label": "PunakhaDzong",
+     "position": 9
+    },
+    {
+     "photo_id": "28b510a7-be8e-4a40-9918-85b33f22460b",
+     "path": "/content/photos/28b510a7-be8e-4a40-9918-85b33f22460b",
+     "place_label": "Thimphu",
+     "position": 10
+    },
+    {
+     "photo_id": "b4341b58-543d-4928-8330-d45978bb3860",
+     "path": "/content/photos/b4341b58-543d-4928-8330-d45978bb3860",
+     "place_label": "Thimphu",
+     "position": 11
+    },
+    {
+     "photo_id": "5ef49071-a2c7-428d-8407-0e2ab87d96ce",
+     "path": "/content/photos/5ef49071-a2c7-428d-8407-0e2ab87d96ce",
+     "place_label": "Thimphu City Image Main ade4c01cca",
+     "position": 12
+    },
+    {
+     "photo_id": "dbd2fb25-eb61-49d1-875e-39b10b462479",
+     "path": "/content/photos/dbd2fb25-eb61-49d1-875e-39b10b462479",
+     "place_label": "Thimphu",
+     "position": 13
+    }
+   ],
+   "cases_started": 1,
+   "commercial": {
+    "created_at": "2026-10-16T01:52:48.522896Z",
+    "updated_at": "2026-10-16T01:52:48.522896Z",
+    "created_by": {
+     "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "name": "e2e-claude-code"
+    },
+    "updated_by": {
+     "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "name": "e2e-claude-code"
+    }
+   }
+  }
+ },
+ "audit_case": {
+  "items": [
+   {
+    "id": "098ccfc2-56e6-45f4-8f2c-81b22250ccfd",
+    "at": "2026-10-16T01:53:53.478369Z",
+    "actor": {
+     "type": "staff",
+     "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+     "name": "e2e-claude-code"
+    },
+    "action": "trip_case.created",
+    "entity_type": "trip_case",
+    "entity_id": "509c154f-fdd6-40f3-ad65-108fd4f67fd9",
+    "entity_label": "TC-000008",
+    "summary": "Created TC-000008 (new_inquiry)",
+    "before": null,
+    "after": {
+     "pax": 2,
+     "status": "new_inquiry",
+     "currency": "USD",
+     "countries": [
+      "BT"
+     ],
+     "source_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "pax_adults": 2,
+     "start_date": "2027-04-05",
+     "trip_style": "Trekking",
+     "customer_id": "1376fac5-1f04-4ea9-b4bb-633b95e4f550",
+     "pax_children": 0,
+     "source_system": "cis"
+    }
+   }
+  ],
+  "next_before": null
+ }
+}

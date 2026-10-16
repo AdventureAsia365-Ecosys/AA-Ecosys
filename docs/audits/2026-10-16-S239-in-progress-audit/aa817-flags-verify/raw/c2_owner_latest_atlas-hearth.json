@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T05:15:34+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/e6919aa3-576e-420d-90eb-57c36cdbc513/latest-piece",
+ "status": 200,
+ "x_request_id": "415ddae6-13bb-4679-b23b-9d93514b7174",
+ "body": {
+  "piece": {
+   "piece_id": "a7e18faf-4b68-4453-8020-000e38109674",
+   "angle_gate_request_id": "e6919aa3-576e-420d-90eb-57c36cdbc513",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "Pawangka Monastery, built in the seventh century by Songtsen Gampo, marks the origin of Tibetan written language.\n\nThe c...",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-16T00:21:48.092155+00:00"
+  }
+ }
+}

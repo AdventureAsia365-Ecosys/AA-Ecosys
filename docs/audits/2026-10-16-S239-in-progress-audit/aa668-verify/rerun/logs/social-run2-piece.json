@@ -1,0 +1,56 @@
+{
+ "piece": {
+  "piece_id": "269682ec-ddff-4249-bd7e-af8a42bf6a28",
+  "angle_gate_request_id": "3fa8495d-64c0-4948-8910-c9f599691389",
+  "channel": "linkedin",
+  "ready_state": "ready",
+  "content_text": "Lok Virsa Museum in Islamabad gathers Pakistan's folk traditions from communities across the country.\n\nIts collections span textiles, costumes, jewellery, woodwork, ceramics, and musical instruments, representing cultural traditions from communities and regions across Pakistan. For families, that breadth matters: there is genuine variety here, and the objects themselves carry the stories of the people who made and used them. The museum sits in Islamabad's Shakarparian area and is associated with the National Institute of Folk and Traditional Heritage.\n\nTerra Family Expeditions designs journeys where cultural discovery like this sits naturally alongside the rest of a family trip.\n\nMessage us to start planning your family trip.\n\n#Pakistan #Islamabad #LokVirsaMuseum",
+  "seo_title": null,
+  "meta_description": null,
+  "slug": null,
+  "route_hub_name": null,
+  "route_segment_count": null,
+  "created_at": "2026-10-16T03:33:17.737361+00:00"
+ },
+ "final_progress": {
+  "found": true,
+  "status": "done",
+  "message": null,
+  "revision": 1,
+  "steps": [
+   {
+    "key": "prepare",
+    "label": "Reading your topic and brand voice",
+    "state": "done"
+   },
+   {
+    "key": "write",
+    "label": "Writing your post",
+    "state": "done"
+   },
+   {
+    "key": "check",
+    "label": "Checking facts, tone and quality",
+    "state": "done"
+   },
+   {
+    "key": "revise",
+    "label": "Revising what the checks flagged",
+    "state": "done"
+   },
+   {
+    "key": "save",
+    "label": "Saving to My Content",
+    "state": "done"
+   }
+  ],
+  "sections": [
+   {
+    "key": "body",
+    "label": "",
+    "text": "Lok Virsa Museum in Islamabad gathers Pakistan's folk traditions from communities across the country.\n\nIts collections span textiles, costumes, jewellery, woodwork, ceramics, and musical instruments, representing cultural traditions from communities and regions across Pakistan. For families, that breadth matters: there is genuine variety here, and the objects themselves carry the stories of the people who made and used them. The museum sits in Islamabad's Shakarparian area and is associated with the National Institute of Folk and Traditional Heritage.\n\nTerra Family Expeditions designs journeys where cultural discovery like this sits naturally alongside the rest of a family trip.\n\nMessage us to start planning your family trip.\n\n#Pakistan #Islamabad #LokVirsaMuseum"
+   }
+  ],
+  "updated_at": 1792121630.64515
+ }
+}

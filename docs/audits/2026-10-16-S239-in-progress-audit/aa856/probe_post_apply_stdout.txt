@@ -1,0 +1,28 @@
+{
+  "mode": "post-apply",
+  "since": "2026-10-16T05:25:00+00:00",
+  "catalog": [
+    {
+      "model_key": "cohere-embed-v4",
+      "bedrock_profile_ids": {
+        "acc2": "global.cohere.embed-v4:0"
+      },
+      "enabled": true,
+      "blocked_reason": null,
+      "updated_at": "2026-10-16 05:26:23.659941+00:00",
+      "updated_by": "migration-238-aa856"
+    }
+  ],
+  "calls": [],
+  "failed_call_errors": [],
+  "job_errors": [],
+  "jobs_in_flight": [],
+  "ok_rows_by_stage": {},
+  "verdict": {
+    "catalog_on_global": true,
+    "no_refused_embed_rows": true,
+    "no_embed_job_errors": true,
+    "cis_stages_with_ok_rows": []
+  }
+}
+uploaded s3://aa-cis-bronze-005097885195/scripts/aa856-probe-post-apply.json

@@ -1,0 +1,146 @@
+{
+    "queryLanguage": "CWLI",
+    "results": [
+        [
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "tid",
+                "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf"
+            },
+            {
+                "field": "count()",
+                "value": "13"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 05:15:27.351"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 05:15:39.803"
+            }
+        ],
+        [
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "tid",
+                "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146"
+            },
+            {
+                "field": "count()",
+                "value": "2"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 05:15:34.914"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 05:15:39.161"
+            }
+        ],
+        [
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "tid",
+                "value": "885d4916-007b-415e-9261-909ad43c6d00"
+            },
+            {
+                "field": "count()",
+                "value": "1"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 05:15:36.225"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 05:15:36.225"
+            }
+        ],
+        [
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "tid",
+                "value": "692a3214-5cc2-46c6-a5ca-265389747269"
+            },
+            {
+                "field": "count()",
+                "value": "1"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 05:15:35.560"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 05:15:35.560"
+            }
+        ],
+        [
+            {
+                "field": "pool",
+                "value": "False"
+            },
+            {
+                "field": "tid",
+                "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf"
+            },
+            {
+                "field": "count()",
+                "value": "7"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 02:25:47.591"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 03:33:17.315"
+            }
+        ],
+        [
+            {
+                "field": "pool",
+                "value": "False"
+            },
+            {
+                "field": "tid",
+                "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146"
+            },
+            {
+                "field": "count()",
+                "value": "2"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 01:38:30.767"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 01:40:20.788"
+            }
+        ]
+    ],
+    "statistics": {
+        "recordsMatched": 26.0,
+        "recordsScanned": 12854.0,
+        "estimatedRecordsSkipped": 0.0,
+        "bytesScanned": 1423103.0,
+        "estimatedBytesSkipped": 0.0,
+        "logGroupsScanned": 1.0
+    },
+    "status": "Complete"
+}

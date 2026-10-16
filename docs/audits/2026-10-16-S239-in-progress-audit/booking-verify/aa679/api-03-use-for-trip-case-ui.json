@@ -1,0 +1,200 @@
+{
+ "use_new": {
+  "status": 201,
+  "body": {
+   "mode": "new_case",
+   "trip_case": {
+    "id": "509c154f-fdd6-40f3-ad65-108fd4f67fd9",
+    "code": "TC-000008",
+    "status": "new_inquiry",
+    "customer_id": "1376fac5-1f04-4ea9-b4bb-633b95e4f550",
+    "trip_style": "Trekking",
+    "start_date": "2027-04-05",
+    "end_date": null,
+    "pax": 2,
+    "pax_adults": 2,
+    "pax_children": 0,
+    "currency": "USD",
+    "notes": null,
+    "source_system": "cis",
+    "source_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+    "created_at": "2026-10-16T01:53:53.478369Z",
+    "updated_at": "2026-10-16T01:53:53.478369Z",
+    "customer_code": "CUS-000008",
+    "customer_name": "ZZ S239 test Customer AA-679",
+    "customer_email": "zz-s239-aa679@example.com",
+    "customer_phone": null,
+    "customer_verified": false,
+    "customer_needs_merge_review": false,
+    "assignees": [],
+    "countries": [
+     "BT"
+    ],
+    "inquiry_snapshot": null,
+    "inbox_event_id": null,
+    "legs": [],
+    "trip_title": null,
+    "leg_titles": [],
+    "leg_count": 0,
+    "duration_days": null,
+    "trip_end_date": null,
+    "versions": [
+     {
+      "id": "119361b2-2b6e-417b-812c-1d75573f9674",
+      "version_number": 1,
+      "title": "Bhutan: Bumdra Trek & Valley Monasteries — 7 Days",
+      "notes": null,
+      "total_price": null,
+      "currency": "USD",
+      "channel": "b2c_tailor_made",
+      "valid_until": null,
+      "is_sent_to_customer": false,
+      "sent_at": null,
+      "sent_by": null,
+      "is_approved": false,
+      "approved_at": null,
+      "approved_by": null,
+      "approval_note": null,
+      "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "created_at": "2026-10-16T01:53:53.478369Z",
+      "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "updated_at": "2026-10-16T01:53:53.478369Z",
+      "badge": "draft",
+      "item_count": 7,
+      "fx_locked": null
+     }
+    ],
+    "status_history": [
+     {
+      "from_status": null,
+      "to_status": "new_inquiry",
+      "changed_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "note": null,
+      "changed_at": "2026-10-16T01:53:53.478369Z"
+     }
+    ],
+    "assignments": [],
+    "allowed_transitions": [
+     "cancelled",
+     "discovery"
+    ]
+   },
+   "version": {
+    "id": "119361b2-2b6e-417b-812c-1d75573f9674",
+    "version_number": 1,
+    "title": "Bhutan: Bumdra Trek & Valley Monasteries — 7 Days",
+    "notes": null,
+    "total_price": null,
+    "currency": "USD",
+    "channel": "b2c_tailor_made",
+    "valid_until": null,
+    "is_sent_to_customer": false,
+    "sent_at": null,
+    "sent_by": null,
+    "is_approved": false,
+    "approved_at": null,
+    "approved_by": null,
+    "approval_note": null,
+    "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "created_at": "2026-10-16T01:53:53.478369Z",
+    "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "updated_at": "2026-10-16T01:53:53.478369Z",
+    "badge": "draft",
+    "fx_locked": null,
+    "items": [
+     {
+      "id": "6b4f5c25-261a-4d8e-8c10-9c4117ee48bc",
+      "position": 1,
+      "title": "Arrival in Paro and Drive to Thimphu",
+      "day_from": 1,
+      "day_to": 1,
+      "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+      "notes": null,
+      "hotel_room_type_id": null,
+      "service_id": null,
+      "costs": [],
+      "supply": null
+     },
+     {
+      "id": "df0ac60e-9ac3-450c-8f50-65028eeb76a1",
+      "position": 2,
+      "title": "Thimphu Sightseeing",
+      "day_from": 2,
+      "day_to": 2,
+      "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+      "notes": null,
+      "hotel_room_type_id": null,
+      "service_id": null,
+      "costs": [],
+      "supply": null
+     },
+     {
+      "id": "0dbd59b4-8c75-444a-bc77-239f1bc1bfbc",
+      "position": 3,
+      "title": "Dochu La Pass to Punakha Dzong",
+      "day_from": 3,
+      "day_to": 3,
+      "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+      "notes": null,
+      "hotel_room_type_id": null,
+      "service_id": null,
+      "costs": [],
+      "supply": null
+     },
+     {
+      "id": "06490c11-4961-410a-a6ac-2daf52120f61",
+      "position": 4,
+      "title": "Return to Paro",
+      "day_from": 4,
+      "day_to": 4,
+      "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+      "notes": null,
+      "hotel_room_type_id": null,
+      "service_id": null,
+      "costs": [],
+      "supply": null
+     },
+     {
+      "id": "aba3a1c9-3633-4b90-8a3a-08abd3dbd4dc",
+      "position": 5,
+      "title": "Bumdra Trek: Sang Choekor to High Mountain Camp",
+      "day_from": 5,
+      "day_to": 5,
+      "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+      "notes": null,
+      "hotel_room_type_id": null,
+      "service_id": null,
+      "costs": [],
+      "supply": null
+     },
+     {
+      "id": "5fab758e-7dff-4d75-8fc2-9bc2dd5678f5",
+      "position": 6,
+      "title": "Bumdra to Taktsang: Mountain Descent and Sacred Monastery",
+      "day_from": 6,
+      "day_to": 6,
+      "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+      "notes": null,
+      "hotel_room_type_id": null,
+      "service_id": null,
+      "costs": [],
+      "supply": null
+     },
+     {
+      "id": "e571fd52-85e2-4de7-ba82-cee12810f36e",
+      "position": 7,
+      "title": "Departure from Paro",
+      "day_from": 7,
+      "day_to": 7,
+      "source_tour_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+      "notes": null,
+      "hotel_room_type_id": null,
+      "service_id": null,
+      "costs": [],
+      "supply": null
+     }
+    ]
+   }
+  }
+ }
+}

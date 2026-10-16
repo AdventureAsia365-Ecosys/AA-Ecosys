@@ -1,0 +1,56 @@
+{
+ "piece": {
+  "piece_id": "4ebda814-b6f1-4a3b-80e3-727f866220fb",
+  "angle_gate_request_id": "b353d044-060b-4c65-84c2-44f64f30a0d1",
+  "channel": "linkedin",
+  "ready_state": "ready",
+  "content_text": "Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.\n\nZorig Chusum means Bhutan's thirteen traditional arts and crafts, and this government-run school in Thimphu exists for one clear purpose: to make sure those skills pass to the next generation rather than disappear. Each student follows a multi-year programme under experienced master craftspeople, which is why the standard of work inside is serious and deliberate.\n\nThere is a direct connection to the dzongs and monasteries families see elsewhere in Bhutan. The institute trains the artisans who restore and decorate those very buildings, so what looks like a separate stop starts to feel like a thread running through the whole journey.\n\nFor families, that context matters. Children can watch a discipline being learned at the same pace that craft has always demanded, and parents can see how Bhutanese cultural life holds together across centuries.\n\nThis visit sits within a broader morning in Thimphu. Message us to start planning your family trip.\n\n#Thimphu #ZorigChusum #Bhutan",
+  "seo_title": null,
+  "meta_description": null,
+  "slug": null,
+  "route_hub_name": null,
+  "route_segment_count": null,
+  "created_at": "2026-10-16T03:32:06.572002+00:00"
+ },
+ "final_progress": {
+  "found": true,
+  "status": "done",
+  "message": null,
+  "revision": 1,
+  "steps": [
+   {
+    "key": "prepare",
+    "label": "Reading your topic and brand voice",
+    "state": "done"
+   },
+   {
+    "key": "write",
+    "label": "Writing your post",
+    "state": "done"
+   },
+   {
+    "key": "check",
+    "label": "Checking facts, tone and quality",
+    "state": "done"
+   },
+   {
+    "key": "revise",
+    "label": "Revising what the checks flagged",
+    "state": "skipped"
+   },
+   {
+    "key": "save",
+    "label": "Saving to My Content",
+    "state": "done"
+   }
+  ],
+  "sections": [
+   {
+    "key": "body",
+    "label": "",
+    "text": "Students at the National Institute for Zorig Chusum spend years mastering a single craft, thangka painting, wood carving, weaving, or one of ten other disciplines.\n\nZorig Chusum means Bhutan's thirteen traditional arts and crafts, and this government-run school in Thimphu exists for one clear purpose: to make sure those skills pass to the next generation rather than disappear. Each student follows a multi-year programme under experienced master craftspeople, which is why the standard of work inside is serious and deliberate.\n\nThere is a direct connection to the dzongs and monasteries families see elsewhere in Bhutan. The institute trains the artisans who restore and decorate those very buildings, so what looks like a separate stop starts to feel like a thread running through the whole journey.\n\nFor families, that context matters. Children can watch a discipline being learned at the same pace that craft has always demanded, and parents can see how Bhutanese cultural life holds together across centuries.\n\nThis visit sits within a broader morning in Thimphu. Message us to start planning your family trip.\n\n#Thimphu #ZorigChusum #Bhutan"
+   }
+  ],
+  "updated_at": 1792121544.638681
+ }
+}

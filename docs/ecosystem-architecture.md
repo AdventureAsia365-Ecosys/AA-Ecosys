@@ -1,6 +1,7 @@
 # AA-Ecosys — Ecosystem architecture
 
-> **Status:** updated 14/10/2026 (S236 — ADR 0007 place pipeline in CIS; S235 — AA-Booking bootstrap live, OIDC trust narrowed, ADRs
+> **Status:** updated 16/10/2026 (S239 — AA-Booking §3.4 refresh: slices live through `bk-011`, live catalog read (S237 D4),
+> customer identity per ADR 0006, `api-booking` sub-domain live); 14/10/2026 (S236 — ADR 0007 place pipeline in CIS; S235 — AA-Booking bootstrap live, OIDC trust narrowed, ADRs
 > 0001/0004/0005 Accepted; previous revisions 11/10/2026 S225 AA-654, 25/09/2026). Items marked **[FACT]** were verified by reading code, migrations or live
 > state; **[TO CONFIRM]** marks an inference or gap that Nghiệp still has to confirm.
 > Target direction and decisions: [ADR 0001](adr/0001-ecosystem-target-architecture.md),
@@ -23,7 +24,7 @@ AA-Ecosys is a **multi-repo**: each app deploys on its own; locally they are gat
 | `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series), durable job worker, admin frontend + tenant portal | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel (frontend) |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations and plan a trip (Next.js FE + 2 Lambda BE) | Vercel (FE) + Lambda (BE) |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform — VPC, RDS, ECS, Lambda, API GW, OIDC, alarms, cross-account Bedrock; DB Migrate workflow | GitHub Actions (`accounts/aa365` root) + a human with MFA (acc1/acc3 roots) |
-| — (separate checkout) | `AA-Booking` | AAA: advisor workflow and booking lifecycle (health-only bootstrap live, 14/10/2026) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) |
+| — (separate checkout) | `AA-Booking` | AAA: advisor workflow and booking lifecycle (live on Dev since 14/10/2026: inquiry intake, staff trip case workflow and proposals, pricing + FX, suppliers and supply, sellable trip plans; staff admin frontend; see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) |
 
 **Boundary rule [FACT]:** *apps own code, Infra owns resources.* The clearest example is TripPlanner:
 `infra/AA-CIS-Infra/accounts/aa365/tripplanner.tf` creates the 2 Lambdas from a 209-byte placeholder zip;
@@ -169,13 +170,24 @@ Source: `apps/AA-TripPlanner-Web/migrations/*`.
 Decided 28/09/2026 (ADR 0001 decisions 6–7): AA-Booking runs on acc2 and shares the RDS with its own
 schema `booking` (version key `bk-NNN`). AA-CIS-Infra provisions it inside acc2 (ECS service, ECR, DB
 role, API route); there are no new accounts. It never writes another app's schema. Contracts are
-versioned JSON in `docs/contracts/`, carried by a **transactional outbox table** consumed by the
-receiving app's job runner with an idempotency key: `catalog.tour.*` (CIS → AA-Booking, photos via
-`shared.v_tour_photos`; contract not written yet, AA-679) and `inquiry.submitted` (TripPlanner →
-AA-Booking, with the multi-tour leg chain; current version v1.2,
-`docs/contracts/inquiry.submitted.v1.2.json`: the guest always gives name + email + consent, each leg carries the
-catalog tour key `source_system` + `source_id`). Contract
-rules: [`contracts/README.md`](contracts/README.md). AA-Booking owns the customer identity (OTP).
+versioned JSON in `docs/contracts/` (rules: [`contracts/README.md`](contracts/README.md)):
+
+- **`inquiry.submitted`** (TripPlanner → AA-Booking, with the multi-tour leg chain; current version v1.2,
+  `docs/contracts/inquiry.submitted.v1.2.json`: the guest always gives name + email + consent, each leg carries the
+  catalog tour key `source_system` + `source_id`) is carried by a **transactional outbox**: TripPlanner's
+  `tripplanner.v_inquiry_outbox` (grant `tp-009`), pulled by Booking's `booking.job` worker into
+  `booking.inbox_events` with an idempotency key, then lead customer + trip case + staff notification.
+- **CIS catalog** (contract `catalog.tour.v1`, CIS migration 225 grant to role `booking`) is **read live at request
+  time, never copied** (S237 decision D4, AA-679; it replaced the planned `catalog.tour.*` outbox and sync job):
+  `catalog.v_tour` / `v_tour_day` / `v_tour_photo` for sellable trip plans (Booking keeps only the commercial row,
+  `booking.trip_plans`, keyed on the CIS `source_id`) and `catalog.v_destination` for the supplier place picker
+  (AA-822).
+
+Identity: ADR 0001 decision 6 gave AA-Booking the customer identity (its own OTP stack, tables in `bk-001`).
+[ADR 0006](adr/0006-ecosystem-identity.md) amends this: the target is the shared Cognito EXTERNAL pool
+(`aa-external`) for travellers and Booking customers (AA-703 epic, AA-680), so the `bk-001` OTP tables are interim and
+not built out. Booking staff sign in today through the interim bridge of ADR 0004 O1 (CIS-issued RS256 JWT,
+`aud=booking`, verified against the CIS JWKS), to be swapped for the Cognito WORKFORCE pool by configuration.
 Stack, runtime and decisions O1–O9: [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (Accepted
 14/10/2026); prices and suppliers: [ADR 0005](adr/0005-pricing-and-supplier-rates.md).
 
@@ -185,9 +197,10 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 |---|---|
 | Repo | `AdventureAsia365-Ecosys/AA-Booking` (repo id `1418188499`) |
 | Runtime | ECS service `aa-booking-dev-api` on `aa-cis-dev-cluster`, own ECR `aa-booking-dev-api`, log group `/ecs/aa-booking-dev`, own execution/task roles |
-| Entry | Separate REST API `aa-booking-dev-api` (`9z3xnalp59`) on the **shared VPC link** → NLB → ALB listener rule `/booking`, `/booking/*` → Booking target group. Custom sub-domain `api-booking.lumiguides.it.com` planned (ADR 0004 O2); execute-api URL until the certificate covers it |
-| Database | Schema `booking`, login role `booking` (created by `bk-001`, password set out-of-band; DSN in Secrets Manager `booking/dev/database-url`). `bk-001` applied 14/10/2026 |
-| Health | `/booking/health` (liveness), `/booking/health/ready` (DB + `bk-001`) |
+| Entry | Separate REST API `aa-booking-dev-api` (`9z3xnalp59`) on the **shared VPC link** → NLB → ALB listener rule `/booking`, `/booking/*` → Booking target group. Custom sub-domain `api-booking.lumiguides.it.com` live (ADR 0004 O2; `/booking/health` 200 on 16/10/2026); the execute-api URL still answers |
+| Database | Schema `booking`, login role `booking` (created by `bk-001`, password set out-of-band; DSN in Secrets Manager `booking/dev/database-url`). Migrations applied through Infra DB Migrate from `bk-001` (14/10/2026) to the latest, `bk-011` (15/10/2026) |
+| Slices | `bk-001` foundation (customers, OTP tables, audit log, inbox events) · `bk-002` inquiry intake + `booking.job` worker (AA-681) · `bk-003` staff profiles, trip case workflow (DB-enforced status transitions), proposal versions (AA-680 staff half, AA-681) · `bk-004` / `bk-006` / `bk-007` pricing engine, rules + FX with maker-checker approval (AA-810, ADR 0005) · `bk-005` wave 1 staff admin backend · `bk-008` suppliers + contracts (AA-822) · `bk-009` sellable trip plans over the live catalog (AA-679) · `bk-010` hotels, room types, services, supplier net rates (AA-823) · `bk-011` catalog tour key on trip case legs (AA-830). Staff "new inquiry" e-mail through SES (`bk_notify_email` job, AA-811). Staff admin frontend in `frontend/` (Next.js, Vercel `aa-booking-admin`, AA-683) |
+| Health | `/booking/health` (liveness, reports `git_sha`), `/booking/health/ready` (DB + every required `bk-NNN`; reported `bk-011` on 16/10/2026) |
 
 ## 4. Data contracts
 
@@ -211,7 +224,7 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 | Edge | Contract | Source |
 |---|---|---|
 | CIS FE (Vercel) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT, admin secret added by the BFF | `AA-CIS-App/CONTEXT.md` |
-| AA-Booking ⇄ clients | REST through API GW `9z3xnalp59` (shared VPC Link) → ALB `/booking/*` → ECS `aa-booking-dev-api`. Staff auth: CIS-issued JWT verified by Booking (`aud=booking`, ADR 0004 O1) — not built yet | `booking.tf`, ADR 0004 |
+| AA-Booking ⇄ clients | REST through API GW `9z3xnalp59` (shared VPC Link) → ALB `/booking/*` → ECS `aa-booking-dev-api`. Staff auth: CIS-issued JWT verified by Booking (`aud=booking`, ADR 0004 O1; built in `bk-003`, interim until Cognito per ADR 0006). The staff admin frontend calls it through its Next.js BFF | `booking.tf`, ADR 0004 |
 | TripPlanner FE (Vercel) ⇄ BE | The Next.js BFF calls 2 Lambda URLs through API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly; header `X-TripPlanner-Key`. Env `BROWSE_API_URL` / `TRIP_API_URL` | `tripplanner.tf`, `docs/vercel-setup.md` |
 
 Contracts between apps (views, grants, events) are listed in each repo's `CONTEXT.md`
@@ -226,8 +239,9 @@ Contracts between apps (views, grants, events) are listed in each repo's `CONTEX
   and worker on the same image (`Deploy Dev`, blocked while `shared.job` has queued/running jobs).
 - **AA-Booking:** Infra creates ECR / ECS service / roles / REST API (`booking.tf`, task definition and
   desired count in `ignore_changes`); the app builds an image tagged with the git SHA and deploys through
-  its own least-privilege role `aa-booking-dev-app-deploy`. No job guard yet (Booking will use its own
-  `booking.job` table, ADR 0004 O3, so the CIS guard is unaffected).
+  its own least-privilege role `aa-booking-dev-app-deploy`, then smoke-tests `/booking/health` (same `git_sha`) and
+  `/booking/health/ready`. Booking has its own `booking.job` table (`bk-002`, ADR 0004 O3), so the CIS guard is
+  unaffected; a deploy guard on `booking.job` is not built yet (AA-751 / X6).
 - **Migrations:** the owner repo authors them; Infra's DB Migrate applies them to Dev before the app code
   that needs them merges.
 
@@ -292,8 +306,8 @@ moving to CIS under AA-712 / ADR 0007, where it becomes the `place_extract` job 
 the graph build enqueues cover/photo match) (`tripplanner.itinerary_components` / `tour_stop`, later
 `geo.*`) → Admin › Photos:
 "Sync <country>" + "Match places + covers". A photo is only matched against places in **that tour's own
-itinerary**. Filling destination covers stays off until places are re-extracted. AA-Booking (AA-679
-catalog sync) gets tour photos from `shared.v_tour_photos` by `tour_id`.
+itinerary**. Filling destination covers stays off until places are re-extracted. AA-Booking (AA-679,
+S237 D4) reads tour photos live from `catalog.v_tour_photo`.
 
 ## 5. OIDC / CI-CD
 
@@ -319,9 +333,10 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
 
 ## 6. Debt / future work
 
-- **AA-Booking (AAA):** health-only bootstrap live (3.4); next slices: inquiry intake (`inquiry.submitted`
-  v1.1, `booking.job`), staff identity via CIS (ADR 0004 O1), catalog sync (AA-679). Handoff from TripPlanner:
-  [`tripplanner-to-aaa-handoff.md`](tripplanner-to-aaa-handoff.md).
+- **AA-Booking (AAA):** slices live through `bk-011` (3.4). Open: customer-facing app and customer identity on
+  Cognito (AA-680, ADR 0006), deploy guard on `booking.job` (AA-751 / X6), Playwright smoke of the staff admin in
+  Booking CI (the non-required "Frontend Build" job already runs eslint, tsc and `next build`). Handoff from
+  TripPlanner: [`tripplanner-to-aaa-handoff.md`](tripplanner-to-aaa-handoff.md).
 - **Place pipeline to CIS (AA-712, [ADR 0007](adr/0007-place-pipeline-in-cis.md)):** required before
   destination covers are switched on. Geocoder decided (Geoapify, S236; surfaces showing coordinates need
   "Powered by Geoapify" + "© OpenStreetMap contributors"). Open: TripPlanner vector search must be

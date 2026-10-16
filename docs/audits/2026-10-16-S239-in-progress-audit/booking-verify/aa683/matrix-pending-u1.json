@@ -1,0 +1,300 @@
+{
+ "pricing-rules-1440-light": {
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1078,
+     "cw": 1078,
+     "tw": 1078
+    }
+   ]
+  },
+  "notes": [
+   {
+    "headers": [
+     "channel",
+     "margin",
+     "peak uplift",
+     "card fee",
+     "valid from",
+     "status",
+     "entered by",
+     "approved by",
+     "note"
+    ],
+    "col": "note",
+    "lines": [
+     2,
+     2,
+     2,
+     2
+    ]
+   }
+  ],
+  "no_hscroll": true,
+  "pending_text": "Pending and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never "
+ },
+ "pricing-fx-1440-light": {
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1084,
+     "cw": 1084,
+     "tw": 1084
+    }
+   ]
+  },
+  "notes": [
+   {
+    "headers": [
+     "currency",
+     "units per 1 usd",
+     "selling buffer",
+     "as of",
+     "source",
+     "status",
+     "entered by",
+     "approved by"
+    ],
+    "col": "source",
+    "lines": [
+     3,
+     2
+    ]
+   }
+  ],
+  "no_hscroll": true,
+  "pending_text": "Pending and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never "
+ },
+ "proposals-1440-light": {
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1084,
+     "cw": 1084,
+     "tw": 1084
+    }
+   ]
+  },
+  "notes": [
+   {
+    "headers": [
+     "proposal",
+     "trip",
+     "status",
+     "total",
+     "last edited",
+     "actions"
+    ],
+    "note": null
+   }
+  ],
+  "no_hscroll": true,
+  "pending_text": ""
+ },
+ "_log-1440-light": {
+  "console": [],
+  "network": []
+ },
+ "pricing-rules-390-light": {
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "notes": [],
+  "no_hscroll": true,
+  "pending_text": "Pending and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never "
+ },
+ "pricing-fx-390-light": {
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "notes": [],
+  "no_hscroll": true,
+  "pending_text": "Pending and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never "
+ },
+ "proposals-390-light": {
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "notes": [],
+  "no_hscroll": true,
+  "pending_text": ""
+ },
+ "_log-390-light": {
+  "console": [],
+  "network": []
+ },
+ "pricing-rules-1440-dark": {
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1078,
+     "cw": 1078,
+     "tw": 1078
+    }
+   ]
+  },
+  "notes": [
+   {
+    "headers": [
+     "channel",
+     "margin",
+     "peak uplift",
+     "card fee",
+     "valid from",
+     "status",
+     "entered by",
+     "approved by",
+     "note"
+    ],
+    "col": "note",
+    "lines": [
+     2,
+     2,
+     2,
+     2
+    ]
+   }
+  ],
+  "no_hscroll": true,
+  "pending_text": "Pending and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never "
+ },
+ "pricing-fx-1440-dark": {
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1084,
+     "cw": 1084,
+     "tw": 1084
+    }
+   ]
+  },
+  "notes": [
+   {
+    "headers": [
+     "currency",
+     "units per 1 usd",
+     "selling buffer",
+     "as of",
+     "source",
+     "status",
+     "entered by",
+     "approved by"
+    ],
+    "col": "source",
+    "lines": [
+     3,
+     2
+    ]
+   }
+  ],
+  "no_hscroll": true,
+  "pending_text": "Pending and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never "
+ },
+ "proposals-1440-dark": {
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1084,
+     "cw": 1084,
+     "tw": 1084
+    }
+   ]
+  },
+  "notes": [
+   {
+    "headers": [
+     "proposal",
+     "trip",
+     "status",
+     "total",
+     "last edited",
+     "actions"
+    ],
+    "note": null
+   }
+  ],
+  "no_hscroll": true,
+  "pending_text": ""
+ },
+ "_log-1440-dark": {
+  "console": [],
+  "network": []
+ },
+ "pricing-rules-390-dark": {
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "notes": [],
+  "no_hscroll": true,
+  "pending_text": "Pending and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never "
+ },
+ "pricing-fx-390-dark": {
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "notes": [],
+  "no_hscroll": true,
+  "pending_text": "Pending and is not used until another staff member approves it. The person who entered a row cannot approve it. Rows are never "
+ },
+ "proposals-390-dark": {
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "notes": [],
+  "no_hscroll": true,
+  "pending_text": ""
+ },
+ "_log-390-dark": {
+  "console": [],
+  "network": []
+ }
+}

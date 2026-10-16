@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T06:48:24+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/b96797b8-3547-4c49-b48b-707979788a77/latest-piece",
+ "status": 200,
+ "x_request_id": "34a6c5c2-1b6b-463a-8b5f-eabe68e901b4",
+ "body": {
+  "piece": {
+   "piece_id": "5ce24c74-229c-44cc-a520-b2a6c643a44d",
+   "angle_gate_request_id": "b96797b8-3547-4c49-b48b-707979788a77",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "## What One Ruined Monastery Tells Families About Mongolia\n\nOn Day 14 of this fifteen-day journey, families visit the ru...",
+   "seo_title": "Mongolia Family Travel: Lakes, Volcanoes & Nomadic Culture",
+   "meta_description": "From a dormant volcano's caldera to the last reindeer herders of the taiga, this Mongolia route offers families a journey through living and lost history.",
+   "slug": "mongolia-family-travel-khovsgol-gobi-guide",
+   "route_hub_name": "a local Buddhist monastery \u2192 Sod Camp \u2192 Uran Togoo \u2192 Moron",
+   "route_segment_count": 10,
+   "created_at": "2026-10-13T04:00:33.440891+00:00"
+  }
+ }
+}
