@@ -1,0 +1,212 @@
+{
+    "queryLanguage": "CWLI",
+    "results": [
+        [
+            {
+                "field": "@logStream",
+                "value": "api/api/b931286ceb9d445183d068d5669d3b30"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "count()",
+                "value": "21"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 05:15:27.351"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 05:15:42.636"
+            }
+        ],
+        [
+            {
+                "field": "@logStream",
+                "value": "api/api/4ba41baa227d4d888b7d52d3f0856ad2"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "count()",
+                "value": "18"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 03:32:10.070"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 03:33:55.872"
+            }
+        ],
+        [
+            {
+                "field": "@logStream",
+                "value": "api/api/4ba41baa227d4d888b7d52d3f0856ad2"
+            },
+            {
+                "field": "pool",
+                "value": "False"
+            },
+            {
+                "field": "count()",
+                "value": "3"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 03:32:06.158"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 03:33:17.315"
+            }
+        ],
+        [
+            {
+                "field": "@logStream",
+                "value": "api/api/5c342940c18f432a8482f0888011ed53"
+            },
+            {
+                "field": "pool",
+                "value": "False"
+            },
+            {
+                "field": "count()",
+                "value": "2"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 02:30:04.526"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 02:30:34.725"
+            }
+        ],
+        [
+            {
+                "field": "@logStream",
+                "value": "api/api/5c342940c18f432a8482f0888011ed53"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "count()",
+                "value": "9"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 02:30:08.355"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 02:30:34.356"
+            }
+        ],
+        [
+            {
+                "field": "@logStream",
+                "value": "api/api/b54c60b903d24cda9f0e4916d5d822f4"
+            },
+            {
+                "field": "pool",
+                "value": "False"
+            },
+            {
+                "field": "count()",
+                "value": "2"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 02:25:47.591"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 02:26:28.325"
+            }
+        ],
+        [
+            {
+                "field": "@logStream",
+                "value": "api/api/b54c60b903d24cda9f0e4916d5d822f4"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "count()",
+                "value": "3"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 02:25:47.221"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 02:26:27.956"
+            }
+        ],
+        [
+            {
+                "field": "@logStream",
+                "value": "api/api/3307d15eca49409f99ee0c51774a2831"
+            },
+            {
+                "field": "pool",
+                "value": "False"
+            },
+            {
+                "field": "count()",
+                "value": "2"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 01:38:30.767"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 01:40:20.788"
+            }
+        ],
+        [
+            {
+                "field": "@logStream",
+                "value": "api/api/3307d15eca49409f99ee0c51774a2831"
+            },
+            {
+                "field": "pool",
+                "value": "True"
+            },
+            {
+                "field": "count()",
+                "value": "2"
+            },
+            {
+                "field": "min(@timestamp)",
+                "value": "2026-10-16 01:38:30.382"
+            },
+            {
+                "field": "max(@timestamp)",
+                "value": "2026-10-16 01:40:20.409"
+            }
+        ]
+    ],
+    "statistics": {
+        "recordsMatched": 62.0,
+        "recordsScanned": 12848.0,
+        "estimatedRecordsSkipped": 0.0,
+        "bytesScanned": 1422575.0,
+        "estimatedBytesSkipped": 0.0,
+        "logGroupsScanned": 1.0
+    },
+    "status": "Complete"
+}

@@ -1,0 +1,2 @@
+    117 [ERROR] BedrockError: All models failed for stage 'tp_search_embed': cohere-embed-v4@acc2: An error occurred (ThrottlingException) when calling the InvokeModel operation (reached max retries: 4): Too many requests, please wait before trying again.
+REPORT invocations: 191 duration_ms p50: 5372.19 p95: 11792.49 max: 13126.86

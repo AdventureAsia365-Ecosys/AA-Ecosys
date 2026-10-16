@@ -1,0 +1,32 @@
+{
+ "rif_room_before": {
+  "path": "/supply/rate-in-force?on=2026-12-01&hotel_room_type_id=209a97cc-e5fe-4f1d-bf4e-a87d4257c685",
+  "status": 200,
+  "body": {
+   "rate": null
+  }
+ },
+ "rif_svc_before": {
+  "path": "/supply/rate-in-force?on=2026-12-01&service_id=fabe33de-5293-48ae-b68d-16f753886531&pax=2",
+  "status": 200,
+  "body": {
+   "rate": null
+  }
+ },
+ "self_publish_16d66dfa-51d6-4aad-9703-88ab29688beb": {
+  "user": "e2e-claude-code",
+  "status": 403,
+  "body": {
+   "detail": "maker_checker",
+   "message": "a contract is published by someone other than the person who last wrote its terms"
+  }
+ },
+ "self_publish_f0241f6b-6f85-4367-8359-043c29cd26c5": {
+  "user": "e2e-claude-code",
+  "status": 403,
+  "body": {
+   "detail": "maker_checker",
+   "message": "a contract is published by someone other than the person who last wrote its terms"
+  }
+ }
+}

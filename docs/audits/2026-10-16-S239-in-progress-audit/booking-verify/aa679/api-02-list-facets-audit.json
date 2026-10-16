@@ -1,0 +1,153 @@
+{
+ "sellable_bhutan": {
+  "path": "/catalog/trip-plans?sellable=true&country=Bhutan",
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "source_system": "cis",
+     "source_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+     "tour_id": "2e1fd11d-0ba6-4388-9091-716a3e719da8",
+     "sku": null,
+     "title": "Bhutan: Bumdra Trek & Valley Monasteries \u2014 7 Days",
+     "country": "Bhutan",
+     "duration_days": 7,
+     "cover_photo_path": "/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef",
+     "photo_count": 13,
+     "lifecycle_stage": "active",
+     "updated_at": "2026-10-05T12:33:16.088972Z",
+     "plan_id": "75b1bdfe-ed69-4459-a22e-e96cf2e68805",
+     "sellable": true,
+     "trip_style": "Trekking",
+     "default_channel": "b2c_tailor_made",
+     "price_hint": {
+      "amount": "2450.00",
+      "currency": "USD",
+      "basis": "per_person"
+     },
+     "has_commercial_row": true
+    }
+   ],
+   "total": 1,
+   "limit": 25,
+   "offset": 0
+  }
+ },
+ "facets": {
+  "path": "/catalog/trip-plans/facets",
+  "status": 200,
+  "body": {
+   "total": 892,
+   "sellable": 1,
+   "countries": [
+    {
+     "country": "Bhutan",
+     "tours": 32,
+     "sellable": 1
+    },
+    {
+     "country": "China",
+     "tours": 121,
+     "sellable": 0
+    },
+    {
+     "country": "India",
+     "tours": 218,
+     "sellable": 0
+    },
+    {
+     "country": "Japan",
+     "tours": 79,
+     "sellable": 0
+    },
+    {
+     "country": "Laos",
+     "tours": 46,
+     "sellable": 0
+    },
+    {
+     "country": "Mongolia",
+     "tours": 17,
+     "sellable": 0
+    },
+    {
+     "country": "Nepal",
+     "tours": 85,
+     "sellable": 0
+    },
+    {
+     "country": "Pakistan",
+     "tours": 18,
+     "sellable": 0
+    },
+    {
+     "country": "Philippines",
+     "tours": 44,
+     "sellable": 0
+    },
+    {
+     "country": "South Korea",
+     "tours": 30,
+     "sellable": 0
+    },
+    {
+     "country": "Sri Lanka",
+     "tours": 122,
+     "sellable": 0
+    },
+    {
+     "country": "Taiwan",
+     "tours": 36,
+     "sellable": 0
+    },
+    {
+     "country": "Thailand",
+     "tours": 43,
+     "sellable": 0
+    },
+    {
+     "country": "Vietnam",
+     "tours": 1,
+     "sellable": 0
+    }
+   ],
+   "trip_styles": [
+    "Trekking"
+   ]
+  }
+ },
+ "audit_plan": {
+  "path": "/audit-logs?entity_id=75b1bdfe-ed69-4459-a22e-e96cf2e68805",
+  "status": 200,
+  "body": {
+   "items": [
+    {
+     "id": "34d3f49a-fc2e-4020-adc7-94a3104387fa",
+     "at": "2026-10-16T01:52:48.522896Z",
+     "actor": {
+      "type": "staff",
+      "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+      "name": "e2e-claude-code"
+     },
+     "action": "trip_plan.created",
+     "entity_type": "trip_plan",
+     "entity_id": "75b1bdfe-ed69-4459-a22e-e96cf2e68805",
+     "entity_label": "Bhutan: Bumdra Trek & Valley Monasteries \u2014 7 Days",
+     "summary": "Marked sellable",
+     "before": null,
+     "after": {
+      "sellable": true,
+      "source_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+      "trip_style": "Trekking",
+      "default_channel": "b2c_tailor_made",
+      "commercial_notes": "ZZ S239 test commercial row (AA-679 live verify). Revert sellable=false when done.",
+      "price_hint_basis": "per_person",
+      "price_hint_amount": "2450.00",
+      "price_hint_currency": "USD"
+     }
+    }
+   ],
+   "next_before": null
+  }
+ }
+}

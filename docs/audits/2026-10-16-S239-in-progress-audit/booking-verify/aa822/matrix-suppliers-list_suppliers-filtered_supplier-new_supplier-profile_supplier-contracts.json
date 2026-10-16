@@ -1,0 +1,326 @@
+{
+ "suppliers-list-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/suppliers",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1195,
+     "cw": 1084,
+     "tw": 1195
+    }
+   ]
+  },
+  "h1": "Suppliers"
+ },
+ "suppliers-filtered-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/suppliers?q",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1195,
+     "cw": 1084,
+     "tw": 1195
+    }
+   ]
+  },
+  "h1": "Suppliers"
+ },
+ "supplier-new-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/suppliers/new",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": []
+  },
+  "h1": "Add new supplier"
+ },
+ "supplier-profile-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/suppliers/SUP-000001",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "supplier-contracts-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/suppliers/SUP-000001?tab",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "_log-1440-light": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ },
+ "suppliers-list-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/suppliers",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Suppliers"
+ },
+ "suppliers-filtered-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/suppliers?q",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Suppliers"
+ },
+ "supplier-new-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/suppliers/new",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Add new supplier"
+ },
+ "supplier-profile-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/suppliers/SUP-000001",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "supplier-contracts-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/suppliers/SUP-000001?tab",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "_log-390-light": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ },
+ "suppliers-list-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/suppliers",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1195,
+     "cw": 1084,
+     "tw": 1195
+    }
+   ]
+  },
+  "h1": "Suppliers"
+ },
+ "suppliers-filtered-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/suppliers?q",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1195,
+     "cw": 1084,
+     "tw": 1195
+    }
+   ]
+  },
+  "h1": "Suppliers"
+ },
+ "supplier-new-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/suppliers/new",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": []
+  },
+  "h1": "Add new supplier"
+ },
+ "supplier-profile-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/suppliers/SUP-000001",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "supplier-contracts-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/suppliers/SUP-000001?tab",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "_log-1440-dark": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ },
+ "suppliers-list-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/suppliers",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Suppliers"
+ },
+ "suppliers-filtered-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/suppliers?q",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Suppliers"
+ },
+ "supplier-new-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/suppliers/new",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Add new supplier"
+ },
+ "supplier-profile-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/suppliers/SUP-000001",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "supplier-contracts-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/suppliers/SUP-000001?tab",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "_log-390-dark": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ }
+}

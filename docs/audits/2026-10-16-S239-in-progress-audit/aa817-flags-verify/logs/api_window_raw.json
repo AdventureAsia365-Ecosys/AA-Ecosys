@@ -1,0 +1,586 @@
+{
+    "events": [
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127702009,
+            "message": "INFO:     10.2.1.51:29204 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127703467,
+            "eventId": "39965783245730926136221752599922999147531692300032540672"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127705623,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127708465,
+            "eventId": "39965783326325819283711424639474962463344227171500097536"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127711989,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127713467,
+            "eventId": "39965783468292363217557371564538336702799600483273146368"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127715619,
+            "message": "INFO:     10.2.2.98:27534 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127718466,
+            "eventId": "39965783549244068288223533574356671354737868887028531200"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127716386,
+            "message": "INFO:     10.2.2.98:31452 - \"POST /auth/tenant-login HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127718466,
+            "eventId": "39965783566348739855496521523914567269859162162115510273"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127718266,
+            "message": "INFO:     10.2.2.98:27534 - \"POST /auth/tenant-login HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127718466,
+            "eventId": "39965783608274140828734093030001717622438081793358692354"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127719307,
+            "message": "INFO:     127.0.0.1:60792 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127723469,
+            "eventId": "39965783631489216580404471726388488685328954863349334016"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127720087,
+            "message": "INFO:     10.2.2.98:31452 - \"POST /auth/tenant-login HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127723469,
+            "eventId": "39965783648883797835258357776786348937994676838014058497"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127721937,
+            "message": "INFO:     10.2.1.51:29204 - \"POST /auth/tenant-login HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127723469,
+            "eventId": "39965783690140176452540010588627427742394145624077828098"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127721985,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127723469,
+            "eventId": "39965783691210612222069480499421142219481266976364888067"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127722591,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /v1/content-writing/reviews HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127723469,
+            "eventId": "39965783704724863812379038123191787492706174048989020164"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127723664,
+            "message": "INFO:     10.2.1.51:29204 - \"GET /v1/content-writing/reviews HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127728465,
+            "eventId": "39965783728653563410402396760099695671539550002534416384"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127724228,
+            "message": "INFO:     10.2.2.98:57486 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127728465,
+            "eventId": "39965783741231183702373668211925840777313225891907371009"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127724243,
+            "message": "INFO:     10.2.1.51:7336 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127728465,
+            "eventId": "39965783741565694880351627559048876551402951314497077250"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127725619,
+            "message": "INFO:     10.2.2.98:27534 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127728465,
+            "eventId": "39965783772251520273529765001802024894567096746726129667"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127725685,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /v1/content-writing/reviews HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127728465,
+            "eventId": "39965783773723369456632786129143382300561888606120837124"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127726627,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /v1/content-writing/reviews HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127728465,
+            "eventId": "39965783794730671433648633128470028913396645144754388997"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127727351,
+            "message": "2026-10-16 05:15:27 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127728465,
+            "eventId": "39965783810876410957384804282941888942794058875084210182"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127727353,
+            "message": "INFO:     10.2.2.98:27534 - \"GET /v1/content-writing/requests/3fa8495d-64c0-4948-8910-c9f599691389/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127728465,
+            "eventId": "39965783810921012447781865529224960379339355598096171015"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127729439,
+            "message": "2026-10-16 05:15:29 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783857440366931916745408512603306341911087693627392"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127729442,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /v1/content-writing/requests/b353d044-060b-4c65-84c2-44f64f30a0d1/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783857507269167512337277937210461159856172211568641"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127730145,
+            "message": "2026-10-16 05:15:30 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783873184693042079365346436820406831654310915801090"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127730148,
+            "message": "INFO:     10.2.1.51:29204 - \"GET /v1/content-writing/requests/72082375-edc4-44f1-a2d8-3317be6eb325/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783873251595277674957215861427561649599395433742339"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127730789,
+            "message": "2026-10-16 05:15:30 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783887546372949933086649585822974417199120767188996"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127730792,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /v1/content-writing/requests/9e957fac-596a-4238-8b89-4aa775dab78f/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783887613275185528678519010430129235144205285130245"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127731433,
+            "message": "2026-10-16 05:15:31 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783901908052857786807952734825542002743930618576902"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127731436,
+            "message": "INFO:     10.2.1.51:29204 - \"GET /v1/content-writing/requests/e42adb08-8f39-430e-b82f-4c9d78a58d56/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783901974955093382399822159432696820689015136518151"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127731989,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783914307267188169834419428684901595232927943688200"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127732101,
+            "message": "2026-10-16 05:15:32 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783916804950650405264211280685348131849416613494793"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127732103,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /v1/content-writing/requests/ff45fd8a-a9e9-4881-ac8b-25aa25cee014/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783916849552140802325457563756784677146139625455626"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127732742,
+            "message": "2026-10-16 05:15:32 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783931099728322663393645005080760899449141946941451"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127732744,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /v1/content-writing/requests/3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783931144329813060454891288152197444745864958902284"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127733415,
+            "message": "2026-10-16 05:15:33 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783946108129841274503019258619158391796435471761421"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127733418,
+            "message": "INFO:     10.2.1.51:29204 - \"GET /v1/content-writing/requests/158072bf-773f-4a32-be54-8d4f1590091e/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127733465,
+            "eventId": "39965783946175032076870094888683226313209741519989702670"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127734063,
+            "message": "2026-10-16 05:15:34 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965783960559012729922346821018796169042887839805865984"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127734066,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /v1/content-writing/requests/b96797b8-3547-4c49-b48b-707979788a77/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965783960625914965517938690443403323860832924323807233"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127734914,
+            "message": "2026-10-16 05:15:34 [info     ] aa817_latest_piece             tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965783979536946893871907114465692419066643481395200002"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127734916,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /v1/content-writing/requests/e6919aa3-576e-420d-90eb-57c36cdbc513/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965783979581548384268968360748763855611940204407160835"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127735560,
+            "message": "2026-10-16 05:15:35 [info     ] aa817_latest_piece             tenant_id=692a3214-5cc2-46c6-a5ca-265389747269 used_tenant_pool=True",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965783993943228292122689663897766423197485014258548740"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127735562,
+            "message": "INFO:     10.2.1.51:29204 - \"GET /v1/content-writing/requests/55670945-ff4f-48eb-bb2c-857dfcdf1b05/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965783993987829782519750910180837859742781737270509573"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127735619,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965783995258972258835996429248373801283738343111393286"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127736225,
+            "message": "2026-10-16 05:15:36 [info     ] aa817_latest_piece             tenant_id=885d4916-007b-415e-9261-909ad43c6d00 used_tenant_pool=True",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965784008773223849145554053019019074508645415735525383"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127736227,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /v1/content-writing/requests/3524ad2d-76f8-43ae-a84b-a4ecec7978a8/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965784008817825339542615299302090511053942138747486216"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127736876,
+            "message": "2026-10-16 05:15:36 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965784023291008973388989718158771670002728756128776201"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127736878,
+            "message": "INFO:     10.2.2.98:27534 - \"GET /v1/content-writing/requests/e6919aa3-576e-420d-90eb-57c36cdbc513/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965784023335610463786050964441843106548025479140737034"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127737542,
+            "message": "2026-10-16 05:15:37 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965784038143305275610384730421560039586537519111733259"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127737544,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /v1/content-writing/requests/55670945-ff4f-48eb-bb2c-857dfcdf1b05/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127738465,
+            "eventId": "39965784038187906766007445976704631476131834242123694092"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127738488,
+            "message": "2026-10-16 05:15:38 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784059239810233420354228357488385906621477427281920"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127738490,
+            "message": "INFO:     10.2.2.98:27534 - \"GET /v1/content-writing/requests/3524ad2d-76f8-43ae-a84b-a4ecec7978a8/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784059284411723817415474640559822451918200439242753"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127739161,
+            "message": "2026-10-16 05:15:39 [info     ] aa817_latest_piece             tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784074248211752031463602611026783398968770952101890"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127739164,
+            "message": "INFO:     10.2.2.98:27534 - \"GET /v1/content-writing/requests/3fa8495d-64c0-4948-8910-c9f599691389/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784074315113987627055472035633938216913855470043139"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127739803,
+            "message": "2026-10-16 05:15:39 [info     ] aa817_latest_piece             tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784088565290169488123659476957914439216857791528964"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127739805,
+            "message": "INFO:     10.2.2.98:27534 - \"GET /v1/content-writing/requests/57a9350d-bce0-445b-830d-1c4ba8aa920e/latest-piece HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784088609891659885184905760029350984513580803489797"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127740692,
+            "message": "2026-10-16 05:15:40 [info     ] aa544_stage5_fetch_piece       tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784108390652650981847632302211458823610236608118790"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127740694,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /v1/content-writing/pieces/269682ec-ddff-4249-bd7e-af8a42bf6a28 HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784108435254141378908878585282895368906959620079623"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127741334,
+            "message": "2026-10-16 05:15:41 [info     ] aa544_stage5_fetch_piece       tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784122707731068438507689168142589863858323447545864"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127741336,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /v1/content-writing/pieces/a7e18faf-4b68-4453-8020-000e38109674 HTTP/1.1\" 404 Not Found",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784122752332558835568935451214026409155046459506697"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127741980,
+            "message": "2026-10-16 05:15:41 [info     ] aa544_stage5_fetch_piece       tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784137114012466689290238600216593994699856310894602"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127741982,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /v1/content-writing/pieces/7594ffed-d1a9-4f6e-9bba-95d18d403b7c HTTP/1.1\" 404 Not Found",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784137158613957086351484883288030539996579322855435"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127741989,
+            "message": "INFO:     10.2.1.51:29204 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784137314719173476065846874038058448535109864718348"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127742636,
+            "message": "2026-10-16 05:15:42 [info     ] aa544_stage5_fetch_piece       tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784151743301316925379019447647780852025004234047501"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127742639,
+            "message": "INFO:     10.2.1.51:29204 - \"GET /v1/content-writing/pieces/3d5631b1-1a6b-41ec-a350-c60b556c4adf HTTP/1.1\" 404 Not Found",
+            "ingestionTime": 1792127743464,
+            "eventId": "39965784151810203552520970888872254935669970088751988750"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127744551,
+            "message": "INFO:     10.2.1.51:29204 - \"GET /v1/integrations/wordpress HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127748465,
+            "eventId": "39965784194449228372111522341534394563048543901068296192"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127745348,
+            "message": "2026-10-16 05:15:45 [info     ] integration_secret_updated     secret_key=acp/cms/20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+            "ingestionTime": 1792127748465,
+            "eventId": "39965784212222922295340428985338362026349288021334687745"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127745356,
+            "message": "2026-10-16 05:15:45 [info     ] wordpress_integration_saved    site_url=https://fightcanvas.s3-tastewp.com tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+            "ingestionTime": 1792127748465,
+            "eventId": "39965784212401328256928673970470647772530474913382531074"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127745359,
+            "message": "INFO:     10.2.1.51:29204 - \"POST /v1/integrations/wordpress HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127748465,
+            "eventId": "39965784212468230492524265839895254927348419997900472323"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127745620,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127748465,
+            "eventId": "39965784218288724989340758479836077396509642350961360900"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127746950,
+            "message": "2026-10-16 05:15:46 [info     ] wordpress_test_connection      error=None status_code=200 success=True tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+            "ingestionTime": 1792127748465,
+            "eventId": "39965784247948716103386487258078582699131963153915314181"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127746952,
+            "message": "INFO:     10.2.2.98:31452 - \"POST /v1/integrations/wordpress/test HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127748465,
+            "eventId": "39965784247993317593783548504361654135677259876927275014"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127747871,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /v1/integrations/wordpress HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127748465,
+            "eventId": "39965784268487702431233191171432979228241104100923277319"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127748590,
+            "message": "2026-10-16 05:15:48 [info     ] integration_disconnected       integration_type=wordpress tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+            "ingestionTime": 1792127753465,
+            "eventId": "39965784284521938228976709216241876084155024515474194432"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127748594,
+            "message": "INFO:     10.2.2.98:31452 - \"DELETE /v1/integrations/wordpress HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127753465,
+            "eventId": "39965784284611141209770831708808018957245617961498116097"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127749248,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /v1/integrations/wordpress HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127753465,
+            "eventId": "39965784299195828569609859243372378707557646386409308162"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127749337,
+            "message": "INFO:     127.0.0.1:49062 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127753465,
+            "eventId": "39965784301180594892279084702969057633823350560441565187"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127749887,
+            "message": "INFO:     10.2.2.98:27534 - \"DELETE /v1/integrations/wordpress HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127753465,
+            "eventId": "39965784313446004751470927430813702683779949388730793988"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127750555,
+            "message": "INFO:     10.2.2.98:31452 - \"GET /v1/integrations/facebook HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127753465,
+            "eventId": "39965784328342902544089383689359562489909054874725711877"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127751202,
+            "message": "INFO:     10.2.1.51:29204 - \"DELETE /v1/integrations/facebook HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127753465,
+            "eventId": "39965784342771484687538696861933172212312544769095041030"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127751985,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127753465,
+            "eventId": "39965784360232968177988174781755639619796211828277706759"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127754234,
+            "message": "INFO:     10.2.2.98:35384 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127758465,
+            "eventId": "39965784410387344129483546233114389117919955222010265600"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127754247,
+            "message": "INFO:     10.2.1.51:30020 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127758465,
+            "eventId": "39965784410677253817064444333954353455464383921588011009"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127755619,
+            "message": "INFO:     10.2.2.98:27534 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127758465,
+            "eventId": "39965784441273876229448459284141358925537935907793141762"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127761987,
+            "message": "INFO:     10.2.1.51:57286 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127763467,
+            "eventId": "39965784583285021653691467455487769708046587632598843392"
+        },
+        {
+            "logStreamName": "api/api/b931286ceb9d445183d068d5669d3b30",
+            "timestamp": 1792127765619,
+            "message": "INFO:     10.2.2.98:27534 - \"GET /health HTTP/1.1\" 200 OK",
+            "ingestionTime": 1792127768465,
+            "eventId": "39965784664281328214754690711587650674993122541713555456"
+        }
+    ],
+    "searchedLogStreams": []
+}

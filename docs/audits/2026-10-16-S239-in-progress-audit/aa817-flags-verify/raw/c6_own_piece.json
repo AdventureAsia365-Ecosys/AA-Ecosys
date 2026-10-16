@@ -1,0 +1,20 @@
+{
+ "at": "2026-10-16T05:15:39+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/pieces/269682ec-ddff-4249-bd7e-af8a42bf6a28",
+ "status": 200,
+ "x_request_id": "5856417f-b0ac-49ef-aba6-c363251883d1",
+ "body": {
+  "piece_id": "269682ec-ddff-4249-bd7e-af8a42bf6a28",
+  "angle_gate_request_id": "3fa8495d-64c0-4948-8910-c9f599691389",
+  "channel": "linkedin",
+  "ready_state": "ready",
+  "content_text": "Lok Virsa Museum in Islamabad gathers Pakistan's folk traditions from communities across the country.\n\nIts collections s...",
+  "seo_title": null,
+  "meta_description": null,
+  "slug": null,
+  "route_hub_name": null,
+  "route_segment_count": null,
+  "created_at": "2026-10-16T03:33:17.737361+00:00"
+ }
+}

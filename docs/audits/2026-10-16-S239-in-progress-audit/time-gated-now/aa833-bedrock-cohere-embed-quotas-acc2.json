@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Global cross-region model inference tokens per day for Cohere Embed V4",
+        "value": 16200000.0,
+        "code": "L-795ADAB0",
+        "adjustable": false
+    },
+    {
+        "name": "Global cross-region model inference requests per minute for Cohere Embed V4",
+        "value": 20.0,
+        "code": "L-7089DC7D",
+        "adjustable": true
+    },
+    {
+        "name": "Cross-region model inference requests per minute for Cohere Embed V4",
+        "value": 20.0,
+        "code": "L-EB8C1F30",
+        "adjustable": false
+    },
+    {
+        "name": "Global cross-region model inference tokens per minute for Cohere Embed V4",
+        "value": 300000.0,
+        "code": "L-02DFBB76",
+        "adjustable": true
+    },
+    {
+        "name": "Cross-region model inference tokens per minute for Cohere Embed V4",
+        "value": 300000.0,
+        "code": "L-4C3F0FE6",
+        "adjustable": true
+    },
+    {
+        "name": "Model invocation max tokens per day for Cohere Embed V4 (doubled for cross-region calls)",
+        "value": 8100000.0,
+        "code": "L-F1BB08BB",
+        "adjustable": false
+    }
+]

@@ -1,0 +1,15 @@
+{
+ "at": "2026-10-16T06:48:41+00:00",
+ "method": "DELETE",
+ "path": "/v1/integrations/facebook",
+ "status": 200,
+ "x_request_id": "5a527bea-cd26-4d3d-ad8d-7758719ade9b",
+ "body": {
+  "connected": false,
+  "page_id": null,
+  "connected_at": null,
+  "last_verified_at": null,
+  "last_verify_error": null,
+  "disconnected": false
+ }
+}

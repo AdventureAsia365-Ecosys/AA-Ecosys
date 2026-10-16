@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T05:15:35+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/3524ad2d-76f8-43ae-a84b-a4ecec7978a8/latest-piece",
+ "status": 200,
+ "x_request_id": "6df39d24-7fc8-490b-b5aa-6ec35af0e345",
+ "body": {
+  "piece": {
+   "piece_id": "3d5631b1-1a6b-41ec-a350-c60b556c4adf",
+   "angle_gate_request_id": "3524ad2d-76f8-43ae-a84b-a4ecec7978a8",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "Punakha Dzong sits at the exact point where the Pho Chhu and Mo Chhu rivers meet \u2014 and that placement was a decision, no...",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-14T05:31:36.504766+00:00"
+  }
+ }
+}

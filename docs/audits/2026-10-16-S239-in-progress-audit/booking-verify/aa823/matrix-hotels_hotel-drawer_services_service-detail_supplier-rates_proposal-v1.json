@@ -1,0 +1,416 @@
+{
+ "hotels-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/hotels",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1245,
+     "cw": 1084,
+     "tw": 1245
+    }
+   ]
+  },
+  "h1": "Hotels"
+ },
+ "hotel-drawer-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/hotels?hotel=HTL-000001",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1245,
+     "cw": 1084,
+     "tw": 1245
+    },
+    {
+     "sw": 1126,
+     "cw": 631,
+     "tw": 1126
+    }
+   ]
+  },
+  "h1": "Hotels"
+ },
+ "services-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/services",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1379,
+     "cw": 1084,
+     "tw": 1379
+    }
+   ]
+  },
+  "h1": "Services"
+ },
+ "service-detail-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/services/SVC-000001",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Thimphu valley guided day walk"
+ },
+ "supplier-rates-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/suppliers/SUP-000001?tab=rates",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1092,
+     "cw": 1092,
+     "tw": 1092
+    }
+   ]
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "proposal-v1-1440-light": {
+  "theme": "light",
+  "w": 1440,
+  "url": "/cases/TC-000007/proposals/1",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    1434,
+    1434
+   ],
+   "wraps": []
+  },
+  "h1": "Proposal V1"
+ },
+ "_log-1440-light": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ },
+ "hotels-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/hotels",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Hotels"
+ },
+ "hotel-drawer-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/hotels?hotel=HTL-000001",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Hotels"
+ },
+ "services-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/services",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Services"
+ },
+ "service-detail-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/services/SVC-000001",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Thimphu valley guided day walk"
+ },
+ "supplier-rates-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/suppliers/SUP-000001?tab=rates",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "proposal-v1-390-light": {
+  "theme": "light",
+  "w": 390,
+  "url": "/cases/TC-000007/proposals/1",
+  "data_theme": "light",
+  "overflow": {
+   "doc": [
+    384,
+    384
+   ],
+   "wraps": []
+  },
+  "h1": "Proposal V1"
+ },
+ "_log-390-light": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ },
+ "hotels-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/hotels",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1245,
+     "cw": 1084,
+     "tw": 1245
+    }
+   ]
+  },
+  "h1": "Hotels"
+ },
+ "hotel-drawer-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/hotels?hotel=HTL-000001",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1245,
+     "cw": 1084,
+     "tw": 1245
+    },
+    {
+     "sw": 1126,
+     "cw": 631,
+     "tw": 1126
+    }
+   ]
+  },
+  "h1": "Hotels"
+ },
+ "services-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/services",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1379,
+     "cw": 1084,
+     "tw": 1379
+    }
+   ]
+  },
+  "h1": "Services"
+ },
+ "service-detail-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/services/SVC-000001",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Thimphu valley guided day walk"
+ },
+ "supplier-rates-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/suppliers/SUP-000001?tab=rates",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1440,
+    1440
+   ],
+   "wraps": [
+    {
+     "sw": 1092,
+     "cw": 1092,
+     "tw": 1092
+    }
+   ]
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "proposal-v1-1440-dark": {
+  "theme": "dark",
+  "w": 1440,
+  "url": "/cases/TC-000007/proposals/1",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    1434,
+    1434
+   ],
+   "wraps": []
+  },
+  "h1": "Proposal V1"
+ },
+ "_log-1440-dark": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ },
+ "hotels-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/hotels",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Hotels"
+ },
+ "hotel-drawer-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/hotels?hotel=HTL-000001",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Hotels"
+ },
+ "services-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/services",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "Services"
+ },
+ "service-detail-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/services/SVC-000001",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Thimphu valley guided day walk"
+ },
+ "supplier-rates-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/suppliers/SUP-000001?tab=rates",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    390,
+    390
+   ],
+   "wraps": []
+  },
+  "h1": "ZZ S239 test Supplier AA-822"
+ },
+ "proposal-v1-390-dark": {
+  "theme": "dark",
+  "w": 390,
+  "url": "/cases/TC-000007/proposals/1",
+  "data_theme": "dark",
+  "overflow": {
+   "doc": [
+    384,
+    384
+   ],
+   "wraps": []
+  },
+  "h1": "Proposal V1"
+ },
+ "_log-390-dark": {
+  "console": [],
+  "network": [],
+  "aborted": 4
+ }
+}

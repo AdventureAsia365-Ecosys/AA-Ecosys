@@ -1,0 +1,452 @@
+{
+ "390-light": {
+  "labels": [
+   {
+    "label": "AA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     76,
+     44,
+     332,
+     258.6
+    ],
+    "transform": "none",
+    "innerWidth": 390,
+    "limit": 386,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 390,
+    "doc_cw": 390,
+    "main_sw": 390,
+    "main_cw": 390,
+    "explanation": "Tour descriptions and day-by-day itineraries are written by AI from Adventure Asia's own tour notes and checked by automated quality checks. Trip narration carries its own Adventure Asia AI label, which says how much of it AI wrote. The planner's place search and its “You might also like” suggestions use AI to match your words and the places you picked. An Adventure Asia advisor reviews every trip before you book.",
+    "name": "header-pill",
+    "closed_after": "false"
+   },
+   {
+    "label": "AA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     16,
+     437.5,
+     272,
+     562.8
+    ],
+    "transform": "none",
+    "innerWidth": 390,
+    "limit": 386,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 390,
+    "doc_cw": 390,
+    "main_sw": 390,
+    "main_cw": 390,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "summary",
+    "closed_after": "false"
+   },
+   {
+    "label": "AA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     126,
+     498,
+     382,
+     623.3
+    ],
+    "transform": "matrix(1, 0, 0, 1, -17.8125, 0)",
+    "innerWidth": 390,
+    "limit": 386,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 390,
+    "doc_cw": 390,
+    "main_sw": 390,
+    "main_cw": 390,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "highlights",
+    "closed_after": "false"
+   },
+   {
+    "label": "AA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     126,
+     438.3,
+     382,
+     563.5
+    ],
+    "transform": "matrix(1, 0, 0, 1, -25.8125, 0)",
+    "innerWidth": 390,
+    "limit": 386,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 390,
+    "doc_cw": 390,
+    "main_sw": 390,
+    "main_cw": 390,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "day-by-day",
+    "closed_after": "false"
+   }
+  ],
+  "console_errors": [],
+  "http_errors": [],
+  "data_theme": "light",
+  "main_label_count": 3,
+  "page": {
+   "doc_sw": 390,
+   "doc_cw": 390,
+   "main_sw": 390,
+   "main_cw": 390
+  },
+  "pass": true
+ },
+ "390-dark": {
+  "labels": [
+   {
+    "label": "AA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     76,
+     44,
+     332,
+     258.6
+    ],
+    "transform": "none",
+    "innerWidth": 390,
+    "limit": 386,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 390,
+    "doc_cw": 390,
+    "main_sw": 390,
+    "main_cw": 390,
+    "explanation": "Tour descriptions and day-by-day itineraries are written by AI from Adventure Asia's own tour notes and checked by automated quality checks. Trip narration carries its own Adventure Asia AI label, which says how much of it AI wrote. The planner's place search and its “You might also like” suggestions use AI to match your words and the places you picked. An Adventure Asia advisor reviews every trip before you book.",
+    "name": "header-pill",
+    "closed_after": "false"
+   },
+   {
+    "label": "AA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     16,
+     437.5,
+     272,
+     562.8
+    ],
+    "transform": "none",
+    "innerWidth": 390,
+    "limit": 386,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 390,
+    "doc_cw": 390,
+    "main_sw": 390,
+    "main_cw": 390,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "summary",
+    "closed_after": "false"
+   },
+   {
+    "label": "AA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     126,
+     498,
+     382,
+     623.3
+    ],
+    "transform": "matrix(1, 0, 0, 1, -17.8125, 0)",
+    "innerWidth": 390,
+    "limit": 386,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 390,
+    "doc_cw": 390,
+    "main_sw": 390,
+    "main_cw": 390,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "highlights",
+    "closed_after": "false"
+   },
+   {
+    "label": "AA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     126,
+     438.3,
+     382,
+     563.5
+    ],
+    "transform": "matrix(1, 0, 0, 1, -25.8125, 0)",
+    "innerWidth": 390,
+    "limit": 386,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 390,
+    "doc_cw": 390,
+    "main_sw": 390,
+    "main_cw": 390,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "day-by-day",
+    "closed_after": "false"
+   }
+  ],
+  "console_errors": [],
+  "http_errors": [],
+  "data_theme": "dark",
+  "main_label_count": 3,
+  "page": {
+   "doc_sw": 390,
+   "doc_cw": 390,
+   "main_sw": 390,
+   "main_cw": 390
+  },
+  "pass": true
+ },
+ "1440-light": {
+  "labels": [
+   {
+    "label": "ADVENTURE ASIA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     220,
+     44,
+     476,
+     258.6
+    ],
+    "transform": "none",
+    "innerWidth": 1440,
+    "limit": 1436,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 1440,
+    "doc_cw": 1440,
+    "main_sw": 1152,
+    "main_cw": 1152,
+    "explanation": "Tour descriptions and day-by-day itineraries are written by AI from Adventure Asia's own tour notes and checked by automated quality checks. Trip narration carries its own Adventure Asia AI label, which says how much of it AI wrote. The planner's place search and its “You might also like” suggestions use AI to match your words and the places you picked. An Adventure Asia advisor reviews every trip before you book.",
+    "name": "header-pill",
+    "closed_after": "false"
+   },
+   {
+    "label": "ADVENTURE ASIA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     160,
+     465.9,
+     416,
+     591.1
+    ],
+    "transform": "none",
+    "innerWidth": 1440,
+    "limit": 1436,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 1440,
+    "doc_cw": 1440,
+    "main_sw": 1152,
+    "main_cw": 1152,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "summary",
+    "closed_after": "false"
+   },
+   {
+    "label": "ADVENTURE ASIA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     287.8,
+     526.4,
+     543.8,
+     651.6
+    ],
+    "transform": "none",
+    "innerWidth": 1440,
+    "limit": 1436,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 1440,
+    "doc_cw": 1440,
+    "main_sw": 1152,
+    "main_cw": 1152,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "highlights",
+    "closed_after": "false"
+   },
+   {
+    "label": "ADVENTURE ASIA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     295.8,
+     809.4,
+     551.8,
+     934.6
+    ],
+    "transform": "none",
+    "innerWidth": 1440,
+    "limit": 1436,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 1440,
+    "doc_cw": 1440,
+    "main_sw": 1152,
+    "main_cw": 1152,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "day-by-day",
+    "closed_after": "false"
+   }
+  ],
+  "console_errors": [],
+  "http_errors": [],
+  "data_theme": "light",
+  "main_label_count": 3,
+  "page": {
+   "doc_sw": 1440,
+   "doc_cw": 1440,
+   "main_sw": 1152,
+   "main_cw": 1152
+  },
+  "pass": true
+ },
+ "1440-dark": {
+  "labels": [
+   {
+    "label": "ADVENTURE ASIA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     220,
+     44,
+     476,
+     258.6
+    ],
+    "transform": "none",
+    "innerWidth": 1440,
+    "limit": 1436,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 1440,
+    "doc_cw": 1440,
+    "main_sw": 1152,
+    "main_cw": 1152,
+    "explanation": "Tour descriptions and day-by-day itineraries are written by AI from Adventure Asia's own tour notes and checked by automated quality checks. Trip narration carries its own Adventure Asia AI label, which says how much of it AI wrote. The planner's place search and its “You might also like” suggestions use AI to match your words and the places you picked. An Adventure Asia advisor reviews every trip before you book.",
+    "name": "header-pill",
+    "closed_after": "false"
+   },
+   {
+    "label": "ADVENTURE ASIA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     160,
+     465.9,
+     416,
+     591.1
+    ],
+    "transform": "none",
+    "innerWidth": 1440,
+    "limit": 1436,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 1440,
+    "doc_cw": 1440,
+    "main_sw": 1152,
+    "main_cw": 1152,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "summary",
+    "closed_after": "false"
+   },
+   {
+    "label": "ADVENTURE ASIA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     287.8,
+     526.4,
+     543.8,
+     651.6
+    ],
+    "transform": "none",
+    "innerWidth": 1440,
+    "limit": 1436,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 1440,
+    "doc_cw": 1440,
+    "main_sw": 1152,
+    "main_cw": 1152,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "highlights",
+    "closed_after": "false"
+   },
+   {
+    "label": "ADVENTURE ASIA AI ×",
+    "expanded": "true",
+    "panel_visible": true,
+    "rect": [
+     295.8,
+     809.4,
+     551.8,
+     934.6
+    ],
+    "transform": "none",
+    "innerWidth": 1440,
+    "limit": 1436,
+    "right_ok": true,
+    "left_ok": true,
+    "doc_sw": 1440,
+    "doc_cw": 1440,
+    "main_sw": 1152,
+    "main_cw": 1152,
+    "explanation": "Written by an AI model from Adventure Asia's own tour notes and checked by automated quality checks; tours the checks flag are reviewed by our team. Your advisor confirms every detail before you book.",
+    "name": "day-by-day",
+    "closed_after": "false"
+   }
+  ],
+  "console_errors": [],
+  "http_errors": [],
+  "data_theme": "dark",
+  "main_label_count": 3,
+  "page": {
+   "doc_sw": 1440,
+   "doc_cw": 1440,
+   "main_sw": 1152,
+   "main_cw": 1152
+  },
+  "pass": true
+ },
+ "site_pill": [
+  {
+   "run": "390-light",
+   "says_ai_assisted": false,
+   "explanation": "Tour descriptions and day-by-day itineraries are written by AI from Adventure Asia's own tour notes and checked by automated quality checks. Trip narration carries its own Adventure Asia AI label, which says how much of it AI wrote. The planner's place search and its “You might also like” suggestions use AI to match your words and the places you picked. An Adventure Asia advisor reviews every trip before you book."
+  },
+  {
+   "run": "390-dark",
+   "says_ai_assisted": false,
+   "explanation": "Tour descriptions and day-by-day itineraries are written by AI from Adventure Asia's own tour notes and checked by automated quality checks. Trip narration carries its own Adventure Asia AI label, which says how much of it AI wrote. The planner's place search and its “You might also like” suggestions use AI to match your words and the places you picked. An Adventure Asia advisor reviews every trip before you book."
+  },
+  {
+   "run": "1440-light",
+   "says_ai_assisted": false,
+   "explanation": "Tour descriptions and day-by-day itineraries are written by AI from Adventure Asia's own tour notes and checked by automated quality checks. Trip narration carries its own Adventure Asia AI label, which says how much of it AI wrote. The planner's place search and its “You might also like” suggestions use AI to match your words and the places you picked. An Adventure Asia advisor reviews every trip before you book."
+  },
+  {
+   "run": "1440-dark",
+   "says_ai_assisted": false,
+   "explanation": "Tour descriptions and day-by-day itineraries are written by AI from Adventure Asia's own tour notes and checked by automated quality checks. Trip narration carries its own Adventure Asia AI label, which says how much of it AI wrote. The planner's place search and its “You might also like” suggestions use AI to match your words and the places you picked. An Adventure Asia advisor reviews every trip before you book."
+  }
+ ]
+}

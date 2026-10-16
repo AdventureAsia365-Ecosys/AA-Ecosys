@@ -1,0 +1,169 @@
+{
+ "step": "all",
+ "console_errors": [],
+ "net_errors": [],
+ "admin_username": "e2e-claude-code",
+ "probe": {
+  "dde74641-455f-4d9d-9c8e-696dc3a456c8": {
+   "label_status": 200,
+   "labels": 0,
+   "mine": null,
+   "detail_status": 200,
+   "piece_status": "held",
+   "tenant": "Terra Family Expeditions",
+   "channel": "blog",
+   "title": "Cycling Laos with Family: Luang Prabang to Nong Khiaw"
+  },
+  "a7e18faf-4b68-4453-8020-000e38109674": {
+   "label_status": 200,
+   "labels": 0,
+   "mine": null,
+   "detail_status": 200,
+   "piece_status": "held",
+   "tenant": "Atlas & Hearth",
+   "channel": "linkedin",
+   "title": null
+  }
+ },
+ "piece": "dde74641-455f-4d9d-9c8e-696dc3a456c8",
+ "before": {
+  "aria_checked": {
+   "as_is": "false",
+   "light": "false",
+   "heavy": "false",
+   "reject": "false"
+  },
+  "save_disabled": true,
+  "save_text": "Save label",
+  "pick_hint_visible": true
+ },
+ "after_pick": {
+  "light_checked": "true",
+  "save_enabled": true,
+  "pick_hint_count": 0
+ },
+ "post": {
+  "status": 200,
+  "request_body": {
+   "label": "light",
+   "defects": {
+    "voice": "light"
+   },
+   "minutes_to_fix": 5,
+   "reason": "ZZ S239 test label"
+  },
+  "mine": {
+   "labelled_by": "admin:2d8e5a2f-3722-4571-9327-177d10b74127",
+   "label": "light",
+   "defects": {
+    "voice": "light"
+   },
+   "minutes_to_fix": 5,
+   "reason": "ZZ S239 test label",
+   "labelled_at": "2026-10-16T02:12:36.213810+00:00",
+   "text_changed_since_label": false
+  }
+ },
+ "toast": "Labelled Light edit",
+ "after_save_form": {
+  "save_text": "Update my label",
+  "light_checked": "true"
+ },
+ "get_label": {
+  "status": 200,
+  "labels": [
+   {
+    "labelled_by": "admin:2d8e5a2f-3722-4571-9327-177d10b74127",
+    "label": "light",
+    "defects": {
+     "voice": "light"
+    },
+    "minutes_to_fix": 5,
+    "reason": "ZZ S239 test label",
+    "labelled_at": "2026-10-16T02:12:36.213810+00:00",
+    "text_changed_since_label": false
+   }
+  ],
+  "mine": {
+   "labelled_by": "admin:2d8e5a2f-3722-4571-9327-177d10b74127",
+   "label": "light",
+   "defects": {
+    "voice": "light"
+   },
+   "minutes_to_fix": 5,
+   "reason": "ZZ S239 test label",
+   "labelled_at": "2026-10-16T02:12:36.213810+00:00",
+   "text_changed_since_label": false
+  }
+ },
+ "api_labelled_filter": {
+  "status": 200,
+  "total": 1,
+  "has_piece": true,
+  "row_label": "light",
+  "row_label_count": 1
+ },
+ "api_light_filter": {
+  "status": 200,
+  "total": 1,
+  "has_piece": true
+ },
+ "table_1440": {
+  "doc_scroll": [
+   1440,
+   1440
+  ],
+  "body_scroll": [
+   1440,
+   1440
+  ],
+  "theme": "light",
+  "header_order": [
+   "WRITTEN",
+   "TENANT",
+   "CHANNEL",
+   "TITLE / ANGLE",
+   "STATUS",
+   "LABEL",
+   "BLOCKING FAILS",
+   "WARNINGS",
+   "ATT.",
+   "COST"
+  ],
+  "label_th": {
+   "t": "LABEL",
+   "l": 1244,
+   "r": 1331
+  },
+  "label_index": 5,
+  "status_index": 4,
+  "label_th_in_viewport": true,
+  "page_hscroll": false,
+  "rows": 1,
+  "label_filter_value": "labelled",
+  "match": [
+   {
+    "label_cell": "LIGHT EDIT",
+    "cell_left": 1244,
+    "cell_right": 1331
+   }
+  ]
+ },
+ "table_390_dark": {
+  "theme": "dark",
+  "doc_scroll": [
+   384,
+   384
+  ],
+  "page_hscroll": false
+ },
+ "drawer_390_dark": {
+  "light_checked": "true",
+  "save_text": "Update my label",
+  "theme": "dark",
+  "doc_scroll": [
+   384,
+   384
+  ]
+ }
+}

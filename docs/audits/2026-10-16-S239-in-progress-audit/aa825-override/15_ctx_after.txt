@@ -1,0 +1,168 @@
+===JSON===
+{
+ "timezone": "UTC",
+ "today_utc": "2026-10-16",
+ "latest_allowed_older_than": "2026-09-15",
+ "llm": {
+  "oldest_created_at": "2026-09-17 07:28:31.346449+00:00",
+  "older_than": "2026-09-18",
+  "allowed": false,
+  "days_below_cutoff": [
+   {
+    "day": "2026-09-17",
+    "calls": 2476,
+    "tokens_in": 3594013,
+    "tokens_out": 1797881,
+    "cost_usd": "25.694670"
+   }
+  ],
+  "first_rows_to_delete": [
+   {
+    "n": 200,
+    "oldest": "2026-09-17 07:28:31.346449+00:00",
+    "newest": "2026-09-17 07:33:44.520491+00:00",
+    "cost_usd": "1.371358",
+    "typesafe_rows": 0,
+    "tenants": 0,
+    "tenant_ids": "[]",
+    "internal_rows": 200
+   }
+  ],
+  "rollup_rows_for_those_days": [
+   {
+    "day": "2026-09-17",
+    "calls": "2676",
+    "tokens_in": "3874683",
+    "tokens_out": "1895066",
+    "cost_usd": "26.794948",
+    "rollup_rows": 5
+   }
+  ],
+  "rollup_total_rows": 5,
+  "jev_first_topup": "2026-10-04"
+ },
+ "tenant_api_usage": {
+  "oldest_called_at": "2026-09-16 13:53:00.669358+00:00",
+  "older_than": "2026-09-17",
+  "allowed": false,
+  "months_up_to_cutoff_month": [
+   {
+    "month": "2026-09-01",
+    "tenant_id": "1bae2159-671b-4f35-a782-e96ea4cbdd4a",
+    "actor_type": "tenant",
+    "calls": 31,
+    "ok_calls": 31,
+    "rate_limited_calls": 0,
+    "server_error_calls": 0
+   },
+   {
+    "month": "2026-09-01",
+    "tenant_id": "a1b2c3d4-0001-4000-8000-000000000001",
+    "actor_type": "tenant",
+    "calls": 1989,
+    "ok_calls": 1960,
+    "rate_limited_calls": 0,
+    "server_error_calls": 0
+   },
+   {
+    "month": "2026-09-01",
+    "tenant_id": null,
+    "actor_type": "admin",
+    "calls": 7363,
+    "ok_calls": 7354,
+    "rate_limited_calls": 0,
+    "server_error_calls": 0
+   }
+  ],
+  "candidates_below_cutoff": 60,
+  "rollup": [
+   {
+    "month": "2026-09-01",
+    "tenant_id": "1bae2159-671b-4f35-a782-e96ea4cbdd4a",
+    "actor_type": "tenant",
+    "calls": 31,
+    "ok_calls": 31,
+    "rate_limited_calls": 0,
+    "server_error_calls": 0
+   },
+   {
+    "month": "2026-09-01",
+    "tenant_id": "a1b2c3d4-0001-4000-8000-000000000001",
+    "actor_type": "tenant",
+    "calls": 1989,
+    "ok_calls": 1960,
+    "rate_limited_calls": 0,
+    "server_error_calls": 0
+   },
+   {
+    "month": "2026-09-01",
+    "tenant_id": null,
+    "actor_type": "admin",
+    "calls": 7563,
+    "ok_calls": 7554,
+    "rate_limited_calls": 0,
+    "server_error_calls": 0
+   }
+  ]
+ },
+ "explain_v_tenant_monthly_usage": [
+  "GroupAggregate  (cost=25.50..133727.16 rows=48 width=270) (actual time=0.303..7.443 rows=9 loops=1)",
+  "  Group Key: t.tenant_id, mp.tours_quota_monthly, mp.api_calls_quota_monthly, mp.price_usd_monthly, mp.overage_rate_usd_per_tour",
+  "  Buffers: shared hit=1448",
+  "  ->  Sort  (cost=25.50..25.62 rows=48 width=102) (actual time=0.228..0.241 rows=55 loops=1)",
+  "        Sort Key: t.tenant_id, mp.tours_quota_monthly, mp.api_calls_quota_monthly, mp.price_usd_monthly, mp.overage_rate_usd_per_tour",
+  "        Sort Method: quicksort  Memory: 31kB",
+  "        Buffers: shared hit=11",
+  "        ->  Hash Right Join  (cost=19.28..24.16 rows=48 width=102) (actual time=0.076..0.172 rows=55 loops=1)",
+  "              Hash Cond: (ttv.tenant_id = t.tenant_id)",
+  "              Buffers: shared hit=5",
+  "              ->  Seq Scan on tenant_tour_versions ttv  (cost=0.00..4.32 rows=48 width=32) (actual time=0.008..0.081 rows=50 loops=1)",
+  "                    Filter: ((created_at >= date_trunc('month'::text, now())) AND (created_at < (date_trunc('month'::text, now()) + '1 mon'::interval)))",
+  "                    Buffers: shared hit=3",
+  "              ->  Hash  (cost=19.23..19.23 rows=4 width=86) (actual time=0.059..0.062 rows=9 loops=1)",
+  "                    Buckets: 1024  Batches: 1  Memory Usage: 9kB",
+  "                    Buffers: shared hit=2",
+  "                    ->  Hash Right Join  (cost=1.09..19.23 rows=4 width=86) (actual time=0.046..0.054 rows=9 loops=1)",
+  "                          Hash Cond: (mp.id = t.plan_id)",
+  "                          Buffers: shared hit=2",
+  "                          ->  Seq Scan on membership_plans mp  (cost=0.00..15.90 rows=590 width=54) (actual time=0.003..0.004 rows=5 loops=1)",
+  "                                Buffers: shared hit=1",
+  "                          ->  Hash  (cost=1.04..1.04 rows=4 width=64) (actual time=0.024..0.025 rows=9 loops=1)",
+  "                                Buckets: 1024  Batches: 1  Memory Usage: 9kB",
+  "                                Buffers: shared hit=1",
+  "                                ->  Seq Scan on tenants t  (cost=0.00..1.04 rows=4 width=64) (actual time=0.015..0.018 rows=9 loops=1)",
+  "                                      Buffers: shared hit=1",
+  "  SubPlan 1",
+  "    ->  Aggregate  (cost=34.35..34.37 rows=1 width=32) (actual time=0.111..0.111 rows=1 loops=9)",
+  "          Buffers: shared hit=134",
+  "          ->  Index Only Scan using tenant_api_usage_tenant_called_idx on tenant_api_usage tau  (cost=0.43..32.56 rows=717 width=0) (actual time=0.008..0.080 rows=356 loops=9)",
+  "                Index Cond: ((tenant_id = t.tenant_id) AND (called_at >= date_trunc('month'::text, now())) AND (called_at < (date_trunc('month'::text, now()) + '1 mon'::interval)))",
+  "                Heap Fetches: 387",
+  "                Buffers: shared hit=134",
+  "  SubPlan 2",
+  "    ->  Aggregate  (cost=34.35..34.37 rows=1 width=32) (actual time=0.081..0.081 rows=1 loops=9)",
+  "          Buffers: shared hit=134",
+  "          ->  Index Only Scan using tenant_api_usage_tenant_called_idx on tenant_api_usage tau2  (cost=0.43..32.56 rows=717 width=0) (actual time=0.004..0.054 rows=356 loops=9)",
+  "                Index Cond: ((tenant_id = t.tenant_id) AND (called_at >= date_trunc('month'::text, now())) AND (called_at < (date_trunc('month'::text, now()) + '1 mon'::interval)))",
+  "                Heap Fetches: 387",
+  "                Buffers: shared hit=134",
+  "  SubPlan 3",
+  "    ->  Aggregate  (cost=2716.63..2716.64 rows=1 width=32) (actual time=0.591..0.591 rows=1 loops=9)",
+  "          Buffers: shared hit=1169",
+  "          ->  Bitmap Heap Scan on llm_call_log l  (cost=40.58..2714.29 rows=933 width=5) (actual time=0.083..0.487 rows=788 loops=9)",
+  "                Recheck Cond: ((tenant_id = t.tenant_id) AND (created_at >= date_trunc('month'::text, now())) AND (created_at < (date_trunc('month'::text, now()) + '1 mon'::interval)))",
+  "                Filter: (NOT (quality_signal @> '{\"shadow\": true}'::jsonb))",
+  "                Rows Removed by Filter: 14",
+  "                Heap Blocks: exact=1083",
+  "                Buffers: shared hit=1169",
+  "                ->  Bitmap Index Scan on idx_llm_call_log_tenant_created  (cost=0.00..40.34 rows=953 width=0) (actual time=0.069..0.069 rows=802 loops=9)",
+  "                      Index Cond: ((tenant_id = t.tenant_id) AND (created_at >= date_trunc('month'::text, now())) AND (created_at < (date_trunc('month'::text, now()) + '1 mon'::interval)))",
+  "                      Buffers: shared hit=86",
+  "Planning:",
+  "  Buffers: shared hit=392",
+  "Planning Time: 1.563 ms",
+  "Execution Time: 7.748 ms"
+ ],
+ "explain_uses_tenant_called_idx": true
+}
+===JSON===

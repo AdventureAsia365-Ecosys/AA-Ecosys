@@ -1,0 +1,512 @@
+[
+  {
+    "id": "A1",
+    "label": "A1 admin raw PATCH, real fields unchanged (plain text)",
+    "path": "/api/admin/tours/598b2041-54a6-4fd4-b0b3-19d5ab3088eb/raw",
+    "body_bytes": 10023,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123375398,
+      "method": "PATCH",
+      "uri": "/admin/tours/598b2041-54a6-4fd4-b0b3-19d5ab3088eb/raw",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": null,
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body"
+      ],
+      "requestBodySize": 10023,
+      "inspectedByWAF": 8192,
+      "user_agent": "node",
+      "via_vercel_bff": true,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "x-admin-secret"
+      ]
+    }
+  },
+  {
+    "id": "A2",
+    "label": "A2 admin raw PATCH, HTML description",
+    "path": "/api/admin/tours/62100b31-ca0c-40a0-a35b-37a39e2c25a5/raw",
+    "body_bytes": 11232,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123376798,
+      "method": "PATCH",
+      "uri": "/admin/tours/62100b31-ca0c-40a0-a35b-37a39e2c25a5/raw",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body",
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 11232,
+      "inspectedByWAF": 8192,
+      "user_agent": "node",
+      "via_vercel_bff": true,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "x-admin-secret"
+      ]
+    }
+  },
+  {
+    "id": "A3",
+    "label": "A3 admin generated-content PATCH, HTML",
+    "path": "/api/admin/tours/ff663663-813c-4c81-b5fe-f595e534e3a2/generated/ce70d69c-8073-421a-937d-72b618343d27",
+    "body_bytes": 19927,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123378498,
+      "method": "PATCH",
+      "uri": "/admin/tours/ff663663-813c-4c81-b5fe-f595e534e3a2/generated/ce70d69c-8073-421a-937d-72b618343d27",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body",
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 19927,
+      "inspectedByWAF": 8192,
+      "user_agent": "node",
+      "via_vercel_bff": true,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "x-admin-secret"
+      ]
+    }
+  },
+  {
+    "id": "T1",
+    "label": "T1 tenant version edit, real rewritten_content unchanged",
+    "path": "/v1/tours/versions/9e246b87-4813-455d-8d34-effb369c0564",
+    "body_bytes": 13430,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123380489,
+      "method": "PATCH",
+      "uri": "/v1/tours/versions/9e246b87-4813-455d-8d34-effb369c0564",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": null,
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body"
+      ],
+      "requestBodySize": 13430,
+      "inspectedByWAF": 8192,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "T2",
+    "label": "T2 tenant version edit, HTML summary",
+    "path": "/v1/tours/versions/1117fba6-8902-4a4a-9c71-6cac0ebff835",
+    "body_bytes": 14953,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123382590,
+      "method": "PATCH",
+      "uri": "/v1/tours/versions/1117fba6-8902-4a4a-9c71-6cac0ebff835",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body",
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 14953,
+      "inspectedByWAF": 8192,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "T3",
+    "label": "T3 tenant piece edit, markdown blog",
+    "path": "/v1/content-writing/pieces/07e1bd41-b3c9-401d-aa58-c48fba0a47f6",
+    "body_bytes": 9903,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123384299,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/07e1bd41-b3c9-401d-aa58-c48fba0a47f6",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body",
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 9903,
+      "inspectedByWAF": 8192,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "T4",
+    "label": "T4 tenant version edit via portal BFF, HTML summary",
+    "path": "/api/tenant/v1/tours/versions/0a7759ac-149c-453e-86cc-7292abf246dd",
+    "body_bytes": 14953,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123385923,
+      "method": "PATCH",
+      "uri": "/v1/tours/versions/0a7759ac-149c-453e-86cc-7292abf246dd",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body",
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 14953,
+      "inspectedByWAF": 8192,
+      "user_agent": "node",
+      "via_vercel_bff": true,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "T5",
+    "label": "T5 tenant piece edit via portal BFF, markdown blog",
+    "path": "/api/tenant/v1/content-writing/pieces/cb2d3299-e1dc-4ead-8ba5-ba124a87daeb",
+    "body_bytes": 9903,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123387493,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/cb2d3299-e1dc-4ead-8ba5-ba124a87daeb",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body",
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 9903,
+      "inspectedByWAF": 8192,
+      "user_agent": "node",
+      "via_vercel_bff": true,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "C1",
+    "label": "C1 control: small HTML (< 8 KB) piece edit",
+    "path": "/v1/content-writing/pieces/1e53966e-0841-4a39-bfaf-b03f416de73c",
+    "body_bytes": 1521,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123389233,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/1e53966e-0841-4a39-bfaf-b03f416de73c",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 1521,
+      "inspectedByWAF": 1521,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "C2",
+    "label": "C2 control: large plain text (> 8 KB) piece edit",
+    "path": "/v1/content-writing/pieces/0d335d4c-6ea2-43ac-af61-6bc189c7f360",
+    "body_bytes": 17528,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123391089,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/0d335d4c-6ea2-43ac-af61-6bc189c7f360",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": null,
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body"
+      ],
+      "requestBodySize": 17528,
+      "inspectedByWAF": 8192,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "B1",
+    "label": "B1 Booking trip case notes PATCH",
+    "path": "/booking/trip-cases/TC-923374",
+    "body_bytes": 9896,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123392778,
+      "method": "PATCH",
+      "uri": "/booking/trip-cases/TC-923374",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body",
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 9896,
+      "inspectedByWAF": 8192,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "9z3xnalp59",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "B2",
+    "label": "B2 Booking contract terms PATCH",
+    "path": "/booking/contracts/8c947aab-b2bc-4895-be1a-3faf110daa6e",
+    "body_bytes": 11844,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123394658,
+      "method": "PATCH",
+      "uri": "/booking/contracts/8c947aab-b2bc-4895-be1a-3faf110daa6e",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [
+        "SizeRestrictions_BODY"
+      ],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:SizeRestrictions_Body",
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 11844,
+      "inspectedByWAF": 8192,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "9z3xnalp59",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "C3",
+    "label": "HTML intro with every ../ link made absolute (otherwise identical to C1)",
+    "path": "/v1/content-writing/pieces/b44a7a91-b21f-454c-a0fa-12f081164772",
+    "body_bytes": 1590,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123494779,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/b44a7a91-b21f-454c-a0fa-12f081164772",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": null,
+      "crs_count_override_matches (stay COUNT)": [],
+      "labels": [],
+      "requestBodySize": 1590,
+      "inspectedByWAF": 1590,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "C4",
+    "label": "one markdown link with ../ only",
+    "path": "/v1/content-writing/pieces/d3f37399-e10a-4536-b801-543d81ad90c7",
+    "body_bytes": 75,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123496486,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/d3f37399-e10a-4536-b801-543d81ad90c7",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 75,
+      "inspectedByWAF": 75,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "C5",
+    "label": "one markdown link with ./ only",
+    "path": "/v1/content-writing/pieces/370ad14a-8768-4908-9acd-3b005045fca4",
+    "body_bytes": 74,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123498178,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/370ad14a-8768-4908-9acd-3b005045fca4",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": null,
+      "crs_count_override_matches (stay COUNT)": [],
+      "labels": [],
+      "requestBodySize": 74,
+      "inspectedByWAF": 74,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "C6",
+    "label": "prose with ellipsis and slashes, no ../",
+    "path": "/v1/content-writing/pieces/bded3545-8c0c-4e77-b927-6d3d4c49a8d8",
+    "body_bytes": 119,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123499831,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/bded3545-8c0c-4e77-b927-6d3d4c49a8d8",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": null,
+      "crs_count_override_matches (stay COUNT)": [],
+      "labels": [],
+      "requestBodySize": 119,
+      "inspectedByWAF": 119,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "C7",
+    "label": "one HTML link with ../ only",
+    "path": "/v1/content-writing/pieces/7bae44b1-7c1b-4677-95c7-7ee8a67c2f7e",
+    "body_bytes": 91,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123501489,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/7bae44b1-7c1b-4677-95c7-7ee8a67c2f7e",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 91,
+      "inspectedByWAF": 91,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  },
+  {
+    "id": "C8",
+    "label": "one HTML img with ../ only",
+    "path": "/v1/content-writing/pieces/1b9fec64-72ad-45e3-bb63-a355a7e120f9",
+    "body_bytes": 81,
+    "status": 404,
+    "waf": {
+      "time_ms": 1792123503208,
+      "method": "PATCH",
+      "uri": "/v1/content-writing/pieces/1b9fec64-72ad-45e3-bb63-a355a7e120f9",
+      "action": "ALLOW",
+      "terminatingRuleId": "VpcLinkInternalAllow",
+      "crs_terminating_rule (BLOCK once enforced)": "GenericLFI_BODY",
+      "crs_count_override_matches (stay COUNT)": [],
+      "labels": [
+        "awswaf:managed:aws:core-rule-set:GenericLFI_Body"
+      ],
+      "requestBodySize": 81,
+      "inspectedByWAF": 81,
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWeb",
+      "via_vercel_bff": false,
+      "api_gw": "4ylo382khg",
+      "sensitive_headers_logged": [
+        "authorization"
+      ]
+    }
+  }
+]

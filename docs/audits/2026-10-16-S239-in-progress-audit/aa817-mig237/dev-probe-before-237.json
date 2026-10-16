@@ -1,0 +1,51 @@
+{
+    "runner": {
+        "cu": "aa_cis_admin",
+        "rolsuper": false,
+        "rolbypassrls": false,
+        "rolcreaterole": true,
+        "ver": "15.17",
+        "member_of_aa_app_user": false
+    },
+    "table": {
+        "owner": "aa_cis_admin",
+        "rls": false,
+        "force": false,
+        "runner_owns": true
+    },
+    "acl": [
+        {
+            "grantee": "aa_app_user",
+            "privs": "SELECT"
+        },
+        {
+            "grantee": "aa_cis_admin",
+            "privs": "DELETE,INSERT,REFERENCES,SELECT,TRIGGER,TRUNCATE,UPDATE"
+        }
+    ],
+    "policies": [],
+    "aa_app_user_privs": {
+        "SELECT": true,
+        "INSERT": false,
+        "UPDATE": false,
+        "DELETE": false,
+        "TRUNCATE": false
+    },
+    "rows_total": 0,
+    "rows_per_tenant": [],
+    "rows_per_type": {},
+    "schema_versions_cis_max": "236",
+    "has_237": 0,
+    "jobs_active": {},
+    "app_user_login": "aa_app_user",
+    "app_user_where_less_reads": {
+        "foreign": {
+            "rows": 0,
+            "tenants": 0
+        },
+        "empty": {
+            "rows": 0,
+            "tenants": 0
+        }
+    }
+}

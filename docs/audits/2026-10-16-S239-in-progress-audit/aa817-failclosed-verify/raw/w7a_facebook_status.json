@@ -1,0 +1,14 @@
+{
+ "at": "2026-10-16T06:48:41+00:00",
+ "method": "GET",
+ "path": "/v1/integrations/facebook",
+ "status": 200,
+ "x_request_id": "7db3a298-4be2-4bc5-81eb-1fbec7bf6ceb",
+ "body": {
+  "connected": false,
+  "page_id": null,
+  "connected_at": null,
+  "last_verified_at": null,
+  "last_verify_error": null
+ }
+}

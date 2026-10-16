@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T05:15:30+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/9e957fac-596a-4238-8b89-4aa775dab78f/latest-piece",
+ "status": 200,
+ "x_request_id": "0f1b7036-0f7c-401b-aa5a-5727afb03a26",
+ "body": {
+  "piece": {
+   "piece_id": "c54260a5-e154-4f10-b850-fc40676402b7",
+   "angle_gate_request_id": "9e957fac-596a-4238-8b89-4aa775dab78f",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "Pawangka Monastery holds weight that children sense before they can name it.\n\nThis is the site connected to the origins ...",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-16T01:36:16.425090+00:00"
+  }
+ }
+}

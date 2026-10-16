@@ -1,0 +1,95 @@
+{
+  "mode": "preflight",
+  "invoke_requested": true,
+  "account": "acc3",
+  "identity": {
+    "account": "005097885195",
+    "arn": "arn:aws:sts::005097885195:assumed-role/aa-cis-dev-ecs-task-role/4151748e56354cb9bbd95c9fc2c2ceea"
+  },
+  "catalog": [
+    {
+      "model_key": "cohere-embed-v4",
+      "bedrock_profile_ids": {
+        "acc2": "global.cohere.embed-v4:0"
+      },
+      "enabled": true,
+      "blocked_reason": null,
+      "updated_at": "2026-10-16 05:26:23.659941+00:00",
+      "updated_by": "migration-238-aa856"
+    }
+  ],
+  "routes": [
+    {
+      "stage": "a3_place_embed",
+      "role": "embed",
+      "model_id": "cohere-embed-v4",
+      "fallback_model_ids": [],
+      "account_route": null,
+      "is_active": true
+    },
+    {
+      "stage": "f10_embed",
+      "role": "embed",
+      "model_id": "cohere-embed-v4",
+      "fallback_model_ids": [],
+      "account_route": null,
+      "is_active": true
+    },
+    {
+      "stage": "tp_component_embed",
+      "role": "embed",
+      "model_id": "cohere-embed-v4",
+      "fallback_model_ids": [],
+      "account_route": null,
+      "is_active": true
+    },
+    {
+      "stage": "tp_search_embed",
+      "role": "embed",
+      "model_id": "cohere-embed-v4",
+      "fallback_model_ids": [],
+      "account_route": null,
+      "is_active": true
+    }
+  ],
+  "jobs_in_flight": [
+    {
+      "kind": "recompute",
+      "status": "running",
+      "jobs": 1
+    }
+  ],
+  "invoke": {
+    "satellite": {
+      "ok": true,
+      "account": "acc3",
+      "model_id": "global.cohere.embed-v4:0",
+      "dimensions": 1536,
+      "input_tokens": 7,
+      "tokens_estimated": false,
+      "cost_usd": 1e-06,
+      "ms": 662
+    },
+    "acc2_reference": {
+      "ok": true,
+      "account": "acc2",
+      "model_id": "global.cohere.embed-v4:0",
+      "dimensions": 1536,
+      "input_tokens": 7,
+      "tokens_estimated": false,
+      "cost_usd": 1e-06,
+      "ms": 341
+    },
+    "cosine_vs_acc2": 1.0
+  },
+  "gate": {
+    "account": "acc3",
+    "satellite_invoke_ok": true,
+    "dimensions_ok": true,
+    "cosine_vs_acc2": 1.0,
+    "same_model": true,
+    "no_jobs_in_flight": false,
+    "apply_240": true
+  }
+}
+uploaded s3://aa-cis-bronze-005097885195/scripts/aa862-probe-preflight-acc3.json

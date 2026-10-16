@@ -1,0 +1,10 @@
+{
+ "at": "2026-10-16T06:48:27+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/d940d26f-a991-4a56-a7a8-aeae63f5c7b4/latest-piece",
+ "status": 200,
+ "x_request_id": "073e4fc2-1674-4eac-9af4-87b4d7b876ef",
+ "body": {
+  "piece": null
+ }
+}

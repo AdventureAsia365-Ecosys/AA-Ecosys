@@ -1,0 +1,10 @@
+{
+ "at": "2026-10-16T06:48:32+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/pieces/263e5a5a-e4d8-4cdc-ad9e-2545a26c757d",
+ "status": 404,
+ "x_request_id": "e783afe5-a5eb-4e96-bf0e-1091a7b9b196",
+ "body": {
+  "detail": "piece_id=263e5a5a-e4d8-4cdc-ad9e-2545a26c757d not found for this tenant"
+ }
+}

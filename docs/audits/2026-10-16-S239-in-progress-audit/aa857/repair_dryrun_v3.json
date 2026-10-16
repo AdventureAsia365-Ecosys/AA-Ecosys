@@ -1,0 +1,70 @@
+{
+ "mixed_live_segments_before": 96,
+ "mixed_live_segments_after_simulated": 0,
+ "member_rows_to_detach": 1678,
+ "live_member_rows_to_detach": 1610,
+ "affected_active_tours": 543,
+ "inactive_member_rows_to_detach": 68,
+ "segments_minted": 947,
+ "ids_reminted": 108,
+ "ids_reminted_by_reason": {
+  "foreign": 22,
+  "alias_old": 86
+ },
+ "unclaimed_same_country_writes": 2,
+ "alias_merges": 338,
+ "alias_was_ids": 337,
+ "alias_was_ids_that_are_split_segments": 7,
+ "excluded_memberships_deleted": 740,
+ "existing_segments_renamed": 338,
+ "plan_segments_renamed": 43,
+ "segments_touched_for_platform_recompute": 1626,
+ "subjects_on_alias_was_ids": {
+  "proposed": 2
+ },
+ "subjects_on_split_segments": {
+  "used": 5,
+  "proposed": 20,
+  "picked": 2
+ },
+ "subjects_on_membership_changed": {
+  "used": 3,
+  "proposed": 16,
+  "picked": 1
+ },
+ "subjects_predicted_after": {
+  "used": {
+   "seed": 5,
+   "no_member_on_tenant_tours": 3
+  },
+  "proposed": {
+   "seed": 25,
+   "no_member_on_tenant_tours": 11,
+   "on_alias_old_id": 2
+  },
+  "picked": {
+   "seed": 2,
+   "no_member_on_tenant_tours": 1
+  }
+ },
+ "inflight_subject_requests": 3,
+ "subject_side_effects": {
+  "picked_used_subjects_on_alias_was_ids": 0,
+  "inflight_requests_need_decision": 3
+ },
+ "current_routes_on_alias_was_ids": 390,
+ "inflight_route_requests_on_watch_ids": 6,
+ "snapshot_members_bytes_estimate": 2113272,
+ "estimated_resegment_minutes_at_5s_per_tour": 45.2,
+ "blocking_jobs_now": [],
+ "job_queue_now": [],
+ "apply_would_refuse_on_jobs": false,
+ "set_for_apply": {
+  "EXPECTED_DETACH_ROWS": 1678,
+  "APPROVED_SUBJECT_SIDE_EFFECTS": {
+   "picked_used_subjects_on_alias_was_ids": 0,
+   "inflight_requests_need_decision": 3
+  }
+ }
+}
+RESULT: OK s3://aa-cis-bronze-005097885195/scripts/out/s239_aa857_repair_dry_run.json

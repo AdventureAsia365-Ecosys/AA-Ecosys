@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T05:15:34+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/55670945-ff4f-48eb-bb2c-857dfcdf1b05/latest-piece",
+ "status": 200,
+ "x_request_id": "59df77ee-460e-43e2-bb72-338bb13ca2bd",
+ "body": {
+  "piece": {
+   "piece_id": "7594ffed-d1a9-4f6e-9bba-95d18d403b7c",
+   "angle_gate_request_id": "55670945-ff4f-48eb-bb2c-857dfcdf1b05",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "Legs burning, lungs working, prayer flags lining the trail around you: this is how you reach Tiger's Nest.\n\nThe trail to...",
+   "seo_title": null,
+   "meta_description": null,
+   "slug": null,
+   "route_hub_name": null,
+   "route_segment_count": null,
+   "created_at": "2026-10-16T00:21:56.756427+00:00"
+  }
+ }
+}

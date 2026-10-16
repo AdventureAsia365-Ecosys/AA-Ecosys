@@ -1,0 +1,144 @@
+{
+ "list_status": 200,
+ "jobs_listed_since_0835": 2,
+ "jobs": [
+  {
+   "id": "36562bb7-40b0-470e-922c-2f01c31c2bcd",
+   "kind": "t9_write",
+   "status": "succeeded",
+   "cost_usd_job": 0.02807,
+   "created_at": "2026-10-16T08:35:53.199746+00:00",
+   "finished_at": "2026-10-16T08:36:23.075947+00:00",
+   "attempt": 1,
+   "payload_keys": [
+    "context",
+    "piece_id",
+    "tenant_id",
+    "request_id"
+   ],
+   "llm_status": 200,
+   "llm_calls": 9,
+   "llm_cost_usd": 0.02807,
+   "calls": [
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "model": "gpt-5.6-luna",
+     "tokens_in": 2343,
+     "tokens_out": 788,
+     "cost_usd": 0.001531
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "model": "gpt-5.6-luna",
+     "tokens_in": 452,
+     "tokens_out": 260,
+     "cost_usd": 0.000402
+    },
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "model": "cohere-embed-v4",
+     "tokens_in": 233,
+     "tokens_out": 0,
+     "cost_usd": 0.000028
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "model": "sonnet-4-6",
+     "tokens_in": 1584,
+     "tokens_out": 70,
+     "cost_usd": 0.005802
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "model": "gpt-5.6-luna",
+     "tokens_in": 2369,
+     "tokens_out": 1021,
+     "cost_usd": 0.001817
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "model": "gpt-5.6-luna",
+     "tokens_in": 478,
+     "tokens_out": 338,
+     "cost_usd": 0.000501
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "model": "haiku-4-5",
+     "tokens_in": 1115,
+     "tokens_out": 47,
+     "cost_usd": 0.00135
+    },
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "model": "cohere-embed-v4",
+     "tokens_in": 270,
+     "tokens_out": 0,
+     "cost_usd": 0.000032
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "model": "sonnet-4-6",
+     "tokens_in": 1982,
+     "tokens_out": 383,
+     "cost_usd": 0.016607
+    }
+   ],
+   "llm_raw_keys": [
+    "calls",
+    "totals",
+    "by_stage",
+    "truncated"
+   ]
+  },
+  {
+   "id": "4194698f-2b89-4884-a6a3-cd0ceca42571",
+   "kind": "t8_angles",
+   "status": "succeeded",
+   "cost_usd_job": 0.027799,
+   "created_at": "2026-10-16T08:35:29.803656+00:00",
+   "finished_at": "2026-10-16T08:35:48.376324+00:00",
+   "attempt": 1,
+   "payload_keys": [
+    "goal",
+    "tenant_id",
+    "request_id"
+   ],
+   "llm_status": 200,
+   "llm_calls": 1,
+   "llm_cost_usd": 0.027799,
+   "calls": [
+    {
+     "stage": "t8_angle_gen",
+     "role": "writer",
+     "model": "sonnet-4-6",
+     "tokens_in": 1484,
+     "tokens_out": 1273,
+     "cost_usd": 0.027799
+    }
+   ],
+   "llm_raw_keys": [
+    "calls",
+    "totals",
+    "by_stage",
+    "truncated"
+   ]
+  }
+ ],
+ "total_cost_usd": 0.055869,
+ "admin_piece_probe": {
+  "path": "/api/admin/content-quality/pieces/6925acce-b2ed-49bd-a52b-41a74a2e6d60",
+  "status": 200,
+  "status_field": "approved",
+  "held_reason": null
+ }
+}

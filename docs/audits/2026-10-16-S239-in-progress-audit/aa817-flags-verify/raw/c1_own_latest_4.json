@@ -1,0 +1,22 @@
+{
+ "at": "2026-10-16T05:15:30+00:00",
+ "method": "GET",
+ "path": "/v1/content-writing/requests/e42adb08-8f39-430e-b82f-4c9d78a58d56/latest-piece",
+ "status": 200,
+ "x_request_id": "05603ae5-2c81-4bb7-8ed3-84f0444c89c8",
+ "body": {
+  "piece": {
+   "piece_id": "dde74641-455f-4d9d-9c8e-696dc3a456c8",
+   "angle_gate_request_id": "e42adb08-8f39-430e-b82f-4c9d78a58d56",
+   "channel": null,
+   "ready_state": "ready",
+   "content_text": "## The Dinner That Changes How You See the Route\n\nBefore the cycling begins in earnest, before the mountain road and the...",
+   "seo_title": "Cycling Laos with Family: Luang Prabang to Nong Khiaw",
+   "meta_description": "Cycle through northern Laos from Luang Prabang to Nong Khiaw, swimming at Kuang Si Falls and staying with village families along the way.",
+   "slug": "family-cycling-luang-prabang-nong-khiaw-laos",
+   "route_hub_name": "Khaiphaen Restaurant \u2192 Luang Prabang \u2192 Kuang Si Falls \u2192 Ban Long Lao Mai",
+   "route_segment_count": 12,
+   "created_at": "2026-10-16T00:21:50.750607+00:00"
+  }
+ }
+}

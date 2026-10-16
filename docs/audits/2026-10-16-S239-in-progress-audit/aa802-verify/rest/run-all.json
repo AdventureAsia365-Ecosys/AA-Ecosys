@@ -1,0 +1,200 @@
+{
+ "step": "all",
+ "tenant": "terra-family",
+ "piece": "c54260a5-e154-4f10-b850-fc40676402b7",
+ "request": "9e957fac-596a-4238-8b89-4aa775dab78f",
+ "tenant_before": {
+  "piece": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "latest": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "reviews": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "pending": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "summary": {
+   "piece_len": 1113,
+   "piece_has_old": true,
+   "piece_has_new": false,
+   "my_content_has_piece": true,
+   "my_content_len": 1113,
+   "my_content_has_old": true,
+   "latest_piece_id": "c54260a5-e154-4f10-b850-fc40676402b7",
+   "latest_has_old": true,
+   "piece_top_keys": [
+    "piece_id",
+    "angle_gate_request_id",
+    "channel",
+    "ready_state",
+    "content_text",
+    "seo_title",
+    "meta_description",
+    "slug",
+    "route_hub_name",
+    "route_segment_count",
+    "created_at"
+   ]
+  },
+  "ui": {
+   "drawer_open": true,
+   "has_old": true,
+   "has_new": false,
+   "bad_words": []
+  }
+ },
+ "export_button_found": true,
+ "export": {
+  "http": 200,
+  "url_qs": "format=text",
+  "content_type": "text/plain; charset=utf-8",
+  "filename": "sacred-stillness-what-pawangka-teaches-kids-that-classrooms-.txt",
+  "bytes": 1113,
+  "file_has_old": true,
+  "at": "2026-10-16T02:25:54.848Z"
+ },
+ "tenant_export_console_errors": [],
+ "admin": {
+  "before": {
+   "http": 200,
+   "piece_status": "approved",
+   "published": false,
+   "exported": true,
+   "tenant_copy": {
+    "published_at": null,
+    "exported_at": "2026-10-16T02:25:54.782561+00:00",
+    "delivered_at": "2026-10-16T02:25:54.782561+00:00",
+    "older_copy": false,
+    "edits_after_delivery": 0
+   },
+   "admin_edits": 0,
+   "len": 1113,
+   "has_old": true,
+   "has_new": false,
+   "flagged": 1
+  },
+  "before_ui": {
+   "older_copy_notice": 0,
+   "already_exported_note": "The tenant already exported this piece. An edit changes our copy only — the downloaded file keeps the old text."
+  },
+  "row_found": true,
+  "draft_prefilled_matches": true,
+  "apply": {
+   "http": 200,
+   "method": "POST",
+   "mode": "manual",
+   "gate": "F12_scope",
+   "warnings": [],
+   "len_after": 1051,
+   "tenant_copy_in_response": {
+    "published_at": null,
+    "exported_at": "2026-10-16T02:25:54.782561+00:00",
+    "delivered_at": "2026-10-16T02:25:54.782561+00:00",
+    "older_copy": true,
+    "edits_after_delivery": 1
+   },
+   "at": "2026-10-16T02:26:15.040Z"
+  },
+  "after": {
+   "http": 200,
+   "piece_status": "approved",
+   "published": false,
+   "exported": true,
+   "tenant_copy": {
+    "published_at": null,
+    "exported_at": "2026-10-16T02:25:54.782561+00:00",
+    "delivered_at": "2026-10-16T02:25:54.782561+00:00",
+    "older_copy": true,
+    "edits_after_delivery": 1
+   },
+   "admin_edits": 1,
+   "len": 1051,
+   "has_old": false,
+   "has_new": true,
+   "flagged": 1,
+   "audit_row": {
+    "action": "content_piece.admin_sentence_edited",
+    "actor": "admin:2d8e5a2f-3722-4571-9327-177d10b74127",
+    "created_at": "2026-10-16T02:26:14.851389+00:00",
+    "details": {
+     "end": 138,
+     "gate": "F12_scope",
+     "mode": "manual",
+     "after": "Pawangka Monastery holds weight that children sense before they can name it.",
+     "start": 0,
+     "before": "Pawangka Monastery, built in the seventh century by Tibetan King Songtsen Gampo, holds weight that children sense before they can name it.",
+     "problem": "F12_scope: names 'King Songtsen Gampo', outside this piece's scope",
+     "exported": true,
+     "warnings": [],
+     "published": false,
+     "suggestion": null,
+     "length_after": 1051,
+     "length_before": 1113,
+     "suggestion_model": null,
+     "suggestion_cost_usd": null
+    }
+   }
+  },
+  "after_ui": {
+   "older_copy_notice_count": 1,
+   "notice_text": "The tenant has an older copy. They downloaded it on Oct 16, 09:25 AM, before 1 admin edit to this piece. Their copy keeps the old text until they export again.",
+   "admin_edits_heading": "ADMIN EDITS · 1"
+  },
+  "console_errors": []
+ },
+ "tenant_after": {
+  "piece": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "latest": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "reviews": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "pending": {
+   "status": 200,
+   "forbidden_keys": []
+  },
+  "summary": {
+   "piece_len": 1051,
+   "piece_has_old": false,
+   "piece_has_new": true,
+   "my_content_has_piece": true,
+   "my_content_len": 1051,
+   "my_content_has_old": false,
+   "latest_piece_id": "c54260a5-e154-4f10-b850-fc40676402b7",
+   "latest_has_old": false,
+   "piece_top_keys": [
+    "piece_id",
+    "angle_gate_request_id",
+    "channel",
+    "ready_state",
+    "content_text",
+    "seo_title",
+    "meta_description",
+    "slug",
+    "route_hub_name",
+    "route_segment_count",
+    "created_at"
+   ]
+  },
+  "ui": {
+   "drawer_open": true,
+   "has_old": false,
+   "has_new": true,
+   "bad_words": [],
+   "console_errors": []
+  }
+ }
+}

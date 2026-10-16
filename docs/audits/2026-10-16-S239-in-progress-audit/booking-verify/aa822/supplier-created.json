@@ -1,0 +1,47 @@
+{
+ "id": "d54ae2c7-f161-4971-9dff-4aff7bbb09d7",
+ "code": "SUP-000001",
+ "company_name": "ZZ S239 test Supplier AA-822",
+ "categories": [
+  "hotel",
+  "activity"
+ ],
+ "website": "https://example.com/zz-s239",
+ "internal_notes": "ZZ S239 test record (AA-822/AA-823 live verify). Safe to deactivate.",
+ "contact_name": "ZZ S239 Test Contact",
+ "contact_title": null,
+ "contact_email": "zz-s239-supplier@example.com",
+ "contact_phone": null,
+ "address": null,
+ "region": null,
+ "postal_code": null,
+ "destination_id": null,
+ "country_code": "BT",
+ "country_name": "Bhutan",
+ "status": "active",
+ "created_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+ "updated_by": "2d8e5a2f-3722-4571-9327-177d10b74127",
+ "created_at": "2026-10-16T01:38:47.542752Z",
+ "updated_at": "2026-10-16T01:38:47.542752Z",
+ "contracts_in_force": 0,
+ "destination": null,
+ "contract_counts": {
+  "total": 0,
+  "drafts": 0,
+  "in_force": 0
+ },
+ "recent_activity": [
+  {
+   "id": "44facb29-908a-4ffa-a523-020b796823dc",
+   "at": "2026-10-16T01:38:47.542752Z",
+   "action": "supplier.created",
+   "entity_type": "supplier",
+   "entity_label": "SUP-000001 ZZ S239 test Supplier AA-822",
+   "summary": "Created supplier ZZ S239 test Supplier AA-822",
+   "actor": {
+    "id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+    "name": "e2e-claude-code"
+   }
+  }
+ ]
+}

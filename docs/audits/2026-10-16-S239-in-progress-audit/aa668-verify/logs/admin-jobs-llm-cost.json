@@ -1,0 +1,116 @@
+{
+ "list_status": 200,
+ "list_keys": [
+  "jobs",
+  "total",
+  "pagination"
+ ],
+ "jobs": [
+  {
+   "id": "7619f24e-2eb5-4772-8af5-709b3180f5b8",
+   "kind": "t9_write",
+   "status": "succeeded",
+   "created_at": "2026-10-16T02:30:04.989480+00:00",
+   "finished_at": "2026-10-16T02:30:26.779261+00:00",
+   "payload_keys": [
+    "context",
+    "piece_id",
+    "tenant_id",
+    "request_id"
+   ],
+   "payload_ids": {
+    "piece_id": "788f3568-f4d2-4a12-9572-982efb41aa56",
+    "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+    "request_id": "72082375-edc4-44f1-a2d8-3317be6eb325"
+   },
+   "llm": {
+    "status": 200,
+    "totals": {
+     "calls": 9,
+     "cost_usd": 0.024054,
+     "tokens_in": 11259,
+     "tokens_out": 3233,
+     "first_at": "2026-10-16T02:30:11.086410+00:00",
+     "last_at": "2026-10-16T02:30:34.221831+00:00"
+    },
+    "calls": [
+     "t10_judge/judge/gpt-6-luna:0.000856",
+     "t10_judge/judge/gpt-5.6-luna:0.000865",
+     "t10_judge/judge/gpt-5.6-luna:0.000477",
+     "f10_embed/embed/cohere-embed-v4:0.000025",
+     "t9_write/writer/sonnet-4-6:0.00405",
+     "t10_judge/judge/gpt-5.6-luna:0.001604",
+     "t10_judge/judge/gpt-5.6-luna:0.000441",
+     "f10_embed/embed/cohere-embed-v4:0.000026",
+     "t9_write/writer/sonnet-4-6:0.01571"
+    ]
+   }
+  },
+  {
+   "id": "7e0d07af-e814-46e6-9da2-086df81067d9",
+   "kind": "t8_angles",
+   "status": "succeeded",
+   "created_at": "2026-10-16T02:29:43.603833+00:00",
+   "finished_at": "2026-10-16T02:30:01.122032+00:00",
+   "payload_keys": [
+    "goal",
+    "tenant_id",
+    "request_id"
+   ],
+   "payload_ids": {
+    "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+    "request_id": "72082375-edc4-44f1-a2d8-3317be6eb325"
+   },
+   "llm": {
+    "status": 200,
+    "totals": {
+     "calls": 1,
+     "cost_usd": 0.026953,
+     "tokens_in": 1537,
+     "tokens_out": 1206,
+     "first_at": "2026-10-16T02:30:01.092485+00:00",
+     "last_at": "2026-10-16T02:30:01.092485+00:00"
+    },
+    "calls": [
+     "t8_angle_gen/writer/sonnet-4-6:0.026953"
+    ]
+   }
+  },
+  {
+   "id": "a966eb32-93f5-4f4a-bc62-54a45d78403f",
+   "kind": "t2_rewrite",
+   "status": "succeeded",
+   "created_at": "2026-10-16T02:27:24.864868+00:00",
+   "finished_at": "2026-10-16T02:29:04.114355+00:00",
+   "payload_keys": [
+    "tenant_id",
+    "version_id",
+    "rewrite_language",
+    "published_tour_id"
+   ],
+   "payload_ids": {
+    "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+    "version_id": "554ab6e8-1047-40cc-8c91-516b81c834a6",
+    "published_tour_id": "2cf487be-2a9a-4a64-b1d0-1cceaebd9361"
+   },
+   "llm": {
+    "status": 200,
+    "totals": {
+     "calls": 5,
+     "cost_usd": 0.125415,
+     "tokens_in": 26538,
+     "tokens_out": 10373,
+     "first_at": "2026-10-16T02:27:55.024780+00:00",
+     "last_at": "2026-10-16T02:29:03.914665+00:00"
+    },
+    "calls": [
+     "t2_judge/judge/gpt-5.6-luna:0.003663",
+     "t2_generate/writer/sonnet-4-6:0.061126",
+     "t2_itinerary_nudge/writer/haiku-4-5:0.001692",
+     "t2_judge/judge/gpt-5.6-luna:0.0037",
+     "t2_generate/writer/sonnet-4-6:0.055234"
+    ]
+   }
+  }
+ ]
+}

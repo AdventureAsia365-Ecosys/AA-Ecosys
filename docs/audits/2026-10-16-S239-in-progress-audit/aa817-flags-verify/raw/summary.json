@@ -1,0 +1,189 @@
+{
+ "started": "2026-10-16T05:15:13+00:00",
+ "finished": "2026-10-16T05:15:50+00:00",
+ "tenant_a": {
+  "slug": "terra-family",
+  "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf"
+ },
+ "others": {
+  "atlas-hearth": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+  "trail-pulse": "692a3214-5cc2-46c6-a5ca-265389747269",
+  "wildkind-travel": "885d4916-007b-415e-9261-909ad43c6d00"
+ },
+ "checks": [
+  {
+   "id": "C1.0",
+   "check": "terra-family own request 3fa8495d latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c1_own_latest_0.json status=200 piece=yes"
+  },
+  {
+   "id": "C1.1",
+   "check": "terra-family own request b353d044 latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c1_own_latest_1.json status=200 piece=yes"
+  },
+  {
+   "id": "C1.2",
+   "check": "terra-family own request 72082375 latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c1_own_latest_2.json status=200 piece=yes"
+  },
+  {
+   "id": "C1.3",
+   "check": "terra-family own request 9e957fac latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c1_own_latest_3.json status=200 piece=yes"
+  },
+  {
+   "id": "C1.4",
+   "check": "terra-family own request e42adb08 latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c1_own_latest_4.json status=200 piece=yes"
+  },
+  {
+   "id": "C1.5",
+   "check": "terra-family own request ff45fd8a latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c1_own_latest_5.json status=200 piece=yes"
+  },
+  {
+   "id": "C1.6",
+   "check": "terra-family own request 3bf7a5f7 latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c1_own_latest_6.json status=200 piece=yes"
+  },
+  {
+   "id": "C1.7",
+   "check": "terra-family own request 158072bf latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c1_own_latest_7.json status=200 piece=yes"
+  },
+  {
+   "id": "C1.8",
+   "check": "terra-family own request b96797b8 latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c1_own_latest_8.json status=200 piece=yes"
+  },
+  {
+   "id": "C2.atlas-hearth",
+   "check": "atlas-hearth reads its own request e6919aa3 (control)",
+   "result": "PASS",
+   "evidence": "raw/c2_owner_latest_atlas-hearth.json status=200"
+  },
+  {
+   "id": "C2.trail-pulse",
+   "check": "trail-pulse reads its own request 55670945 (control)",
+   "result": "PASS",
+   "evidence": "raw/c2_owner_latest_trail-pulse.json status=200"
+  },
+  {
+   "id": "C2.wildkind-travel",
+   "check": "wildkind-travel reads its own request 3524ad2d (control)",
+   "result": "PASS",
+   "evidence": "raw/c2_owner_latest_wildkind-travel.json status=200"
+  },
+  {
+   "id": "C3.atlas-hearth",
+   "check": "terra-family -> atlas-hearth's request e6919aa3 latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c3_cross_latest_atlas-hearth.json status=200 piece=None"
+  },
+  {
+   "id": "C3.trail-pulse",
+   "check": "terra-family -> trail-pulse's request 55670945 latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c3_cross_latest_trail-pulse.json status=200 piece=None"
+  },
+  {
+   "id": "C3.wildkind-travel",
+   "check": "terra-family -> wildkind-travel's request 3524ad2d latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c3_cross_latest_wildkind-travel.json status=200 piece=None"
+  },
+  {
+   "id": "C4",
+   "check": "atlas-hearth -> terra-family's request 3fa8495d latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c4_reverse_latest.json status=200 piece=None"
+  },
+  {
+   "id": "C5",
+   "check": "random request id latest-piece",
+   "result": "PASS",
+   "evidence": "raw/c5_random_latest.json status=200"
+  },
+  {
+   "id": "C6",
+   "check": "terra-family own piece GET /pieces/{id} (stage5 flag, context)",
+   "result": "PASS",
+   "evidence": "raw/c6_own_piece.json status=200"
+  },
+  {
+   "id": "C7.atlas-hearth",
+   "check": "terra-family -> atlas-hearth's piece GET /pieces/{id} (stage5 flag, context)",
+   "result": "PASS",
+   "evidence": "raw/c7_cross_piece_atlas-hearth.json status=404"
+  },
+  {
+   "id": "C7.trail-pulse",
+   "check": "terra-family -> trail-pulse's piece GET /pieces/{id} (stage5 flag, context)",
+   "result": "PASS",
+   "evidence": "raw/c7_cross_piece_trail-pulse.json status=404"
+  },
+  {
+   "id": "C7.wildkind-travel",
+   "check": "terra-family -> wildkind-travel's piece GET /pieces/{id} (stage5 flag, context)",
+   "result": "PASS",
+   "evidence": "raw/c7_cross_piece_wildkind-travel.json status=404"
+  },
+  {
+   "id": "W0",
+   "check": "terra-family WordPress status before",
+   "result": "PASS",
+   "evidence": "raw/w0_status_before.json connected=False"
+  },
+  {
+   "id": "W1",
+   "check": "connect WordPress (TasteWP test site)",
+   "result": "PASS",
+   "evidence": "raw/w1_connect.json status=200"
+  },
+  {
+   "id": "W2",
+   "check": "test connection",
+   "result": "PASS",
+   "evidence": "raw/w2_test.json status=200 success=True"
+  },
+  {
+   "id": "W3",
+   "check": "status shows connected",
+   "result": "PASS",
+   "evidence": "raw/w3_status_connected.json"
+  },
+  {
+   "id": "W4",
+   "check": "DELETE /v1/integrations/wordpress (flag route)",
+   "result": "PASS",
+   "evidence": "raw/w4_disconnect.json status=200 disconnected=True"
+  },
+  {
+   "id": "W5",
+   "check": "re-read shows disconnected",
+   "result": "PASS",
+   "evidence": "raw/w5_status_after.json"
+  },
+  {
+   "id": "W6",
+   "check": "second DELETE, no row (idempotent)",
+   "result": "PASS",
+   "evidence": "raw/w6_disconnect_again.json status=200 disconnected=False"
+  },
+  {
+   "id": "W7",
+   "check": "DELETE /v1/integrations/facebook, tenant has none (same flag)",
+   "result": "PASS",
+   "evidence": "raw/w7_disconnect_facebook_none.json status=200"
+  }
+ ]
+}

@@ -1,0 +1,167 @@
+{
+ "help-facebook-390-light": {
+  "console_errors": [],
+  "api_errors": [],
+  "found": true,
+  "text": "Connect your Facebook Page",
+  "title_attr": "Connect your Facebook Page",
+  "textOverflow": "ellipsis",
+  "whiteSpace": "nowrap",
+  "overflowX": "hidden",
+  "title_scrollWidth": 181,
+  "title_clientWidth": 169,
+  "truncated": true,
+  "title_rect": [
+   149,
+   318
+  ],
+  "crumb_right": 318,
+  "next_control_left": 338,
+  "header_rect": [
+   0,
+   390
+  ],
+  "hamburger": true,
+  "doc_sw": 390,
+  "doc_cw": 390,
+  "main_sw": 390,
+  "main_cw": 390,
+  "innerWidth": 390,
+  "theme": "light",
+  "no_page_overflow": true,
+  "no_overlap": true,
+  "pass": true
+ },
+ "help-facebook-390-dark": {
+  "console_errors": [],
+  "api_errors": [],
+  "found": true,
+  "text": "Connect your Facebook Page",
+  "title_attr": "Connect your Facebook Page",
+  "textOverflow": "ellipsis",
+  "whiteSpace": "nowrap",
+  "overflowX": "hidden",
+  "title_scrollWidth": 181,
+  "title_clientWidth": 169,
+  "truncated": true,
+  "title_rect": [
+   149,
+   318
+  ],
+  "crumb_right": 318,
+  "next_control_left": 338,
+  "header_rect": [
+   0,
+   390
+  ],
+  "hamburger": true,
+  "doc_sw": 390,
+  "doc_cw": 390,
+  "main_sw": 390,
+  "main_cw": 390,
+  "innerWidth": 390,
+  "theme": "dark",
+  "no_page_overflow": true,
+  "no_overlap": true,
+  "pass": true
+ },
+ "billing-390-light": {
+  "console_errors": [],
+  "api_errors": [],
+  "found": true,
+  "text": "Billing",
+  "title_attr": "Billing",
+  "textOverflow": "ellipsis",
+  "whiteSpace": "nowrap",
+  "overflowX": "hidden",
+  "title_scrollWidth": 36,
+  "title_clientWidth": 36,
+  "truncated": false,
+  "title_rect": [
+   149,
+   185
+  ],
+  "crumb_right": 185,
+  "next_control_left": 338,
+  "header_rect": [
+   0,
+   390
+  ],
+  "hamburger": true,
+  "doc_sw": 390,
+  "doc_cw": 390,
+  "main_sw": 390,
+  "main_cw": 390,
+  "innerWidth": 390,
+  "theme": "light",
+  "no_page_overflow": true,
+  "no_overlap": true,
+  "pass": true
+ },
+ "billing-1440-light": {
+  "console_errors": [],
+  "api_errors": [],
+  "found": true,
+  "text": "Billing",
+  "title_attr": "Billing",
+  "textOverflow": "ellipsis",
+  "whiteSpace": "nowrap",
+  "overflowX": "hidden",
+  "title_scrollWidth": 36,
+  "title_clientWidth": 36,
+  "truncated": false,
+  "title_rect": [
+   355,
+   391
+  ],
+  "crumb_right": 391,
+  "next_control_left": 1372,
+  "header_rect": [
+   236,
+   1440
+  ],
+  "hamburger": false,
+  "doc_sw": 1440,
+  "doc_cw": 1440,
+  "main_sw": 1204,
+  "main_cw": 1204,
+  "innerWidth": 1440,
+  "theme": "light",
+  "no_page_overflow": true,
+  "no_overlap": true,
+  "pass": true
+ },
+ "help-facebook-1440-light": {
+  "console_errors": [],
+  "api_errors": [],
+  "found": true,
+  "text": "Connect your Facebook Page",
+  "title_attr": "Connect your Facebook Page",
+  "textOverflow": "ellipsis",
+  "whiteSpace": "nowrap",
+  "overflowX": "hidden",
+  "title_scrollWidth": 181,
+  "title_clientWidth": 181,
+  "truncated": false,
+  "title_rect": [
+   355,
+   536
+  ],
+  "crumb_right": 536,
+  "next_control_left": 1372,
+  "header_rect": [
+   236,
+   1440
+  ],
+  "hamburger": false,
+  "doc_sw": 1440,
+  "doc_cw": 1440,
+  "main_sw": 1204,
+  "main_cw": 1204,
+  "innerWidth": 1440,
+  "theme": "light",
+  "no_page_overflow": true,
+  "no_overlap": true,
+  "pass": true
+ }
+}

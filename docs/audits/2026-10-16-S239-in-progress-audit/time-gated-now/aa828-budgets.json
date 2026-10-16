@@ -1,0 +1,214 @@
+{
+    "Budgets": [
+        {
+            "BudgetName": "aa-cis-dev-monthly-app-booking",
+            "BudgetLimit": {
+                "Amount": "25.0",
+                "Unit": "USD"
+            },
+            "CostFilters": {
+                "TagKeyValue": [
+                    "user:App$booking"
+                ]
+            },
+            "CostTypes": {
+                "IncludeTax": true,
+                "IncludeSubscription": true,
+                "UseBlended": false,
+                "IncludeRefund": true,
+                "IncludeCredit": true,
+                "IncludeUpfront": true,
+                "IncludeRecurring": true,
+                "IncludeOtherSubscription": true,
+                "IncludeSupport": true,
+                "IncludeDiscount": true,
+                "UseAmortized": false
+            },
+            "TimeUnit": "MONTHLY",
+            "TimePeriod": {
+                "Start": "2026-10-01T07:00:00+07:00",
+                "End": "2087-06-15T07:00:00+07:00"
+            },
+            "CalculatedSpend": {
+                "ActualSpend": {
+                    "Amount": "0.003",
+                    "Unit": "USD"
+                }
+            },
+            "BudgetType": "COST",
+            "LastUpdatedTime": "2026-10-16T03:25:05.053000+07:00",
+            "HealthStatus": {
+                "Status": "HEALTHY",
+                "LastUpdatedTime": "2026-10-16T03:25:04.524000+07:00"
+            }
+        },
+        {
+            "BudgetName": "aa-cis-dev-monthly-app-cis",
+            "BudgetLimit": {
+                "Amount": "150.0",
+                "Unit": "USD"
+            },
+            "CostFilters": {
+                "TagKeyValue": [
+                    "user:App$cis"
+                ]
+            },
+            "CostTypes": {
+                "IncludeTax": true,
+                "IncludeSubscription": true,
+                "UseBlended": false,
+                "IncludeRefund": true,
+                "IncludeCredit": true,
+                "IncludeUpfront": true,
+                "IncludeRecurring": true,
+                "IncludeOtherSubscription": true,
+                "IncludeSupport": true,
+                "IncludeDiscount": true,
+                "UseAmortized": false
+            },
+            "TimeUnit": "MONTHLY",
+            "TimePeriod": {
+                "Start": "2026-10-01T07:00:00+07:00",
+                "End": "2087-06-15T07:00:00+07:00"
+            },
+            "CalculatedSpend": {
+                "ActualSpend": {
+                    "Amount": "0.049",
+                    "Unit": "USD"
+                }
+            },
+            "BudgetType": "COST",
+            "LastUpdatedTime": "2026-10-16T03:27:14.462000+07:00",
+            "HealthStatus": {
+                "Status": "HEALTHY",
+                "LastUpdatedTime": "2026-10-16T03:27:13.782000+07:00"
+            }
+        },
+        {
+            "BudgetName": "aa-cis-dev-monthly-app-shared",
+            "BudgetLimit": {
+                "Amount": "50.0",
+                "Unit": "USD"
+            },
+            "CostFilters": {
+                "TagKeyValue": [
+                    "user:App$shared"
+                ]
+            },
+            "CostTypes": {
+                "IncludeTax": true,
+                "IncludeSubscription": true,
+                "UseBlended": false,
+                "IncludeRefund": true,
+                "IncludeCredit": true,
+                "IncludeUpfront": true,
+                "IncludeRecurring": true,
+                "IncludeOtherSubscription": true,
+                "IncludeSupport": true,
+                "IncludeDiscount": true,
+                "UseAmortized": false
+            },
+            "TimeUnit": "MONTHLY",
+            "TimePeriod": {
+                "Start": "2026-10-01T07:00:00+07:00",
+                "End": "2087-06-15T07:00:00+07:00"
+            },
+            "CalculatedSpend": {
+                "ActualSpend": {
+                    "Amount": "0.103",
+                    "Unit": "USD"
+                }
+            },
+            "BudgetType": "COST",
+            "LastUpdatedTime": "2026-10-16T03:30:58.502000+07:00",
+            "HealthStatus": {
+                "Status": "HEALTHY",
+                "LastUpdatedTime": "2026-10-16T03:30:58.034000+07:00"
+            }
+        },
+        {
+            "BudgetName": "aa-cis-dev-monthly-app-tripplanner",
+            "BudgetLimit": {
+                "Amount": "25.0",
+                "Unit": "USD"
+            },
+            "CostFilters": {
+                "TagKeyValue": [
+                    "user:App$tripplanner"
+                ]
+            },
+            "CostTypes": {
+                "IncludeTax": true,
+                "IncludeSubscription": true,
+                "UseBlended": false,
+                "IncludeRefund": true,
+                "IncludeCredit": true,
+                "IncludeUpfront": true,
+                "IncludeRecurring": true,
+                "IncludeOtherSubscription": true,
+                "IncludeSupport": true,
+                "IncludeDiscount": true,
+                "UseAmortized": false
+            },
+            "TimeUnit": "MONTHLY",
+            "TimePeriod": {
+                "Start": "2026-10-01T07:00:00+07:00",
+                "End": "2087-06-15T07:00:00+07:00"
+            },
+            "CalculatedSpend": {
+                "ActualSpend": {
+                    "Amount": "0.014",
+                    "Unit": "USD"
+                }
+            },
+            "BudgetType": "COST",
+            "LastUpdatedTime": "2026-10-16T03:30:40.278000+07:00",
+            "HealthStatus": {
+                "Status": "HEALTHY",
+                "LastUpdatedTime": "2026-10-16T03:30:39.389000+07:00"
+            }
+        },
+        {
+            "BudgetName": "aa-cis-dev-monthly-total",
+            "BudgetLimit": {
+                "Amount": "250.0",
+                "Unit": "USD"
+            },
+            "CostFilters": {},
+            "CostTypes": {
+                "IncludeTax": true,
+                "IncludeSubscription": true,
+                "UseBlended": false,
+                "IncludeRefund": true,
+                "IncludeCredit": true,
+                "IncludeUpfront": true,
+                "IncludeRecurring": true,
+                "IncludeOtherSubscription": true,
+                "IncludeSupport": true,
+                "IncludeDiscount": true,
+                "UseAmortized": false
+            },
+            "TimeUnit": "MONTHLY",
+            "TimePeriod": {
+                "Start": "2026-07-01T07:00:00+07:00",
+                "End": "2087-06-15T07:00:00+07:00"
+            },
+            "CalculatedSpend": {
+                "ActualSpend": {
+                    "Amount": "80.038",
+                    "Unit": "USD"
+                },
+                "ForecastedSpend": {
+                    "Amount": "180.642",
+                    "Unit": "USD"
+                }
+            },
+            "BudgetType": "COST",
+            "LastUpdatedTime": "2026-10-16T03:23:19.342000+07:00",
+            "HealthStatus": {
+                "Status": "HEALTHY",
+                "LastUpdatedTime": "2026-10-16T03:23:18.788000+07:00"
+            }
+        }
+    ]
+}
