@@ -67,7 +67,7 @@ Every `shared` table is **owned by AA-CIS-App** unless the row says otherwise.
 | Table(s) | Owner | Notes |
 |---|---|---|
 | `tenants`, `membership_plans`, `admin_users`, `tenant_*` (brand rules, configs, integrations, usage) | CIS | Tenant and admin identity of the CIS platform. AA-Booking owns *customer* identity (ADR 0001). |
-| `job`, `job_worker` | CIS | Durable job runner of CIS (ADR 0003). Other owners do not enqueue here: each owner has its own job table from the shared DDL template (ADR 0003a; `booking.job` bk-002, `tripplanner.job` when needed). |
+| `job`, `job_worker` | CIS | Durable job runner of CIS (ADR 0003). Other owners do not enqueue here: each owner has its own job table from the shared DDL template (ADR 0003a; `booking.job` bk-002, `tripplanner.job` when needed). Job kind prefixes per owner (ADR 0003a decision 3, until `owners.yaml` exists, X1): CIS `shared.job` keeps its unprefixed names; Booking `bk_` (`booking.job` `job_kind_chk`); TripPlanner `tp_`; a new app `<prefix>_`. |
 | `llm_role_config`, `llm_model_catalog` | CIS | Model Gateway config; TripPlanner has SELECT (CIS 173). |
 | `llm_call_log`, `llm_shadow_log` | CIS | Cost log; TripPlanner has INSERT on `llm_call_log` only, rows tagged `quality_signal.app = "tripplanner"` (CIS 173). |
 | `decision_log`, `decision_question`, `decision_cache_hits_daily`, `jev_*` | CIS | Jev decision layer. |
