@@ -112,8 +112,8 @@ account Lambda quota of 10 and `desired_count = 1` hide it.
 
 | Pool (`application_name`) | DB role (today → after X1) | Pool `max_size` | Max processes | Worst case | `CONNECTION LIMIT` | Statement timeout (pool-level, C2.3f) | Lock timeout (pool-level) |
 |---|---|---|---|---|---|---|---|
-| `cis-api` (main) | `aa_cis_admin` → `cis_app` | **5** (today 10, `api/main.py:78`) | 10 (`modules/ecs/main.tf:391` `max_capacity`) | 50 | none on `aa_cis_admin`; `cis_app` 90 (shared with worker) | 30 s | 5 s |
-| `cis-tenant` | `aa_app_user` | **1** while canary (today 5, `aa544_tenant_pool.py:62`); `floor(limit / tasks)` later | 10 | 10 | **15** (25 when AA-544 Stage 2 widens) | 15 s (also the role backstop) | 5 s |
+| `cis-api` (main) | `aa_cis_admin` → `cis_app` | **5** (today 10, `api/main.py:78`; shrink decided from the `aa859_main_pool_gauge` baseline) | **7** (`modules/ecs/main.tf` `max_capacity`, 10 → 7 in AA-CIS-Infra #156, AA-859) | 35 | none on `aa_cis_admin`; `cis_app` 90 (shared with worker) | 30 s | 5 s |
+| `cis-tenant` | `aa_app_user` | **2** (`aa544_tenant_pool.py` `TENANT_POOL_MAX_SIZE`, AA-859 PR-S #774, 16/10/2026) = `floor(15 / 7)` | 7 | 14 | **15** (25 when AA-544 Stage 2 widens) | 15 s (also the role backstop) | 5 s |
 | `cis-worker` | `aa_cis_admin` → `cis_app` | `max(5, max_parallel + 2)` = 10 (`shared/jobs/worker.py:323`, default `max_parallel` 8) | 3 (`worker_max_count`) | 30 | in `cis_app` 90 | none at pool level; per job kind | per job kind (`SET LOCAL`) |
 | `tp-browse` | `tripplanner` | **1** (today 5, `backend/shared/db.py:60`) | reserved concurrency **10** | 10 | **30** (both TP pools + 10 for backfills and Lambda deploy overlap) | 10 s (Lambda timeout 30 s) | 3 s |
 | `tp-assembly` | `tripplanner` | **1** | reserved concurrency **10** | 10 | (in 30) | 20 s (Lambda timeout 60 s; also the role backstop) | 5 s |
@@ -121,7 +121,7 @@ account Lambda quota of 10 and `desired_count = 1` hide it.
 | `db-migrate` | `aa_cis_admin` → `db_migrator` | 1 | 1 | 1 | `db_migrator` **3** | 15 min (N5 runner default, set per session) | 5 s (MIG-9 runner default) |
 | ops / ECS exec scripts / break-glass | `aa_cis_admin` | — | — | 10 (reserve) | none (break-glass) | per session | per session |
 | RDS internal + `superuser_reserved_connections` | `rdsadmin` | — | — | ~5 | — | — | — |
-| **Total** | | | | **~136** | | ≤ 140 ceiling | |
+| **Total** | | | | **~124** (after AA-859 sizing: api 35, tenant 14) | | ≤ 135 ceiling (75 % of 181) | |
 
 ### C2.3 Rules
 
