@@ -1,0 +1,20 @@
+{
+ "at": "2026-10-16T13:31:12+00:00",
+ "tenant": "terra-family",
+ "method": "GET",
+ "path": "/v1/content-writing/pieces/6925acce-b2ed-49bd-a52b-41a74a2e6d60",
+ "status": 200,
+ "body": {
+  "piece_id": "6925acce-b2ed-49bd-a52b-41a74a2e6d60",
+  "angle_gate_request_id": "41e94397-aa14-45f6-9e23-337a0362fd19",
+  "channel": "linkedin",
+  "ready_state": "ready",
+  "content_text": "At the National Institute for Zorig Chusum, students master a single craft over years of study.\n\nZorig Chusum refers to Bhutan's thirteen traditional arts and c...",
+  "seo_title": null,
+  "meta_description": null,
+  "slug": null,
+  "route_hub_name": null,
+  "route_segment_count": null,
+  "created_at": "2026-10-16T08:35:53.173229+00:00"
+ }
+}

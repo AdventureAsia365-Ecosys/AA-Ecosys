@@ -1,0 +1,37 @@
+[
+ {
+  "case": "tenant list",
+  "method": "GET",
+  "path": "/admin/atoms?limit=1",
+  "status": 403,
+  "detail": "Staff only: /admin/atoms does not accept a tenant token"
+ },
+ {
+  "case": "tenant summary",
+  "method": "GET",
+  "path": "/admin/atoms/summary",
+  "status": 403,
+  "detail": "Staff only: /admin/atoms does not accept a tenant token"
+ },
+ {
+  "case": "tenant patch",
+  "method": "PATCH",
+  "path": "/admin/atoms/00000000-0000-0000-0000-000000000000",
+  "status": 403,
+  "detail": "Staff only: /admin/atoms does not accept a tenant token"
+ },
+ {
+  "case": "admin list",
+  "method": "GET",
+  "path": "/admin/atoms?limit=1",
+  "status": 200,
+  "detail": null
+ },
+ {
+  "case": "admin summary",
+  "method": "GET",
+  "path": "/admin/atoms/summary",
+  "status": 200,
+  "detail": null
+ }
+]

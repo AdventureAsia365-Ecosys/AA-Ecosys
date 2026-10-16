@@ -1,0 +1,10 @@
+{
+ "at": "2026-10-16T13:34:44+00:00",
+ "tenant": "terra-family",
+ "method": "DELETE",
+ "path": "/v1/publish-log/03c41f93-bbbd-423d-b078-68afa2728057",
+ "status": 404,
+ "body": {
+  "detail": "publish_log row not found or already unpublished"
+ }
+}

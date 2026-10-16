@@ -1,0 +1,10 @@
+{
+ "at": "2026-10-16T13:33:28+00:00",
+ "tenant": "atlas-hearth",
+ "method": "POST",
+ "path": "/v1/angle-gate/requests/41e94397-aa14-45f6-9e23-337a0362fd19/choose",
+ "status": 404,
+ "body": {
+  "detail": "request_id=41e94397-aa14-45f6-9e23-337a0362fd19 not found for this tenant"
+ }
+}
