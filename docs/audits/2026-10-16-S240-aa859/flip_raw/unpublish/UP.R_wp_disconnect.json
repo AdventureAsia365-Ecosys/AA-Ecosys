@@ -1,0 +1,15 @@
+{
+ "at": "2026-10-16T13:34:49+00:00",
+ "tenant": "terra-family",
+ "method": "DELETE",
+ "path": "/v1/integrations/wordpress",
+ "status": 200,
+ "body": {
+  "connected": false,
+  "site_url": null,
+  "connected_at": null,
+  "last_verified_at": null,
+  "last_verify_error": null,
+  "disconnected": true
+ }
+}

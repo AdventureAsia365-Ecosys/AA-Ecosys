@@ -1,0 +1,77 @@
+{
+ "started": "2026-10-16T12:16:01+00:00",
+ "finished": "2026-10-16T12:16:18+00:00",
+ "tenant_a": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+ "tenant_b": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+ "pass": 11,
+ "total": 11,
+ "checks": [
+  {
+   "id": "R0",
+   "desc": "terra-family GET /v1/content-writing/reviews",
+   "pass": true,
+   "evidence": "status=200 n=10"
+  },
+  {
+   "id": "R1",
+   "desc": "GET /v1/publish-log (aa544:publish_log_list_pool)",
+   "pass": true,
+   "evidence": "status=200"
+  },
+  {
+   "id": "R2",
+   "desc": "GET /v1/publish-log/pending (aa544:stage1:publish_pending_pool)",
+   "pass": true,
+   "evidence": "status=200"
+  },
+  {
+   "id": "R3",
+   "desc": "own latest-piece (aa817:content_piece_reads_pool)",
+   "pass": true,
+   "evidence": "status=200"
+  },
+  {
+   "id": "R4",
+   "desc": "own GET /pieces/{id} (aa544:stage5:get_piece_pool)",
+   "pass": true,
+   "evidence": "status=200"
+  },
+  {
+   "id": "R5",
+   "desc": "atlas-hearth -> terra-family's latest-piece",
+   "pass": true,
+   "evidence": "status=200"
+  },
+  {
+   "id": "R6",
+   "desc": "atlas-hearth -> terra-family's piece",
+   "pass": true,
+   "evidence": "status=404"
+  },
+  {
+   "id": "W0",
+   "desc": "WordPress status before",
+   "pass": true,
+   "evidence": "status=200 connected=False"
+  },
+  {
+   "id": "W1",
+   "desc": "connect the E2E WordPress test site",
+   "pass": true,
+   "evidence": "status=200"
+  },
+  {
+   "id": "W2",
+   "desc": "two parallel DELETEs: both 200, exactly one disconnected=true",
+   "pass": true,
+   "evidence": "statuses=[200, 200] disconnected=[False, True]"
+  },
+  {
+   "id": "W3",
+   "desc": "status after: not connected",
+   "pass": true,
+   "evidence": "status=200"
+  }
+ ],
+ "note": "random id probe 63957d73"
+}

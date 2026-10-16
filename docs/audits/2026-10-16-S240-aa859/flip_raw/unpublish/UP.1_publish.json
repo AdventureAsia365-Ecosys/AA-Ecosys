@@ -1,0 +1,17 @@
+{
+ "at": "2026-10-16T13:34:39+00:00",
+ "tenant": "terra-family",
+ "method": "POST",
+ "path": "/v1/publish-log/5ce24c74-229c-44cc-a520-b2a6c643a44d/publish",
+ "status": 200,
+ "body": {
+  "publish_id": "4989ac13-6784-4c75-a008-d295b96a9768",
+  "success": true,
+  "status": "published",
+  "external_id": "12",
+  "external_url": "https://fightcanvas.s3-tastewp.com/2026/10/16/mongolia-family-travel-khovsgol-gobi-guide-0b7aa38a/",
+  "published_at": "2026-10-16T13:34:40.274065+00:00",
+  "last_error": null,
+  "replayed": false
+ }
+}

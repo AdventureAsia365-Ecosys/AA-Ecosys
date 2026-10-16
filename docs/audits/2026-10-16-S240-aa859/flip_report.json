@@ -1,0 +1,501 @@
+[
+ {
+  "flag": "aa859:piece_edit_pool",
+  "started": "2026-10-16T13:30:41+00:00",
+  "checks": [
+   {
+    "id": "PE.0",
+    "desc": "precondition: A has a ready piece with content",
+    "pass": true,
+    "evidence": "piece=6925acce-b2ed-49bd-a52b-41a74a2e6d60 status=200 len=1204 sha=842f277ce09ffd0c"
+   },
+   {
+    "id": "PE.1",
+    "desc": "A PATCH own piece -> 200, tenant-safe shape",
+    "pass": true,
+    "evidence": "status=200 ready_state=ready text_is_probe=True has_status_key=False"
+   },
+   {
+    "id": "PE.2",
+    "desc": "A GET reads the probe text back",
+    "pass": true,
+    "evidence": "status=200"
+   },
+   {
+    "id": "PE.3",
+    "desc": "B PATCH A's piece -> 404, A's text unchanged",
+    "pass": true,
+    "evidence": "foreign_status=404 detail='piece_id=6925acce-b2ed-49bd-a52b-41a74a2e6d60 not found for this tenant, or not ' a_get=200"
+   },
+   {
+    "id": "PE.4",
+    "desc": "A PATCH random uuid -> 404",
+    "pass": true,
+    "evidence": "status=404 id=4c991aa1"
+   },
+   {
+    "id": "PE.R",
+    "desc": "restore: original text back, sha256 equal",
+    "pass": true,
+    "evidence": "patch=200 get=200 sha_before=842f277ce09ffd0c sha_after=842f277ce09ffd0c (2 content_piece.edited audit rows: probe + restore)"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=4 false=0"
+   }
+  ],
+  "kept_on": true,
+  "before": null,
+  "logs": {
+   "true": 4,
+   "false": 0,
+   "sample": [
+    "2026-10-16 13:31:13 [info     ] aa859_piece_edit               piece_id=6925acce-b2ed-49bd-a52b-41a74a2e6d60 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf updated=True used_tenant_pool=True",
+    "2026-10-16 13:31:12 [info     ] aa859_piece_edit               piece_id=4c991aa1-d864-4667-b4e7-98e3b2ebbca2 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf updated=False used_tenant_pool=True",
+    "2026-10-16 13:31:11 [info     ] aa859_piece_edit               piece_id=6925acce-b2ed-49bd-a52b-41a74a2e6d60 tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 updated=False used_tenant_pool=True",
+    "2026-10-16 13:31:10 [info     ] aa859_piece_edit               piece_id=6925acce-b2ed-49bd-a52b-41a74a2e6d60 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf updated=True used_tenant_pool=True"
+   ]
+  },
+  "after": "true",
+  "finished": "2026-10-16T13:31:47+00:00"
+ },
+ {
+  "flag": "aa859:t2_version_write_pool",
+  "started": "2026-10-16T13:31:47+00:00",
+  "checks": [
+   {
+    "id": "VW.0",
+    "desc": "precondition: A has an approved version on a tour with no pending version",
+    "pass": false,
+    "evidence": "my-versions status=200 total=14 approved_with_content=0 \u2014 none usable; status can only be restored to approved, so nothing safe to flip"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": false,
+    "evidence": "true=0 false=0"
+   }
+  ],
+  "kept_on": false,
+  "before": null,
+  "logs": {
+   "true": 0,
+   "false": 0,
+   "sample": []
+  },
+  "reverted": "2026-10-16T13:32:48+00:00",
+  "after": null,
+  "finished": "2026-10-16T13:32:58+00:00"
+ },
+ {
+  "flag": "aa859:angle_gate_decide_pool",
+  "started": "2026-10-16T13:32:58+00:00",
+  "checks": [
+   {
+    "id": "AG.0",
+    "desc": "precondition: A has an approved request with >= 2 angles, one chosen",
+    "pass": true,
+    "evidence": "request=41e94397-aa14-45f6-9e23-337a0362fd19 IDX0=0 IDX1=1 angles=3"
+   },
+   {
+    "id": "AG.1",
+    "desc": "B reopen A's approved request -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "AG.2",
+    "desc": "A reopen -> 200 reusable",
+    "pass": true,
+    "evidence": "status=200 req_status=reusable"
+   },
+   {
+    "id": "AG.3",
+    "desc": "A reopen again -> 409",
+    "pass": true,
+    "evidence": "status=409"
+   },
+   {
+    "id": "AG.4",
+    "desc": "B choose on A's reusable request -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "AG.5",
+    "desc": "A choose IDX1 -> 200 approved, only IDX1 chosen",
+    "pass": true,
+    "evidence": "status=200 req_status=approved chosen=[1]"
+   },
+   {
+    "id": "AG.6",
+    "desc": "A choose IDX1 again -> 409",
+    "pass": true,
+    "evidence": "status=409"
+   },
+   {
+    "id": "AG.7",
+    "desc": "A reopen / choose on a random uuid -> 404",
+    "pass": true,
+    "evidence": "reopen=404 choose=404 id=17ed1a18"
+   },
+   {
+    "id": "AG.R",
+    "desc": "restore: approved, chosen IDX0, same option ids",
+    "pass": true,
+    "evidence": "status=approved chosen=[0] IDX0=0 options_same=True reopen=200 choose_idx0=200 (updated_at moved)"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=10 false=0"
+   }
+  ],
+  "kept_on": true,
+  "before": null,
+  "logs": {
+   "true": 10,
+   "false": 0,
+   "sample": [
+    "2026-10-16 13:33:35 [info     ] aa859_angle_gate_choose        request_id=41e94397-aa14-45f6-9e23-337a0362fd19 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:33:33 [info     ] aa859_angle_gate_reopen        request_id=41e94397-aa14-45f6-9e23-337a0362fd19 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:33:32 [info     ] aa859_angle_gate_choose        request_id=17ed1a18-80d7-4795-b7d7-14c080b70a79 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:33:31 [info     ] aa859_angle_gate_reopen        request_id=17ed1a18-80d7-4795-b7d7-14c080b70a79 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:33:31 [info     ] aa859_angle_gate_choose        request_id=41e94397-aa14-45f6-9e23-337a0362fd19 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:33:30 [info     ] aa859_angle_gate_choose        request_id=41e94397-aa14-45f6-9e23-337a0362fd19 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True"
+   ]
+  },
+  "after": "true",
+  "finished": "2026-10-16T13:34:09+00:00"
+ },
+ {
+  "flag": "aa859:unpublish_pool",
+  "started": "2026-10-16T13:34:09+00:00",
+  "checks": [
+   {
+    "id": "UP.0a",
+    "desc": "precondition: A's WordPress = E2E test site (connect it if disconnected)",
+    "pass": true,
+    "evidence": "was disconnected; connect status=200"
+   },
+   {
+    "id": "UP.0b",
+    "desc": "precondition: A has a blog piece in /pending",
+    "pass": true,
+    "evidence": "status=200 blog_pending=3 piece=5ce24c74-229c-44cc-a520-b2a6c643a44d"
+   },
+   {
+    "id": "UP.1",
+    "desc": "setup: A publishes the piece to the E2E WP site (MAIN route) -> 200 published",
+    "pass": true,
+    "evidence": "status=200 success=True publish_id=4989ac13-6784-4c75-a008-d295b96a9768 external_id=12 detail='' (1 of A's daily publishes used)"
+   },
+   {
+    "id": "UP.2",
+    "desc": "B DELETE A's publish_id -> 404, A's row still published",
+    "pass": true,
+    "evidence": "foreign=404 detail='publish_log row not found or already unpublished' a_row=published"
+   },
+   {
+    "id": "UP.3",
+    "desc": "A DELETE own publish_id -> 200 unpublished, tenant:<A>, remote trashed",
+    "pass": true,
+    "evidence": "status=200 row_status=unpublished by_ok=True remote=trashed detail=''"
+   },
+   {
+    "id": "UP.4",
+    "desc": "WP read-back: post status trash",
+    "pass": true,
+    "evidence": "wp_status=200 post_status=trash"
+   },
+   {
+    "id": "UP.5",
+    "desc": "A DELETE again -> 404 (status guard)",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "UP.6",
+    "desc": "A DELETE random uuid -> 404",
+    "pass": true,
+    "evidence": "status=404 id=03c41f93"
+   },
+   {
+    "id": "UP.7",
+    "desc": "publish-log shows unpublished; the piece is back in /pending",
+    "pass": true,
+    "evidence": "row=unpublished piece_back_in_pending=True"
+   },
+   {
+    "id": "UP.R",
+    "desc": "restore: no published row left, WP post deleted, WP integration as it started",
+    "pass": true,
+    "evidence": "wp_force_delete=200 deleted=True wp_disconnect=200 connected_after=False"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=5 false=0"
+   }
+  ],
+  "kept_on": true,
+  "before": null,
+  "logs": {
+   "true": 5,
+   "false": 0,
+   "sample": [
+    "2026-10-16 13:34:46 [info     ] aa859_unpublish                publish_id=03c41f93-bbbd-423d-b078-68afa2728057 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:34:45 [info     ] aa859_unpublish                publish_id=4989ac13-6784-4c75-a008-d295b96a9768 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:34:43 [info     ] tenant_self_unpublish          channel=blog publish_id=4989ac13-6784-4c75-a008-d295b96a9768 remote=trashed tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:34:42 [info     ] aa859_unpublish                publish_id=4989ac13-6784-4c75-a008-d295b96a9768 tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:34:40 [info     ] aa859_unpublish                publish_id=4989ac13-6784-4c75-a008-d295b96a9768 tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True"
+   ]
+  },
+  "after": "true",
+  "finished": "2026-10-16T13:35:25+00:00"
+ },
+ {
+  "flag": "aa859:integration_connect_pool",
+  "started": "2026-10-16T13:35:25+00:00",
+  "checks": [
+   {
+    "id": "IC.0",
+    "desc": "status as A and B (WordPress + Facebook) -> 200 with the status shape",
+    "pass": true,
+    "evidence": "terra/wo=200:False terra/fa=200:False atlas/wo=200:False atlas/fa=200:False"
+   },
+   {
+    "id": "IC.1",
+    "desc": "precondition: creds to re-post without changing A's connection",
+    "pass": true,
+    "evidence": "E2E test site (A was disconnected)"
+   },
+   {
+    "id": "IC.2",
+    "desc": "A POST connect -> 200 connected, site_url as expected",
+    "pass": true,
+    "evidence": "status=200 site_host_ok=True was_connected=False connected_at_unchanged=n/a (new row)"
+   },
+   {
+    "id": "IC.3",
+    "desc": "A GET status after connect -> connected, same site",
+    "pass": true,
+    "evidence": "status=200 connected=True"
+   },
+   {
+    "id": "IC.4",
+    "desc": "A POST test -> 200 success, last_verified_at moved",
+    "pass": true,
+    "evidence": "status=200 success=True verified_moved=True error=''"
+   },
+   {
+    "id": "IC.5",
+    "desc": "B's WordPress / Facebook status unchanged by A's writes",
+    "pass": true,
+    "evidence": "same=[True, True]"
+   },
+   {
+    "id": "IC.6",
+    "desc": "B POST test -> 404 when B has no WordPress connection",
+    "pass": true,
+    "evidence": "status=404 detail='WordPress is not connected yet'"
+   },
+   {
+    "id": "IC.R",
+    "desc": "restore: A's WordPress connection as it started",
+    "pass": true,
+    "evidence": "connected_after=False disconnect=200"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=12 false=0"
+   }
+  ],
+  "kept_on": true,
+  "before": null,
+  "logs": {
+   "true": 12,
+   "false": 0,
+   "sample": [
+    "2026-10-16 13:36:01 [info     ] aa859_integration_status       integration_type=wordpress tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:35:59 [info     ] aa859_integration_status       integration_type=wordpress tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:35:59 [info     ] aa859_integration_test         integration_type=wordpress tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True",
+    "2026-10-16 13:35:58 [info     ] aa859_integration_status       integration_type=facebook tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True",
+    "2026-10-16 13:35:57 [info     ] aa859_integration_status       integration_type=wordpress tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True",
+    "2026-10-16 13:35:55 [info     ] aa859_integration_test         integration_type=wordpress tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True"
+   ]
+  },
+  "after": "true",
+  "finished": "2026-10-16T13:36:34+00:00"
+ },
+ {
+  "flag": "aa859:t2_version_reads_pool",
+  "started": "2026-10-16T13:36:34+00:00",
+  "checks": [
+   {
+    "id": "VR.1",
+    "desc": "A my-versions / pool / versions/{V} -> 200 with the expected keys",
+    "pass": true,
+    "evidence": "my_versions total=14 pool total=892 countries=14 V=5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2 job_status=succeeded missing_ver=[]"
+   },
+   {
+    "id": "VR.2",
+    "desc": "consistency: V's job_status list = detail, history ids are A's, pool tenant_id = A",
+    "pass": true,
+    "evidence": "list_job=succeeded detail_job=succeeded history_in_list=True (list complete=True) pool_tenant_ok=True"
+   },
+   {
+    "id": "VR.3",
+    "desc": "pool already_rewritten matches A's own tours",
+    "pass": true,
+    "evidence": "pool_rows=20 rewritten=0 mismatch=0 null_country_rows=0"
+   },
+   {
+    "id": "VR.4",
+    "desc": "B GET A's versions/{V} -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "VR.5",
+    "desc": "B my-versions holds none of A's ids",
+    "pass": true,
+    "evidence": "status=200 b_total=12 overlap=0"
+   },
+   {
+    "id": "VR.6",
+    "desc": "A GET versions/{random uuid} -> 404",
+    "pass": true,
+    "evidence": "status=404 id=f28a61e2"
+   },
+   {
+    "id": "VR.7",
+    "desc": "flag-on answers match the flag-off baseline",
+    "pass": true,
+    "evidence": "baseline_at=2026-10-16T13:02:57+00:00 same (new versions since allowed)"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=6 false=0"
+   }
+  ],
+  "kept_on": true,
+  "before": null,
+  "logs": {
+   "true": 6,
+   "false": 0,
+   "sample": [
+    "2026-10-16 13:37:08 [info     ] aa859_t2_version_read          found=False route=version tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:37:03 [info     ] aa859_t2_version_read          count=12 route=my_versions tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True",
+    "2026-10-16 13:37:02 [info     ] aa859_t2_version_read          found=False route=version tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True",
+    "2026-10-16 13:37:01 [info     ] aa859_t2_version_read          found=True route=version tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:37:00 [info     ] aa859_t2_version_read          count=20 route=pool tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True",
+    "2026-10-16 13:36:58 [info     ] aa859_t2_version_read          count=14 route=my_versions tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True"
+   ]
+  },
+  "after": "true",
+  "finished": "2026-10-16T13:37:41+00:00"
+ },
+ {
+  "flag": "aa859:t2_version_write_pool",
+  "run": "w6_verify (run 2: ai_generated V, DB restore of V's stored status)",
+  "started": "2026-10-16T13:39:55+00:00",
+  "checks": [
+   {
+    "id": "0",
+    "desc": "precondition: V found, stored status recorded (DB, read-only)",
+    "pass": true,
+    "evidence": "V=5bf13cc9 stored_status=ai_generated version_number=5 max=5"
+   },
+   {
+    "id": "1",
+    "desc": "A approve V -> 200 approved",
+    "pass": true,
+    "evidence": "status=200 body_status=approved"
+   },
+   {
+    "id": "2",
+    "desc": "A reject V -> 200 rejected",
+    "pass": true,
+    "evidence": "status=200 body_status=rejected"
+   },
+   {
+    "id": "3",
+    "desc": "A approve V -> 200 approved",
+    "pass": true,
+    "evidence": "status=200 body_status=approved"
+   },
+   {
+    "id": "4",
+    "desc": "A edit with {} -> 400",
+    "pass": true,
+    "evidence": "status=400"
+   },
+   {
+    "id": "5",
+    "desc": "A edit -> 200, new version number = max + 1",
+    "pass": true,
+    "evidence": "status=200 new_version_number=6 expected=6 new_id=14531bf9"
+   },
+   {
+    "id": "6",
+    "desc": "B approve A's V -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "7",
+    "desc": "B reject A's V -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "8",
+    "desc": "B edit A's V -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "9",
+    "desc": "A on a random uuid -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=8 false=0"
+   },
+   {
+    "id": "R",
+    "desc": "restore: N rejected via API, V's stored status back to the recorded value",
+    "pass": true,
+    "evidence": "N=14531bf9 reject_ok=True V_status=ai_generated (was ai_generated) UPDATE 1"
+   }
+  ],
+  "kept_on": true,
+  "logs": {
+   "true": 8,
+   "false": 0,
+   "sample": [
+    "2026-10-16 13:40:27 [info     ] aa859_t2_version_write         action=approve tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True version_id=fb9d8c8b-6d64-46ab-8c3b-dbb3ee40e0a8",
+    "2026-10-16 13:40:26 [info     ] aa859_t2_version_write         action=edit tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True version_id=5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+    "2026-10-16 13:40:25 [info     ] aa859_t2_version_write         action=reject tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True version_id=5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+    "2026-10-16 13:40:24 [info     ] aa859_t2_version_write         action=approve tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 used_tenant_pool=True version_id=5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+    "2026-10-16 13:40:24 [info     ] aa859_t2_version_write         action=edit tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True version_id=5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+    "2026-10-16 13:40:22 [info     ] aa859_t2_version_write         action=approve tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True version_id=5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2"
+   ]
+  },
+  "after": "true",
+  "finished": "2026-10-16T13:41:12+00:00"
+ }
+]

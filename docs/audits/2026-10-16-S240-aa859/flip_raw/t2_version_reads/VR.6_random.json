@@ -1,0 +1,10 @@
+{
+ "at": "2026-10-16T13:37:07+00:00",
+ "tenant": "terra-family",
+ "method": "GET",
+ "path": "/v1/tours/versions/f28a61e2-592b-4b3d-9545-66d29d2c9102",
+ "status": 404,
+ "body": {
+  "detail": "Version not found"
+ }
+}

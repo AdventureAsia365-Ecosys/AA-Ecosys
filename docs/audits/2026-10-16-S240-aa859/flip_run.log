@@ -1,0 +1,53 @@
+PASS [piece_edit] PE.0 precondition: A has a ready piece with content | piece=6925acce-b2ed-49bd-a52b-41a74a2e6d60 status=200 len=1204 sha=842f277ce09ffd0c
+PASS [piece_edit] PE.1 A PATCH own piece -> 200, tenant-safe shape | status=200 ready_state=ready text_is_probe=True has_status_key=False
+PASS [piece_edit] PE.2 A GET reads the probe text back | status=200
+PASS [piece_edit] PE.3 B PATCH A's piece -> 404, A's text unchanged | foreign_status=404 detail='piece_id=6925acce-b2ed-49bd-a52b-41a74a2e6d60 not found for this tenant, or not ' a_get=200
+PASS [piece_edit] PE.4 A PATCH random uuid -> 404 | status=404 id=4c991aa1
+PASS [piece_edit] PE.R restore: original text back, sha256 equal | patch=200 get=200 sha_before=842f277ce09ffd0c sha_after=842f277ce09ffd0c (2 content_piece.edited audit rows: probe + restore)
+PASS [piece_edit] LOG used_tenant_pool=True seen, no False with the flag on | true=4 false=0
+[piece_edit] KEPT ON
+FAIL [t2_version_write] VW.0 precondition: A has an approved version on a tour with no pending version | my-versions status=200 total=14 approved_with_content=0 — none usable; status can only be restored to approved, so nothing safe to flip
+FAIL [t2_version_write] LOG used_tenant_pool=True seen, no False with the flag on | true=0 false=0
+[t2_version_write] REVERTED (off)
+PASS [angle_gate_decide] AG.0 precondition: A has an approved request with >= 2 angles, one chosen | request=41e94397-aa14-45f6-9e23-337a0362fd19 IDX0=0 IDX1=1 angles=3
+PASS [angle_gate_decide] AG.1 B reopen A's approved request -> 404 | status=404
+PASS [angle_gate_decide] AG.2 A reopen -> 200 reusable | status=200 req_status=reusable
+PASS [angle_gate_decide] AG.3 A reopen again -> 409 | status=409
+PASS [angle_gate_decide] AG.4 B choose on A's reusable request -> 404 | status=404
+PASS [angle_gate_decide] AG.5 A choose IDX1 -> 200 approved, only IDX1 chosen | status=200 req_status=approved chosen=[1]
+PASS [angle_gate_decide] AG.6 A choose IDX1 again -> 409 | status=409
+PASS [angle_gate_decide] AG.7 A reopen / choose on a random uuid -> 404 | reopen=404 choose=404 id=17ed1a18
+PASS [angle_gate_decide] AG.R restore: approved, chosen IDX0, same option ids | status=approved chosen=[0] IDX0=0 options_same=True reopen=200 choose_idx0=200 (updated_at moved)
+PASS [angle_gate_decide] LOG used_tenant_pool=True seen, no False with the flag on | true=10 false=0
+[angle_gate_decide] KEPT ON
+PASS [unpublish] UP.0a precondition: A's WordPress = E2E test site (connect it if disconnected) | was disconnected; connect status=200
+PASS [unpublish] UP.0b precondition: A has a blog piece in /pending | status=200 blog_pending=3 piece=5ce24c74-229c-44cc-a520-b2a6c643a44d
+PASS [unpublish] UP.1 setup: A publishes the piece to the E2E WP site (MAIN route) -> 200 published | status=200 success=True publish_id=4989ac13-6784-4c75-a008-d295b96a9768 external_id=12 detail='' (1 of A's daily publishes used)
+PASS [unpublish] UP.2 B DELETE A's publish_id -> 404, A's row still published | foreign=404 detail='publish_log row not found or already unpublished' a_row=published
+PASS [unpublish] UP.3 A DELETE own publish_id -> 200 unpublished, tenant:<A>, remote trashed | status=200 row_status=unpublished by_ok=True remote=trashed detail=''
+PASS [unpublish] UP.4 WP read-back: post status trash | wp_status=200 post_status=trash
+PASS [unpublish] UP.5 A DELETE again -> 404 (status guard) | status=404
+PASS [unpublish] UP.6 A DELETE random uuid -> 404 | status=404 id=03c41f93
+PASS [unpublish] UP.7 publish-log shows unpublished; the piece is back in /pending | row=unpublished piece_back_in_pending=True
+PASS [unpublish] UP.R restore: no published row left, WP post deleted, WP integration as it started | wp_force_delete=200 deleted=True wp_disconnect=200 connected_after=False
+PASS [unpublish] LOG used_tenant_pool=True seen, no False with the flag on | true=5 false=0
+[unpublish] KEPT ON
+PASS [integration_connect] IC.0 status as A and B (WordPress + Facebook) -> 200 with the status shape | terra/wo=200:False terra/fa=200:False atlas/wo=200:False atlas/fa=200:False
+PASS [integration_connect] IC.1 precondition: creds to re-post without changing A's connection | E2E test site (A was disconnected)
+PASS [integration_connect] IC.2 A POST connect -> 200 connected, site_url as expected | status=200 site_host_ok=True was_connected=False connected_at_unchanged=n/a (new row)
+PASS [integration_connect] IC.3 A GET status after connect -> connected, same site | status=200 connected=True
+PASS [integration_connect] IC.4 A POST test -> 200 success, last_verified_at moved | status=200 success=True verified_moved=True error=''
+PASS [integration_connect] IC.5 B's WordPress / Facebook status unchanged by A's writes | same=[True, True]
+PASS [integration_connect] IC.6 B POST test -> 404 when B has no WordPress connection | status=404 detail='WordPress is not connected yet'
+PASS [integration_connect] IC.R restore: A's WordPress connection as it started | connected_after=False disconnect=200
+PASS [integration_connect] LOG used_tenant_pool=True seen, no False with the flag on | true=12 false=0
+[integration_connect] KEPT ON
+PASS [t2_version_reads] VR.1 A my-versions / pool / versions/{V} -> 200 with the expected keys | my_versions total=14 pool total=892 countries=14 V=5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2 job_status=succeeded missing_ver=[]
+PASS [t2_version_reads] VR.2 consistency: V's job_status list = detail, history ids are A's, pool tenant_id = A | list_job=succeeded detail_job=succeeded history_in_list=True (list complete=True) pool_tenant_ok=True
+PASS [t2_version_reads] VR.3 pool already_rewritten matches A's own tours | pool_rows=20 rewritten=0 mismatch=0 null_country_rows=0
+PASS [t2_version_reads] VR.4 B GET A's versions/{V} -> 404 | status=404
+PASS [t2_version_reads] VR.5 B my-versions holds none of A's ids | status=200 b_total=12 overlap=0
+PASS [t2_version_reads] VR.6 A GET versions/{random uuid} -> 404 | status=404 id=f28a61e2
+PASS [t2_version_reads] VR.7 flag-on answers match the flag-off baseline | baseline_at=2026-10-16T13:02:57+00:00 same (new versions since allowed)
+PASS [t2_version_reads] LOG used_tenant_pool=True seen, no False with the flag on | true=6 false=0
+[t2_version_reads] KEPT ON

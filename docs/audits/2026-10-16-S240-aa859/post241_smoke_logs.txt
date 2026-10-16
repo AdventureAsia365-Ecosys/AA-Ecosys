@@ -1,0 +1,7 @@
+2026-10-16 12:16:17 [info     ] aa817_integration_disconnect   integration_type=wordpress tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True
+2026-10-16 12:16:17 [info     ] aa859_tenant_pool_timing       flag_key=aa544:integration_disconnect_pool hold_ms=8.5 wait_ms=0.0
+2026-10-16 12:16:17 [info     ] aa817_integration_disconnect   integration_type=wordpress tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True
+2026-10-16 12:16:17 [info     ] aa859_tenant_pool_timing       flag_key=aa544:integration_disconnect_pool hold_ms=7.0 wait_ms=0.0
+2026-10-16 12:16:18 [info     ] aa859_tenant_pool_timing       flag_key=aa544:integration_disconnect_pool hold_ms=8.4 wait_ms=0.0
+2026-10-16 12:16:18 [info     ] aa859_tenant_pool_timing       flag_key=aa544:integration_disconnect_pool hold_ms=9.5 wait_ms=0.0
+2026-10-16 12:16:18 [info     ] aa859_integration_disconnect_raced integration_type=wordpress tenant_id=20d07d32-ed98-405f-81d5-0c2399c9fcdf used_tenant_pool=True

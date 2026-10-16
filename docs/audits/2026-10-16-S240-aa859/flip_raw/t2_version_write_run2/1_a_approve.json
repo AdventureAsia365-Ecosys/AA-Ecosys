@@ -1,0 +1,11 @@
+{
+ "at": "2026-10-16T13:40:20+00:00",
+ "tenant": "terra-family",
+ "method": "PATCH",
+ "path": "/v1/tours/versions/5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2",
+ "status": 200,
+ "body": {
+  "status": "approved",
+  "version_id": "5bf13cc9-b5e8-42a2-98d5-8cce720ce2e2"
+ }
+}

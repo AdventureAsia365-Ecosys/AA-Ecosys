@@ -1,0 +1,10 @@
+{
+ "at": "2026-10-16T13:31:11+00:00",
+ "tenant": "terra-family",
+ "method": "PATCH",
+ "path": "/v1/content-writing/pieces/4c991aa1-d864-4667-b4e7-98e3b2ebbca2",
+ "status": 404,
+ "body": {
+  "detail": "piece_id=4c991aa1-d864-4667-b4e7-98e3b2ebbca2 not found for this tenant, or not in an editable state"
+ }
+}
