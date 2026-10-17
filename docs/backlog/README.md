@@ -22,7 +22,6 @@ _Last updated: S241, 17/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 
 - **Approve and post** the S241 Jira draft (PR-18) and the Zalo note to Ms. Thư: `docs/sessions/2026-10-17-S241-jira-drafts.md`.
 - **Cognito break-glass:** set the break-glass secret value by hand when the agent has created the user (AA-854).
-- **AA-ACP-Core** (private, archived, 23 KB): delete or keep.
 - AA-855 UAT videos: when Nghiệp says (after the tech work). Product questions from S238: T2 day separator; "— N Days" vs ", N Days".
 - AA-829: approve deleting/securing the 2026-09-16 real-data dumps; DSN CNAME secrets are edited by hand.
 
