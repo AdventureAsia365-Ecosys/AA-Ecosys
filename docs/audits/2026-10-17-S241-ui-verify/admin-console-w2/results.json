@@ -1,0 +1,2765 @@
+{
+ "ui": {
+  "started": "2026-10-17T11:27:48.976Z",
+  "logins": [
+   {
+    "url": "/login",
+    "status": 200
+   },
+   {
+    "url": "https://aa-booking-admin.vercel.app/api/auth/login",
+    "via": "booking-form"
+   },
+   {
+    "url": "https://aa-booking-admin.vercel.app/api/auth/login",
+    "via": "booking-form"
+   },
+   {
+    "url": "https://aa-booking-admin.vercel.app/api/auth/login",
+    "via": "booking-form"
+   }
+  ],
+  "blocked_writes": [],
+  "leak_hits": [],
+  "runs": [
+   {
+    "page": "overview/sidebar",
+    "combo": "1440-light",
+    "shots": [
+     "sidebar-1440-light.png",
+     "sidebar-platform-folded-after-reload-1440-light.png",
+     "sidebar-rail-1440-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "url": "/admin/overview",
+    "overflow": {
+     "sw": 1440,
+     "iw": 1440
+    },
+    "sidebar": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "true",
+      "groups": [
+       "PEOPLE & ACCESS",
+       "AI & SPEND",
+       "DEVELOPER"
+      ],
+      "items": [
+       "Overview",
+       "Staff",
+       "Tenants",
+       "Jobs",
+       "External Spend",
+       "Jev Decisions",
+       "API Docs"
+      ]
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": null,
+     "breadcrumb": "Platform / Overview Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code"
+    },
+    "after_fold": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "false",
+      "groups": [],
+      "items": []
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": "platform",
+     "breadcrumb": "Platform / Overview Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code"
+    },
+    "after_reload": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "false",
+      "groups": [],
+      "items": []
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": "platform",
+     "breadcrumb": "Platform / Overview Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code"
+    },
+    "after_unfold": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "true",
+      "groups": [
+       "PEOPLE & ACCESS",
+       "AI & SPEND",
+       "DEVELOPER"
+      ],
+      "items": [
+       "Overview",
+       "Staff",
+       "Tenants",
+       "Jobs",
+       "External Spend",
+       "Jev Decisions",
+       "API Docs"
+      ]
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": null,
+     "breadcrumb": "Platform / Overview Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code"
+    },
+    "rail": {
+     "platform": {
+      "present": true,
+      "header": null,
+      "expanded": null,
+      "groups": [
+       "People & access",
+       "AI & spend",
+       "Developer"
+      ],
+      "items": [
+       "Overview",
+       "Staff",
+       "Tenants",
+       "Jobs",
+       "External Spend",
+       "Jev Decisions",
+       "API Docs"
+      ]
+     },
+     "cis": {
+      "present": true,
+      "header": null,
+      "expanded": null,
+      "groups": [
+       "Pipeline",
+       "Assets",
+       "Intelligence",
+       "Tenant output"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": ""
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": ""
+      }
+     ],
+     "collapsed": "true",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": null,
+     "breadcrumb": "Platform / Overview Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code"
+    },
+    "rail_dividers": [
+     "Platform",
+     "CIS Content"
+    ]
+   },
+   {
+    "combo": "1440-light",
+    "page": "nav-reachability",
+    "entries": [
+     {
+      "label": "Overview",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/overview",
+      "h1": "Overview",
+      "crumb": "Platform / Overview Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-overview-1440-light.png"
+     },
+     {
+      "label": "Staff",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/platform/staff",
+      "h1": "Staff",
+      "crumb": "Platform / Staff Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-platform_staff-1440-light.png"
+     },
+     {
+      "label": "Tenants",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/tenants",
+      "h1": "Tenants",
+      "crumb": "Platform / Tenants Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-tenants-1440-light.png"
+     },
+     {
+      "label": "Jobs",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/jobs",
+      "h1": "Jobs",
+      "crumb": "Platform / Jobs Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-jobs-1440-light.png"
+     },
+     {
+      "label": "External Spend",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/llm-usage",
+      "h1": "External Spend",
+      "crumb": "Platform / External Spend Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-llm-usage-1440-light.png"
+     },
+     {
+      "label": "Jev Decisions",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/decisions",
+      "h1": "Jev Decisions",
+      "crumb": "Platform / Jev Decisions Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-decisions-1440-light.png"
+     },
+     {
+      "label": "API Docs",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/api-docs",
+      "h1": "API Docs",
+      "crumb": "Platform / API Docs Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-api-docs-1440-light.png"
+     },
+     {
+      "label": "Upload (S0)",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/upload",
+      "h1": "Upload (S0)",
+      "crumb": "CIS Content / Upload (S0) Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-upload-1440-light.png"
+     },
+     {
+      "label": "Rewrite (S1)",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/s1-rewrite",
+      "h1": "S1 Rewrite",
+      "crumb": "CIS Content / Rewrite (S1) Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-s1-rewrite-1440-light.png"
+     },
+     {
+      "label": "Review Queue",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/review",
+      "h1": "Review Queue",
+      "crumb": "CIS Content / Review Queue Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-review-1440-light.png"
+     },
+     {
+      "label": "Master Content",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/master-content",
+      "h1": "Master Content",
+      "crumb": "CIS Content / Master Content Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-co",
+      "overflow_x": false,
+      "shot": "page-master-content-1440-light.png"
+     },
+     {
+      "label": "Photos",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/photos",
+      "h1": "Photos",
+      "crumb": "CIS Content / Photos Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-photos-1440-light.png"
+     },
+     {
+      "label": "Social Content",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/atom-curation",
+      "h1": "Social Content",
+      "crumb": "CIS Content / Social Content Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-co",
+      "overflow_x": false,
+      "shot": "page-atom-curation-1440-light.png"
+     },
+     {
+      "label": "SEO Intelligence",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/seo-intelligence",
+      "h1": "SEO Intelligence",
+      "crumb": "CIS Content / SEO Intelligence Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-",
+      "overflow_x": false,
+      "shot": "page-seo-intelligence-1440-light.png"
+     },
+     {
+      "label": "Content Trace",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/tenant-activity",
+      "h1": "06 \u00b7 Content Trace",
+      "crumb": "CIS Content / Content Trace Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-cod",
+      "overflow_x": false,
+      "shot": "page-tenant-activity-1440-light.png"
+     },
+     {
+      "label": "A4 Quality",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/platform-stats",
+      "h1": "07 \u00b7 A4 Quality",
+      "crumb": "CIS Content / A4 Quality Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-platform-stats-1440-light.png"
+     },
+     {
+      "label": "Content Quality",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/content-quality",
+      "h1": "Content Quality",
+      "crumb": "CIS Content / Content Quality Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-c",
+      "overflow_x": false,
+      "shot": "page-content-quality-1440-light.png"
+     },
+     {
+      "label": "Settings",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/settings",
+      "h1": "Settings",
+      "crumb": "Admin / Settings Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code",
+      "overflow_x": false,
+      "shot": "page-settings-1440-light.png"
+     }
+    ]
+   },
+   {
+    "page": "platform/staff",
+    "combo": "1440-light",
+    "shots": [
+     "staff-list-1440-light.png",
+     "staff-drawer-1440-light.png"
+    ],
+    "xhr": [
+     {
+      "url": "/api/admin/platform/staff",
+      "status": 200,
+      "top_keys": [
+       "staff",
+       "total",
+       "active",
+       "active_by_role"
+      ],
+      "row_keys": [
+       "created_at",
+       "id",
+       "is_active",
+       "role",
+       "updated_at",
+       "username"
+      ],
+      "rows": 7,
+      "forbidden_words": [],
+      "leak": false
+     },
+     {
+      "url": "/api/admin/platform/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+      "status": 200,
+      "top_keys": [
+       "id",
+       "username",
+       "role",
+       "is_active",
+       "created_at",
+       "updated_at"
+      ],
+      "row_keys": null,
+      "rows": null,
+      "forbidden_words": [],
+      "leak": false
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "table": {
+     "headers": [
+      "USERNAME",
+      "ROLE",
+      "STATUS",
+      "CREATED",
+      "UPDATED",
+      "BOOKING"
+     ],
+     "n_rows": 7,
+     "rows": [
+      [
+       "admin",
+       "ADMINISTRATOR",
+       "ACTIVE",
+       "2 Jul 2026",
+       "2 Jul 2026, 11:01",
+       "Open in Booking"
+      ],
+      [
+       "e2e-claude-code",
+       "ADMINISTRATOR",
+       "ACTIVE",
+       "8 Oct 2026",
+       "8 Oct 2026, 15:25",
+       "Open in Booking"
+      ],
+      [
+       "e2e-claude-code-2",
+       "ADMINISTRATOR",
+       "ACTIVE",
+       "16 Oct 2026",
+       "16 Oct 2026, 08:12",
+       "Open in Booking"
+      ],
+      [
+       "nghiep",
+       "ADMINISTRATOR",
+       "ACTIVE",
+       "1 Jul 2026",
+       "1 Jul 2026, 15:54",
+       "Open in Booking"
+      ],
+      [
+       "trang",
+       "REVIEWER",
+       "ACTIVE",
+       "14 Aug 2026",
+       "14 Aug 2026, 10:14",
+       "Open in Booking"
+      ],
+      [
+       "e2e-test-admin",
+       "ADMINISTRATOR",
+       "INACTIVE",
+       "22 Jul 2026",
+       "9 Oct 2026, 10:45",
+       "Open in Booking"
+      ],
+      [
+       "s226_rev_ui",
+       "REVIEWER",
+       "INACTIVE",
+       "11 Oct 2026",
+       "11 Oct 2026, 18:52",
+       "Open in Booking"
+      ]
+     ],
+     "booking_links": [
+      {
+       "text": "Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/",
+       "target": "_blank"
+      },
+      {
+       "text": "Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/2d8e5a2f-3722-4571-9327-177d10b74127",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/58a130c7-5f39-4eec-8297-8a36c3318a63",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/c26f6938-2ae4-4977-b5e4-c185ff24981e",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/c18c1400-c4f8-4feb-825c-e777255b724b",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/b4c220b1-5f9b-48a6-9ac7-93ecbe227065",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/29d29291-7e52-458d-b638-fefea6ef749d",
+       "target": "_blank"
+      }
+     ],
+     "counts": "7 Accounts 5 Active 4 Active administrator 1 Active reviewer 0 Active content team",
+     "pw_inputs": 0,
+     "sensitive_word_hits": [],
+     "overflow_x": false
+    },
+    "drawer": {
+     "text": "admin ADMINISTRATOR ACTIVE Username admin CIS role Administrator Booking role See in Booking admin Status Active Created 2 Jul 2026, 11:01 Updated 2 Jul 2026, 11:01 Account id 93efce82-fa4b-4b6f-818e-7bb135c00dda Changing a role or deactivating an account is not available here yet. It will be limited to the platform owner and recorded in the audit log. Open this account in Booking admin",
+     "links": [
+      {
+       "text": "See in Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+       "target": "_blank"
+      },
+      {
+       "text": "Open this account in Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+       "target": "_blank"
+      }
+     ],
+     "pw_inputs": 0,
+     "url": "/admin/platform/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+     "sensitive": []
+    },
+    "url_after_close": "/admin/platform/staff"
+   },
+   {
+    "page": "platform/staff/[id] deep link",
+    "combo": "1440-light",
+    "shots": [
+     "staff-deeplink-1440-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "drawer_open": "admin"
+   },
+   {
+    "page": "master-content",
+    "combo": "1440-light",
+    "shots": [
+     "master-content-1440-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "controls": {
+     "Set Inactive": 20,
+     "Trash": 20
+    },
+    "rows": 20
+   },
+   {
+    "page": "settings",
+    "combo": "1440-light",
+    "shots": [
+     "settings-brand-1440-light.png",
+     "settings-models-1440-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "tabs": [
+     "Pipeline Gates",
+     "Brand Identity",
+     "SEO Config",
+     "LLM Models",
+     "Jev Credit",
+     "Tenant Info",
+     "UI Kit"
+    ],
+    "brand": {
+     "buttons": [
+      "Pipeline Gates",
+      "Brand Identity",
+      "SEO Config",
+      "LLM Models",
+      "Jev Credit",
+      "Tenant Info",
+      "UI Kit",
+      "DOCX",
+      "New"
+     ],
+     "selects": 0,
+     "inputs": 1,
+     "read_only_note": false
+    },
+    "models": {
+     "buttons": [
+      "Pipeline Gates",
+      "Brand Identity",
+      "SEO Config",
+      "LLM Models",
+      "Jev Credit",
+      "Tenant Info",
+      "UI Kit",
+      "Stages",
+      "Catalog",
+      "Shadow A/B",
+      "Save",
+      "OFF",
+      "Save route",
+      "Cancel",
+      "ON",
+      "0",
+      "10",
+      "20",
+      "50",
+      "100"
+     ],
+     "selects": 66,
+     "inputs": 3,
+     "read_only_note": false
+    }
+   },
+   {
+    "page": "cross-app",
+    "combo": "1440-light",
+    "shots": [
+     "booking-topbar-1440-light.png",
+     "crossapp-cis-console-opened-1440-light.png",
+     "booking-staff-profile-1440-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "booking": {
+     "href": "https://aa-booking-admin.vercel.app",
+     "target": "_blank",
+     "opened_url": "https://aa-booking-admin.vercel.app/login",
+     "title": "Sign in \u00b7 Booking",
+     "h": "Sign in to Booking",
+     "popup_errors": {
+      "console": 0,
+      "non2xx": []
+     },
+     "shot": "crossapp-booking-opened-1440-light.png"
+    },
+    "tripplanner": {
+     "href": "https://aa-tripplanner.vercel.app",
+     "target": "_blank",
+     "opened_url": "https://aa-tripplanner.vercel.app/",
+     "title": "Adventure Asia \u2014 Plan a tailor-made trip in Asia",
+     "h": "Plan your Asia adventure, tailor-made with an advisor",
+     "popup_errors": {
+      "console": 0,
+      "non2xx": [
+       "302 GET /content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=small",
+       "302 GET /content/photos/64a028ae-7b70-47fa-bdb7-6ee0caecd585?size=small",
+       "302 GET /content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=small",
+       "302 GET /content/photos/6965bf89-d98d-4380-882a-8374dc18eef6?size=small",
+       "302 GET /content/photos/b1a696fc-dbc2-49f3-a0b4-e66e39181997?size=small",
+       "302 GET /content/photos/78a3edab-cb29-466d-b7f4-66870b649edb?size=small",
+       "302 GET /content/photos/fc3123ce-e289-4d93-b2b8-60a5c8a87574?size=small",
+       "302 GET /content/photos/0021d133-4e76-47e0-abcc-22f80b3b689f?size=small",
+       "302 GET /content/photos/4abdd7bd-4511-4804-8005-1bafe3e6179c?size=small",
+       "302 GET /content/photos/15e0c9cf-9d7c-407f-84c2-0540ed0338ac?size=small",
+       "302 GET /content/photos/af01d19d-1433-4e77-87c1-04a97cd0bd70?size=small"
+      ]
+     },
+     "shot": "crossapp-tripplanner-opened-1440-light.png"
+    },
+    "booking_login_status": 200,
+    "booking_landing": "/",
+    "booking_topbar": {
+     "present": 1,
+     "href": "https://aa-cis.lumiguides.it.com/admin/dashboard",
+     "target": "_blank",
+     "label_visible": true
+    },
+    "cis_console_opened": "/admin/overview",
+    "cis_console_h1": "Overview",
+    "booking_staff_page": {
+     "status": 200,
+     "path": "/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+     "h": "admin",
+     "non2xx": [],
+     "console": 0
+    },
+    "booking_errors": {
+     "console": [],
+     "non2xx": [],
+     "page": []
+    }
+   },
+   {
+    "page": "overview/sidebar",
+    "combo": "1440-dark",
+    "shots": [
+     "sidebar-1440-dark.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "url": "/admin/overview",
+    "overflow": {
+     "sw": 1440,
+     "iw": 1440
+    },
+    "sidebar": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "true",
+      "groups": [
+       "PEOPLE & ACCESS",
+       "AI & SPEND",
+       "DEVELOPER"
+      ],
+      "items": [
+       "Overview",
+       "Staff",
+       "Tenants",
+       "Jobs",
+       "External Spend",
+       "Jev Decisions",
+       "API Docs"
+      ]
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": null,
+     "breadcrumb": "Platform / Overview Search tours, tenants, jobs\u2026 Ctrl K E e2e-claude-code"
+    }
+   },
+   {
+    "page": "platform/staff",
+    "combo": "1440-dark",
+    "shots": [
+     "staff-list-1440-dark.png",
+     "staff-drawer-1440-dark.png"
+    ],
+    "xhr": [
+     {
+      "url": "/api/admin/platform/staff",
+      "status": 200,
+      "top_keys": [
+       "staff",
+       "total",
+       "active",
+       "active_by_role"
+      ],
+      "row_keys": [
+       "created_at",
+       "id",
+       "is_active",
+       "role",
+       "updated_at",
+       "username"
+      ],
+      "rows": 7,
+      "forbidden_words": [],
+      "leak": false
+     },
+     {
+      "url": "/api/admin/platform/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+      "status": 200,
+      "top_keys": [
+       "id",
+       "username",
+       "role",
+       "is_active",
+       "created_at",
+       "updated_at"
+      ],
+      "row_keys": null,
+      "rows": null,
+      "forbidden_words": [],
+      "leak": false
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "table": {
+     "headers": [
+      "USERNAME",
+      "ROLE",
+      "STATUS",
+      "CREATED",
+      "UPDATED",
+      "BOOKING"
+     ],
+     "n_rows": 7,
+     "rows": [
+      [
+       "admin",
+       "ADMINISTRATOR",
+       "ACTIVE",
+       "2 Jul 2026",
+       "2 Jul 2026, 11:01",
+       "Open in Booking"
+      ],
+      [
+       "e2e-claude-code",
+       "ADMINISTRATOR",
+       "ACTIVE",
+       "8 Oct 2026",
+       "8 Oct 2026, 15:25",
+       "Open in Booking"
+      ],
+      [
+       "e2e-claude-code-2",
+       "ADMINISTRATOR",
+       "ACTIVE",
+       "16 Oct 2026",
+       "16 Oct 2026, 08:12",
+       "Open in Booking"
+      ],
+      [
+       "nghiep",
+       "ADMINISTRATOR",
+       "ACTIVE",
+       "1 Jul 2026",
+       "1 Jul 2026, 15:54",
+       "Open in Booking"
+      ],
+      [
+       "trang",
+       "REVIEWER",
+       "ACTIVE",
+       "14 Aug 2026",
+       "14 Aug 2026, 10:14",
+       "Open in Booking"
+      ],
+      [
+       "e2e-test-admin",
+       "ADMINISTRATOR",
+       "INACTIVE",
+       "22 Jul 2026",
+       "9 Oct 2026, 10:45",
+       "Open in Booking"
+      ],
+      [
+       "s226_rev_ui",
+       "REVIEWER",
+       "INACTIVE",
+       "11 Oct 2026",
+       "11 Oct 2026, 18:52",
+       "Open in Booking"
+      ]
+     ],
+     "booking_links": [
+      {
+       "text": "Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/",
+       "target": "_blank"
+      },
+      {
+       "text": "Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/2d8e5a2f-3722-4571-9327-177d10b74127",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/58a130c7-5f39-4eec-8297-8a36c3318a63",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/c26f6938-2ae4-4977-b5e4-c185ff24981e",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/c18c1400-c4f8-4feb-825c-e777255b724b",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/b4c220b1-5f9b-48a6-9ac7-93ecbe227065",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/29d29291-7e52-458d-b638-fefea6ef749d",
+       "target": "_blank"
+      }
+     ],
+     "counts": "7 Accounts 5 Active 4 Active administrator 1 Active reviewer 0 Active content team",
+     "pw_inputs": 0,
+     "sensitive_word_hits": [],
+     "overflow_x": false
+    },
+    "drawer": {
+     "text": "admin ADMINISTRATOR ACTIVE Username admin CIS role Administrator Booking role See in Booking admin Status Active Created 2 Jul 2026, 11:01 Updated 2 Jul 2026, 11:01 Account id 93efce82-fa4b-4b6f-818e-7bb135c00dda Changing a role or deactivating an account is not available here yet. It will be limited to the platform owner and recorded in the audit log. Open this account in Booking admin",
+     "links": [
+      {
+       "text": "See in Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+       "target": "_blank"
+      },
+      {
+       "text": "Open this account in Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+       "target": "_blank"
+      }
+     ],
+     "pw_inputs": 0,
+     "url": "/admin/platform/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+     "sensitive": []
+    },
+    "url_after_close": "/admin/platform/staff"
+   },
+   {
+    "page": "master-content",
+    "combo": "1440-dark",
+    "shots": [
+     "master-content-1440-dark.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "controls": {
+     "Set Inactive": 20,
+     "Trash": 20
+    },
+    "rows": 20
+   },
+   {
+    "page": "settings",
+    "combo": "1440-dark",
+    "shots": [
+     "settings-brand-1440-dark.png",
+     "settings-models-1440-dark.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "tabs": [
+     "Pipeline Gates",
+     "Brand Identity",
+     "SEO Config",
+     "LLM Models",
+     "Jev Credit",
+     "Tenant Info",
+     "UI Kit"
+    ],
+    "brand": {
+     "buttons": [
+      "Pipeline Gates",
+      "Brand Identity",
+      "SEO Config",
+      "LLM Models",
+      "Jev Credit",
+      "Tenant Info",
+      "UI Kit",
+      "DOCX",
+      "New"
+     ],
+     "selects": 0,
+     "inputs": 1,
+     "read_only_note": false
+    },
+    "models": {
+     "buttons": [
+      "Pipeline Gates",
+      "Brand Identity",
+      "SEO Config",
+      "LLM Models",
+      "Jev Credit",
+      "Tenant Info",
+      "UI Kit",
+      "Stages",
+      "Catalog",
+      "Shadow A/B",
+      "Save",
+      "OFF",
+      "Save route",
+      "Cancel",
+      "ON",
+      "0",
+      "10",
+      "20",
+      "50",
+      "100"
+     ],
+     "selects": 66,
+     "inputs": 3,
+     "read_only_note": false
+    }
+   },
+   {
+    "page": "cross-app",
+    "combo": "1440-dark",
+    "shots": [
+     "booking-topbar-1440-dark.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "booking": {
+     "href": "https://aa-booking-admin.vercel.app",
+     "target": "_blank"
+    },
+    "tripplanner": {
+     "href": "https://aa-tripplanner.vercel.app",
+     "target": "_blank"
+    },
+    "booking_login_status": 200,
+    "booking_landing": "/",
+    "booking_topbar": {
+     "present": 1,
+     "href": "https://aa-cis.lumiguides.it.com/admin/dashboard",
+     "target": "_blank",
+     "label_visible": true
+    },
+    "booking_errors": {
+     "console": [],
+     "non2xx": [],
+     "page": []
+    }
+   },
+   {
+    "page": "overview/sidebar",
+    "combo": "390-light",
+    "shots": [
+     "overview-bottomnav-390-light.png",
+     "sidebar-390-light.png",
+     "sidebar-platform-folded-after-reload-390-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "url": "/admin/overview",
+    "overflow": {
+     "sw": 390,
+     "iw": 390
+    },
+    "bottom_nav": {
+     "visible": true,
+     "items": [
+      {
+       "label": "Overview",
+       "h": 59,
+       "current": "page"
+      },
+      {
+       "label": "Review",
+       "h": 59,
+       "current": null
+      },
+      {
+       "label": "Master",
+       "h": 59,
+       "current": null
+      },
+      {
+       "label": "Jobs",
+       "h": 59,
+       "current": null
+      },
+      {
+       "label": "More navigation",
+       "h": 59,
+       "current": null
+      }
+     ]
+    },
+    "sidebar": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "true",
+      "groups": [
+       "PEOPLE & ACCESS",
+       "AI & SPEND",
+       "DEVELOPER"
+      ],
+      "items": [
+       "Overview",
+       "Staff",
+       "Tenants",
+       "Jobs",
+       "External Spend",
+       "Jev Decisions",
+       "API Docs"
+      ]
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": null,
+     "breadcrumb": "Overview E"
+    },
+    "after_fold": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "false",
+      "groups": [],
+      "items": []
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": "platform",
+     "breadcrumb": "Overview E"
+    },
+    "after_reload": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "false",
+      "groups": [],
+      "items": []
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": "platform",
+     "breadcrumb": "Overview E"
+    },
+    "after_unfold": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "true",
+      "groups": [
+       "PEOPLE & ACCESS",
+       "AI & SPEND",
+       "DEVELOPER"
+      ],
+      "items": [
+       "Overview",
+       "Staff",
+       "Tenants",
+       "Jobs",
+       "External Spend",
+       "Jev Decisions",
+       "API Docs"
+      ]
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": null,
+     "breadcrumb": "Overview E"
+    }
+   },
+   {
+    "combo": "390-light",
+    "page": "nav-reachability",
+    "entries": [
+     {
+      "label": "Overview",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/overview",
+      "h1": "Overview",
+      "crumb": "Overview E",
+      "overflow_x": false
+     },
+     {
+      "label": "Staff",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/platform/staff",
+      "h1": "Staff",
+      "crumb": "Staff E",
+      "overflow_x": false
+     },
+     {
+      "label": "Tenants",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/tenants",
+      "h1": "Tenants",
+      "crumb": "Tenants E",
+      "overflow_x": false
+     },
+     {
+      "label": "Jobs",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/jobs",
+      "h1": "Jobs",
+      "crumb": "Jobs E",
+      "overflow_x": false
+     },
+     {
+      "label": "External Spend",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/llm-usage",
+      "h1": "External Spend",
+      "crumb": "External Spend E",
+      "overflow_x": false
+     },
+     {
+      "label": "Jev Decisions",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/decisions",
+      "h1": "Jev Decisions",
+      "crumb": "Jev Decisions E",
+      "overflow_x": false
+     },
+     {
+      "label": "API Docs",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/api-docs",
+      "h1": "API Docs",
+      "crumb": "API Docs E",
+      "overflow_x": false
+     },
+     {
+      "label": "Upload (S0)",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/upload",
+      "h1": "Upload (S0)",
+      "crumb": "Upload (S0) E",
+      "overflow_x": false
+     },
+     {
+      "label": "Rewrite (S1)",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/s1-rewrite",
+      "h1": "S1 Rewrite",
+      "crumb": "Rewrite (S1) E",
+      "overflow_x": false
+     },
+     {
+      "label": "Review Queue",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/review",
+      "h1": "Review Queue",
+      "crumb": "Review Queue E",
+      "overflow_x": false
+     },
+     {
+      "label": "Master Content",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/master-content",
+      "h1": "Master Content",
+      "crumb": "Master Content E",
+      "overflow_x": false
+     },
+     {
+      "label": "Photos",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/photos",
+      "h1": "Photos",
+      "crumb": "Photos E",
+      "overflow_x": false
+     },
+     {
+      "label": "Social Content",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/atom-curation",
+      "h1": "Social Content",
+      "crumb": "Social Content E",
+      "overflow_x": false
+     },
+     {
+      "label": "SEO Intelligence",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/seo-intelligence",
+      "h1": "SEO Intelligence",
+      "crumb": "SEO Intelligence E",
+      "overflow_x": false
+     },
+     {
+      "label": "Content Trace",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/tenant-activity",
+      "h1": "06 \u00b7 Content Trace",
+      "crumb": "Content Trace E",
+      "overflow_x": false
+     },
+     {
+      "label": "A4 Quality",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/platform-stats",
+      "h1": "07 \u00b7 A4 Quality",
+      "crumb": "A4 Quality E",
+      "overflow_x": false
+     },
+     {
+      "label": "Content Quality",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/content-quality",
+      "h1": "Content Quality",
+      "crumb": "Content Quality E",
+      "overflow_x": false
+     },
+     {
+      "label": "Settings",
+      "console_errors": [],
+      "page_errors": [],
+      "non2xx": [],
+      "path": "/admin/settings",
+      "h1": "Settings",
+      "crumb": "Settings E",
+      "overflow_x": false
+     }
+    ]
+   },
+   {
+    "page": "platform/staff",
+    "combo": "390-light",
+    "shots": [
+     "staff-list-390-light.png"
+    ],
+    "xhr": [
+     {
+      "url": "/api/admin/platform/staff",
+      "status": 200,
+      "top_keys": [
+       "staff",
+       "total",
+       "active",
+       "active_by_role"
+      ],
+      "row_keys": [
+       "created_at",
+       "id",
+       "is_active",
+       "role",
+       "updated_at",
+       "username"
+      ],
+      "rows": 7,
+      "forbidden_words": [],
+      "leak": false
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "table": {
+     "headers": [],
+     "n_rows": 0,
+     "rows": [],
+     "booking_links": [
+      {
+       "text": "",
+       "href": "https://aa-booking-admin.vercel.app/",
+       "target": "_blank"
+      },
+      {
+       "text": "Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/2d8e5a2f-3722-4571-9327-177d10b74127",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/58a130c7-5f39-4eec-8297-8a36c3318a63",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/c26f6938-2ae4-4977-b5e4-c185ff24981e",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/c18c1400-c4f8-4feb-825c-e777255b724b",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/b4c220b1-5f9b-48a6-9ac7-93ecbe227065",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/29d29291-7e52-458d-b638-fefea6ef749d",
+       "target": "_blank"
+      }
+     ],
+     "counts": "7 Accounts 5 Active 4 Active administrator 1 Active reviewer 0 Active content team",
+     "pw_inputs": 0,
+     "sensitive_word_hits": [],
+     "overflow_x": false
+    }
+   },
+   {
+    "page": "platform/staff/[id] deep link",
+    "combo": "390-light",
+    "shots": [
+     "staff-deeplink-390-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "drawer_open": "admin"
+   },
+   {
+    "page": "master-content",
+    "combo": "390-light",
+    "shots": [
+     "master-content-390-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "controls": {
+     "Set Inactive": 20,
+     "Trash": 20
+    },
+    "rows": 0
+   },
+   {
+    "page": "settings",
+    "combo": "390-light",
+    "shots": [
+     "settings-brand-390-light.png",
+     "settings-models-390-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "tabs": [
+     "Pipeline Gates",
+     "Brand Identity",
+     "SEO Config",
+     "LLM Models",
+     "Jev Credit",
+     "Tenant Info",
+     "UI Kit"
+    ],
+    "brand": {
+     "buttons": [
+      "Pipeline Gates",
+      "Brand Identity",
+      "SEO Config",
+      "LLM Models",
+      "Jev Credit",
+      "Tenant Info",
+      "UI Kit",
+      "DOCX",
+      "New"
+     ],
+     "selects": 0,
+     "inputs": 1,
+     "read_only_note": false
+    },
+    "models": {
+     "buttons": [
+      "Pipeline Gates",
+      "Brand Identity",
+      "SEO Config",
+      "LLM Models",
+      "Jev Credit",
+      "Tenant Info",
+      "UI Kit",
+      "Stages",
+      "Catalog",
+      "Shadow A/B",
+      "Save",
+      "OFF",
+      "Save route",
+      "Cancel",
+      "ON",
+      "0",
+      "10",
+      "20",
+      "50",
+      "100"
+     ],
+     "selects": 66,
+     "inputs": 3,
+     "read_only_note": false
+    }
+   },
+   {
+    "page": "cross-app",
+    "combo": "390-light",
+    "shots": [
+     "booking-topbar-390-light.png",
+     "crossapp-cis-console-opened-390-light.png",
+     "booking-staff-profile-390-light.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "booking": {
+     "href": "https://aa-booking-admin.vercel.app",
+     "target": "_blank",
+     "opened_url": "https://aa-booking-admin.vercel.app/login",
+     "title": "Sign in \u00b7 Booking",
+     "h": "Sign in to Booking",
+     "popup_errors": {
+      "console": 0,
+      "non2xx": []
+     },
+     "shot": "crossapp-booking-opened-390-light.png"
+    },
+    "tripplanner": {
+     "href": "https://aa-tripplanner.vercel.app",
+     "target": "_blank",
+     "opened_url": "https://aa-tripplanner.vercel.app/",
+     "title": "Adventure Asia \u2014 Plan a tailor-made trip in Asia",
+     "h": "Plan your Asia adventure, tailor-made with an advisor",
+     "popup_errors": {
+      "console": 0,
+      "non2xx": [
+       "302 GET /content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=small",
+       "302 GET /content/photos/64a028ae-7b70-47fa-bdb7-6ee0caecd585?size=small",
+       "302 GET /content/photos/b1a696fc-dbc2-49f3-a0b4-e66e39181997?size=small",
+       "302 GET /content/photos/6965bf89-d98d-4380-882a-8374dc18eef6?size=small",
+       "302 GET /content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=small",
+       "302 GET /content/photos/4abdd7bd-4511-4804-8005-1bafe3e6179c?size=small"
+      ]
+     },
+     "shot": "crossapp-tripplanner-opened-390-light.png"
+    },
+    "booking_login_status": 200,
+    "booking_landing": "/",
+    "booking_topbar": {
+     "present": 1,
+     "href": "https://aa-cis.lumiguides.it.com/admin/dashboard",
+     "target": "_blank",
+     "label_visible": false
+    },
+    "cis_console_opened": "/admin/overview",
+    "cis_console_h1": "Overview",
+    "booking_staff_page": {
+     "status": 200,
+     "path": "/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+     "h": "admin",
+     "non2xx": [],
+     "console": 0
+    },
+    "booking_errors": {
+     "console": [],
+     "non2xx": [],
+     "page": []
+    }
+   },
+   {
+    "page": "overview/sidebar",
+    "combo": "390-dark",
+    "shots": [
+     "overview-bottomnav-390-dark.png",
+     "sidebar-390-dark.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "url": "/admin/overview",
+    "overflow": {
+     "sw": 390,
+     "iw": 390
+    },
+    "bottom_nav": {
+     "visible": true,
+     "items": [
+      {
+       "label": "Overview",
+       "h": 59,
+       "current": "page"
+      },
+      {
+       "label": "Review",
+       "h": 59,
+       "current": null
+      },
+      {
+       "label": "Master",
+       "h": 59,
+       "current": null
+      },
+      {
+       "label": "Jobs",
+       "h": 59,
+       "current": null
+      },
+      {
+       "label": "More navigation",
+       "h": 59,
+       "current": null
+      }
+     ]
+    },
+    "sidebar": {
+     "platform": {
+      "present": true,
+      "header": "PLATFORM",
+      "expanded": "true",
+      "groups": [
+       "PEOPLE & ACCESS",
+       "AI & SPEND",
+       "DEVELOPER"
+      ],
+      "items": [
+       "Overview",
+       "Staff",
+       "Tenants",
+       "Jobs",
+       "External Spend",
+       "Jev Decisions",
+       "API Docs"
+      ]
+     },
+     "cis": {
+      "present": true,
+      "header": "CIS CONTENT",
+      "expanded": "true",
+      "groups": [
+       "PIPELINE",
+       "ASSETS",
+       "INTELLIGENCE",
+       "TENANT OUTPUT"
+      ],
+      "items": [
+       "Upload (S0)",
+       "Rewrite (S1)",
+       "Review Queue",
+       "Master Content",
+       "Photos",
+       "Social Content",
+       "SEO Intelligence",
+       "Content Trace",
+       "A4 Quality",
+       "Content Quality"
+      ]
+     },
+     "apps": [
+      {
+       "id": "sidebar-app-booking",
+       "href": "https://aa-booking-admin.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "Booking admin"
+      },
+      {
+       "id": "sidebar-app-tripplanner",
+       "href": "https://aa-tripplanner.vercel.app",
+       "target": "_blank",
+       "rel": "noopener noreferrer",
+       "label": "TripPlanner"
+      }
+     ],
+     "collapsed": "false",
+     "visible": true,
+     "settings": true,
+     "nav_closed_ls": null,
+     "breadcrumb": "Overview E"
+    }
+   },
+   {
+    "page": "platform/staff",
+    "combo": "390-dark",
+    "shots": [
+     "staff-list-390-dark.png"
+    ],
+    "xhr": [
+     {
+      "url": "/api/admin/platform/staff",
+      "status": 200,
+      "top_keys": [
+       "staff",
+       "total",
+       "active",
+       "active_by_role"
+      ],
+      "row_keys": [
+       "created_at",
+       "id",
+       "is_active",
+       "role",
+       "updated_at",
+       "username"
+      ],
+      "rows": 7,
+      "forbidden_words": [],
+      "leak": false
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "table": {
+     "headers": [],
+     "n_rows": 0,
+     "rows": [],
+     "booking_links": [
+      {
+       "text": "",
+       "href": "https://aa-booking-admin.vercel.app/",
+       "target": "_blank"
+      },
+      {
+       "text": "Booking admin",
+       "href": "https://aa-booking-admin.vercel.app/",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/93efce82-fa4b-4b6f-818e-7bb135c00dda",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/2d8e5a2f-3722-4571-9327-177d10b74127",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/58a130c7-5f39-4eec-8297-8a36c3318a63",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/c26f6938-2ae4-4977-b5e4-c185ff24981e",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/c18c1400-c4f8-4feb-825c-e777255b724b",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/b4c220b1-5f9b-48a6-9ac7-93ecbe227065",
+       "target": "_blank"
+      },
+      {
+       "text": "Open in Booking",
+       "href": "https://aa-booking-admin.vercel.app/staff/29d29291-7e52-458d-b638-fefea6ef749d",
+       "target": "_blank"
+      }
+     ],
+     "counts": "7 Accounts 5 Active 4 Active administrator 1 Active reviewer 0 Active content team",
+     "pw_inputs": 0,
+     "sensitive_word_hits": [],
+     "overflow_x": false
+    }
+   },
+   {
+    "page": "master-content",
+    "combo": "390-dark",
+    "shots": [
+     "master-content-390-dark.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "controls": {
+     "Set Inactive": 20,
+     "Trash": 20
+    },
+    "rows": 0
+   },
+   {
+    "page": "settings",
+    "combo": "390-dark",
+    "shots": [
+     "settings-brand-390-dark.png",
+     "settings-models-390-dark.png"
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "tabs": [
+     "Pipeline Gates",
+     "Brand Identity",
+     "SEO Config",
+     "LLM Models",
+     "Jev Credit",
+     "Tenant Info",
+     "UI Kit"
+    ],
+    "brand": {
+     "buttons": [
+      "Pipeline Gates",
+      "Brand Identity",
+      "SEO Config",
+      "LLM Models",
+      "Jev Credit",
+      "Tenant Info",
+      "UI Kit",
+      "DOCX",
+      "New"
+     ],
+     "selects": 0,
+     "inputs": 1,
+     "read_only_note": false
+    },
+    "models": {
+     "buttons": [
+      "Pipeline Gates",
+      "Brand Identity",
+      "SEO Config",
+      "LLM Models",
+      "Jev Credit",
+      "Tenant Info",
+      "UI Kit",
+      "Stages",
+      "Catalog",
+      "Shadow A/B",
+      "Save",
+      "OFF",
+      "Save route",
+      "Cancel",
+      "ON",
+      "0",
+      "10",
+      "20",
+      "50",
+      "100"
+     ],
+     "selects": 66,
+     "inputs": 3,
+     "read_only_note": false
+    }
+   }
+  ],
+  "login_landing": "/admin/overview",
+  "finished": "2026-10-17T11:35:38.031Z"
+ },
+ "ui_supplement": {
+  "runs": [
+   {
+    "page": "staff drawer (card click)",
+    "combo": "390-light",
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "drawer": {
+     "title": "e2e-claude-code-2",
+     "w": 390,
+     "url": "/admin/platform/staff/58a130c7-5f39-4eec-8297-8a36c3318a63",
+     "links": [
+      "https://aa-booking-admin.vercel.app/staff/58a130c7-5f39-4eec-8297-8a36c3318a63",
+      "https://aa-booking-admin.vercel.app/staff/58a130c7-5f39-4eec-8297-8a36c3318a63"
+     ],
+     "pw_inputs": 0,
+     "overflow_x": false
+    },
+    "shot": "staff-drawer-390-light.png"
+   },
+   {
+    "page": "staff drawer (card click)",
+    "combo": "390-dark",
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "drawer": {
+     "title": "e2e-claude-code-2",
+     "w": 390,
+     "url": "/admin/platform/staff/58a130c7-5f39-4eec-8297-8a36c3318a63",
+     "links": [
+      "https://aa-booking-admin.vercel.app/staff/58a130c7-5f39-4eec-8297-8a36c3318a63",
+      "https://aa-booking-admin.vercel.app/staff/58a130c7-5f39-4eec-8297-8a36c3318a63"
+     ],
+     "pw_inputs": 0,
+     "overflow_x": false
+    },
+    "shot": "staff-drawer-390-dark.png"
+   },
+   {
+    "page": "settings brand editor",
+    "combo": "1440-light",
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "buttons": [
+     "Pipeline Gates",
+     "Brand Identity",
+     "SEO Config",
+     "LLM Models",
+     "Jev Credit",
+     "Tenant Info",
+     "UI Kit",
+     "DOCX",
+     "New",
+     "Delete",
+     "ADD",
+     "\u00d7",
+     "SAVE (NEW VERSION)",
+     "VERSION HISTORY (2)"
+    ],
+    "textareas": 12,
+    "shot": "settings-brand-editor-1440-light.png"
+   }
+  ],
+  "blocked_writes": [],
+  "leak_hits": [],
+  "logins": [
+   {
+    "url": "/login",
+    "status": 200
+   }
+  ]
+ },
+ "api_roles": {
+  "checks": [
+   {
+    "name": "GET /admin/platform/staff",
+    "method": "GET",
+    "path": "/admin/platform/staff",
+    "role": "admin",
+    "status": 200,
+    "expect": 200,
+    "pass": true,
+    "rows": 7,
+    "row_keys": [
+     "created_at",
+     "id",
+     "is_active",
+     "role",
+     "updated_at",
+     "username"
+    ],
+    "top_keys": [
+     "active",
+     "active_by_role",
+     "staff",
+     "total"
+    ],
+    "forbidden_keys": [],
+    "detail_snip": null,
+    "detail_status": 200,
+    "detail_keys": [
+     "created_at",
+     "id",
+     "is_active",
+     "role",
+     "updated_at",
+     "username"
+    ]
+   },
+   {
+    "name": "GET /admin/platform/staff",
+    "method": "GET",
+    "path": "/admin/platform/staff",
+    "role": "reviewer",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'reviewer' lacks the 'staff.read' permission"
+   },
+   {
+    "name": "GET /admin/platform/staff",
+    "method": "GET",
+    "path": "/admin/platform/staff",
+    "role": "content",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'content' lacks the 'staff.read' permission"
+   },
+   {
+    "name": "GET /admin/platform/staff",
+    "method": "GET",
+    "path": "/admin/platform/staff",
+    "role": "machine",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "This route needs a staff role (x-admin-role); machine callers are not allowed"
+   },
+   {
+    "name": "GET /admin/tenants/{other}/details",
+    "method": "GET",
+    "path": "/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/details",
+    "role": "admin",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/tenants/{other}/details",
+    "method": "GET",
+    "path": "/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/details",
+    "role": "reviewer",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'reviewer' lacks the 'tenant.read' permission"
+   },
+   {
+    "name": "GET /admin/tenants/{other}/details",
+    "method": "GET",
+    "path": "/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/details",
+    "role": "content",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'content' lacks the 'tenant.read' permission"
+   },
+   {
+    "name": "GET /admin/tenants/{other}/details",
+    "method": "GET",
+    "path": "/admin/tenants/9149d3c6-fcaf-4400-8e7a-4ed5e557e146/details",
+    "role": "machine",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'machine' lacks the 'tenant.read' permission"
+   },
+   {
+    "name": "GET /admin/tenants/00000000-0000-0000-0000-000000000001/details",
+    "method": "GET",
+    "path": "/admin/tenants/00000000-0000-0000-0000-000000000001/details?page_size=1",
+    "role": "admin",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/tenants/00000000-0000-0000-0000-000000000001/details",
+    "method": "GET",
+    "path": "/admin/tenants/00000000-0000-0000-0000-000000000001/details?page_size=1",
+    "role": "reviewer",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/tenants/00000000-0000-0000-0000-000000000001/details",
+    "method": "GET",
+    "path": "/admin/tenants/00000000-0000-0000-0000-000000000001/details?page_size=1",
+    "role": "content",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/tenants/00000000-0000-0000-0000-000000000001/details",
+    "method": "GET",
+    "path": "/admin/tenants/00000000-0000-0000-0000-000000000001/details?page_size=1",
+    "role": "machine",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/budgets",
+    "method": "GET",
+    "path": "/admin/budgets",
+    "role": "admin",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/budgets",
+    "method": "GET",
+    "path": "/admin/budgets",
+    "role": "reviewer",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'reviewer' lacks the 'spend.read' permission"
+   },
+   {
+    "name": "GET /admin/budgets",
+    "method": "GET",
+    "path": "/admin/budgets",
+    "role": "content",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'content' lacks the 'spend.read' permission"
+   },
+   {
+    "name": "GET /admin/budgets",
+    "method": "GET",
+    "path": "/admin/budgets",
+    "role": "machine",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "This route needs a staff role (x-admin-role); machine callers are not allowed"
+   },
+   {
+    "name": "GET /admin/llm-config",
+    "method": "GET",
+    "path": "/admin/llm-config",
+    "role": "admin",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/llm-config",
+    "method": "GET",
+    "path": "/admin/llm-config",
+    "role": "reviewer",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/llm-config",
+    "method": "GET",
+    "path": "/admin/llm-config",
+    "role": "content",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/llm-config",
+    "method": "GET",
+    "path": "/admin/llm-config",
+    "role": "machine",
+    "status": 200,
+    "expect": 200,
+    "pass": true
+   },
+   {
+    "name": "GET /admin/platform/staff/{id}",
+    "method": "GET",
+    "path": "/admin/platform/staff/{id}",
+    "role": "reviewer",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'reviewer' lacks the 'staff.read' permission"
+   },
+   {
+    "name": "GET /admin/platform/staff/{id}",
+    "method": "GET",
+    "path": "/admin/platform/staff/{id}",
+    "role": "content",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'content' lacks the 'staff.read' permission"
+   },
+   {
+    "name": "GET /admin/platform/staff/{id}",
+    "method": "GET",
+    "path": "/admin/platform/staff/{id}",
+    "role": "machine",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "This route needs a staff role (x-admin-role); machine callers are not allowed"
+   },
+   {
+    "name": "GET /admin/platform/staff (no secret)",
+    "method": "GET",
+    "path": "/admin/platform/staff",
+    "role": "none",
+    "status": 403,
+    "expect": 403,
+    "pass": true
+   },
+   {
+    "name": "notifications scoped (no platform.*/spend rows)",
+    "method": "GET",
+    "path": "/admin/notifications{,/count}",
+    "role": "reviewer",
+    "status": 200,
+    "expect": 200,
+    "pass": true,
+    "listed": 4,
+    "unread": 0
+   },
+   {
+    "name": "notifications scoped (no platform.*/spend rows)",
+    "method": "GET",
+    "path": "/admin/notifications{,/count}",
+    "role": "content",
+    "status": 200,
+    "expect": 200,
+    "pass": true,
+    "listed": 4,
+    "unread": 0
+   },
+   {
+    "name": "PATCH /admin/llm-config/t9_write invalid body",
+    "method": "PATCH",
+    "path": "/admin/llm-config/t9_write",
+    "role": "reviewer",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'reviewer' lacks the 'ai.admin' permission"
+   },
+   {
+    "name": "PATCH /admin/llm-config/t9_write invalid body",
+    "method": "PATCH",
+    "path": "/admin/llm-config/t9_write",
+    "role": "content",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "Role 'content' lacks the 'ai.admin' permission"
+   },
+   {
+    "name": "PATCH /admin/llm-config/t9_write invalid body",
+    "method": "PATCH",
+    "path": "/admin/llm-config/t9_write",
+    "role": "admin",
+    "status": 422,
+    "expect": 422,
+    "pass": true,
+    "detail": [
+     {
+      "type": "missing",
+      "loc": [
+       "body",
+       "model_id"
+      ]
+     }
+    ]
+   },
+   {
+    "name": "PATCH /admin/llm-config/t9_write invalid body",
+    "method": "PATCH",
+    "path": "/admin/llm-config/t9_write",
+    "role": "machine",
+    "status": 403,
+    "expect": 403,
+    "pass": true,
+    "detail": "This route needs a staff role (x-admin-role); machine callers are not allowed"
+   }
+  ],
+  "notes": {
+   "tenant_list_status": 200,
+   "other_tenant": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+   "other_tenant_slug": "atlas-hearth",
+   "first_staff_id": "93efce82-fa4b-4b6f-818e-7bb135c00dda",
+   "t9_write_before": {
+    "stage": "t9_write",
+    "model_id": "sonnet",
+    "account_route": "acc3",
+    "updated_at": "2026-09-02T23:53:54.146944+00:00",
+    "updated_by": "system-seed-aa518"
+   },
+   "t9_write_after": {
+    "stage": "t9_write",
+    "model_id": "sonnet",
+    "account_route": "acc3",
+    "updated_at": "2026-09-02T23:53:54.146944+00:00",
+    "updated_by": "system-seed-aa518"
+   },
+   "t9_unchanged": true
+  },
+  "notifications": {
+   "admin": {
+    "count_status": 200,
+    "unread": 0,
+    "list_status": 200,
+    "listed": 25,
+    "event_types": {
+     "platform.jev_credit.exhausted": 4,
+     "tour.master.activated": 6,
+     "tour.master.deactivated": 6,
+     "tour.source.trashed": 4,
+     "tour.source.restored": 2,
+     "spend_budget_alert": 1,
+     "platform.dfs_balance.low": 2
+    },
+    "platform_or_spend_rows": 7,
+    "target_roles_seen": [
+     "admin",
+     "content"
+    ]
+   },
+   "reviewer": {
+    "count_status": 200,
+    "unread": 0,
+    "list_status": 200,
+    "listed": 4,
+    "event_types": {
+     "tour.source.trashed": 4
+    },
+    "platform_or_spend_rows": 0,
+    "target_roles_seen": [
+     "admin",
+     "content"
+    ]
+   },
+   "content": {
+    "count_status": 200,
+    "unread": 0,
+    "list_status": 200,
+    "listed": 4,
+    "event_types": {
+     "tour.source.trashed": 4
+    },
+    "platform_or_spend_rows": 0,
+    "target_roles_seen": [
+     "admin",
+     "content"
+    ]
+   },
+   "machine": {
+    "count_status": 200,
+    "unread": 0,
+    "list_status": 200,
+    "listed": 25,
+    "event_types": {
+     "platform.jev_credit.exhausted": 4,
+     "tour.master.activated": 6,
+     "tour.master.deactivated": 6,
+     "tour.source.trashed": 4,
+     "tour.source.restored": 2,
+     "spend_budget_alert": 1,
+     "platform.dfs_balance.low": 2
+    },
+    "platform_or_spend_rows": 7,
+    "target_roles_seen": [
+     "admin",
+     "content"
+    ]
+   }
+  }
+ }
+}

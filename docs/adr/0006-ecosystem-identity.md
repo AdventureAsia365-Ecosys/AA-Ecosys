@@ -101,7 +101,7 @@ EXTERNAL); every app verifies JWTs via JWKS; the PR #721 bridge must be swappabl
 | Group | Maps to |
 |---|---|
 | `cis-admin`, `cis-reviewer`, `cis-content` | `shared.admin_role` values `admin`, `reviewer`, `content` |
-| `booking-admin`, `booking-sales`, `booking-contracting` | Booking staff roles (replaces the planned `staff_role` enum in `booking.staff_users`) |
+| `booking-admin`, `booking-sales`, `booking-contracting`, `booking-content_creator` | Booking staff roles (replaces the planned `staff_role` enum in `booking.staff_users`). `booking-content_creator` added S241 (Nghiệp, Q4/Q5): staff who only write Booking content; applied with the Phase 0 pools (Infra #162). |
 
 - **Source of truth = the staff directory** (AA-816): `shared.admin_users` gains `email` (unique,
   lower-cased, `@adventure.asia`), `display_name`, `cognito_sub` and per-app role columns;
