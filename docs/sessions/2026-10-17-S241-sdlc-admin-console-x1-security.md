@@ -127,7 +127,7 @@ và các chốt buổi tối).
 - **AA-859** đợt 3–4, D5b. **AA-861** `tripplanner.job`. **AA-829** runbook khôi phục 1 schema + CNAME DSN + dump 16/09.
 - **Ghi chú cho chị Thư:** Vercel Pro khi có tenant trả tiền đầu (D-18); hồ sơ pháp lý (AA-886) có Sentry là bên xử lý phụ.
   Nháp Zalo ở `docs/sessions/2026-10-17-S241-jira-drafts.md`.
-- **AA-ACP-Core** (private, archived, 23 KB) còn tồn tại: xoá hay giữ là Nghiệp quyết.
+- **AA-ACP-Core** (private, archived, 23 KB): Nghiệp chốt **giữ nguyên** (không ảnh hưởng gì).
 
 ## Lưu ý kỹ thuật cho phiên sau
 - **Bootstrap role** (`aa-cis-infra-tf-apply`, `aa-cis-dev-app-deploy`, inline policy của chúng): CI apply không sửa được → plan có target
