@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SDLC Roadmap S241</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Đánh giá SDLC/ADLC S241 và lộ trình nền tảng hợp nhất U-xx cho AA_Ecosys, chờ Nghiệp duyệt.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: audit report. Sticky table of contents on the left (desktop), one reading column, tier bands colour-coded by urgency. */
+:root {
+  --bg: #f3f5f7;
+  --surface: #ffffff;
+  --ink: #15202b;
+  --muted: #4f5d6b;
+  --line: #d6dde4;
+  --accent: #1c5a89;
+  --accent-soft: #e2ecf5;
+  --crit: #a8231b;
+  --crit-soft: #fae8e6;
+  --warn: #7f5300;
+  --warn-soft: #faf0d9;
+  --ok: #2b6535;
+  --ok-soft: #e4f1e6;
+  --t4: #56616c;
+  --t4-soft: #eaedf0;
+  --code-bg: #eaeef2;
+  --bar-track: #dfe5ea;
+  --font-display: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e141a; --surface: #151d25; --ink: #e5eaef; --muted: #9eabb7; --line: #2a3540;
+    --accent: #84b7de; --accent-soft: #19293a; --crit: #f08a80; --crit-soft: #351b19;
+    --warn: #e6b65a; --warn-soft: #33270f; --ok: #8acb96; --ok-soft: #182b1c;
+    --t4: #aab4be; --t4-soft: #212a32; --code-bg: #1c2630; --bar-track: #26313c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e141a; --surface: #151d25; --ink: #e5eaef; --muted: #9eabb7; --line: #2a3540;
+  --accent: #84b7de; --accent-soft: #19293a; --crit: #f08a80; --crit-soft: #351b19;
+  --warn: #e6b65a; --warn-soft: #33270f; --ok: #8acb96; --ok-soft: #182b1c;
+  --t4: #aab4be; --t4-soft: #212a32; --code-bg: #1c2630; --bar-track: #26313c;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+  overflow-wrap: anywhere;
+}
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+code { background: var(--code-bg); padding: 0.08em 0.35em; border-radius: 4px; }
+h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; line-height: 1.25; margin: 0; }
+h2 { font-size: 1.5rem; font-weight: 700; }
+h3 { font-size: 1.12rem; font-weight: 600; }
+h4 { font-size: 0.98rem; font-weight: 600; }
+p { margin: 0; }
+ul, ol { margin: 0; padding-left: 1.25em; }
+li + li { margin-top: 0.3em; }
+
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+}
+@media (min-width: 1100px) {
+  .page { grid-template-columns: 220px minmax(0, 1fr); }
+}
+
+/* TOC */
+.toc { display: none; }
+@media (min-width: 1100px) {
+  .toc {
+    display: block;
+    position: sticky;
+    top: calc(env(safe-area-inset-top, 0px) + 24px);
+    align-self: start;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    padding-top: 32px;
+  }
+}
+.toc-label {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--muted); font-weight: 600; margin-bottom: 10px;
+}
+.toc ol { list-style: none; padding: 0; margin: 0; border-left: 1px solid var(--line); }
+.toc li { margin: 0; }
+.toc a {
+  display: block; padding: 5px 0 5px 14px; margin-left: -1px;
+  border-left: 2px solid transparent; color: var(--muted);
+  text-decoration: none; font-size: 0.88rem; line-height: 1.35;
+}
+.toc a:hover { color: var(--ink); border-left-color: var(--accent); }
+
+main { min-width: 0; display: flex; flex-direction: column; gap: 56px; padding-top: 32px; }
+main > section { display: flex; flex-direction: column; gap: 18px; scroll-margin-top: 20px; min-width: 0; }
+.section-head { display: flex; flex-direction: column; gap: 6px; border-top: 2px solid var(--ink); padding-top: 14px; }
+.eyebrow {
+  font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600;
+}
+.lede { color: var(--muted); max-width: 70ch; }
+.prose { max-width: 72ch; display: flex; flex-direction: column; gap: 12px; }
+
+/* Header */
+.masthead { display: flex; flex-direction: column; gap: 16px; }
+.masthead h1 { font-size: clamp(1.8rem, 4.5vw, 2.7rem); font-weight: 700; letter-spacing: -0.01em; }
+.status-pill {
+  align-self: flex-start;
+  display: inline-flex; gap: 8px; align-items: center;
+  background: var(--warn-soft); color: var(--warn);
+  font-weight: 600; font-size: 0.82rem; padding: 4px 12px; border-radius: 999px;
+}
+.meta-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px 28px; font-size: 0.9rem; color: var(--muted);
+}
+.meta-grid div { min-width: 0; }
+.meta-grid strong { color: var(--ink); font-weight: 600; display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Headline numbers */
+.headline {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+}
+.headline > div { background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.headline .num { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.headline .lbl { font-size: 0.84rem; color: var(--muted); line-height: 1.4; }
+
+.callout {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; max-width: 80ch;
+}
+.callout.note { background: var(--accent-soft); border-color: transparent; }
+.callout.warn { background: var(--warn-soft); border-color: transparent; }
+.callout-title { font-weight: 600; font-size: 0.92rem; }
+
+.two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.two-col > div { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.top5 { counter-reset: t; list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.top5 li { counter-increment: t; display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 10px; margin: 0; }
+.top5 li::before {
+  content: counter(t); font-family: var(--font-display); font-weight: 700; font-size: 1.2rem;
+  color: var(--accent); line-height: 1.4;
+}
+
+/* Scorecard */
+.scorecard { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.score-row {
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px;
+  padding: 14px 16px; border-top: 1px solid var(--line);
+}
+.score-row:first-child { border-top: 0; }
+@media (min-width: 720px) {
+  .score-row { grid-template-columns: 230px 170px minmax(0, 1fr); gap: 18px; align-items: start; }
+}
+.score-name { font-weight: 600; }
+.score-val { display: flex; align-items: center; gap: 10px; }
+.score-num { font-family: var(--font-mono); font-weight: 600; font-variant-numeric: tabular-nums; min-width: 3.2em; }
+.bar {
+  position: relative; flex: 1; height: 10px; background: var(--bar-track); border-radius: 3px; overflow: hidden;
+  background-image: linear-gradient(to right, transparent calc(25% - 1px), var(--surface) calc(25% - 1px), var(--surface) 25%, transparent 25%, transparent calc(50% - 1px), var(--surface) calc(50% - 1px), var(--surface) 50%, transparent 50%, transparent calc(75% - 1px), var(--surface) calc(75% - 1px), var(--surface) 75%, transparent 75%);
+}
+.bar > span { position: absolute; inset: 0 auto 0 0; background: var(--warn); border-radius: 3px 0 0 3px; }
+.bar.low > span { background: var(--crit); }
+.score-ev { font-size: 0.88rem; color: var(--muted); }
+.score-ev b { color: var(--ink); font-weight: 600; }
+.scale { font-size: 0.86rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.scale span b { color: var(--ink); font-family: var(--font-mono); }
+
+/* Tables */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; line-height: 1.45; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-top: 1px solid var(--line); }
+thead th {
+  border-top: 0; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); font-weight: 600; background: var(--bg);
+}
+td.nowrap, th.nowrap { white-space: nowrap; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.wide { min-width: 760px; }
+table.mid { min-width: 600px; }
+tr.total td { font-weight: 600; background: var(--accent-soft); }
+
+/* Chips */
+.chip {
+  display: inline-block; font-size: 0.74rem; font-weight: 600; padding: 1px 8px; border-radius: 999px;
+  white-space: nowrap; line-height: 1.6;
+}
+.chip.crit { background: var(--crit-soft); color: var(--crit); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.acc { background: var(--accent-soft); color: var(--accent); }
+.chip.t4 { background: var(--t4-soft); color: var(--t4); }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+
+/* Risk list */
+.risks { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.risk {
+  display: grid; grid-template-columns: 4.2rem minmax(0, 1fr); gap: 12px;
+  padding: 12px 16px; border-top: 1px solid var(--line);
+}
+.risk:first-child { border-top: 0; }
+.risk .code { font-family: var(--font-mono); font-weight: 600; font-size: 0.86rem; color: var(--crit); padding-top: 1px; }
+.risk.b .code { color: var(--warn); }
+.risk-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.risk-body .t { font-weight: 600; }
+.risk-body .d { font-size: 0.88rem; color: var(--muted); }
+
+/* Decisions */
+.decisions { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 12px; }
+.dec {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0;
+}
+.dec.rec { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.dec.nodefault { border-color: var(--crit); box-shadow: inset 0 0 0 1px var(--crit); }
+.dec-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+.dec-code { font-family: var(--font-mono); font-weight: 600; font-size: 0.86rem; color: var(--accent); }
+.dec-topic { font-weight: 600; flex: 1 1 200px; min-width: 0; }
+.dec-ctx { font-size: 0.86rem; color: var(--muted); }
+.opts { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; }
+.opts li { margin: 0; display: grid; grid-template-columns: 1.6rem minmax(0, 1fr); gap: 6px; }
+.opts .k { font-family: var(--font-mono); font-weight: 600; }
+.opts li.def { background: var(--ok-soft); border-radius: 6px; padding: 4px 6px; margin: 0 -6px; }
+.opts li.def .tag { color: var(--ok); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.86rem; color: var(--muted); align-items: center; }
+.legend .sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 6px; }
+
+/* Roadmap tiers */
+.tier { display: flex; flex-direction: column; gap: 12px; }
+.tier-head {
+  display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline;
+  padding: 10px 14px; border-radius: 8px;
+}
+.tier-1 .tier-head { background: var(--crit-soft); }
+.tier-2 .tier-head { background: var(--warn-soft); }
+.tier-3 .tier-head { background: var(--accent-soft); }
+.tier-4 .tier-head { background: var(--t4-soft); }
+.tier-head h3 { font-size: 1.1rem; }
+.tier-1 .tier-head h3 { color: var(--crit); }
+.tier-2 .tier-head h3 { color: var(--warn); }
+.tier-3 .tier-head h3 { color: var(--accent); }
+.tier-4 .tier-head h3 { color: var(--t4); }
+.tier-head .sub { font-size: 0.88rem; color: var(--ink); }
+.ulist { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.u {
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px;
+  padding: 12px 16px; border-top: 1px solid var(--line);
+}
+.u:first-child { border-top: 0; }
+@media (min-width: 720px) { .u { grid-template-columns: 4.4rem minmax(0, 1fr); gap: 14px; } }
+.u-code { font-family: var(--font-mono); font-weight: 600; font-size: 0.92rem; }
+.tier-1 .u-code { color: var(--crit); }
+.tier-2 .u-code { color: var(--warn); }
+.tier-3 .u-code { color: var(--accent); }
+.tier-4 .u-code { color: var(--t4); }
+.u-main { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.u-title { font-weight: 600; }
+.u-desc { font-size: 0.88rem; color: var(--muted); }
+.u-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.8rem; color: var(--muted); }
+.u-meta span { min-width: 0; }
+.u-meta b { color: var(--ink); font-weight: 600; }
+.u-meta .dep { color: var(--accent); font-weight: 600; }
+.cond { font-size: 0.74rem; font-weight: 600; color: var(--warn); background: var(--warn-soft); border-radius: 4px; padding: 0 6px; margin-right: 6px; }
+
+/* Ops model */
+pre.flow {
+  margin: 0; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 16px; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.5; color: var(--ink);
+}
+.ops-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+.ops-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; font-size: 0.9rem; }
+.ops-card h4 { color: var(--accent); }
+
+.dont { list-style: none; padding: 0; counter-reset: d; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 8px 20px; }
+.dont li { counter-increment: d; margin: 0; display: grid; grid-template-columns: 1.8rem minmax(0, 1fr); gap: 8px; font-size: 0.92rem; padding: 6px 0; border-top: 1px solid var(--line); }
+.dont li::before { content: counter(d); font-family: var(--font-mono); font-weight: 600; color: var(--crit); font-size: 0.86rem; padding-top: 2px; }
+
+.paths { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.paths li { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 8px 0; border-top: 1px solid var(--line); }
+@media (min-width: 720px) { .paths li { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; } }
+.paths code { background: none; padding: 0; word-break: break-all; }
+.paths span { color: var(--muted); font-size: 0.88rem; }
+
+footer { color: var(--muted); font-size: 0.84rem; border-top: 1px solid var(--line); padding-top: 14px; }
+
+@media print {
+  :root { --bg: #ffffff; --surface: #ffffff; --ink: #000000; --muted: #333333; --line: #bbbbbb; color-scheme: light; }
+  body { font-size: 10.5pt; padding: 0; background: #ffffff; }
+  .toc { display: none !important; }
+  .page { display: block; max-width: none; }
+  main { gap: 28px; padding-top: 0; }
+  .table-wrap { overflow: visible; border: 1px solid #bbbbbb; }
+  table.wide, table.mid { min-width: 0; }
+  .dec, .u, .risk, .ops-card, .score-row, tr { break-inside: avoid; }
+  .section-head { break-after: avoid; }
+  a { color: inherit; text-decoration: none; }
+  .dec.rec, .dec.nodefault { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="toc-label">Mục lục</div>
+  <ol>
+    <li><a href="#tom-tat">Tóm tắt</a></li>
+    <li><a href="#bang-diem">Bảng điểm</a></li>
+    <li><a href="#rui-ro">Rủi ro hàng đầu</a></li>
+    <li><a href="#quyet-dinh">Quyết định cần Nghiệp</a></li>
+    <li><a href="#lo-trinh">Lộ trình hợp nhất</a></li>
+    <li><a href="#tang-1">&nbsp;&nbsp;Tầng 1: Ngay</a></li>
+    <li><a href="#tang-2">&nbsp;&nbsp;Tầng 2: Trước tenant</a></li>
+    <li><a href="#tang-3">&nbsp;&nbsp;Tầng 3: 90 ngày</a></li>
+    <li><a href="#tang-4">&nbsp;&nbsp;Tầng 4: Có điều kiện</a></li>
+    <li><a href="#mo-hinh">Mô hình đích</a></li>
+    <li><a href="#khong-lam">Không nên làm lúc này</a></li>
+    <li><a href="#chuan">Sửa data standards</a></li>
+    <li><a href="#issue">Issue đề xuất</a></li>
+    <li><a href="#chi-phi">Chi phí</a></li>
+    <li><a href="#tai-lieu">Tài liệu nguồn</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<header class="masthead">
+  <div class="eyebrow">AA_Ecosys · Audit S241 · 17/10/2026</div>
+  <h1>Chuẩn hoá SDLC &amp; nền tảng — S241</h1>
+  <span class="status-pill">Đề xuất, chờ Nghiệp duyệt</span>
+  <p class="lede">Gộp đánh giá SDLC/ADLC (bản sửa 2, sau 2 vòng phản biện) và lộ trình nền tảng hợp nhất U-xx (bản sửa 1). Trang này không thay đổi ADR, data standards, backlog hay Linear.</p>
+  <div class="meta-grid">
+    <div><strong>Phạm vi</strong>Org <code>AdventureAsia365-Ecosys</code> (AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-CIS-Infra, root AA-Ecosys), AWS acc2 <code>005097885195</code> (us-west-1), 3 project Vercel, quy trình agent (Claude Code, Kiro).</div>
+    <div><strong>Cách làm</strong>Chỉ đọc: <code>gh api</code> (GET), <code>aws describe/list/get</code>, đọc file. Không thay đổi gì trên GitHub, AWS, Vercel hay Linear. Không in giá trị secret.</div>
+    <div><strong>Tác nhân</strong>Claude Code: 6 lĩnh vực chạy song song, 1 bước tổng hợp, 2 phản biện, 1 bước sửa; sau đó kiểm nhất quán đối kháng cho lộ trình.</div>
+  </div>
+</header>
+
+<!-- 1. Tóm tắt -->
+<section id="tom-tat">
+  <div class="section-head"><span class="eyebrow">Phần 1</span><h2>Tóm tắt</h2></div>
+
+  <div class="headline" role="list">
+    <div role="listitem"><span class="num">~1,5/4</span><span class="lbl">Mức hiện tại so với NIST SSDF, OpenSSF Scorecard, OWASP API/LLM, DORA</span></div>
+    <div role="listitem"><span class="num">3–4 ngày</span><span class="lbl">P0-A làm ngay, 0 USD</span></div>
+    <div role="listitem"><span class="num">15–20 ngày</span><span class="lbl">P0-B trước tenant trả tiền đầu tiên (4–6 tuần part-time)</span></div>
+    <div role="listitem"><span class="num">25 quyết định</span><span class="lbl">D-01 … D-25 cần Nghiệp chốt</span></div>
+  </div>
+
+  <div class="prose">
+    <p><b>Phạm vi đánh giá (theo review):</b> acc2 "Dev" là hệ thống lưu PII thật của khách. Với questionnaire của khách B2B, môi trường đang giữ dữ liệu khách chính là môi trường production, dù tên là Dev. Lộ trình hợp nhất <b>không nhận tiền đề này một cách im lặng</b>: đây là quyết định D-01, mặc định là "dữ liệu test" cho tới khi Nghiệp xác nhận bằng một lệnh đếm chính xác chỉ đọc (U-10).</p>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Nền móng tốt hơn mức thường gặp ở team 1 người</h3>
+      <ul>
+        <li>CI dùng OIDC, không có AWS key tĩnh trong CI (nhưng trust hiện quá rộng, P0-1; máy dev vẫn có key tĩnh, P0-3).</li>
+        <li>Pipeline Booking đạt chuẩn tham chiếu.</li>
+        <li>Có deploy-gate theo job và migration guard.</li>
+        <li>Definition of Done dựa trên bằng chứng live.</li>
+        <li>Có ADR và data-standards.</li>
+        <li>Tốc độ: CI p50 khoảng 2,7 phút, deploy 1–6 phút, merge lên Dev khoảng 10 phút. Mọi đề xuất đều cố giữ tốc độ này.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Lớp quản trị gần như chỉ là quy ước</h3>
+      <ul>
+        <li>Nhánh bất kỳ có thể chạy <code>terraform apply</code> với role gần admin trên acc2 (env <code>prod</code> của Infra không có rule nào).</li>
+        <li>Agent AI chạy bằng quyền admin của Nghiệp và tự merge, không có review được ghi nhận (0/951 PR).</li>
+        <li>Cô lập tenant fail-open khi mất cờ Redis; Redis không có AUTH/TLS.</li>
+        <li>Runtime CIS đọc được PII của Booking; 3 service dùng chung 1 security group.</li>
+        <li>Đường sửa dữ liệu không review, không log (ECS exec chạy script với user master).</li>
+        <li>Lỗi production không ai thấy: Sentry tắt, CIS API không có alarm 5xx. Backup chưa từng thử khôi phục.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>5 việc quan trọng nhất (theo review)</h3>
+  <ol class="top5">
+    <li><div><b>Đóng đường "nhánh bất kỳ → quyền admin AWS"</b> (P0-1 → U-01): branch policy <code>main</code> cho env CIS, <code>if: github.ref == 'refs/heads/main'</code> cho terraform-apply, điều kiện IAM <code>token.actions.githubusercontent.com:ref</code> trên trust các role apply/migrate/deploy. Làm được trên gói Free.</div></li>
+    <li><div><b>Revoke token GitHub đã lộ ngay</b> (P0-2 → U-03, D-02). Mật khẩu RDS master xoay theo đúng thứ tự: xoay tay → X1 → RDS-managed (P0-9, D-03, D-04).</div></li>
+    <li><div><b>Thu hẹp quyền agent</b> (P0-3 → U-04): agent dùng <code>aa365-agent</code>, lệnh nguy hiểm sang <code>ask</code>/<code>deny</code>, chặn agent đọc <code>~/.aws/**</code>. Sau đó GitHub App cho agent, rồi ruleset theo tầng rủi ro (U-25).</div></li>
+    <li><div><b>Cô lập tenant và dữ liệu</b> (P0-8, P0-9 → U-12…U-18): cô lập fail-closed, Redis AUTH/TLS, runtime CIS không đọc được PII Booking, SG riêng cho từng app.</div></li>
+    <li><div><b>Thấy được lỗi và khôi phục được</b> (P0-6, P0-11 → U-07, U-20, U-21): Sentry, alarm 5xx CIS, uptime check, diễn tập PITR (AA-829), ECR immutable và rollback bằng task-def revision trước.</div></li>
+  </ol>
+
+  <div class="callout note">
+    <div class="callout-title">Cách lộ trình xếp ưu tiên</div>
+    <p>ADR đã accepted thắng tất cả; data standards v1.0 thắng skill, steering và ghi chú phiên; quyết định đã ghi của Nghiệp cũng ràng buộc. SDLC review là đề xuất mới, chưa duyệt: chỗ nào review ngược ADR, chuẩn hay quyết định đã ghi thì đưa lên thành quyết định D-xx, và lộ trình xếp theo phương án giữ nguyên quyết định đã có cho tới khi Nghiệp quyết.</p>
+  </div>
+</section>
+
+<!-- 2. Bảng điểm -->
+<section id="bang-diem">
+  <div class="section-head"><span class="eyebrow">Phần 2</span><h2>Bảng điểm hiện trạng</h2></div>
+  <div class="scale" aria-label="Thang điểm">
+    <span><b>0</b> không có</span>
+    <span><b>1</b> tự phát, dựa quy ước</span>
+    <span><b>2</b> có công cụ, chưa cưỡng chế hoặc chưa đều</span>
+    <span><b>3</b> cưỡng chế được, đo được</span>
+    <span><b>4</b> tự động, cải tiến liên tục</span>
+  </div>
+  <div class="scorecard">
+    <div class="score-row">
+      <div class="score-name">GitHub org &amp; repo governance</div>
+      <div class="score-val"><span class="score-num">1</span><div class="bar low" role="img" aria-label="1 trên 4"><span style="width:25%"></span></div></div>
+      <div class="score-ev">Org <code>plan=free</code>, <code>two_factor_requirement_enabled=false</code>. Root <code>master</code> không được bảo vệ. Infra trả 403 khi đọc protection. Repo app: <code>required_pull_request_reviews=null</code>, <code>enforce_admins=false</code>. Secret scanning và push protection <code>disabled</code> trên 4 repo public và <code>AA-ACP-App</code> (archived, public). Không có CODEOWNERS, SECURITY.md hay dependabot.yml.</div>
+    </div>
+    <div class="score-row">
+      <div class="score-name">CI/CD &amp; phát hành</div>
+      <div class="score-val"><span class="score-num">2</span><div class="bar" role="img" aria-label="2 trên 4"><span style="width:50%"></span></div></div>
+      <div class="score-ev"><b>Cộng:</b> OIDC tách role theo job, Booking dùng tag ECR immutable, deploy-gate fail-closed, circuit breaker, smoke kiểm SHA. <b>Trừ:</b> CIS <code>pip-audit … || true</code>, Trivy <code>exit-code: 0</code>, deploy-dev CIS không có <code>concurrency</code>, ECR CIS MUTABLE, chỉ giữ 10 image. Không có rollback, provenance, tag hay release.</div>
+    </div>
+    <div class="score-row">
+      <div class="score-name">Môi trường, secret, IAM, mạng, DR</div>
+      <div class="score-val"><span class="score-num">1,5</span><div class="bar low" role="img" aria-label="1,5 trên 4"><span style="width:37.5%"></span></div></div>
+      <div class="score-ev"><b>Cộng:</b> permission boundary, OIDC subject bất biến. <b>Trừ:</b> env <code>prod</code> của Infra trống rule nhưng role tf-apply có quyền FullAccess rộng. 27 secret không rotation. Credential đã lộ chưa xoay (S240). Redis không AUTH/TLS. 3 ECS service chung SG. ECS Exec bật, không log phiên. CloudTrail single-region, không KMS. Không có GuardDuty. acc2 thuộc org có management account bên thứ ba <code>033086823579</code>. Chưa từng diễn tập restore.</div>
+    </div>
+    <div class="score-row">
+      <div class="score-name">Quản lý API</div>
+      <div class="score-val"><span class="score-num">1,5</span><div class="bar low" role="img" aria-label="1,5 trên 4"><span style="width:37.5%"></span></div></div>
+      <div class="score-ev"><b>Cộng:</b> Booking dùng RS256, JWKS và ma trận quyền; contract sự kiện có version. <b>Trừ:</b> RBAC staff CIS chỉ ở BFF (mặc định cho phép). Cô lập tenant fail-open. WAF không gắn vào API GW. CIS stage throttle <code>-1</code>. Frontend CIS và TripPlanner không gửi CSP/X-Frame-Options/nosniff/Referrer-Policy. 11/258 route có <code>response_model</code>.</div>
+    </div>
+    <div class="score-row">
+      <div class="score-name">Chất lượng, quan sát, vận hành</div>
+      <div class="score-val"><span class="score-num">1,5</span><div class="bar low" role="img" aria-label="1,5 trên 4"><span style="width:37.5%"></span></div></div>
+      <div class="score-ev"><b>Cộng:</b> khoảng 4,3k unit test và 440 integration test cho CIS; Booking coverage 90%; 47 alarm. <b>Trừ:</b> secret Sentry DSN không tồn tại nên Sentry tắt. CIS API không có alarm 5xx. SNS chỉ gửi email. Log dạng text, giữ 14 ngày. Không có quy trình sự cố. UI smoke chỉ chạy 1/100 lần.</div>
+    </div>
+    <div class="score-row">
+      <div class="score-name">ADLC (cách dùng agent AI)</div>
+      <div class="score-val"><span class="score-num">1,5</span><div class="bar low" role="img" aria-label="1,5 trên 4"><span style="width:37.5%"></span></div></div>
+      <div class="score-ev"><b>Cộng:</b> skills, lessons log, DoD và hook guardrail cho subagent. <b>Trừ:</b> agent dùng role <code>nghiep-admin-8h-session</code>, tự merge, không có review được ghi nhận. <code>~/.aws/credentials</code> có 5 profile key tĩnh, <code>~/.aws/cli/cache</code> có 11 phiên STS, agent đọc được. Hook chỉ áp cho subagent, dựa trên deny-list. Eval regression chạy lần cuối 01/08.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Rủi ro -->
+<section id="rui-ro">
+  <div class="section-head"><span class="eyebrow">Phần 3</span><h2>Rủi ro hàng đầu</h2></div>
+  <p class="lede">Các khoảng trống P0 của review. <span class="chip crit">P0-A</span> đang hở hôm nay, rẻ, làm ngay. <span class="chip warn">P0-B</span> phải xong trước khi ký tenant trả tiền đầu tiên.</p>
+  <div class="risks">
+    <div class="risk"><span class="code">P0-1</span><div class="risk-body"><span class="t">Bất kỳ nhánh nào cũng có thể assume role deploy/tf-apply</span><span class="d">Env <code>prod</code> của Infra: <code>protection_rules=0</code>, <code>deployment_branch_policy=null</code>. <code>terraform-apply.yml</code> không kiểm <code>github.ref</code>, chạy <code>-auto-approve</code>. <code>ADMIN_SECRET</code> (god-key) là secret cấp repo. Đường ngắn nhất tới quyền admin acc2. Công sức S.</span></div></div>
+    <div class="risk"><span class="code">P0-2</span><div class="risk-body"><span class="t">Token GitHub đã lộ vẫn còn hiệu lực</span><span class="d">Scope <code>repo, workflow</code>, dùng được từ bất kỳ đâu trên Internet. Mở lại quyết định S240 (D-02). Công sức XS.</span></div></div>
+    <div class="risk"><span class="code">P0-3</span><div class="risk-body"><span class="t">Agent AI chạy bằng quyền admin của người</span><span class="d"><code>assumed-role/nghiep-admin-8h-session</code>; profile <code>aa365-agent</code> đã có nhưng không được dùng; agent đọc được key tĩnh và cache STS; hook không kiểm phiên chính. "Lethal trifecta". Công sức S.</span></div></div>
+    <div class="risk"><span class="code">P0-4</span><div class="risk-body"><span class="t">Tính năng bảo mật GitHub miễn phí đang tắt, 2FA không bắt buộc</span><span class="d">Secret scanning, push protection, Dependabot tắt trên 4 repo public; Dependabot alerts tắt trên Infra; lịch sử <code>AA-ACP-App</code> (public) chưa từng được quét. Công sức XS.</span></div></div>
+    <div class="risk"><span class="code">P0-5</span><div class="risk-body"><span class="t">Backend không kiểm role cho route ghi admin nhạy cảm</span><span class="d"><code>llm-config</code>, <code>budgets</code>, job-runner chỉ kiểm secret; backend tin <code>x-admin-role</code>; so sánh secret bằng <code>==</code>. OWASP API5. Công sức S.</span></div></div>
+    <div class="risk"><span class="code">P0-6</span><div class="risk-body"><span class="t">Lỗi production không ai thấy</span><span class="d">Secret Sentry DSN không tồn tại; không có alarm 5XXError/Latency cho API GW CIS; không có uptime check; SNS chỉ email. Công sức S.</span></div></div>
+    <div class="risk"><span class="code">P0-7</span><div class="risk-body"><span class="t">Cổng CI "luôn xanh" và deploy CIS chạy chồng</span><span class="d"><code>pip-audit … || true</code> trong check bắt buộc; <code>deploy-dev.yml</code> không có <code>concurrency</code> (40/550 lượt chạy chồng); guard fail-open khi thiếu secret. Công sức XS–S.</span></div></div>
+    <div class="risk b"><span class="code">P0-8</span><div class="risk-body"><span class="t">Cô lập tenant fail-open, Redis không xác thực</span><span class="d">Lỗi Redis hoặc thiếu key nghĩa là "off" (về admin pool). Redis <code>AuthTokenEnabled=false</code>, <code>TransitEncryptionEnabled=false</code>. SSRF qua URL WordPress do tenant nhập. Công sức M.</span></div></div>
+    <div class="risk b"><span class="code">P0-9</span><div class="risk-body"><span class="t">Runtime CIS đọc được PII của Booking; app không tách mạng; mật khẩu RDS master đã lộ</span><span class="d"><code>aa_cis_admin</code> đọc được qua <code>pg_read_all_data</code>; 3 service chung <code>sg-038383acb15660582</code>. Thứ tự đúng: xoay tay → X1 → RDS-managed, sai thứ tự sẽ làm gãy runtime. Công sức S + M.</span></div></div>
+    <div class="risk b"><span class="code">P0-10</span><div class="risk-body"><span class="t">Biên API: login không giới hạn, không WAF/throttle, lộ docs, thiếu security header</span><span class="d">JWT HS256 chung staff/tenant, không lockout; WAF chỉ gắn ALB; throttle <code>-1</code>; <code>openapi.json</code> Booking công khai; frontend CIS/TripPlanner thiếu CSP, X-Frame-Options. Công sức M.</span></div></div>
+    <div class="risk b"><span class="code">P0-11</span><div class="risk-body"><span class="t">Chưa chứng minh được khôi phục (DB) và rollback (app)</span><span class="d">"Restore drill | never"; 11 MB dump thật trên laptop; ECR CIS MUTABLE, giữ 10 image trong khi deploy khoảng 129 lần/tuần; không có runbook rollback hay quy trình sự cố. Công sức S–M.</span></div></div>
+    <div class="risk b"><span class="code">P0-12</span><div class="risk-body"><span class="t">Truy cập dữ liệu không review, không log; bên thứ ba quản trị account</span><span class="d">ECS Exec bật trên 3 service, cluster không log phiên; không pgaudit; acc2 là member của org có management account <code>033086823579</code> (TrueIDC). Công sức S.</span></div></div>
+    <div class="risk b"><span class="code">P0-13</span><div class="risk-body"><span class="t">Hồ sơ pháp lý và thương mại tối thiểu</span><span class="d">Chưa có privacy/terms trên TripPlanner, DPA, RoPA, DSAR, SLA; Vercel Hobby phi thương mại. Đề xuất nhẹ nhàng gửi chị Thư; chị và luật sư quyết. Công sức M.</span></div></div>
+  </div>
+  <div class="callout warn">
+    <div class="callout-title">Sửa sự thật từ lộ trình hợp nhất (§3.2, gom vào U-09)</div>
+    <ul>
+      <li>Không có schema <code>crm</code> (dump 16/10, 15 schema). Phần "CRM giữ PII" trong review là sai; giữ "REVOKE <code>crm</code>" làm điều kiện của L10.</li>
+      <li><code>aa_cis_admin</code> có <code>bypassrls = no</code>. Rủi ro vẫn còn, nhưng cơ chế là role sở hữu bảng + ENABLE không FORCE + <code>pg_read_all_data</code>.</li>
+      <li>"AA-817 X1" trong review: AA-817 đã Done (S239); phần tách runtime CIS là AA-860.</li>
+      <li>ADR 0006: Cognito WORKFORCE, MFA tuỳ chọn (TOTP, chỉ break-glass), staff đăng nhập bằng email code, không mật khẩu.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4. Quyết định -->
+<section id="quyet-dinh">
+  <div class="section-head"><span class="eyebrow">Phần 4 · unified-roadmap §3</span><h2>Quyết định cần Nghiệp</h2></div>
+  <p class="lede">Mỗi quyết định có phương án. Phương án mặc định là phương án giữ quyết định hoặc chuẩn đã duyệt; lộ trình đang xếp theo nó cho tới khi Nghiệp quyết.</p>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--ok-soft);border:1px solid var(--ok)"></span>Mặc định hiện tại</span>
+    <span><span class="sw" style="background:var(--surface);border:2px solid var(--accent)"></span>Có phương án khuyến nghị</span>
+    <span><span class="sw" style="background:var(--surface);border:2px solid var(--crit)"></span>Không có mặc định an toàn</span>
+  </div>
+  <div class="decisions">
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-01</span><span class="dec-topic">Khung "acc2 Dev = production vì có PII thật"</span></div>
+      <p class="dec-ctx">Dump 16/10 (ước lượng <code>reltuples</code>): <code>booking.customers</code> khoảng 1 dòng, <code>shared.tenants</code> 4, không có schema <code>crm</code>. TripPlanner chạy public trên domain thật từ S239 nên PII thật có thể đã vào qua form inquiry. Xác nhận bằng U-10.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> Là dữ liệu test. Sửa §1 review thành "danh sách sẵn sàng trước prod/tenant đầu".</span></li>
+        <li><span class="k">B</span><span>Là dữ liệu thật (C7.1a đang bị vi phạm). B1: xoá/che dữ liệu thật trên Dev. B2: tuyên bố Dev là prod trên thực tế, đảo dev-no-waiting, S240 và C1/C4.1a.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec rec">
+      <div class="dec-head"><span class="dec-code">D-02</span><span class="dec-topic">Revoke token GitHub ngay</span><span class="chip acc">Khuyến nghị A</span></div>
+      <p class="dec-ctx">S240: token + mật khẩu RDS "để nguyên, xoay khi lên prod". Chi phí 0, XS, lý do không phụ thuộc D-01.</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Revoke ngay; backlog §1 chỉ còn mật khẩu RDS chờ prod.</span></li>
+        <li class="def"><span class="k">B</span><span><span class="tag">Mặc định (giữ S240).</span> U-03 chưa chạy.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-03</span><span class="dec-topic">Xoay mật khẩu RDS master bây giờ và chính sách xoay</span></div>
+      <p class="dec-ctx">S240 và DM-8.9: xoay khi lên prod. Về kỹ thuật an toàn (<code>ignore_changes = [password]</code>) nhưng vẫn là đảo quyết định. Nên đi theo D-01.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> Giữ S240, chuyển vào checklist prod (U-40).</span></li>
+        <li><span class="k">B</span><span>Xoay tay ở tầng 2 (U-17), sửa DM-8.9, thêm rule xoay DM-8.11.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec rec">
+      <div class="dec-head"><span class="dec-code">D-04</span><span class="dec-topic">Bật <code>manage_master_user_password</code></span><span class="chip acc">Khuyến nghị A</span></div>
+      <p class="dec-ctx">Trước X1, master còn chạy DB Migrate và là role duy nhất có CREATEROLE; secret RDS-managed là JSON và tự xoay 7 ngày.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> Trigger "X1 xong" (gồm <code>db_migrator</code>) hoặc L9 (U-41).</span></li>
+        <li><span class="k">B</span><span>Giữ ở P0-B như review, kéo theo D-05 = B.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-05</span><span class="dec-topic">Thời điểm tách role X1</span></div>
+      <p class="dec-ctx">ADR 0008 d6: <code>bk_owner</code>/<code>tp_owner</code> + <code>db_migrator</code> trước, rồi CIS chuyển <code>cis_app</code>. Phần CIS là AA-860.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> X1 ở tầng 90 ngày (U-33), theo thứ tự ADR.</span></li>
+        <li><span class="k">B</span><span>Kéo cả chuỗi X1 lên tầng 2, ước lại là L.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-06</span><span class="dec-topic">Security group riêng cho từng app</span></div>
+      <p class="dec-ctx">Rẻ, nhưng sửa ranh giới của ADR 0004 d5 (accepted), nên cần ADR 0004b. C7.2c chỉ đòi SG riêng theo môi trường (prod).</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Viết ADR 0004b, làm trên Dev ở tầng 2 (U-18).</span></li>
+        <li class="def"><span class="k">B</span><span><span class="tag">Mặc định.</span> Chỉ làm ở prod (C7.2c, U-40).</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-07</span><span class="dec-topic">ECS exec: đường chuẩn hay break-glass</span></div>
+      <p class="dec-ctx">DM-8.8: người truy cập DB chỉ qua S3-mediated ECS exec; A/B LLM bắt buộc chạy qua đường này.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> Giữ DM-8.8, thêm log phiên (U-22) và read-only role (U-33).</span></li>
+        <li><span class="k">B</span><span>Khi có prod: sửa DM-8.8/MIG-5, exec thành break-glass (U-51).</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-08</span><span class="dec-topic">pgaudit trên Dev ngay</span></div>
+      <p class="dec-ctx">C7.2e: pgaudit là SHOULD ở prod; S237 đã chuyển sang Later. pgaudit <code>write</code> sẽ ghi literal PII từ script ad-hoc.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> Chỉ <code>log_connections</code> (U-22); pgaudit vào prod (U-40).</span></li>
+        <li><span class="k">B</span><span>Bật pgaudit trên Dev với scope không ghi literal PII, idle check C6.3b, window, một dòng DM-7.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-09</span><span class="dec-topic">Cửa sổ retention mới</span></div>
+      <p class="dec-ctx">DM-7.1 là registry duy nhất; mọi thay đổi cửa sổ cần Nghiệp duyệt (DM-7.5).</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Duyệt các dòng DM-7 như đề xuất (log bảo mật ≥ 365 ngày, log app 30–90, log exec, snapshot thủ công 90 ngày).</span></li>
+        <li><span class="k">B</span><span>Giữ nguyên DM-7, chỉ thêm dòng snapshot thủ công.</span></li>
+        <li class="def"><span class="k">—</span><span><span class="tag">Mặc định.</span> Không đổi dòng DM-7 nào; log mới dùng 14 ngày; hạn snapshot ở U-21 chờ.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec rec">
+      <div class="dec-head"><span class="dec-code">D-10</span><span class="dec-topic">Thời điểm diễn tập restore (X10/AA-829)</span><span class="chip acc">Khuyến nghị A</span></div>
+      <p class="dec-ctx">DM-9.3: "run it once now"; C1.2: Dev RTO &lt; 1 h; backlog: "later". Chi phí &lt; 1 USD.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định (chuẩn thắng backlog).</span> Làm ngay khi có slot, U-20 ở đầu tầng 2.</span></li>
+        <li><span class="k">B</span><span>Trước tenant đầu, như review.</span></li>
+        <li><span class="k">C</span><span>Giữ "later", khi đó phải sửa DM-9.3.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-11</span><span class="dec-topic">Quyền chủ thể dữ liệu trong 90 ngày</span></div>
+      <p class="dec-ctx">DM-6.7: "to build (L3); Runbook until then". AA-839 parked "before prod".</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Bỏ park AA-839, thêm DM-6.11, làm U-32 ở tầng 90 ngày.</span></li>
+        <li class="def"><span class="k">B</span><span><span class="tag">Mặc định.</span> Chỉ runbook trước tenant đầu (U-23); script theo ADR 0006 Phase 4 (U-57).</span></li>
+      </ul>
+    </article>
+
+    <article class="dec rec">
+      <div class="dec-head"><span class="dec-code">D-12</span><span class="dec-topic">Đảo mặc định tenant pool</span><span class="chip acc">Khuyến nghị A</span></div>
+      <p class="dec-ctx">Cả 11 cờ đã ON, nên đảo toàn cục thực chất là promote mọi canary cùng lúc và bỏ rollback đã duyệt.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định (khớp C2.3g/DM-8.4).</span> Quyết theo từng wave AA-859; route nào promote thì bỏ fallback (U-12).</span></li>
+        <li><span class="k">B</span><span>Đảo toàn cục, chuyển cờ sang SSM; sửa C2.3g, §9 Part A, DM-8.4 trước.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-13</span><span class="dec-topic">Quyền merge: agent tự merge PR rủi ro thấp</span></div>
+      <p class="dec-ctx">DM-11.5 (MUST): "Agents MUST NOT merge to main". Steering hiện lại bảo agent <code>gh pr merge --auto</code>. Quyết trong ADR 0010.</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Sửa DM-11.5 thành mô hình theo tầng rủi ro (gồm Dependabot tự merge patch/minor); sửa steering và CLAUDE.md cho khớp.</span></li>
+        <li class="def"><span class="k">B</span><span><span class="tag">Mặc định.</span> Giữ chỉ người merge; sửa steering cho đúng DM-11.5 (bỏ <code>--auto</code>, bỏ việc agent tự merge root PR); không bật Dependabot auto-merge.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-14</span><span class="dec-topic">Visibility repo và gói GitHub (ADR 0011)</span></div>
+      <p class="dec-ctx">E10 S237: 3 repo app giữ public. Quyết định kinh doanh và IP của Nghiệp và chị Thư.</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Team (~8 USD), root + Infra private, app public.</span></li>
+        <li><span class="k">B</span><span>Enterprise (~42 USD), tất cả private.</span></li>
+        <li><span class="k">C</span><span>Team, tất cả private.</span></li>
+        <li class="def"><span class="k">D</span><span><span class="tag">Mặc định.</span> Giữ hiện trạng (Free, app + root public, Infra private), dùng gitleaks, chuyển dữ liệu nhạy cảm khỏi root. 0 USD.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec rec">
+      <div class="dec-head"><span class="dec-code">D-15</span><span class="dec-topic">Profile AWS cho agent (<code>aa365-agent</code>)</span><span class="chip acc">Khuyến nghị A</span></div>
+      <p class="dec-ctx">DM-8.7 (MUST) ghi cứng <code>--profile aa365-admin</code>. Trước khi chuyển, kiểm aa365-agent làm được S3 upload, presign và ECS exec.</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Sửa DM-8.7 (PR chuẩn v1.1), chuyển agent sang aa365-agent sau khi kiểm (U-04 bước 4). Nghiệp tự sửa CLAUDE.md toàn cục.</span></li>
+        <li class="def"><span class="k">B</span><span><span class="tag">Mặc định.</span> Giữ aa365-admin, chỉ thêm ask/deny.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec nodefault">
+      <div class="dec-head"><span class="dec-code">D-16</span><span class="dec-topic">Layout Terraform prod và cổng duyệt prod (ADR 0012)</span><span class="chip crit">Không có mặc định</span></div>
+      <p class="dec-ctx">C7.2c (chuẩn) và CONTEXT.md của Infra (AA-841 đã xoá <code>envs/</code>) mâu thuẫn từ trước review. Không dựng gì cho prod tới khi chốt; U-40 chỉ kích hoạt khi có ngày go-live.</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span><code>accounts/&lt;name&gt;/</code> (khớp CONTEXT.md).</span></li>
+        <li><span class="k">B</span><span><code>stacks/platform</code> tham số hoá (review).</span></li>
+        <li><span class="k">C</span><span><code>envs/prod/</code> (C7.2c hiện tại).</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-17</span><span class="dec-topic">Account cho prod</span></div>
+      <p class="dec-ctx">ADR 0001 S235, C7.2a: prod trên acc2. AA-864 đang nghiên cứu gom account. Biện pháp bù không áp được cho principal của management account TrueIDC.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> acc2, kèm biện pháp bù và điểm xem xét management account.</span></li>
+        <li><span class="k">B</span><span>Chờ AA-864 rồi mới chốt.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-18</span><span class="dec-topic">Vercel Pro</span></div>
+      <p class="dec-ctx">S240: ở lại Hobby bằng cách giảm usage. Trong lúc chờ: token ở mức repo là rủi ro chấp nhận.</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Lên Pro (~20 USD + usage) trước ngày thu tiền.</span></li>
+        <li class="def"><span class="k">B</span><span><span class="tag">Mặc định.</span> Hobby, xem lại khi ký tenant.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-19</span><span class="dec-topic">Gói chi tiêu AWS mới</span></div>
+      <p class="dec-ctx">WAF stage, ECR 30 image, log exec, GuardDuty, CloudTrail/KMS, giữ log. Tổng P1 cộng prod có thể tiến gần budget account $250. Review bỏ sót chi phí LLM của eval gate U-29.</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Duyệt cả gói ở tầng 2 và tầng 3.</span></li>
+        <li class="def"><span class="k">B</span><span><span class="tag">Mặc định (DM-10.7).</span> Duyệt từng mục khi tới lượt, sau khi tính bằng AWS pricing calculator.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-20</span><span class="dec-topic">OKActions trên alarm</span></div>
+      <p class="dec-ctx">S240: alarm chỉ email khi ALARM. Mâu thuẫn trực tiếp với quyết định vận hành mới nhất.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> Giữ "chỉ ALARM".</span></li>
+        <li><span class="k">B</span><span>OK chỉ đẩy về kênh điện thoại/uptime, không qua email.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-21</span><span class="dec-topic">Trigger của AA-842 (tracing)</span></div>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> Giữ trigger S238: chỉ làm option B khi job chậm hoặc không giải thích được.</span></li>
+        <li><span class="k">B</span><span>"Sau U-30".</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-22</span><span class="dec-topic">Tự sinh trạng thái phiên và backlog</span></div>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định.</span> Giữ cập nhật tay (steering session-workflow).</span></li>
+        <li><span class="k">B</span><span>Thử tự sinh phần §5/§6 của backlog.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-23</span><span class="dec-topic">AA-729 golden set: viết lại hay huỷ</span></div>
+      <p class="dec-ctx">Job PR gọi LLM là chi tiêu định kỳ mới, cần duyệt theo DM-10.7 cùng D-19.</p>
+      <ul class="opts">
+        <li><span class="k">A</span><span>Viết lại AA-729 theo P1-5 (U-29).</span></li>
+        <li><span class="k">B</span><span>Huỷ, giữ eval chạy tay.</span></li>
+        <li class="def"><span class="k">—</span><span><span class="tag">Mặc định.</span> AA-729 giữ trạng thái chờ, U-29 chưa làm.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-24</span><span class="dec-topic">Tạo issue Linear mới</span></div>
+      <p class="dec-ctx">Review đề xuất khoảng 20 issue; đã gộp thành 26 dòng ở phần Issue đề xuất. Quota ≤ 100 issue chưa lưu trữ mỗi project.</p>
+      <ul class="opts">
+        <li><span class="k">→</span><span>Duyệt từng dòng.</span></li>
+      </ul>
+    </article>
+
+    <article class="dec">
+      <div class="dec-head"><span class="dec-code">D-25</span><span class="dec-topic">Dữ liệu thương mại trong root public</span></div>
+      <p class="dec-ctx">Root public chứa giá và audit; DM-6.10 cấm dữ liệu trong repo public. Kiểm trước (U-10), rồi quyết.</p>
+      <ul class="opts">
+        <li class="def"><span class="k">A</span><span><span class="tag">Mặc định nếu U-10 xác nhận vi phạm.</span> Chuyển dữ liệu nhạy cảm sang chỗ private, giữ root public.</span></li>
+        <li><span class="k">B</span><span>Private hoá root (D-14 = A/C).</span></li>
+      </ul>
+    </article>
+
+  </div>
+</section>
+
+<!-- 5. Lộ trình -->
+<section id="lo-trinh">
+  <div class="section-head"><span class="eyebrow">Phần 5 · unified-roadmap §4</span><h2>Lộ trình hợp nhất U-xx</h2></div>
+  <p class="lede">Một danh sách việc nền tảng duy nhất gộp roadmap N/X/L của data standards (đã duyệt S237) và P0/P1/P2 của SDLC review. Công sức: XS dưới nửa ngày; S 1–2 ngày; M 3–5 ngày; L trên 1 tuần. Chi phí là USD/tháng tăng thêm, ước tính, phải tính lại bằng AWS pricing calculator trước khi bật. "(D-xx)" là mục phụ thuộc quyết định.</p>
+  <div class="callout warn">
+    <div class="callout-title">Biến có dấu gạch dưới</div>
+    <p>Một số mục chạm <code>ADMIN_SECRET</code>, <code>E2E_ADMIN_*</code>, <code>TF_VAR_DB_PASSWORD</code>, <code>VERCEL_TOKEN</code>, DSN. Những biến này Nghiệp sửa tay trong VSCode/Console; agent không sinh script cho các biến đó.</p>
+  </div>
+
+  <!-- Tier 1 -->
+  <div class="tier tier-1" id="tang-1">
+    <div class="tier-head"><h3>Tầng 1: Ngay</h3><span class="sub">0 USD, tuần này · khoảng 3–4 ngày công · thao tác ghi settings do Nghiệp chạy</span></div>
+    <div class="ulist">
+      <div class="u"><span class="u-code">U-01</span><div class="u-main"><span class="u-title">Đóng đường "nhánh bất kỳ → quyền admin acc2"</span><span class="u-desc">Env CIS <code>dev</code>/<code>prod</code> chỉ cho <code>main</code>; <code>if: github.ref == 'refs/heads/main'</code> trên terraform-apply; điều kiện IAM <code>:ref</code> trên role tf-apply/db-migrate/deploy (thử trên role nháp trước, có phương án dự phòng); sửa comment <code>cicd_split.tf:515-517</code>; ghi rủi ro chấp nhận cho secret mức repo.</span><div class="u-meta"><span><b>Nguồn</b> P0-1 b1–3, b5, b6; C7.2d, DM-11.6 mới</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-02</span><div class="u-main"><span class="u-title"><code>ADMIN_SECRET</code>: chuyển vào env <code>dev</code> main-only</span><span class="u-desc"><b>Đã xoay xong trong S241</b> ở cả 5 nơi (Secrets Manager, ECS api + worker, Vercel prod + preview, GitHub, Lambda dfs-balance): khoá mới 200, khoá cũ 403. Còn lại: chuyển secret GitHub từ mức repo vào env <code>dev</code> main-only (sau U-01).</span><div class="u-meta"><span><b>Nguồn</b> P0-1 b4; DM-8.6</span><span><b>Linear</b> chore (backlog #4)</span><span><b>Công sức</b> S</span><span><b>Phụ thuộc</b> U-01; slot Vercel; auto mode tắt</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-03</span><div class="u-main"><span class="u-title">Revoke token GitHub đã lộ, cấp lại token fine-grained, ghi bản ghi sự cố</span><span class="u-desc">Bản ghi ở <code>docs/incidents/</code> (vị trí mới); xoá transcript chứa giá trị.</span><div class="u-meta"><span><b>Nguồn</b> P0-2; DM-8.9</span><span><b>Linear</b> chore</span><span><b>Công sức</b> XS</span><span class="dep">D-02</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-04</span><div class="u-main"><span class="u-title">Thu hẹp quyền agent (phần không cần sửa chuẩn)</span><span class="u-desc">(1) <code>.claude/settings.json</code> bản commit có <code>ask</code>/<code>deny</code>, chặn đọc <code>~/.aws/**</code>, <code>~/.config/gh/**</code>; xoá 3 rule có mật khẩu literal; Kiro áp tương đương. (2) Terraform: thu hẹp Deny ở <code>agent_session.tf:159</code> bằng <code>NotResource</code> cho secret e2e. (3) Kiểm identity đầu phiên. (4) Sau D-15: chuyển sang <code>aa365-agent</code>. (5) Ghi các luồng giữ cho Nghiệp.</span><div class="u-meta"><span><b>Nguồn</b> P0-3 b1–b5; DM-8.7, 8.8, 11.5</span><span><b>Linear</b> mới (AA-730 Done S227, tham chiếu)</span><span><b>Công sức</b> S</span><span class="dep">Bước 4: D-15</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-05</span><div class="u-main"><span class="u-title">Bật tính năng bảo mật GitHub miễn phí, org 2FA</span><span class="u-desc">4 repo public: secret scanning, push protection, Dependabot, CodeQL default, PVR. Infra: Dependabot + <code>dependabot.yml</code>. Tắt quyền member tạo repo public. Ruleset tối thiểu (chặn force-push, xoá nhánh). Gitleaks toàn lịch sử <code>AA-ACP-App</code> rồi xoá hoặc private.</span><div class="u-meta"><span><b>Nguồn</b> P0-4; DM-6.10</span><span><b>Linear</b> mới</span><span><b>Công sức</b> XS</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-06</span><div class="u-main"><span class="u-title">Kiểm role phía server cho llm-config, budgets, ghi job-runner</span><span class="u-desc">Chỉ <code>admin</code>/<code>owner</code>; một verifier <code>hmac.compare_digest</code> thay mọi chỗ so sánh secret. Bước tạm của ADR 0006 Phase 1.</span><div class="u-meta"><span><b>Nguồn</b> P0-5; NAM-14</span><span><b>Linear</b> mới (liên quan AA-816, AA-703)</span><span><b>Công sức</b> S</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-07</span><div class="u-main"><span class="u-title">Thấy lỗi CIS: Sentry, alarm API GW, uptime check</span><span class="u-desc">Secret Sentry DSN (free, <code>release = git SHA</code>, <code>send_default_pii=False</code> + lọc body/header); alarm 5XXError-rate và IntegrationLatency p95 cho <code>4ylo382khg</code> bằng Terraform; một uptime check miễn phí cho CIS <code>/health</code> và Booking <code>/booking/health/ready</code>.</span><div class="u-meta"><span><b>Nguồn</b> P0-6; C4.1, C4.1a, C1.2, DM-6.4</span><span><b>Linear</b> mới (liên quan AA-832)</span><span><b>Công sức</b> S</span><span><b>Phụ thuộc</b> Sentry vào danh sách sub-processor (U-23)</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-08</span><div class="u-main"><span class="u-title">CI/deploy CIS: pip-audit chặn, concurrency, guard fail-closed</span><span class="u-desc">Bỏ <code>|| true</code> (ignore có hạn như Booking); <code>concurrency</code> cho deploy-dev; guard <code>shared.job</code> fail-closed khi thiếu credential; giữ <code>--desired-count 1</code> kèm comment lý do.</span><div class="u-meta"><span><b>Nguồn</b> P0-7; C6.3a, DM-11.4; X6</span><span><b>Linear</b> mới</span><span><b>Công sức</b> XS–S</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-09</span><div class="u-main"><span class="u-title">Sửa sự thật trong tài liệu (root PR)</span><span class="u-desc">Các dòng §3.2; chuyển dòng trạng thái cũ trong chuẩn sang Exists; cột enforcement của DM-11.5; <code>ecosystem-architecture.md</code> §5; CLAUDE.md dự án (ACP); sửa review (CRM, BYPASSRLS, MFA, AA-860).</span><div class="u-meta"><span><b>Nguồn</b> §3.2</span><span><b>Linear</b> không cần</span><span><b>Công sức</b> XS</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-10</span><div class="u-main"><span class="u-title">Ba kiểm tra chỉ đọc</span><span class="u-desc">(a) Đếm chính xác <code>count(*)</code> và xác nhận PII thật trên Dev, inquiry từ domain TripPlanner public, dump laptop 16/09 (cho D-01). (b) Liệt kê dữ liệu <code>conf:commercial</code> và audit nhạy cảm trong root public (cho D-25). (c) Trust của <code>OrganizationAccountAccessRole</code> với <code>033086823579</code>; xin TrueIDC chính sách truy cập và SCP bằng văn bản.</span><div class="u-meta"><span><b>Nguồn</b> §1; P0-12 b3; DM-6.10, C7.1a; AA-864</span><span><b>Linear</b> không cần (ghi vào audit)</span><span><b>Công sức</b> XS</span><span><b>Phụ thuộc</b> (c) Nghiệp chạy</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-11</span><div class="u-main"><span class="u-title">Việc XS: dọn nhánh, squash-only, gỡ <code>/v1/webhooks</code> khỏi Playground</span><span class="u-desc">Dọn nhánh đã merge, <code>delete_branch_on_merge</code>, squash-only trên 4 repo.</span><div class="u-meta"><span><b>Nguồn</b> P2-17 (XS); P2-5</span><span><b>Linear</b> không cần</span><span><b>Công sức</b> XS</span><span class="dep">Tự sinh backlog: D-22</span><span><b>Chi phí</b> 0</span></div></div></div>
+    </div>
+  </div>
+
+  <!-- Tier 2 -->
+  <div class="tier tier-2" id="tang-2">
+    <div class="tier-head"><h3>Tầng 2: Trước tenant trả tiền đầu tiên</h3><span class="sub">Khoảng 15–20 ngày công, 4–6 tuần part-time · mốc chặn là ngày ký tenant đầu tiên · nếu D-01 = B, cả tầng chuyển lên ngay sau tầng 1</span></div>
+    <div class="ulist">
+      <div class="u"><span class="u-code">U-12</span><div class="u-main"><span class="u-title">Cô lập tenant fail-closed theo từng wave AA-859</span><span class="u-desc">Hoàn thành D5b, wave 3, wave 4; route nào promote thì bỏ đọc cờ Redis cho route đó. Đường còn mở là <code>_flag_enabled</code> trả "off" khi Redis lỗi. Test route-policy + test hai tenant cho mọi route <code>/v1</code>; sửa C2.3g và runbook khi bỏ rollback qua Redis.</span><div class="u-meta"><span><b>Nguồn</b> P0-8 b1, b4; C2.3g, DM-8.4, SEC-10, TST-4</span><span><b>Linear</b> AA-859</span><span><b>Công sức</b> L</span><span class="dep">D-12</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-13</span><div class="u-main"><span class="u-title">Redis AUTH + TLS + at-rest; alarm đọc cờ tenant</span><span class="u-desc">Cluster mới cùng <code>cache.t3.micro</code>; alarm <code>aa817_tenant_flag_read_failed</code> và <code>used_tenant_pool=false</code> chỉ trên route có cờ tenant pool.</span><div class="u-meta"><span><b>Nguồn</b> P0-8 b2, b3; SEC-13 mới, dòng C4.1 mới</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S–M</span><span><b>Phụ thuộc</b> đổi endpoint, deploy lại api, worker, Booking</span><span><b>Chi phí</b> ~0</span></div></div></div>
+      <div class="u"><span class="u-code">U-14</span><div class="u-main"><span class="u-title">Client <code>safe_http</code> dùng chung</span><span class="u-desc">Resolve DNS, chặn IP private, <code>allow_redirects=False</code>, giới hạn size và timeout; thay <code>_validate_wp_url</code>.</span><div class="u-meta"><span><b>Nguồn</b> P0-8 b5</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-15</span><div class="u-main"><span class="u-title">X2 catalogue CI guard (review bỏ sót)</span><span class="u-desc">Bảng tenant không RLS, policy PUBLIC, tên GUC, NULLIF, FK chéo owner, grant allowlist; kèm lint thẻ PII và kernel list (chỉ khi Nghiệp OK).</span><div class="u-meta"><span><b>Nguồn</b> X2; TST-5; DM-2.1, 2.3, 5.2, 5.4, 8.3, 8.4</span><span><b>Linear</b> mới</span><span><b>Công sức</b> M</span><span><b>Phụ thuộc</b> allowlist đầy đủ cần <code>owners.yaml</code> (U-33)</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-16</span><div class="u-main"><span class="u-title">Isolation probe trong CI</span><span class="u-desc">Probe aa817 trên mỗi PR chạm RLS; probe chéo app "role runtime CIS <code>SELECT booking.customers</code> phải lỗi", expected-fail đến khi U-33 xong.</span><div class="u-meta"><span><b>Nguồn</b> P0-9 b4; TST-4; DM-8.4</span><span><b>Linear</b> mới (hoặc gộp U-15)</span><span><b>Công sức</b> S</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-17</span><div class="u-main"><span class="u-title"><span class="cond">D-03 = B</span>Xoay tay mật khẩu RDS master qua Console</span><span class="u-desc">Sửa DSN <code>aa-cis/dev/rds</code>; force-new-deployment api và worker; làm mới Lambda dùng DSN; cập nhật <code>TF_VAR_DB_PASSWORD</code>. Nghiệp sửa tay. Mặc định chuyển vào checklist prod U-40.</span><div class="u-meta"><span><b>Nguồn</b> P0-9 b1; DM-8.9</span><span><b>Linear</b> chore</span><span><b>Công sức</b> S</span><span class="dep">D-03</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-18</span><div class="u-main"><span class="u-title"><span class="cond">D-06 = A</span>SG riêng cho từng app, viết ADR 0004b</span><span class="u-desc">CIS api, worker, Booking; SG RDS/Redis liệt kê ingress theo app.</span><div class="u-meta"><span><b>Nguồn</b> P0-9 b3; ADR 0004 d5; C7.2c</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S–M</span><span class="dep">D-06</span><span><b>Chi phí</b> ~0</span></div></div></div>
+      <div class="u"><span class="u-code">U-19</span><div class="u-main"><span class="u-title">Biên API</span><span class="u-desc">Rate-limit theo IP + backoff theo user cho login (không khoá cứng theo user); WAF gắn REST stage; throttle CIS 50 rps / burst 100, <code>/auth/*</code> khoảng 5 rps; khoá docs Booking; CORS rỗng; security header cho CIS và TripPlanner, lấy Booking làm mẫu.</span><div class="u-meta"><span><b>Nguồn</b> P0-10; C2.3a, C2.3g, C2.3i mới; DM-10.7</span><span><b>Linear</b> mới (liên quan AA-806, AA-577)</span><span><b>Công sức</b> M</span><span class="dep">WAF: D-19</span><span><b>Chi phí</b> ~0–2</span></div></div></div>
+      <div class="u"><span class="u-code">U-20</span><div class="u-main"><span class="u-title">X10 đầy đủ (AA-829): diễn tập PITR</span><span class="u-desc">Instance tạm, smoke query từng schema, ghi RTO so với mục tiêu &lt; 1 h; dump 16/09 → S3 private SSE-KMS rồi xoá bản local; private CNAME cho DSN (DM-9.5); runbook restore một schema (DM-9.4).</span><div class="u-meta"><span><b>Nguồn</b> P0-11 b1, b2; X10; DM-9.3, 9.4, 9.5, 6.10</span><span><b>Linear</b> AA-829</span><span><b>Công sức</b> M</span><span class="dep">D-10</span><span><b>Chi phí</b> &lt; 1 (một lần mỗi drill)</span></div></div></div>
+      <div class="u"><span class="u-code">U-21</span><div class="u-main"><span class="u-title">Rollback app và sự cố</span><span class="u-desc">Bỏ push <code>:latest</code>, rồi ECR CIS IMMUTABLE, giữ 30 image <code>dev-*</code>; rollback = task-def revision trước, ghi vào <code>aa-ship</code>; Vercel instant rollback; <code>docs/ops/incident-response.md</code>; hạn snapshot thủ công.</span><div class="u-meta"><span><b>Nguồn</b> P0-11 b2–6; DM-9.2, DM-7.5</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S</span><span class="dep">Snapshot: D-09; ECR: D-19</span><span><b>Chi phí</b> ~1–3</span></div></div></div>
+      <div class="u"><span class="u-code">U-22</span><div class="u-main"><span class="u-title">Log phiên ECS Exec và <code>log_connections</code></span><span class="u-desc"><code>executeCommandConfiguration</code> có logging (CloudWatch/S3, KMS) bằng Terraform; <code>log_connections</code> qua parameter group (idle check C6.3b, maintenance window). Không làm pgaudit ở đây.</span><div class="u-meta"><span><b>Nguồn</b> P0-12 b1, b2; DM-8.8, C4.2a, C6.3b</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S</span><span class="dep">D-08, D-09</span><span><b>Chi phí</b> ~1–5</span></div></div></div>
+      <div class="u"><span class="u-code">U-23</span><div class="u-main"><span class="u-title">Gói pháp lý (đề xuất nhẹ nhàng gửi chị Thư)</span><span class="u-desc">Privacy/cookie, mẫu DPA + sub-processor, RoPA, runbook DSAR/xoá theo DM-6.7, đánh giá chuyển dữ liệu ra nước ngoài, SLA gọn, <code>support@</code> vào Linear, status page miễn phí; chốt AA-820 trước 11/11; metadata <code>ai_generated</code>. Kỹ thuật: <code>/privacy</code>, <code>/terms</code>; kiểm thu consent DM-6.5.</span><div class="u-meta"><span><b>Nguồn</b> P0-13, §5.7; DM-6.5, 6.7, 6.8</span><span><b>Linear</b> AA-820 + mới</span><span><b>Công sức</b> M</span><span class="dep">RoPA cần U-24; Pro: D-18</span><span><b>Chi phí</b> 0 (Pro ~20 + usage nếu D-18 = A)</span></div></div></div>
+      <div class="u"><span class="u-code">U-24</span><div class="u-main"><span class="u-title">Gắn thẻ <code>pii:&lt;class&gt;</code> cho cột Booking/TripPlanner</span><span class="u-desc">Bước 1 của L3; regenerate schema reference; RoPA lập từ các thẻ này. Đi qua migration của chủ (<code>bk-NNN</code>, <code>tp-NNN</code>).</span><div class="u-meta"><span><b>Nguồn</b> L3; DM-6.1, DM-3.2</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-60</span><div class="u-main"><span class="u-title">DM-6.6 phía TripPlanner</span><span class="u-desc"><code>tripplanner.job</code> từ DDL template + worker Lambda theo lịch + kind <code>tp_outbox_pii_redact</code> (90 ngày). Đã nằm trong backlog sống #6; chỉ để truy vết.</span><div class="u-meta"><span><b>Nguồn</b> DM-6.6, DM-7.2; L3</span><span><b>Linear</b> AA-861</span><span><b>Công sức</b> M–L</span><span><b>Phụ thuộc</b> TP merge cần tắt auto mode</span><span><b>Chi phí</b> ~0</span></div></div></div>
+    </div>
+  </div>
+
+  <!-- Tier 3 -->
+  <div class="tier tier-3" id="tang-3">
+    <div class="tier-head"><h3>Tầng 3: Trong 90 ngày</h3><span class="sub">Khoảng 25–35 ngày công, chưa tính X1 nếu D-05 = B</span></div>
+    <div class="ulist">
+      <div class="u"><span class="u-code">U-25</span><div class="u-main"><span class="u-title">Cổng thay đổi</span><span class="u-desc">(1) GitHub App "aa-agent" làm danh tính commit/PR của agent; (2) ADR 0011 visibility × gói; (3) ADR 0010 Change authority; (4) ruleset theo tầng rủi ro + CODEOWNERS cho đường dẫn nhạy cảm; (5) mỗi App chỉ cài vào repo cần dùng.</span><div class="u-meta"><span><b>Nguồn</b> P1-1, §5.1, §5.8; DM-11.5, 6.10, 11.1</span><span><b>Linear</b> mới</span><span><b>Công sức</b> M</span><span class="dep">D-13, D-14, D-25</span><span><b>Chi phí</b> 0 (D-14 = D); ~8 (A/C); ~42 (B)</span></div></div></div>
+      <div class="u"><span class="u-code">U-26</span><div class="u-main"><span class="u-title">Vệ sinh secret</span><span class="u-desc"><code>docs/security/secrets-register.md</code>; xoá secret mồ côi; PAT → App token; Lambda đọc secret theo ARN; tài khoản E2E chỉ đọc rồi thay <code>ADMIN_SECRET</code> trong Vercel Preview; chạy DM-8.10 access review quý đầu.</span><div class="u-meta"><span><b>Nguồn</b> P1-2, §5.4; DM-8.6, 8.10, SEC-2</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S</span><span class="dep">U-25, U-06, U-27; chu kỳ 90 ngày: D-03</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-27</span><div class="u-main"><span class="u-title">RBAC staff phía server</span><span class="u-desc"><code>require_staff(roles=…)</code> cho mọi router <code>/admin</code>; test CI duyệt <code>app.routes</code>; verify JWT staff; tách key staff/tenant; TTL staff 8h (tạm) → ADR 0006 Phase 1 (Cognito WORKFORCE, bỏ <code>X-Admin-Secret</code>).</span><div class="u-meta"><span><b>Nguồn</b> P1-3, §5.5; NAM-14</span><span><b>Linear</b> AA-703, AA-816</span><span><b>Công sức</b> M</span><span><b>Phụ thuộc</b> U-06</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-28</span><div class="u-main"><span class="u-title">Cổng CI đồng đều</span><span class="u-desc">CIS bắt buộc <code>tsc --noEmit</code> + <code>next build</code>; Trivy chặn với <code>.trivyignore</code> có hạn; TripPlanner deploy Lambda sau CI kèm smoke; check header trên preview; ratchet coverage CIS; TST-1 replay <code>tp-NNN</code> trên <code>postgres:15</code>.</span><div class="u-meta"><span><b>Nguồn</b> P1-4; TST-1</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S–M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-29</span><div class="u-main"><span class="u-title">Eval gate có trần chi phí</span><span class="u-desc">Golden set 20–30 mẫu cho T2/T9 + prompt-injection; job PR theo path filter, ≤ 1 USD/lần qua <code>LLMClient</code>, ghi <code>llm_call_log</code>; trần tháng trong <code>shared.spend_budget</code>; fail khi thiếu baseline.</span><div class="u-meta"><span><b>Nguồn</b> P1-5; DM-10.4–10.7, DM-4.6, CON-8</span><span><b>Linear</b> AA-729 (viết lại); AA-783</span><span><b>Công sức</b> M</span><span class="dep">D-23, D-19; U-34</span><span><b>Chi phí</b> ≤ 1/lần; tới ~30/tháng (acc3 Bedrock)</span></div></div></div>
+      <div class="u"><span class="u-code">U-30</span><div class="u-main"><span class="u-title">Log JSON + request id; Sentry cho Booking và TripPlanner</span><span class="u-desc">structlog, middleware request id gắn <code>tenant_id</code>, <code>job_id</code> (chỉ id, không PII) ở 3 app; scrub PII; test guard thiếu DSN; ghi <code>db_ms</code>.</span><div class="u-meta"><span><b>Nguồn</b> P1-6; C1.1d, DM-6.4, C4.2c</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S–M</span><span class="dep">U-07; OKActions: D-20</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-31</span><div class="u-main"><span class="u-title">Phát hiện và audit trail</span><span class="u-desc">GuardDuty chỉ foundational + RDS login; IAM Access Analyzer; S3 BPA cấp account; CloudTrail multi-region + KMS + metric filter; bucket trail versioning + Object Lock; audit event append-only bằng cách mở rộng <code>acp_shared.audit_log</code>.</span><div class="u-meta"><span><b>Nguồn</b> P1-7; DM-2.4, 7.1, 7.5, C4.2b</span><span><b>Linear</b> mới</span><span><b>Công sức</b> S–M</span><span class="dep">D-09, D-19</span><span><b>Chi phí</b> ~4–16</span></div></div></div>
+      <div class="u"><span class="u-code">U-32</span><div class="u-main"><span class="u-title"><span class="cond">D-11 = A</span>Quyền chủ thể dữ liệu</span><span class="u-desc">Script xoá DM-6.7 chạy DRY RUN có query xác minh; endpoint export cho staff (DSAR, DM-6.11 mới).</span><div class="u-meta"><span><b>Nguồn</b> P1-8; L3; DM-6.7</span><span><b>Linear</b> AA-839 (cần duyệt tạo)</span><span><b>Công sức</b> M</span><span class="dep">D-11; phần TP cần U-60</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-33</span><div class="u-main"><span class="u-title">Chuỗi X1 theo đúng ADR 0008 d6</span><span class="u-desc">(1) <code>owners.yaml</code> + template role bootstrap; (2) <code>bk_owner</code>/<code>tp_owner</code> NOLOGIN, <code>db_migrator</code> trên task def riêng, role LOGIN trong git; (3) AA-817 D2 role-scoped policies; (4) AA-860 chuyển runtime CIS sang <code>cis_app</code>, REVOKE trên <code>booking</code>/<code>tripplanner</code>, bỏ <code>pg_read_all_data</code>; (5) read-only ops role.</span><div class="u-meta"><span><b>Nguồn</b> P0-9 b2; X1; DM-1.2, 1.3, 8.1, 8.2, 8.8, 8.9; SEC-1</span><span><b>Linear</b> AA-826 + mới + AA-860</span><span><b>Công sức</b> L</span><span class="dep">D-05</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-34</span><div class="u-main"><span class="u-title">ADR 0009 AI platform</span><span class="u-desc">Contract gateway CON-8, cột <code>app</code>/<code>is_shadow</code> trên ledger, AI Use Register, quyết định kiểm PII tự động DM-6.4 trên prompt và ledger.</span><div class="u-meta"><span><b>Nguồn</b> AA-804; DM-6.4, CON-8, DM-10.5</span><span><b>Linear</b> AA-804</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-35</span><div class="u-main"><span class="u-title">X7 phần còn lại: consumer contract hash guard</span><span class="u-desc">CON-4, TST-6, DM-3.6 + công cụ playbook đọc <code>owners.yaml</code>. Kiểm câu review "bản copy contract đã pin hash trong test".</span><div class="u-meta"><span><b>Nguồn</b> X7</span><span><b>Linear</b> AA-826</span><span><b>Công sức</b> S–M</span><span><b>Phụ thuộc</b> playbook sau U-33 bước 1</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-36</span><div class="u-main"><span class="u-title">X4 tách TripPlanner</span><span class="u-desc">Bỏ <code>set_catalog_tenant</code>, đọc qua <code>catalog.*</code>, drop 7 bảng đóng băng và 12 FK chéo owner (DRY RUN), REVOKE grant trực tiếp của TP trên bảng CIS.</span><div class="u-meta"><span><b>Nguồn</b> X4; DM-2.3, 5.2, 8.4; SEC-5, CON-1</span><span><b>Linear</b> AA-712</span><span><b>Công sức</b> M–L</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-37</span><div class="u-main"><span class="u-title">N6 Dead Table Registry + L1</span><span class="u-desc"><code>docs/architecture/dead-table-registry.md</code> + quarantine wave 1; L1 wave 2–3 gồm archive <code>shared.pipeline_jobs</code>.</span><div class="u-meta"><span><b>Nguồn</b> N6, L1; DM-3.8, 3.9</span><span><b>Linear</b> mới</span><span><b>Công sức</b> M</span><span><b>Phụ thuộc</b> L1 sau N6 + chủ bảng xác nhận</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-38</span><div class="u-main"><span class="u-title">Review định kỳ vào nghi thức phiên</span><span class="u-desc">Capacity review hằng tháng (C8a–c), <code>pg_stat_statements</code> hằng tuần (C4.3), access review hằng quý (DM-8.10), rà quyền agent hằng quý.</span><div class="u-meta"><span><b>Nguồn</b> C8, C4.3, DM-8.10; §5.8</span><span><b>Linear</b> AA-838 (cần duyệt tạo)</span><span><b>Công sức</b> S, định kỳ</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-39</span><div class="u-main"><span class="u-title">X5 <code>shared.countries</code></span><span class="u-desc">ISO-3166 + view country trong <code>catalog</code> + cột <code>country_iso2</code>. Toàn vẹn dữ liệu, ngoài phạm vi SDLC.</span><div class="u-meta"><span><b>Nguồn</b> X5; DM-2.4</span><span><b>Linear</b> mới</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-61</span><div class="u-main"><span class="u-title">Phần còn lại của N3</span><span class="u-desc">C2.3h <code>idle_session_timeout</code> cho role <code>tripplanner</code>; C2.3c script CI fail khi tổng connection budget vượt.</span><div class="u-meta"><span><b>Nguồn</b> N3; C2.3c, C2.3h</span><span><b>Linear</b> mới (hoặc mở lại AA-824)</span><span><b>Công sức</b> S</span><span><b>Chi phí</b> 0</span></div></div></div>
+    </div>
+  </div>
+
+  <!-- Tier 4 -->
+  <div class="tier tier-4" id="tang-4">
+    <div class="tier-head"><h3>Tầng 4: Có điều kiện kích hoạt</h3><span class="sub">Chỉ làm khi điều kiện xảy ra</span></div>
+    <div class="ulist">
+      <div class="u"><span class="u-code">U-40</span><div class="u-main"><span class="u-title">L9 prod blueprint + ADR 0012 (Environment model)</span><span class="u-desc">Instance riêng, Multi-AZ, PITR 14 ngày, AWS Backup cross-region; C7.2e role tách từ ngày đầu, pgaudit; C7.2f DSN qua private CNAME; layout Terraform (D-16); mạng prod; Security Hub FSBP + Config; biện pháp bù cho acc2; xoay master/GitHub token theo S240.</span><div class="u-meta"><span><b>Kích hoạt</b> có ngày go-live; tiền đề U-33, U-20, U-61, D-16, D-17</span><span><b>Linear</b> mới; AA-864</span><span><b>Công sức</b> L</span><span><b>Chi phí</b> ~150–300</span></div></div></div>
+      <div class="u"><span class="u-code">U-41</span><div class="u-main"><span class="u-title"><code>manage_master_user_password</code> + bỏ <code>TF_VAR_DB_PASSWORD</code></span><span class="u-desc">Sửa DM-8.6, CLAUDE.md toàn cục (Nghiệp), skill aa-cis-schema cho secret JSON.</span><div class="u-meta"><span><b>Kích hoạt</b> X1 (U-33) xong hoặc L9 (D-04)</span><span><b>Công sức</b> S</span><span><b>Chi phí</b> ~0.4</span></div></div></div>
+      <div class="u"><span class="u-code">U-42</span><div class="u-main"><span class="u-title">Luồng Terraform</span><span class="u-desc">Plan comment trên PR, apply gắn hash plan, fmt/validate/tflint/trivy config, drift hằng đêm, state lock cho acc1/acc3.</span><div class="u-meta"><span><b>Kích hoạt</b> trước prod hoặc sự cố drift tiếp theo</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-43</span><div class="u-main"><span class="u-title">Build once theo digest, provenance, SBOM, pin SHA action</span><div class="u-meta"><span><b>Kích hoạt</b> first prod; attestation theo D-14</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-44</span><div class="u-main"><span class="u-title">ADR 0013 HTTP API conventions</span><span class="u-desc"><code>response_model</code> cho <code>/v1</code>, commit <code>openapi.json</code>, <code>oasdiff breaking</code>, problem+json + <code>request_id</code>, access log API GW, inventory API.</span><div class="u-meta"><span><b>Kích hoạt</b> tenant đầu tiên tích hợp bằng API</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> ~0–1</span></div></div></div>
+      <div class="u"><span class="u-code">U-45</span><div class="u-main"><span class="u-title">Public API v1: <code>shared.tenant_api_keys</code></span><span class="u-desc">Scope, hết hạn, ≥ 2 key active, lưu hash, X-API-Key, rate-limit theo key, usage plan.</span><div class="u-meta"><span><b>Kích hoạt</b> quyết định bán gói API</span><span><b>Linear</b> AA-813 (liên quan)</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> ~0</span></div></div></div>
+      <div class="u"><span class="u-code">U-46</span><div class="u-main"><span class="u-title"><code>Idempotency-Key</code> cho POST tốn tiền</span><div class="u-meta"><span><b>Kích hoạt</b> trước khi bật thanh toán</span><span><b>Linear</b> AA-682</span><span><b>Công sức</b> S–M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-47</span><div class="u-main"><span class="u-title">release-please, GitHub Deployments, CHANGELOG, DORA</span><div class="u-meta"><span><b>Kích hoạt</b> first prod</span><span><b>Công sức</b> S–M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-48</span><div class="u-main"><span class="u-title">Org <code>.github</code>: reusable workflow, template PR/issue, SECURITY.md</span><div class="u-meta"><span><b>Kích hoạt</b> contributor thứ hai hoặc lần lệch pipeline thứ ba</span><span><b>Công sức</b> S</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-49</span><div class="u-main"><span class="u-title">SLO người dùng, alarm burn-rate, dashboard, k6</span><div class="u-meta"><span><b>Kích hoạt</b> first prod</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> ~0–3</span></div></div></div>
+      <div class="u"><span class="u-code">U-50</span><div class="u-main"><span class="u-title">Bot mở PR copy migration sang Infra; preflight <code>required_schema_version</code></span><div class="u-meta"><span><b>Kích hoạt</b> sự cố "app deploy trước migration" tiếp theo</span><span><b>Linear</b> AA-826</span><span><b>Công sức</b> S–M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-51</span><div class="u-main"><span class="u-title">ECS exec thành break-glass; workflow "run-script"</span><div class="u-meta"><span><b>Kích hoạt</b> sau U-22 + U-33, khi có prod</span><span class="dep">D-07</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-52</span><div class="u-main"><span class="u-title">Pentest bên thứ ba một lần</span><div class="u-meta"><span><b>Kích hoạt</b> trước deal enterprise đầu tiên</span><span><b>Chi phí</b> một lần (báo giá)</span></div></div></div>
+      <div class="u"><span class="u-code">U-53</span><div class="u-main"><span class="u-title">Không còn key tĩnh trên máy dev; agent trong devcontainer</span><span class="u-desc">Tắt <code>[acc1-legacy-default]</code> sau khi đọc lại hồ sơ AA-517.</span><div class="u-meta"><span><b>Kích hoạt</b> sau U-04, trong 6 tháng</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-54</span><div class="u-main"><span class="u-title"><code>rollback.yml</code>; Lambda alias <code>live</code></span><div class="u-meta"><span><b>Kích hoạt</b> first prod</span><span><b>Linear</b> AA-703</span><span><b>Công sức</b> S</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-55</span><div class="u-main"><span class="u-title">Trailer <code>AI-Agent:</code>, telemetry agent, tracing AA-842 B, SLSA L3</span><div class="u-meta"><span><b>Kích hoạt</b> theo D-21</span><span><b>Linear</b> AA-842</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-56</span><div class="u-main"><span class="u-title">Diễn tập nâng PostgreSQL 15 lên major mới</span><div class="u-meta"><span><b>Kích hoạt</b> 05/2027 (EOL 11/2027); cần U-20</span><span><b>Linear</b> mới</span><span><b>Công sức</b> M</span><span><b>Chi phí</b> &lt; 1</span></div></div></div>
+      <div class="u"><span class="u-code">U-57</span><div class="u-main"><span class="u-title">Phần còn lại của L3</span><span class="u-desc">Thu <code>tripplanner.customers</code> về guest contact + consent, dòng retention TP/Booking, script xoá đầy đủ nếu D-11 = B.</span><div class="u-meta"><span><b>Kích hoạt</b> ADR 0006 Phase 4 / trước prod</span><span><b>Linear</b> AA-839</span><span><b>Công sức</b> M–L</span><span><b>Chi phí</b> 0</span></div></div></div>
+      <div class="u"><span class="u-code">U-58</span><div class="u-main"><span class="u-title">L10 tenant CRM qua playbook</span><div class="u-meta"><span><b>Kích hoạt</b> AA-821 được duyệt + X1/X2/X7/AA-813 xong</span><span><b>Linear</b> AA-821, AA-813</span><span><b>Công sức</b> L</span></div></div></div>
+      <div class="u"><span class="u-code">U-59</span><div class="u-main"><span class="u-title"><code>reserved_concurrent_executions</code> = 10 cho Lambda TP</span><div class="u-meta"><span><b>Kích hoạt</b> quota Lambda 1000 có hiệu lực</span><span><b>Linear</b> AA-824 (mở lại) hoặc mới</span><span><b>Công sức</b> XS</span><span><b>Chi phí</b> 0</span></div></div></div>
+    </div>
+    <p class="lede">Các mục Later khác giữ nguyên trigger theo S237 §7, C3 và C8: L2, L4, L5, L6, L7 (RDS Proxy), L8.</p>
+  </div>
+</section>
+
+<!-- 6. Mô hình đích -->
+<section id="mo-hinh">
+  <div class="section-head"><span class="eyebrow">Phần 6 · review §5</span><h2>Mô hình đích cho 1 người cùng agent AI</h2></div>
+  <div class="callout note"><p><b>Nguyên tắc:</b> agent làm nhanh, cổng do máy cưỡng chế, người chỉ bấm ở chỗ rủi ro cao (PR chạm đường dẫn nhạy cảm, apply hạ tầng, promote prod). Mọi điểm đều có bản ghi trong GitHub. Không dựa vào việc agent "đọc và tuân thủ văn bản".</p></div>
+
+  <h3>Ma trận visibility × gói GitHub (cho ADR 0011, D-14)</h3>
+  <div class="table-wrap">
+    <table class="wide">
+      <thead><tr><th></th><th>A. Team, root + Infra private, app public</th><th>B. Enterprise, tất cả private</th><th>C. Team, tất cả private</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Chi phí GitHub</th><td>~8 USD (2 seat)</td><td>~42 USD (2 × ~21)</td><td>~8 USD</td></tr>
+        <tr><th scope="row">Env reviewer, wait timer</th><td>Có trên repo app; Infra thì không</td><td>Có ở mọi repo</td><td>Không có</td></tr>
+        <tr><th scope="row">Cổng apply Infra</th><td>Ruleset PR + IAM <code>ref</code> + env branch policy</td><td>Env reviewer + các lớp kia</td><td>Ruleset PR + IAM <code>ref</code> + env branch policy</td></tr>
+        <tr><th scope="row">CodeQL, push protection</th><td>Miễn phí trên repo app; root/Infra dùng gitleaks</td><td>Cần GHAS nếu muốn (không đề xuất)</td><td>gitleaks pre-commit + CI, Semgrep OSS</td></tr>
+        <tr><th scope="row">Attestation</th><td>Có trên repo app</td><td>Có</td><td>Không</td></tr>
+        <tr><th scope="row">Lộ IP</th><td>Mã app public, cần LICENSE proprietary</td><td>Không</td><td>Không</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="lede">Review khuyến nghị A. Lộ trình hợp nhất đặt mặc định là D (giữ hiện trạng, gói Free, 0 USD) cho tới khi Nghiệp và chị Thư quyết.</p>
+
+  <h3>Môi trường và luồng promote</h3>
+  <pre class="flow" aria-label="Luồng promote">feature branch ──PR──► CI (lint, security, unit, integration, build)
+                         │ auto-merge khi xanh; Nghiệp approve nếu chạm đường dẫn nhạy cảm
+                         ▼
+                 main ──► dev (acc2, env "dev", main-only) ── smoke + UI smoke + eval subset
+                         │ tag vX.Y.Z
+                         ▼
+                 prod (acc2, env "prod", main/tag-only;
+                       reviewer + wait timer nếu repo public hoặc Enterprise,
+                       nếu không: IAM ref + ruleset PR là cổng)
+                         └─ cùng image, cùng Vercel deployment được promote; smoke prod</pre>
+  <p class="lede">Auto-merge của agent và Dependabot đang mâu thuẫn với DM-11.5 (D-13; mặc định: chỉ người merge).</p>
+
+  <div class="ops-grid">
+    <div class="ops-card"><h4>Môi trường</h4><ul><li>Không dựng staging thường trực; khi có prod, Dev đóng vai pre-prod.</li><li>Prod trên acc2 (ADR 0001), kèm biện pháp bù: role/trust OIDC riêng, KMS CMK riêng, ABAC <code>env=prod</code>, DB và SG riêng, state key riêng, agent không có quyền prod.</li><li>Giới hạn: không áp được cho principal từ management account TrueIDC.</li></ul></div>
+    <div class="ops-card"><h4>CI/CD</h4><ul><li><code>concurrency</code> theo service, guard fail-closed, smoke theo contract, rollback bằng task-def revision trước.</li><li>Dependabot gom PR hằng tuần; audit/Trivy chặn build với ignore có hạn; CodeQL trên repo public, gitleaks trên private.</li><li>Build once theo digest, attestation, reusable workflow: P2.</li></ul></div>
+    <div class="ops-card"><h4>Secret</h4><ul><li>Nguồn sự thật: Secrets Manager (runtime) và GitHub env secret.</li><li>Register <code>docs/security/secrets-register.md</code>; xoay ngay khi nghi lộ.</li><li>OIDC, GitHub App token, Vercel token chỉ ở env production. Không PAT cá nhân trong CI.</li><li>Agent không đọc secret runtime, không đọc <code>~/.aws/**</code>.</li></ul></div>
+    <div class="ops-card"><h4>API</h4><ul><li>Bây giờ: kiểm role ở backend, cô lập tenant fail-closed, rate-limit login, WAF và throttle, security header, khoá docs.</li><li>Khi tenant tích hợp: OpenAPI <code>/v1</code>, problem+json, Deprecation/Sunset, idempotency key.</li><li>Đích: Cognito (ADR 0006), deny-by-default, bỏ god-key.</li></ul></div>
+    <div class="ops-card"><h4>Quan sát và hỗ trợ</h4><ul><li>Sentry 3 app; log JSON có request ID; alarm 5xx/latency mỗi API; uptime ngoài.</li><li>Trước tenant đầu: quy trình sự cố một trang, SLA gọn, <code>support@</code> vào Linear, status page free.</li><li>Khi có prod: SLO burn-rate, dashboard, release-please, CHANGELOG.</li></ul></div>
+  </div>
+
+  <h3>ADLC: phạm vi quyền agent</h3>
+  <div class="table-wrap">
+    <table class="mid">
+      <thead><tr><th>Lớp</th><th>Agent được làm</th><th>Chỉ người (hoặc CI có cổng)</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Code</th><td>Branch, commit, mở PR (bằng App "aa-agent"), chạy test, đọc log; auto-merge PR rủi ro thấp khi xanh</td><td>Approve và merge PR chạm đường dẫn nhạy cảm</td></tr>
+        <tr><th scope="row">AWS</th><td><code>aa365-agent</code>: describe/list/get, đọc log, đọc secret e2e đã allowlist; ECS exec Dev chỉ khi đã bật log phiên</td><td>IAM, Terraform apply, DB Migrate apply, ghi secret, scale/stop, xoá tài nguyên</td></tr>
+        <tr><th scope="row">GitHub settings</th><td>GET</td><td>Ruleset, environment, secret</td></tr>
+        <tr><th scope="row">Vercel</th><td>Đọc deployment/log</td><td>Env var, promote prod</td></tr>
+        <tr><th scope="row">LLM/prompt</th><td>Sửa prompt trong PR</td><td>Đổi model route (kèm eval run ID)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="lede">Cưỡng chế bằng IAM, token, permission deny và sandbox, không chỉ bằng regex hook. PR đụng prompt, model hoặc route phải qua eval có trần chi phí. Mỗi quý xem lại permission, cấu hình agent và App install.</p>
+</section>
+
+<!-- 7. Không nên làm -->
+<section id="khong-lam">
+  <div class="section-head"><span class="eyebrow">Phần 7 · review §7, guardrail giữ nguyên</span><h2>Không nên làm lúc này</h2></div>
+  <ol class="dont">
+    <li>Không dựng staging thường trực, multi-region hay active-active.</li>
+    <li>Không mua GHAS cho repo private. Dùng gitleaks và Semgrep OSS.</li>
+    <li>Không làm Infra thành public.</li>
+    <li>Không chạy Kubernetes, service mesh, Backstage hay developer portal tự host.</li>
+    <li>Không bật Security Hub hay AWS Config lúc này (chi phí và nhiễu).</li>
+    <li>Không làm audit SOC 2 hay ISO thật lúc này. Chỉ chuẩn bị bằng chứng.</li>
+    <li>Không bắt bấm duyệt tay mọi PR (khoảng 16 PR/ngày).</li>
+    <li>Không bật canary hay CodeDeploy cho ECS ngay.</li>
+    <li>Không dùng Pact broker.</li>
+    <li>Không viết lại toàn bộ auth trước ADR 0006 Phase 1.</li>
+    <li>Không chạy eval trên toàn catalog. Golden set 20–30 mẫu có trần chi phí.</li>
+    <li>Không tách AWS account cho prod ngay (đi ngược quyết định đã chốt).</li>
+    <li>Không bật <code>manage_master_user_password</code> trước X1.</li>
+    <li>Không khoá cứng tài khoản theo username khi làm rate-limit login.</li>
+  </ol>
+</section>
+
+<!-- 8. Data standards -->
+<section id="chuan">
+  <div class="section-head"><span class="eyebrow">Phần 8 · unified-roadmap §5</span><h2>Đề xuất sửa data standards (v1.1)</h2></div>
+  <p class="lede">Chỉ đề xuất, chờ Nghiệp duyệt. Tất cả đi chung một PR v1.1 vào root repo; steering và skill nhắc lại rule thì sửa cùng PR. Rule mới là TST-8 và C2.3i vì TST-7 và C2.3h đã có trong v1.0.</p>
+
+  <h3>Part A (Engineering)</h3>
+  <div class="table-wrap"><table class="mid">
+    <thead><tr><th class="nowrap">Rule</th><th>Loại</th><th>Nội dung ngắn</th><th>Phụ thuộc</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap mono">SEC-13</td><td><span class="chip ok">mới</span></td><td>Kho dữ liệu dùng cho quyết định bảo mật MUST có AUTH + TLS. Thiếu cờ hoặc lỗi đọc cờ MUST NOT nới quyền.</td><td>—</td></tr>
+      <tr><td class="mono">SEC-10, C2.3g, §9</td><td><span class="chip acc">sửa</span></td><td>Ghi cơ chế promote từng route AA-859 và rollback sau khi bỏ Redis <code>DEL</code> (nếu D-12 = B).</td><td>D-12</td></tr>
+      <tr><td class="nowrap mono">TST-8</td><td><span class="chip ok">mới</span></td><td>Mỗi route <code>/v1</code> có test hai tenant; mỗi route <code>/admin</code> không phải GET có policy role.</td><td>—</td></tr>
+      <tr><td class="nowrap mono">TST-4</td><td><span class="chip acc">sửa</span></td><td>Isolation probe chạy trong CI, kèm probe chéo app sau X1.</td><td>—</td></tr>
+      <tr><td class="nowrap mono">CON-9</td><td><span class="chip ok">mới</span></td><td>Contract HTTP <code>/v1</code> ngoài: OpenAPI commit, <code>oasdiff breaking</code>, problem+json + <code>request_id</code>, major song song ≥ 30 ngày.</td><td>Trigger tích hợp API</td></tr>
+      <tr><td class="nowrap mono">CON-10</td><td><span class="chip ok">mới</span></td><td>POST tốn tiền hoặc không đảo ngược được MUST nhận <code>Idempotency-Key</code>.</td><td>Trigger thanh toán</td></tr>
+      <tr><td class="nowrap mono">§8 checklist</td><td><span class="chip t4">sửa vị trí</span></td><td>Checklist SQL đưa vào template PR của org.</td><td>Trigger</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Part B (Data management)</h3>
+  <div class="table-wrap"><table class="mid">
+    <thead><tr><th class="nowrap">Rule</th><th>Loại</th><th>Nội dung ngắn</th><th>Phụ thuộc</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap mono">DM-6.4</td><td><span class="chip acc">sửa</span></td><td>Sentry tính là log ứng dụng: MUST <code>send_default_pii=False</code> và lọc body/header.</td><td>U-34 cho phần CI</td></tr>
+      <tr><td class="nowrap mono">DM-6.11</td><td><span class="chip ok">mới</span></td><td>Quyền truy cập/xuất (DSAR): staff xuất được toàn bộ dữ liệu một traveller; mỗi lần xuất ghi audit.</td><td>D-11</td></tr>
+      <tr><td class="nowrap mono">DM-6.12</td><td><span class="chip ok">mới</span></td><td>Danh sách sub-processor và RoPA lập từ thẻ <code>pii:</code> và AI Use Register.</td><td>—</td></tr>
+      <tr><td class="nowrap mono">DM-7</td><td><span class="chip warn">thêm dòng</span></td><td>Log bảo mật ≥ 365 ngày; log app 30–90 ngày; log phiên ECS Exec ≥ 365 ngày; snapshot thủ công hạn 90 ngày (trừ snapshot DM-9.2 còn trong cửa sổ).</td><td>D-09</td></tr>
+      <tr><td class="nowrap mono">DM-8.7</td><td><span class="chip acc">sửa</span></td><td>Trung lập về profile: agent dùng <code>aa365-agent</code>, <code>aa365-admin</code> chỉ cho Nghiệp.</td><td>D-15</td></tr>
+      <tr><td class="nowrap mono">DM-8.8</td><td><span class="chip acc">sửa</span></td><td>Log phiên ECS Exec MUST bật trước khi agent được exec. Nếu D-07 = B: exec thành break-glass, sửa MIG-5.</td><td>D-07</td></tr>
+      <tr><td class="nowrap mono">DM-8.9</td><td><span class="chip acc">sửa</span></td><td>Nếu D-03 = B: mật khẩu master xoay ngay khi nghi lộ (cả Dev).</td><td>D-03</td></tr>
+      <tr><td class="nowrap mono">DM-8.11</td><td><span class="chip ok">mới</span></td><td>Register secret: owner, consumer, ngày xoay. Chu kỳ 90 ngày chỉ khi D-03 = B.</td><td>D-03</td></tr>
+      <tr><td class="nowrap mono">DM-8.12</td><td><span class="chip ok">mới</span></td><td>Mỗi app một SG; SG RDS/Redis chỉ nhận ingress từ SG app được liệt kê. Kèm ADR 0004b.</td><td>D-06</td></tr>
+      <tr><td class="nowrap mono">DM-9.3</td><td><span class="chip acc">sửa</span></td><td>Ghi thời điểm drill đã chốt; drill ghi RTO so với C1.2 (&lt; 1 h).</td><td>D-10</td></tr>
+      <tr><td class="nowrap mono">DM-10.7</td><td><span class="chip acc">sửa</span></td><td>Thêm dòng "đã duyệt" cho từng chi tiêu mới khi Nghiệp duyệt.</td><td>D-14, D-18, D-19</td></tr>
+      <tr><td class="nowrap mono">DM-11.5</td><td><span class="chip acc">sửa</span></td><td>Sửa ngay cột "Enforced by" cho đúng sự thật; nội dung rule theo D-13 (ADR 0010).</td><td>D-13</td></tr>
+      <tr><td class="nowrap mono">DM-11.6</td><td><span class="chip ok">mới</span></td><td>Trust OIDC cho role deploy/apply/migrate MUST giới hạn theo <code>ref</code>; env GitHub MUST có branch policy; workflow apply MUST kiểm <code>github.ref</code>.</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Part C (Operations and scaling)</h3>
+  <div class="table-wrap"><table class="mid">
+    <thead><tr><th class="nowrap">Rule</th><th>Loại</th><th>Nội dung ngắn</th><th>Phụ thuộc</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap mono">C4.1</td><td><span class="chip warn">thêm dòng</span></td><td>API GW 5XXError-rate + IntegrationLatency p95; uptime ngoài; <code>aa817_tenant_flag_read_failed</code> &gt; 0; <code>used_tenant_pool=false</code>.</td><td>—</td></tr>
+      <tr><td class="nowrap mono">C4.1a</td><td><span class="chip acc">sửa</span></td><td>Ngoại lệ: uptime check SaaS ngoài Terraform, ghi trong register.</td><td>—</td></tr>
+      <tr><td class="nowrap mono">C4.2c</td><td><span class="chip acc">sửa</span></td><td>Nếu D-08 = B: scope pgaudit không ghi literal PII. Sentry thuộc phạm vi rule này.</td><td>D-08</td></tr>
+      <tr><td class="nowrap mono">C2.3i</td><td><span class="chip ok">mới</span></td><td>Throttle stage API GW (CIS 50 rps / burst 100, <code>/auth/*</code> ~5 rps) là chặn phía HTTP.</td><td>—</td></tr>
+      <tr><td class="nowrap mono">C6.3c</td><td><span class="chip ok">mới</span></td><td>Deploy guard MUST fail closed khi thiếu credential; workflow deploy MUST có <code>concurrency</code>.</td><td>—</td></tr>
+      <tr><td class="nowrap mono">C7.1</td><td><span class="chip acc">sửa</span></td><td>Chuyển dòng cũ sang "Exists"; thêm log phiên ECS Exec, ECR immutable.</td><td>—</td></tr>
+      <tr><td class="nowrap mono">C7.2c</td><td><span class="chip acc">sửa</span></td><td>Layout Terraform prod theo ADR 0012, thay <code>envs/prod/</code>.</td><td>D-16</td></tr>
+      <tr><td class="nowrap mono">C7.2d</td><td><span class="chip acc">sửa</span></td><td>Cổng prod: IAM <code>ref</code>/<code>job_workflow_ref</code> + ruleset PR khi Infra private trên Free/Team.</td><td>D-14, D-16</td></tr>
+      <tr><td class="nowrap mono">C7.2g</td><td><span class="chip ok">mới</span></td><td>Mạng prod: NAT GW mỗi AZ, ALB internal, xoá default VPC; Security Hub FSBP + Config cùng prod.</td><td>Trigger L9</td></tr>
+      <tr><td class="nowrap mono">C7.2h</td><td><span class="chip ok">mới</span></td><td>Biện pháp bù cho prod trên acc2; điểm xem xét management account.</td><td>D-17</td></tr>
+      <tr><td class="nowrap mono">C1.3</td><td><span class="chip ok">mới</span></td><td>SLO người dùng và alarm burn-rate từ khi có prod.</td><td>Trigger prod</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 9. Issue -->
+<section id="issue">
+  <div class="section-head"><span class="eyebrow">Phần 9 · unified-roadmap §7</span><h2>Issue Linear đề xuất tạo mới</h2></div>
+  <p class="lede">Không tạo, chờ Nghiệp duyệt từng dòng (D-24). Trước khi tạo: kiểm quota (≤ 100 issue chưa lưu trữ mỗi project) và kiểm trùng theo skill <code>aa-linear-issue</code>.</p>
+  <div class="table-wrap"><table class="wide">
+    <thead><tr><th class="nowrap">#</th><th>Tiêu đề (EN)</th><th class="nowrap">U</th><th>Project</th><th>Ưu tiên</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Restrict deploy/apply/migrate OIDC trust to main: env branch policy, ref guard, IAM ref condition</td><td class="mono nowrap">U-01</td><td>Data Platform</td><td><span class="chip crit">Urgent</span></td></tr>
+      <tr><td class="num">2</td><td>Agent least privilege: committed ask/deny lists, block ~/.aws reads, e2e secret allowlist, aa365-agent switch</td><td class="mono nowrap">U-04</td><td>Data Platform</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">3</td><td>Enable free GitHub security features, org 2FA, Infra Dependabot; scan archived AA-ACP-App history</td><td class="mono nowrap">U-05</td><td>Data Platform</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">4</td><td>Server-side role check on llm-config, budgets and job-runner writes; constant-time secret compare</td><td class="mono nowrap">U-06</td><td>CIS Core</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">5</td><td>CIS error visibility: Sentry DSN with PII scrubbing, API Gateway 5xx/latency alarms, external uptime check</td><td class="mono nowrap">U-07</td><td>CIS Core</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">6</td><td>CIS CI/deploy hardening: blocking pip-audit, deploy concurrency, fail-closed job guard</td><td class="mono nowrap">U-08</td><td>CIS Core</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">7</td><td>Redis AUTH/TLS/at-rest and tenant-flag read-failure alarm</td><td class="mono nowrap">U-13</td><td>Data Platform</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">8</td><td>SSRF-safe outbound HTTP client (safe_http) for tenant-supplied URLs</td><td class="mono nowrap">U-14</td><td>CIS Core</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">9</td><td>X2 catalogue CI guard: RLS, PUBLIC policies, NULLIF, cross-owner FKs, grant allowlist, PII-tag lint</td><td class="mono nowrap">U-15 (+U-16)</td><td>Data Platform</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">10</td><td>Per-app security groups for CIS api/worker and Booking (ADR 0004b)</td><td class="mono nowrap">U-18</td><td>Data Platform</td><td><span class="chip acc">Medium</span> chỉ khi D-06 = A</td></tr>
+      <tr><td class="num">11</td><td>API edge hardening: login rate limit, WAF and throttles on the CIS stage, gate Booking docs, CORS, security headers</td><td class="mono nowrap">U-19</td><td>CIS Core</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">12</td><td>App rollback readiness: immutable CIS ECR, task-def rollback runbook, Vercel rollback, incident one-pager</td><td class="mono nowrap">U-21</td><td>CIS Core</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">13</td><td>ECS Exec session logging and log_connections</td><td class="mono nowrap">U-22</td><td>Data Platform</td><td><span class="chip warn">High</span></td></tr>
+      <tr><td class="num">14</td><td>Legal readiness packet proposal for Ms. Thư and /privacy, /terms pages</td><td class="mono nowrap">U-23</td><td>TripPlanner &amp; AA-Booking</td><td><span class="chip acc">Medium</span></td></tr>
+      <tr><td class="num">15</td><td>Tag existing Booking and TripPlanner PII columns (DM-6.1)</td><td class="mono nowrap">U-24</td><td>TripPlanner &amp; AA-Booking</td><td><span class="chip acc">Medium</span></td></tr>
+      <tr><td class="num">16</td><td>Change authority: agent GitHub App identity, ADR 0010/0011, risk-tiered rulesets and CODEOWNERS</td><td class="mono nowrap">U-25</td><td>Data Platform</td><td><span class="chip acc">Medium</span></td></tr>
+      <tr><td class="num">17</td><td>Secrets register, orphaned-secret cleanup, read-only E2E account, first quarterly access review</td><td class="mono nowrap">U-26</td><td>Data Platform</td><td><span class="chip acc">Medium</span></td></tr>
+      <tr><td class="num">18</td><td>CI gate parity: CIS typecheck/build, blocking Trivy, TripPlanner Lambda deploy after CI, TripPlanner migration replay on postgres:15</td><td class="mono nowrap">U-28</td><td>CIS Core</td><td><span class="chip acc">Medium</span></td></tr>
+      <tr><td class="num">19</td><td>Structured JSON logs with request ids (ids only) and Sentry for Booking and TripPlanner</td><td class="mono nowrap">U-30</td><td>CIS Core</td><td><span class="chip acc">Medium</span></td></tr>
+      <tr><td class="num">20</td><td>Account detection baseline: GuardDuty (limited features), Access Analyzer, S3 BPA, hardened CloudTrail</td><td class="mono nowrap">U-31</td><td>Data Platform</td><td><span class="chip acc">Medium</span> cần D-19</td></tr>
+      <tr><td class="num">21</td><td>X1 owner roles and db_migrator task definition (Booking/TripPlanner first; owners.yaml comes from AA-826)</td><td class="mono nowrap">U-33</td><td>Data Platform</td><td><span class="chip warn">High</span> tiền đề AA-860</td></tr>
+      <tr><td class="num">22</td><td>N6 Dead Table Registry and legacy shared.pipeline_jobs archive</td><td class="mono nowrap">U-37</td><td>Data Platform</td><td><span class="chip t4">Low</span></td></tr>
+      <tr><td class="num">23</td><td>X5 shared.countries and catalog country view</td><td class="mono nowrap">U-39</td><td>Data Platform</td><td><span class="chip t4">Low</span></td></tr>
+      <tr><td class="num">24</td><td>L9 prod blueprint and ADR 0012 environment model</td><td class="mono nowrap">U-40</td><td>Data Platform</td><td><span class="chip acc">Medium</span> trigger: ngày go-live</td></tr>
+      <tr><td class="num">25</td><td>PostgreSQL 15 major-upgrade rehearsal on a restored snapshot</td><td class="mono nowrap">U-56</td><td>Data Platform</td><td><span class="chip t4">Low</span> trigger 05/2027</td></tr>
+      <tr><td class="num">26</td><td>N3 remainder: tripplanner idle_session_timeout and a CI connection-budget check (or reopen AA-824)</td><td class="mono nowrap">U-61</td><td>Data Platform</td><td><span class="chip t4">Low</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="lede">"Data Platform" = Data Platform — Schema, Ops &amp; Scale; "CIS Core" = CIS Core — Pipeline, LLM &amp; Platform.</p>
+  <div class="two-col">
+    <div>
+      <h4>Không cần issue mới (dùng issue hoặc chore có sẵn)</h4>
+      <ul>
+        <li>U-02, U-03, U-17: chore trong backlog §1</li>
+        <li>U-09, U-10, U-11: root PR hoặc audit</li>
+        <li>U-12: AA-859 · U-20: AA-829 · U-27: AA-703, AA-816</li>
+        <li>U-29: AA-729 · U-34: AA-804 · U-36: AA-712</li>
+        <li>U-33 bước 1, U-35: AA-826; U-33 bước 3–4: AA-860</li>
+        <li>U-46: AA-682 · U-55: AA-842 · U-57: AA-839 · U-60: AA-861</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Tầng 4 chưa cần issue</h4>
+      <p>U-41, U-42, U-43, U-44, U-47, U-48, U-49, U-51, U-52; U-45 (theo AA-813), U-53 (sau U-04), U-54 (theo AA-703), U-58 (AA-821, AA-813). Tạo khi trigger cháy, hỏi Nghiệp trước.</p>
+      <p>AA-839 (U-32/U-57) và AA-838 (U-38) vẫn là dòng "Approve creating" trong backlog §4. U-59 cần mở lại AA-824 hoặc tạo một issue XS.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10. Chi phí -->
+<section id="chi-phi">
+  <div class="section-head"><span class="eyebrow">Phần 10 · unified-roadmap §4.5</span><h2>Chi phí tăng thêm</h2></div>
+  <p class="lede">Ước tính, chờ duyệt theo D-19. Mọi dịch vụ trả phí phải tính lại bằng AWS pricing calculator trước khi bật (DM-10.7, C3c).</p>
+  <div class="table-wrap"><table class="mid">
+    <thead><tr><th>Tầng</th><th class="nowrap">USD/tháng</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td>1. Ngay</td><td class="num">0</td><td>Tính năng GitHub miễn phí, Sentry free, uptime free</td></tr>
+      <tr><td>2. Trước tenant</td><td class="num">~2–10</td><td>WAF stage 0–2, ECR 30 image 1–3, log exec + <code>log_connections</code> 1–5, Redis mới cùng loại node ~0. Drill PITR &lt; 1 là phí một lần. Cộng ~20 + usage nếu D-18 = A (Vercel Pro).</td></tr>
+      <tr><td>3. 90 ngày</td><td class="num">~4–16 AWS</td><td>GuardDuty giới hạn 1–5, CloudTrail/KMS 1–3, giữ log 2–8. Cộng ~8 (Team) hoặc ~42 (Enterprise) nếu D-14 ≠ D. Cộng eval gate U-29 tới ~30 LLM (acc3, D-23).</td></tr>
+      <tr class="total"><td>Cộng dồn hết tầng 3, phương án mặc định</td><td class="num">~6–26</td><td>Chỉ phí AWS acc2 (D-14 = D, D-18 = B, U-29 chưa làm)</td></tr>
+      <tr class="total"><td>Cộng dồn hết tầng 3, theo review</td><td class="num">~35–55 (A/C)<br>~70–90 (B)</td><td>6–26 + GitHub (8 hoặc 42) + Vercel Pro 20; khớp §6 review. Chưa gồm eval gate U-29 (review bỏ sót).</td></tr>
+      <tr><td>4. Prod (U-40)</td><td class="num">~150–300</td><td>Ước rất thô. ADR 0012 giữ một con số đã đối chiếu với C3 (RDS ~110–130, RDS Proxy "before prod" ~20–25). Budget account $250 tính cả Dev hiện tại.</td></tr>
+      <tr><td>Pentest bên thứ ba</td><td class="num">một lần</td><td>Không phải phí tháng; báo giá riêng (P2-12, U-52).</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 11. Links -->
+<section id="tai-lieu">
+  <div class="section-head"><span class="eyebrow">Phần 11</span><h2>Tài liệu nguồn</h2></div>
+  <p class="lede">Đường dẫn tính từ gốc repo <code>AA-Ecosys</code>.</p>
+  <ul class="paths">
+    <li><code>docs/audits/2026-10-17-S241-sdlc-review/README.md</code><span>Đánh giá SDLC/ADLC S241, bản sửa 2 (bằng chứng, P0–P2, §8.4 lệnh một dòng, §9 phản biện)</span></li>
+    <li><code>docs/audits/2026-10-17-S241-sdlc-review/unified-roadmap.md</code><span>Lộ trình nền tảng hợp nhất U-xx, bản sửa 1 (bảng đối chiếu, D-01…D-25)</span></li>
+    <li><code>docs/audits/2026-10-17-S241-sdlc-review/areas/</code><span>Báo cáo gốc 6 lĩnh vực (tiếng Anh): github-governance, cicd, environments-secrets-iam, api, quality-observability-delivery, adlc-standards</span></li>
+    <li><code>docs/architecture/data-standards/README.md</code><span>Data standards v1.0 (đã duyệt S237)</span></li>
+    <li><code>docs/architecture/data-standards/01-engineering.md</code><span>Part A: Engineering</span></li>
+    <li><code>docs/architecture/data-standards/02-data-management.md</code><span>Part B: Data management (§12 enforcement)</span></li>
+    <li><code>docs/architecture/data-standards/03-scaling.md</code><span>Part C: Operations and scaling (C7 môi trường, prod blueprint)</span></li>
+    <li><code>docs/adr/README.md</code><span>ADR 0001–0008 (kèm 0003a, 0004a; 0009 giữ chỗ)</span></li>
+    <li><code>docs/backlog/README.md</code><span>Backlog sống</span></li>
+    <li><code>docs/ecosystem-architecture.md</code><span>Kiến trúc hệ sinh thái</span></li>
+    <li><code>docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md</code><span>Review data architecture S237 (roadmap N/X/L)</span></li>
+  </ul>
+</section>
+
+<footer>S241 · 17/10/2026 · Tác nhân: Claude Code · Trang tổng hợp từ README.md và unified-roadmap.md; khi lệch, hai file nguồn thắng.</footer>
+
+</main>
+</div>
+</body>
+</html>

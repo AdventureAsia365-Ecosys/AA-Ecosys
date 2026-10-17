@@ -53,3 +53,32 @@ Verified live <dd/mm>:
 ```
 
 Thiếu bằng chứng nào → để In Review và ghi rõ còn thiếu gì.
+
+## 5. Rollback (AA-869)
+
+Deploy hỏng mà circuit breaker ECS không tự lùi (task vẫn healthy nhưng app sai) → lùi app trước, sửa sau.
+DB không lùi theo app: migration chỉ tiến (lùi = migration mới); app cũ phải chạy được trên schema mới.
+
+**ECS (CIS api/worker, Booking):** trỏ service về revision task-def trước. ECR CIS và Booking là
+IMMUTABLE, giữ 30 image `dev-*` gần nhất (CIS), nên revision trong khoảng đó còn image.
+```
+aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api --profile aa365-admin --region us-west-1 --query "services[0].taskDefinition" --output text
+aws ecs update-service --cluster aa-cis-dev-cluster --service aa-cis-dev-api --task-definition aa-cis-dev-api:<rev-1> --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+aws ecs wait services-stable --cluster aa-cis-dev-cluster --services aa-cis-dev-api --profile aa365-admin --region us-west-1
+```
+- Worker: cùng lệnh với `aa-cis-dev-worker` / `aa-cis-dev-worker:<rev-1>`; api và worker phải về **cùng SHA**.
+- Kiểm: rollout COMPLETED, image của task = `dev-<sha cũ>`, `/health` 200.
+- Lùi xong: revert PR lỗi trên `main` (deploy bình thường đưa service lên revision mới). Không "roll forward"
+  bằng tay sang revision lỗi.
+- `shared.job` đang chạy: rollback cũng restart container, nên vẫn hỏi deploy-gate trước; sự cố SEV1 thì
+  Nghiệp quyết.
+
+**Vercel (CIS admin/portal, TripPlanner, Booking FE):** deploy do CI tạo (S241). Dashboard → project →
+Deployments → bản production trước → **Instant Rollback** (Hobby: chỉ về bản production ngay trước). Sau
+rollback, Vercel tắt tự gán domain production cho deploy mới: khi bản sửa đã lên, vào bản đó → **Promote**
+(hoặc `vercel promote <url> --token …`), không thì domain vẫn đứng ở bản cũ.
+
+**Lambda TripPlanner:** revert PR lỗi trên `main`, `deploy-lambdas.yml` tự deploy lại. Không dispatch từ nhánh
+khác: role deploy chỉ tin `sub` = `…:ref:refs/heads/main`, nên AWS từ chối.
+
+Sự cố ảnh hưởng người dùng → `docs/ops/incident-response.md`.

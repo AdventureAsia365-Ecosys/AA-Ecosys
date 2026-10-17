@@ -251,8 +251,9 @@ These meanings are binding. A new column MUST NOT reuse a name below with a diff
 | `booking.trip_case_status_history`, `acp_shared.publish_log` | owner | kept (audit evidence); a window is set before prod | — | — |
 | `shared.pipeline_jobs` (legacy) | CIS | no new writes; archive, then retire (L1) | — | Yes |
 | `acp_shared.audit_log`, `booking.audit_logs` | owner | kept (append-only); a window is set before prod | — | — |
-| CloudWatch `postgresql` log export | Infra | 14 days | — | No |
+| CloudWatch `postgresql` log export | Infra | **365 days** (security/audit class: connection logs; S241 D-09, AA-872) | — | No |
 | RDS automated backups | Infra | Dev 7 days; prod 14 days | — | — |
+| RDS manual snapshots | Infra | **30 days** after creation, then deleted by the daily expiry job (S241, approved by Nghiệp, AA-869). Kept longer only when the identifier starts with `keep-`, or the tag `aa:retain-until` holds a later date (a malformed date is kept and reported), or `aa:retain` = `keep`; each such snapshot carries the reason in its name or an `aa:purpose` tag. DB Migrate pre-apply snapshots get `aa:retain-until` = +30 days at creation. | — | No (the snapshot is the archive) |
 | S3 archive objects | Infra | Proposed: lifecycle to an infrequent-access class after 90 days; expiry per table set in N4 | — | — |
 
 ---
