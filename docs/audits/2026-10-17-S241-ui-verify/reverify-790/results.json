@@ -1,0 +1,490 @@
+{
+ "started": "2026-10-17T07:30:08.289Z",
+ "logins": [
+  {
+   "url": "/login",
+   "status": 200
+  },
+  {
+   "url": "/tenant-login",
+   "status": 200
+  }
+ ],
+ "blocked_writes": [],
+ "leak_hits": 0,
+ "runs": [
+  {
+   "page": "cq-piece-drawer",
+   "combo": "390-light",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "head": {
+    "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 319,
+    "title_h": 109,
+    "title_lines_est": 4,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "APPROVED",
+      "h": 22.5,
+      "w": 93,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 352,
+     "right": 370,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 390
+   },
+   "shot_header": "cq-piece-drawer-header-390-light.png",
+   "shot_full": "cq-piece-drawer-390-light.png"
+  },
+  {
+   "page": "cq-version-drawer",
+   "combo": "390-light",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "rows": 50,
+   "head": {
+    "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Terra Family Expeditions v6",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 319,
+    "title_h": 77,
+    "title_lines_est": 3,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [],
+    "close": {
+     "left": 352,
+     "right": 370,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 390
+   },
+   "shot": "cq-version-drawer-390-light.png"
+  },
+  {
+   "page": "jobs-drawer",
+   "combo": "390-light",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "rows": 25,
+   "head": {
+    "title": "ops_rds_role_connections SUCCEEDED",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 319,
+    "title_h": 27,
+    "title_lines_est": 1,
+    "title_overflow": false,
+    "clipped_children": [
+     "ops_rds_role_connections"
+    ],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "SUCCEEDED",
+      "h": 22.5,
+      "w": 99,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 352,
+     "right": 370,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 390
+   },
+   "shot": "jobs-drawer-390-light.png",
+   "closed_after_click": true,
+   "url_after_close": "/admin/jobs?kind=ops_rds_role_connections&status=succeeded"
+  },
+  {
+   "page": "cq-piece-drawer",
+   "combo": "390-dark",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "head": {
+    "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 319,
+    "title_h": 109,
+    "title_lines_est": 4,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "APPROVED",
+      "h": 22.5,
+      "w": 93,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 352,
+     "right": 370,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 390
+   },
+   "shot_header": "cq-piece-drawer-header-390-dark.png",
+   "shot_full": "cq-piece-drawer-390-dark.png"
+  },
+  {
+   "page": "cq-version-drawer",
+   "combo": "390-dark",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "rows": 50,
+   "head": {
+    "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Terra Family Expeditions v6",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 319,
+    "title_h": 77,
+    "title_lines_est": 3,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [],
+    "close": {
+     "left": 352,
+     "right": 370,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 390
+   },
+   "shot": "cq-version-drawer-390-dark.png"
+  },
+  {
+   "page": "jobs-drawer",
+   "combo": "390-dark",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "rows": 25,
+   "head": {
+    "title": "ops_rds_role_connections SUCCEEDED",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 319,
+    "title_h": 27,
+    "title_lines_est": 1,
+    "title_overflow": false,
+    "clipped_children": [
+     "ops_rds_role_connections"
+    ],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "SUCCEEDED",
+      "h": 22.5,
+      "w": 99,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 352,
+     "right": 370,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 390
+   },
+   "shot": "jobs-drawer-390-dark.png",
+   "closed_after_click": true,
+   "url_after_close": "/admin/jobs?kind=ops_rds_role_connections&status=succeeded"
+  },
+  {
+   "page": "cq-piece-drawer",
+   "combo": "1440-light",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "head": {
+    "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 789,
+    "title_h": 52,
+    "title_lines_est": 2,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "APPROVED",
+      "h": 22.5,
+      "w": 93,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 1402,
+     "right": 1420,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 1440
+   },
+   "shot_header": "cq-piece-drawer-header-1440-light.png",
+   "shot_full": "cq-piece-drawer-1440-light.png"
+  },
+  {
+   "page": "cq-version-drawer",
+   "combo": "1440-light",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "rows": 50,
+   "head": {
+    "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Terra Family Expeditions v6",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 789,
+    "title_h": 51,
+    "title_lines_est": 2,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [],
+    "close": {
+     "left": 1402,
+     "right": 1420,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 1440
+   },
+   "shot": "cq-version-drawer-1440-light.png"
+  },
+  {
+   "page": "jobs-drawer",
+   "combo": "1440-light",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "rows": 25,
+   "head": {
+    "title": "ops_rds_role_connections SUCCEEDED",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 689,
+    "title_h": 27,
+    "title_lines_est": 1,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "SUCCEEDED",
+      "h": 22.5,
+      "w": 99,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 1402,
+     "right": 1420,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 1440
+   },
+   "shot": "jobs-drawer-1440-light.png",
+   "closed_after_click": true,
+   "url_after_close": "/admin/jobs?kind=ops_rds_role_connections&status=succeeded"
+  },
+  {
+   "page": "cq-piece-drawer",
+   "combo": "1440-dark",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "head": {
+    "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 789,
+    "title_h": 52,
+    "title_lines_est": 2,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "APPROVED",
+      "h": 22.5,
+      "w": 93,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 1402,
+     "right": 1420,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 1440
+   },
+   "shot_header": "cq-piece-drawer-header-1440-dark.png",
+   "shot_full": "cq-piece-drawer-1440-dark.png"
+  },
+  {
+   "page": "cq-version-drawer",
+   "combo": "1440-dark",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "rows": 50,
+   "head": {
+    "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Terra Family Expeditions v6",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 789,
+    "title_h": 51,
+    "title_lines_est": 2,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [],
+    "close": {
+     "left": 1402,
+     "right": 1420,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 1440
+   },
+   "shot": "cq-version-drawer-1440-dark.png"
+  },
+  {
+   "page": "jobs-drawer",
+   "combo": "1440-dark",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "rows": 25,
+   "head": {
+    "title": "ops_rds_role_connections SUCCEEDED",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 689,
+    "title_h": 27,
+    "title_lines_est": 1,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "SUCCEEDED",
+      "h": 22.5,
+      "w": 99,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 1402,
+     "right": 1420,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 1440
+   },
+   "shot": "jobs-drawer-1440-dark.png",
+   "closed_after_click": true,
+   "url_after_close": "/admin/jobs?kind=ops_rds_role_connections&status=succeeded"
+  },
+  {
+   "page": "t10-drawer",
+   "combo": "390-light",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "row_found": true,
+   "head": {
+    "title": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia BLOG",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 319,
+    "title_h": 102,
+    "title_lines_est": 4,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "BLOG",
+      "h": 22.5,
+      "w": 62,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 352,
+     "right": 370,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 390
+   },
+   "shot_header": "t10-drawer-header-390-light.png",
+   "shot_full": "t10-drawer-390-light.png"
+  },
+  {
+   "page": "t10-drawer",
+   "combo": "1440-light",
+   "console_errors": [],
+   "page_errors": [],
+   "non2xx": [],
+   "row_found": true,
+   "head": {
+    "title": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia BLOG",
+    "title_box_overflow_wrap": "break-word",
+    "title_w": 649,
+    "title_h": 51,
+    "title_lines_est": 2,
+    "title_overflow": false,
+    "clipped_children": [],
+    "hdr_overflow": false,
+    "pills": [
+     {
+      "text": "BLOG",
+      "h": 22.5,
+      "w": 62,
+      "one_line": true,
+      "wraps_text": false
+     }
+    ],
+    "close": {
+     "left": 1402,
+     "right": 1420,
+     "in_view": true,
+     "hit_is_close": true
+    },
+    "vw": 1440
+   },
+   "shot_header": "t10-drawer-header-1440-light.png",
+   "shot_full": "t10-drawer-1440-light.png"
+  }
+ ],
+ "finished": "2026-10-17T07:32:36.319Z"
+}

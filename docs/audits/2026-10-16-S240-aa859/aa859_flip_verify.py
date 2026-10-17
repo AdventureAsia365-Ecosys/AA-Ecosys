@@ -1,7 +1,8 @@
 """AA-859 S240 — automated flag flip: ON -> verify tenant A/B through the public Dev API -> verify the per-request
-`used_tenant_pool=True` log line -> keep it ON if everything passes, otherwise turn it OFF again (DEL).
+`used_tenant_pool=True` log line -> keep it ON if everything passes, otherwise turn it OFF again (SET "false").
 
-Nghiệp's S240 decision: no manual approval per flag; one report at the end. Rollback of a flag = DEL (no deploy).
+Nghiệp's S240 decision: no manual approval per flag; one report at the end. Rollback of a flag = SET "false"
+(no deploy). Since S241 D-12 the flags fail closed: a missing key is ON, so DEL is not a rollback.
 
     python3 aa859_flip_verify.py <flag-short-name> [...]      e.g. piece_edit unpublish
     python3 aa859_flip_verify.py --off <flag-short-name> ...  turn flags off (manual rollback)

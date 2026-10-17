@@ -1,0 +1,2403 @@
+{
+ "portal": {
+  "phase": "portal",
+  "started": "2026-10-17T07:07:22.634Z",
+  "blocked_writes": [],
+  "runs": [
+   {
+    "page": "t11",
+    "combo": "1440-light",
+    "shots": [
+     {
+      "file": "reverify-789/t11-1440-light.png",
+      "leaks": []
+     },
+     {
+      "file": "reverify-789/t11-rest-1440-light.png",
+      "leaks": []
+     },
+     {
+      "file": "reverify-789/t11-stuck-1440-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/tenant/v1/integrations/wordpress 200",
+     "GET /api/tenant/v1/billing 200",
+     "GET /api/tenant/me 200",
+     "GET /api/tenant/v1/tours/pool?page_size=1 200",
+     "GET /api/tenant/v1/integrations/facebook 200",
+     "GET /api/tenant/v1/tours/my-versions?page_size=50 200",
+     "GET /api/tenant/v1/publish-log 200",
+     "GET /api/tenant/v1/publish-log/pending 200"
+    ],
+    "html_theme": "light",
+    "overflow": {
+     "sw": 1440,
+     "iw": 1440
+    },
+    "pills": [
+     {
+      "text": "ROUTE: A LOCAL BUDDHIST MONASTERY → SOD CAMP → URAN TOGOO → MORON · 10",
+      "h": 22.5,
+      "w": 626,
+      "svg": {
+       "top": 5.8,
+       "h": 11,
+       "cy": 11.3
+      },
+      "text_box": {
+       "top": 3,
+       "h": 16.5,
+       "cy": 11.3
+      },
+      "same_line": true,
+      "ellipsis": false,
+      "text_overflow": "ellipsis"
+     },
+     {
+      "text": "ROUTE: KHALING NATIONAL HANDLOOM → TASHIGANG DZONG → CHORTEN KORA → MO",
+      "h": 22.5,
+      "w": 745,
+      "svg": {
+       "top": 5.8,
+       "h": 11,
+       "cy": 11.3
+      },
+      "text_box": {
+       "top": 3,
+       "h": 16.5,
+       "cy": 11.3
+      },
+      "same_line": true,
+      "ellipsis": false,
+      "text_overflow": "ellipsis"
+     },
+     {
+      "text": "ROUTE: A LOCAL BUDDHIST MONASTERY → SOD CAMP → URAN TOGOO → MORON · 10",
+      "h": 22.5,
+      "w": 626,
+      "svg": {
+       "top": 5.8,
+       "h": 11,
+       "cy": 11.3
+      },
+      "text_box": {
+       "top": 3,
+       "h": 16.5,
+       "cy": 11.3
+      },
+      "same_line": true,
+      "ellipsis": false,
+      "text_overflow": "ellipsis"
+     }
+    ],
+    "previews": [
+     {
+      "title": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia",
+      "heading": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia",
+      "headingEqTitle": true,
+      "preview_start": "There is a line in northern Mongolia where the open steppe ends and the Siberian forest begins. It is not a border on any political map, but it is one of the mo",
+      "hash2": 0,
+      "star2": 0,
+      "starts_with_title": false,
+      "heading_followed_by": null,
+      "heading_dropped": true,
+      "clamp_h": 36,
+      "raw_start": "## Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia\n\nThere is a line in northern Mongo"
+     },
+     {
+      "title": "The Market as Cultural Decoder",
+      "heading": "What a Bolt of Cloth Can Tell You About a Country",
+      "headingEqTitle": false,
+      "preview_start": "What a Bolt of Cloth Can Tell You About a Country · In the National Textile Museum of Bhutan in Thimphu, there is a type of cloth that takes months to complete.",
+      "hash2": 0,
+      "star2": 0,
+      "starts_with_title": false,
+      "heading_followed_by": "\" · \"",
+      "heading_dropped": null,
+      "clamp_h": 36,
+      "raw_start": "## What a Bolt of Cloth Can Tell You About a Country\n\nIn the National Textile Museum of Bhutan in Thimphu, there is a ty"
+     },
+     {
+      "title": "What Silence Leaves Behind: Understanding Mongolia Through Its Ruins",
+      "heading": "The Weight of 1937",
+      "headingEqTitle": false,
+      "preview_start": "The Weight of 1937 · 1937. For a moment, let the year stand alone. Across Mongolia, the political purges of the 1930s brought the destruction of monasteries and",
+      "hash2": 0,
+      "star2": 0,
+      "starts_with_title": false,
+      "heading_followed_by": "\" · \"",
+      "heading_dropped": null,
+      "clamp_h": 36,
+      "raw_start": "## The Weight of 1937\n\n1937.\n\nFor a moment, let the year stand alone. Across Mongolia, the political purges of the 1930s"
+     }
+    ],
+    "pending_n": 3,
+    "rest": {
+     "stuck": false,
+     "band_top_css": "28px",
+     "bar_top_css": "-28px",
+     "sentinel_gap": -50,
+     "sc": {
+      "tag": "MAIN",
+      "rect": {
+       "top": 56,
+       "bottom": 900,
+       "left": 236,
+       "right": 1440
+      },
+      "padTop": "28px",
+      "scrollTop": 214
+     },
+     "bar": {
+      "top": 419.6,
+      "bottom": 516.1,
+      "left": 273,
+      "right": 1403
+     },
+     "band": {
+      "top": 447.6,
+      "bottom": 516.1,
+      "left": 273,
+      "right": 1403
+     },
+     "content": {
+      "top": 469.6,
+      "bottom": 486.1,
+      "left": 295,
+      "right": 1381
+     },
+     "card": {
+      "top": 446.6,
+      "bottom": 1022.8,
+      "left": 272,
+      "right": 1404
+     },
+     "prev": {
+      "top": -27,
+      "bottom": 426.6,
+      "left": 272,
+      "right": 1404
+     },
+     "band_prev_overlap_px2": [
+      0,
+      0,
+      0
+     ],
+     "bar_pointer_events": "none"
+    },
+    "stuck": {
+     "stuck": true,
+     "band_top_css": "0px",
+     "bar_top_css": "-28px",
+     "sentinel_gap": 116.4,
+     "sc": {
+      "tag": "MAIN",
+      "rect": {
+       "top": 56,
+       "bottom": 900,
+       "left": 236,
+       "right": 1440
+      },
+      "padTop": "28px",
+      "scrollTop": 744
+     },
+     "bar": {
+      "top": 56,
+      "bottom": 152.5,
+      "left": 273,
+      "right": 1403
+     },
+     "band": {
+      "top": 56,
+      "bottom": 152.5,
+      "left": 273,
+      "right": 1403
+     },
+     "content": {
+      "top": 106,
+      "bottom": 122.5,
+      "left": 295,
+      "right": 1381
+     },
+     "card": {
+      "top": -83.4,
+      "bottom": 492.8,
+      "left": 272,
+      "right": 1404
+     },
+     "prev": {
+      "top": -557,
+      "bottom": -103.4,
+      "left": 272,
+      "right": 1404
+     },
+     "band_prev_overlap_px2": [
+      0,
+      0,
+      0
+     ],
+     "bar_pointer_events": "auto"
+    },
+    "stuck_probe": {
+     "topbar_bottom_y": 56,
+     "bar_content_top_y": 106,
+     "band_height_px": 50,
+     "samples": 3025,
+     "bad_hits": 0,
+     "bad_sample": []
+    }
+   },
+   {
+    "page": "dashboard",
+    "combo": "1440-light",
+    "shots": [
+     {
+      "file": "reverify-789/dashboard-recent-1440-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/tenant/me 200",
+     "GET /api/tenant/v1/billing 200",
+     "GET /api/tenant/v1/tours/pool?page_size=1 200",
+     "GET /api/tenant/v1/tours/pool?page_size=1 200",
+     "GET /api/tenant/v1/quota 200",
+     "GET /api/tenant/v1/billing 200",
+     "GET /api/tenant/v1/tours/my-versions?page_size=50 200",
+     "GET /api/tenant/admin/brand-identity 200",
+     "GET /api/tenant/v1/content-writing/reviews 200",
+     "GET /api/tenant/v1/integrations/wordpress 200",
+     "GET /api/tenant/admin/brand-identity 200",
+     "GET /api/tenant/v1/integrations/wordpress 200",
+     "GET /api/tenant/v1/content-writing/reviews 200"
+    ],
+    "dash": [
+     {
+      "title": "Mongolia: Khövsgöl Lake and Gobi Desert — 15 Days",
+      "w": 240,
+      "title_row_w": 261,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": false,
+       "below_title": false,
+       "h": 22.5
+      },
+      "grid_cols": "36px 261.391px 135.609px 42px"
+     },
+     {
+      "title": "Mongolia: Khövsgöl Lake and Gobi Desert — 15 Days",
+      "w": 240,
+      "title_row_w": 261,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": false,
+       "below_title": false,
+       "h": 22.5
+      },
+      "grid_cols": "36px 261.391px 135.609px 42px"
+     },
+     {
+      "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days",
+      "w": 240,
+      "title_row_w": 261,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": false,
+       "below_title": false,
+       "h": 22.5
+      },
+      "grid_cols": "36px 261.391px 135.609px 42px"
+     },
+     {
+      "title": "Bhutan: Culinary Trail East to West — 10 Days",
+      "w": 240,
+      "title_row_w": 261,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": false,
+       "below_title": false,
+       "h": 22.5
+      },
+      "grid_cols": "36px 261.391px 135.609px 42px"
+     },
+     {
+      "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days",
+      "w": 240,
+      "title_row_w": 261,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": false,
+       "below_title": false,
+       "h": 22.5
+      },
+      "grid_cols": "36px 261.391px 135.609px 42px"
+     }
+    ]
+   },
+   {
+    "page": "t4",
+    "combo": "1440-light",
+    "shots": [
+     {
+      "file": "reverify-789/t4-drawer-1440-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/tenant/me 200",
+     "GET /api/tenant/v1/tours/pool?page_size=1 200",
+     "GET /api/tenant/v1/billing 200",
+     "GET /api/tenant/v1/tours/my-versions?page_size=50 200",
+     "GET /api/tenant/v1/tours/my-versions?page_size=50 200",
+     "GET /api/tenant/v1/tours/versions/9122ca5f-0bc0-4792-b4fc-bf5a46c1730e 200"
+    ],
+    "open_btns": 3,
+    "drawer": {
+     "title": "Mongolia: Khövsgöl Lake and Gobi Desert — 15 Days",
+     "title_h": 26,
+     "title_clipped": false,
+     "close_in_view": true,
+     "body_has_lang_only_header": true,
+     "body_start": "Mongolia: Khövsgöl Lake and Gobi Desert — 15 Days en-US Created: 15 Oct, 21:24 SUMMARY ✏ Edit This journey moves from the taiga-bordered shores of Khövsgöl Lake"
+    }
+   },
+   {
+    "page": "t11",
+    "combo": "390-light",
+    "shots": [
+     {
+      "file": "reverify-789/t11-390-light.png",
+      "leaks": []
+     },
+     {
+      "file": "reverify-789/t11-rest-390-light.png",
+      "leaks": []
+     },
+     {
+      "file": "reverify-789/t11-stuck-390-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/tenant/me 200",
+     "GET /api/tenant/v1/billing 200",
+     "GET /api/tenant/v1/integrations/wordpress 200",
+     "GET /api/tenant/v1/tours/pool?page_size=1 200",
+     "GET /api/tenant/v1/tours/my-versions?page_size=50 200",
+     "GET /api/tenant/v1/integrations/facebook 200",
+     "GET /api/tenant/v1/publish-log/pending 200",
+     "GET /api/tenant/v1/publish-log 200"
+    ],
+    "html_theme": "light",
+    "overflow": {
+     "sw": 390,
+     "iw": 390
+    },
+    "pills": [
+     {
+      "text": "ROUTE: A LOCAL BUDDHIST MONASTERY → SOD CAMP → URAN TOGOO → MORON · 10",
+      "h": 22.5,
+      "w": 278,
+      "svg": {
+       "top": 5.8,
+       "h": 11,
+       "cy": 11.3
+      },
+      "text_box": {
+       "top": 3,
+       "h": 16.5,
+       "cy": 11.3
+      },
+      "same_line": true,
+      "ellipsis": true,
+      "text_overflow": "ellipsis"
+     },
+     {
+      "text": "ROUTE: KHALING NATIONAL HANDLOOM → TASHIGANG DZONG → CHORTEN KORA → MO",
+      "h": 22.5,
+      "w": 278,
+      "svg": {
+       "top": 5.8,
+       "h": 11,
+       "cy": 11.3
+      },
+      "text_box": {
+       "top": 3,
+       "h": 16.5,
+       "cy": 11.3
+      },
+      "same_line": true,
+      "ellipsis": true,
+      "text_overflow": "ellipsis"
+     },
+     {
+      "text": "ROUTE: A LOCAL BUDDHIST MONASTERY → SOD CAMP → URAN TOGOO → MORON · 10",
+      "h": 22.5,
+      "w": 278,
+      "svg": {
+       "top": 5.8,
+       "h": 11,
+       "cy": 11.3
+      },
+      "text_box": {
+       "top": 3,
+       "h": 16.5,
+       "cy": 11.3
+      },
+      "same_line": true,
+      "ellipsis": true,
+      "text_overflow": "ellipsis"
+     }
+    ],
+    "previews": [
+     {
+      "title": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia",
+      "heading": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia",
+      "headingEqTitle": true,
+      "preview_start": "There is a line in northern Mongolia where the open steppe ends and the Siberian forest begins. It is not a border on any political map, but it is one of the mo",
+      "hash2": 0,
+      "star2": 0,
+      "starts_with_title": false,
+      "heading_followed_by": null,
+      "heading_dropped": true,
+      "clamp_h": 36,
+      "raw_start": "## Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia\n\nThere is a line in northern Mongo"
+     },
+     {
+      "title": "The Market as Cultural Decoder",
+      "heading": "What a Bolt of Cloth Can Tell You About a Country",
+      "headingEqTitle": false,
+      "preview_start": "What a Bolt of Cloth Can Tell You About a Country · In the National Textile Museum of Bhutan in Thimphu, there is a type of cloth that takes months to complete.",
+      "hash2": 0,
+      "star2": 0,
+      "starts_with_title": false,
+      "heading_followed_by": "\" · \"",
+      "heading_dropped": null,
+      "clamp_h": 36,
+      "raw_start": "## What a Bolt of Cloth Can Tell You About a Country\n\nIn the National Textile Museum of Bhutan in Thimphu, there is a ty"
+     },
+     {
+      "title": "What Silence Leaves Behind: Understanding Mongolia Through Its Ruins",
+      "heading": "The Weight of 1937",
+      "headingEqTitle": false,
+      "preview_start": "The Weight of 1937 · 1937. For a moment, let the year stand alone. Across Mongolia, the political purges of the 1930s brought the destruction of monasteries and",
+      "hash2": 0,
+      "star2": 0,
+      "starts_with_title": false,
+      "heading_followed_by": "\" · \"",
+      "heading_dropped": null,
+      "clamp_h": 36,
+      "raw_start": "## The Weight of 1937\n\n1937.\n\nFor a moment, let the year stand alone. Across Mongolia, the political purges of the 1930s"
+     }
+    ],
+    "pending_n": 3,
+    "rest": {
+     "stuck": false,
+     "band_top_css": "28px",
+     "bar_top_css": "-28px",
+     "sentinel_gap": -50,
+     "sc": {
+      "tag": "MAIN",
+      "rect": {
+       "top": 56,
+       "bottom": 844,
+       "left": 0,
+       "right": 390
+      },
+      "padTop": "20px",
+      "scrollTop": 827
+     },
+     "bar": {
+      "top": 391.6,
+      "bottom": 488.1,
+      "left": 17,
+      "right": 373
+     },
+     "band": {
+      "top": 419.6,
+      "bottom": 488.1,
+      "left": 17,
+      "right": 373
+     },
+     "content": {
+      "top": 441.6,
+      "bottom": 458.1,
+      "left": 39,
+      "right": 351
+     },
+     "card": {
+      "top": 418.6,
+      "bottom": 1236.3,
+      "left": 16,
+      "right": 374
+     },
+     "prev": {
+      "top": -628.5,
+      "bottom": 398.6,
+      "left": 16,
+      "right": 374
+     },
+     "band_prev_overlap_px2": [
+      0,
+      0,
+      0
+     ],
+     "bar_pointer_events": "none"
+    },
+    "stuck": {
+     "stuck": true,
+     "band_top_css": "0px",
+     "bar_top_css": "-28px",
+     "sentinel_gap": 229.4,
+     "sc": {
+      "tag": "MAIN",
+      "rect": {
+       "top": 56,
+       "bottom": 844,
+       "left": 0,
+       "right": 390
+      },
+      "padTop": "20px",
+      "scrollTop": 1450
+     },
+     "bar": {
+      "top": 48,
+      "bottom": 144.5,
+      "left": 17,
+      "right": 373
+     },
+     "band": {
+      "top": 48,
+      "bottom": 144.5,
+      "left": 17,
+      "right": 373
+     },
+     "content": {
+      "top": 98,
+      "bottom": 114.5,
+      "left": 39,
+      "right": 351
+     },
+     "card": {
+      "top": -204.4,
+      "bottom": 613.3,
+      "left": 16,
+      "right": 374
+     },
+     "prev": {
+      "top": -1251.5,
+      "bottom": -224.4,
+      "left": 16,
+      "right": 374
+     },
+     "band_prev_overlap_px2": [
+      0,
+      0,
+      0
+     ],
+     "bar_pointer_events": "auto"
+    },
+    "stuck_probe": {
+     "topbar_bottom_y": 56,
+     "bar_content_top_y": 98,
+     "band_height_px": 42,
+     "samples": 819,
+     "bad_hits": 0,
+     "bad_sample": []
+    }
+   },
+   {
+    "page": "dashboard",
+    "combo": "390-light",
+    "shots": [
+     {
+      "file": "reverify-789/dashboard-recent-390-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/tenant/v1/tours/pool?page_size=1 200",
+     "GET /api/tenant/v1/billing 200",
+     "GET /api/tenant/me 200",
+     "GET /api/tenant/v1/billing 200",
+     "GET /api/tenant/v1/tours/pool?page_size=1 200",
+     "GET /api/tenant/v1/quota 200",
+     "GET /api/tenant/v1/tours/my-versions?page_size=50 200",
+     "GET /api/tenant/admin/brand-identity 200",
+     "GET /api/tenant/v1/integrations/wordpress 200",
+     "GET /api/tenant/v1/content-writing/reviews 200",
+     "GET /api/tenant/admin/brand-identity 200",
+     "GET /api/tenant/v1/integrations/wordpress 200",
+     "GET /api/tenant/v1/content-writing/reviews 200"
+    ],
+    "dash": [
+     {
+      "title": "Mongolia: Khövsgöl Lake and Gobi Desert — 15 Days",
+      "w": 245,
+      "title_row_w": 266,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": true,
+       "below_title": true,
+       "h": 22.5
+      },
+      "grid_cols": "36px 266px"
+     },
+     {
+      "title": "Mongolia: Khövsgöl Lake and Gobi Desert — 15 Days",
+      "w": 245,
+      "title_row_w": 266,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": true,
+       "below_title": true,
+       "h": 22.5
+      },
+      "grid_cols": "36px 266px"
+     },
+     {
+      "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days",
+      "w": 245,
+      "title_row_w": 266,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": true,
+       "below_title": true,
+       "h": 22.5
+      },
+      "grid_cols": "36px 266px"
+     },
+     {
+      "title": "Bhutan: Culinary Trail East to West — 10 Days",
+      "w": 245,
+      "title_row_w": 266,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": true,
+       "below_title": true,
+       "h": 22.5
+      },
+      "grid_cols": "36px 266px"
+     },
+     {
+      "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days",
+      "w": 245,
+      "title_row_w": 266,
+      "h": 16.9,
+      "lines": 1,
+      "ws": "nowrap",
+      "to": "ellipsis",
+      "truncated": true,
+      "badge": {
+       "text": "READY TO REVIEW",
+       "in_text_col": true,
+       "below_title": true,
+       "h": 22.5
+      },
+      "grid_cols": "36px 266px"
+     }
+    ]
+   },
+   {
+    "page": "t4",
+    "combo": "390-light",
+    "shots": [
+     {
+      "file": "reverify-789/t4-drawer-390-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/tenant/me 200",
+     "GET /api/tenant/v1/tours/pool?page_size=1 200",
+     "GET /api/tenant/v1/tours/my-versions?page_size=50 200",
+     "GET /api/tenant/v1/billing 200",
+     "GET /api/tenant/v1/tours/my-versions?page_size=50 200",
+     "GET /api/tenant/v1/tours/versions/9122ca5f-0bc0-4792-b4fc-bf5a46c1730e 200"
+    ],
+    "open_btns": 3,
+    "drawer": {
+     "title": "Mongolia: Khövsgöl Lake and Gobi Desert — 15 Days",
+     "title_h": 51,
+     "title_clipped": false,
+     "close_in_view": true,
+     "body_has_lang_only_header": true,
+     "body_start": "Mongolia: Khövsgöl Lake and Gobi Desert — 15 Days en-US Created: 15 Oct, 21:24 SUMMARY ✏ Edit This journey moves from the taiga-bordered shores of Khövsgöl Lake"
+    }
+   }
+  ],
+  "login": {
+   "status": 200
+  },
+  "finished": "2026-10-17T07:08:15.150Z"
+ },
+ "admin": {
+  "phase": "admin",
+  "started": "2026-10-17T07:08:40.053Z",
+  "blocked_writes": [],
+  "runs": [
+   {
+    "page": "atom-curation-slate",
+    "combo": "390-light",
+    "shots": [
+     {
+      "file": "reverify-789/slate-390-light.png",
+      "leaks": []
+     },
+     {
+      "file": "reverify-789/slate-sorted-filtered-mismatch-390-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/tenants? 200",
+     "GET /api/admin/dashboard/summary? 200",
+     "GET /api/admin/atoms/summary 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/dashboard/slate?tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 200"
+    ],
+    "tenant_found": true,
+    "before": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 1110,
+      "cw": 356,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 390,
+      "cw": 390,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 390,
+      "iw": 390,
+      "sl": 0
+     },
+     "offenders": [
+      {
+       "el": "div.a527-inner-sidebar",
+       "ancestor_of_table": false,
+       "sw": 1157,
+       "cw": 357,
+       "ox": "auto",
+       "to": "clip",
+       "text": "01 · Atomize 02 · Segment 03 · Score 04 "
+      },
+      {
+       "el": "span",
+       "ancestor_of_table": false,
+       "sw": 28,
+       "cw": 20,
+       "ox": "visible",
+       "to": "clip",
+       "text": "25"
+      }
+     ],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 16,
+     "h1": "Social Content"
+    },
+    "after_sort": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 1110,
+      "cw": 356,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 390,
+      "cw": 390,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 390,
+      "iw": 390,
+      "sl": 0
+     },
+     "offenders": [
+      {
+       "el": "div.a527-inner-sidebar",
+       "ancestor_of_table": false,
+       "sw": 1157,
+       "cw": 357,
+       "ox": "auto",
+       "to": "clip",
+       "text": "01 · Atomize 02 · Segment 03 · Score 04 "
+      },
+      {
+       "el": "span",
+       "ancestor_of_table": false,
+       "sw": 28,
+       "cw": 20,
+       "ox": "visible",
+       "to": "clip",
+       "text": "25"
+      }
+     ],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 16,
+     "h1": "Social Content"
+    },
+    "after_filter": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 849,
+      "cw": 356,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 390,
+      "cw": 390,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 390,
+      "iw": 390,
+      "sl": 0
+     },
+     "offenders": [
+      {
+       "el": "div.a527-inner-sidebar",
+       "ancestor_of_table": false,
+       "sw": 1157,
+       "cw": 357,
+       "ox": "auto",
+       "to": "clip",
+       "text": "01 · Atomize 02 · Segment 03 · Score 04 "
+      },
+      {
+       "el": "span",
+       "ancestor_of_table": false,
+       "sw": 28,
+       "cw": 20,
+       "ox": "visible",
+       "to": "clip",
+       "text": "25"
+      }
+     ],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 16,
+     "h1": "Social Content"
+    },
+    "filter_rows": [
+     "linkedin USED 207 Segment a local Buddhist monastery — visit and engage in cultural exchange with young monks ↳ tour: \"—\" Seed: Pawangka Monastery · China PLACE"
+    ],
+    "after_scroll_row": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 849,
+      "cw": 356,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 390,
+      "cw": 390,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 390,
+      "iw": 390,
+      "sl": 0
+     },
+     "offenders": [
+      {
+       "el": "div.a527-inner-sidebar",
+       "ancestor_of_table": false,
+       "sw": 1157,
+       "cw": 357,
+       "ox": "auto",
+       "to": "clip",
+       "text": "01 · Atomize 02 · Segment 03 · Score 04 "
+      },
+      {
+       "el": "span",
+       "ancestor_of_table": false,
+       "sw": 28,
+       "cw": 20,
+       "ox": "visible",
+       "to": "clip",
+       "text": "25"
+      }
+     ],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 16,
+     "h1": "Social Content"
+    }
+   },
+   {
+    "page": "header-indent",
+    "combo": "390-light",
+    "pages": {
+     "/admin/jobs": {
+      "left": 16,
+      "text": "Jobs"
+     },
+     "/admin/content-quality": {
+      "left": 16,
+      "text": "Content Quality"
+     },
+     "/admin/review-queue": null
+    },
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [
+     {
+      "url": "/admin/review-queue",
+      "status": 307
+     }
+    ],
+    "api": [
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/job-runner/jobs?page=1&page_size=25&sort=created_at&sort_dir=desc&fields=summary 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/job-runner/workers 200",
+     "GET /api/admin/job-runner/summary 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/content-quality/stats?days=30 200"
+    ]
+   },
+   {
+    "page": "jobs-drawer",
+    "combo": "390-light",
+    "shots": [
+     {
+      "file": "reverify-789/jobs-drawer-390-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/job-runner/jobs?page=1&page_size=25&sort=created_at&sort_dir=desc&fields=summary&kind=ops_rds_role_connections&status=succeeded 200",
+     "GET /api/admin/job-runner/workers 200",
+     "GET /api/admin/job-runner/summary 200",
+     "GET /api/admin/job-runner/jobs/a97344b9-a5dd-42a6-b6a0-8ea70c927f7d 200",
+     "GET /api/admin/job-runner/jobs/a97344b9-a5dd-42a6-b6a0-8ea70c927f7d/llm-calls?limit=200 200"
+    ],
+    "rows": 25,
+    "head": {
+     "title": "ops_rds_role_connections SUCCEEDED",
+     "title_w": 319,
+     "title_h": 27,
+     "title_lines": 1,
+     "title_overflow": false,
+     "title_clipped_children": [
+      {
+       "tag": "SPAN",
+       "text": "ops_rds_role_connections",
+       "to": "ellipsis"
+      }
+     ],
+     "hdr_overflow": false,
+     "close": {
+      "left": 352,
+      "right": 370,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 390
+    },
+    "kind_span": {
+     "title": "ops_rds_role_connections",
+     "w": 210,
+     "truncated": true,
+     "to": "ellipsis"
+    },
+    "closed_after_click": true,
+    "url_after_close": "/admin/jobs?kind=ops_rds_role_connections&status=succeeded"
+   },
+   {
+    "page": "cq-piece-drawer",
+    "combo": "390-light",
+    "shots": [
+     {
+      "file": "reverify-789/cq-piece-drawer-legend-390-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/content-quality/stats?days=30 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/content-quality/pieces/21697065-39c8-4642-a7db-f214ed2ee9f9 200",
+     "GET /api/admin/content-quality/pieces/21697065-39c8-4642-a7db-f214ed2ee9f9/label 200"
+    ],
+    "head": {
+     "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+     "title_w": 319,
+     "title_h": 111,
+     "title_lines": 4,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 352,
+      "right": 370,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 390
+    },
+    "legend": {
+     "row_h": 52,
+     "helper_h": 52,
+     "pills": [
+      {
+       "text": "BLOCKING",
+       "h": 22.5,
+       "w": 82,
+       "radius": "999px"
+      },
+      {
+       "text": "WARNING",
+       "h": 22.5,
+       "w": 76,
+       "radius": "999px"
+      }
+     ]
+    }
+   },
+   {
+    "page": "cq-version-drawer",
+    "combo": "390-light",
+    "shots": [
+     {
+      "file": "reverify-789/cq-version-drawer-390-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/content-quality/stats?days=30 200",
+     "GET /api/admin/content-quality/tour-versions?limit=50&offset=0 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/content-quality/tour-versions/14531bf9-b7f3-4f04-b017-a59aa728268b 200"
+    ],
+    "rows": 50,
+    "head": {
+     "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Terra Family Expeditions v6",
+     "title_w": 319,
+     "title_h": 77,
+     "title_lines": 3,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 352,
+      "right": 370,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 390
+    }
+   },
+   {
+    "page": "atom-curation-slate",
+    "combo": "390-dark",
+    "shots": [
+     {
+      "file": "reverify-789/slate-390-dark.png",
+      "leaks": []
+     },
+     {
+      "file": "reverify-789/slate-sorted-filtered-mismatch-390-dark.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/dashboard/summary? 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/tenants? 200",
+     "GET /api/admin/atoms/summary 200",
+     "GET /api/admin/dashboard/slate?tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 200"
+    ],
+    "tenant_found": true,
+    "before": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 1110,
+      "cw": 356,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 390,
+      "cw": 390,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 390,
+      "iw": 390,
+      "sl": 0
+     },
+     "offenders": [
+      {
+       "el": "div.a527-inner-sidebar",
+       "ancestor_of_table": false,
+       "sw": 1157,
+       "cw": 357,
+       "ox": "auto",
+       "to": "clip",
+       "text": "01 · Atomize 02 · Segment 03 · Score 04 "
+      },
+      {
+       "el": "span",
+       "ancestor_of_table": false,
+       "sw": 28,
+       "cw": 20,
+       "ox": "visible",
+       "to": "clip",
+       "text": "25"
+      }
+     ],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 16,
+     "h1": "Social Content"
+    },
+    "after_sort": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 1110,
+      "cw": 356,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 390,
+      "cw": 390,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 390,
+      "iw": 390,
+      "sl": 0
+     },
+     "offenders": [
+      {
+       "el": "div.a527-inner-sidebar",
+       "ancestor_of_table": false,
+       "sw": 1157,
+       "cw": 357,
+       "ox": "auto",
+       "to": "clip",
+       "text": "01 · Atomize 02 · Segment 03 · Score 04 "
+      },
+      {
+       "el": "span",
+       "ancestor_of_table": false,
+       "sw": 28,
+       "cw": 20,
+       "ox": "visible",
+       "to": "clip",
+       "text": "25"
+      }
+     ],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 16,
+     "h1": "Social Content"
+    },
+    "after_filter": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 849,
+      "cw": 356,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 390,
+      "cw": 390,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 390,
+      "iw": 390,
+      "sl": 0
+     },
+     "offenders": [
+      {
+       "el": "div.a527-inner-sidebar",
+       "ancestor_of_table": false,
+       "sw": 1157,
+       "cw": 357,
+       "ox": "auto",
+       "to": "clip",
+       "text": "01 · Atomize 02 · Segment 03 · Score 04 "
+      },
+      {
+       "el": "span",
+       "ancestor_of_table": false,
+       "sw": 28,
+       "cw": 20,
+       "ox": "visible",
+       "to": "clip",
+       "text": "25"
+      }
+     ],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 16,
+     "h1": "Social Content"
+    },
+    "filter_rows": [
+     "linkedin USED 207 Segment a local Buddhist monastery — visit and engage in cultural exchange with young monks ↳ tour: \"—\" Seed: Pawangka Monastery · China PLACE"
+    ],
+    "after_scroll_row": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 849,
+      "cw": 356,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 390,
+      "cw": 390,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 390,
+      "iw": 390,
+      "sl": 0
+     },
+     "offenders": [
+      {
+       "el": "div.a527-inner-sidebar",
+       "ancestor_of_table": false,
+       "sw": 1157,
+       "cw": 357,
+       "ox": "auto",
+       "to": "clip",
+       "text": "01 · Atomize 02 · Segment 03 · Score 04 "
+      },
+      {
+       "el": "span",
+       "ancestor_of_table": false,
+       "sw": 28,
+       "cw": 20,
+       "ox": "visible",
+       "to": "clip",
+       "text": "25"
+      }
+     ],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 16,
+     "h1": "Social Content"
+    }
+   },
+   {
+    "page": "header-indent",
+    "combo": "390-dark",
+    "pages": {
+     "/admin/jobs": {
+      "left": 16,
+      "text": "Jobs"
+     },
+     "/admin/content-quality": {
+      "left": 16,
+      "text": "Content Quality"
+     },
+     "/admin/review-queue": null
+    },
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [
+     {
+      "url": "/admin/review-queue",
+      "status": 307
+     }
+    ],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/job-runner/jobs?page=1&page_size=25&sort=created_at&sort_dir=desc&fields=summary 200",
+     "GET /api/admin/job-runner/summary 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/job-runner/workers 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/content-quality/stats?days=30 200"
+    ]
+   },
+   {
+    "page": "jobs-drawer",
+    "combo": "390-dark",
+    "shots": [
+     {
+      "file": "reverify-789/jobs-drawer-390-dark.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/job-runner/jobs?page=1&page_size=25&sort=created_at&sort_dir=desc&fields=summary&kind=ops_rds_role_connections&status=succeeded 200",
+     "GET /api/admin/job-runner/workers 200",
+     "GET /api/admin/job-runner/summary 200",
+     "GET /api/admin/job-runner/jobs/a97344b9-a5dd-42a6-b6a0-8ea70c927f7d 200",
+     "GET /api/admin/job-runner/jobs/a97344b9-a5dd-42a6-b6a0-8ea70c927f7d/llm-calls?limit=200 200"
+    ],
+    "rows": 25,
+    "head": {
+     "title": "ops_rds_role_connections SUCCEEDED",
+     "title_w": 319,
+     "title_h": 27,
+     "title_lines": 1,
+     "title_overflow": false,
+     "title_clipped_children": [
+      {
+       "tag": "SPAN",
+       "text": "ops_rds_role_connections",
+       "to": "ellipsis"
+      }
+     ],
+     "hdr_overflow": false,
+     "close": {
+      "left": 352,
+      "right": 370,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 390
+    },
+    "kind_span": {
+     "title": "ops_rds_role_connections",
+     "w": 210,
+     "truncated": true,
+     "to": "ellipsis"
+    },
+    "closed_after_click": true,
+    "url_after_close": "/admin/jobs?kind=ops_rds_role_connections&status=succeeded"
+   },
+   {
+    "page": "cq-piece-drawer",
+    "combo": "390-dark",
+    "shots": [
+     {
+      "file": "reverify-789/cq-piece-drawer-legend-390-dark.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/content-quality/stats?days=30 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/content-quality/pieces/21697065-39c8-4642-a7db-f214ed2ee9f9 200",
+     "GET /api/admin/content-quality/pieces/21697065-39c8-4642-a7db-f214ed2ee9f9/label 200"
+    ],
+    "head": {
+     "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+     "title_w": 319,
+     "title_h": 111,
+     "title_lines": 4,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 352,
+      "right": 370,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 390
+    },
+    "legend": {
+     "row_h": 52,
+     "helper_h": 52,
+     "pills": [
+      {
+       "text": "BLOCKING",
+       "h": 22.5,
+       "w": 82,
+       "radius": "999px"
+      },
+      {
+       "text": "WARNING",
+       "h": 22.5,
+       "w": 76,
+       "radius": "999px"
+      }
+     ]
+    }
+   },
+   {
+    "page": "cq-version-drawer",
+    "combo": "390-dark",
+    "shots": [
+     {
+      "file": "reverify-789/cq-version-drawer-390-dark.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/content-quality/stats?days=30 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/content-quality/tour-versions?limit=50&offset=0 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/content-quality/tour-versions/14531bf9-b7f3-4f04-b017-a59aa728268b 200"
+    ],
+    "rows": 50,
+    "head": {
+     "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Terra Family Expeditions v6",
+     "title_w": 319,
+     "title_h": 77,
+     "title_lines": 3,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 352,
+      "right": 370,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 390
+    }
+   },
+   {
+    "page": "atom-curation-slate",
+    "combo": "1440-light",
+    "shots": [
+     {
+      "file": "reverify-789/slate-1440-light.png",
+      "leaks": []
+     },
+     {
+      "file": "reverify-789/slate-sorted-filtered-mismatch-1440-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/tenants? 200",
+     "GET /api/admin/dashboard/summary? 200",
+     "GET /api/admin/atoms/summary 200",
+     "GET /api/admin/dashboard/slate?tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 200"
+    ],
+    "tenant_found": true,
+    "before": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 1110,
+      "cw": 918,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 1204,
+      "cw": 1204,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 1440,
+      "iw": 1440,
+      "sl": 0
+     },
+     "offenders": [],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 268,
+     "h1": "Social Content"
+    },
+    "after_sort": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 1110,
+      "cw": 918,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 1204,
+      "cw": 1204,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 1440,
+      "iw": 1440,
+      "sl": 0
+     },
+     "offenders": [],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 268,
+     "h1": "Social Content"
+    },
+    "after_filter": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 918,
+      "cw": 918,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 1204,
+      "cw": 1204,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 1440,
+      "iw": 1440,
+      "sl": 0
+     },
+     "offenders": [],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 268,
+     "h1": "Social Content"
+    },
+    "filter_rows": [
+     "linkedin USED 207 Segment a local Buddhist monastery — visit and engage in cultural exchange with young monks ↳ tour: \"—\" Seed: Pawangka Monastery · China PLACE"
+    ],
+    "after_scroll_row": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 918,
+      "cw": 918,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 1204,
+      "cw": 1204,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 1440,
+      "iw": 1440,
+      "sl": 0
+     },
+     "offenders": [],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 268,
+     "h1": "Social Content"
+    }
+   },
+   {
+    "page": "header-indent",
+    "combo": "1440-light",
+    "pages": {
+     "/admin/jobs": {
+      "left": 272,
+      "text": "Jobs"
+     },
+     "/admin/content-quality": {
+      "left": 260,
+      "text": "Content Quality"
+     },
+     "/admin/review-queue": null
+    },
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [
+     {
+      "url": "/admin/review-queue",
+      "status": 307
+     }
+    ],
+    "api": [
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/job-runner/summary 200",
+     "GET /api/admin/job-runner/workers 200",
+     "GET /api/admin/job-runner/jobs?page=1&page_size=25&sort=created_at&sort_dir=desc&fields=summary 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/content-quality/stats?days=30 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200"
+    ]
+   },
+   {
+    "page": "jobs-drawer",
+    "combo": "1440-light",
+    "shots": [
+     {
+      "file": "reverify-789/jobs-drawer-1440-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/job-runner/jobs?page=1&page_size=25&sort=created_at&sort_dir=desc&fields=summary&kind=ops_rds_role_connections&status=succeeded 200",
+     "GET /api/admin/job-runner/workers 200",
+     "GET /api/admin/job-runner/summary 200",
+     "GET /api/admin/job-runner/jobs/a97344b9-a5dd-42a6-b6a0-8ea70c927f7d 200",
+     "GET /api/admin/job-runner/jobs/a97344b9-a5dd-42a6-b6a0-8ea70c927f7d/llm-calls?limit=200 200"
+    ],
+    "rows": 25,
+    "head": {
+     "title": "ops_rds_role_connections SUCCEEDED",
+     "title_w": 689,
+     "title_h": 27,
+     "title_lines": 1,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 1402,
+      "right": 1420,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 1440
+    },
+    "kind_span": {
+     "title": "ops_rds_role_connections",
+     "w": 248,
+     "truncated": false,
+     "to": "ellipsis"
+    },
+    "closed_after_click": true,
+    "url_after_close": "/admin/jobs?kind=ops_rds_role_connections&status=succeeded"
+   },
+   {
+    "page": "cq-piece-drawer",
+    "combo": "1440-light",
+    "shots": [
+     {
+      "file": "reverify-789/cq-piece-drawer-legend-1440-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/content-quality/stats?days=30 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/content-quality/pieces/21697065-39c8-4642-a7db-f214ed2ee9f9 200",
+     "GET /api/admin/content-quality/pieces/21697065-39c8-4642-a7db-f214ed2ee9f9/label 200"
+    ],
+    "head": {
+     "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+     "title_w": 789,
+     "title_h": 52,
+     "title_lines": 2,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 1402,
+      "right": 1420,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 1440
+    },
+    "legend": {
+     "row_h": 23,
+     "helper_h": 17,
+     "pills": [
+      {
+       "text": "BLOCKING",
+       "h": 22.5,
+       "w": 82,
+       "radius": "999px"
+      },
+      {
+       "text": "WARNING",
+       "h": 22.5,
+       "w": 76,
+       "radius": "999px"
+      }
+     ]
+    }
+   },
+   {
+    "page": "cq-version-drawer",
+    "combo": "1440-light",
+    "shots": [
+     {
+      "file": "reverify-789/cq-version-drawer-1440-light.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/content-quality/stats?days=30 200",
+     "GET /api/admin/content-quality/tour-versions?limit=50&offset=0 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/content-quality/tour-versions/14531bf9-b7f3-4f04-b017-a59aa728268b 200"
+    ],
+    "rows": 50,
+    "head": {
+     "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Terra Family Expeditions v6",
+     "title_w": 789,
+     "title_h": 51,
+     "title_lines": 2,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 1402,
+      "right": 1420,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 1440
+    }
+   },
+   {
+    "page": "atom-curation-slate",
+    "combo": "1440-dark",
+    "shots": [
+     {
+      "file": "reverify-789/slate-1440-dark.png",
+      "leaks": []
+     },
+     {
+      "file": "reverify-789/slate-sorted-filtered-mismatch-1440-dark.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/tenants? 200",
+     "GET /api/admin/dashboard/summary? 200",
+     "GET /api/admin/atoms/summary 200",
+     "GET /api/admin/dashboard/slate?tenant_id=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 200"
+    ],
+    "tenant_found": true,
+    "before": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 1110,
+      "cw": 918,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 1204,
+      "cw": 1204,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 1440,
+      "iw": 1440,
+      "sl": 0
+     },
+     "offenders": [],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 268,
+     "h1": "Social Content"
+    },
+    "after_sort": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 1110,
+      "cw": 918,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 1204,
+      "cw": 1204,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 1440,
+      "iw": 1440,
+      "sl": 0
+     },
+     "offenders": [],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 268,
+     "h1": "Social Content"
+    },
+    "after_filter": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 918,
+      "cw": 918,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 1204,
+      "cw": 1204,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 1440,
+      "iw": 1440,
+      "sl": 0
+     },
+     "offenders": [],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 268,
+     "h1": "Social Content"
+    },
+    "filter_rows": [
+     "linkedin USED 207 Segment a local Buddhist monastery — visit and engage in cultural exchange with young monks ↳ tour: \"—\" Seed: Pawangka Monastery · China PLACE"
+    ],
+    "after_scroll_row": {
+     "table": true,
+     "wrap": {
+      "el": "div",
+      "sw": 918,
+      "cw": 918,
+      "ox": "auto"
+     },
+     "main": {
+      "sw": 1204,
+      "cw": 1204,
+      "sl": 0
+     },
+     "doc": {
+      "sw": 1440,
+      "iw": 1440,
+      "sl": 0
+     },
+     "offenders": [],
+     "nonzero_scrollLeft_ancestors": [],
+     "h1_left": 268,
+     "h1": "Social Content"
+    }
+   },
+   {
+    "page": "header-indent",
+    "combo": "1440-dark",
+    "pages": {
+     "/admin/jobs": {
+      "left": 272,
+      "text": "Jobs"
+     },
+     "/admin/content-quality": {
+      "left": 260,
+      "text": "Content Quality"
+     },
+     "/admin/review-queue": null
+    },
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [
+     {
+      "url": "/admin/review-queue",
+      "status": 307
+     }
+    ],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/job-runner/workers 200",
+     "GET /api/admin/job-runner/jobs?page=1&page_size=25&sort=created_at&sort_dir=desc&fields=summary 200",
+     "GET /api/admin/job-runner/summary 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/content-quality/stats?days=30 200"
+    ]
+   },
+   {
+    "page": "jobs-drawer",
+    "combo": "1440-dark",
+    "shots": [
+     {
+      "file": "reverify-789/jobs-drawer-1440-dark.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/job-runner/summary 200",
+     "GET /api/admin/job-runner/workers 200",
+     "GET /api/admin/job-runner/jobs?page=1&page_size=25&sort=created_at&sort_dir=desc&fields=summary&kind=ops_rds_role_connections&status=succeeded 200",
+     "GET /api/admin/job-runner/jobs/a97344b9-a5dd-42a6-b6a0-8ea70c927f7d 200",
+     "GET /api/admin/job-runner/jobs/a97344b9-a5dd-42a6-b6a0-8ea70c927f7d/llm-calls?limit=200 200"
+    ],
+    "rows": 25,
+    "head": {
+     "title": "ops_rds_role_connections SUCCEEDED",
+     "title_w": 689,
+     "title_h": 27,
+     "title_lines": 1,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 1402,
+      "right": 1420,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 1440
+    },
+    "kind_span": {
+     "title": "ops_rds_role_connections",
+     "w": 248,
+     "truncated": false,
+     "to": "ellipsis"
+    },
+    "closed_after_click": true,
+    "url_after_close": "/admin/jobs?kind=ops_rds_role_connections&status=succeeded"
+   },
+   {
+    "page": "cq-piece-drawer",
+    "combo": "1440-dark",
+    "shots": [
+     {
+      "file": "reverify-789/cq-piece-drawer-legend-1440-dark.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/content-quality/stats?days=30 200",
+     "GET /api/admin/content-quality/pieces/21697065-39c8-4642-a7db-f214ed2ee9f9 200",
+     "GET /api/admin/content-quality/pieces/21697065-39c8-4642-a7db-f214ed2ee9f9/label 200"
+    ],
+    "head": {
+     "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+     "title_w": 789,
+     "title_h": 52,
+     "title_lines": 2,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 1402,
+      "right": 1420,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 1440
+    },
+    "legend": {
+     "row_h": 23,
+     "helper_h": 17,
+     "pills": [
+      {
+       "text": "BLOCKING",
+       "h": 22.5,
+       "w": 82,
+       "radius": "999px"
+      },
+      {
+       "text": "WARNING",
+       "h": 22.5,
+       "w": 76,
+       "radius": "999px"
+      }
+     ]
+    }
+   },
+   {
+    "page": "cq-version-drawer",
+    "combo": "1440-dark",
+    "shots": [
+     {
+      "file": "reverify-789/cq-version-drawer-1440-dark.png",
+      "leaks": []
+     }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "non2xx": [],
+    "api": [
+     "GET /api/admin/notifications/count 200",
+     "GET /api/admin/review-queue?status=pending&page=1&page_size=1 200",
+     "GET /api/admin/content-quality/stats?days=30 200",
+     "GET /api/admin/content-quality/pieces?limit=50&offset=0&sort=created_at&sort_dir=desc 200",
+     "GET /api/admin/content-quality/tour-versions?limit=50&offset=0 200",
+     "GET /api/admin/content-quality/tour-versions/14531bf9-b7f3-4f04-b017-a59aa728268b 200"
+    ],
+    "rows": 50,
+    "head": {
+     "title": "Laos to Vietnam by Bicycle: Nam Ou River to Hanoi — 12 Days — Terra Family Expeditions v6",
+     "title_w": 789,
+     "title_h": 51,
+     "title_lines": 2,
+     "title_overflow": false,
+     "title_clipped_children": [],
+     "hdr_overflow": false,
+     "close": {
+      "left": 1402,
+      "right": 1420,
+      "w": 18,
+      "in_view": true,
+      "hit_is_close": true
+     },
+     "vw": 1440
+    }
+   }
+  ],
+  "login": {
+   "status": 200
+  },
+  "finished": "2026-10-17T07:11:48.059Z"
+ },
+ "probe2": {
+  "blocked_writes": [],
+  "runs": [
+   {
+    "page": "cq-piece-drawer-title",
+    "combo": "390-light",
+    "console_errors": [],
+    "non2xx": [],
+    "title": {
+     "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+     "pills": [
+      {
+       "text": "APPROVED",
+       "h": 55.5,
+       "w": 59,
+       "text_lines": 1,
+       "ow": "anywhere",
+       "flexShrink": "1"
+      }
+     ]
+    },
+    "shot": "reverify-789/cq-piece-drawer-header-390-light.png"
+   },
+   {
+    "page": "cq-piece-drawer-title",
+    "combo": "390-dark",
+    "console_errors": [],
+    "non2xx": [],
+    "title": {
+     "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+     "pills": [
+      {
+       "text": "APPROVED",
+       "h": 55.5,
+       "w": 59,
+       "text_lines": 1,
+       "ow": "anywhere",
+       "flexShrink": "1"
+      }
+     ]
+    },
+    "shot": "reverify-789/cq-piece-drawer-header-390-dark.png"
+   },
+   {
+    "page": "cq-piece-drawer-title",
+    "combo": "1440-light",
+    "console_errors": [],
+    "non2xx": [],
+    "title": {
+     "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+     "pills": [
+      {
+       "text": "APPROVED",
+       "h": 22.5,
+       "w": 93,
+       "text_lines": 1,
+       "ow": "anywhere",
+       "flexShrink": "1"
+      }
+     ]
+    },
+    "shot": "reverify-789/cq-piece-drawer-header-1440-light.png"
+   },
+   {
+    "page": "cq-piece-drawer-title",
+    "combo": "1440-dark",
+    "console_errors": [],
+    "non2xx": [],
+    "title": {
+     "title": "Built Into the Cliff, Restored From Ash APPROVED Terra Family Expeditions · linkedin · attempt 2 · $0.020 · Oct 16, 03:01 PM",
+     "pills": [
+      {
+       "text": "APPROVED",
+       "h": 22.5,
+       "w": 93,
+       "text_lines": 1,
+       "ow": "anywhere",
+       "flexShrink": "1"
+      }
+     ]
+    },
+    "shot": "reverify-789/cq-piece-drawer-header-1440-dark.png"
+   },
+   {
+    "page": "slate-row",
+    "combo": "390-light",
+    "console_errors": [],
+    "non2xx": [],
+    "m": {
+     "rows": 1,
+     "seed_cell": "Seed: Pawangka Monastery · China PLACE ≠ SUBJECT",
+     "wrap_scrollLeft": 435,
+     "main_scrollLeft": 0,
+     "doc_scrollLeft": 0,
+     "ancestors_with_scrollLeft": []
+    },
+    "shot": "reverify-789/slate-mismatch-row-seed-cell-390-light.png"
+   },
+   {
+    "page": "slate-row",
+    "combo": "390-dark",
+    "console_errors": [],
+    "non2xx": [],
+    "m": {
+     "rows": 1,
+     "seed_cell": "Seed: Pawangka Monastery · China PLACE ≠ SUBJECT",
+     "wrap_scrollLeft": 435,
+     "main_scrollLeft": 0,
+     "doc_scrollLeft": 0,
+     "ancestors_with_scrollLeft": []
+    },
+    "shot": "reverify-789/slate-mismatch-row-seed-cell-390-dark.png"
+   },
+   {
+    "page": "t10-drawer-title",
+    "combo": "390-light",
+    "console_errors": [],
+    "non2xx": [],
+    "title": {
+     "title": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia BLOG",
+     "pills": [
+      {
+       "text": "BLOG",
+       "h": 72,
+       "w": 38,
+       "text_lines": 1,
+       "ow": "anywhere",
+       "flexShrink": "1"
+      }
+     ]
+    },
+    "shot": "reverify-789/t10-drawer-header-390-light.png"
+   },
+   {
+    "page": "t10-drawer-title",
+    "combo": "1440-light",
+    "console_errors": [],
+    "non2xx": [],
+    "title": {
+     "title": "Where Two Worlds Meet: The Ecological and Cultural Crossroads of Northern Mongolia BLOG",
+     "pills": [
+      {
+       "text": "BLOG",
+       "h": 39,
+       "w": 51,
+       "text_lines": 1,
+       "ow": "anywhere",
+       "flexShrink": "1"
+      }
+     ]
+    },
+    "shot": "reverify-789/t10-drawer-header-1440-light.png"
+   }
+  ]
+ },
+ "probe3_slate_row": [
+  {
+   "s": "light",
+   "m": {
+    "scroller": {
+     "cls": "",
+     "top": 559,
+     "bottom": 760,
+     "h": 201
+    },
+    "table": {
+     "top": 563,
+     "bottom": 881
+    },
+    "thead": {
+     "top": 563,
+     "bottom": 640
+    },
+    "row": {
+     "top": 640,
+     "bottom": 881
+    },
+    "cell_text": "Seed: Pawangka Monastery · China PLACE ≠ SUBJECT",
+    "wrap_sl": 490,
+    "main_sl": 0,
+    "doc_sl": 0,
+    "stickies": [
+     {
+      "text": "PROPOSED: 85 PICKED: 0 USED: 4 CUT: 0",
+      "h": 80,
+      "top": 579
+     }
+    ],
+    "row_after": {
+     "top": 640,
+     "bottom": 881,
+     "hit_in_row": false
+    }
+   },
+   "errs": []
+  },
+  {
+   "s": "dark",
+   "m": {
+    "scroller": {
+     "cls": "",
+     "top": 559,
+     "bottom": 760,
+     "h": 201
+    },
+    "table": {
+     "top": 563,
+     "bottom": 881
+    },
+    "thead": {
+     "top": 563,
+     "bottom": 640
+    },
+    "row": {
+     "top": 640,
+     "bottom": 881
+    },
+    "cell_text": "Seed: Pawangka Monastery · China PLACE ≠ SUBJECT",
+    "wrap_sl": 490,
+    "main_sl": 0,
+    "doc_sl": 0,
+    "stickies": [
+     {
+      "text": "PROPOSED: 85 PICKED: 0 USED: 4 CUT: 0",
+      "h": 80,
+      "top": 579
+     }
+    ],
+    "row_after": {
+     "top": 640,
+     "bottom": 881,
+     "hit_in_row": false
+    }
+   },
+   "errs": []
+  }
+ ]
+}

@@ -67,7 +67,7 @@ Every `shared` table is **owned by AA-CIS-App** unless the row says otherwise.
 | Table(s) | Owner | Notes |
 |---|---|---|
 | `tenants`, `membership_plans`, `admin_users`, `tenant_*` (brand rules, configs, integrations, usage) | CIS | Tenant and admin identity of the CIS platform. AA-Booking owns *customer* identity (ADR 0001). |
-| `job`, `job_worker` | CIS | Durable job runner of CIS (ADR 0003). Other owners do not enqueue here: each owner has its own job table from the shared DDL template (ADR 0003a; `booking.job` bk-002, `tripplanner.job` when needed). Job kind prefixes per owner (ADR 0003a decision 3, until `owners.yaml` exists, X1): CIS `shared.job` keeps its unprefixed names; Booking `bk_` (`booking.job` `job_kind_chk`); TripPlanner `tp_`; a new app `<prefix>_`. |
+| `job`, `job_worker` | CIS | Durable job runner of CIS (ADR 0003). Other owners do not enqueue here: each owner has its own job table from the shared DDL template (ADR 0003a; `booking.job` bk-002, `tripplanner.job` when needed). Job kind prefixes per owner (ADR 0003a decision 3, until `owners.yaml` exists, X1): CIS `shared.job` keeps its unprefixed names; Booking `bk_` (`booking.job` `job_kind_chk`); TripPlanner `tp_`; a new app `<prefix>_`. Every job table is created from the DDL template `apps/AA-CIS-App/shared/jobs/job_table_template.sql` (AA-751). Idle-exempt kinds (not counted by the deploy guards or the DB Migrate idle check): Booking `bk_inquiry_pull`; CIS none since AA-751 (the list lives in `run_migration.py` `IDLE_EXEMPT_KINDS` and Booking `DEPLOY_GATE_EXEMPT` until `owners.yaml`, X1). |
 | `llm_role_config`, `llm_model_catalog` | CIS | Model Gateway config; TripPlanner has SELECT (CIS 173). |
 | `llm_call_log`, `llm_shadow_log` | CIS | Cost log; TripPlanner has INSERT on `llm_call_log` only, rows tagged `quality_signal.app = "tripplanner"` (CIS 173). |
 | `decision_log`, `decision_question`, `decision_cache_hits_daily`, `jev_*` | CIS | Jev decision layer. |
@@ -75,8 +75,8 @@ Every `shared` table is **owned by AA-CIS-App** unless the row says otherwise.
 | `notifications` | CIS | Admin bell. |
 | `place_photo` (+ photo views) | CIS | Photo sync and matching (AA-708); TripPlanner reads the views (CIS 201). |
 | `destinations` | **CIS** (since ADR 0002) | Golden record of places. Created by TripPlanner migrations 002 / 005 (history); since CIS 201 the `tripplanner` role is read-only on it and only CIS writes it. Future column changes are CIS migrations. The place pipeline moves to CIS in AA-712 (ADR 0007): uniqueness changes from global `lower(name)` to `(name_norm, country, locality_norm)` (`locality_norm` NOT NULL DEFAULT '', non-empty only for generic names; `country` NOT NULL; same key on `geo.place_name`; ids kept), new geo-quality columns, and only the CIS job `place_geocode` writes coordinates. |
-| `schema_versions` | CIS (table), every owner (its rows) | Each owner registers its own versions with its prefix (rule 4). |
-| `pipeline_jobs`, `pipeline_runs`, `acp_runs`, `pipeline_lessons`, `prompt_eval_runs`, `unmapped_market_requests` | CIS | `pipeline_jobs` is history only (no new writes, ADR 0003). |
+| `schema_versions` | CIS (table), every owner (its rows) | Each owner registers its own versions with its prefix (rule 4). From CIS 243 (X1): `bk_owner`/`tp_owner` insert only their own prefix (BEFORE INSERT key guard); members of the registry owner insert any key; every other role none. |
+| `pipeline_jobs`, `pipeline_runs`, `acp_runs`, `pipeline_lessons`, `prompt_eval_runs`, `unmapped_market_requests` | CIS | `pipeline_jobs` is history only (no new writes, ADR 0003). `acp_runs` has no runtime reader since CIS #785 (AA-751; `/admin/acp/stuck-runs` removed) — Dead Table Registry candidate. |
 
 ## Current gaps (AA-684)
 

@@ -1,9 +1,12 @@
 """AA-859 S240 — get / set / del AA-859 tenant-pool flags in the CIS Dev Redis (runs inside the api task via
 S3-mediated ECS exec; driven by aa859_flip_verify.py).
 
-    python3 aa859_flag.py <get|on|off> <flag> [<flag> ...]
+    python3 aa859_flag.py <get|on|off|del> <flag> [<flag> ...]
 
-Only the six AA-859 wave-2 keys are accepted. "on" = SET "true", "off" = DEL (the documented rollback).
+Only the eleven tenant-pool route flags of api/core/aa544_tenant_pool.py are accepted. "on" = SET "true",
+"off" = SET "false" (the rollback). S241 decision D-12: the flags FAIL CLOSED -- a missing key, any value other
+than "false", or a Redis read error means ON (tenant pool), so DEL is NOT a rollback any more; "off" must write
+the explicit "false". "del" removes the key (= back to the ON default), kept only for cleanup.
 Writes {action, before, after} to s3://aa-cis-bronze-005097885195/scripts/out/s240_aa859_flag.json and
 prints only "OK <bytes>".
 """
@@ -15,9 +18,14 @@ import boto3
 import redis.asyncio as aioredis
 
 ALLOWED = {
+    # AA-859 wave 2
     "aa859:piece_edit_pool", "aa859:t2_version_write_pool", "aa859:angle_gate_decide_pool",
     "aa859:unpublish_pool", "aa859:t2_version_reads_pool", "aa859:integration_connect_pool",
+    # AA-544 / AA-815 / AA-817 (same fail-closed encoding since S241 D-12)
+    "aa544:stage1:publish_pending_pool", "aa544:stage5:get_piece_pool", "aa544:publish_log_list_pool",
+    "aa544:integration_disconnect_pool", "aa817:content_piece_reads_pool",
 }
+ON_VALUE, OFF_VALUE = "true", "false"   # must match FLAG_ON_VALUE / FLAG_OFF_VALUE in aa544_tenant_pool.py
 
 
 def _redis_url():
@@ -45,14 +53,16 @@ BUCKET, KEY = "aa-cis-bronze-005097885195", "scripts/out/s240_aa859_flag.json"
 
 async def main(action, flags):
     bad = [f for f in flags if f not in ALLOWED]
-    if action not in ("get", "on", "off") or bad or not flags:
-        raise SystemExit(f"usage: get|on|off <aa859 flag>...; refused: {bad}")
+    if action not in ("get", "on", "off", "del") or bad or not flags:
+        raise SystemExit(f"usage: get|on|off|del <tenant-pool flag>...; refused: {bad}")
     r = aioredis.from_url(_redis_url(), decode_responses=True)
     out = {"action": action, "before": {f: await r.get(f) for f in flags}}
     for f in flags:
         if action == "on":
-            await r.set(f, "true")
+            await r.set(f, ON_VALUE)
         elif action == "off":
+            await r.set(f, OFF_VALUE)   # explicit OFF; a missing key would mean ON (D-12)
+        elif action == "del":
             await r.delete(f)
     out["after"] = {f: await r.get(f) for f in flags}
     await (r.aclose() if hasattr(r, "aclose") else r.close())
