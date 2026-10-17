@@ -20,6 +20,12 @@ Người đọc là phía nghiệp vụ, ngoài nhóm kỹ thuật. Một commen
 - Atlassian MCP endpoint `/v2/mcp` (v1/sse đã ngừng). Lấy `cloudId` một lần mỗi phiên.
 - Mention chị Thư: `contentFormat: html` với `<span data-type="mention" data-user-id="70121:5793bdd5-44b1-4623-97d4-43c35d440869">@thule</span>` (markdown `@thule` không tạo mention thật). cloudId site: lấy một lần bằng `getAccessibleAtlassianResources`.
 - Bảng HTML render tốt trên Jira.
+- **Ảnh kèm comment (S241, PR-18 comment 10483):**
+  1. `executeWrite` `uploadAttachmentToJiraIssue` (issueIdOrKey + `filePath`, mỗi file 1 lần) → trả `uploadCommand` (curl tới api.media.atlassian.com, token sống ngắn) + `collection`;
+  2. chạy curl, lấy `data.id` (fileId);
+  3. `addOrEditJiraIssueComment` với `contentFormat: html`, `inlineFileId: [ids…]`, `inlineFileCollection: [collection]`, `inlineFileName: [tên…]` → ảnh nhúng ở cuối comment, đúng thứ tự.
+
+  KHÔNG chạy bước 2 "standalone attach" cho cùng file (bị trùng). Đặt tên file tiếng Việt không dấu cho dễ đọc, và thêm 1 dòng chú thích thứ tự ảnh trong comment.
 
 ## Mẫu báo tiến độ rerun
 
