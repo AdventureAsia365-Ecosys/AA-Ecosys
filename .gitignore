@@ -36,3 +36,6 @@ docs/calib/*.csv
 
 # Audit videos live in S3 (see each audit folder VIDEOS.md), not in git
 docs/audits/**/*.webm
+
+# Windows download metadata (alternate data stream copied into WSL)
+*:Zone.Identifier
