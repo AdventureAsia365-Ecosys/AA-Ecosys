@@ -46,16 +46,16 @@ tạm dừng (Nghiệp cho máy ngủ, ghi chú `.tmp-session/s242/RESUME.md`) r
 - Tài liệu R1: ADR **0006a** (root), ecosystem-architecture §4.6 Identity, schema-ownership, x1-plan "S242 amendments".
 
 ## Trạng thái cuối phiên
-- ECS CIS api `:684` / worker `:241` COMPLETED; Booking `/booking/health/ready` 200 bk-015; TP tp-014; CIS migration **247**.
+- ECS CIS api `:685` / worker `:242` COMPLETED; Booking `/booking/health/ready` 200 bk-015; TP tp-014; CIS migration **247**.
 - Cognito WORKFORCE: nghieppham (owner, linked), admin (break-glass, disabled, TOTP), thu (admin, chưa đăng nhập).
 - Terraform acc2 trên provider 6.69.1; state cũ v5: version `J5F5SH1RZxnqFSJKPfAcfNtlfw3aHK.H` (đường lùi).
-- Repo: 4 repo con về main sạch; PR mở còn #830 (auto-merge) khi viết log.
+- Repo: gốc + 4 repo con về main sạch; 0 PR mở ở cả 5 repo.
 
 ## Còn lại
 - AA-816: thử break-glass qua managed login (`/api/auth/signin/cognito-breakglass`); kiểm TOTP có chặn đăng nhập chỉ bằng
   mã email cho break-glass không; lịch chạy hằng ngày cho job đối soát (Infra: ops-probe gọi schedule); hộp thư E2E (D2);
   cutover (tắt đăng nhập mật khẩu khi mọi dòng active có `cognito_sub`, xử lý `e2e-claude-code*`).
-- Gửi thư mời cho chị Thư **sau khi Google gỡ cờ** (Resend invite trên trang Staff).
+- Thư mời chị Thư **đã gửi** 18/10 19:27 (Nghiệp bấm); Jira PR-14 đã đăng (comment 10484, 3 ảnh). PR-19 (CRM tenant) ghi vào AA-821.
 - Lệch nhóm: nghieppham + admin có nhóm `booking-admin` trong Cognito nhưng không có `staff_app_grant` (job đối soát sẽ báo).
 - X1 đợt 4 (S15–S19, AA-860, `cis_app`) sau Cognito; S17 Nghiệp lưu DSN `cis_app` trong Console.
 - Booking Phase 2 (AA-680 staff): Booking chưa nhận issuer Cognito (cần sửa code, không chỉ config).
