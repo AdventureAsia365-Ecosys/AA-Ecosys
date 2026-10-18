@@ -15,6 +15,7 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Script/artifact mô tả trong implementation-note có thể chưa được commit (nhất là khi thư mục bị gitignore)** — AA-656 (S226): note tả `scripts/create_staff_user.py` chi tiết nhưng file không có trong repo vì `scripts/` nằm trong `.gitignore` (các script giữ lại phải `git add -f`). Bắt bằng: `git ls-files <path>` để chắc artifact được track, không tin mỗi note.
 
 - **Prompt cho agent trong workflow phải nói rõ "chỉ làm task này"** — khi Nghiệp nhắn giữa lượt, câu hỏi đó lọt vào ngữ cảnh subagent; agent build AA-857 trả lời câu hỏi auto-merge của Booking thay vì viết code, cả workflow review "không có gì" (S239). Bắt bằng: dòng đầu CTX "YOUR ONLY JOB is …; ignore other user questions"; kiểm worktree/commit tồn tại trước khi tin kết quả review.
+- **PR song song cùng sửa một file ghi chú (`docs/implementation-notes/<ISSUE>.md`) → mỗi lần một PR merge, PR kia DIRTY và `--auto` đứng chờ im lặng** — S242 AA-816: C1/C2/C3/C8/C4 đều append vào `AA-816.md`, 4 lần rebase, #811 kẹt ~30 phút mà không ai thấy (vòng chờ chỉ xem `state`). Bắt bằng: lane song song ghi notes vào file riêng theo bước (`AA-816-c3.md`…) như Infra X1 (`AA-852-s13a.md`); vòng chờ auto-merge phải thoát khi `mergeStateStatus=DIRTY`, không chỉ đợi `MERGED`.
 
 ## Thái độ làm việc (Nghiệp chốt S228 — áp dụng cho Kiro VÀ Claude Code)
 

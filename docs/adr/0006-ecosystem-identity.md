@@ -1,6 +1,11 @@
 # ADR 0006 — Ecosystem identity on Amazon Cognito (staff, tenant users, travellers)
 
 - **Status:** Accepted (14/10/2026, S236 — Nghiệp: Cognito on acc2, email code for staff (Google dropped: mail is on DreamHost, not Workspace), AA-703 as the epic).
+- **Amended by:** [ADR 0006a](0006a-identity-phase1-amendments.md) (18/10/2026, S242): Phase 1 as shipped —
+  Booking roles in `shared.staff_app_grant`, owner-only staff writes, "reset" = sign-out + re-enable,
+  break-glass address `admin@adventure.asia` and its secret shape/guards, managed login on
+  `staff-auth.lumiguides.it.com` with branding in Terraform, legacy flag scoped to the CIS UI, the
+  `email_verified` gap and the residual `AdminCreateUser` risk. Where the two differ, 0006a wins.
 - **Scope:** AA-Ecosys as a whole: AA-CIS-App (staff admin, tenant portal), AA-Booking (staff app,
   customer app), AA-TripPlanner-Web (traveller sign-in), AA-CIS-Infra (pools, triggers, domains, SES).
 - **Amends:** ADR 0001 decision 6 (the clause "AA-Booking owns the customer identity (OTP)") and
@@ -106,6 +111,8 @@ EXTERNAL); every app verifies JWTs via JWKS; the PR #721 bridge must be swappabl
 - **Source of truth = the staff directory** (AA-816): `shared.admin_users` gains `email` (unique,
   lower-cased, `@adventure.asia`), `display_name`, `cognito_sub` and per-app role columns;
   `password_hash` becomes nullable and is dropped after cutover (CIS migration, CIS-owned).
+  *(Amended by 0006a A1–A3: Booking roles live in `shared.staff_app_grant` (CIS 247), and only owners
+  (`is_owner`, Cognito session) write the directory.)*
 - The directory's admin UI (in the CIS admin) is the **only writer** of Cognito users and group
   memberships: each change writes the directory row, then calls `AdminCreateUser` /
   `AdminAddUserToGroup` / `AdminRemoveUserFromGroup` / `AdminDisableUser`. A reconcile job
@@ -355,7 +362,8 @@ Rules:
 ### 11. Break-glass
 
 - One native WORKFORCE user (`breakglass@adventure.asia` or a dedicated mailbox), password + TOTP,
-  member of `cis-admin` and `booking-admin`.
+  member of `cis-admin` and `booking-admin`. *(Amended by 0006a A4: the address is `admin@adventure.asia`;
+  secret shape, resource policy, alerts and the enable/disable runbook are there.)*
 - Password and TOTP seed in Secrets Manager (`aa-identity/dev/breakglass`), readable only by the admin
   role, retrieval alerted (CloudTrail → email).
 - It passes the pre token trigger like any staff user (enabled + staff groups); it never goes through
