@@ -11,8 +11,9 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0002](0002-only-cis-writes-content.md) | Only CIS writes content; other apps read it through views | Accepted |
 | [0003](0003-one-durable-job-model.md) | One durable job model for all deferred work | Accepted (amended by 0003a) |
 | [0003a](0003a-per-owner-job-tables.md) | Amendment: one job table per owner schema, from a shared DDL template | Accepted |
-| [0004](0004-aa-booking-stack-and-bootstrap.md) | AA-Booking: stack, repo layout, runtime and bootstrap on acc2 | Accepted |
+| [0004](0004-aa-booking-stack-and-bootstrap.md) | AA-Booking: stack, repo layout, runtime and bootstrap on acc2 | Accepted (amended by 0004a, 0004b) |
 | [0004a](0004a-supply-content-ownership.md) | Amendment: supply data in Booking, customer-facing supply content in CIS | Accepted |
+| [0004b](0004b-per-app-security-groups.md) | Amendment: one security group per caller (per-app network isolation) | Accepted |
 | [0005](0005-pricing-and-supplier-rates.md) | Pricing and supplier rates | Accepted |
 | [0006](0006-ecosystem-identity.md) | Ecosystem identity on Amazon Cognito (staff, tenant users, travellers) | Accepted |
 | [0007](0007-place-pipeline-in-cis.md) | Place pipeline in CIS: `geo` schema, `catalog.*` views, background jobs | Accepted |
