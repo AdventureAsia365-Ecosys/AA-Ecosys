@@ -115,6 +115,7 @@ the answer Nghiệp gave on 14/10/2026.
      - `ignore_changes = [task_definition, desired_count]`;
      - `enable_execute_command`;
      - existing private subnets and app security group;
+       (amended by [ADR 0004b](0004b-per-app-security-groups.md): one security group per caller, S242);
      - `desired_count = 0` until the first image exists.
    - **Module and CIS-resource boundary.** The single allowed module edit is one new output,
      `http_listener_arn`, in `modules/alb/outputs.tf`. No other change to `modules/ecs`,
