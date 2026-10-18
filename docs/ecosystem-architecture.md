@@ -1,6 +1,7 @@
 # AA-Ecosys — Ecosystem architecture
 
-> **Status:** updated 16/10/2026 (S239 — AA-Booking §3.4 refresh: slices live through `bk-011`, live catalog read (S237 D4),
+> **Status:** updated 18/10/2026 (S242 — §4.6 identity: Cognito WORKFORCE live for CIS staff, ADR 0006a; Booking
+> staff still on the bridge until Phase 2); 16/10/2026 (S239 — AA-Booking §3.4 refresh: slices live through `bk-011`, live catalog read (S237 D4),
 > customer identity per ADR 0006, `api-booking` sub-domain live); 14/10/2026 (S236 — ADR 0007 place pipeline in CIS; S235 — AA-Booking bootstrap live, OIDC trust narrowed, ADRs
 > 0001/0004/0005 Accepted; previous revisions 11/10/2026 S225 AA-654, 25/09/2026). Items marked **[FACT]** were verified by reading code, migrations or live
 > state; **[TO CONFIRM]** marks an inference or gap that Nghiệp still has to confirm.
@@ -9,7 +10,8 @@
 > [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (AA-Booking stack and bootstrap) with
 > [amendment A1](adr/0004a-supply-content-ownership.md) (supply content ownership),
 > [ADR 0005](adr/0005-pricing-and-supplier-rates.md) (pricing and supplier rates),
-> [ADR 0006](adr/0006-ecosystem-identity.md) (ecosystem identity on Cognito),
+> [ADR 0006](adr/0006-ecosystem-identity.md) (ecosystem identity on Cognito) with
+> [amendment A](adr/0006a-identity-phase1-amendments.md) (Phase 1 as shipped),
 > [ADR 0007](adr/0007-place-pipeline-in-cis.md) (place pipeline in CIS: `geo` schema, `catalog.*` views). Contract rules
 > between apps: [`contracts/README.md`](contracts/README.md).
 
@@ -187,7 +189,8 @@ Identity: ADR 0001 decision 6 gave AA-Booking the customer identity (its own OTP
 [ADR 0006](adr/0006-ecosystem-identity.md) amends this: the target is the shared Cognito EXTERNAL pool
 (`aa-external`) for travellers and Booking customers (AA-703 epic, AA-680), so the `bk-001` OTP tables are interim and
 not built out. Booking staff sign in today through the interim bridge of ADR 0004 O1 (CIS-issued RS256 JWT,
-`aud=booking`, verified against the CIS JWKS), to be swapped for the Cognito WORKFORCE pool by configuration.
+`aud=booking`, verified against the CIS JWKS), to be swapped for the Cognito WORKFORCE pool in Phase 2 (see 4.6;
+Booking's verifier needs code changes, not only configuration).
 Stack, runtime and decisions O1–O9: [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (Accepted
 14/10/2026); prices and suppliers: [ADR 0005](adr/0005-pricing-and-supplier-rates.md).
 
@@ -223,7 +226,7 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 
 | Edge | Contract | Source |
 |---|---|---|
-| CIS FE (Vercel) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT, admin secret added by the BFF | `AA-CIS-App/CONTEXT.md` |
+| CIS FE (Vercel) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT; staff = Cognito WORKFORCE access token as `Authorization: Bearer` (or a legacy HS256 session while `LEGACY_ADMIN_LOGIN_ENABLED` is on), plus the admin secret added by the BFF until the cutover (4.6) | `AA-CIS-App/CONTEXT.md` |
 | AA-Booking ⇄ clients | REST through API GW `9z3xnalp59` (shared VPC Link) → ALB `/booking/*` → ECS `aa-booking-dev-api`. Staff auth: CIS-issued JWT verified by Booking (`aud=booking`, ADR 0004 O1; built in `bk-003`, interim until Cognito per ADR 0006). The staff admin frontend calls it through its Next.js BFF | `booking.tf`, ADR 0004 |
 | TripPlanner FE (Vercel) ⇄ BE | The Next.js BFF calls 2 Lambda URLs through API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly; header `X-TripPlanner-Key`. Env `BROWSE_API_URL` / `TRIP_API_URL` | `tripplanner.tf`, `docs/vercel-setup.md` |
 
@@ -309,6 +312,29 @@ the graph build enqueues cover/photo match) (`tripplanner.itinerary_components` 
 itinerary**. Filling destination covers stays off until places are re-extracted. AA-Booking (AA-679,
 S237 D4) reads tour photos live from `catalog.v_tour_photo`.
 
+### 4.6 Identity (ADR 0006 + 0006a, 18/10/2026) [FACT]
+
+One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan, Terraform in AA-CIS-Infra
+`accounts/aa365/identity*.tf`. Phase 0 (pools, triggers) and Phase 1 for CIS staff are live on Dev.
+
+| Population | Pool / client | State |
+|---|---|---|
+| CIS staff | WORKFORCE `us-west-1_bCcFvbSOS`, client `cis-admin` | **Live.** Email one-time code on managed login at `https://staff-auth.lumiguides.it.com` (AA-branded, own domain since S242). The CIS BFF runs auth code + PKCE; the CIS API verifies the access token (WORKFORCE issuer only, `client_id` ∈ {cis-admin, breakglass}, `token_use=access`) and resolves the `shared.admin_users` row by `(iss, sub)`; role = highest `cis-*` group. Legacy password login stays behind `LEGACY_ADMIN_LOGIN_ENABLED` until the cutover |
+| Break-glass | WORKFORCE, client `breakglass` | **Live, disabled at rest.** `admin@adventure.asia`, password + TOTP; secret `aa-identity/dev/breakglass` readable only by the MFA admin role, every read/write and token issue alerts |
+| Booking staff | WORKFORCE, client `booking-staff` (callbacks on `booking.lumiguides.it.com`) | **Phase 2, not started.** Booking still verifies the CIS bridge token (ADR 0004 O1) issued by `/auth/booking-token` from a CIS password session; Booking roles are already stored in CIS `shared.staff_app_grant` and mirrored to `booking-*` groups |
+| Tenant users | EXTERNAL `us-west-1_nKOvHan0W`, client `cis-portal` | Phase 3 (AA-813), not started; tenants keep `/auth/tenant-login` with the API key |
+| Travellers / Booking customers | EXTERNAL, clients `tripplanner`, `booking-customer` | Phase 4 (AA-680), not started; native self sign-up stays off until WAF is on |
+
+- **Staff directory = CIS.** `shared.admin_users` (+ `email`, `cognito_iss`/`cognito_sub`, `is_owner`, CIS 247)
+  and `shared.staff_app_grant` (per-app roles) are the source of truth. Only owners write it, from the CIS admin
+  Staff page; each write goes to the DB first, then to Cognito through the CIS task role's allow-list.
+  A report-only job `staff_directory_reconcile` compares the two and shows cutover readiness.
+- **Cutover (not started):** every active staff row linked by its own sign-in, managed-login break-glass tested,
+  the admin-secret check made principal-aware and the secret rotated, then the legacy flag off for the CIS UI.
+  `/auth/admin-login` and `/auth/booking-token` stay until Booking Phase 2.
+- Apex `lumiguides.it.com` is an A record to Vercel (the `aa-cis-frontend` project redirects it to
+  `aa-cis.lumiguides.it.com`); Cognito requires a parent A record for its custom domains.
+
 ## 5. OIDC / CI-CD
 
 | Role | File | Current `sub` | Used by |
@@ -333,8 +359,8 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
 
 ## 6. Debt / future work
 
-- **AA-Booking (AAA):** slices live through `bk-011` (3.4). Open: customer-facing app and customer identity on
-  Cognito (AA-680, ADR 0006), deploy guard on `booking.job` (AA-751 / X6), Playwright smoke of the staff admin in
+- **AA-Booking (AAA):** slices live through `bk-011` (3.4). Open: staff sign-in on Cognito WORKFORCE (ADR 0006
+  Phase 2, 4.6), customer-facing app and customer identity on Cognito (AA-680, ADR 0006), deploy guard on `booking.job` (AA-751 / X6), Playwright smoke of the staff admin in
   Booking CI (the non-required "Frontend Build" job already runs eslint, tsc and `next build`). Handoff from
   TripPlanner: [`tripplanner-to-aaa-handoff.md`](tripplanner-to-aaa-handoff.md).
 - **Place pipeline to CIS (AA-712, [ADR 0007](adr/0007-place-pipeline-in-cis.md)):** required before
