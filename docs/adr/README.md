@@ -15,7 +15,8 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0004a](0004a-supply-content-ownership.md) | Amendment: supply data in Booking, customer-facing supply content in CIS | Accepted |
 | [0004b](0004b-per-app-security-groups.md) | Amendment: one security group per caller (per-app network isolation) | Accepted |
 | [0005](0005-pricing-and-supplier-rates.md) | Pricing and supplier rates | Accepted |
-| [0006](0006-ecosystem-identity.md) | Ecosystem identity on Amazon Cognito (staff, tenant users, travellers) | Accepted |
+| [0006](0006-ecosystem-identity.md) | Ecosystem identity on Amazon Cognito (staff, tenant users, travellers) | Accepted (amended by 0006a) |
+| [0006a](0006a-identity-phase1-amendments.md) | Amendment: identity Phase 1 as shipped (CIS staff on Cognito WORKFORCE) | Accepted |
 | [0007](0007-place-pipeline-in-cis.md) | Place pipeline in CIS: `geo` schema, `catalog.*` views, background jobs | Accepted |
 | [0008](0008-new-app-integration-and-data-platform-rules.md) | New-app integration and data platform rules | Accepted |
 

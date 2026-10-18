@@ -25,6 +25,73 @@ and read-only AWS calls (security groups, ENIs, Lambda VPC config, connection me
 
 ---
 
+## S242 amendments (18/10/2026)
+
+What shipping S9–S14 changed in this plan. Where this block and a step below differ, this block wins.
+Implementation notes: AA-CIS-Infra `docs/implementation-notes/AA-852-s11-sg-expand.md`, `AA-852-s12-migrator-workflows.md`,
+`AA-852-s13a.md`, `-s13b.md`, `-s13c.md`, `AA-852-s14.md`.
+
+**Status of Wave 2 end and Wave 3**
+
+| Step | State | Where |
+|---|---|---|
+| S9 probe files `bk-015`, `tp-014` | Done | Infra #179 (copies) |
+| S10 ADR 0004b | Done | root #95 |
+| S11 expand: SGs, migrator task def, secret placeholders | Done, applied | Infra #180 |
+| S12 workflows on the migrator task def, `set-password` + `run-script` | Done | Infra #182 |
+| S13 a/b/c callers on their own SGs (Booking → TP + dfs Lambdas → CIS api + worker) | Done, applied | Infra #187, #188, #189 |
+| S14 `sg-app` out of RDS/Redis/EFS ingress, self-443 dropped | Done, applied | Infra #190 |
+
+**S11 (item 3, item 4):**
+- The secret placeholders `aa-cis/dev/rds-cis-app` and `aa-cis/dev/db-migrator` follow the `booking_db` pattern
+  (secret container, **no** `aws_secretsmanager_secret_version`), not `tripplanner_db`. A version resource would
+  make Terraform read the DSN on every refresh and would need a bootstrap change to `tf_plan_secret_arns`. Nghiệp
+  writes each value in the Console (H3, H5 unchanged).
+- **No S3 grant for the probe.** `db/isolation_probe.py` returns its results as `PROBE …` lines in the task log,
+  and the workflow builds probe.json from them. The migrator task role has `s3:PutObject` on the
+  `db-schema-dump/*` prefix only.
+- H1 (DSN env var name in the migrator task def) was done by hand before the S11 merge. A plan precondition
+  blocked the placeholder name.
+
+**S12:**
+- **No new environment variable, no hand edit, no IAM change.** H2 is void.
+  - The role and script travel in the value of the existing `MIGRATION_MODE` (`set-password:<role>`,
+    `run-script:db/scripts/<name>.py`).
+  - The workflow inputs fold into the existing job variable `MIGRATION`.
+  - The apply role already had register/deregister/run-task and `iam:PassRole` on `aa-*-dev-*`.
+- **One temporary task-definition revision per run.** `.github/scripts/migrator-task.sh prepare` copies the
+  newest Terraform-shaped revision (`:latest` placeholder image, fixed roles and secret), swaps in the image the
+  api service runs and registers it. The run uses it by ARN, and `deregister` runs in an `always()` step.
+  Terraform never sees these revisions as drift.
+- S12 depended on the S11 apply (family, SG and RDS ingress must exist). That condition was met before the
+  merge.
+- `READ_ONLY = True` scripts run with `default_transaction_read_only = on`, and their idle check is
+  report-only. Plan S15's sampler is such a script, one snapshot per dispatch.
+
+**S14:**
+- Done. `aa-cis-dev-sg-app` itself is kept. The two ENIs of the deleted `aa-cis-dev-ingestion` Lambda still
+  reference it (owned by the Lambda service). Delete the group in a later cleanup once AWS releases them.
+- Rolling back any S13 sub-step now needs S14 reverted and applied first.
+
+**S22:**
+- The runner must open a **master connection** read in-task from `aa-cis/dev/rds` for `roles/` files,
+  `mode=set-password` **and** `mode=run-script`. Both new modes refuse any login other than `aa_cis_admin`
+  (exit 8). The step text above names only `roles/`, set-password and extensions.
+- S22's check "set-password … exits 0 (master path)" depends on this. `check-base` already accepts the
+  `aa-cis/dev/db-migrator` secret, so the task-def switch needs no script change.
+
+**Before S20:**
+- The CIS task role still grants `secretsmanager:GetSecretValue` on `*` (`modules/ecs/main.tf`). Narrow it during
+  S18/S19, before the `db_migrator` DSN is written (S11 notes).
+
+**Identity Phase 1 overlap (CIS 247, root ADR 0006a):**
+- CIS 247 (`admin_users` identity columns + `shared.staff_app_grant`) was applied before 244–246. 245 (ownership
+  to `cis_owner`) and the 246 probe must cover `shared.staff_app_grant` and the new `admin_users` columns.
+- After 244 merges, CI applies 247 after 244 as a superuser. So 244's default privileges do not reach
+  `staff_app_grant` in CI, while on Dev they do. `test_x1_cis_app_privileges` must model the runner.
+
+---
+
 ## 1. Current state
 
 ### 1.1 Who connects as what today
@@ -816,7 +883,7 @@ else and lists the exact file and line in each PR description.
 | # | Step | Where | Edit |
 |---|---|---|---|
 | H1 | S11 | `infra/AA-CIS-Infra` migrator task def (new resource) | the container `secrets` entry naming the DB env var the runner reads → `aa-cis/dev/rds` ARN |
-| H2 | S12 | `db-migrate.yml` run-task override + `db/run_migration.py` | the new env var carrying the target role for `set-password` (name proposed in the PR) |
+| ~~H2~~ | S12 | — | **Void (S242):** the role travels in the existing `MIGRATION_MODE` value; no new env var |
 | H3 | S17 | Secrets Manager `aa-cis/dev/rds-cis-app` | DSN for `cis_app` with a new password (Console) |
 | H4 | S18 | `accounts/aa365/main.tf:177` | `secret_rds_arn` → `cis_app` secret (feeds `DATABASE_URL` of api + worker): review/confirm the one-line diff |
 | H5 | S20 | Secrets Manager `aa-cis/dev/db-migrator` | DSN for `db_migrator` with a new password (Console) |

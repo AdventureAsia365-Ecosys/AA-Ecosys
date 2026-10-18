@@ -4,15 +4,16 @@
 
 **Rules:** at session start read §1–§3 and pick 3–5 items from §3 top-down (skip items blocked in §2). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S241, 17/10/2026 (Claude Code). Q10 (Nghiệp): finish the platform block (admin, X1, Cognito, portal split) in one stretch, then return to CIS content work._
+_Last updated: S242, 18/10/2026 (Claude Code). Q10 (Nghiệp): finish the platform block (admin, X1, Cognito, portal split) in one stretch, then return to CIS content work._
 
 ## 1. Time-gated checks (do these first when due)
 
 | Due | Issue | Check |
 |---|---|---|
 | **X1 S1 merge → X1 S22** | AA-852 / AA-860 | **`catalog.*` view freeze** (X1 plan XD9): no `CREATE/ALTER/DROP VIEW catalog.*` in any CIS migration until the DB Migrate login is `db_migrator` (S22). Recorded in AA-CIS-App `CONTEXT.md` (#806). A catalog change that cannot wait = Nghiệp decides plan option (b) roles/ file or (c) `db_migrator` earlier. |
+| **from 19/10** | AA-816 | **Google Safe Browsing review** of lumiguides.it.com (Search Console request + report form sent 18/10). Check: `curl -s "https://transparencyreport.google.com/transparencyreport/api/v3/safebrowsing/status?site=lumiguides.it.com"` (status 3 + 5th field true = still flagged) or the Search Console email. When cleared: Resend invite to thu@adventure.asia on Platform → Staff. |
 | daily 22:00 UTC | AA-869 | Snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry` runs live (deletes manual snapshots > 30 d unless `keep-` / `aa:retain*`). An SNS mail only when it deletes, caps, finds a malformed tag or an orphan. |
-| 30/11, 31/12 | AA-868 | `.github/pip-audit-ignore.txt` (AA-CIS-App) entries expire: langchain, langgraph-sdk, pytest 9 (30/11); chromadb (31/12, drop the dependency). Expiry turns Security Audit + Unit Tests red. |
+| 30/11, 31/12 | AA-868 | `.github/pip-audit-ignore.txt` (AA-CIS-App) entries expire: langchain, langgraph-sdk (30/11; pytest entry removed S242 by #819); chromadb (31/12, drop the dependency). Expiry turns Security Audit + Unit Tests red. |
 | ≥01/11 | (cost) | Infra cost audit Aug/Sep/Oct 2026 per `App` tag and service (acc2) + acc3 Bedrock + AWS Lift credits. |
 | ≤11/11 | AA-820 | Tenant terms AI clause — Ms. Thư decides whether counsel is needed. |
 | ~mid-Nov | AA-862 follow-up | Re-request acc2 quotas in small steps (Cohere 20 → 100 rpm). |
@@ -20,8 +21,11 @@ _Last updated: S241, 17/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
-- **Approve and post** the S241 Jira draft (PR-18) and the Zalo note to Ms. Thư: `docs/sessions/2026-10-17-S241-jira-drafts.md`.
-- **Cognito break-glass:** set the break-glass secret value by hand when the agent has created the user (AA-854).
+- **Approve and post** the S242 Jira draft (PR-14): `docs/sessions/2026-10-18-S242-jira-drafts.md`.
+- **Break-glass TOTP:** add `totp_seed` from Secrets Manager `aa-identity/dev/breakglass` to an authenticator app.
+- **Thư's invite:** after Google clears the flag (§1), click "Resend invite" (or tell the agent).
+- **Booking role drift:** set your own Booking role on Platform → Staff (Cognito has booking-admin, the directory has no grant).
+- **AA-816 cutover call:** API-side `LEGACY_ADMIN_LOGIN_ENABLED` also serves Preview (ADR 0006a A6).
 - AA-855 UAT videos: when Nghiệp says (after the tech work). Product questions from S238: T2 day separator; "— N Days" vs ", N Days".
 - AA-829: approve deleting/securing the 2026-09-16 real-data dumps; DSN CNAME secrets are edited by hand.
 
@@ -29,13 +33,13 @@ _Last updated: S241, 17/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 
 | # | Issue | Work | Lane | Size | Status after S241 / next action | Needs Nghiệp |
 |---|---|---|---|---|---|---|
-| 1 | AA-854 → AA-703 | **Cognito Phase 1 (staff):** create the break-glass user (AdminCreateUser SUPPRESS → cis-admin + booking-admin → disable); CIS admin + Booking staff sign in with the WORKFORCE pool (email code); keep the old login as fallback until verified | Identity | L | Phase 0 applied S241 (pools us-west-1_bCcFvbSOS / us-west-1_nKOvHan0W, 7 groups, 4 triggers, 14 alarms). | Break-glass secret value. |
-| 2 | AA-852 / AA-860 | **X1 next waves:** S9 probe files, S10 ADR 0004b, S11–S14 per-app SGs + `db_migrator` task def, S15–S19 `cis_owner` (CIS 245) / `cis_app` runtime split, S20–S23 (plan `docs/audits/2026-10-17-S241-x1/x1-plan.md`) | Data platform | XL | S1–S8 live; probe 39 pass / 16 pending (all CIS-side) / 0 fail. Undo for tp-013 kept on Infra branch `feat/x1-s7-tp013-undo`. | MFA Terraform for SG/bootstrap. |
+| 1 | AA-816 → AA-703 | **Cognito Phase 1 finish:** break-glass through managed login (`/api/auth/signin/cognito-breakglass`) + check TOTP blocks email-code-only sign-in; daily trigger for `staff_directory_reconcile` (Infra ops probe); E2E mailbox (D2); cutover (legacy flag off once every active row has `cognito_sub`; retire `e2e-claude-code*`) | Identity | M | S242: CIS staff email-code sign-in LIVE on staff-auth.lumiguides.it.com (AA branding), directory writes, invite email, reconcile job; ADR 0006a. | Cutover go. |
+| 2 | AA-852 / AA-860 | **X1 wave 4:** S15–S19 `cis_owner` (CIS 245) / `cis_app` runtime split, S20–S23 (plan `docs/audits/2026-10-17-S241-x1/x1-plan.md`) | Data platform | XL | S1–S14 live (S242: probes, ADR 0004b, migrator task def + set-password/run-script, per-caller SGs, sg-app contracted); probe 39/16/0. Undo for tp-013 kept on Infra branch `feat/x1-s7-tp013-undo`. | MFA Terraform for SG/bootstrap. |
 | 3 | AA-885 | **Split the tenant portal** into its own Vercel project + domain (Q8: now) | CIS portal | L | Not started. | — |
-| 4 | AA-816 | Staff create/disable/role UI on top of Cognito (Q6: after Cognito) | Identity / admin | M | Read-only Staff directory shipped (AA-883). | — |
+| 4 | AA-680 | **Booking Phase 2 (staff):** Booking accepts the Cognito WORKFORCE issuer (code change: multi-issuer, no aud, groups instead of cis_role), then drop the CIS bridge | Booking / identity | M | Not started. | — |
 | 5 | AA-858 | Ops overview on /admin/overview (Q9: agent designs, then show Ms. Thư) | CIS admin | M | Not started. | Show Ms. Thư. |
 | 6 | AA-884 | Apps page (health/version/links), staff action audit view, cost per app | CIS admin | M | Not started. | — |
-| 7 | AA-869 | Close: root PR with rollback runbook + incident page merged | Ops | XS | All live (ECR immutable, rollback drill, snapshot expiry). | — |
+| 7 | (chore) | Remove the 3 Cognito branding `import` blocks (Infra identity.tf); `use_lockfile` S3 backend; Next 17 middleware → proxy | Infra / CIS | XS | Follow-ups from S242. | — |
 | 8 | AA-878 | Secrets register, orphaned-secret cleanup, read-only non-admin E2E account (also closes the AA-883 reviewer UI gap) | Security | M | Not started. | — |
 | 9 | AA-874 | Redis AUTH/TLS/at-rest + tenant-flag read-failure alarm | Security | M | Not started (cost quote first). | Cost (D-19). |
 | 10 | AA-876 / AA-875 | API edge hardening (login rate limit, throttle/WAF, CORS, headers); SSRF-safe outbound client | Security | M | Not started. | — |
@@ -86,7 +90,15 @@ _Last updated: S241, 17/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 | AA-842 | OTel gen_ai tracing investigation | parked | Report on Notion (Program Brain) + AA-CIS-App docs/investigations/llm-otel-tracing.md. | Decided S238: keep Backlog; build option B (gateway span, ~15–20 h) only when slow/unexplained jobs justify it |
 | AA-864 | Research: consolidate all of acc2 (services, data, connections) on acc3 or one designated account — complexity, cost, time | later | Seed notes on the issue. Do with AA-860 on the target account. | Pick the target account when the research is done. |
 
-## 5. Closed in S241
+## 5. Closed in S242
+
+- **AA-854 Done** (Cognito Phase 0: break-glass, email-code spike, no-group deny, self sign-up rejected; evidence `docs/audits/2026-10-18-S242-cognito-phase1/`).
+- **AA-816** shipped (In Progress until cutover): Infra #183/#184/#185/#191/#194, CIS #807/#808/#809/#810/#811/#812/#813/#826/#827/#828/#829, mig 247.
+- **AA-852** X1 S9–S14 shipped (Booking #33, TP #97, root #95, Infra #179/#180/#182/#187/#188/#189/#190).
+- Dependabot cleared in all repos (CIS #814/#819/#820/#830, Infra #192/#193 — AWS provider 6.69.1); CIS `dependabot.yml` groups security updates.
+- AA-869 confirmed Done (S241). New issue: none.
+
+## 5a. Closed in S241
 
 - Done with live evidence: **AA-883** (console 2 sections + Staff), **AA-882** (server-side staff authz), **AA-836**, **AA-863**, **AA-834**,
   **AA-866** (main-only OIDC trust), **AA-867** (GitHub security, org 2FA, AA-ACP-App deleted), **AA-868** (CI hardening),
@@ -100,7 +112,9 @@ _Last updated: S241, 17/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 
 ## 6. Environment notes for the next session
 
-- ECS CIS api :673 / worker :230 (image `dev-58801f33…`, #805); Booking bk-014; TripPlanner tp-013; CIS migrations up to **243**; roles rl-001.
+- ECS CIS api :684 / worker :241; Booking bk-015; TripPlanner tp-014; CIS migrations up to **247**; roles rl-001. Terraform acc2 on **AWS provider 6.69.1** (v5 state version kept for rollback).
+- **Identity:** staff sign-in = https://staff-auth.lumiguides.it.com (Cognito custom domain, AA branding in Terraform); apex lumiguides.it.com → Vercel redirect to aa-cis. Legacy password login still on. Break-glass `admin@adventure.asia` disabled, TOTP in Secrets Manager. Tool `tools/identity/workforce_bootstrap.py` (Infra).
+- **Network (X1 S11–S14):** one SG per caller; RDS admits tp-lambda, booking-api, cis-api, cis-worker, db-migrate; Redis/EFS only cis-api + cis-worker. DB Migrate / Schema Dump / probe run on a temporary `aa-cis-dev-db-migrate` revision; modes `set-password:<role>` and `run-script:db/scripts/*.py`.
 - **X1:** Booking/TripPlanner objects owned by `bk_owner` / `tp_owner` (NOLOGIN). DB Migrate reads the LIVE owner of `anchor_schema` and runs each file as that role (`owners.yaml`). Probe workflow `db-isolation-probe.yml` (schedule + after each apply).
 - **OIDC:** `aa-cis-dev-app-deploy` and `aa-cis-infra-tf-apply` trust only `ref = refs/heads/main`. CIS env `dev` allows only `main`; `ADMIN_SECRET` is an env secret. Bootstrap roles/policies are applied by hand with the MFA admin profile.
 - **ECR CIS IMMUTABLE**, lifecycle 30 `dev-*` + untagged 7 d; Deploy Dev reuses an existing `dev-<sha>`. Rollback runbook: `skill/aa-ship` §5.
