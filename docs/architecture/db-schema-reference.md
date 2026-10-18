@@ -1,13 +1,13 @@
 # AA-Ecosys DB Schema Reference (live dump)
 
-<!-- schema-fingerprint: 0e543e0b39ffed88c6f9fcffe21be3648be7fae5f9e7e24941f0ec3f48f991ad -->
+<!-- schema-fingerprint: f214728d72b2b3c3e527ce96b799c2de9ed9f1b35406a53881bef199476e947c -->
 
-**Verified:** 2026-10-16 15:45 UTC — live catalog dump of the shared RDS (`aa-cis-dev-db`, `aa-cis/dev/rds`, acc2 `005097885195`, us-west-1, PostgreSQL 15.17). Latest migration per owner: CIS **242**, TripPlanner **tp-012**, Booking **bk-013** (242 versions registered).
+**Verified:** 2026-10-18 03:01 UTC — live catalog dump of the shared RDS (`aa-cis-dev-db`, `aa-cis/dev/rds`, acc2 `005097885195`, us-west-1, PostgreSQL 15.17). Latest migration per owner: CIS **247**, TripPlanner **tp-014**, Booking **bk-015** (249 versions registered).
 
 > **Generated file — do not edit by hand** (data standards DM-3.1). It is the single source of truth for table/column names, owners, grants and RLS across CIS, TripPlanner and Booking (one RDS, one schema per owner; ownership rules: `docs/database/schema-ownership.md`). Read it before introspecting columns. AA-CIS-Infra `.github/workflows/db-schema-dump.yml` regenerates it after every DB Migrate apply and every night (`db/schema_dump.py` in a one-off ECS task, then `db/gen_schema_reference.py`) and opens a PR here when the structure changed.
-> Source: AA-CIS-Infra DB Schema Dump (after DB Migrate apply of cis/242_job_table_template_conformance.sql (run 38926177334)), https://github.com/AdventureAsia365-Ecosys/AA-CIS-Infra/actions/runs/38926350176
+> Source: AA-CIS-Infra DB Schema Dump (after DB Migrate apply of cis/247_admin_users_identity.sql (run 39091996165)), https://github.com/AdventureAsia365-Ecosys/AA-CIS-Infra/actions/runs/39092112389
 
-**Totals:** 15 schemas (4 empty: acp_gold_output, acp_silver_s2, acp_silver_s3, acp_silver_s4), 172 tables/views, 406 indexes, 176 FKs, 21 RLS policy(ies), 15 functions, 13 enums. Database size 931.9 MB, max_connections 181.
+**Totals:** 15 schemas (4 empty: acp_gold_output, acp_silver_s2, acp_silver_s3, acp_silver_s4), 173 tables/views, 409 indexes, 177 FKs, 21 RLS policy(ies), 16 functions, 13 enums. Database size 933.3 MB, max_connections 181.
 
 ## Conventions
 - Column format: `name type` — `NN` suffix = NOT NULL. Types are `format_type()` output (`character varying(64)`, `text[]`, `vector(1024)`, enums schema-qualified).
@@ -26,14 +26,14 @@
 | `acp_silver_s2` | aa_cis_admin | 0 |  |  |
 | `acp_silver_s3` | aa_cis_admin | 0 |  |  |
 | `acp_silver_s4` | aa_cis_admin | 0 |  |  |
-| `booking` | aa_cis_admin | 34 | 3.3 MB | booking: USAGE |
+| `booking` | bk_owner | 34 | 3.9 MB | booking: USAGE |
 | `catalog` | aa_cis_admin | 14 |  | aa_app_user: USAGE; booking: USAGE; catalog_owner: USAGE; tripplanner: USAGE |
 | `geo` | aa_cis_admin | 12 | 18.7 MB | catalog_owner: USAGE |
 | `gold_aa_internal` | aa_cis_admin | 4 | 5.9 MB | aa_app_user: USAGE; catalog_owner: USAGE; tripplanner: USAGE |
 | `public` | pg_database_owner | 1 | 24 kB | PUBLIC: USAGE |
-| `shared` | aa_cis_admin | 44 | 556.1 MB | aa_app_user: USAGE; catalog_owner: USAGE; tripplanner: USAGE |
+| `shared` | aa_cis_admin | 45 | 556.6 MB | aa_app_user: USAGE; bk_owner: USAGE; catalog_owner: USAGE; tp_owner: USAGE; tripplanner: USAGE |
 | `silver_aa_internal` | aa_cis_admin | 7 | 23.5 MB | aa_app_user: USAGE; catalog_owner: USAGE; tripplanner: USAGE |
-| `tripplanner` | aa_cis_admin | 16 | 62.2 MB | booking: USAGE; tripplanner: USAGE |
+| `tripplanner` | tp_owner | 16 | 62.2 MB | booking: USAGE; tripplanner: USAGE |
 
 ## `acp_contract` (18 objects)
 
@@ -779,7 +779,7 @@ created_at timestamp with time zone NN
 
 ## `booking` (34 objects)
 
-### `booking.audit_logs` (table, ~54 rows, 144 kB)
+### `booking.audit_logs` (table, ~54 rows, 152 kB)
 ```
 id uuid NN
 actor_type text NN
@@ -794,7 +794,7 @@ actor_ref text
 entity_label text
 summary text
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `audit_logs_actor_ref_idx`: btree (actor_ref, created_at DESC) WHERE (actor_ref IS NOT NULL)
 - index `audit_logs_created_idx`: btree (created_at DESC)
 - index `audit_logs_entity_idx`: btree (entity_type, entity_id, created_at DESC)
@@ -808,7 +808,7 @@ iso2 character(2) NN
 name text NN
 active boolean NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `countries_pkey` PRIMARY KEY: UNIQUE btree (iso2)
 - check `countries_iso2_chk`: CHECK ((iso2 ~ '^[A-Z]{2}$'::text))
 - grant `booking`: SELECT
@@ -824,7 +824,7 @@ used_at timestamp with time zone
 attempts smallint NN
 created_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `customer_otps_customer_idx`: btree (customer_id, created_at DESC)
 - index `customer_otps_pkey` PRIMARY KEY: UNIQUE btree (id)
 - check `customer_otps_attempts_chk`: CHECK ((attempts >= 0))
@@ -840,7 +840,7 @@ expires_at timestamp with time zone NN
 revoked_at timestamp with time zone
 created_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `customer_sessions_customer_idx`: btree (customer_id)
 - index `customer_sessions_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `customer_sessions_token_uq`: UNIQUE btree (refresh_token_hash)
@@ -870,7 +870,7 @@ contact_consent boolean NN
 contact_consent_at timestamp with time zone
 code text NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `customers_code_uq`: UNIQUE btree (code)
 - index `customers_email_lookup_idx`: btree (lower(email)) WHERE ((email IS NOT NULL) AND (deleted_at IS NULL))
 - index `customers_email_verified_uq`: UNIQUE btree (lower(email)) WHERE ((email IS NOT NULL) AND (deleted_at IS NULL) AND verified)
@@ -894,7 +894,7 @@ source text NN
 created_by text
 created_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `fx_rates_currency_as_of_uq`: UNIQUE btree (currency, as_of)
 - index `fx_rates_pkey` PRIMARY KEY: UNIQUE btree (id)
 - check `fx_rates_buffer_chk`: CHECK (((buffer_pct >= (0)::numeric) AND (buffer_pct < (1)::numeric)))
@@ -917,7 +917,7 @@ updated_by text
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `hotel_room_types_name_uq`: UNIQUE btree (hotel_id, lower(btrim(name)))
 - index `hotel_room_types_pkey` PRIMARY KEY: UNIQUE btree (id)
 - check `hotel_room_types_beds_chk`: CHECK ((cardinality(bed_types) <= 10))
@@ -951,7 +951,7 @@ updated_by text
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `hotels_code_uq`: UNIQUE btree (code)
 - index `hotels_country_idx`: btree (country_code)
 - index `hotels_destination_idx`: btree (destination_id) WHERE (destination_id IS NOT NULL)
@@ -977,7 +977,7 @@ contract text NN
 safe_id bigint NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `inbox_cursor_pk` PRIMARY KEY: UNIQUE btree (source, contract)
 - check `inbox_cursor_safe_id_chk`: CHECK ((safe_id >= 0))
 - check `inbox_cursor_source_chk`: CHECK ((source = ANY (ARRAY['tripplanner'::text, 'cis'::text])))
@@ -999,7 +999,7 @@ contract_version text
 source_position bigint
 redacted_at timestamp with time zone
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `inbox_events_key_uq`: UNIQUE btree (source, contract, idempotency_key)
 - index `inbox_events_pending_idx`: btree (received_at) WHERE (processed_at IS NULL)
 - index `inbox_events_pkey` PRIMARY KEY: UNIQUE btree (id)
@@ -1009,7 +1009,7 @@ redacted_at timestamp with time zone
 - check `inbox_events_status_chk`: CHECK ((status = ANY (ARRAY['received'::text, 'processed'::text, 'parked'::text, 'failed'::text])))
 - grant `booking`: DELETE, INSERT, SELECT, UPDATE
 
-### `booking.job` (table, ~2455 rows, 1.1 MB)
+### `booking.job` (table, ~3635 rows, 1.8 MB)
 ```
 id uuid NN
 kind text NN
@@ -1033,7 +1033,7 @@ progress jsonb NN
 cost_usd numeric(12,6) NN
 parent_job_id uuid
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `job_active_pull_uq`: UNIQUE btree (kind) WHERE ((kind = 'bk_inquiry_pull'::text) AND (status = ANY (ARRAY['queued'::text, 'running'::text])))
 - index `job_finished_idx`: btree (finished_at, id) WHERE (finished_at IS NOT NULL)
 - index `job_idempotency_key_uq`: UNIQUE btree (idempotency_key) WHERE (idempotency_key IS NOT NULL)
@@ -1063,7 +1063,7 @@ uploaded_by uuid
 created_at timestamp with time zone NN
 deleted_at timestamp with time zone
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `media_files_object_uq`: UNIQUE btree (s3_bucket, s3_key)
 - index `media_files_pkey` PRIMARY KEY: UNIQUE btree (id)
 - check `media_files_bytes_chk`: CHECK (((bytes IS NULL) OR (bytes >= 0)))
@@ -1077,7 +1077,7 @@ notification_id uuid NN
 cis_user_id text NN
 read_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `notification_reads_pk` PRIMARY KEY: UNIQUE btree (notification_id, cis_user_id)
 - index `notification_reads_staff_idx`: btree (cis_user_id, read_at DESC)
 - grant `booking`: DELETE, INSERT, SELECT
@@ -1097,7 +1097,7 @@ read_at timestamp with time zone
 created_at timestamp with time zone NN
 recipient_ref text
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `notifications_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `notifications_staff_feed_idx`: btree (recipient_ref, created_at DESC) WHERE (recipient_type = 'staff'::text)
 - index `notifications_unread_idx`: btree (recipient_type, recipient_id, created_at DESC) WHERE (read_at IS NULL)
@@ -1115,7 +1115,7 @@ approved_by text NN
 approved_at timestamp with time zone NN
 note text
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `policy_approvals_fx_rate_uq`: UNIQUE btree (fx_rate_id)
 - index `policy_approvals_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `policy_approvals_pricing_rule_uq`: UNIQUE btree (pricing_rule_id)
@@ -1137,7 +1137,7 @@ note text
 created_by text
 created_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `pricing_rules_channel_valid_from_uq`: UNIQUE btree (channel, valid_from)
 - index `pricing_rules_pkey` PRIMARY KEY: UNIQUE btree (id)
 - check `pricing_rules_channel_chk`: CHECK ((channel = ANY (ARRAY['b2c_tailor_made'::text, 'fixed_departure'::text, 'b2b'::text])))
@@ -1167,7 +1167,7 @@ updated_by text
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `services_code_uq`: UNIQUE btree (code)
 - index `services_country_idx`: btree (country_code)
 - index `services_destination_idx`: btree (destination_id) WHERE (destination_id IS NOT NULL)
@@ -1195,7 +1195,7 @@ value jsonb NN
 description text
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `settings_pkey` PRIMARY KEY: UNIQUE btree (key)
 - check `settings_key_chk`: CHECK ((key ~ '^[a-z][a-z0-9_]{0,62}$'::text))
 - grant `booking`: SELECT
@@ -1210,7 +1210,7 @@ assigned_by text
 assigned_at timestamp with time zone NN
 unassigned_at timestamp with time zone
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `staff_assignments_open_uq`: UNIQUE btree (trip_case_id, role) WHERE (unassigned_at IS NULL)
 - index `staff_assignments_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `staff_assignments_staff_open_idx`: btree (staff_user_id, assigned_at DESC) WHERE (unassigned_at IS NULL)
@@ -1231,7 +1231,7 @@ updated_at timestamp with time zone NN
 last_seen_at timestamp with time zone
 preferences jsonb NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `staff_users_active_idx`: btree (active, role)
 - index `staff_users_pkey` PRIMARY KEY: UNIQUE btree (cis_user_id)
 - check `staff_users_id_chk`: CHECK (((length(cis_user_id) >= 1) AND (length(cis_user_id) <= 128)))
@@ -1261,7 +1261,7 @@ expired_at timestamp with time zone
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `supplier_contracts_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `supplier_contracts_published_idx`: btree (supplier_id, valid_to) WHERE (status = 'published'::text)
 - index `supplier_contracts_supplier_idx`: btree (supplier_id, valid_from DESC)
@@ -1298,7 +1298,7 @@ updated_by text
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `supplier_rates_contract_idx`: btree (supplier_contract_id)
 - index `supplier_rates_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `supplier_rates_room_type_idx`: btree (hotel_room_type_id, valid_from DESC) WHERE (hotel_room_type_id IS NOT NULL)
@@ -1338,7 +1338,7 @@ updated_by text
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `suppliers_categories_idx`: gin (categories)
 - index `suppliers_code_uq`: UNIQUE btree (code)
 - index `suppliers_country_idx`: btree (country_code)
@@ -1362,7 +1362,7 @@ country_code character(2) NN
 position smallint NN
 created_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `trip_case_countries_country_idx`: btree (country_code)
 - index `trip_case_countries_pk` PRIMARY KEY: UNIQUE btree (trip_case_id, country_code)
 - check `trip_case_countries_position_chk`: CHECK (("position" >= 1))
@@ -1380,7 +1380,7 @@ created_at timestamp with time zone NN
 source_system text
 source_id text
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `trip_case_legs_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `trip_case_legs_position_uq`: UNIQUE btree (trip_case_id, "position")
 - index `trip_case_legs_tour_key_idx`: btree (source_system, source_id)
@@ -1399,7 +1399,7 @@ note text
 changed_at timestamp with time zone NN
 seq bigint NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `trip_case_status_history_case_idx`: btree (trip_case_id, changed_at)
 - index `trip_case_status_history_case_seq_idx`: btree (trip_case_id, seq)
 - index `trip_case_status_history_pkey` PRIMARY KEY: UNIQUE btree (id)
@@ -1412,7 +1412,7 @@ seq bigint NN
 from_status text NN
 to_status text NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `trip_case_status_transitions_pk` PRIMARY KEY: UNIQUE btree (from_status, to_status)
 - check `trip_case_status_transitions_distinct_chk`: CHECK ((from_status <> to_status))
 - check `trip_case_status_transitions_from_chk`: CHECK ((from_status = ANY (ARRAY['new_inquiry'::text, 'discovery'::text, 'building'::text, 'proposal_sent'::text, 'confirmed'::text, 'supplier_confirming'::text, 'invoice_sent'::text, 'payment_pending'::text, 'paid'::text, 'pre_departure'::text, 'on_trip'::text, 'completed'::text, 'cancelled'::text])))
@@ -1434,7 +1434,7 @@ updated_at timestamp with time zone NN
 hotel_room_type_id uuid
 service_id uuid
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `trip_case_version_itinerary_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `trip_case_version_itinerary_position_uq`: UNIQUE btree (trip_case_version_id, "position")
 - index `trip_case_version_itinerary_room_type_idx`: btree (hotel_room_type_id) WHERE (hotel_room_type_id IS NOT NULL)
@@ -1474,7 +1474,7 @@ approval_note text
 updated_by text
 deleted_at timestamp with time zone
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `trip_case_versions_approved_uq`: UNIQUE btree (trip_case_id) WHERE is_approved
 - index `trip_case_versions_number_uq`: UNIQUE btree (trip_case_id, version_number)
 - index `trip_case_versions_pkey` PRIMARY KEY: UNIQUE btree (id)
@@ -1517,7 +1517,7 @@ notes text
 pax_adults smallint
 pax_children smallint
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `trip_cases_code_uq`: UNIQUE btree (code)
 - index `trip_cases_customer_idx`: btree (customer_id, created_at DESC)
 - index `trip_cases_idempotency_key_uq`: UNIQUE btree (idempotency_key)
@@ -1554,7 +1554,7 @@ updated_by text
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `trip_plans_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `trip_plans_sellable_idx`: btree (source_id) WHERE sellable
 - index `trip_plans_source_uq`: UNIQUE btree (source_system, source_id)
@@ -1589,7 +1589,7 @@ open_case_count bigint
 last_activity_at timestamp with time zone
 status text
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - grant `booking`: SELECT
 
 ### `booking.v_schema_versions` (VIEW)
@@ -1598,7 +1598,7 @@ version character varying(20)
 description text
 applied_at timestamp with time zone
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - grant `booking`: SELECT
 
 ### `booking.version_item_costs` (table, ~4 rows, 64 kB)
@@ -1613,7 +1613,7 @@ created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 supplier_rate_id uuid
 ```
-- owner `aa_cis_admin`
+- owner `bk_owner`
 - index `version_item_costs_item_idx`: btree (version_item_id)
 - index `version_item_costs_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `version_item_costs_rate_idx`: btree (supplier_rate_id) WHERE (supplier_rate_id IS NOT NULL)
@@ -2258,7 +2258,7 @@ v integer NN
 - owner `aa_cis_admin`
 - index `checkpoint_migrations_pkey` PRIMARY KEY: UNIQUE btree (v)
 
-## `shared` (44 objects)
+## `shared` (45 objects)
 
 ### `shared.acp_runs` (table, 40 kB)
 ```
@@ -2279,21 +2279,31 @@ completed_at timestamp with time zone
 - index `idx_acp_runs_country`: btree (country)
 - index `idx_acp_runs_status`: btree (status)
 
-### `shared.admin_users` (table, 40 kB)
+### `shared.admin_users` (table, ~7 rows, 80 kB)
 ```
 id uuid NN
 username character varying(100) NN
-password_hash character varying(255) NN
+password_hash character varying(255)
 role shared.admin_role NN
 is_active boolean NN
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
+email text
+display_name text
+cognito_iss text
+cognito_sub text
+last_login_at timestamp with time zone
+is_owner boolean NN
 ```
 - owner `aa_cis_admin`
+- index `admin_users_cognito_identity_key`: UNIQUE btree (cognito_iss, cognito_sub)
+- index `admin_users_email_lower_key`: UNIQUE btree (lower(email))
 - index `admin_users_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `admin_users_username_key`: UNIQUE btree (username)
+- check `admin_users_cognito_pair_chk`: CHECK ((((cognito_iss IS NULL) AND (cognito_sub IS NULL)) OR ((cognito_iss IS NOT NULL) AND (cognito_sub IS NOT NULL) AND (cognito_iss ~~ 'https://%'::text) AND ((length(cognito_sub) >= 1) AND (length(cognito_sub) <= 128)))))
+- check `admin_users_email_chk`: CHECK (((email IS NULL) OR ((email = lower(email)) AND (email ~ '^[^@[:space:]]+@adventure[.]asia$'::text))))
 
-### `shared.cost_explorer_snapshot` (table, ~1885 rows, 2.5 MB)
+### `shared.cost_explorer_snapshot` (table, ~1428 rows, 2.5 MB)
 ```
 id uuid NN
 account_id text NN
@@ -2416,7 +2426,7 @@ review_reason text
 - grant `catalog_owner`: SELECT
 - grant `tripplanner`: SELECT
 
-### `shared.dfs_balance_snapshot` (table, 264 kB)
+### `shared.dfs_balance_snapshot` (table, 280 kB)
 ```
 id uuid NN
 balance_usd numeric(14,4) NN
@@ -2476,7 +2486,7 @@ added_by text NN
 - owner `aa_cis_admin`
 - index `jev_tenant_allowlist_pkey` PRIMARY KEY: UNIQUE btree (tenant_id)
 
-### `shared.job` (table, ~2649 rows, 10.7 MB)
+### `shared.job` (table, ~2702 rows, 10.7 MB)
 ```
 id uuid NN
 kind text NN
@@ -2514,7 +2524,7 @@ finished_at timestamp with time zone
 - check `job_status_check`: CHECK ((status = ANY (ARRAY['queued'::text, 'running'::text, 'succeeded'::text, 'failed'::text, 'stopped_budget'::text, 'cancelled'::text])))
 - trigger `job_set_updated_at`: BEFORE UPDATE ON shared.job FOR EACH ROW EXECUTE FUNCTION shared.job_set_updated_at()
 
-### `shared.job_worker` (table, ~161 rows, 224 kB)
+### `shared.job_worker` (table, ~158 rows, 224 kB)
 ```
 worker_id text NN
 host text NN
@@ -2859,6 +2869,9 @@ applied_at timestamp with time zone NN
 ```
 - owner `aa_cis_admin`
 - index `schema_versions_pkey` PRIMARY KEY: UNIQUE btree (version)
+- grant `bk_owner`: INSERT, SELECT
+- grant `tp_owner`: INSERT, SELECT
+- trigger `schema_versions_key_guard`: BEFORE INSERT ON shared.schema_versions FOR EACH ROW EXECUTE FUNCTION shared.schema_versions_key_guard()
 
 ### `shared.spend_budget` (table, 32 kB)
 ```
@@ -2879,7 +2892,20 @@ updated_by text
 - check `spend_budget_provider_check`: CHECK ((provider = ANY (ARRAY['dfs'::text, 'bedrock'::text, 'openai'::text, 'jev'::text, 'geocoder'::text])))
 - check `spend_budget_scope_check`: CHECK (((scope = 'global'::text) OR (scope ~~ 'job:%'::text)))
 
-### `shared.tenant_api_usage` (table, ~126213 rows, 31.2 MB)
+### `shared.staff_app_grant` (table, 16 kB)
+```
+admin_user_id uuid NN
+app text NN
+role text NN
+created_at timestamp with time zone NN
+updated_at timestamp with time zone NN
+```
+- owner `aa_cis_admin`
+- index `staff_app_grant_pkey` PRIMARY KEY: UNIQUE btree (admin_user_id, app)
+- check `staff_app_grant_app_chk`: CHECK ((app = 'booking'::text))
+- check `staff_app_grant_role_chk`: CHECK ((role = ANY (ARRAY['admin'::text, 'sales'::text, 'contracting'::text, 'content_creator'::text])))
+
+### `shared.tenant_api_usage` (table, ~131197 rows, 31.7 MB)
 ```
 id uuid NN
 tenant_id uuid
@@ -3406,7 +3432,7 @@ created_at timestamp with time zone NN
 contact_consent boolean NN
 contact_consent_at timestamp with time zone
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `customers_email_key`: UNIQUE btree (email)
 - index `customers_phone_key`: UNIQUE btree (phone)
 - index `customers_pkey` PRIMARY KEY: UNIQUE btree (id)
@@ -3427,7 +3453,7 @@ text_extract text NN
 embedding vector(1536)
 created_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `itinerary_components_activity_idx`: btree (activity)
 - index `itinerary_components_destination_idx`: btree (destination_id)
 - index `itinerary_components_embedding_idx`: hnsw (embedding vector_cosine_ops)
@@ -3447,7 +3473,7 @@ calls integer NN
 unpriced_calls integer NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `llm_spend_daily_pkey` PRIMARY KEY: UNIQUE btree (day, stage)
 - grant `tripplanner`: DELETE, INSERT, SELECT, UPDATE
 
@@ -3462,7 +3488,7 @@ created_at timestamp with time zone NN
 hits integer NN
 last_hit_at timestamp with time zone
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `narration_cache_created_at_idx`: btree (created_at)
 - index `narration_cache_pkey` PRIMARY KEY: UNIQUE btree (itinerary_hash)
 - check `narration_cache_mode_chk`: CHECK ((mode = ANY (ARRAY['compose'::text, 'renarrate'::text])))
@@ -3479,7 +3505,7 @@ aggregate_id uuid NN
 payload jsonb NN
 created_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `outbox_event_id_idx`: btree (event, id)
 - index `outbox_idempotency_key_key`: UNIQUE btree (idempotency_key)
 - index `outbox_pkey` PRIMARY KEY: UNIQUE btree (id)
@@ -3495,7 +3521,7 @@ created_at timestamp with time zone NN
 expires_at timestamp with time zone
 guest_token_hash bytea
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `sessions_guest_token_key`: UNIQUE btree (guest_token)
 - index `sessions_pkey` PRIMARY KEY: UNIQUE btree (id)
 - check `sessions_guest_token_hash_len_chk`: CHECK (((guest_token_hash IS NULL) OR (octet_length(guest_token_hash) = 32)))
@@ -3516,7 +3542,7 @@ extracted_by text NN
 source_hash text NN
 extracted_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `tour_day_overnight_dest_idx`: btree (overnight_destination_id) WHERE (overnight_destination_id IS NOT NULL)
 - index `tour_day_pkey` PRIMARY KEY: UNIQUE btree (source_tour_id, day_index)
 - check `tour_day_day_index_check`: CHECK ((day_index >= 1))
@@ -3530,7 +3556,7 @@ built_at timestamp with time zone NN
 params jsonb NN
 stats jsonb NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `tour_graph_build_pkey` PRIMARY KEY: UNIQUE btree (id)
 - grant `tripplanner`: DELETE, INSERT, SELECT, UPDATE
 
@@ -3542,7 +3568,7 @@ tour_count integer NN
 tour_ids text[] NN
 km double precision NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `tour_graph_edge_pkey` PRIMARY KEY: UNIQUE btree (from_destination_id, to_destination_id)
 - grant `tripplanner`: DELETE, INSERT, SELECT, UPDATE
 
@@ -3560,7 +3586,7 @@ intensity_min text
 intensity_max text
 season_months integer[] NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `tour_graph_node_country_idx`: btree (country)
 - index `tour_graph_node_pkey` PRIMARY KEY: UNIQUE btree (destination_id)
 - grant `tripplanner`: DELETE, INSERT, SELECT, UPDATE
@@ -3572,7 +3598,7 @@ destination_b uuid NN
 km double precision NN
 cross_border boolean NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `tour_junction_pkey` PRIMARY KEY: UNIQUE btree (destination_a, destination_b)
 - check `tour_junction_check`: CHECK ((destination_a <> destination_b))
 - grant `tripplanner`: DELETE, INSERT, SELECT, UPDATE
@@ -3589,7 +3615,7 @@ destination_ids uuid[] NN
 countries text[] NN
 activities text[] NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `tour_leg_countries_idx`: gin (countries)
 - index `tour_leg_end_idx`: btree (end_destination_id)
 - index `tour_leg_pkey` PRIMARY KEY: UNIQUE btree (source_tour_id, day_from, day_to)
@@ -3605,7 +3631,7 @@ destination_id uuid NN
 country text NN
 source text NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `tour_stop_destination_idx`: btree (destination_id)
 - index `tour_stop_pkey` PRIMARY KEY: UNIQUE btree (source_tour_id, day_index)
 - check `tour_stop_source_check`: CHECK ((source = ANY (ARRAY['overnight'::text, 'component'::text])))
@@ -3622,7 +3648,7 @@ date_end date
 created_at timestamp with time zone NN
 updated_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `trip_drafts_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `trip_drafts_session_idx`: btree (session_id)
 - check `trip_drafts_status_chk`: CHECK ((status = ANY (ARRAY['draft'::text, 'sent'::text])))
@@ -3637,7 +3663,7 @@ event_type text NN
 payload jsonb NN
 created_at timestamp with time zone NN
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - index `trip_events_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `trip_events_trip_idx`: btree (trip_id, created_at)
 - check `trip_events_type_chk`: CHECK ((event_type = ANY (ARRAY['add_component'::text, 'remove_component'::text, 'reorder'::text, 'sent'::text, 'add_day'::text, 'remove_day'::text])))
@@ -3652,7 +3678,7 @@ trip_id uuid
 payload jsonb
 created_at timestamp with time zone
 ```
-- owner `aa_cis_admin`
+- owner `tp_owner`
 - grant `booking`: SELECT
 - grant `tripplanner`: DELETE, INSERT, SELECT, UPDATE
 
@@ -3663,9 +3689,12 @@ Roles other than `pg_*` / `rds*`. Passwords are never part of the dump.
 | role | login | superuser | bypassrls | connection limit | settings | member of |
 |---|---|---|---|---|---|---|
 | `aa_app_user` | yes | no | no | 15 |  |  |
-| `aa_cis_admin` | yes | no | no | none |  | rds_superuser |
+| `aa_cis_admin` | yes | no | no | none |  | bk_owner, cis_app, rds_superuser, tp_owner |
+| `bk_owner` | no | no | no | none |  |  |
 | `booking` | yes | no | no | 15 |  |  |
 | `catalog_owner` | no | no | no | none |  |  |
+| `cis_app` | yes | no | no | 90 |  |  |
+| `tp_owner` | no | no | no | none |  |  |
 | `tripplanner` | yes | no | no | 30 |  |  |
 
 ## Default privileges
@@ -3674,11 +3703,11 @@ Grants applied automatically to objects that `role` creates later (`ALTER DEFAUL
 
 | role | schema | objects | grantee | privileges |
 |---|---|---|---|---|
-| `aa_cis_admin` | booking | functions | `booking` | EXECUTE |
-| `aa_cis_admin` | booking | tables | `booking` | DELETE,INSERT,SELECT,UPDATE |
-| `aa_cis_admin` | booking | sequences | `booking` | SELECT,USAGE |
-| `aa_cis_admin` | tripplanner | tables | `tripplanner` | DELETE,INSERT,SELECT,UPDATE |
-| `aa_cis_admin` | tripplanner | sequences | `tripplanner` | SELECT,USAGE |
+| `bk_owner` | booking | functions | `booking` | EXECUTE |
+| `bk_owner` | booking | tables | `booking` | DELETE,INSERT,SELECT,UPDATE |
+| `bk_owner` | booking | sequences | `booking` | SELECT,USAGE |
+| `tp_owner` | tripplanner | tables | `tripplanner` | DELETE,INSERT,SELECT,UPDATE |
+| `tp_owner` | tripplanner | sequences | `tripplanner` | SELECT,USAGE |
 
 ## Functions
 
@@ -3686,21 +3715,22 @@ Extension-owned functions are left out. `SECURITY DEFINER` functions run with th
 
 | function | returns | language | owner | security definer |
 |---|---|---|---|---|
-| `booking.policy_approval_maker_checker()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.set_updated_at()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.supplier_contract_lock()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.supplier_contract_rates_fit()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.supplier_rate_guard()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.trip_case_check_transition()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.trip_case_record_status()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.trip_case_version_item_lock()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.trip_case_version_item_sent_lock()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.trip_case_version_lock()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.trip_case_version_sent_lock()` | trigger | plpgsql | `aa_cis_admin` | no |
-| `booking.version_item_cost_lock()` | trigger | plpgsql | `aa_cis_admin` | no |
+| `booking.policy_approval_maker_checker()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.set_updated_at()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.supplier_contract_lock()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.supplier_contract_rates_fit()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.supplier_rate_guard()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.trip_case_check_transition()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.trip_case_record_status()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.trip_case_version_item_lock()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.trip_case_version_item_sent_lock()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.trip_case_version_lock()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.trip_case_version_sent_lock()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.version_item_cost_lock()` | trigger | plpgsql | `bk_owner` | no |
 | `geo.name_norm(p text)` | text | sql | `aa_cis_admin` | no |
 | `shared.create_tenant_schemas(p_slug character varying)` | void | plpgsql | `aa_cis_admin` | no |
 | `shared.job_set_updated_at()` | trigger | plpgsql | `aa_cis_admin` | no |
+| `shared.schema_versions_key_guard()` | trigger | plpgsql | `aa_cis_admin` | no |
 
 ## Extensions
 
@@ -3863,6 +3893,7 @@ shared.llm_call_log.tenant_id -> shared.tenants.tenant_id
 shared.pipeline_runs.tenant_id -> shared.tenants.tenant_id
 shared.place_photo.destination_id -> shared.destinations.id
 shared.place_photo.tour_id -> silver_aa_internal.raw_tours.tour_id
+shared.staff_app_grant.admin_user_id -> shared.admin_users.id
 shared.tenant_api_usage.admin_user_id -> shared.admin_users.id
 shared.tenant_api_usage.tenant_id -> shared.tenants.tenant_id
 shared.tenant_brand_rule_versions.tenant_id -> shared.tenants.tenant_id
@@ -3912,154 +3943,155 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 
 | table | ~rows | size | seq scans | idx scans | ins / upd / del | dead tuples | last autovacuum |
 |---|---|---|---|---|---|---|---|
-| `acp_contract.atom_decompose_jobs` | 0 | 104 kB | 0 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_contract.atom_embedding` | 7298 | 118.3 MB | 408 | 65613 | 4772 / 0 / 0 | 0 | 2026-10-10 13:30 |
-| `acp_contract.atom_matches` | 10119 | 3.3 MB | 0 | 28793 | 4372 / 24421 / 0 | 908 | 2026-10-08 14:00 |
-| `acp_contract.atom_ranking` | 107784 | 66.9 MB | 29192 | 8113 | 4436347 / 4337113 / 4361071 | 0 | 2026-10-16 08:25 |
-| `acp_contract.atom_segment` | 12496 | 3.8 MB | 3524 | 5310745 | 14528 / 128575 / 5045 | 0 | 2026-10-16 08:22 |
-| `acp_contract.atom_segment_alias` | 410 | 352 kB | 8744 | 213050 | 1641 / 231628 / 1471 | 85 | 2026-10-10 13:29 |
-| `acp_contract.atom_segment_member` | 23987 | 5.4 MB | 6328 | 897984 | 38202 / 471 / 18799 | 2002 | 2026-10-16 08:07 |
-| `acp_contract.atomize_day_fingerprint` | 10062 | 1.9 MB | 1 | 7574 | 6710 / 43 / 0 | 8 | 2026-10-10 07:13 |
-| `acp_contract.hub` | 59 | 152 kB | 1112 | 8835 | 52 / 718 / 774 | 4 | 2026-10-11 23:36 |
-| `acp_contract.question_embedding` | 847 | 8.1 MB | 32 | 87 | 71 / 0 / 0 | 0 |  |
-| `acp_contract.route` | 9063 | 5.6 MB | 552 | 7391727 | 8416 / 7407 / 0 | 0 | 2026-10-16 08:25 |
-| `acp_contract.route_pick` |  | 48 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_contract.s1_from_atom_runs` |  | 64 kB | 0 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_contract.search_demand` | 5089 | 1.7 MB | 2265 | 790 | 501 / 289 / 0 | 237 |  |
-| `acp_contract.segment_research_log` | 1337 | 568 kB | 3355 | 14657 | 219 / 0 / 0 | 0 |  |
-| `acp_contract.tour_atoms` | 32019 | 19.8 MB | 8770 | 15859917 | 20744 / 13485 / 0 | 428 | 2026-10-10 14:15 |
-| `acp_deliver.tenant_tour_pages` | 0 | 40 kB | 814 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.acp_output_rules` |  | 48 kB | 25 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.acp_quota_ledger` |  | 56 kB | 1 | 5 | 5 / 0 / 0 | 0 |  |
-| `acp_shared.angle_gate_option` | 57 | 264 kB | 1912 | 30897 | 60 / 60 / 0 | 9 | 2026-10-16 03:32 |
-| `acp_shared.angle_gate_request` | 21 | 128 kB | 5084 | 8190 | 21 / 54 / 0 | 4 | 2026-10-16 08:36 |
-| `acp_shared.atom_place_card` | 291 | 120 kB | 11183 | 139851 | 298 / 28 / 0 | 27 |  |
-| `acp_shared.audit_log` | 1276 | 1 MB | 307 | 865 | 1276 / 0 / 0 | 0 | 2026-10-16 12:16 |
-| `acp_shared.content_piece` | 251 | 8.1 MB | 14406 | 55174 | 258 / 515 / 0 | 29 | 2026-10-16 08:01 |
-| `acp_shared.content_piece_label` |  | 48 kB | 8 | 8536 | 1 / 0 / 0 | 0 |  |
-| `acp_shared.debate_brand_fit_cache` | 375 | 344 kB | 60 | 1306 | 387 / 0 / 0 | 5 |  |
-| `acp_shared.facts` |  | 64 kB | 42 | 543 | 0 / 2 / 0 | 2 |  |
-| `acp_shared.marketplace_portfolios` |  | 32 kB | 0 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.place_card` | 111 | 344 kB | 5678 | 213616 | 128 / 101 / 18 | 5 | 2026-10-14 10:18 |
-| `acp_shared.place_card_alias` | 361 | 136 kB | 80 | 556 | 409 / 20 / 0 | 20 |  |
-| `acp_shared.place_card_miss` |  | 32 kB | 4 | 103 | 3 / 0 / 0 | 0 |  |
-| `acp_shared.publish_log` |  | 96 kB | 42 | 4106 | 4 / 8 / 0 | 5 |  |
-| `acp_shared.quarter_plan` | 6 | 88 kB | 3 | 8 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.quarter_plan_version` | 0 | 112 kB | 2 | 8 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.subject` | 342 | 544 kB | 5502 | 1968 | 432 / 225 / 90 | 2 | 2026-10-16 08:30 |
-| `acp_shared.tenant_atom_state` | 0 | 80 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.tenant_config` |  | 32 kB | 7 | 101 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.year_plan` |  | 40 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `booking.audit_logs` | 54 | 144 kB | 80 | 0 | 54 / 0 / 0 | 0 |  |
-| `booking.countries` |  | 32 kB | 90 | 141 | 17 / 0 / 0 | 0 |  |
-| `booking.customer_otps` |  | 24 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
-| `booking.customer_sessions` |  | 32 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
-| `booking.customers` | 1 | 104 kB | 2404 | 4 | 8 / 0 / 0 | 0 |  |
-| `booking.fx_rates` |  | 48 kB | 72 | 12 | 2 / 0 / 0 | 0 |  |
-| `booking.hotel_room_types` |  | 48 kB | 2 | 191 | 2 / 0 / 0 | 0 |  |
-| `booking.hotels` |  | 136 kB | 38 | 50 | 1 / 0 / 0 | 0 |  |
-| `booking.inbox_cursor` | 1 | 64 kB | 4789 | 2544 | 1 / 2444 / 0 | 47 | 2026-10-16 14:35 |
-| `booking.inbox_events` | 5 | 128 kB | 16 | 60 | 5 / 5 / 0 | 5 |  |
-| `booking.job` | 2455 | 1.1 MB | 18078 | 119012 | 2456 / 4909 / 0 | 10 | 2026-10-16 15:38 |
-| `booking.media_files` |  | 24 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
-| `booking.notification_reads` |  | 24 kB | 2 | 2838 | 0 / 0 / 0 | 0 |  |
-| `booking.notifications` | 1 | 64 kB | 677 | 0 | 8 / 0 / 0 | 0 |  |
-| `booking.policy_approvals` |  | 64 kB | 119 | 46 | 6 / 0 / 0 | 0 |  |
-| `booking.pricing_rules` |  | 48 kB | 80 | 36 | 4 / 0 / 0 | 0 |  |
-| `booking.services` |  | 152 kB | 25 | 79 | 1 / 0 / 0 | 0 |  |
-| `booking.settings` |  | 32 kB | 9 | 4 | 2 / 0 / 0 | 0 |  |
-| `booking.staff_assignments` |  | 64 kB | 39 | 2050 | 1 / 0 / 0 | 0 |  |
-| `booking.staff_users` |  | 48 kB | 254 | 4413 | 3 / 31 / 0 | 31 |  |
-| `booking.supplier_contracts` |  | 64 kB | 3 | 333 | 2 / 6 / 0 | 6 |  |
-| `booking.supplier_rates` |  | 80 kB | 9 | 109 | 3 / 0 / 0 | 0 |  |
-| `booking.suppliers` |  | 144 kB | 111 | 122 | 1 / 1 / 0 | 1 |  |
-| `booking.trip_case_countries` |  | 40 kB | 2 | 553 | 3 / 0 / 0 | 0 |  |
-| `booking.trip_case_legs` | 8 | 64 kB | 523 | 117 | 12 / 8 / 0 | 8 |  |
-| `booking.trip_case_status_history` | 1 | 64 kB | 44 | 0 | 11 / 0 / 0 | 0 |  |
-| `booking.trip_case_status_transitions` |  | 32 kB | 1 | 51 | 12 / 0 / 0 | 0 |  |
-| `booking.trip_case_version_itinerary` | 4 | 80 kB | 67 | 31 | 20 / 4 / 0 | 4 |  |
-| `booking.trip_case_versions` |  | 80 kB | 8 | 832 | 5 / 9 / 0 | 9 |  |
-| `booking.trip_cases` | 1 | 160 kB | 1074 | 10 | 8 / 3 / 0 | 3 |  |
-| `booking.trip_plans` |  | 64 kB | 371 | 13602 | 1 / 0 / 0 | 0 |  |
-| `booking.version_item_costs` | 4 | 64 kB | 49 | 19 | 7 / 0 / 1 | 1 |  |
-| `geo.geocode_call` |  | 48 kB | 5 | 195 | 3 / 0 / 0 | 0 |  |
-| `geo.graph_build` |  | 48 kB | 225 | 9036 | 2 / 3 / 0 | 3 |  |
-| `geo.graph_edge` | 209 | 112 kB | 3 | 4 | 209 / 0 / 0 | 0 |  |
-| `geo.graph_node` | 143 | 96 kB | 4 | 3 | 143 / 0 / 0 | 0 |  |
-| `geo.place_name` | 573 | 248 kB | 276 | 1224 | 573 / 517 / 0 | 36 | 2026-10-15 00:03 |
-| `geo.place_outlier` |  | 16 kB | 7 | 49 | 0 / 0 / 0 | 0 |  |
-| `geo.tour_build` | 27 | 88 kB | 219 | 128 | 46 / 46 / 0 | 24 |  |
-| `geo.tour_day` | 392 | 264 kB | 38 | 292 | 392 / 143 / 0 | 8 | 2026-10-15 00:02 |
-| `geo.tour_junction` | 2854 | 560 kB | 44 | 0 | 2854 / 0 / 0 | 0 | 2026-10-15 00:07 |
-| `geo.tour_leg` | 1971 | 1.1 MB | 103 | 0 | 1971 / 0 / 0 | 0 | 2026-10-15 00:07 |
-| `geo.tour_place` | 967 | 16 MB | 598 | 581005 | 967 / 496 / 0 | 62 | 2026-10-15 00:02 |
-| `geo.tour_stop` | 407 | 168 kB | 458 | 9 | 407 / 0 / 0 | 0 |  |
-| `gold_aa_internal.content_exports` |  | 24 kB | 51 | 0 | 0 / 0 / 0 | 0 |  |
-| `gold_aa_internal.published_tours` | 886 | 5.3 MB | 26664 | 12690238 | 497 / 523 / 0 | 59 | 2026-10-10 13:12 |
-| `gold_aa_internal.tenant_tour_versions` | 48 | 608 kB | 17888 | 2034 | 51 / 106 / 0 | 12 | 2026-10-15 14:24 |
-| `gold_aa_internal.webhook_deliveries` |  | 24 kB | 51 | 0 | 0 / 0 / 0 | 0 |  |
-| `public.checkpoint_migrations` |  | 24 kB | 0 | 0 | 0 / 0 / 0 | 0 |  |
-| `shared.acp_runs` |  | 40 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `shared.admin_users` |  | 40 kB | 7 | 72790 | 5 / 2 / 4 | 4 |  |
-| `shared.cost_explorer_snapshot` | 1885 | 2.5 MB | 331 | 8 | 5695 / 0 / 5991 | 0 | 2026-10-16 04:22 |
-| `shared.decision_cache_hits_daily` | 202 | 104 kB | 568 | 6345 | 202 / 6141 / 0 | 18 | 2026-10-10 17:41 |
-| `shared.decision_log` | 331400 | 360.4 MB | 403 | 520667 | 279817 / 0 / 695728 | 0 | 2026-10-16 08:23 |
-| `shared.decision_question` | 5 | 72 kB | 8172 | 574 | 1 / 17 / 0 | 2 |  |
-| `shared.destinations` | 1469 | 752 kB | 11198 | 1655217 | 334 / 1290 / 0 | 36 | 2026-10-14 14:52 |
-| `shared.dfs_balance_snapshot` |  | 264 kB | 0 | 1036 | 10 / 0 / 0 | 0 |  |
-| `shared.dfs_call_log` | 2545 | 1 MB | 1768 | 5745 | 683 / 0 / 0 | 0 |  |
-| `shared.jev_credit_topup` |  | 48 kB | 10 | 3 | 2 / 0 / 0 | 0 |  |
-| `shared.jev_tenant_allowlist` |  | 32 kB | 6364 | 3893 | 4 / 0 / 7 | 7 |  |
-| `shared.job` | 2649 | 10.7 MB | 14977 | 663942 | 2073 / 22487 / 0 | 83 | 2026-10-16 12:22 |
-| `shared.job_worker` | 161 | 224 kB | 110168 | 133735 | 200 / 52782 / 100 | 50 | 2026-10-16 15:33 |
-| `shared.llm_call_daily` |  | 48 kB | 12 | 5 | 5 / 0 / 0 | 0 |  |
-| `shared.llm_call_log` | 257439 | 132.4 MB | 6755 | 21839643 | 145564 / 0 / 200 | 200 | 2026-10-15 05:52 |
-| `shared.llm_model_catalog` |  | 32 kB | 1348 | 74 | 1 / 4 / 0 | 1 |  |
-| `shared.llm_role_config` |  | 32 kB | 898 | 5637 | 13 / 16 / 6 | 18 |  |
-| `shared.llm_shadow_log` | 5554 | 11.9 MB | 10 | 5 | 2972 / 0 / 0 | 0 | 2026-10-08 07:37 |
-| `shared.membership_plans` |  | 48 kB | 1688 | 1818 | 0 / 0 / 0 | 0 |  |
-| `shared.notifications` | 12 | 104 kB | 14157 | 0 | 11 / 13 / 0 | 13 |  |
-| `shared.pipeline_jobs` | 523 | 480 kB | 1 | 22 | 0 / 0 / 0 | 0 |  |
-| `shared.pipeline_lessons` |  | 24 kB | 0 | 1950 | 0 / 0 / 0 | 0 |  |
-| `shared.pipeline_runs` | 46 | 208 kB | 5520 | 3459 | 0 / 838 / 0 | 23 |  |
-| `shared.place_photo` | 3232 | 2.6 MB | 9601 | 2552454 | 0 / 0 / 0 | 0 |  |
-| `shared.prompt_eval_runs` |  | 48 kB | 0 | 0 | 0 / 0 / 0 | 0 |  |
-| `shared.rerun_wave` |  | 48 kB | 3 | 25 | 1 / 1 / 0 | 1 |  |
-| `shared.schema_versions` | 239 | 96 kB | 242 | 164 | 62 / 0 / 0 | 6 |  |
-| `shared.spend_budget` |  | 32 kB | 729 | 95 | 4 / 0 / 0 | 0 |  |
-| `shared.tenant_api_usage` | 126213 | 31.2 MB | 9 | 15636 | 86846 / 0 / 200 | 200 | 2026-10-16 05:00 |
-| `shared.tenant_api_usage_monthly` |  | 48 kB | 9 | 39 | 3 / 0 / 0 | 0 |  |
-| `shared.tenant_brand_rule_versions` |  | 64 kB | 1 | 24 | 0 / 0 / 0 | 0 |  |
-| `shared.tenant_brand_rules` | 1 | 184 kB | 19748 | 0 | 14 / 15 / 0 | 5 |  |
-| `shared.tenant_brand_rules_deleted_aa404` |  | 96 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `shared.tenant_export_config` |  | 48 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `shared.tenant_integrations` |  | 64 kB | 23 | 339 | 10 / 10 / 10 | 20 |  |
-| `shared.tenant_rewrite_usage` |  | 32 kB | 1 | 117 | 4 / 46 / 0 | 46 |  |
-| `shared.tenant_seo_config` |  | 48 kB | 2 | 653 | 4 / 1 / 0 | 1 |  |
-| `shared.tenants` | 4 | 80 kB | 227163 | 2828 | 5 / 26 / 0 | 6 |  |
-| `shared.unmapped_market_requests` |  | 32 kB | 2 | 356 | 0 / 0 / 0 | 0 |  |
-| `silver_aa_internal.generated_content` | 1423 | 14.8 MB | 1184 | 516549 | 975 / 456 / 0 | 84 | 2026-10-08 02:59 |
-| `silver_aa_internal.quality_scores` | 1432 | 2 MB | 439599 | 1012 | 981 / 944 / 6 | 132 | 2026-10-10 10:07 |
-| `silver_aa_internal.raw_sources` | 34 | 96 kB | 859 | 1650 | 0 / 0 / 0 | 0 |  |
-| `silver_aa_internal.raw_tours` | 987 | 5.1 MB | 18829 | 18184928 | 0 / 819 / 0 | 80 | 2026-10-10 09:43 |
-| `silver_aa_internal.review_queue` | 229 | 176 kB | 50350 | 13413 | 177 / 109 / 0 | 66 | 2026-10-08 03:05 |
-| `silver_aa_internal.seo_context` | 898 | 1.2 MB | 360 | 605768 | 506 / 0 / 0 | 12 |  |
-| `silver_aa_internal.upload_staging` |  | 104 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.customers` |  | 64 kB | 5 | 19 | 5 / 5 / 1 | 6 |  |
-| `tripplanner.itinerary_components` | 3972 | 56.6 MB | 3217 | 128004 | 0 / 0 / 240 | 240 |  |
-| `tripplanner.llm_spend_daily` | 3 | 64 kB | 863 | 1581 | 3 / 1452 / 0 | 2 | 2026-10-16 09:06 |
-| `tripplanner.narration_cache` |  | 24 kB | 2 | 3 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.outbox` |  | 96 kB | 12 | 4904 | 6 / 0 / 3 | 1 |  |
-| `tripplanner.sessions` | 40 | 48 kB | 14 | 206 | 15 / 40 / 3 | 45 |  |
-| `tripplanner.tour_day` | 650 | 384 kB | 5 | 3 | 0 / 0 / 51 | 51 |  |
-| `tripplanner.tour_graph_build` |  | 32 kB | 0 | 0 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.tour_graph_edge` | 379 | 200 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.tour_graph_node` | 299 | 240 kB | 19 | 33 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.tour_junction` | 3496 | 864 kB | 5 | 39063 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.tour_leg` | 3871 | 3.1 MB | 1259 | 238 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.tour_stop` | 622 | 320 kB | 334 | 77653 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.trip_drafts` | 33 | 88 kB | 34 | 76 | 14 / 60 / 1 | 2 |  |
-| `tripplanner.trip_events` | 152 | 96 kB | 458 | 24 | 74 / 0 / 6 | 5 |  |
+| `acp_contract.atom_decompose_jobs` | 0 | 104 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_contract.atom_embedding` | 7298 | 118.3 MB | 409 | 65613 | 4772 / 0 / 0 | 0 | 2026-10-10 13:30 |
+| `acp_contract.atom_matches` | 10119 | 3.3 MB | 1 | 28793 | 4372 / 24421 / 0 | 742 | 2026-10-08 14:00 |
+| `acp_contract.atom_ranking` | 107784 | 66.9 MB | 29193 | 8266 | 4436347 / 4337113 / 4361071 | 0 | 2026-10-16 08:25 |
+| `acp_contract.atom_segment` | 12496 | 3.8 MB | 3525 | 5314086 | 14528 / 128575 / 5045 | 0 | 2026-10-16 08:22 |
+| `acp_contract.atom_segment_alias` | 410 | 352 kB | 8762 | 213129 | 1641 / 231628 / 1471 | 85 | 2026-10-10 13:29 |
+| `acp_contract.atom_segment_member` | 23987 | 5.4 MB | 6416 | 903109 | 38202 / 471 / 18799 | 2002 | 2026-10-16 08:07 |
+| `acp_contract.atomize_day_fingerprint` | 10062 | 1.9 MB | 2 | 7574 | 6710 / 43 / 0 | 4 | 2026-10-10 07:13 |
+| `acp_contract.hub` | 59 | 152 kB | 1189 | 8967 | 52 / 718 / 774 | 4 | 2026-10-11 23:36 |
+| `acp_contract.question_embedding` | 847 | 8.1 MB | 33 | 87 | 71 / 0 / 0 | 0 |  |
+| `acp_contract.route` | 9063 | 5.6 MB | 552 | 7673517 | 8416 / 7407 / 0 | 0 | 2026-10-16 08:25 |
+| `acp_contract.route_pick` |  | 48 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_contract.s1_from_atom_runs` |  | 64 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_contract.search_demand` | 5089 | 1.7 MB | 2361 | 790 | 501 / 289 / 0 | 237 |  |
+| `acp_contract.segment_research_log` | 1337 | 568 kB | 3553 | 14657 | 219 / 0 / 0 | 0 |  |
+| `acp_contract.tour_atoms` | 32019 | 19.8 MB | 9093 | 15882040 | 20744 / 13485 / 0 | 428 | 2026-10-10 14:15 |
+| `acp_deliver.tenant_tour_pages` | 0 | 40 kB | 840 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.acp_output_rules` |  | 48 kB | 26 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.acp_quota_ledger` |  | 56 kB | 2 | 5 | 5 / 0 / 0 | 0 |  |
+| `acp_shared.angle_gate_option` | 57 | 264 kB | 2113 | 33471 | 60 / 60 / 0 | 9 | 2026-10-16 03:32 |
+| `acp_shared.angle_gate_request` | 21 | 128 kB | 5721 | 9291 | 21 / 54 / 0 | 4 | 2026-10-16 08:36 |
+| `acp_shared.atom_place_card` | 291 | 120 kB | 11299 | 142920 | 298 / 28 / 0 | 27 |  |
+| `acp_shared.audit_log` | 1276 | 1 MB | 332 | 929 | 1283 / 0 / 0 | 0 | 2026-10-16 12:16 |
+| `acp_shared.content_piece` | 251 | 8.1 MB | 14831 | 62475 | 258 / 515 / 0 | 29 | 2026-10-16 08:01 |
+| `acp_shared.content_piece_label` |  | 48 kB | 9 | 16998 | 1 / 0 / 0 | 0 |  |
+| `acp_shared.debate_brand_fit_cache` | 375 | 344 kB | 61 | 1306 | 387 / 0 / 0 | 5 |  |
+| `acp_shared.facts` |  | 64 kB | 43 | 759 | 0 / 2 / 0 | 2 |  |
+| `acp_shared.marketplace_portfolios` |  | 32 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.place_card` | 111 | 344 kB | 5789 | 213682 | 128 / 101 / 18 | 5 | 2026-10-14 10:18 |
+| `acp_shared.place_card_alias` | 361 | 136 kB | 204 | 556 | 409 / 20 / 0 | 20 |  |
+| `acp_shared.place_card_miss` |  | 32 kB | 5 | 103 | 3 / 0 / 0 | 0 |  |
+| `acp_shared.publish_log` |  | 96 kB | 43 | 4369 | 4 / 8 / 0 | 5 |  |
+| `acp_shared.quarter_plan` | 6 | 88 kB | 4 | 8 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.quarter_plan_version` | 0 | 112 kB | 3 | 8 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.subject` | 342 | 544 kB | 5626 | 2057 | 432 / 225 / 90 | 2 | 2026-10-16 08:30 |
+| `acp_shared.tenant_atom_state` | 0 | 80 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.tenant_config` |  | 32 kB | 8 | 101 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.year_plan` |  | 40 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `booking.audit_logs` | 54 | 152 kB | 85 | 0 | 58 / 0 / 0 | 0 |  |
+| `booking.countries` |  | 32 kB | 91 | 141 | 17 / 0 / 0 | 0 |  |
+| `booking.customer_otps` |  | 24 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
+| `booking.customer_sessions` |  | 32 kB | 4 | 0 | 0 / 0 / 0 | 0 |  |
+| `booking.customers` | 1 | 104 kB | 2511 | 4 | 8 / 0 / 0 | 0 |  |
+| `booking.fx_rates` |  | 48 kB | 73 | 12 | 2 / 0 / 0 | 0 |  |
+| `booking.hotel_room_types` |  | 48 kB | 3 | 191 | 2 / 0 / 0 | 0 |  |
+| `booking.hotels` |  | 136 kB | 39 | 50 | 1 / 0 / 0 | 0 |  |
+| `booking.inbox_cursor` | 1 | 64 kB | 7674 | 3986 | 1 / 3886 / 0 | 10 | 2026-10-18 02:47 |
+| `booking.inbox_events` | 5 | 128 kB | 21 | 60 | 5 / 5 / 0 | 5 |  |
+| `booking.job` | 3635 | 1.8 MB | 18103 | 272899 | 3903 / 7803 / 0 | 76 | 2026-10-18 02:06 |
+| `booking.media_files` |  | 24 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
+| `booking.notification_reads` |  | 24 kB | 3 | 2893 | 0 / 0 / 0 | 0 |  |
+| `booking.notifications` | 1 | 64 kB | 688 | 0 | 8 / 0 / 0 | 0 |  |
+| `booking.policy_approvals` |  | 64 kB | 120 | 46 | 6 / 0 / 0 | 0 |  |
+| `booking.pricing_rules` |  | 48 kB | 81 | 36 | 4 / 0 / 0 | 0 |  |
+| `booking.services` |  | 152 kB | 26 | 79 | 1 / 0 / 0 | 0 |  |
+| `booking.settings` |  | 32 kB | 10 | 4 | 2 / 0 / 0 | 0 |  |
+| `booking.staff_assignments` |  | 64 kB | 40 | 2142 | 1 / 0 / 0 | 0 |  |
+| `booking.staff_users` |  | 48 kB | 258 | 4477 | 3 / 32 / 0 | 32 |  |
+| `booking.supplier_contracts` |  | 64 kB | 4 | 333 | 2 / 6 / 0 | 6 |  |
+| `booking.supplier_rates` |  | 80 kB | 10 | 109 | 3 / 0 / 0 | 0 |  |
+| `booking.suppliers` |  | 144 kB | 112 | 122 | 1 / 1 / 0 | 1 |  |
+| `booking.trip_case_countries` |  | 40 kB | 3 | 571 | 3 / 0 / 0 | 0 |  |
+| `booking.trip_case_legs` | 8 | 64 kB | 551 | 117 | 12 / 8 / 0 | 8 |  |
+| `booking.trip_case_status_history` | 1 | 64 kB | 45 | 0 | 11 / 0 / 0 | 0 |  |
+| `booking.trip_case_status_transitions` |  | 32 kB | 2 | 51 | 12 / 0 / 0 | 0 |  |
+| `booking.trip_case_version_itinerary` | 4 | 80 kB | 68 | 31 | 20 / 4 / 0 | 4 |  |
+| `booking.trip_case_versions` |  | 80 kB | 9 | 850 | 5 / 9 / 0 | 9 |  |
+| `booking.trip_cases` | 1 | 160 kB | 1094 | 10 | 8 / 3 / 0 | 3 |  |
+| `booking.trip_plans` |  | 64 kB | 372 | 13602 | 1 / 0 / 0 | 0 |  |
+| `booking.version_item_costs` | 4 | 64 kB | 50 | 19 | 7 / 0 / 1 | 1 |  |
+| `geo.geocode_call` |  | 48 kB | 6 | 251 | 3 / 0 / 0 | 0 |  |
+| `geo.graph_build` |  | 48 kB | 236 | 9036 | 2 / 3 / 0 | 3 |  |
+| `geo.graph_edge` | 209 | 112 kB | 4 | 4 | 209 / 0 / 0 | 0 |  |
+| `geo.graph_node` | 143 | 96 kB | 5 | 3 | 143 / 0 / 0 | 0 |  |
+| `geo.place_name` | 573 | 248 kB | 277 | 1224 | 573 / 517 / 0 | 36 | 2026-10-15 00:03 |
+| `geo.place_outlier` |  | 16 kB | 8 | 49 | 0 / 0 / 0 | 0 |  |
+| `geo.tour_build` | 27 | 88 kB | 230 | 128 | 46 / 46 / 0 | 24 |  |
+| `geo.tour_day` | 392 | 264 kB | 39 | 292 | 392 / 143 / 0 | 8 | 2026-10-15 00:02 |
+| `geo.tour_junction` | 2854 | 560 kB | 45 | 0 | 2854 / 0 / 0 | 0 | 2026-10-15 00:07 |
+| `geo.tour_leg` | 1971 | 1.1 MB | 104 | 0 | 1971 / 0 / 0 | 0 | 2026-10-15 00:07 |
+| `geo.tour_place` | 967 | 16 MB | 598 | 584017 | 967 / 496 / 0 | 62 | 2026-10-15 00:02 |
+| `geo.tour_stop` | 407 | 168 kB | 459 | 9 | 407 / 0 / 0 | 0 |  |
+| `gold_aa_internal.content_exports` |  | 24 kB | 160 | 0 | 0 / 0 / 0 | 0 |  |
+| `gold_aa_internal.published_tours` | 886 | 5.3 MB | 27468 | 12700229 | 497 / 523 / 0 | 59 | 2026-10-10 13:12 |
+| `gold_aa_internal.tenant_tour_versions` | 48 | 608 kB | 18511 | 2161 | 51 / 106 / 0 | 12 | 2026-10-15 14:24 |
+| `gold_aa_internal.webhook_deliveries` |  | 24 kB | 160 | 0 | 0 / 0 / 0 | 0 |  |
+| `public.checkpoint_migrations` |  | 24 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.acp_runs` |  | 40 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.admin_users` | 7 | 80 kB | 35 | 75345 | 5 / 2 / 4 | 4 |  |
+| `shared.cost_explorer_snapshot` | 1428 | 2.5 MB | 348 | 9 | 5695 / 0 / 6448 | 0 | 2026-10-17 21:00 |
+| `shared.decision_cache_hits_daily` | 202 | 104 kB | 593 | 6345 | 202 / 6141 / 0 | 18 | 2026-10-10 17:41 |
+| `shared.decision_log` | 331400 | 360.4 MB | 403 | 521348 | 279817 / 0 / 695728 | 0 | 2026-10-16 08:23 |
+| `shared.decision_question` | 5 | 72 kB | 8197 | 598 | 1 / 17 / 0 | 2 |  |
+| `shared.destinations` | 1469 | 752 kB | 11217 | 1659912 | 334 / 1290 / 0 | 36 | 2026-10-14 14:52 |
+| `shared.dfs_balance_snapshot` |  | 280 kB | 1 | 1099 | 13 / 0 / 0 | 0 |  |
+| `shared.dfs_call_log` | 2545 | 1 MB | 1836 | 6031 | 686 / 0 / 0 | 0 |  |
+| `shared.jev_credit_topup` |  | 48 kB | 11 | 3 | 2 / 0 / 0 | 0 |  |
+| `shared.jev_tenant_allowlist` |  | 32 kB | 6365 | 4109 | 4 / 0 / 7 | 7 |  |
+| `shared.job` | 2702 | 10.7 MB | 15252 | 726923 | 2093 / 22532 / 0 | 21 | 2026-10-16 16:32 |
+| `shared.job_worker` | 158 | 224 kB | 110612 | 170931 | 221 / 61318 / 124 | 36 | 2026-10-18 02:53 |
+| `shared.llm_call_daily` |  | 48 kB | 13 | 5 | 5 / 0 / 0 | 0 |  |
+| `shared.llm_call_log` | 257439 | 132.4 MB | 7043 | 22323843 | 145565 / 0 / 200 | 200 | 2026-10-15 05:52 |
+| `shared.llm_model_catalog` |  | 32 kB | 1397 | 74 | 1 / 4 / 0 | 1 |  |
+| `shared.llm_role_config` |  | 32 kB | 945 | 5638 | 13 / 16 / 6 | 18 |  |
+| `shared.llm_shadow_log` | 5554 | 11.9 MB | 10 | 6 | 2972 / 0 / 0 | 0 | 2026-10-08 07:37 |
+| `shared.membership_plans` |  | 48 kB | 1820 | 1942 | 0 / 0 / 0 | 0 |  |
+| `shared.notifications` | 12 | 104 kB | 15014 | 0 | 11 / 13 / 0 | 13 |  |
+| `shared.pipeline_jobs` | 523 | 480 kB | 2 | 22 | 0 / 0 / 0 | 0 |  |
+| `shared.pipeline_lessons` |  | 24 kB | 1 | 1950 | 0 / 0 / 0 | 0 |  |
+| `shared.pipeline_runs` | 46 | 208 kB | 5591 | 3801 | 0 / 838 / 0 | 23 |  |
+| `shared.place_photo` | 3232 | 2.6 MB | 9676 | 2598343 | 0 / 0 / 0 | 0 |  |
+| `shared.prompt_eval_runs` |  | 48 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.rerun_wave` |  | 48 kB | 4 | 47 | 1 / 1 / 0 | 1 |  |
+| `shared.schema_versions` | 239 | 96 kB | 275 | 208 | 69 / 0 / 0 | 6 |  |
+| `shared.spend_budget` |  | 32 kB | 786 | 95 | 4 / 0 / 0 | 0 |  |
+| `shared.staff_app_grant` |  | 16 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.tenant_api_usage` | 131197 | 31.7 MB | 9 | 17238 | 89765 / 0 / 200 | 206 | 2026-10-16 05:00 |
+| `shared.tenant_api_usage_monthly` |  | 48 kB | 10 | 39 | 3 / 0 / 0 | 0 |  |
+| `shared.tenant_brand_rule_versions` |  | 64 kB | 2 | 24 | 0 / 0 / 0 | 0 |  |
+| `shared.tenant_brand_rules` | 1 | 184 kB | 20351 | 0 | 14 / 15 / 0 | 5 |  |
+| `shared.tenant_brand_rules_deleted_aa404` |  | 96 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.tenant_export_config` |  | 48 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.tenant_integrations` |  | 64 kB | 24 | 477 | 10 / 10 / 10 | 20 |  |
+| `shared.tenant_rewrite_usage` |  | 32 kB | 2 | 125 | 4 / 46 / 0 | 46 |  |
+| `shared.tenant_seo_config` |  | 48 kB | 3 | 678 | 4 / 1 / 0 | 1 |  |
+| `shared.tenants` | 4 | 80 kB | 228438 | 2918 | 5 / 26 / 0 | 6 |  |
+| `shared.unmapped_market_requests` |  | 32 kB | 3 | 368 | 0 / 0 / 0 | 0 |  |
+| `silver_aa_internal.generated_content` | 1423 | 14.8 MB | 1355 | 530424 | 975 / 456 / 0 | 84 | 2026-10-08 02:59 |
+| `silver_aa_internal.quality_scores` | 1432 | 2 MB | 451583 | 1012 | 981 / 944 / 6 | 132 | 2026-10-10 10:07 |
+| `silver_aa_internal.raw_sources` | 34 | 96 kB | 897 | 1720 | 0 / 0 / 0 | 0 |  |
+| `silver_aa_internal.raw_tours` | 987 | 5.1 MB | 19609 | 18253866 | 0 / 819 / 0 | 80 | 2026-10-10 09:43 |
+| `silver_aa_internal.review_queue` | 229 | 176 kB | 51307 | 15247 | 177 / 109 / 0 | 66 | 2026-10-08 03:05 |
+| `silver_aa_internal.seo_context` | 898 | 1.2 MB | 480 | 629044 | 506 / 0 / 0 | 12 |  |
+| `silver_aa_internal.upload_staging` |  | 104 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `tripplanner.customers` |  | 64 kB | 7 | 19 | 5 / 5 / 1 | 6 |  |
+| `tripplanner.itinerary_components` | 3972 | 56.6 MB | 3221 | 128068 | 0 / 0 / 240 | 240 |  |
+| `tripplanner.llm_spend_daily` | 3 | 64 kB | 865 | 1582 | 4 / 1452 / 0 | 2 | 2026-10-16 09:06 |
+| `tripplanner.narration_cache` |  | 24 kB | 3 | 3 | 0 / 0 / 0 | 0 |  |
+| `tripplanner.outbox` |  | 96 kB | 14 | 7788 | 6 / 0 / 3 | 1 |  |
+| `tripplanner.sessions` | 40 | 48 kB | 24 | 206 | 15 / 40 / 3 | 45 |  |
+| `tripplanner.tour_day` | 650 | 384 kB | 6 | 3 | 0 / 0 / 51 | 51 |  |
+| `tripplanner.tour_graph_build` |  | 32 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
+| `tripplanner.tour_graph_edge` | 379 | 200 kB | 4 | 0 | 0 / 0 / 0 | 0 |  |
+| `tripplanner.tour_graph_node` | 299 | 240 kB | 19 | 34 | 0 / 0 / 0 | 0 |  |
+| `tripplanner.tour_junction` | 3496 | 864 kB | 6 | 39063 | 0 / 0 / 0 | 0 |  |
+| `tripplanner.tour_leg` | 3871 | 3.1 MB | 1259 | 239 | 0 / 0 / 0 | 0 |  |
+| `tripplanner.tour_stop` | 622 | 320 kB | 335 | 77653 | 0 / 0 / 0 | 0 |  |
+| `tripplanner.trip_drafts` | 33 | 88 kB | 35 | 76 | 14 / 60 / 1 | 2 |  |
+| `tripplanner.trip_events` | 152 | 96 kB | 459 | 24 | 74 / 0 / 6 | 5 |  |
 
 ## Unused indexes
 
@@ -4075,7 +4107,6 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `acp_shared.idx_angle_gate_request_status` on `angle_gate_request` (16 kB)
 - `acp_shared.idx_angle_gate_request_subject` on `angle_gate_request` (16 kB)
 - `acp_shared.idx_angle_gate_request_tenant` on `angle_gate_request` (16 kB)
-- `acp_shared.idx_audit_log_actor_type` on `audit_log` (40 kB)
 - `acp_shared.idx_content_piece_embedding` on `content_piece` (1.8 MB)
 - `acp_shared.idx_content_piece_label_label` on `content_piece_label` (16 kB)
 - `acp_shared.idx_quarter_plan_year_plan_id` on `quarter_plan` (16 kB)
@@ -4138,7 +4169,6 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `shared.ix_pipeline_jobs_created` on `pipeline_jobs` (40 kB)
 - `shared.idx_pipeline_runs_status` on `pipeline_runs` (16 kB)
 - `shared.idx_prompt_eval_runs_pipeline_created` on `prompt_eval_runs` (16 kB)
-- `shared.idx_tenant_api_usage_actor_type` on `tenant_api_usage` (1.3 MB)
 - `shared.idx_brand_rules_tenant_brand` on `tenant_brand_rules` (16 kB)
 - `shared.tenant_brand_rules_deleted_aa404_tenant_id_brand_name_idx` on `tenant_brand_rules_deleted_aa404` (16 kB)
 - `silver_aa_internal.idx_aa_internal_gen_content_status` on `generated_content` (32 kB)
@@ -4149,7 +4179,6 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `tripplanner.itinerary_components_season_idx` on `itinerary_components` (288 kB)
 - `tripplanner.narration_cache_created_at_idx` on `narration_cache` (8 kB)
 - `tripplanner.tour_day_overnight_dest_idx` on `tour_day` (40 kB)
-- `tripplanner.tour_graph_node_country_idx` on `tour_graph_node` (16 kB)
 - `tripplanner.tour_leg_countries_idx` on `tour_leg` (144 kB)
 - `tripplanner.trip_events_trip_idx` on `trip_events` (16 kB)
 
@@ -4169,12 +4198,21 @@ Client sessions per `application_name` (`(empty)` = a pool without `application_
 |---|---|---|---|
 | booking-api | booking | idle | 1 |
 | cis-api | aa_cis_admin | idle | 1 |
-| cis-worker | aa_cis_admin | idle | 2 |
+| cis-worker | aa_cis_admin | idle | 1 |
+| db-isolation-probe | aa_app_user | idle in transaction | 1 |
+| db-isolation-probe | aa_cis_admin | idle | 1 |
 
 ## Latest migrations
 
 | version | applied_at | description |
 |---|---|---|
+| 247 | 2026-10-18 03:00:20.065738+00:00 | AA-816: shared.admin_users Cognito identity columns (email, display_name, cognito_iss/sub, last_login_at, is_owner), nullable password_hash, shared.staff_app_grant |
+| tp-014 | 2026-10-18 01:31:05.331176+00:00 | AA-852 X1 S9: probe, ran as tp_owner (automatic SET ROLE to the live owner of schema tripplanner) |
+| bk-015 | 2026-10-18 01:27:47.953040+00:00 | AA-852 (X1 S9): probe, ran as bk_owner (automatic SET ROLE to the live owner of schema booking) |
+| tp-013 | 2026-10-17 12:39:45.728135+00:00 | AA-852 X1 S7: schema tripplanner + its 16 objects owned by tp_owner (was aa_cis_admin); default privileges FOR ROLE tp_owner to tripplanner, FOR ROLE aa_cis_admin rows revoked |
+| bk-014 | 2026-10-17 12:36:28.913320+00:00 | AA-852 (X1 S6): booking schema, 32 tables, 2 views, 5 sequences, 12 functions owned by bk_owner, default privileges of role booking restated FOR ROLE bk_owner, FOR ROLE aa_cis_admin rows revoked |
+| 243 | 2026-10-17 12:32:32.694976+00:00 | AA-852 (X1 S4): bk_owner/tp_owner USAGE on shared + SELECT, INSERT on shared.schema_versions; BEFORE INSERT key guard (registry owner members any key, bk_owner only bk- keys, tp_owner only tp- keys, others none) |
+| rl-001 | 2026-10-17 12:29:17.906876+00:00 | AA-852 (X1 S3): role bootstrap — bk_owner, tp_owner NOLOGIN (granted to aa_cis_admin); cis_app LOGIN CONNECTION LIMIT 90, no password (granted to aa_cis_admin for the 244 guards); N3 limits restated from 234 (tripplanner 30, booking 15, aa_app_user 15) |
 | 242 | 2026-10-16 15:43:48.481961+00:00 | AA-751 (X6): shared.job conforms to the job table template — kind/lease/attempts CHECKs, updated_at trigger, queue autovacuum |
 | bk-013 | 2026-10-16 15:37:53.402363+00:00 | AA-751 (X6): booking.job template catch-up — cancel_requested, progress, cost_usd, parent_job_id (+FK, job_parent_idx), job_running_idx, job_queued_due_idx, queue autovacuum |
 | 241 | 2026-10-16 12:14:02.290595+00:00 | AA-859: aa_app_user loses every privilege on CIS relations without RLS (catalog_owner catalog.* SELECT contract kept); angle_gate_option RLS through the parent request (SELECT + UPDATE(chosen) to aa_app_user); tenant_integrations column INSERT/UPDATE to aa_app_user for connect/test. Revoked from aa_app_user: acp_contract.v_active_tour_atoms (SELECT); acp_shared.angle_gate_option (SELECT); acp_shared.marketplace_portfolios (INSERT, SELECT, UPDATE); acp_shared.tenant_atom_state (SELECT); acp_shared.year_plan (SELECT); shared.cost_explorer_snapshot (SELECT); shared.decision_cache_hits_daily (SELECT); shared.decision_log (SELECT); shared.decision_question (SELECT); shared.destinations (SELECT); shared.dfs_balance_snapshot (SELECT); shared.dfs_call_log (SELECT); shared.jev_credit_topup (SELECT); shared.jev_tenant_allowlist (SELECT); shared.job (SELECT); shared.job_worker (SELECT); shared.llm_call_log (SELECT); shared.llm_model_catalog (SELECT); shared.llm_role_config (SELECT); shared.llm_shadow_log (SELECT); shared.place_photo (SELECT); shared.prompt_eval_runs (SELECT); shared.rerun_wave (SELECT); shared.spend_budget (SELECT); shared.tenant_brand_rules (SELECT); shared.tenant_brand_rules_deleted_aa404 (SELECT); shared.tenant_export_config (SELECT); shared.tenant_rewrite_usage (SELECT); shared.tenants (SELECT); shared.tenant_seo_config (SELECT); shared.unmapped_market_requests (SELECT); shared.v_destination_photos (SELECT); shared.v_tour_photos (SELECT). PUBLIC SELECT kept on relations without RLS: pg_stat_statements, pg_stat_statements_info. |
@@ -4188,10 +4226,3 @@ Client sessions per `application_name` (`(empty)` = a pool without `application_
 | bk-011 | 2026-10-15 15:27:51.815647+00:00 | AA-830: booking.trip_case_legs + source_system / source_id (catalog tour key of inquiry.submitted v1.2, nullable, both or neither, cis only), index, back-filled by app.inquiry.leg_keys |
 | 236 | 2026-10-15 13:52:16.287314+00:00 | AA-840: tenant_config.channels CHECK widened to the 8 Slate Channels (was blog/facebook/tiktok/email since 101); the Slate now reads this column |
 | 235 | 2026-10-15 11:33:04.620848+00:00 | AA-712 L4: catalog.v_tour_place reads day texts through a LATERAL per tour, so a tour_id filter no longer parses every live tour's itinerary (same columns and rows) |
-| 234 | 2026-10-15 07:57:29.569039+00:00 | AA-824: CONNECTION LIMIT tripplanner 30 / booking 15 / aa_app_user 15 (data standards C2.2, N3 interim MIG-6 exception until the X1 role bootstrap) + CREATE EXTENSION pg_stat_statements |
-| bk-010 | 2026-10-15 06:10:43.263554+00:00 | AA-823 wave 2b: hotels (HTL- code, supplier, style, stars, place, geo, check-in/out, amenities, links, active/inactive), hotel_room_types, services (SVC- code, activity/transfer/guide/entrance/meal, unit, place, CIS source ref), supplier_rates under draft-only contracts (fixed once published), version items reference a room type or service, cost lines name their rate, no customer-facing columns (Q17) |
-| 233 | 2026-10-15 05:51:59.990701+00:00 | AA-825: sargable v_tenant_monthly_usage + (tenant_id, called_at) index, retention indexes, ledger autovacuum, shared.llm_call_daily + shared.tenant_api_usage_monthly rollups |
-| 229 | 2026-10-15 05:10:15.575344+00:00 | AA-817: tenant-pool RLS template (TO aa_app_user, NULLIF app.tenant_id, WITH CHECK) on tenant_tour_versions, angle_gate_request, content_piece, publish_log, facts (platform rows read-only); drop drift policies; SELECT/INSERT/UPDATE on tenant_tour_versions to aa_app_user; no default privileges to aa_app_user. ENABLE without FORCE (owner exempt) |
-| 231 | 2026-10-15 04:29:28.914998+00:00 | AA-791: acp_shared.content_piece_label — human label per T9 piece and labeller (as_is/light/heavy/reject, defects, minutes, reason, content sha256) |
-| bk-009 | 2026-10-15 04:28:06.478539+00:00 | AA-679: trip_plans (commercial-only row per CIS catalog tour, keyed on source_system + source_id: sellable, trip style, channel, price hint, notes) |
-| bk-008 | 2026-10-15 01:27:29.530670+00:00 | AA-822 wave 2a: suppliers (SUP- code, categories, contact, address, destination_id, country_code, active/inactive, no delete) + supplier_contracts (validity, currency, payment terms, cancellation policy, draft/published/expired, maker-checker publish, published lock), countries MN |
