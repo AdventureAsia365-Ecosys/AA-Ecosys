@@ -11,7 +11,7 @@ _Last updated: S242, 18/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 | Due | Issue | Check |
 |---|---|---|
 | **X1 S1 merge → X1 S22** | AA-852 / AA-860 | **`catalog.*` view freeze** (X1 plan XD9): no `CREATE/ALTER/DROP VIEW catalog.*` in any CIS migration until the DB Migrate login is `db_migrator` (S22). Recorded in AA-CIS-App `CONTEXT.md` (#806). A catalog change that cannot wait = Nghiệp decides plan option (b) roles/ file or (c) `db_migrator` earlier. |
-| **from 19/10** | AA-816 | **Google Safe Browsing review** of lumiguides.it.com (Search Console request + report form sent 18/10). Check: `curl -s "https://transparencyreport.google.com/transparencyreport/api/v3/safebrowsing/status?site=lumiguides.it.com"` (status 3 + 5th field true = still flagged) or the Search Console email. When cleared: Resend invite to thu@adventure.asia on Platform → Staff. |
+| **from 19/10** | AA-816 | **Google Safe Browsing review** of lumiguides.it.com (Search Console request + report form sent 18/10). Check: `curl -s "https://transparencyreport.google.com/transparencyreport/api/v3/safebrowsing/status?site=lumiguides.it.com"` (status 3 + 5th field true = still flagged) or the Search Console email. Thư's invite was already sent 18/10 19:27 (she may see the warning until it clears). |
 | daily 22:00 UTC | AA-869 | Snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry` runs live (deletes manual snapshots > 30 d unless `keep-` / `aa:retain*`). An SNS mail only when it deletes, caps, finds a malformed tag or an orphan. |
 | 30/11, 31/12 | AA-868 | `.github/pip-audit-ignore.txt` (AA-CIS-App) entries expire: langchain, langgraph-sdk (30/11; pytest entry removed S242 by #819); chromadb (31/12, drop the dependency). Expiry turns Security Audit + Unit Tests red. |
 | ≥01/11 | (cost) | Infra cost audit Aug/Sep/Oct 2026 per `App` tag and service (acc2) + acc3 Bedrock + AWS Lift credits. |
@@ -21,9 +21,8 @@ _Last updated: S242, 18/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
-- **Approve and post** the S242 Jira draft (PR-14): `docs/sessions/2026-10-18-S242-jira-drafts.md`.
 - **Break-glass TOTP:** add `totp_seed` from Secrets Manager `aa-identity/dev/breakglass` to an authenticator app.
-- **Thư's invite:** after Google clears the flag (§1), click "Resend invite" (or tell the agent).
+- **PR-19 (tenant CRM, Ms. Thư 18/10):** open the Google Drive spec `partner-crm-spec.md` when AA-821 is picked up.
 - **Booking role drift:** set your own Booking role on Platform → Staff (Cognito has booking-admin, the directory has no grant).
 - **AA-816 cutover call:** API-side `LEGACY_ADMIN_LOGIN_ENABLED` also serves Preview (ADR 0006a A6).
 - AA-855 UAT videos: when Nghiệp says (after the tech work). Product questions from S238: T2 day separator; "— N Days" vs ", N Days".
@@ -84,7 +83,7 @@ _Last updated: S242, 18/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 | AA-655 | Shared design system package | parked |  | Package vs copies + drift guard. |
 | AA-671 | Marketplace redesign | parked |  | Merge with Browse Tours? |
 | AA-704 | In-app AI assistant | parked |  | Keep on the roadmap? |
-| AA-821 | Tenant CRM research | parked |  | When to schedule it. |
+| AA-821 | Tenant CRM research — now Jira **PR-19** with a spec (Drive `partner-crm-spec.md`) | later | Noted S242. | When to schedule it; open Google Drive. |
 | AA-628 | Engagement feedback loop | parked |  | Park or cancel. |
 | AA-839 | Erasure runbook + DRY RUN job for a traveller and an offboarded tenant | parked | Parked until ADR 0006 Phase 4 / before prod. | Approve creating it as a parked Low issue. |
 | AA-842 | OTel gen_ai tracing investigation | parked | Report on Notion (Program Brain) + AA-CIS-App docs/investigations/llm-otel-tracing.md. | Decided S238: keep Backlog; build option B (gateway span, ~15–20 h) only when slow/unexplained jobs justify it |
@@ -112,7 +111,7 @@ _Last updated: S242, 18/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 
 ## 6. Environment notes for the next session
 
-- ECS CIS api :684 / worker :241; Booking bk-015; TripPlanner tp-014; CIS migrations up to **247**; roles rl-001. Terraform acc2 on **AWS provider 6.69.1** (v5 state version kept for rollback).
+- ECS CIS api :685 / worker :242; Booking bk-015; TripPlanner tp-014; CIS migrations up to **247**; roles rl-001. Terraform acc2 on **AWS provider 6.69.1** (v5 state version kept for rollback).
 - **Identity:** staff sign-in = https://staff-auth.lumiguides.it.com (Cognito custom domain, AA branding in Terraform); apex lumiguides.it.com → Vercel redirect to aa-cis. Legacy password login still on. Break-glass `admin@adventure.asia` disabled, TOTP in Secrets Manager. Tool `tools/identity/workforce_bootstrap.py` (Infra).
 - **Network (X1 S11–S14):** one SG per caller; RDS admits tp-lambda, booking-api, cis-api, cis-worker, db-migrate; Redis/EFS only cis-api + cis-worker. DB Migrate / Schema Dump / probe run on a temporary `aa-cis-dev-db-migrate` revision; modes `set-password:<role>` and `run-script:db/scripts/*.py`.
 - **X1:** Booking/TripPlanner objects owned by `bk_owner` / `tp_owner` (NOLOGIN). DB Migrate reads the LIVE owner of `anchor_schema` and runs each file as that role (`owners.yaml`). Probe workflow `db-isolation-probe.yml` (schedule + after each apply).
