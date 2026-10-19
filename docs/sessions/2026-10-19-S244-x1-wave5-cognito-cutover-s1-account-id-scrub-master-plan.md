@@ -92,9 +92,9 @@ ECS exec, Cognito, Secrets Manager, Vercel, Linear do phiên chính làm.
 
 ## Việc đầu phiên sau (S245) — theo backlog sống §3
 1. Kiểm probe đêm 20/10 04:13Z (`sessions.master_break_glass_only` pass) + dump `DUMP login=db_migrator` → AA-860 Done (sau docs S23).
-2. AA-816: N-F (Nghiệp bấm Disable `e2e-claude-code-2`), A10 gỡ staff E2E tạm; AA-680 nửa staff (chứng minh user không nhóm booking-* bị từ chối, bỏ bridge).
+2. AA-816: A10 gỡ staff E2E tạm; AA-680 nửa staff (chứng minh user không nhóm booking-* bị từ chối, bỏ bridge).
 3. AA-846 apply guard; AA-865 F9 re-flag; quay lại nội dung CIS theo kế hoạch.
-4. Nghiệp duyệt các đề xuất audit (§2 backlog).
+4. Nghiệp: xoay GitHub token (bước ở mục bổ sung dưới); mở trang HTML master plan để theo dõi.
 
 ## Lưu ý kỹ thuật cho phiên sau
 - DB Migrate giờ đăng nhập `db_migrator`; `roles/`, set-password, run-script vẫn chạy master (đọc trong task). Script ECS exec vẫn `cis_app`.
@@ -103,3 +103,18 @@ ECS exec, Cognito, Secrets Manager, Vercel, Linear do phiên chính làm.
 - Thân PR / commit: chỉ ghi mã issue với "Refs"; mã trần (kể cả trong đường dẫn) làm Linear tự gắn và có thể tự Done.
 - `gh pr edit` lỗi GraphQL Projects classic → sửa thân PR bằng `gh api -X PATCH repos/…/pulls/<n> --input body.json`.
 - Plan Terraform có thể hiện `tags_all` trên object zip TP (deploy-lambdas ghi đè không kèm tag) — vô hại.
+
+## Bổ sung cuối phiên (sau root #117)
+- Nghiệp duyệt đề xuất audit → đã làm trên Linear: **AA-852 Done**; **AA-675, AA-689 Canceled**; tạo **AA-907** (pip-audit hết hạn 30/11),
+  **AA-908** (nửa khách của AA-680), **AA-909** (TP kiểm guest token ở GET), **AA-910** (Booking 1440 px + audit rows); nâng ưu tiên
+  AA-901 / AA-875 / AA-876; chuyển trạng thái theo audit. Root #117 đã merge.
+- **N-F xong:** Nghiệp bấm Disable `e2e-claude-code-2`; đã kiểm (user disabled).
+- **Jira PR-14:** gộp vào comment cùng ngày 10485 (không tạo comment mới), thêm 4 ý S244 + ảnh trang đăng nhập admin (Nghiệp duyệt).
+- **Trang HTML master plan:** `docs/backlog/tracker/` (`index.html` + `plan.json`), artifact riêng tư
+  <https://claude.ai/artifact/Q4LvqJyX5wsqRgZZQ75aoF>. Cuối mỗi phiên: sửa `plan.json` cùng PR backlog, publish lại cùng URL
+  (cách làm: `docs/backlog/tracker/README.md`).
+- **Xoay GitHub token (Nghiệp tự làm):** token bị in là OAuth `gho_` của GitHub CLI, cấp theo **tài khoản** (mọi repo, không riêng repo nào).
+  Bước: GitHub → Settings → Applications → Authorized OAuth Apps → GitHub CLI → Revoke; chạy `gh auth login`; sửa tay giá trị biến
+  token GitHub MCP trong `~/.zshrc` bằng VSCode (tên có gạch dưới); tắt hẳn Kiro + `wsl -- pkill -f kiro-server` rồi mở lại; kiểm
+  `gh auth status`. Mật khẩu master RDS (cũng bị in) giữ theo D-02/D-03: xoay trước prod.
+- Memory Notion: HOT giữ S244–S241; S231→S240 chuyển sang `memory_archive_2026H5`.

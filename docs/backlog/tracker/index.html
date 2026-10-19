@@ -1,0 +1,307 @@
+<title>AA_Ecosys Master Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a program control board — status strip, milestone rail, session lanes, then the full register. */
+:root {
+  --bg: #f5f7f6; --surface: #ffffff; --sunk: #eaefed; --line: #d3dcd8;
+  --fg: #16201d; --muted: #5a6a64; --accent: #0d6e5a; --accent-soft: #d6ece5;
+  --ok: #1f7a3d; --ok-soft: #dcefe1; --warn: #9a5b00; --warn-soft: #f7ead2;
+  --bad: #b3261e; --bad-soft: #f8dcd9; --info: #2d4f9e; --info-soft: #dfe6f6;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1513; --surface: #161f1c; --sunk: #1d2925; --line: #2c3a35;
+  --fg: #e3ebe8; --muted: #93a49e; --accent: #4fc2a3; --accent-soft: #173a31;
+  --ok: #6fcf8d; --ok-soft: #173322; --warn: #e3ac55; --warn-soft: #3a2c14;
+  --bad: #f08a80; --bad-soft: #3d1c19; --info: #94b0f0; --info-soft: #1b2643; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1513; --surface: #161f1c; --sunk: #1d2925; --line: #2c3a35;
+  --fg: #e3ebe8; --muted: #93a49e; --accent: #4fc2a3; --accent-soft: #173a31;
+  --ok: #6fcf8d; --ok-soft: #173322; --warn: #e3ac55; --warn-soft: #3a2c14;
+  --bad: #f08a80; --bad-soft: #3d1c19; --info: #94b0f0; --info-soft: #1b2643; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 40px }
+h1, h2, h3 { font-family: var(--display); font-stretch: 85%; text-wrap: balance; margin: 0; line-height: 1.15 }
+h1 { font-size: clamp(28px, 4.2vw, 42px); font-weight: 800; letter-spacing: -0.01em }
+h2 { font-size: 22px; font-weight: 700 }
+h3 { font-size: 16px; font-weight: 700 }
+a { color: var(--accent) }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.eyebrow { font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted) }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums }
+.muted { color: var(--muted) }
+section { display: grid; gap: 16px; min-width: 0 }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px }
+
+/* header */
+header { display: grid; gap: 18px }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: 14px }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: 10px; overflow: hidden }
+.stat { background: var(--surface); padding: 14px 16px; display: grid; gap: 2px }
+.stat b { font: 700 28px/1.1 var(--display); font-stretch: 80%; font-variant-numeric: tabular-nums }
+.stat span { font-size: 13px; color: var(--muted) }
+
+/* milestones */
+.rail { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px }
+.ms { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 10px; align-content: start }
+.ms-top { display: flex; justify-content: space-between; align-items: center; gap: 8px }
+.ms-id { font: 700 13px var(--mono); color: var(--accent) }
+.bar { height: 6px; background: var(--sunk); border-radius: 3px; overflow: hidden }
+.bar i { display: block; height: 100%; background: var(--accent) }
+.ms ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13.5px }
+.ms li { display: grid; grid-template-columns: 18px 1fr; gap: 6px; align-items: start }
+.ms li .tick { font-family: var(--mono); color: var(--muted) }
+.ms li.done .tick { color: var(--ok) }
+.ms li.done span:last-child { color: var(--muted) }
+.ms-foot { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted) }
+
+/* pills */
+.pill { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; font: 500 12px/1 var(--body);
+  padding: 4px 8px; border-radius: 999px; background: var(--sunk); color: var(--muted) }
+.pill.active, .pill.prog { background: var(--info-soft); color: var(--info) }
+.pill.next { background: var(--accent-soft); color: var(--accent) }
+.pill.blocked { background: var(--warn-soft); color: var(--warn) }
+.pill.Urgent, .pill.High { background: var(--bad-soft); color: var(--bad) }
+.pill.Medium { background: var(--warn-soft); color: var(--warn) }
+.size { font: 500 11px/1 var(--mono); padding: 3px 5px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted) }
+
+/* session lanes */
+.lanes-scroll { overflow-x: auto; padding-bottom: 6px }
+.lanes { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(230px, 1fr); gap: 10px; min-width: min-content }
+.lane { background: var(--sunk); border-radius: 10px; padding: 10px; display: grid; gap: 8px; align-content: start; min-width: 0 }
+.lane.now { background: var(--accent-soft) }
+.lane h3 { display: flex; justify-content: space-between; align-items: baseline; padding: 2px 4px }
+.lane h3 small { font: 400 12px var(--mono); color: var(--muted) }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; display: grid; gap: 5px; font-size: 13px; min-width: 0 }
+.card .row1 { display: flex; gap: 6px; align-items: center; flex-wrap: wrap }
+.card .row1 a { font: 600 13px var(--mono); text-decoration: none }
+.card p { margin: 0; color: var(--fg); overflow-wrap: anywhere }
+.card .needs { color: var(--warn); font-size: 12.5px }
+
+/* two-column info */
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 24px }
+.list { display: grid; gap: 0; border-top: 1px solid var(--line) }
+.list > div { display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; min-width: 0 }
+.list > div > * { min-width: 0; overflow-wrap: anywhere }
+.list .when { font: 500 12.5px/1.5 var(--mono); color: var(--muted) }
+@media (max-width: 520px) { .list > div { grid-template-columns: 1fr; gap: 2px } }
+
+/* register */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+.filters input, .filters select { font: 14px var(--body); color: var(--fg); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 7px; padding: 7px 10px; min-width: 0 }
+.filters input { flex: 1 1 220px }
+.count { font: 500 13px var(--mono); color: var(--muted) }
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface) }
+table { border-collapse: collapse; width: 100%; min-width: 980px; font-size: 13.5px }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line) }
+th { font: 600 12px var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--sunk);
+  position: sticky; top: 0; cursor: pointer; user-select: none; white-space: nowrap }
+th[aria-sort="ascending"]::after { content: " ↑" } th[aria-sort="descending"]::after { content: " ↓" }
+tbody tr:hover { background: var(--sunk) }
+td.id a { font: 600 13px var(--mono); text-decoration: none; white-space: nowrap }
+td.t { min-width: 260px }
+td.t small { display: block; color: var(--muted); margin-top: 3px }
+td.n { color: var(--warn) }
+
+/* log */
+.log { display: grid; gap: 12px }
+.entry { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding-top: 12px; border-top: 1px solid var(--line) }
+.entry .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 }
+.entry ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px }
+@media (max-width: 520px) { .entry { grid-template-columns: 1fr; gap: 4px } }
+.tag { font: 500 12px var(--mono); padding: 3px 7px; border-radius: 5px; background: var(--sunk) }
+.tag.c { background: var(--ok-soft); color: var(--ok) } .tag.x { text-decoration: line-through; color: var(--muted) }
+.tag.n { background: var(--info-soft); color: var(--info) } .tag.r { background: var(--warn-soft); color: var(--warn) }
+
+.err { padding: 16px; border: 1px solid var(--bad); color: var(--bad); border-radius: 8px; background: var(--bad-soft) }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px }
+footer code { font-family: var(--mono); font-size: 12.5px }
+@media (prefers-reduced-motion: no-preference) { .bar i { transition: width .4s ease } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">AA_Ecosys · kế hoạch tổng thể</div>
+    <h1>Master Plan — CIS, TripPlanner, Booking</h1>
+    <div class="meta" id="meta"><span>Đang tải dữ liệu…</span></div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <section aria-labelledby="h-ms">
+    <div class="sec-head"><h2 id="h-ms">Mốc</h2><span class="muted">Tiến độ = số tiêu chí Done-when đã đạt</span></div>
+    <div class="rail" id="rail"></div>
+  </section>
+
+  <section aria-labelledby="h-lanes">
+    <div class="sec-head"><h2 id="h-lanes">Theo phiên</h2><span class="muted">3–5 việc chính mỗi phiên; việc XS đi kèm không tính</span></div>
+    <div class="lanes-scroll"><div class="lanes" id="lanes"></div></div>
+  </section>
+
+  <section class="split" aria-label="Kiểm theo hạn và việc chờ">
+    <div style="display:grid;gap:12px;min-width:0">
+      <h2>Kiểm theo hạn</h2>
+      <div class="list" id="checks"></div>
+    </div>
+    <div style="display:grid;gap:12px;min-width:0">
+      <h2>Đang chờ người</h2>
+      <div class="list" id="waiting"></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-reg">
+    <div class="sec-head"><h2 id="h-reg">Toàn bộ issue mở</h2><span class="count" id="count"></span></div>
+    <div class="filters">
+      <label class="eyebrow" for="q" hidden>Tìm</label>
+      <input id="q" type="search" placeholder="Tìm theo mã, tiêu đề, việc tiếp…" aria-label="Tìm issue">
+      <select id="f-ms" aria-label="Lọc theo mốc"></select>
+      <select id="f-status" aria-label="Lọc theo trạng thái"></select>
+      <select id="f-project" aria-label="Lọc theo project"></select>
+      <select id="f-pri" aria-label="Lọc theo ưu tiên"></select>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th data-k="id">Issue</th><th data-k="title">Tiêu đề · việc tiếp</th><th data-k="status">Trạng thái</th>
+          <th data-k="priority">Ưu tiên</th><th data-k="milestone">Mốc</th><th data-k="session">Phiên</th>
+          <th data-k="size">Cỡ</th><th data-k="project">Project</th><th data-k="needs">Cần Nghiệp</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-log">
+    <h2 id="h-log">Nhật ký theo phiên</h2>
+    <div class="log" id="log"></div>
+  </section>
+
+  <footer>
+    <div id="src"></div>
+    <div>Cập nhật cuối mỗi phiên: sửa <code>docs/backlog/tracker/plan.json</code> trong repo gốc (cùng PR với <code>docs/backlog/README.md</code>), rồi publish lại artifact này với cùng URL. Cách làm: <code>docs/backlog/tracker/README.md</code>.</div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var LINEAR = "https://linear.app/aa-ecosys/issue/";
+  var JIRA = "https://adventure-asia.atlassian.net/browse/";
+  var SES_ORDER = ["S245","S246","S247","S248","S248–S249","S249","S250","S251","S252","S253","≥01/11","≤11/11","≥S254","after M2a","any","unscheduled","later","05/2027","parked"];
+  var LANES = ["S245","S246","S247","S248","S249","S250","S251","S252","S253","≥01/11"];
+  var PRI = { Urgent: 0, High: 1, Medium: 2, Low: 3, None: 4 };
+  var MS_ORDER = ["M1","M1b","M2a","M2b","M3","M4","M5","later","parked"];
+  var STATUS_VI = { active: "đang làm", next: "kế tiếp", blocked: "chờ quyết định", later: "sau" };
+  var data, sortKey = "milestone", sortDir = 1;
+
+  function $(id) { return document.getElementById(id) }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] }) }
+  function link(id) {
+    if (/^AA-\d+$/.test(id)) return '<a href="' + LINEAR + id + '" target="_blank" rel="noopener">' + id + "</a>";
+    if (/^PR-\d+$/.test(id)) return '<a href="' + JIRA + id + '" target="_blank" rel="noopener">' + id + "</a>";
+    return esc(id);
+  }
+  function sesIdx(s) { var i = SES_ORDER.indexOf(s); return i < 0 ? 99 : i }
+  function laneOf(s) { return s === "S248–S249" ? "S248" : s }
+
+  function render() {
+    var I = data.issues, prog = I.filter(function (x) { return x.status === "In Progress" }).length;
+    var needs = I.filter(function (x) { return x.needs }).length;
+    var last = data.log[0] || { closed: [] };
+    $("meta").innerHTML = "<span>Cập nhật <b class='mono'>" + esc(data.updated.split("-").reverse().join("/")) + "</b> sau phiên <b class='mono'>" + esc(data.session) + "</b></span><span>Phiên kế tiếp: <b class='mono'>" + esc(data.next_session) + "</b></span>";
+    $("stats").innerHTML = [
+      [I.length, "issue đang mở"], [prog, "In Progress"], [I.length - prog, "Backlog"],
+      [last.closed.length, "đóng trong " + esc(last.session)], [needs, "issue cần Nghiệp quyết"]
+    ].map(function (s) { return '<div class="stat"><b>' + s[0] + "</b><span>" + s[1] + "</span></div>" }).join("");
+
+    $("rail").innerHTML = data.milestones.map(function (m) {
+      var d = m.criteria.filter(function (c) { return c.done }).length, n = m.criteria.length;
+      var cnt = I.filter(function (x) { return x.milestone === m.id }).length;
+      return '<article class="ms"><div class="ms-top"><span class="ms-id">' + esc(m.id) + '</span><span class="pill ' + esc(m.status) + '">' + esc(STATUS_VI[m.status] || m.status) + "</span></div>" +
+        "<h3>" + esc(m.name) + '</h3><div class="bar" role="img" aria-label="' + d + " trên " + n + ' tiêu chí"><i style="width:' + Math.round(100 * d / n) + '%"></i></div><ul>' +
+        m.criteria.map(function (c) { return '<li class="' + (c.done ? "done" : "") + '"><span class="tick">' + (c.done ? "✓" : "○") + "</span><span>" + esc(c.text) + "</span></li>" }).join("") +
+        '</ul><div class="ms-foot"><span class="mono">' + d + "/" + n + " tiêu chí</span><span>" + esc(m.window) + " · " + cnt + " issue</span></div></article>";
+    }).join("");
+
+    $("lanes").innerHTML = LANES.map(function (L, i) {
+      var items = I.filter(function (x) { return laneOf(x.session) === L }).sort(function (a, b) { return PRI[a.priority] - PRI[b.priority] });
+      return '<div class="lane' + (L === data.next_session ? " now" : "") + '"><h3>' + esc(L) + "<small>" + items.length + " việc</small></h3>" +
+        items.map(function (x) {
+          return '<div class="card"><div class="row1">' + link(x.id) + (x.size ? '<span class="size">' + esc(x.size) + "</span>" : "") +
+            '<span class="pill">' + esc(x.milestone) + "</span>" + (x.status === "In Progress" ? '<span class="pill prog">đang làm</span>' : "") + "</div>" +
+            "<p>" + esc(x.next) + "</p>" + (x.needs ? '<div class="needs">Cần: ' + esc(x.needs) + "</div>" : "") + "</div>";
+        }).join("") + "</div>";
+    }).join("");
+
+    $("checks").innerHTML = data.checks.map(function (c) { return '<div><span class="when">' + esc(c.due) + "</span><span>" + link(c.issue) + " — " + esc(c.text) + "</span></div>" }).join("");
+    $("waiting").innerHTML = data.waiting.map(function (w) { return '<div><span class="when">' + esc(w.who) + "</span><span>" + esc(w.text) + (w.issue ? " · " + link(w.issue) : "") + "</span></div>" }).join("");
+
+    $("log").innerHTML = data.log.map(function (e) {
+      function tags(arr, cls, label) { return arr.length ? arr.map(function (t) { return '<span class="tag ' + cls + '" title="' + label + '">' + esc(t) + "</span>" }).join("") : "" }
+      return '<div class="entry"><div><h3 class="mono">' + esc(e.session) + '</h3><span class="muted mono" style="font-size:12.5px">' + esc(e.date) + "</span></div><div>" +
+        '<div class="tags">' + tags(e.closed, "c", "Done") + tags(e.canceled, "x", "Canceled") + tags(e.reopened, "r", "Mở lại") + tags(e.created, "n", "Mới") + "</div>" +
+        "<ul>" + e.notes.map(function (n) { return "<li>" + esc(n) + "</li>" }).join("") + "</ul></div></div>";
+    }).join("") + '<div class="muted" style="font-size:13px">Chú thích: <span class="tag c">Done</span> <span class="tag x">Canceled</span> <span class="tag r">Mở lại</span> <span class="tag n">Mới</span></div>';
+
+    $("src").textContent = "Nguồn: " + data.source;
+    fillFilters(); renderRows();
+  }
+
+  function opts(sel, label, values, fmt) {
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">' + label + "</option>" + values.map(function (v) { return '<option value="' + esc(v) + '">' + esc(fmt ? fmt(v) : v) + "</option>" }).join("");
+    sel.value = cur;
+  }
+  function fillFilters() {
+    var I = data.issues;
+    function uniq(k, order) { var s = []; I.forEach(function (x) { if (s.indexOf(x[k]) < 0) s.push(x[k]) }); return order ? s.sort(order) : s.sort() }
+    opts($("f-ms"), "Mọi mốc", uniq("milestone", function (a, b) { return MS_ORDER.indexOf(a) - MS_ORDER.indexOf(b) }));
+    opts($("f-status"), "Mọi trạng thái", uniq("status"));
+    opts($("f-project"), "Mọi project", uniq("project"), function (v) { return data.projects[v] || v });
+    opts($("f-pri"), "Mọi ưu tiên", uniq("priority", function (a, b) { return PRI[a] - PRI[b] }));
+  }
+  function cmp(a, b) {
+    var k = sortKey, va = a[k], vb = b[k];
+    if (k === "priority") { va = PRI[va]; vb = PRI[vb] }
+    else if (k === "session") { va = sesIdx(va); vb = sesIdx(vb) }
+    else if (k === "milestone") { va = MS_ORDER.indexOf(va) * 100 + sesIdx(a.session); vb = MS_ORDER.indexOf(vb) * 100 + sesIdx(b.session) }
+    else if (k === "id") { va = +a.id.slice(3); vb = +b.id.slice(3) }
+    return (va > vb ? 1 : va < vb ? -1 : 0) * sortDir;
+  }
+  function renderRows() {
+    var q = $("q").value.trim().toLowerCase(), ms = $("f-ms").value, st = $("f-status").value, pj = $("f-project").value, pr = $("f-pri").value;
+    var rows = data.issues.filter(function (x) {
+      return (!ms || x.milestone === ms) && (!st || x.status === st) && (!pj || x.project === pj) && (!pr || x.priority === pr) &&
+        (!q || (x.id + " " + x.title + " " + x.next + " " + x.needs).toLowerCase().indexOf(q) >= 0);
+    }).sort(cmp);
+    $("count").textContent = rows.length + " / " + data.issues.length + " issue";
+    $("rows").innerHTML = rows.length ? rows.map(function (x) {
+      return '<tr><td class="id">' + link(x.id) + '</td><td class="t">' + esc(x.title) + "<small>" + esc(x.next) + "</small></td>" +
+        '<td><span class="pill' + (x.status === "In Progress" ? " prog" : "") + '">' + esc(x.status) + '</span></td><td><span class="pill ' + esc(x.priority) + '">' + esc(x.priority) + "</span></td>" +
+        '<td class="mono">' + esc(x.milestone) + '</td><td class="mono">' + esc(x.session) + "</td><td>" + (x.size ? '<span class="size">' + esc(x.size) + "</span>" : "") + "</td>" +
+        "<td>" + esc(data.projects[x.project] || x.project) + '</td><td class="n">' + esc(x.needs) + "</td></tr>";
+    }).join("") : '<tr><td colspan="9" class="muted">Không có issue nào khớp bộ lọc. Xoá ô tìm hoặc chọn "Mọi …" để xem lại.</td></tr>';
+    document.querySelectorAll("th[data-k]").forEach(function (th) { th.setAttribute("aria-sort", th.dataset.k === sortKey ? (sortDir > 0 ? "ascending" : "descending") : "none") });
+  }
+
+  ["q", "f-ms", "f-status", "f-project", "f-pri"].forEach(function (id) { $(id).addEventListener("input", renderRows) });
+  document.querySelectorAll("th[data-k]").forEach(function (th) {
+    th.tabIndex = 0;
+    function go() { var k = th.dataset.k; sortDir = sortKey === k ? -sortDir : 1; sortKey = k; renderRows() }
+    th.addEventListener("click", go);
+    th.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go() } });
+  });
+
+  fetch("plan.json", { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json() })
+    .then(function (d) { data = d; render() })
+    .catch(function (e) { $("meta").innerHTML = '<div class="err">Không đọc được plan.json (' + esc(e.message) + "). Trang cần file plan.json được publish cùng thư mục.</div>" });
+})();
+</script>
