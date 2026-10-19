@@ -14,6 +14,8 @@ related: [GUIDE-01, GUIDE-02, GUIDE-05, ARCH-01, TPL-02, AA-897]
 
 # New engineer guide
 
+How the whole delivery system works: [engineering handbook](../engineering-handbook.md).
+
 ## Who this is for
 
 You write code for AA-Ecosys: Python (FastAPI, asyncpg), Next.js, PostgreSQL, Terraform on AWS. You do not need

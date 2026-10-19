@@ -112,9 +112,9 @@ page links to nothing more specific than "see the private ops docs".
 
 - Technical docs (architecture, how-to, runbook, reference, ADR, templates): **English**
   (`.kiro/steering/language-convention.md`).
-- **Exception: the CEO guide (`guides/ceo.md`) is bilingual**, English then Vietnamese for each section (or two columns
-  in a table). Nghiệp asked for it on 19/10/2026; the matching line in `language-convention.md` is pending his
-  approval (reconciliation N-7). Role guides for other readers are English; a short Vietnamese summary block is allowed.
+- **Exception: the CEO guide and the role guides (`guides/*.md`) are bilingual EN-VI**, the same content in both
+  languages (English then Vietnamese for each section, or two columns in a table), none missing a point (N-7,
+  `language-convention.md`). The translation work is AA-897.
 - Business-facing summaries for Ms. Thư (cost report summary, release-note business part, postmortem business
   summary) are Vietnamese, plain, without internal Linear keys.
 - Kept Vietnamese by convention: session logs and Notion memory; advisory audits for Nghiệp in `docs/audits/`.
@@ -162,3 +162,9 @@ flowchart LR
 - File names are English kebab-case by content (`rollback-cis.md`), never by issue key. Issue keys belong only in
   `docs/implementation-notes/<ISSUE>.md`.
 - Do not create empty section folders. Add a folder `README.md` when the folder holds at least two real pages.
+
+## Deprecate and archive
+
+- An outdated page gets `status: deprecated`, `superseded_by` and a warning line at the top naming its replacement.
+- After one quarter unused, it moves to `docs/archive/YYYY/` with `status: archived`.
+- ADRs are never archived: they are superseded or amended only.

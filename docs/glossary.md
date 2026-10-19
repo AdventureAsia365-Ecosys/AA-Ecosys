@@ -133,10 +133,10 @@ everywhere ([STYLE](STYLE.md#voice-and-structure)). Add a term in the same PR th
 
 | Term | Tiếng Việt | Meaning | In AA-Ecosys |
 |---|---|---|---|
-| Dev phase | Giai đoạn Dev | Today: only a Dev environment, no real users, test data only. | Agents merge after green CI (D-13; DM-11.5 text update pending v1.1). |
+| Dev phase | Giai đoạn Dev | Today: only a Dev environment, no real users, test data only. | Agents merge after green CI (D-13; DM-11.5 in v1.1). |
 | Prod | Môi trường prod | The future production environment. | Separate RDS instance on acc2 (ADR 0001, C7.2a, D-17); dated at go-live (AA-880). |
-| Data standards | Chuẩn dữ liệu | Binding DM-x (Part B) and C-x (Part C) rules for the shared RDS. | `docs/architecture/data-standards/` v1.0; v1.1 pending (N-1). |
-| U-xx / D-xx | Mục lộ trình / quyết định | S241 roadmap items / Nghiệp's recorded decisions. | `docs/audits/2026-10-17-S241-sdlc-review/unified-roadmap.md`, `docs/sessions/2026-10-17-S241-decisions.md`. |
+| Data standards | Chuẩn dữ liệu | Binding DM-x (Part B) and C-x (Part C) rules for the shared RDS. | `docs/architecture/data-standards/` v1.1 (approved S243, N-1). |
+| U-xx / D-xx | Mục lộ trình / quyết định | S241 roadmap items / Nghiệp's recorded decisions. | [Handbook §9–§10](engineering-handbook.md#9-roadmap); D-xx record in `docs/sessions/2026-10-17-S241-decisions.md`. |
 | Session (S<nnn>) | Phiên làm việc | One numbered working session with a log. | `docs/sessions/`, Notion memory. |
 | CODEOWNERS | CODEOWNERS | GitHub file that assigns required reviewers by path. | Later, needs a separate agent identity (U-25). |
 | NIST SSDF (SP 800-218) | Khung phát triển an toàn NIST | Secure software development practices in four groups. | Reading checklist, later. |

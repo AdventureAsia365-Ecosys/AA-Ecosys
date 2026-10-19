@@ -14,6 +14,8 @@ related: [TPL-01-dor, PLAT-01, APP-07, OPS-06, GUIDE-04, AA-897]
 
 # PM guide
 
+How the whole delivery system works: [engineering handbook](../engineering-handbook.md).
+
 ## Who this is for
 
 You plan and track work: you turn requests into issues, keep the queue in order and report progress to the
@@ -106,8 +108,8 @@ without Nghiệp's approval. Any new paid service needs a monthly price and appr
 |---|---|
 | What is next? | [Live backlog](../backlog/README.md) §3 |
 | What waits on Nghiệp? | Live backlog §2 |
-| Platform roadmap items (U-xx) | `docs/audits/2026-10-17-S241-sdlc-review/unified-roadmap.md`, keys in the backlog |
-| Who approves what? | Data standards [Part B §11](../architecture/data-standards/02-data-management.md#11-change-management) (merge rights per D-13, text update pending v1.1) |
+| Platform roadmap items (U-xx) | [Handbook §9](../engineering-handbook.md#9-roadmap); keys in [backlog §3a](../backlog/README.md#3a-platform-roadmap-keys-plat-01) |
+| Who approves what? | Data standards [Part B §11](../architecture/data-standards/02-data-management.md#11-change-management) (merge rights per D-13, DM-11.5 in v1.1) |
 | What does this term mean? | [Glossary](../glossary.md) |
 
 ## Related

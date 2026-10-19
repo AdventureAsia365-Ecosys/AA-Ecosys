@@ -14,6 +14,8 @@ related: [ARCH-01, ARCH-05, ARCH-08, GUIDE-09, GUIDE-07, AA-897, AA-697]
 
 # CTO guide
 
+How the whole delivery system works: [engineering handbook](../engineering-handbook.md).
+
 ## Who this is for
 
 You own the technical direction: architecture, engineering process and technical risk. You do not need the
@@ -83,13 +85,13 @@ Nghiệp decides N-9).
 | Infra-only ADRs | `infra/AA-CIS-Infra/docs/adr/` | Same template |
 | Single-app ADRs | `apps/<repo>/docs/adr/` | Cite the root ADR they implement |
 | Decisions taken in a session (D-xx, Q-xx) | `docs/sessions/2026-10-17-S241-decisions.md` and later session logs | Vietnamese; promoted to an ADR or a standard when they change a rule |
-| Decisions waiting (N-1…N-12) | `docs/audits/2026-10-19-S243-sdlc-docs-versioning/reconciliation-s241-standards.md` §5.2 and the [catalog](../README.md#decisions-pending-that-change-this-catalog) | Nghiệp decides |
+| Decisions (D-01…D-25, N-1…N-12, all decided) | [Handbook §10](../engineering-handbook.md#10-decisions-log) | A new decision gets a row there |
 
 Accepted ecosystem ADRs: 0001 target architecture, 0002 only CIS writes content, 0003/0003a durable jobs per owner,
 0004/0004a/0004b Booking stack, supply ownership, one security group per caller, 0005 pricing, 0006/0006a identity,
 0007 place pipeline in CIS, 0008 new-app integration and data platform rules. Reserved: 0009 AI platform (AA-804).
 Planned: 0012 prod blueprint (AA-880), 0013 API versioning before any `/booking/v1` prefix (AA-899, N-11), and the
-agent identity ADRs that come with a GitHub App (U-25, no issue yet).
+agent identity ADRs that come with a GitHub App (U-25, AA-901).
 
 ## Data standards
 
@@ -154,27 +156,16 @@ identity (GitHub App) and least-privilege agent role are trigger items (U-25, U-
 
 ## Risks and technical debt
 
-The S241 review (`docs/audits/2026-10-17-S241-sdlc-review/README.md`) ranked the risks P0-A (now) and P0-B (before
-the first paying tenant). Status on 2026-10-19 from the S243 reconciliation §1:
+Platform roadmap and status: [handbook §9](../engineering-handbook.md#9-roadmap). Risk ranking history: the S241
+review (`docs/audits/2026-10-17-S241-sdlc-review/README.md`, superseded).
 
-| Area | Status |
-|---|---|
-| CI trust limited to `main`, admin secret moved and rotated, GitHub security and 2FA, server-side role checks, Sentry and 5xx/latency alarms, blocking `pip-audit` | Done (U-01, U-02, U-05, U-06, U-07, U-08) |
-| Per-app security groups, ECS exec session logs, connection logs, immutable images and rollback, snapshot expiry | Done (U-18, U-21, U-22) |
-| Tenant pool fail-closed, isolation probe, DB role split (X1), secrets register, staff identity, restore drill | In progress (U-12, U-16, U-33, U-26, U-27, U-20) |
-| Redis AUTH/TLS, SSRF-safe client, API edge hardening, GuardDuty and CloudTrail, `pii:` tags, legal pack | Open (U-13, U-14, U-19, U-31, U-24, U-23) |
-| Leaked GitHub token and RDS master password | Rotate at go-live (D-02, D-03) |
-| Agent permissions narrowed | Kept `aa365-admin` (D-15); U-04 has no issue (N-12) |
-
-Debt that the docs track: Dead Table Registry (AA-850), connection budget check (U-61, no issue), contract hash
-guard (AA-826), place pipeline move to CIS (AA-712, ADR 0007).
+Debt that the docs track: Dead Table Registry (AA-850), connection budget check (U-61, folded into AA-879), contract
+hash guard (AA-826), place pipeline move to CIS (AA-712, ADR 0007).
 
 ## Roadmap
 
-- Platform roadmap U-01…U-61: `docs/audits/2026-10-17-S241-sdlc-review/unified-roadmap.md`; current status:
-  reconciliation §1; U-xx keys recorded in the [live backlog](../backlog/README.md) (PLAT-01).
-- S243 documentation and operations issues AA-887…AA-900, each mapped to its U-xx in the
-  [catalog](../README.md#catalog).
+- Platform roadmap U-01…U-61 and the S243 issues AA-887…AA-901, with status: [handbook §9](../engineering-handbook.md#9-roadmap);
+  the order of the next picks is [backlog §3a](../backlog/README.md#3a-platform-roadmap-keys-plat-01) (PLAT-01).
 - Order of work: Q10 - finish the platform block (admin, X1, Cognito, portal split), then return to CIS content.
 
 ## Recurring duties

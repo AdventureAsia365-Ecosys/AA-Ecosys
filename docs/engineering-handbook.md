@@ -3,7 +3,7 @@ id: CAT-01
 title: AA-Ecosys engineering handbook
 description: The single page on how AA-Ecosys is built, documented, versioned, released, operated and paid for - operating model, lifecycle, docs system, versioning, releases, operations, cost, the merged platform roadmap and the decision log.
 type: explanation
-status: active
+status: draft
 owner: nghiep
 audience: [owner, engineer, devops, cto, cio, pm, agent]
 applies_to: [ecosystem]
@@ -15,7 +15,7 @@ related: [CAT-00, TPL-02, GUIDE-02, GUIDE-03, ARCH-08, OPS-01, FIN-01, AA-887]
 # AA-Ecosys engineering handbook
 
 This page is the single source for **how we build, document, version, release, operate and pay for AA-Ecosys**.
-It replaces the S241 platform roadmap and the four S243 advisory files (listed in
+It replaces the S241 SDLC review and platform roadmap and the four S243 advisory files (listed in
 [§12](#12-change-history-and-superseded-documents)). It does not restate rules that have a canonical home: it
 names them and links there. Where a rule lives in a data standard, an ADR or a skill, that file wins and this page
 only points at it.
@@ -26,7 +26,26 @@ AA-Ecosys is three apps on one AWS account (acc2): **AA-CIS** (content and catal
 (D-01). The team is one engineer (Nghiệp) working with AI agents (Claude Code, Kiro) for one business owner
 (Ms. Thư).
 
-How to read it:
+> **For Ms. Thư (CEO) / Dành cho chị Thư:** We build on one shared test environment (Dev, test data only) and will add
+> production only when a go-live date is set. Every change passes automated checks and is verified on the live system
+> before it counts as done. Spending: the account budget is 250 USD/month today; any new AWS cost is quoted first and
+> approved item by item. Your decisions: business, legal and pricing. You receive a short Vietnamese summary of the
+> monthly cost, of releases and of any incident. Your guide: [CEO guide](guides/ceo.md).
+>
+> Hệ hiện chỉ có một môi trường thử (Dev, dữ liệu test); prod chỉ dựng khi có ngày go-live. Mọi thay đổi phải qua
+> kiểm tra tự động và kiểm trên hệ thật mới tính là xong. Ngân sách tài khoản hiện 250 USD/tháng; chi phí AWS mới đều
+> báo giá trước và duyệt từng mục. Chị quyết việc kinh doanh, pháp lý, giá; chị nhận tóm tắt tiếng Việt về chi phí
+> tháng, các bản phát hành và mọi sự cố. Hướng dẫn cho chị: [CEO guide](guides/ceo.md).
+
+How to read it (Tóm tắt (VI): bảng dưới chỉ phần nên đọc theo nhu cầu và theo vai trò):
+
+| Role | Read first |
+|---|---|
+| CEO | The box above, [§8.3](#83-monthly-review), [§9.3](#93-do-not-do-now), [CEO guide](guides/ceo.md) |
+| CTO / CIO | [§1](#1-purpose-scope-and-precedence), [§2](#2-operating-model), [§5](#5-versioning), [§7](#7-operations), [§9](#9-roadmap), [§10](#10-decisions-log) |
+| DevOps | [§6](#6-releasing-and-changing-features), [§7](#7-operations), [§8](#8-cost-finops), [DevOps guide](guides/devops.md) |
+| PM | [§2](#2-operating-model), [§3](#3-lifecycle-stages), [§6.4](#64-definition-of-ready-and-done), [§9](#9-roadmap) |
+| New engineer / agent | [§1](#1-purpose-scope-and-precedence)-[§4](#4-documentation-system), [onboarding](onboarding.md), [agents.md](agents.md) |
 
 | If you want | Read |
 |---|---|
@@ -45,7 +64,7 @@ How to read it:
 ## 1. Purpose, scope and precedence
 
 > **Tóm tắt (VI):** Trang này là nguồn duy nhất trả lời "hệ AA-Ecosys được xây, viết tài liệu, đánh version, phát
-> hành, vận hành và trả tiền như thế nào". Nó thay lộ trình S241 và bốn file tư vấn S243. Khi lệch nhau, thứ tự thắng:
+> hành, vận hành và trả tiền như thế nào". Nó thay bản review và lộ trình S241 cùng bốn file tư vấn S243. Khi lệch nhau, thứ tự thắng:
 > ADR đã accepted > data standards v1.1 > quyết định đã ghi của Nghiệp > handbook này > skill/steering. Sửa handbook
 > bằng một PR vào repo gốc, sửa luôn các file nó trỏ tới trong cùng PR.
 
@@ -149,7 +168,7 @@ When repo, Notion and memory disagree: repo > canonical Notion page > memory > s
 | **Claude Code, main session** | Picks work, writes or delegates code, gates, merges and deploys on Dev in the dev phase, runs Terraform and DB Migrate, updates Linear | Posts to Jira without approval; touches prod (when it exists) without Nghiệp | [Agent index](agents.md) |
 | **Kiro and subagents** | Code, tests and commits on a branch | Push, merge, apply, ECS/RDS/IAM writes, secrets ([`subagent-guardrails.sh`](../.claude/hooks/subagent-guardrails.sh)) | [Agent index](agents.md) |
 | **`kiro-reviewer`** (agent) | Reviews risky PRs: auth or permissions, migration or schema, CI/workflow/secret, data deletion ([`kiro-reviewer.md`](../.claude/agents/kiro-reviewer.md)) | Merge | — |
-| **CI** | Required checks: CIS 5, Booking 5, TripPlanner 2; docs lint in root | — | [CTO](guides/cto.md#quality-gates) |
+| **CI** | Required checks: CIS 5, Booking 5, TripPlanner 2. The root docs lint runs on every root PR but cannot be a required check (private repo on GitHub Free); the merging agent checks it is green before merging | — | [CTO](guides/cto.md#quality-gates) |
 | CTO, CIO, PM readers | Governance, security and compliance, planning views | — | [CTO](guides/cto.md), [CIO](guides/cio.md), [PM](guides/pm.md) |
 
 Merge rights by phase: [§6.5](#65-merge-rights-by-phase).
@@ -220,7 +239,7 @@ the catalog is a journal or a draft. Agents start from [`agents.md`](agents.md) 
 | Root repo (private) | Ecosystem docs, account map, security and infra docs, audits, registers by name | [Where a page may live](STYLE.md#where-a-page-may-live-sec-06) |
 | App repos (public) | `CONTEXT.md`, app ADRs, public-safe how-tos, LLM docs without tenant data | No account IDs, ARNs, SG/VPC IDs, inventories, secret lists, security reports (DM-6.10, D-14, D-25) |
 | Google Drive (AdventureAsia folder) | PDF exports and UAT videos for Ms. Thư | Never a source; each export says which commit it came from |
-| `/admin/docs` in the CIS admin (AA-898, later) | A **reader**, not an editor | Synced from a CI checkout of tracked files only, never a laptop; allowlist = catalog entries in root and Infra; excluded by default the git-ignored real-data backups folder, `docs/calib/`, `docs/audits/`, `docs/sessions/`; security and audit pages shown only to the `owner` role through a backend check (N-3); bucket tagged `App=cis`, encrypted, public access blocked, about 0.01 USD/month stated in the PR. Built after AA-885 (done) |
+| `/admin/docs` in the CIS admin (AA-898, later) | A **reader**, not an editor | Synced from a CI checkout of tracked files only, never a laptop; allowlist = catalog entries in root and Infra; always excluded: the git-ignored real-data backups folder, `docs/calib/`, `docs/sessions/`; security and audit pages (`docs/security/`, `docs/audits/`) are synced but served only to the `owner` role through a backend check (N-3); bucket tagged `App=cis`, encrypted, public access blocked, about 0.01 USD/month stated in the PR. Built after AA-885 (done) |
 | A separate docs site (Starlight on S3 + CloudFront + Cognito) | Stage 3 only | Trigger: more than two engineers, a contractor without admin access, or prod docs that must be readable while CIS is down. No MkDocs, no Backstage, no Vercel Pro for docs |
 
 Before prod, a break-glass PDF of the operations index, rollback runbooks and incident response goes to Drive,
@@ -268,6 +287,9 @@ because the admin docs page goes down with CIS (AA-880).
 9. **CIS `docs/` is tracked only after a scan.** AA-889 replaces the blanket ignore with "Markdown tracked,
    binaries ignored", after gitleaks and the resource-ID check pass on every file to add. Infra or security details
    move to the private root repo; Nghiệp reviews the list of added files once (DM-6.10, D-25).
+10. **Deprecate, then archive** ([STYLE](STYLE.md#deprecate-and-archive)). An outdated page gets `status: deprecated`,
+    `superseded_by` and a warning line at the top; after one quarter unused it moves to `docs/archive/YYYY/` with
+    `status: archived`. ADRs are never archived (superseded or amended only).
 
 ### 4.6 Generated reference
 
@@ -278,9 +300,9 @@ because the admin docs page goes down with CIS (AA-880).
 | Contracts | JSON Schema per version | Hand-written, hash pinned in tests | Live; registry table AA-826 |
 | OpenAPI per app | FastAPI | CI export + oasdiff (AA-899) | Booking partial; CIS planned |
 | Env-config register (names only) + ERD | Live task definitions, Lambda and Vercel config | Infra workflow, PR into root (AA-894) | Planned |
-| Alarm, inventory, network and IAM tables | Terraform | Infra docs workflow (AA-893) | Planned (alarm runbook links first) |
+| Alarm, inventory, network and IAM tables | Terraform | Infra docs workflow (AA-893) | Planned (step 1, the runbook link in each alarm description, is live: Infra #213) |
 | LLM route table | `shared.llm_role_config`, `shared.llm_model_catalog` | Export (AA-900) | Planned |
-| Freshness report | Front-matter | Docs lint weekly run (AA-888) | Live in the bundle |
+| Freshness report | Front-matter | Docs lint weekly run (AA-888) | Ships with the bundle PR; runs weekly once merged (scheduled workflows run only from the default branch) |
 
 Generators that need AWS run in Infra, which has the OIDC roles; the root repo has no AWS access.
 
@@ -292,6 +314,11 @@ internal links (offline), Markdown style (warning), literal resource IDs (warnin
 public ones once their job lands), and gitleaks on the added lines. A weekly run writes the freshness report: pages
 past `review_every_days` (default 90) and runbooks with an old `last_tested`. Freshness warns; it never blocks a
 merge. At session start, pick one or two stale pages to review with the session's work.
+
+Once a quarter (about 30 minutes, in the first session of the quarter, with the access review in
+[§7.6](#76-access)): go through the freshness report, check each section index for orphan pages, ask the six
+Well-Architected pillar questions ("if X breaks, which page tells us what to do?"), read the CEO guide as Ms. Thư
+would, and run the Diagnose part of one random runbook on Dev. The cadence belongs to U-38 (AA-838).
 
 ### 4.8 Language
 
@@ -321,7 +348,7 @@ The rule is [`language-convention.md`](../.kiro/steering/language-convention.md)
 | Secrets (names) | [Secrets register](security/secrets-register.md) (YAML first) | env-config register links |
 | Flags and kill switches | [Flag register](ops/feature-flags.md), [job-kind register](ops/job-kinds.md) | — |
 | Process | `skill/*/SKILL.md` | steering summaries |
-| Platform roadmap and decisions | [§9](#9-roadmap), [§10](#10-decisions-log) | backlog rows carry U-xx keys |
+| Platform roadmap and decisions | [§9](#9-roadmap), [§10](#10-decisions-log) | [backlog §3a](backlog/README.md#3a-platform-roadmap-keys-plat-01) orders the U-xx keys |
 
 ---
 
@@ -342,7 +369,7 @@ The rule is [`language-convention.md`](../.kiro/steering/language-convention.md)
   release-please ignores it. Keep it.
 - For release-please: `feat!:` or a `BREAKING CHANGE:` footer marks a breaking change. CHANGELOG shows `feat`, `fix`,
   `perf`, `revert`; it hides `docs`, `chore`, `refactor`, `test`, `ci`, `build`.
-- PR-title lint in Booking and TripPlanner: AA-890.
+- PR-title lint in every repo: AA-890.
 
 ### 5.2 App versions and releases (AA-891)
 
@@ -399,7 +426,8 @@ How release-please is set up (AA-891):
   4. Contract in a later release: drop the old (`-- migrate: destructive`, automatic snapshot before).
   Version N and N+1 of the app both run on the schema, so an app rollback is always safe.
 - DB Migrate `apply` waits for every job table to be idle (DM-11.4).
-- Later (U-50): an app checks a required schema version at start-up and fails fast.
+- Readiness already checks the schema: CIS `/health/ready` reports `required_schema` next to the applied version, and
+  Booking `/booking/health/ready` checks the required migration. Later (U-50): fail fast at start-up as well.
 
 ### 5.5 Terraform
 
@@ -410,7 +438,8 @@ How release-please is set up (AA-891):
 - Every PR states what changes, the monthly cost and the rollback, with the plan attached.
 - The GitHub environment that applies Dev is still named `prod`. Renaming it belongs to ADR 0012 (AA-880, D-16,
   C7.2d); do not rename it now.
-- Stray backup files in Infra are removed by AA-890. The full Terraform flow (plan comment, apply bound to the plan,
+- Stray `.bak` and `.tfplan` files in Infra were removed (Infra #211, AA-890). Confirm versioning on the Terraform
+  state bucket (not checked in S243). The full Terraform flow (plan comment, apply bound to the plan,
   drift check) is U-42, triggered before prod or by the next drift incident.
 - Rollback: [Terraform rollback runbook](ops/runbooks/rollback-terraform.md).
 
@@ -440,8 +469,9 @@ How release-please is set up (AA-891):
 - **Evals:** the golden set of about 100 samples built from existing data is AA-729. Evals run **by hand or by
   dispatch** (D-23), through `LLMClient` with `stage = adhoc_aa900` and a spend cap. A PR that changes a prompt,
   model or route records the eval run ID. A per-PR eval trigger is not enabled (N-4: it would be new recurring spend).
-- **AA-900 is narrowed** to the prompt register, the eval runbook and a generated route table. It does not build the
-  golden set (AA-729) or touch the ledger (AA-804).
+- **AA-900 is to be narrowed** (N-4, N-5) to the prompt register, the eval runbook and a generated route table, so it
+  does not build the golden set (AA-729) or touch the ledger (AA-804). The Linear issue still lists the
+  `prompt_version` migration and a per-PR eval workflow; its scope and Done-when are updated before work starts.
 - The AI platform ADR 0009, the ledger's `app` and `is_shadow` columns and the AI Use Register are AA-804 (U-34).
 
 ### 5.8 Docs versions
@@ -466,7 +496,7 @@ How release-please is set up (AA-891):
 | Environment | Purpose | Today | Rule |
 |---|---|---|---|
 | Local | Develop, unit tests | Yes | — |
-| PR preview (Vercel) | See a frontend change before merge | Yes; Playwright UI smoke on CIS previews | Vercel Hobby until the first paying tenant (D-18) |
+| PR preview (Vercel) | See a frontend change before merge | Yes; Playwright UI smoke on CIS previews (the last three `ui-smoke.yml` runs were skipped: fix in AA-879) | Vercel Hobby until the first paying tenant (D-18) |
 | **Dev** (acc2) | Integration, allowed to break, demo | Yes | **Test data only** (D-01: exact counts on 17/10/2026; Part C C7.1a forbids prod PII on Dev). No grace windows or time-gated watches: generate evidence now |
 | Staging | — | No | Not planned. When prod exists, Dev acts as pre-prod; PR previews cover UI review |
 | **Prod** | Real users | No | A separate RDS instance and services **on acc2** (ADR 0001, Part C C7.2a, D-17); account consolidation research AA-864 feeds ADR 0012. Layout, gate and naming in ADR 0012 when go-live is dated (D-16, AA-880, U-40). Prod targets: DM-9.6, C7.2 |
@@ -542,9 +572,9 @@ What makes the prod gate real later: a separate agent identity (GitHub App, AA-9
 
 ## 7. Operations
 
-> **Tóm tắt (VI):** Alarm phải dẫn tới runbook (AA-893). Email alarm gửi cả khi ALARM và khi OK (D-20). Sự cố theo
+> **Tóm tắt (VI):** Alarm phải dẫn tới runbook (AA-893; bước 1 đã live, Infra #213). Email alarm gửi cả khi ALARM và khi OK (D-20). Sự cố theo
 > `incident-response.md`, mỗi sự cố một bản ghi, postmortem không đổ lỗi, bài học vào `lessons.md`. Backup: PITR 7 ngày,
-> đã diễn tập ~22 phút; diễn tập lại khi quy trình đổi và một lần trước prod, theo quý từ prod (DM-9.3). Secret: register
+> đã diễn tập ~22 phút; diễn tập lại khi quy trình đổi (S243 K-04) và một lần trước prod, theo quý từ prod (DM-9.3). Secret: register
 > AA-878; xoay khi nghi lộ, khi lên prod, sau khi dùng break-glass, không xoay 90 ngày trên Dev. Access review mỗi quý
 > (DM-8.10), bằng chứng trong `docs/audits/`. Log bảo mật giữ 365 ngày, log app 30 ngày (D-09).
 
@@ -555,12 +585,12 @@ Start page: [operations index](ops/README.md) (OPS-01). Day-to-day guide: [DevOp
 | Signal | Today | Next |
 |---|---|---|
 | Logs | CloudWatch; **security and audit logs 365 days, application logs 30 days** (D-09, AA-872; the DM-7 retention table) | JSON logs with request id, tenant id and job id only, no PII (AA-871, U-30) |
-| Metrics and alarms | CloudWatch alarms for CIS 5xx and p95 latency, ECS, Booking, TripPlanner Lambdas, RDS, jobs, SES, Cognito; e-mail on **ALARM and OK** (D-20) | A runbook link in every alarm description and a generated alarm catalog (AA-893); a second channel and SLOs at prod (AA-880, U-49) |
+| Metrics and alarms | CloudWatch alarms for CIS 5xx and p95 latency, ECS, Booking, TripPlanner Lambdas, RDS, jobs, SES, Cognito; e-mail on **ALARM and OK** (D-20); a runbook link in the alarm description (AA-893 step 1, Infra #213: 57 of 65 alarms in us-west-1 on 19/10) | Links on the remaining alarms and a generated alarm catalog (AA-893 step 2); a second channel and SLOs at prod (AA-880, U-49) |
 | Errors | Sentry for the CIS backend and frontend (AA-870), PII not sent | Sentry for Booking and TripPlanner (AA-871) |
 | Uptime | One free Sentry monitor on CIS `/health`; Booking relies on AWS alarms (AA-870); daily ops-probe Lambda | — |
 | Traces | None | Only when a job is slow and unexplained (D-21, AA-842) |
 | LLM | `shared.llm_call_log` (cost, account, fallback, job id) | `prompt_version` with AA-804 |
-| What runs where | `/health` SHA per service | Admin Apps page (AA-884); ops overview for Ms. Thư (AA-858) |
+| What runs where | `/health` SHA per service; admin Apps page (AA-884, CIS #838) and ops overview for Ms. Thư (AA-858, CIS #840), both deployed in CIS `dba9b72` | Done for both after the `aa-ship` live verify |
 
 Alarm on symptoms users feel (5xx, health failing, queue stuck, budget passed), not on causes. Remember RED for
 services (rate, errors, duration) and USE for resources (utilization, saturation, errors). SLOs mean something only
@@ -568,11 +598,12 @@ with real traffic (prod).
 
 ### 7.2 Alarms to runbooks
 
-- Every alarm points to a runbook or playbook (AA-893, step 1: the link in each alarm description; step 2: generated
-  tables). Until then, use the symptom table in the [operations index](ops/README.md#something-is-wrong).
+- Every alarm points to a runbook or playbook (AA-893). Step 1, the link in each alarm description, is live (Infra
+  #213, 57 of 65 alarms); step 2 is the generated tables. For an alarm without a link, use the symptom table in the
+  [operations index](ops/README.md#something-is-wrong).
 - Playbooks: [5xx spike](ops/playbooks/5xx-spike.md), [queue stuck](ops/playbooks/queue-stuck.md),
-  [LLM cost spike](ops/playbooks/llm-cost-spike.md), [Cognito sign-in](ops/playbooks/cognito-login.md),
-  [SES bounce](ops/runbooks/ses-bounce.md).
+  [LLM cost spike](ops/playbooks/llm-cost-spike.md), [Cognito sign-in](ops/playbooks/cognito-login.md). The SES
+  bounce case is a runbook: [SES bounce](ops/runbooks/ses-bounce.md).
 - Kill switches per job kind: [job-kind register](ops/job-kinds.md).
 - Runbooks follow the [runbook template](templates/runbook.md) and the "tested" rule in [STYLE](STYLE.md#runbooks-and-tested):
   `active` only after a real run (Dev, drill, incident, or DRY RUN for destructive steps); otherwise `draft` with
@@ -597,8 +628,8 @@ with real traffic (prod).
   manual snapshots expire after 30 days unless kept on purpose (AA-869).
 - **Drill result:** a full PITR drill passed on 17/10/2026, about 22 minutes against the < 1 h Dev target
   (D-10; evidence [`audits/2026-10-17-S241-restore-drill/`](audits/2026-10-17-S241-restore-drill/)).
-- **Cadence (DM-9.3):** on Dev, drill again when the restore or rollback procedure changes and once before prod;
-  quarterly from prod. A stale `last_tested` on Dev is a warning, not an order (N-2 kept the default).
+- **Cadence (DM-9.3 + S243 K-04):** on Dev, drill again when the restore or rollback procedure changes (K-04) and once
+  before prod; quarterly from prod (DM-9.3). A stale `last_tested` on Dev is a warning, not an order (N-2 kept the default).
 - Runbooks: [PITR restore](ops/runbooks/restore-rds-pitr.md), [single-schema restore](ops/runbooks/restore-schema.md)
   (draft); [drill index](ops/drills/README.md). The DSN behind a private CNAME, the single-schema rehearsal and the
   removal of the old laptop dumps are AA-829 (U-20); its Done-when is unchanged.
@@ -632,7 +663,7 @@ with real traffic (prod).
   (ask/deny, the e2e secret allowlist) is folded into AA-878 (N-12). A least-privilege agent role and no static keys
   on the laptop are trigger items (U-53), not current work.
 - **Quarterly access review** (DM-8.10): roles, grants, the IAM roles that read each DB secret, Cognito workforce
-  users; run in the first session of each quarter; record in `docs/audits/<date>-S<nnn>-access-review/`; index in
+  users, GitHub collaborators and apps, the agents' committed permissions, and MCP connectors; run in the first session of each quarter; record in `docs/audits/<date>-S<nnn>-access-review/`; index in
   [security docs](security/README.md#access-reviews-sec-05). The first one is in AA-878; the cadence is AA-838 (U-38).
 - Staff sign-in: Cognito workforce pool with e-mail codes (ADR 0006, 0006a); only owners change other people's
   rights (Q2). The legacy password login ends at the AA-816 cutover ([legacy login flag](ops/runbooks/legacy-login-flag.md)).
@@ -659,7 +690,7 @@ a rotation ([§7.5](#75-secrets)).
 
 > **Tóm tắt (VI):** Luật chi tiêu nằm ở DM-10 (data standards), không chép lại ở đây. Mọi tài nguyên AWS có tag `App`;
 > tag `Environment` đã có sẵn, chỉ cần nhờ tài khoản trả tiền kích hoạt (0 USD). Chi phí theo app xem ở trang admin
-> (AA-884, AA-858). Cost Anomaly Detection miễn phí (AA-896). Báo cáo chi phí tháng gộp với review dung lượng C8, lưu
+> (AA-884, AA-858). Cost Anomaly Detection miễn phí, đã live (Infra #213). Báo cáo chi phí tháng gộp với review dung lượng C8, lưu
 > trong `docs/audits/`, bản đầu cho tháng 10 làm từ 01/11. Mọi chi tiêu mới phải báo giá trước và Nghiệp duyệt từng mục.
 
 ### 8.1 Rules, by reference
@@ -678,9 +709,10 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | `App` tag | Active as a cost allocation tag since 15/10/2026 |
 | `Environment` tag | Already on every Terraform resource (`default_tags`). acc2 is a member account, so Nghiệp asks the payer to activate it; 0 USD. No new `Env` key (DM-10.1) |
 | Account budget 250 USD/month + per-app budgets | Live (Infra observability) |
-| Cost Anomaly Detection | Free; Terraform in AA-896 (in progress), alerts to the existing SNS e-mail. Per-tag monitors exist only in the management account; per-app budgets cover that |
+| Cost Anomaly Detection | Free; live (Infra #213, `cost_anomaly.tf`): immediate alerts to the existing SNS e-mail for anomalies of at least 5 USD. AA-896 stays open for the rest (FinOps page, monthly report tool). Per-tag monitors exist only in the management account; per-app budgets cover that |
 | LLM and external API caps | `shared.spend_budget` (DM-10.5) |
-| Cost per app | Admin cost page and API (AA-884, in progress); the overview for Ms. Thư reads the same module (AA-858, in progress) |
+| Cost per app | Admin cost page and API (AA-884, CIS #838) and the overview for Ms. Thư on the same module (AA-858, CIS #840): deployed in CIS `dba9b72`; Done after the `aa-ship` live verify |
+| Budgets on acc1/acc3 (LLM satellites) | Not verified ([FinOps](ops/finops.md)); check in the first monthly review |
 
 ### 8.3 Monthly review
 
@@ -706,6 +738,8 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | `/admin/docs` bucket (AA-898) | ~0.01 | Stated in the PR |
 | Before the first paying tenant (Redis AUTH/TLS, WAF and throttles, ECR, logs) | ~2-10 | Each item quoted and approved when its turn comes (D-19) |
 | 90-day security (GuardDuty limited, CloudTrail hardening, log retention) | ~4-16 | AA-873 |
+| Cognito alarms + break-glass secret | ~2.4 | Approved S241 ("Cognito $") |
+| Cognito WAF on the customer pool | ~7 | When customer sign-up opens (S241); Apple Developer 99 USD/year with the AA-680 customer login |
 | Vercel Pro | ~20 + usage | Only at the first paying tenant (D-18) |
 | Prod (U-40) | ~150-300 (rough) | One reconciled number in ADR 0012; the 250 USD account budget includes Dev today |
 
@@ -715,21 +749,22 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 
 > **Tóm tắt (VI):** Một bảng duy nhất gộp lộ trình S241 (U-01…U-61) với các issue S243 (AA-887…AA-901) và các mục còn lại
 > của lộ trình S243 (Now / Before prod / Later). Mỗi dòng: việc, trạng thái, issue, chi phí, người làm. Việc 0 USD đứng
-> trước. Cuối mục là danh sách "không làm bây giờ". Thứ tự làm thật vẫn theo backlog sống; dòng backlog ghi mã U-xx và trỏ
-> về đây.
+> trước. Cuối mục là danh sách "không làm bây giờ". Thứ tự làm thật vẫn theo backlog sống; mục §3a của backlog xếp thứ tự các mã U-xx
+> và trỏ về đây.
 
 ### 9.1 How to use the roadmap
 
-- This table is the **only** platform roadmap. The [live backlog](backlog/README.md) orders the next sessions and
-  records the U-xx key of each row it picks (PLAT-01); it does not copy the content.
+- This table is the **only** platform roadmap. The [live backlog](backlog/README.md) orders the next sessions; its
+  [§3a](backlog/README.md#3a-platform-roadmap-keys-plat-01) (PLAT-01) lists the U-xx keys in the order they are
+  picked and does not copy the content.
 - Product work (T-series, portal, Booking waves, place pipeline) is not here.
 - Horizon: **Now** (next sessions), **Tenant** (before the first paying tenant), **Prod** (before the first prod,
   when go-live is dated), **Trigger** (when its trigger fires), **Later** (team or traffic grows).
 - Status on 2026-10-19: Done, In progress, Open, Trigger, Not doing (by decision).
 - Cost: extra USD per month; 0 first inside each horizon. Owner: who does the work; "Nghiệp" marks a manual step or
   a decision.
-- An issue column marked "S241 batch" means the Linear issue was created in the S241 batch (backlog §5a) and is not
-  yet a row of the live backlog.
+- Every issue named here exists in Linear; an issue that is not yet a row of the live backlog is listed under
+  "later" in backlog §3a.
 
 ### 9.2 The roadmap table
 
@@ -738,7 +773,7 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | U-01 | OIDC deploy/apply/migrate trust limited to `main` | Now | Done | AA-866 | 0 | Agent |
 | U-02 | Admin secret scoped to the `dev` environment and rotated in 5 places | Now | Done | S241 chore | 0 | Agent + Nghiệp |
 | U-05 | Free GitHub security features, org 2FA, force-push and deletion block | Now | Done (Dependabot for Booking and TripPlanner in AA-895) | AA-867 | 0 | Agent |
-| U-06 | Server-side role checks on llm-config, budgets, job-runner writes | Now | Done (constant-time compare to re-check) | AA-882 | 0 | Agent |
+| U-06 | Server-side role checks on llm-config, budgets, job-runner writes | Now | Done (constant-time compare in `api/core/secret_compare.py`, CIS #791) | AA-882 | 0 | Agent |
 | U-07 | CIS Sentry, API 5xx and p95 alarms, uptime monitor | Now | Done | AA-870 | 0 | Agent |
 | U-08 | Blocking pip-audit, deploy concurrency, fail-closed job guard | Now | Done | AA-868 | 0 | Agent |
 | U-18 | One security group per caller, ADR 0004b | Now | Done (X1 S10-S14) | AA-852 | 0 | Agent |
@@ -746,15 +781,15 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | U-22 | ECS exec session logs, `log_connections` | Now | Done (Infra #161) | — | ~1-5 | Agent |
 | — | Log retention 365 days security / 30 days app, OK e-mails | Now | Done | AA-872 | <1-2 | Agent |
 | — | Console sections + Staff page; tenant portal split | Now | Done | AA-883, AA-885 | 0 | Agent |
-| — | Data standards v1.1 (DM-11.5, C2.3g/DM-8.4, DM-7 rows, C4.2b, DM-11.2, DM-1.2) | Now | Done (S243, N-1) | AA-889 | 0 | Agent + Nghiệp |
+| — | Data standards v1.1 (DM-11.5, C2.3g/DM-8.4, DM-7 rows, C4.2b, DM-11.2, DM-1.2) | Now | Approved (N-1); merges with the bundle PR | AA-889 | 0 | Agent + Nghiệp |
 | AA-887 | Docs standard: catalog, templates, schema, style, glossary, DoR, this handbook (U-48 docs part) | Now | In bundle PR (Linear: Backlog) | AA-887 | 0 | Agent |
 | AA-888 | Docs lint + ADR indexes in every repo, freshness report | Now | In progress | AA-888 | 0 | Agent |
 | U-09 | Stale docs and agent-instruction drift; CIS `docs/` tracked after scan | Now | In progress | AA-889 | 0 | Agent |
-| U-11 | Squash-only, delete branch on merge, branch cleanup, PR template and title lint, Infra `.bak` cleanup, remove `/v1/webhooks` from the Playground (U-48 PR template part) | Now | In progress | AA-890 | 0 | Agent + Nghiệp (settings) |
+| U-11 | Squash-only, delete branch on merge, branch cleanup, PR template and title lint, Infra `.bak` cleanup, remove `/v1/webhooks` from the Playground (U-48 PR template part) | Now | In progress (Infra PR template and `.bak` cleanup done, Infra #211) | AA-890 | 0 | Agent + Nghiệp (settings) |
 | AA-892 | Operations index, rollback runbooks, playbooks, flag and job registers, break-glass, isolation probe | Now | Drafts in bundle PR (Linear: Backlog); runbooks to be run on Dev | AA-892 | 0 | Agent |
-| AA-893 | Alarm runbook links (step 1), then generated inventory, network and IAM tables (U-49 runbook part) | Now | In progress | AA-893 | 0 | Agent |
+| AA-893 | Alarm runbook links (step 1), then generated inventory, network and IAM tables (U-49 runbook part); core Terraform outputs (VPC, RDS, ECS, ALB, SG) first, so generated tables have sources | Now | In progress (step 1 live, Infra #213: 57 of 65 alarms) | AA-893 | 0 | Agent |
 | AA-895 | Security baseline, vulnerability policy, Dependabot for Booking and TripPlanner | Now | In progress | AA-895 | 0 | Agent |
-| AA-896 | FinOps page, Cost Anomaly Detection, monthly report tool | Now | In progress | AA-896 | 0 | Agent |
+| AA-896 | FinOps page, Cost Anomaly Detection, monthly report tool | Now | In progress (anomaly detection live, Infra #213) | AA-896 | 0 | Agent |
 | AA-897 | Onboarding, agent index, role guides (bilingual per N-7), add-a-new-app playbook | Now | Drafts in bundle PR (Linear: Backlog) | AA-897 | 0 | Agent |
 | U-26 | Secrets register, orphan cleanup, read-only E2E account, first access review | Now | In progress | AA-878 | 0 | Agent + Nghiệp |
 | U-04 | Agent permission narrowing (committed ask/deny, e2e secret allowlist), folded per N-12 | Now | Open | AA-878 | 0 | Agent + Nghiệp |
@@ -762,16 +797,17 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | U-25 | GitHub App identity for agents and release-please; ADR 0010/0011; rulesets and CODEOWNERS for prod | Now (App) / Prod (gates) | Open | AA-901 | 0 | Agent + Nghiệp |
 | U-44 | OpenAPI export + oasdiff for CIS and Booking (pulled early); ADR 0013 before `/booking/v1` | Now | Open | AA-899 | 0 | Agent |
 | AA-894 | Generated env-config register (names only) + ERD | Now | Open | AA-894 | 0 | Agent |
-| — | Cost per app page and ops overview for Ms. Thư | Now | In progress | AA-884, AA-858 | ~0.30 max | Agent |
+| — | Cost per app page and ops overview for Ms. Thư | Now | Deployed (CIS #838, #840; live SHA `dba9b72`); Done after the `aa-ship` verify | AA-884, AA-858 | ~0.30 max | Agent |
 | — | `Environment` cost allocation tag activated by the payer | Now | Open | — | 0 | Nghiệp |
+| — | Nghiệp edits `~/.claude/CLAUDE.md` by hand: release-PR exception to `Refs`, merge rule by phase (N-6); drop `handoff.md`, stop-ECS reminders, task-def/CI numbers in repo CLAUDE.md, `ADR-2026-0xx` numbering (S243 N4) | Now | Open | — | 0 | Nghiệp |
 | U-10 | Read-only checks: (a) real PII on Dev (no, D-01) and (b) commercial data in root (root made private, D-25) done; (c) management-account trust and written policy from the payer open | Now | (a)(b) Done, (c) Open | — | 0 | Nghiệp |
 | — | First monthly cost and capacity review (October) | Now (≥ 01/11) | Open | AA-896, AA-838 | 0 | Agent + Nghiệp |
 | U-12 | Tenant pool fail-closed (global since D-12) and waves 3-4 | Tenant | In progress | AA-859 | 0 | Agent |
-| U-16 | Isolation probe on schedule and after apply; per-PR run when RLS changes | Tenant | In progress | AA-852 | 0 | Agent |
-| U-20 | Restore: PITR drill done; private CNAME DSN, single-schema rehearsal, laptop dumps | Tenant | In progress | AA-829 | <1 per drill | Agent + Nghiệp |
+| U-16 | Isolation probe on schedule and after apply; per-PR run when RLS changes | Tenant | Scheduled + after-apply probe live (Infra `db-isolation-probe.yml`, X1 S2); per-PR run when RLS changes open | AA-852 (probe); per-PR part with AA-848 | 0 | Agent |
+| U-20 | Restore: PITR drill done; private CNAME DSN, single-schema rehearsal, laptop dumps | Tenant | Open (Linear: Backlog); PITR drill done S241 (D-10) | AA-829 | <1 per drill | Agent + Nghiệp |
 | U-14 | SSRF-safe outbound HTTP client | Tenant | Open | AA-875 | 0 | Agent |
-| U-15 | X2 catalogue CI guard (RLS, PUBLIC, cross-owner FKs, grants) | Tenant | Open | S241 batch | 0 | Agent |
-| U-24 | `pii:` tags on Booking and TripPlanner columns | Tenant | Open | S241 batch | 0 | Agent |
+| U-15 | X2 catalogue CI guard (RLS, PUBLIC, cross-owner FKs, grants) | Tenant | Open | AA-848 | 0 | Agent |
+| U-24 | `pii:` tags on Booking and TripPlanner columns | Tenant | Open | AA-877 | 0 | Agent |
 | U-60 | TripPlanner job table + outbox PII redaction | Tenant | Open | AA-861 | ~0 | Agent |
 | U-13 | Redis AUTH/TLS/at-rest + flag read-failure alarm | Tenant | Open (quote first) | AA-874 | ~0 | Agent + Nghiệp |
 | U-19 | API edge: login rate limit, WAF and throttles, docs gate, CORS, headers | Tenant | Open | AA-876 | ~0-2 | Agent + Nghiệp |
@@ -779,24 +815,26 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | U-27 | Staff RBAC + Cognito Phase 1 cutover | Tenant | In progress | AA-816, AA-703 | 0 | Agent + Nghiệp |
 | U-33 | X1 role split chain (owner roles, `db_migrator`, CIS runtime role) | Tenant | In progress (S1-S16 live) | AA-852, AA-860 | 0 | Agent |
 | AA-898 | `/admin/docs` reader page (allowlist, owner-only security pages) | Tenant | Open | AA-898 | ~0.01 | Agent |
-| U-28 | CI gate parity, TripPlanner Lambda deploy after CI, TripPlanner migration replay | Tenant | Open | AA-879 | 0 | Agent |
+| U-28 | CI gate parity, TripPlanner Lambda deploy after CI, TripPlanner migration replay | Tenant | Open | AA-879; migration replay AA-849 | 0 | Agent |
 | U-61 | TripPlanner `idle_session_timeout` + CI connection-budget check, folded per N-12 | Tenant | Open | AA-879 | 0 | Agent |
 | U-29 | Golden set of about 100 samples, eval by hand or dispatch (D-23) | Tenant | Open | AA-729 | ≤ 1 per run | Agent |
-| AA-900 | Prompt register, eval runbook, generated route table (narrowed) | Tenant | Open | AA-900 | 0 | Agent |
+| AA-900 | Prompt register, eval runbook, generated route table (to be narrowed per N-4, N-5; Linear scope not yet updated) | Tenant | Open | AA-900 | 0 | Agent |
 | U-30 | JSON logs with request ids; Sentry for Booking and TripPlanner | Tenant | Open | AA-871 | 0 | Agent |
 | U-31 | GuardDuty (limited), Access Analyzer, S3 BPA, CloudTrail hardening | Tenant | Open (quote first) | AA-873 | ~4-16 | Agent + Nghiệp |
 | U-34 | ADR 0009 AI platform, ledger v2 with `prompt_version`, AI Use Register | Tenant | Open | AA-804 | 0 | Agent + Nghiệp |
 | U-35 | Contract hash guard + new-app playbook tooling | Tenant | Open | AA-826 | 0 | Agent |
 | U-36 | TripPlanner off CIS tables | Tenant | Open | AA-712 | 0 | Agent |
-| U-37 | Dead Table Registry + legacy job table archive | Tenant | Open | S241 batch | 0 | Agent |
-| U-38 | Recurring reviews in the session ritual (capacity monthly, access quarterly) | Tenant | Open | AA-838 | 0 | Agent + Nghiệp |
-| U-39 | `shared.countries` and catalog country view | Tenant | Open | S241 batch | 0 | Agent |
+| U-37 | Dead Table Registry + legacy job table archive | Tenant | Open | AA-850 | 0 | Agent |
+| U-38 | Recurring reviews in the session ritual (capacity monthly, access quarterly); weekly `pg_stat_statements` check (C4.3); quarterly agent-permission review | Tenant | Open | AA-838 | 0 | Agent + Nghiệp |
+| U-39 | `shared.countries` and catalog country view | Tenant | Open | AA-851 | 0 | Agent |
 | U-32 | Erasure script and DSAR export | Tenant | Not doing now (D-11): manual runbook on request | AA-839 | 0 | Agent |
+| — | Manual data-subject request runbook (delete/export on request, DRY RUN), catalog OPS-09 | Tenant | Open | AA-839 (runbook part, does not wait for Phase 4) | 0 | Agent |
+| — | Not numbered in S241 (Nghiệp may fold in): A14 body-size limits + `extra='forbid'` → U-19; E13 free S3 gateway endpoint on Dev → U-40 for the prod part | Tenant | Open (undecided) | AA-876 | 0 | Agent + Nghiệp |
 | U-40 | Prod blueprint, ADR 0012 (account, layout, gate, env rename), SLOs, second alert channel, prod budget, break-glass PDF, readiness checklist | Prod | Trigger: go-live date | AA-880 | ~150-300 | Agent + Nghiệp |
 | U-03 | Rotate the exposed GitHub token | Prod | Not doing now (D-02): at go-live | AA-880 | 0 | Nghiệp |
 | U-17 | Rotate the RDS master password | Prod | Not doing now (D-03): at go-live | AA-880 | 0 | Nghiệp |
 | U-41 | Managed master secret | Prod | Trigger: X1 done (D-04) | — | ~0.4 | Agent + Nghiệp |
-| U-42 | Terraform flow: plan comment, plan-bound apply, drift check | Prod | Trigger: before prod or next drift | — | 0 | Agent |
+| U-42 | Terraform flow: plan comment, plan-bound apply, drift check | Prod | Trigger: before prod or next drift | AA-846 (clean plan, version pin, apply guard); `.bak` cleanup done in AA-890 | 0 | Agent |
 | U-43 | Build once by digest, SBOM on release, provenance, pinned actions | Prod | Trigger: first prod | — | 0 | Agent |
 | U-47 | GitHub Deployments, DORA numbers (rest of U-47) | Prod | Trigger: first prod | AA-891 | 0 | Agent |
 | U-49 | SLOs and burn-rate alarms | Prod | Trigger: first prod | AA-880 | ~0-3 | Agent |
@@ -811,7 +849,7 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | U-52 | Third-party pentest | Trigger | Trigger: first enterprise deal | — | one-off quote | Ms. Thư + Nghiệp |
 | U-53 | No static keys on the laptop, agent role, devcontainer | Trigger | Trigger: D-15 reopened | — | 0 | Nghiệp |
 | U-55 | AI-agent commit trailer, tracing option B | Trigger | Trigger: slow unexplained jobs (D-21) | AA-842 | 0 | Agent |
-| U-56 | PostgreSQL 15 major-upgrade rehearsal | Trigger | Trigger: 05/2027 | S241 batch | <1 | Agent |
+| U-56 | PostgreSQL 15 major-upgrade rehearsal | Trigger | Trigger: 05/2027 | AA-881 | <1 | Agent |
 | U-57 | Rest of L3 (traveller data, retention rows, erasure) | Trigger | Trigger: ADR 0006 Phase 4 / before prod | AA-839 | 0 | Agent |
 | U-58 | Tenant CRM through the new-app playbook | Trigger | Trigger: AA-821 approved | AA-821 | — | Agent + Ms. Thư |
 | U-59 | Reserved concurrency for TripPlanner Lambdas | Trigger | Trigger: Lambda quota 1000 | — | 0 | Agent |
@@ -819,7 +857,7 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | — | UAT videos for all apps | Later | After the technical work, on Nghiệp's signal | AA-855 | 0 | Agent + Ms. Thư |
 | — | Monthly DORA numbers from the GitHub API; unit-cost dashboard | Later | Open | — | 0 | Agent |
 | — | Yearly Well-Architected self-review per app (with the Generative AI lens); NIST SSDF, NIST AI RMF, OWASP LLM Top 10 as reading checklists | Later | Open | — | 0 | Nghiệp |
-| — | Docs site (stage 3), Vale style lint (warn), `terraform-docs`, `AGENTS.md` for other agents | Later | Trigger-based ([§4.3](#43-where-docs-live)) | — | 0-1 | Agent |
+| — | Docs site (stage 3), Vale style lint (warn), `terraform-docs`, `AGENTS.md` for other agents; public partner (B2B) docs as a separate site; orphan-page check; Structurizr C4 | Later | Trigger-based ([§4.3](#43-where-docs-live)) | — | 0-1 | Agent |
 | — | OpenTelemetry tracing | Later | Trigger: D-21 | AA-842 | 0 | Agent |
 
 Mapping of the S243 guide's own list (so nothing is built twice): N1 CIS `/health` SHA → shipped with AA-884;
@@ -859,6 +897,20 @@ Each item is deliberate, with its reason. Reopening one needs a new decision in 
 | Kubernetes, a service mesh, a self-hosted developer portal | Out of scale |
 | SOC 2 / ISO 27001 / ISO 42001 audits, SLSA L3, full OWASP SAMM, Scrum ceremonies, a CAB, a paging rota, a formal error-budget policy on Dev | Prepare evidence only (PR records, registers, postmortems) |
 | A hard lockout by username on login rate limits | Lets an attacker lock staff out |
+| Paid DORA/flag platforms (e.g. LaunchDarkly), full arc42, docs analytics or feedback widgets, Vale as a blocking check, multi-person CODEOWNERS, an internal API playground | Overkill for one engineer + agents (S243 guide §7, pro-practices §7.2) |
+
+### 9.4 Rule proposals not in data standards v1.1
+
+S241 roadmap §5 proposed further rules that v1.1 (N-1) did not take. They are not rules. Each is raised again only
+with the roadmap item that needs it, in that item's PR: SEC-13 Redis AUTH/TLS (U-13), TST-8 two-tenant and
+admin-route tests (U-12, U-27), TST-4 probe in CI (U-16), CON-9 HTTP contract (U-44, ADR 0013), CON-10
+Idempotency-Key (U-46), DM-6.4 Sentry as an application log (U-30), DM-6.11 DSAR export (U-32, D-11), DM-6.12
+sub-processor list from `pii:` tags (U-23, U-24), DM-8.8 exec logging (U-22, done; text only), DM-8.11 secrets
+register (U-26), DM-8.12 per-app SGs (U-18, done; text only), DM-10.7 an "approved" row per new spend (D-19),
+DM-11.6 `main`-only OIDC (U-01, done; text only), C2.3i stage throttles (U-19), C6.3c fail-closed deploy guard (U-08,
+done; text only), C4.1/C4.1a alarm rows (U-07), C7.1 table rows (U-09), C7.2c/d/g/h and C1.3 (U-40, ADR 0012).
+Dropped by decision: DM-8.7 profile change (D-15, N-8), DM-8.9 periodic rotation (D-03), DM-9.3 quarterly Dev
+drills (N-2).
 
 ---
 
@@ -893,7 +945,7 @@ S243 session record for N-x. Where a decision changed a standard, the standard i
 | D-16 | Prod layout and gate chosen with the go-live date | ADR 0012 (AA-880) |
 | D-17 | Prod on acc2 by default | ADR 0001; C7.2a; AA-880 |
 | D-18 | Vercel Hobby until the first paying tenant, then Pro | [§6.1](#61-environments); note for Ms. Thư |
-| D-19 | New AWS spend approved item by item, quoted first | DM-10.7; PR template cost section; [FinOps](ops/finops.md) |
+| D-19 | New AWS spend approved item by item, quoted first | PR template cost section; [FinOps](ops/finops.md); DM-10.7 holds only the approval rule ("spend changes need Nghiệp's approval") |
 | D-20 | Alarm e-mails on ALARM and OK | Infra alarms (`ok_actions`); AA-872 |
 | D-21 | Tracing only when a job is slow and unexplained | AA-842 |
 | D-22 | Backlog updated by hand at session end | `session-workflow.md`; [live backlog](backlog/README.md) |
@@ -907,6 +959,10 @@ content roles through Cognito groups; Q6 no staff-creation UI before Cognito; Q7
 split the tenant portal now (AA-885, done); Q9 ops overview by the agent, then shown to Ms. Thư (AA-858); Q10 finish
 the platform block (admin, X1, Cognito, portal split) before returning to CIS content. Dev phase: the agent codes,
 pushes, merges, verifies and reports, security and infrastructure PRs included.
+
+S241 also approved the Cognito Phase 0 cost (14 alarms, 2 metrics, break-glass secret, ~2.4 USD/month; WAF ~7 USD
+when customer sign-up opens) and the customer login methods (AA-680); D-18 adds: revisit Amplify only if Vercel
+passes ~50 USD/month.
 
 ### 10.2 S243 (19/10/2026)
 
@@ -961,7 +1017,7 @@ Full glossary (EN and VI, by area): [`glossary.md`](glossary.md). The fifteen te
 
 ## 12. Change history and superseded documents
 
-> **Tóm tắt (VI):** Lịch sử: lộ trình S241 (17/10) và bốn file tư vấn S243 (19/10) đã được gộp vào trang này. Các file
+> **Tóm tắt (VI):** Lịch sử: bản review và lộ trình S241 (17/10) cùng bốn file tư vấn S243 (19/10) đã được gộp vào trang này. Các file
 > cũ giữ lại làm lịch sử, có dòng "Superseded" ở đầu; không dùng chúng làm nguồn chuẩn nữa.
 
 ### 12.1 Change history
@@ -970,7 +1026,7 @@ Full glossary (EN and VI, by area): [`glossary.md`](glossary.md). The fifteen te
 |---|---|---|
 | 2026-10-17 | S241 | SDLC/ADLC review (six areas) and the unified platform roadmap U-01…U-61 with decisions D-01…D-25 |
 | 2026-10-19 | S243 | SDLC/docs/versioning guide, docs standard proposal, professional docs practice, and the reconciliation with S241 and data standards (conflicts K-xx, corrections, decisions N-1…N-12) |
-| 2026-10-19 | S243 | This handbook: one page for process, docs, versioning, releases, operations, cost, roadmap and decisions; every reconciliation correction applied; the five advisory files marked superseded (AA-887) |
+| 2026-10-19 | S243 | This handbook: one page for process, docs, versioning, releases, operations, cost, roadmap and decisions; every reconciliation correction applied; six documents marked superseded: the S241 review and roadmap and the four S243 advisory files (AA-887) |
 
 ### 12.2 Superseded documents
 

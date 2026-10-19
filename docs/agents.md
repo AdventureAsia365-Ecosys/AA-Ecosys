@@ -35,15 +35,15 @@ When two sources disagree, report the mismatch to Nghiệp; do not pick one sile
 
 | File | Read by | What it covers | Last changed | Known stale points (fix in AA-889 unless noted) |
 |---|---|---|---|---|
-| `.claude/CLAUDE.md` | Claude Code (imports the three steering files) | Workspace map, account map copy, live endpoints, git rules, Kiro mode switch | 2026-10-14 | "DO NOT merge" predates D-13 (dev-phase self-merge); "AA-Booking coming soon" (live since S235); `develop` note still lists AA-ACP-App; ADR range "0001-0005" (now 0008) |
+| `.claude/CLAUDE.md` | Claude Code (imports the three steering files) | Workspace map, account map copy, live endpoints, git rules, Kiro mode switch | 2026-10-19 | - (fixed in the S243 bundle, AA-889) |
 | `.kiro/steering/session-workflow.md` | Kiro and Claude Code | Session start/end, state sources, DoD, Linear, Jira, LLM cost logging, waiting for CI | 2026-10-15 | - |
-| `.kiro/steering/language-convention.md` | Kiro and Claude Code | Language per artifact | 2026-09-21 | No bilingual CEO guide exception yet (N-7) |
-| `.kiro/steering/db-schema.md` | Kiro and Claude Code | Schema source of truth, gotchas | 2026-10-11 | Regeneration steps name old `.tmp-session` scripts; now `db-schema-dump.yml` in Infra (DM-11.2) |
+| `.kiro/steering/language-convention.md` | Kiro and Claude Code | Language per artifact | 2026-10-19 | - (N-7 exception added in the S243 bundle) |
+| `.kiro/steering/db-schema.md` | Kiro and Claude Code | Schema source of truth, gotchas | 2026-10-19 | - (now points at `db-schema-dump.yml` in Infra, DM-11.2) |
 | `.kiro/agents/aa-worker.json` | Kiro CLI | The Kiro worker agent: brief in, code on a branch, log out | - | - |
 | `.claude/skills/kiro-delegate/` | Claude Code, only in "dùng kiro-cli" mode | Kiro/Claude split, brief template, preflight, gate | 2026-10-09 | - |
 | `.claude/agents/kiro-reviewer.md` | Claude Code subagent | Review of risky PRs | 2026-10-09 | - |
 | `.claude/hooks/subagent-guardrails.sh`, `subagent-mcp-guardrails.sh` | Claude Code hooks | Block subagent push, merge, apply, secret and MCP writes (tested by `test_subagent_guardrails.sh`) | 2026-10-14 | - |
-| `.claude/settings.json` | Claude Code | Permissions and hooks wiring | - | Still allows broad AWS/Terraform/merge commands (U-04, no issue, N-12) |
+| `.claude/settings.json` | Claude Code | Permissions and hooks wiring | - | Still allows broad AWS/Terraform/merge commands (U-04, folded into AA-878 per N-12) |
 
 ## Root skills (`skill/`)
 

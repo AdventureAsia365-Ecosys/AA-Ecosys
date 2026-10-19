@@ -123,16 +123,16 @@ placeholders.
 
 | ID | Title | Type | Target path | Mode | Owner | Review | Audience | Status / issue |
 |---|---|---|---|---|---|---|---|---|
-| GUIDE-01 | Onboarding: accounts and access (holds the only account-map table) | Tut | root `docs/onboarding.md` | H | nghiep | 90; on an access change | E D | planned. AA-897 |
-| GUIDE-02 | Agent instruction index | Ref | root `docs/agents.md` | H (links only, no rules restated) | nghiep | 90 | A E | planned. AA-897 |
+| GUIDE-01 | Onboarding: accounts and access (holds the only account-map table) | Tut | root `docs/onboarding.md` | H | nghiep | 90; on an access change | E D | draft (AA-897, S243): [`onboarding.md`](onboarding.md) |
+| GUIDE-02 | Agent instruction index | Ref | root `docs/agents.md` | H (links only, no rules restated) | nghiep | 90 | A E | draft (AA-897, S243): [`agents.md`](agents.md) |
 | GUIDE-03 | Glossary (EN/VI) | Ref | root [`docs/glossary.md`](glossary.md) | H | nghiep | 180; with each new term | all | exists (AA-887) |
-| GUIDE-04 | CEO guide, bilingual EN-VI | Tut / How | root `docs/guides/ceo.md`; PDF export on Drive | H | nghiep; Ms. Thư reviews | each major release | O | planned. AA-897 + AA-855 (UAT). Language exception pending N-7. Owner-facing reports go in `docs/business/` |
-| GUIDE-05 | DevOps / operations guide | Tut | root `docs/guides/devops.md` | H | nghiep | 90 | D E | planned. AA-897 (G-01) |
-| GUIDE-06 | CTO guide | Exp | root `docs/guides/cto.md` | H | nghiep | 90 | CT | planned. AA-897 (G-02) |
-| GUIDE-07 | PM guide | How | root `docs/guides/pm.md` | H | nghiep | 90 | P | planned. AA-897 (G-03) |
+| GUIDE-04 | CEO guide, bilingual EN-VI | Tut / How | root `docs/guides/ceo.md`; PDF export on Drive | H | nghiep; Ms. Thư reviews | each major release | O | draft (AA-897, S243): [`guides/ceo.md`](guides/ceo.md). AA-855 (UAT). Bilingual per N-7. Owner-facing reports go in `docs/business/` |
+| GUIDE-05 | DevOps / operations guide | Tut | root `docs/guides/devops.md` | H | nghiep | 90 | D E | draft (AA-897, S243): [`guides/devops.md`](guides/devops.md) |
+| GUIDE-06 | CTO guide | Exp | root `docs/guides/cto.md` | H | nghiep | 90 | CT | draft (AA-897, S243): [`guides/cto.md`](guides/cto.md) |
+| GUIDE-07 | PM guide | How | root `docs/guides/pm.md` | H | nghiep | 90 | P | draft (AA-897, S243): [`guides/pm.md`](guides/pm.md) |
 | GUIDE-08 | Add a new app (ADR 0008 playbook) | How | root `docs/guides/add-a-new-app.md` | H | nghiep | on an ADR 0008 change | E CT A | planned. AA-897 (G-15) |
-| GUIDE-09 | CIO guide | Exp | root `docs/guides/cio.md` | H | nghiep | 90 | CI | planned. AA-897 (G-02) |
-| GUIDE-10 | New engineer guide (learning path) | Tut | root `docs/guides/new-engineer.md` | H | nghiep | 90 | E | planned. AA-897; links GUIDE-01 for access |
+| GUIDE-09 | CIO guide | Exp | root `docs/guides/cio.md` | H | nghiep | 90 | CI | draft (AA-897, S243): [`guides/cio.md`](guides/cio.md) |
+| GUIDE-10 | New engineer guide (learning path) | Tut | root `docs/guides/new-engineer.md` | H | nghiep | 90 | E | draft (AA-897, S243): [`guides/new-engineer.md`](guides/new-engineer.md); links GUIDE-01 for access |
 | GUIDE-11 | Agent docs index (`llms.txt`) | Ref | root [`docs/llms.txt`](llms.txt) | H | nghiep | 90 | A | exists (AA-887) |
 
 ### Standards, templates and status
@@ -140,11 +140,11 @@ placeholders.
 | ID | Title | Type | Target path | Mode | Owner | Review | Audience | Status / issue |
 |---|---|---|---|---|---|---|---|---|
 | CAT-00 | Doc catalog and start here (this page) | Ref | root `docs/README.md` | H | nghiep | 30 | all | exists (AA-887) |
-| CAT-01 | Engineering handbook: operating model, lifecycle, docs system, versioning, releases, operations, cost, platform roadmap (U-xx + S243 issues), decision log (D-xx, N-x) | Exp | root [`docs/engineering-handbook.md`](engineering-handbook.md) | H (links canonical rules, restates none) | nghiep | 90; on each new decision or roadmap change | all | exists (AA-887). Supersedes the S241 roadmap and the four S243 advisory files |
+| CAT-01 | Engineering handbook: operating model, lifecycle, docs system, versioning, releases, operations, cost, platform roadmap (U-xx + S243 issues), decision log (D-xx, N-x) | Exp | root [`docs/engineering-handbook.md`](engineering-handbook.md) | H (links canonical rules, restates none) | nghiep | 90; on each new decision or roadmap change | all | draft (AA-887). Supersedes the S241 review and roadmap and the four S243 advisory files |
 | TPL-01 | Doc templates + PR template | Template | root [`docs/templates/`](templates/); `.github/pull_request_template.md` in each repo | H | nghiep | on a standard change | E A | templates exist (AA-887); PR template in all 5 repos and PR-title check in BK and TP: AA-890 (U-11, U-48) |
 | TPL-02 | Style guide | Ref | root [`docs/STYLE.md`](STYLE.md) | H | nghiep | 180 | E D A | exists (AA-887) |
 | TPL-03 | Front-matter schema | Ref | root [`docs/templates/frontmatter.schema.json`](templates/frontmatter.schema.json) | H | nghiep | on a standard change | E A | exists (AA-887); linted by `docs-lint.yml` (AA-888) |
-| PLAT-01 | Platform roadmap status (U-xx) | Ref | a section of root [`docs/backlog/README.md`](backlog/README.md) | H | nghiep | each session close | E P A | planned (G-05): U-xx keys recorded in the live backlog at session close |
+| PLAT-01 | Platform roadmap status (U-xx) | Ref | a section of root [`docs/backlog/README.md`](backlog/README.md) | H | nghiep | each session close | E P A | draft (AA-887): [backlog §3a](backlog/README.md#3a-platform-roadmap-keys-plat-01), updated at session close |
 
 ## Outside the catalog (journals)
 
@@ -156,8 +156,9 @@ DM-6.10) and `docs/calib/` are never published anywhere.
 ## Admin docs page allowlist (AA-898)
 
 The CIS admin docs reader syncs **from a CI checkout** (tracked files only, never a laptop) and only the catalog
-entries above whose path is in root or INF. Excluded by default: `docs/backups/`, `docs/calib/`, `docs/audits/`,
-`docs/sessions/`, `docs/security/`. Showing security pages needs a backend check on the `owner` role (N-3).
+entries above whose path is in root or INF. Always excluded: `docs/backups/`, `docs/calib/`, `docs/sessions/`.
+Security and audit pages (`docs/security/`, `docs/audits/`) are synced but served only to the `owner` role through a
+backend check (N-3).
 The bucket carries `App=cis`, server-side encryption and Block Public Access; the PR states the monthly cost
 (about 0.01 USD).
 

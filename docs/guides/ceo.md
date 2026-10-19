@@ -14,6 +14,8 @@ related: [CAT-00, GUIDE-03, OPS-04, FIN-01, FIN-02, AA-897, AA-855]
 
 # CEO guide (English and Tiếng Việt)
 
+How the whole delivery system works / Cách cả hệ thống được xây, vận hành và tính chi phí: [engineering handbook](../engineering-handbook.md).
+
 Each section is written in English first, then the same content in Vietnamese.
 Mỗi mục viết tiếng Anh trước, sau đó là cùng nội dung bằng tiếng Việt.
 

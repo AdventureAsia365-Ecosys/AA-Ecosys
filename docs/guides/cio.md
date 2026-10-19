@@ -14,6 +14,8 @@ related: [SEC-01, SEC-02, SEC-04, SEC-05, ARCH-08, FIN-01, GUIDE-06, AA-897, AA-
 
 # CIO guide
 
+How the whole delivery system works: [engineering handbook](../engineering-handbook.md).
+
 ## Who this is for
 
 You are accountable for information security, data protection, compliance and IT spend. After this page you know

@@ -14,6 +14,8 @@ related: [GUIDE-10, GUIDE-05, GUIDE-02, TPL-02, AA-897, AA-517]
 
 # Onboarding: accounts and access
 
+How the whole delivery system works: [engineering handbook](engineering-handbook.md).
+
 This page lists the accounts you need to work on AA-Ecosys, who grants each one and the command or page that proves
 it works. It also holds the **only** AWS account-map table in the docs; every other page links to
 [Account map](#account-map). For the learning path (what to read and build in week one) open the

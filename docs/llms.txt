@@ -7,6 +7,7 @@ Paths are relative to this `docs/` folder unless they start with a repo name. Re
 ## Start here
 
 - [Doc catalog](README.md): every maintained doc with ID, path, owner, cadence and status.
+- [Engineering handbook](engineering-handbook.md): operating model, lifecycle, docs, versioning, releases, operations, cost, platform roadmap, decision log.
 - [Agent index](agents.md): which instruction file, steering file and skill wins for what (written in AA-897).
 - [Style guide](STYLE.md): one-line AWS CLI with --profile and --region, no literal resource IDs, front-matter, "tested" rule, where a page may live.
 - [Glossary](glossary.md): terms with Vietnamese equivalents.
@@ -15,7 +16,7 @@ Paths are relative to this `docs/` folder unless they start with a repo name. Re
 ## Architecture
 
 - [Ecosystem architecture](ecosystem-architecture.md): apps, boundaries, identity, data flow.
-- [Data standards v1.0](architecture/data-standards/README.md): binding DM-x and C-x rules for the shared RDS.
+- [Data standards v1.1](architecture/data-standards/README.md): binding DM-x and C-x rules for the shared RDS.
 - [Schema ownership](database/schema-ownership.md): which repo may migrate which schema.
 - [Contracts](contracts/README.md): versioned JSON contracts between apps.
 

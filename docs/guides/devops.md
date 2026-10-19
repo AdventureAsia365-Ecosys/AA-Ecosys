@@ -14,6 +14,8 @@ related: [GUIDE-01, OPS-01, OPS-04, OPS-03, SEC-02, FIN-01, AA-897, AA-892]
 
 # DevOps guide
 
+How the whole delivery system works: [engineering handbook](../engineering-handbook.md).
+
 ## Who this is for
 
 You keep AA-Ecosys running: deploys, migrations, alarms, incidents, backups, secrets and cost. You know AWS, GitHub
