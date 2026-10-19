@@ -16,7 +16,7 @@
 
 - ECS cluster `aa-cis-dev-cluster`; hai service dùng chung một image: `aa-cis-dev-api` (container `api`, uvicorn) và `aa-cis-dev-worker` (job runner, chạy `python -m worker`). Mỗi deploy đăng ký task-def mới cho cả hai.
 - Job nền chạy qua `shared.job` + worker service. Env `JOB_WORKER_IN_API` quyết định api có chạy thêm worker loop hay không; đọc giá trị thật trong task-def api, đừng suy từ default trong code.
-- RDS `aa-cis-dev-db`, DB `aa_cis_dev`; secret `aa-cis/dev/rds` là DSN thô (không phải JSON). RDS nằm trong subnet riêng — CI không query thẳng được, phải qua ECS exec.
+- RDS `aa-cis-dev-db`, DB `aa_cis_dev`; secret `aa-cis/dev/rds` là DSN thô (không phải JSON) của master — từ X1 S18 api + worker dùng `aa-cis/dev/rds-cis-app` (`cis_app`), từ S19 task role CIS không đọc được secret master nữa. RDS nằm trong subnet riêng — CI không query thẳng được: việc phạm vi CIS qua ECS exec (`DATABASE_URL` của container), việc cần master qua DB Migrate `run-script` (`skill/aa-cis-schema/references/ecs-exec.md`).
 - Domain: API `api-cis.lumiguides.it.com`, frontend `aa-cis.lumiguides.it.com`.
 
 ## LLM routing
