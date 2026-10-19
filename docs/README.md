@@ -27,6 +27,7 @@ Templates: [`templates/`](templates/). Terms: [glossary](glossary.md).
 
 | You are | Open first | Then |
 |---|---|---|
+| **Anyone** | [Engineering handbook](engineering-handbook.md) (CAT-01): how we build, document, version, release, operate and pay for AA-Ecosys; the platform roadmap and the decision log | Your role row below |
 | **CEO / owner** (Ms. Thư) | [CEO guide](guides/ceo.md) (English + Tiếng Việt) | Monthly cost and capacity summary (FIN-02), release notes (APP-07) |
 | **New engineer** | [New engineer guide](guides/new-engineer.md) | [Onboarding: accounts and access](onboarding.md), [architecture](ecosystem-architecture.md), [STYLE](STYLE.md) |
 | **DevOps / operations** | [DevOps guide](guides/devops.md) | Operations index `ops/README.md` (OPS-01), [incident response](ops/incident-response.md) |
@@ -139,6 +140,7 @@ placeholders.
 | ID | Title | Type | Target path | Mode | Owner | Review | Audience | Status / issue |
 |---|---|---|---|---|---|---|---|---|
 | CAT-00 | Doc catalog and start here (this page) | Ref | root `docs/README.md` | H | nghiep | 30 | all | exists (AA-887) |
+| CAT-01 | Engineering handbook: operating model, lifecycle, docs system, versioning, releases, operations, cost, platform roadmap (U-xx + S243 issues), decision log (D-xx, N-x) | Exp | root [`docs/engineering-handbook.md`](engineering-handbook.md) | H (links canonical rules, restates none) | nghiep | 90; on each new decision or roadmap change | all | exists (AA-887). Supersedes the S241 roadmap and the four S243 advisory files |
 | TPL-01 | Doc templates + PR template | Template | root [`docs/templates/`](templates/); `.github/pull_request_template.md` in each repo | H | nghiep | on a standard change | E A | templates exist (AA-887); PR template in all 5 repos and PR-title check in BK and TP: AA-890 (U-11, U-48) |
 | TPL-02 | Style guide | Ref | root [`docs/STYLE.md`](STYLE.md) | H | nghiep | 180 | E D A | exists (AA-887) |
 | TPL-03 | Front-matter schema | Ref | root [`docs/templates/frontmatter.schema.json`](templates/frontmatter.schema.json) | H | nghiep | on a standard change | E A | exists (AA-887); linted by `docs-lint.yml` (AA-888) |
@@ -159,10 +161,8 @@ entries above whose path is in root or INF. Excluded by default: `docs/backups/`
 The bucket carries `App=cis`, server-side encryption and Block Public Access; the PR states the monthly cost
 (about 0.01 USD).
 
-## Decisions pending that change this catalog
+## Decisions that shape this catalog
 
-From the S243 reconciliation (`docs/audits/2026-10-19-S243-sdlc-docs-versioning/reconciliation-s241-standards.md` §5.2):
-N-1 (data standards v1.1 wording), N-2 (quarterly drills on Dev), N-3 (who reads security pages on the admin docs
-page), N-4 (per-PR eval trigger), N-5 (`prompt_version` timing), N-7 (language convention for the bilingual CEO
-guide), N-9 (unpark AA-697), N-10 (move evidence out of `docs/audits/`), N-11 (ADR 0013 timing), N-12 (issues for
-U-04 and U-61). Until Nghiệp decides, the defaults in that table apply and this catalog follows them.
+Nghiệp decided N-1…N-12 on 2026-10-19 (S243). Each one, with the place that enforces it, is in the
+[engineering handbook §10.2](engineering-handbook.md#102-s243-19102026); the S243 reconciliation that proposed them is
+kept for history only.
