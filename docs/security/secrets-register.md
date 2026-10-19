@@ -5,7 +5,7 @@ it, who reads it, how it is managed and rotated, and what should happen to it. *
 only — never a value.** The machine-readable twin is [`secrets-register.yaml`](secrets-register.yaml)
 (same rows); edit the YAML first, then the tables here to match.
 
-- Updated: 19/10/2026 (S243). Inventory: acc2 `list-secrets` (31 secrets, 0 with rotation enabled,
+- Updated: 19/10/2026 (S243; end-of-session update: X1 S18/S19, 4 orphans deleted, viewer created). Inventory: acc2 `list-secrets` (31 secrets, 0 with rotation enabled,
   0 scheduled for deletion), Lambda env keys, ECS task-definition secret refs, the `secrets.*`
   references in workflows on `main` of the four app/infra repos, and the S241 audit's GitHub +
   Vercel name lists (17/10).
@@ -21,10 +21,10 @@ only — never a value.** The machine-readable twin is [`secrets-register.yaml`]
 
 | | Count |
 |---|---|
-| Rows | 84: 32 Secrets Manager (31 live + 1 planned), 27 GitHub, 9 Vercel, 4 Lambda env, 12 vendor |
-| Orphans to delete (M2) | 4 Secrets Manager (`aa-cis/dev/api-keys`, `aa-cis/dev/acp-webhook-secret`, `aa-cis/dev/acp-partner-api`, `tripplanner/dev/mapbox-geocoding-token`) + 2 GitHub (`VERCEL_DEPLOY_HOOK`, `ACPCORE_READ_TOKEN` on AA-CIS-App) |
+| Rows | 84: 32 Secrets Manager (28 live + 4 deleted 19/10, in the recovery window), 27 GitHub, 9 Vercel, 4 Lambda env, 12 vendor |
+| Orphans to delete (M2) | 4 Secrets Manager — **deleted 19/10/2026**, recovery until 18/11 (`aa-cis/dev/api-keys`, `aa-cis/dev/acp-webhook-secret`, `aa-cis/dev/acp-partner-api`, `tripplanner/dev/mapbox-geocoding-token`); 2 GitHub still open (`VERCEL_DEPLOY_HOOK`, `ACPCORE_READ_TOKEN` on AA-CIS-App) |
 | Plaintext secret in a Lambda env | `TRIPPLANNER_API_KEY` on both TripPlanner Lambdas (removed by AA-878 I2); the ops-probe `ADMIN_SECRET` is already gone (I1, Infra #195) |
-| Planned this session | 5: `aa-cis/dev/e2e-test-viewer`; GitHub `VERCEL_PORTAL_BYPASS_SECRET`, `E2E_TENANT_API_KEY`, `E2E_MAIL_ROLE_ARN` (env `e2e`); Vercel aa-booking-admin `COGNITO_BOOKING_STAFF_CLIENT_SECRET`. The new Vercel project aa-cis-portal holds no secret. |
+| Planned this session | 5: `aa-cis/dev/e2e-test-viewer` (created S243, now keep); GitHub `VERCEL_PORTAL_BYPASS_SECRET`, `E2E_TENANT_API_KEY`, `E2E_MAIL_ROLE_ARN` (env `e2e`); Vercel aa-booking-admin `COGNITO_BOOKING_STAFF_CLIENT_SECRET`. The new Vercel project aa-cis-portal holds no secret. |
 | Rotation enabled in Secrets Manager | 0 of 31 |
 
 ## How to run the drift check
@@ -91,8 +91,10 @@ planned rows created and flipped to `keep`. Run it again at every quarterly acce
    design: a separate `aa-cis/dev/admin-secret-preview`, read by the API by name (code constant),
    principal capped at viewer and never machine; Nghiệp pastes its value into Vercel Preview by hand.
 2. **CIS task role `secretsmanager:GetSecretValue` on `*`** (AA-CIS-Infra `modules/ecs/main.tf:171-181`):
-   the CIS containers can read the Booking/TripPlanner DSNs and every E2E secret. The break-glass
-   secret is protected by its resource-policy Deny. Follow-up issue proposed (ask Nghiệp first).
+   partly closed by X1 S19 (Infra #204, 19/10/2026): an explicit Deny now covers the RDS master,
+   `aa-cis/dev/db-migrator`, `booking/*` and `tripplanner/*`. The Allow is still `*`, so the CIS containers can
+   still read every other secret (E2E secrets included). The break-glass secret is protected by its
+   resource-policy Deny. Narrowing the Allow to a list stays a follow-up (ask Nghiệp first).
 3. **0 rotations configured** (31 Secrets Manager secrets, `RotationEnabled` null on all). Manual
    rotation dates are the `last_changed` column; vendor rotation dates are `TBD-Nghiep`.
 4. **Full-admin E2E accounts**: `e2e-claude-code` sits behind GitHub `E2E_ADMIN_*` on every PR
@@ -112,6 +114,21 @@ planned rows created and flipped to `keep`. Run it again at every quarterly acce
 9. **acc1 / acc3 secrets** (`pqnghiep-admin`, `nghiep_aa365`): not inventoried yet. The main session
    lists their names (M0 d) and adds rows; AA-517 cleaned 20 strays from acc1 on 02/09.
 
+## Who can read the RDS master (X1 S19)
+
+Since 19/10/2026 (S243, Infra #203 + #204, AA-860):
+
+| Principal | Reads `aa-cis/dev/rds`? | Why |
+|---|---|---|
+| CIS api + worker containers (task role) | **No** — explicit Deny, verified 20/20 AccessDenied after IAM propagation (~8 min) | X1 S19 Deny on `aa-cis/<env>/rds-??????` (master only; `rds-app-user` / `rds-cis-app` stay readable) |
+| CIS api + worker `DATABASE_URL` | No — now `aa-cis/dev/rds-cis-app` (`cis_app`) | X1 S18 |
+| ECS execution role | Yes (injects the migrator task `DATABASE_URL`) | Untouched by S19; the migrator keeps the master until X1 S22 (`db_migrator`) |
+| DB Migrate / Schema Dump / isolation probe (migrator task) | Yes, as its `DATABASE_URL` | Until X1 S22 |
+| Humans with the MFA admin profile (`aa365-admin`) | Yes | Break-glass only (DM-8.9); prefer DB Migrate `mode=run-script` |
+| Agent ECS exec scripts | **No** | They use the container `DATABASE_URL` (`cis_app`); see `docs/ops/runbooks/ecs-exec-s3-mediated.md` |
+
+The same Deny covers `aa-cis/dev/db-migrator`, `booking/*` and `tripplanner/*` for the CIS task role.
+
 ## Deletion log
 
 Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --recovery-window-in-days 30`
@@ -120,7 +137,10 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 | Date | Store | Name | Evidence of no consumer | Command / who | Recovery until |
 |---|---|---|---|---|---|
-| — | — | — | — | — | — |
+| 2026-10-19 | Secrets Manager acc2 | `aa-cis/dev/api-keys` | No reader on main of any repo (register row, M2 DRY RUN); Terraform-managed ones forgotten from state first (Infra #207) | `delete-secret --recovery-window-in-days 30` (main session, Nghiệp OK S243) | 2026-11-18 |
+| 2026-10-19 | Secrets Manager acc2 | `aa-cis/dev/acp-webhook-secret` | No reader on main of any repo (register row, M2 DRY RUN); Terraform-managed ones forgotten from state first (Infra #207) | `delete-secret --recovery-window-in-days 30` (main session, Nghiệp OK S243) | 2026-11-18 |
+| 2026-10-19 | Secrets Manager acc2 | `aa-cis/dev/acp-partner-api` | No reader on main of any repo (register row, M2 DRY RUN); Terraform-managed ones forgotten from state first (Infra #207) | `delete-secret --recovery-window-in-days 30` (main session, Nghiệp OK S243) | 2026-11-18 |
+| 2026-10-19 | Secrets Manager acc2 | `tripplanner/dev/mapbox-geocoding-token` | No reader on main of any repo (register row, M2 DRY RUN); Terraform-managed ones forgotten from state first (Infra #207) | `delete-secret --recovery-window-in-days 30` (main session, Nghiệp OK S243) | 2026-11-18 |
 
 ## Register
 
@@ -128,19 +148,19 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 | Name | Owner app | Consumers (main) | Managed by | Rotation | Last changed | Status | Notes |
 |---|---|---|---|---|---|---|---|
-| `aa-cis/dev/rds` | cis | ECS aa-cis-dev-api + aa-cis-dev-worker DATABASE_URL (AA-CIS-Infra modules/ecs/main.tf:399, :601); ECS aa-cis-dev-db-migrate DATABASE_URL (AA-CIS-Infra .github/scripts/migrator-task.sh:16); AA-CIS-App scripts/link_staff_identity.py:65, services/acp_produce/sweeper_lambda.py:37 (default); agent S3-mediated ECS exec scripts (master DSN) | cli (read by data source module.secrets.data.aws_secretsmanager_secret.rds) | none | 2026-07-07 | **keep** | Master DSN (aa_cis_admin). X1 S18 moves the CIS runtime to aa-cis/dev/rds-cis-app; X1 S19 denies the task role on this secret. |
+| `aa-cis/dev/rds` | cis | ECS aa-cis-dev-db-migrate DATABASE_URL (AA-CIS-Infra .github/scripts/migrator-task.sh:16), until X1 S22; AA-CIS-App scripts/link_staff_identity.py:65, services/acp_produce/sweeper_lambda.py:37 (default; Lambda not deployed); humans with the MFA admin profile (break-glass, DM-8.9) | cli (read by data source module.secrets.data.aws_secretsmanager_secret.rds) | none | 2026-07-07 | **keep** | Master DSN (aa_cis_admin). No longer the CIS runtime login since X1 S18 (19/10/2026); the CIS task role is denied it since X1 S19. See "Who can read the RDS master (X1 S19)". |
 | `aa-cis/dev/dataforseo` | cis | ECS api + worker DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD (modules/ecs/main.tf:409-410, :605-606) | cli (data source module.secrets.data.aws_secretsmanager_secret.dataforseo) | none | 2026-07-07 | **keep** | Vendor DataForSEO login/password (JSON). |
-| `aa-cis/dev/acp-partner-api` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_partner_api (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **orphan-delete** | Placeholder of the retired ACP v1 partner path. No reader on main of any repo; CloudTrail since 18/10: only the plan role (refresh). LastChangedDate 15/10 is a Terraform tag re-apply, not a value change. |
-| `aa-cis/dev/acp-webhook-secret` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_webhook_secret (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **orphan-delete** | Placeholder of the retired ACP v1 webhook HMAC. No reader on main; CloudTrail since 18/10: only the plan role. |
+| `aa-cis/dev/acp-partner-api` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_partner_api (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **deleted** | Placeholder of the retired ACP v1 partner path. No reader on main of any repo; CloudTrail since 18/10: only the plan role (refresh). LastChangedDate 15/10 is a Terraform tag re-apply, not a value change. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
+| `aa-cis/dev/acp-webhook-secret` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_webhook_secret (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **deleted** | Placeholder of the retired ACP v1 webhook HMAC. No reader on main; CloudTrail since 18/10: only the plan role. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
 | `aa-cis/dev/admin-secret` | cis | ECS api + worker ADMIN_SECRET (modules/ecs/main.tf:402, :603); ops-probe Lambda aa-cis-dev-dfs-balance-check, read by ARN from the event secret_id (AA-CIS-Infra accounts/aa365/dfs_balance.tf:236, :270); copies: GitHub AA-CIS-App ADMIN_SECRET, Vercel aa-cis-frontend ADMIN_SECRET (production + preview) | cli (var.secret_admin_arn, terraform.tfvars) | manual (2026-10-17) | 2026-10-17 | **open-item** | God-key. Copies in GitHub + Vercel (Preview included). The Preview swap to a low-privilege credential and the rotation move to the AA-816 cutover (C9 + I6). No longer in the ops-probe Lambda env or Terraform state (AA-878 I1, Infra #195). |
 | `aa-cis/dev/openai-key` | cis | ECS api + worker OPENAI_API_KEY (modules/ecs/main.tf:400, :602); AA-CIS-App shared/llm_client/client.py:134 | cli (var.secret_openai_arn, terraform.tfvars) | none | 2026-08-21 | **keep** | Vendor OpenAI. |
-| `aa-cis/dev/api-keys` | cis | — | cli | none | 2026-07-07 | **orphan-delete** | APIFY_API_TOKEN placeholder; api/main.py no longer reads it (no reader on main of any repo). LastAccessedDate 2026-09-07. |
+| `aa-cis/dev/api-keys` | cis | — | cli | none | 2026-07-07 | **deleted** | APIFY_API_TOKEN placeholder; api/main.py no longer reads it (no reader on main of any repo). LastAccessedDate 2026-09-07. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
 | `aa-cis/dev/e2e-test-admin` | cis | agent UI verify (skill/aa-ui-verify/SKILL.md:33), user e2e-claude-code; value mirrored in GitHub AA-CIS-App E2E_ADMIN_USERNAME / E2E_ADMIN_PASSWORD (ui-smoke.yml:58-59) | cli | none | 2026-10-08 | **open-item** | Full CIS admin + Booking admin, legacy password login. AA-878 C1/N1: the GitHub copy switches to the read-only viewer account; this secret stays the agent's admin account. |
 | `aa-cis/dev/jwt-secret` | cis | ECS api + worker JWT_SECRET (modules/ecs/main.tf:403, :604); AA-CIS-App api/routers/auth.py:34 | cli (var.secret_jwt_arn, terraform.tfvars) | none | 2026-09-01 | **keep** | HS256, one key for staff + tenant JWT (S241 P1-3). |
 | `aa-cis/dev/rds-app-user` | cis | AA-CIS-App api/core/aa544_tenant_pool.py:128 (tenant pool, aa_app_user); AA-CIS-Infra db/isolation_probe.py:116, db/owners.yaml:64 | cli | none | 2026-09-10 | **keep** | DSN of the non-BYPASSRLS tenant role (AA-544). |
 | `tripplanner/dev/database-url` | tripplanner | TP Lambdas browse + assembly by ARN TRIPPLANNER_DATABASE_URL_ARN (AA-CIS-Infra accounts/aa365/tripplanner.tf env; AA-TripPlanner-Web backend/shared/db.py:33); AA-CIS-Infra db/isolation_probe.py:127, db/owners.yaml:161 | terraform aws_secretsmanager_secret.tripplanner_db (value out-of-band, ignore_changes) | none | 2026-10-14 | **keep** | Read by the plan role on refresh (tf_plan_secret_arns). |
 | `tripplanner/dev/api-key` | tripplanner | TP Lambdas browse + assembly, by name tripplanner/<ENVIRONMENT>/api-key (AA-TripPlanner-Web backend/shared/auth.py, AA-878 T1); copy: Vercel aa-tripplanner TRIPPLANNER_API_KEY (BFF frontend/app/api/browse/route.ts:9, trip/route.ts:15, lib/catalog.ts:46) | terraform aws_secretsmanager_secret.tripplanner_api_key + random_password.tripplanner_api_key | none | 2026-10-14 | **keep** | Edge shared secret X-TripPlanner-Key. Until AA-878 I2 is applied the value is also a plaintext Lambda env (see lambda-env rows). Still in Terraform state (random_password) by design. |
-| `tripplanner/dev/mapbox-geocoding-token` | tripplanner | — | terraform aws_secretsmanager_secret.tripplanner_mapbox (forgotten by AA-878 I2, removed block) | none | 2026-10-14 | **orphan-delete** | AA-675 extraction token; no reader since AA-712 slice 6a. A real Mapbox token (PutSecretValue 29/09): Nghiep revokes it in the Mapbox account after the delete. |
+| `tripplanner/dev/mapbox-geocoding-token` | tripplanner | — | terraform aws_secretsmanager_secret.tripplanner_mapbox (forgotten by AA-878 I2, removed block) | none | 2026-10-14 | **deleted** | AA-675 extraction token; no reader since AA-712 slice 6a. A real Mapbox token (PutSecretValue 29/09): Nghiep revokes it in the Mapbox account after the delete. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
 | `aa-cis/dev/typesafe` | cis | AA-CIS-App shared/secrets.py:78 (Jev decide() seam, worker) | cli | none | 2026-09-29 | **keep** | Vendor Typesafe / Jev. |
 | `aa-cis/dev/gdrive-photo-reader` | cis | AA-CIS-App services/photos/drive.py:83 | cli | none (decision 02/10/2026: no rotation needed) | 2026-10-01 | **keep** | Google API key (Drive API, public CON photo folders). |
 | `aa-cis/dev/e2e-tenant/atlas-hearth` | cis | AA-CIS-App services/acp_shared/e2e_tenant_key_sync.py:28 (writes after key issue), task role grant AA-CIS-Infra modules/ecs/main.tf:250; agent UI verify / paid E2E runs (tenant portal API key) | cli (value kept in sync by app-runtime) | app-runtime (key re-issue) | 2026-10-15 | **keep** | Test tenant Atlas & Hearth portal API key. |
@@ -157,9 +177,9 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `aa-cis/dev/e2e-test-admin-2` | cis | agent Booking maker-checker verify (user e2e-claude-code-2) | cli | none | 2026-10-16 | **open-item** | Full CIS admin + Booking checker. Decision D4: keep or disable. |
 | `aa-identity/dev/breakglass` | identity | humans only (break-glass sign-in); written by AA-CIS-Infra tools/identity/workforce_bootstrap.py breakglass-init | terraform aws_secretsmanager_secret.identity_breakglass (identity.tf:932) + resource policy identity_alerts.tf:63 (value out-of-band) | none | 2026-10-18 | **keep** | Password + TOTP seed. Resource-policy Deny for every other principal and access alarms (AA-854). |
 | `aa-cis/dev/sentry-dsn-api` | cis | AA-CIS-App shared/sentry_init.py:20 | cli (tag ManagedBy=manual-AA-870) | none | 2026-10-17 | **keep** | Sentry DSN (low sensitivity: ingest-only). |
-| `aa-cis/dev/rds-cis-app` | cis | AA-CIS-Infra db/run_migration.py:191 (set-password), db/owners.yaml:48, db/isolation_probe.py:116; from X1 S18: ECS api + worker DATABASE_URL | terraform aws_secretsmanager_secret.rds_cis_app (db_migrator.tf:71) | none | 2026-10-18 | **pending-x1** | LOGIN role cis_app DSN; value set by hand at X1 S17. |
-| `aa-cis/dev/db-migrator` | infra | AA-CIS-Infra db/run_migration.py:191, .github/scripts/migrator-task.sh:16 (from X1 S22) | terraform aws_secretsmanager_secret.db_migrator (db_migrator.tf:78) | none | 2026-10-18 | **pending-x1** | LOGIN role db_migrator DSN; DB Migrate login from X1 S22. |
-| `aa-cis/dev/e2e-test-viewer` | cis | planned: value copied into GitHub AA-CIS-App E2E_ADMIN_USERNAME / E2E_ADMIN_PASSWORD (ui-smoke viewer mode) | cli | none | TBD-M3 | **planned** | AA-878 C1/M3: read-only viewer staff account e2e-claude-code-viewer (legacy login), no Booking access. Not a real user. |
+| `aa-cis/dev/rds-cis-app` | cis | ECS aa-cis-dev-api + aa-cis-dev-worker DATABASE_URL (X1 S18, Infra #203); AA-CIS-Infra db/run_migration.py:191 (set-password), db/owners.yaml:48, db/isolation_probe.py:116 | terraform aws_secretsmanager_secret.rds_cis_app (db_migrator.tf:71) | none | 2026-10-18 | **keep** | LOGIN role cis_app DSN; value generated by script at X1 S17 (S243). CIS runtime login since 19/10/2026 (api:703 / worker:260). |
+| `aa-cis/dev/db-migrator` | infra | AA-CIS-Infra db/run_migration.py:191, .github/scripts/migrator-task.sh:16 (from X1 S22) | terraform aws_secretsmanager_secret.db_migrator (db_migrator.tf:78) | none | 2026-10-18 | **pending-x1** | LOGIN role db_migrator DSN; DB Migrate login from X1 S22. Nghiệp sets the value by hand at X1 S20. Denied to the CIS task role since X1 S19. |
+| `aa-cis/dev/e2e-test-viewer` | cis | agent read-only UI checks and the ui-smoke viewer mode (CIS #841); CI smoke keeps the admin account (S243 recommendation) | cli | none | 2026-10-19 | **keep** | AA-878 C1/M3: read-only viewer staff account e2e-claude-code-viewer (CIS 249 viewer role, legacy login), no Booking access. Created S243 (password generated by script, never shown). Not a real user. |
 
 ### GitHub Actions secrets (27)
 

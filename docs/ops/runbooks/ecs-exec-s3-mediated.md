@@ -35,9 +35,9 @@ This page is the canonical copy of the pattern (data standard DM-8.8). The agent
 
 | X1 step | `DATABASE_URL` in the api container | What the script can reach |
 |---|---|---|
-| Until S18 (true on 19/10/2026) | the master DSN (secret `aa-cis/dev/rds`) | everything; treat non-CIS schemas as off limits anyway (DM-8.9) |
+| Until S18 (ended 19/10/2026) | the master DSN (secret `aa-cis/dev/rds`) | everything; treat non-CIS schemas as off limits anyway (DM-8.9) |
 | From S18 | `cis_app` (secret `aa-cis/dev/rds-cis-app`) | CIS schemas incl. RLS tables; **not** `booking.*` / `tripplanner.*` (error 42501), no DDL |
-| From S19 | as S18, and the CIS task role is denied `GetSecretValue` on the master and on `booking/*`, `tripplanner/*` | a script that reads the master secret fails with AccessDenied |
+| From S19 (live since 19/10/2026) | as S18, and the CIS task role is denied `GetSecretValue` on the master, `aa-cis/dev/db-migrator`, `booking/*`, `tripplanner/*` | a script that reads the master secret fails with AccessDenied |
 
 So scripts read the container's own `DATABASE_URL`. They never fetch `aa-cis/dev/rds` themselves. Check which step
 is live: the `DATABASE_URL` secret reference of the api task definition (step 0).

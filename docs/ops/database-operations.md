@@ -41,8 +41,9 @@ personal logins, no SSH (DM-8.8).
 - Manual snapshots expire after 30 days unless named `keep-…` or tagged `aa:retain=keep` /
   `aa:retain-until=YYYY-MM-DD` (snapshot-expiry Lambda, AA-869). A `-- migrate: destructive` migration gets a snapshot
   from DB Migrate first (DM-9.2).
-- Logins: the RDS master (`aa-cis/dev/rds`) is still the CIS runtime login until X1 S18 moves it to `cis_app`; then the
-  master is break-glass only (DM-8.9). Booking (`booking`), TripPlanner (`tripplanner`) and the tenant pool
+- Logins: since X1 S18 (19/10/2026) the CIS api + worker log in as `cis_app` (`aa-cis/dev/rds-cis-app`), and since S19
+  the CIS task role is denied the master secret (`aa-cis/dev/rds`). The master is break-glass only (DM-8.9); DB Migrate,
+  Schema Dump and the probe still use it until X1 S22 moves them to `db_migrator`. Booking (`booking`), TripPlanner (`tripplanner`) and the tenant pool
   (`aa_app_user`) have their own logins; Booking and TripPlanner objects are owned by `bk_owner` / `tp_owner`.
 - The DSN CNAME of DM-9.5 does not exist yet (AA-829).
 - Real-data dumps from 16/09/2026 sit outside git on a laptop (`docs/backups/`, ignored); securing or deleting them is
