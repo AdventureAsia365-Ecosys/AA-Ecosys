@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [ecosystem, aa-cis-dev-db]
-last_reviewed: 2026-10-18
+last_reviewed: 2026-10-19
 review_every_days: 90
 related: [ARCH-08, APP-04, infra/AA-CIS-Infra/db/owners.yaml]
 ---
@@ -43,6 +43,10 @@ the two disagree, `owners.yaml` wins and this page is fixed in the same PR train
    the **DB Migrate** workflow that applies a reviewed file. Infra keeps no schema SQL of its own;
    `db/migrations/<owner>/` holds byte-identical copies of the owner's files for the workflow to
    apply (Nghiệp, S225: migrations are applied through Infra so nobody runs them from a laptop).
+   The one Infra-native dir is `db/migrations/roles/` (key `rl-NNN`, X1): role bootstrap (LOGIN/NOLOGIN
+   roles, memberships, `CONNECTION LIMIT`), `CREATE/ALTER/DROP EXTENSION`, the `public.*` leftovers and the
+   prepared undo files of the X1 ownership transfers. No owner file creates or alters a role or an
+   extension; those statements go into a `roles/` file.
 4. **Every migration registers itself** in `shared.schema_versions` (`INSERT … ON CONFLICT DO
    NOTHING`, inside the file's own `BEGIN; … COMMIT;`). Version key per owner:
 
@@ -51,6 +55,7 @@ the two disagree, `owners.yaml` wins and this page is fixed in the same PR train
    | AA-CIS-App | plain number, `217` (kept for history) | `api/migrations/NNN_*.sql` |
    | AA-TripPlanner-Web | `tp-NNN` | `migrations/NNN_*.sql` |
    | AA-Booking (AAA) | `bk-NNN` | `migrations/NNN_*.sql` (first: `bk-001`, applied 14/10/2026) |
+   | AA-CIS-Infra (`roles`, Infra-native) | `rl-NNN` | `db/migrations/roles/NNN_*.sql` (first: `rl-001`, X1 S3/S8) |
 
    Without the prefix two repos' `007` would collide and the second one would silently not register.
 5. **Cross-owner grant migrations do not wrap the grant in `IF EXISTS (role)`.** Apply them only after
@@ -59,25 +64,36 @@ the two disagree, `owners.yaml` wins and this page is fixed in the same PR train
    Migrate does not register a failed file, so it can be re-run (ADR 0004 decision 6).
 6. **Destructive changes** (DROP, DELETE of data) follow the DRY RUN procedure in
    `skill/aa-cis-schema/references/destructive-ops.md`, whoever the owner is.
+7. **Who runs a file (X1, AA-852 / AA-860, done 19/10/2026).** DB Migrate, DB Schema Dump and the DB
+   Isolation Probe log in as **`db_migrator`** (LOGIN, NOCREATEROLE, `CONNECTION LIMIT` 5, created by
+   `rl-002`) from the migrator task definition. Before each owner file the runner reads the live owner of
+   the dir's anchor schema (`shared`, `booking`, `tripplanner`) and runs the file as that role (`SET ROLE`),
+   so a file creates objects owned by the owner role in the table below, with no `OWNER TO`. A `roles/`
+   file always runs as the RDS master `aa_cis_admin`, read in the task; so do DB Migrate `set-password`
+   and `run-script`. Otherwise the master is break-glass only (data standards Part B DM-8.9).
 
 ## Owners by schema
 
-| Schema | Owner | What it is | Read by others |
-|---|---|---|---|
-| `silver_aa_internal` | AA-CIS-App | A0 raw tours, A1 rewrites (`generated_content`), `review_queue`, `seo_context`, upload staging | — |
-| `gold_aa_internal` | AA-CIS-App | Master Content (`published_tours`), tenant tour versions, exports | TripPlanner: `published_tours` read (tenant RLS) |
-| `acp_contract` | AA-CIS-App | A3 platform atoms, Segments, Routes, Hubs, search demand; view `v_active_tour_atoms` | TripPlanner: `v_active_tour_atoms` (216), `tour_atoms` columns (180, legacy) |
-| `acp_shared` | AA-CIS-App | Tenant T-series: plans, angle gate, `content_piece`, `publish_log`, quota, audit | — |
-| `acp_deliver` | AA-CIS-App | `tenant_tour_pages` (only table left after AA-603) | — |
-| `tripplanner` | AA-TripPlanner-Web | Trip user state (`sessions`, `customers`, `trip_events`, `trip_drafts`). Legacy place read models (`itinerary_components`, `tour_day`, `tour_stop`, `tour_graph_*`, `tour_leg`, `tour_junction`) are **frozen** (ADR 0002) and replaced by CIS `geo` + `catalog` views (ADR 0007); a TripPlanner migration drops them 14 days after the reader cut-over | — |
-| `geo` | AA-CIS-App | Place pipeline (ADR 0007, AA-712, CIS 226+): per-tour builds (`tour_build`), day skeleton (`tour_day`), itinerary components (`tour_place`, stable `component_id`), name resolution cache (`place_name`), versioned tour graph (`graph_build`, `tour_stop`, `graph_node`, `graph_edge`, `tour_leg`, `tour_junction`). Keyed by `source_id`; written only by CIS jobs `place_extract` / `place_geocode` / `tour_graph_build` | **None directly** — internal; other apps read the `catalog.*` place and graph views (owner `catalog_owner` has `SELECT`). Only `EXECUTE` on the pure `geo.name_norm(text)` to `aa_app_user`, `tripplanner`, `booking` (CIS 228: a view calls functions with the reader's rights; no `USAGE` on `geo`) |
-| `booking` | AA-Booking | Customers, OTPs/sessions, media, audit, `inbox_events` (`bk-001`, 14/10/2026, ADR 0004); later trip cases, suppliers and prices (ADR 0005). DB role `booking` created by `bk-001` (NOLOGIN, then LOGIN with a password set out-of-band, DSN in `booking/dev/database-url`), `USAGE` only on the schema | — |
-| `catalog` | AA-CIS-App | Catalog read model for other apps (AA-679, CIS 225): views only — `v_tour`, `v_tour_day`, `v_tour_place`, `v_tour_photo`, `v_destination`, `v_destination_photo` over the CIS pipeline tables. Contract `docs/contracts/catalog.tour.v1.json`. ADR 0007 (CIS 228, views only) adds the place/graph views over `geo`: `v_tour_component`, `v_tour_day_route`, `v_tour_stop`, `v_tour_leg`, `v_graph_node`, `v_graph_edge`, `v_tour_junction` (contract `docs/contracts/catalog.graph.v1.json`), appending columns only to the 225 views (`v_destination` + `geo_status`, `located_by`, `precision`; `v_tour_place` + `located_by`, `precision`: contract `catalog.tour.v1.1.json`). Owned by NOLOGIN `catalog_owner` (RDS `aa_cis_admin` is not BYPASSRLS) | AA-Booking, TripPlanner (and `aa_app_user`): `USAGE` + `SELECT` on every view (225 + 228, unguarded) |
-| `public` | — | `checkpoint_migrations` (LangGraph checkpointer, CIS) and enums created before schemas existed | — |
-| `shared` | per table, below | Platform tables every app may need | see below |
+| Schema | Owner | DB owner role / runtime role(s) | What it is | Read by others |
+|---|---|---|---|---|
+| `silver_aa_internal` | AA-CIS-App | `cis_owner` / `cis_app`, `aa_app_user` | A0 raw tours, A1 rewrites (`generated_content`), `review_queue`, `seo_context`, upload staging | — |
+| `gold_aa_internal` | AA-CIS-App | `cis_owner` / `cis_app`, `aa_app_user` | Master Content (`published_tours`), tenant tour versions, exports | TripPlanner: `published_tours` read (tenant RLS) |
+| `acp_contract` | AA-CIS-App | `cis_owner` / `cis_app` | A3 platform atoms, Segments, Routes, Hubs, search demand; view `v_active_tour_atoms` | TripPlanner: `v_active_tour_atoms` (216), `tour_atoms` columns (180, legacy) |
+| `acp_shared` | AA-CIS-App | `cis_owner` / `cis_app`, `aa_app_user` | Tenant T-series: plans, angle gate, `content_piece`, `publish_log`, quota, audit | — |
+| `acp_deliver` | AA-CIS-App | `cis_owner` / `cis_app`, `aa_app_user` | `tenant_tour_pages` (only table left after AA-603) | — |
+| `tripplanner` | AA-TripPlanner-Web | `tp_owner` (since tp-013) / `tripplanner` | Trip user state (`sessions`, `customers`, `trip_events`, `trip_drafts`). Legacy place read models (`itinerary_components`, `tour_day`, `tour_stop`, `tour_graph_*`, `tour_leg`, `tour_junction`) are **frozen** (ADR 0002) and replaced by CIS `geo` + `catalog` views (ADR 0007); a TripPlanner migration drops them 14 days after the reader cut-over | AA-Booking (`booking`): `v_inquiry_outbox` (tp-009); CIS runtime `cis_app`: `v_ops_traffic_daily` (tp-015, AA-858) |
+| `geo` | AA-CIS-App | `cis_owner` / `cis_app` | Place pipeline (ADR 0007, AA-712, CIS 226+): per-tour builds (`tour_build`), day skeleton (`tour_day`), itinerary components (`tour_place`, stable `component_id`), name resolution cache (`place_name`), versioned tour graph (`graph_build`, `tour_stop`, `graph_node`, `graph_edge`, `tour_leg`, `tour_junction`). Keyed by `source_id`; written only by CIS jobs `place_extract` / `place_geocode` / `tour_graph_build` | **None directly** — internal; other apps read the `catalog.*` place and graph views (owner `catalog_owner` has `SELECT`). Only `EXECUTE` on the pure `geo.name_norm(text)` to `aa_app_user`, `tripplanner`, `booking` (CIS 228: a view calls functions with the reader's rights; no `USAGE` on `geo`) |
+| `booking` | AA-Booking | `bk_owner` (since bk-014) / `booking` | Customers, OTPs/sessions, media, audit, `inbox_events` (`bk-001`, 14/10/2026, ADR 0004); later trip cases, suppliers and prices (ADR 0005). DB role `booking` created by `bk-001` (NOLOGIN, then LOGIN with a password set out-of-band, DSN in `booking/dev/database-url`), `USAGE` only on the schema. The schema and every object belong to NOLOGIN `bk_owner` since `bk-014` (X1 S6/S8); default privileges `FOR ROLE bk_owner` give `booking` what a new file creates | CIS runtime `cis_app`: `v_ops_funnel_daily`, `v_ops_case_status` (bk-017, AA-858) |
+| `catalog` | AA-CIS-App | schema `cis_owner`, views `catalog_owner` / none (consumers read) | Catalog read model for other apps (AA-679, CIS 225): views only — `v_tour`, `v_tour_day`, `v_tour_place`, `v_tour_photo`, `v_destination`, `v_destination_photo` over the CIS pipeline tables. Contract `docs/contracts/catalog.tour.v1.json`. ADR 0007 (CIS 228, views only) adds the place/graph views over `geo`: `v_tour_component`, `v_tour_day_route`, `v_tour_stop`, `v_tour_leg`, `v_graph_node`, `v_graph_edge`, `v_tour_junction` (contract `docs/contracts/catalog.graph.v1.json`), appending columns only to the 225 views (`v_destination` + `geo_status`, `located_by`, `precision`; `v_tour_place` + `located_by`, `precision`: contract `catalog.tour.v1.1.json`). Views owned by NOLOGIN `catalog_owner` (RDS `aa_cis_admin` is not BYPASSRLS), the schema by `cis_owner` since CIS 245; a view change follows the catalog-view recipe (AA-CIS-App `CONTEXT.md`, skill `aa-cis-schema`) | AA-Booking, TripPlanner (and `aa_app_user`): `USAGE` + `SELECT` on every view (225 + 228, unguarded) |
+| `public` | — | `pg_database_owner`; objects and extensions `aa_cis_admin` (Infra `roles/`) | `checkpoint_migrations` (LangGraph checkpointer, CIS) and enums created before schemas existed | — |
+| `shared` | per table, below | `cis_owner` / `cis_app`, `aa_app_user` | Platform tables every app may need | see below |
 
-Empty schemas `acp_gold_output`, `acp_silver_s3`, `acp_silver_s4` are leftovers of ACPv1 (CIS); drop
-them in a CIS migration when convenient.
+Empty schemas `acp_gold_output`, `acp_silver_s2`, `acp_silver_s3`, `acp_silver_s4` are leftovers of ACPv1 (CIS);
+drop them in a CIS migration when convenient (owner `cis_owner`, runtime grants from CIS 244).
+
+Owner and runtime roles come from `owners.yaml` (`owner_role`, `runtime_roles`) and the live dump: `cis_owner`
+owns the 12 CIS schemas since CIS 245 (X1 S21), `bk_owner` and `tp_owner` own theirs since bk-014 / tp-013
+(X1 S8). `cis_app` is the CIS api + worker login since X1 S18; `aa_app_user` is the CIS tenant pool.
 
 ## `shared.*` by table
 
