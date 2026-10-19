@@ -60,7 +60,7 @@ Proposed rule for each session: 3–5 main items. An XS item whose only remainin
 
 ## 3a. Platform roadmap keys (PLAT-01)
 
-Content and status live in the [engineering handbook §9](../engineering-handbook.md#9-roadmap). This list only orders the next picks.
+Content and status live in the [engineering handbook §9](../../engineering-handbook.md#9-roadmap). This list only orders the next picks.
 
 | Order | U-xx / key | Issue | Next step |
 |---|---|---|---|
