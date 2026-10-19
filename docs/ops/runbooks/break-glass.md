@@ -71,9 +71,9 @@ in, revoke, disable; fails closed if cleanup fails).
 
 ## B. RDS master login
 
-- Until X1 moves the CIS runtime to `cis_app` (S18), the master is the CIS runtime login, and DDL through it outside
-  DB Migrate counts as break-glass use (DM-8.9).
-- Afterwards the master is break-glass only. The normal master path is a reviewed script through
+- Since X1 S18 (19/10/2026) the CIS runtime logs in as `cis_app`, and since S19 the CIS task role cannot read the
+  master secret. Any use of the master outside DB Migrate counts as break-glass use (DM-8.9).
+- The master is break-glass only. The normal master path is a reviewed script through
   [DB Migrate run-script](db-migrate.md), which needs a merged PR. If even that is impossible (GitHub down, SEV1), the
   break-glass path is a one-off run of the migrator task by hand - write down every statement, and rotate the master
   password afterwards (from prod; on Dev per D-03 at prod time).
