@@ -45,10 +45,10 @@ do phiên chính làm. Merge theo luật dev-phase (S241 D-13, data standards v1
 - **AA-885 Done:** #832 portal tenant thành Next.js app + Vercel project riêng `aa-cis-portal` trên
   `portal.lumiguides.it.com` (Infra #197 CNAME + URL client); smoke prod portal **24/24**.
 - **AA-858:** #839 API ops overview, #840 `/admin/overview` (sức khoẻ app, TripPlanner traffic, phễu Booking, chi phí theo
-  app); view hợp đồng Booking #37 (bk-017), TP #98 (tp-015), Infra #205.
+  app); view hợp đồng Booking #37 (bk-017), TP #98 (tp-015), Infra #205; quyền CloudWatch Infra #206.
 - **AA-884:** #835 (CIS **248**: `acp_shared.audit_log` append-only có chuỗi hash, `job_worker.git_sha`, snapshot chi phí
   theo tag App), #836 API Platform apps/audit/cost + `/health` git_sha + `/health/ready`, #837 sửa cast uuid ở audit,
-  #838 trang Platform (apps, nhật ký thao tác staff, chi phí theo app).
+  #838 trang Platform (apps, nhật ký thao tác staff, chi phí theo app); Infra #208 (copy 248), #209 (`/health/ready`).
 - **#848 (c201afa1)** một định nghĩa sức khoẻ cho Overview + Platform (`app_health.py`), luật worker alive, staff
   `readiness_now`, chi phí một nguồn (`shownSum`; Jev ghi `typesafe` gộp thành Jev, bedrock-satellite thành Bedrock),
   bảng mobile ScrollX, audit phân trang + thẻ trên điện thoại, bỏ mã nội bộ. **Verify live:** apps cis/booking/tripplanner
@@ -124,6 +124,13 @@ do phiên chính làm. Merge theo luật dev-phase (S241 D-13, data standards v1
 - Đã đăng (Nghiệp duyệt): Epic **PR-20** "Nền tảng kỹ thuật & vận hành — báo cáo định kỳ" và Story **PR-21** "Báo cáo nền
   tảng kỳ 1 (01–19/10/2026)" (parent PR-20). Chi tiết + nháp: [2026-10-19-S243-jira-drafts.md](2026-10-19-S243-jira-drafts.md).
 
+## Linear (cuối phiên S243)
+- **Done:** AA-885 (smoke portal 24/24), AA-892 (runbook/playbook trong root #105; mỗi runbook có `last_tested` hoặc banner UNTESTED).
+- **In Review** (đã live, chỉ thiếu bằng chứng Done-when): AA-858 (chị Thư xác nhận + nguồn số liệu trong tooltip), AA-884 (42501
+  live khi UPDATE/DELETE audit + so cost với Cost Explorer theo tag App), AA-897 (dry walkthrough của agent mới).
+- **In Progress** (comment S243 kèm phần còn lại): AA-816, AA-680, AA-860, AA-852, AA-878, AA-887, AA-888, AA-889, AA-890,
+  AA-893, AA-895, AA-896. AA-891 giữ Backlog. Các comment/trạng thái do phiên chính đăng (subagent bị hook chặn ghi Linear).
+
 ## Trạng thái cuối phiên
 - ECS CIS api **:703** / worker **:260** COMPLETED, chạy bằng `cis_app`; CIS migration **250**; Booking **bk-017**;
   TripPlanner **tp-015**; schema reference sinh lại (#104).
@@ -137,7 +144,9 @@ do phiên chính làm. Merge theo luật dev-phase (S241 D-13, data standards v1
 1. **X1 đợt 5** (AA-860): S20 → S21 → S22 (Nghiệp đặt giá trị secret db-migrator ở S20).
 2. **AA-816 cutover** (Stage S) + gỡ ngoại lệ E2E tạm theo ADR 0006a A10 khi xong việc E2E.
 3. **CI:** bỏ qua job "Vercel deploy" cho `dependabot[bot]` ở Booking/TP/CIS; **TP nâng Next 15** (thay cho Dependabot #104).
-4. Đóng AA-858 / AA-884 / AA-878 khi đủ Done-when (đã live; còn mục nào thì làm nốt), AA-680 Phase 2 bỏ bridge CIS.
+4. Đóng có bằng chứng AA-858 / AA-884 / AA-897 (In Review); AA-878 khi đủ Done-when; AA-680 Phase 2 bỏ bridge CIS.
+4a. Hỏi Nghiệp trước khi tạo issue mới: skip "Vercel deploy" cho Dependabot, TP Next 15, scrub account ID/ARN khỏi repo
+   public (CIS 76 / Booking 4 / TP 6 file), CIS logout gọi Cognito `/logout` (hoặc chỉ là dòng scope AA-816), backfill geo 8 nước.
 5. Rà soát chi phí đầu tháng 11 (Aug/Sep/Oct theo tag App) → số chi phí cho báo cáo Jira kỳ 2.
 6. Dữ liệu: khoảng trống geo 8 nước của place-pipeline (backfill tốn tiền → cần duyệt); lệch Bhutan 33 vs 32.
 7. CRM (AA-821 / PR-19): nghiên cứu + kế hoạch gọn, không theo kế hoạch 40 tuần.
