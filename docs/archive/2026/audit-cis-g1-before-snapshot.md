@@ -1,3 +1,5 @@
+> **Archived (AA-889, 19/10/2026) — not current truth.** S183 "before" snapshot of the CIS data reset (AA-596). Row counts are from 16/09/2026; the live schema is `docs/architecture/db-schema-reference.md`.
+
 # G1 — CIS DB "before" snapshot (S183, 2026-09-16)
 
 Read-only, qua SSM tunnel (localhost:15432) tới aa-cis-dev-db (acc2, postgres 15.17). Linear AA-596.
@@ -135,7 +137,7 @@ EXIT:0
 
 ## Nhận xét ranh giới (cho G2)
 
-**Khớp bản đồ (docs/audit-cis-data-reset.md):** mọi bảng GIỮ + XÓA trong bản đồ đều tồn tại và có row count ở trên.
+**Khớp bản đồ (docs/archive/2026/audit-cis-data-reset.md):** mọi bảng GIỮ + XÓA trong bản đồ đều tồn tại và có row count ở trên.
 
 **Chênh lệch cần lưu:**
 - `pipeline_status='published'` = **75** nhưng `gold_aa_internal.published_tours` = **74**. Lệch 1. Khả năng: 1 raw_tour có pipeline_status='published' nhưng bản published tương ứng đã bị trash/xoá, hoặc 1 published_tours bị trashed (master_status='trashed'=4). G2 cần soi kỹ khi viết UPDATE reset pipeline_status.

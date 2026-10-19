@@ -424,7 +424,7 @@ Tabs:
 > transactional outbox (`tripplanner.outbox` + `v_inquiry_outbox`, tp-008) with the contract key
 > `<trip_id>:<handoff_id>` (`docs/contracts/inquiry.submitted.v1.json`). See §10,
 > [ADR 0001](../adr/0001-ecosystem-target-architecture.md) decision 6 and
-> `docs/tripplanner-to-aaa-handoff.md`. The payload and identity points below still stand.
+> `docs/archive/2026/tripplanner-to-aaa-handoff.md` (archived, AA-889). The payload and identity points below still stand.
 
 - **Transport — option A:** a signed webhook with an outbox on the TripPlanner side.
   - HMAC-SHA256 signature header.

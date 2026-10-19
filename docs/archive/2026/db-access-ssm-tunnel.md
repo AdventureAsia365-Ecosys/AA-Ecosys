@@ -1,3 +1,5 @@
+> **Archived (AA-889, 19/10/2026) — not current truth.** Design for a bastion + SSM tunnel that was never kept (the S186 bastion was terminated, AA-602; no bastion exists on 19/10/2026). Database access today is the S3-mediated ECS exec pattern (`skill/aa-cis-schema/references/ecs-exec.md`) and CI workflows (DB Migrate, DB Schema Dump).
+
 # Truy cập RDS acc2 từ máy local (Kiro/WSL) qua SSM tunnel + SQLTools
 
 > Mục đích: cho phép query trực tiếp PostgreSQL RDS (acc2) **trong IDE** khi làm data-ops
@@ -97,10 +99,10 @@ Các bước (tóm tắt, chưa chạy):
 
 ## 5. Mở tunnel (script)
 
-Xem `docs/db-tunnel.sh`. Cách dùng:
+Xem `docs/archive/2026/db-tunnel.sh`. Cách dùng:
 ```bash
-./docs/db-tunnel.sh <bastion-instance-id> <rds-host>
-# ví dụ: ./docs/db-tunnel.sh i-0abc123 aa-cis-dev-db.xxxx.us-west-1.rds.amazonaws.com
+./docs/archive/2026/db-tunnel.sh <bastion-instance-id> <rds-host>
+# ví dụ: ./docs/archive/2026/db-tunnel.sh i-0abc123 aa-cis-dev-db.xxxx.us-west-1.rds.amazonaws.com
 # → giữ terminal này mở; RDS giờ ở localhost:5432
 ```
 
@@ -119,7 +121,7 @@ Xem `docs/db-tunnel.sh`. Cách dùng:
 
 ## 7. File cấu hình đi kèm
 
-- `docs/db-tunnel.sh` — script mở SSM port-forward (đường A).
+- `docs/archive/2026/db-tunnel.sh` — script mở SSM port-forward (đường A).
 - `.vscode/settings.json` — connection SQLTools mẫu (`localhost:5432`, password rỗng → SQLTools hỏi lúc connect).
 
 ## 8. An toàn / dọn dẹp

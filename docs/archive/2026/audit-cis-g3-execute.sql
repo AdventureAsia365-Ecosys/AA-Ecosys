@@ -1,3 +1,4 @@
+-- ARCHIVED (AA-889, 19/10/2026), not current truth: AA-598 one-off CIS data reset, executed 16/09/2026 (S183). Do not re-run.
 -- G3 EXECUTE (AA-598) — transaction thật. Chạy: psql ... -v ON_ERROR_STOP=1 -f này
 -- ON_ERROR_STOP=1 + BEGIN/COMMIT: bất kỳ lỗi nào → toàn bộ rollback tự động.
 \set ON_ERROR_STOP on

@@ -1,3 +1,5 @@
+> **Archived (AA-889, 19/10/2026) — not current truth.** Inventory for the September 2026 org rename (AdventureAsia365-CIS to AdventureAsia365-Ecosys), finished in S181-S191.
+
 # Inventory — tham chiếu tên cũ (org / repo / path) trong AA-Ecosys
 
 **Mục đích:** Kiểm kê mọi tham chiếu tới tên org cũ `AdventureAsia365-CIS`, tên repo,

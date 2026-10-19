@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
+# ARCHIVED (AA-889, 19/10/2026), not current truth: bastion tunnel that was never kept; no bastion exists. Not executable on purpose.
 # Open an SSM port-forwarding tunnel from a bastion EC2 (in the RDS VPC) to the
 # RDS endpoint, mapping it to localhost:5432 for local SQL clients (SQLTools).
 #
 # Prereqs:
 #   - AWS CLI v2 + session-manager-plugin installed
-#   - MFA creds loaded into env (see docs/db-access-ssm-tunnel.md §2)
-#   - A bastion EC2 online in SSM (docs/db-access-ssm-tunnel.md §4)
+#   - MFA creds loaded into env (see docs/archive/2026/db-access-ssm-tunnel.md §2)
+#   - A bastion EC2 online in SSM (docs/archive/2026/db-access-ssm-tunnel.md §4)
 #
 # Usage:
-#   ./docs/db-tunnel.sh <bastion-instance-id> <rds-host> [local-port]
+#   ./docs/archive/2026/db-tunnel.sh <bastion-instance-id> <rds-host> [local-port]
 #
 # Example:
-#   ./docs/db-tunnel.sh i-0abc123 aa-cis-dev-db.xxxx.us-west-1.rds.amazonaws.com
+#   ./docs/archive/2026/db-tunnel.sh i-0abc123 aa-cis-dev-db.xxxx.us-west-1.rds.amazonaws.com
 #
 # Keep this terminal open while you query. Ctrl+C closes the tunnel.
 set -euo pipefail

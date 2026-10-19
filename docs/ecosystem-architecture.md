@@ -63,7 +63,8 @@ flowchart TB
     APIG3[API GW REST aa-booking-dev-api → same VPC Link → ALB /booking/*]
     S3TP[(S3: tripplanner artifacts)]
     OIDC[GitHub OIDC provider]
-    RCICD[role: aa-cis-dev-role]
+    RCICD[role: aa-cis-dev-app-deploy]
+    RTFA[role: aa-cis-infra-tf-apply]
     RTP[role: aa-tripplanner-dev-app-deploy]
     RBK[role: aa-booking-dev-app-deploy]
     RLEX[role: aa-tripplanner-dev-lambda-exec]
@@ -80,10 +81,10 @@ flowchart TB
 
   R1 -->|deploy-dev.yml OIDC| RCICD --> ECS & WRK
   R2 -->|deploy-lambdas.yml OIDC| RTP --> S3TP --> L1 & L2
-  R3 -->|terraform-apply.yml / db-migrate.yml OIDC| RCICD
+  R3 -->|terraform-apply.yml / db-migrate.yml OIDC| RTFA
   R4 -->|deploy-dev.yml OIDC| RBK --> BK
-  RCICD --> MIG
-  RCICD & RTP & RBK -.assume.-> OIDC
+  RTFA --> MIG
+  RCICD & RTFA & RTP & RBK -.assume.-> OIDC
 
   ECS & WRK & MIG & BK --> RDS
   L1 & L2 --> RDS
@@ -244,7 +245,9 @@ Contracts between apps (views, grants, events) are listed in each repo's `CONTEX
   desired count in `ignore_changes`); the app builds an image tagged with the git SHA and deploys through
   its own least-privilege role `aa-booking-dev-app-deploy`, then smoke-tests `/booking/health` (same `git_sha`) and
   `/booking/health/ready`. Booking has its own `booking.job` table (`bk-002`, ADR 0004 O3), so the CIS guard is
-  unaffected; a deploy guard on `booking.job` is not built yet (AA-751 / X6).
+  unaffected. Its own deploy guard is built (AA-751 / X6, S240–S241): the `preflight` job of Booking
+  `deploy-dev.yml` calls `GET /booking/ops/deploy-gate` with its GitHub OIDC token and waits until `booking.job`
+  is idle (the always-queued `bk_inquiry_pull` singleton is not counted).
 - **Migrations:** the owner repo authors them; Infra's DB Migrate applies them to Dev before the app code
   that needs them merges.
 
@@ -337,11 +340,24 @@ One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan,
 
 ## 5. OIDC / CI-CD
 
-| Role | File | Current `sub` | Used by |
+Every CI job assumes its **own** role through GitHub OIDC (AA-806 role split, `cicd_split.tf`). The
+legacy shared `aa-cis-dev-role` was retired in AA-806 step 3 (S239, last use 14/10/2026) and the apply
+boundary denies recreating it. The repos use GitHub's immutable subject claim, so every trust pins the
+org id and the repo id (`repo:AdventureAsia365-Ecosys@<org_id>/<repo>@<repo_id>:<context>`); the exact
+values live in Terraform (`local.oidc_sub_cis_app`, `local.oidc_sub_cis_infra`, `local.tp_oidc_subjects`,
+`local.bk_oidc_subjects`), not in prose. Checked against AA-CIS-Infra `main` on 19/10/2026.
+
+| Role | File | Trusted context | Used by |
 |---|---|---|---|
-| `aa-cis-dev-role` | `accounts/aa365/cicd.tf` | Only `repo:AdventureAsia365-Ecosys@276539096/AA-CIS-App@1212291079:*` and `…/AA-CIS-Infra@1212290412:*` — pinned to the immutable org and repo ids (Infra #95, 14/10/2026). Was org-wide `repo:AdventureAsia365-Ecosys*/*:*` | AA-CIS-App, AA-CIS-Infra (Terraform, DB Migrate) |
-| `aa-booking-dev-app-deploy` | `accounts/aa365/booking.tf` | `repo:AdventureAsia365-Ecosys@276539096/AA-Booking@1418188499:` + `environment:dev` or `ref:refs/heads/main` only (Infra #97) | AA-Booking |
-| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | `repo:AdventureAsia365-Ecosys*/AA-TripPlanner-Web*:*` — still name-based; to be pinned to the repo id in Phase 0 | AA-TripPlanner-Web |
+| `aa-cis-dev-app-deploy` | `accounts/aa365/cicd_split.tf` | AA-CIS-App, `environment:dev` | CIS `Deploy Dev` (ECR push, CIS task families and services only) |
+| `aa-cis-infra-tf-plan` | `accounts/aa365/cicd_split.tf` | AA-CIS-Infra, `pull_request` | `Terraform Plan` (read only) |
+| `aa-cis-infra-tf-apply` | `accounts/aa365/cicd_split.tf` | AA-CIS-Infra, `environment:prod` | `Terraform Apply Prod`, `DB Migrate`, `DB Schema Dump`, `DB Isolation Probe` (boundary `aa-cis-infra-tf-apply-boundary`) |
+| `aa-booking-dev-app-deploy` | `accounts/aa365/booking.tf` | AA-Booking, `environment:dev` or `ref:refs/heads/main` | Booking `Deploy Dev` (Booking ECR, task family and service only) |
+| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | AA-TripPlanner-Web, `ref:refs/heads/main` (pinned S235 Phase 0) | `deploy-lambdas.yml` (artifact zip + the two Lambdas' code) |
+
+Bootstrap objects (these roles, both boundaries, the OIDC provider, the agent session role) are applied
+locally with the MFA admin profile; CI apply cannot rewrite them (AA-CIS-Infra `CONTEXT.md`, "CI/CD and
+OIDC"). Every new IAM role must carry the workload boundary `aa-workload-boundary`.
 
 **Safe rename rule:** widen trust to accept **both** the old and the new org (additive) **first**, rename
 the org **after**, remove the old trust last. Role ARNs in workflows come from `secrets` / `vars`, and
@@ -351,18 +367,19 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
 > **[FACT — G5 done 21/09/2026, AA-588]** Trust for the old org `AdventureAsia365-CIS` was removed from
 > both roles; `sub` now matches only `AdventureAsia365-Ecosys` (verified live with `aws iam get-role`).
 >
-> **OIDC correction (checked in CloudTrail 21/09/2026, AA-588):** the org `AdventureAsia365-Ecosys`
-> **does** enable "include repo ID in the subject". The real `sub` looks like
-> `repo:AdventureAsia365-Ecosys@<orgid>/<repo>@<repoid>:<ref>`, so trust **must** use a wildcard after the
-> org name. The flat pattern `repo:AdventureAsia365-Ecosys/*:*` (no `*`) **fails with AccessDenied** —
-> reproduced in CI Terraform Plan #94, then fixed, applied and green again.
+> **OIDC subject form (checked in CloudTrail 21/09/2026, AA-588):** the repos enable "include repo ID
+> in the subject", so the real `sub` is `repo:AdventureAsia365-Ecosys@<orgid>/<repo>@<repoid>:<ref>`. The flat
+> pattern `repo:AdventureAsia365-Ecosys/*:*` **fails with AccessDenied** (CI Terraform Plan #94). History: the
+> trusts first used a wildcard after the org name; since AA-678 / S235 Phase 0 every role pins the exact ids
+> (table above).
 
 ## 6. Debt / future work
 
 - **AA-Booking (AAA):** slices live through `bk-011` (3.4). Open: staff sign-in on Cognito WORKFORCE (ADR 0006
-  Phase 2, 4.6), customer-facing app and customer identity on Cognito (AA-680, ADR 0006), deploy guard on `booking.job` (AA-751 / X6), Playwright smoke of the staff admin in
-  Booking CI (the non-required "Frontend Build" job already runs eslint, tsc and `next build`). Handoff from
-  TripPlanner: [`tripplanner-to-aaa-handoff.md`](tripplanner-to-aaa-handoff.md).
+  Phase 2, 4.6), customer-facing app and customer identity on Cognito (AA-680, ADR 0006), Playwright smoke of the staff admin in
+  Booking CI (the non-required "Frontend Build" job already runs eslint, tsc and `next build`). The hand-off
+  from TripPlanner is live (outbox → `bk_inquiry_pull`, contract `docs/contracts/inquiry.submitted.v1*.json`); the
+  pre-build draft is archived at [`archive/2026/tripplanner-to-aaa-handoff.md`](archive/2026/tripplanner-to-aaa-handoff.md).
 - **Place pipeline to CIS (AA-712, [ADR 0007](adr/0007-place-pipeline-in-cis.md)):** required before
   destination covers are switched on. Geocoder decided (Geoapify, S236; surfaces showing coordinates need
   "Powered by Geoapify" + "© OpenStreetMap contributors"). Open: TripPlanner vector search must be
@@ -370,7 +387,6 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
 - **[TO CONFIRM]** CloudFront in front of TripPlanner browse routes (listed as a later change).
 - **CIS data rerun:** waves are registered and reported through `/admin/waves` (`shared.rerun_wave`,
   AA-727); Batch Inference on acc3 (AA-624) is still blocked.
-- TripPlanner deploy-role OIDC trust is still name-based (section 5) — pin it to the repo id (Phase 0).
 
 ## 7. References
 
@@ -385,4 +401,4 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
 - `infra/AA-CIS-Infra/accounts/aa365/{cicd.tf, tripplanner.tf, booking.tf}` — OIDC roles, Booking runtime.
 - `docs/contracts/README.md` — contract rules between apps; `docs/adr/0005-pricing-and-supplier-rates.md`.
 - `apps/AA-TripPlanner-Web/docs/{vercel-setup,architecture-overview,smoke-test-runbook}.md`.
-- `docs/inventory-old-refs.md` — inventory of references to old names.
+- `docs/archive/` — retired one-off pages (org-rename inventory, CIS data reset S182-S183, pre-build Booking hand-off).

@@ -1,3 +1,5 @@
+> **Archived (AA-889, 19/10/2026) — not current truth.** Pre-build draft of the TripPlanner to AA-Booking hand-off. Superseded by ADR 0001/0004, the contract `docs/contracts/inquiry.submitted.v1*.json` and AA-Booking `CONTEXT.md` (inquiry intake live since `bk-002`, AA-681).
+
 # Spec (draft) — TripPlanner → AA-Booking (AAA) handoff
 
 > **Status:** G0 draft, **no AAA code yet**. Waiting for the **AA-Booking (AAA)** repo/product.
@@ -59,7 +61,7 @@ shared database makes unnecessary.
 
 ### 3.2 Payload — `inquiry.submitted` v1 (draft) [TODO-AAA]
 
-Normative schema: [`contracts/inquiry.submitted.v1.json`](contracts/inquiry.submitted.v1.json) (AA-676). The sketch below predates it;
+Normative schema: [`contracts/inquiry.submitted.v1.json`](../../contracts/inquiry.submitted.v1.json) (AA-676). The sketch below predates it;
 when they differ, the JSON Schema wins (v1 has no narration; consent carries `consent_at`; legs carry `position`).
 
 ```jsonc
