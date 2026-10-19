@@ -436,8 +436,9 @@ reads `catalog.*`.
 *Why:* a self-asserted GUC is not an authorization boundary (TripPlanner `backend/shared/catalog_rls.py`
 `set_catalog_tenant`, review P7), and a silent fallback to the master pool turns RLS off (review P2).
 *Enforced:* review; isolation probe. The transaction-local GUC pattern is
-`apps/AA-CIS-App/api/core/aa544_tenant_pool.py` (`acquire_scoped_conn`); its fallback to the admin pool
-when a flag is off or the pool is `None` is grandfathered (section 9), not a pattern to copy.
+`apps/AA-CIS-App/api/core/aa544_tenant_pool.py` (`acquire_scoped_conn`). Its flags fail closed since S241 D-12:
+only an explicit off value (or `TENANT_POOL_FORCE_ADMIN_FLAGS`) moves a route to the admin pool, as an operator
+rollback that section 9 still lists until the last route's flag is retired.
 
 **SEC-11 (MUST)** Every LOGIN role except the RDS master `aa_cis_admin` (break-glass, Part C C2.3b) has a
 `CONNECTION LIMIT` set in git and changed only through review: for `tripplanner`, `booking` and
@@ -721,7 +722,7 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 | TripPlanner: 12 FKs into `shared.destinations`; direct reads of `published_tours` (self-set master GUC), `raw_tours`, `shared.destinations`; CIS `photo_sync` reading frozen TP tables | KEY-1, SEC-10, CON-1 | **X4** (AA-712) |
 | Table/column grants to `tripplanner`: CIS 173 (gateway tables), 179 (`raw_tours` columns), 180/216 (atoms), 201 (destinations, photo views), the `published_tours` SELECT | SEC-5 (`schema-ownership.md` rule 2 allowed them) | **X4** revoke migration; the gateway-config SELECT (`llm_role_config`, `llm_model_catalog`) stays until ADR 0009 (AA-804) defines the gateway contract |
 | Contract views in `shared`: `shared.v_tour_photos`, `shared.v_destination_photos` (ADR 0002, CIS 200) | CON-1 | retired once TripPlanner reads `catalog.v_*_photo` (**X4**) |
-| CIS tenant pool falls back to the admin pool when its Redis flag is off or the pool is `None` (`aa544_tenant_pool.py`) | SEC-10 | AA-544 stage roll-out / **AA-817** |
+| CIS tenant pool: an explicit off flag value or `TENANT_POOL_FORCE_ADMIN_FLAGS` moves one route to the admin pool (operator rollback). Missing/unreadable flags and a missing pool fail closed since S241 D-12 (CIS #792) | SEC-10 | AA-817 / AA-859 (retire the flags route by route) |
 | CIS 007b creates login role `aa_app_user` in a migration | MIG-6 | **X1** (role definitions moved to the Infra bootstrap) |
 | Booking and TripPlanner objects and views owned by `aa_cis_admin` (the migrator), not a NOLOGIN owner | SEC-1, CON-2 | **X1** (`bk_owner`, `tp_owner`) |
 | `shared.admin_users.password_hash`; `booking.customer_otps`, `booking.customer_sessions` | NAM-14 | ADR 0006 Phase 1 (AA-816) / Phase 4 (a later `bk-NNN` drop) |

@@ -41,16 +41,16 @@ AA-517 (02/09/2026): dọn 1 RDS snapshot lạc + 20 Secrets Manager secrets l�
 nhân: `default` profile từng trỏ acc1) — xem memory `project_aa517_acc1_orphan_cleanup`.
 
 ## LIVE ENDPOINTS (Dev, kiểm 19/10/2026)
-CIS API:       https://api-cis.lumiguides.it.com      (API Gateway REST → VPC link → ALB → ECS; `/health` 200)
-CIS frontend:  https://aa-cis.lumiguides.it.com       (Vercel)
-Booking API:   https://api-booking.lumiguides.it.com  (REST API riêng, cùng VPC link; `/booking/health` 200)
+CIS API:       <https://api-cis.lumiguides.it.com>      (API Gateway REST → VPC link → ALB → ECS; `/health` 200)
+CIS frontend:  <https://aa-cis.lumiguides.it.com>       (Vercel)
+Booking API:   <https://api-booking.lumiguides.it.com>  (REST API riêng, cùng VPC link; `/booking/health` 200)
 Booking admin: Vercel project `aa-booking-admin`
-Staff sign-in: Cognito WORKFORCE, managed login https://staff-auth.lumiguides.it.com (ADR 0006/0006a)
+Staff sign-in: Cognito WORKFORCE, managed login <https://staff-auth.lumiguides.it.com> (ADR 0006/0006a)
 ID của API Gateway / pool / SG: KHÔNG chép vào đây (đổi được) — tra bằng lệnh 1 dòng hoặc Terraform output.
 
 ## RESOURCES
 ECS cluster: aa-cis-dev-cluster | services: aa-cis-dev-api, aa-cis-dev-worker, aa-booking-dev-api
-ECR: aa-cis-dev-api, aa-booking-dev-api — IMMUTABLE, tag `dev-<git sha>` (AA-869); không dùng `:latest`
+ECR: aa-cis-dev-api (tag `dev-<git sha>`, AA-869), aa-booking-dev-api (tag = git SHA) — cả hai IMMUTABLE; không dùng `:latest`
 RDS: aa-cis-dev-db (PostgreSQL 15, db.t4g.small) | DSN secrets: aa-cis/dev/rds (master), mỗi app một secret riêng — danh sách: docs/security/secrets-register.md (AA-878)
 S3 scripts bucket: aa-cis-bronze-005097885195
 
@@ -61,11 +61,16 @@ backlog sống docs/backlog/README.md.
 Trạng thái phiên: memory Notion (Program Brain/memory.md) + docs/sessions/. Không ghi số ECS/issue cứng ở đây.
 
 ## Git Rules — NON-NEGOTIABLE
-- ADR-2026-023 (trunk-based, effective 09/07/2026): `develop` branch REMOVED in all 3 repos
-  (AA-CIS-App, AA-ACP-App, AA-CIS-Infra). Work on a feature/fix branch → PR → CI required → merge
-  straight to `main` (human-only, via PR review).
-- DO NOT merge to main yourself — human does that manually after CI green
-- Before starting: git checkout main && git pull origin main
+- ADR-2026-023 (trunk-based): không có `develop`. Branch feature/fix → PR → CI bắt buộc → squash merge thẳng vào
+  `main` (repo gốc: `master`). Bắt đầu: tạo branch/worktree từ `origin/main` mới nhất, không sửa trên checkout chính.
+- **Quyền merge theo giai đoạn (S241 D-13, data standards DM-11.5 — câu chữ v1.1 chờ Nghiệp duyệt, N-1):**
+  - **Giai đoạn dev (bây giờ):** phiên agent điều phối TỰ merge PR của mình khi CI xanh — kể cả PR bảo mật/hạ tầng —
+    rồi deploy, verify live, báo cáo (memory `dev-phase-self-merge`). Subagent KHÔNG merge (hook
+    `.claude/hooks/subagent-guardrails.sh` chặn). Thay đổi rủi ro (auth/quyền, migration/schema, CI/workflow/secret,
+    xoá dữ liệu) → cho agent review trước (`kiro-reviewer` theo `kiro-delegate`, hoặc subagent review độc lập).
+  - **Từ prod đầu tiên hoặc tenant trả tiền đầu tiên:** Nghiệp duyệt trước khi merge mọi PR Terraform/IAM, migration DB,
+    auth/bảo mật, xoá dữ liệu. PR app khác: agent merge khi CI xanh.
+- Không merge/deploy backend khi bảng job còn job hoặc đang có wave (DM-11.4); "Done" theo `skill/aa-ship/SKILL.md`.
 ## KIRO STEERING RULES — BẮT BUỘC (import, added 24/09/2026)
 Nguồn sự thật duy nhất là `.kiro/steering/` (dùng chung Kiro + Claude Code) — import trực tiếp để
 không lệch nhau; sửa quy tắc thì sửa file steering, KHÔNG chép lại vào đây.
