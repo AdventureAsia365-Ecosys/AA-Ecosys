@@ -903,7 +903,11 @@ worker gets stopTimeout 30 s. So every ECS/Lambda change runs only when the job 
   Console; then DB Migrate `mode=set-password`, role `db_migrator`.
 - **Verify:** set-password log `current_user=db_migrator rolconnlimit=5`; dump Roles table; CloudWatch
   `AA/RDS RoleConnections Role=db_migrator` alarm exists.
-- **Rollback:** forward drop file. **Effort:** 2 h.
+- **Rollback:** forward drop file, prepared (unmerged) `roles/` undo `s20-undo/0NN_x1_rl002_undo.sql` (this
+  folder): refuses while `cis_owner` owns anything (245 undo first, S21), `db_migrator` holds any privilege or
+  has a session (roll S22 back first); `DROP OWNED BY cis_owner` (revokes CREATE on the database), `DROP ROLE
+  db_migrator, cis_owner`. Dry-run on PG 16 (S244, AA-CIS-Infra `docs/implementation-notes/AA-860-S20.md`).
+  **Effort:** 2 h.
 
 #### S21. CIS `245`: CIS objects to `cis_owner`
 - **Repo:** AA-CIS-App, `api/migrations/245_x1_cis_owner.sql`; apply as the master (member of `cis_owner`).
