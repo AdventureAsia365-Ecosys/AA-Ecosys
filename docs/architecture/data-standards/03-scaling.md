@@ -7,7 +7,7 @@ taken on a measured trigger, not a guess.
 
 **Status:** Accepted with the S237 data-architecture review
 ([`docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md`](../../audits/2026-10-14-S237-lane-backlog/data-architecture/README.md),
-"the review"; Nghiệp approved every recommendation, 15/10/2026). Version 1.0, part of the rule body
+"the review"; Nghiệp approved every recommendation, 15/10/2026). Version 1.1 (19/10/2026, S243; changes in the README changelog), part of the rule body
 of [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and
 data platform rules, accepted 15/10/2026); index and golden rules in [`README.md`](README.md). Roadmap
 ids (N1..N7, X1..X10, L1..L10) are the review's section 7.
@@ -133,7 +133,7 @@ account Lambda quota of 10 and `desired_count = 1` hide it.
 | C2.3d | Lambda pools MUST use `max_size = 1` per instance. | One Lambda instance serves one request at a time; extra connections are idle waste multiplied by concurrency. | Review checklist (TP `backend/shared/db.py`). |
 | C2.3e | `CONNECTION LIMIT` on `tripplanner` and TP pool max 1 MUST be merged **and applied** before the Lambda quota increase to 1000 takes effect. `reserved_concurrent_executions` on `aws_lambda_function.tripplanner_browse` / `tripplanner_assembly` (`accounts/aa365/tripplanner.tf`) MUST be merged as a variable that stays unset while the quota is 10 and is set to 10 in the first Terraform apply after the quota lands, before any load test. | AWS keeps at least 100 unreserved concurrency, so a reservation fails on a quota of 10; Terraform Apply is one manual workflow over all of `accounts/aa365`, so a hard-coded reservation on `main` would break every unrelated apply. S236 already saw 1,591 throttles on `/plan` tiles; without caps the quota raise converts throttles into a DB outage for all three apps. | Approved decision E6; review checklist on the quota case; N3. |
 | C2.3f | Every pool MUST set its own `statement_timeout` (asyncpg `server_settings`) below its caller's timeout (table C2.2). A role-level `ALTER ROLE … SET statement_timeout` is only a backstop, set to the **largest** pool value of that role, and only on single-purpose roles (`aa_app_user`, `tripplanner`, `booking`, later `db_migrator` with the runner override). `idle_in_transaction_session_timeout = 60s` is set in the parameter group; before it is enabled, a week of N1 `pg_stat_activity` samples MUST show no app session idle in transaction for > 60 s (a job handler holding a transaction across an LLM call would be killed). | A runaway query must die before the Lambda or HTTP caller gives up and retries on a new connection; shared roles (`aa_cis_admin`, later `cis_app` for API + worker, `tripplanner` for browse + assembly) cannot carry two role-level values. | To build (N3: parameter group, pool settings, `ALTER ROLE … SET`); review checklist on pool creation. |
-| C2.3g | Pools MUST fail fast on exhaustion (bounded acquire timeout, ≤ 5 s) and MUST NOT fall back to another role's pool. Exception: the CIS tenant pool's flag-off / pool-missing path to the main pool is the AA-544 staged-rollout design and stays only while a route is a canary; once a route is promoted (flag removed), a missing or exhausted tenant pool MUST give 503. New apps fail closed from day one (DM-8.4). | Silent fallback to the master pool hides saturation and breaks isolation (review P2). | Review checklist; AA-817 / AA-544 for the CIS tenant pool. |
+| C2.3g | Pools MUST fail fast on exhaustion (bounded acquire timeout, ≤ 5 s) and MUST NOT fall back to another role's pool. A missing or exhausted tenant pool gives 503. The CIS tenant-pool flags fail closed globally (S241 D-12, CIS #792): an unreadable or missing flag means the tenant pool; only an explicit `"false"` moves that one route to the admin pool. Rollback path (DM-8.4): `SET <flag key> false` in Redis for one route, or the emergency task-definition variable `TENANT_POOL_FORCE_ADMIN_FLAGS` (survives a Redis restart; needs a redeploy). New apps fail closed from day one. | Silent fallback to the master pool hides saturation and breaks isolation (review P2). | Review checklist; CIS `aa544_tenant_pool.py` (fail closed since D-12). |
 | C2.3h | The `tripplanner` role SHOULD set `idle_session_timeout` (PostgreSQL 14+, start 10 min) so connections held by frozen or retired Lambda environments are reaped; the TP pool MUST tolerate a server-closed connection (retry the acquire once). Verify on Dev with a thawed Lambda before enabling. | Frozen environments keep their connection open, and after a TP deploy the old version's environments still count against the `CONNECTION LIMIT`. | To build (N3); TP smoke after the change. |
 
 ---
@@ -204,8 +204,8 @@ task role (shared by api and worker), scoped by `cloudwatch:namespace`, added in
 
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
-| C4.2a | The parameter group MUST set `log_min_duration_statement = 500ms`, `log_lock_waits = on`, `track_io_timing = on`, `rds.force_ssl = 1`, and preload `pg_stat_statements` (`CREATE EXTENSION` in a CIS migration; extensions are instance-level and only CIS migrations create them, like `vector` and `pgcrypto` today). Before `rds.force_ssl = 1` is applied, `pg_stat_ssl` joined to `pg_stat_activity` MUST show `ssl = true` for every app session (Booking enforces `DB_SSL=require`; CIS and TP rely on the asyncpg default). | Slow-query and lock-wait evidence must exist before an incident, not after; a non-TLS client would be cut off by the flip. | To build (N3). |
-| C4.2b | `enabled_cloudwatch_logs_exports = ["postgresql"]` with 14-day retention. | Logs survive instance events and are searchable. | To build (N3). |
+| C4.2a | The parameter group MUST set `log_min_duration_statement = 500ms`, `log_lock_waits = on`, `track_io_timing = on`, `rds.force_ssl = 1`, and preload `pg_stat_statements` (`CREATE EXTENSION` in a CIS migration; extensions are instance-level and only CIS migrations create them, like `vector` and `pgcrypto` today). Before `rds.force_ssl = 1` is applied, `pg_stat_ssl` joined to `pg_stat_activity` MUST show `ssl = true` for every app session (Booking enforces `DB_SSL=require`; CIS and TP rely on the asyncpg default). | Slow-query and lock-wait evidence must exist before an incident, not after; a non-TLS client would be cut off by the flip. | Exists (v1.1): parameter group `aa-cis-dev-pg15` in `infra/AA-CIS-Infra/modules/rds/main.tf` (AA-824; also `log_connections`/`log_disconnections` per D-08, `log_parameter_max_length = 0`, `idle_in_transaction_session_timeout`); extension by CIS 234. |
+| C4.2b | `enabled_cloudwatch_logs_exports = ["postgresql"]` with **365-day** retention (security/audit class: connection logs, S241 D-09, AA-872; Part B §7). | Logs survive instance events and are searchable for a year. | Exists (v1.1): `modules/rds/main.tf` (`log_retention_days` default 365); live log group checked 19/10/2026. |
 | C4.2c | Logs MUST NOT contain PII or secrets: no `log_statement = all`, no parameter logging on PII tables. | `booking.customers` and inbox payloads are personal data. | Review checklist on the parameter group. |
 
 ### C4.3 Review cadence
@@ -326,14 +326,14 @@ them manually in VSCode, never through a generated script.
 
 | Setting | Today (`modules/rds/main.tf`) | Target | Roadmap |
 |---|---|---|---|
-| Class | `db.t3.micro` | `db.t4g.small` + PI | X9 (approved) |
-| Storage | 20 GB gp3, no autoscaling | `max_allocated_storage = 100` | N3 |
+| Class | `db.t4g.small` + Performance Insights (v1.1, checked live 19/10/2026) | `db.t4g.small` + PI | X9 (done) |
+| Storage | 20 GB gp3, `max_allocated_storage = 100` | `max_allocated_storage = 100` | N3 (done) |
 | Multi-AZ | false | false (Dev) | — |
 | PITR | 7 days, window 03:00-04:00 UTC | 7 days | — |
-| Final snapshot | `skip_final_snapshot = true` | `false`, `copy_tags_to_snapshot = true` | N3 |
+| Final snapshot | `skip_final_snapshot = false`, `copy_tags_to_snapshot = true` | `false`, `copy_tags_to_snapshot = true` | N3 (done) |
 | Deletion protection | true | true | — |
-| Parameter group | default | custom (C4.2a, C2.3f) | N3 |
-| Restore drill | never | once now, record the RTO; again before prod (DM-9.3) | X10 |
+| Parameter group | custom `aa-cis-dev-pg15` | custom (C4.2a, C2.3f) | N3 (done) |
+| Restore drill | done once on 17/10/2026 (S241 D-10: PITR, about 22 minutes; evidence `docs/audits/2026-10-17-S241-restore-drill/`) | once now, record the RTO; again before prod (DM-9.3) | X10 |
 | DSN host | RDS endpoint in each secret | private CNAME | X10 |
 | Real-data dumps | `docs/backups/2026-09-16` on a laptop | moved to an encrypted private S3 prefix, then removed locally (E10) | X10 |
 

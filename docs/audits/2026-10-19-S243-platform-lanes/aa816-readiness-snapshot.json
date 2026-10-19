@@ -1,0 +1,123 @@
+{
+ "users": [
+  {
+   "username": "admin",
+   "role": "admin",
+   "email": "admin@adventure.asia",
+   "display_name": "Break-glass",
+   "linked": false,
+   "has_pw": true,
+   "is_owner": false,
+   "is_active": true,
+   "last_login_at": null
+  },
+  {
+   "username": "e2e-claude-code",
+   "role": "admin",
+   "email": null,
+   "display_name": null,
+   "linked": false,
+   "has_pw": true,
+   "is_owner": false,
+   "is_active": true,
+   "last_login_at": null
+  },
+  {
+   "username": "e2e-claude-code-2",
+   "role": "admin",
+   "email": null,
+   "display_name": null,
+   "linked": false,
+   "has_pw": true,
+   "is_owner": false,
+   "is_active": true,
+   "last_login_at": null
+  },
+  {
+   "username": "e2e-test-admin",
+   "role": "admin",
+   "email": null,
+   "display_name": null,
+   "linked": false,
+   "has_pw": true,
+   "is_owner": false,
+   "is_active": false,
+   "last_login_at": null
+  },
+  {
+   "username": "nghiep",
+   "role": "admin",
+   "email": "nghieppham@adventure.asia",
+   "display_name": "Nghi\u1ec7p Ph\u1ea1m",
+   "linked": true,
+   "has_pw": true,
+   "is_owner": true,
+   "is_active": true,
+   "last_login_at": "2026-10-18 15:16:22.257856+00"
+  },
+  {
+   "username": "s226_rev_ui",
+   "role": "reviewer",
+   "email": null,
+   "display_name": null,
+   "linked": false,
+   "has_pw": true,
+   "is_owner": false,
+   "is_active": false,
+   "last_login_at": null
+  },
+  {
+   "username": "thu",
+   "role": "admin",
+   "email": "thu@adventure.asia",
+   "display_name": "ThuLe",
+   "linked": false,
+   "has_pw": false,
+   "is_owner": false,
+   "is_active": true,
+   "last_login_at": null
+  },
+  {
+   "username": "trang",
+   "role": "reviewer",
+   "email": null,
+   "display_name": null,
+   "linked": false,
+   "has_pw": true,
+   "is_owner": false,
+   "is_active": true,
+   "last_login_at": null
+  }
+ ],
+ "grants": [],
+ "reconcile_jobs": [],
+ "booking_staff": [
+  {
+   "cis_user_id": "2d8e5a2f-3722-4571-9327-177d10b74127",
+   "email": null,
+   "name": "e2e-claude-code",
+   "role": "admin",
+   "active": true,
+   "cis_role": "admin",
+   "last_seen_at": "2026-10-17 11:31:05.158145+00"
+  },
+  {
+   "cis_user_id": "93efce82-fa4b-4b6f-818e-7bb135c00dda",
+   "email": null,
+   "name": "admin",
+   "role": "admin",
+   "active": true,
+   "cis_role": "admin",
+   "last_seen_at": "2026-10-16 15:26:24.109232+00"
+  },
+  {
+   "cis_user_id": "58a130c7-5f39-4eec-8297-8a36c3318a63",
+   "email": null,
+   "name": "e2e-claude-code-2",
+   "role": "admin",
+   "active": true,
+   "cis_role": "admin",
+   "last_seen_at": "2026-10-16 01:58:23.605972+00"
+  }
+ ]
+}

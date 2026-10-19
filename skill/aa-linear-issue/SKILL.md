@@ -36,6 +36,19 @@ AA-xxx (vì sao liên quan)
 
 Title: `[Area] <việc cần làm> — <chi tiết chính>`, ví dụ `[T11] Idempotent publish — …`.
 
+## Definition of Ready (trước khi giao Kiro/subagent/lane)
+
+Issue chỉ được giao khi đủ các mục dưới (thêm dưới template trên; mẫu đầy đủ: `docs/templates/definition-of-ready.md`, AA-887). Thiếu → bổ sung trước, chưa giao.
+
+- [ ] **Goal** — 1–2 câu kết quả nghiệp vụ.
+- [ ] **Scope** ghi repo/schema/file và phần out of scope.
+- [ ] **Done when** 3–6 tiêu chí kiểm được trên Dev (không phải "code merged").
+- [ ] **Verify** — lệnh curl/trang/query/workflow cụ thể chứng minh live.
+- [ ] **Risk class** — none | auth | migration | IAM/secret | delete | cost | LLM; lớp rủi ro → `kiro-reviewer` trên PR.
+- [ ] **Dependencies** — issue/PR/migration phải xong trước (`blocks`/`blockedBy`).
+- [ ] **Docs impact** — CONTEXT.md | ADR | runbook | contract | ID trong catalog `docs/README.md` | none.
+- [ ] **Cost** — 0 USD, hoặc ước tính USD/tháng cho resource AWS mới / chạy trả phí (DM-10.7; LLM: subset + `stage=adhoc_<issue>`).
+
 ## Cập nhật
 
 - **Trước khi ghi vào issue nào: `get_issue` và kiểm title khớp nội dung.** Từng gọi nhầm số issue 3 lần trong một phiên (30/07).

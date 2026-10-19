@@ -1,0 +1,95 @@
+{
+ "id": "b180f522-8ab5-42d4-8a2c-4b67b759e980",
+ "kind": "staff_directory_reconcile",
+ "status": "succeeded",
+ "created_at": "2026-10-19 00:38:44.444375+00",
+ "finished_at": "2026-10-19 00:38:46.906631+00",
+ "result": {
+  "kind": "staff_directory_reconcile",
+  "notes": [
+   "ListUsers does not say whether a user has a password; (d) flags any status other than CONFIRMED.",
+   "FORCE_CHANGE_PASSWORD (created, no password set) is listed under pending_first_sign_in and not counted as drift: staff sign in with an email code, which may leave that status as it is.",
+   "Report only: nothing in Cognito or shared.admin_users was changed."
+  ],
+  "counts": {
+   "rows": 8,
+   "active_rows": 6,
+   "drift_total": 1,
+   "group_drift": 1,
+   "cognito_users": 3,
+   "missing_email": 3,
+   "groups_missing": 0,
+   "status_findings": 0,
+   "breakglass_issues": 0,
+   "cognito_without_row": 0,
+   "missing_cognito_sub": 5,
+   "pending_first_sign_in": 0,
+   "rows_unknown_to_cognito": 0
+  },
+  "groups": {
+   "cis-admin": 3,
+   "cis-content": 0,
+   "cis-reviewer": 0,
+   "booking-admin": 2,
+   "booking-sales": 0,
+   "booking-contracting": 0,
+   "booking-content_creator": 0
+  },
+  "issuer": "https://cognito-idp.us-west-1.amazonaws.com/us-west-1_bCcFvbSOS",
+  "pool_id": "us-west-1_bCcFvbSOS",
+  "trigger": "schedule",
+  "readiness": {
+   "ready": false,
+   "active_rows": 6,
+   "missing_email": [
+    "e2e-claude-code",
+    "e2e-claude-code-2",
+    "trang"
+   ],
+   "missing_cognito_sub": [
+    "admin",
+    "e2e-claude-code",
+    "e2e-claude-code-2",
+    "thu",
+    "trang"
+   ],
+   "missing_email_count": 3,
+   "missing_cognito_sub_count": 5
+  },
+  "breakglass": {
+   "email": "admin@adventure.asia",
+   "groups": [
+    "cis-admin",
+    "booking-admin"
+   ],
+   "issues": [],
+   "linked": false,
+   "status": "CONFIRMED",
+   "enabled": false,
+   "has_row": true,
+   "present": true,
+   "row_username": "admin",
+   "missing_groups": []
+  },
+  "checked_at": "2026-10-19T00:38:46.900426+00:00",
+  "drift_total": 1,
+  "group_drift": [
+   {
+    "kind": "booking_role",
+    "email": "nghieppham@adventure.asia",
+    "cognito": "admin",
+    "username": "nghiep",
+    "directory": null,
+    "cognito_groups": [
+     "booking-admin"
+    ]
+   }
+  ],
+  "groups_missing": [],
+  "status_findings": [],
+  "cognito_without_row": [],
+  "pending_first_sign_in": [],
+  "rows_unknown_to_cognito": []
+ },
+ "err": ""
+}

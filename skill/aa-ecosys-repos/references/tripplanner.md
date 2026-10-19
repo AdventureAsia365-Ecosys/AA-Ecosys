@@ -7,4 +7,4 @@ Nguồn yêu cầu: Notion "AA_TripPlanner_AI — PRD Canonical v0.3 (Map-First)
 - Đơn vị khách pin: `itinerary_component` (destination + activity + thời lượng), không phải nguyên tour.
 - "Send to advisor" là cổng người duy nhất. Chặn đăng ký bằng flag `require_registration_before_handoff`.
 - Việc mở trước khi có khách thật: AA-731 (idempotent handoff, đọc `v_active_tour_atoms`, chạy lại sau wave, grounding renarrate, email advisor).
-- Bàn giao sang AAA: `~/projects/AA-Ecosys/docs/tripplanner-to-aaa-handoff.md`.
+- Bàn giao sang AA-Booking: đã chạy thật (outbox `tripplanner.v_inquiry_outbox` → Booking `bk_inquiry_pull`, contract `docs/contracts/inquiry.submitted.v1*.json`); xem `apps/AA-Booking/CONTEXT.md`. Bản nháp cũ: `docs/archive/2026/tripplanner-to-aaa-handoff.md`.

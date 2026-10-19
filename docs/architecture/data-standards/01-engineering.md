@@ -4,7 +4,7 @@
 view, a contract or a query against the shared PostgreSQL 15 RDS (`aa-cis-dev-db`, acc2 `005097885195`,
 us-west-1) used by AA-CIS-App, AA-TripPlanner-Web and AA-Booking, and by any app that joins later.
 
-- **Status:** Accepted 15/10/2026 (v1.0, S237). Nghiệp approved every recommendation of the S237
+- **Status:** Accepted 15/10/2026 (v1.0, S237); version 1.1 on 19/10/2026 (S243, changelog in [`README.md`](README.md)). Nghiệp approved every recommendation of the S237
   data-architecture review (`docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md`,
   "the review"). This page is part of the rule body that
   [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and
@@ -68,7 +68,7 @@ roadmap id; until it lands, the review checklist (section 8) carries the check.
 | Instance guardrails, parameter group, `pg_stat_statements`, new alarms, `CONNECTION LIMIT`, `application_name`, Lambda reserved concurrency | *to build* **N3** | slow queries, lock waits, idle-in-transaction, connection budget |
 | Safe runner defaults, `-- migrate:` headers, pre-snapshot, SQL lint (squawk or grep rules), unique-number check | *to build* **N5** | lock/statement timeouts, CONCURRENTLY, destructive snapshot |
 | Infra role bootstrap (role attributes: LOGIN, `CONNECTION LIMIT`, role-level backstop timeouts, `application_name`) in git, applied through a reviewed Infra path | *to build* **X1** (owner roles, `db_migrator`, `cis_app`, new apps). Interim for **N3**: one reviewed CIS migration sets the limits of the 3 existing runtime roles (Part C **C2.3a**, the single MIG-6 exception) | roles are Infra-owned (`schema-ownership.md` rule 3); DB Migrate today accepts only `cis`/`tripplanner`/`booking` dirs and the Booking guard rejects `ALTER ROLE` |
-| `infra/AA-CIS-Infra/db/owners.yaml` + owner roles + `db_migrator` | *to build* **X1** | one registry of owners, prefixes, roles, allowed grants |
+| `infra/AA-CIS-Infra/db/owners.yaml` + owner roles + `db_migrator` | `owners.yaml` exists (X1 S1, AA-CIS-Infra #163; v1.1); owner roles and `db_migrator`: **X1** | one registry of owners, prefixes, roles, allowed grants |
 | Shared job-table DDL template in `shared/jobs` ([ADR 0003a](../../adr/0003a-per-owner-job-tables.md)) | *to build* **X6** | one job shape per owner schema |
 | Retention/rollup job kinds, `shared.llm_call_daily` | *to build* **N4** | TTL deletes after S3 archive; rollups other apps read |
 | `docs/architecture/dead-table-registry.md` | *to build* **N6** (referenced, does not exist) | every quarantined or dropped object |
@@ -235,8 +235,9 @@ exist today, and every new app copies whichever precedent it finds first (review
 **MIG-1 (MUST)** Every schema has one owner repo and one key space: CIS `NNN`
 (`apps/AA-CIS-App/api/migrations/`), TripPlanner `tp-NNN` (`apps/AA-TripPlanner-Web/migrations/`),
 Booking `bk-NNN` (`apps/AA-Booking/migrations/`), a new app `<prefix>-NNN`. A new owner is registered in
-`infra/AA-CIS-Infra/db/owners.yaml` (*to build*, **X1**); until then one Infra PR updates
-`db-migrate.yml`, `check_migration_copies.py` (`OWNERS`, `PATH_RE`) and `schema-ownership.md` together.
+`infra/AA-CIS-Infra/db/owners.yaml` (the single registry, Part B DM-1.2); the same Infra PR updates the files
+that mirror it (`db-migrate.yml`, `run_migration.py`, `check_migration_copies.py`, `isolation_probe.py`;
+`db/tests/test_owners_registry.py` fails when they disagree) and `schema-ownership.md`.
 *Why:* without prefixes two owners' `007` collide and the second silently does not register.
 *Enforced:* Copy Guard (prefix and path); DB Migrate path regex.
 
@@ -436,8 +437,10 @@ reads `catalog.*`.
 *Why:* a self-asserted GUC is not an authorization boundary (TripPlanner `backend/shared/catalog_rls.py`
 `set_catalog_tenant`, review P7), and a silent fallback to the master pool turns RLS off (review P2).
 *Enforced:* review; isolation probe. The transaction-local GUC pattern is
-`apps/AA-CIS-App/api/core/aa544_tenant_pool.py` (`acquire_scoped_conn`); its fallback to the admin pool
-when a flag is off or the pool is `None` is grandfathered (section 9), not a pattern to copy.
+`apps/AA-CIS-App/api/core/aa544_tenant_pool.py` (`acquire_scoped_conn`). Its flags fail closed globally since S241 D-12
+(an unreadable flag means the tenant pool): only an explicit `"false"`, or the emergency variable
+`TENANT_POOL_FORCE_ADMIN_FLAGS`, moves one route to the admin pool, as an operator rollback (Part B DM-8.4)
+that section 9 still lists until the last route's flag is retired.
 
 **SEC-11 (MUST)** Every LOGIN role except the RDS master `aa_cis_admin` (break-glass, Part C C2.3b) has a
 `CONNECTION LIMIT` set in git and changed only through review: for `tripplanner`, `booking` and
@@ -721,7 +724,7 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 | TripPlanner: 12 FKs into `shared.destinations`; direct reads of `published_tours` (self-set master GUC), `raw_tours`, `shared.destinations`; CIS `photo_sync` reading frozen TP tables | KEY-1, SEC-10, CON-1 | **X4** (AA-712) |
 | Table/column grants to `tripplanner`: CIS 173 (gateway tables), 179 (`raw_tours` columns), 180/216 (atoms), 201 (destinations, photo views), the `published_tours` SELECT | SEC-5 (`schema-ownership.md` rule 2 allowed them) | **X4** revoke migration; the gateway-config SELECT (`llm_role_config`, `llm_model_catalog`) stays until ADR 0009 (AA-804) defines the gateway contract |
 | Contract views in `shared`: `shared.v_tour_photos`, `shared.v_destination_photos` (ADR 0002, CIS 200) | CON-1 | retired once TripPlanner reads `catalog.v_*_photo` (**X4**) |
-| CIS tenant pool falls back to the admin pool when its Redis flag is off or the pool is `None` (`aa544_tenant_pool.py`) | SEC-10 | AA-544 stage roll-out / **AA-817** |
+| CIS tenant pool: an explicit `"false"` flag value (Redis, immediate) or the emergency variable `TENANT_POOL_FORCE_ADMIN_FLAGS` (task definition, durable, needs a redeploy) moves one route to the admin pool (operator rollback, Part B DM-8.4). Missing or unreadable flags and a missing pool fail closed since S241 D-12 (CIS #792) | SEC-10 | AA-817 / AA-859 (retire the flags route by route) |
 | CIS 007b creates login role `aa_app_user` in a migration | MIG-6 | **X1** (role definitions moved to the Infra bootstrap) |
 | Booking and TripPlanner objects and views owned by `aa_cis_admin` (the migrator), not a NOLOGIN owner | SEC-1, CON-2 | **X1** (`bk_owner`, `tp_owner`) |
 | `shared.admin_users.password_hash`; `booking.customer_otps`, `booking.customer_sessions` | NAM-14 | ADR 0006 Phase 1 (AA-816) / Phase 4 (a later `bk-NNN` drop) |

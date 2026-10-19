@@ -10,7 +10,7 @@ paste it into dbdiagram.io to render it.
 - `../Adventure Asia PRD and Technical Spec Doc [Final].pdf`;
 - `../AAA_Quanskill_Handover_Review.docx` (10/06/2026);
 - ADR 0001 (decisions 5–7) and ADR 0002;
-- `../../tripplanner-to-aaa-handoff.md`.
+- `../../archive/2026/tripplanner-to-aaa-handoff.md` (archived pre-build draft; Booking `CONTEXT.md` is current).
 
 ## Decisions encoded
 

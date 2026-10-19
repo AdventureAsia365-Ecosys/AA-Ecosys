@@ -1,0 +1,4 @@
+stage,role,account,calls,cost_usd
+s1_rewrite,writer,acc3,1200,14.5
+review,judge,acc3,800,6.2
+adhoc_aa999,writer,acc3,30,0.4

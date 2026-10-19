@@ -52,6 +52,21 @@ _Last updated: S242, 18/10/2026 (Claude Code). Q10 (Nghiệp): finish the platfo
 | 18 | AA-682 | Booking wave 3 | Booking | XL | — | Payment marking, tax. |
 | 19 | AA-855 | UAT videos for all apps | QA | M | After the tech work. | Go signal. |
 
+## 3a. Platform roadmap keys (PLAT-01)
+
+Content and status live in the [engineering handbook §9](../engineering-handbook.md#9-roadmap); this list only orders
+the next picks.
+
+| Order | U-xx / key | Issue | Next step |
+|---|---|---|---|
+| 1 | AA-887, AA-888, U-09, U-11 | AA-887, AA-888, AA-889, AA-890 | Merge the S243 docs bundle PR; finish the lint jobs in the app repos |
+| 2 | AA-892, AA-893 | AA-892, AA-893 | Run the rollback runbooks on Dev; generated alarm tables (step 2; step 1 live, Infra #213) |
+| 3 | AA-896, U-38 | AA-896, AA-838 | First cost and capacity review on or after 01/11 (anomaly detection live, Infra #213) |
+| 4 | U-25 → AA-891 | AA-901, AA-891 | GitHub App, then release-please |
+| 5 | U-44, AA-894, AA-895, AA-897 | AA-899, AA-894, AA-895, AA-897 | OpenAPI + oasdiff; env-config register; Dependabot for Booking and TripPlanner; guides out of draft |
+| 6 | U-26 + U-04, U-28 + U-61 | AA-878, AA-879 | Folded per N-12 |
+| later | U-15, U-24, U-37, U-39, U-42, U-56 | AA-848, AA-877, AA-850, AA-851, AA-846, AA-881 | Order when picked |
+
 ## 4. Later / parked
 
 | Issue | Work | Tier | Status / trigger | Needs Nghiệp |
