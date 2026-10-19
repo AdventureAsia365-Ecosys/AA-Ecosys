@@ -1,17 +1,3 @@
----
-id: ARCH-08-scaling
-title: "Data platform standards — Part C: Operations and scaling"
-description: Binding C-x rules for the connection budget, timeouts, retention mechanics, scale triggers, prod shape and the monthly capacity review.
-type: reference
-status: active
-owner: nghiep
-audience: [engineer, devops, cto, agent]
-applies_to: [ecosystem, aa-cis-dev-db]
-last_reviewed: 2026-10-17
-review_every_days: 90
-related: [ARCH-08, APP-08, OPS-08, PROD-01]
----
-
 # Data platform standards — Part C: Operations and scaling
 
 **Purpose:** binding rules for running, monitoring and growing the shared PostgreSQL 15 RDS
@@ -21,7 +7,7 @@ taken on a measured trigger, not a guess.
 
 **Status:** Accepted with the S237 data-architecture review
 ([`docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md`](../../audits/2026-10-14-S237-lane-backlog/data-architecture/README.md),
-"the review"; Nghiệp approved every recommendation, 15/10/2026). Version 1.0, part of the rule body
+"the review"; Nghiệp approved every recommendation, 15/10/2026). Version 1.1 (19/10/2026, S243; changes in the README changelog), part of the rule body
 of [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and
 data platform rules, accepted 15/10/2026); index and golden rules in [`README.md`](README.md). Roadmap
 ids (N1..N7, X1..X10, L1..L10) are the review's section 7.
@@ -147,7 +133,7 @@ account Lambda quota of 10 and `desired_count = 1` hide it.
 | C2.3d | Lambda pools MUST use `max_size = 1` per instance. | One Lambda instance serves one request at a time; extra connections are idle waste multiplied by concurrency. | Review checklist (TP `backend/shared/db.py`). |
 | C2.3e | `CONNECTION LIMIT` on `tripplanner` and TP pool max 1 MUST be merged **and applied** before the Lambda quota increase to 1000 takes effect. `reserved_concurrent_executions` on `aws_lambda_function.tripplanner_browse` / `tripplanner_assembly` (`accounts/aa365/tripplanner.tf`) MUST be merged as a variable that stays unset while the quota is 10 and is set to 10 in the first Terraform apply after the quota lands, before any load test. | AWS keeps at least 100 unreserved concurrency, so a reservation fails on a quota of 10; Terraform Apply is one manual workflow over all of `accounts/aa365`, so a hard-coded reservation on `main` would break every unrelated apply. S236 already saw 1,591 throttles on `/plan` tiles; without caps the quota raise converts throttles into a DB outage for all three apps. | Approved decision E6; review checklist on the quota case; N3. |
 | C2.3f | Every pool MUST set its own `statement_timeout` (asyncpg `server_settings`) below its caller's timeout (table C2.2). A role-level `ALTER ROLE … SET statement_timeout` is only a backstop, set to the **largest** pool value of that role, and only on single-purpose roles (`aa_app_user`, `tripplanner`, `booking`, later `db_migrator` with the runner override). `idle_in_transaction_session_timeout = 60s` is set in the parameter group; before it is enabled, a week of N1 `pg_stat_activity` samples MUST show no app session idle in transaction for > 60 s (a job handler holding a transaction across an LLM call would be killed). | A runaway query must die before the Lambda or HTTP caller gives up and retries on a new connection; shared roles (`aa_cis_admin`, later `cis_app` for API + worker, `tripplanner` for browse + assembly) cannot carry two role-level values. | To build (N3: parameter group, pool settings, `ALTER ROLE … SET`); review checklist on pool creation. |
-| C2.3g | Pools MUST fail fast on exhaustion (bounded acquire timeout, ≤ 5 s) and MUST NOT fall back to another role's pool. A missing or exhausted tenant pool gives 503. The CIS tenant-pool flags fail closed (S241 D-12, CIS #792): an unreadable or missing flag means the tenant pool; only an explicit off value or `TENANT_POOL_FORCE_ADMIN_FLAGS` moves one route to the admin pool, as an operator rollback (DM-8.4). New apps fail closed from day one. | Silent fallback to the master pool hides saturation and breaks isolation (review P2). | Review checklist; CIS `aa544_tenant_pool.py` (fail closed since D-12). |
+| C2.3g | Pools MUST fail fast on exhaustion (bounded acquire timeout, ≤ 5 s) and MUST NOT fall back to another role's pool. A missing or exhausted tenant pool gives 503. The CIS tenant-pool flags fail closed globally (S241 D-12, CIS #792): an unreadable or missing flag means the tenant pool; only an explicit `"false"` moves that one route to the admin pool. Rollback path (DM-8.4): `SET <flag key> false` in Redis for one route, or the emergency task-definition variable `TENANT_POOL_FORCE_ADMIN_FLAGS` (survives a Redis restart; needs a redeploy). New apps fail closed from day one. | Silent fallback to the master pool hides saturation and breaks isolation (review P2). | Review checklist; CIS `aa544_tenant_pool.py` (fail closed since D-12). |
 | C2.3h | The `tripplanner` role SHOULD set `idle_session_timeout` (PostgreSQL 14+, start 10 min) so connections held by frozen or retired Lambda environments are reaped; the TP pool MUST tolerate a server-closed connection (retry the acquire once). Verify on Dev with a thawed Lambda before enabling. | Frozen environments keep their connection open, and after a TP deploy the old version's environments still count against the `CONNECTION LIMIT`. | To build (N3); TP smoke after the change. |
 
 ---
