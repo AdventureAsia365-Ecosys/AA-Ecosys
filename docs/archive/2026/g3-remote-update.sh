@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+# ARCHIVED (AA-889, 19/10/2026), not current truth: org-rename remote update, done 15/09/2026. Paths are relative to its old location; do not run.
 # G3 — cập nhật git remote sang org mới AdventureAsia365-Ecosys.
 # CHẠY SAU KHI đã đổi tên org trên GitHub (Task 8). GitHub tự redirect remote cũ,
 # nhưng cập nhật URL cho tường minh, tránh lệ thuộc redirect lâu dài.
 #
-# Cách dùng:  bash docs/g3-remote-update.sh
+# Cách dùng:  bash docs/archive/2026/g3-remote-update.sh
 # An toàn: chỉ đổi URL remote 'origin', không đụng history/branch.
 set -euo pipefail
 

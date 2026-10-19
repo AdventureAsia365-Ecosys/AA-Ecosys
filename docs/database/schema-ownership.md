@@ -22,6 +22,11 @@ Column-level truth (names, types, enums, FKs) is the live dump in
 [`docs/architecture/db-schema-reference.md`](../architecture/db-schema-reference.md). This page only
 assigns owners and states the rules. Tracked in AA-684.
 
+**Registry = `infra/AA-CIS-Infra/db/owners.yaml`** (data standards DM-1.2, since X1 S1, AA-CIS-Infra #163):
+owner dirs, repos, version-key prefixes, owner and runtime roles and job-kind prefixes are read from it by
+DB Migrate, the Migration Copy Guard and the schema dump. This page explains that registry for people; when
+the two disagree, `owners.yaml` wins and this page is fixed in the same PR train.
+
 ## Rules
 
 1. **A schema has one owner repo.** Its migrations live in that repo, next to the code that uses
@@ -81,7 +86,7 @@ Every `shared` table is **owned by AA-CIS-App** unless the row says otherwise.
 | Table(s) | Owner | Notes |
 |---|---|---|
 | `tenants`, `membership_plans`, `admin_users`, `staff_app_grant`, `tenant_*` (brand rules, configs, integrations, usage) | CIS | Tenant and admin identity of the CIS platform. `admin_users` is the ecosystem staff directory (CIS 247: `email`, `display_name`, `cognito_iss`/`cognito_sub`, `last_login_at`, `is_owner`; ADR 0006a) and `staff_app_grant` holds each staff member's role in another app (`app` = `booking` today, roles `admin`/`sales`/`contracting`/`content_creator`). Only the CIS staff directory writes them; no other app reads them (Booking gets `cis_role` from the bridge token today and will read `cognito:groups` from Phase 2). AA-Booking owns *customer* identity (ADR 0001; target Cognito EXTERNAL, ADR 0006). |
-| `job`, `job_worker` | CIS | Durable job runner of CIS (ADR 0003). Other owners do not enqueue here: each owner has its own job table from the shared DDL template (ADR 0003a; `booking.job` bk-002, `tripplanner.job` when needed). Job kind prefixes per owner (ADR 0003a decision 3, until `owners.yaml` exists, X1): CIS `shared.job` keeps its unprefixed names; Booking `bk_` (`booking.job` `job_kind_chk`); TripPlanner `tp_`; a new app `<prefix>_`. Every job table is created from the DDL template `apps/AA-CIS-App/shared/jobs/job_table_template.sql` (AA-751). Idle-exempt kinds (not counted by the deploy guards or the DB Migrate idle check): Booking `bk_inquiry_pull`; CIS none since AA-751 (the list lives in `run_migration.py` `IDLE_EXEMPT_KINDS` and Booking `DEPLOY_GATE_EXEMPT` until `owners.yaml`, X1). |
+| `job`, `job_worker` | CIS | Durable job runner of CIS (ADR 0003). Other owners do not enqueue here: each owner has its own job table from the shared DDL template (ADR 0003a; `booking.job` bk-002, `tripplanner.job` when needed). Job kind prefixes per owner (ADR 0003a decision 3; registry: `owners.yaml` `job_kind_prefix`): CIS `shared.job` keeps its unprefixed names; Booking `bk_` (`booking.job` `job_kind_chk`); TripPlanner `tp_`; a new app `<prefix>_`. Every job table is created from the DDL template `apps/AA-CIS-App/shared/jobs/job_table_template.sql` (AA-751). Idle-exempt kinds (not counted by the deploy guards or the DB Migrate idle check): Booking `bk_inquiry_pull`; CIS none since AA-751 (registry: `owners.yaml` `idle_exempt_kinds`, which DB Migrate reads; Booking `DEPLOY_GATE_EXEMPT` mirrors it). |
 | `llm_role_config`, `llm_model_catalog` | CIS | Model Gateway config; TripPlanner has SELECT (CIS 173). |
 | `llm_call_log`, `llm_shadow_log` | CIS | Cost log; TripPlanner has INSERT on `llm_call_log` only, rows tagged `quality_signal.app = "tripplanner"` (CIS 173). |
 | `decision_log`, `decision_question`, `decision_cache_hits_daily`, `jev_*` | CIS | Jev decision layer. |

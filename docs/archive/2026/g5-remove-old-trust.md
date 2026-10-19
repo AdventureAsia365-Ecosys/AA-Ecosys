@@ -1,3 +1,5 @@
+> **Archived (AA-889, 19/10/2026) — not current truth.** Step G5 of the org rename, done on 21/09/2026 (AA-588, Infra #66). Current OIDC trust: `docs/ecosystem-architecture.md` §5 and AA-CIS-Infra `CONTEXT.md`.
+
 # G5 — Gỡ trust tên org cũ khỏi OIDC (bản chuẩn bị, CHƯA apply)
 
 > **Linear: AA-588** (Backlog/Low) — https://linear.app/aa-ecosys/issue/AA-588
@@ -78,5 +80,5 @@ terraform apply                       # MFA
 
 ## 6. Nguồn
 
-- `docs/inventory-old-refs.md` mục #1, #2 (Loại A).
+- `docs/archive/2026/inventory-old-refs.md` mục #1, #2 (Loại A).
 - Diff transitional đã apply ở G2 (commit sửa `cicd.tf` + `tripplanner.tf`).

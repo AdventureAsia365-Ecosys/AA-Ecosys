@@ -1,3 +1,5 @@
+> **Archived (AA-889, 19/10/2026) — not current truth.** One-off plan of the S182-S183 CIS data reset (AA-594). The reset ran on 16/09/2026; current destructive-work procedure: `skill/aa-cis-schema/references/destructive-ops.md`.
+
 # CIS Data Reset & Pipeline Rerun — Audit plan (S182)
 
 > Linear epic: **AA-594** (project *CIS Data Reset & Pipeline Rerun (Audit)*).

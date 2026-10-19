@@ -1,3 +1,4 @@
+-- ARCHIVED (AA-889, 19/10/2026), not current truth: AA-603 one-off DROP, executed 21/09/2026 (S191). Do not re-run.
 -- AA-603 — DROP the dead N7/N8 produce-flow tables.
 -- Run ONLY after PR #413 (code removal) is merged + deployed to Dev (done: taskDef 313,
 -- rollout COMPLETED, removed routes verified 404, kept routes verified live).

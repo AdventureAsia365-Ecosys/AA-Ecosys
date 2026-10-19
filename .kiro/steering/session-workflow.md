@@ -20,8 +20,8 @@ Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo l�
   Linear (S238: tốn token) — chỉ audit lại khi file cũ > ~2 tuần.
 - Cuối phiên: cập nhật `docs/backlog/README.md` (cột Status, chuyển issue đóng sang §5, thêm issue mới) cùng root PR.
 - "dừng session này": prepend session block vào memory HOT (chỉ prepend, không rotate tay), log local,
-  đồng bộ Linear, soạn draft cập nhật cho các issue Jira tương ứng để Nghiệp duyệt (không tự đăng, S237), đưa **mọi repo (gốc + 3 con) về main/master cây sạch**; root PR chờ thì merge tay
-  (`gh pr merge <n> --squash`) hoặc hỏi Nghiệp.
+  đồng bộ Linear, soạn draft cập nhật cho các issue Jira tương ứng để Nghiệp duyệt (không tự đăng, S237), đưa **mọi repo (gốc + 4 con) về main/master cây sạch**; root PR chờ thì
+  agent điều phối tự merge (`gh pr merge <n> --squash`, repo gốc không có CI bắt buộc) theo luật merge bên dưới.
 
 ## Nguồn sự thật khi thiết kế — CONTEXT.md (BẮT BUỘC)
 Trước khi thiết kế/sửa code một repo, ĐỌC `CONTEXT.md` của repo đó và bám sát (stack, ranh giới, ownership).
@@ -40,7 +40,15 @@ Hỏi "đảo ngược quyết định này thì repo nào phải sửa?": ≥2 
 ## Định nghĩa "XONG" + merge/deploy → `skill/aa-ship/SKILL.md`
 Merge + CI xanh CHƯA đủ. Issue có code backend chỉ Done khi: merge + CI xanh + deploy Dev **rollout COMPLETED**
 + **verify endpoint live** (curl 200 + shape). Commit/PR dùng `Refs AA-xxx` (KHÔNG `[AA-xxx]`/`Fixes` — tự đóng issue).
-Không merge/deploy backend khi `shared.job` còn job hoặc đang có wave (CI tự chặn; override chỉ Nghiệp, ghi lý do).
+Không merge/deploy backend khi bảng job của app (`shared.job`, `booking.job`) còn job hoặc đang có wave (CI tự chặn; override chỉ Nghiệp, ghi lý do).
+
+**Ai merge (S241 D-13; data standards DM-11.5, câu chữ v1.1 chờ Nghiệp duyệt — N-1):**
+
+- **Giai đoạn dev (bây giờ):** agent điều phối tự code → push → merge khi CI xanh → deploy → verify → báo cáo, kể cả PR
+  bảo mật/hạ tầng. Subagent không merge (hook chặn). PR rủi ro (auth/quyền, migration/schema, CI/workflow/secret, xoá dữ
+  liệu) → agent review trước (`kiro-reviewer` hoặc subagent review độc lập), không chờ người.
+- **Từ prod đầu tiên / tenant trả tiền đầu tiên:** Nghiệp duyệt trước khi merge PR Terraform/IAM, migration, auth/bảo mật,
+  xoá dữ liệu; PR app khác vẫn agent merge khi CI xanh.
 
 ## Linear → `skill/aa-linear-issue/SKILL.md`
 HỎI Nghiệp trước khi tạo issue mới. MỌI issue gắn 1 project; 1 project tối đa 100 issue chưa lưu trữ (S236; gần ngưỡng → hỏi; Done hẳn → lưu trữ sớm).
@@ -73,7 +81,8 @@ Không tạo nhiều lệnh `sleep N; check` chồng chéo hay mở terminal son
 ## Lưu ý kỹ thuật (môi trường)
 - Chạy git/terraform từ đường dẫn WSL `/home/nghiep/...` (KHÔNG dùng UNC `\\wsl.localhost`).
 - terraform/boto3 cần MFA: `export $(aws configure export-credentials --profile aa365-admin --format env | xargs) && unset AWS_PROFILE` rồi chạy.
-- AA-CIS-App có branch protection (5 CI job) → merge PR dùng `gh pr merge --auto`. Repo gốc merge tay (lệ root PR).
+- AA-CIS-App có branch protection (5 CI job) → merge PR dùng `gh pr merge --auto`. Repo gốc không có CI bắt buộc →
+  `gh pr merge <n> --squash` sau khi tự kiểm (lệ root PR).
 - MCP config ở `.kiro/settings/mcp.json` (gitignored). Linear endpoint `/mcp` (KHÔNG `/sse`).
 - File tạm ghi TRONG workspace tại `/home/nghiep/projects/AA-Ecosys/.tmp-session/` (đã gitignore), KHÔNG ghi ra `~/`. Dọn sau khi dùng.
 - Google API key `aa-cis/dev/gdrive-photo-reader` KHÔNG cần đổi (đã bịt rò rỉ từ PR #535 — Nghiệp chốt 02/10/2026).
