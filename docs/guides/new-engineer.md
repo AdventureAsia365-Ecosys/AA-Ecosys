@@ -59,7 +59,7 @@ Each repo README has the exact commands; these are the shortest paths that work 
 |---|---|---|
 | AA-CIS-App | README "Local setup": venv, `uvicorn api.main:app --reload --port 8000`, `python -m worker`, `cd frontend && npm ci && npm run dev` | README "Tests": unit tests need no DB; integration tests need a local PostgreSQL 15/16 |
 | AA-Booking | README "Local development": `cd backend`, venv, `ENVIRONMENT=local .venv/bin/uvicorn app.main:app --port 8000`, then `curl -s localhost:8000/booking/health` | `ruff check`, `pytest tests/unit`; integration needs a throwaway `*_test` DB prepared by `tests.integration.bootstrap_roles` |
-| AA-TripPlanner-Web | README "Local setup": `cd frontend && npm ci && npm run dev`; backend fixtures server `python -m backend.tests.dev_browse_server` (no DB) | `cd backend && PYTHONPATH=.. pytest` (offline) |
+| AA-TripPlanner-Web | README "Local setup": `cd frontend && npm ci && npm run dev`; backend fixtures server `python -m backend.tests.dev_browse_server` run from the repo root, not `backend/` (no DB) | `cd backend && PYTHONPATH=.. pytest` (offline) |
 | AA-CIS-Infra | No local apply. `terraform fmt -check` and `terraform validate` locally; `plan` needs MFA credentials (onboarding) | CI "Terraform Plan" on the PR |
 
 Environment variable names with underscores are set by Nghiệp by hand (Vercel, GitHub, AWS). Copy `.env.example`
@@ -73,16 +73,21 @@ The full gate list is `skill/aa-ship/SKILL.md`; this is the shape.
    `CONTEXT.md` and the section of `skill/aa-lessons/lessons.md` for the area you touch.
 2. Branch from fresh `main` (`master` in root): `git checkout main && git pull origin main && git checkout -b fix/<slug>`.
 3. Keep `docs/implementation-notes/<ISSUE>.md` while you work: Decisions, Changed, Tradeoffs, Should know.
-4. Commit with Conventional Commits: subject `feat|fix|chore|refactor|docs|test|ci: <english>`, body `Refs AA-123`.
-   Never `[AA-123]` in the subject and never `Fixes` / `Closes` (Linear would close the issue too early).
-5. Open the PR. CI must be green: CIS and Booking have 5 required checks, TripPlanner 2; root and Infra have none
-   (private repos on GitHub Free), so read their CI by hand.
+4. Commit with Conventional Commits: subject `feat|fix|chore|refactor|docs|ci|test|perf: <english>`, body
+   `Refs AA-123`. Never `[AA-123]` in the subject and never `Fixes` / `Closes` (Linear would close the issue too
+   early). The PR title becomes the squash commit, so it follows the same rule
+   ([handbook §5.1](../engineering-handbook.md#51-commits)).
+5. Push and open the PR (`git push -u origin <branch>`, then `gh pr create`); every repo has a PR template, fill it
+   in. CI must be green: CIS and Booking have 5 required checks, TripPlanner 2; root and Infra have none (private
+   repos on GitHub Free), so read their CI by hand. In root that CI is **Docs lint**. Run it before you push with
+   the commands in `tools/docs/README.md` "Run locally", inside a venv (`python3 -m venv .tmp-session/docs-venv`):
+   Ubuntu 24.04 refuses a system-wide `pip install` (PEP 668).
 6. Migration? It goes first, alone: migration-only PR in the owner repo → byte copy in Infra
    `db/migrations/<owner>/` → **DB Migrate** `check` then `apply` → then the code PR
    ([schema ownership](../database/schema-ownership.md), Infra `README.md` "DB Migrate").
-7. Merge (squash). During the dev phase the author merges after green CI (decision D-13; the matching text in data
-   standards DM-11.5 is pending v1.1). A risky change (auth, migration, IAM or secret, data delete, CI workflow) gets
-   the `kiro-reviewer` agent review first.
+7. Merge (squash). During the dev phase the author merges after green CI (decision D-13, data standards DM-11.5
+   v1.1). A risky change (auth, migration, IAM or secret, data delete, CI workflow) gets an agent review first
+   (`kiro-reviewer` or an independent reviewer subagent).
 8. Deploy happens on merge: CIS and Booking `Deploy Dev` (blocked while background jobs run), TripPlanner
    `deploy-lambdas.yml`, frontends through `vercel-deploy*.yml`.
 9. **Verify live** before you call it done: rollout COMPLETED, `/health` shows your commit, the endpoint or page
