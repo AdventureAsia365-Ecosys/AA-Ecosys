@@ -65,3 +65,16 @@ Scope: the guides lane of AA-897 (S243, 19/10/2026), built on the AA-887 foundat
 - The bilingual CEO guide is an exception to `language-convention.md` pending N-7.
 - Merge after the AA-887 foundation PR. Then rerun the link check: the only dangling link left from this lane is
   `ops/README.md` until the AA-892 lane merges.
+
+## Dry walkthrough (Done-when: a fresh reader opens a PR to Dev from the guide alone)
+
+- An agent followed only `docs/onboarding.md` and the pages it links to (2026-10-19): access checks, Booking local
+  run (lint, 826 unit tests, `/booking/health` 200), TripPlanner offline tests (357 passed), root Docs lint locally,
+  then a docs PR. The run stopped before `git push` (subagent hook); the push and PR commands are the ones in GUIDE-10
+  step 5.
+- Fixed in GUIDE-10 from what the walkthrough hit: step 5 did not say root has a Docs lint workflow or how to run it
+  locally, and `tools/docs/README.md` "Run locally" fails on Ubuntu 24.04 without a venv (PEP 668); step 4 missed the
+  `perf` type and the "PR title = squash commit" rule; step 7 still said DM-11.5 was "pending v1.1" (approved S243);
+  the TripPlanner fixtures server only starts from the repo root.
+- Left for later (not in this PR): the TripPlanner README runs `python -m backend.tests.dev_browse_server` right after
+  `cd backend`, which fails with `No module named 'backend'`; `tools/docs/README.md` could show the venv itself.
