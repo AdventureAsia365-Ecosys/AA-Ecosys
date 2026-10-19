@@ -5,7 +5,8 @@
 - **Amends:** ADR 0006 decision 3 (Booking role storage, who may write the directory, directory operations, IAM),
   decision 7 (what "reset" means), decision 10 (custom domain timing, DNS), decision 11 (break-glass address,
   secret shape, guards), decision 12 (branding now in Terraform), the Phase 1 row of the Migration plan (legacy
-  flag scope) and the "Remaining open risks" list (the `AdminCreateUser` line).
+  flag scope) and the "Remaining open risks" list (the `AdminCreateUser` line). A10 (19/10/2026, S243) adds a
+  temporary exception to the `@adventure.asia`-only staff rule for the E2E test account.
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) is unchanged and still pending.
 - **Plan and evidence:** `docs/audits/2026-10-18-S242-cognito-phase1/plan.md` (judged plan, stages A/B/S/D),
   `docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md` (Phase 0 done-when evidence).
@@ -244,6 +245,42 @@ mailbox or Google account". That is too strong.
 - **Staff sign-in method:** email one-time code only. The WORKFORCE Google IdP and the decision 4/5 Google
   linking rules do not apply to staff (S236 decision, unchanged).
 
+### A10. Temporary exception: the E2E test mailbox as one staff address (19/10/2026, S243)
+
+- **Decision (Nghiệp, option B):** the Cognito email-code E2E test (AA-816 E1, AA-CIS-App `e2e-cognito.yml`) signs
+  in as a staff user whose address is the SES inbound test mailbox itself, `e2e@e2e-mail.lumiguides.it.com`
+  (AA-CIS-Infra `e2e_mailbox.tf`). Option A, a company address forwarded to that mailbox, needed a manual
+  change in the adventure.asia mail host. This is the only staff address outside `@adventure.asia`. It is
+  **temporary**: it is removed when the E2E work is finished.
+- **Guards:**
+  - **One exact address,** with no pattern and no other local part or sub-domain. It is a code constant in each
+    place, never configuration: CIS migration 250 (`admin_users_email_chk`), CIS
+    `staff_directory.E2E_TEST_STAFF_EMAIL`, and the WORKFORCE pre sign-up and pre token triggers.
+  - **Reviewer only.** The DB CHECK accepts the address only with `role = 'reviewer'`, not an owner and with no
+    password. The directory refuses any other CIS role. The pre token trigger denies the token unless the
+    staff groups are exactly `cis-reviewer`.
+  - **No Booking access.** The directory refuses a Booking grant for the address, and the pre token trigger
+    denies any `booking-*` group on it.
+  - **Short-lived codes at rest.** Mailbox objects expire after 1 day.
+  - **Narrow reader.** The reader role `aa-cis-dev-e2e-mail-reader` is read-only (List + Get). Its trust is the
+    AA-CIS-App repo, the `e2e` environment and `refs/heads/main` only.
+  - **Created like any staff member:** through the staff directory (`create_staff`, audited
+    `staff.created`), without an invitation. The Staff page still accepts `@adventure.asia` only.
+  - **Domain dependency.** Whoever receives mail for `e2e-mail.lumiguides.it.com` can receive the sign-in
+    codes. This access therefore depends on keeping the `lumiguides.it.com` registration and its Route 53 zone
+    and MX record. Losing control of any of them (lapsed registration, zone or MX change) triggers the removal
+    below at once. The SES receipt rule requires TLS.
+  - **Tracked removal.** The removal is an open item under AA-816 in `docs/backlog/README.md` until it is done.
+- **Removal (when the E2E work is finished):**
+  1. Disable the user (directory disable + global sign-out).
+  2. Delete the `shared.admin_users` row (DRY RUN procedure) and the Cognito user (console; the writer may
+     not call `AdminDeleteUser`).
+  3. Add a new CIS migration that restores the 247 CHECK. It RAISEs while a row still uses the address.
+  4. Remove `E2E_TEST_STAFF_EMAIL` and the scope checks from CIS. Remove the trigger exception from Infra and
+     run Terraform Apply.
+  5. Point the E2E test at a company address, or retire it.
+  6. Add a closing line here.
+
 ## Phase 1 status (18/10/2026)
 
 | Item | State |
@@ -285,6 +322,7 @@ mailbox or Google account". That is too strong.
 - AA-CIS-App: `CONTEXT.md` § "Staff roles and permissions"; `api/core/identity_verifier.py`,
   `api/core/identity_config.py`, `api/core/staff_identity.py`, `api/middleware/staff_bearer.py`,
   `api/services/staff_directory.py`, `services/staff_reconcile.py`, `frontend/lib/cognito.ts`,
-  `api/migrations/247_admin_users_identity.sql`.
+  `api/migrations/247_admin_users_identity.sql`, `api/migrations/250_admin_users_e2e_test_email.sql` (A10).
 - AA-CIS-Infra: `accounts/aa365/identity.tf`, `identity_alerts.tf`, `identity_iam.tf`, `identity_variables.tf`,
-  `dns.tf`, `tools/identity/workforce_bootstrap.py`.
+  `dns.tf`, `tools/identity/workforce_bootstrap.py`, `e2e_mailbox.tf` and
+  `lambda_src/identity_triggers/workforce.py` (A10).
