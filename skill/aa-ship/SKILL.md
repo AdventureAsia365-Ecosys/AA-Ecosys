@@ -16,6 +16,10 @@ Mục tiêu: "Done" luôn nghĩa là đã chạy đúng trên môi trường th�
 - [ ] Thêm thư mục top-level → thêm `COPY` vào Dockerfile và path filter `deploy-dev.yml`.
 - [ ] PR frontend → `npm run build` đầy đủ chạy local (Node 22 qua nvm), rồi `aa-ui-verify`.
 - [ ] PR xoá bảng/dữ liệu → quy trình DRY RUN (`aa-cis-schema/references/destructive-ops.md`).
+- [ ] **Docs:** "Docs impact" của issue đã làm trong cùng PR (CONTEXT.md / ADR / runbook / contract / trang catalog `docs/README.md`), hoặc ghi "N/A". Trang catalog theo `docs/STYLE.md` (front-matter, CLI một dòng, không ID thô); chỉ bump `last_reviewed` khi đã kiểm với hệ thật.
+- [ ] **Changelog:** PR `feat`/`fix` người dùng thấy → tiêu đề PR đọc được như một dòng CHANGELOG (release-please lấy từ đây khi AA-891 xong).
+- [ ] **LLM:** đổi prompt/model/route → ghi run ID eval chạy tay/dispatch trên golden set AA-729 vào PR (D-23; không có trigger theo PR). `prompt_version` chỉ khi ledger v2 (AA-804) đã có.
+- [ ] **Cost:** thêm resource AWS hoặc lượt chạy trả phí → ghi ước tính USD/tháng trong PR body (DM-10.7); resource mới có tag `App` (DM-10.1).
 
 ## 2. Guard trước merge backend
 
@@ -49,6 +53,7 @@ Verified live <dd/mm>:
 - PR: #<n> (merged <sha>), ECS api :<rev> / worker :<rev>
 - <endpoint> → 200, <tóm tắt shape/số dòng>
 - UI: <trang> — screenshot đính kèm / link
+- Docs: <file/ID catalog đã sửa, hoặc N/A> · Cost: <0 USD / ước tính USD/tháng>
 - Ghi chú: <giới hạn còn lại, issue tách ra nếu có>
 ```
 

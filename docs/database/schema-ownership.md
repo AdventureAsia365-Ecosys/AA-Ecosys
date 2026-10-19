@@ -1,3 +1,17 @@
+---
+id: ARCH-08-schema-ownership
+title: Schema ownership — shared RDS on acc2
+description: Which repo owns, migrates and writes each schema on the shared RDS, and the migration-key rules.
+type: reference
+status: active
+owner: nghiep
+audience: [engineer, agent]
+applies_to: [ecosystem, aa-cis-dev-db]
+last_reviewed: 2026-10-18
+review_every_days: 90
+related: [ARCH-08, APP-04, infra/AA-CIS-Infra/db/owners.yaml]
+---
+
 # Schema ownership — shared RDS on acc2
 
 One PostgreSQL instance (`aa-cis-dev-db`, acc2 `005097885195`, us-west-1) holds the data of every

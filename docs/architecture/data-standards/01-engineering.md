@@ -1,3 +1,17 @@
+---
+id: ARCH-08-engineering
+title: "AA_Ecosys data standards — Part A: Engineering"
+description: Binding rules for naming, keys, migrations (MIG-x), the RLS template, contracts and queries on the shared RDS.
+type: reference
+status: active
+owner: nghiep
+audience: [engineer, agent]
+applies_to: [ecosystem, aa-cis-dev-db]
+last_reviewed: 2026-10-15
+review_every_days: 90
+related: [ARCH-08, ARCH-08-schema-ownership, APP-04]
+---
+
 # AA_Ecosys data standards — Part A: Engineering
 
 **Purpose:** binding rules for anyone (human or agent) who designs a table, writes a migration, a policy, a

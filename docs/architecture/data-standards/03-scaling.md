@@ -1,3 +1,17 @@
+---
+id: ARCH-08-scaling
+title: "Data platform standards — Part C: Operations and scaling"
+description: Binding C-x rules for the connection budget, timeouts, retention mechanics, scale triggers, prod shape and the monthly capacity review.
+type: reference
+status: active
+owner: nghiep
+audience: [engineer, devops, cto, agent]
+applies_to: [ecosystem, aa-cis-dev-db]
+last_reviewed: 2026-10-17
+review_every_days: 90
+related: [ARCH-08, APP-08, OPS-08, PROD-01]
+---
+
 # Data platform standards — Part C: Operations and scaling
 
 **Purpose:** binding rules for running, monitoring and growing the shared PostgreSQL 15 RDS

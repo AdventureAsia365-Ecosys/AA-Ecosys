@@ -1,3 +1,17 @@
+---
+id: ARCH-01
+title: AA-Ecosys — Ecosystem architecture
+description: How the three apps, the shared RDS, identity and contracts fit together, with the target direction from the ecosystem ADRs.
+type: explanation
+status: active
+owner: nghiep
+audience: [engineer, devops, cto, cio, agent]
+applies_to: [ecosystem]
+last_reviewed: 2026-10-18
+review_every_days: 90
+related: [ARCH-05, ARCH-08, AA-697, AA-889]
+---
+
 # AA-Ecosys — Ecosystem architecture
 
 > **Status:** updated 18/10/2026 (S242 — §4.6 identity: Cognito WORKFORCE live for CIS staff, ADR 0006a; Booking

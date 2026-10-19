@@ -1,3 +1,17 @@
+---
+id: OPS-04
+title: Incident response
+description: Severity levels, who to tell and when, and the first steps for an incident during the dev phase.
+type: how-to
+status: active
+owner: nghiep
+audience: [engineer, devops, cto, agent]
+applies_to: [ecosystem]
+last_reviewed: 2026-10-17
+review_every_days: 90
+related: [OPS-02, OPS-10, skill/aa-ship/SKILL.md, AA-869, AA-892]
+---
+
 # Incident response
 
 Owner: Nghiệp (on call for everything during the dev phase). Created S241 (AA-869). Rollback commands:

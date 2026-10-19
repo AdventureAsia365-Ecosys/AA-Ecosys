@@ -1,3 +1,17 @@
+---
+id: ARCH-08-data-management
+title: "Data standards, Part B: data management and governance"
+description: Binding DM-x rules for ownership, PII, retention (DM-7 is the only retention registry), access, backup, spend and change control.
+type: reference
+status: active
+owner: nghiep
+audience: [engineer, devops, cto, cio, agent]
+applies_to: [ecosystem, aa-cis-dev-db]
+last_reviewed: 2026-10-17
+review_every_days: 90
+related: [ARCH-08, SEC-02, SEC-04, SEC-05, FIN-01, AA-889]
+---
+
 # Data standards, Part B: data management and governance
 
 **Purpose.** These are the binding rules for owning, documenting, protecting, keeping and changing data on the shared AA_Ecosys PostgreSQL 15 RDS (`aa-cis-dev-db`, acc2 `005097885195`, us-west-1). AA-CIS-App, AA-TripPlanner-Web and AA-Booking share it today, on Dev. Prod will be a separate instance, also on acc2.

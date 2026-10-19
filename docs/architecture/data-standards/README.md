@@ -1,3 +1,17 @@
+---
+id: ARCH-08
+title: AA_Ecosys data standards
+description: Index and golden rules of the binding data standards v1.0 (Parts A, B, C) for the shared PostgreSQL RDS.
+type: reference
+status: active
+owner: nghiep
+audience: [engineer, devops, cto, cio, agent]
+applies_to: [ecosystem, aa-cis-dev-db]
+last_reviewed: 2026-10-17
+review_every_days: 90
+related: [ARCH-08-engineering, ARCH-08-data-management, ARCH-08-scaling, ARCH-08-schema-ownership, AA-889]
+---
+
 # AA_Ecosys data standards
 
 **Version 1.0** · S237 · 15/10/2026 · **Approved by Nghiệp** (S237 data-architecture review, "đồng ý
