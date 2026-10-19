@@ -39,3 +39,6 @@ docs/audits/**/*.webm
 
 # Windows download metadata (alternate data stream copied into WSL)
 *:Zone.Identifier
+
+# Python bytecode (docs lint tools, S243 AA-897 walkthrough)
+__pycache__/
