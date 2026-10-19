@@ -1,4 +1,4 @@
-# Language convention (Nghiệp chốt 19/09/2026)
+# Language convention (Nghiệp chốt 19/09/2026; bổ sung 19/10/2026, S243 N-7)
 
 Bắt buộc mọi phiên trong workspace này:
 
@@ -11,6 +11,14 @@ Bắt buộc mọi phiên trong workspace này:
 
 - **Log session local** (`docs/sessions/*`) — giữ tiếng Việt (khớp lịch sử S181+).
 - **Memory Notion** (`Program Brain/memory.md`) — giữ tiếng Việt.
+- **Bản tư vấn / audit viết cho Nghiệp trong `docs/audits/`** — được viết tiếng Việt (S243, N-7).
+
+## Song ngữ Anh–Việt (S243, N-7)
+
+- **Guide cho chủ doanh nghiệp (chị Thư) và guide theo vai trò** (role guides) → viết **song ngữ EN–VI**:
+  cùng một nội dung bằng cả hai thứ tiếng (EN và VI cạnh nhau, hoặc hai cột), không bản nào thiếu ý.
+
+Mọi thứ khác giữ nguyên như trên.
 
 Nói ngắn gọn: **nói chuyện tiếng Việt, viết ra sản phẩm (code/PR/Linear) tiếng Anh; riêng log
-session + memory Notion vẫn tiếng Việt.**
+session, memory Notion và audit tư vấn cho Nghiệp được tiếng Việt; guide chị Thư + guide vai trò song ngữ.**

@@ -1,0 +1,23 @@
+// Markdown style for docs (AA-887 settings, AA-888 lint). Used by the docs-lint workflow (warn-only for now)
+// and by editors with the markdownlint extension.
+{
+  "config": {
+    "default": true,
+    "MD013": false, // line length: prose wraps at ~120 by convention, tables do not
+    "MD033": false, // inline HTML: GitHub alerts, <details>, comments
+    "MD041": false, // first line: front-matter comes first
+    "MD024": { "siblings_only": true },
+    "MD025": { "front_matter_title": "" } // front-matter title and the H1 are both kept on purpose (STYLE.md)
+  },
+  // Journals keep their history as written; generated pages change only through their generator.
+  "ignores": [
+    "docs/sessions/**",
+    "docs/audits/**",
+    "docs/implementation-notes/**",
+    "docs/backlog/**",
+    "docs/research/**",
+    "docs/calib/**",
+    "docs/backups/**",
+    "docs/architecture/db-schema-reference.md"
+  ]
+}

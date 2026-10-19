@@ -1,3 +1,5 @@
+> Superseded on 2026-10-19 (S243) by docs/engineering-handbook.md — kept for history.
+
 # S241: Lộ trình nền tảng hợp nhất (SDLC/ADLC review × data standards v1.0)
 
 - **Ngày:** 17/10/2026 (S241). **Tác nhân:** Claude Code.

@@ -1,3 +1,5 @@
+> Superseded on 2026-10-19 (S243) by docs/engineering-handbook.md — kept for history.
+
 # S241: Đánh giá SDLC/ADLC: repo, GitHub org, môi trường, CI/CD, API, vận hành
 
 - **Ngày:** 17/10/2026 (S241). **Bản sửa 2** sau 2 vòng phản biện (xem §9).

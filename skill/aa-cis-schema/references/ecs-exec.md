@@ -43,7 +43,7 @@ aws s3 cp s3://aa-cis-bronze-005097885195/scripts/result.json /tmp/result.json -
 
 ## Log
 
-- ECS: `/ecs/aa-cis-dev` — một log group chung cho cả api và worker, phân biệt bằng stream prefix. Retention 14 ngày.
+- ECS: `/ecs/aa-cis-dev` — một log group chung cho cả api và worker, phân biệt bằng stream prefix. Retention 30 ngày (D-09, AA-872; nhật ký phiên exec `/ecs/aa-cis-dev/exec-sessions` 365 ngày).
 - Lambda: `/aws/lambda/aa-cis-dev-<name>` (ingestion, validation, seo, export, content, brand-brief-parser, authorizer, dfs-balance-check).
 
 ## DBeaver qua SSM port-forward
@@ -53,4 +53,11 @@ TASK_ID=$(echo $TASK_ARN | cut -d'/' -f3)
 RUNTIME_ID=$(aws ecs describe-tasks --cluster aa-cis-dev-cluster --tasks $TASK_ARN --profile aa365-admin --region us-west-1 --query 'tasks[0].containers[0].runtimeId' --output text)
 aws ssm start-session --target "ecs:aa-cis-dev-cluster_${TASK_ID}_${RUNTIME_ID}" --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters "{\"host\":[\"<RDS endpoint>\"],\"portNumber\":[\"5432\"],\"localPortNumber\":[\"15432\"]}" --profile aa365-admin --region us-west-1
 ```
+
 DBeaver: `localhost:15432`, db `aa_cis_dev`.
+
+## Bản chuẩn (AA-892)
+
+Bản chuẩn của pattern này là runbook `docs/ops/runbooks/ecs-exec-s3-mediated.md` (tiếng Anh, có bảng login DB theo
+từng bước X1, verify + dọn file S3). File này là bản tóm tắt nhanh cho agent; khi hai bản lệch nhau, runbook thắng và
+file này được sửa theo.
