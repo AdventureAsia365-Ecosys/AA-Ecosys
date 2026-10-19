@@ -27,11 +27,26 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
 ## 3. Kiểm trên preview hoặc Dev
 
 1. Vercel deployment của PR = **READY/SUCCESS**.
-2. **Smoke tự động (AA-732):** mỗi PR có Vercel preview → workflow `UI smoke (Playwright)` tự chạy (`deployment_status`, env `Preview`), mở 7 trang admin chính, fail khi API `/api/` 4xx/5xx, console error, hoặc trang không có dòng/empty state; ảnh desktop/mobile × light/dark nằm trong artifact + comment trên PR. Đọc comment/artifact đó trước. Chạy tay: `gh workflow run ui-smoke.yml [--ref <branch>] -f base_url=<preview URL>`; local: `BASE_URL=https://aa-cis.lumiguides.it.com npx playwright test --project=smoke` với `E2E_ADMIN_USERNAME/PASSWORD` export từ secret (không in). Thêm trang = thêm 1 dòng vào danh sách trong `tests/e2e/smoke/ui-smoke.spec.ts`. Portal chờ tenant test (AA-741, `E2E_TENANT_API_KEY`).
+2. **Smoke tự động (AA-732):** mỗi PR có Vercel preview → workflow `UI smoke (Playwright)` tự chạy (`deployment_status`, env `Preview`), mở 7 trang admin chính, fail khi API `/api/` 4xx/5xx, console error, hoặc trang không có dòng/empty state; ảnh desktop/mobile × light/dark nằm trong artifact + comment trên PR. Đọc comment/artifact đó trước. Từ S244 (AA-878 N1) smoke đăng nhập bằng tài khoản **viewer** (`e2e-claude-code-viewer`, GitHub `E2E_ADMIN_*`), log ghi "logged in with staff role: viewer"; spec chỉ dành cho admin tự skip (59 passed / 7 skipped là bình thường). Chạy tay: `gh workflow run ui-smoke.yml [--ref <branch>] -f base_url=<preview URL>`; local: `BASE_URL=<preview URL> npx playwright test --project=smoke` với `E2E_ADMIN_USERNAME/PASSWORD` export từ secret `aa-cis/dev/e2e-test-viewer` (không in). **Không** chạy smoke với `base_url` = production `https://aa-cis.lumiguides.it.com`: production không còn form mật khẩu, `smoke-setup` fail "HTTP 404". Thêm trang = thêm 1 dòng vào danh sách trong `tests/e2e/smoke/ui-smoke.spec.ts`. Portal chờ tenant test (AA-741, `E2E_TENANT_API_KEY`).
    Smoke chỉ là sàn tối thiểu — trang vừa sửa vẫn kiểm tay các bước dưới.
-3. Mở trang bằng browser (Claude in Chrome hoặc Playwright), đăng nhập đúng vai (admin / tenant test).
-   Tài khoản admin test: secret `aa-cis/dev/e2e-test-admin` (acc2, JSON username/password; user `e2e-claude-code`).
-   Đọc vào biến môi trường lúc chạy, không in hay ghi mật khẩu ra file/log/PR.
+3. Mở trang bằng browser (Claude in Chrome hoặc Playwright), đăng nhập đúng vai (admin / tenant test). Đăng nhập staff
+   đã đổi từ AA-816 S1 (19/10/2026, S244):
+   - **Production** (`aa-cis.lumiguides.it.com`): **không còn đăng nhập bằng mật khẩu**; trang `/login` chỉ có
+     "Sign in with company email" (Cognito, mã gửi qua email). `POST /api/auth/login` → 404. Agent không đọc được
+     hộp thư `@adventure.asia`, nên không tự đăng nhập admin trên production được.
+   - **PR preview**: form mật khẩu legacy vẫn còn (cờ Preview giữ bật đến S2), nhưng BFF của preview giữ **Preview
+     credential** (`aa-cis/dev/admin-secret-preview`, AA-816 C9) nên mọi phiên trên preview chỉ có **quyền viewer**,
+     kể cả khi đăng nhập bằng tài khoản admin. Ghi admin (lưu, duyệt, chạy job) và trang chỉ-admin trả 403 trên preview
+     — đó là thiết kế, không phải lỗi của PR.
+   - Cách kiểm theo loại trang:
+     | Cần kiểm | Ở đâu, bằng gì |
+     |---|---|
+     | Trang đọc (viewer xem được) | PR preview, tài khoản viewer: secret `aa-cis/dev/e2e-test-viewer` (user `e2e-claude-code-viewer`) |
+     | Trang reviewer trên production sau merge | workflow `e2e-cognito.yml` (người dùng Cognito E2E, vai reviewer, hộp thư E2E theo ngoại lệ A10) — chỉ trang reviewer |
+     | Trang chỉ-admin, thao tác ghi admin | Sau merge + deploy: nhờ **Nghiệp** đăng nhập production bằng mã email và kiểm (hoặc gửi ảnh); ghi rõ trong báo cáo là phần này chưa do agent kiểm |
+     | UI Booking (Booking BFF → CIS `/auth/admin-login`) | Vẫn dùng `aa-cis/dev/e2e-test-admin` (user `e2e-claude-code`) đến S2 / AA-680 |
+   - Đọc mật khẩu từ secret vào biến môi trường lúc chạy, không in hay ghi ra file/log/PR. Đổi mật khẩu một tài
+     khoản test legacy chỉ còn qua DB Migrate `run-script` có review (script `create_staff_user.py` đã bỏ ở CIS #858).
 4. Với **mỗi trang đã đổi**, ghi lại:
    - Screenshot desktop 1440px và mobile 390px; light + dark.
    - Console: 0 error. Liệt kê warning mới.
