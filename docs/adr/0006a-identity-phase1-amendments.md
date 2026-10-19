@@ -266,6 +266,11 @@ mailbox or Google account". That is too strong.
     AA-CIS-App repo, the `e2e` environment and `refs/heads/main` only.
   - **Created like any staff member:** through the staff directory (`create_staff`, audited
     `staff.created`), without an invitation. The Staff page still accepts `@adventure.asia` only.
+  - **Domain dependency.** Whoever receives mail for `e2e-mail.lumiguides.it.com` can receive the sign-in
+    codes. This access therefore depends on keeping the `lumiguides.it.com` registration and its Route 53 zone
+    and MX record. Losing control of any of them (lapsed registration, zone or MX change) triggers the removal
+    below at once. The SES receipt rule requires TLS.
+  - **Tracked removal.** The removal is an open item under AA-816 in `docs/backlog/README.md` until it is done.
 - **Removal (when the E2E work is finished):**
   1. Disable the user (directory disable + global sign-out).
   2. Delete the `shared.admin_users` row (DRY RUN procedure) and the Cognito user (console; the writer may
