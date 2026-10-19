@@ -2,6 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(gh pr merge:*)"
+    ],
+    "deny": [
+      "Read(~/.aws/**)",
+      "Read(~/.config/gh/**)",
+      "Read(//home/*/.aws/**)",
+      "Read(//home/*/.config/gh/**)",
+      "Bash(cat ~/.aws/*)",
+      "Bash(cat ~/.config/gh/*)",
+      "Bash(gh auth token:*)",
+      "Bash(aws configure get:*)"
     ]
   },
   "hooks": {
