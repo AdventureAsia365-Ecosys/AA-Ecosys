@@ -202,7 +202,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 | Name | Store | Owner app | Consumers (main) | Rotation | Status | Notes |
 |---|---|---|---|---|---|---|
-| `ADMIN_SECRET` | `github:AA-CIS-App` | cis | — | none | **orphan-delete** | Repo-level copy of the main admin secret (S241 P0-1). I6 (19/10/2026) put the new value in env `dev` (next row), which the deploy-dev.yml jobs read. If this copy still exists it holds the refused pre-I6 value: delete it by hand. Main session confirms it exists first; if gone, flip to removed. |
+| `ADMIN_SECRET` | `github:AA-CIS-App` | cis | — | none | **removed** | Repo-level copy of the main admin secret (S241 P0-1). Confirmed absent on 19/10/2026 (S244, `gh secret list`); the only GitHub copy is environment `dev` (next row). |
 | `ADMIN_SECRET` | `github:AA-CIS-App/dev` | cis | AA-CIS-App .github/workflows/deploy-dev.yml:51, :234 (jobs with environment: dev) | manual (copy of aa-cis/dev/admin-secret, 2026-10-19) | **keep** | Deploy Dev pre-deploy gate + post-deploy smoke. Updated with AA-816 I6 (S244). |
 | `AWS_REGION` | `github:AA-CIS-App` | cis | deploy-dev.yml:28, :73, :109; eval-regression.yml:31 | none | **keep** | Not a secret (S241 E12: move to a variable). |
 | `AWS_ROLE_ARN` | `github:AA-CIS-App` | cis | — | none | **open-item** | Repo-level legacy value that pointed at the retired aa-cis-dev-role (AA-CIS-Infra docs/ci-role-split.md:108: remove or repoint). The jobs that use AWS_ROLE_ARN run in env dev, which overrides it. M0 confirms whether it still exists. |
