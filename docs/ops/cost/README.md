@@ -80,7 +80,10 @@ Rules and budgets: [FinOps process](../finops.md).
 
 6. Create `docs/audits/<date>-S<nnn>-capacity-review/README.md` from
    [`templates/cost-report.md`](../../templates/cost-report.md). Paste the drafted sections, keep the input files
-   in the same folder (they hold no secrets and no personal data), then fill in by hand:
+   in the same folder, then fill in by hand. The inputs hold no secrets and no personal data, but the
+   `/admin/platform/cost` JSON contains the real account IDs (`aws.account_id`, `llm_satellites.*.account_id`):
+   keep them in this private root repo only, never copy them into an app repo (SEC-06, D-25). The drafted
+   Markdown does not print account IDs.
    - the reason for each flagged change (Terraform applies, deploys, waves, batch runs in the month);
    - "Budgets and anomalies": budget e-mails and Cost Anomaly Detection alerts of the month;
    - the C8b capacity checklist (CloudWatch, Performance Insights, table sizes, ledgers, Lambda, jobs);

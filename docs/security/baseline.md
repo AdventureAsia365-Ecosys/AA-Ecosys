@@ -33,7 +33,7 @@ open), **by decision** (not done because Nghiệp decided so, with the trigger t
 | Identity and access | Human MFA, GitHub org 2FA, CI OIDC main-only, CI role split | Cognito cutover (AA-816), agent role optional | — |
 | Data stores | RDS encryption, TLS, no public endpoint | DB role split and RLS FORCE for CIS (X1) | Redis AUTH/TLS/at-rest (AA-874) |
 | Detection and logs | CloudTrail, flow logs, WAF logs, 365/30-day retention, alarms | CloudTrail single-region | GuardDuty, Access Analyzer, S3 account BPA (AA-873) |
-| Code and supply chain | Secret scanning on public repos, Dependabot alerts everywhere | Branch rules on private repos, scanners per repo | Secret scanning on the root repo |
+| Code and supply chain | Secret scanning on public repos, Dependabot alerts everywhere | Branch rules on private repos, scanners per repo | Secret scanning on the root repo; account IDs and ARNs tracked in all three public repos (no issue yet) |
 | Secrets | Secrets Manager per app | Register and rotation process (AA-878) | — |
 
 ## Edge and network
@@ -92,7 +92,7 @@ open), **by decision** (not done because Nghiệp decided so, with the trigger t
 | Secret scanning | Public repos: GitHub secret scanning and push protection on. AA-CIS-Infra: gitleaks workflow (`secret-scan.yml`). AA-Booking CI: gitleaks. AA-Ecosys (root): no scanner. | partial | AA-867; root scanner: candidate for the AA-888 docs-lint workflow |
 | Dependency alerts | Dependabot alerts and security updates on in all five repos; `dependabot.yml` in CIS, Infra, Booking and TripPlanner (AA-895). Process and open alerts: [vulnerability management](vulnerability-management.md). | in place | AA-867, AA-895 |
 | CI security gates | CIS: `pip-audit` gate with an expiring ignore list, Trivy image scan report-only. Booking: `pip-audit` failing gate and gitleaks. TripPlanner: none. | partial | AA-868; parity across repos: AA-879 |
-| Public repos content | No account IDs, ARNs, network IDs, inventories or security reports in public repos. | in place | SEC-06 in [`STYLE.md`](../STYLE.md#where-a-page-may-live-sec-06); D-25 |
+| Public repos content | Rule: no account IDs, ARNs, network IDs, inventories or security reports in public repos (SEC-06, D-25). Today the rule holds for new pages only. A `git grep` for the three account IDs on `origin/main` (2026-10-19) finds them in tracked files of all three public repos: AA-CIS-App 76 files (`.claude/CLAUDE.md`, `.claude/skills/ecs-exec-pattern.md`, `CONTEXT.md`, several `api/migrations/*.sql`, `api/routers/admin_pipeline.py`, `docs/CIS_Runbook_v1.md`, `docs/claude_audit/*`, `docs/implementation-notes/*`); AA-Booking 4 files (`CONTEXT.md`, `backend/app/retention/policy.py` bucket name, its unit test, `docs/implementation-notes/AA-825.md` S3 ARN); AA-TripPlanner-Web 6 files (`.github/workflows/deploy-lambdas.yml` role ARN and bucket defaults, `backend/config.py`, `backend/shared/bedrock_satellite.py`, `backend/.env.example`, `.kiro/steering/tech.md`, `docs/implementation-notes/AA-862.md`). Git history keeps them even after a scrub; account IDs are not credentials, so a scrub of HEAD (config from Terraform outputs or env, prose with names) is the target, not a history rewrite. | gap | SEC-06 in [`STYLE.md`](../STYLE.md#where-a-page-may-live-sec-06); D-25. AA-889 (reconciliation item 13) covers only CIS `docs/` files added from now on; the scrub of files already tracked has no issue yet: ask Nghiệp before creating one |
 
 ## Secrets
 
@@ -117,7 +117,13 @@ aws wafv2 list-web-acls --scope REGIONAL --profile aa365-admin --region us-west-
 aws logs describe-log-groups --profile aa365-admin --region us-west-1 --query "logGroups[].[logGroupName,retentionInDays]" --output text
 ```
 
-`<acc2-account-id>` is in the account map (`docs/onboarding.md`). GitHub settings: repository Settings →
+Public repo content (run in each public repo after `git fetch origin main`; prints the files that hold an account ID):
+
+```bash
+git grep -l -E '<acc1-account-id>|<acc2-account-id>|<acc3-account-id>' origin/main
+```
+
+The account IDs are in the account map (`docs/onboarding.md`). GitHub settings: repository Settings →
 Code security, and Settings → Rules; or the read-only API calls listed in
 [vulnerability management](vulnerability-management.md#monthly-triage).
 

@@ -35,6 +35,14 @@ AA-TripPlanner-Web (branch `chore/aa895-dependabot` in each).
 - The WAF row says "partial": the web ACL is on the shared ALB; the two API Gateway stages have no web ACL.
 - CloudTrail is single-region (not in the brief); recorded as partial under AA-873.
 - Catalog rows SEC-01, SEC-03, SEC-05 status updated; `llms.txt` gains a Security section.
+- S243 review fix: the baseline row "Public repos content" was first written as "in place". A `git grep` for
+  the three account IDs on each public repo's `origin/main` (19/10) found them in 76 CIS files, 4 Booking files
+  and 6 TripPlanner files (TP `deploy-lambdas.yml` role ARN and bucket defaults, Booking retention bucket name,
+  CIS `CLAUDE.md` / `CONTEXT.md` / migrations / runbook). The row is now "gap", lists the places, and the
+  summary table and "How to re-check" match. AA-889 covers only CIS `docs/` files added from now on
+  (reconciliation item 13), so the scrub of already-tracked files has no issue: Nghiệp decides whether to open one.
+- S243 review fix: the chromadb exception (critical, expiry 2026-12-31) now states the exposure rule (no runtime
+  import, treated as High, 90 days max), so it no longer contradicts the fix-time table.
 
 ## Tradeoffs
 

@@ -44,3 +44,7 @@ to the alerts topic, runbook links in alarm descriptions for AA-893 step 1).
 - The how-to is `status: draft` with a NOTE: never run on real data. First real run: the October report in the
   first session on or after 01/11, which also compares August to October (memory `infra-cost-audit-nov-2026`).
 - Budgets on acc1/acc3 were not checked (other profiles); listed as a check for the first monthly review.
+- The `/admin/platform/cost` JSON saved with each monthly report contains the real account IDs
+  (`aws.account_id`, `llm_satellites.*.account_id`). That is allowed in the private root repo (SEC-06, D-25);
+  the how-to says so and forbids copying the inputs into an app repo. The drafted Markdown does not print them
+  (S243 review).
