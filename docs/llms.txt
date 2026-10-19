@@ -28,6 +28,14 @@ Paths are relative to this `docs/` folder unless they start with a repo name. Re
 - [Incident response](ops/incident-response.md): severities, who to tell, first steps.
 - `skill/aa-ship/SKILL.md`: pre-merge checks, deploy gate, live verify, rollback commands.
 - `skill/aa-cis-schema/SKILL.md`: DB query pattern (ECS exec S3-mediated), gotchas, destructive-ops DRY RUN.
+- [FinOps process](ops/finops.md): tags, budgets, Cost Anomaly Detection, where to read cost; rules are DM-10.
+- [Monthly cost report](ops/cost/README.md): how to draft the monthly cost and capacity review (no new Cost Explorer calls).
+
+## Security
+
+- [Security docs index](security/README.md): security pages and access-review records.
+- [Security baseline](security/baseline.md): every control with live status, evidence and open issue.
+- [Vulnerability management](security/vulnerability-management.md): fix times, exceptions, monthly triage, open alerts.
 
 ## Decisions
 
