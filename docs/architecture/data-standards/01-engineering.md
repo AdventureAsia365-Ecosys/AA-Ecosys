@@ -4,7 +4,7 @@
 view, a contract or a query against the shared PostgreSQL 15 RDS (`aa-cis-dev-db`, acc2 `005097885195`,
 us-west-1) used by AA-CIS-App, AA-TripPlanner-Web and AA-Booking, and by any app that joins later.
 
-- **Status:** Accepted 15/10/2026 (v1.0, S237); version 1.1 on 19/10/2026 (S243, changelog in [`README.md`](README.md)). Nghiệp approved every recommendation of the S237
+- **Status:** Accepted 15/10/2026 (v1.0, S237); version 1.1 on 19/10/2026 (S243) and 1.2 (S244, X1 close-out; changelog in [`README.md`](README.md)). Nghiệp approved every recommendation of the S237
   data-architecture review (`docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md`,
   "the review"). This page is part of the rule body that
   [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and
@@ -67,8 +67,8 @@ roadmap id; until it lands, the review checklist (section 8) carries the check.
 | Schema dump + nightly drift check, policies/indexes/grants/owners/default ACLs/sizes | *to build* **N1** | live vs repo; fails on unmanaged objects |
 | Instance guardrails, parameter group, `pg_stat_statements`, new alarms, `CONNECTION LIMIT`, `application_name`, Lambda reserved concurrency | *to build* **N3** | slow queries, lock waits, idle-in-transaction, connection budget |
 | Safe runner defaults, `-- migrate:` headers, pre-snapshot, SQL lint (squawk or grep rules), unique-number check | *to build* **N5** | lock/statement timeouts, CONCURRENTLY, destructive snapshot |
-| Infra role bootstrap (role attributes: LOGIN, `CONNECTION LIMIT`, role-level backstop timeouts, `application_name`) in git, applied through a reviewed Infra path | *to build* **X1** (owner roles, `db_migrator`, `cis_app`, new apps). Interim for **N3**: one reviewed CIS migration sets the limits of the 3 existing runtime roles (Part C **C2.3a**, the single MIG-6 exception) | roles are Infra-owned (`schema-ownership.md` rule 3); DB Migrate today accepts only `cis`/`tripplanner`/`booking` dirs and the Booking guard rejects `ALTER ROLE` |
-| `infra/AA-CIS-Infra/db/owners.yaml` + owner roles + `db_migrator` | `owners.yaml` exists (X1 S1, AA-CIS-Infra #163; v1.1); owner roles and `db_migrator`: **X1** | one registry of owners, prefixes, roles, allowed grants |
+| Infra role bootstrap (role attributes: LOGIN, `CONNECTION LIMIT`, role-level backstop timeouts, `application_name`) in git, applied through a reviewed Infra path | exists (X1, v1.2): AA-CIS-Infra `db/migrations/roles/` (key `rl-NNN`, runs as the master): `rl-001` (`bk_owner`, `tp_owner`, `cis_app` limit 90, the N3 limits restated from CIS 234), `rl-002` (`cis_owner`, `db_migrator` limit 5). Role-level backstop timeouts and new apps' roles: later `rl-` files | roles are Infra-owned (`schema-ownership.md` rule 3); DB Migrate accepts `cis`/`tripplanner`/`booking`/`roles` dirs and the Booking guard rejects `ALTER ROLE` |
+| `infra/AA-CIS-Infra/db/owners.yaml` + owner roles + `db_migrator` | `owners.yaml` exists (X1 S1, AA-CIS-Infra #163; v1.1); owner roles `cis_owner` / `bk_owner` / `tp_owner`, runtime `cis_app` and login `db_migrator` exist (X1, done 19/10/2026; v1.2) | one registry of owners, prefixes, roles, allowed grants |
 | Shared job-table DDL template in `shared/jobs` ([ADR 0003a](../../adr/0003a-per-owner-job-tables.md)) | *to build* **X6** | one job shape per owner schema |
 | Retention/rollup job kinds, `shared.llm_call_daily` | *to build* **N4** | TTL deletes after S3 archive; rollups other apps read |
 | `docs/architecture/dead-table-registry.md` | *to build* **N6** (referenced, does not exist) | every quarantined or dropped object |
@@ -401,9 +401,15 @@ CREATE POLICY <table>_tenant_isolation ON <schema>.<table>
 - `NULLIF(…, '')` is mandatory: a pooled connection holds `''` after any `set_config(..., true)`
   transaction, and `''::uuid` raises instead of returning 0 rows.
 - `WITH CHECK` is written out, never left implicit.
-- `TO <role>` is mandatory; a policy without `TO` applies to `PUBLIC`. On CIS tables the runtime
-  role is `aa_app_user` today (draft 229 omits `TO`; under this rule it adds `TO aa_app_user`, which
-  changes nothing for the exempt owner and so stays inside D2).
+- `TO <role>` is mandatory; a policy without `TO` applies to `PUBLIC`. On CIS tables the tenant
+  runtime role is `aa_app_user` (the tenant pool; 229 adds `TO aa_app_user`). The platform runtime role
+  is `cis_app` (CIS api + worker since X1 S18, AA-860): it is not a tenant role and reads every row
+  through `<table>_cis_app_all AS PERMISSIVE FOR ALL TO cis_app USING (true) WITH CHECK (true)` (CIS 244).
+  A CIS migration that enables RLS on a table, ENABLE-only or FORCE, adds that policy in the same file,
+  and on a FORCE table also `<table>_cis_owner_all TO cis_owner` (CIS 245: the owner is not exempt under
+  FORCE and owns the views that read the table); without it the runtime reads 0 rows. *Enforced:* CIS CI
+  standing checks (`tests/integration/test_x1_cis_app_privileges.py`) and the isolation probe cells
+  `rls.enable_only_has_cis_app_policy` and `rls.force_parity.cis_app`.
 - New policies are named `<table>_tenant_isolation`; a migration that replaces an existing policy MAY
   keep its old name.
 
@@ -714,9 +720,9 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 
 | Legacy state | Rule it breaks | Retired by |
 |---|---|---|
-| `aa_cis_admin` is CIS API pool + worker + DB Migrate + owner of every object, incl. `booking.*` and `tripplanner.*` | SEC-1 | **X1** (Booking/TP first), **AA-817** (CIS runtime) |
 | CIS 007b `ALTER DEFAULT PRIVILEGES` in `shared`/silver/gold to `aa_app_user` | SEC-3 | **N7** (before AA-813 tables) |
-| Booking `bk-001` default privileges `FOR ROLE aa_cis_admin IN SCHEMA booking … TO booking`, required by the Booking migration guard | SEC-3 | **X1**: restated for `bk_owner` or replaced by per-object grants, guard updated in the same PR |
+| Booking default privileges `FOR ROLE bk_owner IN SCHEMA booking … TO booking` (bk-001's rows, restated by bk-014) and TripPlanner `FOR ROLE tp_owner IN SCHEMA tripplanner … TO tripplanner` (tp-013, restating rows that existed `FOR ROLE aa_cis_admin`); the Booking migration guard requires its rows | SEC-3 | stay until per-object grants replace them (no roadmap id) |
+| **XD3:** CIS default privileges `FOR ROLE cis_owner IN SCHEMA <the 11 CIS runtime schemas> … TO cis_app` (tables DML, sequences, functions; CIS 244 for the master, restated by 245) | SEC-3, Part B DM-8.3 | stays: approved exception (X1 plan XD3, S241). `cis_app` is CIS's own runtime, not a consumer; a CIS migration that forgot a per-object grant would give the runtime 42501 after deploy. Never `catalog`, never another owner's schema or role; `shared.schema_versions` stays read-only for `cis_app` (244 REVOKE). Reviewed in the DM-8.10 access review |
 | Live-only policies `gold_aa_internal.tenant_tour_versions_isolation`, `acp_shared.acp_output_rules.output_rules_rls` | SEC-8 | **N2** (229 drops the first explicitly) |
 | Policies on `app.current_tenant` (CIS 019/031); `::uuid` casts without NULLIF (CIS 004/008); `acp_shared.facts` without WITH CHECK | SEC-6, SEC-9 | **AA-817** follow-up migrations |
 | CIS tenant tables with ENABLE but no FORCE (D2) | SEC-7 (new apps only) | after the CIS role split |
@@ -726,7 +732,6 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 | Contract views in `shared`: `shared.v_tour_photos`, `shared.v_destination_photos` (ADR 0002, CIS 200) | CON-1 | retired once TripPlanner reads `catalog.v_*_photo` (**X4**) |
 | CIS tenant pool: an explicit `"false"` flag value (Redis, immediate) or the emergency variable `TENANT_POOL_FORCE_ADMIN_FLAGS` (task definition, durable, needs a redeploy) moves one route to the admin pool (operator rollback, Part B DM-8.4). Missing or unreadable flags and a missing pool fail closed since S241 D-12 (CIS #792) | SEC-10 | AA-817 / AA-859 (retire the flags route by route) |
 | CIS 007b creates login role `aa_app_user` in a migration | MIG-6 | **X1** (role definitions moved to the Infra bootstrap) |
-| Booking and TripPlanner objects and views owned by `aa_cis_admin` (the migrator), not a NOLOGIN owner | SEC-1, CON-2 | **X1** (`bk_owner`, `tp_owner`) |
 | `shared.admin_users.password_hash`; `booking.customer_otps`, `booking.customer_sessions` | NAM-14 | ADR 0006 Phase 1 (AA-816) / Phase 4 (a later `bk-NNN` drop) |
 | `tripplanner.llm_spend_daily` (own spend table) | CON-8 | after `shared.llm_call_daily` (**N4**) |
 | Connection worst case above the C2.1 ceiling; no `CONNECTION LIMIT` on any role | QRY-6, SEC-11 | **N3** (before the Lambda quota of 1000) |
@@ -740,3 +745,11 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 | `tripplanner.sessions.guest_token = id::text` | NAM-13 | **X8** (before ADR 0006 Phase 4) |
 | PII copied across `tripplanner.customers`, outbox/inbox payloads and `booking.customers`, untagged | KEY-5, NAM-12 | **L3** (redaction after 90 days per the approved retention) |
 | No TripPlanner migration integration test | TST-1 | open item for Nghiệp (not in the review roadmap; no N/X/L id) |
+
+**Retired rows** (kept here so a reader of an old link finds where they went):
+
+| Legacy state | Retired by (evidence) |
+|---|---|
+| `aa_cis_admin` is CIS API pool + worker + DB Migrate + owner of every object, incl. `booking.*` and `tripplanner.*` (SEC-1) | **X1**, done 19/10/2026 (AA-852 / AA-860): CIS api + worker log in as `cis_app` (S18), the CIS task role is denied the master secret (S19), the 12 CIS schemas belong to `cis_owner` (CIS 245, S21), DB Migrate / DB Schema Dump / DB Isolation Probe log in as `db_migrator` (S22). The master is break-glass plus `roles/`, `set-password` and `run-script` (Part B DM-8.9). Probe after S22: 58/58 cells pass |
+| Booking `bk-001` default privileges `FOR ROLE aa_cis_admin IN SCHEMA booking … TO booking` (SEC-3) | **X1** S6/S8: bk-014 restates them `FOR ROLE bk_owner` and revokes the `aa_cis_admin` rows; the Booking guard takes the role per file. The `bk_owner` rows stay as a grandfathered row above |
+| Booking and TripPlanner objects and views owned by `aa_cis_admin` (the migrator), not a NOLOGIN owner (SEC-1, CON-2) | **X1** S6–S8: bk-014 → `bk_owner`, tp-013 → `tp_owner` (live dump: schema `booking` owner `bk_owner`, `tripplanner` owner `tp_owner`) |

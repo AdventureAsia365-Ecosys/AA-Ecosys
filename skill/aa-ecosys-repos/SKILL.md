@@ -16,11 +16,11 @@ Workspace local: `~/projects/AA-Ecosys/` — mỗi repo một `.git` riêng. B�
 | `AA-CIS-App` | FastAPI backend + Next.js admin + tenant portal + worker | ECS api + worker (acc2), Vercel | `references/cis-app.md` |
 | `AA-CIS-Infra` | Terraform `accounts/aa365` (ECS, RDS, S3, IAM, TripPlanner BE) | GitHub Actions (apply chỉ qua workflow_dispatch) | `references/infra.md` |
 | `AA-TripPlanner-Web` | B2C map-first planner: Next.js + 2 Lambda | Vercel + Lambda | `references/tripplanner.md` |
-| `AA-Booking` | AAA: trip case, booking, ops (đang bootstrap) | ECS service trên acc2 | `references/booking.md` |
+| `AA-Booking` | AAA: khách, trip case, giá, ops (live Dev từ S235) | ECS `aa-booking-dev-api` trên acc2 + Vercel `aa-booking-admin` | `references/booking.md` |
 
 `AA-ACP-App` / `AA-ACP-Core` đã archive và xoá. Không tìm code ở đó. Mọi task UI ghi rõ repo đích.
 
-AA-Booking repo CHƯA tồn tại (local hay GitHub) — còn đang bootstrap (AA-678). Repo gốc workspace là `AA-Ecosys` (chứa `docs/`, `skill/`, `.kiro/`, và các repo con trong `apps/` + `infra/`).
+Repo gốc workspace là `AA-Ecosys` (chứa `docs/`, `skill/`, `.kiro/`, và các repo con trong `apps/` + `infra/`).
 
 ## Pipeline (tóm tắt)
 
@@ -44,6 +44,11 @@ Bảng đầy đủ stage → file → bảng DB: `references/pipeline.md`.
 - Trunk-based: chỉ `main`; branch `feature|fix|chore/aa-xxx-…`; PR ghi `Refs AA-xxx`.
 - CIS: merge vào `main` → tự deploy Dev (api + worker cùng image). Infra: merge không tự apply.
 - Thêm module top-level vào AA-CIS-App → `COPY` trong Dockerfile + path filter `deploy-dev.yml`.
+- DB (X1 xong 19/10/2026): mỗi app một role chủ NOLOGIN (`cis_owner`, `bk_owner`, `tp_owner`) + role runtime
+  (`cis_app` + `aa_app_user`, `booking`, `tripplanner`). Migration của repo chủ, copy byte-identical vào Infra
+  `db/migrations/<owner>/`, DB Migrate đăng nhập `db_migrator` và chạy file bằng role chủ. Role/extension chỉ ở Infra
+  `db/migrations/roles/` (`rl-NNN`, chạy bằng master). Master `aa_cis_admin` là break-glass. Sổ đăng ký:
+  Infra `db/owners.yaml`; giải thích: `docs/database/schema-ownership.md`. Viết migration: skill `aa-cis-schema`.
 - Frontend: Next 16 + React Compiler, UI kit `app/_kit/`, react-query, inline style + brand token. Xem `aa-ui-verify`.
 - Auth: admin dùng header `x-admin-secret` (`verify_admin_secret`); tenant dùng JWT (`/auth/tenant-login` → `_create_jwt`/`verify_jwt`). Hardening (JWT thật cho staff role, passwordless) còn ở backlog (AA-656/AA-703).
 

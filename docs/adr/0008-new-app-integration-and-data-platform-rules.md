@@ -229,4 +229,10 @@ accepted ADR are separate `<nnnn>a-<slug>.md` files (pattern 0004a).
 - **X7 (AA-826):** `owners.yaml`-driven playbook tooling, role bootstrap template, consumer contract
   hash guard. **X2:** catalogue CI guard. **N1:** generated schema reference with policies, grants and
   `pii:` tags.
+- **X1 done (19/10/2026, S244; AA-852 / AA-860):** decision 6 is in force. `booking.*` → `bk_owner` (bk-014),
+  `tripplanner.*` → `tp_owner` (tp-013), CIS runtime on `cis_app` (S18), the 12 CIS schemas → `cis_owner` (CIS 245),
+  DB Migrate logs in as `db_migrator` from its own task definition (S22), role attributes in the Infra `roles/` dir
+  (`rl-001`, `rl-002`); `aa_cis_admin` is break-glass (data standards DM-8.9). One exception recorded in Part A §9:
+  XD3 default privileges `FOR ROLE cis_owner … TO cis_app`. Plan and evidence:
+  `docs/audits/2026-10-17-S241-x1/x1-plan.md`, isolation probe 58/58 after S22.
 - Open items for Nghiệp are listed in the standards README ("Open items").
