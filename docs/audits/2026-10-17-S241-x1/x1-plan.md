@@ -10,6 +10,8 @@
 - **Linear:** AA-860 (CIS runtime split, Waves 4–5); AA-826 (owners.yaml + role bootstrap, Wave 1). Waves
   1–3 (Booking/TripPlanner owners, migrator task def, SGs) have no open issue since AA-807 closed:
   **ask Nghiệp before creating one** (steering rule).
+- **S243 (19/10):** the "S243 amendments" block below corrects §1.4 / S16 (FORCE RLS does not filter the
+  master: 244 adds parity policies TO cis_app on all 16 RLS tables) and records Wave 4's build state.
 - **Revision 2 (17/10):** two review passes (19 points) checked against the code and folded in; the biggest
   change is that the runner's `SET ROLE` is keyed on the **live schema owner** (XD8), which removes the
   default-privilege gap windows and the separate "flip" steps. What was accepted, adapted or rejected is in §9.
@@ -22,6 +24,116 @@
 Every number below was read on 17/10/2026 from the code at `main`, the schema reference dump of 16/10
 (CIS 242, tp-012, bk-013), the AA-817 probe output (`docs/audits/2026-10-14-S237-lane-backlog/aa817/probe-after-229.json`)
 and read-only AWS calls (security groups, ENIs, Lambda VPC config, connection metrics).
+
+---
+
+## S243 amendments (19/10/2026)
+
+Wave 4 (AA-860) built in S243. Where this block and a step below (or the S242 block) differ, this block wins.
+Implementation notes: AA-CIS-App `docs/implementation-notes/AA-860-S15.md`, `AA-860-S16.md`; AA-CIS-Infra
+`docs/implementation-notes/AA-860-S15.md`, `AA-860-S16.md`, `AA-860-S18.md`, `AA-860-S19.md`.
+
+**Status of Wave 4**
+
+| Step | State | Branch |
+|---|---|---|
+| S15a photo sync on `geo`, docstring, connection inventory | Built | AA-CIS-App `feat/x1-s15-cis-runtime-prep` |
+| S15b read-only run-scripts (connection snapshot, photo parity) | Built | AA-CIS-Infra `feat/x1-s15-scripts` |
+| S16a CIS `244` + tests | Built | AA-CIS-App `feat/x1-s16-migration-244` |
+| S16b-i Infra byte copy of 244 | Built (Copy Guard red until S16a merges) | AA-CIS-Infra `chore/x1-s16-copy-244` |
+| S16b-ii probe cell `rls.force_parity.cis_app` | Built | AA-CIS-Infra `feat/x1-probe-force-parity` |
+| S17 cis_app DSN + set-password | Nghiệp + main session | — |
+| S18a `DATABASE_URL` → cis_app, 53300 alarm | Staged, merge only in the freeze window | AA-CIS-Infra `feat/x1-s18-cis-app-dsn` |
+| S19a task-role Deny | Staged, apply last | AA-CIS-Infra `feat/x1-s19-task-role-deny` + root `docs/x1-s19-ecs-exec` |
+
+**§1.4 and S16 item 3 were wrong: FORCE RLS does not filter the master.**
+- The AA-817 probe v2 (`docs/audits/2026-10-16-S239-in-progress-audit/aa817-done-evidence/probe_v2_after_239.json`)
+  shows, for `aa_cis_admin`, `rls_active = false` and `foreign_guc == total` on every FORCE table
+  (published_tours 892/892, raw_tours 987/987, generated_content 1481/1481, quality_scores 1481/1481,
+  seo_context 918/918, pipeline_runs 46/46). The master is in `rds_superuser`; lesson S236. About 69 CIS files
+  read these tables without setting `app.tenant_id`.
+- So 244 gives `cis_app` a permissive `<table>_cis_app_all FOR ALL TO cis_app USING (true) WITH CHECK (true)`
+  on **all 16** RLS tables: the 8 ENABLE-only ones (D2) **and** the 8 FORCE ones. This reproduces today's
+  runtime behaviour exactly; tenant isolation stays on the tenant pool (`aa_app_user`). Without it, `cis_app`
+  would read 0 rows and be refused writes on raw_tours, published_tours, generated_content, … after S18.
+- The 244 guard is inverted: not "published_tours without GUC = 0" but **parity**: for every FORCE table and
+  tenant_tour_versions, `cis_app`'s `count(*)` without a GUC and under a forged GUC equals the master's.
+  The master's counts are taken **before** the policies are created: the master is a member of `cis_app`
+  (rl-001) and a policy `TO cis_app` applies to members too, so measured afterwards the master would always
+  match. CI test: a filtered master (the old premise) makes the guard refuse.
+- Probe: new cell `rls.force_parity.cis_app` (cis_app's own DSN vs the catalog login), owners.yaml
+  `cis.rls_parity_tables`.
+- **S21 / 245 must handle `cis_owner` the same way** (policies `TO cis_owner` or `NO FORCE` on the 8 FORCE
+  tables). DB Migrate runs CIS files as `cis_owner` (not a member of `cis_app`), and the owner-rights views
+  `acp_contract.v_active_tour_atoms`, `v_trip_registry`, `shared.v_tour_photos`, `shared.v_destination_photos`
+  (read by TripPlanner and `catalog_owner`) read their base tables as their owner: once `cis_owner` owns
+  them without the `rds_superuser` bypass they would return 0 rows, and so would old-style data migrations.
+  Needs its own design pass before 245.
+- **AA-860 Done-when (1)** ("a forged foreign `app.tenant_id` on the main pool returns 0 rows from every RLS
+  table") contradicts parity: admin needs cross-tenant reads and the code sets no GUC. Proposed wording
+  (Nghiệp decides): "cis_app owns nothing, is in no role and has no BYPASSRLS; CIS runtime → booking /
+  tripplanner 42501; tenant isolation proven on the tenant pool (aa_app_user matrix 0 cross-tenant rows); the
+  main pool keeps platform parity on RLS tables (policies TO cis_app)". A GUC-aware main pool is a separate
+  project (~69 files); a follow-up issue needs Nghiệp's OK first.
+
+**244 on Dev after 247–249 (S243 migration numbers: 248 = AA-884, 249 = AA-878, X1 keeps 244–246).**
+244 is applied after them. `GRANT … ON ALL` covers every object that exists then (incl.
+`shared.staff_app_grant`, 248's `shared.cost_explorer_app_snapshot`); EXECUTE is revoked again on all trigger
+functions (243's key guard, 248's audit triggers, `shared.job_set_updated_at`; owners.yaml already excludes
+them); default privileges `FOR ROLE aa_cis_admin` cover later objects. Tested in AA-CIS-App
+`test_aa860_migration_244.py` (objects before 244, after 244 as the master, after 244 as a superuser).
+A later migration that adds an RLS table in a CIS runtime schema must add a policy `TO cis_app` in the same
+file (CI standing check `test_x1_cis_app_privileges.py`); none of 248/249/bk-017/tp-015 does.
+
+**CI replay (S242 amendment changed):** the conftest replay now **skips 244** (like 001/002/007b/008): its
+policies make the exact-policy guards of 229/237/239/241, which their tests re-apply, refuse. The X1 tests
+apply 244 themselves in the Dev order (after the full replay, CI DB first brought to Dev's RLS shape:
+`conftest.x1_244_ci_shape`) and remove it at teardown. Any new migration that asserts an exact policy set on
+one of the 16 tables must allow `<table>_cis_app_all`.
+
+**S15:**
+- `services/photos/sync.py` `itinerary_places` reads `geo.tour_place` ∪ `geo.tour_stop` of the **current**
+  graph build (mapped to the live tour by the `services/places/store.py` liveness SQL), fail-open logged at
+  ERROR. No CIS code reads `tripplanner.*` after it. The Infra run-script `x1_photo_itinerary_parity.py`
+  compares old vs new per country (S15c).
+- Connection budget (XD6): inventory in AA-CIS-App `AA-860-S15.md`. Worst case per api + worker task set ≈ 63
+  (api 16, worker 47 with 8 slots of per-job pools and executor-thread ad-hoc connects), ≈ 126 with the 200 %
+  deploy overlap; measured instance max 28 (05–18/10). **Proposal: keep 90**; raise (Infra `roles/003`,
+  ceiling ≈ 105 = 181 − 30 − 15 − 15 − 5 − reserved) only if the S15c snapshots show more than 45 sessions, or
+  better move the grounding / Jev / export per-job pools onto the worker pool. `shared/repository/database.py`
+  is dead (nothing imports it).
+- The snapshot is 2–3 dispatches of a read-only run-script, not a per-minute series (30-minute run-script
+  ceiling).
+- D7 (s4_trigger Lambda) is void: no such function on acc2 (list-functions). `services/acp_produce/sweeper_lambda.py`
+  (the only code naming the master secret) is not deployed and not imported.
+
+**S17 (Nghiệp, Console; ⚠️ underscore names, edit by hand, never paste the value into chat):**
+- Secrets Manager → `aa-cis/dev/rds-cis-app` (the placeholder exists, no value yet) → "Set secret value" →
+  Plaintext. Take the **format of the master DSN `aa-cis/dev/rds`** (the value api and worker read as
+  `DATABASE_URL` today), keep scheme, host, port, database and any query string exactly, and change only:
+  user → `cis_app`, password → a new random password of **≥ 32 printable ASCII characters**. Shape:
+  `postgresql://cis_app:<new password>@<same host>:<same port>/aa_cis_dev<same ?query, if any>`.
+  Percent-encode `@ : / ? # %` in the password (or generate one without them). The runner refuses a DSN whose
+  user is not `cis_app`, a shorter password, or a host/port/database different from the master's.
+- Then the main session dispatches DB Migrate `mode=set-password`, `role=cis_app`, `environment=dev`. The
+  runner (master login) sends only a SCRAM verifier, test-logs in with the DSN and prints
+  `current_user=cis_app rolconnlimit=90`, then `COMMENT ON ROLE cis_app IS 'x1:password-set …'`. Exit 11 =
+  secret refused (nothing changed), 12 = password set but test login failed.
+- Then the probe: `cis_app_secret_ready`, `cis_app_password_set` true; `login.cis_app`, `cross.cis_app.*`,
+  `rls.force_parity.cis_app` pass.
+
+**S18:** the Terraform line is now `accounts/aa365/main.tf:185` (module "ecs" `secret_rds_arn`) →
+`aws_secretsmanager_secret.rds_cis_app.arn` (H4: Nghiệp reviews it). Same PR: log metric filter on
+`/ecs/aa-cis-dev` for `"too many connections for role" "cis_app"` → `AA/RDS CisAppTooManyConnections`, alarm Sum ≥ 1 / 5 min,
+ALARM + OK to the alerts topic (≈ $0.10–0.40/month). Expected plan: 2 task-definition revisions, 1 filter,
+1 alarm, no `aws_ecs_service` change. Preconditions: S15 deployed, 244 applied, S17 done, CIS merge freeze.
+
+**S19:** Deny `secretsmanager:GetSecretValue` on `${project}/${environment}/rds-??????`, `db-migrator-??????`,
+`booking/*`, `tripplanner/*` in `ecs_task_policy`. Checked against the live secret ARNs: the master,
+db-migrator, every booking/ and tripplanner/ secret denied; rds-app-user, rds-cis-app, gdrive-photo-reader,
+booking-jwt-signing-key allowed. Skills `aa-cis-schema/references/ecs-exec.md` and `ai-nghiep/references/aws.md`:
+ECS-exec scripts use the container `DATABASE_URL`; master work via DB Migrate `run-script` (root branch
+`docs/x1-s19-ecs-exec`, merge with the S19 apply). H7 (Nghiệp's `~/.claude/CLAUDE.md`) unchanged.
 
 ---
 
