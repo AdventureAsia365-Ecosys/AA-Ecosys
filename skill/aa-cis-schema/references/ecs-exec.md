@@ -1,20 +1,23 @@
 # ECS exec + S3 — query DB AA-CIS
 
-RDS trong private subnet → chạy script Python (asyncpg) trong container `api` qua ECS exec, lấy kết quả qua S3. Script có thể import secret trực tiếp (dưới) hoặc dùng app code (`sys.path.insert(0, "/app")` rồi `from shared.secrets import get_database_url`) — cả hai chạy được; bản dưới độc lập app, dùng được cả khi code app đổi.
+RDS trong private subnet → chạy script Python (asyncpg) trong container `api` qua ECS exec, lấy kết quả qua S3. Script dùng **`DATABASE_URL` của chính container** (hoặc app code: `sys.path.insert(0, "/app")` rồi `from shared.secrets import get_database_url`).
+
+## Ai đăng nhập DB, được làm gì (X1, AA-860)
+
+- **Từ X1 S18**, `DATABASE_URL` của api + worker là DSN của **`cis_app`** (secret `aa-cis/dev/rds-cis-app`): đọc/ghi mọi bảng CIS (11 schema runtime, kể cả bảng RLS — policy parity của CIS 244), **không** đọc được `booking.*` / `tripplanner.*` (42501), không DDL, không ghi `shared.schema_versions`. Trước S18 nó vẫn là master.
+- **Từ X1 S19**, task role của CIS bị **Deny** `GetSecretValue` trên `aa-cis/dev/rds` (master), `aa-cis/dev/db-migrator`, `booking/*`, `tripplanner/*`. Script ECS exec **không còn tự lấy DSN master** được (AccessDenied) — đừng dùng `get_secret_value(SecretId="aa-cis/dev/rds")` nữa.
+- Việc cần quyền master — đọc/ghi `booking.*` / `tripplanner.*`, role, `catalog.*`, sửa liên chủ sở hữu — đi qua **DB Migrate `mode=run-script`** với một file `db/scripts/<name>.py` đã review trong AA-CIS-Infra (`db/scripts/README.md`; `READ_ONLY = True` cho script chỉ đọc). Không qua ECS exec.
+- Đổi cấu trúc DB vẫn là migration của repo chủ (không phải script).
 
 ## Script mẫu (asyncpg, ghi kết quả ra file)
 
 ```python
-import asyncio, json, boto3, asyncpg
-from urllib.parse import urlparse
+import asyncio, json, os, boto3, asyncpg
 
 async def main():
-    sm = boto3.client("secretsmanager", region_name="us-west-1")
-    dsn = sm.get_secret_value(SecretId="aa-cis/dev/rds")["SecretString"].strip()  # DSN thô
-    u = urlparse(dsn)
-    conn = await asyncpg.connect(host=u.hostname, port=u.port or 5432, user=u.username,
-        password=u.password, database=u.path.lstrip("/"), ssl="require")
-    rows = await conn.fetch("SELECT ...")  # luôn schema-qualify
+    # DSN của container: cis_app từ X1 S18 (master trước đó). Không đọc secret master (Deny từ S19).
+    conn = await asyncpg.connect(os.environ["DATABASE_URL"], ssl="require")
+    rows = await conn.fetch("SELECT ...")  # luôn schema-qualify; chỉ schema CIS
     with open("/tmp/result.json", "w") as f:
         json.dump([dict(r) for r in rows], f, indent=2, default=str)
     await conn.close()
