@@ -42,7 +42,7 @@ Merge + CI xanh CHƯA đủ. Issue có code backend chỉ Done khi: merge + CI x
 + **verify endpoint live** (curl 200 + shape). Commit/PR dùng `Refs AA-xxx` (KHÔNG `[AA-xxx]`/`Fixes` — tự đóng issue).
 Không merge/deploy backend khi bảng job của app (`shared.job`, `booking.job`) còn job hoặc đang có wave (CI tự chặn; override chỉ Nghiệp, ghi lý do).
 
-**Ai merge (S241 D-13; data standards DM-11.5, câu chữ v1.1 chờ Nghiệp duyệt — N-1):**
+**Ai merge (S241 D-13; data standards DM-11.5, v1.1, Nghiệp duyệt S243 (N-1)):**
 
 - **Giai đoạn dev (bây giờ):** agent điều phối tự code → push → merge khi CI xanh → deploy → verify → báo cáo, kể cả PR
   bảo mật/hạ tầng. Subagent không merge (hook chặn). PR rủi ro (auth/quyền, migration/schema, CI/workflow/secret, xoá dữ

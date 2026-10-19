@@ -63,7 +63,7 @@ Trạng thái phiên: memory Notion (Program Brain/memory.md) + docs/sessions/. 
 ## Git Rules — NON-NEGOTIABLE
 - ADR-2026-023 (trunk-based): không có `develop`. Branch feature/fix → PR → CI bắt buộc → squash merge thẳng vào
   `main` (repo gốc: `master`). Bắt đầu: tạo branch/worktree từ `origin/main` mới nhất, không sửa trên checkout chính.
-- **Quyền merge theo giai đoạn (S241 D-13, data standards DM-11.5 — câu chữ v1.1 chờ Nghiệp duyệt, N-1):**
+- **Quyền merge theo giai đoạn (S241 D-13, data standards DM-11.5 — v1.1, Nghiệp duyệt S243 (N-1)):**
   - **Giai đoạn dev (bây giờ):** phiên agent điều phối TỰ merge PR của mình khi CI xanh — kể cả PR bảo mật/hạ tầng —
     rồi deploy, verify live, báo cáo (memory `dev-phase-self-merge`). Subagent KHÔNG merge (hook
     `.claude/hooks/subagent-guardrails.sh` chặn). Thay đổi rủi ro (auth/quyền, migration/schema, CI/workflow/secret,
