@@ -7,7 +7,7 @@ taken on a measured trigger, not a guess.
 
 **Status:** Accepted with the S237 data-architecture review
 ([`docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md`](../../audits/2026-10-14-S237-lane-backlog/data-architecture/README.md),
-"the review"; Nghiệp approved every recommendation, 15/10/2026). Version 1.1 (19/10/2026, S243; changes in the README changelog), part of the rule body
+"the review"; Nghiệp approved every recommendation, 15/10/2026). Version 1.2 (19/10/2026, S244; changes in the README changelog), part of the rule body
 of [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and
 data platform rules, accepted 15/10/2026); index and golden rules in [`README.md`](README.md). Roadmap
 ids (N1..N7, X1..X10, L1..L10) are the review's section 7.
@@ -110,18 +110,26 @@ account Lambda quota of 10 and `desired_count = 1` hide it.
 
 **Re-checked 16/10/2026 (AA-832)** against the measured `max_connections` = 181 (75 % ceiling ≈ 135): the target total below (~136) sits at the ceiling, so any pool increase needs an offsetting cut (AA-859 sizing: tenant pool 2/task with api `max_capacity` 7). Live `CONNECTION LIMIT`s: `tripplanner` 30, `booking` **15** (migration 234; the row below still shows the target 10), `aa_app_user` 15. Per-role usage is now a CloudWatch metric (`AA/RDS RoleConnections` / `RoleConnectionLimitPct`, every 5 min).
 
-| Pool (`application_name`) | DB role (today → after X1) | Pool `max_size` | Max processes | Worst case | `CONNECTION LIMIT` | Statement timeout (pool-level, C2.3f) | Lock timeout (pool-level) |
+| Pool (`application_name`) | DB role (live since X1, 19/10/2026) | Pool `max_size` | Max processes | Worst case | `CONNECTION LIMIT` | Statement timeout (pool-level, C2.3f) | Lock timeout (pool-level) |
 |---|---|---|---|---|---|---|---|
-| `cis-api` (main) | `aa_cis_admin` → `cis_app` | **5** (today 10, `api/main.py:78`; shrink decided from the `aa859_main_pool_gauge` baseline) | **7** (`modules/ecs/main.tf` `max_capacity`, 10 → 7 in AA-CIS-Infra #156, AA-859) | 35 | none on `aa_cis_admin`; `cis_app` 90 (shared with worker) | 30 s | 5 s |
+| `cis-api` (main) | `cis_app` (X1 S18; was `aa_cis_admin`) | **5** (today 10, `api/main.py:78`; shrink decided from the `aa859_main_pool_gauge` baseline) | **7** (`modules/ecs/main.tf` `max_capacity`, 10 → 7 in AA-CIS-Infra #156, AA-859) | 35 | `cis_app` **90** (shared with worker and the per-job pools; `rl-001`) | 30 s | 5 s |
 | `cis-tenant` | `aa_app_user` | **2** (`aa544_tenant_pool.py` `TENANT_POOL_MAX_SIZE`, AA-859 PR-S #774, 16/10/2026) = `floor(15 / 7)` | 7 | 14 | **15** (25 when AA-544 Stage 2 widens) | 15 s (also the role backstop) | 5 s |
-| `cis-worker` | `aa_cis_admin` → `cis_app` | `max(5, max_parallel + 2)` = 10 (`shared/jobs/worker.py:323`, default `max_parallel` 8) | 3 (`worker_max_count`) | 30 | in `cis_app` 90 | none at pool level; per job kind | per job kind (`SET LOCAL`) |
+| `cis-worker` | `cis_app` (X1 S18) | `max(5, max_parallel + 2)` = 10 (`shared/jobs/worker.py:323`, default `max_parallel` 8) | 3 (`worker_max_count`) | 30 | in `cis_app` 90 | none at pool level; per job kind | per job kind (`SET LOCAL`) |
 | `tp-browse` | `tripplanner` | **1** (today 5, `backend/shared/db.py:60`) | reserved concurrency **10** | 10 | **30** (both TP pools + 10 for backfills and Lambda deploy overlap) | 10 s (Lambda timeout 30 s) | 3 s |
 | `tp-assembly` | `tripplanner` | **1** | reserved concurrency **10** | 10 | (in 30) | 20 s (Lambda timeout 60 s; also the role backstop) | 5 s |
 | `booking-api` (+ in-process `booking.job` worker) | `booking` | 5 (`backend/app/db.py:54`) | 2 (1 task + deploy overlap, `booking.tf` `deployment_maximum_percent = 200`) | 10 | **10** | 15 s (also the role backstop) | 5 s |
-| `db-migrate` | `aa_cis_admin` → `db_migrator` | 1 | 1 | 1 | `db_migrator` **3** | 15 min (N5 runner default, set per session) | 5 s (MIG-9 runner default) |
-| ops / ECS exec scripts / break-glass | `aa_cis_admin` | — | — | 10 (reserve) | none (break-glass) | per session | per session |
+| `db-migrate`, DB Schema Dump, DB Isolation Probe | `db_migrator` (X1 S22) | 1 | 3 (three workflow concurrency groups can overlap) | 3 | `db_migrator` **5** (`rl-002`) | 15 min (N5 runner default, set per session) | 5 s (MIG-9 runner default) |
+| ECS exec scripts (S3-mediated, container `DATABASE_URL`) | `cis_app` | — | — | (inside the 90) | (in `cis_app` 90) | per session | per session |
+| `roles/` files, DB Migrate `set-password` / `run-script`, break-glass | `aa_cis_admin` (master; its DSN is read only inside the migrator task, or for break-glass) | — | — | 10 (reserve) | none (break-glass, C2.3b) | per session | per session |
 | RDS internal + `superuser_reserved_connections` | `rdsadmin` | — | — | ~5 | — | — | — |
-| **Total** | | | | **~124** (after AA-859 sizing: api 35, tenant 14) | | ≤ 135 ceiling (75 % of 181) | |
+| **Total** | | | | **~126** (after AA-859 sizing: api 35, tenant 14; `db_migrator` 3) | | ≤ 135 ceiling (75 % of 181) | |
+
+`cis_app` connection sites besides the two pools (X1 S15 inventory, XD6; AA-CIS-App
+`docs/implementation-notes/AA-860-S15.md`): per-job pools `cis-job` (export / recompute 5, S1 Jev gates 4,
+grounding 2 per in-flight rewrite), the eval pool 2 (eval workflow only) and short-lived ad-hoc `asyncpg.connect`
+calls. Theoretical worst case per api + worker task set ≈ 63 (× 2 during a deploy overlap); measured instance-wide
+`DatabaseConnections` daily max 28 (05–18/10/2026). The limit stays 90 (S15c); 53300 on `cis_app` is a CloudWatch log
+alarm (S18) next to `RoleConnectionLimitPct` > 80 %. Raise it only by an Infra `roles/` file, never a CIS migration.
 
 ### C2.3 Rules
 
