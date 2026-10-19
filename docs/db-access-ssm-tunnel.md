@@ -60,10 +60,7 @@ export $(aws configure export-credentials --profile aa365-admin --format env | x
 
 ```bash
 # DSN đầy đủ (host RDS, user, password, dbname) — dùng để cấu hình SQLTools.
-aws secretsmanager get-secret-value \
-  --secret-id aa-cis/dev/rds \
-  --region us-west-1 \
-  --query SecretString --output text
+aws secretsmanager get-secret-value --secret-id aa-cis/dev/rds --query SecretString --output text --profile aa365-admin --region us-west-1
 ```
 
 Tách các phần từ DSN `postgresql://<user>:<pass>@<rds-host>:5432/<db>`:
@@ -75,8 +72,7 @@ Tách các phần từ DSN `postgresql://<user>:<pass>@<rds-host>:5432/<db>`:
 
 Lấy nhanh RDS endpoint (nếu cần tách riêng):
 ```bash
-aws rds describe-db-instances --db-instance-identifier aa-cis-dev-db \
-  --region us-west-1 --query 'DBInstances[0].Endpoint.Address' --output text
+aws rds describe-db-instances --db-instance-identifier aa-cis-dev-db --query 'DBInstances[0].Endpoint.Address' --output text --profile aa365-admin --region us-west-1
 ```
 
 ## 4. (Đường A) Dựng bastion tạm — CẦN NGHIỆP DUYỆT
