@@ -80,7 +80,8 @@ Không tạo nhiều lệnh `sleep N; check` chồng chéo hay mở terminal son
 
 ## Lưu ý kỹ thuật (môi trường)
 - Chạy git/terraform từ đường dẫn WSL `/home/nghiep/...` (KHÔNG dùng UNC `\\wsl.localhost`).
-- terraform/boto3 cần MFA: `export $(aws configure export-credentials --profile aa365-admin --format env | xargs) && unset AWS_PROFILE` rồi chạy.
+- terraform/boto3 cần MFA. KHÔNG `export $(…)` trần: lệnh lỗi/rỗng thì `export` in toàn bộ env (lộ token, S244). Dùng:
+  `C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q '^AWS_ACCESS_KEY_ID=' <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr '\n' ' ' <<<"$C") <lệnh>` (chạy trong `bash -c`). Hết hạn MFA → Nghiệp chạy `aws sts get-caller-identity --profile aa365-admin` và nhập mã.
 - AA-CIS-App có branch protection (5 CI job) → merge PR dùng `gh pr merge --auto`. Repo gốc không có CI bắt buộc →
   `gh pr merge <n> --squash` sau khi tự kiểm (lệ root PR).
 - MCP config ở `.kiro/settings/mcp.json` (gitignored). Linear endpoint `/mcp` (KHÔNG `/sse`).
