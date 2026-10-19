@@ -1,0 +1,58 @@
+{
+  "cleanup_failures": [],
+  "clients": [
+    {
+      "client": "aa-workforce-dev-breakglass",
+      "client_id": "2g3f3ncfuqdiuu1o5b70o4h0lq",
+      "email_otp_offered": false,
+      "no_preference": {
+        "available_challenges": [
+          "PASSWORD",
+          "PASSWORD_SRP"
+        ],
+        "challenge": "SELECT_CHALLENGE",
+        "error": null,
+        "tokens_issued": false
+      },
+      "prefer_email_otp": {
+        "available_challenges": [
+          "PASSWORD",
+          "PASSWORD_SRP"
+        ],
+        "challenge": "SELECT_CHALLENGE",
+        "error": null,
+        "tokens_issued": false
+      }
+    },
+    {
+      "client": "aa-workforce-dev-cis-admin",
+      "client_id": "3oqkumijh04cp81k3nlnub6qtv",
+      "email_otp_offered": false,
+      "no_preference": {
+        "available_challenges": [
+          "PASSWORD",
+          "PASSWORD_SRP"
+        ],
+        "challenge": "SELECT_CHALLENGE",
+        "error": null,
+        "tokens_issued": false
+      },
+      "prefer_email_otp": {
+        "available_challenges": [
+          "PASSWORD",
+          "PASSWORD_SRP"
+        ],
+        "challenge": "SELECT_CHALLENGE",
+        "error": null,
+        "tokens_issued": false
+      }
+    }
+  ],
+  "email_otp_offered": false,
+  "enabled_at_start": false,
+  "probe": "breakglass-otp-probe",
+  "restored": true,
+  "user": "admin@adventure.asia",
+  "user_status": "CONFIRMED",
+  "verdict": "email_otp_not_offered"
+}
