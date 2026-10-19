@@ -63,7 +63,7 @@ placeholders.
 | ARCH-02 | Network and edge | Exp + Ref | INF `docs/network.md` + `docs/generated/network.md` | H+G | nghiep | 90; after a network apply | E D CT A | planned. Tables: AA-893. Prose and diagram: AA-697 (parked, N-9) |
 | ARCH-03 | Service catalog and resource inventory | Ref | INF `docs/generated/inventory.md` + admin Apps page | G (tag `App` + state) | nghiep | nightly + after apply | E D CT CI A, O (Apps page) | planned. AA-893; live page AA-884 |
 | ARCH-04 | Access and IAM matrix | Ref + Exp | INF `docs/iam.md`, `docs/generated/iam-roles.md`; root `docs/security/access-matrix.md` | H+G | nghiep | 90; quarterly access review (SEC-05) | E D CI A | planned. Tables: AA-893. Matrix: AA-697 (parked, N-9). Today: INF `docs/ci-role-split.md`, `docs/agent-session-role.md`, ADR 0006/0006a |
-| ARCH-05 | ADR index per repo | Exp | `docs/adr/README.md` in root, CIS, BK, TP, INF | H + lint | nghiep | each new ADR | E CT A | root exists; CIS (8 ADRs) and BK (1) have no index; TP and INF have no ADR folder. AA-888 |
+| ARCH-05 | ADR index per repo | Exp | `docs/adr/README.md` in root, CIS, BK, TP, INF | H + lint | nghiep | each new ADR | E CT A | root exists and is linted (status + index, `docs-lint.yml`); CIS, BK, TP, INF indexes added by AA-888 (TP and INF have no ADR yet) |
 | ARCH-06 | CONTEXT.md per repo | Exp | `CONTEXT.md` in CIS, BK, TP, INF (root uses ARCH-01) | H | nghiep | 90; on a stack or boundary change | E A | exists in 4 repos. Add `last_reviewed` + `applies_to`: AA-888 |
 | ARCH-07 | Contracts catalog and registry | Ref | root `docs/contracts/README.md` | H (G table later) | nghiep | each contract version | E A | exists. Producer → consumer → version → pinned hash: AA-826 (U-35) |
 | ARCH-08 | Data standards (DM-x, C-x) and schema ownership | Ref + Exp | root [`architecture/data-standards/`](architecture/data-standards/README.md), [`database/schema-ownership.md`](database/schema-ownership.md) | H | nghiep | 90; on a rule change | E D CT CI A | exists v1.0, front-matter (AA-887). v1.1 edits (DM-11.5, C2.3g/DM-8.4, DM-7 rows + C4.2b, DM-11.2, DM-1.2, `owners.yaml` as registry): AA-889, wording N-1. DM-7 is the only retention registry |
@@ -139,9 +139,9 @@ placeholders.
 | ID | Title | Type | Target path | Mode | Owner | Review | Audience | Status / issue |
 |---|---|---|---|---|---|---|---|---|
 | CAT-00 | Doc catalog and start here (this page) | Ref | root `docs/README.md` | H | nghiep | 30 | all | exists (AA-887) |
-| TPL-01 | Doc templates + PR template | Template | root [`docs/templates/`](templates/); `.github/pull_request_template.md` in each repo | H | nghiep | on a standard change | E A | templates exist (AA-887); PR template: AA-890 (U-11, U-48) |
+| TPL-01 | Doc templates + PR template | Template | root [`docs/templates/`](templates/); `.github/pull_request_template.md` in each repo | H | nghiep | on a standard change | E A | templates exist (AA-887); PR template in all 5 repos and PR-title check in BK and TP: AA-890 (U-11, U-48) |
 | TPL-02 | Style guide | Ref | root [`docs/STYLE.md`](STYLE.md) | H | nghiep | 180 | E D A | exists (AA-887) |
-| TPL-03 | Front-matter schema | Ref | root [`docs/templates/frontmatter.schema.json`](templates/frontmatter.schema.json) | H | nghiep | on a standard change | E A | exists (AA-887); lint: AA-888 |
+| TPL-03 | Front-matter schema | Ref | root [`docs/templates/frontmatter.schema.json`](templates/frontmatter.schema.json) | H | nghiep | on a standard change | E A | exists (AA-887); linted by `docs-lint.yml` (AA-888) |
 | PLAT-01 | Platform roadmap status (U-xx) | Ref | a section of root [`docs/backlog/README.md`](backlog/README.md) | H | nghiep | each session close | E P A | planned (G-05): U-xx keys recorded in the live backlog at session close |
 
 ## Outside the catalog (journals)

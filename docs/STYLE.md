@@ -15,8 +15,9 @@ related: [CAT-00, TPL-01, TPL-03, SEC-06]
 # Docs style guide
 
 Short rules for every page in the [doc catalog](README.md). Templates are in [`templates/`](templates/); the
-front-matter schema is [`templates/frontmatter.schema.json`](templates/frontmatter.schema.json). Lint for these
-rules arrives with AA-888.
+front-matter schema is [`templates/frontmatter.schema.json`](templates/frontmatter.schema.json). The root workflow
+`.github/workflows/docs-lint.yml` (AA-888) checks these rules on every docs PR; run the same checks locally with
+[`tools/docs/`](../tools/docs/README.md).
 
 ## Voice and structure
 
@@ -91,8 +92,10 @@ aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api
   to it. Exceptions: resource names that embed the account ID by convention (for example the bronze bucket),
   journals, generated files, and agent instruction files (`CLAUDE.md`, `.kiro/steering/*`, `skill/**`), whose copy
   of the table must match the onboarding one.
-- Lint (AA-888) fails on `sg-…`, `subnet-…`, `vpc-…` and standalone 12-digit numbers outside the exempt paths.
-  `arn:aws:` fails in the public repos and warns in root and Infra.
+- Lint (AA-888, `tools/docs/check_docs_text.py resource-ids`) flags `sg-…`, `subnet-…`, `vpc-…` and similar IDs,
+  standalone 12-digit numbers, ARNs with an account, user-pool IDs and API Gateway hosts outside the exempt paths.
+  It **warns** in root and Infra (private) and is meant to **fail** in the public repos (`--mode error`) once their
+  docs job lands. Mark a deliberate exception with `docs-lint: ignore` on the line.
 
 ## Where a page may live (SEC-06)
 
