@@ -160,3 +160,12 @@ do phiên chính làm. Merge theo luật dev-phase (S241 D-13, data standards v1
 - DB Migrate: input `migration` có tiền tố owner (`cis/250_x.sql`); log đọc qua `gh api …/actions/jobs/<job>/logs`.
 - Dependabot PR đỏ "Vercel deploy" là do thiếu secret, không phải lỗi code.
 - Bài học mới đã ghi vào `skill/aa-lessons/lessons.md` (9 dòng S243).
+
+## Cập nhật cuối phiên (sau root #107)
+
+- **Quyết định của Nghiệp:** "Tạo các issue" → AA-902 (scrub account ID/ARN khỏi repo public, High), AA-903 (bỏ job Vercel deploy cho Dependabot), AA-904 (TP Next 15, đóng Dependabot TP #104), AA-905 (geo backfill 8 nước, tốn phí → báo giá trước). CIS logout → Cognito `/logout` giữ là dòng scope AA-816; Bhutan 33/32 giữ ở backlog. "Việc chị Thư đăng nhập bỏ qua đi" → bỏ khỏi Done-when AA-858. "Đăng đi" → Jira PR-14 (comment 10485) và PR-18 (comment 10486) đã đăng. `.claude/settings.json`: 124 quyền cá nhân chuyển sang `settings.local.json` (không commit), file chung giữ nguyên.
+- **AA-884 Done:** SHA trang Apps `411e5f18` = image api:703/worker:260; UPDATE/DELETE dòng audit bằng `cis_app` → 42501 (trong transaction, rollback; 1337 dòng trước/sau); chi phí theo ngày khớp Cost Explorer theo tag App cho 01–17/10 (≤ 0.0003 USD), lệch 2.11 USD chỉ ở 18/10 vì snapshot lấy 02:34Z trước khi AWS ghi xong ngày đó.
+- **AA-858 Done:** CIS #850 (715ac316) — 71 con số trên /admin/overview đều có tooltip nguồn (InfoTip trong kit, bàn phím + chạm), review độc lập sửa 1 major + 6 minor; kiểm live production 71/71 tooltip mở có chữ, 0 tên bảng/mã nội bộ, 0 lỗi console, 390 px không tràn; CIS #851 sửa chữ hoa tooltip Total.
+- **AA-897 Done:** agent mới chỉ dùng `docs/onboarding.md` tới PR sạch lint trong ~5 phút (Booking 826 test + health 200, TP 357 test); 2 lỗ hổng hướng dẫn sửa ở root #108 (docs lint local cần venv trên Ubuntu 24.04; lệnh fixtures TP chạy từ gốc repo). Root `.gitignore` thêm `__pycache__/`.
+- **Cảnh báo secret (Infra #217):** loạt email "Break-glass … AccessDenied" lúc 06:25–06:33Z là do các lần kiểm S19 của em (đọc secret bị chặn; CloudTrail không ghi tên secret khi bị từ chối, nhánh dự phòng của rule break-glass lại ghi cứng tên break-glass). Tách thành rule riêng "Denied secret access" với nội dung đúng; rule break-glass chỉ bắt lượt gọi có tên secret break-glass. Apply 2 thêm / 3 sửa; thử live 09:39Z: rule mới 1 lần, break-glass 0, email mới đúng nội dung. Chi phí 0.
+- **Việc đầu phiên sau giữ nguyên thứ tự** (X1 đợt 5, AA-816 cutover, gỡ ngoại lệ E2E A10…); AA-858/AA-884/AA-897 đã đóng nên bỏ khỏi danh sách "đóng có bằng chứng".
