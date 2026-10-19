@@ -1,0 +1,156 @@
+{
+ "month": "2099-02",
+ "period_start": "2099-02-01",
+ "period_end_exclusive": "x",
+ "aws": {
+  "account_id": "<acc2>",
+  "has_data": true,
+  "total_usd": 186,
+  "covered_from": "2099-02-01",
+  "covered_to": "2099-02-28",
+  "fetched_at": "2099-03-01T00:00:00+00:00",
+  "untagged_usd": 0
+ },
+ "apps": [
+  {
+   "app": "cis",
+   "kind": "app",
+   "label": "CIS (content + catalog)",
+   "aws_usd": 130,
+   "aws_bedrock_usd": 0.0,
+   "services": [
+    {
+     "service": "Amazon Elastic Container Service",
+     "amount_usd": 78.0,
+     "is_bedrock": false
+    },
+    {
+     "service": "Amazon ElastiCache",
+     "amount_usd": 52.0,
+     "is_bedrock": false
+    }
+   ],
+   "aws_tags": [
+    "cis"
+   ],
+   "ai_usd": 25,
+   "ai_in_aws_acc2_usd": 0.0,
+   "ai_calls": 100,
+   "ai_by_source": [],
+   "total_usd": 155
+  },
+  {
+   "app": "booking",
+   "kind": "app",
+   "label": "Booking",
+   "aws_usd": 10,
+   "aws_bedrock_usd": 0.0,
+   "services": [
+    {
+     "service": "Amazon Elastic Container Service",
+     "amount_usd": 10,
+     "is_bedrock": false
+    }
+   ],
+   "aws_tags": [
+    "booking"
+   ],
+   "ai_usd": 0.0,
+   "ai_in_aws_acc2_usd": 0.0,
+   "ai_calls": 0,
+   "ai_by_source": [],
+   "total_usd": 10.0
+  },
+  {
+   "app": "tripplanner",
+   "kind": "app",
+   "label": "TripPlanner",
+   "aws_usd": 5,
+   "aws_bedrock_usd": 0.0,
+   "services": [
+    {
+     "service": "AWS Lambda",
+     "amount_usd": 5,
+     "is_bedrock": false
+    }
+   ],
+   "aws_tags": [
+    "tripplanner"
+   ],
+   "ai_usd": 0.0,
+   "ai_in_aws_acc2_usd": 0.0,
+   "ai_calls": 0,
+   "ai_by_source": [],
+   "total_usd": 5.0
+  },
+  {
+   "app": "tag:shared",
+   "kind": "shared_tag",
+   "label": "Shared: shared",
+   "aws_usd": 41,
+   "aws_bedrock_usd": 0.0,
+   "services": [
+    {
+     "service": "Amazon Relational Database Service",
+     "amount_usd": 41,
+     "is_bedrock": false
+    }
+   ],
+   "aws_tags": [
+    "tag:shared"
+   ],
+   "ai_usd": 0.0,
+   "ai_in_aws_acc2_usd": 0.0,
+   "ai_calls": 0,
+   "ai_by_source": [],
+   "total_usd": 41.0
+  },
+  {
+   "app": "untagged",
+   "kind": "untagged",
+   "label": "Untagged (no App tag)",
+   "aws_usd": 0,
+   "aws_bedrock_usd": 0.0,
+   "services": [
+    {
+     "service": "AWS Data Transfer",
+     "amount_usd": 0,
+     "is_bedrock": false
+    }
+   ],
+   "aws_tags": [
+    "untagged"
+   ],
+   "ai_usd": 0.0,
+   "ai_in_aws_acc2_usd": 0.0,
+   "ai_calls": 0,
+   "ai_by_source": [],
+   "total_usd": 0.0
+  }
+ ],
+ "totals": {
+  "aws_usd": 186,
+  "ai_usd": 25,
+  "total_usd": 211
+ },
+ "llm_satellites": {
+  "acc1": {
+   "account_id": "<acc1>",
+   "ce_bedrock_usd": 1.0,
+   "llm_log_estimate_usd": 0.9
+  },
+  "acc3": {
+   "account_id": "<acc3>",
+   "ce_bedrock_usd": 30,
+   "llm_log_estimate_usd": 28.5
+  },
+  "ce_fetched_at": null
+ },
+ "refresh": {
+  "attempted": false,
+  "ok": null,
+  "reason": "fresh",
+  "stale": false
+ },
+ "sources": {}
+}

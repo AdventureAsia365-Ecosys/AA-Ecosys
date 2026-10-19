@@ -104,19 +104,19 @@ placeholders.
 
 | ID | Title | Type | Target path | Mode | Owner | Review | Audience | Status / issue |
 |---|---|---|---|---|---|---|---|---|
-| SEC-01 | Security baseline | Ref (checklist) | root `docs/security/baseline.md` | H | nghiep | 90 | E D CT CI A | planned. AA-895; each control links AA-873/874/875/876/879 |
-| SEC-02 | Secrets register and rotation | Ref + How | root `docs/security/secrets-register.yaml` (+ `.md`), `docs/security/rotation/*.md`; checker in INF | H+G (drift check) | nghiep | monthly drift check | E D CI A | in progress. AA-878 (U-26). Rotation: one runbook per class in [`ops/runbooks/secret-rotation.md`](ops/runbooks/secret-rotation.md) (AA-892, draft) instead of `docs/security/rotation/*.md`. Rotate on suspected exposure, at go-live and after break-glass use (D-02, D-03, DM-8.9); no 90-day cycle on Dev |
-| SEC-03 | Vulnerability management | Exp + Ref | root `docs/security/vulnerability-management.md` + `docs/generated/security-alerts.md` | H+G | nghiep | monthly triage | E D CI A | planned. AA-895 (Dependabot for BK and TP) |
+| SEC-01 | Security baseline | Ref (checklist) | root `docs/security/baseline.md` | H | nghiep | 90 | E D CT CI A | draft (AA-895, S243): [`security/baseline.md`](security/baseline.md); each control links AA-873/874/875/876/879 |
+| SEC-02 | Secrets register and rotation | Ref + How | root `docs/security/secrets-register.yaml` (+ `.md`), `docs/ops/runbooks/secret-rotation.md`; checker in INF | H+G (drift check) | nghiep | monthly drift check | E D CI A | in progress. AA-878 (U-26). Rotation: one runbook per class in [`ops/runbooks/secret-rotation.md`](ops/runbooks/secret-rotation.md) (AA-892, draft) instead of `docs/ops/runbooks/secret-rotation.md`. Rotate on suspected exposure, at go-live and after break-glass use (D-02, D-03, DM-8.9); no 90-day cycle on Dev |
+| SEC-03 | Vulnerability management | Exp + Ref | root `docs/security/vulnerability-management.md` + `docs/generated/security-alerts.md` | H+G | nghiep | monthly triage | E D CI A | draft (AA-895, S243): [`security/vulnerability-management.md`](security/vulnerability-management.md); Dependabot for BK and TP in their repos; generated alerts page still planned |
 | SEC-04 | Compliance and privacy register | Ref + Rep | root `docs/legal/register.md` + `docs/legal/retention-log.md` (runs only) | H (+G later) | nghiep; business calls by Ms. Thư | 90; when a vendor is added | E CI, O | planned. AA-886 (U-23) with AA-877 (`pii:` tags), AA-804 (AI Use Register), AA-839 |
-| SEC-05 | Quarterly access review record | Rep | `docs/audits/<date>-S<nnn>-access-review/`; index `docs/security/README.md` | H | nghiep | first session of each quarter (DM-8.10) | E D CI | planned. First review in AA-878; cadence AA-838 |
+| SEC-05 | Quarterly access review record | Rep | `docs/audits/<date>-S<nnn>-access-review/`; index `docs/security/README.md` | H | nghiep | first session of each quarter (DM-8.10) | E D CI | index draft: [`security/README.md`](security/README.md) (AA-895). First review in AA-878; cadence AA-838 |
 | SEC-06 | Where a page may live (public vs private repo) | Ref | [`STYLE.md`](STYLE.md#where-a-page-may-live-sec-06) | H | nghiep | 180 | E A | exists (AA-887) |
 
 ### Cost
 
 | ID | Title | Type | Target path | Mode | Owner | Review | Audience | Status / issue |
 |---|---|---|---|---|---|---|---|---|
-| FIN-01 | FinOps process | Exp + Ref | root `docs/ops/finops.md` | H (links DM-10, no copied rules) | nghiep | 90 | E D CT CI P, O | planned. AA-896. Tags `App` + existing `Environment` (DM-10.1); Cost Anomaly Detection (free) |
-| FIN-02 | Monthly cost report (with unit costs) | Rep | same file as OPS-08 | H (reads `shared.cost_explorer_snapshot` + `shared.llm_call_log`) | nghiep (Claude drafts) | monthly; first one for October in the first session from 01/11 | O CT CI P | planned. AA-896; no new Cost Explorer script (DM-10.4) |
+| FIN-01 | FinOps process | Exp + Ref | root `docs/ops/finops.md` | H (links DM-10, no copied rules) | nghiep | 90 | E D CT CI P, O | draft (AA-896, S243): [`ops/finops.md`](ops/finops.md). Tags `App` + existing `Environment` (DM-10.1; `Environment` activation by the payer); Cost Anomaly Detection to the alerts topic (INF `cost_anomaly.tf`, free) |
+| FIN-02 | Monthly cost report (with unit costs) | Rep | same file as OPS-08 | H (reads `shared.cost_explorer_snapshot` + `shared.llm_call_log`) | nghiep (Claude drafts) | monthly; first one for October in the first session from 01/11 | O CT CI P | planned; how-to draft [`ops/cost/README.md`](ops/cost/README.md) + `tools/finops/monthly_cost_report.py` (reads the AA-884 cost export, no Cost Explorer call, DM-10.4). AA-896; first report from 01/11 |
 
 ### Guides and agents
 
