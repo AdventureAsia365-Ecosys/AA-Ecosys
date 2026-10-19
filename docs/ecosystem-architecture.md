@@ -398,7 +398,7 @@ resource names use the `aa-cis-*` / `aa-tripplanner-*` prefixes (independent of 
   the "apps own code, Infra owns resources" boundary.
 - `docs/adr/` — ecosystem ADRs; `docs/database/schema-ownership.md` — schema owners.
 - `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md` — TripPlanner Terraform report.
-- `infra/AA-CIS-Infra/accounts/aa365/{cicd.tf, tripplanner.tf, booking.tf}` — OIDC roles, Booking runtime.
+- `infra/AA-CIS-Infra/accounts/aa365/{cicd_split.tf, cicd.tf (bootstrap locals), tripplanner.tf, booking.tf}` — OIDC roles, Booking runtime.
 - `docs/contracts/README.md` — contract rules between apps; `docs/adr/0005-pricing-and-supplier-rates.md`.
 - `apps/AA-TripPlanner-Web/docs/{vercel-setup,architecture-overview,smoke-test-runbook}.md`.
 - `docs/archive/` — retired one-off pages (org-rename inventory, CIS data reset S182-S183, pre-build Booking hand-off).
