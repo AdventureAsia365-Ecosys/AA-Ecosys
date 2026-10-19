@@ -27,6 +27,44 @@ and read-only AWS calls (security groups, ENIs, Lambda VPC config, connection me
 
 ---
 
+## S244 amendments (19/10/2026) — S21 design pass
+
+Built in S244 (AA-860). Where this block and S21 below (or the S243 block) differ, this block wins. Notes: AA-CIS-App
+`docs/implementation-notes/AA-860-S21.md`, AA-CIS-Infra `docs/implementation-notes/AA-860-S21.md`, root
+`docs/implementation-notes/AA-860-S21-undo.md`.
+
+| Step | State | Branch |
+|---|---|---|
+| S21a CIS `245` + tests + conftest + CONTEXT.md | Built | AA-CIS-App `feat/x1-s21-cis-owner` |
+| S21b read-only run-script `db/scripts/x1_245_cis_owner_objects.py` | Built | AA-CIS-Infra `chore/x1-s21-introspect` |
+| S21c prepared `roles/` undo `s21-undo/0NN_x1_cis_owner_undo.sql` (unmerged as a migration) | Built | root `docs/x1-s21-undo` |
+| S21d Infra byte copy of 245 (starts the CIS freeze) | After S21a merges | orchestrator |
+
+- **`cis_owner` and FORCE RLS (the S243 "own design pass").** 245 adds `<table>_cis_owner_all FOR ALL TO cis_owner
+  USING (true) WITH CHECK (true)` on the 8 FORCE tables (not `NO FORCE`): `cis_owner` is not in `rds_superuser`, so as
+  owner it is filtered by FORCE, and every later `cis/` file and every owner-rights view (`v_active_tour_atoms`,
+  `v_trip_registry`, `shared.v_*`, the `catalog_owner` views reading them) runs with its rights. Only the master and
+  `db_migrator` may be members of `cis_owner` (245 guard). Any later FORCE-RLS table needs both `<t>_cis_app_all` and
+  `<t>_cis_owner_all` (CIS standing CI checks).
+- **Objects: catalog-driven, not explicit statements.** The schema reference has no standalone sequences, type
+  owners, domains, ranges or statistics, so 245 step 4 reads the catalog at apply time (owner = master, 11 runtime
+  schemas, extension members and owned sequences excluded; `catalog` moves as a schema only), logs one NOTICE per
+  object, and strict guards fail the file on anything left or owned by a third role. The Infra run-script prints the
+  same list (verbatim query, unit-tested) from Dev before the apply.
+- **Guards actually in 245:** guard 0 (master login, rl-002 shape, 244 applied); ownership complete (catalog
+  relations `catalog_owner`'s); no SECURITY DEFINER; non-owner privilege snapshot byte-equal; policies unchanged but
+  the 8 new; FORCE set exactly the 8; default ACL exactly 33 rows FOR ROLE `cis_owner` → `cis_app`, none FOR ROLE
+  master; `catalog_owner` keeps USAGE + SELECT on every relation its views read; behaviour last: every readable
+  view's count unchanged (as the master), FORCE tables + `tenant_tour_versions` parity as `cis_owner` and `cis_app`,
+  cross-app reads refused for both, registry writes refused for `cis_app`. `catalog.*` views are counted as the
+  master only if it can read them (`pg_read_all_data`); otherwise a NOTICE and the run-script shows it beforehand.
+  `aa_app_user` is not reachable in the file (never a member): covered by the snapshots and the probe's tenant matrix.
+- **Order:** rl-002 applied (S20) → run-script → CIS 245 Infra copy (freeze starts) → `check` (exits 8 before
+  rl-002) → `apply` with job tables idle (holds ACCESS EXCLUSIVE on every CIS table for a few seconds) → schema dump
+  → probe (`ownership.cis`, `runtime_grants.cis`, `default_acl.cis` expected) → S21 live verify → S22.
+
+---
+
 ## S243 amendments (19/10/2026)
 
 Wave 4 (AA-860) built in S243. Where this block and a step below (or the S242 block) differ, this block wins.
