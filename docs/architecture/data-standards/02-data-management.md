@@ -1,3 +1,17 @@
+---
+id: ARCH-08-data-management
+title: "Data standards, Part B: data management and governance"
+description: "Part B of the data standards: ownership, documentation, PII classes, protection, retention (DM-7 registry) and change rules for data on the shared RDS."
+type: reference
+status: active
+owner: nghiep
+audience: [engineer, devops, cto, cio, agent]
+applies_to: [ecosystem, aa-cis-dev-db]
+last_reviewed: 2026-10-19
+review_every_days: 90
+related: [ARCH-08, ARCH-08-engineering, ARCH-08-scaling, ARCH-08-schema-ownership]
+---
+
 # Data standards, Part B: data management and governance
 
 **Purpose.** These are the binding rules for owning, documenting, protecting, keeping and changing data on the shared AA_Ecosys PostgreSQL 15 RDS (`aa-cis-dev-db`, acc2 `005097885195`, us-west-1). AA-CIS-App, AA-TripPlanner-Web and AA-Booking share it today, on Dev. Prod will be a separate instance, also on acc2.

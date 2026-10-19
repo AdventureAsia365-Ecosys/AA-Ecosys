@@ -1,3 +1,17 @@
+---
+id: ARCH-08-engineering
+title: "AA_Ecosys data standards — Part A: Engineering"
+description: "Part A of the data standards: naming, keys, migration mechanics (MIG-*), the RLS template and query rules for anyone who designs a table or writes a migration on the shared RDS."
+type: reference
+status: active
+owner: nghiep
+audience: [engineer, devops, cto, cio, agent]
+applies_to: [ecosystem, aa-cis-dev-db]
+last_reviewed: 2026-10-19
+review_every_days: 90
+related: [ARCH-08, ARCH-08-data-management, ARCH-08-scaling, ARCH-08-schema-ownership]
+---
+
 # AA_Ecosys data standards — Part A: Engineering
 
 **Purpose:** binding rules for anyone (human or agent) who designs a table, writes a migration, a policy, a

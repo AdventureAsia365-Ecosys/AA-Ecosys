@@ -1,3 +1,17 @@
+---
+id: ARCH-08-scaling
+title: "Data platform standards — Part C: Operations and scaling"
+description: "Part C of the data standards: connection budget, timeouts, retention mechanics, scale triggers and the job guard for running and growing the shared RDS."
+type: reference
+status: active
+owner: nghiep
+audience: [engineer, devops, cto, cio, agent]
+applies_to: [ecosystem, aa-cis-dev-db]
+last_reviewed: 2026-10-19
+review_every_days: 90
+related: [ARCH-08, ARCH-08-engineering, ARCH-08-data-management, ARCH-08-schema-ownership]
+---
+
 # Data platform standards — Part C: Operations and scaling
 
 **Purpose:** binding rules for running, monitoring and growing the shared PostgreSQL 15 RDS
