@@ -2,6 +2,7 @@
 
 | Ngày | Phạm vi | Bản xem | Ghi chú |
 |---|---|---|---|
+| 19/10/2026 | Kế hoạch tổng thể S244: audit toàn bộ 84 issue mở (4 project Linear), mốc, đường găng, kế hoạch theo phiên S244–S252, đề xuất đổi trạng thái đã verify | [README](2026-10-19-S244-master-plan/README.md) · [issues.md](2026-10-19-S244-master-plan/issues.md) · [backlog-proposal.md](2026-10-19-S244-master-plan/backlog-proposal.md) | Chỉ đọc. Không đổi Linear/Jira. Backlog sống §3/§3a/§4 thay theo bản này cuối S244 (trạng thái cập nhật) |
 | 19/10/2026 | AA-816 Stage S: báo cáo cutover (S1 Production tắt đăng nhập mật khẩu, C9 Preview credential, I6 xoay admin secret, break-glass qua managed login + xoay; readiness 7 dòng; còn N-F, S2, A10, AA-680) | [MD](2026-10-19-S244-aa816-cutover/cutover-report.md) | Bằng chứng từng bước checklist A–F của cutover-prep.md |
 | 19/10/2026 | AA-816 Stage S: kế hoạch chuẩn bị cutover Cognito (từng tài khoản staff, S1/S2 hỏng gì, checklist A–G, quyết định N-A…N-F) | [MD](2026-10-19-S244-aa816-cutover/cutover-prep.md) | Chỉ là kế hoạch, chưa chạy gì. Chuyển từ AA-CIS-App (repo public) sang đây khi review S244 |
 | 10/10/2026 | Jev toàn hệ thống (24 câu hỏi, 30 ngày): hiệu quả, ngưỡng v2, thêm/giữ/bỏ (AA-756) | [HTML](2026-10-10-S223-jev-audit.html) · artifact `claude.ai/artifact/8A5XBeeUU5n7B8potPMt5q` | Script: `scripts-s223/`. Ngưỡng v2 đã áp Dev; shadow reject `a1_claim_supported` đo offline |
