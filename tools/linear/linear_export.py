@@ -230,7 +230,12 @@ def main() -> None:
           f"trashed: {sum(1 for i in issues if i.get('trashed'))} | archived: {sum(1 for i in issues if i.get('archivedAt'))}")
 
     if args.rescue_trash:
-        rescue = [i for i in issues if i.get("trashed") and exported_matches(i)]
+        # Only closed issues go to the archive. A trashed open issue (Backlog / In Progress) is reported, never
+        # archived: an archived open issue disappears from every Linear view (AA-779 / AA-800, S245).
+        open_trashed = [i for i in issues if i.get("trashed") and i["state"]["type"] not in CLOSED]
+        for i in open_trashed:
+            print(f"  skip (open, restore by hand or --only + unarchive): {i['identifier']} {i['state']['name']}")
+        rescue = [i for i in issues if i.get("trashed") and i["state"]["type"] in CLOSED and exported_matches(i)]
         print(f"{'RESCUE' if args.apply else 'DRY RUN, would move trash -> archive'}: {len(rescue)} issue(s)")
         for i in rescue:
             if not args.apply:
