@@ -1,0 +1,81 @@
+{
+  "generated": "2026-10-20",
+  "session": "S245",
+  "provenance": "Scored by the write-up agent (Claude Code) from research notes 01-04 and the option material. The workflow's judge-panel output did not reach the write-up step, so this is a single-agent scoring: treat it as advisory, not as an independent panel.",
+  "scale": "1 (poor) to 5 (best); weighted total out of 100",
+  "criteria": [
+    {
+      "key": "spec_coverage",
+      "weight": 25,
+      "label": "Covers all spec modules F1-F5, 1-18 and the three differentiators"
+    },
+    {
+      "key": "isolation_compliance",
+      "weight": 25,
+      "label": "Tenant isolation, processor posture, DPA story (DM-6.8, ADR 0008, PDPL/GDPR/APP)"
+    },
+    {
+      "key": "reuse_fit",
+      "weight": 15,
+      "label": "Reuse of what exists and fit with written rules/ADRs"
+    },
+    {
+      "key": "cost",
+      "weight": 10,
+      "label": "AA's monthly cost at 10/50/200 agencies"
+    },
+    {
+      "key": "effort",
+      "weight": 15,
+      "label": "Agent sessions to the complete product"
+    },
+    {
+      "key": "operational_risk",
+      "weight": 10,
+      "label": "Release coupling, blast radius, vendor/contract drift"
+    }
+  ],
+  "scores": {
+    "A": {
+      "spec_coverage": 5,
+      "isolation_compliance": 5,
+      "reuse_fit": 3,
+      "cost": 3,
+      "effort": 2,
+      "operational_risk": 4
+    },
+    "B": {
+      "spec_coverage": 5,
+      "isolation_compliance": 3,
+      "reuse_fit": 5,
+      "cost": 3,
+      "effort": 3,
+      "operational_risk": 2
+    },
+    "C": {
+      "spec_coverage": 1,
+      "isolation_compliance": 4,
+      "reuse_fit": 4,
+      "cost": 4,
+      "effort": 5,
+      "operational_risk": 4
+    }
+  },
+  "weighted_total": {
+    "A": 79.0,
+    "B": 74.0,
+    "C": 68.0
+  },
+  "rationale": {
+    "A": "Only A and B cover the full spec. A keeps the CRM's public surfaces, vendor webhooks, KMS decrypt and scrubber out of the CIS process and task role, has its own deploy guard (crm.job), and gives the DPA a clean technical annex. Cost: one more repo, ECS service and REST API (~1 extra session, ~$20/month on Dev).",
+    "B": "Same coverage and cost as A and the most reuse, but CRM releases would be gated by CIS waves (DM-11.4), the CIS task role must read the crm_app secret, and CIS migrations are frozen until X1 S22. Weakest isolation story for a product whose selling point is privacy.",
+    "C": "Cheapest and fastest, lowest AA exposure, but it is not the product Ms. Thư specified and contradicts the S245 decision. Kept as an export path inside A (crm.integration_link) for agencies that already run HubSpot/Zoho."
+  },
+  "winner": "A",
+  "grafts": [
+    "From B: the agent UI is served inside the portal host (Vercel multi-zone under portal.lumiguides.it.com/portal/crm) and reuses the portal UI kit by byte-copy guard, so tenants see one portal and one sign-in.",
+    "From B: keep the crm-NNN key space and owners.yaml entry exactly as ADR 0008 §8 planned, so nothing is renumbered.",
+    "From C: crm.integration_link + outbox export to HubSpot/Zoho/Pipedrive as a module (W7) for agencies that keep their own CRM; the intake + attribution path (W3) is useful on its own from day one.",
+    "From research 03: the 8 table-stakes items are acceptance checks for the W3/W5 demos with pilot agencies."
+  ]
+}
