@@ -1,5 +1,6 @@
-// Markdown style for docs (AA-887 settings, AA-888 lint). Used by the docs-lint workflow (warn-only for now)
-// and by editors with the markdownlint extension.
+// Markdown style for docs (AA-887 settings, AA-888 lint). Used by the docs-lint workflow (failing step) and by
+// editors with the markdownlint extension. Local run: npx markdownlint-cli2@0.23.2 'docs/**/*.md' (the version the
+// pinned action uses).
 {
   "config": {
     "default": true,
@@ -7,9 +8,11 @@
     "MD033": false, // inline HTML: GitHub alerts, <details>, comments
     "MD041": false, // first line: front-matter comes first
     "MD024": { "siblings_only": true },
-    "MD025": { "front_matter_title": "" } // front-matter title and the H1 are both kept on purpose (STYLE.md)
+    "MD025": { "front_matter_title": "" }, // front-matter title and the H1 are both kept on purpose (STYLE.md)
+    "MD060": false // table pipes: the house style is `| a | b |` over `|---|---|`, which no MD060 style accepts
   },
-  // Journals keep their history as written; generated pages change only through their generator.
+  // Journals and archived pages keep their history as written; generated pages change only through their
+  // generator (docs/generated: AA-CIS-Infra docs-gen.yml; docs/linear-export: the Linear export tool).
   "ignores": [
     "docs/sessions/**",
     "docs/audits/**",
@@ -18,6 +21,9 @@
     "docs/research/**",
     "docs/calib/**",
     "docs/backups/**",
+    "docs/archive/**",
+    "docs/generated/**",
+    "docs/linear-export/**",
     "docs/architecture/db-schema-reference.md"
   ]
 }

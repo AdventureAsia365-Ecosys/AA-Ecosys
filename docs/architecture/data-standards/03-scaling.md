@@ -277,8 +277,8 @@ task role (shared by api and worker), scoped by `cloudwatch:namespace`, added in
 
 ### C5.4 Retention and batched deletes
 
-The windows (approved decision E3: `llm_call_log` raw 180 d + daily rollup, `tenant_api_usage` 90 d
-+ monthly rollup, jobs succeeded 30 d / failed 90 d, outbox/inbox payload PII redacted after 90 d,
+The windows (approved decision E3: `llm_call_log` raw 180 d + daily rollup,
+`tenant_api_usage` 90 d + monthly rollup, jobs succeeded 30 d / failed 90 d, outbox/inbox payload PII redacted after 90 d,
 archive to S3 Parquet before delete) and the per-table "archive before delete" choice live **only**
 in the Part B retention table (DM-7). This section adds how the deletes run on a shared instance.
 Existing pruning to keep: `shared.job_worker` (`shared/jobs/queue.py:440`) and Booking's recurring
