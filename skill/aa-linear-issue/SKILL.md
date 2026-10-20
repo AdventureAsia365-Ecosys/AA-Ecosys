@@ -14,7 +14,10 @@ Team: `AA_Ecosys`. Issue viết bằng **tiếng Anh**; comment trao đổi vớ
    - `CIS Core — Pipeline, LLM & Platform` — backend App + Infra: A/T pipeline, rerun, review, LLM gateway, judge, Jev, eval, jobs, CI, bảo mật, auth, docs/skill
    - `CIS Portal — Admin & Tenant UI` — trang admin/portal, UI kit, design system
    - `TripPlanner & AA-Booking` — AA-TripPlanner-Web + AA-Booking (AAA)
-   - Workspace Linear gói Free: trần 250 issue chưa lưu trữ. **Issue Done đã xong hẳn (verify live, không còn follow-up) nên được lưu trữ sớm để trống quota** (S236). Connector MCP không lưu trữ được → nhắc Nghiệp lưu trữ trên UI (lọc Done → chọn hết → Archive) hoặc bật auto-archive ngắn nhất; cuối mỗi phiên báo số issue chưa lưu trữ theo project.
+   - Workspace Linear gói Free: trần 250 issue chưa lưu trữ; **không nâng gói** (Nghiệp, S245). Ba việc thay cho lưu trữ tay (UI không có nút Archive):
+     (1) **1 issue = 1 lát việc giao được** (~1 PR hoặc nhóm PR nhỏ); việc chi tiết nằm trong plan/checklist local (`docs/backlog/tracker/plan.json`, file đợt) — chương trình lớn (CRM, Writing Memory) chỉ vài issue mỗi đợt.
+     (2) Cuối phiên chạy `python3 tools/linear/linear_export.py` (xuất mọi issue Done/Canceled kèm comment ra `docs/linear-export/`, commit vào root PR) rồi `--archive` (dry run) → `--archive --apply`.
+     (3) **Không xoá issue** để trống chỗ: issue xoá mất hẳn sau 30 ngày cùng comment bằng chứng. Báo số issue chưa lưu trữ theo project cuối phiên.
 3. **Ưu tiên:** Urgent = đang hỏng production hoặc mất dữ liệu; High = chặn wave/việc kế tiếp hoặc rủi ro bảo mật; Medium = cải tiến có ích; Low = để sau.
 
 ## Template

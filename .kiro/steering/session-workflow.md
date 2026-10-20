@@ -51,7 +51,10 @@ Không merge/deploy backend khi bảng job của app (`shared.job`, `booking.job
   xoá dữ liệu; PR app khác vẫn agent merge khi CI xanh.
 
 ## Linear → `skill/aa-linear-issue/SKILL.md`
-HỎI Nghiệp trước khi tạo issue mới. MỌI issue gắn 1 project; 1 project tối đa 100 issue chưa lưu trữ (S236; gần ngưỡng → hỏi; Done hẳn → lưu trữ sớm).
+HỎI Nghiệp trước khi tạo issue mới. MỌI issue gắn 1 project; 1 project tối đa 100 issue chưa lưu trữ (S236; gần ngưỡng → hỏi).
+Linear gói Free (250 issue chưa lưu trữ, KHÔNG nâng gói — S245): **1 issue = 1 lát việc giao được** (~1 PR / nhóm PR nhỏ), việc chi tiết
+nằm trong plan/checklist local; cuối phiên **xuất issue đóng ra `docs/linear-export/` rồi archive qua API**
+(`python3 tools/linear/linear_export.py --archive --apply`). KHÔNG xoá issue để trống chỗ (mất comment bằng chứng sau 30 ngày).
 Cập nhật trạng thái khi có tiến độ thật + bằng chứng, không Done khống.
 
 ## Jira (chị Thư / người ngoài team) → `skill/aa-jira-update/SKILL.md`
