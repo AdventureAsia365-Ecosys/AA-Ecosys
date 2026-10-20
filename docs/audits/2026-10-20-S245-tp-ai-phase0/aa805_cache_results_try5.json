@@ -1,0 +1,117 @@
+{
+ "trip_id": "2d4a346e-506b-44fc-a54e-a5077301ce54",
+ "owner_session_prefix": "1dea6104",
+ "owner_cookie_set": true,
+ "cache_verdict": "stopped",
+ "steps": [
+  {
+   "at": "2026-10-19T23:38:57+00:00",
+   "step": "add 5a517d49-cd75-4bd8-a3f7-5f432771e10b",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 1
+  },
+  {
+   "at": "2026-10-19T23:38:58+00:00",
+   "step": "add 10a9d948-167b-470e-a05d-a49964a9beaa",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 2
+  },
+  {
+   "at": "2026-10-19T23:38:59+00:00",
+   "step": "add e10d3a44-f261-4aab-991e-5062f00be0a6",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 3
+  },
+  {
+   "at": "2026-10-19T23:38:59+00:00",
+   "step": "add 56ae25a4-25b5-4f46-86cb-4b096a87ed0c",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 4
+  },
+  {
+   "at": "2026-10-19T23:39:00+00:00",
+   "step": "add c85e5d56-e26b-4839-b190-40d96c030492",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 5
+  },
+  {
+   "at": "2026-10-19T23:39:00+00:00",
+   "step": "add d9a8afce-8078-47c3-8a98-ed2cae6f4615",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 6
+  },
+  {
+   "at": "2026-10-19T23:39:01+00:00",
+   "step": "add e9d4cf1d-00dc-44b9-a593-38d597f45738",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 7
+  },
+  {
+   "at": "2026-10-19T23:39:01+00:00",
+   "step": "add 031799ba-b214-4c45-99ba-429b72256ab5",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 8
+  },
+  {
+   "at": "2026-10-19T23:39:02+00:00",
+   "step": "add 458e9a80-6be2-4632-a2bd-4b7388c9758d",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 9
+  },
+  {
+   "at": "2026-10-19T23:39:02+00:00",
+   "step": "add c6b4c57e-7052-4dc6-9db9-fea4bb54d6d3",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 10
+  },
+  {
+   "at": "2026-10-19T23:39:03+00:00",
+   "step": "add 21f5c0e8-4400-4676-ab25-aae359d828a1",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 11
+  },
+  {
+   "at": "2026-10-19T23:39:04+00:00",
+   "step": "add b313ad8e-f50e-41e3-a57b-08d97b70cdc5",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 12
+  },
+  {
+   "at": "2026-10-19T23:39:04+00:00",
+   "step": "narrate #1",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "mode": "compose",
+   "source": "master",
+   "ai_generated": true,
+   "cached": false,
+   "narration_chars": 9807,
+   "itinerary_days": 12
+  }
+ ]
+}

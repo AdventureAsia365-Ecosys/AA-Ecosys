@@ -1,0 +1,75 @@
+{
+ "trip_id": "5883bd57-d8df-4109-941e-78ae7b197050",
+ "owner_session_prefix": "f1449c11",
+ "owner_cookie_set": true,
+ "cache_verdict": "PASS",
+ "steps": [
+  {
+   "at": "2026-10-20T00:48:08+00:00",
+   "step": "add 01bacbda-c8bd-49ae-9fd1-98d53f71f31d",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 1
+  },
+  {
+   "at": "2026-10-20T00:48:08+00:00",
+   "step": "add 268457fd-1af0-4f6a-89d8-d4b813db748a",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 2
+  },
+  {
+   "at": "2026-10-20T00:48:11+00:00",
+   "step": "narrate #1",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "mode": "compose",
+   "source": "llm",
+   "ai_generated": true,
+   "cached": false,
+   "narration_chars": 301,
+   "itinerary_days": 2
+  },
+  {
+   "at": "2026-10-20T00:48:11+00:00",
+   "step": "narrate #2 (same itinerary)",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "mode": "compose",
+   "source": "llm",
+   "ai_generated": true,
+   "cached": true,
+   "narration_chars": 301,
+   "itinerary_days": 2
+  },
+  {
+   "at": "2026-10-20T00:48:12+00:00",
+   "step": "narrate, foreign client, owner's session id, no cookie",
+   "attempt": 1,
+   "client": "foreign-no-cookie",
+   "status": 401,
+   "error": "cookies_required"
+  },
+  {
+   "at": "2026-10-20T00:48:13+00:00",
+   "step": "add on own trip (foreign client gets its cookie)",
+   "attempt": 1,
+   "client": "foreign-own-session",
+   "status": 200,
+   "itinerary_days": 1
+  },
+  {
+   "at": "2026-10-20T00:48:14+00:00",
+   "step": "narrate, foreign client, own session + cookie",
+   "attempt": 1,
+   "client": "foreign-own-session",
+   "status": 403,
+   "error": "forbidden",
+   "detail": "this trip belongs to another session"
+  }
+ ]
+}

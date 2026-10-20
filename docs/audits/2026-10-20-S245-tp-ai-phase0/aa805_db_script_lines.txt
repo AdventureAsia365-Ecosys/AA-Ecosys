@@ -1,0 +1,15 @@
+SCRIPT input returned_destinations=725 sha256_16=a0a419e9ccb805bf
+SCRIPT spend day=2026-10-19 stage=tp_search_embed cost_usd=0.000015 calls=34 unpriced_calls=0
+SCRIPT spend_log day=2026-10-19 stage=tp_search_embed calls=34 cost_usd=0.000015
+SCRIPT spend_today online_usd=0.000000 cap_usd=5.0 under_cap=True
+SCRIPT cache_total rows=0 hits=0 rows_hit=0
+SCRIPT search returned=725 found=725 without_active_component=0
+SCRIPT control inactive_only_destinations=0 of_them_returned=0
+SCRIPT control components embedded=3905 embedded_not_active=0
+SCRIPT candidates no_structured_text=0 own_day_missing=8
+SCRIPT candidate kind=own_day_missing component=01bacbda-c8bd-49ae-9fd1-98d53f71f31d
+SCRIPT candidate kind=own_day_missing component=268457fd-1af0-4f6a-89d8-d4b813db748a
+SCRIPT candidate kind=own_day_missing component=26d26dc2-579f-4574-9775-90724954979e
+SCRIPT candidate kind=own_day_missing component=74bd4aea-bce7-4807-90f3-bf5027f0e2df
+SCRIPT candidate kind=own_day_missing component=8574d548-a9fe-4fdf-822f-f4dc8028d70f
+SCRIPT verdict search_no_inactive=PASS control_has_inactive_only=False
