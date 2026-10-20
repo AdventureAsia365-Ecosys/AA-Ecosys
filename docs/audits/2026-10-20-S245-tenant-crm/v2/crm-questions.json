@@ -1,0 +1,755 @@
+{
+  "decisions_recorded": [
+    {
+      "id": "D1",
+      "question": "Kiến trúc CRM",
+      "answer": "b — app thứ tư, dùng chung hạ tầng, tích hợp vào portal",
+      "note": "[Cần xác nhận lại] App thứ tư nay là AA-Partner = tenant portal (chuyển khỏi CIS) + CRM trong một repo, không phải 'AA-CRM chỉ có CRM'. Xem N1.",
+      "reconfirm": true
+    },
+    {
+      "id": "D2",
+      "question": "ADR 0014/0015 + standards v1.2, không ngoại lệ grant DB trên crm.*",
+      "answer": "có",
+      "note": "[Cần xác nhận lại] ADR 0014 nay SỬA ADR 0008 §8 ('CIS module first') thay vì tuân theo nó; không grant DB nào cả hai chiều, đọc chéo app qua HTTP (N5).",
+      "reconfirm": true
+    },
+    {
+      "id": "D3",
+      "question": "Thứ tự với M1",
+      "answer": "a — lane CRM riêng chạy song song từ S246",
+      "note": "Giữ nguyên.",
+      "reconfirm": false
+    },
+    {
+      "id": "D4",
+      "question": "Nhịp làm",
+      "answer": "a — agent team, ~6 issue/phiên",
+      "note": "Giữ; ≈ 16 phiên tới 30/11, ≈ 20 phiên tổng.",
+      "reconfirm": false
+    },
+    {
+      "id": "D5",
+      "question": "Khởi động mọi việc ngoài ở W0",
+      "answer": "có",
+      "note": "Danh sách đổi nhẹ: bỏ CASA và Vercel Pro; thêm văn bản Documenso về gói Teams, spike Lambda Web Adapter/Next 16.",
+      "reconfirm": false
+    },
+    {
+      "id": "D6",
+      "question": "Gmail",
+      "answer": "b — chỉ gmail.send + chuyển tiếp SES, không CASA",
+      "note": "Giữ; module 5 kéo lên trước 30/11 (đúng Phase 1 của spec). Ghi điểm lệch: không đồng bộ đọc hai chiều.",
+      "reconfirm": false
+    },
+    {
+      "id": "D7",
+      "question": "Khoá F1",
+      "answer": "a — 1 khoá KMS mỗi đại lý + DEK mỗi khách",
+      "note": "Giữ; thêm tạo khoá lười + không xoay tự động trong pilot (N11).",
+      "reconfirm": false
+    },
+    {
+      "id": "D8",
+      "question": "Sửa câu F1 sau H3",
+      "answer": "có",
+      "note": "Giữ; câu đề xuất ở H3.",
+      "reconfirm": false
+    },
+    {
+      "id": "D9",
+      "question": "WhatsApp",
+      "answer": "a — Embedded Signup, WABA của đại lý, Cloud API trực tiếp",
+      "note": "Giữ (W6). AA trả $0.",
+      "reconfirm": false
+    },
+    {
+      "id": "D10",
+      "question": "Thanh toán đại lý VN",
+      "answer": "a — cổng VN sau báo giá, tạm ghi tay",
+      "note": "Giữ.",
+      "reconfirm": false
+    },
+    {
+      "id": "D11",
+      "question": "E-sign",
+      "answer": "b — Documenso Platform",
+      "note": "[Cần xác nhận lại] Vendor giữ. v1 chưa nói: mọi gói trả phí Documenso trả theo NĂM; Platform = $3.000/năm (documenso.com/pricing, 20/10/2026). Gói tách thành N8 (đề xuất Teams $480/năm cho pilot nếu có văn bản đồng ý).",
+      "reconfirm": true
+    },
+    {
+      "id": "D12",
+      "question": "Route AI",
+      "answer": "có — Bedrock acc3 us., model ZDR, AI tắt mặc định mỗi tenant",
+      "note": "[Cần xác nhận lại] Đường đi đổi: CRM là app riêng nên gọi thẳng role satellite acc3 (như TripPlanner) và ghi sổ crm.llm_call riêng, không qua gateway CIS và shared.llm_call_log.",
+      "reconfirm": true
+    },
+    {
+      "id": "D13",
+      "question": "Prod là điều kiện cứng của pilot?",
+      "answer": "không",
+      "note": "Pilot chạy trên prod cell riêng của CRM (N4), ≈ $27/tháng.",
+      "reconfirm": false
+    },
+    {
+      "id": "D13-ngày",
+      "question": "Ngày go-live",
+      "answer": "30/11/2026",
+      "note": "Đúng điểm pilot của spec (cuối Phase 2). Điểm kiểm lịch 13/11 (N18).",
+      "reconfirm": false
+    },
+    {
+      "id": "D14",
+      "question": "Mua Vercel Pro bây giờ?",
+      "answer": "không",
+      "note": "Giữ; app đại lý chạy trên AWS (N3) nên không vướng điều khoản Hobby.",
+      "reconfirm": false
+    },
+    {
+      "id": "D15",
+      "question": "Gửi brief luật sư bây giờ?",
+      "answer": "không",
+      "note": "Giữ; dữ liệu thật chỉ đại lý ngoài VN/EU + ngưỡng bắt buộc gửi brief (N13).",
+      "reconfirm": false
+    },
+    {
+      "id": "D16",
+      "question": "Project Linear + issue theo đợt",
+      "answer": "có",
+      "note": "[Cần xác nhận lại] ≈ 117 issue (v1: 115), ≈ 96 trước 30/11; tên project đề xuất 'Partner app (Tenant CRM)'.",
+      "reconfirm": true
+    },
+    {
+      "id": "D17",
+      "question": "Service ECS riêng cho CRM từ Dev",
+      "answer": "có",
+      "note": "[Cần xác nhận lại] Service aa-crm-dev-api build từ image riêng của AA-Partner (không phải image CIS aa-cis-dev-crm), ARM64 0,25 vCPU/0,5 GB, Dev chỉ Fargate Spot, worker trong process.",
+      "reconfirm": true
+    },
+    {
+      "id": "D18",
+      "question": "Sửa CTA mailto:admin@adventureasia.com trên /trip/[tourId]",
+      "answer": "có",
+      "note": "Sửa ngay W1, sau đó chuyển trang trip sang host khách của app đại lý.",
+      "reconfirm": false
+    },
+    {
+      "id": "D19",
+      "question": "Messenger + Instagram",
+      "answer": "a — W6",
+      "note": "Giữ.",
+      "reconfirm": false
+    },
+    {
+      "id": "D20",
+      "question": "Ngôn ngữ giao diện",
+      "answer": "a — EN/VI + khung i18n",
+      "note": "Giữ.",
+      "reconfirm": false
+    },
+    {
+      "id": "D21",
+      "question": "Builder module 3",
+      "answer": "c — builder trong app portal/CRM, chép byte component TripPlanner có guard",
+      "note": "[Cần xác nhận lại] Giữ; lưu ý TripPlanner chạy Next 15.5.28, portal Next 16.4.2 → CI build file chép dưới Next 16, cho phép lớp bọc mỏng.",
+      "reconfirm": true
+    },
+    {
+      "id": "D22",
+      "question": "Job runner",
+      "answer": "b — bản chép riêng, không chạm CIS shared/jobs",
+      "note": "[Cần xác nhận lại] Chép bản của Booking (đã port từ CIS, 675 dòng, chạy trong process) + bộ test tuân thủ chung để bắt lệch.",
+      "reconfirm": true
+    },
+    {
+      "id": "D23",
+      "question": "Điều kiện tách module thành app riêng",
+      "answer": "có",
+      "note": "[Cần xác nhận lại] Hết ý nghĩa vì CRM đã là app riêng; ADR 0014 ghi thay: ranh giới portal↔CRM trong repo + điều kiện dời DB/đổi runtime.",
+      "reconfirm": true
+    },
+    {
+      "id": "D24",
+      "question": "Insights: ≥3 đại lý + k≥10 + opt-in",
+      "answer": "có",
+      "note": "Giữ (W7); chị Thư duyệt ở H11.",
+      "reconfirm": false
+    }
+  ],
+  "decisions_new": [
+    {
+      "id": "N1",
+      "question": "CRM là app riêng tích hợp vào portal: đặt code theo hình dạng repo nào?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Một repo AA-Partner: portal (chuyển khỏi CIS) + CRM, có test ranh giới api/ ↔ web/"
+        },
+        {
+          "key": "b",
+          "label": "Hai repo AA-Portal + AA-CRM, trang CRM là zone riêng dưới host portal"
+        },
+        {
+          "key": "c",
+          "label": "Repo AA-CRM chỉ có API; trang CRM nằm trong repo portal"
+        }
+      ],
+      "recommended": "a",
+      "why": "Chị Thư muốn CRM nằm trong portal: một app thì một đăng nhập, một BFF, một deploy, một kit. CRM vẫn có schema, role, DSN, API, runner, image, service riêng. b thêm 1 CI, 1 OIDC role, 1 kit copy, điều hướng nạp lại trang, ~+3 issue mà không cách ly thêm."
+    },
+    {
+      "id": "N2",
+      "question": "Chuyển portal/ ra khỏi AA-CIS-App (giữ lịch sử git) và gỡ project Vercel aa-cis-portal?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Có"
+        },
+        {
+          "key": "b",
+          "label": "Không, giữ portal trong repo CIS"
+        }
+      ],
+      "recommended": "a",
+      "why": "Không chuyển thì không tách hoàn toàn được: 14 file kit chép byte bị test ép bằng nhau, chung CI, chung team Vercel."
+    },
+    {
+      "id": "N3",
+      "question": "App đại lý (portal + CRM + trang khách) chạy ở đâu?",
+      "options": [
+        {
+          "key": "a",
+          "label": "AWS: Lambda + Lambda Web Adapter + CloudFront gói Free, cho cả Dev và prod; dự phòng Fargate (+≈ $8)"
+        },
+        {
+          "key": "b",
+          "label": "Container Fargate sau CloudFront ngay từ đầu (+≈ $8/tháng)"
+        },
+        {
+          "key": "c",
+          "label": "Vercel Pro $20/seat/tháng"
+        }
+      ],
+      "recommended": "a",
+      "why": "Giữ D14 (không Pro), không vướng điều khoản phi thương mại của Hobby. Amplify không hỗ trợ Next 16. CloudFront Free có sẵn WAF 5 rule, $0. Spike W0 kiểm Next 16 trên LWA."
+    },
+    {
+      "id": "N4",
+      "question": "Pilot dữ liệu khách thật chạy ở đâu (D13 không + 30/11)?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Prod cell riêng CRM: RDS t4g.micro + 1 task ECS, ngoại lệ C7.2a cho ≤ 10 đại lý"
+        },
+        {
+          "key": "b",
+          "label": "Sửa C7.1a cho ciphertext vault lên Dev ($0)"
+        },
+        {
+          "key": "c",
+          "label": "Chờ AA-880 prod đầy đủ (+$150–300/tháng)"
+        }
+      ],
+      "recommended": "a",
+      "why": "≈ $27/tháng, giữ nguyên C7.1a (không PII thật trên Dev), không chờ AA-880. b bị panel chấm rủi ro quản trị cao (Dev public schema, module 8 đưa PII sang Booking Dev)."
+    },
+    {
+      "id": "N5",
+      "question": "CRM đọc dữ liệu CIS/Booking bằng cách nào?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Chỉ HTTP: feed thành viên + catalog.v1 của CIS, Booking B2B bằng IAM; không grant DB nào"
+        },
+        {
+          "key": "b",
+          "label": "Grant view catalog.* và booking.* cho crm_app"
+        }
+      ],
+      "recommended": "a",
+      "why": "Prod cell có RDS riêng nên b không chạy được ở prod; a cho một đường code Dev/prod và probe cách ly đơn giản. Giá: 2 endpoint nhỏ ở CIS."
+    },
+    {
+      "id": "N6",
+      "question": "Module 8 (gửi thông tin khách cho AA ops) để dữ liệu ở đâu?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Ở lại trong CRM, mã hoá bằng khoá AA-ops, AA ops xem ở Booking admin qua API, xoá sau 90 ngày, biên nhận vào audit đại lý"
+        },
+        {
+          "key": "b",
+          "label": "Đẩy sang Booking như v1"
+        }
+      ],
+      "recommended": "a",
+      "why": "Booking chỉ có Dev, không được chứa PII thật (C7.1a). Bớt 2 issue Booking."
+    },
+    {
+      "id": "N7",
+      "question": "Kéo module 5 (inbox email) và baseline đo sự kiện lên trước 30/11?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Có"
+        },
+        {
+          "key": "b",
+          "label": "Không, để sau go-live"
+        }
+      ],
+      "recommended": "a",
+      "why": "Spec đặt module 5 ở Phase 1 (trước pilot). Không có email thì đại lý vẫn dùng Gmail, trái nguyên tắc 'nhanh hơn Gmail'. Không đo sự kiện thì không đo được chỉ tiêu nào trong pilot."
+    },
+    {
+      "id": "N8",
+      "question": "Gói Documenso cho ký điện tử (D11 b)?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Platform từ go-live: $250/tháng, trả năm $3.000, white-label"
+        },
+        {
+          "key": "b",
+          "label": "Teams $40/tháng (trả năm $480) cho pilot nếu Documenso đồng ý bằng văn bản; lên Platform khi > 5 user, đại lý thứ 6 hoặc cần white-label"
+        },
+        {
+          "key": "c",
+          "label": "Tự host bản AGPL trong prod cell (~$17/tháng + chứng thư ký; rủi ro bảo hiểm chấp nhận)"
+        }
+      ],
+      "recommended": "b",
+      "why": "Documenso là ~78% hoá đơn ở 10 đại lý. b tiết kiệm ≈ $210/tháng trong pilot. Nếu Documenso không đồng ý bằng văn bản thì quay về a đúng D11 b. Chị Thư quyết phần hình ảnh ở H12."
+    },
+    {
+      "id": "N9",
+      "question": "Bộ lọc PII (F3) trước khi gọi AI?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Giá trị đã biết + regex + Bedrock Guardrails (trả theo lượt)"
+        },
+        {
+          "key": "b",
+          "label": "Service Presidio chạy suốt như v1"
+        }
+      ],
+      "recommended": "a",
+      "why": "−$39–49/tháng; Guardrails ghi 'Vietnamese: Optimized and supported', Presidio tiếng Việt chưa rõ. Lỗi thì chặn, corpus 0 rò."
+    },
+    {
+      "id": "N10",
+      "question": "Model AI mặc định cho nháp?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Haiku 5.5 mặc định; Sonnet 5.5 chỉ khi đại lý bật cho proposal; trần $2/đại lý/tháng"
+        },
+        {
+          "key": "b",
+          "label": "Sonnet 5.5 mặc định"
+        }
+      ],
+      "recommended": "a",
+      "why": "≈ $1,34 thay vì $8,4 mỗi đại lý; vẫn trong D12. Eval W7 kiểm chất lượng."
+    },
+    {
+      "id": "N11",
+      "question": "Vòng đời khoá KMS mỗi đại lý?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Tạo lười ở khách đầu tiên, không xoay tự động trong pilot (review bảo mật W7 có thể đổi)"
+        },
+        {
+          "key": "b",
+          "label": "Xoay tự động hằng năm từ đầu"
+        }
+      ],
+      "recommended": "a",
+      "why": "Đại lý không hoạt động = $0; khoá chờ xoá không bị tính tiền; xoay tự động thêm $1–2/khoá."
+    },
+    {
+      "id": "N12",
+      "question": "SMS cho đại lý?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đại lý dùng tài khoản Twilio của chính họ"
+        },
+        {
+          "key": "b",
+          "label": "Sub-account Twilio dưới tài khoản AA"
+        }
+      ],
+      "recommended": "a",
+      "why": "Sub-account tính tiền vào AA (~$3/đại lý); a để đại lý tự trả như WhatsApp."
+    },
+    {
+      "id": "N13",
+      "question": "Phạm vi địa lý dữ liệu thật trong pilot (D15 không)?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Chỉ đại lý ngoài VN và ngoài EU (ví dụ Úc); VN/EU dùng demo tới khi có luật sư"
+        },
+        {
+          "key": "b",
+          "label": "Cho cả EU với SCC mẫu, không luật sư"
+        }
+      ],
+      "recommended": "a",
+      "why": "VN có thể cần giấy phép + TIA; EU cần SCC có luật sư. a làm D15 khả thi mà không nhận rủi ro pháp lý lớn."
+    },
+    {
+      "id": "N14",
+      "question": "WAF / chống lạm dụng cho trang khách và API CRM?",
+      "options": [
+        {
+          "key": "a",
+          "label": "WAF trong CloudFront Free (không chặn theo nước) + rate limit trong app + chữ ký webhook; không gắn ACL vào api-crm trong pilot"
+        },
+        {
+          "key": "b",
+          "label": "Gắn ACL WAF dùng chung (chặn mọi nước ngoài 10 nước, cần thêm quyền CI)"
+        },
+        {
+          "key": "c",
+          "label": "Tạo ACL WAF mới (~$9/tháng)"
+        }
+      ],
+      "recommended": "a",
+      "why": "$0; khách ở mọi nước mở được form; webhook từ EU không bị chặn."
+    },
+    {
+      "id": "N15",
+      "question": "Tách quyền cho đường công khai (form, webhook)?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Pilot dùng một task role (ghi là rủi ro còn lại); tách service thứ hai chỉ Encrypt trước AA-880 hoặc đại lý thứ 11"
+        },
+        {
+          "key": "b",
+          "label": "Tách ngay từ đầu"
+        }
+      ],
+      "recommended": "a",
+      "why": "b thêm $2,5 Dev / $8,3 prod và 1 issue trên đường găng; rủi ro pilot thấp với ≤ 10 đại lý."
+    },
+    {
+      "id": "N16",
+      "question": "Redirect 308 cũ /portal, /tenant-login trên host admin?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Xoá và đảo test guard: admin không được chứa URL portal"
+        },
+        {
+          "key": "b",
+          "label": "Giữ để chuyển tiếp bookmark cũ"
+        }
+      ],
+      "recommended": "a",
+      "why": "Dev chỉ ~4 tenant thử, không có bookmark thật; đúng yêu cầu tách hoàn toàn."
+    },
+    {
+      "id": "N17",
+      "question": "Ngân sách kết nối RDS Dev cho crm_app?",
+      "options": [
+        {
+          "key": "a",
+          "label": "crm_app limit 5, hạ booking 15 → 10 trong cùng PR (tổng giữ 155/181)"
+        },
+        {
+          "key": "b",
+          "label": "Resize RDS Dev lên t4g.medium"
+        }
+      ],
+      "recommended": "a",
+      "why": "Booking chỉ dùng pool max 5; b thêm ≈ $31/tháng."
+    },
+    {
+      "id": "N18",
+      "question": "Nếu điểm kiểm 13/11 (cuối W3) cho thấy trễ hơn 1 đợt?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Giữ đủ phạm vi, dời ngày go-live"
+        },
+        {
+          "key": "b",
+          "label": "Vẫn go-live 30/11 nhưng chỉ demo dữ liệu giả"
+        },
+        {
+          "key": "c",
+          "label": "Cắt phạm vi pilot"
+        }
+      ],
+      "recommended": "a",
+      "why": "Anh đã chốt không MVP; 96 issue trong 41 ngày là rủi ro lớn nhất."
+    },
+    {
+      "id": "N19",
+      "question": "CIS admin và Booking admin vẫn trên Vercel Hobby (cũng có thể bị coi là thương mại)?",
+      "options": [
+        {
+          "key": "a",
+          "label": "Quyết định nền tảng riêng, mở 1 issue riêng, không tính vào lane CRM"
+        },
+        {
+          "key": "b",
+          "label": "Gom luôn về host AWS trong lane CRM"
+        }
+      ],
+      "recommended": "a",
+      "why": "Không làm phình lane CRM; module host của portal tái dùng được nếu sau này muốn gom."
+    }
+  ],
+  "questions_for_thu": [
+    {
+      "id": "H1",
+      "question": "Chị ơi, chị nói 'lơ đi cái 40 tuần': em hiểu là bỏ lịch 40 tuần nhưng vẫn làm đủ 23 phần trong spec của chị. Em đề xuất mở cho đại lý dùng thử từ 30/11/2026, chị xem có ổn không ạ?",
+      "proposed_answer": "Làm đủ 23 phần, không cắt. Từ 30/11/2026, 3–5 đại lý dùng thử các phần: nhận khách (form), theo dõi chuyến, email với khách, báo giá cho khách tự chọn, sổ booking, hoá đơn + thu cọc, ký hợp đồng/waiver, cổng thông tin cho khách, hoa hồng. WhatsApp, tự động nhắc việc, AI soạn nháp và báo cáo đầy đủ ra dần trong lúc đại lý dùng thử. Có 2 chỗ khác spec, em ghi rõ: (1) email vào CRM bằng cách đại lý chuyển tiếp thư, gửi đi bằng chính Gmail/Outlook của đại lý, không đồng bộ đọc toàn bộ hộp thư; (2) tour không có lịch khởi hành cố định thì hiện 'chờ AA xác nhận' (xem H8).",
+      "why": "Đúng điểm thử của spec (cuối Phase 2), có thêm email vì spec đặt email ở Phase 1. Đồng bộ đọc Gmail cần kiểm định bảo mật CASA $675–5.400/năm mỗi năm (anh Nghiệp đã chọn bỏ).",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Đợi làm xong hết 23 phần rồi mới cho đại lý dùng thử"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H2",
+      "question": "Về giá cho đại lý: em đề xuất CRM miễn phí hoàn toàn cho đối tác như spec ghi. Chị thấy cách tính dưới đây được không ạ?",
+      "proposed_answer": "Miễn phí cho đại lý, không tính theo số người dùng. Các phí của bên thứ ba đại lý tự trả qua tài khoản của họ: WhatsApp (Meta), SMS (Twilio), phí thẻ (Stripe). AI soạn nháp được dùng tới $2 tiền model mỗi đại lý mỗi tháng (đủ dư, dự kiến chỉ ~$0,5). AA chịu khoảng $31/đại lý/tháng khi mới có 10 đại lý (phần lớn là phí ký điện tử cố định), giảm còn ~$11 ở 50 đại lý và ~$6 ở 200 đại lý. Xem lại khi đủ 50 đại lý.",
+      "why": "Spec ghi 'free for partners'. Để đại lý tự trả các kênh nhắn tin và phí thẻ giúp phần AA gánh giảm từ ~$25 xuống ~$6–11/đại lý.",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Thu phí theo số người dùng (seat)"
+        },
+        {
+          "key": "c",
+          "label": "Gắn phí với hoa hồng khi bán tour AA"
+        },
+        {
+          "key": "d",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H3",
+      "question": "Spec có câu 'AA cũng không truy cập được dữ liệu khách'. Về kỹ thuật, khoá nằm trong tài khoản AWS của AA nên câu này chưa đúng tuyệt đối. Em đề xuất đổi câu như dưới, chị đồng ý không ạ?",
+      "proposed_answer": "\"Chỉ hệ thống CRM dùng được khoá của đại lý. Mọi lần dùng đều được ghi lại và đại lý tự xem được. Nhân viên AA không mở được hồ sơ khách. Nếu đại lý dùng khoá riêng của họ thì có thể tự thu hồi, và khi xoá khoá thì dữ liệu không đọc được nữa.\"",
+      "why": "Hứa đúng cái làm được, tránh rủi ro pháp lý khi ghi trong hợp đồng với đại lý. Anh Nghiệp đã đồng ý sửa (D8), chỉ chờ chị.",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Giữ câu gốc của spec"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn sửa câu khác"
+        }
+      ]
+    },
+    {
+      "id": "H4",
+      "question": "Chị chọn giúp em 3–5 đại lý thân quen để dùng thử nhé. Em đề xuất như dưới, chị thấy được không ạ?",
+      "proposed_answer": "3–5 đại lý thân quen ở Úc (hoặc nước khác không thuộc EU và không phải Việt Nam), chị cho em tên trong tuần đầu; mỗi đại lý em xin 30 phút phỏng vấn trước khi mở. Đại lý ở Việt Nam và EU vẫn xem và dùng được bản demo với dữ liệu giả, sẽ dùng dữ liệu khách thật sau khi có ý kiến luật sư.",
+      "why": "Luật dữ liệu VN (Nghị định 356) có thể cần giấy phép riêng, EU cần điều khoản chuyển dữ liệu có luật sư duyệt; anh Nghiệp đã quyết chưa gửi luật sư lúc này (D15).",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Chị muốn có đại lý Việt Nam dùng dữ liệu thật ngay (cần luật sư trước)"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H5",
+      "question": "Hợp đồng với đại lý dùng thử sẽ ký dưới tên pháp nhân nào của AA, và mình có cần luật sư ngay không ạ?",
+      "proposed_answer": "Ký bằng pháp nhân AA đang dùng để ký hợp đồng đối tác hôm nay (chị cho em tên). Dùng mẫu thoả thuận xử lý dữ liệu (DPA) em đã soạn, chưa cần luật sư cho giai đoạn dùng thử. Em soạn sẵn bản tóm tắt cho luật sư và chỉ gửi khi: có đại lý VN hoặc EU đầu tiên muốn dùng dữ liệu thật, hoặc có đại lý thứ 6, hoặc sau 60 ngày kể từ khi có khách thật đầu tiên.",
+      "why": "Khớp quyết định chưa gửi luật sư (D15) nhưng có mốc rõ để không quên.",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Chị muốn gửi luật sư ngay"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H6",
+      "question": "Waiver trekking ký điện tử cần hãng bảo hiểm chấp nhận. Mình nhờ hãng nào ạ?",
+      "proposed_answer": "Nhờ hãng bảo hiểm trekking AA đang dùng; chị cho em tên người liên hệ trong tuần đầu. Trong lúc chờ họ trả lời, khách vẫn ký waiver điện tử bình thường, hệ thống đánh dấu 'chờ bảo hiểm duyệt'.",
+      "why": "Spec yêu cầu waiver 'accepted by insurer'; không chặn việc dùng thử trong lúc chờ.",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Chị muốn dùng hãng bảo hiểm khác"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H7",
+      "question": "Khách Việt hay dùng Zalo. Bản đầu mình có cần Zalo không ạ?",
+      "proposed_answer": "Chưa làm Zalo ở bản đầu (spec không có Zalo, và đại lý VN chưa dùng dữ liệu thật trong pilot). Email, WhatsApp, SMS, Messenger, Instagram có đủ. Xem lại Zalo khi mở cho đại lý VN.",
+      "why": "Giữ đúng spec, không làm phình phạm vi khi chưa có đại lý VN trong pilot.",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Chị muốn có Zalo ngay bản đầu"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H8",
+      "question": "Spec ghi hàng AA 'tự xác nhận'. Muốn vậy cần biết tour nào có lịch khởi hành cố định và còn bao nhiêu chỗ. Em đề xuất cách làm dưới đây, chị thấy được không ạ?",
+      "proposed_answer": "Đội AA ops nhập lịch khởi hành và số chỗ trong hệ thống Booking cho các tour có ngày cố định — các tour này đại lý đặt là tự xác nhận. Các tour khác (tour riêng, may đo) hiện 'theo yêu cầu': hệ thống giữ chỗ tạm, AA ops xác nhận trong 1 ngày làm việc. Chị cho em biết ai trong đội ops phụ trách.",
+      "why": "Booking chưa có dữ liệu chỗ trống; cách này cho đi thử đúng hạn mà không phải chờ nhập toàn bộ allotment. Đây là một chỗ khác spec, em ghi lại.",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Chỉ bán tour có lịch cố định trong pilot"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H9",
+      "question": "Giá cho đại lý trong CRM: mình dùng bảng giá net B2B hiện có (biên 15%) phải không ạ?",
+      "proposed_answer": "Dùng nguyên bảng giá net B2B hiện có (biên 15%). Đại lý tự đặt giá bán cho khách của họ trong CRM; giá net thô không hiện ra ngoài.",
+      "why": "Đã có quyết định giá B2B (ADR 0005) và AA-681 đã xong; không cần làm thêm bảng giá mới.",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Chị muốn biên khác cho đại lý dùng CRM"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H10",
+      "question": "Mẫu điều khoản đặt tour và waiver cho đại lý: ai soạn ạ?",
+      "proposed_answer": "AA soạn sẵn 1 mẫu điều khoản đặt tour và 1 mẫu waiver, song ngữ Anh–Việt, dựa trên điều khoản AA đang dùng (đội của chị xem lại). Đại lý được tải mẫu riêng của họ nếu muốn. Hãng bảo hiểm duyệt mẫu waiver.",
+      "why": "Đại lý nhỏ thường chưa có mẫu; mẫu mặc định giúp họ bắt đầu ngay.",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Mỗi đại lý tự soạn, AA không cung cấp mẫu"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H11",
+      "question": "Số liệu tổng hợp cho AA (xu hướng nhu cầu, mức chi): em đề xuất thêm vài điều kiện để bảo vệ đại lý, chị thấy được không ạ?",
+      "proposed_answer": "Đồng ý: AA chỉ xem số liệu của nhóm có ít nhất 10 khách và đến từ ít nhất 3 đại lý; đại lý phải tự chọn tham gia, mặc định là tắt. AA không bao giờ thấy tên hay liên hệ của khách.",
+      "why": "Spec chỉ ghi k≥10; thêm '≥3 đại lý' và 'tự chọn' để một đại lý lớn không bị lộ số liệu riêng. Anh Nghiệp đã đồng ý (D24).",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Chỉ cần nhóm ≥ 10 khách như spec, không cần thêm"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    },
+    {
+      "id": "H12",
+      "question": "Câu mới: ký điện tử cho khách của đại lý. Có gói rẻ và gói mang thương hiệu riêng. Em đề xuất như dưới, chị thấy được không ạ?",
+      "proposed_answer": "Trong giai đoạn dùng thử (tối đa 5 đại lý) dùng gói Documenso Teams ($480/năm): khách ký trong cổng thông tin của đại lý, nhưng trang ký có thể hiện chữ 'Documenso'. Khi có đại lý thứ 6, hoặc đại lý nào yêu cầu trang ký không có thương hiệu khác, mình lên gói Platform ($3.000/năm) mang thương hiệu riêng.",
+      "why": "Thêm câu này vì đây là quyết định về hình ảnh thương hiệu với khách, thuộc về chị. Phí ký điện tử là khoản lớn nhất (~78% chi phí lúc 10 đại lý); cách này tiết kiệm ≈ $210/tháng trong pilot. Cần Documenso đồng ý bằng văn bản; nếu không, dùng Platform ngay.",
+      "options": [
+        {
+          "key": "a",
+          "label": "Đồng ý đề xuất"
+        },
+        {
+          "key": "b",
+          "label": "Dùng gói Platform mang thương hiệu riêng ngay từ đầu"
+        },
+        {
+          "key": "c",
+          "label": "Chị muốn trao đổi thêm"
+        }
+      ]
+    }
+  ]
+}
