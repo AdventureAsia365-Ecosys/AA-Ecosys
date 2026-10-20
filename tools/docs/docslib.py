@@ -47,6 +47,7 @@ class Finding:
     line: int
     title: str
     message: str
+    kind: str = ""  # short key of the rule that matched (resource-ids: vpc, arn, ...); used by --block
 
     def annotate(self, level: str) -> str:
         """GitHub Actions workflow command; also readable in a local terminal."""
