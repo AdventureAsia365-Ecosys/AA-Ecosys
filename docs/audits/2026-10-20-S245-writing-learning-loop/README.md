@@ -89,19 +89,56 @@ Nguồn: `research/02-state-of-the-art.md` §2–§3 và mục Sources (truy c�
 
 ## 3. Ba phương án
 
+Cả ba đều do agent viết phương án đề xuất độc lập; bản đầy đủ (tiếng Anh) ở `research/options.json`. Cả ba đều: đóng
+băng `pipeline_lessons` ở P0, ghi trước/sau mọi chỉnh sửa + chip lý do một cú bấm, lọc sự thật trước khi học, giữ tenant
+chỉ thấy nội dung, chạy trên RDS + worker sẵn có (không dịch vụ AWS mới; riêng C có thể thêm một bucket/prefix S3 cho
+dataset). Khác nhau ở **cái gì được học** và **ai bật**.
+
 | | **A. Writing Memory v1** | **B. Golden-gated Writer Optimiser (GWO)** | **C. Writer Flywheel** |
 |---|---|---|---|
-| Ý tưởng | Kho **luật** (từ lỗi lặp + diff người sửa) + kho **ví dụ** đã duyệt theo tenant; bật theo **release** có cổng | Đo trước; tách prompt thành "slot"; tối ưu kiểu GEPA trên golden set; bấm để promote | Ghi nhận trước; học nhiều lớp L0 (từ vựng) → L3 (ví dụ, sở thích tenant), L4 GEPA offline, L5 fine-tune khi đủ dữ liệu |
-| Dùng điểm chèn có sẵn | Có (lessons append, `render_brand_block`, `_repair_feedback`, lớp AA-800) | Không — phải refactor mọi prompt A1/T2/T9 thành slot | Phần lớn có |
-| Học giọng tenant | Có (ví dụ k=3 lọc theo tenant) | Muộn (P4, ví dụ là tuỳ chọn) | Có (ví dụ + tóm tắt sở thích kiểu CIPHER) |
-| Cải thiện đầu tiên chạm bài viết | ~phiên 4 (phải chờ AA-729) | ~phiên 5–7 | ~phiên 3–4 |
-| Bảng mới / sửa | 4 mới + 2 nới CHECK | ~8–9 | ≥4 + export S3 |
-| Trang admin | 5 tab | 6 khu (Writer Lab) | 6 tab |
-| Fine-tune | Không | Không (giữ dữ liệu để sau) | Có điều kiện (L5, $160–400/lượt, xuất JSONL ra S3) |
+| Ý tưởng | Kho **luật** (từ lỗi gate lặp + diff người sửa) + kho **ví dụ** đã duyệt theo tenant; chỉ bật qua **release** có cổng (R0 → R1 → R2 → shadow) | **Đo trước**: golden set + giám khảo đã hiệu chỉnh; tách prompt thành **slot** có tên; bộ đề xuất kiểu GEPA sửa từng slot theo cụm lỗi, chọn theo biên Pareto, **bấm để promote** | **Ghi nhận trước** vào một kho sự kiện; học theo 6 lớp: L0 từ vựng, L1 sổ bài học (ACE), L2 ví dụ, L3 tóm tắt sở thích tenant (CIPHER), L4 GEPA offline cho prompt sửa/giám khảo, L5 fine-tune khi đủ dữ liệu |
+| Dùng điểm chèn có sẵn | Có (lessons append, `render_brand_block`, `_repair_feedback`, lớp AA-800) | **Không** — refactor mọi prompt writer/repair A1/T2/T9 thành slot đọc từ DB (`prompt_registry.resolve`); phải replay giống hệt từng byte trước khi bật | Có (khối "HOUSE LESSONS" ở S1/T2/T9; ví dụ thay few-shot tĩnh trong `render_brand_block`) |
+| Học giọng tenant | Có (P4: ví dụ k=3 lọc theo tenant) | Muộn (P4: slot `*.voice.*` riêng tenant; ví dụ chỉ là tuỳ chọn) | Có (P3: 3–5 ví dụ + tóm tắt sở thích ≤ 5 câu) |
+| Cải thiện đầu tiên chạm bài viết | ~phiên 4 (P2 chờ AA-729) | ~phiên 5–7 (bản tối ưu tự động đầu tiên ở P3; P2 chỉ thử một biến thể do người viết) | ~phiên 3,5 (P2; P1 chờ trả lời AA-729 + AA-845) |
+| Bảng mới / sửa | 4 mới (+ bảng shadow) + nới 2 CHECK | **8 mới** (sự kiện; golden set, mẫu, kết quả từng mẫu; slot; biến thể; cụm lỗi; lượt tối ưu) + sửa `prompt_eval_runs`, `content_piece_label` | 4 mới (sự kiện, bài học, ví dụ, cặp ưa thích) + sửa `prompt_eval_runs`, `tenant_brand_rule_versions`, bảng nhãn + prefix/bucket S3 cho dataset |
+| Job mới | `writing_memory_mine` + eval/shadow | Mine cụm lỗi hằng tuần + lượt tối ưu (mặc định ≤ 2 chiến dịch/tháng) | 6 kind: backfill, `writer_pair_build`, `writer_lesson_mine`, `writer_exemplar_index`, `writer_eval_run`, `writer_dataset_export` |
+| Trang admin | `/admin/writing-memory`, 5 tab | Writer Lab, 6 khu (+ panel ở LLM usage và Decisions) | `/admin/writer-learning`, 6 tab (+ thẻ Tenant 360) |
+| Ai bật | Release nền tảng: Nghiệp bấm; release tenant **tự bật** trong dev khi qua cổng | Mọi biến thể: bấm; DB trigger đòi một lượt holdout đạt | Mọi thứ: admin bấm — "không gì tự bật" |
+| Fine-tune | Không | Không (giữ dữ liệu trung lập, xem lại ở ~1k+ cặp sạch / tác vụ) | Có điều kiện (L5: xuất JSONL SFT/DPO ra S3; cần ≥ 1.000 cặp sạch + KPI chững 2 vòng; RFT open-weight ~$160–400/lượt) |
 | Chi phí/tháng (Dev) | $30–50 | $30–70 | $35–80 |
-| Công | ~6 phiên (giám khảo: thực tế ~8) | 7–8 phiên | 7–8 phiên |
-| Điểm mạnh | Rẻ, nhanh, rút lại bằng một lệnh; phát hiện đúng bẫy `pipeline_lessons` | Kỷ luật eval tốt nhất (κ, holdout, DB trigger) | Lớp L0 từ vựng chứng minh bằng replay $0; "không gì tự bật" |
-| Điểm yếu | Release tenant tự bật trong dev; chưa có ngưỡng κ cho giám khảo | Chậm, nặng; tối ưu trên rất ít dữ liệu dễ overfit | Phạm vi quá rộng; đường fine-tune + S3 thêm mặt rủi ro dữ liệu tenant không cần bây giờ |
+| Công | ~6 phiên (giám khảo 2: thực tế ~8) | 7–8 phiên | ~5,5 phiên (P0–P4) + P5 có điều kiện ~1,5 |
+| Điểm mạnh (theo giám khảo) | Rẻ nhất; dùng lại điểm chèn, không refactor; luật chỉ-hạn-chế; rút lại bằng lật con trỏ; chỉ ra đúng bẫy T2 chạy chung graph S1 | Kỷ luật eval tốt nhất: golden set là bảng thật có tune/holdout, giám khảo chỉ tính khi κ ≥ 0,6, DB trigger, KPI edit-pair, phễu ứng viên, luật repo public, xoá khi offboard | L0 từ vựng chứng minh bằng replay $0; helper ghi tín hiệu cùng transaction, kiểm sự thật bất đồng bộ; "không gì tự bật"; phân lớp thẳng thắn về rủi ro nhà cung cấp |
+| Điểm yếu (theo giám khảo) | Chờ AA-729; release tenant tự bật trong dev; không có ngưỡng κ; vài chi tiết schema sai (§5.3) | Chậm và nặng nhất; refactor prompt có phạm vi ảnh hưởng rộng (T2 chung graph S1); tối ưu trên ~251 bài T9, ~48 bản T2, 1 nhãn → dễ overfit kiểu OPRO; nhịp chiến dịch + duyệt nặng cho một người | Phạm vi rộng nhất; đường export dataset + S3 + đồng ý tenant thêm một chỗ chứa chữ tenant mà bây giờ chưa cần; fine-tune gần như không khả dụng; một người duyệt thành nút thắt cho mọi mục giọng tenant; đắt nhất |
+
+### 3.1 B và C nói ngắn
+
+**B — Golden-gated Writer Optimiser.** Bốn lớp, tất cả trong AA-CIS-App:
+- *Ghi nhận*: `acp_shared.writer_feedback_event` (giống `writing_signal` của A) + lưu chữ mọi lượt T9.
+- *Golden set*: bảng `eval_golden_set` / `eval_golden_item` / `eval_item_result`; A1 50, T2 10 + phân vùng theo tenant,
+  blog 15, social 15, injection 10; chia tune/holdout 30%, có mẫu edit-pair và mẫu cài lỗi (AA-791). Giám khảo khác
+  hãng với writer, chỉ được tính vào dừng cứng khi κ ≥ 0,6 so với nhãn Nghiệp neo; dưới mức đó chỉ là chỉ số mềm.
+- *Optimiser*: job hằng tuần gom cụm lỗi (`failure_cluster`) → LLM phản tư đề xuất ≤ 3 sửa nhỏ cho một slot → chấm R0
+  ($0) / R1 / R2 (≤ 50 mẫu) → giữ biên Pareto theo từng mẫu (GEPA-lite tự viết ~300 dòng, không chuyển writer sang
+  DSPy). Slot `*.fidelity.*` bị khoá: chỉ được thêm hạn chế.
+- *Promote*: chạy holdout một lần → Writer Lab hiện diff + nguồn gốc + bảng điểm → bấm promote (active/canary), một cú
+  bấm rút lại; đổi golden set / model / gate → biến thể vào trạng thái `reverify`, lượt chấm lại chờ duyệt.
+- Pha: P0 ghi nhận (1) · P1 golden set + giám khảo + baseline (1,5–2) · P2 registry slot + Writer Lab (1) · P3 mine +
+  optimiser (1,5–2) · P4 giọng tenant (1–1,5) · P5 vận hành (0,5–1).
+
+**C — Writer Flywheel.** Một kho sự kiện + sáu lớp học, mỗi lớp rẻ và an toàn hơn lớp sau:
+- *Ghi nhận*: helper `record_writer_feedback` ghi trong cùng transaction với thao tác sửa; kiểm sự thật chạy bất đồng
+  bộ trong job (`pending/grey/pass/fail`), vùng xám cần admin xác nhận tới khi AA-803 được hiệu chỉnh.
+- *L0–L3*: luật từ vựng (cụm bị cắt ≥ 5 lần bởi ≥ 2 reviewer hoặc qua ≥ 3 tenant); sổ bài học kiểu ACE (chỉ thêm/gộp/bỏ
+  từng mục; trần 8 bài nền tảng + 5 bài tenant / người viết × kênh); ví dụ đã che sự thật lọc theo `tenant_id`; tóm tắt
+  sở thích tenant ≤ 5 câu. `rule_set_version` (hash) đóng dấu mọi đầu ra; cờ `LEARNING_LAYERS_ENABLED` tắt tức thì.
+- *Cổng chung R0–R3*: replay $0 → chấm lại bài cũ → golden set ≤ $15 → shadow biến thể (viết cạnh bản chính, tenant
+  không thấy). Không gì tự bật.
+- *L4–L5*: GEPA chỉ trên prompt sửa câu và prompt giám khảo, cần Nghiệp duyệt từng lượt; xuất dataset SFT/DPO ra S3 tách
+  nền tảng / tenant; fine-tune chỉ khi ≥ 1.000 cặp sạch, KPI tăng < 2 điểm hai vòng liền và có nhà cung cấp; adapter riêng
+  tenant cần tenant đồng ý bằng văn bản (quyết định kinh doanh của chị Thư).
+- Pha: P0 ghi nhận (1) · P1 eval + nhãn (1) · P2 L0 + L1 (1,5) · P3 L2 + L3 (1) · P4 dataset + GEPA thử (1) · P5 quyết
+  định fine-tune (có điều kiện).
+- C đề xuất giám khảo OpenAI; bản khuyến nghị thay bằng route judge không phải Anthropic trên Bedrock acc3 (§5.5, D10).
 
 ## 4. Điểm giám khảo
 
@@ -116,7 +153,15 @@ Nguồn: `research/02-state-of-the-art.md` §2–§3 và mục Sources (truy c�
 Cả hai giám khảo chọn **A**. Cả hai cũng chỉ ra cùng một điểm yếu: A chờ AA-729 nên luật đầu tiên chạm bài muộn,
 và cho release tenant tự bật quá sớm. Phần ghép ở §5 sửa đúng hai điểm này.
 
-## 5. KHUYẾN NGHỊ: Writing Memory v1 + 9 ý ghép
+Vì sao B và C thua:
+- **B (30)**: cả hai giám khảo cho "thời gian ra giá trị" và "vận hành" 2/5. Golden set, giám khảo hiệu chỉnh và refactor
+  prompt thành slot phải xong trước khi có ứng viên tối ưu đầu tiên; với dữ liệu Dev hiện nay (1 nhãn, 4 tenant thử),
+  optimiser có rất ít tín hiệu thật. Giám khảo 1 cho an toàn 5/5 — cao nhất — nên phần an toàn của B được ghép vào A.
+- **C (32)**: lõi L0–L3 gần giống A nhưng mô hình release/quy trách nhiệm lỏng hơn (một hash `rule_set_version` thay cho
+  CHECK eval theo từng release). Giám khảo 2 cho an toàn 3/5 vì đường export dataset + S3 + đồng ý tenant; giám khảo 1
+  cho vận hành 2/5 (6 job, ≥ 4 bảng, 6 tab). Chi phí cao nhất ($35–80).
+
+## 5. KHUYẾN NGHỊ: Writing Memory v1 + 11 ý ghép
 
 ### 5.1 Phương án thắng, nói ngắn
 
@@ -143,7 +188,7 @@ Jev) đứng trên tất cả**.
 Không mục nào tới tay người viết một mình: chúng đi trong một **release** (gói có version theo người viết). Release
 chỉ bật khi qua đủ cổng và có một cú bấm duyệt; rút lại = đưa con trỏ "active" về release trước, không cần deploy.
 
-### 5.2 Chín ý ghép từ B và C (đã được hai giám khảo đề xuất)
+### 5.2 Mười một ý ghép từ B và C (đều do giám khảo đề xuất, `research/judges.json` mục `grafts`)
 
 1. **Đường nhanh L0 — từ vựng** (từ C): cụm từ admin đã cắt ≥ N lần thành luật `lexicon`, chứng minh bằng **replay
    $0** trên chữ + ledger đã lưu, gắn vào lớp AA-800 (PR #869 đã merge). Không cần chờ AA-729 → chị Thư thấy "không còn viết
@@ -160,8 +205,9 @@ chỉ bật khi qua đủ cổng và có một cú bấm duyệt; rút lại = �
    `eval_item_result` — thay vì nhét hết vào `prompt_eval_runs.details`. Thêm trạng thái release `reverify` khi đổi
    golden set, route model hoặc taxonomy gate (AA-787): release vẫn chạy nhưng bị cờ, R2 chạy lại **chờ duyệt**.
 7. **Helper `record_writer_feedback`** (từ C): ghi tín hiệu trong cùng transaction với thao tác sửa; kiểm sự thật chạy
-   bất đồng bộ (`pending/grey/pass/fail`), không thêm lệnh LLM vào đường request. Thêm bản đồ alias gate để luật
-   không mồ côi khi AA-787 đổi tên gate (27 → ~18).
+   bất đồng bộ (`pending/grey/pass/fail`), không thêm lệnh LLM vào đường request; sự kiện vùng xám cần admin xác nhận
+   cho tới khi AA-803 được hiệu chỉnh. Luật khoá theo `reason_code` + bản đồ alias gate để không mồ côi khi AA-787 đổi
+   tên gate (27 → ~18).
 8. **Luật dữ liệu** (từ B): repo AA-CIS-App là public → golden fixture, cặp sửa, ví dụ chỉ ở DB / S3 bronze; test trong
    repo dùng fixture giả. Xoá dữ liệu học của tenant khi offboard (quy trình DRY RUN): `writing_signal`, luật và tóm tắt
    phạm vi tenant, `writing_exemplar`, và `writing_memory_shadow` (đầu ra shadow chứa chữ tenant). Vì `audit_log` là
@@ -172,6 +218,12 @@ chỉ bật khi qua đủ cổng và có một cú bấm duyệt; rút lại = �
    chính tenant. Tóm tắt là một loại luật (§5.1): qua cùng lint chỉ-hạn-chế, cách ly `adds_unsourced_claim`, R0–R2 và
    một cú bấm duyệt. Rẻ hơn ví dụ và chạy được với rất ít lần sửa — hợp với Dev hiện tại (4 tenant thử, ~48 bản T2).
    Kèm một ô "số cặp sạch / người viết" trên tab Metrics để giữ cửa fine-tune sau này, **không** xây đường export.
+10. **Khoá bật release hai lớp + replay release rỗng** (từ B, giám khảo 1): ngoài CHECK trong DB, API cũng từ chối bật
+    release thiếu eval/shadow (B dùng DB trigger + API). Test CI: luật, ví dụ, tóm tắt của tenant A không bao giờ được
+    resolve cho tenant B. Trước khi bật `memory_enabled`, replay **release 0 (bộ nhớ rỗng)** qua đường chèn mới phải cho
+    prompt **giống hệt từng byte** với prompt hiện tại (R0, $0) — bằng chứng rằng đường chèn không tự đổi bài.
+11. **Gộp AA-900 vào tab Releases** (từ B, giám khảo 2): AA-900 (sổ đăng ký prompt, cổng eval thủ công) không thành
+    trang riêng; tab Releases là chỗ duy nhất quản lý prompt và bộ nhớ.
 
 ### 5.3 Những chỗ sửa so với bản gốc của phương án A (giám khảo 2 kiểm dump)
 
@@ -335,7 +387,7 @@ hoặc edit-pair hit rate trên golden set → dừng ở P3, giữ P0 (ghi nh�
 | **P0 — Cầm máu + ghi lại việc người làm** | Đóng băng `pipeline_lessons` (đếm chính xác trước, tắt ghi + đọc sau flag); migration `shared.writing_signal` (RLS + FORCE, xoá được) để chữ trước/sau có chỗ xoá được ngay từ đầu; T9 tenant sửa lưu trước/sau phía admin; A1 sửa trường lưu trước/sau; chip lý do (sentence apply, Regenerate, Reject, Dismiss, T2 admin reject); `fact_not_in_source` → `record_outcome(truth=False)` (AA-845 a); đóng dấu `writer_prompt_version` **chỉ cho T9** (`content_piece.writer_input`; T2 chờ `generation_meta` ở P3); lưu **chữ** mọi lượt T9 (ledger đã có từ AA-791); helper `record_writer_feedback`; ADR app; CONTEXT.md; lesson trong `skill/aa-lessons/lessons.md` | 1 | Không | 0 đọc/ghi mới `pipeline_lessons` trên Dev; một lần sửa T9 tenant và một lần sửa A1 có bằng chứng trước/sau (curl + dòng `writing_signal`); `audit_log.details` chỉ có id/hash + chip, không có chữ; test xoá dòng `writing_signal` theo tenant; deploy + verify theo aa-ship |
 | **P1 — Kho luật + mỏ luật** | Migration `writing_rule` (RLS + FORCE, CHECK phạm vi); backfill `writing_signal` (A1 → `scope='platform'`); lọc sự thật; job `writing_memory_mine` (route judge không phải Anthropic, đầu vào đã che thực thể); tab Signals + Candidates; seed `llm_role_config` với `role='judge'` | 1–1,5 | P0 | Số backfill theo nguồn + tenant; 1 lượt mine ≤ $1; test: lint từ chối luật "include X", chặn 5-gram, tín hiệu tenant A không bao giờ thành luật nền tảng, luật nền tảng có bằng chứng tenant cần ≥ 3 tenant |
 | **P1b — Đường nhanh L0 (từ vựng)** | Release chỉ-từ-vựng, R0 replay $0 trên chữ + ledger đã lưu, cú bấm duyệt; gắn lớp AA-800; luật áp trước các cổng (hoặc chỉ luật "cấm") | 0,5 | P1 (PR #869 đã merge) | Một release L0 bật cho T9 social, replay chứng minh giảm lỗi mục tiêu, 0 dừng cứng; **test: chuỗi thay thế thêm số / nơi / giờ / giá / dịch vụ bị `new_specifics` từ chối** |
-| **P2 — Eval + release** | Bảng golden set (set/item/item_result); nới `prompt_eval_runs`; bảng `writing_memory_release` (+ CHECK active cần eval + shadow), `writing_memory_shadow`; runner R0/R1/R2; isolation probe; grep dấu vết QA; shadow replay 50 input; cổng κ giám khảo; tab Releases; đo **release 0** (bộ nhớ rỗng) | 1–1,5 | **AA-729**, AA-783 (nhãn neo) | Release 0 tái lập số baseline; CHECK từ chối release thiếu eval; diễn tập rút lại: job kế tiếp dùng release cũ (chứng minh bằng dấu writer_input) |
+| **P2 — Eval + release** | Bảng golden set (set/item/item_result); nới `prompt_eval_runs`; bảng `writing_memory_release` (+ CHECK active cần eval + shadow, API kiểm thêm lần nữa), `writing_memory_shadow`; runner R0/R1/R2; isolation probe; grep dấu vết QA; shadow replay 50 input; cổng κ giám khảo; tab Releases (gộp AA-900); đo **release 0** (bộ nhớ rỗng) | 1–1,5 | **AA-729**, AA-783 (nhãn neo) | Release 0 cho prompt giống hệt từng byte với hiện tại và tái lập số baseline; CHECK và API đều từ chối release thiếu eval; test CI tenant A không resolve sang tenant B; diễn tập rút lại: job kế tiếp dùng release cũ (chứng minh bằng dấu writer_input) |
 | **P3 — Chèn luật vào mọi người viết** | A1 HOUSE RULES thay lessons append; T2 release riêng + migration `generation_meta` **cùng PR** bịt projection tenant (denylist + regex, §7); T9 qua `render_brand_block` + repair hint; trần token; dấu `rule_ids`; kiểm sau bật (isolation probe + grep dấu vết QA trên mỗi bài mới → tự rút lại) | 1 | P2 | Release 1 active cho ≥ 1 người viết: lỗi mục tiêu giảm trên golden + holdout, 0 B-class/C1 mới, 0 rò tenant, chi phí ≤ +20%; test key-walk tenant không thấy `generation_meta` / `rule_ids`; diễn tập vi phạm giả → tự rút lại |
 | **P4 — Ví dụ + sở thích tenant** | `writing_exemplar` + ivfflat; che thực thể; thu từ tín hiệu duyệt; k=3 lọc tenant thay slot `good_examples` tĩnh; tóm tắt sở thích CIPHER ≤ 5 câu (loại luật: lint + cách ly + R0–R2 + cú bấm); lọc `WHERE tenant_id = $1` trong code; tab Exemplars | 1 | P3 | R2 cặp cho thấy giảm khoảng cách sửa với ≥ 1 người viết tenant, 0 sự thật mang sang; **test chạy bằng `cis_app`** (role thật của writer và job mine): truy xuất ví dụ / tóm tắt cho tenant A trả 0 dòng của tenant B; tóm tắt chứa lời hứa nguồn không có bị cách ly |
 | **P5 — Đo, bảo trì, khép vòng người** | Job KPI hằng tuần + tab Metrics, dừng mềm + dừng cứng 1 trên golden set (dừng cứng 2–3 đã kiểm từ P3); hết hạn luật 60 ngày; drawer nhãn cho T2 + A1; hàng đợi bất đồng 5–10 mục/tuần; DRY RUN xoá `pipeline_lessons`, `acp_output_rules`, `/v1/rules` (kèm mục policy trong `api/core/staff_authz.py`), `acp_post_processor.py`, `services/acp_produce/rule_adapter.py` + `tests/unit/test_aa363_rule_adapter.py`; xoá dữ liệu học khi offboard tenant (gồm `writing_memory_shadow`); runbook | 1 | P4 | 2 báo cáo tuần tự động; 1 luật hết hạn được job đánh dấu; xoá bảng chết có bằng chứng DRY RUN; xu hướng KPI ghi vào `docs/audits/` |
@@ -359,9 +411,9 @@ tiếng Anh theo quy ước:
 | 8 | P1 | [Writing memory] shared.writing_rule (RLS + FORCE, scope CHECKs) + backfill (A1 → scope=platform) + mining job: cluster, thresholds (tenant-derived platform rules need ≥3 tenants), non-Anthropic judge-route drafter on entity-masked text (≤50 calls), constraint-only lint, PREDICT validation |
 | 9 | P1 | [Admin UI] /admin/writing-memory: Signals and Candidates tabs |
 | 10 | P1b | [Writing memory] L0 lexicon fast path: replay-proven ($0) lexicon releases into the AA-800 vocabulary layers, applied before the gates; replacement strings checked by new_specifics |
-| 11 | P2 | [Eval] First-class golden set tables + widened prompt_eval_runs + writing_memory_release/shadow with activate-requires-eval CHECK |
-| 12 | P2 | [Eval] R0/R1/R2 memory eval runner, holdout, isolation probe, QA-artefact grep, judge κ gate; baseline release 0 |
-| 13 | P2 | [Eval] Shadow replay job + Releases tab (report, approve, activate, rollback, kill switch) |
+| 11 | P2 | [Eval] First-class golden set tables + widened prompt_eval_runs + writing_memory_release/shadow with activate-requires-eval CHECK and the same check in the API |
+| 12 | P2 | [Eval] R0/R1/R2 memory eval runner, holdout, isolation probe, QA-artefact grep, judge κ gate; baseline release 0 with a byte-identical prompt replay before memory_enabled; CI test that tenant A items never resolve for tenant B |
+| 13 | P2 | [Eval] Shadow replay job + Releases tab (report, approve, activate, rollback, kill switch); absorbs AA-900 (prompt register, manual eval gate) |
 | 14 | P3 | [Writers] Inject the active release into A1, T2 (generation_meta migration + tenant projection denylist/regex in the same PR) and T9, with caps, rule_ids stamps and a post-activation isolation/QA-artefact check that rolls back |
 | 15 | P4 | [Writing memory] Entity-masked exemplar pool + k=3 retrieval with a code-level tenant_id filter (tested as cis_app) + CIPHER tenant preference summaries gated like rules |
 | 16 | P5 | [Writing memory] Weekly KPI job + Metrics tab, soft-stop rollback, rule expiry, disagreement queue |
@@ -370,7 +422,7 @@ tiếng Anh theo quy ước:
 
 Liên kết (blocker/related) với issue đã có: AA-729, AA-783, AA-845, AA-803, AA-787, AA-800 (PR #869, đã merge), AA-865
 (PR #868, đã merge),
-AA-804 (AI Use Register). Tìm Linear 20/10/2026 với "lesson"/"exemplar": chưa có issue nào cho vòng này.
+AA-804 (AI Use Register), AA-900 (sổ đăng ký prompt — gộp vào issue 13). Tìm Linear 20/10/2026 với "lesson"/"exemplar": chưa có issue nào cho vòng này.
 
 ## 10. Chi phí
 
@@ -429,7 +481,7 @@ Trả lời ngắn theo mẫu "D1 có, D6 a…". Khuyến nghị in đậm.
 
 | # | Câu hỏi | Trả lời | Khuyến nghị |
 |---|---|---|---|
-| D1 | Chọn phương án A "Writing Memory v1" + 9 ý ghép ở §5.2 làm hướng đi? | có / không | **có** |
+| D1 | Chọn phương án A "Writing Memory v1" + 11 ý ghép ở §5.2 làm hướng đi? | có / không | **có** |
 | D2 | Không fine-tune trong v1; xem lại khi ≥ 1k cặp sạch / người viết? | có / không | **có** |
 | D3 | Đóng băng `shared.pipeline_lessons` ngay ở P0 (đếm dòng chính xác, tắt ghi + đọc sau flag)? | có / không | **có** (ưu tiên cao nhất) |
 | D4 | Chốt AA-729 theo [memo M2a](../2026-10-20-S245-m2a-decisions/README.md) (`AA-729: a / có / có` — golden set 100 mẫu, ~$8,6–10,4, trần $15) và chạy trước P2? **Cùng câu hỏi với memo: trả lời một lần ở memo là đủ cho cả D4.** | có / không | **có** |
@@ -465,7 +517,9 @@ chỉ học từ lần sửa bình thường và góp ý trên Jira).
 - `research/01-current-state.md` — CIS đã có gì cho vòng học (ghi chú gốc, tiếng Anh).
 - `research/02-state-of-the-art.md` — các cách làm trên thế giới + fine-tune 10/2026, kèm nguồn.
 - `research/03-measurement-design.md` — thiết kế đo lường, golden set, rollout R0–R5, tiêu chí dừng.
-- `research/options.json` — ba phương án (A đầy đủ; B, C rút gọn — xem ghi chú trong file).
-- `research/judges.json` — điểm và nhận xét của hai giám khảo, ý ghép, lỗi của phương án thắng.
+- `research/options.json` — ba phương án đầy đủ, nguyên văn đầu ra của các agent viết phương án. Thứ tự trong file:
+  Writer Flywheel (= C), Writing Memory v1 (= A), Golden-gated Writer Optimiser (= B); file không dùng chữ A/B/C.
+- `research/judges.json` — nguyên văn đầu ra của hai giám khảo (phần tử 1 = giám khảo AI 1, phần tử 2 = giám khảo AI 2):
+  điểm, nhận xét, phương án thắng, ý ghép, lỗi của phương án thắng.
 
 Front-matter: không dùng — `docs/audits/` là nhật ký (journal), schema front-matter loại trừ nhật ký.

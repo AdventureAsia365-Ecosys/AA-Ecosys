@@ -1,79 +1,118 @@
-{
-  "_note": "Two independent judges, S245 (20/10/2026). Criteria scored 1-5: quality_gain, safety, cost, time_to_value, operability. Judge 1 took Ms. Thư's / product lens; judge 2 the engineering / safety lens and spot-checked the schema dump.",
-  "judges": [
-    {
-      "judge": 1,
-      "lens": "product owner (Ms. Thư) + time to visible value",
-      "scores": [
-        {"option": "A. Writing Memory v1", "quality_gain": 4, "safety": 4, "cost": 4, "time_to_value": 4, "operability": 3, "total": 19,
-         "why": "One loop covers A1, T2 and T9 and attacks what Ms. Thư sees: recurring errors (rules from gate_ledger, repair_log and audit_log admin_sentence_* before/after) and tenant voice (k=3 tenant-filtered, entity-masked exemplars replacing the static good_examples slot). Reuses existing injection points, so the first release reaches all writers around session 4 of ~6 with no prompt refactor. Constraint-only lint, B-class hard stop, RLS + 5-gram guard, pointer-flip rollback. Lowest cost ($30-50/month). Loses a point on operability: four new tables, a five-tab page and auto-promoted tenant releases for one reviewer. Spot-check confirmed: flag_fix_node.py L733 writes stage='audit'; s1_batch.py L112 and admin_pipeline.py L565 read S1_rewrite/S1_editor; dump L4290 shows 0 inserts and 1,956 index scans."},
-        {"option": "B. GWO", "quality_gain": 3, "safety": 5, "cost": 3, "time_to_value": 2, "operability": 2, "total": 15,
-         "why": "Strongest safety (locked fidelity slots, DB trigger requiring a passing holdout, kappa >= 0.6 judges, byte-identical R0 replay, public-repo rule, offboarding deletion). Worst time to value: golden sets, calibrated judges (AA-729, AA-783) and a slot refactor come before any optimiser candidate; first automated improvement in P3 (~sessions 5-7 of 7-8). Voice learning late. GEPA campaigns $10-25 each, up to $70/month. Writer Lab plus nine tables heavy for one reviewer."},
-        {"option": "C. Writer Flywheel", "quality_gain": 4, "safety": 4, "cost": 3, "time_to_value": 3, "operability": 2, "total": 16,
-         "why": "L0 lexicon is the cheapest visible win; lessons, exemplars and CIPHER tenant summary target voice; nothing auto-activates. But carries scope a product owner does not need now (preference pairs, SFT/DPO export to S3, readiness meter, GEPA spike, conditional fine-tune) and raises tenant-consent/legal questions for Ms. Thư. Lessons land ~session 3.5. Highest monthly cost ($35-80)."}
-      ],
-      "winner": "A. Writing Memory v1",
-      "grafts": [
-        "From C: an L0 lexicon-only release before P2/AA-729, proven by $0 R0 replay, plugged into the AA-800 layers after PR #869 — visible 'stops writing X' around session 2.",
-        "From C: CIPHER-style per-tenant preference summary (<= 5 statements) as a tenant-scope rule kind.",
-        "From C: 'nothing auto-activates' — one-click admin approve for tenant releases, at least until a real tenant exists.",
-        "From C: keep writing_signal vendor-neutral and add a 'clean pairs per writer' counter; no export path now.",
-        "From B: judge calibration gate (kappa >= 0.6 vs Nghiệp-anchored labels; soft-only otherwise; re-check after model/rubric change).",
-        "From B: edit-pair replay hit rate KPI.",
-        "From B: persist every T9 attempt's text and ledger (G4).",
-        "From B: enforce activation with DB CHECK/trigger + API check + CI test for tenant-A to tenant-B resolve; byte-identical R0 replay with an empty release before memory_enabled.",
-        "From B: public-repo rule, tenant offboarding deletion (DRY RUN), AI Use Register entry (AA-804)."
-      ],
-      "flaws_in_winner": [
-        "Time to value hinges on AA-729; no lexicon-only fast path.",
-        "Tenant voice learning likely empty on Dev with 4 synthetic tenants and one reviewer; platform rules in practice only from the >= 5% gate-recurrence route.",
-        "Dev-phase auto-promotion of tenant releases; fidelity gate leans on uncalibrated AA-803 and unbuilt AA-845 reject truth.",
-        "approval_basis tenant_final_edit relies on fidelity filter + masking; residual masking risk unmeasured.",
-        "No judge-calibration precondition (content_piece_label has 1 insert).",
-        "minutes_to_fix and light-edit KPIs depend on labels that barely exist.",
-        "Operational surface for one reviewer; <= 30 min/week asserted, not evidenced.",
-        "Unknowns: T2 stamp column, audit_log sentence-edit volume, current T2 unit cost, prompt caching on acc3.",
-        "Cost estimate omits forced R2 reruns from AA-787 gate rename and route/model changes."
-      ]
-    },
-    {
-      "judge": 2,
-      "lens": "engineering, safety and schema correctness",
-      "scores": [
-        {"option": "A. Writing Memory v1", "quality_gain": 4, "safety": 5, "cost": 4, "time_to_value": 4, "operability": 4, "total": 21,
-         "why": "Reuses existing injection points (lessons append verified at s1_batch.py L108-121, render_brand_block good_examples, _repair_feedback, AA-800 layers); no slot refactor. Strongest safety design: constraint-only lint, adds_unsourced_claim quarantine, entity-masked 'style only' exemplars, scope CHECK, no aa_app_user grant, isolation probe as hard stop, activation refused by CHECK without eval and shadow, pointer-flip rollback. Correctly spots the trap: T2 runs the S1 graph (stages.py stage_for, AA-763, verified), so fixing the stage mismatch (flag_fix_node.py L733, verified) would leak tenant text into a global prompt. Per-rule attribution via rule_ids stamps. Loses points: no kappa anchor, tenant auto-promotion, a few schema errors."},
-        {"option": "B. GWO", "quality_gain": 4, "safety": 4, "cost": 3, "time_to_value": 2, "operability": 2, "total": 15,
-         "why": "Best eval discipline (first-class golden tables, holdout, per-item results, kappa >= 0.6, candidate funnel, edit-pair replay KPI, public-repo rule, offboarding lifecycle). But its spine is a refactor of all writer/repair prompts into DB-resolved slots with a wide blast radius (shared graph), ~8 new/altered tables, and a GEPA-lite optimiser that needs a full valset pass per candidate on very thin data (OPRO-style overfitting regime). 7-8 sessions; heavy weekly campaign cadence for one reviewer."},
-        {"option": "C. Writer Flywheel", "quality_gain": 4, "safety": 3, "cost": 3, "time_to_value": 3, "operability": 3, "total": 16,
-         "why": "Solid P0 (same-transaction record_writer_feedback, source_audit_id uuid matching audit_log.id, async fidelity_status). Honest about vendor churn. But widest scope (six layers, preference pairs, CIPHER, GEPA spike, SFT/DPO JSONL exports to S3, cross-region fine-tune) adds a tenant-text-at-rest surface not needed now; fine-tuning effectively unavailable; 'nothing auto-activates' makes the single reviewer the bottleneck; $35-80/month; less rigorous release/attribution (rule_set_version hash)."}
-      ],
-      "winner": "A. Writing Memory v1",
-      "grafts": [
-        "From B: first-class golden set tables (eval_golden_set, eval_golden_item with tune/holdout, stratum, traps, edit_pair_event_id, tenant partition; eval_item_result with per-item gate_ledger, jev, judge, b_class_faults, cost) before release 1; prompt_eval_runs CHECK allows only s1_old/s1_from_atom today (dump L2993).",
-        "From B: judge calibration rule (kappa >= 0.6 vs Nghiệp-anchored AA-783 labels for hard stops; soft-only otherwise; re-check after route/rubric change).",
-        "From B: a 'reverify' release state on golden-set version, model route or AA-787 taxonomy change; R2 re-run queued for approval, not auto-run.",
-        "From B: edit-pair replay hit rate KPI and candidate-funnel KPI (rollback rate > 20% means gates too weak).",
-        "From B: public-repo rule — golden fixtures, edit pairs and exemplars only in DB or S3 bronze; repo tests use synthetic fixtures.",
-        "From B: delete tenant rows in writing_signal / writing_exemplar and tenant releases on offboarding (DRY RUN); register new stores in the AI Use Register (AA-804, ecosystem ADR 0009 reserved).",
-        "From B: P0 persists every T9 attempt (G4); fold AA-900 (prompt register, manual eval gate) into the Releases tab.",
-        "From C: record_writer_feedback helper in the same transaction with async fidelity_status; grey-zone events need admin confirm until AA-803 is calibrated.",
-        "From C: capture-completeness KPI (>= 80% of admin events carry a reason_code) and a gate alias map for the AA-787 rename (27 -> ~18).",
-        "From C: passive fine-tune readiness counter as a tile only; training use of tenant text off by default and a business decision for Ms. Thư.",
-        "From C: CIPHER-style per-tenant preference summaries (<= 5 statements) as a tenant-scope writer_instruction kind in P4/P5."
-      ],
-      "flaws_in_winner": [
-        "Schema: writing_signal.audit_log_id declared bigint but acp_shared.audit_log.id is uuid; audit_log.tenant_id is varchar(50), not uuid.",
-        "No place to stamp memory_release_id on T2: tenant_tour_versions has no metadata or writer_input column (only rewritten_content jsonb) -> needs a nullable generation_meta jsonb migration.",
-        "Tenant-scope auto-promotion in dev = promotion on noise; per DM-11.5 the first paid tenant/prod must switch to a human click; ADR should state it as a dated invariant.",
-        "Eval combinatorics (6 writer keys + stacked tenant layers) can exceed $15/run and $30-50/month; needs a monthly budget and R2 limited to affected strata.",
-        "Statistical power: <= 50 paired items will mostly be inconclusive; needs a 'non-inferior on hard stops + directional gain, pooled across rounds' fallback.",
-        "Hard dependency on AA-729; decouple P0 and R0 lexicon rules to ship value earlier.",
-        "Tenant text duplicated into shared tables needs RLS + FORCE ROW LEVEL SECURITY or an explicit cis_app-only model with code-side filtering; the option does not say whether cis_app bypasses RLS.",
-        "Effort likely understated: plan for ~8 sessions, not 6.",
-        "ADR numbering: an app ADR '0009' collides by name with the reserved ecosystem ADR 0009 (AI platform, AA-804); use a distinct title and cite it."
-      ]
-    }
+[
+ {
+  "scores": [
+   {
+    "option": "Writing Memory v1: governed rule bank + approved-exemplar retrieval, replay-gated shadowed releases (no fine-tuning)",
+    "quality_gain": 4,
+    "safety": 4,
+    "cost": 4,
+    "time_to_value": 4,
+    "operability": 3,
+    "total": 19,
+    "why": "Best fit for Ms. Thư's lens. One loop covers A1, T2 and T9. It attacks the two things she sees: recurring errors (rules mined from gate_ledger, repair_log and the audit_log admin_sentence_* before/after) and tenant voice (k=3 tenant-filtered, entity-masked exemplars that replace the static good_examples slot at brand_pack.py L135-137). It reuses injection points that already exist: the LESSONS append at s1_batch.py L108-121 and admin_pipeline.py L560-583, render_brand_block and _repair_feedback. So the first rule release can reach all writers around session 4 of about 6, with no prompt refactor. Rules may only constrain (enforced by a lint), there is a B-class hard stop, RLS plus a 5-gram guard, and rollback is a pointer flip. Cost is the lowest of the three: $30-50 a month, no new AWS service. Operability loses a point because it adds four new tables, a five-tab admin page and auto-promoted tenant releases, which one reviewer has to watch. I spot-checked P0's broken-loop finding and it holds: flag_fix_node.py L733 writes stage='audit' while s1_batch.py L112 and admin_pipeline.py L565 read S1_rewrite/S1_editor, and db-schema-reference.md L4290 shows 0 inserts and 1,956 index scans."
+   },
+   {
+    "option": "Golden-gated Writer Optimiser (GWO): eval-first, GEPA-style slot optimisation with click-to-promote",
+    "quality_gain": 3,
+    "safety": 5,
+    "cost": 3,
+    "time_to_value": 2,
+    "operability": 2,
+    "total": 15,
+    "why": "Strongest safety design: locked fidelity slots, a DB trigger that needs a passing holdout run, judges accepted only at κ ≥0.6 against Nghiệp's anchor labels, a byte-identical R0 replay before the registry goes on, a public-repo rule, and tenant offboarding deletion. Time to value is the worst of the three. Golden sets and calibrated judges (which absorb AA-729 and AA-783, both Backlog) and a refactor of the A1/T2/T9 prompts into slots all come before any optimiser candidate. The first automated improvement lands in P3, around sessions 5-7 of 7-8. Tenant voice learning is P4, and exemplars are optional, so Ms. Thư sees the least visible voice gain soonest. GEPA campaigns run at $10-25 each, up to $70 a month. Writer Lab (six areas) plus nine new or altered tables is heavy to run with one active reviewer."
+   },
+   {
+    "option": "Writer Flywheel: capture first, prompt-layer learning now, fine-tune only on evidence",
+    "quality_gain": 4,
+    "safety": 4,
+    "cost": 3,
+    "time_to_value": 3,
+    "operability": 2,
+    "total": 16,
+    "why": "Broad and evidence-aware. The L0 learned lexicon is the cheapest visible win: deterministic, $0 R0 replay. Its lessons, exemplars and CIPHER-style tenant preference summary directly target tenant voice, and nothing auto-activates. The cost is scope a product owner does not need now: a preference-pair table, SFT/DPO dataset export to new S3 prefixes, a fine-tune readiness meter, a GEPA spike ($20-60) and a conditional fine-tune ($160-400 a run). Fine-tuning also raises tenant-consent and legal questions that Ms. Thư would have to decide. P1 needs Nghiệp's AA-729 and AA-845 answers before lessons ship in P2, which lands around session 3.5. Six job kinds, four or more tables and a six-tab page weigh on operations. Monthly cost is the highest: $35-80."
+   }
   ],
-  "totals": {"A. Writing Memory v1": 40, "C. Writer Flywheel": 32, "B. GWO": 30},
-  "consensus_winner": "A. Writing Memory v1"
-}
+  "winner": "Writing Memory v1: governed rule bank + approved-exemplar retrieval, replay-gated shadowed releases (no fine-tuning)",
+  "grafts": [
+   "From the Flywheel: ship an L0 lexicon-only release BEFORE P2/AA-729. A lexicon rule (a phrase cut by admins at least N times, written into the AA-800 signature-vocabulary layers after PR #869) can be proven by R0 deterministic replay on stored content_piece texts and ledgers at $0. That gives Ms. Thư a visible 'stops writing X' improvement around session 2 instead of session 4.",
+   "From the Flywheel: CIPHER-style per-tenant preference summary (at most 5 plain-language statements mined from that tenant's fidelity-passed edits) as a tenant-scope rule kind. It is cheaper than exemplars and works on fewer edits, which suits Dev's roughly 48 T2 versions and 4 synthetic tenants.",
+   "From the Flywheel: the 'nothing auto-activates' rule. Replace Option A's dev-phase auto-promotion of tenant releases with a one-click admin approve, or at least require it until a real tenant exists.",
+   "From the Flywheel: keep writing_signal vendor-neutral and add a small 'clean pairs per writer' counter on the Metrics tab, so fine-tuning stays a future option without building the export or S3 path now.",
+   "From GWO: a judge calibration gate. A judge counts toward a hard or soft stop only at Cohen's κ ≥ 0.6 against Nghiệp-anchored labels (AA-783), is soft-only otherwise, and is re-checked after any model or rubric change.",
+   "From GWO: the 'edit-pair replay hit rate' KPI (does the writer still produce the pattern a human removed?). It is the most legible 'learns from human edits' number to show Ms. Thư, and it works on golden edit-pair items before real tenant volume exists.",
+   "From GWO: persist every T9 attempt's text and ledger (gap G4), not only the single discarded attempt, so the mining job sees full repair trajectories.",
+   "From GWO: enforce release activation with a DB trigger or CHECK plus an API check (Option A already proposes a CHECK; also add a CI unit test for the tenant-A to tenant-B resolve). Add a byte-identical R0 replay of the injection path with an empty release before turning memory_enabled on.",
+   "From GWO: the public-repo rule (golden fixtures, edit pairs and tenant text only in the DB or S3 bronze, never in AA-CIS-App), tenant offboarding deletion of writing_signal, writing_exemplar and tenant rules under the DRY RUN procedure, and an AI Use Register entry (AA-804)."
+  ],
+  "flaws_in_winner": [
+   "Time to value hinges on AA-729. P2 cannot exit without the golden set (Backlog; the a/có/có decision is pending), so no rule reaches a writer before session 4 at the earliest. The plan has no lexicon-only fast path that would need only R0.",
+   "Tenant voice learning will likely stay empty on Dev. The thresholds (tenant rule: ≥2 edits on ≥2 pieces; platform rule: ≥3 tenants or ≥2 reviewers) are hard to meet with 4 synthetic tenants and one active reviewer (the trang account is inactive). Platform rules will in practice come only from the ≥5% gate-recurrence route, and Ms. Thư will see little tenant-voice gain until real tenants arrive.",
+   "Dev-phase auto-promotion of tenant-scope releases is weaker than the 'nothing auto-activates' standard of the other options. Its fidelity gate also leans on a1_promise_unsupported (AA-803), which is not yet calibrated, and on Jev reject truth, which AA-845 has not built.",
+   "Exemplar approval_basis 'tenant_final_edit' lets tenant-written text become an exemplar. The design depends on the fidelity filter plus entity masking to catch added claims, and the residual risk of masking missing an entity is acknowledged but not measured.",
+   "Judge calibration has no gate. Option A says that labels anchored by Nghiệp calibrate the judge and reports judge test-retest, but it never makes a calibrated judge (for example κ ≥ 0.6) a precondition for its soft and hard stops, while content_piece_label has only 1 insert.",
+   "The minutes_to_fix and light-edit-or-better KPIs depend on human labels that barely exist (1 label; the AA-783 pack is unlabelled). The 'less review time' outcome Ms. Thư cares about may stay unmeasurable for several weeks.",
+   "Operational surface for one reviewer: four new tables, two widened CHECKs, a five-tab /admin/writing-memory page, a weekly mining job and shadow replays. Nghiệp's ≤30 min/week budget is asserted, not evidenced.",
+   "Unknowns left in the plan: the tenant_tour_versions writer-input/metadata column for the release stamps; the audit_log admin_sentence_* volume (about 1,324 rows across all actions, split unknown); the current T2 unit cost; and whether prompt caching on the acc3 route would offset the +3-8% token overhead.",
+   "The cost estimate leaves out forced R2 reruns that AA-787's gate rename (27 to ~18 gates) and any llm_role_config route or model change will trigger, both of which are likely in the near term."
+  ]
+ },
+ {
+  "scores": [
+   {
+    "option": "Writing Memory v1 (governed rule bank + approved-exemplar retrieval, release-gated, no fine-tuning)",
+    "quality_gain": 4,
+    "safety": 5,
+    "cost": 4,
+    "time_to_value": 4,
+    "operability": 4,
+    "total": 21,
+    "why": "It reuses the injection points that already exist and only adds content to them: the lessons append in s1_batch.py L108-121 (verified), render_brand_block good_examples, _repair_feedback, and the AA-800 lexicon layers. That keeps engineering risk low; nothing has to be refactored to slots. Its safety design is the strongest of the three. Rules may only constrain (enforced by a lint), and edits flagged adds_unsourced_claim are quarantined. Exemplars are entity-masked and labelled 'style only'. A CHECK ties scope to tenant_id, aa_app_user gets no grant, an isolation probe acts as a hard stop, and activation is refused by CHECK without an eval run and a shadow run. Rollback is a single pointer flip with no deploy. It also correctly spots the real trap: T2 runs the same S1 graph (stages.py stage_for, AA-763, verified), so 'fixing' the stage='audit' vs S1_* mismatch (flag_fix_node.py L733, verified) would leak tenant text into a global prompt. Measurement is attributable per rule through rule_ids stamps. About 6 sessions and $30-50 a month fit one engineer plus agents. It loses points because there is no explicit judge-calibration anchor (κ), tenant releases auto-promote, and a few schema details are wrong (see flaws)."
+   },
+   {
+    "option": "Golden-gated Writer Optimiser (GWO): GEPA-style prompt-slot optimisation with click-to-promote",
+    "quality_gain": 4,
+    "safety": 4,
+    "cost": 3,
+    "time_to_value": 2,
+    "operability": 2,
+    "total": 15,
+    "why": "Its eval discipline is the best of the three. Golden sets and items are first-class versioned tables with tune and holdout splits, and per-item results are stored. Judges count only at κ ≥ 0.6 against Nghiệp-anchored labels, and an uncalibrated judge is soft-only. There is a candidate-funnel and rollback-rate metric, an edit-pair replay KPI, and an explicit public-repo rule and tenant-offboarding lifecycle. The cost is that its spine is a refactor of every A1/T2/T9 writer and repair prompt into DB-resolved slots. That needs a byte-identical replay before it can be switched on, and T2 shares the LangGraph S1 graph, so the blast radius is wide. It adds about 8 new or altered tables and a GEPA-lite optimiser. The optimiser needs a full valset pass per candidate, against about 251 T9 pieces, about 48 T2 versions, 4 synthetic tenants and 1 human label: the regime where OPRO-style overfitting appears and the optimiser has little real signal. Time to value is 7-8 sessions, and P3 only gets its first automated gain after P1 (AA-729, AA-783) and P2 (refactor) both land. The weekly campaign and approval cadence is a heavy operating load for one reviewer."
+   },
+   {
+    "option": "Writer Flywheel: capture first, prompt layers L0-L3, offline GEPA L4, fine-tune L5 on evidence",
+    "quality_gain": 4,
+    "safety": 3,
+    "cost": 3,
+    "time_to_value": 3,
+    "operability": 3,
+    "total": 16,
+    "why": "P0 is solid. A single record_writer_feedback helper writes in the same transaction as the edit, source_audit_id uuid matches the actual audit_log.id type, and fidelity_status is pending/grey/fail and filled asynchronously. Its layering is honest about vendor churn. The scope, though, is the widest of the three: six layers, a preference-pair table, CIPHER summaries, a GEPA spike, SFT/DPO JSONL exports to a new S3 prefix or bucket, and a P5 fine-tune that would cross regions. That export path adds a tenant-text-at-rest surface (S3, IAM, consent) that the user's goal does not need now. Fine-tuning is effectively unavailable (Bedrock Claude fine-tuning EOL; OpenAI closing 06/01/2027) and the 1k-pair trigger is far off. 'Nothing auto-activates', including tenant lessons, so the single reviewer becomes the bottleneck for every tenant voice item. At $35-80 a month it is the most expensive of the three, and it says least about how it will be operated. Its L0-L3 core is close to option A, but with less rigour on the release and attribution model (rule_set_version hash rather than per-release eval CHECKs)."
+   }
+  ],
+  "winner": "Writing Memory v1: a governed rule bank plus approved-exemplar retrieval, each activated only by a replay-gated, shadowed release (no fine-tuning)",
+  "grafts": [
+   "From GWO: make the golden set first-class before release 1: shared.eval_golden_set, shared.eval_golden_item (split tune/holdout, stratum, traps, edit_pair_event_id, tenant partition) and shared.eval_item_result (per-item gate_ledger, jev, judge, b_class_faults, cost). Today option A packs everything into prompt_eval_runs.details, and prompt_eval_runs currently allows only 's1_old'/'s1_from_atom' (db-schema-reference.md L2993).",
+   "From GWO: add a judge calibration rule. A judge counts toward a hard stop only at Cohen's κ ≥ 0.6 against Nghiệp-anchored labels (AA-783 pack); otherwise it is soft-only. Re-check after any route or rubric change in llm_role_config. Option A mentions anchoring, but sets no acceptance threshold.",
+   "From GWO: add a 'reverify' release state, set automatically on a golden-set version, model route, or AA-787 gate-taxonomy change. The release stays active but is flagged, and the R2 re-run is queued for approval, not auto-run (paid-runs-subset).",
+   "From GWO: add the edit-pair replay hit rate ('does the writer still produce the human-removed pattern?') as the 'learns from human edits' KPI, and the candidate-funnel KPI (proposed → R0 → R2 → holdout → promoted → rolled back; a rollback rate above 20% means the gates are too weak).",
+   "From GWO: add the public-repo rule (AA-CIS-App is public, D-25/DM-6.10). Golden fixtures, edit pairs and exemplars live only in the DB or the S3 bronze bucket; repo tests use synthetic fixtures like tests/unit/aa791_t9_fault_set.py.",
+   "From GWO: delete tenant rows in writing_signal and writing_exemplar, and tenant releases, on tenant offboarding (DRY RUN procedure). Register these new tenant-text stores in the AI Use Register (AA-804, ecosystem ADR 0009, reserved in docs/adr/README.md L23).",
+   "From GWO: P0 persists every T9 attempt's text and ledger (G4), not only the one discarded attempt. Fold AA-900 (prompt register, manual eval gate) into the Releases tab so there is a single place to manage prompts.",
+   "From Flywheel: one record_writer_feedback helper called in the same DB transaction as every edit/decision write, with an async fidelity_status pending/grey/pass/fail filled by a job, so the edit request path has no LLM call. Grey-zone events need admin confirm until AA-803 is calibrated.",
+   "From Flywheel: add capture completeness as a loop-health KPI (≥80% of admin events carry a reason_code), and key rules on reason_code plus a gate alias map so the AA-787 rename (27 → ~18 gates) does not orphan them.",
+   "From Flywheel: a passive fine-tune readiness counter (clean fidelity-passed platform pairs per writer) shown as a tile only, with no JSONL export, no S3 bucket and no consent flow in v1. Training use of tenant text stays off by default and is a business decision for Ms. Thư.",
+   "From Flywheel: CIPHER-style per-tenant preference summaries (≤5 statements) as a later tenant-scope writer_instruction rule kind in P4/P5, going through the same release gate."
+  ],
+  "flaws_in_winner": [
+   "Schema error: writing_signal.audit_log_id is declared bigint, but acp_shared.audit_log.id is uuid NN and audit_log.tenant_id is varchar(50), not uuid (db-schema-reference.md, acp_shared.audit_log block). The backfill join and the tenant_id cast must handle both.",
+   "No place to stamp memory_release_id on T2: gold_aa_internal.tenant_tour_versions has no metadata or writer_input column; its only jsonb is rewritten_content NN (dump checked 20/10/2026). Stamping on T2 therefore needs a migration (a nullable generation_meta jsonb), or attribution has to fall back to llm_call_log.quality_signal alone, which is weaker per-version attribution. The option left this as 'unknown'.",
+   "Tenant-scope releases auto-promote in the dev phase. With 4 synthetic tenants, that is promotion on noise. Per DM-11.5, the first paid tenant or first prod must switch this to a human click, and the ADR should state that switch as a dated invariant rather than leave it implicit.",
+   "Eval combinatorics: a release per writer (6 writer keys) plus stacked tenant layers, each needing R0/R1/R2 and a shadow replay of 50 inputs, can exceed the $15 per-run cap and the claimed $30-50 a month. No per-tenant golden partition exists to score tenant layers against. Needed: a budget per month, not only per run, plus R2 limited to the affected strata.",
+   "Statistical power: McNemar/Wilcoxon on ≤50 paired items, with Dev signal this thin (content_piece_label 1 insert, AA-783 unlabelled, decision_log.outcome empty per AA-845), will mostly be inconclusive. The promotion rule needs an explicit 'non-inferior on hard stops plus a directional gain, pooled across rounds' fallback, or nothing ever promotes.",
+   "Hard dependency on AA-729 (Backlog). P2 cannot exit without it, and P3/P4 sit behind P2, so learned rules affect output no earlier than session 4. Capture (P0) and R0 lexicon rules (no golden set needed, $0) should be decoupled so some value ships earlier.",
+   "Option A says 'no tenant text' at platform scope, yet tenant before/after text is still duplicated into shared.writing_signal and shared.writing_exemplar, which are CIS-owned shared tables. That needs RLS plus FORCE ROW LEVEL SECURITY, or an explicit cis_app-only grant model with code-side filtering like audit_log. The option claims a tenant_isolation policy on cis_app-read tables but does not say whether cis_app bypasses RLS.",
+   "Effort is likely understated. About 6 sessions covers 4 new tables, 2 widened CHECKs, a mining job, an eval runner, a shadow job, an entity-masking pipeline, embeddings and a five-tab admin page. GWO/Flywheel's 7-8 sessions for similar scope is more realistic, so plan for about 8.",
+   "ADR numbering ambiguity: app ADR 0009 (apps/AA-CIS-App/docs/adr, where 0001-0008 exist) collides by name with the reserved ecosystem ADR 0009 for the AI platform (AA-804). The app ADR should cite it and use a distinct title to avoid confusion."
+  ]
+ }
+]
