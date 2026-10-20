@@ -1,0 +1,701 @@
+{
+  "intro": "Chị Thư ơi, bên em đang làm phần CRM cho đại lý (nằm trong tenant portal), đúng theo spec chị đưa; phần kỹ thuật bên em tự lo. Những việc dưới đây là chuyện kinh doanh, pháp lý, tiền hoặc chọn dịch vụ bên ngoài, nên em xin ý kiến của chị. Bây giờ chưa có gì gấp: anh Nghiệp đã chốt làm xong đủ 23 phần của spec rồi mới cho đại lý thật dùng, trong lúc làm bên em thử bằng đại lý giả, dữ liệu giả nên chưa phải trả tiền cho dịch vụ nào. Mỗi câu đều có đề xuất của bên em, chị chỉ cần đánh dấu đồng ý hoặc ghi ý của chị (giá ghi bằng USD, em xem trên trang của từng hãng ngày 20/10/2026).",
+  "groups": [
+    {
+      "title": "Giá cho đại lý",
+      "intro": "",
+      "items": [
+        {
+          "id": "1.1",
+          "question": "(H2) Đại lý trả gì để dùng CRM? Chị cho em biết chia tính năng theo gói thế nào, hoặc cứ để miễn phí hết như spec?",
+          "proposed_answer": "CRM đi theo gói của tenant portal (đại lý ở gói portal nào thì có phần CRM tương ứng): các phần chính miễn phí ở mọi gói; gói cao hơn có thêm AI soạn nháp, báo cáo đầy đủ, nhiều người dùng hơn; đại lý tự trả các phí của bên thứ ba qua tài khoản của họ (tin WhatsApp, SMS, phí thẻ).",
+          "why": "Spec ghi \"miễn phí cho đối tác\", anh Nghiệp đề xuất thêm việc đi theo gói portal. Chi phí AA gánh (ước tính): khoảng $8–9 một đại lý mỗi tháng khi có 10 đại lý, chưa tính tiền ký điện tử (xem 3.1); con số giảm dần khi có nhiều đại lý hơn.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "b",
+              "label": "Miễn phí hết như spec"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "1.2",
+          "question": "(H9) Giá net cho đại lý.",
+          "proposed_answer": "Dùng bảng giá net B2B đang có (biên 15%), và đại lý tự đặt giá bán cho khách của họ.",
+          "why": "Anh Nghiệp để chị quyết.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "1.3",
+          "question": "AA thu tiền đại lý thế nào khi đại lý bán tour của AA? Chị cho em biết: đại lý trả trước hay được nợ; cọc bao nhiêu %; xuất hoá đơn bằng tiền gì; phí thẻ 3% có áp cho chuyển khoản không.",
+          "proposed_answer": "Bên em chưa có đề xuất riêng cho mục này. Theo quyết định cũ, AA xuất hoá đơn cho đại lý; các chi tiết còn lại xin chị cho ý kiến.",
+          "why": "Theo quyết định cũ, AA xuất hoá đơn cho đại lý.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Giữ cách AA xuất hoá đơn cho đại lý; chị ghi các chi tiết bên dưới"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "1.4",
+          "question": "Có cấm đại lý báo giá thấp hơn giá \"từ …\" công khai của AA không?",
+          "proposed_answer": "Chỉ ghi trong hợp đồng; CRM chỉ cảnh báo chứ không chặn.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "1.5",
+          "question": "Ai nhập giá net của nhà cung cấp và bảng giá tour vào hệ thống Booking, và khi nào?",
+          "proposed_answer": "Trong lúc chờ, bên em dùng giá giả để thử. Chị cho em biết người nhập và thời điểm.",
+          "why": "Báo giá tự động cho khách cần số liệu này.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đã đọc; chị ghi tên người và thời điểm bên dưới"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn trao đổi thêm"
+            }
+          ],
+          "recommended": "a"
+        }
+      ]
+    },
+    {
+      "title": "Pháp lý và hợp đồng",
+      "intro": "",
+      "items": [
+        {
+          "id": "2.1",
+          "question": "(H5) Ký hợp đồng với đại lý bằng pháp nhân nào của AA, và có cần luật sư ngay không?",
+          "proposed_answer": "Ký bằng pháp nhân AA đang dùng cho hợp đồng đối tác (chị cho em tên); dùng mẫu thoả thuận dữ liệu (DPA) em đã soạn; chưa cần luật sư khi chưa có đại lý thật. Em soạn sẵn bản tóm tắt cho luật sư và chỉ gửi khi có một trong ba điều: đại lý ở Việt Nam hoặc châu Âu muốn dùng dữ liệu thật; có đại lý thứ 6; 60 ngày sau khi có khách thật đầu tiên.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "2.2",
+          "question": "Câu hứa về quyền riêng tư cần sửa thêm một chút.",
+          "proposed_answer": "Hứa đúng như sau: \"Nhân viên AA không mở được hồ sơ khách trong công việc bình thường. Chỉ trong trường hợp khẩn cấp mới mở được, mỗi lần một đại lý, phải đăng nhập hai bước, và việc đó tự động hiện trong nhật ký của chính đại lý.\"",
+          "why": "Anh Nghiệp đã tạm đồng ý thay chị câu \"nhân viên AA không mở được hồ sơ khách\" (H3). Về kỹ thuật thì AA sở hữu tài khoản máy chủ, nên trong trường hợp khẩn cấp vẫn mở được.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "2.3",
+          "question": "AA hỗ trợ có được xem vào CRM của đại lý không?",
+          "proposed_answer": "Chỉ khi chủ đại lý tự bật quyền cho AA trong phần cài đặt, có thời hạn (ví dụ 24 giờ). Mọi lần xem đều được ghi lại, và chủ đại lý tắt được bất cứ lúc nào.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "2.4",
+          "question": "Khi khách hoặc đại lý yêu cầu xoá dữ liệu, mình hứa gì?",
+          "proposed_answer": "\"Xoá ngay trong ứng dụng. Không đọc lại được ở bất kỳ đâu, kể cả bản sao lưu, trong vòng 30 ngày.\"",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "2.5",
+          "question": "Nhật ký \"ai đã xem gì\" giữ bao lâu?",
+          "proposed_answer": "Đại lý xem được trong 12 tháng, sau đó lưu khoá (không sửa được) thêm 6 năm, trừ khi luật sư khuyên khác.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "2.6",
+          "question": "Khi AA ops xem thông tin khách của chuyến đã chốt, có báo cho đại lý không?",
+          "proposed_answer": "Có: đại lý thấy dòng \"AA ops đã xem thông tin chuyến X ngày Y\".",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "2.7",
+          "question": "AA ops được gửi thông tin khách nào cho khách sạn, xe?",
+          "proposed_answer": "Chỉ gửi họ tên, số người, yêu cầu ăn uống/đi lại; không gửi số hộ chiếu, trừ khi nhà cung cấp bắt buộc; mỗi lần xuất danh sách đều được ghi lại.",
+          "why": "Gửi đi là có bản sao nằm ngoài hệ thống, không tự xoá sau 90 ngày được.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "2.8",
+          "question": "Khách của đại lý sẽ thấy địa chỉ web và email gửi đi tên gì?",
+          "proposed_answer": "Một tên miền trung tính cho sản phẩm, và cho đại lý nào muốn thì dùng tên miền riêng của họ.",
+          "why": "Hiện bên em dùng tên miền thử nghiệm. Mua tên miền mới thường vài chục USD mỗi năm (ước tính).",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "b",
+              "label": "Một tên miền chung mang tên AA"
+            },
+            {
+              "key": "c",
+              "label": "Mỗi đại lý dùng tên miền riêng của họ (đại lý tự cài đặt)"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "2.9",
+          "question": "Đăng nhập mạnh hơn cho nhân viên đại lý. Chị thấy đại lý có chịu không?",
+          "proposed_answer": "Chủ đại lý và nhân viên bán hàng đăng nhập thêm một bước: passkey trên điện thoại, hoặc app xác thực. Lần đầu mất thêm khoảng 1 phút.",
+          "why": "Nhân viên đại lý xem được số hộ chiếu của khách.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "2.10",
+          "question": "Dịch vụ AI chạy ở tài khoản máy chủ thứ hai của AA (mua qua một đơn vị khác, eCloudvalley). Chị đồng ý không?",
+          "proposed_answer": "Em ghi tài khoản này vào danh sách \"bên xử lý dữ liệu\" trong hợp đồng với đại lý.",
+          "why": "Nếu chị không muốn, phần AI sẽ tắt cho tới khi có cách khác.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "b",
+              "label": "Không đồng ý: tắt phần AI cho tới khi có cách khác"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        }
+      ]
+    },
+    {
+      "title": "App và dịch vụ bên ngoài có phí",
+      "intro": "Tất cả các mục dưới đây chưa cần trả tiền: trên môi trường thử, bên em dùng bản miễn phí hoặc bản test. Chỉ cần quyết trước khi có đại lý thật.",
+      "items": [
+        {
+          "id": "3.1",
+          "question": "Ký điện tử: khách bấm ký điều khoản và waiver trekking ngay trên trang của đại lý, hệ thống lưu bản PDF đã ký kèm nhật ký ký. Chị chọn cách nào?",
+          "proposed_answer": "1. Hỏi hãng bảo hiểm trước, vì họ chấp nhận cách nào thì mình chọn cách đó. 2. Nếu họ chấp nhận chữ ký đơn giản thì AA tự làm (rẻ nhất, dữ liệu không ra ngoài). 3. Nếu họ muốn hãng có tên tuổi thì chọn BoldSign, hoặc Documenso Teams cho giai đoạn đầu.",
+          "why": "Spec đòi ký điện tử, lưu PDF và nhật ký ký, và hãng bảo hiểm chấp nhận; spec không chỉ định hãng nào. Anh Nghiệp tạm chọn Documenso Teams cho giai đoạn đầu (H12) nhưng muốn chị quyết lại ở đây.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "b",
+              "label": "Documenso Teams: $40/tháng, trả $480 một năm (trang ký có thể hiện chữ \"Documenso\"; tối đa 5 người dùng)"
+            },
+            {
+              "key": "c",
+              "label": "Documenso Platform: $250/tháng, trả $3.000 một năm (mang thương hiệu riêng, không giới hạn)"
+            },
+            {
+              "key": "d",
+              "label": "BoldSign API: từ $30/tháng, gồm 40 lượt ký, thêm $0,75 mỗi lượt (rẻ khi ít khách; có thương hiệu riêng)"
+            },
+            {
+              "key": "e",
+              "label": "Dropbox Sign API: từ $75/tháng ($900/năm) (hãng lớn, đắt hơn)"
+            },
+            {
+              "key": "f",
+              "label": "Tự cài Documenso trên máy chủ của AA: ≈ $5–17/tháng + chứng thư số (giá chưa rõ) (dữ liệu không ra ngoài; bên em tự vận hành)"
+            },
+            {
+              "key": "g",
+              "label": "AA tự làm chữ ký điện tử đơn giản: ≈ $0–1/tháng (khách nhận mã qua email, gõ tên, bấm \"Tôi đồng ý\"; hệ thống niêm phong PDF)"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "3.2",
+          "question": "WhatsApp (và Messenger, Instagram): đại lý nhắn tin với khách ngay trong CRM, bằng tài khoản WhatsApp Business của chính đại lý.",
+          "proposed_answer": "Đi thẳng với Meta (rẻ nhất); chị cho em biết pháp nhân nào đăng ký; bắt đầu thủ tục khi chị chọn đại lý thật đầu tiên, hoặc sớm hơn nếu chị muốn kịp giờ.",
+          "why": "Phí: AA $0, Meta tính phí tin nhắn thẳng vào thẻ của đại lý. AA cần đăng ký làm \"Tech Provider\" với Meta: xác minh doanh nghiệp và Meta duyệt app, mất 2–4 tuần trở lên, và cần đứng tên một pháp nhân AA.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "b",
+              "label": "Dùng Twilio hoặc 360dialog như spec ghi (thu thêm phí trung gian)"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "3.3",
+          "question": "SMS (Twilio): gửi tin SMS cho khách.",
+          "proposed_answer": "Đồng ý cách: mỗi đại lý dùng tài khoản Twilio của chính họ và tự trả.",
+          "why": "Phí: AA $0.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "3.4",
+          "question": "Thanh toán thẻ (Stripe): khách trả cọc và trả nốt bằng link thanh toán; tiền vào thẳng tài khoản Stripe của đại lý. Chị cho em biết pháp nhân nào đứng tên tài khoản thật.",
+          "proposed_answer": "Dùng Stripe cho đại lý ở nước có Stripe (ví dụ Úc).",
+          "why": "Phí: AA $0, Stripe tính phí thẻ vào đại lý. Stripe không hoạt động ở Việt Nam. Để tiền vào thẳng tài khoản của đại lý, AA cần một tài khoản Stripe làm \"nền tảng\" (Stripe Connect) đứng tên một pháp nhân AA; trên môi trường thử chỉ cần tài khoản test, miễn phí.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "3.5",
+          "question": "Cổng thanh toán cho đại lý Việt Nam (cổng nội địa thay cho Stripe).",
+          "proposed_answer": "Trong lúc chờ, đại lý ghi tay khoản đã thu; chị chọn giúp em vài cổng để xin báo giá; mục này chưa gấp.",
+          "why": "Phí: chưa có báo giá. Đại lý Việt Nam chưa dùng dữ liệu thật.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "3.6",
+          "question": "Gửi email bằng Gmail của đại lý (Google): email trả lời khách gửi từ chính Gmail của đại lý và nằm trong hộp \"Đã gửi\" của họ.",
+          "proposed_answer": "Chị cho em biết pháp nhân và tên miền đứng tên để Google xác minh app (miễn phí).",
+          "why": "Phí: $0. Bên em cố ý chỉ xin quyền \"gửi thư\", nên tránh được đợt kiểm định bảo mật bắt buộc mỗi năm của Google (CASA), theo tìm hiểu trước đây tốn khoảng $675–5.400 mỗi năm, có nơi ghi cao hơn nhiều; Google không công bố bảng giá. Việc xác minh cần trang chủ và chính sách quyền riêng tư trên tên miền của AA.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "3.7",
+          "question": "Gửi email bằng Outlook (Microsoft), như 3.6 cho đại lý dùng Outlook.",
+          "proposed_answer": "Làm sau Gmail, khi có đại lý dùng Outlook.",
+          "why": "Phí: $0. Cần AA có tài khoản tổ chức Microsoft 365 và tham gia chương trình đối tác miễn phí của Microsoft.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "3.8",
+          "question": "Tường lửa web cho trang khách: chặn tấn công và spam trên form và trang của khách.",
+          "proposed_answer": "Bật lúc có đại lý thật. AA chịu khoản này (≈ $7–8/tháng).",
+          "why": "Chỉ bật khi có đại lý thật.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "3.9",
+          "question": "Luật sư: xem luật dữ liệu Việt Nam, châu Âu, Úc, hợp đồng đối tác và waiver.",
+          "proposed_answer": "Giữ như anh Nghiệp đã chốt: chưa gửi bây giờ, gửi khi chạm một trong các mốc ở 2.1.",
+          "why": "Phí: chưa có báo giá.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        }
+      ]
+    },
+    {
+      "title": "Bảo hiểm và waiver",
+      "intro": "",
+      "items": [
+        {
+          "id": "4.1",
+          "question": "(H6) Nhờ hãng bảo hiểm nào duyệt waiver trekking?",
+          "proposed_answer": "Nhờ hãng bảo hiểm AA đang dùng; chị cho em tên người liên hệ khi tiện. Em xin hỏi họ thêm: họ chấp nhận cách ký điện tử nào (mục 3.1).",
+          "why": "Câu trả lời về cách ký điện tử quyết định mình chọn dịch vụ nào ở 3.1.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "4.2",
+          "question": "(H10, anh Nghiệp đã tạm đồng ý thay chị) Mẫu điều khoản và waiver.",
+          "proposed_answer": "AA soạn một mẫu song ngữ Anh–Việt dựa trên điều khoản hiện tại. Đội của chị xem lại, và hãng bảo hiểm duyệt.",
+          "why": "Em chỉ báo để chị nắm, không cần trả lời.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đã đọc, đồng ý"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn trao đổi thêm"
+            }
+          ],
+          "recommended": "a"
+        }
+      ]
+    },
+    {
+      "title": "Đại lý thử nghiệm",
+      "intro": "",
+      "items": [
+        {
+          "id": "5.1",
+          "question": "(H4) Dùng đại lý giả trước, em báo để chị biết.",
+          "proposed_answer": "Theo ý anh Nghiệp, bên em tạo vài đại lý giả, khách giả để thử toàn bộ quy trình trên môi trường thử; chị không cần làm gì lúc này. Khi đủ 23 phần (dự kiến khoảng giữa tháng 12/2026 tới giữa tháng 1/2027, còn tuỳ tiến độ), em xin chị chọn 3–5 đại lý thân quen, ở Úc hoặc nước khác ngoài châu Âu và Việt Nam, và mỗi đại lý em xin 30 phút phỏng vấn trước khi mở.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đã đọc, đồng ý"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn trao đổi thêm"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "5.2",
+          "question": "(H1, đã chốt) Chờ xong cả 23 phần mới cho đại lý thật dùng.",
+          "proposed_answer": "Em ghi lại để mọi người cùng hiểu. Ngày 30/11 trước đây chỉ là dự kiến, không còn là hạn chót.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đã đọc, đồng ý"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn trao đổi thêm"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "5.3",
+          "question": "Khi nào bắt đầu các thủ tục với Meta, Google, Microsoft?",
+          "proposed_answer": "Bắt đầu khi chị chọn xong đại lý thật đầu tiên.",
+          "why": "Các thủ tục này mất vài tuần mỗi cái. Nếu chị muốn mở đúng ngày cho đại lý thì bắt đầu sớm hơn khoảng một tháng.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý đề xuất"
+            },
+            {
+              "key": "b",
+              "label": "Bắt đầu sớm hơn khoảng một tháng để mở đúng ngày cho đại lý"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn khác (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "5.4",
+          "question": "(H8, anh Nghiệp đã tạm đồng ý thay chị) Ai ở đội ops phụ trách nhập lịch khởi hành và xác nhận các tour \"theo yêu cầu\" trong 1 ngày làm việc?",
+          "proposed_answer": "Chị cho em tên người khi tiện.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đã đọc, đồng ý"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn trao đổi thêm"
+            }
+          ],
+          "recommended": "a"
+        }
+      ]
+    },
+    {
+      "title": "Các mục anh Nghiệp đã tạm trả lời thay chị",
+      "intro": "Chị xem lại cho chắc. Nếu đồng ý thì không cần làm gì; muốn đổi mục nào thì chị ghi lại giúp em.",
+      "items": [
+        {
+          "id": "H3",
+          "question": "Câu hứa về quyền riêng tư.",
+          "proposed_answer": "Đã sửa thêm ở 2.2.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý như anh Nghiệp đã trả lời"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn đổi (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "H7",
+          "question": "Zalo.",
+          "proposed_answer": "Bản đầu chưa làm Zalo.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý như anh Nghiệp đã trả lời"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn đổi (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "H8",
+          "question": "Xác nhận tour.",
+          "proposed_answer": "Tour có lịch cố định thì tự xác nhận; tour khác là \"theo yêu cầu\", AA ops xác nhận trong 1 ngày làm việc (xem 5.4).",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý như anh Nghiệp đã trả lời"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn đổi (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "H10",
+          "question": "Mẫu điều khoản và waiver.",
+          "proposed_answer": "AA soạn mẫu điều khoản và waiver song ngữ (xem 4.2).",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý như anh Nghiệp đã trả lời"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn đổi (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "H11",
+          "question": "AA xem số liệu tổng hợp của đại lý.",
+          "proposed_answer": "AA chỉ xem số liệu tổng hợp của nhóm có ít nhất 10 khách, đến từ ít nhất 3 đại lý, và chỉ của đại lý tự chọn tham gia.",
+          "why": "",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý như anh Nghiệp đã trả lời"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn đổi (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        },
+        {
+          "id": "H12",
+          "question": "Dịch vụ ký điện tử giai đoạn đầu.",
+          "proposed_answer": "Anh Nghiệp tạm chọn Documenso Teams cho giai đoạn đầu.",
+          "why": "Sau đó anh muốn chị quyết lại cùng các lựa chọn khác ở 3.1, nên mục 3.1 mới là câu cần chị trả lời.",
+          "options": [
+            {
+              "key": "a",
+              "label": "Đồng ý như anh Nghiệp đã trả lời"
+            },
+            {
+              "key": "z",
+              "label": "Chị muốn đổi (ghi chú bên dưới)"
+            }
+          ],
+          "recommended": "a"
+        }
+      ]
+    }
+  ]
+}

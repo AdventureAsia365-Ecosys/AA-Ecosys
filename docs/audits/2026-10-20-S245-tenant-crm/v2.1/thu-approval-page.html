@@ -1,0 +1,570 @@
+<title>CRM: ý kiến chị Thư</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: an approval docket. Sticky tab strip, a summary ledger, then one card per item; documents read in a 72ch column. */
+:root {
+  --paper: #f6f7f9; --sheet: #ffffff; --ink: #18202b; --muted: #5b6676; --rule: #dde2ea;
+  --accent: #1f5f8b; --accent-soft: #e3eef6; --ok: #1d7a4f; --ok-soft: #e2f3ea; --warn: #9a5b00; --warn-soft: #fbefdc;
+  --chip: #eef1f5;
+  --f-display: "Lora", Georgia, "Times New Roman", serif;
+  --f-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #11161d; --sheet: #18202a; --ink: #e6ebf2; --muted: #9aa6b6; --rule: #2a3442;
+  --accent: #7ab8e3; --accent-soft: #1b3346; --ok: #5cc995; --ok-soft: #173327; --warn: #e8b05a; --warn-soft: #3a2c14;
+  --chip: #222c38; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #11161d; --sheet: #18202a; --ink: #e6ebf2; --muted: #9aa6b6; --rule: #2a3442;
+  --accent: #7ab8e3; --accent-soft: #1b3346; --ok: #5cc995; --ok-soft: #173327; --warn: #e8b05a; --warn-soft: #3a2c14;
+  --chip: #222c38; color-scheme: dark }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sheet); }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { background: var(--sheet); border-bottom: 1px solid var(--rule); }
+header.top .wrap { padding-block: 28px 18px; display: grid; gap: 8px; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { font-family: var(--f-display); font-size: clamp(26px, 4vw, 36px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); max-width: 72ch; margin: 0; }
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--sheet); border-bottom: 1px solid var(--rule); }
+nav.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; }
+nav.tabs button { font: 600 14px var(--f-body); color: var(--muted); background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 14px 10px; cursor: pointer; white-space: nowrap; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+nav.tabs button:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+main .wrap { padding-block: 24px 64px; }
+.ledger { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.ledger .cell { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: grid; gap: 6px; }
+.ledger .k { font-size: 13px; color: var(--muted); }
+.ledger .v { font: 600 22px var(--f-body); font-variant-numeric: tabular-nums; }
+.bar { height: 6px; background: var(--chip); border-radius: 3px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--ok); width: 0; transition: width .3s; }
+.notice { border: 1px solid var(--rule); background: var(--sheet); border-radius: 8px; padding: 12px 14px; color: var(--muted); margin-bottom: 18px; }
+.notice.warn { background: var(--warn-soft); color: var(--ink); border-color: transparent; }
+.group { margin-top: 28px; display: grid; gap: 12px; }
+.group-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+.group-head h2 { font-family: var(--f-display); font-size: 22px; margin: 0; }
+.group-head p { margin: 0; color: var(--muted); flex-basis: 100%; max-width: 72ch; }
+.btn { font: 600 14px var(--f-body); border-radius: 6px; padding: 8px 14px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); cursor: pointer; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--sheet); }
+.btn.ok { background: var(--ok); border-color: var(--ok); color: var(--sheet); }
+.btn:disabled { opacity: .5; cursor: default; }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+.card.done { border-color: var(--ok); }
+.card-top { display: flex; gap: 10px; align-items: flex-start; }
+.id { font: 500 13px var(--f-mono); background: var(--chip); border-radius: 4px; padding: 2px 6px; flex: none; margin-top: 2px; }
+.q { font-weight: 600; flex: 1; min-width: 0; }
+.pill { font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 10px; flex: none; white-space: nowrap; }
+.pill.wait { background: var(--chip); color: var(--muted); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.diff { background: var(--warn-soft); color: var(--warn); }
+.ctx { font-size: 14px; color: var(--muted); max-width: 80ch; }
+.ctx b { color: var(--ink); font-weight: 600; }
+.proposal { background: var(--accent-soft); border-radius: 6px; padding: 10px 12px; font-size: 14px; }
+.proposal .lbl { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--accent); display: block; margin-bottom: 2px; }
+.opts { display: grid; gap: 6px; }
+.opt { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; cursor: pointer; }
+.opt input { margin-top: 4px; accent-color: var(--accent); }
+.opt.sel { border-color: var(--accent); background: var(--accent-soft); }
+.opt .key { font: 500 13px var(--f-mono); color: var(--muted); }
+.opt .rec { font-size: 11px; font-weight: 700; color: var(--ok); text-transform: uppercase; letter-spacing: .05em; margin-left: 6px; white-space: nowrap; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+textarea { width: 100%; box-sizing: border-box; min-height: 40px; font: 14px var(--f-body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; resize: vertical; }
+.who { font-size: 12px; color: var(--muted); }
+details.why summary { cursor: pointer; font-size: 13px; color: var(--accent); font-weight: 600; }
+details.why div { font-size: 14px; color: var(--muted); margin-top: 6px; max-width: 80ch; }
+.recorded { display: grid; gap: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; }
+.recorded .r { display: grid; grid-template-columns: 56px 1fr; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--rule); }
+.recorded .r:first-child { border-top: 0; }
+.recorded .r .a { color: var(--muted); font-size: 14px; }
+article.doc { max-width: 76ch; margin: 0 auto; }
+article.doc h1 { font-size: 30px; margin: 8px 0 16px; }
+article.doc h2 { font-family: var(--f-display); font-size: 24px; margin: 36px 0 10px; text-wrap: balance; }
+article.doc h3 { font-size: 17px; margin: 24px 0 8px; }
+article.doc p, article.doc li { max-width: 72ch; }
+article.doc code { font: 13px var(--f-mono); background: var(--chip); border-radius: 3px; padding: 1px 4px; overflow-wrap: anywhere; }
+.tablewrap, .codewrap { overflow-x: auto; margin: 12px 0; max-width: 100%; }
+article.doc table { border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; min-width: 520px; }
+article.doc th, article.doc td { border: 1px solid var(--rule); padding: 6px 8px; text-align: left; vertical-align: top; }
+article.doc th { background: var(--chip); }
+.codewrap pre { background: var(--chip); padding: 12px; border-radius: 6px; margin: 0; }
+.codewrap code { background: none; padding: 0; }
+.reflink { text-decoration: underline dotted; text-underline-offset: 3px; }
+pre.mermaid { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px; overflow-x: auto; }
+.toast { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: 6px; font-size: 14px; z-index: 20; }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+
+<header class="top"><div class="wrap">
+  <span class="eyebrow">CRM cho đại lý · việc cần chị Thư cho ý kiến · 20/10/2026</span>
+  <h1>CRM cho đại lý: những việc cần chị cho ý kiến</h1>
+  <p class="lede">Chị Thư ơi, bên em đang làm phần CRM cho đại lý (nằm trong tenant portal), đúng theo spec chị đưa; phần kỹ thuật bên em tự lo. Những việc dưới đây là chuyện kinh doanh, pháp lý, tiền hoặc chọn dịch vụ bên ngoài, nên em xin ý kiến của chị. Bây giờ chưa có gì gấp: anh Nghiệp đã chốt làm xong đủ 23 phần của spec rồi mới cho đại lý thật dùng, trong lúc làm bên em thử bằng đại lý giả, dữ liệu giả nên chưa phải trả tiền cho dịch vụ nào. Mỗi câu đều có đề xuất của bên em, chị chỉ cần đánh dấu đồng ý hoặc ghi ý của chị (giá ghi bằng USD, em xem trên trang của từng hãng ngày 20/10/2026).</p>
+</div></header>
+<nav class="tabs" aria-label="Phần của trang"><div class="wrap" role="tablist">
+<button role="tab" id="tab-duyet" aria-controls="panel-duyet" aria-selected="true" data-tab="duyet">Câu hỏi</button>
+<button role="tab" id="tab-ban-day-du" aria-controls="panel-ban-day-du" aria-selected="false" data-tab="ban-day-du">Bản đầy đủ</button>
+</div></nav>
+<main>
+<section id="panel-duyet" role="tabpanel" aria-labelledby="tab-duyet"><div class="wrap">
+  <div id="status" class="notice">Đang kết nối nơi lưu câu trả lời… Trong lúc chờ, anh/chị vẫn đọc được mọi mục bên dưới.</div>
+  <div class="ledger" id="ledger"></div>
+  <div id="groups"></div>
+</div></section>
+<section id="panel-ban-day-du" role="tabpanel" aria-labelledby="tab-ban-day-du" hidden><div class="wrap"><article class="doc"><h1>CRM cho đại lý: những việc cần chị Thư cho ý kiến</h1>
+<p>Chị Thư ơi,</p>
+<p>Bên em đang làm phần CRM cho đại lý (nằm trong tenant portal), đúng theo spec chị đưa. Phần kỹ thuật bên em tự lo.
+Còn những việc dưới đây là chuyện kinh doanh, pháp lý, tiền hoặc chọn dịch vụ bên ngoài, nên em xin ý kiến của chị.</p>
+<p>Trước khi vào câu hỏi, có hai điều để chị yên tâm:</p>
+<ul>
+<li><strong>Bây giờ chưa có gì gấp.</strong> Anh Nghiệp đã chốt: làm xong đủ 23 phần của spec rồi mới cho đại lý thật dùng. Trong
+lúc làm, bên em thử bằng <strong>đại lý giả, dữ liệu giả</strong>, nên chưa phải trả tiền cho dịch vụ nào bên dưới.</li>
+<li>Mỗi câu đều có <strong>đề xuất</strong> của bên em. Chị chỉ cần đánh dấu &quot;đồng ý&quot;, hoặc ghi ý của chị.</li>
+</ul>
+<p>Giá ghi bằng USD, em xem trên trang của từng hãng ngày 20/10/2026.</p>
+<hr>
+<h2>1. Giá cho đại lý</h2>
+<p><strong>1.1 (H2) Đại lý trả gì để dùng CRM?</strong></p>
+<ul>
+<li>Spec ghi &quot;miễn phí cho đối tác&quot;. Anh Nghiệp đề xuất thêm: CRM đi theo <strong>gói của tenant portal</strong>, tức đại lý ở gói
+portal nào thì có phần CRM tương ứng.</li>
+<li>Em đề xuất:<ul>
+<li>các phần chính miễn phí ở mọi gói;</li>
+<li>gói cao hơn có thêm AI soạn nháp, báo cáo đầy đủ, nhiều người dùng hơn;</li>
+<li>đại lý tự trả các phí của bên thứ ba qua tài khoản của họ: tin WhatsApp, SMS, phí thẻ.</li>
+</ul>
+</li>
+<li>Chi phí AA gánh (ước tính): khoảng $8–9 một đại lý mỗi tháng khi có 10 đại lý, chưa tính tiền ký điện tử (xem 3.1).
+Con số giảm dần khi có nhiều đại lý hơn.</li>
+<li>Chị cho em biết: chia tính năng theo gói thế nào, hoặc cứ để miễn phí hết như spec?</li>
+</ul>
+<p><strong>1.2 (H9) Giá net cho đại lý.</strong></p>
+<ul>
+<li>Em đề xuất dùng bảng giá net B2B đang có (biên 15%), và đại lý tự đặt giá bán cho khách của họ.</li>
+<li>Anh Nghiệp để chị quyết.</li>
+</ul>
+<p><strong>1.3 AA thu tiền đại lý thế nào khi đại lý bán tour của AA?</strong></p>
+<ul>
+<li>Theo quyết định cũ, AA xuất hoá đơn cho đại lý.</li>
+<li>Chị cho em biết các điều sau:<ul>
+<li>đại lý trả trước hay được nợ;</li>
+<li>cọc bao nhiêu %;</li>
+<li>xuất hoá đơn bằng tiền gì;</li>
+<li>phí thẻ 3% có áp cho chuyển khoản không.</li>
+</ul>
+</li>
+</ul>
+<p><strong>1.4 Có cấm đại lý báo giá thấp hơn giá &quot;từ …&quot; công khai của AA không?</strong></p>
+<ul>
+<li>Em đề xuất chỉ ghi trong hợp đồng, CRM chỉ cảnh báo chứ không chặn.</li>
+</ul>
+<p><strong>1.5 Ai nhập giá net của nhà cung cấp và bảng giá tour vào hệ thống Booking, và khi nào?</strong></p>
+<ul>
+<li>Báo giá tự động cho khách cần số liệu này.</li>
+<li>Trong lúc chờ, bên em dùng giá giả để thử.</li>
+</ul>
+<hr>
+<h2>2. Pháp lý và hợp đồng</h2>
+<p><strong>2.1 (H5) Ký hợp đồng với đại lý bằng pháp nhân nào của AA, và có cần luật sư ngay không?</strong></p>
+<ul>
+<li>Em đề xuất:<ul>
+<li>ký bằng pháp nhân AA đang dùng cho hợp đồng đối tác (chị cho em tên);</li>
+<li>dùng mẫu thoả thuận dữ liệu (DPA) em đã soạn;</li>
+<li><strong>chưa cần luật sư khi chưa có đại lý thật</strong>.</li>
+</ul>
+</li>
+<li>Em soạn sẵn bản tóm tắt cho luật sư, và chỉ gửi khi có một trong ba điều:<ul>
+<li>đại lý ở Việt Nam hoặc châu Âu muốn dùng dữ liệu thật;</li>
+<li>có đại lý thứ 6;</li>
+<li>60 ngày sau khi có khách thật đầu tiên.</li>
+</ul>
+</li>
+</ul>
+<p><strong>2.2 Câu hứa về quyền riêng tư cần sửa thêm một chút.</strong></p>
+<ul>
+<li>Anh Nghiệp đã tạm đồng ý thay chị câu &quot;nhân viên AA không mở được hồ sơ khách&quot; (H3). Về kỹ thuật thì AA sở hữu tài khoản máy chủ, nên trong
+trường hợp khẩn cấp vẫn mở được.</li>
+<li>Em đề xuất hứa đúng như sau: &quot;Nhân viên AA không mở được hồ sơ khách trong công việc bình thường. Chỉ trong trường
+hợp khẩn cấp mới mở được, mỗi lần một đại lý, phải đăng nhập hai bước, và việc đó tự động hiện trong nhật ký của
+chính đại lý.&quot;</li>
+</ul>
+<p><strong>2.3 AA hỗ trợ có được xem vào CRM của đại lý không?</strong></p>
+<ul>
+<li>Em đề xuất: chỉ khi chủ đại lý tự bật quyền cho AA trong phần cài đặt, có thời hạn (ví dụ 24 giờ). Mọi lần xem đều
+được ghi lại, và chủ đại lý tắt được bất cứ lúc nào.</li>
+</ul>
+<p><strong>2.4 Khi khách hoặc đại lý yêu cầu xoá dữ liệu, mình hứa gì?</strong></p>
+<ul>
+<li>Em đề xuất: &quot;Xoá ngay trong ứng dụng. Không đọc lại được ở bất kỳ đâu, kể cả bản sao lưu, trong vòng 30 ngày.&quot;</li>
+</ul>
+<p><strong>2.5 Nhật ký &quot;ai đã xem gì&quot; giữ bao lâu?</strong></p>
+<ul>
+<li>Em đề xuất: đại lý xem được trong 12 tháng, sau đó lưu khoá (không sửa được) thêm 6 năm, trừ khi luật sư khuyên
+khác.</li>
+</ul>
+<p><strong>2.6 Khi AA ops xem thông tin khách của chuyến đã chốt, có báo cho đại lý không?</strong></p>
+<ul>
+<li>Em đề xuất có: đại lý thấy dòng &quot;AA ops đã xem thông tin chuyến X ngày Y&quot;.</li>
+</ul>
+<p><strong>2.7 AA ops được gửi thông tin khách nào cho khách sạn, xe?</strong></p>
+<ul>
+<li>Gửi đi là có bản sao nằm ngoài hệ thống, không tự xoá sau 90 ngày được.</li>
+<li>Em đề xuất:<ul>
+<li>chỉ gửi họ tên, số người, yêu cầu ăn uống/đi lại;</li>
+<li>không gửi số hộ chiếu, trừ khi nhà cung cấp bắt buộc;</li>
+<li>mỗi lần xuất danh sách đều được ghi lại.</li>
+</ul>
+</li>
+</ul>
+<p><strong>2.8 Khách của đại lý sẽ thấy địa chỉ web và email gửi đi tên gì?</strong></p>
+<ul>
+<li>Hiện bên em dùng tên miền thử nghiệm. Có ba lựa chọn:<ul>
+<li>một tên miền chung mang tên AA;</li>
+<li>một tên miền trung tính cho sản phẩm;</li>
+<li>mỗi đại lý dùng tên miền riêng của họ (đại lý tự cài đặt).</li>
+</ul>
+</li>
+<li>Mua tên miền mới thường vài chục USD mỗi năm (ước tính).</li>
+<li>Em đề xuất: một tên miền trung tính, và cho đại lý nào muốn thì dùng tên miền riêng.</li>
+</ul>
+<p><strong>2.9 Đăng nhập mạnh hơn cho nhân viên đại lý.</strong></p>
+<ul>
+<li>Nhân viên đại lý xem được số hộ chiếu của khách, nên em đề xuất chủ đại lý và nhân viên bán hàng đăng nhập thêm một
+bước: passkey trên điện thoại, hoặc app xác thực. Lần đầu mất thêm khoảng 1 phút.</li>
+<li>Chị thấy đại lý có chịu không?</li>
+</ul>
+<p><strong>2.10 Dịch vụ AI chạy ở tài khoản máy chủ thứ hai của AA.</strong></p>
+<ul>
+<li>Tài khoản này mua qua một đơn vị khác (eCloudvalley). Em sẽ ghi nó vào danh sách &quot;bên xử lý dữ liệu&quot; trong hợp đồng
+với đại lý.</li>
+<li>Chị đồng ý không? Nếu chị không muốn, phần AI sẽ tắt cho tới khi có cách khác.</li>
+</ul>
+<hr>
+<h2>3. App và dịch vụ bên ngoài có phí</h2>
+<p>Tất cả các mục dưới đây <strong>chưa cần trả tiền</strong>: trên môi trường thử, bên em dùng bản miễn phí hoặc bản test. Chỉ cần
+quyết trước khi có đại lý thật.</p>
+<p><strong>3.1 Ký điện tử (khách ký điều khoản và waiver trekking)</strong></p>
+<ul>
+<li><p><strong>Là gì:</strong> khách bấm ký điều khoản và waiver ngay trên trang của đại lý, hệ thống lưu bản PDF đã ký kèm nhật ký
+ký.</p>
+</li>
+<li><p><strong>Spec đòi:</strong> ký điện tử, lưu PDF và nhật ký ký, và <strong>hãng bảo hiểm chấp nhận</strong>. Spec không chỉ định hãng nào.</p>
+</li>
+<li><p><strong>Lựa chọn:</strong></p>
+<div class="tablewrap"><table><thead><tr>
+<th>Lựa chọn</th>
+<th>Phí cho AA</th>
+<th>Ghi chú</th>
+</tr>
+</thead><tbody><tr>
+<td>Documenso Teams</td>
+<td>$40/tháng, trả $480 một năm</td>
+<td>Trang ký có thể hiện chữ &quot;Documenso&quot;; tối đa 5 người dùng</td>
+</tr>
+<tr>
+<td>Documenso Platform</td>
+<td>$250/tháng, trả $3.000 một năm</td>
+<td>Mang thương hiệu riêng, không giới hạn</td>
+</tr>
+<tr>
+<td>BoldSign API</td>
+<td>từ $30/tháng, gồm 40 lượt ký, thêm $0,75 mỗi lượt</td>
+<td>Rẻ khi ít khách; có thương hiệu riêng</td>
+</tr>
+<tr>
+<td>Dropbox Sign API</td>
+<td>từ $75/tháng ($900/năm)</td>
+<td>Hãng lớn, đắt hơn</td>
+</tr>
+<tr>
+<td>Tự cài Documenso trên máy chủ của AA</td>
+<td>≈ $5–17/tháng + chứng thư số (giá chưa rõ)</td>
+<td>Dữ liệu không ra ngoài; bên em tự vận hành</td>
+</tr>
+<tr>
+<td>AA tự làm chữ ký điện tử đơn giản</td>
+<td>≈ $0–1/tháng</td>
+<td>Khách nhận mã qua email, gõ tên, bấm &quot;Tôi đồng ý&quot;; hệ thống niêm phong PDF</td>
+</tr>
+</tbody></table></div></li>
+<li><p><strong>Đề xuất:</strong></p>
+<ol>
+<li>Hỏi hãng bảo hiểm trước, vì họ chấp nhận cách nào thì mình chọn cách đó.</li>
+<li>Nếu họ chấp nhận chữ ký đơn giản thì <strong>AA tự làm</strong> (rẻ nhất, dữ liệu không ra ngoài).</li>
+<li>Nếu họ muốn hãng có tên tuổi thì chọn <strong>BoldSign</strong>, hoặc <strong>Documenso Teams</strong> cho giai đoạn đầu.</li>
+</ol>
+</li>
+</ul>
+<p><strong>3.2 WhatsApp (và Messenger, Instagram)</strong></p>
+<ul>
+<li><strong>Là gì:</strong> đại lý nhắn tin với khách ngay trong CRM, bằng tài khoản WhatsApp Business của chính đại lý.</li>
+<li><strong>Phí:</strong> AA $0. Meta tính phí tin nhắn thẳng vào thẻ của đại lý.</li>
+<li><strong>Cần làm:</strong> AA đăng ký làm &quot;Tech Provider&quot; với Meta. Việc này cần xác minh doanh nghiệp và Meta duyệt app, mất 2–4
+tuần trở lên, và cần đứng tên một pháp nhân AA.</li>
+<li><strong>Lựa chọn khác:</strong> spec ghi Twilio hoặc 360dialog. Hai hãng này thu thêm phí trung gian.</li>
+<li><strong>Đề xuất:</strong><ul>
+<li>đi thẳng với Meta (rẻ nhất);</li>
+<li>chị cho em biết pháp nhân nào đăng ký;</li>
+<li>bắt đầu thủ tục khi chị chọn đại lý thật đầu tiên, hoặc sớm hơn nếu chị muốn kịp giờ.</li>
+</ul>
+</li>
+</ul>
+<p><strong>3.3 SMS (Twilio)</strong></p>
+<ul>
+<li><strong>Là gì:</strong> gửi tin SMS cho khách.</li>
+<li><strong>Phí:</strong> AA $0. Mỗi đại lý dùng tài khoản Twilio của chính họ và tự trả.</li>
+<li><strong>Đề xuất:</strong> đồng ý cách này.</li>
+</ul>
+<p><strong>3.4 Thanh toán thẻ (Stripe)</strong></p>
+<ul>
+<li><strong>Là gì:</strong> khách trả cọc và trả nốt bằng link thanh toán; tiền vào thẳng tài khoản Stripe của đại lý.</li>
+<li><strong>Phí:</strong> AA $0. Stripe tính phí thẻ vào đại lý.</li>
+<li><strong>Lưu ý:</strong> Stripe <strong>không hoạt động ở Việt Nam</strong>.</li>
+<li><strong>Cần làm:</strong> để tiền vào thẳng tài khoản của đại lý, AA cần một tài khoản Stripe làm &quot;nền tảng&quot; (Stripe Connect),
+đứng tên một pháp nhân AA. Trên môi trường thử chỉ cần tài khoản ở chế độ test, miễn phí. Chị cho em biết pháp nhân
+nào đứng tên tài khoản thật.</li>
+<li><strong>Đề xuất:</strong> dùng Stripe cho đại lý ở nước có Stripe (ví dụ Úc).</li>
+</ul>
+<p><strong>3.5 Cổng thanh toán cho đại lý Việt Nam</strong></p>
+<ul>
+<li><strong>Là gì:</strong> cổng thanh toán nội địa thay cho Stripe.</li>
+<li><strong>Phí:</strong> chưa có báo giá.</li>
+<li><strong>Đề xuất:</strong><ul>
+<li>trong lúc chờ, đại lý ghi tay khoản đã thu;</li>
+<li>chị chọn giúp em vài cổng để xin báo giá;</li>
+<li>mục này chưa gấp, vì đại lý Việt Nam chưa dùng dữ liệu thật.</li>
+</ul>
+</li>
+</ul>
+<p><strong>3.6 Gửi email bằng Gmail của đại lý (Google)</strong></p>
+<ul>
+<li><strong>Là gì:</strong> email trả lời khách gửi từ chính Gmail của đại lý, và nằm trong hộp &quot;Đã gửi&quot; của họ.</li>
+<li><strong>Phí:</strong> $0. Bên em cố ý <strong>chỉ xin quyền &quot;gửi thư&quot;</strong>, nên tránh được đợt kiểm định bảo mật bắt buộc mỗi năm của
+Google (gọi là CASA). Theo tìm hiểu trước đây, CASA tốn khoảng $675–5.400 mỗi năm, có nơi ghi cao hơn nhiều; Google
+không công bố bảng giá.</li>
+<li><strong>Cần làm:</strong> Google xác minh app (miễn phí). Việc này cần trang chủ và chính sách quyền riêng tư trên tên miền của
+AA.</li>
+<li><strong>Đề xuất:</strong> chị cho em biết pháp nhân và tên miền đứng tên.</li>
+</ul>
+<p><strong>3.7 Gửi email bằng Outlook (Microsoft)</strong></p>
+<ul>
+<li><strong>Là gì:</strong> như 3.6, cho đại lý dùng Outlook.</li>
+<li><strong>Phí:</strong> $0. Cần AA có tài khoản tổ chức Microsoft 365 và tham gia chương trình đối tác miễn phí của Microsoft.</li>
+<li><strong>Đề xuất:</strong> làm sau Gmail, khi có đại lý dùng Outlook.</li>
+</ul>
+<p><strong>3.8 Tường lửa web cho trang khách</strong></p>
+<ul>
+<li><strong>Là gì:</strong> chặn tấn công và spam trên form và trang của khách.</li>
+<li><strong>Phí:</strong> ≈ $7–8/tháng, chỉ bật khi có đại lý thật.</li>
+<li><strong>Đề xuất:</strong> bật lúc có đại lý thật. AA chịu khoản này.</li>
+</ul>
+<p><strong>3.9 Luật sư</strong></p>
+<ul>
+<li><strong>Là gì:</strong> xem luật dữ liệu Việt Nam, châu Âu, Úc, hợp đồng đối tác và waiver.</li>
+<li><strong>Phí:</strong> chưa có báo giá.</li>
+<li><strong>Đề xuất:</strong> giữ như anh Nghiệp đã chốt: chưa gửi bây giờ, gửi khi chạm một trong các mốc ở 2.1.</li>
+</ul>
+<hr>
+<h2>4. Bảo hiểm và waiver</h2>
+<p><strong>4.1 (H6) Nhờ hãng bảo hiểm nào duyệt waiver trekking?</strong></p>
+<ul>
+<li>Em đề xuất nhờ hãng bảo hiểm AA đang dùng. Chị cho em tên người liên hệ khi tiện.</li>
+<li>Em xin hỏi họ thêm một câu: <strong>họ chấp nhận cách ký điện tử nào</strong> (mục 3.1). Câu trả lời này quyết định mình chọn
+dịch vụ nào.</li>
+</ul>
+<p><strong>4.2 (H10, anh Nghiệp đã tạm đồng ý thay chị) Mẫu điều khoản và waiver.</strong></p>
+<ul>
+<li>AA soạn một mẫu song ngữ Anh–Việt dựa trên điều khoản hiện tại. Đội của chị xem lại, và hãng bảo hiểm duyệt.</li>
+<li>Em chỉ báo để chị nắm, không cần trả lời.</li>
+</ul>
+<hr>
+<h2>5. Đại lý thử nghiệm</h2>
+<p><strong>5.1 (H4) Dùng đại lý giả trước — em báo để chị biết.</strong></p>
+<ul>
+<li>Theo ý anh Nghiệp, bên em tạo vài <strong>đại lý giả, khách giả</strong> để thử toàn bộ quy trình trên môi trường thử. Chị không
+cần làm gì lúc này.</li>
+<li>Khi đủ 23 phần (dự kiến khoảng giữa tháng 12/2026 tới giữa tháng 1/2027, còn tuỳ tiến độ), em xin chị chọn <strong>3–5 đại lý thân quen</strong>. Em đề
+xuất chọn ở Úc hoặc nước khác ngoài châu Âu và Việt Nam, và mỗi đại lý em xin 30 phút phỏng vấn trước khi mở.</li>
+</ul>
+<p><strong>5.2 (H1, đã chốt) Chờ xong cả 23 phần mới cho đại lý thật dùng.</strong></p>
+<ul>
+<li>Em ghi lại để mọi người cùng hiểu.</li>
+<li>Ngày 30/11 trước đây chỉ là dự kiến, không còn là hạn chót.</li>
+</ul>
+<p><strong>5.3 Khi nào bắt đầu các thủ tục với Meta, Google, Microsoft?</strong></p>
+<ul>
+<li>Các thủ tục này mất vài tuần mỗi cái.</li>
+<li>Em đề xuất bắt đầu khi chị chọn xong đại lý thật đầu tiên. Nếu chị muốn mở đúng ngày cho đại lý thì bắt đầu sớm
+hơn khoảng một tháng.</li>
+</ul>
+<p><strong>5.4 (H8, anh Nghiệp đã tạm đồng ý thay chị) Ai ở đội ops phụ trách nhập lịch khởi hành và xác nhận các tour &quot;theo yêu cầu&quot; trong 1 ngày làm
+việc?</strong></p>
+<ul>
+<li>Chị cho em tên người khi tiện.</li>
+</ul>
+<hr>
+<h2>6. Các mục anh Nghiệp đã tạm trả lời thay chị</h2>
+<p>Chị xem lại cho chắc. Nếu đồng ý thì không cần làm gì; muốn đổi mục nào thì chị ghi lại giúp em.</p>
+<ul>
+<li><strong>H3:</strong> câu hứa về quyền riêng tư (đã sửa thêm ở 2.2).</li>
+<li><strong>H7:</strong> bản đầu chưa làm Zalo.</li>
+<li><strong>H8:</strong> tour có lịch cố định thì tự xác nhận; tour khác là &quot;theo yêu cầu&quot;, AA ops xác nhận trong 1 ngày làm việc
+(5.4).</li>
+<li><strong>H10:</strong> AA soạn mẫu điều khoản và waiver song ngữ (4.2).</li>
+<li><strong>H11:</strong> AA chỉ xem số liệu tổng hợp của nhóm có ít nhất 10 khách, đến từ ít nhất 3 đại lý, và chỉ của đại lý tự
+chọn tham gia.</li>
+<li><strong>H12:</strong> anh Nghiệp tạm chọn Documenso Teams cho giai đoạn đầu. Sau đó anh muốn chị quyết lại cùng các lựa chọn khác
+ở 3.1, nên mục 3.1 mới là câu cần chị trả lời.</li>
+</ul>
+<p>Em cảm ơn chị. Chị trả lời mục nào trước cũng được. Những mục gắn &quot;đã chốt&quot; hoặc &quot;đã tạm đồng ý&quot; chỉ để chị nắm.</p>
+</article></div></section>
+</main>
+<div id="toast" class="toast" hidden></div>
+
+<script id="docket-data" type="application/json">{"groups":[{"title":"Giá cho đại lý","short":"Giá cho đại lý","intro":"","items":[{"id":"1.1","question":"(H2) Đại lý trả gì để dùng CRM? Chị cho em biết chia tính năng theo gói thế nào, hoặc cứ để miễn phí hết như spec?","proposed_answer":"CRM đi theo gói của tenant portal (đại lý ở gói portal nào thì có phần CRM tương ứng): các phần chính miễn phí ở mọi gói; gói cao hơn có thêm AI soạn nháp, báo cáo đầy đủ, nhiều người dùng hơn; đại lý tự trả các phí của bên thứ ba qua tài khoản của họ (tin WhatsApp, SMS, phí thẻ).","why":"Spec ghi \"miễn phí cho đối tác\", anh Nghiệp đề xuất thêm việc đi theo gói portal. Chi phí AA gánh (ước tính): khoảng $8–9 một đại lý mỗi tháng khi có 10 đại lý, chưa tính tiền ký điện tử (xem 3.1); con số giảm dần khi có nhiều đại lý hơn.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Miễn phí hết như spec"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"1.2","question":"(H9) Giá net cho đại lý.","proposed_answer":"Dùng bảng giá net B2B đang có (biên 15%), và đại lý tự đặt giá bán cho khách của họ.","why":"Anh Nghiệp để chị quyết.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"1.3","question":"AA thu tiền đại lý thế nào khi đại lý bán tour của AA? Chị cho em biết: đại lý trả trước hay được nợ; cọc bao nhiêu %; xuất hoá đơn bằng tiền gì; phí thẻ 3% có áp cho chuyển khoản không.","proposed_answer":"Bên em chưa có đề xuất riêng cho mục này. Theo quyết định cũ, AA xuất hoá đơn cho đại lý; các chi tiết còn lại xin chị cho ý kiến.","why":"Theo quyết định cũ, AA xuất hoá đơn cho đại lý.","options":[{"key":"a","label":"Giữ cách AA xuất hoá đơn cho đại lý; chị ghi các chi tiết bên dưới"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"1.4","question":"Có cấm đại lý báo giá thấp hơn giá \"từ …\" công khai của AA không?","proposed_answer":"Chỉ ghi trong hợp đồng; CRM chỉ cảnh báo chứ không chặn.","why":"","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"1.5","question":"Ai nhập giá net của nhà cung cấp và bảng giá tour vào hệ thống Booking, và khi nào?","proposed_answer":"Trong lúc chờ, bên em dùng giá giả để thử. Chị cho em biết người nhập và thời điểm.","why":"Báo giá tự động cho khách cần số liệu này.","options":[{"key":"a","label":"Đã đọc; chị ghi tên người và thời điểm bên dưới"},{"key":"z","label":"Chị muốn trao đổi thêm"}],"recommended":"a"}]},{"title":"Pháp lý và hợp đồng","short":"Pháp lý và hợp đồng","intro":"","items":[{"id":"2.1","question":"(H5) Ký hợp đồng với đại lý bằng pháp nhân nào của AA, và có cần luật sư ngay không?","proposed_answer":"Ký bằng pháp nhân AA đang dùng cho hợp đồng đối tác (chị cho em tên); dùng mẫu thoả thuận dữ liệu (DPA) em đã soạn; chưa cần luật sư khi chưa có đại lý thật. Em soạn sẵn bản tóm tắt cho luật sư và chỉ gửi khi có một trong ba điều: đại lý ở Việt Nam hoặc châu Âu muốn dùng dữ liệu thật; có đại lý thứ 6; 60 ngày sau khi có khách thật đầu tiên.","why":"","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"2.2","question":"Câu hứa về quyền riêng tư cần sửa thêm một chút.","proposed_answer":"Hứa đúng như sau: \"Nhân viên AA không mở được hồ sơ khách trong công việc bình thường. Chỉ trong trường hợp khẩn cấp mới mở được, mỗi lần một đại lý, phải đăng nhập hai bước, và việc đó tự động hiện trong nhật ký của chính đại lý.\"","why":"Anh Nghiệp đã tạm đồng ý thay chị câu \"nhân viên AA không mở được hồ sơ khách\" (H3). Về kỹ thuật thì AA sở hữu tài khoản máy chủ, nên trong trường hợp khẩn cấp vẫn mở được.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"2.3","question":"AA hỗ trợ có được xem vào CRM của đại lý không?","proposed_answer":"Chỉ khi chủ đại lý tự bật quyền cho AA trong phần cài đặt, có thời hạn (ví dụ 24 giờ). Mọi lần xem đều được ghi lại, và chủ đại lý tắt được bất cứ lúc nào.","why":"","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"2.4","question":"Khi khách hoặc đại lý yêu cầu xoá dữ liệu, mình hứa gì?","proposed_answer":"\"Xoá ngay trong ứng dụng. Không đọc lại được ở bất kỳ đâu, kể cả bản sao lưu, trong vòng 30 ngày.\"","why":"","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"2.5","question":"Nhật ký \"ai đã xem gì\" giữ bao lâu?","proposed_answer":"Đại lý xem được trong 12 tháng, sau đó lưu khoá (không sửa được) thêm 6 năm, trừ khi luật sư khuyên khác.","why":"","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"2.6","question":"Khi AA ops xem thông tin khách của chuyến đã chốt, có báo cho đại lý không?","proposed_answer":"Có: đại lý thấy dòng \"AA ops đã xem thông tin chuyến X ngày Y\".","why":"","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"2.7","question":"AA ops được gửi thông tin khách nào cho khách sạn, xe?","proposed_answer":"Chỉ gửi họ tên, số người, yêu cầu ăn uống/đi lại; không gửi số hộ chiếu, trừ khi nhà cung cấp bắt buộc; mỗi lần xuất danh sách đều được ghi lại.","why":"Gửi đi là có bản sao nằm ngoài hệ thống, không tự xoá sau 90 ngày được.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"2.8","question":"Khách của đại lý sẽ thấy địa chỉ web và email gửi đi tên gì?","proposed_answer":"Một tên miền trung tính cho sản phẩm, và cho đại lý nào muốn thì dùng tên miền riêng của họ.","why":"Hiện bên em dùng tên miền thử nghiệm. Mua tên miền mới thường vài chục USD mỗi năm (ước tính).","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Một tên miền chung mang tên AA"},{"key":"c","label":"Mỗi đại lý dùng tên miền riêng của họ (đại lý tự cài đặt)"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"2.9","question":"Đăng nhập mạnh hơn cho nhân viên đại lý. Chị thấy đại lý có chịu không?","proposed_answer":"Chủ đại lý và nhân viên bán hàng đăng nhập thêm một bước: passkey trên điện thoại, hoặc app xác thực. Lần đầu mất thêm khoảng 1 phút.","why":"Nhân viên đại lý xem được số hộ chiếu của khách.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"2.10","question":"Dịch vụ AI chạy ở tài khoản máy chủ thứ hai của AA (mua qua một đơn vị khác, eCloudvalley). Chị đồng ý không?","proposed_answer":"Em ghi tài khoản này vào danh sách \"bên xử lý dữ liệu\" trong hợp đồng với đại lý.","why":"Nếu chị không muốn, phần AI sẽ tắt cho tới khi có cách khác.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Không đồng ý: tắt phần AI cho tới khi có cách khác"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"}]},{"title":"App và dịch vụ bên ngoài có phí","short":"App và dịch vụ bên ngoài có phí","intro":"Tất cả các mục dưới đây chưa cần trả tiền: trên môi trường thử, bên em dùng bản miễn phí hoặc bản test. Chỉ cần quyết trước khi có đại lý thật.","items":[{"id":"3.1","question":"Ký điện tử: khách bấm ký điều khoản và waiver trekking ngay trên trang của đại lý, hệ thống lưu bản PDF đã ký kèm nhật ký ký. Chị chọn cách nào?","proposed_answer":"1. Hỏi hãng bảo hiểm trước, vì họ chấp nhận cách nào thì mình chọn cách đó. 2. Nếu họ chấp nhận chữ ký đơn giản thì AA tự làm (rẻ nhất, dữ liệu không ra ngoài). 3. Nếu họ muốn hãng có tên tuổi thì chọn BoldSign, hoặc Documenso Teams cho giai đoạn đầu.","why":"Spec đòi ký điện tử, lưu PDF và nhật ký ký, và hãng bảo hiểm chấp nhận; spec không chỉ định hãng nào. Anh Nghiệp tạm chọn Documenso Teams cho giai đoạn đầu (H12) nhưng muốn chị quyết lại ở đây.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Documenso Teams: $40/tháng, trả $480 một năm (trang ký có thể hiện chữ \"Documenso\"; tối đa 5 người dùng)"},{"key":"c","label":"Documenso Platform: $250/tháng, trả $3.000 một năm (mang thương hiệu riêng, không giới hạn)"},{"key":"d","label":"BoldSign API: từ $30/tháng, gồm 40 lượt ký, thêm $0,75 mỗi lượt (rẻ khi ít khách; có thương hiệu riêng)"},{"key":"e","label":"Dropbox Sign API: từ $75/tháng ($900/năm) (hãng lớn, đắt hơn)"},{"key":"f","label":"Tự cài Documenso trên máy chủ của AA: ≈ $5–17/tháng + chứng thư số (giá chưa rõ) (dữ liệu không ra ngoài; bên em tự vận hành)"},{"key":"g","label":"AA tự làm chữ ký điện tử đơn giản: ≈ $0–1/tháng (khách nhận mã qua email, gõ tên, bấm \"Tôi đồng ý\"; hệ thống niêm phong PDF)"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"3.2","question":"WhatsApp (và Messenger, Instagram): đại lý nhắn tin với khách ngay trong CRM, bằng tài khoản WhatsApp Business của chính đại lý.","proposed_answer":"Đi thẳng với Meta (rẻ nhất); chị cho em biết pháp nhân nào đăng ký; bắt đầu thủ tục khi chị chọn đại lý thật đầu tiên, hoặc sớm hơn nếu chị muốn kịp giờ.","why":"Phí: AA $0, Meta tính phí tin nhắn thẳng vào thẻ của đại lý. AA cần đăng ký làm \"Tech Provider\" với Meta: xác minh doanh nghiệp và Meta duyệt app, mất 2–4 tuần trở lên, và cần đứng tên một pháp nhân AA.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Dùng Twilio hoặc 360dialog như spec ghi (thu thêm phí trung gian)"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"3.3","question":"SMS (Twilio): gửi tin SMS cho khách.","proposed_answer":"Đồng ý cách: mỗi đại lý dùng tài khoản Twilio của chính họ và tự trả.","why":"Phí: AA $0.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"3.4","question":"Thanh toán thẻ (Stripe): khách trả cọc và trả nốt bằng link thanh toán; tiền vào thẳng tài khoản Stripe của đại lý. Chị cho em biết pháp nhân nào đứng tên tài khoản thật.","proposed_answer":"Dùng Stripe cho đại lý ở nước có Stripe (ví dụ Úc).","why":"Phí: AA $0, Stripe tính phí thẻ vào đại lý. Stripe không hoạt động ở Việt Nam. Để tiền vào thẳng tài khoản của đại lý, AA cần một tài khoản Stripe làm \"nền tảng\" (Stripe Connect) đứng tên một pháp nhân AA; trên môi trường thử chỉ cần tài khoản test, miễn phí.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"3.5","question":"Cổng thanh toán cho đại lý Việt Nam (cổng nội địa thay cho Stripe).","proposed_answer":"Trong lúc chờ, đại lý ghi tay khoản đã thu; chị chọn giúp em vài cổng để xin báo giá; mục này chưa gấp.","why":"Phí: chưa có báo giá. Đại lý Việt Nam chưa dùng dữ liệu thật.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"3.6","question":"Gửi email bằng Gmail của đại lý (Google): email trả lời khách gửi từ chính Gmail của đại lý và nằm trong hộp \"Đã gửi\" của họ.","proposed_answer":"Chị cho em biết pháp nhân và tên miền đứng tên để Google xác minh app (miễn phí).","why":"Phí: $0. Bên em cố ý chỉ xin quyền \"gửi thư\", nên tránh được đợt kiểm định bảo mật bắt buộc mỗi năm của Google (CASA), theo tìm hiểu trước đây tốn khoảng $675–5.400 mỗi năm, có nơi ghi cao hơn nhiều; Google không công bố bảng giá. Việc xác minh cần trang chủ và chính sách quyền riêng tư trên tên miền của AA.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"3.7","question":"Gửi email bằng Outlook (Microsoft), như 3.6 cho đại lý dùng Outlook.","proposed_answer":"Làm sau Gmail, khi có đại lý dùng Outlook.","why":"Phí: $0. Cần AA có tài khoản tổ chức Microsoft 365 và tham gia chương trình đối tác miễn phí của Microsoft.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"3.8","question":"Tường lửa web cho trang khách: chặn tấn công và spam trên form và trang của khách.","proposed_answer":"Bật lúc có đại lý thật. AA chịu khoản này (≈ $7–8/tháng).","why":"Chỉ bật khi có đại lý thật.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"3.9","question":"Luật sư: xem luật dữ liệu Việt Nam, châu Âu, Úc, hợp đồng đối tác và waiver.","proposed_answer":"Giữ như anh Nghiệp đã chốt: chưa gửi bây giờ, gửi khi chạm một trong các mốc ở 2.1.","why":"Phí: chưa có báo giá.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"}]},{"title":"Bảo hiểm và waiver","short":"Bảo hiểm và waiver","intro":"","items":[{"id":"4.1","question":"(H6) Nhờ hãng bảo hiểm nào duyệt waiver trekking?","proposed_answer":"Nhờ hãng bảo hiểm AA đang dùng; chị cho em tên người liên hệ khi tiện. Em xin hỏi họ thêm: họ chấp nhận cách ký điện tử nào (mục 3.1).","why":"Câu trả lời về cách ký điện tử quyết định mình chọn dịch vụ nào ở 3.1.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"4.2","question":"(H10, anh Nghiệp đã tạm đồng ý thay chị) Mẫu điều khoản và waiver.","proposed_answer":"AA soạn một mẫu song ngữ Anh–Việt dựa trên điều khoản hiện tại. Đội của chị xem lại, và hãng bảo hiểm duyệt.","why":"Em chỉ báo để chị nắm, không cần trả lời.","options":[{"key":"a","label":"Đã đọc, đồng ý"},{"key":"z","label":"Chị muốn trao đổi thêm"}],"recommended":"a"}]},{"title":"Đại lý thử nghiệm","short":"Đại lý thử nghiệm","intro":"","items":[{"id":"5.1","question":"(H4) Dùng đại lý giả trước, em báo để chị biết.","proposed_answer":"Theo ý anh Nghiệp, bên em tạo vài đại lý giả, khách giả để thử toàn bộ quy trình trên môi trường thử; chị không cần làm gì lúc này. Khi đủ 23 phần (dự kiến khoảng giữa tháng 12/2026 tới giữa tháng 1/2027, còn tuỳ tiến độ), em xin chị chọn 3–5 đại lý thân quen, ở Úc hoặc nước khác ngoài châu Âu và Việt Nam, và mỗi đại lý em xin 30 phút phỏng vấn trước khi mở.","why":"","options":[{"key":"a","label":"Đã đọc, đồng ý"},{"key":"z","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"5.2","question":"(H1, đã chốt) Chờ xong cả 23 phần mới cho đại lý thật dùng.","proposed_answer":"Em ghi lại để mọi người cùng hiểu. Ngày 30/11 trước đây chỉ là dự kiến, không còn là hạn chót.","why":"","options":[{"key":"a","label":"Đã đọc, đồng ý"},{"key":"z","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"5.3","question":"Khi nào bắt đầu các thủ tục với Meta, Google, Microsoft?","proposed_answer":"Bắt đầu khi chị chọn xong đại lý thật đầu tiên.","why":"Các thủ tục này mất vài tuần mỗi cái. Nếu chị muốn mở đúng ngày cho đại lý thì bắt đầu sớm hơn khoảng một tháng.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Bắt đầu sớm hơn khoảng một tháng để mở đúng ngày cho đại lý"},{"key":"z","label":"Chị muốn khác (ghi chú bên dưới)"}],"recommended":"a"},{"id":"5.4","question":"(H8, anh Nghiệp đã tạm đồng ý thay chị) Ai ở đội ops phụ trách nhập lịch khởi hành và xác nhận các tour \"theo yêu cầu\" trong 1 ngày làm việc?","proposed_answer":"Chị cho em tên người khi tiện.","why":"","options":[{"key":"a","label":"Đã đọc, đồng ý"},{"key":"z","label":"Chị muốn trao đổi thêm"}],"recommended":"a"}]},{"title":"Các mục anh Nghiệp đã tạm trả lời thay chị","short":"Các mục anh Nghiệp đã tạm trả lời thay chị","intro":"Chị xem lại cho chắc. Nếu đồng ý thì không cần làm gì; muốn đổi mục nào thì chị ghi lại giúp em.","items":[{"id":"H3","question":"Câu hứa về quyền riêng tư.","proposed_answer":"Đã sửa thêm ở 2.2.","why":"","options":[{"key":"a","label":"Đồng ý như anh Nghiệp đã trả lời"},{"key":"z","label":"Chị muốn đổi (ghi chú bên dưới)"}],"recommended":"a"},{"id":"H7","question":"Zalo.","proposed_answer":"Bản đầu chưa làm Zalo.","why":"","options":[{"key":"a","label":"Đồng ý như anh Nghiệp đã trả lời"},{"key":"z","label":"Chị muốn đổi (ghi chú bên dưới)"}],"recommended":"a"},{"id":"H8","question":"Xác nhận tour.","proposed_answer":"Tour có lịch cố định thì tự xác nhận; tour khác là \"theo yêu cầu\", AA ops xác nhận trong 1 ngày làm việc (xem 5.4).","why":"","options":[{"key":"a","label":"Đồng ý như anh Nghiệp đã trả lời"},{"key":"z","label":"Chị muốn đổi (ghi chú bên dưới)"}],"recommended":"a"},{"id":"H10","question":"Mẫu điều khoản và waiver.","proposed_answer":"AA soạn mẫu điều khoản và waiver song ngữ (xem 4.2).","why":"","options":[{"key":"a","label":"Đồng ý như anh Nghiệp đã trả lời"},{"key":"z","label":"Chị muốn đổi (ghi chú bên dưới)"}],"recommended":"a"},{"id":"H11","question":"AA xem số liệu tổng hợp của đại lý.","proposed_answer":"AA chỉ xem số liệu tổng hợp của nhóm có ít nhất 10 khách, đến từ ít nhất 3 đại lý, và chỉ của đại lý tự chọn tham gia.","why":"","options":[{"key":"a","label":"Đồng ý như anh Nghiệp đã trả lời"},{"key":"z","label":"Chị muốn đổi (ghi chú bên dưới)"}],"recommended":"a"},{"id":"H12","question":"Dịch vụ ký điện tử giai đoạn đầu.","proposed_answer":"Anh Nghiệp tạm chọn Documenso Teams cho giai đoạn đầu.","why":"Sau đó anh muốn chị quyết lại cùng các lựa chọn khác ở 3.1, nên mục 3.1 mới là câu cần chị trả lời.","options":[{"key":"a","label":"Đồng ý như anh Nghiệp đã trả lời"},{"key":"z","label":"Chị muốn đổi (ghi chú bên dưới)"}],"recommended":"a"}]}],"recorded":[],"recordedTitle":""}</script>
+<script>
+(function () {
+  var DATA = JSON.parse(document.getElementById('docket-data').textContent);
+  var answers = {};          // id -> {choice, note, approved, by, at}
+  var names = {};            // user id -> display name
+  var db = null, user = null, myId = null, canWrite = false;
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var toastTimer = null;
+  function toast(msg) { var t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 2600); }
+
+  // Tabs (deep link with #id)
+  function showTab(id) {
+    document.querySelectorAll('nav.tabs button').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === id)); });
+    document.querySelectorAll('main > section').forEach(function (s) { s.hidden = s.id !== 'panel-' + id; });
+  }
+  document.querySelectorAll('nav.tabs button').forEach(function (b) {
+    b.addEventListener('click', function () { showTab(b.dataset.tab); try { history.replaceState(null, '', '#' + b.dataset.tab); } catch (e) {} });
+  });
+  var h = (location.hash || '').slice(1);
+  if (h && document.getElementById('panel-' + h)) showTab(h);
+
+  function allItems() { var out = []; DATA.groups.forEach(function (g) { g.items.forEach(function (it) { out.push(it); }); }); return out; }
+  function stateOf(it) {
+    var a = answers[it.id];
+    if (!a || !a.approved) return 'wait';
+    return a.choice === it.recommended ? 'ok' : 'diff';
+  }
+
+  function renderLedger() {
+    var L = $('#ledger'); L.textContent = '';
+    DATA.groups.forEach(function (g) {
+      var n = g.items.length, d = g.items.filter(function (it) { return stateOf(it) !== 'wait'; }).length;
+      var c = el('div', 'cell'); c.appendChild(el('span', 'k', g.short || g.title));
+      c.appendChild(el('span', 'v', d + ' / ' + n + ' đã duyệt'));
+      var b = el('div', 'bar'); var i = el('i'); i.style.width = (n ? Math.round(100 * d / n) : 0) + '%'; b.appendChild(i); c.appendChild(b);
+      L.appendChild(c);
+    });
+  }
+
+  function labelOf(it, key) { var o = (it.options || []).filter(function (o) { return o.key === key; })[0]; return o ? o.label : key; }
+
+  async function save(it, patch) {
+    if (!db || !canWrite) { toast('Trang đang ở chế độ chỉ xem.'); return; }
+    var prev = answers[it.id] || {};
+    var next = Object.assign({}, prev, patch, { by: myId, at: new Date().toISOString() });
+    if (!next.choice) next.choice = it.recommended;
+    answers[it.id] = next; renderAll();
+    try { await db.collection('answers').doc(it.id).set(next); }
+    catch (e) {
+      answers[it.id] = prev; renderAll();
+      if (e && e.code === 'invalid_argument') { canWrite = false; setStatus('Bạn chỉ có quyền xem trang này. Nhờ Nghiệp cấp quyền Contributor để duyệt.', true); }
+      else toast('Chưa lưu được (' + ((e && e.code) || 'lỗi') + '). Thử lại sau giây lát.');
+    }
+  }
+
+  function card(it) {
+    var st = stateOf(it), a = answers[it.id] || {};
+    var c = el('div', 'card' + (st !== 'wait' ? ' done' : '')); c.id = 'item-' + it.id;
+    var top = el('div', 'card-top');
+    top.appendChild(el('span', 'id', it.id));
+    top.appendChild(el('div', 'q', it.question));
+    var pill = el('span', 'pill ' + st, st === 'wait' ? 'Chưa duyệt' : st === 'ok' ? 'Đã duyệt theo đề xuất' : 'Đã duyệt, khác đề xuất');
+    top.appendChild(pill); c.appendChild(top);
+    if (it.context) { var cx = el('div', 'ctx'); cx.innerHTML = it.context; c.appendChild(cx); }
+    if (it.proposed_answer) {
+      var p = el('div', 'proposal'); p.appendChild(el('span', 'lbl', 'Đề xuất trả lời')); p.appendChild(document.createTextNode(it.proposed_answer)); c.appendChild(p);
+    }
+    var opts = el('div', 'opts'); var cur = a.choice || it.recommended;
+    (it.options || []).forEach(function (o) {
+      var lab = el('label', 'opt' + (cur === o.key ? ' sel' : ''));
+      var inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'opt-' + it.id; inp.id = 'opt-' + it.id + '-' + o.key; inp.value = o.key; inp.checked = cur === o.key; inp.disabled = !canWrite;
+      inp.addEventListener('change', function () { save(it, { choice: o.key, approved: false }); });
+      lab.appendChild(inp);
+      var t = el('span'); t.appendChild(el('span', 'key', o.key + ') ')); t.appendChild(document.createTextNode(o.label));
+      if (o.key === it.recommended) t.appendChild(el('span', 'rec', 'Đề xuất'));
+      lab.appendChild(t); opts.appendChild(lab);
+    });
+    c.appendChild(opts);
+    if (it.why) { var d = document.createElement('details'); d.className = 'why'; d.appendChild(el('summary', null, 'Vì sao đề xuất như vậy')); var dv = el('div'); dv.textContent = it.why; d.appendChild(dv); c.appendChild(d); }
+    var ta = document.createElement('textarea'); ta.id = 'note-' + it.id; ta.placeholder = 'Ghi chú (không bắt buộc)'; ta.value = a.note || ''; ta.disabled = !canWrite; ta.rows = 1;
+    ta.addEventListener('change', function () { if ((answers[it.id] || {}).note !== ta.value) save(it, { note: ta.value }); });
+    c.appendChild(ta);
+    var row = el('div', 'row');
+    var who = el('span', 'who', a.approved ? ('Duyệt bởi ' + (names[a.by] || 'người duyệt') + (a.at ? ' · ' + new Date(a.at).toLocaleString('vi-VN') : '')) : (a.at ? 'Đã lưu lựa chọn, chưa bấm duyệt' : ''));
+    row.appendChild(who);
+    var btn = el('button', 'btn ' + (a.approved ? '' : 'ok'), a.approved ? 'Bỏ duyệt' : 'Duyệt lựa chọn này'); btn.type = 'button'; btn.disabled = !canWrite;
+    btn.addEventListener('click', function () { save(it, { approved: !a.approved, choice: cur }); });
+    row.appendChild(btn); c.appendChild(row);
+    return c;
+  }
+
+  function renderAll() {
+    renderLedger();
+    var G = $('#groups'); var focusId = document.activeElement && document.activeElement.id; G.textContent = '';
+    DATA.groups.forEach(function (g, gi) {
+      var sec = el('section', 'group');
+      var hd = el('div', 'group-head'); hd.appendChild(el('h2', null, g.title));
+      var bulk = el('button', 'btn primary', 'Duyệt tất cả mục còn lại theo đề xuất'); bulk.type = 'button'; bulk.id = 'bulk-' + gi;
+      var pending = g.items.filter(function (it) { return !(answers[it.id] && answers[it.id].approved); });
+      bulk.disabled = !canWrite || pending.length === 0;
+      bulk.addEventListener('click', async function () {
+        bulk.disabled = true;
+        for (var i = 0; i < pending.length; i++) { var it = pending[i]; var a = answers[it.id] || {}; await save(it, { approved: true, choice: a.choice || it.recommended }); }
+        toast('Đã duyệt ' + pending.length + ' mục theo đề xuất.');
+      });
+      hd.appendChild(bulk);
+      if (g.intro) hd.appendChild(el('p', null, g.intro));
+      sec.appendChild(hd);
+      g.items.forEach(function (it) { sec.appendChild(card(it)); });
+      G.appendChild(sec);
+    });
+    if (DATA.recorded.length) {
+      var sec = el('section', 'group'); var hd = el('div', 'group-head'); hd.appendChild(el('h2', null, DATA.recordedTitle)); sec.appendChild(hd);
+      var box = el('div', 'recorded');
+      DATA.recorded.forEach(function (r) { var row = el('div', 'r'); row.appendChild(el('span', 'id', r.id)); var t = el('div'); t.appendChild(el('div', null, r.question)); t.appendChild(el('div', 'a', r.answer)); row.appendChild(t); box.appendChild(row); });
+      sec.appendChild(box); G.appendChild(sec);
+    }
+    if (focusId) { var f = document.getElementById(focusId); if (f) f.focus(); }
+  }
+
+  function setStatus(msg, warn) { var s = $('#status'); s.textContent = msg; s.className = 'notice' + (warn ? ' warn' : ''); s.hidden = !msg; }
+
+  renderAll();
+
+  (async function connect() {
+    if (!window.claude || !window.claude.use) { setStatus('Bản xem này không lưu được câu trả lời. Mở trang trên claude.ai để duyệt.', true); return; }
+    var dbP = window.claude.use('db'), userP = window.claude.use('user');
+    db = await dbP; user = await userP;
+    if (!db) { setStatus('Bản xem này không lưu được câu trả lời. Đăng nhập claude.ai rồi mở lại trang để duyệt.', true); return; }
+    try { myId = user ? await user.id() : null; } catch (e) { myId = null; }
+    var w = null; try { w = user ? await user.can('data.write') : null; } catch (e) { w = null; }
+    canWrite = w !== false;
+    setStatus(canWrite ? '' : 'Bạn chỉ có quyền xem trang này. Nhờ Nghiệp cấp quyền Contributor để duyệt.', !canWrite);
+    db.collection('answers').onSnapshot(async function (snap) {
+      var next = {}; snap.docs.forEach(function (d) { if (d.exists) next[d.id] = d.data(); });
+      answers = next;
+      var ids = Object.keys(next).map(function (k) { return next[k].by; }).filter(Boolean);
+      if (user && ids.length) { try { var ps = await user.profiles(ids); ids.forEach(function (id) { names[id] = (ps[id] && ps[id].name) || 'người duyệt'; }); } catch (e) {} }
+      renderAll();
+    }, function () { setStatus('Mất kết nối nơi lưu câu trả lời. Tải lại trang để tiếp tục.', true); });
+  })();
+})();
+</script>
