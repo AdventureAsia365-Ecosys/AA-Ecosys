@@ -6,7 +6,7 @@
 > agreed to it. Counsel should rewrite it to fit the existing tenant agreement (defined terms,
 > numbering, liability, governing law). Every quotation of the Anthropic Usage Policy below comes
 > from the S236 review (read 14/10/2026). Counsel must check each one against the live text at
-> https://www.anthropic.com/legal/aup before relying on it.
+> <https://www.anthropic.com/legal/aup> before relying on it.
 
 | | |
 |---|---|
@@ -57,7 +57,7 @@ Counsel should align these terms.*
   [sub-processor list / Portal] from time to time.
 - **"Model Provider Policies"** means the acceptable-use and usage policies of the Model Providers
   and of the cloud platform through which they are accessed, as updated from time to time,
-  including the Anthropic Usage Policy (currently at https://www.anthropic.com/legal/aup) and the
+  including the Anthropic Usage Policy (currently at <https://www.anthropic.com/legal/aup>) and the
   AWS Acceptable Use Policy.
 - **"Channel"** means any website, social-media page or account, newsletter, marketplace or other
   medium on which the Tenant, or AA acting on the Tenant's instruction, publishes AI Output.
@@ -240,6 +240,7 @@ counsel approves the final Schedule.*
 > apply to businesses that use services built on their models.
 >
 > We have added a short schedule to our Terms, attached. In summary:
+>
 > - content must never be used for fake reviews, testimonials, made-up personas, or networks of
 >   accounts or sites that appear independent, and sponsorship must not be hidden;
 > - AI-generated content is marked as such in your portal, and you review and approve every item

@@ -12,6 +12,7 @@ Related: AA-741 (audit), AA-696/699/700/701 (T-series Jev), AA-668/670/671/672 +
 ## 1. How the tenant flows actually work
 
 ### T2 — tenant tour rewrite (job `t2_rewrite`)
+
 - Rewrites AA **Master** content (`published_tours.aa_*`) in the tenant's brand voice, with the
   tenant's own-market SEO keywords. It does NOT rewrite the raw tour.
 - Writer prompt = Master text + brand (`system_prompt` into the system prompt; `style_guide`,
@@ -26,6 +27,7 @@ Related: AA-741 (audit), AA-696/699/700/701 (T-series Jev), AA-668/670/671/672 +
   decides which tours are candidates (`tenant_tour_versions` membership).
 
 ### T7→T11 — content writing
+
 - **T7 Slate:** candidates = platform segments/routes of tours the tenant rewrote, ranked by a
   plain rank-sum (demand + recurrence + PAA questions + "said" length). Channel bars (blog needs
   demand ≥ 1000 and ≥ 3 questions; social needs said ≥ 150). Debate cuts rule-contested items and
@@ -46,6 +48,7 @@ Related: AA-741 (audit), AA-696/699/700/701 (T-series Jev), AA-668/670/671/672 +
 ## 2. DFS (DataForSEO) — tenants never buy; the market skew is an ops gap, not a bug
 
 Two different jobs, deliberately different:
+
 - **`s1_seo_prefetch`** (per-tour, for Master) picks **one** market via `resolve_buyer_market`
   (singular; US ranks first). Correct by design — Master is shared AA content keyed to one
   reference market. NOT a bug.
@@ -62,6 +65,7 @@ NEVER runs DFS when writing. Tenants only READ what the platform already has, to
 pick goal/angle and write. 0 tenant-tagged DFS rows since 29/09 (AA-646).
 
 **Unknown / unresearched market — how the system reacts (verified in code):**
+
 - T2 keywords (`tenant_market_seo`): if `search_demand` has nothing for that market, returns
   `(market, None)` → rewrite proceeds with the brand voice but no SEO keywords, logs
   `t2_seo_context_missing`. Never falls back to buying DFS.
@@ -71,8 +75,8 @@ pick goal/angle and write. 0 tenant-tagged DFS rows since 29/09 (AA-646).
 - T8/T9: use whatever PAA/keywords exist; with none, proceed on atom text without SEO signal.
 
 **Decided (Nghiệp, S231 12/10/2026):** T2 keeps writing for ONE market per tenant (the
-highest-ranked of its markets). No per-market T2 versions; revisit only with G7 numbers. Since
-#664 (S231) that market's keywords come from `search_demand` matched on the tour's atom places.
+highest-ranked of its markets). No per-market T2 versions; revisit only with G7 numbers.
+Since #664 (S231) that market's keywords come from `search_demand` matched on the tour's atom places.
 
 ## 3. LLM — all via the gateway; per-tenant cost is under-counted (fix = G1)
 
@@ -128,6 +132,7 @@ Ordered by dependency: fix measurement → pilot for real numbers → re-layer �
 UI. Each item is one PR or one session.
 
 ### Stage 1 — measure correctly (before the pilot)
+
 - **G1 [backend] tenant_id on every LLM call.** Set `tenant_id` in the gateway via a ContextVar
   (like `job_id`); remove `tenant_id=None` at the 9 call sites (judge, brand_audit, flag_fix ×2,
   itinerary_nudge, grounding, source_facts, t10_judge, f10_embed). Test: one T2 + one T9 log a
@@ -136,11 +141,13 @@ UI. Each item is one PR or one session.
   gives an estimate, Nghiệp triggers. Without it, the Europe-brand comparison is meaningless.
 
 ### Stage 2 — pilot (~$1)
+
 - **G3 [audit] pilot 3 tours × 4 tenants + one slate→angle→blog→social per tenant.** Measure real
   cost per stage, **blog vs social separately**, incl. T8+T9+T10+retry; measure T7/T8 request
   latency (evidence for G5); collect ground-truth labels during the run.
 
 ### Stage 3 — re-layer
+
 - **G4 [backend] separate T-series stage keys** (`t2_judge`, `t2_brand_audit`, `t7_debate_judge`…)
   so T cost/routing split from A1. Before the full run.
 - **G5 [backend] move T7/T8 + T9 fact-select to the worker** (jobs `t7_slate`, `t8_angles`; split
@@ -149,11 +156,13 @@ UI. Each item is one PR or one session.
   stale model docstrings.
 
 ### Stage 4 — full run + report
+
 - **G7 [audit] full 48 tours (12 × 4 tenants)**, S218 method.
 - **G8 [audit] T-series report + mechanism table + roadmap**; open a follow-up issue per
   "not fit" mechanism.
 
 ### Stage 5 — tenant management + portal
+
 - **G9 [admin] expand Tenant 360** — it is the **inline panel inside `/admin/tenants`** (AA-666),
   not a separate page. Add to its tabs: Cost ($/stage vs plan revenue → margin, per-tenant budget,
   $/tour, $/piece); Quality (pass/held per gate, tenant edit rate, brand distinctness, per-brand
@@ -163,7 +172,8 @@ UI. Each item is one PR or one session.
   (after the identity ADR + SES).
 
 ### Dependencies
-```
+
+```text
 G1 ─┐
 G2 ─┴→ G3 (pilot) ─→ G4 ─→ G7 ─→ G8
                       └→ G5 ⇄ AA-668 (G12)

@@ -4,7 +4,8 @@ name: Docs lint
 #   - ADR status lines and the ADR index (docs/adr/README.md)
 #   - no backslash-continued AWS CLI command in docs, skills, steering or .claude (WSL2 hang)
 #   - literal resource IDs in docs prose: warn-only here (private repo, docs/STYLE.md)
-#   - Markdown style (markdownlint, .markdownlint-cli2.jsonc): warn-only for now
+#   - Markdown style (markdownlint, .markdownlint-cli2.jsonc): catalog pages under docs/ (journals, archive and
+#     generated pages are ignored in the config)
 #   - internal links, offline (lychee): no network, no external sites
 #   - every alarm row of docs/generated/alarms.md links to an existing runbook (AA-893)
 #   - gitleaks on the lines this PR's commits add (secret names are fine in docs, values never are)
@@ -86,10 +87,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python tools/docs/check_docs_text.py resource-ids --mode warn
 
-      # Warn-only until the existing pages are cleaned up (about 90 findings outside the generated schema reference).
-      - name: Markdown style (warn-only)
+      # Failing since the existing pages were cleaned up (AA-888, S245). The scope (what is ignored and why) and the
+      # rule settings are in .markdownlint-cli2.jsonc; the action pins markdownlint-cli2 0.23.2.
+      - name: Markdown style
         if: ${{ !cancelled() }}
-        continue-on-error: true
         uses: DavidAnson/markdownlint-cli2-action@21c1be1b93ad9ed58fa840aacc3f279cde2a72ff # v24.2.0
         with:
           globs: docs/**/*.md

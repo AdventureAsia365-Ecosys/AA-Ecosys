@@ -303,8 +303,8 @@ in a CIS migration (or by the bootstrap once the migrator no longer holds `rds_s
 `no-extension`, `create-role`); review for CIS/TP; **X2** (*to build*).
 
 **MIG-7 (MUST)** Expand/contract for every shape change: expand (add) → ship readers and writers on the
-new shape → wait ≥ 14 days → contract (drop) in a separate migration under DRY RUN. A rename is add + copy
-+ switch + drop. One migration MUST NOT drop or rename something that deployed code still reads.
+new shape → wait ≥ 14 days → contract (drop) in a separate migration under DRY RUN.
+A rename is add + copy + switch + drop. One migration MUST NOT drop or rename something that deployed code still reads.
 *Why:* there is no per-app rollback; PITR rolls back all three apps. *Enforced:* review; lint
 (*to build*, **N5**).
 
@@ -479,6 +479,7 @@ partial: `aa_cis_admin` can still read and write it through `pg_read_all_data`/`
 ## 5. Views and contracts
 
 **CON-1 (MUST)** Cross-app reads go only through contract views:
+
 - the CIS read model in `catalog` (`catalog.v_<entity>`, owner `catalog_owner`). New CIS contract
   views of any kind go here, including tenant-facing ones (e.g. the AA-813 membership view) and
   read-backs such as ADR 0004a's CIS → Booking supply content view (named `shared.v_supply_content`
@@ -517,6 +518,7 @@ sample payload, consumer CI parses the same sample (README rule 7); hash guard o
 `apps/AA-TripPlanner-Web/backend/tests/contracts/catalog.tour.v1.json` (*to build*, **X7**).
 
 **CON-5 (MUST)** Versioning:
+
 - **Minor (additive):** a new field the consumer may ignore, a wider enum, a field becoming nullable.
   The producer may send it at once; consumers accept every minor of their major.
   Approved example: `inquiry.submitted` v1.2 adds `source_system` + `source_id` per leg (**X3**).
@@ -678,12 +680,14 @@ over 200 ms mean on the primary path, and record the result in the PR or session
 
 Copy into the PR description and tick or answer "n/a + reason".
 
-**Placement and ownership**
+**Placement and ownership:**
+
 - [ ] The file is in the owner repo of every schema it touches; nothing outside the owner's schemas (MIG-6)
 - [ ] Migration-only PR (D8); app code that reads new objects comes in a later PR (MIG-4)
 - [ ] Number unique for the owner, 3 digits, correct key prefix, self-registers with `ON CONFLICT DO NOTHING` (MIG-1–3)
 
-**Shape**
+**Shape:**
+
 - [ ] New objects not in `public`; no new CIS-private table in `shared` (NAM-2)
 - [ ] `uuid` PK for entities / identity PK for logs; `timestamptz`; text + CHECK, no new enum (NAM-4–7)
 - [ ] Filter/group fields are columns, not jsonb keys (NAM-9)
@@ -692,7 +696,8 @@ Copy into the PR description and tick or answer "n/a + reason".
 - [ ] Log/event/outbox/job table: retention row in Part B §7 + TTL index (NAM-15)
 - [ ] No cross-owner FK; tours keyed by `(source_system, source_id)`; canonical job/audit/place/country form reused (KEY-1, KEY-3, KEY-9)
 
-**Safety**
+**Safety:**
+
 - [ ] Header with issue, purpose, touched tables; `SET LOCAL lock_timeout/statement_timeout` until **N5** (MIG-9)
 - [ ] Expand/contract respected; nothing dropped that deployed code reads (MIG-7)
 - [ ] Idempotent; guards raise; cross-owner grants unguarded (MIG-8)
@@ -702,7 +707,8 @@ Copy into the PR description and tick or answer "n/a + reason".
 - [ ] Destructive: snapshot named, DRY RUN counts shown to Nghiệp, dead-table registry row (MIG-12)
 - [ ] No large backfill or retention delete in the migration (MIG-13)
 
-**Security**
+**Security:**
+
 - [ ] Per-object grants only; no default ACL to an app role; nothing to PUBLIC; until **N7**, `REVOKE ALL … FROM aa_app_user` on new shared/silver/gold tables it must not read (SEC-3, SEC-4)
 - [ ] Consumers get SELECT on views only, no table or column grants (SEC-5)
 - [ ] RLS template exactly: `app.tenant_id`, NULLIF, explicit WITH CHECK, `TO <role>`; FORCE for new apps (SEC-6, SEC-7)
@@ -710,17 +716,20 @@ Copy into the PR description and tick or answer "n/a + reason".
 - [ ] Tenant context set transaction-locally after a membership check; pool fails closed, no fallback pool (SEC-10)
 - [ ] New LOGIN role has a `CONNECTION LIMIT` and a row in Part C C2.2 (SEC-11, QRY-6)
 
-**Contracts**
+**Contracts:**
+
 - [ ] View in `catalog` (CIS), `<schema>.v_<entity>` (non-CIS producer) or `<schema>.v_<event>_outbox`; NOLOGIN owner; explicit columns; append-only change (CON-1–3)
 - [ ] JSON Schema + registry row in the same PR; minor vs major decided (CON-4, CON-5)
 
-**Queries**
+**Queries:**
+
 - [ ] Sargable predicates; index for every FK, soft key and hot filter (QRY-1, QRY-2)
 - [ ] `EXPLAIN (ANALYZE, BUFFERS)` pasted for new/changed views and queries on > 10k-row tables (QRY-3)
 - [ ] No LLM/HTTP/S3 call inside a transaction or while holding a connection; no connection shared by concurrent tasks (QRY-4, QRY-11)
 - [ ] Pool timeouts and connection budget unchanged, or Part C C2.2 updated in the same PR (QRY-5, QRY-6)
 
-**Tests and docs**
+**Tests and docs:**
+
 - [ ] Migration test asserting the new objects; RDS-like role for RLS/grant tests (TST-2, TST-3)
 - [ ] Isolation cases for every new tenant table (TST-4)
 - [ ] `db-schema-reference.md` regenerated after apply (MIG-4 step 6, until **N1** automates it)

@@ -181,7 +181,7 @@ be changed, and a VPC cold start plus an RDS connection would eat most of it. Th
 lives **in the pool itself**: a staff member is allowed if and only if the directory has pre-created an
 enabled native user for that email.
 
-**WORKFORCE**
+#### WORKFORCE
 
 1. **Pre sign-up** (`PreSignUp_ExternalProvider`, first Google sign-in only). Reject unless **all** hold:
    - `email_verified` is true (the Google IdP attribute mapping **must** map `email_verified`);
@@ -217,7 +217,7 @@ enabled native user for that email.
 the Terraform provider does not support it and `apply` silently removes it if set by hand
 (hashicorp/terraform-provider-aws #49707). Revisit when provider PR #47954 ships.
 
-**EXTERNAL**
+#### EXTERNAL
 
 1. **Pre sign-up**, by `callerContext.clientId`:
    - `cis-portal`: reject **every** `SignUp` and every federated first sign-in. The trigger has no
