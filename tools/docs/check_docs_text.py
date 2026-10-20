@@ -11,12 +11,21 @@ resource-ids    Literal AWS resource IDs in prose: sg-/subnet-/vpc-/... IDs, sta
                 hostnames (docs/STYLE.md, "Resource IDs"). Scope: docs/** minus journals,
                 templates excepted, the onboarding account map and generated pages.
                 --mode warn (root and Infra, private) or --mode error (public repos).
+                --block vpc,apigw keeps those kinds failing in warn mode (Infra: no VPC
+                resource ID or API Gateway host in any page; ARNs and account IDs warn).
+                Kinds: vpc, arn, user-pool, apigw, account.
+
+--all scans every tracked .md file of the repo (minus journals) instead of the check's
+default scope. The app and Infra repos keep their pages at the repo root and in docs/, so
+their docs-lint workflows pass --all; the root repo keeps the narrower default scope.
 
 Add `docs-lint: ignore` (for example in an HTML comment) to a line to skip it.
 
 Usage:
   python tools/docs/check_docs_text.py aws-multiline
+  python tools/docs/check_docs_text.py aws-multiline --all
   python tools/docs/check_docs_text.py resource-ids --mode warn
+  python tools/docs/check_docs_text.py resource-ids --all --mode warn --block vpc,apigw
   python tools/docs/check_docs_text.py resource-ids --mode error path/to/file.md ...
 """
 
@@ -46,6 +55,7 @@ ID_SCOPE = ["docs"]
 AWS_MULTILINE = re.compile(r"(?:^|[\s(|;&=`])aws\s+[a-z][a-z0-9-]*\b.*\\\s*$")
 
 _HEX_ID = r"[0-9a-f]{8}(?:[0-9a-f]{9})?"
+# (label, pattern); KIND_KEYS gives each label the short key that --block takes.
 RESOURCE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("VPC resource ID",
      re.compile(rf"(?<![\w-])(?:sg|subnet|vpc|vpce|rtb|igw|nat|eni|acl|eipalloc|tgw)-{_HEX_ID}(?![\w-])")),
@@ -56,6 +66,13 @@ RESOURCE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     # (aa-cis-bronze-<account>) is allowed by the style guide, so a leading '-' or word char skips it.
     ("12-digit account ID", re.compile(r"(?<![\w./:-])\d{12}(?![\w-])")),
 ]
+KIND_KEYS = {
+    "VPC resource ID": "vpc",
+    "ARN with account ID": "arn",
+    "Cognito user-pool ID": "user-pool",
+    "API Gateway host": "apigw",
+    "12-digit account ID": "account",
+}
 
 
 def _lines(root: Path, relpath: str):
@@ -97,6 +114,7 @@ def check_resource_ids(root: Path, files: list[str]) -> list[Finding]:
                         relpath, n, "Literal resource ID",
                         f"{label} '{m.group(0)}' in prose; use the resource name, a Terraform output "
                         "or a link to the account map in docs/onboarding.md.",
+                        kind=KIND_KEYS[label],
                     ))
                     break
     return findings
@@ -112,22 +130,40 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("check", choices=["aws-multiline", "resource-ids"])
     parser.add_argument("files", nargs="*", help="repo-relative files (default: the check's scope)")
     parser.add_argument("--mode", choices=["warn", "error"], default="error")
+    parser.add_argument("--block", type=_kinds, default=set(),
+                        help="resource-ids: comma-separated kinds that fail even with --mode warn ("
+                        + ", ".join(KIND_KEYS.values()) + ")")
+    parser.add_argument("--all", action="store_true", help="scan every tracked .md file (minus journals)")
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
     args = parser.parse_intermixed_args(argv)
     root = args.root.resolve()
 
     if args.check == "aws-multiline":
-        files = _select(root, AWS_SCOPE, args.files)
+        files = _select(root, ["."] if args.all else AWS_SCOPE, args.files)
         findings = check_aws_multiline(root, files)
-        level = "error"
+        errors, warnings = findings, []
     else:
-        files = _select(root, ID_SCOPE, args.files)
+        files = _select(root, ["."] if args.all else ID_SCOPE, args.files)
         findings = check_resource_ids(root, files)
-        level = "warning" if args.mode == "warn" else "error"
+        if args.mode == "error":
+            errors, warnings = findings, []
+        else:
+            errors = [f for f in findings if f.kind in args.block]
+            warnings = [f for f in findings if f.kind not in args.block]
 
-    emit(findings, level)
-    print(f"{args.check}: {len(files)} files checked, {len(findings)} findings ({level})")
-    return 1 if findings and level == "error" else 0
+    emit(errors, "error")
+    emit(warnings, "warning")
+    print(f"{args.check}: {len(files)} files checked, {len(errors)} errors, {len(warnings)} warnings")
+    return 1 if errors else 0
+
+
+def _kinds(value: str) -> set[str]:
+    kinds = {k.strip() for k in value.split(",") if k.strip()}
+    unknown = kinds - set(KIND_KEYS.values())
+    if unknown:
+        raise argparse.ArgumentTypeError(
+            f"unknown kind(s) {', '.join(sorted(unknown))}; use {', '.join(KIND_KEYS.values())}")
+    return kinds
 
 
 if __name__ == "__main__":
