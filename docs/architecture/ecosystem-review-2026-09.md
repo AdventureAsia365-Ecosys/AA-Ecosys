@@ -114,7 +114,7 @@ All of these are exposed only through inference profiles (`us.*` and `global.*`)
 
 ### F4 — Admin and Tenant UI: duplicated structure, thin pages [FACT]
 
-**Admin navigation**
+#### Admin navigation
 
 - Two "Dashboard" entries: "ACP v2 — Setup & Approval" and "AA Internal Content".
 - Legacy route group `(internal)/{catalog,upload,brand,review}` duplicates `/admin/*`.
@@ -133,7 +133,7 @@ All of these are exposed only through inference profiles (`us.*` and `global.*`)
 **External Spend** (`/admin/llm-usage`) should become **Cost Operations**. It needs budgets and alerts,
 not only reporting.
 
-**Tenant portal**
+#### Tenant portal
 
 - Account pages (Activity, Billing, Settings) are single components in `PlaceholderTabs.tsx`.
 - My Content is a list, not a table.

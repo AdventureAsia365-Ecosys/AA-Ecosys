@@ -5,6 +5,7 @@ Every event or read model one app exposes to another is described here as a JSON
 **outbox → pull consumer → inbox**.
 
 ## Rules
+
 1. **Owner.** The producing app owns the contract file and the read view (`<schema>.v_<event>_outbox` or a catalog
    view). Consumers never read the producer's tables.
 2. **Versioning.**
@@ -29,6 +30,7 @@ Every event or read model one app exposes to another is described here as a JSON
 7. **CI.** Producer tests validate a sample payload against the schema; consumer tests parse the same sample.
 
 ## Registry
+
 | Contract | Producer → consumer | View | Status |
 |---|---|---|---|
 | `inquiry.submitted.v1.json` | TripPlanner → AA-Booking | `tripplanner.v_inquiry_outbox` (tp-008) | superseded by 1.1 (additive) |

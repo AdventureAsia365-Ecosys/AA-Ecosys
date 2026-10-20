@@ -6,6 +6,7 @@ the AA-Booking repo (`docs/erd/`) once that repo exists (AA-678). Schema `bookin
 paste it into dbdiagram.io to render it.
 
 **Inputs:**
+
 - `../AA ERD.pdf` (v1: 17 tables, 6 enums);
 - `../Adventure Asia PRD and Technical Spec Doc [Final].pdf`;
 - `../AAA_Quanskill_Handover_Review.docx` (10/06/2026);

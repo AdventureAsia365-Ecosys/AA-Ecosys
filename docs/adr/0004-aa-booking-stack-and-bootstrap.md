@@ -62,7 +62,8 @@ the answer Nghiệp gave on 14/10/2026.
    - Database: PostgreSQL 15 on the shared RDS.
 
 2. **Repo `AdventureAsia365-Ecosys/AA-Booking`, layout:**
-   ```
+
+   ```text
    backend/        FastAPI app (app/main.py, app/routers/, app/db.py, app/settings.py), tests/unit, tests/integration, Dockerfile
    migrations/     NNN_<name>.sql — owner key bk-NNN
    frontend/       placeholder until the first UI slice (staff identity O1 and customer surface O8 are decided)
@@ -70,6 +71,7 @@ the answer Nghiệp gave on 14/10/2026.
    docs/erd/       ERD v2 (moved from AA-Ecosys/docs/AAA/erd-v2)
    CONTEXT.md, README.md, .claude/CLAUDE.md   (English)
    ```
+
    - Trunk-based (ADR-2026-023): feature branch → PR → required CI → human merge to `main`.
    - Commits follow the program format (`feat|fix|chore|refactor|docs: …` + `Refs AA-xxx`).
 

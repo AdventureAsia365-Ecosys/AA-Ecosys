@@ -170,7 +170,7 @@ These meanings are binding. A new column MUST NOT reuse a name below with a diff
 | DM-4.7 | Every domain SHOULD publish the measures below on an admin page or in the nightly dump, with a threshold its steward sets. A breach SHOULD alarm or appear on the admin overview. A new domain (playbook) MUST ship at least a job backlog-age alarm (review §6.3). Many measures already exist on CIS admin pages (Jobs, cost, place coverage per ADR 0007); the rest are added when the domain's owner touches that area, not as one project. | Quality nobody measures decays silently, but a small team cannot build every gauge at once. | Review; to build (N1+ for the dump-based rows) |
 | DM-4.8 | Wave and backfill reports MUST count from the database (exact counts and an expected set), not from logs. | Lost-tour incidents (S212) were found by counting. | Runbook (`aa-wave-rerun`) |
 
-**What to measure per domain**
+**What to measure per domain:**
 
 | Domain | Completeness | Freshness | Validity |
 |---|---|---|---|
@@ -241,7 +241,7 @@ These meanings are binding. A new column MUST NOT reuse a name below with a diff
 | DM-7.4 | Rollups MUST be written before raw rows expire, and readers of history (cost and usage pages) MUST read the rollup. | Pages stay fast and keep their history past the raw window. | to build (N4) |
 | DM-7.5 | A retention window change MUST be approved by Nghiệp and land as an amendment to this table. | Retention is a cost, audit and privacy decision. | Review |
 
-**Retention table (bold windows are approved in E3; rows marked "proposed" need the owner's confirmation and Nghiệp's approval (DM-7.5) in N4 for CIS or L3 for TripPlanner/Booking PII; until then nothing in a "proposed" row is deleted)**
+**Retention table** (bold windows are approved in E3; rows marked "proposed" need the owner's confirmation and Nghiệp's approval (DM-7.5) in N4 for CIS or L3 for TripPlanner/Booking PII; until then nothing in a "proposed" row is deleted)
 
 | Table | Owner | Raw window | Rollup / after expiry | Archive before delete |
 |---|---|---|---|---|

@@ -63,6 +63,7 @@ version V3, the V3 price cannot change.
 
 ## Decisions on the former open items (approved by Nghiệp, 14/10/2026)
 
+<!-- markdownlint-disable MD029 -- numbering continues decisions 1-7 above, which other text cites (decision 8) -->
 8. **Who enters prices.** A new staff role `contracting` (next to admin / sales / content_creator) owns supplier
    contracts and net rates; Ms. Thư or a named ops/product person holds it at first. **Maker-checker:** one person
    uploads or edits, another publishes; every change is audited. Sales never edit net rates — they quote and may
@@ -80,3 +81,4 @@ version V3, the V3 price cannot change.
     consumption × service type × validity. B2C prices are shown tax-inclusive (all-in) and invoices itemise tax;
     B2B net prices state whether tax is included, per the agent contract. If an EU entity or EU sales appear
     later, check the EU tour-operator margin scheme (TOMS) with the accountant.
+<!-- markdownlint-enable MD029 -->
