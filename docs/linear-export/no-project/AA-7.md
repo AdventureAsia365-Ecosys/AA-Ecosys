@@ -1,4 +1,6 @@
----
+# AA-7 — Legacy image migration → S3 + CloudFront CDN
+
+```yaml
 identifier: "AA-7"
 title: "Legacy image migration → S3 + CloudFront CDN"
 state: "Canceled"
@@ -16,9 +18,7 @@ canceled_at: "2026-08-21T09:26:58.006Z"
 updated_at: "2026-08-21T09:26:58.025Z"
 trashed: false
 url: "https://linear.app/aa-ecosys/issue/AA-7/legacy-image-migration-s3-cloudfront-cdn"
----
-
-# AA-7 — Legacy image migration → S3 + CloudFront CDN
+```
 
 # Legacy Image Migration → S3 + CloudFront CDN
 
