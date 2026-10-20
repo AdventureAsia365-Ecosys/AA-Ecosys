@@ -1,9 +1,9 @@
 ---
-id: SEC-05-2026Q4
+id: SEC-05-2026q4
 title: Access review 2026-Q4 (first DM-8.10 review)
 description: Ai và cái gì có quyền vào từng app (GitHub, Vercel, AWS IAM, Cognito, DB role, secret) tại 20/10/2026, kèm phát hiện và việc tiếp theo.
-type: audit
-status: final
+type: report
+status: active
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem, aa-cis-api, aa-booking, tripplanner-lambda, aa-cis-infra]
