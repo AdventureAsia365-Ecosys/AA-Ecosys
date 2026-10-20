@@ -1,4 +1,6 @@
----
+# AA-4 — Import your data
+
+```yaml
 identifier: "AA-4"
 title: "Import your data"
 state: "Done"
@@ -16,9 +18,7 @@ canceled_at: null
 updated_at: "2026-05-13T12:22:08.993Z"
 trashed: false
 url: "https://linear.app/aa-ecosys/issue/AA-4/import-your-data"
----
-
-# AA-4 — Import your data
+```
 
 Sync data between Linear and your other tools.
 

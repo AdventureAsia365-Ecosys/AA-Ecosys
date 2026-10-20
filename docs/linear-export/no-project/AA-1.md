@@ -1,4 +1,6 @@
----
+# AA-1 — Get familiar with Linear
+
+```yaml
 identifier: "AA-1"
 title: "Get familiar with Linear"
 state: "Done"
@@ -16,9 +18,7 @@ canceled_at: null
 updated_at: "2026-05-13T12:21:54.756Z"
 trashed: false
 url: "https://linear.app/aa-ecosys/issue/AA-1/get-familiar-with-linear"
----
-
-# AA-1 — Get familiar with Linear
+```
 
 Welcome to Linear! 
 

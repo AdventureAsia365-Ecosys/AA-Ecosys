@@ -1,4 +1,6 @@
----
+# AA-2 — Set up your teams
+
+```yaml
 identifier: "AA-2"
 title: "Set up your teams"
 state: "Done"
@@ -16,9 +18,7 @@ canceled_at: null
 updated_at: "2026-05-13T12:21:59.588Z"
 trashed: false
 url: "https://linear.app/aa-ecosys/issue/AA-2/set-up-your-teams"
----
-
-# AA-2 — Set up your teams
+```
 
 This workspace is a container for your organization’s work. 
 
