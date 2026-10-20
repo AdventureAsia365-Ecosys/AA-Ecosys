@@ -127,17 +127,20 @@ pass of the old sentence it came from when:
 
 1. the old sentence passed F9, and
 2. the new one is the old one or a **deletion-only** edit of it: the old words in the same order with some removed;
-   a removed run sits at the start or end, between two punctuation breaks, or is only filler adverbs ("also",
-   "very"…); no negation, hedge or option word is removed ("not", "optional", "about", "can", "if", "said"…); no new
-   symbol; and
+   every removed run is only filler adverbs ("also", "very"…) or ends at a punctuation break: a start run needs a
+   break before the first kept word, an end run a break before the first removed word, a middle run a break on both
+   sides (an appositive or a parenthetical); no negation, hedge, option or quantifier word is removed ("not",
+   "optional", "about", "can", "if", "said", "most", "at least", "per", "all"…); no new symbol. A run cut without a
+   break can drop a qualifier and broaden the claim ("Lunch is included on most days of the trek." → "Lunch is
+   included.", "The museum is open daily in summer." → "…open daily."), so that is judged again; and
 3. a referent opener keeps its antecedent: the sentence before it is the same, a deletion-only edit of the old one,
    or, for a definite noun phrase opener ("The sacred cave…"), still holds every content word the sentence shared with
    its old neighbour. A pronoun after a rewritten neighbour ("It was founded in 1692.") is still judged again.
 
 Covered: #9 (deletion only) and #12 (unchanged, definite-noun-phrase opener). Not covered, on purpose: #5b and #11
 add words, and accepting synonyms would need a judgement the code cannot make safely; #13 and #14 are real faults. A
-plain set (any other caller) and attempt 1 behave exactly as before. 30 unit tests, including these before/after
-pairs; the full CIS unit suite passes (8693 passed, 1 skipped).
+plain set (any other caller) and attempt 1 behave exactly as before. 37 unit tests, including these before/after
+pairs and six qualifier-cut pairs that must be judged again; the full CIS unit suite passes (8700 passed, 1 skipped).
 
 ## 7. Re-measure
 
@@ -146,6 +149,9 @@ pairs; the full CIS unit suite passes (8693 passed, 1 skipped).
 `script/s245_f9_counterfactual.py` replays the rules on every F9 item of `pool.json`, importing `_f9_key`,
 `_f9_deletion_only` and `_f9_antecedent_kept` from the CIS fix branch. For k = 2 cases the attempt-1 sentence and
 its neighbour come from the §5 reading (table `REVIEWED` in the script). Output: `counterfactual_stdout.json`.
+Re-run after the review tightened the deletion-only rule (a start or end run must end at a punctuation break; more
+quantifier words kept): the output is byte-identical, so the numbers below stand. #9 still carries because its cut
+starts after the colon of "…of 1937:".
 
 Check: replaying the **current** main rule on the current-code pool removes nothing (4/31 stays 4/31), which is
 what the live r7 run showed. On the primary pool it removes only #8, which #767 fix 3 fixed.
