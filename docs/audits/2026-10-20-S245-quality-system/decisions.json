@@ -1,0 +1,221 @@
+[
+ {
+  "id": "D1",
+  "question": "Thi hành cổng chất lượng thế nào để không chỉ dựa vào kỷ luật của agent?",
+  "context": "AA-779 cho thấy luật merge chỉ là quy ước thì bị bỏ qua. 454 PR/tháng; ~40 PR chạm path judge. CI repo public không có quyền DB. Workflow eval-regression.yml đã dùng OIDC + ECS exec từ main.",
+  "options": [
+   {
+    "key": "a",
+    "label": "Q0 là một bước trong job pytest unit đang bắt buộc. PR chạm path judge phải có status quality/q2 khớp hash diff path chất lượng; status do workflow chạy từ main đăng bằng GITHUB_TOKEN. Không secret mới, không đổi branch protection."
+   },
+   {
+    "key": "b",
+    "label": "Chỉ Q0 trong CI; Q2 là luật merge của agent (quy ước)."
+   },
+   {
+    "key": "c",
+    "label": "Thêm required check mới và runner trên Dev đăng status bằng token GitHub riêng."
+   }
+  ],
+  "recommended": "a",
+  "why": "Chặn được bằng máy mà không đưa token GitHub vào Dev, không chạy code PR với quyền AWS. PASS mang sang commit mới khi diff path chất lượng không đổi nên fixup không tốn tiền."
+ },
+ {
+  "id": "D2",
+  "question": "Kiểm tra trả tiền (Q3 viết lại) và replay chạy lúc nào?",
+  "context": "~46 PR/tháng chạm path writer/repair. Q3 mỗi lần ~$10. Q1 trước merge cần build image cho mỗi PR và chạy code chưa merge trên Dev với quyền DB. Dev không có người dùng.",
+  "options": [
+   {
+    "key": "a",
+    "label": "Q3 gom một lần mỗi release train tháng, control là train trước; fail thì revert từng PR để tìm. Replay R0 chạy sau merge trên Dev ($0), hồi quy thì agent mở PR revert. Hoãn Q1 trước merge tới prod đầu tiên."
+   },
+   {
+    "key": "b",
+    "label": "Q3 cho mỗi PR writer/repair, Q1 trước merge cho mỗi PR gate."
+   },
+   {
+    "key": "c",
+    "label": "Q3 cho mỗi PR nhưng chỉ tier hard_cases; R0 sau merge."
+   }
+  ],
+  "recommended": "a",
+  "why": "(b) tốn ~$90–370/tháng và thêm hạ tầng rủi ro. (a) giữ phần tất định chạy ngay ($0, oracle trên toàn bộ ~900 tour), phần trả tiền theo lô. Đổi lại lỗi writer có thể chỉ lộ ở train, chấp nhận được vì Dev không có người dùng."
+ },
+ {
+  "id": "D3",
+  "question": "Ngân sách eval và học hằng tháng?",
+  "context": "Tính lại theo nhịp PR thật: Quality System thường ~$27 (khoảng $17–48), Writing Memory thường ~$7 (trần $25). shared.spend_budget đã có (per_run/per_day, scope job:<kind>); trần tháng thêm bằng code trong cost_guard.py, không migration. Đơn giá T2 cần đo lại sau AA-792.",
+  "options": [
+   {
+    "key": "a",
+    "label": "Một trần chung $35/tháng, $10/lần chạy."
+   },
+   {
+    "key": "b",
+    "label": "Một trần chung $40/tháng, $10/lần chạy, báo ở 80%; gần trần thì ưu tiên xác minh lỗi hard và Q3 train, giãn canary/control chart."
+   },
+   {
+    "key": "c",
+    "label": "Một trần chung $50/tháng, $10/lần chạy."
+   },
+   {
+    "key": "d",
+    "label": "Hai trần riêng: WM $25 + Quality System $20."
+   }
+  ],
+  "recommended": "b",
+  "why": "Mức thường ~$34 sát $35 nên tháng bận sẽ chạm trần ngay. $40 có chỗ thở nhưng vẫn chặn cứng. Một bộ đếm thay vì hai giúp WM-12 không phải viết helper riêng. Chốt lại số sau khi đo đơn giá T2."
+ },
+ {
+  "id": "D4",
+  "question": "Taxonomy lỗi v1 rộng tới đâu?",
+  "context": "Panel AA-729 chỉ có mẫu dương đáng kể ở ~11 lớp (F5 25; F1/F2/F3 17; F8 11; S2 10; S1 8; F4 7; C2/C4/F9 5). Bản trước có 26 lớp, 11 trường mỗi lớp.",
+  "options": [
+   {
+    "key": "a",
+    "label": "~17 lớp: 12 lớp writer (≥ 5 mẫu dương hoặc hard), 3 lớp safety, lớp selector scope.faq_question_offtopic, lớp nguồn source.contradiction. Lớp khác vào other.* mức warn tới khi có ví dụ. 8 trường mỗi lớp."
+   },
+   {
+    "key": "b",
+    "label": "Giữ đủ 26 lớp như bản trước."
+   }
+  ],
+  "recommended": "a",
+  "why": "Lớp không có dữ liệu thì không đo được, chỉ thêm việc. Gate hiện có của các lớp other.* vẫn chạy như cũ; lớp được nâng lên khi có ví dụ thật."
+ },
+ {
+  "id": "D5",
+  "question": "Khi nào một gate hoặc judge được phép chặn (block)?",
+  "context": "Luật cũ (precision ≥ 0.70, n ≥ 20 dương trên golden) chỉ F5 đạt. Tín hiệu sản xuất (gate_ledger, Dismiss/style_only/override) cho n hàng trăm, $0. Có 27 gate, 6 gate từng không fire.",
+  "options": [
+   {
+    "key": "a",
+    "label": "Detector mới chạy shadow tới khi precision ≥ 0.70 (đo từ tín hiệu sản xuất) và recall lớp hard ≥ 0.80 (golden + mẫu cấy lỗi ≥ 30/lớp). Gate đang chặn giữ nguyên; gate nào bị gỡ cờ > 30% thì đưa anh một quyết định theo lô."
+   },
+   {
+    "key": "b",
+    "label": "Mọi gate, kể cả gate cũ, phải đo lại và anh duyệt giữ/hạ từng gate."
+   },
+   {
+    "key": "c",
+    "label": "Giữ như hiện nay, không đo."
+   }
+  ],
+  "recommended": "a",
+  "why": "Đo được ngay ở $0 và không đẩy ~20 quyết định lẻ cho anh. Lớp chưa đủ mẫu thì chỉ báo cáo kèm verifier, không giả vờ có thống kê."
+ },
+ {
+  "id": "D6",
+  "question": "Nuôi golden set tới đâu trong v1?",
+  "context": "T2 có 7 mẫu, Facebook 0 nên hai tier này chưa chặn được release. Bản trước nhắm gs-v2 ~140, gs-v3 ~175, lô hằng tháng anh duyệt, job kiểm nguồn hằng đêm. Thiếu mẫu dương sẽ được bù bằng mẫu cấy lỗi.",
+  "options": [
+   {
+    "key": "a",
+    "label": "gs-v2 chỉ nuôi T2 lên 15 và Facebook lên 10; tier khác giữ nguyên. Không job đêm: kiểm source_sha256 lúc chạy eval. Không đặt mục tiêu gs-v3."
+   },
+   {
+    "key": "b",
+    "label": "Theo bản trước: gs-v2 ~140 (T2 20), gs-v3 ~175, lô hằng tháng."
+   }
+  ],
+  "recommended": "a",
+  "why": "Ít thời gian duyệt nhãn của anh nhất mà vẫn mở khoá hai tier đang mù. T2 giữ ở 15 vì mỗi mẫu T2 viết lại tốn ~$0.38 (số trước AA-792)."
+ },
+ {
+  "id": "D7",
+  "question": "Có hiệu chỉnh chính full-source verifier không?",
+  "context": "Verifier là trọng tài cuối cho lớp hard và nhãn golden, nhưng là LLM chưa được đo, thường cùng họ model với judge, và đang chạy trong Claude Code nên Q3 không chạy tự động được.",
+  "options": [
+   {
+    "key": "a",
+    "label": "Anh gán một bộ audit 30–40 claim (một lần, ~40 phút). Verifier phải khác họ model với judge được kiểm, chạy trên ECS qua LLMClient (stage eval_verify), đo lại khi prompt/model verifier đổi."
+   },
+   {
+    "key": "b",
+    "label": "Như (a) nhưng panel agent gán bộ audit thay anh."
+   },
+   {
+    "key": "c",
+    "label": "Tin verifier, không đo."
+   }
+  ],
+  "recommended": "a",
+  "why": "Nếu trọng tài sai thì mọi số phía sau đều sai mà không ai biết. Nhãn của anh là nguồn duy nhất không do LLM tạo. Một lần 40 phút, sau đó Q3 chạy hết không cần người."
+ },
+ {
+  "id": "D8",
+  "question": "Có đo nhiễu của writer và trôi của judge không?",
+  "context": "Luật Q3 '0 lỗi hard mới' sẽ fail oan nếu chính main viết lại cũng sinh lỗi mới ngẫu nhiên. Cache verdict che việc nhà cung cấp đổi model sau cùng model_id. Chi phí: nhiễu writer ~$1–2 mỗi train; canary ~$1.7/tháng.",
+  "options": [
+   {
+    "key": "a",
+    "label": "Có cả hai: ở mỗi train viết lại control 2 lần trên tier hard_cases (S1 + T9), cache theo prompt_version + model; canary hằng tuần chấm lại không cache 10 anchor mỗi judge, lệch thì báo và reverify."
+   },
+   {
+    "key": "b",
+    "label": "Chỉ đo nhiễu writer, bỏ canary."
+   },
+   {
+    "key": "c",
+    "label": "Không đo, dùng noise_k = 1 cố định."
+   }
+  ],
+  "recommended": "a",
+  "why": "Không có số nhiễu thì cổng hoặc chặn oan (rồi bị bỏ qua) hoặc để lọt. Tổng thêm ~$3–4/tháng, nằm trong trần D3."
+ },
+ {
+  "id": "D9",
+  "question": "Tạo issue Linear thế nào và làm gì trước?",
+  "context": "Linear gói Free, còn ít quota. Bản trước có 4 issue mới (Q-1, Q-2, Q-6, Q-7). Hai kiểu lỗi đắt nhất: AA-777 (repair, 7 ngày, 3 PR, 2 vòng trả tiền) và Jev 402 âm thầm (~48k lần).",
+  "options": [
+   {
+    "key": "a",
+    "label": "2 issue mới: Q-2 (repair_contract + sửa fitter AA-740 + degraded[] + oracle ngày + corpus Q0) làm trước, rồi Q-1 (taxonomy, registry, thresholds, lint). Q-3 gộp AA-916, Q-5 gộp AA-918, Q-6 gộp AA-919, Q-8 gộp AA-922, selector gộp AA-779. Bỏ Q-7."
+   },
+   {
+    "key": "b",
+    "label": "4 issue mới như bản trước, Q-1 làm trước."
+   }
+  ],
+  "recommended": "a",
+  "why": "Tiết kiệm 2 issue và ~2 phiên. Phiên đầu nhắm thẳng vào hai kiểu lỗi đắt nhất thay vì dựng hạ tầng trước."
+ },
+ {
+  "id": "D10",
+  "question": "Xử lý AA-779 (bộ lọc câu hỏi FAQ) thế nào?",
+  "context": "5 vòng sửa trong một phiên: sửa 'bỏ nhầm' thì sinh 'giữ nhầm' (Karakoram, Darkhan, Mongolian beef, Burmese python). Lỗi nằm ở selector input (real_questions.py, nhánh fix/real-questions-scope-variants), không ở gate output.",
+  "options": [
+   {
+    "key": "a",
+    "label": "Dừng vòng chỉnh luật. Dựng bộ ~150 câu PAA thật có nhãn keep/drop (private, chạy ở R0) cộng bộ sinh đối kháng tổng hợp trong CI (hàng xóm edit-distance của tên địa danh; tên nước/demonym + danh từ thường). Luật: sửa một chiều không được làm xấu chiều kia. Sửa một lần theo số."
+   },
+   {
+    "key": "b",
+    "label": "Tiếp tục các vòng sửa hiện tại."
+   }
+  ],
+  "recommended": "a",
+  "why": "Đây đúng là kiểu 'sửa chỗ này sinh lỗi chỗ khác'. Bộ hai chiều biến nó thành test có số, và là ca thử đầu tiên của quy trình Q-FIX."
+ },
+ {
+  "id": "D11",
+  "question": "Các loop writer–judge hiện có (S1/A1, T2/T3, T9/T10): xử lý thế nào trong Quality System?",
+  "context": "Loop trong giữ nguyên. Hiện có 3 loop học đang hở: lesson tự động không vào prompt; tenant sửa bài T9 thì mất bản gốc; bài không mang version. Hàm T9 dài khoảng 620 dòng nên khó sửa an toàn. Chi tiết ở §13 tab Thiết kế.",
+  "options": [
+   {
+    "key": "a",
+    "label": "Giữ các loop; trong P0 nối 3 loop học hở (giữ bản trước/sau khi tenant sửa, đưa lesson qua Writing Memory thay pipeline_lessons, ghi version); thêm repair contract cho mọi loop; tách hàm T9 sau khi Q0 đủ phủ"
+   },
+   {
+    "key": "b",
+    "label": "Như (a) nhưng tách hàm T9 ngay trong P0"
+   },
+   {
+    "key": "c",
+    "label": "Chỉ nối 3 loop học hở, chưa đụng repair contract"
+   }
+  ],
+  "recommended": "a",
+  "why": "Không nối 3 loop hở thì hệ thống không có dữ liệu để học. Tách hàm T9 trước khi Q0 đủ phủ dễ sinh lỗi mới, đúng loại lỗi mà ta đang muốn chặn."
+ }
+]
