@@ -108,7 +108,7 @@ Rút ra: công cụ du lịch mạnh itinerary/báo giá nhưng yếu CRM và im
 không hiểu tour. **Không ai cung cấp sẵn nội dung itinerary** — đại lý phải tự gõ. Đó là lợi thế riêng của AA: lead đến
 đã kèm tour/ngày/pax, proposal dựng từ tour master theo giọng thương hiệu tenant, giá chỉ báo từ giá net thật, và miễn phí
 cho đối tác. 8 "table stakes" ở [03 §3](research/03-market-benchmark.md) được dùng làm tiêu chí nghiệm thu demo với đại
-lý pilot (dữ liệu giả, từ W4).
+lý pilot (dữ liệu giả, từ W3).
 
 ## 5. Ba phương án kiến trúc (output thật của panel)
 
@@ -153,7 +153,8 @@ tính lại ở §13.
 ## 6. Điểm giám khảo (panel thật)
 
 Hai giám khảo độc lập, mỗi người chấm 5 tiêu chí, thang 1–5 mỗi tiêu chí, tổng tối đa 25, không trọng số. Nguyên văn
-lý do, đề xuất ghép (grafts) và lỗi của phương án thắng: [judges.json](research/judges.json).
+lý do, đề xuất ghép (grafts) và lỗi của phương án thắng: [judges.json](research/judges.json). Nhãn PO/CTO lấy từ cách
+dựng panel (judge[0] = PO, judge[1] = CTO): `judges.json` không ghi nhãn, chỉ judge[1] tự nói "Under the CTO lens".
 
 | Tiêu chí | PO: A | PO: B | PO: C | CTO: A | CTO: B | CTO: C |
 |---|---|---|---|---|---|---|
@@ -175,15 +176,20 @@ lý do, đề xuất ghép (grafts) và lỗi của phương án thắng: [judge
 B thua rõ ở cả hai góc nhìn (trộn dữ liệu khách của AA với khách của đại lý trong một schema).
 
 - **PO chọn C vì:** là phương án duy nhất theo đúng ADR 0008 §8 ("If built, it is a CIS module with its own crm schema …
-  so a later move to its own repo needs no renumbering") và DM-6.8; tái dùng nhiều nhất thứ đang chạy (portal + kit,
-  process api/worker, Cognito `cis-portal`, job template, hạ tầng); rẻ nhất trên Dev; tuân thủ 5/5 vì không có grant DB
-  nào trên `crm.*`. Trừ điểm: ước lượng phiên cao nhất, sửa job runner lõi CIS, phát hành gắn với 5 job CI của CIS.
+  so a later move to its own repo needs no renumbering") và DM-6.8 như đã viết, chỉ cần sửa standards cho điều khoản
+  insights và các lớp PII mới (lý do PO cho tuân thủ 5/5); tái dùng nhiều nhất thứ đang chạy (portal + kit, process
+  api/worker, Cognito `cis-portal`, job template, hạ tầng); rẻ nhất trên Dev. PO vẫn ghi trang insights cho AA cần sửa
+  KEY-6 (lỗi #9 PO nêu ở C). Trừ điểm: ước lượng phiên cao nhất, sửa job runner lõi CIS, phát hành gắn với 5 job CI của
+  CIS; task role CIS thành principal giải mã KMS nên "chỉ runtime CRM giải mã được" không đúng nghĩa đen nếu CRM không
+  chạy service riêng (PO cho rủi ro 3 vì điểm này); builder dựng mới trên view catalog, không tái dùng route planner
+  Mapbox của TripPlanner.
 - **CTO chọn A vì:** riêng tư theo kiến trúc mạnh nhất — service, task role, SG riêng nên "chỉ runtime CRM giải mã được"
   đúng theo nghĩa đen; deploy và job gate (DM-11.4) tách khỏi wave CIS; sự cố CRM không kéo sập API CIS; là phương án
   duy nhất lên lịch spec gap 1–4. Trừ điểm: lệch ADR 0008 §8, 2 ngoại lệ grant DB, số ADR trùng, 3 frontend cho 1
   engineer, chi phí Dev chạy suốt.
-- **Điểm chung của hai giám khảo:** cả hai đề xuất ghép **service ECS riêng cho CRM** (PO ghép vào C; CTO chọn A vì có
-  sẵn). Cả hai chỉ ra cùng các lỗi: AA-681 đã Done (tiền đề "chờ AA-681" lỗi thời), ngân sách kết nối 136 trên trần 135,
+- **Điểm chung của hai giám khảo:** cả hai chỉ ra cùng điểm yếu của C: chạy trong process CIS thì task role CIS thành
+  principal giải mã KMS. Chỉ PO đề xuất ghép **service ECS riêng cho CRM** vào C (PO #3); CTO dùng chính điểm này để
+  chọn A (C "suggests a separate service on prod, which leads back to option A"). Cả hai cũng chỉ ra cùng các lỗi: AA-681 đã Done (tiền đề "chờ AA-681" lỗi thời), ngân sách kết nối 136 trên trần 135,
   lịch ở nhịp 3–5 issue/phiên dài gần gấp đôi, cạnh tranh với M1.
 
 ## 7. Khuyến nghị
@@ -200,7 +206,8 @@ Lý do, dựa trên lập luận của chính hai giám khảo:
    riêng, tách repo sau không phải đánh số lại". C không cần ADR thay thế luật cũ, không cần ngoại lệ grant DB nào trên
    `crm.*` (KEY-6 chỉ thêm một dòng cho trang insights do module CRM phục vụ).
 3. **Cách ly và bán kính sự cố (lý do của CTO) — giải bằng ghép, không phải bằng repo mới.** Điểm yếu lớn nhất của C là
-   task role CIS thành principal giải mã KMS và CRM chung process với pipeline nội dung. Ghép PO #3 (CTO cũng đòi): CRM
+   task role CIS thành principal giải mã KMS và CRM chung process với pipeline nội dung. Ghép PO #3 (CTO nêu cùng điểm
+   yếu và cho rằng cách sửa này dẫn về A; ở đây giải bằng service riêng trong cùng repo): CRM
    routes + worker `crm.job` chạy trên service riêng `aa-cis-dev-crm`, task role + SG riêng, **chỉ task role này có
    `kms:Decrypt` trên `alias/crm/*`**, job gate `crm.job` không chặn deploy `aa-cis-dev-api`/`aa-cis-dev-worker`. Giá:
    ~$21/tháng. Như vậy "chỉ runtime CRM giải mã được" đúng theo nghĩa đen, giống A.
@@ -222,7 +229,7 @@ và TripPlanner qua HTTP/hợp đồng.
   `crm.builder_session` — thay cho builder dựng mới trên view catalog (PO #1; D21). F2 do **DB** chặn: role NOLOGIN
   `crm_ai_reader`, `crm_insights` chỉ thấy `v_ai_trip_context`, `v_insight_facts`, probe `SET ROLE crm_ai_reader → 42501`
   trên vault (PO #2). Chuỗi hash theo tenant với `pg_advisory_xact_lock(hashtext(tenant_id))` + số lần KMS Decrypt mỗi
-  ngày trên trang audit đại lý; tuyển 3–5 đại lý pilot ngay W0, demo dữ liệu giả từ W4 (PO #4). FX cho dòng hàng AA lấy từ
+  ngày trên trang audit đại lý; tuyển 3–5 đại lý pilot ngay W0, demo dữ liệu giả từ W3 — đợt "bán một chuyến" (PO #4). FX cho dòng hàng AA lấy từ
   báo giá B2B của Booking; `crm.fx_rate` chỉ cho dòng NCC ngoài AA (PO #7).
 - **Từ B:** Booking xuất bảng giá B2B đã tính sẵn (`b2b_price_list` / `v_b2b_offer`) nên giá net thô không rời Booking
   (ADR 0005 QĐ9); hash giá trên mỗi version proposal để bản chữ và bản chọn chứng minh được là cùng giá; đăng ký mọi kind
@@ -288,7 +295,7 @@ flowchart LR
   CRMSVC --> CRMDB
   CRMSVC -->|đọc view hợp đồng| CAT
   CRMSVC -->|HTTPS: quote, hold, confirm, ops release| BKAPI --> BKDB
-  BKDB -->|v_b2b_booking_outbox, v_ops_release_outbox| CRMSVC
+  BKDB -->|v_b2b_booking_outbox, v_ops_release_receipt_outbox| CRMSVC
   AAOPS --> BKAPI
   AAMGT --> ADMIN -->|route admin do CRM phục vụ| CRMSVC
   CRMSVC --> KMS
@@ -334,7 +341,10 @@ Ngoài `crm`: **CIS** thêm `shared.tenant_members` (AA-813), `catalog.v_tenant_
 grant `catalog.v_tour*`/geo cho `crm_app`, guard khoá `crm-` trong `shared.schema_versions`, cấu hình route LLM `crm_*`.
 **Booking** (ADR 0015, bk-NNN) thêm `b2b_partner`, `departure`/`allotment`, `hold`, `b2b_quote`, `b2b_price_list` +
 `v_b2b_offer` (ghép từ B), `b2b_booking`, `ops_release_pax` (mã hoá lại bằng CMK AA ops, xoá sau ngày về + 90 ngày), view
-hợp đồng `v_b2b_booking_outbox`, `v_ops_release_outbox` grant cho `crm_app`. **TripPlanner** không thêm bảng (route
+hợp đồng `booking.v_b2b_booking_outbox` (`booking.b2b_booking_outbox.v1`) và view biên nhận
+`booking.v_ops_release_receipt_outbox` (`booking.ops_release_receipt.v1`, chỉ id + biên nhận, không PII) grant cho
+`crm_app` — đây là grant từ `booking` sang role CRM, không phải ngoại lệ `crm.v_ops_release_outbox` của A mà D2 loại.
+**TripPlanner** không thêm bảng (route
 `/builder` chỉ là UI). **Infra**: mục `owners.yaml`, file roles `rl-003`, service `aa-cis-dev-crm` + `aa-crm-dev-scrubber`,
 KMS theo tenant, bucket, quy tắc SES, WAF, báo động CloudTrail.
 
@@ -378,8 +388,8 @@ Stage 3 → Travelling → Completed, đối chiếu hoa hồng → báo cáo, i
 
 ## 9. Bảng phủ spec (dữ liệu thật của phương án C)
 
-Cột "Phiên (C)" là số `module_coverage` của lane phương án C; cột "Sau ghép" là điều chỉnh do các mục ghép ở §7 và sửa
-lỗi review (chỉ khác ở các dòng có ghi chú).
+Cột "Xây ở đâu", "Tái dùng" và "Phiên (C)" lấy từ `module_coverage` của lane phương án C; mọi thay đổi do các mục ghép ở
+§7 và sửa lỗi review chỉ nằm ở cột "Sau ghép" (chỉ khác ở các dòng có ghi chú).
 
 | Module | Xây ở đâu | Tái dùng | Phiên (C) | Sau ghép |
 |---|---|---|---|---|
@@ -390,13 +400,13 @@ lỗi review (chỉ khác ở các dòng có ghi chú).
 | F5 Audit | `crm.access_event` (phân vùng, chuỗi theo tenant), hook `vault.reveal`, trang `/portal/crm/audit`, job archive | Thiết kế hash-chain CIS 248, archive Parquet ADR 0008 §7, kit DataTable | 0,5 | 0,5 (+ số Decrypt KMS trên trang) |
 | 1 Form intake | CIS `/crm/public/v1/intake` + `/crm/v1/intake` (X-API-Key); app Next.js `crm-client/` (Vercel `aa-crm-client`) cho trang form + widget nhúng; đổi CTA T11/trang trip trong CIS | API key tenant, `tenant_brand_rules.default_cta` (CIS 220), `content_piece`/`publish_log` qua `catalog.v_tenant_content_piece`, mẫu inbox idempotent Booking, WAF | 0,8 | 0,8 |
 | 2 Pipeline | `crm.trip`, trigger chuyển/lịch sử, `/portal/crm/pipeline` (Kanban + list), trip view + panel Traveler info | Mẫu bk-003, kit portal, react-query | 0,7 | 0,7 |
-| 3 Proposal tương tác | CRM: mô hình proposal, builder API, trang chọn cho khách trong `crm-client`; Booking B2B API (quote, availability, hold, confirm) theo ADR 0015 | `catalog.v_tour`, `v_tour_day`, `v_tour_place`, `v_tour_photo` + geo; engine giá Booking kênh `b2b`; khoá mềm `(source_system, source_id)` | 1,5 CRM + 1,5 Booking | 1,3 CRM + 0,3 TP `/builder` + 1,6 Booking (+ `v_b2b_offer`) |
+| 3 Proposal tương tác | CRM proposal builder + trang chọn cho khách trong `crm-client`; Booking B2B API (quote, availability, hold, confirm) theo ADR 0015 | `catalog.v_tour`, `v_tour_day`, `v_tour_place`, `v_tour_photo` + geo; engine giá Booking kênh `b2b`; khoá mềm `(source_system, source_id)` | 1,5 CRM + 1,5 Booking | 1,3 CRM + 0,3 TP `/builder` + 1,6 Booking (builder chuyển sang TP `/builder`, CRM chỉ giữ mô hình proposal + builder API `crm.builder.v1`; + `v_b2b_offer`) |
 | 4 Proposal dạng chữ | Renderer email HTML / WhatsApp từ cùng version | Dữ liệu module 3, SES (AA-811), template module 9 | 0,25 | 0,25 (hash giá chung với module 3) |
 | 5 Inbox email | `crm/comms/email/`; quy tắc SES + bucket inbound (Infra); connector Gmail và Graph | Tiền lệ SES inbound (`e2e_mailbox.tf`, một rule set active ở us-west-1), mẫu `v1_integrations`, poll qua `crm.job` | 1,0 | 1,0 |
 | 6 Sổ booking | `crm.booking_line` + `booking_line_money`; dòng AA tự điền từ `booking.v_b2b_booking_outbox` | Mẫu outbox → pull → inbox (tp-009 / `bk_inquiry_pull`) | 0,5 | 0,5 |
 | 7 Hoá đơn + thanh toán | `crm/payments/` với adapter Stripe Connect Standard, cổng VN, thủ công; endpoint webhook công khai | Mẫu inbox idempotent, nhắc qua `crm.job`; không dùng code thanh toán Booking (cổng của Booking còn mở, ui-spec Q22) | 0,8 | 0,8 |
 | 8 AA ops release | Outbox CRM + job push; endpoint nhận ở Booking, `booking.ops_release_pax`, kind TTL xoá, view biên nhận | Luật hand-off có đồng ý ADR 0008 (DM-6.8), mẫu TTL `booking.job` (DM-7.2) | 0,6 | 0,6 (+ CMK AA ops) |
-| 9 Inbox WhatsApp/SMS/Messenger/IG | `crm/comms/whatsapp/`, `crm/comms/sms/` (Embedded Signup, Twilio); Messenger + Instagram qua Meta Graph API | Mẫu inbox/webhook, `crm.message_template`, blind index số điện thoại | 0,8 | 1,0 (+ Messenger/IG, sửa lỗi review) |
+| 9 Inbox WhatsApp/SMS | `crm/comms/whatsapp/`, `crm/comms/sms/` (Meta Cloud API Embedded Signup, Twilio) | Mẫu inbox/webhook, `crm.message_template`, blind index số điện thoại | 0,8 | 1,0 (+ Messenger + Instagram qua Meta Graph API theo spec §7, sửa lỗi review) |
 | 10 Tự động hoá | `crm.workflow_*` + job `crm_workflow_tick` | Template job runner (kind định kỳ) | 0,5 | 0,5 |
 | 11 Client portal | App `crm-client/` (link ký + OTP), CIS `/crm/public/v1/portal/*` | SES, token hash (DM-6.9), brand token (`_brand/tokens.ts`) | 0,7 | 0,7 |
 | 12 Hợp đồng + waiver | Adapter e-sign (BoldSign hoặc Documenso, chốt trong ADR 0014), PDF đã ký vào bucket tài liệu | Bucket F1, inbox webhook | 0,5 | 0,5 |
@@ -406,16 +416,21 @@ lỗi review (chỉ khác ở các dòng có ghi chú).
 | 16 Báo cáo đại lý | View `crm.v_report_*` + `/portal/crm/reports` | Xuất CSV của DataTable, quy ước dataviz trang admin | 0,5 | 0,5 |
 | 17 AA insights | `crm_insights_rollup` → `crm.insight_aggregate`; trang CIS admin `/admin/crm/insights` do module CRM phục vụ | Kit admin, luật k≥10 (spec §8); sửa 1 dòng KEY-6 | 0,3 | 0,3 |
 | 18 Mang dữ liệu đi | Job `crm_export`, `crm_erase_traveler`, `crm_tenant_offboard` (crypto-shred); bucket exports; runbook | DRY RUN (`destructive-ops.md`), endpoint offboard tenant (AA-797), KMS ScheduleKeyDeletion | 0,6 | 0,6 |
-| Spec gap §11 (onboarding/import, NFR, event tracking) | Wizard import CSV, import danh bạ Gmail (People API), i18n EN/VI, tiền tệ/múi giờ, `crm.metric_event` | Kit portal | 0,6 | 0,7 (+ SLO hiệu năng/uptime + alarm, sửa lỗi review) |
+| Spec gap §11 (onboarding/import, NFR, event tracking) | Wizard import CSV, import danh bạ Gmail (People API), i18n EN/VI, tiền tệ/múi giờ, `crm.metric_event` | Kit portal, `crm.fx_rate` (tỉ giá riêng hằng ngày) | 0,6 | 0,7 (+ SLO hiệu năng/uptime + alarm, sửa lỗi review; `crm.fx_rate` chỉ cho dòng NCC ngoài AA, dòng AA lấy FX từ báo giá Booking — PO #7) |
 | Nền tảng (ADR, registry/role Infra, runner, `crm-001`, probe, prod/pilot) | ADR root 0013/0014/0015 + standards v1.2; `owners.yaml`/`rl-003`/mirror DB Migrate; tham số hoá `shared/jobs`; AA-880 prod | Playbook 12 bước ADR 0008 + checklist S237 §6.3, công cụ X1 | ≈3 | ≈3,3 (+ spec gap 1–4 ở W0) |
 | **Tổng** | | | **≈19,9** | **≈21,0** |
 
-Tổng theo đợt ở §10 là ≈19,8; dải dùng trong tài liệu: **19–21 phiên**.
+Tổng theo đợt ở §10 là ≈19,8, thấp hơn ≈21,0 ở trên 1,2 phiên. Lý do: số phiên theo đợt ở §10 là **ước lượng lại của tài
+liệu này**, xuất phát từ `phases` của C (cộng lại 19 = 1 + 2 + 2 + 2,5 + 3 + 2,5 + 2,5 + 2 + 1,5; chính C đã lệch 0,9 phiên
+giữa `phases` và `module_coverage` 19,9), rồi cộng phần ghép ở W0 (+0,3 spec gap 1–4), W1 (+0,2 service `aa-cis-dev-crm`),
+W6 (+0,2 Messenger/IG), W7 (+0,1 SLO). Role NOLOGIN của F2 (+0,1) và TP `/builder` + `v_b2b_offer` (+0,2 ròng) được gộp
+vào ngân sách W2 và W4 sẵn có. Dải dùng trong tài liệu: **19–21 phiên**, phủ cả hai cách tính.
 
 ## 10. Kế hoạch xây theo đợt (toàn bộ module, không cắt)
 
 Thứ tự đợt theo phương án C: bán hàng phía CRM trước (W3), rồi hàng AA + proposal tương tác (W4) khi Booking B2B sẵn
-sàng; liên lạc (W6) trước AI (W7) đúng phụ thuộc spec "module 14 cần F3, F5, 5 và 9".
+sàng; liên lạc (W6) trước AI (W7) đúng phụ thuộc spec "module 14 cần F3, F5, 5 và 9". Cột "Phiên" là ước lượng lại của
+tài liệu này (sau ghép), không phải số của C (`phases` của C cộng lại 19); cách đối chiếu với bảng §9 ở cuối §9.
 
 | Đợt | Phạm vi | Phiên | Thoát đợt khi |
 |---|---|---|---|
@@ -436,7 +451,8 @@ liệu pilot.
 
 **Đổi so với spec — thời điểm pilot:** spec đặt pilot 3–5 đại lý ở cuối Phase 2 (tuần 22), trước phần tự động hoá. Bản
 này để pilot ở W8, sau mọi module, vì pilot dùng dữ liệu khách thật nên cần prod (AA-880, C7.1a cấm PII thật trên Dev), DPA
-đã ký và review bảo mật. Đại lý pilot vẫn thấy sản phẩm sớm qua demo trên dữ liệu giả từ W4. Nếu muốn pilot sớm như spec:
+đã ký và review bảo mật. Đại lý pilot vẫn thấy sản phẩm sớm qua demo trên dữ liệu giả từ W3 (đợt "bán một chuyến", theo
+PO #4; proposal hàng AA có từ W4). Nếu muốn pilot sớm như spec:
 kéo phần prod + DPA + review bảo mật lên ngay sau W5, rồi chạy W6–W7 khi pilot đang chạy (cần Nghiệp chọn khi đặt ngày
 go-live, D13).
 
@@ -456,14 +472,15 @@ go-live, D13).
 | acc3 (eCloudvalley) có cho SCP ép Bedrock retention `none` không | Chưa rõ | — | Bằng chứng ZDR cho W7 |
 | Vercel Pro (D-18) | Ngay | $20/seat/tháng | Đại lý dùng portal (Hobby cấm thương mại) |
 | Môi trường prod (AA-880 / ADR 0012) | Vài phiên | ~$150–300/tháng | Toàn bộ pilot (C7.1a) |
-| Tuyển 3–5 đại lý pilot + phỏng vấn | Theo chị Thư | — | Phản hồi sản phẩm từ demo W4 |
+| Tuyển 3–5 đại lý pilot + phỏng vấn | Theo chị Thư | — | Phản hồi sản phẩm từ demo (từ W3) |
 
 Nguồn + URL: [research/04 §2, §3.4](research/04-economics-compliance-security.md) (BoldSign → boldsign.com/pricing; CASA,
 Meta, Stripe, Vercel theo nguồn ghi trong note), [research/03 §Sources](research/03-market-benchmark.md); truy cập 20/10/2026.
 
 ## 11. Issue Linear đề xuất theo đợt (CHƯA tạo — chờ Nghiệp duyệt D16)
 
-115 issue, tên tiếng Anh như sẽ tạo trên Linear, dựa trên `issue_breakdown` của phương án C (104) cộng các mục ghép và
+115 issue tổng, trong đó **khoảng 112 issue mới** (W0 #3 là AA-899, W1 #1 là AA-813, W8 #1 là AA-880 — đã có, chỉ cập
+nhật; W8 #7 dựa trên AA-855 nên số mới có thể còn ít hơn). Tên tiếng Anh như sẽ tạo trên Linear, dựa trên `issue_breakdown` của phương án C (104) cộng các mục ghép và
 sửa lỗi review. `[root]` repo gốc, `[CIS]` AA-CIS-App (gồm module `crm/`), `[BK]` Booking, `[TP]`, `[Infra]`. Issue đã
 có: AA-813, AA-880, AA-886, AA-855, AA-899, AA-873/875/876/877 — cập nhật mô tả thay vì tạo trùng. AA-848 (X2) đã
 **Done** trên Linear (kiểm lại 20/10/2026: hoàn thành 20/10 08:05 giờ VN), nên phần phủ `crm` (W1 #5) là issue mới.
@@ -481,7 +498,7 @@ có: AA-813, AA-880, AA-886, AA-855, AA-899, AA-873/875/876/877 — cập nhật
 10. [root] Meta Business verification + Tech Provider application; Twilio sender registration checks AU/VN
 11. [root] Stripe Connect platform setup + VN payment gateway shortlist and quotes
 12. [root] Legal track (owner named): DPA + sub-processor annex (extends AA-886), SCC Module 2 + Module 3 flow-down / UK Addendum, VN counsel on Decree 356 + DPIA/TIA, insurer waiver review, partner agreement with no-poaching clause
-13. [root] Recruit 3–5 pilot agencies + interview plan; synthetic-data demos from W4
+13. [root] Recruit 3–5 pilot agencies + interview plan; synthetic-data demos from W3 (sell-a-trip wave)
 
 **W1 (14)**
 1. [CIS] AA-813 rescope to ADR 0006 Phase 3 (existing issue)
@@ -740,12 +757,12 @@ Trả lời theo số, ví dụ "D1 a, D2 có, …". Khuyến nghị in đậm.
 | D13-ngày | Ngày go-live prod (cũng quyết định pilot đi theo W8 hay sớm hơn, xem §10) | Nghiệp điền ngày | — |
 | D14 | Mua Vercel Pro (D-18) trước khi đại lý đầu tiên vào portal | có / không | **có** |
 | D15 | Gửi brief cho luật sư VN + AU/EU để lấy báo giá | có / không | **có** |
-| D16 | Tạo project Linear "Tenant CRM" và tạo issue theo từng đợt (115 issue ở §11), cập nhật Done-when AA-821 và dòng AA-821 ở `docs/backlog/README.md:123` | có / không | **có** |
+| D16 | Tạo project Linear "Tenant CRM" và tạo issue theo từng đợt (115 issue ở §11, ~112 issue mới; AA-899 = W0 #3, AA-813 = W1 #1, AA-880 = W8 #1 và AA-855 cho W8 #7 là issue đã có → cập nhật, không tạo mới), cập nhật Done-when AA-821 và dòng AA-821 ở `docs/backlog/README.md:123` | có / không | **có** |
 | D17 | Chạy CRM trên service ECS riêng `aa-cis-dev-crm` (image CIS, task role + SG riêng, chỉ role này có `kms:Decrypt` trên `alias/crm/*`) **từ Dev**, ~$21/tháng | có / không | **có** |
 | D18 | Mở ngay một issue nhỏ (CIS) sửa CTA `mailto:admin@adventureasia.com` cứng trên `/trip/[tourId]` (lead của tenant đang chảy về AA) | có / không | **có** |
 | D19 | Messenger + Instagram (spec §7 `Conversation.channel`) | a) làm ở W6 qua Meta Graph API (W6 #8) · b) hoãn — đây là cắt phạm vi spec, phải ghi rõ | **a** |
 | D20 | Ngôn ngữ giao diện (spec gap 6 chưa chốt) | a) EN/VI cho trang đại lý và app khách, khung i18n sẵn để thêm ngôn ngữ · b) thêm ngay ngôn ngữ cho đại lý/khách EU (ví dụ DE, FR) | **a**, xem lại sau H4 |
-| D21 | Builder của module 3 | a) route `/builder` của TripPlanner qua `crm.builder.v1` (tái dùng Mapbox + route planner, ghép từ A) · b) dựng builder mới trong portal trên view catalog (C gốc) | **a** (rủi ro lệch hợp đồng giữa repo → OpenAPI + consumer test) |
+| D21 | Builder của module 3 | a) route `/builder` của TripPlanner qua `crm.builder.v1` (tái dùng Mapbox + route planner, ghép từ A) · b) dựng builder mới trong portal trên view catalog (C gốc) · c) builder nằm trong portal/app CRM, tái dùng component bản đồ/route của TP bằng byte-copy có guard (cách CTO đề xuất, lỗi #5 CTO nêu ở A) | **a** (rủi ro lệch hợp đồng giữa repo → OpenAPI + consumer test). Lưu ý: a tạo đúng ràng buộc "3 frontend cho 1 engineer" (portal + `aa-crm-client` + TP builder, qua 2 repo) mà CTO trừ điểm A; chọn c nếu muốn bỏ ràng buộc đó |
 | D22 | Job runner | a) tham số hoá `shared/jobs` theo bảng (một runner, test hồi quy worker CIS, merge khi `shared.job` rảnh) · b) chép runner vào `crm/` (không chạm lõi CIS, nhưng hai bản dễ lệch) | **a** |
 | D23 | Điều kiện tách module thành app AA-CRM, ghi vào ADR 0014: tách khi (i) phát hành CRM bị wave/deploy gate CIS chặn nhiều lần trong một tháng, hoặc (ii) review bảo mật trước tenant trả tiền đầu tiên đòi tách repo/CI, hoặc (iii) có engineer riêng cho CRM | có / không | **có** |
 | D24 | Insights (module 17): thêm luật "≥3 đại lý đóng góp" ngoài k≥10 và opt-in từng tenant (không có trong spec) | có / không — cần chị Thư biết (H11) | **có** |
@@ -771,7 +788,7 @@ Trả lời theo số, ví dụ "D1 a, D2 có, …". Khuyến nghị in đậm.
 | Lời hứa F1 quá tay (khoá nằm trong account AA) | Cao | Sửa câu chữ (D8), key policy chỉ task role `aa-cis-dev-crm` + encryption context, báo động Decrypt, BYOK |
 | Pháp lý VN (Nghị định 356): có thể cần giấy phép + pháp nhân VN; DPIA/TIA | Cao | Brief luật sư từ W0 (D15); đại lý VN có thể phải chờ — trượt phạm vi do bên ngoài |
 | Lịch: 115 issue, ≈20 phiên; ở nhịp 3–5 issue/phiên là 23–38 phiên, cạnh tranh với CIS-first và M1 | Cao | D4 (agent team), CRM là lane riêng (D3) |
-| Rủi ro sản phẩm: chưa phỏng vấn đại lý nào; Dev có ~4 tenant thử | Cao | Tuyển pilot ở W0, demo dữ liệu giả từ W4, table stakes làm tiêu chí |
+| Rủi ro sản phẩm: chưa phỏng vấn đại lý nào; Dev có ~4 tenant thử | Cao | Tuyển pilot ở W0, demo dữ liệu giả từ W3, table stakes làm tiêu chí |
 | Sửa job runner lõi CIS (`shared/jobs`, chạy A0–A4, T0–T11) | TB | PR riêng, test hồi quy worker, review agent, merge khi `shared.job` rảnh (D22) |
 | Phát hành CRM gắn CI 5 job + nhịp deploy CIS; kind `crm_` định kỳ chặn deploy gate | TB | Job deploy chỉ cuộn `aa-cis-dev-crm`; `idle_exempt_kinds` + `DEPLOY_GATE_EXEMPT` ngày đầu; điều kiện tách (D23) |
 | Module chạy chung repo → ranh giới bị xói mòn, khó tách sau | TB | Test import-boundary hai chiều, schema/role/DSN/service riêng, chỉ đọc CIS qua view `catalog.*` |
@@ -784,7 +801,7 @@ Trả lời theo số, ví dụ "D1 a, D2 có, …". Khuyến nghị in đậm.
 | Bedrock `global.` có thể đi vòng thế giới; Fable 5/5.1 bắt buộc lưu 30 ngày; SCP trên acc3 có thể ngoài quyền AA | TB | Ghim `us.` + model cho phép ZDR + SCP (D12); kiểm acc3 (eCloudvalley) |
 | Stripe không có VN → hai adapter thanh toán | TB | D10 |
 | Chi phí WhatsApp trôi (từ 01/10/2026 tính phí service vượt 1.000; nhắc khách có thể là marketing) | TB | WABA của đại lý (D9), kiểm loại template |
-| Builder ở TripPlanner lệch hợp đồng với CRM | TB | OpenAPI + consumer test, builder JWT ngắn hạn (D21) |
+| Builder ở TripPlanner lệch hợp đồng với CRM; portal + `aa-crm-client` + TP builder là 3 frontend qua 2 repo cho 1 engineer (lỗi #5 CTO nêu ở A, cũng áp cho bản ghép này) | TB | OpenAPI + consumer test, builder JWT ngắn hạn (D21 a); hoặc D21 c (builder trong portal, byte-copy component TP có guard) nếu ràng buộc gây sự cố |
 | Pool Cognito EXTERNAL dùng chung | TB | Membership là ranh giới; probe + X2 bắt buộc |
 | Trùng khách giữa `booking.customers` (B2C của AA) và CRM đại lý | TB | Cấm so khớp/khử trùng chéo (KEY-6); pax B2B tách khỏi danh sách khách B2C (DM-6.2) |
 | Backup PITR giữ hàng đã xoá 7–14 ngày | Thấp | DEK từng khách + crypto-shred khi offboarding; ghi rõ trong DPA |
