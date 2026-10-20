@@ -1,0 +1,876 @@
+{
+ "cases": [
+  {
+   "set": "S234_r4",
+   "piece": "bb776a54",
+   "k": 3,
+   "mode": "sentences",
+   "added": [
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C2",
+     "note": "base text stored: unchanged, previous sentence unchanged",
+     "current": true,
+     "fixed": true,
+     "deletion_only": true,
+     "antecedent_kept": true
+    }
+   ],
+   "other_gates": [],
+   "class": [
+    "C2"
+   ],
+   "removed": {
+    "current": true,
+    "fixed": true,
+    "fixed_plus_767": true
+   }
+  },
+  {
+   "set": "S234_r4",
+   "piece": "71ad6b1f",
+   "k": 2,
+   "mode": "sentences",
+   "added": [
+    "F17_trip_fact",
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C1",
+     "note": "F17 flags the same sentence at k and is deterministic, so the sentence changed: the repair added 'before the afternoon's next move'",
+     "current": false,
+     "fixed": false,
+     "why": "changed; old version unknown"
+    }
+   ],
+   "other_gates": [
+    "F17_trip_fact"
+   ],
+   "class": [
+    "C1"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": false,
+    "fixed_plus_767": false
+   }
+  },
+  {
+   "set": "S234_r4",
+   "piece": "9594430b",
+   "k": 3,
+   "mode": "sentences",
+   "added": [
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C2",
+     "note": "base text stored: unchanged",
+     "current": true,
+     "fixed": true,
+     "deletion_only": true,
+     "antecedent_kept": true
+    }
+   ],
+   "other_gates": [],
+   "class": [
+    "C2"
+   ],
+   "removed": {
+    "current": true,
+    "fixed": true,
+    "fixed_plus_767": true
+   }
+  },
+  {
+   "set": "S234_r4",
+   "piece": "5939df86",
+   "k": 3,
+   "mode": "sentences",
+   "added": [
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C2",
+     "note": "base text stored: unchanged",
+     "current": true,
+     "fixed": true,
+     "deletion_only": true,
+     "antecedent_kept": true
+    },
+    {
+     "class": "C2",
+     "note": "base text stored: unchanged",
+     "current": true,
+     "fixed": true,
+     "deletion_only": true,
+     "antecedent_kept": true
+    },
+    {
+     "class": "C2",
+     "note": "base text stored: unchanged (the F17 target, left as it was)",
+     "current": true,
+     "fixed": true,
+     "deletion_only": true,
+     "antecedent_kept": true
+    }
+   ],
+   "other_gates": [],
+   "class": [
+    "C2"
+   ],
+   "removed": {
+    "current": true,
+    "fixed": true,
+    "fixed_plus_767": true
+   }
+  },
+  {
+   "set": "S235_r5",
+   "piece": "ccb0843c",
+   "k": 2,
+   "mode": "sentences",
+   "added": [
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C2",
+     "note": "not a repair target, previous sentence not a target: unchanged",
+     "current": true,
+     "fixed": true,
+     "deletion_only": true,
+     "antecedent_kept": true
+    },
+    {
+     "class": "C2",
+     "note": "the F17 thin-coda target rewritten; the location claim was in the passed sentence, but 'within' is a new word",
+     "current": false,
+     "fixed": false,
+     "deletion_only": false,
+     "antecedent_kept": true
+    }
+   ],
+   "other_gates": [],
+   "class": [
+    "C2"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": false,
+    "fixed_plus_767": false
+   }
+  },
+  {
+   "set": "S239_aa768_pre761",
+   "piece": "dde74641",
+   "k": 3,
+   "mode": "sentences",
+   "added": [
+    "F17_trip_fact"
+   ],
+   "f9_items": [],
+   "other_gates": [
+    "F17_trip_fact"
+   ],
+   "class": [
+    "C1"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": false,
+    "fixed_plus_767": false
+   }
+  },
+  {
+   "set": "S239_r6",
+   "piece": "a3d82ff1",
+   "k": 2,
+   "mode": "sentences",
+   "added": [
+    "F17_trip_fact"
+   ],
+   "f9_items": [],
+   "other_gates": [
+    "F17_trip_fact"
+   ],
+   "class": [
+    "C1"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": false,
+    "fixed_plus_767": true
+   }
+  },
+  {
+   "set": "S239_r6",
+   "piece": "17125e0c",
+   "k": 2,
+   "mode": "sentences",
+   "added": [
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C2",
+     "note": "unchanged; the hook before it was repaired; no referent opener (r6 diagnosis R3)",
+     "current": true,
+     "fixed": true,
+     "deletion_only": true,
+     "antecedent_kept": true
+    }
+   ],
+   "other_gates": [],
+   "class": [
+    "C2"
+   ],
+   "removed": {
+    "current": true,
+    "fixed": true,
+    "fixed_plus_767": true
+   }
+  },
+  {
+   "set": "S239_r6",
+   "piece": "a2133050",
+   "k": 2,
+   "mode": "sentences",
+   "added": [
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C2",
+     "note": "F17 repair cut the added clause: deletion only (r6 diagnosis R4)",
+     "current": false,
+     "fixed": true,
+     "deletion_only": true,
+     "antecedent_kept": true
+    }
+   ],
+   "other_gates": [],
+   "class": [
+    "C2"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": true,
+    "fixed_plus_767": true
+   }
+  },
+  {
+   "set": "S239_r6",
+   "piece": "263e5a5a",
+   "k": 2,
+   "mode": "sentences",
+   "added": [
+    "F17_trip_fact"
+   ],
+   "f9_items": [],
+   "other_gates": [
+    "F17_trip_fact"
+   ],
+   "class": [
+    "C1"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": false,
+    "fixed_plus_767": true
+   }
+  },
+  {
+   "set": "S239_r7",
+   "piece": "31b91e79",
+   "k": 2,
+   "mode": "sentences",
+   "added": [
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C2",
+     "note": "F15 style repair made a figure literal ('shapes', 'sustained'): same claim, new words (borderline C1)",
+     "current": false,
+     "fixed": false,
+     "deletion_only": false,
+     "antecedent_kept": true
+    }
+   ],
+   "other_gates": [],
+   "class": [
+    "C2"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": false,
+    "fixed_plus_767": false
+   }
+  },
+  {
+   "set": "S239_r7",
+   "piece": "3aa22704",
+   "k": 2,
+   "mode": "sentences",
+   "added": [
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C2",
+     "note": "unchanged; 'The' opener keyed on the hook, which the F14/F15 repair rewrote",
+     "current": false,
+     "fixed": true,
+     "deletion_only": true,
+     "antecedent_kept": true
+    }
+   ],
+   "other_gates": [],
+   "class": [
+    "C2"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": true,
+    "fixed_plus_767": true
+   }
+  },
+  {
+   "set": "S239_r7",
+   "piece": "4dd0e729",
+   "k": 2,
+   "mode": "sentences",
+   "added": [
+    "F9_cta_fact"
+   ],
+   "f9_items": [
+    {
+     "class": "C1",
+     "note": "the F17 target rewritten into a lunch stop the source does not give (source: overnight)",
+     "current": false,
+     "fixed": false,
+     "deletion_only": false,
+     "antecedent_kept": true
+    }
+   ],
+   "other_gates": [],
+   "class": [
+    "C1"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": false,
+    "fixed_plus_767": false
+   }
+  },
+  {
+   "set": "S239_r7_aa768",
+   "piece": "ebfff6f3",
+   "k": 2,
+   "mode": "full_rewrite",
+   "added": [
+    "F18_rarity"
+   ],
+   "f9_items": [],
+   "other_gates": [
+    "F18_rarity"
+   ],
+   "class": [
+    "C1"
+   ],
+   "removed": {
+    "current": false,
+    "fixed": false,
+    "fixed_plus_767": false
+   }
+  }
+ ],
+ "pools": {
+  "primary_r5_r7": {
+   "observed": {
+    "num": 8,
+    "den": 75,
+    "rate": 0.1067,
+    "ci95": [
+     0.055,
+     0.1966
+    ],
+    "le_target": false
+   },
+   "current": {
+    "num": 7,
+    "den": 75,
+    "rate": 0.0933,
+    "ci95": [
+     0.0459,
+     0.1803
+    ],
+    "le_target": false
+   },
+   "current_f9": {
+    "num": 5,
+    "den": 75,
+    "rate": 0.0667,
+    "ci95": [
+     0.0288,
+     0.1468
+    ],
+    "le_target": true
+   },
+   "current_left": [
+    "ccb0843c",
+    "a3d82ff1",
+    "a2133050",
+    "263e5a5a",
+    "31b91e79",
+    "3aa22704",
+    "4dd0e729"
+   ],
+   "fixed": {
+    "num": 5,
+    "den": 75,
+    "rate": 0.0667,
+    "ci95": [
+     0.0288,
+     0.1468
+    ],
+    "le_target": true
+   },
+   "fixed_f9": {
+    "num": 3,
+    "den": 75,
+    "rate": 0.04,
+    "ci95": [
+     0.0137,
+     0.1111
+    ],
+    "le_target": true
+   },
+   "fixed_left": [
+    "ccb0843c",
+    "a3d82ff1",
+    "263e5a5a",
+    "31b91e79",
+    "4dd0e729"
+   ],
+   "fixed_plus_767": {
+    "num": 3,
+    "den": 75,
+    "rate": 0.04,
+    "ci95": [
+     0.0137,
+     0.1111
+    ],
+    "le_target": true
+   },
+   "fixed_plus_767_f9": {
+    "num": 3,
+    "den": 75,
+    "rate": 0.04,
+    "ci95": [
+     0.0137,
+     0.1111
+    ],
+    "le_target": true
+   },
+   "fixed_plus_767_left": [
+    "ccb0843c",
+    "31b91e79",
+    "4dd0e729"
+   ]
+  },
+  "extended_with_aa768": {
+   "observed": {
+    "num": 10,
+    "den": 100,
+    "rate": 0.1,
+    "ci95": [
+     0.0552,
+     0.1744
+    ],
+    "le_target": false
+   },
+   "current": {
+    "num": 9,
+    "den": 100,
+    "rate": 0.09,
+    "ci95": [
+     0.0481,
+     0.1623
+    ],
+    "le_target": false
+   },
+   "current_f9": {
+    "num": 5,
+    "den": 100,
+    "rate": 0.05,
+    "ci95": [
+     0.0215,
+     0.1118
+    ],
+    "le_target": true
+   },
+   "current_left": [
+    "ccb0843c",
+    "dde74641",
+    "a3d82ff1",
+    "a2133050",
+    "263e5a5a",
+    "31b91e79",
+    "3aa22704",
+    "4dd0e729",
+    "ebfff6f3"
+   ],
+   "fixed": {
+    "num": 7,
+    "den": 100,
+    "rate": 0.07,
+    "ci95": [
+     0.0343,
+     0.1375
+    ],
+    "le_target": true
+   },
+   "fixed_f9": {
+    "num": 3,
+    "den": 100,
+    "rate": 0.03,
+    "ci95": [
+     0.0103,
+     0.0845
+    ],
+    "le_target": true
+   },
+   "fixed_left": [
+    "ccb0843c",
+    "dde74641",
+    "a3d82ff1",
+    "263e5a5a",
+    "31b91e79",
+    "4dd0e729",
+    "ebfff6f3"
+   ],
+   "fixed_plus_767": {
+    "num": 5,
+    "den": 100,
+    "rate": 0.05,
+    "ci95": [
+     0.0215,
+     0.1118
+    ],
+    "le_target": true
+   },
+   "fixed_plus_767_f9": {
+    "num": 3,
+    "den": 100,
+    "rate": 0.03,
+    "ci95": [
+     0.0103,
+     0.0845
+    ],
+    "le_target": true
+   },
+   "fixed_plus_767_left": [
+    "ccb0843c",
+    "dde74641",
+    "31b91e79",
+    "4dd0e729",
+    "ebfff6f3"
+   ]
+  },
+  "current_code_r7": {
+   "observed": {
+    "num": 4,
+    "den": 31,
+    "rate": 0.129,
+    "ci95": [
+     0.0513,
+     0.2885
+    ],
+    "le_target": false
+   },
+   "current": {
+    "num": 4,
+    "den": 31,
+    "rate": 0.129,
+    "ci95": [
+     0.0513,
+     0.2885
+    ],
+    "le_target": false
+   },
+   "current_f9": {
+    "num": 3,
+    "den": 31,
+    "rate": 0.0968,
+    "ci95": [
+     0.0335,
+     0.249
+    ],
+    "le_target": false
+   },
+   "current_left": [
+    "31b91e79",
+    "3aa22704",
+    "4dd0e729",
+    "ebfff6f3"
+   ],
+   "fixed": {
+    "num": 3,
+    "den": 31,
+    "rate": 0.0968,
+    "ci95": [
+     0.0335,
+     0.249
+    ],
+    "le_target": false
+   },
+   "fixed_f9": {
+    "num": 2,
+    "den": 31,
+    "rate": 0.0645,
+    "ci95": [
+     0.0179,
+     0.2072
+    ],
+    "le_target": true
+   },
+   "fixed_left": [
+    "31b91e79",
+    "4dd0e729",
+    "ebfff6f3"
+   ],
+   "fixed_plus_767": {
+    "num": 3,
+    "den": 31,
+    "rate": 0.0968,
+    "ci95": [
+     0.0335,
+     0.249
+    ],
+    "le_target": false
+   },
+   "fixed_plus_767_f9": {
+    "num": 2,
+    "den": 31,
+    "rate": 0.0645,
+    "ci95": [
+     0.0179,
+     0.2072
+    ],
+    "le_target": true
+   },
+   "fixed_plus_767_left": [
+    "31b91e79",
+    "4dd0e729",
+    "ebfff6f3"
+   ]
+  },
+  "extended_plus_natural": {
+   "observed": {
+    "num": 10,
+    "den": 101,
+    "rate": 0.099,
+    "ci95": [
+     0.0547,
+     0.1727
+    ],
+    "le_target": false
+   },
+   "current": {
+    "num": 9,
+    "den": 101,
+    "rate": 0.0891,
+    "ci95": [
+     0.0476,
+     0.1607
+    ],
+    "le_target": false
+   },
+   "current_f9": {
+    "num": 5,
+    "den": 101,
+    "rate": 0.0495,
+    "ci95": [
+     0.0213,
+     0.1107
+    ],
+    "le_target": true
+   },
+   "current_left": [
+    "ccb0843c",
+    "dde74641",
+    "a3d82ff1",
+    "a2133050",
+    "263e5a5a",
+    "31b91e79",
+    "3aa22704",
+    "4dd0e729",
+    "ebfff6f3"
+   ],
+   "fixed": {
+    "num": 7,
+    "den": 101,
+    "rate": 0.0693,
+    "ci95": [
+     0.034,
+     0.1362
+    ],
+    "le_target": true
+   },
+   "fixed_f9": {
+    "num": 3,
+    "den": 101,
+    "rate": 0.0297,
+    "ci95": [
+     0.0102,
+     0.0837
+    ],
+    "le_target": true
+   },
+   "fixed_left": [
+    "ccb0843c",
+    "dde74641",
+    "a3d82ff1",
+    "263e5a5a",
+    "31b91e79",
+    "4dd0e729",
+    "ebfff6f3"
+   ],
+   "fixed_plus_767": {
+    "num": 5,
+    "den": 101,
+    "rate": 0.0495,
+    "ci95": [
+     0.0213,
+     0.1107
+    ],
+    "le_target": true
+   },
+   "fixed_plus_767_f9": {
+    "num": 3,
+    "den": 101,
+    "rate": 0.0297,
+    "ci95": [
+     0.0102,
+     0.0837
+    ],
+    "le_target": true
+   },
+   "fixed_plus_767_left": [
+    "ccb0843c",
+    "dde74641",
+    "31b91e79",
+    "4dd0e729",
+    "ebfff6f3"
+   ]
+  },
+  "reference_S234_r4": {
+   "observed": {
+    "num": 4,
+    "den": 32,
+    "rate": 0.125,
+    "ci95": [
+     0.0497,
+     0.2807
+    ],
+    "le_target": false
+   },
+   "current": {
+    "num": 1,
+    "den": 32,
+    "rate": 0.0312,
+    "ci95": [
+     0.0055,
+     0.1574
+    ],
+    "le_target": true
+   },
+   "current_f9": {
+    "num": 1,
+    "den": 32,
+    "rate": 0.0312,
+    "ci95": [
+     0.0055,
+     0.1574
+    ],
+    "le_target": true
+   },
+   "current_left": [
+    "71ad6b1f"
+   ],
+   "fixed": {
+    "num": 1,
+    "den": 32,
+    "rate": 0.0312,
+    "ci95": [
+     0.0055,
+     0.1574
+    ],
+    "le_target": true
+   },
+   "fixed_f9": {
+    "num": 1,
+    "den": 32,
+    "rate": 0.0312,
+    "ci95": [
+     0.0055,
+     0.1574
+    ],
+    "le_target": true
+   },
+   "fixed_left": [
+    "71ad6b1f"
+   ],
+   "fixed_plus_767": {
+    "num": 1,
+    "den": 32,
+    "rate": 0.0312,
+    "ci95": [
+     0.0055,
+     0.1574
+    ],
+    "le_target": true
+   },
+   "fixed_plus_767_f9": {
+    "num": 1,
+    "den": 32,
+    "rate": 0.0312,
+    "ci95": [
+     0.0055,
+     0.1574
+    ],
+    "le_target": true
+   },
+   "fixed_plus_767_left": [
+    "71ad6b1f"
+   ]
+  }
+ },
+ "classes": {
+  "C2": [
+   "bb776a54",
+   "9594430b",
+   "5939df86",
+   "ccb0843c",
+   "17125e0c",
+   "a2133050",
+   "31b91e79",
+   "3aa22704"
+  ],
+  "C1": [
+   "71ad6b1f",
+   "dde74641",
+   "a3d82ff1",
+   "263e5a5a",
+   "4dd0e729",
+   "ebfff6f3"
+  ]
+ }
+}
