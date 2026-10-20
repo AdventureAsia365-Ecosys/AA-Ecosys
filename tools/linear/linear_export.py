@@ -130,8 +130,11 @@ def render(issue: dict) -> str:
         "trashed": bool(issue.get("trashed")),
         "url": issue["url"],
     }
-    lines = ["---"] + [f"{k}: {json.dumps(v, ensure_ascii=False)}" for k, v in meta.items()] + ["---", ""]
-    lines += [f"# {issue['identifier']} — {issue['title']}", "", issue.get("description") or "_(no description)_", ""]
+    # Metadata as a fenced yaml block, not front-matter: docs lint validates every docs/**/*.md front-matter
+    # against the catalog schema, and these generated pages are not catalog pages.
+    lines = [f"# {issue['identifier']} — {issue['title']}", "", "```yaml"]
+    lines += [f"{k}: {json.dumps(v, ensure_ascii=False)}" for k, v in meta.items()] + ["```", ""]
+    lines += [issue.get("description") or "_(no description)_", ""]
     atts = issue["attachments"]["nodes"]
     if atts:
         lines += ["## Links", ""] + [f"- [{a['title']}]({a['url']})" for a in atts] + [""]
@@ -148,7 +151,7 @@ def exported_matches(issue: dict) -> bool:
     p = path_for(issue)
     if not p.exists():
         return False
-    head = p.read_text(encoding="utf-8").split("\n---", 1)[0]
+    head = p.read_text(encoding="utf-8").split("\n```\n", 1)[0]
     return f'updated_at: "{issue["updatedAt"]}"' in head
 
 
@@ -220,11 +223,14 @@ def main() -> None:
             p.write_text(text, encoding="utf-8")
             written += 1
     if not args.only:
-        existing = {f.stem for f in OUT.glob("*/*.md")}
-        kept = {i["identifier"] for i in issues}
-        missing = sorted(existing - kept)
-        if missing:
-            print(f"note: {len(missing)} exported files no longer returned by Linear (kept): {', '.join(missing[:10])}")
+        # A file is stale when its issue was reopened (no longer closed/archived/trashed) or now lives under another
+        # project folder. Stale files are removed so the export stays one file per issue (history keeps the rest).
+        wanted = {path_for(i).resolve() for i in issues}
+        stale = sorted(f for f in OUT.glob("*/AA-*.md") if f.resolve() not in wanted)
+        for f in stale:
+            f.unlink()
+        if stale:
+            print(f"removed {len(stale)} stale files: {', '.join(f.stem for f in stale[:10])}")
         write_index(issues)
     print(f"closed issues: {len(issues)} | files written/updated: {written} | "
           f"trashed: {sum(1 for i in issues if i.get('trashed'))} | archived: {sum(1 for i in issues if i.get('archivedAt'))}")
