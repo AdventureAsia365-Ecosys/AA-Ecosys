@@ -215,7 +215,7 @@ Xếp theo mức ảnh hưởng tới việc vận hành hằng ngày của đ�
   $0 cho các khoản đó.
 - **Đã cố ý không làm, vì tốn tiền hoặc tốn công vận hành (nên giữ):**
   - **Đồng bộ Gmail hai chiều như Tern:** cần đợt kiểm định bảo mật Google (CASA) mỗi năm, khoảng $675–5.400 theo v2.1
-    §7.1. Chính Tern cũng phải qua đợt kiểm định của Google ([market-travel-crm §1.2](../s245-r2/r4/market-travel-crm.md)).
+    §7.1. Chính Tern cũng phải qua đợt kiểm định của Google (nghiên cứu market-travel-crm §1.2, bản nháp ngoài repo).
   - **App điện thoại riêng:** là một sản phẩm thứ hai phải phát hành và duy trì.
   - **Lưu thẻ để uỷ quyền như Tern:** kéo AA vào phạm vi PCI. Stripe cũng xếp đặt chỗ du lịch vào nhóm rủi ro cao.
   - **AI ghi biên bản cuộc gọi:** tốn tiền xử lý âm thanh, và phải chuyên chở thêm dữ liệu cá nhân.
