@@ -1,0 +1,3241 @@
+<title>Tenant CRM v2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: an approval docket. Sticky tab strip, a summary ledger, then one card per item; documents read in a 72ch column. */
+:root {
+  --paper: #f6f7f9; --sheet: #ffffff; --ink: #18202b; --muted: #5b6676; --rule: #dde2ea;
+  --accent: #1f5f8b; --accent-soft: #e3eef6; --ok: #1d7a4f; --ok-soft: #e2f3ea; --warn: #9a5b00; --warn-soft: #fbefdc;
+  --chip: #eef1f5;
+  --f-display: "Lora", Georgia, "Times New Roman", serif;
+  --f-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #11161d; --sheet: #18202a; --ink: #e6ebf2; --muted: #9aa6b6; --rule: #2a3442;
+  --accent: #7ab8e3; --accent-soft: #1b3346; --ok: #5cc995; --ok-soft: #173327; --warn: #e8b05a; --warn-soft: #3a2c14;
+  --chip: #222c38; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #11161d; --sheet: #18202a; --ink: #e6ebf2; --muted: #9aa6b6; --rule: #2a3442;
+  --accent: #7ab8e3; --accent-soft: #1b3346; --ok: #5cc995; --ok-soft: #173327; --warn: #e8b05a; --warn-soft: #3a2c14;
+  --chip: #222c38; color-scheme: dark }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sheet); }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { background: var(--sheet); border-bottom: 1px solid var(--rule); }
+header.top .wrap { padding-block: 28px 18px; display: grid; gap: 8px; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { font-family: var(--f-display); font-size: clamp(26px, 4vw, 36px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); max-width: 72ch; margin: 0; }
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--sheet); border-bottom: 1px solid var(--rule); }
+nav.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; }
+nav.tabs button { font: 600 14px var(--f-body); color: var(--muted); background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 14px 10px; cursor: pointer; white-space: nowrap; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+nav.tabs button:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+main .wrap { padding-block: 24px 64px; }
+.ledger { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.ledger .cell { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: grid; gap: 6px; }
+.ledger .k { font-size: 13px; color: var(--muted); }
+.ledger .v { font: 600 22px var(--f-body); font-variant-numeric: tabular-nums; }
+.bar { height: 6px; background: var(--chip); border-radius: 3px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--ok); width: 0; transition: width .3s; }
+.notice { border: 1px solid var(--rule); background: var(--sheet); border-radius: 8px; padding: 12px 14px; color: var(--muted); margin-bottom: 18px; }
+.notice.warn { background: var(--warn-soft); color: var(--ink); border-color: transparent; }
+.group { margin-top: 28px; display: grid; gap: 12px; }
+.group-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+.group-head h2 { font-family: var(--f-display); font-size: 22px; margin: 0; }
+.group-head p { margin: 0; color: var(--muted); flex-basis: 100%; max-width: 72ch; }
+.btn { font: 600 14px var(--f-body); border-radius: 6px; padding: 8px 14px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); cursor: pointer; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--sheet); }
+.btn.ok { background: var(--ok); border-color: var(--ok); color: var(--sheet); }
+.btn:disabled { opacity: .5; cursor: default; }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+.card.done { border-color: var(--ok); }
+.card-top { display: flex; gap: 10px; align-items: flex-start; }
+.id { font: 500 13px var(--f-mono); background: var(--chip); border-radius: 4px; padding: 2px 6px; flex: none; margin-top: 2px; }
+.q { font-weight: 600; flex: 1; min-width: 0; }
+.pill { font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 10px; flex: none; white-space: nowrap; }
+.pill.wait { background: var(--chip); color: var(--muted); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.diff { background: var(--warn-soft); color: var(--warn); }
+.ctx { font-size: 14px; color: var(--muted); max-width: 80ch; }
+.ctx b { color: var(--ink); font-weight: 600; }
+.proposal { background: var(--accent-soft); border-radius: 6px; padding: 10px 12px; font-size: 14px; }
+.proposal .lbl { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--accent); display: block; margin-bottom: 2px; }
+.opts { display: grid; gap: 6px; }
+.opt { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; cursor: pointer; }
+.opt input { margin-top: 4px; accent-color: var(--accent); }
+.opt.sel { border-color: var(--accent); background: var(--accent-soft); }
+.opt .key { font: 500 13px var(--f-mono); color: var(--muted); }
+.opt .rec { font-size: 11px; font-weight: 700; color: var(--ok); text-transform: uppercase; letter-spacing: .05em; margin-left: 6px; white-space: nowrap; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+textarea { width: 100%; box-sizing: border-box; min-height: 40px; font: 14px var(--f-body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; resize: vertical; }
+.who { font-size: 12px; color: var(--muted); }
+details.why summary { cursor: pointer; font-size: 13px; color: var(--accent); font-weight: 600; }
+details.why div { font-size: 14px; color: var(--muted); margin-top: 6px; max-width: 80ch; }
+.recorded { display: grid; gap: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; }
+.recorded .r { display: grid; grid-template-columns: 56px 1fr; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--rule); }
+.recorded .r:first-child { border-top: 0; }
+.recorded .r .a { color: var(--muted); font-size: 14px; }
+article.doc { max-width: 76ch; margin: 0 auto; }
+article.doc h1 { font-size: 30px; margin: 8px 0 16px; }
+article.doc h2 { font-family: var(--f-display); font-size: 24px; margin: 36px 0 10px; text-wrap: balance; }
+article.doc h3 { font-size: 17px; margin: 24px 0 8px; }
+article.doc p, article.doc li { max-width: 72ch; }
+article.doc code { font: 13px var(--f-mono); background: var(--chip); border-radius: 3px; padding: 1px 4px; overflow-wrap: anywhere; }
+.tablewrap, .codewrap { overflow-x: auto; margin: 12px 0; max-width: 100%; }
+article.doc table { border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; min-width: 520px; }
+article.doc th, article.doc td { border: 1px solid var(--rule); padding: 6px 8px; text-align: left; vertical-align: top; }
+article.doc th { background: var(--chip); }
+.codewrap pre { background: var(--chip); padding: 12px; border-radius: 6px; margin: 0; }
+.codewrap code { background: none; padding: 0; }
+.reflink { text-decoration: underline dotted; text-underline-offset: 3px; }
+pre.mermaid { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px; overflow-x: auto; }
+.toast { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: 6px; font-size: 14px; z-index: 20; }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+
+<header class="top"><div class="wrap">
+  <span class="eyebrow">PR-19 · Tenant CRM · thiết kế v2 · 20/10/2026</span>
+  <h1>Tenant CRM v2: app riêng trong portal đại lý</h1>
+  <p class="lede">CRM thành app riêng (AA-Partner: portal đại lý + CRM), chỉ dùng chung hạ tầng acc2, tách hẳn khỏi admin CIS. Dev ≈ $11–13/tháng (v1: $85–160); prod 10 đại lý ≈ $313–320 (v1: $500–925). Chọn và bấm duyệt từng mục; câu trả lời được lưu ngay trên trang.</p>
+</div></header>
+<nav class="tabs" aria-label="Phần của trang"><div class="wrap" role="tablist">
+<button role="tab" id="tab-duyet" aria-controls="panel-duyet" aria-selected="true" data-tab="duyet">Duyệt</button>
+<button role="tab" id="tab-thiet-ke" aria-controls="panel-thiet-ke" aria-selected="false" data-tab="thiet-ke">Thiết kế v2</button>
+<button role="tab" id="tab-giam-khao" aria-controls="panel-giam-khao" aria-selected="false" data-tab="giam-khao">Giám khảo (EN)</button>
+</div></nav>
+<main>
+<section id="panel-duyet" role="tabpanel" aria-labelledby="tab-duyet"><div class="wrap">
+  <div id="status" class="notice">Đang kết nối nơi lưu câu trả lời… Trong lúc chờ, anh/chị vẫn đọc được mọi mục bên dưới.</div>
+  <div class="ledger" id="ledger"></div>
+  <div id="groups"></div>
+</div></section>
+<section id="panel-thiet-ke" role="tabpanel" aria-labelledby="tab-thiet-ke" hidden><div class="wrap"><article class="doc"><h1>Tenant CRM — thiết kế v2: app riêng cho đại lý (portal + CRM), dùng chung hạ tầng (AA-821 / PR-19)</h1>
+<p>Ngày 20/10/2026, phiên S245 (vòng 2), tác nhân: Claude Code. Chỉ đọc và viết tài liệu: không đổi repo, AWS, Vercel,
+Linear, Jira. Không gọi API trả phí.</p>
+<p><strong>Nguồn đã đọc đầy đủ:</strong> <code>.tmp-session/s245-r2/owner-input.md</code> (ý kiến Nghiệp 20/10), spec của chị Thư
+<code>docs/research/partner-crm-spec.md</code> (224 dòng, gọi tắt &quot;spec&quot;), scout hiện trạng <code>out/crm-01-current-state.md</code>,
+phương án A <code>out/crm-design-A-one-tenant-app.md</code> (ECS, một app cho đại lý), phương án B <code>out/crm-design-B-serverless.md</code>
+(Lambda), panel giám khảo <code>out/crm-judges.md</code>, và thiết kế v1 <code>docs/audits/2026-10-20-S245-tenant-crm/README.md</code>.</p>
+<p><strong>Mốc code được trích:</strong> AA-CIS-App <code>origin/main</code> @ <code>b7e6da66</code> (checkout local đang chậm 9 commit, nên mọi dòng CIS là
+dòng của <code>origin/main</code>, đọc bằng <code>git show</code>); AA-CIS-Infra <code>4824c81</code>; AA-Booking <code>f4fb80d</code>; AA-TripPlanner-Web
+<code>b79ec48</code>; root <code>f8a9938</code>. Tôi tự kiểm lại các dòng chốt (link login, redirect 308, <code>verify-tenant</code>, CTA <code>mailto</code>, URL
+trip, <code>alert_email</code>, WAF geo, connection limit, callback Cognito, <code>envs/</code>, C7.1a/C7.2) trên đúng các mốc này.</p>
+<p>Giá: mọi dòng có URL + ngày truy cập (20/10/2026) hoặc ghi <strong>ước tính</strong>. Giá Documenso và CloudFront tôi đọc lại trực
+tiếp hôm nay; giá AWS khác lấy từ price-list JSON us-west-1 mà panel đã kiểm (<code>crm-judges.md</code> §1.2).</p>
+<hr>
+<h2>1. TL;DR</h2>
+<ol>
+<li><p><strong>CRM là một app riêng, không còn là module trong CIS.</strong> App mới tên <strong>AA-Partner</strong> (repo riêng) là sản phẩm duy nhất
+cho đại lý: <strong>tenant portal hiện tại (chuyển hẳn ra khỏi <code>AA-CIS-App/portal/</code>) + CRM</strong> trong cùng một app Next.js, cộng
+một backend CRM nhỏ (FastAPI) chạy service ECS riêng <code>aa-crm-dev-api</code>. Đúng ý chị Thư: CRM nằm <strong>trong</strong> portal. Đúng
+ý anh: CRM có ranh giới code, schema, role DB, API, job runner, deploy riêng; <strong>chỉ dùng chung hạ tầng</strong> acc2 (VPC,
+ECS cluster, RDS instance, Cognito, API Gateway/VPC link, SES, S3).</p>
+</li>
+<li><p><strong>CIS admin và portal tách hoàn toàn:</strong> xoá cả hai link chéo ở trang đăng nhập, xoá redirect 308, đổi tên proxy
+<code>/api/tenant/*</code> phía admin, bỏ 14 file kit chép byte, tách cookie và secret token. Danh sách đầy đủ 31 điểm dính ở §4.</p>
+</li>
+<li><p><strong>Chi phí giảm mạnh, vẫn đủ 23 module của spec:</strong></p>
+<div class="tablewrap"><table><thead><tr>
+<th></th>
+<th>v1 (module CIS)</th>
+<th><strong>v2</strong></th>
+<th>Giảm</th>
+</tr>
+</thead><tbody><tr>
+<td>Dev / tháng</td>
+<td>$85–160</td>
+<td><strong>≈ $11–13</strong></td>
+<td>−$72–147 (≈ −87–92%)</td>
+</tr>
+<tr>
+<td>Prod 10 đại lý / tháng</td>
+<td>$500–925 (chưa gồm DB prod)</td>
+<td><strong>≈ $313–320</strong> (Documenso Platform) · <strong>≈ $103–110</strong> (nếu dùng gói Teams)</td>
+<td>−$180–612 (Platform) · −$390–820 (Teams)</td>
+</tr>
+<tr>
+<td>Prod 50 đại lý</td>
+<td>$1,6–2,0k</td>
+<td><strong>≈ $570</strong></td>
+<td>−$1,03–1,43k</td>
+</tr>
+<tr>
+<td>Prod 200 đại lý</td>
+<td>$4,7–5,2k</td>
+<td><strong>≈ $1,15–1,26k</strong></td>
+<td>−$3,4–4,0k</td>
+</tr>
+</tbody></table></div><p>v2 đã <strong>gồm</strong> DB pilot riêng; v1 thì không. Nên mức giảm thật còn lớn hơn bảng. Khoản lớn nhất còn lại là Documenso
+Platform $250/tháng (<strong>trả theo năm, $3.000</strong>), chiếm ~78% hoá đơn ở 10 đại lý. Đây là đòn bẩy duy nhất còn lớn, để
+anh và chị Thư chọn (N8, H12).</p>
+</li>
+<li><p><strong>Căng thẳng giữa các câu trả lời được giải cụ thể:</strong></p>
+<ul>
+<li>D13 không + go-live 30/11/2026: pilot chạy trên một <strong>&quot;prod cell&quot; chỉ cho CRM</strong> (RDS <code>t4g.micro</code> riêng + 1 task
+ECS), ≈ $27/tháng. Không cần chờ AA-880. Dữ liệu khách thật không bao giờ nằm trên Dev.</li>
+<li>D14 không: portal và trang khách chạy trên <strong>AWS (Lambda + CloudFront gói Free, có sẵn WAF 5 rule)</strong>, nên không
+cần Vercel Pro và không vướng điều khoản &quot;phi thương mại&quot; của Vercel Hobby.</li>
+<li>D15 không: pilot chỉ nhận dữ liệu thật của đại lý <strong>ngoài VN và ngoài EU</strong> (ví dụ Úc). Đại lý VN/EU dùng chế độ demo
+cho đến khi có luật sư. Có ngưỡng bắt buộc gửi brief luật sư.</li>
+<li>D6 b, D11 b, D22 b: làm đúng như anh trả lời, có ghi điểm lệch spec.</li>
+</ul>
+</li>
+<li><p><strong>Công sức:</strong> ≈ <strong>96 issue trước 30/11</strong> (≈ 16 phiên, ~2,8 phiên CRM/tuần), ≈ <strong>117 issue tổng</strong> (≈ 20 phiên). Rủi ro
+lớn nhất là ngày. Đề xuất: nếu trễ thì <strong>dời ngày, không cắt phạm vi</strong> (N18).</p>
+</li>
+<li><p><strong>Cần anh quyết 19 quyết định mới N1–N19</strong> (§14), xác nhận lại 9 câu D có nghĩa đã đổi theo kiến trúc mới (§13), và
+chị Thư duyệt <strong>12 đề xuất trả lời H1–H12</strong> (H12 mới, về giao diện ký điện tử) trong <code>crm-questions.json</code>.</p>
+</li>
+</ol>
+<hr>
+<h2>2. Đổi gì so với v1, và vì sao</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Ý của anh (owner-input.md)</th>
+<th>v1</th>
+<th>v2</th>
+</tr>
+</thead><tbody><tr>
+<td>1</td>
+<td>&quot;Sao không tách thành app riêng mà là module trong CIS&quot;</td>
+<td>Module <code>crm/</code> trong AA-CIS-App, service <code>aa-cis-dev-crm</code> build từ image CIS</td>
+<td>Repo riêng <strong>AA-Partner</strong>, image riêng, service <code>aa-crm-dev-api</code>. Mẫu khởi tạo = AA-Booking (<code>infra/AA-CIS-Infra/accounts/aa365/booking.tf</code>)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>&quot;Đánh giá CRM chung với portal/tenant, chị Thư nói tích hợp vào&quot;</td>
+<td>CRM là trang trong <code>portal/</code> nhưng portal vẫn ở repo CIS; thêm app khách <code>aa-crm-client</code> riêng</td>
+<td>Portal + CRM <strong>là một app</strong> (một build, một đăng nhập). Trang khách (form, proposal, client portal) là <strong>host thứ hai của cùng app</strong>, không phải app thứ ba</td>
+</tr>
+<tr>
+<td>3</td>
+<td>&quot;Admin CIS và portal còn link qua nhau là vô lý, phải tách hoàn toàn&quot;</td>
+<td>Không xử lý</td>
+<td>§4: 31 điểm dính, mỗi điểm có hành động + đợt; test guard đảo ngược để cấm link quay lại</td>
+</tr>
+<tr>
+<td>4</td>
+<td>&quot;Chi phí tăng khá nhiều, tìm giải pháp tối ưu thay vì phình to&quot;</td>
+<td>Dev $85–160, prod $500–925 ở 10 đại lý</td>
+<td>Dev ≈ $11–13, prod ≈ $313–320 (≈ $103–110 với Documenso Teams). Bảng đòn bẩy ở §9.4–§9.5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>&quot;Bám spec chị Thư tốt hơn&quot;</td>
+<td>Pilot ở W8 sau mọi module; module 5 (email) ở W6</td>
+<td>Pilot 30/11 = <strong>đúng điểm pilot của spec</strong> (&quot;end of Phase 2&quot;, <code>partner-crm-spec.md:196</code>); <strong>module 5 kéo lên trước 30/11</strong> vì spec đặt nó ở Phase 1 (&quot;S8 4 + 5&quot;, <code>partner-crm-spec.md:191</code>); baseline đo sự kiện có từ W3 để đo được chỉ tiêu thành công ngay trong pilot</td>
+</tr>
+<tr>
+<td>6</td>
+<td>&quot;H1–H11 phải có đề xuất để duyệt&quot;</td>
+<td>Câu hỏi mở</td>
+<td>Mỗi câu có đề xuất trả lời cụ thể + phương án khác (§15, JSON)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>&quot;Câu hỏi ở artifact làm cơ chế chọn, duyệt&quot;</td>
+<td>Bảng chữ</td>
+<td><code>crm-questions.json</code> máy đọc được, cho trang duyệt tương tác</td>
+</tr>
+</tbody></table></div><p><strong>Những gì v1 làm đúng và được giữ nguyên:</strong> benchmark thị trường (v1 §4), trích yêu cầu chị Thư (v1 §2), phần tuân thủ
+GDPR/PDPL VN/APP Úc (v1 §14, cập nhật ở §8.5 dưới đây), mô hình dữ liệu schema <code>crm</code> (v1 §8.2, với 4 thay đổi ở §7.1),
+F1–F5 (v1 §8.3, đổi scrubber), Booking B2B API (v1 §8.4).</p>
+<p><strong>Những gì bỏ khỏi v1 (làm hoá đơn phình):</strong> service Presidio chạy suốt ($39–49 Dev), WAF ACL mới ($10–15), app khách
+<code>aa-crm-client</code>, route <code>/builder</code> + builder JWT ở TripPlanner, tham số hoá job runner lõi CIS, Gmail hai chiều + CASA
+($675–5.400/năm), WhatsApp qua Twilio BSP, SMS qua sub-account của AA, Sonnet làm mặc định, Vercel Pro.</p>
+<hr>
+<h2>3. Kiến trúc</h2>
+<h3>3.1 Sơ đồ</h3>
+<pre class="mermaid">flowchart LR
+  subgraph People[&quot;Người dùng&quot;]
+    AG[&quot;Đại lý: owner / agent / assistant&quot;]
+    TR[&quot;Khách của đại lý (không tài khoản)&quot;]
+    OPS[&quot;AA ops (staff)&quot;]
+    MGT[&quot;AA management (staff)&quot;]
+  end
+
+  subgraph Partner[&quot;Repo AA-Partner (app cho đại lý)&quot;]
+    subgraph WEB[&quot;web/: MỘT app Next.js 16, chạy Lambda + Lambda Web Adapter&quot;]
+      PH[&quot;portal.lumiguides.it.com: Content studio (T0–T11, marketplace, billing) + CRM&quot;]
+      CH[&quot;host khách (go.lumiguides.it.com): form intake, chọn option, client portal OTP, trang trip white-label&quot;]
+      BFF[&quot;BFF: allow-list đường dẫn, phiên Cognito, IP khách ký HMAC&quot;]
+    end
+    subgraph API[&quot;api/: FastAPI aa-crm-dev-api (ECS ARM64, Dev = Spot)&quot;]
+      R1[&quot;/crm/v1 cho đại lý (JWT Cognito EXTERNAL + membership)&quot;]
+      R2[&quot;/crm/public/v1 (form, link khách)&quot;]
+      R3[&quot;/crm/hooks (Stripe, Meta, SES, Documenso: kiểm chữ ký)&quot;]
+      R4[&quot;/crm/ops/v1 + /crm/insights/v1 (JWT WORKFORCE)&quot;]
+      WK[&quot;worker crm.job trong cùng process (chép từ Booking)&quot;]
+      SCR[&quot;scrub(): giá trị đã biết → regex → Guardrails&quot;]
+    end
+  end
+
+  subgraph Shared[&quot;Hạ tầng acc2 dùng chung (đã trả tiền)&quot;]
+    CF[&quot;CloudFront gói Free (WAF 5 rule, không chặn theo nước)&quot;]
+    COG[&quot;Cognito EXTERNAL / WORKFORCE&quot;]
+    GW[&quot;REST API api-crm.lumiguides.it.com → VPC link → ALB /crm/*&quot;]
+    RDSD[(&quot;RDS Dev aa-cis-dev-db: schema crm (chỉ dữ liệu giả)&quot;)]
+    SES[&quot;SES gửi + 1 rule nhận trong rule set đang active&quot;]
+  end
+
+  subgraph Cell[&quot;Prod cell của CRM (envs/prod, từ 30/11)&quot;]
+    RDSP[(&quot;aa-crm-prod-db t4g.micro: schema crm (dữ liệu thật)&quot;)]
+    KMS[&quot;KMS: 1 khoá mỗi đại lý + khoá AA-ops&quot;]
+    S3[&quot;S3 tài liệu / export / mail vào&quot;]
+  end
+
+  subgraph Others[&quot;App khác: chỉ gọi HTTP, không grant DB&quot;]
+    CISAPI[&quot;CIS API: /v1/* nội dung, feed thành viên, catalog.v1&quot;]
+    BK[&quot;Booking API: /booking/b2b/v1 (IAM SigV4)&quot;]
+    CISADM[&quot;CIS admin: trang insights&quot;]
+    BKADM[&quot;Booking admin: trang ops release&quot;]
+  end
+
+  subgraph Ext[&quot;Bên ngoài (tài khoản của đại lý khi có thể)&quot;]
+    BED[&quot;Bedrock acc3 us.: Haiku 5.5 / Sonnet 5.5, ApplyGuardrail&quot;]
+    STR[&quot;Stripe Connect Standard (tài khoản đại lý)&quot;]
+    META[&quot;Meta Cloud API (WABA đại lý), Messenger, IG&quot;]
+    TW[&quot;Twilio của đại lý&quot;]
+    DOC[&quot;Documenso&quot;]
+    MAIL[&quot;Gmail/Outlook đại lý: chuyển tiếp vào SES; gửi bằng gmail.send / Graph Mail.Send&quot;]
+  end
+
+  AG --&gt; CF --&gt; PH --&gt; BFF
+  TR --&gt; CF --&gt; CH --&gt; BFF
+  AG --&gt; COG
+  BFF --&gt;|&quot;Bearer Cognito, allow-list&quot;| CISAPI
+  BFF --&gt;|&quot;Bearer / HMAC&quot;| GW --&gt; API
+  API --&gt; RDSD
+  API --&gt; RDSP
+  API --&gt; KMS
+  API --&gt; S3
+  API --&gt; SES
+  API --&gt;|&quot;SigV4&quot;| BK
+  API --&gt;|&quot;feed thành viên, catalog.v1&quot;| CISAPI
+  SCR --&gt;|&quot;chỉ text đã scrub&quot;| BED
+  API &lt;--&gt; STR
+  API &lt;--&gt; META
+  API &lt;--&gt; TW
+  API &lt;--&gt; DOC
+  MAIL --&gt; SES
+  OPS --&gt; BKADM --&gt;|&quot;WORKFORCE&quot;| GW
+  MGT --&gt; CISADM --&gt;|&quot;WORKFORCE, k≥10&quot;| GW</pre><p>Không có trong hình, có chủ đích: không service Presidio, không app khách riêng, không route builder ở TripPlanner,
+không WAF ACL mới, không grant DB nào từ/tới <code>crm.*</code>, không dòng code CIS nào trong repo AA-Partner, <strong>không link nào
+giữa CIS admin và portal</strong>. Các trang staff (insights, ops release) là trang của <strong>app staff</strong> gọi API CRM bằng token
+WORKFORCE — đó là app staff đọc dữ liệu, không phải link giữa hai app người dùng.</p>
+<h3>3.2 Ba app → bốn app, ai sở hữu gì</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Repo</th>
+<th>Đối tượng</th>
+<th>Chạy gì</th>
+<th>Sở hữu</th>
+</tr>
+</thead><tbody><tr>
+<td>AA-CIS-App</td>
+<td>Nhân viên AA</td>
+<td><code>frontend/</code> admin (Vercel), <code>api/</code> + worker (ECS)</td>
+<td>Pipeline nội dung, danh bạ tenant, AA-813 membership, API nội dung <code>/v1/*</code> cho tenant (thành <strong>hợp đồng HTTP</strong>)</td>
+</tr>
+<tr>
+<td><strong>AA-Partner</strong> (mới, public, org AdventureAsia365-Ecosys)</td>
+<td>Đại lý + khách của đại lý</td>
+<td><code>web/</code> (portal chuyển từ CIS + CRM UI + host khách), <code>api/</code> (CRM)</td>
+<td>Mọi màn hình cho đại lý; schema <code>crm</code> (khoá <code>crm-NNN</code>)</td>
+</tr>
+<tr>
+<td>AA-Booking</td>
+<td>Nhân viên AA (B2C)</td>
+<td>như cũ + <code>/booking/b2b/v1</code></td>
+<td>Hàng, giá net, departure/hold</td>
+</tr>
+<tr>
+<td>AA-TripPlanner-Web</td>
+<td>Khách của AA</td>
+<td>không đổi</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AA-CIS-Infra</td>
+<td>—</td>
+<td><code>accounts/aa365/crm.tf</code> (Dev, chép dạng <code>booking.tf</code>), <code>envs/prod/crm.tf</code> (prod cell)</td>
+<td>Hạ tầng dùng chung</td>
+</tr>
+</tbody></table></div><p><strong>Vì sao một repo (portal + CRM) chứ không hai (N1):</strong> chị Thư muốn CRM nằm trong portal; một app Next.js thì một đăng
+nhập, một BFF, một deploy, một kit UI. Ranh giới &quot;CRM là app riêng&quot; vẫn cứng: <code>api/</code> không import <code>web/</code>, <code>web/</code> chỉ gọi
+CRM qua HTTP, có test import hai chiều; CRM có schema, role, DSN, REST API, runner, image, service riêng. Tách hai repo
+(AA-Portal + AA-CRM) thêm một CI, một branch protection, một OIDC role, một kit copy và điều hướng giữa hai &quot;zone&quot; bị
+nạp lại trang — tốn thêm mà không cách ly thêm gì.</p>
+<h3>3.3 Backend CRM (D17, D22 b)</h3>
+<p>Chép <strong>AA-Booking</strong> (cùng stack ADR 0004): <code>booking.tf</code> là một file tự chứa, chỉ đọc output module, chạm đúng một tài
+nguyên dùng chung là listener rule ALB (scout §4). Khác biệt cho CRM:</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Mục</th>
+<th>Booking hôm nay</th>
+<th>CRM v2</th>
+</tr>
+</thead><tbody><tr>
+<td>Kích thước task</td>
+<td>256 CPU / 512 MB x86 (<code>booking.tf:285-286</code>)</td>
+<td>0,25 vCPU / 0,5 GB <strong>ARM64</strong></td>
+</tr>
+<tr>
+<td>Capacity</td>
+<td>FARGATE base 1 + SPOT 3 (<code>booking.tf:392-400</code>)</td>
+<td><strong>Dev: chỉ FARGATE_SPOT</strong> (Dev không có người dùng thật); prod cell: FARGATE on-demand, 1 task trong pilot</td>
+</tr>
+<tr>
+<td>Worker</td>
+<td>Trong process API, lifespan task (<code>AA-Booking/backend/app/main.py:79-92</code>, <code>jobs/worker.py:14-19</code> nhả job khi tắt)</td>
+<td>Giống hệt: chép <code>backend/app/jobs/</code> (675 dòng, 4 file), bảng <code>crm.job</code> từ template CIS <code>shared/jobs/job_table_template.sql</code> (ADR 0003a), kind <code>crm_*</code>. <strong>Không chạm <code>shared/jobs</code> của CIS</strong> (D22 b)</td>
+</tr>
+<tr>
+<td>Deploy gate</td>
+<td><code>GET /booking/ops/deploy-gate</code> bằng OIDC GitHub, không secret (<code>deploy-dev.yml:15-35</code>)</td>
+<td>Chép: <code>GET /crm/ops/deploy-gate</code>; kind định kỳ vào <code>DEPLOY_GATE_EXEMPT</code> + <code>idle_exempt_kinds</code> từ ngày đầu</td>
+</tr>
+<tr>
+<td>ECS exec</td>
+<td>Bật</td>
+<td><strong>Tắt</strong> trên service CRM (bản rõ của vault nằm trong bộ nhớ); debug bằng log + DB Migrate <code>run-script</code> trên bảng không PII</td>
+</tr>
+<tr>
+<td>REST API</td>
+<td>Riêng, throttle 20/40 (<code>booking.tf:449-567</code>)</td>
+<td>Riêng <code>api-crm.lumiguides.it.com</code>, cùng VPC link</td>
+</tr>
+<tr>
+<td>Role DB</td>
+<td><code>booking</code> limit 15, pool <code>max_size=5</code> (<code>AA-Booking/backend/app/db.py:65-72</code>)</td>
+<td><code>crm_app</code> limit 5, pool <code>max_size=5</code>; bù bằng hạ <code>booking</code> 15 → 10 trong cùng PR → tổng LOGIN giữ 155/181 (<code>observability_ecosys.tf:52,59-72</code>), không resize RDS (N17)</td>
+</tr>
+<tr>
+<td>IAM thêm</td>
+<td>SES send, PutMetricData</td>
+<td>+ <code>kms:Decrypt/GenerateDataKey</code> trên <code>alias/crm/*</code> có điều kiện encryption context; <code>bedrock:ApplyGuardrail</code> + <code>sts:AssumeRole</code> sang role invoker acc3; <code>execute-api:Invoke</code> trên tài nguyên B2B của Booking</td>
+</tr>
+</tbody></table></div><h3>3.4 Portal + CRM là một app, hai host</h3>
+<ul>
+<li><strong>Trang đại lý</strong> (<code>portal.lumiguides.it.com</code>): sidebar có hai nhóm <strong>Content studio</strong> (các trang hôm nay,
+<code>portal/app/portal/_components/Sidebar.tsx:28-50</code>) và <strong>CRM</strong> (pipeline, trip, khách, inbox, proposal + builder, sổ
+booking, hoá đơn, hoa hồng, NCC, báo cáo, tự động, nháp AI, audit, cài đặt).</li>
+<li><strong>Trang khách</strong> (<code>go.lumiguides.it.com</code>): form intake + widget nhúng, trang chọn option (không đăng nhập), client
+portal (link ký + OTP email), trang trip white-label (chuyển từ admin CIS, D18). <code>proxy.ts</code> (Next 16 Proxy) định tuyến
+theo <code>Host</code>; cookie host-only, nên host khách không bao giờ thấy cookie đại lý và ngược lại.</li>
+<li><strong>Builder (D21 c):</strong> <code>web/app/crm/trips/[id]/builder</code>, chép byte các component bản đồ/route của TripPlanner
+(<code>mapbox-gl</code> 3.7.0, <code>AA-TripPlanner-Web/frontend/package.json:14</code>; <code>components/MapView.tsx</code> 803 dòng, import
+<code>@/lib/{api,mapbox,tileLoader,types,useTrip}</code> ở <code>MapView.tsx:4-17</code>) + adapter cùng chữ ký hàm cho <code>lib/tp/api.ts</code> và
+<code>lib/tp/useTrip.ts</code>. Guard: manifest sha256 + commit TP trong CI, job hằng đêm mở issue khi TP lệch. <strong>Lưu ý:</strong>
+TripPlanner chạy Next 15.5.28 (<code>frontend/package.json:15</code>), portal chạy Next 16.4.2 (<code>portal/package.json:15</code>), nên
+CI build thêm các file chép dưới Next 16 và cho phép một lớp bọc mỏng (D21 c đã cho phép adapter).</li>
+<li><strong>Hosting (N3):</strong> Next 16 <code>output: &quot;standalone&quot;</code> trên <strong>Lambda + Lambda Web Adapter</strong>, sau <strong>CloudFront gói Free</strong>
+($0/tháng: 1M request, 100 GB, 5 rule WAF; <a href="https://aws.amazon.com/cloudfront/pricing/" target="_blank" rel="noopener">aws.amazon.com/cloudfront/pricing</a>,
+truy cập 20/10/2026). File tĩnh lên S3. Một kiểu host cho Dev và prod. Vì sao không Amplify: Amplify chỉ hỗ trợ Next
+&quot;up through Next.js 15&quot; (<a href="https://docs.aws.amazon.com/amplify/latest/userguide/ssr-amplify-support.html" target="_blank" rel="noopener">Amplify docs</a>,
+truy cập 20/10/2026), còn portal là Next 16. W0 có một spike kiểm Next 16 Proxy + SSR + BFF trên LWA. <strong>Dự phòng
+(không phải Vercel Pro):</strong> cùng container chạy một service Fargate nhỏ sau cùng CloudFront, +≈ $8/tháng.</li>
+<li><strong>Preview PR:</strong> client Cognito có callback URL cố định (<code>identity_variables.tf:163-168</code>), nên preview động (Vercel
+hay Lambda function URL) không đăng nhập được. Dùng <strong>một host preview cố định</strong> <code>portal-pr.lumiguides.it.com</code> đăng ký
+trên client; CI deploy PR đang test lên đó; smoke test đăng nhập bằng user <code>e2e-test-*</code>.</li>
+</ul>
+<hr>
+<h2>4. Kế hoạch tách CIS admin ↔ tenant portal (mọi điểm dính scout tìm thấy)</h2>
+<p>Tất cả nằm ở <strong>W1</strong>, trước khi trang CRM nào lên. Nguồn: scout §2, panel đã kiểm V1–V9.</p>
+<h3>4.1 Link, redirect, mục điều hướng</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>ID</th>
+<th>Hôm nay (file:line, <code>origin/main</code>)</th>
+<th>Hành động</th>
+<th>Repo</th>
+</tr>
+</thead><tbody><tr>
+<td>L1</td>
+<td>Trang đăng nhập staff có link &quot;B2B Tenant login →&quot; tới <code>${PORTAL_BASE_URL}/tenant-login</code> (<code>frontend/app/login/LoginForm.tsx:10,159</code>)</td>
+<td>Xoá link + import <code>PORTAL_BASE_URL</code></td>
+<td>CIS</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>Trang đăng nhập tenant có link &quot;← Staff login&quot; (<code>portal/app/tenant-login/page.tsx:4,111-112</code>; <code>portal/lib/hosts.ts:5-9</code>)</td>
+<td>Xoá cùng lúc chuyển repo; trang đăng nhập đại lý chỉ có đăng nhập của nó</td>
+<td>Partner</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>Redirect 308 <code>/portal</code>, <code>/portal/:path*</code>, <code>/tenant-login</code> từ host admin sang portal (<code>frontend/next.config.ts:23-25</code>), test bắt buộc giữ (<code>tests/unit/test_aa885_portal_split.py:104-117</code>)</td>
+<td><strong>Xoá</strong> (Dev chỉ ~4 tenant thử, không có bookmark thật) và <strong>đảo test</strong>: assert <code>frontend/</code> không còn URL/hằng số host portal nào (N16)</td>
+<td>CIS</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>Chữ hướng dẫn trong admin nhắc <code>/portal/t7-planning</code> (<code>frontend/app/admin/atom-curation/page.tsx:1106-1107</code>)</td>
+<td>Viết lại, không ghi đường dẫn portal</td>
+<td>CIS</td>
+</tr>
+<tr>
+<td>L5</td>
+<td><code>NavBar.tsx</code> chết, có mục &quot;Tenant Portal&quot; (<code>frontend/components/NavBar.tsx:6-12</code>, không ai import)</td>
+<td>Xoá file</td>
+<td>CIS</td>
+</tr>
+<tr>
+<td>L6</td>
+<td>Trang trip white-label cho khách của tenant lại do <strong>app admin</strong> phục vụ, CTA cứng <code>mailto:admin@adventureasia.com</code> (<code>frontend/app/trip/[tourId]/page.tsx:146</code>)</td>
+<td>D18: sửa CTA ngay (W1 #1); rồi chuyển trang sang host khách <code>go.…/t/{tenant}/{tour}</code>, CTA mở form intake của đúng đại lý; CIS chỉ giữ endpoint nội dung</td>
+<td>CIS + Partner</td>
+</tr>
+<tr>
+<td>L7</td>
+<td>URL lưu cho trang trip trỏ host admin: <code>real_url = f&quot;https://aa-cis.lumiguides.it.com/trip/{tour_id}&quot;</code> (<code>api/routers/v1_trip_page.py:157</code>)</td>
+<td>Đổi sang host khách + backfill <code>trip_url</code> đã lưu (DRY RUN trước)</td>
+<td>CIS</td>
+</tr>
+<tr>
+<td>L8</td>
+<td>Sidebar admin không có mục portal (<code>frontend/lib/apps.ts:30-32</code>)</td>
+<td>Giữ nguyên (đúng thiết kế)</td>
+<td>—</td>
+</tr>
+</tbody></table></div><h3>4.2 Code dùng chung (bản chép), style</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>ID</th>
+<th>Hôm nay</th>
+<th>Hành động</th>
+</tr>
+</thead><tbody><tr>
+<td>C1</td>
+<td>14 file kit chép byte từ admin, test ép bằng nhau (<code>test_aa885_portal_split.py:25-40,66-81</code>) — sửa kit admin là CI portal đỏ, và ngược lại</td>
+<td>AA-Partner <strong>sở hữu</strong> kit của nó từ lúc chuyển; xoá test bằng-byte</td>
+</tr>
+<tr>
+<td>C2</td>
+<td><code>adminHeaders()</code> gửi <code>x-reviewer-id</code> nằm trong bundle portal (<code>portal/app/_kit/api.ts:17-25</code>)</td>
+<td>Xoá trong app chuyển sang</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>CSS shell admin trong portal (<code>portal/app/globals.css:4-15,300-303,337-405,435-474</code>: <code>.aa-admin-sidebar</code>, crumb &quot;Admin /&quot;)</td>
+<td>Xoá</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>Comment admin trong <code>portal/app/_brand/tokens.ts:2-3,50-52</code></td>
+<td>Viết lại; token thương hiệu giữ (cố ý dùng chung brand)</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>Comment trỏ trang admin trong <code>portal/app/_kit/primitives.tsx:5-7,65,132,330,429</code></td>
+<td>Dọn</td>
+</tr>
+</tbody></table></div><h3>4.3 Tên, cookie, env, host</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>ID</th>
+<th>Hôm nay</th>
+<th>Hành động</th>
+</tr>
+</thead><tbody><tr>
+<td>N1</td>
+<td>Cùng tên cookie <code>cis_role</code> ở hai app (portal <code>portal/app/api/auth/tenant-login/route.ts:63</code>; admin <code>frontend/lib/cognito.ts:429-438</code>, còn xử lý &quot;cookie tenant để lại trên cùng host&quot; từ trước AA-885)</td>
+<td>Portal dùng namespace <code>pp_*</code> (phiên mã hoá, httpOnly, host-only); xoá đoạn xử lý tenant trong <code>cognito.ts</code></td>
+</tr>
+<tr>
+<td>N2</td>
+<td>Cả hai app cùng biến môi trường trỏ cùng backend (<code>portal/lib/auth-server.ts:15</code>; <code>frontend/app/api/tenant/[...path]/route.ts:41</code>)</td>
+<td>AA-Partner có biến riêng cho CIS API và CRM API. ⚠️ <strong>Đây là biến môi trường có dấu gạch dưới — Nghiệp sửa tay trong VSCode/console</strong>, agent không sinh script</td>
+</tr>
+<tr>
+<td>N3</td>
+<td>Cùng team Vercel, cùng <code>VERCEL_TOKEN</code>, chung trần 100 deploy/ngày của Hobby (<code>.github/workflows/vercel-deploy-portal.yml:7-9,16,57</code>)</td>
+<td>Portal rời Vercel (N3): bỏ workflow, gỡ project <code>aa-cis-portal</code> sau khi host AWS chạy</td>
+</tr>
+<tr>
+<td>N4</td>
+<td>CORS backend có host admin, không có host portal (<code>api/main.py:162-173</code>)</td>
+<td>Không cần đổi: portal gọi server-to-server qua BFF</td>
+</tr>
+<tr>
+<td>N5</td>
+<td>Một repo, một <code>ci.yml</code>, branch protection CIS áp cho PR portal</td>
+<td>Repo mới có CI 5 check riêng như Booking</td>
+</tr>
+</tbody></table></div><h3>4.4 Proxy &quot;tenant&quot; phía admin (chỉ staff, nhưng tên gây nhầm)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>ID</th>
+<th>Hôm nay</th>
+<th>Hành động</th>
+</tr>
+</thead><tbody><tr>
+<td>P1</td>
+<td>Route admin <code>/api/tenant/[...path]</code> (staff-only, <code>frontend/app/api/tenant/[...path]/route.ts:1-19,48-54</code>)</td>
+<td>Đổi tên <code>/api/admin/[...path]</code></td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Trang staff gọi <code>/api/tenant/admin/tenants/${AA_INTERNAL_ID}/details</code> (<code>frontend/app/admin/master-content/page.tsx:857</code>)</td>
+<td>Đổi theo P1</td>
+</tr>
+<tr>
+<td>P3</td>
+<td><code>frontend/app/api/tenant/pipeline/brand-identity/route.ts</code> + <code>frontend/lib/rbac.ts:93-94</code></td>
+<td>Đổi theo P1</td>
+</tr>
+</tbody></table></div><h3>4.5 Backend: một process FastAPI phục vụ cả hai đối tượng</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>ID</th>
+<th>Hôm nay</th>
+<th>Hành động</th>
+</tr>
+</thead><tbody><tr>
+<td>B1</td>
+<td>Một process đăng ký router tenant (<code>v1_*</code>) và staff (<code>admin_*</code>) (<code>api/main.py:24-62,227-269</code>)</td>
+<td>Giữ cho nội dung (CIS vẫn là chủ API nội dung); CRM <strong>không</strong> nằm trong process này</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>Một <code>JWT_SECRET</code> HS256 ký cả token tenant và token staff cũ (<code>api/routers/auth.py:34-41,64-73</code>)</td>
+<td>AA-813: người dùng đại lý chuyển sang Cognito EXTERNAL; route tenant của CIS kiểm JWT Cognito + membership; đóng đăng nhập bằng API key cho người</td>
+</tr>
+<tr>
+<td>B3</td>
+<td><code>POST /auth/verify-tenant</code> gọi <code>verify_jwt</code> chứ không phải <code>verify_tenant_jwt</code>, token staff hợp lệ ra lỗi 500 thay vì 401 (<code>api/main.py:326-335</code>)</td>
+<td><strong>Sửa ngay trong PR CIS đầu tiên</strong> (2 dòng)</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>Portal gọi <code>/admin/brand-identity</code> bằng token tenant (dual-auth, <code>api/routers/admin_pipeline.py:4658-4690</code>)</td>
+<td>Route tenant mới <code>/v1/brand-identity</code>; allow-list BFF cấm <code>/admin/*</code></td>
+</tr>
+<tr>
+<td>B5</td>
+<td><code>GET /v1/tours/{id}/full</code> dual-auth (<code>api/routers/v1_tours.py:676-696</code>)</td>
+<td>Giữ cho staff qua header admin; portal chỉ dùng nhánh tenant (ghi trong hợp đồng)</td>
+</tr>
+<tr>
+<td>B6</td>
+<td>Router staff nằm dưới prefix trông như tenant <code>/v1/pipeline</code> (<code>api/routers/v1_pipeline.py:44-69</code>)</td>
+<td>Thêm vào danh sách cấm của allow-list BFF; đổi prefix khi tiện (không chặn CRM)</td>
+</tr>
+<tr>
+<td>B7</td>
+<td>BFF portal chuyển <strong>bất kỳ</strong> đường dẫn nào (<code>portal/app/api/tenant/[...path]/route.ts:20-33</code>); admin phải có code phòng thủ (<code>api/routers/admin_atoms.py:60-90</code>)</td>
+<td><strong>Allow-list</strong> từng upstream (CIS <code>/v1/...</code>, CRM <code>/crm/v1/...</code>); hợp đồng <code>docs/contracts/cis.tenant-api.v1.json</code> + contract test trong CI AA-Partner</td>
+</tr>
+<tr>
+<td>B8</td>
+<td><code>verify_tenant_api_key</code> nhận <code>X-Admin-Secret</code> <strong>hoặc</strong> <code>X-API-Key</code> (<code>api/routers/auth.py:173-240</code>)</td>
+<td>Ngoài phạm vi CRM; ghi follow-up (auth server-to-server của tenant)</td>
+</tr>
+<tr>
+<td>B9</td>
+<td>Login tenant, API tenant và API staff chung một REST API, một domain <code>api-cis.…</code> (<code>modules/api_gateway/main.tf:94-339</code>)</td>
+<td>CRM có REST API riêng <code>api-crm.…</code>; tách API nội dung tenant khỏi <code>api-cis</code> là việc sau (không chặn)</td>
+</tr>
+<tr>
+<td>B10</td>
+<td>Trang staff <strong>về</strong> tenant (Tenant 360, <code>/admin/tenant-activity</code>)</td>
+<td>Giữ — là dữ liệu staff, không phải link giữa hai app</td>
+</tr>
+</tbody></table></div><h3>4.6 Chuyển <code>portal/</code> ra khỏi CIS</h3>
+<ol>
+<li>Tạo repo AA-Partner từ <code>portal/</code> <strong>giữ lịch sử</strong> (<code>git filter-repo</code>), kèm hai workflow <code>vercel-deploy-portal.yml</code>,
+<code>ui-smoke-portal.yml</code> (chuyển thành workflow deploy AWS + smoke). Kích thước: 101 file, ~13,6k dòng TS/TSX/CSS (panel
+V7). Ước tính ≈ 1 phiên.</li>
+<li>Cùng cặp PR: CIS xoá <code>portal/</code>, hai workflow, và viết lại <code>test_aa885_portal_split.py</code> thành test &quot;admin không có
+route/hằng số portal&quot;.</li>
+<li>Host <code>portal.lumiguides.it.com</code> chuyển sang CloudFront; client Cognito <code>cis-portal</code> đổi tên <code>partner-portal</code>, giữ
+callback cùng host (<code>identity_variables.tf:163-168</code>).</li>
+<li>Gỡ project Vercel <code>aa-cis-portal</code> sau khi smoke trên AWS xanh.</li>
+<li><strong>Giá của việc tách:</strong> một tính năng nội dung cần UI thì chạm hai repo (API ở CIS, trang ở AA-Partner). Đây là giá
+anh đã chấp nhận khi đòi tách, và Booking đang sống với mô hình này.</li>
+</ol>
+<hr>
+<h2>5. Truy vết spec (mọi mục, mọi module)</h2>
+<p>Cột &quot;Phase spec&quot; lấy từ <code>partner-crm-spec.md:190-194</code>. &quot;Trước 30/11&quot; = có trong pilot.</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Mục spec</th>
+<th>Xây ở đâu (v2)</th>
+<th>Đợt</th>
+<th>Trước 30/11</th>
+<th>Phase spec</th>
+</tr>
+</thead><tbody><tr>
+<td>§1 Hàng AA sống trong CRM</td>
+<td>Booking <code>/booking/b2b/v1</code> (quote, availability, hold, confirm) + client <code>api/app/b2b/</code> + sổ booking tự điền</td>
+<td>W4</td>
+<td>Có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§1 Proposal khách tự chỉnh</td>
+<td><code>crm.proposal/day/option_block/option/selection</code> + trang chọn trên host khách + builder</td>
+<td>W4</td>
+<td>Có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§1 Riêng tư theo kiến trúc</td>
+<td>F1–F5 (§7)</td>
+<td>W2</td>
+<td>Có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§1 Miễn phí cho đối tác</td>
+<td>H2</td>
+<td>W0</td>
+<td>Có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§2 Dữ liệu thuộc đại lý; AA không marketing</td>
+<td>Không grant nào trên <code>crm.*</code>; DPA; probe cách ly</td>
+<td>W1–W2</td>
+<td>Có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§2 AI nháp, người gửi</td>
+<td>UI duyệt; không có đường gửi nếu chưa có dòng duyệt (test)</td>
+<td>W7</td>
+<td>Sau</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>§2 Chỉ hỏi cái cần ở từng giai đoạn</td>
+<td>Form theo stage; Stage 3 khoá đến khi đặt cọc</td>
+<td>W3/W5</td>
+<td>Có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§2 Nhanh hơn Gmail + WhatsApp + sheet</td>
+<td>Inbox email trước 30/11; đo bằng <code>crm.metric_event</code></td>
+<td>W3–W7</td>
+<td>Một phần</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§2 Nền riêng tư trước mọi dữ liệu</td>
+<td>W2 trước dữ liệu thật; guard CI</td>
+<td>W2</td>
+<td>Có</td>
+<td>Phase 0</td>
+</tr>
+<tr>
+<td>§3 Người dùng (6 vai)</td>
+<td><code>crm.member_role</code> (owner/agent/assistant, <code>margin_visible</code>); link ký cho khách; WORKFORCE cho AA ops/management</td>
+<td>W1–W7</td>
+<td>Có (trừ AA mgmt)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§4 Pipeline 7 bước + Lost + cổng</td>
+<td><code>crm.trip</code> + bảng chuyển + trigger (mẫu Booking bk-003)</td>
+<td>W3</td>
+<td>Có</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td>§5 Stage 1/2/3, luật 1–5, đặt dữ liệu, panel Traveler info</td>
+<td>Intake (W3), form Stage 2 + &quot;điền từ cuộc gọi&quot; (W3), Stage 3 qua client portal sau cọc (W5), panel (W3)</td>
+<td>W3/W5</td>
+<td>Có</td>
+<td>Phase 1–2</td>
+</tr>
+<tr>
+<td>§5 Tự động: task &quot;Get planning info&quot; khi Stage 2 &lt; 80%; nhắc T-21</td>
+<td>Luật cổng trong W3 (task tạo đồng bộ); T-21 qua <code>crm_workflow_tick</code></td>
+<td>W3/W6</td>
+<td>Task có; T-21 sau</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>F1 Kho danh tính</td>
+<td>Vault AES-GCM, khoá KMS mỗi đại lý + DEK mỗi khách (D7 a)</td>
+<td>W2</td>
+<td>Có</td>
+<td>Phase 0</td>
+</tr>
+<tr>
+<td>F2 Profile ẩn danh</td>
+<td><code>crm.traveler_profile</code> + role NOLOGIN <code>crm_ai_reader</code>/<code>crm_insights</code></td>
+<td>W2</td>
+<td>Có</td>
+<td>Phase 0</td>
+</tr>
+<tr>
+<td>F3 Scrubber</td>
+<td>3 lượt, Guardrails (§7.3)</td>
+<td>W2</td>
+<td>Có</td>
+<td>Phase 0</td>
+</tr>
+<tr>
+<td>F4 Tenancy &amp; quyền</td>
+<td>AA-813 + <code>crm.member_mirror</code> + <code>member_role</code> + RLS</td>
+<td>W1–W2</td>
+<td>Có</td>
+<td>Phase 0</td>
+</tr>
+<tr>
+<td>F5 Audit</td>
+<td><code>crm.access_event</code> chuỗi hash theo tenant + trang audit</td>
+<td>W2</td>
+<td>Có</td>
+<td>Phase 0</td>
+</tr>
+<tr>
+<td>1 Form intake</td>
+<td>Host khách + widget + <code>crm_intake_process</code></td>
+<td>W3</td>
+<td>Có</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td>2 Pipeline</td>
+<td>Board + timeline + panel</td>
+<td>W3</td>
+<td>Có</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td>3 Proposal tương tác</td>
+<td>Mô hình proposal + trang chọn + giá sống + luật phụ thuộc + mặc định từ Stage 2</td>
+<td>W4</td>
+<td>Có</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td>4 Proposal dạng chữ</td>
+<td>Renderer email/WhatsApp, chung hash giá</td>
+<td>W3–W4</td>
+<td>Có</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td>5 Inbox email</td>
+<td>SES chuyển tiếp vào + <code>gmail.send</code>/Graph <code>Mail.Send</code> ra + threading + trả lời mẫu + ghi chú (D6 b) — <strong>ghi lệch</strong>: không đồng bộ đọc hai chiều</td>
+<td><strong>W3</strong> (kéo từ W6)</td>
+<td>Có</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td>6 Sổ booking</td>
+<td><code>crm.booking_line(_money)</code>, dòng AA tự điền</td>
+<td>W3–W4</td>
+<td>Có</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td>7 Hoá đơn + thanh toán</td>
+<td>Stripe Connect Standard; VN: thủ công, cổng VN sau báo giá (D10 a)</td>
+<td>W5</td>
+<td>Có</td>
+<td>Phase 2</td>
+</tr>
+<tr>
+<td>8 AA ops release</td>
+<td>Ở lại trong CRM, mã hoá lại bằng khoá AA-ops, AA ops đọc qua trang Booking admin, xoá sau ngày về + 90 ngày, biên nhận vào audit đại lý (N6)</td>
+<td>W5</td>
+<td>Có</td>
+<td>Phase 2</td>
+</tr>
+<tr>
+<td>12 Hợp đồng + waiver</td>
+<td>Documenso (D11 b, gói ở N8); Dev/CI dùng container Documenso tự host</td>
+<td>W5</td>
+<td>Có</td>
+<td>Phase 2</td>
+</tr>
+<tr>
+<td>13 Hoa hồng</td>
+<td>Kỳ vọng/đã nhận + cờ quá hạn</td>
+<td>W5</td>
+<td>Có</td>
+<td>Phase 2</td>
+</tr>
+<tr>
+<td>9 WhatsApp / SMS</td>
+<td>Embedded Signup, WABA của đại lý (D9 a); SMS bằng Twilio của đại lý (N12)</td>
+<td>W6</td>
+<td>Sau</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>10 Tự động hoá</td>
+<td><code>crm.workflow_*</code> + tick</td>
+<td>W6</td>
+<td>Sau</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>14 AI agent</td>
+<td>Haiku mặc định, scrub bắt buộc, duyệt (N10)</td>
+<td>W7</td>
+<td>Sau</td>
+<td>Phase 3</td>
+</tr>
+<tr>
+<td>11 Client portal</td>
+<td>Host khách, link ký + OTP</td>
+<td>W5</td>
+<td>Có (kéo sớm: Stage 3 cần nó)</td>
+<td>Phase 4</td>
+</tr>
+<tr>
+<td>15 Danh bạ NCC</td>
+<td><code>crm.agency_supplier</code>, AA là mặc định</td>
+<td>W3</td>
+<td>Có</td>
+<td>Phase 4</td>
+</tr>
+<tr>
+<td>16 Báo cáo đại lý</td>
+<td>Cơ bản W3, đầy đủ W7</td>
+<td>W3/W7</td>
+<td>Một phần</td>
+<td>Phase 4</td>
+</tr>
+<tr>
+<td>17 AA insights</td>
+<td>Rollup k≥10 + ≥3 đại lý + opt-in (D24), API WORKFORCE, trang CIS admin</td>
+<td>W7</td>
+<td>Sau</td>
+<td>Phase 4</td>
+</tr>
+<tr>
+<td>18 Mang dữ liệu đi</td>
+<td>Xuất/xoá khách W5 (nghĩa vụ khi có dữ liệu thật), xuất đầy đủ + crypto-shred W7</td>
+<td>W5/W7</td>
+<td>Một phần</td>
+<td>Phase 4</td>
+</tr>
+<tr>
+<td>§7 Mô hình dữ liệu (kênh email/whatsapp/sms/messenger/ig)</td>
+<td>Schema <code>crm</code> (§7.1)</td>
+<td>W1–W6</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§8 Kiến trúc riêng tư (tách kho, scrub, ZDR, AA access, quyền đại lý)</td>
+<td>§7</td>
+<td>W2/W5/W7</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§9 Tích hợp (7 dòng)</td>
+<td>§8</td>
+<td>W3–W7</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§10 Pilot cuối Phase 2</td>
+<td>Go-live 30/11 sau W5</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§10 Track ngoài code (luật, thoả thuận chống lôi kéo, insurer, WhatsApp, trang dữ liệu)</td>
+<td>§10.3, W0 khởi động, W5 DPA + trang dữ liệu</td>
+<td>W0/W5</td>
+<td>Có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§11.1–4 Story, edge case, day-in-life, mockup</td>
+<td>W0</td>
+<td>W0</td>
+<td>Có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§11.5 Onboarding (Gmail/CSV import, first run, mời)</td>
+<td>CSV + mbox (Google Takeout) + mời ở W3; danh bạ Gmail (People API) ở W7</td>
+<td>W3/W7</td>
+<td>Một phần</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§11.6 NFR (mobile, ngôn ngữ, AUD/USD/VND/EUR, múi giờ, hiệu năng, uptime)</td>
+<td>EN/VI (D20 a), tiền tệ, múi giờ, mobile ở W3; SLO + alarm ở W7</td>
+<td>W3/W7</td>
+<td>Một phần</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§11.7 Đo sự kiện</td>
+<td><strong>Baseline <code>crm.metric_event</code> ~10 sự kiện ở W3</strong>, báo cáo đầy đủ W7</td>
+<td>W3/W7</td>
+<td>Có (baseline)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>§11.8 Mô hình giá</td>
+<td>H2</td>
+<td>W0</td>
+<td>Có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Messenger + IG (D19 a)</td>
+<td>Meta Graph API, cùng xác minh Meta</td>
+<td>W6</td>
+<td>Sau</td>
+<td>Phase 3</td>
+</tr>
+</tbody></table></div><p><strong>Điểm lệch spec phải ghi để chị Thư biết (H1, H8, H12):</strong></p>
+<ol>
+<li>Module 5: &quot;two-way Gmail/Outlook sync&quot; → chuyển tiếp vào + gửi bằng tài khoản đại lý (D6 b, không CASA).</li>
+<li>§1 &quot;confirmed automatically&quot;: tour có departure cố định thì tự xác nhận; tour khác &quot;theo yêu cầu&quot;, AA ops xác nhận
+trong 1 ngày làm việc (H8).</li>
+<li>Thứ tự phase: module 11 (client portal) kéo lên Phase 2 vì Stage 3 của Booked cần nó; module 18 phần xoá/xuất khách
+kéo lên vì có dữ liệu thật — không cắt gì.</li>
+<li>Nếu chọn Documenso Teams: trang ký có thể hiện thương hiệu Documenso (H12).</li>
+</ol>
+<hr>
+<h2>6. Các luồng chính (tóm tắt)</h2>
+<p>Đại lý được mời (AA-813) → đăng nhập Cognito qua <code>portal.</code> → lần đầu vào CRM: tạo <code>tenant_settings</code>; khoá KMS tạo
+<strong>lười</strong> khi lưu khách đầu tiên → khách điền form trên <code>go.</code> (hoặc widget nhúng, hoặc CTA trên trang trip) →
+<code>crm_intake_process</code> khử trùng bằng blind index, tạo khách (F1) + profile (F2) + trip ở Inquiry, task &quot;trả lời &lt; 2 giờ&quot;
+→ email khách vào qua địa chỉ chuyển tiếp, gắn vào trip → form Stage 2 → cổng Proposal khi ≥ 80% hoặc override có log
+→ dựng proposal trong builder, giá qua Booking B2B → khách giữ/đổi/chấp nhận không cần đăng nhập → chấp nhận thì đặt
+hold ở Booking → cọc qua Stripe của đại lý (hoặc ghi tay) → Booked → client portal OTP mở Stage 3 + ký waiver qua
+Documenso → ops release (khoá AA-ops, xoá sau 90 ngày) → T-21 nhắc → Travelling → Completed → hoa hồng, báo cáo.</p>
+<hr>
+<h2>7. Dữ liệu, bảo mật, AI</h2>
+<h3>7.1 Dữ liệu</h3>
+<p>Schema <code>crm</code>, owner <code>crm_owner</code> NOLOGIN, runtime <code>crm_app</code> LOGIN, khoá migration <code>crm-NNN</code>, đăng ký trong
+<code>infra/AA-CIS-Infra/db/owners.yaml</code>, bản copy <code>db/migrations/crm/</code>, chỉ áp qua DB Migrate. Mọi bảng tenant:
+<code>tenant_id NOT NULL</code>, ENABLE + FORCE RLS từ <code>crm-001</code>, policy NULLIF <code>TO crm_app</code>, <code>COMMENT &#39;pii:&lt;class&gt;&#39;</code> (lớp mới
+<code>pii:government_id</code>, <code>pii:health</code>, <code>pii:emergency_contact</code> trong standards v1.2). Nhóm bảng như v1 §8.2, với 4 thay đổi:</p>
+<ul>
+<li><p><strong>Bỏ</strong> <code>builder_session</code> (D21 c: builder chạy trong phiên đại lý, không cần builder JWT).</p>
+</li>
+<li><p><strong>Thêm</strong> <code>crm.member_mirror</code> (membership AA-813 kéo từ CIS ≤ 1 phút), <code>crm.catalog_cache</code> (<code>catalog.v1</code> cache TTL),
+<code>crm.ops_release</code> (module 8), <code>crm.llm_call</code> (sổ chi phí AI, không lưu text).</p>
+</li>
+<li><p><code>crm.fx_rate</code> chỉ cho dòng NCC ngoài AA; dòng AA lấy FX từ báo giá Booking.</p>
+</li>
+<li><p><strong>Không grant cho role nào khác, và <code>crm_app</code> không có grant ngoài <code>crm.*</code></strong> (N5). Mọi đọc chéo app đi HTTP:</p>
+<ul>
+<li>CIS: hai endpoint nội bộ <code>AWS_IAM</code> — <code>GET /internal/v1/tenant-members?since=</code> và <code>GET /internal/v1/catalog/*</code>.</li>
+<li>Booking: <code>AWS_IAM</code> trên <code>/booking/b2b/*</code> (REST API Booking <code>booking.tf:449</code>), CRM ký SigV4.</li>
+</ul>
+<p>Lý do: prod cell có RDS riêng, không thấy được view của Dev; một đường code cho Dev và prod; probe cách ly đơn giản;
+sau này dời schema sang AA-880 chỉ là chuyển schema.</p>
+</li>
+</ul>
+<h3>7.2 Mã hoá và quyền (D7 a)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Lớp</th>
+<th>Thiết kế</th>
+</tr>
+</thead><tbody><tr>
+<td>F1</td>
+<td>AES-256-GCM từng trường, AAD = tenant/bảng/cột/id; DEK riêng từng khách, bọc bằng <strong>khoá KMS riêng của đại lý</strong> (encryption context <code>crm_tenant_id</code>); blind index HMAC cho email/điện thoại/tên; BYOK tuỳ chọn</td>
+</tr>
+<tr>
+<td>Vòng đời khoá (N11)</td>
+<td>Tạo lười ở khách đầu tiên (đại lý không hoạt động = $0); rời đi thì <code>ScheduleKeyDeletion</code> — <strong>khoá đang chờ xoá không bị tính tiền</strong> (<a href="https://aws.amazon.com/kms/pricing/" target="_blank" rel="noopener">aws.amazon.com/kms/pricing</a>, truy cập 20/10/2026, panel §1.2). Không bật xoay tự động KEK trong pilot (xoay bằng bọc lại DEK); review bảo mật W7 có thể đổi. Xoay tự động chỉ thêm $1 cho 2 lần xoay đầu (trần $3/khoá)</td>
+</tr>
+<tr>
+<td>Key policy</td>
+<td>Chỉ task role CRM được Decrypt/GenerateDataKey; báo động CloudTrail khi principal khác Decrypt (mở rộng AA-873); ECS exec tắt</td>
+</tr>
+<tr>
+<td>Đường công khai (N15)</td>
+<td>Pilot: một task role cho cả route đại lý lẫn intake/webhook — ghi là <strong>rủi ro còn lại</strong>. Trước AA-880 hoặc đại lý thứ 11: tách service thứ hai từ cùng image cho <code>/crm/public/*</code> + <code>/crm/hooks/*</code> với role <strong>chỉ Encrypt/GenerateDataKey</strong> (+≈ $2,5 Dev Spot / $8,3 prod)</td>
+</tr>
+<tr>
+<td>Tài liệu</td>
+<td>S3 SSE-KMS khoá đại lý + S3 Bucket Keys</td>
+</tr>
+<tr>
+<td>Câu F1 (D8, H3)</td>
+<td>&quot;Chỉ hệ thống CRM dùng được khoá của đại lý; mọi lần dùng đều ghi log và đại lý tự xem được; nhân viên AA không mở được hồ sơ khách; đại lý dùng khoá riêng (BYOK) thì thu hồi được, xoá khoá là dữ liệu không đọc được nữa&quot;</td>
+</tr>
+</tbody></table></div><h3>7.3 F3 scrubber và AI (D12)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Phương án</th>
+<th>Giá (nguồn, 20/10/2026)</th>
+<th>Tiếng Việt</th>
+<th>Chi phí cố định</th>
+<th>Kết luận</th>
+</tr>
+</thead><tbody><tr>
+<td>Presidio service (v1)</td>
+<td>1 vCPU/4 GB Fargate ≈ $39 ARM / $49 x86 mỗi tháng, chạy suốt (research/04 §2.6)</td>
+<td>Chưa rõ chất lượng</td>
+<td>$39–49</td>
+<td>Bỏ</td>
+</tr>
+<tr>
+<td>Amazon Comprehend PII</td>
+<td>$0,0001/100 ký tự</td>
+<td><strong>Không</strong>: chỉ tiếng Anh/Tây Ban Nha (<a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-pii.html" target="_blank" rel="noopener">docs</a>)</td>
+<td>$0</td>
+<td>Loại</td>
+</tr>
+<tr>
+<td><strong>Bedrock Guardrails <code>ApplyGuardrail</code></strong> (không gọi model)</td>
+<td>&quot;$0.10 per 1,000 text units&quot;, 1 unit ≤ 1.000 ký tự; regex free (<a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" rel="noopener">aws.amazon.com/bedrock/pricing</a>)</td>
+<td><strong>&quot;Vietnamese: Optimized and supported&quot;</strong> (<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-supported-languages.html" target="_blank" rel="noopener">docs</a>)</td>
+<td>$0</td>
+<td><strong>Dùng (lượt 3)</strong></td>
+</tr>
+<tr>
+<td>Giá trị đã biết + regex trong process</td>
+<td>$0</td>
+<td>Có cho giá trị đã biết</td>
+<td>$0</td>
+<td><strong>Dùng (lượt 1–2)</strong></td>
+</tr>
+</tbody></table></div><p><code>scrub()</code> chạy trong worker CRM trước mọi lời gọi LLM, <strong>lỗi thì chặn</strong>: (1) thay mọi giá trị danh tính trip đã biết
+(khách, người đi cùng, liên hệ khẩn, nhân viên đại lý) bằng <code>&lt;PERSON_1&gt;</code>…; (2) regex email, điện thoại quốc tế + VN, hộ
+chiếu, ngày sinh, thẻ, link ký; (3) Guardrails <code>ANONYMIZE</code> trên phần còn lại; lỗi/timeout → không gọi LLM, nháp ghi
+&quot;cần trả lời tay&quot;. Bản đồ placeholder mã hoá bằng DEK, TTL 24 giờ, chỉ khôi phục trong phiên đại lý. Gate: corpus
+EN/VI ≥ 200 mẫu phải 0 rò (~$0,70/tháng). Guardrails thử trên <strong>acc2 trước</strong> (text thô không rời acc2), acc2 có thể bị
+reseller chặn Bedrock (memory <code>acc2-bedrock-claude-gpt-blocked</code>) → spike W0, dự phòng acc3.</p>
+<p><strong>Model (N10):</strong> mặc định <strong>Claude Haiku 5.5</strong> ($0,10/$0,50 mỗi MTok, prompt ≤ 100k); <strong>Sonnet 5.5</strong> ($2/$10) chỉ cho
+văn bản proposal dài khi đại lý bật. Giá theo danh sách Anthropic (claude-api skill, cache 06/10/2026; giá trên Bedrock
+<strong>ước tính</strong> bằng giá Anthropic, chưa kiểm được). Profile <code>us.</code>, retention <code>none</code>, loại Fable 5/5.1 (bắt buộc <code>aws_review</code>,
+lưu tới 30 ngày). AI tắt mặc định mỗi tenant (D12). Trần <strong>$2/đại lý/tháng</strong> (fail closed). CRM gọi thẳng role satellite
+acc3 như TripPlanner đang làm (<code>infra/AA-CIS-Infra/accounts/aa365/tripplanner.tf:361-362</code>) vì là app riêng, không import
+gateway CIS; sổ chi phí ở <code>crm.llm_call</code> (stage, model, token, cost, tenant — không text).</p>
+<h3>7.4 Chống lạm dụng và WAF (N14)</h3>
+<p>ACL WAF dùng chung <strong>không</strong> dùng được nguyên trạng cho CRM: rule 4 chặn mọi nước ngoài 10 nước
+<code>[&quot;US&quot;,&quot;GB&quot;,&quot;AU&quot;,&quot;SG&quot;,&quot;VN&quot;,&quot;IN&quot;,&quot;JP&quot;,&quot;TH&quot;,&quot;NZ&quot;,&quot;CA&quot;]</code> (<code>modules/waf/variables.tf:20-25</code>) — khách ở Đức, Pháp… sẽ không
+mở được form, webhook từ EU bị chặn; và gắn vào stage REST API đang tắt vì role CI thiếu <code>apigateway:SetWebACL</code>
+(<code>accounts/aa365/variables.tf:198-205</code>). v2:</p>
+<ul>
+<li>WAF ở <strong>biên host khách</strong>: CloudFront Free có sẵn 5 rule (rate, CommonRuleSet, bot) — <strong>không chặn theo nước</strong>, $0.</li>
+<li><code>api-crm</code>: không gắn ACL trong pilot; throttle API Gateway; rate limit trong app theo IP khách mà BFF chuyển trong
+header ký HMAC (vì sau BFF mọi khách cùng một IP egress).</li>
+<li>Webhook: kiểm chữ ký từng nhà cung cấp + idempotent (<code>UNIQUE(source, contract, idempotency_key)</code>, mẫu Booking).</li>
+<li>Honeypot + rate limit cho form; không thêm vendor captcha.</li>
+</ul>
+<hr>
+<h2>8. Kênh liên lạc và tích hợp (spec §9)</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Spec</th>
+<th>Thiết kế v2</th>
+<th>AA trả</th>
+</tr>
+</thead><tbody><tr>
+<td>Module 5 email (D6 b)</td>
+<td>Mỗi đại lý một địa chỉ nhận <code>&lt;slug&gt;@in.crm.lumiguides.it.com</code>, là 1 rule trong <strong>rule set SES đang active duy nhất</strong> (<code>e2e_mailbox.tf:14-17,203-207</code>; Infra chuyển rule set thành tài nguyên <code>shared</code>) → S3 → <code>crm_mail_ingest</code>. Đại lý đặt chuyển tiếp/BCC; UI hiện mã xác nhận chuyển tiếp của Gmail. Gửi: <code>gmail.send</code> (scope <em>sensitive</em>: xác minh OAuth, <strong>không CASA</strong>) hoặc Graph <code>Mail.Send</code>, nên thư nằm trong Sent của đại lý; dự phòng SES + DKIM domain đại lý. Threading bằng reply-to theo trip + <code>Message-ID</code>/<code>References</code>. Lịch sử: upload mbox</td>
+<td>SES $0,10/1.000 gửi; nhận $0,10/1.000 + $0,09/1.000 chunk (<a href="https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonSES/current/us-west-1/index.json" target="_blank" rel="noopener">SES price list</a>)</td>
+</tr>
+<tr>
+<td>Module 9 WhatsApp (D9 a)</td>
+<td>Embedded Signup, WABA của đại lý, Cloud API trực tiếp (AA là Tech Provider); cửa sổ 24h + chặn loại template</td>
+<td>$0 (Meta tính đại lý)</td>
+</tr>
+<tr>
+<td>Module 9 SMS (N12)</td>
+<td><strong>Đại lý dùng tài khoản Twilio của chính họ</strong> (API key bọc bằng DEK). Sub-account Twilio sẽ tính tiền vào tài khoản cha của AA, nên không dùng</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>Messenger + IG (D19 a)</td>
+<td>Meta Graph API, cùng app Meta</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>Module 7 thanh toán (D10 a)</td>
+<td>Stripe Connect <strong>Standard</strong> (đại lý là merchant of record); VN: ghi tay, adapter cổng VN sau báo giá</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>Module 12 e-sign (D11 b, N8)</td>
+<td>Adapter Documenso API + webhook, ký nhúng trong client portal, PDF đã ký vào bucket khoá đại lý. <strong>Dev/CI: container Documenso tự host (AGPL)</strong> vì gói Free &quot;5 documents per month&quot; không có API</td>
+<td>Xem §9</td>
+</tr>
+<tr>
+<td>AA inventory (module 3/6)</td>
+<td>Booking <code>/booking/b2b/v1</code>: quote từ <code>v_b2b_offer</code> (giá net thô không rời Booking, ADR 0005 QĐ9), availability, hold có hạn + reaper, confirm/cancel, feed trạng thái. <strong>Chưa có gì trong Booking</strong> (chỉ có kênh giá <code>b2b</code>, panel V20) → 6–7 issue Booking trên đường găng, cần <strong>người phụ trách lane Booking từ W0</strong></td>
+<td>$0</td>
+</tr>
+<tr>
+<td>Builder</td>
+<td>§3.4</td>
+<td>Mapbox 50.000 lượt tải bản đồ/tháng free rồi $5/1.000 (<a href="https://www.mapbox.com/pricing" target="_blank" rel="noopener">mapbox.com/pricing</a>, qua A §8), dùng chung free tier với TP</td>
+</tr>
+</tbody></table></div><hr>
+<h2>9. Chi phí</h2>
+<h3>9.1 Đơn giá (us-west-1, truy cập 20/10/2026)</h3>
+<ul>
+<li>Fargate ARM $0,03725/vCPU-h, $0,00409/GB-h; x86 $0,04656/$0,00511 (AWS price list AmazonECS, panel §1.2). Giảm giá
+Spot 60–70% là <strong>ước tính</strong>.</li>
+<li>RDS PostgreSQL: t4g.micro $0,021/h single-AZ; t4g.medium Multi-AZ $0,171/h; gp3 $0,138/GB-tháng (price list AmazonRDS).</li>
+<li>Lambda ARM $0,0000133334/GB-s, $0,20/M request; API Gateway REST $3,50/M (price list).</li>
+<li>KMS $1/khoá-tháng, 20k request free (<a href="https://aws.amazon.com/kms/pricing/" target="_blank" rel="noopener">aws.amazon.com/kms/pricing</a>).</li>
+<li>Secrets Manager $0,40/secret-tháng. SES như §8.</li>
+<li>CloudFront flat-rate: <strong>Free $0</strong> (1M request, 100 GB, 5 rule WAF), <strong>Pro $15</strong> (10M request, 50 TB, 25 rule), không
+phí vượt (<a href="https://aws.amazon.com/cloudfront/pricing/" target="_blank" rel="noopener">aws.amazon.com/cloudfront/pricing</a>, đọc lại 20/10/2026).</li>
+<li>Documenso: Free $0 (5 tài liệu/tháng, không ghi API); Individual $25 (<strong>$300 billed yearly</strong>); <strong>Teams $40 ($480 billed
+yearly)</strong>, 5 user, &quot;API Access for Automation&quot;, &quot;Embedded Signing&quot;, tài liệu không giới hạn; <strong>Platform $250 ($3,000
+billed yearly)</strong>, &quot;Unlimited Documents &amp; Users&quot;, &quot;Embedded Signing (Whitelabel)&quot;
+(<a href="https://documenso.com/pricing" target="_blank" rel="noopener">documenso.com/pricing</a>, đọc lại 20/10/2026).</li>
+<li>Claude Haiku 5.5 $0,10/$0,50, Sonnet 5.5 $2/$10 mỗi MTok (danh sách Anthropic; Bedrock = <strong>ước tính</strong>).</li>
+<li>Guardrails sensitive-info $0,10/1.000 text unit.</li>
+</ul>
+<p>Giả định dùng mỗi đại lý-tháng (research/04 §1, như A và B): 3 seat, 40 inquiry, 10 booking, 25 khách, 1.000 mail hệ
+thống, 400 nháp AI + 50%, 5k lần KMS decrypt — <strong>ước tính</strong>. Không giả định free tier AWS (acc2 tính tiền qua TrueIDC).</p>
+<h3>9.2 Dev, tăng thêm mỗi tháng (trước khi có đại lý)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Khoản</th>
+<th>Cơ sở</th>
+<th>$/tháng</th>
+</tr>
+</thead><tbody><tr>
+<td><code>aa-crm-dev-api</code> ARM 0,25 vCPU / 0,5 GB, chỉ Spot, worker trong process</td>
+<td>on-demand 0,25×0,03725×730 + 0,5×0,00409×730 = $8,29; Spot −60–70% (<strong>ước tính</strong>)</td>
+<td>2,5–3,3 (8,3 nếu hết Spot)</td>
+</tr>
+<tr>
+<td>Portal Lambda + CloudFront Free</td>
+<td>lưu lượng test + CI (<strong>ước tính</strong>)</td>
+<td>~0,5</td>
+</tr>
+<tr>
+<td>Secrets: <code>crm/dev/database-url</code> + 1 secret JSON nhà cung cấp</td>
+<td>2 × $0,40</td>
+<td>0,80</td>
+</tr>
+<tr>
+<td>KMS: 2 khoá đại lý test + khoá AA-ops</td>
+<td>3 × $1</td>
+<td>3,00</td>
+</tr>
+<tr>
+<td>CloudWatch Logs (14–30 ngày) + ~5 alarm</td>
+<td><strong>ước tính</strong></td>
+<td>1–2</td>
+</tr>
+<tr>
+<td>ECR (≤ 10 image arm64, 2 repo)</td>
+<td>$0,10/GB-tháng</td>
+<td>≤ 0,60</td>
+</tr>
+<tr>
+<td>REST API + SES + S3 ở mức Dev</td>
+<td><strong>ước tính</strong></td>
+<td>≤ 0,50</td>
+</tr>
+<tr>
+<td>Guardrails: corpus 200 mẫu hằng đêm + test</td>
+<td>≈ 7k unit × $0,0001</td>
+<td>≈ 0,70</td>
+</tr>
+<tr>
+<td>Haiku test (trần trong <code>crm.spend_budget</code>)</td>
+<td>trần do mình đặt</td>
+<td>≤ 1–2</td>
+</tr>
+<tr>
+<td>Documenso (container tự host trong CI), Stripe test, số test Meta, Twilio trial, Mapbox free, Cognito, RDS (bù kết nối)</td>
+<td>—</td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>Tổng</strong></td>
+<td></td>
+<td><strong>≈ $11–13</strong> (≈ $17 nếu Spot không có)</td>
+</tr>
+</tbody></table></div><p>So sánh: v1 $85–160; Booking Dev ≈ $12–15 (scout §4). CRM v2 trên Dev ngang Booking.</p>
+<h3>9.3 Prod (prod cell rồi mở rộng), phần CRM tăng thêm mỗi tháng</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Khoản</th>
+<th>10 đại lý</th>
+<th>50 đại lý</th>
+<th>200 đại lý</th>
+<th>Cơ sở</th>
+</tr>
+</thead><tbody><tr>
+<td>Compute API CRM (ECS ARM on-demand)</td>
+<td>8,3 (1 task 0,25/0,5)</td>
+<td>33 (2 × 0,5/1 GB)</td>
+<td>66–100 (2–3 × 1/2 GB, load test W7 chốt)</td>
+<td>price list</td>
+</tr>
+<tr>
+<td>Portal Lambda + CloudFront (Free → Pro $15 khi &gt; 1M request)</td>
+<td>~1,5</td>
+<td>~8</td>
+<td>~45</td>
+<td><strong>ước tính</strong> + CloudFront page</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>19 (cell <code>t4g.micro</code> single-AZ $15,33 + 20 GB $2,76 + copy snapshot ~1)</td>
+<td>133 (<code>t4g.medium</code> Multi-AZ $124,83 + 30 GB, hoặc dời sang AA-880)</td>
+<td>141–216</td>
+<td>price list</td>
+</tr>
+<tr>
+<td>KMS (khoá đại lý + AA-ops)</td>
+<td>11</td>
+<td>51</td>
+<td>201</td>
+<td>$1/khoá</td>
+</tr>
+<tr>
+<td>LLM (Haiku-first, 10% Sonnet, ×1,1 định tuyến US, <strong>giả định 100% bật AI</strong> — thực tế thấp hơn vì AI tắt mặc định)</td>
+<td>13</td>
+<td>67</td>
+<td>268</td>
+<td>$1,34/đại lý (panel §1.3)</td>
+</tr>
+<tr>
+<td>Guardrails, SES, S3, API GW, log, secret, ECR</td>
+<td>~10</td>
+<td>~30</td>
+<td>~110</td>
+<td><strong>ước tính</strong></td>
+</tr>
+<tr>
+<td>Mapbox</td>
+<td>0</td>
+<td>0</td>
+<td>~70 (đòn bẩy: ảnh bản đồ tĩnh cho khách)</td>
+<td><strong>ước tính</strong></td>
+</tr>
+<tr>
+<td>WhatsApp, SMS, Stripe, Cognito (&lt; 10k MAU)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>tài khoản của đại lý</td>
+</tr>
+<tr>
+<td>CASA, BSP, Vercel Pro, WAF ACL mới, Presidio, RDS Proxy</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>đã bỏ</td>
+</tr>
+<tr>
+<td><strong>Documenso Platform (D11 b)</strong></td>
+<td>250</td>
+<td>250</td>
+<td>250</td>
+<td>$3.000/năm</td>
+</tr>
+<tr>
+<td><strong>Tổng (Platform)</strong></td>
+<td><strong>≈ $313–320</strong></td>
+<td><strong>≈ $570</strong></td>
+<td><strong>≈ $1,15–1,26k</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Mỗi đại lý</td>
+<td>~$31</td>
+<td>~$11,4</td>
+<td>~$5,8–6,3</td>
+<td></td>
+</tr>
+<tr>
+<td>Tổng nếu Documenso <strong>Teams</strong> ($40)</td>
+<td>≈ $103–110</td>
+<td>— (Teams chỉ 5 user: ở 50 đại lý phải lên Platform)</td>
+<td>—</td>
+<td>N8</td>
+</tr>
+<tr>
+<td>v1 (chưa gồm DB prod $150–300)</td>
+<td>$500–925</td>
+<td>$1,6–2,0k</td>
+<td>$4,7–5,2k</td>
+<td>v1 §13</td>
+</tr>
+</tbody></table></div><p>Tuỳ chọn thêm: service thứ hai cho đường công khai +$8,3 prod (N15); fallback portal trên Fargate +≈ $8 (N3).</p>
+<p>Kiểm số: 10 đại lý = 8,3 + 1,5 + 19 + 11 + 13 + 10 + 0 + 250 = 312,8; 50 = 33 + 8 + 133 + 51 + 67 + 30 + 250 = 572;
+200 = 66 + 45 + 141 + 201 + 268 + 110 + 70 + 250 = 1.151 tới 100 + 45 + 216 + 201 + 268 + 110 + 70 + 250 = 1.260.</p>
+<h3>9.4 v1 → v2: tiền đi đâu</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Khoản</th>
+<th>v1</th>
+<th>v2</th>
+<th>Vì sao</th>
+</tr>
+</thead><tbody><tr>
+<td>Service CRM Dev</td>
+<td>~$21 (0,5/1 GB x86)</td>
+<td>$2,5–3,3</td>
+<td>Cỡ Booking, ARM (−20% giá list), chỉ Spot trên Dev</td>
+</tr>
+<tr>
+<td>Scrubber Dev</td>
+<td>$39–49</td>
+<td>~$0,7</td>
+<td>Guardrails trả theo lượt + 2 lượt $0</td>
+</tr>
+<tr>
+<td>WAF Dev</td>
+<td>$10–15</td>
+<td>$0</td>
+<td>WAF có sẵn trong CloudFront Free</td>
+</tr>
+<tr>
+<td>Số test Twilio/Meta</td>
+<td>~$5</td>
+<td>$0</td>
+<td>Số test Cloud API, Twilio trial của đại lý</td>
+</tr>
+<tr>
+<td>E-sign Dev</td>
+<td>$0–30</td>
+<td>$0</td>
+<td>Container Documenso tự host trong CI</td>
+</tr>
+<tr>
+<td>Gọi AI test</td>
+<td>$5–20</td>
+<td>≤ $2</td>
+<td>Haiku + trần</td>
+</tr>
+<tr>
+<td>WhatsApp prod</td>
+<td>$5/đại lý</td>
+<td>$0</td>
+<td><strong>D9 a</strong></td>
+</tr>
+<tr>
+<td>SMS prod</td>
+<td>$3/đại lý</td>
+<td>$0</td>
+<td>Twilio của đại lý (N12)</td>
+</tr>
+<tr>
+<td>LLM prod</td>
+<td>$8,4/đại lý</td>
+<td>$1,34/đại lý</td>
+<td>Haiku mặc định (N10)</td>
+</tr>
+<tr>
+<td>Compute prod</td>
+<td>111 / 222 / 395</td>
+<td>10 / 41 / 111–145</td>
+<td>Không Presidio, ARM, worker trong process, đúng cỡ, portal trên Lambda</td>
+</tr>
+<tr>
+<td>Vercel Pro</td>
+<td>40–100</td>
+<td>0</td>
+<td><strong>D14</strong> + host AWS</td>
+</tr>
+<tr>
+<td>CASA chia tháng</td>
+<td>56–450</td>
+<td>0</td>
+<td><strong>D6 b</strong></td>
+</tr>
+<tr>
+<td>Bảo mật nền / WAF</td>
+<td>25–40</td>
+<td>~0</td>
+<td>CloudFront Free</td>
+</tr>
+<tr>
+<td>E-sign</td>
+<td>75 / 250 / 250</td>
+<td>250 (hoặc 40)</td>
+<td><strong>D11 b</strong> làm ca 10 đại lý <strong>đắt hơn</strong> v1 $175</td>
+</tr>
+<tr>
+<td>DB</td>
+<td>0 / 63 / 188 (chưa gồm prod nền $150–300)</td>
+<td>19 / 133 / 141–216 (<strong>đã gồm</strong> DB riêng)</td>
+<td>Prod cell thay cho chờ AA-880</td>
+</tr>
+</tbody></table></div><h3>9.5 Đòn bẩy còn lại (chưa tính vào tổng, anh chọn)</h3>
+<ol>
+<li><strong>Documenso Teams trong pilot</strong> (N8): −$210/tháng, cần Documenso đồng ý bằng văn bản cho nhiều đại lý dưới một team;
+khách có thể thấy thương hiệu Documenso (H12).</li>
+<li><strong>Chỉ Haiku</strong> (bỏ phần Sonnet) nếu bộ eval W7 cho thấy đủ: −≈ $0,8/đại lý.</li>
+<li><strong>Bản đồ tĩnh</strong> trên trang khách: bỏ phần lớn lượt Mapbox ở 200 đại lý (−~$70).</li>
+<li><strong>AI tắt mặc định</strong> (D12): LLM thật tỉ lệ với số đại lý bật.</li>
+<li><strong>Prompt caching</strong> system prompt + luật thương hiệu: cache hit 0,1× giá input Haiku.</li>
+<li>Dời DB sang AA-880 khi AA-880 có: phần CRM chỉ còn chia sẻ instance (~0 / +63 / +188).</li>
+</ol>
+<hr>
+<h2>10. Các căng thẳng giữa câu trả lời, và cách giải</h2>
+<h3>10.1 D13 không + go-live 30/11/2026</h3>
+<p>C7.1a: &quot;Production personal data MUST NOT be copied to Dev; Dev seed data MUST be synthetic or masked&quot;
+(<code>docs/architecture/data-standards/03-scaling.md:364</code>). C7.2a đòi prod Multi-AZ từ <code>db.t4g.medium</code>
+(<code>03-scaling.md:371</code>). Anh đã bỏ prod làm điều kiện (D13 không) nhưng giữ ngày 30/11.</p>
+<p><strong>Giải: prod cell chỉ cho CRM (N4).</strong></p>
+<div class="tablewrap"><table><thead><tr>
+<th>Phần</th>
+<th>Chọn</th>
+<th>$/tháng</th>
+</tr>
+</thead><tbody><tr>
+<td>Terraform</td>
+<td><code>infra/AA-CIS-Infra/envs/prod/crm.tf</code> — thư mục <strong>chưa tồn tại</strong> (hôm nay <code>envs/</code> chỉ có <code>dev</code>), cư dân đầu tiên của root prod C7.2c. SG riêng trong VPC dùng chung, secret <code>crm/prod/*</code>, alarm riêng gửi <code>nghieppham@adventure.asia</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>DB</td>
+<td><code>aa-crm-prod-db</code> <code>t4g.micro</code> single-AZ, gp3 20 GB, PITR 14 ngày, deletion protection, copy snapshot chéo region hằng ngày (C7.2b), <strong>diễn tập restore trước go-live</strong>. <strong>Ngoại lệ C7.2a có văn bản</strong> cho ≤ 10 đại lý (chấp nhận RTO vài giờ). Kích hoạt nâng cấp: đại lý thứ 11 hoặc AA-880 sẵn sàng → dời schema <code>crm</code></td>
+<td>~19</td>
+</tr>
+<tr>
+<td>API</td>
+<td><code>aa-crm-prod-api</code> ARM, on-demand, 1 task</td>
+<td>8,3</td>
+</tr>
+<tr>
+<td>DB Migrate</td>
+<td>Cần input <code>environment</code> của C7.2d (&quot;To build&quot;, <code>03-scaling.md:374</code>) — 1 issue W5</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Danh tính</td>
+<td>User đại lý vẫn ở Cognito EXTERNAL (<code>aa-external-dev</code>) — coi là <strong>danh tính nền tảng</strong>, không phải &quot;dữ liệu Dev&quot; (ghi trong ngoại lệ)</td>
+<td>0</td>
+</tr>
+<tr>
+<td>App khác</td>
+<td>Cell gọi CIS Dev và Booking Dev qua HTTP cho catalog, membership, quote/hold — <strong>không chở PII khách</strong> (hold chỉ có số pax + mã trip); module 8 PII ở lại trong cell</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Luật vận hành</td>
+<td>Thêm &quot;không tắt Dev khi pilot đang chạy&quot; (vì C7.1b cho phép tắt Dev để tiết kiệm, <code>03-scaling.md:365</code>)</td>
+<td>0</td>
+</tr>
+</tbody></table></div><p>Vì sao không phương án A (sửa C7.1a cho ciphertext lên Dev, $0): Dev public schema, master Dev đọc được <code>crm.*</code>, và
+module 8 sẽ đưa PII sang Booking Dev — panel chấm &quot;High (governance)&quot; (judges A-2, A-3). Vì sao không chờ AA-880: thêm
+$150–300/tháng và vài phiên trên đường găng.</p>
+<h3>10.2 D14 không (không mua Vercel Pro)</h3>
+<p>Vercel: Hobby &quot;restricted to non-commercial personal use only&quot;, thương mại gồm cả &quot;a paid employee or consultant writing
+the code&quot; (<a href="https://vercel.com/docs/limits/fair-use-guidelines" target="_blank" rel="noopener">vercel.com/docs/limits/fair-use-guidelines</a>, truy cập
+20/10/2026, qua A §12.2 và B §9.1). Client portal gửi link thanh toán Stripe → pilot trên Hobby chắc chắn vi phạm.</p>
+<p><strong>Giải (N3):</strong> app đại lý (portal + CRM + host khách) chạy trên AWS acc2 (Lambda + LWA + CloudFront) cho cả Dev và prod.
+Hobby không còn áp cho app này. ≈ $0,5 Dev, ≈ $1,5 pilot. Còn lại một việc <strong>ngoài CRM</strong>: CIS admin và Booking admin
+đang trên Hobby cũng có thể bị coi là thương mại theo định nghĩa trên — quyết định nền tảng riêng (N19), không nằm trong
+chi phí CRM. Module hosting của portal tái dùng được nếu anh muốn gom về sau.</p>
+<h3>10.3 D15 không (chưa gửi luật sư) vs PDPL VN / GDPR / APP Úc</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Nước của đại lý</th>
+<th>Lưu dữ liệu khách thật trong pilot?</th>
+<th>Vì sao</th>
+<th>Mở khoá bằng</th>
+</tr>
+</thead><tbody><tr>
+<td>Việt Nam</td>
+<td><strong>Không</strong> — demo dữ liệu giả</td>
+<td>Nghị định 356/2025 có thể đòi Giấy chứng nhận đủ điều kiện + pháp nhân VN cho dịch vụ &quot;cung cấp hệ thống xử lý dữ liệu cá nhân cho bên kiểm soát&quot;; TIA nộp trong 60 ngày từ lần chuyển đầu sang us-west-1; không ân hạn SME (v1 §14)</td>
+<td>Ý kiến luật sư + hồ sơ DPIA/TIA</td>
+</tr>
+<tr>
+<td>EU / UK</td>
+<td><strong>Không</strong></td>
+<td>Lưu ở Mỹ cần SCC Module 2 (+ UK Addendum); câu hỏi đại diện Art. 27 (v1 §14)</td>
+<td>DPA + phụ lục SCC có luật sư duyệt</td>
+</tr>
+<tr>
+<td>Úc và nước khác ngoài EU/VN</td>
+<td><strong>Có</strong>, Ms. Thư chấp nhận rủi ro</td>
+<td>Đại lý doanh thu ≤ A$3M thường ngoài APP; DPA dạng APP 8 &quot;use, not disclosure&quot; từ mẫu AA-886</td>
+<td>DPA mẫu ký từng đại lý + trang dữ liệu công khai</td>
+</tr>
+</tbody></table></div><p><strong>Vẫn phải có, không cần luật sư (W5):</strong> DPA mẫu AA-886 + phụ lục sub-processor (AWS acc2 qua TrueIDC, Bedrock acc3 qua
+eCloudvalley, Documenso, Meta/Twilio theo tài khoản đại lý, Sentry không PII — Vercel <strong>ra khỏi</strong> danh sách cho app
+đại lý), sổ đồng ý (DM-6.5), bảng lưu giữ mỗi tenant, xoá khách có kiểm, câu F1 đã sửa, trang dữ liệu công khai (spec §10
+phase 4, kéo sớm). <strong>Hoãn:</strong> giấy phép + TIA VN, SCC/IDTA, Art. 27, tư cách APP entity của AA, luật sư xem điều khoản
+chống lôi kéo (pilot dùng câu chữ đơn giản do chị Thư soạn).</p>
+<p><strong>Ngưỡng bắt buộc gửi brief luật sư</strong> (ghi vào ADR 0014): trước khi đại lý VN hoặc EU đầu tiên lưu dữ liệu thật; trước
+đại lý thứ 6 hoặc gói trả phí đầu tiên; hoặc 60 ngày sau bản ghi khách thật đầu tiên — cái nào đến trước.</p>
+<h3>10.4 D6 b, D11 b, D22 b</h3>
+<ul>
+<li><strong>D6 b:</strong> bỏ CASA ($675–5.400/năm) và scope đọc. Module 5 thành hội thoại hai chiều (vào bằng chuyển tiếp, ra bằng
+tài khoản đại lý, threading) — <strong>ghi là điểm lệch spec</strong>. Lỗ hổng biết trước: thư đại lý quên chuyển tiếp thì không
+vào; giảm bằng filter Gmail đặt lúc onboarding + reply-to theo trip; M365 có thể chặn chuyển tiếp ra ngoài mặc định →
+admin đại lý phải mở (rủi ro §11).</li>
+<li><strong>D11 b:</strong> Documenso là vendor. Ba điều v1 chưa nói: (1) mọi gói trả phí <strong>trả theo năm</strong> — Platform là cam kết
+<strong>$3.000/năm</strong>; (2) gói Free không có API nên Dev/CI dùng container tự host; (3) gói Teams $480/năm có API + ký nhúng
+nhưng không ghi white-label và chỉ 5 user. Quyết định gói ở N8 (đề xuất Teams cho pilot nếu Documenso đồng ý bằng văn
+bản, còn không thì Platform đúng D11 b).</li>
+<li><strong>D22 b:</strong> chép runner của <strong>Booking</strong> (đã là bản port của CIS, <code>AA-Booking/backend/app/jobs/queue.py:3</code>), không chép
+lõi CIS và không chạm <code>shared/jobs</code>. Đây là bản sao thứ ba của ngữ nghĩa hàng đợi → thêm một bộ test tuân thủ chung
+(claim/lease/release/cancel) chép vào mỗi repo để bắt lệch.</li>
+</ul>
+<hr>
+<h2>11. Đợt, số issue, lịch</h2>
+<p>Mốc: hôm nay 20/10 → go-live 30/11 = <strong>41 ngày</strong>. Nhịp D4 a ≈ 6 issue/phiên. Pilot = Phase 0–2 của spec + module 5.</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Đợt</th>
+<th>Phạm vi chính (repo)</th>
+<th>Issue</th>
+<th>Phiên</th>
+<th>Thoát đợt khi</th>
+<th>Mốc gợi ý</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>W0</strong> Quyết định + hợp đồng + việc ngoài</td>
+<td>ADR 0014 (app AA-Partner; <strong>sửa ADR 0008 §8</strong> &quot;CIS module first&quot;; ranh giới, runtime), ADR 0015 B2B, ADR Infra khoá KMS theo tenant; standards v1.2 (lớp PII mới, ngoại lệ C7.2a cho cell); hợp đồng (<code>cis.tenant-api.v1</code>, <code>catalog.v1</code>, feed thành viên, Booking B2B OpenAPI); spec gap §11.1–4; spike LWA/Next 16 + spike Guardrails acc2/VN; container Documenso cho CI; duyệt chi phí (DM-10.7); khởi động việc ngoài (Meta Tech Provider, Stripe Connect, báo giá cổng VN, Documenso văn bản về Teams + DPA, xác minh Google cho <code>gmail.send</code>, Microsoft publisher, insurer); tuyển đại lý pilot; <strong>chỉ định người lane Booking</strong></td>
+<td>11</td>
+<td>1,8</td>
+<td>ADR merge, spike có kết quả</td>
+<td>23/10</td>
+</tr>
+<tr>
+<td><strong>W1</strong> Tách + khung</td>
+<td>[CIS] D18 CTA; L1/L3/L4/L5, P1–P3, đảo test guard; B3 (PR đầu tiên); <code>/v1/brand-identity</code>; AA-813 ×3 (membership + lời mời, đăng nhập Cognito + kiểm JWT, đóng login API key cho người); 2 endpoint nội bộ IAM (feed thành viên, <code>catalog.v1</code>). [root] tạo AA-Partner từ <code>portal/</code> giữ lịch sử + CI. [CIS] xoá <code>portal/</code> + workflow + test bằng-byte. [Infra] <code>crm.tf</code>, <code>owners.yaml</code> + role + bù kết nối, mở rộng X2 + probe ô <code>crm</code>, module host portal (Lambda + CloudFront), host preview cố định. [Partner] khung api + request context + test import, runner + <code>crm-001</code> + deploy gate, BFF allow-list + phiên Cognito + cookie <code>pp_*</code>, i18n EN/VI + sidebar</td>
+<td>21</td>
+<td>3,5</td>
+<td>Không còn link chéo (test), đại lý đăng nhập bằng lời mời, heartbeat <code>crm.job</code>, probe 0 dòng chéo tenant, portal chạy trên AWS</td>
+<td>31/10</td>
+</tr>
+<tr>
+<td><strong>W2</strong> Riêng tư F1–F5</td>
+<td>Cấp khoá KMS lười + key policy; thư viện mã hoá; vault + <code>reveal()</code> + audit cùng transaction; bucket tài liệu; BYOK; báo động Decrypt; F2 + role NOLOGIN + probe; sổ đồng ý; scrubber 3 lượt + restore; corpus job; UI quyền + RLS tiền; chuỗi audit + trang + archive</td>
+<td>12</td>
+<td>2,0</td>
+<td>Dump DB chỉ thấy ciphertext; corpus 0 rò; assistant không thấy cột tiền</td>
+<td>05/11</td>
+</tr>
+<tr>
+<td><strong>W3</strong> Bán một chuyến + email</td>
+<td>Intake API + host khách + widget; <code>crm_intake_process</code>; attribution; chuyển trang trip sang host khách; pipeline + panel; Stage 2; danh bạ khách + gộp; import CSV/mbox + onboarding + mời; NCC (15); sổ booking dòng đại lý (6); module 4; báo cáo cơ bản (16); tiền tệ/múi giờ/mobile; <strong>module 5 (4 issue: rule SES + ingest + threading; <code>gmail.send</code>/Graph; UI inbox + trả lời mẫu + ghi chú; xác nhận chuyển tiếp)</strong>; <strong>baseline <code>crm.metric_event</code> (1)</strong></td>
+<td>20</td>
+<td>3,3</td>
+<td>Form nhúng trên WordPress test tạo Inquiry &lt; 2 phút, idempotent; thư chuyển tiếp gắn đúng trip</td>
+<td>13/11 (<strong>điểm kiểm lịch</strong>, N18)</td>
+</tr>
+<tr>
+<td><strong>W4</strong> Hàng AA + proposal tương tác</td>
+<td>[BK] auth IAM B2B, departure/allotment + UI, hold + reaper, <code>v_b2b_offer</code>, quote, confirm/cancel + feed trạng thái; [Partner] mô hình proposal + hash giá; builder chép TP + adapter + job drift; giá sống + chế độ Booking sập; luật phụ thuộc + mặc định Stage 2; trang chọn; accept → hold; sổ booking dòng AA tự điền</td>
+<td>15</td>
+<td>3,0</td>
+<td>Khách đổi 2 option, giá cập nhật; accept tạo hold ở Booking</td>
+<td>20/11</td>
+</tr>
+<tr>
+<td><strong>W5</strong> Thu tiền + giao + prod cell</td>
+<td>Hoá đơn + lịch cọc; Stripe Connect; VN thủ công + stub cổng; nhắc + Booked khi cọc; client portal + OTP + Stage 3; Documenso + mẫu; ops release trong CRM + trang Booking admin + xoá 90 ngày + biên nhận; hoa hồng (13); xuất/xoá khách; <strong><code>envs/prod</code> + cell + input <code>environment</code> DB Migrate + diễn tập restore</strong></td>
+<td>14</td>
+<td>2,3</td>
+<td>Cọc test → Booked; Stage 3 sau OTP; PDF đã ký được lưu; restore drill đạt</td>
+<td>27/11</td>
+</tr>
+<tr>
+<td><strong>W5g</strong> Cổng go-live (30/11)</td>
+<td>DPA mẫu + trang dữ liệu công khai; review bảo mật bề mặt công khai (AA-875/876 áp vào CRM); onboard 3–5 đại lý + video UAT (AA-855)</td>
+<td>3</td>
+<td>0,5</td>
+<td>Đại lý pilot đầu tiên chạy Inquiry → Booked trên prod cell</td>
+<td>30/11</td>
+</tr>
+<tr>
+<td><em>Trước 30/11</em></td>
+<td></td>
+<td><strong>96</strong></td>
+<td><strong>≈ 16,4</strong></td>
+<td>≈ 2,8 phiên CRM/tuần</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>W6</strong> Kênh + tự động (trong pilot)</td>
+<td>WhatsApp Embedded Signup + cửa sổ 24h; đồng bộ template + chặn loại; Messenger + IG; SMS Twilio của đại lý; workflow engine; nhắc (khách im lặng, tự gửi Stage 2, T-21, không lead nào im 3 ngày)</td>
+<td>6</td>
+<td>1,0</td>
+<td>WhatsApp ngoài cửa sổ chỉ gửi template</td>
+<td>Tháng 12</td>
+</tr>
+<tr>
+<td><strong>W7</strong> AI, insights, portability, hardening</td>
+<td>Nháp AI (Haiku) + UI duyệt + đo tỉ lệ sửa; eval + trần; báo cáo đầy đủ + đo sự kiện; insights k≥10/≥3 đại lý + API staff + trang CIS admin; xuất đầy đủ; xoá DRY RUN; offboarding crypto-shred; danh bạ Gmail; threat model; load test 200 tenant; SLO + alarm</td>
+<td>11</td>
+<td>1,9</td>
+<td>Không PII trong prompt/log; ô n&lt;10 bị chặn (property test)</td>
+<td>Tháng 12–1</td>
+</tr>
+<tr>
+<td><strong>W8</strong> Mở rộng</td>
+<td>Dời sang AA-880 khi có (hoặc đại lý thứ 11); review quyền (DM-8.10); mở khoá VN/EU theo luật sư; service thứ hai cho đường công khai</td>
+<td>4</td>
+<td>0,7</td>
+<td>Đạt ngưỡng</td>
+<td>Khi kích hoạt</td>
+</tr>
+<tr>
+<td><strong>Tổng</strong></td>
+<td></td>
+<td><strong>117</strong></td>
+<td><strong>≈ 20</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table></div><p>So với v1 (115 issue, 19–21 phiên): <strong>thêm</strong> tách admin/portal + chuyển repo + host AWS (~+10), prod cell (+4), module 5
+kéo sớm (0 ròng), baseline sự kiện (+1); <strong>bớt</strong> Gmail hai chiều + Graph subscription + CASA (−3), receiver ops ở Booking
+(−2), builder JWT + route TP (−1), service Presidio (−1), tham số hoá runner CIS (−1), app <code>crm-client</code> (−1), Vercel Pro
+và AA-880 khỏi đường găng (−2). Issue đã có được cập nhật thay vì tạo mới: AA-813, AA-855, AA-875, AA-876, AA-880,
+AA-886, AA-899. Linear: project mới (D16; ≤ 100 issue chưa lưu trữ mỗi project → tạo issue theo đợt khi bắt đầu đợt).</p>
+<p><strong>Ngoài CRM nhưng anh đã yêu cầu cùng lúc:</strong> đổi địa chỉ nhận thông báo hệ thống sang <code>nghieppham@adventure.asia</code> là một
+PR Infra một dòng ở <code>infra/AA-CIS-Infra/accounts/aa365/variables.tf:152-156</code> (<code>alert_email</code>, mặc định hôm nay
+<code>pqnghiep1354@gmail.com</code>, dùng bởi SNS và Budgets) + xác nhận subscription SNS từ hộp thư mới. Alarm CRM thừa hưởng.
+Không tính vào 117 issue.</p>
+<hr>
+<h2>12. Rủi ro</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Rủi ro</th>
+<th>Mức</th>
+<th>Giảm thiểu</th>
+</tr>
+</thead><tbody><tr>
+<td>96 issue trong 41 ngày, lane song song, cộng AA-813 ở repo CIS và 6–7 issue Booking B2B chưa có gì</td>
+<td><strong>Cao</strong></td>
+<td>D3 a + D4 a; điểm kiểm 13/11 (N18): trễ &gt; 1 đợt thì dời ngày, không cắt phạm vi; chế độ &quot;on request&quot; (H8) để W4 không chờ allotment; người lane Booking chỉ định ở W0</td>
+</tr>
+<tr>
+<td>Next 16 trên Lambda Web Adapter chưa kiểm</td>
+<td>TB</td>
+<td>Spike W0; dự phòng Fargate sau CloudFront (+≈ $8) — <strong>không</strong> Vercel Pro</td>
+</tr>
+<tr>
+<td>Ngoại lệ C7.2a: DB single-AZ micro giữ dữ liệu thật</td>
+<td>TB</td>
+<td>PITR 14 ngày, copy snapshot chéo region, diễn tập restore trước go-live, ngưỡng 10 đại lý</td>
+</tr>
+<tr>
+<td>Prod cell phụ thuộc CIS/Booking Dev</td>
+<td>TB</td>
+<td>Không tắt Dev khi pilot chạy (ghi luật vận hành); hold của Booking không chứa PII; chấp nhận tới AA-880</td>
+</tr>
+<tr>
+<td>Pháp lý VN/EU (D15)</td>
+<td>Cao (giới hạn theo địa lý)</td>
+<td>Chỉ nhận dữ liệu thật ngoài VN/EU; ngưỡng brief luật sư</td>
+</tr>
+<tr>
+<td>Guardrails bị reseller chặn trên acc2 hoặc yếu với tên VN</td>
+<td>TB</td>
+<td>Spike W0; dự phòng acc3; lượt giá trị đã biết bắt phần lớn; corpus gate; AI tắt mặc định</td>
+</tr>
+<tr>
+<td>Một task role giải mã được và cũng phục vụ form/webhook công khai</td>
+<td>TB</td>
+<td>Ghi là rủi ro còn lại; service thứ hai trước AA-880 (N15)</td>
+</tr>
+<tr>
+<td>Chuyển portal làm vỡ tính năng nội dung</td>
+<td>TB</td>
+<td>Chuyển giữ lịch sử, smoke chuyển theo, contract test <code>cis.tenant-api.v1</code>, cắt chuyển trong một cặp PR</td>
+</tr>
+<tr>
+<td>Hai repo cho một thay đổi UI nội dung</td>
+<td>TB</td>
+<td>Hợp đồng + consumer test; giá chấp nhận của việc tách</td>
+</tr>
+<tr>
+<td>TP Next 15 vs portal Next 16</td>
+<td>Thấp</td>
+<td>CI build file chép dưới Next 16, lớp bọc mỏng; manifest + job drift</td>
+</tr>
+<tr>
+<td>M365 chặn chuyển tiếp ra ngoài; thư quên chuyển tiếp</td>
+<td>TB</td>
+<td>Wizard onboarding; BCC; reply-to theo trip; đo trong pilot</td>
+</tr>
+<tr>
+<td>Documenso Teams không được phép dùng cho nhiều đại lý / thương hiệu Documenso không chấp nhận được</td>
+<td>Thấp</td>
+<td>Lên Platform (+$210)</td>
+</tr>
+<tr>
+<td>Bản sao runner thứ ba lệch ngữ nghĩa</td>
+<td>Thấp</td>
+<td>Bộ test tuân thủ chung</td>
+</tr>
+<tr>
+<td>Một rule set SES active dùng chung cho e2e + CRM</td>
+<td>Thấp</td>
+<td>Infra sở hữu rule set như <code>shared</code>; rule theo domain người nhận</td>
+</tr>
+<tr>
+<td>Giá Bedrock = giá Anthropic chưa kiểm</td>
+<td>TB</td>
+<td>Trần mỗi tenant; đo thật ở W7</td>
+</tr>
+<tr>
+<td>ECS exec tắt làm khó debug</td>
+<td>Thấp</td>
+<td>Log có cấu trúc, <code>run-script</code> trên bảng không PII</td>
+</tr>
+</tbody></table></div><hr>
+<h2>13. Quyết định của anh D1–D24: ghi nhận, và câu nào đổi nghĩa</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>D</th>
+<th>Anh trả lời</th>
+<th>v2 làm thế nào</th>
+<th>Đổi nghĩa?</th>
+</tr>
+</thead><tbody><tr>
+<td>D1</td>
+<td>b — app thứ tư</td>
+<td>App thứ tư tên <strong>AA-Partner</strong>, gồm portal (chuyển từ CIS) + CRM, không phải &quot;AA-CRM chỉ có CRM&quot;</td>
+<td><strong>Có</strong> → xác nhận lại: &quot;app thứ tư = AA-Partner (portal + CRM)&quot; (N1)</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>có — ADR 0014/0015, không ngoại lệ grant</td>
+<td>ADR 0014 nay <strong>sửa ADR 0008 §8</strong> (&quot;CIS module first&quot;) thay vì tuân theo nó; không grant nào cả hai chiều, đọc chéo qua HTTP</td>
+<td><strong>Có</strong> → xác nhận lại (N5)</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>a — lane riêng từ S246</td>
+<td>Giữ</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>a — agent team ~6 issue/phiên</td>
+<td>Giữ; ≈ 16 phiên tới 30/11</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>có — khởi động việc ngoài ở W0</td>
+<td>Danh sách đổi: bỏ CASA (D6 b), bỏ Vercel Pro, thêm văn bản Documenso về gói Teams, spike LWA</td>
+<td>Nhỏ (chỉ danh sách)</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>b — <code>gmail.send</code> + chuyển tiếp SES, không CASA</td>
+<td>Giữ; module 5 kéo lên trước 30/11</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>a — khoá KMS mỗi đại lý + DEK mỗi khách</td>
+<td>Giữ; thêm tạo lười + không xoay tự động (N11)</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>có — sửa câu F1 sau H3</td>
+<td>Giữ (câu ở §7.2, H3)</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>a — Embedded Signup, WABA của đại lý</td>
+<td>Giữ (W6)</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>a — cổng VN sau báo giá, tạm ghi tay</td>
+<td>Giữ</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>b — Documenso Platform</td>
+<td>Vendor giữ; v1 chưa nói Platform là <strong>$3.000 trả theo năm</strong>; gói tách thành N8</td>
+<td><strong>Có</strong> → xác nhận lại gói (N8)</td>
+</tr>
+<tr>
+<td>D12</td>
+<td>có — Bedrock acc3 <code>us.</code>, model ZDR, AI tắt mặc định</td>
+<td>Giữ; nhưng CRM gọi thẳng role satellite acc3 và ghi sổ <code>crm.llm_call</code> riêng, <strong>không</strong> qua gateway CIS và <code>shared.llm_call_log</code></td>
+<td><strong>Có</strong> (đường đi) → xác nhận lại</td>
+</tr>
+<tr>
+<td>D13</td>
+<td>không; go-live 30/11/2026</td>
+<td>Pilot trên prod cell (N4)</td>
+<td>Không (cách thực hiện ở N4)</td>
+</tr>
+<tr>
+<td>D14</td>
+<td>không mua Vercel Pro</td>
+<td>Giữ; app đại lý rời Vercel (N3)</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D15</td>
+<td>không gửi luật sư bây giờ</td>
+<td>Giữ; giới hạn địa lý + ngưỡng (N13)</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D16</td>
+<td>có — project Linear + issue theo đợt</td>
+<td>≈ 117 issue (v1: 115); tên project đề xuất &quot;Partner app (Tenant CRM)&quot;</td>
+<td><strong>Có</strong> (số + tên) → xác nhận lại</td>
+</tr>
+<tr>
+<td>D17</td>
+<td>có — service ECS riêng từ Dev</td>
+<td>Service <code>aa-crm-dev-api</code> từ <strong>image riêng</strong> của AA-Partner (không phải image CIS <code>aa-cis-dev-crm</code>), ARM, Dev chỉ Spot, 0,25/0,5</td>
+<td><strong>Có</strong> (image/cỡ) → xác nhận lại</td>
+</tr>
+<tr>
+<td>D18</td>
+<td>có — sửa CTA <code>mailto</code></td>
+<td>Sửa ngay W1, rồi chuyển trang sang host khách</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D19</td>
+<td>a — Messenger + IG ở W6</td>
+<td>Giữ</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D20</td>
+<td>a — EN/VI + khung i18n</td>
+<td>Giữ</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>D21</td>
+<td>c — builder trong app portal/CRM, chép byte component TP</td>
+<td>Giữ; thêm lưu ý TP Next 15 → portal Next 16, cho phép lớp bọc</td>
+<td>Nhỏ → xác nhận lại</td>
+</tr>
+<tr>
+<td>D22</td>
+<td>b — runner riêng, không chạm CIS</td>
+<td>Chép bản <strong>Booking</strong> (đã port từ CIS) + bộ test tuân thủ chung</td>
+<td>Nhỏ → xác nhận lại</td>
+</tr>
+<tr>
+<td>D23</td>
+<td>có — điều kiện tách ghi trong ADR</td>
+<td><strong>Hết ý nghĩa</strong> (đã là app riêng); ADR 0014 ghi thay: ranh giới portal↔CRM trong repo và điều kiện chuyển runtime/dời DB</td>
+<td><strong>Có</strong> → xác nhận lại</td>
+</tr>
+<tr>
+<td>D24</td>
+<td>có — insights ≥3 đại lý + k≥10 + opt-in</td>
+<td>Giữ (W7)</td>
+<td>Không</td>
+</tr>
+</tbody></table></div><h2>14. Quyết định mới cần anh (N1–N19)</h2>
+<p>Khuyến nghị in đậm. Chi tiết lựa chọn trong <code>crm-questions.json</code>.</p>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Quyết định</th>
+<th>Lựa chọn</th>
+<th>Khuyến nghị</th>
+<th>Ảnh hưởng</th>
+</tr>
+</thead><tbody><tr>
+<td>N1</td>
+<td>Hình dạng repo</td>
+<td>a) Một repo AA-Partner (portal + CRM, test ranh giới) · b) Hai repo AA-Portal + AA-CRM (CRM UI là zone riêng dưới host portal) · c) Repo AA-CRM chỉ có API, trang CRM nằm trong repo portal</td>
+<td><strong>a</strong></td>
+<td>b: +1 CI, +1 OIDC role, +1 kit copy, điều hướng nạp lại trang, ~+3 issue</td>
+</tr>
+<tr>
+<td>N2</td>
+<td>Chuyển <code>portal/</code> ra khỏi CIS (giữ lịch sử) và gỡ project Vercel <code>aa-cis-portal</code></td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+<td>Không có thì không tách hoàn toàn được (C1, N1–N5)</td>
+</tr>
+<tr>
+<td>N3</td>
+<td>Host app đại lý</td>
+<td>a) Lambda + LWA + CloudFront Free cho Dev và prod; dự phòng Fargate · b) Container Fargate sau CloudFront ngay từ đầu (+≈ $8) · c) Vercel Pro $20/seat</td>
+<td><strong>a</strong></td>
+<td>Giữ D14; ≈ $0,5–1,5/tháng ở pilot</td>
+</tr>
+<tr>
+<td>N4</td>
+<td>Nơi chạy pilot dữ liệu thật</td>
+<td>a) Prod cell riêng CRM (<code>t4g.micro</code>, ngoại lệ C7.2a ≤ 10 đại lý) · b) Sửa C7.1a cho ciphertext lên Dev · c) Chờ AA-880</td>
+<td><strong>a</strong></td>
+<td>+≈ $27/tháng; C7.1a nguyên vẹn</td>
+</tr>
+<tr>
+<td>N5</td>
+<td>Đọc dữ liệu chéo app</td>
+<td>a) Chỉ HTTP (feed thành viên, <code>catalog.v1</code>, Booking IAM), không grant DB nào · b) Grant view <code>catalog.*</code> cho <code>crm_app</code></td>
+<td><strong>a</strong></td>
+<td>b không chạy được với prod cell (RDS riêng)</td>
+</tr>
+<tr>
+<td>N6</td>
+<td>Module 8 ops release</td>
+<td>a) Ở lại trong CRM, khoá AA-ops, AA ops xem ở Booking admin qua API · b) Đẩy sang Booking (v1)</td>
+<td><strong>a</strong></td>
+<td>Không có PII trên Booking Dev; −2 issue Booking</td>
+</tr>
+<tr>
+<td>N7</td>
+<td>Module 5 + baseline đo sự kiện trước 30/11</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+<td>Đúng phase spec; +1 issue ròng trước go-live</td>
+</tr>
+<tr>
+<td>N8</td>
+<td>Gói Documenso</td>
+<td>a) Platform từ go-live ($250/tháng, $3.000/năm) · b) Teams ($40, $480/năm) cho pilot nếu Documenso đồng ý bằng văn bản, lên Platform khi &gt; 5 user/đại lý thứ 6 hoặc cần white-label · c) Tự host AGPL trong cell (~$17 + chứng thư ký, rủi ro insurer)</td>
+<td><strong>b</strong> (không có văn bản → a)</td>
+<td>−$210/tháng trong pilot</td>
+</tr>
+<tr>
+<td>N9</td>
+<td>Scrubber F3</td>
+<td>a) Giá trị đã biết + regex + Bedrock Guardrails · b) Service Presidio (v1)</td>
+<td><strong>a</strong></td>
+<td>−$39–49/tháng; VN được hỗ trợ</td>
+</tr>
+<tr>
+<td>N10</td>
+<td>Model AI mặc định</td>
+<td>a) Haiku 5.5 mặc định, Sonnet 5.5 chỉ khi đại lý bật cho proposal, trần $2/đại lý/tháng · b) Sonnet mặc định</td>
+<td><strong>a</strong></td>
+<td>−≈ $7/đại lý</td>
+</tr>
+<tr>
+<td>N11</td>
+<td>Vòng đời khoá KMS</td>
+<td>a) Tạo lười, không xoay tự động trong pilot (review W7 có thể đổi) · b) Xoay tự động hằng năm</td>
+<td><strong>a</strong></td>
+<td>−$1–2/khoá/tháng sau năm đầu</td>
+</tr>
+<tr>
+<td>N12</td>
+<td>SMS</td>
+<td>a) Đại lý dùng Twilio của chính họ · b) Sub-account dưới tài khoản AA</td>
+<td><strong>a</strong></td>
+<td>−$3/đại lý</td>
+</tr>
+<tr>
+<td>N13</td>
+<td>Phạm vi địa lý của pilot</td>
+<td>a) Dữ liệu thật chỉ đại lý ngoài VN/EU; VN/EU demo tới khi có luật sư · b) Cho cả EU với SCC mẫu không luật sư</td>
+<td><strong>a</strong></td>
+<td>Làm D15 khả thi</td>
+</tr>
+<tr>
+<td>N14</td>
+<td>WAF / chống lạm dụng</td>
+<td>a) WAF trong CloudFront Free (không chặn theo nước) + rate limit trong app + chữ ký webhook; không gắn ACL vào <code>api-crm</code> trong pilot · b) Gắn ACL dùng chung (chặn 190+ nước, cần quyền CI) · c) ACL mới (~$9/tháng)</td>
+<td><strong>a</strong></td>
+<td>$0; khách mọi nước mở được form</td>
+</tr>
+<tr>
+<td>N15</td>
+<td>Quyền tối thiểu cho đường công khai</td>
+<td>a) Pilot một task role (rủi ro ghi rõ); tách service thứ hai trước AA-880/đại lý thứ 11 · b) Tách ngay</td>
+<td><strong>a</strong></td>
+<td>b: +$2,5 Dev / +$8,3 prod, +1 issue trước go-live</td>
+</tr>
+<tr>
+<td>N16</td>
+<td>Redirect 308 cũ trên host admin</td>
+<td>a) Xoá + đảo test guard · b) Giữ (chuyển tiếp bookmark cũ)</td>
+<td><strong>a</strong></td>
+<td>Tách hoàn toàn</td>
+</tr>
+<tr>
+<td>N17</td>
+<td>Ngân sách kết nối RDS</td>
+<td>a) <code>crm_app</code> 5, hạ <code>booking</code> 15 → 10 cùng PR (tổng giữ 155/181) · b) Resize Dev lên t4g.medium</td>
+<td><strong>a</strong></td>
+<td>b: +≈ $31/tháng</td>
+</tr>
+<tr>
+<td>N18</td>
+<td>Nếu trễ lịch (kiểm 13/11, cuối W3)</td>
+<td>a) Giữ phạm vi, dời ngày go-live · b) Go-live 30/11 dạng demo dữ liệu giả · c) Cắt phạm vi</td>
+<td><strong>a</strong></td>
+<td>Anh đã chốt không MVP</td>
+</tr>
+<tr>
+<td>N19</td>
+<td>CIS admin + Booking admin vẫn trên Vercel Hobby (cũng có thể bị coi là thương mại)</td>
+<td>a) Quyết định nền tảng riêng, mở 1 issue riêng, không tính vào CRM · b) Gom luôn về host AWS trong lane CRM</td>
+<td><strong>a</strong></td>
+<td>Không làm phình lane CRM</td>
+</tr>
+</tbody></table></div><h2>15. Câu hỏi cho chị Thư (H1–H12, đều có đề xuất)</h2>
+<p>Nguyên văn tiếng Việt cho chị Thư nằm trong <code>crm-questions.json</code> (<code>questions_for_thu</code>). Tóm tắt:</p>
+<div class="tablewrap"><table><thead><tr>
+<th>H</th>
+<th>Đề xuất trả lời</th>
+</tr>
+</thead><tbody><tr>
+<td>H1</td>
+<td>Giữ đủ 23 module, bỏ lịch 40 tuần. Mở cho 3–5 đại lý thử từ 30/11/2026 với phần bán hàng, email, proposal, thu tiền, ký; WhatsApp, tự động, AI, báo cáo đầy đủ ra dần trong lúc thử. Ghi 2 điểm khác spec: email qua chuyển tiếp; tour không có lịch cố định thì &quot;chờ AA xác nhận&quot;</td>
+</tr>
+<tr>
+<td>H2</td>
+<td>Miễn phí cho đại lý, không tính theo seat. Đại lý tự trả WhatsApp, SMS, phí thẻ qua tài khoản của họ. AI tối đa $2/đại lý/tháng. AA chịu ≈ $11/đại lý/tháng ở 50 đại lý. Xem lại ở 50 đại lý</td>
+</tr>
+<tr>
+<td>H3</td>
+<td>Câu F1 mới (§7.2)</td>
+</tr>
+<tr>
+<td>H4</td>
+<td>3–5 đại lý thân quen ở Úc (hoặc nước ngoài EU và VN), chị chọn trong tuần đầu, mỗi đại lý 30 phút phỏng vấn; đại lý VN/EU dùng bản demo tới khi có luật sư</td>
+</tr>
+<tr>
+<td>H5</td>
+<td>Pháp nhân AA đang ký hợp đồng đối tác hôm nay; DPA mẫu (AA-886), chưa cần luật sư cho pilot; brief luật sư soạn sẵn, gửi khi chạm ngưỡng</td>
+</tr>
+<tr>
+<td>H6</td>
+<td>Hãng bảo hiểm trekking hiện tại của AA; trong lúc chờ, waiver vẫn ký điện tử, đánh dấu &quot;chờ bảo hiểm duyệt&quot;</td>
+</tr>
+<tr>
+<td>H7</td>
+<td>Chưa làm Zalo ở bản đầu; xem lại khi mở cho đại lý VN</td>
+</tr>
+<tr>
+<td>H8</td>
+<td>AA ops giữ lịch khởi hành + số chỗ trong Booking cho tour có ngày cố định (tự xác nhận); tour khác &quot;theo yêu cầu&quot;, AA ops xác nhận trong 1 ngày làm việc</td>
+</tr>
+<tr>
+<td>H9</td>
+<td>Dùng nguyên bảng giá net B2B (biên 15%); đại lý tự đặt giá bán</td>
+</tr>
+<tr>
+<td>H10</td>
+<td>AA soạn 1 mẫu điều khoản + 1 mẫu waiver EN/VI từ điều khoản hiện tại; đại lý được tải mẫu riêng; bảo hiểm duyệt waiver</td>
+</tr>
+<tr>
+<td>H11</td>
+<td>Đồng ý: chỉ dùng nhóm ≥ 10 khách và ≥ 3 đại lý, đại lý tự chọn tham gia, mặc định tắt</td>
+</tr>
+<tr>
+<td>H12 (mới)</td>
+<td>Trong lúc thử dùng gói ký điện tử rẻ (Teams), khách có thể thấy chữ &quot;Documenso&quot; trên trang ký; lên gói white-label khi có đại lý thứ 6 hoặc đại lý yêu cầu. Lý do thêm: đây là quyết định về hình ảnh thương hiệu với khách, thuộc về chị, và tiết kiệm ≈ $210/tháng</td>
+</tr>
+</tbody></table></div><hr>
+<h2>16. Nguồn</h2>
+<ul>
+<li>Repo (đọc 20/10/2026, mốc ở đầu tài liệu): như trích inline; các dòng chốt tự kiểm lại bằng <code>git show origin/main:…</code>
+và <code>sed</code> trên Infra <code>4824c81</code>.</li>
+<li>Web (truy cập 20/10/2026): <a href="https://documenso.com/pricing" target="_blank" rel="noopener">Documenso pricing</a> (đọc lại), <a href="https://aws.amazon.com/cloudfront/pricing/" target="_blank" rel="noopener">CloudFront pricing</a>
+(đọc lại), <a href="https://aws.amazon.com/kms/pricing/" target="_blank" rel="noopener">KMS pricing</a>, <a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" rel="noopener">Bedrock pricing</a>,
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-supported-languages.html" target="_blank" rel="noopener">Guardrails languages</a>,
+<a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-pii.html" target="_blank" rel="noopener">Comprehend PII</a>,
+<a href="https://docs.aws.amazon.com/amplify/latest/userguide/ssr-amplify-support.html" target="_blank" rel="noopener">Amplify Next.js support</a>,
+<a href="https://vercel.com/docs/limits/fair-use-guidelines" target="_blank" rel="noopener">Vercel fair use</a>, <a href="https://www.mapbox.com/pricing" target="_blank" rel="noopener">Mapbox pricing</a>,
+AWS price-list JSON us-west-1 (<code>https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/&lt;code&gt;/current/us-west-1/index.json</code>)
+qua panel §1.2.</li>
+<li>Không nghiên cứu lại (dùng từ v1 research 01–04): benchmark thị trường, Stripe/WhatsApp/Twilio/CASA, pháp lý.</li>
+<li><strong>Ước tính lớn nhất:</strong> giảm giá Spot, lưu lượng mỗi đại lý, thời gian SSR Lambda, lượt bản đồ, giá Bedrock = giá
+Anthropic, chứng thư ký nếu tự host Documenso.</li>
+</ul>
+</article></div></section>
+<section id="panel-giam-khao" role="tabpanel" aria-labelledby="tab-giam-khao" hidden><div class="wrap"><article class="doc"><h1>CRM redesign: judge panel on Design A (one tenant app, ECS) vs Design B (serverless)</h1>
+<p>Date: 20/10/2026 (S245 r2). Read-only review. No repo, AWS, Vercel, Linear or Jira change; no paid API call.
+The only network calls were public AWS price-list JSON files and public vendor/AWS documentation pages.</p>
+<p><strong>Panel:</strong> two lenses.</p>
+<ul>
+<li><strong>PO lens:</strong> a product owner who must satisfy Ms. Thư&#39;s spec (<code>docs/research/partner-crm-spec.md</code>, the &quot;spec&quot;).</li>
+<li><strong>CTO lens:</strong> one engineer plus agents, on a tight budget.</li>
+</ul>
+<p><strong>Read in full:</strong></p>
+<ul>
+<li><code>.tmp-session/s245-r2/owner-input.md</code>;</li>
+<li>the spec;</li>
+<li><code>out/crm-01-current-state.md</code> (the &quot;scout&quot;);</li>
+<li><code>out/crm-design-A-one-tenant-app.md</code> (&quot;A&quot;);</li>
+<li><code>out/crm-design-B-serverless.md</code> (&quot;B&quot;).</li>
+</ul>
+<p><strong>Snapshots verified:</strong></p>
+<div class="tablewrap"><table><thead><tr>
+<th>Repo</th>
+<th>Ref</th>
+</tr>
+</thead><tbody><tr>
+<td>AA-CIS-App</td>
+<td><code>origin/main</code> @ <code>b7e6da66</code>, read with <code>git show</code></td>
+</tr>
+<tr>
+<td>AA-CIS-Infra</td>
+<td><code>4824c81</code></td>
+</tr>
+<tr>
+<td>AA-Booking</td>
+<td><code>f4fb80d</code></td>
+</tr>
+<tr>
+<td>AA-TripPlanner-Web</td>
+<td><code>b79ec48</code></td>
+</tr>
+<tr>
+<td>root</td>
+<td><code>f8a9938</code></td>
+</tr>
+</tbody></table></div><hr>
+<h2>0. Verdict in 10 lines</h2>
+<ol>
+<li><strong>Scores are close</strong> (§3): A = 21/30 on both lenses; B = 22/30 (PO) and 21/30 (CTO). Neither design can ship as written.</li>
+<li><strong>Base = Design A.</strong> It keeps D17 (own ECS service), the Booking bootstrap template, the in-process Booking runner copy (D22 b) and the Guardrails scrubber, which supports Vietnamese. That gives one runtime pattern that one engineer already runs.</li>
+<li><strong>Graft from B (four things):</strong><ul>
+<li>the <strong>CRM-only prod cell</strong> for real traveller data, which replaces A&#39;s R1 &quot;real PII on Dev&quot; amendment;</li>
+<li><strong>HTTP-only cross-app reads</strong>, with no grants on other schemas;</li>
+<li><strong>module 8 kept in the CRM</strong> under an AA-ops key;</li>
+<li><strong>portal hosting on Lambda + Lambda Web Adapter + CloudFront</strong>, which replaces A&#39;s Amplify plan. Amplify is documented only &quot;up through Next.js 15&quot;, and the portal runs Next 16.4.2.</li>
+</ul>
+</li>
+<li><strong>Both designs share wrong items</strong> that the synthesis must fix:<ul>
+<li>&quot;Reuse the shared WAF ACL&quot; is not $0-and-done. The ACL geo-blocks every country except 10, and the stage association is gated off.</li>
+<li>Documenso <strong>Free</strong> has no API, so it cannot run the Dev adapter tests.</li>
+<li>Spec <strong>module 5 is a Phase 1 module</strong>, so it belongs in the 30/11 pilot scope. Both designs move it after go-live.</li>
+<li>Event tracking lands too late to measure any success metric during the pilot.</li>
+</ul>
+</li>
+<li><strong>Synthesis cost:</strong><ul>
+<li>Dev ≈ <strong>$11–13/month</strong>.</li>
+<li>Prod pilot at 10 agencies ≈ <strong>$320/month</strong> with Documenso Platform (D11 b), or ≈ <strong>$110</strong> if Documenso confirms that Teams is allowed for the pilot.</li>
+<li>Documenso is ~78% of the 10-agency bill. It is the only big lever left, and it belongs to the owner.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>1. What was verified (and how)</h2>
+<h3>1.1 Code and Terraform claims (17 spot-checks; ✔ = matches the design text)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Claim (where used)</th>
+<th>Evidence</th>
+<th>Result</th>
+</tr>
+</thead><tbody><tr>
+<td>V1</td>
+<td>Staff login has a &quot;B2B Tenant login →&quot; link (A L1, B S1)</td>
+<td><code>AA-CIS-App/frontend/app/login/LoginForm.tsx:10,159</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Tenant login has a &quot;← Staff login&quot; link (A L2, B S2)</td>
+<td><code>portal/app/tenant-login/page.tsx:4,111-112</code></td>
+<td>✔ (A cites 108-114 and B cites 110-112; both cover it)</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>308 redirects on the admin host, required by a test (A L3, B S3)</td>
+<td><code>frontend/next.config.ts:4,23-25</code>; <code>tests/unit/test_aa885_portal_split.py:104-117</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V4</td>
+<td><code>/auth/verify-tenant</code> uses <code>verify_jwt</code>, not <code>verify_tenant_jwt</code>; one HS256 secret signs both token types</td>
+<td><code>api/main.py:326-335</code>; <code>api/routers/auth.py:34,40,76,86-87</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V5</td>
+<td>CORS allow-list has no portal host</td>
+<td><code>api/main.py:162-173</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V6</td>
+<td>Portal runs Next 16.4.2 (B&#39;s argument against Amplify)</td>
+<td><code>portal/package.json:15</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V7</td>
+<td>Portal size: 100 files and ~13.6k lines (A) or ~20.7k lines (B)</td>
+<td><code>git ls-tree</code>: 101 files; 13,576 TS/TSX/CSS lines; 20,705 lines in all files including <code>package-lock.json</code></td>
+<td>✔ (both right; they count different things)</td>
+</tr>
+<tr>
+<td>V8</td>
+<td>Trip page served by admin, with mailto CTA and admin-host URL (D18)</td>
+<td><code>frontend/app/trip/[tourId]/page.tsx:146</code>; <code>api/routers/v1_trip_page.py:157</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V9</td>
+<td>Portal BFF forwards any path</td>
+<td><code>portal/app/api/tenant/[...path]/route.ts:20-33</code> (no allow-list)</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V10</td>
+<td><code>alert_email</code> default is <code>pqnghiep1354@gmail.com</code></td>
+<td><code>infra/AA-CIS-Infra/accounts/aa365/variables.tf:152-156</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V11</td>
+<td>LOGIN connection limits total 155 of 181</td>
+<td><code>observability_ecosys.tf:52,59-72</code> (30+15+15+90+5)</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V12</td>
+<td>Booking task is 256/512, FARGATE base 1 + SPOT 3, <code>ignore_changes</code></td>
+<td><code>booking.tf:285-286,392-400,435</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V13</td>
+<td>Booking pool <code>max_size=5</code>; runner is 675 lines and runs in-process with release on shutdown</td>
+<td><code>AA-Booking/backend/app/db.py:65-72</code>; <code>wc -l backend/app/jobs/*.py</code> = 675; <code>jobs/worker.py:1-20</code>; <code>main.py:79-92</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V14</td>
+<td>TripPlanner Lambdas reserve 15 + 5 concurrency (B&#39;s offset 30 → 22)</td>
+<td><code>tripplanner_variables.tf:69-79</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V15</td>
+<td>One active SES receipt rule set per region</td>
+<td><code>e2e_mailbox.tf:14-17,203-207</code></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>V16</td>
+<td>Cognito <code>cis-portal</code> client exists with <strong>fixed</strong> callback URLs</td>
+<td><code>identity.tf:168-171</code>; <code>identity_variables.tf:163-168</code></td>
+<td>✔ It also matters for previews (D-B4)</td>
+</tr>
+<tr>
+<td>V17</td>
+<td>TP map stack: <code>mapbox-gl</code> 3.7.0, MapView 803 lines, imports <code>@/lib/{api,tileLoader,types,useTrip}</code></td>
+<td><code>AA-TripPlanner-Web/frontend/package.json:14</code>; <code>components/MapView.tsx:4-17</code></td>
+<td>✔ TP is on <strong>Next 15.5.28</strong> (<code>package.json:15</code>), the portal on 16. The byte-copied components must work across that gap (not in either design)</td>
+</tr>
+</tbody></table></div><p><strong>Wrong or incomplete infra claims found during verification:</strong></p>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>What both designs assume</th>
+<th>What the code says</th>
+</tr>
+</thead><tbody><tr>
+<td>V18</td>
+<td>&quot;Associate the existing shared regional WAF ACL with the CRM stage, ~$0&quot; (A §4.2, §8; B §8.2)</td>
+<td>The ACL&#39;s rule 4 <strong>blocks every country not in</strong> <code>[&quot;US&quot;,&quot;GB&quot;,&quot;AU&quot;,&quot;SG&quot;,&quot;VN&quot;,&quot;IN&quot;,&quot;JP&quot;,&quot;TH&quot;,&quot;NZ&quot;,&quot;CA&quot;]</code> (<code>modules/waf/variables.tf:20-25</code>, <code>modules/waf/main.tf:158-178</code>). The stage association is <strong>off</strong> because the CI role lacks <code>apigateway:SetWebACL</code> (<code>accounts/aa365/variables.tf:198-205</code>; <code>main.tf:272-277</code>). See defect X1</td>
+</tr>
+<tr>
+<td>V19</td>
+<td>B: &quot;<code>envs/prod/</code> (0 bytes today)&quot;</td>
+<td>The directory <strong>does not exist</strong> (<code>infra/AA-CIS-Infra/envs/</code> holds only <code>dev</code>). Same conclusion, one more bootstrap step</td>
+</tr>
+<tr>
+<td>V20</td>
+<td>Both: Booking <code>/booking/b2b/v1</code> with departures, allotments and holds</td>
+<td><strong>Nothing exists yet.</strong> <code>b2b</code> appears only as a pricing channel (<code>AA-Booking/backend/app/pricing/engine.py</code>; <code>CONTEXT.md:368</code>). The Booking-side W4 work is all new and sits on the 30/11 critical path</td>
+</tr>
+<tr>
+<td>V21</td>
+<td>ADR numbers 0014/0015</td>
+<td><code>docs/adr/</code> holds 0001–0008 only. Other documents refer to ADR 0009/0012 as planned, so check the numbering before allocating (minor)</td>
+</tr>
+</tbody></table></div><h3>1.2 Prices (15 spot-checks, all accessed 20/10/2026)</h3>
+<p>AWS price-list JSON for us-west-1 (<code>https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/&lt;code&gt;/current/us-west-1/index.json</code>):</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Line</th>
+<th>Price-list value</th>
+<th>Used by</th>
+<th>Result</th>
+</tr>
+</thead><tbody><tr>
+<td>Fargate x86</td>
+<td>$0.04656/vCPU-h, $0.00511/GB-h (pub. 2026-10-19)</td>
+<td>A, B, scout</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>Fargate ARM</td>
+<td>$0.03725/vCPU-h, $0.00409/GB-h</td>
+<td>A, B</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>Fargate Spot discount</td>
+<td>not in the price list</td>
+<td>A (60–70%)</td>
+<td>Estimate, correctly marked</td>
+</tr>
+<tr>
+<td>Lambda ARM</td>
+<td>$0.0000133334/GB-s, $0.20/M requests (pub. 2026-10-16)</td>
+<td>B</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>RDS PostgreSQL</td>
+<td>t4g.micro $0.021/h single-AZ, $0.043/h Multi-AZ; t4g.small $0.043/$0.085; t4g.medium $0.085/$0.171 (pub. 2026-10-20)</td>
+<td>A, B</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>API Gateway REST</td>
+<td>$3.50/M (first 333M); HTTP API $1.17/M</td>
+<td>A, B</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>WAF</td>
+<td>$5.00 per web ACL-month, $1.00 per rule-month, $0.60/M requests</td>
+<td>A, B</td>
+<td>✔ (a new ACL with 4 rules ≈ $9 + requests)</td>
+</tr>
+<tr>
+<td>SES</td>
+<td>send $0.0001/recipient; receive $0.0001/message + $0.00009/chunk</td>
+<td>A, B</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>Amplify Hosting</td>
+<td>SSR $0.30/M requests + $0.20/GB-h; transfer $0.15/GB; build $0.01/min; <strong>Amplify WAF $15/month</strong></td>
+<td>A</td>
+<td>Prices ✔; A does not count the WAF line</td>
+</tr>
+</tbody></table></div><p>Vendor and documentation pages:</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Line</th>
+<th>Source</th>
+<th>Used by</th>
+<th>Result</th>
+</tr>
+</thead><tbody><tr>
+<td>KMS</td>
+<td>$1/key-month; rotations add $1 for the first two only (&quot;capped at the second rotation&quot;); <strong>keys scheduled for deletion are not charged</strong>; 20k free requests (<a href="https://aws.amazon.com/kms/pricing/" target="_blank" rel="noopener">aws.amazon.com/kms/pricing</a>)</td>
+<td>A, B</td>
+<td>✔ (B&#39;s lazy-create / delete-free lever is real)</td>
+</tr>
+<tr>
+<td>Bedrock Guardrails</td>
+<td>Sensitive-info (PII) filter &quot;$0.10 per 1,000 text units&quot;, regex filters free, 1 unit ≤ 1,000 chars (<a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" rel="noopener">aws.amazon.com/bedrock/pricing</a>)</td>
+<td>A</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>Guardrails Vietnamese</td>
+<td>Sensitive-information filters list <strong>&quot;Vietnamese: Optimized and supported&quot;</strong> (<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-supported-languages.html" target="_blank" rel="noopener">guardrails-supported-languages</a>)</td>
+<td>A</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>Claude Haiku 5.5 / Sonnet 5.5</td>
+<td>$0.10/$0.50 and $2/$10 per MTok, first-party list (claude-api skill, cached 2026-10-06; Haiku price applies to prompts ≤100K)</td>
+<td>A, B</td>
+<td>✔ for the Anthropic list. <strong>The Bedrock price is unverified</strong>: the Bedrock pricing page shows no Anthropic figures. Both designs assume parity; keep it marked as an estimate</td>
+</tr>
+<tr>
+<td>CloudFront flat-rate plans</td>
+<td><strong>Free</strong> $0: 1M requests, 100 GB, <strong>WAF with 5 rules included</strong>, always-on DDoS. <strong>Pro</strong> $15: 10M requests, 50 TB, 25 rules (<a href="https://aws.amazon.com/cloudfront/pricing/" target="_blank" rel="noopener">aws.amazon.com/cloudfront/pricing</a>)</td>
+<td>B</td>
+<td>✔ B does not use the bundled WAF (see X1)</td>
+</tr>
+<tr>
+<td>Amplify Next.js support</td>
+<td>&quot;versions up through Next.js 15&quot;; compute SSR for &quot;12 through 15&quot; (<a href="https://docs.aws.amazon.com/amplify/latest/userguide/ssr-amplify-support.html" target="_blank" rel="noopener">ssr-amplify-support</a>)</td>
+<td>A</td>
+<td><strong>Fails A&#39;s plan</strong>: the portal is Next 16.4.2 (V6)</td>
+</tr>
+<tr>
+<td>Documenso</td>
+<td>Free $0: 5 docs/month, <strong>no API listed</strong>. Individual $25: &quot;API Access for Personal Use&quot;. Teams $40: 5 users, &quot;API Access for Automation&quot;, &quot;Embedded Signing&quot;, 1 team. Platform $250: unlimited, &quot;Embedded Signing (Whitelabel)&quot;. <strong>All paid plans are billed yearly</strong> (Platform $3,000/year) (<a href="https://documenso.com/pricing" target="_blank" rel="noopener">documenso.com/pricing</a>)</td>
+<td>A, B</td>
+<td><strong>Wrong in both:</strong> Dev on the Free plan cannot exercise the API (X2). Platform is a $3,000 annual commitment, which neither design says</td>
+</tr>
+</tbody></table></div><h3>1.3 Arithmetic re-done</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Design</th>
+<th>Line</th>
+<th>Re-computed</th>
+<th>Result</th>
+</tr>
+</thead><tbody><tr>
+<td>A</td>
+<td>LLM per agency</td>
+<td>0.8×(2.4×0.10 + 0.36×0.50) + 0.2×(2.4×2 + 0.36×10) = 0.336 + 1.68 = <strong>$2.02</strong></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Guardrails per agency</td>
+<td>1,800 units × $0.0001 = <strong>$0.18</strong></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Dev Fargate</td>
+<td>0.25×0.03725×730 + 0.5×0.00409×730 = <strong>$8.29</strong> on-demand → $2.5–3.3 on Spot (estimate)</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Prod compute</td>
+<td>2 × (0.5×0.03725×730 + 1×0.00409×730) = <strong>$33.2</strong></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>B</td>
+<td>LLM per agency</td>
+<td>0.9×0.42×1.1 + 0.1×8.4×1.1 = <strong>$1.34</strong></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Pilot DB</td>
+<td>t4g.micro 0.021×730 = $15.33 + 20 GB × $0.138 = $2.76 → <strong>~$19</strong></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Prod totals</td>
+<td>10 agencies: 13 + 10–30 + 2 + 1 + 1.5 + 1.2 + 1.3 + 0 + 19 + 3 + 250 = <strong>$302–322</strong></td>
+<td>✔ (50 and 200 also re-add)</td>
+</tr>
+</tbody></table></div><p><strong>A&#39;s and B&#39;s prod totals are not comparable as published.</strong> A runs the pilot on Dev and excludes any prod database. B includes its own pilot database ($19 / $133 / $141). Normalised on the same basis, the two are within ~$10–30/month of each other at every scale. <strong>Runtime choice is not where the money is</strong>, and B says so itself (B §0.3).</p>
+<hr>
+<h2>2. Defects</h2>
+<h3>2.1 Defects in BOTH designs</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Defect</th>
+<th>Evidence</th>
+<th>Fix in the synthesis</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>X1</strong></td>
+<td>&quot;Reuse the shared WAF ACL, ~$0&quot; is wrong on three counts. (a) Rule 4 geo-blocks every country outside 10: travellers in DE, FR, IT, NL, US-adjacent markets and others could not reach the intake form, and <strong>webhook senders</strong> outside the list (e.g. EU-hosted Documenso, Meta, Stripe egress) would be blocked. (b) The association needs <code>apigateway:SetWebACL</code> on the CI role, which it does not have. (c) In both designs, traveller traffic reaches <code>api-crm</code> <strong>through a BFF</strong>, so the per-IP rate rule sees the BFF egress IP. That is the same failure the module documents for NLB IPs (<code>modules/waf/main.tf:49-50</code>): either all travellers share one bucket or the rule protects nothing</td>
+<td>V18</td>
+<td>Put protection at the <strong>edge of the traveller host</strong>: CloudFront flat-rate Free includes WAF with 5 rules ($0), so use rate, CommonRuleSet and bot rules there, with <strong>no geo block</strong>. On <code>api-crm</code>: no association during the pilot, or the shared ACL with a scope-down that exempts the CRM host from rule 4, after the CI grant. Webhooks are protected by signature checks + throttling. Add an in-app rate limit keyed on the client IP, which the BFF forwards in an HMAC-signed header</td>
+</tr>
+<tr>
+<td><strong>X2</strong></td>
+<td>&quot;Documenso Free on Dev for the adapter tests&quot; cannot work: the Free plan lists no API access</td>
+<td>§1.2 Documenso</td>
+<td>Run the AGPL <strong>self-hosted Documenso container in CI / Dev</strong> for adapter and contract tests ($0, no data leaves). Use the paid plan only from go-live</td>
+</tr>
+<tr>
+<td><strong>X3</strong></td>
+<td><strong>Module 5 (email inbox) is wrongly scheduled after go-live.</strong> Spec §10 Phase 1 is &quot;S8 4 + 5&quot; (<code>partner-crm-spec.md:191</code>), and the pilot is &quot;at the end of Phase 2&quot; (<code>:196</code>). A (§13: W0–W5 + W8a) and B (§9.1: &quot;Modules 5 and 9 … follow in W6–W8 … in the spec&#39;s own phase order&quot;) both claim the spec&#39;s pilot point while omitting module 5. Without it, agencies keep using Gmail, which breaks spec §2 (&quot;faster than … Gmail&quot;) and module 1&#39;s &quot;first reply under 2 hours&quot;</td>
+<td>spec:186-196</td>
+<td>Move module 5 (D6 b: SES forwarding in, <code>gmail.send</code>/Graph send out, threading, saved replies, notes) <strong>before 30/11</strong>: ≈4 issues from W6 into W3/W5. WhatsApp (module 9) stays in W6 (spec Phase 3), which also fits the Meta verification clock</td>
+</tr>
+<tr>
+<td><strong>X4</strong></td>
+<td>Event tracking (spec gap §11.7) sits in W7 in both designs, so no module success metric can be measured during the pilot (≥80% budget band, deposits paid within 48 h, emails per trip, upgrade picks ≥20%)</td>
+<td>A §13 W7; B §14 W7</td>
+<td>One W3 issue: a <code>crm.metric_event</code> baseline (≈10 events). Full reports stay in W7</td>
+</tr>
+<tr>
+<td><strong>X5</strong></td>
+<td>A shared CIS JWT secret and API-key tenant login remain until AA-813 lands, and both designs need AA-813 inside W1. That is 3 issues in the <strong>CIS</strong> repo on the CRM critical path</td>
+<td>V4; scout §1 Cognito row</td>
+<td>Keep, but fix B3 in the very first CIS PR (it is a 2-line change), so a staff token gets a 401, not a 500</td>
+</tr>
+<tr>
+<td><strong>X6</strong></td>
+<td>Cognito clients have <strong>fixed callback URLs</strong> (V16). B&#39;s per-PR Lambda function URLs and A&#39;s per-PR Vercel previews cannot complete a Cognito login</td>
+<td><code>identity_variables.tf:163-168</code></td>
+<td>One fixed preview host (e.g. <code>portal-pr.lumiguides.it.com</code>) registered on the client. CI deploys the PR under test there (last writer wins). Smoke tests sign in with the <code>e2e-test-*</code> tenant user</td>
+</tr>
+<tr>
+<td><strong>X7</strong></td>
+<td>TripPlanner is on Next 15.5.28 and the portal on Next 16.4.2 (V17). &quot;Byte-copy unchanged&quot; (A §5.3) assumes the copied client components build unchanged under Next 16</td>
+<td>V17</td>
+<td>The manifest guard stays. Add a CI build of the copied files under the portal&#39;s Next version, and note the copy may need a thin wrapper (D21 c already allows adapters)</td>
+</tr>
+<tr>
+<td><strong>X8</strong></td>
+<td>The Booking B2B surface (departures, allotments, holds, quote, confirm) does not exist (V20). Both designs put ~6–7 Booking-repo issues on the 30/11 critical path (W4) without naming a Booking owner or lane</td>
+<td>V20</td>
+<td>Name the Booking lane owner in W0. On-request mode (&quot;hold → AA ops confirms in one working day&quot;, B H8) is the go-live fallback, so the pilot does not wait for allotments</td>
+</tr>
+<tr>
+<td><strong>X9</strong></td>
+<td>Spec §1 says AA product is &quot;confirmed automatically&quot;. Both H8 answers make non-allotment tours &quot;on request&quot; without recording this as a spec deviation for Ms. Thư</td>
+<td>spec:9</td>
+<td>Record it in the spec-deviation list next to module 5 / D6 b</td>
+</tr>
+</tbody></table></div><h3>2.2 Defects only in Design A</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Defect</th>
+<th>Evidence</th>
+<th>Severity</th>
+</tr>
+</thead><tbody><tr>
+<td>A-1</td>
+<td><strong>The pilot host does not work as planned.</strong> Amplify supports Next &quot;up through 15&quot;, and the portal is 16.4.2. A&#39;s fallback (R2: Vercel Pro $20) contradicts D14 (no Pro). The D14 tension is therefore left unresolved</td>
+<td>§1.2 Amplify; V6</td>
+<td>High</td>
+</tr>
+<tr>
+<td>A-2</td>
+<td><strong>R1 puts real traveller PII on Dev.</strong> That amends C7.1a (&quot;Production personal data MUST NOT be copied to Dev&quot;, <code>03-scaling.md:364</code>) and the handbook&#39;s &quot;Test data only&quot; (<code>engineering-handbook.md:500</code>). The Dev master <code>aa_cis_admin</code> can still read <code>crm.*</code> (ADR 0008 <code>:175</code>). Only ciphertext, but schema and metadata are public by design</td>
+<td><code>03-scaling.md:364</code>; ADR 0008:168-175</td>
+<td>High (governance)</td>
+</tr>
+<tr>
+<td>A-3</td>
+<td><strong>A breaks its own R1.</strong> R1 allows real data &quot;only inside <code>crm.*</code> vault ciphertext&quot;, yet module 8 (A §8) pushes traveller PII to <strong>Booking&#39;s</strong> receiver, and Booking runs only on Dev. So real PII lands in <code>booking.*</code> on Dev</td>
+<td>A §8 row &quot;Module 8&quot;, §12.1</td>
+<td>High</td>
+</tr>
+<tr>
+<td>A-4</td>
+<td>Amplify host costs omit Amplify WAF ($15/month per the price list). The traveller host then has no edge WAF at all (X1)</td>
+<td>§1.2</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>A-5</td>
+<td>The A prod totals at 50 and 200 agencies exclude a prod database (A §11.2 &quot;Not included … AA-880&quot;). They read lower than B&#39;s only for that reason</td>
+<td>§1.3</td>
+<td>Low (presentation)</td>
+</tr>
+<tr>
+<td>A-6</td>
+<td>H4 allows <strong>EU agencies with real data</strong> under standard SCCs and no counsel (A §12.3, H4). GDPR Art. 27 and the SCC annex are exactly what D15 defers. B&#39;s &quot;non-EU, non-VN only&quot; is the safer reading of D15</td>
+<td>A §12.3; B §9.2</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>A-7</td>
+<td>Onboarding: A drops the Gmail import (spec gap §11.5 &quot;import from Gmail / CSV&quot;) and replaces it with a CSV export from Gmail. B keeps an mbox upload plus a Gmail contacts import</td>
+<td>A §14 last rows</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>A-8</td>
+<td>One task role can decrypt the vault and also serves the internet-facing intake and webhooks. B&#39;s per-function least privilege (<code>crm-public</code> gets Encrypt only) is not possible with one ECS task role. A does not name this as a residual risk</td>
+<td>B §5.2</td>
+<td>Medium</td>
+</tr>
+</tbody></table></div><h3>2.3 Defects only in Design B</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Defect</th>
+<th>Evidence</th>
+<th>Severity</th>
+</tr>
+</thead><tbody><tr>
+<td>B-1</td>
+<td><strong>It overturns D17</strong>, an owner answer given the same day (&quot;D17 có, own ECS service from Dev&quot;). The saving is ≈ $8/month on Dev and $30–80/month in prod. It adds a second backend runtime (Lambda + LWA), EventBridge Scheduler one-time schedules, async invoke, an SQS DLQ, a sweeper and per-stage reserved concurrency. That is a <strong>new runner, not a copy</strong> (D22 b), with more failure modes, for one engineer</td>
+<td>B §7.1; owner-input:21</td>
+<td>High (CTO)</td>
+</tr>
+<tr>
+<td>B-2</td>
+<td><strong>The prod cell depends on Dev.</strong> It calls CIS Dev and Booking Dev and signs users in through <code>aa-external-dev</code>. C7.1b says &quot;Dev MAY be stopped to save cost&quot; (<code>03-scaling.md:365</code>), so the pilot&#39;s availability equals Dev&#39;s. Real AA holds would live in Booking Dev, which has no prod DR</td>
+<td>B §9.1 &quot;Other apps&quot; row</td>
+<td>Medium. Accept for ≤10 agencies, write it into the C7.2a exception, and add &quot;do not stop Dev while the pilot runs&quot; to the ops rules</td>
+</tr>
+<tr>
+<td>B-3</td>
+<td>The <strong>scrubber is weaker for Vietnamese</strong>: Presidio + spaCy <em>English</em> plus a ~100-surname gazetteer. AWS documents Guardrails&#39; sensitive-info filter as &quot;Vietnamese: Optimized and supported&quot; at $0.18/agency-month (§1.2). The Presidio image also enlarges the worker cold start</td>
+<td>B §5.3</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>B-4</td>
+<td>Per-PR Lambda function URLs cannot sign in through Cognito (X6). B presents them as the replacement for Vercel previews</td>
+<td>B §7.2</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>B-5</td>
+<td>Reserved concurrency <code>api</code> = 8 at 200 agencies. The portal SSR, BFF and react-query bursts reproduce TripPlanner&#39;s S237 503s at cap 5 (<code>tripplanner_variables.tf:66-68</code> comment). Dev and pilot scale are fine</td>
+<td>V14</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>B-6</td>
+<td>N7 (Documenso Teams first) deviates from D11 b without written terms. Teams lists no white-label, so travellers may see Documenso branding. B marks it &quot;unverified&quot; but recommends it</td>
+<td>§1.2 Documenso</td>
+<td>Low (the owner decides)</td>
+</tr>
+<tr>
+<td>B-7</td>
+<td>Several more pre-30/11 infra items, each new to the platform: the <code>envs/prod</code> root (V19), the C7.2d DB Migrate <code>environment</code> input (&quot;To build&quot;, <code>03-scaling.md:374</code>), the portal-on-Lambda module and the prod Lambda stage. That raises W1/W5 risk</td>
+<td>V19</td>
+<td>Medium</td>
+</tr>
+</tbody></table></div><hr>
+<h2>3. Scores (1–5, 5 = best; for &quot;delivery risk&quot;, 5 = lowest risk)</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Criterion</th>
+<th>A, PO</th>
+<th>A, CTO</th>
+<th>B, PO</th>
+<th>B, CTO</th>
+<th>Why</th>
+</tr>
+</thead><tbody><tr>
+<td>Spec coverage</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>Both trace every module and section, but both move module 5 after go-live (X3) and leave event tracking late (X4). A matches the module 8 &quot;sent to AA&quot; wording, but on Dev (A-3). B keeps Gmail/mbox import</td>
+</tr>
+<tr>
+<td>Cost, Dev + prod</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>Dev $10–12 vs $9–12. Normalised prod is equal within ~$30. A&#39;s host line is invalid (A-1); B&#39;s DB line is real. Documenso dominates both</td>
+</tr>
+<tr>
+<td>Separation from CIS/admin</td>
+<td>4</td>
+<td>4</td>
+<td>5</td>
+<td>5</td>
+<td>Both remove every link (V1–V3) and move the portal out of the CIS repo. B also has no cross-schema grants, staff views go through the API with a WORKFORCE token, and the cookie namespace is cleaned up</td>
+</tr>
+<tr>
+<td>Ops simplicity</td>
+<td>4</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>A = the Booking template (one ECS pattern) plus a second hosting platform (Amplify). B = 5 Lambdas, Scheduler, DLQ, sweeper, CloudFront and a second RDS</td>
+</tr>
+<tr>
+<td>Security / compliance</td>
+<td>3</td>
+<td>2</td>
+<td>4</td>
+<td>4</td>
+<td>A puts real PII on Dev (A-2, A-3), allows EU data without counsel (A-6) and has one decrypt-capable task role (A-8). B has the prod cell, per-function KMS and a stricter jurisdiction gate, but a weaker VN scrubber (B-3) and a prod cell that depends on Dev (B-2)</td>
+</tr>
+<tr>
+<td>Delivery risk before 30/11</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>Both need ~84–94 issues in 41 days plus AA-813, the Booking B2B work (V20) and external clocks. A&#39;s hosting answer is broken (A-1). B adds a new runtime and new prod infra (B-7)</td>
+</tr>
+<tr>
+<td><strong>Total / 30</strong></td>
+<td><strong>21</strong></td>
+<td><strong>21</strong></td>
+<td><strong>22</strong></td>
+<td><strong>21</strong></td>
+<td></td>
+</tr>
+</tbody></table></div><p><strong>Reading the tie:</strong></p>
+<ul>
+<li>The PO prefers B&#39;s <strong>data and compliance architecture</strong>, which is what Ms. Thư&#39;s &quot;AA never sees who the traveller is&quot; needs.</li>
+<li>The CTO prefers A&#39;s <strong>runtime</strong>, which is what one engineer can operate.</li>
+<li>The synthesis takes each lens&#39;s winner. Neither design is accepted whole.</li>
+</ul>
+<hr>
+<h2>4. Synthesis (the design to take forward)</h2>
+<h3>4.1 Shape</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Area</th>
+<th>Choice</th>
+<th>From</th>
+<th>Why</th>
+</tr>
+</thead><tbody><tr>
+<td>Repo</td>
+<td>One new public repo <code>AA-Partner</code> with <code>web/</code> (the portal moved from <code>AA-CIS-App/portal/</code> with history, CRM UI as a <code>/crm</code> section, traveller host) and <code>api/</code> (CRM backend). Add an import-boundary test: <code>api/</code> never imports <code>web/</code>, and <code>web/</code> reaches the API only over HTTP</td>
+<td>B §3.1 naming and test; A §4.1 layout</td>
+<td>Owner: the CRM is its own app, integrated into the portal, and has nothing in CIS. One repo means one CI, one branch protection, one OIDC role</td>
+</tr>
+<tr>
+<td>Backend runtime</td>
+<td>ECS service <code>aa-crm-dev-api</code>, <strong>ARM64 0.25 vCPU / 0.5 GB</strong>, Dev = FARGATE_SPOT only, in-process <code>crm.job</code> worker copied from Booking (675 lines), deploy gate copied from Booking</td>
+<td>A §4.2, §9</td>
+<td>D17 and D22 b as approved. Same pattern as Booking. ≈ $2.5–3.3/month on Dev</td>
+</tr>
+<tr>
+<td>Portal + traveller hosting (Dev and pilot prod)</td>
+<td>Next 16 <code>output: &quot;standalone&quot;</code> on <strong>Lambda + Lambda Web Adapter</strong>, behind <strong>CloudFront flat-rate Free</strong>, which includes WAF with 5 rules and DDoS protection. Static assets go to S3. Retire the <code>aa-cis-portal</code> Vercel project. W0 spike: Next 16 Proxy, SSR and BFF on LWA. <strong>Fallback (not Vercel Pro):</strong> the same container as a small Fargate service behind the same CloudFront (+≈ $8/month)</td>
+<td>B §7.2, §9.1; fallback is new</td>
+<td>Solves D14 without Pro and without Amplify (A-1). One host for Dev and prod. Frees the Hobby 100-deploys/day cap</td>
+</tr>
+<tr>
+<td>Previews</td>
+<td>One fixed <code>portal-pr.</code> host registered on the Cognito client. CI deploys the PR under test there</td>
+<td>new (X6)</td>
+<td>Cognito callbacks are fixed URLs</td>
+</tr>
+<tr>
+<td>Real data / pilot prod</td>
+<td><strong>CRM-only prod cell</strong> in a new <code>envs/prod/</code>: <code>aa-crm-prod-db</code> t4g.micro single-AZ (14-day PITR, deletion protection, cross-region snapshot copy, a restore drill before go-live) and service <code>aa-crm-prod-api</code> (ARM, on-demand, 1 task during the pilot). Write a C7.2a exception for ≤10 agencies, with the trigger &quot;11th agency or AA-880 ready → move schema&quot;. <strong>Drop A&#39;s R1</strong></td>
+<td>B §9.1, N4</td>
+<td>C7.1a stays intact. ≈ $19 + $8.3/month</td>
+</tr>
+<tr>
+<td>Cross-app reads</td>
+<td>HTTP only: a CIS tenant-member feed + <code>catalog.v1</code> (cached in <code>crm.catalog_cache</code>), and Booking B2B over IAM/SigV4. <strong>No grants from or to <code>crm.*</code></strong></td>
+<td>B §4</td>
+<td>Works the same for Dev and the prod cell. The isolation probe stays simple</td>
+</tr>
+<tr>
+<td>Module 8</td>
+<td>Data stays in the CRM under an AA-ops CMK. AA ops read it from a Booking-admin page through <code>/crm/ops/v1</code> with a WORKFORCE token. Every read is audited to the agency. Purge at return date + 90 days with a receipt</td>
+<td>B §5.4 (N5)</td>
+<td>Fixes A-3. ADR 0014 must record this as the module 8 form of ADR 0008&#39;s &quot;consented hand-off&quot; (<code>0008:171-174</code>)</td>
+</tr>
+<tr>
+<td>F3 scrubber</td>
+<td>3 passes: known values → regex → <strong>Bedrock Guardrails sensitive-info filter</strong> (ANONYMIZE), fail closed, EN/VI corpus gate</td>
+<td>A §7</td>
+<td>Vietnamese is optimized (§1.2). ≈ $0.18/agency. W0 spike: Guardrails on acc2 vs acc3</td>
+</tr>
+<tr>
+<td>KMS</td>
+<td>One key per agency (D7 a), created lazily at the first traveller. Offboarding uses <code>ScheduleKeyDeletion</code> (not billed while pending). Automatic rotation stays a security-review choice (A&#39;s R4; the rotation cap limits it to $3/key anyway)</td>
+<td>B §5.2 + A §6.1</td>
+<td>Verified prices</td>
+</tr>
+<tr>
+<td>Public-path least privilege</td>
+<td>Accept a single task role for the pilot and record it as residual risk (A-8). Option before AA-880: a second ECS service from the same image for <code>/crm/public/*</code> and <code>/crm/hooks/*</code> with an <strong>Encrypt/GenerateDataKey-only</strong> role (+≈ $2.5 Dev Spot / $8.3 prod)</td>
+<td>B §5.2 idea, ECS form</td>
+<td>Keeps one runtime</td>
+</tr>
+<tr>
+<td>WAF / abuse</td>
+<td>X1 fix: edge WAF via the CloudFront plan (rate + CommonRuleSet, <strong>no geo block</strong>); no shared-ACL association on <code>api-crm</code> until the CI grant exists and a scope-down exempts the CRM host; in-app per-traveller rate limit using a signed forwarded IP; webhook signatures + idempotency</td>
+<td>new</td>
+<td>Verified ACL rules</td>
+</tr>
+<tr>
+<td>AI</td>
+<td>Haiku 5.5 default, Sonnet 5.5 for opt-in proposal prose only; acc3 satellite, <code>us.</code> profile, retention none; AI off per tenant (D12); per-tenant cap $2/month</td>
+<td>A §7.3 + B §5.5</td>
+<td>Bedrock price parity stays marked as an estimate</td>
+</tr>
+<tr>
+<td>E-sign (D11 b)</td>
+<td>Dev and CI: self-hosted Documenso container ($0, X2). Prod: Platform from go-live per D11 b; flag that it is <strong>$3,000 billed yearly</strong>. Re-decision option: Teams ($480/year) for ≤5 pilot agencies <strong>only with Documenso&#39;s written OK</strong> on multi-agency use and acceptance of non-white-label signing</td>
+<td>A R3 / B N7, corrected</td>
+<td>Biggest line; the owner decides</td>
+</tr>
+<tr>
+<td>Channels</td>
+<td>Module 5 before go-live (X3). WhatsApp via Embedded Signup, agency-owned WABA (D9 a). BYO Twilio for SMS. Messenger and IG in W6 (D19 a)</td>
+<td>A §8 / B §6</td>
+<td>Per the spec phases</td>
+</tr>
+<tr>
+<td>Separation work</td>
+<td>Union of A §3 and B §3.3: L1/S1, L2/S2, L3/S3 (delete + invert the guard test), L4/S9, L5/S4, L6–L7/S5 (trip page to the traveller host, CTA = agency intake, D18), P1–P3/S6, N1/S7, B2–B4/S8 + <code>/v1/brand-identity</code>, B7 BFF allow-list, C1–C3 (the portal owns its kit; drop the byte-equality test)</td>
+<td>A §3, B §3.3</td>
+<td>All verified (V1–V9)</td>
+</tr>
+</tbody></table></div><h3>4.2 Synthesis cost (per month)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Item</th>
+<th>Dev</th>
+<th>Prod, 10 agencies</th>
+<th>Prod, 50</th>
+<th>Prod, 200</th>
+</tr>
+</thead><tbody><tr>
+<td>CRM API compute (ECS ARM)</td>
+<td>2.5–3.3 (Spot)</td>
+<td>8.3 (1 task, 0.25/0.5)</td>
+<td>33 (2 × 0.5/1 GB)</td>
+<td>66–100</td>
+</tr>
+<tr>
+<td>Portal Lambda + CloudFront (Free → Pro $15 above 1M requests)</td>
+<td>~0.5</td>
+<td>~1.5</td>
+<td>~8</td>
+<td>~45</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>0 (shared Dev; <code>crm_app</code> 5, offset booking 15 → 10)</td>
+<td>19 (t4g.micro cell)</td>
+<td>133 (cell → t4g.medium Multi-AZ, or move onto AA-880)</td>
+<td>141–216</td>
+</tr>
+<tr>
+<td>KMS (agency keys + AA-ops key)</td>
+<td>3–4</td>
+<td>11</td>
+<td>51</td>
+<td>201 (+ rotation if chosen)</td>
+</tr>
+<tr>
+<td>LLM (B&#39;s mix; worst case, AI on everywhere)</td>
+<td>≤2 (cap)</td>
+<td>13</td>
+<td>67</td>
+<td>268</td>
+</tr>
+<tr>
+<td>Guardrails, SES, S3, API GW, logs, secrets, ECR</td>
+<td>~4</td>
+<td>~10</td>
+<td>~30</td>
+<td>~110</td>
+</tr>
+<tr>
+<td>Mapbox (shared free 50k loads)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>~70 (lever: static map on the traveller host)</td>
+</tr>
+<tr>
+<td>Documenso Platform (D11 b)</td>
+<td>0 (self-host test container)</td>
+<td>250</td>
+<td>250</td>
+<td>250</td>
+</tr>
+<tr>
+<td><strong>Total (Platform)</strong></td>
+<td><strong>≈ $11–13</strong></td>
+<td><strong>≈ $313–320</strong></td>
+<td><strong>≈ $570</strong></td>
+<td><strong>≈ $1.15–1.26k</strong></td>
+</tr>
+<tr>
+<td>Total if Teams is confirmed for the pilot</td>
+<td>—</td>
+<td>≈ $103–110</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Previous design</td>
+<td>$85–160</td>
+<td>$500–925 (no DB)</td>
+<td>$1.6–2.0k</td>
+<td>$4.7–5.2k</td>
+</tr>
+</tbody></table></div><p>All rows are estimates built on the verified unit prices in §1.2. Volume assumptions are those of research 04 §1, as used by A and B.</p>
+<p>Optional extras:</p>
+<ul>
+<li>the public-path second service: +$2.5 Dev / +$8.3 prod;</li>
+<li>a portal Fargate fallback if the LWA spike fails: +$8.</li>
+</ul>
+<h3>4.3 The owner&#39;s tensions, answered by the synthesis</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Tension</th>
+<th>Answer</th>
+</tr>
+</thead><tbody><tr>
+<td>D13 không + 30/11</td>
+<td>The pilot runs in the CRM-only prod cell (≈ $27/month for DB + API). No AA-880 dependency. Real traveller PII never touches Dev</td>
+</tr>
+<tr>
+<td>D14 không (no Vercel Pro)</td>
+<td>Portal and traveller host run on AWS (Lambda + CloudFront), so the Vercel Hobby clause no longer applies to the partner app. The Hobby exposure of the <strong>other</strong> Dev frontends is a separate platform decision (B N9); it is not settled here</td>
+</tr>
+<tr>
+<td>D15 không (no lawyer)</td>
+<td>Real data only for non-VN, non-EU agencies (B N8 / H4). VN and EU agencies get demo mode on synthetic data. Lawyer brief triggers: the first VN or EU agency with real data, the 6th agency or first paid plan, or 60 days after the first real traveller record (A §12.3 triggers)</td>
+</tr>
+<tr>
+<td>D6 b / D11 b / D22 b</td>
+<td>Built as answered. Module 5 forwarding counts as the spec&#39;s &quot;two-way&quot; inbox and is recorded as a deviation. Documenso per §4.1. The runner is the Booking copy, in-process</td>
+</tr>
+</tbody></table></div><h3>4.4 H1–H11: merged proposed answers</h3>
+<p>Where the two designs differ, the stricter or more concrete answer was taken.</p>
+<div class="tablewrap"><table><thead><tr>
+<th>H</th>
+<th>Proposed answer</th>
+<th>Source</th>
+</tr>
+</thead><tbody><tr>
+<td>H1</td>
+<td>Keep all 23 modules; drop only the 40-week schedule. The pilot opens 30/11/2026 with Phase 0–2 modules <strong>including module 5 (email)</strong>; Phase 3–4 ship during the pilot. Recorded deviations: email by forwarding + send-as (D6 b), and on-request confirmation for non-allotment tours (X9)</td>
+<td>A/B + X3, X9</td>
+</tr>
+<tr>
+<td>H2</td>
+<td>Free for partners, no seat fee. Agencies pay their own WhatsApp (Meta), SMS (Twilio) and card fees (Stripe) through their own accounts. AI is included up to $2 of model use per agency-month. AA&#39;s cost is ≈ $11/agency/month at 50 agencies. Review at 50 agencies</td>
+<td>B</td>
+</tr>
+<tr>
+<td>H3</td>
+<td>&quot;Only the CRM system can use your agency&#39;s key. Every use is logged and visible to you. AA staff cannot open traveller records. With your own key (BYOK) you can revoke access, and deleting the key makes the data unreadable.&quot;</td>
+<td>B</td>
+</tr>
+<tr>
+<td>H4</td>
+<td>3–5 friendly agencies from Australia or another non-EU, non-VN country, named by Ms. Thư in W0, with a 30-minute interview each. VN and EU agencies join in demo mode until a lawyer&#39;s review</td>
+<td>B (fixes A-6)</td>
+</tr>
+<tr>
+<td>H5</td>
+<td>The AA entity that signs partner agreements today (Ms. Thư names it). DPA from the AA-886 template, no lawyer for the pilot (D15); the lawyer brief is prepared, not sent</td>
+<td>A/B</td>
+</tr>
+<tr>
+<td>H6</td>
+<td>AA&#39;s current trekking insurer; Ms. Thư names the contact in W0. Waivers are e-signed meanwhile and marked &quot;insurer review pending&quot;</td>
+<td>A/B</td>
+</tr>
+<tr>
+<td>H7</td>
+<td>Zalo is not in v1. Revisit when VN agencies are unblocked</td>
+<td>A/B</td>
+</tr>
+<tr>
+<td>H8</td>
+<td>AA ops keep departures and seats in Booking for fixed-date tours. Every other tour is &quot;on request&quot;: the hold is confirmed by AA ops within one working day</td>
+<td>B</td>
+</tr>
+<tr>
+<td>H9</td>
+<td>Use the ADR 0005 B2B net list (15%) unchanged; the agency sets its own sell price</td>
+<td>A/B</td>
+</tr>
+<tr>
+<td>H10</td>
+<td>AA provides default EN/VI terms and waiver templates adapted from AA&#39;s current terms. Agencies may upload their own. The insurer reviews the waiver</td>
+<td>A/B</td>
+</tr>
+<tr>
+<td>H11</td>
+<td>Yes (D24): k ≥ 10, ≥ 3 agencies, opt-in per agency, default off</td>
+<td>A/B</td>
+</tr>
+</tbody></table></div><h3>4.5 New decisions the synthesis needs (for the approval page)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Decision</th>
+<th>Recommendation</th>
+<th>Effect</th>
+</tr>
+</thead><tbody><tr>
+<td>S-1</td>
+<td>Portal and CRM hosting on Lambda + LWA + CloudFront (Dev and prod); retire Vercel <code>aa-cis-portal</code></td>
+<td>Yes</td>
+<td>D14 holds. $0–2/month at pilot size</td>
+</tr>
+<tr>
+<td>S-2</td>
+<td>CRM-only prod cell (t4g.micro) with a C7.2a exception for ≤10 agencies; no real PII on Dev</td>
+<td>Yes</td>
+<td>+$27/month. C7.1a intact</td>
+</tr>
+<tr>
+<td>S-3</td>
+<td>Module 8 stays in the CRM under an AA-ops key (B N5)</td>
+<td>Yes</td>
+<td>No PII in Booking Dev</td>
+</tr>
+<tr>
+<td>S-4</td>
+<td>Module 5 and an event-tracking baseline move before 30/11</td>
+<td>Yes</td>
+<td>+≈5 issues before go-live</td>
+</tr>
+<tr>
+<td>S-5</td>
+<td>Documenso: Platform at go-live (D11 b, $3,000/year), <strong>or</strong> Teams for the pilot with written vendor OK</td>
+<td>Owner</td>
+<td>−$210/month if Teams</td>
+</tr>
+<tr>
+<td>S-6</td>
+<td>Optional second ECS service for public routes (Encrypt-only role)</td>
+<td>Before AA-880, not for the pilot</td>
+<td>+$8.3/month prod</td>
+</tr>
+</tbody></table></div><h3>4.6 Waves (adjusted from A §13, with B&#39;s prod-cell work added)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Wave</th>
+<th>Change versus A</th>
+</tr>
+</thead><tbody><tr>
+<td>W0</td>
+<td>+ LWA/Next 16 spike (replaces the Amplify spike), Guardrails spike, Documenso self-host test container, Booking-lane owner named (X8)</td>
+</tr>
+<tr>
+<td>W1</td>
+<td>+ portal Lambda/CloudFront module, fixed preview host, CIS tenant-member feed + <code>catalog.v1</code> endpoints (replace the catalog grants). B3 fix goes first</td>
+</tr>
+<tr>
+<td>W3</td>
+<td>+ module 5 (≈4 issues), event baseline (1)</td>
+</tr>
+<tr>
+<td>W5</td>
+<td>+ <code>envs/prod</code> root, prod cell, C7.2d DB Migrate <code>environment</code> input, restore drill (≈4)</td>
+</tr>
+</tbody></table></div><p>Total ≈ <strong>95 issues to 30/11 (≈ 16 sessions)</strong>, ≈ 118 in all. At ~6 issues/session that is ~2.7 CRM sessions/week from S246.</p>
+<p><strong>This is the main risk.</strong> If the lane slips, keep the scope and move the date (both designs agree). On-request supply (H8) keeps W4 off the Booking allotment build.</p>
+<hr>
+<h2>5. Notes outside the CRM, observed while verifying</h2>
+<ul>
+<li><strong>Notifications request:</strong> <code>var.alert_email</code> default (<code>accounts/aa365/variables.tf:152-156</code>) feeds SNS and Budgets (scout §6.7). Changing it to <code>nghieppham@adventure.asia</code> is a one-line Infra PR plus SNS subscription confirmation from the new mailbox. CRM alarms inherit it.</li>
+<li><strong>Vercel Hobby exposure</strong> of the CIS and Booking admin frontends (B N9): out of scope here, but S-1 creates a reusable hosting module if the owner wants to converge.</li>
+</ul>
+</article></div></section>
+</main>
+<div id="toast" class="toast" hidden></div>
+
+<script id="docket-data" type="application/json">{"groups":[{"title":"Câu hỏi cho chị Thư","short":"Chị Thư (H1–H12)","intro":"Mỗi câu có sẵn đề xuất trả lời. Chị chọn \"Đồng ý đề xuất\" hoặc ghi ý khác, rồi bấm duyệt.","items":[{"id":"H1","question":"Chị ơi, chị nói 'lơ đi cái 40 tuần': em hiểu là bỏ lịch 40 tuần nhưng vẫn làm đủ 23 phần trong spec của chị. Em đề xuất mở cho đại lý dùng thử từ 30/11/2026, chị xem có ổn không ạ?","proposed_answer":"Làm đủ 23 phần, không cắt. Từ 30/11/2026, 3–5 đại lý dùng thử các phần: nhận khách (form), theo dõi chuyến, email với khách, báo giá cho khách tự chọn, sổ booking, hoá đơn + thu cọc, ký hợp đồng/waiver, cổng thông tin cho khách, hoa hồng. WhatsApp, tự động nhắc việc, AI soạn nháp và báo cáo đầy đủ ra dần trong lúc đại lý dùng thử. Có 2 chỗ khác spec, em ghi rõ: (1) email vào CRM bằng cách đại lý chuyển tiếp thư, gửi đi bằng chính Gmail/Outlook của đại lý, không đồng bộ đọc toàn bộ hộp thư; (2) tour không có lịch khởi hành cố định thì hiện 'chờ AA xác nhận' (xem H8).","why":"Đúng điểm thử của spec (cuối Phase 2), có thêm email vì spec đặt email ở Phase 1. Đồng bộ đọc Gmail cần kiểm định bảo mật CASA $675–5.400/năm mỗi năm (anh Nghiệp đã chọn bỏ).","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Đợi làm xong hết 23 phần rồi mới cho đại lý dùng thử"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H2","question":"Về giá cho đại lý: em đề xuất CRM miễn phí hoàn toàn cho đối tác như spec ghi. Chị thấy cách tính dưới đây được không ạ?","proposed_answer":"Miễn phí cho đại lý, không tính theo số người dùng. Các phí của bên thứ ba đại lý tự trả qua tài khoản của họ: WhatsApp (Meta), SMS (Twilio), phí thẻ (Stripe). AI soạn nháp được dùng tới $2 tiền model mỗi đại lý mỗi tháng (đủ dư, dự kiến chỉ ~$0,5). AA chịu khoảng $31/đại lý/tháng khi mới có 10 đại lý (phần lớn là phí ký điện tử cố định), giảm còn ~$11 ở 50 đại lý và ~$6 ở 200 đại lý. Xem lại khi đủ 50 đại lý.","why":"Spec ghi 'free for partners'. Để đại lý tự trả các kênh nhắn tin và phí thẻ giúp phần AA gánh giảm từ ~$25 xuống ~$6–11/đại lý.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Thu phí theo số người dùng (seat)"},{"key":"c","label":"Gắn phí với hoa hồng khi bán tour AA"},{"key":"d","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H3","question":"Spec có câu 'AA cũng không truy cập được dữ liệu khách'. Về kỹ thuật, khoá nằm trong tài khoản AWS của AA nên câu này chưa đúng tuyệt đối. Em đề xuất đổi câu như dưới, chị đồng ý không ạ?","proposed_answer":"\"Chỉ hệ thống CRM dùng được khoá của đại lý. Mọi lần dùng đều được ghi lại và đại lý tự xem được. Nhân viên AA không mở được hồ sơ khách. Nếu đại lý dùng khoá riêng của họ thì có thể tự thu hồi, và khi xoá khoá thì dữ liệu không đọc được nữa.\"","why":"Hứa đúng cái làm được, tránh rủi ro pháp lý khi ghi trong hợp đồng với đại lý. Anh Nghiệp đã đồng ý sửa (D8), chỉ chờ chị.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Giữ câu gốc của spec"},{"key":"c","label":"Chị muốn sửa câu khác"}],"recommended":"a"},{"id":"H4","question":"Chị chọn giúp em 3–5 đại lý thân quen để dùng thử nhé. Em đề xuất như dưới, chị thấy được không ạ?","proposed_answer":"3–5 đại lý thân quen ở Úc (hoặc nước khác không thuộc EU và không phải Việt Nam), chị cho em tên trong tuần đầu; mỗi đại lý em xin 30 phút phỏng vấn trước khi mở. Đại lý ở Việt Nam và EU vẫn xem và dùng được bản demo với dữ liệu giả, sẽ dùng dữ liệu khách thật sau khi có ý kiến luật sư.","why":"Luật dữ liệu VN (Nghị định 356) có thể cần giấy phép riêng, EU cần điều khoản chuyển dữ liệu có luật sư duyệt; anh Nghiệp đã quyết chưa gửi luật sư lúc này (D15).","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Chị muốn có đại lý Việt Nam dùng dữ liệu thật ngay (cần luật sư trước)"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H5","question":"Hợp đồng với đại lý dùng thử sẽ ký dưới tên pháp nhân nào của AA, và mình có cần luật sư ngay không ạ?","proposed_answer":"Ký bằng pháp nhân AA đang dùng để ký hợp đồng đối tác hôm nay (chị cho em tên). Dùng mẫu thoả thuận xử lý dữ liệu (DPA) em đã soạn, chưa cần luật sư cho giai đoạn dùng thử. Em soạn sẵn bản tóm tắt cho luật sư và chỉ gửi khi: có đại lý VN hoặc EU đầu tiên muốn dùng dữ liệu thật, hoặc có đại lý thứ 6, hoặc sau 60 ngày kể từ khi có khách thật đầu tiên.","why":"Khớp quyết định chưa gửi luật sư (D15) nhưng có mốc rõ để không quên.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Chị muốn gửi luật sư ngay"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H6","question":"Waiver trekking ký điện tử cần hãng bảo hiểm chấp nhận. Mình nhờ hãng nào ạ?","proposed_answer":"Nhờ hãng bảo hiểm trekking AA đang dùng; chị cho em tên người liên hệ trong tuần đầu. Trong lúc chờ họ trả lời, khách vẫn ký waiver điện tử bình thường, hệ thống đánh dấu 'chờ bảo hiểm duyệt'.","why":"Spec yêu cầu waiver 'accepted by insurer'; không chặn việc dùng thử trong lúc chờ.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Chị muốn dùng hãng bảo hiểm khác"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H7","question":"Khách Việt hay dùng Zalo. Bản đầu mình có cần Zalo không ạ?","proposed_answer":"Chưa làm Zalo ở bản đầu (spec không có Zalo, và đại lý VN chưa dùng dữ liệu thật trong pilot). Email, WhatsApp, SMS, Messenger, Instagram có đủ. Xem lại Zalo khi mở cho đại lý VN.","why":"Giữ đúng spec, không làm phình phạm vi khi chưa có đại lý VN trong pilot.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Chị muốn có Zalo ngay bản đầu"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H8","question":"Spec ghi hàng AA 'tự xác nhận'. Muốn vậy cần biết tour nào có lịch khởi hành cố định và còn bao nhiêu chỗ. Em đề xuất cách làm dưới đây, chị thấy được không ạ?","proposed_answer":"Đội AA ops nhập lịch khởi hành và số chỗ trong hệ thống Booking cho các tour có ngày cố định — các tour này đại lý đặt là tự xác nhận. Các tour khác (tour riêng, may đo) hiện 'theo yêu cầu': hệ thống giữ chỗ tạm, AA ops xác nhận trong 1 ngày làm việc. Chị cho em biết ai trong đội ops phụ trách.","why":"Booking chưa có dữ liệu chỗ trống; cách này cho đi thử đúng hạn mà không phải chờ nhập toàn bộ allotment. Đây là một chỗ khác spec, em ghi lại.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Chỉ bán tour có lịch cố định trong pilot"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H9","question":"Giá cho đại lý trong CRM: mình dùng bảng giá net B2B hiện có (biên 15%) phải không ạ?","proposed_answer":"Dùng nguyên bảng giá net B2B hiện có (biên 15%). Đại lý tự đặt giá bán cho khách của họ trong CRM; giá net thô không hiện ra ngoài.","why":"Đã có quyết định giá B2B (ADR 0005) và AA-681 đã xong; không cần làm thêm bảng giá mới.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Chị muốn biên khác cho đại lý dùng CRM"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H10","question":"Mẫu điều khoản đặt tour và waiver cho đại lý: ai soạn ạ?","proposed_answer":"AA soạn sẵn 1 mẫu điều khoản đặt tour và 1 mẫu waiver, song ngữ Anh–Việt, dựa trên điều khoản AA đang dùng (đội của chị xem lại). Đại lý được tải mẫu riêng của họ nếu muốn. Hãng bảo hiểm duyệt mẫu waiver.","why":"Đại lý nhỏ thường chưa có mẫu; mẫu mặc định giúp họ bắt đầu ngay.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Mỗi đại lý tự soạn, AA không cung cấp mẫu"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H11","question":"Số liệu tổng hợp cho AA (xu hướng nhu cầu, mức chi): em đề xuất thêm vài điều kiện để bảo vệ đại lý, chị thấy được không ạ?","proposed_answer":"Đồng ý: AA chỉ xem số liệu của nhóm có ít nhất 10 khách và đến từ ít nhất 3 đại lý; đại lý phải tự chọn tham gia, mặc định là tắt. AA không bao giờ thấy tên hay liên hệ của khách.","why":"Spec chỉ ghi k≥10; thêm '≥3 đại lý' và 'tự chọn' để một đại lý lớn không bị lộ số liệu riêng. Anh Nghiệp đã đồng ý (D24).","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Chỉ cần nhóm ≥ 10 khách như spec, không cần thêm"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"},{"id":"H12","question":"Câu mới: ký điện tử cho khách của đại lý. Có gói rẻ và gói mang thương hiệu riêng. Em đề xuất như dưới, chị thấy được không ạ?","proposed_answer":"Trong giai đoạn dùng thử (tối đa 5 đại lý) dùng gói Documenso Teams ($480/năm): khách ký trong cổng thông tin của đại lý, nhưng trang ký có thể hiện chữ 'Documenso'. Khi có đại lý thứ 6, hoặc đại lý nào yêu cầu trang ký không có thương hiệu khác, mình lên gói Platform ($3.000/năm) mang thương hiệu riêng.","why":"Thêm câu này vì đây là quyết định về hình ảnh thương hiệu với khách, thuộc về chị. Phí ký điện tử là khoản lớn nhất (~78% chi phí lúc 10 đại lý); cách này tiết kiệm ≈ $210/tháng trong pilot. Cần Documenso đồng ý bằng văn bản; nếu không, dùng Platform ngay.","options":[{"key":"a","label":"Đồng ý đề xuất"},{"key":"b","label":"Dùng gói Platform mang thương hiệu riêng ngay từ đầu"},{"key":"c","label":"Chị muốn trao đổi thêm"}],"recommended":"a"}]},{"title":"Quyết định mới cho Nghiệp","short":"Quyết định mới (N1–N19)","intro":"Phát sinh khi chuyển CRM thành app riêng. Lựa chọn đề xuất đã được chọn sẵn.","items":[{"id":"N1","question":"CRM là app riêng tích hợp vào portal: đặt code theo hình dạng repo nào?","options":[{"key":"a","label":"Một repo AA-Partner: portal (chuyển khỏi CIS) + CRM, có test ranh giới api/ ↔ web/"},{"key":"b","label":"Hai repo AA-Portal + AA-CRM, trang CRM là zone riêng dưới host portal"},{"key":"c","label":"Repo AA-CRM chỉ có API; trang CRM nằm trong repo portal"}],"recommended":"a","why":"Chị Thư muốn CRM nằm trong portal: một app thì một đăng nhập, một BFF, một deploy, một kit. CRM vẫn có schema, role, DSN, API, runner, image, service riêng. b thêm 1 CI, 1 OIDC role, 1 kit copy, điều hướng nạp lại trang, ~+3 issue mà không cách ly thêm."},{"id":"N2","question":"Chuyển portal/ ra khỏi AA-CIS-App (giữ lịch sử git) và gỡ project Vercel aa-cis-portal?","options":[{"key":"a","label":"Có"},{"key":"b","label":"Không, giữ portal trong repo CIS"}],"recommended":"a","why":"Không chuyển thì không tách hoàn toàn được: 14 file kit chép byte bị test ép bằng nhau, chung CI, chung team Vercel."},{"id":"N3","question":"App đại lý (portal + CRM + trang khách) chạy ở đâu?","options":[{"key":"a","label":"AWS: Lambda + Lambda Web Adapter + CloudFront gói Free, cho cả Dev và prod; dự phòng Fargate (+≈ $8)"},{"key":"b","label":"Container Fargate sau CloudFront ngay từ đầu (+≈ $8/tháng)"},{"key":"c","label":"Vercel Pro $20/seat/tháng"}],"recommended":"a","why":"Giữ D14 (không Pro), không vướng điều khoản phi thương mại của Hobby. Amplify không hỗ trợ Next 16. CloudFront Free có sẵn WAF 5 rule, $0. Spike W0 kiểm Next 16 trên LWA."},{"id":"N4","question":"Pilot dữ liệu khách thật chạy ở đâu (D13 không + 30/11)?","options":[{"key":"a","label":"Prod cell riêng CRM: RDS t4g.micro + 1 task ECS, ngoại lệ C7.2a cho ≤ 10 đại lý"},{"key":"b","label":"Sửa C7.1a cho ciphertext vault lên Dev ($0)"},{"key":"c","label":"Chờ AA-880 prod đầy đủ (+$150–300/tháng)"}],"recommended":"a","why":"≈ $27/tháng, giữ nguyên C7.1a (không PII thật trên Dev), không chờ AA-880. b bị panel chấm rủi ro quản trị cao (Dev public schema, module 8 đưa PII sang Booking Dev)."},{"id":"N5","question":"CRM đọc dữ liệu CIS/Booking bằng cách nào?","options":[{"key":"a","label":"Chỉ HTTP: feed thành viên + catalog.v1 của CIS, Booking B2B bằng IAM; không grant DB nào"},{"key":"b","label":"Grant view catalog.* và booking.* cho crm_app"}],"recommended":"a","why":"Prod cell có RDS riêng nên b không chạy được ở prod; a cho một đường code Dev/prod và probe cách ly đơn giản. Giá: 2 endpoint nhỏ ở CIS."},{"id":"N6","question":"Module 8 (gửi thông tin khách cho AA ops) để dữ liệu ở đâu?","options":[{"key":"a","label":"Ở lại trong CRM, mã hoá bằng khoá AA-ops, AA ops xem ở Booking admin qua API, xoá sau 90 ngày, biên nhận vào audit đại lý"},{"key":"b","label":"Đẩy sang Booking như v1"}],"recommended":"a","why":"Booking chỉ có Dev, không được chứa PII thật (C7.1a). Bớt 2 issue Booking."},{"id":"N7","question":"Kéo module 5 (inbox email) và baseline đo sự kiện lên trước 30/11?","options":[{"key":"a","label":"Có"},{"key":"b","label":"Không, để sau go-live"}],"recommended":"a","why":"Spec đặt module 5 ở Phase 1 (trước pilot). Không có email thì đại lý vẫn dùng Gmail, trái nguyên tắc 'nhanh hơn Gmail'. Không đo sự kiện thì không đo được chỉ tiêu nào trong pilot."},{"id":"N8","question":"Gói Documenso cho ký điện tử (D11 b)?","options":[{"key":"a","label":"Platform từ go-live: $250/tháng, trả năm $3.000, white-label"},{"key":"b","label":"Teams $40/tháng (trả năm $480) cho pilot nếu Documenso đồng ý bằng văn bản; lên Platform khi > 5 user, đại lý thứ 6 hoặc cần white-label"},{"key":"c","label":"Tự host bản AGPL trong prod cell (~$17/tháng + chứng thư ký; rủi ro bảo hiểm chấp nhận)"}],"recommended":"b","why":"Documenso là ~78% hoá đơn ở 10 đại lý. b tiết kiệm ≈ $210/tháng trong pilot. Nếu Documenso không đồng ý bằng văn bản thì quay về a đúng D11 b. Chị Thư quyết phần hình ảnh ở H12."},{"id":"N9","question":"Bộ lọc PII (F3) trước khi gọi AI?","options":[{"key":"a","label":"Giá trị đã biết + regex + Bedrock Guardrails (trả theo lượt)"},{"key":"b","label":"Service Presidio chạy suốt như v1"}],"recommended":"a","why":"−$39–49/tháng; Guardrails ghi 'Vietnamese: Optimized and supported', Presidio tiếng Việt chưa rõ. Lỗi thì chặn, corpus 0 rò."},{"id":"N10","question":"Model AI mặc định cho nháp?","options":[{"key":"a","label":"Haiku 5.5 mặc định; Sonnet 5.5 chỉ khi đại lý bật cho proposal; trần $2/đại lý/tháng"},{"key":"b","label":"Sonnet 5.5 mặc định"}],"recommended":"a","why":"≈ $1,34 thay vì $8,4 mỗi đại lý; vẫn trong D12. Eval W7 kiểm chất lượng."},{"id":"N11","question":"Vòng đời khoá KMS mỗi đại lý?","options":[{"key":"a","label":"Tạo lười ở khách đầu tiên, không xoay tự động trong pilot (review bảo mật W7 có thể đổi)"},{"key":"b","label":"Xoay tự động hằng năm từ đầu"}],"recommended":"a","why":"Đại lý không hoạt động = $0; khoá chờ xoá không bị tính tiền; xoay tự động thêm $1–2/khoá."},{"id":"N12","question":"SMS cho đại lý?","options":[{"key":"a","label":"Đại lý dùng tài khoản Twilio của chính họ"},{"key":"b","label":"Sub-account Twilio dưới tài khoản AA"}],"recommended":"a","why":"Sub-account tính tiền vào AA (~$3/đại lý); a để đại lý tự trả như WhatsApp."},{"id":"N13","question":"Phạm vi địa lý dữ liệu thật trong pilot (D15 không)?","options":[{"key":"a","label":"Chỉ đại lý ngoài VN và ngoài EU (ví dụ Úc); VN/EU dùng demo tới khi có luật sư"},{"key":"b","label":"Cho cả EU với SCC mẫu, không luật sư"}],"recommended":"a","why":"VN có thể cần giấy phép + TIA; EU cần SCC có luật sư. a làm D15 khả thi mà không nhận rủi ro pháp lý lớn."},{"id":"N14","question":"WAF / chống lạm dụng cho trang khách và API CRM?","options":[{"key":"a","label":"WAF trong CloudFront Free (không chặn theo nước) + rate limit trong app + chữ ký webhook; không gắn ACL vào api-crm trong pilot"},{"key":"b","label":"Gắn ACL WAF dùng chung (chặn mọi nước ngoài 10 nước, cần thêm quyền CI)"},{"key":"c","label":"Tạo ACL WAF mới (~$9/tháng)"}],"recommended":"a","why":"$0; khách ở mọi nước mở được form; webhook từ EU không bị chặn."},{"id":"N15","question":"Tách quyền cho đường công khai (form, webhook)?","options":[{"key":"a","label":"Pilot dùng một task role (ghi là rủi ro còn lại); tách service thứ hai chỉ Encrypt trước AA-880 hoặc đại lý thứ 11"},{"key":"b","label":"Tách ngay từ đầu"}],"recommended":"a","why":"b thêm $2,5 Dev / $8,3 prod và 1 issue trên đường găng; rủi ro pilot thấp với ≤ 10 đại lý."},{"id":"N16","question":"Redirect 308 cũ /portal, /tenant-login trên host admin?","options":[{"key":"a","label":"Xoá và đảo test guard: admin không được chứa URL portal"},{"key":"b","label":"Giữ để chuyển tiếp bookmark cũ"}],"recommended":"a","why":"Dev chỉ ~4 tenant thử, không có bookmark thật; đúng yêu cầu tách hoàn toàn."},{"id":"N17","question":"Ngân sách kết nối RDS Dev cho crm_app?","options":[{"key":"a","label":"crm_app limit 5, hạ booking 15 → 10 trong cùng PR (tổng giữ 155/181)"},{"key":"b","label":"Resize RDS Dev lên t4g.medium"}],"recommended":"a","why":"Booking chỉ dùng pool max 5; b thêm ≈ $31/tháng."},{"id":"N18","question":"Nếu điểm kiểm 13/11 (cuối W3) cho thấy trễ hơn 1 đợt?","options":[{"key":"a","label":"Giữ đủ phạm vi, dời ngày go-live"},{"key":"b","label":"Vẫn go-live 30/11 nhưng chỉ demo dữ liệu giả"},{"key":"c","label":"Cắt phạm vi pilot"}],"recommended":"a","why":"Anh đã chốt không MVP; 96 issue trong 41 ngày là rủi ro lớn nhất."},{"id":"N19","question":"CIS admin và Booking admin vẫn trên Vercel Hobby (cũng có thể bị coi là thương mại)?","options":[{"key":"a","label":"Quyết định nền tảng riêng, mở 1 issue riêng, không tính vào lane CRM"},{"key":"b","label":"Gom luôn về host AWS trong lane CRM"}],"recommended":"a","why":"Không làm phình lane CRM; module host của portal tái dùng được nếu sau này muốn gom."}]},{"title":"Xác nhận lại câu trả lời đã chọn","short":"Xác nhận lại (D)","intro":"Kiến trúc mới làm đổi nghĩa vài câu trả lời D1–D24 của anh. Xem nghĩa mới rồi giữ hoặc đổi.","items":[{"id":"D1","question":"Kiến trúc CRM","context":"\u003cb>Anh đã chọn:\u003c/b> b — app thứ tư, dùng chung hạ tầng, tích hợp vào portal\u003cbr>[Cần xác nhận lại] App thứ tư nay là AA-Partner = tenant portal (chuyển khỏi CIS) + CRM trong một repo, không phải &#x27;AA-CRM chỉ có CRM&#x27;. Xem N1.","options":[{"key":"a","label":"Giữ lựa chọn, hiểu theo nghĩa mới ở trên"},{"key":"b","label":"Muốn đổi (ghi rõ trong ghi chú)"}],"recommended":"a"},{"id":"D2","question":"ADR 0014/0015 + standards v1.2, không ngoại lệ grant DB trên crm.*","context":"\u003cb>Anh đã chọn:\u003c/b> có\u003cbr>[Cần xác nhận lại] ADR 0014 nay SỬA ADR 0008 §8 (&#x27;CIS module first&#x27;) thay vì tuân theo nó; không grant DB nào cả hai chiều, đọc chéo app qua HTTP (N5).","options":[{"key":"a","label":"Giữ lựa chọn, hiểu theo nghĩa mới ở trên"},{"key":"b","label":"Muốn đổi (ghi rõ trong ghi chú)"}],"recommended":"a"},{"id":"D11","question":"E-sign","context":"\u003cb>Anh đã chọn:\u003c/b> b — Documenso Platform\u003cbr>[Cần xác nhận lại] Vendor giữ. v1 chưa nói: mọi gói trả phí Documenso trả theo NĂM; Platform = $3.000/năm (documenso.com/pricing, 20/10/2026). Gói tách thành N8 (đề xuất Teams $480/năm cho pilot nếu có văn bản đồng ý).","options":[{"key":"a","label":"Giữ lựa chọn, hiểu theo nghĩa mới ở trên"},{"key":"b","label":"Muốn đổi (ghi rõ trong ghi chú)"}],"recommended":"a"},{"id":"D12","question":"Route AI","context":"\u003cb>Anh đã chọn:\u003c/b> có — Bedrock acc3 us., model ZDR, AI tắt mặc định mỗi tenant\u003cbr>[Cần xác nhận lại] Đường đi đổi: CRM là app riêng nên gọi thẳng role satellite acc3 (như TripPlanner) và ghi sổ crm.llm_call riêng, không qua gateway CIS và shared.llm_call_log.","options":[{"key":"a","label":"Giữ lựa chọn, hiểu theo nghĩa mới ở trên"},{"key":"b","label":"Muốn đổi (ghi rõ trong ghi chú)"}],"recommended":"a"},{"id":"D16","question":"Project Linear + issue theo đợt","context":"\u003cb>Anh đã chọn:\u003c/b> có\u003cbr>[Cần xác nhận lại] ≈ 117 issue (v1: 115), ≈ 96 trước 30/11; tên project đề xuất &#x27;Partner app (Tenant CRM)&#x27;.","options":[{"key":"a","label":"Giữ lựa chọn, hiểu theo nghĩa mới ở trên"},{"key":"b","label":"Muốn đổi (ghi rõ trong ghi chú)"}],"recommended":"a"},{"id":"D17","question":"Service ECS riêng cho CRM từ Dev","context":"\u003cb>Anh đã chọn:\u003c/b> có\u003cbr>[Cần xác nhận lại] Service aa-crm-dev-api build từ image riêng của AA-Partner (không phải image CIS aa-cis-dev-crm), ARM64 0,25 vCPU/0,5 GB, Dev chỉ Fargate Spot, worker trong process.","options":[{"key":"a","label":"Giữ lựa chọn, hiểu theo nghĩa mới ở trên"},{"key":"b","label":"Muốn đổi (ghi rõ trong ghi chú)"}],"recommended":"a"},{"id":"D21","question":"Builder module 3","context":"\u003cb>Anh đã chọn:\u003c/b> c — builder trong app portal/CRM, chép byte component TripPlanner có guard\u003cbr>[Cần xác nhận lại] Giữ; lưu ý TripPlanner chạy Next 15.5.28, portal Next 16.4.2 → CI build file chép dưới Next 16, cho phép lớp bọc mỏng.","options":[{"key":"a","label":"Giữ lựa chọn, hiểu theo nghĩa mới ở trên"},{"key":"b","label":"Muốn đổi (ghi rõ trong ghi chú)"}],"recommended":"a"},{"id":"D22","question":"Job runner","context":"\u003cb>Anh đã chọn:\u003c/b> b — bản chép riêng, không chạm CIS shared/jobs\u003cbr>[Cần xác nhận lại] Chép bản của Booking (đã port từ CIS, 675 dòng, chạy trong process) + bộ test tuân thủ chung để bắt lệch.","options":[{"key":"a","label":"Giữ lựa chọn, hiểu theo nghĩa mới ở trên"},{"key":"b","label":"Muốn đổi (ghi rõ trong ghi chú)"}],"recommended":"a"},{"id":"D23","question":"Điều kiện tách module thành app riêng","context":"\u003cb>Anh đã chọn:\u003c/b> có\u003cbr>[Cần xác nhận lại] Hết ý nghĩa vì CRM đã là app riêng; ADR 0014 ghi thay: ranh giới portal↔CRM trong repo + điều kiện dời DB/đổi runtime.","options":[{"key":"a","label":"Giữ lựa chọn, hiểu theo nghĩa mới ở trên"},{"key":"b","label":"Muốn đổi (ghi rõ trong ghi chú)"}],"recommended":"a"}]}],"recorded":[{"id":"D3","question":"Thứ tự với M1","answer":"a — lane CRM riêng chạy song song từ S246 — Giữ nguyên."},{"id":"D4","question":"Nhịp làm","answer":"a — agent team, ~6 issue/phiên — Giữ; ≈ 16 phiên tới 30/11, ≈ 20 phiên tổng."},{"id":"D5","question":"Khởi động mọi việc ngoài ở W0","answer":"có — Danh sách đổi nhẹ: bỏ CASA và Vercel Pro; thêm văn bản Documenso về gói Teams, spike Lambda Web Adapter/Next 16."},{"id":"D6","question":"Gmail","answer":"b — chỉ gmail.send + chuyển tiếp SES, không CASA — Giữ; module 5 kéo lên trước 30/11 (đúng Phase 1 của spec). Ghi điểm lệch: không đồng bộ đọc hai chiều."},{"id":"D7","question":"Khoá F1","answer":"a — 1 khoá KMS mỗi đại lý + DEK mỗi khách — Giữ; thêm tạo khoá lười + không xoay tự động trong pilot (N11)."},{"id":"D8","question":"Sửa câu F1 sau H3","answer":"có — Giữ; câu đề xuất ở H3."},{"id":"D9","question":"WhatsApp","answer":"a — Embedded Signup, WABA của đại lý, Cloud API trực tiếp — Giữ (W6). AA trả $0."},{"id":"D10","question":"Thanh toán đại lý VN","answer":"a — cổng VN sau báo giá, tạm ghi tay — Giữ."},{"id":"D13","question":"Prod là điều kiện cứng của pilot?","answer":"không — Pilot chạy trên prod cell riêng của CRM (N4), ≈ $27/tháng."},{"id":"D13-ngày","question":"Ngày go-live","answer":"30/11/2026 — Đúng điểm pilot của spec (cuối Phase 2). Điểm kiểm lịch 13/11 (N18)."},{"id":"D14","question":"Mua Vercel Pro bây giờ?","answer":"không — Giữ; app đại lý chạy trên AWS (N3) nên không vướng điều khoản Hobby."},{"id":"D15","question":"Gửi brief luật sư bây giờ?","answer":"không — Giữ; dữ liệu thật chỉ đại lý ngoài VN/EU + ngưỡng bắt buộc gửi brief (N13)."},{"id":"D18","question":"Sửa CTA mailto:admin@adventureasia.com trên /trip/[tourId]","answer":"có — Sửa ngay W1, sau đó chuyển trang trip sang host khách của app đại lý."},{"id":"D19","question":"Messenger + Instagram","answer":"a — W6 — Giữ."},{"id":"D20","question":"Ngôn ngữ giao diện","answer":"a — EN/VI + khung i18n — Giữ."},{"id":"D24","question":"Insights: ≥3 đại lý + k≥10 + opt-in","answer":"có — Giữ (W7); chị Thư duyệt ở H11."}],"recordedTitle":"Câu trả lời đã chốt (giữ nguyên)"}</script>
+<script>
+(function () {
+  var DATA = JSON.parse(document.getElementById('docket-data').textContent);
+  var answers = {};          // id -> {choice, note, approved, by, at}
+  var names = {};            // user id -> display name
+  var db = null, user = null, myId = null, canWrite = false;
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var toastTimer = null;
+  function toast(msg) { var t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 2600); }
+
+  // Tabs (deep link with #id)
+  function showTab(id) {
+    document.querySelectorAll('nav.tabs button').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === id)); });
+    document.querySelectorAll('main > section').forEach(function (s) { s.hidden = s.id !== 'panel-' + id; });
+  }
+  document.querySelectorAll('nav.tabs button').forEach(function (b) {
+    b.addEventListener('click', function () { showTab(b.dataset.tab); try { history.replaceState(null, '', '#' + b.dataset.tab); } catch (e) {} });
+  });
+  var h = (location.hash || '').slice(1);
+  if (h && document.getElementById('panel-' + h)) showTab(h);
+
+  function allItems() { var out = []; DATA.groups.forEach(function (g) { g.items.forEach(function (it) { out.push(it); }); }); return out; }
+  function stateOf(it) {
+    var a = answers[it.id];
+    if (!a || !a.approved) return 'wait';
+    return a.choice === it.recommended ? 'ok' : 'diff';
+  }
+
+  function renderLedger() {
+    var L = $('#ledger'); L.textContent = '';
+    DATA.groups.forEach(function (g) {
+      var n = g.items.length, d = g.items.filter(function (it) { return stateOf(it) !== 'wait'; }).length;
+      var c = el('div', 'cell'); c.appendChild(el('span', 'k', g.short || g.title));
+      c.appendChild(el('span', 'v', d + ' / ' + n + ' đã duyệt'));
+      var b = el('div', 'bar'); var i = el('i'); i.style.width = (n ? Math.round(100 * d / n) : 0) + '%'; b.appendChild(i); c.appendChild(b);
+      L.appendChild(c);
+    });
+  }
+
+  function labelOf(it, key) { var o = (it.options || []).filter(function (o) { return o.key === key; })[0]; return o ? o.label : key; }
+
+  async function save(it, patch) {
+    if (!db || !canWrite) { toast('Trang đang ở chế độ chỉ xem.'); return; }
+    var prev = answers[it.id] || {};
+    var next = Object.assign({}, prev, patch, { by: myId, at: new Date().toISOString() });
+    if (!next.choice) next.choice = it.recommended;
+    answers[it.id] = next; renderAll();
+    try { await db.collection('answers').doc(it.id).set(next); }
+    catch (e) {
+      answers[it.id] = prev; renderAll();
+      if (e && e.code === 'invalid_argument') { canWrite = false; setStatus('Bạn chỉ có quyền xem trang này. Nhờ Nghiệp cấp quyền Contributor để duyệt.', true); }
+      else toast('Chưa lưu được (' + ((e && e.code) || 'lỗi') + '). Thử lại sau giây lát.');
+    }
+  }
+
+  function card(it) {
+    var st = stateOf(it), a = answers[it.id] || {};
+    var c = el('div', 'card' + (st !== 'wait' ? ' done' : '')); c.id = 'item-' + it.id;
+    var top = el('div', 'card-top');
+    top.appendChild(el('span', 'id', it.id));
+    top.appendChild(el('div', 'q', it.question));
+    var pill = el('span', 'pill ' + st, st === 'wait' ? 'Chưa duyệt' : st === 'ok' ? 'Đã duyệt theo đề xuất' : 'Đã duyệt, khác đề xuất');
+    top.appendChild(pill); c.appendChild(top);
+    if (it.context) { var cx = el('div', 'ctx'); cx.innerHTML = it.context; c.appendChild(cx); }
+    if (it.proposed_answer) {
+      var p = el('div', 'proposal'); p.appendChild(el('span', 'lbl', 'Đề xuất trả lời')); p.appendChild(document.createTextNode(it.proposed_answer)); c.appendChild(p);
+    }
+    var opts = el('div', 'opts'); var cur = a.choice || it.recommended;
+    (it.options || []).forEach(function (o) {
+      var lab = el('label', 'opt' + (cur === o.key ? ' sel' : ''));
+      var inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'opt-' + it.id; inp.id = 'opt-' + it.id + '-' + o.key; inp.value = o.key; inp.checked = cur === o.key; inp.disabled = !canWrite;
+      inp.addEventListener('change', function () { save(it, { choice: o.key, approved: false }); });
+      lab.appendChild(inp);
+      var t = el('span'); t.appendChild(el('span', 'key', o.key + ') ')); t.appendChild(document.createTextNode(o.label));
+      if (o.key === it.recommended) t.appendChild(el('span', 'rec', 'Đề xuất'));
+      lab.appendChild(t); opts.appendChild(lab);
+    });
+    c.appendChild(opts);
+    if (it.why) { var d = document.createElement('details'); d.className = 'why'; d.appendChild(el('summary', null, 'Vì sao đề xuất như vậy')); var dv = el('div'); dv.textContent = it.why; d.appendChild(dv); c.appendChild(d); }
+    var ta = document.createElement('textarea'); ta.id = 'note-' + it.id; ta.placeholder = 'Ghi chú (không bắt buộc)'; ta.value = a.note || ''; ta.disabled = !canWrite; ta.rows = 1;
+    ta.addEventListener('change', function () { if ((answers[it.id] || {}).note !== ta.value) save(it, { note: ta.value }); });
+    c.appendChild(ta);
+    var row = el('div', 'row');
+    var who = el('span', 'who', a.approved ? ('Duyệt bởi ' + (names[a.by] || 'người duyệt') + (a.at ? ' · ' + new Date(a.at).toLocaleString('vi-VN') : '')) : (a.at ? 'Đã lưu lựa chọn, chưa bấm duyệt' : ''));
+    row.appendChild(who);
+    var btn = el('button', 'btn ' + (a.approved ? '' : 'ok'), a.approved ? 'Bỏ duyệt' : 'Duyệt lựa chọn này'); btn.type = 'button'; btn.disabled = !canWrite;
+    btn.addEventListener('click', function () { save(it, { approved: !a.approved, choice: cur }); });
+    row.appendChild(btn); c.appendChild(row);
+    return c;
+  }
+
+  function renderAll() {
+    renderLedger();
+    var G = $('#groups'); var focusId = document.activeElement && document.activeElement.id; G.textContent = '';
+    DATA.groups.forEach(function (g, gi) {
+      var sec = el('section', 'group');
+      var hd = el('div', 'group-head'); hd.appendChild(el('h2', null, g.title));
+      var bulk = el('button', 'btn primary', 'Duyệt tất cả mục còn lại theo đề xuất'); bulk.type = 'button'; bulk.id = 'bulk-' + gi;
+      var pending = g.items.filter(function (it) { return !(answers[it.id] && answers[it.id].approved); });
+      bulk.disabled = !canWrite || pending.length === 0;
+      bulk.addEventListener('click', async function () {
+        bulk.disabled = true;
+        for (var i = 0; i < pending.length; i++) { var it = pending[i]; var a = answers[it.id] || {}; await save(it, { approved: true, choice: a.choice || it.recommended }); }
+        toast('Đã duyệt ' + pending.length + ' mục theo đề xuất.');
+      });
+      hd.appendChild(bulk);
+      if (g.intro) hd.appendChild(el('p', null, g.intro));
+      sec.appendChild(hd);
+      g.items.forEach(function (it) { sec.appendChild(card(it)); });
+      G.appendChild(sec);
+    });
+    if (DATA.recorded.length) {
+      var sec = el('section', 'group'); var hd = el('div', 'group-head'); hd.appendChild(el('h2', null, DATA.recordedTitle)); sec.appendChild(hd);
+      var box = el('div', 'recorded');
+      DATA.recorded.forEach(function (r) { var row = el('div', 'r'); row.appendChild(el('span', 'id', r.id)); var t = el('div'); t.appendChild(el('div', null, r.question)); t.appendChild(el('div', 'a', r.answer)); row.appendChild(t); box.appendChild(row); });
+      sec.appendChild(box); G.appendChild(sec);
+    }
+    if (focusId) { var f = document.getElementById(focusId); if (f) f.focus(); }
+  }
+
+  function setStatus(msg, warn) { var s = $('#status'); s.textContent = msg; s.className = 'notice' + (warn ? ' warn' : ''); s.hidden = !msg; }
+
+  renderAll();
+
+  (async function connect() {
+    if (!window.claude || !window.claude.use) { setStatus('Bản xem này không lưu được câu trả lời. Mở trang trên claude.ai để duyệt.', true); return; }
+    var dbP = window.claude.use('db'), userP = window.claude.use('user');
+    db = await dbP; user = await userP;
+    if (!db) { setStatus('Bản xem này không lưu được câu trả lời. Đăng nhập claude.ai rồi mở lại trang để duyệt.', true); return; }
+    try { myId = user ? await user.id() : null; } catch (e) { myId = null; }
+    var w = null; try { w = user ? await user.can('data.write') : null; } catch (e) { w = null; }
+    canWrite = w !== false;
+    setStatus(canWrite ? '' : 'Bạn chỉ có quyền xem trang này. Nhờ Nghiệp cấp quyền Contributor để duyệt.', !canWrite);
+    db.collection('answers').onSnapshot(async function (snap) {
+      var next = {}; snap.docs.forEach(function (d) { if (d.exists) next[d.id] = d.data(); });
+      answers = next;
+      var ids = Object.keys(next).map(function (k) { return next[k].by; }).filter(Boolean);
+      if (user && ids.length) { try { var ps = await user.profiles(ids); ids.forEach(function (id) { names[id] = (ps[id] && ps[id].name) || 'người duyệt'; }); } catch (e) {} }
+      renderAll();
+    }, function () { setStatus('Mất kết nối nơi lưu câu trả lời. Tải lại trang để tiếp tục.', true); });
+  })();
+})();
+</script>

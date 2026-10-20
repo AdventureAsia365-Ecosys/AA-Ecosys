@@ -1,0 +1,2456 @@
+<title>Hệ thống viết tự học</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: an approval docket. Sticky tab strip, a summary ledger, then one card per item; documents read in a 72ch column. */
+:root {
+  --paper: #f6f7f9; --sheet: #ffffff; --ink: #18202b; --muted: #5b6676; --rule: #dde2ea;
+  --accent: #1f5f8b; --accent-soft: #e3eef6; --ok: #1d7a4f; --ok-soft: #e2f3ea; --warn: #9a5b00; --warn-soft: #fbefdc;
+  --chip: #eef1f5;
+  --f-display: "Lora", Georgia, "Times New Roman", serif;
+  --f-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #11161d; --sheet: #18202a; --ink: #e6ebf2; --muted: #9aa6b6; --rule: #2a3442;
+  --accent: #7ab8e3; --accent-soft: #1b3346; --ok: #5cc995; --ok-soft: #173327; --warn: #e8b05a; --warn-soft: #3a2c14;
+  --chip: #222c38; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #11161d; --sheet: #18202a; --ink: #e6ebf2; --muted: #9aa6b6; --rule: #2a3442;
+  --accent: #7ab8e3; --accent-soft: #1b3346; --ok: #5cc995; --ok-soft: #173327; --warn: #e8b05a; --warn-soft: #3a2c14;
+  --chip: #222c38; color-scheme: dark }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sheet); }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { background: var(--sheet); border-bottom: 1px solid var(--rule); }
+header.top .wrap { padding-block: 28px 18px; display: grid; gap: 8px; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { font-family: var(--f-display); font-size: clamp(26px, 4vw, 36px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); max-width: 72ch; margin: 0; }
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--sheet); border-bottom: 1px solid var(--rule); }
+nav.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; }
+nav.tabs button { font: 600 14px var(--f-body); color: var(--muted); background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 14px 10px; cursor: pointer; white-space: nowrap; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+nav.tabs button:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+main .wrap { padding-block: 24px 64px; }
+.ledger { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.ledger .cell { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: grid; gap: 6px; }
+.ledger .k { font-size: 13px; color: var(--muted); }
+.ledger .v { font: 600 22px var(--f-body); font-variant-numeric: tabular-nums; }
+.bar { height: 6px; background: var(--chip); border-radius: 3px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--ok); width: 0; transition: width .3s; }
+.notice { border: 1px solid var(--rule); background: var(--sheet); border-radius: 8px; padding: 12px 14px; color: var(--muted); margin-bottom: 18px; }
+.notice.warn { background: var(--warn-soft); color: var(--ink); border-color: transparent; }
+.group { margin-top: 28px; display: grid; gap: 12px; }
+.group-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+.group-head h2 { font-family: var(--f-display); font-size: 22px; margin: 0; }
+.group-head p { margin: 0; color: var(--muted); flex-basis: 100%; max-width: 72ch; }
+.btn { font: 600 14px var(--f-body); border-radius: 6px; padding: 8px 14px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); cursor: pointer; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--sheet); }
+.btn.ok { background: var(--ok); border-color: var(--ok); color: var(--sheet); }
+.btn:disabled { opacity: .5; cursor: default; }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+.card.done { border-color: var(--ok); }
+.card-top { display: flex; gap: 10px; align-items: flex-start; }
+.id { font: 500 13px var(--f-mono); background: var(--chip); border-radius: 4px; padding: 2px 6px; flex: none; margin-top: 2px; }
+.q { font-weight: 600; flex: 1; min-width: 0; }
+.pill { font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 10px; flex: none; white-space: nowrap; }
+.pill.wait { background: var(--chip); color: var(--muted); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.diff { background: var(--warn-soft); color: var(--warn); }
+.ctx { font-size: 14px; color: var(--muted); max-width: 80ch; }
+.ctx b { color: var(--ink); font-weight: 600; }
+.proposal { background: var(--accent-soft); border-radius: 6px; padding: 10px 12px; font-size: 14px; }
+.proposal .lbl { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--accent); display: block; margin-bottom: 2px; }
+.opts { display: grid; gap: 6px; }
+.opt { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; cursor: pointer; }
+.opt input { margin-top: 4px; accent-color: var(--accent); }
+.opt.sel { border-color: var(--accent); background: var(--accent-soft); }
+.opt .key { font: 500 13px var(--f-mono); color: var(--muted); }
+.opt .rec { font-size: 11px; font-weight: 700; color: var(--ok); text-transform: uppercase; letter-spacing: .05em; margin-left: 6px; white-space: nowrap; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+textarea { width: 100%; box-sizing: border-box; min-height: 40px; font: 14px var(--f-body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; resize: vertical; }
+.who { font-size: 12px; color: var(--muted); }
+details.why summary { cursor: pointer; font-size: 13px; color: var(--accent); font-weight: 600; }
+details.why div { font-size: 14px; color: var(--muted); margin-top: 6px; max-width: 80ch; }
+.recorded { display: grid; gap: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; }
+.recorded .r { display: grid; grid-template-columns: 56px 1fr; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--rule); }
+.recorded .r:first-child { border-top: 0; }
+.recorded .r .a { color: var(--muted); font-size: 14px; }
+article.doc { max-width: 76ch; margin: 0 auto; }
+article.doc h1 { font-size: 30px; margin: 8px 0 16px; }
+article.doc h2 { font-family: var(--f-display); font-size: 24px; margin: 36px 0 10px; text-wrap: balance; }
+article.doc h3 { font-size: 17px; margin: 24px 0 8px; }
+article.doc p, article.doc li { max-width: 72ch; }
+article.doc code { font: 13px var(--f-mono); background: var(--chip); border-radius: 3px; padding: 1px 4px; overflow-wrap: anywhere; }
+.tablewrap, .codewrap { overflow-x: auto; margin: 12px 0; max-width: 100%; }
+article.doc table { border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; min-width: 520px; }
+article.doc th, article.doc td { border: 1px solid var(--rule); padding: 6px 8px; text-align: left; vertical-align: top; }
+article.doc th { background: var(--chip); }
+.codewrap pre { background: var(--chip); padding: 12px; border-radius: 6px; margin: 0; }
+.codewrap code { background: none; padding: 0; }
+.reflink { text-decoration: underline dotted; text-underline-offset: 3px; }
+pre.mermaid { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px; overflow-x: auto; }
+.toast { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: 6px; font-size: 14px; z-index: 20; }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+
+<header class="top"><div class="wrap">
+  <span class="eyebrow">CIS + portal tenant · Writing Memory v1 · 20/10/2026</span>
+  <h1>Hệ thống viết tự học: chi phí sau khi tối ưu</h1>
+  <p class="lede">Anh đã duyệt toàn bộ D1–D16. Bản tối ưu hạ chi phí Dev từ ~$30–50 xuống ≈ $2,5–20/tháng (thường ~$7), phụ phí mỗi bài S1 từ +17–21% (tính nhầm giá Sonnet) xuống ~1%, thứ tự cổng an toàn giữ nguyên. Còn 4 câu E1–E4 chờ anh bấm duyệt.</p>
+</div></header>
+<nav class="tabs" aria-label="Phần của trang"><div class="wrap" role="tablist">
+<button role="tab" id="tab-duyet" aria-controls="panel-duyet" aria-selected="true" data-tab="duyet">Duyệt</button>
+<button role="tab" id="tab-cat-chi-phi" aria-controls="panel-cat-chi-phi" aria-selected="false" data-tab="cat-chi-phi">Cắt chi phí</button>
+<button role="tab" id="tab-thiet-ke" aria-controls="panel-thiet-ke" aria-selected="false" data-tab="thiet-ke">Thiết kế gốc</button>
+</div></nav>
+<main>
+<section id="panel-duyet" role="tabpanel" aria-labelledby="tab-duyet"><div class="wrap">
+  <div id="status" class="notice">Đang kết nối nơi lưu câu trả lời… Trong lúc chờ, anh/chị vẫn đọc được mọi mục bên dưới.</div>
+  <div class="ledger" id="ledger"></div>
+  <div id="groups"></div>
+</div></section>
+<section id="panel-cat-chi-phi" role="tabpanel" aria-labelledby="tab-cat-chi-phi" hidden><div class="wrap"><article class="doc"><h1>Writing Memory v1: cắt chi phí hằng tháng, giữ nguyên độ an toàn và giá trị học</h1>
+<p>Phiên S245 (vòng 2), 20/10/2026. Tác nhân: Claude Code (subagent). Chỉ đọc: không truy vấn DB, không gọi LLM, không
+sửa repo. Chi phí $0.</p>
+<p>Đầu vào đã đọc đầy đủ: <code>.tmp-session/s245-r2/owner-input.md</code>;
+<code>docs/audits/2026-10-20-S245-writing-learning-loop/README.md</code> (§0, §5, §8, §9, §10, §13) và <code>research/01-current-state.md</code>,
+<code>02-state-of-the-art.md</code>, <code>03-measurement-design.md</code>, phần <code>monthly_cost</code> / <code>safety</code> / <code>phases</code> của option A trong
+<code>research/options.json</code>; memo <code>docs/audits/2026-10-20-S245-m2a-decisions/README.md</code> §1 (giá đơn vị AA-729).</p>
+<p>Code: AA-CIS-App <code>origin/main</code> <strong>b7e6da66</strong>. Riêng <code>shared/llm_client/</code> giống hệt checkout local <code>f9fc32d6</code>
+(đã kiểm bằng <code>git diff</code>), nên số dòng ở thư mục đó đúng cho cả hai. Trạng thái route live lấy từ
+<code>docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json</code> (snapshot 14/10/2026, mục <code>routes</code>).
+Từ đó tới nay không migration nào đổi các route writer.</p>
+<p>Giá: link nguồn kèm ngày truy cập 20/10/2026. Số nào không có trang giá chính thức thì ghi &quot;ước tính&quot;.</p>
+<hr>
+<h2>0. Tóm tắt</h2>
+<ol>
+<li><strong>Con số +17–21% mỗi bài S1 là tính sai giá.</strong> README §10 tính 1,5k token × giá Sonnet ($3/1M). Nhưng writer S1 và
+flag_fix là <strong>Haiku 4.5 ($1/1M)</strong>: <code>s1_generate</code> và <code>s1_flag_fix</code> = <code>haiku</code> trong route live. Tính lại thì
+2 × 1.500 × $1/1M = <strong>$0,003/tour, tức +5–6%</strong>. Với bộ cắt đề xuất còn khoảng <strong>+$0,0005/tour (~1%)</strong>.</li>
+<li><strong>Chi phí Dev hằng tháng: ~$39 (giữa khoảng $30–50) → ~$4–18, thường ~$8–10.</strong> Hai đòn bẩy lớn nhất:<ul>
+<li><strong>Gộp release thành một đợt mỗi tháng.</strong> Đường nhanh L0 (từ vựng, $0) vẫn chạy bất kỳ lúc nào.</li>
+<li><strong>Shadow 20 input có chủ đích</strong> thay cho 50 input, và chỉ chạy cho release có luật viết, ví dụ hoặc tóm tắt sở thích.</li>
+</ul>
+</li>
+<li><strong>Prompt caching giúp rất ít ở quy mô Dev.</strong><ul>
+<li>Haiku 4.5 chỉ cache khi tiền tố ≥ 4.096 token. System prompt A1 chỉ ~1,4k token, nên S1 không bao giờ cache.</li>
+<li>System của T9 (~1,3k token, Sonnet 4.6, ngưỡng 1.024) đã được đánh dấu cache sẵn. Chỉ cần <strong>đặt</strong> HOUSE RULES vào đó,
+không phải viết code mới.</li>
+</ul>
+</li>
+<li><strong>Bedrock Batch (giảm 50%) không dùng được cho vòng học bây giờ:</strong><ul>
+<li>mỗi job cần tối thiểu 100 bản ghi, trong khi R2 và shadow đều ≤ 50;</li>
+<li>batch không có prompt caching;</li>
+<li>hai model judge Luna không có trong danh sách hỗ trợ batch;</li>
+<li>chỉ lượt viết đầu batch được, vòng judge và sửa vẫn chạy on-demand.</li>
+</ul>
+</li>
+<li><strong>Quy trình an toàn giữ nguyên:</strong> replay $0 → golden → shadow → một cú bấm duyệt, kèm kiểm tra sau khi bật trên mọi bài
+mới. Chỗ đổi: ít lượt release hơn và shadow có chủ đích hơn. Rủi ro còn lại được tính bằng số ở §3.</li>
+<li><strong>Câu trả lời D cần chỉnh:</strong><ul>
+<li><strong>D8</strong>: trần $60 → <strong>$25/tháng</strong>, R2 $15 → <strong>$10/lượt release</strong>.</li>
+<li>D10, D12, D14, D15 giữ &quot;có&quot;, chỉ chỉnh chi tiết (§6).</li>
+<li>Thêm 4 câu chốt mới E1–E4 (§7).</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>1. Tính lại điểm xuất phát</h2>
+<h3>1.1 Ai viết bằng model nào (route live 14/10/2026)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Stage</th>
+<th>Model</th>
+<th>Giá vào/ra (1M token)</th>
+<th>Đường gọi</th>
+<th>Nguồn</th>
+</tr>
+</thead><tbody><tr>
+<td><code>s1_generate</code> (A1)</td>
+<td><code>haiku</code> = Claude Haiku 4.5</td>
+<td>$1 / $5</td>
+<td>legacy chain → satellite <code>invoke_claude</code></td>
+<td>ai_audit.json <code>routes[8]</code>; <code>pricing.py:37-39</code></td>
+</tr>
+<tr>
+<td><code>s1_flag_fix</code>, <code>t2_flag_fix</code></td>
+<td><code>haiku</code></td>
+<td>$1 / $5</td>
+<td>như trên</td>
+<td>ai_audit.json <code>routes[7]</code>, <code>[15]</code></td>
+</tr>
+<tr>
+<td><code>t2_generate</code></td>
+<td><code>sonnet</code> = Sonnet 4.6 trên satellite</td>
+<td>$3 / $15</td>
+<td>như trên</td>
+<td><code>routes[16]</code>; <code>bedrock_satellite.py:138</code></td>
+</tr>
+<tr>
+<td><code>t9_write</code></td>
+<td><code>sonnet</code></td>
+<td>$3 / $15</td>
+<td>như trên</td>
+<td><code>routes[22]</code></td>
+</tr>
+<tr>
+<td><code>t9_repair</code></td>
+<td><code>haiku</code> → <code>sonnet</code></td>
+<td>$1 / $5</td>
+<td>như trên</td>
+<td><code>routes[21]</code></td>
+</tr>
+<tr>
+<td>judge (<code>s1_judge</code>, <code>t10_judge</code>, <code>t2_judge</code>…)</td>
+<td><code>gpt-5.6-luna</code> → <code>gpt-6-luna</code> → <code>gpt-6-luna-openai</code></td>
+<td>$0,20/$1,20 và $0,10/$0,50 (<strong>ước tính</strong>: giá list OpenAI, Bedrock chưa công bố)</td>
+<td>Converse</td>
+<td><code>api/migrations/170_llm_stage_routes_and_prices.sql</code> (UPDATE gpt-5.6-luna; INSERT gpt-6-luna); <code>224_openai_last_resort_only.sql</code></td>
+</tr>
+</tbody></table></div><p>Giá Claude lấy từ catalog repo (<code>api/migrations/169_llm_model_catalog.sql</code>, hàng <code>haiku</code> $1/$5 và <code>sonnet</code> $3/$15) và
+khớp giá list Anthropic: Haiku 4.5 $1/$5, Sonnet 4.6 $3/$15 (bảng model của skill claude-api, cache 06/10/2026).
+Trang <a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" rel="noopener">https://aws.amazon.com/bedrock/pricing/</a> (truy cập 20/10/2026) không hiện được bảng giá Anthropic khi tải về,
+nên <strong>giá Bedrock của từng model Claude coi là ước tính bằng giá list</strong>. Hệ số cache: ghi 1,25×, đọc 0,1× giá vào
+(<code>shared/llm_client/pricing.py:47-48</code>).</p>
+<h3>1.2 Phụ phí mỗi bài: README so với tính lại</h3>
+<p>README §10 giả định mỗi lời gọi có chèn bộ nhớ thêm ≈ 1,5k token (≤ 20 dòng luật + 3 ví dụ), giá <strong>$3/1M</strong>.</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Loại bài</th>
+<th>Giá gốc / bài</th>
+<th>README</th>
+<th>Tính lại đúng giá model, giữ thiết kế cũ</th>
+</tr>
+</thead><tbody><tr>
+<td>S1 tour (Haiku)</td>
+<td>$0,048–0,06</td>
+<td>2 lời gọi × $0,0045 ≈ +$0,01 = <strong>+17–21%</strong></td>
+<td>2 × 1.500 × $1/1M = <strong>$0,003 = +5,0–6,3%</strong></td>
+</tr>
+<tr>
+<td>T9 blog (Sonnet)</td>
+<td>$0,094–0,104</td>
+<td>1–3 lời gọi → +$0,005–0,02 = +5–21%</td>
+<td>đúng (Sonnet $3/1M), nhưng lượt sửa câu <code>t9_repair</code> là Haiku → trần thật ≈ 2 × $0,0045 + $0,0015 = $0,0105 (≈ +10–11%)</td>
+</tr>
+<tr>
+<td>T9 LinkedIn (Sonnet)</td>
+<td>~$0,057</td>
+<td>không tính</td>
+<td>1–2 lượt × $0,0045 + sửa $0,0015 = $0,006–0,0105 = <strong>+11–18%</strong></td>
+</tr>
+<tr>
+<td>T2 tour (Sonnet + Haiku fix)</td>
+<td>$0,38 (số cũ, trước AA-792)</td>
+<td>không tính</td>
+<td>$0,0045 + $0,0015 = $0,006 ≈ +1,6%</td>
+</tr>
+</tbody></table></div><p>Kết luận: phụ phí S1 thấp hơn 3 lần so với README. Chỗ thật sự sát ngưỡng dừng mềm +20% là <strong>T9 LinkedIn</strong>, vì bài ngắn
+mà giá đơn vị rẻ.</p>
+<h3>1.3 Hai câu trong README §10 cần sửa</h3>
+<ul>
+<li><p><strong>&quot;Caching: tra được, vì <code>LLMClient</code> ghi <code>cache_read_tokens</code> / <code>cache_write_tokens</code> … → truy <code>shared.llm_call_log</code>&quot; là
+sai.</strong> Bảng <code>shared.llm_call_log</code> <strong>không có</strong> cột cache (<code>docs/architecture/db-schema-reference.md:2708-2727</code>), và
+<code>shared/llm_client/call_log.py</code> không ghi trường cache nào. Số cache chỉ nằm ở:</p>
+<ul>
+<li><code>generated_content.metadata.cache_read_tokens</code> / <code>cache_write_tokens</code>, chỉ cho S1
+(<code>api/routers/admin_pipeline.py:269, 284-285</code>);</li>
+<li>dòng log CloudWatch <code>llm_success</code> (<code>shared/llm_client/client.py:423-426, 477-480, 605-608</code>).</li>
+</ul>
+<p><code>cost_usd</code> trong <code>llm_call_log</code> thì <strong>đã</strong> tính giá cache (<code>pricing.py:112-113</code>), nên tổng tiền vẫn đúng.</p>
+</li>
+<li><p><strong>&quot;Tính lại … ≈ +17–21% cho S1&quot;</strong> (§5.3 và §10) dùng nhầm giá Sonnet (xem §1.2).</p>
+</li>
+</ul>
+<h3>1.4 Ngân sách Dev hằng tháng theo README, làm cơ sở so sánh</h3>
+<p>README §10 không cộng ra từng dòng, nên dưới đây là kịch bản &quot;giữa&quot; để so sánh. Tổng $39 nằm trong khoảng $30–50 README đã nêu.</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Dòng</th>
+<th>Giả định (từ README §10)</th>
+<th>Kịch bản giữa</th>
+</tr>
+</thead><tbody><tr>
+<td>Mine luật</td>
+<td>hằng tuần (4,3 lượt) × $0,3–1</td>
+<td><strong>$3</strong></td>
+</tr>
+<tr>
+<td>R2 golden</td>
+<td>2–3 release × $3–10 (chỉ tầng bị ảnh hưởng)</td>
+<td>2,5 × $6,5 = <strong>$16,25</strong></td>
+</tr>
+<tr>
+<td>Shadow</td>
+<td>≤ 50 input × $0,05–0,10 = $5–10 / release</td>
+<td>2,5 × $7,5 = <strong>$18,75</strong></td>
+</tr>
+<tr>
+<td>R0, R1, embedding</td>
+<td>$0–2</td>
+<td><strong>$1</strong></td>
+</tr>
+<tr>
+<td><strong>Tổng</strong></td>
+<td></td>
+<td><strong>$39</strong></td>
+</tr>
+</tbody></table></div><p>Giá đơn vị một mẫu golden, dùng cho mọi phép tính sau (memo M2a §1):</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Tầng</th>
+<th>Giá / mẫu</th>
+<th>Số mẫu</th>
+<th>Tiền cả tầng</th>
+</tr>
+</thead><tbody><tr>
+<td>S1</td>
+<td>$0,06</td>
+<td>50</td>
+<td>$3,0</td>
+</tr>
+<tr>
+<td>T2 (số cũ, trước AA-792)</td>
+<td>$0,38</td>
+<td>10</td>
+<td>$3,8</td>
+</tr>
+<tr>
+<td>blog</td>
+<td>$0,10</td>
+<td>15</td>
+<td>$1,5</td>
+</tr>
+<tr>
+<td>LinkedIn</td>
+<td>$0,057</td>
+<td>15</td>
+<td>$0,86</td>
+</tr>
+</tbody></table></div><hr>
+<h2>2. Danh sách tối ưu, xếp theo số tiền tiết kiệm</h2>
+<p>Số &quot;tiết kiệm&quot; tính <strong>riêng từng mục</strong> so với kịch bản giữa $39. Khi gộp, các mục chồng lên nhau, nên tổng gộp nằm ở §4,
+không phải tổng cộng dồn của bảng này. &quot;Công&quot; tính theo phiên agent.</p>
+<h3>#1. Release theo đợt hằng tháng (release train), L0 vẫn chạy bất kỳ lúc nào</h3>
+<ul>
+<li><strong>Đổi gì:</strong><ul>
+<li>Luật <code>writer_instruction</code>, <code>repair_hint</code>, ví dụ và tóm tắt sở thích gom vào <strong>một release mỗi tháng</strong> cho mỗi người viết.</li>
+<li>Luật <code>lexicon</code> vẫn đi đường nhanh L0 (R0 $0 + cú bấm) bất kỳ lúc nào.</li>
+<li>Rút lại là lật con trỏ, $0, không chờ đợt.</li>
+<li>Chỉ có release &quot;khẩn&quot; khi cần sửa gấp một dừng cứng.</li>
+</ul>
+</li>
+<li><strong>Tiết kiệm:</strong><ul>
+<li>R2: (2,5 − 1) × $6,5 = $9,75.</li>
+<li>Shadow: (2,5 − 1) × $7,5 = $11,25.</li>
+<li><strong>Cộng ≈ −$21/tháng (39 → 18).</strong> Mỗi bài: $0.</li>
+</ul>
+</li>
+<li><strong>An toàn / giá trị học:</strong><ul>
+<li>Mọi cổng giữ nguyên.</li>
+<li>Thiệt: luật viết chờ tối đa ~30 ngày mới chạm bài.</li>
+<li>Bù lại: L0, phần chị Thư nhìn thấy rõ nhất (&quot;không còn viết X&quot;), vẫn đi ngay. Dữ liệu Dev cũng ít (4 tenant thử, ~48
+bản T2, ~251 bài T9; README §11), nên mỗi tuần hiếm khi có cụm đủ ngưỡng (luật tenant cần ≥ 2 lần sửa trên ≥ 2 bài).</li>
+<li>Gộp nhiều luật vào một release làm khó quy công cho từng luật. Khắc phục: R0 replay từng luật riêng ($0). Chỉ khi
+release trượt mới chạy loại-bỏ-từng-luật, và chỉ trên tầng bị trượt.</li>
+</ul>
+</li>
+<li><strong>Công:</strong> ~0 (chính sách + lịch job; nút &quot;đóng đợt&quot; trên tab Releases).</li>
+<li><strong>Bằng chứng:</strong> README §10 ghi &quot;2–3 release/tháng&quot;; ngân sách R2 và shadow tính theo release (README §10;
+options.json A <code>safety[4]</code>).</li>
+</ul>
+<h3>#2. Shadow: 20 input có chủ đích, chỉ cho loại release cần</h3>
+<ul>
+<li><strong>Đổi gì:</strong><ul>
+<li>Shadow replay chạy trên <strong>20</strong> input thật gần nhất (không phải 50) của người viết bị ảnh hưởng. Ưu tiên input mà gate
+hoặc cụm mục tiêu từng bắn, và loại input đã có trong golden set.</li>
+<li><strong>Bỏ shadow</strong> cho release chỉ có <code>lexicon</code> (đã bỏ sẵn ở README §5.4) và release chỉ có <code>repair_hint</code>. <code>repair_hint</code> chỉ
+chèn khi gate bắn, nên R2 đã đo đủ.</li>
+<li>Release tenant: shadow chỉ trên input của chính tenant đó.</li>
+</ul>
+</li>
+<li><strong>Tiết kiệm:</strong><ul>
+<li>Mỗi release-người viết: 50 × $0,05–0,10 = $2,5–5 → 20 × $0,05–0,10 = <strong>$1–2</strong>.</li>
+<li>Kịch bản giữa ($7,5/release ≈ 1,5 người viết): còn ~$2,25.</li>
+<li>Riêng mục này, giữ 2,5 release: 18,75 → 5,6 = <strong>−$13/tháng</strong>. Gộp với #1: 7,5 → 2,25 = −$5,25 thêm.</li>
+</ul>
+</li>
+<li><strong>An toàn (tính ra số):</strong><ul>
+<li><p>Shadow là lớp kiểm <strong>trước khi bật</strong> cho dừng cứng 2 (rò tenant) và 3 (dấu vết QA). Hai dừng này đều tất định.</p>
+</li>
+<li><p>Với tỉ lệ vi phạm p trên mỗi bài, xác suất bắt được ≥ 1 ca = 1 − (1 − p)^n:</p>
+<ul>
+<li>p = 5%: n = 50 → 92%; n = 20 → 64%.</li>
+<li>p = 10%: n = 50 → 99,5%; n = 20 → 88%.</li>
+<li>p = 15%: n = 20 → 96%.</li>
+</ul>
+</li>
+<li><p>Có giảm, nhưng còn hai lớp khác:</p>
+<ul>
+<li><strong>R2 golden</strong> đã có isolation probe và grep dấu vết QA;</li>
+<li>README §8.2 đã có <strong>kiểm sau khi bật trên mọi bài mới</strong>, vi phạm thì tự rút lại.</li>
+</ul>
+<p>Nên một lỗi lọt shadow chỉ sống tới bài đầu tiên vi phạm. Trên Dev, tenant là dữ liệu thử.</p>
+</li>
+<li><p>Chọn input &quot;có chủ đích&quot; làm p của đúng hành vi đang đổi cao hơn p ngẫu nhiên.</p>
+</li>
+<li><p>Giá trị học: không đổi, vì shadow không sinh luật.</p>
+</li>
+</ul>
+</li>
+<li><strong>Công:</strong> −0,05 (job đơn giản hơn).</li>
+<li><strong>Bằng chứng:</strong> README §5.4 (L0 bỏ qua R2/shadow), §8.2 (&quot;Theo dõi sau khi bật (có từ P3…)&quot;), §10 dòng Shadow.</li>
+</ul>
+<h3>#3. Chặn chi tiêu R2 vô ích: lọc $0 trước, dừng sớm khi trượt</h3>
+<ul>
+<li><strong>Đổi gì:</strong><ul>
+<li><p><strong>(a) Lọc R0 $0 trước R2.</strong> Ứng viên chỉ được vào R2 khi replay trên <code>gate_ledger</code> / <code>repair_log</code> / <code>writing_signal</code>
+đã lưu cho thấy cụm mục tiêu <strong>còn tái diễn ≥ k lần trong 30 ngày</strong> (k là config, đề xuất 3). Với luật <code>lexicon</code> và
+<code>repair_hint</code>, R0 còn đếm được số lần luật sẽ kích hoạt. Ứng viên không có tác dụng dự kiến thì dừng ở R0.</p>
+</li>
+<li><p><strong>(b) Chạy R2 theo thứ tự, dừng ngay khi trượt.</strong> Trình tự: thử 3 mẫu → phần tune (70%) của <strong>đúng tầng bị ảnh hưởng</strong>
+→ holdout (30%), chỉ khi tune đạt.</p>
+<p>Dừng ngay khi có dừng cứng 1 (≥ 1 lỗi B-class/C1 mới), hoặc khi tune cho thấy chỉ số mục tiêu không tốt hơn
+(futility). <strong>Không bao giờ dừng sớm vì &quot;thấy tốt&quot;</strong>: promote vẫn cần đủ tune + holdout.</p>
+</li>
+<li><p><strong>(c) Không bao giờ sinh lại nhánh đối chứng.</strong> Đối chứng là output đã lưu của release đang active. Release 0 chính là
+baseline AA-729 (README §8.1: &quot;Đo baseline AA-729 trước release đầu tiên&quot;). Chỉ khi release ở trạng thái <code>reverify</code>
+(đổi route model, đổi gate theo AA-787, đổi fixture) mới sinh lại đối chứng.</p>
+</li>
+</ul>
+</li>
+<li><strong>Tiết kiệm:</strong><ul>
+<li>(c) không giảm so với ước tính README (vì $3–10/lượt của README đã là một nhánh), nhưng <strong>chặn rủi ro nhân đôi R2</strong> nếu
+runner sinh lại cả hai nhánh.</li>
+<li>(a) + (b), <strong>ước tính:</strong><ul>
+<li>Giả sử 1/3 ứng viên dừng ở R0, và 1/3 số còn lại trượt ở tune (tiêu ~0,7 + phần thử 3 mẫu). Chi phí R2 kỳ vọng ≈
+(2/3) × [(2/3) × 1 + (1/3) × 0,75] = 0,61 của mức cũ.</li>
+<li>Riêng mục này: 16,25 → ~10 = <strong>−$6/tháng</strong>. Gộp với #1: 6,5 → ~4.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>An toàn / giá trị học:</strong><ul>
+<li>Dừng sớm chỉ theo hướng <strong>từ chối</strong>, nên không tăng rủi ro bật nhầm.</li>
+<li>Dùng output đối chứng đã lưu thì không đo được độ ngẫu nhiên của chính lần sinh đối chứng. Phép so cặp (McNemar,
+Wilcoxon) vẫn đúng trên cùng mẫu. Độ nhiễu được bù bằng quy tắc &quot;gộp ≥ 2 vòng&quot; đã có (README §8.2 Promote).</li>
+<li>Ứng viên bị loại ở R0 vẫn nằm ở tab Candidates; tháng sau cụm quay lại thì được xét lại.</li>
+</ul>
+</li>
+<li><strong>Công:</strong> +0,2 (R0 counterfactual theo mẫu <code>s245_f9_counterfactual.py</code>; hai checkpoint trong runner R2).</li>
+<li><strong>Bằng chứng:</strong> README §5.4, §8.2; <code>research/03-measurement-design.md</code> §5 (R0 &quot;current rule must reproduce observed
+numbers first&quot;); memo M2a §1 (one-arm $8,6–10,4 cho 100 mẫu; &quot;Before/after cần lần chạy thứ hai, hoặc chỉ chạy lớp bị
+ảnh hưởng (riêng S1 ~$3)&quot;).</li>
+</ul>
+<h3>#4. Ngân sách token và chỗ chèn: giảm phụ phí mỗi bài</h3>
+<ul>
+<li><strong>Đổi gì:</strong><ol>
+<li><strong>Trần token cứng theo người viết:</strong><ul>
+<li>luật nền tảng ≤ 400 token (12 dòng × ≤ 25 từ, không phải ≤ 300 ký tự như <code>writing_rule.instruction</code> trong options.json A <code>data_model[2]</code>);</li>
+<li>luật tenant ≤ 250 token;</li>
+<li>ví dụ ≤ 2 × 150 token.</li>
+</ul>
+</li>
+<li><strong>A1/S1 không chèn ví dụ ở v1</strong>, chỉ luật nền tảng. Lỗi A1 chủ yếu là sự thật, từ cấm và cấu trúc (README §6). A1 là
+nội dung trung tính, không có giọng tenant, nên ví dụ giọng mang ít giá trị.</li>
+<li>Ví dụ <strong>chỉ ở lượt viết đầu</strong> (README đã nêu). Lượt 2 (<code>rewrite_with_feedback</code>) chỉ có luật.</li>
+<li><code>repair_hint</code> chỉ chèn khi gate tương ứng bắn (README đã nêu). Flag_fix chỉ nhận hint của mã bị cờ (~60 token), không
+nhận khối HOUSE RULES.</li>
+<li>Lọc theo <code>applies_to</code>: luật chỉ cho social (dòng mở đầu, hashtag) không vào blog, và ngược lại.</li>
+</ol>
+</li>
+<li><strong>Tiết kiệm mỗi bài</strong> (Sonnet $3/1M, Haiku $1/1M; tính trên đường xấu nhất, chưa có cache hit):<ul>
+<li><p><strong>S1:</strong> 1,1 lượt viết × 400 × $1/1M + 60 × $1/1M = $0,00044 + $0,00006 = <strong>$0,0005 (+0,8–1,0%)</strong>, thay vì $0,003.
+Hệ số 1,1 lượt viết/tour là ước tính từ &quot;94% tới Master ngay&quot; (03-measurement-design §1).</p>
+</li>
+<li><p><strong>T9 blog</strong>, lượt 1 = 400 (luật nền tảng) + 250 (luật tenant) + 300 (ví dụ) = 950 token:</p>
+<ul>
+<li>lượt 1: 950 × $3/1M = $0,00285;</li>
+<li>lượt 2 (giả định 50% bài cần): 650 × $3/1M × 0,5 = $0,00098;</li>
+<li>sửa câu (Haiku): $0,00006.</li>
+</ul>
+<p>Cộng ≈ <strong>$0,0039 (+3,8–4,1%)</strong>, thay vì tới +10–21%.</p>
+</li>
+<li><p><strong>T9 LinkedIn:</strong> cùng phép tính ≈ $0,0039 trên $0,057 = <strong>+6,8%</strong>, thay vì +11–18%.</p>
+</li>
+<li><p><strong>T2:</strong> 950 × $3/1M + 60 × $1/1M = $0,0029 (≈ +0,8% của $0,38).</p>
+</li>
+<li><p><strong>Tháng trên Dev:</strong> không đáng kể (vài chục bài).</p>
+</li>
+</ul>
+</li>
+<li><strong>An toàn / giá trị học:</strong><ul>
+<li>Trần token ép luật ngắn, hợp với khuyến cáo &quot;context collapse&quot; của ACE (research/02 §2.1).</li>
+<li>Bỏ ví dụ ở A1 làm mất một kênh học giọng nền tảng. Vì vậy cần đo: nếu sau P3 chỉ số &quot;sửa nhẹ trở xuống&quot; của A1 không
+tốt lên, bật lại ví dụ cho A1 bằng một release riêng.</li>
+</ul>
+</li>
+<li><strong>Công:</strong> ~0 (P3 vốn đã có &quot;trần token&quot;, README §9 P3).</li>
+<li><strong>Bằng chứng:</strong><ul>
+<li>điểm chèn A1: lessons nối vào <code>brand_rules[&quot;system_prompt&quot;]</code> ở <code>api/routers/admin_pipeline.py:560-583</code> và
+<code>services/content_generation/s1_batch.py:108-122</code>;</li>
+<li>system A1: <code>services/content_generation/batch_prompt.py:158-176</code>;</li>
+<li>T9 write và rewrite: <code>services/acp_content_writing/generate.py:201-202, 264-265</code>;</li>
+<li>repair: <code>generate.py:277, 339-340</code>;</li>
+<li><code>_repair_feedback</code>: <code>service.py:1031-1039</code>;</li>
+<li>flag_fix: <code>services/content_generation/flag_fix_node.py:560-568</code>.</li>
+</ul>
+</li>
+</ul>
+<h3>#5. Bộ ví dụ &quot;ghim&quot; theo release thay cho truy xuất kNN mỗi lời gọi</h3>
+<ul>
+<li><strong>Đổi gì:</strong><ul>
+<li>Mỗi release tenant chứa một <strong>bộ cố định 2 ví dụ / (tenant × người viết × kênh)</strong>, chọn và che thực thể lúc đúc
+release, được duyệt cùng release.</li>
+<li>Không truy xuất k=3 theo độ gần ở mỗi lời gọi, nên v1 không cần index ivfflat và không cần embedding mỗi bài.</li>
+</ul>
+</li>
+<li><strong>Tiết kiệm:</strong><ul>
+<li>Tiền: embedding (README: &lt; $0,10/tháng) và token ví dụ thay đổi theo từng lời gọi.</li>
+<li>Quan trọng hơn: bộ cố định đứng yên theo release, nên đặt được trong tiền tố ổn định để cache (#7). Ví dụ kNN thì
+không, vì nó đổi mỗi lời gọi.</li>
+<li>Công: <strong>−0,25 phiên ở P4</strong> (bỏ ivfflat + đường truy xuất).</li>
+</ul>
+</li>
+<li><strong>An toàn / giá trị học:</strong><ul>
+<li><strong>An toàn tăng.</strong> Ví dụ được duyệt một lần, shadow và R2 thấy đúng bộ ví dụ sẽ chạy. Không còn &quot;truy xuất lúc chạy
+lấy nhầm đoạn&quot;. Test cách ly đơn giản: release tenant A chỉ chứa id của tenant A.</li>
+<li>Giá trị học giảm nhẹ: Liu et al. (2101.06804) cho thấy ví dụ gần nghĩa tốt hơn ví dụ ngẫu nhiên. Nhưng ở đây ví dụ chỉ
+dùng để học <strong>giọng</strong>, đã che thực thể. Có thể quay lại kNN khi có tenant thật, bằng một release thử A/B.</li>
+</ul>
+</li>
+<li><strong>Bằng chứng:</strong> README §5.1 (&quot;lấy 3 đoạn gần nhất&quot;), §9 P4 (&quot;<code>writing_exemplar</code> + ivfflat; … k=3&quot;); options.json A
+<code>data_model[3]</code>.</li>
+</ul>
+<h3>#6. Mỏ luật: chạy khi đủ tín hiệu, soạn bằng model judge rẻ hơn</h3>
+<ul>
+<li><strong>Đổi gì:</strong><ul>
+<li><code>writing_memory_mine</code> chỉ chạy khi có <strong>≥ 10 tín hiệu mới đã qua lọc sự thật</strong> kể từ lượt trước, tối đa 2 lượt/tháng,
+và luôn có một lượt trước ngày đóng đợt release.</li>
+<li>Chỉ cụm đã vượt ngưỡng (đếm bằng SQL, $0) mới được gửi LLM.</li>
+<li>Model soạn: route <code>gpt-6-luna</code> → <code>gpt-5.6-luna</code> → <code>gpt-6-luna-openai</code>, thay cho <code>gpt-5.6-luna</code> đứng đầu. Vẫn là model
+không phải Anthropic, nên giữ luật vendor của app ADR 0006 §5.</li>
+<li>Trước khi đổi: chạy kiểm κ một lần, cùng 20 cụm cho cả hai model soạn. Tiêu chí: tỉ lệ luật qua lint + PREDICT (luật
+giải thích được ≥ 2 lần sửa) không thấp hơn quá 10 điểm. Chi phí kiểm ≈ 40 lời gọi × $0,006–0,02 ≈ $0,25–0,8, một lần.</li>
+</ul>
+</li>
+<li><strong>Tiết kiệm:</strong><ul>
+<li>Giá: gpt-6-luna $0,10/$0,50 so với gpt-5.6-luna $0,20/$1,20, nên rẻ ~50–58% (ước tính, giá list OpenAI theo
+migration 170).</li>
+<li>Mỗi lượt: $0,3–1 → ~$0,15–0,5. Số lượt: 4,3 → ≤ 2.</li>
+<li>Tháng: $3 → 2 × $0,15–0,5 = <strong>$0,3–1,0 (−$2–2,7)</strong>.</li>
+</ul>
+</li>
+<li><strong>An toàn / giá trị học:</strong><ul>
+<li>Luật soạn ra vẫn qua lint chỉ-hạn-chế, chặn 5-gram, PREDICT, R0–R2 và cú bấm duyệt, nên model soạn kém hơn chỉ làm tụt
+phễu ứng viên, không làm bật luật xấu.</li>
+<li>Nếu κ trượt thì giữ route cũ.</li>
+<li>Lưu ý: gpt-6-luna đã là model chính ở nhiều stage validate (<code>a3_atomize</code>, <code>s1_source_facts</code>, <code>t10_claims</code>) và là shadow
+10% của các judge (ai_audit.json <code>routes</code>). Nó đã chạy ổn trên acc3.</li>
+</ul>
+</li>
+<li><strong>Công:</strong> ~0,05 (một dòng seed <code>llm_role_config</code>, điều kiện kích hoạt job).</li>
+<li><strong>Bằng chứng:</strong> README §5.5, §10 (≤ 50 lệnh/lượt, $0,3–1/lượt); <code>api/migrations/170_llm_stage_routes_and_prices.sql</code>
+(giá Luna).</li>
+</ul>
+<h3>#7. Prompt caching: chỉ cần đặt đúng chỗ, không viết code mới</h3>
+<ul>
+<li><strong>Hiện trạng code:</strong><ul>
+<li>Đường satellite (<code>invoke_claude</code>) gắn <code>cache_control: ephemeral</code> lên <strong>toàn bộ</strong> khối <code>system</code>
+(<code>shared/llm_client/bedrock_satellite.py:315-331</code> → <code>prompt_cache.py:9-17</code>). Mọi writer Claude hiện chạy đường này,
+vì <code>haiku</code> / <code>sonnet</code> là key legacy (<code>client.py:180-185, 314-316</code>).</li>
+<li>User prompt gửi dạng chuỗi trần, không có điểm cache (<code>bedrock_satellite.py:306-310</code>).</li>
+<li>Đường Converse (Luna judge) <strong>không</strong> gửi <code>cachePoint</code> (<code>client.py:524-529</code>). Bedrock tự cache ngầm các tiền tố Luna
+(<code>client.py:597-602</code>).</li>
+</ul>
+</li>
+<li><strong>Ngưỡng tối thiểu</strong> (AWS, <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html</a>, truy cập 20/10/2026):<ul>
+<li>Claude Haiku 4.5: <strong>4.096</strong> token mỗi checkpoint;</li>
+<li>Claude Sonnet 4.6 và Claude Sonnet 5: <strong>1.024</strong>;</li>
+<li>GPT-5.6 Luna: 1.024, TTL 30 phút, Converse không hỗ trợ cache tường minh;</li>
+<li>TTL Claude: 5 phút hoặc 1 giờ.</li>
+</ul>
+</li>
+<li><strong>Áp vào từng người viết</strong> (đếm token bằng ký tự / 4, <strong>ước tính</strong>):<ul>
+<li><strong>A1/S1 (Haiku):</strong><ul>
+<li><code>SYSTEM_PROMPT</code> = 4.924 ký tự ≈ 1.231 token (<code>services/content_generation/prompts.py:191</code>). Cộng dòng ngôn ngữ và
+khối từ cấm (<code>batch_prompt.py:179-211</code>), system ≈ 1,4k token.</li>
+<li>Thêm 400 token luật vẫn ≈ 1,8k, <strong>dưới 4.096 → không bao giờ cache</strong>. Không có gì để tối ưu ở đây; #4 đã làm phần này
+rẻ (~$0,0004/tour).</li>
+</ul>
+</li>
+<li><strong>T9 (Sonnet 4.6):</strong><ul>
+<li><p>System là <code>SYSTEM_PROMPT</code> tĩnh, chung mọi tenant, 5.201 ký tự ≈ 1,3k token (<code>acp_content_writing/prompts.py:184</code>;
+gửi ở <code>generate.py:201</code>). Vượt 1.024, nên <strong>đã được cache</strong> khi hai lời gọi cách nhau &lt; 5 phút.</p>
+</li>
+<li><p>Khối brand tenant nằm trong <strong>user</strong> prompt (<code>prompts.py:334-345</code>, <code>render_brand_block</code> ở dòng 344).</p>
+</li>
+<li><p>→ Đặt <strong>luật nền tảng ngay sau <code>SYSTEM_PROMPT</code></strong> trong system: dùng chung cache mọi tenant.</p>
+</li>
+<li><p>→ Đặt luật tenant và ví dụ trong user prompt, <strong>sau</strong> khối brand, trước CONTENT SEED.</p>
+</li>
+<li><p>Giá cho 400 token luật nền tảng:</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Trường hợp</th>
+<th>Giá / 1M</th>
+<th>400 token</th>
+</tr>
+</thead><tbody><tr>
+<td>Ghi cache</td>
+<td>1,25 × $3 = $3,75</td>
+<td>$0,0015</td>
+</tr>
+<tr>
+<td>Đọc cache</td>
+<td>0,1 × $3 = $0,30</td>
+<td>$0,00012</td>
+</tr>
+<tr>
+<td>Không cache</td>
+<td>$3</td>
+<td>$0,0012</td>
+</tr>
+</tbody></table></div></li>
+<li><p>Với lượt 2 (cache hit) và các bài trong cùng đợt (wave), phụ phí T9 blog từ $0,0039 (#4) còn <strong>$0,0023–0,0037
+(+2,2–3,9%)</strong>. Mức thấp là khi lượt 1 cũng trúng cache.</p>
+</li>
+</ul>
+</li>
+<li><strong>T2 (Sonnet 4.6):</strong> system = T2 base + khối CLIENT BRAND của tenant (<code>batch_prompt.py:114-136</code>), ổn định theo tenant,
+nên luật nền tảng + tenant đặt cuối system sẽ cache trong một đợt T2 của cùng tenant.</li>
+</ul>
+</li>
+<li><strong>Tiết kiệm:</strong> vài phần nghìn đô mỗi bài; mỗi tháng trên Dev ≈ $0. Đây là bước &quot;đặt đúng chỗ&quot; để prod rẻ, không phải
+đòn bẩy cho Dev.</li>
+<li><strong>Cảnh báo:</strong> ghi cache đắt hơn không cache (1,25×). Lưu lượng thưa (mỗi bài cách nhau &gt; 5 phút) thì chèn vào system bị
+tính giá ghi nhiều lần, đắt hơn ~25% so với để trong user. Ở Dev chênh lệch &lt; $0,0003/bài, chấp nhận được. Nếu sau này
+muốn cache cả lớp tenant cho T9 thì phải cho <code>invoke_claude</code> nhận user content dạng block có <code>cache_control</code> (công S–M).
+<strong>Không đề xuất làm bây giờ.</strong></li>
+<li><strong>Đo trước khi tin</strong> (read-only, chưa chạy):<ul>
+<li>S1 lấy từ <code>generated_content.metadata</code>:
+<code>SELECT count(*) FILTER (WHERE (metadata-&gt;&gt;&#39;cache_read_tokens&#39;)::int &gt; 0) AS hit, count(*) FROM silver_aa_internal.generated_content WHERE created_at &gt; now() - interval &#39;30 days&#39;;</code>
+Kỳ vọng hit ≈ 0 vì dưới ngưỡng Haiku.</li>
+<li>T9 lấy từ CloudWatch Logs Insights trên <code>/ecs/aa-cis-dev</code>:
+<code>fields @timestamp, cache_read, cache_write, in_tokens | filter event = &quot;llm_success&quot; and provider = &quot;bedrock-satellite&quot; and model = &quot;sonnet-4-6&quot; | stats sum(cache_read), sum(cache_write), sum(in_tokens)</code></li>
+</ul>
+</li>
+</ul>
+<h3>#8. Golden set nhỏ hơn: hầu như KHÔNG nên</h3>
+<ul>
+<li>Các tầng đã nhỏ: T2 10, blog 15, LinkedIn 15. Holdout 30% của T2 chỉ còn 3 mẫu (README §8.2). Cắt thêm làm mất khả năng
+chặn, mà mỗi tầng chỉ tốn $0,86–3,8.</li>
+<li>Cái đáng làm, và đã nằm trong #3, là <strong>chỉ chạy tầng bị ảnh hưởng</strong>. Release chỉ cho T9 thì không chạy tầng S1 50 mẫu
+(tiết kiệm $3). Ngoại lệ: release đụng S1 hoặc T2 phải chạy tầng &quot;fact-dense&quot; và &quot;tour dài ≥ 9 ngày&quot;, vì T2 dùng chung
+graph S1 (README §6).</li>
+<li>Một lựa chọn nhỏ: với release <strong>chỉ tenant</strong>, tầng S1 không chạy, và tầng T2/T9 chỉ chạy mẫu của đúng tenant đó cộng mẫu
+isolation probe.</li>
+</ul>
+<h3>#9. Bedrock Batch Inference (−50%): KHÔNG làm bây giờ</h3>
+<ul>
+<li><strong>Giảm giá có thật:</strong> &quot;batch inference at a 50% lower price compared to on-demand&quot;
+(<a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" rel="noopener">https://aws.amazon.com/bedrock/pricing/</a>, truy cập 20/10/2026).</li>
+<li><strong>Lý do không dùng:</strong><ol>
+<li><strong>Tối thiểu 100 bản ghi mỗi job</strong> (quota &quot;Minimum number of records per batch inference job&quot;,
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-data.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-data.html</a>; code giữ <code>MIN_BATCH_RECORDS = 100</code>
+ở <code>shared/llm_client/bedrock_batch.py:65-68</code>). R2 một tầng là 10–50 mẫu, shadow 20.<ul>
+<li>Gộp cả đợt tháng theo model: Haiku = 50 (S1) + 20 shadow = 70; Sonnet = 10 + 15 + 15 + 40 = 80. Cả hai vẫn &lt; 100.</li>
+</ul>
+</li>
+<li><strong>Batch không có prompt caching:</strong> &quot;Prompt caching is only supported for on-demand inference endpoints. It is not
+supported with the batch inference API.&quot; (trang prompt-caching ở trên).</li>
+<li><strong>Model judge không có trong danh sách batch.</strong> Bảng
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-supported.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-supported.html</a> (truy cập 20/10/2026) có Claude
+Haiku 4.5 và Sonnet 4.6 (cross-region, gồm us-west-1). Nó <strong>không</strong> có GPT-5.6 Luna, GPT-6 Luna hay Claude Sonnet 5.</li>
+<li><strong>Chỉ lượt viết đầu batch được.</strong> Vòng judge ↔ viết lại vẫn on-demand (<code>bedrock_batch.py:1-5</code>). Lượt viết chiếm
+khoảng một nửa giá một mẫu, nên mức giảm thật ≈ 25%, không phải 50%.</li>
+<li><strong>Quyền batch trên acc3 chưa chắc.</strong> <code>bedrock_satellite.py:72-79</code> ghi role acc3 <em>không có</em> quyền batch, còn
+<code>bedrock_batch.py:20-23</code> ghi <em>có</em> (AA-399). AA-606 STEP0 còn mở (<code>bedrock_batch.py:65-67</code>). Profile batch cho
+<code>global.</code> chưa được trang AWS xác nhận.</li>
+</ol>
+</li>
+<li><strong>Xem lại khi:</strong> prod có ≥ 100 bản ghi / model / đợt. Ví dụ R2 chạy lại toàn bộ golden set sau khi đổi route model.</li>
+</ul>
+<h3>Mục nhỏ đi kèm (≤ $0,5/tháng)</h3>
+<ul>
+<li>Đặt <code>shadow_sample_pct = 0</code> cho stage <code>memory_eval</code> / <code>memory_shadow</code>. Seed stage mới bằng cách copy route writer/judge
+thì không copy shadow 10% gpt-6-luna của judge (ai_audit.json: <code>s1_judge</code> shadow 10%). Lý do: shadow model trên lượt eval
+không mang thông tin gì.</li>
+<li>Embedding cho ví dụ: bỏ hẳn ở v1 nhờ #5.</li>
+</ul>
+<hr>
+<h2>3. An toàn: thứ tự cổng giữ nguyên, rủi ro còn lại</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Cổng (README §5.4, §8.2)</th>
+<th>Trước</th>
+<th>Sau bộ cắt</th>
+<th>Thay đổi rủi ro</th>
+</tr>
+</thead><tbody><tr>
+<td>R0 replay $0</td>
+<td>Có</td>
+<td>Có, mạnh hơn (lọc ứng viên, #3a)</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>R2 golden + holdout 30%</td>
+<td>2–3 lần/tháng, tầng bị ảnh hưởng</td>
+<td>1 lần/tháng, tầng bị ảnh hưởng, dừng sớm <strong>chỉ khi trượt</strong></td>
+<td>Không, vì promote vẫn cần đủ tune + holdout</td>
+</tr>
+<tr>
+<td>Shadow</td>
+<td>50 input / người viết / release</td>
+<td>20 input có chủ đích; bỏ cho release <code>lexicon</code> / <code>repair_hint</code>-only</td>
+<td>Bắt vi phạm hiếm kém hơn trước khi bật: p = 5% → 92% còn 64% (§2 #2). Bù bằng kiểm sau khi bật trên mọi bài mới, có tự rút lại</td>
+</tr>
+<tr>
+<td>Cú bấm duyệt (D6 a)</td>
+<td>Có</td>
+<td>Có, gom một lần/tháng</td>
+<td>Người duyệt đỡ tải hơn</td>
+</tr>
+<tr>
+<td>Kiểm sau khi bật (isolation + grep QA)</td>
+<td>Có từ P3</td>
+<td>Không đổi</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>Rút lại = lật con trỏ</td>
+<td>$0</td>
+<td>$0, không chờ đợt</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>Ví dụ</td>
+<td>kNN lúc chạy</td>
+<td>Bộ ghim, được duyệt trong release</td>
+<td><strong>Rủi ro giảm</strong></td>
+</tr>
+</tbody></table></div><p>Giá trị học thay đổi:</p>
+<ul>
+<li>Luật viết chậm tối đa ~30 ngày; L0 không chậm.</li>
+<li>A1 tạm không có ví dụ, có cửa bật lại (§2 #4).</li>
+<li>Ví dụ ít &quot;đúng ngữ cảnh&quot; hơn kNN (§2 #5).</li>
+</ul>
+<p>KPI và tiêu chí dừng ở README §8 giữ nguyên, gồm dừng mềm &quot;chi phí/bài +20%&quot;.</p>
+<hr>
+<h2>4. Ngân sách Dev hằng tháng với bộ đề xuất (#1–#7)</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Dòng</th>
+<th>Trước (kịch bản giữa)</th>
+<th>Sau</th>
+<th>Cách tính</th>
+</tr>
+</thead><tbody><tr>
+<td>Mine luật</td>
+<td>$3</td>
+<td><strong>$0,3–1,0</strong></td>
+<td>≤ 2 lượt × $0,15–0,5 (#6)</td>
+</tr>
+<tr>
+<td>R2 golden</td>
+<td>$16,25</td>
+<td><strong>$1,3–6</strong></td>
+<td>1 release/tháng × tầng bị ảnh hưởng: T9 social + blog = $0,86 + $1,5 = $2,36; thêm S1 $3; thêm T2 $3,8 (số cũ); × 0,61 do lọc R0 + dừng sớm (#3); + thử 3 mẫu ~$0,3. Thấp: một tầng LinkedIn ≈ $0,86 × 0,61 + 0,3 = $0,8–1,3. Cao: đủ 4 người viết ≈ $9,2 × 0,61 + 0,3 ≈ $6</td>
+</tr>
+<tr>
+<td>Shadow</td>
+<td>$18,75</td>
+<td><strong>$0–4</strong></td>
+<td>20 × $0,05–0,10 × 1–2 người viết (#2); $0 khi release chỉ L0 / <code>repair_hint</code></td>
+</tr>
+<tr>
+<td>R0, R1, embedding</td>
+<td>$1</td>
+<td><strong>$0–0,5</strong></td>
+<td>R0 $0; embedding bỏ (#5); R1 ~$0,1–0,5 khi có</td>
+</tr>
+<tr>
+<td>Dự phòng <code>reverify</code> (AA-787 đổi gate, đổi route)</td>
+<td>(nằm trong trần $60)</td>
+<td><strong>$1–3</strong></td>
+<td>~1 lần/quý × chạy lại tầng bị ảnh hưởng $3–9</td>
+</tr>
+<tr>
+<td>Kiểm κ model soạn luật (một lần)</td>
+<td>—</td>
+<td>$0,25–0,8 một lần</td>
+<td>§2 #6</td>
+</tr>
+<tr>
+<td><strong>Tổng / tháng</strong></td>
+<td><strong>$39 ($30–50)</strong></td>
+<td><strong>≈ $3–15, thường ~$7–10</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Trần đề xuất (D8)</td>
+<td>$60/tháng, $15/lượt R2</td>
+<td><strong>$25/tháng, $10/lượt R2 release</strong></td>
+<td>Lượt baseline/reverify toàn bộ (≤ $15) vẫn theo D4/AA-729 và cần duyệt riêng</td>
+</tr>
+</tbody></table></div><p>Một lần, không tính vào tháng: baseline AA-729 $8,6–10,4 (trần $15, đã duyệt qua D4).</p>
+<h3>Phụ phí mỗi bài (khi chạy thật)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Loại bài</th>
+<th>Giá gốc</th>
+<th>README</th>
+<th>Tính lại (thiết kế cũ, đúng giá)</th>
+<th><strong>Bộ đề xuất</strong></th>
+</tr>
+</thead><tbody><tr>
+<td>S1 tour</td>
+<td>$0,048–0,06</td>
+<td>+$0,01 (+17–21%)</td>
+<td>+$0,003 (+5–6%)</td>
+<td><strong>+$0,0005 (+0,8–1,0%)</strong></td>
+</tr>
+<tr>
+<td>T9 blog</td>
+<td>$0,094–0,104</td>
+<td>+$0,005–0,02 (+5–21%)</td>
+<td>tới +$0,0105 (+10–11%)</td>
+<td><strong>+$0,0023–0,0039 (+2,2–4,1%)</strong></td>
+</tr>
+<tr>
+<td>T9 LinkedIn</td>
+<td>~$0,057</td>
+<td>—</td>
+<td>+$0,006–0,0105 (+11–18%)</td>
+<td><strong>+$0,0023–0,0039 (+4,0–6,8%)</strong></td>
+</tr>
+<tr>
+<td>T2 tour</td>
+<td>$0,38 (số cũ)</td>
+<td>—</td>
+<td>+$0,006 (+1,6%)</td>
+<td><strong>+$0,003 (+0,8%)</strong></td>
+</tr>
+</tbody></table></div><p>Cách tính chi tiết ở §2 #4 và #7. Mức thấp là khi luật nền tảng trúng cache trên lượt 1 (bài trong cùng đợt); mức cao là
+không trúng cache. Mọi bài đều xa ngưỡng dừng mềm +20%.</p>
+<hr>
+<h2>5. Công và thứ tự làm</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Mục</th>
+<th>Công (phiên)</th>
+<th>Pha</th>
+</tr>
+</thead><tbody><tr>
+<td>#1 release train + lịch đóng đợt</td>
+<td>~0</td>
+<td>P2 (tab Releases)</td>
+</tr>
+<tr>
+<td>#2 shadow 20 có chủ đích + bỏ cho L0/hint</td>
+<td>−0,05</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>#3 lọc R0, dừng sớm khi trượt, đối chứng đã lưu</td>
+<td>+0,2</td>
+<td>P1b/P2</td>
+</tr>
+<tr>
+<td>#4 trần token + chỗ chèn + A1 không ví dụ</td>
+<td>~0</td>
+<td>P3</td>
+</tr>
+<tr>
+<td>#5 ví dụ ghim theo release</td>
+<td><strong>−0,25</strong></td>
+<td>P4</td>
+</tr>
+<tr>
+<td>#6 mỏ luật chạy theo tín hiệu + gpt-6-luna + kiểm κ</td>
+<td>+0,05</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>#7 caching đặt đúng chỗ + 2 truy vấn kiểm</td>
+<td>~0</td>
+<td>P3</td>
+</tr>
+<tr>
+<td><strong>Tổng</strong></td>
+<td><strong>≈ −0,05 phiên</strong></td>
+<td>Kế hoạch vẫn 6,5–7,5 phiên + dự phòng ≈ 8</td>
+</tr>
+</tbody></table></div><hr>
+<h2>6. Câu trả lời D nào thay đổi</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>D</th>
+<th>Nghiệp đã trả lời</th>
+<th>Đề xuất sau bản này</th>
+</tr>
+</thead><tbody><tr>
+<td>D8</td>
+<td>có ($60/tháng, $15/lượt R2)</td>
+<td><strong>Đổi thành $25/tháng, $10/lượt R2 release</strong>; lượt baseline hoặc <code>reverify</code> toàn bộ (≤ $15) duyệt riêng</td>
+</tr>
+<tr>
+<td>D10</td>
+<td>có (route judge không phải Anthropic)</td>
+<td>Giữ &quot;có&quot;. Model soạn luật đổi thứ tự route thành <code>gpt-6-luna</code> → <code>gpt-5.6-luna</code> → <code>gpt-6-luna-openai</code> sau khi qua kiểm κ (§2 #6)</td>
+</tr>
+<tr>
+<td>D12</td>
+<td>có (ví dụ chỉ cho chính tenant)</td>
+<td>Giữ &quot;có&quot;. Cơ chế đổi: <strong>bộ 2 ví dụ ghim theo release</strong> thay cho kNN k=3 mỗi lời gọi (§2 #5)</td>
+</tr>
+<tr>
+<td>D14</td>
+<td>có (18 issue)</td>
+<td>Giữ &quot;có&quot;, sửa nội dung 3 issue: #12 (thêm lọc R0 + dừng sớm khi trượt + đối chứng đã lưu), #13 (shadow 20 có chủ đích, release train hằng tháng), #15 (ví dụ ghim, bỏ ivfflat)</td>
+</tr>
+<tr>
+<td>D15</td>
+<td>có (≤ 30 phút/tuần)</td>
+<td>Giữ &quot;có&quot;. Cú bấm duyệt release gom vào một lần/tháng; hàng đợi bất đồng vẫn hằng tuần</td>
+</tr>
+<tr>
+<td>D1–D7, D9, D11, D13, D16</td>
+<td>có / a</td>
+<td>Không đổi</td>
+</tr>
+</tbody></table></div><p>Chỗ sửa cần làm trong README audit khi đưa vào repo:</p>
+<ul>
+<li>§0 dòng 6 và §10: con số chi phí.</li>
+<li>§5.3 dòng &quot;Chi phí tăng thêm mỗi bài&quot;: +17–21% → +5–6% theo thiết kế cũ, ~1% theo bộ đề xuất.</li>
+<li>§10 câu &quot;Caching: tra được … <code>shared.llm_call_log</code>&quot;: sai, xem §1.3.</li>
+</ul>
+<hr>
+<h2>7. Câu cần Nghiệp chốt (đề xuất trả lời sẵn)</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Câu hỏi</th>
+<th>Đề xuất</th>
+</tr>
+</thead><tbody><tr>
+<td>E1</td>
+<td>Release luật/ví dụ theo <strong>đợt hằng tháng</strong> (L0 từ vựng vẫn bật bất kỳ lúc nào, rút lại không chờ đợt)?</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>E2</td>
+<td>Shadow <strong>20 input có chủ đích</strong> thay cho 50; bỏ shadow cho release chỉ <code>lexicon</code> / <code>repair_hint</code>?</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>E3</td>
+<td>A1/S1 v1 <strong>chỉ chèn luật, không chèn ví dụ</strong>; ví dụ cho T2/T9 là <strong>bộ 2 ví dụ ghim theo release</strong>?</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>E4</td>
+<td>Trần mới <strong>$25/tháng, $10/lượt R2 release</strong> (sửa D8)?</td>
+<td><strong>có</strong></td>
+</tr>
+</tbody></table></div><hr>
+<h2>8. Chưa biết / cần đo</h2>
+<ul>
+<li>Token thật của các system prompt: ở đây đếm bằng ký tự / 4. Nên đếm lại bằng tokenizer Claude trước P3.</li>
+<li>Tỉ lệ cache hit hiện tại của <code>t9_write</code> và <code>t2_generate</code>: chưa đo, truy vấn ở §2 #7.</li>
+<li>Giá đơn vị T2 sau AA-792: số $0,38 là số cũ. Baseline AA-729 sẽ có số mới.</li>
+<li>Giá Bedrock chính thức cho Haiku 4.5, Sonnet 4.6 và hai Luna: trang giá không hiện được bảng khi tải về, nên coi là ước
+tính bằng giá list (catalog migration 169/170).</li>
+<li>Tỉ lệ ứng viên dừng ở R0 và trượt ở tune (1/3 và 1/3 ở §2 #3) là giả định. Sau 2 đợt release, thay bằng số thật từ phễu
+ứng viên (KPI &quot;Sức khoẻ vòng&quot;, README §8.1).</li>
+</ul>
+<hr>
+<h2>Kiểm chứng độc lập</h2>
+<p>Người kiểm: Claude Code (subagent kiểm phản biện), 20/10/2026. Chỉ đọc: không truy vấn DB, không gọi LLM, không sửa repo.
+Chi phí $0. Code đọc ở AA-CIS-App <code>origin/main</code> <strong>b7e6da66</strong> (xuất bằng <code>git show</code> / <code>git archive</code>, vì checkout local
+<code>f9fc32d6</code> lệch 13 file trong <code>services/</code> so với <code>origin/main</code>; <code>shared/llm_client/</code> thì giống hệt). Mọi trang AWS dưới đây
+truy cập ngày <strong>20/10/2026</strong>.</p>
+<h3>K0. Sự thật nền đã kiểm</h3>
+<ul>
+<li><p><strong>Đường gọi là <code>global.</code>, không phải <code>us.</code>.</strong> Satellite gọi profile <code>global.anthropic.claude-sonnet-4-6</code> và
+<code>global.anthropic.claude-haiku-4-5-20251001-v1:0</code> (<code>shared/llm_client/bedrock_satellite.py:138-139</code>, ghép ARN ở
+<code>:142-155</code>); Luna trên acc3 dùng <code>global.openai.gpt-6-luna</code> (<code>api/migrations/170_llm_stage_routes_and_prices.sql:84-85</code>).
+Hằng <code>us.</code> trong <code>shared/llm_client/pricing.py:30</code> chỉ dành cho nhánh acc2-native, đã tắt mặc định (AA-843,
+<code>client.py:263-270</code>). Vì vậy mọi phép tính ở bản trên đã đúng mức giá rẻ nhất có thể.</p>
+<ul>
+<li>AWS: global rẻ hơn geo khoảng 10% cả đầu vào lẫn đầu ra
+(<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html</a>).</li>
+<li><strong>Cảnh báo:</strong> quyết định CRM D12 (&quot;Bedrock acc3 <code>us.</code> only&quot;) chỉ áp cho app CRM. Nếu áp sang vòng học của CIS thì mọi số
+ở đây <strong>+10%</strong> (Luna geo $0,11/$0,55 và $0,22/$1,32, xem K1).</li>
+</ul>
+</li>
+<li><p><strong>Route writer</strong> (snapshot <code>ai_audit.json</code> 14/10, <code>routes[7,8,15,16,21,22]</code>) khớp bản trên. Từ migration 225 tới 250
+trên <code>origin/main</code> không có migration nào đổi route writer: 226 chỉ thêm stage geo, 240 chỉ đổi fallback embed.</p>
+</li>
+<li><p><strong>Prompt:</strong> đo bằng <code>len()</code> trên <code>origin/main</code>.</p>
+<ul>
+<li><code>services/content_generation/prompts.py:191</code> <code>SYSTEM_PROMPT</code> = <strong>4.924</strong> ký tự.</li>
+<li><code>services/acp_content_writing/prompts.py:184</code> = <strong>5.201</strong> ký tự.</li>
+</ul>
+<p>Khớp bản trên. Token vẫn là ước tính ký tự/4.</p>
+</li>
+<li><p><strong>Cache:</strong> satellite gắn <code>cache_control: ephemeral</code> lên khối <code>system</code> (<code>bedrock_satellite.py:315-331</code> →
+<code>prompt_cache.py:9-17</code>), còn user prompt là chuỗi trần (<code>bedrock_satellite.py:306-310</code>). Khớp.</p>
+</li>
+<li><p><strong>Cột cache:</strong> <code>shared.llm_call_log</code> không có cột cache (<code>docs/architecture/db-schema-reference.md:2708-2726</code>).
+<code>pricing.py:112-113</code> đã cộng tiền cache vào <code>cost_usd</code>. Khớp §1.3.</p>
+</li>
+<li><p><strong>Ngưỡng cache</strong> (<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html</a>, cùng thẻ model Haiku 4.5
+và Sonnet 4.6):</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Model</th>
+<th>Tối thiểu / checkpoint</th>
+<th>TTL</th>
+</tr>
+</thead><tbody><tr>
+<td>Haiku 4.5</td>
+<td>4.096</td>
+<td>5 phút / 1 giờ</td>
+</tr>
+<tr>
+<td>Sonnet 4.6</td>
+<td>1.024</td>
+<td>5 phút / 1 giờ</td>
+</tr>
+<tr>
+<td>GPT-5.6 Luna</td>
+<td>1.024</td>
+<td>30 phút</td>
+</tr>
+</tbody></table></div><p>Converse không hỗ trợ cache tường minh cho Luna. Batch không có prompt caching. Tất cả khớp.</p>
+</li>
+<li><p><strong>Bổ sung bản trên chưa nêu:</strong></p>
+<ul>
+<li>Model Anthropic trên Bedrock <strong>cũng có cache ngầm</strong> (implicit caching).</li>
+<li>AWS ghi rõ cross-Region &quot;may lead to increased cache writes&quot;.</li>
+</ul>
+<p>Vì vậy mức thấp của #7 (lượt 1 trúng cache) phải <strong>đo</strong> trước khi tin.</p>
+</li>
+</ul>
+<h3>K1. Giá: nâng hạng nguồn</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Model</th>
+<th>Giá Global CRIS (đầu vào / đầu ra, 1M token)</th>
+<th>Nguồn</th>
+<th>Trạng thái</th>
+</tr>
+</thead><tbody><tr>
+<td>GPT-5.6 Luna</td>
+<td>$0,20 / $1,20; đọc cache $0,02; Geo/US $0,22 / $1,32</td>
+<td><a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-openai-gpt-56-luna.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-openai-gpt-56-luna.html</a></td>
+<td><strong>Đã xác nhận</strong> (bản trên ghi &quot;ước tính&quot;)</td>
+</tr>
+<tr>
+<td>GPT-6 Luna</td>
+<td>$0,10 / $0,50; đọc cache $0,01; US Geo $0,11 / $0,55</td>
+<td><a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-openai-gpt-6-luna.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-openai-gpt-6-luna.html</a></td>
+<td><strong>Đã xác nhận</strong></td>
+</tr>
+<tr>
+<td>Claude Haiku 4.5</td>
+<td>$1 / $5</td>
+<td>Trang giá AWS không render bảng Anthropic khi tải; thẻ model chỉ trỏ về trang giá</td>
+<td>Ước tính. Global bằng giá list Anthropic; trang global CRIS ở trên xác nhận geo đắt hơn ~10%</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>$3 / $15</td>
+<td>như trên</td>
+<td>Ước tính, như trên</td>
+</tr>
+</tbody></table></div><p><strong>Kết luận:</strong> mức tiết kiệm 50% (đầu vào) và 58% (đầu ra) của #6 nay có nguồn AWS chính thức.</p>
+<h3>K2. Phán quyết từng mục</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Mục</th>
+<th>Phán quyết</th>
+<th>Lý do (đã kiểm)</th>
+<th>Số đúng</th>
+</tr>
+</thead><tbody><tr>
+<td>§1.2 tính lại phụ phí mỗi bài</td>
+<td><strong>giữ</strong></td>
+<td><code>s1_generate</code> và <code>s1_flag_fix</code> = <code>haiku</code> (routes[8], [7]); <code>pricing.py:39</code> = $1/$5 cho mỗi 1M token. 2 × 1.500 × $1/1M = $0,003 = 5,0–6,3%</td>
+<td>LinkedIn thiết kế cũ: +10,5–18,4% (bản trên ghi 11–18%, lệch làm tròn)</td>
+</tr>
+<tr>
+<td>§1.3 câu &quot;caching tra được trong <code>llm_call_log</code>&quot; là sai</td>
+<td><strong>giữ</strong></td>
+<td>Xem K0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>#1 release theo đợt tháng</td>
+<td><strong>giữ</strong></td>
+<td>Số học đúng: (2,5−1) × (6,5 + 7,5) = $21. Mọi cổng giữ nguyên; rút lại vẫn $0</td>
+<td>−$21/tháng</td>
+</tr>
+<tr>
+<td>#2 shadow 20</td>
+<td><strong>sửa</strong></td>
+<td>(a) Số học sai. (b) Vi phạm luật T2/Facebook. (c) Bỏ shadow cho <code>repair_hint</code> là sai. (d) Thiếu kiểm cách ly. Chi tiết dưới bảng</td>
+<td>Shadow/release ≈ <strong>$3,0</strong>; riêng mục: <strong>−$11,25/tháng</strong>; gộp với #1: <strong>−$4,5</strong>. Ngân sách xem K3</td>
+</tr>
+<tr>
+<td>#3 lọc R0 + dừng sớm + đối chứng đã lưu</td>
+<td><strong>sửa</strong></td>
+<td>(a) Hệ số 0,61 trộn hai đơn vị. (b) Ngưỡng k = 3 làm đói vòng học. (c) Đối chứng phải chấm lại bằng judge hiện hành. Chi tiết dưới bảng</td>
+<td>R2 = chi phí tầng × <strong>0,92</strong> + $0,3 thử</td>
+</tr>
+<tr>
+<td>#4 trần token + chỗ chèn</td>
+<td><strong>giữ</strong></td>
+<td>Số học kiểm lại khớp: S1 $0,0005 (0,8–1,0%); T9 blog $0,0039 (3,7–4,1%); LinkedIn 6,8%; T2 $0,0029 (0,8%). Điểm chèn khớp code. Bỏ ví dụ ở A1 là đổi thiết kế đã duyệt, nên phải qua E3 (đã có)</td>
+<td>Như bản trên</td>
+</tr>
+<tr>
+<td>#5 ví dụ ghim theo release</td>
+<td><strong>giữ, sửa lý do cache</strong></td>
+<td>Lý do an toàn và công vẫn đúng. Lợi ích cache <strong>không thành hiện thực</strong> với code hiện tại: user prompt là chuỗi trần (<code>bedrock_satellite.py:306-310</code>), và trong user prompt T9 các dòng CHANNEL / GOAL đứng trước khối brand (<code>acp_content_writing/prompts.py:334-344</code>), nên tiền tố tenant đổi theo kênh và mục tiêu. Bỏ câu &quot;đặt được trong tiền tố ổn định để cache&quot;</td>
+<td>Tiền: ~$0</td>
+</tr>
+<tr>
+<td>#6 mỏ luật theo tín hiệu + <code>gpt-6-luna</code></td>
+<td><strong>giữ</strong></td>
+<td>Giá đã xác nhận (K1). Profile <code>global.</code> (migration 170:85). <code>gpt-6-luna</code> là model chính của <code>a3_atomize</code>, <code>s1_source_facts</code>, <code>t10_claims</code> (routes[1], [11], [12]). Đòn bẩy phụ (<strong>ước tính</strong>, không tính vào ngân sách): đặt reasoning effort <code>low</code> cho lượt soạn luật. Mặc định là <code>medium</code> theo thẻ model; hiện client không gửi tham số này qua Converse (<code>client.py:518-529</code>)</td>
+<td>$0,3–1,0/tháng</td>
+</tr>
+<tr>
+<td>#7 đặt luật nền tảng sau <code>SYSTEM_PROMPT</code> T9</td>
+<td><strong>giữ</strong></td>
+<td>Thông số khớp. Số tính: lượt 1 trúng cache $0,00177 + lượt 2 × 0,5 = $0,000435 + sửa $0,00006 = $0,0023; không trúng = $0,0036. Thêm cảnh báo: global CRIS có thể làm tăng ghi cache (K0); đo bằng 2 truy vấn trước khi tin mức thấp</td>
+<td>+2,2–3,9% (blog)</td>
+</tr>
+<tr>
+<td>#8 không thu nhỏ golden set</td>
+<td><strong>giữ</strong></td>
+<td>Khớp README §8.2: holdout T2 chỉ 3 mẫu</td>
+<td>—</td>
+</tr>
+<tr>
+<td>#9 Bedrock Batch: không làm</td>
+<td><strong>giữ kết luận, sửa ý 5</strong></td>
+<td>Ý 1–4 đúng: tối thiểu 100 bản ghi (<code>bedrock_batch.py:65-68</code>); batch không có cache; danh sách batch có Haiku 4.5 và Sonnet 4.6 (us-west-1, cross-region) nhưng không có GPT-5.6/6 Luna (<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-supported.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-supported.html</a>). Ý 5 sai một nửa: trang global CRIS ghi &quot;Global inference profile is supported for … Batch inference&quot;. Mâu thuẫn quyền batch acc3 vẫn đúng: <code>bedrock_satellite.py:72-79</code> nói không có, <code>bedrock_batch.py:20-23</code> nói có</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Mục nhỏ <code>shadow_sample_pct = 0</code> cho stage eval</td>
+<td><strong>giữ</strong></td>
+<td>Shadow judge chạy theo cấu hình stage (<code>client.py:175-177</code>). Nếu R2 dùng lại tên stage judge cũ (<code>s1_judge</code> shadow 10%) thì tốn thêm, nên stage eval riêng phải seed với shadow 0</td>
+<td>&lt;$0,5</td>
+</tr>
+<tr>
+<td><strong>Mới: Flex tier (−50%)</strong></td>
+<td><strong>bỏ</strong> (đã xét, không dùng được)</td>
+<td>Flex không hỗ trợ Haiku 4.5, Sonnet 4.6, GPT-5.6 Luna, GPT-6 Luna (mục &quot;Service Tiers&quot; của từng thẻ model ở K1; <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html</a>)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Mới: giữ <code>global.</code></strong></td>
+<td><strong>giữ (mặc định đã đúng)</strong></td>
+<td>Xem K0. Không chuyển writer CIS sang <code>us.</code> nếu không tính thêm +10%</td>
+<td>Nếu chuyển: +10% mọi dòng</td>
+</tr>
+</tbody></table></div><p><strong>Chi tiết #2 (shadow 20):</strong></p>
+<ul>
+<li><strong>(a) Số học sai.</strong> Từ 50 xuống 20 là ×0,4. Nên 7,5 → <strong>3,0</strong>, không phải 2,25: bản trên dùng $0,10/input cho mức cũ
+nhưng $0,075 cho mức mới. Riêng mục này 18,75 → 7,5.</li>
+<li><strong>(b) Vi phạm luật đã duyệt của README §8.2</strong> (<code>docs/audits/2026-10-20-S245-writing-learning-loop/README.md:379-381</code>):
+&quot;release T2 và Facebook luôn dùng quy tắc dự phòng … (cộng shadow 50 input thật)&quot;, vì holdout T2 chỉ có 3 mẫu và
+không có tầng Facebook. <strong>Phải giữ 50 cho T2 và Facebook.</strong></li>
+<li><strong>(c) Bỏ shadow cho release chỉ có <code>repair_hint</code> là sai.</strong> Hint chỉ chèn khi gate bắn, mà golden set ít ca gate bắn, nên R2
+có thể không chạm hint lần nào. Thay bằng shadow có chủ đích ≤ 10 input mà gate đó từng bắn (~$0,5–1), hoặc replay
+riêng lượt sửa (Haiku, ~$0,0015/lượt) trên bản nháp và cờ đã lưu.</li>
+<li><strong>(d) Thêm 1–2 input của tenant khác</strong> vào shadow của release tenant, làm probe cách ly (~$0,2). Lý do: shadow chỉ trên
+input của chính tenant đó không bắt được lỗi chọn release sai tenant.</li>
+<li>Xác suất bắt lỗi 64% / 88% / 96% tính đúng.</li>
+</ul>
+<p><strong>Chi tiết #3:</strong></p>
+<ul>
+<li><strong>(a) Hệ số 0,61 trộn hai đơn vị.</strong> &quot;1/3 dừng ở R0&quot; là tỉ lệ theo <strong>ứng viên</strong>, nhưng R2 chạy theo <strong>release</strong>. Khi
+gộp đợt tháng (#1), một release chỉ bị bỏ R2 khi <em>mọi</em> ứng viên rớt R0, tức xác suất (1/3)^k, rất nhỏ. Hệ số đúng khi
+gộp với #1 chỉ còn phần dừng sớm do trượt: 1 − (1/3)(0,25) ≈ <strong>0,92</strong>.</li>
+<li><strong>(b) k = 3 lần trong 30 ngày có thể làm đói vòng học trên Dev.</strong> Ngưỡng mỏ luật là ≥ 2 lần sửa trên ≥ 2 bài. Nên đặt k
+bằng đúng ngưỡng mỏ luật.</li>
+<li><strong>(c) Đối chứng đã lưu phải được chấm lại bằng judge đang dùng.</strong> Chi phí Luna không đáng kể. Nếu không, độ lệch giữa
+các phiên bản judge làm sai phép so cặp.</li>
+<li>Hướng an toàn (dừng chỉ để từ chối) đúng.</li>
+</ul>
+<h3>K3. Bảng ngân sách Dev đã sửa (thay §4)</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Dòng</th>
+<th>Bản trên</th>
+<th><strong>Sau kiểm chứng</strong></th>
+<th>Cách tính</th>
+</tr>
+</thead><tbody><tr>
+<td>Mine luật</td>
+<td>$0,3–1,0</td>
+<td><strong>$0,3–1,0</strong></td>
+<td>Không đổi; giá Luna đã xác nhận</td>
+</tr>
+<tr>
+<td>R2 golden</td>
+<td>$1,3–6</td>
+<td><strong>$1,1–8,7</strong> (thường ~$2,5)</td>
+<td>1 release/tháng; hệ số 0,92 (không phải 0,61) + thử 3 mẫu $0,3. Thấp: LinkedIn $0,86 × 0,92 + 0,3. Thường: blog + LinkedIn $2,36 × 0,92 + 0,3. Cao: 4 tầng $9,16 × 0,92 + 0,3</td>
+</tr>
+<tr>
+<td>Shadow</td>
+<td>$0–4</td>
+<td><strong>$0–7</strong> (thường ~$1,5)</td>
+<td>20 input × $0,05–0,10 cho A1 / blog / LinkedIn; <strong>50 input cho T2 và Facebook</strong> (README §8.2); +$0,2 probe cách ly; ≤ 10 input có chủ đích cho <code>repair_hint</code>. Cao: T2 50 × $0,10 + một người viết 20 × $0,10 = $7</td>
+</tr>
+<tr>
+<td>R0, R1, embedding</td>
+<td>$0–0,5</td>
+<td><strong>$0–0,5</strong></td>
+<td>Không đổi</td>
+</tr>
+<tr>
+<td>Dự phòng <code>reverify</code></td>
+<td>$1–3</td>
+<td><strong>$1–3</strong></td>
+<td>Không đổi</td>
+</tr>
+<tr>
+<td>Kiểm κ (một lần)</td>
+<td>$0,25–0,8</td>
+<td><strong>$0,25–0,8 một lần</strong></td>
+<td>Không đổi</td>
+</tr>
+<tr>
+<td><strong>Tổng / tháng</strong></td>
+<td>§0: &quot;$4–18, thường $8–10&quot;; §4: &quot;$3–15, thường $7–10&quot; (<strong>hai chỗ tự mâu thuẫn</strong>)</td>
+<td><strong>≈ $2,5–20, thường ~$7</strong></td>
+<td>0,3 + 1,1 + 0 + 0 + 1 = 2,4; 1,0 + 8,7 + 7 + 0,5 + 3 = 20,2; 0,6 + 2,5 + 1,5 + 0,2 + 2 = 6,8</td>
+</tr>
+<tr>
+<td>Nếu chuyển sang profile <code>us.</code></td>
+<td>—</td>
+<td>≈ $2,7–22</td>
+<td>+10% (K0)</td>
+</tr>
+<tr>
+<td>Trần (D8 / E4)</td>
+<td>$25/tháng, $10/lượt R2</td>
+<td><strong>Giữ $25/tháng, $10/lượt R2</strong></td>
+<td>Còn ~$5 khoảng trống trên mức cao. Nếu giá T2 sau AA-792 &gt; ~$0,50/tour thì R2 đủ 4 tầng vượt $10: khi đó tách release hoặc xin duyệt riêng</td>
+</tr>
+</tbody></table></div><p>Phụ phí mỗi bài (§4 bảng thứ hai): <strong>giữ nguyên</strong>, số học kiểm lại đúng.</p>
+<p>So với README ($30–50): vẫn giảm khoảng <strong>80%</strong>, nhưng mức cao là $20 chứ không phải $15. Phần tăng chủ yếu do giữ đúng
+luật shadow 50 cho T2 và Facebook.</p>
+<h3>K4. Câu chốt E sửa theo kiểm chứng</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Đề xuất sau kiểm chứng</th>
+</tr>
+</thead><tbody><tr>
+<td>E1</td>
+<td><strong>có</strong>, không đổi</td>
+</tr>
+<tr>
+<td>E2</td>
+<td><strong>có, sửa nội dung:</strong> shadow 20 input có chủ đích cho A1, blog và LinkedIn. <strong>T2 và Facebook giữ 50</strong> cho tới khi golden set mở rộng hai tầng này. Release chỉ có <code>repair_hint</code> dùng shadow ≤ 10 input mà gate từng bắn, không bỏ hẳn. Release tenant thêm 1–2 input của tenant khác làm probe cách ly</td>
+</tr>
+<tr>
+<td>E3</td>
+<td><strong>có</strong>, không đổi. Ghi rõ lợi ích là an toàn và công, không phải cache</td>
+</tr>
+<tr>
+<td>E4</td>
+<td><strong>có</strong>: $25/tháng, $10/lượt R2. Mức cao dự kiến $20</td>
+</tr>
+</tbody></table></div><p>Thêm vào issue #12 (D14): <strong>k = ngưỡng mỏ luật</strong> (không phải 3); <strong>chấm lại đối chứng đã lưu bằng judge hiện hành</strong>.</p>
+<h3>K5. Còn chưa kiểm được</h3>
+<ul>
+<li>Bảng giá Claude trên Bedrock (Haiku 4.5, Sonnet 4.6): trang giá không render khi tải về, nên vẫn là ước tính bằng giá list.</li>
+<li>Token thật của hai <code>SYSTEM_PROMPT</code>: tính bằng ký tự/4. T9 ≈ 1,3k, sát ngưỡng 1.024 của Sonnet. Nếu tokenizer cho số dưới
+1.024 thì T9 hiện <strong>không</strong> cache, và #7 mất mức thấp.</li>
+<li>Tỉ lệ cache hit thật của <code>t9_write</code> / <code>t2_generate</code>: chưa đo. Hai truy vấn ở #7 là cách đo.</li>
+</ul>
+</article></div></section>
+<section id="panel-thiet-ke" role="tabpanel" aria-labelledby="tab-thiet-ke" hidden><div class="wrap"><article class="doc"><h1>Hệ thống viết tự học — học từ lỗi và từ chỉnh sửa của con người (CIS + Portal tenant)</h1>
+<p>Phiên S245, 20/10/2026. Tác nhân: Claude Code. Issue gốc: AA-729 (golden set). Loại tài liệu: bản tư vấn thiết kế
+cho Nghiệp. <strong>Chỉ đọc</strong>: không truy vấn DB, không gọi LLM, không tạo issue Linear. Chi phí $0.</p>
+<p>Nguồn: code AA-CIS-App <code>origin/main</code> ca61ca8c (đã gồm PR #868 và #869, merge 20/10/2026),
+<code>docs/architecture/db-schema-reference.md</code> (dump 20/10/2026 01:02 UTC,
+số dòng là ước lượng <code>reltuples</code>), Linear (20/10/2026), audit AA-865 (<span class="reflink" title="../2026-10-20-S245-f9-pooled/README.md">README</span>).
+Ghi chú gốc (tiếng Anh) nằm ở <code>research/</code>. Ba phương án đầy đủ ở <code>research/options.json</code>, điểm giám khảo ở
+<code>research/judges.json</code>.</p>
+<h2>0. Tóm tắt (6 dòng)</h2>
+<ol>
+<li>CIS đã có nhiều cổng chấm lỗi và vòng sửa (gate T10, sentence repair, flag_fix, Jev), nhưng <strong>chưa có vòng học nào chạy được</strong>: <code>shared.pipeline_lessons</code> ghi sai stage nên không bao giờ được đọc, còn N8 &quot;mỗi lỗi thành luật&quot; đã bị gỡ (AA-603).</li>
+<li>Tín hiệu người sửa tốt nhất đã có là <strong>chỉnh câu của admin</strong> (trước/sau + gate + vấn đề, trong <code>audit_log</code>); có 3 chỗ người sửa mà <strong>mất bản gốc hoặc lý do</strong> (A1 sửa trường, tenant sửa T9, mọi approve/reject).</li>
+<li>Fine-tune gần như không khả thi bây giờ (Bedrock Claude hết hạn, OpenAI đóng fine-tune 06/01/2027) và dữ liệu quá ít → <strong>học trong prompt, không đổi trọng số mô hình</strong>.</li>
+<li>Khuyến nghị: <strong>&quot;Writing Memory v1&quot;</strong> — kho luật + kho ví dụ đã duyệt, mỗi lần bật đi qua replay $0 → golden set → shadow → một cú bấm duyệt; rút lại bằng một lệnh lật con trỏ.</li>
+<li>Làm ngay <strong>P0</strong> (1 phiên, không phụ thuộc gì): đóng băng <code>pipeline_lessons</code> (bảng toàn cục không có <code>tenant_id</code>: nếu ai &quot;sửa&quot; lệch stage, lỗi T2 sẽ lái prompt S1 chung và mẫu lấy từ chữ tenant nằm trong bảng toàn cục), lưu trước/sau mọi chỉnh sửa vào một bảng xoá được, chip lý do một cú bấm.</li>
+<li><strong>6,5–7,5 phiên agent + dự phòng ≈ 8</strong>, <strong>~$30–50/tháng (trần $60, D8)</strong> trên Dev, không thêm dịch vụ AWS; tenant chỉ thấy bài tốt hơn, không thấy QA; <strong>16 quyết định</strong> chờ Nghiệp (§13).</li>
+</ol>
+<h2>1. Hiện trạng: đã có gì</h2>
+<h3>1.1 Bốn &quot;người viết&quot; và cổng chất lượng</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Người viết</th>
+<th>Code chính</th>
+<th>Bảng kết quả</th>
+<th>Cổng / vòng sửa</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>A1/S1 — tour Master</strong></td>
+<td><code>services/content_generation/graph.py</code>, <code>flag_fix_node.py</code>, <code>grounding.py</code>, <code>brand_audit_node.py</code>, <code>s1_batch.py</code></td>
+<td><code>silver_aa_internal.generated_content</code> (<del>1.423), <code>quality_scores</code> (</del>1.432)</td>
+<td>validate → judge → brand_audit (trả <code>lessons_extracted[]</code>) → grounding từng câu (Jev <code>a1_claim_supported</code>) → flag_fix chỉ sửa trường bị cờ; &lt; 7 điểm vào <code>review_queue</code> (~229)</td>
+</tr>
+<tr>
+<td><strong>T2 — tour giọng tenant</strong> (AA-792)</td>
+<td><code>services/jobs/t2_rewrite_job.py</code>, <code>tenant_pipeline.py</code></td>
+<td><code>gold_aa_internal.tenant_tour_versions</code> (~48)</td>
+<td>Chạy <strong>chung graph S1</strong> (<code>stages.py</code>, AA-763) + T3 QA (<code>qa_status</code>, <code>qa_repair_count</code>)</td>
+</tr>
+<tr>
+<td><strong>T8 — góc viết</strong></td>
+<td><code>services/acp_angle_gate/service.py</code></td>
+<td><code>angle_gate_request</code> (<del>21), <code>angle_gate_option</code> (</del>57)</td>
+<td>3 góc, 1 góc đề xuất; tenant chọn (<code>chosen</code>)</td>
+</tr>
+<tr>
+<td><strong>T9 — blog + social (LinkedIn, Facebook…)</strong>, T11 đăng</td>
+<td><code>services/acp_content_writing/service.py</code>, <code>quality_gates.py</code>, <code>sentence_repair.py</code></td>
+<td><code>acp_shared.content_piece</code> (~251)</td>
+<td>~27 gate F0–F19; 3 lượt, lượt 3 chỉ sửa câu; chặn hồi quy; <code>splice_checked</code>; <code>new_specifics</code> cấm thêm số/giờ; <code>gate_ledger</code>, <code>repair_log[]</code>, <code>discarded_attempts</code> (AA-791)</td>
+</tr>
+</tbody></table></div><p>Đầu vào thương hiệu chung T2/T8/T9: <code>render_brand_block()</code> (<code>brand_pack.py</code> L107) đưa style guide,
+<code>forbidden_words</code> và <code>good_examples</code> (ví dụ tĩnh, chỉ lấy giọng) vào prompt.</p>
+<p>Mới xong, liên quan trực tiếp:</p>
+<ul>
+<li><strong>AA-865 (F9 sticky pass)</strong>: câu F9 đã duyệt thì giữ nguyên trạng thái trong cùng job; PR #868 (đã merge 20/10/2026,
+<code>76de7932</code>) mở rộng cho sửa kiểu chỉ xoá chữ. Tỉ lệ retry thêm lỗi chặn gộp 8/75 = 10,7%, replay fix (a) còn 6,7%
+(mục tiêu ≤ 8%).</li>
+<li><strong>AA-800 (signature vocabulary)</strong>: PR #869 (đã merge 20/10/2026, <code>ca61ca8c</code>) thêm 3 lớp từ vựng: <code>PLATFORM_TRUTH</code> cấm mọi tenant, từ
+khen sáo rỗng tối đa 1 lần/bài, và <code>forbidden_words</code> riêng tenant luôn thắng. Đây là chỗ tự nhiên để gắn &quot;luật từ
+vựng học được&quot;.</li>
+</ul>
+<h3>1.2 Các cơ chế &quot;học&quot; đã có — và tình trạng thật</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Cơ chế</th>
+<th>Tình trạng</th>
+<th>Vì sao</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>A1 lessons (AA-132)</strong> — <code>shared.pipeline_lessons</code>, chèn &quot;LESSONS FROM PREVIOUS BATCHES&quot; vào prompt S1 (<code>s1_batch.py</code> L108–121, <code>admin_pipeline.py</code> L560–583)</td>
+<td><strong>Hỏng + nguy hiểm</strong></td>
+<td>Ghi <code>stage=&#39;audit&#39;</code> (<code>flag_fix_node.py</code> L733) nhưng đọc <code>S1_rewrite/S1_editor</code>; lệnh ghi gần như chắc chắn lỗi im lặng (<code>run_until_complete</code> trong executor). Dump: 0 insert kể từ lần reset thống kê gần nhất, 1.956 lượt đọc index; số dòng thật chưa biết (dump không có <code>reltuples</code> cho bảng này, P0 sẽ đếm). Đường đọc chỉ chèn <code>field</code> + <code>what_to_do</code>, mà <code>what_to_do</code> là mẫu câu <code>&quot;Fix field {field} — failure code {code}&quot;</code> (<code>flag_fix_node.py</code> L756), nên chữ tenant không đi thẳng vào prompt. Không cổng eval, không <code>tenant_id</code>, tự bật <code>is_active=true</code>. <strong>Rủi ro thật nếu ai đó &quot;sửa&quot; lệch stage: (1) <code>pattern</code> / <code>example_before</code> lấy từ chữ tenant (T2 dùng chung graph) nằm trong một bảng toàn cục không có <code>tenant_id</code>; (2) lỗi của T2 sẽ lái prompt S1 dùng chung.</strong></td>
+</tr>
+<tr>
+<td><strong>N8 flywheel / H-3 rule extractor</strong> — <code>acp_shared.acp_output_rules</code>, <code>/v1/rules</code></td>
+<td><strong>Chết</strong></td>
+<td>Gỡ cùng N7/N8 (AA-603). <code>acp_post_processor.py</code> chỉ còn test gọi và <code>services/acp_produce/rule_adapter.py</code> gọi (bản thân file này chỉ <code>tests/unit/test_aa363_rule_adapter.py</code> dùng). Bảng còn, route còn mount, <code>/v1/rules</code> còn mục policy trong <code>api/core/staff_authz.py</code> (L302, L326).</td>
+</tr>
+<tr>
+<td><strong>Jev outcome (AA-756)</strong> — <code>decision_log.outcome</code></td>
+<td><strong>Gần như rỗng</strong></td>
+<td>Chỉ phía &quot;approve&quot; ghi truth=True; <code>record_rejected_outcome</code> chưa làm (AA-845).</td>
+</tr>
+<tr>
+<td><strong>Prompt regression (AA-289)</strong> — <code>shared.prompt_eval_runs</code></td>
+<td><strong>Chưa chạy trên schema hiện tại</strong></td>
+<td>0 insert; chỉ cho S1; fixture 20 tour nằm trên S3.</td>
+</tr>
+<tr>
+<td><strong>Nhãn người (AA-791)</strong> — <code>content_piece_label</code></td>
+<td><strong>Có khung, gần như chưa có nhãn</strong></td>
+<td>1 insert; gói 40 bài AA-783 chưa chấm.</td>
+</tr>
+<tr>
+<td><strong>Brand rules</strong> — <code>shared.tenant_brand_rules</code> (<code>voice_examples</code>, <code>good_examples</code>, <code>forbidden_words</code>, <code>version</code>)</td>
+<td>Chạy, nhưng <strong>tĩnh</strong></td>
+<td>Người nhập tay; không học từ chỉnh sửa.</td>
+</tr>
+</tbody></table></div><h3>1.3 Chỗ nào đã ghi lại chỉnh sửa của người, chỗ nào chưa</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Hành động của người</th>
+<th>Lưu ở đâu</th>
+<th>Có trước/sau?</th>
+<th>Có lý do?</th>
+</tr>
+</thead><tbody><tr>
+<td>Admin chỉnh câu bài T9 (cắt / nhận gợi ý / tự viết)</td>
+<td><code>audit_log</code> <code>content_piece.admin_sentence_*</code></td>
+<td><strong>Có</strong> (before, after, gate, problem, suggestion, mode)</td>
+<td>Gián tiếp (gate + problem)</td>
+</tr>
+<tr>
+<td>Admin chỉnh câu bản T2 (AA-802)</td>
+<td><code>audit_log</code> <code>tenant_tour_version.admin_sentence_*</code></td>
+<td><strong>Có</strong> (câu, đoạn, cả bản)</td>
+<td>Gián tiếp</td>
+</tr>
+<tr>
+<td>Tenant sửa tour T2 trên portal</td>
+<td>Bản mới <code>edit_source=&#39;tenant_edit&#39;</code> + <code>parent_version_id</code></td>
+<td><strong>Có</strong> (diff với bản cha)</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>Góc T8 tenant chọn vs đề xuất</td>
+<td><code>angle_gate_option.chosen</code> / <code>recommended</code></td>
+<td>n/a</td>
+<td>Không</td>
+</tr>
+<tr>
+<td>Admin dán nhãn bài T9</td>
+<td><code>content_piece_label</code></td>
+<td>Chỉ hash</td>
+<td><strong>Có</strong> (nhưng mới 1 nhãn)</td>
+</tr>
+<tr>
+<td><strong>Admin sửa trường bản A1</strong></td>
+<td><code>generated_content.edit_diff</code></td>
+<td><strong>Không</strong> — chỉ tên trường, bản AI bị ghi đè</td>
+<td>Không</td>
+</tr>
+<tr>
+<td><strong>Tenant sửa bài T9 ở My Content</strong></td>
+<td><code>audit_log</code> <code>content_piece.edited</code></td>
+<td><strong>Không</strong> — chỉ <code>content_length</code>, chữ bị ghi đè</td>
+<td>Không</td>
+</tr>
+<tr>
+<td><strong>Mọi approve / reject / dismiss / regenerate</strong> (A1 review queue, T2 tenant)</td>
+<td><code>review_status</code> / <code>status</code></td>
+<td>n/a</td>
+<td><strong>Không</strong>. Thực tế reviewer bấm Regenerate thay vì duyệt (S218: 196 dòng, 0 quyết định)</td>
+</tr>
+<tr>
+<td>Lượt viết bị bỏ của T9</td>
+<td>Ledger từng lượt: <code>repair_log</code> (AA-791, #735); chữ: <code>discarded_attempts</code></td>
+<td>Ledger: <strong>có</strong> mọi lượt; chữ: chỉ giữ <strong>một</strong> lượt (<code>service.py</code> L1861)</td>
+<td>n/a</td>
+</tr>
+</tbody></table></div><p>Kết luận phần hiện trạng: nguyên liệu để học <strong>có sẵn một nửa</strong>. Thiếu ba thứ: (1) bản trước khi sửa ở A1 và T9 tenant,
+(2) lý do ở mọi reject/cut/regenerate, (3) nhãn người. Và có <strong>một cơ chế cũ phải tắt trước</strong> khi làm gì khác.</p>
+<h2>2. Thế giới đang làm gì (10/2026)</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Cách làm</th>
+<th>Khi nào dùng</th>
+<th>Chi phí</th>
+<th>Rủi ro chính</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>Bộ nhớ luật/&quot;playbook&quot; từ lỗi</strong> (ACE arXiv 2510.04618; Dynamic Cheatsheet arXiv 2504.07952) — luật ngắn, thêm/bớt từng mục, không viết lại cả khối</td>
+<td>Lỗi lặp có quy luật; muốn hiệu quả ngay, không train</td>
+<td>Rất thấp (vài lệnh LLM khi đúc luật; +token prompt)</td>
+<td>&quot;Sụp ngữ cảnh&quot;: prompt phình, luật mâu thuẫn — đúng hình dạng <code>pipeline_lessons</code> hôm nay. Phải có trần số luật + cổng eval</td>
+</tr>
+<tr>
+<td><strong>Truy xuất ví dụ đã duyệt (dynamic few-shot)</strong> (Liu et al. 2101.06804; Anthropic: 3–5 ví dụ)</td>
+<td>Học <strong>giọng</strong> từng tenant; ít dữ liệu vẫn chạy</td>
+<td>Thấp (embedding một lần + token)</td>
+<td>Ví dụ mang <strong>sự thật của tour khác</strong> vào bài; rò chéo tenant (OWASP LLM08:2025). Cần che thực thể + lọc <code>tenant_id</code></td>
+</tr>
+<tr>
+<td><strong>Học từ diff chỉnh sửa</strong> (PRELUDE/CIPHER NeurIPS 2024; PREDICT 2410.06273; LAMP CHI 2025) — suy ra &quot;sở thích&quot; bằng lời từ các lần sửa, kiểm trên nhiều lần sửa trước khi tin</td>
+<td>Có nhiều cặp trước/sau; muốn &quot;học cách viết khi con người sửa&quot;</td>
+<td>Thấp</td>
+<td>Khái quát quá từ một lần sửa / một người sửa; người sửa có thể <strong>thêm</strong> lời hứa nguồn không có</td>
+</tr>
+<tr>
+<td><strong>Tối ưu prompt tự động trên tập eval</strong> (GEPA ICLR 2026; DSPy MIPROv2; OPRO; TextGrad)</td>
+<td>Có golden set ≥ 35–100 mẫu + giám khảo đáng tin</td>
+<td>Trung bình ($10–60/lượt chiến dịch)</td>
+<td>Overfit tập eval; prompt tối ưu tệ hơn ở input lạ. Cần holdout + người xem từng prompt</td>
+</tr>
+<tr>
+<td><strong>Hiệu chỉnh giám khảo LLM bằng nhãn người</strong> (MT-Bench; EvalGen; Panickssery et al.)</td>
+<td>Trước khi để giám khảo quyết định bật/tắt</td>
+<td>Thấp</td>
+<td>Giám khảo cùng hãng ưu ái bài của chính nó; &quot;trôi tiêu chí&quot;. Dùng giám khảo khác hãng + κ ≥ 0,6</td>
+</tr>
+<tr>
+<td><strong>Fine-tune SFT/DPO/RFT</strong> (SALT, &quot;post-edits are preferences&quot;)</td>
+<td>~1k–10k cặp sạch / tác vụ, trên mô hình chịu dùng làm writer</td>
+<td>Train rẻ (~$22 cho gpt-4.1-mini 500 tour) nhưng...</td>
+<td><strong>Không khả dụng thực tế</strong>: Bedrock chỉ cho fine-tune Claude 3 Haiku (EOL 10/09/2026); OpenAI đóng fine-tune cho org mới từ 07/05/2026, đóng hẳn 06/01/2027; Nova/Qwen/gpt-oss = đổi writer, khác region. Fine-tune trên dữ liệu có sự thật mới <strong>tăng ảo giác</strong> (Gekhman EMNLP 2024)</td>
+</tr>
+</tbody></table></div><p>Điểm chung của các nhóm làm tốt: <strong>dữ liệu + eval + bộ nhớ nằm trong DB của mình</strong>, không khoá vào nền tảng của hãng
+(OpenAI Evals chỉ-đọc từ 31/10/2026, đóng 30/11/2026). Mọi thay đổi đi qua eval gate trước khi bật.</p>
+<p>Nguồn: <code>research/02-state-of-the-art.md</code> §2–§3 và mục Sources (truy cập 20/10/2026); fine-tune và giá:
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-fine-tuning.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-fine-tuning.html</a>,
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html</a>, <a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" rel="noopener">https://aws.amazon.com/bedrock/pricing/</a>,
+<a href="https://developers.openai.com/api/docs/deprecations" target="_blank" rel="noopener">https://developers.openai.com/api/docs/deprecations</a>, <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">https://developers.openai.com/api/docs/pricing</a>.</p>
+<h2>3. Ba phương án</h2>
+<p>Cả ba đều do agent viết phương án đề xuất độc lập; bản đầy đủ (tiếng Anh) ở <code>research/options.json</code>. Cả ba đều: đóng
+băng <code>pipeline_lessons</code> ở P0, ghi trước/sau mọi chỉnh sửa + chip lý do một cú bấm, lọc sự thật trước khi học, giữ tenant
+chỉ thấy nội dung, chạy trên RDS + worker sẵn có (không dịch vụ AWS mới; riêng C có thể thêm một bucket/prefix S3 cho
+dataset). Khác nhau ở <strong>cái gì được học</strong> và <strong>ai bật</strong>.</p>
+<div class="tablewrap"><table><thead><tr>
+<th></th>
+<th><strong>A. Writing Memory v1</strong></th>
+<th><strong>B. Golden-gated Writer Optimiser (GWO)</strong></th>
+<th><strong>C. Writer Flywheel</strong></th>
+</tr>
+</thead><tbody><tr>
+<td>Ý tưởng</td>
+<td>Kho <strong>luật</strong> (từ lỗi gate lặp + diff người sửa) + kho <strong>ví dụ</strong> đã duyệt theo tenant; chỉ bật qua <strong>release</strong> có cổng (R0 → R1 → R2 → shadow)</td>
+<td><strong>Đo trước</strong>: golden set + giám khảo đã hiệu chỉnh; tách prompt thành <strong>slot</strong> có tên; bộ đề xuất kiểu GEPA sửa từng slot theo cụm lỗi, chọn theo biên Pareto, <strong>bấm để promote</strong></td>
+<td><strong>Ghi nhận trước</strong> vào một kho sự kiện; học theo 6 lớp: L0 từ vựng, L1 sổ bài học (ACE), L2 ví dụ, L3 tóm tắt sở thích tenant (CIPHER), L4 GEPA offline cho prompt sửa/giám khảo, L5 fine-tune khi đủ dữ liệu</td>
+</tr>
+<tr>
+<td>Dùng điểm chèn có sẵn</td>
+<td>Có (lessons append, <code>render_brand_block</code>, <code>_repair_feedback</code>, lớp AA-800)</td>
+<td><strong>Không</strong> — refactor mọi prompt writer/repair A1/T2/T9 thành slot đọc từ DB (<code>prompt_registry.resolve</code>); phải replay giống hệt từng byte trước khi bật</td>
+<td>Có (khối &quot;HOUSE LESSONS&quot; ở S1/T2/T9; ví dụ thay few-shot tĩnh trong <code>render_brand_block</code>)</td>
+</tr>
+<tr>
+<td>Học giọng tenant</td>
+<td>Có (P4: ví dụ k=3 lọc theo tenant)</td>
+<td>Muộn (P4: slot <code>*.voice.*</code> riêng tenant; ví dụ chỉ là tuỳ chọn)</td>
+<td>Có (P3: 3–5 ví dụ + tóm tắt sở thích ≤ 5 câu)</td>
+</tr>
+<tr>
+<td>Cải thiện đầu tiên chạm bài viết</td>
+<td>~phiên 4 (P2 chờ AA-729)</td>
+<td>~phiên 5–7 (bản tối ưu tự động đầu tiên ở P3; P2 chỉ thử một biến thể do người viết)</td>
+<td>~phiên 3,5 (P2; P1 chờ trả lời AA-729 + AA-845)</td>
+</tr>
+<tr>
+<td>Bảng mới / sửa</td>
+<td>4 mới (+ bảng shadow) + nới 2 CHECK</td>
+<td><strong>8 mới</strong> (sự kiện; golden set, mẫu, kết quả từng mẫu; slot; biến thể; cụm lỗi; lượt tối ưu) + sửa <code>prompt_eval_runs</code>, <code>content_piece_label</code></td>
+<td>4 mới (sự kiện, bài học, ví dụ, cặp ưa thích) + sửa <code>prompt_eval_runs</code>, <code>tenant_brand_rule_versions</code>, bảng nhãn + prefix/bucket S3 cho dataset</td>
+</tr>
+<tr>
+<td>Job mới</td>
+<td><code>writing_memory_mine</code> + eval/shadow</td>
+<td>Mine cụm lỗi hằng tuần + lượt tối ưu (mặc định ≤ 2 chiến dịch/tháng)</td>
+<td>6 kind: backfill, <code>writer_pair_build</code>, <code>writer_lesson_mine</code>, <code>writer_exemplar_index</code>, <code>writer_eval_run</code>, <code>writer_dataset_export</code></td>
+</tr>
+<tr>
+<td>Trang admin</td>
+<td><code>/admin/writing-memory</code>, 5 tab</td>
+<td>Writer Lab, 6 khu (+ panel ở LLM usage và Decisions)</td>
+<td><code>/admin/writer-learning</code>, 6 tab (+ thẻ Tenant 360)</td>
+</tr>
+<tr>
+<td>Ai bật</td>
+<td>Release nền tảng: Nghiệp bấm; release tenant <strong>tự bật</strong> trong dev khi qua cổng</td>
+<td>Mọi biến thể: bấm; DB trigger đòi một lượt holdout đạt</td>
+<td>Mọi thứ: admin bấm — &quot;không gì tự bật&quot;</td>
+</tr>
+<tr>
+<td>Fine-tune</td>
+<td>Không</td>
+<td>Không (giữ dữ liệu trung lập, xem lại ở ~1k+ cặp sạch / tác vụ)</td>
+<td>Có điều kiện (L5: xuất JSONL SFT/DPO ra S3; cần ≥ 1.000 cặp sạch + KPI chững 2 vòng; RFT open-weight ~$160–400/lượt)</td>
+</tr>
+<tr>
+<td>Chi phí/tháng (Dev)</td>
+<td>$30–50</td>
+<td>$30–70</td>
+<td>$35–80</td>
+</tr>
+<tr>
+<td>Công</td>
+<td>~6 phiên (giám khảo 2: thực tế ~8)</td>
+<td>7–8 phiên</td>
+<td>~5,5 phiên (P0–P4) + P5 có điều kiện ~1,5</td>
+</tr>
+<tr>
+<td>Điểm mạnh (theo giám khảo)</td>
+<td>Rẻ nhất; dùng lại điểm chèn, không refactor; luật chỉ-hạn-chế; rút lại bằng lật con trỏ; chỉ ra đúng bẫy T2 chạy chung graph S1</td>
+<td>Kỷ luật eval tốt nhất: golden set là bảng thật có tune/holdout, giám khảo chỉ tính khi κ ≥ 0,6, DB trigger, KPI edit-pair, phễu ứng viên, luật repo public, xoá khi offboard</td>
+<td>L0 từ vựng chứng minh bằng replay $0; helper ghi tín hiệu cùng transaction, kiểm sự thật bất đồng bộ; &quot;không gì tự bật&quot;; phân lớp thẳng thắn về rủi ro nhà cung cấp</td>
+</tr>
+<tr>
+<td>Điểm yếu (theo giám khảo)</td>
+<td>Chờ AA-729; release tenant tự bật trong dev; không có ngưỡng κ; vài chi tiết schema sai (§5.3)</td>
+<td>Chậm và nặng nhất; refactor prompt có phạm vi ảnh hưởng rộng (T2 chung graph S1); tối ưu trên ~251 bài T9, ~48 bản T2, 1 nhãn → dễ overfit kiểu OPRO; nhịp chiến dịch + duyệt nặng cho một người</td>
+<td>Phạm vi rộng nhất; đường export dataset + S3 + đồng ý tenant thêm một chỗ chứa chữ tenant mà bây giờ chưa cần; fine-tune gần như không khả dụng; một người duyệt thành nút thắt cho mọi mục giọng tenant; đắt nhất</td>
+</tr>
+</tbody></table></div><h3>3.1 B và C nói ngắn</h3>
+<p><strong>B — Golden-gated Writer Optimiser.</strong> Bốn lớp, tất cả trong AA-CIS-App:</p>
+<ul>
+<li><em>Ghi nhận</em>: <code>acp_shared.writer_feedback_event</code> (giống <code>writing_signal</code> của A) + lưu chữ mọi lượt T9.</li>
+<li><em>Golden set</em>: bảng <code>eval_golden_set</code> / <code>eval_golden_item</code> / <code>eval_item_result</code>; A1 50, T2 10 + phân vùng theo tenant,
+blog 15, social 15, injection 10; chia tune/holdout 30%, có mẫu edit-pair và mẫu cài lỗi (AA-791). Giám khảo khác
+hãng với writer, chỉ được tính vào dừng cứng khi κ ≥ 0,6 so với nhãn Nghiệp neo; dưới mức đó chỉ là chỉ số mềm.</li>
+<li><em>Optimiser</em>: job hằng tuần gom cụm lỗi (<code>failure_cluster</code>) → LLM phản tư đề xuất ≤ 3 sửa nhỏ cho một slot → chấm R0
+($0) / R1 / R2 (≤ 50 mẫu) → giữ biên Pareto theo từng mẫu (GEPA-lite tự viết ~300 dòng, không chuyển writer sang
+DSPy). Slot <code>*.fidelity.*</code> bị khoá: chỉ được thêm hạn chế.</li>
+<li><em>Promote</em>: chạy holdout một lần → Writer Lab hiện diff + nguồn gốc + bảng điểm → bấm promote (active/canary), một cú
+bấm rút lại; đổi golden set / model / gate → biến thể vào trạng thái <code>reverify</code>, lượt chấm lại chờ duyệt.</li>
+<li>Pha: P0 ghi nhận (1) · P1 golden set + giám khảo + baseline (1,5–2) · P2 registry slot + Writer Lab (1) · P3 mine +
+optimiser (1,5–2) · P4 giọng tenant (1–1,5) · P5 vận hành (0,5–1).</li>
+</ul>
+<p><strong>C — Writer Flywheel.</strong> Một kho sự kiện + sáu lớp học, mỗi lớp rẻ và an toàn hơn lớp sau:</p>
+<ul>
+<li><em>Ghi nhận</em>: helper <code>record_writer_feedback</code> ghi trong cùng transaction với thao tác sửa; kiểm sự thật chạy bất đồng
+bộ trong job (<code>pending/grey/pass/fail</code>), vùng xám cần admin xác nhận tới khi AA-803 được hiệu chỉnh.</li>
+<li><em>L0–L3</em>: luật từ vựng (cụm bị cắt ≥ 5 lần bởi ≥ 2 reviewer hoặc qua ≥ 3 tenant); sổ bài học kiểu ACE (chỉ thêm/gộp/bỏ
+từng mục; trần 8 bài nền tảng + 5 bài tenant / người viết × kênh); ví dụ đã che sự thật lọc theo <code>tenant_id</code>; tóm tắt
+sở thích tenant ≤ 5 câu. <code>rule_set_version</code> (hash) đóng dấu mọi đầu ra; cờ <code>LEARNING_LAYERS_ENABLED</code> tắt tức thì.</li>
+<li><em>Cổng chung R0–R3</em>: replay $0 → chấm lại bài cũ → golden set ≤ $15 → shadow biến thể (viết cạnh bản chính, tenant
+không thấy). Không gì tự bật.</li>
+<li><em>L4–L5</em>: GEPA chỉ trên prompt sửa câu và prompt giám khảo, cần Nghiệp duyệt từng lượt; xuất dataset SFT/DPO ra S3 tách
+nền tảng / tenant; fine-tune chỉ khi ≥ 1.000 cặp sạch, KPI tăng &lt; 2 điểm hai vòng liền và có nhà cung cấp; adapter riêng
+tenant cần tenant đồng ý bằng văn bản (quyết định kinh doanh của chị Thư).</li>
+<li>Pha: P0 ghi nhận (1) · P1 eval + nhãn (1) · P2 L0 + L1 (1,5) · P3 L2 + L3 (1) · P4 dataset + GEPA thử (1) · P5 quyết
+định fine-tune (có điều kiện).</li>
+<li>Cả A (bản gốc) và C đều đề xuất giám khảo OpenAI; bản khuyến nghị thay bằng route judge không phải Anthropic trên Bedrock acc3 (§5.5, D10).</li>
+</ul>
+<h2>4. Điểm giám khảo</h2>
+<p><strong>Panel giám khảo AI</strong> (S245): hai agent AI chấm độc lập, không phải người. Thang 1–5 mỗi tiêu chí (chất lượng tăng, an toàn, chi phí, thời gian ra giá trị, vận hành).</p>
+<div class="tablewrap"><table><thead><tr>
+<th>Phương án</th>
+<th>Giám khảo AI 1 (góc chị Thư / sản phẩm)</th>
+<th>Giám khảo AI 2 (góc kỹ thuật / an toàn)</th>
+<th>Tổng</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>A. Writing Memory v1</strong></td>
+<td><strong>19</strong> (4/4/4/4/3)</td>
+<td><strong>21</strong> (4/5/4/4/4)</td>
+<td><strong>40</strong></td>
+</tr>
+<tr>
+<td>C. Writer Flywheel</td>
+<td>16 (4/4/3/3/2)</td>
+<td>16 (4/3/3/3/3)</td>
+<td>32</td>
+</tr>
+<tr>
+<td>B. GWO</td>
+<td>15 (3/5/3/2/2)</td>
+<td>15 (4/4/3/2/2)</td>
+<td>30</td>
+</tr>
+</tbody></table></div><p>Cả hai giám khảo chọn <strong>A</strong>. Cả hai cũng chỉ ra cùng một điểm yếu: A chờ AA-729 nên luật đầu tiên chạm bài muộn,
+và cho release tenant tự bật quá sớm. Phần ghép ở §5 sửa đúng hai điểm này.</p>
+<p>Vì sao B và C thua:</p>
+<ul>
+<li><strong>B (30)</strong>: cả hai giám khảo cho &quot;thời gian ra giá trị&quot; và &quot;vận hành&quot; 2/5. Golden set, giám khảo hiệu chỉnh và refactor
+prompt thành slot phải xong trước khi có ứng viên tối ưu đầu tiên; với dữ liệu Dev hiện nay (1 nhãn, 4 tenant thử),
+optimiser có rất ít tín hiệu thật. Giám khảo 1 cho an toàn 5/5 — cao nhất — nên phần an toàn của B được ghép vào A.</li>
+<li><strong>C (32)</strong>: lõi L0–L3 gần giống A nhưng mô hình release/quy trách nhiệm lỏng hơn (một hash <code>rule_set_version</code> thay cho
+CHECK eval theo từng release). Giám khảo 2 cho an toàn 3/5 vì đường export dataset + S3 + đồng ý tenant; giám khảo 1
+cho vận hành 2/5 (6 job, ≥ 4 bảng, 6 tab). Chi phí cao nhất ($35–80).</li>
+</ul>
+<h2>5. KHUYẾN NGHỊ: Writing Memory v1 + 11 ý ghép</h2>
+<h3>5.1 Phương án thắng, nói ngắn</h3>
+<p>Một vòng học dùng chung cho cả 4 người viết (A1 Master, T2 tour tenant, T9 blog, T9 social). Trọng số mô hình không
+đổi. Thứ được học là <strong>bộ nhớ viết</strong> gồm hai loại mục:</p>
+<ul>
+<li><strong>Luật</strong> — câu lệnh ngắn hoặc mục từ vựng, đúc từ lỗi gate lặp lại và từ diff người sửa. Ba loại:
+<code>lexicon</code> (cấm/thay cụm từ, không cần LLM), <code>writer_instruction</code> (một dòng trong khối &quot;HOUSE RULES&quot;, tối đa
+12 dòng nền tảng + 8 dòng tenant), <code>repair_hint</code> (chỉ chèn khi gate tương ứng báo lỗi).
+<strong>Luật chỉ được hạn chế</strong> (cắt, cấm, đổi cách nói, định dạng), lint tự động từ chối mọi luật bảo &quot;hãy nêu dịch vụ X&quot;.
+Với luật <code>lexicon</code> kiểu &quot;thay&quot;, <strong>chuỗi thay thế cũng bị kiểm</strong> bằng <code>new_specifics</code> (hoặc phép kiểm tương đương): từ
+chối mọi chuỗi thêm số, nơi, giờ, giá hay dịch vụ (vd. &quot;lunch&quot; → &quot;lunch included&quot; bị loại).
+<strong>Tóm tắt sở thích tenant (CIPHER, §5.2.9) cũng là một loại luật</strong> (<code>preference_summary</code>): qua cùng lint chỉ-hạn-chế,
+cách ly <code>adds_unsourced_claim</code>, R0–R2 và một cú bấm duyệt — vì một tóm tắt ≤ 5 câu vẫn có thể mã hoá một lời hứa nguồn
+không có (vd. &quot;luôn nhắc đón khách sạn miễn phí&quot;) rồi được chèn vào prompt writer.</li>
+<li><strong>Ví dụ</strong> — đoạn văn đã được duyệt, <strong>che thực thể</strong> (tên nơi, số, giờ, giá, dịch vụ → <code>[PLACE]</code>, <code>[N]</code>…), lấy
+3 đoạn gần nhất theo người viết + kênh + <strong>đúng tenant</strong>, chèn với nhãn &quot;chỉ học giọng, không dùng lại sự thật nào&quot;.</li>
+</ul>
+<p>Mỗi mục có <strong>phạm vi</strong>: <code>platform</code> (không bao giờ chứa chữ của tenant) hoặc <code>tenant</code> (chỉ dùng cho tenant đó: lọc
+<code>WHERE tenant_id = $1</code> trong code + RLS, xem §5.3).
+Thứ tự ưu tiên: luật brand tenant tự viết &gt; luật tenant học được &gt; luật nền tảng; <strong>cổng sự thật (F1/F17/F9_cta_fact,
+Jev) đứng trên tất cả</strong>.</p>
+<p>Không mục nào tới tay người viết một mình: chúng đi trong một <strong>release</strong> (gói có version theo người viết). Release
+chỉ bật khi qua đủ cổng và có một cú bấm duyệt; rút lại = đưa con trỏ &quot;active&quot; về release trước, không cần deploy.</p>
+<h3>5.2 Mười một ý ghép từ B và C (đều do giám khảo đề xuất, <code>research/judges.json</code> mục <code>grafts</code>)</h3>
+<ol>
+<li><strong>Đường nhanh L0 — từ vựng</strong> (từ C): cụm từ admin đã cắt ≥ N lần thành luật <code>lexicon</code>, chứng minh bằng <strong>replay
+$0</strong> trên chữ + ledger đã lưu, gắn vào lớp AA-800 (PR #869 đã merge). Không cần chờ AA-729 → chị Thư thấy &quot;không còn viết
+X nữa&quot; từ ~phiên 2–3 thay vì phiên 4.</li>
+<li><strong>Không gì tự bật</strong> (từ C): mọi release, kể cả release tenant, cần một cú bấm của Nghiệp/admin. Ghi trong ADR như
+một bất biến có ngày; xem lại khi có tenant thật.</li>
+<li><strong>Cổng hiệu chỉnh giám khảo</strong> (từ B): giám khảo chỉ được tính vào &quot;dừng cứng/mềm&quot; khi Cohen&#39;s κ ≥ 0,6 so với nhãn
+Nghiệp neo (AA-783); dưới mức đó chỉ để tham khảo. Kiểm lại khi đổi model/rubric.</li>
+<li><strong>KPI &quot;edit-pair replay hit rate&quot;</strong> (từ B): người viết còn tạo ra đúng mẫu mà người đã xoá không? Đây là con số dễ hiểu
+nhất để cho chị Thư thấy hệ thống &quot;học từ chỉnh sửa&quot;, và đo được ngay trên golden set trước khi có tenant thật.</li>
+<li><strong>Lưu chữ của mọi lượt viết T9</strong> (từ B, gap G4): ledger từng lượt đã có trong <code>repair_log</code> (AA-791, #735); phần
+thiếu là <strong>chữ</strong> — <code>discarded_attempts</code> chỉ giữ một lượt.</li>
+<li><strong>Golden set thành bảng thật</strong> (từ B): <code>eval_golden_set</code>, <code>eval_golden_item</code> (tune/holdout, tầng, bẫy, tenant),
+<code>eval_item_result</code> — thay vì nhét hết vào <code>prompt_eval_runs.details</code>. Thêm trạng thái release <code>reverify</code> khi đổi
+golden set, route model hoặc taxonomy gate (AA-787): release vẫn chạy nhưng bị cờ, R2 chạy lại <strong>chờ duyệt</strong>.</li>
+<li><strong>Helper <code>record_writer_feedback</code></strong> (từ C): ghi tín hiệu trong cùng transaction với thao tác sửa; kiểm sự thật chạy
+bất đồng bộ (<code>pending/grey/pass/fail</code>), không thêm lệnh LLM vào đường request; sự kiện vùng xám cần admin xác nhận
+cho tới khi AA-803 được hiệu chỉnh. Luật khoá theo <code>reason_code</code> + bản đồ alias gate để không mồ côi khi AA-787 đổi
+tên gate (27 → ~18).</li>
+<li><strong>Luật dữ liệu</strong> (từ B): repo AA-CIS-App là public → golden fixture, cặp sửa, ví dụ chỉ ở DB / S3 bronze; test trong
+repo dùng fixture giả. Xoá dữ liệu học của tenant khi offboard (quy trình DRY RUN): <code>writing_signal</code>, luật và tóm tắt
+phạm vi tenant, <code>writing_exemplar</code>, và <code>writing_memory_shadow</code> (đầu ra shadow chứa chữ tenant). Vì <code>audit_log</code> là
+append-only, có chuỗi hash và trigger <code>audit_log_no_delete</code> / <code>no_update</code> / <code>no_truncate</code>, <strong>chữ trước/sau chỉ lưu ở
+<code>writing_signal</code> (xoá được); <code>audit_log.details</code> chỉ giữ id/hash + chip</strong>. Chữ chỉnh câu admin T2/T9 đã nằm sẵn trong
+<code>audit_log</code> thì không xoá được → ngoại lệ lưu giữ chờ Nghiệp chốt (D16). Đăng ký kho mới vào AI Use Register (AA-804).</li>
+<li><strong>Tóm tắt sở thích tenant kiểu CIPHER</strong> (từ C, P4): ≤ 5 câu bằng lời, đúc từ các lần sửa đã qua lọc sự thật của
+chính tenant. Tóm tắt là một loại luật (§5.1): qua cùng lint chỉ-hạn-chế, cách ly <code>adds_unsourced_claim</code>, R0–R2 và
+một cú bấm duyệt. Rẻ hơn ví dụ và chạy được với rất ít lần sửa — hợp với Dev hiện tại (4 tenant thử, ~48 bản T2).
+Kèm một ô &quot;số cặp sạch / người viết&quot; trên tab Metrics để giữ cửa fine-tune sau này, <strong>không</strong> xây đường export.</li>
+<li><strong>Khoá bật release hai lớp + replay release rỗng</strong> (từ B, giám khảo 1): ngoài CHECK trong DB, API cũng từ chối bật
+release thiếu eval/shadow (B dùng DB trigger + API). Test CI: luật, ví dụ, tóm tắt của tenant A không bao giờ được
+resolve cho tenant B. Trước khi bật <code>memory_enabled</code>, replay <strong>release 0 (bộ nhớ rỗng)</strong> qua đường chèn mới phải cho
+prompt <strong>giống hệt từng byte</strong> với prompt hiện tại (R0, $0) — bằng chứng rằng đường chèn không tự đổi bài.</li>
+<li><strong>Gộp AA-900 vào tab Releases</strong> (từ B, giám khảo 2): AA-900 (sổ đăng ký prompt, cổng eval thủ công) không thành
+trang riêng; tab Releases là chỗ duy nhất quản lý prompt và bộ nhớ.</li>
+</ol>
+<h3>5.3 Những chỗ sửa so với bản gốc của phương án A (giám khảo 2 kiểm dump)</h3>
+<ul>
+<li><p><strong>Route soạn luật / giám khảo:</strong> bản gốc của A gieo stage <code>writing_memory_mine</code> là &quot;judge, OpenAI&quot;; bản khuyến nghị dùng route judge không phải Anthropic sẵn có trên Bedrock acc3 (D10), OpenAI chỉ là fallback cuối theo migration 224.</p>
+</li>
+<li><p><strong>Chi phí tăng thêm mỗi bài:</strong> A ghi +3–8%; tính lại theo từng lời gọi có chèn ví dụ/luật thì khoảng +17–21% cho S1 và +5–21% cho blog T9, sát ngưỡng dừng mềm +20%. Vì vậy ví dụ mẫu chỉ chèn ở lượt viết đầu, còn <code>repair_hint</code> chỉ chèn khi gate bắn.</p>
+</li>
+<li><p><code>acp_shared.audit_log.id</code> là <strong>uuid</strong>, <code>audit_log.tenant_id</code> là <strong>varchar(50)</strong> → <code>writing_signal.audit_log_id</code> phải
+là uuid và backfill phải ép kiểu tenant_id.</p>
+</li>
+<li><p><code>gold_aa_internal.tenant_tour_versions</code> <strong>không có</strong> cột metadata/writer_input (jsonb duy nhất là <code>rewritten_content</code>)
+→ cần migration thêm <code>generation_meta jsonb NULL</code> để đóng dấu release cho T2 (P3). Trước đó, P0 chỉ đóng dấu T9
+(<code>content_piece.writer_input</code> đã có).</p>
+</li>
+<li><p>Bảng mới chứa chữ tenant trong schema <code>shared</code>: writer và job mine chạy bằng <code>cis_app</code>, mà mọi bảng RLS của CIS có
+policy <code>... TO cis_app USING true</code> (vd. <code>content_piece_cis_app_all</code>, <code>tenant_tour_versions_cis_app_all</code>). Đặt
+<code>app.tenant_id</code> chỉ lọc được với <code>aa_app_user</code> qua tenant pool (<code>api/core/aa544_tenant_pool.py</code>). Vì vậy truy xuất ví
+dụ và tóm tắt <strong>phải có <code>WHERE tenant_id = $1</code> trong code</strong> (hoặc đi qua tenant pool), kèm test chạy bằng <code>cis_app</code>.
+Vẫn bật <code>FORCE ROW LEVEL SECURITY</code> cho bảng mới (tiền lệ: <code>generated_content</code> &quot;RLS on + FORCE&quot;).</p>
+</li>
+<li><p>Ngân sách theo <strong>tháng</strong>, không chỉ theo lượt (6 người viết × lớp tenant × R2 + shadow có thể vượt $15/lượt).</p>
+</li>
+<li><p>Thống kê: ≤ 50 cặp trên Dev thường không đủ ý nghĩa → quy tắc promote dự phòng: <strong>không kém hơn ở mọi dừng cứng + cải
+thiện cùng chiều, gộp qua nhiều vòng</strong> (như AA-865).</p>
+</li>
+<li><p>ADR: <strong>app ADR 0009 trong chuỗi app</strong> (<code>apps/AA-CIS-App/docs/adr/</code> đang dừng ở 0008), tiêu đề riêng, trích dẫn ADR
+hệ sinh thái 0009 đã giữ chỗ (AI platform, AA-804, <code>docs/adr/README.md</code>). Hai số 0009 thuộc hai chuỗi khác nhau.</p>
+</li>
+<li><p>Công: 6,5–7,5 phiên + dự phòng ≈ 8, không phải 6.</p>
+</li>
+</ul>
+<h3>5.4 Sơ đồ vòng học</h3>
+<pre class="mermaid">flowchart LR
+  S[&quot;1. Tín hiệu&lt;br/&gt;lỗi gate lặp, chỉnh câu admin,&lt;br/&gt;tenant sửa, regenerate + chip lý do,&lt;br/&gt;nhãn, bài đăng không sửa&quot;] --&gt; F[&quot;2. Lọc sự thật&lt;br/&gt;new_specifics + Jev&lt;br/&gt;chặn lần sửa thêm lời hứa&quot;]
+  F --&gt; M[&quot;3. Mỏ luật / ví dụ&lt;br/&gt;gom cụm, ngưỡng hỗ trợ,&lt;br/&gt;LLM không phải Anthropic&lt;br/&gt;(route judge) soạn luật,&lt;br/&gt;lint chỉ-hạn-chế, chặn chữ tenant&quot;]
+  M --&gt; O[&quot;4. Kiểm offline&lt;br/&gt;R0 replay $0&lt;br/&gt;R1 chấm lại bài cũ&lt;br/&gt;R2 golden set + holdout 30%&quot;]
+  O --&gt; SH[&quot;5. Shadow&lt;br/&gt;chạy lại 50 input thật,&lt;br/&gt;không ai thấy&quot;]
+  SH --&gt; A[&quot;6. Bật&lt;br/&gt;1 cú bấm duyệt,&lt;br/&gt;release active&quot;]
+  A --&gt; W[&quot;7. Theo dõi hằng tuần&lt;br/&gt;lỗi lặp, công sửa,&lt;br/&gt;sự thật, rò tenant, chi phí&quot;]
+  W --&gt;|dừng cứng / mềm| R[&quot;8. Rút lại&lt;br/&gt;lật con trỏ về release trước&quot;]
+  W --&gt;|lỗi mới, lần sửa mới| S
+  R --&gt; S</pre><p>Bản ASCII (cho chỗ không vẽ được mermaid):</p>
+<div class="codewrap"><pre><code> tín hiệu ─► lọc sự thật ─► mỏ luật/ví dụ ─► R0 $0 ─► R1 ─► R2 golden+holdout ─► shadow ─► [bấm duyệt] ─► BẬT
+    ▲                                                                                                  │
+    │                                                                                   theo dõi hằng tuần
+    └──────────────── lỗi mới / lần sửa mới ◄──────────── RÚT LẠI (lật con trỏ) ◄── dừng cứng/mềm ◄────┘</code></pre></div><p>Đường nhanh L0: luật <code>lexicon</code> chỉ cần R0 ($0) + cú bấm, bỏ qua R2/shadow (luật từ vựng là tất định, replay đã đủ chứng minh).
+Hai điều kiện để đường tắt này an toàn: (1) chuỗi thay thế của luật &quot;thay&quot; phải qua <code>new_specifics</code> (§5.1); (2) luật
+<code>lexicon</code> áp <strong>trước</strong> các cổng — hoặc v1 chỉ dùng luật &quot;cấm&quot; để kích hoạt lượt sửa bình thường. Không bao giờ thay chữ
+sau khi cổng đã chạy, vì như vậy phép thay đi vòng qua F1/F17/F9_cta_fact.</p>
+<h3>5.5 Mỏ luật hoạt động thế nào</h3>
+<ul>
+<li><strong>Bảng tín hiệu chuẩn hoá</strong> <code>shared.writing_signal</code> (tạo ở P0, xoá được): mỗi dòng = người viết, kênh, phạm vi +
+tenant, trường/đoạn, trước/sau, gate, chip lý do, ai sửa (admin/tenant/system), kết luận sự thật. Dòng A1 mang
+<code>scope=&#39;platform&#39;</code>: <code>generated_content.tenant_id</code> là NOT NULL nhưng chưa rõ chứa tenant nào, nên backfill ánh xạ A1
+sang <code>scope=&#39;platform&#39;</code> một cách tường minh và <strong>không chép <code>tenant_id</code></strong>. Backfill một lần từ <code>audit_log</code>
+admin_sentence_*, diff T2 cha/con, <code>discarded_attempts</code>/<code>repair_log</code>, <code>quality_scores.lessons_extracted</code>.</li>
+<li><strong>Job <code>writing_memory_mine</code></strong> (bảng <code>shared.job</code>, hằng tuần + bấm tay): gom cụm theo (người viết, gate/lý do, mẫu từ
+ngữ) → ngưỡng: luật tenant ≥ 2 lần sửa trên ≥ 2 bài của tenant đó; luật nền tảng có bằng chứng từ bài của tenant <strong>luôn
+cần ≥ 3 tenant khác nhau</strong>; &quot;≥ 2 reviewer&quot; và &quot;lỗi gate lặp ≥ 5% bài trong 30 ngày&quot; chỉ áp cho tín hiệu A1 (Dev có
+4 tenant thử, một tenant có thể một mình vượt 5%) → một lệnh LLM <strong>không phải Anthropic trên route judge sẵn có</strong>
+(gpt-5.6-luna → gpt-6-luna trên Bedrock acc3; gpt-6-luna-openai chỉ là fallback cuối theo migration 224; stage mới seed
+<code>role=&#39;judge&#39;</code>) cho mỗi cụm, tối đa 50/lượt. Giữ luật vendor của app ADR 0006 §5: &quot;writer là Anthropic, judge thì
+không&quot; → kiểm kiểu PREDICT: luật phải giải thích được ≥ 2 lần sửa giữ lại trong cùng cụm.</li>
+<li><strong>Luật nền tảng</strong> từ mẫu của tenant chỉ được nâng lên khi viết lại thành câu chung, ví dụ lấy từ chữ A1 hoặc tự tạo;
+prompt soạn luật nền tảng chỉ nhận chữ <strong>đã che thực thể</strong>, không nhận chữ thô của nhiều tenant; kiểm trùng 5-gram với
+kho chữ của mọi tenant + tên brand + forbidden words; Nghiệp duyệt từng luật.</li>
+</ul>
+<h2>6. Áp cho từng loại bài</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Loại bài</th>
+<th>Tín hiệu chính</th>
+<th>Luật chèn vào đâu</th>
+<th>Ví dụ (exemplar)</th>
+<th>Lưu ý riêng</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>Tour Master (A1/S1)</strong></td>
+<td><code>quality_scores.failure_codes / brand_audit_codes / lessons_extracted</code>; flag_fix; admin sửa trường (sau P0 có trước/sau); Regenerate + chip lý do; chip <code>fact_not_in_source</code> → Jev</td>
+<td>Khối HOUSE RULES <strong>thay</strong> &quot;LESSONS FROM PREVIOUS BATCHES&quot; (<code>s1_batch.py</code>, <code>admin_pipeline.py</code>); <code>repair_hint</code> cho flag_fix</td>
+<td>Chỉ ví dụ nền tảng (A1 không có tenant)</td>
+<td>Chỉ có luật nền tảng. Cổng: không thêm lỗi B-class trên tầng &quot;fact-dense&quot; và &quot;tour dài ≥ 9 ngày&quot; của golden set</td>
+</tr>
+<tr>
+<td><strong>Tour tenant (T2)</strong></td>
+<td>Diff <code>tenant_edit</code> cha/con; admin chỉnh câu T2 (AA-802); T3 QA</td>
+<td>Release riêng khoá <code>t2_tour</code> (dù chung graph S1 — luật A1 chỉ áp cho T2 khi được đưa vào và chấm trên tầng T2)</td>
+<td>k=3 theo tenant, fallback ví dụ nền tảng khi tenant &lt; 3</td>
+<td>Cần migration <code>generation_meta</code> (P3, cùng PR bịt projection tenant ở §7) để đóng dấu release. Golden set chỉ 10 mẫu T2 → promote theo quy tắc dự phòng (§8.2). Lời hứa tenant tự thêm (vd. &quot;lunch included&quot;) bị cách ly, không thành ví dụ</td>
+</tr>
+<tr>
+<td><strong>Social (T9 LinkedIn/Facebook)</strong></td>
+<td><code>gate_ledger</code> (F14_social_shape, F14_first_line, F15_voice, F2…); admin chỉnh câu; tenant sửa ở My Content (sau P0)</td>
+<td><code>render_brand_block</code> + <code>_repair_feedback</code>; luật <code>lexicon</code> vào lớp AA-800 / gate từ vựng AA-787</td>
+<td>k=3 theo tenant + kênh</td>
+<td>Bài ngắn → luật từ vựng và &quot;dòng mở đầu&quot; có tác dụng lớn nhất; nên là nơi bật L0 đầu tiên. Golden set có 15 LinkedIn nhưng <strong>không có Facebook</strong> → release Facebook dùng quy tắc dự phòng (§8.2) cho tới khi có tầng riêng</td>
+</tr>
+<tr>
+<td><strong>Blog (T9 blog)</strong></td>
+<td>Như social + F7/F16 FAQ, F5, F18, F19; <code>minutes_to_fix</code> từ nhãn</td>
+<td>Như social</td>
+<td>k=3 theo tenant + kênh, theo đoạn (không cả bài)</td>
+<td>Golden set tầng blog 15 mẫu; đo <code>minutes_to_fix</code> (~5 phút/blog theo gói AA-783)</td>
+</tr>
+</tbody></table></div><p>Ghi chú T8 (góc viết) và slate: giữ tín hiệu <code>chosen</code> vs <code>recommended</code>, chưa khai thác ở v1 (thiếu lý do).</p>
+<h2>7. Giao diện cần thêm</h2>
+<p><strong>Admin (UI kit <code>app/_kit</code>, kiểm bằng skill aa-ui-verify):</strong></p>
+<ul>
+<li>Trang mới <strong><code>/admin/writing-memory</code></strong>, 5 tab:<ul>
+<li><em>Signals</em>: cụm lỗi/sửa lặp theo người viết, kênh, tenant; số lượng, xu hướng, mẫu trước/sau.</li>
+<li><em>Candidates</em>: luật nháp kèm nguồn gốc (link tới bài gốc), độ hỗ trợ, phạm vi, kết luận sự thật, kết quả lint;
+nút sửa / từ chối / gửi replay.</li>
+<li><em>Exemplars</em>: kho ví dụ theo tenant × người viết × kênh; nút ghim / loại (kèm lý do).</li>
+<li><em>Releases</em>: nháp → báo cáo eval (R0/R1/R2, thống kê cặp, isolation probe, chi phí) → shadow đặt cạnh nhau →
+<strong>Duyệt</strong> → Bật / Rút lại một cú bấm; công tắc tắt theo người viết.</li>
+<li><em>Metrics</em>: KPI §8 theo người viết và tenant; ô &quot;số cặp sạch&quot;.</li>
+</ul>
+</li>
+<li><strong>Drawer Content Quality</strong> (bài T9, bản T2): <strong>nút sửa + chip lý do</strong> khi áp câu — chip chọn sẵn theo gate bị cờ, xác
+nhận là một cú bấm: <code>fact_not_in_source</code>, <code>optional_as_included</code>, <code>wrong_place_or_time</code>, <code>voice_off_brand</code>,
+<code>ai_phrasing</code>, <code>format_channel</code>, <code>repair_residue</code>, <code>style_only</code>. Thêm &quot;Dùng làm ví dụ&quot; / &quot;Không bao giờ dùng làm ví
+dụ&quot;. Drawer nhãn <code>PieceLabel.tsx</code> dùng cho cả bản T2.</li>
+<li><strong>A1 review / chi tiết tour</strong>: chip lý do trên Regenerate, Reject, Dismiss; lưu trước/sau khi sửa trường; huy hiệu
+&quot;đã học từ lần sửa này&quot; khi một luật trích dẫn nó; drawer nhãn mở rộng cho A1.</li>
+<li><strong>Tenant 360</strong>: thẻ &quot;Voice memory&quot; (luật tenant đang bật, số ví dụ, release gần nhất, xu hướng tỉ lệ tenant sửa).</li>
+</ul>
+<p><strong>Tenant portal: không thêm gì về QA.</strong> Tenant sửa trực tiếp như hôm nay (T2 sửa inline, T9 My Content); hệ thống ghi
+nhận phía server, tenant không thấy luật, gate, điểm, release hay chip. Tenant chỉ nhận ra bài sau cần sửa ít hơn.
+Câu hỏi tuỳ chọn &quot;Lần sau nên đổi gì?&quot; là quyết định sản phẩm riêng (D7), mặc định tắt.</p>
+<p><strong>Khe hở phải bịt trước khi đóng dấu release cho T2.</strong> Đọc bản T2 phía tenant dùng <code>SELECT ttv.*</code>
+(<code>api/routers/v1_tours.py</code> L820) rồi lọc bằng denylist <code>TENANT_HIDDEN_VERSION_FIELDS</code>
+(<code>api/routers/_tenant_projection.py</code> L19–21). Regex key-walk <code>TENANT_FORBIDDEN_KEY_RE</code>
+(<code>needs_review|quality|score|qa_|judge|llm_cost|jev_cost</code>) không bắt <code>generation_meta</code>, <code>rule_ids</code> hay <code>release</code>. Cùng PR
+với migration <code>generation_meta</code> (P3) phải: thêm <code>generation_meta</code> vào <code>TENANT_HIDDEN_VERSION_FIELDS</code>; mở rộng regex thêm
+<code>generation_meta|rule_ids|release|memory</code>; lấy test key-walk làm bằng chứng cho dừng cứng 3 (§8.2). T9 đã theo kiểu
+allowlist (<code>api/routers/v1_content_writing.py</code>), nên không có khe này.</p>
+<h2>8. Đo lường và tiêu chí dừng</h2>
+<h3>8.1 KPI</h3>
+<div class="tablewrap"><table><thead><tr>
+<th>Nhóm</th>
+<th>Chỉ số</th>
+<th>Nguồn</th>
+<th>Mục tiêu</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>Học từ lỗi</strong> (sao bắc đẩu)</td>
+<td>Tỉ lệ lỗi lặp: % bài mới chạm một cụm đã có luật active</td>
+<td><code>writing_signal</code> × dấu <code>rule_ids</code></td>
+<td>Giảm qua từng release</td>
+</tr>
+<tr>
+<td><strong>Học từ người sửa</strong></td>
+<td>Edit-pair replay hit rate; khoảng cách sửa chuẩn hoá; tỉ lệ tenant sửa (T2 <code>tenant_edit</code>, T9 sự kiện sửa); số lần admin áp câu / 100 bài; <code>minutes_to_fix</code> median/p90; regenerate / tour A1</td>
+<td>golden set, <code>writing_signal</code>, <code>content_piece_label</code></td>
+<td>Giảm</td>
+</tr>
+<tr>
+<td>Chất lượng</td>
+<td>Tỉ lệ &quot;sửa nhẹ trở xuống&quot;</td>
+<td>nhãn người, hoặc đa số panel AI khi chưa đủ nhãn</td>
+<td>≥ 60% (r5 đạt 70%)</td>
+</tr>
+<tr>
+<td><strong>Sự thật</strong> (không khoan nhượng)</td>
+<td>Lỗi B-class / 100 bài trên tầng fact; ca C1; tỉ lệ chặn F1/F17/F9_cta_fact</td>
+<td>golden set, <code>/admin/content-quality/stats</code></td>
+<td>Không tăng (0 lỗi mới)</td>
+</tr>
+<tr>
+<td>Cách ly tenant</td>
+<td>Isolation probe (n-gram tenant A trong bài tenant B); F10 ≥ 0,92</td>
+<td>R2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Sức khoẻ vòng</td>
+<td>Re-flag rate (n ≥ 60, Wilson 95%); độ đầy đủ ghi nhận (≥ 80% sự kiện admin có chip lý do); phễu ứng viên (đề xuất → R0 → R2 → holdout → bật → rút lại)</td>
+<td>AA-865 pattern</td>
+<td>≤ 8%; ≥ 80%; tỉ lệ rút lại &gt; 20% = cổng quá lỏng</td>
+</tr>
+<tr>
+<td>Chi phí</td>
+<td>$/bài theo stage; chi tiêu vòng học / tháng; token prompt thêm</td>
+<td><code>llm_call_log</code></td>
+<td>≤ +20% / bài; ≤ trần tháng</td>
+</tr>
+</tbody></table></div><p>Phương pháp: so cặp trên cùng phiên bản fixture (McNemar cho nhị phân, Wilcoxon cho phút/điểm), Wilson 95%, gộp qua
+nhiều vòng như AA-865, báo cáo theo từng tenant lẫn gộp, holdout 30% phải đồng thuận. <strong>Đo baseline AA-729 trước
+release đầu tiên.</strong></p>
+<h3>8.2 Tiêu chí dừng</h3>
+<p><strong>Dừng cứng — tự rút lại ngay (một điều là đủ):</strong></p>
+<ol>
+<li>≥ 1 lỗi B-class hoặc C1 <strong>mới</strong> trên tầng fact của golden set so với release trước (cùng logic AA-865 đã loại fix (b)
+vì ca #13 &quot;ngủ đêm&quot; thành &quot;dừng ăn trưa&quot;).</li>
+<li>Bất kỳ chữ có nguồn từ tenant A xuất hiện trong bài của tenant B (n-gram hoặc F10 ≥ 0,92).</li>
+<li>Bất kỳ dấu vết QA (mã gate, thẻ trích dẫn, chữ của luật, khoá <code>generation_meta</code> / <code>rule_ids</code> / <code>release</code>) lọt vào
+chữ hoặc response tenant thấy.</li>
+</ol>
+<p><strong>Theo dõi sau khi bật (có từ P3, không chờ P5):</strong> mỗi bài mới do một release active viết chạy isolation probe (dừng
+cứng 2) và grep dấu vết QA (dừng cứng 3); vi phạm → tự rút lại về release trước. Ba dừng cứng vì vậy được kiểm cả trước
+lẫn sau khi bật; job KPI tuần ở P5 lo phần dừng mềm và dừng cứng 1 trên golden set.</p>
+<p><strong>Dừng mềm — rút lại trừ khi Nghiệp ghi lý do giữ:</strong> re-flag &gt; 8% gộp hoặc +3 điểm; &quot;sửa nhẹ trở xuống&quot; −10 điểm hoặc
+&lt; 60%; <code>minutes_to_fix</code> +20%; tỉ lệ tenant sửa tăng; chi phí/bài +20%; độ ổn định giám khảo F9 giảm (phép so sánh mất giá
+trị).</p>
+<p><strong>Promote:</strong> chỉ số chính tốt lên (hoặc giữ nguyên khi chi phí giảm), không dừng nào bật, holdout đồng thuận, giám khảo
+dùng để quyết đã qua κ ≥ 0,6. Khi mẫu Dev quá ít để có ý nghĩa thống kê: không kém ở mọi dừng cứng + cải thiện cùng chiều
+gộp qua ≥ 2 vòng.</p>
+<p>Golden set AA-729 có 10 T2, 15 blog, 15 LinkedIn và không có Facebook (memo M2a). Holdout 30% của tầng T2 chỉ còn 3 mẫu,
+không đủ để chặn một release. Vì vậy <strong>release T2 và Facebook luôn dùng quy tắc dự phòng ở trên</strong> (cộng shadow 50 input
+thật), cho tới khi hai tầng này được mở rộng.</p>
+<p><strong>Tiêu chí dừng cả dự án</strong> (để không xây tiếp vô ích): sau P3, nếu 2 release liên tiếp không giảm được tỉ lệ lỗi lặp
+hoặc edit-pair hit rate trên golden set → dừng ở P3, giữ P0 (ghi nhận) + L0 (từ vựng), không làm P4/P5.</p>
+<h2>9. Kế hoạch theo pha (phiên agent)</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Pha</th>
+<th>Nội dung</th>
+<th>Phiên</th>
+<th>Phụ thuộc</th>
+<th>Xong khi</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>P0 — Cầm máu + ghi lại việc người làm</strong></td>
+<td>Đóng băng <code>pipeline_lessons</code> (đếm chính xác trước, tắt ghi + đọc sau flag); migration <code>shared.writing_signal</code> (RLS + FORCE, xoá được) để chữ trước/sau có chỗ xoá được ngay từ đầu; T9 tenant sửa lưu trước/sau phía admin; A1 sửa trường lưu trước/sau; chip lý do (sentence apply, Regenerate, Reject, Dismiss, T2 admin reject); <code>fact_not_in_source</code> → <code>record_outcome(truth=False)</code> (AA-845 a); đóng dấu <code>writer_prompt_version</code> <strong>chỉ cho T9</strong> (<code>content_piece.writer_input</code>; T2 chờ <code>generation_meta</code> ở P3); lưu <strong>chữ</strong> mọi lượt T9 (ledger đã có từ AA-791); helper <code>record_writer_feedback</code>; ADR app; CONTEXT.md; lesson trong <code>skill/aa-lessons/lessons.md</code></td>
+<td>1</td>
+<td>Không</td>
+<td>0 đọc/ghi mới <code>pipeline_lessons</code> trên Dev; một lần sửa T9 tenant và một lần sửa A1 có bằng chứng trước/sau (curl + dòng <code>writing_signal</code>); <code>audit_log.details</code> chỉ có id/hash + chip, không có chữ; test xoá dòng <code>writing_signal</code> theo tenant; deploy + verify theo aa-ship</td>
+</tr>
+<tr>
+<td><strong>P1 — Kho luật + mỏ luật</strong></td>
+<td>Migration <code>writing_rule</code> (RLS + FORCE, CHECK phạm vi); backfill <code>writing_signal</code> (A1 → <code>scope=&#39;platform&#39;</code>); lọc sự thật; job <code>writing_memory_mine</code> (route judge không phải Anthropic, đầu vào đã che thực thể); tab Signals + Candidates; seed <code>llm_role_config</code> với <code>role=&#39;judge&#39;</code></td>
+<td>1–1,5</td>
+<td>P0</td>
+<td>Số backfill theo nguồn + tenant; 1 lượt mine ≤ $1; test: lint từ chối luật &quot;include X&quot;, chặn 5-gram, tín hiệu tenant A không bao giờ thành luật nền tảng, luật nền tảng có bằng chứng tenant cần ≥ 3 tenant</td>
+</tr>
+<tr>
+<td><strong>P1b — Đường nhanh L0 (từ vựng)</strong></td>
+<td>Release chỉ-từ-vựng, R0 replay $0 trên chữ + ledger đã lưu, cú bấm duyệt; gắn lớp AA-800; luật áp trước các cổng (hoặc chỉ luật &quot;cấm&quot;)</td>
+<td>0,5</td>
+<td>P1 (PR #869 đã merge)</td>
+<td>Một release L0 bật cho T9 social, replay chứng minh giảm lỗi mục tiêu, 0 dừng cứng; <strong>test: chuỗi thay thế thêm số / nơi / giờ / giá / dịch vụ bị <code>new_specifics</code> từ chối</strong></td>
+</tr>
+<tr>
+<td><strong>P2 — Eval + release</strong></td>
+<td>Bảng golden set (set/item/item_result); nới <code>prompt_eval_runs</code>; bảng <code>writing_memory_release</code> (+ CHECK active cần eval + shadow, API kiểm thêm lần nữa), <code>writing_memory_shadow</code>; runner R0/R1/R2; isolation probe; grep dấu vết QA; shadow replay 50 input; cổng κ giám khảo; tab Releases (gộp AA-900); đo <strong>release 0</strong> (bộ nhớ rỗng)</td>
+<td>1–1,5</td>
+<td><strong>AA-729</strong>, AA-783 (nhãn neo)</td>
+<td>Release 0 cho prompt giống hệt từng byte với hiện tại và tái lập số baseline; CHECK và API đều từ chối release thiếu eval; test CI tenant A không resolve sang tenant B; diễn tập rút lại: job kế tiếp dùng release cũ (chứng minh bằng dấu writer_input)</td>
+</tr>
+<tr>
+<td><strong>P3 — Chèn luật vào mọi người viết</strong></td>
+<td>A1 HOUSE RULES thay lessons append; T2 release riêng + migration <code>generation_meta</code> <strong>cùng PR</strong> bịt projection tenant (denylist + regex, §7); T9 qua <code>render_brand_block</code> + repair hint; trần token; dấu <code>rule_ids</code>; kiểm sau bật (isolation probe + grep dấu vết QA trên mỗi bài mới → tự rút lại)</td>
+<td>1</td>
+<td>P2</td>
+<td>Release 1 active cho ≥ 1 người viết: lỗi mục tiêu giảm trên golden + holdout, 0 B-class/C1 mới, 0 rò tenant, chi phí ≤ +20%; test key-walk tenant không thấy <code>generation_meta</code> / <code>rule_ids</code>; diễn tập vi phạm giả → tự rút lại</td>
+</tr>
+<tr>
+<td><strong>P4 — Ví dụ + sở thích tenant</strong></td>
+<td><code>writing_exemplar</code> + ivfflat; che thực thể; thu từ tín hiệu duyệt; k=3 lọc tenant thay slot <code>good_examples</code> tĩnh; tóm tắt sở thích CIPHER ≤ 5 câu (loại luật: lint + cách ly + R0–R2 + cú bấm); lọc <code>WHERE tenant_id = $1</code> trong code; tab Exemplars</td>
+<td>1</td>
+<td>P3</td>
+<td>R2 cặp cho thấy giảm khoảng cách sửa với ≥ 1 người viết tenant, 0 sự thật mang sang; <strong>test chạy bằng <code>cis_app</code></strong> (role thật của writer và job mine): truy xuất ví dụ / tóm tắt cho tenant A trả 0 dòng của tenant B; tóm tắt chứa lời hứa nguồn không có bị cách ly</td>
+</tr>
+<tr>
+<td><strong>P5 — Đo, bảo trì, khép vòng người</strong></td>
+<td>Job KPI hằng tuần + tab Metrics, dừng mềm + dừng cứng 1 trên golden set (dừng cứng 2–3 đã kiểm từ P3); hết hạn luật 60 ngày; drawer nhãn cho T2 + A1; hàng đợi bất đồng 5–10 mục/tuần; DRY RUN xoá <code>pipeline_lessons</code>, <code>acp_output_rules</code>, <code>/v1/rules</code> (kèm mục policy trong <code>api/core/staff_authz.py</code>), <code>acp_post_processor.py</code>, <code>services/acp_produce/rule_adapter.py</code> + <code>tests/unit/test_aa363_rule_adapter.py</code>; xoá dữ liệu học khi offboard tenant (gồm <code>writing_memory_shadow</code>); runbook</td>
+<td>1</td>
+<td>P4</td>
+<td>2 báo cáo tuần tự động; 1 luật hết hạn được job đánh dấu; xoá bảng chết có bằng chứng DRY RUN; xu hướng KPI ghi vào <code>docs/audits/</code></td>
+</tr>
+</tbody></table></div><p>Tổng: <strong>6,5–7,5 phiên + dự phòng ≈ 8</strong>. Có thể bắt đầu P0 ngay phiên sau; P0 và P1 không phụ thuộc AA-729.</p>
+<h3>9.1 Issue Linear đề xuất (CHƯA tạo — chờ D14)</h3>
+<p>Project đề xuất: &quot;CIS Core — Pipeline, LLM &amp; Platform&quot; (kiểm còn &lt; 100 issue chưa lưu trữ trước khi tạo). Tiêu đề
+tiếng Anh theo quy ước:</p>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Pha</th>
+<th>Tiêu đề đề xuất</th>
+</tr>
+</thead><tbody><tr>
+<td>1</td>
+<td>P0</td>
+<td>[Writing memory] Freeze the ungated pipeline_lessons loop (stage mismatch; if &quot;fixed&quot;, T2 failures would steer the global S1 prompt and tenant-derived pattern/example text would sit in a table with no tenant_id)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>P0</td>
+<td>[Writing memory] Capture before/after on tenant T9 piece edits (admin-side only)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>P0</td>
+<td>[Writing memory] Capture per-field before/after on admin A1 generated_content edits</td>
+</tr>
+<tr>
+<td>4</td>
+<td>P0</td>
+<td>[Writing memory] One-click reason chips on sentence apply, A1 Regenerate/Reject/Dismiss and T2 admin reject; fact_not_in_source writes Jev record_outcome(truth=False)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>P0</td>
+<td>[Writing memory] Persist every T9 attempt&#39;s text (ledgers already kept by AA-791) and stamp writer_prompt_version on T9</td>
+</tr>
+<tr>
+<td>6</td>
+<td>P0</td>
+<td>[ADR] CIS app ADR: governed writing memory (rules + exemplars, release-gated, no fine-tuning); supersedes AA-132 lessons and AA-99 output rules</td>
+</tr>
+<tr>
+<td>7</td>
+<td>P0</td>
+<td>[Writing memory] Migration: shared.writing_signal (RLS + FORCE; deletable before/after text, audit_log keeps ids/hashes only) + record_writer_feedback helper</td>
+</tr>
+<tr>
+<td>8</td>
+<td>P1</td>
+<td>[Writing memory] shared.writing_rule (RLS + FORCE, scope CHECKs) + backfill (A1 → scope=platform) + mining job: cluster, thresholds (tenant-derived platform rules need ≥3 tenants), non-Anthropic judge-route drafter on entity-masked text (≤50 calls), constraint-only lint, PREDICT validation</td>
+</tr>
+<tr>
+<td>9</td>
+<td>P1</td>
+<td>[Admin UI] /admin/writing-memory: Signals and Candidates tabs</td>
+</tr>
+<tr>
+<td>10</td>
+<td>P1b</td>
+<td>[Writing memory] L0 lexicon fast path: replay-proven ($0) lexicon releases into the AA-800 vocabulary layers, applied before the gates; replacement strings checked by new_specifics</td>
+</tr>
+<tr>
+<td>11</td>
+<td>P2</td>
+<td>[Eval] First-class golden set tables + widened prompt_eval_runs + writing_memory_release/shadow with activate-requires-eval CHECK and the same check in the API</td>
+</tr>
+<tr>
+<td>12</td>
+<td>P2</td>
+<td>[Eval] R0/R1/R2 memory eval runner, holdout, isolation probe, QA-artefact grep, judge κ gate; baseline release 0 with a byte-identical prompt replay before memory_enabled; CI test that tenant A items never resolve for tenant B</td>
+</tr>
+<tr>
+<td>13</td>
+<td>P2</td>
+<td>[Eval] Shadow replay job + Releases tab (report, approve, activate, rollback, kill switch); absorbs AA-900 (prompt register, manual eval gate)</td>
+</tr>
+<tr>
+<td>14</td>
+<td>P3</td>
+<td>[Writers] Inject the active release into A1, T2 (generation_meta migration + tenant projection denylist/regex in the same PR) and T9, with caps, rule_ids stamps and a post-activation isolation/QA-artefact check that rolls back</td>
+</tr>
+<tr>
+<td>15</td>
+<td>P4</td>
+<td>[Writing memory] Entity-masked exemplar pool + k=3 retrieval with a code-level tenant_id filter (tested as cis_app) + CIPHER tenant preference summaries gated like rules</td>
+</tr>
+<tr>
+<td>16</td>
+<td>P5</td>
+<td>[Writing memory] Weekly KPI job + Metrics tab, soft-stop rollback, rule expiry, disagreement queue</td>
+</tr>
+<tr>
+<td>17</td>
+<td>P5</td>
+<td>[Labels] Extend PieceLabel / content_piece_label to T2 versions and A1 tours</td>
+</tr>
+<tr>
+<td>18</td>
+<td>P5</td>
+<td>[Data] DRY-RUN retirement of pipeline_lessons, acp_output_rules, /v1/rules (+ staff_authz policy entries), acp_post_processor.py, rule_adapter.py and its test; offboarding deletion of learned tenant data incl. writing_memory_shadow</td>
+</tr>
+</tbody></table></div><p>Liên kết (blocker/related) với issue đã có: AA-729, AA-783, AA-845, AA-803, AA-787, AA-800 (PR #869, đã merge), AA-865
+(PR #868, đã merge),
+AA-804 (AI Use Register), AA-900 (sổ đăng ký prompt — gộp vào issue 13). Tìm Linear 20/10/2026 với &quot;lesson&quot;/&quot;exemplar&quot;: chưa có issue nào cho vòng này.</p>
+<h2>10. Chi phí</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Hạng mục</th>
+<th>Ước tính</th>
+</tr>
+</thead><tbody><tr>
+<td>Hạ tầng mới</td>
+<td><strong>$0</strong> — dùng lại RDS/pgvector, worker <code>shared.job</code>, LLMClient, route writer + route judge sẵn có trên Bedrock acc3. Không dịch vụ AWS mới</td>
+</tr>
+<tr>
+<td>Baseline AA-729 (một lần)</td>
+<td>~$8,6–10,4, trần $15</td>
+</tr>
+<tr>
+<td>Mine luật</td>
+<td>≤ 50 lệnh giám khảo/lượt, ~$0,3–1/lượt → ~$2–4/tháng</td>
+</tr>
+<tr>
+<td>R2 golden eval</td>
+<td>≤ $15/lượt, thường $3–10 khi chỉ chạy tầng bị ảnh hưởng; 2–3 release/tháng → ~$10–30</td>
+</tr>
+<tr>
+<td>Shadow replay</td>
+<td>≤ 50 input × $0,05–0,10 → ~$5–10 / release</td>
+</tr>
+<tr>
+<td>R0, R1, embedding</td>
+<td>~$0–2</td>
+</tr>
+<tr>
+<td><strong>Tổng Dev</strong></td>
+<td><strong>~$30–50/tháng</strong>, đề xuất <strong>trần $60/tháng</strong> (D8) để có chỗ cho R2 chạy lại khi AA-787 đổi gate hoặc đổi route model</td>
+</tr>
+<tr>
+<td>Thêm vào mỗi bài khi chạy thật</td>
+<td>≤ 20 dòng luật + 3 ví dụ ≈ 1,5k token đầu vào ≈ +$0,005 <strong>mỗi lệnh có chèn bộ nhớ</strong>. Số lệnh mỗi bài: S1 = writer + flag_fix (2 lệnh) → +~$0,01 ≈ +17–21% của $0,048–0,06/tour; T9 = 1–3 lượt viết + lượt sửa → +$0,005–0,02 ≈ +5–21% của $0,094–0,104/blog. Để giữ ≤ +20%: ví dụ chỉ chèn ở lượt viết đầu, <code>repair_hint</code> chỉ chèn khi gate tương ứng báo lỗi. Giá đơn vị: S1 từ S218, blog từ S234 (tổng hợp ở memo M2a, <code>../2026-10-20-S245-m2a-decisions/README.md</code> mục AA-729). Caching: tra được, vì <code>LLMClient</code> ghi <code>cache_read_tokens</code> / <code>cache_write_tokens</code> cho đường satellite (<code>shared/llm_client/client.py</code> L593–606) → truy <code>shared.llm_call_log</code>. Để không phá cache tiền tố: đặt luật tĩnh (HOUSE RULES) ngay sau khối hệ thống cố định, ví dụ thay đổi theo lệnh để <strong>cuối cùng</strong> (hôm nay lessons được nối vào cuối system prompt)</td>
+</tr>
+<tr>
+<td>Fine-tune</td>
+<td>$0 (ngoài phạm vi)</td>
+</tr>
+</tbody></table></div><p>Mọi lệnh đi qua <code>LLMClient</code> và ghi <code>shared.llm_call_log</code> (stage <code>writing_memory_mine</code>, <code>memory_eval</code>, <code>memory_shadow</code>;
+stage soạn/chấm luật seed <code>role=&#39;judge&#39;</code> trên route judge không phải Anthropic).
+Lượt trả tiền theo luật <code>paid-runs-subset</code>: thử ~3 rồi ≤ ~50; không chạy khi còn PR backend chưa merge hoặc bảng job bận.</p>
+<h2>11. Rủi ro</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>Rủi ro</th>
+<th>Giảm thiểu</th>
+</tr>
+</thead><tbody><tr>
+<td><strong>Bẫy cũ</strong>: ai đó &quot;sửa&quot; lệch stage của <code>pipeline_lessons</code> → lỗi T2 lái prompt S1 toàn cục không cổng, và mẫu lấy từ chữ tenant nằm trong một bảng không có <code>tenant_id</code></td>
+<td>Đóng băng ở P0, ghi lesson, sau đó xoá bảng (DRY RUN)</td>
+</tr>
+<tr>
+<td><strong>Sai sự thật qua bộ nhớ</strong>: ví dụ mang sự thật tour khác; tenant sửa thêm lời hứa</td>
+<td>Che thực thể, nhãn &quot;chỉ học giọng&quot;, cách ly <code>adds_unsourced_claim</code>, lint chỉ-hạn-chế, Jev, dừng cứng B-class. Rủi ro còn lại: che sót thực thể lạ → kiểm n-gram mang sang ở R2</td>
+</tr>
+<tr>
+<td><strong>Rò chéo tenant</strong> qua luật nền tảng hoặc truy xuất</td>
+<td>Mọi luật nền tảng có bằng chứng tenant cần ≥ 3 tenant; prompt soạn luật chỉ nhận chữ đã che thực thể; chặn 5-gram + tên brand; Nghiệp duyệt; lọc <code>tenant_id</code> trong code (vì <code>cis_app</code> có policy <code>USING true</code>) + FORCE RLS; isolation probe là dừng cứng, kiểm cả sau khi bật</td>
+</tr>
+<tr>
+<td><strong>QA lộ ra portal</strong> qua <code>generation_meta</code></td>
+<td>Denylist + regex key-walk mở rộng cùng PR migration (§7)</td>
+</tr>
+<tr>
+<td><strong>Không xoá được chữ tenant khi offboard</strong></td>
+<td>Chữ mới chỉ ở <code>writing_signal</code>; <code>audit_log</code> chỉ id/hash; chữ cũ trong <code>audit_log</code> là ngoại lệ chờ D16</td>
+</tr>
+<tr>
+<td><strong>Ít tín hiệu trên Dev</strong> (4 tenant thử, ~48 bản T2, ~251 bài T9, 1 nhãn)</td>
+<td>Luật nền tảng từ lỗi gate + A1 trước; ngưỡng là config; L0 từ vựng và tóm tắt CIPHER chạy được với ít dữ liệu</td>
+</tr>
+<tr>
+<td><strong>Băng thông người duyệt</strong> (Nghiệp gần như duy nhất; tài khoản <code>trang</code> đã tắt)</td>
+<td>Duyệt = một cú bấm trên báo cáo; hàng đợi bất đồng ≤ 30 phút/tuần; thời gian team chị Thư hỏi ở §14</td>
+</tr>
+<tr>
+<td><strong>Phình prompt / mâu thuẫn với brand pack</strong></td>
+<td>Trần dòng theo người viết, xếp hạng theo hỗ trợ × hiệu quả, hết hạn 60 ngày, thứ tự ưu tiên rõ</td>
+</tr>
+<tr>
+<td><strong>Overfit golden set hoặc một người sửa</strong>; trôi tiêu chí</td>
+<td>Holdout 30% không bao giờ dùng để mine, ≥ 2 reviewer/tenant cho luật nền tảng, giữ nguồn gốc, hiệu chỉnh lại giám khảo</td>
+</tr>
+<tr>
+<td><strong>Giám khảo tự ưu ái</strong></td>
+<td>Mô hình không phải Anthropic trên route judge sẵn có soạn/chấm luật; Jev giữ phần sự thật; cổng κ</td>
+</tr>
+<tr>
+<td><strong>Chuỗi phụ thuộc</strong> (AA-729, AA-783, AA-845, AA-787; PR #868 và #869 đã merge 20/10/2026)</td>
+<td>P0, P1, L0 không phụ thuộc AA-729; alias gate cho AA-787; trạng thái <code>reverify</code></td>
+</tr>
+<tr>
+<td><strong>Graph dùng chung A1/T2</strong></td>
+<td>Release khoá theo người viết; luật A1 chỉ áp T2 khi được đưa vào và chấm trên tầng T2</td>
+</tr>
+<tr>
+<td><strong>Repo public</strong></td>
+<td>Dữ liệu thật chỉ ở DB/S3 bronze; test dùng fixture giả</td>
+</tr>
+</tbody></table></div><h2>12. Vì sao không fine-tune (bây giờ)</h2>
+<ul>
+<li>Bedrock: chỉ Claude 3 Haiku từng fine-tune được, đã EOL 10/09/2026; Nova/Llama/Qwen/gpt-oss = đổi writer, phải đưa dữ
+liệu sang us-east-1/us-west-2.</li>
+<li>OpenAI: đóng fine-tune cho org chưa từng fine-tune từ 07/05/2026; từ 02/07/2026 đóng thêm cho org không chạy inference
+trên mô hình fine-tune trong 60 ngày gần nhất; đóng hẳn 06/01/2027. AA có đủ điều kiện không: chưa biết.</li>
+<li>Dữ liệu: vài trăm cặp, phần lớn chưa sạch; fine-tune trên dữ liệu có sự thật mới làm tăng ảo giác.</li>
+<li>Giữ cửa: <code>writing_signal</code> trung lập nhà cung cấp + ô &quot;số cặp sạch&quot;. Xem lại khi ≥ 1k cặp sạch đã qua lọc sự thật / người
+viết, và chỉ trên mô hình chịu dùng làm writer. Dùng chữ tenant để huấn luyện là quyết định kinh doanh của chị Thư.</li>
+</ul>
+<p>Nguồn: <code>research/02-state-of-the-art.md</code> §3 (truy cập 20/10/2026). Kiểm lại 20/10/2026:
+<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-fine-tuning.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-fine-tuning.html</a> (mô hình Claude duy nhất được liệt
+kê là Claude 3 Haiku, us-west-2) và <a href="https://developers.openai.com/api/docs/deprecations" target="_blank" rel="noopener">https://developers.openai.com/api/docs/deprecations</a> (các mốc 07/05/2026,
+02/07/2026, 06/01/2027; Evals chỉ-đọc 31/10/2026, đóng 30/11/2026).</p>
+<h2>13. QUYẾT ĐỊNH cần Nghiệp</h2>
+<p>Trả lời ngắn theo mẫu &quot;D1 có, D6 a…&quot;. Khuyến nghị in đậm.</p>
+<div class="tablewrap"><table><thead><tr>
+<th>#</th>
+<th>Câu hỏi</th>
+<th>Trả lời</th>
+<th>Khuyến nghị</th>
+</tr>
+</thead><tbody><tr>
+<td>D1</td>
+<td>Chọn phương án A &quot;Writing Memory v1&quot; + 11 ý ghép ở §5.2 làm hướng đi?</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Không fine-tune trong v1; xem lại khi ≥ 1k cặp sạch / người viết?</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Đóng băng <code>shared.pipeline_lessons</code> ngay ở P0 (đếm dòng chính xác, tắt ghi + đọc sau flag)?</td>
+<td>có / không</td>
+<td><strong>có</strong> (ưu tiên cao nhất)</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>Chốt AA-729 theo <span class="reflink" title="../2026-10-20-S245-m2a-decisions/README.md">memo M2a</span> (<code>AA-729: a / có / có</code> — golden set 100 mẫu, ~$8,6–10,4, trần $15) và chạy trước P2? <strong>Cùng câu hỏi với memo: trả lời một lần ở memo là đủ cho cả D4.</strong></td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D5</td>
+<td>AA-845 theo <span class="reflink" title="../2026-10-20-S245-m2a-decisions/README.md">memo M2a</span> (<code>AA-845: c / có / có</code> — ~100 câu panel gán nhãn bây giờ, rồi chip <code>fact_not_in_source</code> là nguồn sự thật lâu dài)? <strong>Cùng câu hỏi với memo: một câu trả lời dùng cho cả hai.</strong></td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D6</td>
+<td>Bật release: (a) mọi release, kể cả tenant, cần một cú bấm duyệt; (b) release tenant tự bật khi qua hết cổng trong giai đoạn dev</td>
+<td>a / b</td>
+<td><strong>a</strong></td>
+</tr>
+<tr>
+<td>D7</td>
+<td>Tenant portal: (a) không thêm gì, chỉ ghi nhận ngầm; (b) thêm câu hỏi tuỳ chọn &quot;Lần sau nên đổi gì?&quot; sau khi lưu (mặc định tắt)</td>
+<td>a / b</td>
+<td><strong>a</strong> bây giờ; xem lại (b) khi có tenant thật</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>Trần ngân sách vòng học trên Dev $60/tháng, $15/lượt R2?</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D9</td>
+<td>Ngưỡng luật nền tảng: luật có bằng chứng từ bài của tenant luôn cần ≥ 3 tenant khác nhau; &quot;≥ 2 reviewer&quot; và &quot;lỗi gate lặp ≥ 5% / 30 ngày&quot; chỉ cho tín hiệu A1; luật nền tảng luôn cần Nghiệp duyệt?</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D10</td>
+<td>Dùng một mô hình không phải Anthropic trên route judge sẵn có (gpt-5.6-luna → gpt-6-luna trên Bedrock acc3; gpt-6-luna-openai chỉ là fallback cuối, theo migration 224 + app ADR 0006 §5) để soạn và chấm luật cho writer Claude?</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D11</td>
+<td>Làm đường nhanh L0 (luật từ vựng chứng minh bằng replay $0) trước khi có AA-729?</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D12</td>
+<td>Cho phép chữ tenant đã sửa (qua lọc sự thật + che thực thể) làm ví dụ giọng <strong>chỉ cho chính tenant đó</strong>?</td>
+<td>có / không</td>
+<td><strong>có</strong> (không bao giờ cho tenant khác; không dùng để huấn luyện)</td>
+</tr>
+<tr>
+<td>D13</td>
+<td>ADR là <strong>app ADR 0009 (chuỗi app)</strong> ở <code>apps/AA-CIS-App/docs/adr/</code>, tiêu đề riêng, trích dẫn ADR hệ sinh thái 0009 (AI platform, AA-804 — chuỗi khác)?</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D14</td>
+<td>Tạo 18 issue ở §9.1 trong project &quot;CIS Core — Pipeline, LLM &amp; Platform&quot;?</td>
+<td>có / không</td>
+<td><strong>có</strong> (P0 trước, phần còn lại tạo dần)</td>
+</tr>
+<tr>
+<td>D15</td>
+<td>Thời gian của Nghiệp: ≤ 30 phút/tuần cho hàng đợi bất đồng 5–10 mục + các cú bấm duyệt?</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+<tr>
+<td>D16</td>
+<td>Chữ trước/sau đã nằm sẵn trong <code>acp_shared.audit_log</code> (chỉnh câu admin T2/T9; append-only, chuỗi hash, trigger chặn DELETE/UPDATE/TRUNCATE) không xoá được khi offboard tenant: chấp nhận là <strong>ngoại lệ lưu giữ</strong> có ghi trong AI Use Register, còn từ P0 chữ mới chỉ lưu ở <code>writing_signal</code> (xoá được)?</td>
+<td>có / không</td>
+<td><strong>có</strong></td>
+</tr>
+</tbody></table></div><h2>14. Câu hỏi cho chị Thư</h2>
+<p>Gửi nhẹ nhàng, không gấp; trả lời lúc nào tiện cũng được. Hệ thống vẫn chạy được nếu team chưa có thời gian (khi đó
+chỉ học từ lần sửa bình thường và góp ý trên Jira).</p>
+<ol>
+<li><strong>Thời gian review mỗi tuần</strong>: team chị có thể dành bao nhiêu phút mỗi tuần để xem hoặc sửa bài AI viết (tour +
+social)? Ai sẽ làm? Chọn một: 0 phút / ≤ 30 phút / 30–60 phút / &gt; 60 phút.</li>
+<li>Khi team sửa một câu, có tiện bấm thêm <strong>một nút lý do</strong> không (vd. &quot;Sai chi tiết&quot;, &quot;Giọng chưa đúng&quot;, &quot;Văn kiểu máy&quot;,
+&quot;Sai định dạng&quot;)? Mỗi lần mất khoảng 1 giây.</li>
+<li>Với tenant thật sau này: có đồng ý dùng bài tenant đã tự sửa làm <strong>ví dụ giọng văn cho chính tenant đó</strong> (không chia
+sẻ cho tenant khác) không? Có cần ghi vào điều khoản dịch vụ không — phần này chị quyết, có thể hỏi luật sư nếu cần.</li>
+<li>Chị gửi giúp <strong>3–5 ví dụ lỗi chị thấy lặp nhiều nhất</strong> (tour hoặc bài social) để đưa vào bộ mẫu chuẩn ngay từ đầu.</li>
+</ol>
+<h2>15. Tệp trong thư mục này</h2>
+<ul>
+<li><code>README.md</code> — bản này.</li>
+<li><code>research/01-current-state.md</code> — CIS đã có gì cho vòng học (ghi chú gốc, tiếng Anh).</li>
+<li><code>research/02-state-of-the-art.md</code> — các cách làm trên thế giới + fine-tune 10/2026, kèm nguồn.</li>
+<li><code>research/03-measurement-design.md</code> — thiết kế đo lường, golden set, rollout R0–R5, tiêu chí dừng.</li>
+<li><code>research/options.json</code> — ba phương án đầy đủ, nguyên văn đầu ra của các agent viết phương án. Thứ tự trong file:
+Writer Flywheel (= C), Writing Memory v1 (= A), Golden-gated Writer Optimiser (= B); file không dùng chữ A/B/C.</li>
+<li><code>research/judges.json</code> — nguyên văn đầu ra của hai giám khảo (phần tử 1 = giám khảo AI 1, phần tử 2 = giám khảo AI 2):
+điểm, nhận xét, phương án thắng, ý ghép, lỗi của phương án thắng.</li>
+</ul>
+<p>Front-matter: không dùng — <code>docs/audits/</code> là nhật ký (journal), schema front-matter loại trừ nhật ký.</p>
+</article></div></section>
+</main>
+<div id="toast" class="toast" hidden></div>
+
+<script id="docket-data" type="application/json">{"groups":[{"title":"Câu chốt về chi phí","short":"Câu chốt E1–E4","intro":"Đề xuất đã chọn sẵn, đã qua một agent kiểm chứng độc lập (mục \"Kiểm chứng độc lập\" ở tab Cắt chi phí).","items":[{"id":"E1","question":"Gom release luật/ví dụ thành một đợt mỗi tháng?","context":"Luật từ vựng (L0, $0) vẫn bật bất kỳ lúc nào. Rút lại một release không phải chờ đợt tháng.","options":[{"key":"a","label":"Có"},{"key":"b","label":"Không"}],"recommended":"a","why":"Khoản tiết kiệm lớn nhất (≈ −$21/tháng): mỗi release tốn một lượt golden set + shadow; 1 đợt/tháng thay cho 2–3 đợt."},{"id":"E2","question":"Shadow có chủ đích: 20 input cho A1, blog, LinkedIn; T2 và Facebook giữ 50?","context":"Release chỉ có repair_hint chạy shadow ≤ 10 input mà gate từng bắn (không bỏ hẳn). Release cấp tenant thêm 1–2 input của tenant khác để kiểm cách ly.","options":[{"key":"a","label":"Có"},{"key":"b","label":"Không"}],"recommended":"a","why":"Bản kiểm chứng độc lập sửa đề xuất ban đầu: T2 và Facebook phải giữ 50 input theo luật §8.2 của thiết kế. Xác suất bắt lỗi 5% trước khi bật giảm từ 92% xuống 64% ở các tầng 20 input; kiểm tra sau khi bật trên mọi bài mới vẫn giữ."},{"id":"E3","question":"S1 (A1) chỉ chèn luật, không chèn ví dụ; T2/T9 dùng bộ 2 ví dụ ghim theo release?","context":"Thay cho tìm ví dụ gần nhất (kNN k=3) ở mỗi lời gọi.","options":[{"key":"a","label":"Có"},{"key":"b","label":"Không"}],"recommended":"a","why":"Lợi ích chính là an toàn và đỡ công (ví dụ cố định được duyệt cùng release, bỏ ivfflat, −0,25 phiên), phụ phí mỗi bài còn ~1% cho S1."},{"id":"E4","question":"Trần chi phí mới: $25/tháng và $10 mỗi lượt golden set (sửa D8 từ $60 và $15)?","context":"Chi phí Dev dự kiến ≈ $2,5–20/tháng, thường ~$7 (thiết kế cũ ghi $30–50). Lượt baseline AA-729 hoặc chấm lại toàn bộ (≤ $15) duyệt riêng.","options":[{"key":"a","label":"Có"},{"key":"b","label":"Không"}],"recommended":"a","why":"Mức cao $20 vẫn dưới trần $25. Nếu giá T2 sau AA-792 vượt ~$0,50/tour thì golden set đủ 4 tầng có thể vượt $10: khi đó tách release hoặc xin duyệt riêng."}]}],"recorded":[{"id":"D1–D16","question":"Toàn bộ quyết định của thiết kế Writing Memory v1","answer":"Nghiệp duyệt tất cả theo đề xuất (20/10/2026). D8 sẽ đổi theo E4 nếu anh duyệt E4."},{"id":"D10","question":"Route judge cho mỏ luật","answer":"Giữ \"có\"; thứ tự model soạn luật đổi thành gpt-6-luna → gpt-5.6-luna sau một lượt kiểm độ đồng thuận (κ, ~$0,25–0,8 một lần)."},{"id":"D14","question":"18 issue","answer":"Giữ; sửa nội dung #12 (lọc $0 trước golden, dừng sớm khi trượt, đối chứng đã lưu chấm lại bằng judge hiện hành), #13 (shadow có chủ đích, đợt tháng), #15 (ví dụ ghim, bỏ ivfflat)."}],"recordedTitle":"Đã chốt"}</script>
+<script>
+(function () {
+  var DATA = JSON.parse(document.getElementById('docket-data').textContent);
+  var answers = {};          // id -> {choice, note, approved, by, at}
+  var names = {};            // user id -> display name
+  var db = null, user = null, myId = null, canWrite = false;
+
+  function $(s, r) { return (r || document).querySelector(s); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  var toastTimer = null;
+  function toast(msg) { var t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 2600); }
+
+  // Tabs (deep link with #id)
+  function showTab(id) {
+    document.querySelectorAll('nav.tabs button').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === id)); });
+    document.querySelectorAll('main > section').forEach(function (s) { s.hidden = s.id !== 'panel-' + id; });
+  }
+  document.querySelectorAll('nav.tabs button').forEach(function (b) {
+    b.addEventListener('click', function () { showTab(b.dataset.tab); try { history.replaceState(null, '', '#' + b.dataset.tab); } catch (e) {} });
+  });
+  var h = (location.hash || '').slice(1);
+  if (h && document.getElementById('panel-' + h)) showTab(h);
+
+  function allItems() { var out = []; DATA.groups.forEach(function (g) { g.items.forEach(function (it) { out.push(it); }); }); return out; }
+  function stateOf(it) {
+    var a = answers[it.id];
+    if (!a || !a.approved) return 'wait';
+    return a.choice === it.recommended ? 'ok' : 'diff';
+  }
+
+  function renderLedger() {
+    var L = $('#ledger'); L.textContent = '';
+    DATA.groups.forEach(function (g) {
+      var n = g.items.length, d = g.items.filter(function (it) { return stateOf(it) !== 'wait'; }).length;
+      var c = el('div', 'cell'); c.appendChild(el('span', 'k', g.short || g.title));
+      c.appendChild(el('span', 'v', d + ' / ' + n + ' đã duyệt'));
+      var b = el('div', 'bar'); var i = el('i'); i.style.width = (n ? Math.round(100 * d / n) : 0) + '%'; b.appendChild(i); c.appendChild(b);
+      L.appendChild(c);
+    });
+  }
+
+  function labelOf(it, key) { var o = (it.options || []).filter(function (o) { return o.key === key; })[0]; return o ? o.label : key; }
+
+  async function save(it, patch) {
+    if (!db || !canWrite) { toast('Trang đang ở chế độ chỉ xem.'); return; }
+    var prev = answers[it.id] || {};
+    var next = Object.assign({}, prev, patch, { by: myId, at: new Date().toISOString() });
+    if (!next.choice) next.choice = it.recommended;
+    answers[it.id] = next; renderAll();
+    try { await db.collection('answers').doc(it.id).set(next); }
+    catch (e) {
+      answers[it.id] = prev; renderAll();
+      if (e && e.code === 'invalid_argument') { canWrite = false; setStatus('Bạn chỉ có quyền xem trang này. Nhờ Nghiệp cấp quyền Contributor để duyệt.', true); }
+      else toast('Chưa lưu được (' + ((e && e.code) || 'lỗi') + '). Thử lại sau giây lát.');
+    }
+  }
+
+  function card(it) {
+    var st = stateOf(it), a = answers[it.id] || {};
+    var c = el('div', 'card' + (st !== 'wait' ? ' done' : '')); c.id = 'item-' + it.id;
+    var top = el('div', 'card-top');
+    top.appendChild(el('span', 'id', it.id));
+    top.appendChild(el('div', 'q', it.question));
+    var pill = el('span', 'pill ' + st, st === 'wait' ? 'Chưa duyệt' : st === 'ok' ? 'Đã duyệt theo đề xuất' : 'Đã duyệt, khác đề xuất');
+    top.appendChild(pill); c.appendChild(top);
+    if (it.context) { var cx = el('div', 'ctx'); cx.innerHTML = it.context; c.appendChild(cx); }
+    if (it.proposed_answer) {
+      var p = el('div', 'proposal'); p.appendChild(el('span', 'lbl', 'Đề xuất trả lời')); p.appendChild(document.createTextNode(it.proposed_answer)); c.appendChild(p);
+    }
+    var opts = el('div', 'opts'); var cur = a.choice || it.recommended;
+    (it.options || []).forEach(function (o) {
+      var lab = el('label', 'opt' + (cur === o.key ? ' sel' : ''));
+      var inp = document.createElement('input'); inp.type = 'radio'; inp.name = 'opt-' + it.id; inp.id = 'opt-' + it.id + '-' + o.key; inp.value = o.key; inp.checked = cur === o.key; inp.disabled = !canWrite;
+      inp.addEventListener('change', function () { save(it, { choice: o.key, approved: false }); });
+      lab.appendChild(inp);
+      var t = el('span'); t.appendChild(el('span', 'key', o.key + ') ')); t.appendChild(document.createTextNode(o.label));
+      if (o.key === it.recommended) t.appendChild(el('span', 'rec', 'Đề xuất'));
+      lab.appendChild(t); opts.appendChild(lab);
+    });
+    c.appendChild(opts);
+    if (it.why) { var d = document.createElement('details'); d.className = 'why'; d.appendChild(el('summary', null, 'Vì sao đề xuất như vậy')); var dv = el('div'); dv.textContent = it.why; d.appendChild(dv); c.appendChild(d); }
+    var ta = document.createElement('textarea'); ta.id = 'note-' + it.id; ta.placeholder = 'Ghi chú (không bắt buộc)'; ta.value = a.note || ''; ta.disabled = !canWrite; ta.rows = 1;
+    ta.addEventListener('change', function () { if ((answers[it.id] || {}).note !== ta.value) save(it, { note: ta.value }); });
+    c.appendChild(ta);
+    var row = el('div', 'row');
+    var who = el('span', 'who', a.approved ? ('Duyệt bởi ' + (names[a.by] || 'người duyệt') + (a.at ? ' · ' + new Date(a.at).toLocaleString('vi-VN') : '')) : (a.at ? 'Đã lưu lựa chọn, chưa bấm duyệt' : ''));
+    row.appendChild(who);
+    var btn = el('button', 'btn ' + (a.approved ? '' : 'ok'), a.approved ? 'Bỏ duyệt' : 'Duyệt lựa chọn này'); btn.type = 'button'; btn.disabled = !canWrite;
+    btn.addEventListener('click', function () { save(it, { approved: !a.approved, choice: cur }); });
+    row.appendChild(btn); c.appendChild(row);
+    return c;
+  }
+
+  function renderAll() {
+    renderLedger();
+    var G = $('#groups'); var focusId = document.activeElement && document.activeElement.id; G.textContent = '';
+    DATA.groups.forEach(function (g, gi) {
+      var sec = el('section', 'group');
+      var hd = el('div', 'group-head'); hd.appendChild(el('h2', null, g.title));
+      var bulk = el('button', 'btn primary', 'Duyệt tất cả mục còn lại theo đề xuất'); bulk.type = 'button'; bulk.id = 'bulk-' + gi;
+      var pending = g.items.filter(function (it) { return !(answers[it.id] && answers[it.id].approved); });
+      bulk.disabled = !canWrite || pending.length === 0;
+      bulk.addEventListener('click', async function () {
+        bulk.disabled = true;
+        for (var i = 0; i < pending.length; i++) { var it = pending[i]; var a = answers[it.id] || {}; await save(it, { approved: true, choice: a.choice || it.recommended }); }
+        toast('Đã duyệt ' + pending.length + ' mục theo đề xuất.');
+      });
+      hd.appendChild(bulk);
+      if (g.intro) hd.appendChild(el('p', null, g.intro));
+      sec.appendChild(hd);
+      g.items.forEach(function (it) { sec.appendChild(card(it)); });
+      G.appendChild(sec);
+    });
+    if (DATA.recorded.length) {
+      var sec = el('section', 'group'); var hd = el('div', 'group-head'); hd.appendChild(el('h2', null, DATA.recordedTitle)); sec.appendChild(hd);
+      var box = el('div', 'recorded');
+      DATA.recorded.forEach(function (r) { var row = el('div', 'r'); row.appendChild(el('span', 'id', r.id)); var t = el('div'); t.appendChild(el('div', null, r.question)); t.appendChild(el('div', 'a', r.answer)); row.appendChild(t); box.appendChild(row); });
+      sec.appendChild(box); G.appendChild(sec);
+    }
+    if (focusId) { var f = document.getElementById(focusId); if (f) f.focus(); }
+  }
+
+  function setStatus(msg, warn) { var s = $('#status'); s.textContent = msg; s.className = 'notice' + (warn ? ' warn' : ''); s.hidden = !msg; }
+
+  renderAll();
+
+  (async function connect() {
+    if (!window.claude || !window.claude.use) { setStatus('Bản xem này không lưu được câu trả lời. Mở trang trên claude.ai để duyệt.', true); return; }
+    var dbP = window.claude.use('db'), userP = window.claude.use('user');
+    db = await dbP; user = await userP;
+    if (!db) { setStatus('Bản xem này không lưu được câu trả lời. Đăng nhập claude.ai rồi mở lại trang để duyệt.', true); return; }
+    try { myId = user ? await user.id() : null; } catch (e) { myId = null; }
+    var w = null; try { w = user ? await user.can('data.write') : null; } catch (e) { w = null; }
+    canWrite = w !== false;
+    setStatus(canWrite ? '' : 'Bạn chỉ có quyền xem trang này. Nhờ Nghiệp cấp quyền Contributor để duyệt.', !canWrite);
+    db.collection('answers').onSnapshot(async function (snap) {
+      var next = {}; snap.docs.forEach(function (d) { if (d.exists) next[d.id] = d.data(); });
+      answers = next;
+      var ids = Object.keys(next).map(function (k) { return next[k].by; }).filter(Boolean);
+      if (user && ids.length) { try { var ps = await user.profiles(ids); ids.forEach(function (id) { names[id] = (ps[id] && ps[id].name) || 'người duyệt'; }); } catch (e) {} }
+      renderAll();
+    }, function () { setStatus('Mất kết nối nơi lưu câu trả lời. Tải lại trang để tiếp tục.', true); });
+  })();
+})();
+</script>
