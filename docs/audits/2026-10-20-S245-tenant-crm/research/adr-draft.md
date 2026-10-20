@@ -1,5 +1,11 @@
 # ADR 0010 (draft): AA-CRM, the tenant partner CRM as the fourth ecosystem app
 
+> **Superseded draft (kept for the record).** This draft was written for option A before the real judge panel output
+> reached the write-up. The panel split (product owner: CIS module; CTO: AA-CRM app) and `../README.md` §7 now
+> recommends the CIS module with its own ECS service and a clean bounded context. Numbers 0010/0011 are also reserved
+> for the GitHub App work (AA-901); the CRM ADRs are 0014 (Tenant CRM) and 0015 (B2B channel). Do not move this file
+> into `docs/adr/`. If Nghiệp picks option A (D1 b), it is the starting point, renumbered to 0014.
+
 - **Status:** Proposed (draft in an audit folder; not in `docs/adr/` until Nghiệp approves decision D1 and D2 of
   `../README.md` §14)
 - **Date:** 20/10/2026 (S245)

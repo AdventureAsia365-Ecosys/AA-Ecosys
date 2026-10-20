@@ -1,81 +1,118 @@
-{
-  "generated": "2026-10-20",
-  "session": "S245",
-  "provenance": "Scored by the write-up agent (Claude Code) from research notes 01-04 and the option material. The workflow's judge-panel output did not reach the write-up step, so this is a single-agent scoring: treat it as advisory, not as an independent panel.",
-  "scale": "1 (poor) to 5 (best); weighted total out of 100",
-  "criteria": [
-    {
-      "key": "spec_coverage",
-      "weight": 25,
-      "label": "Covers all spec modules F1-F5, 1-18 and the three differentiators"
-    },
-    {
-      "key": "isolation_compliance",
-      "weight": 25,
-      "label": "Tenant isolation, processor posture, DPA story (DM-6.8, ADR 0008, PDPL/GDPR/APP)"
-    },
-    {
-      "key": "reuse_fit",
-      "weight": 15,
-      "label": "Reuse of what exists and fit with written rules/ADRs"
-    },
-    {
-      "key": "cost",
-      "weight": 10,
-      "label": "AA's monthly cost at 10/50/200 agencies"
-    },
-    {
-      "key": "effort",
-      "weight": 15,
-      "label": "Agent sessions to the complete product"
-    },
-    {
-      "key": "operational_risk",
-      "weight": 10,
-      "label": "Release coupling, blast radius, vendor/contract drift"
-    }
+[
+ {
+  "scores": [
+   {
+    "option": "Tenant CRM as a module of AA-CIS-App (full product, F1-F5 + 1-18)",
+    "fit": 4,
+    "time_to_value": 3,
+    "cost": 4,
+    "risk": 3,
+    "compliance": 5,
+    "total": 19,
+    "why": "I checked module_coverage against docs/research/partner-crm-spec.md §6 (lines 94-140). It covers F1-F5, modules 1-18, the §5 stage forms and Traveler-info panel, the §10 non-code track and the §11 gaps. Nothing is missing. This is the only option that follows ADR 0008 §8 as written (docs/adr/0008-new-app-integration-and-data-platform-rules.md:167-175: 'If built, it is a CIS module with its own crm schema, crm_owner / crm_app ... so a later move to its own repo needs no renumbering') and DM-6.8 (02-data-management.md:214). It needs a standards amendment only for the insights clause and the new PII classes. It reuses the most of what already runs: the portal app and kit, the CIS api and worker processes, the Cognito cis-portal client, the job template and the existing infra. That makes Dev the cheapest of the three ($80-150/month), with no new REST API, repo, CI or ECR beyond the scrubber. Costs to time_to_value: the highest session estimate (18-20; 104 issues listed, although its risks section says ~150), a refactor of the CIS job runner (queue.py has 32 references to shared.job, worker.py and backlog.py 8 each), and CRM releases tied to the CIS 5-job branch protection. Risk: the CIS task role becomes the KMS Decrypt principal, so F1's 'only the CRM runtime can decrypt' is not literally true unless the CRM runs as its own service. Its proposal builder is built new over catalog views and does not reuse TripPlanner's Mapbox route planner, which is less reuse than AA-CRM."
+   },
+   {
+    "option": "AA-CRM: tenant partner CRM as a fourth ecosystem app (full product, all spec modules F1–F5 and 1–18)",
+    "fit": 4,
+    "time_to_value": 3,
+    "cost": 3,
+    "risk": 3,
+    "compliance": 3,
+    "total": 16,
+    "why": "It covers every spec module, plus a cross-cutting row for bootstrap, NFRs and the pilot. It has the strongest reuse of the 'visual itinerary builder' (spec §9): the TripPlanner /builder runs on the existing Mapbox map and /browse/routes route planner (apps/AA-TripPlanner-Web/CONTEXT.md:33,69,180), with state kept in crm.*. It also has the strongest F2 control: NOLOGIN roles crm_ai_reader and crm_insights, enforced by the database. Blast radius is low because it runs as its own ECS service and task role. Against that, it overrides the written rule 'CIS module first' (ADR 0008 §8) and needs two new DM-6.8 exceptions: ops-release and insights views granted across apps. That is a larger standards change than the CIS-module option needs. It also proposes ADR 0010/0011, numbers already reserved for the GitHub App work (docs/engineering-handbook.md:797, AA-901). Effort it adds: a new repo, CI, ECR, ECS service, REST API api-crm, OIDC role and two new Vercel projects, plus a portal multi-zone rewrite. Its own 14-16 session figure assumes 8-10 issues per session against ~125 issues. Higher fixed cost: a separate always-on API task plus a new REST API. Its prerequisite status checks are accurate: AA-681 Done (completed 16/10/2026), AA-848 In Progress, AA-813 Backlog, all verified in Linear on 20/10/2026."
+   },
+   {
+    "option": "Partner CRM as a multi-tenant AA-Booking core (variant B)",
+    "fit": 3,
+    "time_to_value": 3,
+    "cost": 3,
+    "risk": 1,
+    "compliance": 1,
+    "total": 11,
+    "why": "Module coverage is complete: F1-F5, 1-18 and onboarding. It reuses Booking the most (trip_cases, the status transitions, the pricing engine and the supplier shapes). As a product, though, it puts AA's own customers and agency travellers in one schema. That reverses the controller separation that ADR 0008 §8, DM-6.8 ('MUST NOT be joined with, copied to or read from booking.customers') and KEY-6 put at the centre, and it needs a superseding root ADR before any code is written. It retrofits FORCE RLS and tenant_id onto about 34 live Booking objects and migrates AA's customer PII into a vault while the staff app is running. Booking's own owner transfer is not finished either: owners.yaml lists booking owner_role_today as aa_cis_admin. It also adds a cross-controller exception through handoff_outbox, two new LOGIN roles (168 of 181 connections) and deploy-gate starvation from the recurring tenant jobs. A tenant-feature bug or bad deploy can break AA's own B2C staff app. Its lower issue count (~95) understates the retrofit and regression work. It has the highest Dev increment ($100-115/month) because of two new services and WAF."
+   }
   ],
-  "scores": {
-    "A": {
-      "spec_coverage": 5,
-      "isolation_compliance": 5,
-      "reuse_fit": 3,
-      "cost": 3,
-      "effort": 2,
-      "operational_risk": 4
-    },
-    "B": {
-      "spec_coverage": 5,
-      "isolation_compliance": 3,
-      "reuse_fit": 5,
-      "cost": 3,
-      "effort": 3,
-      "operational_risk": 2
-    },
-    "C": {
-      "spec_coverage": 1,
-      "isolation_compliance": 4,
-      "reuse_fit": 4,
-      "cost": 4,
-      "effort": 5,
-      "operational_risk": 4
-    }
-  },
-  "weighted_total": {
-    "A": 79.0,
-    "B": 74.0,
-    "C": 68.0
-  },
-  "rationale": {
-    "A": "Only A and B cover the full spec. A keeps the CRM's public surfaces, vendor webhooks, KMS decrypt and scrubber out of the CIS process and task role, has its own deploy guard (crm.job), and gives the DPA a clean technical annex. Cost: one more repo, ECS service and REST API (~1 extra session, ~$20/month on Dev).",
-    "B": "Same coverage and cost as A and the most reuse, but CRM releases would be gated by CIS waves (DM-11.4), the CIS task role must read the crm_app secret, and CIS migrations are frozen until X1 S22. Weakest isolation story for a product whose selling point is privacy.",
-    "C": "Cheapest and fastest, lowest AA exposure, but it is not the product Ms. Thư specified and contradicts the S245 decision. Kept as an export path inside A (crm.integration_link) for agencies that already run HubSpot/Zoho."
-  },
-  "winner": "A",
+  "winner": "Tenant CRM as a module of AA-CIS-App (full product, F1-F5 + 1-18)",
   "grafts": [
-    "From B: the agent UI is served inside the portal host (Vercel multi-zone under portal.lumiguides.it.com/portal/crm) and reuses the portal UI kit by byte-copy guard, so tenants see one portal and one sign-in.",
-    "From B: keep the crm-NNN key space and owners.yaml entry exactly as ADR 0008 §8 planned, so nothing is renumbered.",
-    "From C: crm.integration_link + outbox export to HubSpot/Zoho/Pipedrive as a module (W7) for agencies that keep their own CRM; the intake + attribution path (W3) is useful on its own from day one.",
-    "From research 03: the 8 table-stakes items are acceptance checks for the W3/W5 demos with pilot agencies."
+   "From AA-CRM: reuse the TripPlanner /builder route (Mapbox map, /browse/routes route planner, catalog.graph suggestions) as the module 3 visual builder. It writes through a CRM builder API (contract crm.builder.v1) with a short-lived, KMS-signed builder JWT (aud tp-builder, 30 min, no PII) and an edit lock (crm.builder_session). This replaces the plan to build a new builder over catalog views. It reuses more of the platform and matches spec §9 'visual itinerary builder'.",
+   "From AA-CRM: enforce F2 in the database, not only in code. Add NOLOGIN crm_ai_reader and crm_insights roles, with crm_app granted membership for SET LOCAL ROLE. Grant them only v_ai_trip_context and v_insight_facts, with no grant on crm.traveler. Add the probe cell 'SET ROLE crm_ai_reader -> 42501 on vault'.",
+   "From AA-CRM / the CIS-module option's own open question: run the CRM routes and the crm.job worker as a dedicated ECS service built from the CIS image (e.g. aa-cis-dev-crm), with its own task role and security group, from Dev onward and not only on prod. Only that task role gets kms:Decrypt on alias/crm/*. This makes F1's 'restricted to the CRM runtime' literally true and keeps CRM blast radius and crm.job deploy-gate checks out of aa-cis-dev-api and aa-cis-dev-worker. Cost is about $21/month.",
+   "From AA-CRM: a per-tenant hash chain with pg_advisory_xact_lock(hashtext(tenant_id)), plus a KMS Decrypt count per day on the agency audit page. Also W0 recruitment of 3-5 pilot agencies who see synthetic-data demos from the 'sell a trip' wave onward. This addresses the risk that AA-821 Q1-Q15 have no tenant interviews.",
+   "From the Booking-core variant: a materialised b2b_price_list or v_b2b_offer, so raw net rates never leave Booking (ADR 0005 d9). A price hash on proposal versions so the text and visual modes provably match (module 4 success metric). idle_exempt_kinds and DEPLOY_GATE_EXEMPT entries for every recurring crm_ kind in owners.yaml.",
+   "From the Booking-core variant: the ops-release copy is re-encrypted under a dedicated AA-ops CMK, and the 90-day purge writes a deletion receipt into the agency access_audit (module 8 'deletion can be verified'). Also the explicit DM-6.2 note that B2B pax are not booking.customers.",
+   "From AA-CRM: get FX from the Booking B2B quote, not a separate crm.fx_rate job, for AA lines, so proposal prices and Booking invoices use one rate source. Keep crm.fx_rate only for non-AA supplier lines."
+  ],
+  "flaws_in_winner": [
+   "Stale prerequisite: it says module 3 and ADR 0005 d9 wait on 'AA-681 Booking quoting finished'. AA-681 is Done (completed 2026-10-16, Linear, read 20/10/2026), so the resale gate is already met. What is still missing is the B2B endpoint and the availability/hold model (apps/AA-Booking/CONTEXT.md:519-530).",
+   "KMS principal: running CRM routes inside aa-cis-dev-api and aa-cis-dev-worker makes the CIS task role the Decrypt principal. Any CIS code path or compromised dependency can call Decrypt with a tenant encryption context. The import-boundary test and the CloudTrail alarm detect this; they do not prevent it. The design only defers a separate service to a prod-time ADR decision.",
+   "Job runner refactor touches CIS core: parametrising shared/jobs by table (queue.py 32 references to shared.job, worker.py 8, backlog.py 8) changes the production CIS worker that runs A0-A4 and T0-T11. It also adds crm.job to the DM-11.4 idle checks that gate CIS deploys and DB Migrate.",
+   "Builds a new proposal builder over catalog day/place views instead of reusing TripPlanner's existing Mapbox route planner. This duplicates UI and weakens the platform-reuse case for module 3, the spec's main differentiator.",
+   "F2 separation is enforced by code paths only. The model has no database role that is denied the vault, so the spec F2 rule 'no personal data in AI context' depends on code review rather than the database.",
+   "Inconsistent sizing: the issue breakdown lists 104 issues, but the risks and Linear-housekeeping sections say ~150. 18-20 sessions assumes 8-10 issues per session. Memory session-size-3-5-issues implies 35-40 sessions, and the CRM competes with CIS-first work and M1 close-out (docs/backlog/README.md:123).",
+   "Connection budget: its own arithmetic gives 136 against a 135 ceiling on db.t4g.small (C2.2). It needs an unspecified 1-2 connection offset or a larger instance class, and the brief's count of LOGIN limits (155 of 181) uses a different basis that is not reconciled.",
+   "A separate crm.fx_rate daily job can drift from the Booking FX used in B2B quotes. Agency invoices and Booking B2B invoices could then use different rates for the same AA line.",
+   "The AA insights admin page reads crm.insight_aggregate through the CRM module from a WORKFORCE route. This still needs a KEY-6 amendment ('no AA app reads crm.*'), and the extra '>=3 agencies' suppression rule is not in the spec and has no owner decision.",
+   "Releases are tied to the AA-CIS-App 5-job branch protection and CIS deploy cadence. Every CRM fix ships with a CIS api/worker rollout, which costs time to value for a product meant to iterate with pilot agencies."
   ]
-}
+ },
+ {
+  "scores": [
+   {
+    "option": "AA-CRM: tenant partner CRM as a fourth ecosystem app (full product, all spec modules F1–F5 and 1–18)",
+    "fit": 4,
+    "time_to_value": 3,
+    "cost": 3,
+    "risk": 4,
+    "compliance": 4,
+    "total": 18,
+    "why": "The strongest privacy-by-architecture design. The CRM gets its own ECS service, task role and security group, so the CRM task role is the only KMS Decrypt principal and the claim 'only the CRM runtime can decrypt' is literally true. Its deploys and job-gate (DM-11.4) are separate from CIS waves, and a CRM incident cannot take down the CIS API (Booking bootstrap template, ADR 0004/0004b). Module coverage checks out against docs/research/partner-crm-spec.md §6 and §11: F1–F5, modules 1–18, onboarding (gap 5), NFRs (gap 6), event tracking (gap 7), and it is the only option that schedules gaps 1–4 (G/W/T stories, edge cases, day-in-the-life, mockups). Prerequisite statuses are correct: AA-681 is Done (Linear, completed 16/10/2026) and AA-848 is In Progress. Costs: one more repo, CI and deploy pipeline for one engineer, and an always-on API task plus Presidio sidecar on Dev (~$75–90). Problems: it deviates from ADR 0008 §8 / DM-6.8 'CIS module first', which needs a new root ADR. It adds two DB-level read exceptions on crm.* (ops-release outbox to `booking`, insights view to `cis_app`). Its ADR numbers 0010/0011 are already reserved (engineering-handbook.md:797, AA-901). The TripPlanner builder plus the portal multi-zone couple three frontends."
+   },
+   {
+    "option": "Partner CRM as a multi-tenant AA-Booking core (variant B)",
+    "fit": 2,
+    "time_to_value": 2,
+    "cost": 3,
+    "risk": 2,
+    "compliance": 2,
+    "total": 11,
+    "why": "It contradicts the accepted rule set directly: ADR 0008 §8, DM-6.8, KEY-6 and SEC-12 forbid mixing AA's own customers with tenant data. It puts two data controllers in one schema, separated only by RLS policies and a cross-tenant `handoff_outbox` exception, so a single policy bug is a cross-controller leak. It needs a FORCE RLS retrofit of 32 live Booking tables (bk-014: '32 tables, 2 views') while the staff app runs. It also moves AA's own `booking.customers` PII into a vault, which is scope creep beyond the spec. Its connection budget of 168/181 uses LOGIN limits and ignores the C2.2 ceiling of 75 % of max_connections, about 135 (03-scaling.md:101,125); 168 is far over that ceiling. Tenant features would share an image and migrations with AA's B2C staff app, so a bad tenant deploy can break AA's B2C operations. Module coverage is complete (F1–F5, 1–18, onboarding), and it adds good ideas: deploy-gate starvation, a price-hash for text/visual parity, per-traveller DEKs, and Zalo. Under the CTO lens it is the weakest."
+   },
+   {
+    "option": "Tenant CRM as a module of AA-CIS-App (full product, spec F1-F5 + modules 1-18)",
+    "fit": 3,
+    "time_to_value": 3,
+    "cost": 4,
+    "risk": 3,
+    "compliance": 4,
+    "total": 17,
+    "why": "It is the closest to the written rules: ADR 0008 §8 and DM-6.8 call for a CIS module with schema `crm`, `crm_owner`/`crm_app` and the `crm-NNN` key space. It grants no AA role anything on crm.*: the ops release is an HTTPS push to Booking with PII only in the request body (DM-6.3), and the insights admin page is served by the CRM module itself. It uses the correct ADR numbers 0014/0015. It is the cheapest on Dev, because it reuses the CIS api/worker tasks and adds only the scrubber service. Weaknesses for a complete product: the CIS task role becomes the KMS principal, so any CIS code path or dependency in that process can decrypt tenant data. The option admits this and suggests a separate service on prod, which leads back to option A. It also needs the CIS job runner (`shared/jobs`, about 50 hard-coded `shared.job` references, verified) parametrised, which is a core-CIS refactor. CRM releases would share the CIS deploy gate, so they wait on CIS waves and CRM recurring kinds can block CIS deploys. It lists 'AA-681 Booking quoting finished' as a prerequisite and a risk, but AA-681 is Done (16/10/2026), so this is stale. Module coverage is complete (F1–F5, 1–18, gaps 5–7), but spec gaps 1–4 (stories, edge cases, mockups) are not scheduled."
+   }
+  ],
+  "winner": "AA-CRM: tenant partner CRM as a fourth ecosystem app (full product, all spec modules F1–F5 and 1–18)",
+  "grafts": [
+   "From the CIS-module option: no DB grant on crm.* to any AA role. Send the module 8 ops release as an HTTPS POST to the Booking B2B API (`/booking/b2b/v1/departures/{id}/pax`, Idempotency-Key). PII travels only in the TLS body; `crm.outbox` carries ids only (DM-6.3). This removes the `crm.v_ops_release_outbox` → `booking` exception and keeps KEY-6/DM-6.8 'no AA app reads crm.*' intact.",
+   "From the CIS-module option: serve module 17 through a CRM API admin route (WORKFORCE token, CIS admin page calls `api-crm`) instead of granting `crm.v_aa_insights_k10` to `cis_app`. Store aggregates with no tenant_id. Suppress cells with n<10 OR fewer than 3 contributing agencies, and require a per-tenant insights opt-in.",
+   "From the CIS-module option: correct ADR numbering. 0009–0013 are reserved (0010/0011 are the GitHub App ADRs, AA-901, engineering-handbook.md:797), so the CRM app ADR and the data-protection ADR become 0014/0015. Confirm against docs/adr/README.md first.",
+   "From the CIS-module option: an email-OTP step-up on signed links before any Stage 3 identity data (passport, DOB) is read or written.",
+   "From the CIS-module option: AI drafting off per tenant by default until the owner enables it. Add a gateway wrapper that refuses `crm_*` stages without a scrub receipt, and an import-boundary CI test so only the vault module holds a KMS client.",
+   "From the Booking-core option: deploy-gate starvation. Register recurring `crm_` kinds (mail sync, workflow tick, Graph renew, b2b status pull) in owners.yaml `idle_exempt_kinds` and the deploy-gate exemption on day 1. Otherwise the DM-11.4 'job table idle' check never passes.",
+   "From the Booking-core option: a price hash stored on each proposal version so text/WhatsApp renders and the visual picker provably show identical prices. This is the spec module 4 success metric.",
+   "From the Booking-core option: a per-traveller DEK wrapped by the tenant key. Deleting it crypto-shreds one traveller, which closes the PITR/backup gap for single-traveller erasure, not only tenant offboarding, at no extra KMS key cost.",
+   "From the Booking-core option: a 200-tenant synthetic load test (access_event volume, DEK cache, connection pool), a property test that the insights view never returns n<10, and an explicit open question to Ms. Thư about Zalo for VN travellers (not in the spec).",
+   "From the Booking-core option: name the Linear follow-ups the CRM touches: extend AA-839 (erasure runbook) to tenant CRM, and clarify AA-682 (Booking money/ops) so B2B invoicing of agencies is not built twice."
+  ],
+  "flaws_in_winner": [
+   "ADR number collision. It proposes ADR 0010 and 0011, but both are reserved for the GitHub App identity work (docs/engineering-handbook.md:797, U-25/AA-901), and 0009, 0012 and 0013 are also reserved. Renumber to 0014/0015 or later.",
+   "It breaks the 'no AA app reads crm.*' rule twice at the DB level (KEY-6, DM-6.8): `crm.v_ops_release_outbox` granted to `booking`, with traveller PII in the outbox payload, and `crm.v_aa_insights_k10` granted to `cis_app`. The PII-bearing outbox also strains DM-6.3 (ids-only payloads). Both have contract-only alternatives (HTTPS push; CRM-served admin API).",
+   "It deviates from ADR 0008 §8 and DM-6.8 ('a CIS module first ... so a later move needs no renumbering'). This is defensible, but the new root ADR must explicitly supersede that clause. The X2 guard (AA-848) and the isolation probe must also cover the `crm` owner before any DSN exists.",
+   "Connection budget. The C2.2 total of ~126 plus `crm_app` at 10 gives about 136, which is above the ~135 ceiling (75 % of 181, 03-scaling.md:101,125). A concrete offset, such as holding `booking` at its target 10 instead of the live 15, must merge before crm-001, not as a later note.",
+   "Three-frontend coupling for one engineer. The agent UI is a Vercel multi-zone rewritten under the CIS portal host, the builder lives in the TripPlanner repo, and the traveller app is a third Vercel project. A portal auth or route change, or TP builder drift, breaks the CRM. Consider hosting the builder inside the AA-CRM agent app and reusing TP map and route components by byte-copy with a guard, the same way the portal kit is shared.",
+   "Optimistic schedule. It claims ~125 issues in 14–16 sessions at 8–10 issues per session, but its own issue_breakdown lists ~107 items, and memory `session-size-3-5-issues` implies 25–40 sessions. Calendar risk competes with CIS-first work and M1 close-out (backlog README:123 places AA-821 'after M1').",
+   "Operating cost on Dev. An always-on API task plus a 1 vCPU / 4 GB Presidio sidecar (~$39–49) while there are 0 agencies. Run the scrubber only in the worker path, or scale the CRM service to 0 outside work sessions. Every new AWS line still needs Nghiệp's DM-10.7 approval.",
+   "The privacy claim stays bounded. With CMKs in acc2, AA IAM admins can change key policy and a compromised CRM runtime can decrypt everything it serves. The spec, DPA and data page must say 'restricted and logged', and only BYOK gives agency-held control.",
+   "The in-process `crm.job` worker inside the API service copies the Booking pattern, but AI drafts, mail sync and the insights rollup are heavier than Booking jobs. Plan a separate worker service, or at least separate claim sets, so API latency and the audit-chain advisory locks are not starved.",
+   "Booking's ops-release copy (`booking.b2b_traveller`) makes AA a controller or processor of agency traveller PII. The role is still open in docs/legal/tenant-terms-ai-clause-draft.md:304 and must be settled by counsel before W5. The VN Decree 356 licence question could block VN agencies entirely.",
+   "Module 3's 'live availability' depends on new Booking departure and allotment data that ops must keep current. Booking CONTEXT 'Out of scope today' confirms that rates are entered one by one and there is no price matrix, so most AA options may show 'on request' at launch. That weakens the spec's main differentiator unless contracting commits to maintaining allotments."
+  ]
+ }
+]
