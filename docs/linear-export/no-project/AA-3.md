@@ -1,4 +1,6 @@
----
+# AA-3 — Connect your tools
+
+```yaml
 identifier: "AA-3"
 title: "Connect your tools"
 state: "Done"
@@ -16,9 +18,7 @@ canceled_at: null
 updated_at: "2026-05-13T12:22:04.471Z"
 trashed: false
 url: "https://linear.app/aa-ecosys/issue/AA-3/connect-your-tools"
----
-
-# AA-3 — Connect your tools
+```
 
 Integrations turn Linear into your source of truth around product development. Keep data in sync, and eliminate manual updates between tools.
 

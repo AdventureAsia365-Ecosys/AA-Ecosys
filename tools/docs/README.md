@@ -38,3 +38,22 @@ lychee --config tools/docs/lychee.toml 'docs/**/*.md'
 ```
 
 The other repos can run `check_adr_index.py` and `check_docs_text.py` with `--root <repo>`: both are stdlib only.
+
+## Copies in AA-Booking and AA-CIS-Infra
+
+AA-Booking and AA-CIS-Infra vendor these files in their own `tools/docs/` (public / separate repos cannot read this
+private one from CI). `docslib.py`, `check_docs_text.py`, `check_adr_index.py`, `check_frontmatter.py`,
+`test_docs_tools.py`, `lychee.toml` and `requirements.txt` must stay byte-identical in all three repos; only each
+README is repo-specific. Options used only by those repos, harmless here:
+
+- `check_docs_text.py ... --all` scans every tracked Markdown file (minus journals) instead of the default scope.
+- `check_docs_text.py resource-ids --mode warn --block vpc,apigw` keeps the listed kinds failing in warn mode
+  (kinds: `vpc`, `arn`, `user-pool`, `apigw`, `account`).
+- `check_frontmatter.py` also validates a `CONTEXT.md` at the repo root; this repo has none.
+
+Change a rule here first, then copy the seven files to both repos in the same session, and check from the workspace
+root:
+
+```bash
+for f in docslib.py check_docs_text.py check_adr_index.py check_frontmatter.py test_docs_tools.py lychee.toml requirements.txt; do cmp tools/docs/$f apps/AA-Booking/tools/docs/$f; cmp tools/docs/$f infra/AA-CIS-Infra/tools/docs/$f; done
+```

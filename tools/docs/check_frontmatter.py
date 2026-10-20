@@ -2,7 +2,8 @@
 """Validate doc front-matter against docs/templates/frontmatter.schema.json (AA-888).
 
 Default mode (CI, every docs PR):
-  * every docs/**/*.md file that starts with a '---' block must validate against the schema;
+  * every docs/**/*.md file, and a CONTEXT.md at the repo root (the app and Infra repos), that
+    starts with a '---' block must validate against the schema;
   * catalog IDs must be unique (templates excluded, they share placeholder IDs);
   * exit 1 on any error.
 
@@ -37,6 +38,9 @@ from docslib import (
 )
 
 SCHEMA_PATH = "docs/templates/frontmatter.schema.json"
+# Pages that may carry catalog front-matter. CONTEXT.md sits at the root of each app and Infra repo
+# (catalog ARCH-06-<repo>); the root repo has none, so this list changes nothing there.
+SCOPE = ["docs", "CONTEXT.md"]
 DEFAULT_REVIEW_DAYS = 90
 RUNBOOK_TEST_DAYS = 180
 
@@ -53,10 +57,10 @@ def _stringify_dates(value):
 
 
 def load_pages(root: Path) -> tuple[list[tuple[str, dict]], list[Finding]]:
-    """Return ([(relpath, front_matter)], parse_errors) for docs/** pages with front-matter."""
+    """Return ([(relpath, front_matter)], parse_errors) for pages in SCOPE with front-matter."""
     pages: list[tuple[str, dict]] = []
     errors: list[Finding] = []
-    for relpath in list_markdown(["docs"], root):
+    for relpath in list_markdown(SCOPE, root):
         text = (root / relpath).read_text(encoding="utf-8")
         try:
             raw, _ = split_front_matter(text)
