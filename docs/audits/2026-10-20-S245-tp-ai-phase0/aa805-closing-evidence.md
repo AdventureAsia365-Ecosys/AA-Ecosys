@@ -21,11 +21,11 @@
 |---|---|---|---|
 | 1 | Throttle verified live (429 on `/narrate`) | **PASS: 429 captured.** Note: the limit is looser than configured, see §1 | §1 |
 | 2 | Session ownership (re-check after AA-827) | **PASS** (401 without a cookie, 403 with a foreign session) | §2 |
-| 3 | Spend cap: `llm_spend_daily` rows against the 5.0 USD cap | **Pending the DB run** (script ready) | §DB |
-| 4 | Cache hit rate visible (cached:false, then cached:true) | **Not provable over HTTP with the trips tried:** every narration was `source: master`, which is never cached. The DB run lists candidate components | §3, §DB |
-| 5 | Search returns no inactive tours (30-query set) | **Live half PASS** (30/30 HTTP 200, all `ranking: semantic`). The **DB join is pending** (script ready) | §4, §DB |
+| 3 | Spend cap: `llm_spend_daily` rows against the 5.0 USD cap | **PASS:** `tripplanner.llm_spend_daily` has rows (19/10 `tp_search_embed` 34 calls, 0.000015 USD, 0 unpriced) matching `shared.llm_call_log`; today's online spend 0.000000 vs cap 5.0 → `under_cap=True`. The hard stop itself stays covered by unit tests (as in S237) | §DB |
+| 4 | Cache hit rate visible (cached:false, then cached:true) | **PASS** on a DB-listed candidate (`own_day_missing`): narrate #1 `source: llm, cached: false`, narrate #2 same itinerary `cached: true` (00:48:11Z, `aa805_cache_results_final.json`). Before this run `narration_cache` was empty (all earlier trips resolved to `source: master`, never cached) | §3, §DB |
+| 5 | Search returns no inactive tours (30-query set) | **PASS:** 725/725 returned destinations exist and each has an active, embedded component (`without_active_component=0`); every embedded component is active (3905 embedded, 0 not active). Caveat: the negative control is empty (`inactive_only_destinations=0`), so the filter is shown as a necessary condition on today's catalog, not exercised against an inactive-only destination. The 30-query set was labelled by one agent, not a panel | §4, §DB |
 
-AA-805 is **not Done yet.** It needs the DB run (lines 3, 4 and 5) and, if the run finds candidates, one cache run.
+**All five open lines pass** (S245, 20/10/2026). DB evidence: DB Migrate run-script run 39349512417 (read-only, master via `tp_owner`), lines in `aa805_db_script_lines.txt`.
 
 ---
 
@@ -143,7 +143,25 @@ tenant itself, as well as setting `app.tenant_id`. That way it reads exactly wha
 was checked against a local PostgreSQL 16 with stub tables in a read-only session: a clean set gave PASS, and an
 inactive-only destination plus a not-embedded one gave FAIL with both named.
 
-**Results:** _(fill in from the DB Migrate job log: the `SCRIPT` lines)_
+**Results** (run 39349512417, 20/10/2026 ~00:45Z; full lines in `aa805_db_script_lines.txt`):
+
+```
+SCRIPT input returned_destinations=725 sha256_16=a0a419e9ccb805bf
+SCRIPT spend day=2026-10-19 stage=tp_search_embed cost_usd=0.000015 calls=34 unpriced_calls=0
+SCRIPT spend_log day=2026-10-19 stage=tp_search_embed calls=34 cost_usd=0.000015
+SCRIPT spend_today online_usd=0.000000 cap_usd=5.0 under_cap=True
+SCRIPT cache_total rows=0 hits=0 rows_hit=0
+SCRIPT search returned=725 found=725 without_active_component=0
+SCRIPT control inactive_only_destinations=0 of_them_returned=0
+SCRIPT control components embedded=3905 embedded_not_active=0
+SCRIPT candidates no_structured_text=0 own_day_missing=8
+SCRIPT candidate kind=own_day_missing component=01bacbda-c8bd-49ae-9fd1-98d53f71f31d
+SCRIPT candidate kind=own_day_missing component=268457fd-1af0-4f6a-89d8-d4b813db748a
+SCRIPT candidate kind=own_day_missing component=26d26dc2-579f-4574-9775-90724954979e
+SCRIPT candidate kind=own_day_missing component=74bd4aea-bce7-4807-90f3-bf5027f0e2df
+SCRIPT candidate kind=own_day_missing component=8574d548-a9fe-4fdf-822f-f4dc8028d70f
+SCRIPT verdict search_no_inactive=PASS control_has_inactive_only=False
+```
 
 ## Test data left on Dev
 
