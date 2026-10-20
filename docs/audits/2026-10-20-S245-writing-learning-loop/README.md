@@ -16,7 +16,7 @@ Ghi chú gốc (tiếng Anh) nằm ở `research/`. Ba phương án đầy đủ
 3. Fine-tune gần như không khả thi bây giờ (Bedrock Claude hết hạn, OpenAI đóng fine-tune 06/01/2027) và dữ liệu quá ít → **học trong prompt, không đổi trọng số mô hình**.
 4. Khuyến nghị: **"Writing Memory v1"** — kho luật + kho ví dụ đã duyệt, mỗi lần bật đi qua replay $0 → golden set → shadow → một cú bấm duyệt; rút lại bằng một lệnh lật con trỏ.
 5. Làm ngay **P0** (1 phiên, không phụ thuộc gì): đóng băng `pipeline_lessons` (bảng toàn cục không có `tenant_id`: nếu ai "sửa" lệch stage, lỗi T2 sẽ lái prompt S1 chung và mẫu lấy từ chữ tenant nằm trong bảng toàn cục), lưu trước/sau mọi chỉnh sửa vào một bảng xoá được, chip lý do một cú bấm.
-6. **6,5–7,5 phiên agent + dự phòng ≈ 8**, **~$30–60/tháng** trên Dev, không thêm dịch vụ AWS; tenant chỉ thấy bài tốt hơn, không thấy QA; **16 quyết định** chờ Nghiệp (§13).
+6. **6,5–7,5 phiên agent + dự phòng ≈ 8**, **~$30–50/tháng (trần $60, D8)** trên Dev, không thêm dịch vụ AWS; tenant chỉ thấy bài tốt hơn, không thấy QA; **16 quyết định** chờ Nghiệp (§13).
 
 ## 1. Hiện trạng: đã có gì
 
@@ -138,7 +138,7 @@ dataset). Khác nhau ở **cái gì được học** và **ai bật**.
   tenant cần tenant đồng ý bằng văn bản (quyết định kinh doanh của chị Thư).
 - Pha: P0 ghi nhận (1) · P1 eval + nhãn (1) · P2 L0 + L1 (1,5) · P3 L2 + L3 (1) · P4 dataset + GEPA thử (1) · P5 quyết
   định fine-tune (có điều kiện).
-- C đề xuất giám khảo OpenAI; bản khuyến nghị thay bằng route judge không phải Anthropic trên Bedrock acc3 (§5.5, D10).
+- Cả A (bản gốc) và C đều đề xuất giám khảo OpenAI; bản khuyến nghị thay bằng route judge không phải Anthropic trên Bedrock acc3 (§5.5, D10).
 
 ## 4. Điểm giám khảo
 
@@ -226,6 +226,9 @@ chỉ bật khi qua đủ cổng và có một cú bấm duyệt; rút lại = �
     trang riêng; tab Releases là chỗ duy nhất quản lý prompt và bộ nhớ.
 
 ### 5.3 Những chỗ sửa so với bản gốc của phương án A (giám khảo 2 kiểm dump)
+
+- **Route soạn luật / giám khảo:** bản gốc của A gieo stage `writing_memory_mine` là "judge, OpenAI"; bản khuyến nghị dùng route judge không phải Anthropic sẵn có trên Bedrock acc3 (D10), OpenAI chỉ là fallback cuối theo migration 224.
+- **Chi phí tăng thêm mỗi bài:** A ghi +3–8%; tính lại theo từng lời gọi có chèn ví dụ/luật thì khoảng +17–21% cho S1 và +5–21% cho blog T9, sát ngưỡng dừng mềm +20%. Vì vậy ví dụ mẫu chỉ chèn ở lượt viết đầu, còn `repair_hint` chỉ chèn khi gate bắn.
 
 - `acp_shared.audit_log.id` là **uuid**, `audit_log.tenant_id` là **varchar(50)** → `writing_signal.audit_log_id` phải
   là uuid và backfill phải ép kiểu tenant_id.
