@@ -169,6 +169,14 @@ nothing to flag, but the rows were stale); the three TripPlanner Lambda `pending
    left state with I1.
 9. **acc1 / acc3 secrets** (`pqnghiep-admin`, `nghiep_aa365`): not inventoried yet. The main session
    lists their names (M0 d) and adds rows; AA-517 cleaned 20 strays from acc1 on 02/09.
+10. **CI apply role reads every secret** (S245 access review F-7): `aa-cis-infra-tf-apply` carries the AWS
+    managed policy `SecretsManagerReadWrite` and its boundary does not limit `secretsmanager`, so any AA-CIS-Infra
+    workflow on `main` in env `prod` can read (and write) the RDS master, `aa-cis/dev/db-migrator`, `booking/*`,
+    `tripplanner/*` and every other secret. It also holds `PutResourcePolicy` / `DeleteResourcePolicy`, so it can
+    lift the break-glass resource-policy Deny (that call is alerted). Follow-up under AA-806: replace the managed
+    policy with a named-ARN grant (as `tf_plan_secret_arns` does for the plan role) or add a `GetSecretValue` Deny
+    on the master / `booking/*` / `tripplanner/*` to the boundary (bootstrap object: applied locally with MFA, ask
+    Nghiệp first, IAM); add a `main` branch policy on env `prod` (AA-866).
 
 ## Who can read the RDS master (X1 S19)
 
@@ -182,8 +190,10 @@ Since 19/10/2026 (S243, Infra #203 + #204, AA-860; migrator rows updated for X1 
 | DB Migrate / Schema Dump / isolation probe (migrator task) | Only inside the task (`MASTER_SECRET`, migrator task role) for `roles/` files, `set-password` and `run-script`; every other file runs with the `db_migrator` login | X1 S22; probe 58/58 after S22, `sessions.master_break_glass_only` pass |
 | Humans with the MFA admin profile (`aa365-admin`) | Yes | Break-glass only (DM-8.9); prefer DB Migrate `mode=run-script` |
 | Agent ECS exec scripts | **No** | They use the container `DATABASE_URL` (`cis_app`); see `docs/ops/runbooks/ecs-exec-s3-mediated.md` |
+| CI role `aa-cis-infra-tf-apply` (any AA-CIS-Infra workflow on `main` in env `prod`: terraform-apply, db-migrate, db-schema-dump, db-isolation-probe) | **Yes** — and every other secret, `booking/*` and `tripplanner/*` included | AWS managed policy `SecretsManagerReadWrite` (one of the ten on the apply role, AA-806); the `tf_apply_boundary` boundary starts with Allow `*` and none of its Deny statements cover `secretsmanager`. Env `prod` has no GitHub protection rule; the only gate is the OIDC `ref = refs/heads/main` claim (AA-866). Open item 10, access review F-7 |
 
-The same Deny covers `aa-cis/dev/db-migrator`, `booking/*` and `tripplanner/*` for the CIS task role.
+The same Deny covers `aa-cis/dev/db-migrator`, `booking/*` and `tripplanner/*` for the CIS task role. It does
+not apply to the apply role above.
 
 ## Deletion log
 
@@ -206,7 +216,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 | Name | Owner app | Consumers (main) | Managed by | Rotation | Last changed | Status | Notes |
 |---|---|---|---|---|---|---|---|
-| `aa-cis/dev/rds` | cis | migrator task, read in the task as MASTER_SECRET for roles/ files, set-password, run-script only (AA-CIS-Infra db/run_migration.py:204; not injected since X1 S22, Infra #225); AA-CIS-App scripts/link_staff_identity.py:65, services/acp_produce/sweeper_lambda.py:37 (default; Lambda not deployed); humans with the MFA admin profile (break-glass, DM-8.9) | cli (read by data source module.secrets.data.aws_secretsmanager_secret.rds) | none | 2026-07-07 | **keep** | Master DSN (aa_cis_admin). No longer the CIS runtime login since X1 S18 (19/10/2026); the CIS task role is denied it since X1 S19; DB Migrate logs in as db_migrator since X1 S22. See "Who can read the RDS master (X1 S19)". |
+| `aa-cis/dev/rds` | cis | migrator task, read in the task as MASTER_SECRET for roles/ files, set-password, run-script only (AA-CIS-Infra db/run_migration.py:204; not injected since X1 S22, Infra #225); AA-CIS-App scripts/link_staff_identity.py:65, services/acp_produce/sweeper_lambda.py:37 (default; Lambda not deployed); humans with the MFA admin profile (break-glass, DM-8.9) | cli (read by data source module.secrets.data.aws_secretsmanager_secret.rds) | none | 2026-07-07 | **keep** | Master DSN (aa_cis_admin). No longer the CIS runtime login since X1 S18 (19/10/2026); the CIS task role is denied it since X1 S19; DB Migrate logs in as db_migrator since X1 S22. Also readable by the CI apply role aa-cis-infra-tf-apply (SecretsManagerReadWrite; open item 10). See "Who can read the RDS master (X1 S19)". |
 | `aa-cis/dev/dataforseo` | cis | ECS api + worker DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD (modules/ecs/main.tf:409-410, :605-606) | cli (data source module.secrets.data.aws_secretsmanager_secret.dataforseo) | none | 2026-07-07 | **keep** | Vendor DataForSEO login/password (JSON). |
 | `aa-cis/dev/acp-partner-api` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_partner_api (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **deleted** | Placeholder of the retired ACP v1 partner path. No reader on main of any repo; CloudTrail since 18/10: only the plan role (refresh). LastChangedDate 15/10 is a Terraform tag re-apply, not a value change. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
 | `aa-cis/dev/acp-webhook-secret` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_webhook_secret (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **deleted** | Placeholder of the retired ACP v1 webhook HMAC. No reader on main; CloudTrail since 18/10: only the plan role. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
@@ -268,7 +278,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `VERCEL_TOKEN` | `github:AA-TripPlanner-Web` | tripplanner | AA-TripPlanner-Web vercel-deploy.yml:83, :132 | TBD-Nghiep | **keep** | Vendor Vercel token. |
 | `AWS_DEPLOY_ROLE_ARN` | `github:AA-TripPlanner-Web` | tripplanner | AA-TripPlanner-Web deploy-lambdas.yml:59, :69 | none | **keep** | Lambda deploy role ARN (AA-902), a repo secret so the public repo holds no ARN; not a secret value. Added S245 (was UNREGISTERED). |
 | `AWS_ROLE_ARN` | `github:AA-CIS-Infra` | infra | AA-CIS-Infra .github/workflows/terraform-plan.yml:27 (no environment) | none | **keep** | aa-cis-infra-tf-plan role ARN (not a secret). |
-| `AWS_ROLE_ARN` | `github:AA-CIS-Infra/prod` | infra | terraform-apply.yml:37; db-migrate.yml:206; db-schema-dump.yml:90; db-isolation-probe.yml:79 (environment: prod) | none | **keep** | aa-cis-infra-tf-apply role ARN (not a secret). Env `prod` has no GitHub protection rule; the OIDC trust requires `refs/heads/main` (access review F-7). |
+| `AWS_ROLE_ARN` | `github:AA-CIS-Infra/prod` | infra | terraform-apply.yml:37; db-migrate.yml:206; db-schema-dump.yml:90; db-isolation-probe.yml:79 (environment: prod) | none | **keep** | aa-cis-infra-tf-apply role ARN (not a secret). Env `prod` has no GitHub protection rule; the OIDC trust requires `refs/heads/main` (access review F-7). The role reads every Secrets Manager secret (open item 10). |
 | `AWS_REGION` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:38, :53 | none | **keep** | Not a secret. |
 | `TF_STATE_BUCKET` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:51; terraform-plan.yml:41 | none | **keep** | Not a secret. |
 | `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:29; terraform-plan.yml:50 | none | **open-item** | RDS master password, repo-level (S241 E12: move into a protected env or drop once RDS manages it). S240: printed once in a local transcript; decision: rotate before prod. |

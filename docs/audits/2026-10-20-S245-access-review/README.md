@@ -76,14 +76,17 @@ lượng, nhóm và cờ bật/tắt. Người dùng Cognito ghi theo vai trò v
 | `aa-cis-dev-db-migrate-execution-role` / `-task-role` | DB Migrate, Schema Dump, isolation probe | `db-migrator` (inject); trong task: danh sách DSN + master cho `roles/`, `set-password`, `run-script` |
 | `aa-cis-dev-dfs-balance-check-exec` | Lambda ops probe | Chỉ `aa-cis/dev/admin-secret` (theo ARN) |
 | `aa-cis-infra-tf-plan` | Terraform Plan (CI, mọi nhánh của Infra) | Danh sách secret có tên (`tf_plan_secret_arns`, để refresh) |
-| `aa-cis-infra-tf-apply` | Terraform Apply, DB Migrate, Schema Dump (env `prod` + `main`) | Rộng (10 managed policy AWS, AA-806) |
+| `aa-cis-infra-tf-apply` | Terraform Apply, DB Migrate, Schema Dump, isolation probe (env `prod` + `main`) | **Mọi secret, kể cả master RDS, `db-migrator`, `booking/*`, `tripplanner/*`**: managed policy `SecretsManagerReadWrite` (1 trong 10 policy AWS, AA-806); boundary `tf_apply_boundary` mở bằng Allow `*` và không Deny nào chạm `secretsmanager`. Riêng break-glass có Deny resource-policy, nhưng role này có `PutResourcePolicy` / `DeleteResourcePolicy` nên gỡ được (có cảnh báo e-mail AA-854). Xem F-7 |
 | `aa-cis-dev-app-deploy`, `aa-booking-dev-app-deploy`, `aa-tripplanner-dev-app-deploy` | Deploy app từ GitHub (OIDC) | Không đọc secret |
 | `aa-cis-dev-agent-session` | Role agent (AA-730), chưa bắt buộc | Có `GetSecretValue` trong Deny `DenyDangerous` trên `*`, chưa có ngoại lệ cho secret E2E (U-04 bước 2) |
 | `aa-identity-dev-*-trigger` (4 Lambda Cognito) | Pre sign-up / pre token | Không đọc secret |
 | Role khác (flow logs, API GW logs, scheduler, NAT, snapshot expiry, e2e mail reader) | Hạ tầng | Không đọc secret |
 
-Master RDS (`aa-cis/dev/rds`): chỉ migrator task role và người có profile MFA (break-glass). Đã kiểm 20/20
-AccessDenied từ container CIS (S243). Chi tiết: register, mục "Who can read the RDS master".
+Master RDS (`aa-cis/dev/rds`) đọc được bởi: migrator task role (trong task, cho `roles/`, `set-password`,
+`run-script`), người có profile MFA (break-glass) **và role CI `aa-cis-infra-tf-apply`**: mọi workflow chạy trên
+`main` của AA-CIS-Infra trong env `prod` (terraform-apply, db-migrate, db-schema-dump, db-isolation-probe) gọi được
+`GetSecretValue` trên master và trên mọi secret khác (F-7). Container CIS: đã kiểm 20/20 AccessDenied (S243).
+Chi tiết: register, mục "Who can read the RDS master".
 
 ### 4.3 Đối chiếu live còn thiếu (phiên chính chạy, chỉ đọc)
 
@@ -127,7 +130,7 @@ Theo dump live 19/10 13:00 UTC:
 
 | Role | Login | Thành viên của | Ai dùng |
 |---|---|---|---|
-| `aa_cis_admin` | có | `rds_superuser`, `cis_owner`, `cis_app`, `bk_owner`, `tp_owner` | Master; chỉ break-glass + migrator task (`roles/`, `set-password`, `run-script`) |
+| `aa_cis_admin` | có | `rds_superuser`, `cis_owner`, `cis_app`, `bk_owner`, `tp_owner` | Master; người dùng: break-glass + migrator task (`roles/`, `set-password`, `run-script`); secret của nó còn đọc được bởi role CI `aa-cis-infra-tf-apply` (F-7) |
 | `db_migrator` | có (limit 5) | `cis_owner`, `cis_app`, `bk_owner`, `tp_owner`, `catalog_owner`, `pg_read_all_stats` | DB Migrate, Schema Dump, probe |
 | `cis_app` | có (limit 90) | — | CIS api + worker (từ X1 S18) |
 | `aa_app_user` | có (limit 15) | — | Pool tenant CIS (RLS) |
@@ -149,7 +152,7 @@ cấp DML cho đúng role runtime của app mình (`cis_owner` → `cis_app`, `b
 | F-4 | 0/29 secret có rotation tự động | Thấp (Dev, D-02/D-03) | Xoay khi nghi lộ / trước prod | Go-live (AA-880) |
 | F-5 | 3 biến Vercel bí mật để loại Encrypted (đọc được trên dashboard): `SENTRY_AUTH_TOKEN`, `ADMIN2_PASSWORD`, `TRIPPLANNER_API_KEY` (Dev + Preview) | Thấp | Nghiệp tạo lại dạng Sensitive (tên có gạch dưới: sửa tay); `ADMIN2_PASSWORD` thì xoá luôn (F-11) | AA-878 follow-up |
 | F-6 | Không có project Vercel `aa-cis-portal`, dù AA-CIS-App có `vercel-deploy-portal.yml` và secret `VERCEL_PORTAL_BYPASS_SECRET` | Cần làm rõ | Kiểm workflow portal có chạy được không; tạo project hoặc ghi rõ đã bỏ | AA-885 |
-| F-7 | Environment `prod` của AA-CIS-Infra không có protection rule trên GitHub | Thấp | OIDC trust của role apply đã đòi `refs/heads/main` (AA-866); thêm branch policy `main` cho env (miễn phí) nếu muốn hai lớp | AA-866 (tham chiếu) |
+| F-7 | Role CI `aa-cis-infra-tf-apply` đọc (và ghi) **mọi secret** trên acc2, kể cả master RDS, `booking/*`, `tripplanner/*` (`SecretsManagerReadWrite`, boundary không chặn). Bất kỳ workflow nào chạy trên `main` của AA-CIS-Infra trong env `prod` đều lấy được giá trị; env `prod` lại không có protection rule trên GitHub, cổng duy nhất là claim `ref = refs/heads/main` trong OIDC trust (AA-866) | Trung bình | (1) Bỏ `SecretsManagerReadWrite` khỏi role apply, thay bằng grant theo tên ARN (giống `tf_plan_secret_arns`: chỉ secret Terraform quản lý + quyền quản lý metadata), hoặc thêm Deny `GetSecretValue` trên master / `booking/*` / `tripplanner/*` vào `tf_apply_boundary`; là bootstrap object nên apply tay bằng profile MFA, hỏi Nghiệp trước (IAM). (2) Thêm branch policy `main` cho env `prod` (miễn phí) để có hai lớp | AA-806 (thu hẹp policy), AA-866 (env) |
 | F-8 | 4 GitHub App cài cho **mọi repo** (vercel, linear-code, notion-workspace, claude); 2 thành viên đều là admin org; thành viên được tự tạo repo | Thấp | Thu hẹp App về repo cần dùng (Vercel: 3 repo app; Linear/Claude: theo nhu cầu); cân nhắc tắt "members can create repositories". Nghiệp quyết | mới (hỏi Nghiệp) |
 | F-9 | Không liệt kê được secret cấp org (token thiếu quyền org-admin) | Thấp | Nghiệp xem tay: Org Settings > Secrets and variables > Actions; nếu trống, ghi "0" vào register | AA-878 |
 | F-10 | Secret cấp repo đọc được từ mọi nhánh: `VERCEL_TOKEN` ×3, `TF_VAR_DB_PASSWORD` | Trung bình | Chuyển vào environment có branch policy | AA-878 open item 7, U-25 |
