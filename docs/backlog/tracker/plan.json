@@ -1,8 +1,8 @@
 {
- "updated": "2026-10-19",
- "session": "S244",
- "next_session": "S245",
- "source": "Linear (19/10/2026 ~21:30 +07) + docs/backlog/README.md + docs/audits/2026-10-19-S244-master-plan/",
+ "updated": "2026-10-20",
+ "session": "S245",
+ "next_session": "S246",
+ "source": "Linear (20/10/2026) + docs/backlog/README.md + docs/sessions/2026-10-20-S245-quality-system-golden-set-codeql-crm-research.md",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -26,7 +26,7 @@
     },
     {
      "text": "AA-860 Done sau probe đêm 20/10 (không còn phiên master)",
-     "done": false
+     "done": true
     },
     {
      "text": "Gỡ ngoại lệ E2E tạm (ADR 0006a A10)",
@@ -181,11 +181,6 @@
  ],
  "checks": [
   {
-   "due": "20/10 04:13 UTC",
-   "issue": "AA-860",
-   "text": "Probe đêm sau S22: master_break_glass_only pass, dump 03:43 UTC xanh với login db_migrator → AA-860 Done"
-  },
-  {
    "due": "PR Dependabot frontend kế tiếp",
    "issue": "AA-903",
    "text": "\"Vercel deploy\" hiện skipped → gắn link, đóng AA-903"
@@ -219,22 +214,22 @@
    "due": "18/11",
    "issue": "AA-878",
    "text": "4 secret lạc đã xoá 19/10 hết hạn khôi phục"
-  },
-  {
-   "due": "30/11, 31/12",
-   "issue": "AA-907",
-   "text": "Hết hạn ngoại lệ pip-audit (langchain, langgraph-sdk; chromadb)"
   }
  ],
  "waiting": [
   {
    "who": "Nghiệp",
-   "text": "Xoay GitHub OAuth token (gho_) đã in ra transcript local S244 — hướng dẫn trong log phiên",
-   "issue": ""
+   "text": "Duyệt 16 đề xuất CRM (artifact 5srRKGxXrdiADV6u13niAH) — rồi mới làm thiết kế CRM bản kế tiếp",
+   "issue": "AA-821"
   },
   {
    "who": "Nghiệp",
-   "text": "Thu hồi token geocoding cũ trong tài khoản Mapbox",
+   "text": "Thu hồi mật khẩu ứng dụng \"AA portal e2e\" trên site TasteWP test khi không cần nữa",
+   "issue": "AA-875"
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Access review 2026-Q4: Q-1 (quyền của chị Thư), Q-2 (thu hẹp 4 GitHub App); duyệt xoá IAM user mồ côi s226-should-fail",
    "issue": "AA-878"
   },
   {
@@ -269,6 +264,59 @@
   }
  ],
  "log": [
+  {
+   "session": "S245",
+   "date": "20/10/2026",
+   "closed": [
+    "AA-913",
+    "AA-914",
+    "AA-826",
+    "AA-893",
+    "AA-800",
+    "AA-865",
+    "AA-888",
+    "AA-875",
+    "AA-849",
+    "AA-787",
+    "AA-912",
+    "AA-860",
+    "AA-895",
+    "AA-846",
+    "AA-887",
+    "AA-805",
+    "AA-680",
+    "AA-878",
+    "AA-907"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-911",
+    "AA-912",
+    "AA-913",
+    "AA-914",
+    "AA-915",
+    "AA-916",
+    "AA-917",
+    "AA-918",
+    "AA-919",
+    "AA-920",
+    "AA-921",
+    "AA-922",
+    "AA-923",
+    "AA-924",
+    "AA-925",
+    "AA-926",
+    "AA-927"
+   ],
+   "reopened": [],
+   "notes": [
+    "Golden set AA-729 1.1.0 (100 mẫu có nhãn) + baseline: judge lệch nhãn 43,6%, S1 lọt 26/44, T9 chặn oan 12",
+    "Hệ thống chất lượng v1: Nghiệp duyệt D1–D11; issue mới AA-925 (Q-2), AA-926 (Q-1)",
+    "CodeQL CIS 31 → 0 (AA-912, CIS #885)",
+    "AA-779 dừng vòng vá luật theo D10; nhánh fix/real-questions-scope-variants để lại, chưa merge",
+    "CRM: so sánh Tern/TravelJoy từ nguồn công khai, chờ Nghiệp duyệt 16 đề xuất"
+   ]
+  },
   {
    "session": "S244",
    "date": "19/10/2026",
@@ -374,51 +422,15 @@
  ],
  "issues": [
   {
-   "id": "AA-860",
-   "title": "X1: split the CIS runtime role (cis_owner owns tables, cis_app serves requests without the RLS bypass)",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1",
-   "session": "S245",
-   "size": "S",
-   "next": "S23 docs; Done after the 20/10 nightly probe shows no master session and the dump logs in as db_migrator",
-   "needs": ""
-  },
-  {
    "id": "AA-816",
    "title": "Staff user management UI + Cognito cutover (retire create_staff_user.py)",
    "status": "In Progress",
    "priority": "Medium",
    "project": "portal",
    "milestone": "M1",
-   "session": "S245",
-   "size": "S",
-   "next": "A10: remove the temporary E2E staff exception (new migration, revert Infra #215); S2 API legacy flag off together with AA-680",
-   "needs": ""
-  },
-  {
-   "id": "AA-888",
-   "title": "Docs lint and ADR indexes in every repo — front-matter, links, resource-ID and multi-line CLI checks",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S248",
-   "size": "S",
-   "next": "Link + ID jobs in Infra and app repos; one red test PR; close after the first scheduled run (≥26/10)",
-   "needs": ""
-  },
-  {
-   "id": "AA-680",
-   "title": "Identity — staff RBAC on WORKFORCE (staff half); customer half split to AA-908",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M1",
    "session": "S246",
    "size": "S",
-   "next": "Staff half: live refusal of a WORKFORCE user without booking-* group; drop the CIS bridge /auth/booking-token",
+   "next": "A10: remove the temporary E2E staff exception (new migration, revert Infra #215); S2 API legacy flag off once Previews can sign in (AA-911)",
    "needs": ""
   },
   {
@@ -434,54 +446,6 @@
    "needs": ""
   },
   {
-   "id": "AA-895",
-   "title": "Security baseline and vulnerability management policy — Dependabot for Booking and TripPlanner",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S245",
-   "size": "XS",
-   "next": "Close along with AA-902 (baseline row in place)",
-   "needs": ""
-  },
-  {
-   "id": "AA-826",
-   "title": "New-app integration playbook (ADR 0008) — owners.yaml, role bootstrap template, contract hash guard",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "later",
-   "size": "M",
-   "next": "Reword the Done-when; owner of owners.yaml",
-   "needs": "Reword the Done-when"
-  },
-  {
-   "id": "AA-846",
-   "title": "Clean full-root Terraform plan for accounts/aa365: hidden drifts, version pin, apply guard",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S245",
-   "size": "M",
-   "next": "Apply guard in terraform-apply.yml, exact required_version, hidden diffs, apply-role narrowing",
-   "needs": ""
-  },
-  {
-   "id": "AA-849",
-   "title": "TripPlanner migration replay CI: replay tp migrations twice, assert tp-NNN keys + grants",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S253",
-   "size": "S",
-   "next": "TP replay: apply twice, assert keys, one red run, required check",
-   "needs": "Branch-protection toggle"
-  },
-  {
    "id": "AA-829",
    "title": "Restore drill on Dev + private DSN CNAME + secure the real-data dumps (2026-09-16)",
    "status": "In Progress",
@@ -492,18 +456,6 @@
    "size": "M",
    "next": "Dumps: DRY RUN then move/delete; single-schema rehearsal; DSN CNAME",
    "needs": "Approve dumps; DSN secrets by hand"
-  },
-  {
-   "id": "AA-878",
-   "title": "Secrets register, orphaned-secret cleanup, read-only E2E account",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S247",
-   "size": "S",
-   "next": "Register drift diff = 0; confirm the 2 GitHub orphans; U-04",
-   "needs": "Revoke the PAT and the Mapbox token"
   },
   {
    "id": "AA-903",
@@ -552,30 +504,6 @@
    "size": "S",
    "next": "First cost report Aug/Sep/Oct with unit costs (acc2 + acc3 + credits)",
    "needs": "Decision list"
-  },
-  {
-   "id": "AA-893",
-   "title": "Alarm catalog with runbook links and core Terraform outputs — generated inventory, network, IAM",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S251",
-   "size": "M",
-   "next": "Generated alarms.md + link check; docs-gen.yml with a read-only OIDC role",
-   "needs": ""
-  },
-  {
-   "id": "AA-887",
-   "title": "Adopt the documentation standard — catalog, front-matter schema, templates, glossary, DoR",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S245",
-   "size": "S",
-   "next": "Front-matter on the 4 CONTEXT.md files",
-   "needs": ""
   },
   {
    "id": "AA-859",
@@ -638,18 +566,6 @@
    "needs": ""
   },
   {
-   "id": "AA-805",
-   "title": "TripPlanner AI Phase 0 — narration spend caps + cache + session ownership + label (reopened)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "tpbk",
-   "milestone": "M2b",
-   "session": "S247",
-   "size": "XS",
-   "next": "The 4 open checks (narrate 429, spend cap rows, cache hit, inactive-tour join), ~$0.02",
-   "needs": ""
-  },
-  {
    "id": "AA-909",
    "title": "TripPlanner: check the guest token on the read GETs (trip, suggestions, coverage, activities)",
    "status": "Backlog",
@@ -674,18 +590,6 @@
    "needs": ""
   },
   {
-   "id": "AA-907",
-   "title": "Bump langchain / langgraph and drop chromadb before the pip-audit ignores expire (30/11, 31/12)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S250",
-   "size": "S",
-   "next": "Bump langchain/langgraph, drop chromadb, 3-tour regression — hard deadline 30/11",
-   "needs": ""
-  },
-  {
    "id": "AA-876",
    "title": "API edge hardening: login rate limit, throttle/WAF, Booking docs, CORS, headers",
    "status": "Backlog",
@@ -696,18 +600,6 @@
    "size": "M",
    "next": "Login rate limit, CORS, headers, Booking docs; WAF after quote",
    "needs": "WAF cost (D-19)"
-  },
-  {
-   "id": "AA-875",
-   "title": "SSRF-safe outbound HTTP client (safe_http) for tenant-supplied URLs",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S248",
-   "size": "S",
-   "next": "SSRF-safe safe_http for tenant URLs",
-   "needs": ""
   },
   {
    "id": "AA-901",
@@ -844,14 +736,14 @@
   {
    "id": "AA-821",
    "title": "Research: tenant CRM — customer/lead management (Jira PR-19)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Low",
    "project": "portal",
    "milestone": "later",
-   "session": "later",
+   "session": "S247",
    "size": "L",
-   "next": "Tenant CRM research + phased MVP plan (after M1)",
-   "needs": "Plan with Ms. Thư"
+   "next": "After the 16 recommendations are approved: next design version (flows, wireframes, data model, cost, issue split), then Ms. Thư's questionnaire",
+   "needs": "Approve the 16 CRM recommendations"
   },
   {
    "id": "AA-900",
@@ -952,14 +844,14 @@
   {
    "id": "AA-729",
    "title": "Golden set (~100 samples from existing data) + scoring script for audit rounds",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S247",
+   "session": "S246",
    "size": "L",
-   "next": "Golden set ~100 samples + scoring + baseline (D-23)",
-   "needs": "Sample/label plan, run cost"
+   "next": "Fixture 1.1.0 + baseline done S245; closes with the first before/after numbers from AA-925 (Q-2)",
+   "needs": ""
   },
   {
    "id": "AA-804",
@@ -1154,18 +1046,6 @@
    "needs": ""
   },
   {
-   "id": "AA-865",
-   "title": "T10 F9: pooled F9_cta_fact re-flag rate after sentence repair",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S245",
-   "size": "S",
-   "next": "Pooled F9 re-flag rate (r5–r7, n≥60, $0); fix only if above 8%",
-   "needs": ""
-  },
-  {
    "id": "AA-741",
    "title": "T-series audit: end-to-end T0→T11 run on controlled tenants + per-mechanism report",
    "status": "Backlog",
@@ -1188,18 +1068,6 @@
    "size": "M",
    "next": "Agreement analysis once the 40 labels exist",
    "needs": "2–3 h labelling"
-  },
-  {
-   "id": "AA-800",
-   "title": "Tenant signature vocabulary — platform-truth vs AA-style; tenants may use their own brand words",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S246",
-   "size": "M",
-   "next": "Tenant signature vocabulary (3 layers, per-tenant writer rule 1)",
-   "needs": "<$1 live check"
   },
   {
    "id": "AA-853",
@@ -1228,14 +1096,14 @@
   {
    "id": "AA-845",
    "title": "Jev: A-axis ground-truth loop + a1_claim_supported reject ceiling + 402 investigation",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2b",
    "session": "S247",
    "size": "M",
-   "next": "Jev 402 investigation (~48k in 14 days) + label-source choice",
-   "needs": "Label source (a) or (b)"
+   "next": "Panel labels for 100 claims, pick the reject ceiling (Jev S1 agreement 12.5%), investigate the 402s",
+   "needs": ""
   },
   {
    "id": "AA-844",
@@ -1334,40 +1202,28 @@
    "needs": ""
   },
   {
-   "id": "AA-787",
-   "title": "T10 gates: drop F8_framework, promises_an_option, F3, F5; merge into one lexicon gate",
-   "status": "Backlog",
+   "id": "AA-780",
+   "title": "LinkedIn: 120-word floor, Trail Pulse voice, broetry + new stock lines",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
    "session": "S247",
-   "size": "M",
-   "next": "Drop/merge T10 gates with before/after numbers on the golden set",
-   "needs": "Re-confirm dropping promises_an_option"
-  },
-  {
-   "id": "AA-780",
-   "title": "LinkedIn: 120-word floor, Trail Pulse voice, broetry + new stock lines",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S248",
    "size": "S",
-   "next": "6 stock lines, broetry warn, hashtag place-name check",
-   "needs": "Trail Pulse voice fields"
+   "next": "Panel-label the 15 rewritten LinkedIn posts (run dab254c4), then close or adjust",
+   "needs": ""
   },
   {
    "id": "AA-779",
    "title": "T9 FAQ: questions from People Also Ask first; every answer names its subject",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S248",
+   "session": "S246",
    "size": "M",
-   "next": "FAQ from People Also Ask + head-entity check",
-   "needs": ""
+   "next": "D10: build a ~150–200 PAA keep/drop labelled set, panel labels, measure main vs rules branch vs small LLM classifier, fix once",
+   "needs": "Approve the labelled set"
   },
   {
    "id": "AA-795",
@@ -1440,6 +1296,174 @@
    "size": "L",
    "next": "Engagement feedback loop — needs real publish volume",
    "needs": "Park or cancel"
+  },
+  {
+   "id": "AA-925",
+   "title": "[Quality] Q-2: repair contract, degraded counters, S1 day-count oracle and Q0 corpus",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S246",
+   "size": "M",
+   "next": "First per D9; before/after on fixture 1.1.0 closes AA-729",
+   "needs": ""
+  },
+  {
+   "id": "AA-926",
+   "title": "[Quality] Q-1: error taxonomy, gate registry, single thresholds file and lint",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S246",
+   "size": "M",
+   "next": "After AA-925",
+   "needs": ""
+  },
+  {
+   "id": "AA-915",
+   "title": "[Writing memory] Freeze the ungated lessons loop and record ADR 0009 (governed writing memory)",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S247",
+   "size": "S",
+   "next": "Writing Memory P0, right after AA-926",
+   "needs": ""
+  },
+  {
+   "id": "AA-916",
+   "title": "[Writing memory] Capture writing signals: before/after text, reason codes, every T9 attempt",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S247",
+   "size": "M",
+   "next": "Writing Memory P0 + Q-3 quality_context stamp (A1/T9); migration + RLS → agent review",
+   "needs": ""
+  },
+  {
+   "id": "AA-927",
+   "title": "[Cost] LLM calls with no llm_call_log row (AA-729 eval runs: 116/216 and 188/815)",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S247",
+   "size": "S",
+   "next": "Find the unlogged call paths and log them",
+   "needs": ""
+  },
+  {
+   "id": "AA-924",
+   "title": "[T10 gates] Severity per violation in the gate ledger, then merge F15_voice_warn→F15 and F2 variants + stock list → one lexicon gate",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S248",
+   "size": "M",
+   "next": "After AA-926 (Q-1); replay Done-when uses R0",
+   "needs": ""
+  },
+  {
+   "id": "AA-917",
+   "title": "[Writing memory] Rule store and the mining job (scoped rules, fact filter, cheaper drafter)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "later",
+   "size": "M",
+   "next": "Writing Memory P1",
+   "needs": "Release click per rule set"
+  },
+  {
+   "id": "AA-918",
+   "title": "[Writing memory] R0 replay engine ($0) and the L0 lexicon fast path",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "later",
+   "size": "M",
+   "next": "Writing Memory P1 (+ post-merge R0 job, Q-5)",
+   "needs": ""
+  },
+  {
+   "id": "AA-919",
+   "title": "[Writing memory] Eval and release gate: golden set, R2 runner, targeted shadow, Releases tab",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "later",
+   "size": "L",
+   "next": "Writing Memory P2 (+ Q-6 calibration, κ ≥ 0.6); cap $40/month, $10 per run",
+   "needs": "Each release"
+  },
+  {
+   "id": "AA-920",
+   "title": "[Writing memory] Inject approved rules into the four writers with a post-activation check",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "later",
+   "size": "M",
+   "next": "Writing Memory P2",
+   "needs": ""
+  },
+  {
+   "id": "AA-921",
+   "title": "[Writing memory] Pinned example sets and tenant preference summaries",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "later",
+   "size": "M",
+   "next": "Writing Memory P3",
+   "needs": ""
+  },
+  {
+   "id": "AA-922",
+   "title": "[Writing memory] Weekly KPIs, soft-stop rollback and the disagreement queue",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "later",
+   "size": "M",
+   "next": "Writing Memory P3 (+ Q-8 scorer learning)",
+   "needs": ""
+  },
+  {
+   "id": "AA-923",
+   "title": "[Writing memory] Labels for T2/A1, offboarding deletion, retire the old lesson paths",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "later",
+   "size": "M",
+   "next": "Writing Memory P3",
+   "needs": ""
+  },
+  {
+   "id": "AA-911",
+   "title": "[Identity] Staff sign-in for Booking (and CIS) Vercel Previews, then retire the CIS → Booking bridge",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M1",
+   "session": "S248",
+   "size": "M",
+   "next": "Pick the Preview sign-in option (ADR 0006a amendment), build it, then remove /auth/booking-token; unblocks AA-816 S2",
+   "needs": "Choose the Preview sign-in option"
   }
  ]
 }
