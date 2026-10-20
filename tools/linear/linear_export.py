@@ -52,8 +52,7 @@ ISSUE_FIELDS = """
 
 LIST_QUERY = """
 query($after: String) {
-  issues(first: 50, after: $after, includeArchived: true,
-         filter: { state: { type: { in: ["completed", "canceled"] } } }) {
+  issues(first: 50, after: $after, includeArchived: true) {
     pageInfo { hasNextPage endCursor }
     nodes { %s }
   }
@@ -62,7 +61,14 @@ query($after: String) {
 
 ONE_QUERY = "query($id: String!) { issue(id: $id) { %s } }" % ISSUE_FIELDS
 
-ARCHIVE_MUTATION = "mutation($id: String!) { issueArchive(id: $id) { success } }"
+ARCHIVE_MUTATION = "mutation($id: String!) { issueArchive(id: $id, trash: false) { success } }"
+UNARCHIVE_MUTATION = "mutation($id: String!) { issueUnarchive(id: $id) { success } }"
+STATE_QUERY = "query($id: String!) { issue(id: $id) { identifier trashed archivedAt } }"
+
+
+def keep(issue: dict) -> bool:
+    """Exported: every closed issue, and every archived or trashed issue whatever its state."""
+    return issue["state"]["type"] in CLOSED or bool(issue.get("archivedAt")) or bool(issue.get("trashed"))
 
 
 def api_key() -> str:
@@ -151,7 +157,7 @@ def fetch(key: str, only: list[str]) -> list[dict]:
         out = []
         for ident in only:
             issue = gql(key, ONE_QUERY, {"id": ident})["issue"]
-            if issue and issue["state"]["type"] in CLOSED:
+            if issue and keep(issue):
                 out.append(issue)
             else:
                 print(f"skip {ident}: not found or not closed")
@@ -159,16 +165,28 @@ def fetch(key: str, only: list[str]) -> list[dict]:
     issues, after = [], None
     while True:
         page = gql(key, LIST_QUERY, {"after": after})["issues"]
-        issues += page["nodes"]
+        issues += [i for i in page["nodes"] if keep(i)]
         if not page["pageInfo"]["hasNextPage"]:
             return issues
         after = page["pageInfo"]["endCursor"]
 
 
+def move_from_trash(key: str, issue_id: str) -> str:
+    """Trash -> archive. issueArchive(trash: false) first; if the issue is still trashed, restore it and archive."""
+    gql(key, ARCHIVE_MUTATION, {"id": issue_id})
+    st = gql(key, STATE_QUERY, {"id": issue_id})["issue"]
+    if st["archivedAt"] and not st["trashed"]:
+        return "archived (direct)"
+    gql(key, UNARCHIVE_MUTATION, {"id": issue_id})
+    gql(key, ARCHIVE_MUTATION, {"id": issue_id})
+    st = gql(key, STATE_QUERY, {"id": issue_id})["issue"]
+    return "archived (restore + archive)" if st["archivedAt"] and not st["trashed"] else f"NOT moved: {st}"
+
+
 def write_index(issues: list[dict]) -> None:
     rows = sorted(issues, key=lambda i: (slug((i.get("project") or {}).get("name")), i["identifier"]))
     lines = ["# Linear export", "",
-             "Closed Linear issues (Done / Canceled) with their comments, exported by "
+             "Closed Linear issues (Done / Canceled), plus every archived or trashed issue, with their comments, exported by "
              "`tools/linear/linear_export.py` before they are archived (Linear Free plan, S245). "
              "Generated — do not edit by hand; re-run the script.", "",
              "| Issue | Title | State | Closed | Project |", "|---|---|---|---|---|"]
@@ -187,6 +205,8 @@ def main() -> None:
     ap.add_argument("--archive", action="store_true", help="archive exported closed issues (dry run unless --apply)")
     ap.add_argument("--apply", action="store_true", help="with --archive: really archive")
     ap.add_argument("--only", action="append", default=[], help="issue identifier, e.g. AA-913 (repeatable)")
+    ap.add_argument("--rescue-trash", action="store_true",
+                    help="move exported issues from Linear's 30-day trash to the archive (dry run unless --apply)")
     args = ap.parse_args()
 
     key = api_key()
@@ -209,6 +229,15 @@ def main() -> None:
     print(f"closed issues: {len(issues)} | files written/updated: {written} | "
           f"trashed: {sum(1 for i in issues if i.get('trashed'))} | archived: {sum(1 for i in issues if i.get('archivedAt'))}")
 
+    if args.rescue_trash:
+        rescue = [i for i in issues if i.get("trashed") and exported_matches(i)]
+        print(f"{'RESCUE' if args.apply else 'DRY RUN, would move trash -> archive'}: {len(rescue)} issue(s)")
+        for i in rescue:
+            if not args.apply:
+                print(f"  {i['identifier']}  {i['state']['name']}  {i['title'][:80]}")
+                continue
+            print(f"  {i['identifier']}: {move_from_trash(key, i['id'])}")
+        return
     if not args.archive:
         return
     todo = [i for i in issues if not i.get("archivedAt") and not i.get("trashed") and exported_matches(i)]
