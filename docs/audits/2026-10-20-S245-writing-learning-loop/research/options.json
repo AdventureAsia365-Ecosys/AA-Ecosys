@@ -1,0 +1,137 @@
+{
+  "_note": "Three design options produced by the S245 option agents (20/10/2026). Option A is reproduced in full (lightly condensed). The hand-off to the writer agent truncated options B and C mid-text; their entries below are condensed reconstructions from the truncated text plus the two judges' descriptions, and are marked reconstructed=true.",
+  "options": [
+    {
+      "id": "A",
+      "name": "Writing Memory v1: a governed rule bank plus approved-exemplar retrieval, each activated only by a replay-gated, shadowed release (no fine-tuning)",
+      "reconstructed": false,
+      "summary": "One learning loop for A1/S1 Master rewrite, T2 tenant-voice tour rewrite and T9 blog/social (published by T11): capture -> mine -> gate -> release -> inject -> measure; model weights never change. Memory holds (a) rules: short typed instructions or lexicon entries mined from recurring gate failures and human edit diffs, and (b) exemplars: human-approved passages retrieved per writer, channel and tenant, injected as 3 'style only' few-shot examples. Items are scoped platform (no tenant text) or tenant (RLS). Items ship only inside a versioned per-writer memory release, activated after R0 deterministic replay ($0), R1 judge-only re-score, R2 golden-set regenerate (AA-729 + edit-pair subset + 30% holdout; trial 3 then <=50; $15 cap) and a never-shown shadow replay; hard stops on fidelity (0 new B-class) and isolation (0 cross-tenant hits); rollback = move the active pointer. Phase 0 is urgent: the ungated pipeline_lessons loop is broken (writes stage='audit' at flag_fix_node.py L733, reads S1_rewrite/S1_editor at s1_batch.py L108-121) and dangerous (T2 runs the same graph, so a 'fix' would put tenant text into a global, tenant-less prompt). All CIS-owned (schema shared, CIS migrations after 250). Tenant sees only better content; everything else under /admin/writing-memory. ~6 agent-sessions, ~$30-50/month on Dev, no new AWS service.",
+      "learning_signals": [
+        "Recurring gate failures (free): T9 gate_ledger, repair_log[], discarded_attempts; A1 quality_scores.failure_codes / brand_audit_codes / lessons_extracted; T2 qa_status / qa_repair_count. Unit = (writer, channel, gate_code, normalised violation pattern) cluster recurring across >= N pieces.",
+        "Admin sentence edits (best signal): audit_log content_piece.admin_sentence_* and tenant_tour_version.admin_sentence_* with before, after, gate, problem, suggestion, suggestion_model, mode (admin_content_quality.py ~L586-593, ~L1212-1226). Mode tells whether the admin accepted the model's fix or wrote their own.",
+        "Admin A1 field edits: not usable today (edit_diff holds field names only); Phase 0 stores per-field before/after.",
+        "Tenant T2 edits: tenant_edit rows linked by parent_version_id; per-tenant voice signal, never platform scope unless generalised.",
+        "Tenant T9 edits: not usable today (audit holds content_length only); Phase 0 stores before/after admin-side.",
+        "Approve / reject / regenerate: no reasons today; reviewers regenerate instead of approving (S218: 196 rows, 0 decisions). Phase 0 adds one-click reason chips; regenerate = implicit 'version rejected'.",
+        "Reason chips on sentence apply into audit_log.details (no migration): fact_not_in_source, optional_as_included, wrong_place_or_time, voice_off_brand, ai_phrasing, format_channel, repair_residue, style_only; pre-selected from the gate. fact_not_in_source also writes Jev record_outcome(a1_claim_supported, truth=False) (AA-845 a).",
+        "Human labels: content_piece_label (1 insert) and the unlabelled AA-783 pack; extended to T2 and A1 in P5; panel labels tagged; only Nghiệp-anchored labels calibrate the judge.",
+        "Implicit approval for exemplars: T9 published unedited, T2 approved with no tenant_edit child, as_is/light labels, Ms. Thư feedback in the golden set; a tenant's own final edit only after the fidelity check.",
+        "Later: T8 chosen vs recommended, slate subject cut (no reason today)."
+      ],
+      "mechanism": [
+        "1) shared.writing_signal: normalised store written at capture time + one-time backfill (audit_log sentence rows, T2 diffs, discarded_attempts/repair_log, lessons_extracted). Writer key, scope hint, tenant_id, field/section, before/after, gate_code, reason_code, actor_kind, fidelity verdict.",
+        "2) Fidelity filter: new_specifics + Jev a1_claim_supported / a1_promise_unsupported (AA-803) on added sentences; edits adding unsupported claims marked adds_unsourced_claim and never become exemplars or content-licensing rules.",
+        "3) Mining job writing_memory_mine (shared.job, weekly + on demand): deterministic clustering; thresholds (tenant rule >= 2 edits on >= 2 pieces; platform rule >= 3 tenants, or A1 edits from >= 2 reviewers, or gate failure on >= 5% of pieces in 30 days); one cross-vendor LLM call per cluster (OpenAI drafts for the Claude writer; <= 50 per run; logged); PREDICT-style validation on >= 2 held-out edits.",
+        "4) Rule kinds: lexicon (deterministic; platform extends AA-800 layers and the AA-787 lexicon gate; tenant below tenant forbidden_words), writer_instruction (capped HOUSE RULES block: <= 12 platform + 8 tenant lines), repair_hint (only when the gate fires). Rules may only constrain; a lint rejects rules telling the writer to include a fact, inclusion, time or place.",
+        "5) Platform generalisation: rewritten generic instruction; synthetic or A1 examples only; 5-gram overlap guard vs every tenant corpus + brand names + forbidden words; Nghiệp approves every platform rule.",
+        "6) Exemplar retrieval: shared.writing_exemplar passages, entity-masked ([PLACE] / [N] / [TIME]), embedded once (vector(1536)); k=3 nearest filtered by writer, channel and tenant (platform A1 fallback when < 3); injected as style_example blocks 'voice and rhythm only'; replaces the static good_examples slot in render_brand_block (static examples remain the fallback).",
+        "7) Releases and injection: shared.writing_memory_release per writer (rule ids, exemplar policy, token caps); writers read the active release per job and stamp memory_release_id + rule_ids + exemplar_ids into writer_input / metadata / llm_call_log.quality_signal. A1 replaces the lessons append; T2 inherits via the shared graph filtered by writer=t2_tour; T9 via render_brand_block and repair feedback.",
+        "8) Gated activation: R0, R1, R2, shadow replay of the last <= 50 real inputs; promotion needs improved target metric (paired McNemar/Wilcoxon, Wilson 95%), no hard stop, holdout holds, Nghiệp's click for platform scope. (Original: tenant-only releases auto-promote in dev phase - judges recommend removing this.)",
+        "9) Maintenance: delta-only curation; retire candidates after 60 days unused; per-writer caps ranked by support x effect; route/model or AA-787 taxonomy change forces an R2 re-run.",
+        "10) Jev stays the fidelity decision layer; reason chips close AA-845's ground-truth loop; no new Jev question in v1."
+      ],
+      "safety": [
+        "Fidelity: constraint-only rules (lint at mining and release), adds_unsourced_claim quarantine, entity-masked 'style only' exemplars, runtime gates unchanged; hard stop on >= 1 new B-class or C1 fault (same logic as AA-865 rejecting fix (b), case #13).",
+        "Tenant isolation: RLS (cis_app + tenant_isolation) on new tables; no aa_app_user grant; CHECK scope <-> tenant_id; tenant predicate in retrieval SQL; admin-side mining; 5-gram + brand-name guard; isolation probe in every R2 is a hard stop.",
+        "Tenant sees content only: no rule/gate/score/release/chip in the portal; R2 greps outputs for gate codes and tags.",
+        "Eval gate before activation: release CHECK status='active' requires eval_run_id and shadow_run_id; platform releases need approved_by; prompt_eval_runs pipeline CHECK widened.",
+        "Cost caps: mining <= 50 calls; R2 trial 3 then <= 50, $15; shadow <= 50 per writer per release; all via LLMClient; no paid run while a backend PR is unmerged or job tables busy.",
+        "Rollback: one UPDATE flips the pointer; per-writer memory_enabled kill switch (AA-544 flag pattern); weekly job flags soft stops and auto-rolls back hard stops.",
+        "Freeze legacy loops in P0: stop pipeline_lessons writes and reads; leave acp_output_rules / acp_post_processor.py as Dead Table Registry candidates."
+      ],
+      "data_model": [
+        "Owner AA-CIS-App, schema shared, owner cis_owner, runtime cis_app; CIS migrations after 250 via AA-CIS-Infra DB Migrate.",
+        "NEW shared.writing_signal (writer CHECK a1_master/t2_tour/t9_blog/t9_linkedin/t9_facebook/t9_other; source_kind CHECK; before/after; gate_code + gate_taxonomy_version; reason_code; actor_kind; fidelity jsonb; audit_log_id; RLS; no aa_app_user grant). Judge correction: audit_log.id is uuid and audit_log.tenant_id is varchar(50).",
+        "NEW shared.writing_rule (scope CHECK platform/tenant with tenant_id CHECK; rule_kind lexicon/writer_instruction/repair_hint; instruction <= 300 chars; lexicon jsonb; provenance jsonb; status candidate/replay_passed/shadow/active/retired/rejected; version; supersedes_id; approval and retirement fields; hit counters).",
+        "NEW shared.writing_exemplar (passage_masked; mask_map_sha; embedding vector(1536) + ivfflat; approval_basis CHECK; fidelity_passed NOT NULL; status; RLS).",
+        "NEW shared.writing_memory_release (writer; scope_tenant_id; rule_ids; exemplar_policy; caps; status draft/evaluating/shadow/active/rolled_back/superseded; CHECK active requires eval_run_id + shadow_run_id; approved_by required for platform; partial UNIQUE one active per layer).",
+        "WIDEN shared.prompt_eval_runs pipeline CHECK (t2_tour, t9_blog, t9_linkedin, memory_replay, memory_shadow) + release_id; NEW shared.writing_memory_shadow.",
+        "WIDEN tenant_brand_rule_versions.source_type CHECK to add 'learned' (snapshot only; tenant_brand_rules is never written by the learner).",
+        "No-migration changes: reason_code in audit_log.details; T9 tenant edit audit gains before_sha (full text to writing_signal); generated_content.edit_diff gains per-field before/after; release stamps in writer_input / metadata / quality_signal. Judge correction: tenant_tour_versions has no metadata column -> needs a generation_meta jsonb migration.",
+        "Retire later via DRY RUN: pipeline_lessons, acp_output_rules, /v1/rules, acp_post_processor.py.",
+        "Seed llm_role_config rows for writing_memory_mine (judge, OpenAI), memory_eval, memory_shadow."
+      ],
+      "ui": [
+        "Admin /admin/writing-memory with tabs Signals, Candidates, Exemplars, Releases, Metrics.",
+        "Content Quality drawer: reason chips pre-selected from the gate; 'Use as exemplar' / 'Never use as exemplar'; PieceLabel drawer reused for T2.",
+        "A1 review and tour detail: chips on Regenerate/Reject/Dismiss; before/after on field edit; 'learned from this edit' badge; label drawer for A1.",
+        "Tenant 360: 'Voice memory' card (admin-only).",
+        "Tenant portal: no new QA UI; optional product-worded feedback prompt is a separate decision, default OFF."
+      ],
+      "measurement": [
+        "North star: repeat-error rate per writer (share of outputs hitting a cluster already covered by an active rule), weekly, attributed per rule.",
+        "Human edit effort: normalised edit distance; tenant edit rate; admin sentence-apply count per 100 pieces; minutes_to_fix median/p90; A1 regenerates per tour.",
+        "Quality: light-edit-or-better (floor 60%, last 70%); gate approval/precision vs labels; brand fit metrics.",
+        "Fidelity (zero tolerance): B-class per 100 on golden fact subset; C1; online F1/F17/F9_cta_fact proxy.",
+        "Isolation: probe hits = 0; F10 >= 0.92 = 0; cross_brand_distinct does not drop.",
+        "Loop health and cost: re-flag rate <= 8% pooled; prompt tokens added; cost per piece per stage; loop spend per month.",
+        "Method: paired, McNemar/Wilcoxon, Wilson 95%, pooled across rounds, per tenant and pooled, holdout agreement, judge test-retest.",
+        "Baseline first: AA-729 run before any release."
+      ],
+      "phases": [
+        {"phase": "P0 Stop the bleed and capture what humans do", "effort_sessions": "1", "exit_criteria": "pipeline_lessons 0 new reads/writes; before/after evidence for a tenant T9 edit and an A1 field edit; chip in audit_log.details; fact_not_in_source lands as a decision_log outcome; deployed and verified."},
+        {"phase": "P1 Signal store, backfill and mining", "effort_sessions": "1-1.5", "exit_criteria": "Backfill counts per source and tenant; one mining run <= $1; candidates visible with provenance; tests for scope CHECK, lint, 5-gram guard, isolation."},
+        {"phase": "P2 Eval harness and releases (needs AA-729)", "effort_sessions": "1", "exit_criteria": "Release 0 reproduces baseline; activate CHECK refuses releases without eval/shadow; rollback drill proven by writer_input stamp."},
+        {"phase": "P3 Rule injection in all writers", "effort_sessions": "1", "exit_criteria": "Release 1 active for >= 1 writer with improved target metric, 0 B-class/C1 regressions, 0 isolation hits, cost <= +20%."},
+        {"phase": "P4 Exemplar retrieval", "effort_sessions": "1", "exit_criteria": "Paired R2 shows lower edit distance or better light-edit share for >= 1 tenant writer with 0 fact carry-over; retrieval proven tenant-filtered."},
+        {"phase": "P5 Measure, maintain, close the human loop", "effort_sessions": "0.5-1", "exit_criteria": "Two automatic weekly reports; one rule expired by the job; dead-table drop with DRY RUN evidence; KPI trend in docs/audits."}
+      ],
+      "monthly_cost": "About $30-50/month on Dev (mining $2-4, R2 $10-30, shadow $5-10, R0/R1 $0-2, embeddings < $0.10) plus +3-8% writer prompt cost per piece in production (~1.5k extra input tokens); no new AWS service; fine-tuning $0.",
+      "risks": [
+        "Signal scarcity on Dev (4 synthetic tenants, ~48 T2 versions, ~251 T9 pieces).",
+        "Reviewer bandwidth (Nghiệp effectively sole reviewer; trang inactive; Ms. Thư team minutes unknown).",
+        "Fidelity regression through memory (fact carry-over, tenant-added promises).",
+        "Cross-tenant leakage via platform rules.",
+        "Prompt bloat / context collapse and conflicts with the brand pack.",
+        "Overfitting to the golden set or one reviewer; criteria drift.",
+        "Dependency chain: AA-729, AA-783, AA-845, AA-787, AA-800 PR #869, AA-865 PR #868.",
+        "Self-preference and judge bias.",
+        "Legacy trap: someone 'fixes' pipeline_lessons.",
+        "Shared-graph coupling between A1 and T2."
+      ],
+      "adr_needed": "Yes, one app ADR in apps/AA-CIS-App/docs/adr/ (app ADRs run 0001-0008). Cite ecosystem ADR 0002, 0008, app ADR 0006, 0007. Decide: no fine-tuning now; memory = rules + exemplars with precedence tenant-authored > learned tenant > platform, fidelity above all; release-gated activation; supersedes AA-132 lessons and AA-99/N8 output rules; tenant-isolation and no-tenant-text invariants. Judge note: use a distinct title so it is not confused with the reserved ecosystem ADR 0009 (AI platform, AA-804)."
+    },
+    {
+      "id": "B",
+      "name": "Golden-gated Writer Optimiser (GWO): eval-first, GEPA-style prompt-slot optimisation with click-to-promote, for A1 Master, T2 and T9/T11",
+      "reconstructed": true,
+      "summary": "Measure first, optimise second, human click before anything goes live. Four layers inside AA-CIS-App: (1) capture into acp_shared.writer_feedback_event (closes gaps G1-G4); (2) frozen, versioned golden sets per writer x channel with tune and holdout splits (AA-729 extended with edit-pair, fault-injection and per-tenant items), scored by deterministic gates, Jev fidelity questions and cross-vendor judges calibrated against content_piece_label; (3) refactor writer prompts into named slots and run a GEPA-style reflective proposer on failure clusters, scored through R0 replay, R1 judge-only and R2 capped regenerate, keeping a Pareto frontier; (4) Writer Lab admin page: diff, provenance, scorecard, click to promote (shadow/canary or active), one-click rollback. Platform variants need >= 3 tenants or >= 2 reviewers and no tenant text; tenant variants are voice slots only; fidelity slots are locked (optimiser may only add restrictions). pipeline_lessons frozen and its rows migrated into reviewed candidates; acp_output_rules stays dead; prompt_eval_runs widened. No fine-tuning (corpus kept for later at ~1k+ pairs).",
+      "strengths_per_judges": [
+        "Strongest eval discipline: first-class golden set/item/result tables, tune/holdout, per-item results.",
+        "Judges count only at Cohen's kappa >= 0.6 against Nghiệp-anchored labels; uncalibrated judges soft-only.",
+        "DB trigger requiring a passing holdout run; byte-identical R0 replay before the slot registry goes on.",
+        "Edit-pair replay hit rate KPI; candidate-funnel / rollback-rate KPI.",
+        "Public-repo rule; tenant offboarding deletion; AI Use Register entry."
+      ],
+      "weaknesses_per_judges": [
+        "Spine is a refactor of every A1/T2/T9 writer and repair prompt into DB-resolved slots; T2 shares the S1 graph, so the blast radius is wide.",
+        "First automated improvement only in P3 (~sessions 5-7 of 7-8); tenant voice learning P4, exemplars optional.",
+        "GEPA on ~251 T9 pieces, ~48 T2 versions, 4 synthetic tenants and 1 label is the regime where optimisers overfit.",
+        "~8-9 new or altered tables and a six-area Writer Lab: heavy for one reviewer."
+      ],
+      "effort_sessions": "7-8 over 5 phases",
+      "monthly_cost": "About $30-70/month LLM spend (GEPA campaigns $10-25 each); $0 new infrastructure; ~30 min/week of Nghiệp's time."
+    },
+    {
+      "id": "C",
+      "name": "Writer Flywheel: capture first, prompt-layer learning now (L0-L3), offline GEPA (L4), fine-tune (L5) only on evidence",
+      "reconstructed": true,
+      "summary": "P0 capture through a single record_writer_feedback helper written in the same DB transaction as each edit/decision (source_audit_id uuid matching audit_log.id), with an asynchronous fidelity_status (pending/grey/pass/fail). Learning in layers: L0 learned lexicon (deterministic, proven by $0 R0 replay), L1 lessons, L2 retrieved exemplars, L3 CIPHER-style per-tenant preference summaries (<= 5 statements); L4 an offline GEPA spike ($20-60); L5 conditional fine-tune ($160-400 per run) when ~1k clean pairs exist, with SFT/DPO JSONL exports to a new S3 prefix and a fine-tune readiness meter. Nothing auto-activates, including tenant lessons. Preference-pair table; six job kinds; four or more tables; six-tab admin page.",
+      "strengths_per_judges": [
+        "L0 lexicon is the cheapest visible win (deterministic, $0 replay).",
+        "CIPHER-style tenant preference summaries work with very few edits.",
+        "'Nothing auto-activates' rule.",
+        "Same-transaction capture helper with async fidelity status; capture-completeness KPI (>= 80% of admin events with a reason code); gate alias map for the AA-787 rename.",
+        "Honest about vendor churn; keeps a fine-tune readiness counter."
+      ],
+      "weaknesses_per_judges": [
+        "Widest scope: preference pairs, JSONL exports to S3, readiness meter, GEPA spike, conditional fine-tune.",
+        "Export path adds a tenant-text-at-rest surface (S3, IAM, consent) not needed now; fine-tuning effectively unavailable (Bedrock Claude EOL, OpenAI closing 06/01/2027).",
+        "Every tenant voice item needs the single reviewer; release/attribution model less rigorous (rule_set_version hash rather than per-release eval CHECKs).",
+        "P1 waits on AA-729 and AA-845 answers; lessons land ~session 3.5."
+      ],
+      "effort_sessions": "7-8",
+      "monthly_cost": "About $35-80/month; fine-tune runs $160-400 each if ever triggered."
+    }
+  ]
+}
