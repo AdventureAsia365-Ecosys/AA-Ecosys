@@ -1,0 +1,192 @@
+{
+  "project": "Tenant CRM",
+  "issues": [
+    {
+      "key": "CRM-01",
+      "title": "ADR: Partner app (portal + CRM) boundary, runtime and Dev-first plan",
+      "priority": 1,
+      "blocked_by": [],
+      "repo": "AA-Ecosys (root)",
+      "description": "## Problem\nThe Tenant CRM is now its own app, AA-Partner (tenant portal + CRM + traveller host), on shared acc2 infrastructure. The round-2 owner decisions (N3 b, the D12/D22 changes, synthetic agencies first, no prod cell before real agencies) and three technical reviews changed several v2 choices. None of this is recorded in an ADR yet, and ADR 0008 section 8 still says \"CIS module first\".\n\n## Scope\n- Write a root ADR that amends ADR 0008 section 8. Use the next free number: docs/adr holds 0001-0008 and other docs reserve 0009/0012, so check before numbering.\n- Record the architecture:\n  - repo shape: web/ + api/, with an import-boundary test;\n  - runtime: ECS api + web on Fargate ARM, reached through CloudFront pay-as-you-go -> VPC origin on the internal VPC-link NLB -> ALB host rule;\n  - data: no DB grants to or from crm.*; cross-app reads over HTTP only;\n  - service-to-service auth: a KMS-signed service JWT, verified by the producer.\n- Record the role rule: CRM roles (owner/agent/assistant) belong to the CRM and are written only on an agency owner's action; CIS membership may only revoke. Note the AA-813 re-scope this implies: update AA-813's description, do not open a new issue.\n- Record the key and secret rules: the per-agency KMS key policy template (use / administer / explicit Deny); a separate credential class for integration secrets; no HS256 JWT_SECRET in AA-Partner.\n- Record observability: the CRM has its own LLM gateway (crm.llm_call) and its own job runner (crm.job), and CIS observes both read-only through ops-feed.v1 with the staff WORKFORCE token.\n- Record the environment plan:\n  - Dev uses synthetic agencies only (C7.1a).\n  - The Go-real wave is gated on the first real agency. It covers prod placement (AA-880 or a CRM cell), a prod Cognito client/pool with passkeys, a CloudFront WAF, ECS exec off, a second service for the public path, and the vendor plans.\n- Update the docs/README or catalog links as needed.\n\n## Done when\n- The ADR is merged on master with status Accepted and linked from docs/adr/README.md.\n- ADR 0008 carries an 'amended by' note.\n- AA-813 carries a comment with the CRM-role rule (and its description points to it), and this issue links to that comment.\n"
+    },
+    {
+      "key": "CRM-02",
+      "title": "Contract ops-feed.v1: CRM job summary and LLM usage for the CIS admin",
+      "priority": 2,
+      "blocked_by": [
+        "CRM-01"
+      ],
+      "repo": "AA-Ecosys (root)",
+      "description": "## Problem\nOwner round 2: the CRM keeps its own job runner and LLM log, and the CIS admin must be able to monitor both read-only, without DB grants. No cross-app observability contract exists today: CIS reads only its own runner, and TripPlanner writes into shared.llm_call_log.\n\n## Scope\n- Add docs/contracts/ops-feed.v1.json (JSON Schema + samples) for two endpoints:\n  - GET /crm/ops/v1/job-runner/summary: counts per kind x status, oldest queued age, worker heartbeat age, running SHA and deploy-gate state. Same shape as CIS /admin/job-runner/summary.\n  - GET /crm/ops/v1/llm-usage?from&to: per day x model x stage, the calls, input/output/cache tokens, estimated cost, error class and a pseudonymous tenant hash.\n- Rules:\n  - no payloads, no prompt text, no tenant names, no traveller_token;\n  - auth = WORKFORCE access token with client_id cis-admin and group cis-admin;\n  - no ADMIN_SECRET.\n- Register the contract in docs/contracts/README.md (producer = AA-Partner, consumer = AA-CIS-App). The producer and consumer tests share the sample files.\n\n## Done when\n- The contract and samples are merged, and the README registry row is present.\n- A JSON-schema validation test of the samples passes in CI (root or consumer repo).\n"
+    },
+    {
+      "key": "CRM-03",
+      "title": "Infra: apply-role bootstrap for CloudFront, VPC origins and CRM ECR (local MFA apply)",
+      "priority": 1,
+      "blocked_by": [],
+      "repo": "AA-CIS-Infra",
+      "description": "## Problem\nThe Terraform apply role cannot create what the CRM needs:\n- it holds only cloudfront:UpdateDistribution (accounts/aa365/cicd_split.tf:683-689);\n- it can create ECR repos only under aa-booking-<env>-* (accounts/aa365/cicd.tf:305-322).\n\nThe CRM needs a CloudFront distribution, a VPC origin and two ECR repos. The role already has 10 managed policies, and its inline policy is near the size limit.\n\n## Scope\n- Add one customer-managed policy for the apply role, covering:\n  - CloudFront distribution, VPC origin, cache and origin-request policy, and tagging verbs;\n  - iam:CreateServiceLinkedRole, conditioned on the CloudFront VPC-origin service name (verify the exact name in CRM-04);\n  - ECR manage on aa-crm-<env>-*.\n- Request the 'managed policies per role' quota raise (adjustable, free), or fold two AWS-managed attachments.\n- Fix the stale comment that says the CI role lacks apigateway:SetWebACL. It has it (cicd_split.tf:582-590).\n- Nghiep applies this locally with the MFA admin profile, as for AA-811 and AA-816 (bootstrap objects).\n\n## Done when\n- The policy is attached, and a Terraform plan of the CRM-04/CRM-05 resources runs clean under the apply role.\n- The apply log line and the quota request id are recorded in this issue (no account ids in public repos).\n"
+    },
+    {
+      "key": "CRM-04",
+      "title": "Spike: CloudFront pay-as-you-go -> VPC origin on the internal NLB -> ALB host rule -> Next 16 container",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-03"
+      ],
+      "repo": "AA-CIS-Infra",
+      "description": "## Problem\nN3 b puts the agency app in a Fargate container behind CloudFront. Two facts block the obvious path:\n- CloudFront flat-rate Free and Pro do not include VPC origins; only Business and Premium do;\n- the shared ALB is internet-facing, and its :443 listener defaults to CIS.\n\nThe chosen path is unproven here: pay-as-you-go + a VPC origin on the existing internal VPC-link NLB (it has a security group and a TCP :80 listener).\n\n## Scope\n- Build a throwaway hello container: Next 16 output standalone on Fargate ARM (0.25 vCPU / 1 GB), with proxy.ts host routing for two hosts and a streamed SSR page.\n- Wire the path:\n  - aws_cloudfront_vpc_origin on the NLB;\n  - NLB SG ingress from CloudFront-VPCOrigins-Service-SG;\n  - an ALB listener rule on host + a secret origin header -> the spike target group (priority after Booking's 100).\n- Rule order on the :80 listener (final check 20/10/2026: the default action forwards to the CIS API target group, modules/alb/main.tf:78-85, and Booking's rule at priority 100 is path-only, booking.tf:356-372):\n  - priority BELOW 100 (e.g. 10): host in {partner-dev., go-dev.} AND X-AA-Origin = secret -> web target group;\n  - next (e.g. 11): X-AA-Origin present with any value (wildcard) -> fixed 403. CloudFront adds the header to every origin request, so traffic arriving via the distribution's *.cloudfront.net name or any other Host can never fall through to Booking (/booking/*), the CRM api (/crm*) or the CIS default action.\n- Add an origin request policy that forwards Host and CloudFront-Viewer-Address. Cache the static path with CachingOptimized.\n- Measure the web task's RSS. Confirm the ALB CommonRuleSet still inspects the traffic and that no geo block applies.\n- Document the fallback in case the spike fails: Free plan -> HTTP API -> VPC link v2 (no streaming, 10,240-byte header cap).\n- Out of scope: opening ALB :443 to the CloudFront prefix list.\n\n## Done when\n- curl through CloudFront returns 200 on both hosts with chunked streaming.\n- Through CloudFront, https://partner-dev.<zone>/booking/health and https://<distribution>.cloudfront.net/health both return 403 (never Booking or CIS), and partner-dev./crm/anything reaches the web container, not the CRM api.\n- A request from a country outside the WAF allow-list succeeds.\n- The findings and the go/no-go are written in the issue. The spike resources are destroyed or folded into CRM-05.\n"
+    },
+    {
+      "key": "CRM-05",
+      "title": "Infra: crm.tf for the Partner app on Dev (ECR, tasks, services, routing, secrets, CloudFront, DNS, budget)",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-03",
+        "CRM-04"
+      ],
+      "repo": "AA-CIS-Infra",
+      "description": "## Problem\nThe Partner app needs its own Dev infrastructure on the shared cluster. It follows the Booking template: booking.tf is self-contained, reads module outputs, and adds one ALB listener rule.\n\n## Scope\nAdd accounts/aa365/crm.tf + crm_variables.tf, prefix aa-crm-dev-*:\n- Images and logs:\n  - 2 ECR repos (api, web) with IMMUTABLE git-SHA tags, keeping 10;\n  - log groups with 14-30 days retention.\n- Compute:\n  - ARM64 task definitions: api 0.25 vCPU / 0.5 GB, web 0.25 vCPU / 1 GB;\n  - 2 services on FARGATE_SPOT with a circuit breaker, ignore_changes on desired_count and task_definition, desired 0 at creation, ECS exec ON for Dev.\n- Network:\n  - own SGs: the api SG gets RDS ingress, the web SG gets none;\n  - ALB rules, in the CRM-04 order: web host+header rule and the 'origin header present -> 403' rule below Booking's 100; the api rule (path /crm, /crm/*) after them, so only in-VPC callers (BFF, CIS) reach the api.\n- Secrets and access:\n  - 4 secrets without values (DSN, BFF JSON, Cognito client, provider JSON), registered first as planned rows in the secrets register;\n  - the task role reads crm/dev/* only;\n  - SES send for the api task role: only var.ses_from_address and only the transactional configuration set (the cis_ecs_task_ses_send pattern in ses.tf / booking.tf);\n  - GitHub OIDC deploy roles scoped to these repos and services.\n- Edge: the CloudFront distribution + VPC origin (from CRM-04), ACM in us-east-1, Route 53 aliases partner-dev. and go-dev.\n- Budget row App=crm.\n- E2E mailbox (e2e_mailbox.tf): today the receipt rule accepts exactly one recipient and the reader role trusts only AA-CIS-App environment e2e. Add the fixed synthetic-agency addresses (e.g. e2e-crm-1..3@e2e-mail.<zone>, one per Cognito user, since the EXTERNAL pool uses email as username) to the rule, and add the AA-Partner environment e2e subject to the reader trust. Without this, CRM-12/CRM-15 mail bounces.\n- Add the partner-dev callback/logout URLs to the Dev EXTERNAL client (identity_variables.tf).\n- Runbook line: switch to FARGATE base 1 if tasks stay PENDING for more than 15 minutes.\n\n## Done when\n- The Terraform apply through CI is green.\n- The services exist at desired 0, the distribution is deployed, and both hosts resolve.\n- A test mail to e2e-crm-1@e2e-mail.<zone> lands in the e2e bucket and is readable by the AA-Partner reader subject.\n- No account id, ARN or NLB DNS name appears in any public repo.\n"
+    },
+    {
+      "key": "CRM-06",
+      "title": "Infra: register DB owner crm (roles, connection budget, idle-exempt kinds, isolation probe)",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-01"
+      ],
+      "repo": "AA-CIS-Infra",
+      "description": "## Problem\nA new schema owner touches several mirrored places: db/owners.yaml, the IDLE_EXEMPT_KINDS list in run_migration.py, check_migration_copies.py, db-migrate.yml, isolation_probe.py and roles/.\n\nThe connection budget rule is that the C2.2 worst-case total stays at or below 75% of max_connections, about 135 on t4g.small. Today the total is ~126, so the CRM pool must be small.\n\n## Scope\n- Add an owners.yaml entry crm (key crm-NNN, mirror dir db/migrations/crm/).\n- Add a roles file under db/migrations/roles/: crm_owner NOLOGIN and crm_app LOGIN (no password) with CONNECTION LIMIT 6. Migrator membership as for the other owners.\n- Add crm_app to owners.yaml password_roles and to the DB Migrate mode=set-password role input, so the password comes from the DSN Nghiep writes in crm/dev/database-url (the X1 S12 pattern, db/README.md:20-23).\n- Put the crm.job periodic kinds in IDLE_EXEMPT_KINDS from day one: heartbeat and key cleanup now, mail ingest and workflow tick later.\n- Add a rds_role_connection_limits row for crm_app (observability_ecosys.tf).\n- Paired root PR: a C2.2 row in docs/architecture/data-standards/03-scaling.md (pool 3 x 2 processes = 6, total ~132).\n- Add an isolation probe cell: as crm_app with no tenant set, every crm.* tenant table returns 0 rows.\n\n## Done when\n- DB Migrate check mode is green with an empty crm-000 baseline.\n- The C2.2 table is updated in the same change set and is still at or under the ceiling.\n- The probe runs: the cell is present and passes trivially before the tables exist.\n"
+    },
+    {
+      "key": "CRM-07",
+      "title": "Infra: guardrails for per-agency KMS keys (IAM conditions, key-policy template, misuse alarm, drift check)",
+      "priority": 2,
+      "blocked_by": [
+        "CRM-05"
+      ],
+      "repo": "AA-CIS-Infra",
+      "description": "## Problem\nThe CRM creates per-agency keys lazily (D7 a). As designed in v2, two things go wrong:\n- the keys would carry the default key policy, so any acc2 admin with kms:* could decrypt;\n- an IAM statement on alias/crm/* grants nothing, because KMS does not accept alias ARNs as IAM resources.\n\nSpec F1 requires no access outside the agency, AA included.\n\n## Scope\n- Task-role IAM:\n  - kms:CreateKey and TagResource only with aws:RequestTag/App = crm and the allowed tag keys;\n  - CreateAlias only on alias/crm-dev/*;\n  - crypto actions on key/*, conditioned on kms:ResourceAliases alias/crm-dev/* and on the required encryption-context keys;\n  - lockout safety check: the CreateKey API requires the supplied key policy to let the CALLING principal make a later PutKeyPolicy unless BypassPolicyLockoutSafetyCheck is true (docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html, read 20/10/2026). The task role never gets PutKeyPolicy, so CreateKey with the template and bypass=false is expected to fail. Test both on Dev and record the choice in the ADR: (a) allow CreateKey only with kms:BypassPolicyLockoutSafetyCheck = true, safe because the template's statement (b) keeps the key manageable by the account root and the drift check enforces the template; or (b) a Terraform-managed key-issuer role that creates keys on the CRM's request;\n  - never PutKeyPolicy, ScheduleKeyDeletion or DisableKey.\n- Key policy template (versioned JSON in the repo, consumed by CRM-11), with three statements:\n  - (a) use: the CRM task role, with kms:EncryptionContext:crm_tenant_id;\n  - (b) administer: the account root, with no crypto actions;\n  - (c) an explicit Deny of Decrypt, ReEncrypt*, GenerateDataKey* and CreateGrant for every principal except the CRM task role and a CRM break-glass role (the pattern of identity_alerts.tf).\n- An EventBridge rule -> SNS + an SQS queue that the CRM reads into the agency audit. It fires on:\n  - KMS Decrypt by a non-CRM principal;\n  - PutKeyPolicy, CreateGrant, ScheduleKeyDeletion or DisableKey on alias/crm-* keys;\n  - ecs ExecuteCommand or UpdateService on the CRM service.\n- IAM for the nightly drift-check job (GetKeyPolicy on CRM keys).\n\n## Done when\n- A Terraform-managed canary key (alias/crm-dev/canary) carries the template. A Decrypt attempt by the admin role is denied by the explicit Deny and raises the alarm (evidence in the issue).\n- The IAM policy simulator shows the task role denied CreateKey without aws:RequestTag/App = crm, and the lockout-check choice (a or b above) is recorded with the CreateKey test output. (The 'key created by the CRM role' check is in CRM-11, which owns that code.)\n- The Terraform apply through CI is green.\n"
+    },
+    {
+      "key": "CRM-08",
+      "title": "AA-Partner repo bootstrap: layout, CI on ARM runners, import-boundary test, deploy workflows",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-01",
+        "CRM-05"
+      ],
+      "repo": "AA-Partner (new)",
+      "description": "## Problem\nThe Partner app needs its own public repo in AdventureAsia365-Ecosys, with the same CI discipline as Booking. Its images are ARM64; Linux arm64 hosted runners are free on public repos.\n\n## Scope\n- Create the repo AdventureAsia365-Ecosys/AA-Partner (public), with CONTEXT.md, CLAUDE.md and docs/adr/0001-implements-root ADR.\n- Layout: api/ (FastAPI + asyncpg) and web/ (Next 16, React 19). A test checks that api/ never imports web/, and that web/ reaches the API only over HTTP.\n- CI on ubuntu-24.04-arm:\n  - lint, type check, unit tests, and builds of both images;\n  - a docker compose smoke: web on :3004 + api + an ephemeral postgres with the crm-NNN migrations. A KMS stub sits behind KeyProvider, in CI only;\n  - OpenAPI export + oasdiff on the api, following AA-899 (reference it, do not duplicate it).\n- Branch protection with the required checks; a GitHub dev environment limited to main.\n- Deploy workflows:\n  - deploy-api, with the deploy gate (OIDC audience aa-crm-deploy-gate; a copy of the Booking deploy-dev.yml preflight);\n  - deploy-web, not gated.\n- Account ids and DNS names live only in repo variables.\n\nNote: the CI part can start once CRM-01 is merged; only the Done-when needs CRM-05 (ECR repos and OIDC deploy roles).\n\n## Done when\n- The first PR is green on all required checks.\n- The deploy workflows have pushed the first image SHAs to both ECR repos (services still at desired 0).\n"
+    },
+    {
+      "key": "CRM-09",
+      "title": "CRM API skeleton: health, Cognito EXTERNAL auth, tenant transactions, crm-001 base tables",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-06",
+        "CRM-08"
+      ],
+      "repo": "AA-Partner (new)",
+      "description": "## Problem\nThe slice needs a running CRM API that authenticates agency users, isolates tenants with RLS and holds the base tables.\n\n## Scope\n- FastAPI app with /crm/health and /crm/health/ready. Structured logging with a PII scrub filter (and Sentry before_send if Sentry is used).\n- A Cognito EXTERNAL JWT verifier pinned to the Dev client id and token_use (copy the Booking identity_config pattern). No HS256 path.\n- For the slice, membership comes from crm.member_role, seeded for the synthetic agencies. It sits behind an interface that the re-scoped AA-813 feed will later feed (revoke-only).\n- A tenant_tx(tenant_id) helper doing set_config('app.tenant_id', ..., true), plus a lint test that forbids pool.fetch*/execute outside it.\n- crm-001:\n  - crm.tenant, including is_synthetic; the Dev API refuses is_synthetic = false;\n  - crm.member_role;\n  - crm.access_event: one row per request with traveller_ids[] + fields[], partitioned monthly, runtime INSERT/SELECT only;\n  - ENABLE + FORCE RLS with NULLIF policies TO crm_app, and COMMENT 'pii:<class>' tags.\n- Applied on Dev through DB Migrate only.\n- Before scaling to 1 (manual, Nghiep): set the value of crm/dev/database-url and the Cognito client secret in the console, then run DB Migrate mode=set-password for crm_app (CRM-06).\n\n## Done when\n- The DB Migrate apply is green, and /crm/health returns 200 through the ALB rule with the service at desired 1.\n- Unauthenticated and wrong-client tokens get 401, and the probe cell shows 0 cross-tenant rows.\n"
+    },
+    {
+      "key": "CRM-10",
+      "title": "CRM job runner (copy of Booking), deploy gate and ops-feed job summary",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-09",
+        "CRM-02"
+      ],
+      "repo": "AA-Partner (new)",
+      "description": "## Problem\nD22 (changed): the CRM has its own copy of the job runner and does not touch CIS shared/jobs. The CIS admin must be able to observe it.\n\n## Scope\n- Copy Booking backend/app/jobs into AA-Partner: an in-process lifespan worker with claim/lease/release/cancel.\n- Create the table crm.job (own migration, next free crm-NNN at merge time: CRM-10 and CRM-11 run in parallel, so numbers are taken in merge order) from the ADR 0003a template: no RLS, payload ids only, and a CI check that rejects pii: keys in payloads.\n- Store error_class plus a redacted message instead of free-text error. A unit test feeds a PII string through the error path.\n- Add the shared conformance test suite (claim/lease/release/cancel) here. Note in the issue that it should be mirrored into Booking and CIS later.\n- Add GET /crm/ops/deploy-gate (GitHub OIDC, no secret), with the periodic kinds exempt, and a heartbeat kind.\n- Add GET /crm/ops/v1/job-runner/summary per ops-feed.v1. Auth = WORKFORCE token, client_id cis-admin + group cis-admin.\n- Emit EMF metrics for job failures and queue age.\n\n## Done when\n- The heartbeat job is visible in crm.job on Dev, and the deploy gate blocks a deploy while a non-exempt job runs (tested).\n- The summary endpoint validates against the ops-feed.v1 samples and rejects tokens from other clients.\n"
+    },
+    {
+      "key": "CRM-11",
+      "title": "KeyProvider and field encryption: per-agency KMS key, per-traveller DEK, crm-002 vault columns",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-07",
+        "CRM-09"
+      ],
+      "repo": "AA-Partner (new)",
+      "description": "## Problem\nSpec F1: traveller personal data is encrypted with the agency's own key, and nobody outside the agency can access it. The slice must store intake identity fields encrypted from day one.\n\n## Scope\n- KeyProvider interface (KMS on Dev and prod, a stub only in CI):\n  - lazy per-agency key creation with the CRM-07 key-policy template and the alias alias/crm-dev/<tenant>;\n  - a per-traveller DEK wrapped by that key;\n  - encryption context {crm_tenant_id, traveller_id}.\n- Field encryption: AES-256-GCM per field with AAD = tenant/table/column/id, and an HMAC blind index for email and phone.\n- An in-process DEK cache (LRU, ~5 min TTL), and parallel decrypt for list views.\n- reveal() writes an access_event in the same request.\n- A migration (next free crm-NNN at merge time):\n  - crm.traveller: ciphertext columns + blind indexes, with pii: tags;\n  - crm.traveller_profile (F2 minimal): a random traveller_token and the bands;\n  - crm.trip: stage and dates.\n- A nightly drift-check job that compares key policies to the template and alarms on a mismatch.\n- A Dev cleanup kind that schedules deletion of synthetic agencies' keys after 7 days unused.\n\n## Done when\n- A DB dump of crm.traveller on Dev shows only ciphertext, reveal round-trips, and access_event rows appear.\n- A key created lazily by the CRM task role on Dev carries the CRM-07 template (GetKeyPolicy diff = empty).\n- The drift check passes on fresh keys and fails on a manually altered test key.\n"
+    },
+    {
+      "key": "CRM-12",
+      "title": "Intake to Inquiry: public intake endpoint, crm_intake_process job, agent notification",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-10",
+        "CRM-11",
+        "CRM-15"
+      ],
+      "repo": "AA-Partner (new)",
+      "description": "## Problem\nSpec module 1: a Stage 1 intake form auto-creates the lead, profile and trip. A first reply under 2 hours needs the agent to be told.\n\n## Scope\n- POST /crm/public/v1/intake/{tenant_slug}:\n  - Stage 1 fields per spec section 5 (bands, not open numbers);\n  - a honeypot;\n  - an in-app rate limit keyed on the BFF-signed viewer IP (from CloudFront-Viewer-Address);\n  - an idempotency key.\n- The crm_intake_process job:\n  - dedupes by blind index;\n  - creates the traveller (F1), the profile (F2) and a trip at Inquiry;\n  - creates the task 'reply < 2 h';\n  - emails the agency's agents through the SES transactional configuration set, with a link to the trip and no traveller PII in the body beyond what the agency already owns.\n- A migration (next free crm-NNN) for crm.task and crm.metric_event (no PII columns, RLS like crm-001); no earlier issue creates them.\n- Metric events intake_submitted and trip_created in crm.metric_event (the baseline table).\n\n## Done when\n- Submitting the same payload twice creates one trip, and a burst from one IP is limited.\n- On Dev, the synthetic agency's agent mailbox (the e2e mail sub-domain) receives the notification.\n"
+    },
+    {
+      "key": "CRM-13",
+      "title": "Web skeleton: Next 16 standalone, host routing, Cognito server-side session, BFF allow-list, EN/VI",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-05",
+        "CRM-08",
+        "CRM-09"
+      ],
+      "repo": "AA-Partner (new)",
+      "description": "## Problem\nThe agency app (partner host) and the traveller host run as one Next 16 app in one container. Cookies must stay small (the ALB CommonRuleSet has a cookie size rule), and tokens must not reach the browser.\n\n## Scope\n- Next 16 output standalone, ARM image. proxy.ts routes by Host (partner-dev. vs go-dev.), with host-only cookies per host.\n- Sign-in:\n  - Cognito authorization-code flow against the Dev EXTERNAL client;\n  - tokens kept server-side; the cookie pp_sid holds an opaque id;\n  - the session is stored through the CRM API in crm.web_session (this issue adds that table: next free crm-NNN, token hashes only, TTL), so the web task holds no DB connection;\n  - redirect_uri is built from the configured public base URLs.\n- A BFF with a path allow-list per upstream. It calls the CRM over the internal NLB: no public API Gateway hop, no NAT.\n- An EN/VI i18n frame.\n- Security headers: CSP, Referrer-Policy no-referrer on the traveller host, frame-ancestors.\n- WARNING: this contains underscore env vars. Nghiep edits them manually in VSCode or the console; the agent does not generate scripts for them.\n\n## Done when\n- On Dev, a synthetic agency user signs in at partner-dev. and sees an empty board shell, and go-dev. renders without any agency cookie.\n- A request to a path outside the allow-list returns 404 from the BFF.\n"
+    },
+    {
+      "key": "CRM-14",
+      "title": "Slice pages: intake form on the traveller host, Inquiry board on the partner host, Dev E2E",
+      "priority": 1,
+      "blocked_by": [
+        "CRM-12",
+        "CRM-13",
+        "CRM-15"
+      ],
+      "repo": "AA-Partner (new)",
+      "description": "## Problem\nThis closes the first end-to-end vertical slice: the CRM runs on Dev with synthetic agencies.\n\n## Scope\n- go-dev./t/{tenant_slug}/inquiry: the Stage 1 form (EN/VI). It posts through the BFF to the intake endpoint.\n- partner-dev./crm/trips: a board listing Inquiry trips with the stage and the lead name, revealed with an audit row.\n- A Playwright E2E on Dev (and the compose smoke in CI): a synthetic user signs in -> a traveller submits the form -> the trip appears in under 1 minute.\n- The Playwright job reads the synthetic user credentials from AA-Partner GitHub environment secrets (names e2e-test-crm-*, values never printed) and the notification mail through the CRM-05 reader subject.\n- UAT videos are not part of this issue. They stay in AA-855, after all 23 modules.\n\n## Done when\n- The Playwright run on Dev is green, with screenshots attached.\n- The DB dump check from CRM-11 is repeated on the new trip, and access_event shows the board reveal.\n"
+    },
+    {
+      "key": "CRM-15",
+      "title": "Synthetic agencies on Dev: seeder, test users and cleanup",
+      "priority": 2,
+      "blocked_by": [
+        "CRM-09",
+        "CRM-11"
+      ],
+      "repo": "AA-Partner (new)",
+      "description": "## Problem\nH1 = b and H4 = c: no real agencies until all 23 modules are done. Dev must use synthetic agencies only (C7.1a).\n\n## Scope\n- A seeder CLI, DRY RUN by default. It creates:\n  - 2-3 synthetic agencies with is_synthetic = true, and their member roles;\n  - e2e-test-crm-* users in the Dev EXTERNAL pool;\n  - Faker travellers in EN and VI (Vietnamese names, to exercise the later scrubber);\n  - mail sent to the existing e2e mailbox sub-domain.\n- Credentials are stored as e2e-test-* secrets (names only in docs).\n- The Cognito AdminCreateUser and Secrets Manager writes run under Nghiep's MFA admin profile (or a one-off workflow he approves), never from the CRM task role: S2 adds alarms on Admin* calls against the EXTERNAL pool. The DB rows are written through the CRM API/CLI inside the api container. User emails use the fixed CRM-05 mailbox addresses.\n- A teardown that removes the rows and schedules key deletion (reusing the CRM-11 cleanup kind).\n\n## Done when\n- The seeder runs on Dev twice without creating duplicates, and teardown leaves 0 synthetic rows and the keys pending deletion.\n- A guard test proves the Dev API refuses a tenant without is_synthetic.\n"
+    },
+    {
+      "key": "CRM-16",
+      "title": "CIS admin: CRM in the app registry and a read-only CRM jobs tab",
+      "priority": 2,
+      "blocked_by": [
+        "CRM-10"
+      ],
+      "repo": "AA-CIS-App",
+      "description": "## Problem\nOwner round 2 (D22 changed): CIS ops must be able to observe CRM jobs, without DB grants across apps.\n\n## Scope\n- api/core/app_registry.py: add AppInfo 'crm' (repo AA-Partner, cost tag crm, health via the internal path, ops-feed URLs).\n- A CIS api route that calls GET /crm/ops/v1/job-runner/summary over the internal NLB:\n  - the route lives under the admin/ staff prefix (frontend/lib/auth-server.ts STAFF_API_PREFIXES), because the CIS BFF only sends the Cognito bearer on staff paths;\n  - it forwards the staff WORKFORCE access token (token_use access, client_id cis-admin; api/core/identity_verifier.py) and no ADMIN_SECRET;\n  - it uses a short timeout and shows a clear 'CRM unreachable' state.\n- Admin Jobs page: a read-only 'CRM' tab that renders the summary. The Platform/apps page shows CRM health and SHA.\n- A consumer contract test against the ops-feed.v1 samples.\n\n## Done when\n- On Dev, the CRM tab shows the heartbeat kind counts and the worker heartbeat age.\n- The contract test is green in CIS CI.\n"
+    },
+    {
+      "key": "CRM-17",
+      "title": "CRM LLM gateway skeleton (crm.llm_call, per-tenant budget, stub provider) and the CIS cost view row",
+      "priority": 3,
+      "blocked_by": [
+        "CRM-10",
+        "CRM-16"
+      ],
+      "repo": "AA-Partner (new) + AA-CIS-App",
+      "description": "## Problem\nOwner round 2 (D12 changed): the CRM has its own LLM gateway and log, and the CIS admin must see CRM LLM calls and cost. Module 14 is in a later wave; wiring the gateway now with a stub proves the monitoring path before any model call.\n\n## Scope\n- AA-Partner:\n  - a gateway module: scrub hook -> crm.spend_budget check (fail closed) -> provider -> crm.llm_call row -> EMF metric;\n  - the provider is a stub only in this issue: no model call, $0;\n  - a migration (next free crm-NNN): crm.llm_call (no text, no traveller_token) and crm.spend_budget;\n  - GET /crm/ops/v1/llm-usage per ops-feed.v1.\n- AA-CIS-App: the LLM cost page adds a 'CRM' row from llm-usage, next to the shared.llm_call_log data.\n\n## Done when\n- On Dev, a stub call produces a crm.llm_call row, an EMF datapoint and a visible CRM row (cost 0) on the CIS cost page.\n"
+    },
+    {
+      "key": "CRM-18",
+      "title": "Bedrock readiness for the CRM: read-only checks and the acc3 CRM invoker role design",
+      "priority": 3,
+      "blocked_by": [],
+      "repo": "AA-CIS-Infra (acc3-bedrock root)",
+      "description": "## Problem\nD12 requires us. inference profiles and zero-retention models, and N10 picked Haiku 5.5. Today:\n- the acc3 invoker role trusts only CIS and TripPlanner (accounts/acc3-bedrock/main.tf:21-106);\n- it allows only global. profiles (Haiku 4.5, Sonnet 4.6, Sonnet 5, Opus 5.5), with no ApplyGuardrail;\n- the Haiku 4.5 list price is 10x that of Haiku 5.5;\n- acc2 may block Bedrock through the reseller.\n\n## Scope\n- Free read-only checks (no model invocation):\n  - get-foundation-model-availability for Haiku 5.5 / Sonnet 5.5 and their us. profiles on acc3 us-west-1;\n  - the model invocation logging configuration on acc3 (it must be off for CRM traffic);\n  - whether ApplyGuardrail is callable on acc2.\n- Write the Terraform for a new role AA3-Bedrock-Invoker-CRM:\n  - trust = the CRM task roles, with a new ExternalId;\n  - allow only the chosen us. profiles + their foundation-model ARNs in the 3-ARN shape, and ApplyGuardrail on one guardrail ARN.\n  The apply waits for the AI wave and needs the acc3 profile with MFA.\n- Check whether an application inference profile tagged App=crm is supported for the cost split.\n\n## Done when\n- The findings are posted in the issue with the exact CLI outputs (no account ids in public repos).\n- If Haiku 5.5 has no us. profile, the issue holds a short decision note for Nghiep: Haiku 4.5 at 10x the price, global., or wait.\n- The role Terraform is merged behind a disabled flag, or its PR is open awaiting the AI wave.\n"
+    }
+  ]
+}
