@@ -1,0 +1,27 @@
+{
+ "trip_id": "7d819aca-63c2-418b-be07-a3ebe79d6ab4",
+ "owner_session_prefix": "dcd23de0",
+ "owner_cookie_set": true,
+ "cache_verdict": "stopped",
+ "steps": [
+  {
+   "at": "2026-10-19T23:30:20+00:00",
+   "step": "add 6eadce27-32b7-4159-b2d5-c8cf269a2a05",
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 1
+  },
+  {
+   "at": "2026-10-19T23:30:20+00:00",
+   "step": "narrate #1",
+   "client": "owner",
+   "status": 200,
+   "mode": "compose",
+   "source": "master",
+   "ai_generated": true,
+   "cached": false,
+   "narration_chars": 717,
+   "itinerary_days": 1
+  }
+ ]
+}

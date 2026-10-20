@@ -1,0 +1,85 @@
+{
+ "trip_id": "5e1f2e06-a944-4b41-aa92-4cb0262d1d25",
+ "owner_session_prefix": "035c9d04",
+ "owner_cookie_set": true,
+ "cache_verdict": "stopped",
+ "steps": [
+  {
+   "at": "2026-10-19T23:31:09+00:00",
+   "step": "add bbb3d1b1-1edd-4439-8a18-8e1dfe6d6947",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 1
+  },
+  {
+   "at": "2026-10-19T23:31:09+00:00",
+   "step": "add 6793c700-135e-415b-b0b9-2f73fc5a62c3",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 2
+  },
+  {
+   "at": "2026-10-19T23:31:10+00:00",
+   "step": "add b558ce12-ee64-4331-bd96-f4dcafdbd549",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 3
+  },
+  {
+   "at": "2026-10-19T23:31:10+00:00",
+   "step": "add 696b06cb-3ce7-4d7c-9d21-3d737d022031",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 4
+  },
+  {
+   "at": "2026-10-19T23:31:11+00:00",
+   "step": "add 9c4b3f1b-ab30-4d53-b8f8-77a853738bf3",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 5
+  },
+  {
+   "at": "2026-10-19T23:31:11+00:00",
+   "step": "add cf133798-4543-48d4-82df-9755ae9a0e90",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 6
+  },
+  {
+   "at": "2026-10-19T23:31:12+00:00",
+   "step": "add 3d85cc4c-d111-4cfe-aa8e-8b8cfbbb9295",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 7
+  },
+  {
+   "at": "2026-10-19T23:31:13+00:00",
+   "step": "add 2442e457-ef92-4660-85c6-38e77a68027c",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "itinerary_days": 8
+  },
+  {
+   "at": "2026-10-19T23:31:13+00:00",
+   "step": "narrate #1",
+   "attempt": 1,
+   "client": "owner",
+   "status": 200,
+   "mode": "compose",
+   "source": "master",
+   "ai_generated": true,
+   "cached": false,
+   "narration_chars": 6211,
+   "itinerary_days": 8
+  }
+ ]
+}
