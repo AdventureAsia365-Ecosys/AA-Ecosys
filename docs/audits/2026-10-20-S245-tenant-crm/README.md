@@ -13,10 +13,10 @@ Tài liệu gốc trong `research/` (tiếng Anh, giữ nguyên như workflow tr
 
 1. Khuyến nghị: xây CRM thành **app thứ tư `AA-CRM`** (repo, ECS service, REST API, schema `crm` riêng), giao diện cho đại lý chạy **bên trong portal** (`/portal/crm`, Vercel multi-zone) nên đại lý chỉ thấy một portal, một lần đăng nhập.
 2. Phủ đủ 23 module (F1–F5, 1–18) và cả 3 điểm khác biệt của spec: hàng AA thật trong CRM (qua Booking B2B API), proposal khách tự chọn (qua TripPlanner `/builder`), riêng tư theo kiến trúc (khoá KMS riêng mỗi đại lý, profile ẩn danh, scrubber, audit log).
-3. Công sức: **khoảng 16 phiên agent (dải 14–16), ~112 issue, 9 đợt W0–W8**, ở nhịp 8–10 issue/phiên (agent team). Ở nhịp hiện tại 3–5 issue/phiên thì là 25–40 phiên.
+3. Công sức: **khoảng 16 phiên agent (dải 14–16,5), ~114 issue, 9 đợt W0–W8**, ở nhịp 8–10 issue/phiên (agent team): 114 ÷ 8–10 ≈ 12–15 phiên làm, cộng 1–2,5 phiên dự phòng; bảng §9 cộng từ dưới lên ≈ 16,3. Ở nhịp hiện tại 3–5 issue/phiên thì là 23–38 phiên.
 4. Lịch thực tế bị quyết định bởi việc **ngoài code**: xác minh Google (CASA), Meta/WhatsApp, insurer duyệt waiver, luật sư (DPA, PDPL Việt Nam, có thể cần giấy phép VN), và môi trường prod (AA-880), vì dữ liệu khách thật không được lên Dev (C7.1a). Phải khởi động tất cả từ W0.
-5. Chi phí tăng thêm: Dev ~$75–90/tháng; prod ~$500–925 / $1,6–2,0k / $4,7–5,2k mỗi tháng ở 10 / 50 / 200 đại lý, chưa kể prod nền ($150–300) và phí luật sư (chưa có báo giá).
-6. Cần Nghiệp trả lời **18 quyết định** ở §15 (có/không hoặc a/b/c) và hỏi chị Thư 10 câu, trong đó quan trọng nhất là mô hình giá cho đại lý và câu chữ cam kết F1.
+5. Chi phí tăng thêm: Dev ~$70–83/tháng; prod ~$500–925 / $1,6–2,0k / $4,7–5,2k mỗi tháng ở 10 / 50 / 200 đại lý, chưa kể prod nền ($150–300) và phí luật sư (chưa có báo giá).
+6. Cần Nghiệp trả lời **20 quyết định** ở §15 (có/không hoặc a/b/c) cộng một ngày go-live prod, và hỏi chị Thư 10 câu, trong đó quan trọng nhất là mô hình giá cho đại lý và câu chữ cam kết F1.
 
 ## 2. Yêu cầu của chị Thư (trích nguyên văn)
 
@@ -52,7 +52,7 @@ Cách hiểu S245: T5 bỏ **kế hoạch 40 tuần / 2–3 dev**, không bỏ p
 | State machine | Booking `trip_case_status_transitions` + trigger (bk-003) | Chép mẫu cho pipeline 7 bước |
 | Inbox idempotent | `booking.inbox_events UNIQUE(source, contract, idempotency_key)` + xoá PII 90 ngày | Chép mẫu cho webhook Stripe/Twilio/Meta/Graph và sự kiện Booking |
 | Lead → khách | `bk_inquiry_process` | **Chỉ chép mẫu.** DM-6.8/KEY-6 cấm CRM đọc/ghi `booking.customers`, `tripplanner.customers` |
-| Catalog tour | `catalog.v_tour*`, `v_destination`, `catalog.graph`; khoá mềm `(source_system, source_id)` | Proposal tham chiếu tour bằng khoá mềm |
+| Catalog tour | `catalog.v_tour*`, `v_destination`, `catalog.v_graph_node` / `catalog.v_graph_edge` (hợp đồng `docs/contracts/catalog.graph.v1.json`); khoá mềm `(source_system, source_id)` | Proposal tham chiếu tour bằng khoá mềm |
 | Nội dung tenant đã đăng | `acp_shared.content_piece`, `publish_log`; `tenant_brand_rules.default_cta` | Gắn nguồn lead (attribution) + CTA trỏ form của tenant |
 | Giá B2B | ADR 0005 quyết định 9 (bảng giá net B2B, kênh `b2b` đã có trong `pricing_rules`); AA-681 Done | Booking B2B API mới (giá, availability, hold) — **chưa có endpoint, chưa có mô hình availability** |
 | Kết nối kênh | `shared.tenant_integrations` + connect/test/disconnect WP/FB | Chép UX cho mailbox, WhatsApp |
@@ -74,10 +74,13 @@ controller (và domain có thể sai). Chi tiết: [01 §3](research/01-platform
 | Kaptio | Trên Salesforce, itinerary builder, multi-currency | Cho doanh nghiệp lớn, cần admin Salesforce | Theo Salesforce | Theo Hyperforce | ~€200/user/tháng (Capterra) |
 | Tourplan NX | Back office DMC | CRM không rõ | hostConnect/accountConnect | Không công bố | $250–1.000/tháng (lệch nhau) |
 | Rezdy / Bókun | Đặt tour ngày, phân phối OTA | Không phải CRM | Webhook ở gói cao | Không công bố | $49–499/tháng + % booking (chính hãng) |
-| HubSpot | Pipeline, form, tracking; GDPR mode | Không hiểu tour/pax; sequence ở gói Pro | REST mọi gói; webhook theo app | Chọn vùng EU/AU/US | $15–20/seat (bên thứ ba) |
+| HubSpot | Pipeline, form, tracking; GDPR mode | Không hiểu tour/pax; sequence ở gói Pro | REST mọi gói; webhook theo app | Chọn vùng EU/AU/US | $7 và $20/seat (chính hãng, không ghi kỳ thanh toán); $15 năm / $20 tháng (bên thứ ba) |
 | Zoho CRM / Bigin | Web-to-lead, cadence, quote ở Pro | Không hiểu tour | REST; webhook chỉ chiều ra | Chọn vùng theo domain | $14–52/seat; Bigin $7–18 (bên thứ ba) |
 | Pipedrive | Pipeline-first | Không free; không hiểu tour | Webhook mọi gói | EU/AU/US, bị gán | $14–79/seat (bên thứ ba) |
 | Salesforce | Đầy đủ; Partner Community | Đắt; PRM cần Enterprise | API thêm phí ở gói thấp | Hyperforce chọn vùng | $25–550/user/tháng (bên thứ ba) |
+
+Nguồn + URL: [research/03 §Sources](research/03-market-benchmark.md) (truy cập 20/10/2026). "Chính hãng" = trang giá
+của vendor; "bên thứ ba" = danh bạ/blog, thường lệch nhau.
 
 Rút ra: công cụ du lịch mạnh itinerary/báo giá nhưng yếu CRM và im lặng về GDPR; CRM phổ thông có API và GDPR nhưng
 không hiểu tour. **Không ai cung cấp sẵn nội dung itinerary** — đại lý phải tự gõ. Đó là lợi thế riêng của AA: lead đến
@@ -93,8 +96,8 @@ chưa gồm prod nền ($150–300) và phí luật sư.
 |---|---|---|---|
 | Nơi đặt | Repo + ECS service + REST API `api-crm` + schema `crm` riêng; UI đại lý là zone trong host portal; app khách riêng | Route trong process API CIS, job trên worker CIS, trang trong `portal/`; schema `crm` riêng, pool DB thứ hai | AA chỉ thu lead + đẩy sang CRM của đại lý; schema `crm` mỏng (integration_link, outbox, consent) |
 | Tái dùng | Mẫu RLS/job/inbox/audit, portal host + kit, catalog, Booking pricing, TP map | Cao nhất: thêm CI, deploy, ECS, API GW của CIS | Intake + attribution; còn lại là của vendor |
-| Chi phí/tháng ở 10 / 50 / 200 đại lý | $500–925 / $1,6–2,0k / $4,7–5,2k (Dev +$75–90) | $480–900 / $1,55–1,95k / $4,6–5,1k (Dev +$55–70) | AA $30–60 / $40–80 / $60–120; nếu AA trả seat cho đại lý: $450–700 / $2,3–3,5k / $9–14k |
-| Số phiên tới hoàn chỉnh | ~16 (dải 14–16) | ~13–15 | ~3–4 (nhưng **không** phải sản phẩm trong spec) |
+| Chi phí/tháng ở 10 / 50 / 200 đại lý | $500–925 / $1,6–2,0k / $4,7–5,2k (Dev +$70–83) | $480–900 / $1,55–1,95k / $4,6–5,1k (Dev +$50–63) | AA $30–60 / $40–80 / $60–120; nếu AA trả seat cho đại lý: $450–700 / $2,3–3,5k / $9–14k |
+| Số phiên tới hoàn chỉnh | ~16 (dải 14–16,5) | ~13–15 | ~3–4 (nhưng **không** phải sản phẩm trong spec) |
 | Rủi ro chính | Thêm một bộ hạ tầng để vận hành; hợp đồng chéo repo (builder, B2B) có thể lệch | Phát hành CRM bị chặn khi CIS chạy wave (DM-11.4); task role CIS phải đọc secret `crm_app`; giải mã PII chung process với pipeline nội dung; migration CIS đang đóng băng tới X1 S22 | Không có proposal trên hàng AA, không riêng tư theo kiến trúc, không ops release, không insights; đại lý dùng Gmail + bảng tính thì không có CRM để đẩy vào |
 | Tuân thủ | Tốt nhất: phụ lục kỹ thuật DPA sạch (role, khoá, audit tách khỏi AA) | Như A trên giấy, nhưng câu chuyện cách ly yếu hơn | AA tiếp xúc ít nhất (chỉ lead đang truyền), DPA ngắn; dữ liệu khách nằm ở vendor của đại lý |
 
@@ -238,11 +241,11 @@ Ngoài `crm`: **CIS** thêm `shared.tenant_members`, `shared.tenant_invitations`
 | Spec §9 | Thiết kế | Hợp đồng |
 |---|---|---|
 | AA inventory API | Booking B2B API mới (giá net B2B + FX, availability theo departure/allotment, hold có hạn, yêu cầu đặt) gọi bằng IAM SigV4; trạng thái về qua `booking.v_b2b_status_outbox`. Tour tailor-made = "on request" | ADR 0005a, OpenAPI, `booking.b2b_status.v1` |
-| Visual itinerary builder | TripPlanner `/builder` (bản đồ Mapbox, route planner, gợi ý trên `catalog.graph`) — chỉ UI; dữ liệu nằm ở `crm.*` | `crm.builder.v1`, builder token ký bằng KMS, khoá chỉnh sửa đồng thời |
-| Stripe | Connect **Standard**: đại lý là merchant of record, AA trả $0; Checkout pay link; webhook ký + idempotent. **Stripe không hỗ trợ Việt Nam** → cổng VN (OnePay/2C2P/9Pay, cần báo giá) hoặc ghi nhận thủ công | — |
+| Visual itinerary builder | TripPlanner `/builder` (bản đồ Mapbox, route planner, gợi ý trên `catalog.v_graph_node` / `catalog.v_graph_edge`, hợp đồng `catalog.graph.v1`) — chỉ UI; dữ liệu nằm ở `crm.*` | `crm.builder.v1`, builder token ký bằng KMS, khoá chỉnh sửa đồng thời |
+| Stripe | Connect **Standard**: đại lý là merchant of record, AA trả $0; Checkout pay link; webhook ký + idempotent; hoàn tiền (refund) và đa tiền tệ theo spec §9. **Stripe không hỗ trợ Việt Nam** → cổng VN (OnePay/2C2P/9Pay, cần báo giá) hoặc ghi nhận thủ công | — |
 | Gmail / Outlook | Outlook qua Graph; Gmail đồng bộ hai chiều cần scope restricted → CASA hằng năm; đường dự phòng `gmail.send` + chuyển tiếp vào SES inbound (không CASA) | — |
-| Twilio / 360dialog | WhatsApp Embedded Signup: mỗi đại lý sở hữu WABA, trả Meta trực tiếp; Cloud API trực tiếp (Tech Provider) hoặc Twilio làm BSP; tránh 360dialog ($49/số/tháng). SMS qua Twilio | — |
-| E-sign | BoldSign (rẻ ở quy mô nhỏ, có vùng AU/EU) — đổi sang Documenso Platform khi > ~30 đại lý | — |
+| Twilio / 360dialog | WhatsApp Embedded Signup: mỗi đại lý sở hữu WABA, trả Meta trực tiếp; Cloud API trực tiếp (Tech Provider) hoặc Twilio làm BSP; tránh 360dialog ($49/số/tháng, [research/04 §2.4](research/04-economics-compliance-security.md) → docs.360dialog.com/docs/pricing, truy cập 20/10/2026). SMS qua Twilio. Messenger và Instagram (spec §7 `Conversation.channel`) qua Meta Graph API, dùng chung xác minh Meta với WhatsApp (D19) | — |
+| E-sign | BoldSign ($30/tháng gồm 40 phong bì, sau đó $0,75/phong bì; có vùng AU/EU — [research/04 §2.5](research/04-economics-compliance-security.md) → boldsign.com/pricing, truy cập 20/10/2026) — đổi sang Documenso Platform khi > ~30 đại lý | — |
 | LLM | Bedrock acc3 qua gateway, profile `us.`, model cho phép retention `none` (không Fable 5/5.1), SCP ép ZDR; loại OpenAI và Jev khỏi route CRM | ADR 0009 (đã giữ số, AA-804) |
 
 ### 8.5 Luồng chính (tóm tắt)
@@ -274,7 +277,7 @@ chung: ước lượng ở bước viết tài liệu (phần đó của lane b�
 | 6 Sổ booking | AA-CRM (`booking_line`, `booking_line_cost`) + Booking (`v_b2b_status_outbox`) | Quy tắc outbox → pull → inbox | 0,4 |
 | 7 Hoá đơn + thanh toán | AA-CRM (Stripe Connect, adapter cổng VN, thủ công, nhắc) | Ý tưởng `deposit_pct`, FX Booking; chưa có cổng thanh toán nào trong hệ | 0,8 |
 | 8 AA ops release | AA-CRM (outbox có đồng ý, UI) + Booking (pull, `b2b_traveller`, TTL 90 ngày, sự kiện đã xoá) | Mẫu outbox TP→Booking; job xoá 90 ngày của Booking | 0,5 |
-| 9 Inbox WhatsApp/SMS | AA-CRM (Embedded Signup, Cloud API/Twilio, template, cửa sổ 24h, hàng đợi số lạ) | Mẫu inbox webhook; blind index số điện thoại | 0,6 |
+| 9 Inbox WhatsApp/SMS/Messenger/IG | AA-CRM (Embedded Signup, Cloud API/Twilio, template, cửa sổ 24h, hàng đợi số lạ; Messenger + Instagram qua Meta Graph API) | Mẫu inbox webhook; blind index số điện thoại | 0,8 |
 | 10 Tự động hoá | AA-CRM (rule theo stage, nhắc khi im lặng, T-21, tự gửi Stage 2, mẫu task) | `crm.job` (ADR 0003a) | 0,5 |
 | 11 Client portal | AA-CRM client app (một link: proposal, Stage 3, tài liệu, hoá đơn, itinerary) | Link ký có hạn (DM-6.9) | 0,4 |
 | 12 Hợp đồng + waiver | AA-CRM (tích hợp e-sign, lưu PDF đã ký) | `crm.document`, inbox webhook | 0,3 |
@@ -287,9 +290,9 @@ chung: ước lượng ở bước viết tài liệu (phần đó của lane b�
 | Chung: ADR, hợp đồng, spec gap 1–7 | Repo gốc | ADR 0008, `docs/contracts/` | 1,0 |
 | Chung: khung repo + hạ tầng app | AA-CRM + Infra | Mẫu Booking (ADR 0004/0004b) | 0,5 |
 | Chung: onboarding/import | AA-CRM | CSV kit | 0,3 |
-| Chung: NFR (i18n EN/VI, tiền tệ, mobile, event tracking) | AA-CRM | FX Booking | 0,5 |
+| Chung: NFR theo spec gap 6 (i18n EN/VI, tiền tệ, múi giờ, mobile, SLO hiệu năng + uptime kèm alarm, event tracking) | AA-CRM + Infra | FX Booking; alarm CloudWatch sẵn có | 0,6 |
 | Chung: prod, review bảo mật, pilot | Infra + AA-CRM + gốc | AA-880, AA-855 | 1,0 |
-| **Tổng** | | | **≈16,0** |
+| **Tổng** | | | **≈16,3** |
 
 ## 10. Kế hoạch xây theo đợt (toàn bộ module, không cắt)
 
@@ -300,15 +303,21 @@ chung: ước lượng ở bước viết tài liệu (phần đó của lane b�
 | W2 Nền riêng tư F1–F5 | Lambda KMS + báo động; vault; F2; consent; scrubber + corpus; audit; RLS biên lợi nhuận; lint `pii:`; TTL | 1,5 | Master chỉ thấy ciphertext; `crm_ai_reader` nhận 42501 trên vault; corpus 0 rò; shred khoá test → không giải mã được |
 | W3 Bán một chuyến (1–4 + onboarding) | Intake + WAF + attribution + sửa CTA; board; Stage 2; import CSV; Booking B2B API + availability + hold; TP `/builder`; trang proposal cho khách; proposal dạng chữ | 2,5 | Một ngày làm việc trên Dev bằng dữ liệu giả: lead → proposal từ tour AA, giá qua B2B, khách đổi + chấp nhận, hold hiện ở Booking admin |
 | W4 Inbox email (5) | Outlook; SES inbound + `gmail.send`; Gmail hai chiều sau cờ; threading; ghi chú | 1 | Outlook + chuyển tiếp chạy với mailbox test; Gmail chỉ bật khi có thư LOA của Google |
-| W5 Thu tiền + giao (6, 7, 8, 12, 13) | Sổ booking; hoá đơn; Stripe Connect; cổng VN/thủ công; ops release + xoá 90 ngày; e-sign; hoa hồng | 1,5 | Cọc test Stripe → Booked; waiver đã ký được lưu; ops release tới Booking, xoá có báo lại |
-| W6 Tự động (9, 10, 14) | WhatsApp + SMS; workflow; lớp AI qua scrubber + Bedrock ZDR | 1,5 | WhatsApp chạy trên WABA test (sau Meta); nháp AI không có danh tính trong log/prompt; không gửi khi chưa duyệt |
-| W7 Trải nghiệm + quy mô (11, 15–18) + NFR | Client portal; NCC; báo cáo; insights k≥10 + trang admin CIS; xuất/xoá/offboarding; trang dữ liệu công khai; xuất sang HubSpot/Zoho; i18n, tiền tệ, mobile; event tracking | 1,5 | Xuất → xoá → kiểm đúng ngay lần đầu; insights không có nhóm n<10; client portal chạy trên điện thoại |
+| W5 Thu tiền + giao (6, 7, 8, 12, 13) | Sổ booking; hoá đơn; Stripe Connect (pay link, hoàn tiền, đa tiền tệ); cổng VN/thủ công; ops release + xoá 90 ngày; e-sign; hoa hồng | 1,5 | Cọc test Stripe → Booked; waiver đã ký được lưu; ops release tới Booking, xoá có báo lại |
+| W6 Tự động (9, 10, 14) | WhatsApp + SMS + Messenger/IG; workflow; lớp AI qua scrubber + Bedrock ZDR | 1,7 | WhatsApp chạy trên WABA test (sau Meta); nháp AI không có danh tính trong log/prompt; không gửi khi chưa duyệt |
+| W7 Trải nghiệm + quy mô (11, 15–18) + NFR | Client portal; NCC; báo cáo; insights k≥10 + trang admin CIS; xuất/xoá/offboarding; trang dữ liệu công khai; xuất sang HubSpot/Zoho; i18n, tiền tệ, múi giờ, mobile; SLO hiệu năng/uptime + alarm; event tracking | 1,6 | Xuất → xoá → kiểm đúng ngay lần đầu; insights không có nhóm n<10; client portal chạy trên điện thoại |
 | W8 Prod, review bảo mật, pilot | Phần CRM của AA-880; probe prod; pen test/review độc lập; hồ sơ CASA; review quyền; DPA ký; 3–5 đại lý; video UAT; nộp TIA VN nếu luật sư xác nhận | 1–1,5 | Đại lý pilot chạy prod với dữ liệu thật dưới DPA đã ký; không có PII thật trên Dev |
 | Dự phòng | Tích hợp chéo repo, sửa sau verify | 1–2,5 | — |
-| **Tổng** | | **14–16** | |
+| **Tổng** | | **≈14,3–16,3** | |
 
 Phụ thuộc theo thứ tự: W1 cần AA-813 + X2; W2 trước mọi dữ liệu khách; W3 cần Booking B2B + hợp đồng builder; W6 (AI)
 cần F3, F5, 5 và 9; module 17 chỉ có ý nghĩa sau 3–6 tháng dữ liệu pilot.
+
+**Đổi so với spec — thời điểm pilot:** spec đặt pilot 3–5 đại lý ở cuối Phase 2 (tuần 22), trước phần tự động hoá. Bản
+này dời pilot xuống W8, sau mọi module, vì pilot dùng dữ liệu khách thật nên cần prod (AA-880, C7.1a cấm PII thật trên
+Dev), DPA đã ký và review bảo mật — các việc đó gom ở W8. Đại lý pilot vẫn thấy sản phẩm sớm qua demo trên dữ liệu giả ở
+W3 và W5. Nếu muốn pilot sớm như spec: kéo phần prod + DPA + review bảo mật của W8 lên ngay sau W5, rồi chạy W6–W7 khi
+pilot đang chạy (cần Nghiệp chọn khi đặt ngày go-live, D13).
 
 ### Phụ thuộc bên ngoài có thời gian chờ — khởi động ngay W0, chạy song song
 
@@ -318,18 +327,22 @@ cần F3, F5, 5 và 9; module 17 chỉ có ý nghĩa sau 3–6 tháng dữ liệ
 | Microsoft publisher verification | Ngày → tuần (chưa rõ) | ~$0 (chưa kiểm) | Outlook ở tenant M365 chặn user consent |
 | Meta: xác minh doanh nghiệp + Tech Provider + duyệt template WhatsApp | 2–4 tuần | $0 phí Meta (chưa kiểm) | WhatsApp (W6) |
 | Insurer duyệt waiver ký điện tử | Chưa rõ | Chưa rõ | Tiêu chí "insurer chấp nhận" của module 12 |
-| Luật sư: DPA, SCC Module 2 / UK Addendum, PDPL VN (DPIA, TIA, **có thể cần Giấy chứng nhận đủ điều kiện + pháp nhân VN**), APP 8 Úc, thoả thuận đối tác chống lôi kéo khách | Chưa rõ; TIA VN nộp trong 60 ngày từ lần chuyển đầu | Chưa có báo giá | Pilot với dữ liệu thật; đại lý VN có thể phải chờ |
+| Luật sư: DPA, SCC Module 2 (+ flow-down Module 3) / UK Addendum, PDPL VN (DPIA, TIA, **có thể cần Giấy chứng nhận đủ điều kiện + pháp nhân VN**), APP 8 Úc, thoả thuận đối tác chống lôi kéo khách | Chưa rõ; TIA VN nộp trong 60 ngày từ lần chuyển đầu | Chưa có báo giá | Pilot với dữ liệu thật; đại lý VN có thể phải chờ |
 | Stripe Connect platform profile | Vài ngày | $0 | Thanh toán AU/EU (W5) |
 | Cổng thanh toán VN (OnePay / 2C2P / 9Pay) | Chưa rõ | Chưa có báo giá | Thanh toán online cho đại lý VN; tạm ghi nhận thủ công |
-| Vendor e-sign: DPA + vùng dữ liệu | Vài ngày | $30/tháng + $0,75/phong bì (BoldSign) | W5 |
+| Vendor e-sign: DPA + vùng dữ liệu | Vài ngày | $30/tháng gồm 40 phong bì, sau đó $0,75/phong bì (BoldSign) | W5 |
 | Vercel Pro (D-18) | Ngay | $20/seat/tháng | Đại lý dùng portal (Hobby cấm thương mại) |
 | Môi trường prod (AA-880 / ADR 0012) | Vài phiên | ~$150–300/tháng | Toàn bộ pilot (C7.1a) |
 | Tuyển 3–5 đại lý pilot + phỏng vấn | Theo chị Thư | — | Phản hồi sản phẩm từ demo W3 |
 
+Nguồn + URL: [research/04 §2, §3.4](research/04-economics-compliance-security.md) (BoldSign → boldsign.com/pricing; CASA,
+Meta, Stripe, Vercel theo nguồn ghi trong note), [research/03 §Sources](research/03-market-benchmark.md); truy cập 20/10/2026.
+
 ## 11. Issue Linear đề xuất theo đợt (CHƯA tạo — chờ Nghiệp duyệt D16)
 
-112 issue, tên tiếng Anh như sẽ tạo trên Linear. `[root]` repo gốc, `[CRM]` AA-CRM, `[CIS]`, `[BK]` Booking, `[TP]`, `[Infra]`.
-Issue đã có: AA-813, AA-848, AA-880, AA-886, AA-855, AA-873/875/876/877 — cập nhật mô tả thay vì tạo trùng.
+114 issue, tên tiếng Anh như sẽ tạo trên Linear. `[root]` repo gốc, `[CRM]` AA-CRM, `[CIS]`, `[BK]` Booking, `[TP]`, `[Infra]`.
+Issue đã có: AA-813, AA-880, AA-886, AA-855, AA-873/875/876/877 — cập nhật mô tả thay vì tạo trùng. AA-848 (X2) đã
+**Done** trên Linear (đọc 20/10/2026), nên phần phủ `crm` (W1 #4) là issue mới.
 
 **W0 (9)**
 1. [root] ADR 0010 AA-CRM app and integration
@@ -340,13 +353,13 @@ Issue đã có: AA-813, AA-848, AA-880, AA-886, AA-855, AA-873/875/876/877 — c
 6. [root] Data standards amendment: pii:gov_id, pii:special, DM-6.8 contract exceptions, X1 wording fix
 7. [root] Contracts crm.ops_release.v1, booking.b2b_status.v1, crm.insights.v1, crm.builder.v1 + Booking B2B OpenAPI
 8. [root] CRM spec gaps 1–7: G/W/T stories (module 3 first), edge cases, day-in-the-life, mockups, event plan, NFRs
-9. [root] External-process tracker: Google/CASA, Microsoft, Meta, Stripe Connect, VN gateway, e-sign, insurer, counsel, Vercel Pro, pilot agencies
+9. [root] External-process tracker: Google/CASA, Microsoft, Meta, Stripe Connect, VN gateway, e-sign, insurer, counsel (incl. the partner agreement with a no-poaching clause, spec non-code track phase 1), Vercel Pro, pilot agencies
 
 **W1 (13)**
 1. [CIS] AA-813 rescope + build: Cognito invitations, shared.tenant_members, shared.tenant_invitations (existing issue)
 2. [CIS] catalog.v_tenant_member and catalog.v_tenant views + grants to crm_app
-3. [CIS] Tenant user sign-in on cis-portal + verify N7 (007b default ACL gone)
-4. [Infra] AA-848 X2 guard covers the crm schema (existing issue)
+3. [CIS] Tenant user sign-in on cis-portal + re-run the N7 probe (007b default ACL already gone in the 20/10 dump)
+4. [Infra] Extend the X2 guard (AA-848, Done) to cover the crm schema (new issue)
 5. [Infra] owners.yaml crm entry + runner, copy-guard and probe mirrors
 6. [Infra] rl- roles: crm_owner, crm_app (limit 10), crm_ai_reader, crm_insights, crm_staff + C2.2 budget offset
 7. [CRM] Repo bootstrap: FastAPI + asyncpg, CONTEXT.md, CI (tests, migration lint, PG15 replay, copy guard)
@@ -410,7 +423,7 @@ Issue đã có: AA-813, AA-848, AA-880, AA-886, AA-855, AA-873/875/876/877 — c
 1. [CRM] Bookings ledger UI: AA lines from status events + manual lines
 2. [CRM] Invoice + payment schedule from the accepted proposal
 3. [CRM] Stripe Connect Standard onboarding + payment_account
-4. [CRM] Stripe Checkout pay links + signed idempotent webhook → stage booked
+4. [CRM] Stripe Checkout pay links + signed idempotent webhook → stage booked + refunds + multi-currency (spec §9)
 5. [CRM] VN payment gateway adapter + manual payment recording
 6. [CRM] Payment reminders (crm_payment_reminder)
 7. [CRM] Ops release UI + consent check + crm.v_ops_release_outbox
@@ -421,7 +434,7 @@ Issue đã có: AA-813, AA-848, AA-880, AA-886, AA-855, AA-873/875/876/877 — c
 12. [CRM] Stage 3 unlock + pre_departure transition rules
 13. [CRM] Commission expected vs received + overdue flags
 
-**W6 (12)**
+**W6 (13)**
 1. [CRM] WhatsApp Embedded Signup + per-agency WABA connect
 2. [CRM] WhatsApp inbound webhook (signature), phone match, unmatched queue
 3. [CRM] Template sync + approval status + 24-hour window enforcement
@@ -434,8 +447,9 @@ Issue đã có: AA-813, AA-848, AA-880, AA-886, AA-855, AA-873/875/876/877 — c
 10. [CRM] AI proposal and follow-up drafts
 11. [CRM] AA-820 AI disclosure on traveller-facing surfaces
 12. [CRM] Leak audit of AI drafts on synthetic threads
+13. [CRM] Facebook Messenger + Instagram inbox via the Meta Graph API (spec §7 channels; webhook signature, unmatched queue)
 
-**W7 (13)**
+**W7 (14)**
 1. [CRM] Client portal (proposal, Stage 3, documents, invoices, itinerary)
 2. [CRM] Supplier directory (AA default + agency suppliers, mixed trips)
 3. [CRM] Agency reports (conversion by stage, margin, lead source, option picks)
@@ -445,10 +459,11 @@ Issue đã có: AA-813, AA-848, AA-880, AA-886, AA-855, AA-873/875/876/877 — c
 7. [CRM] Traveller erasure (DRY RUN, F1 delete, redaction, Booking early purge, verified_at)
 8. [CRM] Tenant offboarding: export, hard delete, ScheduleKeyDeletion + runbook
 9. [CRM] integration_link export to HubSpot / Zoho / Pipedrive
-10. [CRM] i18n EN/VI + currencies AUD/USD/VND/EUR via Booking FX
+10. [CRM] i18n EN/VI + time zones + currencies AUD/USD/VND/EUR via Booking FX
 11. [CRM] Mobile-first pass on agent and client apps
 12. [CRM] Event tracking + metrics dashboard for every spec success metric
 13. [root] Public plain-language data page for agencies
+14. [Infra] Performance and uptime SLOs for api-crm and both UIs + CloudWatch alarms (spec gap 6)
 
 **W8 (9)**
 1. [Infra] CRM slice of the AA-880 prod blueprint (RDS, KMS, WAF, Vercel prod, Sentry without PII)
@@ -456,20 +471,20 @@ Issue đã có: AA-813, AA-848, AA-880, AA-886, AA-855, AA-873/875/876/877 — c
 3. [CRM] Independent security review / pen test + fixes
 4. [CRM] CASA evidence pack + Google Letter of Assessment
 5. [root] Access review incl. crm_* roles and KMS key policies (DM-8.10)
-6. [root] DPA + terms + sub-processor annex signed per pilot agency (extends AA-886)
+6. [root] DPA + terms + partner agreement (no-poaching clause) + sub-processor annex signed per pilot agency (extends AA-886)
 7. [CRM] Pilot onboarding of 3–5 agencies (runbook + support)
 8. [root] CRM part of the UAT videos (AA-855)
 9. [root] VN DPIA / TIA filing (if counsel confirms)
 
-Hạn mức Linear: 112 issue vượt một project (≤100 chưa lưu trữ) → cần project mới "AA-CRM" (hoặc hai, theo đợt); tạo
+Hạn mức Linear: 114 issue vượt một project (≤100 chưa lưu trữ) → cần project mới "AA-CRM" (hoặc hai, theo đợt); tạo
 issue theo từng đợt khi bắt đầu đợt đó.
 
 ## 12. Điều kiện tiên quyết
 
 1. **AA-813** (Backlog): viết lại theo ADR 0006 Phase 3 rồi xây — ranh giới F4, không có dữ liệu CRM nào trước nó.
-2. **AA-848 X2** (In Progress theo lane phương án; lane 1 ghi Backlog): phải phủ schema `crm` (FORCE, NULLIF, không PUBLIC, `rolconnlimit`).
-3. **N7 / AA-817** (Done): kiểm live default ACL 007b tới `aa_app_user` đã gỡ; probe lại không runtime role nào có `pg_read_all_data`/BYPASSRLS.
-4. **Ngân sách kết nối** (AA-824 Done): thêm dòng `crm_app` vào C2.2 kèm bù trừ (ví dụ giữ `booking` ở 10), nếu không thì t4g.medium (~+$31/tháng Dev).
+2. **AA-848 X2** (Done trên Linear, đọc 20/10/2026): mở rộng X2 phủ schema `crm` (FORCE, NULLIF, không PUBLIC, `rolconnlimit`) bằng issue mới W1 #4.
+3. **N7 / AA-817** (Done): phần default ACL 007b tới `aa_app_user` **đã kiểm trong dump 20/10** (`db-schema-reference.md` mục Default privileges không còn dòng nào tới `aa_app_user`). Còn mở: probe lại không runtime role nào có `pg_read_all_data`/BYPASSRLS.
+4. **Ngân sách kết nối** (AA-824 Done): thêm dòng `crm_app` vào C2.2 kèm bù trừ (ví dụ hạ `booking` từ mức live 15 xuống mục tiêu C2.2 là 10, hoặc bù ở role khác), nếu không thì t4g.medium (~+$31/tháng Dev). Tổng LOGIN limit live (dump 20/10): 155 = `aa_app_user` 15 + `booking` 15 + `cis_app` 90 + `db_migrator` 5 + `tripplanner` 30, trên `max_connections` 181 (`03-scaling.md:125`).
 5. **AA-880 + ADR 0012** (Backlog): điều kiện cứng của pilot; Nghiệp đặt ngày go-live.
 6. **AA-886** (In Progress): mở rộng cho DPA CRM, phụ lục sub-processor, SCC, điều khoản xoá 90 ngày.
 7. **AA-681** (Done): đủ cổng "Booking báo giá được" của ADR 0005 QĐ9; vẫn phải xây B2B API + availability/hold.
@@ -477,7 +492,7 @@ issue theo từng đợt khi bắt đầu đợt đó.
 9. **ADR 0009** (đã giữ số, AA-804): ghi luật route AI cho CRM (`us.`, ZDR qua SCP, không Fable 5/5.1, không OpenAI/Jev).
 10. **Vercel Pro (D-18)** trước khi đại lý đầu tiên dùng portal.
 11. **Thứ tự với M1:** backlog đang ghi AA-821 "After M1"; quyết định S245 đổi điều này — xác nhận phần M1 không nằm trên đường CRM chạy song song (D3).
-12. **Linear:** project mới + cập nhật Done-when của AA-821 theo quyết định "sản phẩm hoàn chỉnh".
+12. **Linear + backlog:** project mới + cập nhật Done-when của AA-821 theo quyết định "sản phẩm hoàn chỉnh"; sửa luôn dòng AA-821 ở `docs/backlog/README.md:123` (đang ghi "research + phased MVP plan … After M1", trái với quyết định không MVP và với D3).
 
 ## 13. Chi phí
 
@@ -485,7 +500,7 @@ issue theo từng đợt khi bắt đầu đợt đó.
 sư VN + AU/EU chưa có báo giá (DPA, SCC, DPIA/TIA, ý kiến về giấy phép VN, thoả thuận đối tác); đại diện EU Art. 27 nếu
 cần: chưa rõ.
 
-**Hằng tháng — Dev (tăng thêm):** ~$75–90 (task API ~$21, sidecar Presidio ~$39–49, KMS ~$5, secret ~$1,6, log/alarm ~$3–5).
+**Hằng tháng — Dev (tăng thêm):** ~$70–83 (task API ~$21, sidecar Presidio ~$39–49, KMS ~$5, secret ~$1,6, log/alarm ~$3–5, S3 + API Gateway < $1).
 
 **Hằng tháng — prod (phần CRM tăng thêm):**
 
@@ -500,28 +515,41 @@ cần: chưa rõ.
 | Bảo mật nền / WAF | 25–40 | 25–40 | 25–40 |
 | **Tổng** | **≈ $500–925** | **≈ $1,6k–2,0k** | **≈ $4,7k–5,2k** (~$24–26/đại lý) |
 
+Nguồn + URL: [research/04 §3](research/04-economics-compliance-security.md) (giá AWS us-west-1 và trang giá vendor, truy cập
+20/10/2026).
+
 Chưa gồm: prod nền ~$150–300/tháng; phí đại lý tự trả (Stripe, Meta nếu đại lý sở hữu WABA); luật sư. Đòn bẩy: Haiku
 thay Sonnet −$8/đại lý; WABA của đại lý trên Cloud API trực tiếp −$3–5/đại lý; đường Gmail chuyển tiếp tránh CASA. Nếu
-"miễn phí cho đối tác", AA gánh ~$5k/tháng ở 200 đại lý; chuyển phí cho đại lý (Stripe, WhatsApp, SMS) còn ~$2,5k. Mọi dịch
+"miễn phí cho đối tác", AA gánh ~$4,7–5,2k/tháng ở 200 đại lý. Nếu đại lý tự trả WhatsApp và SMS (Stripe chưa bao giờ là
+chi phí của AA: Connect Standard $0), phần AA còn lại là LLM 1.680 + KMS 200–600 + SES 60 + compute 395 + RDS 188 + Vercel
+60–100 + WAF 25–40 ≈ **$2,6–3,1k**; cộng e-sign 250 và CASA 56–450 mà AA vẫn gánh thì ≈ **$2,9–3,8k**. (Con số ~$2,5k ở
+[research/04 §3.3](research/04-economics-compliance-security.md) thấp hơn thực tế; dùng số ở đây.) Mọi dịch
 vụ AWS mới (KMS, SES inbound, Lambda, WAF) cần Nghiệp duyệt báo giá này (DM-10.7); gắn tag `App=crm`.
 
 ## 14. Tuân thủ + DPA
 
 - **Vai trò:** đại lý là controller, AA là processor cho `crm.*` (DM-6.8). Với bản sao ops release (module 8), Booking là
   controller hay processor theo chỉ dẫn — luật sư quyết, DPA phải ghi rõ cùng điều khoản xoá 90 ngày + xác nhận đã xoá.
-- **GDPR (đại lý EU/UK):** điều khoản Art. 28; SCC Module 2 cho việc lưu ở Mỹ (+ UK IDTA/Addendum); bằng chứng Art. 32
+- **GDPR (đại lý EU/UK):** điều khoản Art. 28; chuyển dữ liệu ra ngoài EU gồm ba chặng: SCC Module 2 cho đại lý (EU) →
+  AA (lưu ở Mỹ); flow-down Module 3 / điều khoản tương đương cho chuyển tiếp sang sub-processor (AWS và các bên khác theo
+  DPF hoặc SCC riêng của họ); và việc nhân viên AA truy cập từ Việt Nam (nước chưa có quyết định đầy đủ). Ai là exporter /
+  importer còn tuỳ pháp nhân của AA ở nước nào (H5, chưa biết) — luật sư chốt sau H5. UK: IDTA/Addendum. Bằng chứng Art. 32
   (mã hoá, RLS, audit, review quyền); đồng ý rõ ràng Art. 9 cho cờ sức khoẻ/vận động/ăn uống; yêu cầu chủ thể qua module
   18; runbook hỗ trợ khi rò rỉ; danh sách sub-processor có báo trước khi đổi. Hỏi luật sư: đại diện Art. 27, sổ Art. 30(2).
 - **PDPL Việt Nam** (Luật 91/2025/QH15 + Nghị định 356/2025, hiệu lực 01/01/2026): hợp đồng xử lý có nội dung bắt buộc;
-  DPIA cho cả processor; **TIA nộp trong 60 ngày** từ lần chuyển dữ liệu ra nước ngoài đầu tiên (us-west-1); dữ liệu
-  nhạy cảm (sức khoẻ, ảnh giấy tờ, tài chính) nên **không** được hưởng ân hạn doanh nghiệp nhỏ; cấm ô đồng ý tick sẵn;
+  DPIA cho cả processor; **TIA nộp trong 60 ngày** từ lần chuyển dữ liệu ra nước ngoài đầu tiên (us-west-1); AA
+  **không** được hưởng ân hạn doanh nghiệp nhỏ, trước hết vì AA là bên **cung cấp dịch vụ xử lý dữ liệu cá nhân** (theo
+  các bản tóm tắt thứ cấp của Điều 38), và thêm vì CRM giữ dữ liệu nhạy cảm (sức khoẻ, tài chính; ảnh giấy tờ có phải dữ
+  liệu nhạy cảm theo Nghị định 356 hay không: luật sư xác nhận); cấm ô đồng ý tick sẵn;
   **có thể phải có Giấy chứng nhận đủ điều kiện và pháp nhân VN** cho dịch vụ "cung cấp hệ thống xử lý dữ liệu cá nhân
   cho bên kiểm soát". Phải có ý kiến luật sư trước khi đại lý VN nào lưu dữ liệu. Chưa có ở đâu theo dõi việc này.
 - **Privacy Act Úc:** viết DPA đạt phép thử APP 8 "use, not disclosure" cho cloud nước ngoài (giới hạn mục đích, ràng
-  buộc nhà thầu phụ, đại lý giữ quyền kiểm soát); APP 11 + NDB áp cho đại lý doanh thu > A$3M; "AI nháp, người gửi" có lẽ
+  buộc nhà thầu phụ, đại lý giữ quyền kiểm soát); các APP (kể cả APP 8, APP 11) + NDB chỉ áp cho đại lý là APP entity (doanh thu > A$3M,
+  hoặc thuộc ngoại lệ như kinh doanh thông tin cá nhân hay tự chọn tham gia); bản thân AA cũng có thể là APP entity —
+  luật sư xác nhận; "AI nháp, người gửi" có lẽ
   nằm ngoài nghĩa vụ minh bạch quyết định tự động (từ 10/12/2026) — cần kiểm.
-- **DPA mẫu phải có trước đại lý đầu tiên** (DM-6.8, mở rộng AA-886): điều khoản processor cho VN/GDPR/AU; phụ lục SCC +
-  UK; xoá 90 ngày cho ops; tổng hợp k≥10; phụ lục kỹ thuật (khoá KMS, RLS, audit, câu chữ F1 đã sửa); phụ lục
+- **DPA mẫu phải có trước đại lý đầu tiên** (DM-6.8, mở rộng AA-886): điều khoản processor cho VN/GDPR/AU; phụ lục SCC (Module 2 + flow-down
+  Module 3) + UK; xoá 90 ngày cho ops; tổng hợp k≥10; phụ lục kỹ thuật (khoá KMS, RLS, audit, câu chữ F1 đã sửa); phụ lục
   sub-processor: AWS acc2 qua TrueIDC, Bedrock acc3 qua eCloudvalley, Vercel, Twilio/Meta, vendor e-sign, Sentry (không
   PII); Stripe/Google/Microsoft là hợp đồng riêng của đại lý (luật sư xác nhận); OpenAI và Jev bị loại khỏi CRM.
 - **Luật nền tảng phải bám:** DM-6.1, 6.3, 6.4, 6.5, 6.6, 6.8, 6.9, DM-7.1/7.2, DM-8.4, DM-8.9, C7.1a; điều khoản AI cho
@@ -535,23 +563,26 @@ Trả lời theo số, ví dụ "D1 a, D2 có, …". Khuyến nghị in đậm.
 | # | Quyết định | Lựa chọn | Khuyến nghị |
 |---|---|---|---|
 | D1 | Kiến trúc | a) App thứ tư AA-CRM · b) module trong CIS · c) tích hợp CRM sẵn có | **a** |
-| D2 | Sửa ADR 0008 §8 + DM-6.8 (2 ngoại lệ view hợp đồng: ops release → `booking`, insights k≥10 → `cis_app`) qua ADR 0010 | có / không | **có** |
+| D2 | Sửa ADR 0008 §8 + DM-6.8 qua ADR 0010: câu "it is a CIS module" của ADR 0008 §8 đổi theo D1 = a, và DM-6.8 thêm 2 ngoại lệ view hợp đồng (ops release → `booking`, insights k≥10 → `cis_app`) | có / không | **có** |
 | D3 | Thứ tự với M1 | a) CRM thành một lane riêng chạy song song từ S246 (W0 ngay; W1 khi AA-813 xong) · b) chờ M1 đóng hẳn như backlog ghi | **a** |
-| D4 | Nhịp làm | a) agent team (điều phối + 2–3 lane) ~8–10 issue/phiên → ~16 phiên · b) giữ 3–5 issue/phiên → 25–40 phiên | **a** |
+| D4 | Nhịp làm | a) agent team (điều phối + 2–3 lane) ~8–10 issue/phiên → 12–15 phiên + 1–2,5 dự phòng ≈ 14–16,5 · b) giữ 3–5 issue/phiên → 23–38 phiên | **a** |
 | D5 | Khởi động mọi việc ngoài ngay ở W0 (Google/CASA, Microsoft, Meta, Stripe, insurer, brief luật sư) | có / không | **có** |
 | D6 | Gmail | a) đồng bộ hai chiều (scope restricted, CASA $675–5.400/năm), xây đường chuyển tiếp trước làm dự phòng · b) chỉ `gmail.send` + chuyển tiếp SES, không CASA | **a** |
 | D7 | Khoá F1 | a) 1 khoá KMS mỗi đại lý (+ BYOK tuỳ chọn), $1–3/đại lý/tháng · b) 1 khoá chung + DEK mỗi đại lý (~$1/tháng tổng, xoá kém sạch vì backup PITR) | **a** |
-| D8 | Sửa câu F1 trong spec/DPA thành "chỉ runtime CRM dùng được, mọi lần đều ghi log; thu hồi được với BYOK" | có / không (cần chị Thư đồng ý) | **có** |
+| D8 | Sửa câu F1 trong spec/DPA thành "chỉ runtime CRM dùng được, mọi lần đều ghi log; thu hồi được với BYOK" — cùng một quyết định với H3, **chỉ chốt sau H3** (chị Thư đồng ý) | có / không | **có** |
 | D9 | WhatsApp | a) Embedded Signup, đại lý sở hữu WABA, Cloud API trực tiếp (Tech Provider) · b) Twilio làm BSP · c) 360dialog | **a** (b làm dự phòng) |
 | D10 | Thanh toán đại lý VN | a) tích hợp cổng VN sau khi có báo giá, trong lúc chờ ghi nhận thủ công · b) chỉ ghi nhận thủ công | **a** |
 | D11 | E-sign | a) BoldSign · b) Documenso Platform | **a** (xem lại ở ~30 đại lý) |
 | D12 | Route AI của CRM chỉ Bedrock acc3 `us.`, model cho phép ZDR (không Fable 5/5.1), SCP ép `none`, loại OpenAI + Jev | có / không | **có** |
-| D13 | Prod (AA-880 / ADR 0012, ~$150–300/tháng) là điều kiện cứng của pilot — Nghiệp đặt ngày go-live | có / không | **có** |
+| D13 | Prod (AA-880 / ADR 0012, ~$150–300/tháng) là điều kiện cứng của pilot | có / không | **có** |
+| D13-ngày | Ngày go-live prod (cũng quyết định pilot đi theo W8 hay sớm hơn, xem §10) | Nghiệp điền ngày | — |
 | D14 | Mua Vercel Pro (D-18) trước khi đại lý đầu tiên vào portal | có / không | **có** |
 | D15 | Gửi brief cho luật sư VN + AU/EU để lấy báo giá | có / không | **có** |
-| D16 | Tạo project Linear "AA-CRM" và tạo issue theo từng đợt (112 issue ở §11), cập nhật Done-when AA-821 | có / không | **có** |
+| D16 | Tạo project Linear "AA-CRM" và tạo issue theo từng đợt (114 issue ở §11), cập nhật Done-when AA-821 và dòng AA-821 ở `docs/backlog/README.md:123` | có / không | **có** |
 | D17 | Repo AA-CRM | a) public như Booking (không ghi ID/inventory, có branch protection miễn phí) · b) private | **a** |
 | D18 | Mở ngay một issue nhỏ (CIS) sửa CTA `mailto:admin@adventureasia.com` cứng trên `/trip/[tourId]` (lead của tenant đang chảy về AA) | có / không | **có** |
+| D19 | Messenger + Instagram (spec §7 `Conversation.channel`) | a) làm ở W6 qua Meta Graph API (W6 #13) · b) hoãn — đây là cắt phạm vi spec, phải ghi rõ | **a** |
+| D20 | Ngôn ngữ giao diện (spec gap 6 chưa chốt) | a) EN/VI cho app đại lý và app khách, khung i18n sẵn để thêm ngôn ngữ · b) thêm ngay ngôn ngữ cho đại lý/khách EU (ví dụ DE, FR) | **a**, xem lại sau H4 |
 
 ### Câu hỏi cho chị Thư
 
@@ -561,7 +592,7 @@ Trả lời theo số, ví dụ "D1 a, D2 có, …". Khuyến nghị in đậm.
 4. **H4.** 3–5 đại lý pilot là ai, ở nước nào (Úc / EU / VN)? Mình phỏng vấn họ được từ đầu không?
 5. **H5.** Pháp nhân ký hợp đồng của AA ở nước nào? Chị có luật sư VN và AU/EU để em gửi brief (PDPL, có thể cần giấy phép VN)?
 6. **H6.** Bảo hiểm nào sẽ duyệt waiver trekking ký điện tử, ai liên hệ?
-7. **H7.** Khách VN của đại lý có cần Zalo không (spec chỉ ghi WhatsApp/SMS)?
+7. **H7.** Khách VN của đại lý có cần Zalo không (spec ghi WhatsApp/SMS/Messenger/IG, không có Zalo)?
 8. **H8.** Tour AA nào có ngày khởi hành cố định + chỗ (allotment) để hiển thị "còn chỗ" thật; ai giữ số liệu đó luôn đúng?
 9. **H9.** Bảng giá net B2B (ADR 0005, biên 15%) có dùng nguyên cho CRM không?
 10. **H10.** Ai soạn nội dung điều khoản đặt tour và waiver mẫu cho đại lý?
@@ -572,7 +603,7 @@ Trả lời theo số, ví dụ "D1 a, D2 có, …". Khuyến nghị in đậm.
 |---|---|---|
 | Lời hứa F1 quá tay (khoá nằm trong account AA) | Cao | Sửa câu chữ (D8), key policy chỉ task role CRM + encryption context, báo động Decrypt, BYOK |
 | Pháp lý VN (Nghị định 356): có thể cần giấy phép + pháp nhân VN; DPIA/TIA | Cao | Brief luật sư từ W0 (D15); đại lý VN có thể phải chờ — trượt phạm vi do bên ngoài |
-| Lịch: 112 issue; ở nhịp 3–5 issue/phiên là 25–40 phiên, cạnh tranh với CIS-first | Cao | D4 (agent team), CRM là lane riêng |
+| Lịch: 114 issue; ở nhịp 3–5 issue/phiên là 23–38 phiên, cạnh tranh với CIS-first | Cao | D4 (agent team), CRM là lane riêng |
 | Rủi ro sản phẩm: chưa phỏng vấn đại lý nào; Dev có ~4 tenant thử | Cao | Tuyển pilot ở W0, demo W3 trên dữ liệu giả, table stakes làm tiêu chí |
 | Việc ngoài trễ (CASA, Meta, insurer, luật sư, cổng VN) | TB | Code đằng sau cờ; chỉ Gmail hai chiều, WhatsApp và pilot bị chặn |
 | Booking chưa có mô hình availability | TB | Departure/allotment trong W3; tour tailor-made "on request"; cần kỷ luật vận hành (H8) |
@@ -591,7 +622,8 @@ Trả lời theo số, ví dụ "D1 a, D2 có, …". Khuyến nghị in đậm.
 
 - Nguồn chính: 4 note research trong `research/`, phương án A từ lane phương án (bị cắt sau module 9 của bảng phủ —
   phần 10–18 ở §9 do bước viết tài liệu ước lượng), spec, ADR 0005/0006/0008, data standards DM-6/7/8, C7.1a.
-- **Lệch giữa các lane:** AA-848 (lane 1: Backlog, slot S250; lane phương án: In Progress); AA-824 N3 (lane 1: chưa
+- **Lệch giữa các lane:** AA-848 (lane 1: Backlog, slot S250; lane phương án: In Progress) — đã kiểm Linear 20/10/2026:
+  **Done**, cả hai lane đều sai; đã sửa ở §11/§12; AA-824 N3 (lane 1: chưa
   kiểm; lane phương án: Done); ngân sách kết nối (lane 1: tổng LOGIN limit 155 → 165 trên 181; lane phương án: worst
   case C2.2 ~126 trên trần 135). Kiểm lại live khi bắt đầu W1.
 - **Lệch tài liệu đã thấy** (sửa ở W0, issue 6): `docs/ecosystem-architecture.md:340` còn ghi staff Cognito của Booking

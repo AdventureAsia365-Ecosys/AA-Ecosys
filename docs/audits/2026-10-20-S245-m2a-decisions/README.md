@@ -5,13 +5,13 @@ gì tốn tiền. Mỗi bản ghi: quyết định cần chốt, phương án + 
 ngay sau đó, và vướng mắc không cần Nghiệp quyết. Nghiệp chốt S245: làm sản phẩm hoàn chỉnh, không MVP — các khuyến nghị
 dưới đây theo hướng đó.
 
-**Trả lời nhanh (gửi một dòng):** `AA-729: a / có / có · AA-787: có · AA-845: c` là đúng theo khuyến nghị.
+**Trả lời nhanh (gửi một dòng):** `AA-729: a / có / có · AA-787: có · AA-845: c / có / có` là đúng theo khuyến nghị.
 
 | Issue | Câu cần trả lời | Khuyến nghị |
 |---|---|---|
 | AA-729 | (1) phương án a/b/c; (2) có/không: 1 lần chạy baseline 100 mẫu, trần $15, + 1 lần before/after sau này; (3) có/không: thay dòng 3 Done-when | **a / có / có** |
 | AA-787 | Bỏ gate `promises_an_option` trong AA-787? có/không | **có** (bỏ) |
-| AA-845 | Nguồn nhãn cho `a1_claim_supported`: a / b / c | **c** |
+| AA-845 | (1) nguồn nhãn cho `a1_claim_supported`: a / b / c; (2) có/không: sửa Scope mục 2 + Done-when — chỉ ghi truth=False cho câu reviewer đánh dấu; (3) có/không: retune `a1_keyword_about_tour` (accept 0,65 / reject 0,40) | **c / có / có** |
 
 ---
 
@@ -23,7 +23,7 @@ dưới đây theo hướng đó.
 
 | | a. Harness hoàn chỉnh (khuyến nghị) | b. Chỉ chấm (judge-only) | c. Bộ nhỏ S241 P1-5 |
 |---|---|---|---|
-| Mẫu | 100: 50 tour S1/Master, 10 T2, 15 blog T9, 15 LinkedIn T9, 10 prompt-injection | Cùng 100 mẫu | 20–30 T2/T9 + injection |
+| Mẫu | 100: 50 tour S1/Master, 10 T2, 15 blog T9, 15 LinkedIn T9, 10 prompt-injection; trong mỗi tầng phân theo nước và loại tour, có ca khó (cycle/bike, raw nghèo, tour 18 ngày) và lỗi đã biết (Scope mục 1 AA-729) | Cùng 100 mẫu | 20–30 T2/T9 + injection |
 | Cách chấm | Hai chế độ trong một script: **sinh lại + chấm**, và **chỉ chấm** trên output đã đóng băng | Chỉ chấm | Sinh lại + chấm |
 | Chi phí mỗi lần chạy | **~$8,6–10,4.** Thử 3 mẫu < $0,5. Before/after cần lần chạy thứ hai, hoặc chỉ chạy lớp bị ảnh hưởng (riêng S1 ~$3) | ~$1–2 (`s1_judge` ~$0,008/tour) | ~$2–4. Lộ trình đặt mục tiêu ≤ $1 nhưng giá từng mẩu không cho phép |
 | Công sức | L (~2 phiên) | M | S–M |
@@ -137,10 +137,10 @@ Nguồn: mục Scope của AA-845 (chưa có comment tính tới 20/10/2026).
 
 | | (a) Hành động từng câu của reviewer | (b) Bộ nhãn panel agent | (c) b ngay bây giờ, rồi a làm vòng lặp lâu dài |
 |---|---|---|---|
-| LLM trả phí | $0 | $0 nếu chạy bằng subagent Claude Code. Sau đó một wave đo, < $1 Jev (~12,7k lời gọi × $0,00007878, theo lessons dòng 26; đếm số lời gọi trước khi chạy) | Như (b) |
+| LLM trả phí | $0 | $0 nếu chạy bằng subagent Claude Code. Sau đó một wave đo: ≈ $1 Jev nếu 12,7k lời gọi (12,7k × $0,00007878 = $1,00; số 12,7k chưa có nguồn — đếm bằng query trước khi chạy). Wave đầy đủ S228 là 81.496 lời gọi = $6,42 (lessons dòng 26) | Như (b) |
 | Công sức | M–L: API + UI Review Queue + `record_rejected_outcome` + kiểm UI. Hiện frontend chưa có hành động claim từng câu (grep CIS `origin/main`) | M: lấy mẫu, panel, báo cáo, duyệt | L |
 | Rủi ro | Dev không có reviewer thật; reviewer bấm Regenerate thay vì duyệt nên `approved_versions = 0` (S228 Part 6). Nhãn có thể mất vài tuần, hoặc không bao giờ có | Bộ một lần, cũ dần khi writer đổi (AA-748). Nhãn AI, không phải người | Công sức cao nhất |
-| Mở khoá | Lâu dần có outcome | Trần reject 0,15 ở S252. Cùng lượt gán nhãn luôn cho AA-803 (`a1_promise_unsupported`) | Cả hai, cộng vòng lặp chạy tiếp sau khi ra mắt |
+| Mở khoá | Lâu dần có outcome | Trần reject (0,15 hoặc 0,20, chọn theo nhãn) ở S252. Cùng lượt gán nhãn luôn cho AA-803 (`a1_promise_unsupported`) | Cả hai, cộng vòng lặp chạy tiếp sau khi ra mắt |
 
 Thiết kế mẫu cho (b): phân tầng ~60 câu có p ≤ 0,20 và ~40 câu trong 0,20–0,85. Kể cả đúng 100/100, cận dưới Wilson
 khoảng 96%, nên 100 là tối thiểu cho ngưỡng precision 95%.
@@ -148,18 +148,30 @@ khoảng 96%, nên 100 là tối thiểu cho ngưỡng precision 95%.
 ### Khuyến nghị
 
 **c.** Nghiệp yêu cầu sản phẩm hoàn chỉnh, không MVP. (b) một mình chỉ là làm một lần; (a) một mình không sinh nhãn trên
-Dev. Dùng (b) để hiệu chỉnh ngay, và ship (a) làm vòng lặp ground truth lâu dài.
+Dev. Dùng (b) để hiệu chỉnh ngay, và ship (a) làm vòng lặp ground truth lâu dài. Thêm lý do ở câu 2 dưới đây: nếu bỏ
+truth=False-khi-reject thì (b) một mình không đạt được dòng 2 của Done-when.
 
 ### Nghiệp cần trả lời
 
-**a, b hay c?**
+1. **a, b hay c?**
+2. **Có/không: sửa Scope mục 2 và Done-when.** Mục 2 của AA-845 ghi truth=False cho **mọi** câu khi một Review bị
+   reject. S228 Part 6 nói reject là chấm cả version, nên làm vậy sẽ gán nhãn sai hàng loạt. Đề xuất: chỉ ghi truth=False
+   cho câu reviewer đánh dấu (chính là phương án a). Đây là đổi phạm vi đã viết nên cần Nghiệp duyệt. Hệ quả: khi bỏ đường
+   reject, dòng 2 của Done-when (`outcome > 0` cho `a1_claim_supported` trên Dev) chỉ đạt được qua hành động từng câu của
+   (a) — (b) một mình không đóng được issue, nên (c) càng nên chọn. Khuyến nghị: **có**.
+3. **Có/không: retune `a1_keyword_about_tour`** về accept 0,65 / reject 0,40 (offline grey 32,2% → 15,7%, Scope mục 4;
+   Done-when ghi "applied … if approved"). Giữ nguyên `a3_same_moment` (hold) và `a3_same_place` reject ≤ 0,10.
+   Khuyến nghị: **có**, áp cùng wave đo, sau khi viết phân tích "vùng → hệ thống làm gì → chất lượng đổi ra sao"
+   (lessons dòng 27).
 
 ### Agent làm ngay sau đó
 
 - **(b) hoặc (c):** rút mẫu phân tầng từ `decision_log`; gán nhãn `claim_supported` và `promise_unsupported` trong một
-  lượt panel; lưu bộ vào `docs/calibration/`, liệt kê các chỗ bất đồng để Nghiệp duyệt. Sau đó áp reject ≤ 0,15 qua
+  lượt panel; lưu bộ vào `docs/calibration/`, liệt kê các chỗ bất đồng để Nghiệp duyệt. Sau đó chọn trần reject 0,15 hoặc 0,20 theo nhãn, áp qua
   `PUT /admin/decisions/questions/a1_claim_supported`, chạy một wave ≤ ~50 tour, báo % vùng xám và chi phí trước/sau.
 - **(c):** thêm việc xây hành động "unsupported" từng câu và ghi outcome, deploy, kiểm outcome > 0.
+- **Câu 3 = có:** áp retune `a1_keyword_about_tour` qua cùng endpoint (`threshold_version` + 1, sao lưu giá trị cũ), cập
+  nhật file calibration, đo trong cùng wave.
 
 ### Vướng mắc và cờ không cần Nghiệp quyết
 
@@ -168,12 +180,9 @@ Dev. Dùng (b) để hiệu chỉnh ngay, và ship (a) làm vòng lặp ground t
    S234 tính cho 29/09–13/10 (`docs/audits/2026-10-13-S234-t-series-rounds/08-pipeline-stats-thu-jev.md:723,746`), gồm cả
    sự cố hết credit 03/10, trước khi AA-720 ship ngày 05/10 (log S209, S210). Chưa đối chiếu với đếm `decision_log` theo
    ngày hay các dòng `jev_credit_topup` (ước 12), nên vẫn chưa xác nhận. Việc kiểm này là việc của agent.
-2. **Xung đột phạm vi.** Mục 2 của AA-845 ghi truth=False cho **mọi** câu khi một Review bị reject. S228 Part 6 nói reject
-   là chấm cả version, nên làm vậy sẽ gán nhãn sai hàng loạt. Cách sửa: chỉ ghi truth=False cho câu reviewer đánh dấu —
-   chính là phương án (a).
-3. **AA-720 và ledger.** AA-720 đã quyết "không làm ledger", nhưng AA-845 lại so 402 với `jev_credit_topup`. Bảng có tồn
+2. **AA-720 và ledger.** AA-720 đã quyết "không làm ledger", nhưng AA-845 lại so 402 với `jev_credit_topup`. Bảng có tồn
    tại (`docs/architecture/db-schema-reference.md:2598`) nhưng có dữ liệu hay không thì chưa biết.
-4. **Wave đo** chỉ chạy được khi các bảng job rảnh (DM-11.4).
+3. **Wave đo** chỉ chạy được khi các bảng job rảnh (DM-11.4).
 
 Nguồn: Linear AA-845, AA-803, AA-720; `docs/audits/2026-10-11-S228-jev-aseries-closeout.md` (Item 1, Part 6);
 `docs/audits/2026-10-19-S244-master-plan/README.md:128,177`; `skill/aa-lessons/lessons.md:26-27`. Đọc 20/10/2026.
