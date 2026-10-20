@@ -43,7 +43,7 @@ When two sources disagree, report the mismatch to Nghiệp; do not pick one sile
 | `.claude/skills/kiro-delegate/` | Claude Code, only in "dùng kiro-cli" mode | Kiro/Claude split, brief template, preflight, gate | 2026-10-09 | - |
 | `.claude/agents/kiro-reviewer.md` | Claude Code subagent | Review of risky PRs | 2026-10-09 | - |
 | `.claude/hooks/subagent-guardrails.sh`, `subagent-mcp-guardrails.sh` | Claude Code hooks | Block subagent push, merge, apply, secret and MCP writes (tested by `test_subagent_guardrails.sh`) | 2026-10-14 | - |
-| `.claude/settings.json` | Claude Code | Permissions and hooks wiring | - | Still allows broad AWS/Terraform/merge commands (U-04, folded into AA-878 per N-12) |
+| `.claude/settings.json` | Claude Code | Permissions and hooks wiring | 2026-10-20 | U-04 step 1 done (root #120): deny reads of `~/.aws/**`, `~/.config/gh/**`, `gh auth token`, `aws configure get`. Deny-only by Nghiệp's choice (no ask rules; the dev-phase self-merge stays allowed). Open: NotResource carve-out in the agent role (U-04 step 2, with U-53) |
 
 ## Root skills (`skill/`)
 

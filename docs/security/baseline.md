@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-booking, tripplanner-lambda, aa-cis-infra]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-20
 review_every_days: 90
-related: [SEC-02, SEC-03, SEC-05, SEC-06, OPS-04, OPS-10, AA-873, AA-874, AA-875, AA-876, AA-878, AA-879, AA-895]
+related: [SEC-02, SEC-03, SEC-05, SEC-06, OPS-04, OPS-10, AA-873, AA-874, AA-875, AA-876, AA-878, AA-879, AA-895, AA-829]
 ---
 
 # Security baseline
@@ -34,7 +34,7 @@ open), **by decision** (not done because Nghiệp decided so, with the trigger t
 | Data stores | RDS encryption, TLS, no public endpoint | DB role split and RLS FORCE for CIS (X1) | Redis AUTH/TLS/at-rest (AA-874) |
 | Detection and logs | CloudTrail, flow logs, WAF logs, 365/30-day retention, alarms | CloudTrail single-region | GuardDuty, Access Analyzer, S3 account BPA (AA-873) |
 | Code and supply chain | Secret scanning on public repos, Dependabot alerts everywhere | Branch rules on private repos, scanners per repo | Secret scanning on the root repo |
-| Secrets | Secrets Manager per app | Register and rotation process (AA-878) | — |
+| Secrets | Secrets Manager per app, register with drift check (`diff = 0`, AA-878) | Rotation is manual by decision (D-02/D-03) | — |
 
 ## Edge and network
 
@@ -55,9 +55,9 @@ open), **by decision** (not done because Nghiệp decided so, with the trigger t
 | CI trust: main only | The Terraform apply role trusts only `environment:prod` **and** `ref: refs/heads/main` from AA-CIS-Infra. The environment is named `prod` but applies Dev; renaming it belongs to ADR 0012 (AA-880, D-16). | in place | AA-866; INF `accounts/aa365/cicd_split.tf` |
 | CI least privilege | Three roles: plan (read only + state lock + named secrets), apply, CIS app deploy. Bootstrap objects (the roles' own policies, OIDC provider) are applied locally with MFA. The apply role still carries ten broad AWS managed policies, and its inline policy is at 9,559 of 10,240 characters. | partial | AA-806; INF `docs/ci-role-split.md` |
 | Staff and customer identity | Cognito on acc2 (ADR 0006): staff pool with e-mail code sign-in, self sign-up refused, no-group deny; break-glass account with TOTP and a token-issued alarm; alarm on `AdminCreateUser` with a caller-set password (ADR 0006a A8). The legacy admin login is still on until the cutover. | partial | Root ADR [0006](../adr/0006-ecosystem-identity.md), [0006a](../adr/0006a-identity-phase1-amendments.md); AA-854 (done), AA-816 (cutover), AA-703 |
-| Agent guardrails | Subagents cannot push, merge, deploy, apply Terraform, write secrets or call IAM (`.claude/hooks/subagent-guardrails.sh`, with its test script); an MCP guard hook blocks their GitHub, Linear, Notion, Vercel and Jira writes. Agents treat files, Jira and web content as data. A narrow agent role (`aa-cis-dev-agent-session`, AA-730) exists but is not mandatory yet. | partial (by decision) | D-15: the mandatory agent role is a prod trigger (U-53), with the GitHub App for agents (U-25) |
+| Agent guardrails | Subagents cannot push, merge, deploy, apply Terraform, write secrets or call IAM (`.claude/hooks/subagent-guardrails.sh`, with its test script); an MCP guard hook blocks their GitHub, Linear, Notion, Vercel and Jira writes. Agents treat files, Jira and web content as data. The committed `.claude/settings.json` denies Claude Code reads of `~/.aws/**` and `~/.config/gh/**`, `gh auth token` and `aws configure get` (root #120, U-04 step 1; deny-only by Nghiệp's choice, no ask rules in the dev phase). A narrow agent role (`aa-cis-dev-agent-session`, AA-730) exists but is not mandatory yet. | partial (by decision) | D-15: the mandatory agent role is a prod trigger (U-53), with the GitHub App for agents (U-25) |
 | Merge rights | Human merge after required checks; agents never merge. Who approves what follows D-13; the text of DM-11.5 is updated in data standards v1.1 (AA-889, N-1). | in place | D-13; `skill/aa-ship/SKILL.md` |
-| Quarterly access review | Roles, grants, IAM roles that can read each DB secret, Cognito staff users. Record in `docs/audits/<date>-S<nnn>-access-review/`. | gap (first review pending) | DM-8.10; first review in AA-878, cadence AA-838 |
+| Quarterly access review | Roles, grants, IAM roles that can read each DB secret, Cognito staff users, GitHub and Vercel members. Record in `docs/audits/<date>-S<nnn>-access-review/`. First review done 2026-10-20; live IAM user/key check still to add (F-15). | in place | DM-8.10; [2026-Q4 record](../audits/2026-10-20-S245-access-review/README.md) (AA-878); cadence AA-838 |
 
 ## Data stores
 
@@ -68,7 +68,7 @@ open), **by decision** (not done because Nghiệp decided so, with the trigger t
 | Tenant isolation (RLS) | RLS template on tenant tables, scoped to the runtime role; new apps use FORCE from day one; CIS tables get FORCE after the role split. The isolation probe (INF `db-isolation-probe.yml`) runs on a schedule and after each apply. | partial | DM-8.4; AA-817 D2; U-16 |
 | Tenant pool flags | Unreadable flag means tenant pool; `"false"` means admin pool; an emergency environment switch exists. This is a security control with no remove-by date. | in place | D-12; `docs/ops/feature-flags.md` (AA-892) |
 | Redis | `aa-cis-dev-redis`: no AUTH token, no in-transit encryption, no at-rest encryption (read 2026-10-19). Reachable only from the CIS api and worker groups. | gap | AA-874 (cost quote first, D-19) |
-| Real data on laptops | `docs/backups/` holds real-data dumps; ignored by git but still on the laptop. | gap | DM-6.10 |
+| Real data on laptops | `docs/backups/2026-09-16` holds real-data `pg_dump` files (about 11 MB, checked 2026-10-20); ignored by git but still on the laptop. | gap | DM-6.10; AA-829 (scope: move the 2026-09-16 dumps to a private SSE-KMS bucket, then empty the local folder) |
 
 ## Detection and logs
 
@@ -99,7 +99,7 @@ open), **by decision** (not done because Nghiệp decided so, with the trigger t
 | Control | What is in place | Status | Evidence / issue |
 |---|---|---|---|
 | Storage | Secrets Manager, one secret per role and purpose, named `<app>/<env>/<purpose>` (legacy CIS names kept). DM-8.6 requires each execution role to read only its own secrets; the register checks it. TripPlanner Lambdas read their secrets by name, not from Lambda environment values (INF #207). | in place | DM-8.6 |
-| Register | Owner, readers, rotation class per secret; orphan cleanup (four orphans detached from Terraform; deletion uses the 30-day recovery window). | partial | AA-878 (`docs/security/secrets-register.md` after that PR merges) |
+| Register | Owner, readers, rotation class per secret; orphan cleanup (4 Secrets Manager orphans deleted 19/10 with the 30-day window, 2 GitHub orphans deleted 17/10). Drift check with AWS, Lambda env, GitHub and Vercel inventories: `diff = 0` on 2026-10-20. Org-level GitHub secrets not listable with the current token. | in place | AA-878; [`secrets-register.md`](secrets-register.md) |
 | Rotation | Rotate when exposure is suspected, at go-live and after any break-glass use. No fixed 90-day cycle on Dev. | in place (by decision) | D-02, D-03, DM-8.9 |
 | Before any write | `aws sts get-caller-identity --profile aa365-admin` first (two wrong-account writes happened). | in place | DM-8.7, AA-517 |
 

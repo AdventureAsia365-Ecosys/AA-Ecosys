@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-20
 review_every_days: 90
 related: [SEC-01, SEC-02, SEC-03, SEC-05, SEC-06]
 ---
@@ -32,4 +32,4 @@ Quarterly, in the first session of each quarter (DM-8.10). Each review is a date
 
 | Quarter | Record | Notes |
 |---|---|---|
-| 2026-Q4 | pending | First review is part of AA-878 |
+| 2026-Q4 | [2026-10-20-S245-access-review](../audits/2026-10-20-S245-access-review/README.md) | First review (AA-878), 20/10/2026: 15 findings (F-1…F-15), 2 questions for Nghiệp. Next: first session of 2027-Q1 (cadence AA-838) |
