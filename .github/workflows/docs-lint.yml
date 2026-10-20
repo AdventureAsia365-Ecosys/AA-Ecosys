@@ -99,7 +99,8 @@ jobs:
         if: ${{ !cancelled() }}
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
-          args: --config tools/docs/lychee.toml 'docs/**/*.md'
+          # docs/linear-export holds generated copies of Linear issues; their links are Linear's own markdown (S245).
+          args: --config tools/docs/lychee.toml --exclude-path docs/linear-export 'docs/**/*.md'
           fail: true
           jobSummary: true
 
