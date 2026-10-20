@@ -6,6 +6,7 @@ name: Docs lint
 #   - literal resource IDs in docs prose: warn-only here (private repo, docs/STYLE.md)
 #   - Markdown style (markdownlint, .markdownlint-cli2.jsonc): warn-only for now
 #   - internal links, offline (lychee): no network, no external sites
+#   - every alarm row of docs/generated/alarms.md links to an existing runbook (AA-893)
 #   - gitleaks on the lines this PR's commits add (secret names are fine in docs, values never are)
 # Weekly (and on demand): freshness report of pages past their review date, as a run artifact.
 # Nothing is committed; no AWS access, no secrets beyond the default read-only token.
@@ -75,6 +76,11 @@ jobs:
       - name: Single-line AWS CLI
         if: ${{ !cancelled() }}
         run: python tools/docs/check_docs_text.py aws-multiline
+
+      # AA-893: every alarm in the generated catalog (docs/generated/alarms.md) links to a runbook that exists here.
+      - name: Alarm runbook links
+        if: ${{ !cancelled() }}
+        run: python tools/docs/check_alarm_runbooks.py
 
       - name: Literal resource IDs (warn-only)
         if: ${{ !cancelled() }}
