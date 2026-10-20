@@ -25,15 +25,15 @@ only — never a value.** The machine-readable twin is [`secrets-register.yaml`]
 
 | | Count |
 |---|---|
-| Rows | 87: 33 Secrets Manager (29 live + 4 deleted 19/10, in the recovery window), 29 GitHub (23 live + 6 deleted/removed), 9 Vercel, 4 Lambda env (all removed), 12 vendor |
+| Rows | 88: 34 Secrets Manager (30 live + 4 deleted 19/10, in the recovery window), 29 GitHub (23 live + 6 deleted/removed), 9 Vercel, 4 Lambda env (all removed), 12 vendor |
 | Drift check (S245, all four inventories) | **`diff = 0`** (was 8 before this update). Not checked: GitHub org secrets (the listing answers 403, no org-admin scope; no `github:org` row) |
 | Orphans | 4 Secrets Manager — **deleted 19/10/2026**, recovery until 18/11 (`aa-cis/dev/api-keys`, `aa-cis/dev/acp-webhook-secret`, `aa-cis/dev/acp-partner-api`, `tripplanner/dev/mapbox-geocoding-token`); 2 GitHub — **deleted 17/10/2026** (AA-866: `VERCEL_DEPLOY_HOOK`, `ACPCORE_READ_TOKEN`), absent on 20/10; the repo-level `ADMIN_SECRET` and `AWS_ROLE_ARN` on AA-CIS-App are absent too |
 | Plaintext secret in a Lambda env | none: `TRIPPLANNER_API_KEY` and the dead `MAPBOX_GEOCODING_TOKEN_ARN` left both TripPlanner Lambdas with I2 (19/10); the ops-probe `ADMIN_SECRET` left with I1 (Infra #195) |
 | Planned rows | 0: the 4 planned in S243 exist now (GitHub `VERCEL_PORTAL_BYPASS_SECRET`, `E2E_TENANT_API_KEY`, env `e2e` `E2E_MAIL_ROLE_ARN`; Vercel aa-booking-admin `COGNITO_BOOKING_STAFF_CLIENT_SECRET`) and are `keep` |
-| Added S245 | GitHub AA-TripPlanner-Web `AWS_DEPLOY_ROLE_ARN` (role ARN, AA-902) |
+| Added S245 | GitHub AA-TripPlanner-Web `AWS_DEPLOY_ROLE_ARN` (role ARN, AA-902); Secrets Manager `aa-ecosys/ops/linear-api-key` (Linear export + archive tool) |
 | Rotated / revoked 20/10/2026 (S245) | local gh / MCP OAuth token (`gho_`, Nghiệp); old Mapbox geocoding token revoked in the Mapbox account (geocoding API now 401) |
 | Rotated 19/10/2026 (S244) | `aa-cis/dev/admin-secret` (I6), `aa-identity/dev/breakglass` (password + TOTP), `aa-cis/dev/db-migrator` (value first written by script, X1 S20) |
-| Rotation enabled in Secrets Manager | 0 of 29 live |
+| Rotation enabled in Secrets Manager | 0 of 30 live |
 
 ## How to run the drift check
 
@@ -212,12 +212,12 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 ## Register
 
-### Secrets Manager, acc2 (005097885195, us-west-1) (33)
+### Secrets Manager, acc2 (005097885195, us-west-1) (34)
 
 | Name | Owner app | Consumers (main) | Managed by | Rotation | Last changed | Status | Notes |
 |---|---|---|---|---|---|---|---|
 | `aa-cis/dev/rds` | cis | migrator task, read in the task as MASTER_SECRET for roles/ files, set-password, run-script only (AA-CIS-Infra db/run_migration.py:204; not injected since X1 S22, Infra #225); AA-CIS-App scripts/link_staff_identity.py:65, services/acp_produce/sweeper_lambda.py:37 (default; Lambda not deployed); humans with the MFA admin profile (break-glass, DM-8.9) | cli (read by data source module.secrets.data.aws_secretsmanager_secret.rds) | none | 2026-07-07 | **keep** | Master DSN (aa_cis_admin). No longer the CIS runtime login since X1 S18 (19/10/2026); the CIS task role is denied it since X1 S19; DB Migrate logs in as db_migrator since X1 S22. Also readable by the CI apply role aa-cis-infra-tf-apply (SecretsManagerReadWrite; open item 10). See "Who can read the RDS master (X1 S19)". |
-| `aa-ecosys/ops/linear-api-key` | ecosystem | AA-Ecosys `tools/linear/linear_export.py` (orchestrating session, MFA admin profile) | cli (by hand, Nghiệp) | TBD-Nghiep | — | **planned** | Linear personal API key (S245): export closed issues to `docs/linear-export/`, then archive via the GraphQL API (Free plan, no manual archive in the UI). Flip to keep once created. |
+| `aa-ecosys/ops/linear-api-key` | ecosystem | AA-Ecosys `tools/linear/linear_export.py` (orchestrating session, MFA admin profile) | cli (by hand, Nghiệp) | TBD-Nghiep | 2026-10-20 | **keep** | Linear personal API key (S245): export closed issues to `docs/linear-export/`, then archive via the GraphQL API (Free plan, no manual archive in the UI). Created 20/10/2026 (S245). |
 | `aa-cis/dev/dataforseo` | cis | ECS api + worker DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD (modules/ecs/main.tf:409-410, :605-606) | cli (data source module.secrets.data.aws_secretsmanager_secret.dataforseo) | none | 2026-07-07 | **keep** | Vendor DataForSEO login/password (JSON). |
 | `aa-cis/dev/acp-partner-api` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_partner_api (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **deleted** | Placeholder of the retired ACP v1 partner path. No reader on main of any repo; CloudTrail since 18/10: only the plan role (refresh). LastChangedDate 15/10 is a Terraform tag re-apply, not a value change. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
 | `aa-cis/dev/acp-webhook-secret` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_webhook_secret (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **deleted** | Placeholder of the retired ACP v1 webhook HMAC. No reader on main; CloudTrail since 18/10: only the plan role. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
