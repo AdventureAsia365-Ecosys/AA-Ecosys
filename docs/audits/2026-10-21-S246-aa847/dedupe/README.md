@@ -235,6 +235,9 @@ Built on the revised plan (12 changes) in AA-CIS-App `feat/aa-847-dedupe` (decis
 `feat/aa-847-destination-redirect` (301). Details: AA-CIS-App `docs/implementation-notes/AA-847-dedupe.md`.
 
 - **Migration 257, not 256:** the lines lane took 256 (`256_catalog_line_places.sql`) while this lane ran.
+- **One line rule:** two drawn lines are auto-merged by the lines lane's `shape.same_line_place` (≥ 70 % overlap by
+  length or the same OSM id, two-way name match, same class); dedupe adds only the model band (shared OSM object or
+  ≥ 30 % overlap) — §2's "≥ 0.6 overlap" auto rule was dropped so the codebase has one line rule.
 - **Offline evaluation r1.4** (CIS `tests/unit/test_aa847_dedupe.py`, 134 pairs: the 105 here + the review's
   adversarial / linear pairs + the revised plan's keeps + the homonym list; `eval-r1.4.txt`, misses in
   `eval-r1.4-misses.txt`):
