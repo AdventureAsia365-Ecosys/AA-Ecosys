@@ -294,29 +294,55 @@ mailbox or Google account". That is too strong.
   `POST /auth/booking-token` → a CIS-signed RS256 token, ADR 0004 O1). The same gap kept CIS previews on the
   legacy password path and so blocked AA-816 S2 (API `LEGACY_ADMIN_LOGIN_ENABLED` off).
 - **Options compared:**
-  - **(a) Chosen (owner decision S246): a fixed Preview domain per app**, registered once as a WORKFORCE callback and
-    sign-out URL on the existing app client: `booking-preview.lumiguides.it.com` (Vercel `aa-booking-admin`, client
-    `booking-staff`) and `aa-cis-preview.lumiguides.it.com` (Vercel `aa-cis-frontend`, client `cis-admin` only;
-    break-glass stays production-only). Staff sign in with an email code exactly as on Production.
+  - **(a) Chosen (owner decision S246): a fixed Preview domain per app**, registered once as the only callback and
+    sign-out URL of a separate, Preview-only WORKFORCE app client (decision D-1 below):
+    `booking-preview.lumiguides.it.com` (Vercel `aa-booking-admin`, client `booking-staff-preview`) and
+    `aa-cis-preview.lumiguides.it.com` (Vercel `aa-cis-frontend`, client `cis-admin-preview`; break-glass stays
+    production-only). Staff sign in with an email code exactly as on Production, and the APIs cap those sessions.
   - (b) CI writes each preview URL into the callback list. Rejected: `UpdateUserPoolClient` replaces the whole client
     config, the list grows without bound, and every PR would write to the identity pool.
   - (c) A Preview-only machine principal capped at viewer (like CIS C9), no user sign-in. Rejected for people; kept
     as the candidate for the CIS PR UI smoke (AA-816 S2) and for agent checks of the Booking UI.
-  - A separate `*-preview` app client per app: deferred (a new client_id in both frontends and verifiers, its own
-    branding and secret). **Revisit before the first prod environment or the first paying tenant.**
+  - A separate `*-preview` app client per app: first deferred, then **pulled forward by D-1 (21/10/2026)**.
+- **Decision D-1 (Nghiệp, 21/10/2026): option 2 accepted, the Preview-only client now.** The question was whether
+  Preview sessions may carry the person's real role for the dev phase (option 1, interim rule "label only after
+  reading the diff") or get their own app client that the APIs cap by `client_id` (option 2). Option 2:
+  - AA-CIS-Infra creates two NEW WORKFORCE clients, `booking-staff-preview` and `cis-admin-preview`, with the same
+    settings and scopes as the production clients and ONLY their Preview host as callback / sign-out URL. The
+    production clients `booking-staff` and `cis-admin` are not changed (their Preview URLs are never added). Each new
+    client gets the managed login style. Plan: 6 to add (2 clients, 2 styles, 2 CNAMEs), 0 to change, 0 to destroy.
+  - **CIS API:** `api/core/identity_config` accepts `cis-admin-preview` and `api/core/staff_identity.resolve_staff`
+    maps every token of it to role `viewer` with `is_owner = false`, whatever its `cis-*` groups. The bearer
+    middleware forwards `viewer`, `staff_authz` refuses every write (read-only role), owner-only writes need the
+    owner flag, and `/auth/verify-admin` returns `viewer` to the BFF.
+  - **Booking API:** `app/auth/identity_config` accepts `booking-staff-preview` and `app/auth/staff.current_staff`
+    refuses every request other than GET / HEAD / OPTIONS from it (403 `preview_read_only`, before any DB access);
+    reads are limited to `PREVIEW_PERMISSIONS` (the `*.read` permissions and `staff.directory`, intersected with the
+    role; never `staff.admin`, `audit.read`, `retention.admin`). `/booking/staff/me` reports `preview_viewer`.
+  - **Frontends:** a Vercel preview build signs in with the preview client and reads only its own secret env var
+    (`COGNITO_BOOKING_STAFF_PREVIEW_CLIENT_SECRET`, `COGNITO_CIS_ADMIN_PREVIEW_CLIENT_SECRET`, Preview target only);
+    the production secrets are Production-only. The production client has no Preview callback, so preview code can
+    never complete a sign-in with it.
+  - The preview client ids are public values, kept as code constants like the production ids. They are known only
+    after the apply, so both apps ship with an empty constant first (an unknown client = 401 in the API and no
+    sign-in on a preview build: fail closed) and one commit per app fills them in.
+  - Cost: $0/month (Cognito app clients and managed login styles are free; no Secrets Manager secret is added,
+    following the existing pattern of client secrets in Terraform state + Vercel only).
 - **How it works:**
   - The host is a Vercel domain of the project, bound to a never-pushed branch `preview-signin`, so a production
     deploy never claims it (fallback if Vercel refuses: a team domain plus `vercel alias set` only). Route 53 CNAMEs
-    in AA-CIS-Infra `custom_domain_vercel_hosts`; callbacks in `identity_client_urls`. The Cognito client update must
-    be **in place** (a replacement rotates the client_id, a code constant, and the secret).
-  - Each frontend allowlists by build: a Vercel production build accepts only the production hosts, a preview build
-    only its Preview host (`VERCEL_ENV`). The redirect URI is still never built from the Host header.
+    in AA-CIS-Infra `custom_domain_vercel_hosts`; the two Preview-only clients in `id_workforce_clients` with their
+    URLs in `identity_client_urls` (D-1). The apply must **not** change or replace any existing client (a
+    replacement would rotate a production client_id, a code constant, and its secret).
+  - Each frontend chooses by build: a Vercel production build uses the production client on the production hosts
+    only, a preview build the Preview-only client on its Preview host only (`VERCEL_ENV`). The redirect URI is still
+    never built from the Host header.
   - **Re-pointing is opt-in**, never automatic on every PR: a same-repo PR carrying the label `preview-signin` (after
     a successful preview deploy), or a `workflow_dispatch` of Vercel Deploy with `alias_only_url`, accepted **only on
     `refs/heads/main`** and only for a READY, non-production deployment of the same project (checked over the
     Vercel API). `vercel alias set` creates no deployment (no Hobby cap use). Reasons: unmerged agent PR code sees the
     tokens of whoever signs in, and parallel PRs would race for the alias.
-  - The alias must point at a deployment **built after** the Preview target of the client-secret env var was set
+  - The alias must point at a deployment **built after** the Preview-only client-secret env var was set
     (lesson S237); an older build shows "sign-in not set up on this build".
   - Runbook: `docs/ops/runbooks/preview-staff-sign-in.md`.
 - **Security notes:**
@@ -329,10 +355,11 @@ mailbox or Google account". That is too strong.
     and the mitigations below matter more.
   - Both Preview hosts never offer the legacy password form or `POST /api/auth/login`, and preview builds send
     `X-Robots-Tag: noindex, nofollow` (Safe Browsing history, A5).
-  - The preview BFF holds the real client secret (Preview target). Forks and Dependabot never deploy.
-  - A CIS Cognito session on `aa-cis-preview` carries the user's **real** role (a verified Bearer), not the C9
-    viewer cap; C9 stays for legacy preview sessions. Every CIS BFF route that attaches `X-Admin-Secret` calls
-    `requireAdmin()` first (audited 21/10/2026).
+  - The preview BFF holds only the Preview-only client's secret (D-1); the production client secrets have no
+    Preview target. Forks and Dependabot never deploy.
+  - A CIS Cognito session on `aa-cis-preview` is the **viewer** (D-1), like the C9 Preview credential, which stays
+    for legacy preview sessions. Every CIS BFF route that attaches `X-Admin-Secret` calls `requireAdmin()` first
+    (audited 21/10/2026).
   - **Same-site writes (review finding B-1, fixed before any Preview host exists):** `it.com` is on the Public Suffix
     List, so the site is `lumiguides.it.com` and both Preview hosts are the *same site* as the CIS admin, the
     tenant portal and Booking. Their requests carry those hosts' `SameSite=Lax` session cookies. Preview code
@@ -341,26 +368,30 @@ mailbox or Google account". That is too strong.
     portal BFF write route therefore refuses a request whose `Origin` (or `Sec-Fetch-Site`) is not its own
     origin (CIS `lib/crossSiteGuard.ts`, AA-911). Booking's proxy already did this (`isSameOrigin`). **The
     CIS guard is deployed to production before the Infra apply that creates the CNAMEs.**
-  - **No role cap on the Preview hosts (open decision for the owner).** A session on either Preview host carries
-    the person's real role (CIS owner `staff.write`, Booking `booking-*`) against the one Dev API, which cannot
-    tell a Preview token from a Production one (same `client_id`). Managed-login sessions are shared across
-    clients, so preview code that redirects to the sign-in route gets a silent sign-in, with an access token and
-    a 12 h refresh token, from anyone who opens the host. Vercel Authentication does not help, because the person
-    it lets through is that person. The only real cap is the deferred separate `*-preview` client with the APIs
-    capping by `client_id`. Until the owner either accepts this for the dev phase or pulls that client forward,
-    only label a PR `preview-signin` after reading its diff.
+  - **Role cap on the Preview hosts (D-1, accepted 21/10/2026: option 2).** Before D-1 a session on either Preview
+    host carried the person's real role (CIS owner `staff.write`, Booking `booking-*`) against the one Dev API,
+    which could not tell a Preview token from a Production one (same `client_id`). Managed-login sessions are
+    shared across clients, so preview code that redirects to the sign-in route still gets a silent sign-in, with
+    an access token and a 12 h refresh token, from anyone who opens the host; Vercel Authentication does not help.
+    Since D-1 those are tokens of the Preview-only client, which both APIs cap at viewer / read-only by
+    `client_id`. **Residual risk:** preview code can read what a viewer reads on Dev (Booking: the person's read
+    permissions, customers and pricing included; Dev holds test data). Revisit the read set before the first prod
+    environment or the first paying tenant. The opt-in label stays; reading the diff first is still good practice
+    but no longer the only control.
 - **Bridge retirement (same issue):**
-  - Booking accepts only WORKFORCE (`booking-staff`, `breakglass`); a correctly signed bridge-shaped token is 401
-    `invalid_token` with no key fetch and no `staff_users` write. The legacy form, `/api/auth/login` and the re-mint
-    are removed from the Booking frontend.
+  - Booking accepts only WORKFORCE (`booking-staff`, `breakglass`, and `booking-staff-preview` capped at read-only);
+    a correctly signed bridge-shaped token is 401 `invalid_token` with no key fetch and no `staff_users` write. The
+    legacy form, `/api/auth/login` and the re-mint are removed from the Booking frontend.
   - CIS removes `POST /auth/booking-token`, `GET /auth/.well-known/jwks.json` and `api/core/booking_jwt.py` (both
     paths 404).
   - Secret `aa-cis/dev/booking-jwt-signing-key` is deleted with a 7-day recovery window (secrets register).
   - Bridge-era `booking.staff_users` rows are linked to their Cognito identity or deactivated (never deleted) by
     AA-CIS-Infra `db/scripts/aa911_bridge_staff_rows.py` (DRY RUN, then apply), so no active unlinked row remains.
-  - Order: CIS cross-site guard deployed → Infra callback + CNAMEs applied → Booking B1 (Preview sign-in shown
-    working) → Booking B2 deployed (a real CIS-minted token replayed before = 200, after = 401) → CIS C1
-    deployed → secret deleted → rows script.
+  - Order: CIS cross-site guard deployed (AA-CIS-App #899) → Infra Preview-only clients + CNAMEs applied → the two
+    preview client ids filled into both apps → Booking B1 (API cap + frontend) deployed, then the Preview sign-in
+    shown as read-only → Booking B2 deployed (a real CIS-minted token replayed before = 200, after = 401) → CIS C1
+    (API cap + bridge removal) deployed, then the CIS Preview sign-in shown as viewer → secret deleted → rows
+    script.
 - **Consequence to state:** after the bridge is gone **no agent can sign in to the Booking UI** (Preview or
   Production): the E2E Cognito user may not hold a `booking-*` group (A10). Booking UI checks are done by Nghiệp
   (screenshots) until Nghiệp chooses a Booking preview machine principal (a follow-up issue only after asking).
@@ -371,7 +402,8 @@ mailbox or Google account". That is too strong.
   or delete `/auth/admin-login`; (3) turn off the Preview BFF flag, then the API flag (ECS task definition);
   (4) disable the frozen legacy rows (`e2e-claude-code*`), then `aa-cis/dev/e2e-test-admin` and `e2e-test-viewer`
   become orphan-delete candidates (DRY RUN procedure).
-- **Cost:** $0 (two Route 53 records in the existing zone; Vercel domains and Cognito callbacks are free).
+- **Cost:** $0/month (two Route 53 records in the existing zone; Vercel domains, the two Cognito app clients and
+  their managed login styles are free; no new Secrets Manager secret, which would be $0.40 per secret per month).
 
 ## Phase 1 status (18/10/2026)
 
