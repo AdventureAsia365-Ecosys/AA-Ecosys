@@ -203,9 +203,10 @@ versioned JSON in `docs/contracts/` (rules: [`contracts/README.md`](contracts/RE
 Identity: ADR 0001 decision 6 gave AA-Booking the customer identity (its own OTP stack, tables in `bk-001`).
 [ADR 0006](adr/0006-ecosystem-identity.md) amends this: the target is the shared Cognito EXTERNAL pool
 (`aa-external`) for travellers and Booking customers (AA-703 epic, AA-680), so the `bk-001` OTP tables are interim and
-not built out. Booking staff sign in today through the interim bridge of ADR 0004 O1 (CIS-issued RS256 JWT,
-`aud=booking`, verified against the CIS JWKS), to be swapped for the Cognito WORKFORCE pool in Phase 2 (see 4.6;
-Booking's verifier needs code changes, not only configuration).
+not built out. Booking staff sign in with the Cognito WORKFORCE pool (`booking-staff` client, Phase 2 / AA-680) on
+Production and on the fixed Preview host `booking-preview.lumiguides.it.com`; the interim bridge of ADR 0004 O1
+(CIS-issued RS256 JWT, `aud=booking`) is retired ([ADR 0006a A11](adr/0006a-identity-phase1-amendments.md), AA-911;
+see 4.6).
 Stack, runtime and decisions O1–O9: [ADR 0004](adr/0004-aa-booking-stack-and-bootstrap.md) (Accepted
 14/10/2026); prices and suppliers: [ADR 0005](adr/0005-pricing-and-supplier-rates.md).
 
@@ -242,7 +243,7 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 | Edge | Contract | Source |
 |---|---|---|
 | CIS FE (Vercel) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT; staff = Cognito WORKFORCE access token as `Authorization: Bearer` (or a legacy HS256 session while `LEGACY_ADMIN_LOGIN_ENABLED` is on), plus the admin secret added by the BFF until the cutover (4.6) | `AA-CIS-App/CONTEXT.md` |
-| AA-Booking ⇄ clients | REST through API GW `9z3xnalp59` (shared VPC Link) → ALB `/booking/*` → ECS `aa-booking-dev-api`. Staff auth: CIS-issued JWT verified by Booking (`aud=booking`, ADR 0004 O1; built in `bk-003`, interim until Cognito per ADR 0006). The staff admin frontend calls it through its Next.js BFF | `booking.tf`, ADR 0004 |
+| AA-Booking ⇄ clients | REST through API GW `9z3xnalp59` (shared VPC Link) → ALB `/booking/*` → ECS `aa-booking-dev-api`. Staff auth: Cognito WORKFORCE access token (`booking-staff` / `breakglass`) verified by Booking (ADR 0006 Phase 2; the CIS-issued bridge token of ADR 0004 O1 is retired, 0006a A11). The staff admin frontend calls it through its Next.js BFF | `booking.tf`, ADR 0004 |
 | TripPlanner FE (Vercel) ⇄ BE | The Next.js BFF calls 2 Lambda URLs through API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly; header `X-TripPlanner-Key`. Env `BROWSE_API_URL` / `TRIP_API_URL` | `tripplanner.tf`, `docs/vercel-setup.md` |
 
 Contracts between apps (views, grants, events) are listed in each repo's `CONTEXT.md`
@@ -338,7 +339,7 @@ One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan,
 |---|---|---|
 | CIS staff | WORKFORCE `us-west-1_bCcFvbSOS`, client `cis-admin` | **Live.** Email one-time code on managed login at `https://staff-auth.lumiguides.it.com` (AA-branded, own domain since S242). The CIS BFF runs auth code + PKCE; the CIS API verifies the access token (WORKFORCE issuer only, `client_id` ∈ {cis-admin, breakglass}, `token_use=access`) and resolves the `shared.admin_users` row by `(iss, sub)`; role = highest `cis-*` group. Legacy password login stays behind `LEGACY_ADMIN_LOGIN_ENABLED` until the cutover |
 | Break-glass | WORKFORCE, client `breakglass` | **Live, disabled at rest.** `admin@adventure.asia`, password + TOTP; secret `aa-identity/dev/breakglass` readable only by the MFA admin role, every read/write and token issue alerts |
-| Booking staff | WORKFORCE, client `booking-staff` (callbacks on `booking.lumiguides.it.com`) | **Phase 2, not started.** Booking still verifies the CIS bridge token (ADR 0004 O1) issued by `/auth/booking-token` from a CIS password session; Booking roles are already stored in CIS `shared.staff_app_grant` and mirrored to `booking-*` groups |
+| Booking staff | WORKFORCE, client `booking-staff` (callbacks on `booking.lumiguides.it.com`, `aa-booking-admin.vercel.app` and the fixed Preview host `booking-preview.lumiguides.it.com`) | **Live (Phase 2, AA-680; bridge retired by 0006a A11, AA-911).** Booking verifies WORKFORCE only; roles come from the `booking-*` groups mirrored from CIS `shared.staff_app_grant` |
 | Tenant users | EXTERNAL `us-west-1_nKOvHan0W`, client `cis-portal` | Phase 3 (AA-813), not started; tenants keep `/auth/tenant-login` with the API key |
 | Travellers / Booking customers | EXTERNAL, clients `tripplanner`, `booking-customer` | Phase 4 (AA-680), not started; native self sign-up stays off until WAF is on |
 
@@ -348,7 +349,8 @@ One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan,
   A report-only job `staff_directory_reconcile` compares the two and shows cutover readiness.
 - **Cutover (not started):** every active staff row linked by its own sign-in, managed-login break-glass tested,
   the admin-secret check made principal-aware and the secret rotated, then the legacy flag off for the CIS UI.
-  `/auth/admin-login` and `/auth/booking-token` stay until Booking Phase 2.
+  `/auth/admin-login` stays until AA-816 S2; `/auth/booking-token` is removed (0006a A11). CIS previews sign in on
+  the fixed Preview host `aa-cis-preview.lumiguides.it.com`.
 - Apex `lumiguides.it.com` is an A record to Vercel (the `aa-cis-frontend` project redirects it to
   `aa-cis.lumiguides.it.com`); Cognito requires a parent A record for its custom domains.
 

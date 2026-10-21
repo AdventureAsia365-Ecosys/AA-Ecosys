@@ -249,7 +249,7 @@ All eight steps were completed in this order on 14/10/2026.
 
 | # | Decision | Answer |
 |---|---|---|
-| O1 | **Staff identity** | **(a) one store.** Booking staff log in through the CIS staff login (`shared.admin_users`, AA-656). `booking.staff_users` becomes a thin profile keyed by `admin_users.id` (Booking role, no password). CIS issues the JWT; Booking verifies it, preferably with an asymmetric key published as JWKS, and requires `aud=booking`. |
+| O1 | **Staff identity** (superseded by ADR 0006a A11, AA-911: Booking staff sign in with Cognito WORKFORCE only; the CIS-issued token is retired) | **(a) one store.** Booking staff log in through the CIS staff login (`shared.admin_users`, AA-656). `booking.staff_users` becomes a thin profile keyed by `admin_users.id` (Booking role, no password). CIS issues the JWT; Booking verifies it, preferably with an asymmetric key published as JWKS, and requires `aud=booking`. |
 | O2 | **API entry** | **Custom sub-domains of `lumiguides.it.com`** (e.g. `api-booking.lumiguides.it.com`), as for CIS. The REST API execute-api URL is used until the ACM certificate covers the sub-domain. |
 | O3 | **Job model** | **Own `booking.job` table** on the same runner library (decision 8). The CIS deploy guard is untouched. |
 | O4 | **Stack confirmation** | **Confirmed:** FastAPI + asyncpg backend, Next.js on Vercel (decision 1). |

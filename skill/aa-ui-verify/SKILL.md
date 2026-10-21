@@ -44,7 +44,8 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
      | Trang đọc (viewer xem được) | PR preview, tài khoản viewer: secret `aa-cis/dev/e2e-test-viewer` (user `e2e-claude-code-viewer`) |
      | Trang reviewer trên production sau merge | workflow `e2e-cognito.yml` (người dùng Cognito E2E, vai reviewer, hộp thư E2E theo ngoại lệ A10) — chỉ trang reviewer |
      | Trang chỉ-admin, thao tác ghi admin | Sau merge + deploy: nhờ **Nghiệp** đăng nhập production bằng mã email và kiểm (hoặc gửi ảnh); ghi rõ trong báo cáo là phần này chưa do agent kiểm |
-     | UI Booking (Booking BFF → CIS `/auth/admin-login`) | Vẫn dùng `aa-cis/dev/e2e-test-admin` (user `e2e-claude-code`) đến S2 / AA-680 |
+     | Trang admin CIS trên preview, quyền thật (Cognito) | Host Preview cố định `aa-cis-preview.lumiguides.it.com` (AA-911): gắn nhãn `preview-signin` cho PR hoặc dispatch `alias_only_url` từ main, rồi **Nghiệp** đăng nhập bằng mã email (agent không đọc được hộp thư). Runbook `docs/ops/runbooks/preview-staff-sign-in.md` |
+     | UI Booking | **Agent không đăng nhập được** (AA-911: bridge CIS đã gỡ; user Cognito E2E không được có nhóm `booking-*`, ADR 0006a A10). Nghiệp đăng nhập trên `booking-preview.lumiguides.it.com` (preview) hoặc production và gửi ảnh; ghi rõ trong báo cáo phần này chưa do agent kiểm |
    - Đọc mật khẩu từ secret vào biến môi trường lúc chạy, không in hay ghi ra file/log/PR. Đổi mật khẩu một tài
      khoản test legacy chỉ còn qua DB Migrate `run-script` có review (script `create_staff_user.py` đã bỏ ở CIS #858).
 4. Với **mỗi trang đã đổi**, ghi lại:
