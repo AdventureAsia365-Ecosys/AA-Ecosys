@@ -258,9 +258,25 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
     geocoder confirms a point. A deterministic content-validity report (CIS `services/places/validity.py`) runs after
     every graph build and on `/admin/places`, with audited, undoable fixes (duplicate merge, area, linear → line);
     the flip gate counts `linear_feature` (a line stored as a pin / circle) and `linear_without_shape`.
-  - *Duplicates merge automatically (Nghiệp, S246, D2).* Two lines are one place on the same country, kind and name
-    plus the same OSM id or a line overlap — never on the point-distance rule; the merge moves the keeper's
-    `geo.place_shape` row and the next build rebuilds the stretches. An admin is not the normal path.
+  - *Duplicates merge automatically (Nghiệp, S246, D2; design + skeptic pass: `docs/audits/2026-10-21-S246-aa847/
+    dedupe/`).* Duplicate destinations are merged automatically by the CIS job kind `place_dedupe` (CIS 257); the
+    admin duplicate fix on `/admin/places` is an override, not the normal path. One decision
+    (`services/places/dedupe.decide`, rules pinned by a labelled pair set with 0 false merges in CI) is shared by the
+    job, the in-tour dedupe of `place_extract` and the validity report. **Id evidence is a signal, not a verdict:** a
+    shared Geoapify object or place card auto-merges only POI / natural objects whose names match and no ambiguity
+    cap applies; anything else goes to the model. **Two lines** merge on their shape overlap or the same OSM id, never
+    on the point-distance rule; a line without a drawn shape, or a point vs a line, is at most the model's call.
+    **Model merges need two-vendor agreement:** GPT-6 Luna asked A/B and B/A plus Claude Haiku, all `same` with
+    confidence ≥ 0.8 (stages `a3_place_dedupe` / `a3_place_dedupe_check`, role `validate`), verdicts cached by input
+    hash; anything else keeps both places and nobody acts on it. **Every merge is logged** (`geo.place_merge`) **and
+    reversible by relink** (undo clears `duplicate_of`, restores the pointers that still hold the keeper, pins the
+    pair `different`). A merge leaves `geo.place_shape` / `geo.place_outlier` on the merged id (their keys would
+    collide; hidden by the `duplicate_of` filters) — the keeper order prefers the drawn line — and the next build
+    rebuilds the stretches. Writes happen per country only after an admin approved that country's dry-run diff;
+    changes outside it above max(5, 1 %) hold the country with an alert. `place_geocode` stays the only writer of
+    coordinates; `place_dedupe` is the only writer of `duplicate_of` (the admin fix is the override). Consumers resolve
+    an old id through `catalog.v_destination_redirect` (TripPlanner answers 301); the contract version is named when
+    it is appended, after the lines lane's views.
   - *Flip.* `PLACES_SOURCE=cis` is set on both TripPlanner Lambdas together, after the coverage gate
     (`missing_in_cis_live = 0`), with `tripplanner.component_id_map` (tp-017) bridging old component ids; then CIS
     254 revokes TripPlanner's grandfathered `raw_tours` (179) and `tour_atoms` (180) reads.

@@ -227,3 +227,29 @@ Upfront ≤ $0.60 with the caps; no new AWS service.
    text; the CI set pins the policy.
 3. Model after the A/B (Haiku per the brief, or GPT-6 Luna if it is as accurate at ~1/10 the price).
 4. Circuit-breaker threshold (proposed max(10, 3 %) per country per run).
+
+## 11. Implementation (S246, after the skeptic pass)
+
+Built on the revised plan (12 changes) in AA-CIS-App `feat/aa-847-dedupe` (decision, rules **r1.4**) and
+`feat/aa-847-dedupe-job` (job, storage), AA-CIS-Infra `feat/aa-847-cis-257-copy`, AA-TripPlanner-Web
+`feat/aa-847-destination-redirect` (301). Details: AA-CIS-App `docs/implementation-notes/AA-847-dedupe.md`.
+
+- **Migration 257, not 256:** the lines lane took 256 (`256_catalog_line_places.sql`) while this lane ran.
+- **Offline evaluation r1.4** (CIS `tests/unit/test_aa847_dedupe.py`, 134 pairs: the 105 here + the review's
+  adversarial / linear pairs + the revised plan's keeps + the homonym list; `eval-r1.4.txt`, misses in
+  `eval-r1.4-misses.txt`):
+
+  | Run | Auto precision | Rules recall | False merges | Band merge / keep | Recall if the check is right |
+  |---|---|---|---|---|---|
+  | Full metadata | 1.000 | 0.689 (42/61) | 0 | 17 / 6 | 0.967 |
+  | No ids / stops / cards | 1.000 | 0.689 | 0 | 14 / 5 | 0.918 |
+  | All points the model's | 1.000 | 0.623 | 0 | 18 / 15 | 0.918 |
+  | One shared city id | 1.000 | 0.066 | 0 | 52 / 15 | 0.918 |
+  | No shapes | 1.000 | 0.623 | 0 | 19 / 5 | 0.934 |
+
+- The plan's §6.1 target "rules recall ≥ 0.75" is **not met** (0.689): its own §0.1 sends Van Mieu, Wat Arun and
+  Tiger's Nest (shared Geoapify id, unrelated names) to the model. No rule was loosened to reach the number.
+- The six keep pairs left to the model (Long Bien ×2, Hoan Kiem on the suburb id, Lao Cai / Lao Chai, a Dhammayazika
+  model point, a Cu Chi Tunnels model point) are what the paid measurement run (§6.2) must see answered
+  `different` / `unsure`.
+- Nothing paid ran: the model check is tested with stubs; the job spends only for countries an admin lists.
