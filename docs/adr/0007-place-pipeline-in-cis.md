@@ -38,7 +38,8 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   a rebuild from scratch touches nothing else.
 - `shared.destinations` stays the golden record of places (ADR 0002), keeps every existing `id`
   (photos, covers and TripPlanner trip events point at them) and gains geo-quality columns
-  (`geo_status` ok / suspect / manual, `located_by`, `precision` point / area, `confidence`, provider,
+  (`geo_status` ok / suspect / manual, `located_by`, `precision` point / area / line (line: amended S246, see
+  the end), `confidence`, provider,
   provider id, `result_type`, `geocoded_at`, `name_norm`), which decision 9 fills.
 
 ### 2. `catalog.*` views are the TripPlanner contract
@@ -244,11 +245,22 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
     per-tour photo count, cover, duration regex and md5. `security_barrier` stays on the contract views; turning it
     off on the graph views (they hide only non-live rows from trusted app roles) is a measured follow-up (CIS 255+)
     only if the AA-847 probe shows consumer quals blocked above a barrier subquery.
-  - *Not a pin.* Linear features (trail, river, road, range, loop …) are not drawn at all: stored `suspect` +
-    `review_reason='linear_feature'`, hidden by every view, name kept in the day text (proposed display rule,
-    Nghiệp's decision); area features (national park, delta, plateau, coast, gorge) are `precision='area'` even when
-    a geocoder confirms a point. A deterministic content-validity report (CIS `services/places/validity.py`) runs
-    after every graph build and on `/admin/places`, with audited, undoable fixes (duplicate merge, area / linear).
+  - *Not a pin — lines are DRAWN (Nghiệp, S246, D1; supersedes the earlier "hidden" proposal).* Linear features
+    (trail, river, road, loop, stream, path, circuit …) are stored `geo_status='ok'`, `precision='line'` and drawn as
+    lines on every TripPlanner map — never a pin, never a circle, never hidden, also before the flip and while a
+    shape is missing. Geometry: CIS `geo.place_shape` (CIS 255), written only by the job kind `place_shape` (Geoapify
+    Place Details, then Overpass; accepted on name, kind, country polygon, distance to the tour-day anchors, a
+    kind-aware length) — no OSM feature: the anchored approximate route of a tour-day, drawn dashed "approximate
+    route"; the stretch each tour-day follows is `geo.tour_segment` (versioned with the graph build). A line is never a
+    graph stop or node. The views expose it (CIS 256: `v_destination` bbox / shape columns, `v_destination_shape`,
+    the day stretch on `v_tour_place` / `v_tour_component`; contracts `catalog.tour.v1.2`, `catalog.graph.v1.2`).
+    Area features (national park, delta, plateau, coast, gorge, mountain range) are `precision='area'` even when a
+    geocoder confirms a point. A deterministic content-validity report (CIS `services/places/validity.py`) runs after
+    every graph build and on `/admin/places`, with audited, undoable fixes (duplicate merge, area, linear → line);
+    the flip gate counts `linear_feature` (a line stored as a pin / circle) and `linear_without_shape`.
+  - *Duplicates merge automatically (Nghiệp, S246, D2).* Two lines are one place on the same country, kind and name
+    plus the same OSM id or a line overlap — never on the point-distance rule; the merge moves the keeper's
+    `geo.place_shape` row and the next build rebuilds the stretches. An admin is not the normal path.
   - *Flip.* `PLACES_SOURCE=cis` is set on both TripPlanner Lambdas together, after the coverage gate
     (`missing_in_cis_live = 0`), with `tripplanner.component_id_map` (tp-017) bridging old component ids; then CIS
     254 revokes TripPlanner's grandfathered `raw_tours` (179) and `tour_atoms` (180) reads.
