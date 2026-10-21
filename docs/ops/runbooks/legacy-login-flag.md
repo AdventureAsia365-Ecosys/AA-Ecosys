@@ -34,8 +34,9 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
   typo keeps the legacy login on. The API and the BFF parse it the same way.
 - It gates the CIS UI password form, the BFF route `/api/auth/login` (404 when off) and the HS256 path of
   `/auth/verify-admin`.
-- It does **not** gate `/auth/admin-login` or `/auth/booking-token`: Booking staff still sign in through them until
-  AA-680 (Phase 2).
+- It does **not** gate `/auth/admin-login`. Booking no longer uses it: the CIS → Booking bridge and
+  `/auth/booking-token` are retired (AA-911, ADR 0006a A11), so S2 is possible once the CIS PR UI smoke has another
+  sign-in (see A11).
 - It is read in two places: the BFF (Vercel `aa-cis-frontend` environment, per target) and the API (ECS task
   definition; not set today, so on). The API serves Production and Preview alike.
 - Recommended cutover (S243 plan, Nghiệp's call N5): turn off **only the Production BFF**. The API stays on until

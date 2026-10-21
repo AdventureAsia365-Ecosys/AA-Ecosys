@@ -52,6 +52,7 @@ Everything runs on **acc2** (us-west-1) except the LLM satellite accounts; see t
 | [Restore one schema or table](runbooks/restore-schema.md) | draft, UNTESTED | - (AA-829) |
 | [Rotate a secret](runbooks/secret-rotation.md) | draft, UNTESTED | two classes once |
 | [Switch off the legacy staff password login](runbooks/legacy-login-flag.md) | draft, UNTESTED | readiness read only |
+| [Sign staff in on a Vercel preview (fixed Preview host)](runbooks/preview-staff-sign-in.md) | draft, UNTESTED | - (AA-911) |
 | [Use a break-glass path](runbooks/break-glass.md) | draft, UNTESTED | API path 2026-10-18 |
 | [Handle an SES bounce or complaint alarm](runbooks/ses-bounce.md) | draft, UNTESTED | read-only only |
 | Data subject request (manual delete/export) | planned (AA-839, D-11) | - |

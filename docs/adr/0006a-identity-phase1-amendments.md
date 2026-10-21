@@ -6,8 +6,11 @@
   decision 7 (what "reset" means), decision 10 (custom domain timing, DNS), decision 11 (break-glass address,
   secret shape, guards), decision 12 (branding now in Terraform), the Phase 1 row of the Migration plan (legacy
   flag scope) and the "Remaining open risks" list (the `AdminCreateUser` line). A10 (19/10/2026, S243) adds a
-  temporary exception to the `@adventure.asia`-only staff rule for the E2E test account.
-- **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) is unchanged and still pending.
+  temporary exception to the `@adventure.asia`-only staff rule for the E2E test account. A11 (21/10/2026, S246)
+  gives Vercel Previews a staff sign-in (one fixed Preview host per app) and retires the CIS → Booking bridge; it
+  amends A6 and ADR 0004 O1.
+- **Implements:** ADR 0006 Phase 1 for CIS. Booking Phase 2 (WORKFORCE verifier, `booking-staff` sign-in) shipped in
+  AA-680 (S245); A11 removes the bridge it kept for previews.
 - **Plan and evidence:** `docs/audits/2026-10-18-S242-cognito-phase1/plan.md` (judged plan, stages A/B/S/D),
   `docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md` (Phase 0 done-when evidence).
   Implementation notes: AA-CIS-App `docs/implementation-notes/AA-816*.md`; AA-CIS-Infra
@@ -44,8 +47,8 @@ Replaces "per-app role columns" (decision 3) and "Booking role column" (Phase 1 
   person per app; a new app widens the CHECK in a CIS migration.
 - `admin_users.role` stays NOT NULL and keeps the CIS role.
 - The directory writes the grant first, then mirrors it to the `booking-<role>` WORKFORCE group.
-- Booking does not read the table. It keeps the PR #721 bridge until Phase 2, and from Phase 2 it reads
-  `cognito:groups` (decision 3, unchanged).
+- Booking does not read the table. It kept the PR #721 bridge until Phase 2, and from Phase 2 it reads
+  `cognito:groups` (decision 3, unchanged). The bridge is retired by A11 (AA-911).
 - The same migration adds to `admin_users`:
   - `email`: lower-case, exactly `…@adventure.asia`, unique on `lower(email)`;
   - `display_name`;
@@ -183,7 +186,10 @@ Narrows the Phase 1 cutover text ("password login is switched off by a config fl
 - **What it does not gate:** `/auth/admin-login` and `/auth/booking-token`. Booking signs in through them until
   Phase 2, and `/auth/booking-token` accepts only an HS256 CIS session.
 - **Preview:** keeps password login. Preview hosts cannot be registered callbacks, and the sign-in route refuses
-  any host outside its allow-list. So the BFF flag stays on for Preview.
+  any host outside its allow-list. So the BFF flag stays on for Preview. **Amended by A11 (21/10/2026):** one fixed
+  Preview host per app IS a registered callback now; per-deployment preview URLs keep the flag-driven form (CIS
+  viewer UI smoke) until AA-816 S2, and `/auth/admin-login` / `/auth/booking-token` are no longer needed by
+  Booking (the latter is removed).
 - **Open for the cutover (Stage S):** the API is one service for Production and Preview, so turning its flag off
   would also end Preview password logins. Nghiệp decides at cutover between "API flag stays on, only the
   Production BFF switches off" and "previews lose admin login".
@@ -281,6 +287,75 @@ mailbox or Google account". That is too strong.
   5. Point the E2E test at a company address, or retire it.
   6. Add a closing line here.
 
+### A11. Staff sign-in on Vercel Previews: one fixed Preview domain per app; bridge retired (21/10/2026, S246)
+
+- **Problem (AA-911):** Booking Production signs staff in with Cognito WORKFORCE (AA-680), but a Vercel Preview has
+  no registered callback, so the only staff sign-in on a Booking preview was the CIS bridge (CIS password →
+  `POST /auth/booking-token` → a CIS-signed RS256 token, ADR 0004 O1). The same gap kept CIS previews on the
+  legacy password path and so blocked AA-816 S2 (API `LEGACY_ADMIN_LOGIN_ENABLED` off).
+- **Options compared:**
+  - **(a) Chosen (owner decision S246): a fixed Preview domain per app**, registered once as a WORKFORCE callback and
+    sign-out URL on the existing app client: `booking-preview.lumiguides.it.com` (Vercel `aa-booking-admin`, client
+    `booking-staff`) and `aa-cis-preview.lumiguides.it.com` (Vercel `aa-cis-frontend`, client `cis-admin` only;
+    break-glass stays production-only). Staff sign in with an email code exactly as on Production.
+  - (b) CI writes each preview URL into the callback list. Rejected: `UpdateUserPoolClient` replaces the whole client
+    config, the list grows without bound, and every PR would write to the identity pool.
+  - (c) A Preview-only machine principal capped at viewer (like CIS C9), no user sign-in. Rejected for people; kept
+    as the candidate for the CIS PR UI smoke (AA-816 S2) and for agent checks of the Booking UI.
+  - A separate `*-preview` app client per app: deferred (a new client_id in both frontends and verifiers, its own
+    branding and secret). **Revisit before the first prod environment or the first paying tenant.**
+- **How it works:**
+  - The host is a Vercel domain of the project, bound to a never-pushed branch `preview-signin`, so a production
+    deploy never claims it (fallback if Vercel refuses: a team domain plus `vercel alias set` only). Route 53 CNAMEs
+    in AA-CIS-Infra `custom_domain_vercel_hosts`; callbacks in `identity_client_urls`. The Cognito client update must
+    be **in place** (a replacement rotates the client_id, a code constant, and the secret).
+  - Each frontend allowlists by build: a Vercel production build accepts only the production hosts, a preview build
+    only its Preview host (`VERCEL_ENV`). The redirect URI is still never built from the Host header.
+  - **Re-pointing is opt-in**, never automatic on every PR: a same-repo PR carrying the label `preview-signin` (after
+    a successful preview deploy), or a `workflow_dispatch` of Vercel Deploy with `alias_only_url`, accepted **only on
+    `refs/heads/main`** and only for a READY, non-production deployment of the same project (checked over the
+    Vercel API). `vercel alias set` creates no deployment (no Hobby cap use). Reasons: unmerged agent PR code sees the
+    tokens of whoever signs in, and parallel PRs would race for the alias.
+  - The alias must point at a deployment **built after** the Preview target of the client-secret env var was set
+    (lesson S237); an older build shows "sign-in not set up on this build".
+  - Runbook: `docs/ops/runbooks/preview-staff-sign-in.md`.
+- **Security notes:**
+  - **Vercel protection on the alias (check V1, to record after the first alias):** `aa-booking-admin` runs
+    Standard Protection (`all_except_custom_domains`), which as documented leaves only *production* custom domains
+    public. Expected: the Preview host sits behind Vercel Authentication, so on Hobby only the owner (Nghiệp) passes;
+    other staff need a Vercel shareable link or wait for prod; automation needs the project's Protection Bypass for
+    Automation (CIS `e2e` environment secret `BOOKING_PREVIEW_BYPASS`, sent as headers to that host only). If V1
+    shows it public: anyone can load the aliased preview's code, data still needs an email code and a staff group,
+    and the mitigations below matter more.
+  - Both Preview hosts never offer the legacy password form or `POST /api/auth/login`, and preview builds send
+    `X-Robots-Tag: noindex, nofollow` (Safe Browsing history, A5).
+  - The preview BFF holds the real client secret (Preview target). Forks and Dependabot never deploy.
+  - A CIS Cognito session on `aa-cis-preview` carries the user's **real** role (a verified Bearer), not the C9
+    viewer cap; C9 stays for legacy preview sessions. Every CIS BFF route that attaches `X-Admin-Secret` calls
+    `requireAdmin()` first (audited 21/10/2026).
+- **Bridge retirement (same issue):**
+  - Booking accepts only WORKFORCE (`booking-staff`, `breakglass`); a correctly signed bridge-shaped token is 401
+    `invalid_token` with no key fetch and no `staff_users` write. The legacy form, `/api/auth/login` and the re-mint
+    are removed from the Booking frontend.
+  - CIS removes `POST /auth/booking-token`, `GET /auth/.well-known/jwks.json` and `api/core/booking_jwt.py` (both
+    paths 404).
+  - Secret `aa-cis/dev/booking-jwt-signing-key` is deleted with a 7-day recovery window (secrets register).
+  - Bridge-era `booking.staff_users` rows are linked to their Cognito identity or deactivated (never deleted) by
+    AA-CIS-Infra `db/scripts/aa911_bridge_staff_rows.py` (DRY RUN, then apply), so no active unlinked row remains.
+  - Order: Booking B2 deployed (a real CIS-minted token replayed before = 200, after = 401) → CIS C1 deployed →
+    secret deleted → rows script.
+- **Consequence to state:** after the bridge is gone **no agent can sign in to the Booking UI** (Preview or
+  Production): the E2E Cognito user may not hold a `booking-*` group (A10). Booking UI checks are done by Nghiệp
+  (screenshots) until Nghiệp chooses a Booking preview machine principal (a follow-up issue only after asking).
+- **AA-816 S2 (API `LEGACY_ADMIN_LOGIN_ENABLED` off) becomes possible for people:** Booking no longer calls
+  `/auth/admin-login` or `/auth/booking-token`, and CIS previews have a Cognito sign-in. Still needed: (1) the CIS PR
+  UI smoke signs in with the legacy viewer password and would turn red, so it needs a Preview-only machine session in
+  the CIS BFF (option c; new Preview env var + GitHub secret set by hand) or signed-out smoke before merge; (2) gate
+  or delete `/auth/admin-login`; (3) turn off the Preview BFF flag, then the API flag (ECS task definition);
+  (4) disable the frozen legacy rows (`e2e-claude-code*`), then `aa-cis/dev/e2e-test-admin` and `e2e-test-viewer`
+  become orphan-delete candidates (DRY RUN procedure).
+- **Cost:** $0 (two Route 53 records in the existing zone; Vercel domains and Cognito callbacks are free).
+
 ## Phase 1 status (18/10/2026)
 
 | Item | State |
@@ -291,7 +366,8 @@ mailbox or Google account". That is too strong.
 | Staff invitation email for directory-created users | In progress (follow-up) |
 | Daily reconcile trigger (ops-probe Lambda path) | Follow-up (Infra one line) |
 | Cutover (Stage S): every active row with an email + its own `cognito_sub`, managed-login break-glass test, principal-aware secret check (C9), `ADMIN_SECRET` rotation, flag off per A6, E2E mailbox (D2) | Not started |
-| Booking Phase 2 (verifier copy, `booking-staff` sign-in, bridge retirement) | Not started |
+| Booking Phase 2 (verifier copy, `booking-staff` sign-in) | Live on Dev (AA-680, S245) |
+| Preview staff sign-in + bridge retirement (A11) | In progress (AA-911, S246) |
 
 ## Consequences
 
@@ -316,7 +392,9 @@ mailbox or Google account". That is too strong.
 
 ## Links
 
-- `docs/adr/0006-ecosystem-identity.md` (amended ADR).
+- `docs/adr/0006-ecosystem-identity.md` (amended ADR); `docs/adr/0004-aa-booking-stack-and-bootstrap.md` (O1,
+  superseded by A11).
+- `docs/ops/runbooks/preview-staff-sign-in.md` (A11).
 - `docs/audits/2026-10-18-S242-cognito-phase1/plan.md`, `aa854-evidence.md`, `reader-maps.md`.
 - `docs/database/schema-ownership.md` (`shared.staff_app_grant` in the CIS row).
 - AA-CIS-App: `CONTEXT.md` § "Staff roles and permissions"; `api/core/identity_verifier.py`,

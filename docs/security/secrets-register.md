@@ -5,7 +5,8 @@ it, who reads it, how it is managed and rotated, and what should happen to it. *
 only — never a value.** The machine-readable twin is [`secrets-register.yaml`](secrets-register.yaml)
 (same rows); edit the YAML first, then the tables here to match.
 
-- Updated: 20/10/2026 (S245: first drift check with all four inventories (AWS, Lambda env, GitHub per
+- Updated: 21/10/2026 (S246, AA-911: bridge signing key scheduled for deletion, both staff client secrets gain the
+  Preview target, `e2e-test-admin` loses its Booking consumer, `BOOKING_PREVIEW_BYPASS` planned). Earlier: 20/10/2026 (S245: first drift check with all four inventories (AWS, Lambda env, GitHub per
   repo/env, Vercel names): `diff = 8` → `diff = 0`; rows flipped below; first access review
   [2026-10-20-S245](../audits/2026-10-20-S245-access-review/README.md)). Earlier: 19/10/2026 (S244: AA-816 Stage S — S1 on Production, C9 Preview credential, I6 rotation, break-glass
   rotation, AA-878 N1; X1 S20/S22 — `db_migrator` in use. acc2 `list-secrets` re-read: 33 names, 29 live + 4 deleted in
@@ -21,19 +22,19 @@ only — never a value.** The machine-readable twin is [`secrets-register.yaml`]
   consumer; DRY RUN → Nghiệp OK → delete) · **pending-removal** (plaintext/dead Lambda env key an
   open PR removes) · **deleted / removed** (kept for the log).
 
-## Summary (20/10/2026)
+## Summary (21/10/2026)
 
 | | Count |
 |---|---|
-| Rows | 88: 34 Secrets Manager (30 live + 4 deleted 19/10, in the recovery window), 29 GitHub (23 live + 6 deleted/removed), 9 Vercel, 4 Lambda env (all removed), 12 vendor |
+| Rows | 89: 34 Secrets Manager (29 live + 5 deleted in the recovery window: 4 on 19/10, `aa-cis/dev/booking-jwt-signing-key` on 21/10, AA-911), 30 GitHub (23 live + 6 deleted/removed + 1 planned), 9 Vercel, 4 Lambda env (all removed), 12 vendor |
 | Drift check (S245, all four inventories) | **`diff = 0`** (was 8 before this update). Not checked: GitHub org secrets (the listing answers 403, no org-admin scope; no `github:org` row) |
 | Orphans | 4 Secrets Manager — **deleted 19/10/2026**, recovery until 18/11 (`aa-cis/dev/api-keys`, `aa-cis/dev/acp-webhook-secret`, `aa-cis/dev/acp-partner-api`, `tripplanner/dev/mapbox-geocoding-token`); 2 GitHub — **deleted 17/10/2026** (AA-866: `VERCEL_DEPLOY_HOOK`, `ACPCORE_READ_TOKEN`), absent on 20/10; the repo-level `ADMIN_SECRET` and `AWS_ROLE_ARN` on AA-CIS-App are absent too |
 | Plaintext secret in a Lambda env | none: `TRIPPLANNER_API_KEY` and the dead `MAPBOX_GEOCODING_TOKEN_ARN` left both TripPlanner Lambdas with I2 (19/10); the ops-probe `ADMIN_SECRET` left with I1 (Infra #195) |
-| Planned rows | 0: the 4 planned in S243 exist now (GitHub `VERCEL_PORTAL_BYPASS_SECRET`, `E2E_TENANT_API_KEY`, env `e2e` `E2E_MAIL_ROLE_ARN`; Vercel aa-booking-admin `COGNITO_BOOKING_STAFF_CLIENT_SECRET`) and are `keep` |
+| Planned rows | 1: GitHub env `e2e` `BOOKING_PREVIEW_BYPASS` (AA-911, only if check V1 needs it). The 4 planned in S243 exist now (GitHub `VERCEL_PORTAL_BYPASS_SECRET`, `E2E_TENANT_API_KEY`, env `e2e` `E2E_MAIL_ROLE_ARN`; Vercel aa-booking-admin `COGNITO_BOOKING_STAFF_CLIENT_SECRET`) and are `keep` |
 | Added S245 | GitHub AA-TripPlanner-Web `AWS_DEPLOY_ROLE_ARN` (role ARN, AA-902); Secrets Manager `aa-ecosys/ops/linear-api-key` (Linear export + archive tool) |
 | Rotated / revoked 20/10/2026 (S245) | local gh / MCP OAuth token (`gho_`, Nghiệp); old Mapbox geocoding token revoked in the Mapbox account (geocoding API now 401) |
 | Rotated 19/10/2026 (S244) | `aa-cis/dev/admin-secret` (I6), `aa-identity/dev/breakglass` (password + TOTP), `aa-cis/dev/db-migrator` (value first written by script, X1 S20) |
-| Rotation enabled in Secrets Manager | 0 of 30 live |
+| Rotation enabled in Secrets Manager | 0 of 29 live |
 
 ## How to run the drift check
 
@@ -203,6 +204,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 | Date | Store | Name | Evidence of no consumer | Command / who | Recovery until |
 |---|---|---|---|---|---|
+| 2026-10-21 | Secrets Manager acc2 | `aa-cis/dev/booking-jwt-signing-key` | AA-911: CIS C1 removed the only reader (`api/core/booking_jwt.py`); Booking B2 accepts WORKFORCE only; CIS logs quiet after C1 | `delete-secret --recovery-window-in-days 7` (main session) | 2026-10-28 |
 | 2026-10-19 | Secrets Manager acc2 | `aa-cis/dev/api-keys` | No reader on main of any repo (register row, M2 DRY RUN); Terraform-managed ones forgotten from state first (Infra #207) | `delete-secret --recovery-window-in-days 30` (main session, Nghiệp OK S243) | 2026-11-18 |
 | 2026-10-19 | Secrets Manager acc2 | `aa-cis/dev/acp-webhook-secret` | No reader on main of any repo (register row, M2 DRY RUN); Terraform-managed ones forgotten from state first (Infra #207) | `delete-secret --recovery-window-in-days 30` (main session, Nghiệp OK S243) | 2026-11-18 |
 | 2026-10-19 | Secrets Manager acc2 | `aa-cis/dev/acp-partner-api` | No reader on main of any repo (register row, M2 DRY RUN); Terraform-managed ones forgotten from state first (Infra #207) | `delete-secret --recovery-window-in-days 30` (main session, Nghiệp OK S243) | 2026-11-18 |
@@ -224,7 +226,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `aa-cis/dev/admin-secret` | cis | ECS api + worker ADMIN_SECRET (modules/ecs/main.tf:402, :603); ops-probe Lambda aa-cis-dev-dfs-balance-check, read by ARN from the event secret_id (AA-CIS-Infra accounts/aa365/dfs_balance.tf:236, :270); copies: GitHub AA-CIS-App env dev ADMIN_SECRET, Vercel aa-cis-frontend ADMIN_SECRET Production only | cli (var.secret_admin_arn, terraform.tfvars) | manual (2026-10-19, AA-816 I6) | 2026-10-19 | **keep** | Main admin secret (machine callers; legacy sessions until S2). Rotated 19/10/2026 (S244, I6): new → 200, old → 403; GitHub env dev + Vercel Production copies updated; api + worker restarted. Preview holds `aa-cis/dev/admin-secret-preview` (C9). Header trust remains for it until S2. |
 | `aa-cis/dev/openai-key` | cis | ECS api + worker OPENAI_API_KEY (modules/ecs/main.tf:400, :602); AA-CIS-App shared/llm_client/client.py:134 | cli (var.secret_openai_arn, terraform.tfvars) | none | 2026-08-21 | **keep** | Vendor OpenAI. |
 | `aa-cis/dev/api-keys` | cis | — | cli | none | 2026-07-07 | **deleted** | APIFY_API_TOKEN placeholder; api/main.py no longer reads it (no reader on main of any repo). LastAccessedDate 2026-09-07. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
-| `aa-cis/dev/e2e-test-admin` | cis | agent Booking UI checks (Booking BFF → CIS /auth/admin-login) and legacy sign-in on CIS PR previews (skill/aa-ui-verify/SKILL.md), user e2e-claude-code | cli | none | 2026-10-08 | **open-item** | Full CIS admin + Booking admin, legacy password login. Not in GitHub any more (N1 done S244). No password form on Production since S1; on a Preview it reaches only viewer rights (C9). Disable at S2. |
+| `aa-cis/dev/e2e-test-admin` | cis | legacy sign-in on CIS PR previews (skill/aa-ui-verify/SKILL.md), user e2e-claude-code; no Booking consumer since AA-911 (bridge retired) | cli | none | 2026-10-08 | **open-item** | Full CIS admin, legacy password login. Not in GitHub any more (N1 done S244). No password form on Production since S1; on a Preview it reaches only viewer rights (C9). Disable at S2; then an S2 cleanup candidate (orphan-delete, DRY RUN). |
 | `aa-cis/dev/jwt-secret` | cis | ECS api + worker JWT_SECRET (modules/ecs/main.tf:403, :604); AA-CIS-App api/routers/auth.py:34 | cli (var.secret_jwt_arn, terraform.tfvars) | none | 2026-09-01 | **keep** | HS256, one key for staff + tenant JWT (S241 P1-3). |
 | `aa-cis/dev/rds-app-user` | cis | AA-CIS-App api/core/aa544_tenant_pool.py:128 (tenant pool, aa_app_user); AA-CIS-Infra db/isolation_probe.py:116, db/owners.yaml:64 | cli | none | 2026-09-10 | **keep** | DSN of the non-BYPASSRLS tenant role (AA-544). |
 | `tripplanner/dev/database-url` | tripplanner | TP Lambdas browse + assembly by ARN TRIPPLANNER_DATABASE_URL_ARN (AA-CIS-Infra accounts/aa365/tripplanner.tf env; AA-TripPlanner-Web backend/shared/db.py:33); AA-CIS-Infra db/isolation_probe.py:127, db/owners.yaml:161 | terraform aws_secretsmanager_secret.tripplanner_db (value out-of-band, ignore_changes) | none | 2026-10-14 | **keep** | Read by the plan role on refresh (tf_plan_secret_arns). |
@@ -237,13 +239,13 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `aa-cis/dev/e2e-tenant/trail-pulse` | cis | AA-CIS-App services/acp_shared/e2e_tenant_key_sync.py:28 (writes after key issue), task role grant AA-CIS-Infra modules/ecs/main.tf:250; agent UI verify / paid E2E runs (tenant portal API key) | cli (value kept in sync by app-runtime) | app-runtime (key re-issue) | 2026-10-12 | **keep** | Test tenant Trail Pulse portal API key. |
 | `aa-cis/dev/e2e-tenant/wildkind-travel` | cis | AA-CIS-App services/acp_shared/e2e_tenant_key_sync.py:28 (writes after key issue), task role grant AA-CIS-Infra modules/ecs/main.tf:250; agent UI verify / paid E2E runs (tenant portal API key) | cli (value kept in sync by app-runtime) | app-runtime (key re-issue) | 2026-10-12 | **keep** | Test tenant WildKind Travel portal API key. |
 | `booking/dev/database-url` | booking | ECS aa-booking-dev-api DATABASE_URL (AA-CIS-Infra accounts/aa365/booking.tf:304); AA-CIS-Infra db/isolation_probe.py:122, db/owners.yaml:131 | terraform aws_secretsmanager_secret.booking_db (container only, value out-of-band) | none | 2026-10-14 | **keep** |  |
-| `aa-cis/dev/booking-jwt-signing-key` | cis | AA-CIS-App api/core/booking_jwt.py:49 (RS256 private key, signs Booking staff tokens; Booking verifies via the public JWKS) | cli | manual (kid + previous[] supported) | 2026-10-14 | **keep** | AA-680 Phase 2 retires this bridge (Booking accepts Cognito tokens); keep until then. |
+| `aa-cis/dev/booking-jwt-signing-key` | cis | — (AA-CIS-App api/core/booking_jwt.py removed, AA-911) | cli | manual (kid + previous[] supported) | 2026-10-14 | **deleted** | AA-911 (S246): CIS to Booking bridge retired (`/auth/booking-token` + JWKS removed; Booking accepts WORKFORCE only). Scheduled 21/10/2026, 7-day recovery window, recovery until 28/10/2026. |
 | `aa-cis/dev/geoapify` | cis | AA-CIS-App shared/secrets.py:98 (geocoder, worker) | cli | none | 2026-10-14 | **keep** | Vendor Geoapify. |
 | `acp/cms/20d07d32-ed98-405f-81d5-0c2399c9fcdf` | cis | AA-CIS-App api/routers/v1_integrations.py:261 (tenant WordPress credentials, acp/cms/{tenant_id}); task role grant modules/ecs/main.tf:220 | app-runtime | tenant (reconnect) | 2026-10-16 | **keep** | Test tenant Terra Family. Per-tenant secrets appear here as tenants connect a CMS. |
 | `acp/social/20d07d32-ed98-405f-81d5-0c2399c9fcdf` | cis | AA-CIS-App api/routers/v1_integrations.py:421 (tenant Facebook Page token, acp/social/{tenant_id}); task role grant modules/ecs/main.tf:238 | app-runtime | tenant (reconnect) | 2026-10-15 | **keep** | Test tenant Terra Family. |
 | `aa-cis/dev/e2e-wordpress-test` | cis | agent E2E channel tests (WordPress test site) | cli | none | 2026-10-15 | **keep** | Test-only credentials (S238). Kept on purpose at cleanup. |
 | `aa-cis/dev/e2e-facebook-test` | cis | agent E2E channel tests (Facebook test Page) | cli | none | 2026-10-15 | **keep** | Test-only credentials (S238). Kept on purpose at cleanup. |
-| `aa-cis/dev/e2e-test-admin-2` | cis | agent Booking maker-checker verify (user e2e-claude-code-2) | cli | none | 2026-10-16 | **open-item** | Full CIS admin + Booking checker. Decision D4 / cutover N-F (proposed: disable on the Staff page; needs an owner Cognito session, Nghiệp). Still active 19/10. |
+| `aa-cis/dev/e2e-test-admin-2` | cis | none since AA-911 (was: agent Booking maker-checker verify through the CIS bridge, user e2e-claude-code-2) | cli | none | 2026-10-16 | **open-item** | Full CIS admin + Booking checker. Decision D4 / cutover N-F (proposed: disable on the Staff page; needs an owner Cognito session, Nghiệp). Still active 19/10. |
 | `aa-identity/dev/breakglass` | identity | humans only (break-glass sign-in); written by AA-CIS-Infra tools/identity/workforce_bootstrap.py breakglass-init | terraform aws_secretsmanager_secret.identity_breakglass (identity.tf:932) + resource policy identity_alerts.tf:63 (value out-of-band) | manual (2026-10-19, breakglass-init) | 2026-10-19 | **keep** | Password + TOTP seed. Resource-policy Deny for every other principal and access alarms (AA-854). Rotated 19/10/2026 (S244) after the managed-login break-glass test; breakglass-verify OK. Old TOTP seed void: Nghiệp re-adds the new one to an authenticator if wanted. |
 | `aa-cis/dev/sentry-dsn-api` | cis | AA-CIS-App shared/sentry_init.py:20 | cli (tag ManagedBy=manual-AA-870) | none | 2026-10-17 | **keep** | Sentry DSN (low sensitivity: ingest-only). |
 | `aa-cis/dev/rds-cis-app` | cis | ECS aa-cis-dev-api + aa-cis-dev-worker DATABASE_URL (X1 S18, Infra #203); AA-CIS-Infra db/run_migration.py:191 (set-password), db/owners.yaml:48, db/isolation_probe.py:116 | terraform aws_secretsmanager_secret.rds_cis_app (db_migrator.tf:71) | none | 2026-10-19 | **keep** | LOGIN role cis_app DSN; value generated by script at X1 S17 (S243). CIS runtime login since 19/10/2026 (api:703 / worker:260). |
@@ -251,7 +253,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `aa-cis/dev/e2e-test-viewer` | cis | value mirrored in GitHub AA-CIS-App E2E_ADMIN_USERNAME / E2E_ADMIN_PASSWORD: the ui-smoke account on every PR preview, viewer mode (ui-smoke.yml:58-59; N1, S244); agent read-only checks on CIS PR previews (skill/aa-ui-verify/SKILL.md) | cli | none | 2026-10-19 | **keep** | AA-878 C1/M3: read-only viewer staff account e2e-claude-code-viewer (CIS 249 viewer role, legacy login, Preview only), no Booking access. Created S243 (password generated by script, never shown). Not a real user. CI smoke account since S244 (59 passed / 7 skipped). |
 | `aa-cis/dev/admin-secret-preview` | cis | CIS API by the code-constant name PREVIEW_SECRET_NAME (AA-CIS-App api/core/staff_credential.py:48; only when AWS_EXECUTION_ENV is set, 5 min cache); copy: Vercel aa-cis-frontend ADMIN_SECRET, Preview target only | cli | none | 2026-10-19 | **keep** | AA-816 C9 (CIS #858) Preview BFF credential, created 19/10/2026 (S244, about 0.40 USD a month). A match gives a principal capped at viewer, never the machine. Separate from the main secret. Closes open item 1. |
 
-### GitHub Actions secrets (29)
+### GitHub Actions secrets (30)
 
 | Name | Store | Owner app | Consumers (main) | Rotation | Status | Notes |
 |---|---|---|---|---|---|---|
@@ -273,6 +275,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `VERCEL_PORTAL_BYPASS_SECRET` | `github:AA-CIS-App` | cis | ui-smoke-portal.yml:58; vercel-deploy-portal.yml:171 | none | **keep** | AA-885: bypass secret of the Vercel project aa-cis-portal, set 19/10. The S245 Vercel listing shows no aa-cis-portal project in the team (access review F-6). |
 | `E2E_TENANT_API_KEY` | `github:AA-CIS-App` | cis | ui-smoke-portal.yml:61 (portal smoke) | manual (copy of an aa-cis/dev/e2e-tenant/* key) | **keep** | AA-885: test tenant portal API key for the portal smoke, set 19/10. |
 | `E2E_MAIL_ROLE_ARN` | `github:AA-CIS-App/e2e` | cis | e2e-cognito.yml:48 (environment e2e) | none | **keep** | AA-816 E1: role ARN (not a secret value) of the SES e2e mailbox reader, set 19/10 in env `e2e` (branch policy). |
+| `BOOKING_PREVIEW_BYPASS` | `github:AA-CIS-App/e2e` | cis | e2e-cognito.yml (headers to booking-preview only, input `booking_base_url`) | none | **planned** | AA-911: aa-booking-admin Protection Bypass for Automation, only if check V1 shows booking-preview behind Vercel Authentication (Nghiệp sets the value). Flip to keep, or drop the row if V1 shows it public. |
 | `VERCEL_AUTOMATION_BYPASS_SECRET` | `github:AA-Booking` | booking | AA-Booking .github/workflows/vercel-deploy.yml:161 (optional) | none | **removed** | Absent in the S245 listing (repo + envs). The workflow only logs the status code without it; re-add and flip to keep if wanted. AWS deploy settings are vars.*, not secrets. |
 | `VERCEL_TOKEN` | `github:AA-Booking` | booking | AA-Booking vercel-deploy.yml:83, :132 | TBD-Nghiep | **keep** | Vendor Vercel token. |
 | `VERCEL_AUTOMATION_BYPASS_SECRET` | `github:AA-TripPlanner-Web` | tripplanner | AA-TripPlanner-Web .github/workflows/vercel-deploy.yml:161 (optional) | none | **removed** | Absent in the S245 listing (repo + envs). Optional in the workflow; re-add and flip to keep if wanted. |
@@ -294,10 +297,10 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `ADMIN2_PASSWORD` | `vercel:aa-cis-frontend` | cis | — | none | **open-item** | Same as ADMIN_PASSWORD (with ADMIN2_USERNAME): no reader on main, candidate orphan. Still present 20/10, type Encrypted (`readable-secret`). |
 | `INTERNAL_API_KEY` | `vercel:aa-cis-frontend` | cis | AA-CIS-App frontend/app/api/tenant/pipeline/brand-identity/route.ts:12, frontend/app/api/tour-full/[id]/route.ts:11 (sent as X-API-Key) | none | **open-item** | No backend reader of INTERNAL_API_KEY on main (the s4_trigger Lambda is gone); verify what the X-API-Key value is, then drop or document. |
 | `SENTRY_AUTH_TOKEN` | `vercel:aa-cis-frontend` | cis | AA-CIS-App frontend/next.config.ts (withSentryConfig, build-time source-map upload) | TBD-Nghiep | **keep** | Vendor Sentry. Type Encrypted: Vercel flags `readable-secret` (S245); re-create as Sensitive (F-5). |
-| `COGNITO_CIS_ADMIN_CLIENT_SECRET` | `vercel:aa-cis-frontend` | identity | AA-CIS-App frontend (staff sign-in BFF, process.env.COGNITO_CIS_ADMIN_CLIENT_SECRET) | none | **keep** | AA-816 / ADR 0006a. The secret also sits in Terraform state (client resource). |
+| `COGNITO_CIS_ADMIN_CLIENT_SECRET` | `vercel:aa-cis-frontend` | identity | AA-CIS-App frontend (staff sign-in BFF, process.env.COGNITO_CIS_ADMIN_CLIENT_SECRET); Production + Preview (Preview: aa-cis-preview, AA-911) | none | **keep** | AA-816 / ADR 0006a. The secret also sits in Terraform state (client resource). Preview target added by hand (AA-911). |
 | `COGNITO_BREAKGLASS_CLIENT_SECRET` | `vercel:aa-cis-frontend` | identity | AA-CIS-App frontend (break-glass sign-in, process.env.COGNITO_BREAKGLASS_CLIENT_SECRET) | none | **keep** | AA-816. |
 | `TRIPPLANNER_API_KEY` | `vercel:aa-tripplanner` | tripplanner | AA-TripPlanner-Web frontend/app/api/browse/route.ts:9, trip/route.ts:15, lib/catalog.ts:46 | with tripplanner/dev/api-key | **keep** | Must be set on Production, Preview and Development (S237 lesson). S245: Production Sensitive; Development + Preview Encrypted (`readable-secret`, F-5). |
-| `COGNITO_BOOKING_STAFF_CLIENT_SECRET` | `vercel:aa-booking-admin` | booking | AA-Booking frontend staff sign-in (AA-680 S3) | none | **keep** | AA-680. Sensitive, Production only; created 18/10/2026. |
+| `COGNITO_BOOKING_STAFF_CLIENT_SECRET` | `vercel:aa-booking-admin` | booking | AA-Booking frontend staff sign-in (AA-680 S3); Production + Preview (Preview: booking-preview, AA-911) | none | **keep** | AA-680. Sensitive; created 18/10/2026. Preview target added by hand (AA-911); a preview built before that has no sign-in. |
 
 ### Lambda environment keys (acc2) (4)
 
