@@ -61,7 +61,7 @@ Rows 1–10 come from S245 (Quality System v1 D9/D10, Writing Memory P0, the ses
 | 17 | AA-790 | Tenant-voice gate + post-repair integrity (owns orphans) | CIS content | L | S249 | LLM judge vs deterministic rubric |
 | 18 | AA-876 | Login rate limit (legacy and tenant), CORS, headers, Booking docs; WAF after quote | Security | M | S249 | WAF cost (D-19) |
 | 19 | AA-844 | CloudFront in front of photos + daily `photo_sync` (Jira PR-11 promise, 01/10); resolve the host in the app layer to avoid a catalog view change | Photos | M | S249 | Cost line before apply |
-| 20 | AA-877 | PII column tags through bk/tp migrations; RoPA input for AA-886 | Data | S | S249 | — |
+| 20 | AA-877 | PII column tags through bk/tp migrations; RoPA input for AA-886 | Data | S | S246 pulled ahead: Infra #245 (dump/render tags), Booking #53 (bk-018), TP #119 (tp-016) open; then Infra byte copies, DB Migrate apply, post-apply reference, root RoPA PR (cells done, generated block after the reference) | — |
 | 21 | AA-741 | T-series G7 (12 tours × 4 tenants) + G8 report; exclude test rows | CIS audit | XL | S250 (AA-787, AA-800 Done S245) | Paid run ~$10–20 |
 | 22 | AA-789 | Gate recall tunes, lexical part only | CIS content | M | S250 | — |
 | 23 | AA-874 | Redis AUTH/TLS/at-rest + flag alarm; confirm Booking does not use Redis | Security | M | S250 | Cost (D-19) |
