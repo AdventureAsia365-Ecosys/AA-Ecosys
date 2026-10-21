@@ -1,0 +1,158 @@
+{
+  "rule_version": "r1.2",
+  "degrade": null,
+  "pairs": 105,
+  "merge": 55,
+  "keep": 50,
+  "matrix": {
+    "merge->auto_merge": 42,
+    "merge->llm": 12,
+    "merge->keep": 1,
+    "keep->auto_merge": 0,
+    "keep->llm": 1,
+    "keep->keep": 49
+  },
+  "rules_only": {
+    "precision": 1.0,
+    "recall": 0.764,
+    "false_merges": 0
+  },
+  "with_llm_if_llm_is_right": {
+    "recall": 0.982,
+    "false_merges": 0,
+    "llm_calls": 13
+  },
+  "with_llm_worst_case": {
+    "recall": 0.764,
+    "false_merges": 1,
+    "precision": 0.982
+  },
+  "keep_correct_by_rules": 0.98,
+  "by_src": {
+    "built": {
+      "pairs": 79,
+      "merge_auto": 34,
+      "merge": 44,
+      "false_merge": 0
+    },
+    "s246": {
+      "pairs": 22,
+      "merge_auto": 8,
+      "merge": 8,
+      "false_merge": 0
+    },
+    "task": {
+      "pairs": 4,
+      "merge_auto": 0,
+      "merge": 3,
+      "false_merge": 0
+    }
+  }
+}
+
+label decision   score     km  pair  [why]
+keep  keep        0.14   1.83  Don Det | Don Khon (Laos)  [other/both_bare]  built
+keep  keep        0.00   0.89  Wat Xieng Thong | Wat Mai (Laos)  [farther_than_0.5km]  s246
+keep  keep        0.00   0.25  That Luang | Wat That Luang Tai (Laos)  [different_kinds]  s246
+keep  keep        0.00 634.64  Ho Chi Minh City | Ho Chi Minh Trail (Vietnam)  [different_kinds]  s246
+keep  keep        0.00   0.00  Mekong Delta | Mekong Delta (Vietnam)  [other_country]  s246
+keep  keep        0.00   2.91  Nong Khiaw | Nong Khiaw Viewpoint (Laos)  [town_vs_place]  s246
+keep  keep        0.00   0.11  Hoi An Old Town | Hoi An Night Market (Vietnam)  [different_kinds]  s246
+keep  keep        0.00   0.91  Long Bien Bridge | Long Bien Market (Vietnam)  [different_kinds]  s246
+keep  keep        0.00   0.71  Hoan Kiem Lake | Hoan Kiem Night Market (Vietnam)  [different_kinds]  s246
+keep  keep        0.00   1.41  Mount Phousi | Phousi Market (Laos)  [different_kinds]  s246
+keep  keep        0.00   0.26  Dong Ba Market | Dong Ba Bridge (Vietnam)  [different_kinds]  s246
+keep  keep        0.00   0.12  Ben Thanh Market | Ben Thanh Night Market (Vietnam)  [different_kinds]  s246
+keep  keep        0.00   0.40  Luang Prabang | Luang Prabang Night Market (Laos)  [town_vs_place]  s246
+keep  keep        0.00   0.75  Luang Prabang | Luang Prabang Old Town (Laos)  [town_vs_place]  task
+keep  keep        0.00   0.81  Kuang Si Falls | Kuang Si Butterfly Park (Laos)  [different_kinds]  built
+keep  keep        0.00   0.08  Kuang Si Falls | Kuang Si Bear Rescue Centre (Laos)  [different_kinds]  built
+keep  keep        0.00   0.57  Pak Ou Caves | Pak Ou Village (Laos)  [different_kinds]  built
+keep  keep        0.00   6.21  Phonsavan | Plain of Jars (Laos)  [other/both_bare]  built
+keep  keep        0.00   0.24  Plain of Jars | Plain of Jars Site 1 (Laos)  [number_differs]  built
+keep  keep        0.00   4.62  Vang Vieng | Vang Vieng Blue Lagoon (Laos)  [town_vs_place]  built
+keep  keep        0.00   1.28  Hoi An | Hoi An Old Town (Vietnam)  [town_vs_place]  built
+keep  keep        0.00   8.24  Halong Bay | Ha Long (Vietnam)  [town_vs_place]  built
+keep  keep        0.00   0.16  Ho Chi Minh Mausoleum | Presidential Palace (Vietnam)  [different_kinds]  built
+keep  keep        0.00   0.15  Ho Chi Minh Mausoleum | Ba Dinh Square (Vietnam)  [different_kinds]  built
+keep  keep        0.00   1.47  Sapa | Cat Cat Village (Vietnam)  [town_vs_place]  built
+keep  keep        0.00   6.18  Trang An | Tam Coc (Vietnam)  [farther_than_4km]  built
+keep  keep        0.00  14.85  Phong Nha Cave | Phong Nha-Ke Bang National Park (Vietnam)  [different_kinds]  built
+keep  keep        0.00   4.23  Phong Nha | Phong Nha Cave (Vietnam)  [town_vs_place]  built
+keep  keep        0.00   0.08  Da Lat Night Market | Da Lat Market (Vietnam)  [different_kinds]  built
+keep  keep        0.00   0.92  Golden Bridge | Ba Na Hills (Vietnam)  [different_kinds]  built
+keep  keep        0.00   4.77  An Bang Beach | Cua Dai Beach (Vietnam)  [farther_than_2km]  built
+keep  keep        0.00   1.53  Ma Pi Leng Pass | Nho Que River (Vietnam)  [different_kinds]  built
+keep  keep        0.00   2.27  Doi Suthep | Wat Phra That Doi Suthep (Thailand)  [different_kinds]  built
+keep  keep        0.00   0.56  Chiang Mai Night Bazaar | Warorot Market (Thailand)  [different_kinds]  built
+keep  keep        0.00   0.23  Grand Palace | Wat Phra Kaew (Thailand)  [qualifier_differs]  built
+keep  keep        0.00   3.29  Angkor Wat | Angkor Thom (Cambodia)  [farther_than_0.5km]  built
+keep  keep        0.00   0.94  Siem Reap | Siem Reap Night Market (Cambodia)  [town_vs_place]  built
+keep  keep        0.00  12.31  Inle Lake | Nyaung Shwe (Myanmar)  [town_vs_place]  built
+keep  keep        0.00   3.75  Mandalay Hill | Mandalay (Myanmar)  [town_vs_place]  built
+keep  keep        0.00   0.24  Bagan | Old Bagan (Myanmar)  [qualifier_differs]  built
+keep  keep        0.00   3.95  Kathmandu Durbar Square | Patan Durbar Square (Nepal)  [farther_than_0.5km]  built
+keep  keep        0.00   0.21  Bhaktapur | Bhaktapur Durbar Square (Nepal)  [town_vs_place]  built
+keep  keep        0.00   0.45  Punakha | Punakha Dzong (Bhutan)  [town_vs_place]  built
+keep  keep        0.00   0.63  Amber Fort | Jaigarh Fort (India)  [farther_than_0.5km]  built
+keep  keep        0.00  10.31  Amber Fort | Jaipur (India)  [town_vs_place]  built
+keep  keep        0.00   2.13  Taj Mahal | Agra Fort (India)  [different_kinds]  built
+keep  keep       -0.15   0.15  Wat Sisaket | Haw Phra Kaew (Laos)  [other/bare_resolved_poi]  s246
+keep  keep       -0.15   0.31  Royal Palace | National Museum of Cambodia (Cambodia)  [other/heritage_museum]  built
+keep  keep       -0.15   0.36  Hawa Mahal | City Palace, Jaipur (India)  [other/same_kind]  built
+keep  llm         0.47   0.25  Long Bien Bridge | Long Bien (Vietnam)  [exact/bare_vs_built]  s246
+merge auto_merge  1.00   0.07  Kuang Si Falls | Kuangsi Waterfalls (Laos)  [same_provider_object]  s246
+merge auto_merge  1.00   0.02  That Luang | Pha That Luang (Laos)  [same_provider_object]  built
+merge auto_merge  1.00   0.05  Temple of Literature | Van Mieu (Vietnam)  [same_provider_object]  built
+merge auto_merge  1.00   0.04  Wat Arun | Temple of Dawn (Thailand)  [same_provider_object]  built
+merge auto_merge  1.00   0.04  Paro Taktsang | Tiger's Nest Monastery (Bhutan)  [same_provider_object]  built
+merge auto_merge  1.00   0.04  Hoan Kiem Lake | Ho Hoan Kiem (Vietnam)  [exact/same_kind]  built
+merge auto_merge  1.00   0.05  Sapa | Sa Pa (Vietnam)  [exact/both_bare]  built
+merge auto_merge  1.00   0.10  Dalat | Da Lat (Vietnam)  [exact/both_bare]  built
+merge auto_merge  0.99   0.07  Mount Phousi | Phou Si Hill (Laos)  [exact/same_kind]  s246
+merge auto_merge  0.99   0.08  Tham Phu Kham | Phu Kham Cave (Laos)  [exact/same_kind]  built
+merge auto_merge  0.99   0.08  Hang Mua | Mua Cave (Vietnam)  [exact/same_kind]  built
+merge auto_merge  0.99   0.08  Hanoi Old Quarter | Old Quarter, Hanoi (Vietnam)  [exact/same_kind]  s246
+merge auto_merge  0.99   0.14  Pak Ou Caves | Pak Ou Cave (Laos)  [exact/same_kind]  s246
+merge auto_merge  0.98   0.15  Tad Fane | Tad Fane Waterfall (Laos)  [exact/same_kind]  built
+merge auto_merge  0.98   0.15  Son Doong Cave | Hang Son Doong (Vietnam)  [exact/same_kind]  built
+merge auto_merge  0.98   0.04  Kathmandu Durbar Square | Durbar Square, Kathmandu (Nepal)  [exact/same_kind]  built
+merge auto_merge  0.98   0.20  Kuang Si Falls | Tat Kuang Si (Laos)  [exact/same_kind]  s246
+merge auto_merge  0.98   0.05  Wat Xieng Thong | Xieng Thong Temple (Laos)  [exact/same_kind]  built
+merge auto_merge  0.98   0.05  Shwedagon Pagoda | Shwedagon Paya (Myanmar)  [exact/same_kind]  built
+merge auto_merge  0.98   0.18  Hoi An Old Town | Hoi An Ancient Town (Vietnam)  [exact/same_kind]  built
+merge auto_merge  0.97   0.07  Ho Chi Minh Mausoleum | Ho Chi Minh's Mausoleum (Vietnam)  [exact/same_kind]  built
+merge auto_merge  0.97   0.08  Pha That Luang | That Luang Stupa (Laos)  [exact/same_kind]  built
+merge auto_merge  0.97   0.08  Angkor Wat | Angkor Wat Temple (Cambodia)  [exact/same_kind]  built
+merge auto_merge  0.96   0.38  Kuang Si Falls | Kuang Si Waterfall (Laos)  [exact/same_kind]  s246
+merge auto_merge  0.96   0.39  Trang An | Trang An Scenic Landscape Complex (Vietnam)  [exact/both_bare]  built
+merge auto_merge  0.96   0.11  Chatuchak Market | Chatuchak Weekend Market (Thailand)  [exact/same_kind]  built
+merge auto_merge  0.94   0.15  Bai Dinh Pagoda | Bai Dinh Temple (Vietnam)  [exact/same_kind]  built
+merge auto_merge  0.94   0.15  Chiang Mai Night Bazaar | Chiang Mai Night Market (Thailand)  [exact/same_kind]  built
+merge auto_merge  0.93   0.17  Vat Phou | Wat Phu (Laos)  [exact/same_kind]  built
+merge auto_merge  0.91   0.22  Cu Chi Tunnels | Cu Chi Tunnel (Vietnam)  [exact/same_kind]  built
+merge auto_merge  0.90   0.06  Hoan Kiem Lake | Hoan Kiem (Vietnam)  [exact/bare_natural]  s246
+merge auto_merge  0.90   0.07  Mount Phousi | Phousi (Laos)  [exact/bare_natural]  s246
+merge auto_merge  0.89   0.15  Hai Van Pass | Hai Van (Vietnam)  [exact/bare_natural]  built
+merge auto_merge  0.89   0.15  Ma Pi Leng Pass | Mã Pí Lèng (Vietnam)  [exact/bare_natural]  built
+merge auto_merge  0.89   0.15  An Bang Beach | An Bang (Vietnam)  [exact/bare_natural]  built
+merge auto_merge  0.88   9.33  Ha Long Bay | Halong Bay (Vietnam)  [exact/same_kind]  built
+merge auto_merge  0.88  31.13  Nam Ou | Nam Ou River (Laos)  [exact/same_kind]  built
+merge auto_merge  0.84   0.04  Swayambhunath | Swayambhunath Temple (Monkey Temple) (Nepal)  [exact/bare_resolved_poi]  built
+merge auto_merge  0.83   0.06  Ta Prohm | Ta Prohm Temple (Cambodia)  [exact/bare_resolved_poi]  built
+merge auto_merge  0.83   0.03  Jokhang Temple | Jokhang (China)  [exact/bare_resolved_poi]  built
+merge auto_merge  0.83   0.06  Amber Fort | Amer Fort (India)  [fuzzy/same_kind]  built
+merge auto_merge  0.82   0.05  Thien Mu Pagoda | Thien Mu (Vietnam)  [exact/bare_resolved_poi]  built
+merge keep        0.00   0.16  Temple of Literature | Van Mieu - Quoc Tu Giam (Vietnam)  [other/bare_vs_built]  built
+merge llm         0.88   5.02  Mekong River | Mekong (Laos)  [exact/bare_natural]  built
+merge llm         0.86   3.49  Inle Lake | Inle (Myanmar)  [exact/bare_natural]  built
+merge llm         0.79   0.04  Royal Palace | Royal Palace Museum (Laos)  [exact/heritage_museum]  task
+merge llm         0.58   0.07  Boudhanath Stupa | Boudha Stupa (Nepal)  [fuzzy_low/same_kind]  built
+merge llm         0.55   0.02  Japanese Covered Bridge | Japanese Bridge (Vietnam)  [contain_extra/same_kind]  built
+merge llm         0.54   0.15  Ban Gioc Waterfall | Ban Gioc - Detian Falls (Vietnam)  [contain_extra/same_kind]  built
+merge llm         0.50   0.02  Bayon | Bayon Temple (Cambodia)  [exact/bare_vs_built]  built
+merge llm         0.50   0.03  Ben Thanh Market | Ben Thanh (Vietnam)  [exact/bare_vs_built]  task
+merge llm         0.50   0.03  Potala Palace | Potala (China)  [exact/bare_vs_built]  built
+merge llm         0.48   0.15  My Son Sanctuary | Mỹ Sơn (Vietnam)  [exact/bare_vs_built]  built
+merge llm         0.47   0.33  Ben Thanh Market | Ben Thanh (Vietnam)  [exact/bare_vs_built]  task
+merge llm         0.44  19.70  Lake Khuvsgul | Khövsgöl Lake (Mongolia)  [fuzzy_low/same_kind]  built
