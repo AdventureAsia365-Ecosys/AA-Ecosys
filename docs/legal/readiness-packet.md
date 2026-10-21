@@ -23,8 +23,10 @@ A test on 20/10/2026 showed that when a traveller ticks the consent box, the sys
 and where it came from, and that the copy in the booking system matches. Behind the pages there is now a register of
 what personal data is processed and which service providers receive it, a draft data processing agreement for
 partners, a deletion procedure and a retention log. Twelve topics below each give the current fact, the options and a
-proposed answer. All data in the system today is test data on the development environment; no real traveller data is
-stored there. Whether to involve a lawyer, and on which topics, is Ms. Thư's call.
+proposed answer. The system runs only on a development environment, and it holds no real traveller or customer data:
+every traveller and customer record there was a test or internal entry when checked on 17/10/2026, and the 20/10/2026
+consent test used a test address. Staff accounts, alert e-mail recipients and the tour catalog are real data. Whether
+to involve a lawyer, and on which topics, is Ms. Thư's call.
 
 **VI.** Trip Planner và Partner Portal mỗi bên đã có bản nháp chính sách quyền riêng tư và bản nháp điều khoản. Bốn trang
 đang chạy, có nhãn "Draft — pending legal review" và không cho công cụ tìm kiếm lập chỉ mục. Mỗi câu nêu sự kiện trên
@@ -33,8 +35,10 @@ các trang đều mô tả đúng việc hệ thống đang làm; các điểm c
 nguồn, và bản ghi trong hệ thống đặt tour khớp với bản gốc. Phía sau các trang hiện có một sổ đăng ký dữ liệu cá nhân được
 xử lý và các nhà cung cấp dịch vụ nhận dữ liệu, một bản nháp thỏa thuận xử lý dữ liệu cho đối tác, một quy trình xoá dữ
 liệu và một sổ ghi các lần xoá theo thời hạn lưu trữ. Mười hai chủ đề dưới đây, mỗi chủ đề nêu hiện trạng, các phương án
-và một đề xuất. Toàn bộ dữ liệu trong hệ thống hiện nay là dữ liệu thử trên môi trường phát triển; chưa có dữ liệu khách
-thật. Có cần mời luật sư hay không, và cho chủ đề nào, là chị Thư quyết định.
+và một đề xuất. Hệ thống mới chạy trên môi trường phát triển và chưa có dữ liệu thật của khách du lịch hay khách hàng:
+khi kiểm ngày 17/10/2026, mọi bản ghi khách đều là bản ghi thử hoặc nội bộ, và lần thử ngày 20/10/2026 dùng một địa chỉ
+thử. Tài khoản nhân viên, người nhận e-mail cảnh báo và danh mục tour là dữ liệu thật. Có cần mời luật sư hay không, và
+cho chủ đề nào, là chị Thư quyết định.
 
 | # | Topic / Chủ đề | Proposed answer / Đề xuất |
 |---|---|---|
@@ -49,7 +53,7 @@ thật. Có cần mời luật sư hay không, và cho chủ đề nào, là ch�
 | 9 | Support address / Địa chỉ hỗ trợ | `support@` to a shared mailbox / `support@` về một hộp thư chung |
 | 10 | Status page / Trang trạng thái | None until the first paying partner / Chưa làm tới khi có đối tác trả tiền đầu tiên |
 | 11 | Vercel plan / Gói Vercel | Pro before the first partner is charged (D-18) / Lên Pro trước lần thu tiền đối tác đầu tiên (D-18) |
-| 12 | AI acceptable-use clause / Điều khoản sử dụng AI | Separate draft, policy effective 12/11/2026 / Bản nháp riêng, chính sách có hiệu lực 12/11/2026 |
+| 12 | AI acceptable-use clause / Điều khoản sử dụng AI | Separate draft; answer needed by 11/11/2026, policy effective 12/11/2026 / Bản nháp riêng; cần chị trả lời trước 11/11/2026, chính sách có hiệu lực 12/11/2026 |
 
 ## 1. Data controller entity
 
@@ -75,7 +79,8 @@ uses one guest cookie (a random token, stored only as a one-way hash) and browse
 display theme; the portal uses sign-in cookies only. Neither uses advertising or analytics cookies, and the code
 contains no analytics tool. *Options:* (A) Ms. Thư reads Annex A and answers the business points (entity, address, minimum age,
 answer time for requests, booking conditions, fees), then decides whether counsel reviews the result; (B) send Annex A
-to counsel as it is. *Proposed answer:* A. *Detail:* Annex A; [register](register.md), "Page copy follow-ups".
+to counsel as it is. Table A.0 lists every open point on the four pages in both languages. *Proposed answer:* A.
+*Detail:* Annex A; [register](register.md), "Page copy follow-ups".
 
 **VI.** *Hiện trạng:* bốn trang nháp đang chạy:
 `https://aa-tripplanner.vercel.app/privacy`, `https://aa-tripplanner.vercel.app/terms`,
@@ -85,7 +90,8 @@ một cookie khách (mã ngẫu nhiên, hệ thống chỉ lưu bản băm một
 chế độ sáng/tối; portal chỉ dùng cookie đăng nhập. Không bên nào dùng cookie quảng cáo hay thống kê, và mã nguồn không
 có công cụ thống kê nào. *Phương án:* (A) chị Thư đọc Phụ lục A và trả lời các điểm kinh doanh (pháp nhân, địa chỉ, tuổi tối thiểu,
 thời hạn trả lời yêu cầu, điều kiện đặt tour, phí), rồi quyết định có nhờ luật sư xem lại hay không; (B) gửi nguyên Phụ
-lục A cho luật sư. *Đề xuất:* A. *Chi tiết:* Phụ lục A; [sổ đăng ký](register.md), mục "Page copy follow-ups".
+lục A cho luật sư. Bảng A.0 liệt kê song ngữ mọi điểm còn mở trên bốn trang. *Đề xuất:* A. *Chi tiết:* Phụ lục A;
+[sổ đăng ký](register.md), mục "Page copy follow-ups".
 
 ## 3. Consent capture
 
@@ -152,7 +158,9 @@ có thể bị sót; sổ sẽ được lập lại tự động khi mọi cột
 
 **EN.** *Current fact:* requests can be sent to `info@adventure.asia`, as both privacy notices say. A written procedure
 exists for checking the person's identity, finding their records in both systems, and deleting them under a counted
-dry run that Nghiệp approves first. It has not been run yet, and a tested deletion job does not exist yet. No real
+dry run that Nghiệp approves first. The records are found by a one-way code (hash) computed from the e-mail address and
+then deleted by record number, so the address itself is never written into code, logs or files. Database backups keep a
+copy for up to 7 days after a deletion and then expire. It has not been run yet, and a tested deletion job does not exist yet. No real
 deletion has happened, and three test records are kept for the first test. Deleting a partner account today only
 switches it off; nothing is erased. The time within which a request is answered is "[to be confirmed]" on the pages.
 *Options:* (A) use the manual procedure now and have a tested job before real traveller data is stored; (B) build the
@@ -161,7 +169,9 @@ job first. *Proposed answer:* A, and choose the answer time (for example [●] d
 
 **VI.** *Hiện trạng:* khách có thể gửi yêu cầu tới `info@adventure.asia`, như cả hai trang chính sách đã ghi. Đã có quy
 trình viết sẵn để xác minh danh tính, tìm bản ghi của người đó trong cả hai hệ thống, và xoá sau một lần chạy thử có đếm số
-dòng mà Nghiệp duyệt trước. Quy trình này chưa chạy lần nào, và chưa có job xoá đã được thử. Chưa có lần xoá thật nào; ba
+dòng mà Nghiệp duyệt trước. Bản ghi được tìm bằng một mã băm một chiều tính từ địa chỉ e-mail rồi xoá theo mã số bản ghi,
+nên chính địa chỉ e-mail không bao giờ được ghi vào mã nguồn, nhật ký hay tệp nào. Bản sao lưu cơ sở dữ liệu còn giữ dữ
+liệu tối đa 7 ngày sau khi xoá rồi tự hết hạn. Quy trình này chưa chạy lần nào, và chưa có job xoá đã được thử. Chưa có lần xoá thật nào; ba
 bản ghi thử được giữ lại cho lần thử đầu tiên. Xoá tài khoản đối tác hiện chỉ là tắt tài khoản, chưa xoá dữ liệu. Thời hạn
 trả lời yêu cầu đang để "[to be confirmed]" trên các trang. *Phương án:* (A) dùng quy trình làm tay ngay, và có job đã thử
 trước khi lưu dữ liệu khách thật; (B) làm job trước. *Đề xuất:* A, và chọn thời hạn trả lời (ví dụ [●] ngày). *Chi tiết:*
@@ -269,14 +279,14 @@ Mọi khoản chi mới cần Nghiệp duyệt (DM-10.7). *Đề xuất:* A. *Ch
 
 **EN.** *Current fact:* Anthropic's Usage Policy takes effect on 12/11/2026 and reaches partners whose content is
 written with Claude through Amazon Bedrock. A separate draft clause for the partner terms is ready for review. The portal
-terms say "The full AI acceptable-use terms are [to be confirmed]" (§3) until that clause is approved. *Options:* as set
-out in the draft clause. *Proposed answer:* as set out in the draft clause. *Detail:*
+terms say "The full AI acceptable-use terms are [to be confirmed]" (§3) until that clause is approved. Ms. Thư's answer
+is needed by 11/11/2026, one day before the policy takes effect. *Options:* as set out in the draft clause. *Proposed answer:* as set out in the draft clause. *Detail:*
 [AI acceptable-use clause draft](tenant-terms-ai-clause-draft.md).
 
 **VI.** *Hiện trạng:* Chính sách sử dụng của Anthropic có hiệu lực từ 12/11/2026 và áp dụng cho các đối tác có nội dung
 được viết bằng Claude qua Amazon Bedrock. Đã có bản nháp điều khoản riêng để đưa vào điều khoản đối tác, sẵn sàng để xem.
 Điều khoản portal ghi "The full AI acceptable-use terms are [to be confirmed]" (mục 3) cho tới khi điều khoản đó được duyệt.
-*Phương án:* như trong bản nháp điều khoản. *Đề xuất:* như trong bản nháp điều khoản. *Chi tiết:*
+Cần chị Thư trả lời trước ngày 11/11/2026, một ngày trước khi chính sách có hiệu lực. *Phương án:* như trong bản nháp điều khoản. *Đề xuất:* như trong bản nháp điều khoản. *Chi tiết:*
 [bản nháp điều khoản sử dụng AI](tenant-terms-ai-clause-draft.md).
 
 ## Annex A: current text of the four pages
@@ -288,7 +298,36 @@ and AA-CIS-App commit `6e00458d` (2026-10-20). Each page shows the banner "Draft
 **VI.** Nội dung dưới đây được chép từ mã nguồn trang, đúng như hiển thị, tại commit `c497489` (20/10/2026) của
 AA-TripPlanner-Web và commit `6e00458d` (20/10/2026) của AA-CIS-App. Mỗi trang có nhãn "Draft — pending legal review" và
 phiên bản "Draft v0.1". Link được ghi bằng chữ hiển thị. Nếu trang thay đổi sau các commit trên, trang đang chạy là bản đúng.
-Nội dung trang giữ nguyên tiếng Anh như trên website.
+Nội dung trang giữ nguyên tiếng Anh như trên website. Bảng A.0 dưới đây liệt kê song ngữ mọi điểm "[to be confirmed]"
+trên bốn trang, để chị Thư trả lời mà không cần đọc hết bản tiếng Anh.
+
+### A.0 Points to be confirmed on the four pages / Các điểm cần xác nhận trên bốn trang
+
+**EN.** Every "[to be confirmed]" point in A.1 to A.4, with the packet topic that proposes an answer.
+**VI.** Mọi điểm "[to be confirmed]" trong A.1 đến A.4, kèm chủ đề trong gói này có đề xuất trả lời.
+
+| Page, section / Trang, mục | Point (EN) | Điểm cần xác nhận (VI) | Topic / Chủ đề |
+|---|---|---|---|
+| A.1 §1, A.3 §1 | Data controller entity and registered address | Pháp nhân chịu trách nhiệm dữ liệu và địa chỉ đăng ký | 1 |
+| A.2 §1, A.4 §1 | Operating legal entity | Pháp nhân vận hành | 1 |
+| A.1 §4, A.3 §4 | Legal basis for each use of the data | Cơ sở pháp lý cho từng mục đích sử dụng dữ liệu | 2 |
+| A.1 §6 | Full list of service providers, kept in a register | Danh sách đầy đủ nhà cung cấp dịch vụ, ghi trong sổ đăng ký | 4 |
+| A.3 §5 | Full list of AI providers | Danh sách đầy đủ nhà cung cấp AI | 4 |
+| A.1 §7, A.3 §7 | Safeguards for transfers outside the person's country | Biện pháp bảo vệ khi chuyển dữ liệu ra ngoài nước của người dùng | 7 |
+| A.1 §8 | Retention periods: the customer record after the enquiry or booking ends; trips never sent | Thời hạn lưu: hồ sơ khách sau khi yêu cầu hoặc đặt tour kết thúc; chuyến đi chưa gửi | 2, 5 |
+| A.3 §8 | Retention of publish records and the admin log; account data and content after the account ends | Thời hạn lưu hồ sơ đăng bài và nhật ký quản trị; dữ liệu tài khoản và nội dung sau khi tài khoản kết thúc | 2, 5 |
+| A.1 §9, A.3 §9 | Time to answer a request; the right to complain to a data protection authority | Thời hạn trả lời yêu cầu; quyền khiếu nại tới cơ quan bảo vệ dữ liệu | 6 |
+| A.1 §11 | Minimum age | Tuổi tối thiểu | 2 |
+| A.2 §2 | Booking conditions | Điều kiện đặt tour | 2 |
+| A.2 §7 | Limits of liability, warranties and consumer rights | Giới hạn trách nhiệm, bảo đảm và quyền của người tiêu dùng | 2 |
+| A.2 §8, A.4 §9 | Governing law and competent courts (A.4 §9 also limits of liability) | Luật áp dụng và tòa án có thẩm quyền (A.4 mục 9 gồm cả giới hạn trách nhiệm) | 2 |
+| A.3 §10 | Data processing agreement between the partner and Adventure Asia | Thỏa thuận xử lý dữ liệu giữa đối tác và Adventure Asia | 4 |
+| A.4 intro | How the terms relate to the signed partner agreement | Quan hệ giữa điều khoản này và hợp đồng đối tác đã ký | 2 |
+| A.4 §3 | Full AI acceptable-use terms | Điều khoản đầy đủ về sử dụng AI | 12 |
+| A.4 §5 | Notice periods, termination, and what happens to the content afterwards | Thời hạn báo trước, chấm dứt, và nội dung được xử lý thế nào sau đó | 2 |
+| A.4 §6 | Ownership of generated content; licence to the catalog tours | Quyền sở hữu nội dung tạo ra; giấy phép dùng tour trong danh mục | 2 |
+| A.4 §7 | Plans, fees and payment terms | Gói dịch vụ, phí và điều khoản thanh toán | 2 |
+| A.4 §8 | Service levels and support hours | Cam kết dịch vụ và giờ hỗ trợ | 8 |
 
 ### A.1 Trip Planner: Privacy notice (`/privacy`)
 

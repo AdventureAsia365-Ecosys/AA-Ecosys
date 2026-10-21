@@ -30,9 +30,9 @@ Tác nhân: Claude Code. **Chưa đăng.** Nghiệp duyệt nguyên văn trướ
   <li>Bản tóm tắt 12 chủ đề, mỗi chủ đề có hiện trạng, các phương án và một đề xuất.</li>
   <li>Sổ đăng ký dữ liệu cá nhân được xử lý và danh sách nhà cung cấp dịch vụ nhận dữ liệu.</li>
   <li>Bản nháp thỏa thuận xử lý dữ liệu cho đối tác, kèm phụ lục biện pháp bảo mật (ghi rõ biện pháp nào đang chạy, biện pháp nào mới dự kiến).</li>
-  <li>Quy trình nhận và trả lời yêu cầu xem hoặc xoá dữ liệu (chưa chạy thử), và sổ ghi các lần xoá theo thời hạn lưu trữ.</li>
+  <li>Quy trình nhận và trả lời yêu cầu xem hoặc xoá dữ liệu (chưa chạy thử; tìm bản ghi bằng mã băm của e-mail và xoá theo mã số bản ghi, nên địa chỉ e-mail không bị ghi vào mã nguồn hay nhật ký), và sổ ghi các lần xoá theo thời hạn lưu trữ.</li>
 </ul>
-<p>Toàn bộ dữ liệu trong hệ thống hiện là dữ liệu thử; chưa có dữ liệu khách thật.</p>
+<p>Hệ thống chưa có dữ liệu thật của khách du lịch hay khách hàng: khi kiểm ngày 17/10/2026, mọi bản ghi khách đều là bản ghi thử hoặc nội bộ. Tài khoản nhân viên, người nhận e-mail cảnh báo và danh mục tour là dữ liệu thật.</p>
 
 <p><strong>Các điểm cần chị quyết định</strong> (đề xuất ở từng mục trong gói):</p>
 <ol>
@@ -42,7 +42,7 @@ Tác nhân: Claude Code. **Chưa đăng.** Nghiệp duyệt nguyên văn trướ
   <li>Chuyển dữ liệu ra nước ngoài: máy chủ đặt tại Mỹ; một phần xử lý AI có thể chạy ngoài Mỹ.</li>
   <li>Cam kết dịch vụ cho đối tác, địa chỉ hỗ trợ <code>support@</code>, trang trạng thái.</li>
   <li>Thời điểm chuyển Vercel lên gói Pro.</li>
-  <li>Điều khoản sử dụng AI cho đối tác (chính sách của Anthropic có hiệu lực từ 12/11/2026).</li>
+  <li>Điều khoản sử dụng AI cho đối tác: cần chị trả lời trước ngày 11/11/2026, vì chính sách của Anthropic có hiệu lực từ 12/11/2026.</li>
 </ol>
 <p>Có cần mời luật sư xem gói này hay không, và cho chủ đề nào, là chị quyết định.</p>
 ```

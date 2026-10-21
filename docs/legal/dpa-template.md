@@ -70,7 +70,12 @@ AA shall:
    within [●] days, and delete existing copies unless the law requires storage. AA confirms deletion in writing.
    *Drafting note: offboarding a tenant today is soft (revokes the key, cancels queued jobs) and reversible by AA. A
    tested tenant erasure procedure does not exist yet (see the [DSAR and erasure runbook](dsar-erasure-runbook.md));
-   it is needed before AA can commit to a deletion deadline.*
+   it is needed before AA can commit to a deletion deadline. Two facts bound any "delete existing copies" wording. The
+   7-day automated database backups (`backup_retention_period = 7`, `modules/rds/main.tf:143`) cannot be edited, so
+   erased data leaves them only when they age out, within 7 days; the manual snapshot taken before an erasure is
+   deleted once the erasure is verified (runbook section 3, step 8). And the runbook finds a person's records by a
+   one-way hash of their e-mail address and erases by record id, so the address itself is never written into code,
+   logs or the repository.*
 9. **Audit.** Make available the information needed to show compliance with this DPA, and allow audits by the Tenant
    or an auditor it mandates, [●] (frequency, notice, cost).
 10. **Transfers.** Process Tenant data in the United States (AWS us-west-1) and with the sub-processors in Annex 3,
@@ -121,7 +126,7 @@ Register rows 5 and 6 of [register.md](register.md) hold the table-level detail.
 | Security log retention 365 days | Live | [§7 retention table](../architecture/data-standards/02-data-management.md#7-retention-and-archival) (CloudWatch security/audit class, AA-872) |
 | No personal data in AI prompts or AI call records | Live as a rule, checked by review | DM-6.4; no automated PII check exists |
 | Retention jobs for event payload PII | Planned | Booking job built, DRY RUN only; TripPlanner not built (DM-6.6; AA-825, AA-861). See the [retention log](retention-log.md) |
-| Tested erasure job for a traveller and a tenant | Planned | AA-839; [DSAR and erasure runbook](dsar-erasure-runbook.md) (untested) |
+| Tested erasure job for a traveller and a tenant | Planned | AA-839; [DSAR and erasure runbook](dsar-erasure-runbook.md) (untested; finds a traveller's records by a one-way hash of the e-mail address and erases by record id) |
 | Machine-readable PII inventory (`pii:` column tags) | Planned | AA-877 (DM-6.1) |
 | Individual tenant user accounts and key rotation | Planned | AA-813 |
 
