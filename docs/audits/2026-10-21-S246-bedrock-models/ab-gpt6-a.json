@@ -1,0 +1,5846 @@
+{
+ "run_id": "d2329335",
+ "stage": "adhoc_s246_models",
+ "cap_usd": 1.0,
+ "n": 10,
+ "seed": 246,
+ "since": "1970-01-01T00:00:00+00:00",
+ "candidates": [
+  "gpt-6-luna"
+ ],
+ "worker_stage_env": {
+  "T2_JUDGE_ANCHORS": {
+   "was": null,
+   "now": "on"
+  },
+  "T2_JUDGE_GATE": {
+   "was": null,
+   "now": "brand_fit"
+  }
+ },
+ "rule": "The switch rule (module docstring). `candidates` = {model key: {\"eligible\": bool, \"reason\": str}}.",
+ "stages": [
+  {
+   "stage": "s1_judge",
+   "what": "A1 master rewrite brand-fit judge (brand_fit gated at 7.0)",
+   "source": "golden fixture 1.1.0",
+   "role": "judge",
+   "current_model": "gpt-5.6-luna",
+   "current_is_expected": true,
+   "n_inputs": 10,
+   "input_meta": {
+    "pool": "fixture s1"
+   },
+   "candidates": {
+    "gpt-6-luna": {
+     "callable": true,
+     "eligible": true,
+     "reason": "",
+     "vendor": "openai",
+     "run": true,
+     "supports_temperature": false,
+     "price_in_out": [
+      0.1,
+      0.5
+     ]
+    }
+   },
+   "arms": [
+    "current#1",
+    "gpt-6-luna",
+    "current#2"
+   ],
+   "worst_case_estimate_usd": 0.1338,
+   "metrics": {
+    "current": {
+     "n": 20,
+     "skipped": 0,
+     "schema_valid_rate": 1.0,
+     "failures": 0,
+     "errors": [],
+     "calls": 60,
+     "failed_calls": 0,
+     "cost_usd": 0.042284,
+     "cost_per_call_usd": 0.000705,
+     "cost_per_sample_usd": 0.002114,
+     "latency_ms_mean": 4115,
+     "latency_ms_p90": 4880,
+     "checks_mean": {
+      "brand_fit": 7.45,
+      "distinct": 3.5,
+      "mission_present": 1.0,
+      "judge_calls": 3.0,
+      "empty_feedback_on_fail": 0.0
+     },
+     "score_mae_self": 0.1,
+     "self_agreement": 0.9,
+     "self_n": 10
+    },
+    "arms": {
+     "current#1": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 30,
+      "failed_calls": 0,
+      "cost_usd": 0.023309,
+      "cost_per_call_usd": 0.000777,
+      "cost_per_sample_usd": 0.002331,
+      "latency_ms_mean": 4146,
+      "latency_ms_p90": 4880,
+      "checks_mean": {
+       "brand_fit": 7.5,
+       "distinct": 3.6,
+       "mission_present": 1.0,
+       "judge_calls": 3.0,
+       "empty_feedback_on_fail": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.5,
+      "label_n": 10
+     },
+     "gpt-6-luna": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 28,
+      "failed_calls": 0,
+      "cost_usd": 0.010225,
+      "cost_per_call_usd": 0.000365,
+      "cost_per_sample_usd": 0.001022,
+      "latency_ms_mean": 5931,
+      "latency_ms_p90": 7770,
+      "checks_mean": {
+       "brand_fit": 7.4,
+       "distinct": 3.7,
+       "mission_present": 0.9,
+       "judge_calls": 2.8,
+       "empty_feedback_on_fail": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.4,
+      "label_n": 10,
+      "agreement_vs_current": 0.85,
+      "compared_n": 10,
+      "similarity_vs_current": null,
+      "score_mae_vs_current": 0.55
+     },
+     "current#2": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 30,
+      "failed_calls": 0,
+      "cost_usd": 0.018975,
+      "cost_per_call_usd": 0.000632,
+      "cost_per_sample_usd": 0.001897,
+      "latency_ms_mean": 4084,
+      "latency_ms_p90": 4784,
+      "checks_mean": {
+       "brand_fit": 7.4,
+       "distinct": 3.4,
+       "mission_present": 1.0,
+       "judge_calls": 3.0,
+       "empty_feedback_on_fail": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.6,
+      "label_n": 10
+     }
+    }
+   },
+   "recommendation": {
+    "decision": "keep current",
+    "choice": null,
+    "bar": 0.9,
+    "candidates": {
+     "gpt-6-luna": {
+      "switch": false,
+      "blockers": [
+       "agreement 85% < bar 90% (self-agreement 90%, floor 90%)"
+      ],
+      "agreement": 0.85,
+      "bar": 0.9
+     }
+    }
+   },
+   "samples": {
+    "s1-023": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 2.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001001,
+        "ms": 4954,
+        "in": 1486,
+        "out": 525,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000757,
+        "ms": 4680,
+        "in": 1486,
+        "out": 606,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000742,
+        "ms": 4880,
+        "in": 1486,
+        "out": 593,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 4.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000447,
+        "ms": 6041,
+        "in": 1486,
+        "out": 523,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000263,
+        "ms": 5779,
+        "in": 1486,
+        "out": 496,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000346,
+        "ms": 6874,
+        "in": 1486,
+        "out": 661,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 6.0,
+       "distinct": 2.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000722,
+        "ms": 4427,
+        "in": 1486,
+        "out": 577,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000811,
+        "ms": 5343,
+        "in": 1486,
+        "out": 651,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000725,
+        "ms": 4749,
+        "in": 1486,
+        "out": 579,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-035": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001075,
+        "ms": 4790,
+        "in": 2300,
+        "out": 417,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000519,
+        "ms": 3441,
+        "in": 2300,
+        "out": 394,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000508,
+        "ms": 3591,
+        "in": 2300,
+        "out": 385,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 5.0,
+      "checks": {
+       "brand_fit": 5.0,
+       "distinct": 2.0,
+       "mission_present": false,
+       "judge_calls": 1,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000529,
+        "ms": 5571,
+        "in": 2300,
+        "out": 484,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000508,
+        "ms": 3253,
+        "in": 2300,
+        "out": 385,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000531,
+        "ms": 3386,
+        "in": 2300,
+        "out": 404,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000681,
+        "ms": 4254,
+        "in": 2300,
+        "out": 529,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-029": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 6.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000979,
+        "ms": 5404,
+        "in": 1421,
+        "out": 520,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000835,
+        "ms": 4955,
+        "in": 1421,
+        "out": 672,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000544,
+        "ms": 3669,
+        "in": 1421,
+        "out": 429,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000571,
+        "ms": 8484,
+        "in": 1421,
+        "out": 787,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000282,
+        "ms": 6363,
+        "in": 1421,
+        "out": 535,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000344,
+        "ms": 7227,
+        "in": 1421,
+        "out": 660,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 2.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000528,
+        "ms": 3678,
+        "in": 1421,
+        "out": 416,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000726,
+        "ms": 4704,
+        "in": 1421,
+        "out": 581,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000672,
+        "ms": 4473,
+        "in": 1421,
+        "out": 536,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-049": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001039,
+        "ms": 4508,
+        "in": 1561,
+        "out": 541,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000632,
+        "ms": 3891,
+        "in": 1561,
+        "out": 500,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000719,
+        "ms": 4748,
+        "in": 1561,
+        "out": 573,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000455,
+        "ms": 5915,
+        "in": 1561,
+        "out": 520,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000348,
+        "ms": 7167,
+        "in": 1561,
+        "out": 664,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000289,
+        "ms": 5627,
+        "in": 1561,
+        "out": 546,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000784,
+        "ms": 4784,
+        "in": 1561,
+        "out": 627,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000556,
+        "ms": 3642,
+        "in": 1561,
+        "out": 437,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000634,
+        "ms": 4130,
+        "in": 1561,
+        "out": 502,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-032": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 6.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.00122,
+        "ms": 3914,
+        "in": 2565,
+        "out": 482,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000702,
+        "ms": 4622,
+        "in": 2565,
+        "out": 542,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.00066,
+        "ms": 3995,
+        "in": 2565,
+        "out": 507,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000506,
+        "ms": 4178,
+        "in": 2565,
+        "out": 370,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000278,
+        "ms": 5465,
+        "in": 2565,
+        "out": 504,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.00029,
+        "ms": 5798,
+        "in": 2565,
+        "out": 528,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000676,
+        "ms": 3930,
+        "in": 2565,
+        "out": 520,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000835,
+        "ms": 5328,
+        "in": 2565,
+        "out": 653,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000541,
+        "ms": 3477,
+        "in": 2565,
+        "out": 408,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-015": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001368,
+        "ms": 4583,
+        "in": 2698,
+        "out": 578,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000568,
+        "ms": 3472,
+        "in": 2698,
+        "out": 428,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000516,
+        "ms": 3226,
+        "in": 2698,
+        "out": 385,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 5.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000653,
+        "ms": 6381,
+        "in": 2698,
+        "out": 631,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.00043,
+        "ms": 7798,
+        "in": 2698,
+        "out": 805,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000284,
+        "ms": 6084,
+        "in": 2698,
+        "out": 513,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000545,
+        "ms": 3608,
+        "in": 2698,
+        "out": 409,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000638,
+        "ms": 4102,
+        "in": 2698,
+        "out": 486,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000452,
+        "ms": 2661,
+        "in": 2698,
+        "out": 331,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-033": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 2.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000968,
+        "ms": 3931,
+        "in": 1548,
+        "out": 484,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.00054,
+        "ms": 3604,
+        "in": 1548,
+        "out": 424,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000444,
+        "ms": 2923,
+        "in": 1548,
+        "out": 344,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 2.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000443,
+        "ms": 6162,
+        "in": 1548,
+        "out": 499,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000206,
+        "ms": 5169,
+        "in": 1548,
+        "out": 381,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000188,
+        "ms": 4158,
+        "in": 1548,
+        "out": 344,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 2.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.00064,
+        "ms": 4208,
+        "in": 1548,
+        "out": 507,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000681,
+        "ms": 4480,
+        "in": 1548,
+        "out": 541,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000607,
+        "ms": 4128,
+        "in": 1548,
+        "out": 480,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-042": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 5.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001009,
+        "ms": 4311,
+        "in": 1453,
+        "out": 538,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000505,
+        "ms": 3303,
+        "in": 1453,
+        "out": 396,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000729,
+        "ms": 4636,
+        "in": 1453,
+        "out": 583,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 6.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000362,
+        "ms": 4062,
+        "in": 1453,
+        "out": 361,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000215,
+        "ms": 4194,
+        "in": 1453,
+        "out": 400,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000293,
+        "ms": 5708,
+        "in": 1453,
+        "out": 557,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000561,
+        "ms": 3508,
+        "in": 1453,
+        "out": 443,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000448,
+        "ms": 3024,
+        "in": 1453,
+        "out": 349,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000619,
+        "ms": 4078,
+        "in": 1453,
+        "out": 491,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-039": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000976,
+        "ms": 4334,
+        "in": 1266,
+        "out": 550,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000671,
+        "ms": 4175,
+        "in": 1266,
+        "out": 538,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000533,
+        "ms": 3754,
+        "in": 1266,
+        "out": 423,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 4.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000348,
+        "ms": 3972,
+        "in": 1266,
+        "out": 380,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000396,
+        "ms": 7770,
+        "in": 1266,
+        "out": 767,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000252,
+        "ms": 5149,
+        "in": 1266,
+        "out": 478,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 2.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000482,
+        "ms": 3242,
+        "in": 1266,
+        "out": 380,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000572,
+        "ms": 3569,
+        "in": 1266,
+        "out": 455,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000531,
+        "ms": 3811,
+        "in": 1266,
+        "out": 421,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-011": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001259,
+        "ms": 4236,
+        "in": 2540,
+        "out": 520,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000691,
+        "ms": 4212,
+        "in": 2540,
+        "out": 533,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.0006,
+        "ms": 3645,
+        "in": 2540,
+        "out": 457,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 5.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000604,
+        "ms": 6472,
+        "in": 2540,
+        "out": 574,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000326,
+        "ms": 6524,
+        "in": 2540,
+        "out": 600,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000277,
+        "ms": 6001,
+        "in": 2540,
+        "out": 502,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 3.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000651,
+        "ms": 4227,
+        "in": 2540,
+        "out": 500,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000697,
+        "ms": 4390,
+        "in": 2540,
+        "out": 538,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "s1_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000921,
+        "ms": 5947,
+        "in": 2540,
+        "out": 725,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "stage": "t2_judge",
+   "what": "T2 tenant rewrite brand-fit judge (brand_fit + mission, gated at 7.0)",
+   "source": "golden fixture 1.1.0",
+   "role": "judge",
+   "current_model": "gpt-5.6-luna",
+   "current_is_expected": true,
+   "n_inputs": 10,
+   "input_meta": {
+    "pool": "fixture t2"
+   },
+   "candidates": {
+    "gpt-6-luna": {
+     "callable": true,
+     "eligible": true,
+     "reason": "",
+     "vendor": "openai",
+     "run": true,
+     "supports_temperature": false,
+     "price_in_out": [
+      0.1,
+      0.5
+     ]
+    }
+   },
+   "arms": [
+    "current#1",
+    "gpt-6-luna",
+    "current#2"
+   ],
+   "worst_case_estimate_usd": 0.1338,
+   "metrics": {
+    "current": {
+     "n": 20,
+     "skipped": 0,
+     "schema_valid_rate": 1.0,
+     "failures": 0,
+     "errors": [],
+     "calls": 60,
+     "failed_calls": 0,
+     "cost_usd": 0.060005,
+     "cost_per_call_usd": 0.001,
+     "cost_per_sample_usd": 0.003,
+     "latency_ms_mean": 5195,
+     "latency_ms_p90": 6635,
+     "checks_mean": {
+      "brand_fit": 7.5,
+      "distinct": 7.4,
+      "mission_present": 1.0,
+      "judge_calls": 3.0,
+      "empty_feedback_on_fail": 0.0
+     },
+     "score_mae_self": 0.4,
+     "self_agreement": 1.0,
+     "self_n": 10
+    },
+    "arms": {
+     "current#1": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 30,
+      "failed_calls": 0,
+      "cost_usd": 0.032281,
+      "cost_per_call_usd": 0.001076,
+      "cost_per_sample_usd": 0.003228,
+      "latency_ms_mean": 4945,
+      "latency_ms_p90": 5791,
+      "checks_mean": {
+       "brand_fit": 7.6,
+       "distinct": 7.5,
+       "mission_present": 1.0,
+       "judge_calls": 3.0,
+       "empty_feedback_on_fail": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.3,
+      "label_n": 10
+     },
+     "gpt-6-luna": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 30,
+      "failed_calls": 0,
+      "cost_usd": 0.018,
+      "cost_per_call_usd": 0.0006,
+      "cost_per_sample_usd": 0.0018,
+      "latency_ms_mean": 8994,
+      "latency_ms_p90": 12082,
+      "checks_mean": {
+       "brand_fit": 6.9,
+       "distinct": 6.3,
+       "mission_present": 0.7,
+       "judge_calls": 3.0,
+       "empty_feedback_on_fail": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.2,
+      "label_n": 10,
+      "agreement_vs_current": 0.7,
+      "compared_n": 10,
+      "similarity_vs_current": null,
+      "score_mae_vs_current": 0.6
+     },
+     "current#2": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 30,
+      "failed_calls": 0,
+      "cost_usd": 0.027724,
+      "cost_per_call_usd": 0.000924,
+      "cost_per_sample_usd": 0.002772,
+      "latency_ms_mean": 5445,
+      "latency_ms_p90": 7525,
+      "checks_mean": {
+       "brand_fit": 7.4,
+       "distinct": 7.3,
+       "mission_present": 1.0,
+       "judge_calls": 3.0,
+       "empty_feedback_on_fail": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.3,
+      "label_n": 10
+     }
+    }
+   },
+   "recommendation": {
+    "decision": "keep current",
+    "choice": null,
+    "bar": 0.9,
+    "candidates": {
+     "gpt-6-luna": {
+      "switch": false,
+      "blockers": [
+       "agreement 70% < bar 90% (self-agreement 100%, floor 90%)"
+      ],
+      "agreement": 0.7,
+      "bar": 0.9
+     }
+    }
+   },
+   "samples": {
+    "t2-008": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001434,
+        "ms": 4633,
+        "in": 2865,
+        "out": 598,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000746,
+        "ms": 4306,
+        "in": 2865,
+        "out": 574,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000655,
+        "ms": 3866,
+        "in": 2865,
+        "out": 498,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 6.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000811,
+        "ms": 8593,
+        "in": 2865,
+        "out": 906,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000325,
+        "ms": 5937,
+        "in": 2865,
+        "out": 593,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000435,
+        "ms": 7673,
+        "in": 2865,
+        "out": 813,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000803,
+        "ms": 4593,
+        "in": 2865,
+        "out": 621,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001402,
+        "ms": 8375,
+        "in": 2865,
+        "out": 1120,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000966,
+        "ms": 5884,
+        "in": 2865,
+        "out": 757,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-005": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001496,
+        "ms": 5264,
+        "in": 2847,
+        "out": 654,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.00085,
+        "ms": 5503,
+        "in": 2847,
+        "out": 661,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000924,
+        "ms": 5411,
+        "in": 2847,
+        "out": 722,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 6.0,
+       "distinct": 6.0,
+       "mission_present": false,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000659,
+        "ms": 7139,
+        "in": 2847,
+        "out": 607,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000482,
+        "ms": 8847,
+        "in": 2847,
+        "out": 906,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000399,
+        "ms": 7556,
+        "in": 2847,
+        "out": 741,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000891,
+        "ms": 4521,
+        "in": 2847,
+        "out": 695,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001356,
+        "ms": 7925,
+        "in": 2847,
+        "out": 1082,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.0008,
+        "ms": 5068,
+        "in": 2847,
+        "out": 619,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-002": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001678,
+        "ms": 6635,
+        "in": 2826,
+        "out": 810,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000734,
+        "ms": 4703,
+        "in": 2826,
+        "out": 564,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000944,
+        "ms": 5791,
+        "in": 2826,
+        "out": 739,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 6.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000943,
+        "ms": 12082,
+        "in": 2826,
+        "out": 1180,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000651,
+        "ms": 12377,
+        "in": 2826,
+        "out": 1246,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000499,
+        "ms": 11126,
+        "in": 2826,
+        "out": 942,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000976,
+        "ms": 5914,
+        "in": 2826,
+        "out": 766,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001012,
+        "ms": 6043,
+        "in": 2826,
+        "out": 796,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000712,
+        "ms": 4168,
+        "in": 2826,
+        "out": 546,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-009": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001533,
+        "ms": 5042,
+        "in": 2922,
+        "out": 669,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000659,
+        "ms": 3965,
+        "in": 2922,
+        "out": 500,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000959,
+        "ms": 5607,
+        "in": 2922,
+        "out": 750,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 6.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000756,
+        "ms": 7614,
+        "in": 2922,
+        "out": 781,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.00043,
+        "ms": 7681,
+        "in": 2922,
+        "out": 802,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.00038,
+        "ms": 8417,
+        "in": 2922,
+        "out": 702,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000934,
+        "ms": 5277,
+        "in": 2922,
+        "out": 729,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000673,
+        "ms": 3691,
+        "in": 2922,
+        "out": 512,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000648,
+        "ms": 3848,
+        "in": 2922,
+        "out": 491,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-010": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001805,
+        "ms": 5647,
+        "in": 3392,
+        "out": 798,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001025,
+        "ms": 5915,
+        "in": 3392,
+        "out": 797,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001214,
+        "ms": 6681,
+        "in": 3392,
+        "out": 955,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000953,
+        "ms": 10329,
+        "in": 3392,
+        "out": 1059,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000851,
+        "ms": 15453,
+        "in": 3392,
+        "out": 1633,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000635,
+        "ms": 11556,
+        "in": 3392,
+        "out": 1202,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001224,
+        "ms": 6916,
+        "in": 3392,
+        "out": 963,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001333,
+        "ms": 7652,
+        "in": 3392,
+        "out": 1054,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001352,
+        "ms": 7525,
+        "in": 3392,
+        "out": 1070,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-004": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001397,
+        "ms": 4199,
+        "in": 3308,
+        "out": 475,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000796,
+        "ms": 4232,
+        "in": 3308,
+        "out": 608,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000621,
+        "ms": 3551,
+        "in": 3308,
+        "out": 462,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 6.0,
+       "distinct": 6.0,
+       "mission_present": false,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000968,
+        "ms": 10533,
+        "in": 3308,
+        "out": 1109,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000337,
+        "ms": 5822,
+        "in": 3308,
+        "out": 607,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000406,
+        "ms": 8029,
+        "in": 3308,
+        "out": 745,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000749,
+        "ms": 5442,
+        "in": 3308,
+        "out": 569,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000721,
+        "ms": 4681,
+        "in": 3308,
+        "out": 545,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000932,
+        "ms": 5561,
+        "in": 3308,
+        "out": 721,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-003": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001513,
+        "ms": 5042,
+        "in": 3004,
+        "out": 635,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000828,
+        "ms": 4793,
+        "in": 3004,
+        "out": 640,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000767,
+        "ms": 4376,
+        "in": 3004,
+        "out": 589,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 6.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001115,
+        "ms": 13603,
+        "in": 3004,
+        "out": 1479,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000483,
+        "ms": 8293,
+        "in": 3004,
+        "out": 905,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000487,
+        "ms": 8849,
+        "in": 3004,
+        "out": 914,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000953,
+        "ms": 5793,
+        "in": 3004,
+        "out": 744,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000744,
+        "ms": 4328,
+        "in": 3004,
+        "out": 570,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000857,
+        "ms": 5219,
+        "in": 3004,
+        "out": 664,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-006": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001698,
+        "ms": 5044,
+        "in": 3477,
+        "out": 691,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000784,
+        "ms": 4327,
+        "in": 3477,
+        "out": 595,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000609,
+        "ms": 3869,
+        "in": 3477,
+        "out": 449,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000859,
+        "ms": 9603,
+        "in": 3477,
+        "out": 848,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000524,
+        "ms": 9275,
+        "in": 3477,
+        "out": 978,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000545,
+        "ms": 9635,
+        "in": 3477,
+        "out": 1021,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000634,
+        "ms": 3380,
+        "in": 3477,
+        "out": 470,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001015,
+        "ms": 5649,
+        "in": 3477,
+        "out": 788,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001001,
+        "ms": 5980,
+        "in": 3477,
+        "out": 776,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-007": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001703,
+        "ms": 5461,
+        "in": 3465,
+        "out": 697,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.00098,
+        "ms": 5565,
+        "in": 3465,
+        "out": 759,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000878,
+        "ms": 4830,
+        "in": 3465,
+        "out": 674,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001036,
+        "ms": 11651,
+        "in": 3465,
+        "out": 1205,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000323,
+        "ms": 6783,
+        "in": 3465,
+        "out": 576,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000311,
+        "ms": 5583,
+        "in": 3465,
+        "out": 552,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000625,
+        "ms": 3940,
+        "in": 3465,
+        "out": 463,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000888,
+        "ms": 4958,
+        "in": 3465,
+        "out": 682,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000839,
+        "ms": 4718,
+        "in": 3465,
+        "out": 641,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-001": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001511,
+        "ms": 5138,
+        "in": 2991,
+        "out": 636,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000911,
+        "ms": 5156,
+        "in": 2991,
+        "out": 709,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000629,
+        "ms": 3814,
+        "in": 2991,
+        "out": 474,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 6.0,
+       "distinct": 6.0,
+       "mission_present": false,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000671,
+        "ms": 6361,
+        "in": 2991,
+        "out": 594,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000427,
+        "ms": 7802,
+        "in": 2991,
+        "out": 794,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000299,
+        "ms": 5642,
+        "in": 2991,
+        "out": 538,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0,
+       "mission_present": true,
+       "judge_calls": 3,
+       "empty_feedback_on_fail": false
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000721,
+        "ms": 4279,
+        "in": 2991,
+        "out": 551,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000985,
+        "ms": 6131,
+        "in": 2991,
+        "out": 771,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "t2_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000978,
+        "ms": 5901,
+        "in": 2991,
+        "out": 765,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "stage": "t7_debate_judge",
+   "what": "T7 Debate: does a candidate topic (place + action + raw atom evidence) fit the tenant brand",
+   "source": "acp_shared.debate_brand_fit_cache (segment rows) + acp_contract atoms, read-only",
+   "role": "judge",
+   "current_model": "gpt-5.6-luna",
+   "current_is_expected": true,
+   "n_inputs": 10,
+   "input_meta": {
+    "pool_rows": 300,
+    "skipped": {
+     "brand_changed": 0,
+     "no_brand": 0,
+     "no_evidence": 0
+    },
+    "note": "route rows not replayed (their hub text is not stored with the cache)"
+   },
+   "candidates": {
+    "gpt-6-luna": {
+     "callable": true,
+     "eligible": true,
+     "reason": "",
+     "vendor": "openai",
+     "run": true,
+     "supports_temperature": false,
+     "price_in_out": [
+      0.1,
+      0.5
+     ]
+    }
+   },
+   "arms": [
+    "current#1",
+    "gpt-6-luna",
+    "current#2"
+   ],
+   "worst_case_estimate_usd": 0.1338,
+   "metrics": {
+    "current": {
+     "n": 20,
+     "skipped": 0,
+     "schema_valid_rate": 1.0,
+     "failures": 0,
+     "errors": [],
+     "calls": 20,
+     "failed_calls": 0,
+     "cost_usd": 0.005525,
+     "cost_per_call_usd": 0.000276,
+     "cost_per_sample_usd": 0.000276,
+     "latency_ms_mean": 1371,
+     "latency_ms_p90": 1597,
+     "checks_mean": {
+      "brand_fit": 7.25,
+      "distinct": 5.85
+     },
+     "score_mae_self": 0.6,
+     "self_agreement": 0.8,
+     "self_n": 10
+    },
+    "arms": {
+     "current#1": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.002774,
+      "cost_per_call_usd": 0.000277,
+      "cost_per_sample_usd": 0.000277,
+      "latency_ms_mean": 1410,
+      "latency_ms_p90": 1597,
+      "checks_mean": {
+       "brand_fit": 7.1,
+       "distinct": 5.7
+      },
+      "stored_agreement": 0.8,
+      "stored_n": 10,
+      "label_agreement": null,
+      "label_n": 0
+     },
+     "gpt-6-luna": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.001272,
+      "cost_per_call_usd": 0.000127,
+      "cost_per_sample_usd": 0.000127,
+      "latency_ms_mean": 1787,
+      "latency_ms_p90": 1828,
+      "checks_mean": {
+       "brand_fit": 6.1,
+       "distinct": 4.7
+      },
+      "stored_agreement": 0.6,
+      "stored_n": 10,
+      "label_agreement": null,
+      "label_n": 0,
+      "agreement_vs_current": 0.7,
+      "compared_n": 10,
+      "similarity_vs_current": null,
+      "score_mae_vs_current": 1.2
+     },
+     "current#2": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.002751,
+      "cost_per_call_usd": 0.000275,
+      "cost_per_sample_usd": 0.000275,
+      "latency_ms_mean": 1333,
+      "latency_ms_p90": 1437,
+      "checks_mean": {
+       "brand_fit": 7.4,
+       "distinct": 6.0
+      },
+      "stored_agreement": 0.8,
+      "stored_n": 10,
+      "label_agreement": null,
+      "label_n": 0
+     }
+    }
+   },
+   "recommendation": {
+    "decision": "keep current",
+    "choice": null,
+    "bar": 0.8,
+    "candidates": {
+     "gpt-6-luna": {
+      "switch": false,
+      "blockers": [
+       "agreement 70% < bar 80% (self-agreement 80%, floor 90%)"
+      ],
+      "agreement": 0.7,
+      "bar": 0.8
+     }
+    }
+   },
+   "samples": {
+    "t7-311dc1f1b8b5e411-20d07d32": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 6.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000257,
+        "ms": 1405,
+        "in": 495,
+        "out": 132,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 6.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000126,
+        "ms": 1828,
+        "in": 495,
+        "out": 153,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000291,
+        "ms": 1437,
+        "in": 495,
+        "out": 160,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t7-48d541b0b6e97778-692a3214": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 6.0,
+       "distinct": 7.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000254,
+        "ms": 1393,
+        "in": 489,
+        "out": 130,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 3.0,
+      "checks": {
+       "brand_fit": 4.0,
+       "distinct": 3.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000127,
+        "ms": 1771,
+        "in": 489,
+        "out": 156,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 7.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000254,
+        "ms": 1205,
+        "in": 489,
+        "out": 130,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t7-f3232cba8fe8bf25-885d4916": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 4.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 4.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000257,
+        "ms": 1386,
+        "in": 456,
+        "out": 138,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 4.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 4.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000112,
+        "ms": 1599,
+        "in": 456,
+        "out": 133,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 5.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 5.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000256,
+        "ms": 1289,
+        "in": 456,
+        "out": 137,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t7-208729202acc4913-20d07d32": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 6.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000252,
+        "ms": 1174,
+        "in": 484,
+        "out": 129,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 5.0,
+      "checks": {
+       "brand_fit": 6.0,
+       "distinct": 5.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000111,
+        "ms": 1631,
+        "in": 484,
+        "out": 125,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 6.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000268,
+        "ms": 1306,
+        "in": 484,
+        "out": 143,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t7-df90ffdf2189944a-885d4916": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 4.0,
+      "checks": {
+       "brand_fit": 5.0,
+       "distinct": 4.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000303,
+        "ms": 1597,
+        "in": 526,
+        "out": 165,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 2.0,
+      "checks": {
+       "brand_fit": 3.0,
+       "distinct": 2.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000116,
+        "ms": 1476,
+        "in": 526,
+        "out": 126,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 3.0,
+      "checks": {
+       "brand_fit": 5.0,
+       "distinct": 3.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000285,
+        "ms": 1391,
+        "in": 526,
+        "out": 150,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t7-8edc560075b1f191-692a3214": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000295,
+        "ms": 1344,
+        "in": 540,
+        "out": 156,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 5.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 5.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000135,
+        "ms": 1790,
+        "in": 540,
+        "out": 161,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000301,
+        "ms": 1421,
+        "in": 540,
+        "out": 161,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t7-a308dbfc7de0df53-885d4916": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 4.0,
+      "checks": {
+       "brand_fit": 5.0,
+       "distinct": 4.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000287,
+        "ms": 1703,
+        "in": 497,
+        "out": 156,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 4.0,
+      "checks": {
+       "brand_fit": 5.0,
+       "distinct": 4.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000124,
+        "ms": 1492,
+        "in": 497,
+        "out": 148,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 5.0,
+      "checks": {
+       "brand_fit": 6.0,
+       "distinct": 5.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000279,
+        "ms": 1821,
+        "in": 497,
+        "out": 150,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t7-f72fa4f7b9f0ec19-692a3214": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000315,
+        "ms": 1412,
+        "in": 685,
+        "out": 148,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 6.0,
+      "checks": {
+       "brand_fit": 6.0,
+       "distinct": 7.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000189,
+        "ms": 3135,
+        "in": 685,
+        "out": 241,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 8.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 8.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000299,
+        "ms": 1201,
+        "in": 685,
+        "out": 135,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t7-a6c5ac0cc1f461f0-692a3214": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 4.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 4.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000273,
+        "ms": 1362,
+        "in": 508,
+        "out": 143,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 4.0,
+      "checks": {
+       "brand_fit": 7.0,
+       "distinct": 4.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000115,
+        "ms": 1390,
+        "in": 508,
+        "out": 128,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": false,
+      "score": 5.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 5.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000258,
+        "ms": 1087,
+        "in": 508,
+        "out": 130,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t7-b9c59f4ef8ff8935-692a3214": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000281,
+        "ms": 1328,
+        "in": 509,
+        "out": 149,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 8.0,
+       "distinct": 7.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000117,
+        "ms": 1759,
+        "in": 509,
+        "out": 133,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": true,
+      "score": 7.0,
+      "checks": {
+       "brand_fit": 9.0,
+       "distinct": 7.0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t7_debate_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.00026,
+        "ms": 1173,
+        "in": 509,
+        "out": 132,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "stage": "a3_place_card",
+   "what": "A3 place card draft: identity (name, locality, region, country) + 4-6 background facts",
+   "source": "acp_shared.place_card + atom_place_card + acp_contract.v_active_tour_atoms, read-only",
+   "role": "validate",
+   "current_model": "gpt-5.6-luna",
+   "current_is_expected": true,
+   "n_inputs": 10,
+   "input_meta": {
+    "pool_rows": 110,
+    "skipped_no_live_atoms": 0,
+    "note": "the representative is rebuilt from today's linked atoms; a card linked later by alias / core name may have been drafted from another group"
+   },
+   "candidates": {
+    "gpt-6-luna": {
+     "callable": true,
+     "eligible": true,
+     "reason": "",
+     "vendor": "openai",
+     "run": true,
+     "supports_temperature": false,
+     "price_in_out": [
+      0.1,
+      0.5
+     ]
+    }
+   },
+   "arms": [
+    "current#1",
+    "gpt-6-luna",
+    "current#2"
+   ],
+   "worst_case_estimate_usd": 0.0585,
+   "metrics": {
+    "current": {
+     "n": 20,
+     "skipped": 0,
+     "schema_valid_rate": 1.0,
+     "failures": 0,
+     "errors": [],
+     "calls": 40,
+     "failed_calls": 0,
+     "cost_usd": 0.052913,
+     "cost_per_call_usd": 0.001323,
+     "cost_per_sample_usd": 0.002646,
+     "latency_ms_mean": 3494,
+     "latency_ms_p90": 4963,
+     "checks_mean": {
+      "n_facts": 4.9,
+      "rekinded": 0.0,
+      "no_name": 0.0,
+      "generic_no_locality": 0.0,
+      "identity_ok": 1.0,
+      "kept_rate": 0.8367
+     },
+     "score_mae_self": null,
+     "self_agreement": 0.9,
+     "self_n": 10
+    },
+    "arms": {
+     "current#1": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 20,
+      "failed_calls": 0,
+      "cost_usd": 0.025612,
+      "cost_per_call_usd": 0.001281,
+      "cost_per_sample_usd": 0.002561,
+      "latency_ms_mean": 3460,
+      "latency_ms_p90": 5181,
+      "checks_mean": {
+       "n_facts": 4.9,
+       "rekinded": 0.0,
+       "no_name": 0.0,
+       "generic_no_locality": 0.0,
+       "identity_ok": 1.0,
+       "kept_rate": 0.8783
+      },
+      "stored_agreement": 0.9,
+      "stored_n": 10,
+      "label_agreement": null,
+      "label_n": 0
+     },
+     "gpt-6-luna": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 0.9,
+      "failures": 1,
+      "errors": [
+       "BilledUnusableReply: gpt-6-luna returned empty content (stopReason=max_tokens)"
+      ],
+      "calls": 19,
+      "failed_calls": 1,
+      "cost_usd": 0.018907,
+      "cost_per_call_usd": 0.000995,
+      "cost_per_sample_usd": 0.001891,
+      "latency_ms_mean": 5281,
+      "latency_ms_p90": 11333,
+      "checks_mean": {
+       "n_facts": 4.2222,
+       "rekinded": 0.0,
+       "no_name": 0.0,
+       "generic_no_locality": 0.0,
+       "identity_ok": 1.0,
+       "kept_rate": 0.8333
+      },
+      "stored_agreement": 0.9,
+      "stored_n": 10,
+      "label_agreement": null,
+      "label_n": 0,
+      "agreement_vs_current": 0.85,
+      "compared_n": 10,
+      "similarity_vs_current": null,
+      "score_mae_vs_current": null
+     },
+     "current#2": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 20,
+      "failed_calls": 0,
+      "cost_usd": 0.027301,
+      "cost_per_call_usd": 0.001365,
+      "cost_per_sample_usd": 0.00273,
+      "latency_ms_mean": 3529,
+      "latency_ms_p90": 4888,
+      "checks_mean": {
+       "n_facts": 4.9,
+       "rekinded": 0.0,
+       "no_name": 0.0,
+       "generic_no_locality": 0.0,
+       "identity_ok": 1.0,
+       "kept_rate": 0.795
+      },
+      "stored_agreement": 1.0,
+      "stored_n": 10,
+      "label_agreement": null,
+      "label_n": 0
+     }
+    }
+   },
+   "recommendation": {
+    "decision": "keep current",
+    "choice": null,
+    "bar": 0.9,
+    "candidates": {
+     "gpt-6-luna": {
+      "switch": false,
+      "blockers": [
+       "schema-valid 90% (< 100%)",
+       "agreement 85% < bar 90% (self-agreement 90%, floor 90%)"
+      ],
+      "agreement": 0.85,
+      "bar": 0.9
+     }
+    }
+   },
+   "samples": {
+    "card-28991ff6": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "chinggis khaan international airport",
+       "country": "mongolia",
+       "name": "Chinggis Khaan International Airport"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8
+      },
+      "detail": {
+       "locality": "Sergelen",
+       "region": "Töv"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000806,
+        "ms": 3851,
+        "in": 602,
+        "out": 571,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002061,
+        "ms": 3302,
+        "in": 416,
+        "out": 329,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "chinggis khaan international airport",
+       "country": "mongolia",
+       "name": "Chinggis Khaan International Airport"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.75
+      },
+      "detail": {
+       "locality": "Sergelen",
+       "region": "Töv"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000582,
+        "ms": 10508,
+        "in": 602,
+        "out": 1043,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.001752,
+        "ms": 1968,
+        "in": 367,
+        "out": 277,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "chinggis khaan international airport",
+       "country": "mongolia",
+       "name": "Chinggis Khaan International Airport"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8
+      },
+      "detail": {
+       "locality": "Ulaanbaatar",
+       "region": "Töv Province"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001001,
+        "ms": 4329,
+        "in": 602,
+        "out": 734,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.001798,
+        "ms": 2140,
+        "in": 388,
+        "out": 282,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "card-e4be28e7": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "gyirong",
+       "country": "china",
+       "name": "Gyirong"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Gyirong",
+       "region": "Tibet Autonomous Region"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001644,
+        "ms": 7537,
+        "in": 652,
+        "out": 1261,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002107,
+        "ms": 2799,
+        "in": 457,
+        "out": 330,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": false,
+      "skipped": false,
+      "verdict": null,
+      "score": null,
+      "checks": {},
+      "detail": {},
+      "error": "BilledUnusableReply: gpt-6-luna returned empty content (stopReason=max_tokens)",
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": false,
+        "cost_usd": 0.000815,
+        "ms": 12821,
+        "in": null,
+        "out": null,
+        "stop": null,
+        "error": "BilledUnusableReply: gpt-6-luna returned empty content (stopReason=max_tokens)"
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "gyirong",
+       "country": "china",
+       "name": "Gyirong"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8
+      },
+      "detail": {
+       "locality": "Gyirong Town",
+       "region": "Tibet Autonomous Region"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001644,
+        "ms": 8320,
+        "in": 652,
+        "out": 1261,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002307,
+        "ms": 3434,
+        "in": 462,
+        "out": 369,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "card-228b51f3": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "son la",
+       "country": "vietnam",
+       "name": "Son La"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8
+      },
+      "detail": {
+       "locality": "Son La",
+       "region": "Son La Province"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000601,
+        "ms": 3233,
+        "in": 594,
+        "out": 402,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.00193,
+        "ms": 3125,
+        "in": 365,
+        "out": 313,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "son la",
+       "country": "vietnam",
+       "name": "Son La"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.75
+      },
+      "detail": {
+       "locality": "Sơn La",
+       "region": "Sơn La Province"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000306,
+        "ms": 5291,
+        "in": 594,
+        "out": 494,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.001985,
+        "ms": 5481,
+        "in": 340,
+        "out": 329,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "son la",
+       "country": "vietnam",
+       "name": "Son La"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.6
+      },
+      "detail": {
+       "locality": "Son La",
+       "region": "Son La Province"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000595,
+        "ms": 3048,
+        "in": 594,
+        "out": 397,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002167,
+        "ms": 3199,
+        "in": 377,
+        "out": 358,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "card-df110217": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "peiku tso",
+       "country": "china",
+       "name": "Peiku Tso"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 6,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8333333333333334
+      },
+      "detail": {
+       "locality": "Nyalam",
+       "region": "Tibet Autonomous Region"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001016,
+        "ms": 4943,
+        "in": 614,
+        "out": 744,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002353,
+        "ms": 3283,
+        "in": 423,
+        "out": 386,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "peiku tso",
+       "country": "china",
+       "name": "Peiku Tso"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.75
+      },
+      "detail": {
+       "locality": "Nyalam County",
+       "region": "Tibet"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000811,
+        "ms": 13889,
+        "in": 614,
+        "out": 1500,
+        "stop": "max_tokens",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.001958,
+        "ms": 3164,
+        "in": 353,
+        "out": 321,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "peiku tso",
+       "country": "china",
+       "name": "Peiku Tso"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.75
+      },
+      "detail": {
+       "locality": "Nyalam",
+       "region": "Tibet"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000956,
+        "ms": 4256,
+        "in": 614,
+        "out": 694,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.00193,
+        "ms": 2904,
+        "in": 370,
+        "out": 312,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "card-d28da59f": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "ongi monastery",
+       "country": "mongolia",
+       "name": "Ongi Monastery"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Saikhan-Ovoo",
+       "region": "Dundgovi"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000675,
+        "ms": 3269,
+        "in": 627,
+        "out": 458,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.000692,
+        "ms": 838,
+        "in": 417,
+        "out": 55,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "ongi monastery",
+       "country": "mongolia",
+       "name": "Ongi Monastery"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Saikhan-Ovoo",
+       "region": "Dundgovi"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000316,
+        "ms": 4529,
+        "in": 627,
+        "out": 507,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.000683,
+        "ms": 713,
+        "in": 408,
+        "out": 55,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "ongi monastery",
+       "country": "mongolia",
+       "name": "Ongi Monastery"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Saikhan-Ovoo",
+       "region": "Dundgovi"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000722,
+        "ms": 3673,
+        "in": 627,
+        "out": 497,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.000685,
+        "ms": 831,
+        "in": 410,
+        "out": 55,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "card-0c5e64ae": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "ura village",
+       "country": "bhutan",
+       "name": "Ura Village"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Ura",
+       "region": "Bumthang District"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001256,
+        "ms": 6671,
+        "in": 598,
+        "out": 947,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.00068,
+        "ms": 811,
+        "in": 405,
+        "out": 55,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "ura village",
+       "country": "bhutan",
+       "name": "Ura Village"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Bumthang",
+       "region": "Bumthang District"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000466,
+        "ms": 7025,
+        "in": 598,
+        "out": 813,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.000659,
+        "ms": 745,
+        "in": 384,
+        "out": 55,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "ura village",
+       "country": "bhutan",
+       "name": "Ura Village"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8
+      },
+      "detail": {
+       "locality": "Ura",
+       "region": "Bumthang District"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000808,
+        "ms": 4020,
+        "in": 598,
+        "out": 574,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002078,
+        "ms": 2995,
+        "in": 403,
+        "out": 335,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "card-9d875d75": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "dewathang",
+       "country": "bhutan",
+       "name": "Dewathang"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.75
+      },
+      "detail": {
+       "locality": "Dewathang",
+       "region": "Samdrup Jongkhar"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000961,
+        "ms": 4707,
+        "in": 604,
+        "out": 700,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.001764,
+        "ms": 2217,
+        "in": 394,
+        "out": 274,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "dewathang",
+       "country": "bhutan",
+       "name": "Dewathang"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.75
+      },
+      "detail": {
+       "locality": "Dewathang",
+       "region": "Samdrup Jongkhar District"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000699,
+        "ms": 11333,
+        "in": 604,
+        "out": 1277,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.00205,
+        "ms": 2917,
+        "in": 370,
+        "out": 336,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "dewathang",
+       "country": "bhutan",
+       "name": "Dewathang"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.6
+      },
+      "detail": {
+       "locality": "Dewathang",
+       "region": "Samdrup Jongkhar District"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000996,
+        "ms": 4608,
+        "in": 604,
+        "out": 729,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002047,
+        "ms": 2771,
+        "in": 427,
+        "out": 324,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "card-c80ffe40": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "karo la pass",
+       "country": "china",
+       "name": "Karo La Pass"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Nagarzê",
+       "region": "Tibet"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000992,
+        "ms": 5181,
+        "in": 621,
+        "out": 723,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.000688,
+        "ms": 866,
+        "in": 413,
+        "out": 55,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "karo la",
+       "country": "china",
+       "name": "Karo La"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Nagarzê County",
+       "region": "Tibet Autonomous Region"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.0005,
+        "ms": 8203,
+        "in": 621,
+        "out": 875,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.000656,
+        "ms": 717,
+        "in": 406,
+        "out": 50,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "karo la",
+       "country": "china",
+       "name": "Karo La"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Nagarzê County",
+       "region": "Tibet"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000907,
+        "ms": 4888,
+        "in": 621,
+        "out": 652,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.000709,
+        "ms": 766,
+        "in": 434,
+        "out": 55,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "card-126d5b0a": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "chiu monastery",
+       "country": "china",
+       "name": "Chiu Monastery"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8
+      },
+      "detail": {
+       "locality": "Burang",
+       "region": "Tibet Autonomous Region"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000891,
+        "ms": 4752,
+        "in": 619,
+        "out": 639,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002053,
+        "ms": 2531,
+        "in": 413,
+        "out": 328,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "chiu monastery",
+       "country": "china",
+       "name": "Chiu Monastery"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 1.0
+      },
+      "detail": {
+       "locality": "Lake Manasarovar",
+       "region": "Ngari"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000423,
+        "ms": 6589,
+        "in": 619,
+        "out": 723,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002064,
+        "ms": 2819,
+        "in": 404,
+        "out": 332,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "chiu monastery",
+       "country": "china",
+       "name": "Chiu Monastery"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8
+      },
+      "detail": {
+       "locality": "Burang County",
+       "region": "Ngari"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000887,
+        "ms": 4328,
+        "in": 619,
+        "out": 636,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002421,
+        "ms": 4963,
+        "in": 421,
+        "out": 400,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "card-46167e9e": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "national library of bhutan",
+       "country": "bhutan",
+       "name": "National Library of Bhutan"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8
+      },
+      "detail": {
+       "locality": "Thimphu",
+       "region": "Thimphu District"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000566,
+        "ms": 2553,
+        "in": 599,
+        "out": 372,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.001876,
+        "ms": 2736,
+        "in": 371,
+        "out": 301,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "national library of bhutan",
+       "country": "bhutan",
+       "name": "National Library of Bhutan"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 4,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.5
+      },
+      "detail": {
+       "locality": "Thimphu",
+       "region": "Thimphu"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000499,
+        "ms": 6807,
+        "in": 599,
+        "out": 878,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.001683,
+        "ms": 2375,
+        "in": 368,
+        "out": 263,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": {
+       "core": "national library of bhutan",
+       "country": "bhutan",
+       "name": "National Library of Bhutan"
+      },
+      "score": null,
+      "checks": {
+       "n_facts": 5,
+       "rekinded": 0,
+       "no_name": false,
+       "generic_no_locality": false,
+       "identity_ok": true,
+       "kept_rate": 0.8
+      },
+      "detail": {
+       "locality": "Thimphu",
+       "region": "Thimphu District"
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "a3_place_card",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000602,
+        "ms": 2706,
+        "in": 599,
+        "out": 402,
+        "stop": "end_turn",
+        "error": null
+       },
+       {
+        "stage": "a3_place_card_check",
+        "model": "haiku",
+        "ok": true,
+        "cost_usd": 0.002041,
+        "ms": 2407,
+        "in": 396,
+        "out": 329,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    }
+   }
+  }
+ ],
+ "spent_usd": 0.209131,
+ "llm_call_log_spend_usd": 0.354594
+}

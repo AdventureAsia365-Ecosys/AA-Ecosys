@@ -1,0 +1,89 @@
+{
+ "items": [
+  {
+   "id": "P1",
+   "title": "Primary metric of the S1 writer A/B",
+   "context": "With pass/light labels the A/B has only ~0.33 power at n=50 for 12%->25%; most real improvement happens inside 'heavy'. Deterministic errors (day count, cut meta) are removed by S247-S248 fixes regardless of the writer, so counting them would make the new path win by construction.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Primary = semantic serious errors per verifiable claim (paired Wilcoxon) + blind pairwise preference both orders; deterministic errors are a must-pass gate only; pass/light rate and 18-tour slice reported, not decisive"
+    },
+    {
+     "key": "b",
+     "label": "Keep the advisory metric: pass/light rate, slice 4/18 -> >=10/18, winner must beat |A'-A|"
+    }
+   ],
+   "recommended": "a",
+   "why": "Error counts and pairwise see improvements inside 'heavy' (power 0.86-0.94 for a 50% error cut at n=50 vs 0.33 for the binary target), and separating the gate from the score isolates the writer effect Nghiep asked about."
+  },
+  {
+   "id": "P2",
+   "title": "Arms and model selection",
+   "context": "5 arms x 50 tours costs ~20-35 power points to multiplicity and 250 full-source labels. Which model (Haiku/Luna/Sonnet) is a selection question, not a hypothesis test.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Screen Haiku/Luna/Sonnet on 12 non-golden tours (~$2.5), then confirm A+ (current writer + day-count oracle + separate meta), A' (run 1 only, A/A check), W, E on 50 golden tours in 2 runs <= $10 each"
+    },
+    {
+     "key": "b",
+     "label": "Keep A, A', Haiku, Sonnet, Luna on 50 golden tours"
+    }
+   ],
+   "recommended": "a",
+   "why": "Fewer arms keep power, A+ makes the comparison about the writer, and the screen still tries every cheap tier (lesson #96); the risk that a 12-tour screen picks the wrong model is stated in the report."
+  },
+  {
+   "id": "P3",
+   "title": "Short facts-first page (arm E) timing",
+   "context": "Plan B was only a fallback after the A/B fails. E is built mostly by code from the fact sheet (one LLM line per day), costs near $0, and keeps the 'Day N —' header that TripPlanner parse_days needs.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Add E as an arm in the S248-S249 A/B and compare E vs W (answers Q8 in the same run)"
+    },
+    {
+     "key": "b",
+     "label": "Build E only if no writer arm wins"
+    }
+   ],
+   "recommended": "a",
+   "why": "Near-zero extra cost, removes a whole extra cycle if the writer arms fail, and gives per-stratum evidence (thin vs rich sources) instead of deciding a length rule from p=0.15 golden stats."
+  },
+  {
+   "id": "P4",
+   "title": "Stopping and switch-to-Plan-B rule",
+   "context": "Requiring both endpoints significant gives only ~0.25-0.35 chance of adopting a truly better writer at n=50; the most likely outcome is inconclusive.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Adopt W if error ratio W/A+ <= 0.7 (p<0.025 final) and preference not worse (>=50%); futility after run 1 if ratio >= 0.9 and preference <= 50%; if inconclusive add 50 non-golden tours; at n=100 switch to Plan B if CI upper bound >= 0.9 or preference <= 55%"
+    },
+    {
+     "key": "b",
+     "label": "Run all 50 tours once and decide by judgement"
+    }
+   ],
+   "recommended": "a",
+   "why": "Pre-registered rules prevent re-reading noise as signal (AA-748 control drifted -36%), and the expected total ($8-25 over 3-4 sessions) is stated up front."
+  },
+  {
+   "id": "P5",
+   "title": "Light human editing and Ms. Thu's team",
+   "context": "/admin/review editor and staff role 'reviewer' already exist; gaps: Master-published tours not editable in place, raw itinerary textarea, no source-quote panel, edit_diff stores field names only (AA-916). Who edits is a business decision for Ms. Thu.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Send nothing now; after the A/B, send Ms. Thu one neutral proposal (pick ~50 priority tours, answer ask-supplier lists, who edits is her call) and spend 1 session fixing the editor only if Plan B/E is chosen"
+    },
+    {
+     "key": "b",
+     "label": "Send the editor/staffing proposal to Ms. Thu now, before the A/B"
+    }
+   ],
+   "recommended": "a",
+   "why": "Keeps tech focus and avoids asking her for time on a format that may not be chosen; the ask-supplier work costs her the same under either plan, so it can wait for the decision."
+  }
+ ]
+}

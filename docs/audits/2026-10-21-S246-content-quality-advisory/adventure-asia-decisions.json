@@ -1,0 +1,93 @@
+{
+ "items": [
+  {
+   "id": "W1",
+   "title": "Dùng adventure.asia làm gì cho S1",
+   "context": "Site có hai đời trang. Đời cũ đầy chữ quảng cáo, lỗi chính tả, câu 'Join Adventure Asia'. Đời mới (ID 700+) bình tĩnh nhưng bịa dữ kiện (subak, mosque, 3.600 m), bỏ km/bữa ăn, LEVEL sai. Trên 6 tour golden, site hơn S1 2, ngang 2, kém 2.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Chỉ học khung trang, giọng bình tĩnh và lập trường white-label; không coi chữ site là chuẩn hay ví dụ mẫu"
+    },
+    {
+     "key": "b",
+     "label": "Lấy trang đời mới làm ví dụ mẫu nguyên văn"
+    },
+    {
+     "key": "c",
+     "label": "Bỏ qua site hoàn toàn"
+    }
+   ],
+   "recommended": "a",
+   "why": "Khung trang tốt và hợp mô hình B2B, nhưng chữ site trượt rubric và mang đúng lỗi bịa mà S1 đang sửa."
+  },
+  {
+   "id": "W2",
+   "title": "Ví dụ mẫu cho phẫu thuật prompt S248",
+   "context": "Kế hoạch đã duyệt có 3-5 ví dụ ngoài golden. 14/50 tour golden có trang site nên không được dùng. af0ded16 (site 1010) và dfdb4017 (site 324) không thuộc golden và so được ba bản.",
+   "options": [
+    {
+     "key": "a",
+     "label": "3-5 tour ngoài golden (af0ded16, dfdb4017 + 1-3), khung AA, chỉ điền từ bảng dữ kiện CIS, không dán câu site"
+    },
+    {
+     "key": "b",
+     "label": "Dán trang site đã sửa dữ kiện làm ví dụ"
+    }
+   ],
+   "recommended": "a",
+   "why": "Tránh rò golden, tránh model lặp câu mở của site trên 900 trang, và giữ dữ kiện đúng nguồn."
+  },
+  {
+   "id": "W3",
+   "title": "Đo số liệu: tỷ lệ giữ hay mật độ",
+   "context": "Trang site cũ tốt nhất có 24-26 số/1.000 từ vì nguồn của nó giàu số. Nguồn CIS trung vị 7,6, S1 trung vị 4,9. S1 giữ ít số hơn nguồn ở 420/870 tour và tự thêm số ở 127 tour.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Đo tỷ lệ giữ dữ kiện nguồn (số, bữa ăn, chỗ ngủ, LEVEL) bằng code trong bộ kiểm S247"
+    },
+    {
+     "key": "b",
+     "label": "Đặt mục tiêu mật độ số ≥ 11/1.000 từ"
+    }
+   ],
+   "recommended": "a",
+   "why": "Mục tiêu mật độ là sàn, sẽ đẩy model bịa số; đúng thứ S248 đang gỡ ('real number', 'expand')."
+  },
+  {
+   "id": "W4",
+   "title": "Rò tên Adventure Asia trong S1 đã publish",
+   "context": "9 tour S1 ghi Adventure Asia là đơn vị tổ chức; 8 tour không có tên này trong lịch trình nguồn. Fixer A1 còn ghi 'You are Adventure Asia's editorial fixer' và 'Adventure Asia brand standards' (flag_fix_node.py:194,222). Site hứa agent 'Ready-to-sell trip pages'.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Thêm kiểm rò tên vào bộ kiểm S247, sửa prompt fixer trung tính trong PR S248 (có review độc lập)"
+    },
+    {
+     "key": "b",
+     "label": "Để sau A/B"
+    }
+   ],
+   "recommended": "a",
+   "why": "Chi phí $0, sửa nhỏ, và trang trắng là điều kiện để agent bán lại được."
+  },
+  {
+   "id": "W5",
+   "title": "Bản viết lại song song trên adventure.asia",
+   "context": "169/212 tour trùng tên là trang đời mới, tức site đang có bản viết lại riêng của sản phẩm CIS, làm ngoài CIS (trái tinh thần ADR 0002). Chưa rõ ai viết.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Anh cho biết ai viết; ghi câu hỏi 'site đọc catalog.v_tour' vào backlog, chưa mở issue"
+    },
+    {
+     "key": "b",
+     "label": "Mở issue Linear kiến trúc ngay"
+    }
+   ],
+   "recommended": "a",
+   "why": "Cần biết nguồn gốc trước khi quyết; tạo issue Linear phải hỏi anh và quota Linear đang hạn chế."
+  }
+ ]
+}

@@ -1,0 +1,442 @@
+{
+ "groups": [
+  {
+   "title": "Làm gọn kỹ thuật (quyết lại mục đã duyệt)",
+   "short": "Làm gọn S1–S7",
+   "intro": "Bảy đề xuất làm gọn còn đứng sau phản biện độc lập, ở bản đã sửa. Tiền tiết kiệm ở Dev gần như hoà (≈ $2–4/tháng); lợi chính là bớt ≈ 5–8 giờ trực/tháng khi chạy thật và bỏ các phần tự chế. Chi tiết: r4/crm-v2.2-simplified.md §2.",
+   "items": [
+    {
+     "id": "S1",
+     "question": "Khoá F1: dùng một khoá KMS cho mỗi môi trường và mỗi đại lý một DEK, thay cho mỗi đại lý một khoá KMS?",
+     "context": "Hiện tại: mỗi đại lý một khoá KMS do task role tạo lúc chạy (<b>B2</b>: CreateKey + BypassPolicyLockoutSafetyCheck), N key policy kiểm lệch mỗi đêm, dọn khoá đại lý giả, mỗi khách một DEK (D7 a, N11 a). | Thị trường: Atlassian dùng khoá chung theo ranh giới dịch vụ, tenant context là AAD; khoá riêng (CMK) là add-on gói Enterprise. AWS khuyên đặt tenant_id trong encryption context (support.atlassian.com/…/what-is-cmk-encryption, docs.aws.amazon.com/kms/…/encrypt_context.html, đọc 20/10/2026). | Đề xuất: 1 khoá <b>alias/crm-env/data</b> do Terraform quản lý, policy ba câu + alarm EventBridge + so GetKeyPolicy mỗi đêm; DEK theo đại lý (bọc, context {tenant_id, purpose}, cache 5 phút); AES-GCM thư viện; blind index HKDF cắt ngắn; kho DEK cắm-rút được (E2); bỏ DEK từng khách; bỏ B2.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý S1 (bỏ D7 a khoá/đại lý, N11 a, B2)"
+      },
+      {
+       "key": "b",
+       "label": "Giữ như v2.1"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tiết kiệm: Dev ≈ −$2–4; prod −$10/−$50/−$200 ở 10/50/200 đại lý ($1/khoá, không xoay). Vận hành −2 giờ/tháng, không khoá mồ côi. Bảo mật: task role mất quyền CreateKey + bypass (tốt hơn); cách ly đại lý giữ nhờ AAD + RLS; break-glass vẫn mỗi lần một đại lý. Đổi lại: lời hứa xoá dựa vào thời hạn backup (luật V1, câu Q2 cho chị Thư)."
+    },
+    {
+     "id": "S2",
+     "question": "Audit: chỉ ghi sự kiện bảo mật và mọi lần đọc F1, export mỗi giờ lên S3 Object Lock, bỏ niêm phong Merkle mỗi phút?",
+     "context": "Hiện tại: mỗi request có đọc PII một event, partition tháng, job niêm phong Merkle mỗi phút, Object Lock (v2.1 S8). | Thị trường: bảng append-only + trang audit cho tenant + export; AWS khai tử QLDB, chỉ sang pgAudit + S3; Object Lock là mỏ neo chống sửa (infoq.com/news/2024/07/aws-kill-qldb, docs.aws.amazon.com/AmazonS3/…/object-lock.html, đọc 20/10/2026). | Đề xuất: runtime chỉ INSERT/SELECT, trigger chặn UPDATE/DELETE; ghi đủ actor (user, ai_agent, aa_ops, support); không PII trong audit; export <b>mỗi giờ</b> với manifest SHA-256 nối chuỗi; Dev governance, compliance chỉ bật sau câu Q1 của chị Thư.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý S2"
+      },
+      {
+       "key": "b",
+       "label": "Giữ như v2.1"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tiền ≈ $0 (vài cent PUT S3). Vận hành −1 tới −1,5 giờ/tháng (bỏ job mỗi phút). Bảo mật: cửa sổ sửa lén ≤ 1 giờ; spec F5 'every read is logged' vẫn đủ."
+    },
+    {
+     "id": "S3",
+     "question": "E-sign trên Dev/CI: chỉ dùng stub qua adapter trung lập, bỏ container Documenso khỏi CI?",
+     "context": "Hiện tại: adapter trung lập; Dev/CI chạy container Documenso (AGPL) + stub (F17, v2.1 §7.2). | Thị trường: Travefy và Safari Portal có e-sign sẵn trong app; không công cụ du lịch nào đẩy khách sang DocuSign (help.safariportal.app/…/20902…, agentstudio.travefy.com/crm, đọc 20/10/2026). | Đề xuất: giữ adapter <b>esign.*</b>, Dev/CI chỉ stub (đúng B5 a). Chưa xây provider tự làm: chọn tự làm/BoldSign/Documenso là việc của chị Thư sau khi hãng bảo hiểm trả lời (Q6).",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý S3 (stub, bỏ Documenso khỏi CI)"
+      },
+      {
+       "key": "b",
+       "label": "Giữ như v2.1"
+      }
+     ],
+     "recommended": "a",
+     "why": "Dev $0 (như cũ). Vận hành −0,5 tới −1 giờ/tháng, −1 issue. Ở prod có thể −$40 tới −$250/tháng nhưng chỉ khi chị Thư chọn tự làm, nên không tính vào tiết kiệm của engineering. Bảo mật: không đổi."
+    },
+    {
+     "id": "S4",
+     "question": "Builder: fork component bản đồ của TripPlanner một lần rồi AA-Partner tự sở hữu, bỏ đồng bộ byte?",
+     "context": "Hiện tại: chép byte MapView.tsx + lib, manifest sha256 kiểm trong CI, job hằng đêm mở issue khi TP đổi (<b>D21 c</b>, vừa xác nhận lại ở vòng 2). | Thị trường: khi hai sản phẩm dùng chung UI thì tách package hoặc fork rồi tự sở hữu; không thấy ai đối chiếu byte giữa hai repo (ước tính). | Đề xuất: fork một lần, ADR ghi 'nguồn gốc TP commit X'; giữ một guard CI cấm import @/lib/api, @/lib/useTrip, @/lib/tileLoader của TP.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý S4 (lật D21 c)"
+      },
+      {
+       "key": "b",
+       "label": "Giữ như v2.1 (D21 c)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tiền $0. Vận hành −1 tới −2 giờ/tháng (không phải phân loại issue tự mở), −1 issue. Rủi ro: hai bản UI lệch dần, chấp nhận được. Phần khó thật (logic ghép tuyến, T13) vẫn chờ issue điều tra."
+    },
+    {
+     "id": "S5",
+     "question": "Xác thực service-to-service: dùng Cognito M2M (client credentials) trên pool riêng thay cho JWT tự ký bằng KMS?",
+     "context": "Hiện tại: JWT dịch vụ ký bằng khoá KMS bất đối xứng, bên nhận tự kiểm (<b>T8</b>), ≈ $1/tháng, định dạng token và JWKS tự giữ. | Thị trường: OAuth2 client credentials là chuẩn; Cognito tính theo token M2M, không free tier, không tính phí app client; access token 5 phút–1 ngày; xoay secret hai slot từ 02/2026 (aws.amazon.com/cognito/pricing, docs.aws.amazon.com/cognito/…/amazon-cognito-user-pools-using-the-access-token.html, đọc 20/10/2026). | Đề xuất: pool <b>aa-m2m-env</b> riêng (không trộn WORKFORCE); mỗi API một resource server + scope; route ghim client_id + scope; token 6 giờ, cache trong process.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý S5 (M2M pool riêng)"
+      },
+      {
+       "key": "b",
+       "label": "Giữ như v2.1 (T8)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tiền ≈ hoà: token 6 giờ ≈ $0,5 + 1 secret $0,40, bỏ khoá ký $1. Vận hành −0,25 tới −0,5 giờ/tháng, không còn mật mã tự viết. Bảo mật: thêm một client secret tĩnh (xoay được), T8 không có secret nên nhỉnh hơn về độ chặt; ưu tiên thấp, giữ T8 cũng an toàn."
+    },
+    {
+     "id": "S6",
+     "question": "Service công khai thứ hai chỉ có quyền Encrypt (N15): hoãn quyết tới Go-real sau pentest, nhưng làm ngay guard ranh giới?",
+     "context": "Hiện tại: N15 a: pilot một task role, tách trước đại lý thứ 11 hoặc AA-880; T3 hoãn sang Go-real. | Thị trường: không thấy vendor công bố mô hình này; thường là một service + ranh giới code + WAF ở biên (ước tính, không phải bằng chứng). | Đề xuất: giữ N15 a; quyết ở Go-real sau pentest. Làm ngay <b>traveller_self_reveal(session)</b> (chỉ mở khách của trip gắn cookie link, cần cho module 11 + Rule 4) và test cấm reveal() tổng quát ở router công khai; webhook Twilio luôn kiểm HMAC.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Hoãn quyết + làm guard ngay"
+      },
+      {
+       "key": "b",
+       "label": "Giữ như v2.1 (chỉ hoãn, không thêm guard)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tiền $0 bây giờ; nếu pentest không đòi tách thì −$8–17/tháng từ đại lý thứ 11. Vận hành không đổi. Bảo mật: guard giảm rủi ro RCE ở đường công khai lấy được quyền giải mã; bản gốc 'bỏ N15 ngay' bị phản biện bác vì không tiết kiệm gì và mâu thuẫn module 11."
+    },
+    {
+     "id": "S7",
+     "question": "Kênh nhắn tin: làm WhatsApp + SMS trước, dời Messenger/Instagram ra khỏi 'đủ 23 module'?",
+     "context": "Hiện tại: AA làm Meta Tech Provider, Embedded Signup cho WABA của đại lý, cùng một app Meta cho Messenger + IG (<b>D19 a</b>). | Thị trường: Tern, Travefy, Safari Portal không có WhatsApp (không tìm thấy); TravelJoy chỉ SMS ở Premium; Tech Provider cần xác minh doanh nghiệp + app review kèm video (traveljoy.com/pricing, developers.facebook.com/…/get-started-for-tech-providers, đọc 20/10/2026). | Đề xuất: module 9 v1 = channel adapter chung + WhatsApp + SMS Twilio của đại lý; Messenger/IG có chỗ trong adapter, làm sau. Spec module 9 chỉ ghi WhatsApp/SMS.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý S7 (nếu chị Thư trả lời Q7 là không bắt buộc)"
+      },
+      {
+       "key": "b",
+       "label": "Giữ như v2.1 (D19 a)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tiền $0 (đại lý trả Meta). Vận hành −0,5 tới −1 giờ/tháng (bớt permission, webhook, review), −2 tới −3 issue ở D6. Bảo mật: bớt bề mặt token Meta."
+    }
+   ]
+  },
+  {
+   "title": "AA admin vào và quản lý CRM thế nào",
+   "short": "AA admin (T9)",
+   "intro": "Trả lời câu anh hỏi ở T9. Ba lớp giống HubSpot, Zoho, Okta, WorkOS; đã sửa theo phản biện (không tự gán owner mới, không tự export/xoá). Chi tiết + sơ đồ: r4/crm-v2.2-simplified.md §3.",
+   "items": [
+    {
+     "id": "A1",
+     "question": "Chọn mô hình AA admin vào CRM: console nền tảng không PII + hỗ trợ có đồng ý + break-glass?",
+     "context": "Hiện tại: chỉ có break-glass (review bảo mật §2) và ops-feed.v1 chỉ đọc; chưa có thao tác quản trị đại lý, chưa có luồng hỗ trợ. | Thị trường: tắt mặc định → khách cấp → có hạn → thu hồi được → ghi log: HubSpot 24 giờ, Zoho chặn export/integrations và mỗi lần 1 người, Okta chỉ đọc, WorkOS lý do + banner; AWS tách control plane khỏi application plane (knowledge.hubspot.com/…/limit-logins-to-trusted-ip-addresses, help.zoho.com/…/support-access-for-zoho-crm, workos.com/blog/support-impersonation-delegated-sessions, đọc 20/10/2026). Công cụ du lịch không công bố cơ chế nào. | Đề xuất: <b>Lớp 1</b> console trong CIS admin qua <b>crm.ops.v1</b>: usage meter cố định (không trip/doanh thu), tạo/khoá đại lý, mời owner đầu tiên chỉ khi chưa có owner và chưa có khách, entitlements chỉ cho phép không bật AI, export/xoá chỉ là yêu cầu owner xác nhận, khôi phục owner chỉ thăng thành viên có sẵn có thời gian chờ. <b>Lớp 2</b> owner cấp hỗ trợ 24 giờ, chỉ đọc, ẩn F1, mỗi lần 1 người, nhập lý do, banner, client WORKFORCE riêng, chặn gửi tin/export/đổi quyền/tích hợp. <b>Lớp 3</b> break-glass MFA ≤ 1 giờ, mỗi lần 1 đại lý qua encryption context, alarm tới anh + người thứ hai. Mọi lớp ghi vào audit của đại lý.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý mô hình 3 lớp (bản đã sửa)"
+      },
+      {
+       "key": "b",
+       "label": "Chỉ lớp 1 + break-glass, chưa làm hỗ trợ có đồng ý"
+      },
+      {
+       "key": "c",
+       "label": "Giữ như v2.1 (chỉ break-glass)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tiền $0 hạ tầng; +4 tới +6 issue (D1–D2), +0,5 giờ vận hành/tháng nhưng bớt việc ad-hoc vì staff có màn hình thật. Bảo mật: giữ câu F1 'AA included' và T9 (CRM nắm quyền); AA không bao giờ tự chỉ định người đọc F1; mọi truy cập đại lý tự thấy trong audit. Câu chữ hứa với đại lý → chị Thư (Q4, Q5, Q9, Q10)."
+    }
+   ]
+  },
+  {
+   "title": "Luật vận hành đi kèm",
+   "short": "Luật V1–V3",
+   "intro": "Ba luật nhỏ còn đứng sau phản biện; không tốn tiền, chống lỗi đắt về sau.",
+   "items": [
+    {
+     "id": "V1",
+     "question": "Đưa luật backup vào runbook Go-real để lời hứa xoá đúng (hệ quả của S1)?",
+     "context": "Hiện tại: lời hứa xoá dựa vào ScheduleKeyDeletion của khoá từng đại lý. | Thị trường: RDS giữ backup 0–35 ngày, và có thể giữ lâu hơn nếu instance từng bị stop (docs.aws.amazon.com/AmazonRDS/…/BackupRetention.html, đọc 20/10/2026). | Đề xuất: backup tự động ≤ 30 ngày; snapshot tay, bản chép region khác và AWS Backup của DB chứa crm ≤ 30 ngày; prod không stop; alarm khi có snapshot tay; diễn tập khôi phục với đại lý giả đã xoá. Nếu dùng RDS chung thì chuyển kho DEK sang S3 có hạn giữ riêng (E2).",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý"
+      },
+      {
+       "key": "b",
+       "label": "Không áp dụng (giữ như v2.1)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tiền $0; một lần diễn tập ở Go-real. Bảo mật: làm câu 'không đọc lại được kể cả bản sao lưu sau 30 ngày' kiểm chứng được."
+    },
+    {
+     "id": "V2",
+     "question": "Cấm dùng tenant_id làm chiều metric CloudWatch; số theo từng đại lý lấy từ log/DB?",
+     "context": "Hiện tại: chưa có luật. | Thị trường: CloudWatch tính $0,30 mỗi metric tuỳ chỉnh; 200 đại lý × vài metric ≈ $300/tháng (aws.amazon.com/cloudwatch/pricing, đọc 20/10/2026). | Đề xuất: metric EMF chỉ có chiều theo service/stage/model; theo từng đại lý dùng truy vấn log hoặc crm.llm_call.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý"
+      },
+      {
+       "key": "b",
+       "label": "Không áp dụng"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tránh bẫy ≈ $300/tháng ở 200 đại lý; vận hành không đổi; không ảnh hưởng bảo mật."
+    },
+    {
+     "id": "V3",
+     "question": "Thêm test CI kiểm thứ tự rule trên ALB dùng chung (chống lặp lỗi B1)?",
+     "context": "Hiện tại: thứ tự rule đã sửa tay ở CRM-04/05 (web < 100, rồi 'có X-AA-Origin → 403'). | Thị trường: AWS hướng dẫn ALB nhận CloudFront qua header bí mật + mặc định 403, xoay header định kỳ (docs.aws.amazon.com/AmazonCloudFront/…/restrict-access-to-load-balancer.html, đọc 20/10/2026). | Đề xuất: test trên terraform plan: mọi traffic có X-AA-Origin chỉ tới web hoặc 403; nằm trong CRM-04/05, không thêm issue.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đồng ý"
+      },
+      {
+       "key": "b",
+       "label": "Không áp dụng"
+      }
+     ],
+     "recommended": "a",
+     "why": "Tiền $0; chặn lỗi lộ CIS/Booking API qua CloudFront tái diễn khi ai đó thêm rule mới."
+    }
+   ]
+  },
+  {
+   "title": "Câu hỏi cho chị Thư (thêm)",
+   "short": "Chị Thư",
+   "intro": "Các câu kinh doanh, pháp lý, vendor mới xuất hiện ở vòng 4. Engineering không quyết; 'recommended' chỉ là gợi ý để chị tham khảo. Gộp với thu-questions.md khi gửi.",
+   "items": [
+    {
+     "id": "Q1",
+     "question": "Nhật ký audit giữ bao lâu, và đại lý có cần tải về hoặc stream nhật ký không?",
+     "context": "Hiện tại: Dev dùng Object Lock chế độ governance; prod chưa chốt. | Thị trường: S3 Object Lock chế độ compliance không ai xoá hay rút ngắn được, kể cả root (docs.aws.amazon.com/AmazonS3/…/object-lock.html, đọc 20/10/2026). | Đề xuất: engineering gợi ý 1 năm + đại lý export CSV trong app; thời hạn là việc của chị.",
+     "options": [
+      {
+       "key": "a",
+       "label": "1 năm, export CSV"
+      },
+      {
+       "key": "b",
+       "label": "3 năm"
+      },
+      {
+       "key": "c",
+       "label": "7 năm"
+      },
+      {
+       "key": "d",
+       "label": "Chị quyết khác"
+      }
+     ],
+     "recommended": "a",
+     "why": "Thời hạn dài hơn tốn thêm lưu trữ S3 (vài cent) nhưng không rút lại được; là cam kết pháp lý với đại lý."
+    },
+    {
+     "id": "Q2",
+     "question": "Câu hứa xoá: 'sau khi xoá, dữ liệu không đọc lại được ở bất kỳ đâu, kể cả bản sao lưu, sau tối đa 30 ngày' (thay câu H3 'khi xoá khoá thì không đọc được nữa')?",
+     "context": "Hiện tại: câu H3 do anh Nghiệp tạm trả lời thay chị, dựa trên xoá khoá KMS từng đại lý. | Thị trường: Travefy xoá trong 30 ngày sau khi chấm dứt; RDS giữ backup tối đa 35 ngày (travefy.com/termsandprivacy, docs.aws.amazon.com/AmazonRDS/…/BackupRetention.html, đọc 20/10/2026). | Đề xuất: chấp nhận mốc 30 ngày; nếu cần xoá tức thì cho riêng một đại lý thì bán tuỳ chọn 'khoá riêng' (Q3).",
+     "options": [
+      {
+       "key": "a",
+       "label": "Chấp nhận 30 ngày"
+      },
+      {
+       "key": "b",
+       "label": "Mốc khác (chị chọn)"
+      },
+      {
+       "key": "c",
+       "label": "Cần không đọc được ngay khi xoá"
+      }
+     ],
+     "recommended": "a",
+     "why": "Phương án c buộc giữ khoá KMS riêng mỗi đại lý (+$1/đại lý/tháng và quyền CreateKey lúc chạy)."
+    },
+    {
+     "id": "Q3",
+     "question": "'Khoá riêng của đại lý' / BYOK (spec §8 'agency-held keys'): cần cho các đại lý đầu tiên, hay để thành tuỳ chọn trả phí sau?",
+     "context": "Hiện tại: cả v2.1 lẫn v2.2 đều chưa làm BYOK; v2.2 giữ sẵn chỗ cắm trong KeyProvider. | Thị trường: Atlassian bán CMK như add-on gói Cloud Enterprise (atlassian.com/platform/infrastructure/cmk, đọc 20/10/2026). | Đề xuất: để thành tuỳ chọn trả phí sau.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Tuỳ chọn trả phí sau"
+      },
+      {
+       "key": "b",
+       "label": "Cần ngay cho đại lý đầu tiên"
+      }
+     ],
+     "recommended": "a",
+     "why": "Làm ngay thêm khoảng 3–5 issue và quy trình hỗ trợ khoá của khách (ước tính)."
+    },
+    {
+     "id": "Q4",
+     "question": "Đại lý cấp quyền hỗ trợ cho AA mặc định bao lâu?",
+     "context": "Hiện tại: chưa có. | Thị trường: HubSpot 24 giờ; Zoho theo số ngày khách chọn; Intercom 14 ngày (knowledge.hubspot.com/…/limit-logins-to-trusted-ip-addresses, help.zoho.com/…/support-access-for-zoho-crm, đọc 20/10/2026). | Đề xuất: 24 giờ mặc định, owner chọn được tới 14 ngày.",
+     "options": [
+      {
+       "key": "a",
+       "label": "24 giờ (chọn tới 14 ngày)"
+      },
+      {
+       "key": "b",
+       "label": "7 ngày"
+      },
+      {
+       "key": "c",
+       "label": "14 ngày"
+      }
+     ],
+     "recommended": "a",
+     "why": "Không tốn tiền; ngắn hơn thì ít rủi ro hơn nhưng đại lý phải bật lại nhiều lần."
+    },
+    {
+     "id": "Q5",
+     "question": "Có điều khoản cho AA vào khẩn cấp (break-glass) không cần đồng ý trước không, báo đại lý trong bao lâu, và ai là người thứ hai nhận báo động?",
+     "context": "Hiện tại: break-glass đã thiết kế (MFA, ≤ 1 giờ, một đại lý, tự vào audit); chưa có điều khoản và người nhận thứ hai. | Thị trường: Zendesk có điều khoản vào khẩn cấp không báo trước (support.zendesk.com/hc/en-us/articles/4408824477082, đọc 20/10/2026). | Đề xuất: có điều khoản, báo đại lý trong 72 giờ, chị Thư là người thứ hai nhận báo động.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Có điều khoản, báo trong 72 giờ, chị Thư nhận báo động"
+      },
+      {
+       "key": "b",
+       "label": "Có điều khoản, mốc báo khác"
+      },
+      {
+       "key": "c",
+       "label": "Không có điều khoản (chỉ vào khi đại lý đồng ý)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Phương án c nghĩa là sự cố an ninh cũng phải chờ đại lý; DPA và câu chữ là việc của chị và luật sư."
+    },
+    {
+     "id": "Q6",
+     "question": "Chữ ký điện tử cho điều khoản và waiver trekking: hãng bảo hiểm có nhận chữ ký đơn giản tự làm không? Chọn phương án nào?",
+     "context": "Hiện tại: Dev dùng stub; chưa chọn nhà cung cấp (N8 hoãn). | Thị trường: Travefy, Safari Portal có e-sign sẵn trong app; BoldSign từ $30/tháng; Documenso Teams $40, Platform $250 (help.safariportal.app/…/20902…, boldsign.com/pricing, documenso.com/pricing, đọc 20/10/2026). | Đề xuất: hỏi hãng bảo hiểm trước; nếu họ nhận thì tự làm (≈ $0–1/tháng, 3–4 issue). Lưu ý bản niêm phong tự ký có thể hiện 'validity unknown' trong Adobe (ước tính).",
+     "options": [
+      {
+       "key": "a",
+       "label": "Tự làm trong CRM (nếu bảo hiểm nhận)"
+      },
+      {
+       "key": "b",
+       "label": "BoldSign"
+      },
+      {
+       "key": "c",
+       "label": "Documenso Teams"
+      },
+      {
+       "key": "d",
+       "label": "Documenso Platform"
+      }
+     ],
+     "recommended": "a",
+     "why": "Chênh $0 tới $250/tháng; công tương đương (2–4 issue)."
+    },
+    {
+     "id": "Q7",
+     "question": "Messenger/Instagram có bắt buộc cho các đại lý thật đầu tiên không, hay WhatsApp + email là đủ?",
+     "context": "Hiện tại: D19 a gồm cả Messenger + IG. | Thị trường: công cụ du lịch thường không có WhatsApp, càng ít Messenger/IG (traveljoy.com/pricing, đọc 20/10/2026). | Đề xuất: WhatsApp + email đủ cho bản đầu.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Không bắt buộc"
+      },
+      {
+       "key": "b",
+       "label": "Bắt buộc"
+      }
+     ],
+     "recommended": "a",
+     "why": "Nếu b thì thêm 2–3 issue và các vòng app review của Meta."
+    },
+    {
+     "id": "Q8",
+     "question": "Gói giá cho đại lý có tính theo số trip hoặc doanh số không?",
+     "context": "Hiện tại: console của AA chỉ thấy seat, user hoạt động, dung lượng, chi phí AI. | Thị trường: TravelJoy Starter giới hạn 12 trip/năm (traveljoy.com/pricing, đọc 20/10/2026). | Đề xuất: nếu không tính theo trip thì AA không cần thấy số trip từng đại lý.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Không tính theo trip/doanh số"
+      },
+      {
+       "key": "b",
+       "label": "Có tính theo trip/doanh số"
+      }
+     ],
+     "recommended": "a",
+     "why": "Phương án b nghĩa là AA thấy số trip của từng đại lý; cần ghi vào câu hứa quyền riêng tư."
+    },
+    {
+     "id": "Q9",
+     "question": "Duyệt câu hứa quyền riêng tư thay cho 2.2 + 2.3 cũ?",
+     "context": "Hiện tại: 2.2 + 2.3 cũ chỉ nói break-glass. | Thị trường: nhà cung cấp lớn công bố cơ chế hỗ trợ có đồng ý; công cụ du lịch không công bố gì. | Đề xuất: 'AA quản lý tài khoản đại lý mà không xem hồ sơ khách. Nhân viên AA chỉ xem được dữ liệu khi chủ đại lý tự cấp quyền hỗ trợ có thời hạn, mặc định chỉ đọc và ẩn thông tin danh tính khách. Khẩn cấp về an ninh hoặc pháp lý thì AA có thể mở dữ liệu của một đại lý, phải đăng nhập hai bước, và việc đó tự hiện trong nhật ký của đại lý.'",
+     "options": [
+      {
+       "key": "a",
+       "label": "Duyệt câu đề xuất"
+      },
+      {
+       "key": "b",
+       "label": "Sửa câu chữ"
+      }
+     ],
+     "recommended": "a",
+     "why": "Không tốn tiền; đây là câu kỹ thuật làm đúng được theo mô hình A1."
+    },
+    {
+     "id": "Q10",
+     "question": "Khi chủ đại lý nghỉ hoặc mất tài khoản, AA được thăng một nhân viên có sẵn của đại lý lên chủ sau bao lâu chờ?",
+     "context": "Hiện tại: chưa có luồng. | Thị trường: khôi phục tài khoản qua support là cách thường gặp (ước tính). | Đề xuất: chỉ thăng thành viên có sẵn, chờ 7 ngày, mọi thành viên nhận mail và ai cũng huỷ được; không bao giờ giao cho người ngoài.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Chờ 7 ngày"
+      },
+      {
+       "key": "b",
+       "label": "Chờ 72 giờ"
+      },
+      {
+       "key": "c",
+       "label": "Không khôi phục, đại lý onboard lại"
+      }
+     ],
+     "recommended": "a",
+     "why": "Chờ ngắn thì nhanh hơn nhưng dễ bị lạm dụng hơn."
+    },
+    {
+     "id": "Q11",
+     "question": "WhatsApp đi qua tài khoản Twilio của chính đại lý, hay AA làm Meta Tech Provider?",
+     "context": "Hiện tại: D9 a: AA làm Tech Provider, đại lý chỉ trả phí Meta. | Thị trường: Twilio thu thêm $0,005 mỗi tin vào/ra và có luồng self sign-up cho thương hiệu của đại lý; Tech Provider cần xác minh doanh nghiệp + app review (twilio.com/en-us/whatsapp/pricing, twilio.com/docs/whatsapp/self-sign-up, developers.facebook.com/…/get-started-for-tech-providers, đọc 20/10/2026). Spec ghi 'Twilio / 360dialog'. | Đề xuất: engineering nghiêng về Twilio của đại lý (một adapter cho SMS + WhatsApp, AA không phải xác minh); điều khoản Twilio cho nền tảng bên thứ ba chưa kiểm.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Twilio của đại lý"
+      },
+      {
+       "key": "b",
+       "label": "AA làm Meta Tech Provider (D9 a)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Đại lý trả thêm ≈ $5 mỗi 1.000 tin (ước tính); AA bớt 1–2 issue và đồng hồ chờ Meta 2–4 tuần."
+    }
+   ]
+  }
+ ]
+}

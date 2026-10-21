@@ -1,0 +1,320 @@
+[
+ {
+  "id": "CRM-01a",
+  "linear": "AA-928",
+  "title": "[CRM W0] CRM-01a ADRs + contracts + spec errata",
+  "wave": "W0"
+ },
+ {
+  "id": "CRM-01b",
+  "linear": "AA-929",
+  "title": "[CRM W0] CRM-01b Data-standards bump",
+  "wave": "W0"
+ },
+ {
+  "id": "CRM-02",
+  "linear": "AA-930",
+  "title": "[CRM W0] CRM-02 Readiness checks (read-only)",
+  "wave": "W0"
+ },
+ {
+  "id": "CRM-03",
+  "linear": "AA-931",
+  "title": "[CRM W0] CRM-03 Infra bootstrap + CloudFront VPC-origin spike",
+  "wave": "W0"
+ },
+ {
+  "id": "CRM-04",
+  "linear": "AA-932",
+  "title": "[CRM W1] CRM-04 Infra + DB owner `crm`",
+  "wave": "W1"
+ },
+ {
+  "id": "CRM-05",
+  "linear": "AA-933",
+  "title": "[CRM W1] CRM-05 AA-Partner repo, API, job runner",
+  "wave": "W1"
+ },
+ {
+  "id": "CRM-06",
+  "linear": "AA-934",
+  "title": "[CRM W1] CRM-06 KeyProvider and field encryption",
+  "wave": "W1"
+ },
+ {
+  "id": "CRM-07",
+  "linear": "AA-935",
+  "title": "[CRM W1] CRM-07 Web skeleton + synthetic agencies",
+  "wave": "W1"
+ },
+ {
+  "id": "CRM-08",
+  "linear": "AA-936",
+  "title": "[CRM W1] CRM-08 Slice 1: intake → Inquiry → board",
+  "wave": "W1"
+ },
+ {
+  "id": "CRM-09",
+  "linear": "AA-937",
+  "title": "[CRM W2] CRM-09 F1/F2 complete",
+  "wave": "W2"
+ },
+ {
+  "id": "CRM-10",
+  "linear": "AA-938",
+  "title": "[CRM W2] CRM-10 F3 scrubber",
+  "wave": "W2"
+ },
+ {
+  "id": "CRM-11",
+  "linear": "AA-939",
+  "title": "[CRM W2] CRM-11 F4 roles, partner pool, MFA, permission matrix",
+  "wave": "W2"
+ },
+ {
+  "id": "CRM-12",
+  "linear": "AA-940",
+  "title": "[CRM W2] CRM-12 F5 audit",
+  "wave": "W2"
+ },
+ {
+  "id": "CRM-13a",
+  "linear": "AA-941",
+  "title": "[CRM W2] CRM-13a AA admin L1 console",
+  "wave": "W2"
+ },
+ {
+  "id": "CRM-14",
+  "linear": "AA-942",
+  "title": "[CRM W2] CRM-14 Data lifecycle rules",
+  "wave": "W2"
+ },
+ {
+  "id": "CRM-15",
+  "linear": "AA-943",
+  "title": "[CRM W3] CRM-15 Modules 1 + 2 complete",
+  "wave": "W3"
+ },
+ {
+  "id": "CRM-16",
+  "linear": "AA-944",
+  "title": "[CRM W3] CRM-16 Agency-line ledger + suppliers",
+  "wave": "W3"
+ },
+ {
+  "id": "CRM-17",
+  "linear": "AA-945",
+  "title": "[CRM W3] CRM-17 Module 5 email",
+  "wave": "W3"
+ },
+ {
+  "id": "CRM-18",
+  "linear": "AA-946",
+  "title": "[CRM W3] CRM-18 Thin full lifecycle",
+  "wave": "W3"
+ },
+ {
+  "id": "CRM-19",
+  "linear": "AA-947",
+  "title": "[CRM W4] CRM-19 B2B client + AA lines",
+  "wave": "W4"
+ },
+ {
+  "id": "CRM-20",
+  "linear": "AA-948",
+  "title": "[CRM W4] CRM-20 Builder map fork (enhancement)",
+  "wave": "W4"
+ },
+ {
+  "id": "CRM-21a",
+  "linear": "AA-949",
+  "title": "[CRM W4] CRM-21a Proposal model + day-list builder",
+  "wave": "W4"
+ },
+ {
+  "id": "CRM-21b",
+  "linear": "AA-950",
+  "title": "[CRM W4] CRM-21b Client proposal + accept + hold",
+  "wave": "W4"
+ },
+ {
+  "id": "CRM-22",
+  "linear": "AA-951",
+  "title": "[CRM W4] CRM-22 Module 4 + \"Before you go\"",
+  "wave": "W4"
+ },
+ {
+  "id": "CRM-23",
+  "linear": "AA-952",
+  "title": "[CRM W5] CRM-23 Module 7 invoices and payments",
+  "wave": "W5"
+ },
+ {
+  "id": "CRM-24a",
+  "linear": "AA-953",
+  "title": "[CRM W5] CRM-24a Module 11 portal per person",
+  "wave": "W5"
+ },
+ {
+  "id": "CRM-24b",
+  "linear": "AA-954",
+  "title": "[CRM W5] CRM-24b Offline PWA",
+  "wave": "W5"
+ },
+ {
+  "id": "CRM-25",
+  "linear": "AA-955",
+  "title": "[CRM W5] CRM-25 Module 12 contracts and waivers",
+  "wave": "W5"
+ },
+ {
+  "id": "CRM-26",
+  "linear": "AA-956",
+  "title": "[CRM W5] CRM-26 Module 8 ops release",
+  "wave": "W5"
+ },
+ {
+  "id": "CRM-27",
+  "linear": "AA-957",
+  "title": "[CRM W5] CRM-27 Commission + cancel trip",
+  "wave": "W5"
+ },
+ {
+  "id": "CRM-28",
+  "linear": "AA-958",
+  "title": "[CRM W6] CRM-28 Module 9 WhatsApp + SMS",
+  "wave": "W6"
+ },
+ {
+  "id": "CRM-29a",
+  "linear": "AA-959",
+  "title": "[CRM W6] CRM-29a Module 10 engine + tasks",
+  "wave": "W6"
+ },
+ {
+  "id": "CRM-29b",
+  "linear": "AA-960",
+  "title": "[CRM W6] CRM-29b Tags, system tags, coverage, ready-to-travel",
+  "wave": "W6"
+ },
+ {
+  "id": "CRM-30",
+  "linear": "AA-961",
+  "title": "[CRM W6] CRM-30 Duty of care + calendar",
+  "wave": "W6"
+ },
+ {
+  "id": "CRM-31",
+  "linear": "AA-962",
+  "title": "[CRM W6] CRM-31 Onboarding + import",
+  "wave": "W6"
+ },
+ {
+  "id": "CRM-32",
+  "linear": "AA-963",
+  "title": "[CRM W6] CRM-32 Search + library",
+  "wave": "W6"
+ },
+ {
+  "id": "CRM-33a",
+  "linear": "AA-964",
+  "title": "[CRM W7] CRM-33a AI gateway + drafts + guardrails",
+  "wave": "W7"
+ },
+ {
+  "id": "CRM-33b",
+  "linear": "AA-965",
+  "title": "[CRM W7] CRM-33b AI: supplier confirmations, notes → options, voices",
+  "wave": "W7"
+ },
+ {
+  "id": "CRM-34",
+  "linear": "AA-966",
+  "title": "[CRM W7] CRM-34 Reports + insights",
+  "wave": "W7"
+ },
+ {
+  "id": "CRM-35",
+  "linear": "AA-967",
+  "title": "[CRM W7] CRM-35 Module 18 portability + deletion",
+  "wave": "W7"
+ },
+ {
+  "id": "CRM-36",
+  "linear": "AA-968",
+  "title": "[CRM W7] CRM-36 Campaigns (R14)",
+  "wave": "W7"
+ },
+ {
+  "id": "CRM-37a",
+  "linear": "AA-969",
+  "title": "[CRM W7] CRM-37a Security review, SLOs, bounded load test",
+  "wave": "W7"
+ },
+ {
+  "id": "CRM-37b",
+  "linear": "AA-970",
+  "title": "[CRM W7] CRM-37b Release train, help, data page",
+  "wave": "W7"
+ },
+ {
+  "id": "CRM-13b",
+  "linear": "AA-971",
+  "title": "[CRM W7] CRM-13b AA support L2 + break-glass L3",
+  "wave": "W7"
+ },
+ {
+  "id": "CRM-B1",
+  "linear": "AA-972",
+  "title": "[CRM LB] CRM-B1 M2M + B2B quote",
+  "wave": "LB"
+ },
+ {
+  "id": "CRM-B2",
+  "linear": "AA-973",
+  "title": "[CRM LB] CRM-B2 Departures, capacity, holds",
+  "wave": "LB"
+ },
+ {
+  "id": "CRM-B2b",
+  "linear": "AA-974",
+  "title": "[CRM LB] CRM-B2b Booking commercial rules (new, Fix C2, A3, A8)",
+  "wave": "LB"
+ },
+ {
+  "id": "CRM-B3",
+  "linear": "AA-975",
+  "title": "[CRM LB] CRM-B3 Event feed + on-request desk + incident flag",
+  "wave": "LB"
+ },
+ {
+  "id": "CRM-B4",
+  "linear": "AA-976",
+  "title": "[CRM LB] CRM-B4 CIS catalog over HTTP",
+  "wave": "LB"
+ },
+ {
+  "id": "CRM-B5",
+  "linear": "AA-977",
+  "title": "[CRM LB] CRM-B5 AA-authored content in CIS (new, Fix C1)",
+  "wave": "LB"
+ },
+ {
+  "id": "CRM-P1",
+  "linear": "AA-978",
+  "title": "[CRM LP] CRM-P1 Membership feed + tenant API",
+  "wave": "LP"
+ },
+ {
+  "id": "CRM-P2",
+  "linear": "AA-979",
+  "title": "[CRM LP] CRM-P2 Move `portal/` into AA-Partner",
+  "wave": "LP"
+ },
+ {
+  "id": "CRM-38",
+  "linear": "AA-980",
+  "title": "[CRM W8] CRM-38 Go-real",
+  "wave": "W8"
+ }
+]
