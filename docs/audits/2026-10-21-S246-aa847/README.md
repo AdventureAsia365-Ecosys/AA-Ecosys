@@ -8,6 +8,7 @@ folder holds the tools that only the orchestrator runs and the outputs they prod
 | File | What |
 |---|---|
 | `gen_probe_sql.py` | Copies the TripPlanner reader SQL (browse + assembly, legacy + cis) into the AA-CIS-Infra probe between markers, with the TripPlanner commit (`ast`, no import). Works on TripPlanner before and after slice 6c. `--check` diffs. |
+| `design-linear-places.md` | Design (S246, owner decision: linear places drawn as lines): geometry sources, `geo.place_shape` + per-day stretch (CIS 255), catalog view columns, TripPlanner line layers / list / search / static maps, missing-geometry fallback, cost quote. Not applied. |
 | `http_parity.py` | Through the TripPlanner BFF (no secret): every browse reader with a cache-buster, ≤ 8 searches (Cohere quota), 20 seeded AA-674 pin sets on fresh guest drafts (coverage, suggestions, activities; **never** hand-off / inquiry; narration only with `--narrate`), `compare` legacy vs cis, `burst` (no search, rate-capped). |
 | `probe-*.txt` | (to add) `SCRIPT` lines of each probe run: baseline, after CIS 253, after the paid run, after the flip. |
 | `http-*.json`, `burst.json` | (to add) the HTTP runs and the post-flip burst. |
@@ -64,11 +65,10 @@ folder holds the tools that only the orchestrator runs and the outputs they prod
 
 ## Waiting on Nghiệp
 
-- Linear-feature display: proposed **hidden** (no pin, no circle; name kept in the day text); area features drawn as
-  areas. One constant to flip if a circle is preferred. Hiding is global (`shared.destinations.geo_status =
-  'suspect'`) and sticky: every re-locate of a linear-feature name hides it again (`store._write_point`). If the
-  circle option wins, flip the constant and undo the hide fixes already applied; to un-hide one place, an admin sets
-  it `manual`, or the next locate re-hides it.
+- ~~Linear-feature display~~ **decided S246: drawn as lines** (not hidden, not a circle) — design in
+  `design-linear-places.md`; the validity branch's hiding (`LINEAR_FEATURES_HIDDEN`, `Located.hidden`) is replaced
+  before it merges, and the flip gate reason `linear_feature` becomes `linear_without_shape`. Open: approve the
+  geometry backfill quote ($0 on the Geoapify Free plan + Overpass; $59 worst case) and the CIS 255 slice.
 - Approve the paid-run quote (AA-905).
 - Type the Terraform `tripplanner_places_source` / `PLACES_SOURCE` lines (underscore names).
 - Amend Done-when line 5 as above.
