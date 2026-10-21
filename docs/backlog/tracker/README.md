@@ -2,7 +2,7 @@
 
 A one-page view of the living backlog for Nghiệp: milestones (M1–M5 plus the CRM and portal-move milestones C-M1, P-M1, C-M2, C-M3) with their Done-when criteria, the per-session queue, time-gated checks, items waiting on people, every open Linear issue (filter + sort) and a per-session log.
 
-- Live page (private claude.ai artifact, owner Nghiệp): <https://claude.ai/artifact/Q4LvqJyX5wsqRgZZQ75aoF>
+- Live page (private claude.ai artifact, owner Nghiệp): <https://claude.ai/artifact/2VSP2stGG1TF7uXvqgQTUY>
 - Files: `index.html` (layout + script, rarely changes) and `plan.json` (all content). The page reads `plan.json` next to it.
 - Source of truth stays `docs/backlog/README.md` + Linear. `plan.json` mirrors them; when they disagree, fix `plan.json`.
 

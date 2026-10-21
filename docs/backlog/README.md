@@ -2,7 +2,7 @@
 
 **Purpose:** the single ordered list of what to do next, so a session starts here instead of re-auditing Linear. Built from the S238 full audit (69 open issues + data standards + logs + code + Jira, `docs/audits/2026-10-15-S238-backlog-audit/`) and updated at the end of every session since.
 
-**HTML view:** [tracker/](tracker/README.md) — the same plan as a filterable page (private artifact <https://claude.ai/artifact/Q4LvqJyX5wsqRgZZQ75aoF>); update `tracker/plan.json` in the same PR as this file.
+**HTML view:** [tracker/](tracker/README.md) — the same plan as a filterable page (private artifact <https://claude.ai/artifact/2VSP2stGG1TF7uXvqgQTUY>); update `tracker/plan.json` in the same PR as this file.
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
@@ -251,7 +251,7 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 - Audit proposals approved by Nghiệp and applied in Linear: **AA-852 Done** (X1 S1–S22 evidence; 179/180 revoke moved to AA-847), **AA-675 / AA-689 Canceled** (superseded), new **AA-907** (pip-audit expiry, High), **AA-908** (AA-680 customer half), **AA-909** (TP guest-token check on GETs), **AA-910** (Booking 1440 UI + audit rows); priority up AA-901 / AA-875 / AA-876; In Progress moves per the audit.
 - N-F: `e2e-claude-code-2` disabled on the Staff page (Nghiệp, verified S244). Root #117 merged (data standards v1.2, XD3 exception row).
 - Jira PR-14: same-day comment 10485 extended with the S244 cutover bullets + login screenshot (Nghiệp approved).
-- Master plan HTML tracker: `docs/backlog/tracker/` (artifact <https://claude.ai/artifact/Q4LvqJyX5wsqRgZZQ75aoF>).
+- Master plan HTML tracker: `docs/backlog/tracker/` (artifact <https://claude.ai/artifact/2VSP2stGG1TF7uXvqgQTUY>).
 
 ## 5c. Closed in S243
 

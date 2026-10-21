@@ -407,6 +407,7 @@
     "AA-844",
     "AA-876",
     "AA-877",
+    "AA-925",
     "AA-927"
    ],
    "canceled": [],
@@ -1425,18 +1426,6 @@
    "size": "L",
    "next": "Engagement feedback loop — needs real publish volume",
    "needs": "Park or cancel"
-  },
-  {
-   "id": "AA-925",
-   "title": "[Quality] Q-2: repair contract, degraded counters, S1 day-count oracle and Q0 corpus",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S247",
-   "size": "M",
-   "next": "L0 · Shipped live (#891, #893, #894 on a5f3da88); only the live forced-Jev check is left, then close with evidence",
-   "needs": ""
   },
   {
    "id": "AA-926",
