@@ -52,16 +52,23 @@ folder holds the tools that only the orchestrator runs and the outputs they prod
 2. Report live on `/admin/places`, every duration mismatch listed with a reason code (`ranged_heading`,
    `missing_day_numbers`, `duration_text_vs_days`, `extra_days`).
 3. No duplicate and no trail pin on the HCM Trail and Kuang Si tours: probe section 4 on the cis views after the
-   fixes + a TripPlanner screenshot after the flip.
+   fixes + a TripPlanner screenshot after the flip. Gate = `summary.gate.pass` on `/admin/places` for those tours'
+   countries: the blocking reason codes are `near_duplicate`, `linear_feature`, `area_feature`
+   (`validity.GATE_REASONS`); `same_destination_names` (one pin, several spellings — what Kuang Si becomes after the
+   dedupe), V1 duration and V4 day text are informational and never block.
 4. `cis` live on **both** Lambdas (TripPlanner CONTEXT: the component ids change, so browse and assembly flip
    together), post-flip parity, the four pages 200 with screenshots.
-5. Proposed replacement of the 7-day window (Dev: no waiting): the post-flip burst with 0 rows of
-   `aa-tripplanner-dev-browse-throttles` and 0 Lambda Errors over the run window, and no rollback.
+5. **Open until Nghiệp approves the change of acceptance criteria.** Proposed replacement of the 7-day window (Dev:
+   no waiting): the post-flip burst with 0 rows of `aa-tripplanner-dev-browse-throttles` and 0 Lambda Errors over
+   the run window, and no rollback.
 
 ## Waiting on Nghiệp
 
 - Linear-feature display: proposed **hidden** (no pin, no circle; name kept in the day text); area features drawn as
-  areas. One constant to flip if a circle is preferred.
+  areas. One constant to flip if a circle is preferred. Hiding is global (`shared.destinations.geo_status =
+  'suspect'`) and sticky: every re-locate of a linear-feature name hides it again (`store._write_point`). If the
+  circle option wins, flip the constant and undo the hide fixes already applied; to un-hide one place, an admin sets
+  it `manual`, or the next locate re-hides it.
 - Approve the paid-run quote (AA-905).
 - Type the Terraform `tripplanner_places_source` / `PLACES_SOURCE` lines (underscore names).
 - Amend Done-when line 5 as above.

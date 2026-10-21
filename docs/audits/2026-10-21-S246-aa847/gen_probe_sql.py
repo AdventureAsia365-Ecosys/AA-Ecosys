@@ -36,7 +36,7 @@ TOPK_SUBS = {"cols": "od.id, od.name, od.lat, od.lng", "scan_where": "c.embeddin
              "keep_where": "<ACTIVE_TOUR_SQL>", "k_param": "2", "int(limit)": "60", "key": "od.id"}
 EXACT_SUBS = {"cols": "d.id, d.name, d.lat, d.lng", "scan_where": "c.embedding IS NOT NULL",
               "keep_where": "<ACTIVE_TOUR_SQL>", "int(limit)": "60", "key": "d.id", "group": "d.id, d.name, d.lat, d.lng"}
-# 6c: the cis search (browse.search CIS_DEST_COLS, no country filter, no keep_where: the views are live-only)
+# 6c: the cis search (browse.search CIS_DEST_COLS, no country filter, no keep_where: views hide dead tours, unusable places)
 TOPK_CIS_SUBS = {"cols": "od.destination_id AS id, od.name, od.lat, od.lng, od.located_by, od.precision",
                  "scan_where": "c.embedding IS NOT NULL", "keep_where": "", "k_param": "2", "int(limit)": "60",
                  "key": "od.destination_id"}

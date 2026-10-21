@@ -232,11 +232,13 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   publishes (AA-679 behaviour); true homonyms without card or overnight context stay unlocated; the
   background slot reserve is per worker task and must be re-checked on horizontal scale-out.
 - **Amended S246 (AA-847), no decision changed:**
-  - *Top-k view.* The HNSW top-k is `catalog.v_component_embedding` (CIS 253): resolved components of live tours
-    with their embedding, **not** a `security_barrier` view, so `ORDER BY embedding <=> q LIMIT k` is served by the
-    index on `geo.tour_place` (`hnsw.iterative_scan` on pgvector ≥ 0.8); granted to `tripplanner` only (it exposes
-    ids and vectors, which Booking and `aa_app_user` do not need); usable-destination checks stay on the reader after
-    the scan. Contract `catalog.graph.v1.1`. TripPlanner `vector_topk` reads it with `source=CIS` (slice 6c).
+  - *Top-k view.* The HNSW top-k is `catalog.v_component_embedding` (CIS 253): components of live tours on a usable
+    destination (the rows of `v_tour_component`: never a suspect or merged place) with their embedding, **not** a
+    `security_barrier` view, so `ORDER BY embedding <=> q LIMIT k` is served by the index on `geo.tour_place`
+    (`hnsw.iterative_scan` on pgvector ≥ 0.8; liveness and the usable-destination rule are EXISTS filters, which an
+    iterative scan keeps); granted to `tripplanner` only (it exposes ids and vectors, which Booking and
+    `aa_app_user` do not need). The reader checks nothing after the scan. Contract `catalog.graph.v1.1`.
+    TripPlanner `vector_topk` reads it with `source=CIS` (slice 6c).
   - *Liveness without the barrier cost.* Every place / graph view joins the internal, ungranted, non-barrier
     `catalog._live_tour` (CIS 253) instead of `catalog.v_tour`, so the planner flattens it and prunes `v_tour`'s
     per-tour photo count, cover, duration regex and md5. `security_barrier` stays on the contract views; turning it
