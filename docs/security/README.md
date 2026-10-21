@@ -22,7 +22,7 @@ unless Nghiệp decides who may read them there (N-3).
 | SEC-01 | [Security baseline](baseline.md) | Which controls exist, their live status, evidence and open issue |
 | SEC-02 | `secrets-register.md` / `.yaml` (AA-878) | Every secret: owner, readers, rotation class |
 | SEC-03 | [Vulnerability management](vulnerability-management.md) | Fix times, exceptions, monthly triage, open alerts |
-| SEC-04 | `docs/legal/register.md` (AA-886) | Processing activities, sub-processors, retention runs |
+| SEC-04 | [Compliance and privacy register](../legal/register.md) (draft, AA-886), with the [retention log](../legal/retention-log.md), [DPA template](../legal/dpa-template.md), [DSAR and erasure runbook](../legal/dsar-erasure-runbook.md), [readiness packet](../legal/readiness-packet.md) and [consent check](../legal/consent-capture-query.md) | Processing activities, sub-processors, retention runs, data-subject requests |
 | SEC-06 | [Where a page may live](../STYLE.md#where-a-page-may-live-sec-06) | What may go into the public app repos |
 
 ## Access reviews (SEC-05)

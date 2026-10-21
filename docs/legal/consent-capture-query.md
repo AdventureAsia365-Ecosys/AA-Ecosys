@@ -7,20 +7,32 @@ status: draft
 owner: nghiep
 audience: [engineer, cio]
 applies_to: [tripplanner-lambda, aa-booking]
-last_reviewed: 2026-10-20
+last_reviewed: 2026-10-21
 review_every_days: 90
+last_tested: 2026-10-20
+tested_where: dev-acc2
+tested_evidence: AA-886 Linear comment of 2026-10-20 (DB Migrate run-script run 39363696312)
 related: [SEC-04, AA-886, AA-676, AA-877, AA-839]
 ---
 
 # Consent capture check (DM-6.5)
 
-> [!WARNING]
-> UNTESTED - do not follow in an incident without checking each step. The query has not run on Dev yet.
-
 Data standard DM-6.5 ([`02-data-management.md`](../architecture/data-standards/02-data-management.md)) says:
 consent MUST be stored with **value, timestamp and source**, and Booking's record is the master. This page holds
 the read-only query that shows it, and the steps to run it. It is the evidence for the AA-886 done-when line "a
 test inquiry stores consent value, time and source".
+
+## Result on Dev (2026-10-20)
+
+Ran once on Dev (acc2) through DB Migrate `mode=run-script`, run 39363696312, after a test inquiry through the live
+TripPlanner form (consent ticked). Evidence: the AA-886 Linear comment of 2026-10-20.
+
+- Test inquiry: 3 rows, `tripplanner.customers` → `booking.inbox_events` (source tripplanner) → `booking.customers`
+  (source `tripplanner_lead`), each with consent `true` and the same consent time (2026-10-20 03:16:26Z).
+- Integrity: consent without a time 0, a time without consent 0, in both apps.
+- Chain: value, time and source mismatches 0 across 5 linked customers.
+- The three test rows are kept for the first erasure test (see the
+  [retention log](retention-log.md#test-data-kept-for-the-erasure-test)).
 
 ## Where consent lives
 
