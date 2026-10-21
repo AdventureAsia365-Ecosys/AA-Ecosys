@@ -18,7 +18,7 @@ related: [ARCH-08, ARCH-08-data-management, ARCH-08-scaling, ARCH-08-schema-owne
 view, a contract or a query against the shared PostgreSQL 15 RDS (`aa-cis-dev-db`, acc2 `005097885195`,
 us-west-1) used by AA-CIS-App, AA-TripPlanner-Web and AA-Booking, and by any app that joins later.
 
-- **Status:** Accepted 15/10/2026 (v1.0, S237); version 1.1 on 19/10/2026 (S243) and 1.2 (S244, X1 close-out; changelog in [`README.md`](README.md)). Nghiệp approved every recommendation of the S237
+- **Status:** Accepted 15/10/2026 (v1.0, S237); version 1.1 on 19/10/2026 (S243), 1.2 (S244, X1 close-out) and 1.3 (S247, partner CRM; changelog in [`README.md`](README.md)). Nghiệp approved every recommendation of the S237
   data-architecture review (`docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md`,
   "the review"). This page is part of the rule body that
   [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and
