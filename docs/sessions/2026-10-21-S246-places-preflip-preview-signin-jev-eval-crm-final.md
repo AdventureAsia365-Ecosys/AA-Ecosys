@@ -4,12 +4,12 @@
 
 ## Trạng thái cuối phiên
 
-- **ECS (kiểm 21/10 ~15:55 UTC):**
-  - CIS api `aa-cis-dev-api:743` và worker `aa-cis-dev-worker:300`, cùng image `dev-7a4b0759` (CIS #902), rollout COMPLETED.
-  - CIS #903 (gateway fix cho Claude 5.5) merge 15:50 UTC; Deploy Dev đang chạy khi viết log, **chưa verify live**.
+- **ECS (kiểm 21/10 ~16:35 UTC):**
+  - CIS api và worker cùng image `dev-47ae118f` (CIS #904), rollout COMPLETED; `/health/ready` schema 260.
+  - CIS #903 (gateway fix cho Claude 5.5) đã live; smoke 16:29 UTC: Haiku 5.5 + Sonnet 5.5 OK trên acc3 (cả plain và schema).
   - Booking `aa-booking-dev-api:35`, image `dcb9936` (Booking #54), rollout COMPLETED.
-- **Migration đã apply trên Dev trong phiên (DB Migrate, check → apply, bảng job rảnh mỗi lần):** CIS 253, 255, 256, 257, 258, 259; tp-017; bk-018; tp-016.
-- **Repo:** main các repo con: CIS 31341906, Booking dcb9936, TripPlanner 6675519, Infra 3e81ce1. Root `master` + nhánh `docs/s246-master-plan` (PR đóng phiên này).
+- **Migration đã apply trên Dev trong phiên (DB Migrate, check → apply, bảng job rảnh mỗi lần):** CIS 253, 255, 256, 257, 258, 259, 260; tp-017; bk-018; tp-016.
+- **Repo:** main các repo con: CIS 47ae118f, Booking dcb9936, TripPlanner 6675519, Infra 3e81ce1. Root `master` + nhánh `docs/s246-master-plan` (PR đóng phiên này).
 - **Linear (đọc lại cuối phiên):**
   - Done trong phiên (8): AA-844, AA-876, AA-877, AA-927, AA-729, AA-925, AA-915, AA-821.
   - In Progress: AA-847, AA-911, AA-845, AA-803 (mở lại, phạm vi mới), AA-886, AA-816, AA-903, AA-779, AA-780.
@@ -69,7 +69,8 @@
   - Haiku 4.5: anchor 0,89, overnight 0,95 (0,947), locate 0,53.
   - GPT-6 Luna: 0,79 / 0,74 / 0,76.
   - GPT-5.6 Luna: 0,84 / 0,74 / 0,76.
-  - → Giữ Sonnet cho `a3_place_days` / `a3_place_locate`; thử Haiku 5.5 khi gateway fix (#903) đã live.
+  - Nghiệp chốt: chỉ Haiku hoặc Luna, **dùng Haiku 4.5 hiện có** → CIS #904 (migration 260, Infra #263) apply 16:22 UTC: hai stage `haiku`, fallback `sonnet`, bỏ shadow. Rủi ro: locate lệch hơn (trung vị 21 km so với 5 km) → nhiều tên rơi `llm`/area hơn; S247 build 1 nước trước rồi đếm `located_by`.
+  - Trial Haiku 5.5 (16:31 UTC, $0,01): locate trung vị 4,3 km (≈ Sonnet), nhưng 2/3 call days lỗi `max_tokens` (thinking ăn trần 4000) → chưa so được; S247 chỉnh effort/max_tokens rồi trial lại (`bedrock-models/place-trial-haiku-5-5.md`).
 - Lưu ý: Linear tự đóng AA-847 lúc 11:39 UTC vì tiêu đề "fix: AA-847 …" (Infra #255, root #151); đã mở lại (bài học mới).
 - Còn lại (chuỗi lật, phiên sau): lượt place có phí (AA-905 báo giá) để coverage gate về 0 thiếu (hiện 66 tour live thiếu trong CIS); Nghiệp sửa tay `PLACES_SOURCE` trên Lambda browse TP và `PLACE_SHAPES_ENABLED` trên CIS; parity + ảnh sau lật; cửa sổ 7 ngày.
 
@@ -99,9 +100,9 @@
 - Liệt kê model 3 account × 3 region: cùng danh sách (us-west-1 40, us-west-2 92, us-east-1 95). Mới nhất: Haiku 5.5, Sonnet 5.5, Opus 5.5, GPT-6 Luna/Sol. Catalog thiếu Haiku 5.5/Sonnet 5.5; route acc2 của `sonnet` trỏ Sonnet 4.5 LEGACY.
 - IAM: Infra #261 (role invoker được gọi Haiku 5.5 + Sonnet 5.5), apply trên acc3 và acc1.
 - CIS #902: thêm Haiku 5.5 + Sonnet 5.5 vào catalog, bỏ profile Sonnet 4.5 acc2 cũ → **CIS 259** (Infra #262) apply Dev 15:41 UTC.
-- Smoke (14:59 UTC, $0,0001): Haiku 5.5 và Sonnet 5.5 OK trên acc3; trên acc1 báo "not available for this account" (chưa có quyền truy cập model); GPT-6 Luna OK trên acc3, acc1 bị từ chối trên inference profile global (IAM, lúc smoke).
-- **Gateway fix CIS #903** (structured output của Claude 5.5 dùng auto tool choice): merge 15:50 UTC, deploy đang chạy, chưa verify.
-- A/B 7 stage `gpt-5.6-luna` → `gpt-6-luna`: script đã soạn (`.tmp-session/models/stage_ab.py`), chưa có kết quả trong phiên.
+- Smoke: 14:59 UTC OK trên acc3; 15:56–16:00 UTC bị từ chối "aws-marketplace:Subscribe" (kể cả user admin) — lần gọi đầu khởi động subscription Marketplace nền, role invoker không có quyền Marketplace nên subscription hỏng; sau `create-foundation-model-agreement` (15:58, admin) khoảng 30 phút thì có hiệu lực → 16:29 UTC OK cả 4 lượt. Không cần nhờ eCloudvalley (nháp giữ làm hồ sơ). acc1 vẫn báo "not available for this account".
+- **Gateway fix CIS #903** (structured output của Claude 5.5 dùng auto tool choice): live, smoke schema OK.
+- A/B 7 stage `gpt-5.6-luna` → `gpt-6-luna` (fixture 1.1.0, n=10/stage, ~$0,65): **giữ nguyên cả 7**. 6 stage dưới ngưỡng; `t2_brand_audit` đạt ngưỡng nhưng GPT-6 chỉ bắt nửa số lỗi (4 so với ~8), chậm 3 lần, tiết kiệm ~$0,0003/call → không đổi judge (`bedrock-models/stage-ab-gpt6.md`).
 
 **AA-886 — pháp lý (In Progress)**
 - `/privacy`, `/terms` 200 trên TripPlanner và portal (nhãn "Draft — pending legal review"); kiểm consent lần đầu (run-script 39596391333, chỉ đọc): 0 consent thiếu thời gian, 0 lệch giá trị/thời gian/nguồn trong chuỗi TP → Booking.
@@ -122,12 +123,12 @@
 ## Còn lại / việc phiên sau (S247)
 
 **Thứ tự đề xuất**
-1. **AA-847 chuỗi lật.** Trước tiên chốt model cho pipeline nơi chốn: khi #903 live, thử Haiku 5.5 bằng cùng script trial (Laos, 3 tour, luật ≥ 0,95); qua ngưỡng thì dùng Haiku 5.5, không thì giữ Sonnet. Sau đó báo giá + Nghiệp duyệt lượt place có phí (AA-905; ~$1–10), chạy để coverage gate về 0, Nghiệp sửa tay `PLACES_SOURCE` (Lambda browse TP) + `PLACE_SHAPES_ENABLED` (CIS), parity + ảnh sau lật, bắt đầu cửa sổ 7 ngày.
-2. Verify #903 live (deploy COMPLETED, 1 call structured output Haiku 5.5/Sonnet 5.5 trên acc3).
+1. **AA-847 chuỗi lật.** Model đã chốt: Haiku 4.5 (migration 260). Tuỳ chọn trước: cho place stage gửi effort/max_tokens hợp với Claude 5.5 rồi trial lại Haiku 5.5 (rẻ hơn 3 lần, locate ≈ Sonnet) — đổi thì Nghiệp duyệt. Build 1 nước trước, đếm `located_by` geoapify/llm; tăng mạnh thì chỉ đưa `a3_place_locate` về Sonnet. Sau đó báo giá + Nghiệp duyệt lượt place có phí (AA-905; ~$1–10), chạy để coverage gate về 0, Nghiệp sửa tay `PLACES_SOURCE` (Lambda browse TP) + `PLACE_SHAPES_ENABLED` (CIS), parity + ảnh sau lật, bắt đầu cửa sổ 7 ngày.
+2. (đã xong trong S246) #903 live + smoke.
 3. **AA-803 / AA-845:** ship luật bữa ăn, rồi OFF `a1_claim_supported` + `a1_promise_unsupported`; đóng AA-845 (và AA-803 khi xong J-items).
 4. Các slot S247 còn lại của master plan: L1 S1 bước 0/1 ($0: bảng dữ kiện, bộ kiểm code trên 50 bài S1, panel chấm lại ×2); L6 AA-928 (ADR AA-Partner, contracts, errata, re-scope AA-813, memo lõi thương mại Booking) + AA-929 + AA-930 (chỉ docs/root).
 5. **AA-903:** kiểm CIS #901 — job "Vercel deploy" phải skipped, required check xanh → đóng.
-6. A/B 7 stage `gpt-5.6-luna` → `gpt-6-luna` (từng stage, harness eval) nếu còn chỗ.
+6. (đã xong trong S246) A/B 7 stage → giữ nguyên; chỉ xem lại với n ≥ 30 + recall theo mã lỗi.
 
 **Chờ Nghiệp**
 - Duyệt + đăng draft Jira (`docs/audits/2026-10-21-S246-jira-drafts/README.md`), gồm link trang UI CRM cho PR-19.
@@ -140,8 +141,10 @@
 ## Lưu ý kỹ thuật cho phiên sau
 
 - **Lệch phát hiện đầu phiên:** ECS lúc đó là api :731 / worker :288 (memory ghi :730/:287); plan.json còn AA-889/AA-890 In Progress dù Linear Done; AA-886 Linear In Progress (plan ghi Backlog).
-- **Pipeline nơi chốn và Sonnet:** `a3_place_days` / `a3_place_locate` đang chạy Sonnet; các model rẻ hiện có không đạt mức Sonnet về định vị (locate trong bán kính 0,53–0,76). Đừng đổi route trước khi trial mới qua ngưỡng.
+- **Pipeline nơi chốn:** `a3_place_days` / `a3_place_locate` chạy Haiku 4.5 từ migration 260 (fallback Sonnet). Tour đã build không làm lại (model không nằm trong `days_hash`).
 - **Haiku 5.5 / Sonnet 5.5 chỉ gọi được trên acc3.** acc1 (fallback) báo model không khả dụng cho account → nếu acc3 lỗi thì không có fallback cho hai model này.
+- **Model Bedrock mới trên account mới:** lần gọi đầu khởi động subscription Marketplace; role invoker không có quyền `aws-marketplace:*` → tạo agreement bằng user admin (`create-foundation-model-agreement`) rồi chờ ~30 phút trước khi kết luận bị chặn.
+- **Claude 5.5 + `max_tokens` nhỏ:** adaptive thinking tính vào `maxTokens`; stage đặt 4000 (place days) bị cắt → cần effort/max_tokens riêng trước khi route stage sang 5.5.
 - **Kế hoạch đổi model qua admin:** `PATCH /admin/llm-catalog/{key}` chỉ sửa giá, `price_source`, `enabled`; thêm dòng mới hay profile Bedrock cần migration (như 259).
 - **Probe AA-847:** phán parity theo trung vị 3 lượt; HNSW kiểm theo cấu trúc plan (forced plan), plan tự nhiên ở cỡ Dev là exact sort (chỉ báo cáo).
 - **Hook subagent** chặn cả chuỗi lệnh có `gh run rerun` dù chỉ nằm trong heredoc/chuỗi văn bản → viết nội dung qua file rồi chạy.
