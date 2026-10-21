@@ -1323,7 +1323,7 @@
   },
   {
    "id": "AA-915",
-   "title": "[Writing memory] Freeze the ungated lessons loop and record ADR 0009 (governed writing memory)",
+   "title": "[Writing memory] Freeze the ungated lessons loop and record app ADR 0010 (governed writing memory)",
    "status": "Backlog",
    "priority": "High",
    "project": "core",
