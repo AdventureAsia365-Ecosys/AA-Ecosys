@@ -87,14 +87,14 @@
 - 25 câu: giữ 9, chỉnh ngưỡng 2, tắt mới 5 (3 câu sau một bước kiểm $0), 9 câu T-series giữ OFF. Nghiệp duyệt hết.
 - Đã áp: `a1_brand_fit` OFF (J06); `a1_keyword_about_tour` reject 0,30 → 0,40, accept giữ 0,80 (J07, threshold_version 2); `a3_question_foreign` OFF (J16: chỉ 0,45% câu nước ngoài).
 - J09: luật lodging bỏ sót 24 reject, cả 24 là câu tìm khách sạn → **giữ** `a3_idea_traveller` enforce.
-- J04: trust gate FAIL (55% unit không có verdict; 71 waiver bị sót) nên không quyết tự động. Jev miễn mã bữa ăn cho 71/914 tour (7,8% > 5%) → theo luật đã duyệt: ship luật bữa ăn trước, rồi mới OFF `a1_claim_supported` + `a1_promise_unsupported`. **Luật bữa ăn đang làm** (worktree `cis-aa803-meal`, chưa có commit).
+- J04: trust gate FAIL (55% unit không có verdict; 71 waiver bị sót) nên không quyết tự động. Jev miễn mã bữa ăn cho 71/914 tour (7,8% > 5%) → theo luật đã duyệt: ship luật bữa ăn trước, rồi mới OFF `a1_claim_supported` + `a1_promise_unsupported`. **Luật bữa ăn: dựng xong nhưng không hội tụ** → CIS PR nháp #905, không merge. 1 review + 3 vòng săn lỗi đối kháng (78 agent) xác nhận và sửa 65 lỗi cho qua sai (23/22/20 mỗi vòng), 377 unit test, vòng nào cũng còn lỗi mới. Rule chạy trước Jev nên cho qua sai là không ai kiểm lại → **giữ `a1_claim_supported` + `a1_promise_unsupported` ON** (`jev-question-eval/meal-rule-hunt.md`).
 - Chi phí Jev ước sau đề xuất: ~$1–1,5/tháng (hiện ~$3,5–4).
 
 **AA-845 — Jev (In Progress)**
 - CIS #898 (deploy c81b978b): cảnh báo credit thấp (< $3, kiểm 30 phút/lần) + e-mail khi hết credit (402), dedupe 1/loại/ngày; sweep 402 bắt cả `credit_exhausted%`.
 - Verify bằng mail test: kiểm thật $8,19 còn lại → không cảnh báo; ép test (`threshold_usd: 1000`, `test_exhausted_alert: true`) → 2 job `ops_alert_email` `sent` tới người nhận cảnh báo + 2 thông báo admin.
 - Panel (`docs/audits/2026-10-21-S246-eval-panels/aa-845.md`): không trần reject nào đạt (0,15/0,20 chỉ 47–48% là vi phạm thật) → giữ `reject_ceiling` NULL; 402 do credit TypeSafe trả trước hết 2 lần (03/10, 10/10).
-- Đóng khi luật bữa ăn ship và `a1_claim_supported` OFF.
+- Đóng khi luật bữa ăn (bản thu hẹp, S247) ship và `a1_claim_supported` OFF.
 
 **Làm mới model (Bedrock + gateway)** (`docs/audits/2026-10-21-S246-bedrock-models/`)
 - Liệt kê model 3 account × 3 region: cùng danh sách (us-west-1 40, us-west-2 92, us-east-1 95). Mới nhất: Haiku 5.5, Sonnet 5.5, Opus 5.5, GPT-6 Luna/Sol. Catalog thiếu Haiku 5.5/Sonnet 5.5; route acc2 của `sonnet` trỏ Sonnet 4.5 LEGACY.
@@ -125,7 +125,7 @@
 **Thứ tự đề xuất**
 1. **AA-847 chuỗi lật.** Model đã chốt: Haiku 4.5 (migration 260). Tuỳ chọn trước: cho place stage gửi effort/max_tokens hợp với Claude 5.5 rồi trial lại Haiku 5.5 (rẻ hơn 3 lần, locate ≈ Sonnet) — đổi thì Nghiệp duyệt. Build 1 nước trước, đếm `located_by` geoapify/llm; tăng mạnh thì chỉ đưa `a3_place_locate` về Sonnet. Sau đó báo giá + Nghiệp duyệt lượt place có phí (AA-905; ~$1–10), chạy để coverage gate về 0, Nghiệp sửa tay `PLACES_SOURCE` (Lambda browse TP) + `PLACE_SHAPES_ENABLED` (CIS), parity + ảnh sau lật, bắt đầu cửa sổ 7 ngày.
 2. (đã xong trong S246) #903 live + smoke.
-3. **AA-803 / AA-845:** ship luật bữa ăn, rồi OFF `a1_claim_supported` + `a1_promise_unsupported`; đóng AA-845 (và AA-803 khi xong J-items).
+3. **AA-803 / AA-845:** thu hẹp luật bữa ăn (#905): chỉ cho qua bằng chứng có cấu trúc (danh sách mã/`Meals:` cùng ngày, full board/daily không giới hạn trong INCLUSIONS), còn lại vẫn hỏi Jev; ship riêng phần mở rộng `ITIN_MEAL_INVENTED` (câu số nhiều/chung chung — lỗ thật trên main); đo số call Jev + waiver rồi mới xét OFF J04/J05. AA-845 đóng theo đó.
 4. Các slot S247 còn lại của master plan: L1 S1 bước 0/1 ($0: bảng dữ kiện, bộ kiểm code trên 50 bài S1, panel chấm lại ×2); L6 AA-928 (ADR AA-Partner, contracts, errata, re-scope AA-813, memo lõi thương mại Booking) + AA-929 + AA-930 (chỉ docs/root).
 5. **AA-903:** kiểm CIS #901 — job "Vercel deploy" phải skipped, required check xanh → đóng.
 6. (đã xong trong S246) A/B 7 stage → giữ nguyên; chỉ xem lại với n ≥ 30 + recall theo mã lỗi.
