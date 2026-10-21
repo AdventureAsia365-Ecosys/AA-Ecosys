@@ -83,6 +83,12 @@ the workflow), then alias the new deployment.
 
 ## Sign-in checks
 
+- **Before the first CIS check, check V2 (ADR 0006a A11):** prove that the `aa-cis-frontend` Preview-target
+  `ADMIN_SECRET` is the C9 Preview credential (`aa-cis/dev/admin-secret-preview`) and not the main secret, without
+  printing either value. Either Nghiệp compares the two by hand, or find `staff_preview_credential` lines (role
+  `viewer`) in the CIS api CloudWatch log for requests from a CIS preview deployment. If the Preview value is the
+  main secret, stop: preview code could claim admin with no bearer, whatever the Cognito client. Record the result
+  in A11 and the secrets register.
 - **Accept:** a person with a `booking-*` group (Booking) or a `cis-*` group (CIS) signs in with the email code and
   lands in the app.
 - **Capped (D-1):** Booking: `GET /api/booking/staff/me` through the BFF shows `preview_viewer: true` and only read

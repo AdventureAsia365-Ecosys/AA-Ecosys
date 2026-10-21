@@ -360,6 +360,17 @@ mailbox or Google account". That is too strong.
   - A CIS Cognito session on `aa-cis-preview` is the **viewer** (D-1), like the C9 Preview credential, which stays
     for legacy preview sessions. Every CIS BFF route that attaches `X-Admin-Secret` calls `requireAdmin()` first
     (audited 21/10/2026).
+  - **The CIS cap also depends on the Vercel Preview `ADMIN_SECRET` (check V2).** The CIS API lowers a request to
+    viewer only when its `X-Admin-Secret` is the C9 Preview credential (`aa-cis/dev/admin-secret-preview`). A request
+    with the *main* secret, no bearer and `x-admin-role: admin` passes the bearer middleware untouched, with full
+    admin on every staff path, whatever the Cognito client. So "a Preview host never carries a real admin role"
+    holds only while the `aa-cis-frontend` Preview-target `ADMIN_SECRET` is the Preview credential. The register
+    says it is (set 19/10/2026, S244, viewer-mode preview smoke CIS #859); check V2 re-proves it before the CIS
+    Preview sign-in check, without printing either value: Nghiệp compares the Vercel Preview value with the secret
+    by hand, or the orchestrator finds `staff_preview_credential` (role `viewer`) lines in the CIS api CloudWatch log
+    for requests from a CIS preview deployment (the middleware logs it only on a Preview-credential match).
+    **V2 result:** to record here and in the secrets register (date, method). Booking is not affected: its Preview
+    target holds only `BOOKING_API_URL`.
   - **Same-site writes (review finding B-1, fixed before any Preview host exists):** `it.com` is on the Public Suffix
     List, so the site is `lumiguides.it.com` and both Preview hosts are the *same site* as the CIS admin, the
     tenant portal and Booking. Their requests carry those hosts' `SameSite=Lax` session cookies. Preview code
@@ -390,8 +401,8 @@ mailbox or Google account". That is too strong.
   - Order: CIS cross-site guard deployed (AA-CIS-App #899) → Infra Preview-only clients + CNAMEs applied → the two
     preview client ids filled into both apps → Booking B1 (API cap + frontend) deployed, then the Preview sign-in
     shown as read-only → Booking B2 deployed (a real CIS-minted token replayed before = 200, after = 401) → CIS C1
-    (API cap + bridge removal) deployed, then the CIS Preview sign-in shown as viewer → secret deleted → rows
-    script.
+    (API cap + bridge removal) deployed → check V2 (the Vercel Preview `ADMIN_SECRET` is the C9 Preview credential)
+    → the CIS Preview sign-in shown as viewer → secret deleted → rows script.
 - **Consequence to state:** after the bridge is gone **no agent can sign in to the Booking UI** (Preview or
   Production): the E2E Cognito user may not hold a `booking-*` group (A10). Booking UI checks are done by Nghiệp
   (screenshots) until Nghiệp chooses a Booking preview machine principal (a follow-up issue only after asking).
