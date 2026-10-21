@@ -20,21 +20,24 @@ related: [OPS-06-legacy-login, OPS-02-vercel, docs/adr/0006a-identity-phase1-ame
 > [!WARNING]
 > UNTESTED. Written with AA-911 (S246) before the first alias. Fill in "What check V1 found" after the first run.
 
-ADR 0006a A11 gives each staff app **one** fixed Preview host. It is a registered Cognito WORKFORCE callback, so
-staff sign in there with an email code, exactly as on Production. A per-deployment preview URL
-(`https://<project>-<hash>.vercel.app`) has no staff sign-in.
+ADR 0006a A11 gives each staff app **one** fixed Preview host. It is the only callback of a Preview-only Cognito
+WORKFORCE client (decision D-1), so staff sign in there with an email code, exactly as on Production, but the API
+caps every such session at viewer / read-only. A per-deployment preview URL (`https://<project>-<hash>.vercel.app`)
+has no staff sign-in.
 
 ## Host map
 
 | App | Preview host | Vercel project | Cognito client | Production hosts |
 |---|---|---|---|---|
-| AA-Booking staff admin | `booking-preview.lumiguides.it.com` | `aa-booking-admin` | `booking-staff` | `booking.lumiguides.it.com`, `aa-booking-admin.vercel.app` |
-| AA-CIS admin | `aa-cis-preview.lumiguides.it.com` | `aa-cis-frontend` | `cis-admin` (break-glass: Production only) | `aa-cis.lumiguides.it.com` |
+| AA-Booking staff admin | `booking-preview.lumiguides.it.com` | `aa-booking-admin` | `booking-staff-preview` (read-only in the API) | `booking.lumiguides.it.com`, `aa-booking-admin.vercel.app` |
+| AA-CIS admin | `aa-cis-preview.lumiguides.it.com` | `aa-cis-frontend` | `cis-admin-preview` (viewer in the API; break-glass: Production only) | `aa-cis.lumiguides.it.com` |
 
 Pieces: Vercel project domain (bound to the never-pushed branch `preview-signin`), Route 53 CNAME (AA-CIS-Infra
-`custom_domain_vercel_hosts`), callback and sign-out URL (AA-CIS-Infra `identity_client_urls`), the Preview target of
-the client-secret env var in Vercel (set by hand), and the frontend allowlist (a preview build accepts only its
-Preview host, `VERCEL_ENV`).
+`custom_domain_vercel_hosts`), the Preview-only client with its callback and sign-out URL (AA-CIS-Infra
+`id_workforce_clients`, `identity_client_urls`), its client id as a code constant in the app (API and frontend), its
+secret in a Preview-only Vercel env var (`COGNITO_BOOKING_STAFF_PREVIEW_CLIENT_SECRET`,
+`COGNITO_CIS_ADMIN_PREVIEW_CLIENT_SECRET`, set by hand), and the frontend choice by build (a preview build uses only
+the preview client on its Preview host, `VERCEL_ENV`). The production client secrets never get a Preview target.
 
 ## Before the first CNAME exists
 
@@ -42,8 +45,10 @@ Preview host, `VERCEL_ENV`).
   Check with `curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Origin: https://booking-preview.lumiguides.it.com" -H "Content-Type: text/plain" --data '{}' https://aa-cis.lumiguides.it.com/api/admin/waves/check`, which must print 403.
   A Preview host is the same site as every `*.lumiguides.it.com` host (`it.com` is a public suffix).
 - Both domains are added to their Vercel projects (otherwise the CNAME is a subdomain-takeover target).
-- Sessions on the Preview hosts carry real roles (ADR 0006a A11 security notes). Label a PR `preview-signin` only
-  after reading its diff.
+- The API that the Preview host calls already caps the preview client (Booking B1 / CIS C1 deployed with the
+  preview client id filled in). Before that, a preview sign-in gets 401 from the API, never an uncapped session.
+- Label a PR `preview-signin` only for a same-repo PR you mean to check; reading its diff first is still good
+  practice (preview code sees the viewer token of whoever signs in).
 
 ## Point the host at a preview (opt-in)
 
@@ -71,14 +76,19 @@ check.
 
 ## The alias must point at a build made after the env var was set
 
-A Preview env var reaches only deployments **built after** it was set (lesson S237). If the host serves an older
+A Preview env var (here the Preview-only client secret) reaches only deployments **built after** it was set
+(lesson S237). If the host serves an older
 build, `/login` says "Company e-mail sign-in is not set up on this build". Fix: redeploy the PR (push, or re-run
 the workflow), then alias the new deployment.
 
 ## Sign-in checks
 
 - **Accept:** a person with a `booking-*` group (Booking) or a `cis-*` group (CIS) signs in with the email code and
-  lands in the app. A CIS session on the Preview host has the person's **real** role (not the C9 viewer cap).
+  lands in the app.
+- **Capped (D-1):** Booking: `GET /api/booking/staff/me` through the BFF shows `preview_viewer: true` and only read
+  permissions, and any save on the page fails with 403 `preview_read_only`. CIS: the session shows role `viewer`
+  even for an owner, and a write (for example a settings toggle) fails with "Role 'viewer' is read-only". Production
+  sign-in of the same person still has the full role.
 - **Refuse (Booking):** dispatch AA-CIS-App `e2e-cognito.yml` with `booking_base_url=https://booking-preview.lumiguides.it.com`.
   The E2E Cognito user (no `booking-*` group) must land on `/login?reason=no_booking_role`. Then run AA-CIS-Infra
   `db/scripts/aa680_staff_users_readonly_check.py` (DB Migrate `mode=run-script`): `e2e_has_no_booking_row=true`.

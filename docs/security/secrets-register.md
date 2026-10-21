@@ -26,11 +26,11 @@ only — never a value.** The machine-readable twin is [`secrets-register.yaml`]
 
 | | Count |
 |---|---|
-| Rows | 89: 34 Secrets Manager (29 live + 5 deleted in the recovery window: 4 on 19/10, `aa-cis/dev/booking-jwt-signing-key` on 21/10, AA-911), 30 GitHub (23 live + 6 deleted/removed + 1 planned), 9 Vercel, 4 Lambda env (all removed), 12 vendor |
+| Rows | 91: 34 Secrets Manager (29 live + 5 deleted in the recovery window: 4 on 19/10, `aa-cis/dev/booking-jwt-signing-key` on 21/10, AA-911), 30 GitHub (23 live + 6 deleted/removed + 1 planned), 11 Vercel (9 live + 2 planned, AA-911 D-1), 4 Lambda env (all removed), 12 vendor |
 | Drift check (S245, all four inventories) | **`diff = 0`** (was 8 before this update). Not checked: GitHub org secrets (the listing answers 403, no org-admin scope; no `github:org` row) |
 | Orphans | 4 Secrets Manager — **deleted 19/10/2026**, recovery until 18/11 (`aa-cis/dev/api-keys`, `aa-cis/dev/acp-webhook-secret`, `aa-cis/dev/acp-partner-api`, `tripplanner/dev/mapbox-geocoding-token`); 2 GitHub — **deleted 17/10/2026** (AA-866: `VERCEL_DEPLOY_HOOK`, `ACPCORE_READ_TOKEN`), absent on 20/10; the repo-level `ADMIN_SECRET` and `AWS_ROLE_ARN` on AA-CIS-App are absent too |
 | Plaintext secret in a Lambda env | none: `TRIPPLANNER_API_KEY` and the dead `MAPBOX_GEOCODING_TOKEN_ARN` left both TripPlanner Lambdas with I2 (19/10); the ops-probe `ADMIN_SECRET` left with I1 (Infra #195) |
-| Planned rows | 1: GitHub env `e2e` `BOOKING_PREVIEW_BYPASS` (AA-911, only if check V1 needs it). The 4 planned in S243 exist now (GitHub `VERCEL_PORTAL_BYPASS_SECRET`, `E2E_TENANT_API_KEY`, env `e2e` `E2E_MAIL_ROLE_ARN`; Vercel aa-booking-admin `COGNITO_BOOKING_STAFF_CLIENT_SECRET`) and are `keep` |
+| Planned rows | 3: GitHub env `e2e` `BOOKING_PREVIEW_BYPASS` (AA-911, only if check V1 needs it); Vercel `COGNITO_BOOKING_STAFF_PREVIEW_CLIENT_SECRET` (aa-booking-admin) and `COGNITO_CIS_ADMIN_PREVIEW_CLIENT_SECRET` (aa-cis-frontend), Preview target only (AA-911 D-1, after the Infra apply). The 4 planned in S243 exist now (GitHub `VERCEL_PORTAL_BYPASS_SECRET`, `E2E_TENANT_API_KEY`, env `e2e` `E2E_MAIL_ROLE_ARN`; Vercel aa-booking-admin `COGNITO_BOOKING_STAFF_CLIENT_SECRET`) and are `keep` |
 | Added S245 | GitHub AA-TripPlanner-Web `AWS_DEPLOY_ROLE_ARN` (role ARN, AA-902); Secrets Manager `aa-ecosys/ops/linear-api-key` (Linear export + archive tool) |
 | Rotated / revoked 20/10/2026 (S245) | local gh / MCP OAuth token (`gho_`, Nghiệp); old Mapbox geocoding token revoked in the Mapbox account (geocoding API now 401) |
 | Rotated 19/10/2026 (S244) | `aa-cis/dev/admin-secret` (I6), `aa-identity/dev/breakglass` (password + TOTP), `aa-cis/dev/db-migrator` (value first written by script, X1 S20) |
@@ -288,7 +288,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:29; terraform-plan.yml:50 | none | **open-item** | RDS master password, repo-level (S241 E12: move into a protected env or drop once RDS manages it). S240: printed once in a local transcript; decision: rotate before prod. |
 | `ROOT_REPO_DOCS_TOKEN` | `github:AA-CIS-Infra` | infra | db-schema-dump.yml:71, :177, :183 | TBD-Nghiep | **open-item** | Personal access token with write to the root repo (S241 P1-2; PAT -> GitHub App token is U-25, out of AA-878 scope). |
 
-### Vercel environment variables (secret-bearing) (9)
+### Vercel environment variables (secret-bearing) (11)
 
 | Name | Store | Owner app | Consumers (main) | Rotation | Status | Notes |
 |---|---|---|---|---|---|---|
@@ -297,10 +297,12 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `ADMIN2_PASSWORD` | `vercel:aa-cis-frontend` | cis | — | none | **open-item** | Same as ADMIN_PASSWORD (with ADMIN2_USERNAME): no reader on main, candidate orphan. Still present 20/10, type Encrypted (`readable-secret`). |
 | `INTERNAL_API_KEY` | `vercel:aa-cis-frontend` | cis | AA-CIS-App frontend/app/api/tenant/pipeline/brand-identity/route.ts:12, frontend/app/api/tour-full/[id]/route.ts:11 (sent as X-API-Key) | none | **open-item** | No backend reader of INTERNAL_API_KEY on main (the s4_trigger Lambda is gone); verify what the X-API-Key value is, then drop or document. |
 | `SENTRY_AUTH_TOKEN` | `vercel:aa-cis-frontend` | cis | AA-CIS-App frontend/next.config.ts (withSentryConfig, build-time source-map upload) | TBD-Nghiep | **keep** | Vendor Sentry. Type Encrypted: Vercel flags `readable-secret` (S245); re-create as Sensitive (F-5). |
-| `COGNITO_CIS_ADMIN_CLIENT_SECRET` | `vercel:aa-cis-frontend` | identity | AA-CIS-App frontend (staff sign-in BFF, process.env.COGNITO_CIS_ADMIN_CLIENT_SECRET); Production + Preview (Preview: aa-cis-preview, AA-911) | none | **keep** | AA-816 / ADR 0006a. The secret also sits in Terraform state (client resource). Preview target added by hand (AA-911). |
+| `COGNITO_CIS_ADMIN_CLIENT_SECRET` | `vercel:aa-cis-frontend` | identity | AA-CIS-App frontend (staff sign-in BFF, process.env.COGNITO_CIS_ADMIN_CLIENT_SECRET); **Production target only** | none | **keep** | AA-816 / ADR 0006a. The secret also sits in Terraform state (client resource). AA-911 D-1: never add a Preview target (previews use `COGNITO_CIS_ADMIN_PREVIEW_CLIENT_SECRET`). |
+| `COGNITO_CIS_ADMIN_PREVIEW_CLIENT_SECRET` | `vercel:aa-cis-frontend` | identity | AA-CIS-App frontend/lib/cognito.ts (cis-admin sign-in of a preview build, client `cis-admin-preview`); **Preview target only** | none | **planned** | AA-911 D-1 (S246). Copy of the Terraform-generated secret of `aa-workforce-dev-cis-admin-preview` (Nghiệp, by hand, after the Infra apply). Sessions of that client are the viewer in the CIS API. |
 | `COGNITO_BREAKGLASS_CLIENT_SECRET` | `vercel:aa-cis-frontend` | identity | AA-CIS-App frontend (break-glass sign-in, process.env.COGNITO_BREAKGLASS_CLIENT_SECRET) | none | **keep** | AA-816. |
 | `TRIPPLANNER_API_KEY` | `vercel:aa-tripplanner` | tripplanner | AA-TripPlanner-Web frontend/app/api/browse/route.ts:9, trip/route.ts:15, lib/catalog.ts:46 | with tripplanner/dev/api-key | **keep** | Must be set on Production, Preview and Development (S237 lesson). S245: Production Sensitive; Development + Preview Encrypted (`readable-secret`, F-5). |
-| `COGNITO_BOOKING_STAFF_CLIENT_SECRET` | `vercel:aa-booking-admin` | booking | AA-Booking frontend staff sign-in (AA-680 S3); Production + Preview (Preview: booking-preview, AA-911) | none | **keep** | AA-680. Sensitive; created 18/10/2026. Preview target added by hand (AA-911); a preview built before that has no sign-in. |
+| `COGNITO_BOOKING_STAFF_CLIENT_SECRET` | `vercel:aa-booking-admin` | booking | AA-Booking frontend staff sign-in (AA-680 S3); **Production target only** | none | **keep** | AA-680. Sensitive; created 18/10/2026. AA-911 D-1: never add a Preview target (previews use `COGNITO_BOOKING_STAFF_PREVIEW_CLIENT_SECRET`). |
+| `COGNITO_BOOKING_STAFF_PREVIEW_CLIENT_SECRET` | `vercel:aa-booking-admin` | booking | AA-Booking frontend/lib/cognito.ts (staff sign-in of a preview build, client `booking-staff-preview`); **Preview target only** | none | **planned** | AA-911 D-1 (S246). Copy of the Terraform-generated secret of `aa-workforce-dev-booking-staff-preview` (Nghiệp, by hand, after the Infra apply). Sessions of that client are read-only in the Booking API. A preview built before it is set has no sign-in. |
 
 ### Lambda environment keys (acc2) (4)
 
