@@ -1,0 +1,207 @@
+{
+ "items": [
+  {
+   "id": "D1",
+   "title": "Done-when có ca từ chối và ca biên",
+   "context": "Học từ rules/08-gherkin-acceptance-criteria.md, ISO 29148. Công XS. Giá trị Cao.",
+   "recommended": "a",
+   "why": "Khoảng 70% issue chỉ có đường thường; chỉ cần sửa DoR, aa-linear-issue và brief reviewer, không dùng Gherkin."
+  },
+  {
+   "id": "D2",
+   "title": "Schema dump hiện COMMENT ON (ý nghĩa cột, thẻ pii:)",
+   "context": "Học từ rules/09 (làm ngược lại: sinh tự động, không bảng tay). Công S. Giá trị Cao.",
+   "recommended": "a",
+   "why": "Đã có 199 COMMENT nhưng schema_dump.py không đọc; DM-3.2 và DM-3.5 đang sai; chỉ là SQL đọc catalog."
+  },
+  {
+   "id": "D3",
+   "title": "Sửa ADR 0009 trùng và thêm bảng Reserved có kiểm",
+   "context": "Học từ MADR/Nygard. Công XS-S. Giá trị Cao.",
+   "recommended": "a",
+   "why": "CIS 0009 đã có nhưng AA-915 vẫn định dùng; mở rộng check_adr_index.py có sẵn."
+  },
+  {
+   "id": "D4",
+   "title": "Docs-lint cho AA-CIS-App",
+   "context": "Học từ Write the Docs (docs-as-code). Công S-M. Giá trị Cao.",
+   "recommended": "a",
+   "why": "AA-888 ghi Done nhưng repo lớn nhất chưa có; chép workflow sẵn có, chạy warn hoặc baseline lúc đầu."
+  },
+  {
+   "id": "D5",
+   "title": "Tách CIS CONTEXT.md 165 KB theo domain",
+   "context": "Học từ đo token (OpenBA cho thấy chi phí do cấu trúc). Công M. Giá trị Cao.",
+   "recommended": "a",
+   "why": "Đây là chi phí token lặp lại lớn nhất; mỗi task thường chỉ cần một phần."
+  },
+  {
+   "id": "D6",
+   "title": "Đưa spec CRM vào catalog, giữ ID F1-F5/1-18",
+   "context": "Học từ rules/01, rules/05, ISO 29148. Công XS-S. Giá trị TB-Cao.",
+   "recommended": "a",
+   "why": "Spec gốc của AA-821 đang nằm trong journal; không đánh số lại; tránh prefix PROD; owner chờ chị Thư xác nhận."
+  },
+  {
+   "id": "D7",
+   "title": "Check audit chưa có trong index",
+   "context": "Học từ check_adr_index.py (ngược với /kg của OpenBA). Công XS-S. Giá trị TB.",
+   "recommended": "a",
+   "why": "Index thiếu khoảng 27/38 audit; giữ dòng viết tay, chỉ báo khi thiếu."
+  },
+  {
+   "id": "D8",
+   "title": "Trạng thái UI error/loading/403/modal trong aa-ui-verify",
+   "context": "Học từ rules/13-wireframe-html-guidelines.md. Công XS. Giá trị TB.",
+   "recommended": "a",
+   "why": "Empty state đã có kiểm; error và loading chưa ai kiểm."
+  },
+  {
+   "id": "D9",
+   "title": "Nhãn verified/from-code/inference/unverified trong STYLE.md",
+   "context": "Học từ skills/code-to-srs, skills/reverse-doc. Công XS. Giá trị TB.",
+   "recommended": "a",
+   "why": "Agent dùng audit như sự thật; dùng lại từ đã có, không dùng phần trăm."
+  },
+  {
+   "id": "D10",
+   "title": "Xuất câu trả lời trang duyệt về git khi đóng phiên",
+   "context": "Học từ ISO 9001 7.5.3, GitLab handbook-first. Công S. Giá trị TB.",
+   "recommended": "a",
+   "why": "Đang chép tay, duyệt của chị Thư chưa có bản ghi; bỏ lint 14 ngày."
+  },
+  {
+   "id": "D11",
+   "title": "check_skills.py: đường dẫn tồn tại, trigger, tên",
+   "context": "Học từ lỗi của OpenBA (skill sinh tự động, link gãy). Công S. Giá trị TB.",
+   "recommended": "a",
+   "why": "Tự động hoá REVIEW-CHECKLIST.md; đang có link chết ở aa-cis-schema."
+  },
+  {
+   "id": "D12",
+   "title": "watch_paths giai đoạn 1 (cùng repo, báo cáo tuần)",
+   "context": "Học từ skills/doc-drift, GOV.UK tech-docs-gem. Công S. Giá trị TB.",
+   "recommended": "a",
+   "why": "Review theo lịch không bắt được drift của handbook và ADR README; kiểm cơ học, không dùng LLM."
+  },
+  {
+   "id": "D13",
+   "title": "Trang quy tắc chủ (mẫu DM, khoảng 10-15 rule)",
+   "context": "Học từ rules/02-br-naming-convention.md. Công S. Giá trị TB.",
+   "recommended": "a",
+   "why": "Rule chủ đang nằm trong auto-memory riêng, Kiro không thấy; trỏ tới DM/ADR thay vì chép lại."
+  },
+  {
+   "id": "D14",
+   "title": "Dòng version + approved by trên spec chủ",
+   "context": "Học từ rules/19, BABOK baseline. Công XS. Giá trị TB.",
+   "recommended": "b",
+   "why": "Làm sau D6 và khi chị Thư đã xác nhận phạm vi; git tag cần Nghiệp chốt."
+  },
+  {
+   "id": "D15",
+   "title": "Lint ID DM-x.y và Cx.y",
+   "context": "Học từ rules/01-03 (OpenBA không có công cụ). Công S. Giá trị TB.",
+   "recommended": "b",
+   "why": "Có ích nhưng chưa thấy lỗi thật; làm sau các việc ưu tiên."
+  },
+  {
+   "id": "D16",
+   "title": "Template trang duyệt 2 chế độ",
+   "context": "Học từ skills/preview. Công M. Giá trị TB.",
+   "recommended": "b",
+   "why": "Tiết kiệm token lặp lại, nhưng công M; làm khi có đợt duyệt lớn tiếp theo."
+  },
+  {
+   "id": "D17",
+   "title": "Trang ma trận trạng thái trip case sinh tự động",
+   "context": "Học từ rules/12-state-transition-rules.md. Công S. Giá trị Thấp-TB.",
+   "recommended": "b",
+   "why": "Hiện mới có 12 cạnh; đáng làm khi AA-682 thêm cạnh post-sale."
+  },
+  {
+   "id": "D18",
+   "title": "Template spec gọn",
+   "context": "Học từ _templates/08-srs.md. Công XS-S. Giá trị TB.",
+   "recommended": "b",
+   "why": "Chỉ làm khi có miền sản phẩm mới; không dùng placeholder trỏ tới thứ chưa có."
+  },
+  {
+   "id": "D19",
+   "title": "Bảng mapping UI-DB-đối tác cho tích hợp",
+   "context": "Học từ skills/api-map. Công XS. Giá trị TB.",
+   "recommended": "b",
+   "why": "Chưa có tích hợp ngoài nào đang làm; mở rộng bảng booking-ui-spec khi bắt đầu Stripe."
+  },
+  {
+   "id": "D20",
+   "title": "Template implementation note",
+   "context": "Học từ OpenBA (mỗi output một template). Công XS. Giá trị Thấp.",
+   "recommended": "b",
+   "why": "Quy tắc đã có ở nhiều chỗ; chỉ thiếu file mẫu."
+  },
+  {
+   "id": "D21",
+   "title": "Trang quyền Booking sinh từ PERMISSIONS + test route guard",
+   "context": "Học từ rules/17-actor-role-definition.md. Công S. Giá trị Thấp-TB.",
+   "recommended": "b",
+   "why": "Ma trận đã nằm trong code; làm khi chốt ma trận PRD hoặc khi làm CRM."
+  },
+  {
+   "id": "D22",
+   "title": "RTM generator bằng test marker",
+   "context": "Học từ rules/14, NASA SWE-052. Công M. Giá trị Thấp lúc này.",
+   "recommended": "c",
+   "why": "Chưa có rule nào có ID; phần issue -> test -> evidence đã truy được."
+  },
+  {
+   "id": "D23",
+   "title": "Lint từ mơ hồ",
+   "context": "Học từ rules/16-ambiguity-detection-rules.md. Công S. Giá trị Thấp.",
+   "recommended": "c",
+   "why": "Không có trang spec để quét, báo nhầm nhiều; D1 xử lý đúng gốc hơn."
+  },
+  {
+   "id": "D24",
+   "title": "Khối CR impact riêng",
+   "context": "Học từ rules/15, _templates/47-change-request.md. Công XS. Giá trị Thấp.",
+   "recommended": "c",
+   "why": "DoR đã có Docs impact, Risk, Cost."
+  },
+  {
+   "id": "D25",
+   "title": "Error-code catalog dạng tài liệu",
+   "context": "Học từ rules/03, rules/11, RFC 9457. Công S-M. Giá trị Thấp.",
+   "recommended": "c",
+   "why": "errors.py đã tách code và status; nên gộp các map FRIENDLY ở frontend bằng một issue code."
+  },
+  {
+   "id": "D26",
+   "title": "depends_on có kiểu trong front-matter",
+   "context": "Học từ rules/18-knowledge-graph-metadata.md. Công S. Giá trị Thấp.",
+   "recommended": "c",
+   "why": "Trùng với related; đích BR/FR chưa có."
+  },
+  {
+   "id": "D27",
+   "title": "Template biên bản họp",
+   "context": "Học từ skills/meet. Công XS. Giá trị Thấp.",
+   "recommended": "c",
+   "why": "Không có cuộc họp nào cần ghi; quyết định đã đi qua trang duyệt."
+  },
+  {
+   "id": "D28",
+   "title": "Chuẩn sơ đồ mới",
+   "context": "Học từ skills/diagram-design. Công S. Giá trị Thấp.",
+   "recommended": "c",
+   "why": "STYLE.md đã có Mermaid, giới hạn 15 node và C4."
+  },
+  {
+   "id": "D29",
+   "title": "Checklist NFR theo ISO 25010",
+   "context": "Học từ rules/04-nfr-standards.md. Công XS. Giá trị Thấp.",
+   "recommended": "c",
+   "why": "03-scaling.md, DM-9.6 và finops.md đã có số đo và nguồn đo."
+  }
+ ]
+}

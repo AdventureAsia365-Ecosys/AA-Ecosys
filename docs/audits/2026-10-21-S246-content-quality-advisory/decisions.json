@@ -1,0 +1,148 @@
+{
+ "items": [
+  {
+   "id": "Q1",
+   "title": "Đổi thứ tự kế hoạch chất lượng S245",
+   "context": "Cổng và judge không phân biệt tốt/xấu: regenerate cho qua 84,0% bài đạt và 85,3% bài hỏng. Kế hoạch QS v1 + Writing Memory đặt thay đổi đầu tiên vào khâu viết ở khoảng phiên 4. Chất lượng được quyết ở đầu vào và người viết S1.",
+   "options": [
+    {
+     "key": "a",
+     "label": "S1 trước: bảng dữ kiện + day-count oracle (Q-2) + bộ kiểm code + sửa prompt + A/B người viết; QS taxonomy/registry và WM P1+ để sau khi S1 có kết quả; giữ AA-915"
+    },
+    {
+     "key": "b",
+     "label": "Giữ nguyên thứ tự S245 đã duyệt"
+    }
+   ],
+   "recommended": "a",
+   "why": "Hai thứ duy nhất từng có tác dụng là sửa đầu vào và vệ sinh cơ học; hạ tầng đo lường làm trước sẽ lặp lại mẫu hình cũ."
+  },
+  {
+   "id": "Q2",
+   "title": "Đóng băng tinh chỉnh T9 và cấm thêm cổng mới",
+   "context": "Từ 11/10: T9 có 58 commit, S1 có 16. T9 chỉ phục vụ 4 tenant giả. Thêm cổng ở r2–r4 không làm số đo nhích; cổng LinkedIn duyệt 15/15 trong khi panel cho qua 4/15.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Đóng băng T9 (AA-779 vòng luật, AA-780, AA-789, AA-790, AA-924, AA-741 G7) và áp ngân sách luật (thêm 1 thì bỏ 1) cho tới khi S1 đạt hoặc có tenant thật"
+    },
+    {
+     "key": "b",
+     "label": "Tiếp tục tinh chỉnh T9 song song với S1"
+    }
+   ],
+   "recommended": "a",
+   "why": "Để dồn phiên vào chỗ quyết định chất lượng, và ngừng tích luỹ máy móc đang tự đẻ lỗi."
+  },
+  {
+   "id": "Q3",
+   "title": "Ai gán nhãn để đo chất lượng",
+   "context": "Golden set có 1/100 nhãn người. Panel AI đồng thuận κ 0,48, rubric đổi giữa các vòng. Gói AA-783 nằm im khoảng 8 phiên. Nếp đã thống nhất: Claude làm audit, anh duyệt.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Claude chạy panel rubric cố định, đọc toàn nguồn, không biết nhánh; anh chỉ phân xử bất đồng + 10 bài ngẫu nhiên (khoảng 30 phút mỗi vòng)"
+    },
+    {
+     "key": "b",
+     "label": "Anh tự chấm 20 bài mỗi tuần"
+    },
+    {
+     "key": "c",
+     "label": "Chỉ dùng panel AI, không có người"
+    }
+   ],
+   "recommended": "a",
+   "why": "Có neo người mà không biến anh thành điểm nghẽn; đúng nếp claude-audits-quality."
+  },
+  {
+   "id": "Q4",
+   "title": "Thiết kế A/B người viết S1",
+   "context": "Người viết S1 (Haiku) chưa từng được A/B về chất lượng. AA-748 bị đóng vì hiệu ứng nằm trong nhiễu (control lặp tự lệch 36%). Bài học #96: Luna từng thắng Sonnet ở place card.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Nhánh A, A' (control lặp), Haiku, Sonnet, Luna trên 50 tour golden S1; ước tính $12–15, chia 2 lần chạy mỗi lần ≤ $10; thắng phải vượt nhiễu A–A'"
+    },
+    {
+     "key": "b",
+     "label": "Chỉ so Haiku và Sonnet, mỗi nhánh 1 lần chạy"
+    },
+    {
+     "key": "c",
+     "label": "Không A/B, giữ Haiku và chỉ sửa prompt"
+    }
+   ],
+   "recommended": "a",
+   "why": "Đây là phép thử quyết định; không có control lặp thì dễ lặp lại kết cục vô kết luận của AA-748."
+  },
+  {
+   "id": "Q5",
+   "title": "Dữ kiện agency cần nhưng nguồn không có",
+   "context": "Độ khó, thể lực, cỡ đoàn, tuổi tối thiểu, loại trừ phần lớn không có trong nguồn nhà cung cấp. Người viết hoặc bịa ra hoặc bỏ đi. Khoảng 14% lỗi là lấp chỗ trống.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Không cho suy ra; xuất danh sách 'hỏi nhà cung cấp trước khi bán' mỗi tour; đề xuất nhẹ với chị Thư thêm các trường có cấu trúc ở khâu nhập A0 (chị quyết)"
+    },
+    {
+     "key": "b",
+     "label": "Để người viết suy luận như hiện nay"
+    }
+   ],
+   "recommended": "a",
+   "why": "Đây là giá trị thật cho agency, và là vấn đề dữ liệu sản phẩm mà viết văn không giải được."
+  },
+  {
+   "id": "Q6",
+   "title": "Có chạy lại cả catalog S1 không",
+   "context": "Đổi S1 sẽ kéo theo a3_atomize và tính lại Segment/Route. Đã có quy tắc 'chạy tập con' và 'chạy lại sạch một lần'; lần chạy toàn bộ trước tốn $98,6.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Chưa chạy; chỉ chạy sạch một lần theo nước sau khi A/B thắng rõ, xin duyệt chi phí riêng (Sonnet ước tính $100–160, Haiku khoảng $15–20)"
+    },
+    {
+     "key": "b",
+     "label": "Chạy nhỏ giọt 50 tour mỗi tuần ngay từ bây giờ"
+    }
+   ],
+   "recommended": "a",
+   "why": "Tránh xáo trộn atom nhiều lần và tiêu tiền khi chưa có bằng chứng."
+  },
+  {
+   "id": "Q7",
+   "title": "Jev cho văn xuôi",
+   "context": "Jev trả 'problem=False' cho 48/48 lần chạy golden S1; AUC 0,51 giữa nền địa danh được phép và lời hứa bị cấm; không ngưỡng nào đạt precision ≥ 0,95. Với A3 thì Jev tốt.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Tắt các câu hỏi văn xuôi (a1_claim_supported, a1_promise_unsupported), ngừng calib AA-845/AA-803; chỉ giữ Jev cho A3"
+    },
+    {
+     "key": "b",
+     "label": "Tiếp tục calib ngưỡng cho văn xuôi"
+    }
+   ],
+   "recommended": "a",
+   "why": "Không có bằng chứng Jev đóng góp gì đo được cho fidelity của văn xuôi."
+  },
+  {
+   "id": "Q8",
+   "title": "Phương án B nếu A/B không thắng",
+   "context": "AA-748 và A/B nhiệt độ đều không ra kết quả. Cần tiêu chí dừng trước khi chạy, để không mở thêm vòng gate.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Chuyển sang trang S1 ngắn (dữ kiện + một câu hút) và người biên tập nhẹ cho khoảng 50 tour ưu tiên; không mở thêm vòng gate"
+    },
+    {
+     "key": "b",
+     "label": "Mở thêm vòng cổng và judge để bù"
+    }
+   ],
+   "recommended": "a",
+   "why": "Đã có đủ bằng chứng rằng thêm cổng không nâng chất lượng thật."
+  }
+ ]
+}

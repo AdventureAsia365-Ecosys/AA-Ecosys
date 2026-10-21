@@ -1,0 +1,769 @@
+[
+  {
+    "id": "J01",
+    "question_key": "a0_row_kind",
+    "title_vi": "A0 ingest: dòng có phải tour không",
+    "proposal": "KEEP",
+    "options": [
+      {
+        "value": "keep",
+        "label_vi": "Giữ nguyên (enforce, không gửi PUT)"
+      },
+      {
+        "value": "off",
+        "label_vi": "Tắt (OFF, gửi PUT kèm floor + calibration_ref để quay lại được)"
+      }
+    ],
+    "proposed_value": "keep",
+    "rationale_vi": "Rủi ro sai thấp (9/9 đúng ở p≥0.95, 0 lỗi), gần như miễn phí vì đi chung call với itinerary_usable. Hiệu lực riêng nhỏ: theo calibration chỉ ~1/763 dòng có itinerary (8/9 non-tour có itinerary rỗng, luật empty_itinerary đã chặn). Chỉ tác động dòng MỚI, lỗi Jev thì fail-open.",
+    "evidence": {
+      "calls_30d": 1510,
+      "cost_30d_usd": 0.0294,
+      "enforce_effect": "455 accept (01/10), số drop thực chưa đo",
+      "calibration": "docs/calibration/a0_ingest.md: 9/9 đúng p≥0.95; dữ liệu a0_ingest_2026-09-30.json",
+      "saving_if_off_usd_month": 0.0,
+      "followup": "Sau lần upload thật kế tiếp: đọc not_a_tour/thin_itinerary trong ingest_details (read-only)"
+    }
+  },
+  {
+    "id": "J02",
+    "question_key": "a0_itinerary_usable",
+    "title_vi": "A0 ingest: itinerary có dùng được không",
+    "proposal": "KEEP",
+    "options": [
+      {
+        "value": "keep",
+        "label_vi": "Giữ nguyên (enforce, không gửi PUT)"
+      },
+      {
+        "value": "off",
+        "label_vi": "Tắt (OFF, gửi PUT kèm floor + calibration_ref để quay lại được)"
+      }
+    ],
+    "proposed_value": "keep",
+    "rationale_vi": "Câu duy nhất trong nhóm có hiệu lực riêng rõ ràng: ~8/763 dòng có itinerary là rác (bài báo, trang shop, dòng test). Ví dụ 'Trip 3 – Meiji-no-Yakata' từng bị publish rồi phải trash. Không luật nào khác bắt được; 33/33 đúng ở p≤0.20, Nghiệp lật 0/55.",
+    "evidence": {
+      "calls_30d": 1510,
+      "cost_30d_usd": 0.0294,
+      "enforce_effect": "0 reject trong 455 call enforce 01/10; ước ~1% dòng có text theo calibration (không phải 49 dòng: 49 là số câu trả lời, gồm call lặp)",
+      "calibration": "33/33 đúng p≤0.20 (25 trong đó itinerary rỗng)",
+      "saving_if_off_usd_month": 0.0
+    }
+  },
+  {
+    "id": "J03",
+    "question_key": "a0_country",
+    "title_vi": "A0 ingest: điền country khi resolver không tìm ra",
+    "proposal": "KEEP",
+    "options": [
+      {
+        "value": "keep",
+        "label_vi": "Giữ nguyên (enforce, không gửi PUT)"
+      },
+      {
+        "value": "off",
+        "label_vi": "Tắt (OFF, gửi PUT kèm floor + calibration_ref để quay lại được)"
+      }
+    ],
+    "proposed_value": "keep",
+    "rationale_vi": "Chỉ hỏi khi dòng chưa có country, không ghi đè. Chưa từng được hỏi ở enforce (file 01/10 đủ country). Calibration khớp 738/745; 7 chỗ lệch chủ yếu là country lưu sai (1 ca Yunnan–Laos còn bàn được). Tắt thì Commit sẽ lưu dòng với country NULL (Commit không có check missing-field), không phải rủi ro an toàn.",
+    "evidence": {
+      "calls_30d": 1055,
+      "cost_30d_usd": 0.0193,
+      "enforce_effect": "0 (chưa từng hỏi ở enforce; 1055 call đều là shadow calibration 30/09)",
+      "saving_if_off_usd_month": 0.0
+    }
+  },
+  {
+    "id": "J04",
+    "question_key": "a1_claim_supported",
+    "title_vi": "A1 grounding: câu văn có được nguồn hỗ trợ không",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "count_then_off",
+        "label_vi": "Đếm miễn phí số waiver (số + bữa ăn) trước; nếu waiver bữa ăn đáng kể thì làm luật bữa ăn rồi mới OFF (cùng bước với a1_promise_unsupported)"
+      },
+      {
+        "value": "off_now",
+        "label_vi": "OFF ngay cùng a1_promise_unsupported"
+      },
+      {
+        "value": "keep",
+        "label_vi": "Giữ enforce như hiện tại"
+      }
+    ],
+    "proposed_value": "count_then_off",
+    "rationale_vi": "Chỉ có thể cho câu qua (không có reject_ceiling), chưa đến 1% câu trả lời thay đổi kết quả, khoảng một nửa waiver số là sai (dựa trên 2 ví dụ). Check số và check bữa ăn vẫn fail-closed khi không có Jev, nên OFF không mở lỗ an toàn. Ngược lại OFF bỏ được rủi ro hết credit Jev đẩy cả wave vào manual_check (cơ chế hold AA-925 chỉ biến outage thành tour bị giữ). Tiết kiệm thật ~$2.5/tháng (~$1.8 mỗi wave đầy đủ), không phải $7.3 (số 30 ngày phần lớn trước đợt trim AA-756). Rủi ro cần đo: mất waiver bữa ăn → thêm ITINERARY_MEAL_TIME_INVENTED + một lần rewrite itinerary trả phí; vài waiver số đúng có thể rơi vào manual_check.",
+    "evidence": {
+      "calls_30d": 87682,
+      "cost_30d_usd": 6.8659,
+      "zones_30d": {
+        "accept": 26129,
+        "grey": 49516,
+        "error": 11743
+      },
+      "error_rate": "13.4% (gần hết từ 2 lần hết credit 03/10 và 10/10)",
+      "real_effect": "~100 waiver số/tháng (~50% sai) + waiver bữa ăn chưa đo",
+      "calibration": "accept 60/62 ở 0.85 (S223); phía reject không dùng được (precision 0.48, AUC 0.51 theo AA-845)",
+      "saving_if_off_usd_month": "~2.5 (chỉ khi OFF cùng a1_promise_unsupported; tắt một mình ~0 vì chung call)",
+      "put_body": {
+        "mode": "off",
+        "accept_floor": 0.85,
+        "reject_ceiling": null,
+        "calibration_ref": "docs/audits/2026-10-10-S223-jev-audit.html (root repo) + docs/calibration/a1_claim_supported.md S223",
+        "notes": "AA-803 S246: accept-only; <1% of answers change an outcome, ~50% of number waivers wrong; numeric/meal checks stay fail-closed. Off together with a1_promise_unsupported (shared call)."
+      },
+      "side_effects": [
+        "scripts/aa925/jev_drill.py không còn kiểm hold A1",
+        "cột Jev của golden set AA-729 thành skipped",
+        "t3_jev_clear dùng chung key, hiện no-op",
+        "vẫn ghi 2 dòng skipped $0 mỗi câu (dọn tuỳ chọn)",
+        "cập nhật docs/calibration/a1_claim_supported.md + ghi chú drill AA-925"
+      ],
+      "free_count": "ECS exec as cis_app, không gọi LLM: check_grounding(use_jev=False) + pre_audit_checks với Jev stub, map subject_key → decision_log mới nhất; đếm accept xoá được number hit, tour mà meal code được xoá, và tour mà waiver bữa ăn là code duy nhất được xoá (so chi phí rewrite với ~$1.8/wave)"
+    }
+  },
+  {
+    "id": "J05",
+    "question_key": "a1_promise_unsupported",
+    "title_vi": "A1 grounding: câu có hứa điều nguồn không có không",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "off_with_claim",
+        "label_vi": "OFF cùng bước với a1_claim_supported"
+      },
+      {
+        "value": "reask_then_off",
+        "label_vi": "Trước khi OFF: chạy lại câu hỏi trên 100 câu đã gắn nhãn AA-845 (~$0.01, stage adhoc_aa803); chỉ giữ nếu có ngưỡng ≥95% precision VÀ có code dùng kết quả"
+      },
+      {
+        "value": "keep_shadow",
+        "label_vi": "Giữ shadow (vẫn trả tiền, không tác dụng)"
+      }
+    ],
+    "proposed_value": "off_with_claim",
+    "rationale_vi": "Không có code nào đọc kết quả (grounding.py chỉ đọc QUESTION), chưa calibration (chỉ 3 nhãn dương trong 11 câu). Nó giữ cho call trả phí chung còn sống. Việc phát hiện hứa hẹn bịa (type-B) chuyển sang code check trên source facts có cấu trúc (S250). Nếu anh muốn thử lần cuối thì phải chạy TRƯỚC khi OFF, vì OFF làm decide() trả skipped ngay.",
+    "evidence": {
+      "calls_30d": 13661,
+      "cost_30d_usd": 0.4505,
+      "zones_30d": {
+        "grey": 13661
+      },
+      "real_effect": "0 (shadow, không có consumer)",
+      "calibration": "AA-845: 11 nhãn, AUC 0.833 trên 3 dương; p≥0.5 thì 3/5 đúng",
+      "reask_cost_usd": 0.007,
+      "put_body": {
+        "mode": "off",
+        "notes": "AA-803 S246: no consumer, uncalibrated (3 labelled positives); type-B detection moves to code checks (S250)."
+      },
+      "data_oddity": "errors_30d ghi 275 lỗi breaker open nhưng by_q_30d không có dòng zone=error cho key này"
+    }
+  },
+  {
+    "id": "J06",
+    "question_key": "a1_brand_fit",
+    "title_vi": "A1 judge: tie-break điểm brand fit",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "off",
+        "label_vi": "OFF (dọn dẹp, hành vi không đổi)"
+      },
+      {
+        "value": "keep_shadow",
+        "label_vi": "Giữ shadow"
+      }
+    ],
+    "proposed_value": "off",
+    "rationale_vi": "Chỉ 7 câu trả lời trong 30 ngày, tất cả p 0.8–1.0 (không phân biệt được bản tốt/xấu), không floor, không calibration. Ở shadow hay OFF điểm judge đều đi qua không đổi. brand_fit thôi làm cổng ở S250.",
+    "evidence": {
+      "calls_30d": 47,
+      "cost_30d_usd": 0.0003,
+      "zones_30d": {
+        "grey": 7,
+        "skipped": 40
+      },
+      "real_effect": "0",
+      "put_body": {
+        "mode": "off",
+        "notes": "AA-803 S246: 7 answers in 30 days, all p 0.8-1.0, no floors; brand_fit stops gating in S250."
+      }
+    }
+  },
+  {
+    "id": "J07",
+    "question_key": "a1_keyword_about_tour",
+    "title_vi": "A1 SEO prefetch: keyword có nói về tour này không",
+    "proposal": "RECALIBRATE",
+    "options": [
+      {
+        "value": "reject_040",
+        "label_vi": "Giữ enforce, reject 0.30 → 0.40, accept giữ 0.80 (đã duyệt ở AA-845, chưa apply)"
+      },
+      {
+        "value": "keep_030",
+        "label_vi": "Giữ enforce với ngưỡng hiện tại (reject 0.30)"
+      },
+      {
+        "value": "off",
+        "label_vi": "Tắt"
+      }
+    ],
+    "proposed_value": "reject_040",
+    "rationale_vi": "Là chốt duy nhất chặn keyword lạc đề (địa điểm khác cùng nước, tên khách sạn, hoạt động tour không có) lọt vào top_keywords mà writer được bảo phải dùng, tức đúng loại 'hứa điều nguồn không có'. Hiệu lực thật ~1.5 drop + ~1.4 add mỗi tour (không phải 53%/14%). Ở 0.40: 6/7 drop thực sự đổi kết quả là đúng, và chỉ ngưỡng này bắt được tên khách sạn. Giữ accept 0.80: ở 0.65 chỉ 1/9 idea thêm vào là đúng. Lưu ý: catalog hiện tại dùng seo_context dựng lúc shadow (01–08/10, tái dùng 180 ngày), nên đổi ngưỡng chỉ tác dụng tour mới cho tới ~03/2027 trừ khi dựng lại seo_context (issue riêng, chỉ tốn DataForSEO, Jev đã cache).",
+    "evidence": {
+      "calls_30d": 18086,
+      "cost_30d_usd": 0.2999,
+      "zones_30d": {
+        "grey": 17089,
+        "error": 997
+      },
+      "real_effect": "chưa từng tác động (enforce từ 10/10 nhưng prefetch chưa chạy lại từ 08/10); offline ~5.3% candidate bị drop, ~4.8% được thêm",
+      "calibration": "S224, 100 nhãn: accept≥0.80 1.000 (n=20), reject≤0.30 1.000 (n=30); trên drop có hiệu lực: ≤0.40 = 6/7",
+      "saving_if_off_usd_month": "~0 (≈$0.30 mỗi lần prefetch toàn catalog)",
+      "put_body": {
+        "mode": "enforce",
+        "accept_floor": 0.8,
+        "reject_ceiling": 0.4,
+        "calibration_ref": "AA-CIS-App docs/calibration/a1_keyword_about_tour.md (S224)",
+        "notes": "AA-845/AA-803 S246: reject 0.30 -> 0.40 (effective-drop precision 6/7); accept kept 0.80 (0.65 adds 1/9 correct)"
+      },
+      "followups": [
+        "guard 1 dòng: accept re-add qua keep.setdefault không kiểm lại filter transfer/foreign",
+        "đo hiệu lực trên tour mới hoặc replay offline rank_keyword_ideas theo subject_key kw:<tour_id>:<keyword> ($0)",
+        "quyết riêng: có dựng lại seo_context cho catalog hiện tại không"
+      ]
+    }
+  },
+  {
+    "id": "J08",
+    "question_key": "a3_keyword_belongs",
+    "title_vi": "A3 segment research: keyword đề xuất có thuộc địa điểm không",
+    "proposal": "KEEP",
+    "options": [
+      {
+        "value": "keep",
+        "label_vi": "Giữ nguyên (enforce, không gửi PUT)"
+      },
+      {
+        "value": "off",
+        "label_vi": "Tắt (OFF, gửi PUT kèm floor + calibration_ref để quay lại được)"
+      }
+    ],
+    "proposed_value": "keep",
+    "rationale_vi": "Gần như miễn phí; khi chạy loại ~1/4 keyword đề xuất. Tác hại nó chặn: keyword chung chung (vd 'hot springs' 368k) chiếm suất SERP/PAA duy nhất của địa điểm và thổi phồng demand. Reject sai ít hại (tên địa điểm gốc luôn giữ). Precision 0.985 đo trên quần thể khác cổng live, 34 reject live chưa gắn nhãn → kiểm thêm $0.",
+    "evidence": {
+      "calls_30d": 170,
+      "cost_30d_usd": 0.0025,
+      "zones_30d": {
+        "accept": 81,
+        "grey": 30,
+        "reject": 34
+      },
+      "calibration": "66/67 ở reject≤0.45; 69/200 nhãn do Nghiệp duyệt",
+      "followup": "gắn nhãn 34 reject enforce từ decision_log (kw:<place>:<keyword>), $0"
+    }
+  },
+  {
+    "id": "J09",
+    "question_key": "a3_idea_traveller",
+    "title_vi": "A3 research: idea có phải tìm kiếm của du khách không",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "check_then_off",
+        "label_vi": "Kiểm $0: áp is_lodging_search lên 214 reject ngày 30/09; nếu số reject KHÔNG phải lodging ≈ 0 thì OFF ngay, nếu có thì giữ"
+      },
+      {
+        "value": "keep",
+        "label_vi": "Giữ enforce (dưới $0.01/tháng)"
+      },
+      {
+        "value": "off_now",
+        "label_vi": "OFF ngay"
+      }
+    ],
+    "proposed_value": "check_then_off",
+    "rationale_vi": "Theo luật mới của anh (chỉ giữ câu có hiệu lực thật): trên mẫu calibration, cả 19 reject đều đã bị luật is_lodging_search bắt trước (luật chạy trước Jev), 0/132 dòng không-lodging bị reject. Tên khách sạn thuần brand ('amankora paro') Jev cũng không bắt. Hiệu lực biên ~0, nhưng chưa đo trên dữ liệu live → kiểm $0 rồi OFF.",
+    "evidence": {
+      "calls_30d": 396,
+      "cost_30d_usd": 0.0067,
+      "zones_30d": {
+        "reject": 214,
+        "grey": 50,
+        "shadow_grey": 132
+      },
+      "calibration": "19/19 đúng ở reject≤0.20, Nghiệp lật 0/132",
+      "note": "jev_ideas_rejected trong kết quả job đếm trước pre-filter lodging nên không dùng để đo được",
+      "put_body": {
+        "mode": "off",
+        "reject_ceiling": 0.2,
+        "calibration_ref": "docs/calibration/a3_idea_traveller.md",
+        "notes": "AA-803 S246: marginal effect ~0 after is_lodging_search pre-filter"
+      }
+    }
+  },
+  {
+    "id": "J10",
+    "question_key": "a3_atom_in_text",
+    "title_vi": "A3 atomize: atom có thật trong text của ngày đó không",
+    "proposal": "KEEP",
+    "options": [
+      {
+        "value": "keep_review_after_luna",
+        "label_vi": "Giữ enforce; xem lại sau lần re-atomize Luna đầy đủ đầu tiên (OFF nếu ~0 drop trên ≥10k atom)"
+      },
+      {
+        "value": "off",
+        "label_vi": "Tắt ngay"
+      }
+    ],
+    "proposed_value": "keep_review_after_luna",
+    "rationale_vi": "Chặn atomizer gán địa điểm highlight vào sai ngày (lỗi 63% ngày 30/09). Đã drop 119 atom 01–10/10, 127/127 đúng. '0 drop từ 10/10' chưa nói lên gì: từ đó mới chỉ ~354 atom được tạo (kỳ vọng ~1.6 drop). Chưa có lần re-atomize Luna toàn bộ nào: ~27k atom hiện có vẫn là bản trước #644, nên rủi ro đổi model còn ở phía trước. Filter logistics bắt lỗi khác, không bắt sai ngày.",
+    "evidence": {
+      "calls_30d": 27037,
+      "cost_30d_usd": 0.531,
+      "zones_30d": {
+        "reject": 119,
+        "grey": 25761,
+        "error": 1157
+      },
+      "calibration": "127/127 ở reject≤0.30, Nghiệp lật 0/47",
+      "saving_if_off_usd_month": "~0.01 ở volume hiện tại (re-atomize toàn bộ ~$0.53 một lần)"
+    }
+  },
+  {
+    "id": "J11",
+    "question_key": "a3_same_place",
+    "title_vi": "A3 segment matching: hai atom có cùng một địa điểm không",
+    "proposal": "KEEP",
+    "options": [
+      {
+        "value": "keep",
+        "label_vi": "Giữ nguyên (enforce, không gửi PUT)"
+      },
+      {
+        "value": "off",
+        "label_vi": "Tắt (OFF, gửi PUT kèm floor + calibration_ref để quay lại được)"
+      }
+    ],
+    "proposed_value": "keep",
+    "rationale_vi": "Chốt duy nhất ngăn gộp hai địa điểm khác nhau mà luật moment muốn gộp (Bukchon vs Jeonju Hanok Village, Wat Saket vs Wat Si Saket). 1,266 cặp được tách trong 30 ngày (chỉ đếm call mới; cache hit cũng enforce nhưng không ghi log), 30/30 đúng. Tắt thì lỗi tích luỹ dần: Segment trộn, canonical place sai, Score/Route/PAA nhiễm.",
+    "evidence": {
+      "calls_30d": 7413,
+      "cost_30d_usd": 0.1135,
+      "zones_30d": {
+        "reject": 1266,
+        "grey": 4715,
+        "error": 412
+      },
+      "calibration": "30/30 ở reject≤0.10, Nghiệp lật 0/150",
+      "followup": "ngoài AA-803: tìm nguồn 117 lỗi có error rỗng (có thể asyncio timeout)"
+    }
+  },
+  {
+    "id": "J12",
+    "question_key": "a3_activity_type",
+    "title_vi": "A3 segment type: transit hay experience",
+    "proposal": "RECALIBRATE",
+    "options": [
+      {
+        "value": "keep_verify",
+        "label_vi": "Giữ enforce 0.90; gắn nhãn ~60 pick p≥0.90 từ 2,317 moment đang tranh chấp (verify-only, $0); <95% precision thì nâng accept_floor 0.95"
+      },
+      {
+        "value": "keep",
+        "label_vi": "Giữ nguyên, không gắn nhãn"
+      },
+      {
+        "value": "off",
+        "label_vi": "Tắt"
+      }
+    ],
+    "proposed_value": "keep_verify",
+    "rationale_vi": "Hiệu lực Segment lớn nhất A3: mỗi recompute quyết transit/experience cho ~654 Segment mà luật động từ và activity_type của atom bất đồng (cứu nghi lễ, cáp treo, safari thuyền về Score; loại check-out, qua biên giới). 98% trên mẫu, nhưng quần thể tranh chấp tăng ~5x từ re-atomize 08/10 (469 → 1,965) và lời hứa spot-check 30 quyết định ở S223 chưa làm → kiểm lại.",
+    "evidence": {
+      "calls_30d": 32700,
+      "cost_30d_usd": 0.29,
+      "zones_30d": {
+        "accept": 6460,
+        "grey": 7431,
+        "error": 17602
+      },
+      "real_effect": "changed=654/2,317 moment (20/10), 605–654 mỗi recompute từ 10/10 (CloudWatch)",
+      "calibration": "v2 0.90: 90/92 (S223)",
+      "note": "decide() đã dùng cache 180 ngày trước breaker, nên outage chỉ ảnh hưởng moment chưa từng hỏi; follow-up 'tái dùng verdict cũ khi lỗi' đã có sẵn",
+      "put_body_if_below_95": {
+        "mode": "enforce",
+        "accept_floor": 0.95,
+        "calibration_ref": "docs/audits/2026-10-10-S223-jev-audit.html (root repo) + docs/calibration/a3_activity_type.md S223 + AA-803 v3",
+        "notes": "AA-803 recheck on post-re-atomize disputed set"
+      }
+    }
+  },
+  {
+    "id": "J13",
+    "question_key": "a3_demand_belongs",
+    "title_vi": "A3 Score demand: Segment có sở hữu volume của keyword không",
+    "proposal": "KEEP",
+    "options": [
+      {
+        "value": "keep_spotcheck",
+        "label_vi": "Giữ enforce 0.70; gắn nhãn 30 reject live p 0.50–0.70 ($0); >2 sai thì hạ reject_ceiling xuống 0.50"
+      },
+      {
+        "value": "ceiling_050_now",
+        "label_vi": "Hạ reject_ceiling xuống 0.50 ngay (mẫu: 99/99 đúng)"
+      },
+      {
+        "value": "keep",
+        "label_vi": "Giữ 0.70, không kiểm"
+      }
+    ],
+    "proposed_value": "keep_spotcheck",
+    "rationale_vi": "Hiệu lực lớn nhất hệ thống: 20,358 reject trong 30 ngày, ngăn Segment nhận volume của keyword chỉ trùng chữ (vd 'fisherman's village' 40,500 gán cho Humayun's Tomb). Luật word-overlap phía dưới chỉ đúng 34/100. Điểm yếu: dải 0.50–0.70 là 18/20 (90%), dưới chuẩn ≥97% ghi trong notes, live có 2,761 verdict trong dải đó → có thể ~270 reject sai keyword giá trị mỗi 30 ngày. Ngưỡng sạch là 0.50, không phải 0.60 (0.60 vẫn reject 'night life in Jeju' p 0.51).",
+    "evidence": {
+      "calls_30d": 50577,
+      "cost_30d_usd": 0.498,
+      "zones_30d": {
+        "reject": 20358,
+        "grey": 9983,
+        "error": 20236
+      },
+      "calibration": "117/119 reject đúng; <0.40: 88/88; 0.40–0.70: 29/31",
+      "note": "40% call trong cửa sổ là lỗi credit: trục demand chạy không kiểm khoảng 1 tuần; tự sửa ở recompute kế tiếp",
+      "put_body_if_lowered": {
+        "mode": "enforce",
+        "reject_ceiling": 0.5,
+        "calibration_ref": "docs/audits/2026-10-10-S223-jev-audit.html (root repo) + docs/calibration/a3_demand_belongs.md S223 + AA-803 spot-check",
+        "notes": "AA-803: 0.50-0.70 band below 97% precision"
+      }
+    }
+  },
+  {
+    "id": "J14",
+    "question_key": "a3_landing_belongs",
+    "title_vi": "A3 PAA landing: câu hỏi PAA có thuộc Segment không",
+    "proposal": "KEEP",
+    "options": [
+      {
+        "value": "keep_040",
+        "label_vi": "Giữ enforce 0.40"
+      },
+      {
+        "value": "ceiling_035",
+        "label_vi": "Hạ xuống 0.35 (131/131 đúng, bỏ ca sai Pak Ou/Mekong, mất 8 lượt bắt)"
+      },
+      {
+        "value": "spotcheck",
+        "label_vi": "Gắn nhãn 30 reject live p 0.30–0.40 rồi quyết"
+      }
+    ],
+    "proposed_value": "keep_040",
+    "rationale_vi": "Chốt duy nhất giữ số câu hỏi PAA trung thực (không thì câu 'Tiger's Nest' đếm cho mọi tu viện, số câu hỏi tăng ~7 lần). 139/140 reject đúng. Đổi ngưỡng chỉ tới Segment cũ sau một lượt landing toàn platform (segment_ids=None).",
+    "evidence": {
+      "calls_30d": 26883,
+      "cost_30d_usd": 0.4223,
+      "zones_30d": {
+        "reject": 17663,
+        "grey": 8065,
+        "error": 1155
+      },
+      "calibration": "139/140 ở ≤0.40; 131/131 ở ≤0.35; Nghiệp lật 1/62"
+    }
+  },
+  {
+    "id": "J15",
+    "question_key": "a3_question_about_here",
+    "title_vi": "A3 question scope: câu hỏi có nói về nơi này không",
+    "proposal": "KEEP",
+    "options": [
+      {
+        "value": "keep",
+        "label_vi": "Giữ nguyên (enforce, không gửi PUT)"
+      },
+      {
+        "value": "off",
+        "label_vi": "Tắt (OFF, gửi PUT kèm floor + calibration_ref để quay lại được)"
+      }
+    ],
+    "proposed_value": "keep",
+    "rationale_vi": "Làm gần hết việc lọc phạm vi quốc gia và là câu duy nhất bắt câu hỏi chung chung ('What do Buddhists eat?'). Một mình: drop 137, sai 2 (98.5%), bắt 135/149. Đi chung call với a3_question_foreign.",
+    "evidence": {
+      "calls_30d": 5167,
+      "cost_30d_usd": 0.0512,
+      "zones_30d": {
+        "reject": 3029,
+        "grey": 1897,
+        "error": 241
+      },
+      "calibration": "Nghiệp lật 1/54"
+    }
+  },
+  {
+    "id": "J16",
+    "question_key": "a3_question_foreign",
+    "title_vi": "A3 question scope: câu hỏi có về nước khác không",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "join_then_off",
+        "label_vi": "Chạy join $0 trên decision_log (foreign-only = foreign≥0.90 và about_here>0.30), gắn nhãn; ít hoặc phần lớn sai thì OFF thẳng, không qua shadow"
+      },
+      {
+        "value": "off_now",
+        "label_vi": "OFF ngay"
+      },
+      {
+        "value": "keep",
+        "label_vi": "Giữ enforce 0.90"
+      }
+    ],
+    "proposed_value": "join_then_off",
+    "rationale_vi": "Gần như không drop gì mà about_here chưa drop: trên 200 cặp có nhãn chỉ thêm 3 drop, 2 sai ('Is Kerung in China or Nepal?', 'Is Thailand geographically close to Laos?'). Ở 0.95 thì thêm 0, nên 'khôi phục 0.95' không khác OFF. Shadow không đo được gì (zone tính theo floor bất kể mode; recompute ăn cache, không ghi dòng decision_log), nên đo luôn từ log hiện có.",
+    "evidence": {
+      "calls_30d": 5167,
+      "cost_30d_usd": 0.0512,
+      "zones_30d": {
+        "accept": 2147,
+        "grey": 2779,
+        "error": 241
+      },
+      "saving_if_off_usd_month": "<0.05 (chỉ phần token, call vẫn chạy cho about_here)",
+      "put_body": {
+        "mode": "off",
+        "accept_floor": 0.9,
+        "calibration_ref": "docs/audits/2026-10-10-S223-jev-audit.html (root repo) + docs/calibration/a3_question_foreign.md S223",
+        "notes": "AA-803 S246: adds ~1.5% drops beyond about_here, mostly wrong"
+      },
+      "caveat": "khi foreign OFF, about_here được hỏi một mình trên cặp mới (calibrate trong call đôi); spot-check bao luôn"
+    }
+  },
+  {
+    "id": "J17",
+    "question_key": "t7_topic_fits_brand",
+    "title_vi": "T7 debate: chủ đề có hợp brand không",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "keep_off_no_put",
+        "label_vi": "Giữ OFF, không gửi PUT (giữ dấu audit S234)"
+      },
+      {
+        "value": "off_put",
+        "label_vi": "Gửi lại PUT {\"mode\":\"off\"} cho chắc (ghi đè updated_by/updated_at)"
+      }
+    ],
+    "proposed_value": "keep_off_no_put",
+    "rationale_vi": "Đã OFF từ 13/10 (admin:nghiep-s234-jev-audit), không floor, không calibration, allow-list tenant rỗng, chính sách S232 không đưa Jev vào đường T. 226/275 câu trả lời ở p 0.6–0.9 (không chắc), chưa calibration; nếu enforce thì quyết định chỉ dựa vào Jev (không ghi cache brand-fit). Luna + check contested đã làm việc này. Không gửi PUT: giá trị đã đúng, PUT chỉ ghi đè dấu audit S234.",
+    "evidence": {
+      "calls_30d": 390,
+      "cost_30d_usd": 0.007,
+      "real_effect": "0 (mọi câu trả lời là shadow grey trước 14/10; sau đó chỉ dòng skipped $0)",
+      "saving_if_off_usd_month": 0.0,
+      "optional_cleanup": "PR code: bỏ decide() chết ở T7 (debate.py) và T8 verify_answers, sửa tests test_aa700_t7_t8_t9_jev.py + test_aa771_s234_voice_contract.py:359; đánh dấu retired trong notes cho 7 dòng T9/T10"
+    }
+  },
+  {
+    "id": "J18",
+    "question_key": "t8_angle_answers",
+    "title_vi": "T8 angle: angle có thật sự trả lời câu PAA không",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "keep_off_no_put",
+        "label_vi": "Giữ OFF, không gửi PUT (giữ dấu audit S234)"
+      },
+      {
+        "value": "off_put",
+        "label_vi": "Gửi lại PUT {\"mode\":\"off\"} cho chắc (ghi đè updated_by/updated_at)"
+      }
+    ],
+    "proposed_value": "keep_off_no_put",
+    "rationale_vi": "Đã OFF từ 13/10 (admin:nghiep-s234-jev-audit), không floor, không calibration, allow-list tenant rỗng, chính sách S232 không đưa Jev vào đường T. n=18, không nhãn. 17/18 câu ở p<0.4, gợi ý vài khớp nguyên văn là claim chứ không phải trả lời thật: đáng kiểm phía Bedrock sau, không phải Jev. Không call nào từ 13/10. Không gửi PUT: giá trị đã đúng, PUT chỉ ghi đè dấu audit S234.",
+    "evidence": {
+      "calls_30d": 18,
+      "cost_30d_usd": 0.0003,
+      "real_effect": "0 (mọi câu trả lời là shadow grey trước 14/10; sau đó chỉ dòng skipped $0)",
+      "saving_if_off_usd_month": 0.0,
+      "optional_cleanup": "PR code: bỏ decide() chết ở T7 (debate.py) và T8 verify_answers, sửa tests test_aa700_t7_t8_t9_jev.py + test_aa771_s234_voice_contract.py:359; đánh dấu retired trong notes cho 7 dòng T9/T10"
+    }
+  },
+  {
+    "id": "J19",
+    "question_key": "t9_fact_relevant",
+    "title_vi": "T9 facts: fact có liên quan không",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "keep_off_no_put",
+        "label_vi": "Giữ OFF, không gửi PUT (giữ dấu audit S234)"
+      },
+      {
+        "value": "off_put",
+        "label_vi": "Gửi lại PUT {\"mode\":\"off\"} cho chắc (ghi đè updated_by/updated_at)"
+      }
+    ],
+    "proposed_value": "keep_off_no_put",
+    "rationale_vi": "Đã OFF từ 13/10 (admin:nghiep-s234-jev-audit), không floor, không calibration, allow-list tenant rỗng, chính sách S232 không đưa Jev vào đường T. Không còn call site (#757 bỏ select_relevant_facts). Không gửi PUT: giá trị đã đúng, PUT chỉ ghi đè dấu audit S234.",
+    "evidence": {
+      "calls_30d": 21,
+      "cost_30d_usd": 0.0005,
+      "real_effect": "0 (mọi câu trả lời là shadow grey trước 14/10; sau đó chỉ dòng skipped $0)",
+      "saving_if_off_usd_month": 0.0,
+      "optional_cleanup": "PR code: bỏ decide() chết ở T7 (debate.py) và T8 verify_answers, sửa tests test_aa700_t7_t8_t9_jev.py + test_aa771_s234_voice_contract.py:359; đánh dấu retired trong notes cho 7 dòng T9/T10"
+    }
+  },
+  {
+    "id": "J20",
+    "question_key": "t10_rubric_met",
+    "title_vi": "T10 gate: đạt rubric",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "keep_off_no_put",
+        "label_vi": "Giữ OFF, không gửi PUT (giữ dấu audit S234)"
+      },
+      {
+        "value": "off_put",
+        "label_vi": "Gửi lại PUT {\"mode\":\"off\"} cho chắc (ghi đè updated_by/updated_at)"
+      }
+    ],
+    "proposed_value": "keep_off_no_put",
+    "rationale_vi": "Đã OFF từ 13/10 (admin:nghiep-s234-jev-audit), không floor, không calibration, allow-list tenant rỗng, chính sách S232 không đưa Jev vào đường T. Không call site; F8_framework mà nó định thay đã bị AA-787 bỏ. 1,099/1,448 ở p≥0.8 (đóng dấu cho qua). Không gửi PUT: giá trị đã đúng, PUT chỉ ghi đè dấu audit S234.",
+    "evidence": {
+      "calls_30d": 1732,
+      "cost_30d_usd": 0.0859,
+      "real_effect": "0 (mọi câu trả lời là shadow grey trước 14/10; sau đó chỉ dòng skipped $0)",
+      "saving_if_off_usd_month": 0.0,
+      "optional_cleanup": "PR code: bỏ decide() chết ở T7 (debate.py) và T8 verify_answers, sửa tests test_aa700_t7_t8_t9_jev.py + test_aa771_s234_voice_contract.py:359; đánh dấu retired trong notes cho 7 dòng T9/T10"
+    }
+  },
+  {
+    "id": "J21",
+    "question_key": "t10_brand_voice",
+    "title_vi": "T10 gate: giọng brand",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "keep_off_no_put",
+        "label_vi": "Giữ OFF, không gửi PUT (giữ dấu audit S234)"
+      },
+      {
+        "value": "off_put",
+        "label_vi": "Gửi lại PUT {\"mode\":\"off\"} cho chắc (ghi đè updated_by/updated_at)"
+      }
+    ],
+    "proposed_value": "keep_off_no_put",
+    "rationale_vi": "Đã OFF từ 13/10 (admin:nghiep-s234-jev-audit), không floor, không calibration, allow-list tenant rỗng, chính sách S232 không đưa Jev vào đường T. Không call site; từng được cho identity của AA thay vì brand tenant (r=0.11). Không gửi PUT: giá trị đã đúng, PUT chỉ ghi đè dấu audit S234.",
+    "evidence": {
+      "calls_30d": 433,
+      "cost_30d_usd": 0.0312,
+      "real_effect": "0 (mọi câu trả lời là shadow grey trước 14/10; sau đó chỉ dòng skipped $0)",
+      "saving_if_off_usd_month": 0.0,
+      "optional_cleanup": "PR code: bỏ decide() chết ở T7 (debate.py) và T8 verify_answers, sửa tests test_aa700_t7_t8_t9_jev.py + test_aa771_s234_voice_contract.py:359; đánh dấu retired trong notes cho 7 dòng T9/T10"
+    }
+  },
+  {
+    "id": "J22",
+    "question_key": "t10_cta_clear",
+    "title_vi": "T10 gate: CTA rõ",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "keep_off_no_put",
+        "label_vi": "Giữ OFF, không gửi PUT (giữ dấu audit S234)"
+      },
+      {
+        "value": "off_put",
+        "label_vi": "Gửi lại PUT {\"mode\":\"off\"} cho chắc (ghi đè updated_by/updated_at)"
+      }
+    ],
+    "proposed_value": "keep_off_no_put",
+    "rationale_vi": "Đã OFF từ 13/10 (admin:nghiep-s234-jev-audit), không floor, không calibration, allow-list tenant rỗng, chính sách S232 không đưa Jev vào đường T. Không call site; 359/362 ở p≥0.9, nói 'có' với mọi thứ. F9 judge + F6_cta_present đã bao. Không gửi PUT: giá trị đã đúng, PUT chỉ ghi đè dấu audit S234.",
+    "evidence": {
+      "calls_30d": 433,
+      "cost_30d_usd": 0.0217,
+      "real_effect": "0 (mọi câu trả lời là shadow grey trước 14/10; sau đó chỉ dòng skipped $0)",
+      "saving_if_off_usd_month": 0.0,
+      "optional_cleanup": "PR code: bỏ decide() chết ở T7 (debate.py) và T8 verify_answers, sửa tests test_aa700_t7_t8_t9_jev.py + test_aa771_s234_voice_contract.py:359; đánh dấu retired trong notes cho 7 dòng T9/T10"
+    }
+  },
+  {
+    "id": "J23",
+    "question_key": "t10_faq_restates",
+    "title_vi": "T10 gate: FAQ lặp lại thân bài",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "keep_off_no_put",
+        "label_vi": "Giữ OFF, không gửi PUT (giữ dấu audit S234)"
+      },
+      {
+        "value": "off_put",
+        "label_vi": "Gửi lại PUT {\"mode\":\"off\"} cho chắc (ghi đè updated_by/updated_at)"
+      }
+    ],
+    "proposed_value": "keep_off_no_put",
+    "rationale_vi": "Đã OFF từ 13/10 (admin:nghiep-s234-jev-audit), không floor, không calibration, allow-list tenant rỗng, chính sách S232 không đưa Jev vào đường T. Không call site; hỏi sai luật sản phẩm (FAQ được nhắc lại fact, chỉ cấm chép câu). AA-768/AA-787 đã có answer_copies_body + drop_restated_faq trong F16. Không gửi PUT: giá trị đã đúng, PUT chỉ ghi đè dấu audit S234.",
+    "evidence": {
+      "calls_30d": 711,
+      "cost_30d_usd": 0.0464,
+      "real_effect": "0 (mọi câu trả lời là shadow grey trước 14/10; sau đó chỉ dòng skipped $0)",
+      "saving_if_off_usd_month": 0.0,
+      "optional_cleanup": "PR code: bỏ decide() chết ở T7 (debate.py) và T8 verify_answers, sửa tests test_aa700_t7_t8_t9_jev.py + test_aa771_s234_voice_contract.py:359; đánh dấu retired trong notes cho 7 dòng T9/T10"
+    }
+  },
+  {
+    "id": "J24",
+    "question_key": "t10_offer_as_certain",
+    "title_vi": "T10 gate: trình bày option như chắc chắn",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "keep_off_no_put",
+        "label_vi": "Giữ OFF, không gửi PUT (giữ dấu audit S234)"
+      },
+      {
+        "value": "off_put",
+        "label_vi": "Gửi lại PUT {\"mode\":\"off\"} cho chắc (ghi đè updated_by/updated_at)"
+      }
+    ],
+    "proposed_value": "keep_off_no_put",
+    "rationale_vi": "Đã OFF từ 13/10 (admin:nghiep-s234-jev-audit), không floor, không calibration, allow-list tenant rỗng, chính sách S232 không đưa Jev vào đường T. Không call site; regex gate_promises_an_option đã bị bỏ (AA-787 / CIS ADR 0009), F17_trip_fact chặn và sửa lỗi này. Không gửi PUT: giá trị đã đúng, PUT chỉ ghi đè dấu audit S234.",
+    "evidence": {
+      "calls_30d": 136,
+      "cost_30d_usd": 0.0056,
+      "real_effect": "0 (mọi câu trả lời là shadow grey trước 14/10; sau đó chỉ dòng skipped $0)",
+      "saving_if_off_usd_month": 0.0,
+      "optional_cleanup": "PR code: bỏ decide() chết ở T7 (debate.py) và T8 verify_answers, sửa tests test_aa700_t7_t8_t9_jev.py + test_aa771_s234_voice_contract.py:359; đánh dấu retired trong notes cho 7 dòng T9/T10"
+    }
+  },
+  {
+    "id": "J25",
+    "question_key": "t10_same_piece",
+    "title_vi": "T10 gate: trùng bài",
+    "proposal": "OFF",
+    "options": [
+      {
+        "value": "keep_off_no_put",
+        "label_vi": "Giữ OFF, không gửi PUT (giữ dấu audit S234)"
+      },
+      {
+        "value": "off_put",
+        "label_vi": "Gửi lại PUT {\"mode\":\"off\"} cho chắc (ghi đè updated_by/updated_at)"
+      }
+    ],
+    "proposed_value": "keep_off_no_put",
+    "rationale_vi": "Đã OFF từ 13/10 (admin:nghiep-s234-jev-audit), không floor, không calibration, allow-list tenant rỗng, chính sách S232 không đưa Jev vào đường T. Không call site; 43 câu ở p 0.3–0.8; gate cosine cross-tenant (≥0.92) đã chặn. Không gửi PUT: giá trị đã đúng, PUT chỉ ghi đè dấu audit S234.",
+    "evidence": {
+      "calls_30d": 43,
+      "cost_30d_usd": 0.007,
+      "real_effect": "0 (mọi câu trả lời là shadow grey trước 14/10; sau đó chỉ dòng skipped $0)",
+      "saving_if_off_usd_month": 0.0,
+      "optional_cleanup": "PR code: bỏ decide() chết ở T7 (debate.py) và T8 verify_answers, sửa tests test_aa700_t7_t8_t9_jev.py + test_aa771_s234_voice_contract.py:359; đánh dấu retired trong notes cho 7 dòng T9/T10"
+    }
+  }
+]

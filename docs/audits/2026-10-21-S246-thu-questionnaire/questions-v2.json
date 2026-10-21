@@ -1,0 +1,298 @@
+{
+ "groups": [
+  {
+   "title": "Giá và thu tiền",
+   "short": "Giá",
+   "intro": "Giá net cho đại lý, cách AA thu tiền đại lý, ràng buộc giá bán và người nhập giá. Mô hình giá của CRM đã quyết định (xem cuối trang).",
+   "items": [
+    {
+     "id": "1.1",
+     "question": "Giá net cho đại lý (cần xác nhận) [v1 1.2, Q1.2, H9]",
+     "context": "Đã có câu trả lời tạm (lựa chọn a): chỉ cần xác nhận; các lựa chọn khác chỉ dùng khi muốn sửa. API tồn kho AA trả giá net cho CRM (spec §9 AA inventory API); báo giá ở module 6. CRM miễn phí cho đại lý lúc mở (đã quyết định), nên AA thu từ biên lợi nhuận tour AA.",
+     "reference": "Tern, TravelJoy: không áp dụng, vì không bán tour của chính họ. ([Tern](https://tern.travel/pricing), [TravelJoy](https://traveljoy.com/pricing))\nAsian Trails (DMC bán B2B): bảng giá cho đại lý nằm ở kho Cloud Tariff chỉ dành cho đại lý, đặt chỗ qua cổng eConnect; không công bố biên giá. ([Cloud Tariff](https://www.asiantrails.travel/?p=1032235), [eConnect](https://www.asiantrails.travel/?p=1032376))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Dùng bảng giá net B2B đang có (biên 15%); đại lý tự đặt giá bán cho khách của họ"
+      },
+      {
+       "key": "b",
+       "label": "Hoặc sửa: lập bảng giá net riêng cho đại lý dùng CRM"
+      },
+      {
+       "key": "c",
+       "label": "Hoặc sửa: giá net theo hạng đại lý (theo khối lượng bán)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Bảng giá đã có sẵn, không phải duy trì thêm bảng thứ hai.",
+     "status": "open"
+    },
+    {
+     "id": "1.2",
+     "question": "Cách AA thu tiền đại lý khi đại lý bán tour AA (cần xác nhận) [v1 1.3, Q1.3]",
+     "context": "Đã có câu trả lời tạm (lựa chọn a): chỉ cần xác nhận và điền điều khoản B2B hiện tại; các lựa chọn khác chỉ dùng khi muốn sửa. Đã quyết định AA xuất hoá đơn cho đại lý. Phần cần điền: trả trước hay công nợ, % cọc, tiền tệ hoá đơn, phí thẻ 3% có áp cho chuyển khoản không (spec module 6, 7; §11 gap 6: AUD/USD/VND/EUR). Tiền khách trả đại lý đi qua Stripe của đại lý (đã quyết định); tiền đại lý trả AA đi ngoài CRM.",
+     "reference": "Tern, TravelJoy: không áp dụng, vì không bán tour của chính họ. ([Tern](https://tern.travel/pricing), [TravelJoy](https://traveljoy.com/pricing))\nAsian Trails: điều khoản thanh toán với đại lý không công bố. ([eConnect](https://www.asiantrails.travel/?p=1032376))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Dùng đúng điều khoản B2B AA đang áp cho đại lý hiện tại (công nợ, cọc, tiền tệ, phí thẻ như hiện nay)"
+      },
+      {
+       "key": "b",
+       "label": "Hoặc sửa: đại lý trả trước 100% trước ngày khởi hành, không công nợ"
+      },
+      {
+       "key": "c",
+       "label": "Hoặc sửa: cọc khi xác nhận, phần còn lại trước ngày khởi hành, theo điều khoản mới (ghi: % cọc, hạn trả, tiền tệ hoá đơn, phí thẻ có áp cho chuyển khoản không)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Không tạo thêm một quy trình thu tiền thứ hai cho cùng một loại khách B2B.",
+     "status": "open"
+    },
+    {
+     "id": "1.3",
+     "question": "Báo giá thấp hơn giá “từ …” công khai của AA (cần xác nhận) [v1 1.4, Q1.4]",
+     "context": "Đã có câu trả lời tạm (lựa chọn a): chỉ cần xác nhận; các lựa chọn khác chỉ dùng khi muốn sửa. Đại lý tự đặt giá bán (module 3). Hợp đồng đối tác có ở spec §10 Non-code track phase 1 (điều khoản không lôi kéo khách); spec không nói về ràng buộc giá.",
+     "reference": "Tern, TravelJoy: không áp dụng, vì không bán tour của chính họ. ([Tern](https://tern.travel/pricing), [TravelJoy](https://traveljoy.com/pricing))\nAsian Trails: quy định giá bán lại không công bố. ([Cloud Tariff](https://www.asiantrails.travel/?p=1032235))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Chỉ ghi trong hợp đồng đối tác; CRM cảnh báo, không chặn"
+      },
+      {
+       "key": "b",
+       "label": "Hoặc sửa: CRM chặn mọi báo giá thấp hơn giá công khai"
+      },
+      {
+       "key": "c",
+       "label": "Hoặc sửa: không ràng buộc"
+      }
+     ],
+     "recommended": "a",
+     "why": "Đại lý giữ quyền đặt giá, AA vẫn có căn cứ trong hợp đồng.",
+     "status": "open"
+    },
+    {
+     "id": "1.4",
+     "question": "Người nhập giá net nhà cung cấp và bảng giá tour (cần xác nhận) [v1 1.5, Q1.5]",
+     "context": "Đã có câu trả lời tạm (lựa chọn a): chỉ cần xác nhận và điền tên người phụ trách; các lựa chọn khác chỉ dùng khi muốn sửa. Báo giá tự động (module 3) cần giá thật trong AA-Booking (spec §9 AA inventory API). Trên Dev hiện dùng giá giả.",
+     "reference": "Tern, TravelJoy: không áp dụng, vì không bán tour của chính họ. ([Tern](https://tern.travel/pricing), [TravelJoy](https://traveljoy.com/pricing))\nAsian Trails: kho Cloud Tariff chỉ dành cho đại lý, đăng sẵn bảng giá cả năm (bản mới: 11/2025–2026). ([Cloud Tariff](https://www.asiantrails.travel/?p=1047131))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Đội ops/sản phẩm hiện tại nhập, xong trước khi chọn 3–5 đại lý thử nghiệm (ghi tên người phụ trách)"
+      },
+      {
+       "key": "b",
+       "label": "Hoặc sửa: nhập dần từng tour khi đại lý hỏi tới"
+      },
+      {
+       "key": "c",
+       "label": "Hoặc sửa: nhập sau khi đã chọn đại lý thí điểm, chỉ các tour các đại lý đó bán"
+      }
+     ],
+     "recommended": "a",
+     "why": "Đại lý thật dùng báo giá tự động ngay từ ngày đầu, nên giá phải có trước.",
+     "status": "open"
+    }
+   ]
+  },
+  {
+   "title": "Hỗ trợ đại lý",
+   "short": "Hỗ trợ",
+   "intro": "Ai của AA hỗ trợ đại lý mới, qua kênh nào, mất bao nhiêu giờ.",
+   "items": [
+    {
+     "id": "2.1",
+     "question": "Hỗ trợ và hướng dẫn đại lý mới [v1 2.4, R43]",
+     "context": "Spec §11 gap 5: “Onboarding module: import from Gmail / CSV, first-run setup, team invites”. F4: người dùng mới cài đặt xong dưới 5 phút. Spec không nói ai hỗ trợ, giờ hay kênh hỗ trợ. Thí điểm 3–5 đại lý (§10 Pilot). Bản trước đề xuất mỗi đại lý một người AA đồng hành, qua email và WhatsApp; bản này đổi sang mô hình ít người vì AA không có nhiều người cho việc này. Đại lý tự import dữ liệu khách, nhân viên AA không chạm file khách.",
+     "reference": "Tern: bot Fin tự giải quyết hơn 85% hội thoại; khoá Tern & Learn; webinar sản phẩm hằng quý; gọi 1-1 khi việc gấp. ([blog](https://www.tern.travel/blog/the-future-of-human-support.html), [trợ giúp](https://help.tern.travel/en/))\nTravelJoy: bot T.J. trả lời trước rồi chuyển người; live chat chỉ ở gói Pro/Premium, trong giờ hành chính; workshop trực tuyến hằng tuần, có bản ghi. ([hỗ trợ](https://help.traveljoy.com/hc/en-us/articles/360016023172-How-to-reach-TravelJoy-support), [workshop](https://traveljoy.com/blog/post/traveljoy-training-workshops))\nHubSpot: người dùng miễn phí chỉ được hỗ trợ qua cộng đồng; email/chat từ gói Starter; có HubSpot Academy. ([hỗ trợ](https://help.hubspot.com))\nPipedrive: chatbot và live chat 24/7 cho mọi gói; điện thoại chỉ ở gói Premium/Ultimate. ([liên hệ](https://support.pipedrive.com/en/contact-us))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Tự phục vụ trước, một người AA cho cả 3–5 đại lý thí điểm: danh sách việc lần đầu trong app (nối Gmail, mời nhân viên, tự import CSV); trang trợ giúp tiếng Anh kèm 15–20 video ngắn; office hours nhóm 30–45 phút, 2 tuần một lần, có ghi hình; một hộp thư hỗ trợ chung, trả lời trong 1 ngày làm việc (giờ VN), không WhatsApp 1-1; mỗi đại lý 1 cuộc gọi khởi động 45 phút và 1 lần hỏi thăm ở tuần thứ 2 (≈ 3–4 giờ/đại lý trong tháng đầu, sau đó ≈ 1 giờ/tuần); bot trợ giúp (≈ $1–3/tháng) bật khi đã gom khoảng 50 câu hỏi thật (ghi tên người phụ trách)"
+      },
+      {
+       "key": "b",
+       "label": "Mỗi đại lý một người AA đồng hành; email và WhatsApp trong giờ hành chính VN"
+      },
+      {
+       "key": "c",
+       "label": "Chỉ trang trợ giúp, video và email; không có người phụ trách, không gọi khởi động"
+      }
+     ],
+     "recommended": "a",
+     "why": "Cần ít giờ người nhất mà đại lý thí điểm vẫn có người gọi được. Giống cách Tern và TravelJoy: tài liệu, buổi nhóm và bot trước, người thật khi cần. Bản ghi office hours dùng lại làm video trợ giúp.",
+     "status": "open"
+    }
+   ]
+  },
+  {
+   "title": "Pháp lý và dữ liệu",
+   "short": "Pháp lý",
+   "intro": "Pháp nhân, thời điểm thuê luật sư và lời hứa quyền riêng tư với đại lý. Các điểm kỹ thuật về dữ liệu đã quyết định (xem cuối trang).",
+   "items": [
+    {
+     "id": "3.1",
+     "question": "Pháp nhân ký hợp đồng với đại lý (cần xác nhận) [v1 3.1, Q2.1, H5]",
+     "context": "Đã có câu trả lời tạm (lựa chọn a): chỉ cần xác nhận và điền tên pháp nhân; các lựa chọn khác chỉ dùng khi muốn sửa. Hợp đồng đối tác và DPA (spec §10 Non-code track phase 0–1). Cùng pháp nhân này đứng tên tài khoản nền tảng Stripe, tài khoản xác minh app với Google và Microsoft. Thời điểm thuê luật sư hỏi riêng ở 3.2.",
+     "reference": "Tern, TravelJoy: không áp dụng (việc nội bộ của AA).\nGoogle: xác minh app cần tên miền đã xác minh, trang chủ và chính sách riêng tư cùng tên miền. ([Google](https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification))\nMicrosoft: xác minh nhà phát hành cần tài khoản Microsoft AI Cloud Partner Program và tên miền đã xác minh. ([Microsoft](https://learn.microsoft.com/en-us/entra/identity-platform/publisher-verification-overview))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Pháp nhân AA đang dùng cho hợp đồng đối tác (ghi tên); dùng mẫu DPA đã soạn"
+      },
+      {
+       "key": "b",
+       "label": "Hoặc sửa: dùng một pháp nhân khác cho sản phẩm CRM (ghi tên)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Dùng lại pháp nhân và mẫu đã có.",
+     "status": "open"
+    },
+    {
+     "id": "3.2",
+     "question": "Thời điểm thuê luật sư (cần xác nhận) [v1 3.2, Q3.9]",
+     "context": "Đã có câu trả lời tạm (lựa chọn a): chỉ cần xác nhận; các lựa chọn khác chỉ dùng khi muốn sửa. Luật sư xem luật dữ liệu VN, EU, Úc, hợp đồng đối tác, DPA và waiver. Spec §10 Non-code track đặt rà luật (Privacy Act Úc, GDPR, luật dữ liệu VN) và mẫu DPA ở phase 0, tức trước khi lưu dữ liệu khách thật. Lựa chọn a dời việc này tới các mốc rủi ro; đại lý thí điểm đầu tiên ở ngoài EU và VN (ví dụ Úc). Chưa có báo giá luật sư.",
+     "reference": "Tern, TravelJoy: không áp dụng (việc nội bộ của AA).\nHubSpot: khuyên khách tự hỏi luật sư về hiệu lực chữ ký điện tử theo luật nước sở tại. ([HubSpot](https://knowledge.hubspot.com/quotes/use-e-signatures-with-quotes))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Gửi bản tóm tắt cho luật sư khi chạm một trong ba mốc: đại lý VN/EU muốn dùng dữ liệu thật; có đại lý thứ 6; 60 ngày sau khách thật đầu tiên"
+      },
+      {
+       "key": "b",
+       "label": "Hoặc sửa: thuê ngay bây giờ"
+      },
+      {
+       "key": "c",
+       "label": "Hoặc sửa: thuê trước khi mở cho 3–5 đại lý thử nghiệm (đúng thứ tự spec)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Chi phí luật sư đi cùng rủi ro thật, không trả khi mới có dữ liệu giả. Nếu muốn bám đúng thứ tự spec thì chọn c.",
+     "status": "open"
+    },
+    {
+     "id": "3.3",
+     "question": "Lời hứa quyền riêng tư với đại lý, và câu chữ spec đi kèm [v1 3.3, 3.4, 3.6; Q2.2, H3]",
+     "context": "Spec §1 coi “AA không thấy khách là ai” là một trong ba điểm khác biệt của sản phẩm. F1: “No access outside the agency, AA included”. §8: AA chỉ nhận dữ liệu ops của chuyến đã chốt (module 8) và số liệu gộp k ≥ 10 (module 17), “never contact details or non-AA bookings”. §2: dữ liệu khách thuộc về đại lý.\nĐiểm riêng của AA: AA vừa cung cấp phần mềm vừa bán tour, nên đại lý sẽ hỏi “AA có thấy khách của tôi không”. Chính sách quyền riêng tư chung không trả lời câu này.\nThiết kế có 3 lớp: AA quản lý tài khoản mà không xem hồ sơ khách; hỗ trợ chỉ khi chủ đại lý cấp quyền (đã quyết định: mặc định 24 giờ, chủ chọn 1–7 ngày, chỉ đọc, ẩn danh tính khách, chặn export); mở khẩn cấp (đã quyết định: chỉ khi sự cố an ninh hoặc lệnh pháp lý, đăng nhập hai bước, tối đa 1 giờ, mỗi lần một đại lý, tự hiện trong nhật ký, email chủ đại lý trong 24 giờ). Phần kỹ thuật đã nằm trong thiết kế, không tốn thêm chi phí hạ tầng. Câu này chỉ hỏi câu chữ và chỗ đặt lời hứa; hai điều khoản trên giữ nguyên ở mọi lựa chọn.\nCâu hứa đề xuất (đặt trong DPA và trang dữ liệu công khai, không làm khẩu hiệu): “AA quản lý tài khoản đại lý mà không xem hồ sơ khách. AA chỉ nhận thông tin khách của chuyến đã chốt có dịch vụ AA, để vận hành tour, và xoá 90 ngày sau chuyến. AA chỉ xem số liệu gộp, không xem từng khách. Nhân viên hỗ trợ của AA chỉ xem được khi chủ đại lý tự cấp quyền có thời hạn, chỉ đọc, ẩn danh tính khách. Khẩn cấp về an ninh hoặc pháp lý thì AA có thể mở dữ liệu của một đại lý, phải đăng nhập hai bước, việc đó tự hiện trong nhật ký của đại lý và chủ đại lý nhận email trong 24 giờ.”\nCâu chữ spec phải sửa cho khớp (lựa chọn a):\n- F1, cột quyền: “No access outside the agency, AA included” → “No access outside the agency, AA included, except confirmed-trip ops data (module 8), owner-granted read-only support, and audited emergency access”.\n- F1, cột nội dung: “encrypted with the agency's own key” → “encrypted with a per-agency data key; agency-held key available on request”.\n- §8 Agency controls: “agency-held keys” → “per-agency keys (agency-held key on request)”.",
+     "reference": "Tern: privacy policy (12/2025) chỉ hứa “reasonable safeguards”, không nói nhân viên Tern có xem dữ liệu không. ([privacy](https://www.tern.travel/privacy), [bảo mật](https://help.tern.travel/en/articles/8126635-data-privacy-and-security-in-tern))\nTravelJoy: privacy policy (29/05/2026) chỉ hứa “appropriate … security measures”, không nói về nhân viên hỗ trợ. ([privacy](https://traveljoy.com/privacy))\nHubSpot: không có lời hứa riêng; DPA ghi thẳng “a subset of our employees have access to the products and to customer data via controlled interfaces”, kèm nút cho hỗ trợ vào 24 giờ. ([DPA](https://legal.hubspot.com/dpa), [quyền hỗ trợ](https://knowledge.hubspot.com/account-security/limit-logins-to-trusted-ip-addresses))\nZoho CRM: khách tự bật quyền hỗ trợ, có hạn, chặn export, ghi nhật ký. ([Zoho](https://help.zoho.com/portal/en/community/topic/support-access-for-zoho-crm))\nZendesk: có quyền vào tài khoản khách không báo trước khi khẩn cấp. ([Zendesk](https://support.zendesk.com/hc/en-us/articles/4408824477082))\nTóm lại: thị trường ghi điều khoản trong DPA và trang bảo mật, không làm lời hứa marketing.",
+     "options": [
+      {
+       "key": "a",
+       "label": "Có lời hứa riêng như câu đề xuất, đặt trong DPA và trang dữ liệu công khai; sửa câu chữ F1 và §8 của spec như trên"
+      },
+      {
+       "key": "b",
+       "label": "Không có lời hứa riêng; chỉ dùng chính sách quyền riêng tư chung (như Tern, TravelJoy, HubSpot); vẫn sửa câu chữ spec cho đúng kỹ thuật"
+      },
+      {
+       "key": "c",
+       "label": "Lời hứa ngắn hơn, chỉ ghi trong DPA, không đặt trên trang dữ liệu công khai; điều khoản mở khẩn cấp giữ như đã quyết định; vẫn sửa câu chữ F1 và §8 của spec như trên"
+      }
+     ],
+     "recommended": "a",
+     "why": "Trả lời đúng câu đại lý sẽ hỏi một nhà cung cấp cũng bán tour, và nói đúng sự thật về hai ngoại lệ có trong spec (module 8, module 17) và trường hợp khẩn cấp. Thị trường để điều khoản trong DPA, nên câu hứa cũng nằm ở đó. Lựa chọn c ít chữ hơn, nhưng đại lý chỉ đọc trang dữ liệu công khai sẽ không thấy câu trả lời cho câu hỏi đó.",
+     "status": "open"
+    }
+   ]
+  },
+  {
+   "title": "Email của đại lý",
+   "short": "Email",
+   "intro": "Phạm vi đồng bộ email so với chữ của spec module 5. Các dịch vụ bên ngoài khác đã quyết định (xem cuối trang).",
+   "items": [
+    {
+     "id": "4.1",
+     "question": "Gửi và nhận email qua Gmail/Outlook của đại lý [v1 4.7, Q3.6]",
+     "context": "Spec module 5: “Two-way Gmail / Outlook sync … Agency stops using Gmail for client work”; §9 Gmail/Outlook: “OAuth scopes, threading, send-as”. Outlook làm cùng lúc với Gmail (đã quyết định, đúng spec).\nChỉ xin quyền gửi thư (gmail.send) thì Google xác minh miễn phí. Đọc hộp thư là quyền loại restricted, phải qua kiểm định bảo mật CASA hằng năm (≈ $675–5.400/năm, tìm hiểu 20/10/2026; Google không công bố giá).\nLựa chọn a lệch chữ spec module 5: thư đến vào CRM qua địa chỉ chuyển tiếp/BCC chứ không kéo cả hộp thư về.",
+     "reference": "TravelJoy: chỉ gửi đi bằng Gmail của đại lý, không đồng bộ hộp thư. ([Gmail](https://help.traveljoy.com/hc/en-us/articles/360028239552-Connect-your-Google-Mail-account-to-TravelJoy))\nTern: đồng bộ toàn bộ thư Google/Microsoft. ([email](https://help.tern.travel/en/articles/9015404-an-introduction-to-email-in-tern))\nPipedrive: chuyển tiếp Smart BCC ở mọi gói; đồng bộ email từ gói Growth. ([Smart BCC](https://support.pipedrive.com/en/article/smart-email-bcc), [email sync](https://support.pipedrive.com/article/email-sync))\nHubSpot: mặc định chỉ ghi thư gửi từ HubSpot, thư BCC và thư trả lời trong luồng đã ghi; muốn ghi mọi thư phải bật quy tắc ghi thư theo liên hệ. ([kết nối hộp thư](https://knowledge.hubspot.com/connected-email/connect-your-inbox-to-hubspot), [thư trả lời](https://knowledge.hubspot.com/email/log-email-replies-in-the-crm))\nGoogle: phân loại quyền Gmail. ([scopes](https://developers.google.com/workspace/gmail/api/auth/scopes))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Bản đầu: gửi đi từ Gmail/Outlook của đại lý; thư đến vào CRM qua địa chỉ chuyển tiếp/BCC; $0. Đồng bộ hai chiều chỉ làm khi đại lý đòi. Sửa câu module 5 của spec cho khớp"
+      },
+      {
+       "key": "b",
+       "label": "Đồng bộ hai chiều ngay như spec; AA trả kiểm định CASA hằng năm"
+      }
+     ],
+     "recommended": "a",
+     "why": "Đơn giản nhất và $0, giống cách mặc định của HubSpot và gói thấp nhất của Pipedrive; TravelJoy bán được chỉ với gửi đi. Đồng bộ hai chiều vẫn làm được sau, khi có đại lý đòi.",
+     "status": "open"
+    }
+   ]
+  },
+  {
+   "title": "Bảo hiểm và waiver",
+   "short": "Bảo hiểm",
+   "intro": "Hãng bảo hiểm của AA và hai việc spec cần hãng xác nhận.",
+   "items": [
+    {
+     "id": "5.1",
+     "question": "Hãng bảo hiểm duyệt waiver và chữ ký điện tử [v1 5.1, 4.1; Q4.1, H6, R13]",
+     "context": "Spec module 12: ký điện tử điều khoản và waiver trekking, thành công khi “100% signed before departure; accepted by insurer”. §4: muốn qua Booked phải có “waiver signed”. §10 Non-code track phase 2: “Trekking waiver reviewed by AA's insurer”. §5 Stage 3 hỏi khách mục “travel insurance”. Spec không nói về bán bảo hiểm trong app, hoa hồng hay giấy từ chối bảo hiểm.\nĐã quyết định: AA tự làm chữ ký điện tử đơn giản (mã một lần qua email, gõ tên, bấm đồng ý, PDF niêm phong, nhật ký ký), ≈ $0–1/tháng; nếu hãng bảo hiểm đòi nhà cung cấp ký có tên tuổi thì đổi sang BoldSign (từ $30/tháng gồm 40 lượt ký, thêm $0,75/lượt, gói Enterprise API, [BoldSign](https://boldsign.com/pricing); khoảng 2–3 issue). Mẫu waiver song ngữ Anh–Việt do AA soạn từ điều khoản hiện tại.\nBản đầu: mục “travel insurance” ở Stage 3 thêm lựa chọn “tôi không mua bảo hiểm”, nằm trong cùng văn bản ký với waiver. Bán bảo hiểm trong app để sau 23 module; hoa hồng đã quyết định (xem cuối trang).\nCần điền dù chọn a hay b: tên hãng bảo hiểm (hãng AA đang dùng hoặc hãng khác) và người liên hệ.",
+     "reference": "Tern: báo giá bảo hiểm trong app với 4 hãng (Arch RoamRight, Faye, Chubb, Trawick); khách từ chối thì nhận email kèm biên nhận PDF; tự làm khối ký trong form. ([bảo hiểm](https://tern.travel/insurance), [từ chối bảo hiểm](https://help.tern.travel/en/articles/8857059-collecting-travel-insurance-authorization-opt-out), [ký trong form](https://help.tern.travel/en/articles/9670279-can-i-add-an-e-signature-to-my-forms))\nTravelJoy: bán Faye (hoa hồng 24%) và Arch RoamRight (hợp tác công bố 30/07/2026); form có chữ ký, nhật ký gửi/mở/ký kèm IP. ([báo giá](https://traveljoy.com/blog/post/how-to-search-quote-and-book-on-traveljoy), [Arch RoamRight](https://insurance.archgroup.com/arch-roamright-partners-with-traveljoy-to-simplify-travel-insurance-sales-for-travel-advisors/), [ký](https://traveljoy.com/blog/post/traveljoy-travel-agency-software-updates-feb-2025))\nPipedrive: tự làm ký số cơ bản, người ký nhận mã một lần qua email. ([Smart Docs](https://support.pipedrive.com/en/article/sales-documents-esignatures-beta))\nHubSpot: ký báo giá bằng Dropbox Sign nhúng sẵn, khuyên khách tự hỏi luật sư về hiệu lực. ([HubSpot](https://knowledge.hubspot.com/quotes/use-e-signatures-with-quotes))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Hỏi hãng bảo hiểm hai việc: (1) duyệt mẫu waiver trekking; (2) có chấp nhận chữ ký điện tử AA tự làm không. Bản đầu chỉ có lựa chọn “tôi không mua bảo hiểm” ký chung với waiver (ghi tên hãng và người liên hệ)"
+      },
+      {
+       "key": "b",
+       "label": "Như a, và hỏi luôn sản phẩm bảo hiểm du lịch cho khách đại lý kèm hoa hồng, để làm báo giá bảo hiểm trong app sớm (ghi tên hãng và người liên hệ)"
+      }
+     ],
+     "recommended": "a",
+     "why": "Đúng hai việc spec đòi (hãng duyệt waiver, hãng chấp nhận cách ký). Câu trả lời về chữ ký quyết luôn có cần nhà cung cấp ký bên ngoài hay không. Bán bảo hiểm trong app không có trong spec nên để sau.",
+     "status": "open"
+    }
+   ]
+  },
+  {
+   "title": "Vận hành và người phụ trách",
+   "short": "Vận hành",
+   "intro": "Người của AA phụ trách lịch khởi hành, xác nhận tour và nhận báo động.",
+   "items": [
+    {
+     "id": "6.1",
+     "question": "Xác nhận tour và người phụ trách lịch khởi hành (cần xác nhận) [v1 6.2, Q5.4, H8]",
+     "context": "Đã có câu trả lời tạm (lựa chọn a): chỉ cần xác nhận và điền tên người phụ trách; các lựa chọn khác chỉ dùng khi muốn sửa. Giữ chỗ và xác nhận qua API tồn kho AA (spec §9; module 3, 8). Còn thiếu tên người ở đội ops nhập lịch khởi hành và xác nhận tour theo yêu cầu.",
+     "reference": "Tern, TravelJoy: không áp dụng, vì không bán tour của chính họ. ([Tern](https://tern.travel/pricing), [TravelJoy](https://traveljoy.com/pricing))\nAsian Trails: cổng eConnect cho đại lý đặt với giá và chỗ trống theo thời gian thực. ([eConnect](https://www.asiantrails.travel/?p=1032376))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Tour có lịch cố định tự xác nhận; tour khác “theo yêu cầu”, AA ops xác nhận trong 1 ngày làm việc; ghi tên người phụ trách"
+      },
+      {
+       "key": "b",
+       "label": "Hoặc sửa: mọi tour đều do AA ops xác nhận tay"
+      }
+     ],
+     "recommended": "a",
+     "why": "Đại lý có câu trả lời ngay cho tour cố định, ops chỉ xử lý phần cần người.",
+     "status": "open"
+    },
+    {
+     "id": "6.2",
+     "question": "Người thứ hai nhận báo động khi AA mở dữ liệu khẩn cấp (cần xác nhận) [v1 3.4, V22-Q5]",
+     "context": "Đã có câu trả lời tạm (lựa chọn a): chỉ cần xác nhận và điền tên người. Điều khoản mở khẩn cấp đã quyết định (chỉ khi sự cố an ninh hoặc lệnh pháp lý; đăng nhập hai bước; tối đa 1 giờ; mỗi lần một đại lý; tự hiện trong nhật ký đại lý; email chủ đại lý trong 24 giờ). Mỗi lần quyền này được dùng, hệ thống tự gửi báo động. Đội kỹ thuật chỉ có một người, nên cần một người thứ hai không phải kỹ sư nhận báo động. Người này chỉ được báo, không phải duyệt, và xem lại lý do trong nhật ký sau mỗi lần. Việc có người thứ hai nhận báo động cũng đã quyết định; câu này chỉ hỏi tên. Cần có tên trước khi mở cho đại lý thật.",
+     "reference": "AWS Well-Architected (SEC10-BP05): mọi lần dùng role khẩn cấp phải ghi log và báo động; báo động phải tới một nhóm rộng và được xử lý ngay. ([AWS](https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_pre_provision_access.html))\nTern, TravelJoy: không công bố. ([Tern privacy](https://www.tern.travel/privacy), [TravelJoy privacy](https://traveljoy.com/privacy))",
+     "options": [
+      {
+       "key": "a",
+       "label": "Một quản lý AA không phải kỹ sư nhận email và tin nhắn mỗi lần quyền khẩn cấp được dùng; chỉ được báo, không duyệt (ghi tên; có thể ghi thêm một người dự phòng khi người này nghỉ)"
+      }
+     ],
+     "recommended": "a",
+     "why": "AWS khuyên báo động tới nhiều hơn một người. Với đội một kỹ sư, người nhận thứ hai là cách kiểm chéo duy nhất, mà gần như không tốn giờ. Người dự phòng là tuỳ chọn, để có người thấy báo động khi người chính nghỉ.",
+     "status": "open"
+    }
+   ]
+  }
+ ]
+}
