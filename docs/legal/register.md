@@ -1,7 +1,7 @@
 ---
 id: SEC-04
 title: Compliance and privacy register
-description: Records of processing (RoPA), the sub-processor list and the legal decisions log for AA-Ecosys, each line tied to code or the live schema dump; provisional until the pii column tags land.
+description: Records of processing (RoPA), the sub-processor list and the legal decisions log for AA-Ecosys, each line tied to code or the live schema dump.
 type: reference
 status: draft
 owner: nghiep
@@ -33,10 +33,6 @@ How to read it:
 
 ## (a) Records of processing (RoPA)
 
-> [!IMPORTANT]
-> **Provisional.** Hand-built from column names in the schema dump. PII inside free text and jsonb may be missed.
-> It is regenerated from the `pii:<class>` column tags (DM-6.1) when the tagging work lands (AA-877 scope item 3).
-
 Data classes are the DM-6.1 classes of [`02-data-management.md`](../architecture/data-standards/02-data-management.md):
 `contact`, `name`, `address`, `profile`, `online_id`, `free_text`, `travel`, `payment`, and `conf:credential` for
 hashes and keys. Legal basis is `[to be confirmed]` on every row. Retention links the
@@ -44,27 +40,110 @@ hashes and keys. Legal basis is `[to be confirmed]` on every row. Retention link
 
 | # | Purpose | Data subjects | Data classes | Tables and columns (dump 2026-10-20) | Retention | Recipients and sub-processors | Transfer |
 |---|---|---|---|---|---|---|---|
-| 1 | TripPlanner guest trip and inquiry to an advisor, with contact consent | Travellers (guests, no account) | `name`, `contact`, `travel`, `free_text` (search text), `conf:credential` (guest token hash) | `tripplanner.customers` (`name`, `email`, `phone`, `contact_consent`, `contact_consent_at`); `tripplanner.outbox.payload` (copy of the inquiry, `inquiry.submitted`); `tripplanner.sessions` (`guest_token_hash`, `customer_id`; plaintext `guest_token` retired by CHECK `sessions_guest_token_retired_chk`); `tripplanner.trip_drafts.itinerary` and `tripplanner.trip_events.payload`, linked to a person through `session_id` → `sessions.customer_id` | Outbox payload: 90-day redaction approved (DM-6.6), **not built** (TripPlanner has no job table; AA-861 blocked on `tripplanner.job`). Customers, sessions, drafts, events: no window yet (proposed in L3) | AA advisors via AA-Booking; AWS acc2 (RDS, Lambda); Vercel (TripPlanner BFF carries the form in transit); Bedrock on acc3/acc1 (trip contents and search text, no identity: TP `/privacy` §5, DM-6.4); Mapbox (browser: IP, map area) | US (us-west-1); Bedrock `global.` inference profiles on acc3/acc1 may process prompts outside the US; Vercel function region not pinned (default region `[to be confirmed]`); Mapbox edge locations |
-| 2 | Booking customer master and trip cases | Travellers who sent an inquiry or were entered by staff | `name`, `contact`, `address`, `profile`, `travel`, `free_text`, `conf:credential` | `booking.customers` (`name`, `email`, `phone`, `address`, `gender`, `marital_status`, `profession`, `profile_media_id`, `external_ref`, `contact_consent`, `contact_consent_at`, `source`); `booking.inbox_events.payload` (copy of the inquiry; `redacted_at` column); `booking.trip_cases` (`notes`, `inquiry_snapshot`, dates, pax); `booking.customer_otps.otp_hash`, `booking.customer_sessions.refresh_token_hash` (hashes only); `booking.media_files` (S3 object of a profile photo, when `profile_media_id` is set) | Inbox payload: 90-day redaction (DM-6.6): job `bk_retention_inbox_redact` exists (BK `backend/app/retention/policy.py:9-15`, `:83-90`), **DRY RUN only**, no real run yet. OTP/sessions: proposed 7 days after expiry. Customers, trip cases: no window yet | AA staff (Booking admin); AWS acc2 (RDS, ECS, S3); SES (new-inquiry mail, row 3); Vercel (Booking admin) | US (us-west-1) |
-| 3 | Booking notifications, staff e-mail and audit | Travellers named in a case; staff | `name`, `contact`, `free_text` | `booking.notifications` (`recipient_ref`, `title`, `message`, `data`); `booking.audit_logs` (`before`, `after` jsonb; rule: redact, never delete, DM-6.7); the `bk_notify_email` message to the staff inbox carries the traveller's name, e-mail and phone (BK `backend/app/notifications/staff_email.py:174-190`) | Notifications: proposed (read 90 days, unread 180). Audit logs: kept, window set before prod | Staff inbox set by the Booking `STAFF_NOTIFY_EMAIL` setting (BK `backend/app/settings.py:30`); SES; the mail host of that inbox (DreamHost if it is an adventure.asia address, INF `accounts/aa365/identity.tf:22-23`) `[to be confirmed]` | US (SES us-west-1); mail host `[to be confirmed]` |
-| 4 | Staff users and sign-in | AA staff | `name`, `contact`, `online_id` | Cognito WORKFORCE pool (INF `identity.tf:344`); `booking.staff_users` (`email`, `name`, `cognito_iss`, `cognito_sub`, `last_seen_at`); `shared.admin_users` (`email`, `display_name`, `cognito_iss`, `cognito_sub`, `last_login_at`; e-mail CHECK limits it to `@adventure.asia` plus one e2e address); staff invitation mail (CIS `services/jobs/staff_invite_email_job.py:1-24`) | No window yet | AWS acc2 (Cognito, SES, RDS); Sentry (possible, see sub-processors) | US (us-west-1) |
+| 1 | TripPlanner guest trip and inquiry to an advisor, with contact consent | Travellers (guests, no account) | `name`, `contact`, `travel`, `free_text` (traveller notes on custom days and `add_day` edits), `conf:credential` (guest token hash) | `tripplanner.customers` (`name`, `email`, `phone`, `contact_consent`, `contact_consent_at`); `tripplanner.outbox.payload` (copy of the inquiry, `inquiry.submitted`) and the view `tripplanner.v_inquiry_outbox.payload` over it; `tripplanner.sessions` (`guest_token_hash`, `customer_id`; plaintext `guest_token` retired by CHECK `sessions_guest_token_retired_chk`); `tripplanner.trip_drafts` (`itinerary`, `date_start`, `date_end`) and `tripplanner.trip_events.payload`, linked to a person through `session_id` → `sessions.customer_id` | Outbox payload: 90-day redaction approved (DM-6.6), **not built** (TripPlanner has no job table; AA-861 blocked on `tripplanner.job`). Customers, sessions, drafts, events: no window yet (proposed in L3) | AA advisors via AA-Booking; AWS acc2 (RDS, Lambda); Vercel (TripPlanner BFF carries the form in transit); Bedrock on acc3/acc1 (trip contents and search text, no identity: TP `/privacy` §5, DM-6.4); Mapbox (browser: IP, map area) | US (us-west-1); Bedrock `global.` inference profiles on acc3/acc1 may process prompts outside the US; Vercel function region not pinned (default region `[to be confirmed]`); Mapbox edge locations |
+| 2 | Booking customer master and trip cases | Travellers who sent an inquiry or were entered by staff | `name`, `contact`, `address`, `profile`, `travel`, `free_text`, `conf:credential` | `booking.customers` (`name`, `email`, `phone`, `address`, `gender`, `marital_status`, `profession`, `profile_media_id`, `external_ref`, `contact_consent`, `contact_consent_at`, `source`); `booking.v_customer_summary` (`name`, `email`, `phone`, `address`: staff list view over `customers`); `booking.inbox_events` (`payload`: copy of the inquiry; `error`: may quote it; both redacted together, `redacted_at` column); `booking.trip_cases` (`notes`, `inquiry_snapshot`, `start_date`, `end_date`, `pax`, `pax_adults`, `pax_children`, `trip_style`); `booking.trip_case_status_history.note`; `booking.trip_case_versions` (`title`, `notes`, `approval_note`: the proposal staff send to the traveller); `booking.trip_case_version_itinerary.notes`; `booking.customer_otps.otp_hash`, `booking.customer_sessions.refresh_token_hash` (hashes only); `booking.media_files.s3_key` (S3 object of a profile photo, linked from `customers.profile_media_id`; nothing uploads to it yet) | Inbox payload: 90-day redaction (DM-6.6): job `bk_retention_inbox_redact` exists (BK `backend/app/retention/policy.py:9-15`, `:83-90`), **DRY RUN only**, no real run yet. OTP/sessions: proposed 7 days after expiry. Customers, trip cases: no window yet | AA staff (Booking admin); AWS acc2 (RDS, ECS, S3); SES (new-inquiry mail, row 3); Vercel (Booking admin) | US (us-west-1) |
+| 3 | Booking notifications, staff e-mail and audit | Travellers named in a case; staff | `name`, `contact`, `free_text` | `booking.notifications` (`recipient_ref`, `title`, `message`, `data`); `booking.audit_logs` (`before`, `after` jsonb row snapshots, `summary` names the traveller of a manual lead, `entity_label` names staff; rule: redact, never delete, DM-6.7); the `bk_notify_email` message to the staff inbox carries the traveller's name, e-mail and phone (BK `backend/app/notifications/staff_email.py:174-190`) | Notifications: proposed (read 90 days, unread 180). Audit logs: kept, window set before prod | Staff inbox set by the Booking `STAFF_NOTIFY_EMAIL` setting (BK `backend/app/settings.py:30`); SES; the mail host of that inbox (DreamHost if it is an adventure.asia address, INF `accounts/aa365/identity.tf:22-23`) `[to be confirmed]` | US (SES us-west-1); mail host `[to be confirmed]` |
+| 4 | Staff users and sign-in | AA staff | `name`, `contact`, `online_id`, `conf:credential` (legacy password hash) | Cognito WORKFORCE pool (INF `identity.tf:344`); `booking.staff_users` (`email`, `name`, `cis_user_id`: `cog:` plus the Cognito sub on WORKFORCE rows, `cognito_iss`, `cognito_sub`, `last_seen_at`); `shared.admin_users` (`email`, `display_name`, `username`, `cognito_iss`, `cognito_sub`, `password_hash`: legacy login, NULL for Cognito-only staff, `last_login_at`; e-mail CHECK limits it to `@adventure.asia` plus one e2e address); staff invitation mail (CIS `services/jobs/staff_invite_email_job.py:1-24`) | No window yet | AWS acc2 (Cognito, SES, RDS); Sentry (possible, see sub-processors) | US (us-west-1) |
 | 5 | Tenant (partner business) accounts and channel connections | Tenant businesses; their staff only through shared credentials | business data, `conf:credential` | `shared.tenants` (`name`, `slug`, `country`, `api_key_hash`): **no individual contact column**. Portal sign-in is one shared tenant key; tenant user accounts (AA-813) are not built. Channel credentials: `shared.tenant_integrations` (`config`, `secret_key`) and Secrets Manager `acp/cms/*`, `acp/social/*` (`conf:credential`). `acp_shared.audit_log` (`actor`, `actor_type`, `route`, `details`) | Audit log: kept, window set before prod. Others: while the account is active, then `[to be confirmed]` | AA admins; AWS acc2; Vercel (portal); the tenant's own channels (WordPress, Meta) when the tenant publishes: those are the tenant's providers, not AA sub-processors | US (us-west-1) |
 | 6 | AI content generation and review | None identified: no identifying PII may be sent (DM-6.4) | tour and tenant content; `travel` for TripPlanner narration | `shared.llm_call_log` (no PII by rule, DM-6.4); prompts are not stored. DM-6.4 is enforced by code review only: no automated PII check exists | `llm_call_log` 180 days (approved; retention kind scheduled, see the retention log) | Bedrock on acc2 (native), acc3 (primary satellite) and acc1 (fallback) with Claude and GPT models; OpenAI API (last resort for some judges); Jev (content decisions, allowlisted tenants only) | US; `global.` profiles on acc3/acc1 may process outside the US |
 | 7 | Operational alert mail | AA staff and operators | `contact` | `shared.alert_recipient` (`email`, `subscription_arn`, `note`); addresses are shape-checked only, no domain rule (CIS `shared/alert_recipients.py:98-108`) | No window yet | SNS e-mail subscriptions (INF `accounts/aa365/observability.tf:53`, CIS `api/services/alert_recipients.py`); SES ops mail (CIS `services/jobs/ops_alert_email_job.py:1-22`) | US (us-west-1) |
-| 8 | Supplier contacts (hotels, transport, local partners) | Supplier staff | `name`, `contact`, `address` | `booking.suppliers` (`contact_name`, `contact_title`, `contact_email`, `contact_phone`, `address`; `company_name` is business data) | No window yet | AA staff (Booking admin); AWS acc2 (RDS); Vercel (Booking admin) | US (us-west-1) |
+| 8 | Supplier contacts (hotels, transport, local partners) | Supplier staff | `name`, `contact`, `profile` (job title), `address` (business address, untagged) | `booking.suppliers` (`contact_name`, `contact_title`, `contact_email`, `contact_phone`, `address`; `company_name` is business data) | No window yet | AA staff (Booking admin); AWS acc2 (RDS); Vercel (Booking admin) | US (us-west-1) |
 
 The consent chain of rows 1 and 2 was checked on Dev on 2026-10-20 (DM-6.5): see the
 [consent capture check](consent-capture-query.md).
 
+<!-- pii-inventory:start (generated by tools/data/gen_pii_inventory.py; do not edit by hand) -->
+
+### Column inventory (from pii tags)
+
+Generated from the *Personal and confidential data tags (DM-6.1)* section of [`db-schema-reference.md`](../architecture/db-schema-reference.md) (Verified 2026-10-21 05:02 UTC): 59 personal-data column(s) and 5 credential column(s) over every schema. `conf:commercial` columns are business data and are left out. "RoPA row" is the row of the table above that names the column; **none** marks a new processing line.
+
+| Schema | Relation | Column | Tag | Also | RoPA row |
+|---|---|---|---|---|---|
+| `booking` | `audit_logs` | `before` | `pii:free_text` | `pii:name`, `pii:contact` | 3 |
+| `booking` | `audit_logs` | `after` | `pii:free_text` | `pii:name`, `pii:contact` | 3 |
+| `booking` | `audit_logs` | `entity_label` | `pii:free_text` | `pii:name` | 3 |
+| `booking` | `audit_logs` | `summary` | `pii:free_text` | `pii:name` | 3 |
+| `booking` | `customer_otps` | `otp_hash` | `conf:credential` |  | 2 |
+| `booking` | `customer_sessions` | `refresh_token_hash` | `conf:credential` |  | 2 |
+| `booking` | `customers` | `name` | `pii:name` |  | 2 |
+| `booking` | `customers` | `email` | `pii:contact` |  | 2 |
+| `booking` | `customers` | `phone` | `pii:contact` |  | 2 |
+| `booking` | `customers` | `address` | `pii:address` |  | 2 |
+| `booking` | `customers` | `gender` | `pii:profile` |  | 2 |
+| `booking` | `customers` | `marital_status` | `pii:profile` |  | 2 |
+| `booking` | `customers` | `profession` | `pii:profile` |  | 2 |
+| `booking` | `customers` | `profile_media_id` | `pii:profile` |  | 2 |
+| `booking` | `inbox_events` | `payload` | `pii:contact` | `pii:name`, `pii:free_text` | 2 |
+| `booking` | `inbox_events` | `error` | `pii:free_text` |  | 2 |
+| `booking` | `media_files` | `s3_key` | `pii:profile` |  | 2 |
+| `booking` | `notifications` | `title` | `pii:free_text` |  | 3 |
+| `booking` | `notifications` | `message` | `pii:free_text` | `pii:name` | 3 |
+| `booking` | `notifications` | `data` | `pii:contact` |  | 3 |
+| `booking` | `staff_users` | `cis_user_id` | `pii:online_id` |  | 4 |
+| `booking` | `staff_users` | `email` | `pii:contact` |  | 4 |
+| `booking` | `staff_users` | `name` | `pii:name` |  | 4 |
+| `booking` | `staff_users` | `cognito_iss` | `pii:online_id` |  | 4 |
+| `booking` | `staff_users` | `cognito_sub` | `pii:online_id` |  | 4 |
+| `booking` | `suppliers` | `contact_name` | `pii:name` |  | 8 |
+| `booking` | `suppliers` | `contact_title` | `pii:profile` |  | 8 |
+| `booking` | `suppliers` | `contact_email` | `pii:contact` |  | 8 |
+| `booking` | `suppliers` | `contact_phone` | `pii:contact` |  | 8 |
+| `booking` | `trip_case_status_history` | `note` | `pii:free_text` |  | 2 |
+| `booking` | `trip_case_version_itinerary` | `notes` | `pii:free_text` |  | 2 |
+| `booking` | `trip_case_versions` | `notes` | `pii:free_text` |  | 2 |
+| `booking` | `trip_case_versions` | `title` | `pii:free_text` |  | 2 |
+| `booking` | `trip_case_versions` | `approval_note` | `pii:free_text` |  | 2 |
+| `booking` | `trip_cases` | `trip_style` | `pii:travel` |  | 2 |
+| `booking` | `trip_cases` | `start_date` | `pii:travel` |  | 2 |
+| `booking` | `trip_cases` | `end_date` | `pii:travel` |  | 2 |
+| `booking` | `trip_cases` | `pax` | `pii:travel` |  | 2 |
+| `booking` | `trip_cases` | `inquiry_snapshot` | `pii:travel` | `pii:free_text` | 2 |
+| `booking` | `trip_cases` | `notes` | `pii:free_text` |  | 2 |
+| `booking` | `trip_cases` | `pax_adults` | `pii:travel` |  | 2 |
+| `booking` | `trip_cases` | `pax_children` | `pii:travel` |  | 2 |
+| `booking` | `v_customer_summary` | `name` | `pii:name` |  | 2 |
+| `booking` | `v_customer_summary` | `email` | `pii:contact` |  | 2 |
+| `booking` | `v_customer_summary` | `phone` | `pii:contact` |  | 2 |
+| `booking` | `v_customer_summary` | `address` | `pii:address` |  | 2 |
+| `shared` | `admin_users` | `username` | `pii:online_id` |  | 4 |
+| `shared` | `admin_users` | `password_hash` | `conf:credential` |  | 4 |
+| `shared` | `admin_users` | `email` | `pii:contact` |  | 4 |
+| `shared` | `admin_users` | `display_name` | `pii:name` |  | 4 |
+| `shared` | `admin_users` | `cognito_iss` | `pii:online_id` |  | 4 |
+| `shared` | `admin_users` | `cognito_sub` | `pii:online_id` |  | 4 |
+| `shared` | `alert_recipient` | `email` | `pii:contact` |  | 7 |
+| `tripplanner` | `customers` | `name` | `pii:name` |  | 1 |
+| `tripplanner` | `customers` | `phone` | `pii:contact` |  | 1 |
+| `tripplanner` | `customers` | `email` | `pii:contact` |  | 1 |
+| `tripplanner` | `outbox` | `payload` | `pii:contact` | `pii:name`, `pii:free_text`, `pii:travel` | 1 |
+| `tripplanner` | `sessions` | `guest_token` | `conf:credential` |  | 1 |
+| `tripplanner` | `sessions` | `guest_token_hash` | `conf:credential` |  | 1 |
+| `tripplanner` | `trip_drafts` | `itinerary` | `pii:travel` | `pii:free_text` | 1 |
+| `tripplanner` | `trip_drafts` | `date_start` | `pii:travel` |  | 1 |
+| `tripplanner` | `trip_drafts` | `date_end` | `pii:travel` |  | 1 |
+| `tripplanner` | `trip_events` | `payload` | `pii:free_text` | `pii:travel` | 1 |
+| `tripplanner` | `v_inquiry_outbox` | `payload` | `pii:contact` | `pii:name`, `pii:free_text`, `pii:travel` | 1 |
+
+<!-- pii-inventory:end -->
+
 ### How to regenerate this table
 
-1. When AA-877 has tagged every PII column with `COMMENT ON COLUMN … IS 'pii:<class>; …'`, the nightly DB Schema Dump
-   carries the tags into `db-schema-reference.md`.
-2. Rebuild the "Tables and columns" and "Data classes" cells from the tagged columns of `booking.*`,
-   `tripplanner.*` and `shared.*`, grouped by purpose. Keep the purpose, retention and recipients cells.
-3. Diff the result against this table. A tagged column missing here is a new processing line; a column listed here
-   without a tag is a tagging gap for AA-877.
-4. Bump `last_reviewed` and remove the "Provisional" note.
+1. Owners tag a column that holds personal data in the migration that creates it: `COMMENT ON COLUMN … IS
+   'pii:<class>; …'` (DM-6.1). The DB Schema Dump carries the tags into
+   [`db-schema-reference.md`](../architecture/db-schema-reference.md), section *Personal and confidential data tags
+   (DM-6.1)*, for every schema.
+2. Run `python3 tools/data/gen_pii_inventory.py` from the repo root. It rewrites the generated "Column inventory
+   (from pii tags)" block of this section (`pii:*` and `conf:credential` columns; `conf:commercial` is business data
+   and is left out).
+3. Run `python3 tools/data/gen_pii_inventory.py --check`. It exits 1 when the block is stale or when a tagged column
+   is named by no row: a new processing line, to add to the right row (or a new row) with its purpose, retention and
+   recipients. It also prints tagging gaps: columns of `booking.*` / `tripplanner.*` named here without a tag. The
+   consent flags, `external_ref`, `source`, `recipient_ref`, `last_seen_at`, `redacted_at`, `sessions.customer_id` and
+   the supplier business fields are untagged on purpose; any other gap goes to the owner repo as a tag migration.
+4. Name columns in the "Tables and columns" cells as `` `schema.relation.column` `` or
+   `` `schema.relation` (`column`, …) ``, so the check can see them. Plain words are not read.
+5. Bump `last_reviewed`.
 
 ## (b) Sub-processors
 
