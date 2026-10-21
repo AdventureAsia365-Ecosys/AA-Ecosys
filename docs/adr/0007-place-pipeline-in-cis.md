@@ -38,7 +38,8 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   a rebuild from scratch touches nothing else.
 - `shared.destinations` stays the golden record of places (ADR 0002), keeps every existing `id`
   (photos, covers and TripPlanner trip events point at them) and gains geo-quality columns
-  (`geo_status` ok / suspect / manual, `located_by`, `precision` point / area, `confidence`, provider,
+  (`geo_status` ok / suspect / manual, `located_by`, `precision` point / area / line (line: amended S246, see
+  the end), `confidence`, provider,
   provider id, `result_type`, `geocoded_at`, `name_norm`), which decision 9 fills.
 
 ### 2. `catalog.*` views are the TripPlanner contract
@@ -231,5 +232,64 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
 - Accepted risks: a "replace" re-upload hides the tour from `catalog.v_tour` until the new version
   publishes (AA-679 behaviour); true homonyms without card or overnight context stay unlocated; the
   background slot reserve is per worker task and must be re-checked on horizontal scale-out.
+- **Amended S246 (AA-847), no decision changed:**
+  - *Top-k view.* The HNSW top-k is `catalog.v_component_embedding` (CIS 253): components of live tours on a usable
+    destination (the rows of `v_tour_component`: never a suspect or merged place) with their embedding, **not** a
+    `security_barrier` view, so `ORDER BY embedding <=> q LIMIT k` is served by the index on `geo.tour_place`
+    (`hnsw.iterative_scan` on pgvector ≥ 0.8; liveness and the usable-destination rule are EXISTS filters, which an
+    iterative scan keeps); granted to `tripplanner` only (it exposes ids and vectors, which Booking and
+    `aa_app_user` do not need). The reader checks nothing after the scan. Contract `catalog.graph.v1.1`.
+    TripPlanner `vector_topk` reads it with `source=CIS` (slice 6c).
+  - *Liveness without the barrier cost.* Every place / graph view joins the internal, ungranted, non-barrier
+    `catalog._live_tour` (CIS 253) instead of `catalog.v_tour`, so the planner flattens it and prunes `v_tour`'s
+    per-tour photo count, cover, duration regex and md5. `security_barrier` stays on the contract views; turning it
+    off on the graph views (they hide only non-live rows from trusted app roles) is a measured follow-up (CIS 255+)
+    only if the AA-847 probe shows consumer quals blocked above a barrier subquery.
+  - *Not a pin — lines are DRAWN (Nghiệp, S246, D1; supersedes the earlier "hidden" proposal).* Linear features
+    (trail, river, road, loop, stream, path, circuit …) are stored `geo_status='ok'`, `precision='line'`, never
+    hidden, never a graph stop or node. Geometry: CIS `geo.place_shape` (CIS 255). A `pending` row is created when the
+    place is stored; the job kind `place_shape` draws it (Geoapify Place Details, then Overpass; accepted on name,
+    kind, country polygon, distance to the tour-day anchors, a kind-aware length) or, with no OSM feature, stores the
+    anchored approximate route of the place's tour-days (`approximate`); an admin may store a `manual` GeoJSON (Lines
+    tab). The stretch each tour-day follows is `geo.tour_segment` (versioned with the graph build; a line with no
+    shape still gets a row naming the day's two stops). The views expose it (CIS 256: `v_destination` bbox / shape
+    columns, `v_destination_shape`, the day stretch on `v_tour_place` / `v_tour_component`; contracts
+    `catalog.tour.v1.2`, `catalog.graph.v1.2`).
+    **Built scope of D1 (TripPlanner slice 6d):** only where TripPlanner reads the CIS views, after 256 — the tour-page
+    static maps (always on the catalog views) and, after the flip (`PLACES_SOURCE=cis`), the browse and trip maps. There
+    a line place is drawn as a line, never a pin or a circle: `ok` / `manual` solid, `approximate` dashed "approximate
+    route". **Open gaps (D1 not yet met):** (a) before the flip the browse and trip maps read the frozen TripPlanner
+    tables, which carry no precision, so a linear place is still drawn there as an exact pin; (b) a line with no
+    geometry yet (`pending` / `not_found` / `failed`) is not drawn on the browse map or a static map (it stays in the
+    lists and is flagged on `/admin/places`); (c) the trip map draws the provisional dashed line between the day's two
+    stops only when they are consecutive stops of the trip, otherwise nothing.
+    Area features (national park, delta, plateau, coast, gorge, mountain range) are `precision='area'` even when a
+    geocoder confirms a point. A deterministic content-validity report (CIS `services/places/validity.py`) runs after
+    every graph build and on `/admin/places`, with audited, undoable fixes (duplicate merge, area, linear → line);
+    the flip gate counts `linear_feature` (a linear name stored as a pin / circle) and `linear_without_shape` (a line
+    with no drawn shape).
+  - *Duplicates merge automatically (Nghiệp, S246, D2; design + skeptic pass: `docs/audits/2026-10-21-S246-aa847/
+    dedupe/`).* Duplicate destinations are merged automatically by the CIS job kind `place_dedupe` (CIS 257); the
+    admin duplicate fix on `/admin/places` is an override, not the normal path. One decision
+    (`services/places/dedupe.decide`, rules pinned by a labelled pair set with 0 false merges in CI) is shared by the
+    job, the in-tour dedupe of `place_extract` and the validity report. **Id evidence is a signal, not a verdict:** a
+    shared Geoapify object or place card auto-merges only POI / natural objects whose names match and no ambiguity
+    cap applies; anything else goes to the model. **Two lines** merge on their shape overlap or the same OSM id (`services/places/shape.same_line_place`, the
+    codebase's one line-duplicate rule), never on the point-distance rule; a line without a drawn shape, or a point vs a line, is at most the model's call.
+    **Model merges need two-vendor agreement:** GPT-6 Luna asked A/B and B/A plus Claude Haiku, all `same` with
+    confidence ≥ 0.8 (stages `a3_place_dedupe` / `a3_place_dedupe_check`, role `validate`), verdicts cached by input
+    hash; anything else keeps both places and nobody acts on it. **Every merge is logged** (`geo.place_merge`) **and
+    reversible by relink** (undo clears `duplicate_of`, restores the pointers that still hold the keeper, pins the
+    pair `different`). A merge leaves `geo.place_shape` / `geo.place_outlier` on the merged id (their keys would
+    collide; hidden by the `duplicate_of` filters); a drawn line always becomes the keeper, so a merge never stops a
+    drawn line from being drawn, and the next build
+    rebuilds the stretches. Writes happen per country only after an admin approved that country's dry-run diff;
+    changes outside it above max(5, 1 %) hold the country with an alert. `place_geocode` stays the only writer of
+    coordinates; `place_dedupe` is the only writer of `duplicate_of` (the admin fix is the override). Consumers resolve
+    an old id through `catalog.v_destination_redirect` (TripPlanner answers 301); the contract version is named when
+    it is appended, after the lines lane's views.
+  - *Flip.* `PLACES_SOURCE=cis` is set on both TripPlanner Lambdas together, after the coverage gate
+    (`missing_in_cis_live = 0`), with `tripplanner.component_id_map` (tp-017) bridging old component ids; then CIS
+    254 revokes TripPlanner's grandfathered `raw_tours` (179) and `tour_atoms` (180) reads.
 - **Revisit** if Geoapify's terms stop allowing storage or the free tier, if the confirm rate per
   country after the trial is too low to be useful, or if a second app needs to author places.

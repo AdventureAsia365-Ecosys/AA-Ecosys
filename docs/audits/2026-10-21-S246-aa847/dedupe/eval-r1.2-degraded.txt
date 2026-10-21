@@ -1,0 +1,143 @@
+{
+  "rule_version": "r1.2",
+  "degrade": "no_ids_no_stops",
+  "pairs": 105,
+  "merge": 55,
+  "keep": 50,
+  "matrix": {
+    "merge->auto_merge": 39,
+    "merge->llm": 12,
+    "merge->keep": 4,
+    "keep->auto_merge": 0,
+    "keep->llm": 1,
+    "keep->keep": 49
+  },
+  "rules_only": {
+    "precision": 1.0,
+    "recall": 0.709,
+    "false_merges": 0
+  },
+  "with_llm_if_llm_is_right": {
+    "recall": 0.927,
+    "false_merges": 0,
+    "llm_calls": 13
+  },
+  "with_llm_worst_case": {
+    "recall": 0.709,
+    "false_merges": 1,
+    "precision": 0.981
+  },
+  "keep_correct_by_rules": 0.98,
+  "by_src": {
+    "built": {
+      "pairs": 79,
+      "merge_auto": 31,
+      "merge": 44,
+      "false_merge": 0
+    },
+    "s246": {
+      "pairs": 22,
+      "merge_auto": 8,
+      "merge": 8,
+      "false_merge": 0
+    },
+    "task": {
+      "pairs": 4,
+      "merge_auto": 0,
+      "merge": 3,
+      "false_merge": 0
+    }
+  }
+}
+
+label decision   score     km  pair  [why]
+merge keep        0.00   0.05  Temple of Literature | Van Mieu (Vietnam)  [other/bare_resolved_poi]  built
+merge keep        0.00   0.16  Temple of Literature | Van Mieu - Quoc Tu Giam (Vietnam)  [other/bare_vs_built]  built
+merge keep        0.00   0.04  Wat Arun | Temple of Dawn (Thailand)  [other/same_kind]  built
+merge keep        0.00   0.04  Paro Taktsang | Tiger's Nest Monastery (Bhutan)  [other/bare_resolved_poi]  built
+merge llm         0.88   5.02  Mekong River | Mekong (Laos)  [exact/bare_natural]  built
+merge llm         0.86   3.49  Inle Lake | Inle (Myanmar)  [exact/bare_natural]  built
+merge llm         0.79   0.04  Royal Palace | Royal Palace Museum (Laos)  [exact/heritage_museum]  task
+merge llm         0.58   0.07  Boudhanath Stupa | Boudha Stupa (Nepal)  [fuzzy_low/same_kind]  built
+merge llm         0.55   0.02  Japanese Covered Bridge | Japanese Bridge (Vietnam)  [contain_extra/same_kind]  built
+merge llm         0.54   0.15  Ban Gioc Waterfall | Ban Gioc - Detian Falls (Vietnam)  [contain_extra/same_kind]  built
+merge llm         0.50   0.02  Bayon | Bayon Temple (Cambodia)  [exact/bare_vs_built]  built
+merge llm         0.50   0.03  Ben Thanh Market | Ben Thanh (Vietnam)  [exact/bare_vs_built]  task
+merge llm         0.50   0.03  Potala Palace | Potala (China)  [exact/bare_vs_built]  built
+merge llm         0.48   0.15  My Son Sanctuary | Mỹ Sơn (Vietnam)  [exact/bare_vs_built]  built
+merge llm         0.47   0.33  Ben Thanh Market | Ben Thanh (Vietnam)  [exact/bare_vs_built]  task
+merge llm         0.44  19.70  Lake Khuvsgul | Khövsgöl Lake (Mongolia)  [fuzzy_low/same_kind]  built
+
+{
+  "rule_version": "r1.2",
+  "degrade": "all_model_points",
+  "pairs": 105,
+  "merge": 55,
+  "keep": 50,
+  "matrix": {
+    "merge->auto_merge": 35,
+    "merge->llm": 16,
+    "merge->keep": 4,
+    "keep->auto_merge": 0,
+    "keep->llm": 9,
+    "keep->keep": 41
+  },
+  "rules_only": {
+    "precision": 1.0,
+    "recall": 0.636,
+    "false_merges": 0
+  },
+  "with_llm_if_llm_is_right": {
+    "recall": 0.927,
+    "false_merges": 0,
+    "llm_calls": 25
+  },
+  "with_llm_worst_case": {
+    "recall": 0.636,
+    "false_merges": 9,
+    "precision": 0.85
+  },
+  "keep_correct_by_rules": 0.82,
+  "by_src": {
+    "built": {
+      "pairs": 79,
+      "merge_auto": 27,
+      "merge": 44,
+      "false_merge": 0
+    },
+    "s246": {
+      "pairs": 22,
+      "merge_auto": 8,
+      "merge": 8,
+      "false_merge": 0
+    },
+    "task": {
+      "pairs": 4,
+      "merge_auto": 0,
+      "merge": 3,
+      "false_merge": 0
+    }
+  }
+}
+
+label decision   score     km  pair  [why]
+merge keep        0.00   0.05  Temple of Literature | Van Mieu (Vietnam)  [other/bare_vs_built]  built
+merge keep        0.00   0.16  Temple of Literature | Van Mieu - Quoc Tu Giam (Vietnam)  [other/bare_vs_built]  built
+merge keep        0.00   0.04  Wat Arun | Temple of Dawn (Thailand)  [other/same_kind]  built
+merge keep        0.00   0.04  Paro Taktsang | Tiger's Nest Monastery (Bhutan)  [other/bare_vs_built]  built
+merge llm         0.88   5.02  Mekong River | Mekong (Laos)  [exact/bare_natural]  built
+merge llm         0.86   3.49  Inle Lake | Inle (Myanmar)  [exact/bare_natural]  built
+merge llm         0.79   0.04  Royal Palace | Royal Palace Museum (Laos)  [exact/heritage_museum]  task
+merge llm         0.58   0.07  Boudhanath Stupa | Boudha Stupa (Nepal)  [fuzzy_low/same_kind]  built
+merge llm         0.55   0.02  Japanese Covered Bridge | Japanese Bridge (Vietnam)  [contain_extra/same_kind]  built
+merge llm         0.54   0.15  Ban Gioc Waterfall | Ban Gioc - Detian Falls (Vietnam)  [contain_extra/same_kind]  built
+merge llm         0.50   0.02  Bayon | Bayon Temple (Cambodia)  [exact/bare_vs_built]  built
+merge llm         0.50   0.03  Ben Thanh Market | Ben Thanh (Vietnam)  [exact/bare_vs_built]  task
+merge llm         0.50   0.03  Jokhang Temple | Jokhang (China)  [exact/bare_vs_built]  built
+merge llm         0.50   0.03  Potala Palace | Potala (China)  [exact/bare_vs_built]  built
+merge llm         0.50   0.04  Swayambhunath | Swayambhunath Temple (Monkey Temple) (Nepal)  [exact/bare_vs_built]  built
+merge llm         0.49   0.05  Thien Mu Pagoda | Thien Mu (Vietnam)  [exact/bare_vs_built]  built
+merge llm         0.49   0.06  Ta Prohm | Ta Prohm Temple (Cambodia)  [exact/bare_vs_built]  built
+merge llm         0.48   0.15  My Son Sanctuary | Mỹ Sơn (Vietnam)  [exact/bare_vs_built]  built
+merge llm         0.47   0.33  Ben Thanh Market | Ben Thanh (Vietnam)  [exact/bare_vs_built]  task
+merge llm         0.44  19.70  Lake Khuvsgul | Khövsgöl Lake (Mongolia)  [fuzzy_low/same_kind]  built
