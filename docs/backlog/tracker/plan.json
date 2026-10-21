@@ -484,7 +484,8 @@
     "AA-845: cảnh báo credit thấp + 402 qua e-mail (CIS #898) verify bằng mail test; đóng sau luật bữa ăn",
     "Làm mới model: liệt kê Bedrock 3 account, IAM Infra #261 (acc3, acc1), CIS #902 + mig 259 (Haiku 5.5, Sonnet 5.5), gateway fix CIS #903 merge 15:50 UTC (deploy đang chạy); smoke: 5.5 chỉ chạy trên acc3",
     "AA-886: pháp lý chưa vội (Nghiệp), phần kỹ thuật xong; AA-816 A10 dời cuối dự án; AA-926/916/924/790 giữ theo quyết định chất lượng",
-    "Master plan S247–S262: 9 lane song song, 16 phiên, 11 mốc; tracker chuyển sang artifact 2VSP2stGG1TF7uXvqgQTUY"
+    "Master plan S247–S262: 9 lane song song, 16 phiên, 11 mốc; tracker chuyển sang artifact 2VSP2stGG1TF7uXvqgQTUY",
+    "Cuối phiên: place stages chạy Haiku 4.5 (mig 260, CIS #904); A/B GPT-6 Luna giữ nguyên 7 route; Claude 5.5 gọi được trên acc3; luật bữa ăn (#905 nháp) không hội tụ → a1_claim_supported + promise giữ ON."
    ]
   },
   {
@@ -809,7 +810,7 @@
    "milestone": "M2b",
    "session": "S247",
    "size": "L",
-   "next": "L2 · S247 flip chain (moved from S249 by Nghiệp). All pre-flip work shipped S246: CIS 253, 255–258 + tp-017 applied, CIS #895/#896/#897, TP #120/#121, probe parity 21/21, contract pins v1.2 (Infra #259), tour on/off PASS. Model trial: Haiku 4.5, GPT-6 Luna, GPT-5.6 Luna below the 95% bar vs Sonnet. Next: Haiku 5.5 trial once CIS #903 is live (else keep Sonnet) → AA-905 quote + paid place run (~$1–10) → env switches by hand → post-flip parity + screenshots → 7-day window",
+   "next": "L2 · S247 flip chain (moved from S249 by Nghiệp). All pre-flip work shipped S246: CIS 253, 255–258 + tp-017, CIS #895/#896/#897, TP #120/#121, parity 21/21, pins v1.2, tour on/off PASS. Model chosen by Nghiệp: Haiku 4.5 for a3_place_days/locate (CIS #904, migration 260, Sonnet fallback). Next: optional Haiku 5.5 retrial after an effort/max_tokens fix (locate ≈ Sonnet, 1/3 the cost; switch needs Nghiệp); build one country first and count located_by geoapify vs llm; AA-905 paid build; PLACES_SOURCE + PLACE_SHAPES_ENABLED; parity + screenshots after the flip.",
    "needs": "Model choice; AA-905 quote; PLACES_SOURCE + PLACE_SHAPES_ENABLED by hand"
   },
   {
@@ -1229,7 +1230,7 @@
    "milestone": "M2b",
    "session": "S247",
    "size": "M",
-   "next": "L0 · Reopened S246 with a new scope. 25 questions evaluated, Nghiệp approved all (keep 9, retune 2, off 5, 9 T-series stay off). Applied: a1_brand_fit off, a1_keyword_about_tour reject 0.40, a3_question_foreign off; a3_idea_traveller kept. Left: ship the meal rule (J04), then switch off a1_claim_supported + a1_promise_unsupported",
+   "next": "L0 · 25 Jev questions evaluated, all approved and applied (a1_brand_fit off, keyword reject 0.40, a3_question_foreign off). GPT-6 Luna stage A/B: keep all 7 routes. Meal rule (J04) built but did not converge in adversarial review (65 false clears, draft CIS #905) → a1_claim_supported + a1_promise_unsupported stay ON. S247: narrow the rule to structured evidence, ship the wider ITIN_MEAL_INVENTED detection, measure, then revisit OFF.",
    "needs": ""
   },
   {
@@ -1241,7 +1242,7 @@
    "milestone": "M2b",
    "session": "S247",
    "size": "M",
-   "next": "L1 · Credit-low + 402 e-mail alerts shipped and verified with test e-mails (CIS #898); reject ceiling kept NULL (none meets the bar). Close once the meal rule ships and a1_claim_supported is off (AA-803)",
+   "next": "L1 · Credit-low + 402 e-mail alerts shipped and verified (CIS #898); reject ceiling kept NULL. Close once the narrowed meal rule ships and a1_claim_supported is off (AA-803).",
    "needs": ""
   },
   {
