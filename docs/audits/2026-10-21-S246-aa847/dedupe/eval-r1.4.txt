@@ -1,0 +1,20 @@
+== full
+{'pairs': 134, 'merge': 61, 'keep': 73, 'rules_recall': 0.689, 'rules_precision': 1.0, 'recall_if_check_right': 0.967, 'llm_band': {'merge': 17, 'keep': 6}}
+{'merge->auto_merge': 42, 'keep->keep': 67, 'keep->llm': 6, 'merge->llm': 17, 'merge->keep': 2}
+FALSE []
+== no_ids_no_stops
+{'pairs': 133, 'merge': 61, 'keep': 72, 'rules_recall': 0.689, 'rules_precision': 1.0, 'recall_if_check_right': 0.918, 'llm_band': {'merge': 14, 'keep': 5}}
+{'merge->auto_merge': 42, 'keep->keep': 67, 'keep->llm': 5, 'merge->llm': 14, 'merge->keep': 5}
+FALSE []
+== all_model_points
+{'pairs': 133, 'merge': 61, 'keep': 72, 'rules_recall': 0.623, 'rules_precision': 1.0, 'recall_if_check_right': 0.918, 'llm_band': {'merge': 18, 'keep': 15}}
+{'merge->auto_merge': 38, 'keep->keep': 57, 'keep->llm': 15, 'merge->llm': 18, 'merge->keep': 5}
+FALSE []
+== shared_city_id
+{'pairs': 133, 'merge': 61, 'keep': 72, 'rules_recall': 0.066, 'rules_precision': 1.0, 'recall_if_check_right': 0.918, 'llm_band': {'merge': 52, 'keep': 15}}
+{'merge->llm': 52, 'keep->keep': 57, 'keep->llm': 15, 'merge->keep': 5, 'merge->auto_merge': 4}
+FALSE []
+== no_shapes
+{'pairs': 133, 'merge': 61, 'keep': 72, 'rules_recall': 0.623, 'rules_precision': 1.0, 'recall_if_check_right': 0.934, 'llm_band': {'merge': 19, 'keep': 5}}
+{'merge->auto_merge': 38, 'keep->keep': 67, 'keep->llm': 5, 'merge->llm': 19, 'merge->keep': 4}
+FALSE []
