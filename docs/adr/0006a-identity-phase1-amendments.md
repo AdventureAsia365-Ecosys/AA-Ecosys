@@ -333,6 +333,22 @@ mailbox or Google account". That is too strong.
   - A CIS Cognito session on `aa-cis-preview` carries the user's **real** role (a verified Bearer), not the C9
     viewer cap; C9 stays for legacy preview sessions. Every CIS BFF route that attaches `X-Admin-Secret` calls
     `requireAdmin()` first (audited 21/10/2026).
+  - **Same-site writes (review finding B-1, fixed before any Preview host exists):** `it.com` is on the Public Suffix
+    List, so the site is `lumiguides.it.com` and both Preview hosts are the *same site* as the CIS admin, the
+    tenant portal and Booking. Their requests carry those hosts' `SameSite=Lax` session cookies. Preview code
+    (unmerged PRs) could otherwise send a `text/plain` POST, which needs no preflight, to
+    `aa-cis.lumiguides.it.com/api/admin/...` with the CIS session of whoever has one open. Every CIS admin and
+    portal BFF write route therefore refuses a request whose `Origin` (or `Sec-Fetch-Site`) is not its own
+    origin (CIS `lib/crossSiteGuard.ts`, AA-911). Booking's proxy already did this (`isSameOrigin`). **The
+    CIS guard is deployed to production before the Infra apply that creates the CNAMEs.**
+  - **No role cap on the Preview hosts (open decision for the owner).** A session on either Preview host carries
+    the person's real role (CIS owner `staff.write`, Booking `booking-*`) against the one Dev API, which cannot
+    tell a Preview token from a Production one (same `client_id`). Managed-login sessions are shared across
+    clients, so preview code that redirects to the sign-in route gets a silent sign-in, with an access token and
+    a 12 h refresh token, from anyone who opens the host. Vercel Authentication does not help, because the person
+    it lets through is that person. The only real cap is the deferred separate `*-preview` client with the APIs
+    capping by `client_id`. Until the owner either accepts this for the dev phase or pulls that client forward,
+    only label a PR `preview-signin` after reading its diff.
 - **Bridge retirement (same issue):**
   - Booking accepts only WORKFORCE (`booking-staff`, `breakglass`); a correctly signed bridge-shaped token is 401
     `invalid_token` with no key fetch and no `staff_users` write. The legacy form, `/api/auth/login` and the re-mint
@@ -342,8 +358,9 @@ mailbox or Google account". That is too strong.
   - Secret `aa-cis/dev/booking-jwt-signing-key` is deleted with a 7-day recovery window (secrets register).
   - Bridge-era `booking.staff_users` rows are linked to their Cognito identity or deactivated (never deleted) by
     AA-CIS-Infra `db/scripts/aa911_bridge_staff_rows.py` (DRY RUN, then apply), so no active unlinked row remains.
-  - Order: Booking B2 deployed (a real CIS-minted token replayed before = 200, after = 401) → CIS C1 deployed →
-    secret deleted → rows script.
+  - Order: CIS cross-site guard deployed → Infra callback + CNAMEs applied → Booking B1 (Preview sign-in shown
+    working) → Booking B2 deployed (a real CIS-minted token replayed before = 200, after = 401) → CIS C1
+    deployed → secret deleted → rows script.
 - **Consequence to state:** after the bridge is gone **no agent can sign in to the Booking UI** (Preview or
   Production): the E2E Cognito user may not hold a `booking-*` group (A10). Booking UI checks are done by Nghiệp
   (screenshots) until Nghiệp chooses a Booking preview machine principal (a follow-up issue only after asking).
