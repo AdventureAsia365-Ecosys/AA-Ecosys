@@ -2,7 +2,7 @@
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://adventure.asia/contracts/catalog.tour.v1.2.json",
  "title": "catalog.tour v1.2 (CIS → AA-Booking, TripPlanner)",
- "description": "One live AA tour as the CIS catalog read model exposes it (ADR 0001 decision 1, AA-679). Assembled from the views of schema `catalog` (CIS migration 225): the tour fields are one row of catalog.v_tour, `days` are its catalog.v_tour_day rows, `places` its catalog.v_tour_place rows, `photos` its catalog.v_tour_photo rows. Only tours whose Master Content is active and whose source is the active version appear; a tour that leaves the catalog (inactive, trashed, superseded) is simply absent. Key = (source_system, source_id), stable across re-uploads; tour_id is the current CIS version and changes on re-upload. A consumer re-syncs a tour when content_hash changes. No prices: prices are AA-Booking's (ADR 0005). Events catalog.tour.published / updated / trashed (outbox) come in a later additive version; until then consumers poll catalog.v_tour. v1.1 (S237, CIS migration 228, AA-712): additive over v1 — places[] gain located_by and precision; places[].destination_id now comes from the CIS place pipeline's link first (then the place card, then the v1 exact name + country match), and a suspect or duplicate destination is never returned (destination_id, destination_name, lat, lng null). catalog.v_destination gains geo_status, located_by, precision (rows of catalog.graph.v1 point at it).  v1.2 (AA-847, CIS 256, owner decision S246: rivers, roads and trails are DRAWN as lines — never a pin, a circle or hidden): additive over 1.1 — places[].precision gains `line`; places[] gain segment, segment_basis, segment_from_destination_id, segment_to_destination_id, segment_km (the stretch of a line the day follows). catalog.v_destination appends shape_kind, shape_status, shape_source, length_km, min_lat, min_lng, max_lat, max_lng (never null: the line's bbox, else the point — filter map tiles by bbox intersection) and shape_lo (≤ 60 vertices); the geometry itself (shape_mid ≤ 300 vertices / 12 KB, shape_lo) is read by id from catalog.v_destination_shape (TripPlanner only; rows in contract catalog.graph.v1.2 `destination_shapes`). OpenStreetMap data: show \"© OpenStreetMap contributors\" wherever a line is drawn. Consumers must accept version 1, 1.1 and 1.2.",
+ "description": "One live AA tour as the CIS catalog read model exposes it (ADR 0001 decision 1, AA-679). Assembled from the views of schema `catalog` (CIS migration 225): the tour fields are one row of catalog.v_tour, `days` are its catalog.v_tour_day rows, `places` its catalog.v_tour_place rows, `photos` its catalog.v_tour_photo rows. Only tours whose Master Content is active and whose source is the active version appear; a tour that leaves the catalog (inactive, trashed, superseded) is simply absent. Key = (source_system, source_id), stable across re-uploads; tour_id is the current CIS version and changes on re-upload. A consumer re-syncs a tour when content_hash changes. No prices: prices are AA-Booking's (ADR 0005). Events catalog.tour.published / updated / trashed (outbox) come in a later additive version; until then consumers poll catalog.v_tour. v1.1 (S237, CIS migration 228, AA-712): additive over v1 — places[] gain located_by and precision; places[].destination_id now comes from the CIS place pipeline's link first (then the place card, then the v1 exact name + country match), and a suspect or duplicate destination is never returned (destination_id, destination_name, lat, lng null). catalog.v_destination gains geo_status, located_by, precision (rows of catalog.graph.v1 point at it).  v1.2 (AA-847, CIS 256, owner decision S246: rivers, roads and trails are DRAWN as lines — never a pin, a circle or hidden): additive over 1.1 — places[].precision gains `line`; places[] gain segment, segment_basis, segment_from_destination_id, segment_to_destination_id, segment_km (the stretch of a line the day follows) and shape_lo (the line's geometry, ≤ 60 vertices). catalog.v_destination appends shape_kind, shape_status, shape_source, length_km, min_lat, min_lng, max_lat, max_lng (never null: the line's bbox, else the point — filter map tiles by bbox intersection) and shape_lo (≤ 60 vertices); the geometry itself (shape_mid ≤ 300 vertices / 12 KB, shape_lo) is read by id from catalog.v_destination_shape (TripPlanner only; rows in contract catalog.graph.v1.2 `destination_shapes`). OpenStreetMap data: show \"© OpenStreetMap contributors\" wherever a line is drawn. Consumers must accept version 1, 1.1 and 1.2.",
  "type": "object",
  "required": [
   "contract",
@@ -383,6 +383,28 @@
       ],
       "minimum": 0,
       "description": "Length of `segment` in km; null with basis feature."
+     },
+     "shape_lo": {
+      "type": [
+       "object",
+       "null"
+      ],
+      "required": [
+       "type",
+       "coordinates"
+      ],
+      "properties": {
+       "type": {
+        "enum": [
+         "LineString",
+         "MultiLineString"
+        ]
+       },
+       "coordinates": {
+        "type": "array"
+       }
+      },
+      "description": "1.2 (CIS 256): for a precision = line place, the line's own geometry (catalog.v_destination.shape_lo, ≤ 60 vertices, clipped to its country) for small / static maps; null when it has no geometry yet (draw nothing on a static map, list the place by name) or for a point / area place."
      }
     }
    }
