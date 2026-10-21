@@ -1,0 +1,1223 @@
+<title>AA-Partner giao diện</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one reading column; each screen is a framed mockup (desktop window or phone) on the AA cream ground.
+   Palette and type follow the AA brand tokens of the CIS portal kit (_brand/tokens.ts, globals.css). */
+:root {
+  --bg: #F8F6F2; --card: #FFFFFF; --sunk: #F2EEE6; --ink: #1F2933; --body: #33363D; --ink3: #3A4453;
+  --muted: #6B7380; --muted2: #8A929E; --line: #E9E4DB; --line2: #F0EBE0;
+  --gold: #DB9628; --gold-deep: #9E6E16; --gold-soft: #F4E2C2; --gold-tint: #FBF3E3; --gold-border: #DDA64E; --on-gold: #FFFFFF;
+  --slate: #35495E; --slate-soft: #E8EEF4;
+  --side: #1F2933; --side-fg: #C9CFD8; --side-muted: #8A929D; --side-line: #2E3844; --side-strong: #FFFFFF;
+  --red: #C20101; --red-soft: #FBE9E7; --green: #2E7D5B; --green-soft: #E4F1E9;
+  --amber: #B5791F; --amber-soft: #FBEFD6; --info: #1E40AF; --info-soft: #DBEAFE;
+  --purple: #5B21B6; --purple-soft: #EDE9FE; --neutral-bg: #F0EBE0; --neutral-fg: #4B5563;
+  --ag: #1E6B66; --ag-soft: #E3F1EF; --ag-ink: #123F3C; --on-ag: #FFFFFF;
+  --bezel: #1F2933; --shade: rgba(31, 41, 51, 0.10); --scrim: rgba(248, 246, 242, 0.92);
+  --f-display: 'Fahkwang', 'Poppins', Georgia, serif;
+  --f-sans: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F141B; --card: #19212C; --sunk: #141B24; --ink: #EAEEF4; --body: #D4DAE2; --ink3: #B8C0CC;
+    --muted: #9EA7B4; --muted2: #8A93A2; --line: #2A3542; --line2: #222C38;
+    --gold: #E8A838; --gold-deep: #F0C070; --gold-soft: #4A3A1C; --gold-tint: #332814; --gold-border: #6B531F; --on-gold: #1F1608;
+    --slate: #8CA3BC; --slate-soft: #1E2A38;
+    --side: #0B1016; --side-fg: #C9CFD8; --side-muted: #7F8896; --side-line: #1E2733; --side-strong: #FFFFFF;
+    --red: #F2746F; --red-soft: #3A1E1C; --green: #4FB488; --green-soft: #15301F;
+    --amber: #E0A040; --amber-soft: #352711; --info: #A5BEF7; --info-soft: #1C2847;
+    --purple: #B99BF0; --purple-soft: #2A1F42; --neutral-bg: #263040; --neutral-fg: #B8C0CC;
+    --ag: #5CB8B0; --ag-soft: #15302E; --ag-ink: #CFEDEA; --on-ag: #0B1F1D;
+    --bezel: #2F3A48; --shade: rgba(0, 0, 0, 0.45); --scrim: rgba(15, 20, 27, 0.92);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F141B; --card: #19212C; --sunk: #141B24; --ink: #EAEEF4; --body: #D4DAE2; --ink3: #B8C0CC;
+  --muted: #9EA7B4; --muted2: #8A93A2; --line: #2A3542; --line2: #222C38;
+  --gold: #E8A838; --gold-deep: #F0C070; --gold-soft: #4A3A1C; --gold-tint: #332814; --gold-border: #6B531F; --on-gold: #1F1608;
+  --slate: #8CA3BC; --slate-soft: #1E2A38;
+  --side: #0B1016; --side-fg: #C9CFD8; --side-muted: #7F8896; --side-line: #1E2733; --side-strong: #FFFFFF;
+  --red: #F2746F; --red-soft: #3A1E1C; --green: #4FB488; --green-soft: #15301F;
+  --amber: #E0A040; --amber-soft: #352711; --info: #A5BEF7; --info-soft: #1C2847;
+  --purple: #B99BF0; --purple-soft: #2A1F42; --neutral-bg: #263040; --neutral-fg: #B8C0CC;
+  --ag: #5CB8B0; --ag-soft: #15302E; --ag-ink: #CFEDEA; --on-ag: #0B1F1D;
+  --bezel: #2F3A48; --shade: rgba(0, 0, 0, 0.45); --scrim: rgba(15, 20, 27, 0.92);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--body); font-family: var(--f-sans); font-size: 15px; line-height: 1.6; }
+.cap.en, .lede.en { color: var(--muted); font-size: 14px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: var(--gold-deep); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
+.num { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--f-mono); font-size: 0.92em; }
+
+.page {
+  max-width: 1200px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+}
+
+/* ---------- Intro ---------- */
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-deep); }
+h1 { font-family: var(--f-display); font-weight: 500; font-size: clamp(30px, 5vw, 46px); line-height: 1.15; color: var(--ink); margin: 8px 0 16px; text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font-family: var(--f-display); font-weight: 500; font-size: clamp(22px, 3.2vw, 30px); line-height: 1.25; color: var(--ink); margin: 0; text-wrap: balance; }
+h3 { font-family: var(--f-display); font-weight: 500; font-size: 20px; color: var(--ink); margin: 0; text-wrap: balance; }
+.lede { max-width: 68ch; font-size: 16.5px; color: var(--body); margin: 0 0 12px; }
+.note { display: inline-flex; gap: 8px; align-items: baseline; font-size: 13px; color: var(--muted); background: var(--card); border: 1px dashed var(--gold-border); border-radius: 8px; padding: 8px 12px; max-width: 68ch; }
+.note b { color: var(--gold-deep); font-weight: 600; }
+
+.merge { margin-top: 32px; display: grid; gap: 14px; }
+.merge h3 { font-size: 19px; }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.step { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.step .when { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); }
+.step .what { font-weight: 600; color: var(--ink); margin: 2px 0 4px; }
+.step p { margin: 0; font-size: 13.5px; color: var(--muted); }
+.menu-line { font-size: 13.5px; color: var(--muted); max-width: 90ch; margin: 0; }
+.menu-line b { color: var(--ink); font-weight: 600; }
+
+/* ---------- Jump nav ---------- */
+.jump { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--scrim); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); margin-top: 36px; }
+.jump-row { display: flex; gap: 6px; overflow-x: auto; padding-block: 10px; scrollbar-width: thin; }
+.jump a { flex: none; text-decoration: none; font-size: 13px; font-weight: 500; color: var(--ink3); padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); white-space: nowrap; }
+.jump a:hover { border-color: var(--gold-border); color: var(--gold-deep); }
+.jump a .n { color: var(--muted2); margin-right: 4px; font-variant-numeric: tabular-nums; }
+
+/* ---------- Screen sections ---------- */
+.scr { padding-top: 56px; display: grid; gap: 14px; scroll-margin-top: 64px; }
+.scr-head { display: grid; gap: 4px; max-width: 80ch; }
+.scr-no { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.scr-no span { color: var(--gold-deep); }
+.cap { margin: 4px 0 0; color: var(--body); max-width: 74ch; }
+.hint { display: none; font-size: 12px; color: var(--muted); }
+@media (max-width: 1040px) { .hint { display: block; } }
+
+/* Desktop window frame */
+.win { background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 1px 2px var(--shade), 0 12px 32px var(--shade); overflow: hidden; }
+.win-bar { display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: var(--sunk); border-bottom: 1px solid var(--line); }
+.dots { display: flex; gap: 6px; flex: none; }
+.dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); display: block; }
+.url { flex: 1; min-width: 0; font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.scroll { overflow-x: auto; }
+.screen { min-width: 1040px; display: grid; grid-template-columns: 224px minmax(0, 1fr); font-size: 12.5px; line-height: 1.45; color: var(--body); background: var(--bg); }
+.screen.rail { grid-template-columns: 56px minmax(0, 1fr); }
+.screen.full { grid-template-columns: minmax(0, 1fr); }
+
+/* Icons */
+.i { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; }
+.i.sm { width: 13px; height: 13px; }
+
+/* Sidebar (mirrors the current portal sidebar: ink ground, gold active rule) */
+.side { background: var(--side); color: var(--side-fg); padding: 14px 10px 18px; display: flex; flex-direction: column; gap: 2px; }
+.side .logo { font-family: var(--f-display); font-size: 17px; color: var(--gold); padding: 2px 10px 0; }
+.side .agency { display: flex; justify-content: space-between; align-items: center; margin: 8px 4px 10px; padding: 7px 10px; border-radius: 8px; background: var(--side-line); color: var(--side-strong); font-weight: 500; }
+.side .agency small { color: var(--side-muted); font-weight: 400; }
+.side .grp { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--side-muted); padding: 10px 10px 3px; display: flex; gap: 6px; align-items: center; }
+.side .new { font-size: 9px; letter-spacing: 0.06em; color: var(--on-gold); background: var(--gold); border-radius: 999px; padding: 1px 6px; }
+.side .it { position: relative; display: flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 6px; }
+.side .it.on { background: color-mix(in srgb, var(--gold) 14%, transparent); color: var(--side-strong); font-weight: 500; }
+.side .it.on::before { content: ""; position: absolute; left: 0; top: 6px; bottom: 6px; width: 2px; border-radius: 0 2px 2px 0; background: var(--gold); }
+.side .it .c { margin-left: auto; font-size: 10.5px; color: var(--side-muted); font-variant-numeric: tabular-nums; }
+.side .it.on .c { color: var(--gold); }
+.side .studio { border-top: 1px solid var(--side-line); margin-top: 6px; }
+.railbar { background: var(--side); color: var(--side-fg); display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 0; }
+.railbar .logo { font-family: var(--f-display); color: var(--gold); font-size: 15px; margin-bottom: 8px; }
+.railbar span { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 8px; }
+.railbar span.on { background: color-mix(in srgb, var(--gold) 16%, transparent); color: var(--gold); }
+
+/* Top bar */
+.main { min-width: 0; display: flex; flex-direction: column; }
+.top { display: flex; align-items: center; gap: 8px; padding: 9px 18px; background: var(--card); border-bottom: 1px solid var(--line); }
+.search { flex: 1; max-width: 420px; display: flex; align-items: center; gap: 8px; color: var(--muted2); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; background: var(--bg); }
+.search kbd { margin-left: auto; font-family: var(--f-mono); font-size: 10px; border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+.top .sp { flex: 1; }
+.tb { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--ink3); white-space: nowrap; }
+.tb b { font-weight: 600; color: var(--gold-deep); }
+.ava { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--slate-soft); color: var(--slate); font-weight: 600; font-size: 11px; flex: none; }
+.body { padding: 18px 20px 22px; display: grid; gap: 14px; align-content: start; }
+
+/* Shared UI atoms */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 5px 13px; border-radius: 999px; font-weight: 600; font-size: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink3); white-space: nowrap; font-family: inherit; }
+.btn.pri { background: var(--gold); border-color: var(--gold); color: var(--on-gold); text-transform: uppercase; letter-spacing: 0.06em; font-size: 11px; }
+.btn.ghost { background: transparent; }
+.btn.sm { padding: 3px 10px; font-size: 11px; }
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; background: var(--neutral-bg); color: var(--neutral-fg); letter-spacing: 0.02em; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.8; }
+.pill.nodot::before { display: none; }
+.p-gold { background: var(--gold-tint); color: var(--gold-deep); }
+.p-info { background: var(--info-soft); color: var(--info); }
+.p-purple { background: var(--purple-soft); color: var(--purple); }
+.p-slate { background: var(--slate-soft); color: var(--slate); }
+.p-green { background: var(--green-soft); color: var(--green); }
+.p-amber { background: var(--amber-soft); color: var(--amber); }
+.p-red { background: var(--red-soft); color: var(--red); }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.ph { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.lbl { font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.pt { font-family: var(--f-display); font-size: 22px; font-weight: 500; color: var(--ink); line-height: 1.2; }
+.sub { color: var(--muted); font-size: 12px; }
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sep { color: var(--muted2); }
+.mask { font-family: var(--f-mono); letter-spacing: 0.04em; color: var(--ink3); }
+.reveal { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 600; color: var(--slate); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; background: var(--card); }
+.warn { display: flex; gap: 8px; align-items: center; background: var(--amber-soft); color: var(--amber); border-radius: 8px; padding: 7px 12px; font-weight: 500; }
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); }
+.tabs span { padding: 7px 12px; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.tabs span.on { color: var(--ink); border-color: var(--gold); font-weight: 600; }
+.tabs span em { font-style: normal; color: var(--muted2); margin-left: 3px; }
+
+table.tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.tbl th { text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.tbl td { padding: 8px 10px; border-bottom: 1px solid var(--line2); vertical-align: middle; }
+.tbl td.r, .tbl th.r { text-align: right; }
+.tbl tr.hl td { background: var(--gold-tint); }
+.tbl .t { color: var(--ink); font-weight: 500; }
+
+/* ---------- 1 Home ---------- */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.kpi .v { font-family: var(--f-display); font-size: 26px; color: var(--ink); line-height: 1.1; margin: 4px 0 2px; }
+.up { color: var(--green); font-weight: 600; }
+.needs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.need { border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; display: grid; gap: 2px; background: var(--card); }
+.need b { font-size: 18px; font-family: var(--f-display); font-weight: 500; color: var(--ink); }
+.need.hot { border-color: var(--gold-border); background: var(--gold-tint); }
+.homegrid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; }
+.check { display: grid; gap: 6px; }
+.ck { display: flex; gap: 8px; align-items: center; }
+.ck .box { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--line); flex: none; }
+.ck.done .box { background: var(--green); border-color: var(--green); color: var(--card); }
+.ck.done span { color: var(--muted); text-decoration: line-through; }
+.bar { height: 6px; border-radius: 999px; background: var(--line2); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--gold); border-radius: 999px; }
+.studio-list { display: grid; gap: 6px; }
+.studio-list div { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--line2); }
+.studio-list div:last-child { border-bottom: 0; }
+
+/* ---------- 2 Pipeline ---------- */
+.chips { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.chip { padding: 3px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--ink3); font-weight: 500; }
+.chip.on { background: var(--ink); color: var(--card); border-color: var(--ink); }
+.chip em { font-style: normal; color: var(--muted2); margin-left: 3px; }
+.chip.on em { color: var(--gold-soft); }
+.board { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; align-items: start; }
+.col { background: var(--sunk); border-radius: 10px; padding: 8px; display: grid; gap: 7px; position: relative; }
+.colh { display: flex; justify-content: space-between; align-items: center; padding: 2px 4px 0; }
+.colh b { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); }
+.colh b em { font-style: normal; color: var(--muted); margin-left: 3px; }
+.kebab { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 5px; color: var(--muted); font-weight: 700; letter-spacing: -1px; }
+.kebab.on { background: var(--card); color: var(--ink); box-shadow: 0 0 0 1px var(--gold-border); }
+.colsum { font-size: 11px; color: var(--muted); padding: 0 4px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 9px; display: grid; gap: 3px; }
+.card .t { font-weight: 600; color: var(--ink); }
+.card .m { font-size: 11px; color: var(--muted); }
+.card .f { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
+.card.sel { border-color: var(--gold-border); box-shadow: 0 0 0 2px var(--gold-tint); }
+.more { font-size: 11px; color: var(--muted); text-align: center; padding: 2px; }
+.menu { position: absolute; top: 34px; right: -6px; z-index: 2; width: 270px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 10px 30px var(--shade); padding: 6px; display: grid; gap: 1px; }
+.menu .mi { padding: 7px 9px; border-radius: 6px; display: grid; gap: 1px; }
+.menu .mi.on { background: var(--gold-tint); }
+.menu .mi b { font-weight: 600; color: var(--ink); }
+.menu .mi span { font-size: 11px; color: var(--muted); }
+.toast { display: flex; align-items: center; gap: 12px; background: var(--ink); color: var(--card); border-radius: 10px; padding: 9px 14px; justify-self: center; box-shadow: 0 8px 24px var(--shade); }
+.toast b { color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 11px; }
+
+/* ---------- 3 Trip workspace ---------- */
+.triphead { display: grid; gap: 6px; }
+.triphead .row1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.stage { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); background: var(--green-soft); padding: 3px 10px; border-radius: 999px; }
+.stagebar { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; font-size: 10px; color: var(--muted); }
+.stagebar span { border-top: 3px solid var(--line); padding-top: 3px; }
+.stagebar span.d { border-color: var(--gold); color: var(--ink3); }
+.stagebar span.c { border-color: var(--green); color: var(--green); font-weight: 600; }
+.tripgrid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 12px; }
+.trav { display: grid; gap: 8px; }
+.tv { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line2); }
+.tv:last-child { border-bottom: 0; }
+.tv .ava { width: 30px; height: 30px; }
+.tv .nm { font-weight: 600; color: var(--ink); }
+.tv .dt { display: flex; gap: 10px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); }
+.task { display: flex; gap: 9px; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid var(--line2); }
+.task:last-child { border-bottom: 0; }
+.task .box { width: 15px; height: 15px; border: 1.5px solid var(--muted2); border-radius: 4px; flex: none; margin-top: 2px; }
+.task .due { margin-left: auto; font-size: 11px; color: var(--muted); white-space: nowrap; }
+.task .due.late { color: var(--red); font-weight: 600; }
+.msg { display: grid; gap: 8px; }
+.bub { max-width: 88%; padding: 8px 11px; border-radius: 10px; background: var(--sunk); }
+.bub.out { justify-self: end; background: var(--slate-soft); }
+.bub .w { font-size: 10.5px; color: var(--muted); margin-bottom: 2px; }
+.draft { border: 1px dashed var(--gold-border); background: var(--gold-tint); border-radius: 10px; padding: 8px 11px; display: grid; gap: 6px; }
+.draft .lbl { color: var(--gold-deep); }
+.tl { display: grid; gap: 0; }
+.tl div { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line2); }
+.tl div:last-child { border-bottom: 0; }
+.tl time { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ---------- 4 Builder ---------- */
+.bhead { display: flex; align-items: center; gap: 10px; padding: 10px 18px; background: var(--card); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.bhead .tt { font-weight: 600; color: var(--ink); font-size: 13.5px; }
+.money { display: flex; gap: 14px; align-items: baseline; padding: 8px 18px; background: var(--sunk); border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; flex-wrap: wrap; }
+.money b { color: var(--ink); font-weight: 600; }
+.money .mg { color: var(--green); font-weight: 600; }
+.bgrid { display: grid; grid-template-columns: 200px minmax(0, 1fr) 410px; min-height: 560px; }
+.days { border-right: 1px solid var(--line); background: var(--card); padding: 12px 10px; display: grid; gap: 2px; align-content: start; }
+.day { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 6px; padding: 6px 8px; border-radius: 7px; color: var(--ink3); }
+.day i { font-style: normal; color: var(--muted2); font-variant-numeric: tabular-nums; }
+.day.on { background: var(--gold-tint); color: var(--ink); font-weight: 600; }
+.day.on i { color: var(--gold-deep); }
+.canvas { padding: 16px 18px; display: grid; gap: 12px; align-content: start; background: var(--bg); }
+.blk { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.blk-h { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 12px; background: var(--sunk); border-bottom: 1px solid var(--line); }
+.opt { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 9px 12px; border-bottom: 1px solid var(--line2); }
+.opt:last-child { border-bottom: 0; }
+.radio { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--muted2); }
+.radio.on { border: 4px solid var(--gold); }
+.opt .n { font-weight: 600; color: var(--ink); }
+.opt .s { font-size: 11px; color: var(--muted); }
+.opt .pr { text-align: right; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.opt .pr b { color: var(--ink); }
+.addrow { display: flex; gap: 8px; align-items: center; padding: 9px 12px; border-top: 1px dashed var(--line); color: var(--gold-deep); font-weight: 600; }
+.drawer { border-left: 1px solid var(--line); background: var(--card); display: flex; flex-direction: column; box-shadow: -10px 0 26px var(--shade); }
+.dr-h { padding: 12px 14px 0; display: grid; gap: 8px; }
+.dr-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); }
+.dr-tabs span { padding: 6px 10px; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.dr-tabs span.on { color: var(--ink); border-color: var(--gold); font-weight: 600; }
+.sync { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 6px; }
+.sync::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.tour { display: grid; gap: 6px; padding: 11px 14px; border-bottom: 1px solid var(--line2); }
+.tour .top2 { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.tour .n { font-weight: 600; color: var(--ink); }
+.tour .s { font-size: 11px; color: var(--muted); }
+.prices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 6px; align-items: end; font-variant-numeric: tabular-nums; }
+.prices div { display: grid; }
+.prices small { font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.prices b { color: var(--ink); font-weight: 600; }
+.prices .mg b { color: var(--green); }
+.inp { border: 1px solid var(--gold-border); border-radius: 6px; padding: 1px 6px; background: var(--card); display: inline-block; }
+.tour.out { opacity: 0.6; }
+.tour .w2 { font-size: 11px; color: var(--amber); display: flex; gap: 6px; align-items: center; }
+.dr-foot { margin-top: auto; padding: 10px 14px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--line); background: var(--sunk); }
+
+/* ---------- Phones ---------- */
+.phones { display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; padding: 24px 12px; background: var(--sunk); border: 1px solid var(--line); border-radius: 12px; }
+.phwrap { display: grid; gap: 8px; justify-items: center; width: 340px; max-width: 100%; }
+.phwrap > .lbl { text-align: center; }
+.phone { width: 100%; border: 9px solid var(--bezel); border-radius: 38px; background: var(--card); overflow: hidden; box-shadow: 0 16px 40px var(--shade); font-size: 13px; line-height: 1.45; color: var(--body); }
+.status { display: flex; justify-content: space-between; padding: 8px 20px 4px; font-size: 11px; font-weight: 600; color: var(--ink); }
+.agbar { display: flex; align-items: center; gap: 8px; padding: 8px 16px 10px; border-bottom: 1px solid var(--line); }
+.aglogo { width: 28px; height: 28px; border-radius: 8px; background: var(--ag); color: var(--on-ag); display: grid; place-items: center; font-family: var(--f-display); font-weight: 600; font-size: 13px; flex: none; }
+.agname { font-weight: 600; color: var(--ag-ink); font-size: 13px; }
+.agbar .r { margin-left: auto; font-size: 11px; color: var(--muted); }
+.hero { padding: 14px 16px; background: var(--ag-soft); display: grid; gap: 4px; }
+.hero h4 { margin: 0; font-family: var(--f-display); font-weight: 500; font-size: 21px; color: var(--ag-ink); line-height: 1.2; }
+.hero .s { font-size: 12px; color: var(--muted); }
+.total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 6px; }
+.total b { font-size: 20px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.agbtn { display: block; text-align: center; background: var(--ag); color: var(--on-ag); border-radius: 999px; padding: 10px; font-weight: 600; font-size: 13px; }
+.agbtn.ol { background: transparent; color: var(--ag); border: 1.5px solid var(--ag); }
+.pbody { padding: 12px 16px 16px; display: grid; gap: 10px; }
+.dayh { font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.ch { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.chopt { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 10px; padding: 10px; border-bottom: 1px solid var(--line2); }
+.chopt:last-child { border-bottom: 0; }
+.chopt.on { background: var(--ag-soft); }
+.ph-img { width: 54px; height: 54px; border-radius: 8px; background: linear-gradient(160deg, var(--ag-soft), var(--line)); position: relative; overflow: hidden; }
+.ph-img::after { content: ""; position: absolute; inset: auto -10% -30% -10%; height: 70%; background: var(--ag); opacity: 0.35; border-radius: 50% 50% 0 0; }
+.chopt .n { font-weight: 600; color: var(--ink); }
+.chopt .d { font-size: 11.5px; color: var(--muted); }
+.chopt .act { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+.diff { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.diff.inc { color: var(--green); }
+.mini { font-size: 11.5px; font-weight: 600; color: var(--ag); border: 1px solid var(--ag); border-radius: 999px; padding: 2px 10px; }
+.mini.on { background: var(--ag); color: var(--on-ag); }
+.smalllinks { display: flex; gap: 12px; justify-content: center; font-size: 11px; color: var(--muted); padding-top: 4px; }
+.grp2 { display: grid; gap: 4px; padding: 9px 11px; border-radius: 10px; background: var(--sunk); }
+.grp2 .lbl { font-size: 9.5px; }
+.kv { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; }
+.kv b { color: var(--ink); }
+.field { border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; color: var(--ink); font-family: var(--f-display); font-size: 15px; }
+.cb { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; }
+.cb .bx { width: 16px; height: 16px; border-radius: 4px; background: var(--ag); color: var(--on-ag); display: grid; place-items: center; flex: none; margin-top: 1px; }
+.stepper { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; font-size: 10px; color: var(--muted); text-align: center; }
+.stepper span { border-top: 3px solid var(--line); padding-top: 3px; }
+.stepper span.d { border-color: var(--ag); color: var(--ag-ink); font-weight: 600; }
+.hold { display: flex; gap: 6px; align-items: center; font-size: 11.5px; color: var(--amber); }
+.todo { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.todo div { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-bottom: 1px solid var(--line2); }
+.todo div:last-child { border-bottom: 0; }
+.todo .st { margin-left: auto; font-size: 11px; color: var(--muted); white-space: nowrap; }
+.dot { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; flex: none; border: 1.5px solid var(--line); }
+.dot.ok { background: var(--green); border-color: var(--green); color: var(--card); }
+.dot.half { border-color: var(--ag); background: conic-gradient(var(--ag) 0 33%, transparent 0); }
+.party { display: grid; gap: 6px; }
+.party div { display: grid; grid-template-columns: 70px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 12px; }
+.tabbar { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); font-size: 10px; text-align: center; color: var(--muted); }
+.tabbar span { padding: 8px 0 12px; display: grid; justify-items: center; gap: 2px; }
+.tabbar span.on { color: var(--ag); font-weight: 600; }
+
+/* ---------- 7 Payments ---------- */
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.tile .v { font-family: var(--f-display); font-size: 22px; color: var(--ink); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.tile.alert { border-color: var(--gold-border); background: var(--gold-tint); }
+.claim { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; border: 1px solid var(--gold-border); background: var(--card); border-radius: 10px; padding: 12px 14px; box-shadow: 0 0 0 3px var(--gold-tint); }
+.claim .t { font-weight: 600; color: var(--ink); font-size: 13px; }
+.claim ul { margin: 4px 0 0; padding-left: 16px; color: var(--muted); }
+.pay2 { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; }
+
+/* ---------- 8 Reports ---------- */
+.rgrid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px; }
+.hbar { display: grid; grid-template-columns: 110px minmax(0, 1fr) 46px; gap: 10px; align-items: center; padding: 4px 0; }
+.hbar .tr { height: 14px; background: var(--line2); border-radius: 4px; overflow: hidden; }
+.hbar .tr i { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
+.hbar .tr i.sl { background: var(--slate); }
+.hbar .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
+.conv { font-size: 10.5px; color: var(--muted); padding-left: 120px; margin: -2px 0; }
+.axis { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); padding: 2px 56px 0 120px; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart .g { stroke: var(--line); stroke-width: 1; }
+.chart .ax { fill: var(--muted); font-size: 10px; font-family: var(--f-sans); }
+.chart .ly { fill: none; stroke: var(--muted2); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.chart .ty { fill: none; stroke: var(--gold); stroke-width: 2.2; }
+.chart .ar { fill: var(--gold); opacity: 0.12; }
+.chart .ep { fill: var(--gold); stroke: var(--card); stroke-width: 2; }
+.chart .el { fill: var(--ink); font-size: 11px; font-weight: 600; font-family: var(--f-sans); }
+.legend { display: flex; gap: 14px; font-size: 11px; color: var(--muted); }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+.legend i { width: 16px; height: 0; border-top: 2.2px solid var(--gold); display: inline-block; }
+.legend i.ly { border-top: 1.5px dashed var(--muted2); }
+.lost { display: grid; gap: 4px; }
+.lost div { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line2); padding: 4px 0; font-variant-numeric: tabular-nums; }
+.lost div:last-child { border-bottom: 0; }
+
+/* ---------- Summary (brief) ---------- */
+.brief { padding-top: 64px; display: grid; gap: 20px; scroll-margin-top: 64px; }
+.brief-intro { display: grid; gap: 6px; max-width: 80ch; }
+.brief-intro p { margin: 0; color: var(--muted); font-size: 14px; }
+.bsec { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 22px; }
+.bsec > .est { margin: 0; font-size: 13px; color: var(--muted); }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; padding: 10px 0; border-bottom: 1px solid var(--line2); }
+.pair:last-child { border-bottom: 0; }
+.pair p { margin: 0; font-size: 14.5px; line-height: 1.65; max-width: 62ch; }
+.pair p strong { color: var(--ink); font-weight: 600; }
+.lang { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted2); margin-bottom: 2px; }
+.pair-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+.foot { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .pair, .pair-head { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .pair-head .vi-h { display: none; }
+  .phones { padding: 18px 8px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fahkwang:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@400;500;600&display=swap">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11 12 4l8.5 7v8.5a1 1 0 0 1-1 1H15v-6H9v6H4.5a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-crm" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.2"/><rect x="10" y="4" width="5" height="11" rx="1.2"/><rect x="17" y="4" width="4" height="7" rx="1.2"/></symbol>
+  <symbol id="i-money" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19M6 15h4"/></symbol>
+  <symbol id="i-grow" viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-7M2.5 20.5h19"/></symbol>
+  <symbol id="i-studio" viewBox="0 0 24 24"><path d="M12 3.5l1.9 5 5.1 1.9-5.1 1.9-1.9 5-1.9-5L5 10.4l5.1-1.9z"/><path d="M18.5 16.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+  <symbol id="i-set" viewBox="0 0 24 24"><path d="M4 6.5h9M17 6.5h3M4 12h3M11 12h9M4 17.5h11M19 17.5h1"/><circle cx="15" cy="6.5" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17.5" r="2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.2v.1"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M3.5 6.5 9 4l6 2.5L20.5 4v13.5L15 20l-6-2.5-5.5 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1-3.8 4-5.5 7.5-5.5s6.5 1.7 7.5 5.5"/></symbol>
+</svg>
+
+<div class="page">
+
+<header>
+  <div class="eyebrow">AA Partner · Bản mô phỏng giao diện · Tháng 10/2026</div>
+  <h1>Giao diện dự kiến của AA Partner</h1>
+  <p class="lede">AA Partner là ứng dụng web dành cho các đại lý du lịch đối tác. Ứng dụng gộp các công cụ nội dung của portal hiện nay với một CRM mới để quản lý bán hàng và chuyến đi. Tour của AA nằm sẵn trong công cụ soạn đề xuất, có giá và tình trạng chỗ theo thời gian thực.</p>
+  <p class="lede">Tám màn hình dưới đây đi theo vòng đời một chuyến: màn hình chính, pipeline, thư mục chuyến đi, soạn đề xuất, trang đề xuất cho khách, đặt cọc và cổng khách, thanh toán, báo cáo. Cuối trang là bản tóm tắt song ngữ Anh–Việt.</p>
+  <p class="lede en" lang="en">AA Partner is a web app for partner travel agencies. It joins the content tools of today's portal with a new CRM for sales and trips. AA tours sit inside the proposal tool with live price and availability. The eight screens below follow the life of a trip; a bilingual summary closes the page.</p>
+  <div class="note"><span><b>Dữ liệu mẫu / Sample data.</b> Đại lý "Lotus Trails", khách, tour và mọi con số trên trang đều là dữ liệu giả để minh hoạ. Giao diện thật có thể khác ở chi tiết. / The agency "Lotus Trails", its clients, tours and every number on this page are fictional, for illustration only. The real screens may differ in detail.</span></div>
+
+  <div class="merge">
+    <h3>Gộp với portal hiện tại thế nào</h3>
+    <div class="steps">
+      <div class="step"><div class="when">Hiện nay</div><div class="what">Portal nội dung chạy riêng</div><p>Chọn tour AA, hồ sơ thương hiệu, viết lại tour theo giọng đại lý, duyệt và đăng lên website, Facebook.</p></div>
+      <div class="step"><div class="when">Tháng 11/2026</div><div class="what">Chuyển nhà ở phía sau</div><p>Công cụ nội dung chuyển sang ứng dụng AA Partner. Người dùng không thấy thay đổi gì.</p></div>
+      <div class="step"><div class="when">Khoảng tháng 12/2026</div><div class="what">Một đăng nhập, một menu</div><p>Địa chỉ web giữ nguyên, link cũ tự chuyển. Đăng nhập có thêm bước hai. Nội dung, thương hiệu, lịch sử giữ nguyên.</p></div>
+    </div>
+    <p class="menu-line" lang="en">How it joins the current portal: today the content portal runs on its own; in November 2026 the content tools move into AA Partner behind the scenes, with no visible change; around December 2026 there is one sign-in (now with a second step) and one menu, the web address stays the same and content, brand and history are kept.</p>
+    <p class="menu-line">Menu chung: <b>Home</b> · <b>CRM</b> (Pipeline, Clients, Inbox, Tasks) · <b>Money</b> (Payments, Bookings, Commissions) · <b>Grow</b> (Reports, Marketing, Suppliers, Library, Automations) · <b>Content studio</b> (các trang portal hiện có) · <b>Settings</b> · <b>Help</b>.</p>
+  </div>
+</header>
+
+<nav class="jump" aria-label="Các màn hình">
+  <div class="jump-row">
+    <a href="#home"><span class="n">1</span>Màn hình chính</a>
+    <a href="#pipeline"><span class="n">2</span>Pipeline</a>
+    <a href="#trip"><span class="n">3</span>Thư mục chuyến đi</a>
+    <a href="#builder"><span class="n">4</span>Soạn đề xuất</a>
+    <a href="#proposal"><span class="n">5</span>Đề xuất cho khách</a>
+    <a href="#client"><span class="n">6</span>Đặt cọc và cổng khách</a>
+    <a href="#payments"><span class="n">7</span>Thanh toán</a>
+    <a href="#reports"><span class="n">8</span>Báo cáo</a>
+    <a href="#summary">Tóm tắt / Summary</a>
+  </div>
+</nav>
+
+<!-- ============ 1 HOME ============ -->
+<section class="scr" id="home">
+  <div class="scr-head">
+    <div class="scr-no"><span>Màn hình 1</span> / 8 · Home</div>
+    <h2>Màn hình chính</h2>
+    <p class="cap">Chủ đại lý mở ứng dụng thấy bốn chỉ số chính so với năm trước, các việc cần xử lý và danh sách cài đặt ba bước. Menu bên trái có nhóm CRM mới; các công cụ nội dung hiện có nằm trong nhóm Content studio.</p>
+    <p class="cap en" lang="en">The owner opens the app to four key numbers compared with last year, the items that need attention and a three-step setup list. The menu has a new CRM group; the existing content tools sit under Content studio.</p>
+  </div>
+  <div class="hint">Kéo ngang trong khung để xem đủ màn hình.</div>
+  <div class="win">
+    <div class="win-bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">portal.lumiguides.it.com/home</div></div>
+    <div class="scroll"><div class="screen">
+      <div class="side" data-side="home"></div>
+      <div class="main">
+        <div class="top" data-top></div>
+        <div class="body">
+          <div class="row" style="justify-content:space-between">
+            <div><div class="pt">Good morning, Linh</div><div class="sub">Wednesday 21 October 2026 · compared with the same period last year</div></div>
+            <div class="row"><span class="btn"><svg class="i sm"><use href="#i-plus"/></svg>New trip</span><span class="btn pri">Open pipeline</span></div>
+          </div>
+          <div class="kpis">
+            <div class="panel kpi"><div class="lbl">Enquiries</div><div class="v num">142</div><div class="sub"><span class="up">+18%</span> vs last year</div></div>
+            <div class="panel kpi"><div class="lbl">Win rate</div><div class="v num">31%</div><div class="sub"><span class="up">+4 pts</span> vs last year</div></div>
+            <div class="panel kpi"><div class="lbl">Margin</div><div class="v num">USD 61.2k</div><div class="sub"><span class="up">+9%</span> · owner and agents only</div></div>
+            <div class="panel kpi"><div class="lbl">AA tour share</div><div class="v num">64%</div><div class="sub">of total sell value</div></div>
+          </div>
+          <div class="homegrid">
+            <div class="panel">
+              <div class="ph"><span class="lbl">Needs you</span><span class="sub">Tap a tile to open the list</span></div>
+              <div class="needs">
+                <div class="need hot"><b class="num">3</b><span>New enquiries to reply to within 2 h</span></div>
+                <div class="need hot"><b class="num">2</b><span>Holds expire in the next 24 h</span></div>
+                <div class="need hot"><b class="num">1</b><span>Bank transfer to check</span></div>
+                <div class="need"><b class="num">4</b><span>Trips quiet for more than 3 days</span></div>
+                <div class="need"><b class="num">2</b><span>Waivers not signed yet</span></div>
+                <div class="need"><b class="num">1</b><span>AA tour waiting for confirmation</span></div>
+              </div>
+            </div>
+            <div style="display:grid;gap:14px;min-width:0">
+              <div class="panel">
+                <div class="ph"><span class="lbl">Set up Lotus Trails</span><span class="sub num">2 of 3 required</span></div>
+                <div class="bar" style="margin-bottom:10px"><i style="width:66.7%"></i></div>
+                <div class="check">
+                  <div class="ck done"><span class="box"><svg class="i sm"><use href="#i-check"/></svg></span><span>Connect your email (Gmail or Outlook)</span></div>
+                  <div class="ck done"><span class="box"><svg class="i sm"><use href="#i-check"/></svg></span><span>Invite your team</span></div>
+                  <div class="ck"><span class="box"></span><span>Add the enquiry form to your website</span><span class="btn sm" style="margin-left:auto">Get code</span></div>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="ph"><span class="lbl">Content studio</span><span class="pill nodot p-slate">Existing tools</span></div>
+                <div class="studio-list">
+                  <div><span>Tours rewritten in your voice</span><b class="num">24</b></div>
+                  <div><span>Social posts scheduled this week</span><b class="num">3</b></div>
+                  <div><span>Enquiries from AA content, last 12 months</span><b class="num">28</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ 2 PIPELINE ============ -->
+<section class="scr" id="pipeline">
+  <div class="scr-head">
+    <div class="scr-no"><span>Màn hình 2</span> / 8 · Pipeline</div>
+    <h2>Pipeline theo giai đoạn</h2>
+    <p class="cap">Bảng các chuyến theo giai đoạn. Mỗi thẻ ghi bước tiếp theo đang chờ ai (chính mình, khách, AA hay nhà cung cấp) và lọc được bằng hàng chip phía trên. Menu của cột cho phép xử lý cả cột một lần, hoàn tác được trong vài giây. Thẻ không hiện lãi.</p>
+    <p class="cap en" lang="en">A board of trips by stage. Each card shows who the next step is waiting on (me, the client, AA or a supplier), and the chip row filters by it. The column menu acts on a whole column at once and can be undone for a few seconds. Cards never show margin.</p>
+  </div>
+  <div class="hint">Kéo ngang trong khung để xem đủ màn hình.</div>
+  <div class="win">
+    <div class="win-bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">portal.lumiguides.it.com/crm/pipeline</div></div>
+    <div class="scroll"><div class="screen rail">
+      <div class="railbar" data-rail="crm"></div>
+      <div class="main">
+        <div class="top" data-top></div>
+        <div class="body">
+          <div class="row" style="justify-content:space-between">
+            <div class="row" style="gap:14px"><div class="pt">Pipeline</div>
+              <div class="tabs" style="border:0"><span class="on">Board</span><span>List</span><span>Travelling now</span><span>Closed</span></div></div>
+            <div class="row"><span class="btn">Filters</span><span class="btn">Saved views</span></div>
+          </div>
+          <div class="chips">
+            <span class="sub" style="margin-right:2px">Waiting on</span>
+            <span class="chip on">All<em class="num">28</em></span>
+            <span class="chip"><span class="pill p-gold">Me</span><em class="num">7</em></span>
+            <span class="chip"><span class="pill p-info">Client</span><em class="num">14</em></span>
+            <span class="chip"><span class="pill p-purple">AA</span><em class="num">2</em></span>
+            <span class="chip"><span class="pill p-slate">Supplier</span><em class="num">3</em></span>
+            <span class="sep">|</span><span class="sub">Owner: Anyone</span>
+          </div>
+          <div class="row">
+            <div class="warn"><svg class="i sm"><use href="#i-warn"/></svg>4 trips quiet for more than 3 days <u>Show</u></div>
+            <div class="warn"><svg class="i sm"><use href="#i-clock"/></svg>2 holds expire in 24 h <u>Show</u></div>
+          </div>
+          <div class="board">
+            <div class="col">
+              <div class="colh"><b>Enquiry<em>6</em></b><span class="kebab">···</span></div>
+              <div class="card"><div class="t">Sapa trek, 5 days</div><div class="m">Anna M. +2 · Mar 2027 · USD 3–4k</div><div class="f"><span class="pill p-gold">Me · reply in 2 h</span></div><div class="m">Website form</div></div>
+              <div class="card"><div class="t">Hoi An with kids</div><div class="m">Do family (4) · Apr 2027</div><div class="f"><span class="pill p-gold">Me · 40 min</span></div><div class="m">AA content: "Hoi An lanterns"</div></div>
+              <div class="more">+4 more</div>
+            </div>
+            <div class="col">
+              <div class="colh"><b>Qualifying<em>5</em></b><span class="kebab">···</span></div>
+              <div class="card"><div class="t">Ha Giang loop, 6 days</div><div class="m">Tom K. · Apr 2027</div><div class="m">Planning form 60%</div><div class="f"><span class="pill p-info">Client</span><span class="pill nodot p-amber">quiet 4 d</span></div></div>
+              <div class="card"><div class="t">Mekong and Saigon</div><div class="m">Ruiz ×2 · May 2027</div><div class="f"><span class="pill p-gold">Me</span></div></div>
+              <div class="more">+3 more</div>
+            </div>
+            <div class="col">
+              <div class="colh"><b>Proposal<em>8</em></b><span class="kebab on">···</span></div>
+              <div class="colsum num">Sell USD 48.2k</div>
+              <div class="menu">
+                <div class="mi on"><b>Send follow-up</b><span>3 clients waiting more than 2 days · undo until sent</span></div>
+                <div class="mi"><b>Apply workflow</b><span>Preview who it applies to first</span></div>
+                <div class="mi"><b>Add tag</b></div>
+                <div class="mi"><b>Reassign</b><span>Owner only</span></div>
+                <div class="mi"><b>Mark as lost</b><span>Asks for a reason</span></div>
+              </div>
+              <div class="card sel"><div class="t">Central coast, 7 days</div><div class="m">Grace W. +1 · Apr 2027</div><div class="m">Accepted · transfer claimed</div><div class="f"><span class="pill p-gold">Me · check bank</span></div></div>
+              <div class="card"><div class="t">Laos slow travel</div><div class="m">Lee family (4) · Feb 2027</div><div class="m">v1 sent · not opened</div><div class="f"><span class="pill p-info">Client · 3 d</span></div></div>
+              <div class="card"><div class="t">Ninh Binh weekend</div><div class="m">Aiko S. · Dec 2026</div><div class="m">v2 viewed 3×</div><div class="f"><span class="pill p-info">Client · 2 d</span></div></div>
+              <div class="more">+5 more</div>
+            </div>
+            <div class="col">
+              <div class="colh"><b>Booked<em>4</em></b><span class="kebab">···</span></div>
+              <div class="colsum num">Sell USD 31.0k</div>
+              <div class="card"><div class="t">Northern Vietnam, 9 days</div><div class="m">Mai N. +1 · 12–20 Mar 2027</div><div class="m">AA 2 of 3 confirmed</div><div class="f"><span class="pill p-purple">AA · 6 h</span></div></div>
+              <div class="card"><div class="t">Hue and Hoi An</div><div class="m">Patel ×2 · Jan 2027</div><div class="f"><span class="pill p-slate">Supplier · hotel</span></div></div>
+              <div class="more">+2 more</div>
+            </div>
+            <div class="col">
+              <div class="colh"><b>Pre-departure<em>3</em></b><span class="kebab">···</span></div>
+              <div class="colsum num">Sell USD 22.4k</div>
+              <div class="card"><div class="t">Sapa and Ha Long, 8 days</div><div class="m">Nguyen family (3) · T-19</div><div class="m">Waivers 1 of 3</div><div class="f"><span class="pill p-info">Client</span></div></div>
+              <div class="more">+2 more</div>
+            </div>
+            <div class="col">
+              <div class="colh"><b>Travelling<em>2</em></b><span class="kebab">···</span></div>
+              <div class="card"><div class="t">Hanoi food week</div><div class="m">Chen L. · day 3 of 7</div><div class="f"><span class="pill">Nobody</span></div></div>
+              <div class="card"><div class="t">Mekong Delta, 3 days</div><div class="m">Brown ×2 · day 2 of 3</div><div class="f"><span class="pill">Nobody</span></div></div>
+            </div>
+          </div>
+          <div class="toast"><span>Follow-up queued for 3 trips</span><b>Undo</b><span class="sub" style="color:inherit;opacity:.7">8 s</span></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ 3 TRIP ============ -->
+<section class="scr" id="trip">
+  <div class="scr-head">
+    <div class="scr-no"><span>Màn hình 3</span> / 8 · Trip workspace</div>
+    <h2>Thư mục chuyến đi</h2>
+    <p class="cap">Mọi thứ của một chuyến nằm trong một thư mục: khách, việc cần làm, tin nhắn, các dòng đặt chỗ kèm trạng thái và toàn bộ lịch sử. Hộ chiếu, email và số điện thoại được ẩn; bấm Reveal mới hiện, và mỗi lần xem đều được ghi lại kèm lý do.</p>
+    <p class="cap en" lang="en">Everything about one trip in one folder: travellers, tasks, messages, booking lines with their status, and the full history. Passport, email and phone stay hidden until someone presses Reveal, and each view is logged with a reason.</p>
+  </div>
+  <div class="hint">Kéo ngang trong khung để xem đủ màn hình.</div>
+  <div class="win">
+    <div class="win-bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">portal.lumiguides.it.com/crm/trips/northern-vietnam-9d</div></div>
+    <div class="scroll"><div class="screen rail">
+      <div class="railbar" data-rail="crm"></div>
+      <div class="main">
+        <div class="top" data-top></div>
+        <div class="body">
+          <div class="triphead">
+            <div class="sub">‹ Pipeline</div>
+            <div class="row1">
+              <div class="pt">Northern Vietnam, 9 days</div>
+              <span class="stage">Booked</span>
+              <span class="pill p-purple">Waiting on AA · 6 h</span>
+              <span class="sp" style="flex:1"></span>
+              <span class="sub">Owner</span><span class="ava">LT</span><span class="btn">More</span>
+            </div>
+            <div class="sub">Mai N. + 1 · 12–20 March 2027 · 2 adults · USD · tags: trekking, first trip</div>
+            <div class="stagebar"><span class="d">Enquiry</span><span class="d">Qualifying</span><span class="d">Proposal</span><span class="c">Booked</span><span>Pre-departure</span><span>Travelling</span><span>Completed</span></div>
+          </div>
+          <div class="tabs"><span class="on">Overview</span><span>Proposal <em>v2 accepted</em></span><span>Bookings <em>9</em></span><span>Payments</span><span>Travellers &amp; docs <em>2</em></span><span>Messages <em>6</em></span><span>Tasks &amp; notes <em>3</em></span><span>Activity</span></div>
+
+          <div class="tripgrid">
+            <div class="panel">
+              <div class="ph"><span class="lbl">Booking lines</span><span class="sub">5 of 9 lines · AA lines update automatically</span></div>
+              <table class="tbl">
+                <thead><tr><th>Day</th><th>Item</th><th>Supplier</th><th>Conf. no</th><th>Status</th><th class="r">Sell</th></tr></thead>
+                <tbody>
+                  <tr><td>1–3</td><td class="t">La Siesta Hanoi, 2 nights</td><td>Own supplier</td><td class="mono">HN-55812</td><td><span class="pill p-green">Confirmed</span></td><td class="r">USD 420</td></tr>
+                  <tr><td>3–6</td><td class="t">Sapa Rice Terraces 4D</td><td>AA</td><td class="mono">bk-20931</td><td><span class="pill p-green">Confirmed</span></td><td class="r">USD 840</td></tr>
+                  <tr><td>7–8</td><td class="t">Ha Long Bay Overnight Cruise 2D</td><td>AA</td><td class="mono">bk-20932</td><td><span class="pill p-purple">AA confirming</span></td><td class="r">USD 580</td></tr>
+                  <tr><td>8</td><td class="t">Hanoi Street Food Walk</td><td>AA</td><td class="mono">bk-20933</td><td><span class="pill p-green">Confirmed</span></td><td class="r">USD 78</td></tr>
+                  <tr><td>9</td><td class="t">Airport transfer</td><td>Own supplier</td><td class="sub">not yet</td><td><span class="pill">Planning</span></td><td class="r">USD 45</td></tr>
+                </tbody>
+              </table>
+              <div class="row" style="justify-content:space-between;margin-top:10px">
+                <span class="sub num">Trip sell USD 3,960 · Net USD 3,080 · <b style="color:var(--green)">Margin USD 880 (22%)</b></span>
+                <span class="sub">Assistants see sell price and payments only</span>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="ph"><span class="lbl">Tasks</span><span class="btn sm"><svg class="i sm"><use href="#i-plus"/></svg>Task</span></div>
+              <div class="task"><span class="box"></span><span>Chase AA on the Ha Long cruise if not confirmed</span><span class="due">Tomorrow</span></div>
+              <div class="task"><span class="box"></span><span>Collect Tuan's traveller details (2 of 6 done)</span><span class="due late">Overdue 1 d</span></div>
+              <div class="task"><span class="box"></span><span>Send the "Before you go" pack</span><span class="due">T-60 · 11 Jan</span></div>
+              <div class="task"><span class="box"></span><span>Book the airport transfer</span><span class="due">15 Feb</span></div>
+            </div>
+          </div>
+
+          <div class="tripgrid">
+            <div class="panel">
+              <div class="ph"><span class="lbl">Travellers</span><span class="sub"><svg class="i sm"><use href="#i-lock"/></svg> Identity fields hidden · each view is logged</span></div>
+              <div class="trav">
+                <div class="tv"><span class="ava">MN</span>
+                  <div><div class="nm">Mai N. <span class="pill nodot p-gold">Lead</span></div>
+                    <div class="dt"><span>Passport <span class="mask">••••••</span></span><span>Email <span class="mask">••••••</span></span><span>Details 6 of 6</span></div></div>
+                  <span class="reveal"><svg class="i sm"><use href="#i-eye"/></svg>Reveal</span></div>
+                <div class="tv"><span class="ava">TN</span>
+                  <div><div class="nm">Tuan N.</div>
+                    <div class="dt"><span>Passport <span class="sub">not uploaded</span></span><span>Phone <span class="mask">••••••</span></span><span>Details 2 of 6</span></div></div>
+                  <span class="reveal"><svg class="i sm"><use href="#i-eye"/></svg>Reveal</span></div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="ph"><span class="lbl">Messages</span><span class="pill nodot p-green">WhatsApp</span></div>
+              <div class="msg">
+                <div class="bub"><div class="w">Mai N. · 20 Oct 21:10</div>Can we add a cooking class on the last evening in Hanoi?</div>
+                <div class="draft"><span class="lbl">AI draft · review before sending</span><span>Hi Mai, yes. There is a 3-hour class on 19 March at 17:00, USD 35 per person. Shall I add it?</span>
+                  <div class="row"><span class="btn sm pri">Use draft</span><span class="btn sm">Edit</span><span class="btn sm ghost">Discard</span></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="ph"><span class="lbl">Timeline</span><div class="tabs" style="border:0"><span class="on">All</span><span>Messages</span><span>Client actions</span><span>System</span><span>Notes</span></div></div>
+            <div class="tl">
+              <div><time>21 Oct 08:02</time><span>AA confirmed Sapa Rice Terraces 4D and Hanoi Street Food Walk</span></div>
+              <div><time>20 Oct 16:40</time><span>Linh marked the deposit USD 1,188 as received (bank transfer)</span></div>
+              <div><time>20 Oct 09:12</time><span>Mai pressed "I have paid" · places held once more, until 22 Oct 17:00</span></div>
+              <div><time>19 Oct 21:30</time><span>Mai accepted proposal v2 and signed with her typed name · holds placed for 3 AA tours</span></div>
+              <div><time>19 Oct 21:06</time><span>Mai swapped Day 4 to Sapa eco-lodge (+USD 40 per person)</span></div>
+              <div><time>14 Oct 08:51</time><span>Enquiry received from the website form (source: AA content "Sapa in spring")</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ 4 BUILDER ============ -->
+<section class="scr" id="builder">
+  <div class="scr-head">
+    <div class="scr-no"><span>Màn hình 4</span> / 8 · Proposal builder</div>
+    <h2>Soạn đề xuất theo từng ngày</h2>
+    <p class="cap">Kế hoạch theo ngày, mỗi ngày có thể có nhiều lựa chọn để khách chọn. Nút "+ Add" mở danh sách tour AA kèm giá net B2B, giá bán, lãi và tình trạng chỗ: có ngay (Instant), AA xác nhận trong 1 ngày làm việc (On request), hoặc hết chỗ (Sold out). Giá bán thấp hơn giá "từ" công khai của AA chỉ hiện cảnh báo.</p>
+    <p class="cap en" lang="en">A day-by-day plan; each day can offer options for the client to choose from. "+ Add" opens AA tours with B2B net price, selling price, margin and availability: Instant, On request (AA confirms within 1 business day) or Sold out. A price below AA's public "from" price only shows a warning.</p>
+  </div>
+  <div class="hint">Kéo ngang trong khung để xem đủ màn hình.</div>
+  <div class="win">
+    <div class="win-bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">portal.lumiguides.it.com/crm/trips/northern-vietnam-9d/builder</div></div>
+    <div class="scroll"><div class="screen full" style="min-width:1100px">
+      <div class="main">
+        <div class="bhead">
+          <span class="sub">‹ Trip</span><span class="tt">Northern Vietnam, 9 days</span>
+          <span class="pill nodot">Working copy v3</span><span class="sub">Published v2 · viewed 19 Oct</span>
+          <span style="flex:1"></span>
+          <span class="btn"><svg class="i sm"><use href="#i-eye"/></svg>Preview as client</span><span class="btn">Publish v3</span><span class="btn pri">Send</span>
+        </div>
+        <div class="money">
+          <span>Sell <b>USD 3,960</b></span><span>Net <b>USD 3,080</b></span><span class="mg">Margin USD 880 (22.2%)</span><span class="sub">2 adults · 1 double room · prices per trip</span>
+        </div>
+        <div class="bgrid">
+          <div class="days">
+            <div class="row" style="justify-content:space-between;padding:0 6px 6px"><span class="lbl">Days</span><span class="btn sm"><svg class="i sm"><use href="#i-plus"/></svg>Day</span></div>
+            <div class="day"><i>0</i><span>Before you go</span></div>
+            <div class="day"><i>1</i><span>Arrive Hanoi</span></div>
+            <div class="day"><i>2</i><span>Hanoi old quarter</span></div>
+            <div class="day"><i>3</i><span>Train to Lao Cai</span></div>
+            <div class="day on"><i>4</i><span>Sapa · Cat Cat</span></div>
+            <div class="day"><i>5</i><span>Sapa · Ta Van</span></div>
+            <div class="day"><i>6</i><span>Back to Hanoi</span></div>
+            <div class="day"><i>7</i><span>Ha Long Bay</span></div>
+            <div class="day"><i>8</i><span>Ha Long · Hanoi</span></div>
+            <div class="day"><i>9</i><span>Depart</span></div>
+            <div class="sub" style="padding:10px 8px 0">Checks</div>
+            <div class="warn" style="font-size:11px;padding:6px 8px"><svg class="i sm"><use href="#i-warn"/></svg>Day 1 lands 19:40</div>
+          </div>
+          <div class="canvas">
+            <div class="row" style="justify-content:space-between"><div><div class="lbl">Day 4 · Sapa · UTC+7</div><div class="pt" style="font-size:19px">Cat Cat village and the rice terraces</div></div><span class="btn sm"><svg class="i sm"><use href="#i-map"/></svg>Map</span></div>
+            <div class="blk">
+              <div class="blk-h"><b>Where you stay</b><span class="sub">Client may swap · on</span></div>
+              <div class="opt"><span class="radio on"></span><div><div class="n">Sapa homestay, Ta Van</div><div class="s">Included in Sapa Rice Terraces 4D · default</div></div><div class="pr">included</div></div>
+              <div class="opt"><span class="radio"></span><div><div class="n">Sapa eco-lodge, garden view</div><div class="s"><span class="pill nodot p-purple">On request</span> AA confirms within 1 business day</div></div><div class="pr">net 50 · sell <b>80</b><br><span style="color:var(--green)">+40 per person</span></div></div>
+              <div class="opt"><span class="radio"></span><div><div class="n">Valley-view boutique hotel</div><div class="s"><span class="pill nodot p-red">Sold out 14–16 Mar</span> cannot be added</div></div><div class="pr">—</div></div>
+            </div>
+            <div class="blk">
+              <div class="blk-h"><b>Morning</b><span class="sub">Client may swap · on</span></div>
+              <div class="opt"><span class="radio on"></span><div><div class="n">Guided walk to Cat Cat village (AA)</div><div class="s"><span class="pill nodot p-green">Instant</span> part of the AA tour</div></div><div class="pr">included</div></div>
+              <div class="opt"><span class="radio"></span><div><div class="n">Herbal bath and spa (agency supplier)</div><div class="s">Agency books it</div></div><div class="pr">net 30 · sell <b>50</b><br><span style="color:var(--green)">+25 per person</span></div></div>
+              <div class="addrow"><svg class="i sm"><use href="#i-plus"/></svg>Add to Day 4 <span class="sub" style="font-weight:400">AA tours · own suppliers · library</span></div>
+            </div>
+            <div class="warn"><svg class="i sm"><use href="#i-warn"/></svg>Sell price for "Ninh Binh and Tam Coc Day Trip" is below the AA public "from" price (USD 72). Warning only, you can still send.</div>
+          </div>
+          <div class="drawer">
+            <div class="dr-h">
+              <div class="row" style="justify-content:space-between"><b style="color:var(--ink);font-size:13.5px">Add to Day 4</b><span class="sub">✕</span></div>
+              <div class="search" style="max-width:none"><svg class="i sm"><use href="#i-search"/></svg><span>Search AA tours: Sapa, Ha Long, trekking…</span></div>
+              <div class="row"><span class="pill nodot p-gold">Northern Vietnam</span><span class="pill nodot">14–16 Mar</span><span class="pill nodot">2 adults</span></div>
+              <div class="dr-tabs"><span class="on">AA tours</span><span>Own suppliers</span><span>Library</span></div>
+              <div class="sync">Live price and availability · synced 10:42</div>
+            </div>
+            <div class="tour">
+              <div class="top2"><div><div class="n">Sapa Rice Terraces 4D</div><div class="s">Trekking · homestay · from Hanoi</div></div><span class="pill p-green">Instant</span></div>
+              <div class="prices"><div><small>B2B net</small><b>312</b></div><div><small>Sell</small><b><span class="inp">420</span></b></div><div class="mg"><small>Margin</small><b>108 · 26%</b></div><span class="btn sm pri">Add</span></div>
+            </div>
+            <div class="tour">
+              <div class="top2"><div><div class="n">Ha Long Bay Overnight Cruise 2D</div><div class="s">Cruise · cabin for 2</div></div><span class="pill p-purple">On request</span></div>
+              <div class="s" style="font-size:11px;color:var(--muted)">AA confirms within 1 business day after the client accepts</div>
+              <div class="prices"><div><small>B2B net</small><b>228</b></div><div><small>Sell</small><b><span class="inp">290</span></b></div><div class="mg"><small>Margin</small><b>62 · 21%</b></div><span class="btn sm pri">Add</span></div>
+            </div>
+            <div class="tour">
+              <div class="top2"><div><div class="n">Ninh Binh and Tam Coc Day Trip</div><div class="s">Day tour · boat and bike</div></div><span class="pill p-green">Instant</span></div>
+              <div class="prices"><div><small>B2B net</small><b>54</b></div><div><small>Sell</small><b><span class="inp">69</span></b></div><div class="mg"><small>Margin</small><b>15 · 22%</b></div><span class="btn sm">Added</span></div>
+              <div class="w2"><svg class="i sm"><use href="#i-warn"/></svg>Below AA public "from" price USD 72</div>
+            </div>
+            <div class="tour out">
+              <div class="top2"><div><div class="n">Fansipan Cable Car Half Day</div><div class="s">Sightseeing</div></div><span class="pill p-red">Sold out</span></div>
+              <div class="s" style="font-size:11px;color:var(--muted)">No places 14–16 Mar · try other dates</div>
+            </div>
+            <div class="tour">
+              <div class="top2"><div><div class="n">Hanoi Street Food Walk</div><div class="s">Evening · 3 hours</div></div><span class="pill p-green">Instant</span></div>
+              <div class="prices"><div><small>B2B net</small><b>26</b></div><div><small>Sell</small><b><span class="inp">39</span></b></div><div class="mg"><small>Margin</small><b>13 · 33%</b></div><span class="btn sm pri">Add</span></div>
+            </div>
+            <div class="dr-foot">Prices per person in USD. Net and margin are hidden from assistants and never shown to clients.</div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ 5 CLIENT PROPOSAL ============ -->
+<section class="scr" id="proposal">
+  <div class="scr-head">
+    <div class="scr-no"><span>Màn hình 5</span> / 8 · Client proposal</div>
+    <h2>Trang đề xuất cho khách</h2>
+    <p class="cap">Khách mở link đại lý gửi trên điện thoại, không cần tài khoản. Trang mang thương hiệu của đại lý, hiện tổng giá và phần chênh lệch của từng lựa chọn. Không có giá net hay giá từng dòng. Khách giữ hoặc đổi lựa chọn, yêu cầu sửa, hoặc đồng ý.</p>
+    <p class="cap en" lang="en">The client opens the agency's link on the phone, with no account. The page carries the agency's brand and shows the total plus the price difference of each option, never net or line-by-line prices. The client keeps or swaps options, asks for a change, or accepts.</p>
+  </div>
+  <div class="phones">
+    <div class="phwrap">
+      <div class="lbl">Đầu trang · tổng giá</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>5G</span></div>
+        <div class="agbar"><span class="aglogo">L</span><span class="agname">Lotus Trails</span><span class="r">EN | VI</span></div>
+        <div class="hero">
+          <h4>Northern Vietnam, 9 days</h4>
+          <div class="s">12–20 March 2027 · 2 adults</div>
+          <div class="s">Prepared by Linh, Lotus Trails</div>
+          <div class="total"><span class="s">Total for 2</span><b>USD 3,960</b></div>
+          <div class="s">Includes your Day 4 choice. Nothing charged until you accept.</div>
+        </div>
+        <div class="pbody">
+          <span class="agbtn">Accept and continue</span>
+          <div class="grp2"><div class="kv"><span>Before you go</span><span>›</span></div><span class="sub">Packing list, visa links, weather in March</span></div>
+          <div class="dayh">Day 1 · Hanoi</div>
+          <div class="sub">Arrival, private transfer to the old quarter, welcome dinner.</div>
+          <div class="dayh">Day 2 · Hanoi</div>
+          <div class="sub">Old quarter walk, Temple of Literature, water puppets.</div>
+          <div class="dayh">Days 3–6 · Sapa Rice Terraces</div>
+          <div class="sub">Overnight train, two days walking through the terraces with a local guide.</div>
+        </div>
+      </div>
+    </div>
+    <div class="phwrap">
+      <div class="lbl">Lựa chọn trong ngày · giữ hoặc đổi</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>5G</span></div>
+        <div class="agbar"><span class="aglogo">L</span><span class="agname">Lotus Trails</span><span class="r num">USD 3,960</span></div>
+        <div class="pbody">
+          <div class="dayh">Day 4 · Sapa · Where you stay</div>
+          <div class="ch">
+            <div class="chopt"><span class="ph-img"></span><div><div class="n">Sapa homestay, Ta Van</div><div class="d">Family-run house in the valley</div><div class="act"><span class="diff">Included</span><span class="mini">Swap to this</span></div></div></div>
+            <div class="chopt on"><span class="ph-img"></span><div><div class="n">Sapa eco-lodge</div><div class="d">Garden view. Confirmed by our partner within 1 business day after you accept.</div><div class="act"><span class="diff inc">+ USD 40 per person</span><span class="mini on">Selected</span></div></div></div>
+            <div class="chopt"><span class="ph-img" style="opacity:.5"></span><div><div class="n" style="color:var(--muted)">Valley-view boutique hotel</div><div class="d">Not available on your dates</div></div></div>
+          </div>
+          <div class="dayh">Day 7 · Ha Long Bay · Cabin</div>
+          <div class="ch">
+            <div class="chopt on"><span class="ph-img"></span><div><div class="n">Standard cabin</div><div class="d">Window, private bathroom</div><div class="act"><span class="diff">Included</span><span class="mini on">Kept</span></div></div></div>
+            <div class="chopt"><span class="ph-img"></span><div><div class="n">Balcony cabin</div><div class="d">Private balcony over the bay</div><div class="act"><span class="diff inc">+ USD 95 per person</span><span class="mini">Swap to this</span></div></div></div>
+          </div>
+          <span class="agbtn ol">Ask for a change</span>
+          <div class="smalllinks"><span>Email Linh</span><span>WhatsApp Linh</span><span>Terms</span><span>Privacy</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 CLIENT PORTAL ============ -->
+<section class="scr" id="client">
+  <div class="scr-head">
+    <div class="scr-no"><span>Màn hình 6</span> / 8 · Accept, deposit, client portal</div>
+    <h2>Đặt cọc và cổng khách</h2>
+    <p class="cap">Bên trái: khách xác nhận số người và phòng, đồng ý điều khoản, gõ tên và đặt cọc bằng thẻ hoặc chuyển khoản. Bên phải: sau khi đặt cọc, mỗi khách đăng nhập bằng mã gửi tới email riêng, thấy việc của mình, giấy tờ của mình và lịch trình xem được khi không có mạng. Trưởng đoàn thấy thêm tiến độ cả đoàn và thanh toán.</p>
+    <p class="cap en" lang="en">Left: the client confirms travellers and rooms, accepts the terms, types their name and pays the deposit by card or bank transfer. Right: after the deposit each traveller signs in with a code sent to their own email and sees their own tasks, their own documents and an itinerary that works offline. The lead traveller also sees group progress and payments.</p>
+  </div>
+  <div class="phones">
+    <div class="phwrap">
+      <div class="lbl">Đồng ý và đặt cọc</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>5G</span></div>
+        <div class="agbar"><span class="aglogo">L</span><span class="agname">Lotus Trails</span><span class="r">Step 4 of 4</span></div>
+        <div class="pbody">
+          <div class="stepper"><span class="d">Review</span><span class="d">Travellers</span><span class="d">Terms</span><span class="d">Pay</span></div>
+          <div class="grp2"><span class="lbl">Confirmed as soon as you pay</span><span>Sapa Rice Terraces 4D, Hanoi Street Food Walk</span></div>
+          <div class="grp2"><span class="lbl">Confirmed by our partner within 1 business day</span><span>Sapa eco-lodge (Day 4), Ha Long Bay cruise (Day 7)</span></div>
+          <div class="grp2"><span class="lbl">Your agent books</span><span>Hotel in Hanoi, airport transfer</span></div>
+          <div class="cb"><span class="bx"><svg class="i sm"><use href="#i-check"/></svg></span><span>I accept the Lotus Trails booking terms (version 2026-09)</span></div>
+          <div><div class="sub" style="margin-bottom:3px">Full name</div><div class="field">Mai Nguyen</div></div>
+          <div class="grp2" style="background:var(--ag-soft)">
+            <div class="kv"><span>Deposit now (30%)</span><b>USD 1,188</b></div>
+            <div class="kv"><span>Balance due 10 Feb 2027</span><span class="num">USD 2,772</span></div>
+          </div>
+          <div class="hold"><svg class="i sm"><use href="#i-clock"/></svg>Your places are held until 20 Oct, 21:30</div>
+          <span class="agbtn">Pay deposit by card</span>
+          <span class="agbtn ol">Bank transfer · show details</span>
+          <div class="sub" style="text-align:center">After a transfer, press "I have paid". We hold your places once more while Lotus Trails checks the money arrived.</div>
+        </div>
+      </div>
+    </div>
+    <div class="phwrap">
+      <div class="lbl">Cổng khách của Mai (trưởng đoàn)</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>5G</span></div>
+        <div class="agbar"><span class="aglogo">L</span><span class="agname">Lotus Trails</span><span class="r">Sign out</span></div>
+        <div class="hero" style="padding-block:12px">
+          <h4>Hi Mai</h4>
+          <div class="s">Northern Vietnam · 12–20 March 2027 · in 142 days</div>
+        </div>
+        <div class="pbody">
+          <div class="dayh">My to-do</div>
+          <div class="todo">
+            <div><span class="dot ok"><svg class="i sm"><use href="#i-check"/></svg></span><span>My details</span><span class="st">6 of 6</span></div>
+            <div><span class="dot"></span><span>Sign terms and trekking waiver</span><span class="st">›</span></div>
+            <div><span class="dot"></span><span>Insurance: choose an option</span><span class="st">›</span></div>
+          </div>
+          <div class="dayh">Group progress</div>
+          <div class="party">
+            <div><span>Mai</span><div class="bar"><i style="width:33%"></i></div><span class="sub num">1 of 3</span></div>
+            <div><span>Tuan</span><div class="bar"><i style="width:0%"></i></div><span class="sub num">0 of 3</span></div>
+          </div>
+          <div class="sub">You see progress only, not Tuan's personal details.</div>
+          <div class="dayh">Payments</div>
+          <div class="grp2">
+            <div class="kv"><span>Deposit · paid 20 Oct</span><b class="num">USD 1,188</b></div>
+            <div class="kv"><span>Balance · due 10 Feb 2027</span><b class="num">USD 2,772</b></div>
+          </div>
+          <div class="dayh">My documents</div>
+          <div class="todo">
+            <div><svg class="i"><use href="#i-doc"/></svg><span>Booking confirmation</span><span class="st">PDF</span></div>
+            <div><svg class="i"><use href="#i-down"/></svg><span>Itinerary</span><span class="st">Works offline</span></div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <span class="on"><svg class="i"><use href="#i-home"/></svg>Home</span>
+          <span><svg class="i"><use href="#i-map"/></svg>Itinerary</span>
+          <span><svg class="i"><use href="#i-doc"/></svg>Documents</span>
+          <span><svg class="i"><use href="#i-chat"/></svg>Contact</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 PAYMENTS ============ -->
+<section class="scr" id="payments">
+  <div class="scr-head">
+    <div class="scr-no"><span>Màn hình 7</span> / 8 · Payments</div>
+    <h2>Thanh toán</h2>
+    <p class="cap">Tiền cần thu, lịch thanh toán, nhắc thanh toán và tiền nợ nhà cung cấp. Tiền cọc và phần còn lại luôn là hai hoá đơn riêng. Khách bấm "I have paid" (Tôi đã chuyển khoản) thì chỗ được giữ thêm một lần, và nhân viên nhận việc kiểm tra tiền đã về.</p>
+    <p class="cap en" lang="en">Money to receive, payment schedules, reminders and amounts owed to suppliers. Deposit and balance are always two separate invoices. When a client presses "I have paid", the places are held once more and the agent gets a task to check the money arrived.</p>
+  </div>
+  <div class="hint">Kéo ngang trong khung để xem đủ màn hình.</div>
+  <div class="win">
+    <div class="win-bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">portal.lumiguides.it.com/money/payments</div></div>
+    <div class="scroll"><div class="screen rail">
+      <div class="railbar" data-rail="money"></div>
+      <div class="main">
+        <div class="top" data-top></div>
+        <div class="body">
+          <div class="row" style="justify-content:space-between"><div class="pt">Payments</div><span class="sub">Currency: all</span></div>
+          <div class="tabs"><span class="on">Money to receive</span><span>Schedules</span><span>Reminders <em>4</em></span><span>Owed to suppliers</span></div>
+          <div class="tiles">
+            <div class="panel tile"><div class="lbl">Due this week</div><div class="v">USD 8,420</div><div class="sub">5 invoices</div></div>
+            <div class="panel tile"><div class="lbl">Overdue</div><div class="v" style="color:var(--red)">USD 1,150</div><div class="sub">1 invoice · 3 days</div></div>
+            <div class="panel tile alert"><div class="lbl">Transfers to check</div><div class="v">1</div><div class="sub">Client says paid</div></div>
+            <div class="panel tile"><div class="lbl">Deposits paid within 48 h</div><div class="v">74%</div><div class="sub">goal 70%</div></div>
+          </div>
+          <div class="claim">
+            <div>
+              <div class="t">Grace W. pressed "I have paid" · Central coast, 7 days</div>
+              <ul>
+                <li>Deposit INV-0151 · USD 1,410 · bank transfer · 21 Oct 09:12</li>
+                <li>Places held once more, until 23 Oct 17:00 (the extra hold is given only once)</li>
+                <li>Task for Linh: check the bank account, then mark received</li>
+              </ul>
+            </div>
+            <div class="row" style="flex-direction:column;align-items:stretch"><span class="btn pri">Mark received</span><span class="btn">Not arrived yet</span></div>
+          </div>
+          <div class="pay2">
+            <div class="panel" style="padding:6px 6px 2px">
+              <table class="tbl">
+                <thead><tr><th>Trip</th><th>Invoice</th><th>Kind</th><th class="r">Amount</th><th>Due</th><th>Status</th><th>Method</th></tr></thead>
+                <tbody>
+                  <tr class="hl"><td class="t">Grace W.</td><td class="mono">INV-0151</td><td>Deposit</td><td class="r">USD 1,410</td><td>on accept</td><td><span class="pill p-amber">Transfer to check</span></td><td>Transfer</td></tr>
+                  <tr><td class="t">Mai N.</td><td class="mono">INV-0148</td><td>Deposit</td><td class="r">USD 1,188</td><td>on accept</td><td><span class="pill p-green">Paid 20 Oct</span></td><td>Transfer</td></tr>
+                  <tr><td class="t">Mai N.</td><td class="mono">INV-0149</td><td>Balance</td><td class="r">USD 2,772</td><td>10 Feb</td><td><span class="pill">Scheduled</span></td><td>Card link</td></tr>
+                  <tr><td class="t">Aiko S.</td><td class="mono">INV-0146</td><td>Deposit</td><td class="r">USD 540</td><td>on accept</td><td><span class="pill p-info">Link active</span></td><td>Card</td></tr>
+                  <tr><td class="t">Ruiz ×2</td><td class="mono">INV-0139</td><td>Balance</td><td class="r">USD 1,150</td><td>18 Oct</td><td><span class="pill p-red">Overdue 3 d</span></td><td>Transfer</td></tr>
+                  <tr><td class="t">Patel ×2</td><td class="mono">INV-0137</td><td>Balance</td><td class="r">USD 2,080</td><td>paid</td><td><span class="pill p-green">Paid 12 Oct</span></td><td>Card</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="display:grid;gap:12px;min-width:0;align-content:start">
+              <div class="panel">
+                <div class="ph"><span class="lbl">Reminders queue</span><span class="sub">Auto-send to clients: off</span></div>
+                <div class="task"><span>Ruiz ×2 · balance reminder 2</span><span class="due"><span class="btn sm">Send now</span></span></div>
+                <div class="task"><span>Aiko S. · deposit reminder</span><span class="due">22 Oct 09:00</span></div>
+              </div>
+              <div class="panel">
+                <div class="ph"><span class="lbl">Owed to suppliers</span></div>
+                <div class="task"><span>Adventure Asia · <span class="mono">bk-20931</span></span><span class="due num">USD 624 · B2B terms</span></div>
+                <div class="task"><span>La Siesta Hanoi</span><span class="due num">USD 300 · 1 Mar</span></div>
+              </div>
+              <div class="sub">Cards are paid through the agency's own Stripe account. Pay-on-arrival amounts are shown to clients but never charged here.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ 8 REPORTS ============ -->
+<section class="scr" id="reports">
+  <div class="scr-head">
+    <div class="scr-no"><span>Màn hình 8</span> / 8 · Reports</div>
+    <h2>Báo cáo</h2>
+    <p class="cap">Đường đi từ yêu cầu tới đặt chỗ, lãi theo loại chuyến, nguồn của yêu cầu và lý do mất khách, so với cùng kỳ năm trước. Trợ lý không thấy các ô và cột về lãi.</p>
+    <p class="cap en" lang="en">The path from enquiry to booking, margin by trip type, where enquiries come from and why trips were lost, compared with the same period last year. Assistants do not see margin tiles or columns.</p>
+  </div>
+  <div class="hint">Kéo ngang trong khung để xem đủ màn hình.</div>
+  <div class="win">
+    <div class="win-bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">portal.lumiguides.it.com/grow/reports</div></div>
+    <div class="scroll"><div class="screen rail">
+      <div class="railbar" data-rail="grow"></div>
+      <div class="main">
+        <div class="top" data-top></div>
+        <div class="body">
+          <div class="row" style="justify-content:space-between">
+            <div class="pt">Reports</div>
+            <div class="row"><span class="btn">Last 12 months</span><span class="btn">Compare: same period last year</span><span class="btn">Export CSV</span></div>
+          </div>
+          <div class="kpis">
+            <div class="panel kpi"><div class="lbl">Enquiries</div><div class="v num">142</div><div class="sub"><span class="up">+18%</span> vs 120</div></div>
+            <div class="panel kpi"><div class="lbl">Win rate</div><div class="v num">31%</div><div class="sub"><span class="up">+4 pts</span> vs 27%</div></div>
+            <div class="panel kpi"><div class="lbl">Margin</div><div class="v num">USD 61.2k</div><div class="sub"><span class="up">+9%</span> · hidden from assistants</div></div>
+            <div class="panel kpi"><div class="lbl">AA tour share</div><div class="v num">64%</div><div class="sub">of sell value</div></div>
+          </div>
+          <div class="rgrid">
+            <div class="panel">
+              <div class="ph"><span class="lbl">From enquiry to booking</span><span class="sub">Lost 61 · Cancelled 3</span></div>
+              <div class="hbar"><span>Enquiry</span><div class="tr"><i style="width:100%"></i></div><span class="v">142</span></div>
+              <div class="conv">83% move on</div>
+              <div class="hbar"><span>Qualifying</span><div class="tr"><i style="width:83.1%"></i></div><span class="v">118</span></div>
+              <div class="conv">65% move on</div>
+              <div class="hbar"><span>Proposal</span><div class="tr"><i style="width:54.2%"></i></div><span class="v">77</span></div>
+              <div class="conv">57% move on</div>
+              <div class="hbar"><span>Booked</span><div class="tr"><i style="width:31%"></i></div><span class="v">44</span></div>
+              <div class="conv">89% move on</div>
+              <div class="hbar"><span>Completed</span><div class="tr"><i style="width:27.5%"></i></div><span class="v">39</span></div>
+            </div>
+            <div class="panel chart">
+              <div class="ph"><span class="lbl">Enquiries per month</span><div class="legend"><span><i></i>This year</span><span><i class="ly"></i>Last year</span></div></div>
+              <svg viewBox="0 0 520 168" role="img" aria-label="Enquiries per month, November 2025 to October 2026, this year against last year">
+                <line class="g" x1="40" x2="500" y1="140" y2="140"/><line class="g" x1="40" x2="500" y1="102.5" y2="102.5"/><line class="g" x1="40" x2="500" y1="65" y2="65"/><line class="g" x1="40" x2="500" y1="27.5" y2="27.5"/>
+                <text class="ax" x="30" y="143" text-anchor="end">0</text><text class="ax" x="30" y="105.5" text-anchor="end">5</text><text class="ax" x="30" y="68" text-anchor="end">10</text><text class="ax" x="30" y="30.5" text-anchor="end">15</text>
+                <polygon class="ar" points="40,140 40,72.5 81.8,65 123.6,50 165.5,35 207.3,42.5 249.1,57.5 290.9,65 332.7,50 374.5,42.5 416.4,35 458.2,50 500,50 500,140"/>
+                <polyline class="ly" points="40,80 81.8,80 123.6,65 165.5,50 207.3,57.5 249.1,72.5 290.9,72.5 332.7,65 374.5,57.5 416.4,50 458.2,65 500,65"/>
+                <polyline class="ty" points="40,72.5 81.8,65 123.6,50 165.5,35 207.3,42.5 249.1,57.5 290.9,65 332.7,50 374.5,42.5 416.4,35 458.2,50 500,50"/>
+                <circle class="ep" cx="500" cy="50" r="4.5"/>
+                <text class="el" x="500" y="38" text-anchor="end">12</text>
+                <g class="ax" text-anchor="middle">
+                  <text x="40" y="158">N</text><text x="81.8" y="158">D</text><text x="123.6" y="158">J</text><text x="165.5" y="158">F</text><text x="207.3" y="158">M</text><text x="249.1" y="158">A</text><text x="290.9" y="158">M</text><text x="332.7" y="158">J</text><text x="374.5" y="158">J</text><text x="416.4" y="158">A</text><text x="458.2" y="158">S</text><text x="500" y="158">O</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="rgrid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+            <div class="panel">
+              <div class="ph"><span class="lbl">Where enquiries come from</span></div>
+              <div class="hbar" style="grid-template-columns:96px minmax(0,1fr) 30px"><span>Website form</span><div class="tr"><i class="sl" style="width:100%"></i></div><span class="v">61</span></div>
+              <div class="hbar" style="grid-template-columns:96px minmax(0,1fr) 30px"><span>AA content</span><div class="tr"><i style="width:45.9%"></i></div><span class="v">28</span></div>
+              <div class="hbar" style="grid-template-columns:96px minmax(0,1fr) 30px"><span>Referral</span><div class="tr"><i class="sl" style="width:36.1%"></i></div><span class="v">22</span></div>
+              <div class="hbar" style="grid-template-columns:96px minmax(0,1fr) 30px"><span>Instagram</span><div class="tr"><i class="sl" style="width:29.5%"></i></div><span class="v">18</span></div>
+              <div class="hbar" style="grid-template-columns:96px minmax(0,1fr) 30px"><span>Imported</span><div class="tr"><i class="sl" style="width:21.3%"></i></div><span class="v">13</span></div>
+            </div>
+            <div class="panel">
+              <div class="ph"><span class="lbl">Margin by trip type</span><span class="sub">0–25%</span></div>
+              <div class="hbar" style="grid-template-columns:80px minmax(0,1fr) 34px"><span>Day tours</span><div class="tr"><i style="width:88%"></i></div><span class="v">22%</span></div>
+              <div class="hbar" style="grid-template-columns:80px minmax(0,1fr) 34px"><span>Trekking</span><div class="tr"><i style="width:76%"></i></div><span class="v">19%</span></div>
+              <div class="hbar" style="grid-template-columns:80px minmax(0,1fr) 34px"><span>Culture</span><div class="tr"><i style="width:72%"></i></div><span class="v">18%</span></div>
+              <div class="hbar" style="grid-template-columns:80px minmax(0,1fr) 34px"><span>Family</span><div class="tr"><i style="width:64%"></i></div><span class="v">16%</span></div>
+              <div class="sub" style="margin-top:6px">Option picks: upgrade chosen on 23% of trips</div>
+            </div>
+            <div class="panel">
+              <div class="ph"><span class="lbl">Why trips were lost</span><span class="sub num">61</span></div>
+              <div class="lost">
+                <div><span>Price</span><b class="num">21</b></div>
+                <div><span>Went with another agency</span><b class="num">14</b></div>
+                <div><span>No response</span><b class="num">12</b></div>
+                <div><span>AA tour sold out</span><b class="num">6</b></div>
+                <div><span>Price of the AA tour</span><b class="num">5</b></div>
+                <div><span>Other</span><b class="num">3</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ SUMMARY ============ -->
+<section class="brief" id="summary">
+<div class="brief-intro"><div class="eyebrow">Tóm tắt / Summary</div><h2>AA Partner: product brief / Tóm tắt sản phẩm</h2>
+<p>October 2026 · Tháng 10/2026</p>
+<p>Each section gives the same content in English (left) and Vietnamese (right). The screen mockups above show the screens described in section 3.</p>
+<p>Mỗi mục có cùng một nội dung bằng tiếng Anh (bên trái) và tiếng Việt (bên phải). Bản mô phỏng màn hình ở phía trên minh hoạ các màn hình ở mục 3.</p>
+</div>
+<div class="bsec"><h3>1. What we are building / Sản phẩm sẽ xây</h3>
+<div class="pair"><p lang="en"><span class="lang">EN</span>One web app for partner travel agencies, working name <strong>AA Partner</strong>. It joins two things in one place: the content tools agencies already use in today's portal, and a new CRM to run their sales and trips.</p><p lang="vi"><span class="lang">VI</span>Một ứng dụng web cho các đại lý du lịch đối tác, tên tạm là <strong>AA Partner</strong>. Ứng dụng gộp hai phần vào một chỗ: các công cụ nội dung đại lý đang dùng trên portal hiện nay, và một CRM mới để quản lý bán hàng và chuyến đi.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span>The CRM covers the whole life of a trip: enquiry, planning, proposal, booking, payment, documents and signatures, travel, and follow-up after the trip. Each trip is a folder that holds its messages, tasks, proposal, bookings, invoices and documents.</p><p lang="vi"><span class="lang">VI</span>CRM bao trọn vòng đời một chuyến đi: yêu cầu, lên kế hoạch, đề xuất, đặt chỗ, thanh toán, giấy tờ và chữ ký, trong chuyến, và chăm sóc sau chuyến. Mỗi chuyến là một thư mục chứa tin nhắn, việc cần làm, đề xuất, đặt chỗ, hoá đơn và giấy tờ của chuyến đó.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span>AA tours sit inside the proposal tool with live price and availability, so agencies can sell AA products in a few clicks. This is how the product pays for itself: it is free for agencies, and AA earns from the AA tours they sell.</p><p lang="vi"><span class="lang">VI</span>Tour của AA nằm ngay trong công cụ soạn đề xuất, có giá và tình trạng chỗ theo thời gian thực, nên đại lý bán sản phẩm AA chỉ với vài thao tác. Đây là cách sản phẩm tự nuôi mình: đại lý dùng miễn phí, AA có thu nhập từ tour AA mà đại lý bán ra.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span>Every feature is first built and tested with fictional agencies and test data. Real agencies join only when the whole product is complete.</p><p lang="vi"><span class="lang">VI</span>Mọi tính năng được xây và thử trước với đại lý giả và dữ liệu giả. Đại lý thật chỉ tham gia khi toàn bộ sản phẩm đã hoàn chỉnh.</p></div>
+</div>
+<div class="bsec"><h3>2. Who uses it and what a day looks like / Ai dùng và một ngày làm việc ra sao</h3>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Agency owner.</strong> Starts the day on the home screen: four key numbers and a list of items that need attention. Sees margins and commissions, approves refunds, manages the team, settings and payment options, and controls privacy settings, including whether AA support may view the account.</p><p lang="vi"><span class="lang">VI</span><strong>Chủ đại lý.</strong> Bắt đầu ngày ở màn hình chính: bốn chỉ số chính và danh sách việc cần xử lý. Xem lãi và hoa hồng, duyệt hoàn tiền, quản lý nhân viên, cài đặt, cách thanh toán, và các cài đặt quyền riêng tư, kể cả việc có cho bộ phận hỗ trợ của AA xem tài khoản hay không.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Agent (sales).</strong> Works from the pipeline, filtered by who the next step is waiting on: me, the client, AA or a supplier. Replies to email, WhatsApp and SMS from one inbox; the system can suggest a draft, but a person always presses send. Builds proposals that mix AA tours with the agency's own suppliers, sends them, and is notified when the client opens or chooses.</p><p lang="vi"><span class="lang">VI</span><strong>Nhân viên bán hàng.</strong> Làm việc trên bảng pipeline, lọc theo bước tiếp theo đang chờ ai: chính mình, khách, AA hay nhà cung cấp. Trả lời email, WhatsApp và SMS trong một hộp thư chung; hệ thống có thể gợi ý bản nháp, nhưng luôn có người bấm gửi. Soạn đề xuất kết hợp tour AA với nhà cung cấp riêng của đại lý, gửi đi, và nhận thông báo khi khách mở hoặc chọn.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Assistant.</strong> Prepares draft proposals, collects traveller forms and documents, and follows up on missing signatures. The assistant never sees net prices, margins or commissions.</p><p lang="vi"><span class="lang">VI</span><strong>Trợ lý.</strong> Chuẩn bị bản nháp đề xuất, thu thập form và giấy tờ của khách, nhắc các chữ ký còn thiếu. Trợ lý không bao giờ thấy giá net, lãi hay hoa hồng.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>The traveller, on the phone.</strong> No account and no password. Opens a link from the agency, sees the proposal in the agency's brand, keeps or swaps options and sees the price change, accepts and pays the deposit. Each traveller then signs in with a code sent to their own email, fills in their own details, signs the terms and waiver, and keeps an itinerary that works offline. The agency is the only brand the traveller sees; AA never contacts the agency's clients.</p><p lang="vi"><span class="lang">VI</span><strong>Khách đi tour, trên điện thoại.</strong> Không cần tài khoản hay mật khẩu. Mở link đại lý gửi, xem đề xuất mang thương hiệu của đại lý, giữ hoặc đổi lựa chọn và thấy giá thay đổi, đồng ý và đặt cọc. Sau đó mỗi khách đăng nhập bằng mã gửi tới email riêng, tự điền thông tin của mình, ký điều khoản và giấy miễn trừ trách nhiệm (waiver), và có lịch trình xem được cả khi không có mạng. Khách chỉ thấy thương hiệu của đại lý; AA không bao giờ liên hệ khách của đại lý.</p></div>
+</div>
+<div class="bsec"><h3>3. The main screens / Các màn hình chính</h3>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Home.</strong> Four key numbers (enquiries, win rate, margin, share of AA tours) compared with last year, plus "needs you" tiles that open the matching list. New agencies see a short setup checklist with three required steps: connect email, invite the team, add the enquiry form to their website.</p><p lang="vi"><span class="lang">VI</span><strong>Màn hình chính.</strong> Bốn chỉ số chính (số yêu cầu, tỷ lệ chốt, lãi, tỷ trọng tour AA) so với năm trước, cùng các ô "cần xử lý" mở ra danh sách tương ứng. Đại lý mới thấy danh sách cài đặt ngắn với ba bước bắt buộc: nối email, mời nhân viên, gắn form yêu cầu lên website.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Pipeline.</strong> A board of trips by stage, from enquiry to completed. Each card shows who the next step is waiting on. Work can be done for a whole column at once, such as sending a follow-up, and can be undone for a few seconds. Cards never show margin. On the phone, one stage per screen.</p><p lang="vi"><span class="lang">VI</span><strong>Pipeline.</strong> Bảng các chuyến theo giai đoạn, từ yêu cầu tới hoàn tất. Mỗi thẻ ghi bước tiếp theo đang chờ ai. Có thể xử lý cả một cột cùng lúc, ví dụ gửi tin nhắc, và hoàn tác được trong vài giây. Thẻ không bao giờ hiện lãi. Trên điện thoại, mỗi màn hình là một giai đoạn.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Trip workspace.</strong> Everything about one trip: stage, travellers, the proposal and whether the client has viewed it, bookings with confirmation numbers, payments, messages, tasks and a full history. Passport and contact details stay hidden until someone clicks to show them, and each view is logged.</p><p lang="vi"><span class="lang">VI</span><strong>Không gian chuyến đi.</strong> Mọi thứ của một chuyến: giai đoạn, khách, đề xuất và việc khách đã xem chưa, đặt chỗ kèm số xác nhận, thanh toán, tin nhắn, việc cần làm và toàn bộ lịch sử. Hộ chiếu và thông tin liên lạc được ẩn cho tới khi có người bấm xem, và mỗi lần xem đều được ghi lại.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Proposal builder.</strong> A day-by-day plan. "+ Add" opens AA tours with live availability (instant, confirmed by AA within one business day, or sold out), the agency's net price, its selling price and margin. Agencies can offer options per day for the client to choose from. A price below AA's public "from" price shows a warning but is not blocked.</p><p lang="vi"><span class="lang">VI</span><strong>Công cụ soạn đề xuất.</strong> Kế hoạch theo từng ngày. Nút "+ Thêm" mở danh sách tour AA kèm tình trạng chỗ theo thời gian thực (có ngay, AA xác nhận trong 1 ngày làm việc, hoặc hết chỗ), giá net của đại lý, giá bán và lãi. Đại lý có thể đưa nhiều lựa chọn cho mỗi ngày để khách chọn. Giá bán thấp hơn giá "từ …" công khai của AA chỉ hiện cảnh báo, không bị chặn.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Client proposal page.</strong> Made for the phone, in the agency's brand. Shows the total and, for each option, the difference in price ("+ USD 40 per person"). It never shows net prices or line-by-line prices. For any single proposal the agency can choose to show the total only. The client keeps or swaps options, asks for a change, or accepts.</p><p lang="vi"><span class="lang">VI</span><strong>Trang đề xuất cho khách.</strong> Thiết kế cho điện thoại, mang thương hiệu đại lý. Hiện tổng giá và phần chênh lệch của từng lựa chọn ("+ 40 USD mỗi người"). Không bao giờ hiện giá net hay giá từng dòng. Với từng đề xuất, đại lý có thể chọn chỉ hiện tổng giá. Khách giữ hoặc đổi lựa chọn, yêu cầu sửa, hoặc đồng ý.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Client portal on the phone.</strong> Each traveller signs in with an email code. They see their own to-do list (details, signatures, insurance choice), the itinerary that works offline, their own documents and buttons to contact the agent. The lead traveller also sees group progress and payments, but not other travellers' personal data.</p><p lang="vi"><span class="lang">VI</span><strong>Cổng khách trên điện thoại.</strong> Mỗi khách đăng nhập bằng mã qua email. Khách thấy danh sách việc của mình (thông tin, chữ ký, lựa chọn bảo hiểm), lịch trình xem được khi không có mạng, giấy tờ của chính mình và nút liên hệ nhân viên. Trưởng đoàn thấy thêm tiến độ của cả đoàn và thanh toán, nhưng không thấy dữ liệu cá nhân của người khác.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Payments.</strong> Money to receive, payment schedules, reminders and amounts owed to suppliers. Deposit and balance are always separate. Clients pay by card through the agency's own Stripe account, or by bank transfer: a client who presses "I have paid" gets the reservation held once for longer, and the agent gets a task to check the money arrived.</p><p lang="vi"><span class="lang">VI</span><strong>Thanh toán.</strong> Tiền cần thu, lịch thanh toán, nhắc thanh toán và tiền nợ nhà cung cấp. Tiền cọc và phần còn lại luôn tách riêng. Khách trả bằng thẻ qua tài khoản Stripe của chính đại lý, hoặc chuyển khoản: khách bấm "Tôi đã chuyển" thì chỗ được giữ thêm một lần, và nhân viên nhận việc kiểm tra tiền đã về.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Reports.</strong> Enquiries, win rate, margin and share of AA tours compared with last year; the path from enquiry to booking; reasons for lost trips; where enquiries come from; which options clients choose. Margin is hidden from assistants.</p><p lang="vi"><span class="lang">VI</span><strong>Báo cáo.</strong> Số yêu cầu, tỷ lệ chốt, lãi và tỷ trọng tour AA so với năm trước; hành trình từ yêu cầu tới đặt chỗ; lý do mất khách; nguồn của yêu cầu; lựa chọn khách hay chọn. Trợ lý không thấy lãi.</p></div>
+</div>
+<div class="bsec"><h3>4. How it joins the current portal / Gộp với portal hiện tại thế nào</h3>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>One sign-in, one menu.</strong> One web address and one sign-in for everything. The menu has Home; CRM (pipeline, clients, inbox, tasks); Money (payments, bookings, commissions); Grow (reports, marketing, suppliers, library, automations); Content studio; Settings; Help.</p><p lang="vi"><span class="lang">VI</span><strong>Một lần đăng nhập, một menu.</strong> Một địa chỉ web và một lần đăng nhập cho mọi thứ. Menu gồm Màn hình chính; CRM (pipeline, khách hàng, hộp thư, việc cần làm); Tiền (thanh toán, đặt chỗ, hoa hồng); Phát triển (báo cáo, marketing, nhà cung cấp, thư viện, tự động hoá); Content studio; Cài đặt; Trợ giúp.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Existing content features stay.</strong> Content studio keeps today's tools as they are: choosing AA tours, the agency's brand profile, rewriting tours in the agency's voice, review, and publishing to the agency's website and Facebook page. Enquiries that come from AA content are tagged with that source automatically.</p><p lang="vi"><span class="lang">VI</span><strong>Tính năng nội dung hiện có giữ nguyên.</strong> Content studio giữ các công cụ hiện nay: chọn tour AA, hồ sơ thương hiệu của đại lý, viết lại tour theo giọng của đại lý, duyệt, và đăng lên website và trang Facebook của đại lý. Yêu cầu đến từ nội dung của AA được tự gắn nguồn đó.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>What changes for current users.</strong> The web address stays the same and old links redirect. Each user receives an invitation email to set up their sign-in again, now with a second step (a passkey on the phone or an authenticator app, about one extra minute the first time). Content, brand settings and history are kept. The old version stays available as a fallback for at least one week after the switch.</p><p lang="vi"><span class="lang">VI</span><strong>Người dùng hiện tại thấy gì thay đổi.</strong> Địa chỉ web giữ nguyên, link cũ tự chuyển sang link mới. Mỗi người dùng nhận email mời cài lại đăng nhập, nay có thêm bước hai (passkey trên điện thoại hoặc app xác thực, lần đầu mất thêm khoảng một phút). Nội dung, cài đặt thương hiệu và lịch sử được giữ nguyên. Bản cũ vẫn chạy làm dự phòng ít nhất một tuần sau khi chuyển.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>When.</strong> November 2026: the content tools move into the new app behind the scenes, with no visible change for users. Around December 2026: the joined sign-in and the joined menu go live.</p><p lang="vi"><span class="lang">VI</span><strong>Khi nào.</strong> Tháng 11/2026: các công cụ nội dung chuyển sang ứng dụng mới ở phía sau, người dùng không thấy thay đổi. Khoảng tháng 12/2026: đăng nhập chung và menu chung bắt đầu chạy.</p></div>
+</div>
+<div class="bsec"><h3>5. Privacy promise in plain words / Lời hứa quyền riêng tư bằng lời thường</h3>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>The agency owns its client data.</strong> AA runs the agency's account without looking at client records. Each agency's data is encrypted with its own key.</p><p lang="vi"><span class="lang">VI</span><strong>Dữ liệu khách thuộc về đại lý.</strong> AA vận hành tài khoản đại lý mà không xem hồ sơ khách. Dữ liệu mỗi đại lý được mã hoá bằng khoá riêng.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>What AA sees.</strong> Only what is needed to run a booked trip that includes AA services: names, number of travellers, dietary and mobility needs, flight details, and passport numbers only when a hotel or transport provider requires them. This is deleted 90 days after the trip. Beyond that, AA sees only anonymous totals, in groups of at least 10 travellers from at least 3 agencies.</p><p lang="vi"><span class="lang">VI</span><strong>AA thấy gì.</strong> Chỉ những gì cần để vận hành chuyến đã đặt có dịch vụ AA: họ tên, số người, yêu cầu ăn uống và đi lại, thông tin chuyến bay, và số hộ chiếu chỉ khi khách sạn hoặc nhà xe bắt buộc. Phần này được xoá 90 ngày sau chuyến. Ngoài ra AA chỉ thấy số liệu tổng hợp ẩn danh, theo nhóm có ít nhất 10 khách từ ít nhất 3 đại lý.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Support only with permission.</strong> AA support staff can look at an account only when the owner switches it on: read-only, client identities hidden, 24 hours by default (the owner can choose 1 to 7 days), and it can be revoked at any time.</p><p lang="vi"><span class="lang">VI</span><strong>Hỗ trợ chỉ khi được cho phép.</strong> Nhân viên hỗ trợ của AA chỉ xem được tài khoản khi chủ đại lý bật quyền: chỉ đọc, ẩn danh tính khách, mặc định 24 giờ (chủ đại lý chọn được từ 1 đến 7 ngày), và thu hồi được bất cứ lúc nào.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Emergencies.</strong> Only for a security incident or a legal order, AA can open one agency's data for up to one hour, with two-step sign-in. It appears in the agency's log immediately, and the owner is emailed within 24 hours.</p><p lang="vi"><span class="lang">VI</span><strong>Khẩn cấp.</strong> Chỉ khi có sự cố an ninh hoặc lệnh pháp lý, AA có thể mở dữ liệu của một đại lý tối đa một giờ, với đăng nhập hai bước. Việc này hiện ngay trong nhật ký của đại lý, và chủ đại lý nhận email trong 24 giờ.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Logs and deletion.</strong> Every view of personal data is logged; the owner can read the log for 12 months and download a copy. Deleted data is gone from the app at once and from every backup within 30 days. One exception: signed documents (terms, waivers, insurance decisions) are kept until 3 years after the trip, even when deletion is requested, because insurers may need them as evidence; a lawyer will confirm the exact period.</p><p lang="vi"><span class="lang">VI</span><strong>Nhật ký và xoá dữ liệu.</strong> Mọi lần xem dữ liệu cá nhân đều được ghi lại; chủ đại lý xem nhật ký trong 12 tháng và tải được bản sao. Dữ liệu đã xoá biến mất khỏi ứng dụng ngay và khỏi mọi bản sao lưu trong vòng 30 ngày. Một ngoại lệ: giấy tờ đã ký (điều khoản, giấy miễn trừ trách nhiệm, quyết định về bảo hiểm) được giữ tới 3 năm sau chuyến, kể cả khi có yêu cầu xoá, vì hãng bảo hiểm có thể cần làm bằng chứng; luật sư sẽ xác nhận thời hạn chính xác.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>AI drafting.</strong> Personal details are removed before any text is sent to the AI service. The text is not stored by that service and is not used for training.</p><p lang="vi"><span class="lang">VI</span><strong>AI soạn nháp.</strong> Thông tin cá nhân được gỡ bỏ trước khi gửi văn bản cho dịch vụ AI. Dịch vụ đó không lưu văn bản và không dùng để huấn luyện.</p></div>
+</div>
+<div class="bsec"><h3>6. What is already decided / Những điều đã quyết</h3>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Price.</strong> Free for partner agencies now. Later the core CRM stays free and optional paid tiers may be added for extras, with 60 days' notice written into the contract. Pilot agencies keep the core free for good. AA never charges a percentage of sales.</p><p lang="vi"><span class="lang">VI</span><strong>Giá.</strong> Hiện miễn phí cho đại lý đối tác. Về sau phần lõi CRM vẫn miễn phí, có thể thêm gói trả phí cho tính năng thêm, báo trước 60 ngày và ghi trong hợp đồng. Đại lý thí điểm giữ phần lõi miễn phí vĩnh viễn. AA không bao giờ thu theo phần trăm doanh số.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>AA tours.</strong> Agencies buy at the existing B2B net price list and set their own selling price. AA collects from agencies on its current B2B terms. Tours with fixed departures confirm instantly; others are confirmed by AA within one business day.</p><p lang="vi"><span class="lang">VI</span><strong>Tour AA.</strong> Đại lý mua theo bảng giá net B2B hiện có và tự đặt giá bán. AA thu tiền đại lý theo điều khoản B2B hiện tại. Tour có lịch khởi hành cố định được xác nhận ngay; tour khác do AA xác nhận trong 1 ngày làm việc.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Services.</strong> Each agency uses its own accounts and pays the providers directly: Stripe for cards, Twilio for WhatsApp and SMS, its own Gmail or Outlook for email. Vietnamese agencies record bank transfers by hand for now. Signatures are built in (email code, typed name, sealed PDF). No Zalo in the first version.</p><p lang="vi"><span class="lang">VI</span><strong>Dịch vụ.</strong> Mỗi đại lý dùng tài khoản riêng và tự trả phí cho nhà cung cấp: Stripe cho thẻ, Twilio cho WhatsApp và SMS, Gmail hoặc Outlook của đại lý cho email. Đại lý Việt Nam tạm ghi tay các khoản chuyển khoản. Chữ ký điện tử làm sẵn trong ứng dụng (mã qua email, gõ tên, PDF niêm phong). Bản đầu chưa có Zalo.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Content and support.</strong> AA writes "Before you go" packs (visa only links to official sites); agencies can edit them. Email campaigns go only to clients who agreed, in the agency's name. Support is self-service first (checklist, help pages, short videos, group Q&amp;A every two weeks, one shared support inbox) with one AA person for the pilot agencies.</p><p lang="vi"><span class="lang">VI</span><strong>Nội dung và hỗ trợ.</strong> AA viết các gói "Trước khi đi" (visa chỉ đưa link trang chính thức); đại lý sửa được. Email chiến dịch chỉ gửi khách đã đồng ý, đứng tên đại lý. Hỗ trợ theo hướng tự phục vụ trước (danh sách việc, trang trợ giúp, video ngắn, buổi hỏi đáp nhóm hai tuần một lần, một hộp thư hỗ trợ chung), có một người AA lo các đại lý thí điểm.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Cost to AA.</strong> About USD 85 to 100 a month in hosting for 10 agencies. AA pays nothing for the agencies' own payment, messaging and email accounts.</p><p lang="vi"><span class="lang">VI</span><strong>Chi phí của AA.</strong> Khoảng 85 đến 100 USD mỗi tháng tiền máy chủ cho 10 đại lý. AA không trả phí cho tài khoản thanh toán, nhắn tin và email riêng của đại lý.</p></div>
+</div>
+<div class="bsec"><h3>7. Timeline / Lộ trình</h3>
+<p class="est">Estimates; they can move by a few weeks either way. / Ước tính; có thể lệch vài tuần.</p>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>November 2026.</strong> The CRM runs on the test system: a fictional agency signs in, and an enquiry from a website form appears on the pipeline within a minute. Content tools move into the new app behind the scenes.</p><p lang="vi"><span class="lang">VI</span><strong>Tháng 11/2026.</strong> CRM chạy trên hệ thống thử: một đại lý giả đăng nhập, và yêu cầu gửi từ form website hiện trên pipeline trong vòng một phút. Công cụ nội dung chuyển sang ứng dụng mới ở phía sau.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>December 2026.</strong> A full trip from enquiry to completed, using the agency's own suppliers. Two-step sign-in, and one sign-in for content tools and the CRM.</p><p lang="vi"><span class="lang">VI</span><strong>Tháng 12/2026.</strong> Một chuyến đi trọn vẹn từ yêu cầu tới hoàn tất, dùng nhà cung cấp riêng của đại lý. Đăng nhập hai bước, và một lần đăng nhập chung cho công cụ nội dung và CRM.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>January 2027.</strong> AA tours inside proposals: live price and availability, held when the client accepts, confirmed by AA.</p><p lang="vi"><span class="lang">VI</span><strong>Tháng 1/2027.</strong> Tour AA nằm trong đề xuất: giá và chỗ theo thời gian thực, được giữ chỗ khi khách đồng ý, AA xác nhận.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>February to March 2027.</strong> All planned features on the test system: payments, client portal, signatures, WhatsApp and SMS, automation, AI drafts, reports. Then 3 to 5 pilot agencies are chosen, with a short interview each.</p><p lang="vi"><span class="lang">VI</span><strong>Tháng 2 đến tháng 3/2027.</strong> Đủ mọi tính năng đã lên kế hoạch trên hệ thống thử: thanh toán, cổng khách, chữ ký, WhatsApp và SMS, tự động hoá, AI soạn nháp, báo cáo. Sau đó chọn 3 đến 5 đại lý thí điểm, mỗi đại lý một buổi phỏng vấn ngắn.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>From about April 2027.</strong> The first real agency goes live once it is named and the partner contract and data agreement are signed. Google and Microsoft app checks take about one week each and start the day all features are ready.</p><p lang="vi"><span class="lang">VI</span><strong>Từ khoảng tháng 4/2027.</strong> Đại lý thật đầu tiên bắt đầu dùng khi đã có tên đại lý và đã ký hợp đồng đối tác cùng thoả thuận dữ liệu. Thủ tục xác minh ứng dụng với Google và Microsoft mất khoảng một tuần mỗi bên, bắt đầu ngay ngày đủ tính năng.</p></div>
+</div>
+<div class="bsec"><h3>8. What still needs input / Những việc còn cần ý kiến</h3>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Names and terms to confirm.</strong> The legal entity that signs partner contracts; the current B2B terms (credit, deposit, currency, card fees); the person who enters net rates; the person who supports pilot agencies (about 3 to 4 hours per agency in the first month, then about 1 hour a week); the person who manages departure dates and confirms on-request tours; and a manager, not an engineer, who receives an alert whenever emergency access is used.</p><p lang="vi"><span class="lang">VI</span><strong>Tên và điều khoản cần xác nhận.</strong> Pháp nhân ký hợp đồng đối tác; điều khoản B2B hiện tại (công nợ, cọc, tiền tệ, phí thẻ); người nhập giá net; người hỗ trợ đại lý thí điểm (khoảng 3 đến 4 giờ mỗi đại lý trong tháng đầu, sau đó khoảng 1 giờ mỗi tuần); người quản lý lịch khởi hành và xác nhận tour theo yêu cầu; và một quản lý, không phải kỹ sư, nhận báo động mỗi khi quyền truy cập khẩn cấp được dùng.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Insurer.</strong> The name and contact of the insurer, to ask two things: approval of the trekking waiver, and whether a built-in electronic signature is accepted.</p><p lang="vi"><span class="lang">VI</span><strong>Hãng bảo hiểm.</strong> Tên hãng và người liên hệ, để hỏi hai việc: duyệt mẫu giấy miễn trừ trách nhiệm (waiver) cho tour trekking, và có chấp nhận chữ ký điện tử làm sẵn trong ứng dụng không.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Content from the business team.</strong> About 10 "Before you go" packs, bilingual terms and waiver templates based on the current terms, and short help videos. Real net rates entered before pilot agencies are chosen.</p><p lang="vi"><span class="lang">VI</span><strong>Nội dung từ đội kinh doanh.</strong> Khoảng 10 gói "Trước khi đi", mẫu điều khoản và waiver song ngữ dựa trên điều khoản hiện tại, và các video hướng dẫn ngắn. Giá net thật được nhập trước khi chọn đại lý thí điểm.</p></div>
+<div class="pair"><p lang="en"><span class="lang">EN</span><strong>Later.</strong> Choosing the 3 to 5 pilot agencies (known partners outside the EU and Vietnam, for example in Australia) around February to March 2027. A lawyer is brought in when the first of these happens: a Vietnamese or EU agency wants to use real data, a sixth agency joins, or 60 days pass after the first real traveller.</p><p lang="vi"><span class="lang">VI</span><strong>Về sau.</strong> Chọn 3 đến 5 đại lý thí điểm (đối tác quen, ngoài EU và Việt Nam, ví dụ ở Úc) khoảng tháng 2 đến tháng 3/2027. Mời luật sư khi xảy ra điều đầu tiên trong ba điều: một đại lý Việt Nam hoặc EU muốn dùng dữ liệu thật, có đại lý thứ sáu, hoặc 60 ngày sau khách thật đầu tiên.</p></div>
+</div>
+</section>
+
+<div class="foot">Bản mô phỏng giao diện AA Partner · 21/10/2026. Dữ liệu trên trang là dữ liệu mẫu, không phải số liệu thật của đại lý hay khách nào. / AA Partner screen mockups · 21 October 2026. All data on this page is fictional, not the real figures of any agency or traveller.</div>
+
+</div>
+
+<script>
+(function () {
+  var NAV = [
+    { g: null, items: [["home", "Home", "i-home"]] },
+    { g: "CRM", isNew: true, items: [["pipeline", "Pipeline"], ["clients", "Clients"], ["inbox", "Inbox", null, 5], ["tasks", "Tasks", null, 7]] },
+    { g: "Money", items: [["payments", "Payments"], ["bookings", "Bookings"], ["commissions", "Commissions"]] },
+    { g: "Grow", items: [["reports", "Reports"], ["marketing", "Marketing"], ["suppliers", "Suppliers"], ["library", "Library"], ["automations", "Automations"]] },
+    { g: "Content studio", studio: true, items: [["brand", "Brand identity"], ["browse", "Browse tours"], ["catalog", "My catalog tours"], ["social", "Social content"], ["mycontent", "My content"], ["publish", "Publish"]] },
+    { g: null, items: [["settings", "Settings", "i-set"], ["help", "Help & what's new"]] }
+  ];
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function ico(id) { return '<svg class="i"><use href="#' + id + '"/></svg>'; }
+  document.querySelectorAll("[data-side]").forEach(function (el) {
+    var on = el.getAttribute("data-side");
+    var h = '<div class="logo">AA Partner</div><div class="agency"><span>Lotus Trails</span><small>▾</small></div>';
+    NAV.forEach(function (grp) {
+      if (grp.g) h += '<div class="grp' + (grp.studio ? " studio" : "") + '">' + esc(grp.g) + (grp.isNew ? '<span class="new">NEW</span>' : "") + "</div>";
+      grp.items.forEach(function (it) {
+        h += '<div class="it' + (it[0] === on ? " on" : "") + '">' + (it[2] ? ico(it[2]) : "") + "<span>" + esc(it[1]) + "</span>" + (it[3] ? '<span class="c">' + it[3] + "</span>" : "") + "</div>";
+      });
+    });
+    el.innerHTML = h;
+  });
+  var RAIL = [["home", "i-home"], ["crm", "i-crm"], ["money", "i-money"], ["grow", "i-grow"], ["studio", "i-studio"], ["settings", "i-set"]];
+  document.querySelectorAll("[data-rail]").forEach(function (el) {
+    var on = el.getAttribute("data-rail");
+    var h = '<div class="logo">AA</div>';
+    RAIL.forEach(function (r) { h += '<span class="' + (r[0] === on ? "on" : "") + '">' + ico(r[1]) + "</span>"; });
+    el.innerHTML = h;
+  });
+  var TOP = '<div class="search">' + ico("i-search") + '<span>Search trips, clients, bk- codes, phone</span><kbd>Ctrl K</kbd></div>' +
+    '<span class="sp"></span><span class="tb">' + ico("i-plus") + 'New</span><span class="tb">Tasks <b>7</b></span>' +
+    '<span class="tb">' + ico("i-bell") + '<b>3</b></span><span class="tb">EN | VI</span><span class="ava">LT</span>';
+  document.querySelectorAll("[data-top]").forEach(function (el) { el.innerHTML = TOP; });
+})();
+</script>

@@ -1,0 +1,228 @@
+{
+ "items": [
+  {
+   "id": "R17",
+   "title": "Quy tắc tỷ giá: ngày đặt cho doanh số, ngày nhận cho tiền nhận, số cũ cố định",
+   "context": "Module 6, 7, 13, 16, 17. Công 1 issue (gộp issue sổ W3). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Không có quy tắc thì lãi và hoa hồng trôi khi bảng tỷ giá đổi; phải làm trong migration đầu, backfill về sau rất đắt"
+  },
+  {
+   "id": "R18",
+   "title": "Trạng thái dòng booking Planning/Confirmed/Cancelled, chỉ Confirmed được tính",
+   "context": "Module 6, 13, 16, 15. Công 1-2 (gộp). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Booking.status chưa có vòng đời; dòng AA lấy từ feed Booking, dòng ngoài có 3 mức kiểm"
+  },
+  {
+   "id": "R19",
+   "title": "Bản so sánh lựa chọn của khách trong timeline và thông báo",
+   "context": "Module 3, 2, 10. Công <1 (gộp R4). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Agent xử lý được trên điện thoại mà không phải mở builder; dữ liệu đã có sẵn"
+  },
+  {
+   "id": "R20",
+   "title": "Nhóm hạn task và hạn tính theo ngày đi, chờ khi chuyến chưa có ngày",
+   "context": "Module 10, R9. Công 1-2 (gộp W6). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Phần lớn yêu cầu AA chưa có ngày; quy tắc T-21 hiện không có đường chạy"
+  },
+  {
+   "id": "R21",
+   "title": "Thùng rác có hạn khôi phục và chặn xoá chuyến có tiền/chữ ký/hoa hồng",
+   "context": "Module F4, F5, 2, 6, 7, 12, 13, 18. Công 2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "AA không tự khôi phục giúp đại lý được; giữ nguyên sổ, Stripe, hoa hồng và waiver; thời hạn gộp vào Q2"
+  },
+  {
+   "id": "R22",
+   "title": "Trang khách: mỗi người chỉ thấy dữ liệu của mình, tự ẩn dòng huỷ, cờ hiển thị tài liệu",
+   "context": "Module 11, 6, 3, F1/F4. Công 2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Lỗ hổng F1: người đi cùng có thể thấy hộ chiếu người khác trên link chung"
+  },
+  {
+   "id": "R23",
+   "title": "Lưu trữ khách (dừng gửi tự động) và danh sách lý do Lost",
+   "context": "Module 2, 9, 10, 16, 17, 18. Công 2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Lấp khoảng giữa cờ marketing và xoá hẳn; lý do Lost cho AA biết vì sao sản phẩm mất đơn (k>=10)"
+  },
+  {
+   "id": "R24",
+   "title": "Bảng ai gửi cái gì và quy tắc khi hộp mail đại lý mất kết nối",
+   "context": "Module 5, 10, 11. Công 1 (gộp W3). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Token OAuth chết là chuyện thường; hiện chưa định nghĩa, có thể gửi sai người gửi hoặc lỗi âm thầm"
+  },
+  {
+   "id": "R25",
+   "title": "Phần trả tại chỗ trong số dư",
+   "context": "Module 7, 11, 16. Công 1 (gộp W5). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Phí vườn, giấy phép, phụ thu trả tại chỗ phổ biến ở châu Á; giữ hoá đơn, số dư và lãi khớp nhau"
+  },
+  {
+   "id": "R26",
+   "title": "Trang đặt cọc gom dòng: đã xác nhận / AA xác nhận trong 1 ngày / đại lý đang đặt",
+   "context": "Module 3, 7, 11. Công 1. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Giảm câu hỏi 'đã đặt chưa'; chỉ học câu chữ, vẫn một lần đặt cọc"
+  },
+  {
+   "id": "R27",
+   "title": "Loại hoá đơn phí tư vấn tách khỏi tiền chuyến",
+   "context": "Module 7, 6, 16. Công ~1 (gộp). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Đại lý AU/US thu phí thiết kế; không làm sai lãi chuyến; dùng lại câu §9 Q1"
+  },
+  {
+   "id": "R28",
+   "title": "Ô KPI trang chủ so với cùng kỳ năm trước",
+   "context": "Module 16. Công 1 (gộp 16 basic). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Du lịch có mùa; ô dẫn tới việc cần làm giúp đại lý mở CRM mỗi ngày"
+  },
+  {
+   "id": "R29",
+   "title": "Workflow tự áp dụng theo tag hệ thống suy từ loại tour AA",
+   "context": "Module 10, R3, 12. Công 0-1 (gộp R3). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Khách trek luôn nhận waiver mà đại lý không phải tự gắn tag"
+  },
+  {
+   "id": "R30",
+   "title": "Báo chuyến chưa nhận workflow và sửa hàng loạt",
+   "context": "Module 10, R3. Công 0.5-1 (gộp). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Chuyến import hoặc cũ bỏ sót rule chạy khi vào stage; không cần AI"
+  },
+  {
+   "id": "R31",
+   "title": "Form khách có câu hỏi có điều kiện, chia trang, nhảy tới lỗi đầu",
+   "context": "Module 1, Stage 2, 11. Công 1-2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Giảm bỏ dở trên điện thoại; AA dựng sẵn nhánh, server bỏ câu trả lời bị ẩn"
+  },
+  {
+   "id": "R32",
+   "title": "Ngày theo locale 4 thị trường và nhóm tuổi lúc khởi hành",
+   "context": "Module W1 i18n, F2, 2, 3. Công 2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Nhầm DD/MM với MM/DD thành đặt sai với nhà cung cấp; kiểm tuổi tối thiểu theo kho AA"
+  },
+  {
+   "id": "R33",
+   "title": "Múi giờ theo từng ngày, chuyến bay qua đêm hiện vào ngày hạ cánh",
+   "context": "Module 3, 11, 8. Công 1-2 (gộp W4). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Tránh lỡ đón; phải chốt trước khi W4 dựng bảng ngày"
+  },
+  {
+   "id": "R34",
+   "title": "Điều khoản đại lý có phiên bản, mỗi lần chấp nhận gắn với bản đang hiệu lực",
+   "context": "Module F5, 1, 3, 12. Công 1-2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Ghi lại khách đã chấp nhận văn bản nào; bổ sung cho e-sign, không thay"
+  },
+  {
+   "id": "R35",
+   "title": "Tìm kiếm Cmd/Ctrl+K theo mã AA-Booking, mã NCC, số điện thoại",
+   "context": "Module 2, 6, F1. Công 1-2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Tìm chuyến ngay khi ops hoặc khách đọc mã; F1 chỉ khớp chính xác"
+  },
+  {
+   "id": "R36",
+   "title": "Danh sách 'sẵn sàng đi lại' theo quy tắc, không LLM",
+   "context": "Module 2, 10, F2. Công 1-2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Khách quay lại là doanh thu rẻ nhất; ghép tour AA mới; ra sau R6"
+  },
+  {
+   "id": "R37",
+   "title": "'Khách đang ở đâu' và cờ sự cố AA theo departure_id",
+   "context": "Module 2, 3, 8, F4/F5. Công 2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Bão, sạt lở là chuyện thường; AA làm được điều đối thủ không làm được mà không biết danh tính khách"
+  },
+  {
+   "id": "R38",
+   "title": "Mục 'Trước khi đi' điền sẵn từ nội dung AA",
+   "context": "Module 3, 4, 11, 10, R9. Công 2. Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": true,
+   "why": "Giảm câu hỏi 'mang gì'; nội dung visa/bảo hiểm mang thương hiệu đại lý là quyết định kinh doanh (liên quan R13)"
+  },
+  {
+   "id": "R39",
+   "title": "Hàng rào AI: kiểm trước thẻ xem trước, chip câu hỏi, thích/không thích",
+   "context": "Module 14, R10. Công ~1 (gộp W7). Chi phí ~0",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Thẻ không bao giờ hỏng khi bấm; thêm tín hiệu chất lượng; không xây khung agent tổng quát"
+  },
+  {
+   "id": "R40",
+   "title": "AI chuyển ghi chú thành khối lựa chọn, chỉ trong kho AA",
+   "context": "Module 14, 3. Công 1-2 (sau B2B API). Chi phí ~0 AWS, LLM ~$0.10-0.15/đại lý/tháng",
+   "recommended": "a",
+   "needs_thu": false,
+   "why": "Tăng tốc bước chậm nhất của đề xuất; AI chỉ chọn từ danh sách mã đóng, server kiểm lại"
+  },
+  {
+   "id": "R41",
+   "title": "Hồ sơ giọng viết cho từng agent",
+   "context": "Module 14. Công 1. Chi phí ~0",
+   "recommended": "b",
+   "needs_thu": false,
+   "why": "Giả thuyết lệch giọng chưa có số liệu; đo edit-distance ở W7 trước"
+  },
+  {
+   "id": "R42",
+   "title": "Quản lý thay đổi: ghi chú 'Có gì mới' song ngữ, bố cục ổn định, công tắc preview",
+   "context": "Quy tắc chung, console L1. Công 1. Chi phí ~0",
+   "recommended": "b",
+   "needs_thu": false,
+   "why": "Rủi ro thấp khi AA phát hành theo đợt; làm khi có đại lý thật đầu tiên"
+  },
+  {
+   "id": "R43",
+   "title": "Mô hình hỗ trợ: người đồng hành onboarding, bot trợ giúp làm sau",
+   "context": "Module 5 Onboarding, L1. Công 2-3. Chi phí ~0, bot ~$1-3/tháng",
+   "recommended": "a",
+   "needs_thu": true,
+   "why": "Rào cản lớn nhất là chuyển dữ liệu; có người phụ trách hay không, giờ và kênh hỗ trợ là quyết định nhân sự"
+  },
+  {
+   "id": "R44",
+   "title": "Báo đổi giờ cho chuyến bay đến/đi của tour AA",
+   "context": "Module 8, 11, 10. Công 1 (bước 1), 3-4 (đầy đủ). Chi phí ~0 AWS, API ngoài chưa kiểm giá",
+   "recommended": "a",
+   "needs_thu": true,
+   "why": "Bước 1 $0 đưa vào thiết kế; hỏi chị Thư có lỡ đón thật không và AA có trả tiền dữ liệu bay không"
+  }
+ ]
+}

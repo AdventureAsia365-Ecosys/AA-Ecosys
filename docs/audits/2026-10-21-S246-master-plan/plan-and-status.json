@@ -1,0 +1,1172 @@
+{
+ "status": [
+  {
+   "k": "cis",
+   "built": [
+    "CIS API + worker live trên Dev đúng HEAD origin/main: /health trả git_sha a5f3da88 (#894, AA-925). Mọi PR CIS đã merge đều đã deploy, CIS không còn PR mở nào (gh pr list rỗng). Migration trên main lên tới 251.",
+    "A-series (A0 upload → S1/A1 rewrite → A2 Review Queue → A3 Master Content, A4 giám sát cross-tenant): live và chạy job trên aa-cis-dev-worker. S246 đã ship trọn Q-2 của AA-925: repair contract và các bộ dò degraded (#894), parser ngày/thời lượng, S1 day oracle và S2 cut signature ở chế độ shadow (#893), corpus Q0 kèm guard chain-order và bước CI red-on-base (#891).",
+    "T-series live trên portal: T0 Brand, T1 Rewrite, T2 (job t2_rewrite), T4 Pool/My Catalog Tours, T7 Social Content (Slate), T8+T9 wizard, T10 gates, T10-review = My Content. T11 publish mới có kênh WordPress/blog; 7 kênh còn lại chưa có bước publish (CONTEXT.md dòng 1904).",
+    "Quality/cost đã ship trong S245–S246: AA-729 Done (golden fixture 1.1.0 + baseline), AA-927 Done (#888: mỗi lần gọi LLM ghi đúng một dòng llm_call_log), AA-915 phần freeze (#887: vòng pipeline_lessons bị khoá sau flag, app ADR 0010). Còn ở trạng thái merged: AA-779 (#877, #882), AA-780 (#881).",
+    "Admin console (aa-cis.lumiguides.it.com, Vercel aa-cis-frontend) gồm: Overview business view (#840) với 71 tooltip nguồn số liệu, các trang Platform (apps health, staff audit log, cost per app), Staff + Cognito WORKFORCE (staff-auth.lumiguides.it.com, Production đã tắt password login), Alert recipients (#873), Photos, Places, Jobs, External Spend, Jev Decisions, API Docs, Settings/UI Kit. S246 ship thêm: AA-876 (#889, giới hạn tần suất login, tắt CORS ở môi trường deploy, security headers) và AA-844 (#890, ảnh qua CDN img.lumiguides.it.com + endpoint lịch photo_sync hằng ngày). Cả hai đã Done trên Linear.",
+    "Tenant portal: code nằm ở apps/AA-CIS-App/portal/ (101 file theo dõi, khoảng 62 trang dưới app/portal). Đây là Next.js app thứ hai, có package-lock riêng, Vercel project aa-cis-portal (Root Directory = portal), host https://portal.lumiguides.it.com. Kiểm live: / trả 307 về /portal/dashboard, /tenant-login trả 200, còn aa-cis.lumiguides.it.com/portal/dashboard trả 308 sang host portal. Deploy qua workflow 'Vercel Deploy (portal)' (vercel-deploy-portal.yml) và smoke qua ui-smoke-portal.yml. Portal đã tách ở mức Vercel project + domain (AA-885, CIS #832, S243), nhưng CHƯA tách repo.",
+    "Auth của portal: tenant đăng nhập bằng API key qua CIS API /auth/tenant-login. BFF riêng trong portal (app/api/auth/tenant-login|logout, app/api/tenant/[...path], app/api/tenant/me, app/api/playground/proxy) giữ 5 cookie httpOnly host-only (cis_tenant_token, ...). Gate trang là portal/proxy.ts, kiểm token qua /auth/verify-tenant (cache ≤20 s, fail closed). Project này không có ADMIN_SECRET, COGNITO_* hay quyền staff (có test kiểm source). Tenant chưa chuyển sang Cognito (AA-813 / ADR 0006 Phase 3 chưa làm).",
+    "Về code, portal đã tự đứng được: grep không thấy import nào ra ngoài portal/. Việc chuyển file về mặt cơ học là dễ; phần khó nằm ở auth, hosting, kit và CI (xem gaps).",
+    "Đã có thiết kế tách portal: CRM design v3 (root docs/audits/2026-10-21-S246-crm-design-v3/, Nghiệp duyệt D1–D8) tạo app mới AA-Partner (repo public: web/ chứa portal + CRM UI, api/ là FastAPI + crm.job). 53 issue AA-928…AA-980 đã được tạo trong project Linear 'Partner CRM — AA-Partner' (P-AA-17), đều ở Backlog và chưa gắn milestone. Hai issue liên quan trực tiếp: CRM-P1 = AA-978 (membership feed + tenant API; CIS, M; phụ thuộc CRM-11 và AA-813 đã re-scope) và CRM-P2 = AA-979 (chuyển portal/ vào AA-Partner; CIS + AA-Partner + Infra, L; phụ thuộc P1 và CRM-07; checklist: move giữ history, đổi host sang CloudFront → Fargate, mời user Content studio đăng ký lại vào partner pool, xoá bản copy trong CIS, giữ Vercel 1 tuần, 301 cho /trip/*)."
+   ],
+   "gaps": [
+    "Chưa có repo AA-Partner. Repo này sinh ra ở CRM-05 (AA-933, W1), web skeleton ở CRM-07 (AA-935). Đến lúc đó portal vẫn bắt buộc ở lại CIS.",
+    "Auth chặn việc tách: CRM-P2 cần partner pool (CRM-11 AA-939, W2) và membership feed (CRM-P1 AA-978). Hiện có 3 hướng tenant auth chưa thống nhất: (1) API key dùng chung đang chạy, (2) client EXTERNAL cis-portal theo ADR 0006 Phase 3 / AA-813, (3) partner pool có MFA theo CRM v3. Mô tả AA-813 vẫn ghi password login + acp_shared.tenant_users nên cần re-scope (đã ghi trong checklist CRM-01a).",
+    "Backend của portal vẫn hoàn toàn nằm trong CIS API, khoảng 15 nhóm route: /v1/tours, integrations, content-writing, angle-gate, publish-log, subjects, slate, planning, billing, progress, marketplace, quota, /admin/brand-identity (bản tenant), /auth/tenant-login, /auth/verify-tenant. Chuyển UI sang AA-Partner không chuyển backend, nên portal vẫn là client của CIS API qua BFF server-to-server (CORS đã tắt ở môi trường deploy từ #889). Nếu phải đổi host thì cần một hợp đồng API cho tenant (catalog.http.v1 / tenant.* trong CRM-01a).",
+    "UI kit đang được vendor: 14 file portal/app/_kit/*, _brand/tokens.ts, lib/bffPath.ts, lib/proxyResponse.ts là bản copy từng byte của frontend/. Guard là tests/unit/test_aa885_portal_split.py nằm trong CIS. Khi đổi repo thì guard này không còn với tới được. Cần chọn: package dùng chung (AA-655, đang parked) hoặc chấp nhận để hai bên lệch nhau. CRM web còn có thể đẻ ra bản copy thứ ba.",
+    "CI và test gắn với repo CIS: vercel-deploy-portal.yml, ui-smoke-portal.yml, job portal-lint trong ci.yml (non-required, đang mang 9 lỗi cũ), tests/e2e/smoke-portal/* chạy bằng playwright.config.ts ở gốc repo, tests/e2e/smoke/aa885-portal-redirect.spec.ts, test_aa886_portal_legal_pages.py, repo var VERCEL_PORTAL_PROJECT_ID, secret VERCEL_PORTAL_BYPASS_SECRET, secret e2e aa-cis/dev/e2e-tenant/<slug>.",
+    "Hosting: CRM-P2 đổi từ Vercel sang CloudFront → Fargate. Việc này phụ thuộc spike CRM-03 (AA-931): CloudFront VPC origin → NLB → ALB host rule. Spike chưa làm.",
+    "Còn sót trên admin app: trang white-label công khai /trip/[tourId] (các trip_url đã lưu đều trỏ về admin host) cần 301. Portal chưa có Sentry. Chưa có support view cho staff (L2 nằm ở CRM-13b, W7).",
+    "Tài liệu chưa nói gì về việc tách: docs/ecosystem-architecture.md chưa có dòng AA-Partner, và bảng repo vẫn ghi CIS = 'admin frontend + tenant portal'. CONTEXT.md của CIS có applies_to aa-cis-portal và mục 'Not moved yet'. Việc cập nhật được giao cho CRM-01a (ADR AA-Partner, có ghi rủi ro 'CIS App first').",
+    "plan.json (cập nhật S245) đã cũ so với Linear: AA-729, AA-927, AA-876, AA-877, AA-844 đã Done; AA-925, AA-915, AA-886 đang In Progress (plan ghi Backlog); AA-889 và AA-890 đã Done trên Linear theo s246-decisions. Plan không có 53 issue CRM, cũng không có project 'partner'. Thiếu luôn các issue portal đang mở trên Linear: AA-759 (PortalShell on kit, High), AA-760 (portal audit + state fixes), AA-761 (account pages real data), AA-762 (team & roles, trùng với AA-813). Thiếu cả AA-642 (Model Gateway epic) và AA-645 (eval Sonnet 5).",
+    "Linear project không có milestone nào (list_projects: milestones []). Milestone M1–M5 chỉ tồn tại trong plan.json."
+   ],
+   "open_issues": [
+    "M1 (nền tảng): AA-816 In Progress. A10 dời về cuối dự án theo quyết định S246; nhánh local fix/aa-816-remove-e2e-exception đã giữ chỗ migration 252. S2 (tắt cờ legacy ở API) chờ AA-911. AA-911 Backlog, đã chọn phương án (a); nhánh local refactor/aa-911-retire-booking-bridge 1b5b9060 và test/aa-911-e2e-booking-base-url b3a793ab chưa có PR. AA-703 là epic (In Progress).",
+    "M1b: AA-903 (chờ PR Dependabot frontend), AA-896 (≥01/11), AA-891/AA-901 (release-please, GitHub App), AA-879.",
+    "M2a, chất lượng CIS: AA-925 In Progress. #891, #893, #894 đã merge và đang live trên a5f3da88, chỉ còn đóng issue kèm bằng chứng. AA-926 Backlog: nhánh feat/aa-926-quality-registry có 11 commit, giữ không merge theo Q1. AA-915 In Progress: #887 đã merge, nhánh docs ADR 0010 có 3 commit chưa push; tiêu đề Linear ghi ADR 0009 trong khi code ghi app ADR 0010. AA-779 và AA-780 In Progress, T9 tiếp tục tinh chỉnh song song theo Q2 b. Tạm giữ tới khi có bản tư vấn: AA-916, AA-924, AA-790. Còn lại: AA-789, AA-741 (G7, có phí), AA-783, AA-788, AA-795, AA-765, AA-900, Writing Memory P1–P3 (AA-917 … AA-923), AA-642, AA-645.",
+    "M2b, địa điểm/ảnh/Jev: AA-847 trên Linear vẫn Backlog nhưng đã có 8 nhánh CIS local chưa push (places-l4 mig 253, revoke-tp-raw-grants 254, lines 255, place-shape, lines-views 256, places-validity, dedupe, dedupe-job 257), cộng các nhánh Infra (bản copy 255/256, contract pins v1.2), root (ADR 0007 amendment) và TP (slice-6d). Review đang chặn: câu chữ ADR 0007 tả hành vi chưa được build. AA-845 In Progress: theo Q7 bỏ Q845-4, còn lại cảnh báo credit + 402. AA-803: theo Q7 dừng calib, nên cần đổi trạng thái (park/cancel). AA-712, AA-905, AA-784 xếp S252. AA-844 Done S246.",
+    "M4: AA-669 (My Content DataTable, reopened), AA-855 (UAT video).",
+    "M5, trước tenant trả tiền / prod: AA-813 (tenant Cognito, cần re-scope theo partner pool), AA-859 In Progress (tenant pool wave 2/3), AA-886 In Progress (/privacy, /terms: portal có bản nháp từ #867, TP còn thiếu), AA-820 (≤11/11), AA-665, AA-898, AA-814, AA-804, AA-848, AA-874, AA-873. AA-876 và AA-877 Done S246.",
+    "Portal chưa có trong plan: AA-759 (High), AA-760, AA-761, AA-762. AA-671 và AA-655 đang parked.",
+    "Lane CRM chạm tới CIS (project P-AA-17): CRM-P1 AA-978 (CIS · M), CRM-P2 AA-979 (CIS + AA-Partner + Infra · L), CRM-B4 AA-976 (CIS catalog over HTTP), CRM-B5 AA-977 (nội dung AA viết trong CIS). Các issue nền: CRM-01a AA-928, CRM-03 AA-931, CRM-05 AA-933, CRM-07 AA-935, CRM-11 AA-939."
+   ],
+   "risks": [
+    "Thứ tự số migration: số 252 đã giữ trên nhánh A10 (AA-816), mà A10 bị dời về cuối dự án. Trong khi đó AA-847 dùng 253–257. Nếu AA-847 merge trước thì 252 sẽ được áp sau 257, tức là apply lệch thứ tự. Nên đánh số lại A10 khi tới lúc làm. Ngoài ra AA-916 (cần migration) và CRM-P1 cũng sẽ tranh số với nhau.",
+    "AA-847 có rất nhiều thứ local chưa push: 8 nhánh CIS xếp chồng cộng nhánh ở Infra, root và TP, tổng 18 worktree trong .tmp-session/wt. Checkout chính của CIS đang behind 7. Rủi ro mất việc hoặc conflict khi rebase; câu chữ ADR 0007 phải sửa trước khi push vì root PR tự merge mà không có CI.",
+    "Chồng hạn ngạch Linear: design README nói 'tạo issue trước một đợt, chỉ khoảng 10–14 issue mở', nhưng thực tế đã tạo cùng lúc 53 issue CRM (AA-928 … AA-980). Gói Free giới hạn 250 issue chưa lưu trữ, mỗi project tối đa 100 (quy định S236/S245). Cần đếm lại trước khi tạo thêm.",
+    "Rủi ro 'CIS App first': CRM-P2 kéo toàn bộ Content studio (T-series UI) sang repo mới, đổi host Vercel → Fargate và buộc mọi tenant đăng ký lại (invite-to-reenrol). Nếu chuyển sớm, mỗi PR tính năng portal phải chạm 2 repo (UI ở AA-Partner, API ở CIS), cộng thêm vấn đề kit bị lệch. Có một lựa chọn để Nghiệp duyệt: tách CRM-P2 thành P2a (chuyển repo, giữ Vercel và auth hiện tại; làm được ngay sau CRM-05/07) và P2b (đổi host + chuyển partner pool, sau CRM-11/P1).",
+    "Tenant auth đang ở mức yếu cho tới AA-813/CRM-11: mỗi tenant đăng nhập bằng một API key dùng chung. #889 mới chỉ thêm rate limit. Portal không có Sentry.",
+    "Trạng thái theo dõi bị lệch: plan.json cũ, Linear không có milestone, tiêu đề AA-915 lệch số ADR, AA-803 chưa phản ánh quyết định Q7. Lập master plan song song mà không đồng bộ trước thì dễ xếp nhầm issue đã xong hoặc đã dừng."
+   ],
+   "summary_vi": "Trả lời câu hỏi của anh: portal CHƯA tách repo. Từ S243 (AA-885, CIS #832) portal đã có Vercel project riêng là aa-cis-portal và domain riêng portal.lumiguides.it.com. Em đã kiểm live: domain trả 307 về /portal/dashboard, còn host admin trả 308 sang portal. Code vẫn nằm trong apps/AA-CIS-App/portal/ (101 file, package-lock riêng), và portal vẫn gọi các route của CIS API qua BFF của chính nó.\n\nCode portal đã tự đứng được, không import gì ra ngoài portal/, nên chuyển file thì dễ. Cái chặn việc tách nằm ở chỗ khác:\n1. Chưa có repo AA-Partner (CRM-05 AA-933 và CRM-07 AA-935).\n2. Tenant auth vẫn là API key dùng chung. Muốn chuyển phải có partner pool (CRM-11 AA-939) và membership feed (CRM-P1 AA-978), đồng thời re-scope AA-813.\n3. Backend portal vẫn ở CIS, khoảng 15 nhóm route.\n4. 14 file UI kit là bản copy từng byte, được giữ khớp bằng một test nằm trong CIS.\n5. CI, smoke và secret của portal đều gắn với repo CIS.\n6. CRM-P2 đổi host Vercel sang CloudFront → Fargate, việc này còn chờ spike CRM-03 (AA-931).\n7. Trang /trip/[tourId] vẫn nằm trên admin app.\n\nThiết kế CRM v3 giao việc chuyển này cho CRM-P2 (AA-979, cỡ L, phụ thuộc P1 và CRM-07), thuộc lane P chạy sau W2. Tức là còn xa, trong tổng ước tính 40–45 phiên CRM. Em đề xuất anh duyệt thêm một lựa chọn: tách thành P2a (chuyển repo, giữ Vercel và auth hiện tại) và P2b (đổi host + chuyển partner pool).\n\nCIS live: API và worker chạy đúng HEAD a5f3da88, không còn PR mở. Phần đã chạy:\n- A-series, T-series (T11 mới có WordPress/blog).\n- Admin console đủ trang Overview, Platform, Staff, Cognito và Alerts.\n- Trong S246 đã ship AA-925 (đã live, chờ đóng issue), AA-927 và AA-729 (Done), AA-876, AA-844, AA-877 (Done), cùng phần freeze của AA-915.\n\nCòn treo:\n- AA-926 giữ nhánh, chưa merge.\n- AA-847 có 8 nhánh CIS local chưa push (migration 253–257), review đang chặn vì câu chữ ADR 0007.\n- AA-911 và A10 của AA-816 (đã giữ chỗ migration 252) đều chỉ ở nhánh local.\n\nRủi ro chính:\n- Thứ tự migration: 252 sẽ bị áp sau 253–257.\n- Đã tạo cùng lúc 53 issue CRM trong khi Linear Free giới hạn 250 issue mở.\n- plan.json đã cũ: chưa có các issue CRM; chưa có AA-759/760/761/762, AA-642, AA-645; nhiều trạng thái lệch so với Linear.\n- Các project Linear không có milestone; M1–M5 chỉ có trong plan.json."
+  },
+  {
+   "k": "booking",
+   "built": [
+    "Booking API live on Dev: https://api-booking.lumiguides.it.com/booking/health returns 200 with git_sha edd88ba (#52, deploy-dev run 04:26Z 21/10). ECS aa-booking-dev-api is desired 1 / running 1 on task def :34. /booking/trip-cases returns 401 without a token. origin/main HEAD is 2a4b57f (#53, bk-018 PII column tags). That PR only adds a migration, so no image deploy ran for it, which is expected. Infra already holds db/migrations/booking/018_pii_column_tags.sql, and DB Migrate succeeded 4 times between 04:52Z and 04:59Z on 21/10. The schema reference (dump of 20/10) still says bk-017.",
+    "Staff admin (AA-683) is live on Vercel at booking.lumiguides.it.com (307 to /login). It is Next.js 16 and has 35 routes: dashboard, cases (list/new/detail), proposal builder plus preview, proposals, customers, staff, notifications, settings, audit log, pricing rules and calculator, suppliers (incl. rate sheets), hotels, services, catalog (countries, destinations, trip plans plus the commercial row).",
+    "Staff identity: Cognito WORKFORCE booking-staff/breakglass with booking-* groups (bk-016, Booking #34/#35/#36). The CIS bridge JWT is still accepted until AA-911. The only machine caller is GitHub OIDC on /booking/ops/deploy-gate.",
+    "Trip cases (bk-002/003/005): TripPlanner inquiry.submitted intake through booking.job (bk_inquiry_pull/process). There are 13 statuses (new_inquiry, discovery, building, proposal_sent, confirmed, supplier_confirming, invoice_sent, payment_pending, paid, pre_departure, on_trip, completed, cancelled), a transitions table, status history, assignments, proposal versions with send/approve and audit rows.",
+    "Pricing (ADR 0005, bk-004/006/007): a Decimal engine, pricing_rules per channel (b2c_tailor_made 30/20, fixed_departure 25/18, b2b 15/10, seeded and still to confirm with Ms. Thư), dated FX rates (VND allowed as a cost currency), maker-checker approvals, quote-preview, cost lock on a version. Selling currencies are only USD/EUR/GBP/AUD/SGD (engine.py SELLING_CURRENCIES).",
+    "Supply (bk-008/009/010): suppliers plus supplier_contracts with maker-checker publish and a free-text cancellation_policy column. Trip_plans are one commercial row per CIS catalog tour, read live from catalog.v_tour. Hotels, room types, services and supplier_rates have a rate-in-force lookup.",
+    "Platform: booking.job on the CIS job template with a deploy gate, SES staff new-inquiry e-mail (bk_notify_email), retention kinds (bk-012), the ops.overview.v1 views for the CIS dashboard (bk-017), and PII column tags (bk-018). Customer OTP tables (customer_otps/customer_sessions) exist, but there are no customer endpoints: the O8 customer surface has not started."
+   ],
+   "gaps": [
+    "Payments are NOT live. There are no invoices, invoice_items, payment_schedule, payments, supplier_bookings, supplier_bills or trip_case_checks tables (they exist only in ERD v2 booking.dbml). The /billing and /trip-checks admin pages render the 'Coming in wave 3' WaveFrame placeholder.",
+    "AA-682 (Booking wave 3 / Operations MVP): Linear Backlog, priority Low, project 'TripPlanner & AA-Booking'. plan.json milestone M3 is 'blocked', window 'chưa xếp', and both criteria are open: write the Done-when, and decide tax, payment marking and deposit %. CONTEXT.md still lists the post-sale status edges and operations/money as 'waiting for decisions'.",
+    "CRM-B1 (AA-972), M2M + B2B quote, does not exist. There is no M2M pool or client, no scope check, no b2b_partner table, no X-AA-Tenant-Id handling, no b2b_quote/price_hash/valid_until, no b2b_price response naming and no supplier_net schema test. What can be reused: the pricing engine with the 'b2b' channel rule, FX rows, supplier_rates rate-in-force, trip_plans as the product list, quote-preview logic. The parity flag needs the B2C 'from' price, but the trip plan price matrix / v_from_prices is an open AA-679 follow-up, so B1 has an unlisted dependency.",
+    "CRM-B2 (AA-973), departures, capacity and holds, does not exist. There is no departure, b2b_hold, hold reaper, confirm/release or idempotency key. trip_cases.customer_id is NOT NULL and source_system is CHECKed to cis/tripplanner/manual, so a B2B case (channel='b2b', party_tenant_id, customer_id NULL) needs a trip_cases migration. A 'fixed_departure' pricing channel exists, but no departure entity exists.",
+    "CRM-B2b (AA-974), commercial rules, does not exist. Adding VND as a selling currency means changing SELLING_CURRENCIES, handling 0-decimal rounding and amending ADR 0005 decision 5. The only cancellation data is supplier_contracts.cancellation_policy (free TEXT), with no fee schedule by days before departure, no cancel endpoint and no dry run. There is no hold extend-once logic and no re-hold limit (429).",
+    "CRM-B3 (AA-975), event feed, on-request desk and incident flag, does not exist. Booking has an inbox (inbox_events/inbox_cursor) but no outbox table and no cursor feed. The staff admin has no on-request desk with an SLA badge and no 'Flag incident on departure' button.",
+    "Linear issues AA-972..975 are absent from plan.json. They need slots, and Lane B depends on CRM-01a (AA-928, ADRs plus the booking.b2b.v1 contract) and on the Infra M2M pool (Nghiệp MFA)."
+   ],
+   "open_issues": [
+    "Conflict 1, a split booking-line model: AA-682 plans supplier_bookings (one per itinerary item) to drive supplier_confirming → confirmed. CRM-B2/B3 plan b2b_hold lines with line.confirmed/declined events. One supplier-booking/line model shared by B2C cases and B2B holds should be decided before either migration. Otherwise Booking ends up with two confirmation paths.",
+    "Conflict 2, the status machine: B2B cases (hold → confirm after deposit → cancel) do not fit the 13-status B2C flow (invoice_sent, payment_pending, paid). AA-682's 'post-sale status edges' decision and CRM-B2's B2B case path must be designed together. Either the transitions table gets a channel dimension or B2B cases use a subset. The CRM side maps events to its own statuses (X22).",
+    "Conflict 3, invoicing party: AA-682 covers customer invoices with a payment schedule (B2C). ADR 0005 d9 says AA invoices the tenant, not the end customer, for B2B, and CRM O-10 needs Booking to expose B2B invoices per agency. No Lane B card owns B2B invoicing or settlement (design: 'settlement stays outside the CRM'). Either AA-682 models invoice.party = customer | b2b_partner or a new card is needed.",
+    "Conflict 4, cancellation: CRM-B2b's fee-schedule model would also serve B2C cancellations in AA-682. Build it once, on supplier_contracts/products, not inside the B2B module only.",
+    "Conflict 5, ops views and contracts: adding source_system/channel 'b2b' touches v_ops_funnel_daily, v_ops_case_status and v_customer_summary (a NULL customer). The ops.overview.v1 metrics are append-only, so the CIS dashboard needs a contract bump.",
+    "Overlap with AA-835 (ADR 0004a Booking supply outbox): CRM-B3 also needs a Booking outbox. Design one booking outbox pattern for both.",
+    "Auth sequencing: M2M needs a new issuer/client in app/auth/identity_config.py. The verifier is a byte copy of the CIS module (never edited in Booking), so any verifier change goes through CIS first. AA-911 (retire the bridge) touches the same config, so land AA-911 before or with CRM-B1.",
+    "Hold reaper and recurring b2b jobs: new bk_* kinds must go into EXPECTED_SECONDS. A recurring reaper would need DEPLOY_GATE_EXEMPT, like bk_inquiry_pull, or it would block every Booking deploy.",
+    "Decisions still open for AA-682: tax rules (ADR 0005 d10, accountant), payment marking (manual only for MVP per Linear), deposit %. Hold defaults (48 h seats, +72 h extension) are 'est.' and the Booking lane must decide them."
+   ],
+   "risks": [
+    "Booking is the longest pole for CRM W4 (M3 'AA supply inside the CRM'). B2 and B2b are both L-sized with migrations that need review, and building AA-682 in parallel on the same trip_cases/status/pricing files risks merge churn. Recommendation: one Booking 'commercial core' design pass (supplier booking line + case channel + invoice party + cancel policy + outbox) right after CRM-01a, then AA-682 and Lane B as stacked migrations bk-019+.",
+    "The R12 premise 'Booking already has departure/allotment' is confirmed false (no departure, capacity, hold or allotment objects in code, migrations or the schema reference).",
+    "The local apps/AA-Booking checkout is on main at 3dfbb94, 3 commits behind origin/main 2a4b57f. Branch from origin/main before starting Lane B work.",
+    "The schema reference is still at bk-017 although bk-018 was very likely applied on 21/10 (DB Migrate runs succeeded). Wait for or trigger the DB Schema Dump PR before writing code against new Booking columns.",
+    "Commercial numbers (15/10 B2B margin, 3% card fee on B2B) are seeds marked 'to confirm with Ms. Thư'. A B2B quote API built on them would expose unconfirmed prices to agencies, which is acceptable on Dev with synthetic agencies only.",
+    "The Infra M2M Cognito pool needs Nghiệp's MFA (one of 7 MFA steps in the CRM plan), which is a human-gated step on the B1 critical path."
+   ],
+   "summary_vi": "AA-Booking đã chạy thật trên Dev, gồm API và trang admin cho nhân viên, nhưng mới là back office B2C trước bán hàng. Phần \"payments\" chưa có.\n\n**Đang chạy:**\n- **API:** api-booking `/booking/health` trả 200, SHA edd88ba. ECS chạy 1/1 task, task def :34.\n- **Admin:** booking.lumiguides.it.com, 35 route.\n- **Đăng nhập nhân viên:** Cognito WORKFORCE. Cầu nối CIS (bridge) vẫn còn, chờ AA-911 gỡ.\n- **Trip case:** nhận inquiry từ TripPlanner, 13 trạng thái, proposal có nhiều version.\n- **Pricing (ADR 0005):** có engine giá, maker-checker, rule kênh `b2b` 15/10. Đây là số seed, chưa chị Thư xác nhận.\n- **Nguồn cung:** supplier, hợp đồng, hotel, dịch vụ, net rate, trip_plans đọc catalog CIS.\n- **Nền tảng:** job queue, mail SES cho nhân viên, retention, view ops cho CIS, bk-018 (gần như chắc đã apply 21/10).\n\n**Chưa có:**\n- Không có bảng invoice, payment, payment_schedule, supplier_bookings, supplier_bills hay trip_case_checks.\n- Hai trang /billing và /trip-checks chỉ hiện \"Coming in wave 3\".\n- Phần khách hàng (OTP, O8) chưa làm.\n\n**AA-682 (wave 3):** Backlog, ưu tiên Low. Trong plan.json là M3 \"blocked\", chưa xếp lịch. Còn thiếu Done-when và ba quyết định: thuế, cách đánh dấu thanh toán, % đặt cọc.\n\n**Lane B của CRM (AA-972..975):** cả bốn chưa có gì trong code và chưa có slot trong plan.json.\n- **B1:** không có pool M2M, b2b_partner, b2b_quote, price_hash. Tính parity cần giá \"from\", mà price matrix (follow-up của AA-679) chưa làm, nên B1 còn một phụ thuộc chưa ghi.\n- **B2:** không có departure, capacity, hold hay reaper. trip_cases bắt buộc customer_id và chỉ nhận nguồn cis/tripplanner/manual, nên cần migration.\n- **B2b:** VND chưa phải tiền bán (chỉ nằm ở bảng FX). Chính sách huỷ chỉ là một cột TEXT trong supplier_contracts. Chưa có extend hay giới hạn re-hold.\n- **B3:** Booking chỉ có inbox, chưa có outbox. Admin chưa có desk on-request và nút báo incident.\n- **Dùng lại được:** engine giá, kênh b2b, FX, supplier_rates, trip_plans.\n\n**Năm chỗ đụng nhau với AA-682:**\n1. supplier_bookings của AA-682 và b2b_hold lines của Lane B là hai cách xác nhận khác nhau. Nên chốt một mô hình dòng booking chung.\n2. Máy trạng thái B2C và luồng B2B (hold → confirm → cancel) cần thiết kế cùng nhau.\n3. AA-682 xuất invoice cho khách, còn ADR 0005 d9 cho B2B thì AA xuất invoice cho tenant. Hiện chưa card nào nhận phần invoice B2B.\n4. Chính sách phí huỷ nên làm một lần, dùng chung cho cả B2C và B2B.\n5. Thêm kênh b2b sẽ đụng view ops và contract ops.overview.v1.\n\n**Chồng lấn khác:**\n- Outbox của B3 trùng với outbox supply của AA-835, nên làm một mẫu chung.\n- M2M phải sửa verifier, mà file này là bản copy từ CIS, nên đi qua CIS trước. Nên làm AA-911 trước hoặc cùng B1.\n- Reaper hold phải thêm vào DEPLOY_GATE_EXEMPT, không thì chặn mọi lần deploy Booking.\n\n**Đề xuất:** ngay sau CRM-01a, làm một bước thiết kế \"lõi thương mại Booking\". Bước này chốt dòng booking chung, kênh của case, bên nhận invoice, chính sách huỷ và outbox. Sau đó AA-682 và Lane B chạy song song bằng các migration nối tiếp từ bk-019 trở đi.\n\n**Lưu ý:**\n- Checkout local apps/AA-Booking đang chậm 3 commit so với origin/main.\n- File schema reference vẫn ghi bk-017."
+  },
+  {
+   "k": "tp",
+   "built": [
+    "TripPlanner live (kiểm 21/10/2026): frontend https://aa-tripplanner.vercel.app và https://tripplanner.lumiguides.it.com trả 200 cho /, /plan, /destinations/laos. Hai Lambda aa-tripplanner-dev-browse và aa-tripplanner-dev-assembly (python3.12) được deploy lần cuối 19/10 13:32Z.",
+    "main = a38531d (#119, 21/10). Stack trên main: Next 15.5.28, React 19.2.4, Tailwind 3.4.14, mapbox-gl 3.7.0, ESLint 9 flat config. AA-904 đã Done (TP #107). Vercel deploy chạy qua CI, Git integration tắt.",
+    "Planner bản đồ (AA-674/AA-812): home tìm kiếm trước, /plan với route proposals từ tour AA thật, coverage, activities theo ngày, thêm ngày, ?tour=…&ask=1 'Customise this trip'. Trang /tours/[slug] và /destinations/[country] dùng SSR/ISR, có JSON-LD và sitemap, đọc catalog.v_* (CIS 225). Tìm kiếm: Cohere embed v4 qua chuỗi acc2 → acc3 → acc1, có cache và fallback keyword (AA-856/862).",
+    "Slice 6a (#75) đã merge: TP không còn ghi place nào; các bảng place của TP bị đóng băng. Slice 6b (#78) đã merge: browse readers nằm sau cờ PLACES_SOURCE=legacy|cis. Trên live, cờ này CHƯA ĐẶT trên cả 2 Lambda (get-function-configuration trả None), nghĩa là đang chạy legacy và đọc các bảng đã đóng băng.",
+    "Guest identity AA-827: token băm trong cookie HttpOnly __Host-tp_guest, _guard áp lên cả 8 mutation, tp-011/tp-012 đã ship, grace window đã đóng.",
+    "AI Phase 0 (AA-805): spend cap, narration cache, nhãn AI. Hand-off sang Booking: inquiry.submitted v1.2 qua tripplanner.outbox. View ops traffic tp-015 cho CIS admin (AA-858).",
+    "Merge trong S246: TP #112 (AA-886, trang /privacy và /terms bản nháp), #118 (AA-876, security headers và kiểm header khi deploy production), #119 (AA-877, tp-016 gắn tag PII cho cột). Migration mới nhất của TP trên main là tp-016. Backlog README §state còn ghi tp-015, đã cũ.",
+    "Công việc AA-847 phía TP đã code xong nhưng CHỈ NẰM LOCAL (chưa push, chưa có PR). Các nhánh đều dựa trên a38531d, worktree ở .tmp-session/wt/tp-aa-847*. Gồm: feat/aa-847-tp017-component-id-map (migration tp-017); feat/aa-847-slice-6c (assembly readers đọc catalog sau PLACES_SOURCE, id-map, HNSW top-k qua catalog.v_component_embedding, 30 file); feat/aa-847-slice-6d (vẽ sông/đường/tuyến trek thành đường kẻ, /browse/shapes, feature legs, path trên bản đồ tĩnh, contract tour v1.2, 47 file); feat/aa-847-destination-redirect (301 về keeper).",
+    "Phía CIS và Infra của AA-847 cũng chỉ ở local. CIS: feat/aa-847-places-l4 (mig 253), -revoke-tp-raw-grants (254), -lines (255), -lines-views (256), -dedupe-job (257), -place-shape, -dedupe, -places-validity. Infra: các nhánh copy 253–257, tp017-copy, contract pins v1/v1.2, places-probe. Root: feat/aa-847-places-l4 (ADR 0007, contracts v1.2). Migration mới nhất của CIS trên main là 251. Linear AA-847 vẫn ở trạng thái Backlog.",
+    "Portal: code vẫn nằm trong apps/AA-CIS-App/portal/ trên origin/main. Domain https://portal.lumiguides.it.com đang chạy (307 sang trang đăng nhập; Vercel project riêng từ AA-885). Chưa có repo riêng; việc chuyển portal được lên kế hoạch ở AA-979 (CRM-P2, chuyển portal/ sang AA-Partner)."
+   ],
+   "gaps": [
+    "TP phụ thuộc CIS ở AA-847 (lật PLACES_SOURCE=cis). Thứ tự bắt buộc: (1) CIS 253 (L4 read model, v_component_embedding lọc bỏ place nghi vấn/đã gộp) + Infra copy, apply qua DB Migrate. (2) Apply tp-017 trên Dev TRƯỚC khi merge 6c. (3) Đọc EXPLAIN top-k HNSW sau khi apply 253, vì pgvector chưa từng chạy vector_topk.CIS. (4) Merge TP 6c. (5) CIS 255/256 cộng backfill shape, rồi mới đến 6d. (6) 257 dedupe, rồi destination-redirect. (7) Đóng băng CIS graph build từ lúc fill id-map tới lúc lật. (8) Đặt PLACES_SOURCE=cis trên CẢ HAI Lambda cùng lúc. Cờ này do Terraform tripplanner_places_source đặt và là env var có dấu gạch dưới, Nghiệp phải sửa tay trong VSCode. (9) Chạy parity sau khi lật; cửa sổ theo dõi 7 ngày mâu thuẫn với memory 'dev: no waiting', Nghiệp cần quyết.",
+    "CRM phụ thuộc TP: CRM-20 (AA-948, fork bản đồ builder, W4, phụ thuộc CRM-07 và T13). T13 là việc điều tra cách ghép tuyến: CRM dùng lại logic route theo kiểu 'tp.routes.v1' hay qua API graph trong CIS. T13 CHƯA có issue Linear nào (design-v3 dòng 1420 và v2.1 B6 đã ghi nhận). Done-when của nó phải trả lời được 'CRM builder dùng lại logic ghép tuyến bằng cách nào'. CRM-20 không chặn M3, vì CRM-21a có builder dạng danh sách ngày.",
+    "Phụ thuộc ngầm chưa được ghi lại: CRM-20 fork bản đồ TP 'at a pinned commit'. Nên pin SAU khi 6d merge (để có lớp đường kẻ) và SAU AA-906. Lý do: AA-Partner chạy Next 16; nếu fork code Next 15 hiện tại (MapView, TripPanel, DestinationPopup, useTrip) thì sẽ mang theo 23 lỗi lint React Compiler mà AA-906 sinh ra để sửa. Đề xuất: thêm relation AA-948 blockedBy AA-906 (và AA-847 phần 6d), hoặc ghi rõ CRM-20 tự sửa các lỗi đó.",
+    "Trùng file khiến các việc TP không chạy song song được: 6d sửa MapView, TripPanel, DestinationPopup, lib/api.ts, lib/types.ts. Đó cũng là các file AA-906 refactor, và AA-837 đi sau AA-906 trên cùng các file. 6c sửa assembly/handler.py, events, suggestions, coverage, activities, cũng là chỗ AA-909 phải thêm guard cho các GET. Thứ tự đề xuất trong lane TP: tp-017 → 6c → 6d + redirect → AA-909 → AA-906 → AA-837. AA-908 (My Trips) đi sau AA-909.",
+    "AA-712 (một lượt chạy place, S252) ghi precondition là 'HNSW rewrite of TP suggestions.py'. Phần này đã có trong nhánh 6c (vector_topk). Khi 6c merge thì precondition này được gỡ, cần cập nhật plan.json.",
+    "plan.json (cập nhật 20/10, session S245) còn ghi AA-847 ở S248–S249. Thực tế Nghiệp đã chọn ship ngay trong S246 và code đã có ở cả 4 repo. AA-886 ghi Backlog nhưng Linear là In Progress. AA-877 xếp S249 nhưng TP #119 đã merge."
+   ],
+   "open_issues": [
+    "AA-847 (High, Linear Backlog): local branches ở 4 repo, chưa push. Review chặn đã ghi trong docs/audits/2026-10-21-S246-aa847-lines-dedupe/README.md: ADR 0007 của root mô tả hành vi chưa build (trên legacy, đường kẻ vẫn vẽ thành ghim; browse map bỏ qua các line pending; same_line_place chưa có caller). Cần sửa wording trước khi push. 4 câu hỏi mở: approximate route có được tính là 'vẽ đúng' không; line chưa có shape trên browse map; chọn luật trùng đường 70%/geom_mid hay 60%/geom_lo; credit Geoapify thực tế.",
+    "AA-909 (Medium, Backlog, xếp S253): 4 GET (trip, suggestions, coverage, activities) chưa kiểm guest token. Ai có trip_id là đọc được trip của người khác.",
+    "AA-906 (Low, Backlog, ≥S254): Next 15 → 16, đổi middleware.ts thành proxy.ts, sửa 23 lỗi React Compiler, bỏ override postcss. CIS và Booking đã ở Next 16 (Booking 16.3.8).",
+    "AA-837 (Low): /plan còn 7 vi phạm tương phản WCAG, lỗi 404 khi Customise, nhãn '1 DAYS'; cần làm rõ dark mode.",
+    "AA-908 (Low): khách đăng nhập qua Cognito EXTERNAL, liên kết phiên guest, My Trips. Bắt buộc trước khi có khách thật.",
+    "AA-861 (Low): redact PII trong outbox sau 90 ngày, cần tripplanner.job. Dòng đầu tiên chỉ đủ 90 ngày vào khoảng 01/2027.",
+    "AA-886 (In Progress): trang legal của TP đã ship dạng bản nháp. Phần portal và gói pháp lý cho chị Thư còn mở.",
+    "AA-871: JSON logs + Sentry cho TP. AA-879: đồng bộ CI gate (TP chưa có branch protection như CIS, docs lint chưa phải required check).",
+    "T13 (điều tra ghép tuyến cho CRM builder) chưa có issue: cần hỏi Nghiệp trước khi tạo, theo luật Linear.",
+    "Known gaps trong CONTEXT: CloudFront trước browse, bảng gateway mới phủ 6 nước, nhiều tab mở cùng lúc có thể đè guest token."
+   ],
+   "risks": [
+    "Bản đồ TP live đang đọc các bảng place đã đóng băng từ slice 6a: tour mới và các bản sửa place của CIS không lên map cho tới khi lật cờ. Lỗi nội dung đã biết (Kuang Si bị trùng, đường mòn Hồ Chí Minh vẽ thành 1 ghim, tour 14 ngày chỉ có 12 ngày) vẫn hiển thị.",
+    "Lật cờ sai thứ tự sẽ làm hỏng assembly: 6c đọc catalog.v_component_embedding và tripplanner.component_id_map. Nếu merge trước khi apply 253 và tp-017 thì sẽ lỗi khi lật, và rebuild graph sau dedupe sẽ đổi id uuid5. PLACES_SOURCE phải đổi trên cả 2 Lambda cùng lúc.",
+    "HNSW top-k chưa từng chạy trên pgvector thật (test dùng stand-in). Phải xem EXPLAIN trên Dev trước khi merge.",
+    "Rủi ro conflict khi chạy song song: 6d, AA-906, AA-837 sửa cùng các component frontend; 6c và AA-909 sửa cùng assembly handler. Nếu xếp chúng vào các lane song song mà không theo thứ tự trên thì sẽ phải rebase nhiều lần.",
+    "CRM-20 có thể fork phải bản map 'cũ' (Next 15, chưa có đường kẻ, còn lỗi lint React Compiler) nếu pin commit trước 6d và AA-906.",
+    "Diff của AA-847 rất lớn (TP 6d 47 file, khoảng 3.4k dòng; tổng cộng 4 repo, 5 migration CIS + tp-017) nhưng vẫn chỉ ở local. Nếu dồn lâu sẽ càng lệch main, và còn là PR loại rủi ro (migration/schema), phải có review độc lập trước khi merge.",
+    "frame-ancestors 'none' trên TP chặn mọi iframe của partner. Nếu CRM hoặc B2B muốn nhúng TP thì cần thiết kế allow-list (KAN-20)."
+   ],
+   "summary_vi": "TripPlanner đang chạy live trên Dev. Frontend aa-tripplanner.vercel.app và tripplanner.lumiguides.it.com trả 200. Main ở a38531d, chạy Next 15.5.28 và React 19.2. Planner bản đồ chạy trên tuyến của tour AA thật, trang tour và trang điểm đến render SSR. Guest token là cookie HttpOnly và được kiểm trên cả 8 thao tác ghi; hand-off sang Booking dùng outbox v1.2. Trong S246 đã merge thêm #112 (trang legal bản nháp), #118 (security headers) và #119 (tp-016 gắn tag PII).\n\nSlice 6a và 6b đã merge, nhưng PLACES_SOURCE chưa đặt trên cả 2 Lambda. Nghĩa là bản đồ live vẫn đọc các bảng place đã đóng băng: tour mới và các bản sửa place của CIS chưa lên map.\n\nAA-847 (lật sang đọc catalog CIS) đã được code ở cả 4 repo nhưng chỉ nằm ở nhánh local, chưa push:\n- TP: tp-017, 6c, 6d (vẽ đường kẻ), redirect.\n- CIS: migration 253–257.\n- Infra: các bản copy migration.\n- Root: ADR 0007 và contract v1.2. Bản ADR đang có một review chặn.\n\nThứ tự bắt buộc:\n1. Apply CIS 253 và tp-017 trên Dev, xem EXPLAIN của HNSW.\n2. Merge 6c.\n3. CIS 255/256 cộng backfill shape, rồi mới đến 6d.\n4. 257, rồi nhánh redirect.\n5. Đóng băng graph build cho tới lúc lật.\n6. Đặt PLACES_SOURCE=cis trên cả 2 Lambda cùng lúc. Biến này có dấu gạch dưới, Nghiệp phải sửa tay trong VSCode.\n\nPhía CRM: CRM-20 (AA-948, fork bản đồ) phụ thuộc T13, việc điều tra ghép tuyến, mà T13 chưa có issue Linear. CRM-20 không chặn M3 vì đã có builder dạng danh sách ngày. Tôi đề xuất thêm một phụ thuộc: chỉ fork bản đồ sau 6d và sau AA-906 (Next 16), để không mang theo 23 lỗi React Compiler.\n\nSong song trong lane TP bị giới hạn vì nhiều việc sửa cùng file. Thứ tự đề xuất: tp-017 → 6c → 6d và redirect → AA-909 (guest token cho các GET) → AA-906 → AA-837.\n\nplan.json đã lệch thực tế ở mấy điểm:\n- AA-847 đang làm từ S246, không phải S248.\n- AA-877 phía TP đã merge.\n- AA-886 đang In Progress.\n- Precondition HNSW của AA-712 đã có trong nhánh 6c.\n\nVề portal: chưa tách repo. Code vẫn ở apps/AA-CIS-App/portal/; chỉ có Vercel project và domain riêng (portal.lumiguides.it.com, trả 307 sang đăng nhập). Việc tách repo là AA-979 (CRM-P2), chuyển portal sang AA-Partner.\n\nTôi không ghi gì ở bất cứ đâu."
+  },
+  {
+   "k": "infra",
+   "built": [
+    "Infra repo AA-CIS-Infra (private), origin/main e90f7ab (#251, 21/10). One Terraform root for the acc2 Dev stack (accounts/aa365, S3 state dev/terraform.tfstate, use_lockfile only, TF 1.15.5 pinned, AWS provider 6.69.1) plus two satellite roots (acc1-bedrock, acc3-bedrock) that only a human applies. Last CI apply was 'Terraform Apply Prod' run 39547868463 at 05:08Z on 21/10, after #251. Nothing is merged and left unapplied.",
+    "Edge today: API GW REST (CIS + Booking) → VPC link → internal NLB (private subnets) → ALB :80. The ALB is internet-facing, but its SG admits only the VPC CIDR. AA-876 is Done in Linear (21/10): stage throttles 50/100 by default, 20/40 on login, 300/600 on content (#247–#249), and the WAF on REST stages stays off on purpose. AA-844 is Done (21/10): CloudFront photos CDN img.lumiguides.it.com with OAC on the private bronze bucket, PriceClass_100, no WAF (#251), and the apply role already has the PhotosCdnCloudFront grant (*Distribution*, OAC, CachePolicy, ResponseHeadersPolicy).",
+    "Identity: Cognito pools aa-workforce-dev and aa-external-dev (Essentials). Staff sign in on staff-auth.lumiguides.it.com. The apply role holds CognitoUserPoolManage on Resource *, so a new pool can go through the OIDC apply.",
+    "X1 DB roles are finished (AA-860 Done S245). Each app has a NOLOGIN owner (cis_owner, bk_owner, tp_owner). The CIS runtime is cis_app. DB Migrate, Schema Dump and the Isolation Probe log in as db_migrator, and the master is break-glass only. owners.yaml is the registry, mirrored in run_migration.py (OWNER_DIRS, IDLE_EXEMPT_KINDS), check_migration_copies.py, db-migrate.yml and isolation_probe.py, with test_owners_registry enforcing it. The roles/ dir runs as master (rl-002 is the latest). The new-owner playbook and role bootstrap template exist (#241, AA-826 Done). The Probe and the Schema Dump were green 21/10 05:00Z after the bk-018/tp-016 apply (#250).",
+    "CI/CD: the roles are split per repo and per job (AA-806). Every new aws_iam_role needs permissions_boundary = workload_boundary and an aa-*-dev-* name. The plan guard refuses applies that change secret versions, random_password or aws_db_instance (AA-846). Migration and Contract Copy Guards run nightly and are green.",
+    "Alarms and cost: every alarm has a runbook link and sends ALARM + OK e-mails. There are cost-anomaly alerts, a total budget and per-App budgets (cost_filter user:App). The S243 alarms cover the cis_app connection limit and AdminCreateUser with a password. The CloudTrail trail is single-region with no KMS (observability.tf).",
+    "AA-848 is Done in Linear (20/10): the X2 RLS catalogue guard runs in CIS CI and in the nightly dump (Infra #234).",
+    "AA-911 Infra work is in flight this session and NOT pushed (no PR yet). Branch feat/aa-911-preview-callback adds Cognito callbacks + DNS for the fixed staff Preview hosts (identity_variables, custom_domains_variables, modules/ecs). Branch feat/aa-911-bridge-staff-rows adds the run-script db/scripts/aa911_bridge_staff_rows.py + tests. Linear AA-911 is still Backlog.",
+    "Answer to the portal question: the portal has NOT been split into its own repo. The code still lives in apps/AA-CIS-App/portal/ (101 files on origin/main; last commit there is 036ab0e1, AA-876 #889, today). AA-885 (S243) split it only at deploy level: its own Vercel project aa-cis-portal on portal.lumiguides.it.com, with the CNAME in Infra custom_domains.tf (#197). The org has no AA-Partner repo (gh repo list: AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-CIS-Infra, AA-Ecosys, archived AA-ACP-Core). The real move is CRM-P2 = AA-979 (Backlog). It depends on CRM-P1 AA-978 (which needs CRM-11 and the AA-813 re-scope) and CRM-07. Its Infra part: switch portal. from the Vercel CNAME to CloudFront → Fargate, keep Vercel one week, roll back to Vercel if needed, change the Cognito clients."
+   ],
+   "gaps": [
+    "No AA-Partner exists anywhere in Infra: no ECR, task def, service, SG, ALB host rule, OIDC deploy role (needs the new repo's immutable sub id), App tag/budget entry, owners.yaml owner `crm`, rl-003 roles file (crm_owner, crm_app limit 6, crm_ai_reader, crm_insights, crm_support_reader, crm_eraser) or migrator_member_of + crm_owner. The isolation probe has no crm cells and DB Migrate has no input regex for crm-NNN. All of this is CRM-04 (AA-932), deps CRM-01a/01b/03.",
+    "The apply role has NO kms:* grant at all (only agent_session has kms:Decrypt). It also has no CloudFront VPC-origin actions (cloudfront:*VpcOrigin*); PhotosCdnCloudFront covers only distribution, OAC, cache and response-headers policies. Object Lock is covered by AmazonS3FullAccess. CRM-03 (AA-931) must add KMS and VPC-origin grants as a local MFA bootstrap apply.",
+    "Apply-role headroom: it already has the default quota of 10 managed attachments, and all its inline policies share one 10,240-character limit (AA-846 narrowed it to make room). The CRM-03 grants may not fit. Options: a Service Quotas raise (free, up to 20) and a customer-managed policy, or swap an AWS-managed FullAccess policy. Decide this in CRM-03.",
+    "No KMS keys exist in the Dev stack yet. The CRM needs data, ingest and seal keys, with alarms on PutKeyPolicy, CreateGrant, ScheduleKeyDeletion, DisableKey and Decrypt by a foreign principal, plus a nightly GetKeyPolicy diff. The pattern exists: EventBridge on CloudTrail management events incl. read-only → SNS (identity_alerts.tf, AA-854). New EventBridge rules must stay in the apply role's scope (rule/aa-identity-* today), so CRM rules need their own name prefix grant.",
+    "CloudFront → VPC origin is a NEW pattern: the only existing edge is API GW REST + VPC link. The VPC origin must be the internal NLB, or a new internal ALB; the current ALB is internet-facing in public subnets. The ALB default action forwards to CIS, so a partner Host rule plus a secret origin header is needed for 'non-partner Host gets 403'. CloudFront's default origin response timeout is 30 s, which is exactly the CRM-03 SSR edge case and may need a quota raise. A WAF on CloudFront would be a global us-east-1 web ACL with its own cost; design v3 puts Dev WAF at $0 and WAF only at W8.",
+    "No scheduled Terraform drift detection: terraform-plan.yml runs on pull_request only, and the last main push plans are from July. Drift from console changes or MFA bootstrap applies is only seen on the next PR.",
+    "AA-873 is untouched: no GuardDuty, no Access Analyzer, no account-level S3 BPA, and CloudTrail is single-region with no KMS, no CloudWatch delivery and no Object Lock. Overlap with CRM-04: both need Object Lock buckets and KMS keys and use the CloudTrail→EventBridge alarm path, so the KMS key-policy and alarm module could be built once.",
+    "AA-874 is untouched: aws_elasticache_cluster has no AUTH, TLS or at-rest encryption. The 'shared SG' part is already fixed (X1 S14 #190: Redis ingress is cis-api + cis-worker only). grep on origin/main shows Booking and TripPlanner have no redis, sentry_sdk or structlog imports, so the switch touches CIS only. Moving to a replication group rolls the CIS services (needs the idle gate).",
+    "AA-871 is not started in any repo: Booking and TripPlanner have no Sentry and no structlog. The Infra part is small (log metric filters, the Sentry DSN secrets Nghiệp sets by hand).",
+    "AA-880 (prod blueprint, ADR 0012) and AA-864 are Backlog with no date. CRM-38 Go-real (W8, est. Feb–Mar 2027) needs prod placement, a compliance Object Lock and a networking decision, so ADR 0012 should be decided before W8 starts.",
+    "Docs drift: ecosystem-architecture.md and Infra CONTEXT.md do not mention AA-Partner or the crm owner yet (CRM-01a scope). The schema-ownership.md entry for crm is also missing."
+   ],
+   "open_issues": [
+    "Tracker drift to fix at session end: plan.json and backlog §3 still list AA-848 (Done 20/10), AA-876 (Done 21/10) and AA-844 (Done 21/10) as Backlog in S249/S250. AA-911 is set to S248, but its Infra work started S246 (2 local branches, unpushed). AA-889 and AA-890 status drift is already noted in s246-decisions.md.",
+    "AA-931 CRM-03 (Backlog, Nghiệp MFA): apply-role bootstrap (KMS, CloudFront VPC origin, Object Lock, SES, Cognito) + spike hello container via CloudFront VPC origin → NLB → ALB host rule + ALB rule-order test. No deps, so it can start in parallel with CRM-01a/01b (root docs).",
+    "AA-932 CRM-04 (Backlog, L, Nghiệp MFA for KMS policies): deps 01a, 01b, 03.",
+    "Other MFA-gated Infra steps from CRM v3 §6.5: CRM-11 partner pool, CRM-B1 M2M pool aa-m2m-dev, CRM-13b break-glass role, CRM-33a acc3 role AA3-Bedrock-Invoker-CRM (human-only acc3 root), CRM-38 prod. Nghiệp must be present for each, so batch them per session.",
+    "Fargate ARM64 on FARGATE_SPOT (CRM-04 says 'Fargate ARM Spot'): as far as I know Fargate Spot supports only x86_64 (unverified today). Check it in CRM-02, or plan Fargate ARM on-demand or x86 Spot and fix the Dev cost line.",
+    "Terraform state layout for the CRM: put a partner.tf in the existing aa365 root (Booking precedent, one state, one apply at a time) or a new accounts/<name> root. Decide in CRM-03, before CRM-04.",
+    "AA-874 / AA-873 are cost-gated (D-19): Redis is expected to cost ~$0 more; GuardDuty needs a quote; Access Analyzer (external) and account S3 BPA are free (check that no bucket relies on public access; the photos CDN uses OAC, so it is safe); a KMS key for CloudTrail is ~$1/month.",
+    "AA-816 S2 (API legacy flag off) still waits on AA-911 Preview sign-in. AA-816 A10 is pushed to the end of the project (S246 decision)."
+   ],
+   "risks": [
+    "Single Terraform root and state for everything on acc2 (CIS, Booking, TripPlanner, identity, and soon CRM): parallel lanes cannot apply Infra at the same time (lockfile), and every CRM PR plans the whole stack. Run the Infra lane as one serial queue with one apply at a time, even when the app lanes run in parallel.",
+    "A Terraform apply that touches aws_ecs_service, aws_ecs_task_definition or aws_lambda_function rolls services with no job guard, and DB Migrate apply refuses while any owner's job table is busy or a wave is open. Paid quality runs and waves on CIS (shared.job) will block crm-NNN and bk/tp migrations too unless the crm_ kinds are in IDLE_EXEMPT_KINDS from day one (the design says so). Plan migrations into idle windows.",
+    "Migration Copy Guard needs the owner's migration-only PR merged first. 8 AA-847 copy branches + 2 AA-911 branches are open locally in .tmp-session/wt (no PRs). Adding a 4th owner (crm, from a new public repo) adds another cross-repo ordering chain.",
+    "The new CloudFront → VPC origin path bypasses API GW and its throttles. Until W8 the CRM has no WAF and no API GW stage limits, so rate limits must be app-side (as in CIS login_throttle). This is acceptable only because Dev has synthetic tenants only.",
+    "Apply-role bootstrap creep: each CRM wave adds grants to a role near its inline-size and managed-attachment limits. A wildcard such as kms:* on Resource * would weaken the boundary model. Scope the KMS grants to alias/crm-*, give administration no Decrypt, and add an independent agent review (CI/IAM = risky PR).",
+    "Object Lock: compliance mode cannot be undone or deleted before retention ends. Keep Dev governance-only as the design says, and guard it in tests so a compliance bucket is never created on Dev by mistake.",
+    "Shared RDS db.t4g.small: crm_app (limit 6) joins cis_app, booking, tripplanner, aa_app_user and db_migrator. The CRM-37a load test must respect the per-role connection alarms and the idle gate.",
+    "Process note: during this read I briefly ran 'git checkout --detach origin/main' in the main Infra checkout and restored 'main' right away (git status: main...origin/main [behind 2], no file changes). Nothing else was written."
+   ],
+   "summary_vi": "Infra/nền tảng (đọc origin/main e90f7ab, Linear, các worktree). Portal CHƯA tách repo: code vẫn ở apps/AA-CIS-App/portal/ (101 file, commit mới nhất 036ab0e1 hôm nay). AA-885 chỉ tách phần chạy: project Vercel aa-cis-portal + portal.lumiguides.it.com (CNAME ở Infra #197). Trong org chưa có repo AA-Partner. Việc chuyển code thật là CRM-P2 (AA-979, Backlog), chờ P1 (AA-978, cần CRM-11 và AA-813 viết lại phạm vi) và CRM-07. Phần Infra của P2: đổi host portal. từ Vercel sang CloudFront → Fargate, giữ Vercel 1 tuần để quay lại nếu lỗi.\n\nHạ tầng hiện có:\n- 1 root Terraform acc2 (state S3, lockfile, TF 1.15.5). Lần apply gần nhất là 05:08Z 21/10, không còn PR đã merge mà chưa apply.\n- X1 xong: cis_owner/bk_owner/tp_owner, runtime cis_app, migrate bằng db_migrator. Probe và schema dump xanh 21/10.\n- Cognito có 2 pool; role apply đã có quyền tạo pool qua OIDC.\n- Đã Done 20–21/10 trên Linear nhưng plan.json/backlog vẫn ghi Backlog S249/S250 (cần sửa tracker): AA-876 (throttle API GW, không WAF), AA-844 (CDN ảnh img.), AA-848 (guard RLS X2).\n- AA-911 đang làm trong phiên: 2 nhánh Infra (callback Cognito + DNS cho host Preview cố định; script xử lý 3 dòng staff thời cầu nối), chưa push.\n\nBảo mật còn mở:\n- AA-874 (Redis không AUTH/TLS/mã hoá; chỉ CIS dùng Redis, Booking/TP không dùng) và AA-873 (chưa có GuardDuty/Access Analyzer/S3 BPA; CloudTrail 1 region, không KMS) chưa bắt đầu.\n- AA-871: Booking và TP chưa có Sentry/structlog.\n- AA-880/AA-864 (blueprint prod) chưa có ngày. Nên chốt ADR 0012 trước CRM W8.\n\nCRM W0/W1 cần từ Infra:\n- CRM-03 (AA-931, MFA): bổ sung quyền cho role apply. Hiện KHÔNG có quyền kms:* và cloudfront VPC origin; Object Lock thì S3FullAccess đã có. Role đang chạm trần 10 managed policy và 10.240 ký tự inline, nên cần nâng quota hoặc gộp policy. Thêm spike CloudFront → VPC origin → NLB nội bộ → luật Host trên ALB: đây là mẫu mới, ALB hiện internet-facing, timeout origin mặc định 30 s, WAF CloudFront là ACL toàn cầu có phí riêng.\n- CRM-04 (AA-932, MFA cho key policy): ECR/service/SG/luật ALB/role OIDC cho repo mới (boundary + tên aa-*-dev-*), 3 key KMS kèm alarm theo mẫu EventBridge-CloudTrail của AA-854, 2 bucket Object Lock (Dev chỉ governance) + bucket docs/ingest. Phía DB: owner crm trong owners.yaml và mọi bản sao của nó, file roles rl-003, migrator_member_of, ô probe, IDLE_EXEMPT_KINDS crm_ ngay từ đầu.\n- Cần kiểm tra: 'Fargate ARM Spot' có thể không được AWS hỗ trợ (chưa xác minh hôm nay). Cần chốt CRM nằm trong root aa365 hay root riêng.\n\nRủi ro khi làm song song:\n- 1 state chung, nên Infra phải là 1 hàng đợi apply tuần tự.\n- Apply đụng ECS/Lambda không có guard job; DB Migrate chờ mọi bảng job rảnh. Chạy có phí trên CIS sẽ chặn migration crm/bk/tp.\n- Các bước MFA (CRM-03/04/11/B1/13b/33a/38) cần Nghiệp có mặt, nên gom theo phiên.\n- Chưa có workflow phát hiện drift theo lịch.\n\nGhi chú: lúc đọc tôi có lỡ detach HEAD trong checkout Infra chính rồi trả về main ngay, không file nào bị đổi."
+  },
+  {
+   "k": "crm",
+   "built": [
+    "Portal đã tách khỏi CIS chưa: CHƯA tách repo, chỉ mới tách app và domain. AA-885 Done 19/10 (CIS #832, a70cf53d). `portal/` là app Next.js thứ hai, khoảng 68 file .tsx, nằm ngay trong apps/AA-CIS-App/portal/. Nó có Vercel project riêng `aa-cis-portal` và domain portal.lumiguides.it.com (Infra #197). Host admin trả 308 sang portal. Portal vẫn đăng nhập tenant bằng API key (/auth/tenant-login) và vẫn gọi API tenant của CIS FastAPI. Org GitHub chưa có repo AA-Partner (gh repo list: AA-CIS-App, AA-Ecosys, AA-CIS-Infra, AA-Booking, AA-TripPlanner-Web, AA-ACP-Core đã archived). Việc chuyển code là CRM-P2 = AA-979 (Backlog), và chỉ chuyển frontend; API tenant vẫn ở CIS.",
+    "CIS (AA-CIS-App main a5f3da88): phiên S246 đã merge #887–#894 (ADR 0010 đóng băng pipeline_lessons, mỗi lần gọi LLM ghi 1 dòng log, AA-876 rate limit + headers, AA-844 ảnh qua CDN, corpus Q0, oracle S1, repair contract AA-925). Theo Linear, AA-729, AA-927, AA-844, AA-877 và AA-876 đã Done. AA-925 và AA-915 In Progress.",
+    "AA-Booking (main 2a4b57f): live trên Dev từ 14/10, migration tới bk-018. Đã có intake, trip case, proposal, pricing+FX maker-checker, suppliers/hotels/net rates, trip plans đọc catalog live, email staff qua SES, retention, deploy gate. Staff đã đăng nhập được bằng Cognito WORKFORCE (#35/#36) nhưng cầu nối CIS vẫn bật (AA-911 Backlog). CHƯA có: departures, capacity, holds, API B2B, M2M, VND, phí huỷ, giao diện khách (O8), wave 3 (AA-682 chưa xếp lịch).",
+    "AA-TripPlanner-Web (main a38531d): Next 15 + React 19, tp-016, các trang SSR đọc catalog CIS, cờ PLACES_SOURCE vẫn để legacy (chờ AA-847), guest token đã hash, trang legal bản nháp. Chưa có: traveller sign-in (AA-908), T13 route stitching (chưa có issue).",
+    "AA-CIS-Infra (main e90f7ab): X1 xong, Cognito, CDN ảnh (#251), throttle API GW (#247–#249). Chưa có tài nguyên nào cho CRM/AA-Partner. DB Migrate mới biết owner cis/bk/tp, chưa có `crm`.",
+    "Đồ thị phụ thuộc, phần W0–W3 (E = deps ghi trên card, I = suy ra): 928/929/930/931 không phụ thuộc. 932 ← E 928, 929, 931. 933 ← I 928, 932 (deploy). 934 ← I 933, 932. 935 ← I 933, 931. 936 ← I 933, 934, 935. 937 ← I 934, 936. 938 ← I 930, 933. 939 ← I 930, 935, 928. 940 ← I 932, 933. 941 ← I 928, 936, 939. 942 ← I 936, 940. 943 ← I 936, 937, 939. 944 ← I 936. 945 ← I 932, 934, 936. 946 ← I 943, 944.",
+    "Đồ thị, phần W4–W8 + lane (phần lớn là E): 947 ← 972, 973, 975, 976, 944. 948 ← 935 + T13. 949 ← 947. 950 ← 949, 973, 974. 951 ← 949, 977. 952 ← 946, 950, 974. 953 ← 946, 952. 954 ← 953. 955 ← 946. 956 ← 975, 953. 957 ← 952, 974, 956. 958 ← 930, 945. 959 ← 943, 958, 953. 960 ← 959, 976. 961 ← 975, 945. 962 ← 945, 939. 963 ← 947, 959, 977. 964 ← 938, 940, 945, 958, 949. 965 ← 964. 966 ← 950, 952. 967 ← 942, 941. 968 ← 945, 959, 977. 971 ← I 941, 939, 940. 969 ← I toàn bộ W4–W7 + 979. 970 ← I 969. 972 ← 928. 973 ← I 928. 974 ← 973. 975 ← 973. 976 ← 928, 972. 977 ← 976. 978 ← 939 + AA-813. 979 ← 978, 935. 980 ← I 969, 970, 971, 979.",
+    "Đường găng (S=0.25, M=0.5, L=1 phiên; script /tmp/claude-1000/-home-nghiep-projects-AA-Ecosys/2894b372-a5cb-41dc-8635-5df10ac7d5aa/scratchpad/cp.py): AA-928 → 932 → 933 → 934 → 936 → 937 → 943 → 946 → 952 → 953 → 959 → 968 → 969 → 970 → 980. Theo phụ thuộc thì khoảng 13 phiên. Nhánh 936 → 944 → 947 → 949 → 950 → 952 cũng có slack 0. Slack: B1–B4 2.5, B2b 3.5, B5 7.5, P1/P2 5, AA-948 9.5, AA-939 1.0, AA-945 2.5.",
+    "Bắt đầu được NGAY, song song: AA-928, AA-929, AA-930, AA-931 (MFA). Sau AA-928: AA-972 B1 (MFA), AA-973 B2 (migration, cần review), khung repo AA-933. Lượt sau: AA-934/935 ‖ AA-974/975 ‖ AA-976 (CIS) ‖ AA-938/940. Sau nữa: AA-936 + AA-939 (MFA) ‖ AA-977 (migration CIS)."
+   ],
+   "gaps": [
+    "Không kiểm trạng thái AWS live (task def ECS, SHA đang chạy, RDS): task chỉ đọc nên tôi không chạy STS/ECS. Không biết các PR CIS merge hôm nay (#887–#894) đã deploy chưa.",
+    "Phụ thuộc 'I' là suy ra từ nội dung card và thứ tự wave; card W1–W3 không ghi deps rõ. Nghiệp hoặc người viết card nên xác nhận, nhất là 933 ← 932, 939 ← 930, 969 ← mọi thứ.",
+    "Chưa đọc chi tiết từng log phiên S240–S245, chỉ đọc decisions S246, README backlog, plan.json, git log và CONTEXT.md.",
+    "plan.json chưa có 53 issue CRM, chưa có project/milestone CRM, AA-821 vẫn ghi session S247. Các issue đã Done hôm nay (AA-729, 927, 844, 877, 876) vẫn ghi Backlog/In Progress.",
+    "ecosystem-architecture.md (last_reviewed 18/10) đã lỗi thời: vẫn ghi Booking bk-011, staff Booking 'Phase 2 not started', không nhắc portal app/Vercel riêng, không có AA-Partner. Đoạn mở đầu CONTEXT.md của Booking chỉ mô tả tới Wave 1.",
+    "T13 (TripPlanner route stitching) chưa có issue ID.",
+    "Có một thao tác ngoài phạm vi chỉ đọc: `git fetch` đã cập nhật remote-tracking refs ở 5 repo local (không đổi working tree, không đổi nhánh)."
+   ],
+   "open_issues": [
+    "Đăng nhập W1 mâu thuẫn: CRM-07 (AA-935) ghi dùng 'same cis-portal client as the portal', nhưng portal chưa lên Cognito (AA-813 Backlog, vẫn API key). CRM-11 lại tạo pool partner riêng, và P2 phải mời user đăng ký lại. Cần chốt W1 đăng nhập bằng gì.",
+    "AA-813 cần re-scope trước CRM-P1: mô tả vẫn ghi password login + acp_shared.tenant_users, lệch ADR 0006 Phase 3 và pool partner.",
+    "Lane B chồng AA-682 (Booking wave 3: invoices, payment schedules) và AA-835 (ADR 0004a supply content). Cần re-scope hoặc gộp để Booking không có hai kế hoạch cho cùng domain.",
+    "ADR 0008a 'CRM own LLM gateway' xung đột AA-804 'one gateway library'. Cần chốt trong CRM-01a.",
+    "Repo AA-Partner chưa tồn tại: ai tạo (Nghiệp hay agent qua gh)? Access review Q-2 đề xuất tắt 'members can create repositories'.",
+    "Có tạo issue cho T13 không? CRM-20 phụ thuộc nó, dù không chặn M3.",
+    "53 issue đã tạo hết một lần, trái luật design 'tạo trước 1 wave, ~10–14 issue mở'. Linear đang 143/250 chưa archive. Giữ nguyên hay archive các wave xa?",
+    "Tỷ lệ chia CIS / CRM mỗi tuần (luật CIS App first, D5) cần ghi vào master plan, đặc biệt khi việc CIS của CRM (08, 13a, P1, B4, B5) tranh slot với lane chất lượng."
+   ],
+   "risks": [
+    "Booking là cột dài nhất: 3.5 phiên tuần tự trên một repo (B1 → B2 → B2b/B3) cộng AA-911, AA-910. B1–B3 phải xong trước khi AA-947 bắt đầu (khoảng phiên CRM thứ 4.5). Trễ là đẩy lùi cả M3.",
+    "Nghẽn MFA: 7 lần apply cần Nghiệp (931, 932, 939, 972, 971, 964, 980). Hai lần 931 và 932/972 nằm sát đầu đường găng.",
+    "Năng lực song song: chỉ agent điều phối được merge, RAM 8 GB, không deploy backend khi shared.job/booking.job còn job. Chạy có phí bên CIS (chất lượng) có thể chặn deploy CRM/CIS. Thêm crm.job làm DB Migrate apply phải chờ thêm một bảng job (CRM-04 cần IDLE_EXEMPT_KINDS).",
+    "Ngân sách kết nối RDS khoảng 132/135. Thêm crm_app (limit 6 / pool 3) và load test 37a trên RDS Dev dùng chung.",
+    "Migration rủi ro cần review độc lập: B2, B2b (Booking), B5 (CIS), 932 (owner/roles), 967 (xoá dữ liệu), 939/971 (auth).",
+    "P2 chuyển Content studio ra AA-Partner, ngược memory 'CIS App first'. Có nguy cơ hỏng portal: phải giữ Vercel 1 tuần và diễn tập rollback.",
+    "Tài liệu kiến trúc và plan.json lệch thực tế. Phiên sau đọc nhầm trạng thái nếu không cập nhật cùng lúc với master plan song song."
+   ],
+   "summary_vi": "Portal mới tách app và domain, chưa tách repo. AA-885 xong 19/10 (CIS #832):\n- `apps/AA-CIS-App/portal/` là một app Next.js riêng, có Vercel project `aa-cis-portal` và domain portal.lumiguides.it.com.\n- Code vẫn nằm trong repo CIS, vẫn đăng nhập bằng API key và vẫn gọi API tenant của CIS.\n- Repo AA-Partner chưa tồn tại trên GitHub.\n- Việc chuyển code là AA-979 (CRM-P2). Nó phụ thuộc AA-978 (P1), mà P1 lại cần AA-939 và việc re-scope AA-813, cộng thêm AA-935. Sau P2 thì backend tenant vẫn ở CIS.\n\nCác app đang tới đâu:\n- **CIS:** đang tập trung chất lượng nội dung. Hôm nay đã merge #887–#894. Theo Linear, AA-729, AA-927, AA-844, AA-877 và AA-876 đã Done.\n- **Booking:** live trên Dev tới bk-018, staff đã đăng nhập bằng Cognito nhưng cầu nối CIS vẫn bật (AA-911). Chưa có departures, holds, B2B, VND, phí huỷ hay giao diện khách. AA-682 chưa xếp lịch.\n- **TripPlanner:** Next 15, chưa lật PLACES_SOURCE=cis (AA-847), chưa có traveller sign-in (AA-908).\n- **Infra:** chưa có gì cho CRM.\n\n53 issue CRM (AA-928..AA-980) đều ở Backlog, là con của AA-821.\n\n**Đường găng:** dài khoảng 13 phiên nếu chỉ tính phụ thuộc. Chuỗi là AA-928 → 932 → 933 → 934 → 936 → 937 → 943 → 946 → 952 → 953 → 959 → 968 → 969 → 970 → 980. Nhánh 936 → 944 → 947 → 949 → 950 → 952 cũng không có slack.\n\n**Bắt đầu được ngay, song song:** AA-928, AA-929, AA-930 và AA-931 (AA-931 cần MFA). Ngay sau AA-928 là AA-972 (B1, cần MFA), AA-973 (B2) và khung repo AA-933.\n\n**Phụ thuộc ra ngoài CRM:**\n- Booking: Lane B chồng phạm vi với AA-682.\n- CIS: phần CIS của CRM-08, cùng 13a, P1, B4, B5. B4 phụ thuộc mềm vào AA-847 và AA-851; B5 chồng với AA-835.\n- TripPlanner: T13 chưa có issue.\n- Identity: AA-813 (cho P1), ADR 0006 và AA-703.\n- AI: AA-804 xung đột với ADR 0008a.\n- Release và legal: AA-891, AA-886, AA-820.\n- Go-real: AA-880, AA-864, AA-873, AA-874, AA-839 và WAF.\n\nTổng khối lượng là 40–45 phiên. Vì vậy kế hoạch chạy song song bị giới hạn bởi năng lực: chỉ một agent được merge, RAM 8 GB, 7 lần apply cần MFA, luật chờ bảng job rảnh. Phụ thuộc không phải là giới hạn chính.\n\n**Cần chốt và cập nhật:**\n- Chưa cập nhật: plan.json chưa có CRM và trạng thái S246 đã cũ. ecosystem-architecture.md và đoạn mở đầu CONTEXT.md của Booking đã lỗi thời.\n- Đăng nhập ở W1 mâu thuẫn. CRM-07 ghi dùng client cis-portal, nhưng portal chưa lên Cognito, và CRM-11 lại tạo pool partner riêng."
+  }
+ ],
+ "plan": {
+  "status_vi": "TRẢ LỜI THẲNG: portal CHƯA tách repo khỏi CIS. AA-885 (S243, CIS #832) mới tách ở mức deploy: Vercel project riêng aa-cis-portal (Root Directory = portal), domain riêng portal.lumiguides.it.com (CNAME ở Infra #197). Code vẫn ở apps/AA-CIS-App/portal/ (kiểm 21/10: 101 file theo dõi, Next 16.4.2 / React 19.2.4, package riêng, không import ra ngoài portal/ — chỉ có comment trỏ frontend/). Portal vẫn đang được sửa nhiều: 7 commit chạm portal/ trên CIS main trong 7 ngày (gần nhất 036ab0e1 AA-876), đã có /privacy + /terms. Guard và CI gắn repo CIS: tests/unit/test_aa885_portal_split.py (so byte kit), tests/e2e/smoke-portal/aa885-portal-host.spec.ts, workflow vercel-deploy-portal.yml + ui-smoke-portal.yml. Org chưa có repo AA-Partner. Việc chuyển = CRM-P2 AA-979 (Backlog, L), theo thiết kế phụ thuộc CRM-P1 AA-978 (cần CRM-11 AA-939 + AA-813 re-scope) và CRM-07 AA-935.\n\nSỬA so với bản nháp (đã kiểm repo + Linear 21/10):\n- AA-915 gần như xong: CIS #887 (đóng băng pipeline_lessons sau cờ + app ADR 0010) và root #145 (đổi số ADR 0010) đã merge. Chỉ còn đổi tiêu đề Linear (vẫn ghi \"ADR 0009\") và đóng kèm bằng chứng. Không còn \"nhánh docs ADR\" nào phải push.\n- AA-886: root #144 (gói pháp lý, DPA, DSAR) đã merge, /privacy + /terms đã có trên TP và portal. Phần kỹ thuật xong, chỉ chờ chị Thư duyệt câu chữ → đóng/thu hẹp ở S247, không để tới S261.\n- Schema dump có bk-018 + tp-016 đã merge (root #147, Verified 05:02Z 21/10, CIS 251) → bỏ ghi chú \"chờ PR schema dump\" ở lane Booking.\n- Booking: main 2a4b57f (bk-018, chỉ migration tag PII, Infra #250 đã chép), image API vẫn edd88ba — không lệch chức năng.\n- AA-889/890 Linear đã Done; AA-896 Linear In Progress (plan.json chưa ghi). Thư mục .tmp-session/wt có 54 mục chứ không phải 18.\n- Còn issue portal không có trong plan: AA-671 (Marketplace redesign), AA-655 (design system dùng chung), AA-814 (Facts Entry, có UI tenant).\n- Nhịp phiên thật: S240→S246 trong 16–21/10 (~1,2 phiên/ngày). Vậy S253 ≈ 27–28/10, chứ không phải ≥01/11. Việc gắn ngày phải xếp theo ngày: phiên đầu tiên ≥01/11 ≈ S256–S258. AA-820 (≤11/11) ≈ trước S265.\n\nCIS (ước ~80% phạm vi Dev; chất lượng nội dung là phần mở lớn nhất): API + worker chạy a5f3da88 (= origin/main), migration 251. A-series A0→A4 live. T0–T10 live trên portal, T11 mới có WordPress (1/8 kênh). Admin console đủ. Ship S246: AA-925 (live, chờ đóng), AA-927, AA-729, AA-876, AA-877, AA-844 Done, AA-915. Treo: AA-926 giữ nhánh (Q1); AA-847 có 8 nhánh CIS local (mig 253–257) + 4 nhánh TP (tp-017, 6c, 6d, redirect) + nhánh Infra, chưa push; AA-911 và AA-816 A10 (giữ chỗ mig 252) chỉ ở local. Gap: kế hoạch S1-first chưa bắt đầu; T11 còn 7 kênh; tenant auth yếu (API key dùng chung); portal chưa có Sentry.\n\nAA-Booking (~40% phạm vi đầy đủ; ~90% back office B2C trước khi bán): như bản nháp. Chưa có invoice/payment/supplier_bookings (AA-682) và toàn bộ Lane B CRM. Có 5 chỗ đụng nhau AA-682 ↔ Lane B, nên cần memo \"lõi thương mại\" nằm TRONG AA-928 (CRM-01a), vì AA-972 bị chặn bởi AA-928.\n\nTripPlanner (~70%): main a38531d, Next 15.5.28. PLACES_SOURCE chưa lật (AA-847 local). AA-909, AA-906, AA-908, AA-871 mở; T13 chưa có issue.\n\nAA-CIS-Infra (~85% cho 3 app, 0% cho CRM): như bản nháp. Thêm: có nhánh local infra-aa-847 / aa-847-254 / places-probe.\n\nAA-Partner / CRM: 0% code. 53 issue AA-928…AA-980 đều Backlog. Theo thiết kế: danh nghĩa 37,25 phiên, thực tế 40–45 phiên với ~2,8 phiên CRM/tuần, M1 ≈ giữa 11, M2 ≈ giữa 12, M3 ≈ đầu 1/2027. Bản nháp đặt C-M1 S252, C-M2 S256, C-M3 S259, W6 xong S262 (≈ 07/11), tức nhanh gấp 3–5 lần ước tính của chính thiết kế, và có lỗi thứ tự phụ thuộc (xem blocked_by đã sửa). Bản sửa giả định mỗi phiên đều bật Ultracode, CRM (gồm Lane B + P) ≤ ~40% item: C-M1 ≈ S252–S253, C-M2 ≈ S258–S260, C-M3 ≈ S262–S265. W5–W8 xếp lại ở S262. Nếu phiên thường (3–5 issue) thì quay về lịch của thiết kế.",
+  "lanes": [
+   {
+    "lane": "L0 Tracker + docs sync (đầu mỗi phiên, ngắn)",
+    "owner": "Claude orchestrator (root repo); Nghiệp duyệt khi cần tạo issue/milestone Linear",
+    "issues_in_order": [
+     "AA-925",
+     "AA-915",
+     "AA-886",
+     "AA-803",
+     "AA-896",
+     "AA-821"
+    ],
+    "depends_on": [],
+    "notes": "S247: đóng AA-925 kèm bằng chứng (a5f3da88 live, #891/#893/#894). Đóng AA-915: đổi tiêu đề Linear từ 'ADR 0009' sang 'ADR 0010', bằng chứng CIS #887 + root #145 + cờ đóng băng trên Dev. AA-886: phần kỹ thuật xong (#144, trang /privacy /terms trên TP + portal); đóng hoặc tách phần chờ chị Thư thành checklist. AA-803: Cancel theo Q7 a. AA-889/890 chỉ cần sửa plan.json (Linear đã Done). AA-896: ghi In Progress. plan.json: thêm project 'crm', 53 issue CRM theo slot bên dưới, AA-759/760/761/762/671/655, AA-642, AA-645; sửa các mục Done S246; thêm trường lane; đổi slot gắn ngày sang ngày thật (≥01/11 ≈ S256–S258). ecosystem-architecture.md: Booking bk-018; portal = app riêng (deploy) trong repo CIS; AA-Partner 'planned'. Hỏi Nghiệp trước khi tạo issue (T13, P2a nếu tách riêng) và milestone Linear. Quota 143/250: archive Done mỗi phiên. Dọn 54 mục .tmp-session/wt sau mỗi lần merge AA-847."
+   },
+   {
+    "lane": "L1 CIS quality (S1-first; T9 song song theo Q2=b)",
+    "owner": "Claude orchestrator + 1 subagent CIS backend; Nghiệp phân xử A/B (~30–45′) và sửa ví dụ mẫu (~1 h)",
+    "issues_in_order": [
+     "AA-845",
+     "AA-779",
+     "AA-780",
+     "AA-645",
+     "AA-926",
+     "AA-916",
+     "AA-924",
+     "AA-790",
+     "AA-789",
+     "AA-788",
+     "AA-795",
+     "AA-783",
+     "AA-741",
+     "AA-765",
+     "AA-900",
+     "AA-917",
+     "AA-918",
+     "AA-919",
+     "AA-920",
+     "AA-921",
+     "AA-922",
+     "AA-923",
+     "AA-642"
+    ],
+    "depends_on": [
+     "L0"
+    ],
+    "notes": "AA-925/AA-915 chuyển sang L0 (đóng). S247: bước 0/1 ($0): bảng dữ kiện, bộ kiểm bằng code trên 50 bài S1, panel chấm lại 10–15 trang 2 lần. S248: phẫu thuật prompt sau cờ, dựng A+ và E, sàng 3 model trên 12 tour (~$2,5, gộp AA-645). S249: KHÔNG chạy có phí, vì là ngày lật AA-847 (backfill + deploy CIS cần bảng job rảnh, DM-11.4). S250: run 1. S251: run 2 + Nghiệp phân xử. S252: nối nhánh thắng vào shadow. S253: quyết định go/no-go bằng văn bản cho AA-926/916/924/790/WM P1+/chạy lại catalog. Luật DM-11.4 chặn cả merge/deploy backend CIS khi shared.job còn job (không chỉ chặn migration). Vì vậy phiên chạy có phí chỉ được có 1 lượt deploy CIS ở đầu phiên. T9 (AA-779/780) tinh chỉnh song song nhưng không thêm cổng trong 4 tuần. Mỗi phiên tối đa 2 PR backend CIS từ L1, vì L2/L3/LB cũng merge vào CIS."
+   },
+   {
+    "lane": "L2 CIS places + TP flip (AA-847 ship + flip, rồi place runs)",
+    "owner": "Claude orchestrator (4 repo, 1 hàng apply); review độc lập vì có migration; Nghiệp tự sửa biến PLACES_SOURCE trong VSCode",
+    "issues_in_order": [
+     "AA-847",
+     "AA-712",
+     "AA-905",
+     "AA-784"
+    ],
+    "depends_on": [
+     "L0"
+    ],
+    "notes": "Thứ tự giữ như bản nháp: sửa câu chữ ADR 0007 → push root + CIS 253 + Infra copy → review → apply 253 + tp-017 → EXPLAIN HNSW → TP 6c → 254 → 255/256 + backfill → 6d → 257 dedupe-job → redirect → đóng băng graph build → lật PLACES_SOURCE=cis trên 2 Lambda cùng lúc (⚠️ env var có dấu gạch dưới — Nghiệp sửa tay trong VSCode) → kiểm parity. Phiên lật (S249) không chạy có phí. Trước khi push, kiểm Migration Copy Guard có chấp nhận khoảng trống 252 không (252 giữ cho A10 local, dời cuối dự án). Nếu không chấp nhận thì đổi số AA-847 thành 252–256 và A10 lấy số sau. AA-712/905/784 chạy có phí theo tập con (thử 3, rồi tối đa 50), mỗi lần ở phiên không có A/B run."
+   },
+   {
+    "lane": "L3 Identity + security",
+    "owner": "Claude orchestrator + subagent review cho PR auth/IAM; Nghiệp MFA",
+    "issues_in_order": [
+     "AA-911",
+     "AA-816",
+     "AA-813",
+     "AA-820",
+     "AA-874",
+     "AA-871",
+     "AA-859",
+     "AA-829",
+     "AA-873",
+     "AA-703"
+    ],
+    "depends_on": [
+     "L0"
+    ],
+    "notes": "AA-911 (a): push + apply Infra preview-callback + bridge-staff-rows (S247), gỡ cầu nối ở CIS/Booking + e2e (S248). Sau đó AA-816 S2 (S249). A10 để cuối dự án. AA-813 không build riêng: re-scope trong AA-928, hoàn thành qua AA-939 + AA-978. AA-762 đóng như trùng AA-939. AA-820 xếp theo ngày (≤11/11), cần chị Thư. AA-874 chỉ chạm CIS và cần cửa sổ rảnh. AA-871 (Sentry Booking/TP/portal) đặt ở phiên mà Booking/TP không có subagent khác. Nếu P2a đã chạy thì Sentry portal làm ở AA-Partner. AA-873 phải báo giá trước, dùng chung khuôn KMS/alarm với AA-932."
+   },
+   {
+    "lane": "L4 Booking (CRM Lane B + AA-682)",
+    "owner": "Claude orchestrator + 1 subagent Booking (mỗi phiên tối đa 1 item Booking); review độc lập mọi bk-019+; Nghiệp MFA pool M2M; chị Thư: thuế, % cọc, đánh dấu thanh toán, margin B2B",
+    "issues_in_order": [
+     "AA-972",
+     "AA-973",
+     "AA-974",
+     "AA-975",
+     "AA-976",
+     "AA-977",
+     "AA-682",
+     "AA-910",
+     "AA-835"
+    ],
+    "depends_on": [
+     "L0 (AA-928 có memo lõi thương mại)",
+     "L3 (AA-911 trước AA-972)",
+     "L2 (AA-847 lật trước AA-976)"
+    ],
+    "notes": "Memo lõi thương mại Booking (1 mô hình dòng booking, kênh trên trip_cases, máy trạng thái có chiều channel, invoice.party, chính sách huỷ dùng chung, outbox chung với AA-835) phải nằm trong AA-928, vì 928 chặn 972 và AA-682. Chuỗi trên cùng repo, tuần tự: B1 bk-019 (S249–S250) → B2 bk-020 (S251) → B2b bk-021 (S252) → B3 bk-022 (S253). B4 AA-976 (CIS, S254) và B5 AA-977 (CIS migration, S256) đi làn CIS. AA-682 chỉ bắt đầu khi chị Thư đã chốt; không chen vào giữa B1–B3 vì cùng file trip_cases/status/pricing. Bỏ ghi chú 'chờ schema dump bk-018' (đã merge #147). Branch từ origin/main."
+   },
+   {
+    "lane": "L5 TripPlanner",
+    "owner": "Claude orchestrator + 1 subagent TP (UI nhìn thấy được: Claude viết)",
+    "issues_in_order": [
+     "AA-909",
+     "AA-906",
+     "AA-837",
+     "AA-908",
+     "AA-871",
+     "AA-861"
+    ],
+    "depends_on": [
+     "L2 (AA-847 6c/6d)"
+    ],
+    "notes": "Làm tuần tự vì trùng file: 6c/6d/redirect (trong L2) → AA-909 (S250) → AA-906 Next 16 (S252, không chung phiên với AA-934/935 để giữ ≤3 subagent code) → AA-837 (S253) → AA-908 (S255). T13 (ghép tuyến cho AA-948) cần issue mới, hỏi Nghiệp; làm sau 6d + AA-906 (~S258). AA-861 gắn thời gian ~01/2027."
+   },
+   {
+    "lane": "L6 CRM W0–W4 (AA-Partner)",
+    "owner": "Claude orchestrator (root docs + repo mới) + subagent CRM; Nghiệp: MFA 931/932/972/939, tạo repo AA-Partner (nếu tắt quyền tạo repo theo access review Q-2), nhập secret tay",
+    "issues_in_order": [
+     "AA-928",
+     "AA-929",
+     "AA-930",
+     "AA-931",
+     "AA-932",
+     "AA-933",
+     "AA-934",
+     "AA-935",
+     "AA-936",
+     "AA-937",
+     "AA-939",
+     "AA-940",
+     "AA-938",
+     "AA-942",
+     "AA-941",
+     "AA-943",
+     "AA-944",
+     "AA-945",
+     "AA-946",
+     "AA-947",
+     "AA-949",
+     "AA-950",
+     "AA-951",
+     "AA-948"
+    ],
+    "depends_on": [
+     "L0",
+     "L3 (AA-911 trước AA-972)",
+     "L4 (B1–B4 + B2b trước AA-947; B5 trước AA-951)",
+     "L5 (T13 + AA-906 trước AA-948)",
+     "L7 (AA-879: branch protection + CI bắt buộc có ngay từ ngày tạo repo thứ 4)"
+    ],
+    "notes": "Phụ thuộc lấy theo thẻ design-v3 §6.3 và delivery-plan. Bản nháp sai: 938/939/940 cần 937 (CRM-09); 941 cần 939+940; 944 cần 943; 945 cần 943+938; 946 cần 944+945; 947 cần thêm 974. Đường găng thật: 928→932→933→934/935→936 (C-M1)→937→939→943→944/945→946 (C-M2)→947→949→950 (C-M3). Mỗi phiên tối đa 1 bước đường găng (merge + deploy + verify). Mỗi phiên tối đa ~3 item CRM, tính cả Lane B/P (luật CIS-first D5 ~40%). W5–W8 (AA-952…AA-971, AA-980) KHÔNG xếp trước S262: re-plan ở S262 theo tốc độ thật. IDLE_EXEMPT_KINDS crm_ có ngay từ AA-932."
+   },
+   {
+    "lane": "LP Portal move (CRM Lane P) + portal issues",
+    "owner": "Claude orchestrator; UI kit: Claude; đổi host qua hàng apply Infra chung",
+    "issues_in_order": [
+     "AA-759",
+     "AA-760",
+     "AA-978",
+     "AA-979",
+     "AA-761",
+     "AA-669",
+     "AA-671",
+     "AA-762"
+    ],
+    "depends_on": [
+     "L6 (AA-933, AA-935 cho P2a; AA-939 + AA-931 cho P1/P2b)",
+     "L3 (AA-813 re-scope trong AA-928)",
+     "L7 (AA-879 CI parity)"
+    ],
+    "notes": "AA-759 (High) + AA-760 làm trong CIS trước P2a (S249–S250) để kit ổn định. P2a (S255): chuyển portal/ sang thư mục portal/ RIÊNG trong AA-Partner (không gộp vào web/, vì AA-935/936 đang sửa web/), giữ history, giữ Vercel aa-cis-portal (đổi repo nguồn) + auth API key/BFF. Trước P2a đóng băng tính năng portal ở CIS 1 phiên. Nếu P2a làm trước P1 thì phải tách AA-979 hoặc ghi rõ ngoại lệ, vì Linear AA-979 bị chặn bởi AA-978. P1 AA-978 (S256, CIS). P2b (S258): host qua CloudFront→Fargate, partner pool (mời đăng ký lại), 301 /trip/*, Sentry. Vercel giữ ≥7 NGÀY lịch (≈6–8 phiên, không phải 2 phiên). Gỡ Vercel + xoá bản copy CIS + đảo guard ở phiên đầu tiên ≥ P2b + 7 ngày (≈S265+). AA-761/669/671 làm sau P2a ở AA-Partner. AA-762 đóng như trùng AA-939."
+   },
+   {
+    "lane": "L7 Platform / FinOps / release",
+    "owner": "Claude orchestrator; Nghiệp cài GitHub App",
+    "issues_in_order": [
+     "AA-903",
+     "AA-879",
+     "AA-901",
+     "AA-891",
+     "AA-896",
+     "AA-838",
+     "AA-665",
+     "AA-899",
+     "AA-825",
+     "AA-880",
+     "AA-864",
+     "AA-855"
+    ],
+    "depends_on": [
+     "L0"
+    ],
+    "notes": "AA-879 (CI gate parity + drift detection theo lịch) kéo lên S249: plan tự ghi 'trước khi có repo thứ 4' mà AA-933 tạo repo ở S250. Ít nhất branch protection + docs lint + DM-6.10 scan cho AA-Partner phải có trong AA-933. AA-901 (S251) → AA-891 (S252). AA-896 + audit chi phí Aug/Sep/Oct + AA-838 + AA-665: phiên đầu tiên ≥01/11 (≈S257 theo nhịp hiện tại; xếp theo ngày, không theo số phiên). AA-903 khi có PR Dependabot frontend. AA-880 ADR 0012 bản nháp trước W8. AA-855 sau toàn bộ kỹ thuật (memory)."
+   }
+  ],
+  "sessions": [
+   {
+    "session": "S247",
+    "parallel_items": [
+     "L0 tracker sync: đóng AA-925 + AA-915 (bằng chứng #887/#145, sửa tiêu đề Linear), AA-886 phần kỹ thuật, AA-803 cancel; plan.json + backlog + ecosystem-architecture",
+     "L1 S1 bước 0/1 ($0): bảng dữ kiện + bộ kiểm code trên 50 S1 + panel chấm lại ×2",
+     "L2 AA-847: sửa câu chữ ADR 0007, kiểm guard số migration (khoảng trống 252), push root + CIS 253 + Infra copy, review độc lập, apply 253 + tp-017, EXPLAIN HNSW",
+     "L3 AA-911: push + apply 2 nhánh Infra (preview-callback, bridge-staff-rows)",
+     "L6 AA-928 CRM-01a (ADR AA-Partner, contracts, errata, re-scope AA-813, đăng nhập W1, memo lõi thương mại Booking, ADR 0008a vs AA-804) + AA-929 + AA-930 (chỉ docs/root, không chiếm subagent code)",
+     "L1 AA-845 Q845-2/3 (cảnh báo credit + 402)"
+    ],
+    "why": "Đồng bộ tracker trước; S1 bước 0 tốn $0; mig 253 apply khi shared.job rảnh; W0 CRM là docs nên chạy song song không tốn RAM. AA-779/780 dời sang S248 để S247 chỉ có 2–3 PR backend CIS."
+   },
+   {
+    "session": "S248",
+    "parallel_items": [
+     "L1 S1 bước 2: phẫu thuật prompt sau cờ, dựng A+ và E, sàng 3 model trên 12 tour (~$2,5, gộp AA-645). Deploy CIS trước, rồi mới chạy",
+     "L2 AA-847: merge TP 6c, CIS 254 revoke, PR 255/256 + backfill shape (chưa apply)",
+     "L3 AA-911: CIS/Booking gỡ cầu nối + e2e base URL, verify đăng nhập Preview",
+     "L6 AA-931 CRM-03 (Nghiệp MFA): quyền apply role (kms alias/crm-*, VPC origin), spike CloudFront→VPC origin→NLB→ALB host rule; Nghiệp Accept ADR của AA-928",
+     "L1 AA-779/AA-780 T9 tinh chỉnh (không thêm cổng)",
+     "L7 AA-903 nếu đã có PR Dependabot"
+    ],
+    "why": "MFA 931 nằm đầu đường găng. 6c chỉ merge sau 253 + tp-017 + EXPLAIN. AA-911 mở khoá AA-816 S2 và AA-972."
+   },
+   {
+    "session": "S249",
+    "parallel_items": [
+     "L2 AA-847 ngày lật: apply 255/256/257 đầu phiên, merge 6d + dedupe-job + redirect, đóng băng graph build, Nghiệp sửa tay PLACES_SOURCE=cis trên 2 Lambda, parity. KHÔNG chạy có phí trong phiên này",
+     "L3 AA-816 S2: tắt cờ legacy API (deploy CIS cùng cửa sổ rảnh)",
+     "L6 AA-932 CRM-04 + L4 AA-972 pool M2M (gom 1 lần Nghiệp MFA; 2 apply Terraform tuần tự)",
+     "L7 AA-879 CI gate parity + drift detection (trước khi có repo thứ 4)",
+     "LP AA-759 PortalShell on kit (UI, deploy Vercel, không cần bảng job rảnh)"
+    ],
+    "why": "Bản nháp xếp A/B run 1 cùng phiên lật: backfill/dedupe job và deploy CIS sẽ tranh cửa sổ shared.job rảnh với run có phí (DM-11.4) → tách run sang S250."
+   },
+   {
+    "session": "S250",
+    "parallel_items": [
+     "L1 A/B run 1 (25 golden × A+/A'/W/E, ≤$10), kick sau mọi apply/deploy đầu phiên",
+     "L6 AA-933 CRM-05: repo AA-Partner có sẵn branch protection + CI bắt buộc, API skeleton, crm.job, OIDC deploy",
+     "L4 AA-972 xong: b2b quote bk-019, scope, price_hash (review độc lập)",
+     "L5 AA-909 guest token cho 4 GET",
+     "LP AA-760 portal audit + state fixes"
+    ],
+    "why": "Repo AA-Partner là cổng vào W1 và P2a. B1 phải xong trước B2. AA-909 là lỗ đọc trip người khác, làm ngay sau 6d."
+   },
+   {
+    "session": "S251",
+    "parallel_items": [
+     "L1 A/B run 2 + phân tích + Nghiệp phân xử ~30 bài",
+     "L6 AA-934 CRM-06 + AA-935 CRM-07 (cùng repo, khác thư mục api/ và web/)",
+     "L4 AA-973 CRM-B2 departures/holds bk-020 + kênh trên trip_cases (review)",
+     "L7 AA-901 GitHub App + ADR 0011 (Nghiệp cài App)"
+    ],
+    "why": "Giữ ≤3 subagent code (AA-Partner ×2, Booking). AA-906 dời S252 để không vượt RAM."
+   },
+   {
+    "session": "S252",
+    "parallel_items": [
+     "L1 S1 bước 4: nối nhánh thắng vào shadow/review, T2 đọc bảng dữ kiện",
+     "L6 AA-936 CRM-08 slice 1 (AA-Partner + CIS) → C-M1",
+     "L4 AA-974 CRM-B2b VND + phí huỷ dùng chung + gia hạn hold (sửa ADR 0005 d5)",
+     "L5 AA-906 Next 15→16",
+     "L7 AA-891 release-please, tag đầu"
+    ],
+    "why": "C-M1 sớm nhất có thể (936 cần 934+935). B2b xây chính sách huỷ một lần, dùng cho cả AA-682."
+   },
+   {
+    "session": "S253",
+    "parallel_items": [
+     "L1 S1 bước 5: quyết định go/no-go bằng văn bản (AA-926, AA-916, AA-924, AA-790, WM P1+, chạy lại catalog); nếu go thì merge AA-926",
+     "L6 AA-937 CRM-09 F1/F2",
+     "L4 AA-975 CRM-B3 outbox chung (gộp mẫu AA-835) + on-request desk",
+     "L5 AA-837 /plan UI",
+     "L3 AA-871 phần Booking/TP (Sentry + structlog) nếu Booking/TP không có subagent khác; nếu có thì dời"
+    ],
+    "why": "937 mở khoá 938/939/940. B3 khép Lane B trước W4."
+   },
+   {
+    "session": "S254",
+    "parallel_items": [
+     "L6 AA-939 CRM-11 partner pool + MFA + ma trận quyền (Nghiệp MFA); đóng AA-762 trùng",
+     "L6 AA-940 CRM-12 audit F5",
+     "L4 AA-976 CRM-B4 catalog qua HTTP (CIS, cần places đã lật)",
+     "L1 theo go/no-go: AA-916 WM P0 (migration CIS + RLS, review)",
+     "L2 AA-712 lượt place thử (thử 3 → tối đa 50), chỉ khi phiên không có A/B run"
+    ],
+    "why": "939 là điều kiện của P1, 941, 943. Theo thiết kế, 938/940 cần 937 (S253), không chạy song song 936 như bản nháp."
+   },
+   {
+    "session": "S255",
+    "parallel_items": [
+     "L6 AA-938 CRM-10 scrubber + AA-942 CRM-14",
+     "LP P2a: chuyển portal/ sang AA-Partner/portal (giữ history, giữ Vercel + auth API key; chuyển workflow deploy/smoke + secret e2e; guard kit kéo raw từ CIS main); đóng băng tính năng portal ở CIS từ S254",
+     "L5 AA-908 traveller sign-in Cognito EXTERNAL",
+     "L3 AA-874 Redis AUTH/TLS (cửa sổ rảnh)",
+     "L4 AA-682 phần 1 nếu chị Thư đã chốt; nếu chưa thì AA-910"
+    ],
+    "why": "P2a chỉ cần 933 + 935 + 759/760; đặt vào thư mục riêng để không đụng web/ của CRM."
+   },
+   {
+    "session": "S256",
+    "parallel_items": [
+     "L6 AA-943 CRM-15 module 1 + 2",
+     "LP AA-978 CRM-P1 membership feed + cis.tenant-api.v1 (CIS)",
+     "L4 AA-977 CRM-B5 nội dung AA trong CIS (migration CIS, review)",
+     "L3 AA-820 điều khoản AI (chị Thư, hạn ≤11/11)",
+     "L2 AA-905 geo backfill tập con (có báo giá)"
+    ],
+    "why": "P1 cần 939 (S254). B5 cần cho AA-951. AA-820 cần làm trước hạn ngày."
+   },
+   {
+    "session": "S257",
+    "parallel_items": [
+     "L7 phiên đầu ≥01/11: AA-896 + audit chi phí Aug/Sep/Oct theo app + AA-838 + AA-665 (theo ngày)",
+     "L6 AA-944 CRM-16 + AA-945 CRM-17 (cả hai cần 943; 945 cần thêm 938)",
+     "L6 AA-941 CRM-13a L1 console (CIS + AA-Partner)",
+     "LP AA-761 trang account ở AA-Partner/portal",
+     "L1 WM P1 AA-917/918 nếu go"
+    ],
+    "why": "Mốc ngày 01/11 rơi vào khoảng S256–S258 theo nhịp hiện tại. 944/945 sau 943."
+   },
+   {
+    "session": "S258",
+    "parallel_items": [
+     "L6 AA-946 CRM-18 thin full lifecycle → C-M2",
+     "LP P2b: host portal. qua CloudFront→Fargate, partner pool + mời đăng ký lại, 301 /trip/*, Sentry portal; giữ Vercel ≥7 ngày + diễn tập rollback",
+     "L4 AA-682 phần 2 (payment schedule, đánh dấu thanh toán tay) nếu đã chốt",
+     "L3 AA-859 tenant pool wave 2/3",
+     "L5 T13 điều tra ghép tuyến (nếu Nghiệp duyệt tạo issue)"
+    ],
+    "why": "P2b chỉ sau P1 + spike 931 + 939. C-M2 là điểm dùng được đầu tiên của CRM."
+   },
+   {
+    "session": "S259",
+    "parallel_items": [
+     "L6 AA-947 CRM-19 B2B client + AA lines (cần 944 + B1–B4 + B2b)",
+     "LP AA-669 My Content DataTable (AA-Partner/portal)",
+     "L1 WM P2 AA-919/920 nếu go",
+     "L3 AA-829 restore drill",
+     "L7 AA-899 OpenAPI export + kiểm breaking-change"
+    ],
+    "why": "W4 mở khi Lane B và 944 xong."
+   },
+   {
+    "session": "S260",
+    "parallel_items": [
+     "L6 AA-949 CRM-21a proposal model + day-list builder",
+     "L6 AA-948 CRM-20 fork bản đồ nếu T13 + AA-906 + 6d xong (không chặn M3)",
+     "L2 AA-784 place cards theo đợt (tập con có phí)",
+     "L1 AA-741 G7 T-series audit (có phí, theo go/no-go)",
+     "L4 AA-682 phần 3 / AA-910"
+    ],
+    "why": "Chạy có phí chỉ sau khi lật places + gộp trùng đã ổn định."
+   },
+   {
+    "session": "S261",
+    "parallel_items": [
+     "L6 AA-950 CRM-21b client proposal + accept + hold",
+     "L6 AA-951 CRM-22 module 4 + 'Before you go' (cần B5)",
+     "L3 AA-873 baseline (sau báo giá GuardDuty), dùng chung khuôn KMS/alarm của 932",
+     "L7 AA-825 retention rollups",
+     "LP AA-671 Marketplace redesign (AA-Partner/portal)"
+    ],
+    "why": "950 là điều kiện của C-M3."
+   },
+   {
+    "session": "S262",
+    "parallel_items": [
+     "L6 kiểm C-M3 (quote → hold → confirm sản phẩm AA trên Dev) hoặc ghi rõ phần trễ",
+     "L0 tổng kết + re-plan W5–W8 (AA-952…AA-971, AA-980), A10 (AA-816) đổi số migration, gỡ Vercel portal nếu đã đủ 7 ngày",
+     "L7 AA-880 ADR 0012 bản nháp",
+     "L1 WM P3 (AA-921/922/923) nếu go"
+    ],
+    "why": "Theo thiết kế, W5–W8 nằm ngoài cửa sổ S247–S262. Xếp lại theo tốc độ thật thay vì giả định W6 xong ở S262."
+   }
+  ],
+  "milestones": [
+   {
+    "id": "M1",
+    "name": "Đóng khối identity",
+    "window": "S247–S249",
+    "criteria": [
+     "AA-911: e2e đăng nhập staff trên URL Preview của Booking và CIS xanh; /auth/booking-token trả 404; 0 dòng bridge-era trong booking.staff_users",
+     "AA-816 S2: LEGACY_ADMIN_LOGIN_ENABLED=false trên API Dev, POST login cũ trả 404 (A10 dời cuối dự án)",
+     "AA-703: comment trạng thái Phase 2/3 có link bằng chứng"
+    ]
+   },
+   {
+    "id": "M1b",
+    "name": "SDLC / FinOps",
+    "window": "S248–S257 (AA-896 theo ngày ≥01/11)",
+    "criteria": [
+     "AA-879: branch protection + check bắt buộc giống nhau ở 4 repo (kể cả AA-Partner từ ngày tạo), job drift Terraform theo lịch chạy xanh 1 lần",
+     "AA-901 GitHub App cài + AA-891 tag đầu tiên ở ≥1 repo",
+     "AA-896: báo cáo chi phí Aug/Sep/Oct theo tag App + dịch vụ, có ở docs/audits",
+     "AA-903: link 1 PR Dependabot frontend có 'Vercel deploy' skipped"
+    ]
+   },
+   {
+    "id": "M2a",
+    "name": "Chất lượng CIS: S1-first",
+    "window": "S247–S253",
+    "criteria": [
+     "Bảng dữ kiện + bộ kiểm bằng code chạy trên 50 bài S1, có báo cáo; panel chấm lại 10–15 trang 2 lần, độ lặp ghi bằng số",
+     "Run 1 + run 2 mỗi run ≤$10, chi phí đọc từ shared.llm_call_log stage adhoc_*; luật dừng P4 ghi trước khi chạy",
+     "Nhánh thắng chạy shadow/review sau cờ, T2 đọc bảng dữ kiện",
+     "Quyết định go/no-go bằng văn bản ở docs/audits cho AA-926/916/924/790/WM P1+/chạy lại catalog",
+     "AA-779/780: không thêm cổng mới trong 4 tuần (số cổng trong registry không tăng)"
+    ]
+   },
+   {
+    "id": "M2b",
+    "name": "Places flip + place runs",
+    "window": "S247–S256",
+    "criteria": [
+     "CIS 253–257 (hoặc số đã đổi) + tp-017 applied; TP 6c/6d/redirect merged",
+     "PLACES_SOURCE=cis trên cả 2 Lambda; parity probe trên ≥50 trip không lệch place id/toạ độ; 0 tuyến bị ẩn hoặc vẽ vòng tròn thay thế; gộp trùng chạy tự động, 0 lần gộp tay",
+     "AA-712, AA-905 chạy tập con (≤50 tour/lượt), chi phí ghi log; AA-845 Q845-2/3 xong; AA-803 Cancel"
+    ]
+   },
+   {
+    "id": "M3",
+    "name": "Lõi thương mại Booking + Lane B",
+    "window": "S247–S256 (AA-682 tuỳ chị Thư)",
+    "criteria": [
+     "Memo lõi thương mại nằm trong AA-928, ADR Accepted",
+     "AA-972..975 live trên Dev: quote M2M, hold hết hạn bằng reaper, VND + phí huỷ, outbox phát sự kiện; review độc lập mỗi bk-019..022",
+     "AA-976/977: catalog.http.v1 trả dữ liệu từ read model đã lật",
+     "AA-682 (chỉ khi chị Thư đã chốt thuế/% cọc/đánh dấu thanh toán): /billing và /trip-checks thôi placeholder"
+    ]
+   },
+   {
+    "id": "C-M1",
+    "name": "CRM chạy trên Dev (W0–W1)",
+    "window": "S252–S254 (nhịp Ultracode); ~giữa 11 nếu phiên thường",
+    "criteria": [
+     "AA-928..931 merged/applied; host không phải partner trả 403 qua CloudFront→VPC origin",
+     "AA-932: crm_app → booking.* và cis_app → crm.* trả 42501; DB Migrate CIS không bị heartbeat CRM chặn",
+     "Agency giả đăng nhập; form traveller → thẻ Inquiry < 1 phút; F1 chỉ có ciphertext; CIS thấy crm.job"
+    ]
+   },
+   {
+    "id": "P-M1",
+    "name": "Portal tách repo",
+    "window": "P2a S255; P1 S256; P2b S258; gỡ Vercel ≥ P2b + 7 ngày (~S265)",
+    "criteria": [
+     "P2a: AA-Partner/portal giữ history, 24 smoke portal xanh từ CI AA-Partner, Vercel aa-cis-portal deploy từ repo mới",
+     "P1: thay đổi membership ở CIS tới CRM ≤1 phút; CIS cố cấp vai CRM thì bị từ chối",
+     "P2b: portal. chạy trên CloudFront→Fargate, 24 smoke xanh, token cis-admin không lấy được phiên portal, URL Vercel cũ redirect giữ path, diễn tập rollback Vercel thành công",
+     "Sau ≥7 ngày: xoá portal/ khỏi CIS, đảo guard test, cập nhật CONTEXT.md + ecosystem-architecture"
+    ]
+   },
+   {
+    "id": "C-M2",
+    "name": "CRM full lifecycle hàng của đại lý (W2–W3)",
+    "window": "S258–S260 (Ultracode); ~giữa 12 nếu phiên thường",
+    "criteria": [
+     "AA-937..946 xong; 1 trip đi từ Inquiry tới Completed với supplier của đại lý trên Dev",
+     "Partner pool bắt MFA; test lọc trường trên mọi route: trợ lý không nhận lãi/net/hoa hồng"
+    ]
+   },
+   {
+    "id": "C-M3",
+    "name": "AA supply trong CRM (W4)",
+    "window": "S261–S265; ~đầu 1/2027 nếu phiên thường",
+    "criteria": [
+     "AA-947, 949, 950, 951 xong (AA-948 là bản nâng cấp, không chặn mốc)",
+     "Sản phẩm AA được quote, hold, confirm từ đề xuất tương tác; accept sau khi hold hết hạn trả 409 hold_expired"
+    ]
+   },
+   {
+    "id": "M4",
+    "name": "UAT video",
+    "window": "sau M2a và sau toàn bộ kỹ thuật (>S262)",
+    "criteria": [
+     "Mỗi kịch bản 1 video 1440/390, đăng nhập Cognito, đủ mọi app",
+     "Báo cáo pass/fail, Nghiệp ký"
+    ]
+   },
+   {
+    "id": "M5",
+    "name": "Tenant trả tiền / prod + CRM Go-real",
+    "window": ">S262 (CRM W7–W8 ~T2–T3/2027)",
+    "criteria": [
+     "AA-820 xong trước 11/11; AA-886 gói pháp lý chị Thư duyệt",
+     "AA-874, AA-873, AA-859, AA-871 xong",
+     "AA-880 ADR 0012 Accepted trước W8; AA-969 không còn finding High; AA-980 đại lý thật đầu tiên được mời trên prod"
+    ]
+   }
+  ],
+  "blocked_by_relations": [
+   {
+    "issue": "AA-932",
+    "blocked_by": [
+     "AA-928",
+     "AA-929",
+     "AA-931"
+    ]
+   },
+   {
+    "issue": "AA-933",
+    "blocked_by": [
+     "AA-928",
+     "AA-932"
+    ]
+   },
+   {
+    "issue": "AA-934",
+    "blocked_by": [
+     "AA-932",
+     "AA-933"
+    ]
+   },
+   {
+    "issue": "AA-935",
+    "blocked_by": [
+     "AA-933"
+    ]
+   },
+   {
+    "issue": "AA-936",
+    "blocked_by": [
+     "AA-934",
+     "AA-935"
+    ]
+   },
+   {
+    "issue": "AA-937",
+    "blocked_by": [
+     "AA-934",
+     "AA-936"
+    ]
+   },
+   {
+    "issue": "AA-938",
+    "blocked_by": [
+     "AA-930",
+     "AA-937"
+    ]
+   },
+   {
+    "issue": "AA-939",
+    "blocked_by": [
+     "AA-928",
+     "AA-937"
+    ]
+   },
+   {
+    "issue": "AA-940",
+    "blocked_by": [
+     "AA-937"
+    ]
+   },
+   {
+    "issue": "AA-941",
+    "blocked_by": [
+     "AA-939",
+     "AA-940"
+    ]
+   },
+   {
+    "issue": "AA-942",
+    "blocked_by": [
+     "AA-940"
+    ]
+   },
+   {
+    "issue": "AA-943",
+    "blocked_by": [
+     "AA-937",
+     "AA-939"
+    ]
+   },
+   {
+    "issue": "AA-944",
+    "blocked_by": [
+     "AA-943"
+    ]
+   },
+   {
+    "issue": "AA-945",
+    "blocked_by": [
+     "AA-938",
+     "AA-943"
+    ]
+   },
+   {
+    "issue": "AA-946",
+    "blocked_by": [
+     "AA-944",
+     "AA-945"
+    ]
+   },
+   {
+    "issue": "AA-947",
+    "blocked_by": [
+     "AA-944",
+     "AA-972",
+     "AA-973",
+     "AA-974",
+     "AA-975",
+     "AA-976"
+    ]
+   },
+   {
+    "issue": "AA-948",
+    "blocked_by": [
+     "AA-935",
+     "AA-847",
+     "AA-906"
+    ]
+   },
+   {
+    "issue": "AA-949",
+    "blocked_by": [
+     "AA-947"
+    ]
+   },
+   {
+    "issue": "AA-950",
+    "blocked_by": [
+     "AA-949",
+     "AA-973",
+     "AA-974"
+    ]
+   },
+   {
+    "issue": "AA-951",
+    "blocked_by": [
+     "AA-949",
+     "AA-977"
+    ]
+   },
+   {
+    "issue": "AA-952",
+    "blocked_by": [
+     "AA-946",
+     "AA-950",
+     "AA-974"
+    ]
+   },
+   {
+    "issue": "AA-953",
+    "blocked_by": [
+     "AA-946",
+     "AA-952"
+    ]
+   },
+   {
+    "issue": "AA-954",
+    "blocked_by": [
+     "AA-953"
+    ]
+   },
+   {
+    "issue": "AA-955",
+    "blocked_by": [
+     "AA-946"
+    ]
+   },
+   {
+    "issue": "AA-956",
+    "blocked_by": [
+     "AA-953",
+     "AA-975"
+    ]
+   },
+   {
+    "issue": "AA-957",
+    "blocked_by": [
+     "AA-952",
+     "AA-956",
+     "AA-974"
+    ]
+   },
+   {
+    "issue": "AA-958",
+    "blocked_by": [
+     "AA-930",
+     "AA-945"
+    ]
+   },
+   {
+    "issue": "AA-959",
+    "blocked_by": [
+     "AA-943",
+     "AA-953",
+     "AA-958"
+    ]
+   },
+   {
+    "issue": "AA-960",
+    "blocked_by": [
+     "AA-959",
+     "AA-976"
+    ]
+   },
+   {
+    "issue": "AA-961",
+    "blocked_by": [
+     "AA-945",
+     "AA-975"
+    ]
+   },
+   {
+    "issue": "AA-962",
+    "blocked_by": [
+     "AA-939",
+     "AA-945"
+    ]
+   },
+   {
+    "issue": "AA-963",
+    "blocked_by": [
+     "AA-947",
+     "AA-959",
+     "AA-977"
+    ]
+   },
+   {
+    "issue": "AA-964",
+    "blocked_by": [
+     "AA-938",
+     "AA-940",
+     "AA-945",
+     "AA-949",
+     "AA-958"
+    ]
+   },
+   {
+    "issue": "AA-965",
+    "blocked_by": [
+     "AA-964"
+    ]
+   },
+   {
+    "issue": "AA-966",
+    "blocked_by": [
+     "AA-950",
+     "AA-952"
+    ]
+   },
+   {
+    "issue": "AA-967",
+    "blocked_by": [
+     "AA-941",
+     "AA-942"
+    ]
+   },
+   {
+    "issue": "AA-968",
+    "blocked_by": [
+     "AA-945",
+     "AA-959",
+     "AA-977"
+    ]
+   },
+   {
+    "issue": "AA-969",
+    "blocked_by": [
+     "AA-954",
+     "AA-955",
+     "AA-957",
+     "AA-960",
+     "AA-961",
+     "AA-962",
+     "AA-963",
+     "AA-965",
+     "AA-966",
+     "AA-967",
+     "AA-968",
+     "AA-971",
+     "AA-979"
+    ]
+   },
+   {
+    "issue": "AA-970",
+    "blocked_by": [
+     "AA-969"
+    ]
+   },
+   {
+    "issue": "AA-971",
+    "blocked_by": [
+     "AA-939",
+     "AA-940",
+     "AA-941"
+    ]
+   },
+   {
+    "issue": "AA-972",
+    "blocked_by": [
+     "AA-928",
+     "AA-911"
+    ]
+   },
+   {
+    "issue": "AA-973",
+    "blocked_by": [
+     "AA-972"
+    ]
+   },
+   {
+    "issue": "AA-974",
+    "blocked_by": [
+     "AA-973"
+    ]
+   },
+   {
+    "issue": "AA-975",
+    "blocked_by": [
+     "AA-973"
+    ]
+   },
+   {
+    "issue": "AA-976",
+    "blocked_by": [
+     "AA-928",
+     "AA-972",
+     "AA-847"
+    ]
+   },
+   {
+    "issue": "AA-977",
+    "blocked_by": [
+     "AA-976"
+    ]
+   },
+   {
+    "issue": "AA-978",
+    "blocked_by": [
+     "AA-939",
+     "AA-813"
+    ]
+   },
+   {
+    "issue": "AA-979",
+    "blocked_by": [
+     "AA-978",
+     "AA-935",
+     "AA-931"
+    ]
+   },
+   {
+    "issue": "AA-980",
+    "blocked_by": [
+     "AA-969",
+     "AA-970",
+     "AA-971",
+     "AA-979",
+     "AA-880",
+     "AA-873",
+     "AA-874"
+    ]
+   },
+   {
+    "issue": "AA-813",
+    "blocked_by": [
+     "AA-928"
+    ]
+   },
+   {
+    "issue": "AA-682",
+    "blocked_by": [
+     "AA-928",
+     "AA-974"
+    ]
+   },
+   {
+    "issue": "AA-816",
+    "blocked_by": [
+     "AA-911"
+    ]
+   },
+   {
+    "issue": "AA-909",
+    "blocked_by": [
+     "AA-847"
+    ]
+   },
+   {
+    "issue": "AA-906",
+    "blocked_by": [
+     "AA-847"
+    ]
+   },
+   {
+    "issue": "AA-837",
+    "blocked_by": [
+     "AA-906"
+    ]
+   },
+   {
+    "issue": "AA-908",
+    "blocked_by": [
+     "AA-909"
+    ]
+   },
+   {
+    "issue": "AA-712",
+    "blocked_by": [
+     "AA-847"
+    ]
+   },
+   {
+    "issue": "AA-891",
+    "blocked_by": [
+     "AA-901"
+    ]
+   },
+   {
+    "issue": "AA-761",
+    "blocked_by": [
+     "AA-979"
+    ]
+   },
+   {
+    "issue": "AA-669",
+    "blocked_by": [
+     "AA-979"
+    ]
+   }
+  ],
+  "portal_split": "Hiện trạng (kiểm 21/10): portal đã tách ở mức deploy (AA-885, S243: Vercel aa-cis-portal + portal.lumiguides.it.com) nhưng CHƯA tách repo. Code ở apps/AA-CIS-App/portal/ (101 file, Next 16.4.2, tự đứng). Guard và CI nằm ở CIS: test_aa885_portal_split.py, smoke-portal/aa885-portal-host.spec.ts, vercel-deploy-portal.yml, ui-smoke-portal.yml. Backend ~15 nhóm route vẫn ở CIS API. Portal đang được sửa nhiều (7 commit trong 7 ngày).\n\nKhuyến nghị, đã sửa so với bản nháp:\n(1) Vẫn đề xuất tách AA-979 thành P2a/P2b. Nhưng Linear AA-979 đang bị chặn bởi AA-978 (P1), nên phải chọn một trong hai: tạo 1 issue P2a (hỏi Nghiệp, quota 143/250 còn chỗ), hoặc ghi ngoại lệ trong AA-979. Thiết kế gốc đặt P2 sau P1, nên P2a đi trước P1 là thay đổi cần Nghiệp duyệt.\n(2) P2a (~S255): điều kiện là AA-933 (repo có branch protection + CI bắt buộc từ ngày đầu — AA-879 kéo lên S249), AA-935, AA-759 + AA-760 đã merge, và portal đóng băng tính năng ở CIS 1 phiên. Chuyển vào thư mục portal/ RIÊNG trong AA-Partner, giữ history (git filter-repo). KHÔNG gộp vào web/, vì AA-935/936 đang dựng web/ cùng lúc. Giữ Vercel aa-cis-portal (đổi repo nguồn), giữ auth API key + BFF. Chuyển workflow deploy/smoke, playwright, secret VERCEL_PORTAL_* (⚠️ tên có dấu gạch dưới — Nghiệp sửa tay) và secret e2e. Guard kit: CI AA-Partner kéo raw 14 file _kit/_brand/lib từ CIS main để so byte. Bản copy trong CIS giữ tới khi 24 smoke xanh.\n(3) P1 AA-978 (~S256) cần AA-939 (~S254) và AA-813 đã re-scope trong AA-928.\n(4) P2b (~S258): host portal. qua CloudFront→Fargate (luật Host ALB + header bí mật origin, đã chứng minh ở spike AA-931), tenant chuyển sang partner pool (mời đăng ký lại), 301 /trip/[tourId] sang host traveller, thêm Sentry, diễn tập rollback.\n(5) \"Giữ Vercel 1 tuần\" là 7 NGÀY lịch. Với nhịp ~1,2 phiên/ngày, đó là ~6–8 phiên, không phải 2 phiên như bản nháp (S256→S258). Gỡ Vercel + xoá portal/ khỏi CIS + đảo guard ở phiên đầu tiên ≥ ngày P2b + 7 (~S265), ngoài cửa sổ S262.\n(6) AA-761, AA-669, AA-671 làm sau P2a ở AA-Partner. AA-762 đóng như trùng AA-939.\n\nLý do không chuyển sớm hơn P2a: chưa có repo; luật CIS App first; mỗi PR tính năng portal sẽ chạm 2 repo. Chính P2a cũng tạo ra tình trạng 2 repo này sớm hơn P1, nên khoảng P2a→P2b phải ngắn (≤3 phiên).\n\nRủi ro:\n(a) Gãy portal cho tenant đang dùng Content studio khi đổi host/auth → giữ Vercel + diễn tập rollback.\n(b) Kit thành 3 bản copy (CIS admin, portal, CRM web) → AA-655 package dùng chung để sau, guard so byte là bắt buộc.\n(c) CORS đã tắt nên portal tiếp tục gọi CIS server-to-server; cần cis.tenant-api.v1 (P1) trước P2b.\n(d) CloudFront→VPC origin bỏ qua throttle API GW, WAF chỉ có ở W8 → cần rate limit phía app.\n(e) Ba hướng tenant auth (API key, EXTERNAL theo ADR 0006 Phase 3, partner pool) phải chốt một trong AA-928, nếu không AA-813 làm 2 lần.\n(f) Nếu Nghiệp tắt quyền 'members can create repositories' (access review Q-2) thì Nghiệp phải tự tạo repo AA-Partner.\n(g) Tài liệu (ecosystem-architecture, CONTEXT.md CIS, applies_to aa-cis-portal) phải cập nhật cùng phiên P2a và P2b.",
+  "risks_vi": [
+   "Năng lực song song thật bị giới hạn bởi: RAM (7 GB, ~3 GB trống → tối đa ~3 subagent code), chỉ 1 agent điều phối được merge/deploy/verify, 1 state Terraform (apply tuần tự), và DM-11.4. Bản sửa giữ ≤3 item code nặng mỗi phiên và ≤1 item Booking mỗi phiên.",
+   "DM-11.4 chặn CẢ merge/deploy backend (không chỉ DB Migrate apply) khi shared.job còn job. Bản nháp xếp A/B run 1 cùng phiên lật AA-847 (S249) và AA-712 cùng phiên run → đã tách: phiên lật không chạy có phí; mọi run có phí kick sau lượt deploy đầu phiên.",
+   "Repo CIS là điểm nghẽn: L1, L2, L3 (AA-816/874), LB (B4/B5), LP (759/760/P1) đều merge vào CIS có branch protection 5 job. Giữ ≤2–3 PR backend CIS mỗi phiên.",
+   "Tốc độ CRM: thiết kế ước 40–45 phiên (2,8 phiên CRM/tuần, M1 ~giữa 11, M2 ~giữa 12, M3 ~đầu 1/2027). Bản nháp đặt W6 xong ở S262 (≈07/11). Bản sửa giả định Ultracode mọi phiên; nếu phiên thường thì quay về mốc của thiết kế.",
+   "Bản nháp có lỗi phụ thuộc CRM (938/939/940 trước 937; 943+944 cùng phiên; 947 thiếu 974; 969 thiếu nhiều W5–W7) → xếp nhầm việc chưa làm được; đã sửa trong blocked_by.",
+   "Nhịp phiên ~1,2/ngày: mọi việc gắn ngày (AA-896 ≥01/11, AA-820 ≤11/11, giữ Vercel 7 ngày, AA-861 ~01/2027) phải xếp theo ngày, không theo số phiên.",
+   "AA-847 lớn và chỉ ở local (8 nhánh CIS, 4 TP, Infra, root; 54 mục .tmp-session/wt): nguy cơ mất việc/conflict. Khoảng trống mig 252 (A10 giữ chỗ) có thể bị Migration Copy Guard từ chối → kiểm trước khi push. Lật PLACES_SOURCE sai thứ tự làm hỏng assembly.",
+   "Booking: B1→B2→B2b→B3 tuần tự trên 1 repo, AA-682 cùng file. Memo lõi thương mại phải nằm trong AA-928 (đang chặn 972 và AA-682), nếu không sẽ có 2 máy trạng thái và 2 đường xác nhận booking.",
+   "Nghẽn MFA: 931 (S248), 932 + M2M 972 (gom S249), 939 (S254); Nghiệp phải có mặt đúng các phiên đó. Role apply Infra chạm trần policy; chỉ cấp kms trên alias/crm-*, có review độc lập.",
+   "Repo thứ 4 (AA-Partner) ra đời ở S250 trong khi bản nháp để AA-879 CI parity ở S253 → kéo AA-879 lên S249 và đưa branch protection vào Done-when của AA-933.",
+   "Quota Linear 143/250: T13, tách P2a, các issue W5–W8 đã tạo sẵn (trái luật 'tạo trước 1 wave'). Cần archive Done mỗi phiên và hỏi Nghiệp trước khi tạo thêm.",
+   "Tracker lệch: plan.json (S245) thiếu CRM; AA-915 và AA-886 thực tế đã xong phần kỹ thuật; Linear AA-915 còn ghi 'ADR 0009'; AA-896 In Progress chưa có trong plan. Phải sửa ở S247 trước khi xếp việc.",
+   "Chính sách chất lượng: Q2=b cho tinh chỉnh T9 song song → nguy cơ thêm cổng; giữ luật 'không thêm cổng trong 4 tuần'. A/B có thể ra 'chưa rõ' → thêm 50 tour, $8–25 qua 3–4 phiên, làm go/no-go S253 trễ.",
+   "Tenant auth yếu (API key dùng chung) và portal chưa có Sentry tới P2b (~S258); ba hướng auth tenant chưa thống nhất.",
+   "Phụ thuộc người ngoài: AA-682, margin B2B, thuế, % cọc, AA-820, AA-886 câu chữ đều chờ chị Thư; Lane B chỉ chạy được với đại lý giả trên Dev."
+  ]
+ }
+}

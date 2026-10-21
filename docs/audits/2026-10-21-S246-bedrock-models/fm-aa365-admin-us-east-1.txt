@@ -1,0 +1,95 @@
+OpenAI	openai.gpt-6-astra	ACTIVE	INFERENCE_PROFILE
+NVIDIA	nvidia.nemotron-nano-12b-v2	ACTIVE	ON_DEMAND
+Qwen	qwen.qwen3-coder-next	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-5.6-terra	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-haiku-4-5-20251001-v1:0	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-opus-5-5	ACTIVE	INFERENCE_PROFILE
+Moonshot AI	moonshotai.kimi-k2.5	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-oss-120b-1:0	ACTIVE	ON_DEMAND
+Z.AI	zai.glm-5.3	ACTIVE	INFERENCE_PROFILE
+Qwen	qwen.qwen3-next-80b-a3b	ACTIVE	ON_DEMAND
+Moonshot AI	moonshotai.kimi-k3	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-fable-5	ACTIVE	INFERENCE_PROFILE
+DeepSeek	deepseek.v3.2	ACTIVE	ON_DEMAND
+Anthropic	anthropic.claude-haiku-5-5	ACTIVE	INFERENCE_PROFILE
+TwelveLabs	twelvelabs.pegasus-1-5-v1:0	ACTIVE	INFERENCE_PROFILE
+NVIDIA	nvidia.nemotron-nano-3-30b	ACTIVE	ON_DEMAND
+Anthropic	anthropic.claude-sonnet-4-6	ACTIVE	INFERENCE_PROFILE
+MiniMax	minimax.minimax-m2	ACTIVE	ON_DEMAND
+Z.AI	zai.glm-4.7-flash	ACTIVE	ON_DEMAND
+xAI	xai.grok-4.7	ACTIVE	INFERENCE_PROFILE
+Mistral AI	mistral.voxtral-mini-3b-2507	ACTIVE	ON_DEMAND
+xAI	xai.grok-4.6	ACTIVE	INFERENCE_PROFILE
+Amazon	amazon.nova-pro-v1:0	ACTIVE	ON_DEMAND,INFERENCE_PROFILE
+Amazon	amazon.nova-pro-v1:0:24k	ACTIVE	PROVISIONED
+Amazon	amazon.nova-pro-v1:0:300k	ACTIVE	PROVISIONED
+Amazon	amazon.nova-2-lite-v1:0	ACTIVE	INFERENCE_PROFILE
+Amazon	amazon.nova-2-lite-v1:0:256k	ACTIVE	PROVISIONED
+MiniMax	minimax.minimax-m2.5	ACTIVE	ON_DEMAND
+Google	google.gemma-3-12b-it	ACTIVE	ON_DEMAND
+Moonshot AI	moonshot.kimi-k2-thinking	ACTIVE	ON_DEMAND
+Mistral AI	mistral.mistral-large-3-675b-instruct	ACTIVE	ON_DEMAND
+TwelveLabs	twelvelabs.pegasus-1-2-v1:0	LEGACY	INFERENCE_PROFILE,ON_DEMAND
+Amazon	amazon.nova-2-sonic-v1:0	ACTIVE	ON_DEMAND
+Mistral AI	mistral.devstral-2-123b	ACTIVE	ON_DEMAND
+MiniMax	minimax.minimax-m2.1	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-6.1-sol	ACTIVE	INFERENCE_PROFILE
+NVIDIA	nvidia.nemotron-super-3-120b	ACTIVE	ON_DEMAND
+Qwen	qwen.qwen3-32b-v1:0	ACTIVE	ON_DEMAND
+Mistral AI	mistral.ministral-3-14b-instruct	ACTIVE	ON_DEMAND
+Anthropic	anthropic.claude-opus-4-6-v1	ACTIVE	INFERENCE_PROFILE
+Writer	writer.palmyra-x5-v1:0	LEGACY	INFERENCE_PROFILE
+NVIDIA	nvidia.nemotron-nano-9b-v2	ACTIVE	ON_DEMAND
+Mistral AI	mistral.ministral-3-8b-instruct	ACTIVE	ON_DEMAND
+Mistral AI	mistral.voxtral-small-24b-2507	ACTIVE	ON_DEMAND
+Z.AI	zai.glm-5	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-oss-20b-1:0	ACTIVE	ON_DEMAND
+Anthropic	anthropic.claude-opus-5	ACTIVE	INFERENCE_PROFILE
+Google	google.gemma-3-4b-it	ACTIVE	ON_DEMAND
+Anthropic	anthropic.claude-opus-4-8	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-opus-4-7	ACTIVE	INFERENCE_PROFILE
+OpenAI	openai.gpt-oss-safeguard-120b	ACTIVE	ON_DEMAND
+Google	google.gemma-3-27b-it	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-6-sol	ACTIVE	INFERENCE_PROFILE
+Writer	writer.palmyra-x4-v1:0	LEGACY	INFERENCE_PROFILE
+Anthropic	anthropic.claude-sonnet-4-5-20250929-v1:0	LEGACY	INFERENCE_PROFILE
+Qwen	qwen.qwen3-vl-235b-a22b	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-6-luna	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-fable-5-1	ACTIVE	INFERENCE_PROFILE
+Z.AI	zai.glm-4.7	ACTIVE	ON_DEMAND
+Writer	writer.palmyra-vision-7b	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-5.6-luna	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-sonnet-5-5	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-sonnet-5	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-opus-4-1-20250805-v1:0	LEGACY	INFERENCE_PROFILE
+Mistral AI	mistral.magistral-small-2509	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-5.6-sol	ACTIVE	INFERENCE_PROFILE
+Amazon	amazon.nova-2-5-sonic	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-5.4	ACTIVE	INFERENCE_PROFILE
+Mistral AI	mistral.ministral-3-3b-instruct	ACTIVE	ON_DEMAND
+Anthropic	anthropic.claude-opus-4-5-20251101-v1:0	ACTIVE	INFERENCE_PROFILE
+OpenAI	openai.gpt-5.5	ACTIVE	INFERENCE_PROFILE
+Qwen	qwen.qwen3-coder-30b-a3b-v1:0	ACTIVE	ON_DEMAND
+OpenAI	openai.gpt-oss-safeguard-20b	ACTIVE	ON_DEMAND
+Amazon	amazon.nova-lite-v1:0:24k	ACTIVE	PROVISIONED
+Amazon	amazon.nova-lite-v1:0:300k	ACTIVE	PROVISIONED
+Amazon	amazon.nova-lite-v1:0	ACTIVE	ON_DEMAND,INFERENCE_PROFILE
+Amazon	amazon.nova-micro-v1:0:24k	ACTIVE	PROVISIONED
+Amazon	amazon.nova-micro-v1:0:128k	ACTIVE	PROVISIONED
+Amazon	amazon.nova-micro-v1:0	ACTIVE	ON_DEMAND,INFERENCE_PROFILE
+AI21 Labs	ai21.jamba-1-5-large-v1:0	LEGACY	ON_DEMAND
+AI21 Labs	ai21.jamba-1-5-mini-v1:0	LEGACY	ON_DEMAND
+Cohere	cohere.rerank-v3-5:0	ACTIVE	ON_DEMAND
+DeepSeek	deepseek.r1-v1:0	ACTIVE	INFERENCE_PROFILE
+Meta	meta.llama3-8b-instruct-v1:0	ACTIVE	ON_DEMAND
+Meta	meta.llama3-70b-instruct-v1:0	ACTIVE	ON_DEMAND
+Meta	meta.llama3-1-8b-instruct-v1:0	ACTIVE	INFERENCE_PROFILE
+Meta	meta.llama3-1-70b-instruct-v1:0	ACTIVE	INFERENCE_PROFILE
+Meta	meta.llama3-3-70b-instruct-v1:0	ACTIVE	INFERENCE_PROFILE
+Meta	meta.llama4-scout-17b-instruct-v1:0	ACTIVE	INFERENCE_PROFILE
+Meta	meta.llama4-maverick-17b-instruct-v1:0	ACTIVE	INFERENCE_PROFILE
+Mistral AI	mistral.mistral-7b-instruct-v0:2	ACTIVE	ON_DEMAND
+Mistral AI	mistral.mixtral-8x7b-instruct-v0:1	ACTIVE	ON_DEMAND
+Mistral AI	mistral.mistral-large-2402-v1:0	ACTIVE	ON_DEMAND
+Mistral AI	mistral.mistral-small-2402-v1:0	ACTIVE	ON_DEMAND
+Mistral AI	mistral.pixtral-large-2502-v1:0	ACTIVE	INFERENCE_PROFILE

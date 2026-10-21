@@ -1,0 +1,164 @@
+{
+ "items": [
+  {
+   "id": "D1",
+   "title": "Khách thấy giá chi tiết đến mức nào trên trang đề xuất",
+   "context": "C13 (chỉ hiện tổng) chưa được duyệt, nhưng bản nháp kế hoạch và dữ liệu lại lấy nó làm mặc định. Bản UX thì hiện tổng cộng thêm phần chênh lệch theo từng lựa chọn (+$40/người). v3 đã bỏ C13 khỏi phần build và rút enum xuống còn total_with_deltas | total_only. Cần chốt mặc định. Đây cũng là câu O-7: phần chênh lệch có làm lộ giá tour AA so với TripPlanner không.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Hiện tổng cộng thêm chênh lệch giá bán theo từng lựa chọn, không bao giờ hiện giá từng dòng. Đại lý được chuyển sang 'chỉ tổng' cho từng đề xuất"
+    },
+    {
+     "key": "b",
+     "label": "Chỉ hiện tổng (theo C13); khách đổi lựa chọn chỉ thấy tổng mới"
+    },
+    {
+     "key": "c",
+     "label": "Cho đại lý chọn cả ba mức: tổng / theo ngày / từng dòng"
+    }
+   ],
+   "recommended": "a",
+   "why": "Có chênh lệch thì khách mới tự đổi được lựa chọn (Keep/Swap). Đây là lõi của module 3 và chỉ số upgrade ≥ 20 %. Chênh lệch tính trên giá bán của đại lý, không phải giá AA, nên không lộ giá B2B. Bỏ mức 'từng dòng' để giá tour AA không bị đặt cạnh TripPlanner."
+  },
+  {
+   "id": "D2",
+   "title": "Link đặt cọc (C31) khi khách trả bằng chuyển khoản",
+   "context": "Link cọc chỉ sống khi hold AA còn hạn (đề xuất 48 h). Đại lý VN chỉ dùng chuyển khoản, và tiền vào cộng thời gian agent xác nhận thường quá 48 h. Bản nháp chỉ xử lý trường hợp Stripe, nên có nguy cơ khách đã chuyển tiền nhưng mất chỗ.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Khách bấm 'Tôi đã chuyển' thì CRM tự xin Booking gia hạn hold một lần (đề xuất +72 h, độ dài do Booking quyết) và tạo việc 'Kiểm tra tiền trước <hạn mới>' cho agent. Xác nhận trễ thì giữ chỗ lại; không được thì tạo yêu cầu hoàn tiền"
+    },
+    {
+     "key": "b",
+     "label": "Chỉ agent bấm xin gia hạn từ màn chuyến (không tự động)"
+    },
+    {
+     "key": "c",
+     "label": "Không gia hạn: hết hold thì giữ chỗ lại, không được thì hoàn tiền"
+    }
+   ],
+   "recommended": "a",
+   "why": "Chỉ cho gia hạn một lần và có giới hạn, nên kho AA không bị giữ vô hạn. Agent có hạn chót rõ ràng, và đại lý VN không bị mất chỗ chỉ vì ngân hàng chậm. Phần Booking chỉ thêm một endpoint extend (CRM-B2b)."
+  },
+  {
+   "id": "D3",
+   "title": "Khi nào làm pool Cognito riêng cho đại lý có MFA bắt buộc",
+   "context": "Câu Q1 3.13 bắt buộc MFA cho chủ và agent. ADR 0006 tắt MFA trên pool EXTERNAL, vì bật lên sẽ ảnh hưởng khách TripPlanner và Booking. Bản nháp vừa bật MFA ở CRM-11 (W2), vừa nói tới Go-real mới tách pool, tức là mâu thuẫn. MAU của pool partner có giá theo tier; CRM-02 sẽ kiểm, ước tính $0–5 mỗi tháng.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Tạo pool partner trên Dev ngay ở CRM-11 (W2): MFA bắt buộc (passkey/TOTP), chỉ user giả; EXTERNAL giữ nguyên; sửa ADR 0006 trong CRM-01a; CRM-P2 mời user Content studio đăng ký lại"
+    },
+    {
+     "key": "b",
+     "label": "Giữ Dev trên client cis-portal không MFA, đến Go-real (W8) mới tách pool"
+    },
+    {
+     "key": "c",
+     "label": "Bật MFA trên pool EXTERNAL hiện có"
+    }
+   ],
+   "recommended": "a",
+   "why": "Làm sớm thì luồng MFA và bài test 'mời → dùng được dưới 5 phút' được thử từ W2 thay vì dồn hết vào W8. Khách của TripPlanner và Booking không bị đụng tới. Phương án c làm hỏng luồng của khách hiện có."
+  },
+  {
+   "id": "D4",
+   "title": "Thứ tự xây ba lớp truy cập của AA",
+   "context": "A1 đã duyệt ba lớp: L1 bảng điều khiển không có PII, L2 hỗ trợ do chủ cấp quyền, L3 truy cập khẩn. Bản nháp làm cả ba ở W2, trước cả luồng bán hàng, trong khi Dev chỉ có dữ liệu giả nên chưa có gì cần hỗ trợ. Anh muốn CRM chạy được trên Dev càng sớm càng tốt.",
+   "options": [
+    {
+     "key": "a",
+     "label": "L1 ở W2 (CRM-13a); L2 và L3 dời sang W7 (CRM-13b), vẫn xong trước Go-real"
+    },
+    {
+     "key": "b",
+     "label": "Giữ cả ba lớp ở W2 như bản nháp"
+    }
+   ],
+   "recommended": "a",
+   "why": "Không đổi gì trong phê duyệt A1, chỉ đổi thứ tự. M2 và M3 đến sớm hơn khoảng một phiên. L1 vẫn cần sớm để tạo đại lý giả và theo dõi job."
+  },
+  {
+   "id": "D5",
+   "title": "Nhịp làm CRM mỗi tuần và mốc đủ 23 module",
+   "context": "Sau khi tách các issue quá to, khối lượng là 40–45 phiên, không phải 32 như bản nháp. Quy tắc 'CIS App first' yêu cầu nói rõ mỗi tuần chia cho CIS và CRM thế nào. R28, R36, R40, R41, R42 được phép làm sau M4 (trước W8), rút được khoảng 2–3 phiên khỏi đường găng.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Khoảng 2,8 phiên CRM mỗi tuần, phần còn lại cho CIS/Booking/TP; R28/R36/R40/R41/R42 làm sau M4. Đủ 23 module trên Dev khoảng giữa tháng 2 đến cuối tháng 3/2027"
+    },
+    {
+     "key": "b",
+     "label": "Khoảng 2 phiên CRM mỗi tuần, ưu tiên CIS hơn: xong khoảng tháng 4 đến tháng 5/2027"
+    },
+    {
+     "key": "c",
+     "label": "Khoảng 3,5 phiên CRM mỗi tuần: xong khoảng tháng 1 đến tháng 2/2027, CIS chậm lại"
+    }
+   ],
+   "recommended": "a",
+   "why": "Giữ được nhịp đã bàn mà không lấn sang CIS. Các mốc dùng được (M2 giữa tháng 12, M3 đầu tháng 1) đến sớm. Các mục được làm sau M4 đều là việc phần chữ đã duyệt cho phép làm sau, nên không phá phê duyệt nào."
+  },
+  {
+   "id": "D6",
+   "title": "Duyệt bump chuẩn dữ liệu và các mốc lưu giữ (DM-6.1, DM-6.8, DM-7.5)",
+   "context": "Migration đầu tiên chưa viết được nếu thiếu mấy thứ sau: ba loại PII mới (government_id, health, emergency_contact), sửa DM-6.8 (Booking không tạo customer, dữ liệu ops ở lại CRM), và các dòng DM-7. Riêng DM-7.5 cần anh duyệt các mốc: backup và bản sao DEK ≤ 30 ngày; audit 12 tháng trong app cộng lưu trữ 7 năm (2 bucket); dữ liệu ops xoá sau chuyến 90 ngày; thùng rác 7 ngày; gợi ý lưu trữ khách sau 36 tháng không hoạt động; prompt AI 30 ngày. Có thêm một ngoại lệ mới: giấy tờ đã ký (miễn trừ, từ chối bảo hiểm) giữ trong thời hạn khiếu nại, kể cả khi khách yêu cầu xoá.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Duyệt như đề xuất, giấy tờ đã ký giữ đến hết chuyến + 3 năm; luật sư xác nhận ở mốc luật"
+    },
+    {
+     "key": "b",
+     "label": "Duyệt nhưng ghi mốc backup dự phòng 90 ngày thay vì 30 ngày"
+    },
+    {
+     "key": "c",
+     "label": "Duyệt các loại PII và DM-6.8 trước, các mốc lưu giữ chờ luật sư"
+    }
+   ],
+   "recommended": "a",
+   "why": "Đây đều là cam kết đã có trong câu trả lời Q1 3.7/3.8; hệ thống chỉ cần chuẩn hoá lại. Ngoại lệ giấy tờ ký là bằng chứng cho hãng bảo hiểm, thiếu nó thì việc xoá có thể làm mất căn cứ bồi thường. Con số 3 năm chỉ là ước tính, luật sư sẽ chỉnh. Chọn c thì W1 bị chậm."
+  },
+  {
+   "id": "D7",
+   "title": "Ghi log khi hiện tên khách ở danh sách (bảng, hộp thư, tìm kiếm)",
+   "context": "Lời hứa F5 là mọi lần đọc dữ liệu F1 đều được ghi. Bảng pipeline và hộp thư giải mã tên của mọi dòng. Nếu ghi từng thẻ thì log F5 bị ngập. Mã hoá dùng DEK cache cục bộ nên việc này không làm tăng số lần Decrypt của KMS.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Mỗi lần tải trang ghi một sự kiện list_view (danh sách id và trường display_name); danh sách không hiện số điện thoại một phần; hộ chiếu, ngày sinh, sức khoẻ, liên hệ khẩn cấp, email và số điện thoại đầy đủ vẫn phải bấm mới hiện, mỗi trường một sự kiện"
+    },
+    {
+     "key": "b",
+     "label": "Ghi một sự kiện cho mỗi thẻ hoặc dòng được hiển thị"
+    },
+    {
+     "key": "c",
+     "label": "Danh sách chỉ hiện tên viết tắt hoặc mã; bấm vào mới hiện tên đầy đủ"
+    }
+   ],
+   "recommended": "a",
+   "why": "Vẫn giữ được việc truy ra ai đã thấy khách nào mà log không bị ngập. Agent làm việc bình thường vì vẫn thấy tên. Các trường nhạy cảm vẫn phải bấm mới hiện. Người review bảo mật ký duyệt trong CRM-09."
+  },
+  {
+   "id": "D8",
+   "title": "Xác nhận các quyết định v2.2 coi như đã duyệt",
+   "context": "Kế hoạch v3 dựa trên các quyết định v2.2: S1–S7 (một khoá KMS mỗi môi trường cộng DEK theo đại lý, audit Object Lock, chữ ký điện tử, fork bản đồ TP, M2M pool, traveller_self_reveal, WhatsApp/SMS trong 23 module), A1 (ba lớp truy cập AA) và V1–V3 (backup ≤ 30 ngày, không có tenant_id trong metric, test thứ tự rule ALB). Trong repo không có bản ghi anh đã bấm duyệt; log S245 chỉ ghi 'để anh và chị Thư đọc'. reply-to-notes thì đã xây trên S1 và S7.",
+   "options": [
+    {
+     "key": "a",
+     "label": "Xác nhận cả v2.2 như đề xuất; agent chép v2.2 và decisions-v2.2.json vào docs/audits/ trong root PR"
+    },
+    {
+     "key": "b",
+     "label": "Xem lại từng mục trước khi tạo issue CRM"
+    }
+   ],
+   "recommended": "a",
+   "why": "Các câu trả lời bảng hỏi sau đó đều xây trên v2.2, và kế hoạch, chi phí đều dựa vào nó. Có bản ghi xác nhận thì ADR CRM-01a mới trích dẫn được. Chọn b thì W0 chậm mà gần như chắc sẽ không đổi gì."
+  }
+ ]
+}

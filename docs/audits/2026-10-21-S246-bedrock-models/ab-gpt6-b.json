@@ -1,0 +1,3485 @@
+{
+ "run_id": "73bf961f",
+ "stage": "adhoc_s246_models",
+ "cap_usd": 1.0,
+ "n": 10,
+ "seed": 246,
+ "since": "1970-01-01T00:00:00+00:00",
+ "candidates": [
+  "gpt-6-luna"
+ ],
+ "worker_stage_env": {
+  "T2_JUDGE_ANCHORS": {
+   "was": null,
+   "now": "on"
+  },
+  "T2_JUDGE_GATE": {
+   "was": null,
+   "now": "brand_fit"
+  }
+ },
+ "rule": "The switch rule (module docstring). `candidates` = {model key: {\"eligible\": bool, \"reason\": str}}.",
+ "stages": [
+  {
+   "stage": "s1_brand_audit",
+   "what": "A1 LLM brand audit against Adventure Asia brand standards (runs live only when the brand-fit judge did not run)",
+   "source": "golden fixture 1.1.0",
+   "role": "judge",
+   "current_model": "gpt-5.6-luna",
+   "current_is_expected": true,
+   "n_inputs": 10,
+   "input_meta": {
+    "pool": "fixture s1",
+    "note": "stored brand_audit_status is not compared: on branded A1 tours it comes from the judge path (no LLM call)"
+   },
+   "candidates": {
+    "gpt-6-luna": {
+     "callable": true,
+     "eligible": true,
+     "reason": "",
+     "vendor": "openai",
+     "run": true,
+     "supports_temperature": false,
+     "price_in_out": [
+      0.1,
+      0.5
+     ]
+    }
+   },
+   "arms": [
+    "current#1",
+    "gpt-6-luna",
+    "current#2"
+   ],
+   "worst_case_estimate_usd": 0.2776,
+   "metrics": {
+    "current": {
+     "n": 20,
+     "skipped": 0,
+     "schema_valid_rate": 0.95,
+     "failures": 1,
+     "errors": [
+      "Brand audit could not run (gpt-5.6-luna output does not match schema 'brand_audit_result': $.brand_audit.scores.seo_fit: 2 not in [0, 1]). Check by hand or Regenerate."
+     ],
+     "calls": 20,
+     "failed_calls": 1,
+     "cost_usd": 0.030861,
+     "cost_per_call_usd": 0.001543,
+     "cost_per_sample_usd": 0.001543,
+     "latency_ms_mean": 6718,
+     "latency_ms_p90": 7894,
+     "checks_mean": {
+      "n_codes": 10.7,
+      "publish_ready_pass": 0.0
+     },
+     "score_mae_self": null,
+     "self_agreement": 1.0,
+     "self_n": 9
+    },
+    "arms": {
+     "current#1": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.014505,
+      "cost_per_call_usd": 0.00145,
+      "cost_per_sample_usd": 0.00145,
+      "latency_ms_mean": 6844,
+      "latency_ms_p90": 7688,
+      "checks_mean": {
+       "n_codes": 10.8,
+       "publish_ready_pass": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.5,
+      "label_n": 10
+     },
+     "gpt-6-luna": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.011592,
+      "cost_per_call_usd": 0.001159,
+      "cost_per_sample_usd": 0.001159,
+      "latency_ms_mean": 19419,
+      "latency_ms_p90": 23665,
+      "checks_mean": {
+       "n_codes": 3.5,
+       "publish_ready_pass": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.5,
+      "label_n": 10,
+      "agreement_vs_current": 0.8,
+      "compared_n": 10,
+      "similarity_vs_current": 0.254,
+      "score_mae_vs_current": null
+     },
+     "current#2": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 0.9,
+      "failures": 1,
+      "errors": [
+       "Brand audit could not run (gpt-5.6-luna output does not match schema 'brand_audit_result': $.brand_audit.scores.seo_fit: 2 not in [0, 1]). Check by hand or Regenerate."
+      ],
+      "calls": 10,
+      "failed_calls": 1,
+      "cost_usd": 0.016356,
+      "cost_per_call_usd": 0.001636,
+      "cost_per_sample_usd": 0.001636,
+      "latency_ms_mean": 6578,
+      "latency_ms_p90": 7894,
+      "checks_mean": {
+       "n_codes": 10.6,
+       "publish_ready_pass": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.4444444444444444,
+      "label_n": 9
+     }
+    }
+   },
+   "recommendation": {
+    "decision": "keep current",
+    "choice": null,
+    "bar": 0.9,
+    "candidates": {
+     "gpt-6-luna": {
+      "switch": false,
+      "blockers": [
+       "agreement 80% < bar 90% (self-agreement 100%, floor 90%)"
+      ],
+      "agreement": 0.8,
+      "bar": 0.9
+     }
+    }
+   },
+   "samples": {
+    "s1-023": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 12,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_CITY_LIST",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.00122,
+        "ms": 6421,
+        "in": 2267,
+        "out": 959,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 4,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK",
+        "SUBTITLE_CITY_LIST"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000913,
+        "ms": 17599,
+        "in": 2267,
+        "out": 1756,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 10,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "META_INCOMPLETE_SENTENCE",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_CITY_LIST",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001077,
+        "ms": 4881,
+        "in": 2267,
+        "out": 840,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-035": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 13,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "META_OPENER_ROBOTIC",
+        "SUBTITLE_CITY_LIST",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001581,
+        "ms": 8001,
+        "in": 2816,
+        "out": 1251,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "flagged",
+      "score": null,
+      "checks": {
+       "n_codes": 5,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "META_INCOMPLETE_SENTENCE",
+        "SUBTITLE_CITY_LIST",
+        "SUBTITLE_WAYPOINT_FORMAT"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.00079,
+        "ms": 13706,
+        "in": 2816,
+        "out": 1499,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 9,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001325,
+        "ms": 5915,
+        "in": 2816,
+        "out": 1038,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-029": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 10,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_WAYPOINT_FORMAT",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001218,
+        "ms": 6297,
+        "in": 2186,
+        "out": 959,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 5,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK",
+        "SUBTITLE_CITY_LIST",
+        "SUBTITLE_WAYPOINT_FORMAT"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001202,
+        "ms": 25207,
+        "in": 2186,
+        "out": 2337,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 9,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_WAYPOINT_FORMAT",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001264,
+        "ms": 5850,
+        "in": 2186,
+        "out": 997,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-049": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 9,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001495,
+        "ms": 7114,
+        "in": 2243,
+        "out": 1189,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 4,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "GENERIC_AI_WORDING",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001359,
+        "ms": 23665,
+        "in": 2243,
+        "out": 2649,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 9,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001554,
+        "ms": 7894,
+        "in": 2243,
+        "out": 1238,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-032": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 17,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "KEYWORD_STUFFING_RISK",
+        "META_INCOMPLETE_SENTENCE",
+        "META_OPENER_ROBOTIC",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SEO_TITLE_WRONG_ACTIVITY",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001559,
+        "ms": 6586,
+        "in": 2800,
+        "out": 1233,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 2,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "ITINERARY_STRUCTURE_WEAK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001454,
+        "ms": 20429,
+        "in": 2800,
+        "out": 2215,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 18,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "GENERIC_AI_WORDING",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "META_OPENER_ROBOTIC",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SEO_TITLE_WRONG_ACTIVITY",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_HONEYMOON_LANGUAGE",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001654,
+        "ms": 6971,
+        "in": 2800,
+        "out": 1312,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-015": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 13,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "KEYWORD_STUFFING_RISK",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUBTITLE_WAYPOINT_FORMAT",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001404,
+        "ms": 6422,
+        "in": 2979,
+        "out": 1101,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 4,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001164,
+        "ms": 21377,
+        "in": 2979,
+        "out": 2245,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 15,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "META_OPENER_ROBOTIC",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_CITY_LIST",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_HONEYMOON_LANGUAGE",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001878,
+        "ms": 7824,
+        "in": 2979,
+        "out": 1496,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-033": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 6,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "META_INCOMPLETE_SENTENCE",
+        "META_PACKAGE_WORD",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WRONG_ACTIVITY",
+        "SUMMARY_HONEYMOON_LANGUAGE"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001259,
+        "ms": 7688,
+        "in": 2260,
+        "out": 992,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 4,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001324,
+        "ms": 17771,
+        "in": 2260,
+        "out": 2089,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": false,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 1,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "BRAND_AUDIT_UNAVAILABLE"
+       ]
+      },
+      "error": "Brand audit could not run (gpt-5.6-luna output does not match schema 'brand_audit_result': $.brand_audit.scores.seo_fit: 2 not in [0, 1]). Check by hand or Regenerate.",
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": false,
+        "cost_usd": 0.003078,
+        "ms": 13292,
+        "in": null,
+        "out": null,
+        "stop": null,
+        "error": "BilledUnusableReply: gpt-5.6-luna output does not match schema 'brand_audit_result': $.brand_audit.scores.seo_fit: 2 not in [0, 1]"
+       }
+      ]
+     }
+    },
+    "s1-042": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 3,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "GENERIC_AI_WORDING",
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001336,
+        "ms": 7371,
+        "in": 2225,
+        "out": 1057,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 3,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.00102,
+        "ms": 17676,
+        "in": 2225,
+        "out": 1971,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 9,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "META_OPENER_ROBOTIC",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001352,
+        "ms": 6161,
+        "in": 2225,
+        "out": 1070,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-039": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 8,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "GENERIC_AI_WORDING",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001326,
+        "ms": 5929,
+        "in": 2047,
+        "out": 1051,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 2,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001104,
+        "ms": 19757,
+        "in": 2047,
+        "out": 2144,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 10,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUBTITLE_WAYPOINT_FORMAT",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001399,
+        "ms": 6260,
+        "in": 2047,
+        "out": 1112,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "s1-011": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 17,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "KEYWORD_STUFFING_RISK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "META_OPENER_ROBOTIC",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SEO_TITLE_WRONG_ACTIVITY",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_HONEYMOON_LANGUAGE",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.002107,
+        "ms": 6614,
+        "in": 2790,
+        "out": 1180,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "flagged",
+      "score": null,
+      "checks": {
+       "n_codes": 2,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "ITINERARY_STRUCTURE_WEAK",
+        "SEO_TITLE_WEAK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001262,
+        "ms": 17006,
+        "in": 2790,
+        "out": 1833,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 16,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "KEYWORD_STUFFING_RISK",
+        "META_INCOMPLETE_SENTENCE",
+        "META_OPENER_ROBOTIC",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_HONEYMOON_LANGUAGE",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "s1_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001775,
+        "ms": 7449,
+        "in": 2790,
+        "out": 1413,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "stage": "t2_brand_audit",
+   "what": "T2 LLM brand audit against the tenant rubric (runs live only when the brand-fit judge did not run)",
+   "source": "golden fixture 1.1.0",
+   "role": "judge",
+   "current_model": "gpt-5.6-luna",
+   "current_is_expected": true,
+   "n_inputs": 10,
+   "input_meta": {
+    "pool": "fixture t2",
+    "note": "stored brand_audit_status is not compared: on branded A1 tours it comes from the judge path (no LLM call)"
+   },
+   "candidates": {
+    "gpt-6-luna": {
+     "callable": true,
+     "eligible": true,
+     "reason": "",
+     "vendor": "openai",
+     "run": true,
+     "supports_temperature": false,
+     "price_in_out": [
+      0.1,
+      0.5
+     ]
+    }
+   },
+   "arms": [
+    "current#1",
+    "gpt-6-luna",
+    "current#2"
+   ],
+   "worst_case_estimate_usd": 0.2776,
+   "metrics": {
+    "current": {
+     "n": 20,
+     "skipped": 0,
+     "schema_valid_rate": 1.0,
+     "failures": 0,
+     "errors": [],
+     "calls": 20,
+     "failed_calls": 0,
+     "cost_usd": 0.03078,
+     "cost_per_call_usd": 0.001539,
+     "cost_per_sample_usd": 0.001539,
+     "latency_ms_mean": 5778,
+     "latency_ms_p90": 8376,
+     "checks_mean": {
+      "n_codes": 7.9,
+      "publish_ready_pass": 0.0
+     },
+     "score_mae_self": null,
+     "self_agreement": 0.8,
+     "self_n": 10
+    },
+    "arms": {
+     "current#1": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.01984,
+      "cost_per_call_usd": 0.001984,
+      "cost_per_sample_usd": 0.001984,
+      "latency_ms_mean": 6770,
+      "latency_ms_p90": 9787,
+      "checks_mean": {
+       "n_codes": 8.2,
+       "publish_ready_pass": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.7,
+      "label_n": 10
+     },
+     "gpt-6-luna": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.012429,
+      "cost_per_call_usd": 0.001243,
+      "cost_per_sample_usd": 0.001243,
+      "latency_ms_mean": 17816,
+      "latency_ms_p90": 19811,
+      "checks_mean": {
+       "n_codes": 4.0,
+       "publish_ready_pass": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.7,
+      "label_n": 10,
+      "agreement_vs_current": 0.8,
+      "compared_n": 10,
+      "similarity_vs_current": 0.175,
+      "score_mae_vs_current": null
+     },
+     "current#2": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.01094,
+      "cost_per_call_usd": 0.001094,
+      "cost_per_sample_usd": 0.001094,
+      "latency_ms_mean": 4785,
+      "latency_ms_p90": 7375,
+      "checks_mean": {
+       "n_codes": 7.6,
+       "publish_ready_pass": 0.0
+      },
+      "stored_agreement": null,
+      "stored_n": 0,
+      "label_agreement": 0.7,
+      "label_n": 10
+     }
+    }
+   },
+   "recommendation": {
+    "decision": "switch to gpt-6-luna",
+    "choice": "gpt-6-luna",
+    "bar": 0.8,
+    "candidates": {
+     "gpt-6-luna": {
+      "switch": true,
+      "blockers": [],
+      "agreement": 0.8,
+      "bar": 0.8
+     }
+    }
+   },
+   "samples": {
+    "t2-008": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 0,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": []
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000681,
+        "ms": 728,
+        "in": 2372,
+        "out": 79,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 3,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "PRODUCT_TRUTH_RISK",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001163,
+        "ms": 16118,
+        "in": 2372,
+        "out": 1740,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 0,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": []
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000166,
+        "ms": 627,
+        "in": 2372,
+        "out": 79,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-005": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 11,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "META_PACKAGE_WORD",
+        "SEO_TITLE_WEAK",
+        "SEO_TITLE_WRONG_ACTIVITY",
+        "SUBTITLE_WAYPOINT_FORMAT",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.003653,
+        "ms": 14109,
+        "in": 4643,
+        "out": 2504,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 3,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001195,
+        "ms": 16192,
+        "in": 2300,
+        "out": 1821,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 7,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "META_INCOMPLETE_SENTENCE",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_CITY_LIST",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001193,
+        "ms": 5575,
+        "in": 2300,
+        "out": 936,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-002": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 6,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "GENERIC_AI_WORDING",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "SEO_TITLE_WEAK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001502,
+        "ms": 5212,
+        "in": 2175,
+        "out": 804,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 4,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "PRODUCT_TRUTH_RISK",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001143,
+        "ms": 17809,
+        "in": 2175,
+        "out": 1749,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 0,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": []
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000162,
+        "ms": 724,
+        "in": 2175,
+        "out": 79,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-009": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 7,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001694,
+        "ms": 6216,
+        "in": 2218,
+        "out": 955,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "flagged",
+      "score": null,
+      "checks": {
+       "n_codes": 3,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "KEYWORD_STUFFING_RISK",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001134,
+        "ms": 16359,
+        "in": 2218,
+        "out": 1721,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 10,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001624,
+        "ms": 7375,
+        "in": 2218,
+        "out": 1297,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-010": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 11,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_HONEYMOON_LANGUAGE",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001901,
+        "ms": 6030,
+        "in": 2710,
+        "out": 1025,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 5,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WRONG_ACTIVITY",
+        "SUBTITLE_TRIP_TYPE_MISMATCH"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.00135,
+        "ms": 19064,
+        "in": 2710,
+        "out": 2030,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 0,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": []
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000172,
+        "ms": 729,
+        "in": 2710,
+        "out": 79,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-004": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 12,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "META_OPENER_ROBOTIC",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001849,
+        "ms": 5381,
+        "in": 2561,
+        "out": 1013,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 4,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001352,
+        "ms": 19762,
+        "in": 2561,
+        "out": 2070,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 8,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001359,
+        "ms": 6100,
+        "in": 2561,
+        "out": 1070,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-003": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "flagged",
+      "score": null,
+      "checks": {
+       "n_codes": 8,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "META_INCOMPLETE_SENTENCE",
+        "SEO_TITLE_WEAK",
+        "SEO_TITLE_WRONG_ACTIVITY",
+        "SUBTITLE_CITY_LIST",
+        "SUMMARY_HONEYMOON_LANGUAGE",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001764,
+        "ms": 5835,
+        "in": 2336,
+        "out": 989,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 5,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "PRODUCT_TRUTH_RISK",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001123,
+        "ms": 15573,
+        "in": 2336,
+        "out": 1668,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 9,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_CITY_LIST",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001393,
+        "ms": 6054,
+        "in": 2336,
+        "out": 1102,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-006": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 15,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "GENERIC_AI_WORDING",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "META_PACKAGE_WORD",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_CITY_LIST",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.002554,
+        "ms": 8044,
+        "in": 2775,
+        "out": 1556,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 5,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "GENERIC_AI_WORDING",
+        "ITINERARY_STRUCTURE_WEAK",
+        "PRODUCT_TRUTH_RISK",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001151,
+        "ms": 14657,
+        "in": 2775,
+        "out": 1615,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 21,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "GENERIC_AI_WORDING",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "HIGHLIGHTS_TOO_GENERIC",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_DAY_TITLE_GENERIC",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "KEYWORD_STUFFING_RISK",
+        "META_DFS_VERBATIM",
+        "META_INCOMPLETE_SENTENCE",
+        "META_OPENER_ROBOTIC",
+        "META_PACKAGE_WORD",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_HONEYMOON_LANGUAGE",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001912,
+        "ms": 8376,
+        "in": 2775,
+        "out": 1528,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-007": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "flagged",
+      "score": null,
+      "checks": {
+       "n_codes": 3,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_STRUCTURE_WEAK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.002289,
+        "ms": 9787,
+        "in": 2777,
+        "out": 1334,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 5,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "PRODUCT_TRUTH_RISK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001518,
+        "ms": 22824,
+        "in": 2777,
+        "out": 2348,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 12,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_MEAL_TIME_INVENTED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "PRODUCT_TRUTH_RISK",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_WAYPOINT_FORMAT",
+        "SUMMARY_OFF_BRAND",
+        "SUMMARY_SELF_REFERENTIAL"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001617,
+        "ms": 6420,
+        "in": 2777,
+        "out": 1282,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t2-001": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 9,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_TRIP_TYPE_MISMATCH",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001953,
+        "ms": 6367,
+        "in": 2437,
+        "out": 1125,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 3,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "PRODUCT_TRUTH_RISK"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.0013,
+        "ms": 19811,
+        "in": 2437,
+        "out": 1997,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": "manual_check",
+      "score": null,
+      "checks": {
+       "n_codes": 9,
+       "publish_ready_pass": false
+      },
+      "detail": {
+       "codes": [
+        "DFS_INTENT_UNDERUSED",
+        "FACT_CHECK_MANUAL_CHECK",
+        "HIGHLIGHTS_ORDERING_WRONG",
+        "HIGHLIGHTS_WILDLIFE_UNVERIFIED",
+        "ITINERARY_STRUCTURE_WEAK",
+        "META_INCOMPLETE_SENTENCE",
+        "SEO_TITLE_WEAK",
+        "SUBTITLE_CITY_LIST",
+        "SUMMARY_OFF_BRAND"
+       ]
+      },
+      "error": null,
+      "calls": [
+       {
+        "stage": "t2_brand_audit",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001342,
+        "ms": 5879,
+        "in": 2437,
+        "out": 1058,
+        "stop": "tool_use",
+        "error": null
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "stage": "t10_judge",
+   "what": "T9 F9 judge: CTA / fact / text integrity (blocking) + brand style (warn) on blog and LinkedIn",
+   "source": "golden fixture 1.1.0",
+   "role": "judge",
+   "current_model": "gpt-5.6-luna",
+   "current_is_expected": true,
+   "n_inputs": 10,
+   "input_meta": {
+    "pool": "fixture t9 (30)"
+   },
+   "candidates": {
+    "gpt-6-luna": {
+     "callable": true,
+     "eligible": true,
+     "reason": "",
+     "vendor": "openai",
+     "run": true,
+     "supports_temperature": false,
+     "price_in_out": [
+      0.1,
+      0.5
+     ]
+    }
+   },
+   "arms": [
+    "current#1",
+    "gpt-6-luna",
+    "current#2"
+   ],
+   "worst_case_estimate_usd": 0.2876,
+   "metrics": {
+    "current": {
+     "n": 20,
+     "skipped": 0,
+     "schema_valid_rate": 1.0,
+     "failures": 0,
+     "errors": [],
+     "calls": 20,
+     "failed_calls": 0,
+     "cost_usd": 0.040392,
+     "cost_per_call_usd": 0.00202,
+     "cost_per_sample_usd": 0.00202,
+     "latency_ms_mean": 7825,
+     "latency_ms_p90": 13551,
+     "checks_mean": {
+      "reasonless": 0.0,
+      "n_blocking_violations": 0.7
+     },
+     "score_mae_self": null,
+     "self_agreement": 0.7,
+     "self_n": 10
+    },
+    "arms": {
+     "current#1": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.026512,
+      "cost_per_call_usd": 0.002651,
+      "cost_per_sample_usd": 0.002651,
+      "latency_ms_mean": 8547,
+      "latency_ms_p90": 13551,
+      "checks_mean": {
+       "reasonless": 0.0,
+       "n_blocking_violations": 0.7
+      },
+      "stored_agreement": 0.4,
+      "stored_n": 10,
+      "label_agreement": 0.4,
+      "label_n": 10
+     },
+     "gpt-6-luna": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.017755,
+      "cost_per_call_usd": 0.001775,
+      "cost_per_sample_usd": 0.001775,
+      "latency_ms_mean": 21012,
+      "latency_ms_p90": 35149,
+      "checks_mean": {
+       "reasonless": 0.0,
+       "n_blocking_violations": 1.1
+      },
+      "stored_agreement": 0.3,
+      "stored_n": 10,
+      "label_agreement": 0.5,
+      "label_n": 10,
+      "agreement_vs_current": 0.5,
+      "compared_n": 10,
+      "similarity_vs_current": 0.65,
+      "score_mae_vs_current": null
+     },
+     "current#2": {
+      "n": 10,
+      "skipped": 0,
+      "schema_valid_rate": 1.0,
+      "failures": 0,
+      "errors": [],
+      "calls": 10,
+      "failed_calls": 0,
+      "cost_usd": 0.01388,
+      "cost_per_call_usd": 0.001388,
+      "cost_per_sample_usd": 0.001388,
+      "latency_ms_mean": 7104,
+      "latency_ms_p90": 12752,
+      "checks_mean": {
+       "reasonless": 0.0,
+       "n_blocking_violations": 0.7
+      },
+      "stored_agreement": 0.6,
+      "stored_n": 10,
+      "label_agreement": 0.4,
+      "label_n": 10
+     }
+    }
+   },
+   "recommendation": {
+    "decision": "keep current",
+    "choice": null,
+    "bar": 0.7,
+    "candidates": {
+     "gpt-6-luna": {
+      "switch": false,
+      "blockers": [
+       "agreement 50% < bar 70% (self-agreement 70%, floor 90%)"
+      ],
+      "agreement": 0.5,
+      "bar": 0.7
+     }
+    }
+   },
+   "samples": {
+    "t9b-003": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.003545,
+        "ms": 12549,
+        "in": 4819,
+        "out": 1950,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001601,
+        "ms": 17603,
+        "in": 4819,
+        "out": 1998,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001737,
+        "ms": 8366,
+        "in": 4819,
+        "out": 1367,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t9b-011": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.005008,
+        "ms": 15311,
+        "in": 7962,
+        "out": 2515,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       false
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 2
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.002922,
+        "ms": 35149,
+        "in": 7962,
+        "out": 3853,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.002741,
+        "ms": 14681,
+        "in": 7962,
+        "out": 2151,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t9l-009": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       true,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001025,
+        "ms": 2831,
+        "in": 2299,
+        "out": 375,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       false
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001189,
+        "ms": 17008,
+        "in": 2299,
+        "out": 1803,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       true,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000342,
+        "ms": 1790,
+        "in": 2299,
+        "out": 246,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t9l-004": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001159,
+        "ms": 3301,
+        "in": 2410,
+        "out": 464,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001093,
+        "ms": 13870,
+        "in": 2410,
+        "out": 1583,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000735,
+        "ms": 4034,
+        "in": 2410,
+        "out": 572,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t9b-012": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.003994,
+        "ms": 13551,
+        "in": 5127,
+        "out": 2260,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.003203,
+        "ms": 41279,
+        "in": 5127,
+        "out": 5125,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001404,
+        "ms": 6526,
+        "in": 5127,
+        "out": 1084,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t9b-004": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.003534,
+        "ms": 12322,
+        "in": 5197,
+        "out": 1862,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.001843,
+        "ms": 19049,
+        "in": 5197,
+        "out": 2386,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001672,
+        "ms": 8095,
+        "in": 5197,
+        "out": 1306,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t9l-002": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001556,
+        "ms": 4675,
+        "in": 2407,
+        "out": 795,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000782,
+        "ms": 7467,
+        "in": 2407,
+        "out": 963,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       true,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000436,
+        "ms": 2381,
+        "in": 2407,
+        "out": 323,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t9l-005": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       true,
+       false
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001325,
+        "ms": 4671,
+        "in": 2324,
+        "out": 620,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       false
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.000975,
+        "ms": 12065,
+        "in": 2324,
+        "out": 1369,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       true,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.000484,
+        "ms": 2889,
+        "in": 2324,
+        "out": 364,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t9b-008": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       true,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 0
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.002532,
+        "ms": 6872,
+        "in": 5169,
+        "out": 1033,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       false
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.002025,
+        "ms": 22163,
+        "in": 5169,
+        "out": 2757,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       false
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.002354,
+        "ms": 12752,
+        "in": 5169,
+        "out": 1875,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    },
+    "t9b-014": {
+     "current#1": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.002834,
+        "ms": 9393,
+        "in": 5069,
+        "out": 1306,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "gpt-6-luna": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       false
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-6-luna",
+        "ok": true,
+        "cost_usd": 0.002122,
+        "ms": 24468,
+        "in": 5069,
+        "out": 2977,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     },
+     "current#2": {
+      "schema_ok": true,
+      "skipped": false,
+      "verdict": [
+       false,
+       true
+      ],
+      "score": null,
+      "checks": {
+       "reasonless": false,
+       "n_blocking_violations": 1
+      },
+      "detail": {},
+      "error": null,
+      "calls": [
+       {
+        "stage": "t10_judge",
+        "model": "gpt-5.6-luna",
+        "ok": true,
+        "cost_usd": 0.001975,
+        "ms": 9529,
+        "in": 5069,
+        "out": 1561,
+        "stop": "end_turn",
+        "error": null
+       }
+      ]
+     }
+    }
+   }
+  }
+ ],
+ "spent_usd": 0.143809,
+ "llm_call_log_spend_usd": 0.298237
+}

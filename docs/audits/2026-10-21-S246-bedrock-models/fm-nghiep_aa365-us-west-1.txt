@@ -1,0 +1,40 @@
+Anthropic	anthropic.claude-opus-5	ACTIVE	INFERENCE_PROFILE
+OpenAI	openai.gpt-6-astra	ACTIVE	INFERENCE_PROFILE
+OpenAI	openai.gpt-5.6-terra	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-opus-4-8	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-opus-4-7	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-haiku-4-5-20251001-v1:0	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-opus-5-5	ACTIVE	INFERENCE_PROFILE
+OpenAI	openai.gpt-6-sol	ACTIVE	INFERENCE_PROFILE
+Writer	writer.palmyra-x4-v1:0	LEGACY	INFERENCE_PROFILE
+Anthropic	anthropic.claude-sonnet-4-5-20250929-v1:0	LEGACY	INFERENCE_PROFILE
+OpenAI	openai.gpt-6-luna	ACTIVE	INFERENCE_PROFILE
+Z.AI	zai.glm-5.3	ACTIVE	INFERENCE_PROFILE
+Moonshot AI	moonshotai.kimi-k3	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-fable-5	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-fable-5-1	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-haiku-5-5	ACTIVE	INFERENCE_PROFILE
+TwelveLabs	twelvelabs.pegasus-1-5-v1:0	ACTIVE	INFERENCE_PROFILE
+OpenAI	openai.gpt-5.6-luna	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-sonnet-5-5	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-sonnet-5	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-sonnet-4-6	ACTIVE	INFERENCE_PROFILE
+xAI	xai.grok-4.7	ACTIVE	INFERENCE_PROFILE
+xAI	xai.grok-4.6	ACTIVE	INFERENCE_PROFILE
+Amazon	amazon.nova-pro-v1:0	ACTIVE	INFERENCE_PROFILE
+Amazon	amazon.nova-2-lite-v1:0	ACTIVE	INFERENCE_PROFILE
+TwelveLabs	twelvelabs.pegasus-1-2-v1:0	LEGACY	INFERENCE_PROFILE
+OpenAI	openai.gpt-5.6-sol	ACTIVE	INFERENCE_PROFILE
+OpenAI	openai.gpt-5.4	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-opus-4-5-20251101-v1:0	ACTIVE	INFERENCE_PROFILE
+OpenAI	openai.gpt-5.5	ACTIVE	INFERENCE_PROFILE
+OpenAI	openai.gpt-6.1-sol	ACTIVE	INFERENCE_PROFILE
+Anthropic	anthropic.claude-opus-4-6-v1	ACTIVE	INFERENCE_PROFILE
+Writer	writer.palmyra-x5-v1:0	LEGACY	INFERENCE_PROFILE
+Amazon	amazon.nova-lite-v1:0	ACTIVE	INFERENCE_PROFILE
+Meta	meta.llama4-scout-17b-instruct-v1:0:128k	ACTIVE	
+Meta	meta.llama4-scout-17b-instruct-v1:0:10m	ACTIVE	
+Meta	meta.llama4-scout-17b-instruct-v1:0	ACTIVE	INFERENCE_PROFILE
+Meta	meta.llama4-maverick-17b-instruct-v1:0:128k	ACTIVE	
+Meta	meta.llama4-maverick-17b-instruct-v1:0:1m	ACTIVE	
+Meta	meta.llama4-maverick-17b-instruct-v1:0	ACTIVE	INFERENCE_PROFILE
