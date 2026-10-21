@@ -1,19 +1,20 @@
 {
- "updated": "2026-10-20",
- "session": "S245",
- "next_session": "S246",
- "source": "Linear (20/10/2026) + docs/backlog/README.md + docs/sessions/2026-10-20-S245-quality-system-golden-set-codeql-crm-research.md",
+ "updated": "2026-10-21",
+ "session": "S246",
+ "next_session": "S247",
+ "source": "Linear (21/10/2026) + docs/backlog/README.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json + docs/audits/2026-10-21-S246-crm-design-v3/linear-issue-map.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
   "portal": "CIS Portal",
-  "tpbk": "TripPlanner & Booking"
+  "tpbk": "TripPlanner & Booking",
+  "crm": "Partner CRM"
  },
  "milestones": [
   {
    "id": "M1",
-   "name": "Đóng khối nền tảng",
-   "window": "S244–S246",
+   "name": "Đóng khối identity",
+   "window": "S244–S249",
    "status": "active",
    "criteria": [
     {
@@ -29,19 +30,27 @@
      "done": true
     },
     {
-     "text": "Gỡ ngoại lệ E2E tạm (ADR 0006a A10)",
+     "text": "AA-680 nửa staff: từ chối live user không có nhóm booking-* (S245); gỡ cầu nối chuyển sang AA-911",
+     "done": true
+    },
+    {
+     "text": "AA-911: e2e đăng nhập staff trên URL Preview của Booking và CIS xanh; /auth/booking-token trả 404; 0 dòng bridge-era trong booking.staff_users",
      "done": false
     },
     {
-     "text": "AA-680 nửa staff: từ chối live user không có nhóm booking-*, gỡ cầu nối CIS→Booking",
+     "text": "AA-816 S2: LEGACY_ADMIN_LOGIN_ENABLED=false trên API Dev, POST login cũ trả 404 (A10 dời cuối dự án)",
+     "done": false
+    },
+    {
+     "text": "AA-703: comment trạng thái Phase 2/3 có link bằng chứng",
      "done": false
     }
    ]
   },
   {
    "id": "M1b",
-   "name": "SDLC / docs \"Now\"",
-   "window": "S244–S252",
+   "name": "SDLC / FinOps",
+   "window": "S248–S257 (AA-896 theo ngày ≥01/11)",
    "status": "active",
    "criteria": [
     {
@@ -53,87 +62,187 @@
      "done": true
     },
     {
-     "text": "AA-903 bằng chứng trên PR Dependabot frontend kế tiếp",
+     "text": "Docs lint chặn mọi repo (AA-888), squash-only (AA-890), front-matter CONTEXT.md (AA-887)",
+     "done": true
+    },
+    {
+     "text": "alarms.md sinh tự động (AA-893)",
+     "done": true
+    },
+    {
+     "text": "AA-879: branch protection + check bắt buộc giống nhau ở 4 repo (kể cả AA-Partner từ ngày tạo), job drift Terraform theo lịch chạy xanh 1 lần",
      "done": false
     },
     {
-     "text": "Docs lint chặn mọi repo, squash-only, front-matter CONTEXT.md",
+     "text": "AA-901 GitHub App cài + AA-891 tag đầu tiên ở ≥1 repo",
      "done": false
     },
     {
-     "text": "alarms.md sinh tự động; GitHub App → release-please",
+     "text": "AA-896: báo cáo chi phí Aug/Sep/Oct theo tag App + dịch vụ, có ở docs/audits",
      "done": false
     },
     {
-     "text": "Báo cáo cost tháng 10 (sau 01/11)",
+     "text": "AA-903: link 1 PR Dependabot frontend có 'Vercel deploy' skipped",
      "done": false
     }
    ]
   },
   {
    "id": "M2a",
-   "name": "Chất lượng nội dung CIS",
-   "window": "S247–S250",
-   "status": "next",
+   "name": "Chất lượng CIS: S1-first",
+   "window": "S247–S253",
+   "status": "active",
    "criteria": [
     {
-     "text": "Golden set + baseline (AA-729)",
-     "done": false
-    },
-    {
-     "text": "Gọn bộ gate T10 (AA-787, 789, 790)",
-     "done": false
+     "text": "Golden set + baseline (AA-729, Done S246)",
+     "done": true
     },
     {
      "text": "Từ vựng thương hiệu tenant (AA-800)",
+     "done": true
+    },
+    {
+     "text": "Bảng dữ kiện + bộ kiểm bằng code chạy trên 50 bài S1, có báo cáo; panel chấm lại 10–15 trang 2 lần, độ lặp ghi bằng số",
      "done": false
     },
     {
-     "text": "LinkedIn/FAQ (AA-780, 779) + tỉ lệ F9 (AA-865)",
+     "text": "Run 1 + run 2 mỗi run ≤$10, chi phí đọc từ shared.llm_call_log stage adhoc_*; luật dừng P4 ghi trước khi chạy",
      "done": false
     },
     {
-     "text": "G7 48 tour + báo cáo G8 (AA-741)",
+     "text": "Nhánh thắng chạy shadow/review sau cờ, T2 đọc bảng dữ kiện",
+     "done": false
+    },
+    {
+     "text": "Quyết định go/no-go bằng văn bản ở docs/audits cho AA-926/916/924/790/WM P1+/chạy lại catalog",
+     "done": false
+    },
+    {
+     "text": "AA-779/780: không thêm cổng mới trong 4 tuần (số cổng trong registry không tăng)",
      "done": false
     }
    ]
   },
   {
    "id": "M2b",
-   "name": "Địa điểm, ảnh, Jev",
-   "window": "S248–S252",
-   "status": "next",
+   "name": "Places flip + place runs",
+   "window": "S247–S256",
+   "status": "active",
    "criteria": [
     {
-     "text": "L4 read model + lật PLACES_SOURCE=cis (AA-847)",
+     "text": "CloudFront + đồng bộ ảnh hằng ngày (AA-844, Done S246, hứa trên PR-11)",
+     "done": true
+    },
+    {
+     "text": "CIS 253–257 (hoặc số đã đổi) + tp-017 applied; TP 6c/6d/redirect merged",
      "done": false
     },
     {
-     "text": "CloudFront + đồng bộ ảnh hằng ngày (AA-844, hứa trên PR-11)",
+     "text": "PLACES_SOURCE=cis trên cả 2 Lambda; parity probe trên ≥50 trip không lệch place id/toạ độ; 0 tuyến bị ẩn hoặc vẽ vòng tròn thay thế; gộp trùng chạy tự động, 0 lần gộp tay",
      "done": false
     },
     {
-     "text": "Một lượt chạy place gộp (AA-712, 905, 784)",
-     "done": false
-    },
-    {
-     "text": "Vòng nhãn Jev (AA-845, 803)",
+     "text": "AA-712, AA-905 chạy tập con (≤50 tour/lượt), chi phí ghi log; AA-845 Q845-2/3 xong; AA-803 Cancel",
      "done": false
     }
    ]
   },
   {
    "id": "M3",
-   "name": "Booking wave 3",
-   "window": "chưa xếp",
-   "status": "blocked",
+   "name": "Lõi thương mại Booking + Lane B",
+   "window": "S247–S256 (AA-682 tuỳ chị Thư)",
+   "status": "next",
    "criteria": [
     {
-     "text": "Viết Done-when cho AA-682",
+     "text": "Memo lõi thương mại nằm trong AA-928, ADR Accepted",
      "done": false
     },
     {
-     "text": "Quyết định thuế, đánh dấu thanh toán, % đặt cọc",
+     "text": "AA-972..975 live trên Dev: quote M2M, hold hết hạn bằng reaper, VND + phí huỷ, outbox phát sự kiện; review độc lập mỗi bk-019..022",
+     "done": false
+    },
+    {
+     "text": "AA-976/977: catalog.http.v1 trả dữ liệu từ read model đã lật",
+     "done": false
+    },
+    {
+     "text": "AA-682 (chỉ khi chị Thư đã chốt thuế/% cọc/đánh dấu thanh toán): /billing và /trip-checks thôi placeholder",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "C-M1",
+   "name": "CRM chạy trên Dev (W0–W1)",
+   "window": "S252–S254 (nhịp Ultracode); ~giữa 11 nếu phiên thường",
+   "status": "next",
+   "criteria": [
+    {
+     "text": "AA-928..931 merged/applied; host không phải partner trả 403 qua CloudFront→VPC origin",
+     "done": false
+    },
+    {
+     "text": "AA-932: crm_app → booking.* và cis_app → crm.* trả 42501; DB Migrate CIS không bị heartbeat CRM chặn",
+     "done": false
+    },
+    {
+     "text": "Agency giả đăng nhập; form traveller → thẻ Inquiry < 1 phút; F1 chỉ có ciphertext; CIS thấy crm.job",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "P-M1",
+   "name": "Portal tách repo",
+   "window": "P2a S255; P1 S256; P2b S258; gỡ Vercel ≥ P2b + 7 ngày (~S265)",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "P2a: AA-Partner/portal giữ history, 24 smoke portal xanh từ CI AA-Partner, Vercel aa-cis-portal deploy từ repo mới",
+     "done": false
+    },
+    {
+     "text": "P1: thay đổi membership ở CIS tới CRM ≤1 phút; CIS cố cấp vai CRM thì bị từ chối",
+     "done": false
+    },
+    {
+     "text": "P2b: portal. chạy trên CloudFront→Fargate, 24 smoke xanh, token cis-admin không lấy được phiên portal, URL Vercel cũ redirect giữ path, diễn tập rollback Vercel thành công",
+     "done": false
+    },
+    {
+     "text": "Sau ≥7 ngày: xoá portal/ khỏi CIS, đảo guard test, cập nhật CONTEXT.md + ecosystem-architecture",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "C-M2",
+   "name": "CRM full lifecycle hàng của đại lý (W2–W3)",
+   "window": "S258–S260 (Ultracode); ~giữa 12 nếu phiên thường",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "AA-937..946 xong; 1 trip đi từ Inquiry tới Completed với supplier của đại lý trên Dev",
+     "done": false
+    },
+    {
+     "text": "Partner pool bắt MFA; test lọc trường trên mọi route: trợ lý không nhận lãi/net/hoa hồng",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "C-M3",
+   "name": "AA supply trong CRM (W4)",
+   "window": "S261–S265; ~đầu 1/2027 nếu phiên thường",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "AA-947, 949, 950, 951 xong (AA-948 là bản nâng cấp, không chặn mốc)",
+     "done": false
+    },
+    {
+     "text": "Sản phẩm AA được quote, hold, confirm từ đề xuất tương tác; accept sau khi hold hết hạn trả 409 hold_expired",
      "done": false
     }
    ]
@@ -141,39 +250,35 @@
   {
    "id": "M4",
    "name": "UAT video",
-   "window": "sau M2a",
+   "window": "sau M2a và sau toàn bộ kỹ thuật (>S262)",
    "status": "later",
    "criteria": [
     {
-     "text": "Mỗi kịch bản một video 1440/390 ở 4 bề mặt, đăng nhập Cognito",
+     "text": "Mỗi kịch bản 1 video 1440/390, đăng nhập Cognito, đủ mọi app",
      "done": false
     },
     {
-     "text": "Báo cáo pass/fail, Nghiệp ký duyệt",
+     "text": "Báo cáo pass/fail, Nghiệp ký",
      "done": false
     }
    ]
   },
   {
    "id": "M5",
-   "name": "Tenant trả tiền đầu tiên → prod",
-   "window": "≥S254",
+   "name": "Tenant trả tiền / prod + CRM Go-real",
+   "window": ">S262 (CRM W7–W8 ~T2–T3/2027)",
    "status": "later",
    "criteria": [
     {
-     "text": "Tenant horizon (handbook §9.2) + AA-813 tenant đăng nhập Cognito",
+     "text": "AA-820 xong trước 11/11; AA-886 gói pháp lý chị Thư duyệt",
      "done": false
     },
     {
-     "text": "Gói pháp lý (AA-886, AA-820)",
+     "text": "AA-874, AA-873, AA-859, AA-871 xong",
      "done": false
     },
     {
-     "text": "Lớp bảo mật (AA-874, 876, 875, 873, 848, 859)",
-     "done": false
-    },
-    {
-     "text": "Prod: ngày go-live + AA-880",
+     "text": "AA-880 ADR 0012 Accepted trước W8; AA-969 không còn finding High; AA-980 đại lý thật đầu tiên được mời trên prod",
      "done": false
     }
    ]
@@ -196,7 +301,7 @@
    "text": "Lambda xoá snapshot > 30 ngày chạy; chỉ có mail khi xoá / lỗi tag"
   },
   {
-   "due": "≥01/11",
+   "due": "≥01/11 (≈S257)",
    "issue": "AA-896",
    "text": "Audit cost tháng 8/9/10 theo tag App + acc3 Bedrock + credits"
   },
@@ -219,8 +324,38 @@
  "waiting": [
   {
    "who": "Nghiệp",
-   "text": "Duyệt 16 đề xuất CRM (artifact 5srRKGxXrdiADV6u13niAH) — rồi mới làm thiết kế CRM bản kế tiếp",
-   "issue": "AA-821"
+   "text": "MFA đúng phiên: AA-931 (S248), AA-932 + AA-972 (S249, gom 1 lần), AA-939 (S254)",
+   "issue": "AA-931"
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Các bước lật AA-847; sửa tay PLACES_SOURCE=cis trên 2 Lambda TripPlanner trong VSCode (S249)",
+   "issue": "AA-847"
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Accept các ADR của AA-928 (S248)",
+   "issue": "AA-928"
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Phân xử A/B S1 ~30 bài (S251, ~30–45′) + sửa ví dụ mẫu (~1 h)",
+   "issue": ""
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Hỏi trước khi tạo issue: T13 ghép tuyến (cho AA-948), tách P2a khỏi AA-979; quota Linear 143/250",
+   "issue": "AA-979"
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Tạo repo AA-Partner nếu tắt quyền \"members can create repositories\" (access review Q-2)",
+   "issue": "AA-933"
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Cài GitHub App cho agent + release-please (S251)",
+   "issue": "AA-901"
   },
   {
    "who": "Nghiệp",
@@ -244,17 +379,17 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Tạo GitHub App cho agent + release-please",
-   "issue": "AA-901"
-  },
-  {
-   "who": "Nghiệp",
-   "text": "Báo giá rồi duyệt/đỗ lượt geo backfill 8 nước",
+   "text": "Báo giá rồi duyệt lượt geo backfill (tập con, S256)",
    "issue": "AA-905"
   },
   {
    "who": "Chị Thư",
-   "text": "Điều khoản AI (≤11/11) và lời văn /privacy, /terms",
+   "text": "Thuế, % đặt cọc, đánh dấu thanh toán, margin B2B (AA-682 + Lane B)",
+   "issue": "AA-682"
+  },
+  {
+   "who": "Chị Thư",
+   "text": "Điều khoản AI (≤11/11) và lời văn /privacy, /terms (AA-886)",
    "issue": "AA-820"
   },
   {
@@ -264,6 +399,84 @@
   }
  ],
  "log": [
+  {
+   "session": "S246",
+   "date": "21/10/2026",
+   "closed": [
+    "AA-729",
+    "AA-844",
+    "AA-876",
+    "AA-877",
+    "AA-927"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-928",
+    "AA-929",
+    "AA-930",
+    "AA-931",
+    "AA-932",
+    "AA-933",
+    "AA-934",
+    "AA-935",
+    "AA-936",
+    "AA-937",
+    "AA-938",
+    "AA-939",
+    "AA-940",
+    "AA-941",
+    "AA-942",
+    "AA-943",
+    "AA-944",
+    "AA-945",
+    "AA-946",
+    "AA-947",
+    "AA-948",
+    "AA-949",
+    "AA-950",
+    "AA-951",
+    "AA-952",
+    "AA-953",
+    "AA-954",
+    "AA-955",
+    "AA-956",
+    "AA-957",
+    "AA-958",
+    "AA-959",
+    "AA-960",
+    "AA-961",
+    "AA-962",
+    "AA-963",
+    "AA-964",
+    "AA-965",
+    "AA-966",
+    "AA-967",
+    "AA-968",
+    "AA-969",
+    "AA-970",
+    "AA-971",
+    "AA-972",
+    "AA-973",
+    "AA-974",
+    "AA-975",
+    "AA-976",
+    "AA-977",
+    "AA-978",
+    "AA-979",
+    "AA-980"
+   ],
+   "reopened": [],
+   "notes": [
+    "Done: AA-927 (#888), AA-876 (CIS #889, Booking #52, TP #118, Infra #247/#249; WAF chuyển sang AA-908), AA-877 (Infra #245/#250, Booking #53, TP #119, root #148), AA-844 (Infra #246/#251, CIS #890), AA-729 (đã đăng số before/after)",
+    "AA-886: root #144 + /privacy, /terms đã merge; Linear vẫn In Progress — đóng hoặc thu hẹp ở S247, câu chữ chờ chị Thư",
+    "Đang làm: AA-847 (CIS #895 merge, mig 253 apply Dev 21/10 09:12 UTC, 255/256 đang apply, CIS #896 PR code nháp, TP #120 tp-017 merge; bước lật cần Nghiệp), AA-925 (còn kiểm Jev ép live), AA-915 (cần 1 bản viết lại S1 + 1 T2 giữa 2 snapshot pg_stat), AA-911 (7 nhánh local, chưa push), AA-926 giữ nhánh (Q1)",
+    "AA-816: A10 giữ tới khi xong toàn bộ code dự án (Nghiệp quyết), không tạo mail @adventure.asia mới",
+    "Quyết định: viết nội dung site adventure.asia là việc của nhân viên AA, ngoài phạm vi (CIS tập trung cho tenant); bảng hỏi v2 cho chị Thư coi như chốt (chưa gửi)",
+    "CRM thiết kế v3: Nghiệp duyệt D1–D8, tạo 53 issue AA-928…AA-980 (project Partner CRM)",
+    "Master plan S247–S262: 9 lane song song (L0–L7, LP), 16 phiên, 11 mốc (thêm C-M1, P-M1, C-M2, C-M3); nguồn docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
+    "Dọn tracker: AA-848 (20/10), AA-889 và AA-890 (19/10) đã Done trên Linear từ trước, gỡ khỏi danh sách"
+   ]
+  },
   {
    "session": "S245",
    "date": "20/10/2026",
@@ -428,9 +641,9 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M1",
-   "session": "S246",
+   "session": "S249",
    "size": "S",
-   "next": "A10: remove the temporary E2E staff exception (new migration, revert Infra #215); S2 API legacy flag off once Previews can sign in (AA-911)",
+   "next": "L3 · S249 S2: API legacy login flag off (CIS deploy in an idle shared.job window) once AA-911 lands. A10 (E2E exception removal; mig 252 held locally) moves to the end of the project (Nghiệp, S246): no new @adventure.asia mailbox",
    "needs": ""
   },
   {
@@ -442,7 +655,7 @@
    "milestone": "M1",
    "session": "later",
    "size": "",
-   "next": "Epic: closes when AA-816, AA-680 staff half, AA-813 and AA-908 land (phases 0–2 in M1)",
+   "next": "L3 · Epic: post a Phase 2/3 status comment with evidence links (M1 criterion); closes when AA-816, AA-911, AA-813 and AA-908 land",
    "needs": ""
   },
   {
@@ -452,9 +665,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "M5",
-   "session": "any",
+   "session": "S259",
    "size": "M",
-   "next": "Dumps: DRY RUN then move/delete; single-schema rehearsal; DSN CNAME",
+   "next": "L3 · S259 restore drill; dumps: DRY RUN then move/delete once approved; DSN CNAME",
    "needs": "Approve dumps; DSN secrets by hand"
   },
   {
@@ -464,33 +677,9 @@
    "priority": "Low",
    "project": "data",
    "milestone": "M1b",
-   "session": "S245",
+   "session": "S248",
    "size": "XS",
-   "next": "Close on the next Dependabot PR that touches frontend/** (link the skipped Vercel deploy)",
-   "needs": ""
-  },
-  {
-   "id": "AA-890",
-   "title": "PR template, PR title lint and squash-only settings in all repos — plus Infra .bak cleanup",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S245",
-   "size": "XS",
-   "next": "gh api: squash-only + delete-branch settings in every repo",
-   "needs": ""
-  },
-  {
-   "id": "AA-889",
-   "title": "Remove stale docs and agent-instruction drift — CIS runbook v1, root README, steering, stray files",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S245",
-   "size": "XS",
-   "next": "Close along with AA-902 (scrub done S244)",
+   "next": "L7 · Close on the next Dependabot PR that touches frontend/** (link the skipped Vercel deploy)",
    "needs": ""
   },
   {
@@ -500,9 +689,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "≥01/11",
+   "session": "S257",
    "size": "S",
-   "next": "First cost report Aug/Sep/Oct with unit costs (acc2 + acc3 + credits)",
+   "next": "L7 · First session ≥01/11 (≈S257, slotted by date): cost report Aug/Sep/Oct per App tag and service, acc3 Bedrock + credits, unit costs",
    "needs": "Decision list"
   },
   {
@@ -512,9 +701,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M5",
-   "session": "S251",
+   "session": "S258",
    "size": "L",
-   "next": "Re-plan after S22 (renumber migrations), D5b, wave 3",
+   "next": "L3 · S258 tenant pool wave 2/3 (re-plan after S22, renumber migrations, D5b)",
    "needs": "Wave-4 route retire"
   },
   {
@@ -526,7 +715,7 @@
    "milestone": "M2a",
    "session": "later",
    "size": "M",
-   "next": "Gateway refactor + AA-799 follow-ups",
+   "next": "L1 · Gateway refactor + AA-799 follow-ups; after the S253 go/no-go",
    "needs": ""
   },
   {
@@ -536,9 +725,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "M5",
-   "session": "later",
+   "session": "S253",
    "size": "M",
-   "next": "JSON logs + Sentry for Booking/TP; Booking uptime line",
+   "next": "L3 · S253 Booking/TP part (Sentry + structlog) if no other Booking/TP subagent runs that session, else later; portal Sentry comes with P2b (AA-979)",
    "needs": ""
   },
   {
@@ -548,10 +737,10 @@
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M3",
-   "session": "unscheduled",
+   "session": "S255",
    "size": "XL",
-   "next": "Booking wave 3; write the Done-when first, split at pickup",
-   "needs": "Payment marking, tax, deposit %"
+   "next": "L4 · Part 1 S255, part 2 S258 (payment schedule, manual payment marking), part 3 S260 — only once Ms. Thư settles tax, deposit % and payment marking. Blocked by AA-928 (commercial-core memo) and AA-974; never between B1–B3 (same files)",
+   "needs": "Ms. Thư: tax, deposit %, payment marking"
   },
   {
    "id": "AA-910",
@@ -560,9 +749,9 @@
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M3",
-   "session": "later",
+   "session": "S255",
    "size": "S",
-   "next": "Booking 1440 px table fixes + audit rows",
+   "next": "L4 · Fallback in S255/S260 while AA-682 still waits for Ms. Thư",
    "needs": ""
   },
   {
@@ -572,9 +761,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M5",
-   "session": "S253",
+   "session": "S250",
    "size": "S",
-   "next": "Guest-token check on the read GETs",
+   "next": "L5 · S250 guest-token check on the 4 read GETs, right after AA-847 slice 6d",
    "needs": ""
   },
   {
@@ -584,22 +773,10 @@
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M5",
-   "session": "later",
+   "session": "S255",
    "size": "M",
-   "next": "Traveller sign-in on Cognito EXTERNAL, guest linking, My Trips — before real travellers",
+   "next": "L5 · S255 traveller sign-in on Cognito EXTERNAL, guest linking, My Trips (after AA-909)",
    "needs": ""
-  },
-  {
-   "id": "AA-876",
-   "title": "API edge hardening: login rate limit, throttle/WAF, Booking docs, CORS, headers",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S249",
-   "size": "M",
-   "next": "Login rate limit, CORS, headers, Booking docs; WAF after quote",
-   "needs": "WAF cost (D-19)"
   },
   {
    "id": "AA-901",
@@ -610,20 +787,20 @@
    "milestone": "M1b",
    "session": "S251",
    "size": "M",
-   "next": "GitHub App (Nghiệp creates it), ADR 0010/0011, CODEOWNERS",
-   "needs": "Create the App"
+   "next": "L7 · S251 GitHub App (Nghiệp installs it) + ADR 0011, CODEOWNERS",
+   "needs": "Install the App"
   },
   {
    "id": "AA-847",
    "title": "Places: L4 catalog read model fast enough for PLACES_SOURCE=cis + flip + content-validity report",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "data",
    "milestone": "M2b",
-   "session": "S248–S249",
+   "session": "S247",
    "size": "L",
-   "next": "L4 catalog read model + parity, defect fixes, PLACES_SOURCE=cis flip; takes the AA-852 179/180 revoke",
-   "needs": "7-day watch vs \"dev: no waiting\""
+   "next": "L2 · S246: CIS #895 migrations merged, 253 applied on Dev 21/10 09:12 UTC, 255/256 being applied; CIS #896 draft code PR; TP #120 (tp-017) merged. Next: TP 6c + 254 revoke (S248), 257 dedupe job + 6d + redirect + graph-build freeze + PLACES_SOURCE=cis flip on both Lambdas + parity probe ≥50 trips (S249, no paid runs that session)",
+   "needs": "Flip steps; PLACES_SOURCE on the 2 Lambdas edited by hand"
   },
   {
    "id": "AA-704",
@@ -644,9 +821,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2b",
-   "session": "S252",
+   "session": "S254",
    "size": "M",
-   "next": "One place pass: trial country; precondition HNSW rewrite of TP suggestions.py",
+   "next": "L2 · S254 trial place pass (3, then ≤50 tours), only in a session without an A/B run; after the AA-847 flip",
    "needs": "Quote and country order"
   },
   {
@@ -656,9 +833,9 @@
    "priority": "Low",
    "project": "core",
    "milestone": "M2b",
-   "session": "S252",
+   "session": "S256",
    "size": "M",
-   "next": "Geo backfill for the 8 countries, inside the place pass",
+   "next": "L2 · S256 geo backfill subset inside the place pass",
    "needs": "Quote first"
   },
   {
@@ -668,9 +845,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2b",
-   "session": "S252",
+   "session": "S260",
    "size": "L",
-   "next": "Place cards, staged by country, inside the place pass",
+   "next": "L2 · S260 place cards in paid subsets by country",
    "needs": "Quote"
   },
   {
@@ -680,9 +857,9 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M4",
-   "session": "later",
+   "session": "S259",
    "size": "M",
-   "next": "My Content leftovers (reopened) — before UAT",
+   "next": "LP · S259 My Content DataTable in AA-Partner/portal (after P2a, AA-979)",
    "needs": "Rescope or build"
   },
   {
@@ -692,9 +869,9 @@
    "priority": "High",
    "project": "portal",
    "milestone": "M5",
-   "session": "≥01/11",
+   "session": "S257",
    "size": "L",
-   "next": "Cost Operations page (reopened)",
+   "next": "L7 · First session ≥01/11 (≈S257): Cost Operations page (reopened)",
    "needs": ""
   },
   {
@@ -704,9 +881,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M5",
-   "session": "S251",
+   "session": "S261",
    "size": "S",
-   "next": "One real Booking retention run under a Dev override, or drop the Done-when line",
+   "next": "L7 · S261 retention rollups: one real Booking retention run under a Dev override, or drop the Done-when line",
    "needs": "Drop the line or allow the run"
   },
   {
@@ -716,9 +893,9 @@
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M4",
-   "session": "≥S254",
+   "session": "S252",
    "size": "M",
-   "next": "TripPlanner Next 16 + React Compiler refactor",
+   "next": "L5 · S252 Next 15 → 16 + React Compiler refactor (after AA-847 6d; not in the same session as AA-934/935)",
    "needs": ""
   },
   {
@@ -730,7 +907,7 @@
    "milestone": "M1b",
    "session": "S252",
    "size": "M",
-   "next": "release-please and first tags per app",
+   "next": "L7 · S252 release-please and first tags per app (after AA-901)",
    "needs": "Version numbers"
   },
   {
@@ -739,11 +916,11 @@
    "status": "In Progress",
    "priority": "Low",
    "project": "portal",
-   "milestone": "later",
+   "milestone": "C-M1",
    "session": "S247",
    "size": "L",
-   "next": "After the 16 recommendations are approved: next design version (flows, wireframes, data model, cost, issue split), then Ms. Thư's questionnaire",
-   "needs": "Approve the 16 CRM recommendations"
+   "next": "L0 · CRM design v3 D1–D8 approved S246 and 53 issues created (AA-928…AA-980); Ms. Thư's questionnaire v2 counts as settled (not sent). Close with evidence after the Jira PR-19 note",
+   "needs": ""
   },
   {
    "id": "AA-900",
@@ -754,7 +931,7 @@
    "milestone": "M2a",
    "session": "later",
    "size": "M",
-   "next": "LLM ops docs, prompt register, manual eval gate (after AA-729)",
+   "next": "L1 · LLM ops docs, prompt register, manual eval gate; after the S253 go/no-go",
    "needs": ""
   },
   {
@@ -764,9 +941,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "M1b",
-   "session": "S253",
+   "session": "S249",
    "size": "M",
-   "next": "CI gate parity across repos",
+   "next": "L7 · S249 (pulled ahead from S253): CI gate parity + scheduled Terraform drift detection before the 4th repo (AA-933, S250)",
    "needs": "Branch-protection toggles"
   },
   {
@@ -788,9 +965,9 @@
    "priority": "Low",
    "project": "data",
    "milestone": "M5",
-   "session": "later",
+   "session": "S262",
    "size": "L",
-   "next": "L9 prod blueprint + ADR 0012 (go-live date)",
+   "next": "L7 · S262 ADR 0012 draft (before CRM W8); L9 prod blueprint on the go-live date",
    "needs": "Date; account (AA-864)"
   },
   {
@@ -800,9 +977,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M5",
-   "session": "≤11/11",
+   "session": "S256",
    "size": "",
-   "next": "Tenant terms AI clause — Jira draft, decision by ~01/11",
+   "next": "L3 · S256, deadline ≤11/11: tenant terms AI clause; Ms. Thư decides on counsel",
    "needs": "Ms. Thư (counsel)"
   },
   {
@@ -814,20 +991,20 @@
    "milestone": "M4",
    "session": "after M2a",
    "size": "L",
-   "next": "UAT videos for all apps, Cognito login, bilingual guides",
+   "next": "L7 · UAT videos for all apps after all technical work (>S262), Cognito login, bilingual guides",
    "needs": "Go signal"
   },
   {
    "id": "AA-886",
    "title": "/privacy and /terms pages + legal readiness packet for Ms. Thư",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M5",
-   "session": "S246",
+   "session": "S247",
    "size": "S",
-   "next": "/privacy + /terms (draft) on TripPlanner and portal, footer links, consent query",
-   "needs": "Wording through Ms. Thư"
+   "next": "L0 · Technical part done: root #144 (legal packet, register, DPA, DSAR) + /privacy, /terms on TP (#112) and the portal. Close or narrow in S247; the wording waits for Ms. Thư",
+   "needs": "Ms. Thư: wording"
   },
   {
    "id": "AA-697",
@@ -842,18 +1019,6 @@
    "needs": "Scope"
   },
   {
-   "id": "AA-729",
-   "title": "Golden set (~100 samples from existing data) + scoring script for audit rounds",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S246",
-   "size": "L",
-   "next": "Fixture 1.1.0 + baseline done S245; closes with the first before/after numbers from AA-925 (Q-2)",
-   "needs": ""
-  },
-  {
    "id": "AA-804",
    "title": "AI platform ADR + ledger v2 — one gateway library, attempt-level llm_call_log, AI Use Register",
    "status": "Backlog",
@@ -862,7 +1027,7 @@
    "milestone": "M5",
    "session": "later",
    "size": "M",
-   "next": "AI platform ADR (renumber 0009) + ledger v2 + AI Use Register (before prod)",
+   "next": "AI platform ADR + ledger v2 + AI Use Register before prod; AA-928 settles ADR 0008a vs AA-804 (S247)",
    "needs": "Accept the ADR"
   },
   {
@@ -872,9 +1037,9 @@
    "priority": "Low",
    "project": "data",
    "milestone": "M5",
-   "session": "later",
+   "session": "S259",
    "size": "M",
-   "next": "OpenAPI + oasdiff (after AA-891)",
+   "next": "L7 · S259 OpenAPI export + breaking-change check (after AA-891)",
    "needs": ""
   },
   {
@@ -884,9 +1049,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M5",
-   "session": "S250",
+   "session": "S255",
    "size": "M",
-   "next": "Redis AUTH/TLS/at-rest + flag alarm",
+   "next": "L3 · S255 Redis AUTH/TLS/at-rest + flag alarm, in an idle CIS window",
    "needs": "Cost (D-19)"
   },
   {
@@ -896,9 +1061,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "M5",
-   "session": "later",
+   "session": "S261",
    "size": "M",
-   "next": "GuardDuty, Access Analyzer, S3 BPA, CloudTrail (after AA-846)",
+   "next": "L3 · S261 after the GuardDuty quote; reuse the KMS/alarm pattern of AA-932",
    "needs": "Cost per item"
   },
   {
@@ -911,18 +1076,6 @@
    "session": "later",
    "size": "S",
    "next": "Env-config register + ERD (after AA-893)",
-   "needs": ""
-  },
-  {
-   "id": "AA-848",
-   "title": "X2 catalogue-wide RLS CI guard (rules a–e; f after AA-826)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S250",
-   "size": "M",
-   "next": "X2 RLS catalogue CI guard (rules a–e, PUBLIC grants, allowlist)",
    "needs": ""
   },
   {
@@ -968,10 +1121,10 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M5",
-   "session": "later",
+   "session": "S247",
    "size": "M",
-   "next": "Tenant users on Cognito invitations — rewrite to ADR 0006 Phase 3 (security order #1)",
-   "needs": "Confirm the rescope"
+   "next": "L3 · Not built alone: re-scoped inside AA-928 (S247), delivered through AA-939 (partner pool, S254) + AA-978 (membership feed, S256); blocks AA-978",
+   "needs": "Confirm the rescope (AA-928)"
   },
   {
    "id": "AA-838",
@@ -980,9 +1133,9 @@
    "priority": "Low",
    "project": "data",
    "milestone": "M5",
-   "session": "≥01/11",
+   "session": "S257",
    "size": "M",
-   "next": "First capacity and access review",
+   "next": "L7 · First session ≥01/11 (≈S257): first capacity review",
    "needs": ""
   },
   {
@@ -1006,7 +1159,7 @@
    "milestone": "later",
    "session": "later",
    "size": "M",
-   "next": "Consolidate on one AWS account — decide before AA-880",
+   "next": "L7 · Consolidate on one AWS account — decide before AA-880",
    "needs": "Still wanted?"
   },
   {
@@ -1018,20 +1171,8 @@
    "milestone": "M5",
    "session": "later",
    "size": "S",
-   "next": "tripplanner.job + outbox PII redact; first rows age past 90 d ~01/2027",
+   "next": "L5 · tripplanner.job + outbox PII redact; first rows age past 90 d ~01/2027",
    "needs": "Approve the first real run"
-  },
-  {
-   "id": "AA-877",
-   "title": "Tag Booking and TripPlanner PII columns (pii:<class>, DM-6.1)",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S249",
-   "size": "S",
-   "next": "PII column tags through bk/tp migrations; RoPA input for AA-886",
-   "needs": ""
   },
   {
    "id": "AA-842",
@@ -1052,9 +1193,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S250",
+   "session": "S260",
    "size": "XL",
-   "next": "T-series G7 (12 tours × 4 tenants) + G8 report",
+   "next": "L1 · S260 T-series G7 + G8 report (paid), per the S253 go/no-go",
    "needs": "Paid run ~$10–20"
   },
   {
@@ -1066,7 +1207,7 @@
    "milestone": "M2a",
    "session": "S251",
    "size": "M",
-   "next": "Agreement analysis once the 40 labels exist",
+   "next": "L1 · Agreement analysis once Nghiệp's 40 labels exist (not slotted in the S247–S262 sessions; kept at S251)",
    "needs": "2–3 h labelling"
   },
   {
@@ -1088,10 +1229,10 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2b",
-   "session": "S252",
+   "session": "S247",
    "size": "M",
-   "next": "Calibrate or switch off a1_promise_unsupported (labels shared with AA-845)",
-   "needs": "Enforce or switch off"
+   "next": "L0 · Cancel per Q7 a (S247); its labels stay shared with AA-845",
+   "needs": ""
   },
   {
    "id": "AA-845",
@@ -1102,20 +1243,8 @@
    "milestone": "M2b",
    "session": "S247",
    "size": "M",
-   "next": "Panel labels for 100 claims, pick the reject ceiling (Jev S1 agreement 12.5%), investigate the 402s",
+   "next": "L1 · S247 Q845-2/3: credit warning + the 402s; reject ceiling from the panel labels",
    "needs": ""
-  },
-  {
-   "id": "AA-844",
-   "title": "CloudFront in front of S3 photos/ + daily scheduled photo_sync (PR-11 promise)",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M2b",
-   "session": "S249",
-   "size": "M",
-   "next": "CloudFront in front of photos + daily photo_sync (PR-11 promise)",
-   "needs": "Cost line before apply"
   },
   {
    "id": "AA-790",
@@ -1124,9 +1253,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S249",
+   "session": "S253",
    "size": "L",
-   "next": "Tenant-voice gate + post-repair integrity (owns orphans)",
+   "next": "L1 · Held until the S253 written go/no-go",
    "needs": "LLM judge vs deterministic rubric"
   },
   {
@@ -1135,10 +1264,10 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "portal",
-   "milestone": "parked",
-   "session": "parked",
+   "milestone": "M4",
+   "session": "S261",
    "size": "M",
-   "next": "Marketplace redesign",
+   "next": "LP · S261 Marketplace redesign in AA-Partner/portal (after P2a)",
    "needs": "Merge with Browse Tours? (Ms. Thư)"
   },
   {
@@ -1150,7 +1279,7 @@
    "milestone": "parked",
    "session": "parked",
    "size": "L",
-   "next": "Shared design system package",
+   "next": "Shared design system package; after P2a the kit lives in 3 copies (CIS admin, portal, CRM web), byte guard until then",
    "needs": "Package vs copies"
   },
   {
@@ -1160,9 +1289,9 @@
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M4",
-   "session": "≥S254",
+   "session": "S253",
    "size": "S",
-   "next": "/plan contrast and labels (same files as AA-906)",
+   "next": "L5 · S253 /plan contrast and labels (after AA-906, same files)",
    "needs": "Clarify dark mode"
   },
   {
@@ -1172,9 +1301,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M3",
-   "session": "later",
+   "session": "S253",
    "size": "",
-   "next": "ADR 0004a supply content (after X1 S22)",
+   "next": "L4 · Its outbox pattern merges into AA-975 (CRM-B3, S253); paid consumer trial later",
    "needs": "Paid consumer trial"
   },
   {
@@ -1196,9 +1325,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S250",
+   "session": "later",
    "size": "M",
-   "next": "Gate recall tunes, lexical part only",
+   "next": "L1 · Gate recall tunes, lexical part only; not slotted in the S1-first plan (no new gates for 4 weeks)",
    "needs": ""
   },
   {
@@ -1208,9 +1337,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S247",
+   "session": "S248",
    "size": "S",
-   "next": "Panel-label the 15 rewritten LinkedIn posts (run dab254c4), then close or adjust",
+   "next": "L1 · S248 T9 tuning in parallel (Q2 = b), no new gates: panel-label the 15 rewritten LinkedIn posts, then close or adjust",
    "needs": ""
   },
   {
@@ -1220,9 +1349,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S246",
+   "session": "S248",
    "size": "M",
-   "next": "D10: build a ~150–200 PAA keep/drop labelled set, panel labels, measure main vs rules branch vs small LLM classifier, fix once",
+   "next": "L1 · S248 T9 tuning in parallel (Q2 = b), no new gates: PAA keep/drop labelled set, measure the options, fix once",
    "needs": "Approve the labelled set"
   },
   {
@@ -1234,7 +1363,7 @@
    "milestone": "M2a",
    "session": "later",
    "size": "M",
-   "next": "T2 judge breakdown + brand-claim fidelity",
+   "next": "L1 · T2 judge breakdown + brand-claim fidelity",
    "needs": "Still wanted?"
   },
   {
@@ -1246,7 +1375,7 @@
    "milestone": "M2a",
    "session": "later",
    "size": "S",
-   "next": "Promote F12_scope / F9_brand_style to blocking (after AA-787)",
+   "next": "L1 · Promote F12_scope / F9_brand_style to blocking (after AA-924)",
    "needs": ""
   },
   {
@@ -1300,13 +1429,13 @@
   {
    "id": "AA-925",
    "title": "[Quality] Q-2: repair contract, degraded counters, S1 day-count oracle and Q0 corpus",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S246",
+   "session": "S247",
    "size": "M",
-   "next": "First per D9; before/after on fixture 1.1.0 closes AA-729",
+   "next": "L0 · Shipped live (#891, #893, #894 on a5f3da88); only the live forced-Jev check is left, then close with evidence",
    "needs": ""
   },
   {
@@ -1316,21 +1445,21 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S246",
+   "session": "S253",
    "size": "M",
-   "next": "After AA-925",
+   "next": "L1 · Built on branch feat/aa-926-quality-registry (11 commits), parked per Q1; merge only on a go at S253",
    "needs": ""
   },
   {
    "id": "AA-915",
    "title": "[Writing memory] Freeze the ungated lessons loop and record app ADR 0010 (governed writing memory)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
    "session": "S247",
    "size": "S",
-   "next": "Writing Memory P0, right after AA-926",
+   "next": "L0 · CIS #887 + root #145 merged. Left: one S1 + one T2 rewrite between two pg_stat snapshots as evidence, fix the Linear title (ADR 0009 → app ADR 0010), close",
    "needs": ""
   },
   {
@@ -1340,21 +1469,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S247",
+   "session": "S253",
    "size": "M",
-   "next": "Writing Memory P0 + Q-3 quality_context stamp (A1/T9); migration + RLS → agent review",
-   "needs": ""
-  },
-  {
-   "id": "AA-927",
-   "title": "[Cost] LLM calls with no llm_call_log row (AA-729 eval runs: 116/216 and 188/815)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S247",
-   "size": "S",
-   "next": "Find the unlogged call paths and log them",
+   "next": "L1 · Held until the S253 go/no-go; on go: Writing Memory P0 (migration + RLS → agent review)",
    "needs": ""
   },
   {
@@ -1364,9 +1481,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S248",
+   "session": "S253",
    "size": "M",
-   "next": "After AA-926 (Q-1); replay Done-when uses R0",
+   "next": "L1 · Held until the S253 go/no-go (after AA-926)",
    "needs": ""
   },
   {
@@ -1376,9 +1493,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "S257",
    "size": "M",
-   "next": "Writing Memory P1",
+   "next": "L1 · Writing Memory P1 at S257 if the S253 decision is go",
    "needs": "Release click per rule set"
   },
   {
@@ -1388,9 +1505,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "S257",
    "size": "M",
-   "next": "Writing Memory P1 (+ post-merge R0 job, Q-5)",
+   "next": "L1 · Writing Memory P1 at S257 if the S253 decision is go",
    "needs": ""
   },
   {
@@ -1400,9 +1517,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "S259",
    "size": "L",
-   "next": "Writing Memory P2 (+ Q-6 calibration, κ ≥ 0.6); cap $40/month, $10 per run",
+   "next": "L1 · Writing Memory P2 at S259 if go",
    "needs": "Each release"
   },
   {
@@ -1412,9 +1529,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "S259",
    "size": "M",
-   "next": "Writing Memory P2",
+   "next": "L1 · Writing Memory P2 at S259 if go",
    "needs": ""
   },
   {
@@ -1424,9 +1541,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "S262",
    "size": "M",
-   "next": "Writing Memory P3",
+   "next": "L1 · Writing Memory P3 at S262 if go",
    "needs": ""
   },
   {
@@ -1436,9 +1553,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "S262",
    "size": "M",
-   "next": "Writing Memory P3 (+ Q-8 scorer learning)",
+   "next": "L1 · Writing Memory P3 at S262 if go",
    "needs": ""
   },
   {
@@ -1448,9 +1565,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "S262",
    "size": "M",
-   "next": "Writing Memory P3",
+   "next": "L1 · Writing Memory P3 at S262 if go",
    "needs": ""
   },
   {
@@ -1460,10 +1577,718 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M1",
+   "session": "S247",
+   "size": "M",
+   "next": "L3 · Built on 7 local branches, not pushed. S247: push + apply the 2 Infra branches (Preview callbacks, bridge staff rows); S248: remove the bridge in CIS/Booking + e2e base URL, verify Preview sign-in. Unblocks AA-816 S2 and AA-972",
+   "needs": ""
+  },
+  {
+   "id": "AA-642",
+   "title": "[EPIC] Model Gateway — one routing layer for Claude/Bedrock, OpenAI, Jev, driven by admin UI settings",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "later",
+   "session": "later",
+   "size": "L",
+   "next": "L1 · Model Gateway epic; last in the L1 order",
+   "needs": ""
+  },
+  {
+   "id": "AA-645",
+   "title": "[EVAL] Claude Sonnet 5 for writer stages (t2_generate, t8_angle_gen, t9_write, s1_atom_writer) vs Sonnet 4.5/4.6 on Bedrock",
+   "status": "Backlog",
+   "priority": "Low",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S248",
+   "size": "S",
+   "next": "L1 · Folded into S1 step 2 (S248): 3-model screen on 12 tours (~$2.5)",
+   "needs": ""
+  },
+  {
+   "id": "AA-759",
+   "title": "PortalShell on the kit — grouped nav, real ⌘K, mobile bottom bar, theme, route renames (no T-number slugs)",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "portal",
+   "milestone": "P-M1",
+   "session": "S249",
+   "size": "M",
+   "next": "LP · S249 PortalShell on the kit, in CIS before P2a (UI + Vercel deploy, needs no idle job window)",
+   "needs": ""
+  },
+  {
+   "id": "AA-760",
+   "title": "Page-by-page audit + state fixes — statuses from the job, never inferred from rows (\"Writing…\" bug)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "portal",
+   "milestone": "P-M1",
+   "session": "S250",
+   "size": "M",
+   "next": "LP · S250 page-by-page audit + state fixes, in CIS before P2a",
+   "needs": ""
+  },
+  {
+   "id": "AA-761",
+   "title": "Account pages with real data — Billing usage/overage, Activity timeline, Integrations (WordPress health, API key view)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "portal",
+   "milestone": "M4",
+   "session": "S257",
+   "size": "M",
+   "next": "LP · S257 account pages in AA-Partner/portal (after P2a); blocked by AA-979",
+   "needs": ""
+  },
+  {
+   "id": "AA-762",
+   "title": "Team & roles — tenant users (owner/editor/viewer), invites, self-serve API keys — after the ecosystem identity ADR",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "portal",
+   "milestone": "C-M2",
+   "session": "S254",
+   "size": "S",
+   "next": "LP · Close as a duplicate of AA-939 (CRM-11) in S254",
+   "needs": ""
+  },
+  {
+   "id": "AA-928",
+   "title": "[CRM W0] CRM-01a ADRs + contracts + spec errata",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "C-M1",
+   "session": "S247",
+   "size": "M",
+   "next": "L6 · W0 · S247: incl. ADR AA-Partner, contracts, errata, AA-813 re-scope, W1 sign-in, Booking commercial-core memo, ADR 0008a vs AA-804",
+   "needs": "Accept the ADRs (S248)"
+  },
+  {
+   "id": "AA-929",
+   "title": "[CRM W0] CRM-01b Data-standards bump",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "C-M1",
+   "session": "S247",
+   "size": "M",
+   "next": "L6 · W0 · S247: docs/root only, no code subagent",
+   "needs": ""
+  },
+  {
+   "id": "AA-930",
+   "title": "[CRM W0] CRM-02 Readiness checks (read-only)",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "C-M1",
+   "session": "S247",
+   "size": "S",
+   "next": "L6 · W0 · S247: docs/root only, no code subagent",
+   "needs": ""
+  },
+  {
+   "id": "AA-931",
+   "title": "[CRM W0] CRM-03 Infra bootstrap + CloudFront VPC-origin spike",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "C-M1",
    "session": "S248",
    "size": "M",
-   "next": "Pick the Preview sign-in option (ADR 0006a amendment), build it, then remove /auth/booking-token; unblocks AA-816 S2",
-   "needs": "Choose the Preview sign-in option"
+   "next": "L6 · W0 · S248: apply-role grants (kms alias/crm-*, VPC origin), CloudFront → VPC origin → NLB → ALB host-rule spike",
+   "needs": "MFA (Infra apply)"
+  },
+  {
+   "id": "AA-932",
+   "title": "[CRM W1] CRM-04 Infra + DB owner `crm`",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "C-M1",
+   "session": "S249",
+   "size": "L",
+   "next": "L6 · W1 · S249; blocked by AA-928, AA-929, AA-931",
+   "needs": "MFA (KMS policies)"
+  },
+  {
+   "id": "AA-933",
+   "title": "[CRM W1] CRM-05 AA-Partner repo, API, job runner",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "C-M1",
+   "session": "S250",
+   "size": "L",
+   "next": "L6 · W1 · S250: branch protection + required CI from day one; blocked by AA-928, AA-932",
+   "needs": "Create the AA-Partner repo if repo creation is turned off (access review Q-2)"
+  },
+  {
+   "id": "AA-934",
+   "title": "[CRM W1] CRM-06 KeyProvider and field encryption",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "C-M1",
+   "session": "S251",
+   "size": "M",
+   "next": "L6 · W1 · S251; blocked by AA-932, AA-933",
+   "needs": ""
+  },
+  {
+   "id": "AA-935",
+   "title": "[CRM W1] CRM-07 Web skeleton + synthetic agencies",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "C-M1",
+   "session": "S251",
+   "size": "M",
+   "next": "L6 · W1 · S251; blocked by AA-933",
+   "needs": "Create the e2e-test-crm-* users"
+  },
+  {
+   "id": "AA-936",
+   "title": "[CRM W1] CRM-08 Slice 1: intake → Inquiry → board",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "C-M1",
+   "session": "S252",
+   "size": "L",
+   "next": "L6 · W1 · S252: → C-M1; blocked by AA-934, AA-935",
+   "needs": ""
+  },
+  {
+   "id": "AA-937",
+   "title": "[CRM W2] CRM-09 F1/F2 complete",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S253",
+   "size": "L",
+   "next": "L6 · W2 · S253; blocked by AA-934, AA-936",
+   "needs": ""
+  },
+  {
+   "id": "AA-938",
+   "title": "[CRM W2] CRM-10 F3 scrubber",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S255",
+   "size": "M",
+   "next": "L6 · W2 · S255; blocked by AA-930, AA-937",
+   "needs": ""
+  },
+  {
+   "id": "AA-939",
+   "title": "[CRM W2] CRM-11 F4 roles, partner pool, MFA, permission matrix",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S254",
+   "size": "L",
+   "next": "L6 · W2 · S254; blocked by AA-928, AA-937",
+   "needs": "MFA (Cognito)"
+  },
+  {
+   "id": "AA-940",
+   "title": "[CRM W2] CRM-12 F5 audit",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S254",
+   "size": "M",
+   "next": "L6 · W2 · S254; blocked by AA-937",
+   "needs": ""
+  },
+  {
+   "id": "AA-941",
+   "title": "[CRM W2] CRM-13a AA admin L1 console",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S257",
+   "size": "M",
+   "next": "L6 · W2 · S257; blocked by AA-939, AA-940",
+   "needs": ""
+  },
+  {
+   "id": "AA-942",
+   "title": "[CRM W2] CRM-14 Data lifecycle rules",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S255",
+   "size": "M",
+   "next": "L6 · W2 · S255; blocked by AA-940",
+   "needs": ""
+  },
+  {
+   "id": "AA-943",
+   "title": "[CRM W3] CRM-15 Modules 1 + 2 complete",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S256",
+   "size": "L",
+   "next": "L6 · W3 · S256; blocked by AA-937, AA-939",
+   "needs": ""
+  },
+  {
+   "id": "AA-944",
+   "title": "[CRM W3] CRM-16 Agency-line ledger + suppliers",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S257",
+   "size": "M",
+   "next": "L6 · W3 · S257; blocked by AA-943",
+   "needs": ""
+  },
+  {
+   "id": "AA-945",
+   "title": "[CRM W3] CRM-17 Module 5 email",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S257",
+   "size": "L",
+   "next": "L6 · W3 · S257; blocked by AA-938, AA-943",
+   "needs": ""
+  },
+  {
+   "id": "AA-946",
+   "title": "[CRM W3] CRM-18 Thin full lifecycle",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M2",
+   "session": "S258",
+   "size": "L",
+   "next": "L6 · W3 · S258: → C-M2; blocked by AA-944, AA-945",
+   "needs": ""
+  },
+  {
+   "id": "AA-947",
+   "title": "[CRM W4] CRM-19 B2B client + AA lines",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M3",
+   "session": "S259",
+   "size": "M",
+   "next": "L6 · W4 · S259; blocked by AA-944, AA-972, AA-973, AA-974, AA-975, AA-976",
+   "needs": ""
+  },
+  {
+   "id": "AA-948",
+   "title": "[CRM W4] CRM-20 Builder map fork (enhancement)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M3",
+   "session": "S260",
+   "size": "M",
+   "next": "L6 · W4 · S260: enhancement, does not block C-M3; needs T13 (no issue yet) + AA-906 + 6d; blocked by AA-935, AA-847, AA-906",
+   "needs": ""
+  },
+  {
+   "id": "AA-949",
+   "title": "[CRM W4] CRM-21a Proposal model + day-list builder",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M3",
+   "session": "S260",
+   "size": "L",
+   "next": "L6 · W4 · S260; blocked by AA-947",
+   "needs": ""
+  },
+  {
+   "id": "AA-950",
+   "title": "[CRM W4] CRM-21b Client proposal + accept + hold",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M3",
+   "session": "S261",
+   "size": "L",
+   "next": "L6 · W4 · S261: → C-M3; blocked by AA-949, AA-973, AA-974",
+   "needs": ""
+  },
+  {
+   "id": "AA-951",
+   "title": "[CRM W4] CRM-22 Module 4 + \"Before you go\"",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "C-M3",
+   "session": "S261",
+   "size": "M",
+   "next": "L6 · W4 · S261; blocked by AA-949, AA-977",
+   "needs": ""
+  },
+  {
+   "id": "AA-952",
+   "title": "[CRM W5] CRM-23 Module 7 invoices and payments",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-946, AA-950, AA-974",
+   "needs": ""
+  },
+  {
+   "id": "AA-953",
+   "title": "[CRM W5] CRM-24a Module 11 portal per person",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-946, AA-952",
+   "needs": ""
+  },
+  {
+   "id": "AA-954",
+   "title": "[CRM W5] CRM-24b Offline PWA",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-953",
+   "needs": ""
+  },
+  {
+   "id": "AA-955",
+   "title": "[CRM W5] CRM-25 Module 12 contracts and waivers",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-946",
+   "needs": ""
+  },
+  {
+   "id": "AA-956",
+   "title": "[CRM W5] CRM-26 Module 8 ops release",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-953, AA-975",
+   "needs": ""
+  },
+  {
+   "id": "AA-957",
+   "title": "[CRM W5] CRM-27 Commission + cancel trip",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-952, AA-956, AA-974",
+   "needs": ""
+  },
+  {
+   "id": "AA-958",
+   "title": "[CRM W6] CRM-28 Module 9 WhatsApp + SMS",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-930, AA-945",
+   "needs": ""
+  },
+  {
+   "id": "AA-959",
+   "title": "[CRM W6] CRM-29a Module 10 engine + tasks",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-943, AA-953, AA-958",
+   "needs": ""
+  },
+  {
+   "id": "AA-960",
+   "title": "[CRM W6] CRM-29b Tags, system tags, coverage, ready-to-travel",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-959, AA-976",
+   "needs": ""
+  },
+  {
+   "id": "AA-961",
+   "title": "[CRM W6] CRM-30 Duty of care + calendar",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-945, AA-975",
+   "needs": ""
+  },
+  {
+   "id": "AA-962",
+   "title": "[CRM W6] CRM-31 Onboarding + import",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-939, AA-945",
+   "needs": ""
+  },
+  {
+   "id": "AA-963",
+   "title": "[CRM W6] CRM-32 Search + library",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-947, AA-959, AA-977",
+   "needs": ""
+  },
+  {
+   "id": "AA-964",
+   "title": "[CRM W7] CRM-33a AI gateway + drafts + guardrails",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-938, AA-940, AA-945, AA-949, AA-958",
+   "needs": "MFA (acc3 role)"
+  },
+  {
+   "id": "AA-965",
+   "title": "[CRM W7] CRM-33b AI: supplier confirmations, notes → options, voices",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-964",
+   "needs": ""
+  },
+  {
+   "id": "AA-966",
+   "title": "[CRM W7] CRM-34 Reports + insights",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-950, AA-952",
+   "needs": ""
+  },
+  {
+   "id": "AA-967",
+   "title": "[CRM W7] CRM-35 Module 18 portability + deletion",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-941, AA-942",
+   "needs": ""
+  },
+  {
+   "id": "AA-968",
+   "title": "[CRM W7] CRM-36 Campaigns (R14)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-945, AA-959, AA-977",
+   "needs": ""
+  },
+  {
+   "id": "AA-969",
+   "title": "[CRM W7] CRM-37a Security review, SLOs, bounded load test",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "M5",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-954, AA-955, AA-957, AA-960, AA-961, AA-962, AA-963, AA-965, AA-966, AA-967, AA-968, AA-971, AA-979",
+   "needs": ""
+  },
+  {
+   "id": "AA-970",
+   "title": "[CRM W7] CRM-37b Release train, help, data page",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "M5",
+   "session": "≥S263",
+   "size": "M",
+   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-969",
+   "needs": ""
+  },
+  {
+   "id": "AA-971",
+   "title": "[CRM W7] CRM-13b AA support L2 + break-glass L3",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-939, AA-940, AA-941",
+   "needs": "MFA; Ms. Thư names the second alarm recipient"
+  },
+  {
+   "id": "AA-972",
+   "title": "[CRM LB] CRM-B1 M2M + B2B quote",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "M3",
+   "session": "S249",
+   "size": "L",
+   "next": "L4 · Lane B · S249: bk-019, review; blocked by AA-928, AA-911",
+   "needs": "MFA (M2M pool); Ms. Thư: B2B margin"
+  },
+  {
+   "id": "AA-973",
+   "title": "[CRM LB] CRM-B2 Departures, capacity, holds",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "M3",
+   "session": "S251",
+   "size": "L",
+   "next": "L4 · Lane B · S251: bk-020 + channel on trip_cases, review; blocked by AA-972",
+   "needs": ""
+  },
+  {
+   "id": "AA-974",
+   "title": "[CRM LB] CRM-B2b Booking commercial rules (new, Fix C2, A3, A8)",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "M3",
+   "session": "S252",
+   "size": "L",
+   "next": "L4 · Lane B · S252: bk-021: VND, shared cancellation fees, hold extension (ADR 0005 d5); blocked by AA-973",
+   "needs": ""
+  },
+  {
+   "id": "AA-975",
+   "title": "[CRM LB] CRM-B3 Event feed + on-request desk + incident flag",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "M3",
+   "session": "S253",
+   "size": "M",
+   "next": "L4 · Lane B · S253: bk-022, shared outbox (takes the AA-835 pattern) + on-request desk; blocked by AA-973",
+   "needs": ""
+  },
+  {
+   "id": "AA-976",
+   "title": "[CRM LB] CRM-B4 CIS catalog over HTTP",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "M3",
+   "session": "S254",
+   "size": "M",
+   "next": "L4 · Lane B · S254: needs the places flip; blocked by AA-928, AA-972, AA-847",
+   "needs": ""
+  },
+  {
+   "id": "AA-977",
+   "title": "[CRM LB] CRM-B5 AA-authored content in CIS (new, Fix C1)",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "M3",
+   "session": "S256",
+   "size": "M",
+   "next": "L4 · Lane B · S256: CIS migration, review; blocked by AA-976",
+   "needs": ""
+  },
+  {
+   "id": "AA-978",
+   "title": "[CRM LP] CRM-P1 Membership feed + tenant API",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "P-M1",
+   "session": "S256",
+   "size": "M",
+   "next": "LP · Lane P · S256: membership feed + cis.tenant-api.v1 (CIS); blocked by AA-939, AA-813",
+   "needs": ""
+  },
+  {
+   "id": "AA-979",
+   "title": "[CRM LP] CRM-P2 Move `portal/` into AA-Partner",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "P-M1",
+   "session": "S255",
+   "size": "L",
+   "next": "LP · Lane P · S255: P2a S255 (portal/ into AA-Partner/portal, keep history + Vercel + API-key auth); P2b S258 (CloudFront → Fargate, partner pool, 301 /trip/*, Sentry); remove Vercel ≥7 days after P2b (~S265); blocked by AA-978, AA-935, AA-931",
+   "needs": "Approve P2a before P1 (split AA-979 or note the exception)"
+  },
+  {
+   "id": "AA-980",
+   "title": "[CRM W8] CRM-38 Go-real",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "M5",
+   "session": "≥S263",
+   "size": "L",
+   "next": "L6 · W8, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-969, AA-970, AA-971, AA-979, AA-880, AA-873, AA-874",
+   "needs": ""
   }
  ]
 }

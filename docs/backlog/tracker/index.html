@@ -132,7 +132,7 @@ footer code { font-family: var(--mono); font-size: 12.5px }
 <div class="wrap">
   <header>
     <div class="eyebrow">AA_Ecosys · kế hoạch tổng thể</div>
-    <h1>Master Plan — CIS, TripPlanner, Booking</h1>
+    <h1>Master Plan — CIS, TripPlanner, Booking, CRM</h1>
     <div class="meta" id="meta"><span>Đang tải dữ liệu…</span></div>
     <div class="stats" id="stats"></div>
   </header>
@@ -143,7 +143,7 @@ footer code { font-family: var(--mono); font-size: 12.5px }
   </section>
 
   <section aria-labelledby="h-lanes">
-    <div class="sec-head"><h2 id="h-lanes">Theo phiên</h2><span class="muted">3–5 việc chính mỗi phiên; việc XS đi kèm không tính</span></div>
+    <div class="sec-head"><h2 id="h-lanes">Theo phiên</h2><span class="muted">Việc song song theo lane (L0–L7, LP; tiền tố ở dòng “việc tiếp”); tối đa ~3 việc code nặng mỗi phiên</span></div>
     <div class="lanes-scroll"><div class="lanes" id="lanes"></div></div>
   </section>
 
@@ -195,10 +195,10 @@ footer code { font-family: var(--mono); font-size: 12.5px }
 (function () {
   var LINEAR = "https://linear.app/aa-ecosys/issue/";
   var JIRA = "https://adventure-asia.atlassian.net/browse/";
-  var SES_ORDER = ["S245","S246","S247","S248","S248–S249","S249","S250","S251","S252","S253","≥01/11","≤11/11","≥S254","after M2a","any","unscheduled","later","05/2027","parked"];
-  var LANES = ["S245","S246","S247","S248","S249","S250","S251","S252","S253","≥01/11"];
+  var SES_ORDER = ["S247","S248","S249","S250","S251","S252","S253","S254","S255","S256","S257","S258","S259","S260","S261","S262","≥S263","≥01/11","≤11/11","after M2a","any","unscheduled","later","05/2027","parked"];
+  var LANES = ["S247","S248","S249","S250","S251","S252","S253","S254","S255","S256","S257","S258","S259","S260","S261","S262"];
   var PRI = { Urgent: 0, High: 1, Medium: 2, Low: 3, None: 4 };
-  var MS_ORDER = ["M1","M1b","M2a","M2b","M3","M4","M5","later","parked"];
+  var MS_ORDER = ["M1","M1b","M2a","M2b","M3","C-M1","P-M1","C-M2","C-M3","M4","M5","later","parked"];
   var STATUS_VI = { active: "đang làm", next: "kế tiếp", blocked: "chờ quyết định", later: "sau" };
   var data, sortKey = "milestone", sortDir = 1;
 
