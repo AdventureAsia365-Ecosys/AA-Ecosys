@@ -1,6 +1,6 @@
 # S246: nháp Jira cuối phiên (21/10/2026)
 
-Tác nhân: Claude Code. **Chỉ là nháp, chưa đăng gì, chưa đổi trạng thái, không tạo issue.** Quy trình theo
+Tác nhân: Claude Code. **Đã đăng 22/10/2026 sau khi Nghiệp duyệt cả 3: PR-19 comment 10488, PR-11 comment 10489 (bản sửa, chỉ phần CDN), PR-15 comment 10490.** Không đổi trạng thái, không tạo issue. Quy trình theo
 `skill/aa-jira-update/SKILL.md`: nháp, Nghiệp duyệt nguyên văn, rồi mới đăng.
 
 Quy tắc đã áp dụng:
@@ -28,7 +28,7 @@ Quy tắc đã áp dụng:
 | # | Issue | Nội dung | Khuyến nghị |
 |---|---|---|---|
 | 1 | [PR-19](https://adventure-asia.atlassian.net/browse/PR-19) CRM cho travel agencies | Thiết kế cuối AA Partner + link trang + trả lời ý REA + mục 8 cần chị cho ý kiến | **Đăng** |
-| 2 | [PR-11](https://adventure-asia.atlassian.net/browse/PR-11) Visual map planner | Ảnh phát qua CDN (đã nói sẽ làm ở comment 01/10) + địa điểm dạng đường và gộp trùng tự động trên hệ thống thử | **Đăng** (sau khi chụp 1–2 ảnh) |
+| 2 | [PR-11](https://adventure-asia.atlassian.net/browse/PR-11) Visual map planner | Ảnh phát qua CDN (đã nói sẽ làm ở comment 01/10); địa điểm dạng đường + gộp trùng ghi "đang làm" (S246 cuối: job vẽ đường chưa chạy, gộp trùng mới chạy thử không ghi) | **Đăng** |
 | 3 | [PR-15](https://adventure-asia.atlassian.net/browse/PR-15) Dữ liệu tour thô / chạy lại nội dung | Kiểm số ngày, giữ bài khi bộ kiểm tra dữ kiện không chạy, bộ mẫu chặn bản sửa làm hỏng phần đã đạt | **Đăng** (hoặc chuyển sang epic PR-22, xem dưới) |
 | – | [PR-20](https://adventure-asia.atlassian.net/browse/PR-20) báo cáo tuần | Chưa đến hạn (kỳ 1 PR-21 đăng 19/10; kỳ kế cho 20–26/10, soạn khoảng 26/10) | Không soạn; danh sách việc mang sang ở cuối file |
 | – | [KAN-20](https://adventure-asia.atlassian.net/browse/KAN-20) Asian Trails | Thiết kế CRM chưa so với Asian Trails (chỉ bảng hỏi v2 có dẫn, mà bảng hỏi không được nhắc) | Không đăng bây giờ |
@@ -135,12 +135,8 @@ Bản đọc nhanh (cùng nội dung):
 <p><span data-type="mention" data-user-id="70121:5793bdd5-44b1-4623-97d4-43c35d440869">@thule</span> Cập nhật TripPlanner ngày 21/10/2026:</p>
 <ul>
 <li><p><strong>Ảnh tour qua CDN:</strong> ảnh giờ phát qua CDN tại img.lumiguides.it.com, không còn đi qua server bằng link tạm. Mỗi ảnh có link cố định và được lưu đệm gần người xem, nên server không phải tự phát từng ảnh. Đã kiểm trên bản đang chạy: ảnh trên trang TripPlanner được chuyển sang CDN, lần tải thứ hai lấy thẳng từ bộ nhớ đệm.</p></li>
-<li><p><strong>Địa điểm dạng đường:</strong> hệ thống nội dung đã có chỗ lưu và trang quản trị cho các địa điểm vẽ thành đường kẻ trên bản đồ (sông, đường mòn trekking, đường bộ).</p></li>
-<li><p><strong>Gộp địa điểm trùng:</strong> các địa điểm bị trùng được hệ thống tự gộp, không cần gộp tay.</p></li>
-<li><p>Hai phần trên đã chạy trên hệ thống thử và đang tắt với khách cho tới khi kiểm xong lần cuối.</p></li>
-<li><p>Việc chuyển TripPlanner sang dữ liệu địa điểm mới đang làm.</p></li>
+<li><p>Việc chuyển TripPlanner sang dữ liệu địa điểm mới đang làm, gồm vẽ sông, đường mòn trekking và đường bộ thành đường kẻ trên bản đồ, và tự gộp các địa điểm bị trùng.</p></li>
 </ul>
-<p>Ảnh: (1) trang tour TripPlanner có ảnh tải từ CDN, (2) trang quản trị địa điểm dạng đường.</p>
 ```
 
 Bản đọc nhanh:
@@ -150,13 +146,8 @@ Bản đọc nhanh:
 > - **Ảnh tour qua CDN:** ảnh giờ phát qua CDN tại img.lumiguides.it.com, không còn đi qua server bằng link tạm. Mỗi ảnh
 >   có link cố định và được lưu đệm gần người xem, nên server không phải tự phát từng ảnh. Đã kiểm trên bản đang chạy:
 >   ảnh trên trang TripPlanner được chuyển sang CDN, lần tải thứ hai lấy thẳng từ bộ nhớ đệm.
-> - **Địa điểm dạng đường:** hệ thống nội dung đã có chỗ lưu và trang quản trị cho các địa điểm vẽ thành đường kẻ trên
->   bản đồ (sông, đường mòn trekking, đường bộ).
-> - **Gộp địa điểm trùng:** các địa điểm bị trùng được hệ thống tự gộp, không cần gộp tay.
-> - Hai phần trên đã chạy trên hệ thống thử và đang tắt với khách cho tới khi kiểm xong lần cuối.
-> - Việc chuyển TripPlanner sang dữ liệu địa điểm mới đang làm.
->
-> Ảnh: (1) trang tour TripPlanner có ảnh tải từ CDN, (2) trang quản trị địa điểm dạng đường.
+> - Việc chuyển TripPlanner sang dữ liệu địa điểm mới đang làm, gồm vẽ sông, đường mòn trekking và đường bộ thành đường
+>   kẻ trên bản đồ, và tự gộp các địa điểm bị trùng.
 
 ### Bằng chứng (từng câu)
 
@@ -169,6 +160,7 @@ Bản đọc nhanh:
 
 ### Lưu ý trước khi đăng
 
+- **Sửa cuối S246:** bỏ hai câu "địa điểm dạng đường" và "gộp trùng tự động ... đã chạy trên hệ thống thử" — migration và code đã lên Dev nhưng job `place_shape` chưa chạy và job gộp trùng mới chạy plan-only (0 cặp gộp), nên chưa phải tính năng chạy được; gộp thành một câu "đang làm". Bỏ dòng ảnh (câu CDN đã có bằng chứng curl live).
 - Theo quy tắc bằng chứng, câu về ảnh hiện mới có kiểm bằng curl. **Cần chụp 2 ảnh trước khi đăng**: (1) trang tour
   TripPlanner có ảnh (kèm tab Network thấy `img.lumiguides.it.com` nếu muốn), (2) tab Lines trên `/admin/places`. Nếu
   không có ảnh thì bỏ dòng "Ảnh:" và câu "Đã kiểm trên bản đang chạy" chỉ giữ phần đã curl.
