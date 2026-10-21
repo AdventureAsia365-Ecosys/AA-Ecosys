@@ -246,21 +246,39 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
     off on the graph views (they hide only non-live rows from trusted app roles) is a measured follow-up (CIS 255+)
     only if the AA-847 probe shows consumer quals blocked above a barrier subquery.
   - *Not a pin — lines are DRAWN (Nghiệp, S246, D1; supersedes the earlier "hidden" proposal).* Linear features
-    (trail, river, road, loop, stream, path, circuit …) are stored `geo_status='ok'`, `precision='line'` and drawn as
-    lines on every TripPlanner map — never a pin, never a circle, never hidden, also before the flip and while a
-    shape is missing. Geometry: CIS `geo.place_shape` (CIS 255), written only by the job kind `place_shape` (Geoapify
-    Place Details, then Overpass; accepted on name, kind, country polygon, distance to the tour-day anchors, a
-    kind-aware length) — no OSM feature: the anchored approximate route of a tour-day, drawn dashed "approximate
-    route"; the stretch each tour-day follows is `geo.tour_segment` (versioned with the graph build). A line is never a
-    graph stop or node. The views expose it (CIS 256: `v_destination` bbox / shape columns, `v_destination_shape`,
-    the day stretch on `v_tour_place` / `v_tour_component`; contracts `catalog.tour.v1.2`, `catalog.graph.v1.2`).
+    (trail, river, road, loop, stream, path, circuit …) are stored `geo_status='ok'`, `precision='line'`, never
+    hidden, never a graph stop or node. Geometry: CIS `geo.place_shape` (CIS 255). A `pending` row is created when the
+    place is stored; the job kind `place_shape` draws it (Geoapify Place Details, then Overpass; accepted on name,
+    kind, country polygon, distance to the tour-day anchors, a kind-aware length) or, with no OSM feature, stores the
+    anchored approximate route of the place's tour-days (`approximate`); an admin may store a `manual` GeoJSON (Lines
+    tab). The stretch each tour-day follows is `geo.tour_segment` (versioned with the graph build; a line with no
+    shape still gets a row naming the day's two stops). The views expose it (CIS 256: `v_destination` bbox / shape
+    columns, `v_destination_shape`, the day stretch on `v_tour_place` / `v_tour_component`; contracts
+    `catalog.tour.v1.2`, `catalog.graph.v1.2`).
+    **Built scope of D1 (TripPlanner slice 6d):** only where TripPlanner reads the CIS views, after 256 — the tour-page
+    static maps (always on the catalog views) and, after the flip (`PLACES_SOURCE=cis`), the browse and trip maps. There
+    a line place is drawn as a line, never a pin or a circle: `ok` / `manual` solid, `approximate` dashed "approximate
+    route". **Open gaps (D1 not yet met):** (a) before the flip the browse and trip maps read the frozen TripPlanner
+    tables, which carry no precision, so a linear place is still drawn there as an exact pin; (b) a line with no
+    geometry yet (`pending` / `not_found` / `failed`) is not drawn on the browse map or a static map (it stays in the
+    lists and is flagged on `/admin/places`); (c) the trip map draws the provisional dashed line between the day's two
+    stops only when they are consecutive stops of the trip, otherwise nothing.
     Area features (national park, delta, plateau, coast, gorge, mountain range) are `precision='area'` even when a
     geocoder confirms a point. A deterministic content-validity report (CIS `services/places/validity.py`) runs after
     every graph build and on `/admin/places`, with audited, undoable fixes (duplicate merge, area, linear → line);
-    the flip gate counts `linear_feature` (a line stored as a pin / circle) and `linear_without_shape`.
-  - *Duplicates merge automatically (Nghiệp, S246, D2).* Two lines are one place on the same country, kind and name
-    plus the same OSM id or a line overlap — never on the point-distance rule; the merge moves the keeper's
-    `geo.place_shape` row and the next build rebuilds the stretches. An admin is not the normal path.
+    the flip gate counts `linear_feature` (a linear name stored as a pin / circle) and `linear_without_shape` (a line
+    with no drawn shape).
+  - *Duplicates merge automatically (Nghiệp, S246, D2) — delivered by the dedupe lane, not by the lines work.* The
+    automatic merge is the job kind `place_dedupe` (CIS 257, CIS `feat/aa-847-dedupe` + `feat/aa-847-dedupe-job`); its
+    own amendment replaces this item when it merges. The codebase has **one** line-duplicate rule,
+    `services/places/shape.same_line_place`: same country, kind and class, a two-way name match (or both names of the
+    same OSM feature), and the same OSM id or ≥ 70 % of the shorter line's `geom_mid` length within 1 km of the other.
+    The dedupe decision (`dedupe.decide`) calls it for the auto-merge verdict and only adds a model band below it; the
+    point-distance same-place rule never applies to a line (`validity.is_same_place`). Until the dedupe lane merges,
+    nothing merges line duplicates and the validity report does not flag them, so it is a hard prerequisite of the
+    flip. The admin duplicate fix on `/admin/places` is an override, not the normal path: the keeper keeps its shape
+    when it is drawable, otherwise the duplicate's `geo.place_shape` row moves to the keeper
+    (`validity_fix.shape_merge`), and the next build rebuilds the stretches.
   - *Flip.* `PLACES_SOURCE=cis` is set on both TripPlanner Lambdas together, after the coverage gate
     (`missing_in_cis_live = 0`), with `tripplanner.component_id_map` (tp-017) bridging old component ids; then CIS
     254 revokes TripPlanner's grandfathered `raw_tours` (179) and `tour_atoms` (180) reads.
