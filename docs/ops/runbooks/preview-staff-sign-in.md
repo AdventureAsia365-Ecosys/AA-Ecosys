@@ -36,6 +36,15 @@ Pieces: Vercel project domain (bound to the never-pushed branch `preview-signin`
 the client-secret env var in Vercel (set by hand), and the frontend allowlist (a preview build accepts only its
 Preview host, `VERCEL_ENV`).
 
+## Before the first CNAME exists
+
+- The CIS cross-site guard (`lib/crossSiteGuard.ts`, AA-911) is live on the production admin and portal hosts.
+  Check with `curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Origin: https://booking-preview.lumiguides.it.com" -H "Content-Type: text/plain" --data '{}' https://aa-cis.lumiguides.it.com/api/admin/waves/check`, which must print 403.
+  A Preview host is the same site as every `*.lumiguides.it.com` host (`it.com` is a public suffix).
+- Both domains are added to their Vercel projects (otherwise the CNAME is a subdomain-takeover target).
+- Sessions on the Preview hosts carry real roles (ADR 0006a A11 security notes). Label a PR `preview-signin` only
+  after reading its diff.
+
 ## Point the host at a preview (opt-in)
 
 The host moves only when someone asks for it. Two ways, both in the app repo's **Vercel Deploy** workflow:
