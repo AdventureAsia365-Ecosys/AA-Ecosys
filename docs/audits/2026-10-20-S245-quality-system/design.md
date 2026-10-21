@@ -130,6 +130,12 @@ Ba điểm cần nhớ:
   - map detector → các `class_id` (nhiều–nhiều, §3.4);
   - **một** file ngưỡng `quality/thresholds.yaml` (§5.3), thay 5 literal 7.0. Không có `thresholds.py` riêng.
 - **Không có bảng mirror DB.** API admin đọc `taxonomy.yaml` có sẵn trong image.
+- **Đường dẫn thật (AA-926, S246):** ba file YAML nằm cạnh registry, không ở thư mục `quality/` gốc:
+  `AA-CIS-App/services/quality/{taxonomy,thresholds,paths}.yaml`. Lý do: Dockerfile chỉ copy `api/`, `shared/`,
+  `services/`, `worker/`, và path filter của deploy-dev đã gồm `services/**`, nên không phải sửa Dockerfile hay
+  workflow. Mọi chỗ trong tài liệu này ghi `quality/*.yaml` đọc là `services/quality/*.yaml`. Con số "5 literal 7.0"
+  ở trên thực tế là ~15 chỗ backend, cộng nút Approve và dải màu điểm ở frontend, cộng `scripts/aa729/score.py`
+  (xem implementation notes AA-926 trong repo app).
 
 **Đặt tên.** Dùng slug có chấm (`fact.inclusion`) để không đụng tên gate (`F1_grounding`) hay lớp fact cũ của WM (B-class, C1). Mã ngắn của panel AA-729 (F1…X1) giữ lại làm `alias`.
 
@@ -642,6 +648,21 @@ Các quyết định bản trước không đổi và không cần hỏi lại: 
 | **Selector:** `real_questions.py`, seed builder, `search_demand`, `_estimate_day_count` | ✔ (bộ hai chiều + bộ sinh) | | ✔ (cache SERP/PAA, bộ ~150 câu thật) | |
 | `shared/llm_client/decide.py`, migration `decision_question` | ✔ | ✔ | | |
 | Route `llm_role_config` hoặc env flag (ngoài PR) | — | ✔ (judge) qua `reverify` | | ✔ (writer) qua `reverify` |
+
+**Đính chính khi làm AA-926 (S246).** Bản thật là `AA-CIS-App/services/quality/paths.yaml`; lint bắt mọi glob phải
+khớp ít nhất một file trong repo, nên bảng nháp trên được sửa như sau:
+
+- `channel_spec.py` và `signature_vocabulary.py` nằm ở `services/acp_shared/`, không ở `acp_content_writing/`.
+- `forbidden_words` là `services/content_generation/forbidden_words.py`.
+- "seed builder" là `services/seo_intelligence/seed_builder.py`; `search_demand` không phải file, nó là từ khoá được
+  bơm qua `services/seo_intelligence/s1_prefetch.py` và `services/acp_shared/dfs_relevance.py`.
+- `real_questions.py` là `services/acp_shared/real_questions.py`.
+- Mục ở mức hàm thành file của hàm đó, tên hàm ghi trong `note`: `service.py::run_write_background` →
+  `services/acp_content_writing/service.py`; `_estimate_day_count` → `services/content_generation/prompts.py`.
+- "migration `decision_question`" thành glob `api/migrations/*_jev*.sql` cộng `211_a1_promise_unsupported.sql`;
+  `decide.py` là `shared/llm_client/decide.py`.
+- Đường selector (`artefact: selector`) chưa có bộ keep/drop trong corpus Q0 → lint chỉ cảnh báo, thành lỗi khi
+  corpus Q-2 (AA-925) có.
 
 ---
 
