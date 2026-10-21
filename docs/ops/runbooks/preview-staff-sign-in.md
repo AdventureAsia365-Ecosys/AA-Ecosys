@@ -9,9 +9,9 @@ audience: [engineer, devops, agent]
 applies_to: [aa-booking-admin, aa-cis-frontend]
 last_reviewed: 2026-10-21
 review_every_days: 90
-last_tested: never
-tested_where: none
-tested_evidence: none
+last_tested: null
+tested_where: null
+tested_evidence: null
 related: [OPS-06-legacy-login, OPS-02-vercel, docs/adr/0006a-identity-phase1-amendments.md, AA-911, AA-816]
 ---
 
