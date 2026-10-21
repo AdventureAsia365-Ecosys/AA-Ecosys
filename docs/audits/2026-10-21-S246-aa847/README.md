@@ -20,6 +20,7 @@ folder holds the tools that only the orchestrator runs and the outputs they prod
 | AA-CIS-Infra | `feat/aa-847-places-probe` | probe + component id-map fill (dry run) + tests + notes | first (baseline probe) |
 | AA-CIS-Infra | `feat/aa-847-catalog-253-copy` | CIS 253 byte copy | after review; then DB Migrate check / apply |
 | AA-CIS-Infra | `feat/aa-847-tp017-copy` | TripPlanner tp-017 byte copy | after the TripPlanner tp-017 PR |
+| AA-CIS-Infra | `feat/aa-847-contract-pins` | pin `catalog.graph.v1.1`, register TripPlanner's `catalog.tour.v1.1` copy | right after TripPlanner 6c merges |
 | AA-CIS-Infra | `feat/aa-847-cis-254-copy` | CIS 254 copy + rules / owners annotations | after the flip + burst |
 | AA-CIS-App | `feat/aa-847-places-validity` | slice C (validity gate, fixes, `/admin/places`) + notes | any time; deploy before the paid run |
 | AA-CIS-App | `feat/aa-847-places-l4` | CIS 253 + test | after 253 is applied on Dev |
