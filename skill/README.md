@@ -69,6 +69,6 @@ Nguồn duy nhất là `skill/<tên>/` trong repo này. Sau phiên có sửa ski
 tools/skills/package_skills.sh --changed <ref đầu phiên>   # hoặc: tools/skills/package_skills.sh aa-ship aa-session
 ```
 
-Script tạo `skill/dist/<tên>.zip` (mỗi zip là thư mục `<tên>/` có `SKILL.md` và file kèm, đúng dạng claude.ai nhận) và
-`skill/dist/aa-skills-all.zip` (đủ bộ, để đồng bộ lại từ đầu). `skill/dist/` không commit (sinh lại được). Nghiệp
+Script tạo `skill/dist/<tên>.zip` (mỗi zip là thư mục `<tên>/` có `SKILL.md` và file kèm, đúng dạng claude.ai nhận).
+Không có zip gộp: claude.ai chỉ nhận đúng một skill mỗi zip (S247). `skill/dist/` không commit (sinh lại được). Nghiệp
 upload từng zip ở claude.ai → Settings → Capabilities → Skills (thay bản cũ cùng tên).
