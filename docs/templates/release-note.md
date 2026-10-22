@@ -22,11 +22,13 @@ How to fill it from the CHANGELOG section `## [X.Y.Z]` of the app:
 1. `### Features` lines -> one "Feature" block each, only for features verified live on Dev (skill/aa-ship
    section 3). Merge lines that are one feature for the user. Skip features with no user-visible change.
 2. `### Bug Fixes` lines that a user could notice -> "Fixed / Đã sửa". Internal fixes stay technical.
-3. Everything else (Performance Improvements, Reverts, refactors, dependency bumps, docs) -> "Technical changes"
-   only, as the CHANGELOG link.
-4. Rewrite every line in business words: no Linear keys, no commit scopes or hashes, no table or function names.
-5. 3 to 6 feature blocks at most; split a larger release over two Jira comments.
-6. Each section: English line, then the Vietnamese line with the same content (bilingual EN-VI, guide for the owner,
+3. `### ⚠ BREAKING CHANGES` lines that change what a user does -> "Changes in how to use it / Thay đổi cách dùng".
+4. Everything else in the section (`### Performance Improvements`, `### Dependencies`, `### Reverts`) ->
+   "Technical changes" only, as the CHANGELOG link. `refactor`, `docs`, `chore`, `ci`, `test`, `build` and `style`
+   commits are hidden by release-please's default changelog sections, so they never appear there.
+5. Rewrite every line in business words: no Linear keys, no commit scopes or hashes, no table or function names.
+6. 3 to 6 feature blocks at most; split a larger release over two Jira comments.
+7. Each section: English line, then the Vietnamese line with the same content (bilingual EN-VI, guide for the owner,
    .kiro/steering/language-convention.md). Vietnamese dates are dd/mm/yyyy. No "ạ", no "như đã hứa".
 
 Delete this comment and every unused block before saving the note. -->
@@ -68,7 +70,8 @@ Delete this comment and every unused block before saving the note. -->
 ## Technical changes
 
 - CHANGELOG: <link to the `## [X.Y.Z]` section of CHANGELOG.md or to the GitHub Release vX.Y.Z>.
-- Deployed SHA: <short sha> (from `/health`), migrations: <owner key list or none>, contract versions: <none / name vN>.
+- Deployed SHA: <short sha> (`git_sha` from the app's health endpoint: CIS `/health`, Booking `/booking/health`,
+  TripPlanner `/api/health`), migrations: <owner key list or none>, contract versions: <none / name vN>.
 
 ## Known issues / Vấn đề còn lại
 
