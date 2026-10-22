@@ -18,7 +18,7 @@ Nguồn số liệu: `docs/audits/2026-10-22-S247-wrap/state-snapshot.md` (kiể
 - **Visibility:** AA-Ecosys và AA-CIS-Infra **chuyển sang public** từ 22/10 (Nghiệp quyết; phút GitHub Actions cho repo private đã hết tháng 10). Ba repo app vẫn public như trước.
 - **Linear (đọc lại cuối phiên):**
   - Done trong phiên (20): AA-859, AA-901, AA-909, AA-879, AA-903, AA-871, AA-891, AA-779, AA-780, AA-845, AA-803, AA-847, AA-760, AA-759, AA-894, AA-928, AA-929, AA-930, AA-931, AA-886.
-  - Còn In Progress: AA-816, AA-911, AA-839 (AA-839 ở plan.json trước đây ghi Backlog — lệch, đã sửa theo Linear).
+  - Còn In Progress (6): AA-816, AA-911, AA-839 (có việc trong phiên) + AA-703, AA-829, AA-896 (không đổi). AA-839 ở plan.json trước đây ghi Backlog — lệch, đã sửa theo Linear.
   - Không tạo issue mới trong phiên.
 
 ## Quyết định của Nghiệp (trong phiên)
@@ -43,7 +43,7 @@ Nguồn số liệu: `docs/audits/2026-10-22-S247-wrap/state-snapshot.md` (kiể
 
 **AA-TripPlanner-Web:** #122 (guest token trên 4 GET đọc), #123 (CI gate parity), #124 (smoke chờ 404), #126–#129 (log JSON, Sentry, body hỏng → 400, environment dev), #130 + #131 (release-please, v0.4.0).
 
-**AA-CIS-Infra:** #265 (lint tag class + retention row), #267 (2 cờ Places vào Terraform), #268 + #271 (bootstrap CRM, CloudFront VPC origin), #272/#273 (điền id-map component), #274 (lật Places), #279 (drift check ERD), #280 (env-config register), #281 (3 workflow docs dùng token App), #282–#288 (bản sao migration 262/254/265/266/264/267), #284 + #289 (`t9_faq_llm_filter` shadow → on), #290 (bản sao 268), #291 (isolation probe phủ bảng đợt 4).
+**AA-CIS-Infra:** #265 (lint tag class + retention row), #267 (2 cờ Places vào Terraform), #268 + #271 (bootstrap CRM, CloudFront VPC origin), #272/#273 (điền id-map component), #274 (lật Places), #279 (drift check ERD), #280 (env-config register), #281 (3 workflow docs dùng token App), #282, #283, #285–#288 (bản sao migration 262, 264, 254, 265, 266, 267), #284 + #289 (`t9_faq_llm_filter` shadow → on), #290 (bản sao 268), #291 (isolation probe phủ bảng đợt 4).
 
 **AA-Ecosys (root):** #156, #157, #158, #160, #161, #164, #166, #168 (CRM W0: ADR 0005a/0006b/0008a/0010 Accepted, contracts, errata, data standards v1.3, readiness, design ERD crm, ADR 0010/0011 GitHub App + visibility, CODEOWNERS), #165, #167, #171–#176, #181, #182 (ADR 0014 amendment public, secrets register, lessons, audits); bot PR #162, #163, #170, #177, #178, #179, #180. PR này: log + backlog + tracker + snapshot + nháp Jira.
 
