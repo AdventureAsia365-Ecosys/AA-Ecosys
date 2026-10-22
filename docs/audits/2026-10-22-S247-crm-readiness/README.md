@@ -22,7 +22,7 @@ design errata [`errata-s247-byo.md`](../2026-10-21-S246-crm-design-v3/final/erra
 | 7 | Free FX source with VND | **pass** | Primary: ExchangeRate-API open access (attribution on pages that show rates). Cross-check: fawazahmed0 `exchange-api` (CC0). SBV not used. Store the provider per row |
 | 8 | Stripe Checkout session expiry range | **pass** | 30 min to 24 h confirmed; the design's formula and 30-minute floor stand. "Unverified" is removed |
 | 9 | BoldSign regions | **pass** | US, EU, Canada, Australia; no Asia. If the fallback is ever switched on, pick **US** (same region class as AWS). *BYO (S247): the fallback becomes the agency's own account, so the region is the agency's choice; the facts stay as help text* |
-| 10 | Mapbox on the sub-processor list | **pass** (one point open) | Add Mapbox, Inc. as AA sub-processor, "AWS US + global CDN", 2021 SCCs in DPA Schedule C. Whether the DPA is part of the ToS by reference is checked at W8. *BYO (S247, proposed): if maps use the agency's own token, Mapbox is the agency's processor and leaves AA's list; the open point then goes away* |
+| 10 | Mapbox on the sub-processor list | **pass** (one point open) | Add Mapbox, Inc. as AA sub-processor, "AWS US + global CDN", 2021 SCCs in DPA Schedule C. Whether the DPA is part of the ToS by reference is checked at W8. *BYO (S247): maps stay AA-provided (Mapbox, AA token; decided Nghiệp, S247, 22/10/2026, reversing the BYO-maps proposal), so Mapbox stays on AA's list and the open point stays* |
 | 11 | Twilio ISV / Meta Tech Provider rule | **resolved by BYO** (S247) | Each agency owns its Twilio account and registers its own WhatsApp sender; AA never onboards a sender or holds subaccounts, so no ISV / Tech Provider registration for AA. Subaccount fallback removed; Twilio stays the agency's processor; no W8 clock. Residual watch only (§11) |
 | 12 | TrueIDC / eCloudvalley IAM roles in acc2 / acc3 | **pending** (vendors + an IAM read this lane may not run) | The orchestrator runs the one read-only IAM listing below; vendor answers are still asked |
 
@@ -289,7 +289,7 @@ The original pending analysis follows, kept for the record.
 4. R17: FX provider = ExchangeRate-API open access (+ attribution) with CC0 cross-check; `fx_rate_platform.provider`.
 5. §3.5 card flow: Stripe 30 min – 24 h range confirmed.
 6. W8 row: add Microsoft publisher verification next to Google verification.
-7. Still open: reseller IAM roles, Mapbox DPA incorporation (goes away if maps BYO is confirmed). Twilio ISV is
+7. Still open: reseller IAM roles, Mapbox DPA incorporation (stays: maps are AA-provided, decided S247). Twilio ISV is
    resolved by BYO (§11).
 8. BYO (S247): every vendor row above follows [`errata-s247-byo.md`](../2026-10-21-S246-crm-design-v3/final/errata-s247-byo.md);
    W8 verifications are AA's own OAuth apps only (Google, Microsoft); no Meta.
