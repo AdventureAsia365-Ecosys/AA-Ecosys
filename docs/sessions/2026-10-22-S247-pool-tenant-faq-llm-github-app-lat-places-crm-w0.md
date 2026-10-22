@@ -83,7 +83,7 @@ Nghiệp duyệt cả 5 nháp ("Ok hết"). Atlassian MCP rất chậm (nhiều 
 
 - **Đã đăng:** PR-22 (comment 10491).
 - **Đã đăng (xác nhận qua Activity stream của Nghiệp):** PR-24, PR-13, PR-27 (mỗi issue 1 comment, không trùng dù lệnh đăng báo timeout).
-- **Đã gửi, chưa xác nhận:** PR-23 — tải ảnh lên Jira timeout nên đăng kèm 2 link ảnh trên GitHub (repo gốc public); kiểm Activity stream trước khi gửi lại.
+- **Đã đăng:** PR-23 kèm 2 link ảnh trên GitHub (tải ảnh lên Jira timeout). Jira 5/5.
 - Nghiệp mở quyền chia sẻ thư mục Drive pháp lý cho chị Thư (link trong comment PR-27).
 - Không đăng: PR-20 (báo cáo tuần, kỳ tới ~26/10), PR-19/PR-26 (CRM mới xong nền móng).
 
@@ -95,7 +95,7 @@ Nghiệp duyệt cả 5 nháp ("Ok hết"). Atlassian MCP rất chậm (nhiều 
 
 ## Còn lại
 
-1. **Jira:** xác nhận PR-23 đã lên (nếu chưa thì gửi lại); Nghiệp mở sharing thư mục pháp lý trên Drive.
+1. **Jira:** Nghiệp mở sharing thư mục pháp lý trên Drive (link trong comment PR-27).
 2. **CIS #908** (luật bữa ăn có cấu trúc, phần B chồng lên phần A): kiểm đối kháng rồi merge, sau đó tắt `a1_claim_supported`/`a1_promise_unsupported` — chờ Nghiệp chốt vì lệch với kết quả AA-803 (mục trên). Chưa có issue.
 3. **Đề xuất $0:** bỏ khỏi đầu vào writer T9 các câu `place_paa` đã bị `a3_question_about_here` / `a3_landing_belongs` loại (đo 32/52). Chưa có issue.
 4. **CRM W1 AA-932:** pool `crm` phải vừa ngân sách kết nối (cis-api giữ 10 → 132/135; crm 6 thì thành 138).

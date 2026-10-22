@@ -7,7 +7,7 @@ Tác nhân: Claude Code. **Nghiệp duyệt cả 5 nháp ("Ok hết").** Đăng 
 | # | Issue | Trạng thái |
 |---|---|---|
 | 1 | PR-22 | **Đã đăng** — comment 10491 |
-| 2 | PR-23 | **Đã gửi, chưa xác nhận** — tải ảnh lên Jira timeout, nên đăng kèm 2 link ảnh trên GitHub (repo gốc public); lệnh đăng timeout, kiểm Activity stream trước khi gửi lại |
+| 2 | PR-23 | **Đã đăng** kèm 2 link ảnh trên GitHub (tải ảnh lên Jira timeout); xác nhận qua màn hình Nghiệp |
 | 3 | PR-27 | **Đã đăng** (1 comment; xác nhận qua Activity stream của Nghiệp). Nghiệp mở quyền chia sẻ thư mục Drive pháp lý cho chị Thư |
 | 4 | PR-24 | **Đã đăng** (xác nhận qua Activity stream) |
 | 5 | PR-13 | **Đã đăng** (xác nhận qua Activity stream) |
@@ -28,7 +28,7 @@ Mỗi bản đăng dạng HTML, mở đầu bằng mention `@thule` (span data-t
 - **Bài LinkedIn**: tối thiểu 120 chữ, đúng giọng thương hiệu, bỏ kiểu mỗi câu một dòng và các câu sáo.
 - Chi phí thêm cho phần kiểm FAQ: khoảng 0,5 cent mỗi bài.
 
-## 2. PR-23 — Portal tenant (đã gửi, chưa xác nhận)
+## 2. PR-23 — Portal tenant (đã đăng)
 
 @thule Portal cho đối tác đã được làm lại khung và rà từng trang (22/10):
 
