@@ -85,6 +85,8 @@ memory / tracker**. Log ghi sau cùng nên có cả kết quả Jira và số li
      **Chỉ prepend.** Agent không cắt, không di chuyển, không xoá session block cũ. Nghiệp tự chuyển phiên cũ sang
      `memory_archive_2026H2` bằng tay (rotate tự động từng gây lỗi).
    - **Backlog sống** `docs/backlog/README.md` + `docs/backlog/tracker/plan.json`, publish lại trang tracker.
+5b. **Skill đổi trong phiên → đóng gói cho claude.ai:** `tools/skills/package_skills.sh --changed <commit đầu phiên>`
+   → `skill/dist/*.zip`; báo Nghiệp danh sách zip cần upload (skill/README.md, "Đồng bộ lên claude.ai").
 6. **Linear export + archive** (`python3 tools/linear/linear_export.py --archive --apply`), root PR gom log / audit /
    backlog → agent tự merge; mọi repo về `main`/`master` cây sạch, dọn worktree và file tạm (S3 scripts, `.tmp-session`).
 7. **KHÔNG dừng môi trường.** Hệ thống để chạy liên tục, ổn định. Agent TUYỆT ĐỐI không tự `cis-stop`/`cis-start`/scale

@@ -6,6 +6,8 @@ infra/
 # skill/ — tri thức vận hành dùng chung (Kiro + Claude Code): schema reference, ECS exec
 # patterns, repo map. KHÔNG chứa secret (chỉ TÊN secret) nên version-control ở root.
 # (Trước S210 từng ignore local-only; bỏ ignore để learning được chia sẻ + review qua PR.)
+# Zip đóng gói skill để upload claude.ai — sinh lại bằng tools/skills/package_skills.sh, không commit.
+skill/dist/
 
 # Tài liệu nguồn AAA (binary nặng) — giữ local, không commit
 apps/AA-TripPlanner-Web/docs/AAA/
