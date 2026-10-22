@@ -1,8 +1,8 @@
 {
- "updated": "2026-10-21",
- "session": "S246",
- "next_session": "S247",
- "source": "Linear (21/10/2026, S246 close) + docs/backlog/README.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json + docs/audits/2026-10-21-S246-crm-design-v3/linear-issue-map.json",
+ "updated": "2026-10-22",
+ "session": "S247",
+ "next_session": "S248",
+ "source": "Linear (22/10/2026, S247 close) + docs/backlog/README.md + docs/audits/2026-10-22-S247-wrap/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -75,7 +75,7 @@
     },
     {
      "text": "AA-901 GitHub App cài + AA-891 tag đầu tiên ở ≥1 repo",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-896: báo cáo chi phí Aug/Sep/Oct theo tag App + dịch vụ, có ở docs/audits",
@@ -83,7 +83,7 @@
     },
     {
      "text": "AA-903: link 1 PR Dependabot frontend có 'Vercel deploy' skipped",
-     "done": false
+     "done": true
     }
    ]
   },
@@ -135,7 +135,7 @@
     },
     {
      "text": "CIS 253–257 (hoặc số đã đổi) + tp-017 applied; TP 6c/6d/redirect merged",
-     "done": false
+     "done": true
     },
     {
      "text": "PLACES_SOURCE=cis trên cả 2 Lambda; parity probe trên ≥50 trip không lệch place id/toạ độ; 0 tuyến bị ẩn hoặc vẽ vòng tròn thay thế; gộp trùng chạy tự động, 0 lần gộp tay",
@@ -155,7 +155,7 @@
    "criteria": [
     {
      "text": "Memo lõi thương mại nằm trong AA-928, ADR Accepted",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-972..975 live trên Dev: quote M2M, hold hết hạn bằng reaper, VND + phí huỷ, outbox phát sự kiện; review độc lập mỗi bk-019..022",
@@ -179,7 +179,7 @@
    "criteria": [
     {
      "text": "AA-928..931 merged/applied; host không phải partner trả 403 qua CloudFront→VPC origin",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-932: crm_app → booking.* và cis_app → crm.* trả 42501; DB Migrate CIS không bị heartbeat CRM chặn",
@@ -286,9 +286,9 @@
  ],
  "checks": [
   {
-   "due": "ngay S247",
-   "issue": "AA-903",
-   "text": "CIS #901 (Dependabot, /frontend) đang mở: \"Vercel deploy\" phải skipped, check bắt buộc xanh → gắn link, đóng AA-903"
+   "due": "ngay S248",
+   "issue": "PR-27",
+   "text": "Jira S247: kiểm PR-27 (không đăng trùng), xem PR-24/PR-13 bằng mắt, đăng PR-23 kèm 2 ảnh (nháp đã duyệt)"
   },
   {
    "due": "hằng ngày 06:15 UTC",
@@ -301,14 +301,19 @@
    "text": "Lambda xoá snapshot > 30 ngày chạy; chỉ có mail khi xoá / lỗi tag"
   },
   {
-   "due": "≥01/11 (≈S257)",
-   "issue": "AA-896",
-   "text": "Audit cost tháng 8/9/10 theo tag App + acc3 Bedrock + credits"
+   "due": "hằng đêm",
+   "issue": "AA-859",
+   "text": "DB Isolation Probe phủ bảng đợt 4 (58/58); 3 bảng chưa có dòng — đọc lại khi tenant tạo plan/page"
   },
   {
-   "due": "~02/11",
+   "due": "phiên đầu ≥01/11 (≈S257)",
+   "issue": "AA-896",
+   "text": "Audit cost tháng 8/9/10 theo tag App + dịch vụ (acc2) + acc3 Bedrock + credits, giải thích từng bước nhảy"
+  },
+  {
+   "due": "~26/10 (hằng tuần)",
    "issue": "PR-20",
-   "text": "Báo cáo nền tảng kỳ 2 (Jira): nháp → Nghiệp duyệt → đăng"
+   "text": "Báo cáo nền tảng hằng tuần (Jira, kỳ trước 19/10): nháp → Nghiệp duyệt → đăng"
   },
   {
    "due": "≤11/11",
@@ -324,23 +329,33 @@
  "waiting": [
   {
    "who": "Nghiệp",
-   "text": "MFA đúng phiên: AA-931 (S248), AA-932 + AA-972 (S249, gom 1 lần), AA-939 (S254)",
-   "issue": "AA-931"
-  },
-  {
-   "who": "Nghiệp",
-   "text": "Duyệt + đăng draft Jira S246 (docs/audits/2026-10-21-S246-jira-drafts/README.md), PR-19 kèm link trang UI CRM",
+   "text": "Mở chia sẻ thư mục Drive \"Legal readiness packet\" cho chị Thư, rồi agent đăng PR-27",
    "issue": ""
   },
   {
    "who": "Nghiệp",
-   "text": "Chuỗi lật AA-847 (S247): chọn model pipeline nơi chốn (thử Haiku 5.5 khi #903 live, không thì giữ Sonnet), duyệt báo giá AA-905 (~$1–10), sửa tay PLACES_SOURCE (Lambda browse TP) + PLACE_SHAPES_ENABLED (CIS)",
-   "issue": "AA-847"
+   "text": "Chốt hướng CIS #908 (luật bữa ăn): AA-803 đóng với \"giữ a1_claim_supported/promise ON\", danh sách việc phiên sau lại ghi merge #908 rồi tắt — chọn một",
+   "issue": ""
   },
   {
    "who": "Nghiệp",
-   "text": "Accept các ADR của AA-928 (S248)",
-   "issue": "AA-928"
+   "text": "Thu hồi 3 PAT không dùng (aa-cis-infra-schema-dump, ACPCORE_READ_TOKEN, aa-cis-acpcore-read) + PAT cũ của ROOT_REPO_DOCS_TOKEN",
+   "issue": ""
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Khi code xong: trả AA-Ecosys + AA-CIS-Infra về private và quyết phút Actions (budget hay self-hosted runner)",
+   "issue": ""
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Tuỳ chọn: xoay mật khẩu DataForSEO còn trong lịch sử Infra (hiện giữ nguyên theo quyết định AA-841)",
+   "issue": ""
+  },
+  {
+   "who": "Nghiệp",
+   "text": "MFA đúng phiên: AA-932 + AA-972 (S249, gom 1 lần), AA-939 (S254)",
+   "issue": "AA-932"
   },
   {
    "who": "Nghiệp",
@@ -349,7 +364,7 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Hỏi trước khi tạo issue: T13 ghép tuyến (cho AA-948), tách P2a khỏi AA-979; quota Linear 143/250",
+   "text": "Hỏi trước khi tạo issue: các mục \"(no issue yet)\" của S247, T13 ghép tuyến (cho AA-948), tách P2a khỏi AA-979",
    "issue": "AA-979"
   },
   {
@@ -359,17 +374,12 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Cài GitHub App cho agent + release-please (S251)",
-   "issue": "AA-901"
-  },
-  {
-   "who": "Nghiệp",
    "text": "Thu hồi mật khẩu ứng dụng \"AA portal e2e\" trên site TasteWP test khi không cần nữa",
    "issue": "AA-875"
   },
   {
    "who": "Nghiệp",
-   "text": "Access review 2026-Q4: Q-1 (quyền của chị Thư), Q-2 (thu hẹp 4 GitHub App); duyệt xoá IAM user mồ côi s226-should-fail",
+   "text": "Access review 2026-Q4: Q-1 (quyền của chị Thư); Q-2 xong một phần S247 (vercel 3 repo, linear 5, notion giữ), còn \"members can create repositories\"; duyệt xoá IAM user mồ côi s226-should-fail",
    "issue": "AA-878"
   },
   {
@@ -394,7 +404,7 @@
   },
   {
    "who": "Chị Thư",
-   "text": "Điều khoản AI (≤11/11); lời văn /privacy, /terms (AA-886) không vội",
+   "text": "Điều khoản AI (≤11/11); lời văn /privacy, /terms trong gói pháp lý trên Drive — có cần luật sư là chị quyết",
    "issue": "AA-820"
   },
   {
@@ -404,6 +414,44 @@
   }
  ],
  "log": [
+  {
+   "session": "S247",
+   "date": "22/10/2026",
+   "closed": [
+    "AA-759",
+    "AA-760",
+    "AA-779",
+    "AA-780",
+    "AA-803",
+    "AA-845",
+    "AA-847",
+    "AA-859",
+    "AA-871",
+    "AA-879",
+    "AA-886",
+    "AA-891",
+    "AA-894",
+    "AA-901",
+    "AA-903",
+    "AA-909",
+    "AA-928",
+    "AA-929",
+    "AA-930",
+    "AA-931"
+   ],
+   "canceled": [],
+   "created": [],
+   "reopened": [],
+   "notes": [
+    "20 issue Done (Ultracode, nhiều workflow): AA-859 pool tenant đợt 3–4 (CIS 262, 254, 265, 266; 6 cờ ON; probe 58/58), AA-779 FAQ T9 lọc LLM (CIS 264/267, cờ on; 8 blog: 0 câu lạc/29), AA-847 lật Places (PLACES_SOURCE=cis, parity 21/21, burst 1.367 call 200)",
+    "AA-901 GitHub App aa-agent + aa-ecosys-ci-bot; AA-891 release-please (CIS 0.5.0, Booking 0.2.0, TP 0.4.0); AA-871 log JSON + request id + Sentry; AA-879 CI parity; AA-903; AA-909 guest token GET",
+    "Portal: AA-759 PortalShell, AA-760 rà từng trang (smoke prod 50/50, metering portal không đếm); AA-894 ERD/PRD as code (CIS 268 FK, bot PR #179)",
+    "AA-780 LinkedIn đóng; AA-803 + AA-845 đóng với J04/J05 giữ ON (#908 nháp — lệch với việc phiên sau, chờ Nghiệp chốt)",
+    "CRM W0 xong: AA-928 (ADR 0005a/0006b/0008a/0010 Accepted), AA-929 data standards v1.3, AA-930 readiness, AA-931 CloudFront VPC origin; AA-886 gói pháp lý lên Drive",
+    "Root + Infra chuyển public (hết phút Actions private); Vercel dọn biến; S3 script 2.471 → 51; auto mode tắt",
+    "Jira: PR-22 đã đăng (10491); PR-24, PR-13 chưa verify; PR-27 chưa xác nhận; PR-23 chưa đăng"
+   ]
+  },
   {
    "session": "S246",
    "date": "21/10/2026",
@@ -682,18 +730,6 @@
    "needs": "Approve dumps; DSN secrets by hand"
   },
   {
-   "id": "AA-903",
-   "title": "Skip the \"Vercel deploy\" job for Dependabot PRs (Booking, TripPlanner, CIS)",
-   "status": "In Progress",
-   "priority": "Low",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S247",
-   "size": "XS",
-   "next": "L7 · CIS #901 (Dependabot, /frontend) is open: link its skipped Vercel deploy and close",
-   "needs": ""
-  },
-  {
    "id": "AA-896",
    "title": "FinOps doc, Cost Anomaly Detection and the monthly cost report with unit costs",
    "status": "In Progress",
@@ -706,18 +742,6 @@
    "needs": "Decision list"
   },
   {
-   "id": "AA-859",
-   "title": "Tenant pool wave 2: tenant write/planning routes on aa_app_user, RLS on the tables they touch",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S258",
-   "size": "L",
-   "next": "L3 · S258 tenant pool wave 2/3 (re-plan after S22, renumber migrations, D5b)",
-   "needs": "Wave-4 route retire"
-  },
-  {
    "id": "AA-765",
    "title": "Consolidate judge clients, move T11 dispatch into services/acp_publish, clean model docstrings (G6)",
    "status": "Backlog",
@@ -727,18 +751,6 @@
    "session": "later",
    "size": "M",
    "next": "L1 · Gateway refactor + AA-799 follow-ups; after the S253 go/no-go",
-   "needs": ""
-  },
-  {
-   "id": "AA-871",
-   "title": "JSON logs with request ids + Sentry for Booking and TripPlanner",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S253",
-   "size": "M",
-   "next": "L3 · S253 Booking/TP part (Sentry + structlog) if no other Booking/TP subagent runs that session, else later; portal Sentry comes with P2b (AA-979)",
    "needs": ""
   },
   {
@@ -766,18 +778,6 @@
    "needs": ""
   },
   {
-   "id": "AA-909",
-   "title": "TripPlanner: check the guest token on the read GETs (trip, suggestions, coverage, activities)",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M5",
-   "session": "S250",
-   "size": "S",
-   "next": "L5 · S250 guest-token check on the 4 read GETs, right after AA-847 slice 6d",
-   "needs": ""
-  },
-  {
    "id": "AA-908",
    "title": "Traveller sign-in on Cognito EXTERNAL, TripPlanner guest linking and My Trips (customer half of AA-680)",
    "status": "Backlog",
@@ -788,30 +788,6 @@
    "size": "M",
    "next": "L5 · S255 traveller sign-in on Cognito EXTERNAL, guest linking, My Trips (after AA-909)",
    "needs": ""
-  },
-  {
-   "id": "AA-901",
-   "title": "GitHub App for agents and release-please, two root ADRs (next free numbers in the ADR index), CODEOWNERS (U-25)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S251",
-   "size": "M",
-   "next": "L7 · S251 GitHub App (Nghiệp installs it) + ADR 0011, CODEOWNERS",
-   "needs": "Install the App"
-  },
-  {
-   "id": "AA-847",
-   "title": "Places: L4 catalog read model fast enough for PLACES_SOURCE=cis + flip + content-validity report",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M2b",
-   "session": "S247",
-   "size": "L",
-   "next": "L2 · S247 flip chain (moved from S249 by Nghiệp). All pre-flip work shipped S246: CIS 253, 255–258 + tp-017, CIS #895/#896/#897, TP #120/#121, parity 21/21, pins v1.2, tour on/off PASS. Model chosen by Nghiệp: Haiku 4.5 for a3_place_days/locate (CIS #904, migration 260, Sonnet fallback). Next: optional Haiku 5.5 retrial after an effort/max_tokens fix (locate ≈ Sonnet, 1/3 the cost; switch needs Nghiệp); build one country first and count located_by geoapify vs llm; AA-905 paid build; PLACES_SOURCE + PLACE_SHAPES_ENABLED; parity + screenshots after the flip.",
-   "needs": "Model choice; AA-905 quote; PLACES_SOURCE + PLACE_SHAPES_ENABLED by hand"
   },
   {
    "id": "AA-704",
@@ -834,7 +810,7 @@
    "milestone": "M2b",
    "session": "S254",
    "size": "M",
-   "next": "L2 · S254 trial place pass (3, then ≤50 tours), only in a session without an A/B run; after the AA-847 flip",
+   "next": "L2 · S254 trial place pass (3, then ≤50 tours), only in a session without an A/B run. AA-847 flip live S247 (PLACES_SOURCE=cis, PLACE_SHAPES_ENABLED=on, in Terraform; CIS 254 applied). Left from AA-847: revoke TP raw grants, AA-807 X4 drop of frozen TP tables (check feat/aa-847-* branches)",
    "needs": "Quote and country order"
   },
   {
@@ -910,18 +886,6 @@
    "needs": ""
   },
   {
-   "id": "AA-891",
-   "title": "Version traceability — release-please, CHANGELOG and first tags per app",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S252",
-   "size": "M",
-   "next": "L7 · S252 release-please and first tags per app (after AA-901)",
-   "needs": "Version numbers"
-  },
-  {
    "id": "AA-900",
    "title": "LLM operations docs, prompt versioning and eval gate",
    "status": "Backlog",
@@ -932,18 +896,6 @@
    "size": "M",
    "next": "L1 · LLM ops docs, prompt register, manual eval gate; after the S253 go/no-go",
    "needs": ""
-  },
-  {
-   "id": "AA-879",
-   "title": "CI gate parity across CIS, Booking and TripPlanner",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S249",
-   "size": "M",
-   "next": "L7 · S249 (pulled ahead from S253): CI gate parity + scheduled Terraform drift detection before the 4th repo (AA-933, S250)",
-   "needs": "Branch-protection toggles"
   },
   {
    "id": "AA-898",
@@ -992,18 +944,6 @@
    "size": "L",
    "next": "L7 · UAT videos for all apps after all technical work (>S262), Cognito login, bilingual guides",
    "needs": "Go signal"
-  },
-  {
-   "id": "AA-886",
-   "title": "/privacy and /terms pages + legal readiness packet for Ms. Thư",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M5",
-   "session": "S247",
-   "size": "S",
-   "next": "L0 · Not urgent (Nghiệp S246: technical work first). Technical part done (root #144, /privacy + /terms 200, consent capture clean); left: GDrive upload",
-   "needs": "Ms. Thư: wording"
   },
   {
    "id": "AA-697",
@@ -1066,18 +1006,6 @@
    "needs": "Cost per item"
   },
   {
-   "id": "AA-894",
-   "title": "Generated env-config register (names only) and DB ERD",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "data",
-   "milestone": "M5",
-   "session": "later",
-   "size": "S",
-   "next": "Env-config register + ERD (after AA-893)",
-   "needs": ""
-  },
-  {
    "id": "AA-851",
    "title": "shared.countries (ISO-3166) + v_countries / v_destinations catalog views",
    "status": "Backlog",
@@ -1104,7 +1032,7 @@
   {
    "id": "AA-839",
    "title": "Erasure runbook + DRY RUN job for a traveller and an offboarded tenant",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Low",
    "project": "data",
    "milestone": "M5",
@@ -1120,10 +1048,10 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M5",
-   "session": "S247",
+   "session": "S254",
    "size": "M",
-   "next": "L3 · Not built alone: re-scoped inside AA-928 (S247), delivered through AA-939 (partner pool, S254) + AA-978 (membership feed, S256); blocks AA-978",
-   "needs": "Confirm the rescope (AA-928)"
+   "next": "L3 · Not built alone: re-scope posted under AA-928 (Done S247); delivered through AA-939 (partner pool, S254) + AA-978 (membership feed, S256); blocks AA-978",
+   "needs": ""
   },
   {
    "id": "AA-838",
@@ -1222,30 +1150,6 @@
    "needs": ""
   },
   {
-   "id": "AA-803",
-   "title": "[Jev] Evaluate every Jev question on live data; keep the ones with real effect, switch off the rest",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2b",
-   "session": "S247",
-   "size": "M",
-   "next": "L0 · 25 Jev questions evaluated, all approved and applied (a1_brand_fit off, keyword reject 0.40, a3_question_foreign off). GPT-6 Luna stage A/B: keep all 7 routes. Meal rule (J04) built but did not converge in adversarial review (65 false clears, draft CIS #905) → a1_claim_supported + a1_promise_unsupported stay ON. S247: narrow the rule to structured evidence, ship the wider ITIN_MEAL_INVENTED detection, measure, then revisit OFF.",
-   "needs": ""
-  },
-  {
-   "id": "AA-845",
-   "title": "Jev: A-axis ground-truth loop + a1_claim_supported reject ceiling + 402 investigation",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2b",
-   "session": "S247",
-   "size": "M",
-   "next": "L1 · Credit-low + 402 e-mail alerts shipped and verified (CIS #898); reject ceiling kept NULL. Close once the narrowed meal rule ships and a1_claim_supported is off (AA-803).",
-   "needs": ""
-  },
-  {
    "id": "AA-790",
    "title": "T10: tenant-voice rubric gate + post-repair integrity check",
    "status": "Backlog",
@@ -1328,30 +1232,6 @@
    "size": "M",
    "next": "L1 · Gate recall tunes, lexical part only; not slotted in the S1-first plan (no new gates for 4 weeks)",
    "needs": ""
-  },
-  {
-   "id": "AA-780",
-   "title": "LinkedIn: 120-word floor, Trail Pulse voice, broetry + new stock lines",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S248",
-   "size": "S",
-   "next": "L1 · S248 T9 tuning, no new gates. S246 panel: adjust — 120-word floor met; light 4/15, 11 false passes, Trail Pulse 1/3",
-   "needs": ""
-  },
-  {
-   "id": "AA-779",
-   "title": "T9 FAQ: questions from People Also Ask first; every answer names its subject",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S248",
-   "size": "M",
-   "next": "L1 · S248, no new gates. S246: 200-question labelled set; rule branch not better than main (not shipped); next the small-LLM option (~$0.18), ship only if it passes",
-   "needs": "Approve the LLM trial"
   },
   {
    "id": "AA-795",
@@ -1582,30 +1462,6 @@
    "needs": ""
   },
   {
-   "id": "AA-759",
-   "title": "PortalShell on the kit — grouped nav, real ⌘K, mobile bottom bar, theme, route renames (no T-number slugs)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "portal",
-   "milestone": "P-M1",
-   "session": "S249",
-   "size": "M",
-   "next": "LP · S249 PortalShell on the kit, in CIS before P2a (UI + Vercel deploy, needs no idle job window)",
-   "needs": ""
-  },
-  {
-   "id": "AA-760",
-   "title": "Page-by-page audit + state fixes — statuses from the job, never inferred from rows (\"Writing…\" bug)",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "portal",
-   "milestone": "P-M1",
-   "session": "S250",
-   "size": "M",
-   "next": "LP · S250 page-by-page audit + state fixes, in CIS before P2a",
-   "needs": ""
-  },
-  {
    "id": "AA-761",
    "title": "Account pages with real data — Billing usage/overage, Activity timeline, Integrations (WordPress health, API key view)",
    "status": "Backlog",
@@ -1630,54 +1486,6 @@
    "needs": ""
   },
   {
-   "id": "AA-928",
-   "title": "[CRM W0] CRM-01a ADRs + contracts + spec errata",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "C-M1",
-   "session": "S247",
-   "size": "M",
-   "next": "L6 · W0 · S247: incl. ADR AA-Partner, contracts, errata, AA-813 re-scope, W1 sign-in, Booking commercial-core memo, ADR 0008a vs AA-804",
-   "needs": "Accept the ADRs (S248)"
-  },
-  {
-   "id": "AA-929",
-   "title": "[CRM W0] CRM-01b Data-standards bump",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "C-M1",
-   "session": "S247",
-   "size": "M",
-   "next": "L6 · W0 · S247: docs/root only, no code subagent",
-   "needs": ""
-  },
-  {
-   "id": "AA-930",
-   "title": "[CRM W0] CRM-02 Readiness checks (read-only)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "C-M1",
-   "session": "S247",
-   "size": "S",
-   "next": "L6 · W0 · S247: docs/root only, no code subagent",
-   "needs": ""
-  },
-  {
-   "id": "AA-931",
-   "title": "[CRM W0] CRM-03 Infra bootstrap + CloudFront VPC-origin spike",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "C-M1",
-   "session": "S248",
-   "size": "M",
-   "next": "L6 · W0 · S248: apply-role grants (kms alias/crm-*, VPC origin), CloudFront → VPC origin → NLB → ALB host-rule spike",
-   "needs": "MFA (Infra apply)"
-  },
-  {
    "id": "AA-932",
    "title": "[CRM W1] CRM-04 Infra + DB owner `crm`",
    "status": "Backlog",
@@ -1686,7 +1494,7 @@
    "milestone": "C-M1",
    "session": "S249",
    "size": "L",
-   "next": "L6 · W1 · S249; blocked by AA-928, AA-929, AA-931",
+   "next": "L6 · W1 · S249; blockers AA-928/929/931 Done S247. Connection budget: cis-api main pool stays 10 (burst S247) → 132/135 with crm_app limit 6 / pool 3; a crm pool of 6 would reach 138 — size it to fit",
    "needs": "MFA (KMS policies)"
   },
   {
@@ -1878,7 +1686,7 @@
    "milestone": "C-M3",
    "session": "S260",
    "size": "M",
-   "next": "L6 · W4 · S260: enhancement, does not block C-M3; needs T13 (no issue yet) + AA-906 + 6d; blocked by AA-935, AA-847, AA-906",
+   "next": "L6 · W4 · S260: enhancement, does not block C-M3; needs T13 (no issue yet) + AA-906 + 6d; blocked by AA-935, AA-906 (AA-847 Done S247)",
    "needs": ""
   },
   {
@@ -2166,7 +1974,7 @@
    "milestone": "M3",
    "session": "S249",
    "size": "L",
-   "next": "L4 · Lane B · S249: bk-019, review; blocked by AA-928, AA-911",
+   "next": "L4 · Lane B · S249: bk-019, review; blocked by AA-911 (AA-928 Done S247)",
    "needs": "MFA (M2M pool); Ms. Thư: B2B margin"
   },
   {
@@ -2214,7 +2022,7 @@
    "milestone": "M3",
    "session": "S254",
    "size": "M",
-   "next": "L4 · Lane B · S254: needs the places flip; blocked by AA-928, AA-972, AA-847",
+   "next": "L4 · Lane B · S254: places flip live (AA-847 Done S247); blocked by AA-972",
    "needs": ""
   },
   {
