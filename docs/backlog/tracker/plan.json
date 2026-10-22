@@ -791,7 +791,7 @@
   },
   {
    "id": "AA-901",
-   "title": "GitHub App for agents and release-please, ADR 0010/0011, CODEOWNERS (U-25)",
+   "title": "GitHub App for agents and release-please, two root ADRs (next free numbers in the ADR index), CODEOWNERS (U-25)",
    "status": "Backlog",
    "priority": "High",
    "project": "data",

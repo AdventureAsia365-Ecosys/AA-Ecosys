@@ -1,0 +1,20 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "TourSummary",
+  "expect": "invalid",
+  "why": "Prices come only from booking.b2b.v1",
+  "rule": "b2b_price",
+  "payload": {
+    "source_system": "cis",
+    "source_id": "vn-ha-giang-loop-4d",
+    "title": "Ha Giang Loop",
+    "country_code": "VN",
+    "duration_days": 4,
+    "content_hash": "x",
+    "updated_at": "2026-10-22T00:00:00Z",
+    "b2b_price": {
+      "amount": "600.00",
+      "currency": "USD"
+    }
+  }
+}

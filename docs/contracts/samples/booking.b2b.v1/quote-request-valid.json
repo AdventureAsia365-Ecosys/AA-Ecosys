@@ -1,0 +1,29 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "QuoteRequest",
+  "expect": "valid",
+  "why": "Pax counts by age band and rooms only; no traveller data",
+  "payload": {
+    "proposal_ref": "prop-7c1",
+    "proposal_version": 2,
+    "currency": "VND",
+    "lines": [
+      {
+        "line_ref": "opt-d2-a",
+        "component_id": "tp-hg-loop-4d",
+        "departure_id": "dep-2026-11-14-hg",
+        "service_date": "2026-11-14",
+        "pax": {
+          "adult": 2,
+          "child": 1
+        },
+        "rooms": [
+          {
+            "occupancy": "family",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -28,6 +28,16 @@ Every event or read model one app exposes to another is described here as a JSON
 6. **Ack / status back.** A consumer that changes state the producer's users care about publishes its own event
    (e.g. `trip_case.status_changed` from AA-Booking) — no writes into another app's schema.
 7. **CI.** Producer tests validate a sample payload against the schema; consumer tests parse the same sample.
+8. **HTTP contracts.** A contract served over HTTP (one app calling another's API, no view grant: the partner CRM
+   holds no grant on any other schema, root ADR 0008a) is an OpenAPI 3.1 file `<name>.v<major>.openapi.yaml`. Its
+   component schemas are JSON Schema 2020-12, every object sets `additionalProperties: false`, money is a decimal
+   string with an ISO 4217 currency, and personal-data fields carry `x-pii: <class>` (the DM-6.1 classes). The
+   major is in the URL prefix; a breaking change is a new major served in parallel, as in rule 2.
+9. **Samples and CI.** Each HTTP contract has samples in [`samples/<contract>/`](samples/README.md): valid payloads,
+   and the rejected payloads the design requires. The root workflow `contracts.yml`
+   ([`tools/contracts/check_contracts.py`](../../tools/contracts/check_contracts.py)) validates every contract file,
+   every sample, and each contract's field policy (forbidden fields such as `trip_count`, `revenue` and `pii:` in
+   `crm.ops.v1`, `supplier_net` in `booking.b2b.v1`). The policy lives in the checker, not in the contract file.
 
 ## Registry
 
@@ -43,3 +53,7 @@ Every event or read model one app exposes to another is described here as a JSON
 | `catalog.tour.v1.2.json` | CIS → AA-Booking, TripPlanner | same views; CIS 256 (AA-847) appends the day stretch of a line (`segment`, `segment_basis`, `segment_from_destination_id`, `segment_to_destination_id`, `segment_km`) to `v_tour_place`, `precision` gains `line`; `v_destination` appends `shape_kind`, `shape_status`, `shape_source`, `length_km`, never-null `min_lat` / `min_lng` / `max_lat` / `max_lng`, `shape_lo` | additive over 1.1; planned (CIS 256 not applied yet). Lines are drawn, never a pin (owner decision S246) |
 | `catalog.graph.v1.2.json` | CIS → TripPlanner | v1.1 + `v_tour_component` appends `precision` and the day stretch; `destination_shapes` = `catalog.v_destination_shape` (CIS 256, TripPlanner only): a line destination's geometry by id | additive over v1.1; planned (CIS 256 not applied yet) |
 | `trip_case.status_changed.v1` | AA-Booking → TripPlanner | `booking.v_trip_case_status_outbox` | planned |
+| `crm.ops.v1.openapi.yaml` | AA-Partner → CIS admin (L1 console S-01) | HTTP `/crm/ops/v1`, WORKFORCE `cis-admin` token | proposed (AA-928; ADR 0010, 0006b). No trip, revenue, margin, commission or personal-data field (CI). Built by AA-933 / AA-941 |
+| `booking.b2b.v1.openapi.yaml` | AA-Booking → AA-Partner | HTTP `/booking/b2b/v1` (prefix provisional until ADR 0013), M2M token + `X-AA-Tenant-Id` | proposed (AA-928; ADR 0005a). `b2b_price` only, never `supplier_net` (CI); pax counts only. Built by AA-972…AA-975 |
+| `catalog.http.v1.openapi.yaml` | CIS → AA-Partner | HTTP `/catalog/v1` over the `catalog` views + AA-authored content (prep packs, starter templates, campaign blocks) | proposed (AA-928). No prices, no personal data. Built by AA-976 / AA-977 |
+| `tenant.membership.v1.openapi.yaml` | CIS → AA-Partner | HTTP `/tenant/membership/v1` over `catalog.v_tenant_member`, keyed by `(iss, sub)` | proposed (AA-928; ADR 0006b). Content studio role only, never a CRM role; no email or name (CI). Built by AA-978 (AA-813 re-scoped) |

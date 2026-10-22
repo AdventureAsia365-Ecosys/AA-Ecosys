@@ -3,6 +3,8 @@
 - **Status:** Accepted (14/10/2026, Nghiệp, S235), including the former open recommendations (decisions 8–10).
   Tax rates are still to be confirmed by the AA accountant; margin numbers are policy data and are checked with
   Ms. Thư before the first price load.
+- **Amendment proposed:** [ADR 0005a](0005a-b2b-resale-warn-and-vnd.md) (Proposed 22/10/2026, S247): decision 9
+  (warn, not block, below the "from" price; no subscription line), VND quotes, `b2b_price` naming.
 - **Scope:** AA-Booking (owner), CIS and TripPlanner (readers). Answers AA-709.
 - **Related:** ADR 0001 (Booking owns commercial data), ADR 0002 (only CIS writes content), ADR 0004 (Booking
   bootstrap, O7: all customer-facing content in CIS), ERD v2 `docs/AAA/erd-v2/booking.dbml`

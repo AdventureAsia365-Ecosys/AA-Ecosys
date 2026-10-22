@@ -1,0 +1,23 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Hold",
+  "expect": "valid",
+  "why": "One active hold set per proposal version",
+  "payload": {
+    "hold_id": "h_01HFZ4",
+    "quote_id": "q_01HFZ3",
+    "status": "active",
+    "expires_at": "2026-10-24T03:00:00Z",
+    "extended_count": 0,
+    "lines": [
+      {
+        "line_ref": "opt-d2-a",
+        "line_status": "available"
+      },
+      {
+        "line_ref": "opt-d3-b",
+        "line_status": "on_request"
+      }
+    ]
+  }
+}
