@@ -1,6 +1,6 @@
 # ADR 0005 — Amendment: B2B resale by partner agencies (warn below the "from" price, no subscription line, VND quotes)
 
-- **Status:** Proposed (22/10/2026, S247). Nghiệp accepts; until then ADR 0005 applies unchanged.
+- **Status:** Accepted (22/10/2026, S247, Nghiệp). Proposed the same day.
 - **Scope:** AA-Booking (owner of prices and the B2B API), AA-Partner (consumer, [ADR 0010](0010-aa-partner-app.md)),
   CIS and TripPlanner (readers of `price.from.v1`, unchanged).
 - **Amends:** [ADR 0005](0005-pricing-and-supplier-rates.md) decision 9 (tenant resale), decision 5 (currencies) and
