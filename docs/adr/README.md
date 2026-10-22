@@ -23,6 +23,8 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0008](0008-new-app-integration-and-data-platform-rules.md) | New-app integration and data platform rules | Accepted (amendment 0008a proposed) |
 | [0008a](0008a-crm-separate-app-exceptions.md) | Amendment: the partner CRM is a separate app; traveller OTP and an own LLM gateway as playbook exceptions | Proposed |
 | [0010](0010-aa-partner-app.md) | AA-Partner: one app for partner agencies (CRM and tenant portal) | Proposed |
+| [0011](0011-github-app-identity-and-merge-rights.md) | GitHub App identity for agents and bots, and merge rights per risk tier | Proposed |
+| [0014](0014-repo-visibility-and-github-plan.md) | Repo visibility and GitHub plan: app repos public, root and Infra private, GitHub Free | Proposed |
 
 ## Numbering
 
@@ -37,9 +39,9 @@ already cite it.
 | 0012 | Reserved | Prod blueprint and environment model (AA-880; cited by the engineering handbook and the guides) |
 | 0013 | Reserved | HTTP API conventions, before any `/booking/v1` prefix (AA-899; cited by the engineering handbook) |
 
-Next free root numbers: **0011**, **0014**.
+Next free root numbers: **0015**.
 
-Nothing is reserved for AA-901 (GitHub App identity, release-please): it takes the next free numbers when its ADRs
-are written.
+AA-901 took 0011 (agent and bot identity, merge rights) and 0014 (repo visibility and GitHub plan), the next free
+numbers when its ADRs were written (S247).
 
 The enforceable rules that ADR 0008 points to live in `docs/architecture/data-standards/` (v1.0).
