@@ -42,6 +42,14 @@ Mục tiêu: "Done" luôn nghĩa là đã chạy đúng trên môi trường th�
 - [ ] **LLM:** đổi prompt/model/route → ghi run ID eval chạy tay/dispatch trên golden set AA-729 vào PR (D-23; không có trigger theo PR). `prompt_version` chỉ khi ledger v2 (AA-804) đã có.
 - [ ] **Cost:** thêm resource AWS hoặc lượt chạy trả phí → ghi ước tính USD/tháng trong PR body (DM-10.7); resource mới có tag `App` (DM-10.1).
 
+### Ngoại lệ: PR release (release-please, AA-891)
+
+- PR tên `chore(main): release x.y.z` (title mặc định của release-please, cả 3 repo app), do `aa-ecosys-ci-bot` mở và tự cập nhật; chỉ đổi `CHANGELOG.md` + manifest + file version (CIS `api/version.py`, Booking `backend/pyproject.toml`, TripPlanner chỉ manifest).
+- **Không có `Refs AA-xxx`** — đây là ngoại lệ duy nhất của luật Refs. Không sửa tay title/body để thêm Refs. Dòng CHANGELOG không chứa mã Linear (subject không có `[AA-xxx]`), nhưng mỗi dòng link tới commit/PR gốc, và body PR đó có `Refs AA-xxx`.
+- Agent điều phối merge như mọi PR: CI xanh → squash merge (giai đoạn dev). Subagent không merge.
+- Merge xong release-please tạo tag `vX.Y.Z` + GitHub Release. Commit release **không** kích hoạt deploy; code của bản đó đã deploy từ các PR `feat`/`fix` trước, nên không có gì để verify live riêng cho PR release. Riêng field `version` trên health (`/health`, `/booking/health`, TripPlanner `/api/health`) vẫn báo bản trước cho tới lần deploy kế tiếp của app; `git_sha` mới là bằng chứng commit đang chạy.
+- Sau khi tag: soạn release note theo `docs/templates/release-note.md` (chỉ tính năng đã verify live) → draft Jira (`aa-jira-update`).
+
 ## 2. Guard trước merge backend
 
 - CI (`deploy-dev.yml`) tự chặn deploy khi `shared.job` còn queued/running. Override chỉ Nghiệp, phải ghi lý do

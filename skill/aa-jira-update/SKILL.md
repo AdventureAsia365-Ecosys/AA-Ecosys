@@ -39,6 +39,8 @@ Người đọc là phía nghiệp vụ, ngoài nhóm kỹ thuật. Một commen
 - Bước tiếp: <nước kế tiếp, dự kiến>
 ```
 
+Báo theo bản phát hành (tag `vX.Y.Z` của một app): soạn từ mục CHANGELOG theo mẫu `docs/templates/release-note.md` (phần "Jira draft (VI)").
+
 ## Quy trình
 
 1. Đọc issue Jira và các comment gần nhất (`getJiraIssue`).
