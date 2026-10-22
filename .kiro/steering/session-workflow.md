@@ -19,9 +19,12 @@ Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo l�
   `shared.job` queued/running), rồi **đề xuất 5–10 issue lấy từ backlog sống** chờ Nghiệp chốt. KHÔNG audit lại toàn bộ
   Linear (S238: tốn token) — chỉ audit lại khi file cũ > ~2 tuần.
 - Cuối phiên: cập nhật `docs/backlog/README.md` (cột Status, chuyển issue đóng sang §5, thêm issue mới) cùng root PR.
-- "dừng session này": prepend session block vào memory HOT (chỉ prepend, không rotate tay), log local,
-  đồng bộ Linear, soạn draft cập nhật cho các issue Jira tương ứng để Nghiệp duyệt (không tự đăng, S237), đưa **mọi repo (gốc + 4 con) về main/master cây sạch**; root PR chờ thì
-  agent điều phối tự merge (`gh pr merge <n> --squash`, repo gốc không có CI bắt buộc) theo luật merge bên dưới.
+- "dừng session này", theo đúng thứ tự (S247): (1) chốt việc + đồng bộ Linear; (2) **kiểm nguồn thật** (ECS task def
+  + image SHA mỗi service, `/health` + `/health/ready`, migration mới nhất, Lambda/Vercel, bảng job, PR còn mở) ghi
+  `state-snapshot.md`; (3) lessons; (4) **draft Jira → Nghiệp duyệt → đăng** (không tự đăng khi chưa duyệt, S237);
+  (5) **rồi mới** ghi log local, prepend session block vào memory HOT (chỉ prepend, không rotate tay), backlog + tracker
+  — tất cả lấy số từ snapshot và kết quả Jira; (6) đưa **mọi repo (gốc + 4 con) về main/master cây sạch**; root PR chờ
+  thì agent điều phối tự merge (`gh pr merge <n> --squash`, repo gốc không có CI bắt buộc) theo luật merge bên dưới.
 
 ## Nguồn sự thật khi thiết kế — CONTEXT.md (BẮT BUỘC)
 Trước khi thiết kế/sửa code một repo, ĐỌC `CONTEXT.md` của repo đó và bám sát (stack, ranh giới, ownership).
