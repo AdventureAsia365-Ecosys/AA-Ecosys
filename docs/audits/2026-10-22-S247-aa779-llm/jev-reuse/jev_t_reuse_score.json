@@ -1,0 +1,1252 @@
+{
+ "issue": "AA-779",
+ "session": "S247",
+ "kind": "jev_t_reuse_score",
+ "input": "jev_t_reuse.json",
+ "source": {
+  "generated_at": "2026-10-22T13:03:20Z",
+  "app_git_sha": "e042a98c843dc5d903a9bf3262f0c280e8c80cc9",
+  "verdicts_used": {
+   "a3_question_about_here": 4919,
+   "a3_landing_belongs": 22530,
+   "a1_keyword_about_tour": 17086,
+   "a3_demand_belongs": 13346
+  },
+  "floors": {
+   "a3_question_about_here": {
+    "question_key": "a3_question_about_here",
+    "stage": "a3_question_scope",
+    "kind": "noul",
+    "mode": "enforce",
+    "accept_floor": null,
+    "reject_ceiling": 0.3,
+    "threshold_version": 2,
+    "question_hash": "60dee8738bb17f1e386d42ff8497dff1",
+    "calibration_ref": "docs/audits/2026-10-10-S223-jev-audit.html (root repo) + docs/calibration/a3_question_about_here.md S223",
+    "updated_at": "2026-10-10T04:05:14.016223+00:00"
+   },
+   "a3_demand_belongs": {
+    "question_key": "a3_demand_belongs",
+    "stage": "a3_demand",
+    "kind": "noul",
+    "mode": "enforce",
+    "accept_floor": null,
+    "reject_ceiling": 0.7,
+    "threshold_version": 2,
+    "question_hash": "a6e07e7d0e590fa72cd3585884bf428d",
+    "calibration_ref": "docs/audits/2026-10-10-S223-jev-audit.html (root repo) + docs/calibration/a3_demand_belongs.md S223",
+    "updated_at": "2026-10-10T04:05:13.943127+00:00"
+   },
+   "a3_landing_belongs": {
+    "question_key": "a3_landing_belongs",
+    "stage": "a3_question_landing",
+    "kind": "noul",
+    "mode": "enforce",
+    "accept_floor": null,
+    "reject_ceiling": 0.4,
+    "threshold_version": 2,
+    "question_hash": "ba0fab1ccc7cc320733415eda0c19191",
+    "calibration_ref": "docs/audits/2026-10-10-S223-jev-audit.html (root repo) + docs/calibration/a3_landing_belongs.md S223",
+    "updated_at": "2026-10-10T04:05:13.983958+00:00"
+   },
+   "a1_keyword_about_tour": {
+    "question_key": "a1_keyword_about_tour",
+    "stage": "a1_seo",
+    "kind": "noul",
+    "mode": "enforce",
+    "accept_floor": 0.8,
+    "reject_ceiling": 0.4,
+    "threshold_version": 2,
+    "question_hash": "9c9449c57b663d024d149d54a133e06a",
+    "calibration_ref": "AA-CIS-App docs/calibration/a1_keyword_about_tour.md (S224)",
+    "updated_at": "2026-10-21T13:18:07.909905+00:00"
+   }
+  },
+  "tenants": {
+   "9149d3c6-fcaf-4400-8e7a-4ed5e557e146": "atlas-hearth",
+   "20d07d32-ed98-405f-81d5-0c2399c9fcdf": "terra-family",
+   "a1b2c3d4-0001-4000-8000-000000000001": "wanderlux-travel",
+   "a1b2c3d4-0002-4000-8000-000000000002": "exploreasia-co",
+   "1bae2159-671b-4f35-a782-e96ea4cbdd4a": "test-1",
+   "692a3214-5cc2-46c6-a5ca-265389747269": "trail-pulse",
+   "885d4916-007b-415e-9261-909ad43c6d00": "wildkind-travel",
+   "00000000-0000-0000-0000-000000000001": "aa_internal",
+   "ace1f389-3225-4b2d-9502-880c22a93ed1": "s235-throwaway-1791941379"
+  },
+  "tenant_markets": {
+   "exploreasia-co": "DE",
+   "aa_internal": "US",
+   "wanderlux-travel": "US",
+   "terra-family": "UK",
+   "atlas-hearth": "US",
+   "trail-pulse": "US",
+   "wildkind-travel": "US"
+  },
+  "segments": {
+   "moments": 12505,
+   "with_country_set": 11239,
+   "aliases": 412
+  },
+  "timings_s": {
+   "verdicts": 2.6,
+   "setup": 2.7,
+   "c1": 3.8,
+   "c2": 6.1,
+   "c3_c4": 6.3
+  },
+  "errors_count": {},
+  "errors_samples": {},
+  "verdict_inventory": [
+   {
+    "question_key": "a1_keyword_about_tour",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "error",
+    "n": 997
+   },
+   {
+    "question_key": "a1_keyword_about_tour",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "grey",
+    "n": 17089
+   },
+   {
+    "question_key": "a3_demand_belongs",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "error",
+    "n": 20236
+   },
+   {
+    "question_key": "a3_demand_belongs",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "grey",
+    "n": 10181
+   },
+   {
+    "question_key": "a3_demand_belongs",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "reject",
+    "n": 20358
+   },
+   {
+    "question_key": "a3_landing_belongs",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "error",
+    "n": 1155
+   },
+   {
+    "question_key": "a3_landing_belongs",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "grey",
+    "n": 8265
+   },
+   {
+    "question_key": "a3_landing_belongs",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "reject",
+    "n": 17667
+   },
+   {
+    "question_key": "a3_question_about_here",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "error",
+    "n": 241
+   },
+   {
+    "question_key": "a3_question_about_here",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "grey",
+    "n": 2497
+   },
+   {
+    "question_key": "a3_question_about_here",
+    "platform": true,
+    "hash_current": true,
+    "cached": false,
+    "fresh": true,
+    "zone": "reject",
+    "n": 3029
+   }
+  ]
+ },
+ "c1_t2": {
+  "inputs": {
+   "versions": 55,
+   "tenant_tour_pairs": 15,
+   "pairs_by_tenant": {
+    "atlas-hearth": 6,
+    "terra-family": 3,
+    "trail-pulse": 3,
+    "wildkind-travel": 3
+   },
+   "seo_source_now": {
+    "tenant_market": 14,
+    "admin_us_fallback": 1
+   },
+   "seo_source_of_last_job": {
+    "tenant_market": 13,
+    "unknown": 1,
+    "admin_us_fallback": 1
+   },
+   "source_changed_since_job": 0
+  },
+  "prompt_keywords": {
+   "n": 63,
+   "covered": 3,
+   "covered_pct": 4.8,
+   "reject": 0,
+   "reject_pct_of_covered": 0.0,
+   "accept": 3,
+   "grey": 0
+  },
+  "top10_keywords": {
+   "n": 113,
+   "covered": 3,
+   "reject": 0
+  },
+  "admin_us_row_prompt_keywords": {
+   "n": 36,
+   "covered": 31,
+   "reject": 8
+  },
+  "prompt_paa": {
+   "n": 33,
+   "covered": 12,
+   "covered_pct": 36.4,
+   "about_covered": 12,
+   "landing_covered": 8,
+   "text_only": 18,
+   "drop": 1,
+   "drop_pct": 3.0,
+   "drop_pct_of_covered": 8.3,
+   "about_reject": 1,
+   "landing_reject_all": 0,
+   "landing_reject_some_moment": 2
+  },
+  "top10_paa": {
+   "n": 102,
+   "covered": 62,
+   "covered_pct": 60.8,
+   "about_covered": 62,
+   "landing_covered": 39,
+   "text_only": 27,
+   "drop": 5,
+   "drop_pct": 4.9,
+   "drop_pct_of_covered": 8.1,
+   "about_reject": 5,
+   "landing_reject_all": 0,
+   "landing_reject_some_moment": 28
+  },
+  "harm": {
+   "versions_checked": 15,
+   "versions_with_rejected_kw_in_text": 0,
+   "rejected_kw_in_text": 0,
+   "rejected_kw_in_seo_title_or_meta": 0
+  },
+  "status": "COVERED_NO_REJECT",
+  "examples_rejected_kw": [],
+  "examples_rejected_paa": [
+   {
+    "tenant": "terra-family",
+    "tour_name": "CULINARY GEMS OF BHUTAN",
+    "rank": 3,
+    "question": "Is a hot stone bath worth it?",
+    "p": 0.11,
+    "why": "about_here[Bhutan] p=0.11"
+   }
+  ],
+  "examples_harm": [],
+  "spot_check_sample": [],
+  "spot_check_note": "0 of 0 kept rejected-keyword examples (container keeps <= 80); label each 'right reject' / 'wrong reject' by hand before any enforce."
+ },
+ "c2_t8": {
+  "inputs": {
+   "requests": 23,
+   "by_channel": {
+    "blog": 9,
+    "linkedin": 14
+   },
+   "by_tenant": {
+    "atlas-hearth": 6,
+    "terra-family": 10,
+    "trail-pulse": 3,
+    "wildkind-travel": 4
+   },
+   "chains_recomputed": 3
+  },
+  "all_questions": {
+   "n": 81,
+   "covered": 44,
+   "covered_pct": 54.3,
+   "about_covered": 44,
+   "landing_covered": 36,
+   "text_only": 21,
+   "drop": 0,
+   "drop_pct": 0.0,
+   "drop_pct_of_covered": 0.0,
+   "about_reject": 0,
+   "landing_reject_all": 0,
+   "landing_reject_some_moment": 3
+  },
+  "non_segment_match": {
+   "n": 45,
+   "covered": 8,
+   "covered_pct": 17.8,
+   "about_covered": 8,
+   "landing_covered": 0,
+   "text_only": 21,
+   "drop": 0,
+   "drop_pct": 0.0,
+   "drop_pct_of_covered": 0.0,
+   "about_reject": 0,
+   "landing_reject_all": 0,
+   "landing_reject_some_moment": 0
+  },
+  "by_tier": {
+   "tour_paa": {
+    "n": 45,
+    "covered": 8,
+    "covered_pct": 17.8,
+    "about_covered": 8,
+    "landing_covered": 0,
+    "text_only": 21,
+    "drop": 0,
+    "drop_pct": 0.0,
+    "drop_pct_of_covered": 0.0,
+    "about_reject": 0,
+    "landing_reject_all": 0,
+    "landing_reject_some_moment": 0
+   },
+   "segment_match": {
+    "n": 36,
+    "covered": 36,
+    "covered_pct": 100.0,
+    "about_covered": 36,
+    "landing_covered": 36,
+    "text_only": 0,
+    "drop": 0,
+    "drop_pct": 0.0,
+    "drop_pct_of_covered": 0.0,
+    "about_reject": 0,
+    "landing_reject_all": 0,
+    "landing_reject_some_moment": 3
+   }
+  },
+  "requests_with_a_drop": 0,
+  "harm": {
+   "listed_questions_jev_rejects": 0,
+   "options_credited_with_rejected_answers": 0,
+   "recommended_options_credited_with_rejected": 0,
+   "recommended_may_change_without_them": 0,
+   "credited_answers": 45,
+   "credited_rejected": 0,
+   "options": 69
+  },
+  "status": "COVERED_NO_REJECT",
+  "examples_drop": [],
+  "examples_option_harm": []
+ },
+ "c3_t9_live": {
+  "inputs": {
+   "pieces": 132,
+   "latest_pieces": 9,
+   "latest_shown_approved_or_held": 9,
+   "by_tenant": {
+    "atlas-hearth": 66,
+    "terra-family": 64,
+    "trail-pulse": 1,
+    "wildkind-travel": 1
+   },
+   "faq_filter_mode": {
+    "absent": 122,
+    "shadow": 10
+   }
+  },
+  "writer_questions_by_tier": {
+   "segment_match": {
+    "n": 68,
+    "covered": 68,
+    "covered_pct": 100.0,
+    "about_covered": 68,
+    "landing_covered": 68,
+    "text_only": 0,
+    "drop": 0,
+    "drop_pct": 0.0,
+    "drop_pct_of_covered": 0.0,
+    "about_reject": 0,
+    "landing_reject_all": 0,
+    "landing_reject_some_moment": 2
+   },
+   "place_paa": {
+    "n": 52,
+    "covered": 52,
+    "covered_pct": 100.0,
+    "about_covered": 52,
+    "landing_covered": 20,
+    "text_only": 0,
+    "drop": 32,
+    "drop_pct": 61.5,
+    "drop_pct_of_covered": 61.5,
+    "about_reject": 32,
+    "landing_reject_all": 0,
+    "landing_reject_some_moment": 20
+   },
+   "serp_topup": {
+    "n": 16,
+    "covered": 0,
+    "covered_pct": 0.0,
+    "about_covered": 0,
+    "landing_covered": 0,
+    "text_only": 0,
+    "drop": 0,
+    "drop_pct": 0.0,
+    "drop_pct_of_covered": null,
+    "about_reject": 0,
+    "landing_reject_all": 0,
+    "landing_reject_some_moment": 0
+   }
+  },
+  "faq_questions_by_tier": {
+   "writer": {
+    "n": 77,
+    "covered": 0,
+    "covered_pct": 0.0,
+    "about_covered": 0,
+    "landing_covered": 0,
+    "text_only": 0,
+    "drop": 0,
+    "drop_pct": 0.0,
+    "drop_pct_of_covered": null,
+    "about_reject": 0,
+    "landing_reject_all": 0,
+    "landing_reject_some_moment": 0
+   },
+   "segment_match": {
+    "n": 25,
+    "covered": 24,
+    "covered_pct": 96.0,
+    "about_covered": 24,
+    "landing_covered": 24,
+    "text_only": 0,
+    "drop": 0,
+    "drop_pct": 0.0,
+    "drop_pct_of_covered": 0.0,
+    "about_reject": 0,
+    "landing_reject_all": 0,
+    "landing_reject_some_moment": 1
+   },
+   "serp_topup": {
+    "n": 3,
+    "covered": 0,
+    "covered_pct": 0.0,
+    "about_covered": 0,
+    "landing_covered": 0,
+    "text_only": 0,
+    "drop": 0,
+    "drop_pct": 0.0,
+    "drop_pct_of_covered": null,
+    "about_reject": 0,
+    "landing_reject_all": 0,
+    "landing_reject_some_moment": 0
+   },
+   "place_paa": {
+    "n": 1,
+    "covered": 1,
+    "covered_pct": 100.0,
+    "about_covered": 1,
+    "landing_covered": 1,
+    "text_only": 0,
+    "drop": 0,
+    "drop_pct": 0.0,
+    "drop_pct_of_covered": 0.0,
+    "about_reject": 0,
+    "landing_reject_all": 0,
+    "landing_reject_some_moment": 1
+   }
+  },
+  "faq_all": {
+   "n": 106,
+   "covered": 25,
+   "covered_pct": 23.6,
+   "about_covered": 25,
+   "landing_covered": 25,
+   "text_only": 0,
+   "drop": 0,
+   "drop_pct": 0.0,
+   "drop_pct_of_covered": 0.0,
+   "about_reject": 0,
+   "landing_reject_all": 0,
+   "landing_reject_some_moment": 2
+  },
+  "harm": {
+   "latest_shown_with_rejected_faq": 0,
+   "rejected_faq_questions": 0,
+   "rejected_writer_questions": 0
+  },
+  "status": "COVERED_NO_REJECT",
+  "examples_faq_harm": [],
+  "examples_writer_drop": [],
+  "note": "C3 here is the LIVE coverage only; the labelled precision is Part A (66/200 covered, Jev worse than Haiku). Landing rejects practical country questions the panel keeps, so read 'drop' as a ceiling."
+ },
+ "c4_t9_keyword": {
+  "inputs": {
+   "blog_requests": 9,
+   "related_keywords": 32,
+   "latest_shown_pieces": 9,
+   "with_keyword": 0
+  },
+  "related_keywords": {
+   "n": 32,
+   "covered": 0,
+   "covered_pct": 0.0,
+   "a1_covered": 0,
+   "a1_reject": 0,
+   "demand_covered": 0,
+   "demand_reject_some_moment": 0,
+   "reject": 0
+  },
+  "chosen_keyword": {
+   "n": 0,
+   "a1_covered": 0,
+   "a1_reject": 0,
+   "demand_covered": 0,
+   "demand_reject_some_moment": 0,
+   "demand_reject_every_moment": 0,
+   "chosen_from_related": 0
+  },
+  "option_a_moment_owner": {
+   "moments": 89,
+   "owner_today": 44,
+   "owner_strict": 45,
+   "no_candidate": 30,
+   "unasked_first": 0,
+   "all_tried_rejected_today": 15,
+   "pieces_with_owner_today": 9,
+   "pieces_with_owner_strict": 9,
+   "pieces_with_owner_today_pct": 100.0,
+   "note": "'today' = first candidate not rejected at today's floor (A3's rule); 'strict' also accepts a 0.50-0.70 reject (S246 decision 6 open). unasked_first = A3 never asked the head candidate (other market)."
+  },
+  "harm": {
+   "chosen_keyword_a1_reject": 0,
+   "chosen_keyword_demand_reject_every_moment": 0
+  },
+  "status": "NO_COVERAGE",
+  "examples_chosen": [],
+  "examples_related_reject": [],
+  "examples_owner": [
+   {
+    "tenant": "terra-family",
+    "piece": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "market": "UK",
+    "chosen": null,
+    "owners": [
+     {
+      "moment": "Khövsgöl Lake — trek along shorelines and forest paths",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-06"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-06"
+      }
+     },
+     {
+      "moment": "Moron — stop for lunch",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Khövsgöl Lake — horseback riding across surrounding terrain",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.89,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.89,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     },
+     {
+      "moment": "Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-16"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-16"
+      }
+     },
+     {
+      "moment": "Sod Camp — overnight in a standard ger camp",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Lake Khövsgöl — explore the boundary between Central Asian steppes and Siberian Taiga forests",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     }
+    ]
+   },
+   {
+    "tenant": "terra-family",
+    "piece": "be398aa7-3bb2-4a15-89be-fe7ef7acc313",
+    "market": "UK",
+    "chosen": null,
+    "owners": [
+     {
+      "moment": "Khövsgöl Lake — trek along shorelines and forest paths",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-06"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-06"
+      }
+     },
+     {
+      "moment": "Moron — stop for lunch",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Khövsgöl Lake — horseback riding across surrounding terrain",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.89,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.89,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     },
+     {
+      "moment": "Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-16"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-16"
+      }
+     },
+     {
+      "moment": "Sod Camp — overnight in a standard ger camp",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Lake Khövsgöl — explore the boundary between Central Asian steppes and Siberian Taiga forests",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 590,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     }
+    ]
+   },
+   {
+    "tenant": "atlas-hearth",
+    "piece": "cf9e8934-66b5-4458-aa7a-f94d4f45009d",
+    "market": "US",
+    "chosen": null,
+    "owners": [
+     {
+      "moment": "Khövsgöl Lake — trek along shorelines and forest paths",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-06"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-06"
+      }
+     },
+     {
+      "moment": "Moron — stop for lunch",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Khövsgöl Lake — horseback riding across surrounding terrain",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.89,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.89,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     },
+     {
+      "moment": "Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-16"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-16"
+      }
+     },
+     {
+      "moment": "Sod Camp — overnight in a standard ger camp",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Lake Khövsgöl — explore the boundary between Central Asian steppes and Siberian Taiga forests",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     }
+    ]
+   },
+   {
+    "tenant": "atlas-hearth",
+    "piece": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "market": "US",
+    "chosen": null,
+    "owners": [
+     {
+      "moment": "Paro — eat lunch of local rice pizza and buckwheat dumplings with dried spinach filling",
+      "today": {
+       "keyword": "Paro",
+       "volume": 6600,
+       "p": 0.8,
+       "zone": "grey",
+       "at": "2026-10-09"
+      },
+      "strict": {
+       "keyword": "Paro",
+       "volume": 6600,
+       "p": 0.8,
+       "zone": "grey",
+       "at": "2026-10-09"
+      }
+     },
+     {
+      "moment": "Craft Bazaar — explore",
+      "today": {
+       "keyword": "craft bazaar",
+       "volume": 210,
+       "p": 0.79,
+       "zone": "grey",
+       "at": "2026-10-06"
+      },
+      "strict": {
+       "keyword": "craft bazaar",
+       "volume": 210,
+       "p": 0.79,
+       "zone": "grey",
+       "at": "2026-10-06"
+      }
+     },
+     {
+      "moment": "Textile Museum — explore",
+      "today": {
+       "keyword": "textile museum",
+       "volume": 1900,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "textile museum",
+       "volume": 1900,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     },
+     {
+      "moment": "Kyichu Lhakhang — visit",
+      "today": {
+       "keyword": "kyichu lhakhang",
+       "volume": 140,
+       "p": 0.96,
+       "zone": "grey",
+       "at": "2026-10-07"
+      },
+      "strict": {
+       "keyword": "kyichu lhakhang",
+       "volume": 140,
+       "p": 0.96,
+       "zone": "grey",
+       "at": "2026-10-07"
+      }
+     },
+     {
+      "moment": "Kaja Throm Farmers Market — explore",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Paro — stroll",
+      "today": {
+       "keyword": "Paro",
+       "volume": 6600,
+       "p": 0.86,
+       "zone": "grey",
+       "at": "2026-10-07"
+      },
+      "strict": {
+       "keyword": "Paro",
+       "volume": 6600,
+       "p": 0.86,
+       "zone": "grey",
+       "at": "2026-10-07"
+      }
+     }
+    ]
+   },
+   {
+    "tenant": "trail-pulse",
+    "piece": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "market": "US",
+    "chosen": null,
+    "owners": [
+     {
+      "moment": "Nong Khouay — gather at the central shop and converse with villagers over coffee or beer",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Nong Khiaw — stay in a hotel on the riverside",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Khaiphaen Restaurant — informal briefing and dinner",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Nong Khouay — stay in village off the electrical grid",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Nong Khouay — listen to stories from an elder known as 'Grandpa'",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Kuang Si Falls — swim in the lower pools",
+      "today": {
+       "keyword": "Kuang Si Falls",
+       "volume": 3600,
+       "p": 0.94,
+       "zone": "grey",
+       "at": "2026-10-08"
+      },
+      "strict": {
+       "keyword": "Kuang Si Falls",
+       "volume": 3600,
+       "p": 0.94,
+       "zone": "grey",
+       "at": "2026-10-08"
+      }
+     }
+    ]
+   },
+   {
+    "tenant": "wildkind-travel",
+    "piece": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "market": "US",
+    "chosen": null,
+    "owners": [
+     {
+      "moment": "Nong Khouay — gather at the central shop and converse with villagers over coffee or beer",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Nong Khiaw — stay in a hotel on the riverside",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Khaiphaen Restaurant — informal briefing and dinner",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Nong Khouay — stay in village off the electrical grid",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Nong Khouay — listen to stories from an elder known as 'Grandpa'",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Kuang Si Falls — swim in the lower pools",
+      "today": {
+       "keyword": "Kuang Si Falls",
+       "volume": 3600,
+       "p": 0.94,
+       "zone": "grey",
+       "at": "2026-10-08"
+      },
+      "strict": {
+       "keyword": "Kuang Si Falls",
+       "volume": 3600,
+       "p": 0.94,
+       "zone": "grey",
+       "at": "2026-10-08"
+      }
+     }
+    ]
+   },
+   {
+    "tenant": "atlas-hearth",
+    "piece": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "market": "US",
+    "chosen": null,
+    "owners": [
+     {
+      "moment": "Ura Village — eat puta—buckwheat noodles",
+      "today": {
+       "keyword": "ura village",
+       "volume": 10,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "ura village",
+       "volume": 10,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     },
+     {
+      "moment": "Mebar Tsho Lake — stop at",
+      "today": {
+       "keyword": "mebar tsho burning lake",
+       "volume": 10,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "mebar tsho burning lake",
+       "volume": 10,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     },
+     {
+      "moment": "Kurje Lhakhang — visit",
+      "today": {
+       "keyword": "kurje lhakhang",
+       "volume": 10,
+       "p": 0.95,
+       "zone": "grey",
+       "at": "2026-10-06"
+      },
+      "strict": {
+       "keyword": "kurje lhakhang",
+       "volume": 10,
+       "p": 0.95,
+       "zone": "grey",
+       "at": "2026-10-06"
+      }
+     },
+     {
+      "moment": "Traditional Arts & Craft School — visit",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Khaling National Handloom — wander",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Dewathang — visit historical battlefield",
+      "today": {
+       "keyword": "dewathang",
+       "volume": 10,
+       "p": 0.94,
+       "zone": "grey",
+       "at": "2026-10-07"
+      },
+      "strict": {
+       "keyword": "dewathang",
+       "volume": 10,
+       "p": 0.94,
+       "zone": "grey",
+       "at": "2026-10-07"
+      }
+     }
+    ]
+   },
+   {
+    "tenant": "terra-family",
+    "piece": "eb5ee9d4-b84f-49d5-b72e-65a2d8bcf0c4",
+    "market": "UK",
+    "chosen": null,
+    "owners": [
+     {
+      "moment": "Nong Khouay — gather at the central shop and converse with villagers over coffee or beer",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Nong Khiaw — stay in a hotel on the riverside",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Khaiphaen Restaurant — informal briefing and dinner",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Nong Khouay — stay in village off the electrical grid",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Nong Khouay — listen to stories from an elder known as 'Grandpa'",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Kuang Si Falls — swim in the lower pools",
+      "today": {
+       "keyword": "Kuang Si Falls",
+       "volume": 1300,
+       "p": 0.94,
+       "zone": "grey",
+       "at": "2026-10-08"
+      },
+      "strict": {
+       "keyword": "Kuang Si Falls",
+       "volume": 1300,
+       "p": 0.94,
+       "zone": "grey",
+       "at": "2026-10-08"
+      }
+     }
+    ]
+   },
+   {
+    "tenant": "atlas-hearth",
+    "piece": "a58a709b-2c8f-4c56-b159-521b4b4b4869",
+    "market": "US",
+    "chosen": null,
+    "owners": [
+     {
+      "moment": "Khövsgöl Lake — trek along shorelines and forest paths",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-06"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.92,
+       "zone": "grey",
+       "at": "2026-10-06"
+      }
+     },
+     {
+      "moment": "Moron — stop for lunch",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Khövsgöl Lake — horseback riding across surrounding terrain",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.89,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.89,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     },
+     {
+      "moment": "Lake Khövsgöl — visit the boundary between Central Asian steppes and Siberian Taiga forests",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-16"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-16"
+      }
+     },
+     {
+      "moment": "Sod Camp — overnight in a standard ger camp",
+      "today": null,
+      "strict": null
+     },
+     {
+      "moment": "Lake Khövsgöl — explore the boundary between Central Asian steppes and Siberian Taiga forests",
+      "today": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      },
+      "strict": {
+       "keyword": "Lake Khövsgöl",
+       "volume": 1300,
+       "p": 0.91,
+       "zone": "grey",
+       "at": "2026-10-05"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "summary": {
+  "c1_t2": "COVERED_NO_REJECT",
+  "c2_t8": "COVERED_NO_REJECT",
+  "c3_t9_live": "COVERED_NO_REJECT",
+  "c4_t9_keyword": "NO_COVERAGE"
+ }
+}

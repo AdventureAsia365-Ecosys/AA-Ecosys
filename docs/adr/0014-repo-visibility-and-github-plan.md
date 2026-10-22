@@ -1,6 +1,7 @@
 # ADR 0014 — Repo visibility and GitHub plan: app repos public, root and Infra private, GitHub Free
 
 - **Status:** Proposed (22/10/2026, S247). Records S241 D-14 / D-25 as an ADR; Nghiệp accepts (AA-901).
+  Amended 22/10/2026 (S247): root and Infra made **public** for now, see "Amendment (S247, 22/10/2026)" below.
 - **Scope:** AA-Ecosys: org AdventureAsia365-Ecosys and its repos (AA-Ecosys, AA-CIS-App, AA-Booking,
   AA-TripPlanner-Web, AA-CIS-Infra, and AA-Partner when it is created under [ADR 0010](0010-aa-partner-app.md)).
 - **Amends / Supersedes:** none.
@@ -72,6 +73,25 @@ with this ADR amended to record it:
 
 - Default proposal at the trigger: **B** while Nghiệp is the only engineer; **A** when a second person gets write
   access or a customer audit asks for enforced review evidence.
+
+## Amendment (S247, 22/10/2026): root and Infra public until the coding phase ends
+
+Decided by Nghiệp on 22/10/2026:
+
+- **What changed:** AA-Ecosys (root) and AA-CIS-Infra were switched from private to **public**. The private repos'
+  GitHub Free Actions minutes ran out on 22/10/2026, which blocked Terraform Apply and DB Migrate on AA-CIS-Infra.
+  Decision 1's table stays the target; this is a temporary exception to it.
+- **Consequence:** the DM-6.10 content of these two repos (account IDs, ARNs, network IDs, inventories, security
+  reports, registers by name) is now public, in the current tree and in the whole git history.
+- **Scan before the switch:** a full-history gitleaks scan of the root repo found no credential. In AA-CIS-Infra the
+  history holds `envs/dev/terraform.tfvars` (commit `38690dd`, 24/04/2026), which contains the current DataForSEO
+  API password and a `database_url` for the acc1 RDS that was destroyed on 09/07/2026 (AA-271), so that DSN no longer
+  opens anything. Rotating the DataForSEO password is recommended; Nghiệp accepted the risk and chose not to rotate
+  now (tracked in the [secrets register](../security/secrets-register.md), DataForSEO vendor row).
+- **No secret in new commits:** while the repos are public, every commit to root and Infra is held to the public-repo
+  rule (no credential, JWT, API key, cookie or tenant API key; gitleaks before committing audits and exports).
+- **Plan:** both repos go back to private when the coding phase ends (Nghiệp). At that point, re-decide between
+  paying for Actions minutes (budget) and a self-hosted runner for the private repos, and amend this ADR again.
 
 ## Consequences
 

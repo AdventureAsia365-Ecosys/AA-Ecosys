@@ -1,0 +1,7 @@
+# gitleaks false positives (fingerprint file:rule:line, valid for any commit).
+# S247 audit evidence: S3 object keys (`BUCKET, KEY = ...`) in helper scripts and Jev `question_key`
+# names in a question-catalog export. None is a credential.
+docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_existing_stats.json:generic-api-key:1
+docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_reuse_t_map.md:generic-api-key:193
+docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave3_flag.py:generic-api-key:54
+docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave4_flag.py:generic-api-key:62

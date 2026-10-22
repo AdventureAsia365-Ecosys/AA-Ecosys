@@ -1,0 +1,38 @@
+{
+  "issue": "AA-894",
+  "check": "owner render of /admin/data-model, LOCAL next dev of CIS main, data call intercepted with the live erd.json",
+  "auth": "not exercised (placeholder cookie, local dev proxy fail-open); owner auth on Dev = Nghiep screenshots",
+  "generated_at": "2026-10-22T13:20:07.276Z",
+  "model": {
+    "fingerprint": "70fead8405cb6cb7ff5e7c5be6e88725aa23dbf2cab30c7e9689ff2ec2953a12",
+    "generated_at": "2026-10-22T11:18:11+00:00",
+    "schemas": 15,
+    "tables": 189,
+    "edges": 186,
+    "has_diff": true,
+    "table_opened": "published_tours"
+  },
+  "data_calls_intercepted": [
+    "/api/admin/data-model"
+  ],
+  "other_api_calls_stubbed_empty": [
+    "POST /api/auth/refresh",
+    "GET /api/admin/review-queue",
+    "GET /api/admin/notifications/count"
+  ],
+  "console_errors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` wh"
+  ],
+  "horizontal_overflow_px_at_400": 0,
+  "shots": [
+    "aa894-owner-local-live-erd-overview-1440-light.png",
+    "aa894-owner-local-live-erd-overview-1440-dark.png",
+    "aa894-owner-local-live-erd-overview-400-light.png",
+    "aa894-owner-local-live-erd-overview-400-dark.png",
+    "aa894-owner-local-live-erd-table-published_tours-1440-light.png",
+    "aa894-owner-local-live-erd-table-published_tours-1440-dark.png",
+    "aa894-owner-local-live-erd-table-published_tours-400-light.png",
+    "aa894-owner-local-live-erd-table-published_tours-400-dark.png"
+  ]
+}

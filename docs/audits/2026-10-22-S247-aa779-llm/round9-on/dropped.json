@@ -1,0 +1,44 @@
+[
+ {
+  "piece_id": "3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f",
+  "q": "What is the average altitude of Mongolia above sea level?",
+  "a": null,
+  "fit_reason": "Answer gives M\u00f6r\u00f6n's elevation, not Mongolia's average altitude."
+ },
+ {
+  "piece_id": "ac8b98b7-52db-4382-8f07-09aec3572ec4",
+  "q": "Who are the reindeer people?",
+  "a": null,
+  "fit_reason": "Never names who the reindeer people are; omits their name entirely."
+ },
+ {
+  "piece_id": "3712d4dd-52c8-4661-a35f-7927e7f80963",
+  "q": "What is the main statue of Kyichu Lhakhang?",
+  "a": null,
+  "fit_reason": "Question asks for the main statue; answer never names it."
+ },
+ {
+  "piece_id": "781b5de7-3351-40b2-9c1d-7fdc27a3128e",
+  "q": "Are there reindeer in Mongolia?",
+  "a": null,
+  "fit_reason": "Describes Tsaatan practices but never confirms reindeer exist in Mongolia."
+ },
+ {
+  "piece_id": "781b5de7-3351-40b2-9c1d-7fdc27a3128e",
+  "q": "Who are the reindeer people of Mongolia?",
+  "a": null,
+  "fit_reason": "Describes the people but never names them (Tsaatan)."
+ },
+ {
+  "piece_id": "32789658-61c2-496f-a493-dfac399b8b9c",
+  "q": "What is Zorig Chusum?",
+  "a": null,
+  "fit_reason": "Question asks what Zorig Chusum is; answer only names the institute."
+ },
+ {
+  "piece_id": "32789658-61c2-496f-a493-dfac399b8b9c",
+  "q": "What is the story behind Mebar Tsho, the Burning Lake?",
+  "a": null,
+  "fit_reason": "Question asks for the story; answer only gives location description."
+ }
+]

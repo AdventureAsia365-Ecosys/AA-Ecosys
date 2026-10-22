@@ -5,7 +5,11 @@ it, who reads it, how it is managed and rotated, and what should happen to it. *
 only — never a value.** The machine-readable twin is [`secrets-register.yaml`](secrets-register.yaml)
 (same rows); edit the YAML first, then the tables here to match.
 
-- Updated: 20/10/2026 (S245: first drift check with all four inventories (AWS, Lambda env, GitHub per
+- Updated: 22/10/2026 (S247: `ROOT_REPO_DOCS_TOKEN` deleted, the Infra docs workflows use the
+  `aa-ecosys-ci-bot` App token (AA-CIS-Infra #281); the three unused GitHub PATs flagged for revoke
+  (pending Nghiệp); DataForSEO exposure in the now-public AA-CIS-Infra history recorded, see
+  [ADR 0014](../adr/0014-repo-visibility-and-github-plan.md) amendment; no live drift check this update).
+  Earlier: 20/10/2026 (S245: first drift check with all four inventories (AWS, Lambda env, GitHub per
   repo/env, Vercel names): `diff = 8` → `diff = 0`; rows flipped below; first access review
   [2026-10-20-S245](../audits/2026-10-20-S245-access-review/README.md)). Earlier: 19/10/2026 (S244: AA-816 Stage S — S1 on Production, C9 Preview credential, I6 rotation, break-glass
   rotation, AA-878 N1; X1 S20/S22 — `db_migrator` in use. acc2 `list-secrets` re-read: 33 names, 29 live + 4 deleted in
@@ -21,11 +25,12 @@ only — never a value.** The machine-readable twin is [`secrets-register.yaml`]
   consumer; DRY RUN → Nghiệp OK → delete) · **pending-removal** (plaintext/dead Lambda env key an
   open PR removes) · **deleted / removed** (kept for the log).
 
-## Summary (20/10/2026)
+## Summary (22/10/2026)
 
 | | Count |
 |---|---|
-| Rows | 88: 34 Secrets Manager (30 live + 4 deleted 19/10, in the recovery window), 29 GitHub (23 live + 6 deleted/removed), 9 Vercel, 4 Lambda env (all removed), 12 vendor |
+| Rows | 98: 37 Secrets Manager (32 live + 1 planned + 4 deleted 19/10, in the recovery window), 33 GitHub (26 live + 7 deleted/removed), 10 Vercel (9 live + 1 planned), 4 Lambda env (all removed), 14 vendor |
+| Changed 22/10/2026 (S247) | GitHub AA-CIS-Infra `ROOT_REPO_DOCS_TOKEN` **deleted** (Infra docs workflows on the `aa-ecosys-ci-bot` App token, AA-CIS-Infra #281); vendor rows: three unused GitHub PATs, revoke recommended (pending Nghiệp); DataForSEO password exposed in public AA-CIS-Infra history, rotation declined for now (Nghiệp, ADR 0014 amendment). Drift check not re-run (no fresh inventories) |
 | Drift check (S245, all four inventories) | **`diff = 0`** (was 8 before this update). Not checked: GitHub org secrets (the listing answers 403, no org-admin scope; no `github:org` row) |
 | Orphans | 4 Secrets Manager — **deleted 19/10/2026**, recovery until 18/11 (`aa-cis/dev/api-keys`, `aa-cis/dev/acp-webhook-secret`, `aa-cis/dev/acp-partner-api`, `tripplanner/dev/mapbox-geocoding-token`); 2 GitHub — **deleted 17/10/2026** (AA-866: `VERCEL_DEPLOY_HOOK`, `ACPCORE_READ_TOKEN`), absent on 20/10; the repo-level `ADMIN_SECRET` and `AWS_ROLE_ARN` on AA-CIS-App are absent too |
 | Plaintext secret in a Lambda env | none: `TRIPPLANNER_API_KEY` and the dead `MAPBOX_GEOCODING_TOKEN_ARN` left both TripPlanner Lambdas with I2 (19/10); the ops-probe `ADMIN_SECRET` left with I1 (Infra #195) |
@@ -163,7 +168,8 @@ nothing to flag, but the rows were stale); the three TripPlanner Lambda `pending
 7. **Repo-level secrets readable from any branch** (S241 P0-1): `VERCEL_TOKEN` on AA-CIS-App, AA-Booking and
    AA-TripPlanner-Web; `TF_VAR_DB_PASSWORD` on AA-CIS-Infra. The repo-level `ADMIN_SECRET` is gone (S244); the
    rotated copy lives only in env `dev`. `E2E_ADMIN_*` stay repo-level but hold only the viewer account now.
-   `ROOT_REPO_DOCS_TOKEN` is a personal access token (U-25: GitHub App token, out of AA-878 scope).
+   ~~`ROOT_REPO_DOCS_TOKEN` is a personal access token~~ deleted 22/10/2026 (S247): the Infra docs workflows
+   use the `aa-ecosys-ci-bot` App token (AA-CIS-Infra #281).
 8. **Terraform state still holds values**: `random_password.tripplanner_api_key` (by design: the
    secret is the source of truth) and the Cognito app client secrets. The ops-probe admin secret
    left state with I1.
@@ -212,7 +218,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 ## Register
 
-### Secrets Manager, acc2 (005097885195, us-west-1) (35)
+### Secrets Manager, acc2 (005097885195, us-west-1) (37)
 
 | Name | Owner app | Consumers (main) | Managed by | Rotation | Last changed | Status | Notes |
 |---|---|---|---|---|---|---|---|
@@ -289,10 +295,10 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `AA_CI_BOT_PRIVATE_KEY` | `github:AA-CIS-App/release` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
 | `AA_CI_BOT_PRIVATE_KEY` | `github:AA-Booking/release` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
 | `AA_CI_BOT_PRIVATE_KEY` | `github:AA-TripPlanner-Web/release` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
-| `AA_CI_BOT_PRIVATE_KEY` | `github:AA-CIS-Infra` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
-| `ROOT_REPO_DOCS_TOKEN` | `github:AA-CIS-Infra` | infra | db-schema-dump.yml:73, :184, :190; docs-gen.yml:66, :86, :148; migration-copy-guard.yml:152, :163 (retention-rows job, read only, only when a `crm` copy exists; AA-929) | TBD-Nghiep | **open-item** | Personal access token with write to the root repo (S241 P1-2; PAT -> GitHub App token is U-25, out of AA-878 scope). |
+| `AA_CI_BOT_PRIVATE_KEY` | `github:AA-CIS-Infra` | ecosystem | db-schema-dump.yml:233; docs-gen.yml:102, :199; migration-copy-guard.yml:172 (retention-rows job, Contents read; AA-929) — replaced `ROOT_REPO_DOCS_TOKEN` (AA-CIS-Infra #281, S247) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
+| `ROOT_REPO_DOCS_TOKEN` | `github:AA-CIS-Infra` | infra | — | none | **deleted** | Personal access token with write to the root repo (S241 P1-2). Its three Infra docs workflows moved to the `aa-ecosys-ci-bot` App token (AA-CIS-Infra #281); GitHub secret deleted 22/10/2026 (S247). The PAT behind it (most likely `aa-cis-infra-schema-dump`) is still unrevoked: see the GitHub tokens vendor row. |
 
-### Vercel environment variables (secret-bearing) (9)
+### Vercel environment variables (secret-bearing) (10)
 
 | Name | Store | Owner app | Consumers (main) | Rotation | Status | Notes |
 |---|---|---|---|---|---|---|
@@ -324,13 +330,13 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | Namecheap account (lumiguides.it.com) | `vendor:namecheap` | TBD-Nghiep | DNS / domain registration | TBD-Nghiep |  |
 | Zoho account | `vendor:zoho` | TBD-Nghiep | mail / business tooling | TBD-Nghiep |  |
 | Mapbox public token (NEXT_PUBLIC_MAPBOX_TOKEN) + account | `vendor:mapbox` | TBD-Nghiep | Vercel aa-tripplanner NEXT_PUBLIC_MAPBOX_TOKEN (URL-restricted, S239) | TBD-Nghiep | Old secret geocoding token revoked 20/10/2026 (S245, geocoding API now 401); the TripPlanner docs PR removed its last mention. |
-| DataForSEO account | `vendor:dataforseo` | TBD-Nghiep | aa-cis/dev/dataforseo | TBD-Nghiep |  |
+| DataForSEO account | `vendor:dataforseo` | TBD-Nghiep | aa-cis/dev/dataforseo | TBD-Nghiep | **Open (S247, 22/10/2026):** AA-CIS-Infra history (`envs/dev/terraform.tfvars`, commit 38690dd, 24/04/2026) holds the current DataForSEO API password, and that repo is public since 22/10/2026 ([ADR 0014](../adr/0014-repo-visibility-and-github-plan.md) amendment). Rotation recommended; Nghiệp accepted the risk and chose not to rotate now. Rotate before the repos go back to private or before prod, then update `aa-cis/dev/dataforseo`. |
 | OpenAI API key (account) | `vendor:openai` | TBD-Nghiep | aa-cis/dev/openai-key | TBD-Nghiep |  |
 | Typesafe / Jev API key (account) | `vendor:typesafe` | TBD-Nghiep | aa-cis/dev/typesafe | TBD-Nghiep |  |
 | Geoapify API key (account) | `vendor:geoapify` | TBD-Nghiep | aa-cis/dev/geoapify | TBD-Nghiep |  |
 | Sentry org dk-0ql (DSNs + auth token) | `vendor:sentry` | TBD-Nghiep | aa-cis/dev/sentry-dsn-api; booking/dev/sentry-dsn; tripplanner/dev/sentry-dsn; Vercel SENTRY_AUTH_TOKEN; Vercel aa-tripplanner SENTRY_DSN | TBD-Nghiep |  |
 | Google Cloud API key (gdrive-photo-reader) | `vendor:google` | TBD-Nghiep | aa-cis/dev/gdrive-photo-reader | none (decision 02/10/2026) | Leak closed in CIS PR #535; Nghiep decided no rotation. |
-| GitHub tokens (pqnghiep1354) | `vendor:github` | TBD-Nghiep | ROOT_REPO_DOCS_TOKEN (PAT); old ACPCORE_READ_TOKEN PAT (secret deleted 17/10); local gh / MCP OAuth token (`gho_`) | manual: `gho_` rotated 2026-10-20 (S245, Nghiệp); PATs TBD-Nghiep | The `gho_` rotation closes the S240 transcript exposure. Still open: revoke the old ACPCORE PAT; ROOT_REPO_DOCS_TOKEN stays a PAT until U-25 (GitHub App). |
+| GitHub tokens (pqnghiep1354) | `vendor:github` | TBD-Nghiep | local gh / MCP OAuth token (`gho_`); three fine-grained PATs with no consumer: `aa-cis-infra-schema-dump` (most likely the former `ROOT_REPO_DOCS_TOKEN` value, secret deleted 22/10), `ACPCORE_READ_TOKEN` (secret deleted 17/10), `aa-cis-acpcore-read` (expired) | manual: `gho_` rotated 2026-10-20 (S245, Nghiệp); PATs: revoke recommended (S247), pending Nghiệp | The `gho_` rotation closes the S240 transcript exposure. **Open (S247):** with `ROOT_REPO_DOCS_TOKEN` gone (AA-CIS-Infra #281) the three PATs are unused; revoking all three in GitHub Settings > Developer settings is recommended to Nghiệp, pending. |
 | GitHub App `aa-agent` | `vendor:github` | nghiep | agent sessions via `tools/github/as-app.sh` | on leak / go-live (ADR 0011) | AA-901. App id 5421824, 5 selected repos; actions/contents/PR/workflows write, checks/statuses/issues read; no webhook, no org permissions. Key: `aa-ecosys/github/aa-agent-app-key`. |
 | GitHub App `aa-ecosys-ci-bot` | `vendor:github` | nghiep | release-please (AA-891); Infra docs workflows | on leak / go-live (ADR 0011) | AA-901. Created as `aa-ecosys-ci-bot` (`aa-ci-bot` was taken). App id 5421877, 5 selected repos; contents/issues/PR write only. Key: `AA_CI_BOT_PRIVATE_KEY`. |
 | Vercel account tokens | `vendor:vercel` | TBD-Nghiep | GitHub VERCEL_TOKEN in AA-CIS-App, AA-Booking, AA-TripPlanner-Web | TBD-Nghiep | Hobby team; one token or three? Record it. |

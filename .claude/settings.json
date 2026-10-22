@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(gh pr merge:*)"
+      "Bash(gh pr merge:*)",
+      "Bash(/home/nghiep/projects/AA-Ecosys/tools/github/as-app.sh:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(vercel env add:*)",
+      "Bash(vercel env rm:*)"
     ],
     "deny": [
       "Read(~/.aws/**)",

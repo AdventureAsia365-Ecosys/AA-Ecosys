@@ -1,0 +1,112 @@
+<title>FAQ question check</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one review column; a sticky progress bar; one card per question with the two verdicts side by side */
+:root{--bg:#f6f7f4;--card:#ffffff;--fg:#1d2420;--muted:#5d6b63;--line:#dfe4de;--accent:#2f6f57;--accent-soft:#e3efe8;--keep:#2f6f57;--drop:#a2482f;--drop-soft:#f6e6df;--warn:#8a6d1f;
+--display:"Fraunces",Georgia,serif;--body:"Source Sans 3","Segoe UI",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121815;--card:#1a221e;--fg:#e6ece8;--muted:#9aaba1;--line:#2c3832;--accent:#7cc4a4;--accent-soft:#1f3329;--keep:#7cc4a4;--drop:#e39a80;--drop-soft:#3a2620;--warn:#d9b965;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121815;--card:#1a221e;--fg:#e6ece8;--muted:#9aaba1;--line:#2c3832;--accent:#7cc4a4;--accent-soft:#1f3329;--keep:#7cc4a4;--drop:#e39a80;--drop-soft:#3a2620;--warn:#d9b965;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+main{max-width:860px;margin:0 auto;display:grid;gap:14px}
+header{padding-top:28px;display:grid;gap:8px}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(26px,4vw,34px);margin:0;text-wrap:balance}
+.lede{color:var(--muted);max-width:68ch;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted)}
+.stats b{color:var(--fg);font-variant-numeric:tabular-nums}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;border-bottom:1px solid var(--line)}
+.progress{flex:1 1 220px;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.progress span{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.count{font-variant-numeric:tabular-nums;font-size:14px}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:7px 12px}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.primary{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:600}
+.status{font-size:13px;color:var(--muted);min-height:1.2em}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px}
+.qhead{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.qtext{font-size:18px;font-weight:600;flex:1 1 320px;min-width:0}
+.chip{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:1px 8px;white-space:nowrap}
+.sides{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.side{border-radius:8px;padding:10px 12px;display:grid;gap:4px;min-width:0}
+.side h3{margin:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.verdict{font-weight:700}
+.KEEP .verdict{color:var(--keep)} .DROP .verdict{color:var(--drop)}
+.side.KEEP{background:var(--accent-soft)} .side.DROP{background:var(--drop-soft)}
+.note{font-size:13px;color:var(--muted)}
+.choose{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.choose button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);font-weight:600}
+.choose button.keep[aria-pressed="true"]{background:var(--accent-soft)} .choose button.drop[aria-pressed="true"]{background:var(--drop-soft)}
+.prop{font-size:12px;color:var(--warn);font-weight:600}
+.empty{color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono&display=swap">
+<main>
+<header>
+<h1>Câu hỏi FAQ: AI lọc có đúng không?</h1>
+<p class="lede">Bộ lọc AI (Claude Haiku) chọn câu hỏi "People Also Ask" để viết phần FAQ cho tour. Trên 200 câu đã có người chấm, AI đạt ngưỡng ship, nhưng có <b id="ndis"></b> câu AI và người chấm nói khác nhau. Với mỗi câu, anh chọn: câu đó nên <b>giữ</b> (đưa vào FAQ của tour) hay <b>bỏ</b>. Đề xuất mặc định theo người chấm.</p>
+<div class="stats"><span>Chính xác <b>98,7%</b> (cận dưới 93%)</span><span>Giữ được <b>72%</b> câu tốt</span><span>200 câu · chi phí <b>$0,21</b></span></div>
+</header>
+<div class="bar">
+<div class="progress" aria-hidden="true"><span id="pg"></span></div>
+<span class="count" id="count"></span>
+<button class="primary" id="all" type="button">Duyệt theo đề xuất cho câu chưa chọn</button>
+<span class="status" id="status" role="status"></span>
+</div>
+<div id="list"></div>
+</main>
+<script>
+const DATA = {"items": [{"id": "aa779-013", "q": "What is the landscape like in Mongolia?", "country": "Mongolia", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "outside_piece_scope", "llm_conf": "high", "llm_note": "Question is about Mongolia as a whole, not Tsagaan Suvarga specifically or the scope's moment."}, {"id": "aa779-022", "q": "Is $100 a lot in Laos?", "country": "Laos", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "sensitive_no_travel_use", "llm_conf": "medium", "llm_note": "Economics/statistics question without practical visitor guidance on budgeting for this tour."}, {"id": "aa779-033", "q": "What to be careful of in Okinawa?", "country": "Japan", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "medium", "llm_note": "No source text provided; cannot write a 40-60 word answer about Yambaru/Okinawa safety without the source."}, {"id": "aa779-034", "q": "Is it safe to go to Hunza right now?", "country": "Pakistan", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires current/live safety information; cannot be answered from source text or general background facts."}, {"id": "aa779-038", "q": "What is the Kumano faith?", "country": "Japan", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "medium", "llm_note": "Source provides no information about Kumano faith; general background alone insufficient for travel FAQ."}, {"id": "aa779-039", "q": "How far is Thamel from Kathmandu?", "country": "Nepal", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Source text is empty; cannot answer without external information about Thamel's location relative to Kathmandu."}, {"id": "aa779-055", "q": "Is it safe to trek in Nepal right now?", "country": "Nepal", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires current/live safety information; changes daily and needs real-time sources."}, {"id": "aa779-062", "q": "What is considered the national dish of Laos?", "country": "Laos", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "off_scope_homonym", "llm_conf": "high", "llm_note": "About Lao cuisine/food, not a place or activity in scope."}, {"id": "aa779-070", "q": "What is Vietnam known for?", "country": "Vietnam", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "other", "llm_conf": "high", "llm_note": "Too broad; not specific to Imperial City or Huế visit."}, {"id": "aa779-075", "q": "What is the highest mountain in Mongolia?", "country": "Mongolia", "panel": "DROP", "panel_reason": "off_scope_other_place", "llm": "KEEP", "llm_reason": "other", "llm_conf": "medium", "llm_note": "About Mongolia as destination; background fact, though not directly about Khövsgöl Lake."}, {"id": "aa779-079", "q": "How much time do you need at Mutianyu Great Wall?", "country": "China", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires specific tour timing/itinerary details not in source text."}, {"id": "aa779-085", "q": "How likely are you to see a leopard in Yala National Park?", "country": "Sri Lanka", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires current sighting statistics or tour-specific promises not in source text."}, {"id": "aa779-088", "q": "What is the dress code for women in Bhutan?", "country": "Bhutan", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "outside_piece_scope", "llm_conf": "high", "llm_note": "General Bhutan dress code question, not specific to Paro Taktsang hike or Paro."}, {"id": "aa779-101", "q": "How much time to spend at Udo Island?", "country": "South Korea", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires tour itinerary details (duration, schedule) not in source text."}, {"id": "aa779-106", "q": "Is Hoi An worth visiting at Christmas?", "country": "Vietnam", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires current/live information about Christmas conditions, crowds, events this year."}, {"id": "aa779-125", "q": "How long is it from Seoul to Gyeongju?", "country": "South Korea", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires current travel times/routes; scope covers only Gyeongju moment, not the journey from Seoul."}, {"id": "aa779-140", "q": "What is the most famous food in Laos?", "country": "Laos", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "outside_piece_scope", "llm_conf": "high", "llm_note": "About Laos as a whole, not the scope's places or practical visitor info for the scope."}, {"id": "aa779-142", "q": "When to avoid Bhutan?", "country": "Bhutan", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires current weather/season data and live conditions not in source text."}, {"id": "aa779-147", "q": "What is the wettest month in Laos?", "country": "Laos", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "outside_piece_scope", "llm_conf": "high", "llm_note": "About Laos climate broadly, not specific to scope places or practical for this itinerary."}, {"id": "aa779-161", "q": "What is the oxygen level at Dolma La pass?", "country": "Nepal", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Oxygen levels vary by time/weather; needs current data or tour promise of measurement."}, {"id": "aa779-162", "q": "What is the best food in Vietnam?", "country": "Vietnam", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "outside_piece_scope", "llm_conf": "high", "llm_note": "Question is about Vietnam as a whole, not Ben Thanh Market or this street food tour moment."}, {"id": "aa779-166", "q": "What souvenirs to buy in Mongolia?", "country": "Mongolia", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "commercial_junk", "llm_conf": "high", "llm_note": "Shopping advice is not a travel FAQ topic for this trekking moment."}, {"id": "aa779-172", "q": "How to get from Luang Prabang to Nong Khiaw?", "country": "Laos", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Source text is empty; cannot answer without travel logistics details."}, {"id": "aa779-181", "q": "What does the word \"Chorten\" mean?", "country": "Bhutan", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "word_meaning", "llm_conf": "high", "llm_note": "Asks about word meaning/translation, not about the place itself"}, {"id": "aa779-185", "q": "Is there a direct flight from the USA to Mongolia?", "country": "Mongolia", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires current flight schedule data; not supported by source text about the Gobi tour."}, {"id": "aa779-193", "q": "Do you need to pre-book Mutianyu Great Wall?", "country": "China", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires current booking policy/live information not in source text."}, {"id": "aa779-194", "q": "Are there landmines near Angkor Wat?", "country": "Cambodia", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "sensitive_no_travel_use", "llm_conf": "high", "llm_note": "Landmine question is security/conflict history, not practical visitor safety at the temple site."}, {"id": "aa779-197", "q": "Who is inside Chorten Kora?", "country": "Bhutan", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "high", "llm_note": "Requires specific religious/spiritual knowledge about reliquary contents not in source or general travel knowledge."}, {"id": "aa779-199", "q": "Is South Korea good for cycling?", "country": "South Korea", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "medium", "llm_note": "Requires general cycling infrastructure assessment beyond the specific Seoul bike tour scope; source text is empty."}, {"id": "aa779-200", "q": "Can you see the Milky Way in Mongolia?", "country": "Mongolia", "panel": "KEEP", "panel_reason": "on_subject", "llm": "DROP", "llm_reason": "unanswerable", "llm_conf": "medium", "llm_note": "Requires current/live conditions; visibility depends on weather, season, light pollution."}], "stats": {"P": 0.987, "LB": 0.93, "R": 0.724, "n": 200, "dis": 30, "usd": 0.208}};
+const R = {on_subject:"đúng chủ đề tour", outside_piece_scope:"ngoài phạm vi bài viết", unanswerable:"nội dung tour không trả lời được",
+  off_scope_homonym:"trùng tên, khác nghĩa", off_scope_other_place:"nói về nơi khác", sensitive_no_travel_use:"nhạy cảm, không giúp khách đi tour", other:"lý do khác"};
+const V = {KEEP:"GIỮ", DROP:"BỎ"};
+const choices = {};
+let db = null;
+const $ = s => document.querySelector(s);
+function el(tag, cls, text){const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e;}
+function render(){
+  $("#ndis").textContent = DATA.items.length;
+  const list = $("#list"); list.textContent = "";
+  const wrap = el("div"); wrap.style.display="grid"; wrap.style.gap="14px";
+  for(const it of DATA.items){
+    const card = el("section","q"); card.id = it.id;
+    const head = el("div","qhead"); head.append(el("div","qtext",it.q), el("span","chip",it.country), el("span","chip",it.id));
+    const sides = el("div","sides");
+    const p = el("div","side "+it.panel); p.append(el("h3",null,"Người chấm"), el("div","verdict",V[it.panel]+" — "+(R[it.panel_reason]||it.panel_reason)));
+    const a = el("div","side "+it.llm); a.append(el("h3",null,"AI (Haiku), độ tự tin "+(it.llm_conf||"?")), el("div","verdict",V[it.llm]+" — "+(R[it.llm_reason]||it.llm_reason)));
+    if(it.llm_note) a.append(el("div","note",it.llm_note));
+    sides.append(p,a);
+    const ch = el("div","choose");
+    const cur = choices[it.id];
+    for(const [val,label,cls] of [["KEEP","Giữ câu hỏi","keep"],["DROP","Bỏ câu hỏi","drop"],["UNSURE","Không chắc",""]]){
+      const b = el("button",cls,label); b.type="button"; b.setAttribute("aria-pressed", cur===val?"true":"false");
+      b.addEventListener("click",()=>choose(it.id,val));
+      ch.append(b);
+    }
+    ch.append(el("span","prop","Đề xuất: "+(it.panel==="KEEP"?"Giữ":"Bỏ")+" (theo người chấm)"));
+    card.append(head,sides,ch); wrap.append(card);
+  }
+  list.append(wrap);
+  const done = DATA.items.filter(i=>choices[i.id]).length;
+  $("#count").textContent = done+"/"+DATA.items.length+" đã chọn";
+  $("#pg").style.width = (100*done/DATA.items.length)+"%";
+}
+async function choose(id,val){
+  choices[id]=val; render();
+  if(!db){ $("#status").textContent="Chưa lưu được: trang chưa kết nối kho dữ liệu."; return; }
+  try{ await db.collection("verdicts").doc(id).set({choice:val, at:new Date().toISOString()}); $("#status").textContent="Đã lưu "+id; }
+  catch(e){ $("#status").textContent="Không lưu được ("+(e&&e.code||"lỗi")+"). Thử lại sau."; }
+}
+$("#all").addEventListener("click", async ()=>{
+  const todo = DATA.items.filter(i=>!choices[i.id]);
+  for(const it of todo){ await choose(it.id, it.panel); }
+  $("#status").textContent = todo.length ? "Đã duyệt "+todo.length+" câu theo đề xuất" : "Không còn câu nào chưa chọn";
+});
+render();
+(async ()=>{
+  try{ db = await claude.use("db"); }catch(e){ db=null; }
+  if(!db){ $("#status").textContent="Chế độ chỉ xem: lựa chọn sẽ không được lưu."; return; }
+  db.collection("verdicts").onSnapshot(snap=>{ for(const d of snap.docs){ const v=d.data(); if(v&&v.choice) choices[d.id]=v.choice; } render(); },
+    e=>{ $("#status").textContent="Không đọc được lựa chọn đã lưu ("+(e&&e.code||"lỗi")+")."; });
+})();
+</script>
