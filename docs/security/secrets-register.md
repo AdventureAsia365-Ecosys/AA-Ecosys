@@ -212,7 +212,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 ## Register
 
-### Secrets Manager, acc2 (005097885195, us-west-1) (34)
+### Secrets Manager, acc2 (005097885195, us-west-1) (35)
 
 | Name | Owner app | Consumers (main) | Managed by | Rotation | Last changed | Status | Notes |
 |---|---|---|---|---|---|---|---|
@@ -237,8 +237,9 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `aa-cis/dev/e2e-tenant/trail-pulse` | cis | AA-CIS-App services/acp_shared/e2e_tenant_key_sync.py:28 (writes after key issue), task role grant AA-CIS-Infra modules/ecs/main.tf:250; agent UI verify / paid E2E runs (tenant portal API key) | cli (value kept in sync by app-runtime) | app-runtime (key re-issue) | 2026-10-12 | **keep** | Test tenant Trail Pulse portal API key. |
 | `aa-cis/dev/e2e-tenant/wildkind-travel` | cis | AA-CIS-App services/acp_shared/e2e_tenant_key_sync.py:28 (writes after key issue), task role grant AA-CIS-Infra modules/ecs/main.tf:250; agent UI verify / paid E2E runs (tenant portal API key) | cli (value kept in sync by app-runtime) | app-runtime (key re-issue) | 2026-10-12 | **keep** | Test tenant WildKind Travel portal API key. |
 | `booking/dev/database-url` | booking | ECS aa-booking-dev-api DATABASE_URL (AA-CIS-Infra accounts/aa365/booking.tf:304); AA-CIS-Infra db/isolation_probe.py:122, db/owners.yaml:131 | terraform aws_secretsmanager_secret.booking_db (container only, value out-of-band) | none | 2026-10-14 | **keep** |  |
-| `booking/dev/sentry-dsn` | booking | ECS aa-booking-dev-api SENTRY_DSN via the task-definition `secrets` block, only while AA-CIS-Infra `booking_sentry_enabled` is true (accounts/aa365/booking.tf, AA-871); AA-Booking backend/app/observability/sentry.py | terraform aws_secretsmanager_secret.booking_sentry_dsn (shell only, value out-of-band) | none | TBD-M0 | **planned** | AA-871. Sentry DSN of project aa-booking-api (low sensitivity: ingest-only). Flip to keep once the apply created it. |
-| `tripplanner/dev/sentry-dsn` | tripplanner | TP Lambdas browse + assembly, by name tripplanner/<ENVIRONMENT>/sentry-dsn at cold start (AA-TripPlanner-Web backend/shared/observability.py resolve_dsn, AA-871); grant ReadSentryDsnSecret (AA-CIS-Infra accounts/aa365/tripplanner.tf) | terraform aws_secretsmanager_secret.tripplanner_sentry_dsn (shell only, value out-of-band) | none | TBD-M0 | **planned** | AA-871. Sentry DSN of project aa-tripplanner-lambdas (low sensitivity: ingest-only). No DSN in the Lambda env. Flip to keep once the apply created it. |
+| `booking/dev/sentry-dsn` | booking | ECS aa-booking-dev-api SENTRY_DSN via the task-definition `secrets` block, only while AA-CIS-Infra `booking_sentry_enabled` is true (accounts/aa365/booking.tf, AA-871); AA-Booking backend/app/observability/sentry.py | terraform aws_secretsmanager_secret.booking_sentry_dsn (shell only, value out-of-band) | none | TBD-M0 | **keep** | AA-871. Sentry DSN of project aa-booking-api (low sensitivity: ingest-only). Created and wired S247 (22/10/2026); test events verified in Sentry. |
+| `tripplanner/dev/sentry-dsn` | tripplanner | TP Lambdas browse + assembly, by name tripplanner/<ENVIRONMENT>/sentry-dsn at cold start (AA-TripPlanner-Web backend/shared/observability.py resolve_dsn, AA-871); grant ReadSentryDsnSecret (AA-CIS-Infra accounts/aa365/tripplanner.tf) | terraform aws_secretsmanager_secret.tripplanner_sentry_dsn (shell only, value out-of-band) | none | TBD-M0 | **keep** | AA-871. Sentry DSN of project aa-tripplanner-lambdas (low sensitivity: ingest-only). No DSN in the Lambda env. Created and wired S247 (22/10/2026); test events verified in Sentry. |
+| `aa-ecosys/github/aa-agent-app-key` | ecosystem | AA-Ecosys `tools/github/as-app.sh` (orchestrating session, MFA admin profile; mints 1-hour installation tokens) | cli | manual (2026-10-22); on leak / go-live / reader leaving (ADR 0011) | 2026-10-22 | **keep** | AA-901. Private key of the GitHub App `aa-agent` (app id 5421824). The `.pem` was shredded after storing. |
 | `aa-cis/dev/booking-jwt-signing-key` | cis | AA-CIS-App api/core/booking_jwt.py:49 (RS256 private key, signs Booking staff tokens; Booking verifies via the public JWKS) | cli | manual (kid + previous[] supported) | 2026-10-14 | **keep** | AA-680 Phase 2 retires this bridge (Booking accepts Cognito tokens); keep until then. |
 | `aa-cis/dev/geoapify` | cis | AA-CIS-App shared/secrets.py:98 (geocoder, worker) | cli | none | 2026-10-14 | **keep** | Vendor Geoapify. |
 | `acp/cms/20d07d32-ed98-405f-81d5-0c2399c9fcdf` | cis | AA-CIS-App api/routers/v1_integrations.py:261 (tenant WordPress credentials, acp/cms/{tenant_id}); task role grant modules/ecs/main.tf:220 | app-runtime | tenant (reconnect) | 2026-10-16 | **keep** | Test tenant Terra Family. Per-tenant secrets appear here as tenants connect a CMS. |
@@ -253,7 +254,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `aa-cis/dev/e2e-test-viewer` | cis | value mirrored in GitHub AA-CIS-App E2E_ADMIN_USERNAME / E2E_ADMIN_PASSWORD: the ui-smoke account on every PR preview, viewer mode (ui-smoke.yml:58-59; N1, S244); agent read-only checks on CIS PR previews (skill/aa-ui-verify/SKILL.md) | cli | none | 2026-10-19 | **keep** | AA-878 C1/M3: read-only viewer staff account e2e-claude-code-viewer (CIS 249 viewer role, legacy login, Preview only), no Booking access. Created S243 (password generated by script, never shown). Not a real user. CI smoke account since S244 (59 passed / 7 skipped). |
 | `aa-cis/dev/admin-secret-preview` | cis | CIS API by the code-constant name PREVIEW_SECRET_NAME (AA-CIS-App api/core/staff_credential.py:48; only when AWS_EXECUTION_ENV is set, 5 min cache); copy: Vercel aa-cis-frontend ADMIN_SECRET, Preview target only | cli | none | 2026-10-19 | **keep** | AA-816 C9 (CIS #858) Preview BFF credential, created 19/10/2026 (S244, about 0.40 USD a month). A match gives a principal capped at viewer, never the machine. Separate from the main secret. Closes open item 1. |
 
-### GitHub Actions secrets (29)
+### GitHub Actions secrets (33)
 
 | Name | Store | Owner app | Consumers (main) | Rotation | Status | Notes |
 |---|---|---|---|---|---|---|
@@ -285,6 +286,10 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `AWS_REGION` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:38, :53 | none | **keep** | Not a secret. |
 | `TF_STATE_BUCKET` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:51; terraform-plan.yml:41 | none | **keep** | Not a secret. |
 | `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:29; terraform-plan.yml:50 | none | **open-item** | RDS master password, repo-level (S241 E12: move into a protected env or drop once RDS manages it). S240: printed once in a local transcript; decision: rotate before prod. |
+| `AA_CI_BOT_PRIVATE_KEY` | `github:AA-CIS-App/release` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
+| `AA_CI_BOT_PRIVATE_KEY` | `github:AA-Booking/release` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
+| `AA_CI_BOT_PRIVATE_KEY` | `github:AA-TripPlanner-Web/release` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
+| `AA_CI_BOT_PRIVATE_KEY` | `github:AA-CIS-Infra` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
 | `ROOT_REPO_DOCS_TOKEN` | `github:AA-CIS-Infra` | infra | db-schema-dump.yml:73, :184, :190; docs-gen.yml:66, :86, :148; migration-copy-guard.yml:152, :163 (retention-rows job, read only, only when a `crm` copy exists; AA-929) | TBD-Nghiep | **open-item** | Personal access token with write to the root repo (S241 P1-2; PAT -> GitHub App token is U-25, out of AA-878 scope). |
 
 ### Vercel environment variables (secret-bearing) (9)
@@ -311,7 +316,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `MAPBOX_GEOCODING_TOKEN_ARN` | `lambda-env:aa-tripplanner-dev-assembly` | tripplanner | — | none | **removed** | ARN only, dead since AA-712 slice 6a. Removed by AA-878 I2 (19/10); the token was revoked at Mapbox 20/10. |
 | `ADMIN_SECRET` | `lambda-env:aa-cis-dev-dfs-balance-check` | cis | — | none | **removed** | Removed by AA-878 I1 (Infra #195, applied 19/10): the env now holds only API_BASE_URL. |
 
-### Vendors and accounts (not machine-checked) (12)
+### Vendors and accounts (not machine-checked) (14)
 
 | Credential | Store | Owner | Consumers | Rotation | Notes |
 |---|---|---|---|---|---|
@@ -326,4 +331,6 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | Sentry org dk-0ql (DSNs + auth token) | `vendor:sentry` | TBD-Nghiep | aa-cis/dev/sentry-dsn-api; booking/dev/sentry-dsn; tripplanner/dev/sentry-dsn; Vercel SENTRY_AUTH_TOKEN; Vercel aa-tripplanner SENTRY_DSN | TBD-Nghiep |  |
 | Google Cloud API key (gdrive-photo-reader) | `vendor:google` | TBD-Nghiep | aa-cis/dev/gdrive-photo-reader | none (decision 02/10/2026) | Leak closed in CIS PR #535; Nghiep decided no rotation. |
 | GitHub tokens (pqnghiep1354) | `vendor:github` | TBD-Nghiep | ROOT_REPO_DOCS_TOKEN (PAT); old ACPCORE_READ_TOKEN PAT (secret deleted 17/10); local gh / MCP OAuth token (`gho_`) | manual: `gho_` rotated 2026-10-20 (S245, Nghiệp); PATs TBD-Nghiep | The `gho_` rotation closes the S240 transcript exposure. Still open: revoke the old ACPCORE PAT; ROOT_REPO_DOCS_TOKEN stays a PAT until U-25 (GitHub App). |
+| GitHub App `aa-agent` | `vendor:github` | nghiep | agent sessions via `tools/github/as-app.sh` | on leak / go-live (ADR 0011) | AA-901. App id 5421824, 5 selected repos; actions/contents/PR/workflows write, checks/statuses/issues read; no webhook, no org permissions. Key: `aa-ecosys/github/aa-agent-app-key`. |
+| GitHub App `aa-ecosys-ci-bot` | `vendor:github` | nghiep | release-please (AA-891); Infra docs workflows | on leak / go-live (ADR 0011) | AA-901. Created as `aa-ecosys-ci-bot` (`aa-ci-bot` was taken). App id 5421877, 5 selected repos; contents/issues/PR write only. Key: `AA_CI_BOT_PRIVATE_KEY`. |
 | Vercel account tokens | `vendor:vercel` | TBD-Nghiep | GitHub VERCEL_TOKEN in AA-CIS-App, AA-Booking, AA-TripPlanner-Web | TBD-Nghiep | Hobby team; one token or three? Record it. |
