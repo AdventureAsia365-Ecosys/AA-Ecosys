@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Package the AA_Ecosys skills for claude.ai (Settings → Capabilities → Skills → upload): one zip per skill, each
-# holding the folder <name>/ with SKILL.md (+ references/, lessons.md, …), plus aa-skills-all.zip with every skill.
+# holding the folder <name>/ with SKILL.md (+ references/, lessons.md, …). No all-in-one archive: claude.ai accepts
+# exactly one skill (one top-level folder, one SKILL.md) per zip and rejects a bundle (S247).
 # Output: skill/dist/ (gitignored: generated from skill/<name>/, never edited by hand).
 #
 #   tools/skills/package_skills.sh                 # every skill
@@ -44,19 +45,4 @@ with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
 PY
   echo "skill/dist/$n.zip"
 done
-
-# Every skill in one archive (for a full re-sync).
-rm -f dist/aa-skills-all.zip
-python3 - <<'PY'
-import os, zipfile
-with zipfile.ZipFile("dist/aa-skills-all.zip", "w", zipfile.ZIP_DEFLATED) as z:
-    for d in sorted(os.listdir(".")):
-        if d == "dist" or not os.path.isfile(os.path.join(d, "SKILL.md")):
-            continue
-        for base, dirs, files in os.walk(d):
-            dirs[:] = sorted(x for x in dirs if not x.startswith((".", "__pycache__")))
-            for f in sorted(files):
-                if not f.startswith(".") and not f.endswith(".pyc"):
-                    z.write(os.path.join(base, f), os.path.join(base, f))
-PY
-echo "skill/dist/aa-skills-all.zip"
+rm -f dist/aa-skills-all.zip  # an archive left by the old script would be uploaded by mistake
