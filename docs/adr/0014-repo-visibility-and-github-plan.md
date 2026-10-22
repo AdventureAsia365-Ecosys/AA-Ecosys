@@ -84,7 +84,7 @@ Decided by Nghiệp on 22/10/2026:
 - **Consequence:** the DM-6.10 content of these two repos (account IDs, ARNs, network IDs, inventories, security
   reports, registers by name) is now public, in the current tree and in the whole git history.
 - **Scan before the switch:** a full-history gitleaks scan of the root repo found no credential. In AA-CIS-Infra the
-  history holds `envs/dev/terraform.tfvars` (commit `38690dd`, 24/04/2026), which contains the current DataForSEO
+  history holds an old committed variables file that contains a DataForSEO
   API password and a `database_url` for the acc1 RDS that was destroyed on 09/07/2026 (AA-271), so that DSN no longer
   opens anything. Rotating the DataForSEO password is recommended; Nghiệp accepted the risk and chose not to rotate
   now (tracked in the [secrets register](../security/secrets-register.md), DataForSEO vendor row).
