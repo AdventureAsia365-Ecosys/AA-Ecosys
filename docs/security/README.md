@@ -9,7 +9,7 @@ audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-10-20
 review_every_days: 90
-related: [SEC-01, SEC-02, SEC-03, SEC-05, SEC-06]
+related: [SEC-01, SEC-02, SEC-03, SEC-05, SEC-06, SEC-07]
 ---
 
 # Security docs index
@@ -24,6 +24,7 @@ unless Nghiệp decides who may read them there (N-3).
 | SEC-03 | [Vulnerability management](vulnerability-management.md) | Fix times, exceptions, monthly triage, open alerts |
 | SEC-04 | [Compliance and privacy register](../legal/register.md) (draft, AA-886), with the [retention log](../legal/retention-log.md), [DPA template](../legal/dpa-template.md), [DSAR and erasure runbook](../legal/dsar-erasure-runbook.md), [readiness packet](../legal/readiness-packet.md) and [consent check](../legal/consent-capture-query.md) | Processing activities, sub-processors, retention runs, data-subject requests |
 | SEC-06 | [Where a page may live](../STYLE.md#where-a-page-may-live-sec-06) | What may go into the public app repos |
+| SEC-07 | [GitHub Apps for agents and bots](github-apps.md) (draft, AA-901) | How the `aa-agent` and `aa-ci-bot` Apps are created, installed, keyed, rotated and stopped |
 
 ## Access reviews (SEC-05)
 

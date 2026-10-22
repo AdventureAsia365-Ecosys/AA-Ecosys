@@ -1,0 +1,27 @@
+# CODEOWNERS - AA-Ecosys (root). ADR 0011 decision 4 (AA-901, U-25).
+#
+# Owners of the risky paths only; there is deliberately no catch-all `*` rule, so ordinary docs PRs never wait for
+# an owner. Dev phase: nothing is enforced. This repo is private on GitHub Free, where code owners are not active at
+# all (ADR 0014); the file is ready for the prod trigger (AA-880), when the plan choice in ADR 0014 decides how
+# these paths are gated. Later rules win over earlier ones.
+
+# CI, repo settings and this file
+/.github/                              @pqnghiep1354
+/.gitignore                            @pqnghiep1354
+
+# Agent rules, hooks and skills (they decide what agents may do)
+/.claude/                              @pqnghiep1354
+/.kiro/                                @pqnghiep1354
+/skill/                                @pqnghiep1354
+
+# Check and automation scripts run by CI or by agents (ADR numbers, contracts, docs lint, Linear, FinOps, GitHub App)
+/tools/                                @pqnghiep1354
+
+# Decisions and binding standards
+/docs/adr/                             @pqnghiep1354
+/docs/architecture/data-standards/     @pqnghiep1354
+/docs/database/schema-ownership.md     @pqnghiep1354
+/docs/contracts/                       @pqnghiep1354
+
+# Security pages and the secrets register
+/docs/security/                        @pqnghiep1354

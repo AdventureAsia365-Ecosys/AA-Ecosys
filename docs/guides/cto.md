@@ -90,8 +90,9 @@ Nghiệp decides N-9).
 Accepted ecosystem ADRs: 0001 target architecture, 0002 only CIS writes content, 0003/0003a durable jobs per owner,
 0004/0004a/0004b Booking stack, supply ownership, one security group per caller, 0005 pricing, 0006/0006a identity,
 0007 place pipeline in CIS, 0008 new-app integration and data platform rules. Reserved: 0009 AI platform (AA-804).
-Planned: 0012 prod blueprint (AA-880), 0013 API versioning before any `/booking/v1` prefix (AA-899, N-11), and the
-agent identity ADRs that come with a GitHub App (U-25, AA-901).
+Planned: 0012 prod blueprint (AA-880), 0013 API versioning before any `/booking/v1` prefix (AA-899, N-11). Proposed
+(U-25, AA-901): [0011](../adr/0011-github-app-identity-and-merge-rights.md) GitHub App identity for agents and bots with
+merge rights per risk tier, [0014](../adr/0014-repo-visibility-and-github-plan.md) repo visibility and GitHub plan.
 
 ## Data standards
 

@@ -111,6 +111,7 @@ placeholders.
 | SEC-04 | Compliance and privacy register | Ref + Rep | root `docs/legal/register.md` + `docs/legal/retention-log.md` (runs only) | H (+G later) | nghiep; business calls by Ms. Thư | 90; when a vendor is added | E CI, O | draft (S246): [register](legal/register.md), [retention log](legal/retention-log.md), [DPA template](legal/dpa-template.md), [DSAR and erasure runbook](legal/dsar-erasure-runbook.md), [readiness packet](legal/readiness-packet.md); DM-6.5 consent check [`legal/consent-capture-query.md`](legal/consent-capture-query.md) (tested on Dev 2026-10-20). AA-886 (U-23) with AA-877 (`pii:` tags), AA-804 (AI Use Register), AA-839 |
 | SEC-05 | Quarterly access review record | Rep | `docs/audits/<date>-S<nnn>-access-review/`; index `docs/security/README.md` | H | nghiep | first session of each quarter (DM-8.10) | E D CI | index draft: [`security/README.md`](security/README.md) (AA-895). First review in AA-878; cadence AA-838 |
 | SEC-06 | Where a page may live (public vs private repo) | Ref | [`STYLE.md`](STYLE.md#where-a-page-may-live-sec-06) | H | nghiep | 180 | E A | exists (AA-887) |
+| SEC-07 | GitHub Apps for agents and bots (create, install, rotate) | How | root `docs/security/github-apps.md` + `tools/github/as-app.sh` | H | nghiep | 90; after each rotation | E D A | draft, UNTESTED (AA-901, S247): [`security/github-apps.md`](security/github-apps.md); decisions in ADR 0011 and ADR 0014 |
 
 ### Cost
 
