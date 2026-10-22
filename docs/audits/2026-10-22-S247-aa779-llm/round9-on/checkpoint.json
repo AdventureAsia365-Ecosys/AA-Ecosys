@@ -1,0 +1,137 @@
+{
+ "started_at": "2026-10-22T13:55:31+00:00",
+ "plan_made_at": "2026-10-22T13:55:07+00:00",
+ "writes_sent": 8,
+ "items": [
+  {
+   "tenant": "terra-family",
+   "kind": "rewrite",
+   "request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+   "subject_id": "bc3bea2d-03a7-4913-8336-f4322910ae15",
+   "hub": "a local Buddhist monastery \u2192 Sod Camp \u2192 Uran Togoo \u2192 Moron",
+   "latest_piece": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+   "write_sent": "2026-10-22T13:55:31+00:00",
+   "piece_id": "3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f",
+   "final": {
+    "ready_state": "ready",
+    "channel": "blog",
+    "at": "2026-10-22T13:58:07+00:00",
+    "channel_is_blog": true
+   }
+  },
+  {
+   "tenant": "terra-family",
+   "kind": "rewrite",
+   "request_id": "e42adb08-8f39-430e-b82f-4c9d78a58d56",
+   "subject_id": "2ecd0866-57e0-4c28-812e-9f7666a744ab",
+   "hub": "Khaiphaen Restaurant \u2192 Luang Prabang \u2192 Kuang Si Falls \u2192 Ban Long Lao Mai",
+   "latest_piece": "eb5ee9d4-b84f-49d5-b72e-65a2d8bcf0c4",
+   "write_sent": "2026-10-22T13:55:34+00:00",
+   "piece_id": "07c13b25-95fa-458e-85c3-de0982dbf4d8",
+   "final": {
+    "ready_state": "ready",
+    "channel": "blog",
+    "at": "2026-10-22T13:58:08+00:00",
+    "channel_is_blog": true
+   }
+  },
+  {
+   "tenant": "atlas-hearth",
+   "kind": "rewrite",
+   "request_id": "15e682d0-160d-4104-8476-56ad983b2807",
+   "subject_id": "58bc5581-89c2-4d6b-a299-3541981ce0c6",
+   "hub": "a local Buddhist monastery \u2192 Sod Camp \u2192 Uran Togoo \u2192 Moron",
+   "latest_piece": "cf9e8934-66b5-4458-aa7a-f94d4f45009d",
+   "write_sent": "2026-10-22T13:55:35+00:00",
+   "piece_id": "ac8b98b7-52db-4382-8f07-09aec3572ec4",
+   "final": {
+    "ready_state": "ready",
+    "channel": "blog",
+    "at": "2026-10-22T13:57:32+00:00",
+    "channel_is_blog": true
+   }
+  },
+  {
+   "tenant": "atlas-hearth",
+   "kind": "rewrite",
+   "request_id": "41e41098-ffa7-472a-bdb2-da0922f80c0a",
+   "subject_id": "cefe714c-db7e-4783-9928-b5bdd7bbf72d",
+   "hub": "Khaling National Handloom \u2192 Tashigang dzong \u2192 Chorten Kora \u2192 Mongar Dzong",
+   "latest_piece": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+   "write_sent": "2026-10-22T13:55:37+00:00",
+   "piece_id": "3712d4dd-52c8-4661-a35f-7927e7f80963",
+   "final": {
+    "ready_state": "ready",
+    "channel": "blog",
+    "at": "2026-10-22T13:58:08+00:00",
+    "channel_is_blog": true
+   }
+  },
+  {
+   "tenant": "trail-pulse",
+   "kind": "rewrite",
+   "request_id": "f57ebafc-57d4-494a-8b20-8f84e69e791e",
+   "subject_id": "228bf45f-0f0d-4fd0-a9d9-3e4b3f0bb5cc",
+   "hub": "Khaiphaen Restaurant \u2192 Luang Prabang \u2192 Kuang Si Falls \u2192 Ban Long Lao Mai",
+   "latest_piece": "259cb453-2bf6-455d-8db7-4937dd69501b",
+   "write_sent": "2026-10-22T13:55:38+00:00",
+   "piece_id": "76f49455-5891-4284-8281-764ee07ce349",
+   "final": {
+    "ready_state": "ready",
+    "channel": "blog",
+    "at": "2026-10-22T14:00:57+00:00",
+    "channel_is_blog": true
+   }
+  },
+  {
+   "tenant": "wildkind-travel",
+   "kind": "rewrite",
+   "request_id": "449b0feb-9b2a-43f0-a5af-bc39efdeccad",
+   "subject_id": "3498d356-fc60-4600-a11d-e93d4b2cec2d",
+   "hub": "Khaiphaen Restaurant \u2192 Luang Prabang \u2192 Kuang Si Falls \u2192 Ban Long Lao Mai",
+   "latest_piece": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+   "write_sent": "2026-10-22T13:55:41+00:00",
+   "piece_id": "b570fb82-c6e0-4bb2-997a-d45e949a7336",
+   "final": {
+    "ready_state": "ready",
+    "channel": "blog",
+    "at": "2026-10-22T14:00:58+00:00",
+    "channel_is_blog": true
+   }
+  },
+  {
+   "tenant": "terra-family",
+   "kind": "rewrite",
+   "request_id": "b96797b8-3547-4c49-b48b-707979788a77",
+   "subject_id": "bc3bea2d-03a7-4913-8336-f4322910ae15",
+   "hub": "a local Buddhist monastery \u2192 Sod Camp \u2192 Uran Togoo \u2192 Moron",
+   "latest_piece": "be398aa7-3bb2-4a15-89be-fe7ef7acc313",
+   "write_sent": "2026-10-22T13:55:43+00:00",
+   "piece_id": "781b5de7-3351-40b2-9c1d-7fdc27a3128e",
+   "final": {
+    "ready_state": "ready",
+    "channel": "blog",
+    "at": "2026-10-22T14:00:58+00:00",
+    "channel_is_blog": true
+   }
+  },
+  {
+   "tenant": "atlas-hearth",
+   "kind": "rewrite",
+   "request_id": "3c9dc7bb-478f-4341-beba-0ae2044bce15",
+   "subject_id": "415181e9-3ea1-47bd-9de5-a328f0ee25bf",
+   "hub": "Tashichhodzong \u2192 Craft Bazaar \u2192 National School of Arts and Craft \u2192 Changangkha",
+   "latest_piece": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+   "write_sent": "2026-10-22T13:55:44+00:00",
+   "piece_id": "32789658-61c2-496f-a493-dfac399b8b9c",
+   "final": {
+    "ready_state": "ready",
+    "channel": "blog",
+    "at": "2026-10-22T14:02:35+00:00",
+    "channel_is_blog": true
+   }
+  }
+ ],
+ "finished_at": "2026-10-22T14:02:35+00:00",
+ "still_pending": []
+}

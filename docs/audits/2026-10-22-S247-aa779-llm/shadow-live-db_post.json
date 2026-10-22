@@ -1,0 +1,295 @@
+{
+ "pieces": [
+  {
+   "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+   "status": "approved",
+   "held_reason": null,
+   "channel": "blog",
+   "attempt_number": 3,
+   "created_at": "2026-10-22 08:41:29.708012+00:00",
+   "faq_filter_present": true,
+   "faq_filter": {
+    "mode": "shadow",
+    "stage": "t9_faq_filter",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.011864,
+    "n_candidates": 30,
+    "llm_keep": 0,
+    "llm_drop": 30,
+    "llm_kept_after_gazetteer": 6,
+    "gazetteer_dropped": [],
+    "deterministic": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "Is Kuang Si Waterfall worth it?",
+     "How do I get to Kuang Si Falls?",
+     "What time to go to Kuang Si Waterfall?",
+     "Why is Kuang Si Waterfall famous?"
+    ],
+    "llm_kept": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "How do I get to Kuang Si Falls?",
+     "Why is Kuang Si Waterfall famous?",
+     "What is special about Kuang Si Falls?",
+     "Can you swim in the Kuang Si Falls?"
+    ],
+    "labels": [
+     "DROP",
+     "KEEP"
+    ],
+    "drop_reasons": [
+     "on_subject",
+     "on_subject",
+     "unanswerable",
+     "on_subject",
+     "unanswerable",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "unanswerable",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "off_scope_other_place",
+     "sensitive_no_travel_use",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "unanswerable",
+     "unanswerable",
+     "on_subject",
+     "commercial_junk",
+     "on_subject",
+     "commercial_junk",
+     "on_subject",
+     "on_subject"
+    ]
+   },
+   "delivered_search_questions": [
+    {
+     "source": "segment_match",
+     "question": "Which country is Kuang Si Falls in?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Can I swim at Kuang Si Waterfall?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Is Kuang Si Waterfall worth it?"
+    },
+    {
+     "source": "segment_match",
+     "question": "How do I get to Kuang Si Falls?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What time to go to Kuang Si Waterfall?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Why is Kuang Si Waterfall famous?"
+    }
+   ],
+   "faq_questions_final": [
+    {
+     "source": "segment_match",
+     "question": "Which country is Kuang Si Falls in?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Can I swim at Kuang Si Waterfall?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Why is Kuang Si Waterfall famous?"
+    },
+    {
+     "source": "writer",
+     "question": "Why is Kuang Si Falls known for its distinctive water colour?"
+    },
+    {
+     "source": "writer",
+     "question": "Do I need a visa to visit Laos?"
+    }
+   ]
+  },
+  {
+   "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+   "status": "approved",
+   "held_reason": null,
+   "channel": "blog",
+   "attempt_number": 2,
+   "created_at": "2026-10-22 08:41:30.550273+00:00",
+   "faq_filter_present": true,
+   "faq_filter": {
+    "mode": "shadow",
+    "stage": "t9_faq_filter",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.008527,
+    "n_candidates": 19,
+    "llm_keep": 0,
+    "llm_drop": 19,
+    "llm_kept_after_gazetteer": 6,
+    "gazetteer_dropped": [
+     "What is a Ger camp in Mongolia?",
+     "Do Ger camps in Mongolia have electricity?",
+     "What is a ger house in Mongolia?",
+     "How much does a ger cost in Mongolia?"
+    ],
+    "deterministic": [
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Do the Sami people still herd reindeer?",
+     "Who are the reindeer people?"
+    ],
+    "llm_kept": [
+     "Do Mongolian gers have toilets?",
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Who are the reindeer people?"
+    ],
+    "labels": [
+     "DROP",
+     "KEEP"
+    ],
+    "drop_reasons": [
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "off_scope_other_place",
+     "on_subject",
+     "on_subject",
+     "on_subject",
+     "other",
+     "other",
+     "other",
+     "sensitive_no_travel_use",
+     "on_subject",
+     "on_subject"
+    ]
+   },
+   "delivered_search_questions": [
+    {
+     "source": "segment_match",
+     "question": "Does Mongolia have any volcanoes?"
+    },
+    {
+     "source": "place_paa",
+     "question": "What is the average altitude of Mongolia above sea level?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Do Mongolians still live like nomads?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Are there reindeer in Mongolia?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Do the Sami people still herd reindeer?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Who are the reindeer people?"
+    }
+   ],
+   "faq_questions_final": [
+    {
+     "source": "segment_match",
+     "question": "Does Mongolia have any volcanoes?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Are there reindeer in Mongolia?"
+    },
+    {
+     "source": "writer",
+     "question": "What ecological zones exist in northern Mongolia?"
+    }
+   ]
+  }
+ ],
+ "llm_rows": [
+  {
+   "id": "e36cc133-a89a-4b11-9244-f2496f67e68e",
+   "stage": "t9_faq_filter",
+   "role": "validate",
+   "model": "haiku-4-5",
+   "tokens_in": 2889,
+   "tokens_out": 1795,
+   "cost_usd": "0.011864",
+   "quality_signal": {
+    "keep": 21,
+    "mode": "shadow",
+    "issue": "AA-779",
+    "json_parsed": true,
+    "n_questions": 30,
+    "drop_reasons": {
+     "unanswerable": 5,
+     "commercial_junk": 2,
+     "off_scope_other_place": 1,
+     "sensitive_no_travel_use": 1
+    },
+    "gazetteer_dropped": 0
+   },
+   "provider": "bedrock-satellite",
+   "account": "acc3",
+   "fallback_used": false,
+   "stop_reason": "end_turn",
+   "job_id": "f0c11d7d-ba60-4191-a690-efe9e79fe710",
+   "created_at": "2026-10-22 08:41:44.057515+00:00",
+   "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37"
+  },
+  {
+   "id": "1781848f-c568-43fe-9678-7b10759ec7b6",
+   "stage": "t9_faq_filter",
+   "role": "validate",
+   "model": "haiku-4-5",
+   "tokens_in": 2627,
+   "tokens_out": 1180,
+   "cost_usd": "0.008527",
+   "quality_signal": {
+    "keep": 14,
+    "mode": "shadow",
+    "issue": "AA-779",
+    "json_parsed": true,
+    "n_questions": 19,
+    "drop_reasons": {
+     "other": 3,
+     "off_scope_other_place": 1,
+     "sensitive_no_travel_use": 1
+    },
+    "gazetteer_dropped": 4
+   },
+   "provider": "bedrock-satellite",
+   "account": "acc3",
+   "fallback_used": false,
+   "stop_reason": "end_turn",
+   "job_id": "6ac8dc07-d4d0-4011-9c4d-1f6d535da3f9",
+   "created_at": "2026-10-22 08:41:41.608278+00:00",
+   "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771"
+  }
+ ]
+}

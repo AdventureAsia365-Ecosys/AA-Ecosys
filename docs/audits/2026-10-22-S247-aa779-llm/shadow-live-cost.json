@@ -1,0 +1,1 @@
+[{"stage": "t9_write", "role": "writer", "n": 4, "cost": "0.1813"}, {"stage": "t9_repair", "role": "writer", "n": 7, "cost": "0.0301"}, {"stage": "t9_faq_filter", "role": "validate", "n": 2, "cost": "0.0204"}, {"stage": "t10_judge", "role": "judge", "n": 5, "cost": "0.0149"}, {"stage": "f10_embed", "role": "embed", "n": 5, "cost": "0.0009"}]

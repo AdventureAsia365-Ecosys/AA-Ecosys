@@ -1,0 +1,466 @@
+[
+ {
+  "flag": "aa859:t2_version_detail_reads_pool",
+  "started": "2026-10-22T07:56:22+00:00",
+  "checks": [
+   {
+    "id": "DR.1",
+    "desc": "A /{id}, /{id}/full, export-docx -> 200, equal to the flag-OFF baseline",
+    "pass": true,
+    "evidence": "tour 200->200 same=True full same=True keys=['published', 'raw', 'seo'] docx 200 attachment; filename=tour_2aa6e292_v6.docx"
+   },
+   {
+    "id": "DR.2",
+    "desc": "B GET A's tour -> 404 (B has no version of it)",
+    "pass": true,
+    "evidence": "skipped: B rewrote the same tour, so /{id} is legitimately B's too"
+   },
+   {
+    "id": "DR.3",
+    "desc": "B export A's version -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "DR.4",
+    "desc": "A random uuid -> 404 on /{id} and export",
+    "pass": true,
+    "evidence": "tour=404 export=404"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": false,
+    "evidence": "true=0 false=0"
+   }
+  ],
+  "kept_on": false,
+  "before": null,
+  "logs": {
+   "true": 0,
+   "false": 0,
+   "sample": []
+  },
+  "reverted": "2026-10-22T07:57:40+00:00",
+  "after": "false",
+  "finished": "2026-10-22T07:57:49+00:00"
+ },
+ {
+  "flag": "aa859:brand_identity_pool",
+  "started": "2026-10-22T07:57:49+00:00",
+  "checks": [
+   {
+    "id": "BI.0",
+    "desc": "precondition: A has a brand identity (flag-OFF baseline)",
+    "pass": true,
+    "evidence": "version=4 history=4"
+   },
+   {
+    "id": "BI.1",
+    "desc": "A GET -> 200, equal to the flag-OFF baseline",
+    "pass": true,
+    "evidence": "status=200 same=True sha_on=90154d24a15728a3 sha_off=90154d24a15728a3"
+   },
+   {
+    "id": "BI.2",
+    "desc": "A POST an over-long field -> 422, nothing written",
+    "pass": true,
+    "evidence": "status=422 version_after=4"
+   },
+   {
+    "id": "BI.3",
+    "desc": "A POST the same content back -> 200, version + 1, same content",
+    "pass": true,
+    "evidence": "post=200 version 4->5 get_version=5 same_content=True (one new brand version row for A, identical content)"
+   },
+   {
+    "id": "BI.4",
+    "desc": "B GET -> B's own, unchanged by A's save",
+    "pass": true,
+    "evidence": "status=200 same=True"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": false,
+    "evidence": "true=0 false=0"
+   }
+  ],
+  "kept_on": false,
+  "before": "false",
+  "logs": {
+   "true": 0,
+   "false": 0,
+   "sample": []
+  },
+  "reverted": "2026-10-22T07:59:00+00:00",
+  "after": "false",
+  "finished": "2026-10-22T07:59:10+00:00"
+ },
+ {
+  "flag": "aa859:publish_pool",
+  "started": "2026-10-22T07:59:10+00:00",
+  "checks": [
+   {
+    "id": "PB.0a",
+    "desc": "precondition: A's WordPress = E2E test site (connect it if disconnected)",
+    "pass": true,
+    "evidence": "was disconnected; connect status=200"
+   },
+   {
+    "id": "PB.0b",
+    "desc": "precondition: A has a blog piece in /pending",
+    "pass": true,
+    "evidence": "status=200 blog_pending=3"
+   },
+   {
+    "id": "PB.1",
+    "desc": "B publish A's piece -> 404, nothing written",
+    "pass": true,
+    "evidence": "status=404 detail='Content piece not found' piece_still_pending=True"
+   },
+   {
+    "id": "PB.2",
+    "desc": "A publish -> 200 published to the E2E site",
+    "pass": true,
+    "evidence": "status=200 publish_id=493cf976-8db5-4a1e-bad8-42cc280d477a external_id=9 detail='' (1 of A's daily publishes)"
+   },
+   {
+    "id": "PB.3",
+    "desc": "A publish the same piece again -> 200 replayed, same post",
+    "pass": true,
+    "evidence": "status=200 replayed=True same_post=True"
+   },
+   {
+    "id": "PB.4",
+    "desc": "A publish a random uuid -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "PB.5",
+    "desc": "publish-log shows A's row published",
+    "pass": true,
+    "evidence": "row=published"
+   },
+   {
+    "id": "PB.R",
+    "desc": "restore: unpublished (W4 route), WP post deleted, WP integration as it started",
+    "pass": true,
+    "evidence": "unpublish=200 remote=trashed wp_force_delete=200 deleted=True wp_disconnect=200 connected_after=False"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": false,
+    "evidence": "true=0 false=0"
+   }
+  ],
+  "kept_on": false,
+  "before": null,
+  "logs": {
+   "true": 0,
+   "false": 0,
+   "sample": []
+  },
+  "reverted": "2026-10-22T08:00:20+00:00",
+  "after": "false",
+  "finished": "2026-10-22T08:00:29+00:00"
+ },
+ {
+  "flag": "aa859:t2_version_detail_reads_pool",
+  "started": "2026-10-22T08:01:34+00:00",
+  "checks": [
+   {
+    "id": "DR.1",
+    "desc": "A /{id}, /{id}/full, export-docx -> 200, equal to the flag-OFF baseline",
+    "pass": true,
+    "evidence": "tour 200->200 same=True full same=True keys=['published', 'raw', 'seo'] docx 200 attachment; filename=tour_2aa6e292_v6.docx"
+   },
+   {
+    "id": "DR.2",
+    "desc": "B GET A's tour -> 404 (B has no version of it)",
+    "pass": true,
+    "evidence": "skipped: B rewrote the same tour, so /{id} is legitimately B's too"
+   },
+   {
+    "id": "DR.3",
+    "desc": "B export A's version -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "DR.4",
+    "desc": "A random uuid -> 404 on /{id} and export",
+    "pass": true,
+    "evidence": "tour=404 export=404"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": false,
+    "evidence": "true=6 false=3"
+   }
+  ],
+  "kept_on": false,
+  "before": "false",
+  "logs": {
+   "true": 6,
+   "false": 3,
+   "sample": [
+    "{\"route\": \"export_docx\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": false, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"16fa46af1f584a1581a0eadaba5064e2\", \"level\": \"info\", \"logger\": \"a",
+    "{\"route\": \"tour\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": false, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"67d3635ae45343839765fed9fed03bdb\", \"level\": \"info\", \"logger\": \"api.rout",
+    "{\"route\": \"export_docx\", \"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"found\": false, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"a40aaad1881341a1b29306aa25d21c32\", \"level\": \"info\", \"logger\": \"a",
+    "{\"route\": \"export_docx\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": true, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"ecb60c52acae41a49f9285eea9c03dbc\", \"level\": \"info\", \"logger\": \"ap",
+    "{\"route\": \"full\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": true, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"8c07724194664b7b8cc5474d978d967a\", \"level\": \"info\", \"logger\": \"api.route",
+    "{\"route\": \"tour\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": true, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"c9c34470c92f404b86c2909ce10b795d\", \"level\": \"info\", \"logger\": \"api.route"
+   ]
+  },
+  "reverted": "2026-10-22T08:02:52+00:00",
+  "after": "false",
+  "finished": "2026-10-22T08:03:01+00:00"
+ },
+ {
+  "flag": "aa859:brand_identity_pool",
+  "started": "2026-10-22T08:03:01+00:00",
+  "checks": [
+   {
+    "id": "BI.0",
+    "desc": "precondition: A has a brand identity (flag-OFF baseline)",
+    "pass": true,
+    "evidence": "version=5 history=5"
+   },
+   {
+    "id": "BI.1",
+    "desc": "A GET -> 200, equal to the flag-OFF baseline",
+    "pass": true,
+    "evidence": "status=200 same=True sha_on=4a837e793ccb444f sha_off=4a837e793ccb444f"
+   },
+   {
+    "id": "BI.2",
+    "desc": "A POST an over-long field -> 422, nothing written",
+    "pass": true,
+    "evidence": "status=422 version_after=5"
+   },
+   {
+    "id": "BI.3",
+    "desc": "A POST the same content back -> 200, version + 1, same content",
+    "pass": true,
+    "evidence": "post=200 version 5->6 get_version=6 same_content=True (one new brand version row for A, identical content)"
+   },
+   {
+    "id": "BI.4",
+    "desc": "B GET -> B's own, unchanged by A's save",
+    "pass": true,
+    "evidence": "status=200 same=True"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": false,
+    "evidence": "true=5 false=2"
+   }
+  ],
+  "kept_on": false,
+  "before": "false",
+  "logs": {
+   "true": 5,
+   "false": 2,
+   "sample": [
+    "{\"route\": \"get\", \"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"configured\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"fd53eb780864433cbe1978f3670c6d48\", \"level\": \"info\", \"logger\": \"api.routers.a",
+    "{\"route\": \"get\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"configured\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"fc9c3207c2224b5dbc8534eeef670f35\", \"level\": \"info\", \"logger\": \"api.routers.a",
+    "{\"route\": \"post\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"896984db02d64876a638030bf052fc5a\", \"level\": \"info\", \"logger\": \"api.routers.admin_pipeline\", \"ti",
+    "{\"route\": \"get\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"configured\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"2218220dcf6a48deb5bb0c56c9a422ff\", \"level\": \"info\", \"logger\": \"api.routers.a",
+    "{\"route\": \"get\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"configured\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"50280622429747048410fc09d45c5bd5\", \"level\": \"info\", \"logger\": \"api.routers.a",
+    "{\"route\": \"get\", \"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": false, \"configured\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"ba330ba9a25a420d8321e754498ce562\", \"level\": \"info\", \"logger\": \"api.routers."
+   ]
+  },
+  "reverted": "2026-10-22T08:04:13+00:00",
+  "after": "false",
+  "finished": "2026-10-22T08:04:22+00:00"
+ },
+ {
+  "flag": "aa859:publish_pool",
+  "started": "2026-10-22T08:04:22+00:00",
+  "checks": [
+   {
+    "id": "PB.0a",
+    "desc": "precondition: A's WordPress = E2E test site (connect it if disconnected)",
+    "pass": true,
+    "evidence": "was disconnected; connect status=200"
+   },
+   {
+    "id": "PB.0b",
+    "desc": "precondition: A has a blog piece in /pending",
+    "pass": true,
+    "evidence": "status=200 blog_pending=3"
+   },
+   {
+    "id": "PB.1",
+    "desc": "B publish A's piece -> 404, nothing written",
+    "pass": true,
+    "evidence": "status=404 detail='Content piece not found' piece_still_pending=True"
+   },
+   {
+    "id": "PB.2",
+    "desc": "A publish -> 200 published to the E2E site",
+    "pass": true,
+    "evidence": "status=200 publish_id=27cd286c-38bf-4448-ba87-14d5ed48ab01 external_id=11 detail='' (1 of A's daily publishes)"
+   },
+   {
+    "id": "PB.3",
+    "desc": "A publish the same piece again -> 200 replayed, same post",
+    "pass": true,
+    "evidence": "status=200 replayed=True same_post=True"
+   },
+   {
+    "id": "PB.4",
+    "desc": "A publish a random uuid -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "PB.5",
+    "desc": "publish-log shows A's row published",
+    "pass": true,
+    "evidence": "row=published"
+   },
+   {
+    "id": "PB.R",
+    "desc": "restore: unpublished (W4 route), WP post deleted, WP integration as it started",
+    "pass": true,
+    "evidence": "unpublish=200 remote=trashed wp_force_delete=200 deleted=True wp_disconnect=200 connected_after=False"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=5 false=0"
+   }
+  ],
+  "kept_on": true,
+  "before": "false",
+  "logs": {
+   "true": 5,
+   "false": 0,
+   "sample": [
+    "{\"piece_id\": \"035fc6ff-d937-41a5-b465-194ae962f330\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_publish\", \"request_id\": \"2252b4b4d66e4b33af7e85766f7b58cf\", \"level\": \"info\", \"logger\": \"api.",
+    "{\"piece_id\": \"5ce24c74-229c-44cc-a520-b2a6c643a44d\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_publish\", \"request_id\": \"05c97e52541e4ee1bde401bf8a9ec25d\", \"level\": \"info\", \"logger\": \"api.",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"piece_id\": \"5ce24c74-229c-44cc-a520-b2a6c643a44d\", \"channel\": \"blog\", \"success\": true, \"external_id\": \"11\", \"error\": null, \"used_tenant_pool\": true, \"event\": \"channel_publish\", \"request",
+    "{\"piece_id\": \"5ce24c74-229c-44cc-a520-b2a6c643a44d\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_publish\", \"request_id\": \"a34fd15a60094f7590a7dc620c441897\", \"level\": \"info\", \"logger\": \"api.",
+    "{\"piece_id\": \"5ce24c74-229c-44cc-a520-b2a6c643a44d\", \"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"event\": \"aa859_publish\", \"request_id\": \"bc303675bd494a139355255504b1043f\", \"level\": \"info\", \"logger\": \"api."
+   ]
+  },
+  "after": "true",
+  "finished": "2026-10-22T08:05:32+00:00"
+ },
+ {
+  "flag": "aa859:t2_version_detail_reads_pool",
+  "started": "2026-10-22T08:06:30+00:00",
+  "checks": [
+   {
+    "id": "DR.1",
+    "desc": "A /{id}, /{id}/full, export-docx -> 200, equal to the flag-OFF baseline",
+    "pass": true,
+    "evidence": "tour 200->200 same=True full same=True keys=['published', 'raw', 'seo'] docx 200 attachment; filename=tour_2aa6e292_v6.docx"
+   },
+   {
+    "id": "DR.2",
+    "desc": "B GET A's tour -> 404 (B has no version of it)",
+    "pass": true,
+    "evidence": "skipped: B rewrote the same tour, so /{id} is legitimately B's too"
+   },
+   {
+    "id": "DR.3",
+    "desc": "B export A's version -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "DR.4",
+    "desc": "A random uuid -> 404 on /{id} and export",
+    "pass": true,
+    "evidence": "tour=404 export=404"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=6 false=0"
+   }
+  ],
+  "kept_on": true,
+  "before": "false",
+  "logs": {
+   "true": 6,
+   "false": 0,
+   "sample": [
+    "{\"route\": \"export_docx\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": false, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"fe9c364259544c289abb818de5089b2d\", \"level\": \"info\", \"logger\": \"a",
+    "{\"route\": \"tour\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": false, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"908c5918c39e4349a2747ff0ed919a3c\", \"level\": \"info\", \"logger\": \"api.rout",
+    "{\"route\": \"export_docx\", \"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"found\": false, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"411781fdceea4b85a94c3f58e86f5217\", \"level\": \"info\", \"logger\": \"a",
+    "{\"route\": \"export_docx\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": true, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"7704820a198d4dd6abc2a882708449ff\", \"level\": \"info\", \"logger\": \"ap",
+    "{\"route\": \"full\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": true, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"88825efbd7a641319f7332315301f416\", \"level\": \"info\", \"logger\": \"api.route",
+    "{\"route\": \"tour\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"found\": true, \"event\": \"aa859_t2_version_detail_read\", \"request_id\": \"ecb41341fcc64b5c8b4567f69aaad887\", \"level\": \"info\", \"logger\": \"api.route"
+   ]
+  },
+  "after": "true",
+  "finished": "2026-10-22T08:07:50+00:00"
+ },
+ {
+  "flag": "aa859:brand_identity_pool",
+  "started": "2026-10-22T08:07:50+00:00",
+  "checks": [
+   {
+    "id": "BI.0",
+    "desc": "precondition: A has a brand identity (flag-OFF baseline)",
+    "pass": true,
+    "evidence": "version=6 history=6"
+   },
+   {
+    "id": "BI.1",
+    "desc": "A GET -> 200, equal to the flag-OFF baseline",
+    "pass": true,
+    "evidence": "status=200 same=True sha_on=595120b69f20d671 sha_off=595120b69f20d671"
+   },
+   {
+    "id": "BI.2",
+    "desc": "A POST an over-long field -> 422, nothing written",
+    "pass": true,
+    "evidence": "status=422 version_after=6"
+   },
+   {
+    "id": "BI.3",
+    "desc": "A POST the same content back -> 200, version + 1, same content",
+    "pass": true,
+    "evidence": "post=200 version 6->7 get_version=7 same_content=True (one new brand version row for A, identical content)"
+   },
+   {
+    "id": "BI.4",
+    "desc": "B GET -> B's own, unchanged by A's save",
+    "pass": true,
+    "evidence": "status=200 same=True"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=5 false=0"
+   }
+  ],
+  "kept_on": true,
+  "before": "false",
+  "logs": {
+   "true": 5,
+   "false": 0,
+   "sample": [
+    "{\"route\": \"get\", \"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"configured\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"612ae5a94ab748e9a884bd113ac242d1\", \"level\": \"info\", \"logger\": \"api.routers.a",
+    "{\"route\": \"get\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"configured\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"80ebeff26ca34141a41882fc5b978c7d\", \"level\": \"info\", \"logger\": \"api.routers.a",
+    "{\"route\": \"post\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"baa808a2babc41938c428ed121773dbf\", \"level\": \"info\", \"logger\": \"api.routers.admin_pipeline\", \"ti",
+    "{\"route\": \"get\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"configured\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"6124639d6fa143599602a19a0f7a6c30\", \"level\": \"info\", \"logger\": \"api.routers.a",
+    "{\"route\": \"get\", \"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"configured\": true, \"event\": \"aa859_brand_identity\", \"request_id\": \"025514603886478792344ff071dee54a\", \"level\": \"info\", \"logger\": \"api.routers.a"
+   ]
+  },
+  "after": "true",
+  "finished": "2026-10-22T08:09:05+00:00"
+ }
+]

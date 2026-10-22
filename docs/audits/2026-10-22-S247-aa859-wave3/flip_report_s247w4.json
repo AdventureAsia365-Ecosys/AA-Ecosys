@@ -1,0 +1,416 @@
+[
+ {
+  "flag": "aa859:slate_reads_pool",
+  "started": "2026-10-22T10:42:05+00:00",
+  "checks": [
+   {
+    "id": "ON.S1",
+    "desc": "A's Slate equals the flag-OFF baseline",
+    "pass": true,
+    "evidence": "status=200 subjects=90 base=90"
+   },
+   {
+    "id": "ON.S2",
+    "desc": "B's Slate holds none of A's Subjects",
+    "pass": true,
+    "evidence": "status=200 overlap=0"
+   },
+   {
+    "id": "ON.S3",
+    "desc": "POST /v1/slate/refresh still 202 (main pool)",
+    "pass": true,
+    "evidence": "status=202 body={'refresh': {'status': 'queued', 'refreshing': True, 'finished_at': None}}"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=2 false=0"
+   },
+   {
+    "id": "POOL",
+    "desc": "tenant pool p95 wait_ms < 50.0, no unavailable",
+    "pass": true,
+    "evidence": "{\"timing_lines\": 2, \"p95_wait_ms\": 41.4, \"unavailable\": 0}"
+   }
+  ],
+  "kept_on": true,
+  "before": "false",
+  "logs": {
+   "true": 2,
+   "false": 0,
+   "sample": [
+    "{\"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"event\": \"aa859_slate_read\", \"request_id\": \"ff0bb26610be4a3198cf033d54ddf960\", \"level\": \"info\", \"logger\": \"api.routers.v1_planning\", \"timestamp\": \"2026-10-22T10",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_slate_read\", \"request_id\": \"43b22709ef524bfea0233fd4ea067f82\", \"level\": \"info\", \"logger\": \"api.routers.v1_planning\", \"timestamp\": \"2026-10-22T10"
+   ]
+  },
+  "pool_health": {
+   "timing_lines": 2,
+   "p95_wait_ms": 41.4,
+   "unavailable": 0
+  },
+  "after": "true",
+  "finished": "2026-10-22T10:43:24+00:00"
+ },
+ {
+  "flag": "aa859:angle_gate_read_pool",
+  "started": "2026-10-22T10:43:24+00:00",
+  "checks": [
+   {
+    "id": "ON.G1",
+    "desc": "A's request equals the flag-OFF baseline",
+    "pass": true,
+    "evidence": "status=200"
+   },
+   {
+    "id": "ON.G2",
+    "desc": "B GET A's request -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "ON.G3",
+    "desc": "A GET a random request id -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "ON.G4",
+    "desc": "reopen then choose the same idx -> 200 / 200, back to approved, same angle",
+    "pass": true,
+    "evidence": "reopen=200 choose=200 status=approved"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=5 false=0"
+   },
+   {
+    "id": "POOL",
+    "desc": "tenant pool p95 wait_ms < 50.0, no unavailable",
+    "pass": true,
+    "evidence": "{\"timing_lines\": 3, \"p95_wait_ms\": 43.5, \"unavailable\": 0}"
+   }
+  ],
+  "kept_on": true,
+  "before": "false",
+  "logs": {
+   "true": 5,
+   "false": 0,
+   "sample": [
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"same_conn\": true, \"event\": \"aa859_angle_gate_reread\", \"acp_request_id\": \"b96797b8-3547-4c49-b48b-707979788a77\", \"request_id\": \"64a8df8756714f8088213e9c41ef016c",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"same_conn\": true, \"event\": \"aa859_angle_gate_reread\", \"acp_request_id\": \"b96797b8-3547-4c49-b48b-707979788a77\", \"request_id\": \"e90591eafd5f48bca6cbf93e159c9b52",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_angle_gate_read\", \"acp_request_id\": \"fb9dd20a-c901-4a6d-a2f6-91ead2c65d7d\", \"request_id\": \"273433fba350482ab246010b66c04bc5\", \"level\": \"info\", \"",
+    "{\"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"event\": \"aa859_angle_gate_read\", \"acp_request_id\": \"b96797b8-3547-4c49-b48b-707979788a77\", \"request_id\": \"751c804ab2a64b0bb6dc158b9026260f\", \"level\": \"info\", \"",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_angle_gate_read\", \"acp_request_id\": \"b96797b8-3547-4c49-b48b-707979788a77\", \"request_id\": \"5eb73e696e3d4004bb33624c964747bd\", \"level\": \"info\", \""
+   ]
+  },
+  "pool_health": {
+   "timing_lines": 3,
+   "p95_wait_ms": 43.5,
+   "unavailable": 0
+  },
+  "after": "true",
+  "finished": "2026-10-22T10:44:45+00:00"
+ },
+ {
+  "flag": "aa859:marketplace_pool",
+  "started": "2026-10-22T10:51:35+00:00",
+  "checks": [
+   {
+    "id": "ON.M1",
+    "desc": "terra-family's marketplace (total_atoms, tours) equals the baseline",
+    "pass": true,
+    "evidence": "got=(200, {'total_atoms': 0, 'total_tours': 3, 'sha': '5a954accc5259634'}) base=(200, {'total_atoms': 0, 'total_tours': 3, 'sha': '5a954accc5259634'})"
+   },
+   {
+    "id": "ON.M2",
+    "desc": "atlas-hearth's marketplace (total_atoms, tours) equals the baseline",
+    "pass": true,
+    "evidence": "got=(200, {'total_atoms': 0, 'total_tours': 6, 'sha': '9603c4a5a952aef5'}) base=(200, {'total_atoms': 0, 'total_tours': 6, 'sha': '9603c4a5a952aef5'})"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=2 false=0"
+   },
+   {
+    "id": "POOL",
+    "desc": "tenant pool p95 wait_ms < 50.0, no unavailable",
+    "pass": true,
+    "evidence": "{\"timing_lines\": 2, \"p95_wait_ms\": 42.0, \"unavailable\": 0}"
+   }
+  ],
+  "kept_on": true,
+  "before": "false",
+  "logs": {
+   "true": 2,
+   "false": 0,
+   "sample": [
+    "{\"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"event\": \"aa859_marketplace_read\", \"request_id\": \"c3e2c1c4fccc456a9dcc46d56e4e3fa0\", \"level\": \"info\", \"logger\": \"api.routers.v1_marketplace\", \"timestamp\": \"2026",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_marketplace_read\", \"request_id\": \"067b65b0f45445e190547663baee77a2\", \"level\": \"info\", \"logger\": \"api.routers.v1_marketplace\", \"timestamp\": \"2026"
+   ]
+  },
+  "pool_health": {
+   "timing_lines": 2,
+   "p95_wait_ms": 42.0,
+   "unavailable": 0
+  },
+  "after": "true",
+  "finished": "2026-10-22T10:52:52+00:00"
+ },
+ {
+  "flag": "aa859:reviews_pool",
+  "started": "2026-10-22T10:52:52+00:00",
+  "checks": [
+   {
+    "id": "ON.R1",
+    "desc": "A's review list equals the flag-OFF baseline",
+    "pass": true,
+    "evidence": "status=200 rows=10"
+   },
+   {
+    "id": "ON.R2",
+    "desc": "B's list equals its baseline and holds none of A's requests",
+    "pass": true,
+    "evidence": "status=200 overlap=0"
+   },
+   {
+    "id": "ON.R3",
+    "desc": "A's review detail equals the baseline",
+    "pass": true,
+    "evidence": "status=200"
+   },
+   {
+    "id": "ON.R4",
+    "desc": "B review detail of A's request -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=4 false=0"
+   },
+   {
+    "id": "POOL",
+    "desc": "tenant pool p95 wait_ms < 50.0, no unavailable",
+    "pass": false,
+    "evidence": "{\"timing_lines\": 4, \"p95_wait_ms\": 51.3, \"unavailable\": 0}"
+   }
+  ],
+  "kept_on": false,
+  "before": "false",
+  "logs": {
+   "true": 4,
+   "false": 0,
+   "sample": [
+    "{\"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"event\": \"aa859_review_detail\", \"acp_request_id\": \"b96797b8-3547-4c49-b48b-707979788a77\", \"request_id\": \"17da0572c16c4e14b037a3bc1d2021da\", \"level\": \"info\", \"lo",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_review_detail\", \"acp_request_id\": \"b96797b8-3547-4c49-b48b-707979788a77\", \"request_id\": \"8edfb37c8a024179a6aacc3715eaf2fd\", \"level\": \"info\", \"lo",
+    "{\"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"event\": \"aa859_reviews_list\", \"request_id\": \"087697d6f1da42ee89a3d0afd14f3399\", \"level\": \"info\", \"logger\": \"services.acp_content_writing.service\", \"timestamp\":",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_reviews_list\", \"request_id\": \"d4d4d0609caf482d98e16169c6fb8872\", \"level\": \"info\", \"logger\": \"services.acp_content_writing.service\", \"timestamp\":"
+   ]
+  },
+  "pool_health": {
+   "timing_lines": 4,
+   "p95_wait_ms": 51.3,
+   "unavailable": 0
+  },
+  "reverted": "2026-10-22T10:54:14+00:00",
+  "after": "false",
+  "finished": "2026-10-22T10:54:23+00:00"
+ },
+ {
+  "flag": "aa859:trip_reallocation_pool",
+  "started": "2026-10-22T10:54:23+00:00",
+  "checks": [
+   {
+    "id": "ON.T1",
+    "desc": "terra-family's suggestion equals the baseline",
+    "pass": true,
+    "evidence": "status=200"
+   },
+   {
+    "id": "ON.T2",
+    "desc": "atlas-hearth's suggestion equals the baseline",
+    "pass": true,
+    "evidence": "status=200"
+   },
+   {
+    "id": "ON.T3",
+    "desc": "confirm accept=false -> 200 accepted false (audit only)",
+    "pass": true,
+    "evidence": "status=200"
+   },
+   {
+    "id": "ON.T4",
+    "desc": "confirm accept=true NOT run live (covered in CI: test_aa859_wave4_pool_routes)",
+    "pass": true,
+    "evidence": "report this as not tested live"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=3 false=0"
+   },
+   {
+    "id": "POOL",
+    "desc": "tenant pool p95 wait_ms < 50.0, no unavailable",
+    "pass": true,
+    "evidence": "{\"timing_lines\": 3, \"p95_wait_ms\": 41.6, \"unavailable\": 0}"
+   }
+  ],
+  "kept_on": true,
+  "before": "false",
+  "logs": {
+   "true": 3,
+   "false": 0,
+   "sample": [
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"year\": 2027, \"quarter\": 1, \"used_tenant_pool\": true, \"event\": \"aa859_trip_reallocation_confirm\", \"request_id\": \"a7511a1dcaa74850a89489fb2a059c79\", \"level\": \"info\", \"logger\": \"services.a",
+    "{\"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"year\": 2027, \"quarter\": 1, \"used_tenant_pool\": true, \"event\": \"aa859_trip_reallocation_suggest\", \"request_id\": \"c1de11eaf5324f0bbc600f89ee0f5e0b\", \"level\": \"info\", \"logger\": \"services.a",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"year\": 2027, \"quarter\": 1, \"used_tenant_pool\": true, \"event\": \"aa859_trip_reallocation_suggest\", \"request_id\": \"d98ba946694d40e3b92397cb224ff260\", \"level\": \"info\", \"logger\": \"services.a"
+   ]
+  },
+  "pool_health": {
+   "timing_lines": 3,
+   "p95_wait_ms": 41.6,
+   "unavailable": 0
+  },
+  "after": "true",
+  "finished": "2026-10-22T10:55:40+00:00"
+ },
+ {
+  "flag": "aa859:reviews_pool",
+  "started": "2026-10-22T10:55:59+00:00",
+  "checks": [
+   {
+    "id": "ON.R1",
+    "desc": "A's review list equals the flag-OFF baseline",
+    "pass": true,
+    "evidence": "status=200 rows=10"
+   },
+   {
+    "id": "ON.R2",
+    "desc": "B's list equals its baseline and holds none of A's requests",
+    "pass": true,
+    "evidence": "status=200 overlap=0"
+   },
+   {
+    "id": "ON.R3",
+    "desc": "A's review detail equals the baseline",
+    "pass": true,
+    "evidence": "status=200"
+   },
+   {
+    "id": "ON.R4",
+    "desc": "B review detail of A's request -> 404",
+    "pass": true,
+    "evidence": "status=404"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=4 false=0"
+   },
+   {
+    "id": "POOL",
+    "desc": "tenant pool p95 wait_ms < 50.0, no unavailable",
+    "pass": true,
+    "evidence": "{\"timing_lines\": 4, \"p95_wait_ms\": 41.8, \"unavailable\": 0}"
+   }
+  ],
+  "kept_on": true,
+  "before": "false",
+  "logs": {
+   "true": 4,
+   "false": 0,
+   "sample": [
+    "{\"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"event\": \"aa859_review_detail\", \"acp_request_id\": \"b96797b8-3547-4c49-b48b-707979788a77\", \"request_id\": \"b33b8b1684db45fe87720bf4430e6ae6\", \"level\": \"info\", \"lo",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_review_detail\", \"acp_request_id\": \"b96797b8-3547-4c49-b48b-707979788a77\", \"request_id\": \"60f96f38faf9490da014fe8c718bae9b\", \"level\": \"info\", \"lo",
+    "{\"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"used_tenant_pool\": true, \"event\": \"aa859_reviews_list\", \"request_id\": \"642088790c74407499d6eb16b5d9798c\", \"level\": \"info\", \"logger\": \"services.acp_content_writing.service\", \"timestamp\":",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"used_tenant_pool\": true, \"event\": \"aa859_reviews_list\", \"request_id\": \"ec91a3efa30c4d39b5d6c3babe01dfbd\", \"level\": \"info\", \"logger\": \"services.acp_content_writing.service\", \"timestamp\":"
+   ]
+  },
+  "pool_health": {
+   "timing_lines": 4,
+   "p95_wait_ms": 41.8,
+   "unavailable": 0
+  },
+  "after": "true",
+  "finished": "2026-10-22T10:57:20+00:00"
+ },
+ {
+  "flag": "aa859:subject_decide_pool",
+  "started": "2026-10-22T10:57:42+00:00",
+  "checks": [
+   {
+    "id": "ON.D1",
+    "desc": "B pick / cut A's Subject -> 404 / 404",
+    "pass": true,
+    "evidence": "pick=404 cut=404"
+   },
+   {
+    "id": "ON.D2",
+    "desc": "A pick #1 -> 200 with a request id (IRREVERSIBLE: stays picked)",
+    "pass": true,
+    "evidence": "status=200"
+   },
+   {
+    "id": "ON.D3",
+    "desc": "A pick #1 again -> 409",
+    "pass": true,
+    "evidence": "status=409"
+   },
+   {
+    "id": "ON.D4",
+    "desc": "A cut #2 -> 200 cut",
+    "pass": true,
+    "evidence": "status=200"
+   },
+   {
+    "id": "ON.D5",
+    "desc": "concurrent pick and cut of #3 -> one 200, one 409",
+    "pass": true,
+    "evidence": "codes=[200, 409]"
+   },
+   {
+    "id": "LOG",
+    "desc": "used_tenant_pool=True seen, no False with the flag on",
+    "pass": true,
+    "evidence": "true=7 false=0"
+   },
+   {
+    "id": "POOL",
+    "desc": "tenant pool p95 wait_ms < 50.0, no unavailable",
+    "pass": true,
+    "evidence": "{\"timing_lines\": 7, \"p95_wait_ms\": 0.0, \"unavailable\": 0}"
+   }
+  ],
+  "kept_on": true,
+  "before": "false",
+  "logs": {
+   "true": 7,
+   "false": 0,
+   "sample": [
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"subject_id\": \"3a97b4f0-d6b0-477b-864d-c04dba1e47f7\", \"used_tenant_pool\": true, \"event\": \"aa859_subject_pick\", \"request_id\": \"f1f7dd3560c44a21a2e3fa5cf2ab7bf9\", \"level\": \"info\", \"logger\"",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"subject_id\": \"3a97b4f0-d6b0-477b-864d-c04dba1e47f7\", \"used_tenant_pool\": true, \"event\": \"aa859_subject_cut\", \"request_id\": \"5ab089e3979f4413be2c8ef4cd1dd65f\", \"level\": \"info\", \"logger\":",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"subject_id\": \"3914ce7c-f014-47b1-882d-3aff49756b2a\", \"used_tenant_pool\": true, \"event\": \"aa859_subject_cut\", \"request_id\": \"e1c81f191fc745cca9601a375a2fa027\", \"level\": \"info\", \"logger\":",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"subject_id\": \"c8993103-803d-44d9-92c6-10d34487dba1\", \"used_tenant_pool\": true, \"event\": \"aa859_subject_pick\", \"request_id\": \"e3edf6b17ec941db924372241a9c09ed\", \"level\": \"info\", \"logger\"",
+    "{\"tenant_id\": \"20d07d32-ed98-405f-81d5-0c2399c9fcdf\", \"subject_id\": \"c8993103-803d-44d9-92c6-10d34487dba1\", \"used_tenant_pool\": true, \"event\": \"aa859_subject_pick\", \"request_id\": \"a7b43a3dc0f24657a492700b37242623\", \"level\": \"info\", \"logger\"",
+    "{\"tenant_id\": \"9149d3c6-fcaf-4400-8e7a-4ed5e557e146\", \"subject_id\": \"3914ce7c-f014-47b1-882d-3aff49756b2a\", \"used_tenant_pool\": true, \"event\": \"aa859_subject_cut\", \"request_id\": \"45a70f4b2e5d401bade94bcd3ee3418a\", \"level\": \"info\", \"logger\":"
+   ]
+  },
+  "pool_health": {
+   "timing_lines": 7,
+   "p95_wait_ms": 0.0,
+   "unavailable": 0
+  },
+  "after": "true",
+  "finished": "2026-10-22T10:59:01+00:00"
+ }
+]

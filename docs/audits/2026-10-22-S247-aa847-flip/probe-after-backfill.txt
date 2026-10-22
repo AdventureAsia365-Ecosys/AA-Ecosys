@@ -1,0 +1,1168 @@
+SCRIPT start readers_from=AA-TripPlanner-Web@b1775cc66ea7 readers=42 readers_absent=browse.search.CIS_SEARCH_SQL countries=Laos,Vietnam
+SCRIPT pass role=tripplanner
+SCRIPT inputs live_tours=892 cis_component_sources=120 cis_graph_sources=121 frozen_keys=80
+SCRIPT tiles_input country=Laos one_degree=23 ten_degree=1
+SCRIPT detail_input country=Laos destinations=150 of=401
+SCRIPT search_input country=Laos queries=8
+SCRIPT tour_route_input country=Laos tours=30
+SCRIPT assembly_input country=Laos destinations=8 legacy_ids=8 cis_ids=8
+SCRIPT tiles_input country=Vietnam one_degree=14 ten_degree=1
+SCRIPT detail_input country=Vietnam destinations=66 of=66
+SCRIPT search_input country=Vietnam queries=0
+SCRIPT tour_route_input country=Vietnam tours=1
+SCRIPT assembly_input country=Vietnam destinations=8 legacy_ids=0 cis_ids=8
+SCRIPT repeat run=1 of=3 elapsed_s=7.9
+SCRIPT repeat run=2 of=3 elapsed_s=7.1
+SCRIPT repeat run=3 of=3 elapsed_s=7.2
+SCRIPT timing reader=assembly_activities country=Laos source=cis calls=8 rows=11 total_ms=8.1 per_call_ms=1.0 max_ms=3.2 errors=0 repeats=3 partial=0 runs=2.1/1.0/1.0
+SCRIPT timing reader=assembly_activities country=Laos source=legacy calls=8 rows=6 total_ms=7.4 per_call_ms=0.9 max_ms=1.7 errors=0 repeats=3 partial=0 runs=1.1/0.9/0.9
+SCRIPT plan reader=assembly_activities country=Laos source=cis node=Aggregate:- own_ms=0.1 rows=5 loops=1 shared_hit=42 shared_read=0
+SCRIPT plan reader=assembly_activities country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=6 shared_hit=18 shared_read=0
+SCRIPT plan reader=assembly_activities country=Laos source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=6 shared_hit=18 shared_read=0
+SCRIPT plan reader=assembly_activities country=Laos source=cis node=Sort:- own_ms=0.0 rows=6 loops=1 shared_hit=42 shared_read=0
+SCRIPT plan reader=assembly_activities country=Laos source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=assembly_activities country=Laos source=cis node=Sort:- own_ms=0.0 rows=5 loops=1 shared_hit=42 shared_read=0
+SCRIPT qual reader=assembly_activities country=Laos source=cis marker="destination_id =" at="Bitmap Heap Scan:tour_place" pushed=t
+SCRIPT qual reader=assembly_activities country=Laos source=cis marker="destination_id =" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_activities country=Laos source=cis exec_ms=0.2 planning_ms=0.8 jit=f
+SCRIPT plan reader=assembly_activities country=Laos source=legacy node="Bitmap Index Scan:-" own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=assembly_activities country=Laos source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=assembly_activities country=Laos source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=assembly_activities country=Laos source=legacy node=Aggregate:- own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=assembly_activities country=Laos source=legacy node="Bitmap Heap Scan:itinerary_components" own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT qual reader=assembly_activities country=Laos source=legacy marker="destination_id =" at="Bitmap Heap Scan:itinerary_components" pushed=t
+SCRIPT qual reader=assembly_activities country=Laos source=legacy marker="destination_id =" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_activities country=Laos source=legacy exec_ms=0.0 planning_ms=0.2 jit=f
+SCRIPT timing reader=assembly_activities country=Vietnam source=cis calls=8 rows=9 total_ms=8.1 per_call_ms=1.0 max_ms=2.1 errors=0 repeats=3 partial=0 runs=1.1/0.9/1.0
+SCRIPT timing reader=assembly_activities country=Vietnam source=legacy calls=8 rows=0 total_ms=6.9 per_call_ms=0.9 max_ms=1.8 errors=0 repeats=3 partial=0 runs=0.9/1.0/0.8
+SCRIPT plan reader=assembly_activities country=Vietnam source=cis node=Aggregate:- own_ms=0.0 rows=1 loops=1 shared_hit=12 shared_read=0
+SCRIPT plan reader=assembly_activities country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=assembly_activities country=Vietnam source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=assembly_activities country=Vietnam source=cis node="Index Scan:tour_place" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=assembly_activities country=Vietnam source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=assembly_activities country=Vietnam source=cis node="Nested Loop:-" own_ms=0.0 rows=1 loops=1 shared_hit=6 shared_read=0
+SCRIPT qual reader=assembly_activities country=Vietnam source=cis marker="destination_id =" at="Index Scan:tour_place" pushed=t
+SCRIPT plan_total reader=assembly_activities country=Vietnam source=cis exec_ms=0.1 planning_ms=0.8 jit=f
+SCRIPT plan reader=assembly_activities country=Vietnam source=legacy node="Bitmap Index Scan:-" own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=assembly_activities country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=assembly_activities country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=assembly_activities country=Vietnam source=legacy node="Bitmap Heap Scan:itinerary_components" own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=assembly_activities country=Vietnam source=legacy node=Aggregate:- own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT qual reader=assembly_activities country=Vietnam source=legacy marker="destination_id =" at="Bitmap Heap Scan:itinerary_components" pushed=t
+SCRIPT qual reader=assembly_activities country=Vietnam source=legacy marker="destination_id =" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_activities country=Vietnam source=legacy exec_ms=0.0 planning_ms=0.1 jit=f
+SCRIPT timing reader=assembly_components country=Laos source=cis calls=1 rows=8 total_ms=3.7 per_call_ms=3.7 max_ms=4.7 errors=0 repeats=3 partial=0 runs=4.7/3.7/3.6
+SCRIPT timing reader=assembly_components country=Laos source=legacy calls=1 rows=8 total_ms=1.4 per_call_ms=1.4 max_ms=1.8 errors=0 repeats=3 partial=0 runs=1.8/1.3/1.4
+SCRIPT plan reader=assembly_components country=Laos source=cis node="Seq Scan:destinations" own_ms=0.7 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=assembly_components country=Laos source=cis node="Hash Join:-" own_ms=0.2 rows=8 loops=1 shared_hit=191 shared_read=0
+SCRIPT plan reader=assembly_components country=Laos source=cis node="Seq Scan:tour_segment" own_ms=0.1 rows=62 loops=1 shared_hit=9 shared_read=0
+SCRIPT plan reader=assembly_components country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_components country=Laos source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_components country=Laos source=cis node=Hash:- own_ms=0.0 rows=62 loops=1 shared_hit=9 shared_read=0
+SCRIPT qual reader=assembly_components country=Laos source=cis marker="= ANY" at="Bitmap Heap Scan:tour_place" pushed=t
+SCRIPT qual reader=assembly_components country=Laos source=cis marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_components country=Laos source=cis exec_ms=1.2 planning_ms=1.4 jit=f
+SCRIPT plan reader=assembly_components country=Laos source=legacy node="Bitmap Index Scan:-" own_ms=0.0 rows=8 loops=1 shared_hit=16 shared_read=0
+SCRIPT plan reader=assembly_components country=Laos source=legacy node="Index Scan:destinations" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_components country=Laos source=legacy node="Nested Loop:-" own_ms=0.0 rows=8 loops=1 shared_hit=46 shared_read=0
+SCRIPT plan reader=assembly_components country=Laos source=legacy node="Bitmap Heap Scan:itinerary_components" own_ms=0.0 rows=8 loops=1 shared_hit=22 shared_read=0
+SCRIPT qual reader=assembly_components country=Laos source=legacy marker="= ANY" at="Bitmap Heap Scan:itinerary_components" pushed=t
+SCRIPT qual reader=assembly_components country=Laos source=legacy marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_components country=Laos source=legacy exec_ms=0.1 planning_ms=0.2 jit=f
+SCRIPT timing reader=assembly_components country=Vietnam source=cis calls=1 rows=8 total_ms=3.5 per_call_ms=3.5 max_ms=3.8 errors=0 repeats=3 partial=0 runs=3.8/3.5/3.5
+SCRIPT timing reader=assembly_components country=Vietnam source=legacy calls=1 rows=0 total_ms=1.2 per_call_ms=1.2 max_ms=1.4 errors=0 repeats=3 partial=0 runs=1.2/1.1/1.4
+SCRIPT plan reader=assembly_components country=Vietnam source=cis node="Seq Scan:destinations" own_ms=0.7 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=assembly_components country=Vietnam source=cis node="Hash Join:-" own_ms=0.2 rows=8 loops=1 shared_hit=191 shared_read=0
+SCRIPT plan reader=assembly_components country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_components country=Vietnam source=cis node="Seq Scan:tour_segment" own_ms=0.0 rows=62 loops=1 shared_hit=9 shared_read=0
+SCRIPT plan reader=assembly_components country=Vietnam source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_components country=Vietnam source=cis node=Hash:- own_ms=0.0 rows=62 loops=1 shared_hit=9 shared_read=0
+SCRIPT qual reader=assembly_components country=Vietnam source=cis marker="= ANY" at="Bitmap Heap Scan:tour_place" pushed=t
+SCRIPT qual reader=assembly_components country=Vietnam source=cis marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_components country=Vietnam source=cis exec_ms=1.2 planning_ms=1.4 jit=f
+SCRIPT plan reader=assembly_components country=Vietnam source=legacy node="Index Scan:itinerary_components" own_ms=0.0 rows=0 loops=1 shared_hit=0 shared_read=0
+SCRIPT plan reader=assembly_components country=Vietnam source=legacy node="Nested Loop:-" own_ms=0.0 rows=0 loops=1 shared_hit=0 shared_read=0
+SCRIPT plan reader=assembly_components country=Vietnam source=legacy node="Index Scan:destinations" own_ms=0.0 rows=0 loops=0 shared_hit=0 shared_read=0
+SCRIPT qual reader=assembly_components country=Vietnam source=legacy marker="= ANY" at="Index Scan:itinerary_components" pushed=t
+SCRIPT plan_total reader=assembly_components country=Vietnam source=legacy exec_ms=0.0 planning_ms=0.2 jit=f
+SCRIPT timing reader=assembly_id_map country=Laos source=cis calls=1 rows=0 total_ms=1.1 per_call_ms=1.1 max_ms=1.8 errors=0 repeats=3 partial=0 runs=1.8/1.0/1.1
+SCRIPT plan reader=assembly_id_map country=Laos source=cis node="Bitmap Index Scan:-" own_ms=0.0 rows=0 loops=1 shared_hit=16 shared_read=0
+SCRIPT plan reader=assembly_id_map country=Laos source=cis node="Bitmap Heap Scan:component_id_map" own_ms=0.0 rows=0 loops=1 shared_hit=16 shared_read=0
+SCRIPT qual reader=assembly_id_map country=Laos source=cis marker="= ANY" at="Bitmap Heap Scan:component_id_map" pushed=t
+SCRIPT qual reader=assembly_id_map country=Laos source=cis marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_id_map country=Laos source=cis exec_ms=0.0 planning_ms=0.0 jit=f
+SCRIPT timing reader=assembly_options country=Laos source=cis calls=1 rows=9 total_ms=2.3 per_call_ms=2.3 max_ms=3.0 errors=0 repeats=3 partial=0 runs=3.0/2.3/2.3
+SCRIPT timing reader=assembly_options country=Laos source=legacy calls=1 rows=6 total_ms=1.2 per_call_ms=1.2 max_ms=1.6 errors=0 repeats=3 partial=0 runs=1.6/1.2/1.2
+SCRIPT plan reader=assembly_options country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.1 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_options country=Laos source=cis node="Index Scan:published_tours" own_ms=0.1 rows=1 loops=13 shared_hit=39 shared_read=0
+SCRIPT plan reader=assembly_options country=Laos source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=13 shared_hit=39 shared_read=0
+SCRIPT plan reader=assembly_options country=Laos source=cis node=Sort:- own_ms=0.0 rows=13 loops=1 shared_hit=126 shared_read=0
+SCRIPT plan reader=assembly_options country=Laos source=cis node="Nested Loop:-" own_ms=0.0 rows=13 loops=1 shared_hit=48 shared_read=0
+SCRIPT plan reader=assembly_options country=Laos source=cis node="Bitmap Heap Scan:tour_place" own_ms=0.0 rows=13 loops=1 shared_hit=24 shared_read=0
+SCRIPT qual reader=assembly_options country=Laos source=cis marker="= ANY" at="Bitmap Heap Scan:tour_place" pushed=t
+SCRIPT qual reader=assembly_options country=Laos source=cis marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_options country=Laos source=cis exec_ms=0.3 planning_ms=1.0 jit=f
+SCRIPT plan reader=assembly_options country=Laos source=legacy node="Bitmap Heap Scan:itinerary_components" own_ms=0.0 rows=18 loops=1 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_options country=Laos source=legacy node=Sort:- own_ms=0.0 rows=18 loops=1 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_options country=Laos source=legacy node="Bitmap Index Scan:-" own_ms=0.0 rows=18 loops=1 shared_hit=16 shared_read=0
+SCRIPT plan reader=assembly_options country=Laos source=legacy node=Unique:- own_ms=0.0 rows=6 loops=1 shared_hit=24 shared_read=0
+SCRIPT qual reader=assembly_options country=Laos source=legacy marker="= ANY" at="Bitmap Heap Scan:itinerary_components" pushed=t
+SCRIPT qual reader=assembly_options country=Laos source=legacy marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_options country=Laos source=legacy exec_ms=0.1 planning_ms=0.1 jit=f
+SCRIPT timing reader=assembly_options country=Vietnam source=cis calls=1 rows=16 total_ms=2.3 per_call_ms=2.3 max_ms=2.3 errors=0 repeats=3 partial=0 runs=2.3/2.3/2.1
+SCRIPT timing reader=assembly_options country=Vietnam source=legacy calls=1 rows=0 total_ms=1.0 per_call_ms=1.0 max_ms=1.1 errors=0 repeats=3 partial=0 runs=1.0/1.0/1.1
+SCRIPT plan reader=assembly_options country=Vietnam source=cis node="Index Scan:published_tours" own_ms=0.1 rows=1 loops=17 shared_hit=51 shared_read=0
+SCRIPT plan reader=assembly_options country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=5 shared_hit=15 shared_read=0
+SCRIPT plan reader=assembly_options country=Vietnam source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=17 shared_hit=51 shared_read=0
+SCRIPT plan reader=assembly_options country=Vietnam source=cis node=Sort:- own_ms=0.0 rows=17 loops=1 shared_hit=139 shared_read=0
+SCRIPT plan reader=assembly_options country=Vietnam source=cis node=Unique:- own_ms=0.0 rows=16 loops=1 shared_hit=139 shared_read=0
+SCRIPT plan reader=assembly_options country=Vietnam source=cis node=Memoize:- own_ms=0.0 rows=1 loops=17 shared_hit=15 shared_read=0
+SCRIPT qual reader=assembly_options country=Vietnam source=cis marker="= ANY" at="Bitmap Heap Scan:tour_place" pushed=t
+SCRIPT qual reader=assembly_options country=Vietnam source=cis marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_options country=Vietnam source=cis exec_ms=0.3 planning_ms=0.9 jit=f
+SCRIPT plan reader=assembly_options country=Vietnam source=legacy node="Bitmap Index Scan:-" own_ms=0.0 rows=0 loops=1 shared_hit=16 shared_read=0
+SCRIPT plan reader=assembly_options country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=16 shared_read=0
+SCRIPT plan reader=assembly_options country=Vietnam source=legacy node="Bitmap Heap Scan:itinerary_components" own_ms=0.0 rows=0 loops=1 shared_hit=16 shared_read=0
+SCRIPT plan reader=assembly_options country=Vietnam source=legacy node=Unique:- own_ms=0.0 rows=0 loops=1 shared_hit=16 shared_read=0
+SCRIPT qual reader=assembly_options country=Vietnam source=legacy marker="= ANY" at="Bitmap Heap Scan:itinerary_components" pushed=t
+SCRIPT qual reader=assembly_options country=Vietnam source=legacy marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_options country=Vietnam source=legacy exec_ms=0.0 planning_ms=0.1 jit=f
+SCRIPT timing reader=assembly_route_candidates country=Laos source=cis calls=1 rows=24 total_ms=31.0 per_call_ms=31.0 max_ms=32.9 errors=0 repeats=3 partial=0 runs=32.9/31.0/30.3
+SCRIPT timing reader=assembly_route_candidates country=Laos source=legacy calls=1 rows=19 total_ms=23.6 per_call_ms=23.6 max_ms=24.8 errors=0 repeats=3 partial=0 runs=24.8/23.5/23.6
+SCRIPT plan reader=assembly_route_candidates country=Laos source=cis node="CTE Scan:d" own_ms=26.8 rows=323 loops=1 shared_hit=19211 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=cis node="Bitmap Index Scan:-" own_ms=26.4 rows=324 loops=1 shared_hit=19168 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=cis node="CTE Scan:y" own_ms=25.8 rows=626 loops=1 shared_hit=18520 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=cis node="Bitmap Index Scan:-" own_ms=18.5 rows=34 loops=1 shared_hit=14432 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=cis node="CTE Scan:x" own_ms=18.3 rows=142 loops=1 shared_hit=14364 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=cis node="CTE Scan:nr" own_ms=9.2 rows=42 loops=1 shared_hit=7854 shared_read=0
+SCRIPT qual reader=assembly_route_candidates country=Laos source=cis marker=<=> at=- pushed=-
+SCRIPT plan_total reader=assembly_route_candidates country=Laos source=cis exec_ms=28.8 planning_ms=3.7 jit=f
+SCRIPT plan reader=assembly_route_candidates country=Laos source=legacy node="Index Scan:tour_stop" own_ms=6.5 rows=1 loops=2179 shared_hit=6549 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=legacy node="Index Scan:tour_stop" own_ms=6.4 rows=1 loops=2149 shared_hit=6459 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=legacy node=Result:- own_ms=2.2 rows=1 loops=2179 shared_hit=6549 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=legacy node=Result:- own_ms=2.1 rows=1 loops=2149 shared_hit=6459 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=legacy node="Nested Loop:-" own_ms=1.6 rows=3061 loops=1 shared_hit=14575 shared_read=0
+SCRIPT plan reader=assembly_route_candidates country=Laos source=legacy node="Seq Scan:itinerary_components" own_ms=1.5 rows=3905 loops=1 shared_hit=166 shared_read=0
+SCRIPT qual reader=assembly_route_candidates country=Laos source=legacy marker=<=> at=- pushed=-
+SCRIPT plan_total reader=assembly_route_candidates country=Laos source=legacy exec_ms=24.7 planning_ms=1.2 jit=f
+SCRIPT timing reader=assembly_taste country=Laos source=cis calls=1 rows=8 total_ms=3.9 per_call_ms=3.9 max_ms=4.5 errors=0 repeats=3 partial=0 runs=4.5/3.9/3.8
+SCRIPT timing reader=assembly_taste country=Laos source=legacy calls=1 rows=8 total_ms=2.2 per_call_ms=2.2 max_ms=2.7 errors=0 repeats=3 partial=0 runs=2.7/2.0/2.2
+SCRIPT plan reader=assembly_taste country=Laos source=cis node="Seq Scan:destinations" own_ms=0.5 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=assembly_taste country=Laos source=cis node="Hash Join:-" own_ms=0.2 rows=8 loops=1 shared_hit=182 shared_read=0
+SCRIPT plan reader=assembly_taste country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_taste country=Laos source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_taste country=Laos source=cis node="Bitmap Index Scan:-" own_ms=0.0 rows=8 loops=1 shared_hit=16 shared_read=0
+SCRIPT plan reader=assembly_taste country=Laos source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT qual reader=assembly_taste country=Laos source=cis marker="= ANY" at="Bitmap Heap Scan:tour_place" pushed=t
+SCRIPT qual reader=assembly_taste country=Laos source=cis marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_taste country=Laos source=cis exec_ms=1.0 planning_ms=1.1 jit=f
+SCRIPT plan reader=assembly_taste country=Laos source=legacy node="Bitmap Index Scan:-" own_ms=0.0 rows=8 loops=1 shared_hit=16 shared_read=0
+SCRIPT plan reader=assembly_taste country=Laos source=legacy node="Index Scan:destinations" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_taste country=Laos source=legacy node="Bitmap Heap Scan:itinerary_components" own_ms=0.0 rows=8 loops=1 shared_hit=22 shared_read=0
+SCRIPT plan reader=assembly_taste country=Laos source=legacy node="Nested Loop:-" own_ms=0.0 rows=8 loops=1 shared_hit=46 shared_read=0
+SCRIPT qual reader=assembly_taste country=Laos source=legacy marker="= ANY" at="Bitmap Heap Scan:itinerary_components" pushed=t
+SCRIPT qual reader=assembly_taste country=Laos source=legacy marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_taste country=Laos source=legacy exec_ms=0.1 planning_ms=0.2 jit=f
+SCRIPT timing reader=assembly_taste country=Vietnam source=cis calls=1 rows=8 total_ms=3.6 per_call_ms=3.6 max_ms=3.8 errors=0 repeats=3 partial=0 runs=3.8/3.6/3.5
+SCRIPT timing reader=assembly_taste country=Vietnam source=legacy calls=1 rows=0 total_ms=1.2 per_call_ms=1.2 max_ms=1.2 errors=0 repeats=3 partial=0 runs=1.2/1.0/1.2
+SCRIPT plan reader=assembly_taste country=Vietnam source=cis node="Seq Scan:destinations" own_ms=0.6 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=assembly_taste country=Vietnam source=cis node="Hash Join:-" own_ms=0.2 rows=8 loops=1 shared_hit=182 shared_read=0
+SCRIPT plan reader=assembly_taste country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_taste country=Vietnam source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT plan reader=assembly_taste country=Vietnam source=cis node="Bitmap Index Scan:-" own_ms=0.0 rows=8 loops=1 shared_hit=16 shared_read=0
+SCRIPT plan reader=assembly_taste country=Vietnam source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=8 shared_hit=24 shared_read=0
+SCRIPT qual reader=assembly_taste country=Vietnam source=cis marker="= ANY" at="Bitmap Heap Scan:tour_place" pushed=t
+SCRIPT qual reader=assembly_taste country=Vietnam source=cis marker="= ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=assembly_taste country=Vietnam source=cis exec_ms=1.0 planning_ms=1.0 jit=f
+SCRIPT plan reader=assembly_taste country=Vietnam source=legacy node="Nested Loop:-" own_ms=0.0 rows=0 loops=1 shared_hit=0 shared_read=0
+SCRIPT plan reader=assembly_taste country=Vietnam source=legacy node="Index Scan:itinerary_components" own_ms=0.0 rows=0 loops=1 shared_hit=0 shared_read=0
+SCRIPT plan reader=assembly_taste country=Vietnam source=legacy node="Index Scan:destinations" own_ms=0.0 rows=0 loops=0 shared_hit=0 shared_read=0
+SCRIPT qual reader=assembly_taste country=Vietnam source=legacy marker="= ANY" at="Index Scan:itinerary_components" pushed=t
+SCRIPT plan_total reader=assembly_taste country=Vietnam source=legacy exec_ms=0.0 planning_ms=0.2 jit=f
+SCRIPT timing reader=by_country country=Laos source=cis calls=1 rows=327 total_ms=9.9 per_call_ms=9.9 max_ms=11.4 errors=0 repeats=3 partial=0 runs=11.4/9.9/9.7
+SCRIPT timing reader=by_country country=Laos source=legacy calls=1 rows=154 total_ms=3.0 per_call_ms=3.0 max_ms=4.0 errors=0 repeats=3 partial=0 runs=4.0/3.0/3.0
+SCRIPT plan reader=by_country country=Laos source=cis node=Memoize:- own_ms=1.7 rows=1 loops=2455 shared_hit=367 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=cis node="Seq Scan:published_tours" own_ms=1.3 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=cis node="Hash Join:-" own_ms=0.8 rows=2153 loops=1 shared_hit=834 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.7 rows=1 loops=121 shared_hit=367 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=cis node=Aggregate:- own_ms=0.6 rows=327 loops=1 shared_hit=924 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=cis node="Hash Join:-" own_ms=0.6 rows=2455 loops=1 shared_hit=745 shared_read=0
+SCRIPT qual reader=by_country country=Laos source=cis marker="country =" at="Seq Scan:destinations" pushed=t
+SCRIPT plan_total reader=by_country country=Laos source=cis exec_ms=8.9 planning_ms=1.1 jit=f
+SCRIPT plan reader=by_country country=Laos source=legacy node="Hash Join:-" own_ms=0.7 rows=428 loops=1 shared_hit=255 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=legacy node="Seq Scan:itinerary_components" own_ms=0.5 rows=3905 loops=1 shared_hit=166 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=legacy node="Seq Scan:destinations" own_ms=0.4 rows=440 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=legacy node=Aggregate:- own_ms=0.2 rows=154 loops=1 shared_hit=255 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=legacy node=Hash:- own_ms=0.1 rows=440 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=by_country country=Laos source=legacy node=Sort:- own_ms=0.0 rows=154 loops=1 shared_hit=255 shared_read=0
+SCRIPT qual reader=by_country country=Laos source=legacy marker="country =" at="Seq Scan:destinations" pushed=t
+SCRIPT plan_total reader=by_country country=Laos source=legacy exec_ms=1.9 planning_ms=0.3 jit=f
+SCRIPT timing reader=by_country country=Vietnam source=cis calls=1 rows=66 total_ms=8.4 per_call_ms=8.4 max_ms=8.5 errors=0 repeats=3 partial=0 runs=8.5/8.4/8.4
+SCRIPT timing reader=by_country country=Vietnam source=legacy calls=1 rows=0 total_ms=2.3 per_call_ms=2.3 max_ms=2.4 errors=0 repeats=3 partial=0 runs=2.4/2.3/2.3
+SCRIPT plan reader=by_country country=Vietnam source=cis node=Memoize:- own_ms=1.9 rows=1 loops=2455 shared_hit=367 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=cis node="Seq Scan:published_tours" own_ms=1.3 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=cis node="Hash Join:-" own_ms=0.8 rows=2153 loops=1 shared_hit=834 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.6 rows=1 loops=121 shared_hit=367 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=cis node="Hash Join:-" own_ms=0.6 rows=2455 loops=1 shared_hit=745 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=cis node="Seq Scan:destinations" own_ms=0.5 rows=1981 loops=1 shared_hit=89 shared_read=0
+SCRIPT qual reader=by_country country=Vietnam source=cis marker="country =" at="Seq Scan:destinations" pushed=t
+SCRIPT plan_total reader=by_country country=Vietnam source=cis exec_ms=7.8 planning_ms=1.1 jit=f
+SCRIPT plan reader=by_country country=Vietnam source=legacy node="Hash Join:-" own_ms=0.6 rows=0 loops=1 shared_hit=255 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=legacy node="Seq Scan:itinerary_components" own_ms=0.5 rows=3905 loops=1 shared_hit=166 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=legacy node="Seq Scan:destinations" own_ms=0.3 rows=72 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=legacy node=Hash:- own_ms=0.0 rows=72 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=255 shared_read=0
+SCRIPT plan reader=by_country country=Vietnam source=legacy node=Aggregate:- own_ms=0.0 rows=0 loops=1 shared_hit=255 shared_read=0
+SCRIPT qual reader=by_country country=Vietnam source=legacy marker="country =" at="Seq Scan:destinations" pushed=t
+SCRIPT plan_total reader=by_country country=Vietnam source=legacy exec_ms=1.5 planning_ms=0.3 jit=f
+SCRIPT timing reader=countries country=* source=cis calls=1 rows=13 total_ms=8.4 per_call_ms=8.4 max_ms=11.3 errors=0 repeats=3 partial=0 runs=11.3/8.4/7.9
+SCRIPT timing reader=countries country=* source=legacy calls=1 rows=11 total_ms=3.9 per_call_ms=3.9 max_ms=4.6 errors=0 repeats=3 partial=0 runs=4.6/3.9/3.4
+SCRIPT plan reader=countries country=* source=cis node=Memoize:- own_ms=1.9 rows=1 loops=2455 shared_hit=367 shared_read=0
+SCRIPT plan reader=countries country=* source=cis node="Seq Scan:published_tours" own_ms=1.3 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=countries country=* source=cis node="Hash Join:-" own_ms=0.8 rows=2153 loops=1 shared_hit=834 shared_read=0
+SCRIPT plan reader=countries country=* source=cis node="Seq Scan:destinations" own_ms=0.7 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=countries country=* source=cis node="Index Scan:raw_tours" own_ms=0.6 rows=1 loops=121 shared_hit=367 shared_read=0
+SCRIPT plan reader=countries country=* source=cis node="Seq Scan:destinations" own_ms=0.6 rows=1981 loops=1 shared_hit=89 shared_read=0
+SCRIPT qual reader=countries country=* source=cis marker=country at="Seq Scan:destinations" pushed=t
+SCRIPT plan_total reader=countries country=* source=cis exec_ms=9.2 planning_ms=1.1 jit=f
+SCRIPT plan reader=countries country=* source=legacy node="Hash Join:-" own_ms=1.1 rows=3905 loops=1 shared_hit=255 shared_read=0
+SCRIPT plan reader=countries country=* source=legacy node=Aggregate:- own_ms=0.9 rows=11 loops=1 shared_hit=255 shared_read=0
+SCRIPT plan reader=countries country=* source=legacy node="Seq Scan:itinerary_components" own_ms=0.5 rows=3905 loops=1 shared_hit=166 shared_read=0
+SCRIPT plan reader=countries country=* source=legacy node="Seq Scan:destinations" own_ms=0.4 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=countries country=* source=legacy node=Hash:- own_ms=0.4 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=countries country=* source=legacy node=Sort:- own_ms=0.0 rows=11 loops=1 shared_hit=255 shared_read=0
+SCRIPT qual reader=countries country=* source=legacy marker=country at="Seq Scan:destinations" pushed=t
+SCRIPT plan_total reader=countries country=* source=legacy exec_ms=3.3 planning_ms=0.2 jit=f
+SCRIPT timing reader=detail country=Laos source=cis calls=300 rows=356 total_ms=496.9 per_call_ms=1.7 max_ms=45.4 errors=0 repeats=3 partial=0 runs=520.4/496.9/368.3
+SCRIPT timing reader=detail country=Laos source=legacy calls=300 rows=282 total_ms=504.8 per_call_ms=1.7 max_ms=49.8 errors=0 repeats=3 partial=0 runs=504.8/432.5/562.1
+SCRIPT plan reader=detail country=Laos source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=detail country=Laos source=cis node="Index Scan:place_shape" own_ms=0.0 rows=0 loops=1 shared_hit=1 shared_read=0
+SCRIPT plan reader=detail country=Laos source=cis node="Nested Loop:-" own_ms=0.0 rows=1 loops=1 shared_hit=4 shared_read=0
+SCRIPT plan reader=detail country=Laos source=cis node="Subquery Scan:v_destination" own_ms=0.0 rows=1 loops=1 shared_hit=4 shared_read=0
+SCRIPT qual reader=detail country=Laos source=cis marker="destination_id =" at="Nested Loop:-" pushed=t
+SCRIPT qual reader=detail country=Laos source=cis marker="destination_id =" at="Index Scan:place_shape" pushed=t
+SCRIPT plan_total reader=detail country=Laos source=cis exec_ms=0.1 planning_ms=0.2 jit=f
+SCRIPT plan reader=detail country=Laos source=legacy node="Index Scan:destinations" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT qual reader=detail country=Laos source=legacy marker="destination_id =" at=- pushed=-
+SCRIPT plan_total reader=detail country=Laos source=legacy exec_ms=0.0 planning_ms=0.1 jit=f
+SCRIPT timing reader=detail country=Vietnam source=cis calls=132 rows=159 total_ms=215.1 per_call_ms=1.6 max_ms=46.5 errors=0 repeats=3 partial=0 runs=180.3/231.0/215.1
+SCRIPT timing reader=detail country=Vietnam source=legacy calls=132 rows=66 total_ms=173.2 per_call_ms=1.3 max_ms=44.6 errors=0 repeats=3 partial=0 runs=193.6/173.2/158.1
+SCRIPT plan reader=detail country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=detail country=Vietnam source=cis node="Index Scan:tour_place" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=detail country=Vietnam source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=detail country=Vietnam source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=detail country=Vietnam source=cis node=Sort:- own_ms=0.0 rows=1 loops=1 shared_hit=12 shared_read=0
+SCRIPT plan reader=detail country=Vietnam source=cis node="Nested Loop:-" own_ms=0.0 rows=1 loops=1 shared_hit=6 shared_read=0
+SCRIPT qual reader=detail country=Vietnam source=cis marker="destination_id =" at="Index Scan:tour_place" pushed=t
+SCRIPT plan_total reader=detail country=Vietnam source=cis exec_ms=0.1 planning_ms=0.8 jit=f
+SCRIPT plan reader=detail country=Vietnam source=legacy node="Index Scan:destinations" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT qual reader=detail country=Vietnam source=legacy marker="destination_id =" at=- pushed=-
+SCRIPT plan_total reader=detail country=Vietnam source=legacy exec_ms=0.0 planning_ms=0.0 jit=f
+SCRIPT timing reader=routes country=Laos source=cis calls=19 rows=425 total_ms=1891.8 per_call_ms=99.6 max_ms=121.7 errors=0 repeats=3 partial=0 runs=99.6/97.4/103.4
+SCRIPT timing reader=routes country=Laos source=legacy calls=19 rows=45 total_ms=630.1 per_call_ms=33.2 max_ms=53.2 errors=0 repeats=3 partial=0 runs=33.2/32.5/33.4
+SCRIPT timing reader=routes country=Vietnam source=cis calls=19 rows=89 total_ms=945.3 per_call_ms=49.8 max_ms=65.5 errors=0 repeats=3 partial=0 runs=49.8/50.2/48.5
+SCRIPT timing reader=routes country=Vietnam source=legacy calls=19 rows=15 total_ms=180.1 per_call_ms=9.5 max_ms=44.5 errors=0 repeats=3 partial=0 runs=9.3/9.5/11.1
+SCRIPT timing reader=routes_chain country=Laos source=cis calls=19 rows=720 total_ms=1464.6 per_call_ms=77.1 max_ms=98.8 errors=0 repeats=3 partial=0 runs=77.1/75.9/78.4
+SCRIPT timing reader=routes_chain country=Laos source=legacy calls=19 rows=720 total_ms=486.4 per_call_ms=25.6 max_ms=46.2 errors=0 repeats=3 partial=0 runs=25.6/25.3/26.2
+SCRIPT plan reader=routes_chain country=Laos source=cis node="Hash Join:-" own_ms=40.4 rows=43864 loops=1 shared_hit=14135 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=cis node="CTE Scan:j" own_ms=20.0 rows=7480 loops=1 shared_hit=6686 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=cis node="CTE Scan:a" own_ms=16.2 rows=310 loops=1 shared_hit=7125 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=cis node=Sort:- own_ms=13.8 rows=40 loops=1 shared_hit=14135 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=cis node="CTE Scan:l_2" own_ms=8.2 rows=1555 loops=1 shared_hit=615 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=cis node="CTE Scan:sp" own_ms=7.4 rows=121 loops=1 shared_hit=6510 shared_read=0
+SCRIPT qual reader=routes_chain country=Laos source=cis marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_chain country=Laos source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_chain country=Laos source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_chain country=Laos source=cis exec_ms=101.7 planning_ms=3.4 jit=f
+SCRIPT plan reader=routes_chain country=Laos source=legacy node="Seq Scan:tour_leg" own_ms=26.2 rows=196 loops=34 shared_hit=9384 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=legacy node="Nested Loop:-" own_ms=1.0 rows=513 loops=1 shared_hit=10053 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=legacy node="Seq Scan:tour_leg" own_ms=0.9 rows=34 loops=1 shared_hit=669 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=legacy node="Index Only Scan:tour_stop" own_ms=0.6 rows=1 loops=196 shared_hit=393 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=legacy node="Index Scan:tour_junction" own_ms=0.5 rows=0 loops=513 shared_hit=1143 shared_read=0
+SCRIPT plan reader=routes_chain country=Laos source=legacy node="Nested Loop:-" own_ms=0.3 rows=175 loops=1 shared_hit=11196 shared_read=0
+SCRIPT qual reader=routes_chain country=Laos source=legacy marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_chain country=Laos source=legacy marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_chain country=Laos source=legacy marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_chain country=Laos source=legacy marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_chain country=Laos source=legacy exec_ms=30.1 planning_ms=0.7 jit=f
+SCRIPT timing reader=routes_chain country=Vietnam source=cis calls=19 rows=595 total_ms=565.9 per_call_ms=29.8 max_ms=36.7 errors=0 repeats=3 partial=0 runs=30.7/29.8/29.8
+SCRIPT timing reader=routes_chain country=Vietnam source=legacy calls=19 rows=0 total_ms=82.9 per_call_ms=4.4 max_ms=38.3 errors=0 repeats=3 partial=0 runs=4.3/4.4/6.2
+SCRIPT plan reader=routes_chain country=Vietnam source=cis node="CTE Scan:j" own_ms=19.4 rows=7480 loops=1 shared_hit=6686 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=cis node="CTE Scan:a" own_ms=11.5 rows=46 loops=1 shared_hit=8109 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=cis node="CTE Scan:sp" own_ms=7.3 rows=121 loops=1 shared_hit=6510 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=cis node="CTE Scan:ld_1" own_ms=7.1 rows=444 loops=1 shared_hit=6510 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=cis node="CTE Scan:l_2" own_ms=4.0 rows=442 loops=1 shared_hit=1599 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=cis node="Hash Join:-" own_ms=2.8 rows=7480 loops=1 shared_hit=176 shared_read=0
+SCRIPT qual reader=routes_chain country=Vietnam source=cis marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_chain country=Vietnam source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_chain country=Vietnam source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_chain country=Vietnam source=cis exec_ms=35.2 planning_ms=3.3 jit=f
+SCRIPT plan reader=routes_chain country=Vietnam source=legacy node="Bitmap Heap Scan:tour_leg" own_ms=0.4 rows=0 loops=1 shared_hit=200 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=legacy node="Bitmap Index Scan:-" own_ms=0.1 rows=545 loops=1 shared_hit=26 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=legacy node="Index Only Scan:tour_stop" own_ms=0.0 rows=1 loops=5 shared_hit=11 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=200 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=legacy node=Result:- own_ms=0.0 rows=1 loops=5 shared_hit=11 shared_read=0
+SCRIPT plan reader=routes_chain country=Vietnam source=legacy node=Limit:- own_ms=0.0 rows=0 loops=1 shared_hit=200 shared_read=0
+SCRIPT qual reader=routes_chain country=Vietnam source=legacy marker=countries at="Bitmap Heap Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_chain country=Vietnam source=legacy marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_chain country=Vietnam source=legacy marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_chain country=Vietnam source=legacy marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_chain country=Vietnam source=legacy exec_ms=0.5 planning_ms=0.7 jit=f
+SCRIPT timing reader=routes_components country=Laos source=cis calls=19 rows=3647 total_ms=49.0 per_call_ms=2.6 max_ms=3.9 errors=0 repeats=3 partial=0 runs=2.9/2.6/2.5
+SCRIPT timing reader=routes_components country=Laos source=legacy calls=19 rows=1919 total_ms=54.5 per_call_ms=2.9 max_ms=3.6 errors=0 repeats=3 partial=0 runs=3.0/2.9/2.8
+SCRIPT plan reader=routes_components country=Laos source=cis node="Index Scan:destinations" own_ms=0.4 rows=1 loops=193 shared_hit=507 shared_read=0
+SCRIPT plan reader=routes_components country=Laos source=cis node=Sort:- own_ms=0.2 rows=169 loops=1 shared_hit=625 shared_read=0
+SCRIPT plan reader=routes_components country=Laos source=cis node="Bitmap Heap Scan:tour_place" own_ms=0.1 rows=19 loops=10 shared_hit=54 shared_read=0
+SCRIPT plan reader=routes_components country=Laos source=cis node="Subquery Scan:v_tour_component" own_ms=0.1 rows=169 loops=1 shared_hit=625 shared_read=0
+SCRIPT plan reader=routes_components country=Laos source=cis node="Bitmap Index Scan:-" own_ms=0.1 rows=19 loops=10 shared_hit=20 shared_read=0
+SCRIPT plan reader=routes_components country=Laos source=cis node="Bitmap Index Scan:-" own_ms=0.0 rows=917 loops=1 shared_hit=5 shared_read=0
+SCRIPT qual reader=routes_components country=Laos source=cis marker=countries at=- pushed=-
+SCRIPT qual reader=routes_components country=Laos source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_components country=Laos source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_components country=Laos source=cis exec_ms=1.2 planning_ms=1.0 jit=f
+SCRIPT plan reader=routes_components country=Laos source=legacy node="Seq Scan:itinerary_components" own_ms=1.4 rows=101 loops=1 shared_hit=166 shared_read=0
+SCRIPT plan reader=routes_components country=Laos source=legacy node=Sort:- own_ms=0.1 rows=101 loops=1 shared_hit=166 shared_read=0
+SCRIPT qual reader=routes_components country=Laos source=legacy marker=countries at=- pushed=-
+SCRIPT qual reader=routes_components country=Laos source=legacy marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_components country=Laos source=legacy marker="source_tour_id = ANY" at="Seq Scan:itinerary_components" pushed=t
+SCRIPT plan_total reader=routes_components country=Laos source=legacy exec_ms=1.5 planning_ms=0.1 jit=f
+SCRIPT timing reader=routes_components country=Vietnam source=cis calls=19 rows=3009 total_ms=43.1 per_call_ms=2.3 max_ms=2.8 errors=0 repeats=3 partial=0 runs=2.3/2.3/2.2
+SCRIPT timing reader=routes_components country=Vietnam source=legacy calls=15 rows=0 total_ms=30.3 per_call_ms=2.0 max_ms=2.5 errors=0 repeats=3 partial=0 runs=2.0/2.1/2.0
+SCRIPT plan reader=routes_components country=Vietnam source=cis node="Index Scan:destinations" own_ms=0.4 rows=1 loops=182 shared_hit=510 shared_read=0
+SCRIPT plan reader=routes_components country=Vietnam source=cis node=Sort:- own_ms=0.2 rows=170 loops=1 shared_hit=593 shared_read=0
+SCRIPT plan reader=routes_components country=Vietnam source=cis node="Bitmap Heap Scan:tour_place" own_ms=0.1 rows=30 loops=6 shared_hit=47 shared_read=0
+SCRIPT plan reader=routes_components country=Vietnam source=cis node="Subquery Scan:v_tour_component" own_ms=0.1 rows=170 loops=1 shared_hit=593 shared_read=0
+SCRIPT plan reader=routes_components country=Vietnam source=cis node="Bitmap Index Scan:-" own_ms=0.0 rows=35 loops=6 shared_hit=12 shared_read=0
+SCRIPT plan reader=routes_components country=Vietnam source=cis node="Nested Loop:-" own_ms=0.0 rows=182 loops=1 shared_hit=83 shared_read=0
+SCRIPT qual reader=routes_components country=Vietnam source=cis marker=countries at=- pushed=-
+SCRIPT qual reader=routes_components country=Vietnam source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_components country=Vietnam source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_components country=Vietnam source=cis exec_ms=1.0 planning_ms=0.9 jit=f
+SCRIPT plan reader=routes_components country=Vietnam source=legacy node="Seq Scan:itinerary_components" own_ms=0.9 rows=0 loops=1 shared_hit=166 shared_read=0
+SCRIPT plan reader=routes_components country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=166 shared_read=0
+SCRIPT qual reader=routes_components country=Vietnam source=legacy marker=countries at=- pushed=-
+SCRIPT qual reader=routes_components country=Vietnam source=legacy marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_components country=Vietnam source=legacy marker="source_tour_id = ANY" at="Seq Scan:itinerary_components" pushed=t
+SCRIPT plan_total reader=routes_components country=Vietnam source=legacy exec_ms=1.0 planning_ms=0.1 jit=f
+SCRIPT timing reader=routes_days country=Laos source=cis calls=19 rows=1939 total_ms=63.5 per_call_ms=3.3 max_ms=25.8 errors=0 repeats=3 partial=0 runs=3.3/3.0/4.5
+SCRIPT timing reader=routes_days country=Laos source=legacy calls=19 rows=722 total_ms=43.1 per_call_ms=2.3 max_ms=2.9 errors=0 repeats=3 partial=0 runs=2.3/2.3/2.2
+SCRIPT plan reader=routes_days country=Laos source=cis node="Seq Scan:destinations" own_ms=0.6 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=routes_days country=Laos source=cis node="Hash Join:-" own_ms=0.3 rows=87 loops=1 shared_hit=681 shared_read=0
+SCRIPT plan reader=routes_days country=Laos source=cis node="Index Scan:published_tours" own_ms=0.2 rows=1 loops=87 shared_hit=261 shared_read=0
+SCRIPT plan reader=routes_days country=Laos source=cis node="Index Scan:destinations" own_ms=0.2 rows=1 loops=87 shared_hit=261 shared_read=0
+SCRIPT plan reader=routes_days country=Laos source=cis node=Sort:- own_ms=0.1 rows=87 loops=1 shared_hit=681 shared_read=0
+SCRIPT plan reader=routes_days country=Laos source=cis node="Nested Loop:-" own_ms=0.1 rows=87 loops=1 shared_hit=331 shared_read=0
+SCRIPT qual reader=routes_days country=Laos source=cis marker=countries at=- pushed=-
+SCRIPT qual reader=routes_days country=Laos source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_days country=Laos source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_days country=Laos source=cis exec_ms=1.8 planning_ms=1.1 jit=f
+SCRIPT plan reader=routes_days country=Laos source=legacy node=Hash:- own_ms=0.5 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=routes_days country=Laos source=legacy node="Seq Scan:destinations" own_ms=0.4 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=routes_days country=Laos source=legacy node="Seq Scan:tour_stop" own_ms=0.2 rows=38 loops=1 shared_hit=17 shared_read=0
+SCRIPT plan reader=routes_days country=Laos source=legacy node="Hash Join:-" own_ms=0.0 rows=38 loops=1 shared_hit=106 shared_read=0
+SCRIPT plan reader=routes_days country=Laos source=legacy node=Sort:- own_ms=0.0 rows=38 loops=1 shared_hit=106 shared_read=0
+SCRIPT qual reader=routes_days country=Laos source=legacy marker=countries at=- pushed=-
+SCRIPT qual reader=routes_days country=Laos source=legacy marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_days country=Laos source=legacy marker="source_tour_id = ANY" at="Seq Scan:tour_stop" pushed=t
+SCRIPT plan_total reader=routes_days country=Laos source=legacy exec_ms=1.1 planning_ms=0.2 jit=f
+SCRIPT timing reader=routes_days country=Vietnam source=cis calls=19 rows=1485 total_ms=50.5 per_call_ms=2.7 max_ms=3.5 errors=0 repeats=3 partial=0 runs=2.6/2.8/2.7
+SCRIPT timing reader=routes_days country=Vietnam source=legacy calls=15 rows=195 total_ms=29.3 per_call_ms=2.0 max_ms=2.8 errors=0 repeats=3 partial=0 runs=2.0/2.0/1.9
+SCRIPT plan reader=routes_days country=Vietnam source=cis node="Seq Scan:destinations" own_ms=0.6 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=routes_days country=Vietnam source=cis node="Hash Join:-" own_ms=0.2 rows=83 loops=1 shared_hit=629 shared_read=0
+SCRIPT plan reader=routes_days country=Vietnam source=cis node="Index Scan:published_tours" own_ms=0.2 rows=1 loops=83 shared_hit=249 shared_read=0
+SCRIPT plan reader=routes_days country=Vietnam source=cis node="Index Scan:destinations" own_ms=0.2 rows=1 loops=83 shared_hit=249 shared_read=0
+SCRIPT plan reader=routes_days country=Vietnam source=cis node=Sort:- own_ms=0.1 rows=83 loops=1 shared_hit=629 shared_read=0
+SCRIPT plan reader=routes_days country=Vietnam source=cis node="Nested Loop:-" own_ms=0.0 rows=83 loops=1 shared_hit=291 shared_read=0
+SCRIPT qual reader=routes_days country=Vietnam source=cis marker=countries at=- pushed=-
+SCRIPT qual reader=routes_days country=Vietnam source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_days country=Vietnam source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_days country=Vietnam source=cis exec_ms=1.6 planning_ms=1.2 jit=f
+SCRIPT plan reader=routes_days country=Vietnam source=legacy node="Index Scan:destinations" own_ms=0.0 rows=1 loops=13 shared_hit=39 shared_read=0
+SCRIPT plan reader=routes_days country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=13 loops=1 shared_hit=42 shared_read=0
+SCRIPT plan reader=routes_days country=Vietnam source=legacy node="Bitmap Index Scan:-" own_ms=0.0 rows=13 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=routes_days country=Vietnam source=legacy node="Bitmap Heap Scan:tour_stop" own_ms=0.0 rows=13 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=routes_days country=Vietnam source=legacy node="Nested Loop:-" own_ms=0.0 rows=13 loops=1 shared_hit=42 shared_read=0
+SCRIPT qual reader=routes_days country=Vietnam source=legacy marker=countries at=- pushed=-
+SCRIPT qual reader=routes_days country=Vietnam source=legacy marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_days country=Vietnam source=legacy marker="source_tour_id = ANY" at="Bitmap Heap Scan:tour_stop" pushed=t
+SCRIPT qual reader=routes_days country=Vietnam source=legacy marker="source_tour_id = ANY" at="Bitmap Index Scan:-" pushed=t
+SCRIPT plan_total reader=routes_days country=Vietnam source=legacy exec_ms=0.1 planning_ms=0.2 jit=f
+SCRIPT timing reader=routes_single country=Laos source=cis calls=19 rows=425 total_ms=293.0 per_call_ms=15.4 max_ms=42.2 errors=0 repeats=3 partial=0 runs=15.4/15.0/17.1
+SCRIPT calls reader=routes_single country=Laos source=cis repeat=1 ms=17.5,17.5,17.3,17.7,16.7,15.6,15.1,14.6,15.1,17.2,17.0,15.4,20.3,13.5,13.2,12.8,12.3,12.1,11.9
+SCRIPT calls reader=routes_single country=Laos source=cis repeat=2 ms=15.9,17.0,17.9,17.7,16.8,16.5,15.4,14.7,14.9,16.8,16.1,15.3,14.8,14.0,13.1,12.4,12.4,12.0,11.9
+SCRIPT calls reader=routes_single country=Laos source=cis repeat=3 ms=28.7,42.2,17.4,18.8,16.3,15.7,15.4,14.5,14.9,16.8,16.1,15.1,14.4,13.6,13.0,12.4,12.5,14.4,12.2
+SCRIPT timing reader=routes_single country=Laos source=legacy calls=19 rows=45 total_ms=40.7 per_call_ms=2.1 max_ms=4.7 errors=0 repeats=3 partial=0 runs=2.2/2.0/2.1
+SCRIPT calls reader=routes_single country=Laos source=legacy repeat=1 ms=4.3,2.6,2.7,2.8,2.9,2.7,2.2,2.1,2.1,2.1,1.8,1.7,2.1,1.5,2.4,1.4,1.4,1.2,1.3
+SCRIPT calls reader=routes_single country=Laos source=legacy repeat=2 ms=2.4,2.6,2.6,2.8,2.6,2.4,2.4,2.2,2.3,1.9,1.8,1.8,1.8,1.7,1.8,1.4,1.5,1.2,1.0
+SCRIPT calls reader=routes_single country=Laos source=legacy repeat=3 ms=2.3,4.7,2.8,2.5,2.6,2.5,2.2,2.2,1.9,2.3,1.8,1.8,1.8,1.6,1.5,1.3,1.9,1.3,1.6
+SCRIPT plan reader=routes_single country=Laos source=cis node="CTE Scan:sp" own_ms=7.3 rows=121 loops=1 shared_hit=6510 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=cis node="Seq Scan:tour_leg" own_ms=2.9 rows=2157 loops=1 shared_hit=500 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=cis node="Index Scan:destinations" own_ms=2.0 rows=1 loops=1017 shared_hit=3051 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=cis node="Index Scan:published_tours" own_ms=2.0 rows=1 loops=1017 shared_hit=3051 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=cis node="Index Scan:published_tours" own_ms=1.4 rows=1 loops=719 shared_hit=2157 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=cis node=Sort:- own_ms=1.0 rows=719 loops=1 shared_hit=9395 shared_read=0
+SCRIPT qual reader=routes_single country=Laos source=cis marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_single country=Laos source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_single country=Laos source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_single country=Laos source=cis exec_ms=16.0 planning_ms=1.8 jit=f
+SCRIPT plan reader=routes_single country=Laos source=legacy node="Seq Scan:tour_leg" own_ms=0.9 rows=83 loops=1 shared_hit=276 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=legacy node=Aggregate:- own_ms=0.2 rows=56 loops=1 shared_hit=17 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=legacy node=Sort:- own_ms=0.1 rows=83 loops=1 shared_hit=293 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=legacy node="Seq Scan:tour_stop" own_ms=0.1 rows=622 loops=1 shared_hit=17 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=legacy node="Hash Join:-" own_ms=0.0 rows=83 loops=1 shared_hit=293 shared_read=0
+SCRIPT plan reader=routes_single country=Laos source=legacy node=Hash:- own_ms=0.0 rows=56 loops=1 shared_hit=17 shared_read=0
+SCRIPT qual reader=routes_single country=Laos source=legacy marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_single country=Laos source=legacy marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_single country=Laos source=legacy marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_single country=Laos source=legacy exec_ms=1.4 planning_ms=0.2 jit=f
+SCRIPT timing reader=routes_single country=Vietnam source=cis calls=19 rows=89 total_ms=252.3 per_call_ms=13.3 max_ms=40.0 errors=0 repeats=3 partial=0 runs=13.3/14.5/13.1
+SCRIPT calls reader=routes_single country=Vietnam source=cis repeat=1 ms=13.2,14.0,15.0,14.8,15.3,15.1,15.0,14.5,14.0,14.0,13.6,13.0,13.3,13.6,12.2,12.3,12.0,12.0,5.4
+SCRIPT calls reader=routes_single country=Vietnam source=cis repeat=2 ms=40.0,14.0,14.7,15.2,16.0,14.8,14.8,14.4,13.9,13.6,13.3,13.4,12.6,12.2,12.1,12.0,11.7,11.5,4.9
+SCRIPT calls reader=routes_single country=Vietnam source=cis repeat=3 ms=13.4,13.8,14.5,14.5,15.0,15.0,14.8,14.3,15.6,13.8,13.3,13.6,12.6,12.2,12.0,12.0,11.7,11.5,5.0
+SCRIPT timing reader=routes_single country=Vietnam source=legacy calls=19 rows=15 total_ms=33.4 per_call_ms=1.8 max_ms=2.4 errors=0 repeats=3 partial=0 runs=1.8/1.8/1.8
+SCRIPT calls reader=routes_single country=Vietnam source=legacy repeat=1 ms=1.9,2.1,2.3,2.2,2.2,2.1,2.1,2.0,1.8,1.8,1.8,1.6,1.6,1.6,1.5,1.1,1.0,1.1,1.2
+SCRIPT calls reader=routes_single country=Vietnam source=legacy repeat=2 ms=2.2,2.2,2.4,2.4,2.2,2.2,2.3,2.2,1.9,1.8,1.8,1.8,1.7,1.4,1.5,1.3,1.2,1.1,1.1
+SCRIPT calls reader=routes_single country=Vietnam source=legacy repeat=3 ms=2.0,2.1,2.2,2.3,2.2,2.2,2.0,1.9,2.0,1.8,1.7,2.1,1.4,1.4,1.4,1.1,1.2,1.3,1.1
+SCRIPT plan reader=routes_single country=Vietnam source=cis node="CTE Scan:sp" own_ms=8.1 rows=121 loops=1 shared_hit=6510 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=cis node="Seq Scan:tour_leg" own_ms=2.2 rows=260 loops=1 shared_hit=500 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=cis node="Index Scan:destinations" own_ms=2.0 rows=1 loops=1017 shared_hit=3051 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=cis node="Index Scan:published_tours" own_ms=2.0 rows=1 loops=1017 shared_hit=3051 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=cis node="Nested Loop:-" own_ms=0.8 rows=1017 loops=1 shared_hit=408 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=cis node="Hash Join:-" own_ms=0.6 rows=1017 loops=1 shared_hit=41 shared_read=0
+SCRIPT qual reader=routes_single country=Vietnam source=cis marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_single country=Vietnam source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_single country=Vietnam source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_single country=Vietnam source=cis exec_ms=11.8 planning_ms=1.9 jit=f
+SCRIPT plan reader=routes_single country=Vietnam source=legacy node="Seq Scan:tour_leg" own_ms=1.0 rows=19 loops=1 shared_hit=276 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=legacy node=Aggregate:- own_ms=0.2 rows=56 loops=1 shared_hit=17 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=legacy node="Seq Scan:tour_stop" own_ms=0.1 rows=622 loops=1 shared_hit=17 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=19 loops=1 shared_hit=293 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=legacy node=Hash:- own_ms=0.0 rows=56 loops=1 shared_hit=17 shared_read=0
+SCRIPT plan reader=routes_single country=Vietnam source=legacy node="Hash Join:-" own_ms=0.0 rows=19 loops=1 shared_hit=293 shared_read=0
+SCRIPT qual reader=routes_single country=Vietnam source=legacy marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_single country=Vietnam source=legacy marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_single country=Vietnam source=legacy marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_single country=Vietnam source=legacy exec_ms=1.4 planning_ms=0.2 jit=f
+SCRIPT timing reader=routes_single_auto country=Laos source=cis calls=19 rows=425 total_ms=327.2 per_call_ms=17.2 max_ms=32.8 errors=0 repeats=1 partial=0 runs=17.2
+SCRIPT calls reader=routes_single_auto country=Laos source=cis repeat=1 ms=16.4,17.6,17.6,17.4,16.4,32.8,26.4,23.8,21.9,19.3,17.9,16.3,14.7,13.5,12.3,11.4,10.8,10.4,10.2
+SCRIPT timing reader=routes_single_auto country=Vietnam source=cis calls=19 rows=89 total_ms=247.6 per_call_ms=13.0 max_ms=16.8 errors=0 repeats=1 partial=0 runs=13.0
+SCRIPT calls reader=routes_single_auto country=Vietnam source=cis repeat=1 ms=13.2,14.7,16.3,16.2,16.1,16.8,16.3,15.7,15.0,14.5,13.6,12.6,11.9,11.4,10.7,10.1,9.8,9.6,3.1
+SCRIPT timing reader=search country=Laos source=cis calls=8 rows=480 total_ms=202.0 per_call_ms=25.3 max_ms=32.0 errors=0 repeats=3 partial=0 runs=28.0/25.2/25.3
+SCRIPT timing reader=search country=Laos source=legacy calls=8 rows=470 total_ms=246.5 per_call_ms=30.8 max_ms=44.7 errors=0 repeats=3 partial=0 runs=32.9/30.7/30.8
+SCRIPT plan reader=search country=Laos source=cis node="CTE Scan:c" own_ms=21.1 rows=200 loops=1 shared_hit=7117 shared_read=0
+SCRIPT plan reader=search country=Laos source=cis node="Hash Join:-" own_ms=13.7 rows=2153 loops=1 shared_hit=7117 shared_read=0
+SCRIPT plan reader=search country=Laos source=cis node="Seq Scan:tour_place" own_ms=1.5 rows=2153 loops=1 shared_hit=167 shared_read=0
+SCRIPT plan reader=search country=Laos source=cis node="Seq Scan:raw_tours" own_ms=1.5 rows=917 loops=1 shared_hit=191 shared_read=0
+SCRIPT plan reader=search country=Laos source=cis node="Seq Scan:published_tours" own_ms=1.3 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=search country=Laos source=cis node="Hash Join:-" own_ms=0.8 rows=2153 loops=1 shared_hit=569 shared_read=0
+SCRIPT qual reader=search country=Laos source=cis marker=<=> at=- pushed=-
+SCRIPT plan_total reader=search country=Laos source=cis exec_ms=24.9 planning_ms=1.9 jit=f
+SCRIPT plan reader=search country=Laos source=legacy node="CTE Scan:c" own_ms=25.1 rows=200 loops=1 shared_hit=11881 shared_read=0
+SCRIPT plan reader=search country=Laos source=legacy node="Seq Scan:itinerary_components" own_ms=23.8 rows=3905 loops=1 shared_hit=11881 shared_read=0
+SCRIPT plan reader=search country=Laos source=legacy node="Seq Scan:published_tours" own_ms=1.3 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=search country=Laos source=legacy node=Sort:- own_ms=1.3 rows=200 loops=1 shared_hit=11881 shared_read=0
+SCRIPT plan reader=search country=Laos source=legacy node="Seq Scan:published_tours" own_ms=1.1 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=search country=Laos source=legacy node="Seq Scan:destinations" own_ms=0.4 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT qual reader=search country=Laos source=legacy marker=<=> at=- pushed=-
+SCRIPT plan_total reader=search country=Laos source=legacy exec_ms=30.1 planning_ms=0.4 jit=f
+SCRIPT timing reader=search_exact country=Laos source=cis calls=8 rows=480 total_ms=222.0 per_call_ms=27.8 max_ms=31.0 errors=0 repeats=3 partial=0 runs=29.3/27.8/27.2
+SCRIPT timing reader=search_exact country=Laos source=legacy calls=8 rows=480 total_ms=267.7 per_call_ms=33.5 max_ms=35.3 errors=0 repeats=3 partial=0 runs=34.3/33.5/33.4
+SCRIPT plan reader=search_exact country=Laos source=cis node=Aggregate:- own_ms=15.9 rows=1328 loops=1 shared_hit=7383 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=cis node=Memoize:- own_ms=1.9 rows=1 loops=2455 shared_hit=367 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=cis node="Merge Join:-" own_ms=1.4 rows=2153 loops=1 shared_hit=924 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=cis node="Seq Scan:published_tours" own_ms=1.3 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=cis node="Seq Scan:tour_place" own_ms=1.3 rows=2455 loops=1 shared_hit=167 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=cis node=Sort:- own_ms=1.2 rows=2153 loops=1 shared_hit=834 shared_read=0
+SCRIPT qual reader=search_exact country=Laos source=cis marker=<=> at=- pushed=-
+SCRIPT plan_total reader=search_exact country=Laos source=cis exec_ms=29.2 planning_ms=1.2 jit=f
+SCRIPT plan reader=search_exact country=Laos source=legacy node=Aggregate:- own_ms=23.5 rows=1002 loops=1 shared_hit=12181 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=legacy node="Hash Join:-" own_ms=2.7 rows=3905 loops=1 shared_hit=377 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=legacy node="Seq Scan:itinerary_components" own_ms=2.0 rows=3905 loops=1 shared_hit=166 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=legacy node="Seq Scan:published_tours" own_ms=1.5 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=legacy node="Hash Join:-" own_ms=1.4 rows=3905 loops=1 shared_hit=466 shared_read=0
+SCRIPT plan reader=search_exact country=Laos source=legacy node=Aggregate:- own_ms=0.4 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT qual reader=search_exact country=Laos source=legacy marker=<=> at=- pushed=-
+SCRIPT plan_total reader=search_exact country=Laos source=legacy exec_ms=33.1 planning_ms=0.4 jit=f
+SCRIPT timing reader=tiles country=Laos source=cis calls=24 rows=694 total_ms=176.5 per_call_ms=7.4 max_ms=10.0 errors=0 repeats=3 partial=0 runs=191.8/176.5/174.8
+SCRIPT timing reader=tiles country=Laos source=legacy calls=24 rows=294 total_ms=37.8 per_call_ms=1.6 max_ms=3.3 errors=0 repeats=3 partial=0 runs=45.3/37.8/35.5
+SCRIPT plan reader=tiles country=Laos source=cis node=Memoize:- own_ms=1.9 rows=1 loops=2455 shared_hit=367 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=cis node="Seq Scan:published_tours" own_ms=1.3 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=cis node="Hash Join:-" own_ms=0.8 rows=2153 loops=1 shared_hit=834 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=cis node=Sort:- own_ms=0.6 rows=662 loops=1 shared_hit=924 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.6 rows=1 loops=121 shared_hit=367 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=cis node="Hash Join:-" own_ms=0.6 rows=2455 loops=1 shared_hit=745 shared_read=0
+SCRIPT qual reader=tiles country=Laos source=cis marker="lat >=" at=- pushed=-
+SCRIPT qual reader=tiles country=Laos source=cis marker="lng >=" at=- pushed=-
+SCRIPT qual reader=tiles country=Laos source=cis marker=max_lat at="Hash Join:-" pushed=t
+SCRIPT qual reader=tiles country=Laos source=cis marker=max_lng at="Hash Join:-" pushed=t
+SCRIPT plan_total reader=tiles country=Laos source=cis exec_ms=9.7 planning_ms=1.1 jit=f
+SCRIPT plan reader=tiles country=Laos source=legacy node="Hash Join:-" own_ms=0.7 rows=405 loops=1 shared_hit=255 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=legacy node="Seq Scan:itinerary_components" own_ms=0.5 rows=3905 loops=1 shared_hit=166 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=legacy node="Seq Scan:destinations" own_ms=0.4 rows=467 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=legacy node=Aggregate:- own_ms=0.1 rows=140 loops=1 shared_hit=255 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=legacy node=Hash:- own_ms=0.1 rows=467 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=tiles country=Laos source=legacy node=Sort:- own_ms=0.0 rows=140 loops=1 shared_hit=255 shared_read=0
+SCRIPT qual reader=tiles country=Laos source=legacy marker="lat >=" at="Seq Scan:destinations" pushed=t
+SCRIPT qual reader=tiles country=Laos source=legacy marker="lng >=" at="Seq Scan:destinations" pushed=t
+SCRIPT qual reader=tiles country=Laos source=legacy marker=max_lat at=- pushed=-
+SCRIPT qual reader=tiles country=Laos source=legacy marker=max_lng at=- pushed=-
+SCRIPT plan_total reader=tiles country=Laos source=legacy exec_ms=1.9 planning_ms=0.3 jit=f
+SCRIPT timing reader=tiles country=Vietnam source=cis calls=15 rows=435 total_ms=111.7 per_call_ms=7.4 max_ms=9.5 errors=0 repeats=3 partial=0 runs=110.3/111.7/115.6
+SCRIPT timing reader=tiles country=Vietnam source=legacy calls=15 rows=140 total_ms=23.1 per_call_ms=1.5 max_ms=6.0 errors=0 repeats=3 partial=0 runs=23.1/22.7/29.0
+SCRIPT plan reader=tiles country=Vietnam source=cis node=Memoize:- own_ms=1.9 rows=1 loops=2455 shared_hit=367 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=cis node="Seq Scan:published_tours" own_ms=1.3 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=cis node="Hash Join:-" own_ms=0.8 rows=2153 loops=1 shared_hit=834 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.6 rows=1 loops=121 shared_hit=367 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=cis node="Hash Join:-" own_ms=0.6 rows=2455 loops=1 shared_hit=745 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=cis node="Seq Scan:destinations" own_ms=0.5 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT qual reader=tiles country=Vietnam source=cis marker="lat >=" at=- pushed=-
+SCRIPT qual reader=tiles country=Vietnam source=cis marker="lng >=" at=- pushed=-
+SCRIPT qual reader=tiles country=Vietnam source=cis marker=max_lat at="Hash Join:-" pushed=t
+SCRIPT qual reader=tiles country=Vietnam source=cis marker=max_lng at="Hash Join:-" pushed=t
+SCRIPT plan_total reader=tiles country=Vietnam source=cis exec_ms=7.9 planning_ms=1.1 jit=f
+SCRIPT plan reader=tiles country=Vietnam source=legacy node="Seq Scan:destinations" own_ms=0.3 rows=4 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=legacy node="Bitmap Index Scan:-" own_ms=0.0 rows=0 loops=4 shared_hit=8 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=legacy node="Nested Loop:-" own_ms=0.0 rows=0 loops=1 shared_hit=97 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=97 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=97 shared_read=0
+SCRIPT plan reader=tiles country=Vietnam source=legacy node=Aggregate:- own_ms=0.0 rows=0 loops=1 shared_hit=97 shared_read=0
+SCRIPT qual reader=tiles country=Vietnam source=legacy marker="lat >=" at="Seq Scan:destinations" pushed=t
+SCRIPT qual reader=tiles country=Vietnam source=legacy marker="lng >=" at="Seq Scan:destinations" pushed=t
+SCRIPT qual reader=tiles country=Vietnam source=legacy marker=max_lat at=- pushed=-
+SCRIPT qual reader=tiles country=Vietnam source=legacy marker=max_lng at=- pushed=-
+SCRIPT plan_total reader=tiles country=Vietnam source=legacy exec_ms=0.4 planning_ms=0.3 jit=f
+SCRIPT timing reader=tour_route country=Laos source=cis calls=30 rows=0 total_ms=95.5 per_call_ms=3.2 max_ms=6.7 errors=0 repeats=3 partial=0 runs=3.2/3.2/3.2
+SCRIPT timing reader=tour_route country=Laos source=legacy calls=30 rows=0 total_ms=544.3 per_call_ms=18.1 max_ms=49.7 errors=0 repeats=3 partial=0 runs=19.4/18.1/17.9
+SCRIPT timing reader=tour_route country=Vietnam source=cis calls=1 rows=0 total_ms=16.3 per_call_ms=16.3 max_ms=16.6 errors=0 repeats=3 partial=0 runs=16.3/15.6/16.6
+SCRIPT timing reader=tour_route country=Vietnam source=legacy calls=1 rows=0 total_ms=14.6 per_call_ms=14.6 max_ms=14.6 errors=0 repeats=3 partial=0 runs=14.4/14.6/14.6
+SCRIPT timing reader=tour_route_components country=Laos source=cis calls=30 rows=519 total_ms=38.6 per_call_ms=1.3 max_ms=4.1 errors=0 repeats=3 partial=0 runs=1.3/1.3/1.3
+SCRIPT timing reader=tour_route_components country=Laos source=legacy calls=3 rows=69 total_ms=6.4 per_call_ms=2.1 max_ms=2.2 errors=0 repeats=3 partial=0 runs=2.0/2.1/2.1
+SCRIPT plan reader=tour_route_components country=Laos source=cis node="Index Scan:destinations" own_ms=0.1 rows=1 loops=36 shared_hit=93 shared_read=0
+SCRIPT plan reader=tour_route_components country=Laos source=cis node=Sort:- own_ms=0.0 rows=31 loops=1 shared_hit=105 shared_read=0
+SCRIPT plan reader=tour_route_components country=Laos source=cis node="Bitmap Heap Scan:tour_place" own_ms=0.0 rows=36 loops=1 shared_hit=6 shared_read=0
+SCRIPT plan reader=tour_route_components country=Laos source=cis node="Nested Loop:-" own_ms=0.0 rows=31 loops=1 shared_hit=105 shared_read=0
+SCRIPT plan reader=tour_route_components country=Laos source=cis node="Subquery Scan:v_tour_component" own_ms=0.0 rows=31 loops=1 shared_hit=105 shared_read=0
+SCRIPT plan reader=tour_route_components country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT qual reader=tour_route_components country=Laos source=cis marker="source_id =" at="Bitmap Heap Scan:tour_place" pushed=t
+SCRIPT qual reader=tour_route_components country=Laos source=cis marker="source_id =" at="Bitmap Index Scan:-" pushed=t
+SCRIPT qual reader=tour_route_components country=Laos source=cis marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT plan_total reader=tour_route_components country=Laos source=cis exec_ms=0.3 planning_ms=0.9 jit=f
+SCRIPT plan reader=tour_route_components country=Laos source=legacy node="Seq Scan:itinerary_components" own_ms=1.0 rows=47 loops=1 shared_hit=166 shared_read=0
+SCRIPT plan reader=tour_route_components country=Laos source=legacy node=Sort:- own_ms=0.0 rows=47 loops=1 shared_hit=166 shared_read=0
+SCRIPT qual reader=tour_route_components country=Laos source=legacy marker="source_id =" at=- pushed=-
+SCRIPT qual reader=tour_route_components country=Laos source=legacy marker="tour_id =" at="Seq Scan:itinerary_components" pushed=t
+SCRIPT plan_total reader=tour_route_components country=Laos source=legacy exec_ms=1.0 planning_ms=0.1 jit=f
+SCRIPT timing reader=tour_route_days country=Laos source=cis calls=30 rows=241 total_ms=56.1 per_call_ms=1.9 max_ms=2.7 errors=0 repeats=3 partial=0 runs=1.8/1.9/1.9
+SCRIPT timing reader=tour_route_days country=Laos source=legacy calls=30 rows=26 total_ms=33.3 per_call_ms=1.1 max_ms=2.1 errors=0 repeats=3 partial=0 runs=1.1/1.1/1.1
+SCRIPT plan reader=tour_route_days country=Laos source=cis node="Seq Scan:destinations" own_ms=0.6 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT plan reader=tour_route_days country=Laos source=cis node="Hash Join:-" own_ms=0.2 rows=5 loops=1 shared_hit=129 shared_read=0
+SCRIPT plan reader=tour_route_days country=Laos source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=5 shared_hit=15 shared_read=0
+SCRIPT plan reader=tour_route_days country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_days country=Laos source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=5 shared_hit=15 shared_read=0
+SCRIPT plan reader=tour_route_days country=Laos source=cis node=Sort:- own_ms=0.0 rows=5 loops=1 shared_hit=129 shared_read=0
+SCRIPT qual reader=tour_route_days country=Laos source=cis marker="source_id =" at="Bitmap Heap Scan:tour_stop" pushed=t
+SCRIPT qual reader=tour_route_days country=Laos source=cis marker="source_id =" at="Bitmap Index Scan:-" pushed=t
+SCRIPT qual reader=tour_route_days country=Laos source=cis marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT plan_total reader=tour_route_days country=Laos source=cis exec_ms=0.9 planning_ms=1.1 jit=f
+SCRIPT plan reader=tour_route_days country=Laos source=legacy node="Index Scan:destinations" own_ms=0.0 rows=1 loops=6 shared_hit=18 shared_read=0
+SCRIPT plan reader=tour_route_days country=Laos source=legacy node="Index Scan:tour_stop" own_ms=0.0 rows=6 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_days country=Laos source=legacy node="Nested Loop:-" own_ms=0.0 rows=6 loops=1 shared_hit=21 shared_read=0
+SCRIPT qual reader=tour_route_days country=Laos source=legacy marker="source_id =" at=- pushed=-
+SCRIPT qual reader=tour_route_days country=Laos source=legacy marker="tour_id =" at="Index Scan:tour_stop" pushed=t
+SCRIPT plan_total reader=tour_route_days country=Laos source=legacy exec_ms=0.1 planning_ms=0.2 jit=f
+SCRIPT timing reader=tour_route_days country=Vietnam source=cis calls=1 rows=0 total_ms=1.1 per_call_ms=1.1 max_ms=1.1 errors=0 repeats=3 partial=0 runs=1.1/1.1/1.1
+SCRIPT timing reader=tour_route_days country=Vietnam source=legacy calls=1 rows=0 total_ms=1.2 per_call_ms=1.2 max_ms=1.3 errors=0 repeats=3 partial=0 runs=1.2/1.3/1.2
+SCRIPT plan reader=tour_route_days country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_days country=Vietnam source=cis node="Seq Scan:graph_build" own_ms=0.0 rows=1 loops=1 shared_hit=4 shared_read=0
+SCRIPT plan reader=tour_route_days country=Vietnam source=cis node="Bitmap Index Scan:-" own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=tour_route_days country=Vietnam source=cis node="Seq Scan:destinations" own_ms=0.0 rows=1 loops=1 shared_hit=1 shared_read=0
+SCRIPT plan reader=tour_route_days country=Vietnam source=cis node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=10 shared_read=0
+SCRIPT plan reader=tour_route_days country=Vietnam source=cis node="Hash Join:-" own_ms=0.0 rows=0 loops=1 shared_hit=10 shared_read=0
+SCRIPT qual reader=tour_route_days country=Vietnam source=cis marker="source_id =" at="Bitmap Heap Scan:tour_stop" pushed=t
+SCRIPT qual reader=tour_route_days country=Vietnam source=cis marker="source_id =" at="Bitmap Index Scan:-" pushed=t
+SCRIPT qual reader=tour_route_days country=Vietnam source=cis marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT plan_total reader=tour_route_days country=Vietnam source=cis exec_ms=0.1 planning_ms=1.1 jit=f
+SCRIPT plan reader=tour_route_days country=Vietnam source=legacy node="Index Scan:tour_stop" own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=tour_route_days country=Vietnam source=legacy node="Nested Loop:-" own_ms=0.0 rows=0 loops=1 shared_hit=2 shared_read=0
+SCRIPT plan reader=tour_route_days country=Vietnam source=legacy node="Index Scan:destinations" own_ms=0.0 rows=0 loops=0 shared_hit=0 shared_read=0
+SCRIPT qual reader=tour_route_days country=Vietnam source=legacy marker="source_id =" at=- pushed=-
+SCRIPT qual reader=tour_route_days country=Vietnam source=legacy marker="tour_id =" at="Index Scan:tour_stop" pushed=t
+SCRIPT plan_total reader=tour_route_days country=Vietnam source=legacy exec_ms=0.0 planning_ms=0.2 jit=f
+SCRIPT timing reader=tour_route_days_count country=Laos source=legacy calls=27 rows=27 total_ms=54.0 per_call_ms=2.0 max_ms=4.9 errors=0 repeats=3 partial=0 runs=2.3/2.0/2.0
+SCRIPT plan reader=tour_route_days_count country=Laos source=legacy node="Function Scan:c" own_ms=0.5 rows=10 loops=1 shared_hit=4 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Laos source=legacy node="Nested Loop:-" own_ms=0.3 rows=10 loops=1 shared_hit=10 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Laos source=legacy node="Subquery Scan:t" own_ms=0.0 rows=1 loops=1 shared_hit=18 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Laos source=legacy node="Nested Loop:-" own_ms=0.0 rows=1 loops=1 shared_hit=8 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Laos source=legacy node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Laos source=legacy node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT qual reader=tour_route_days_count country=Laos source=legacy marker="source_id =" at=- pushed=-
+SCRIPT qual reader=tour_route_days_count country=Laos source=legacy marker="tour_id =" at="Nested Loop:-" pushed=t
+SCRIPT qual reader=tour_route_days_count country=Laos source=legacy marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT qual reader=tour_route_days_count country=Laos source=legacy marker="tour_id =" at="Index Scan:raw_tours" pushed=t
+SCRIPT plan_total reader=tour_route_days_count country=Laos source=legacy exec_ms=1.1 planning_ms=1.3 jit=f
+SCRIPT timing reader=tour_route_days_count country=Vietnam source=cis calls=1 rows=1 total_ms=2.4 per_call_ms=2.4 max_ms=2.4 errors=0 repeats=3 partial=0 runs=2.3/2.4/2.4
+SCRIPT timing reader=tour_route_days_count country=Vietnam source=legacy calls=1 rows=1 total_ms=2.3 per_call_ms=2.3 max_ms=2.4 errors=0 repeats=3 partial=0 runs=2.2/2.4/2.3
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=cis node="Function Scan:c" own_ms=0.6 rows=12 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=cis node="Nested Loop:-" own_ms=0.4 rows=12 loops=1 shared_hit=9 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=cis node="Nested Loop:-" own_ms=0.0 rows=1 loops=1 shared_hit=8 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=cis node=Sort:- own_ms=0.0 rows=12 loops=1 shared_hit=9 shared_read=0
+SCRIPT qual reader=tour_route_days_count country=Vietnam source=cis marker="source_id =" at=- pushed=-
+SCRIPT qual reader=tour_route_days_count country=Vietnam source=cis marker="tour_id =" at="Nested Loop:-" pushed=t
+SCRIPT qual reader=tour_route_days_count country=Vietnam source=cis marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT qual reader=tour_route_days_count country=Vietnam source=cis marker="tour_id =" at="Index Scan:raw_tours" pushed=t
+SCRIPT plan_total reader=tour_route_days_count country=Vietnam source=cis exec_ms=1.3 planning_ms=1.2 jit=f
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=legacy node="Function Scan:c" own_ms=0.6 rows=12 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=legacy node="Nested Loop:-" own_ms=0.4 rows=12 loops=1 shared_hit=9 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=legacy node="Nested Loop:-" own_ms=0.0 rows=1 loops=1 shared_hit=8 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=legacy node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=12 loops=1 shared_hit=9 shared_read=0
+SCRIPT plan reader=tour_route_days_count country=Vietnam source=legacy node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=1 shared_hit=3 shared_read=0
+SCRIPT qual reader=tour_route_days_count country=Vietnam source=legacy marker="source_id =" at=- pushed=-
+SCRIPT qual reader=tour_route_days_count country=Vietnam source=legacy marker="tour_id =" at="Nested Loop:-" pushed=t
+SCRIPT qual reader=tour_route_days_count country=Vietnam source=legacy marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT qual reader=tour_route_days_count country=Vietnam source=legacy marker="tour_id =" at="Index Scan:raw_tours" pushed=t
+SCRIPT plan_total reader=tour_route_days_count country=Vietnam source=legacy exec_ms=1.3 planning_ms=1.3 jit=f
+SCRIPT timing reader=tour_route_place_components country=Laos source=legacy calls=27 rows=936 total_ms=36.3 per_call_ms=1.3 max_ms=7.5 errors=0 repeats=3 partial=0 runs=1.5/1.3/1.3
+SCRIPT plan reader=tour_route_place_components country=Laos source=legacy node="Seq Scan:itinerary_components" own_ms=0.9 rows=106 loops=1 shared_hit=166 shared_read=0
+SCRIPT plan reader=tour_route_place_components country=Laos source=legacy node=Sort:- own_ms=0.2 rows=106 loops=1 shared_hit=166 shared_read=0
+SCRIPT qual reader=tour_route_place_components country=Laos source=legacy marker="source_id =" at=- pushed=-
+SCRIPT qual reader=tour_route_place_components country=Laos source=legacy marker="tour_id =" at=- pushed=-
+SCRIPT plan_total reader=tour_route_place_components country=Laos source=legacy exec_ms=1.1 planning_ms=0.1 jit=f
+SCRIPT timing reader=tour_route_place_components country=Vietnam source=cis calls=1 rows=7 total_ms=2.9 per_call_ms=2.9 max_ms=3.2 errors=0 repeats=3 partial=0 runs=2.9/2.4/3.2
+SCRIPT timing reader=tour_route_place_components country=Vietnam source=legacy calls=1 rows=0 total_ms=1.1 per_call_ms=1.1 max_ms=1.1 errors=0 repeats=3 partial=0 runs=1.0/1.1/1.1
+SCRIPT plan reader=tour_route_place_components country=Vietnam source=cis node="Index Scan:raw_tours" own_ms=0.0 rows=1 loops=7 shared_hit=21 shared_read=0
+SCRIPT plan reader=tour_route_place_components country=Vietnam source=cis node="Index Scan:published_tours" own_ms=0.0 rows=1 loops=7 shared_hit=21 shared_read=0
+SCRIPT plan reader=tour_route_place_components country=Vietnam source=cis node="Index Scan:destinations" own_ms=0.0 rows=1 loops=7 shared_hit=21 shared_read=0
+SCRIPT plan reader=tour_route_place_components country=Vietnam source=cis node="Bitmap Heap Scan:tour_place" own_ms=0.0 rows=7 loops=1 shared_hit=17 shared_read=0
+SCRIPT plan reader=tour_route_place_components country=Vietnam source=cis node="Bitmap Index Scan:-" own_ms=0.0 rows=7 loops=1 shared_hit=12 shared_read=0
+SCRIPT plan reader=tour_route_place_components country=Vietnam source=cis node=Sort:- own_ms=0.0 rows=7 loops=1 shared_hit=80 shared_read=0
+SCRIPT qual reader=tour_route_place_components country=Vietnam source=cis marker="source_id =" at=- pushed=-
+SCRIPT qual reader=tour_route_place_components country=Vietnam source=cis marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT plan_total reader=tour_route_place_components country=Vietnam source=cis exec_ms=0.2 planning_ms=1.0 jit=f
+SCRIPT plan reader=tour_route_place_components country=Vietnam source=legacy node="Bitmap Index Scan:-" own_ms=0.0 rows=0 loops=1 shared_hit=12 shared_read=0
+SCRIPT plan reader=tour_route_place_components country=Vietnam source=legacy node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=12 shared_read=0
+SCRIPT plan reader=tour_route_place_components country=Vietnam source=legacy node="Bitmap Heap Scan:itinerary_components" own_ms=0.0 rows=0 loops=1 shared_hit=12 shared_read=0
+SCRIPT qual reader=tour_route_place_components country=Vietnam source=legacy marker="source_id =" at=- pushed=-
+SCRIPT qual reader=tour_route_place_components country=Vietnam source=legacy marker="tour_id =" at=- pushed=-
+SCRIPT plan_total reader=tour_route_place_components country=Vietnam source=legacy exec_ms=0.0 planning_ms=0.1 jit=f
+SCRIPT timing reader=tour_route_places country=Laos source=legacy calls=27 rows=519 total_ms=411.6 per_call_ms=15.2 max_ms=35.9 errors=0 repeats=3 partial=0 runs=16.2/15.2/15.1
+SCRIPT plan reader=tour_route_places country=Laos source=legacy node="Index Scan:tour_place" own_ms=20.3 rows=1 loops=45 shared_hit=191 shared_read=0
+SCRIPT plan reader=tour_route_places country=Laos source=legacy node="Nested Loop:-" own_ms=1.0 rows=10 loops=1 shared_hit=10 shared_read=0
+SCRIPT plan reader=tour_route_places country=Laos source=legacy node="Seq Scan:tour_segment" own_ms=0.8 rows=0 loops=45 shared_hit=225 shared_read=0
+SCRIPT plan reader=tour_route_places country=Laos source=legacy node=Aggregate:- own_ms=0.7 rows=45 loops=1 shared_hit=33 shared_read=0
+SCRIPT plan reader=tour_route_places country=Laos source=legacy node="Function Scan:c" own_ms=0.5 rows=10 loops=1 shared_hit=4 shared_read=0
+SCRIPT plan reader=tour_route_places country=Laos source=legacy node="Bitmap Index Scan:-" own_ms=0.2 rows=1 loops=45 shared_hit=90 shared_read=0
+SCRIPT qual reader=tour_route_places country=Laos source=legacy marker="source_id =" at="Index Scan:tour_place" pushed=t
+SCRIPT qual reader=tour_route_places country=Laos source=legacy marker="source_id =" at="Seq Scan:tour_segment" pushed=t
+SCRIPT qual reader=tour_route_places country=Laos source=legacy marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT qual reader=tour_route_places country=Laos source=legacy marker="tour_id =" at="Index Scan:raw_tours" pushed=t
+SCRIPT qual reader=tour_route_places country=Laos source=legacy marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT plan_total reader=tour_route_places country=Laos source=legacy exec_ms=25.8 planning_ms=2.5 jit=f
+SCRIPT timing reader=tour_route_places country=Vietnam source=cis calls=1 rows=6 total_ms=9.8 per_call_ms=9.8 max_ms=10.0 errors=0 repeats=3 partial=0 runs=10.0/9.7/9.8
+SCRIPT timing reader=tour_route_places country=Vietnam source=legacy calls=1 rows=6 total_ms=9.8 per_call_ms=9.8 max_ms=10.0 errors=0 repeats=3 partial=0 runs=9.8/9.8/10.0
+SCRIPT plan reader=tour_route_places country=Vietnam source=cis node="Nested Loop:-" own_ms=1.4 rows=12 loops=1 shared_hit=9 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=cis node="Seq Scan:tour_segment" own_ms=0.9 rows=0 loops=55 shared_hit=275 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=cis node=Aggregate:- own_ms=0.8 rows=55 loops=1 shared_hit=27 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=cis node="Function Scan:c" own_ms=0.6 rows=12 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=cis node=WindowAgg:- own_ms=0.2 rows=56 loops=1 shared_hit=27 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=cis node="Index Scan:tour_place" own_ms=0.2 rows=0 loops=55 shared_hit=110 shared_read=0
+SCRIPT qual reader=tour_route_places country=Vietnam source=cis marker="source_id =" at="Index Scan:tour_place" pushed=t
+SCRIPT qual reader=tour_route_places country=Vietnam source=cis marker="source_id =" at="Seq Scan:tour_segment" pushed=t
+SCRIPT qual reader=tour_route_places country=Vietnam source=cis marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT qual reader=tour_route_places country=Vietnam source=cis marker="tour_id =" at="Index Scan:raw_tours" pushed=t
+SCRIPT qual reader=tour_route_places country=Vietnam source=cis marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT plan_total reader=tour_route_places country=Vietnam source=cis exec_ms=6.0 planning_ms=2.6 jit=f
+SCRIPT plan reader=tour_route_places country=Vietnam source=legacy node="Nested Loop:-" own_ms=1.4 rows=12 loops=1 shared_hit=9 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=legacy node="Seq Scan:tour_segment" own_ms=0.9 rows=0 loops=55 shared_hit=275 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=legacy node=Aggregate:- own_ms=0.8 rows=55 loops=1 shared_hit=27 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=legacy node="Function Scan:c" own_ms=0.6 rows=12 loops=1 shared_hit=3 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=legacy node=WindowAgg:- own_ms=0.3 rows=56 loops=1 shared_hit=27 shared_read=0
+SCRIPT plan reader=tour_route_places country=Vietnam source=legacy node="Index Scan:tour_place" own_ms=0.2 rows=0 loops=55 shared_hit=110 shared_read=0
+SCRIPT qual reader=tour_route_places country=Vietnam source=legacy marker="source_id =" at="Index Scan:tour_place" pushed=t
+SCRIPT qual reader=tour_route_places country=Vietnam source=legacy marker="source_id =" at="Seq Scan:tour_segment" pushed=t
+SCRIPT qual reader=tour_route_places country=Vietnam source=legacy marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT qual reader=tour_route_places country=Vietnam source=legacy marker="tour_id =" at="Index Scan:raw_tours" pushed=t
+SCRIPT qual reader=tour_route_places country=Vietnam source=legacy marker="tour_id =" at="Index Scan:published_tours" pushed=t
+SCRIPT plan_total reader=tour_route_places country=Vietnam source=legacy exec_ms=6.0 planning_ms=2.5 jit=f
+SCRIPT parity reader=assembly_activities country=Laos legacy=0.9 cis=1.0 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=2.1/1.0/1.0 legacy_runs=1.1/0.9/0.9
+SCRIPT parity reader=assembly_activities country=Vietnam legacy=0.9 cis=1.0 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=1.1/0.9/1.0 legacy_runs=0.9/1.0/0.8
+SCRIPT parity reader=assembly_components country=Laos legacy=1.4 cis=3.7 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=4.7/3.7/3.6 legacy_runs=1.8/1.3/1.4
+SCRIPT parity reader=assembly_components country=Vietnam legacy=1.2 cis=3.5 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=3.8/3.5/3.5 legacy_runs=1.2/1.1/1.4
+SCRIPT parity reader=assembly_options country=Laos legacy=1.2 cis=2.3 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=3.0/2.3/2.3 legacy_runs=1.6/1.2/1.2
+SCRIPT parity reader=assembly_options country=Vietnam legacy=1.0 cis=2.3 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=2.3/2.3/2.1 legacy_runs=1.0/1.0/1.1
+SCRIPT parity reader=assembly_route_candidates country=Laos legacy=23.6 cis=31.0 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=32.9/31.0/30.3 legacy_runs=24.8/23.5/23.6
+SCRIPT parity reader=assembly_taste country=Laos legacy=2.2 cis=3.9 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=4.5/3.9/3.8 legacy_runs=2.7/2.0/2.2
+SCRIPT parity reader=assembly_taste country=Vietnam legacy=1.2 cis=3.6 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=3.8/3.6/3.5 legacy_runs=1.2/1.0/1.2
+SCRIPT parity reader=by_country country=Laos legacy=3.0 cis=9.9 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=11.4/9.9/9.7 legacy_runs=4.0/3.0/3.0
+SCRIPT parity reader=by_country country=Vietnam legacy=2.3 cis=8.4 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=8.5/8.4/8.4 legacy_runs=2.4/2.3/2.3
+SCRIPT parity reader=countries country=* legacy=3.9 cis=8.4 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=11.3/8.4/7.9 legacy_runs=4.6/3.9/3.4
+SCRIPT parity reader=detail country=Laos legacy=504.8 cis=496.9 target=757.2 verdict=PASS runs=3 partial=0 cis_runs=520.4/496.9/368.3 legacy_runs=504.8/432.5/562.1
+SCRIPT parity reader=detail country=Vietnam legacy=173.2 cis=215.1 target=259.8 verdict=PASS runs=3 partial=0 cis_runs=180.3/231.0/215.1 legacy_runs=193.6/173.2/158.1
+SCRIPT parity reader=routes country=Laos legacy=33.2 cis=99.6 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=99.6/97.4/103.4 legacy_runs=33.2/32.5/33.4
+SCRIPT parity reader=routes country=Vietnam legacy=9.5 cis=49.8 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=49.8/50.2/48.5 legacy_runs=9.3/9.5/11.1
+SCRIPT parity reader=search country=Laos legacy=30.8 cis=25.3 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=28.0/25.2/25.3 legacy_runs=32.9/30.7/30.8
+SCRIPT parity reader=tiles country=Laos legacy=37.8 cis=176.5 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=191.8/176.5/174.8 legacy_runs=45.3/37.8/35.5
+SCRIPT parity reader=tiles country=Vietnam legacy=23.1 cis=111.7 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=110.3/111.7/115.6 legacy_runs=23.1/22.7/29.0
+SCRIPT parity reader=tour_route country=Laos legacy=18.1 cis=3.2 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=3.2/3.2/3.2 legacy_runs=19.4/18.1/17.9
+SCRIPT parity reader=tour_route country=Vietnam legacy=14.6 cis=16.3 target=200.0 verdict=PASS runs=3 partial=0 cis_runs=16.3/15.6/16.6 legacy_runs=14.4/14.6/14.6
+SCRIPT parity_total passes=21 fails=0 runs=3
+SCRIPT plan reader=env_topk mode=natural node="CTE Scan:c" own_ms=20.8 rows=200 loops=1 shared_hit=7117 shared_read=0
+SCRIPT plan reader=env_topk mode=natural node="Hash Join:-" own_ms=13.4 rows=2153 loops=1 shared_hit=7117 shared_read=0
+SCRIPT plan reader=env_topk mode=natural node="Seq Scan:tour_place" own_ms=1.5 rows=2153 loops=1 shared_hit=167 shared_read=0
+SCRIPT plan reader=env_topk mode=natural node="Seq Scan:raw_tours" own_ms=1.4 rows=917 loops=1 shared_hit=191 shared_read=0
+SCRIPT plan reader=env_topk mode=natural node="Seq Scan:published_tours" own_ms=1.3 rows=892 loops=1 shared_hit=211 shared_read=0
+SCRIPT plan reader=env_topk mode=natural node="Hash Join:-" own_ms=0.8 rows=2153 loops=1 shared_hit=569 shared_read=0
+SCRIPT qual reader=env_topk mode=natural marker=<=> at=- pushed=-
+SCRIPT plan_total reader=env_topk mode=natural exec_ms=24.6 planning_ms=2.0 jit=f
+SCRIPT env_topk mode=natural exec_ms=24.6 uses_hnsw=f hnsw_order_by=f live_probe="Hash:-/Hash Join:-/Hash:-/Seq Scan:raw_tours" live_index=- join_filter_source_id=f raw_tours_seq_loops=1 nodes="Limit>Limit>Sort>Hash Join>Hash Join>Seq Scan"
+SCRIPT plan reader=env_topk mode=forced node="CTE Scan:c" own_ms=8.2 rows=200 loops=1 shared_hit=4644 shared_read=0
+SCRIPT plan reader=env_topk mode=forced node="Index Scan:tour_place" own_ms=4.5 rows=200 loops=1 shared_hit=2244 shared_read=0
+SCRIPT plan reader=env_topk mode=forced node="Nested Loop:-" own_ms=1.6 rows=200 loops=1 shared_hit=4644 shared_read=0
+SCRIPT plan reader=env_topk mode=forced node="Index Scan:raw_tours" own_ms=0.8 rows=1 loops=200 shared_hit=600 shared_read=0
+SCRIPT plan reader=env_topk mode=forced node="Index Scan:published_tours" own_ms=0.6 rows=1 loops=200 shared_hit=600 shared_read=0
+SCRIPT plan reader=env_topk mode=forced node="Seq Scan:destinations" own_ms=0.6 rows=1982 loops=1 shared_hit=89 shared_read=0
+SCRIPT qual reader=env_topk mode=forced marker=<=> at="Index Scan:tour_place" pushed=t
+SCRIPT plan_total reader=env_topk mode=forced exec_ms=11.9 planning_ms=1.9 jit=f
+SCRIPT env_topk mode=forced exec_ms=11.9 uses_hnsw=t hnsw_order_by=t live_probe="Nested Loop:-/Index Scan:raw_tours[raw_tours_source_key_idx]" live_index=raw_tours_source_key_idx join_filter_source_id=f raw_tours_seq_loops=0 nodes="Limit>Limit>Nested Loop>Nested Loop>Index Scan>Nested Loop"
+SCRIPT env_topk_summary role=tripplanner k=200 ef_search=400 iterative_scan=relaxed_order uses_hnsw_natural=f uses_hnsw_forced=t live_probe="Nested Loop:-/Index Scan:raw_tours[raw_tours_source_key_idx]" live_index=raw_tours_source_key_idx join_filter_source_id=f raw_tours_seq_loops_gt1=f verdict_full=PASS verdict_pre258=PASS
+SCRIPT plan reader=routes_single_generic country=Laos source=cis node="CTE Scan:sp" own_ms=7.8 rows=121 loops=10 shared_hit=6510 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Laos source=cis node="Index Scan:destinations" own_ms=2.0 rows=1 loops=1017 shared_hit=3051 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Laos source=cis node="Index Scan:published_tours" own_ms=2.0 rows=1 loops=1017 shared_hit=3051 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Laos source=cis node="Seq Scan:tour_leg" own_ms=2.0 rows=30 loops=1 shared_hit=500 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Laos source=cis node="Hash Join:-" own_ms=0.6 rows=1017 loops=1 shared_hit=41 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.6 rows=1 loops=121 shared_hit=367 shared_read=0
+SCRIPT qual reader=routes_single_generic country=Laos source=cis marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_single_generic country=Laos source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_single_generic country=Laos source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_single_generic country=Laos source=cis exec_ms=10.7 planning_ms=2.1 jit=f
+SCRIPT plan reader=routes_single_custom country=Laos source=cis node="CTE Scan:sp" own_ms=7.6 rows=121 loops=10 shared_hit=6510 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Laos source=cis node="Index Scan:destinations" own_ms=2.0 rows=1 loops=1017 shared_hit=3051 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Laos source=cis node="Index Scan:published_tours" own_ms=2.0 rows=1 loops=1017 shared_hit=3051 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Laos source=cis node="Seq Scan:tour_leg" own_ms=1.7 rows=30 loops=1 shared_hit=500 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Laos source=cis node="Index Scan:raw_tours" own_ms=0.6 rows=1 loops=121 shared_hit=367 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Laos source=cis node="Hash Join:-" own_ms=0.6 rows=1017 loops=1 shared_hit=41 shared_read=0
+SCRIPT qual reader=routes_single_custom country=Laos source=cis marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_single_custom country=Laos source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_single_custom country=Laos source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_single_custom country=Laos source=cis exec_ms=10.1 planning_ms=2.1 jit=f
+SCRIPT generic_plan reader=routes_single country=Laos days=21 slack=3 generic_exec_ms=10.7 custom_exec_ms=10.1 jit=off
+SCRIPT plan reader=routes_single_generic country=Vietnam source=cis node="Seq Scan:tour_leg" own_ms=2.0 rows=0 loops=1 shared_hit=500 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Vietnam source=cis node="Seq Scan:graph_build" own_ms=0.0 rows=1 loops=1 shared_hit=4 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Vietnam source=cis node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=504 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Vietnam source=cis node=Unique:- own_ms=0.0 rows=0 loops=1 shared_hit=504 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Vietnam source=cis node="Nested Loop:-" own_ms=0.0 rows=0 loops=1 shared_hit=504 shared_read=0
+SCRIPT plan reader=routes_single_generic country=Vietnam source=cis node="Nested Loop:-" own_ms=0.0 rows=0 loops=1 shared_hit=504 shared_read=0
+SCRIPT qual reader=routes_single_generic country=Vietnam source=cis marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_single_generic country=Vietnam source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_single_generic country=Vietnam source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_single_generic country=Vietnam source=cis exec_ms=2.2 planning_ms=0.0 jit=f
+SCRIPT plan reader=routes_single_custom country=Vietnam source=cis node="Seq Scan:tour_leg" own_ms=1.7 rows=0 loops=1 shared_hit=500 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Vietnam source=cis node="Seq Scan:graph_build" own_ms=0.0 rows=1 loops=1 shared_hit=4 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Vietnam source=cis node=Sort:- own_ms=0.0 rows=0 loops=1 shared_hit=504 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Vietnam source=cis node=Unique:- own_ms=0.0 rows=0 loops=1 shared_hit=504 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Vietnam source=cis node="Nested Loop:-" own_ms=0.0 rows=0 loops=1 shared_hit=504 shared_read=0
+SCRIPT plan reader=routes_single_custom country=Vietnam source=cis node="Nested Loop:-" own_ms=0.0 rows=0 loops=1 shared_hit=504 shared_read=0
+SCRIPT qual reader=routes_single_custom country=Vietnam source=cis marker=countries at="Seq Scan:tour_leg" pushed=t
+SCRIPT qual reader=routes_single_custom country=Vietnam source=cis marker="source_id = ANY" at=- pushed=-
+SCRIPT qual reader=routes_single_custom country=Vietnam source=cis marker="source_tour_id = ANY" at=- pushed=-
+SCRIPT plan_total reader=routes_single_custom country=Vietnam source=cis exec_ms=1.8 planning_ms=2.0 jit=f
+SCRIPT generic_plan reader=routes_single country=Vietnam days=21 slack=3 generic_exec_ms=2.2 custom_exec_ms=1.8 jit=off
+SCRIPT fingerprint view=v_component_embedding rows=2153 md5=99d20632c66091a4ca4c87ba9133b73a ms=612.9
+SCRIPT fingerprint view=v_destination rows=1982 md5=5c9c68096465fe3554ef1a64564e7d22 ms=24.6
+SCRIPT fingerprint view=v_destination_photo rows=0 md5=d41d8cd98f00b204e9800998ecf8427e ms=2.2
+SCRIPT fingerprint view=v_destination_redirect rows=1 md5=3aa3f4ece375b547dd7b4f78520c408c ms=2.2
+SCRIPT fingerprint view=v_destination_shape rows=37 md5=d238d0ef2eebbfb5348032fb99a16e62 ms=2.6
+SCRIPT fingerprint view=v_graph_edge rows=587 md5=ca1dfda2d891c815438fc901dfb2471a ms=13.0
+SCRIPT fingerprint view=v_graph_node rows=444 md5=e9d98067bf5bf11f53271b4f303def2e ms=17.7
+SCRIPT fingerprint view=v_tour rows=892 md5=8d921fab29160a496ff4209a42a12369 ms=172.6
+SCRIPT fingerprint view=v_tour_component rows=2153 md5=3b53adf08bbba42c53669642b15fadcb ms=692.2
+SCRIPT fingerprint view=v_tour_day rows=6978 md5=db3e673800456bfc058ceb04826b8c2c ms=37908.2
+SCRIPT fingerprint view=v_tour_day_route rows=1084 md5=88b971e9835a7f8067588a7fd84da117 ms=23.0
+SCRIPT fingerprint view=v_tour_junction rows=7480 md5=738248e5ccb65bf5b87604d36f619373 ms=71.9
+SCRIPT fingerprint view=v_tour_leg rows=5303 md5=690243f4cc35c596395618aaa0ea023d ms=126.8
+SCRIPT fingerprint view=v_tour_photo rows=2645 md5=3f174850a64fd5502204ff1ce22dda05 ms=44.8
+SCRIPT fingerprint view=v_tour_place rows=22201 md5=f3cb563d56f58c8f3821421438c9af00 ms=4085.4
+SCRIPT fingerprint view=v_tour_stop rows=1017 md5=92c096599959f8e6a35831645f5b0762 ms=20.3
+SCRIPT defect_tour source_id=efd0a0e9-efb2-4332-a469-45b76c318659 title="Laos by Bicycle: Luang Prabang to the Cambodian Border — 21 Days" country=Laos duration_raw="21 days" duration_days=21 canonical_days=21 max_canonical=21 ranged=- heading_days=21
+SCRIPT defect_component source_id=efd0a0e9 day=1 name="Luang Prabang" destination=a213cca5 destination_name="Luang Prabang" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=2 name="Mekong River" destination=99cf5698 destination_name="Mekong River" precision=line located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=3 name=Oudomxay destination=778bcf65 destination_name=Oudomxay precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=4 name="Nong Khiaw" destination=c2344921 destination_name="Nong Khiaw" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=4 name="Pak Mong" destination=6a68ce4e destination_name="Pak Mong" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=4 name="valley toward Nong Khiaw" destination=57a955d7 destination_name="valley toward Nong Khiaw" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=5 name="100 Waterfalls" destination=6fd2e9d4 destination_name="100 Waterfalls" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=5 name="100 Waterfalls" destination=6fd2e9d4 destination_name="100 Waterfalls" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=5 name="Nam Ou valley" destination=f9502448 destination_name="Nam Ou valley" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=6 name="Nam Ou Valley" destination=f9502448 destination_name="Nam Ou valley" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=7 name="Kuang Si Waterfalls" destination=4466462c destination_name="Kuang Si Waterfalls" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=efd0a0e9 day=7 name="Laos Buffalo Dairy" destination=9da51ff5 destination_name="Laos Buffalo Dairy" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=efd0a0e9 day=8 name="Luang Prabang to Phoukhoun" destination=0596ed6c destination_name="Luang Prabang to Phoukhoun" precision=point located_by=geoapify review=- result_type=city
+SCRIPT defect_component source_id=efd0a0e9 day=10 name="Plain of Jars UNESCO Site" destination=4bef0a8c destination_name="Plain of Jars UNESCO Site" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=efd0a0e9 day=10 name="Plain of Jars UNESCO Site" destination=4bef0a8c destination_name="Plain of Jars UNESCO Site" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=efd0a0e9 day=11 name="Phonsavan to Paksan" destination=2bd6f1de destination_name="Phonsavan to Paksan" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=11 name="That Chomphet" destination=6adab7ff destination_name="That Chomphet" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=efd0a0e9 day=12 name="Kong Lor Cave" destination=eb3be30b destination_name="Kong Lor Cave" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=13 name="Konglor Cave" destination=0997f81c destination_name="Konglor Cave" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=13 name=Thakhek destination=9baa9cb4 destination_name=Thakhek precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=13 name=Thakhek destination=9baa9cb4 destination_name=Thakhek precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=15 name=Salavan destination=76a48761 destination_name=Salavan precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=15 name=Salavan destination=76a48761 destination_name=Salavan precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=16 name="Bolaven Plateau" destination=bbe2ecc1 destination_name="Bolaven Plateau" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=17 name="Paksong to Pakse" destination=6df9d7d5 destination_name="Paksong to Pakse" precision=point located_by=geoapify review=- result_type=city
+SCRIPT defect_component source_id=efd0a0e9 day=17 name="Tad Fane" destination=c01d83ec destination_name="Tad Fane" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=efd0a0e9 day=18 name=Champasak destination=3354dc3f destination_name=Champasak precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=18 name="Wat Phou" destination=6927304b destination_name="Wat Phou" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=efd0a0e9 day=19 name="4000 Islands region" destination=9dd20af3 destination_name="4000 Islands region" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=19 name="Champasak to Don Khong" destination=666032a3 destination_name="Champasak to Don Khong" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=20 name="Don Khone" destination=785bd622 destination_name="Don Khone" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=efd0a0e9 day=20 name="Don Khong to Don Khone" destination=ee4ec3a5 destination_name="Don Khong to Don Khone" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_days source_id=efd0a0e9 cis_days=18 frozen_days=0 frozen_components=0
+SCRIPT defect_tour source_id=4481fea0-5522-41aa-a556-9b9cc34983d5 title="Laos by Bike & Boat: Luang Prabang to Vientiane — 7 Days" country=Laos duration_raw="7 days" duration_days=7 canonical_days=7 max_canonical=7 ranged=- heading_days=7
+SCRIPT defect_component source_id=4481fea0 day=1 name="Heuan Chan Heritage House" destination=b9906653 destination_name="Heuan Chan Heritage House" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=1 name="Luang Prabang's main street" destination=372f19b4 destination_name="Luang Prabang's main street" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=1 name="National Museum" destination=8a65c069 destination_name="National Museum (Luang Prabang)" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=4481fea0 day=1 name="That Dam" destination=19a3305d destination_name="That Dam" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=1 name="Wat Mai" destination=f0d7738c destination_name="Wat Mai" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=4481fea0 day=1 name="Wat Sen" destination=80a6fb33 destination_name="Wat Sen" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=4481fea0 day=1 name="Wat Sop" destination=42fb9b17 destination_name="Wat Sop" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=4481fea0 day=1 name="Wat That Luang" destination=16528084 destination_name="Wat That Luang" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=4481fea0 day=1 name="Wat Visoun" destination=43dd131b destination_name="Wat Visoun" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=4481fea0 day=1 name="Wat Xieng Thong" destination=97bbc5b1 destination_name="Wat Xieng Thong" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=2 name="Kuang Si Waterfall" destination=6bf9c2b3 destination_name="Kuang Si Waterfall" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=2 name="Kuang Si Waterfall" destination=6bf9c2b3 destination_name="Kuang Si Waterfall" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=2 name="Laos Buffalo Dairy" destination=9da51ff5 destination_name="Laos Buffalo Dairy" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=4481fea0 day=3 name="Xiang Ngern district" destination=fc515068 destination_name="Xiang Ngern district" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=3 name="Xieng Ngern town" destination=4dac30e7 destination_name="Xieng Ngern town" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=5 name="Blue Lagoon 3" destination=4ae9cbf8 destination_name="Blue Lagoon 3" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=4481fea0 day=5 name="Vang Vieng" destination=2a5b8df3 destination_name="Vang Vieng" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=6 name="Phou Khao Khouay National Park" destination=45223da2 destination_name="Phou Khao Khouay National Park" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=4481fea0 day=7 name="Patuxay monument" destination=ef788b37 destination_name="Patuxay Monument" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=4481fea0 day=7 name="Pha That Luang" destination=17cd8d9b destination_name="Pha That Luang" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_days source_id=4481fea0 cis_days=6 frozen_days=0 frozen_components=0
+SCRIPT defect_tour source_id=fbe738ad-fa2b-4986-8f48-b98a0d12e425 title="Laos by Bike: Luang Prabang to Vientiane — 7 Days" country=Laos duration_raw="7 days" duration_days=7 canonical_days=7 max_canonical=7 ranged=- heading_days=7
+SCRIPT defect_component source_id=fbe738ad day=2 name="Kuang Si Waterfall" destination=70930247 destination_name="Kuang Si Falls" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=fbe738ad day=2 name="return ride to Luang Prabang" destination=c9016c63 destination_name="return ride to Luang Prabang" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=fbe738ad day=3 name="mountain viewpoint to Kasi Valley" destination=f1d14b6b destination_name="mountain viewpoint to Kasi Valley" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=fbe738ad day=4 name="Kasi to Vang Vieng" destination=ebb92042 destination_name="Kasi to Vang Vieng" precision=point located_by=geoapify review=- result_type=city
+SCRIPT defect_component source_id=fbe738ad day=4 name="Tham Xang or Tham Hoi caves" destination=2aaee25b destination_name="Tham Xang or Tham Hoi caves" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=fbe738ad day=4 name="Tham Xang or Tham Hoi caves" destination=2aaee25b destination_name="Tham Xang or Tham Hoi caves" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=fbe738ad day=4 name="Vang Vieng" destination=2a5b8df3 destination_name="Vang Vieng" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=fbe738ad day=5 name="Blue Lagoon pools" destination=1245b316 destination_name="Blue Lagoon pools" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=fbe738ad day=5 name="Vang Vieng" destination=2a5b8df3 destination_name="Vang Vieng" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=fbe738ad day=7 name="Laos Wildlife Conservation Trust facility" destination=1ee01d83 destination_name="Laos Wildlife Conservation Trust facility" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=fbe738ad day=7 name="Patuxai Monument" destination=0b813e2b destination_name="Patuxai Monument" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=fbe738ad day=7 name="rice paddies beneath the Phou Khao Khouay mountain range" destination=cc7c842f destination_name="rice paddies beneath the Phou Khao Khouay mountain range" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_days source_id=fbe738ad cis_days=5 frozen_days=0 frozen_components=0
+SCRIPT defect_tour source_id=2886a122-9800-423c-bbb6-57ce84aa5a85 title="Laos Eastern Circuit: Cycling the Highland Loop — 11 Days" country=Laos duration_raw="11 days" duration_days=11 canonical_days=11 max_canonical=11 ranged=- heading_days=11
+SCRIPT defect_component source_id=2886a122 day=1 name="Luang Prabang" destination=a213cca5 destination_name="Luang Prabang" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=2 name="Kuang Si Waterfalls" destination=4466462c destination_name="Kuang Si Waterfalls" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=2886a122 day=2 name="Lao Buffalo Dairy" destination=ee88b8fb destination_name="Lao Buffalo Dairy" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=2886a122 day=2 name="Luang Prabang" destination=a213cca5 destination_name="Luang Prabang" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=3 name="Luang Prabang to Kasi" destination=e258c959 destination_name="Luang Prabang to Kasi" precision=point located_by=geoapify review=- result_type=city
+SCRIPT defect_component source_id=2886a122 day=4 name="Kasi to Phoukhoun" destination=8751d443 destination_name="Kasi to Phoukhoun" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=4 name="Phou Khoun" destination=470a933f destination_name="Phou Khoun" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=5 name="Plain of Jars" destination=2dfe016b destination_name="Plain of Jars" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=2886a122 day=5 name="Plain of Jars" destination=2dfe016b destination_name="Plain of Jars" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=2886a122 day=6 name=Viengthong destination=b4b6cc34 destination_name=Viengthong precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=7 name="Viengthong to Vieng Kham" destination=9b0f441f destination_name="Viengthong to Vieng Kham" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=8 name="Nong Khiaw" destination=c2344921 destination_name="Nong Khiaw" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=8 name="Vieng Kham to Nong Khiaw" destination=88634fc3 destination_name="Vieng Kham to Nong Khiaw" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=9 name="100 Waterfalls" destination=6fd2e9d4 destination_name="100 Waterfalls" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=2886a122 day=9 name="100 Waterfalls" destination=6fd2e9d4 destination_name="100 Waterfalls" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=2886a122 day=9 name="Nong Khiaw" destination=c2344921 destination_name="Nong Khiaw" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=11 name="Luang Prabang" destination=a213cca5 destination_name="Luang Prabang" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=2886a122 day=11 name="Luang Prabang" destination=a213cca5 destination_name="Luang Prabang" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_days source_id=2886a122 cis_days=10 frozen_days=11 frozen_components=47
+SCRIPT defect_tour source_id=d57fc4cc-5b0b-4fef-8c85-a3a1c68e3c96 title="Laos: Luang Prabang, Plains of Jars & Mekong Valley — 10 Days" country=Laos duration_raw="10 days" duration_days=10 canonical_days=10 max_canonical=10 ranged=- heading_days=10
+SCRIPT defect_component source_id=d57fc4cc day=1 name="Luang Prabang" destination=a213cca5 destination_name="Luang Prabang" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=2 name="Ban Xanghai village" destination=9af2103d destination_name="Ban Xanghai village" precision=point located_by=geoapify review=- result_type=city
+SCRIPT defect_component source_id=d57fc4cc day=2 name="Mount Phousi" destination=bbbaa12e destination_name="Mount Phousi" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=2 name="National Museum" destination=8a65c069 destination_name="National Museum (Luang Prabang)" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=2 name="Pak Ou Caves" destination=309d27e9 destination_name="Pak Ou Caves" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=2 name="Traditional Art and Ethnology Center" destination=c8a5ab23 destination_name="Traditional Art and Ethnology Center" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=2 name="UXO Visitor Centre" destination=c95d6534 destination_name="UXO Visitor Centre" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=2 name="Wat Mai" destination=f0d7738c destination_name="Wat Mai" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=2 name="Wat Visoun" destination=43dd131b destination_name="Wat Visoun" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=2 name="Wat Xieng Thong" destination=97bbc5b1 destination_name="Wat Xieng Thong" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=3 name="Bear Rescue Centre" destination=c9a0aa45 destination_name="Bear Rescue Centre" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=3 name="Kuang Si Falls Butterflies Park" destination=2edf61b7 destination_name="Kuang Si Falls Butterflies Park" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=3 name="Kuang Si Waterfall" destination=6bf9c2b3 destination_name="Kuang Si Waterfall" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=3 name="Living Land Lao Organic Farm" destination=a96741b3 destination_name="Living Land Lao Organic Farm" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=4 name=Phonsavan destination=865a0f6f destination_name=Phonsavan precision=point located_by=geoapify review=- result_type=city
+SCRIPT defect_component source_id=d57fc4cc day=5 name="Muang Khoun" destination=c95654f1 destination_name="Muang Khoun" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=5 name=Phonsavan destination=865a0f6f destination_name=Phonsavan precision=point located_by=geoapify review=- result_type=city
+SCRIPT defect_component source_id=d57fc4cc day=5 name="Plain of Jars sites" destination=d398abde destination_name="Plain of Jars sites" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=6 name="Vang Vieng" destination=2a5b8df3 destination_name="Vang Vieng" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=6 name="villages near Phonsavan" destination=795b9296 destination_name="villages near Phonsavan" precision=point located_by=geoapify review=- result_type=city
+SCRIPT defect_component source_id=d57fc4cc day=7 name="Blue Lagoon" destination=b625c028 destination_name="Blue Lagoon" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=7 name="Nam Song River" destination=c51ecb8a destination_name="Nam Song River" precision=line located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=7 name="Organic Farm Vang Vieng" destination=c9834272 destination_name="Organic Farm Vang Vieng" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=7 name="Tham Jang Cave" destination=7f7983c7 destination_name="Tham Jang Cave" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=7 name="Tham Phoukham Cave" destination=a57d919a destination_name="Tham Phoukham Cave" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=8 name="Buddha Park (Wat Xieng Khuan)" destination=33678e96 destination_name="Buddha Park (Wat Xieng Khuan)" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=9 name="COPE Visitor Centre" destination=d5e9b991 destination_name="COPE Visitor Centre" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=9 name=Patuxay destination=f37142bf destination_name=Patuxay precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=9 name="Pha That Luang" destination=17cd8d9b destination_name="Pha That Luang" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=9 name="Wat Phra Keo" destination=814ac96f destination_name="Wat Phra Keo" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=9 name="Wat Si Muang" destination=0e141f28 destination_name="Wat Si Muang" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=d57fc4cc day=9 name="Wat Sisaket" destination=b93feca4 destination_name="Wat Sisaket" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=d57fc4cc day=10 name=Vientiane destination=15a1f88c destination_name=Vientiane precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_days source_id=d57fc4cc cis_days=10 frozen_days=0 frozen_components=0
+SCRIPT defect_tour source_id=b9073577-88aa-415f-9bc7-440c296add35 title="Laos: Luang Prabang to Pakse — Temples, Caves & Plateau — 9 Days" country=Laos duration_raw="9 DAYS" duration_days=9 canonical_days=9 max_canonical=9 ranged=- heading_days=9
+SCRIPT defect_component source_id=b9073577 day=1 name="Night Market" destination=e7967cea destination_name="Night Market (Luang Prabang)" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=1 name="Phousi Mountain" destination=519bda5d destination_name="Phousi Mountain" precision=point located_by=geoapify review=- result_type=street
+SCRIPT defect_component source_id=b9073577 day=1 name="Wat Aham" destination=7ad25d77 destination_name="Wat Aham" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=b9073577 day=1 name="Wat Visunalat" destination=401d99f8 destination_name="Wat Visunalat" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=b9073577 day=2 name="Ban Xanghai" destination=13a4ac26 destination_name="Ban Xanghai" precision=point located_by=geoapify review=- result_type=city
+SCRIPT defect_component source_id=b9073577 day=2 name="Ban Xang Khong" destination=d981407e destination_name="Ban Xang Khong" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=2 name="Pak Ou Caves" destination=309d27e9 destination_name="Pak Ou Caves" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=2 name="Wat Sene" destination=955b7d69 destination_name="Wat Sene" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=b9073577 day=2 name="Wat Xieng Thong" destination=97bbc5b1 destination_name="Wat Xieng Thong" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=3 name="Kuang Si Waterfall" destination=6bf9c2b3 destination_name="Kuang Si Waterfall" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=3 name="Kuang Si Waterfall" destination=6bf9c2b3 destination_name="Kuang Si Waterfall" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=3 name="Phousi Market" destination=753ef49e destination_name="Phousi Market" precision=point located_by=geoapify review=- result_type=street
+SCRIPT defect_component source_id=b9073577 day=4 name="Phou Khoun Viewpoint" destination=8e30a606 destination_name="Phou Khoun Viewpoint" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=5 name="Site 1" destination=7eed0934 destination_name="Site 1" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=5 name="Site 2 (Hai Hin Phu Salato)" destination=e4dd0c32 destination_name="Site 2 (Hai Hin Phu Salato)" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=5 name="That Chomphet Stupa" destination=fa87778d destination_name="That Chomphet Stupa" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=5 name="That Foun Stupa" destination=319f7ece destination_name="That Foun Stupa" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=5 name="Wat Phia Wat" destination=081384fb destination_name="Wat Phia Wat" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=6 name="Nam Song River" destination=c51ecb8a destination_name="Nam Song River" precision=line located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=6 name="Vang Vieng" destination=2a5b8df3 destination_name="Vang Vieng" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=7 name="Nam Song River" destination=c51ecb8a destination_name="Nam Song River" precision=line located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=7 name="Tham None Cave" destination=9ae0c934 destination_name="Tham None Cave" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=b9073577 day=8 name="Mekong riverside" destination=affb790e destination_name="Mekong riverside" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=8 name="Patuxai Monument" destination=0b813e2b destination_name="Patuxai Monument" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=b9073577 day=8 name="Talat Kouadin" destination=662a555f destination_name="Talat Kouadin" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=8 name="That Luang Stupa" destination=8e1123db destination_name="That Luang Stupa" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=8 name="Wat Haisok" destination=0aa3bc43 destination_name="Wat Haisok" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=b9073577 day=8 name="Wat Inpeng" destination=a834cd22 destination_name="Wat Inpeng" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=8 name="Wat Ong Tue" destination=c4903ee0 destination_name="Wat Ong Tue" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=8 name="Wat Prakeo" destination=e7b7b410 destination_name="Wat Prakeo" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=b9073577 day=8 name="Wat Sisaket" destination=b93feca4 destination_name="Wat Sisaket" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_days source_id=b9073577 cis_days=8 frozen_days=0 frozen_components=0
+SCRIPT defect_tour source_id=9149a7e8-6223-4afc-a9e8-ce91e895e1f3 title="Laos: Mekong, Caves & Highland Culture—14 Days" country=Laos duration_raw="14 days" duration_days=14 canonical_days=14 max_canonical=14 ranged=- heading_days=14
+SCRIPT defect_component source_id=9149a7e8 day=1 name="Mekong River" destination=99cf5698 destination_name="Mekong River" precision=line located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=1 name="Night Market" destination=7d2eac2f destination_name="Night Market (Vientiane)" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=2 name="Hor Phra Keo" destination=99fe8e5f destination_name="Hor Phra Keo" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=2 name="Patuxay Monument" destination=ef788b37 destination_name="Patuxay Monument" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=2 name="Talat Sao (Morning Market)" destination=cb0a5b69 destination_name="Talat Sao (Morning Market)" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=9149a7e8 day=2 name="That Luang Stupa" destination=8e1123db destination_name="That Luang Stupa" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=2 name="Wat Sisaket" destination=b93feca4 destination_name="Wat Sisaket" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=3 name="Buddha Park (Wat Xieng Khuan)" destination=33678e96 destination_name="Buddha Park (Wat Xieng Khuan)" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=3 name="Buddha Park (Wat Xieng Khuan)" destination=33678e96 destination_name="Buddha Park (Wat Xieng Khuan)" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=3 name="Vang Vieng" destination=2a5b8df3 destination_name="Vang Vieng" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=3 name="Vang Vieng" destination=2a5b8df3 destination_name="Vang Vieng" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=4 name="Phou Khoun Observation Site" destination=1c06cb4b destination_name="Phou Khoun Observation Site" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=5 name="Plain of Jars Site I" destination=f3eee553 destination_name="Plain of Jars Site I" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=5 name="Plain of Jars Site II" destination=3ed24b4d destination_name="Plain of Jars Site II" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=5 name="That Chomphet Stupa" destination=fa87778d destination_name="That Chomphet Stupa" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=5 name="That Foun Stupa" destination=319f7ece destination_name="That Foun Stupa" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=5 name="Wat Phia Wat" destination=081384fb destination_name="Wat Phia Wat" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=6 name="Luang Prabang" destination=a213cca5 destination_name="Luang Prabang" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=7 name="Heuan Chan Luang Prabang" destination=53e4443f destination_name="Heuan Chan Luang Prabang" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=7 name="Morning Market in the old town" destination=82d4d293 destination_name="Morning Market in the old town" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=7 name="Mount Phousi" destination=bbbaa12e destination_name="Mount Phousi" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=7 name="National Museum" destination=8a65c069 destination_name="National Museum (Luang Prabang)" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=9149a7e8 day=7 name="Wat Mai Suwannaphumaham" destination=735acb0e destination_name="Wat Mai Suwannaphumaham" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=7 name="Wat Visounnalath" destination=7c236efa destination_name="Wat Visounnalath" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=7 name="Wat Xieng Thong" destination=97bbc5b1 destination_name="Wat Xieng Thong" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=8 name="Bear Rescue Center" destination=f31b4fa5 destination_name="Bear Rescue Center" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=8 name="Kuang Si Waterfall" destination=6bf9c2b3 destination_name="Kuang Si Waterfall" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=8 name="Phosy Market" destination=4c6fe6da destination_name="Phosy Market" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=9149a7e8 day=9 name="Ban Nayang" destination=a3c1c4c8 destination_name="Ban Nam Yang" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=9 name="Nong Khiaw" destination=c2344921 destination_name="Nong Khiaw" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=9 name="Tham Ting (lower) and Tham Theung (upper)" destination=51da7404 destination_name="Tham Ting (lower) and Tham Theung (upper)" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=10 name="second-highest viewpoint overlooking Nong Khiaw" destination=46a3edae destination_name="second-highest viewpoint overlooking Nong Khiaw" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=9149a7e8 day=10 name="Tham Pha Tok Cave" destination=39eff619 destination_name="Tham Pha Tok Cave" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_days source_id=9149a7e8 cis_days=10 frozen_days=5 frozen_components=32
+SCRIPT defect_tour source_id=664086a9-df2d-481c-a4fa-af67f782a6a8 title="Laos: Mekong Valley, Elephants & Temple Towns — 10 Days" country=Laos duration_raw="10 days" duration_days=10 canonical_days=10 max_canonical=10 ranged=- heading_days=10
+SCRIPT defect_component source_id=664086a9 day=1 name="Mekong River waterfront" destination=e5025282 destination_name="Mekong River waterfront" precision=line located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=664086a9 day=1 name="Night Market" destination=7d2eac2f destination_name="Night Market (Vientiane)" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=2 name="Hor Phra Keo" destination=99fe8e5f destination_name="Hor Phra Keo" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=2 name="Patuxay Monument" destination=ef788b37 destination_name="Patuxay Monument" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=2 name="That Luang Stupa" destination=8e1123db destination_name="That Luang Stupa" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=2 name="Wat Sisaket" destination=b93feca4 destination_name="Wat Sisaket" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=3 name="Buddha Park" destination=9dd11e4b destination_name="Buddha Park" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=3 name="local eatery and café near the Mekong River at Buddha Park" destination=43f91b0f destination_name="local eatery and café near the Mekong River at Buddha Park" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=3 name="Vang Vieng" destination=2a5b8df3 destination_name="Vang Vieng" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=3 name="Wat Xieng Khuan, known locally as Buddha Park" destination=b027c482 destination_name="Wat Xieng Khuan, known locally as Buddha Park" precision=point located_by=geoapify review=- result_type=street
+SCRIPT defect_component source_id=664086a9 day=4 name="Elephant Conservation Center" destination=052f353a destination_name="Elephant Conservation Center" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=4 name="Elephant Conservation Center" destination=052f353a destination_name="Elephant Conservation Center" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=4 name="Elephant Conservation Center" destination=052f353a destination_name="Elephant Conservation Center" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=4 name="Elephant Conservation Center" destination=052f353a destination_name="Elephant Conservation Center" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=4 name="Elephant Conservation Center" destination=052f353a destination_name="Elephant Conservation Center" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=5 name="Elephant Conservation Center" destination=052f353a destination_name="Elephant Conservation Center" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=5 name="Elephant Conservation Center forest" destination=8609e36e destination_name="Elephant Conservation Center forest" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=6 name="Luang Prabang" destination=a213cca5 destination_name="Luang Prabang" precision=- located_by=mapbox review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=7 name="Morning Market" destination=3b2f2e10 destination_name="Morning Market (Luang Prabang)" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=664086a9 day=7 name="Mount Phousi" destination=bbbaa12e destination_name="Mount Phousi" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=7 name="National Museum (Hor Kham or Royal Palace)" destination=0e60cc16 destination_name="National Museum (Hor Kham or Royal Palace)" precision=point located_by=geoapify review=- result_type=amenity
+SCRIPT defect_component source_id=664086a9 day=7 name="Pak Ou Caves" destination=309d27e9 destination_name="Pak Ou Caves" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=7 name="residential streets of Luang Prabang" destination=b61e4e09 destination_name="residential streets of Luang Prabang" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=7 name="Wat Mai Suwannaphumaham" destination=735acb0e destination_name="Wat Mai Suwannaphumaham" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=7 name="Wat Xieng Thong" destination=97bbc5b1 destination_name="Wat Xieng Thong" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=8 name="Kuang Si Waterfall" destination=6bf9c2b3 destination_name="Kuang Si Waterfall" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=8 name="Living Land Farm" destination=690c53cf destination_name="Living Land Farm" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=9 name="Ban Chan Pottery Village" destination=ae13e2ff destination_name="Ban Chan Pottery Village" precision=area located_by=llm review=unconfirmed_hard_type result_type=-
+SCRIPT defect_component source_id=664086a9 day=9 name="Kuang Si Waterfall" destination=6bf9c2b3 destination_name="Kuang Si Waterfall" precision=- located_by=llm review=- result_type=-
+SCRIPT defect_component source_id=664086a9 day=9 name="Tamarind Cooking Class" destination=5bdaf8c7 destination_name="Tamarind Cooking Class" precision=area located_by=llm review=- result_type=-
+SCRIPT defect_days source_id=664086a9 cis_days=9 frozen_days=10 frozen_components=72
+SCRIPT defect_place id=3dd78cd6 name="Bear Rescue Center, Kuang Si" country=Laos located_by=- precision=- geo_status=ok duplicate_of=-
+SCRIPT defect_place id=562f6951 name="farmstead to Kuang Si Falls" country=Laos located_by=geoapify precision=point geo_status=ok duplicate_of=-
+SCRIPT defect_place id=70930247 name="Kuang Si Falls" country=Laos located_by=llm precision=- geo_status=ok duplicate_of=-
+SCRIPT defect_place id=2edf61b7 name="Kuang Si Falls Butterflies Park" country=Laos located_by=llm precision=area geo_status=ok duplicate_of=-
+SCRIPT defect_place id=6bf9c2b3 name="Kuang Si Waterfall" country=Laos located_by=llm precision=- geo_status=ok duplicate_of=-
+SCRIPT defect_place id=4466462c name="Kuang Si Waterfalls" country=Laos located_by=geoapify precision=point geo_status=ok duplicate_of=-
+SCRIPT defect_place id=ef603762 name="Luang Prabang to Kuang Si Falls" country=Laos located_by=geoapify precision=point geo_status=ok duplicate_of=-
+SCRIPT defect_place id=979ef69b name="Tad Kuang Si Waterfall" country=Laos located_by=llm precision=- geo_status=ok duplicate_of=-
+SCRIPT defect_place id=ac14a550 name="Tat Kuang Si Bear Rescue Center" country=Laos located_by=geoapify precision=point geo_status=ok duplicate_of=-
+SCRIPT defect_pair a=3dd78cd6 b=562f6951 km=182.4
+SCRIPT defect_pair a=3dd78cd6 b=70930247 km=185.2
+SCRIPT defect_pair a=3dd78cd6 b=2edf61b7 km=185.3
+SCRIPT defect_pair a=3dd78cd6 b=6bf9c2b3 km=185.2
+SCRIPT defect_pair a=3dd78cd6 b=4466462c km=182.5
+SCRIPT defect_pair a=3dd78cd6 b=ef603762 km=177.3
+SCRIPT defect_pair a=3dd78cd6 b=979ef69b km=185.2
+SCRIPT defect_pair a=3dd78cd6 b=ac14a550 km=182.5
+SCRIPT defect_pair a=562f6951 b=70930247 km=3.8
+SCRIPT defect_pair a=562f6951 b=2edf61b7 km=3.2
+SCRIPT defect_pair a=562f6951 b=6bf9c2b3 km=3.8
+SCRIPT defect_pair a=562f6951 b=4466462c km=0.1
+SCRIPT defect_pair a=562f6951 b=ef603762 km=21.6
+SCRIPT defect_pair a=562f6951 b=979ef69b km=3.8
+SCRIPT defect_pair a=562f6951 b=ac14a550 km=0.4
+SCRIPT defect_pair a=70930247 b=2edf61b7 km=4.0
+SCRIPT defect_pair a=70930247 b=6bf9c2b3 km=0.0
+SCRIPT defect_pair a=70930247 b=4466462c km=3.7
+SCRIPT defect_pair a=70930247 b=ef603762 km=24.9
+SCRIPT defect_pair a=70930247 b=979ef69b km=0.0
+SCRIPT defect_pair a=70930247 b=ac14a550 km=4.0
+SCRIPT defect_pair a=2edf61b7 b=6bf9c2b3 km=4.0
+SCRIPT defect_pair a=2edf61b7 b=4466462c km=3.2
+SCRIPT defect_pair a=2edf61b7 b=ef603762 km=21.3
+SCRIPT defect_pair a=2edf61b7 b=979ef69b km=4.0
+SCRIPT defect_pair a=2edf61b7 b=ac14a550 km=3.0
+SCRIPT defect_pair a=6bf9c2b3 b=4466462c km=3.7
+SCRIPT defect_pair a=6bf9c2b3 b=ef603762 km=24.9
+SCRIPT defect_pair a=6bf9c2b3 b=979ef69b km=0.0
+SCRIPT defect_pair a=6bf9c2b3 b=ac14a550 km=4.0
+SCRIPT defect_pair a=4466462c b=ef603762 km=21.7
+SCRIPT defect_pair a=4466462c b=979ef69b km=3.7
+SCRIPT defect_pair a=4466462c b=ac14a550 km=0.5
+SCRIPT defect_pair a=ef603762 b=979ef69b km=24.9
+SCRIPT defect_pair a=ef603762 b=ac14a550 km=21.2
+SCRIPT defect_pair a=979ef69b b=ac14a550 km=4.0
+SCRIPT pass role=aa_cis_admin
+SCRIPT coverage country=Bhutan live=32 cis_components=6 cis_graph=6 frozen_live=6 missing_in_cis_live=0
+SCRIPT coverage country=China live=121 cis_components=3 cis_graph=3 frozen_live=3 missing_in_cis_live=0
+SCRIPT coverage country=India live=218 cis_components=3 cis_graph=3 frozen_live=3 missing_in_cis_live=0
+SCRIPT coverage country=Japan live=79 cis_components=6 cis_graph=6 frozen_live=6 missing_in_cis_live=0
+SCRIPT coverage country=Laos live=46 cis_components=46 cis_graph=46 frozen_live=11 missing_in_cis_live=0
+SCRIPT coverage country=Mongolia live=17 cis_components=16 cis_graph=17 frozen_live=8 missing_in_cis_live=0
+SCRIPT coverage country=Nepal live=85 cis_components=10 cis_graph=10 frozen_live=10 missing_in_cis_live=0
+SCRIPT coverage country=Pakistan live=18 cis_components=0 cis_graph=0 frozen_live=0 missing_in_cis_live=0
+SCRIPT coverage country=Philippines live=44 cis_components=0 cis_graph=0 frozen_live=0 missing_in_cis_live=0
+SCRIPT coverage country="South Korea" live=30 cis_components=10 cis_graph=10 frozen_live=10 missing_in_cis_live=0
+SCRIPT coverage country="Sri Lanka" live=122 cis_components=11 cis_graph=11 frozen_live=11 missing_in_cis_live=0
+SCRIPT coverage country=Taiwan live=36 cis_components=3 cis_graph=3 frozen_live=3 missing_in_cis_live=0
+SCRIPT coverage country=Thailand live=43 cis_components=6 cis_graph=6 frozen_live=6 missing_in_cis_live=0
+SCRIPT coverage country=Vietnam live=1 cis_components=0 cis_graph=0 frozen_live=0 missing_in_cis_live=0
+SCRIPT coverage_frozen keys=80 mapped_by_raw_tours=80 not_live=1
+SCRIPT coverage_gate missing_in_cis_live=0 verdict=PASS
+SCRIPT build country=Bhutan status=ok tours=6 cost_usd=0.0297 avg_cost_usd=0.004943
+SCRIPT build country=China status=ok tours=3 cost_usd=0.0203 avg_cost_usd=0.006754
+SCRIPT build country=India status=ok tours=3 cost_usd=0.0199 avg_cost_usd=0.006642
+SCRIPT build country=Japan status=ok tours=6 cost_usd=0.0155 avg_cost_usd=0.002578
+SCRIPT build country=Laos status=ok tours=46 cost_usd=0.5511 avg_cost_usd=0.011980
+SCRIPT build country=Mongolia status=ok tours=17 cost_usd=0.0510 avg_cost_usd=0.003002
+SCRIPT build country=Nepal status=ok tours=10 cost_usd=0.0623 avg_cost_usd=0.006228
+SCRIPT build country="South Korea" status=ok tours=10 cost_usd=0.0551 avg_cost_usd=0.005515
+SCRIPT build country="Sri Lanka" status=ok tours=11 cost_usd=0.0431 avg_cost_usd=0.003917
+SCRIPT build country=Taiwan status=ok tours=3 cost_usd=0.0033 avg_cost_usd=0.001112
+SCRIPT build country=Thailand status=ok tours=6 cost_usd=0.0384 avg_cost_usd=0.006407
+SCRIPT defect_build source_id=664086a9 status=ok built_at="2026-10-14 15:39:11.082131+00:00" cost_usd=0.017418
+SCRIPT defect_build source_id=2886a122 status=ok built_at="2026-10-14 23:49:17.557599+00:00" cost_usd=0.013152
+SCRIPT defect_build source_id=4481fea0 status=ok built_at="2026-10-14 23:50:03.685942+00:00" cost_usd=0.015523
+SCRIPT defect_build source_id=9149a7e8 status=ok built_at="2026-10-14 23:51:03.511229+00:00" cost_usd=0.025122
+SCRIPT defect_build source_id=d57fc4cc status=ok built_at="2026-10-14 23:52:09.551505+00:00" cost_usd=0.019556
+SCRIPT defect_build source_id=efd0a0e9 status=ok built_at="2026-10-14 23:52:35.447155+00:00" cost_usd=0.023083
+SCRIPT defect_build source_id=b9073577 status=ok built_at="2026-10-14 23:51:44.912981+00:00" cost_usd=0.000037
+SCRIPT defect_build source_id=fbe738ad status=ok built_at="2026-10-14 23:52:52.957876+00:00" cost_usd=0.011790
+SCRIPT env pgvector=0.8.1 hnsw_iterative_scan=off server=15.17 jit=off jit_above_cost=100000 plan_cache_mode=auto extra_live_tours_per_source=0
+SCRIPT grant role=tripplanner kind=schema object=acp_contract held=t
+SCRIPT grant role=tripplanner kind=schema object=silver_aa_internal held=t
+SCRIPT grant role=tripplanner kind=column object=acp_contract.tour_atoms(action,activity_type,atom_id,deleted,is held=t
+SCRIPT grant role=tripplanner kind=column object=acp_contract.v_active_tour_atoms(action,activity_type,atom_id,d held=t
+SCRIPT grant role=tripplanner kind=column object="silver_aa_internal.raw_tours(country,tour_id) SELECT" held=t
+SCRIPT xref table=acp_shared.place_card rows_with_destination=36
+SCRIPT xref table=booking.hotels rows_with_destination=0
+SCRIPT xref table=booking.services rows_with_destination=0
+SCRIPT xref table=booking.suppliers rows_with_destination=0
+SCRIPT xref table=geo.graph_node rows_with_destination=782
+SCRIPT xref table=geo.place_name rows_with_destination=1456
+SCRIPT xref table=geo.place_outlier rows_with_destination=0
+SCRIPT xref table=geo.place_shape rows_with_destination=37
+SCRIPT xref table=geo.tour_place rows_with_destination=2153
+SCRIPT xref table=geo.tour_segment rows_with_destination=158
+SCRIPT xref table=geo.tour_stop rows_with_destination=1956
+SCRIPT xref table=shared.place_photo rows_with_destination=0
+SCRIPT xref table=tripplanner.itinerary_components rows_with_destination=3905
+SCRIPT xref table=tripplanner.tour_graph_node rows_with_destination=299
+SCRIPT xref table=tripplanner.tour_stop rows_with_destination=622
+SCRIPT stats rel=geo.geocode_call n_live_tup=8 reltuples=-1.0 last_analyze=- last_autoanalyze=-
+SCRIPT stats rel=geo.graph_build n_live_tup=3 reltuples=2.0 last_analyze="2026-10-21 09:12:46.462707+00:00" last_autoanalyze=-
+SCRIPT stats rel=geo.graph_edge n_live_tup=1091 reltuples=1091.0 last_analyze="2026-10-21 09:12:46.483691+00:00" last_autoanalyze="2026-10-22 03:22:41.517845+00:00"
+SCRIPT stats rel=geo.graph_node n_live_tup=782 reltuples=782.0 last_analyze="2026-10-21 09:12:46.482044+00:00" last_autoanalyze="2026-10-22 03:22:41.531403+00:00"
+SCRIPT stats rel=geo.place_dedupe_country n_live_tup=0 reltuples=-1.0 last_analyze=- last_autoanalyze=-
+SCRIPT stats rel=geo.place_merge n_live_tup=0 reltuples=-1.0 last_analyze=- last_autoanalyze=-
+SCRIPT stats rel=geo.place_name n_live_tup=1713 reltuples=1713.0 last_analyze=- last_autoanalyze="2026-10-22 03:19:11.327496+00:00"
+SCRIPT stats rel=geo.place_outlier n_live_tup=0 reltuples=-1.0 last_analyze=- last_autoanalyze=-
+SCRIPT stats rel=geo.place_pair_verdict n_live_tup=0 reltuples=-1.0 last_analyze=- last_autoanalyze=-
+SCRIPT stats rel=geo.place_shape n_live_tup=37 reltuples=-1.0 last_analyze=- last_autoanalyze=-
+SCRIPT stats rel=geo.tour_build n_live_tup=121 reltuples=110.0 last_analyze=- last_autoanalyze="2026-10-22 03:07:40.663075+00:00"
+SCRIPT stats rel=geo.tour_day n_live_tup=1084 reltuples=1084.0 last_analyze="2026-10-21 09:12:46.462072+00:00" last_autoanalyze="2026-10-22 03:21:26.435924+00:00"
+SCRIPT stats rel=geo.tour_junction n_live_tup=13710 reltuples=13710.0 last_analyze="2026-10-21 09:12:46.488372+00:00" last_autoanalyze="2026-10-22 03:22:41.572481+00:00"
+SCRIPT stats rel=geo.tour_leg n_live_tup=9551 reltuples=9551.0 last_analyze="2026-10-21 09:12:46.479743+00:00" last_autoanalyze="2026-10-22 03:22:41.698787+00:00"
+SCRIPT stats rel=geo.tour_place n_live_tup=2455 reltuples=2455.0 last_analyze="2026-10-21 09:12:46.454879+00:00" last_autoanalyze="2026-10-22 03:18:26.445186+00:00"
+SCRIPT stats rel=geo.tour_segment n_live_tup=158 reltuples=158.0 last_analyze=- last_autoanalyze="2026-10-22 03:22:41.506651+00:00"
+SCRIPT stats rel=geo.tour_stop n_live_tup=1956 reltuples=1956.0 last_analyze="2026-10-21 09:12:46.463965+00:00" last_autoanalyze="2026-10-22 03:22:41.710639+00:00"
+SCRIPT stats rel=shared.destinations n_live_tup=1982 reltuples=1927.0 last_analyze="2026-10-21 09:12:46.507867+00:00" last_autoanalyze="2026-10-22 03:20:11.402229+00:00"
+SCRIPT stats rel=shared.place_photo n_live_tup=3232 reltuples=3232.0 last_analyze="2026-10-21 09:12:46.599553+00:00" last_autoanalyze="2026-10-21 05:52:03.469865+00:00"
+SCRIPT pg_stat_statements readable=t rows=10
+SCRIPT statement calls=1 mean_ms=37898.0 max_ms=37898.0 query="SELECT count(*) AS n, md5(coalesce(string_agg(x::text, $1 ORDER BY x::text), $2)) AS h FRO"
+SCRIPT statement calls=1 mean_ms=4041.3 max_ms=4041.3 query="SELECT count(*) AS n, md5(coalesce(string_agg(x::text, $1 ORDER BY x::text), $2)) AS h FRO"
+SCRIPT statement calls=1 mean_ms=680.3 max_ms=680.3 query="SELECT count(*) AS n, md5(coalesce(string_agg(x::text, $1 ORDER BY x::text), $2)) AS h FRO"
+SCRIPT statement calls=2009 mean_ms=673.5 max_ms=7750.2 query="SELECT p.tour_id::text AS tour_id, p.destination_id::text AS destination_id, p.destination"
+SCRIPT statement calls=1 mean_ms=602.0 max_ms=602.0 query="SELECT count(*) AS n, md5(coalesce(string_agg(x::text, $1 ORDER BY x::text), $2)) AS h FRO"
+SCRIPT statement calls=1 mean_ms=167.6 max_ms=167.6 query="SELECT count(*) AS n, md5(coalesce(string_agg(x::text, $1 ORDER BY x::text), $2)) AS h FRO"
+SCRIPT statement calls=114 mean_ms=143.5 max_ms=396.6 query="WITH span AS MATERIALIZED ( SELECT source_id, min(day_index) AS first_day FROM catalog.v_t"
+SCRIPT statement calls=2313 mean_ms=131.6 max_ms=1031.8 query="SELECT t.source_system, t.source_id, t.tour_id::text AS tour_id, t.source_version, t.sku, "
+SCRIPT statement calls=1 mean_ms=123.3 max_ms=123.3 query="SELECT count(*) AS n, md5(coalesce(string_agg(x::text, $1 ORDER BY x::text), $2)) AS h FRO"
+SCRIPT statement calls=365 mean_ms=69.4 max_ms=772.8 query="SELECT t.source_id, t.tour_id::text AS tour_id, t.slug, t.title, t.subtitle, t.summary, t."
+SCRIPT pass role=tripplanner
+SCRIPT day_text source=frozen country=Bhutan components=541 no_day_text=0 not_named=450 examples="Zilukha Nunnery@day1; Kurje Lhakhang@day1; Kyichu Lhakhang@day1; Jambay Lhakhang@day1; Taktsang monastery@day1"
+SCRIPT day_text source=frozen country=China components=171 no_day_text=0 not_named=119 examples="local village near Xi'an@day5; Terracotta Warriors@day15; Jiaohe Ruins@day15; Bezeklik Thousand Buddha Caves@day15; Tiananmen Square@day15"
+SCRIPT day_text source=frozen country=India components=175 no_day_text=11 not_named=113 examples="Nawalgarh@day5; Ranakpur@day5; City Palace@day5; Amber Fort@day5; Keoladeo Ghana Bird Sanctuary@day5"
+SCRIPT day_text source=frozen country=Japan components=151 no_day_text=0 not_named=97 examples="medicinal herb garden@day2; Yanbaru waters@day2; shallow reefs near working fishing port@day2; Shuri Castle@day3; sabani boat workshop@day1"
+SCRIPT day_text source=frozen country=Laos components=430 no_day_text=0 not_named=238 examples="Pak Ou Caves@day3; Kuang Si Waterfall@day5; Vang Vieng Blue Lagoons (1–3)@day1; Tham Cham Cave@day1; Kuang Yui Waterfall and ancient forest@day1"
+SCRIPT day_text source=frozen country=Mongolia components=285 no_day_text=0 not_named=189 examples="Chinggis Khaan Equestrian Statue complex@day1; Chinggis Khaan Equestrian Statue complex@day1; Terelj National Park@day2; Terelj National Park@day2; Ariyapala meditation center@day2"
+SCRIPT day_text source=frozen country=Nepal components=953 no_day_text=0 not_named=723 examples="Annapurna Base Camp@day9; Kagbeni@day1; Phu@day1; Nar Monastery@day1; Milarepa's Cave@day1"
+SCRIPT day_text source=frozen country="South Korea" components=571 no_day_text=9 not_named=318 examples="Mt. Naejang@day8; Busan's port district and riverside paths@day3; Dongmun Traditional Market@day2; Baengnokdam@day2; the harbor@day1"
+SCRIPT day_text source=frozen country="Sri Lanka" components=361 no_day_text=0 not_named=193 examples="Dambulla Cave Temple@day6; Minneriya National Park@day3; Minneriya National Park@day9; Dambulla Cave Temple@day9; Dambulla Cave Temple@day2"
+SCRIPT day_text source=frozen country=Taiwan components=19 no_day_text=0 not_named=9 examples="cafe near Taipingshan Villa@day1; Laomei River (Dream Valley)@day1; Yilan County's coast@day2; Laomei River (Dream Valley), New Taipei City@day3; Jiufen Old Street@day3"
+SCRIPT day_text source=frozen country=Thailand components=248 no_day_text=0 not_named=183 examples="Damnoen Saduak floating market@day1; Cheow Lan Lake@day1; elephant sanctuary near Chiang Mai@day1; Death Railway@day1; Bridge on the River Kwai@day1"
+SCRIPT day_text source=cis country=Bhutan components=109 no_day_text=0 not_named=0 examples=-
+SCRIPT day_text source=cis country=China components=74 no_day_text=0 not_named=0 examples=-
+SCRIPT day_text source=cis country=India components=100 no_day_text=0 not_named=0 examples=-
+SCRIPT day_text source=cis country=Japan components=47 no_day_text=0 not_named=0 examples=-
+SCRIPT day_text source=cis country=Laos components=797 no_day_text=0 not_named=2 examples="limestone mountains near Vang Vieng@day3; Mekong River near Don Khone@day5"
+SCRIPT day_text source=cis country=Mongolia components=138 no_day_text=0 not_named=0 examples=-
+SCRIPT day_text source=cis country=Nepal components=285 no_day_text=0 not_named=0 examples=-
+SCRIPT day_text source=cis country="South Korea" components=268 no_day_text=0 not_named=1 examples="Geumseonsa Temple@day3"
+SCRIPT day_text source=cis country="Sri Lanka" components=168 no_day_text=0 not_named=0 examples=-
+SCRIPT day_text source=cis country=Taiwan components=11 no_day_text=0 not_named=0 examples=-
+SCRIPT day_text source=cis country=Thailand components=156 no_day_text=0 not_named=0 examples=-
+SCRIPT done elapsed_s=70.2

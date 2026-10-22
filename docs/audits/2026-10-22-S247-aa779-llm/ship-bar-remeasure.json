@@ -1,0 +1,406 @@
+{
+ "run": {
+  "session": "S247",
+  "kind": "remeasure",
+  "stage": "adhoc_aa779",
+  "role": "validate",
+  "model_arg": "haiku",
+  "faq_filter_sha": "e90c3e30bea1",
+  "worktree_head": "06861d10",
+  "calls_planned": 106,
+  "calls_done": 106,
+  "questions": 200,
+  "spent_usd": 0.21316,
+  "done": true
+ },
+ "errors": [],
+ "missing": [],
+ "normalized_out": [],
+ "all": {
+  "tp": 96,
+  "fp": 4,
+  "fn": 9,
+  "precision": 0.96,
+  "precision_wilson_lb": 0.9016278276739262,
+  "recall": 0.9142857142857143
+ },
+ "unbiased": {
+  "tp": 51,
+  "fp": 2,
+  "fn": 7,
+  "precision": 0.9622641509433962,
+  "precision_wilson_lb": 0.8724547684904087,
+  "recall": 0.8793103448275862
+ },
+ "main_unbiased": {
+  "tp": 37,
+  "fp": 13,
+  "fn": 21,
+  "precision": 0.74,
+  "precision_wilson_lb": 0.6044657801100008,
+  "recall": 0.6379310344827587
+ },
+ "sensitive_homonym_false_keeps": [
+  {
+   "id": "aa779-021",
+   "q": "Is Laos known for landmines?"
+  },
+  {
+   "id": "aa779-066",
+   "q": "What is the average altitude of Mongolia above sea level?"
+  }
+ ],
+ "bars": {
+  "B1 precision>=0.90 and Wilson LB>=0.80": true,
+  "B2 recall>=0.70": true,
+  "B3 unbiased recall >= main-0.05": true,
+  "B4 sensitive+homonym false keeps <=2": true,
+  "B5 0 errors, no missing verdict": true
+ },
+ "ship": true,
+ "vs_trial": {
+  "flips": [
+   {
+    "id": "aa779-013",
+    "q": "What is the landscape like in Mongolia?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-015",
+    "q": "Is Kathmandu safe after the unrest?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "DROP"
+   },
+   {
+    "id": "aa779-021",
+    "q": "Is Laos known for landmines?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "DROP"
+   },
+   {
+    "id": "aa779-022",
+    "q": "Is $100 a lot in Laos?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-033",
+    "q": "What to be careful of in Okinawa?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-038",
+    "q": "What is the Kumano faith?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-055",
+    "q": "Is it safe to trek in Nepal right now?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-062",
+    "q": "What is considered the national dish of Laos?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-066",
+    "q": "What is the average altitude of Mongolia above sea level?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "DROP"
+   },
+   {
+    "id": "aa779-075",
+    "q": "What is the highest mountain in Mongolia?",
+    "trial": "KEEP",
+    "now": "DROP",
+    "panel": "DROP"
+   },
+   {
+    "id": "aa779-079",
+    "q": "How much time do you need at Mutianyu Great Wall?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-085",
+    "q": "How likely are you to see a leopard in Yala National Park?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-088",
+    "q": "What is the dress code for women in Bhutan?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-101",
+    "q": "How much time to spend at Udo Island?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-106",
+    "q": "Is Hoi An worth visiting at Christmas?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-114",
+    "q": "Is trekking risky?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "DROP"
+   },
+   {
+    "id": "aa779-125",
+    "q": "How long is it from Seoul to Gyeongju?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-140",
+    "q": "What is the most famous food in Laos?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-142",
+    "q": "When to avoid Bhutan?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-146",
+    "q": "Which country is Kuang Si Falls in?",
+    "trial": "KEEP",
+    "now": "DROP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-147",
+    "q": "What is the wettest month in Laos?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-166",
+    "q": "What souvenirs to buy in Mongolia?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-172",
+    "q": "How to get from Luang Prabang to Nong Khiaw?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-193",
+    "q": "Do you need to pre-book Mutianyu Great Wall?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-194",
+    "q": "Are there landmines near Angkor Wat?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-199",
+    "q": "Is South Korea good for cycling?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   },
+   {
+    "id": "aa779-200",
+    "q": "Can you see the Milky Way in Mongolia?",
+    "trial": "DROP",
+    "now": "KEEP",
+    "panel": "KEEP"
+   }
+  ],
+  "fixed": 22,
+  "broken": 5
+ },
+ "hand_check_agreement": {
+  "agree": 22,
+  "of": 30
+ },
+ "caveat": "The prompt's calibration block was written from the trial's misses on this set (its examples are not set questions); recall here is optimistic — confirm on new questions in shadow mode.",
+ "disagreements": [
+  {
+   "id": "aa779-015",
+   "q": "Is Kathmandu safe after the unrest?",
+   "country": "Nepal",
+   "panel": "DROP",
+   "panel_reason": "unanswerable",
+   "llm": "KEEP",
+   "llm_reason": "on_subject",
+   "llm_conf": "high",
+   "llm_note": "Visitor safety in scope country, practical travel question."
+  },
+  {
+   "id": "aa779-021",
+   "q": "Is Laos known for landmines?",
+   "country": "Laos",
+   "panel": "DROP",
+   "panel_reason": "sensitive_no_travel_use",
+   "llm": "KEEP",
+   "llm_reason": "on_subject",
+   "llm_conf": "high",
+   "llm_note": "Practical visitor safety in Laos as destination"
+  },
+  {
+   "id": "aa779-034",
+   "q": "Is it safe to go to Hunza right now?",
+   "country": "Pakistan",
+   "panel": "KEEP",
+   "panel_reason": "on_subject",
+   "llm": "DROP",
+   "llm_reason": "outside_piece_scope",
+   "llm_conf": "high",
+   "llm_note": "Hunza is listed as a trip place outside this post's scope"
+  },
+  {
+   "id": "aa779-039",
+   "q": "How far is Thamel from Kathmandu?",
+   "country": "Nepal",
+   "panel": "KEEP",
+   "panel_reason": "on_subject",
+   "llm": "DROP",
+   "llm_reason": "unanswerable",
+   "llm_conf": "high",
+   "llm_note": "Thamel is a neighborhood in Kathmandu; question assumes separation."
+  },
+  {
+   "id": "aa779-066",
+   "q": "What is the average altitude of Mongolia above sea level?",
+   "country": "Mongolia",
+   "panel": "DROP",
+   "panel_reason": "sensitive_no_travel_use",
+   "llm": "KEEP",
+   "llm_reason": "on_subject",
+   "llm_conf": "high",
+   "llm_note": "Practical travel question about Mongolia as destination."
+  },
+  {
+   "id": "aa779-070",
+   "q": "What is Vietnam known for?",
+   "country": "Vietnam",
+   "panel": "KEEP",
+   "panel_reason": "on_subject",
+   "llm": "DROP",
+   "llm_reason": "off_scope_other_place",
+   "llm_conf": "high",
+   "llm_note": "Country trivia, not about Huế or Imperial City."
+  },
+  {
+   "id": "aa779-114",
+   "q": "Is trekking risky?",
+   "country": "India",
+   "panel": "DROP",
+   "panel_reason": "other",
+   "llm": "KEEP",
+   "llm_reason": "on_subject",
+   "llm_conf": "medium",
+   "llm_note": "Visitor safety question about trekking activity in scope"
+  },
+  {
+   "id": "aa779-146",
+   "q": "Which country is Kuang Si Falls in?",
+   "country": "Laos",
+   "panel": "KEEP",
+   "panel_reason": "on_subject",
+   "llm": "DROP",
+   "llm_reason": "word_meaning",
+   "llm_conf": "high",
+   "llm_note": "Asks which country, not about the place itself"
+  },
+  {
+   "id": "aa779-161",
+   "q": "What is the oxygen level at Dolma La pass?",
+   "country": "Nepal",
+   "panel": "KEEP",
+   "panel_reason": "on_subject",
+   "llm": "DROP",
+   "llm_reason": "unanswerable",
+   "llm_conf": "high",
+   "llm_note": "Requires live atmospheric data; no fixed answer exists."
+  },
+  {
+   "id": "aa779-162",
+   "q": "What is the best food in Vietnam?",
+   "country": "Vietnam",
+   "panel": "KEEP",
+   "panel_reason": "on_subject",
+   "llm": "DROP",
+   "llm_reason": "off_scope_other_place",
+   "llm_conf": "high",
+   "llm_note": "Asks about Vietnam as a whole, not Ben Thanh Market or Ho Chi Minh City"
+  },
+  {
+   "id": "aa779-181",
+   "q": "What does the word \"Chorten\" mean?",
+   "country": "Bhutan",
+   "panel": "KEEP",
+   "panel_reason": "on_subject",
+   "llm": "DROP",
+   "llm_reason": "word_meaning",
+   "llm_conf": "high",
+   "llm_note": "Asks about word meaning, not the place itself"
+  },
+  {
+   "id": "aa779-185",
+   "q": "Is there a direct flight from the USA to Mongolia?",
+   "country": "Mongolia",
+   "panel": "KEEP",
+   "panel_reason": "on_subject",
+   "llm": "DROP",
+   "llm_reason": "outside_piece_scope",
+   "llm_conf": "high",
+   "llm_note": "About getting to Mongolia, not the Gobi tour itself."
+  },
+  {
+   "id": "aa779-197",
+   "q": "Who is inside Chorten Kora?",
+   "country": "Bhutan",
+   "panel": "KEEP",
+   "panel_reason": "on_subject",
+   "llm": "DROP",
+   "llm_reason": "unanswerable",
+   "llm_conf": "high",
+   "llm_note": "Requires specific religious/historical knowledge not in source; unclear what 'inside' means"
+  }
+ ]
+}

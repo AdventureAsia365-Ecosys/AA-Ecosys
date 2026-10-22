@@ -1,0 +1,29 @@
+{
+  "issue": "AA-894",
+  "check": "viewer refusal of /admin/data-model",
+  "host": "https://aa-cis.lumiguides.it.com",
+  "role": "reviewer",
+  "generated_at": "2026-10-22T12:50:44.076Z",
+  "page": {
+    "requested": "/admin/data-model",
+    "landed_on": "/admin/review",
+    "navigation_hops": [
+      "307 /admin/data-model",
+      "200 /admin/review"
+    ]
+  },
+  "bff": {
+    "path": "/api/admin/data-model",
+    "status": 403,
+    "body": {
+      "detail": "Only an admin can do this"
+    }
+  },
+  "api": {
+    "url": "https://api-cis.lumiguides.it.com/admin/data-model",
+    "status": 403,
+    "body": {
+      "detail": "Role 'reviewer' lacks the 'ops.read' permission"
+    }
+  }
+}

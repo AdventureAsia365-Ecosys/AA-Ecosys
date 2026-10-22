@@ -24,7 +24,7 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0008a](0008a-crm-separate-app-exceptions.md) | Amendment: the partner CRM is a separate app; traveller OTP and an own LLM gateway as playbook exceptions | Accepted |
 | [0010](0010-aa-partner-app.md) | AA-Partner: one app for partner agencies (CRM and tenant portal) | Accepted |
 | [0011](0011-github-app-identity-and-merge-rights.md) | GitHub App identity for agents and bots, and merge rights per risk tier | Proposed |
-| [0014](0014-repo-visibility-and-github-plan.md) | Repo visibility and GitHub plan: app repos public, root and Infra private, GitHub Free | Proposed |
+| [0014](0014-repo-visibility-and-github-plan.md) | Repo visibility and GitHub plan: app repos public, root and Infra private, GitHub Free | Proposed (amended S247: root + Infra public for now) |
 
 ## Numbering
 

@@ -160,6 +160,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-776](cis-core-pipeline-llm-platform/AA-776.md) | [T9 repair] Bug — an F4-only ledger triggers a full Sonnet rewrite instead of the SEO-fields repair | Done | 2026-10-14 | CIS Core — Pipeline, LLM & Platform |
 | [AA-777](cis-core-pipeline-llm-platform/AA-777.md) | [T10 F9] Judge consistency — sticky pass for unchanged sentences, cut truth faults at attempt 3, A/B the F9 judge model | Done | 2026-10-16 | CIS Core — Pipeline, LLM & Platform |
 | [AA-778](cis-core-pipeline-llm-platform/AA-778.md) | [T9 voice] Em-dash — deterministic autofix, strip em-dashes from our prompts, then a residue guard | Done | 2026-10-16 | CIS Core — Pipeline, LLM & Platform |
+| [AA-783](cis-core-pipeline-llm-platform/AA-783.md) | [Eval] Human calibration of the T9 commercial panel — 40 pieces labelled by Nghiệp with explicit criteria vs the 4-lens AI panel | Backlog |  | CIS Core — Pipeline, LLM & Platform |
 | [AA-785](cis-core-pipeline-llm-platform/AA-785.md) | [T10 F1] Year-format tolerance — accept "YYYY–YY" / "YYYYs" when the seed has the year (warn until fixed) | Done | 2026-10-14 | CIS Core — Pipeline, LLM & Platform |
 | [AA-786](cis-core-pipeline-llm-platform/AA-786.md) | [T10 F9] F9_cta_fact v1.1 — strip citation tags, quote-the-sentence fallback, title/meta input, LinkedIn repair-not-hold | Done | 2026-10-14 | CIS Core — Pipeline, LLM & Platform |
 | [AA-787](cis-core-pipeline-llm-platform/AA-787.md) | [T10 gates] Drop F8_framework, promises_an_option, F3, F5; merge F7→F16 | Done | 2026-10-20 | CIS Core — Pipeline, LLM & Platform |
@@ -290,6 +291,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-895](data-platform-schema-ops-scale/AA-895.md) | [Security] Security baseline and vulnerability management policy — Dependabot for Booking and TripPlanner | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-897](data-platform-schema-ops-scale/AA-897.md) | [Docs] Engineer onboarding guide and agent instruction index | Done | 2026-10-19 | Data Platform — Schema, Ops & Scale |
 | [AA-902](data-platform-schema-ops-scale/AA-902.md) | [Security] Scrub AWS account IDs and ARNs from tracked files in the public repos | Done | 2026-10-19 | Data Platform — Schema, Ops & Scale |
+| [AA-903](data-platform-schema-ops-scale/AA-903.md) | [CI] Skip the "Vercel deploy" job for Dependabot PRs (Booking, TripPlanner, CIS) | Done | 2026-10-21 | Data Platform — Schema, Ops & Scale |
 | [AA-907](data-platform-schema-ops-scale/AA-907.md) | [CIS] Bump langchain / langgraph and drop chromadb before the pip-audit ignores expire (30/11, 31/12) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-912](data-platform-schema-ops-scale/AA-912.md) | Triage CodeQL backlog (CIS) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-913](data-platform-schema-ops-scale/AA-913.md) | Alert recipients managed from the CIS admin page (no hard-coded e-mail) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
@@ -485,6 +487,59 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-94](no-project/AA-94.md) | [Learning] DVA Gap: DynamoDB fundamentals — exam prep | Canceled | 2026-08-21 | — |
 | [AA-95](no-project/AA-95.md) | [Learning] AIOps Gap: Vector databases — pgvector + Bedrock embeddings | Canceled | 2026-08-21 | — |
 | [AA-96](no-project/AA-96.md) | [Learning] DOP Gap: Prometheus + Grafana — open-source observability | Canceled | 2026-08-21 | — |
+| [AA-928](partner-crm-aa-partner/AA-928.md) | [CRM W0] CRM-01a ADRs + contracts + spec errata | Backlog |  | Partner CRM — AA-Partner |
+| [AA-929](partner-crm-aa-partner/AA-929.md) | [CRM W0] CRM-01b Data-standards bump | Backlog |  | Partner CRM — AA-Partner |
+| [AA-930](partner-crm-aa-partner/AA-930.md) | [CRM W0] CRM-02 Readiness checks (read-only) | Backlog |  | Partner CRM — AA-Partner |
+| [AA-931](partner-crm-aa-partner/AA-931.md) | [CRM W0] CRM-03 Infra bootstrap + CloudFront VPC-origin spike | Backlog |  | Partner CRM — AA-Partner |
+| [AA-932](partner-crm-aa-partner/AA-932.md) | [CRM W1] CRM-04 Infra + DB owner `crm` | Backlog |  | Partner CRM — AA-Partner |
+| [AA-933](partner-crm-aa-partner/AA-933.md) | [CRM W1] CRM-05 AA-Partner repo, API, job runner | Backlog |  | Partner CRM — AA-Partner |
+| [AA-934](partner-crm-aa-partner/AA-934.md) | [CRM W1] CRM-06 KeyProvider and field encryption | Backlog |  | Partner CRM — AA-Partner |
+| [AA-935](partner-crm-aa-partner/AA-935.md) | [CRM W1] CRM-07 Web skeleton + synthetic agencies | Backlog |  | Partner CRM — AA-Partner |
+| [AA-936](partner-crm-aa-partner/AA-936.md) | [CRM W1] CRM-08 Slice 1: intake → Inquiry → board | Backlog |  | Partner CRM — AA-Partner |
+| [AA-937](partner-crm-aa-partner/AA-937.md) | [CRM W2] CRM-09 F1/F2 complete | Backlog |  | Partner CRM — AA-Partner |
+| [AA-938](partner-crm-aa-partner/AA-938.md) | [CRM W2] CRM-10 F3 scrubber | Backlog |  | Partner CRM — AA-Partner |
+| [AA-939](partner-crm-aa-partner/AA-939.md) | [CRM W2] CRM-11 F4 roles, partner pool, MFA, permission matrix | Backlog |  | Partner CRM — AA-Partner |
+| [AA-940](partner-crm-aa-partner/AA-940.md) | [CRM W2] CRM-12 F5 audit | Backlog |  | Partner CRM — AA-Partner |
+| [AA-941](partner-crm-aa-partner/AA-941.md) | [CRM W2] CRM-13a AA admin L1 console | Backlog |  | Partner CRM — AA-Partner |
+| [AA-942](partner-crm-aa-partner/AA-942.md) | [CRM W2] CRM-14 Data lifecycle rules | Backlog |  | Partner CRM — AA-Partner |
+| [AA-943](partner-crm-aa-partner/AA-943.md) | [CRM W3] CRM-15 Modules 1 + 2 complete | Backlog |  | Partner CRM — AA-Partner |
+| [AA-944](partner-crm-aa-partner/AA-944.md) | [CRM W3] CRM-16 Agency-line ledger + suppliers | Backlog |  | Partner CRM — AA-Partner |
+| [AA-945](partner-crm-aa-partner/AA-945.md) | [CRM W3] CRM-17 Module 5 email | Backlog |  | Partner CRM — AA-Partner |
+| [AA-946](partner-crm-aa-partner/AA-946.md) | [CRM W3] CRM-18 Thin full lifecycle | Backlog |  | Partner CRM — AA-Partner |
+| [AA-947](partner-crm-aa-partner/AA-947.md) | [CRM W4] CRM-19 B2B client + AA lines | Backlog |  | Partner CRM — AA-Partner |
+| [AA-948](partner-crm-aa-partner/AA-948.md) | [CRM W4] CRM-20 Builder map fork (enhancement) | Backlog |  | Partner CRM — AA-Partner |
+| [AA-949](partner-crm-aa-partner/AA-949.md) | [CRM W4] CRM-21a Proposal model + day-list builder | Backlog |  | Partner CRM — AA-Partner |
+| [AA-950](partner-crm-aa-partner/AA-950.md) | [CRM W4] CRM-21b Client proposal + accept + hold | Backlog |  | Partner CRM — AA-Partner |
+| [AA-951](partner-crm-aa-partner/AA-951.md) | [CRM W4] CRM-22 Module 4 + "Before you go" | Backlog |  | Partner CRM — AA-Partner |
+| [AA-952](partner-crm-aa-partner/AA-952.md) | [CRM W5] CRM-23 Module 7 invoices and payments | Backlog |  | Partner CRM — AA-Partner |
+| [AA-953](partner-crm-aa-partner/AA-953.md) | [CRM W5] CRM-24a Module 11 portal per person | Backlog |  | Partner CRM — AA-Partner |
+| [AA-954](partner-crm-aa-partner/AA-954.md) | [CRM W5] CRM-24b Offline PWA | Backlog |  | Partner CRM — AA-Partner |
+| [AA-955](partner-crm-aa-partner/AA-955.md) | [CRM W5] CRM-25 Module 12 contracts and waivers | Backlog |  | Partner CRM — AA-Partner |
+| [AA-956](partner-crm-aa-partner/AA-956.md) | [CRM W5] CRM-26 Module 8 ops release | Backlog |  | Partner CRM — AA-Partner |
+| [AA-957](partner-crm-aa-partner/AA-957.md) | [CRM W5] CRM-27 Commission + cancel trip | Backlog |  | Partner CRM — AA-Partner |
+| [AA-958](partner-crm-aa-partner/AA-958.md) | [CRM W6] CRM-28 Module 9 WhatsApp + SMS | Backlog |  | Partner CRM — AA-Partner |
+| [AA-959](partner-crm-aa-partner/AA-959.md) | [CRM W6] CRM-29a Module 10 engine + tasks | Backlog |  | Partner CRM — AA-Partner |
+| [AA-960](partner-crm-aa-partner/AA-960.md) | [CRM W6] CRM-29b Tags, system tags, coverage, ready-to-travel | Backlog |  | Partner CRM — AA-Partner |
+| [AA-961](partner-crm-aa-partner/AA-961.md) | [CRM W6] CRM-30 Duty of care + calendar | Backlog |  | Partner CRM — AA-Partner |
+| [AA-962](partner-crm-aa-partner/AA-962.md) | [CRM W6] CRM-31 Onboarding + import | Backlog |  | Partner CRM — AA-Partner |
+| [AA-963](partner-crm-aa-partner/AA-963.md) | [CRM W6] CRM-32 Search + library | Backlog |  | Partner CRM — AA-Partner |
+| [AA-964](partner-crm-aa-partner/AA-964.md) | [CRM W7] CRM-33a AI gateway + drafts + guardrails | Backlog |  | Partner CRM — AA-Partner |
+| [AA-965](partner-crm-aa-partner/AA-965.md) | [CRM W7] CRM-33b AI: supplier confirmations, notes → options, voices | Backlog |  | Partner CRM — AA-Partner |
+| [AA-966](partner-crm-aa-partner/AA-966.md) | [CRM W7] CRM-34 Reports + insights | Backlog |  | Partner CRM — AA-Partner |
+| [AA-967](partner-crm-aa-partner/AA-967.md) | [CRM W7] CRM-35 Module 18 portability + deletion | Backlog |  | Partner CRM — AA-Partner |
+| [AA-968](partner-crm-aa-partner/AA-968.md) | [CRM W7] CRM-36 Campaigns (R14) | Backlog |  | Partner CRM — AA-Partner |
+| [AA-969](partner-crm-aa-partner/AA-969.md) | [CRM W7] CRM-37a Security review, SLOs, bounded load test | Backlog |  | Partner CRM — AA-Partner |
+| [AA-970](partner-crm-aa-partner/AA-970.md) | [CRM W7] CRM-37b Release train, help, data page | Backlog |  | Partner CRM — AA-Partner |
+| [AA-971](partner-crm-aa-partner/AA-971.md) | [CRM W7] CRM-13b AA support L2 + break-glass L3 | Backlog |  | Partner CRM — AA-Partner |
+| [AA-972](partner-crm-aa-partner/AA-972.md) | [CRM LB] CRM-B1 M2M + B2B quote | Backlog |  | Partner CRM — AA-Partner |
+| [AA-973](partner-crm-aa-partner/AA-973.md) | [CRM LB] CRM-B2 Departures, capacity, holds | Backlog |  | Partner CRM — AA-Partner |
+| [AA-974](partner-crm-aa-partner/AA-974.md) | [CRM LB] CRM-B2b Booking commercial rules (new, Fix C2, A3, A8) | Backlog |  | Partner CRM — AA-Partner |
+| [AA-975](partner-crm-aa-partner/AA-975.md) | [CRM LB] CRM-B3 Event feed + on-request desk + incident flag | Backlog |  | Partner CRM — AA-Partner |
+| [AA-976](partner-crm-aa-partner/AA-976.md) | [CRM LB] CRM-B4 CIS catalog over HTTP | Backlog |  | Partner CRM — AA-Partner |
+| [AA-977](partner-crm-aa-partner/AA-977.md) | [CRM LB] CRM-B5 AA-authored content in CIS (new, Fix C1) | Backlog |  | Partner CRM — AA-Partner |
+| [AA-978](partner-crm-aa-partner/AA-978.md) | [CRM LP] CRM-P1 Membership feed + tenant API | Backlog |  | Partner CRM — AA-Partner |
+| [AA-979](partner-crm-aa-partner/AA-979.md) | [CRM LP] CRM-P2 Move `portal/` into AA-Partner | Backlog |  | Partner CRM — AA-Partner |
+| [AA-980](partner-crm-aa-partner/AA-980.md) | [CRM W8] CRM-38 Go-real | Backlog |  | Partner CRM — AA-Partner |
 | [AA-589](tripplanner-aa-booking/AA-589.md) | [EPIC] TripPlanner — Ms.Thư tasks (data cleanup, upload raw, auto-edit, arrival/departure map, suggest next) | Done | 2026-09-16 | TripPlanner & AA-Booking |
 | [AA-590](tripplanner-aa-booking/AA-590.md) | [#5][MAP] Suggest next place theo itinerary — kết hợp taste-similarity + geography | Done | 2026-09-16 | TripPlanner & AA-Booking |
 | [AA-591](tripplanner-aa-booking/AA-591.md) | [#4][MAP] Arrival/departure trên bản đồ — vẽ gateway airport + flight arc fly-in/fly-out | Done | 2026-09-16 | TripPlanner & AA-Booking |

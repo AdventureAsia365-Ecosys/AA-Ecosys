@@ -1,0 +1,2334 @@
+{
+ "generated_at": "2026-10-22T14:02:40+00:00",
+ "since": "2026-10-22T13:55:31+00:00",
+ "pieces_asked": [
+  "3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f",
+  "07c13b25-95fa-458e-85c3-de0982dbf4d8",
+  "ac8b98b7-52db-4382-8f07-09aec3572ec4",
+  "3712d4dd-52c8-4661-a35f-7927e7f80963",
+  "76f49455-5891-4284-8281-764ee07ce349",
+  "b570fb82-c6e0-4bb2-997a-d45e949a7336",
+  "781b5de7-3351-40b2-9c1d-7fdc27a3128e",
+  "32789658-61c2-496f-a493-dfac399b8b9c"
+ ],
+ "pieces": [
+  {
+   "piece_id": "3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f",
+   "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+   "slug": "terra-family",
+   "request_id": "3bf7a5f7-7ddc-45f2-af25-ca1a81b49d21",
+   "status": "approved",
+   "held_reason": null,
+   "channel": "blog",
+   "attempt_number": 2,
+   "created_at": "2026-10-22 13:55:35.037677+00:00",
+   "route_hub_name": "a local Buddhist monastery → Sod Camp → Uran Togoo → Moron",
+   "job_id": "8f8830bc-c879-4398-a1f4-f4b351ae36a6",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [
+    "dropped FAQ pair (answer fit: the answer is about something else): 'What is the average altitude of Mongolia above sea level?'"
+   ],
+   "faq": [
+    {
+     "question": "Who are the Tsaatan reindeer people of Mongolia?",
+     "answer": "The Tsaatan, also known as the Dukha, are a small semi-nomadic indigenous community numbering only a few hundred people, who herd reindeer in the taiga forests of northern Khövsgöl Province.",
+     "answer_words": 30,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Do Mongolians still live as nomads?",
+     "answer": "Some communities in Mongolia maintain nomadic or semi-nomadic ways of life. Nomadic families also live in the Khövsgöl lake region, and visits to their camps can be arranged as part of a stay at the lake.",
+     "answer_words": 36,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What can families do when they trek into a volcanic crater?",
+     "answer": "When families visit Uran Togoo volcano, they descend into the ancient volcanic crater and walk across the caldera floor. The crater sits within open green steppe grassland and patches of forest, with dark volcanic rock creating a striking contrast to the surrounding terrain.",
+     "answer_words": 43,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 3,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 3,
+    "faq_real": 0,
+    "faq_pairs_before": {
+     "real": 2,
+     "pairs": 4
+    },
+    "faq_pairs_after": {
+     "real": 0,
+     "pairs": 3
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "Do Mongolian gers have toilets?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Does Mongolia have any volcanoes?"
+    },
+    {
+     "source": "place_paa",
+     "question": "What is the average altitude of Mongolia above sea level?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Do Mongolians still live like nomads?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Are there reindeer in Mongolia?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Who are the reindeer people?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "place_paa": 1,
+     "serp_topup": 3,
+     "segment_match": 2
+    },
+    "candidates": {
+     "place_paa": 1,
+     "serp_topup": 12,
+     "segment_match": 6
+    }
+   },
+   "faq_filter": {
+    "mode": "on",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.008527,
+    "n_candidates": 19,
+    "llm_keep": 14,
+    "llm_drop": 5,
+    "drop_reasons": {
+     "off_scope_other_place": 1,
+     "other": 3,
+     "sensitive_no_travel_use": 1
+    },
+    "deterministic": [
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Do the Sami people still herd reindeer?",
+     "Who are the reindeer people?"
+    ],
+    "llm_kept": [
+     "Do Mongolian gers have toilets?",
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Who are the reindeer people?"
+    ],
+    "gazetteer_dropped": [
+     "What is a Ger camp in Mongolia?",
+     "Do Ger camps in Mongolia have electricity?",
+     "What is a ger house in Mongolia?",
+     "How much does a ger cost in Mongolia?"
+    ]
+   },
+   "faq_answer_fit": {
+    "mode": "on",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 4,
+    "stage": "t9_faq_answer_fit",
+    "dropped": [
+     "What is the average altitude of Mongolia above sea level?"
+    ],
+    "failing": [
+     "What is the average altitude of Mongolia above sea level?"
+    ],
+    "cost_usd": 0.004293,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "What is the average altitude of Mongolia above sea level?",
+      "reason": "Answer gives Mörön's elevation, not Mongolia's average altitude.",
+      "verdict": "WRONG_SUBJECT"
+     },
+     {
+      "n": 2,
+      "q": "Who are the Tsaatan reindeer people of Mongolia?",
+      "reason": "Answer directly describes who the Tsaatan reindeer people are.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 3,
+      "q": "Do Mongolians still live as nomads?",
+      "reason": "Answer confirms some Mongolians still live nomadically.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 4,
+      "q": "What can families do when they trek into a volcanic crater?",
+      "reason": "Answer describes what families can do in the volcanic crater.",
+      "verdict": "ANSWERS"
+     }
+    ],
+    "below_min": false,
+    "dropped_n": [
+     1
+    ],
+    "pairs_after": 3
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 2,
+     "cost": "0.000396"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 2,
+     "cost": "0.006828"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.004293"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.008527"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.008374"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.068090"
+    }
+   ],
+   "llm_cost_piece_usd": 0.096508,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 13:55:38.103425+00:00",
+    "finished_at": "2026-10-22 13:57:55.648539+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  },
+  {
+   "piece_id": "07c13b25-95fa-458e-85c3-de0982dbf4d8",
+   "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+   "slug": "terra-family",
+   "request_id": "e42adb08-8f39-430e-b82f-4c9d78a58d56",
+   "status": "approved",
+   "held_reason": null,
+   "channel": "blog",
+   "attempt_number": 3,
+   "created_at": "2026-10-22 13:55:35.857540+00:00",
+   "route_hub_name": "Khaiphaen Restaurant → Luang Prabang → Kuang Si Falls → Ban Long Lao Mai",
+   "job_id": "4536e836-d0f6-4ca1-b72c-27c36a39b98e",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [],
+   "faq": [
+    {
+     "question": "Which country is Kuang Si Falls in?",
+     "answer": "Kuang Si Falls is located in Laos, approximately 30 kilometres south of Luang Prabang in northern Laos.",
+     "answer_words": 17,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Can you swim at Kuang Si Falls?",
+     "answer": "Yes, Kuang Si Falls features turquoise pools suitable for swimming. The water cascades over travertine limestone terraces, creating a series of pools where you can cool off after cycling the mountain road from Luang Prabang.",
+     "answer_words": 35,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "How do I get to Kuang Si Falls?",
+     "answer": "Kuang Si Falls is reached by bicycle on the mountain road south from Luang Prabang, a journey of approximately 30 kilometres on tarmac. The ride takes you through the changing landscape before arriving at the waterfall system and its surrounding protected area.",
+     "answer_words": 42,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What ethnic communities live in the Nam Ou Valley region?",
+     "answer": "The Nam Ou Valley is home to numerous ethnic minority communities, including Khmu, Hmong, and various Tai-speaking groups, many living in small riverside or hillside villages throughout the remote terrain of Phongsali and Luang Prabang provinces in northern Laos.",
+     "answer_words": 39,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 4,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 4,
+    "faq_real": 3,
+    "faq_pairs_before": {
+     "real": 0,
+     "pairs": 0
+    },
+    "faq_pairs_after": {
+     "real": 3,
+     "pairs": 4
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "Which country is Kuang Si Falls in?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Can I swim at Kuang Si Waterfall?"
+    },
+    {
+     "source": "segment_match",
+     "question": "How do I get to Kuang Si Falls?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Why is Kuang Si Waterfall famous?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What is special about Kuang Si Falls?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Can you swim in the Kuang Si Falls?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "segment_match": 6
+    },
+    "candidates": {
+     "place_paa": 12,
+     "serp_topup": 6,
+     "segment_match": 12
+    }
+   },
+   "faq_filter": {
+    "mode": "on",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.011864,
+    "n_candidates": 30,
+    "llm_keep": 21,
+    "llm_drop": 9,
+    "drop_reasons": {
+     "unanswerable": 5,
+     "off_scope_other_place": 1,
+     "sensitive_no_travel_use": 1,
+     "commercial_junk": 2
+    },
+    "deterministic": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "Is Kuang Si Waterfall worth it?",
+     "How do I get to Kuang Si Falls?",
+     "What time to go to Kuang Si Waterfall?",
+     "Why is Kuang Si Waterfall famous?"
+    ],
+    "llm_kept": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "How do I get to Kuang Si Falls?",
+     "Why is Kuang Si Waterfall famous?",
+     "What is special about Kuang Si Falls?",
+     "Can you swim in the Kuang Si Falls?"
+    ],
+    "gazetteer_dropped": []
+   },
+   "faq_answer_fit": {
+    "mode": "on",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 4,
+    "stage": "t9_faq_answer_fit",
+    "failing": [],
+    "cost_usd": 0.004248,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "Which country is Kuang Si Falls in?",
+      "reason": "Directly states Kuang Si Falls is in Laos.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 2,
+      "q": "Can you swim at Kuang Si Falls?",
+      "reason": "Confirms swimming is possible at Kuang Si Falls.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 3,
+      "q": "How do I get to Kuang Si Falls?",
+      "reason": "Explains how to get there by bicycle from Luang Prabang.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 4,
+      "q": "What ethnic communities live in the Nam Ou Valley region?",
+      "reason": "Names ethnic communities living in the Nam Ou Valley region.",
+      "verdict": "ANSWERS"
+     }
+    ]
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 3,
+     "cost": "0.000441"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 3,
+     "cost": "0.010560"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.004248"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.011864"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 3,
+     "cost": "0.010967"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 3,
+     "cost": "0.029949"
+    }
+   ],
+   "llm_cost_piece_usd": 0.068029,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 13:55:38.114596+00:00",
+    "finished_at": "2026-10-22 13:58:00.243665+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  },
+  {
+   "piece_id": "ac8b98b7-52db-4382-8f07-09aec3572ec4",
+   "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+   "slug": "atlas-hearth",
+   "request_id": "15e682d0-160d-4104-8476-56ad983b2807",
+   "status": "approved",
+   "held_reason": null,
+   "channel": "blog",
+   "attempt_number": 2,
+   "created_at": "2026-10-22 13:55:38.479113+00:00",
+   "route_hub_name": "a local Buddhist monastery → Sod Camp → Uran Togoo → Moron",
+   "job_id": "f3a5c54b-1cb9-409a-962f-29036d177ea9",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [
+    "dropped FAQ pair (answer fit: the answer does not give what the question asks): 'Who are the reindeer people?'"
+   ],
+   "faq": [
+    {
+     "question": "Does Mongolia have volcanoes?",
+     "answer": "Mongolia does have dormant volcanoes. Uran Togoo in Bulgan Province is the largest of several dormant volcanoes in its surrounding valleys and last erupted approximately 24,000 years ago. It is protected within the Uran Togoo-Tulga Uul Natural Monument, a designated natural area established to preserve its volcanic landscape.",
+     "answer_words": 48,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Are there still nomadic people in Mongolia?",
+     "answer": "Nomadic and semi-nomadic ways of life continue in Mongolia. The Tsaatan of Khövsgöl Province, for example, move their teepee-style camps, called urts, several times a year as their reindeer herds graze through the taiga forest. Their practice is distinct from Mongolian steppe nomadism and represents one of the last surviving reindeer-herding cultures in the world.",
+     "answer_words": 55,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What is the capital city of Khövsgöl Province?",
+     "answer": "Mörön is the capital city of Khövsgöl Province, Mongolia's northernmost province. The city sits in a broad valley at an elevation of approximately 1,283 metres above sea level, developed during the Soviet era as an administrative and trade centre, and retains several Soviet-style public buildings from that period.",
+     "answer_words": 48,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What protected areas exist around Lake Khövsgöl?",
+     "answer": "Khövsgöl National Park, established in 1992, protects Lake Khövsgöl and its surrounding forests, making it one of Mongolia's most biodiverse protected areas. The park safeguards the distinctive ecological zone where Central Asian steppes meet Siberian taiga forest.",
+     "answer_words": 37,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 4,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 4,
+    "faq_real": 1,
+    "faq_pairs_before": {
+     "real": 1,
+     "pairs": 4
+    },
+    "faq_pairs_after": {
+     "real": 1,
+     "pairs": 4
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "Do Mongolian gers have toilets?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Does Mongolia have any volcanoes?"
+    },
+    {
+     "source": "place_paa",
+     "question": "What is the average altitude of Mongolia above sea level?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Do Mongolians still live like nomads?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Are there reindeer in Mongolia?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Who are the reindeer people?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "place_paa": 1,
+     "serp_topup": 3,
+     "segment_match": 2
+    },
+    "candidates": {
+     "place_paa": 1,
+     "serp_topup": 12,
+     "segment_match": 6
+    }
+   },
+   "faq_filter": {
+    "mode": "on",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.008527,
+    "n_candidates": 19,
+    "llm_keep": 14,
+    "llm_drop": 5,
+    "drop_reasons": {
+     "off_scope_other_place": 1,
+     "other": 3,
+     "sensitive_no_travel_use": 1
+    },
+    "deterministic": [
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Do the Sami people still herd reindeer?",
+     "Who are the reindeer people?"
+    ],
+    "llm_kept": [
+     "Do Mongolian gers have toilets?",
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Who are the reindeer people?"
+    ],
+    "gazetteer_dropped": [
+     "What is a Ger camp in Mongolia?",
+     "Do Ger camps in Mongolia have electricity?",
+     "What is a ger house in Mongolia?",
+     "How much does a ger cost in Mongolia?"
+    ]
+   },
+   "faq_answer_fit": {
+    "mode": "on",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 5,
+    "stage": "t9_faq_answer_fit",
+    "dropped": [
+     "Who are the reindeer people?"
+    ],
+    "failing": [
+     "Who are the reindeer people?"
+    ],
+    "cost_usd": 0.005394,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "Does Mongolia have volcanoes?",
+      "reason": "Confirms Mongolia has volcanoes with specific example and details.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 2,
+      "q": "Who are the reindeer people?",
+      "reason": "Never names who the reindeer people are; omits their name entirely.",
+      "verdict": "NON_ANSWER"
+     },
+     {
+      "n": 3,
+      "q": "Are there still nomadic people in Mongolia?",
+      "reason": "Confirms nomadic people exist with a specific example.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 4,
+      "q": "What is the capital city of Khövsgöl Province?",
+      "reason": "Directly names Mörön as the capital of Khövsgöl Province.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 5,
+      "q": "What protected areas exist around Lake Khövsgöl?",
+      "reason": "Names Khövsgöl National Park as the protected area around the lake.",
+      "verdict": "ANSWERS"
+     }
+    ],
+    "below_min": false,
+    "dropped_n": [
+     2
+    ],
+    "pairs_after": 4
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 2,
+     "cost": "0.000326"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 2,
+     "cost": "0.006993"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.005394"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.008527"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.008477"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.027579"
+    }
+   ],
+   "llm_cost_piece_usd": 0.057296,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 13:55:43.258526+00:00",
+    "finished_at": "2026-10-22 13:57:23.159809+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  },
+  {
+   "piece_id": "3712d4dd-52c8-4661-a35f-7927e7f80963",
+   "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+   "slug": "atlas-hearth",
+   "request_id": "41e41098-ffa7-472a-bdb2-da0922f80c0a",
+   "status": "held",
+   "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"A length of hand-woven fabric, produced by a Bhutanese woman in patterns that carry spiritual meaning, is not simply a textile.\" (claims: The specific museum object was produced by a Bhutanese woman and its patterns carry spiritual meaning.; source: The source supports that Bhutanese textiles are traditionally woven by women and that textile arts have cultural and spiritual significance, but it does not identify this specific object or establish these details about its patterns.); \"From the museum, Day 7 continues to the Craft Bazaar, where traditional crafts are available alongside the handwoven textiles the museum contextualises, and then to the Kaja Throm Farmers Market.\" (claims: The Craft Bazaar offers traditional crafts alongside handwoven textiles.; source: The source only supports exploring the Textile Museum, Craft Bazaar, and Kaja Throm Farmers Market on Day 7; it provides no collection or retail details for the Craft Bazaar.); \"Guru Rinpoche appears in Bhutanese cultural objects, temple murals, and household shrines across the country.\" (claims: Guru Rinpoche appears across Bhutan in cultural objects, temple murals, and household shrines.; source: The source supports Guru Rinpoche's connection to Taktsang and the statue at Kyichu Lhakhang, but it does not support this broader countrywide claim.); \"It has been a place of active worship for centuries, and that use, unbroken across time, is its most significant quality.\" (claims: Kyichu Lhakhang's active worship has continued unbroken across time.; source: The source says the temple is active and has been so for centuries, but it does not establish an unbroken continuity of worship.); \"Rice cultivation is a visible feature of the valley landscape around the town, and buckwheat has long been part of the Paro valley's agricultural character.\" (claims: Buckwheat has long been an established part of Paro Valley agriculture.; source: The source supports visible rice cultivation and identifies buckwheat in the specified lunch, but it does not state that buckwheat has long shaped the valley's agricultural character.)",
+   "channel": "blog",
+   "attempt_number": 2,
+   "created_at": "2026-10-22 13:55:39.253064+00:00",
+   "route_hub_name": "Khaling National Handloom → Tashigang dzong → Chorten Kora → Mongar Dzong",
+   "job_id": "d9253749-3212-42a5-ba19-617d16f893a3",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [
+    "1 FAQ pair(s) that copied a body sentence were removed",
+    "regenerated the FAQ section (4 → 5 pairs, real questions 1 → 2)",
+    "dropped FAQ pair (answer fit: the answer does not give what the question asks): 'What is the main statue of Kyichu Lhakhang?'"
+   ],
+   "faq": [
+    {
+     "question": "What is Paro, Bhutan famous for?",
+     "answer": "Paro is known for its fertile valley landscape, traditional Bhutanese architecture, and the iconic 17th-century Rinpung Dzong fortress-monastery that dominates the valley. The region's rice cultivation and buckwheat farming have shaped both its character and its distinctive local cuisine.",
+     "answer_words": 39,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What collections does the National Museum of Bhutan hold?",
+     "answer": "The National Museum of Bhutan, housed in a former watchtower called Ta Dzong above Rinpung Dzong, holds collections of thangkas, armour, textiles, and natural history specimens that document Bhutanese cultural heritage and artistic traditions.",
+     "answer_words": 34,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What crosses the Paro Valley as a notable landmark?",
+     "answer": "The Paro River flows through the Paro Valley alongside the town and is crossed by traditional covered cantilever bridges, which connect communities across the fertile landscape that produces the rice visible throughout the region.",
+     "answer_words": 34,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 3,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 3,
+    "faq_real": 1,
+    "faq_pairs_before": {
+     "real": 1,
+     "pairs": 4
+    },
+    "faq_pairs_after": {
+     "real": 1,
+     "pairs": 3
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "What to see at the textile museum?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What is the main statue of Kyichu Lhakhang?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Is Paro in Bhutan worth visiting?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What are the main tourist attractions in Paro, Bhutan?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What is Paro, Bhutan known for?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What is Paro, Bhutan famous for?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "segment_match": 6
+    },
+    "candidates": {
+     "place_paa": 12,
+     "segment_match": 12
+    }
+   },
+   "faq_filter": {
+    "mode": "on",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.010737,
+    "n_candidates": 24,
+    "llm_keep": 10,
+    "llm_drop": 14,
+    "drop_reasons": {
+     "outside_piece_scope": 8,
+     "word_meaning": 1,
+     "unanswerable": 1,
+     "off_scope_other_place": 2,
+     "off_scope_homonym": 1,
+     "sensitive_no_travel_use": 1
+    },
+    "deterministic": [
+     "What to see at the textile museum?",
+     "What is the main statue of Kyichu Lhakhang?",
+     "Which is better, Paro or Thimphu?",
+     "What is Paro called in English?",
+     "Is Paro in Bhutan worth visiting?",
+     "What are the main tourist attractions in Paro, Bhutan?"
+    ],
+    "llm_kept": [
+     "What to see at the textile museum?",
+     "What is the main statue of Kyichu Lhakhang?",
+     "Is Paro in Bhutan worth visiting?",
+     "What are the main tourist attractions in Paro, Bhutan?",
+     "What is Paro, Bhutan known for?",
+     "What is Paro, Bhutan famous for?"
+    ],
+    "gazetteer_dropped": []
+   },
+   "faq_answer_fit": {
+    "mode": "on",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 4,
+    "stage": "t9_faq_answer_fit",
+    "dropped": [
+     "What is the main statue of Kyichu Lhakhang?"
+    ],
+    "failing": [
+     "What is the main statue of Kyichu Lhakhang?"
+    ],
+    "cost_usd": 0.004092,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "What is the main statue of Kyichu Lhakhang?",
+      "reason": "Question asks for the main statue; answer never names it.",
+      "verdict": "NON_ANSWER"
+     },
+     {
+      "n": 2,
+      "q": "What is Paro, Bhutan famous for?",
+      "reason": "Answer covers what Paro is famous for adequately.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 3,
+      "q": "What collections does the National Museum of Bhutan hold?",
+      "reason": "Answer lists the museum's collections clearly.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 4,
+      "q": "What crosses the Paro Valley as a notable landmark?",
+      "reason": "Answer names the river and cantilever bridges as landmarks.",
+      "verdict": "ANSWERS"
+     }
+    ],
+    "below_min": false,
+    "dropped_n": [
+     1
+    ],
+    "pairs_after": 3
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 2,
+     "cost": "0.000313"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 2,
+     "cost": "0.007019"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.004092"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.010737"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.011104"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.062358"
+    }
+   ],
+   "llm_cost_piece_usd": 0.095623,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 13:55:43.271412+00:00",
+    "finished_at": "2026-10-22 13:58:08.764840+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  },
+  {
+   "piece_id": "76f49455-5891-4284-8281-764ee07ce349",
+   "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+   "slug": "trail-pulse",
+   "request_id": "f57ebafc-57d4-494a-8b20-8f84e69e791e",
+   "status": "approved",
+   "held_reason": null,
+   "channel": "blog",
+   "attempt_number": 3,
+   "created_at": "2026-10-22 13:55:41.921218+00:00",
+   "route_hub_name": "Khaiphaen Restaurant → Luang Prabang → Kuang Si Falls → Ban Long Lao Mai",
+   "job_id": "9ce794f9-17dd-4d51-b84b-ccf5bd351335",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [],
+   "faq": [
+    {
+     "question": "Which country is Kuang Si Falls in?",
+     "answer": "Kuang Si Falls is located in Laos, specifically in Luang Prabang Province in the north of the country. The falls sit approximately 29 to 30 kilometres south of Luang Prabang city, within a forested protected area. Laos is a landlocked country in Southeast Asia, and Luang Prabang is one of its most distinctive destinations in the north.",
+     "answer_words": 57,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Can you swim at Kuang Si Falls?",
+     "answer": "Yes, Kuang Si Falls has turquoise pools that are suitable for swimming. The vivid colour of the water comes from calcium carbonate leaching from the surrounding limestone, which saturates the water.",
+     "answer_words": 31,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "How do I get to Kuang Si Falls?",
+     "answer": "You cycle to Kuang Si Falls by bicycle from Luang Prabang, traveling south on the mountain road for approximately 30 kilometres on tarmac. The route departs early on Day 2 of the journey.",
+     "answer_words": 33,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What makes Kuang Si Falls distinctive?",
+     "answer": "Kuang Si Falls is a multi-tiered limestone waterfall system where the water cascades over a series of travertine terraces, creating a sequence of pools with a vivid turquoise-blue colour caused by high calcium carbonate content from the surrounding limestone. The site sits within forested hills inside a protected area, and the jungle setting contributes to the landscape around the falls.",
+     "answer_words": 60,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Do I need a visa to visit Laos?",
+     "answer": "Most nationalities can obtain a 30-day Laos e-visa online for approximately $30 to $45, with processing taking around 3 business days. It is worth applying before departure so you arrive with everything in order.",
+     "answer_words": 34,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 5,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 5,
+    "faq_real": 3,
+    "faq_pairs_before": {
+     "real": 2,
+     "pairs": 4
+    },
+    "faq_pairs_after": {
+     "real": 3,
+     "pairs": 5
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "Which country is Kuang Si Falls in?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Can I swim at Kuang Si Waterfall?"
+    },
+    {
+     "source": "segment_match",
+     "question": "How do I get to Kuang Si Falls?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Why is Kuang Si Waterfall famous?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What is special about Kuang Si Falls?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Can you swim in the Kuang Si Falls?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "segment_match": 6
+    },
+    "candidates": {
+     "place_paa": 12,
+     "serp_topup": 6,
+     "segment_match": 12
+    }
+   },
+   "faq_filter": {
+    "mode": "on",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.011864,
+    "n_candidates": 30,
+    "llm_keep": 21,
+    "llm_drop": 9,
+    "drop_reasons": {
+     "unanswerable": 5,
+     "off_scope_other_place": 1,
+     "sensitive_no_travel_use": 1,
+     "commercial_junk": 2
+    },
+    "deterministic": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "Is Kuang Si Waterfall worth it?",
+     "How do I get to Kuang Si Falls?",
+     "What time to go to Kuang Si Waterfall?",
+     "Why is Kuang Si Waterfall famous?"
+    ],
+    "llm_kept": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "How do I get to Kuang Si Falls?",
+     "Why is Kuang Si Waterfall famous?",
+     "What is special about Kuang Si Falls?",
+     "Can you swim in the Kuang Si Falls?"
+    ],
+    "gazetteer_dropped": []
+   },
+   "faq_answer_fit": {
+    "mode": "on",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 5,
+    "stage": "t9_faq_answer_fit",
+    "failing": [],
+    "cost_usd": 0.005172,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "Which country is Kuang Si Falls in?",
+      "reason": "Directly states Kuang Si Falls is in Laos.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 2,
+      "q": "Can you swim at Kuang Si Falls?",
+      "reason": "Confirms swimming is possible and explains why.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 3,
+      "q": "How do I get to Kuang Si Falls?",
+      "reason": "Explains how to get there: by bicycle from Luang Prabang.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 4,
+      "q": "What makes Kuang Si Falls distinctive?",
+      "reason": "Describes distinctive features: tiered limestone, turquoise pools, forested setting.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 5,
+      "q": "Do I need a visa to visit Laos?",
+      "reason": "Provides visa info: e-visa, cost, processing time.",
+      "verdict": "ANSWERS"
+     }
+    ]
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 3,
+     "cost": "0.000502"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 3,
+     "cost": "0.008367"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.005172"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.011864"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.008421"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.065988"
+    }
+   ],
+   "llm_cost_piece_usd": 0.100314,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 13:57:26.355679+00:00",
+    "finished_at": "2026-10-22 14:00:37.956092+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  },
+  {
+   "piece_id": "b570fb82-c6e0-4bb2-997a-d45e949a7336",
+   "tenant_id": "885d4916-007b-415e-9261-909ad43c6d00",
+   "slug": "wildkind-travel",
+   "request_id": "449b0feb-9b2a-43f0-a5af-bc39efdeccad",
+   "status": "approved",
+   "held_reason": null,
+   "channel": "blog",
+   "attempt_number": 2,
+   "created_at": "2026-10-22 13:55:44.507454+00:00",
+   "route_hub_name": "Khaiphaen Restaurant → Luang Prabang → Kuang Si Falls → Ban Long Lao Mai",
+   "job_id": "6092e3b9-d499-4f23-a41a-2c5c04ca25f3",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [],
+   "faq": [
+    {
+     "question": "Can you swim at Kuang Si Falls?",
+     "answer": "Swimming is possible at Kuang Si Falls, where the turquoise pools formed by the limestone terraces are suitable for it. The falls themselves, including the main upper drop, are a separate part of the system above the swimming area.",
+     "answer_words": 39,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Which country is Kuang Si Falls in?",
+     "answer": "Kuang Si Falls is located in Laos, approximately 30 kilometres south of Luang Prabang city in Luang Prabang Province in northern Laos. The falls sit within a protected area surrounded by forested hills.",
+     "answer_words": 33,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Why is the water at Kuang Si Falls that distinctive turquoise colour?",
+     "answer": "The turquoise colour of the water at Kuang Si Falls is caused by high calcium carbonate content leaching from the surrounding limestone into the water. The same chemistry that colours the pools also builds the travertine limestone terraces over which the falls cascade, creating a sequence of pools before the main 50-metre upper drop.",
+     "answer_words": 54,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What changed in the Nam Ou Valley with the hydropower dams?",
+     "answer": "The Nam Ou Valley experienced significant changes when a cascade of hydropower dams were largely completed in the 2010s. These dams altered water levels and affected traditional boat routes along parts of the river, reshaping how the valley functions.",
+     "answer_words": 39,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What is the landscape like cycling through the Nam Ou Valley?",
+     "answer": "The Nam Ou Valley features dramatic limestone karst formations, forested ridges, and steep valley walls as you cycle northward. The route narrows through valleys with towering limestone cliffs rising from the valley floor, part of the Greater Mekong Subregion's distinctive geology.",
+     "answer_words": 41,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 5,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 5,
+    "faq_real": 2,
+    "faq_pairs_before": {
+     "real": 1,
+     "pairs": 4
+    },
+    "faq_pairs_after": {
+     "real": 2,
+     "pairs": 5
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "Which country is Kuang Si Falls in?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Can I swim at Kuang Si Waterfall?"
+    },
+    {
+     "source": "segment_match",
+     "question": "How do I get to Kuang Si Falls?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Why is Kuang Si Waterfall famous?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What is special about Kuang Si Falls?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Can you swim in the Kuang Si Falls?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "segment_match": 6
+    },
+    "candidates": {
+     "place_paa": 12,
+     "serp_topup": 6,
+     "segment_match": 12
+    }
+   },
+   "faq_filter": {
+    "mode": "on",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.011864,
+    "n_candidates": 30,
+    "llm_keep": 21,
+    "llm_drop": 9,
+    "drop_reasons": {
+     "unanswerable": 5,
+     "off_scope_other_place": 1,
+     "sensitive_no_travel_use": 1,
+     "commercial_junk": 2
+    },
+    "deterministic": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "Is Kuang Si Waterfall worth it?",
+     "How do I get to Kuang Si Falls?",
+     "What time to go to Kuang Si Waterfall?",
+     "Why is Kuang Si Waterfall famous?"
+    ],
+    "llm_kept": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "How do I get to Kuang Si Falls?",
+     "Why is Kuang Si Waterfall famous?",
+     "What is special about Kuang Si Falls?",
+     "Can you swim in the Kuang Si Falls?"
+    ],
+    "gazetteer_dropped": []
+   },
+   "faq_answer_fit": {
+    "mode": "on",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 5,
+    "stage": "t9_faq_answer_fit",
+    "failing": [],
+    "cost_usd": 0.004911,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "Can you swim at Kuang Si Falls?",
+      "reason": "Confirms swimming is possible at the named falls.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 2,
+      "q": "Which country is Kuang Si Falls in?",
+      "reason": "Names the country (Laos) and gives location details.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 3,
+      "q": "Why is the water at Kuang Si Falls that distinctive turquoise colour?",
+      "reason": "Explains the cause of the turquoise colour clearly.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 4,
+      "q": "What changed in the Nam Ou Valley with the hydropower dams?",
+      "reason": "Describes changes from hydropower dams in the named valley.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 5,
+      "q": "What is the landscape like cycling through the Nam Ou Valley?",
+      "reason": "Describes the landscape encountered cycling through the named valley.",
+      "verdict": "ANSWERS"
+     }
+    ]
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 2,
+     "cost": "0.000415"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 2,
+     "cost": "0.005042"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.004911"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.011864"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 1,
+     "cost": "0.006352"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.068295"
+    }
+   ],
+   "llm_cost_piece_usd": 0.096879,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 13:58:00.364404+00:00",
+    "finished_at": "2026-10-22 14:00:37.956515+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  },
+  {
+   "piece_id": "781b5de7-3351-40b2-9c1d-7fdc27a3128e",
+   "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+   "slug": "terra-family",
+   "request_id": "b96797b8-3547-4c49-b48b-707979788a77",
+   "status": "held",
+   "held_reason": "F9_cta_fact: audit manual_check: FACT_CHECK_MANUAL_CHECK — unsupported claim(s): \"What a Ruined Monastery Tells Families About Mongolia\" (claims: That the piece concerns a ruined monastery in Mongolia and draws lessons for families from it.; source: The SOURCE contains no monastery, ruined or otherwise, and provides no facts about such a site.)",
+   "channel": "blog",
+   "attempt_number": 2,
+   "created_at": "2026-10-22 13:55:45.237713+00:00",
+   "route_hub_name": "a local Buddhist monastery → Sod Camp → Uran Togoo → Moron",
+   "job_id": "78b875a3-b01d-4509-88b3-26254ab6de91",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [
+    "dropped FAQ pair (answer fit: the answer does not give what the question asks): 'Are there reindeer in Mongolia?'",
+    "dropped FAQ pair (answer fit: the answer does not give what the question asks): 'Who are the reindeer people of Mongolia?'",
+    "FAQ has 2 pair(s) after the answer-fit drop, under the 3-pair minimum (kept, not held)"
+   ],
+   "faq": [
+    {
+     "question": "Does Mongolia have any volcanoes?",
+     "answer": "Mongolia has several dormant volcanoes, and Uran Togoo in Bulgan Province is the largest of the dormant volcanoes in its surrounding valleys.",
+     "answer_words": 22,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Do Mongolians still live like nomads?",
+     "answer": "Some Mongolian communities do continue nomadic or semi-nomadic lives. The Tsaatan of northern Khövsgöl Province are one example: their settlements are not fixed villages but seasonal camps that move with their reindeer herds across the taiga forest several times a year. Near Lake Khövsgöl, visits to local nomadic families are also available as an optional activity during the journey.",
+     "answer_words": 59,
+     "source": "serp_topup",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 2,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 2,
+    "faq_real": 2,
+    "faq_pairs_before": {
+     "real": 3,
+     "pairs": 4
+    },
+    "faq_pairs_after": {
+     "real": 2,
+     "pairs": 2
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "Do Mongolian gers have toilets?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Does Mongolia have any volcanoes?"
+    },
+    {
+     "source": "place_paa",
+     "question": "What is the average altitude of Mongolia above sea level?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Do Mongolians still live like nomads?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Are there reindeer in Mongolia?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Who are the reindeer people?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "place_paa": 1,
+     "serp_topup": 3,
+     "segment_match": 2
+    },
+    "candidates": {
+     "place_paa": 1,
+     "serp_topup": 12,
+     "segment_match": 6
+    }
+   },
+   "faq_filter": {
+    "mode": "on",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.008527,
+    "n_candidates": 19,
+    "llm_keep": 14,
+    "llm_drop": 5,
+    "drop_reasons": {
+     "off_scope_other_place": 1,
+     "other": 3,
+     "sensitive_no_travel_use": 1
+    },
+    "deterministic": [
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Do the Sami people still herd reindeer?",
+     "Who are the reindeer people?"
+    ],
+    "llm_kept": [
+     "Do Mongolian gers have toilets?",
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Who are the reindeer people?"
+    ],
+    "gazetteer_dropped": [
+     "What is a Ger camp in Mongolia?",
+     "Do Ger camps in Mongolia have electricity?",
+     "What is a ger house in Mongolia?",
+     "How much does a ger cost in Mongolia?"
+    ]
+   },
+   "faq_answer_fit": {
+    "mode": "on",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 4,
+    "stage": "t9_faq_answer_fit",
+    "dropped": [
+     "Are there reindeer in Mongolia?",
+     "Who are the reindeer people of Mongolia?"
+    ],
+    "failing": [
+     "Are there reindeer in Mongolia?",
+     "Who are the reindeer people of Mongolia?"
+    ],
+    "cost_usd": 0.004398,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "Does Mongolia have any volcanoes?",
+      "reason": "Confirms Mongolia has volcanoes and names the largest dormant one.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 2,
+      "q": "Are there reindeer in Mongolia?",
+      "reason": "Describes Tsaatan practices but never confirms reindeer exist in Mongolia.",
+      "verdict": "NON_ANSWER"
+     },
+     {
+      "n": 3,
+      "q": "Do Mongolians still live like nomads?",
+      "reason": "Confirms nomadic life continues with specific examples.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 4,
+      "q": "Who are the reindeer people of Mongolia?",
+      "reason": "Describes the people but never names them (Tsaatan).",
+      "verdict": "NON_ANSWER"
+     }
+    ],
+    "below_min": true,
+    "dropped_n": [
+     2,
+     4
+    ],
+    "pairs_after": 2
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 2,
+     "cost": "0.000435"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 2,
+     "cost": "0.006963"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.004398"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.008527"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 3,
+     "cost": "0.010327"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.076461"
+    }
+   ],
+   "llm_cost_piece_usd": 0.107111,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 13:58:00.373133+00:00",
+    "finished_at": "2026-10-22 14:00:58.715312+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  },
+  {
+   "piece_id": "32789658-61c2-496f-a493-dfac399b8b9c",
+   "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+   "slug": "atlas-hearth",
+   "request_id": "3c9dc7bb-478f-4341-beba-0ae2044bce15",
+   "status": "held",
+   "held_reason": "F4_extreme_length: content is 14576 chars — far beyond any real channel example",
+   "channel": "blog",
+   "attempt_number": 2,
+   "created_at": "2026-10-22 13:55:46.049980+00:00",
+   "route_hub_name": "Tashichhodzong → Craft Bazaar → National School of Arts and Craft → Changangkha",
+   "job_id": "73e4d006-ae84-4e09-8bd3-a2921559e7d4",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [
+    "2 FAQ pair(s) that copied a body sentence were removed",
+    "regenerated the FAQ section (4 → 5 pairs, real questions 0 → 0)",
+    "dropped FAQ pair (answer fit: the answer does not give what the question asks): 'What is Zorig Chusum?'",
+    "dropped FAQ pair (answer fit: the answer does not give what the question asks): 'What is the story behind Mebar Tsho, the Burning Lake?'"
+   ],
+   "faq": [
+    {
+     "question": "What is a dzong in Bhutan?",
+     "answer": "A dzong is a fortress-monastery, a form of architecture unique to Bhutan, built to house both the district's government administration and its resident monastic community within a single structure. Dzongs typically feature whitewashed stone and rammed-earth walls, a central tower called a utse, and decorated woodwork. Their dual administrative and religious function reflects Bhutan's integration of civic and spiritual governance.",
+     "answer_words": 60,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What is the significance of dzongs in Bhutanese culture?",
+     "answer": "Dzongs in Bhutan have historically served as the administrative and religious headquarters of their districts, housing monk bodies and government offices simultaneously. Punakha Dzong, for example, served as Bhutan's capital and seat of government until 1955 and remains the winter residence of the Je Khenpo and the Central Monk Body each year. The tradition continued into the 20th century, with dzongs like Mongar still being constructed in the modern era.",
+     "answer_words": 70,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What is ara, and where can you see it being made?",
+     "answer": "Ara is a corn liquor traditionally brewed in Bhutan. During a visit to a local farmhouse near Mongar Dzong, you can observe the brewing process firsthand while tasting traditional eastern dishes prepared in the region.",
+     "answer_words": 35,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 3,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 3,
+    "faq_real": 0,
+    "faq_pairs_before": {
+     "real": 0,
+     "pairs": 4
+    },
+    "faq_pairs_after": {
+     "real": 0,
+     "pairs": 3
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "Where is Chorten Kora?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What is the meaning of \"chorten\"?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What are chortens?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What is a Buddhist chorten?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Is national library free to enter?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What is the significance of Dzongs in Bhutan?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "segment_match": 6
+    },
+    "candidates": {
+     "place_paa": 12,
+     "segment_match": 12
+    }
+   },
+   "faq_filter": {
+    "mode": "on",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.010389,
+    "n_candidates": 24,
+    "llm_keep": 10,
+    "llm_drop": 14,
+    "drop_reasons": {
+     "unanswerable": 1,
+     "off_scope_other_place": 12,
+     "sensitive_no_travel_use": 1
+    },
+    "deterministic": [
+     "Where is Chorten Kora?",
+     "What is the meaning of \"chorten\"?",
+     "What is a Buddhist chorten?",
+     "Who is inside Chorten Kora?",
+     "What is the name of the giant Buddha statue in Bhutan?",
+     "Is national library free to enter?"
+    ],
+    "llm_kept": [
+     "Where is Chorten Kora?",
+     "What is the meaning of \"chorten\"?",
+     "What are chortens?",
+     "What is a Buddhist chorten?",
+     "Is national library free to enter?",
+     "What is the significance of Dzongs in Bhutan?"
+    ],
+    "gazetteer_dropped": []
+   },
+   "faq_answer_fit": {
+    "mode": "on",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 5,
+    "stage": "t9_faq_answer_fit",
+    "dropped": [
+     "What is Zorig Chusum?",
+     "What is the story behind Mebar Tsho, the Burning Lake?"
+    ],
+    "failing": [
+     "What is Zorig Chusum?",
+     "What is the story behind Mebar Tsho, the Burning Lake?"
+    ],
+    "cost_usd": 0.005184,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "What is a dzong in Bhutan?",
+      "reason": "Directly defines dzong as fortress-monastery with details.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 2,
+      "q": "What is the significance of dzongs in Bhutanese culture?",
+      "reason": "Explains cultural and historical significance of dzongs.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 3,
+      "q": "What is Zorig Chusum?",
+      "reason": "Question asks what Zorig Chusum is; answer only names the institute.",
+      "verdict": "NON_ANSWER"
+     },
+     {
+      "n": 4,
+      "q": "What is the story behind Mebar Tsho, the Burning Lake?",
+      "reason": "Question asks for the story; answer only gives location description.",
+      "verdict": "NON_ANSWER"
+     },
+     {
+      "n": 5,
+      "q": "What is ara, and where can you see it being made?",
+      "reason": "Defines ara and gives a location where it can be seen made.",
+      "verdict": "ANSWERS"
+     }
+    ],
+    "below_min": false,
+    "dropped_n": [
+     3,
+     4
+    ],
+    "pairs_after": 3
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 2,
+     "cost": "0.000792"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 2,
+     "cost": "0.009081"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.005184"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.010389"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.014886"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.192876"
+    }
+   ],
+   "llm_cost_piece_usd": 0.233208,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 13:58:10.422942+00:00",
+    "finished_at": "2026-10-22 14:02:32.749040+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  }
+ ],
+ "summary": {
+  "blogs_final": 8,
+  "not_final_or_not_blog": [],
+  "done_when_2": {
+   "blogs_with_ge2_real": 4,
+   "need": "6 of 8",
+   "faq_total": 29,
+   "faq_real": 12,
+   "faq_real_share": 0.414,
+   "met": false
+  },
+  "done_when_3_deterministic": {
+   "f16_holds": 0,
+   "f16_failed_entries": 0,
+   "faq_answers": 29,
+   "faq_answers_failing_F1_recheck": 0,
+   "faq_answers_with_F1_ledger_violation": 0,
+   "real_faq_answers_failing_F1": 0,
+   "faq_answer_problem_code_check": 0,
+   "answers_outside_40_60_words": 18,
+   "panel_non_answers": "judged by the panel from `panel_sheet`"
+  },
+  "cost_usd": {
+   "pieces": 0.855,
+   "requests_t8_since": 0.0
+  }
+ },
+ "panel_sheet": [
+  {
+   "piece_id": "3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f",
+   "tenant": "terra-family",
+   "n": 1,
+   "q": "Who are the Tsaatan reindeer people of Mongolia?",
+   "a": "The Tsaatan, also known as the Dukha, are a small semi-nomadic indigenous community numbering only a few hundred people, who herd reindeer in the taiga forests of northern Khövsgöl Province.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f",
+   "tenant": "terra-family",
+   "n": 2,
+   "q": "Do Mongolians still live as nomads?",
+   "a": "Some communities in Mongolia maintain nomadic or semi-nomadic ways of life. Nomadic families also live in the Khövsgöl lake region, and visits to their camps can be arranged as part of a stay at the lake.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f",
+   "tenant": "terra-family",
+   "n": 3,
+   "q": "What can families do when they trek into a volcanic crater?",
+   "a": "When families visit Uran Togoo volcano, they descend into the ancient volcanic crater and walk across the caldera floor. The crater sits within open green steppe grassland and patches of forest, with dark volcanic rock creating a striking contrast to the surrounding terrain.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "07c13b25-95fa-458e-85c3-de0982dbf4d8",
+   "tenant": "terra-family",
+   "n": 1,
+   "q": "Which country is Kuang Si Falls in?",
+   "a": "Kuang Si Falls is located in Laos, approximately 30 kilometres south of Luang Prabang in northern Laos.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "07c13b25-95fa-458e-85c3-de0982dbf4d8",
+   "tenant": "terra-family",
+   "n": 2,
+   "q": "Can you swim at Kuang Si Falls?",
+   "a": "Yes, Kuang Si Falls features turquoise pools suitable for swimming. The water cascades over travertine limestone terraces, creating a series of pools where you can cool off after cycling the mountain road from Luang Prabang.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "07c13b25-95fa-458e-85c3-de0982dbf4d8",
+   "tenant": "terra-family",
+   "n": 3,
+   "q": "How do I get to Kuang Si Falls?",
+   "a": "Kuang Si Falls is reached by bicycle on the mountain road south from Luang Prabang, a journey of approximately 30 kilometres on tarmac. The ride takes you through the changing landscape before arriving at the waterfall system and its surrounding protected area.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "07c13b25-95fa-458e-85c3-de0982dbf4d8",
+   "tenant": "terra-family",
+   "n": 4,
+   "q": "What ethnic communities live in the Nam Ou Valley region?",
+   "a": "The Nam Ou Valley is home to numerous ethnic minority communities, including Khmu, Hmong, and various Tai-speaking groups, many living in small riverside or hillside villages throughout the remote terrain of Phongsali and Luang Prabang provinces in northern Laos.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "ac8b98b7-52db-4382-8f07-09aec3572ec4",
+   "tenant": "atlas-hearth",
+   "n": 1,
+   "q": "Does Mongolia have volcanoes?",
+   "a": "Mongolia does have dormant volcanoes. Uran Togoo in Bulgan Province is the largest of several dormant volcanoes in its surrounding valleys and last erupted approximately 24,000 years ago. It is protected within the Uran Togoo-Tulga Uul Natural Monument, a designated natural area established to preserve its volcanic landscape.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "ac8b98b7-52db-4382-8f07-09aec3572ec4",
+   "tenant": "atlas-hearth",
+   "n": 2,
+   "q": "Are there still nomadic people in Mongolia?",
+   "a": "Nomadic and semi-nomadic ways of life continue in Mongolia. The Tsaatan of Khövsgöl Province, for example, move their teepee-style camps, called urts, several times a year as their reindeer herds graze through the taiga forest. Their practice is distinct from Mongolian steppe nomadism and represents one of the last surviving reindeer-herding cultures in the world.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "ac8b98b7-52db-4382-8f07-09aec3572ec4",
+   "tenant": "atlas-hearth",
+   "n": 3,
+   "q": "What is the capital city of Khövsgöl Province?",
+   "a": "Mörön is the capital city of Khövsgöl Province, Mongolia's northernmost province. The city sits in a broad valley at an elevation of approximately 1,283 metres above sea level, developed during the Soviet era as an administrative and trade centre, and retains several Soviet-style public buildings from that period.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "ac8b98b7-52db-4382-8f07-09aec3572ec4",
+   "tenant": "atlas-hearth",
+   "n": 4,
+   "q": "What protected areas exist around Lake Khövsgöl?",
+   "a": "Khövsgöl National Park, established in 1992, protects Lake Khövsgöl and its surrounding forests, making it one of Mongolia's most biodiverse protected areas. The park safeguards the distinctive ecological zone where Central Asian steppes meet Siberian taiga forest.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "3712d4dd-52c8-4661-a35f-7927e7f80963",
+   "tenant": "atlas-hearth",
+   "n": 1,
+   "q": "What is Paro, Bhutan famous for?",
+   "a": "Paro is known for its fertile valley landscape, traditional Bhutanese architecture, and the iconic 17th-century Rinpung Dzong fortress-monastery that dominates the valley. The region's rice cultivation and buckwheat farming have shaped both its character and its distinctive local cuisine.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "3712d4dd-52c8-4661-a35f-7927e7f80963",
+   "tenant": "atlas-hearth",
+   "n": 2,
+   "q": "What collections does the National Museum of Bhutan hold?",
+   "a": "The National Museum of Bhutan, housed in a former watchtower called Ta Dzong above Rinpung Dzong, holds collections of thangkas, armour, textiles, and natural history specimens that document Bhutanese cultural heritage and artistic traditions.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "3712d4dd-52c8-4661-a35f-7927e7f80963",
+   "tenant": "atlas-hearth",
+   "n": 3,
+   "q": "What crosses the Paro Valley as a notable landmark?",
+   "a": "The Paro River flows through the Paro Valley alongside the town and is crossed by traditional covered cantilever bridges, which connect communities across the fertile landscape that produces the rice visible throughout the region.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "76f49455-5891-4284-8281-764ee07ce349",
+   "tenant": "trail-pulse",
+   "n": 1,
+   "q": "Which country is Kuang Si Falls in?",
+   "a": "Kuang Si Falls is located in Laos, specifically in Luang Prabang Province in the north of the country. The falls sit approximately 29 to 30 kilometres south of Luang Prabang city, within a forested protected area. Laos is a landlocked country in Southeast Asia, and Luang Prabang is one of its most distinctive destinations in the north.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "76f49455-5891-4284-8281-764ee07ce349",
+   "tenant": "trail-pulse",
+   "n": 2,
+   "q": "Can you swim at Kuang Si Falls?",
+   "a": "Yes, Kuang Si Falls has turquoise pools that are suitable for swimming. The vivid colour of the water comes from calcium carbonate leaching from the surrounding limestone, which saturates the water.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "76f49455-5891-4284-8281-764ee07ce349",
+   "tenant": "trail-pulse",
+   "n": 3,
+   "q": "How do I get to Kuang Si Falls?",
+   "a": "You cycle to Kuang Si Falls by bicycle from Luang Prabang, traveling south on the mountain road for approximately 30 kilometres on tarmac. The route departs early on Day 2 of the journey.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "76f49455-5891-4284-8281-764ee07ce349",
+   "tenant": "trail-pulse",
+   "n": 4,
+   "q": "What makes Kuang Si Falls distinctive?",
+   "a": "Kuang Si Falls is a multi-tiered limestone waterfall system where the water cascades over a series of travertine terraces, creating a sequence of pools with a vivid turquoise-blue colour caused by high calcium carbonate content from the surrounding limestone. The site sits within forested hills inside a protected area, and the jungle setting contributes to the landscape around the falls.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "76f49455-5891-4284-8281-764ee07ce349",
+   "tenant": "trail-pulse",
+   "n": 5,
+   "q": "Do I need a visa to visit Laos?",
+   "a": "Most nationalities can obtain a 30-day Laos e-visa online for approximately $30 to $45, with processing taking around 3 business days. It is worth applying before departure so you arrive with everything in order.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "b570fb82-c6e0-4bb2-997a-d45e949a7336",
+   "tenant": "wildkind-travel",
+   "n": 1,
+   "q": "Can you swim at Kuang Si Falls?",
+   "a": "Swimming is possible at Kuang Si Falls, where the turquoise pools formed by the limestone terraces are suitable for it. The falls themselves, including the main upper drop, are a separate part of the system above the swimming area.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "b570fb82-c6e0-4bb2-997a-d45e949a7336",
+   "tenant": "wildkind-travel",
+   "n": 2,
+   "q": "Which country is Kuang Si Falls in?",
+   "a": "Kuang Si Falls is located in Laos, approximately 30 kilometres south of Luang Prabang city in Luang Prabang Province in northern Laos. The falls sit within a protected area surrounded by forested hills.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "b570fb82-c6e0-4bb2-997a-d45e949a7336",
+   "tenant": "wildkind-travel",
+   "n": 3,
+   "q": "Why is the water at Kuang Si Falls that distinctive turquoise colour?",
+   "a": "The turquoise colour of the water at Kuang Si Falls is caused by high calcium carbonate content leaching from the surrounding limestone into the water. The same chemistry that colours the pools also builds the travertine limestone terraces over which the falls cascade, creating a sequence of pools before the main 50-metre upper drop.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "b570fb82-c6e0-4bb2-997a-d45e949a7336",
+   "tenant": "wildkind-travel",
+   "n": 4,
+   "q": "What changed in the Nam Ou Valley with the hydropower dams?",
+   "a": "The Nam Ou Valley experienced significant changes when a cascade of hydropower dams were largely completed in the 2010s. These dams altered water levels and affected traditional boat routes along parts of the river, reshaping how the valley functions.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "b570fb82-c6e0-4bb2-997a-d45e949a7336",
+   "tenant": "wildkind-travel",
+   "n": 5,
+   "q": "What is the landscape like cycling through the Nam Ou Valley?",
+   "a": "The Nam Ou Valley features dramatic limestone karst formations, forested ridges, and steep valley walls as you cycle northward. The route narrows through valleys with towering limestone cliffs rising from the valley floor, part of the Greater Mekong Subregion's distinctive geology.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "781b5de7-3351-40b2-9c1d-7fdc27a3128e",
+   "tenant": "terra-family",
+   "n": 1,
+   "q": "Does Mongolia have any volcanoes?",
+   "a": "Mongolia has several dormant volcanoes, and Uran Togoo in Bulgan Province is the largest of the dormant volcanoes in its surrounding valleys.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "781b5de7-3351-40b2-9c1d-7fdc27a3128e",
+   "tenant": "terra-family",
+   "n": 2,
+   "q": "Do Mongolians still live like nomads?",
+   "a": "Some Mongolian communities do continue nomadic or semi-nomadic lives. The Tsaatan of northern Khövsgöl Province are one example: their settlements are not fixed villages but seasonal camps that move with their reindeer herds across the taiga forest several times a year. Near Lake Khövsgöl, visits to local nomadic families are also available as an optional activity during the journey.",
+   "source": "serp_topup"
+  },
+  {
+   "piece_id": "32789658-61c2-496f-a493-dfac399b8b9c",
+   "tenant": "atlas-hearth",
+   "n": 1,
+   "q": "What is a dzong in Bhutan?",
+   "a": "A dzong is a fortress-monastery, a form of architecture unique to Bhutan, built to house both the district's government administration and its resident monastic community within a single structure. Dzongs typically feature whitewashed stone and rammed-earth walls, a central tower called a utse, and decorated woodwork. Their dual administrative and religious function reflects Bhutan's integration of civic and spiritual governance.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "32789658-61c2-496f-a493-dfac399b8b9c",
+   "tenant": "atlas-hearth",
+   "n": 2,
+   "q": "What is the significance of dzongs in Bhutanese culture?",
+   "a": "Dzongs in Bhutan have historically served as the administrative and religious headquarters of their districts, housing monk bodies and government offices simultaneously. Punakha Dzong, for example, served as Bhutan's capital and seat of government until 1955 and remains the winter residence of the Je Khenpo and the Central Monk Body each year. The tradition continued into the 20th century, with dzongs like Mongar still being constructed in the modern era.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "32789658-61c2-496f-a493-dfac399b8b9c",
+   "tenant": "atlas-hearth",
+   "n": 3,
+   "q": "What is ara, and where can you see it being made?",
+   "a": "Ara is a corn liquor traditionally brewed in Bhutan. During a visit to a local farmhouse near Mongar Dzong, you can observe the brewing process firsthand while tasting traditional eastern dishes prepared in the region.",
+   "source": "writer"
+  }
+ ]
+}

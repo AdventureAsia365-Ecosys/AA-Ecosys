@@ -1,0 +1,112 @@
+{
+  "summary": "AA-779 Done-when 3 (filter on): three independent judges decide for each of 29 delivered FAQ answers whether it answers its question; majority vote",
+  "agentCount": 3,
+  "logs": [
+    "29 pairs judged by 3 judges; majority non-answers: 0"
+  ],
+  "result": {
+    "judged": 29,
+    "judges": 3,
+    "non_answers": [],
+    "split": [
+      {
+        "key": "3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f#3",
+        "yes": 2,
+        "of": 3,
+        "kinds": [
+          "partial",
+          "answers",
+          "answers"
+        ],
+        "reasons": [
+          "The only activity given is descending into the crater and walking the caldera floor, which just repeats the question's premise. The rest describes scenery, not things families can do."
+        ]
+      },
+      {
+        "key": "3712d4dd-52c8-4661-a35f-7927e7f80963#3",
+        "yes": 2,
+        "of": 3,
+        "kinds": [
+          "answers",
+          "partial",
+          "answers"
+        ],
+        "reasons": [
+          "The question is badly worded. The answer says the Paro River flows through the valley (it does not cross it) and only mentions in passing that bridges cross the river. It never clearly names the landmark that crosses the valley, so it fits the question loosely at best."
+        ]
+      }
+    ]
+  },
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Judge"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "judge:1",
+      "phaseIndex": 1,
+      "phaseTitle": "Judge",
+      "agentId": "adbbef98ce34b6334",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1792677825244,
+      "queuedAt": 1792677825213,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Read /home/nghiep/projects/AA-Ecosys/.tmp-session/aa779-r9/raw/panel_sheet.json (29 FAQ question/answer pairs from 8 travel blog posts written today with the FAQ question filter and answer-fit check ON; fields piece_id, tenant, n, q, a). Judge EVERY pair independently as a strict travel editor: an answer counts only if a reader who asked exactly this question gets a direct, specific answer in the …",
+      "promptFramed": true,
+      "lastProgressAt": 1792677863545,
+      "tokens": 71911,
+      "toolCalls": 2,
+      "durationMs": 38300,
+      "resultPreview": "{\"verdicts\":[{\"piece_id\":\"3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f\",\"n\":1,\"answers_question\":true,\"kind\":\"answers\",\"reason\":\"First sentence identifies the Tsaatan (Dukha) as a small semi-nomadic reindeer-herding community in northern Khövsgöl.\"},{\"piece_id\":\"3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f\",\"n\":2,\"answers_question\":true,\"kind\":\"answers\",\"reason\":\"Says directly that some communities still live nom…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "judge:2",
+      "phaseIndex": 1,
+      "phaseTitle": "Judge",
+      "agentId": "a2916f5b3ecee246a",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1792677825244,
+      "queuedAt": 1792677825213,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Read /home/nghiep/projects/AA-Ecosys/.tmp-session/aa779-r9/raw/panel_sheet.json (29 FAQ question/answer pairs from 8 travel blog posts written today with the FAQ question filter and answer-fit check ON; fields piece_id, tenant, n, q, a). Judge EVERY pair independently as a skeptical SEO reviewer for Google People-Also-Ask: the answer must address the question asked (not a neighbouring question) an…",
+      "promptFramed": true,
+      "lastProgressAt": 1792677863402,
+      "tokens": 71914,
+      "toolCalls": 2,
+      "durationMs": 33576,
+      "resultPreview": "{\"verdicts\":[{\"piece_id\":\"3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f\",\"n\":1,\"answers_question\":true,\"kind\":\"answers\",\"reason\":\"Says who the Tsaatan are: the Dukha, a small semi-nomadic reindeer-herding group in the Khövsgöl taiga.\"},{\"piece_id\":\"3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f\",\"n\":2,\"answers_question\":true,\"kind\":\"answers\",\"reason\":\"Answers yes, some communities are still nomadic or semi-nomadic, …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "judge:3",
+      "phaseIndex": 1,
+      "phaseTitle": "Judge",
+      "agentId": "a5eea79ab3ebd7504",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1792677825244,
+      "queuedAt": 1792677825213,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Read /home/nghiep/projects/AA-Ecosys/.tmp-session/aa779-r9/raw/panel_sheet.json (29 FAQ question/answer pairs from 8 travel blog posts written today with the FAQ question filter and answer-fit check ON; fields piece_id, tenant, n, q, a). Judge EVERY pair independently as a traveller reading the FAQ: would you feel your question was answered, or dodged / answered about something else?. For each: an…",
+      "promptFramed": true,
+      "lastProgressAt": 1792677860166,
+      "tokens": 71543,
+      "toolCalls": 2,
+      "durationMs": 30339,
+      "resultPreview": "{\"verdicts\":[{\"piece_id\":\"3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f\",\"n\":1,\"answers_question\":true,\"kind\":\"answers\",\"reason\":\"Identifies the Tsaatan (Dukha) directly: a small semi-nomadic reindeer-herding people in the northern Khövsgöl taiga.\"},{\"piece_id\":\"3fbcd7fa-69fe-4183-ab5c-1541bbd0be5f\",\"n\":2,\"answers_question\":true,\"kind\":\"answers\",\"reason\":\"Says yes, some communities are still nomadic or sem…"
+    }
+  ],
+  "totalTokens": 215368,
+  "totalToolCalls": 6
+}

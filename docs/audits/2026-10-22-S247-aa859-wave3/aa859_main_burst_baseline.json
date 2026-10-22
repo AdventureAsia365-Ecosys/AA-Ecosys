@@ -1,0 +1,146 @@
+{
+  "issue": "AA-859",
+  "session": "S247",
+  "label": "baseline",
+  "base": "http://127.0.0.1:8000",
+  "in_ecs": true,
+  "steps_cfg": {
+    "steps": [
+      10,
+      50,
+      100
+    ],
+    "step_s": 45.0,
+    "pause_s": 15.0,
+    "warmup_s": 10.0
+  },
+  "meta": {
+    "ids": "200 real place_photo ids",
+    "max_connections": 181,
+    "cis_api_sessions_before": {
+      "total": 3,
+      "in_use": 0
+    }
+  },
+  "steps": [
+    {
+      "concurrency": 10,
+      "start_utc": "2026-10-22T13:50:36.050299+00:00",
+      "end_utc": "2026-10-22T13:51:21.067909+00:00",
+      "duration_s": 45.0,
+      "requests": 4667,
+      "rps": 103.7,
+      "p50_ms": 97.7,
+      "p95_ms": 110.0,
+      "p99_ms": 326.3,
+      "max_ms": 494.4,
+      "statuses": {
+        "302": 4667
+      },
+      "errors": {},
+      "error_count": 0,
+      "pg_stat_activity": {
+        "samples": 215,
+        "max_sessions": 11,
+        "max_in_use": 1,
+        "mean_in_use": 0.04
+      }
+    },
+    {
+      "concurrency": 50,
+      "start_utc": "2026-10-22T13:51:36.068988+00:00",
+      "end_utc": "2026-10-22T13:52:21.445862+00:00",
+      "duration_s": 45.4,
+      "requests": 3096,
+      "rps": 68.2,
+      "p50_ms": 493.7,
+      "p95_ms": 2117.1,
+      "p99_ms": 3397.3,
+      "max_ms": 6603.7,
+      "statuses": {
+        "302": 3096
+      },
+      "errors": {},
+      "error_count": 0,
+      "pg_stat_activity": {
+        "samples": 167,
+        "max_sessions": 11,
+        "max_in_use": 1,
+        "mean_in_use": 0.05
+      }
+    },
+    {
+      "concurrency": 100,
+      "start_utc": "2026-10-22T13:52:36.446416+00:00",
+      "end_utc": "2026-10-22T13:53:23.161474+00:00",
+      "duration_s": 46.7,
+      "requests": 2104,
+      "rps": 45.0,
+      "p50_ms": 1593.8,
+      "p95_ms": 6180.2,
+      "p99_ms": 8119.6,
+      "max_ms": 12310.7,
+      "statuses": {
+        "302": 2104
+      },
+      "errors": {},
+      "error_count": 0,
+      "pg_stat_activity": {
+        "samples": 126,
+        "max_sessions": 10,
+        "max_in_use": 1,
+        "mean_in_use": 0.01
+      }
+    }
+  ],
+  "health_ready_before": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "db": "ok",
+      "schema_version": "268",
+      "required_schema": "257",
+      "git_sha": "c0b6c374bc27f1c33f07b88b76cb806e8df7edcb"
+    }
+  },
+  "warmup": {
+    "concurrency": 5,
+    "start_utc": "2026-10-22T13:50:21.044181+00:00",
+    "end_utc": "2026-10-22T13:50:31.049628+00:00",
+    "duration_s": 10.0,
+    "requests": 1087,
+    "rps": 108.6,
+    "p50_ms": 17.3,
+    "p95_ms": 85.6,
+    "p99_ms": 90.3,
+    "max_ms": 314.0,
+    "statuses": {
+      "302": 1087
+    },
+    "errors": {},
+    "error_count": 0
+  },
+  "health_ready_after": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "db": "ok",
+      "schema_version": "268",
+      "required_schema": "257",
+      "git_sha": "c0b6c374bc27f1c33f07b88b76cb806e8df7edcb"
+    }
+  },
+  "window_utc": [
+    "2026-10-22T13:50:20.906215+00:00",
+    "2026-10-22T13:53:23.241970+00:00"
+  ],
+  "logs_insights": {
+    "window_epoch": [
+      1792676960,
+      1792677323
+    ],
+    "rows": "aws logs start-query --log-group-name /ecs/aa-cis-dev --start-time 1792676960 --end-time 1792677323 --query-string 'fields @timestamp, event, peak_in_use, in_use, size, max, acquires, waited, max_wait_ms, timeouts, wait_ms | filter @logStream like /^api\\// and event like /aa859_main_pool_(gauge|wait|acquire_timeout)/ | sort @timestamp asc | limit 500' --profile aa365-admin --region us-west-1 --query queryId --output text",
+    "stats": "aws logs start-query --log-group-name /ecs/aa-cis-dev --start-time 1792676960 --end-time 1792677323 --query-string 'filter @logStream like /^api\\// and event like /aa859_main_pool_(gauge|wait|acquire_timeout)/ | stats count(*) as n, max(peak_in_use) as peak, max(max_wait_ms) as gauge_max_wait, sum(waited) as waited, sum(timeouts) as timeouts_gauge, max(wait_ms) as max_wait_line by event, @logStream' --profile aa365-admin --region us-west-1 --query queryId --output text",
+    "results": "aws logs get-query-results --query-id <id> --profile aa365-admin --region us-west-1 --output json"
+  }
+}

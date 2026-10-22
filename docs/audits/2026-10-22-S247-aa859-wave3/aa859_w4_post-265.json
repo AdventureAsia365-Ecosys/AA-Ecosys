@@ -1,0 +1,1009 @@
+{
+ "mode": "post-265",
+ "at": "2026-10-22T10:41:41+00:00",
+ "login": "cis_app",
+ "last_cis_migration": "265",
+ "registered": {
+  "254": true,
+  "265": true,
+  "266": false
+ },
+ "roles": {
+  "catalog_owner": {
+   "rolname": "catalog_owner",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcanlogin": false,
+   "rolconnlimit": -1,
+   "members": [
+    "db_migrator"
+   ],
+   "member_of": []
+  },
+  "aa_app_user": {
+   "rolname": "aa_app_user",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcanlogin": true,
+   "rolconnlimit": 15,
+   "members": [],
+   "member_of": []
+  },
+  "cis_owner": {
+   "rolname": "cis_owner",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcanlogin": false,
+   "rolconnlimit": -1,
+   "members": [
+    "aa_cis_admin",
+    "db_migrator"
+   ],
+   "member_of": []
+  },
+  "cis_app": {
+   "rolname": "cis_app",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcanlogin": true,
+   "rolconnlimit": 90,
+   "members": [
+    "aa_cis_admin",
+    "db_migrator"
+   ],
+   "member_of": []
+  }
+ },
+ "tables": {
+  "acp_shared.subject": {
+   "rls": true,
+   "force": false,
+   "owner": "cis_owner",
+   "acl": [
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": "state"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "REFERENCES",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRIGGER",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRUNCATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    }
+   ],
+   "policies": [
+    {
+     "name": "subject_cis_app_all",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "cis_app"
+     ],
+     "using": "true",
+     "with_check": "true"
+    },
+    {
+     "name": "tenant_isolation",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "aa_app_user"
+     ],
+     "using": "(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)",
+     "with_check": "(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)"
+    }
+   ],
+   "dependent_views": [],
+   "columns": {
+    "tenant_id": {
+     "type": "uuid",
+     "not_null": true
+    }
+   },
+   "rows": 417,
+   "tenants": 4,
+   "aa_app_user_privs": [
+    "SELECT",
+    "UPDATE(state)"
+   ],
+   "grantees": [
+    "aa_app_user",
+    "cis_app",
+    "cis_owner"
+   ]
+  },
+  "acp_shared.quarter_plan": {
+   "rls": true,
+   "force": false,
+   "owner": "cis_owner",
+   "acl": [
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": "current_version_id"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "quarter"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "tenant_id"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "year"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "year_plan_id"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": "year_plan_id"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "REFERENCES",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRIGGER",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRUNCATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    }
+   ],
+   "policies": [
+    {
+     "name": "quarter_plan_cis_app_all",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "cis_app"
+     ],
+     "using": "true",
+     "with_check": "true"
+    },
+    {
+     "name": "tenant_isolation",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "aa_app_user"
+     ],
+     "using": "(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)",
+     "with_check": "(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)"
+    }
+   ],
+   "dependent_views": [],
+   "columns": {
+    "plan_id": {
+     "type": "uuid",
+     "not_null": true
+    },
+    "tenant_id": {
+     "type": "uuid",
+     "not_null": true
+    }
+   },
+   "rows": 0,
+   "tenants": 0,
+   "aa_app_user_privs": [
+    "INSERT(quarter)",
+    "INSERT(tenant_id)",
+    "INSERT(year)",
+    "INSERT(year_plan_id)",
+    "SELECT",
+    "UPDATE(current_version_id)",
+    "UPDATE(year_plan_id)"
+   ],
+   "grantees": [
+    "aa_app_user",
+    "cis_app",
+    "cis_owner"
+   ]
+  },
+  "acp_shared.quarter_plan_version": {
+   "rls": true,
+   "force": false,
+   "owner": "cis_owner",
+   "acl": [
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "approval_status"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": "approval_status"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": "approved_at"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": "approved_by"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "payload"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "plan_id"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "source"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "version_no"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "REFERENCES",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRIGGER",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRUNCATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    }
+   ],
+   "policies": [
+    {
+     "name": "quarter_plan_version_cis_app_all",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "cis_app"
+     ],
+     "using": "true",
+     "with_check": "true"
+    },
+    {
+     "name": "tenant_isolation",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "aa_app_user"
+     ],
+     "using": "(EXISTS ( SELECT 1\n   FROM acp_shared.quarter_plan qp\n  WHERE ((qp.plan_id = quarter_plan_version.plan_id) AND (qp.tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid))))",
+     "with_check": "(EXISTS ( SELECT 1\n   FROM acp_shared.quarter_plan qp\n  WHERE ((qp.plan_id = quarter_plan_version.plan_id) AND (qp.tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid))))"
+    }
+   ],
+   "dependent_views": [],
+   "columns": {
+    "plan_id": {
+     "type": "uuid",
+     "not_null": true
+    }
+   },
+   "rows": 0,
+   "tenants": null,
+   "aa_app_user_privs": [
+    "INSERT(approval_status)",
+    "INSERT(payload)",
+    "INSERT(plan_id)",
+    "INSERT(source)",
+    "INSERT(version_no)",
+    "SELECT",
+    "UPDATE(approval_status)",
+    "UPDATE(approved_at)",
+    "UPDATE(approved_by)"
+   ],
+   "grantees": [
+    "aa_app_user",
+    "cis_app",
+    "cis_owner"
+   ]
+  },
+  "acp_shared.year_plan": {
+   "rls": true,
+   "force": false,
+   "owner": "cis_owner",
+   "acl": [
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "tenant_id"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": "year"
+    },
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "REFERENCES",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRIGGER",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRUNCATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    }
+   ],
+   "policies": [
+    {
+     "name": "tenant_isolation",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "aa_app_user"
+     ],
+     "using": "(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)",
+     "with_check": "(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)"
+    },
+    {
+     "name": "year_plan_cis_app_all",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "cis_app"
+     ],
+     "using": "true",
+     "with_check": "true"
+    }
+   ],
+   "dependent_views": [],
+   "columns": {
+    "tenant_id": {
+     "type": "uuid",
+     "not_null": true
+    }
+   },
+   "rows": 0,
+   "tenants": 0,
+   "aa_app_user_privs": [
+    "INSERT(tenant_id)",
+    "INSERT(year)",
+    "SELECT"
+   ],
+   "grantees": [
+    "aa_app_user",
+    "cis_app",
+    "cis_owner"
+   ]
+  },
+  "acp_deliver.tenant_tour_pages": {
+   "rls": true,
+   "force": false,
+   "owner": "cis_owner",
+   "acl": [
+    {
+     "grantee": "aa_app_user",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "REFERENCES",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRIGGER",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRUNCATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    }
+   ],
+   "policies": [
+    {
+     "name": "aa_app_user_aa_master_read",
+     "permissive": true,
+     "cmd": "r",
+     "roles": [
+      "aa_app_user"
+     ],
+     "using": "(tenant_id = '00000000-0000-0000-0000-000000000001'::text)",
+     "with_check": null
+    },
+    {
+     "name": "tenant_isolation",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "aa_app_user"
+     ],
+     "using": "(tenant_id = NULLIF(current_setting('app.tenant_id'::text, true), ''::text))",
+     "with_check": "(tenant_id = NULLIF(current_setting('app.tenant_id'::text, true), ''::text))"
+    },
+    {
+     "name": "tenant_tour_pages_cis_app_all",
+     "permissive": true,
+     "cmd": "*",
+     "roles": [
+      "cis_app"
+     ],
+     "using": "true",
+     "with_check": "true"
+    }
+   ],
+   "dependent_views": [
+    {
+     "view": "acp_contract.v_trip_registry",
+     "owner": "cis_owner"
+    }
+   ],
+   "columns": {
+    "tenant_id": {
+     "type": "text",
+     "not_null": true
+    }
+   },
+   "rows": 0,
+   "tenants": 0,
+   "aa_app_user_privs": [
+    "SELECT"
+   ],
+   "grantees": [
+    "aa_app_user",
+    "cis_app",
+    "cis_owner"
+   ]
+  },
+  "acp_contract.tour_atoms": {
+   "rls": false,
+   "force": false,
+   "owner": "cis_owner",
+   "acl": [
+    {
+     "grantee": "catalog_owner",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "REFERENCES",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRIGGER",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRUNCATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    }
+   ],
+   "policies": [],
+   "dependent_views": [
+    {
+     "view": "acp_contract.v_active_tour_atoms",
+     "owner": "cis_owner"
+    },
+    {
+     "view": "catalog.v_tour_place",
+     "owner": "catalog_owner"
+    }
+   ],
+   "columns": {
+    "owner_scope": {
+     "type": "text",
+     "not_null": true
+    }
+   },
+   "rows": 32454,
+   "tenants": null,
+   "aa_app_user_privs": [],
+   "grantees": [
+    "catalog_owner",
+    "cis_app",
+    "cis_owner"
+   ]
+  }
+ },
+ "platform": {
+  "acp_contract.route": {
+   "rls": false,
+   "tenant_columns": [],
+   "aa_app_user_privs": [
+    "SELECT"
+   ]
+  },
+  "acp_contract.atom_segment": {
+   "rls": false,
+   "tenant_columns": [],
+   "aa_app_user_privs": [
+    "SELECT"
+   ]
+  },
+  "acp_contract.atom_segment_member": {
+   "rls": false,
+   "tenant_columns": [],
+   "aa_app_user_privs": [
+    "SELECT"
+   ]
+  },
+  "acp_contract.atom_segment_alias": {
+   "rls": false,
+   "tenant_columns": [],
+   "aa_app_user_privs": [
+    "SELECT"
+   ]
+  },
+  "acp_shared.place_card": {
+   "rls": false,
+   "tenant_columns": [],
+   "aa_app_user_privs": [
+    "SELECT(card_id)",
+    "SELECT(status)"
+   ]
+  },
+  "acp_shared.place_card_alias": {
+   "rls": false,
+   "tenant_columns": [],
+   "aa_app_user_privs": [
+    "SELECT"
+   ]
+  },
+  "acp_shared.atom_place_card": {
+   "rls": false,
+   "tenant_columns": [],
+   "aa_app_user_privs": [
+    "SELECT"
+   ]
+  }
+ },
+ "acp_contract_usage": true,
+ "pages_non_canonical": 0,
+ "atoms_non_canonical_scope": 0,
+ "d9": 0,
+ "acp_contract_view_privs": [],
+ "invariant_v1_violations": [
+  {
+   "rel": "acp_contract.atom_segment",
+   "privilege_type": "SELECT",
+   "column_name": null
+  },
+  {
+   "rel": "acp_contract.atom_segment_alias",
+   "privilege_type": "SELECT",
+   "column_name": null
+  },
+  {
+   "rel": "acp_contract.atom_segment_member",
+   "privilege_type": "SELECT",
+   "column_name": null
+  },
+  {
+   "rel": "acp_contract.route",
+   "privilege_type": "SELECT",
+   "column_name": null
+  },
+  {
+   "rel": "acp_shared.atom_place_card",
+   "privilege_type": "SELECT",
+   "column_name": null
+  },
+  {
+   "rel": "acp_shared.place_card",
+   "privilege_type": "SELECT",
+   "column_name": "card_id"
+  },
+  {
+   "rel": "acp_shared.place_card",
+   "privilege_type": "SELECT",
+   "column_name": "status"
+  },
+  {
+   "rel": "acp_shared.place_card_alias",
+   "privilege_type": "SELECT",
+   "column_name": null
+  }
+ ],
+ "invariant_v2_violations": [
+  {
+   "rel": "acp_shared.place_card",
+   "privilege_type": "SELECT",
+   "column_name": "card_id"
+  },
+  {
+   "rel": "acp_shared.place_card",
+   "privilege_type": "SELECT",
+   "column_name": "status"
+  }
+ ],
+ "job_busy": {
+  "shared.job": 0,
+  "booking.job": null
+ },
+ "booking_job_read_skipped": "InsufficientPrivilegeError('permission denied for table job')",
+ "post_265_ok": true,
+ "reasons": []
+}
