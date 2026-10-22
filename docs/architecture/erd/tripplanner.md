@@ -170,19 +170,19 @@ erDiagram
         timestamptz created_at
     }
     "shared.destinations"
-    "shared.destinations" ||--o{ itinerary_components : "itinerary_components_destination_id_fkey"
-    customers |o--o{ sessions : "sessions_customer_id_fkey"
-    "shared.destinations" |o--o{ tour_day : "tour_day_overnight_destination_id_fkey"
-    "shared.destinations" ||--o{ tour_graph_edge : "tour_graph_edge_from_destination_id_fkey"
-    "shared.destinations" ||--o{ tour_graph_edge : "tour_graph_edge_to_destination_id_fkey"
-    "shared.destinations" ||--o| tour_graph_node : "tour_graph_node_destination_id_fkey"
-    "shared.destinations" ||--o{ tour_junction : "tour_junction_destination_a_fkey"
-    "shared.destinations" ||--o{ tour_junction : "tour_junction_destination_b_fkey"
-    "shared.destinations" ||--o{ tour_leg : "tour_leg_end_destination_id_fkey"
-    "shared.destinations" ||--o{ tour_leg : "tour_leg_start_destination_id_fkey"
-    "shared.destinations" ||--o{ tour_stop : "tour_stop_destination_id_fkey"
-    sessions ||--o{ trip_drafts : "trip_drafts_session_id_fkey"
-    sessions ||--o{ trip_events : "trip_events_session_id_fkey"
+    "shared.destinations" ||--o{ itinerary_components : "destination_id"
+    customers |o--o{ sessions : "customer_id"
+    "shared.destinations" |o--o{ tour_day : "overnight_destination_id"
+    "shared.destinations" ||--o{ tour_graph_edge : "from_destination_id"
+    "shared.destinations" ||--o{ tour_graph_edge : "to_destination_id"
+    "shared.destinations" ||--o| tour_graph_node : "destination_id"
+    "shared.destinations" ||--o{ tour_junction : "destination_a"
+    "shared.destinations" ||--o{ tour_junction : "destination_b"
+    "shared.destinations" ||--o{ tour_leg : "end_destination_id"
+    "shared.destinations" ||--o{ tour_leg : "start_destination_id"
+    "shared.destinations" ||--o{ tour_stop : "destination_id"
+    sessions ||--o{ trip_drafts : "session_id"
+    sessions ||--o{ trip_events : "session_id"
 ```
 
 Notation: `||` exactly one, `|o` zero or one (nullable FK), `o{` zero or more, `o|` zero or one (the FK is the child's PK or a unique key); a dashed line is a `NOT VALID` FK. Attribute comments are DM-6.1 tags (`pii:<class>`, `conf:<class>`). A quoted `"schema.table"` box is the parent table in another schema; foreign keys of other schemas that point here are listed below, and drawn on their own schema's page.
