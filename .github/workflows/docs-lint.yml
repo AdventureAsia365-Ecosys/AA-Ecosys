@@ -8,6 +8,7 @@ name: Docs lint
 #     generated pages are ignored in the config)
 #   - internal links, offline (lychee): no network, no external sites
 #   - every alarm row of docs/generated/alarms.md links to an existing runbook (AA-893)
+#   - PRDs (docs/product/): required PRD fields, acceptance criteria, and every referenced path exists (AA-894)
 #   - gitleaks on the lines this PR's commits add (secret names are fine in docs, values never are)
 # Weekly (and on demand): freshness report of pages past their review date, as a run artifact.
 # Nothing is committed; no AWS access, no secrets beyond the default read-only token.
@@ -69,6 +70,12 @@ jobs:
       - name: Front-matter schema
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
         run: python tools/docs/check_frontmatter.py
+
+      # AA-894: every path a PRD front matter lists (adrs, contracts, erd, migrations) exists; PRDs under docs/product/
+      # carry those fields, Linear keys and an acceptance-criteria list (rules: docs/product/README.md).
+      - name: PRD references
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/docs/check_prd_refs.py
 
       - name: ADR status and index
         if: ${{ !cancelled() }}

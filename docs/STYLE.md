@@ -37,6 +37,7 @@ front-matter schema is [`templates/frontmatter.schema.json`](templates/frontmatt
 - Every catalog page starts with the front-matter defined by the schema. Required: `id`, `title`, `type`, `status`,
   `owner`, `last_reviewed`. Optional: `description` (recommended), `audience`, `applies_to`, `review_every_days`
   (default 90), `last_tested`, `tested_where`, `tested_evidence`, `generated`, `generator`, `superseded_by`, `related`.
+  PRDs (`docs/product/`) add `linear`, `adrs`, `contracts`, `erd` and `migrations` ([PRD rules](product/README.md)).
 - Not used on journals (`docs/sessions/`, `docs/audits/`, `docs/implementation-notes/`, `docs/backlog/`,
   `docs/research/`, `skill/aa-lessons/lessons.md`) or on ADRs (ADRs keep their `Status` bullet).
 - `last_reviewed` means "checked against the real system". An agent sets it to today only after it ran the verify
