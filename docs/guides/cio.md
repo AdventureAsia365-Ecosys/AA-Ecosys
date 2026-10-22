@@ -74,8 +74,10 @@ The control checklist is `docs/security/baseline.md` (AA-895); each control link
 ## Data classification and personal data
 
 - Every personal-data column carries a `pii:<class>` comment (`contact`, `name`, `address`, `profile`,
-  `online_id`, `free_text`, `travel`, `payment`); commercial secrets use `conf:commercial`, credentials
-  `conf:credential` (DM-6.1). Tagging Booking and TripPlanner columns is AA-877.
+  `online_id`, `free_text`, `travel`, `payment`, and for the partner CRM `government_id`, `health`,
+  `emergency_contact`); commercial secrets use `conf:commercial`, credentials `conf:credential` (DM-6.1, data
+  standards v1.3). A migration copy with an unknown class fails CI. Tagging Booking and TripPlanner columns is
+  AA-877.
 - `booking.customers` is the single customer master (DM-6.2). Payloads and logs carry ids, not personal details
   (DM-6.3).
 - No identifying personal data is sent to LLMs or to Jev, and none is written to the LLM and decision ledgers or
