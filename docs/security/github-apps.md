@@ -10,7 +10,7 @@ applies_to: [ecosystem]
 last_reviewed: 2026-10-22
 review_every_days: 90
 last_tested: 2026-10-22
-tested_where: AdventureAsia365-Ecosys org (S247)
+tested_where: dev-acc2
 tested_evidence: AA-901 Linear comment (identity test PR, installation listing)
 related: [SEC-02, SEC-05, SEC-06, AA-901, AA-891, AA-878, AA-880]
 ---
