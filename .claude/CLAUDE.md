@@ -71,6 +71,8 @@ Trạng thái phiên: memory Notion (Program Brain/memory.md) + docs/sessions/. 
     xoá dữ liệu) → cho agent review trước (`kiro-reviewer` theo `kiro-delegate`, hoặc subagent review độc lập).
   - **Từ prod đầu tiên hoặc tenant trả tiền đầu tiên:** Nghiệp duyệt trước khi merge mọi PR Terraform/IAM, migration DB,
     auth/bảo mật, xoá dữ liệu. PR app khác: agent merge khi CI xanh.
+- Agent điều phối push / mở PR / merge bằng GitHub App `aa-agent` qua `tools/github/as-app.sh` (ADR 0011, S247; cách
+  gọi: `skill/aa-ship` §1). Subagent vẫn không push, không merge (hook chặn lệnh, không phụ thuộc danh tính).
 - Không merge/deploy backend khi bảng job còn job hoặc đang có wave (DM-11.4); "Done" theo `skill/aa-ship/SKILL.md`.
 ## KIRO STEERING RULES — BẮT BUỘC (import, added 24/09/2026)
 Nguồn sự thật duy nhất là `.kiro/steering/` (dùng chung Kiro + Claude Code) — import trực tiếp để

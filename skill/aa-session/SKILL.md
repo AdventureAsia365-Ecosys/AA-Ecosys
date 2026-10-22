@@ -23,6 +23,16 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
 
 ## Trong phiên
 
+- **Checklist sống (S247):** đầu phiên tạo `.tmp-session/S<nnn>-checklist.md` — issue gom theo nhóm, mỗi dòng
+  `[x]` xong / `⏳` đang chạy / `⛔` bị chặn + lý do / `[ ]` chưa làm. Báo Nghiệp mở bằng Markdown Preview
+  (Ctrl+Shift+V) trong VSCode. Cập nhật sau mỗi bước xong, không dồn cuối phiên. Lúc chốt phiên nó là nguồn cho log.
+- **Bài học chờ (S247):** tìm ra nguyên nhân gốc → ghi ngay 1 dòng (mẫu `aa-lessons`) vào
+  `.tmp-session/S<nnn>-lessons-pending.md`; cuối phiên (bước 3) chuyển vào `aa-lessons/lessons.md`. Lý do: không mất
+  bài học khi phiên dài hay bị ngắt.
+- **Làm xong rồi mới đề xuất chốt phiên:** còn việc làm được (In Progress, phát hiện phụ) thì làm tiếp; chỉ liệt kê
+  việc thật sự bị chặn, kèm cái gì chặn (memory `finish-before-closing`, S247).
+- **Mọi câu hỏi cho Nghiệp:** bối cảnh bằng lời thường + đề xuất trả lời sẵn; không hỏi trống (memory
+  `artifact-decisions-interactive`).
 - Mỗi quyết định kiến trúc → đề xuất ADR (`ai-nghiep/references/adr.md`).
 - Mỗi issue xong → theo `aa-ship` (verify live rồi mới Done).
 - Wave rerun → theo `aa-wave-rerun`, không merge backend giữa wave.

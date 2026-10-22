@@ -18,6 +18,8 @@ Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo l�
   sắp thứ tự, mục "Time-gated checks" + "Waiting on Nghiệp"), kiểm trạng thái thật (STS, ECS api/worker cùng SHA,
   `shared.job` queued/running), rồi **đề xuất 5–10 issue lấy từ backlog sống** chờ Nghiệp chốt. KHÔNG audit lại toàn bộ
   Linear (S238: tốn token) — chỉ audit lại khi file cũ > ~2 tuần.
+- Trong phiên: giữ checklist sống `.tmp-session/S<nnn>-checklist.md` (Nghiệp xem bằng Markdown Preview), cập nhật sau
+  mỗi bước xong; bài học chờ ở `.tmp-session/S<nnn>-lessons-pending.md` (S247, chi tiết: skill `aa-session`).
 - Cuối phiên: cập nhật `docs/backlog/README.md` (cột Status, chuyển issue đóng sang §5, thêm issue mới) cùng root PR.
 - "dừng session này", theo đúng thứ tự (S247): (1) chốt việc + đồng bộ Linear; (2) **kiểm nguồn thật** (ECS task def
   + image SHA mỗi service, `/health` + `/health/ready`, migration mới nhất, Lambda/Vercel, bảng job, PR còn mở) ghi
