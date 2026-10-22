@@ -1,16 +1,8 @@
----
-title: "AA Partner CRM: final design"
-description: Final, accepted design of the partner-agency CRM and how it merges with the tenant portal into one app, AA-Partner. It supersedes design v3 where decisions changed it.
-type: report
-status: accepted
-owner: nghiep
-audience: [owner, engineer, pm, agent]
-applies_to: [aa-partner, aa-cis-app, aa-booking, aa-cis-infra]
-last_reviewed: 2026-10-21
-related: [AA-821, PR-19, AA-928, AA-979]
----
-
 # AA Partner CRM: final design
+
+Status: accepted (S246). Owner: nghiep. Related: AA-821, PR-19, AA-928, AA-979. Final, accepted design of the
+partner-agency CRM and how it merges with the tenant portal into one app, AA-Partner; it supersedes design v3
+where decisions changed it.
 
 S246, 2026-10-21. Agent: Claude Code. Parent issue AA-821 (Jira PR-19). Linear project "Partner CRM — AA-Partner",
 issues AA-928 to AA-980.

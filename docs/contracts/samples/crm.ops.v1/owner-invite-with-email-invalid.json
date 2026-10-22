@@ -1,0 +1,12 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "OwnerInviteRequest",
+  "expect": "invalid",
+  "why": "AA cannot invite an owner by email (v2.2 review; CIS owns invitations)",
+  "rule": "pii-name",
+  "payload": {
+    "membership_invitation_id": "5f0b7a52-1d7e-4a3e-8a8f-2f7a9c1d0e11",
+    "ticket_ref": "AA-941",
+    "email": "new.owner@synthetic.example"
+  }
+}

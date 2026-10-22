@@ -1,0 +1,18 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "JobSummary",
+  "expect": "valid",
+  "why": "CIS sees CRM jobs (C-M1 exit)",
+  "payload": {
+    "generated_at": "2026-10-22T03:20:00Z",
+    "kinds": [
+      {
+        "kind": "crm_b2b_events_pull",
+        "queued": 0,
+        "running": 1,
+        "failed_24h": 0,
+        "oldest_queued_age_s": null
+      }
+    ]
+  }
+}

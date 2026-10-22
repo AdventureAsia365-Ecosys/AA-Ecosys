@@ -1,0 +1,68 @@
+name: Contracts
+# AA-928 (CRM W0): validates the cross-app contracts and the ADR numbering of the root repo.
+#   - docs/contracts/*.json (JSON Schema 2020-12) and *.openapi.yaml (OpenAPI 3.1) with their samples, and each
+#     contract's field policy: no trip_count / revenue / pii: in crm.ops.v1, no supplier_net in booking.b2b.v1, ...
+#     (tools/contracts/check_contracts.py);
+#   - ADR numbers: no reused or reserved number, exact "Next free root numbers" line in docs/adr/README.md, and on a
+#     PR every added ADR takes a next-free number of the base branch (tools/adr/check_adr_numbers.py).
+# No AWS access, no secrets beyond the default read-only token. About 1 minute per run, only when these paths change.
+# Run the same checks locally: tools/contracts/README.md.
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "docs/contracts/**"
+      - "docs/adr/**"
+      - "tools/contracts/**"
+      - "tools/adr/**"
+      - ".github/workflows/contracts.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: contracts-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    name: Contracts and ADR numbers
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the ADR-number check reads the base branch
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tools/contracts/requirements.txt
+
+      - name: Install dependencies
+        id: deps
+        run: python -m pip install --quiet -r tools/contracts/requirements.txt
+
+      # Every check below runs even when an earlier one failed, so one run shows all problems.
+      - name: Unit tests of the checks
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: |
+          python -m unittest discover -s tools/contracts -p 'test_*.py'
+          python -m unittest discover -s tools/adr -p 'test_*.py'
+
+      - name: Contracts, samples and field policy
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/contracts/check_contracts.py
+
+      - name: ADR numbers
+        if: ${{ !cancelled() }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ -n "$BASE_SHA" ]; then
+            python tools/adr/check_adr_numbers.py --base "$BASE_SHA"
+          else
+            python tools/adr/check_adr_numbers.py
+          fi

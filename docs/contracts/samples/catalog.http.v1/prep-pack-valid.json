@@ -1,0 +1,21 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "AaContent",
+  "expect": "valid",
+  "why": "AA-authored prep pack, published version",
+  "payload": {
+    "content_id": "3c9e2b1a-7d4f-4e6a-9b8c-1a2b3c4d5e6f",
+    "kind": "prep_pack",
+    "version": 3,
+    "locale": "vi",
+    "title": "Trước khi đi: Hà Giang",
+    "body_markdown": "Visa: see the official e-visa site.",
+    "applies_to": {
+      "country_codes": [
+        "VN"
+      ]
+    },
+    "published_at": "2026-12-01T00:00:00Z",
+    "content_hash": "sha256:9a0364b9e99bb480"
+  }
+}
