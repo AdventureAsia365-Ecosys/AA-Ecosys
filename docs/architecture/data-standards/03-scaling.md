@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-dev-db]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-22
 review_every_days: 90
 related: [ARCH-08, ARCH-08-engineering, ARCH-08-data-management, ARCH-08-schema-ownership]
 ---
@@ -21,7 +21,7 @@ taken on a measured trigger, not a guess.
 
 **Status:** Accepted with the S237 data-architecture review
 ([`docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md`](../../audits/2026-10-14-S237-lane-backlog/data-architecture/README.md),
-"the review"; Nghiệp approved every recommendation, 15/10/2026). Version 1.2 (19/10/2026, S244; changes in the README changelog), part of the rule body
+"the review"; Nghiệp approved every recommendation, 15/10/2026). Version 1.3 (22/10/2026, S247; changes in the README changelog), part of the rule body
 of [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and
 data platform rules, accepted 15/10/2026); index and golden rules in [`README.md`](README.md). Roadmap
 ids (N1..N7, X1..X10, L1..L10) are the review's section 7.
@@ -132,11 +132,14 @@ account Lambda quota of 10 and `desired_count = 1` hide it.
 | `tp-browse` | `tripplanner` | **1** (today 5, `backend/shared/db.py:60`) | reserved concurrency **10** | 10 | **30** (both TP pools + 10 for backfills and Lambda deploy overlap) | 10 s (Lambda timeout 30 s) | 3 s |
 | `tp-assembly` | `tripplanner` | **1** | reserved concurrency **10** | 10 | (in 30) | 20 s (Lambda timeout 60 s; also the role backstop) | 5 s |
 | `booking-api` (+ in-process `booking.job` worker) | `booking` | 5 (`backend/app/db.py:54`) | 2 (1 task + deploy overlap, `booking.tf` `deployment_maximum_percent = 200`) | 10 | **10** | 15 s (also the role backstop) | 5 s |
+| `crm-api` (+ in-process `crm.job` worker; AA-Partner, planned) | `crm_app` (planned: created by an Infra `roles/` file before the first `crm` migration, C2.3a; v1.3, AA-929) | **3** | 2 (1 task + deploy overlap) | 6 | **6** | set with the pool (C2.3f) | set with the pool |
 | `db-migrate`, DB Schema Dump, DB Isolation Probe | `db_migrator` (X1 S22) | 1 | 3 (three workflow concurrency groups can overlap) | 3 | `db_migrator` **5** (`rl-002`) | 15 min (N5 runner default, set per session) | 5 s (MIG-9 runner default) |
 | ECS exec scripts (S3-mediated, container `DATABASE_URL`) | `cis_app` | — | — | (inside the 90) | (in `cis_app` 90) | per session | per session |
 | `roles/` files, DB Migrate `set-password` / `run-script`, break-glass | `aa_cis_admin` (master; its DSN is read only inside the migrator task, or for break-glass) | — | — | 10 (reserve) | none (break-glass, C2.3b) | per session | per session |
 | RDS internal + `superuser_reserved_connections` | `rdsadmin` | — | — | ~5 | — | — | — |
-| **Total** | | | | **~126** (after AA-859 sizing: api 35, tenant 14; `db_migrator` 3) | | ≤ 135 ceiling (75 % of 181) | |
+| **Total** | | | | **~132** (after AA-859 sizing: api 35, tenant 14; `db_migrator` 3; `crm_app` 6 planned) | | ≤ 135 ceiling (75 % of 181) | |
+
+The partner CRM's NOLOGIN roles (`crm_owner`, `crm_ai_reader`, `crm_insights`, `crm_support_reader`, `crm_eraser`) open no connection: `crm_app` reaches them with `SET LOCAL ROLE` inside its own sessions. With limit 6 and pool 3 the total stays under the ceiling; a larger CRM pool needs an offsetting cut or the next trigger row (C3).
 
 `cis_app` connection sites besides the two pools (X1 S15 inventory, XD6; AA-CIS-App
 `docs/implementation-notes/AA-860-S15.md`): per-job pools `cis-job` (export / recompute 5, S1 Jev gates 4,

@@ -283,7 +283,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `AWS_REGION` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:38, :53 | none | **keep** | Not a secret. |
 | `TF_STATE_BUCKET` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:51; terraform-plan.yml:41 | none | **keep** | Not a secret. |
 | `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:29; terraform-plan.yml:50 | none | **open-item** | RDS master password, repo-level (S241 E12: move into a protected env or drop once RDS manages it). S240: printed once in a local transcript; decision: rotate before prod. |
-| `ROOT_REPO_DOCS_TOKEN` | `github:AA-CIS-Infra` | infra | db-schema-dump.yml:71, :177, :183 | TBD-Nghiep | **open-item** | Personal access token with write to the root repo (S241 P1-2; PAT -> GitHub App token is U-25, out of AA-878 scope). |
+| `ROOT_REPO_DOCS_TOKEN` | `github:AA-CIS-Infra` | infra | db-schema-dump.yml:73, :184, :190; docs-gen.yml:66, :86, :148; migration-copy-guard.yml:152, :163 (retention-rows job, read only, only when a `crm` copy exists; AA-929) | TBD-Nghiep | **open-item** | Personal access token with write to the root repo (S241 P1-2; PAT -> GitHub App token is U-25, out of AA-878 scope). |
 
 ### Vercel environment variables (secret-bearing) (9)
 

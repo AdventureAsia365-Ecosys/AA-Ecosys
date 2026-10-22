@@ -34,8 +34,9 @@ How to read it:
 ## (a) Records of processing (RoPA)
 
 Data classes are the DM-6.1 classes of [`02-data-management.md`](../architecture/data-standards/02-data-management.md):
-`contact`, `name`, `address`, `profile`, `online_id`, `free_text`, `travel`, `payment`, and `conf:credential` for
-hashes and keys. Legal basis is `[to be confirmed]` on every row. Retention links the
+`contact`, `name`, `address`, `profile`, `online_id`, `free_text`, `travel`, `payment`, `government_id`, `health`,
+`emergency_contact` (the last three since v1.3, for the partner CRM; no column carries them yet), and
+`conf:credential` for hashes and keys. Legal basis is `[to be confirmed]` on every row. Retention links the
 [§7 retention table](../architecture/data-standards/02-data-management.md#7-retention-and-archival) (DM-7.1 is the registry).
 
 | # | Purpose | Data subjects | Data classes | Tables and columns (dump 2026-10-20) | Retention | Recipients and sub-processors | Transfer |
