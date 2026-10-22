@@ -1,0 +1,630 @@
+{
+ "generated_at": "2026-10-22T11:21:29+00:00",
+ "since": "2026-10-22T11:18:50+00:00",
+ "pieces_asked": [
+  "eb5ee9d4-b84f-49d5-b72e-65a2d8bcf0c4",
+  "a58a709b-2c8f-4c56-b159-521b4b4b4869"
+ ],
+ "pieces": [
+  {
+   "piece_id": "eb5ee9d4-b84f-49d5-b72e-65a2d8bcf0c4",
+   "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+   "slug": "terra-family",
+   "request_id": "e42adb08-8f39-430e-b82f-4c9d78a58d56",
+   "status": "approved",
+   "held_reason": null,
+   "channel": "blog",
+   "attempt_number": 2,
+   "created_at": "2026-10-22 11:18:53.912798+00:00",
+   "route_hub_name": "Khaiphaen Restaurant → Luang Prabang → Kuang Si Falls → Ban Long Lao Mai",
+   "job_id": "73b916c7-f19d-4852-86de-190e434697b4",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [],
+   "faq": [
+    {
+     "question": "Which country is Kuang Si Falls in?",
+     "answer": "Kuang Si Falls is located in Laos, approximately 30 kilometres south of Luang Prabang in Luang Prabang Province. The multi-tiered limestone waterfall system sits within forested hills and is part of a protected area where the surrounding jungle contributes to its scenic setting.",
+     "answer_words": 43,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Can I swim at Kuang Si Waterfall?",
+     "answer": "Yes, Kuang Si Falls offers turquoise pools suitable for swimming.",
+     "answer_words": 10,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Why is Kuang Si Waterfall famous?",
+     "answer": "Kuang Si Falls is renowned for its vivid turquoise-blue pools created by high calcium carbonate content leaching from the surrounding limestone. The multi-tiered cascade over travertine terraces and the main 50-metre drop into a large pool make it a striking natural attraction near Luang Prabang.",
+     "answer_words": 45,
+     "source": "segment_match",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Do I need a visa to visit Laos?",
+     "answer": "Most nationalities can obtain a 30-day Laos e-visa online for approximately $30 to $45, processed in around 3 business days. It is worth checking current requirements for your specific nationality before travel, as conditions can change.",
+     "answer_words": 36,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What ethnic groups live in the Nam Ou Valley?",
+     "answer": "The Nam Ou Valley is home to numerous ethnic minority communities, including Khmu, Hmong, and various Tai-speaking groups, many living in small riverside or hillside villages. The valley's remote, mountainous terrain has long supported diverse communities throughout northern Laos.",
+     "answer_words": 39,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 5,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 5,
+    "faq_real": 3,
+    "faq_pairs_before": {
+     "real": 0,
+     "pairs": 4
+    },
+    "faq_pairs_after": {
+     "real": 3,
+     "pairs": 5
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "Which country is Kuang Si Falls in?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Can I swim at Kuang Si Waterfall?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Is Kuang Si Waterfall worth it?"
+    },
+    {
+     "source": "segment_match",
+     "question": "How do I get to Kuang Si Falls?"
+    },
+    {
+     "source": "segment_match",
+     "question": "What time to go to Kuang Si Waterfall?"
+    },
+    {
+     "source": "segment_match",
+     "question": "Why is Kuang Si Waterfall famous?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "segment_match": 6
+    },
+    "candidates": {
+     "place_paa": 12,
+     "serp_topup": 6,
+     "segment_match": 12
+    }
+   },
+   "faq_filter": {
+    "mode": "shadow",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.011864,
+    "n_candidates": 30,
+    "llm_keep": 21,
+    "llm_drop": 9,
+    "drop_reasons": {
+     "unanswerable": 5,
+     "off_scope_other_place": 1,
+     "sensitive_no_travel_use": 1,
+     "commercial_junk": 2
+    },
+    "deterministic": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "Is Kuang Si Waterfall worth it?",
+     "How do I get to Kuang Si Falls?",
+     "What time to go to Kuang Si Waterfall?",
+     "Why is Kuang Si Waterfall famous?"
+    ],
+    "llm_kept": [
+     "Which country is Kuang Si Falls in?",
+     "Can I swim at Kuang Si Waterfall?",
+     "How do I get to Kuang Si Falls?",
+     "Why is Kuang Si Waterfall famous?",
+     "What is special about Kuang Si Falls?",
+     "Can you swim in the Kuang Si Falls?"
+    ],
+    "gazetteer_dropped": []
+   },
+   "faq_answer_fit": {
+    "mode": "shadow",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 5,
+    "stage": "t9_faq_answer_fit",
+    "failing": [],
+    "cost_usd": 0.004917,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "Which country is Kuang Si Falls in?",
+      "reason": "Directly states Kuang Si Falls is in Laos.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 2,
+      "q": "Can I swim at Kuang Si Waterfall?",
+      "reason": "Directly confirms swimming is possible at Kuang Si Falls.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 3,
+      "q": "Why is Kuang Si Waterfall famous?",
+      "reason": "Explains why Kuang Si Falls is famous with specific details.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 4,
+      "q": "Do I need a visa to visit Laos?",
+      "reason": "Answers visa question for Laos with e-visa details.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 5,
+      "q": "What ethnic groups live in the Nam Ou Valley?",
+      "reason": "Names ethnic groups living in Nam Ou Valley.",
+      "verdict": "ANSWERS"
+     }
+    ]
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 2,
+     "cost": "0.000358"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 2,
+     "cost": "0.006269"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.004917"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.011864"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 3,
+     "cost": "0.011503"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 2,
+     "cost": "0.069402"
+    }
+   ],
+   "llm_cost_piece_usd": 0.104313,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 11:18:58.616011+00:00",
+    "finished_at": "2026-10-22 11:20:37.318844+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  },
+  {
+   "piece_id": "a58a709b-2c8f-4c56-b159-521b4b4b4869",
+   "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+   "slug": "atlas-hearth",
+   "request_id": "1dfbf5e6-bf67-45a3-84c8-7fc37d62868a",
+   "status": "approved",
+   "held_reason": null,
+   "channel": "blog",
+   "attempt_number": 3,
+   "created_at": "2026-10-22 11:18:56.654164+00:00",
+   "route_hub_name": "a local Buddhist monastery → Sod Camp → Uran Togoo → Moron",
+   "job_id": "8be63e04-0078-44b6-8244-d8bf676edf82",
+   "F16_faq": {
+    "held_on_f16": false,
+    "entries": [
+     {
+      "passed": true,
+      "blocking": true,
+      "violations": []
+     }
+    ]
+   },
+   "F1_grounding_ledger": {
+    "present": true,
+    "passed": true,
+    "violations": []
+   },
+   "F7_faq_autofix": [],
+   "faq": [
+    {
+     "question": "Are there reindeer in Mongolia?",
+     "answer": "Reindeer are herded by the Tsaatan community in the taiga forest north of Lake Khövsgöl in northern Mongolia. In Tsaatan culture, reindeer are used primarily for riding, as pack animals, and for their milk, rather than being raised for meat, which makes this herding tradition distinct from many others found elsewhere.",
+     "answer_words": 51,
+     "source": "serp_topup",
+     "real": true,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "Who are the Tsaatan reindeer people?",
+     "answer": "Ethnically and linguistically related to Tuvan peoples of southern Siberia, they are one of the last communities in the world to maintain a reindeer-herding culture of this kind.",
+     "answer_words": 28,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "What is the elevation of Mörön?",
+     "answer": "Mörön, the capital of Khövsgöl Province, sits in a broad valley at an elevation of approximately 1,283 metres above sea level.",
+     "answer_words": 21,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    },
+    {
+     "question": "When did the volcano at Uran Togoo last erupt?",
+     "answer": "The dormant volcano sits within the Uran Togoo-Tulga Uul Natural Monument in Bulgan Province, surrounded by green steppe grasslands and patches of forest.",
+     "answer_words": 23,
+     "source": "writer",
+     "real": false,
+     "faq_answer_problem": null,
+     "F1_ledger_violations_in_answer": [],
+     "F1_recheck_passed": true,
+     "F1_recheck_violations": []
+    }
+   ],
+   "faq_pairs": 4,
+   "faq_min_pairs": 3,
+   "done_when_2": {
+    "given_real": 6,
+    "given_off_meaning": 0,
+    "faq_total": 4,
+    "faq_real": 1,
+    "faq_pairs_before": {
+     "real": 2,
+     "pairs": 4
+    },
+    "faq_pairs_after": {
+     "real": 1,
+     "pairs": 4
+    }
+   },
+   "faq_record_matches_text": true,
+   "search_questions_given": [
+    {
+     "source": "segment_match",
+     "question": "Does Mongolia have any volcanoes?"
+    },
+    {
+     "source": "place_paa",
+     "question": "What is the average altitude of Mongolia above sea level?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Do Mongolians still live like nomads?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Are there reindeer in Mongolia?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Do the Sami people still herd reindeer?"
+    },
+    {
+     "source": "serp_topup",
+     "question": "Who are the reindeer people?"
+    }
+   ],
+   "question_sources": {
+    "kept": {
+     "place_paa": 1,
+     "serp_topup": 4,
+     "segment_match": 1
+    },
+    "candidates": {
+     "place_paa": 1,
+     "serp_topup": 12,
+     "segment_match": 6
+    }
+   },
+   "faq_filter": {
+    "mode": "shadow",
+    "fallback": false,
+    "error": null,
+    "model": "satellite-haiku-4-5",
+    "cost_usd": 0.008512,
+    "n_candidates": 19,
+    "llm_keep": 14,
+    "llm_drop": 5,
+    "drop_reasons": {
+     "off_scope_other_place": 1,
+     "other": 3,
+     "sensitive_no_travel_use": 1
+    },
+    "deterministic": [
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Do the Sami people still herd reindeer?",
+     "Who are the reindeer people?"
+    ],
+    "llm_kept": [
+     "Do Mongolian gers have toilets?",
+     "Does Mongolia have any volcanoes?",
+     "What is the average altitude of Mongolia above sea level?",
+     "Do Mongolians still live like nomads?",
+     "Are there reindeer in Mongolia?",
+     "Who are the reindeer people?"
+    ],
+    "gazetteer_dropped": [
+     "What is a Ger camp in Mongolia?",
+     "Do Ger camps in Mongolia have electricity?",
+     "What is a ger house in Mongolia?",
+     "How much does a ger cost in Mongolia?"
+    ]
+   },
+   "faq_answer_fit": {
+    "mode": "shadow",
+    "calls": 1,
+    "model": "satellite-sonnet-4-6",
+    "pairs": 4,
+    "stage": "t9_faq_answer_fit",
+    "failing": [
+     "When did the volcano at Uran Togoo last erupt?"
+    ],
+    "cost_usd": 0.004422,
+    "fallback": false,
+    "fit_mode": "batched",
+    "verdicts": [
+     {
+      "n": 1,
+      "q": "Are there reindeer in Mongolia?",
+      "reason": "Confirms reindeer exist in Mongolia and explains their use.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 2,
+      "q": "Who are the Tsaatan reindeer people?",
+      "reason": "Describes Tsaatan as Tuvan-related, last reindeer-herding community.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 3,
+      "q": "What is the elevation of Mörön?",
+      "reason": "Gives specific elevation of Mörön: approximately 1,283 metres.",
+      "verdict": "ANSWERS"
+     },
+     {
+      "n": 4,
+      "q": "When did the volcano at Uran Togoo last erupt?",
+      "reason": "Question asks for eruption date; answer describes location only.",
+      "verdict": "NON_ANSWER"
+     }
+    ]
+   },
+   "writer_input_has_chain": true,
+   "llm_cost_piece": [
+    {
+     "stage": "f10_embed",
+     "role": "embed",
+     "n": 3,
+     "cost": "0.000436"
+    },
+    {
+     "stage": "t10_judge",
+     "role": "judge",
+     "n": 3,
+     "cost": "0.008230"
+    },
+    {
+     "stage": "t9_faq_answer_fit",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.004422"
+    },
+    {
+     "stage": "t9_faq_filter",
+     "role": "validate",
+     "n": 1,
+     "cost": "0.008512"
+    },
+    {
+     "stage": "t9_repair",
+     "role": "writer",
+     "n": 5,
+     "cost": "0.016206"
+    },
+    {
+     "stage": "t9_write",
+     "role": "writer",
+     "n": 3,
+     "cost": "0.088145"
+    }
+   ],
+   "llm_cost_piece_usd": 0.125951,
+   "job": {
+    "kind": "t9_write",
+    "status": "succeeded",
+    "cost_usd": "0.000000",
+    "started_at": "2026-10-22 11:18:58.621843+00:00",
+    "finished_at": "2026-10-22 11:20:56.736467+00:00"
+   },
+   "llm_cost_request_since": [],
+   "llm_cost_request_since_usd": 0.0
+  }
+ ],
+ "summary": {
+  "blogs_final": 2,
+  "not_final_or_not_blog": [],
+  "done_when_2": {
+   "blogs_with_ge2_real": 1,
+   "need": "6 of 8",
+   "faq_total": 9,
+   "faq_real": 4,
+   "faq_real_share": 0.444,
+   "met": false
+  },
+  "done_when_3_deterministic": {
+   "f16_holds": 0,
+   "f16_failed_entries": 0,
+   "faq_answers": 9,
+   "faq_answers_failing_F1_recheck": 0,
+   "faq_answers_with_F1_ledger_violation": 0,
+   "real_faq_answers_failing_F1": 0,
+   "faq_answer_problem_code_check": 0,
+   "answers_outside_40_60_words": 6,
+   "panel_non_answers": "judged by the panel from `panel_sheet`"
+  },
+  "cost_usd": {
+   "pieces": 0.2303,
+   "requests_t8_since": 0.0
+  }
+ },
+ "panel_sheet": [
+  {
+   "piece_id": "eb5ee9d4-b84f-49d5-b72e-65a2d8bcf0c4",
+   "tenant": "terra-family",
+   "n": 1,
+   "q": "Which country is Kuang Si Falls in?",
+   "a": "Kuang Si Falls is located in Laos, approximately 30 kilometres south of Luang Prabang in Luang Prabang Province. The multi-tiered limestone waterfall system sits within forested hills and is part of a protected area where the surrounding jungle contributes to its scenic setting.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "eb5ee9d4-b84f-49d5-b72e-65a2d8bcf0c4",
+   "tenant": "terra-family",
+   "n": 2,
+   "q": "Can I swim at Kuang Si Waterfall?",
+   "a": "Yes, Kuang Si Falls offers turquoise pools suitable for swimming.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "eb5ee9d4-b84f-49d5-b72e-65a2d8bcf0c4",
+   "tenant": "terra-family",
+   "n": 3,
+   "q": "Why is Kuang Si Waterfall famous?",
+   "a": "Kuang Si Falls is renowned for its vivid turquoise-blue pools created by high calcium carbonate content leaching from the surrounding limestone. The multi-tiered cascade over travertine terraces and the main 50-metre drop into a large pool make it a striking natural attraction near Luang Prabang.",
+   "source": "segment_match"
+  },
+  {
+   "piece_id": "eb5ee9d4-b84f-49d5-b72e-65a2d8bcf0c4",
+   "tenant": "terra-family",
+   "n": 4,
+   "q": "Do I need a visa to visit Laos?",
+   "a": "Most nationalities can obtain a 30-day Laos e-visa online for approximately $30 to $45, processed in around 3 business days. It is worth checking current requirements for your specific nationality before travel, as conditions can change.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "eb5ee9d4-b84f-49d5-b72e-65a2d8bcf0c4",
+   "tenant": "terra-family",
+   "n": 5,
+   "q": "What ethnic groups live in the Nam Ou Valley?",
+   "a": "The Nam Ou Valley is home to numerous ethnic minority communities, including Khmu, Hmong, and various Tai-speaking groups, many living in small riverside or hillside villages. The valley's remote, mountainous terrain has long supported diverse communities throughout northern Laos.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "a58a709b-2c8f-4c56-b159-521b4b4b4869",
+   "tenant": "atlas-hearth",
+   "n": 1,
+   "q": "Are there reindeer in Mongolia?",
+   "a": "Reindeer are herded by the Tsaatan community in the taiga forest north of Lake Khövsgöl in northern Mongolia. In Tsaatan culture, reindeer are used primarily for riding, as pack animals, and for their milk, rather than being raised for meat, which makes this herding tradition distinct from many others found elsewhere.",
+   "source": "serp_topup"
+  },
+  {
+   "piece_id": "a58a709b-2c8f-4c56-b159-521b4b4b4869",
+   "tenant": "atlas-hearth",
+   "n": 2,
+   "q": "Who are the Tsaatan reindeer people?",
+   "a": "Ethnically and linguistically related to Tuvan peoples of southern Siberia, they are one of the last communities in the world to maintain a reindeer-herding culture of this kind.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "a58a709b-2c8f-4c56-b159-521b4b4b4869",
+   "tenant": "atlas-hearth",
+   "n": 3,
+   "q": "What is the elevation of Mörön?",
+   "a": "Mörön, the capital of Khövsgöl Province, sits in a broad valley at an elevation of approximately 1,283 metres above sea level.",
+   "source": "writer"
+  },
+  {
+   "piece_id": "a58a709b-2c8f-4c56-b159-521b4b4b4869",
+   "tenant": "atlas-hearth",
+   "n": 4,
+   "q": "When did the volcano at Uran Togoo last erupt?",
+   "a": "The dormant volcano sits within the Uran Togoo-Tulga Uul Natural Monument in Bulgan Province, surrounded by green steppe grasslands and patches of forest.",
+   "source": "writer"
+  }
+ ]
+}

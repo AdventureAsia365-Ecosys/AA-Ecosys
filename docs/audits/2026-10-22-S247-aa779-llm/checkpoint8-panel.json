@@ -1,0 +1,665 @@
+[
+ {
+  "verdicts": [
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "First sentence states Laos directly, with location detail."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Opens with 'Yes' and says the pools are suitable for swimming."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Directly names the turquoise pools and multi-tiered limestone structure as the reason it is famous."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 4,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Explains the colour comes from calcium carbonate leaching from limestone."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says most nationalities need, and can get, a 30-day e-visa online, with cost and processing time."
+   },
+   {
+    "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Confirms Mongolia has dormant volcanoes and names Uran Togoo."
+   },
+   {
+    "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Confirms reindeer herding in the northern Khövsgöl taiga among the Tsaatan."
+   },
+   {
+    "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the zones, Central Asian steppe and Siberian taiga forest, meeting at Lake Khövsgöl."
+   },
+   {
+    "piece_id": "be398aa7-3bb2-4a15-89be-fe7ef7acc313",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Identifies the Tsaatan as a semi-nomadic reindeer-herding community in northern Khövsgöl."
+   },
+   {
+    "piece_id": "be398aa7-3bb2-4a15-89be-fe7ef7acc313",
+    "n": 2,
+    "answers_question": false,
+    "kind": "wrong_subject",
+    "reason": "The question asks for Mongolia's average altitude; the answer gives only Mörön's elevation."
+   },
+   {
+    "piece_id": "cf9e8934-66b5-4458-aa7a-f94d4f45009d",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says yes, Mongolia has dormant volcanoes, and names Uran Togoo."
+   },
+   {
+    "piece_id": "cf9e8934-66b5-4458-aa7a-f94d4f45009d",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Lists specific activities: boat rides, horseback riding and visits to nomadic families."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the statue as Jowo Shakyamuni."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 2,
+    "answers_question": false,
+    "kind": "partial",
+    "reason": "Identifies the museum and its theme, but names no specific exhibits or things to see; the rest is generic description."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Lists the main attractions: Taktsang, Kyichu Lhakhang, Paro Dzong and the National Museum."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 4,
+    "answers_question": false,
+    "kind": "non_answer",
+    "reason": "Never gives an English name or meaning for Paro; it explains district versus town and altitude instead."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Gives the reason: Guru Rinpoche is said to have flown there on a tigress and meditated in the cave."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "First sentence states it is in Laos."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 2,
+    "answers_question": false,
+    "kind": "partial",
+    "reason": "Describes only the tour's Day 2 cycling route, not general ways to get there; it does give the direction and the 30 km distance from Luang Prabang."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Opens with 'Yes, swimming is possible' and describes the pools."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 4,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the turquoise pools and the multi-tiered falls as what it is known for."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the Khmu, Hmong and Tai-speaking groups."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "First sentence states it is in Laos."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "First sentence says the pools are suitable for swimming."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names its vivid turquoise water as what it is known for, and explains why."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 4,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says most nationalities can apply for a 30-day e-visa, with cost and processing time."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the Lao, Akha, Phunoy, Khmu and Hmong communities in the route region."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the statue as Buddha Dordenma."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Defines it as a wildlife enclosure in Thimphu for the takin, Bhutan's national animal."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names hand-written pecha Buddhist manuscripts on philosophy, medicine, astrology and history."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 4,
+    "answers_question": false,
+    "kind": "wrong_subject",
+    "reason": "Describes a traditional crafts institute that trains artisans for dzong restoration (the Zorig Chusum type), not the performing arts institute the question names."
+   }
+  ]
+ },
+ {
+  "verdicts": [
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "States plainly that it is in Laos."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says yes and describes the pools you can swim in."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the turquoise pools and the tiered limestone structure as the reason."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 4,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Explains the colour comes from calcium carbonate leaching from the limestone."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says most nationalities need a 30-day e-visa and gives cost and processing time."
+   },
+   {
+    "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says yes, there are dormant volcanoes, and names Uran Togoo."
+   },
+   {
+    "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says yes, the Tsaatan herd reindeer in northern Khövsgöl."
+   },
+   {
+    "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the zones: steppe grassland and Siberian taiga forest."
+   },
+   {
+    "piece_id": "be398aa7-3bb2-4a15-89be-fe7ef7acc313",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says who they are: the Tsaatan reindeer herders, and describes them."
+   },
+   {
+    "piece_id": "be398aa7-3bb2-4a15-89be-fe7ef7acc313",
+    "n": 2,
+    "answers_question": false,
+    "kind": "wrong_subject",
+    "reason": "Asked for Mongolia's average altitude but gives only the elevation of one town, Mörön."
+   },
+   {
+    "piece_id": "cf9e8934-66b5-4458-aa7a-f94d4f45009d",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says yes and names Uran Togoo."
+   },
+   {
+    "piece_id": "cf9e8934-66b5-4458-aa7a-f94d4f45009d",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Lists boat rides, horseback riding and visits to nomadic families. It opens oddly with 'also' but still answers."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the statue: Jowo Shakyamuni."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says what you see there: woven textiles from Bhutanese weaving traditions. A bit general, but on point."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Lists Paro's main sites: Taktsang, Kyichu Lhakhang, Paro Dzong and the National Museum."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 4,
+    "answers_question": false,
+    "kind": "non_answer",
+    "reason": "Never gives an English name or meaning for Paro. It only explains the district versus town naming and the altitude."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Explains the Guru Rinpoche tigress legend and his meditation in the cave."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "States plainly that it is in Laos."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Gives a way to get there: cycle about 30 km south from Luang Prabang. It is framed around the tour itinerary."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says yes, the pools are suitable for swimming."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 4,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the turquoise pools and the multi-tiered falls with a 50 m drop."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the Khmu, Hmong and Tai-speaking groups."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "States plainly that it is in Laos."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says the pools are suitable for swimming, which means yes."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the turquoise water and the tiered cascades."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 4,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says most nationalities need a 30-day e-visa and gives cost and processing time."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the Lao, Akha, Phunoy, Khmu and Hmong communities in the route region."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the statue: Buddha Dordenma."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Describes it as a wildlife preserve in Thimphu for the takin, Bhutan's national animal."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names hand-written pecha manuscripts on Buddhist philosophy, medicine, astrology and history."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 4,
+    "answers_question": false,
+    "kind": "wrong_subject",
+    "reason": "Asked about a performing arts institute, but describes a crafts school that trains artisans for dzong restoration, which is a different institution."
+   }
+  ]
+ },
+ {
+  "verdicts": [
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "States directly that Kuang Si Falls is in Laos, near Luang Prabang."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Opens with 'Yes', names Kuang Si Falls and describes the swimmable pools."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the falls and gives why they are famous: turquoise pools and multi-tiered limestone structure."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 4,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Explains the turquoise colour as calcium carbonate from limestone, which is exactly the question asked."
+   },
+   {
+    "piece_id": "620cbc81-a972-4164-9e0c-d5733445fa37",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Answers the Laos visa question: e-visa for most nationalities, with cost and processing time."
+   },
+   {
+    "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says yes, Mongolia has dormant volcanoes, and names Uran Togoo as an example."
+   },
+   {
+    "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Confirms reindeer herding in Mongolia's taiga among the Tsaatan in Khövsgöl."
+   },
+   {
+    "piece_id": "aebd5ec6-5eba-4673-83ca-cde8280f3771",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the zones (Central Asian steppe and Siberian taiga larch/pine forest) in northern Mongolia, framed through Lake Khövsgöl."
+   },
+   {
+    "piece_id": "be398aa7-3bb2-4a15-89be-fe7ef7acc313",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Identifies the reindeer people as the Tsaatan and describes who they are."
+   },
+   {
+    "piece_id": "be398aa7-3bb2-4a15-89be-fe7ef7acc313",
+    "n": 2,
+    "answers_question": false,
+    "kind": "wrong_subject",
+    "reason": "The question asks for Mongolia's average altitude, but the answer gives the elevation of one town, Mörön (1,283 m), not the national average."
+   },
+   {
+    "piece_id": "cf9e8934-66b5-4458-aa7a-f94d4f45009d",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says Mongolia has dormant volcanoes and names Uran Togoo."
+   },
+   {
+    "piece_id": "cf9e8934-66b5-4458-aa7a-f94d4f45009d",
+    "n": 2,
+    "answers_question": false,
+    "kind": "partial",
+    "reason": "It lists activities (boat rides, horseback riding, nomad visits), but it opens with a dangling 'The lake also...' and never names Lake Khövsgöl, so it does not stand alone as a PAA snippet."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the main statue: Jowo Shakyamuni at Kyichu Lhakhang."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 2,
+    "answers_question": true,
+    "kind": "partial",
+    "reason": "Names the National Textile Museum and says it displays woven textiles, but it is generic and gives no exhibits, galleries or concrete things to see."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Lists Paro's main attractions: Taktsang, Kyichu Lhakhang, Paro Dzong and the National Museum."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 4,
+    "answers_question": false,
+    "kind": "non_answer",
+    "reason": "The question asks what Paro is called in English. The answer only separates district from town ('Paro town') and adds altitude, giving no English name or meaning."
+   },
+   {
+    "piece_id": "54fd3320-d775-4d89-9632-e45b5f7c5863",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Explains why Tiger's Nest (Taktsang) is holy: the legend of Guru Rinpoche flying there on a tigress and meditating in the cave."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "States that Kuang Si Falls is in Laos, south of Luang Prabang."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 2,
+    "answers_question": true,
+    "kind": "partial",
+    "reason": "Gives a route (about 30 km south of Luang Prabang by road), but only as this tour's Day 2 cycling plan, not general ways to get there (tuk-tuk, van, etc.)."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says yes, swimming is possible, and describes the pools at Kuang Si Falls."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 4,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the falls and explains the fame: turquoise pools, mineral colour, and the multi-tiered 50 m drop."
+   },
+   {
+    "piece_id": "259cb453-2bf6-455d-8db7-4937dd69501b",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the communities of the Nam Ou Valley: Khmu, Hmong and Tai-speaking groups."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "States that Kuang Si Falls is in Laos, in Luang Prabang Province."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names Kuang Si Falls and says the pools are suitable for swimming. It is an implicit yes, but it answers."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the falls and gives why they are famous: the vivid turquoise water and the tiered pools."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 4,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Answers the Laos visa question: a 30-day e-visa for most nationalities, with cost and processing time."
+   },
+   {
+    "piece_id": "daa3cefd-ad34-48da-8771-18bb806fb8fc",
+    "n": 5,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Names the ethnic groups (Lao, Akha, Phunoy, Khmu, Hmong) for Phongsali and the Nam Ou area. The question's vague 'this route' is a question-side weakness."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 1,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Gives the name, Buddha Dordenma, and describes the statue. It omits that the statue is in Thimphu but still answers."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 2,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Defines the Motithang Takin Preserve as a Thimphu wildlife enclosure for the takin."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 3,
+    "answers_question": true,
+    "kind": "answers",
+    "reason": "Says what manuscripts the library holds: hand-written pecha on philosophy, medicine, astrology and history."
+   },
+   {
+    "piece_id": "a903bb9e-7d16-4e51-961c-0f70c14498c9",
+    "n": 4,
+    "answers_question": false,
+    "kind": "wrong_subject",
+    "reason": "The question asks about the Institute of Performing Arts (dance and music), but the answer describes a crafts school training artisans for dzong restoration, which matches the Zorig Chusum institute. It also never names the institute."
+   }
+  ]
+ }
+]

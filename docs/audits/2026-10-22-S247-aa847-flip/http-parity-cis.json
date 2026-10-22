@@ -1,0 +1,6135 @@
+{
+ "label": "cis",
+ "base": "https://aa-tripplanner.vercel.app",
+ "run_id": "cis-0e3086",
+ "started": "2026-10-22T11:24:55",
+ "elapsed_s": 292.6,
+ "calls": [
+  {
+   "reader": "countries",
+   "status": 200,
+   "ms": 3964.5,
+   "count": 13,
+   "keys": [
+    "countries"
+   ],
+   "params": {
+    "resource": "countries"
+   }
+  },
+  {
+   "reader": "by_country",
+   "status": 200,
+   "ms": 1094.9,
+   "count": 327,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "by-country",
+    "country": "Laos"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 785.7,
+   "count": 14,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "13_105"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 530.1,
+   "count": 10,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "14_105"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 750.9,
+   "count": 2,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "14_106"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 498.4,
+   "count": 1,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "15_104"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 509.9,
+   "count": 9,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "15_105"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 517.3,
+   "count": 22,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "15_106"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 522.4,
+   "count": 3,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "16_104"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 509.7,
+   "count": 1,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "16_105"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 514.6,
+   "count": 32,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "17_102"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 570.0,
+   "count": 11,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "17_104"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 504.1,
+   "count": 3,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "17_105"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 512.9,
+   "count": 24,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "18_102"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 505.8,
+   "count": 8,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "18_103"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 488.4,
+   "count": 11,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "18_104"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 505.9,
+   "count": 14,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "19_101"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 501.1,
+   "count": 75,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "19_102"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 516.3,
+   "count": 18,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "19_103"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 542.5,
+   "count": 13,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "20_101"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 483.0,
+   "count": 38,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "20_102"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 523.2,
+   "count": 7,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "20_103"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 519.1,
+   "count": 8,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "20_104"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 514.5,
+   "count": 3,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "21_101"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 506.7,
+   "count": 3,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "21_102"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 730.1,
+   "count": 364,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "10_100_10"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 506.0,
+   "count": 26,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "a213cca5-b186-45ea-bfa1-97b27c67ed3d"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 500.7,
+   "count": 19,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "c2344921-4bec-4855-9678-8e233adea7a7"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 576.8,
+   "count": 13,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "6bf9c2b3-bf59-40a4-8718-151536c2fe87"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 569.7,
+   "count": 13,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "99cf5698-0429-41fb-a9eb-4e923ddb70ed"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 499.7,
+   "count": 12,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "97bbc5b1-5528-4af7-bd34-d0b4df8b2382"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 508.5,
+   "count": 12,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "70930247-6aab-4234-bfae-18b2cc5a6783"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 504.0,
+   "count": 11,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "309d27e9-6bc0-44d8-9f0b-0e98e88c0be5"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 1497.1,
+   "count": 10,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "ef788b37-3171-49a3-b0f3-4f8ebcb404f4"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 523.5,
+   "count": 10,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "6fd2e9d4-effe-44fb-b8dc-71dd5df1d780"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 510.1,
+   "count": 10,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "2a5b8df3-5212-41ae-8f63-76986418c075"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 494.3,
+   "count": 9,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "33678e96-4dce-4787-a458-b5390aa4cfec"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 502.6,
+   "count": 8,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "bbbaa12e-12b0-4f7a-aac9-ca13faa44648"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 547.0,
+   "count": 8,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "865a0f6f-20ca-4837-babe-2435cff4aa26"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 498.7,
+   "count": 8,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "b93feca4-43f4-4849-af99-3f3dc8a837db"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 498.9,
+   "count": 7,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "3354dc3f-0286-4dbd-a816-43729cff9a78"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 502.3,
+   "count": 7,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "735acb0e-9baf-4bb3-88e7-eaf1aa203365"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 529.8,
+   "count": 7,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "8e1123db-47dc-473a-b9dc-c4850f7209d7"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 496.6,
+   "count": 6,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "e69b62ff-9457-4fdc-bb11-a61bf3fc6bba"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 528.0,
+   "count": 6,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "052f353a-0e04-45c1-9b39-f2a2f856a3d1"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 521.3,
+   "count": 6,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "c51ecb8a-7f28-47aa-a762-1f93fc1892e5"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 1897.0,
+   "count": 6,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "99fe8e5f-f186-4e59-ad39-e860cb4115fc"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 491.3,
+   "count": 6,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "63ff6322-bf36-4f61-a2aa-98369e923b4f"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 486.4,
+   "count": 6,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "9b973160-46fa-4059-925e-3f021f12d357"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 501.0,
+   "count": 6,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "eb3be30b-5820-48bc-95b1-1117f100f697"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 495.3,
+   "count": 5,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "9dd11e4b-7017-4000-9785-a7132aed74c0"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 491.9,
+   "count": 5,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "d20753a6-1a67-42e0-9d65-756bf5fc9cd1"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 503.7,
+   "count": 5,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "6548a6c2-fd13-42ca-a944-373bbee7d656"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 487.3,
+   "count": 5,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "7d2eac2f-98c1-4ef8-aa2b-6a8b16e87385"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 500.1,
+   "count": 5,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "f31b4fa5-f380-47d1-8b5d-2b4e3c6fc3f7"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 539.9,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "f0d7738c-20e9-4359-9ff8-59b2ea1ca85e"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 484.0,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "6a68ce4e-d25f-4714-9852-7299b8da0c9e"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 477.8,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "bbe2ecc1-23ec-4056-9ce6-09a660d8b1b2"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 474.9,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "62a35a73-ce8f-4506-899f-8086b1310946"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 478.2,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "f9502448-99e0-48d3-a0a6-0875dae66263"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 493.8,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "d981407e-dbd9-4bbb-9815-da8af1a122d5"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 497.5,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "4466462c-2f76-4c69-a687-8505b6b9698c"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 495.5,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "7c236efa-205a-430b-9cba-a1de31feb0cb"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 502.7,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "8a65c069-62bd-4399-9a51-ffbbfd323a7a"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 487.2,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "f1e91550-bb0a-4775-a773-1164cca214eb"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 548.2,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "2dfe016b-f980-419b-8730-c249793b032e"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 482.9,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "6927304b-83d1-4941-8e98-27b4a9ffbd2a"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 511.6,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "ee88b8fb-bff2-4bce-800f-a6c74cd360b5"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 540.4,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "80cdb07e-e9da-4e09-aa9a-cb980438daeb"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 531.2,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "3b2f2e10-a215-4c9d-9f33-e2bf438481f8"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 504.3,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "0d874f06-e425-402d-b4ae-bba1dcca7150"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 503.3,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "785bd622-b284-49ca-8511-bf98e20f6952"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 478.9,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "ae16a8c6-42b8-4baa-a384-9b474e87a451"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 497.5,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "1f31ccc1-bacb-413d-9942-9ac154025f61"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 509.5,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "4415f684-d165-4039-baf5-713b52bbb86e"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 494.3,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "081384fb-adb2-48ac-bb0a-be7da4a5cf58"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 504.4,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "76a48761-6e92-4389-a805-5d5e9d6e043d"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 492.8,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "82d4d293-2047-4f1f-8a42-fb6ca5a477b8"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 502.2,
+   "count": 3,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "41b245a9-d38a-4232-b887-9fca9c2206b5"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 521.3,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "bd8740b5-8adb-42ab-b8ef-002d3619f9a4"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 530.0,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "43dd131b-8904-45d7-8f42-3fda898e89ee"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 484.3,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "778bcf65-2942-4e6e-b1c1-d1e28090ded2"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 491.4,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "319f7ece-5a2b-4699-ac80-b35237404417"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 500.4,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "c01d83ec-2683-4b09-8b82-fa399bfd792b"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 500.7,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "9da51ff5-b609-4a62-9fd1-cb88a4b285a8"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 518.2,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "0997f81c-1c75-46cb-b887-725e303b53a9"
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 559.7,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 3
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 582.5,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 4
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 602.6,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 5
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 580.3,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 6
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 597.8,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 7
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 606.8,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 8
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 587.0,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 9
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 648.5,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 10
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 701.9,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 11
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 603.8,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 12
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 606.0,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 13
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 640.8,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 14
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 606.4,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 15
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 594.9,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 16
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 635.2,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 17
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 584.0,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 18
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 588.6,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 19
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 577.0,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 20
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 596.9,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Laos",
+    "days": 21
+   }
+  },
+  {
+   "reader": "catalog_tours",
+   "status": 200,
+   "ms": 1062.2,
+   "count": null,
+   "keys": [
+    "filters",
+    "limit",
+    "offset",
+    "total",
+    "tours"
+   ],
+   "params": {
+    "resource": "catalog-tours",
+    "country": "Laos",
+    "limit": 30
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 515.0,
+   "count": 7,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "521bc246-5f28-4df6-a6c7-9ec362e3fbe9",
+    "source_id": "62b2895e-57eb-418e-8372-3ca2319cfef9"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 500.8,
+   "count": 12,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "2aa6e292-c82c-4380-a87e-1585933ff3df",
+    "source_id": "a1363897-5bfc-42e8-a155-32ed41371254"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 501.6,
+   "count": 6,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "1389665f-de5d-4f22-a1ba-7aa7fa6f4a25",
+    "source_id": "763e21cd-b9a4-455c-8644-7d1148f5a7c8"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 515.0,
+   "count": 14,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "b0e111a9-aa18-4293-99dd-e2ee5b7820a3",
+    "source_id": "9149a7e8-6223-4afc-a9e8-ce91e895e1f3"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 505.2,
+   "count": 5,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "16548cba-a702-483d-bbe5-33349c77fdfe",
+    "source_id": "87f71e29-a38b-4c66-9be3-2ead018f8ff8"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 503.0,
+   "count": 14,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "bb4b4708-6f1b-4dfa-9c4a-b8ebe3eb31de",
+    "source_id": "2eebd89e-1140-46d6-b41c-83db266192c2"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 491.1,
+   "count": 6,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "e763eb47-0e0b-44a4-ac0d-3ca08b41388a",
+    "source_id": "2f81b1e4-f6e4-433b-a2fe-8911d3e1e096"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 507.4,
+   "count": 2,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "7df4db05-3a76-4843-b1be-55c00fe77185",
+    "source_id": "219eb857-f263-4a52-9ea9-e366cedc7e5e"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 509.5,
+   "count": 7,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "7ba26a2c-0739-4697-b7a4-58948777dcb0",
+    "source_id": "137e8824-ace3-4a37-a175-999c1d94a439"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 503.7,
+   "count": 5,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "29d5bdd3-d73c-4895-852d-e6b8dcf269a7",
+    "source_id": "d9e13eeb-8412-4da0-9725-9c0ca66f7296"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 1521.8,
+   "count": 4,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "c1f84a11-838e-4df7-bef5-6c1295059b62",
+    "source_id": "f973d025-e7d3-467b-9f99-a4e2493e325e"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 536.7,
+   "count": 7,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "431b12ec-463e-4a29-b3f9-1c101985a371",
+    "source_id": "fbe738ad-fa2b-4986-8f48-b98a0d12e425"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 500.0,
+   "count": 5,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "8a759395-f5f7-4912-9d7b-7a48e00a57c0",
+    "source_id": "4c8c0f80-9ee8-4be8-91d3-2ef3b5a38351"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 490.2,
+   "count": 5,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "ff02e1c2-3a61-4e4d-b59c-baa0946e1e6b",
+    "source_id": "0323168d-ad63-4003-aff7-57d7b9f7c70d"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 502.0,
+   "count": 8,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "31d7bc71-417a-48a0-b614-6035b9202d17",
+    "source_id": "7fbbd158-5e17-44c5-9a24-b3839c7d1384"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 501.5,
+   "count": 5,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "1e9a62fc-ccdd-4ec9-92ea-dadbde7f9cba",
+    "source_id": "ccc917ad-2d8b-4996-bb8c-7cc09f1185b8"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 507.8,
+   "count": 8,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "3bb2e313-93a4-450a-84f9-a5e6144ad296",
+    "source_id": "85cddc0a-7366-4c82-b191-4d006841d56c"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 509.4,
+   "count": 13,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "608c5083-1b88-4851-8e62-3d93b966373c",
+    "source_id": "b8ee3d60-a67b-474c-bb71-06fbe8d790b3"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 512.4,
+   "count": 2,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "a679995c-c205-4fbe-ba39-a7586789d464",
+    "source_id": "9394f6b7-805f-4701-80a3-3757a742f589"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 514.4,
+   "count": 21,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "d7e44900-1499-4a9b-9052-465249ac16ec",
+    "source_id": "efd0a0e9-efb2-4332-a469-45b76c318659"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 503.0,
+   "count": 8,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "173f7912-943c-4ba1-b19f-a3bddfde5fc9",
+    "source_id": "2dc1d490-6e8b-4678-b2db-da2dd83ac95d"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 508.3,
+   "count": 10,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "9ec2ba7b-7c97-4257-bd18-fb06fb2dbb11",
+    "source_id": "edf3474f-c2ff-4357-9f93-4bedded2579b"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 497.2,
+   "count": 8,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "482e8cf5-962e-4639-83b7-77c5499b4b1b",
+    "source_id": "a045779f-ad21-4ac9-b82a-008c33f99371"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 502.9,
+   "count": 10,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "a54844fe-e54b-4c3f-8ded-6a0dec747177",
+    "source_id": "295280cd-bc52-40bf-bb27-e6ac749c738f"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 517.8,
+   "count": 8,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "ddb8cd68-3677-4c59-bbd4-5a866a1a13cf",
+    "source_id": "71d879c9-ca7f-4386-8bb8-dcf9d680b029"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 501.1,
+   "count": 4,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "ea3ab3a6-f377-4ac8-b585-5988de408630",
+    "source_id": "e5b363f2-dbc9-4703-a28e-e20d2e673c02"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 514.0,
+   "count": 7,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "c97a5713-1cf0-4832-a2d5-f7c356aa5d8a",
+    "source_id": "4481fea0-5522-41aa-a556-9b9cc34983d5"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 524.2,
+   "count": 15,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "a6254fcf-e1bb-4caa-bad7-867fc80e5792",
+    "source_id": "01e6f7ae-857c-452e-9680-25f226e2de1c"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 517.1,
+   "count": 4,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "5289931a-9d1b-4d87-b45a-67609e06d7dc",
+    "source_id": "0cae3867-cb57-44cf-9fc6-1d71809120a3"
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 200,
+   "ms": 507.7,
+   "count": 4,
+   "keys": [
+    "proposal",
+    "tour_id"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "f67a2eb8-798a-40fa-a745-cd35b69a3316",
+    "source_id": "274b546c-3e4c-465b-b8f0-e8045a16d1cc"
+   }
+  },
+  {
+   "reader": "by_country",
+   "status": 200,
+   "ms": 489.4,
+   "count": 66,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "by-country",
+    "country": "Vietnam"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 509.4,
+   "count": 3,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "10_105"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 789.0,
+   "count": 5,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "10_106"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 494.5,
+   "count": 2,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "11_106"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 490.2,
+   "count": 3,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "15_108"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 495.2,
+   "count": 5,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "16_106"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 487.5,
+   "count": 7,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "16_107"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 500.2,
+   "count": 2,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "16_108"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 492.0,
+   "count": 5,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "17_106"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 489.0,
+   "count": 4,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "18_105"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 492.1,
+   "count": 8,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "20_104"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 541.1,
+   "count": 10,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "20_105"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 494.7,
+   "count": 7,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "20_107"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 504.5,
+   "count": 9,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "21_103"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 486.9,
+   "count": 1,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "21_105"
+   }
+  },
+  {
+   "reader": "tiles",
+   "status": 200,
+   "ms": 529.8,
+   "count": 364,
+   "keys": [
+    "destinations"
+   ],
+   "params": {
+    "resource": "tiles",
+    "tile_id": "10_100_10"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 489.6,
+   "count": 5,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "dd87cdf9-7c48-44ac-85f1-8a0beefe0bf2"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 478.5,
+   "count": 4,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "c8a85640-7c8e-4077-b03d-494bacfd7226"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 502.7,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "cd119383-5f9e-4677-813f-c40469edd323"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 492.3,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "0b0bb07c-f177-4ed1-a1ba-442fba90f160"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 482.1,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "006d373c-b872-4545-b813-ac3d3dcec2b4"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 503.7,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "0b905ee4-8bb5-40ef-8316-37599c99d6b4"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 491.2,
+   "count": 3,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "0f66d136-f8fd-444d-8112-67b7f654f0d4"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 487.7,
+   "count": 2,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "77ccb96c-dbe2-4716-a4ce-7052cae0f066"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 491.2,
+   "count": 2,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "8d20bdf4-ba2c-40d1-8140-cb0ea6521b2c"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 489.0,
+   "count": 2,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "0f2b69ea-4049-4802-803b-a2cf8e25447b"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 494.0,
+   "count": 2,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "b865d807-055c-4b71-a2a9-31b731416e0a"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 496.3,
+   "count": 2,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "6ca9ed9f-97b1-46d5-b802-54b3f1ce4dcc"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 488.4,
+   "count": 2,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "d5c40faa-3c2e-4524-95a4-c961012704d4"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 505.7,
+   "count": 2,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "c81fc777-1173-4e79-88e5-a86a5d1c5a16"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 482.6,
+   "count": 2,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "b2005439-8022-45d2-963b-a9978eb34f98"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 497.5,
+   "count": 2,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "4f7b5053-4857-43b2-a12b-f258e9d510cc"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 495.3,
+   "count": 2,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "ed30535b-d48b-4630-a4d5-950505caa2fb"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 553.8,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "0c317ba0-7e44-4e35-9030-82e99939ce72"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 505.2,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "c21a4484-6b31-44bb-902a-007455b47a7c"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 476.6,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "ce85df15-4150-4396-bffc-0f0987995a9a"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 475.3,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "09fdd56a-db51-4afe-8701-2c9c621df22d"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 487.9,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "bb89c895-18e4-4e46-a87e-70509d1ecf17"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 496.3,
+   "count": 1,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "ab69b160-b1e0-4b28-b3ab-a8c337332013"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 492.6,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "fc24685e-6240-4a74-9fd6-990911d6e5d8"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 489.2,
+   "count": 1,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "2b873b6a-073b-47f3-9427-d7d46901283d"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 570.0,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "fe6022e2-85b8-4b37-927b-3f6ff1cdde57"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 528.8,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "f852358d-a80f-479f-8f3c-66a80cd45550"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 486.9,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "d6b4a043-eccf-4411-ba27-90bdf6928a25"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 524.3,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "c50f29c6-772d-4fed-9a36-464446a1be59"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 554.8,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "cd4111e4-69f5-419c-b20c-706c4bdd1171"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 513.2,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "e670a5cd-d56e-4374-b469-cfb399069c82"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 559.0,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "5126e7c7-b930-4cef-860b-051e470b3c87"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 557.3,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "8aa009d5-c3c7-4e4f-a426-4d4e93615d8b"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 510.9,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "848d796a-6f46-4f35-aac4-7715230c684c"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 524.2,
+   "count": 1,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "6939ba8d-7183-44c2-8917-eb4912cfc52b"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 494.5,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "2637c056-468e-4731-bcd0-3f64af7e3557"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 482.1,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "9a9b6071-0da1-4b32-b863-3703dd6bf4c3"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 489.1,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "5d38b1ca-a36b-4fa5-b53d-7a17a53944fd"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 484.5,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "309faf81-22fe-4773-90ee-ac93aa3a1012"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 489.2,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "95759756-49a5-4012-befe-18a029e83ab8"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 621.0,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "15a442d4-d658-454c-9752-500dfc8d84ef"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 491.4,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "caccf09f-35d9-46b2-b11c-2e691da0d83a"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 496.0,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "09729f4f-af50-49f1-b7b1-80ccb936b503"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 493.0,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "41b74d2d-114b-4028-be59-4a97bb0277a3"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 497.7,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "e790a8e5-7720-4c1d-a04b-a89241ac5790"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 494.4,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "b465d8c8-67d5-4ce5-9382-919f4c58fea4"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 492.0,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "4eb62d18-b43b-4e2b-b076-3e0ca4cb2d0a"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 496.4,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "b7ccb4e2-8fae-402a-a31c-1854742fa84f"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 484.9,
+   "count": 1,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "8cba7800-696f-41e7-bdb9-223551c535dc"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 490.7,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "dd00cb44-6b2a-4538-a69d-1ae1fde08bb1"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 493.4,
+   "count": 1,
+   "keys": [
+    "bbox",
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "length_km",
+    "located_by",
+    "name",
+    "precision",
+    "shape_kind",
+    "shape_status"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "ca7e0264-47b7-4bd5-a110-da426b8f30fa"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 487.3,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "1adbc20f-9971-4fde-9a7b-62451e96a80f"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 494.7,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "8f8181fc-73ab-4067-9b96-e5d5dca12957"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 496.3,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "b5ca76a0-9caa-4485-a7c6-d497cdd0a45c"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 518.0,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "7ccecc3b-06e1-4701-be0b-1e4e4403c54b"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 492.2,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "dbc9f988-0029-40cd-a21c-111021a452c1"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 509.4,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "2b580c65-265c-440d-90ab-f4efe457431d"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 490.1,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "5a73e38b-a5c1-4461-8c9f-26940f6d913c"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 494.4,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "27b7c214-ddde-4bc1-97da-40fdd5f51e7b"
+   }
+  },
+  {
+   "reader": "detail",
+   "status": 200,
+   "ms": 495.9,
+   "count": 1,
+   "keys": [
+    "components",
+    "country",
+    "cover_image_url",
+    "id",
+    "located_by",
+    "name",
+    "precision"
+   ],
+   "params": {
+    "resource": "destination",
+    "id": "a43921ef-2503-4aa6-87a3-63fb232d5240"
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 537.0,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 3
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 546.3,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 4
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 547.9,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 5
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 548.5,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 6
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 549.5,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 7
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 577.1,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 8
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 562.3,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 9
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 1577.5,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 10
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 543.2,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 11
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 578.0,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 12
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 558.1,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 13
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 561.8,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 14
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 573.3,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 15
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 552.7,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 16
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 557.2,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 17
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 547.7,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 18
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 553.6,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 19
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 538.2,
+   "count": 5,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 20
+   }
+  },
+  {
+   "reader": "routes",
+   "status": 200,
+   "ms": 545.0,
+   "count": 3,
+   "keys": [
+    "country",
+    "days",
+    "proposals"
+   ],
+   "params": {
+    "resource": "routes",
+    "country": "Vietnam",
+    "days": 21
+   }
+  },
+  {
+   "reader": "catalog_tours",
+   "status": 200,
+   "ms": 537.1,
+   "count": null,
+   "keys": [
+    "filters",
+    "limit",
+    "offset",
+    "total",
+    "tours"
+   ],
+   "params": {
+    "resource": "catalog-tours",
+    "country": "Vietnam",
+    "limit": 30
+   }
+  },
+  {
+   "reader": "tour_route",
+   "status": 404,
+   "ms": 533.6,
+   "count": null,
+   "keys": [
+    "error",
+    "tour"
+   ],
+   "params": {
+    "resource": "tour-route",
+    "tour_id": "3fa33633-8502-4b53-a775-a0491fd2e509",
+    "source_id": "ca1d7500-a3a6-4278-83ad-fee7a9e5f670"
+   }
+  },
+  {
+   "reader": "search",
+   "status": 200,
+   "ms": 1059.8,
+   "count": 60,
+   "keys": [
+    "destinations",
+    "ranking"
+   ],
+   "params": {
+    "resource": "search",
+    "q": "waterfall swim"
+   }
+  },
+  {
+   "reader": "search",
+   "status": 200,
+   "ms": 782.8,
+   "count": 60,
+   "keys": [
+    "destinations",
+    "ranking"
+   ],
+   "params": {
+    "resource": "search",
+    "q": "night market food"
+   }
+  },
+  {
+   "reader": "search",
+   "status": 200,
+   "ms": 793.2,
+   "count": 60,
+   "keys": [
+    "destinations",
+    "ranking"
+   ],
+   "params": {
+    "resource": "search",
+    "q": "temple at sunrise"
+   }
+  },
+  {
+   "reader": "search",
+   "status": 200,
+   "ms": 1304.6,
+   "count": 60,
+   "keys": [
+    "destinations",
+    "ranking"
+   ],
+   "params": {
+    "resource": "search",
+    "q": "cycling through villages"
+   }
+  },
+  {
+   "reader": "search",
+   "status": 200,
+   "ms": 847.3,
+   "count": 60,
+   "keys": [
+    "destinations",
+    "ranking"
+   ],
+   "params": {
+    "resource": "search",
+    "q": "boat trip on the river"
+   }
+  },
+  {
+   "reader": "search",
+   "status": 200,
+   "ms": 827.1,
+   "count": 60,
+   "keys": [
+    "destinations",
+    "ranking"
+   ],
+   "params": {
+    "resource": "search",
+    "q": "caves"
+   }
+  },
+  {
+   "reader": "search",
+   "status": 200,
+   "ms": 1790.8,
+   "count": 60,
+   "keys": [
+    "destinations",
+    "ranking"
+   ],
+   "params": {
+    "resource": "search",
+    "q": "trekking hill tribes"
+   }
+  },
+  {
+   "reader": "search",
+   "status": 200,
+   "ms": 1093.8,
+   "count": 60,
+   "keys": [
+    "destinations",
+    "ranking"
+   ],
+   "params": {
+    "resource": "search",
+    "q": "cooking class"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 697.3,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 574.7,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 548.4,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 554.8,
+   "count": 4,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 568.5,
+   "count": 3,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "d311cef2-7c54-49be-8176-3d8dfab631b0",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 1314.1,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "d311cef2-7c54-49be-8176-3d8dfab631b0",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 546.3,
+   "count": 4,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "d311cef2-7c54-49be-8176-3d8dfab631b0",
+    "resource": "activities",
+    "destination_id": "3354dc3f-0286-4dbd-a816-43729cff9a78"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 571.8,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 590.6,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 545.5,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 569.0,
+   "count": 2,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "1463756f-fe17-46f2-aa83-4bc8f9e2d4b6",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 592.8,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "1463756f-fe17-46f2-aa83-4bc8f9e2d4b6",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 557.6,
+   "count": 2,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "1463756f-fe17-46f2-aa83-4bc8f9e2d4b6",
+    "resource": "activities",
+    "destination_id": "c01d83ec-2683-4b09-8b82-fa399bfd792b"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 564.7,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 554.9,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 564.5,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 557.7,
+   "count": 4,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 578.5,
+   "count": 3,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "17f6a440-7177-4cbc-a6b7-e770721c642d",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 587.0,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "17f6a440-7177-4cbc-a6b7-e770721c642d",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 571.2,
+   "count": 1,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "17f6a440-7177-4cbc-a6b7-e770721c642d",
+    "resource": "activities",
+    "destination_id": "d981407e-dbd9-4bbb-9815-da8af1a122d5"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 548.0,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 568.8,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 551.4,
+   "count": 2,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "45200392-5ba8-420f-b73f-da02473ba406",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 589.4,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "45200392-5ba8-420f-b73f-da02473ba406",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 604.3,
+   "count": 2,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "45200392-5ba8-420f-b73f-da02473ba406",
+    "resource": "activities",
+    "destination_id": "82d4d293-2047-4f1f-8a42-fb6ca5a477b8"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 610.7,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 566.2,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 573.1,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 563.9,
+   "count": 4,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 582.3,
+   "count": 4,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "4ff768c0-ff4d-483d-afd8-29437cb11c5d",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 587.7,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "4ff768c0-ff4d-483d-afd8-29437cb11c5d",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 565.5,
+   "count": 1,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "4ff768c0-ff4d-483d-afd8-29437cb11c5d",
+    "resource": "activities",
+    "destination_id": "9dd11e4b-7017-4000-9785-a7132aed74c0"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 553.8,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 556.9,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 569.7,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 552.2,
+   "count": 3,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "44f54cd2-34f1-44ea-8e28-39f427a04566",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 576.4,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "44f54cd2-34f1-44ea-8e28-39f427a04566",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 551.6,
+   "count": 1,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "44f54cd2-34f1-44ea-8e28-39f427a04566",
+    "resource": "activities",
+    "destination_id": "77ccb96c-dbe2-4716-a4ce-7052cae0f066"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 561.9,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 560.4,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 557.3,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 571.1,
+   "count": 2,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "6d65ffa7-5fd9-48a8-919e-96b53f884263",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 611.1,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "6d65ffa7-5fd9-48a8-919e-96b53f884263",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 563.1,
+   "count": 2,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "6d65ffa7-5fd9-48a8-919e-96b53f884263",
+    "resource": "activities",
+    "destination_id": "2dfe016b-f980-419b-8730-c249793b032e"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 610.3,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 765.3,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 573.4,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 591.9,
+   "count": 2,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "0cda9184-3fd5-4618-af44-c7ca035bc181",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 573.5,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "0cda9184-3fd5-4618-af44-c7ca035bc181",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 552.3,
+   "count": 1,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "0cda9184-3fd5-4618-af44-c7ca035bc181",
+    "resource": "activities",
+    "destination_id": "0b905ee4-8bb5-40ef-8316-37599c99d6b4"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 560.8,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 614.4,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 636.8,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 566.2,
+   "count": 2,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "e9079e23-b24d-445a-8c8c-6d6fb211747c",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 567.2,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "e9079e23-b24d-445a-8c8c-6d6fb211747c",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 557.9,
+   "count": 2,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "e9079e23-b24d-445a-8c8c-6d6fb211747c",
+    "resource": "activities",
+    "destination_id": "bbbaa12e-12b0-4f7a-aac9-ca13faa44648"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 563.4,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 600.0,
+   "count": 1,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "3cd59047-f64f-468e-949a-75757cf93013",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 581.1,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "3cd59047-f64f-468e-949a-75757cf93013",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 557.5,
+   "count": 1,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "3cd59047-f64f-468e-949a-75757cf93013",
+    "resource": "activities",
+    "destination_id": "0f2b69ea-4049-4802-803b-a2cf8e25447b"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 559.5,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 559.6,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 547.0,
+   "count": 1,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "9430a0cc-37ee-4757-a494-71f36ec5d4ac",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 579.0,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "9430a0cc-37ee-4757-a494-71f36ec5d4ac",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 528.5,
+   "count": 8,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "9430a0cc-37ee-4757-a494-71f36ec5d4ac",
+    "resource": "activities",
+    "destination_id": "70930247-6aab-4234-bfae-18b2cc5a6783"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 591.8,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 554.7,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 561.0,
+   "count": 1,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "0fad7b8e-ea19-4307-9c87-1b031af20ccd",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 593.1,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "0fad7b8e-ea19-4307-9c87-1b031af20ccd",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 738.6,
+   "count": 2,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "0fad7b8e-ea19-4307-9c87-1b031af20ccd",
+    "resource": "activities",
+    "destination_id": "97bbc5b1-5528-4af7-bd34-d0b4df8b2382"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 563.5,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 545.9,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 569.1,
+   "count": 1,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "7fffc316-75b7-42f3-ac33-68d1d525c538",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 568.5,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "7fffc316-75b7-42f3-ac33-68d1d525c538",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 544.7,
+   "count": 3,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "7fffc316-75b7-42f3-ac33-68d1d525c538",
+    "resource": "activities",
+    "destination_id": "dd87cdf9-7c48-44ac-85f1-8a0beefe0bf2"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 557.2,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 625.8,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 543.6,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 550.7,
+   "count": 3,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "239d5ea0-c988-44d6-99f3-ae3ccf36cef8",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 584.4,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "239d5ea0-c988-44d6-99f3-ae3ccf36cef8",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 567.7,
+   "count": 4,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "239d5ea0-c988-44d6-99f3-ae3ccf36cef8",
+    "resource": "activities",
+    "destination_id": "2a5b8df3-5212-41ae-8f63-76986418c075"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 564.4,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 574.3,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 545.4,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 553.9,
+   "count": 2,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "fc1b959b-363d-4a47-8c41-e19331850e67",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 578.9,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "fc1b959b-363d-4a47-8c41-e19331850e67",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 560.2,
+   "count": 1,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "fc1b959b-363d-4a47-8c41-e19331850e67",
+    "resource": "activities",
+    "destination_id": "41b74d2d-114b-4028-be59-4a97bb0277a3"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 548.0,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 572.3,
+   "count": 1,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "52eac01f-0cc8-4383-a613-9040a170a081",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 572.9,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "52eac01f-0cc8-4383-a613-9040a170a081",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 563.4,
+   "count": 2,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "52eac01f-0cc8-4383-a613-9040a170a081",
+    "resource": "activities",
+    "destination_id": "c01d83ec-2683-4b09-8b82-fa399bfd792b"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 571.2,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 554.7,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 564.2,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 565.9,
+   "count": 2,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "1c7e1cb2-5d9b-4852-8180-d1a9e8f398ef",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 554.0,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "1c7e1cb2-5d9b-4852-8180-d1a9e8f398ef",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 561.9,
+   "count": 2,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "1c7e1cb2-5d9b-4852-8180-d1a9e8f398ef",
+    "resource": "activities",
+    "destination_id": "62a35a73-ce8f-4506-899f-8086b1310946"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 558.6,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 568.6,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 545.7,
+   "count": 3,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 544.2,
+   "count": 3,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "3fd39d05-bb12-4658-a45a-f3285451a8fa",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 584.4,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "3fd39d05-bb12-4658-a45a-f3285451a8fa",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 767.5,
+   "count": 2,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "3fd39d05-bb12-4658-a45a-f3285451a8fa",
+    "resource": "activities",
+    "destination_id": "9da51ff5-b609-4a62-9fd1-cb88a4b285a8"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 621.6,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 575.8,
+   "count": 1,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "13fbea43-1c27-4c6c-83f9-aa36f0c57ba5",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 576.6,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "13fbea43-1c27-4c6c-83f9-aa36f0c57ba5",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 559.6,
+   "count": 1,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "13fbea43-1c27-4c6c-83f9-aa36f0c57ba5",
+    "resource": "activities",
+    "destination_id": "0b905ee4-8bb5-40ef-8316-37599c99d6b4"
+   }
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 571.4,
+   "count": 1,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_add",
+   "status": 200,
+   "ms": 568.9,
+   "count": 2,
+   "keys": [
+    "itinerary",
+    "trip_id"
+   ],
+   "params": {}
+  },
+  {
+   "reader": "assembly_coverage",
+   "status": 200,
+   "ms": 553.0,
+   "count": 1,
+   "keys": [
+    "coverable",
+    "custom_days",
+    "gaps",
+    "leg_days",
+    "legs",
+    "total_days",
+    "tours",
+    "transfers",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "ba51764b-0592-4895-a3c4-b784de6588a3",
+    "resource": "coverage"
+   }
+  },
+  {
+   "reader": "assembly_suggestions",
+   "status": 200,
+   "ms": 575.9,
+   "count": 6,
+   "keys": [
+    "mode",
+    "suggestions",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "ba51764b-0592-4895-a3c4-b784de6588a3",
+    "resource": "suggestions"
+   }
+  },
+  {
+   "reader": "assembly_activities",
+   "status": 200,
+   "ms": 542.5,
+   "count": 4,
+   "keys": [
+    "activities",
+    "destination_id",
+    "trip_id"
+   ],
+   "params": {
+    "trip_id": "ba51764b-0592-4895-a3c4-b784de6588a3",
+    "resource": "activities",
+    "destination_id": "3354dc3f-0286-4dbd-a816-43729cff9a78"
+   }
+  }
+ ],
+ "pin_sets": [
+  {
+   "set": 0,
+   "pins": [
+    "45ae0de2-0abe-551c-b47b-de9b95463fda",
+    "6f970f1f-01f6-5aeb-90a9-47edf50bc358",
+    "0618f84a-56f6-52f3-a5b7-9aa87622868c",
+    "9c2f54af-3fcd-5966-a99e-4fb0c43e86af"
+   ],
+   "add_status": [
+    200,
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 1,
+   "pins": [
+    "43a85bdb-80ef-5cc5-9771-70b1df728c80",
+    "790ce5c8-a947-54b3-858b-4fcec9d17c79",
+    "a16ef322-106b-5311-9bc3-0e3cb2589011"
+   ],
+   "add_status": [
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 2,
+   "pins": [
+    "a16ef322-106b-5311-9bc3-0e3cb2589011",
+    "fb349463-a0a5-5646-90a1-b83d27c44c39",
+    "9c2f54af-3fcd-5966-a99e-4fb0c43e86af",
+    "7acbe856-8c8d-5515-8f70-5f23005a0005"
+   ],
+   "add_status": [
+    200,
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 3,
+   "pins": [
+    "6f87037d-5526-5aae-b5c8-5b4a33bc2fc2",
+    "1f38835f-2c0a-5dcd-b95d-62a410796198"
+   ],
+   "add_status": [
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 4,
+   "pins": [
+    "0618f84a-56f6-52f3-a5b7-9aa87622868c",
+    "2ce5a28c-7a85-5698-a32a-58010d4c8fa9",
+    "017997f0-e6e5-56b7-b5fa-d2c76ef70624",
+    "843b2145-19e3-5655-a354-1323d7f311c9"
+   ],
+   "add_status": [
+    200,
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 5,
+   "pins": [
+    "e0087c77-94ed-5a12-8404-4a12b08b839c",
+    "a63dd91a-a61f-5c5f-9013-fb967d4f6377",
+    "853027f4-41db-5aec-9523-07bea5872f42"
+   ],
+   "add_status": [
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 6,
+   "pins": [
+    "1098c505-c1a6-514b-ac30-d6cd8de906bd",
+    "84cce6a8-05c9-52fc-9dd5-08575bf5298f",
+    "0f7da732-18ef-51a2-a62f-76e9bdf6a426"
+   ],
+   "add_status": [
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 7,
+   "pins": [
+    "afa5403c-3062-5d01-9c76-79bc6b5cd8cd",
+    "69816522-3bee-50c0-ad56-94fbf661e37c",
+    "2616d936-ce3f-5452-b7d0-90c5fed10010"
+   ],
+   "add_status": [
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 8,
+   "pins": [
+    "2d0f9c4a-a4c9-597a-8167-99eae6980e31",
+    "7508f65d-02d7-5e3d-9667-0fe3ddcc6bdd",
+    "1330d4b1-d3a6-5a52-85d0-630d249d79a6"
+   ],
+   "add_status": [
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 9,
+   "pins": [
+    "c534762f-2693-587f-8d47-fb9eae4a344f"
+   ],
+   "add_status": [
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 10,
+   "pins": [
+    "1330e006-8a0a-5e23-a11c-f79da0388078",
+    "be2c629d-f2e9-5c59-8564-7e7f41417b6f"
+   ],
+   "add_status": [
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 11,
+   "pins": [
+    "3a81d1fe-c78c-59d1-a8fa-432ec12b151c",
+    "ab08c449-0494-5d8e-ad4a-83dc1d89548c"
+   ],
+   "add_status": [
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 12,
+   "pins": [
+    "413a66b1-f02a-5586-a262-ee7c0df80747",
+    "265a9aeb-f5df-59cc-abe5-c7b4ad882712"
+   ],
+   "add_status": [
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 13,
+   "pins": [
+    "2ee3ec80-16cb-5ef5-be75-5c738e733006",
+    "4b40729d-723e-5a55-8b3b-cedd6015504f",
+    "583aff2e-43b2-559a-abde-25b3d3fd3cb4"
+   ],
+   "add_status": [
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 14,
+   "pins": [
+    "6791d2e1-08be-5063-8323-d4dd11ba7f89",
+    "017997f0-e6e5-56b7-b5fa-d2c76ef70624",
+    "2da181b0-124f-5ec4-8f9f-f4102d2de4b8"
+   ],
+   "add_status": [
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 15,
+   "pins": [
+    "f547e1a3-680c-507a-985f-d3dfed8d87c9"
+   ],
+   "add_status": [
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 16,
+   "pins": [
+    "0e7e818f-9ee4-5f60-b016-4bdaf661ff7f",
+    "3a81d1fe-c78c-59d1-a8fa-432ec12b151c",
+    "c9d38de4-23cd-5459-9ef3-7344cce23ff2"
+   ],
+   "add_status": [
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 17,
+   "pins": [
+    "2ce5a28c-7a85-5698-a32a-58010d4c8fa9",
+    "386f67b5-7a6c-5205-b605-c2b9f5439548",
+    "0959ab43-1f7a-5ec4-8475-73a7846caafb"
+   ],
+   "add_status": [
+    200,
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": false,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 18,
+   "pins": [
+    "ca821dfe-1c97-550d-ab2b-7b2f820c7237"
+   ],
+   "add_status": [
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  },
+  {
+   "set": 19,
+   "pins": [
+    "45ae0de2-0abe-551c-b47b-de9b95463fda",
+    "092cd3ae-2d44-551c-a119-77d9bf30d609"
+   ],
+   "add_status": [
+    200,
+    200
+   ],
+   "coverage": {
+    "coverable": true,
+    "chain_ok": true,
+    "gaps_ok": true
+   }
+  }
+ ],
+ "drafts": [
+  {
+   "trip_id": "d311cef2-7c54-49be-8176-3d8dfab631b0",
+   "session_id": "2286324e-af8c-4160-971b-e77adfaf6f07"
+  },
+  {
+   "trip_id": "1463756f-fe17-46f2-aa83-4bc8f9e2d4b6",
+   "session_id": "83a09e63-21a0-4e7f-b8a6-eb5607d120b8"
+  },
+  {
+   "trip_id": "17f6a440-7177-4cbc-a6b7-e770721c642d",
+   "session_id": "f26a767e-bfa5-43a3-970e-60f014652a97"
+  },
+  {
+   "trip_id": "45200392-5ba8-420f-b73f-da02473ba406",
+   "session_id": "8f27ef1c-0c6c-4bcd-9f82-8806d39ec8ed"
+  },
+  {
+   "trip_id": "4ff768c0-ff4d-483d-afd8-29437cb11c5d",
+   "session_id": "1b394103-680f-4f57-80cc-88e764979fdb"
+  },
+  {
+   "trip_id": "44f54cd2-34f1-44ea-8e28-39f427a04566",
+   "session_id": "5fb2f31b-fa36-4b48-9625-5eead6ff2289"
+  },
+  {
+   "trip_id": "6d65ffa7-5fd9-48a8-919e-96b53f884263",
+   "session_id": "937ec16f-ab9c-433d-ab36-b91443e783cb"
+  },
+  {
+   "trip_id": "0cda9184-3fd5-4618-af44-c7ca035bc181",
+   "session_id": "170d59ed-92f3-49b9-9718-d3b3d46444bd"
+  },
+  {
+   "trip_id": "e9079e23-b24d-445a-8c8c-6d6fb211747c",
+   "session_id": "b74751da-5e1e-4940-995b-97bbe1eaee8d"
+  },
+  {
+   "trip_id": "3cd59047-f64f-468e-949a-75757cf93013",
+   "session_id": "bcd96774-1ec1-4cda-ba93-49386b100ed1"
+  },
+  {
+   "trip_id": "9430a0cc-37ee-4757-a494-71f36ec5d4ac",
+   "session_id": "93492ccd-aff4-425f-b6e9-7e87928a16b8"
+  },
+  {
+   "trip_id": "0fad7b8e-ea19-4307-9c87-1b031af20ccd",
+   "session_id": "9aa16fbd-cb16-48c0-90f0-91aa3c2f8b0b"
+  },
+  {
+   "trip_id": "7fffc316-75b7-42f3-ac33-68d1d525c538",
+   "session_id": "74b4f388-bfec-4557-9cc8-a9e1b1f7b325"
+  },
+  {
+   "trip_id": "239d5ea0-c988-44d6-99f3-ae3ccf36cef8",
+   "session_id": "4d87deee-65bb-4d94-a358-e71924e35957"
+  },
+  {
+   "trip_id": "fc1b959b-363d-4a47-8c41-e19331850e67",
+   "session_id": "f6eb9170-d7b0-45a4-bec2-c863b4663da6"
+  },
+  {
+   "trip_id": "52eac01f-0cc8-4383-a613-9040a170a081",
+   "session_id": "e6fbd318-77fe-41db-8514-b94902836700"
+  },
+  {
+   "trip_id": "1c7e1cb2-5d9b-4852-8180-d1a9e8f398ef",
+   "session_id": "efd38386-34f2-407f-affc-5e62efb25f59"
+  },
+  {
+   "trip_id": "3fd39d05-bb12-4658-a45a-f3285451a8fa",
+   "session_id": "b45dbd74-a528-4874-bd27-2ee0d58d59ac"
+  },
+  {
+   "trip_id": "13fbea43-1c27-4c6c-83f9-aa36f0c57ba5",
+   "session_id": "43690e0d-bb41-4ca6-9968-a84b98fd3169"
+  },
+  {
+   "trip_id": "ba51764b-0592-4895-a3c4-b784de6588a3",
+   "session_id": "532ac8b1-4852-4ecf-a7b6-a7eceb2073d4"
+  }
+ ]
+}

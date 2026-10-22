@@ -1,0 +1,223 @@
+{
+ "mode": "pre",
+ "at": "2026-10-22T07:44:43+00:00",
+ "login": "cis_app",
+ "last_cis_migration": "261",
+ "v262_registered": false,
+ "roles": {
+  "aa_app_user": {
+   "rolname": "aa_app_user",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcanlogin": true,
+   "rolconnlimit": 15,
+   "members": [],
+   "member_of": []
+  },
+  "cis_owner": {
+   "rolname": "cis_owner",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcanlogin": false,
+   "rolconnlimit": -1,
+   "members": [
+    "aa_cis_admin",
+    "db_migrator"
+   ],
+   "member_of": []
+  },
+  "cis_app": {
+   "rolname": "cis_app",
+   "rolsuper": false,
+   "rolbypassrls": false,
+   "rolcanlogin": true,
+   "rolconnlimit": 90,
+   "members": [
+    "aa_cis_admin",
+    "db_migrator"
+   ],
+   "member_of": []
+  }
+ },
+ "tables": {
+  "shared.tenant_brand_rules": {
+   "rls": false,
+   "force": false,
+   "owner": "cis_owner",
+   "acl": [
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "REFERENCES",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRIGGER",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRUNCATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    }
+   ],
+   "policies": [],
+   "dependent_views": [],
+   "tenant_id": {
+    "type": "uuid",
+    "attnotnull": true
+   },
+   "rows": 21,
+   "tenants": 9,
+   "aa_app_user_privs": []
+  },
+  "shared.tenant_seo_config": {
+   "rls": false,
+   "force": false,
+   "owner": "cis_owner",
+   "acl": [
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_app",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "DELETE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "INSERT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "REFERENCES",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "SELECT",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRIGGER",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "TRUNCATE",
+     "col": null
+    },
+    {
+     "grantee": "cis_owner",
+     "grantor": "cis_owner",
+     "priv": "UPDATE",
+     "col": null
+    }
+   ],
+   "policies": [],
+   "dependent_views": [],
+   "tenant_id": {
+    "type": "uuid",
+    "attnotnull": true
+   },
+   "rows": 7,
+   "tenants": 7,
+   "aa_app_user_privs": []
+  }
+ },
+ "invariant_violations": [],
+ "job_busy": {
+  "shared.job": 0,
+  "booking.job": null
+ },
+ "booking_job_read_skipped": "InsufficientPrivilegeError('permission denied for table job')",
+ "d5b_divergence": {
+  "raw_tours": 0,
+  "seo_context": 0
+ },
+ "gate_262_ready": true,
+ "reasons": [],
+ "unchecked": [
+  "booking.job not readable by the runtime login (skipped): DB Migrate apply still refuses while it has queued / running jobs; check it there"
+ ]
+}
