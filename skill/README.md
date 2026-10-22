@@ -60,3 +60,15 @@ aa-ecosys-repos/  SKILL.md + references/{cis-app, pipeline, infra, tripplanner, 
 2. Agent xử lý mọi mốc `<!-- VERIFY ... -->` và `<!-- SINH LẠI ... -->` dựa trên code thật.
 3. Upload lại cho Claude Chat review theo `REVIEW-CHECKLIST.md`.
 4. Upload lên Claude (Settings → Skills), đồng bộ sang Kiro steering, xoá bản cũ.
+
+## Đồng bộ lên claude.ai (S247)
+
+Nguồn duy nhất là `skill/<tên>/` trong repo này. Sau phiên có sửa skill:
+
+```bash
+tools/skills/package_skills.sh --changed <ref đầu phiên>   # hoặc: tools/skills/package_skills.sh aa-ship aa-session
+```
+
+Script tạo `skill/dist/<tên>.zip` (mỗi zip là thư mục `<tên>/` có `SKILL.md` và file kèm, đúng dạng claude.ai nhận) và
+`skill/dist/aa-skills-all.zip` (đủ bộ, để đồng bộ lại từ đầu). `skill/dist/` không commit (sinh lại được). Nghiệp
+upload từng zip ở claude.ai → Settings → Capabilities → Skills (thay bản cũ cùng tên).
