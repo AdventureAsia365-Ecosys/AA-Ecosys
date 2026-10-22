@@ -565,8 +565,11 @@ the first paying tenant, Nghiệp approves Terraform/IAM, migration, auth/securi
 merge.** Subagents never merge (hook). The "Who approves what" table in the same section says who decides each kind
 of data change.
 
-What makes the prod gate real later: a separate agent identity (GitHub App, AA-901), rulesets and CODEOWNERS
-(U-25). GitHub Team is not bought (D-14); the private repos rely on `main`-only OIDC trust instead.
+What makes the prod gate real later: a separate agent identity (GitHub Apps `aa-agent` and `aa-ci-bot`,
+[ADR 0011](adr/0011-github-app-identity-and-merge-rights.md), AA-901), CODEOWNERS on the risky paths (in all five repos
+since AA-901, not enforced in the dev phase) and code-owner review turned on at the prod trigger (U-25). GitHub Team is
+not bought (D-14, [ADR 0014](adr/0014-repo-visibility-and-github-plan.md)); the private repos rely on `main`-only OIDC
+trust and job guards instead, and ADR 0014 lists the choice to make for them at the prod trigger.
 
 ---
 
@@ -794,7 +797,7 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | U-26 | Secrets register, orphan cleanup, read-only E2E account, first access review | Now | In progress | AA-878 | 0 | Agent + Nghiệp |
 | U-04 | Agent permission narrowing (committed ask/deny, e2e secret allowlist), folded per N-12 | Now | Open | AA-878 | 0 | Agent + Nghiệp |
 | AA-891 | release-please, CHANGELOG, first tags (U-47 light part); CIS `/health` SHA already shipped with AA-884 | Now | Open (needs the AA-901 token) | AA-891 | 0 | Agent |
-| U-25 | GitHub App identity for agents and release-please; two root ADRs (next free numbers in the ADR index; 0010 went to AA-Partner, AA-928); rulesets and CODEOWNERS for prod | Now (App) / Prod (gates) | Open | AA-901 | 0 | Agent + Nghiệp |
+| U-25 | GitHub App identity for agents and release-please; root ADRs [0011](adr/0011-github-app-identity-and-merge-rights.md) (identity, merge rights) and [0014](adr/0014-repo-visibility-and-github-plan.md) (visibility, GitHub plan), both Proposed (S247); CODEOWNERS files in all five repos; code-owner review for prod | Now (App) / Prod (gates) | Open | AA-901 | 0 | Agent + Nghiệp |
 | U-44 | OpenAPI export + oasdiff for CIS and Booking (pulled early); ADR 0013 before `/booking/v1` | Now | Open | AA-899 | 0 | Agent |
 | AA-894 | Generated env-config register (names only) + ERD | Now | Open | AA-894 | 0 | Agent |
 | — | Cost per app page and ops overview for Ms. Thư | Now | Deployed (CIS #838, #840; live SHA `dba9b72`); Done after the `aa-ship` verify | AA-884, AA-858 | ~0.30 max | Agent |
@@ -940,7 +943,7 @@ S243 session record for N-x. Where a decision changed a standard, the standard i
 | D-11 | No erasure/export feature yet; manual runbook on request; button after Cognito customer sign-in | AA-839 |
 | D-12 | Tenant pool fails closed globally; per-route rollback kept | C2.3g, DM-8.4, SEC-10 (v1.1); [flag register](ops/feature-flags.md) |
 | D-13 | Merge rights by risk and phase: dev phase agent self-merges incl. security/infra; human gate from prod or first paying tenant | DM-11.5 (v1.1); `.claude/CLAUDE.md`; `session-workflow.md`; subagent hook |
-| D-14 | App repos public, root private, GitHub Free | [STYLE, where a page may live](STYLE.md#where-a-page-may-live-sec-06); U-25 |
+| D-14 | App repos public, root private, GitHub Free | [STYLE, where a page may live](STYLE.md#where-a-page-may-live-sec-06); [ADR 0014](adr/0014-repo-visibility-and-github-plan.md); U-25 |
 | D-15 | Agent keeps the `aa365-admin` profile | DM-8.7; [§7.6](#76-access) |
 | D-16 | Prod layout and gate chosen with the go-live date | ADR 0012 (AA-880) |
 | D-17 | Prod on acc2 by default | ADR 0001; C7.2a; AA-880 |
@@ -974,7 +977,7 @@ passes ~50 USD/month.
 | N-3 | Security and audit pages on `/admin/docs` are visible to the `owner` role only | AA-898 backend role check; [§4.3](#43-where-docs-live) |
 | N-4 | Default kept: no per-PR eval trigger; evals by hand | AA-900; D-23 |
 | N-5 | Default kept: `prompt_version` ships with the AA-804 ledger v2 | AA-804; AA-900 |
-| N-6 | Create the U-25 issue: AA-901 (GitHub App, ADR 0010/0011, CODEOWNERS); Nghiệp edits his global rules by hand (release-PR exception to `Refs`, merge rule) | AA-901; AA-891 |
+| N-6 | Create the U-25 issue: AA-901 (GitHub App, two root ADRs, CODEOWNERS; the ADRs became [0011](adr/0011-github-app-identity-and-merge-rights.md) and [0014](adr/0014-repo-visibility-and-github-plan.md) because 0010 went to AA-Partner); Nghiệp edits his global rules by hand (release-PR exception to `Refs`, merge rule) | AA-901; AA-891 |
 | N-7 | Language convention: Ms. Thư's guide and the role guides bilingual EN-VI; advisory audits for Nghiệp may be Vietnamese | [`language-convention.md`](../.kiro/steering/language-convention.md); [§4.8](#48-language) |
 | N-8 | Default kept: agent stays on `aa365-admin` | DM-8.7; D-15 |
 | N-9 | Default kept: AA-697 stays parked; generated tables come from AA-893 | Backlog §4; AA-893 |
