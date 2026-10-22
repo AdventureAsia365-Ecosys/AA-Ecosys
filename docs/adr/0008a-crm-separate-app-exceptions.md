@@ -1,6 +1,6 @@
 # ADR 0008 — Amendment: the partner CRM is a separate app; traveller OTP and an own LLM gateway as playbook exceptions
 
-- **Status:** Proposed (22/10/2026, S247). Nghiệp accepts; until then ADR 0008 decision 8 applies unchanged.
+- **Status:** Accepted (22/10/2026, S247, Nghiệp). Proposed the same day.
 - **Scope:** AA-Ecosys: the partner CRM (AA-821) in the new app AA-Partner ([ADR 0010](0010-aa-partner-app.md)),
   and every app that would read or write its data (AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-CIS-Infra).
 - **Amends:** [ADR 0008](0008-new-app-integration-and-data-platform-rules.md) decision 8 ("If built, it is a CIS

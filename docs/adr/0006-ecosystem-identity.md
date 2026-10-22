@@ -6,7 +6,7 @@
   break-glass address `admin@adventure.asia` and its secret shape/guards, managed login on
   `staff-auth.lumiguides.it.com` with branding in Terraform, legacy flag scoped to the CIS UI, the
   `email_verified` gap and the residual `AdminCreateUser` risk. Where the two differ, 0006a wins.
-- **Amendment proposed:** [ADR 0006b](0006b-partner-pool-and-mfa.md) (Proposed 22/10/2026, S247): a partner pool
+- **Amended by:** [ADR 0006b](0006b-partner-pool-and-mfa.md) (Accepted 22/10/2026, S247): a partner pool
   with required MFA for agency people, an M2M pool for service calls, Phase 3 moved to the partner pool.
 - **Scope:** AA-Ecosys as a whole: AA-CIS-App (staff admin, tenant portal), AA-Booking (staff app,
   customer app), AA-TripPlanner-Web (traveller sign-in), AA-CIS-Infra (pools, triggers, domains, SES).

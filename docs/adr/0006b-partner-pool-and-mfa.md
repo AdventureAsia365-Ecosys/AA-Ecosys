@@ -1,6 +1,6 @@
 # ADR 0006 — Amendment: a partner pool with required MFA for agency people, and an M2M pool for service calls
 
-- **Status:** Proposed (22/10/2026, S247). Nghiệp accepts; until then ADR 0006 and 0006a apply unchanged.
+- **Status:** Accepted (22/10/2026, S247, Nghiệp). Proposed the same day.
 - **Scope:** AA-CIS-Infra (pools, clients, groups, domains), AA-Partner ([ADR 0010](0010-aa-partner-app.md): CRM and,
   after P2b, the tenant portal), AA-CIS-App (tenant membership, CIS admin calling `crm.ops.v1`), AA-Booking
   (B2B API receiving M2M tokens). TripPlanner and the Booking customer app are **not** affected.

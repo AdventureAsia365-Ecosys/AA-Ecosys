@@ -1,8 +1,8 @@
 # ADR 0010 — AA-Partner: one app for partner agencies (CRM and tenant portal)
 
-- **Status:** Proposed (22/10/2026, S247). Nghiệp accepts (design: S248). Decision 9 (integrations are
+- **Status:** Accepted (22/10/2026, S247, Nghiệp), decision 9 included. Decision 9 (integrations are
   bring-your-own; shared responsibility) added in S247 before acceptance, from Nghiệp's product direction of the same
-  day; it is part of this Proposed ADR, not a separate amendment. Two points in decision 9 decided by Nghiệp, S247
+  day; it is part of this ADR, not a separate amendment. Two points in decision 9 decided by Nghiệp, S247
   (22/10/2026): Stripe v1 uses the agency's own restricted key (approved); maps stay AA-provided (the BYO-maps
   proposal is reversed).
 - **Scope:** AA-Ecosys: the new public repo **AA-Partner** (CRM API, CRM web and client host, the tenant portal after
