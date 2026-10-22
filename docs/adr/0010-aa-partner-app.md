@@ -2,7 +2,9 @@
 
 - **Status:** Proposed (22/10/2026, S247). Nghiệp accepts (design: S248). Decision 9 (integrations are
   bring-your-own; shared responsibility) added in S247 before acceptance, from Nghiệp's product direction of the same
-  day; it is part of this Proposed ADR, not a separate amendment.
+  day; it is part of this Proposed ADR, not a separate amendment. Two points in decision 9 decided by Nghiệp, S247
+  (22/10/2026): Stripe v1 uses the agency's own restricted key (approved); maps stay AA-provided (the BYO-maps
+  proposal is reversed).
 - **Scope:** AA-Ecosys: the new public repo **AA-Partner** (CRM API, CRM web and client host, the tenant portal after
   the move), AA-CIS-App (portal code moves out; membership, catalog and AA content contracts), AA-Booking (B2B API),
   AA-CIS-Infra (ECS service, CloudFront, KMS, Cognito, DB owner `crm`, DB Migrate), the root repo (contracts, ADRs).
@@ -138,9 +140,17 @@ Platform security stays AA's engineering job.
   its Twilio account (SMS) and WhatsApp Business sender (registered by the agency through Twilio Self Sign-up, brand
   and campaign registrations included), its Stripe account (the agency is the merchant of record), its mailbox (Gmail
   or Microsoft 365 through OAuth, or SMTP), its e-sign provider if it ever wants one instead of the built-in e-sign,
-  its map token, a later payment gateway or flight-status service. **AA holds no master vendor account on an agency's
-  behalf**: no Twilio subaccounts, no Meta Tech Provider enrolment, no Stripe Connect platform in v1, no shared map
-  token, no shared SMTP relay for client mail.
+  a later payment gateway or flight-status service. **AA holds no master vendor account on an agency's behalf**: no
+  Twilio subaccounts, no Meta Tech Provider enrolment, no Stripe Connect platform in v1, no shared SMTP relay for
+  client mail.
+- **Stripe v1 = the agency's restricted key** (decided: Nghiệp, S247, 22/10/2026). The agency pastes a restricted key
+  (`rk_`) it creates in its own Stripe Dashboard; AA runs no Stripe platform or Connect account. Connect stays a later
+  adapter option.
+- **Maps are AA's product feature, not BYO** (decided: Nghiệp, S247, 22/10/2026; reverses the BYO-maps proposal). A
+  map is a product feature, not a vendor account that carries legal duties, so AA provides it: Mapbox under AA's own
+  public token, URL-restricted to the CRM hosts. Agencies connect no map token. Mapbox stays an AA sub-processor
+  (readiness check 10). Cost *(est.)*: Mapbox's free tier (about 50,000 web map loads a month) covers Dev, so $0;
+  overage about $5 per 1,000 loads, watched by the existing budget alarms.
 - **AA builds the connectors.** A setup wizard ("Connections", AA-962) with a test button and a health status per
   connection; credentials stored encrypted under the agency's `integration` data key (KeyProvider, AA-934), write-only
   in the UI, decrypted only in the dispatcher, webhook and health-check paths, every change in the agency's audit; owner-only
@@ -167,7 +177,7 @@ Platform security stays AA's engineering job.
 
 | Area | Agency | AA (platform engineering) | Ms. Thư (wording) |
 |---|---|---|---|
-| Vendor accounts (Twilio, WhatsApp sender, Stripe, mailbox, e-sign provider, maps, later gateways) | Opens, verifies, pays and registers them (WhatsApp sender, SMS brand and campaign, Stripe identity checks); accepts the vendor's terms; keeps the vendor log-ins secure | Connectors, setup wizard, test buttons, health checks, encrypted credential storage, clear errors when a vendor refuses | Terms clause on third-party services and customer-owned accounts |
+| Vendor accounts (Twilio, WhatsApp sender, Stripe, mailbox, e-sign provider, later gateways; not maps, which AA provides) | Opens, verifies, pays and registers them (WhatsApp sender, SMS brand and campaign, Stripe identity checks); accepts the vendor's terms; keeps the vendor log-ins secure | Connectors, setup wizard, test buttons, health checks, encrypted credential storage, clear errors when a vendor refuses | Terms clause on third-party services and customer-owned accounts |
 | Messaging rules (WhatsApp opt-in and templates, SMS rules per country, opt-out words) | Gets opt-in, writes and gets templates approved, follows the vendor's and the country's rules | Enforces the 24 h window and template-only sends, records opt-in and opt-out, blocks sends without consent | Acceptable-use wording |
 | Payments | Merchant of record: refunds, disputes, payouts, fees, its own tax invoices | Payment links on the agency's account, no stored cards, verified webhooks, refund approval matrix | "AA is not a party to the agency's payments" wording |
 | Email | Its mailbox, sending limits, its domain's sender records, what it writes | Send-as and SMTP connectors, forward-in, held-until-reconnect, system mail from AA's domain | — |
@@ -181,17 +191,17 @@ Platform security stays AA's engineering job.
 
 | Module (issue) | Change |
 |---|---|
-| CRM-06 KeyProvider (AA-934) | `integration` data key covers every provider (Twilio, Stripe key + webhook secret, OAuth refresh tokens, SMTP, map token, e-sign); serializer test that no credential ever leaves the API |
+| CRM-06 KeyProvider (AA-934) | `integration` data key covers every provider (Twilio, Stripe key + webhook secret, OAuth refresh tokens, SMTP, e-sign; no map token, maps are AA's); serializer test that no credential ever leaves the API |
 | CRM-17 email (AA-945) | Gmail, Microsoft 365 **and SMTP**; `allow_platform_sender` removed; a dead mailbox holds client mail; system mail list closed |
-| CRM-23 payments (AA-952) | Agency's own Stripe through its **restricted key** in v1 (no AA platform account); Connect kept as a later adapter option; VN agencies manual |
+| CRM-23 payments (AA-952) | Agency's own Stripe through its **restricted key** in v1 (decided: Nghiệp, S247; no AA platform account); Connect kept as a later adapter option; VN agencies manual |
 | CRM-25 contracts and waivers (AA-955) | Built-in e-sign stays AA's feature; the BoldSign slot becomes the agency's own provider account; terms and waiver text are the agency's |
 | CRM-28 WhatsApp + SMS (AA-958) | Agency-owned Twilio only; subaccount / Tech Provider fallback removed; AA never onboards a sender |
 | CRM-31 onboarding (AA-962) | "Connections" wizard with test sends and health status; controller settings (privacy notice link, data-request contact, retention choices); owner acknowledgement of the shared responsibility |
 | CRM-36 campaigns (AA-968) | Sent from the agency's mailbox or its own email service by SMTP; no `crm-marketing` SES set |
 | CRM-03 infra (AA-931) | SES grants for system mail and the inbound receipt rule only; no per-agency SES identities |
-| CRM-20 / CRM-21b maps (AA-948, AA-950) | Map shown only with the agency's own token; otherwise day list with place names and links |
+| CRM-20 / CRM-21b maps (AA-948, AA-950) | Mapbox with an AA token, URL-restricted to the CRM hosts (decided: Nghiệp, S247); no agency map connection. The CRM-21a day-list builder stays the core; the CRM-20 builder map is an enhancement that does not block M3 |
 | CRM-33a AI (AA-964) | Unchanged in scope: AA's feature, AA's account |
-| CRM-35, CRM-37b, CRM-38 (AA-967, AA-970, AA-980) | Data-request tools for the agency; sub-processor page lists AWS (plus conditional AA tools) only; W8 verifications = AA's OAuth apps |
+| CRM-35, CRM-37b, CRM-38 (AA-967, AA-970, AA-980) | Data-request tools for the agency; sub-processor page lists AWS and Mapbox (plus conditional AA tools) only; W8 verifications = AA's OAuth apps |
 
 **Other ADRs.** [0008a](0008a-crm-separate-app-exceptions.md) decision 1 (controller / processor) and decision 5 (own
 LLM gateway) are unchanged and point here for the matrix. [0006b](0006b-partner-pool-and-mfa.md) is unchanged:
@@ -210,7 +220,9 @@ sign-in, and its invitation mail is AA system mail. [0005a](0005a-b2b-resale-war
   - a fourth repo, service, pipeline and set of contracts to run;
   - AWS *(est., per month, design §8)*: Dev ≈ $13–22; 10 agencies ≈ $84–97 ($104–152 for a separate prod cell);
     50 agencies ≈ $319–344. AA's vendor cost is $0 (each agency pays its own Stripe, Twilio, mailbox); under
-    decision 9 the conditional vendor lines (BoldSign, Twilio Tech Provider re-billing, map overage) leave AA too;
+    decision 9 the conditional vendor lines BoldSign and Twilio Tech Provider re-billing leave AA too. Mapbox stays
+    AA's: $0 inside the free tier (about 50,000 web map loads a month), overage about $5 per 1,000 loads, watched by
+    the existing budget alarms;
   - decision 9 moves work to the agency (vendor sign-ups and registrations) and to the product (a setup wizard with
     tests and health checks, clear error states); an agency without a connected mailbox cannot email its travellers
     from the CRM, by design;
