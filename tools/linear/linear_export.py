@@ -43,6 +43,7 @@ ISSUE_FIELDS = """
   team { key }
   project { name }
   parent { identifier }
+  children(first: 100) { nodes { identifier state { type } } }
   labels { nodes { name } }
   assignee { name }
   creator { name }
@@ -64,6 +65,15 @@ ONE_QUERY = "query($id: String!) { issue(id: $id) { %s } }" % ISSUE_FIELDS
 ARCHIVE_MUTATION = "mutation($id: String!) { issueArchive(id: $id, trash: false) { success } }"
 UNARCHIVE_MUTATION = "mutation($id: String!) { issueUnarchive(id: $id) { success } }"
 STATE_QUERY = "query($id: String!) { issue(id: $id) { identifier trashed archivedAt } }"
+DETACH_MUTATION = "mutation($id: String!) { issueUpdate(id: $id, input: { parentId: null }) { success } }"
+OPEN = ("triage", "backlog", "unstarted", "started")
+
+
+def open_children(issue: dict) -> list[str]:
+    """Sub-issues still open. Linear archives every sub-issue together with its parent (S247: archiving AA-821
+    took its 53 open CRM sub-issues with it), so a parent with open children must not be archived."""
+    return [c["identifier"] for c in ((issue.get("children") or {}).get("nodes") or [])
+            if c["state"]["type"] in OPEN]
 
 
 def keep(issue: dict) -> bool:
@@ -210,6 +220,8 @@ def main() -> None:
     ap.add_argument("--only", action="append", default=[], help="issue identifier, e.g. AA-913 (repeatable)")
     ap.add_argument("--rescue-trash", action="store_true",
                     help="move exported issues from Linear's 30-day trash to the archive (dry run unless --apply)")
+    ap.add_argument("--rescue-open-archived", action="store_true",
+                    help="unarchive open issues archived with their parent and detach them (dry run unless --apply)")
     args = ap.parse_args()
 
     key = api_key()
@@ -249,9 +261,31 @@ def main() -> None:
                 continue
             print(f"  {i['identifier']}: {move_from_trash(key, i['id'])}")
         return
+    if args.rescue_open_archived:
+        # An archived open issue disappears from every Linear view. Unarchive it and detach it from its closed
+        # parent, so archiving the parent again cannot take it along.
+        hit = [i for i in issues if i.get("archivedAt") and not i.get("trashed") and i["state"]["type"] in OPEN]
+        print(f"{'RESCUE' if args.apply else 'DRY RUN, would unarchive + detach'}: {len(hit)} open issue(s)")
+        for i in hit:
+            parent = (i.get("parent") or {}).get("identifier")
+            if not args.apply:
+                print(f"  {i['identifier']}  {i['state']['name']}  parent={parent}  {i['title'][:70]}")
+                continue
+            gql(key, UNARCHIVE_MUTATION, {"id": i["id"]})
+            if parent:
+                gql(key, DETACH_MUTATION, {"id": i["id"]})
+            st = gql(key, STATE_QUERY, {"id": i["id"]})["issue"]
+            print(f"  {i['identifier']}: {'unarchived' if not st['archivedAt'] else 'STILL ARCHIVED'}"
+                  f"{f', detached from {parent}' if parent else ''}")
+        return
     if not args.archive:
         return
     todo = [i for i in issues if not i.get("archivedAt") and not i.get("trashed") and exported_matches(i)]
+    held = [i for i in todo if open_children(i)]
+    for i in held:
+        print(f"  skip (open sub-issues would be archived with it): {i['identifier']} -> "
+              f"{', '.join(open_children(i)[:8])}{' …' if len(open_children(i)) > 8 else ''}")
+    todo = [i for i in todo if not open_children(i)]
     print(f"{'ARCHIVE' if args.apply else 'DRY RUN, would archive'}: {len(todo)} issue(s)")
     for i in todo:
         if not args.apply:
