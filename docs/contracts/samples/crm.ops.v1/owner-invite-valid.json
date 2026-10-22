@@ -1,0 +1,10 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "OwnerInviteRequest",
+  "expect": "valid",
+  "why": "First-owner invite carries a CIS invitation id, never an email",
+  "payload": {
+    "membership_invitation_id": "5f0b7a52-1d7e-4a3e-8a8f-2f7a9c1d0e11",
+    "ticket_ref": "AA-941"
+  }
+}

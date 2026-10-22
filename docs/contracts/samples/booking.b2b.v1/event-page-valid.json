@@ -1,0 +1,35 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "EventPage",
+  "expect": "valid",
+  "why": "Event feed; an incident flag never carries traveller data",
+  "payload": {
+    "items": [
+      {
+        "event_id": "ev_1",
+        "cursor": "c_000101",
+        "type": "hold.extended",
+        "occurred_at": "2026-10-23T08:00:00Z",
+        "hold_id": "h_01HFZ4",
+        "booking_id": null,
+        "line_ref": null,
+        "departure_id": null,
+        "incident_code": null,
+        "new_start_time": null
+      },
+      {
+        "event_id": "ev_2",
+        "cursor": "c_000102",
+        "type": "departure.incident",
+        "occurred_at": "2026-11-15T01:00:00Z",
+        "hold_id": null,
+        "booking_id": null,
+        "line_ref": null,
+        "departure_id": "dep-2026-11-14-hg",
+        "incident_code": "road",
+        "new_start_time": null
+      }
+    ],
+    "next_cursor": "c_000102"
+  }
+}

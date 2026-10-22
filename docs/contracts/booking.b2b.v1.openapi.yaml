@@ -1,0 +1,658 @@
+openapi: 3.1.0
+info:
+  title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
+  version: "1.0"
+  description: >-
+    The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
+    AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
+    decision 7) with the scope named on each operation, plus the agency's tenant id in X-AA-Tenant-Id; Booking checks
+    the agency against its own b2b_partner row. **No personal data ever crosses this API**: no names, contacts, dates
+    of birth or passports; pax are counts by age band plus room configuration. The agency-facing price is b2b_price
+    (root ADR 0005a decision 2); the supplier net cost never leaves Booking and no field is named supplier_net (the
+    root contracts CI rejects it). Prices are decimal strings. Errors: 409 price_changed (re-quote), 410
+    hold_expired (re-hold), 422 sold_out, 429 rehold_limit, 409 extend_limit; on 503 or a timeout the CRM shows an
+    indicative price and disables deposits until a hold is active. Path prefix /booking/b2b/v1 is provisional until
+    ADR 0013 (AA-899) fixes HTTP conventions; the contract name and major do not change with it.
+  x-aa-contract: booking.b2b.v1
+  x-aa-producer: AA-Booking
+  x-aa-consumers: [AA-Partner]
+  x-aa-issues: [AA-928, AA-972, AA-973, AA-974, AA-975]
+servers:
+  - url: /booking/b2b/v1
+security:
+  - m2m: []
+paths:
+  /products:
+    get:
+      operationId: listProducts
+      summary: Sellable AA trip plans and their bookable components (no prices; content comes from catalog.http.v1)
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - name: updated_since
+          in: query
+          required: false
+          schema: {type: string, format: date-time}
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: One page of products
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/ProductPage"}
+        "403": {$ref: "#/components/responses/Problem"}
+  /quotes:
+    post:
+      operationId: createQuote
+      summary: Price lines at the B2B channel margin, with an FX lock and a price hash
+      security:
+        - m2m: [booking.b2b/quote]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/QuoteRequest"}
+      responses:
+        "201":
+          description: Quote
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Quote"}
+        "422": {$ref: "#/components/responses/Problem"}
+  /departures:
+    get:
+      operationId: listDepartures
+      summary: Fixed departures of a trip plan with capacity
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - name: source_system
+          in: query
+          required: true
+          schema: {type: string, enum: [cis]}
+        - name: source_id
+          in: query
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 128}
+        - name: from
+          in: query
+          required: false
+          schema: {type: string, format: date}
+        - name: to
+          in: query
+          required: false
+          schema: {type: string, format: date}
+      responses:
+        "200":
+          description: Departures
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/DeparturePage"}
+  /holds:
+    post:
+      operationId: createHold
+      summary: Hold the lines of a quote; one active hold set per (tenant, proposal_ref, proposal_version)
+      security:
+        - m2m: [booking.b2b/hold]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/HoldRequest"}
+      responses:
+        "201":
+          description: Hold placed (or the existing active hold for the same key)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Hold"}
+        "409": {$ref: "#/components/responses/Problem"}
+        "422": {$ref: "#/components/responses/Problem"}
+        "429": {$ref: "#/components/responses/Problem"}
+  /holds/{hold_id}:
+    parameters:
+      - $ref: "#/components/parameters/HoldId"
+    get:
+      operationId: getHold
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+      responses:
+        "200":
+          description: Hold
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Hold"}
+        "404": {$ref: "#/components/responses/Problem"}
+    delete:
+      operationId: releaseHold
+      summary: Release a hold (trip lost, proposal withdrawn)
+      security:
+        - m2m: [booking.b2b/hold]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+      responses:
+        "204":
+          description: Released
+        "404": {$ref: "#/components/responses/Problem"}
+  /holds/{hold_id}/extend:
+    parameters:
+      - $ref: "#/components/parameters/HoldId"
+    post:
+      operationId: extendHold
+      summary: Extend a hold once (bank-transfer claim or client re-check); Booking decides the length
+      security:
+        - m2m: [booking.b2b/hold]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/ExtendRequest"}
+      responses:
+        "200":
+          description: Extended
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Hold"}
+        "409": {$ref: "#/components/responses/Problem"}
+        "410": {$ref: "#/components/responses/Problem"}
+  /holds/{hold_id}/confirm:
+    parameters:
+      - $ref: "#/components/parameters/HoldId"
+    post:
+      operationId: confirmHold
+      summary: Turn a hold into a booking after the deposit; fixed departures confirm, others go on request
+      security:
+        - m2m: [booking.b2b/book]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/ConfirmRequest"}
+      responses:
+        "201":
+          description: Booking created
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Booking"}
+        "409": {$ref: "#/components/responses/Problem"}
+        "410": {$ref: "#/components/responses/Problem"}
+  /bookings/{booking_id}/cancel:
+    parameters:
+      - name: booking_id
+        in: path
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 64}
+    post:
+      operationId: cancelBooking
+      summary: Cancel a booking, or preview the fee with dry_run=true (C12)
+      security:
+        - m2m: [booking.b2b/book]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: dry_run
+          in: query
+          required: false
+          schema: {type: boolean, default: false}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/CancelRequest"}
+      responses:
+        "200":
+          description: Cancellation result (or preview)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/CancellationResult"}
+        "409": {$ref: "#/components/responses/Problem"}
+  /events:
+    get:
+      operationId: listEvents
+      summary: Cursor feed of hold, line, booking and departure events for the calling agency
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - name: after
+          in: query
+          required: false
+          schema: {type: string, maxLength: 200}
+        - name: limit
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 500, default: 200}
+      responses:
+        "200":
+          description: Events after the cursor, oldest first
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/EventPage"}
+  /fx-rates:
+    get:
+      operationId: getFxRates
+      summary: Booking-approved FX rates in force on a date (R17 source)
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - name: date
+          in: query
+          required: true
+          schema: {type: string, format: date}
+      responses:
+        "200":
+          description: Rates
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/FxRates"}
+  /price-parity:
+    get:
+      operationId: getPriceParity
+      summary: AA's public B2C "from" price for a trip plan; the CRM warns below it, never blocks (ADR 0005a)
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - name: source_system
+          in: query
+          required: true
+          schema: {type: string, enum: [cis]}
+        - name: source_id
+          in: query
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 128}
+        - name: currency
+          in: query
+          required: true
+          schema: {type: string, pattern: "^[A-Z]{3}$"}
+      responses:
+        "200":
+          description: Parity reference
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PriceParity"}
+components:
+  securitySchemes:
+    m2m:
+      type: oauth2
+      description: Cognito M2M pool aa-m2m-<env>, client credentials, one client per calling service.
+      flows:
+        clientCredentials:
+          tokenUrl: https://m2m-auth.example.invalid/oauth2/token
+          scopes:
+            booking.b2b/read: Products, departures, holds, events, FX, parity
+            booking.b2b/quote: Create quotes
+            booking.b2b/hold: Place, extend and release holds
+            booking.b2b/book: Confirm and cancel bookings
+  parameters:
+    TenantHeader:
+      name: X-AA-Tenant-Id
+      in: header
+      required: true
+      description: The calling agency's CIS tenant id; must match an active b2b_partner.
+      schema: {type: string, format: uuid}
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema: {type: string, minLength: 8, maxLength: 200}
+    HoldId:
+      name: hold_id
+      in: path
+      required: true
+      schema: {type: string, minLength: 1, maxLength: 64}
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      schema: {type: string, maxLength: 200}
+  responses:
+    Problem:
+      description: Error
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Problem"}
+  schemas:
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [error, message]
+      properties:
+        error:
+          type: string
+          enum: [unauthorized, forbidden, unknown_partner, not_found, price_changed, hold_expired, sold_out,
+                 rehold_limit, extend_limit, invalid, unavailable]
+        message: {type: string, maxLength: 500}
+        price_hash:
+          type: string
+          description: On price_changed, the new price hash to re-quote against.
+        retry_after_s: {type: integer, minimum: 0}
+    Money:
+      type: object
+      additionalProperties: false
+      required: [amount, currency]
+      properties:
+        amount:
+          type: string
+          pattern: "^-?\\d+(\\.\\d{1,2})?$"
+          description: Decimal string. VND amounts have no decimals (ISO 4217 exponent 0).
+        currency: {type: string, pattern: "^[A-Z]{3}$"}
+    TourKey:
+      type: object
+      additionalProperties: false
+      required: [source_system, source_id]
+      properties:
+        source_system: {type: string, enum: [cis]}
+        source_id: {type: string, minLength: 1, maxLength: 128}
+    Pax:
+      type: object
+      additionalProperties: false
+      description: Counts only, never people.
+      required: [adult]
+      properties:
+        adult: {type: integer, minimum: 1, maximum: 60}
+        child: {type: integer, minimum: 0, maximum: 60, default: 0}
+        infant: {type: integer, minimum: 0, maximum: 20, default: 0}
+    Room:
+      type: object
+      additionalProperties: false
+      required: [occupancy]
+      properties:
+        room_type_id: {type: string, maxLength: 64}
+        occupancy: {type: string, enum: [single, double, twin, triple, family]}
+        count: {type: integer, minimum: 1, maximum: 30, default: 1}
+    Component:
+      type: object
+      additionalProperties: false
+      required: [component_id, kind]
+      properties:
+        component_id: {type: string, minLength: 1, maxLength: 64}
+        kind: {type: string, enum: [trip_plan, hotel_room, transfer, guide, activity, entrance, meal]}
+        day_no: {type: [integer, "null"], minimum: 0}
+        destination_id: {type: [string, "null"], maxLength: 64}
+    Product:
+      type: object
+      additionalProperties: false
+      required: [tour, trip_plan_id, sellable, has_fixed_departures, components, updated_at]
+      properties:
+        tour: {$ref: "#/components/schemas/TourKey"}
+        trip_plan_id: {type: string, maxLength: 64}
+        sellable: {type: boolean}
+        has_fixed_departures: {type: boolean}
+        components:
+          type: array
+          items: {$ref: "#/components/schemas/Component"}
+        updated_at: {type: string, format: date-time}
+    ProductPage:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items: {$ref: "#/components/schemas/Product"}
+        next_cursor: {type: [string, "null"], maxLength: 200}
+    QuoteLineRequest:
+      type: object
+      additionalProperties: false
+      required: [line_ref, component_id, service_date, pax]
+      properties:
+        line_ref:
+          type: string
+          maxLength: 64
+          description: The CRM's id of the option or booking line (opaque to Booking).
+        component_id: {type: string, maxLength: 64}
+        departure_id: {type: [string, "null"], maxLength: 64}
+        service_date: {type: string, format: date}
+        nights: {type: [integer, "null"], minimum: 1, maximum: 60}
+        pax: {$ref: "#/components/schemas/Pax"}
+        rooms:
+          type: array
+          items: {$ref: "#/components/schemas/Room"}
+    QuoteRequest:
+      type: object
+      additionalProperties: false
+      required: [proposal_ref, proposal_version, currency, lines]
+      properties:
+        proposal_ref: {type: string, maxLength: 64}
+        proposal_version: {type: integer, minimum: 1}
+        currency:
+          type: string
+          pattern: "^[A-Z]{3}$"
+          description: Quote currency, VND included (ADR 0005a decision 3).
+        lines:
+          type: array
+          minItems: 1
+          maxItems: 200
+          items: {$ref: "#/components/schemas/QuoteLineRequest"}
+    FxLock:
+      type: object
+      additionalProperties: false
+      required: [base_currency, quote_currency, rate_per_usd, rate_date, source]
+      properties:
+        base_currency: {type: string, const: USD}
+        quote_currency: {type: string, pattern: "^[A-Z]{3}$"}
+        rate_per_usd: {type: string, pattern: "^\\d+(\\.\\d{1,8})?$"}
+        rate_date: {type: string, format: date}
+        source: {type: string, maxLength: 64}
+    QuoteLine:
+      type: object
+      additionalProperties: false
+      required: [line_ref, b2b_price, unit, availability]
+      properties:
+        line_ref: {type: string, maxLength: 64}
+        b2b_price:
+          $ref: "#/components/schemas/Money"
+          description: The agency's price ("net" in the agency UI) at the B2B channel margin.
+        unit: {type: string, enum: [per_person, per_group, per_room_night, per_line]}
+        availability: {type: string, enum: [available, on_request, sold_out]}
+        departure_id: {type: [string, "null"], maxLength: 64}
+    Quote:
+      type: object
+      additionalProperties: false
+      required: [quote_id, currency, fx, valid_until, price_hash, lines, total_b2b_price]
+      properties:
+        quote_id: {type: string, maxLength: 64}
+        currency: {type: string, pattern: "^[A-Z]{3}$"}
+        fx: {$ref: "#/components/schemas/FxLock"}
+        valid_until: {type: string, format: date-time}
+        price_hash:
+          type: string
+          pattern: "^[a-f0-9]{64}$"
+          description: SHA-256 over lines, prices, FX lock and rounding; holds must present it.
+        lines:
+          type: array
+          items: {$ref: "#/components/schemas/QuoteLine"}
+        total_b2b_price: {$ref: "#/components/schemas/Money"}
+    Departure:
+      type: object
+      additionalProperties: false
+      required: [departure_id, tour, start_date, capacity, held, sold, available, status, auto_confirm]
+      properties:
+        departure_id: {type: string, maxLength: 64}
+        tour: {$ref: "#/components/schemas/TourKey"}
+        start_date: {type: string, format: date}
+        capacity: {type: integer, minimum: 0}
+        held: {type: integer, minimum: 0}
+        sold: {type: integer, minimum: 0}
+        available: {type: integer, minimum: 0}
+        status: {type: string, enum: [scheduled, guaranteed, cancelled]}
+        auto_confirm: {type: boolean}
+    DeparturePage:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items: {$ref: "#/components/schemas/Departure"}
+    HoldRequest:
+      type: object
+      additionalProperties: false
+      required: [quote_id, price_hash, proposal_ref, proposal_version]
+      properties:
+        quote_id: {type: string, maxLength: 64}
+        price_hash: {type: string, pattern: "^[a-f0-9]{64}$"}
+        proposal_ref: {type: string, maxLength: 64}
+        proposal_version: {type: integer, minimum: 1}
+    HoldLine:
+      type: object
+      additionalProperties: false
+      required: [line_ref, line_status]
+      properties:
+        line_ref: {type: string, maxLength: 64}
+        line_status: {type: string, enum: [available, on_request]}
+    Hold:
+      type: object
+      additionalProperties: false
+      required: [hold_id, quote_id, status, expires_at, extended_count, lines]
+      properties:
+        hold_id: {type: string, maxLength: 64}
+        quote_id: {type: string, maxLength: 64}
+        status: {type: string, enum: [active, confirmed, expired, released]}
+        expires_at: {type: string, format: date-time}
+        extended_count:
+          type: integer
+          minimum: 0
+          maximum: 1
+          description: A hold is extended at most once (second extend → 409 extend_limit).
+        lines:
+          type: array
+          items: {$ref: "#/components/schemas/HoldLine"}
+    ExtendRequest:
+      type: object
+      additionalProperties: false
+      required: [reason]
+      properties:
+        reason: {type: string, enum: [payment_claimed, client_recheck]}
+    ConfirmRequest:
+      type: object
+      additionalProperties: false
+      required: [price_hash]
+      properties:
+        price_hash: {type: string, pattern: "^[a-f0-9]{64}$"}
+        deposit_ref:
+          type: [string, "null"]
+          maxLength: 64
+          description: The CRM's payment id (opaque; no card or bank data).
+    BookingLine:
+      type: object
+      additionalProperties: false
+      required: [line_ref, status]
+      properties:
+        line_ref: {type: string, maxLength: 64}
+        status: {type: string, enum: [confirmed, on_request, declined, cancelled]}
+    Booking:
+      type: object
+      additionalProperties: false
+      required: [booking_id, hold_id, trip_case_code, lines]
+      properties:
+        booking_id: {type: string, maxLength: 64}
+        hold_id: {type: string, maxLength: 64}
+        trip_case_code:
+          type: string
+          maxLength: 32
+          description: The Booking trip case code (bk- code) shown in the CRM search.
+        lines:
+          type: array
+          items: {$ref: "#/components/schemas/BookingLine"}
+    CancelRequest:
+      type: object
+      additionalProperties: false
+      required: [reason_code]
+      properties:
+        reason_code: {type: string, enum: [client_cancelled, agency_cancelled, departure_cancelled, other]}
+    CancellationResult:
+      type: object
+      additionalProperties: false
+      required: [booking_id, dry_run, fee, refundable_b2b_amount, fee_basis]
+      properties:
+        booking_id: {type: string, maxLength: 64}
+        dry_run: {type: boolean}
+        fee: {$ref: "#/components/schemas/Money"}
+        refundable_b2b_amount: {$ref: "#/components/schemas/Money"}
+        fee_basis:
+          type: object
+          additionalProperties: false
+          required: [policy_id, days_before_departure, fee_pct]
+          properties:
+            policy_id: {type: string, maxLength: 64}
+            days_before_departure: {type: integer}
+            fee_pct: {type: string, pattern: "^\\d+(\\.\\d{1,2})?$"}
+        cancelled_at: {type: [string, "null"], format: date-time}
+    Event:
+      type: object
+      additionalProperties: false
+      required: [event_id, cursor, type, occurred_at]
+      properties:
+        event_id: {type: string, maxLength: 64}
+        cursor: {type: string, maxLength: 200}
+        type:
+          type: string
+          enum: [hold.expired, hold.extended, line.confirmed, line.declined, booking.cancelled, departure.guaranteed,
+                 departure.incident, departure.time_change]
+        occurred_at: {type: string, format: date-time}
+        hold_id: {type: [string, "null"], maxLength: 64}
+        booking_id: {type: [string, "null"], maxLength: 64}
+        line_ref: {type: [string, "null"], maxLength: 64}
+        departure_id: {type: [string, "null"], maxLength: 64}
+        incident_code:
+          type: [string, "null"]
+          enum: [weather, road, health, political, supplier, other, null]
+          description: For departure.incident; never traveller data.
+        new_start_time: {type: [string, "null"], format: date-time}
+    EventPage:
+      type: object
+      additionalProperties: false
+      required: [items, next_cursor]
+      properties:
+        items:
+          type: array
+          items: {$ref: "#/components/schemas/Event"}
+        next_cursor: {type: string, maxLength: 200}
+    FxRate:
+      type: object
+      additionalProperties: false
+      required: [currency, rate_per_usd, as_of, source]
+      properties:
+        currency: {type: string, pattern: "^[A-Z]{3}$"}
+        rate_per_usd: {type: string, pattern: "^\\d+(\\.\\d{1,8})?$"}
+        as_of: {type: string, format: date}
+        source: {type: string, maxLength: 64}
+    FxRates:
+      type: object
+      additionalProperties: false
+      required: [date, base_currency, rates]
+      properties:
+        date: {type: string, format: date}
+        base_currency: {type: string, const: USD}
+        rates:
+          type: array
+          items: {$ref: "#/components/schemas/FxRate"}
+    PriceParity:
+      type: object
+      additionalProperties: false
+      required: [tour, currency, from_price, basis]
+      properties:
+        tour: {$ref: "#/components/schemas/TourKey"}
+        currency: {type: string, pattern: "^[A-Z]{3}$"}
+        from_price:
+          oneOf:
+            - {type: "null"}
+            - {$ref: "#/components/schemas/Money"}
+        basis: {type: string, enum: [per_person_2pax_low_season]}

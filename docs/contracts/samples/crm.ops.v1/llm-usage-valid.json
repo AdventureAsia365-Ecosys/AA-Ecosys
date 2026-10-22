@@ -1,0 +1,22 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "LlmUsage",
+  "expect": "valid",
+  "why": "CIS observes CRM AI usage per day, stage and model (ADR 0008a decision 5); no text",
+  "payload": {
+    "from": "2026-10-01",
+    "to": "2026-10-21",
+    "rows": [
+      {
+        "day": "2026-10-20",
+        "stage": "crm_draft_reply",
+        "model": "us.anthropic.claude-haiku-4-5",
+        "calls": 12,
+        "failed_calls": 0,
+        "input_tokens": 18000,
+        "output_tokens": 4200,
+        "cost_usd": "0.0390"
+      }
+    ]
+  }
+}

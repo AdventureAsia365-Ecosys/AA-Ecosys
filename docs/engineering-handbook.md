@@ -794,7 +794,7 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | U-26 | Secrets register, orphan cleanup, read-only E2E account, first access review | Now | In progress | AA-878 | 0 | Agent + Nghiệp |
 | U-04 | Agent permission narrowing (committed ask/deny, e2e secret allowlist), folded per N-12 | Now | Open | AA-878 | 0 | Agent + Nghiệp |
 | AA-891 | release-please, CHANGELOG, first tags (U-47 light part); CIS `/health` SHA already shipped with AA-884 | Now | Open (needs the AA-901 token) | AA-891 | 0 | Agent |
-| U-25 | GitHub App identity for agents and release-please; ADR 0010/0011; rulesets and CODEOWNERS for prod | Now (App) / Prod (gates) | Open | AA-901 | 0 | Agent + Nghiệp |
+| U-25 | GitHub App identity for agents and release-please; two root ADRs (next free numbers in the ADR index; 0010 went to AA-Partner, AA-928); rulesets and CODEOWNERS for prod | Now (App) / Prod (gates) | Open | AA-901 | 0 | Agent + Nghiệp |
 | U-44 | OpenAPI export + oasdiff for CIS and Booking (pulled early); ADR 0013 before `/booking/v1` | Now | Open | AA-899 | 0 | Agent |
 | AA-894 | Generated env-config register (names only) + ERD | Now | Open | AA-894 | 0 | Agent |
 | — | Cost per app page and ops overview for Ms. Thư | Now | Deployed (CIS #838, #840; live SHA `dba9b72`); Done after the `aa-ship` verify | AA-884, AA-858 | ~0.30 max | Agent |

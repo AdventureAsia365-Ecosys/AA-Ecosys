@@ -3,6 +3,9 @@
 - **Status:** Accepted (15/10/2026, S237 — Nghiệp approved every recommendation of the S237
   data-architecture review, "đồng ý duyệt hết", decisions E1–E11 in
   `docs/audits/2026-10-14-S237-lane-backlog/00-orchestrator-journal.md`).
+- **Amendment proposed:** [ADR 0008a](0008a-crm-separate-app-exceptions.md) (Proposed 22/10/2026, S247): the
+  partner CRM is a separate app (AA-Partner, ADR 0010), with playbook exceptions for traveller OTP (step 8) and an
+  own LLM gateway (step 9); decision 8 preconditions and hand-off rewritten.
 - **Scope:** AA-Ecosys as a whole: every app that stores data on the shared PostgreSQL 15 RDS
   (`aa-cis-dev-db`, acc2 `005097885195`, us-west-1, and the later prod instance on acc2):
   AA-CIS-App, AA-TripPlanner-Web, AA-Booking, AA-CIS-Infra (instance, roles, DB Migrate), and any app

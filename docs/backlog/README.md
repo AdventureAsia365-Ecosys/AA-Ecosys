@@ -88,7 +88,7 @@ Source: the S246 master plan ([plan-and-status.json](../audits/2026-10-21-S246-m
 | 14 | AA-909 | TripPlanner: check the guest token on the read GETs (trip, suggestions, coverage, activities) | L5 | S | S250 guest-token check on the 4 read GETs, right after AA-847 slice 6d | — |
 | 15 | AA-760 | Page-by-page audit + state fixes — statuses from the job, never inferred from rows ("Writing…" bug) | LP | M | S250 page-by-page audit + state fixes, in CIS before P2a | — |
 | 16 | AA-783 | Human calibration of the T9 commercial panel — 40 pieces labelled by Nghiệp | L1 | M | S251. Agreement analysis once Nghiệp's 40 labels exist (not slotted in the S247–S262 sessions; kept at S251) | 2–3 h labelling |
-| 17 | AA-901 | GitHub App for agents and release-please, ADR 0010/0011, CODEOWNERS (U-25) | L7 | M | S251 GitHub App (Nghiệp installs it) + ADR 0011, CODEOWNERS | Install the App |
+| 17 | AA-901 | GitHub App for agents and release-please, two root ADRs (next free numbers in the ADR index), CODEOWNERS (U-25) | L7 | M | S251 GitHub App (Nghiệp installs it) + ADR 0011, CODEOWNERS | Install the App |
 | 18 | AA-906 | TripPlanner Next.js 15 → 16 upgrade (React Compiler lint refactor) | L5 | M | S252 Next 15 → 16 + React Compiler refactor (after AA-847 6d; not in the same session as AA-934/935) | — |
 | 19 | AA-891 | Version traceability — release-please, CHANGELOG and first tags per app | L7 | M | S252 release-please and first tags per app (after AA-901) | Version numbers |
 | 20 | AA-790 | T10: tenant-voice rubric gate + post-repair integrity check | L1 | L | S253. Held until the S253 written go/no-go | LLM judge vs deterministic rubric |

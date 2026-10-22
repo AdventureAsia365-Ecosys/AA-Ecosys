@@ -1,0 +1,20 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "UsageMeters",
+  "expect": "valid",
+  "why": "L1 usage meters for a synthetic agency: counts of seats, storage, mail, AI cost; no business figures",
+  "payload": {
+    "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+    "period_start": "2026-10-01",
+    "period_end": "2026-10-31",
+    "seats_used": 3,
+    "seats_allowed": null,
+    "active_members_30d": 3,
+    "storage_bytes": 52428800,
+    "inbound_mail_30d": 41,
+    "ai_cost_usd_month": "0.42",
+    "ai_budget_usd_month": "2.00",
+    "failed_jobs_24h": 0,
+    "last_activity_at": "2026-10-22T03:15:00Z"
+  }
+}

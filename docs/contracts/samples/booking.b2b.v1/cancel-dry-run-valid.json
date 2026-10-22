@@ -1,0 +1,24 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "CancellationResult",
+  "expect": "valid",
+  "why": "Dry-run cancel returns the scheduled fee (C12)",
+  "payload": {
+    "booking_id": "b_01HG01",
+    "dry_run": true,
+    "fee": {
+      "amount": "120.00",
+      "currency": "USD"
+    },
+    "refundable_b2b_amount": {
+      "amount": "480.00",
+      "currency": "USD"
+    },
+    "fee_basis": {
+      "policy_id": "cxl-std-2026",
+      "days_before_departure": 20,
+      "fee_pct": "20"
+    },
+    "cancelled_at": null
+  }
+}

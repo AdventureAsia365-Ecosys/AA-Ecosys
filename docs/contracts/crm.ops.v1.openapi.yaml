@@ -1,0 +1,506 @@
+openapi: 3.1.0
+info:
+  title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
+  version: "1.0"
+  description: >-
+    Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
+    CIS admin screen S-01 "Agencies (CRM)" (AA-941). Layer L1 of AA access (design v3 §4.8): usage meters, agency
+    lifecycle and job / AI observability, with **no personal data and no business figures**. No trip, pipeline,
+    revenue, margin or commission field exists in any response (a response test and the root contracts CI enforce
+    it), and no field carries personal data (the first-owner invite names a CIS membership invitation, never an
+    email). Every write lands in that agency's own audit log (actor = the AA staff member). Auth (root ADR 0006b
+    decision 6): WORKFORCE access token of client cis-admin, forwarded by the CIS admin BFF; group cis-admin may
+    read, group crm-platform-admin may write. AA cannot switch features on for an agency (only allow them), cannot
+    invite a new owner while the agency has an owner or travellers, and cannot run an export or deletion (it raises
+    a request the owner confirms).
+  x-aa-contract: crm.ops.v1
+  x-aa-producer: AA-Partner
+  x-aa-consumers: [AA-CIS-App]
+  x-aa-issues: [AA-928, AA-941, AA-933]
+servers:
+  - url: /crm/ops/v1
+security:
+  - workforceStaff: []
+paths:
+  /tenants:
+    get:
+      operationId: listTenants
+      summary: Agencies known to the CRM, with lifecycle state only
+      parameters:
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+      responses:
+        "200":
+          description: One page of agencies
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/TenantPage"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+    post:
+      operationId: createTenant
+      summary: Create the CRM side of an agency that already exists as a CIS tenant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/TenantCreate"}
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/TenantSummary"}
+        "409": {$ref: "#/components/responses/Problem"}
+        "422": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    get:
+      operationId: getTenant
+      responses:
+        "200":
+          description: One agency
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/TenantSummary"}
+        "404": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/usage:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    get:
+      operationId: getTenantUsage
+      summary: Fixed usage meters for one agency (no business figures)
+      responses:
+        "200":
+          description: Usage meters
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/UsageMeters"}
+        "404": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/lock:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    post:
+      operationId: lockTenant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/LockRequest"}
+      responses:
+        "200":
+          description: Locked
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/TenantSummary"}
+        "404": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/unlock:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    post:
+      operationId: unlockTenant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/StaffReason"}
+      responses:
+        "200":
+          description: Unlocked
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/TenantSummary"}
+        "409": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/owner-invite:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    post:
+      operationId: inviteFirstOwner
+      summary: Bind a CIS membership invitation as the agency's first owner
+      description: >-
+        Allowed only while the agency has never had an owner and holds no traveller (409 owner_exists /
+        has_travellers otherwise). CIS creates the invitation and sends the mail (root ADR 0006b decision 5); this
+        call carries only the invitation id.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/OwnerInviteRequest"}
+      responses:
+        "202":
+          description: Accepted; the owner role is granted when the invited person activates the membership
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/OwnerInviteAccepted"}
+        "409": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/entitlements-allowed:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    put:
+      operationId: setAllowedEntitlements
+      summary: Features the agency owner may switch on (AA never switches them on)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/AllowedEntitlements"}
+      responses:
+        "200":
+          description: Stored
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/AllowedEntitlements"}
+  /tenants/{tenant_id}/insights-opt-out:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    put:
+      operationId: setInsightsOptOut
+      summary: Set the AA insights opt-out on the owner's written request (spec module 17, Q2 3.12)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/InsightsOptOut"}
+      responses:
+        "200":
+          description: Stored
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/InsightsOptOut"}
+  /tenants/{tenant_id}/data-requests:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    post:
+      operationId: raiseDataRequest
+      summary: Raise an agency export or deletion request; the owner confirms it in the CRM
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/DataRequestCreate"}
+      responses:
+        "202":
+          description: Waiting for the owner
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/DataRequest"}
+  /tenants/{tenant_id}/owner-recovery:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    post:
+      operationId: startOwnerRecovery
+      summary: Promote an existing member to owner after 14 days unless any member cancels (Q1 6.3)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/OwnerRecoveryCreate"}
+      responses:
+        "202":
+          description: Recovery pending
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/OwnerRecovery"}
+        "409": {$ref: "#/components/responses/Problem"}
+  /jobs/summary:
+    get:
+      operationId: getJobSummary
+      summary: crm.job backlog per kind (CIS sees CRM jobs; deploy and migrate guards)
+      responses:
+        "200":
+          description: Job summary
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/JobSummary"}
+  /tenants/{tenant_id}/jobs/{job_id}/retry:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+      - name: job_id
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: retryJob
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/StaffReason"}
+      responses:
+        "202":
+          description: Re-queued
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/JobRetried"}
+        "404": {$ref: "#/components/responses/Problem"}
+  /llm/usage:
+    get:
+      operationId: getLlmUsage
+      summary: Daily CRM LLM usage per stage and model (root ADR 0008a decision 5; no text)
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema: {type: string, format: date}
+        - name: to
+          in: query
+          required: true
+          schema: {type: string, format: date}
+      responses:
+        "200":
+          description: Daily rows
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/LlmUsage"}
+components:
+  securitySchemes:
+    workforceStaff:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: WORKFORCE access token, client cis-admin; groups cis-admin (read) or crm-platform-admin (write).
+  parameters:
+    TenantId:
+      name: tenant_id
+      in: path
+      required: true
+      description: The CIS tenant id (soft key, shared.tenants.id).
+      schema: {type: string, format: uuid}
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      schema: {type: string, maxLength: 200}
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema: {type: integer, minimum: 1, maximum: 200, default: 50}
+  responses:
+    Problem:
+      description: Error
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Problem"}
+  schemas:
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [error, message]
+      properties:
+        error:
+          type: string
+          enum: [unauthorized, forbidden, not_found, conflict, owner_exists, has_travellers, not_synthetic, invalid]
+        message: {type: string, maxLength: 500}
+        request_id: {type: string, maxLength: 100}
+    TenantState:
+      type: string
+      enum: [active, locked, offboarding]
+    TenantSummary:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, agency_name, state, is_synthetic, has_owner, created_at]
+      properties:
+        tenant_id: {type: string, format: uuid}
+        agency_name:
+          type: string
+          maxLength: 200
+          description: The agency's business name (an organisation, not a person).
+        state: {$ref: "#/components/schemas/TenantState"}
+        is_synthetic:
+          type: boolean
+          description: Dev accepts only synthetic agencies (true); prod refuses them.
+        has_owner: {type: boolean}
+        holds_travellers:
+          type: boolean
+          description: Whether any traveller exists (gates the first-owner invite). A flag, never a count.
+        release_channel: {type: string, enum: [stable, preview]}
+        created_at: {type: string, format: date-time}
+        locked_at: {type: [string, "null"], format: date-time}
+    TenantPage:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items:
+          type: array
+          items: {$ref: "#/components/schemas/TenantSummary"}
+        next_cursor: {type: [string, "null"], maxLength: 200}
+    TenantCreate:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, agency_name, is_synthetic]
+      properties:
+        tenant_id: {type: string, format: uuid}
+        agency_name: {type: string, minLength: 1, maxLength: 200}
+        is_synthetic: {type: boolean}
+        base_currency: {type: string, pattern: "^[A-Z]{3}$", default: USD}
+        default_locale: {type: string, enum: [en, vi], default: en}
+    UsageMeters:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, period_start, period_end, seats_used, seats_allowed, active_members_30d, storage_bytes,
+                 inbound_mail_30d, ai_cost_usd_month, ai_budget_usd_month, failed_jobs_24h, last_activity_at]
+      properties:
+        tenant_id: {type: string, format: uuid}
+        period_start: {type: string, format: date}
+        period_end: {type: string, format: date}
+        seats_used: {type: integer, minimum: 0}
+        seats_allowed: {type: [integer, "null"], minimum: 0}
+        active_members_30d: {type: integer, minimum: 0}
+        storage_bytes: {type: integer, minimum: 0}
+        inbound_mail_30d: {type: integer, minimum: 0}
+        ai_cost_usd_month: {type: string, pattern: "^\\d+(\\.\\d{1,4})?$"}
+        ai_budget_usd_month: {type: string, pattern: "^\\d+(\\.\\d{1,4})?$"}
+        failed_jobs_24h: {type: integer, minimum: 0}
+        last_activity_at: {type: [string, "null"], format: date-time}
+    StaffReason:
+      type: object
+      additionalProperties: false
+      required: [ticket_ref]
+      properties:
+        ticket_ref:
+          type: string
+          minLength: 3
+          maxLength: 64
+          description: Support ticket or Linear id that justifies the action.
+        reason_code: {type: string, enum: [owner_request, payment, abuse, security, test]}
+    LockRequest:
+      type: object
+      additionalProperties: false
+      required: [ticket_ref, reason_code]
+      properties:
+        ticket_ref: {type: string, minLength: 3, maxLength: 64}
+        reason_code: {type: string, enum: [owner_request, payment, abuse, security, test]}
+    OwnerInviteRequest:
+      type: object
+      additionalProperties: false
+      required: [membership_invitation_id, ticket_ref]
+      properties:
+        membership_invitation_id:
+          type: string
+          format: uuid
+          description: Id of the CIS membership invitation (tenant.membership.v1). The CRM never receives the email.
+        ticket_ref: {type: string, minLength: 3, maxLength: 64}
+    OwnerInviteAccepted:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, membership_invitation_id, status]
+      properties:
+        tenant_id: {type: string, format: uuid}
+        membership_invitation_id: {type: string, format: uuid}
+        status: {type: string, enum: [waiting_for_activation]}
+    Feature:
+      type: string
+      enum: [ai, whatsapp_sms, card_payments, campaigns, calendar_sync, custom_domain]
+    AllowedEntitlements:
+      type: object
+      additionalProperties: false
+      required: [features_allowed, ticket_ref]
+      properties:
+        features_allowed:
+          type: array
+          uniqueItems: true
+          items: {$ref: "#/components/schemas/Feature"}
+        ticket_ref: {type: string, minLength: 3, maxLength: 64}
+    InsightsOptOut:
+      type: object
+      additionalProperties: false
+      required: [opt_out, owner_request_ref]
+      properties:
+        opt_out: {type: boolean}
+        owner_request_ref:
+          type: string
+          minLength: 3
+          maxLength: 64
+          description: Reference of the owner's written request.
+    DataRequestCreate:
+      type: object
+      additionalProperties: false
+      required: [kind, ticket_ref]
+      properties:
+        kind: {type: string, enum: [agency_export, agency_deletion]}
+        ticket_ref: {type: string, minLength: 3, maxLength: 64}
+    DataRequest:
+      type: object
+      additionalProperties: false
+      required: [request_id, tenant_id, kind, status, raised_at]
+      properties:
+        request_id: {type: string, format: uuid}
+        tenant_id: {type: string, format: uuid}
+        kind: {type: string, enum: [agency_export, agency_deletion]}
+        status: {type: string, enum: [awaiting_owner_confirmation, confirmed, rejected, done]}
+        raised_at: {type: string, format: date-time}
+    OwnerRecoveryCreate:
+      type: object
+      additionalProperties: false
+      required: [member_id, ticket_ref]
+      properties:
+        member_id:
+          type: string
+          format: uuid
+          description: An existing active member of the agency (never a new email).
+        ticket_ref: {type: string, minLength: 3, maxLength: 64}
+    OwnerRecovery:
+      type: object
+      additionalProperties: false
+      required: [recovery_id, tenant_id, member_id, status, effective_after]
+      properties:
+        recovery_id: {type: string, format: uuid}
+        tenant_id: {type: string, format: uuid}
+        member_id: {type: string, format: uuid}
+        status: {type: string, enum: [pending, cancelled, done]}
+        effective_after:
+          type: string
+          format: date-time
+          description: Start + 14 days; any member can cancel before then.
+    JobKindRow:
+      type: object
+      additionalProperties: false
+      required: [kind, queued, running, failed_24h, oldest_queued_age_s]
+      properties:
+        kind: {type: string, pattern: "^crm_[a-z0-9_]+$"}
+        queued: {type: integer, minimum: 0}
+        running: {type: integer, minimum: 0}
+        failed_24h: {type: integer, minimum: 0}
+        oldest_queued_age_s: {type: [integer, "null"], minimum: 0}
+    JobSummary:
+      type: object
+      additionalProperties: false
+      required: [generated_at, kinds]
+      properties:
+        generated_at: {type: string, format: date-time}
+        kinds:
+          type: array
+          items: {$ref: "#/components/schemas/JobKindRow"}
+    JobRetried:
+      type: object
+      additionalProperties: false
+      required: [job_id, status]
+      properties:
+        job_id: {type: string, format: uuid}
+        status: {type: string, enum: [queued]}
+    LlmUsageRow:
+      type: object
+      additionalProperties: false
+      required: [day, stage, model, calls, failed_calls, input_tokens, output_tokens, cost_usd]
+      properties:
+        day: {type: string, format: date}
+        stage: {type: string, pattern: "^crm_[a-z0-9_]+$"}
+        model: {type: string, maxLength: 120}
+        calls: {type: integer, minimum: 0}
+        failed_calls: {type: integer, minimum: 0}
+        input_tokens: {type: integer, minimum: 0}
+        output_tokens: {type: integer, minimum: 0}
+        cost_usd: {type: string, pattern: "^\\d+(\\.\\d{1,6})?$"}
+    LlmUsage:
+      type: object
+      additionalProperties: false
+      required: [from, to, rows]
+      properties:
+        from: {type: string, format: date}
+        to: {type: string, format: date}
+        rows:
+          type: array
+          items: {$ref: "#/components/schemas/LlmUsageRow"}

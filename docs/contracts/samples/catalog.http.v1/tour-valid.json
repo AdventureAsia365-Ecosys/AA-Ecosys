@@ -1,0 +1,50 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "Tour",
+  "expect": "valid",
+  "why": "Published tour with places, time zones and exclusions",
+  "payload": {
+    "source_system": "cis",
+    "source_id": "vn-ha-giang-loop-4d",
+    "title": "Ha Giang Loop, 4 days",
+    "summary": null,
+    "country_code": "VN",
+    "duration_days": 4,
+    "content_hash": "sha256:5d41402abc4b2a76",
+    "days": [
+      {
+        "day_no": 1,
+        "title": "Ha Giang to Dong Van",
+        "description": null,
+        "places": [
+          {
+            "destination_id": "vn-dong-van",
+            "name": "Dong Van",
+            "time_zone": "Asia/Ho_Chi_Minh",
+            "lat": 23.278,
+            "lng": 105.362,
+            "precision": "point"
+          }
+        ]
+      }
+    ],
+    "inclusions": [
+      "Motorbike with driver"
+    ],
+    "exclusions": [
+      {
+        "code": "entrance_local",
+        "text": "Local entrance fees",
+        "suggests_collect_on_arrival": true
+      }
+    ],
+    "facets": {
+      "activities": [
+        "motorbike",
+        "culture"
+      ],
+      "intensity": "moderate"
+    },
+    "photos": []
+  }
+}
