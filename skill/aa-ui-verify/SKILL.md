@@ -55,6 +55,29 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
    - Hành động chính (nút, filter, drawer, bulk) bấm được và có tác dụng.
 5. Nút hay panel phụ thuộc trạng thái (ví dụ Live view chỉ hiện với job do trang tự kích) → thử cả trạng thái có và không.
 
+## 3b. Audit ảnh chụp toàn trang — tenant portal (và admin) (S247)
+
+Dùng khi cần rà cả portal chứ không chỉ trang vừa sửa (S247 AA-760).
+
+1. **Chụp:** chạy smoke có sẵn local, trỏ vào production portal (`https://portal.lumiguides.it.com`), lần lượt từng
+   tenant brand: `BASE_URL=<portal> npx playwright test --project=smoke-portal --workers=1`. Key mỗi tenant đọc từ
+   Secrets Manager `aa-cis/dev/e2e-tenant/<tenant>` vào biến `E2E_TENANT_API_KEY` ngay trong lệnh — không in, không
+   ghi file.
+2. **Gom ảnh:** sau mỗi tenant, chép PNG từ `tests/e2e/results/smoke-portal/` sang
+   `.tmp-session/<issue>-shots/<tenant>/` (lần chạy sau ghi đè thư mục kết quả).
+3. **Review:** agent review mở **từng ảnh** theo nhóm trang và điền checklist: trạng thái (loading/lỗi), empty state,
+   nhãn/copy, layout desktop + phone, dark mode, dữ liệu thật, **lộ thông tin nội bộ** (tenant chỉ thấy nội dung —
+   memory `tenant-sees-content-only`: không gate/held/flag/QA).
+4. **Sửa:** một agent sửa gom mọi phát hiện; rồi **một agent verify độc lập** chụp lại và kiểm.
+
+Bẫy khi chụp:
+
+- Chờ dữ liệu xong mới chụp: không còn phần tử `[aria-busy="true"]`.
+- Shell portal cuộn bên trong `main[data-pshell=main]`, không cuộn `body` → full-page chỉ ra khung nhìn; đặt kích
+  thước viewport theo chiều cao nội dung của `main` trước khi chụp.
+- Login smoke: điền key lặp lại tới khi input (đã hydrate) giữ được giá trị (`auth.setup.ts`); điền trước hydrate bị
+  React reset im lặng.
+
 ## 4. Báo cáo
 
 ```

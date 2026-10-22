@@ -10,9 +10,30 @@ Mục tiêu: "Done" luôn nghĩa là đã chạy đúng trên môi trường th�
 ## 1. Trước khi mở/merge PR
 
 - [ ] Branch `feature|fix|chore/aa-xxx-<mô tả>` từ `main`; PR vào `main`.
+- [ ] **Worktree luôn tạo bằng đường dẫn TUYỆT ĐỐI** dưới repo gốc: `/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/<tên>`.
+  `git -C apps/<repo> worktree add .tmp-session/...` (tương đối) rơi vào trong repo con, không bị gitignore — S247
+  tạo nhầm 3 cái như vậy.
 - [ ] Commit và PR body ghi **`Refs AA-xxx`**. Không dùng `[AA-xxx]` hay `Fixes AA-xxx` — chúng tự đóng issue khi merge.
+- [ ] **Danh tính GitHub (ADR 0011, AA-901, S247):** agent điều phối push, mở PR, merge bằng App `aa-agent`:
+  `/home/nghiep/projects/AA-Ecosys/tools/github/as-app.sh --repos <Repo> -- <git -C <worktree> push … | gh pr create … | gh pr merge …>`.
+  Cần phiên AWS MFA còn hạn (`aa365-admin`, script đọc key từ Secrets Manager) và gọi script từ checkout có
+  `tools/github/apps.env` điền `agent_app_id` (repo gốc `master`); `git push` cần `gh auth setup-git` một lần.
+  Kiểm: `gh pr view <n> --json author` ra `app/aa-agent`, CI chạy dưới tên `aa-agent[bot]`. App `aa-ecosys-ci-bot`
+  chỉ dành cho release-please và PR docs của Infra, phiên agent không dùng. Hướng dẫn: `docs/security/github-apps.md`.
+- [ ] **PR rủi ro → vòng review** (auth/quyền, migration/RLS, CI/workflow/secret, xoá dữ liệu, middleware trên đường
+  request): agent làm commit local → agent review độc lập (chỉ đọc, giao nhiệm vụ "phá nó") → agent sửa áp mọi
+  blocker/should-fix → agent điều phối push, chờ CI, merge. S247 lần review nào cũng bắt lỗi thật (CIS #924 chín
+  phát hiện, AA-859 một blocker, AA-894 env-config hai).
 - [ ] CI xanh — 5 job required: Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check (Vercel không nằm trong 5 job, kiểm riêng cho FE).
+- [ ] **Test xanh local, đỏ CI → so package đã cài trước** (`pip list` local vs CI/image), rồi mới sửa code. S247
+  AA-871: image có `httpx2` (log cả URL ở INFO), venv local không có.
+- [ ] **Khẳng định "CI xanh khi khớp / đỏ khi lệch"** → chứng minh bằng nhánh thử hoặc draft PR rồi đóng không merge,
+  có cài sẵn một chỗ lệch; không bao giờ merge thứ sai để thử. S247 AA-894: input `design_ref` của DB Schema Dump,
+  Docs lint trên một PRD tham chiếu hỏng.
 - [ ] PR có migration → luồng D8: PR migration-only của repo chủ merge → PR copy Infra (Copy Guard) merge → DB Migrate `check` → `apply` (job tables rảnh) → merge PR bot `bot/db-schema-reference` (DB Schema Dump tự mở sau apply) → chạy DB Isolation Probe. Từ X1 S22, log DB Migrate phải ghi login `db_migrator` và `ran as: <owner>` (`cis_owner` / `bk_owner` / `tp_owner`); `roles/` chạy bằng master.
+- [ ] **Cờ fail-closed (thiếu key = BẬT) + migration:** code cần grant của migration thì đặt cờ TẮT rõ ràng trước khi
+  deploy code → apply migration → BẬT cờ + verify lật cờ. Thiếu bước tắt thì code chạy ngay khi chưa có grant
+  (S247, AA-859 wave 3).
 - [ ] Thêm thư mục top-level → thêm `COPY` vào Dockerfile và path filter `deploy-dev.yml`.
 - [ ] PR frontend → `npm run build` đầy đủ chạy local (Node 22 qua nvm), rồi `aa-ui-verify`.
 - [ ] PR xoá bảng/dữ liệu → quy trình DRY RUN (`aa-cis-schema/references/destructive-ops.md`).
