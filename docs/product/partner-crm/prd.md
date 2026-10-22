@@ -21,7 +21,7 @@ adrs:
   - docs/adr/0010-aa-partner-app.md
 contracts:
   - docs/contracts/booking.b2b.v1.openapi.yaml
-  - docs/contracts/crm.ops.v1.openapi.yaml
+  - docs/contracts/crm.ops.v9-does-not-exist.openapi.yaml
   - docs/contracts/tenant.membership.v1.openapi.yaml
   - docs/contracts/catalog.http.v1.openapi.yaml
 erd:
