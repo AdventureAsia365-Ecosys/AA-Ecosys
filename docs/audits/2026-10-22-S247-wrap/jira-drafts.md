@@ -7,10 +7,10 @@ Tác nhân: Claude Code. **Nghiệp duyệt cả 5 nháp ("Ok hết").** Đăng 
 | # | Issue | Trạng thái |
 |---|---|---|
 | 1 | PR-22 | **Đã đăng** — comment 10491 |
-| 2 | PR-23 | **Chưa đăng** — đăng ở S248 kèm 2 ảnh `docs/audits/2026-10-22-S247-aa760-portal/empty-dashboard-desktop-light.png` và `empty-tours-mine-phone-dark.png` |
-| 3 | PR-27 | **Chưa xác nhận** — 2 lần đăng đều timeout; kiểm issue trước khi đăng lại (không đăng trùng). Trước khi đăng: Nghiệp mở quyền chia sẻ thư mục Drive pháp lý cho chị Thư |
-| 4 | PR-24 | **Có vẻ đã đăng, chưa verify** — issue cập nhật 22:40–22:42 giờ VN, lệnh đăng timeout; mở xem bằng mắt |
-| 5 | PR-13 | **Có vẻ đã đăng, chưa verify** — như PR-24 |
+| 2 | PR-23 | **Đã gửi, chưa xác nhận** — tải ảnh lên Jira timeout, nên đăng kèm 2 link ảnh trên GitHub (repo gốc public); lệnh đăng timeout, kiểm Activity stream trước khi gửi lại |
+| 3 | PR-27 | **Đã đăng** (1 comment; xác nhận qua Activity stream của Nghiệp). Nghiệp mở quyền chia sẻ thư mục Drive pháp lý cho chị Thư |
+| 4 | PR-24 | **Đã đăng** (xác nhận qua Activity stream) |
+| 5 | PR-13 | **Đã đăng** (xác nhận qua Activity stream) |
 
 Bản trong repo (public): link thư mục Google Drive ở mục 3 thay bằng chỗ trỏ tới Linear AA-886 (link gốc nằm trong bản nháp đăng Jira và comment Linear); nội dung khác giữ nguyên.
 
@@ -28,7 +28,7 @@ Mỗi bản đăng dạng HTML, mở đầu bằng mention `@thule` (span data-t
 - **Bài LinkedIn**: tối thiểu 120 chữ, đúng giọng thương hiệu, bỏ kiểu mỗi câu một dòng và các câu sáo.
 - Chi phí thêm cho phần kiểm FAQ: khoảng 0,5 cent mỗi bài.
 
-## 2. PR-23 — Portal tenant (chưa đăng)
+## 2. PR-23 — Portal tenant (đã gửi, chưa xác nhận)
 
 @thule Portal cho đối tác đã được làm lại khung và rà từng trang (22/10):
 
@@ -37,7 +37,7 @@ Mỗi bản đăng dạng HTML, mở đầu bằng mention `@thule` (span data-t
 - Số "API calls" ở trang Billing giờ chỉ đếm lượt gọi API của hệ thống tenant, không đếm lượt mở trang portal (kiểm live: mở 3 trang → số không đổi; 1 lượt gọi API → tăng 1).
 - Kiểm tự động trên portal thật với tài khoản tenant thử: 50/50 bước đạt. Ảnh đính kèm: Dashboard trống (máy tính) và My Tours trống (điện thoại, nền tối).
 
-## 3. PR-27 — Nền tảng (bảo mật, vận hành, pháp lý) (chưa xác nhận)
+## 3. PR-27 — Nền tảng (bảo mật, vận hành, pháp lý) (đã đăng)
 
 @thule Cập nhật nền tảng chung ngày 22/10:
 
@@ -46,7 +46,7 @@ Mỗi bản đăng dạng HTML, mở đầu bằng mention `@thule` (span data-t
 - **Số phiên bản và nhật ký thay đổi** cho từng app: CIS 0.5.0, Booking 0.2.0, TripPlanner 0.4.0 — biết chính xác bản nào đang chạy.
 - **Bộ hồ sơ pháp lý (bản nháp để chị xem)**, trên Google Drive, thư mục "Legal readiness packet (2026-10-22)": (link thư mục Drive — xem comment Done của Linear AA-886) — gồm bản tóm tắt song ngữ, danh mục xử lý dữ liệu, mẫu thỏa thuận xử lý dữ liệu (DPA), quy trình xử lý yêu cầu xoá dữ liệu, điều khoản sử dụng AI cho tenant (nháp). Trang /privacy và /terms đang ở dạng nháp có ghi "chờ duyệt pháp lý". Việc có cần luật sư xem hay không là chị quyết.
 
-## 4. PR-24 — TripPlanner (có vẻ đã đăng, chưa verify)
+## 4. PR-24 — TripPlanner (đã đăng)
 
 @thule Cập nhật TripPlanner ngày 22/10 (bản 0.4.0):
 
@@ -54,7 +54,7 @@ Mỗi bản đăng dạng HTML, mở đầu bằng mention `@thule` (span data-t
 - Dữ liệu địa điểm trên bản đồ giờ lấy từ kho nội dung chung của Adventure Asia (cùng nguồn với CIS), không còn bảng riêng.
 - Có theo dõi lỗi tự động cho trang web và phần xử lý phía máy chủ.
 
-## 5. PR-13 — Jev (có vẻ đã đăng, chưa verify)
+## 5. PR-13 — Jev (đã đăng)
 
 @thule Cập nhật về Jev (lớp ra quyết định) ngày 22/10:
 
