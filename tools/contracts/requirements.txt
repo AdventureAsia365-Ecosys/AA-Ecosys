@@ -1,0 +1,3 @@
+# Contract check (AA-928): same pins as tools/docs/requirements.txt. referencing comes with jsonschema.
+jsonschema==4.23.0
+PyYAML==6.0.2

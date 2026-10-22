@@ -3,8 +3,8 @@
 <!-- Template for a root ADR (docs/adr/NNNN-<slug>.md). It follows the style of the accepted root ADRs
 (0004b, 0006a, 0008). Placement rule: skill/ai-nghiep/references/adr.md - two or more repos -> root,
 infrastructure only -> AA-CIS-Infra, one app -> that app. ADRs do not use the catalog front-matter.
-Numbering: next free number in this repo; check docs/adr/README.md "Reserved" first (0009 = AI platform,
-AA-804). An amendment to an accepted ADR is a separate file <nnnn>a-<slug>.md; the amended ADR gets a pointer
+Numbering: a next-free number from the "Numbering" section of docs/adr/README.md (reserved numbers are listed
+there; CI tools/adr/check_adr_numbers.py rejects used, reserved or skipped numbers). An amendment to an accepted ADR is a separate file <nnnn>a-<slug>.md; the amended ADR gets a pointer
 line and its index row says "amended by". Never rewrite the text of an accepted ADR. Delete this comment. -->
 
 - **Status:** Proposed (<dd/mm/yyyy>, S<nnn>). <!-- Proposed | Accepted (<date>, S<nnn>) | Superseded by ADR <nnnn> -->

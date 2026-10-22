@@ -1,0 +1,22 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "TenantPage",
+  "expect": "valid",
+  "why": "Agency list for S-01",
+  "payload": {
+    "items": [
+      {
+        "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+        "agency_name": "Synthetic Travel Co (Dev)",
+        "state": "active",
+        "is_synthetic": true,
+        "has_owner": true,
+        "holds_travellers": true,
+        "release_channel": "stable",
+        "created_at": "2026-11-10T02:00:00Z",
+        "locked_at": null
+      }
+    ],
+    "next_cursor": null
+  }
+}
