@@ -1,6 +1,8 @@
 # ADR 0010 — AA-Partner: one app for partner agencies (CRM and tenant portal)
 
-- **Status:** Proposed (22/10/2026, S247). Nghiệp accepts (design: S248).
+- **Status:** Proposed (22/10/2026, S247). Nghiệp accepts (design: S248). Decision 9 (integrations are
+  bring-your-own; shared responsibility) added in S247 before acceptance, from Nghiệp's product direction of the same
+  day; it is part of this Proposed ADR, not a separate amendment.
 - **Scope:** AA-Ecosys: the new public repo **AA-Partner** (CRM API, CRM web and client host, the tenant portal after
   the move), AA-CIS-App (portal code moves out; membership, catalog and AA content contracts), AA-Booking (B2B API),
   AA-CIS-Infra (ECS service, CloudFront, KMS, Cognito, DB owner `crm`, DB Migrate), the root repo (contracts, ADRs).
@@ -119,7 +121,83 @@ new repo and starve CIS (the standing rule: CIS App first, parallel lanes agreed
 
 No real agency, traveller or payment before W8 (AA-980): prod placement, prod partner pool, WAF, ECS exec off, an
 independent pentest, vendor verifications, Stripe live per agency, DPA and the public data page, and the ops owner's
-sign-off that real net rates are entered.
+sign-off that real net rates are entered. Under decision 9, "vendor verifications" means AA's own connector
+registrations only (the Google OAuth client and the Microsoft app); "Stripe live per agency" means the agency's own
+live key or account, connected and tested by the agency.
+
+### 9. Integrations are bring-your-own; shared responsibility
+
+Product direction from Nghiệp (S247, 22/10/2026), binding for every CRM module: build a product agencies can really
+use, and leave to the agency what is the agency's by nature — its vendor accounts, its legal duties to its own
+travellers, and its own registrations — as other SaaS companies do in their Terms and data processing agreements.
+Platform security stays AA's engineering job.
+
+**Rules.**
+
+- **BYO integrations.** Every external vendor the CRM talks to on the agency's behalf is the **agency's own account**:
+  its Twilio account (SMS) and WhatsApp Business sender (registered by the agency through Twilio Self Sign-up, brand
+  and campaign registrations included), its Stripe account (the agency is the merchant of record), its mailbox (Gmail
+  or Microsoft 365 through OAuth, or SMTP), its e-sign provider if it ever wants one instead of the built-in e-sign,
+  its map token, a later payment gateway or flight-status service. **AA holds no master vendor account on an agency's
+  behalf**: no Twilio subaccounts, no Meta Tech Provider enrolment, no Stripe Connect platform in v1, no shared map
+  token, no shared SMTP relay for client mail.
+- **AA builds the connectors.** A setup wizard ("Connections", AA-962) with a test button and a health status per
+  connection; credentials stored encrypted under the agency's `integration` data key (KeyProvider, AA-934), write-only
+  in the UI, decrypted only in the dispatcher, webhook and health-check paths, every change in the agency's audit; owner-only
+  changes; AA support (L2) and the L1 console can never read or change them.
+- **AA keeps its own connector identities.** The Google OAuth client and the Microsoft app registration are AA's and
+  AA verifies them (W8). They are how the CRM asks the agency for access, not an account held for the agency.
+- **AA's SES sends system mail only**: invitations and security mail to agency people, one-time codes to travellers
+  (client portal sign-in, e-sign), and operational alerts to agency people. Mail to travellers (proposals, payment
+  reminders, Stage 3 nudges, portal invitations, campaigns) leaves from the agency's own mailbox or not at all; there
+  is no platform-sender fallback. Inbound forward-in through AA's SES receipt rule stays (receive-only, AA domain).
+- **AI is AA's feature, not BYO.** CRM AI runs on AA's Bedrock (ADR 0008a decision 5), AA pays inside the per-agency
+  cap, AI is off until the owner turns it on, a person approves every send. No agency-supplied LLM keys.
+- **Data roles.** The agency is the **controller** of its travellers' data (consent, lawful basis, privacy notice,
+  replies to data-subject requests, retention choices inside the product's limits, notifying its regulator and
+  travellers of a breach). AA is the **processor** (acts on the agency's instructions, tools for those duties,
+  forwards any request it receives, notifies the agency of a breach without undue delay, lists its sub-processors).
+  The agency's vendors are the agency's processors, not AA's sub-processors.
+- **Legal wording is Ms. Thư's call.** The Terms clauses, the DPA wording, the in-app acknowledgement and whether
+  counsel reviews them are a proposal for her
+  ([`proposal-thu.md`](../audits/2026-10-22-S247-crm-byo/proposal-thu.md)); the build does not wait on the wording.
+- "BYO" here is about **vendor accounts**. Customer-managed encryption keys (BYOK) stay out of v1, unchanged.
+
+**Responsibility matrix.**
+
+| Area | Agency | AA (platform engineering) | Ms. Thư (wording) |
+|---|---|---|---|
+| Vendor accounts (Twilio, WhatsApp sender, Stripe, mailbox, e-sign provider, maps, later gateways) | Opens, verifies, pays and registers them (WhatsApp sender, SMS brand and campaign, Stripe identity checks); accepts the vendor's terms; keeps the vendor log-ins secure | Connectors, setup wizard, test buttons, health checks, encrypted credential storage, clear errors when a vendor refuses | Terms clause on third-party services and customer-owned accounts |
+| Messaging rules (WhatsApp opt-in and templates, SMS rules per country, opt-out words) | Gets opt-in, writes and gets templates approved, follows the vendor's and the country's rules | Enforces the 24 h window and template-only sends, records opt-in and opt-out, blocks sends without consent | Acceptable-use wording |
+| Payments | Merchant of record: refunds, disputes, payouts, fees, its own tax invoices | Payment links on the agency's account, no stored cards, verified webhooks, refund approval matrix | "AA is not a party to the agency's payments" wording |
+| Email | Its mailbox, sending limits, its domain's sender records, what it writes | Send-as and SMTP connectors, forward-in, held-until-reconnect, system mail from AA's domain | — |
+| Travellers' personal data (controller duties) | Privacy notice, lawful basis and consent text, data-subject replies, retention choices, breach notices to its regulator and travellers | Consent records, per-traveller export and verified erasure, retention settings inside fixed limits, request forwarding, breach notice to the agency, DPA annex and sub-processor list | DPA and Terms wording; whether counsel is needed |
+| Platform security | Who it invites and which role, its people's second factors, rotating vendor credentials when staff leave | Encryption and keys, MFA, tenant isolation, access control, audit, backups, AI PII filter, security review and pentest, incident response | Public data page wording |
+| Content shown to travellers (terms, waivers, consent text) | Its own documents and their legal fit for its trips | Versioning, signing, sealing, storage; AA templates are examples only | Whether templates carry a "not legal advice" note |
+| AI | Turns it on, reviews every draft before sending | Runs and pays for it, filters PII first, caps and logs it | AI wording in the Terms |
+
+**Consequences per module** (details: design errata
+[`final/errata-s247-byo.md`](../audits/2026-10-21-S246-crm-design-v3/final/errata-s247-byo.md)):
+
+| Module (issue) | Change |
+|---|---|
+| CRM-06 KeyProvider (AA-934) | `integration` data key covers every provider (Twilio, Stripe key + webhook secret, OAuth refresh tokens, SMTP, map token, e-sign); serializer test that no credential ever leaves the API |
+| CRM-17 email (AA-945) | Gmail, Microsoft 365 **and SMTP**; `allow_platform_sender` removed; a dead mailbox holds client mail; system mail list closed |
+| CRM-23 payments (AA-952) | Agency's own Stripe through its **restricted key** in v1 (no AA platform account); Connect kept as a later adapter option; VN agencies manual |
+| CRM-25 contracts and waivers (AA-955) | Built-in e-sign stays AA's feature; the BoldSign slot becomes the agency's own provider account; terms and waiver text are the agency's |
+| CRM-28 WhatsApp + SMS (AA-958) | Agency-owned Twilio only; subaccount / Tech Provider fallback removed; AA never onboards a sender |
+| CRM-31 onboarding (AA-962) | "Connections" wizard with test sends and health status; controller settings (privacy notice link, data-request contact, retention choices); owner acknowledgement of the shared responsibility |
+| CRM-36 campaigns (AA-968) | Sent from the agency's mailbox or its own email service by SMTP; no `crm-marketing` SES set |
+| CRM-03 infra (AA-931) | SES grants for system mail and the inbound receipt rule only; no per-agency SES identities |
+| CRM-20 / CRM-21b maps (AA-948, AA-950) | Map shown only with the agency's own token; otherwise day list with place names and links |
+| CRM-33a AI (AA-964) | Unchanged in scope: AA's feature, AA's account |
+| CRM-35, CRM-37b, CRM-38 (AA-967, AA-970, AA-980) | Data-request tools for the agency; sub-processor page lists AWS (plus conditional AA tools) only; W8 verifications = AA's OAuth apps |
+
+**Other ADRs.** [0008a](0008a-crm-separate-app-exceptions.md) decision 1 (controller / processor) and decision 5 (own
+LLM gateway) are unchanged and point here for the matrix. [0006b](0006b-partner-pool-and-mfa.md) is unchanged:
+mailbox and calendar OAuth grants are integration credentials, never a sign-in; the partner pool stays the only human
+sign-in, and its invitation mail is AA system mail. [0005a](0005a-b2b-resale-warn-and-vnd.md) is not affected
+(AA↔agency settlement for AA lines stays outside the CRM).
 
 ## Consequences
 
@@ -131,7 +209,11 @@ sign-off that real net rates are entered.
 - **Negative / cost:**
   - a fourth repo, service, pipeline and set of contracts to run;
   - AWS *(est., per month, design §8)*: Dev ≈ $13–22; 10 agencies ≈ $84–97 ($104–152 for a separate prod cell);
-    50 agencies ≈ $319–344. AA's vendor cost is $0 (each agency pays its own Stripe, Twilio, mailbox);
+    50 agencies ≈ $319–344. AA's vendor cost is $0 (each agency pays its own Stripe, Twilio, mailbox); under
+    decision 9 the conditional vendor lines (BoldSign, Twilio Tech Provider re-billing, map overage) leave AA too;
+  - decision 9 moves work to the agency (vendor sign-ups and registrations) and to the product (a setup wizard with
+    tests and health checks, clear error states); an agency without a connected mailbox cannot email its travellers
+    from the CRM, by design;
   - the portal move is a risky step for live tenants (mitigated by decision 6).
 
 ## Alternatives considered
@@ -148,5 +230,7 @@ sign-off that real net rates are entered.
 ## Follow-ups
 
 - AA-933: repo, `CONTEXT.md`, CI, health routes. AA-932: infra and DB owner. AA-931: CloudFront → VPC origin spike.
+- Decision 9: the design errata above; Ms. Thư's answers to the proposal; the AA-930 readiness note (check 11
+  resolved by BYO); AA-929 checks whether data standards DM-6/DM-7 need a line for "agency-owned processors".
 - On acceptance: `docs/ecosystem-architecture.md` app row, `docs/database/schema-ownership.md` row for `crm` (with
   AA-932), index status here.
