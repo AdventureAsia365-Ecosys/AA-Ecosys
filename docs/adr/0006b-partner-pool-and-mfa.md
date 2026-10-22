@@ -67,6 +67,10 @@ Cognito clients.
   nobody real is affected because Dev holds synthetic agencies only.
 - `/auth/tenant-login` with the API key is closed for human sessions at P2b. **Tenant API keys remain for machine
   access** (ADR 0006 decision 12, unchanged).
+- Pointer (S247): the Gmail / Microsoft 365 / calendar OAuth grants an agency gives the CRM are **integration
+  credentials** under [ADR 0010](0010-aa-partner-app.md) decision 9 (bring-your-own), never a way to sign in; there
+  is no "Sign in with Google/Microsoft" for agency people. Invitation and security mail for this pool is AA system
+  mail through AA's SES.
 
 ### 4. Roles stay in app data, keyed by `(iss, sub)`
 

@@ -5,7 +5,9 @@ Every check is read-only. AWS calls ran as `nghiep_aa365` (acc3) and `aa365-admi
 on 22/10/2026 between 06:30 and 07:30 UTC. **Spend: $0.** No LLM was called, no guardrail was created, no resource was written.
 
 Verdicts: **pass** = the plan can go ahead as written or with the stated delta; **fail** = the plan must change;
-**pending** = waiting on a vendor answer or on a step this lane may not run.
+**pending** = waiting on a vendor answer or on a step this lane may not run; **resolved by BYO** = the question no
+longer applies because of the S247 bring-your-own rule ([ADR 0010](../../adr/0010-aa-partner-app.md) decision 9,
+design errata [`errata-s247-byo.md`](../2026-10-21-S246-crm-design-v3/final/errata-s247-byo.md)).
 
 ## Summary
 
@@ -19,9 +21,9 @@ Verdicts: **pass** = the plan can go ahead as written or with the stated delta; 
 | 6 | Cognito tier + MAU price for passkeys/MFA | **pass** | Partner pool on **Essentials**, `FactorConfiguration=MULTI_FACTOR_WITH_USER_VERIFICATION`. Cost $0 under 10,000 MAU (cost line ≈ $0 at 10 and 50 agencies) |
 | 7 | Free FX source with VND | **pass** | Primary: ExchangeRate-API open access (attribution on pages that show rates). Cross-check: fawazahmed0 `exchange-api` (CC0). SBV not used. Store the provider per row |
 | 8 | Stripe Checkout session expiry range | **pass** | 30 min to 24 h confirmed; the design's formula and 30-minute floor stand. "Unverified" is removed |
-| 9 | BoldSign regions | **pass** | US, EU, Canada, Australia; no Asia. If the fallback is ever switched on, pick **US** (same region class as AWS) |
-| 10 | Mapbox on the sub-processor list | **pass** (one point open) | Add Mapbox, Inc. as AA sub-processor, "AWS US + global CDN", 2021 SCCs in DPA Schedule C. Whether the DPA is part of the ToS by reference is checked at W8 |
-| 11 | Twilio ISV / Meta Tech Provider rule | **pending** (Twilio answer) | Twilio docs lean to "required". If confirmed: CRM-28 switches to AA subaccounts, Twilio becomes an AA sub-processor, the clock moves to W8 |
+| 9 | BoldSign regions | **pass** | US, EU, Canada, Australia; no Asia. If the fallback is ever switched on, pick **US** (same region class as AWS). *BYO (S247): the fallback becomes the agency's own account, so the region is the agency's choice; the facts stay as help text* |
+| 10 | Mapbox on the sub-processor list | **pass** (one point open) | Add Mapbox, Inc. as AA sub-processor, "AWS US + global CDN", 2021 SCCs in DPA Schedule C. Whether the DPA is part of the ToS by reference is checked at W8. *BYO (S247, proposed): if maps use the agency's own token, Mapbox is the agency's processor and leaves AA's list; the open point then goes away* |
+| 11 | Twilio ISV / Meta Tech Provider rule | **resolved by BYO** (S247) | Each agency owns its Twilio account and registers its own WhatsApp sender; AA never onboards a sender or holds subaccounts, so no ISV / Tech Provider registration for AA. Subaccount fallback removed; Twilio stays the agency's processor; no W8 clock. Residual watch only (§11) |
 | 12 | TrueIDC / eCloudvalley IAM roles in acc2 / acc3 | **pending** (vendors + an IAM read this lane may not run) | The orchestrator runs the one read-only IAM listing below; vendor answers are still asked |
 
 No check failed because of MFA: the STS sessions of both profiles were valid.
@@ -210,7 +212,33 @@ The two usable sources differ by 0.17 % on USD/VND.
 - **Sources:** [Mapbox sub-processors](https://www.mapbox.com/legal/subprocessors) ·
   [Mapbox DPA](https://www.mapbox.com/legal/dpa), 22/10/2026.
 
-## 11. Twilio ISV / Meta Tech Provider rule — pending (Twilio answer)
+## 11. Twilio ISV / Meta Tech Provider rule — resolved by BYO (S247)
+
+**Verdict update (S247, 22/10/2026).** Nghiệp's bring-your-own direction ([ADR 0010](../../adr/0010-aa-partner-app.md)
+decision 9) settles the design question without waiting for Twilio:
+
+- The Tech Provider rule quoted below is about a software vendor that **onboards WhatsApp senders for its
+  customers**: through Meta's Embedded Signup, with one subaccount per customer under the vendor. Under BYO, AA does
+  none of that. Each agency opens its own Twilio account, registers its own WhatsApp sender through Twilio Self
+  Sign-up (its own WhatsApp Business Account), registers its own SMS brand / campaign or sender ID, and gets its own
+  templates approved. The CRM only stores the agency's Account SID and Auth Token (under the `integration` data key)
+  and calls Twilio's API with them, as other software that connects a customer's own Twilio account does (see the
+  sources in [`proposal-thu.md`](../2026-10-22-S247-crm-byo/proposal-thu.md) §3).
+- **Plan delta (replaces the "if Twilio says required" list below):**
+  - CRM-28 (AA-958) builds the agency-owned path only. The AA-subaccount fallback, the re-billing, the Tech Provider
+    enrolment, Embedded Signup and Meta business verification for AA are **removed from the plan**.
+  - Twilio is **not** an AA sub-processor; it is listed among the agency's own processors on the data page (CRM-37b).
+  - The CRM-38 (W8) vendor-verification row drops "Meta (only if Twilio requires it)". No W8 clock from this check.
+  - The Connections wizard (CRM-31) links to Twilio's own Self Sign-up and registration pages and never performs
+    the registration for the agency.
+  - Keep the provider-neutral adapter (it is the design anyway).
+- **Residual watch (Low):** if Twilio's reply to Nghiệp's question ever says the rule also applies to software that
+  only uses customer-owned credentials, the WhatsApp half of CRM-28 is re-opened as its own decision. SMS is not
+  affected. The build does not wait for the reply; the reply is filed here when it comes.
+
+The original pending analysis follows, kept for the record.
+
+### Original analysis (pending, before S247 BYO)
 
 - **Question (sent by Nghiệp):** when each agency owns its **own** Twilio account and its own WABA through Self
   Sign-up, and AA only stores the agency's credentials, is AA an "ISV" that must join Meta's Tech Provider programme?
@@ -261,4 +289,7 @@ The two usable sources differ by 0.17 % on USD/VND.
 4. R17: FX provider = ExchangeRate-API open access (+ attribution) with CC0 cross-check; `fx_rate_platform.provider`.
 5. §3.5 card flow: Stripe 30 min – 24 h range confirmed.
 6. W8 row: add Microsoft publisher verification next to Google verification.
-7. Still open: Twilio ISV answer (CRM-28 path), reseller IAM roles, Mapbox DPA incorporation.
+7. Still open: reseller IAM roles, Mapbox DPA incorporation (goes away if maps BYO is confirmed). Twilio ISV is
+   resolved by BYO (§11).
+8. BYO (S247): every vendor row above follows [`errata-s247-byo.md`](../2026-10-21-S246-crm-design-v3/final/errata-s247-byo.md);
+   W8 verifications are AA's own OAuth apps only (Google, Microsoft); no Meta.

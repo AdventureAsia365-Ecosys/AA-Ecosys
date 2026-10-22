@@ -14,6 +14,11 @@ mapped to Linear ids, and the delivery plan and portal move re-cut to the S246 m
 Where this document and v3 differ, this document wins. Long tables (every column, every wireframe at full width,
 every issue checklist) stay in v3 and its lanes; this document links to them.
 
+**Errata S247 (bring-your-own integrations).** [`errata-s247-byo.md`](errata-s247-byo.md) changes the integration,
+onboarding, sub-processor and cost rows below under [ADR 0010](../../../adr/0010-aa-partner-app.md) decision 9
+(Proposed): agencies connect their own vendor accounts, AA's SES sends system mail only, the Twilio subaccount
+fallback is removed. Where the two differ, the errata wins once ADR 0010 is accepted.
+
 | Source | Path |
 |---|---|
 | Spec (Ms. Thư) | [`docs/research/partner-crm-spec.md`](../../../research/partner-crm-spec.md) |
@@ -751,6 +756,9 @@ audited. AA staff can only raise requests.
 
 ## 6. Integrations
 
+> Errata S247: rows Stripe, Twilio, Email, SES, E-sign and Sub-processors change under bring-your-own; see
+> [`errata-s247-byo.md`](errata-s247-byo.md) §1–§3.
+
 Details: v3 §5 and [`data-privacy-integrations.md`](../lanes/data-privacy-integrations.md) §6.
 
 | System | Design | AA cost |
@@ -854,6 +862,9 @@ normally (3–5 issues), the design-pace column applies.
 ---
 
 ## 8. Cost
+
+> Errata S247: conditional vendor lines leave AA and the SES line shrinks; see
+> [`errata-s247-byo.md`](errata-s247-byo.md) §4.
 
 AA's AWS cost per month *(est.)*. Full line items: v3 §7.
 

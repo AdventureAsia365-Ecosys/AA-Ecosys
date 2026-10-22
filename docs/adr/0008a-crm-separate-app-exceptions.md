@@ -48,6 +48,9 @@ The design marks X2–X5 as **blocking the first CRM migration** (design v3 §9.
   in AA-CIS-Infra.
 - Kept from §8 unchanged: the agency (tenant) is the **data controller** and AA the processor; the CRM never reads
   `booking.customers` or `tripplanner.customers`; no AA app reads `crm.*`.
+  - Pointer (S247): who does what under that split, and the rule that the agency's vendors (Stripe, Twilio,
+    mailbox, …) are its own accounts and its own processors, are in [ADR 0010](0010-aa-partner-app.md) decision 9
+    (integrations are bring-your-own; shared responsibility).
 - Tightened: **no cross-schema grants in either direction** (design N5). `crm_app` gets nothing outside `crm`; no
   other app role gets anything on `crm`. Everything between AA-Partner and the other apps goes over versioned HTTP
   contracts in `docs/contracts/` (ADR 0010 decision 4). The isolation probe expects 42501 for `cis_app`, `booking`,
@@ -113,6 +116,8 @@ whose members are seeded in `crm.member`.
   configuration is per agency (budget, on/off), not CIS's.
 - **CIS still observes CRM AI usage** (owner D12): `crm.ops.v1` serves daily LLM usage per stage and model, and the
   per-agency AI cost in the usage meters; the CIS admin shows it beside the CIS ledger.
+- AI is AA's feature, not a bring-your-own integration: no agency-supplied LLM keys ([ADR 0010](0010-aa-partner-app.md)
+  decision 9, S247).
 - Providers: Bedrock only; OpenAI and Jev are never routed for CRM stages. If acc2 cannot run the models or Guardrails
   (it cannot run Bedrock LLMs today, through TrueIDC), the planned path is acc3 through a CRM-only role
   (`us.` inference profiles + `ApplyGuardrail` only), checked in AA-930.
