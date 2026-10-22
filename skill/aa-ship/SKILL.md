@@ -39,6 +39,14 @@ Mục tiêu: "Done" luôn nghĩa là đã chạy đúng trên môi trường th�
 - [ ] PR xoá bảng/dữ liệu → quy trình DRY RUN (`aa-cis-schema/references/destructive-ops.md`).
 - [ ] **Docs:** "Docs impact" của issue đã làm trong cùng PR (CONTEXT.md / ADR / runbook / contract / trang catalog `docs/README.md`), hoặc ghi "N/A". Trang catalog theo `docs/STYLE.md` (front-matter, CLI một dòng, không ID thô); chỉ bump `last_reviewed` khi đã kiểm với hệ thật.
 - [ ] **Changelog:** PR `feat`/`fix` người dùng thấy → tiêu đề PR đọc được như một dòng CHANGELOG (release-please lấy từ đây khi AA-891 xong).
+
+### Ngoại lệ: PR release (release-please, AA-891)
+
+- PR tên `chore(main): release x.y.z`, do `aa-ecosys-ci-bot` mở và tự cập nhật; chỉ đổi `CHANGELOG.md` + file version/manifest.
+- **Không có `Refs AA-xxx`** — đây là ngoại lệ duy nhất của luật Refs. Không sửa tay title/body để thêm Refs; các issue đã nằm trong từng dòng CHANGELOG.
+- Agent điều phối merge như mọi PR: CI xanh → squash merge (giai đoạn dev). Subagent không merge.
+- Merge xong release-please tạo tag `vX.Y.Z` + GitHub Release. Commit release **không** kích hoạt deploy; code của bản đó đã deploy từ các PR `feat`/`fix` trước. Không có gì để verify live riêng cho PR release.
+- Sau khi tag: soạn release note theo `docs/templates/release-note.md` (chỉ tính năng đã verify live) → draft Jira (`aa-jira-update`).
 - [ ] **LLM:** đổi prompt/model/route → ghi run ID eval chạy tay/dispatch trên golden set AA-729 vào PR (D-23; không có trigger theo PR). `prompt_version` chỉ khi ledger v2 (AA-804) đã có.
 - [ ] **Cost:** thêm resource AWS hoặc lượt chạy trả phí → ghi ước tính USD/tháng trong PR body (DM-10.7); resource mới có tag `App` (DM-10.1).
 
