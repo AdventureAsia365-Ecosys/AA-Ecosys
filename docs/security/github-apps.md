@@ -3,24 +3,25 @@ id: SEC-07
 title: Create and install the GitHub Apps for agents and bots
 description: Step-by-step browser and CLI guide to create the aa-agent and aa-ci-bot GitHub Apps, install them, store their keys, run the identity test PR, and rotate or revoke them (ADR 0011).
 type: how-to
-status: draft
+status: active
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-10-22
 review_every_days: 90
-last_tested: null
-tested_where: null
-tested_evidence: null
+last_tested: 2026-10-22
+tested_where: AdventureAsia365-Ecosys org (S247)
+tested_evidence: AA-901 Linear comment (identity test PR, installation listing)
 related: [SEC-02, SEC-05, SEC-06, AA-901, AA-891, AA-878, AA-880]
 ---
 
 # Create and install the GitHub Apps for agents and bots
 
-> [!WARNING]
-> UNTESTED - do not follow in an incident without checking each step.
-> Written on 2026-10-22 from ADR 0011 before the Apps exist. The helper `tools/github/as-app.sh` was tested only
-> with a throwaway key and stubbed `aws` / `curl` (JWT signature verified with `openssl`).
+> [!NOTE]
+> Run for real on 2026-10-22 (S247): `aa-agent` (app id 5421824) and `aa-ecosys-ci-bot` (app id 5421877; the
+> name `aa-ci-bot` was taken, so the fallback name is live) are created and installed on the five repos; keys stored
+> as described below; the identity test PR is in the AA-901 evidence. Wherever this page says `aa-ci-bot`, the live
+> App is `aa-ecosys-ci-bot`.
 
 The decisions behind each setting are in [ADR 0011](../adr/0011-github-app-identity-and-merge-rights.md) (identity,
 permissions, keys, merge rights) and [ADR 0014](../adr/0014-repo-visibility-and-github-plan.md) (what GitHub Free
@@ -246,6 +247,12 @@ Add these rows to [`secrets-register.yaml`](secrets-register.yaml) and the table
 
 When the Infra docs workflows use `aa-ci-bot`: delete `ROOT_REPO_DOCS_TOKEN` from AA-CIS-Infra, revoke its PAT in
 `https://github.com/settings/personal-access-tokens`, and mark the row `deleted` with the date.
+
+## Add a repo later
+
+No reinstall. Org Settings → **GitHub Apps** → **Configure** next to the App → **Select repositories** → add the
+repo → **Save** (each App). Then add the repo to the lists in this page and in ADR 0011 if it changes the scope, and
+for `aa-ecosys-ci-bot` store `AA_CI_BOT_PRIVATE_KEY` there too (a new key from the App page, part 5 step 4).
 
 ## Rotate a key
 
