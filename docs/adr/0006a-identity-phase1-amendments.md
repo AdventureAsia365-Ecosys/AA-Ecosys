@@ -6,7 +6,8 @@
   decision 7 (what "reset" means), decision 10 (custom domain timing, DNS), decision 11 (break-glass address,
   secret shape, guards), decision 12 (branding now in Terraform), the Phase 1 row of the Migration plan (legacy
   flag scope) and the "Remaining open risks" list (the `AdminCreateUser` line). A10 (19/10/2026, S243) adds a
-  temporary exception to the `@adventure.asia`-only staff rule for the E2E test account.
+  temporary exception to the `@adventure.asia`-only staff rule for the E2E test account. A11 and A12 (22/10/2026,
+  S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) is unchanged and still pending.
 - **Plan and evidence:** `docs/audits/2026-10-18-S242-cognito-phase1/plan.md` (judged plan, stages A/B/S/D),
   `docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md` (Phase 0 done-when evidence).
@@ -187,6 +188,8 @@ Narrows the Phase 1 cutover text ("password login is switched off by a config fl
 - **Open for the cutover (Stage S):** the API is one service for Production and Preview, so turning its flag off
   would also end Preview password logins. Nghiệp decides at cutover between "API flag stays on, only the
   Production BFF switches off" and "previews lose admin login".
+- **Superseded in part by A12 (S247):** the values above (default on) and the open cutover item. Since S2 the flag
+  is off by default in the API and the BFF, and Preview signs in through Cognito (A11), not with a password.
 
 ### A7. Gap: WORKFORCE access tokens carry `email` but no `email_verified`
 
@@ -281,6 +284,50 @@ mailbox or Google account". That is too strong.
   5. Point the E2E test at a company address, or retire it.
   6. Add a closing line here.
 
+### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
+
+Settles the Preview half of the A6 open item: previews get a Cognito sign-in instead of keeping the password form.
+
+- **Host and client:** `aa-cis-preview.lumiguides.it.com` (a Vercel domain of `aa-cis-frontend`) is the only
+  callback and sign-out URL of a Preview-only WORKFORCE client `cis-admin-preview` (AA-CIS-Infra). The production
+  `cis-admin` client does not list it; break-glass stays production-only. Per-deployment `*.vercel.app` previews
+  have no staff sign-in (Cognito allows no wildcard callbacks).
+- **Which build uses which client:** a Vercel production build signs in with `cis-admin` on the production host
+  only; a preview build with `cis-admin-preview` on the fixed host only, with its own Preview-only client secret.
+  A preview build never reads the production client secret.
+- **Cap:** the CIS API maps every `cis-admin-preview` token to role `viewer`, `is_owner` false, whatever its
+  `cis-*` groups. Writes and admin-only reads are refused. The cap also relies on the Vercel Preview
+  `ADMIN_SECRET` being the viewer-capped Preview credential (AA-816 C9).
+- **Opt-in alias:** the Vercel Deploy workflow points the fixed host at a preview only on the PR label
+  `preview-signin` or a dispatch from `main`.
+- **Smoke split:** per-PR previews run only unauthenticated UI smoke; the signed-in smoke runs as the Cognito E2E
+  user (A10 mailbox) on Production after each production deploy and, on dispatch, on the fixed Preview host
+  (setup fails unless the role is `viewer`).
+- **Not changed:** the CIS → Booking token bridge (`/auth/booking-token`) still mints only from an HS256 password
+  session, so no Cognito session (the Preview one included) gets a Booking token. Its retirement is AA-911 P6b at
+  the end of the project.
+
+### A12. The legacy flag is off by default (cutover S2, 22/10/2026, S247; AA-816)
+
+Supersedes the A6 values and closes its open cutover item.
+
+- **Values:** `LEGACY_ADMIN_LOGIN_ENABLED` is off unless set to `1`, `true`, `yes` or `on` (case and spaces
+  ignored). Unset, empty or a typo = off (fail closed). The API (`api/core/staff_identity.py`) and the BFF
+  (`frontend/lib/staffSession.ts`) parse it the same way; a test keeps the two lists equal.
+- **Where it is set:** nowhere. The api task definition never carried it and Vercel Production holds `false`
+  since S1, so the code default decides everywhere: the HS256 path of `/auth/verify-admin` answers 401 "Password
+  sessions are switched off; sign in again", and the BFF password form and `/api/auth/login` (404) are off on every
+  host.
+- **Why a code default and not a Terraform env value:** a `false` only in the task definition would leave every
+  other runtime (tests, a new task definition) on the old default. One reviewed code change fails closed.
+- **Still not gated (unchanged from A6):** `/auth/admin-login` and `/auth/booking-token`. AA-Booking's legacy staff
+  path (CIS password → booking-token) keeps working until AA-911 P6b; Booking's own Cognito sign-in
+  (`booking-staff` client) is the primary way in.
+- **Rollback:** revert the S2 commit (CIS #922) and deploy, or set the flag to `true` on the api task definition
+  (AA-CIS-Infra) and on the Vercel target, then redeploy both. Runbook: `docs/ops/runbooks/legacy-login-flag.md`.
+- **Accounts:** the legacy full-admin test accounts (`e2e-claude-code`, `e2e-claude-code-2`) are disabled; staff
+  and agents sign in with Cognito only (agents through the E2E mailbox, A10).
+
 ## Phase 1 status (18/10/2026)
 
 | Item | State |
@@ -290,7 +337,7 @@ mailbox or Google account". That is too strong.
 | CIS task role grant, break-glass secret alert + policy, staff-auth custom domain + branding | Applied |
 | Staff invitation email for directory-created users | In progress (follow-up) |
 | Daily reconcile trigger (ops-probe Lambda path) | Follow-up (Infra one line) |
-| Cutover (Stage S): every active row with an email + its own `cognito_sub`, managed-login break-glass test, principal-aware secret check (C9), `ADMIN_SECRET` rotation, flag off per A6, E2E mailbox (D2) | Not started |
+| Cutover (Stage S): every active row with an email + its own `cognito_sub`, managed-login break-glass test, principal-aware secret check (C9), `ADMIN_SECRET` rotation, flag off per A6, E2E mailbox (D2) | S1 done 19/10 (Production BFF flag off); S2 done 22/10 (flag off by default, A12). Update S248 |
 | Booking Phase 2 (verifier copy, `booking-staff` sign-in, bridge retirement) | Not started |
 
 ## Consequences

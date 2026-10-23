@@ -7,22 +7,23 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-23
 review_every_days: 90
-last_tested: 2026-10-19
+last_tested: 2026-10-23
 tested_where: dev-acc2
-tested_evidence: docs/audits/2026-10-19-S244-aa816-cutover/cutover-report.md (S1, Production BFF flag off, S244)
+tested_evidence: docs/audits/2026-10-19-S244-aa816-cutover/cutover-report.md (S1, S244); Linear AA-816 S247 comment + S248 live check (S2)
 related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendments.md, AA-816, AA-680]
 ---
 
 # Switch off the legacy staff password login (AA-816 cutover)
 
-> [!WARNING]
-> Partly tested. Steps 1-3 ran on Dev on 19/10/2026 (AA-816 Stage S, S244): **S1 is done on Production** — Vercel
-> `aa-cis-frontend` Production holds the flag `false`, `POST /api/auth/login` answers 404, the login page shows only
-> "Sign in with company email", Cognito E2E 7/7 after the change. The rollback (step 5) has not been needed or run.
-> Preview keeps the legacy flag on (decision N-E) and the API flag is still on (S2, with AA-680). Evidence:
-> `docs/audits/2026-10-19-S244-aa816-cutover/cutover-report.md`.
+> [!IMPORTANT]
+> **Both stages are done.** S1 (19/10/2026, S244): Vercel `aa-cis-frontend` Production holds `false`. S2
+> (22/10/2026, S247, CIS #922): the **code default is now off** in the API and the BFF, so every host refuses
+> password sessions, Preview included; previews sign in through Cognito on the fixed Preview host (ADR 0006a A11,
+> A12). Live check 23/10/2026 (S248): api task definition without the variable, `POST /api/auth/login` → 404,
+> an HS256-shaped token on `/auth/verify-admin` → 401 "Password sessions are switched off; sign in again".
+> This page is now the **rollback** reference; steps 1-3 below are the history of S1.
 <!-- callout break -->
 > [!NOTE]
 > The flag is the legacy admin login flag, `LEGACY_ADMIN_LOGIN_ENABLED`. Its name contains underscores: Nghiệp edits
@@ -30,16 +31,17 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
 
 ## What the flag does (ADR 0006a A6)
 
-- Values: on by default. Only `0`, `false`, `no` or `off` (case and spaces ignored) turn it off; unset, empty or a
-  typo keeps the legacy login on. The API and the BFF parse it the same way.
+- Values (since S2, ADR 0006a A12): **off by default**. Only `1`, `true`, `yes` or `on` (case and spaces ignored)
+  turn it on; unset, empty or a typo keeps the legacy login off. The API and the BFF parse it the same way. Before
+  S2 the rule was the reverse (on unless explicitly off).
 - It gates the CIS UI password form, the BFF route `/api/auth/login` (404 when off) and the HS256 path of
   `/auth/verify-admin`.
 - It does **not** gate `/auth/admin-login` or `/auth/booking-token`: Booking staff still sign in through them until
   AA-680 (Phase 2).
-- It is read in two places: the BFF (Vercel `aa-cis-frontend` environment, per target) and the API (ECS task
-  definition; not set today, so on). The API serves Production and Preview alike.
-- Recommended cutover (S243 plan, Nghiệp's call N5): turn off **only the Production BFF**. The API stays on until
-  AA-680, so Booking and Preview logins keep working.
+- It is read in two places: the BFF (Vercel `aa-cis-frontend` environment, per target; Production holds `false`)
+  and the API (ECS task definition; not set, so off). The API serves Production and Preview alike.
+- History: S1 turned off only the Production BFF (Nghiệp's call N5); S2 flipped the code default once Preview had
+  a Cognito sign-in (ADR 0006a A11).
 
 ## Preconditions (readiness)
 
@@ -82,21 +84,40 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
 
 5. Rollback (any time): Nghiệp deletes the Production value or sets it to `true`, then redeploys production.
    Expected: the password form is back and `/api/auth/login` no longer answers 404.
+   **Since S2 this alone is not enough** (unset = off, and the API refuses HS256): see Roll back below.
 
 6. The principal-aware admin-secret check, the Preview credential and the admin-secret rotation (AA-816 C9 + I6,
    [secret rotation](secret-rotation.md)) did not wait for AA-680 (decision N-C): done on 19/10/2026 right after S1.
-   Later, with AA-680 shipped (S2): the API flag off (Terraform env on the api task definition, an Infra PR edited by
-   hand). Decision N-E: the API flag stays on until Previews have another way to sign in.
+7. S2 (22/10/2026, S247): CIS #922 flipped the default to off in `api/core/staff_identity.py` and
+   `frontend/lib/staffSession.ts`, after the Preview Cognito sign-in (CIS #911) and the smoke split (CIS #912) were
+   live. No Terraform change: the api task definition never set the variable. Then Nghiệp disabled the legacy
+   account `e2e-claude-code` on the Staff page.
+   Verify (any time, read-only):
+
+   ```bash
+   curl -s -o /dev/null -w "%{http_code}\n" -X POST https://aa-cis.lumiguides.it.com/api/auth/login
+   curl -s -X POST https://api-cis.lumiguides.it.com/auth/verify-admin -H 'content-type: application/json' -d '{"token":"a.b.c"}'
+   ```
+
+   Expected: `404`, then `{"detail":"Password sessions are switched off; sign in again"}`. The CIS Cognito E2E
+   (`e2e-cognito.yml`, dispatch from `main`) stays green.
 
 ## Verify the result
 
-- Production: password route 404, Cognito sign-in works for every staff member.
-- Preview: unchanged (password login still works there, by design).
+- Production and the fixed Preview host: password route 404, Cognito sign-in works (Preview capped at viewer).
+- Per-deployment previews: no staff sign-in; their UI smoke runs the public specs only.
+- AA-Booking: unaffected (`/auth/admin-login` and `/auth/booking-token` are not gated, until AA-911 P6b).
 
 ## Roll back or abort
 
-- Step 5 restores the legacy login in one redeploy (about 2 minutes). Abort before step 2 if step 1 shows an unlinked
-  active human row.
+- Since S2, unset means off, so deleting the Vercel value no longer brings the password form back. Two ways:
+  - **Revert** CIS #922 (`30b64228`) through a PR, then Deploy Dev (api + worker) and a Vercel production deploy.
+    Simplest; restores the old default everywhere.
+  - **Flag on:** set the variable to `true` on the api task definition (AA-CIS-Infra, hand edit in VSCode, Terraform
+    apply of the api service) **and** on the Vercel target (Production and/or Preview), then redeploy both. Both
+    sides are needed: a BFF form whose sessions the API refuses bounces at the first verify.
+  - Either way, a legacy account must be active to use the form: `e2e-claude-code*` are disabled (Staff page).
+- Step 5 above describes the pre-S2 rollback of S1 and no longer works alone.
 
 ## Escalation
 
@@ -108,3 +129,5 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
 |---|---|---|---|---|
 | 2026-10-19 | dev-acc2, step 1 only (S243 main session) | Claude Code | `docs/audits/2026-10-19-S243-platform-lanes/aa816-readiness-snapshot.json`: Nghiệp linked; break-glass and Ms. Thư not linked yet; two e2e accounts without email | not ready |
 | 2026-10-19 | dev-acc2, steps 1-3 on Production (S244 main session) | Claude Code + Nghiệp | `docs/audits/2026-10-19-S244-aa816-cutover/cutover-report.md`: readiness snapshot (7 active rows; no email: the three `e2e-claude-code*` rows; no `cognito_sub` before the break-glass link: `admin`, the three e2e rows, `thu` — `thu` ready per N-A, `admin` linked by the break-glass test), Production flag `false` + redeploy, `POST /api/auth/login` 404, login page email-only, Cognito E2E 7/7 | pass (S1 done; rollback step 5 not run) |
+| 2026-10-22 | dev-acc2, S2 (S247 main session) | Claude Code + Nghiệp | Linear AA-816 S247 comment: HS256 on `/auth/verify-admin` 200 → 401 after CIS #922; `/auth/booking-token` unchanged; BFF `/api/auth/login` 404; Cognito E2E green (run 39720383620); `e2e-claude-code` disabled | pass |
+| 2026-10-23 | dev-acc2, step 7 verify, read-only (S248 lane) | Claude Code | api task definition `aa-cis-dev-api:775`, image `dev-5a54bd26…`, no `LEGACY_*` env; `POST /api/auth/login` 404; HS256-shaped token → 401 "Password sessions are switched off" | pass |
