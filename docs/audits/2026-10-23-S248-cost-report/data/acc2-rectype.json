@@ -1,0 +1,131 @@
+{
+    "GroupDefinitions": [
+        {
+            "Type": "DIMENSION",
+            "Key": "RECORD_TYPE"
+        }
+    ],
+    "ResultsByTime": [
+        {
+            "TimePeriod": {
+                "Start": "2026-08-01",
+                "End": "2026-09-01"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": [
+                        "Tax"
+                    ],
+                    "Metrics": {
+                        "NetUnblendedCost": {
+                            "Amount": "0",
+                            "Unit": "USD"
+                        },
+                        "UnblendedCost": {
+                            "Amount": "0",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "Usage"
+                    ],
+                    "Metrics": {
+                        "NetUnblendedCost": {
+                            "Amount": "140.2209643786",
+                            "Unit": "USD"
+                        },
+                        "UnblendedCost": {
+                            "Amount": "140.2209643786",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ],
+            "Estimated": false
+        },
+        {
+            "TimePeriod": {
+                "Start": "2026-09-01",
+                "End": "2026-10-01"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": [
+                        "Tax"
+                    ],
+                    "Metrics": {
+                        "NetUnblendedCost": {
+                            "Amount": "0",
+                            "Unit": "USD"
+                        },
+                        "UnblendedCost": {
+                            "Amount": "0",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "Usage"
+                    ],
+                    "Metrics": {
+                        "NetUnblendedCost": {
+                            "Amount": "134.9600578984",
+                            "Unit": "USD"
+                        },
+                        "UnblendedCost": {
+                            "Amount": "134.9600578984",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ],
+            "Estimated": false
+        },
+        {
+            "TimePeriod": {
+                "Start": "2026-10-01",
+                "End": "2026-10-23"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": [
+                        "Tax"
+                    ],
+                    "Metrics": {
+                        "NetUnblendedCost": {
+                            "Amount": "0",
+                            "Unit": "USD"
+                        },
+                        "UnblendedCost": {
+                            "Amount": "0",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "Usage"
+                    ],
+                    "Metrics": {
+                        "NetUnblendedCost": {
+                            "Amount": "126.5726843742",
+                            "Unit": "USD"
+                        },
+                        "UnblendedCost": {
+                            "Amount": "126.5726843742",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ],
+            "Estimated": true
+        }
+    ],
+    "DimensionValueAttributes": []
+}

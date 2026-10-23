@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, pm, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-23
 review_every_days: 90
 related: [FIN-02, OPS-08, SEC-01, AA-896, AA-884, AA-838, AA-828]
 ---
@@ -59,14 +59,19 @@ Account IDs and profiles: the account map in `docs/onboarding.md` (AA-897).
 | Guard | Threshold | Goes to | Defined in |
 |---|---|---|---|
 | Account budget `aa-cis-dev-monthly-total` | 250 USD/month; 80 % and 100 % of actual | Alert e-mail | INF `accounts/aa365/observability.tf` |
-| Per-App budgets `aa-cis-dev-monthly-app-*` | cis 150, tripplanner 25, booking 25, shared 50 USD; 80 % actual, 100 % forecast | Alert e-mail | Same file, `var.per_app_monthly_budgets` |
+| Per-App budgets `aa-cis-dev-monthly-app-*` | cis 90, tripplanner 25, booking 25, shared 100 USD (rebalanced S248 from the October run-rate: cis ~58, shared ~84); 80 % actual, 100 % forecast | Alert e-mail | Same file, `var.per_app_monthly_budgets` |
 | Cost Anomaly Detection, AWS services monitor | Total impact of an anomaly at least 5 USD | Alerts SNS topic (e-mail, immediate) | INF `accounts/aa365/cost_anomaly.tf` (AA-896) |
 | Same monitor, AWS default subscription | Daily summary when impact is at least 100 USD and 40 % | Account e-mail | Created by AWS, not in Terraform |
+| acc3 budget `aa3-llm-monthly-total` | 250 USD/month gross of credits (= AWS Lift tier 1); 80 % and 100 % actual, 100 % forecast | E-mail to the bootstrap alert inbox | INF `accounts/acc3-bedrock/cost_guard.tf` (AA-896, applied locally with MFA) |
+| acc3 anomaly subscription `aa3-cost-anomaly-daily` | Daily summary of anomalies with total impact at least 10 USD, on the AWS services monitor | Same e-mail | Same file |
+| acc3 and acc1 AWS default subscriptions | Daily summary when impact is at least 100 USD and 40 % | Account e-mail | Created by AWS, not in Terraform |
+| acc1 budgets `AAA-Monthly-Total`, `aa-practice-monthly` | 180 and 150 USD | Account e-mail | Created by hand in the console (acc1 spends cents a month) |
 | LLM and external API caps | Per stage or provider, DB-configured | Refused calls + admin console | `shared.spend_budget` (DM-10.5) |
 
 Not available: an anomaly monitor per `App` tag. AWS allows tag and linked-account monitors only in the
-management account; the per-App budgets cover that need. Budgets on acc1 and acc3 are not verified from this
-account; check them in the next monthly review.
+management account; the per-App budgets cover that need. acc1 and acc3 were checked on 2026-10-23 (S248): acc3
+had no budget, so it now has its own (above). acc3 alerts go to an e-mail address, not the acc2 alerts topic:
+IMMEDIATE needs an SNS topic in the same account, and a cross-account topic policy is not worth it at this volume.
 
 Cost of these guards: 0 USD/month. Budgets without actions are free (AWS Budgets pricing page, read
 2026-10-19; none of ours has actions), Cost Anomaly Detection is free, and SNS e-mail stays inside the free tier.
@@ -91,8 +96,11 @@ new script that calls Cost Explorer (DM-10.4): extend the CIS client if a new gr
 One monthly report covers both the C8 capacity review and the cost report (FIN-02 = OPS-08). How to produce it:
 [monthly cost report](cost/README.md). It is saved as `docs/audits/<date>-S<nnn>-capacity-review/README.md`
 from the template [`templates/cost-report.md`](../templates/cost-report.md), drafted by Claude Code and approved by
-Nghiệp (C8a). The first one, for October 2026, is due in the first session on or after 2026-11-01; it also
-compares August, September and October per app and service and explains the jumps.
+Nghiệp (C8a). A preliminary August / September / October (month to date) comparison per account, `App` tag, service
+and usage type was made on 2026-10-23 (S248): [`docs/audits/2026-10-23-S248-cost-report/`](../audits/2026-10-23-S248-cost-report/README.md).
+The final October report is made in the first session on or after 2026-11-03 (Cost Explorer revises a day for about
+48 hours): it re-runs that folder's `scripts/fetch_ce.sh` with the month end and its read-only unit-cost SQL, then
+follows the how-to.
 
 ## Unit costs
 
