@@ -140,8 +140,9 @@ paths:
         - $ref: "#/components/parameters/TenantHeader"
       responses:
         "204":
-          description: Released
+          description: Released (idempotent; an expired or already released hold also answers 204)
         "404": {$ref: "#/components/responses/Problem"}
+        "422": {$ref: "#/components/responses/Problem"}  # invalid: the hold is confirmed (cancel is AA-974)
   /holds/{hold_id}/extend:
     parameters:
       - $ref: "#/components/parameters/HoldId"
@@ -172,6 +173,10 @@ paths:
     post:
       operationId: confirmHold
       summary: Turn a hold into a booking after the deposit; fixed departures confirm, others go on request
+      description: >-
+        Idempotent on the hold: a confirmed hold returns its booking again. 409 price_changed (hash differs from the
+        hold's quote), 410 hold_expired (expired, released, or its seats no longer fit when the confirm gets the
+        departure locks), 422 sold_out (a departure was cancelled) or invalid (request), 404 unknown hold.
       security:
         - m2m: [booking.b2b/book]
       parameters:
@@ -188,8 +193,10 @@ paths:
           content:
             application/json:
               schema: {$ref: "#/components/schemas/Booking"}
+        "404": {$ref: "#/components/responses/Problem"}
         "409": {$ref: "#/components/responses/Problem"}
         "410": {$ref: "#/components/responses/Problem"}
+        "422": {$ref: "#/components/responses/Problem"}
   /bookings/{booking_id}/cancel:
     parameters:
       - name: booking_id
@@ -430,7 +437,7 @@ components:
       required: [proposal_ref, proposal_version, currency, lines]
       properties:
         proposal_ref: {type: string, maxLength: 64}
-        proposal_version: {type: integer, minimum: 1}
+        proposal_version: {type: integer, minimum: 1, maximum: 2147483647}
         currency:
           type: string
           pattern: "^[A-Z]{3}$"
@@ -509,7 +516,7 @@ components:
         quote_id: {type: string, maxLength: 64}
         price_hash: {type: string, pattern: "^[a-f0-9]{64}$"}
         proposal_ref: {type: string, maxLength: 64}
-        proposal_version: {type: integer, minimum: 1}
+        proposal_version: {type: integer, minimum: 1, maximum: 2147483647}
     HoldLine:
       type: object
       additionalProperties: false
