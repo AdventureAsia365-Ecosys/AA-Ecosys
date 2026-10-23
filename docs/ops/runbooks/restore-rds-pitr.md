@@ -23,7 +23,7 @@ related: [OPS-03, OPS-03-schema, OPS-03-drills, OPS-05, AA-829, AA-892]
 - First half of a [single-schema restore](restore-schema.md) after data loss in one app (DM-9.4).
 - Not for, on its own: replacing the live instance. A restore that replaces the shared instance rolls back every app;
   it needs every owner's agreement (DM-9.4). The DSN cutover for that case is the DM-9.5 CNAME (AA-829, S248); it moves
-  the apps only once the DSN secrets name it (switch pending, see Facts): see
+  the apps because every DSN secret names it since 23/10/2026 (see Facts): see
   [Repoint db.dev.internal after a restore](#repoint-dbdevinternal-after-a-restore) below.
 
 ## Facts (read 19/10/2026)
@@ -37,11 +37,10 @@ related: [OPS-03, OPS-03-schema, OPS-03-drills, OPS-05, AA-829, AA-892]
   differed, all written after the restore point.
 - Cost: a `db.t4g.micro` for under an hour, well under 1 USD.
 - Since S248 (AA-829) the private host **`db.dev.internal`** exists: a Route 53 CNAME (TTL 60 s, private zone
-  `dev.internal`, VPC only) to the RDS endpoint (`accounts/aa365/db_dns.tf` in AA-CIS-Infra). **After the AA-829 DSN
-  switch** (pending: dry run 7/7 on 23/10/2026, the apply waits on Nghiệp) every DSN secret (master, `db-migrator`,
-  `rds-cis-app`, `rds-app-user`, Booking, TripPlanner) names that host, and `crm/dev/database-url` names it once its
-  value is written. From then on, pointing the apps at another instance = changing that one record, not seven secrets.
-  Until then the secrets name the RDS endpoint and a CNAME change moves no app: check step R0 below.
+  `dev.internal`, VPC only) to the RDS endpoint (`accounts/aa365/db_dns.tf` in AA-CIS-Infra). Since the AA-829 DSN
+  switch (23/10/2026, 7/7 secrets, services restarted and verified) every DSN secret (master, `db-migrator`,
+  `rds-cis-app`, `rds-app-user`, Booking, TripPlanner, CRM) names that host. Pointing the apps at another instance =
+  changing that one record, not seven secrets. Step R0 below still checks it before a cut-over.
 
 ## Preconditions
 

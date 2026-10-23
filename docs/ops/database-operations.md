@@ -46,8 +46,8 @@ personal logins, no SSH (DM-8.8).
   Schema Dump and the probe still use it until X1 S22 moves them to `db_migrator`. Booking (`booking`), TripPlanner (`tripplanner`) and the tenant pool
   (`aa_app_user`) have their own logins; Booking and TripPlanner objects are owned by `bk_owner` / `tp_owner`.
 - The DSN CNAME of DM-9.5 exists since S248: `db.dev.internal` (Route 53 private zone, AA-CIS-Infra
-  `accounts/aa365/db_dns.tf`, AA-829). Moving the DSN secrets onto it is pending (dry run 7/7 on 23/10/2026, the
-  apply waits on Nghiệp); until then they name the RDS endpoint. Repoint after a restore:
+  `accounts/aa365/db_dns.tf`, AA-829). Every DSN secret names it since 23/10/2026 (AA-829 switch, 7/7 secrets,
+  services restarted and verified). Repoint after a restore:
   [restore runbook](runbooks/restore-rds-pitr.md#repoint-dbdevinternal-after-a-restore).
 - Real-data dumps from 16/09/2026 sit outside git on a laptop (`docs/backups/`, ignored); securing or deleting them is
   waiting on Nghiệp (AA-829, DM-6.10).
