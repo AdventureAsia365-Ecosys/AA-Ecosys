@@ -17,6 +17,13 @@ apps/AA-TripPlanner-Web/docs/AAA/
 
 # DB backups (pg_dump từ audit — chứa data thật, KHÔNG commit)
 docs/backups/
+# AA-829 (S248): repo-wide fence for database dump formats while root is public (ADR 0014 S247);
+# gitleaks does not inspect binary dumps. No tracked file matches these today.
+*.dump
+*.pgdump
+*.sql.gz
+*.sql.zst
+*.backup
 
 # Scratch / temp
 *.out
