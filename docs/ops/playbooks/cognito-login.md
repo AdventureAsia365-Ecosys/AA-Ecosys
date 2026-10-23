@@ -60,7 +60,8 @@ aws cognito-idp admin-list-groups-for-user --user-pool-id $POOL --username <thei
 3. The custom domain fails but Cognito works: Nghiệp points the BFF back at the pool's prefix domain with the
    workforce-domain override (a Vercel env value on `aa-cis-frontend`). ADR 0006a A5 calls this the zero-deploy
    rollback because no code changes; Vercel still needs a production redeploy to pick up the value.
-4. Get in while it is broken: the legacy password login (still on until the cutover), or [break-glass](../runbooks/break-glass.md).
+4. Get in while it is broken: [break-glass](../runbooks/break-glass.md). The legacy password login is off since
+   AA-816 S2 (22/10/2026); bringing it back is a deploy, not a switch ([legacy login flag](../runbooks/legacy-login-flag.md), Roll back).
 
 ## Close
 

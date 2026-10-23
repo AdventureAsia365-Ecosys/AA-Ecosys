@@ -27,26 +27,36 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
 ## 3. Kiểm trên preview hoặc Dev
 
 1. Vercel deployment của PR = **READY/SUCCESS**.
-2. **Smoke tự động (AA-732):** mỗi PR có Vercel preview → workflow `UI smoke (Playwright)` tự chạy (`deployment_status`, env `Preview`), mở 7 trang admin chính, fail khi API `/api/` 4xx/5xx, console error, hoặc trang không có dòng/empty state; ảnh desktop/mobile × light/dark nằm trong artifact + comment trên PR. Đọc comment/artifact đó trước. Từ S244 (AA-878 N1) smoke đăng nhập bằng tài khoản **viewer** (`e2e-claude-code-viewer`, GitHub `E2E_ADMIN_*`), log ghi "logged in with staff role: viewer"; spec chỉ dành cho admin tự skip (59 passed / 7 skipped là bình thường). Chạy tay: `gh workflow run ui-smoke.yml [--ref <branch>] -f base_url=<preview URL>`; local: `BASE_URL=<preview URL> npx playwright test --project=smoke` với `E2E_ADMIN_USERNAME/PASSWORD` export từ secret `aa-cis/dev/e2e-test-viewer` (không in). **Không** chạy smoke với `base_url` = production `https://aa-cis.lumiguides.it.com`: production không còn form mật khẩu, `smoke-setup` fail "HTTP 404". Thêm trang = thêm 1 dòng vào danh sách trong `tests/e2e/smoke/ui-smoke.spec.ts`. Portal chờ tenant test (AA-741, `E2E_TENANT_API_KEY`).
-   Smoke chỉ là sàn tối thiểu — trang vừa sửa vẫn kiểm tay các bước dưới.
-3. Mở trang bằng browser (Claude in Chrome hoặc Playwright), đăng nhập đúng vai (admin / tenant test). Đăng nhập staff
-   đã đổi từ AA-816 S1 (19/10/2026, S244):
-   - **Production** (`aa-cis.lumiguides.it.com`): **không còn đăng nhập bằng mật khẩu**; trang `/login` chỉ có
-     "Sign in with company email" (Cognito, mã gửi qua email). `POST /api/auth/login` → 404. Agent không đọc được
-     hộp thư `@adventure.asia`, nên không tự đăng nhập admin trên production được.
-   - **PR preview**: form mật khẩu legacy vẫn còn (cờ Preview giữ bật đến S2), nhưng BFF của preview giữ **Preview
-     credential** (`aa-cis/dev/admin-secret-preview`, AA-816 C9) nên mọi phiên trên preview chỉ có **quyền viewer**,
-     kể cả khi đăng nhập bằng tài khoản admin. Ghi admin (lưu, duyệt, chạy job) và trang chỉ-admin trả 403 trên preview
-     — đó là thiết kế, không phải lỗi của PR.
+2. **Smoke tự động (AA-732; chia đôi từ AA-816 S247):**
+   - **Preview riêng của từng PR** (`*.vercel.app`): workflow `UI smoke (Playwright)` tự chạy (`deployment_status`,
+     env `Preview`) nhưng **chỉ spec công khai** (project `smoke-public`, không đăng nhập): Cognito không cho
+     callback wildcard nên preview của PR không có đăng nhập staff. Đọc comment/artifact trên PR trước.
+   - **Smoke có đăng nhập** (project `smoke`, spec gắn tag `@staff`, 7 trang admin chính, ảnh desktop/mobile ×
+     light/dark): đăng nhập bằng **người dùng Cognito E2E** (hộp thư E2E theo ngoại lệ A10), chỉ chạy từ `main`:
+     - Production: tự chạy sau mỗi production deploy ("UI smoke (production, signed in)"), vai **reviewer**; trang
+       reviewer không được mở phải chuyển về trang đích (`frontend/lib/rbac.ts` `PAGE_RULES`).
+     - Host Preview cố định `https://aa-cis-preview.lumiguides.it.com`: vai **viewer** (setup fail nếu khác viewer).
+       Trỏ host vào preview của PR bằng label `preview-signin`, rồi dispatch smoke từ `main`.
+     - Chạy tay (agent điều phối): `gh workflow run ui-smoke.yml --ref main -f base_url=<một trong hai host> -f staff_session=true`.
+   - Local: `BASE_URL=<URL> npx playwright test --project=smoke-public`. Smoke có đăng nhập **không chạy được từ máy
+     local** (role đọc hộp thư chỉ tin `refs/heads/main` + environment `e2e`).
+   Thêm trang = thêm 1 dòng vào danh sách trong `tests/e2e/smoke/ui-smoke.spec.ts`. Portal chờ tenant test (AA-741,
+   `E2E_TENANT_API_KEY`). Smoke chỉ là sàn tối thiểu: trang vừa sửa vẫn kiểm tay các bước dưới.
+3. Mở trang bằng browser (Claude in Chrome hoặc Playwright), đăng nhập đúng vai (admin / tenant test). **Không còn
+   đăng nhập staff bằng mật khẩu ở bất kỳ host CIS nào** từ AA-816 S2 (22/10/2026, S247; root ADR 0006a A12): API
+   từ chối mọi phiên HS256 (`/auth/verify-admin` → 401 "Password sessions are switched off"), BFF `/api/auth/login`
+   → 404, `/login` chỉ có "Sign in with company email". Tài khoản legacy `e2e-claude-code`, `e2e-claude-code-2` đã
+   tắt. Agent không đọc được hộp thư `@adventure.asia` nên không tự đăng nhập tay được; phần có đăng nhập đi qua CI.
    - Cách kiểm theo loại trang:
      | Cần kiểm | Ở đâu, bằng gì |
      |---|---|
-     | Trang đọc (viewer xem được) | PR preview, tài khoản viewer: secret `aa-cis/dev/e2e-test-viewer` (user `e2e-claude-code-viewer`) |
-     | Trang reviewer trên production sau merge | workflow `e2e-cognito.yml` (người dùng Cognito E2E, vai reviewer, hộp thư E2E theo ngoại lệ A10) — chỉ trang reviewer |
+     | Trang công khai, layout chung, trang `/login` | PR preview: smoke công khai (tự chạy) hoặc browser không đăng nhập |
+     | Trang đọc (viewer xem được) trước merge | Label `preview-signin` trên PR + dispatch smoke có đăng nhập trên host Preview cố định (vai viewer) |
+     | Trang reviewer sau merge | Smoke production có đăng nhập (tự chạy sau deploy) hoặc `e2e-cognito.yml` |
      | Trang chỉ-admin, thao tác ghi admin | Sau merge + deploy: nhờ **Nghiệp** đăng nhập production bằng mã email và kiểm (hoặc gửi ảnh); ghi rõ trong báo cáo là phần này chưa do agent kiểm |
-     | UI Booking (Booking BFF → CIS `/auth/admin-login`) | Vẫn dùng `aa-cis/dev/e2e-test-admin` (user `e2e-claude-code`) đến S2 / AA-680 |
-   - Đọc mật khẩu từ secret vào biến môi trường lúc chạy, không in hay ghi ra file/log/PR. Đổi mật khẩu một tài
-     khoản test legacy chỉ còn qua DB Migrate `run-script` có review (script `create_staff_user.py` đã bỏ ở CIS #858).
+     | UI Booking | Agent chưa có tài khoản Booking dùng được (`e2e-claude-code` đã tắt S247; người dùng Cognito E2E chưa có vai Booking): nhờ Nghiệp, ghi rõ "chưa do agent kiểm" |
+   - Không in hay ghi mã email / token ra file, log hay PR. Rollback đăng nhập mật khẩu (chỉ khi sự cố): runbook root
+     `docs/ops/runbooks/legacy-login-flag.md`, mục Roll back; cần deploy, không phải bật một công tắc.
 4. Với **mỗi trang đã đổi**, ghi lại:
    - Screenshot desktop 1440px và mobile 390px; light + dark.
    - Console: 0 error. Liệt kê warning mới.
