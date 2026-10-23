@@ -242,7 +242,7 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 
 | Edge | Contract | Source |
 |---|---|---|
-| CIS FE (Vercel) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT; staff = Cognito WORKFORCE access token as `Authorization: Bearer` (or a legacy HS256 session while `LEGACY_ADMIN_LOGIN_ENABLED` is on), plus the admin secret added by the BFF until the cutover (4.6) | `AA-CIS-App/CONTEXT.md` |
+| CIS FE (Vercel) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT; staff = Cognito WORKFORCE access token as `Authorization: Bearer` (legacy HS256 sessions refused since AA-816 S2, `LEGACY_ADMIN_LOGIN_ENABLED` off by default), plus the admin secret added by the BFF for paths outside the staff prefixes (4.6) | `AA-CIS-App/CONTEXT.md` |
 | AA-Booking ⇄ clients | REST through API GW `9z3xnalp59` (shared VPC Link) → ALB `/booking/*` → ECS `aa-booking-dev-api`. Staff auth: CIS-issued JWT verified by Booking (`aud=booking`, ADR 0004 O1; built in `bk-003`, interim until Cognito per ADR 0006). The staff admin frontend calls it through its Next.js BFF | `booking.tf`, ADR 0004 |
 | TripPlanner FE (Vercel) ⇄ BE | The Next.js BFF calls 2 Lambda URLs through API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly; header `X-TripPlanner-Key`. Env `BROWSE_API_URL` / `TRIP_API_URL` | `tripplanner.tf`, `docs/vercel-setup.md` |
 
@@ -337,7 +337,7 @@ One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan,
 
 | Population | Pool / client | State |
 |---|---|---|
-| CIS staff | WORKFORCE `us-west-1_bCcFvbSOS`, client `cis-admin` | **Live.** Email one-time code on managed login at `https://staff-auth.lumiguides.it.com` (AA-branded, own domain since S242). The CIS BFF runs auth code + PKCE; the CIS API verifies the access token (WORKFORCE issuer only, `client_id` ∈ {cis-admin, breakglass}, `token_use=access`) and resolves the `shared.admin_users` row by `(iss, sub)`; role = highest `cis-*` group. Legacy password login stays behind `LEGACY_ADMIN_LOGIN_ENABLED` until the cutover |
+| CIS staff | WORKFORCE `us-west-1_bCcFvbSOS`, client `cis-admin` | **Live.** Email one-time code on managed login at `https://staff-auth.lumiguides.it.com` (AA-branded, own domain since S242). The CIS BFF runs auth code + PKCE; the CIS API verifies the access token (WORKFORCE issuer only, `client_id` ∈ {cis-admin, breakglass}, `token_use=access`) and resolves the `shared.admin_users` row by `(iss, sub)`; role = highest `cis-*` group. Legacy password login off since AA-816 S2 (22/10/2026; `LEGACY_ADMIN_LOGIN_ENABLED` off by default, ADR 0006a A12). Preview signs in on `aa-cis-preview.lumiguides.it.com` with client `cis-admin-preview`, capped at viewer (A11) |
 | Break-glass | WORKFORCE, client `breakglass` | **Live, disabled at rest.** `admin@adventure.asia`, password + TOTP; secret `aa-identity/dev/breakglass` readable only by the MFA admin role, every read/write and token issue alerts |
 | Booking staff | WORKFORCE, client `booking-staff` (callbacks on `booking.lumiguides.it.com`) | **Phase 2, not started.** Booking still verifies the CIS bridge token (ADR 0004 O1) issued by `/auth/booking-token` from a CIS password session; Booking roles are already stored in CIS `shared.staff_app_grant` and mirrored to `booking-*` groups |
 | Tenant users | EXTERNAL `us-west-1_nKOvHan0W`, client `cis-portal` | Phase 3 (AA-813), not started; tenants keep `/auth/tenant-login` with the API key |
