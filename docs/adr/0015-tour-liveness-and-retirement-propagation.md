@@ -10,8 +10,9 @@
 - **Amends / Supersedes:** none. It keeps ADR 0007's rule that liveness is derived from columns, not stored (decision
   1), and adds the change record that rule did not cover (decision 4).
 - **Implements:** ADR 0001 decision 1 and ADR 0002 (CIS is the content system of record and the only writer);
-  ADR 0008 decisions 6 and 7 (cross-app reads through contract views, events through an outbox);
-  [`contracts/README.md`](../contracts/README.md) rules 1–5.
+  ADR 0008 decision 3 (playbook steps 6–7: cross-app reads through contract views, events through an outbox),
+  decision 5 (contracts are views only; CIS contract views live in `catalog`) and decision 9 (tour key
+  `(source_system, source_id)`); [`contracts/README.md`](../contracts/README.md) rules 1–5.
 - **Design and evidence:** audit memo
   [`docs/audits/2026-10-23-S248-tour-deletion-propagation/memo.md`](../audits/2026-10-23-S248-tour-deletion-propagation/memo.md)
   (§2 matrix with file:line evidence for every layer, §3 target rule, §4 slices L1–L7, §5 questions). Live probe of
@@ -54,14 +55,21 @@ The unit is the **catalog key** `(source_system = 'cis', source_id = silver_aa_i
 `source_key = COALESCE(source_group_id, tour_id)` (CIS 258), stable across re-uploads. CIS owns the state. It is
 **derived** from columns that already exist, never stored as a second truth:
 
-| State | Definition on today's columns | Seen by users |
-|---|---|---|
-| `served` | The key has a live version (`raw_tours.source_status = 'active' AND raw_tours.deleted_at IS NULL`; at most one per group, unique index `uq_raw_tours_active_per_group`) and that version's Master is live (`gold_aa_internal.published_tours.master_status = 'active' AND published_tours.deleted_at IS NULL`) | Normal |
-| `retired` | No live version in the group because the source was deleted at S0/A0 (trash or `DELETE`), or the live version's Master is `trashed` | Every derivative hidden; tenant copies kept with a "no longer served by AA" warning |
-| `paused` | A live version exists but its Master is `inactive` (Q1), or a supersede is waiting for the new version's Master (Q11) | Hidden like `retired`; badge "paused"; no push notification (Q1) |
-| `restored` | A key that was `retired` or `paused` and is `served` again | Behaves as `served`; consumers that acted on the retirement undo it (badges removed, `tour.reinstated` sent) |
+| State | Definition on today's columns | Reason (working values) | Seen by users |
+|---|---|---|---|
+| `served` | The key has a live version (`raw_tours.source_status = 'active' AND raw_tours.deleted_at IS NULL`; at most one per group, unique index `uq_raw_tours_active_per_group`) and that version's Master is live (`gold_aa_internal.published_tours.master_status = 'active' AND published_tours.deleted_at IS NULL`) | — | Normal |
+| `retired` | The key was ever served (some version of the group has a `published_tours` row, any status) and either: no live version because the source was deleted at S0/A0 (trash or `DELETE`); or the live version's Master is `trashed`; or no version is live, none is trashed and the newest one is `superseded` (a supersede whose successor is gone) | `source_deleted`, `master_trashed`, `superseded_orphan` | Every derivative hidden; tenant copies kept with a "no longer served by AA" warning |
+| `paused` | A live version exists but its Master is `inactive` (Q1), or a supersede is waiting for the new version's Master (Q11) | `master_inactive`, `superseded_pending` | Hidden like `retired`; badge "paused"; no push notification (Q1); per-consumer answers in decision 5 |
+| `restored` | A key that was `retired` or `paused` and is `served` again | the action that served it (`restore`, `publish`) | Behaves as `served`; consumers that acted on the retirement undo it (badges removed, `tour.reinstated` sent) |
 
-- A key that was never served (uploaded, never published) has no state: consumers see 404, not 410.
+- A key that was never served (no version has a Master: uploaded, never published) has no state: consumers see 404,
+  not 410. This covers a group whose versions are all `superseded` and that never had a Master.
+- **All-superseded groups** (`superseded_orphan`, the probe bucket of the same name): Dev has 21 of them on 23/10/2026.
+  The probe's Master counts (892 Master rows, all `master_status = 'active'`, and zero active Masters in any dead
+  group) say none of them ever had a Master, so today they are "never served" and answer 404; slice L1 confirms that
+  with one read-only count before the view relies on it. A group of this shape that once had a Master is `retired`
+  (410). Alternative (pending Nghiệp with Q11): treat the shape as an anomaly the nightly probe reports and slice L2
+  cleans up (the group is set to trashed through the service); that answer changes decisions 1 and 6 only.
 - **Supersede is not deletion.** Replacing a version (Excel replace/update) keeps the key `served` under the same
   `source_key`. What belonged to the old version (Master, atoms, ranking, route) moves to the new version or is
   switched off. **Never two active Masters in one group.** A tenant T2 copy that points at the old version gets the flag
@@ -74,9 +82,20 @@ The unit is the **catalog key** `(source_system = 'cis', source_id = silver_aa_i
 ### 2. One CIS write service
 
 Every change to a key's served state goes through **one CIS service** (working name `services/tour_lifecycle`) with
-the actions `retire`, `pause`, `supersede` and `restore`. Every writer in memo §2.1 calls it: trash, `DELETE`
-raw-tours, staging replace/update, `set-active`, Master trash / deactivate / activate, restore. In **one transaction**
-it:
+the actions `retire`, `pause`, `supersede`, `restore` and `publish`. Every writer in memo §2.1 calls it: trash,
+`DELETE` raw-tours, staging replace/update, `set-active`, Master trash / deactivate / activate, restore. The two
+**INSERT** paths that set these columns also go through it, because both can change the served state:
+
+- **Inserting a version** (ingest / staging): the row is born `source_status = 'active'` (default of CIS 052). When
+  the group already has a version this is `supersede` (old version `superseded`, key `paused` /
+  `superseded_pending` until the new Master publishes, Q11); for a new key it is a plain insert with no event,
+  because a key without a Master has no state (decision 1).
+- **Inserting a Master** (`process_export`, born `master_status = 'active'`, default of CIS 052) is `publish`. When
+  the key was `paused` or `retired` (a `superseded_pending` gap, or a re-publish after a restore of the source),
+  `publish` writes the closing `restored` event, so the tombstone (decision 4) clears in the same transaction that
+  serves the key again.
+
+In **one transaction** the service:
 
 1. changes the source and Master status and records **why**, so `restore` re-enables only the Masters this service
    switched off (not a Master staff had deactivated on purpose);
@@ -100,31 +119,45 @@ Rules the service enforces:
 - Retiring a published tour is open to staff with Master Content rights; the confirm dialog shows a dry run of the
   tenants, pieces, posts and bookings affected (Q8).
 - No other CIS code changes `raw_tours.source_status`, `raw_tours.deleted_at`, `published_tours.master_status` or
-  `published_tours.deleted_at`. A CIS guard test enforces it (the service is the only allowed writer).
+  `published_tours.deleted_at`, and no other code inserts into `raw_tours` or `published_tours`. A CIS guard test
+  enforces both, UPDATE and INSERT alike (the service is the only allowed writer): it scans for SQL that writes these
+  columns or tables outside the service module and fails the CI run.
 
 ### 3. One read view inside CIS
 
-CIS reads the served state from **one view** (working name `catalog.v_tour_liveness`: `source_system`, `source_id`,
-`tour_id`, `state`, `reason`, `changed_at`) or one SQL function behind it. `catalog._live_tour`,
+CIS reads the served state from **one view** (working name `gold_aa_internal.v_tour_liveness`: `source_system`,
+`source_id`, `tour_id`, `state`, `reason`, `changed_at`) or one SQL function behind it. `catalog._live_tour`,
 `acp_contract.v_active_tour_atoms`, the two hand copies of its rule (Slate subject seed, route guard), approve,
 `process_export`, the tenant pool, `/v1/trip/{id}` and the T7 planner all use it. The first step (slice L1) is
 smaller: add the source condition to `v_active_tour_atoms` and its two copies, so both sides of CIS agree at once.
 
-The view is internal to CIS (not granted to other apps): consumers outside CIS use decision 4 and the existing
-`catalog.v_tour`, which keeps showing live tours only.
+The view lives in a **CIS schema, not in `catalog`**: `catalog` holds contract views only (owner `catalog_owner`,
+`schema-ownership.md`; ADR 0008 decision 5), and the CIS runtime `cis_app` has no `USAGE` on `catalog` (the live probe
+got `InsufficientPrivilegeError` on `catalog.v_tour` as `cis_app`). `gold_aa_internal` fits: `cis_app`, `aa_app_user`
+(tenant pool) and `catalog_owner` already have `USAGE` there. Grants: `SELECT` to `cis_app` and `aa_app_user`, and to
+`catalog_owner` so `catalog._live_tour` reads it (the view reads RLS tables such as `published_tours`, so it follows
+the catalog-view recipe and the reader policies, as CIS 266 did for `catalog_owner`). It is not granted to other apps:
+consumers outside CIS use decision 4 and the existing `catalog.v_tour`, which keeps showing live tours only.
 
 ### 4. A CIS-owned change record and outbox for the other apps
 
-CIS adds an append-only record of served-state changes per key in schema `catalog` (working name
-`catalog.tour_lifecycle_event`: key, `tour_id`, event `retired | paused | restored | superseded`, reason,
-`replaced_by_tour_id` for a supersede, `occurred_at`, `idempotency_key`). Only the write service (decision 2) inserts.
-Two views read it, owned by `catalog_owner` like CIS 225 and granted to `booking`, `tripplanner` and `aa_app_user`
-(unguarded, `contracts/README.md` rule 5):
+CIS adds an append-only record of served-state changes per key. The **table** lives in a CIS schema written by
+`cis_app` (working name `gold_aa_internal.tour_lifecycle_event`: key, `tour_id`, event
+`retired | paused | restored | superseded`, reason, `replaced_by_tour_id` for a supersede, `occurred_at`,
+`idempotency_key`), owned by `cis_owner`, with `cis_app` `INSERT` + `SELECT` only (no `UPDATE` / `DELETE`: append-only)
+and `catalog_owner` `SELECT`. Only the write service (decision 2) inserts. `catalog` stays views only, so no
+`schema-ownership.md` exception and no `cis_app` grant on `catalog` is needed; slice L4 adds the two views to the
+`catalog` row there and a retention row for the table (ADR 0008 decision 3 step 9).
 
-- `catalog.v_tour_lifecycle_outbox`: the events, for pull consumers (ADR 0008 decision 7; cursor rule of contracts
-  rule 4);
-- `catalog.v_tour_retired`: the tombstone, one row per key whose latest event is `retired` or `paused`, so a consumer
-  can answer 410 instead of 404 and list withdrawn products in a delta feed.
+Two **contract views** read it, in `catalog`, owned by `catalog_owner` like CIS 225 and granted to `booking`,
+`tripplanner` and `aa_app_user` (unguarded, `contracts/README.md` rule 5):
+
+- `catalog.v_tour_lifecycle_outbox`: the events, for pull consumers (ADR 0008 decision 3 step 7; contracts rules 3–4:
+  idempotency key, cursor);
+- `catalog.v_tour_retired`: the tombstone, one row per key whose latest event is `retired`, `paused` or `superseded`
+  (shown as `paused` / `superseded_pending` until `publish` writes `restored`), with `state` and `reason`, so a
+  consumer can tell 410 (`retired`) from a temporary absence (`paused`) and list withdrawn products in a delta feed
+  (`retired` only).
 
 Contract **`catalog.tour.v1.3`** (additive over 1.2) describes both; `catalog.v_tour` does not change. This does not
 reverse S237 D4: tour content is still read live, never copied; the record carries only state changes, which a live
@@ -176,6 +209,17 @@ The names in decisions 2–4 are working names; the slice PRs fix them.
 **SEO** (CIS `/v1/trip/{id}`, TripPlanner tour page): **410 Gone** for `retired`; **301** to the current tour for a
 superseded version of the same `source_key`; a restored tour's page comes back (Q5). Sitemaps already drop it.
 
+**A `paused` key** (Master `inactive`, Q1; or `superseded_pending`, Q11) is hidden everywhere like a `retired` one,
+but every answer says "temporary", never "gone":
+
+| Consumer | Answer for `paused` |
+|---|---|
+| Tenant (portal, `/v1`) | Badge "paused"; no push notification (Q1); new work refused with 409 `tour_paused` (working name) |
+| AA-Booking | New quotes and holds refused with the same 409 `tour_not_served`, `reason` set; confirmed work kept, no staff flag; the B2B delta feed does **not** list it as `withdrawn` |
+| AA-TripPlanner-Web | Tour page **404** (not 410); saved trips mark the stop `available: false` with "temporarily unavailable" |
+| SEO (`/v1/trip/{id}`, tour page) | **404**, no 410 and no 301, so search engines keep the URL for when it returns; `superseded_pending` may answer 503 with `Retry-After` instead if the gap proves long (decided in L4) |
+| AA-Partner | Hidden from offer lists; proposal lines are not marked "no longer offered" |
+
 **Restore:** `restore` returns every layer to `served`, sends `tour.reinstated` to exactly the tenants that got the
 warning, removes the badges, writes `restored` to the record, enqueues `place_extract`. Other apps see the tour again
 through the catalog and the record.
@@ -184,9 +228,10 @@ through the catalog and the record.
 
 The live probe of memo §6 (CIS half and master half: Booking and TripPlanner layers) becomes a script in AA-CIS-Infra
 that runs **nightly** beside DB Schema Dump and fails when a derivative of a non-served key is live, when two Masters
-are active in one group, when a Master is active over a dead source, or when the tombstone disagrees with the derived
-state. It is the regression test of this ADR. `acp_contract.v_trip_registry` (no reader) goes into the Dead Table
-Registry.
+are active in one group, when a Master is active over a dead source, when the tombstone disagrees with the derived
+state (including a `paused` row left open after the key is served again), or when an all-superseded group has a
+Master but no `retired` row. It is the regression test of this ADR. `acp_contract.v_trip_registry` (no reader)
+goes into the Dead Table Registry.
 
 ### 7. Order of work
 
@@ -207,8 +252,10 @@ changes a view, a grant or auth is reviewed by an agent before merge (DM-11.5).
 - (+) Cost about $0: no new AWS service; the nightly probe is a few seconds of an ECS task (under $0.10 a month).
 - (−) Every CIS writer of source or Master status must move into one service (slice L2, the largest), and a guard test
   must keep it there.
-- (−) A new contract minor (`catalog.tour.v1.3`) and a new table in `catalog` to own and test; consumers gain a pull
-  job.
+- (−) A new contract minor (`catalog.tour.v1.3`), a new CIS table (`gold_aa_internal`) and two new `catalog` views
+  to own and test; consumers gain a pull job.
+- (−) `process_export` and the version insert of ingest / staging move behind the write service too (decision 2), so
+  slice L2 touches the publish path, not only the trash and status buttons.
 - (−) More 409 paths for tenants and B2B callers; messages must be clear, or support load moves to Nghiệp.
 - (−) Until L4 ships, consumers still cannot tell 410 from 404, and the CRM still needs a full resync to see a
   withdrawal.
@@ -243,4 +290,4 @@ Each answer below is what this ADR assumes. A different answer changes only the 
 | Q8 | Who may retire a published tour? | Staff with Master Content rights; the confirm dialog shows a dry run of affected tenants, posts and bookings | 2 |
 | Q9 | `lifecycle_stage` (nothing writes it)? | Not a deletion signal. Kept for sales (`phasing_out`); T7 and TripPlanner switch to the served state | 1 |
 | Q10 | Is a tenant that uses the tour only through Slate / planning (no T2) warned? | Yes: every tenant with any derivative (subject, angle request, piece, publish-log row) | 2 |
-| Q11 | Between a supersede and the publish of the new version's Master, is the key served? (added by this ADR; today the tour drops out of the catalog in that gap) | `paused`, reason `superseded_pending`, no notification; consumers treat it as temporary (TripPlanner 404, not 410). Alternative: keep serving the old version until the new Master is published | 1, 2 |
+| Q11 | Between a supersede and the publish of the new version's Master, is the key served? (added by this ADR; today the tour drops out of the catalog in that gap) | `paused`, reason `superseded_pending`, no notification; consumers treat it as temporary (decision 5 `paused` table: TripPlanner and SEO 404, not 410). The `publish` action of the new Master closes it with `restored`. Same question for a group whose versions are all `superseded`: retired (410) if it ever had a Master, no state (404) if not; alternative, a probe anomaly that L2 cleans up. Alternative for the gap: keep serving the old version until the new Master is published | 1, 2, 5, 6 |

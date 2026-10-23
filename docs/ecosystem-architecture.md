@@ -243,8 +243,9 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 - Whether an AA tour is **served** is one CIS-owned state per catalog key `(source_system, source_id)`:
   `served` / `retired` / `paused` / `restored`, derived from `raw_tours` and `published_tours` status columns, changed
   only by one CIS write service, read inside CIS from one view.
-- Other apps learn about a retirement from a CIS-owned tombstone / outbox in schema `catalog` (contract
-  `catalog.tour.v1.3`, additive), not by noticing a tour is gone from `catalog.v_tour`.
+- Other apps learn about a retirement from a CIS-owned change record (a table in a CIS schema) read through tombstone
+  / outbox contract views in `catalog` (contract `catalog.tour.v1.3`, additive), not by noticing a tour is gone from
+  `catalog.v_tour`. A `paused` key is a temporary absence (404, not 410).
 - Per app: tenants keep their T2 copies and posts with a warning, and new work is refused (409 `tour_discontinued`);
   Booking keeps confirmed bookings with a staff flag and refuses new quotes and holds; TripPlanner answers 410 and
   flags saved trips; SEO 410 for retired, 301 for superseded. A supersede is not a deletion.
