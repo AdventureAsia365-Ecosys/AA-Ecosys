@@ -2,6 +2,7 @@
 
 - **Status:** Proposed (22/10/2026, S247). Records S241 D-14 / D-25 as an ADR; Nghiệp accepts (AA-901).
   Amended 22/10/2026 (S247): root and Infra made **public** for now, see "Amendment (S247, 22/10/2026)" below.
+  Amended 23/10/2026 (S248, AA-981): visibility-switch precondition and secret scanning, see "Amendment 2" below.
 - **Scope:** AA-Ecosys: org AdventureAsia365-Ecosys and its repos (AA-Ecosys, AA-CIS-App, AA-Booking,
   AA-TripPlanner-Web, AA-CIS-Infra, and AA-Partner when it is created under [ADR 0010](0010-aa-partner-app.md)).
 - **Amends / Supersedes:** none.
@@ -10,7 +11,7 @@
   ([where a page may live](../STYLE.md#where-a-page-may-live-sec-06)).
 - **Related:** [ADR 0011](0011-github-app-identity-and-merge-rights.md) (agent identity and merge rights; the prod gate
   this ADR has to make enforceable), AA-880 (prod blueprint, the trigger), AA-866 (`main`-only secrets and OIDC trust).
-- **Related Linear:** AA-901 (U-25).
+- **Related Linear:** AA-901 (U-25), AA-981 (secret scanning guard).
 
 ## Context
 
@@ -43,7 +44,9 @@ and what stands in for it where GitHub cannot.
 | AA-CIS-Infra | **private** | Terraform with account IDs, ARNs and network IDs; generated IAM and network tables |
 
 - A new app repo is public by default; a new repo that holds infrastructure, operations or business records is private.
-- Moving a repo between public and private is an ADR amendment, not a settings change.
+- Moving a repo between public and private is an ADR amendment, not a settings change. Going from private to
+  public has a precondition (Amendment 2): a full-history scan with the repo rules and rotation of every real finding
+  **before** the switch.
 
 ### 2. Plan: GitHub Free
 
@@ -58,7 +61,7 @@ and what stands in for it where GitHub cannot.
 | Human review of risky PRs (from prod, ADR 0011 decision 4) | CODEOWNERS + "Require review from Code Owners" | not enforceable by GitHub on Free; see decision 4 |
 | Secrets only for `main` | environment with a `main`-only branch policy | repo or environment secret plus a job guard `if: github.ref == 'refs/heads/main'` (AA-866) |
 | AWS access from CI | OIDC trust limited to `refs/heads/main` or a named environment | same; the apply role's trust is the real fence |
-| Secret scanning | GitHub secret scanning (free on public) + gitleaks in CI | gitleaks in CI (root docs-lint, Infra secret-scan) |
+| Secret scanning | GitHub secret scanning and push protection (free on public) + gitleaks in CI | gitleaks in CI: PR scan + full-history job (`secret-scan.yml` in root and Infra, AA-981); GitHub secret scanning only while the repo is public (paid on private) |
 
 ### 4. Prod trigger: re-decide for the private repos
 
@@ -92,6 +95,35 @@ Decided by Nghiệp on 22/10/2026:
   rule (no credential, JWT, API key, cookie or tenant API key; gitleaks before committing audits and exports).
 - **Plan:** both repos go back to private when the coding phase ends (Nghiệp). At that point, re-decide between
   paying for Actions minutes (budget) and a self-hosted runner for the private repos, and amend this ADR again.
+
+## Amendment 2 (S248, 23/10/2026): precondition for a visibility switch, secret scanning on
+
+Why: on 22/10/2026 an external scanner (GitGuardian) flagged a credential in AA-CIS-Infra history a few hours after
+the switch to public. It sat in an old committed variables file that had left `main` earlier, but history kept it.
+The pre-switch scan of S247 missed it: it ran gitleaks with the default rules, which do not flag `name = "value"` in
+a tfvars file, and Infra's own PR check only reads the lines a PR adds. Handling of the historical findings is
+tracked in the private record (Linear AA-981), not in this public page.
+
+- **Precondition before any private → public switch** (a repo, or a fork or mirror of one):
+  1. run a full-history gitleaks scan **with the repo's `.gitleaks.toml`** (not the default rules alone), over every
+     branch, tag and pull request head (`refs/pull/*/head`, closed PRs included; a `git clone --mirror` has them):
+     `git` mode with no `--log-opts` (local command: header of the root `secret-scan.yml`);
+  2. treat each finding as real until shown otherwise; **rotate** every real credential **before** the switch (a
+     history rewrite is not enough: forks, caches and the GitHub event API keep old commits);
+  3. pin the rotated or false-positive findings by fingerprint in `.gitleaksignore`, with a comment, so the
+     full-history job starts green;
+  4. right after the switch, turn on GitHub secret scanning and push protection (repo Settings → Code security, or
+     the `security_and_analysis` field of the repos API) and read both back.
+- **Public → private** (the plan when the coding phase ends): GitHub secret scanning stops on Free private repos;
+  the gitleaks PR and full-history jobs stay and become the only scanner. They use private Actions minutes (about a
+  minute a night per repo), to count in the re-decision above.
+- **State on 23/10/2026:** all five repos are public with secret scanning and push protection on. Root and Infra
+  run `secret-scan.yml`: a PR scan that reads its rules and baseline from the base commit (a PR that changes them
+  needs the label `secret-scan-baseline-reviewed`), and a nightly full-history scan over branches, tags and PR
+  heads. Same rules in both, incl. `credential-key-literal` for credential-named keys with literal values in tfvars,
+  `.env*`, JSON and YAML. Historical findings are pinned by fingerprint.
+- **Not yet covered:** the three app repos (AA-CIS-App, AA-Booking, AA-TripPlanner-Web) and AA-Partner have no
+  full-history job; their full-history check with these rules is still a manual step (lesson log, AA-981).
 
 ## Consequences
 

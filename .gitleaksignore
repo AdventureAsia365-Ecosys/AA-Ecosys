@@ -5,3 +5,35 @@ docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_existing_stats.json:generic-
 docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_reuse_t_map.md:generic-api-key:193
 docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave3_flag.py:generic-api-key:54
 docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave4_flag.py:generic-api-key:62
+
+# Full-history baseline (AA-981, S248): the first full-history scan with .gitleaks.toml found only
+# these, all in frozen audit evidence. None is a credential:
+# - Jev `question_key` names, TripPlanner `tp_key` UUIDs and backlog `key` slugs in JSON exports;
+# - an S3 object key (`BUCKET, KEY = ...`) in an audit helper script (line 43 when added, 51 now);
+# - a Cognito app client ID quoted as the token `aud` (public, not a secret);
+# - a table cell of a CRM design note that the generic rule reads as `auth, <word>`.
+# The same lines exist on two commits each (lane branch + squash merge), so they are listed
+# without a commit (file:rule:line), the format this file already uses.
+docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:95
+docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:134
+docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:212
+docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:251
+docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:264
+docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:45
+docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:421
+docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:876
+docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1442
+docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1474
+docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1702
+docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1858
+docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1876
+docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:2009
+docs/audits/2026-10-16-S240-aa859/aa859_flag.py:generic-api-key:43
+docs/audits/2026-10-16-S240-aa859/aa859_flag.py:generic-api-key:51
+docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md:generic-api-key:39
+docs/audits/2026-10-20-S245-tenant-crm/v2/crm-design-B-serverless.md:generic-api-key:715
+docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:30
+docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:507
+docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:546
+docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:646
+docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:721
