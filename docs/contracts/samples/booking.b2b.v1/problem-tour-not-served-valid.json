@@ -1,0 +1,13 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Problem",
+  "expect": "valid",
+  "why": "AA-986 (root ADR 0015): a quote, hold or confirm on a trip plan whose tour AA retired is refused with the tour, its state and the reason",
+  "payload": {
+    "error": "tour_not_served",
+    "message": "line L1: tour 5a000000-0000-4000-8000-000000000001 is no longer offered by AA (source_deleted); remove the line or offer another tour",
+    "tour": {"source_system": "cis", "source_id": "5a000000-0000-4000-8000-000000000001"},
+    "tour_state": "retired",
+    "reason": "source_deleted"
+  }
+}
