@@ -20,11 +20,13 @@ only — never a value.** The machine-readable twin is [`secrets-register.yaml`]
 - GitHub scopes (repo vs environment) and the Vercel names are confirmed by the main session's
   M0 listing (`gh secret list` per repo/env/org, Vercel env names without values); subagents cannot
   run `gh secret`.
-- **DSN host (AA-829, S248):** every database DSN secret in this register (`aa-cis/dev/rds`, `aa-cis/dev/db-migrator`,
-  `aa-cis/dev/rds-cis-app`, `aa-cis/dev/rds-app-user`, `booking/dev/database-url`, `tripplanner/dev/database-url`,
-  `crm/dev/database-url`) names the private host **`db.dev.internal`** (Route 53 private zone `dev.internal`, CNAME to
-  the RDS endpoint, TTL 60 s, resolvable only inside the VPC; AA-CIS-Infra `accounts/aa365/db_dns.tf`), never the RDS
-  endpoint. A new DSN uses the same host. `sslmode` stays `require` (the RDS certificate does not name
+- **DSN host (AA-829, S248):** after the AA-829 DSN switch (**pending**: dry run 7/7 on 23/10/2026, the apply waits
+  on Nghiệp) every database DSN secret in this register (`aa-cis/dev/rds`, `aa-cis/dev/db-migrator`,
+  `aa-cis/dev/rds-cis-app`, `aa-cis/dev/rds-app-user`, `booking/dev/database-url`, `tripplanner/dev/database-url`)
+  names the private host **`db.dev.internal`** (Route 53 private zone `dev.internal`, CNAME to the RDS endpoint, TTL
+  60 s, resolvable only inside the VPC; AA-CIS-Infra `accounts/aa365/db_dns.tf`), not the RDS endpoint; until then
+  they name the endpoint. `crm/dev/database-url` names the host once its value is written. A new DSN uses
+  `db.dev.internal`. `sslmode` stays `require` (the RDS certificate does not name
   `db.dev.internal`, so `verify-full` would fail). DB Migrate `set-password` refuses a role secret whose host differs
   from the master's, so the secrets move together; a restore or replacement of the instance changes the CNAME, not the
   secrets ([restore runbook](../ops/runbooks/restore-rds-pitr.md#repoint-dbdevinternal-after-a-restore)).

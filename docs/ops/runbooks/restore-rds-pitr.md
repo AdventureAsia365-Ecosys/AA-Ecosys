@@ -22,8 +22,9 @@ related: [OPS-03, OPS-03-schema, OPS-03-drills, OPS-05, AA-829, AA-892]
 - The restore drill (DM-9.3): on Dev when this procedure changes and once before prod; quarterly from prod.
 - First half of a [single-schema restore](restore-schema.md) after data loss in one app (DM-9.4).
 - Not for, on its own: replacing the live instance. A restore that replaces the shared instance rolls back every app;
-  it needs every owner's agreement (DM-9.4). The DSN cutover for that case exists since S248 (DM-9.5 CNAME,
-  AA-829): see [Repoint db.dev.internal after a restore](#repoint-dbdevinternal-after-a-restore) below.
+  it needs every owner's agreement (DM-9.4). The DSN cutover for that case is the DM-9.5 CNAME (AA-829, S248); it moves
+  the apps only once the DSN secrets name it (switch pending, see Facts): see
+  [Repoint db.dev.internal after a restore](#repoint-dbdevinternal-after-a-restore) below.
 
 ## Facts (read 19/10/2026)
 
@@ -35,10 +36,12 @@ related: [OPS-03, OPS-03-schema, OPS-03-drills, OPS-05, AA-829, AA-892]
   end against the Dev target RTO < 1 h (C1.2). 148/148 tables, migration heads equal; 18 Booking and 25 shared rows
   differed, all written after the restore point.
 - Cost: a `db.t4g.micro` for under an hour, well under 1 USD.
-- Since S248 (AA-829) every DSN secret (master, `db-migrator`, `rds-cis-app`, `rds-app-user`, Booking, TripPlanner,
-  CRM) names the private host **`db.dev.internal`**, a Route 53 CNAME (TTL 60 s, private zone `dev.internal`, VPC only)
-  to the RDS endpoint (`accounts/aa365/db_dns.tf` in AA-CIS-Infra). Pointing the apps at another instance = changing
-  that one record, not seven secrets.
+- Since S248 (AA-829) the private host **`db.dev.internal`** exists: a Route 53 CNAME (TTL 60 s, private zone
+  `dev.internal`, VPC only) to the RDS endpoint (`accounts/aa365/db_dns.tf` in AA-CIS-Infra). **After the AA-829 DSN
+  switch** (pending: dry run 7/7 on 23/10/2026, the apply waits on Nghiệp) every DSN secret (master, `db-migrator`,
+  `rds-cis-app`, `rds-app-user`, Booking, TripPlanner) names that host, and `crm/dev/database-url` names it once its
+  value is written. From then on, pointing the apps at another instance = changing that one record, not seven secrets.
+  Until then the secrets name the RDS endpoint and a CNAME change moves no app: check step R0 below.
 
 ## Preconditions
 
@@ -118,10 +121,21 @@ Use only when a restored instance must **take over** from `aa-cis-dev-db` (every
 never repointed. This section is UNTESTED (written 23/10/2026 from `db_dns.tf`); the next drill should run it against
 the drill copy and back.
 
-Preconditions: the restored instance is `available` and step 4 passed against it; every job table is idle
+Preconditions: the AA-829 DSN switch is applied (R0); the restored instance is `available` and step 4 passed against
+it; every job table is idle
 (`shared.job`, `booking.job`, `crm.job`; DM-11.4); an MFA session; a local checkout of AA-CIS-Infra `main`, pulled
 (apply from `main`, never from a branch). No CI **Terraform Apply** may run while the override is set (it would point
 the name back to the old instance): tell the team before step R2.
+
+R0. Check that the apps connect by name. In the CIS api container (ECS exec, [pattern](ecs-exec-s3-mediated.md)):
+
+   ```bash
+   python3 -c "import os,urllib.parse;print(urllib.parse.urlsplit(os.environ['DATABASE_URL']).hostname)"
+   ```
+
+   Expected: `db.dev.internal` (repeat in the Booking api container). Anything else: the switch is not applied and R2
+   would move no app; apply the AA-829 switch first (every owner's go), or stop and repoint the secrets instead.
+   Rollback: none - read-only.
 
 R1. Read the restored instance's address (bare hostname, no port).
 
@@ -151,11 +165,19 @@ R3. Move the open connections. New connections follow within the 60 s TTL; poole
    [DB Migrate](db-migrate.md) `check` to see the restored instance's migration heads.
    Rollback: R2 rollback, then the same redeploys.
 
-R4. Make it permanent before the next CI apply: either bring the restored instance under Terraform (rename the old
-   instance away, rename the restored one to `aa-cis-dev-db`, then a targeted local apply **without** the override),
-   or keep the override and record it in the Infra repo by PR. Never leave the override only on a laptop.
-   The DSN secrets do not change: they already name `db.dev.internal`. DB Migrate `set-password` keeps working because
-   the master secret and every role secret name the same host.
+R4. Make it permanent before the next CI apply. Never leave the override only on a laptop.
+   - **Default: keep the override and record it in the Infra repo by PR** (`db_dns_target_override` = the R1 address
+     in the account's tfvars), so a CI apply keeps the name on the restored instance.
+   - Only after a drill has tested it: bring the restored instance under Terraform. Renaming alone does not work: the
+     state of `module.rds.aws_db_instance.main` is keyed by the instance's resource id, so Terraform keeps tracking the
+     OLD instance and the next plan tries to rename it back (and the CI plan guard refuses `aws_db_instance` changes
+     anyway). Do it in a local MFA session: rename the old instance away and the restored one to `aa-cis-dev-db` (AWS
+     CLI), `terraform state rm module.rds.aws_db_instance.main`, then
+     `terraform import module.rds.aws_db_instance.main aa-cis-dev-db`; the next plan must show no replace of the instance
+     before a PR removes the override. (An import in CI would need `allow_guarded`.)
+
+   The DSN secrets do not change: after the AA-829 switch they name `db.dev.internal`. DB Migrate `set-password` keeps
+   working because the master secret and every role secret name the same host.
 
 ## Verify the result
 

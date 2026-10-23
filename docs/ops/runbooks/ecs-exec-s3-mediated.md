@@ -116,7 +116,9 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 ECS exec also carries the `AWS-StartPortForwardingSessionToRemoteHost` document, so DBeaver can reach the DB through
 the running api task. The remote host is the private DB name **`db.dev.internal`** (AA-829, S248): the task resolves
 it inside the VPC, and it follows a restore or replacement of the instance, so this page needs no endpoint lookup.
-Every DSN secret names the same host. Fallback, only if the name does not resolve (private zone missing): the RDS
+The CNAME already points at `aa-cis-dev-db`, so the port-forward works before the AA-829 DSN switch too. That switch
+(pending: dry run 7/7 on 23/10/2026, the apply waits on Nghiệp) moves the DSN secrets to the same host; until it is
+applied they still name the RDS endpoint. Fallback, only if the name does not resolve (private zone missing): the RDS
 endpoint from
 `aws rds describe-db-instances --db-instance-identifier aa-cis-dev-db --profile aa365-admin --region us-west-1 --query "DBInstances[0].Endpoint.Address" --output text`.
 
