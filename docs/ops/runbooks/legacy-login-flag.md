@@ -118,6 +118,10 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
     sides are needed: a BFF form whose sessions the API refuses bounces at the first verify.
   - Either way, a legacy account must be active to use the form: `e2e-claude-code*` are disabled (Staff page).
 - Step 5 above describes the pre-S2 rollback of S1 and no longer works alone.
+- The comment on the Vercel Production variable must say the same, since that is what people read during an
+  incident: `AA-816 S1 (S244) + S2 (S247): code default is off; rollback = revert CIS #922 or set true here AND
+  on the api task definition, then redeploy both (runbook legacy-login-flag.md)`. The S1 comment ("Rollback: set
+  true or delete, redeploy") was replaced in S248.
 
 ## Escalation
 

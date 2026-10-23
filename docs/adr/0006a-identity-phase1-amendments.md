@@ -314,8 +314,8 @@ Supersedes the A6 values and closes its open cutover item.
 - **Values:** `LEGACY_ADMIN_LOGIN_ENABLED` is off unless set to `1`, `true`, `yes` or `on` (case and spaces
   ignored). Unset, empty or a typo = off (fail closed). The API (`api/core/staff_identity.py`) and the BFF
   (`frontend/lib/staffSession.ts`) parse it the same way; a test keeps the two lists equal.
-- **Where it is set:** nowhere. The api task definition never carried it and Vercel Production holds `false`
-  since S1, so the code default decides everywhere: the HS256 path of `/auth/verify-admin` answers 401 "Password
+- **Where it is turned on:** nowhere. Vercel Production holds an explicit `false` (since S1) and the api task
+  definition does not set it, so the code default (off) decides everywhere: the HS256 path of `/auth/verify-admin` answers 401 "Password
   sessions are switched off; sign in again", and the BFF password form and `/api/auth/login` (404) are off on every
   host.
 - **Why a code default and not a Terraform env value:** a `false` only in the task definition would leave every
