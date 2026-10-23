@@ -54,6 +54,7 @@ Everything runs on **acc2** (us-west-1) except the LLM satellite accounts; see t
 | [Switch off the legacy staff password login](runbooks/legacy-login-flag.md) | draft, UNTESTED | readiness read only |
 | [Use a break-glass path](runbooks/break-glass.md) | draft, UNTESTED | API path 2026-10-18 |
 | [Handle an SES bounce or complaint alarm](runbooks/ses-bounce.md) | draft, UNTESTED | read-only only |
+| [Handle a CRM KMS key alarm](runbooks/crm-keys.md) | draft, UNTESTED | rule patterns only (AA-932) |
 | Data subject request (manual delete/export) | planned (AA-839, D-11) | - |
 | Disaster recovery overview (`dr.md`) | planned (AA-829 / AA-880) | - |
 
