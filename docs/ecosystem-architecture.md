@@ -238,6 +238,19 @@ Live on Dev since 14/10/2026 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
   and TripPlanner reading `catalog.*` place and graph views. TripPlanner cuts over only when the views cover every tour the
   legacy tables cover.
 
+### 4.0a Tour liveness and retirement (ADR 0015, Proposed, AA-986)
+
+- Whether an AA tour is **served** is one CIS-owned state per catalog key `(source_system, source_id)`:
+  `served` / `retired` / `paused` / `restored`, derived from `raw_tours` and `published_tours` status columns, changed
+  only by one CIS write service, read inside CIS from one view.
+- Other apps learn about a retirement from a CIS-owned tombstone / outbox in schema `catalog` (contract
+  `catalog.tour.v1.3`, additive), not by noticing a tour is gone from `catalog.v_tour`.
+- Per app: tenants keep their T2 copies and posts with a warning, and new work is refused (409 `tour_discontinued`);
+  Booking keeps confirmed bookings with a staff flag and refuses new quotes and holds; TripPlanner answers 410 and
+  flags saved trips; SEO 410 for retired, 301 for superseded. A supersede is not a deletion.
+- Rule and open questions: [ADR 0015](adr/0015-tour-liveness-and-retirement-propagation.md); evidence:
+  [S248 audit memo](audits/2026-10-23-S248-tour-deletion-propagation/memo.md).
+
 ### 4.1 Frontend ⇄ backend
 
 | Edge | Contract | Source |
