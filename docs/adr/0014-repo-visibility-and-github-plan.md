@@ -107,7 +107,8 @@ tracked in the private record (Linear AA-981), not in this public page.
 - **Precondition before any private → public switch** (a repo, or a fork or mirror of one):
   1. run a full-history gitleaks scan **with the repo's `.gitleaks.toml`** (not the default rules alone), over every
      branch, tag and pull request head (`refs/pull/*/head`, closed PRs included; a `git clone --mirror` has them):
-     `git` mode with no `--log-opts` (local command: header of the root `secret-scan.yml`);
+     `git` mode with `--log-opts="--all --full-history --diff-filter=tuxdb --diff-merges=remerge"` (gitleaks'
+     default plus the content of merge commits; local command: header of the root `secret-scan.yml`);
   2. treat each finding as real until shown otherwise; **rotate** every real credential **before** the switch (a
      history rewrite is not enough: forks, caches and the GitHub event API keep old commits);
   3. pin the rotated or false-positive findings by fingerprint in `.gitleaksignore`, with a comment, so the
@@ -120,7 +121,7 @@ tracked in the private record (Linear AA-981), not in this public page.
 - **State on 23/10/2026:** all five repos are public with secret scanning and push protection on. Root and Infra
   run `secret-scan.yml`: a PR scan that reads its rules and baseline from the base commit (a PR that changes them
   needs the label `secret-scan-baseline-reviewed`), and a nightly full-history scan over branches, tags and PR
-  heads. Same rules in both, incl. `credential-key-literal` for credential-named keys with literal values in tfvars,
+  heads, merge commits included. Same rules in both, incl. `credential-key-literal` for credential-named keys with literal values in tfvars,
   `.env*`, JSON and YAML. Historical findings are pinned by fingerprint.
 - **Not yet covered:** the three app repos (AA-CIS-App, AA-Booking, AA-TripPlanner-Web) and AA-Partner have no
   full-history job; their full-history check with these rules is still a manual step (lesson log, AA-981).
