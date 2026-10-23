@@ -63,7 +63,7 @@ Nguồn số liệu: `docs/audits/2026-10-23-S248-wrap/state-snapshot.md` (kiể
 - AA-910: Nghiệp mở trang staff Booking ở 1440 px rồi đóng.
 - AA-829: restore drill (S259). AA-896: báo cáo tháng 10 từ 01/11.
 - Release PR đang mở: CIS #950 (0.7.0), Booking #66 (0.4.0), TP #137 (0.6.0), AA-Partner #3 (0.2.0) — để phiên sau cắt release.
-- Jira S248: 7 nháp chờ Nghiệp duyệt (`.tmp-session/S248-jira-drafts.md`).
+- Jira S248: Nghiệp duyệt cả 7 nháp, đã đăng: PR-13 (10496), PR-25 (10497), PR-26 (10498), PR-27 (10499), PR-22 (10500), PR-24 (10501), PR-23 (10502).
 
 ## Lưu ý kỹ thuật cho phiên sau
 
@@ -72,3 +72,14 @@ Nguồn số liệu: `docs/audits/2026-10-23-S248-wrap/state-snapshot.md` (kiể
 - Phản hồi restore có `tenants_reinstated` riêng (không phải `tenants_notified`).
 - Kiểm STS luôn kèm `</dev/null` + timeout (lệnh chờ MFA treo phiên).
 - Bài học S248: 17 mục mới trong `skill/aa-lessons/lessons.md`.
+
+## Duyệt cuối phiên (trang quyết định, nhóm "Cuối S248")
+
+Nghiệp duyệt và dừng phiên; các việc sau làm đầu S249 (backlog §3 dòng 0a–0g):
+- e01 AA-645: rubric brand-fit v2 + đo lại, pilot 3 → shadow ≤ 50 tour (~$4,5).
+- e02 AA-783: báo cáo đồng thuận người–panel ($0), đóng issue.
+- e03 AA-829: restore drill đầy đủ, có lật `db.dev.internal` (~$0,10) + tập dượt khôi phục 1 schema.
+- e04 AA-910: agent tự kiểm 1440 px bằng tài khoản E2E rồi đóng.
+- e05: cắt release CIS 0.7.0, Booking 0.4.0, TripPlanner 0.6.0, AA-Partner 0.2.0.
+- e06: tạo **AA-987** (CIS lifecycle → purge cache TripPlanner, ≤ 2 phút) và làm trong S249.
+- e07: AA-934, AA-935, AA-975 để S249.
