@@ -42,4 +42,5 @@ Hard-error totals are re-measured with `measure_r4.py` on every set, so they dif
 - `11-next-session-team-pilot.md` — what Nghiệp approved for S235 (lanes, architect agent, Booking bootstrap, guardrails).
 - `12-gates-t2-tenants.md` — evaluation of all T9 gates vs the panel (keep/tune/merge/drop/new), why T2 scores are low (root causes + fixes), metric-by-metric audit and redesign of /admin/tenants, 15 PROPOSED issues for S235.
 - `label-pack/` — 40-piece human labelling workbook + Vietnamese criteria (AA-783).
+- `label-pack/agreement/` — AA-783 (S248): read-only export of the 40 pieces with the hidden panel/gate key, label-page data, and the agreement report script (kappa vs panel and lenses, per-gate precision/recall).
 - Scratch (not committed): `.tmp-session/s234/` — pieces_r{1..4}.json, measure scripts, panel raw votes.

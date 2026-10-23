@@ -1,0 +1,50 @@
+[
+  {
+    "state": "customise-srilanka",
+    "theme": "light",
+    "dataTheme": "light",
+    "width": 1440,
+    "color_contrast": 0,
+    "other_violations": [],
+    "consoleErrors": [],
+    "failed": [],
+    "actError": null,
+    "violations": []
+  },
+  {
+    "state": "customise-srilanka",
+    "theme": "light",
+    "dataTheme": "light",
+    "width": 390,
+    "color_contrast": 0,
+    "other_violations": [],
+    "consoleErrors": [],
+    "failed": [],
+    "actError": null,
+    "violations": []
+  },
+  {
+    "state": "customise-srilanka",
+    "theme": "dark",
+    "dataTheme": "dark",
+    "width": 1440,
+    "color_contrast": 0,
+    "other_violations": [],
+    "consoleErrors": [],
+    "failed": [],
+    "actError": null,
+    "violations": []
+  },
+  {
+    "state": "customise-srilanka",
+    "theme": "dark",
+    "dataTheme": "dark",
+    "width": 390,
+    "color_contrast": 0,
+    "other_violations": [],
+    "consoleErrors": [],
+    "failed": [],
+    "actError": null,
+    "violations": []
+  }
+]

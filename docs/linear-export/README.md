@@ -121,6 +121,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-701](cis-core-pipeline-llm-platform/AA-701.md) | [T-series + Jev] T10 gates — F8 rubric, F9 split, cannibalization, promises_an_option, FAQ dedup (shadow) | Done | 2026-10-16 | CIS Core — Pipeline, LLM & Platform |
 | [AA-706](cis-core-pipeline-llm-platform/AA-706.md) | [A1 + Jev] S1 keyword ideas — ask Jev "is this keyword about this tour?" (shadow first, then enforce) | Done | 2026-10-01 | CIS Core — Pipeline, LLM & Platform |
 | [AA-707](cis-core-pipeline-llm-platform/AA-707.md) | [T2] Tenant rewrite uses keywords + PAA for the tenant's own market (research cache), not the admin's US keywords | Done | 2026-10-01 | CIS Core — Pipeline, LLM & Platform |
+| [AA-712](cis-core-pipeline-llm-platform/AA-712.md) | [ADR 0002] Move the place pipeline (itinerary places, geocoding, tour graph) from the TripPlanner into CIS | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
 | [AA-713](cis-core-pipeline-llm-platform/AA-713.md) | [A3] Atoms follow the tour's Master Content status — inactive/trashed tours leave segments, ranking and tenant slates | Done | 2026-10-03 | CIS Core — Pipeline, LLM & Platform |
 | [AA-714](cis-core-pipeline-llm-platform/AA-714.md) | [LLM] Judges on GPT Luna instead of GPT-4.1 — A/B gpt-6-luna vs gpt-5.6-luna, fix the mixed s1_judge routing | Done | 2026-10-16 | CIS Core — Pipeline, LLM & Platform |
 | [AA-716](cis-core-pipeline-llm-platform/AA-716.md) | [A3] Raw-tour discontinuation cascade — trashing a source tour must inactivate its Master, drop its atoms, and warn the tenant | Done | 2026-10-07 | CIS Core — Pipeline, LLM & Platform |
@@ -189,6 +190,11 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-915](cis-core-pipeline-llm-platform/AA-915.md) | [Writing memory] Freeze the ungated lessons loop and record app ADR 0010 (governed writing memory) | Done | 2026-10-21 | CIS Core — Pipeline, LLM & Platform |
 | [AA-925](cis-core-pipeline-llm-platform/AA-925.md) | [Quality] Q-2: repair contract, degraded counters, S1 day-count oracle and Q0 corpus | Done | 2026-10-21 | CIS Core — Pipeline, LLM & Platform |
 | [AA-927](cis-core-pipeline-llm-platform/AA-927.md) | [Cost] LLM calls with no llm_call_log row (AA-729 eval runs: 116/216 and 188/815) | Done | 2026-10-21 | CIS Core — Pipeline, LLM & Platform |
+| [AA-982](cis-core-pipeline-llm-platform/AA-982.md) | T9 writer input drops place_paa questions already rejected by Jev A3 | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
+| [AA-983](cis-core-pipeline-llm-platform/AA-983.md) | Revalidation sets published_tours.quality_score_id to NULL instead of the new accepted score | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
+| [AA-984](cis-core-pipeline-llm-platform/AA-984.md) | T9 blog holds: F9 claims on heading lines are unrepairable; over-long rewrites held at attempt 2 | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
+| [AA-985](cis-core-pipeline-llm-platform/AA-985.md) | T9 F17 temporal-role false positives + systematic gate-error calibration | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
+| [AA-986](cis-core-pipeline-llm-platform/AA-986.md) | Tour retirement propagation: a tour deleted at S0/A0 hides every derivative, tenant keeps T2 with a warning | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
 | [AA-588](cis-data-reset-pipeline-rerun-audit/AA-588.md) | [INFRA][G5] Gỡ OIDC trust org cũ (AdventureAsia365-CIS) sau khi ổn định | Done | 2026-09-21 | CIS Data Reset & Pipeline Rerun (Audit) |
 | [AA-595](cis-data-reset-pipeline-rerun-audit/AA-595.md) | [G0] Dựng bastion EC2 + SSM tunnel + BACKUP toàn bộ (chặn mọi việc sau) | Done | 2026-09-16 | CIS Data Reset & Pipeline Rerun (Audit) |
 | [AA-596](cis-data-reset-pipeline-rerun-audit/AA-596.md) | [G1] Điều tra hiện trạng DB (read-only) — đếm row mọi bảng/schema, xác nhận ranh giới raw vs dẫn xuất | Done | 2026-09-16 | CIS Data Reset & Pipeline Rerun (Audit) |
@@ -271,6 +277,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-828](data-platform-schema-ops-scale/AA-828.md) | [Data/Ops] Per-app cost allocation tags + budgets for the data platform (RDS, S3 archive, Proxy later) | Done | 2026-10-16 | Data Platform — Schema, Ops & Scale |
 | [AA-832](data-platform-schema-ops-scale/AA-832.md) | [Data/Ops] Remaining C4.1 RDS alarms — read/write latency, disk queue, XID wraparound, per-role connections vs CONNECTION LIMIT | Done | 2026-10-16 | Data Platform — Schema, Ops & Scale |
 | [AA-833](data-platform-schema-ops-scale/AA-833.md) | [Data/Ops] TripPlanner Lambda throttle alarms: stop paging on single 5-minute blips + cut the home-page prefetch fan-out (root cause fixed by CIS migration 235) | Done | 2026-10-16 | Data Platform — Schema, Ops & Scale |
+| [AA-839](data-platform-schema-ops-scale/AA-839.md) | [Data/Privacy] Erasure runbook + DRY RUN job for a traveller/customer and an offboarded tenant (roadmap L3, DM-6.7) — parked until ADR 0006 Phase 4 / before prod | Done | 2026-10-23 | Data Platform — Schema, Ops & Scale |
 | [AA-841](data-platform-schema-ops-scale/AA-841.md) | [Security] Plaintext credentials tracked in AA-CIS-Infra envs/dev/terraform.tfvars (old acc1 RDS DSN with password, DataForSEO login/password) — remove from git, rotate what is still live | Done | 2026-10-16 | Data Platform — Schema, Ops & Scale |
 | [AA-846](data-platform-schema-ops-scale/AA-846.md) | [Infra] Clean full-root Terraform plan for accounts/aa365: hidden drifts, Terraform version pin, apply guard | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-847](data-platform-schema-ops-scale/AA-847.md) | [Places] L4 catalog read model fast enough for PLACES_SOURCE=cis + flip + content-validity report | Done | 2026-10-22 | Data Platform — Schema, Ops & Scale |
@@ -307,6 +314,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-907](data-platform-schema-ops-scale/AA-907.md) | [CIS] Bump langchain / langgraph and drop chromadb before the pip-audit ignores expire (30/11, 31/12) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-912](data-platform-schema-ops-scale/AA-912.md) | Triage CodeQL backlog (CIS) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-913](data-platform-schema-ops-scale/AA-913.md) | Alert recipients managed from the CIS admin page (no hard-coded e-mail) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
+| [AA-981](data-platform-schema-ops-scale/AA-981.md) | Secret scanning guard for public repos: push protection, full-history gitleaks, tfvars password rule | Done | 2026-10-23 | Data Platform — Schema, Ops & Scale |
 | [AA-650](ecosystem-foundation-cost-guard-jobs-docs/AA-650.md) | [P1] Durable job runner — Postgres queue + worker ECS service (replaces in-process asyncio tasks and the Bedrock Batch dependency) | Done | 2026-09-28 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
 | [AA-651](ecosystem-foundation-cost-guard-jobs-docs/AA-651.md) | [P1][INFRA] Worker ECS service for the job runner (AA-CIS-Infra) | Done | 2026-10-05 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
 | [AA-652](ecosystem-foundation-cost-guard-jobs-docs/AA-652.md) | [P1] Move T2 rewrite, T9 write, research and A3 atomize onto jobs; job-based status in the portal (fixes stuck "Writing…") | Done | 2026-09-28 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
@@ -503,6 +511,11 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-929](partner-crm-aa-partner/AA-929.md) | [CRM W0] CRM-01b Data-standards bump | Done | 2026-10-22 | Partner CRM — AA-Partner |
 | [AA-930](partner-crm-aa-partner/AA-930.md) | [CRM W0] CRM-02 Readiness checks (read-only) | Done | 2026-10-22 | Partner CRM — AA-Partner |
 | [AA-931](partner-crm-aa-partner/AA-931.md) | [CRM W0] CRM-03 Infra bootstrap + CloudFront VPC-origin spike | Done | 2026-10-22 | Partner CRM — AA-Partner |
+| [AA-932](partner-crm-aa-partner/AA-932.md) | [CRM W1] CRM-04 Infra + DB owner `crm` | Done | 2026-10-23 | Partner CRM — AA-Partner |
+| [AA-933](partner-crm-aa-partner/AA-933.md) | [CRM W1] CRM-05 AA-Partner repo, API, job runner | Done | 2026-10-23 | Partner CRM — AA-Partner |
+| [AA-972](partner-crm-aa-partner/AA-972.md) | [CRM LB] CRM-B1 M2M + B2B quote | Done | 2026-10-23 | Partner CRM — AA-Partner |
+| [AA-973](partner-crm-aa-partner/AA-973.md) | [CRM LB] CRM-B2 Departures, capacity, holds | Done | 2026-10-23 | Partner CRM — AA-Partner |
+| [AA-974](partner-crm-aa-partner/AA-974.md) | [CRM LB] CRM-B2b Booking commercial rules (new, Fix C2, A3, A8) | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-589](tripplanner-aa-booking/AA-589.md) | [EPIC] TripPlanner — Ms.Thư tasks (data cleanup, upload raw, auto-edit, arrival/departure map, suggest next) | Done | 2026-09-16 | TripPlanner & AA-Booking |
 | [AA-590](tripplanner-aa-booking/AA-590.md) | [#5][MAP] Suggest next place theo itinerary — kết hợp taste-similarity + geography | Done | 2026-09-16 | TripPlanner & AA-Booking |
 | [AA-591](tripplanner-aa-booking/AA-591.md) | [#4][MAP] Arrival/departure trên bản đồ — vẽ gateway airport + flight arc fly-in/fly-out | Done | 2026-09-16 | TripPlanner & AA-Booking |
@@ -528,8 +541,10 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-822](tripplanner-aa-booking/AA-822.md) | [AAA] Wave 2a — suppliers + supplier contracts (bk-008): API + staff admin /suppliers list, form, detail | Done | 2026-10-16 | TripPlanner & AA-Booking |
 | [AA-823](tripplanner-aa-booking/AA-823.md) | [AAA] Wave 2b — hotels + services supply records per ADR 0004a (bk-010): API + staff admin /hotels and /services | Done | 2026-10-16 | TripPlanner & AA-Booking |
 | [AA-830](tripplanner-aa-booking/AA-830.md) | [TripPlanner → AA-Booking] Tour key fix (X3): inquiry.submitted v1.2 with source_system + source_id per leg, trip_case_legs key columns, backfill, contracts registry | Done | 2026-10-15 | TripPlanner & AA-Booking |
+| [AA-837](tripplanner-aa-booking/AA-837.md) | [TripPlanner] /plan UI leftovers: 7 WCAG AA contrast violations, Customise 404 logged as console error, "1 DAYS" label | Done | 2026-10-23 | TripPlanner & AA-Booking |
 | [AA-844](tripplanner-aa-booking/AA-844.md) | [Photos] CloudFront in front of S3 photos/ + daily scheduled photo_sync (PR-11 promise) | Done | 2026-10-21 | TripPlanner & AA-Booking |
 | [AA-856](tripplanner-aa-booking/AA-856.md) | [TripPlanner] Search fails under load: Cohere Embed V4 quota is 20 requests/min on acc2 — cache query embeddings, keyword fallback, raise the quota | Done | 2026-10-16 | TripPlanner & AA-Booking |
 | [AA-886](tripplanner-aa-booking/AA-886.md) | [Legal] /privacy and /terms pages + legal readiness proposal packet for Ms. Thư | Done | 2026-10-22 | TripPlanner & AA-Booking |
 | [AA-904](tripplanner-aa-booking/AA-904.md) | [TripPlanner] Planned Next.js 14 → 15 upgrade (replaces Dependabot PR #104) | Done | 2026-10-19 | TripPlanner & AA-Booking |
+| [AA-906](tripplanner-aa-booking/AA-906.md) | [TripPlanner] Next.js 15 → 16 upgrade (match CIS/Booking; React Compiler lint refactor) | Done | 2026-10-23 | TripPlanner & AA-Booking |
 | [AA-909](tripplanner-aa-booking/AA-909.md) | [TripPlanner] Check the guest token on the read GETs (trip, suggestions, coverage, activities) | Done | 2026-10-22 | TripPlanner & AA-Booking |

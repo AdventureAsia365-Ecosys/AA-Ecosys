@@ -1,0 +1,220 @@
+{
+ "pages": 20,
+ "verdict_agreement_4level": 0.85,
+ "kappa_4level": 0.701,
+ "pass_fail_agreement": 0.95,
+ "kappa_pass_fail": 0.886,
+ "serious_errors_total": {
+  "a": 45,
+  "b": 45,
+  "ratio_b_over_a": 1.0
+ },
+ "serious_errors_mean_abs_diff": 0.5,
+ "rate_mean_abs_diff": 0.0122,
+ "label_agreement": {
+  "a": 0.65,
+  "b": 0.7
+ },
+ "rows": [
+  {
+   "sample_id": "s1-002",
+   "verdict_a": "light_edit",
+   "verdict_b": "light_edit",
+   "serious_a": 1,
+   "serious_b": 1,
+   "rate_a": 0.036,
+   "rate_b": 0.029,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-003",
+   "verdict_a": "light_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 1,
+   "serious_b": 2,
+   "rate_a": 0.02,
+   "rate_b": 0.033,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-009",
+   "verdict_a": "light_edit",
+   "verdict_b": "light_edit",
+   "serious_a": 1,
+   "serious_b": 1,
+   "rate_a": 0.022,
+   "rate_b": 0.022,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-011",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 2,
+   "serious_b": 2,
+   "rate_a": 0.017,
+   "rate_b": 0.017,
+   "label": "pass"
+  },
+  {
+   "sample_id": "s1-013",
+   "verdict_a": "light_edit",
+   "verdict_b": "light_edit",
+   "serious_a": 1,
+   "serious_b": 0,
+   "rate_a": 0.014,
+   "rate_b": 0.0,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-020",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 3,
+   "serious_b": 3,
+   "rate_a": 0.12,
+   "rate_b": 0.1,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-021",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 3,
+   "serious_b": 3,
+   "rate_a": 0.136,
+   "rate_b": 0.12,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-022",
+   "verdict_a": "light_edit",
+   "verdict_b": "light_edit",
+   "serious_a": 0,
+   "serious_b": 1,
+   "rate_a": 0.0,
+   "rate_b": 0.04,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-025",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 2,
+   "serious_b": 2,
+   "rate_a": 0.067,
+   "rate_b": 0.057,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-027",
+   "verdict_a": "light_edit",
+   "verdict_b": "light_edit",
+   "serious_a": 1,
+   "serious_b": 1,
+   "rate_a": 0.008,
+   "rate_b": 0.007,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-030",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "reject",
+   "serious_a": 3,
+   "serious_b": 5,
+   "rate_a": 0.06,
+   "rate_b": 0.1,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-032",
+   "verdict_a": "reject",
+   "verdict_b": "heavy_edit",
+   "serious_a": 5,
+   "serious_b": 2,
+   "rate_a": 0.033,
+   "rate_b": 0.017,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-033",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 6,
+   "serious_b": 6,
+   "rate_a": 0.133,
+   "rate_b": 0.133,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-038",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 3,
+   "serious_b": 2,
+   "rate_a": 0.05,
+   "rate_b": 0.036,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-039",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 2,
+   "serious_b": 2,
+   "rate_a": 0.05,
+   "rate_b": 0.05,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-041",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 2,
+   "serious_b": 3,
+   "rate_a": 0.044,
+   "rate_b": 0.075,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-042",
+   "verdict_a": "light_edit",
+   "verdict_b": "light_edit",
+   "serious_a": 0,
+   "serious_b": 0,
+   "rate_a": 0.0,
+   "rate_b": 0.0,
+   "label": "pass"
+  },
+  {
+   "sample_id": "s1-043",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 3,
+   "serious_b": 3,
+   "rate_a": 0.06,
+   "rate_b": 0.055,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-044",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 3,
+   "serious_b": 3,
+   "rate_a": 0.055,
+   "rate_b": 0.043,
+   "label": "fail"
+  },
+  {
+   "sample_id": "s1-048",
+   "verdict_a": "heavy_edit",
+   "verdict_b": "heavy_edit",
+   "serious_a": 3,
+   "serious_b": 3,
+   "rate_a": 0.015,
+   "rate_b": 0.019,
+   "label": "fail"
+  }
+ ]
+}
