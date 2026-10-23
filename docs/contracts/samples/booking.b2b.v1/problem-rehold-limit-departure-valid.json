@@ -1,0 +1,11 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Problem",
+  "expect": "valid",
+  "why": "A 4th re-hold of one departure in one UTC day under fresh proposal refs (Fix A3, per departure): 429 with the seconds until the limit resets",
+  "payload": {
+    "error": "rehold_limit",
+    "message": "departure 3f6c2a10-8d4e-4b7a-9c1d-2e5f7a9b0c31 was held again 4 times today (limit 3 a day); try after 00:00 UTC",
+    "retry_after_s": 41200
+  }
+}

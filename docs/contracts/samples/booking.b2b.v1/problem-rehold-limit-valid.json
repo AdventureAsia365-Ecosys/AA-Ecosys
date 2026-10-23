@@ -1,0 +1,11 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Problem",
+  "expect": "valid",
+  "why": "A 4th re-hold of a proposal in one UTC day (Fix A3): 429 with the seconds until the limit resets",
+  "payload": {
+    "error": "rehold_limit",
+    "message": "this proposal was held again 3 times today (limit 3 a day); try after 00:00 UTC",
+    "retry_after_s": 68400
+  }
+}
