@@ -10,6 +10,7 @@ Nothing here calls an LLM or writes to the database.
 | `panel_key.json` | data | Per piece: the 4 lens verdicts and scores (overall, fidelity, ai_tells), majority, tie flag, fidelity audit, deciding defects, gate status at S234, sha256 of the text the panel scored. |
 | `aa783_export.py` | CIS api container (ECS exec) | Read-only export: the 40 pieces (text, title, meta, source, brand) plus a hidden `key` (gate ledger, panel key, existing labels). |
 | `agree.py` | local | `decode` the exec output, build `page` data for the label page (no key), compute the agreement `report`. |
+| `report-s248.md` | data | The agreement report of the 40 S248 labels (AI-drafted, owner-approved) and the gate / threshold decisions taken from it (closes AA-783). |
 
 ## Label scheme (one row per piece)
 
