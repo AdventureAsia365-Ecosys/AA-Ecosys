@@ -63,7 +63,7 @@ Nguồn số liệu: `docs/audits/2026-10-23-S248-wrap/state-snapshot.md` (kiể
 - AA-910: Nghiệp mở trang staff Booking ở 1440 px rồi đóng.
 - AA-829: restore drill (S259). AA-896: báo cáo tháng 10 từ 01/11.
 - Release PR đang mở: CIS #950 (0.7.0), Booking #66 (0.4.0), TP #137 (0.6.0), AA-Partner #3 (0.2.0) — để phiên sau cắt release.
-- Jira S248: Nghiệp duyệt cả 7 nháp, đã đăng: PR-13 (10496), PR-25 (10497), PR-26 (10498), PR-27 (10499), PR-22 (10500), PR-24 (10501), PR-23 (10502).
+- Jira S248: Nghiệp duyệt cả 7 nháp, đã đăng: PR-13 (10496), PR-25 (10497), PR-26 (10498, sửa sau khi đăng: CRM đang chạy trên Dev, không phải đang tắt), PR-27 (10499), PR-22 (10500), PR-24 (10501), PR-23 (10502).
 
 ## Lưu ý kỹ thuật cho phiên sau
 
@@ -83,3 +83,10 @@ Nghiệp duyệt và dừng phiên; các việc sau làm đầu S249 (backlog §
 - e05: cắt release CIS 0.7.0, Booking 0.4.0, TripPlanner 0.6.0, AA-Partner 0.2.0.
 - e06: tạo **AA-987** (CIS lifecycle → purge cache TripPlanner, ≤ 2 phút) và làm trong S249.
 - e07: AA-934, AA-935, AA-975 để S249.
+
+## Dọn dẹp khi dừng phiên
+
+- Jira PR-26 (10498) sửa câu sai: `aa-crm-dev-api` đang chạy 1 task (~$7/tháng), `/crm/health` + `/crm/health/ready` 200.
+- 2 stash lỗi thời đã xoá: CIS (nháp PR #905 luật bữa ăn, hướng đã chốt (a)), Booking (WIP AA-810, PR #7 đã merge).
+- Nhánh local: 322 nhánh đã xoá — 284 đã có trên GitHub hoặc PR đã merge/đóng; 27 nhánh lỗi thời được một workflow chỉ đọc đánh giá và một agent phản biện xác nhận từng nhánh. 11 nhánh để dành được đẩy lên GitHub trước khi xoá (backlog §3 dòng 0k). Phát hiện: bản sửa AA-679 của Booking chưa từng lên main (dòng 0h). Mỗi repo chỉ còn nhánh mặc định.
+- `.tmp-session`: 3,4 GB → 46 MB. Đã xoá scratch các phiên cũ, venv, tfplan đã apply, cookie và file override có token hết hạn. Giữ: `s248/tools`, `s247/common.sh`, `aa779-r9`, `S248`, `S248-lanes`, `s248-decisions`, `gitleaks-8301`.
