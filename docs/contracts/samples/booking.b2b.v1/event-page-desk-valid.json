@@ -1,0 +1,50 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "EventPage",
+  "expect": "valid",
+  "why": "1.1 (AA-975): the on-request desk declines a line with a code, staff cancel a departure, an incident is cleared; ids and codes only",
+  "payload": {
+    "items": [
+      {
+        "event_id": "6f0d2a41-0000-4000-8000-000000000201",
+        "cursor": "bk1.201",
+        "type": "line.declined",
+        "occurred_at": "2026-11-02T03:10:00Z",
+        "hold_id": "9b000000-0000-4000-8000-000000000975",
+        "booking_id": "9c000000-0000-4000-8000-000000000975",
+        "line_ref": "room",
+        "departure_id": null,
+        "incident_code": null,
+        "decline_code": "supplier_unavailable",
+        "new_start_time": null
+      },
+      {
+        "event_id": "6f0d2a41-0000-4000-8000-000000000202",
+        "cursor": "bk1.202",
+        "type": "departure.incident_cleared",
+        "occurred_at": "2026-11-15T09:00:00Z",
+        "hold_id": null,
+        "booking_id": null,
+        "line_ref": null,
+        "departure_id": "9f000000-0000-4000-8000-000000000975",
+        "incident_code": "road",
+        "decline_code": null,
+        "new_start_time": null
+      },
+      {
+        "event_id": "6f0d2a41-0000-4000-8000-000000000203",
+        "cursor": "bk1.203",
+        "type": "departure.cancelled",
+        "occurred_at": "2026-11-16T01:00:00Z",
+        "hold_id": null,
+        "booking_id": null,
+        "line_ref": null,
+        "departure_id": "9f000000-0000-4000-8000-000000000976",
+        "incident_code": null,
+        "decline_code": null,
+        "new_start_time": null
+      }
+    ],
+    "next_cursor": "bk1.203"
+  }
+}
