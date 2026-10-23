@@ -153,7 +153,7 @@ Raised as calm proposals with options; whether a lawyer is needed is her call.
 | Tenant terms: clause on AI-written content | Draft in `docs/legal/tenant-terms-ai-clause-draft.md`; her answer wanted by 2026-11-11 (AA-820) |
 | Privacy policy, terms of use, sub-processor list, records of processing | Draft pages live (TripPlanner and portal `/privacy`, `/terms`); [register](../legal/register.md) and bilingual [readiness packet](../legal/readiness-packet.md) (AA-886) |
 | DPA template for tenants (before any tenant CRM data) | Draft [DPA template](../legal/dpa-template.md); required before the first tenant uses a CRM (DM-6.8) |
-| Access and deletion requests | Untested [DSAR and erasure runbook](../legal/dsar-erasure-runbook.md); runs logged in the [retention log](../legal/retention-log.md) |
+| Access and deletion requests | [DSAR and erasure runbook](../legal/dsar-erasure-runbook.md) (CIS erasure job built, DRY RUN only; Dev drill pending); runs logged in the [retention log](../legal/retention-log.md) |
 | Breach notification duties under Vietnamese data protection law | Decided case by case with the lawyer ([incident response](../ops/incident-response.md)) |
 
 ## Readiness list for prod (security and compliance part)

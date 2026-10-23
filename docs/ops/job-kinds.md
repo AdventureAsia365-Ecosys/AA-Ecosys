@@ -74,6 +74,7 @@ free slots.
 | `tour_graph_build` | `services/jobs/tour_graph_job.py` | 1 | 3 | 600 | yes | geocoder (lookups) |
 | `retention_llm_call_log`, `retention_tenant_api_usage`, `retention_job`, `retention_decision_log`, `retention_cost_explorer_snapshot` | `services/jobs/retention_job.py` (policy `services/retention/policy.py`) | 1 | 2 | 1800 | yes | - (DRY RUN by default when run by hand) |
 | `staff_directory_reconcile` | `services/jobs/staff_reconcile_job.py` | 1 | 2 | 120 | yes | - (daily, scheduled by the ops probe) |
+| `data_erasure` | `services/jobs/erasure_job.py` (inventory `services/erasure/inventory.py`) | 1 | 1 | 900 | yes | - (manual only, DRY RUN by default; apply off unless `ERASURE_APPLY_ENABLED=true`; an apply is never retried (409), AA-839, [runbook](../legal/dsar-erasure-runbook.md)) |
 | `staff_invite_email` | `services/jobs/staff_invite_email_job.py` | 2 | per `api/services/staff_invite.py` | 60 | no | SES |
 | `ops_alert_email` | `services/jobs/ops_alert_email_job.py` | 1 | per `shared/ops_alerts.py` | 60 | no | SES |
 
