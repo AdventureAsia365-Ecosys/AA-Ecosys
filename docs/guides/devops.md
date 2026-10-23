@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [devops, engineer]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-23
 review_every_days: 90
 related: [GUIDE-01, OPS-01, OPS-04, OPS-03, SEC-02, FIN-01, AA-897, AA-892]
 ---
@@ -128,7 +128,8 @@ session is logged for 365 days. Deleting data follows the DRY RUN procedure
 
 Rules: data standards [DM-10](../architecture/data-standards/02-data-management.md#10-cost-ownership). In practice:
 
-- AWS Budgets on acc2: 250 USD per month total, plus per `App` tag (CIS 150, shared 50, Booking 25, TripPlanner 25).
+- AWS Budgets on acc2: 250 USD per month total, plus per `App` tag (CIS 90, shared 100, Booking 25, TripPlanner 10,
+  CRM 25; [FinOps](../ops/finops.md#budgets-and-alerts)).
 - Every paid model or data call goes through its ledger (`shared.llm_call_log`, `decision_log`, `dfs_call_log`);
   ad-hoc scripts use `stage=adhoc_<issue>`.
 - Paid batches: trial about 3 items, then at most about 50 tours, never the whole catalog without approval.

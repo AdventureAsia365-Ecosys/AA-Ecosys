@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-dev-db]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-23
 review_every_days: 90
 related: [OPS-01, OPS-05-ecs-exec, OPS-05-db-migrate, OPS-03-pitr, OPS-03-schema, OPS-11, docs/database/schema-ownership.md, AA-892]
 ---
@@ -45,7 +45,10 @@ personal logins, no SSH (DM-8.8).
   the CIS task role is denied the master secret (`aa-cis/dev/rds`). The master is break-glass only (DM-8.9); DB Migrate,
   Schema Dump and the probe still use it until X1 S22 moves them to `db_migrator`. Booking (`booking`), TripPlanner (`tripplanner`) and the tenant pool
   (`aa_app_user`) have their own logins; Booking and TripPlanner objects are owned by `bk_owner` / `tp_owner`.
-- The DSN CNAME of DM-9.5 does not exist yet (AA-829).
+- The DSN CNAME of DM-9.5 exists since S248: `db.dev.internal` (Route 53 private zone, AA-CIS-Infra
+  `accounts/aa365/db_dns.tf`, AA-829). Moving the DSN secrets onto it is pending (dry run 7/7 on 23/10/2026, the
+  apply waits on Nghiệp); until then they name the RDS endpoint. Repoint after a restore:
+  [restore runbook](runbooks/restore-rds-pitr.md#repoint-dbdevinternal-after-a-restore).
 - Real-data dumps from 16/09/2026 sit outside git on a laptop (`docs/backups/`, ignored); securing or deleting them is
   waiting on Nghiệp (AA-829, DM-6.10).
 

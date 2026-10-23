@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-23
 review_every_days: 90
 related: [CAT-00, GUIDE-03, OPS-04, FIN-01, FIN-02, AA-897, AA-855]
 ---
@@ -133,8 +133,8 @@ chưa chắc, chị hỏi Nghiệp trước.
 - **External Spend**: AI and data-provider spend, our own estimate next to the real bill.
 - **Refresh from AWS** asks Amazon for new numbers and costs about 0.04 USD per click. The page already refreshes by
   itself about once a day, so the button is rarely needed.
-- **Budgets with e-mail alerts** (to Nghiệp) on the main AWS account: 250 USD per month in total, split CIS 150,
-  shared 50, Booking 25, TripPlanner 25.
+- **Budgets with e-mail alerts** (to Nghiệp) on the main AWS account: 250 USD per month in total, split CIS 90,
+  shared 100, Booking 25, TripPlanner 10, CRM 25.
 - **Monthly cost and capacity report**: from November 2026, in the first working session of each month, Nghiệp sends
   you a short Vietnamese summary: total by app, the five biggest items, change from last month with reasons, and a
   "cost per published tour" figure.
@@ -148,8 +148,8 @@ chưa chắc, chị hỏi Nghiệp trước.
 - **External Spend**: chi phí AI và nhà cung cấp dữ liệu, số mình tự ước tính đặt cạnh hoá đơn thật.
 - Nút **Refresh from AWS** hỏi Amazon số mới, tốn khoảng 0,04 USD mỗi lần bấm. Trang đã tự cập nhật khoảng một lần
   mỗi ngày, nên hiếm khi cần bấm.
-- **Ngân sách có cảnh báo email** (gửi Nghiệp) trên tài khoản AWS chính: tổng 250 USD/tháng, chia CIS 150, shared 50,
-  Booking 25, TripPlanner 25.
+- **Ngân sách có cảnh báo email** (gửi Nghiệp) trên tài khoản AWS chính: tổng 250 USD/tháng, chia CIS 90, shared 100,
+  Booking 25, TripPlanner 10, CRM 25.
 - **Báo cáo chi phí và năng lực hằng tháng**: từ tháng 11/2026, trong phiên làm việc đầu mỗi tháng, Nghiệp gửi chị một
   bản tóm tắt tiếng Việt: tổng theo ứng dụng, năm khoản lớn nhất, chênh lệch so với tháng trước kèm lý do, và con số
   "chi phí cho mỗi tour được xuất bản".

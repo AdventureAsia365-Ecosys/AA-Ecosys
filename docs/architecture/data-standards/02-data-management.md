@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-dev-db]
-last_reviewed: 2026-10-22
+last_reviewed: 2026-10-23
 review_every_days: 90
 related: [ARCH-08, ARCH-08-engineering, ARCH-08-scaling, ARCH-08-schema-ownership]
 ---
@@ -321,7 +321,7 @@ These meanings are binding. A new column MUST NOT reuse a name below with a diff
 | DM-9.2 | A destructive migration (header `-- migrate: destructive`) MUST take a manual snapshot before it runs. Until the runner does this, the DRY RUN step 2 snapshot is done by hand. | On a shared instance, PITR rolls back all three apps; a snapshot plus a table export does not. | to build (N5); Runbook (destructive-ops.md) |
 | DM-9.3 | **Restore drill on Dev:** PITR to a new instance, smoke queries per schema, record the RTO, delete the copy. Run it once now (X10), then before prod and quarterly in prod. | An untested backup is a guess. | to build (X10); Runbook |
 | DM-9.4 | **Single-schema restore** is done by PITR to a new instance, then `pg_dump --schema <s>` / copy of the affected tables back, under DRY RUN. It is never an in-place PITR of the shared instance unless every owner agrees. | Isolates one app's mistake from the other two. | Runbook (written with X10) |
-| DM-9.5 | DSNs SHOULD point to a private CNAME, not the RDS endpoint, so that a restore or a split can cut over without editing every secret. | Shorter RTO; prepares the Booking split trigger (review §5.2). | to build (X10) |
+| DM-9.5 | DSNs SHOULD point to a private CNAME, not the RDS endpoint, so that a restore or a split can cut over without editing every secret. | Shorter RTO; prepares the Booking split trigger (review §5.2). | Terraform: private zone `dev.internal` + CNAME `db.dev.internal` to the RDS endpoint (`infra/AA-CIS-Infra/accounts/aa365/db_dns.tf`, AA-829, applied S248); the move of the DSN secrets onto it is pending (dry run 7/7 on 23/10/2026, apply waits on Nghiệp); repoint after a restore: `docs/ops/runbooks/restore-rds-pitr.md` |
 | DM-9.6 | **Prod targets** (proposed; confirmed in the L9 blueprint): separate instance on acc2, Multi-AZ, 14-day PITR, AWS Backup with a cross-region copy, final snapshot on. RPO ≤ 15 min for instance loss (PITR) and ≤ 24 h for region loss (daily cross-region copy). RTO ≤ 1 h for AZ or instance failure and ≤ 4 h for region loss. Quarterly restore drill. | The current Dev setup (7-day PITR, same account and region, no drill) blocks prod (P12). | to build (L9); Review of the prod Terraform root |
 
 ---
