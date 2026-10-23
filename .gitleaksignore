@@ -37,3 +37,8 @@ docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:507
 docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:546
 docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:646
 docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:721
+
+# AA-981 canary (test/aa981-canary, closed unmerged): a FAKE random value committed on purpose to prove
+# the scan goes red. Its PR head stays fetchable, so it is pinned by commit.
+e089300c97f2d2a6c3b4e69d3e6a2398a3da47b0:canary/aa981-canary.tfvars:credential-key-literal:2
+e089300c97f2d2a6c3b4e69d3e6a2398a3da47b0:canary/aa981-canary.tfvars:terraform-plaintext-secret:2
