@@ -10,6 +10,7 @@
   byte-identical của migration app; Copy Guard kiểm) + `db/migrations/roles/` (Infra-native, `rl-NNN`: role,
   `CONNECTION LIMIT`, extension, undo X1). Workflow DB Migrate / DB Schema Dump / DB Isolation Probe chạy task
   migrator (`accounts/aa365/db_migrator.tf`), login `db_migrator` từ X1 S22; master chỉ đọc trong task cho `roles/`,
-  `set-password`, `run-script` (`db/scripts/`). `apply` từ chối (exit 7) khi bảng job nào còn bận.
+  `set-password`, `run-script` (`db/scripts/`; DB Tour Liveness Gate hằng đêm cũng là một run-script READ_ONLY,
+  AA-986, data standards DM-4.9). `apply` từ chối (exit 7) khi bảng job nào còn bận.
 - Terraform Apply không có guard job: apply roll ECS service / task def / Lambda → idle gate tay trước (skill `aa-ship` mục 2).
 - Bedrock satellite IAM: role invoker và batch trên acc3/acc1 trust ECS task role của acc2; ExternalId riêng từng account. Policy assume nằm ở `aa-cis-dev-ecs-assume-bedrock-invoker` (khác `aa-cis-dev-ecs-task-policy`).

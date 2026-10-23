@@ -73,7 +73,7 @@ the two disagree, `owners.yaml` wins and this page is fixed in the same PR train
    the dir's anchor schema (`shared`, `booking`, `tripplanner`, `crm`) and runs the file as that role (`SET ROLE`),
    so a file creates objects owned by the owner role in the table below, with no `OWNER TO`. A `roles/`
    file always runs as the RDS master `aa_cis_admin`, read in the task; so do DB Migrate `set-password`
-   and `run-script`. Otherwise the master is break-glass only (data standards Part B DM-8.9).
+   and `run-script`, and the nightly DB Tour Liveness Gate (one READ_ONLY run-script, DM-4.9). Otherwise the master is break-glass only (data standards Part B DM-8.9).
 
 ## Owners by schema
 
