@@ -1,0 +1,24 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "CancellationResult",
+  "expect": "valid",
+  "why": "A done cancel of a VND booking inside the 30-day tier: whole-VND fee, refundable = total - fee (AA-974)",
+  "payload": {
+    "booking_id": "b_01HG02",
+    "dry_run": false,
+    "fee": {
+      "amount": "9779000",
+      "currency": "VND"
+    },
+    "refundable_b2b_amount": {
+      "amount": "29337000",
+      "currency": "VND"
+    },
+    "fee_basis": {
+      "policy_id": "00000000-0000-4000-8000-0000000bc021",
+      "days_before_departure": 30,
+      "fee_pct": "25.00"
+    },
+    "cancelled_at": "2026-10-23T05:00:00Z"
+  }
+}
