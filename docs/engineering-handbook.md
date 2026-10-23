@@ -311,7 +311,9 @@ Generators that need AWS run in Infra, which has the OIDC roles; the root repo h
 The docs lint ([workflow](../.github/workflows/docs-lint.yml), [tools](../tools/docs/README.md), AA-888) checks on
 every docs PR: front-matter against the schema and unique IDs, ADR status and index, no backslash-continued AWS CLI,
 internal links (offline), Markdown style (warning), literal resource IDs (warning in private repos, error in the
-public ones once their job lands), and gitleaks on the added lines. A weekly run writes the freshness report: pages
+public ones once their job lands). Secrets are checked by a separate workflow on every PR, any path
+([`secret-scan.yml`](../.github/workflows/secret-scan.yml): gitleaks on the added lines, plus a nightly full-history
+scan, AA-981). A weekly run writes the freshness report: pages
 past `review_every_days` (default 90) and runbooks with an old `last_tested`. Freshness warns; it never blocks a
 merge. At session start, pick one or two stale pages to review with the session's work.
 
