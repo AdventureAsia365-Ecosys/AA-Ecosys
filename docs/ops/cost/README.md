@@ -97,3 +97,8 @@ Rules and budgets: [FinOps process](../finops.md).
 
 Besides the normal content, compare August, September and October per app and per service and explain each jump
 (the per-App tags exist only from 2026-10-15, so earlier months are by service only).
+
+That comparison was drafted early, with October month to date, on 2026-10-23 (S248):
+[`docs/audits/2026-10-23-S248-cost-report/`](../../audits/2026-10-23-S248-cost-report/README.md). Its section 9 lists
+the refresh after the month closes. Its `scripts/fetch_ce.sh` is a one-off audit pull (11 Cost Explorer requests,
+about 0.11 USD), kept so the numbers can be reproduced; it is not a standing client and does not replace step 2.

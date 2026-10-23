@@ -1,0 +1,151 @@
+{
+    "GroupDefinitions": [
+        {
+            "Type": "TAG",
+            "Key": "App"
+        }
+    ],
+    "ResultsByTime": [
+        {
+            "TimePeriod": {
+                "Start": "2026-08-01",
+                "End": "2026-09-01"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": [
+                        "App$"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "140.2209643786",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ],
+            "Estimated": false
+        },
+        {
+            "TimePeriod": {
+                "Start": "2026-09-01",
+                "End": "2026-10-01"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": [
+                        "App$"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "134.9600578984",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ],
+            "Estimated": false
+        },
+        {
+            "TimePeriod": {
+                "Start": "2026-10-01",
+                "End": "2026-10-23"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": [
+                        "App$"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "88.8171679844",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "App$booking"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "2.3485357035",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "App$cis"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "14.2029690734",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "App$crm"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "0.0000891902",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "App$identity"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "0.0641709197",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "App$platform"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "0.0102958024",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "App$shared"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "20.8394779784",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "App$tripplanner"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "0.2899777222",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ],
+            "Estimated": true
+        }
+    ],
+    "DimensionValueAttributes": []
+}

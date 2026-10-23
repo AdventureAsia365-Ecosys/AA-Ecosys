@@ -1,0 +1,107 @@
+{
+    "GroupDefinitions": [
+        {
+            "Type": "DIMENSION",
+            "Key": "RECORD_TYPE"
+        }
+    ],
+    "ResultsByTime": [
+        {
+            "TimePeriod": {
+                "Start": "2026-08-01",
+                "End": "2026-09-01"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": [
+                        "Tax"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "1.68",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "Usage"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "20.7179926571",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ],
+            "Estimated": false
+        },
+        {
+            "TimePeriod": {
+                "Start": "2026-09-01",
+                "End": "2026-10-01"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": [
+                        "Tax"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "0",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "Usage"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "51.4343503791",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ],
+            "Estimated": false
+        },
+        {
+            "TimePeriod": {
+                "Start": "2026-10-01",
+                "End": "2026-10-23"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": [
+                        "Tax"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "0",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": [
+                        "Usage"
+                    ],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "138.6071035141",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ],
+            "Estimated": true
+        }
+    ],
+    "DimensionValueAttributes": []
+}

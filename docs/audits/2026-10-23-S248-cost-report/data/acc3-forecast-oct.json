@@ -1,0 +1,17 @@
+{
+    "Total": {
+        "Amount": "215.74236250862742",
+        "Unit": "USD"
+    },
+    "ForecastResultsByTime": [
+        {
+            "TimePeriod": {
+                "Start": "2026-10-01",
+                "End": "2026-11-01"
+            },
+            "MeanValue": "215.74236250862742",
+            "PredictionIntervalLowerBound": "130.29427349680105",
+            "PredictionIntervalUpperBound": "301.19045152045373"
+        }
+    ]
+}
