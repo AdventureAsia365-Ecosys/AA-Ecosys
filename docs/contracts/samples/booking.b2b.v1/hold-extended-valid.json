@@ -1,0 +1,19 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Hold",
+  "expect": "valid",
+  "why": "A hold after its one extension (payment claimed, Fix A8): extended_count 1, expiry moved by Booking's length",
+  "payload": {
+    "hold_id": "h_01HFZ4",
+    "quote_id": "q_01HFZ3",
+    "status": "active",
+    "expires_at": "2026-10-27T03:00:00Z",
+    "extended_count": 1,
+    "lines": [
+      {
+        "line_ref": "opt-d2-a",
+        "line_status": "available"
+      }
+    ]
+  }
+}
