@@ -18,7 +18,7 @@ description: Làm việc với database AA-CIS (PostgreSQL trên RDS acc2, dùng
 - Chỉ acc2 (`aa365-admin`, us-west-1). RDS nằm trong private subnet → **ECS exec + script Python (asyncpg) + S3** để lấy kết quả. Không psql local, không RDS Query Editor.
 - **Login DB (X1 xong 19/10/2026, AA-860):** script ECS exec dùng `DATABASE_URL` của container = **`cis_app`** (mọi bảng CIS, kể cả bảng RLS; `booking.*` / `tripplanner.*` → 42501; không DDL). Task role CIS bị Deny secret master `aa-cis/dev/rds`, `aa-cis/dev/db-migrator`, `booking/*`, `tripplanner/*` → đừng `get_secret_value` master. Luôn `ssl="require"`.
 - Việc cần master (đọc/ghi `booking.*` / `tripplanner.*`, role, catalog, ownership) → AA-CIS-Infra **DB Migrate `mode=run-script`** với file `db/scripts/<name>.py` đã review. Không qua ECS exec.
-- Master `aa_cis_admin` là break-glass: chỉ tự động trong task migrator cho file `roles/`, `set-password`, `run-script`. Dùng khác → ghi lý do vào session log + Linear (DM-8.9).
+- Master `aa_cis_admin` là break-glass: chỉ tự động trong task migrator cho file `roles/`, `set-password`, `run-script` (kể cả DB Tour Liveness Gate hằng đêm: một run-script READ_ONLY, DM-4.9). Dùng khác → ghi lý do vào session log + Linear (DM-8.9).
 - Pattern đầy đủ: `references/ecs-exec.md`. Mỗi phiên thường có runner tạm trong `.tmp-session/` (ví dụ `sNNN_run.sh`) — tái dùng nếu còn, hoặc viết mới (không giả định file phiên cũ còn).
 - Đọc output qua S3, không tin output terminal SSM (hay bị cắt giữa chừng).
 - Script import code app → `sys.path.insert(0, "/app")`.
