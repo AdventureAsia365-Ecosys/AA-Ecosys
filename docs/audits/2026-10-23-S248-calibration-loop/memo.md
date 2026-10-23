@@ -95,11 +95,32 @@ Replay offline $0 trên 40 bài AA-783: 12 bài có vai trò đã chấm dứt, 
 ("why it remains Bhutan's spiritual and administrative center") và vẫn được giữ. Census trên toàn bộ ledger từ 01/10 do agent
 điều phối chạy (§5.3).
 
+**Vòng 2: census sau deploy bắt được tầng danh tính thứ hai (thực thể).** #955 (`dev-34730387`) sửa danh tính *vai trò*.
+Census chỉ đọc trên ledger sau deploy vẫn thấy luật fire ở 13/20 stored hit (12 câu khác nhau, 4 bài của request
+3c9dc7bb). Cả 20 hit đều là false positive, đã đọc từng câu:
+
+- câu nói về **cả loại** ("A dzong is …", "In Bhutan, dzongs house …", "Like all dzongs, it …");
+- câu nói về **nơi khác** ("Kuenselphodrang, on a forested hillside above the capital": thủ đô ở đây là Thimphu; "Khaling,
+  where … operates a government-run weaving centre"; "Mongar Dzong houses …");
+- câu có **chủ ngữ khác** ("The weavers at the government looms …").
+
+Luật hỏi đúng *vai trò nào*, nhưng chưa hỏi *của ai*. Bản sửa vòng 2 (nhánh `fix/aa985-f17-entity-binding`) chỉ cho fire khi
+chủ ngữ của mệnh đề chính là thực thể nguồn ghi là đã mất vai trò. Chủ ngữ đó có thể là tên, bí danh ("Punakha"), hoặc đại từ /
+cụm xác định ("it", "the dzong", "its role") mà tiền ngữ trong cùng đoạn là thực thể đó. Câu nói về cả loại và câu dùng "the
+capital" để chỉ vị trí không bao giờ fire. Toàn bộ 20 hit thành regression test, chạy với cả seed một moment và seed nhiều moment.
+Mỗi hit còn có một test riêng chứng minh riêng tầng gắn thực thể cũng đã loại được nó.
+
+**Bài học (thêm vào §1.3):** một lỗi "identity binding" có **nhiều trục danh tính** (vai trò, thực thể, loại so với cá thể,
+vị trí). Sửa xong một trục chưa có nghĩa là xong luật. Test viết theo ca bị giữ chỉ chứng minh *ca đó* đã hết. Chỉ census trên
+ledger thật mới lộ ra trục còn lại. Vì vậy mỗi bản sửa detector phải đi kèm replay trên stored hit (§5.3) **trước khi** đóng
+issue, không phải sau. Đây là lý do mạnh nhất để biến census thủ công thành bước chuẩn của vòng hiệu chuẩn.
+
 ### 1.3 Các lỗi tương tự: một họ, không phải một ca
 
 | Ca (phiên, issue) | Luật thấy gì (dấu hiệu từ vựng) | Danh tính bị nhầm | Đã vá thế nào |
 |---|---|---|---|
-| AA-985 (S248) | "government" + động từ hiện tại | **vai trò**: huyện ↔ quốc gia | `role_claim` (bản này) |
+| AA-985 (S248) | "government" + động từ hiện tại | **vai trò**: huyện ↔ quốc gia | `role_claim` (#955) |
+| AA-985 vòng 2 (S248) | "government"/"capital" ở bất kỳ chủ ngữ nào | **thực thể**: cả loại dzong / nơi khác ↔ Punakha Dzong | `binds_entity` |
 | S234 r3, Thimphu | "capital" + "today" | **thực thể**: nơi kế nhiệm ↔ nơi này | `EndedRole.successor` |
 | S234 r3, "almost four centuries ago" | "N centuries" | **mốc thời gian**: tính từ nay ↔ khoảng của vai trò | bỏ qua khi có "ago" |
 | AA-779 (S245) | tên riêng, tính từ quốc tịch | **địa danh**: Karakoram, "Mongolian beef", "Burmese python" | 3 vòng vá + review đối kháng, *không hội tụ*, dừng theo D10 |
@@ -110,7 +131,7 @@ Replay offline $0 trên 40 bài AA-783: 12 bài có vai trò đã chấm dứt, 
 | AA-694 (S223) | từ khoá trong tên tour | **chủ thể**: keyword về tour ↔ về nơi | gán nhãn tay rồi chuyển sang Jev |
 | AA-771 (S234) | câu khẳng định trong bài | **người nói**: brand tự mô tả ↔ fact về chuyến | tách nhãn "BRAND CORE IDEA" |
 
-**Điểm chung.** Cả 10 ca:
+**Điểm chung.** Cả 11 dòng (10 ca; AA-985 có hai vòng):
 
 - Một luật (hoặc một prompt) quyết định "câu này nói về X" chỉ dựa trên việc **từ của X có mặt**.
 - Lỗi chỉ lộ ra khi có ai đọc tận tay một bài bị giữ.
