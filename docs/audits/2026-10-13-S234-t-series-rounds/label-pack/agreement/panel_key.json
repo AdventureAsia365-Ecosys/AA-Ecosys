@@ -1,0 +1,1908 @@
+{
+ "dimensions_not_kept": [
+  "brand_voice",
+  "channel_fit",
+  "hook",
+  "clarity",
+  "commercial_value"
+ ],
+ "dimensions_per_lens": [
+  "verdict",
+  "overall",
+  "fidelity",
+  "ai_tells"
+ ],
+ "lenses": {
+  "B": "brand_lead",
+  "C": "channel",
+  "E": "editor",
+  "K": "client"
+ },
+ "majority_rule": "upper median by severity: as_is needs >=3 as_is; light-or-better needs >=3 of 4; 2-2 takes the stricter",
+ "notes": [],
+ "pieces": {
+  "0151508d-1e53-4b64-bd3e-547a36b999e6": {
+   "channel": "linkedin",
+   "deciding_defects": "\"chosen as the foundation for a country\"; \"dual purpose still legible\" (admin role ended 1955); meta retreat",
+   "fidelity_audit": 8,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 11,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 6.5,
+     "overall": 6,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 6,
+     "fidelity": 7,
+     "overall": 6.5,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 6,
+     "fidelity": 7,
+     "overall": 6.3,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.5,
+    "fidelity": 6.875,
+    "overall": 6.2
+   },
+   "pack_no": 23,
+   "panel_text_sha256": "be6a2f67a0252d43210fae2b4e24c44cd598709ec08f2989f6768a523ef7d704",
+   "piece_id": "0151508d-1e53-4b64-bd3e-547a36b999e6",
+   "round": 1,
+   "tenant": "WildKind Travel",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "03248f56-2542-4e92-aed2-7db0193f1f9a": {
+   "channel": "linkedin",
+   "deciding_defects": "First line 209 chars (hard error); \"the same argument about where power and devotion are properly placed\"; meta retreat",
+   "fidelity_audit": 7,
+   "gate_failed": "F1_grounding",
+   "gate_status": "held",
+   "idx_in_round": 12,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 6.5,
+     "overall": 6.4,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 6.5,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 5.8,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5,
+    "fidelity": 6.25,
+    "overall": 5.95
+   },
+   "pack_no": 18,
+   "panel_text_sha256": "1e0dca7169ac21579799280c9f777466b7a2967de2ec1bc3063f83e49961bcd0",
+   "piece_id": "03248f56-2542-4e92-aed2-7db0193f1f9a",
+   "round": 1,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "1376c2c3-7560-4394-bed8-97063f4d5564": {
+   "channel": "linkedin",
+   "deciding_defects": "The camera/dress rule appears in the hook and again in paragraph 2; \"honest expectations rather than optimism\"; children's experience absent; the herbal hot stone bath from the seed is skipped",
+   "fidelity_audit": 9,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 2,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 6,
+     "fidelity": 8,
+     "overall": 6.6,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 6,
+     "fidelity": 8,
+     "overall": 7.1,
+     "verdict": "as_is"
+    },
+    "client": {
+     "ai_tells": 6.5,
+     "fidelity": 8,
+     "overall": 6.7,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 6,
+     "fidelity": 8,
+     "overall": 6.1,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 6.125,
+    "fidelity": 8,
+    "overall": 6.625
+   },
+   "pack_no": 10,
+   "panel_text_sha256": "f9e880ec19d57cd4bc20a020564c3389aabc2964080e08a69b64b4069184b82c",
+   "piece_id": "1376c2c3-7560-4394-bed8-97063f4d5564",
+   "round": 4,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "LLAL"
+  },
+  "1dd0f50b-3372-4a9c-a501-6fdb32e75bb6": {
+   "channel": "blog",
+   "deciding_defects": "H2 \"A Single Sentence on What Time Has Taken\" (instruction leak); meta \"cultures thrive\" contradicts decline; optional activities as structure; duplicated sentence",
+   "fidelity_audit": 7,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 10,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 6.5,
+     "overall": 6.3,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.2,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.1,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.5,
+    "fidelity": 5.625,
+    "overall": 5.65
+   },
+   "pack_no": 40,
+   "panel_text_sha256": "e9b9a8c36fc7e4833762970564e52123e8cc939f1da29f981bc25f82692024e5",
+   "piece_id": "1dd0f50b-3372-4a9c-a501-6fdb32e75bb6",
+   "round": 1,
+   "tenant": "Atlas & Hearth",
+   "tie": true,
+   "votes": "HLLH"
+  },
+  "1f2b24dc-d08e-42ac-96e0-db027b2a66a2": {
+   "channel": "blog",
+   "deciding_defects": "2 FAQs; optional activities listed as fixed; \"mirror-still\", \"Mörön: The Gateway Province\"; 4+ \"not X\" frames; SEO title identical to #4",
+   "fidelity_audit": 6.5,
+   "gate_failed": "F16_faq",
+   "gate_status": "held",
+   "idx_in_round": 18,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4,
+     "fidelity": 4,
+     "overall": 5.3,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.2,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.5,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.3,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4,
+    "fidelity": 4.75,
+    "overall": 5.325
+   },
+   "pack_no": 31,
+   "panel_text_sha256": "fdf3e82988b745f6a688c46a4f76b77217c18f0a482cffa4f8a808ba751af3b6",
+   "piece_id": "1f2b24dc-d08e-42ac-96e0-db027b2a66a2",
+   "round": 2,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "HHHH"
+  },
+  "2b49fc6d-eb2f-4818-bc4b-154073c13fc2": {
+   "channel": "linkedin",
+   "deciding_defects": "\"fortress-monastery\" twice in the opening; the \"two named rivers\" angle leaks into the copy; meta \"winter residence since 1637\"; \"well over three centuries\"",
+   "fidelity_audit": 7,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 7,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4.5,
+     "fidelity": 5.5,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 7,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 7,
+     "overall": 5.8,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 4.125,
+    "fidelity": 6.375,
+    "overall": 5.8
+   },
+   "pack_no": 19,
+   "panel_text_sha256": "344f226559098ca3d430fa93a7b3e53d53752cb765aa6fe7ad18f7aba88720c8",
+   "piece_id": "2b49fc6d-eb2f-4818-bc4b-154073c13fc2",
+   "round": 3,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "2fc0a2fb-7708-4a38-a3b5-b1275c1e3089": {
+   "channel": "blog",
+   "deciding_defects": "**Orphan \"Access requires a multi-hour horse or reindeer ride\"** opens the Tsaatan section; superlatives \"one of the most coherent and varied family itineraries\", \"unlike almost anything else on earth\"; \"changes at the waterline\" contradicts \"transition zone\"; \"full without being relentless\"",
+   "fidelity_audit": 6.5,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 16,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4.5,
+     "fidelity": 6.5,
+     "overall": 5.7,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 5,
+     "overall": 5.5,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 5,
+     "overall": 5.3,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 4,
+     "overall": 4.9,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.625,
+    "fidelity": 5.125,
+    "overall": 5.35
+   },
+   "pack_no": 15,
+   "panel_text_sha256": "0bde1a0781045b1f4178a453ef4ee2f45e534d0de44b16966eccc87fa30bcae3",
+   "piece_id": "2fc0a2fb-7708-4a38-a3b5-b1275c1e3089",
+   "round": 4,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "HHHH"
+  },
+  "37047c45-4940-4512-9023-7cda75a4106f": {
+   "channel": "blog",
+   "deciding_defects": "\"This boundary is not metaphor.\"; invented \"quality of the silence\" and nomads \"close to the lakeshore\"; stray leading spaces ×2; \"considered access\" in the CTA",
+   "fidelity_audit": 7,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 18,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4.5,
+     "fidelity": 5,
+     "overall": 5.9,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 6.0,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 6.1,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 5,
+     "overall": 5.1,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 3.875,
+    "fidelity": 5.25,
+    "overall": 5.775
+   },
+   "pack_no": 21,
+   "panel_text_sha256": "852fb6d2f0ae38b68a67371870a68974ed40bdebe8e84b0fc2211f30df72db3d",
+   "piece_id": "37047c45-4940-4512-9023-7cda75a4106f",
+   "round": 3,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "HLLL"
+  },
+  "3964cb12-86c0-4dc8-992a-0a45a86fe9fc": {
+   "channel": "linkedin",
+   "deciding_defects": "\"It was founded in the 8th century\" (temples 1692); checkpoint misplaced \"on the trail\"; 2 contrast frames",
+   "fidelity_audit": 8,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 8,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5.5,
+     "fidelity": 6,
+     "overall": 6.1,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5.9,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 5,
+     "overall": 5,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 4.375,
+    "fidelity": 5.75,
+    "overall": 5.75
+   },
+   "pack_no": 1,
+   "panel_text_sha256": "0b1583ab1c870608a373fc8e297530415e5fb824e12b7adaff5376770a23d564",
+   "piece_id": "3964cb12-86c0-4dc8-992a-0a45a86fe9fc",
+   "round": 1,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "HLLL"
+  },
+  "3affefad-88d1-481b-9c7f-158e55b98a5e": {
+   "channel": "linkedin",
+   "deciding_defects": "\"Two rivers framing a structure on three sides\" plus landscape symbolism the angle forbids; \"most honest form of travel\" aphorism; little habitat content",
+   "fidelity_audit": 7.5,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 0,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6.3,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5.5,
+     "fidelity": 7.5,
+     "overall": 6.6,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6.2,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.125,
+    "fidelity": 6.625,
+    "overall": 6.275
+   },
+   "pack_no": 29,
+   "panel_text_sha256": "312edcf35143b820e9c358cc6f588d600cd0f2276e71501c561c8d9d41ba562d",
+   "piece_id": "3affefad-88d1-481b-9c7f-158e55b98a5e",
+   "round": 2,
+   "tenant": "WildKind Travel",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "4e4f0e0f-a985-4d44-90b2-9ef3cd988756": {
+   "channel": "blog",
+   "deciding_defects": "**Three repair duplicates** (steppe/taiga, \"register immediately\", Sod Camp spring); \"the landscape itself becomes a teaching tool\"; Khatgal in the FAQ; SEO title identical to #0",
+   "fidelity_audit": 6.5,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 19,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 3.5,
+     "fidelity": 5.5,
+     "overall": 4.8,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 3,
+     "fidelity": 5,
+     "overall": 4.7,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 3,
+     "fidelity": 6,
+     "overall": 5.3,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 5,
+     "overall": 4.4,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 3.125,
+    "fidelity": 5.375,
+    "overall": 4.8
+   },
+   "pack_no": 26,
+   "panel_text_sha256": "06152457ee5f7ffae122a6c653d52e2ebad5de6720bdf93a3f948ac8bf0f6802",
+   "piece_id": "4e4f0e0f-a985-4d44-90b2-9ef3cd988756",
+   "round": 3,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "HHHL"
+  },
+  "530aec31-ac34-45a2-9018-7233ad61ef2a": {
+   "channel": "blog",
+   "deciding_defects": "**Broken repair sentence** \"They mean that this single body of water…\"; numbers spelled out; blank lines; \"Edge of the World\" H2; Khatgal in the FAQ; monastery H2",
+   "fidelity_audit": 7,
+   "gate_failed": "F9_cta_fact",
+   "gate_status": "held",
+   "idx_in_round": 4,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 4.8,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 5,
+     "overall": 4.8,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5.3,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5.0,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.25,
+    "fidelity": 5.5,
+    "overall": 4.975
+   },
+   "pack_no": 20,
+   "panel_text_sha256": "e0cf5d6eaffb61d7e41c97aa81a5d35ddcdbc6d3a81b929c3191c16e86f29014",
+   "piece_id": "530aec31-ac34-45a2-9018-7233ad61ef2a",
+   "round": 3,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "HHHH"
+  },
+  "5939df86-f8d4-491e-affc-348d0618ddcd": {
+   "channel": "blog",
+   "deciding_defects": "**Monastery placed in \"the lake region\"**; FAQ \"What do the Tsaatan use their reindeer for?\" not answered; \"landscape has not entirely settled\" implies volcanic risk; \"a significant fraction\" for 0.4%; 2 repeats (hard error)",
+   "fidelity_audit": 6.5,
+   "gate_failed": "F17_trip_fact",
+   "gate_status": "held",
+   "idx_in_round": 19,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4.5,
+     "fidelity": 5.5,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.1,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 5,
+     "overall": 5.5,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 4,
+     "overall": 4.7,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.125,
+    "fidelity": 4.875,
+    "overall": 5.275
+   },
+   "pack_no": 4,
+   "panel_text_sha256": "61131f7b4720e6ad41f87252eaee37c3114dd3c4259e8969e78ef96643c6762c",
+   "piece_id": "5939df86-f8d4-491e-affc-348d0618ddcd",
+   "round": 4,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "HLHH"
+  },
+  "5e04de7a-846f-42fd-b0d6-b5b9b5a1a7f0": {
+   "channel": "linkedin",
+   "deciding_defects": "\"in the morning\" timing is invented, so F17 is right; written to parents only; clunky \"checkpoint\" hook",
+   "fidelity_audit": 7.5,
+   "gate_failed": "F17_trip_fact",
+   "gate_status": "held",
+   "idx_in_round": 8,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5.5,
+     "fidelity": 6,
+     "overall": 5.9,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6.1,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6.1,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 6,
+     "fidelity": 7,
+     "overall": 6.1,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.375,
+    "fidelity": 6.5,
+    "overall": 6.05
+   },
+   "pack_no": 2,
+   "panel_text_sha256": "538cce19991dc1bb6d550c9beb0520cbf08fa998a0fe0bf733abc3a41f4c1937",
+   "piece_id": "5e04de7a-846f-42fd-b0d6-b5b9b5a1a7f0",
+   "round": 3,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "6599b514-4fbb-4c45-ba22-f29b234e4143": {
+   "channel": "linkedin",
+   "deciding_defects": "**113 words**; \"That is not a backdrop. That is where…\" plus \"That kind of sequencing is deliberate.\"; flat, formal voice; swim and rest said twice",
+   "fidelity_audit": 9.5,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 11,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4,
+     "fidelity": 8,
+     "overall": 5.0,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 4,
+     "fidelity": 8,
+     "overall": 5.4,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4.5,
+     "fidelity": 8,
+     "overall": 5.7,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 7,
+     "overall": 4.8,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 3.875,
+    "fidelity": 7.75,
+    "overall": 5.225
+   },
+   "pack_no": 8,
+   "panel_text_sha256": "1f6c99a354867d21b90ed821de88cdf2f42afc7a338fa0434307e06916c182d0",
+   "piece_id": "6599b514-4fbb-4c45-ba22-f29b234e4143",
+   "round": 4,
+   "tenant": "Trail Pulse",
+   "tie": true,
+   "votes": "HHLL"
+  },
+  "68eab532-c59d-47a9-9468-b8170538cc86": {
+   "channel": "linkedin",
+   "deciding_defects": "Meta \"Bhutan meditation retreat\"; invented siting intent and river symbolism (\"placement was deliberate\"); architecture, not nature",
+   "fidelity_audit": 7,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 0,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5.5,
+     "fidelity": 7,
+     "overall": 6.4,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5.5,
+     "fidelity": 6.5,
+     "overall": 6.4,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 6,
+     "fidelity": 6,
+     "overall": 6,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.5,
+    "fidelity": 6.375,
+    "overall": 6.2
+   },
+   "pack_no": 12,
+   "panel_text_sha256": "96e4f87d317a4aeca14347ed283e06858feb24eefa35ee63872fc7bf3e8df1b6",
+   "piece_id": "68eab532-c59d-47a9-9468-b8170538cc86",
+   "round": 1,
+   "tenant": "WildKind Travel",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "6eafd4d0-e815-4406-a4c2-044f6a2f74e8": {
+   "channel": "blog",
+   "deciding_defects": "**Meta \"volcanic terrain shaped by centuries of culture\"**; Khatgal in the FAQ (out of scope); \"## Day Fourteen\" H2 for the thin moment; \"That is not scenery. That is consequence.\"",
+   "fidelity_audit": 7,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 16,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.1,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.2,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 5,
+     "overall": 5.1,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 3.75,
+    "fidelity": 5.25,
+    "overall": 5.3
+   },
+   "pack_no": 39,
+   "panel_text_sha256": "2c9a8bb3b65adfbe5863e5bb86417a36b6850669499b05b5ce14adfc1041414a",
+   "piece_id": "6eafd4d0-e815-4406-a4c2-044f6a2f74e8",
+   "round": 3,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "HHHL"
+  },
+  "71ad6b1f-9eb5-4509-915c-5c7644a5b71a": {
+   "channel": "linkedin",
+   "deciding_defects": "**105 words** (below the 120-word band); \"That's not filler. That's structure.\" (S233 tell); a generic consultancy hook with no place in it",
+   "fidelity_audit": 9.5,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 6,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4.5,
+     "fidelity": 8,
+     "overall": 5.6,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 3,
+     "fidelity": 8,
+     "overall": 4.8,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 4.5,
+     "fidelity": 8,
+     "overall": 6.0,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 7,
+     "overall": 4.8,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 3.75,
+    "fidelity": 7.75,
+    "overall": 5.3
+   },
+   "pack_no": 17,
+   "panel_text_sha256": "7d8552c6ec79cf5838a9df55a60d7655db907c54ebe30d1b697ab75b4c0e78d7",
+   "piece_id": "71ad6b1f-9eb5-4509-915c-5c7644a5b71a",
+   "round": 4,
+   "tenant": "Trail Pulse",
+   "tie": true,
+   "votes": "HLHL"
+  },
+  "72cc7ba9-d01d-4a8f-aef3-365f41c0b5ae": {
+   "channel": "linkedin",
+   "deciding_defects": "\"That's not coincidence. It's how pacing works\"; corporate brand line; \"the plan gives it to you\" implies time for the viewpoint trail and the bear centre",
+   "fidelity_audit": 8,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 5,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 5.6,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6.0,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 7,
+     "overall": 5.6,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6.0,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 4.75,
+    "fidelity": 7,
+    "overall": 5.8
+   },
+   "pack_no": 22,
+   "panel_text_sha256": "ae17e1d6a948184b17f42fa35444f0d3c845a957de17bcdc055693189b161a0c",
+   "piece_id": "72cc7ba9-d01d-4a8f-aef3-365f41c0b5ae",
+   "round": 3,
+   "tenant": "Trail Pulse",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "82af5983-b67c-4131-9e56-90f1e7c4152c": {
+   "channel": "linkedin",
+   "deciding_defects": "\"Day 2 ends at … pools\" (lunch follows); \"That's not filler. It's a structural choice.\"; pacing essay, not Trail energy",
+   "fidelity_audit": 7,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 3,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4.5,
+     "fidelity": 7,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 4.5,
+     "fidelity": 5.5,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 4.9,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5.5,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 4.25,
+    "fidelity": 5.875,
+    "overall": 5.5
+   },
+   "pack_no": 14,
+   "panel_text_sha256": "0303ebaa8c400489d48bbb59cb3006cb0ec5ffd3dca80c8290e1171d93d33403",
+   "piece_id": "82af5983-b67c-4131-9e56-90f1e7c4152c",
+   "round": 1,
+   "tenant": "Trail Pulse",
+   "tie": false,
+   "votes": "LLLH"
+  },
+  "863e7012-929f-416c-b785-96e0abdabbaf": {
+   "channel": "linkedin",
+   "deciding_defects": "Template hook (\"asks something of every visitor… gives back\"); \"Knowing them in advance\" has no antecedent; brand name twice in the close",
+   "fidelity_audit": 8.5,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 2,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 6,
+     "fidelity": 7,
+     "overall": 6.5,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 6,
+     "fidelity": 7,
+     "overall": 6.4,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6.1,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.5,
+    "fidelity": 7,
+    "overall": 6.25
+   },
+   "pack_no": 38,
+   "panel_text_sha256": "86f77219e4bab484411b2f7391f2d35d14b15425f6a5f150ac9a9decdd9cfbaa",
+   "piece_id": "863e7012-929f-416c-b785-96e0abdabbaf",
+   "round": 2,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "95903c65-f5d6-485d-b47c-87bcc16a2161": {
+   "channel": "blog",
+   "deciding_defects": "Broken opener with no antecedent (repair artifact); duplicated caldera sentence; \"Gobi Desert\" in CTA; \"classroom material\" framing; 1 FAQ",
+   "fidelity_audit": 4,
+   "gate_failed": "F1_grounding",
+   "gate_status": "held",
+   "idx_in_round": 19,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 3.5,
+     "fidelity": 3.5,
+     "overall": 3.8,
+     "verdict": "reject"
+    },
+    "channel": {
+     "ai_tells": 4,
+     "fidelity": 3.5,
+     "overall": 3.5,
+     "verdict": "reject"
+    },
+    "client": {
+     "ai_tells": 3,
+     "fidelity": 4,
+     "overall": 4.2,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 4,
+     "overall": 3.8,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "reject",
+   "mean": {
+    "ai_tells": 3.375,
+    "fidelity": 3.75,
+    "overall": 3.825
+   },
+   "pack_no": 36,
+   "panel_text_sha256": "d41eb47df99df216a023daa737205973efe0f4191337f03f14b9c37bd51c2e3e",
+   "piece_id": "95903c65-f5d6-485d-b47c-87bcc16a2161",
+   "round": 1,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "HRRH"
+  },
+  "9bf33724-b8a5-44e1-a6d1-30e0c9d4c253": {
+   "channel": "blog",
+   "deciding_defects": "**H2 \"The Sod Camp Base\"** (Sod Camp is the day-3 stop, not the lake base); naming-note leak (\"phonetic approximation… best avoided\"); caldera trek \"optional\"; storms dismissed",
+   "fidelity_audit": 5.5,
+   "gate_failed": "F9_cta_fact",
+   "gate_status": "held",
+   "idx_in_round": 14,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4.5,
+     "fidelity": 4,
+     "overall": 4.8,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 3,
+     "overall": 4.8,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 3,
+     "overall": 4.7,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 4,
+     "overall": 4.7,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.375,
+    "fidelity": 3.5,
+    "overall": 4.75
+   },
+   "pack_no": 24,
+   "panel_text_sha256": "a484406b368068dd03c17e2cff098868b3867dc4264f4f171262a1e92cf6659d",
+   "piece_id": "9bf33724-b8a5-44e1-a6d1-30e0c9d4c253",
+   "round": 3,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "HHHH"
+  },
+  "a084f256-4521-4113-934d-87d849a252b9": {
+   "channel": "linkedin",
+   "deciding_defects": "Leading blank lines and a 283-character first line (hard error); \"the return takes… two to three hours each way\"; no children; generic close",
+   "fidelity_audit": 7.5,
+   "gate_failed": "F14_first_line",
+   "gate_status": "held",
+   "idx_in_round": 3,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 5.5,
+     "overall": 5.0,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 5,
+     "overall": 4.6,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 5.3,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 6,
+     "fidelity": 6,
+     "overall": 5.4,
+     "verdict": "light"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 5.25,
+    "fidelity": 5.875,
+    "overall": 5.075
+   },
+   "pack_no": 7,
+   "panel_text_sha256": "5b0001308a6486a4de6d32735a56d79b54ef63b79ace029fea202ec04d164230",
+   "piece_id": "a084f256-4521-4113-934d-87d849a252b9",
+   "round": 3,
+   "tenant": "Terra Family Expeditions",
+   "tie": true,
+   "votes": "LHHL"
+  },
+  "a9f966c5-687c-4b4f-970d-ccfdbd65871a": {
+   "channel": "linkedin",
+   "deciding_defects": "Rest thesis stated 3×; wellness-coach voice for an energetic brand; CTA points at the whole trip",
+   "fidelity_audit": 8,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 8,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 7.5,
+     "overall": 6,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5.2,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 8,
+     "overall": 5,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.25,
+    "fidelity": 6.875,
+    "overall": 5.3
+   },
+   "pack_no": 5,
+   "panel_text_sha256": "e8505be99d3bcbdfaf88a1eda8c320aaf610d6c7a0492373693ea9dae4b76046",
+   "piece_id": "a9f966c5-687c-4b4f-970d-ccfdbd65871a",
+   "round": 2,
+   "tenant": "Trail Pulse",
+   "tie": false,
+   "votes": "HHLH"
+  },
+  "abdaf636-b6ae-41b0-a9ea-a41b15dadc1c": {
+   "channel": "linkedin",
+   "deciding_defects": "**Meta missing**; gilded roofs moved from the temples to the assembly hall; \"not a preserved monument\"; heritage-led, no habitat",
+   "fidelity_audit": 8.5,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 6,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5.5,
+     "fidelity": 6.5,
+     "overall": 6.0,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6.1,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 6,
+     "fidelity": 7,
+     "overall": 6.4,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 6,
+     "fidelity": 7,
+     "overall": 6.2,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.625,
+    "fidelity": 6.875,
+    "overall": 6.175
+   },
+   "pack_no": 16,
+   "panel_text_sha256": "361d3a4a8436db18b9f11dddc36326f50d5323399bfae92beda7445574de5bc0",
+   "piece_id": "abdaf636-b6ae-41b0-a9ea-a41b15dadc1c",
+   "round": 3,
+   "tenant": "WildKind Travel",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "ad1783e5-aef7-42ef-bf2a-e219874bd73b": {
+   "channel": "blog",
+   "deciding_defects": "No FAQ; blank-gap artifact; invented shore viewpoint; \"something ancient\"; \"fifteen-day\"; trip \"closes on day fourteen\"",
+   "fidelity_audit": 6,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 17,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 5.5,
+     "overall": 5.5,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 5,
+     "overall": 4.6,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.2,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 5,
+     "overall": 4.8,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.25,
+    "fidelity": 5.125,
+    "overall": 5.025
+   },
+   "pack_no": 33,
+   "panel_text_sha256": "dca6cf61449aabbc2d701cc917e588fe9e25b65ff4296f3a71d9f33fde205ae8",
+   "piece_id": "ad1783e5-aef7-42ef-bf2a-e219874bd73b",
+   "round": 1,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "HHHH"
+  },
+  "b6fd83ba-cac8-4e37-8167-43b9f7c997da": {
+   "channel": "linkedin",
+   "deciding_defects": "Hook does not name the dzong or the rivers; \"founding purpose… never been set aside\" (contradicts 1955); \"deliberate\" ×3",
+   "fidelity_audit": 7,
+   "gate_failed": "F9_cta_fact",
+   "gate_status": "held",
+   "idx_in_round": 7,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.4,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 5.5,
+     "overall": 5.7,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.4,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 5.5,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 4.5,
+    "fidelity": 5.375,
+    "overall": 5.5
+   },
+   "pack_no": 30,
+   "panel_text_sha256": "1abe9726d3a912ddc5aa2488011c31a032af002e5dc5c4fff3c51781cba7bcea",
+   "piece_id": "b6fd83ba-cac8-4e37-8167-43b9f7c997da",
+   "round": 2,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "bb776a54-93cc-4f10-a108-6e26f9f05324": {
+   "channel": "blog",
+   "deciding_defects": "**Boat and trekking presented as included**, with only horse riding optional; **FAQ Q1 \"Who are the Tsaatan?\" not answered**; \"zero point four percent\", \"sixteen hundred and forty-five metres\"; \"continues, in principle, to the Arctic\"; ger upgraded to \"well-made shelter\"",
+   "fidelity_audit": 6.5,
+   "gate_failed": "F17_trip_fact",
+   "gate_status": "held",
+   "idx_in_round": 5,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.0,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 4.9,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 5.5,
+     "overall": 5.4,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 4,
+     "overall": 4.8,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.25,
+    "fidelity": 4.875,
+    "overall": 5.025
+   },
+   "pack_no": 32,
+   "panel_text_sha256": "95a5598c555f38af0b2be8ca875a69264501503e2d84a2cebe01ad8ce181334e",
+   "piece_id": "bb776a54-93cc-4f10-a108-6e26f9f05324",
+   "round": 4,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "HHHH"
+  },
+  "bd8cea42-8c0e-42f6-abf9-992be290e509": {
+   "channel": "blog",
+   "deciding_defects": "**Storm hazard waved away** (\"feel real rather than managed\"); \"a different kind of classroom\"; \"smallest distinct ethnic groups\"; SEO title identical to #19",
+   "fidelity_audit": 7.5,
+   "gate_failed": "F9_cta_fact",
+   "gate_status": "held",
+   "idx_in_round": 0,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 5.5,
+     "overall": 5.7,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 5.9,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5.9,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.2,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 4.5,
+    "fidelity": 5.625,
+    "overall": 5.675
+   },
+   "pack_no": 27,
+   "panel_text_sha256": "7deb82066556b377ea4c465095e9543c069b445b675dbe12ab69f223fa439a00",
+   "piece_id": "bd8cea42-8c0e-42f6-abf9-992be290e509",
+   "round": 3,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "HLLL"
+  },
+  "ca38a799-783d-4cd9-808a-a6bf80c0c374": {
+   "channel": "blog",
+   "deciding_defects": "\"only a few hundred people\" twice; classroom framing; Ulaanbaatar named (out of scope, not detected); Tsaatan as \"logical endpoint\"; 2 FAQs",
+   "fidelity_audit": 6.5,
+   "gate_failed": "F16_faq",
+   "gate_status": "held",
+   "idx_in_round": 17,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.2,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 4,
+     "fidelity": 5.5,
+     "overall": 5.1,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 5.5,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 5.3,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.5,
+    "fidelity": 5.625,
+    "overall": 5.275
+   },
+   "pack_no": 13,
+   "panel_text_sha256": "57d75ce56a657d297ea2a841c0cdc4ddfb1fc3b3e0215a6ad1f601b793b39d5a",
+   "piece_id": "ca38a799-783d-4cd9-808a-a6bf80c0c374",
+   "round": 2,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "HHHH"
+  },
+  "d1305823-aaee-4610-ae0f-a07c039b2efd": {
+   "channel": "linkedin",
+   "deciding_defects": "4 contrast frames in 161 words; same \"filler\" template as #3/#7; corporate close",
+   "fidelity_audit": 8,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 14,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4,
+     "fidelity": 7,
+     "overall": 5.5,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 4.5,
+     "fidelity": 7,
+     "overall": 5.8,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 8,
+     "overall": 5.5,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 7,
+     "overall": 5.1,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 3.875,
+    "fidelity": 7.25,
+    "overall": 5.475
+   },
+   "pack_no": 9,
+   "panel_text_sha256": "6b8477d77987c4c6f0797b739d758aeee9d29e88a1ba5b5f7e751359f22acec1",
+   "piece_id": "d1305823-aaee-4610-ae0f-a07c039b2efd",
+   "round": 1,
+   "tenant": "Trail Pulse",
+   "tie": false,
+   "votes": "HLLL"
+  },
+  "d5156ec3-48c3-4407-b663-3f6919de390a": {
+   "channel": "linkedin",
+   "deciding_defects": "Para 1 restates the hook; filler line \"Each layer of that history shapes…\"; \"surrendered\"; #ParoDistrict",
+   "fidelity_audit": 8.5,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 6,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 5.9,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 6.5,
+     "fidelity": 8,
+     "overall": 7,
+     "verdict": "as_is"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6.1,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 8,
+     "overall": 6,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.375,
+    "fidelity": 7.5,
+    "overall": 6.25
+   },
+   "pack_no": 6,
+   "panel_text_sha256": "e6615d163a161fc24e2a1048ce591d2899e34a4e264823a9dbb405f7badbea55",
+   "piece_id": "d5156ec3-48c3-4407-b663-3f6919de390a",
+   "round": 2,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "LLAL"
+  },
+  "d614d2d5-28ce-43c3-9c39-74d73a0416d1": {
+   "channel": "blog",
+   "deciding_defects": "Opens on \"the Gobi\" (scope, hard error); \"two percent\" vs 0.4%; \"The lake was established as … National Park\"; no FAQ; \"seven-to-sixteen range\" leak; contradictory day order",
+   "fidelity_audit": 4,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 2,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4.5,
+     "fidelity": 4,
+     "overall": 4.5,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 4.5,
+     "fidelity": 4,
+     "overall": 4.2,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 4,
+     "overall": 4.6,
+     "verdict": "heavy"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 3,
+     "overall": 3.9,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.0,
+    "fidelity": 3.75,
+    "overall": 4.3
+   },
+   "pack_no": 37,
+   "panel_text_sha256": "299cb50e517802936b769cb4da3648f72ad79647952ff378f2e71bc0f2735465",
+   "piece_id": "d614d2d5-28ce-43c3-9c39-74d73a0416d1",
+   "round": 1,
+   "tenant": "Terra Family Expeditions",
+   "tie": false,
+   "votes": "HHHH"
+  },
+  "d8990697-4227-4ddc-9541-793c8ae59993": {
+   "channel": "linkedin",
+   "deciding_defects": "\"administrative\" ×3 in 2 sentences; no habitat or nature angle; \"relocate here each year\" drops \"in winter\"; CTA \"Day 4… wider journey\" points out of scope",
+   "fidelity_audit": 8,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 9,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 6,
+     "fidelity": 6.5,
+     "overall": 5.9,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 5.9,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5.5,
+     "fidelity": 7,
+     "overall": 6.0,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 5.5,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.375,
+    "fidelity": 6.875,
+    "overall": 5.825
+   },
+   "pack_no": 28,
+   "panel_text_sha256": "ba38d9a2c22f0ebe5b6ac25cf3546c596b18809cd0446b76149f94a9673cad93",
+   "piece_id": "d8990697-4227-4ddc-9541-793c8ae59993",
+   "round": 4,
+   "tenant": "WildKind Travel",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "e44b05a5-f640-4e1d-a35d-169c5caf5435": {
+   "channel": "linkedin",
+   "deciding_defects": "**Meta \"400-year legacy as Bhutan's capital\"** (it was 318 years); invented \"every valley had a defensible ridge\"; aphorism close",
+   "fidelity_audit": 6.5,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 2,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5.5,
+     "fidelity": 5.5,
+     "overall": 6.0,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 5,
+     "overall": 6.3,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6.0,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6.2,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.125,
+    "fidelity": 5.625,
+    "overall": 6.125
+   },
+   "pack_no": 3,
+   "panel_text_sha256": "d24c98ee3997dedcae4f7dcf80439bb5fd98afb62150fb02b4dff035c613a108",
+   "piece_id": "e44b05a5-f640-4e1d-a35d-169c5caf5435",
+   "round": 3,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "e980728e-f77a-47ba-8b59-0b63a28e301c": {
+   "channel": "linkedin",
+   "deciding_defects": "\"narrow peninsula\" contradicts the seed's \"long\"; \"water on three sides\", \"single point of passage\", \"the dzong did not diminish\" (inferred); \"The annual return is institutional, not ceremonial sentiment.\"; 3–4 contrast frames",
+   "fidelity_audit": 6,
+   "gate_failed": "F9_cta_fact",
+   "gate_status": "held",
+   "idx_in_round": 8,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 6.5,
+     "overall": 6.6,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6.2,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 6.5,
+     "overall": 6.2,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 4,
+     "fidelity": 6,
+     "overall": 5.9,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 4.75,
+    "fidelity": 6.25,
+    "overall": 6.225
+   },
+   "pack_no": 34,
+   "panel_text_sha256": "fb43015f19ced98c327fbe118538a706cf6373ffad6a69ab583a62b5dfc723cd",
+   "piece_id": "e980728e-f77a-47ba-8b59-0b63a28e301c",
+   "round": 4,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "e9f6934a-22b9-4a68-9caf-e1c07f564ad1": {
+   "channel": "blog",
+   "deciding_defects": "H2 \"A Sentence on Loss\" (instruction leak); \"before any human presence at all\" (false); \"the access to understand\"; 1 FAQ",
+   "fidelity_audit": 7,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 16,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 4.5,
+     "fidelity": 5.5,
+     "overall": 5.4,
+     "verdict": "heavy"
+    },
+    "channel": {
+     "ai_tells": 4.5,
+     "fidelity": 5.5,
+     "overall": 5,
+     "verdict": "heavy"
+    },
+    "client": {
+     "ai_tells": 4,
+     "fidelity": 5,
+     "overall": 5.4,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 3,
+     "fidelity": 4,
+     "overall": 4.6,
+     "verdict": "heavy"
+    }
+   },
+   "majority": "heavy",
+   "mean": {
+    "ai_tells": 4.0,
+    "fidelity": 5.0,
+    "overall": 5.1
+   },
+   "pack_no": 11,
+   "panel_text_sha256": "1361df1b9cf4192ae0b7885205031a18b00d0e967078c45c640f1b47b05f35ad",
+   "piece_id": "e9f6934a-22b9-4a68-9caf-e1c07f564ad1",
+   "round": 1,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "HHHL"
+  },
+  "edbaf7c5-3811-4ec6-aed6-0625886c4d57": {
+   "channel": "linkedin",
+   "deciding_defects": "\"understood exactly what that meant\" (mind-reading, F1 is right); meta \"remains Bhutan's… administrative center\"; #PhoChhu/#MoChhu without #Bhutan",
+   "fidelity_audit": 6,
+   "gate_failed": "F1_grounding",
+   "gate_status": "held",
+   "idx_in_round": 13,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5,
+     "fidelity": 5,
+     "overall": 6.1,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5.5,
+     "fidelity": 6,
+     "overall": 6,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6.1,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 5.9,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.125,
+    "fidelity": 6.25,
+    "overall": 6.025
+   },
+   "pack_no": 25,
+   "panel_text_sha256": "7d8c1dae127a2a020c8e9dfe9ea3d7d8e74452aa7b2e0f0937c3592f3e90802b",
+   "piece_id": "edbaf7c5-3811-4ec6-aed6-0625886c4d57",
+   "round": 2,
+   "tenant": "WildKind Travel",
+   "tie": false,
+   "votes": "LLLL"
+  },
+  "f8494e33-b42a-47aa-95b1-d6aedb96d417": {
+   "channel": "linkedin",
+   "deciding_defects": "\"The setting is part of the meaning.\"; speculative \"a hilltop or a valley floor could not provide\"; \"narrow strip\" (seed: long peninsula)",
+   "fidelity_audit": 8,
+   "gate_failed": null,
+   "gate_status": "approved",
+   "idx_in_round": 13,
+   "lenses": {
+    "brand_lead": {
+     "ai_tells": 5.5,
+     "fidelity": 6.5,
+     "overall": 6.3,
+     "verdict": "light"
+    },
+    "channel": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 6.0,
+     "verdict": "light"
+    },
+    "client": {
+     "ai_tells": 5,
+     "fidelity": 6,
+     "overall": 5.6,
+     "verdict": "light"
+    },
+    "editor": {
+     "ai_tells": 5,
+     "fidelity": 7,
+     "overall": 6.5,
+     "verdict": "light"
+    }
+   },
+   "majority": "light",
+   "mean": {
+    "ai_tells": 5.125,
+    "fidelity": 6.375,
+    "overall": 6.1
+   },
+   "pack_no": 35,
+   "panel_text_sha256": "f4f7d25206101e03e9bd2b6d1f0a18405d84ece209be8f200a7e2099ac501e7c",
+   "piece_id": "f8494e33-b42a-47aa-95b1-d6aedb96d417",
+   "round": 3,
+   "tenant": "Atlas & Hearth",
+   "tie": false,
+   "votes": "LLLL"
+  }
+ },
+ "scale": "scores /10, higher is better (ai_tells 10 = no AI tells)",
+ "schema": "aa783-panel-key/1",
+ "source": "S234 T9 commercial panel rounds 1-4 (4 independent Claude Code lens agents + fidelity auditor)"
+}

@@ -6,13 +6,14 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S247 close, 22/10/2026 (Claude Code), statuses read from Linear at session end. 20 issues closed (list in §5): AA-859, AA-901, AA-909, AA-879, AA-903, AA-871, AA-891, AA-779, AA-780, AA-845, AA-803, AA-847, AA-760, AA-759, AA-894, AA-928, AA-929, AA-930, AA-931, AA-886. No new Linear issue; new work without an issue is marked "(no issue yet)". Live state: `docs/audits/2026-10-22-S247-wrap/state-snapshot.md`. The queue still follows the S246 master plan ([plan-and-status.json](../audits/2026-10-21-S246-master-plan/plan-and-status.json)); several slots ran ahead of plan in S247 (AA-759, AA-760, AA-879, AA-901, AA-891, AA-909, AA-871, AA-859, AA-931)._
+_Last updated: S248 close, 23/10/2026 (Claude Code), statuses read from Linear at session end. 15 issues closed (list in §5): AA-981, AA-982, AA-983, AA-984, AA-985, AA-986, AA-933, AA-972, AA-973, AA-974, AA-932, AA-712, AA-839, AA-906, AA-837; AA-762 closed as a duplicate of AA-939. New issues (asked for or approved by Nghiệp): AA-981…AA-986. Live state: `docs/audits/2026-10-23-S248-wrap/state-snapshot.md`. S248 removed the agent-made slot rules (memory `no-agent-made-gates`): an item that is technically ready is done now, so the slot column is an order, not a date gate._
 
 ## 1. Time-gated checks (do these first when due)
 
 | Due | Issue | Check |
 |---|---|---|
-| now (S248) | (Jira) PR-27, PR-24, PR-13, PR-23 | S247 posting timed out (Atlassian MCP > 300 s): check PR-27 before re-posting (no duplicate), check PR-24 and PR-13 by eye, post PR-23 with its 2 screenshots (`docs/audits/2026-10-22-S247-wrap/jira-drafts.md`). PR-27 only after Nghiệp opens the legal Drive folder to Ms. Thư. |
+| now (S249) | (Jira) S248 drafts | 7 drafts in the S248 session log (PR-13 correction, PR-25 B2B, PR-26 CRM base, PR-27 platform, PR-22 content, PR-24 TripPlanner, PR-23 tour retirement warning): post only what Nghiệp approved; check with JQL `updated >= -Nm` before re-posting after an MCP timeout. The S247 drafts were all posted on 22/10 (PR-13 10492, PR-22 10491, PR-24 10493, PR-27 10494, PR-23 10495). |
+| nightly | AA-986 | `db-tour-liveness-gate.yml` (Infra #328/#329): strict, LANDED {L2, L4}, L3/L5 enforced since 23/10. Red = a derivative of a retired or paused tour is still served somewhere (atoms, catalog, tenant, Booking, TripPlanner); read the probe report before changing the tour lifecycle. |
 | daily 06:15 UTC | AA-816 | Ops probe enqueues `staff_directory_reconcile` (Infra #195). Check one job per UTC day in `shared.job` and its drift report (Cognito groups vs `staff_app_grant`). |
 | daily 22:00 UTC | AA-869 | Snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry` runs live (deletes manual snapshots > 30 d unless `keep-` / `aa:retain*`). An SNS mail only when it deletes, caps, finds a malformed tag or an orphan. |
 | first session ≥01/11 (≈S257) | (cost) / AA-896 | Infra cost audit (memory `infra-cost-audit-nov-2026`): compare Aug/Sep/Oct 2026 per `App` tag and service (acc2) + acc3 Bedrock + AWS Lift credits and explain each jump, with AA-838 and AA-665. S247 added CloudFront + VPC origin for CRM ($0 at current volume), the GitHub Apps ($0) and public repos (Actions minutes). The numbers feed the Jira platform report (PR-20 Epic). Slot by date, not by session number (~1.2 sessions a day). |
@@ -26,23 +27,23 @@ _Last updated: S247 close, 22/10/2026 (Claude Code), statuses read from Linear a
 
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
-- **Jira S247:** open sharing of the Drive folder "Legal readiness packet" to Ms. Thư, then the agent checks/posts PR-27; PR-24 and PR-13 to check by eye; PR-23 to post (§1). All 5 drafts already approved ("Ok hết").
-- **CIS #908 (meal rule) — direction to confirm:** the AA-803 Done comment (S247) parks #908 and keeps `a1_claim_supported` + `a1_promise_unsupported` ON as the final outcome, while the S247 next-session list says "adversarial check #908 then merge, then switch the two OFF (S246 decision 1)" and the PR-13 Jira draft says they go off once the code rule lands. Pick one (§3 row "(no issue yet)").
+- **Jira S248:** approve the 7 drafts (PR-13, PR-25, PR-26, PR-27, PR-22, PR-24, PR-23), then the agent posts them. The S247 PR-27 comment links the Drive folder "Legal readiness packet": make sure its sharing is open to Ms. Thư.
+- **AA-910:** open the Booking staff pages at 1440 px (Cognito staff session) and say OK, then the agent closes it.
 - **Revoke unused PATs:** `aa-cis-infra-schema-dump`, `ACPCORE_READ_TOKEN`, `aa-cis-acpcore-read`, and the old PAT behind the deleted `ROOT_REPO_DOCS_TOKEN` (github.com/settings/personal-access-tokens; only Nghiệp can).
 - **Repos back to private + Actions minutes:** AA-Ecosys and AA-CIS-Infra are public since 22/10 (private minutes for October ran out; "code xong rồi quay lại private"). When coding ends: switch them back and decide minutes (budget vs self-hosted runner, ADR 0014 amendment, root #182). While Infra is public, `AA_CI_BOT_PRIVATE_KEY` is a repo-level secret there (readable in `pull_request` runs by writers only).
 - **DataForSEO password in the Infra history (optional):** not rotated by Nghiệp's decision (AA-841 S239, repeated S247); rotate if he changes his mind now that the repo is public.
-- **MFA on the right session:** AA-932 + AA-972 M2M pool (S249, one MFA for both), AA-939 partner pool (S254). (AA-931 done S247.)
+- **MFA on the right session:** AA-939 partner pool (Cognito). (AA-932 + AA-972 M2M pool done S248.)
 - **S1-first A/B (L1):** arbitrate ~30 pieces after run 2 (S251, ~30–45 min) and fix the reference examples (~1 h).
-- **Ask before creating issues:** the S247 "(no issue yet)" items in §3 (place_paa filter, portal/admin contrast, quality_score_id on revalidation, /admin/review at 400 px, probe entry, held blogs), T13 route stitching (needed by AA-948), splitting P2a out of AA-979. Linear Free quota: archive Done every session.
-- **AA-Partner repo:** Nghiệp creates it if "members can create repositories" is turned off (access review Q-2); AA-933 needs it in S250.
+- **Ask before creating issues:** T13 route stitching (needed by AA-948), splitting P2a out of AA-979, the optional TripPlanner purge on a tour lifecycle event (§3). The S247 "(no issue yet)" items became AA-982…AA-984 or were closed with AA-760 / AA-859 follow-ups in S248. Linear Free quota: archive Done every session.
 - **Ms. Thư:** tax, deposit %, payment marking and the B2B margin (AA-682 + Lane B); AI terms clause by 11/11 (AA-820) and the /privacy, /terms wording (drafts in the legal packet on Drive; whether counsel is needed is her call).
 - **TasteWP test site:** revoke the AA portal e2e application password on the TasteWP test site when no longer needed (the value was shown in the S245 transcript).
 - Access review 2026-Q4 (`docs/audits/2026-10-20-S245-access-review/`): Q-1 (Ms. Thư `cis-admin` or `cis-reviewer`); Q-2 partly done S247 (vercel App narrowed to 3 repos, linear to 5, notion left as is; "members can create repositories" still open); owner OK to delete the orphan IAM user `s226-should-fail` (AA-878 finding 2).
 - **Break-glass TOTP:** add the NEW `totp_seed` (rotated S244) from Secrets Manager `aa-identity/dev/breakglass` to an authenticator app, if wanted.
 - **Ms. Thư's first admin login** (invite sent 18/10; Google cleared the Chrome warning 19/10). Optional: Nghiệp dropped it from AA-858 Done-when (S243).
 - AA-855 UAT videos: when Nghiệp says (after all the tech work, >S262). Product questions from S238: T2 day separator; "— N Days" vs ", N Days".
-- AA-829: approve deleting/securing the 2026-09-16 real-data dumps; DSN CNAME secrets are edited by hand.
+- AA-829: the 2026-09-16 dumps are deleted (S248, shredded after the hash check) and the DSN CNAME switch is done. Left: the restore drill with a repoint through `db_dns_target_override` and the single-schema restore rehearsal (temporary RDS, cost stated first).
 - AA-905 geo backfill: quote first, then approve a subset (S256).
+- Settled in S248: no agent-made gates (memory `no-agent-made-gates`: no ≤1-Booking rule, no slot or 01/11 waits, no "needs clarify"); DFS rotation deferred; #908 closed with the two checks kept ON; 18-card decision page approved (d06: new tours get their real publish date, rewritten tours keep the first `published_at`; d07: system gaps are fixed in the system, not raised to Ms. Thư; d15 mask ids; d16 delete the CRM spike); AA-645 writer W×Sonnet with brand-fit report-only; AA-986 ADR 0015 + Q1–Q10 (no badge on supersede, confirmed bookings kept with a staff flag + notification, 410/301, Master Content staff and admins); AA-839 real-erase drill run with Nghiệp.
 - Settled in S247: finish all doable work before closing; Dev measures now instead of waiting days (burst replaced the AA-847 7-day window); session close order = Jira approval before the logs (root #172); all 8 cleanup proposals approved (Vercel `ADMIN_*` ×5 deleted, `SENTRY_AUTH_TOKEN` + `TRIPPLANNER_API_KEY` preview → Secret, third-party Apps narrowed, empty states by interception, portal calls not metered, darker `--aa-muted2`, real FK migration); CRM ADRs 0005a/0006b/0008a/0010 and ADR 0011 (GitHub App) accepted; maps stay AA-provided, CRM integrations bring-your-own; FAQ keeps Haiku + Sonnet (Jev weaker); old S3 scripts deleted (2,471 → 51); auto mode off, 4 durable permission rules in root `.claude/settings.json`; 5 skill zips uploaded to claude.ai by Nghiệp; S246 Jira drafts posted 22/10 (PR-19 10488, PR-11 10489, PR-15 10490).
 - Settled earlier (S246): AA-911 P5–P8 (bridge retirement) and AA-816 A10 (e2e mail exception) wait until all project code is done; CRM design v3 D1–D8 approved; Ms. Thư's questionnaire v2 counts as settled (not sent); writing for the adventure.asia site is AA staff's job (CIS focuses on tenants).
 
@@ -74,53 +75,43 @@ Source: the S246 master plan ([plan-and-status.json](../audits/2026-10-21-S246-m
 
 | # | Issue | Work | Lane | Size | Slot · status / next action | Needs Nghiệp |
 |---|---|---|---|---|---|---|
-| 1 | (no issue yet) | Jira S247 leftovers: check PR-27 (no duplicate), check PR-24 / PR-13, post PR-23 with 2 screenshots | L0 | XS | **S248 first.** Drafts approved; see `docs/audits/2026-10-22-S247-wrap/jira-drafts.md` | Open the legal Drive folder to Ms. Thư |
-| 2 | (no issue yet) | CIS #908 meal-claims structured rule (part B on part A): adversarial check, merge, then `a1_claim_supported` / `a1_promise_unsupported` OFF | L1 | M | S248, **only after Nghiệp picks the direction** (§2: AA-803 closed with "keep ON" as final; #908 is an open draft) | Direction |
-| 3 | (no issue yet) | $0 proposal: drop from the T9 writer input the `place_paa` questions already rejected by `a3_question_about_here` / `a3_landing_belongs` (32/52 measured, AA-779 Jev check) | L1 | XS | S248 proposal → approve → small CIS PR | Approve |
-| 4 | (no issue yet) | Contrast follow-ups: admin app light `--aa-muted2` still #9099A6; portal `--aa-muted` 4.43:1 on the page background (AA-760 follow-ups) | LP | XS | S249 with the portal work | — |
-| 5 | (no issue yet) | Revalidation sets `published_tours.quality_score_id` NULL instead of moving it to the new score row (FK restored by CIS 268, AA-894 follow-up) | L1 | S | S249 | — |
-| 6 | (no issue yet) | `/admin/review` filter row cut at 400 px; `angle_gate_option` PARENT_SCOPED isolation-probe entry (AA-859 follow-up); the 3 blogs held in the AA-779 8-blog round (F9 body facts ×2, F4 length ×1) | L1 / L3 | S | S249–S250 | — |
-| 7 | AA-813 | Tenant user accounts — invites, roles (owner/editor/viewer), API key rotation | L3 | M | S254. Not built alone: re-scope posted under AA-928 (Done S247); delivered through AA-939 (partner pool, S254) + AA-978 (membership feed, S256); blocks AA-978 | — |
-| 8 | AA-911 | Staff sign-in for Booking (and CIS) Vercel Previews, then retire the CIS → Booking bridge | L3 | M | **In Progress**. P1–P4 shipped S246: CIS #899 (BFF refuses cross-site writes), CIS #900 (E2E targets the Booking Preview host), Infra #260 (Preview-only Cognito clients + DNS), Booking #54 (Preview sign-in through a read-only client; verified). Branch `preview-signin` locked by a ruleset. **P5–P8 (bridge retirement) after all project code is done** (Nghiệp), gate: agent signs in through Cognito with the E2E user + Playwright green; branches stay local | — |
-| 9 | AA-645 | Claude Sonnet 5 for writer stages (t2_generate, t8_angle_gen, t9_write, s1_atom_writer) vs Sonnet 4.5/4.6 on Bedrock | L1 | S | S248. Folded into S1 step 2 (S248): 3-model screen on 12 tours (~$2.5) | — |
-| 10 | AA-816 | Staff user management UI + Cognito cutover (retire create_staff_user.py) | L3 | S | **In Progress**; S249 S2: API legacy login flag off (CIS deploy in an idle shared.job window). AA-911 P1–P4 are live but its bridge retirement (P5–P8) waits for the end of the project, so re-check what S2 still depends on before S249. A10 (E2E exception removal; mig 252 held locally) moves to the end of the project (Nghiệp, S246): no new @adventure.asia mailbox | — |
-| 11 | AA-783 | Human calibration of the T9 commercial panel — 40 pieces labelled by Nghiệp | L1 | M | S251. Agreement analysis once Nghiệp's 40 labels exist (not slotted in the S247–S262 sessions; kept at S251) | 2–3 h labelling |
-| 12 | AA-906 | TripPlanner Next.js 15 → 16 upgrade (React Compiler lint refactor) | L5 | M | S252 Next 15 → 16 + React Compiler refactor (after AA-847 6d; not in the same session as AA-934/935) | — |
-| 13 | AA-790 | T10: tenant-voice rubric gate + post-repair integrity check | L1 | L | S253. Held until the S253 written go/no-go | LLM judge vs deterministic rubric |
-| 14 | AA-916 | Capture writing signals: before/after text, reason codes, every T9 attempt | L1 | M | S253. Held until the S253 go/no-go; on go: Writing Memory P0 (migration + RLS → agent review) | — |
-| 15 | AA-926 | Q-1: error taxonomy, gate registry, single thresholds file and lint | L1 | M | S253. Built on branch feat/aa-926-quality-registry (11 commits), parked per Q1; merge only on a go at S253 | — |
-| 16 | AA-924 | Severity per violation in the gate ledger, then merge F15_voice_warn→F15 and F2 variants + stock list → one lexicon gate | L1 | M | S253. Held until the S253 go/no-go (after AA-926) | — |
-| 17 | AA-835 | ADR 0004a supply content — supply contracts, Booking supply outbox, CIS consumer | L4 | — | S253. Its outbox pattern merges into AA-975 (CRM-B3, S253); paid consumer trial later | Paid consumer trial |
-| 18 | AA-837 | TripPlanner /plan UI leftovers: 7 WCAG AA contrast violations, Customise 404, "1 DAYS" | L5 | S | S253 /plan contrast and labels (after AA-906, same files) | Clarify dark mode |
-| 19 | AA-839 | Erasure runbook + DRY RUN job for a traveller and an offboarded tenant | — | XS | **In Progress** in Linear (plan.json said Backlog until S247). S253. Now: remove the "GDPR" wording from the offboard endpoint; erasure runbook before prod (ADR 0006 Phase 4); the runbook draft is in the legal packet (root `docs/legal/dsar-erasure-runbook.md`) | — |
-| 20 | AA-712 | ADR 0002: move the place pipeline (itinerary places, geocoding, tour graph) from TripPlanner into CIS | L2 | M | S254 trial place pass (3, then ≤50 tours), only in a session without an A/B run. The AA-847 flip is live (S247: `PLACES_SOURCE=cis`, `PLACE_SHAPES_ENABLED=on`, both in Terraform; CIS 254 applied). Left from AA-847 (per its Done comment): revoke TP raw grants, AA-807 X4 drop of the frozen TP tables — check the branches `feat/aa-847-*` first | Quote and country order |
-| 21 | AA-762 | Team & roles — tenant users (owner/editor/viewer), invites, self-serve API keys — after the ecosystem identity ADR | LP | S | S254. Close as a duplicate of AA-939 (CRM-11) in S254 | — |
-| 22 | AA-874 | Redis AUTH/TLS/at-rest encryption + tenant-flag read-failure alarm | L3 | M | S255 Redis AUTH/TLS/at-rest + flag alarm, in an idle CIS window | Cost (D-19) |
-| 23 | AA-682 | Operations MVP — supplier bookings, trip checks, invoices + payment schedule, supplier bills | L4 | XL | S255. Part 1 S255, part 2 S258 (payment schedule, manual payment marking), part 3 S260 — only once Ms. Thư settles tax, deposit % and payment marking. Blocked by AA-928 (commercial-core memo) and AA-974; never between B1–B3 (same files) | Ms. Thư: tax, deposit %, payment marking |
-| 24 | AA-910 | Booking staff admin at 1440 px (table overflow, FX wrap, scrollbar) + audit rows for room type / rate | L4 | S | S255. Fallback in S255/S260 while AA-682 still waits for Ms. Thư | — |
-| 25 | AA-908 | Traveller sign-in on Cognito EXTERNAL, TripPlanner guest linking and My Trips (customer half of AA-680) | L5 | M | S255 traveller sign-in on Cognito EXTERNAL, guest linking, My Trips (after AA-909) | — |
-| 26 | AA-905 | Geo graph backfill for the 8 countries without one (paid place-pipeline run, needs a quote) | L2 | M | S256 geo backfill subset inside the place pass | Quote first |
-| 27 | AA-820 | Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2026) + AI-content attribution | L3 | — | S256, deadline ≤11/11: tenant terms AI clause; Ms. Thư decides on counsel | Ms. Thư (counsel) |
-| 28 | AA-917 | Rule store and the mining job (scoped rules, fact filter, cheaper drafter) | L1 | M | S257. Writing Memory P1 at S257 if the S253 decision is go | Release click per rule set |
-| 29 | AA-918 | R0 replay engine ($0) and the L0 lexicon fast path | L1 | M | S257. Writing Memory P1 at S257 if the S253 decision is go | — |
-| 30 | AA-665 | Cost Operations — budgets, DFS/Jev/LLM/AWS spend, research triggers audit, alerts (reopened) | L7 | L | S257. First session ≥01/11 (≈S257): Cost Operations page (reopened) | — |
-| 31 | AA-896 | FinOps doc, Cost Anomaly Detection and the monthly cost report with unit costs | L7 | S | S257. **In Progress**; First session ≥01/11 (≈S257, slotted by date): cost report Aug/Sep/Oct per App tag and service, acc3 Bedrock + credits, unit costs | Decision list |
-| 32 | AA-838 | Capacity review (monthly), pg_stat_statements (weekly), access review (quarterly); first capacity review | L7 | M | S257. First session ≥01/11 (≈S257): first capacity review | — |
-| 33 | AA-761 | Account pages with real data — Billing usage/overage, Activity timeline, Integrations (WordPress health, API key view) | LP | M | S257 account pages in AA-Partner/portal (after P2a); blocked by AA-979 | — |
-| 34 | AA-919 | Eval and release gate: golden set, R2 runner, targeted shadow, Releases tab | L1 | L | S259. Writing Memory P2 at S259 if go | Each release |
-| 35 | AA-920 | Inject approved rules into the four writers with a post-activation check | L1 | M | S259. Writing Memory P2 at S259 if go | — |
-| 36 | AA-829 | Restore drill on Dev + private DSN CNAME + secure the real-data dumps (2026-09-16) | L3 | M | **In Progress**; S259 restore drill; dumps: DRY RUN then move/delete once approved; DSN CNAME | Approve dumps; DSN secrets by hand |
-| 37 | AA-899 | OpenAPI export and breaking-change check for CIS and Booking | L7 | M | S259 OpenAPI export + breaking-change check (after AA-891) | — |
-| 38 | AA-669 | My Content as a DataTable — columns, filters, sort, bulk export/publish (reopened) | LP | M | S259 My Content DataTable in AA-Partner/portal (after P2a, AA-979) | Rescope or build |
-| 39 | AA-741 | T-series audit: end-to-end T0→T11 run on controlled tenants + per-mechanism report | L1 | XL | S260 T-series G7 + G8 report (paid), per the S253 go/no-go | Paid run ~$10–20 |
-| 40 | AA-784 | Place cards platform-wide build — ~7–9.7k places, staged by country (≈$15–25) | L2 | L | S260 place cards in paid subsets by country | Quote |
-| 41 | AA-873 | Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, CloudTrail | L3 | M | S261 after the GuardDuty quote; reuse the KMS/alarm pattern of AA-932 | Cost per item |
-| 42 | AA-825 | Retention + rollups for log tables (reopened: one real Booking retention run) | L7 | S | S261 retention rollups: one real Booking retention run under a Dev override, or drop the Done-when line | Drop the line or allow the run |
-| 43 | AA-671 | Marketplace redesign — catalog grid with filters, detail drawer | LP | M | S261 Marketplace redesign in AA-Partner/portal (after P2a) | Merge with Browse Tours? (Ms. Thư) |
-| 44 | AA-921 | Pinned example sets and tenant preference summaries | L1 | M | S262. Writing Memory P3 at S262 if go | — |
-| 45 | AA-922 | Weekly KPIs, soft-stop rollback and the disagreement queue | L1 | M | S262. Writing Memory P3 at S262 if go | — |
-| 46 | AA-923 | Labels for T2/A1, offboarding deletion, retire the old lesson paths | L1 | M | S262. Writing Memory P3 at S262 if go | — |
-| 47 | AA-880 | L9 prod blueprint + ADR 0012 environment model (trigger: go-live date) | L7 | L | S262 ADR 0012 draft (before CRM W8); L9 prod blueprint on the go-live date | Date; account (AA-864) |
+| 1 | AA-813 | Tenant user accounts — invites, roles (owner/editor/viewer), API key rotation | L3 | M | S254. Not built alone: re-scope posted under AA-928 (Done S247); delivered through AA-939 (partner pool, S254) + AA-978 (membership feed, S256); blocks AA-978 | — |
+| 2 | AA-911 | Staff sign-in for Booking (and CIS) Vercel Previews, then retire the CIS → Booking bridge | L3 | M | **In Progress**. P1–P4 shipped S246: CIS #899 (BFF refuses cross-site writes), CIS #900 (E2E targets the Booking Preview host), Infra #260 (Preview-only Cognito clients + DNS), Booking #54 (Preview sign-in through a read-only client; verified). Branch `preview-signin` locked by a ruleset. **P5–P8 (bridge retirement) after all project code is done** (Nghiệp), gate: agent signs in through Cognito with the E2E user + Playwright green; branches stay local | — |
+| 3 | AA-645 | Claude Sonnet 5 for writer stages (t2_generate, t8_angle_gen, t9_write, s1_atom_writer) vs Sonnet 4.5/4.6 on Bedrock | L1 | S | **In Progress.** S248: writer W×Sonnet chosen (pooled n=50, two blind panel passes; decision memo `docs/audits/2026-10-23-S248-aa645-writer-decision/`); step 0 live (CIS #963 mig 273, #965: first published_at kept, promote through the lifecycle service, `S1_WRITER_V2` off). Next: brand-fit rubric v2 + offline re-measure on the 125 pages, then pilot 3 → ≤50 shadow per the impact memo; the full catalogue needs its own approval with wave numbers | — |
+| 4 | AA-816 | Staff user management UI + Cognito cutover (retire create_staff_user.py) | L3 | S | **In Progress**; S249 S2: API legacy login flag off (CIS deploy in an idle shared.job window). AA-911 P1–P4 are live but its bridge retirement (P5–P8) waits for the end of the project, so re-check what S2 still depends on before S249. A10 (E2E exception removal; mig 252 held locally) moves to the end of the project (Nghiệp, S246): no new @adventure.asia mailbox | — |
+| 5 | AA-783 | Human calibration of the T9 commercial panel — 40 pieces labelled by Nghiệp | L1 | M | S251. Agreement analysis once Nghiệp's 40 labels exist (not slotted in the S247–S262 sessions; kept at S251) | 2–3 h labelling |
+| 6 | AA-790 | T10: tenant-voice rubric gate + post-repair integrity check | L1 | L | S253. Held until the S253 written go/no-go | LLM judge vs deterministic rubric |
+| 7 | AA-916 | Capture writing signals: before/after text, reason codes, every T9 attempt | L1 | M | S253. Held until the S253 go/no-go; on go: Writing Memory P0 (migration + RLS → agent review) | — |
+| 8 | AA-926 | Q-1: error taxonomy, gate registry, single thresholds file and lint | L1 | M | S253. Built on branch feat/aa-926-quality-registry (11 commits), parked per Q1; merge only on a go at S253 | — |
+| 9 | AA-924 | Severity per violation in the gate ledger, then merge F15_voice_warn→F15 and F2 variants + stock list → one lexicon gate | L1 | M | S253. Held until the S253 go/no-go (after AA-926) | — |
+| 10 | AA-835 | ADR 0004a supply content — supply contracts, Booking supply outbox, CIS consumer | L4 | — | S253. Its outbox pattern merges into AA-975 (CRM-B3, S253); paid consumer trial later | Paid consumer trial |
+| 11 | AA-874 | Redis AUTH/TLS/at-rest encryption + tenant-flag read-failure alarm | L3 | M | S255 Redis AUTH/TLS/at-rest + flag alarm, in an idle CIS window | Cost (D-19) |
+| 12 | AA-682 | Operations MVP — supplier bookings, trip checks, invoices + payment schedule, supplier bills | L4 | XL | S255. Part 1 S255, part 2 S258 (payment schedule, manual payment marking), part 3 S260 — only once Ms. Thư settles tax, deposit % and payment marking. Blocked by AA-928 (commercial-core memo) and AA-974; never between B1–B3 (same files) | Ms. Thư: tax, deposit %, payment marking |
+| 13 | AA-910 | Booking staff admin at 1440 px (table overflow, FX wrap, scrollbar) + audit rows for room type / rate | L4 | S | **In Progress.** Booking #68 deployed S248 (table fits 1440 px, FX column, rate / superseded audit rows); closes when Nghiệp opens the staff pages at 1440 px (Cognito staff session) | — |
+| 14 | AA-908 | Traveller sign-in on Cognito EXTERNAL, TripPlanner guest linking and My Trips (customer half of AA-680) | L5 | M | S255 traveller sign-in on Cognito EXTERNAL, guest linking, My Trips (after AA-909) | — |
+| 15 | AA-905 | Geo graph backfill for the 8 countries without one (paid place-pipeline run, needs a quote) | L2 | M | S256 geo backfill subset inside the place pass | Quote first |
+| 16 | AA-820 | Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2026) + AI-content attribution | L3 | — | S256, deadline ≤11/11: tenant terms AI clause; Ms. Thư decides on counsel | Ms. Thư (counsel) |
+| 17 | AA-917 | Rule store and the mining job (scoped rules, fact filter, cheaper drafter) | L1 | M | S257. Writing Memory P1 at S257 if the S253 decision is go | Release click per rule set |
+| 18 | AA-918 | R0 replay engine ($0) and the L0 lexicon fast path | L1 | M | S257. Writing Memory P1 at S257 if the S253 decision is go | — |
+| 19 | AA-665 | Cost Operations — budgets, DFS/Jev/LLM/AWS spend, research triggers audit, alerts (reopened) | L7 | L | S257. First session ≥01/11 (≈S257): Cost Operations page (reopened) | — |
+| 20 | AA-896 | FinOps doc, Cost Anomaly Detection and the monthly cost report with unit costs | L7 | S | S257. **In Progress**; First session ≥01/11 (≈S257, slotted by date): cost report Aug/Sep/Oct per App tag and service, acc3 Bedrock + credits, unit costs | Decision list |
+| 21 | AA-838 | Capacity review (monthly), pg_stat_statements (weekly), access review (quarterly); first capacity review | L7 | M | S257. First session ≥01/11 (≈S257): first capacity review | — |
+| 22 | AA-761 | Account pages with real data — Billing usage/overage, Activity timeline, Integrations (WordPress health, API key view) | LP | M | S257 account pages in AA-Partner/portal (after P2a); blocked by AA-979 | — |
+| 23 | AA-919 | Eval and release gate: golden set, R2 runner, targeted shadow, Releases tab | L1 | L | S259. Writing Memory P2 at S259 if go | Each release |
+| 24 | AA-920 | Inject approved rules into the four writers with a post-activation check | L1 | M | S259. Writing Memory P2 at S259 if go | — |
+| 25 | AA-829 | Restore drill on Dev + private DSN CNAME + secure the real-data dumps (2026-09-16) | L3 | M | **In Progress**; S248: private DSN host `db.dev.internal` live (Infra #308; 7 DSNs switched, 4 services + Lambdas restarted, probe OK); dumps DRY RUN (root #187). Left: the restore drill (repoint via `db_dns_target_override`) + single-schema restore rehearsal; dumps deleted S248 | Approve dumps; DSN secrets by hand |
+| 26 | AA-899 | OpenAPI export and breaking-change check for CIS and Booking | L7 | M | S259 OpenAPI export + breaking-change check (after AA-891) | — |
+| 27 | AA-669 | My Content as a DataTable — columns, filters, sort, bulk export/publish (reopened) | LP | M | S259 My Content DataTable in AA-Partner/portal (after P2a, AA-979) | Rescope or build |
+| 28 | AA-741 | T-series audit: end-to-end T0→T11 run on controlled tenants + per-mechanism report | L1 | XL | S260 T-series G7 + G8 report (paid), per the S253 go/no-go | Paid run ~$10–20 |
+| 29 | AA-784 | Place cards platform-wide build — ~7–9.7k places, staged by country (≈$15–25) | L2 | L | S260 place cards in paid subsets by country | Quote |
+| 30 | AA-873 | Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, CloudTrail | L3 | M | S261 after the GuardDuty quote; reuse the KMS/alarm pattern of AA-932 | Cost per item |
+| 31 | AA-825 | Retention + rollups for log tables (reopened: one real Booking retention run) | L7 | S | S261 retention rollups: one real Booking retention run under a Dev override, or drop the Done-when line | Drop the line or allow the run |
+| 32 | AA-671 | Marketplace redesign — catalog grid with filters, detail drawer | LP | M | S261 Marketplace redesign in AA-Partner/portal (after P2a) | Merge with Browse Tours? (Ms. Thư) |
+| 33 | AA-921 | Pinned example sets and tenant preference summaries | L1 | M | S262. Writing Memory P3 at S262 if go | — |
+| 34 | AA-922 | Weekly KPIs, soft-stop rollback and the disagreement queue | L1 | M | S262. Writing Memory P3 at S262 if go | — |
+| 35 | AA-923 | Labels for T2/A1, offboarding deletion, retire the old lesson paths | L1 | M | S262. Writing Memory P3 at S262 if go | — |
+| 36 | AA-880 | L9 prod blueprint + ADR 0012 environment model (trigger: go-live date) | L7 | L | S262 ADR 0012 draft (before CRM W8); L9 prod blueprint on the go-live date | Date; account (AA-864) |
+| 37 | (no issue yet) | TripPlanner purge on a lifecycle event: the public tour page and the browse list keep a retired tour up to 30 min (proxy list + CDN `max-age=1800`); an on-demand revalidate/purge from the CIS lifecycle outbox would make it immediate | L5 | S | Optional AA-986 follow-up; the backend answers 410 at once | Ask before creating the issue |
 
 ## 3a. Platform roadmap keys (PLAT-01)
 
@@ -144,13 +135,8 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 
 | # | Issue | Work | Lane | Size | Slot · next action | Needs Nghiệp |
 |---|---|---|---|---|---|---|
-| C1 | AA-972 | CRM-B1 M2M + B2B quote | L4 | L | Lane B · S249: bk-019, review; blocked by AA-911 (AA-928 Done S247) | MFA (M2M pool); Ms. Thư: B2B margin |
-| C2 | AA-932 | CRM-04 Infra + DB owner `crm` | L6 | L | W1 · S249; blockers AA-928, AA-929, AA-931 Done S247. Connection budget: cis-api main pool stays 10 (burst-measured S247, AA-859) → 132/135 with `crm_app` limit 6 / pool 3 (DM C2.2); a `crm` pool of 6 would reach 138, so size it to fit | MFA (KMS policies) |
-| C3 | AA-933 | CRM-05 AA-Partner repo, API, job runner | L6 | L | W1 · S250: branch protection + required CI from day one; blocked by AA-928, AA-932 | Create the AA-Partner repo if repo creation is turned off (access review Q-2) |
-| C4 | AA-973 | CRM-B2 Departures, capacity, holds | L4 | L | Lane B · S251: bk-020 + channel on trip_cases, review; blocked by AA-972 | — |
 | C5 | AA-934 | CRM-06 KeyProvider and field encryption | L6 | M | W1 · S251; blocked by AA-932, AA-933 | — |
 | C6 | AA-935 | CRM-07 Web skeleton + synthetic agencies | L6 | M | W1 · S251; blocked by AA-933 | Create the e2e-test-crm-* users |
-| C7 | AA-974 | CRM-B2b Booking commercial rules (new, Fix C2, A3, A8) | L4 | L | Lane B · S252: bk-021: VND, shared cancellation fees, hold extension (ADR 0005 d5); blocked by AA-973 | — |
 | C8 | AA-936 | CRM-08 Slice 1: intake → Inquiry → board | L6 | L | W1 · S252: → C-M1; blocked by AA-934, AA-935 | — |
 | C9 | AA-975 | CRM-B3 Event feed + on-request desk + incident flag | L4 | M | Lane B · S253: bk-022, shared outbox (takes the AA-835 pattern) + on-request desk; blocked by AA-973 | — |
 | C10 | AA-937 | CRM-09 F1/F2 complete | L6 | L | W2 · S253; blocked by AA-934, AA-936 | — |
@@ -204,7 +190,22 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | parked | parked. Asian Trails B2B benchmark (KAN-20) — at B2B design start | Close or keep |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | ≥S263: not slotted before S262; re-plan at S262 from the real pace (blocked-by lists in `plan.blocked_by_relations`) | AA-964 and AA-971 need MFA; AA-971 needs Ms. Thư to name the second alarm recipient |
 
-## 5. Closed in S247
+## 5. Closed in S248
+
+Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S248 log and `docs/audits/2026-10-23-S248-*`.
+
+- **Tour liveness (Nghiệp's request):** **AA-986** — ADR 0015 Accepted (root #206) with Q1–Q10; L1 one served-tour rule (CIS #959, mig 271), L2 one lifecycle service (CIS #962 mig 272, #964), L3 tenant warning + bell + 409 on new work (CIS #966 mig 274, #967), L4 catalog tombstone + outbox contract v1.3 (root #211), L5 Booking refuses quotes/holds with 409 `tour_not_served`, flags confirmed bookings and notifies staff (Booking #75, root #212), L6 TripPlanner saved trips flag gone stops, retired tour pages 410 (TP #142, root #213), L7 probe + nightly gate (Infra #318/#328/#329, root #215 DM-4.9). E2E on Dev with two tours: retire → hidden in CIS, Booking, TripPlanner, tenant warned; restore → served again, tenant `tour.reinstated`.
+- **Security:** **AA-981** (secret scanning + push protection on 6 repos; full-history gitleaks, required check, canary caught then pinned).
+- **CIS content quality:** **AA-982** (T9 drops place PAA rejected by Jev A3, CIS #941/#949), **AA-983** (revalidation keeps `quality_score_id`, CIS #943/#947; DRY RUN 0/892), **AA-984** (F9 heading claims repairable, long blogs trimmed, CIS #951/#953; 2 of 3 held blogs approved), **AA-985** (F17 ended-role false positives: entity binding, census 20 → 0, CIS #955/#956; calibration memo root #203).
+- **B2B (CRM Lane B):** **AA-972** (M2M + B2B quote, Booking #62/#64, Infra #293), **AA-973** (departures, holds, confirm into a B2B trip case, Booking #65/#67), **AA-974** (VND quotes, cancellation with fee + dry run, extend once, re-hold limit, Booking #70/#71); live 24/24 + 36/36 on synthetic supply.
+- **CRM W1:** **AA-932** (DB owner `crm`, roles, KMS keys, buckets, budget, alarms: Infra #294/#325, CIS #944 mig 269), **AA-933** (AA-Partner repo skeleton, API, `crm.job` runner, CI: AA-Partner #1, Infra #303/#304).
+- **Places:** **AA-712** (TripPlanner reads CIS only through the catalog views, TP #135; CIS mig 270 revokes the direct grants; tp-018 drops the frozen place tables after DRY RUN, TP #139 / Infra #309; Dead Table Registry root #196).
+- **Privacy:** **AA-839** (data_erasure job + admin page + subject-bound fingerprint, CIS #946/#960/#961; real-erase drill on a synthetic tenant with Nghiệp: DRY RUN → apply → verify GONE; S3, secrets and Sentry 0).
+- **TripPlanner:** **AA-906** (Next 16, TP #132), **AA-837** (/plan contrast in both themes, clean console, day labels, TP #134; prod axe 0 violations).
+- Duplicate: **AA-762** → AA-939.
+- No issue: 18-card decision page approved (d01–d18); account ids masked in generated docs (Infra #313, root #204); CRM hello spike removed (Infra #312); cost report Aug–Oct (root #191/#194); S1-first step 0/1 audit (root #188); #908 closed (checks stay ON).
+
+## 5a. Closed in S247
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/` once exported and archived), the S247 log and `docs/audits/2026-10-22-S247-*`.
 
@@ -217,7 +218,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/` once 
 - No issue: root and AA-CIS-Infra made public (ADR 0014 amendment, root #182); Vercel env cleanup; third-party GitHub Apps narrowed; S3 scripts cleanup; skills packaged as zips (root #176/#181); session process (root #172/#174); lessons (root #182).
 - New Linear issues in S247: none. Follow-ups without an issue are in §3 as "(no issue yet)".
 
-## 5a. Closed in S246
+## 5b. Closed in S246
 
 Evidence per issue: Linear comments, then `docs/linear-export/` once exported and archived.
 
@@ -228,7 +229,7 @@ Evidence per issue: Linear comments, then `docs/linear-export/` once exported an
 - New in S246: **AA-928…AA-980** (53 CRM issues: W0–W8, Lane B AA-972…AA-977, Lane P AA-978/AA-979).
 - Plan: the S246 master plan ([plan-and-status.json](../audits/2026-10-21-S246-master-plan/plan-and-status.json)) replaces the S244 slots; tracker `index.html` now shows S247…S262 and the new milestones.
 
-## 5b. Closed in S245
+## 5c. Closed in S245
 
 Evidence per issue: `docs/linear-export/` (closed issues exported, then archived) and the S245 session log.
 
@@ -240,7 +241,7 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 - New in S245: **AA-911** (Preview staff sign-in, bridge retirement), **AA-912–AA-914**, **AA-915–AA-923** (Writing Memory v1), **AA-924** (from AA-787), **AA-925** (Q-2), **AA-926** (Q-1), **AA-927** (LLM calls without a log row).
 - Tools: `tools/linear/linear_export.py` exports closed issues to `docs/linear-export/` and archives them through the API (Linear Free plan, no upgrade); secret `aa-ecosys/ops/linear-api-key`.
 
-## 5c. Closed in S244
+## 5d. Closed in S244
 
 - **AA-904 Done** (TP Next 15.5.28 / React 19, TP #107; preview smoke 4 flows desktop + 390 px, prod verified, `npm audit --omit=dev` 0).
 - **AA-902** Done on the S244 root PR merge (0 real account IDs on main of the 3 public repos; CI probe PRs CIS #857 / Booking #47 / TP #108 red as intended; baseline row in place).
@@ -254,7 +255,7 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 - Jira PR-14: same-day comment 10485 extended with the S244 cutover bullets + login screenshot (Nghiệp approved).
 - Master plan HTML tracker: `docs/backlog/tracker/` (artifact <https://claude.ai/artifact/2VSP2stGG1TF7uXvqgQTUY>).
 
-## 5d. Closed in S243
+## 5e. Closed in S243
 
 - **AA-885 Done** (tenant portal on its own Vercel project `aa-cis-portal`, `portal.lumiguides.it.com`; CIS #832, Infra #197; prod smoke 24/24).
 - **AA-892 Done** (ops runbooks/playbooks in root #105; every runbook either active with `last_tested` evidence or draft with the UNTESTED banner; alarm links Infra #213).
@@ -270,7 +271,7 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 - Jira: Epic PR-20 + Story PR-21 (platform report period 1) posted. Google Safe Browsing review of lumiguides.it.com passed (19/10): the §1 check is removed.
 - New Linear issues (Nghiệp approved S243): **AA-902** public-repo account ID/ARN scrub (High), **AA-903** skip Vercel deploy for Dependabot, **AA-904** TripPlanner Next 15, **AA-905** geo backfill (paid, quote first). CIS logout → Cognito `/logout` stays a scope line of AA-816; Bhutan 33 vs 32 stays §3 row 13.
 
-## 5e. Closed in S242
+## 5f. Closed in S242
 
 - **AA-854 Done** (Cognito Phase 0: break-glass, email-code spike, no-group deny, self sign-up rejected; evidence `docs/audits/2026-10-18-S242-cognito-phase1/`).
 - **AA-816** shipped (In Progress until cutover): Infra #183/#184/#185/#191/#194, CIS #807/#808/#809/#810/#811/#812/#813/#826/#827/#828/#829, mig 247.
@@ -278,7 +279,7 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 - Dependabot cleared in all repos (CIS #814/#819/#820/#830, Infra #192/#193 — AWS provider 6.69.1); CIS `dependabot.yml` groups security updates.
 - AA-869 confirmed Done (S241). New issue: none.
 
-## 5f. Closed in S241
+## 5g. Closed in S241
 
 - Done with live evidence: **AA-883** (console 2 sections + Staff), **AA-882** (server-side staff authz), **AA-836**, **AA-863**, **AA-834**,
   **AA-866** (main-only OIDC trust), **AA-867** (GitHub security, org 2FA, AA-ACP-App deleted), **AA-868** (CI hardening),
@@ -292,7 +293,10 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 
 ## 6. Environment notes for the next session
 
-- **State at the S247 close** (live check ~14:45 UTC 22/10, `docs/audits/2026-10-22-S247-wrap/state-snapshot.md`): CIS api **:775** and worker **:334** on **dev-5a54bd2** (release **0.5.0**), `/health/ready` schema **268**; Booking api **:42** on **466ad8e** (0.2.0), **bk-018**; TripPlanner main **0e9fdcf** (0.4.0), **tp-017**, both Lambdas updated 22/10 06:47 UTC; Infra main 62d0f79 (#291); Vercel aa-cis-frontend 51415e2, aa-tripplanner 0e9fdcf; `shared.job` queued/running 0. CIS migrations applied S247: 261, 262, 254, 264, 265, 266, 267, 268.
+- **State at the S248 close** (live check ~14:50 UTC 23/10, `docs/audits/2026-10-23-S248-wrap/state-snapshot.md`): CIS api **:799** and worker **:358** on **dev-5543d1fc**, `/health/ready` schema **274**; Booking api **:49** on **ab5641d1**, **bk-021**; TripPlanner main **e6f5c4a**, **tp-018**, both Lambdas updated 23/10 14:22 UTC; Infra main 2c32a03 (#329); Vercel aa-tripplanner e6f5c4a. CIS migrations applied S248: 269–274; Booking bk-019/020/021; TripPlanner tp-018. Open release PRs: CIS #950 (0.7.0), Booking #66 (0.4.0), TP #137 (0.6.0), AA-Partner #3 (0.2.0).
+- **Tour lifecycle (AA-986, ADR 0015):** every change of a tour's served state goes through `services/tour_lifecycle` in CIS (admin trash/restore, source retire, pause) — never a hand UPDATE. Tombstone `catalog.v_tour_retired` (retired | paused | restored), outbox `catalog.v_tour_lifecycle_outbox` (cursor `event_id`). Tenant bell `/v1/notifications` (`tour.discontinued` / `tour.reinstated`); the restore response counts `tenants_reinstated`, not `tenants_notified`. TripPlanner's frontend keeps the retired list and the browse CDN copy up to 30 min.
+- **Private DB host:** all DSNs use `db.dev.internal` (Route 53 private zone, AA-829); a restore only repoints the CNAME.
+- **Erasure:** `ERASURE_APPLY_ENABLED` off and tenant retention 30 days on Dev (Infra #322); turn on only for an approved apply window (runbook `docs/legal/dsar-erasure-runbook.md`).
 - **Places flipped (AA-847, S247):** `PLACES_SOURCE=cis` on both TP Lambdas and `PLACE_SHAPES_ENABLED=on` on CIS, both managed in Terraform (Infra #267/#274) — change them through Terraform, not by hand. `a3_place_days` on Haiku 4.5, `a3_place_locate` back on Sonnet (CIS 261).
 - **T9 FAQ (AA-779):** worker `T9_FAQ_LLM_FILTER=on` (Terraform `t9_faq_llm_filter`): Haiku question filter (stage `t9_faq_filter`, CIS 264) + Sonnet answer-fit (`t9_faq_answer_fit`, CIS 267, ~$0.004 per blog).
 - **Tenant pool (AA-859):** waves 3–4 live, 6 wave-4 flags `"true"`; tenant routes run as `aa_app_user` with RLS (planning tables, `tour_atoms`, …); main pool kept at 10 (saturates from concurrency 50) with a wait signal (CIS #938). Size pools from the pool's own gauge, not from `pg_stat_activity`.

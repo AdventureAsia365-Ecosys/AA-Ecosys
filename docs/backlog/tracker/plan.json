@@ -1,8 +1,8 @@
 {
- "updated": "2026-10-22",
- "session": "S247",
- "next_session": "S248",
- "source": "Linear (22/10/2026, S247 close) + docs/backlog/README.md + docs/audits/2026-10-22-S247-wrap/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
+ "updated": "2026-10-23",
+ "session": "S248",
+ "next_session": "S249",
+ "source": "Linear (23/10/2026, S248 close) + docs/backlog/README.md + docs/audits/2026-10-23-S248-wrap/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -139,7 +139,7 @@
     },
     {
      "text": "PLACES_SOURCE=cis trên cả 2 Lambda; parity probe trên ≥50 trip không lệch place id/toạ độ; 0 tuyến bị ẩn hoặc vẽ vòng tròn thay thế; gộp trùng chạy tự động, 0 lần gộp tay",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-712, AA-905 chạy tập con (≤50 tour/lượt), chi phí ghi log; AA-845 Q845-2/3 xong; AA-803 Cancel",
@@ -158,7 +158,7 @@
      "done": true
     },
     {
-     "text": "AA-972..975 live trên Dev: quote M2M, hold hết hạn bằng reaper, VND + phí huỷ, outbox phát sự kiện; review độc lập mỗi bk-019..022",
+     "text": "AA-972..975 live trên Dev: quote M2M, hold hết hạn bằng reaper, VND + phí huỷ, outbox phát sự kiện; review độc lập mỗi bk-019..022 — S248: AA-972/973/974 Done; AA-975 còn lại",
      "done": false
     },
     {
@@ -183,7 +183,7 @@
     },
     {
      "text": "AA-932: crm_app → booking.* và cis_app → crm.* trả 42501; DB Migrate CIS không bị heartbeat CRM chặn",
-     "done": false
+     "done": true
     },
     {
      "text": "Agency giả đăng nhập; form traveller → thẻ Inquiry < 1 phút; F1 chỉ có ciphertext; CIS thấy crm.job",
@@ -286,9 +286,14 @@
  ],
  "checks": [
   {
-   "due": "ngay S248",
-   "issue": "PR-27",
-   "text": "Jira S247: kiểm PR-27 (không đăng trùng), xem PR-24/PR-13 bằng mắt, đăng PR-23 kèm 2 ảnh (nháp đã duyệt)"
+   "due": "ngay S249",
+   "issue": "Jira S248",
+   "text": "Đăng các nháp Jira S248 Nghiệp đã duyệt (PR-13, PR-25, PR-26, PR-27, PR-22, PR-24, PR-23); kiểm JQL trước khi đăng lại nếu MCP timeout"
+  },
+  {
+   "due": "hằng đêm",
+   "issue": "AA-986",
+   "text": "Gate tour liveness (db-tour-liveness-gate.yml) strict: đỏ = dẫn xuất của tour đã retire/pause vẫn được phục vụ ở đâu đó"
   },
   {
    "due": "hằng ngày 06:15 UTC",
@@ -329,18 +334,13 @@
  "waiting": [
   {
    "who": "Nghiệp",
-   "text": "Mở chia sẻ thư mục Drive \"Legal readiness packet\" cho chị Thư, rồi agent đăng PR-27",
+   "text": "Duyệt 7 nháp Jira S248 rồi agent đăng",
    "issue": ""
   },
   {
    "who": "Nghiệp",
-   "text": "Chốt hướng CIS #908 (luật bữa ăn): AA-803 đóng với \"giữ a1_claim_supported/promise ON\", danh sách việc phiên sau lại ghi merge #908 rồi tắt — chọn một",
-   "issue": ""
-  },
-  {
-   "who": "Nghiệp",
-   "text": "Thu hồi 3 PAT không dùng (aa-cis-infra-schema-dump, ACPCORE_READ_TOKEN, aa-cis-acpcore-read) + PAT cũ của ROOT_REPO_DOCS_TOKEN",
-   "issue": ""
+   "text": "Mở trang staff Booking ở 1440 px (phiên Cognito) và báo OK để đóng",
+   "issue": "AA-910"
   },
   {
    "who": "Nghiệp",
@@ -369,11 +369,6 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Tạo repo AA-Partner nếu tắt quyền \"members can create repositories\" (access review Q-2)",
-   "issue": "AA-933"
-  },
-  {
-   "who": "Nghiệp",
    "text": "Thu hồi mật khẩu ứng dụng \"AA portal e2e\" trên site TasteWP test khi không cần nữa",
    "issue": "AA-875"
   },
@@ -386,11 +381,6 @@
    "who": "Nghiệp",
    "text": "Thêm totp_seed MỚI của break-glass vào authenticator (đã xoay S244), nếu muốn",
    "issue": "AA-816"
-  },
-  {
-   "who": "Nghiệp",
-   "text": "Duyệt xoá/bảo vệ dump dữ liệu thật 2026-09-16; sửa tay secret DSN CNAME",
-   "issue": "AA-829"
   },
   {
    "who": "Nghiệp",
@@ -411,9 +401,53 @@
    "who": "Nghiệp",
    "text": "Tín hiệu bắt đầu UAT video (sau phần kỹ thuật)",
    "issue": "AA-855"
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Thu hồi 3 PAT không dùng (aa-cis-infra-schema-dump, ACPCORE_READ_TOKEN, aa-cis-acpcore-read) + PAT cũ của ROOT_REPO_DOCS_TOKEN",
+   "issue": ""
   }
  ],
  "log": [
+  {
+   "session": "S248",
+   "date": "23/10/2026",
+   "closed": [
+    "AA-712",
+    "AA-837",
+    "AA-839",
+    "AA-906",
+    "AA-932",
+    "AA-933",
+    "AA-972",
+    "AA-973",
+    "AA-974",
+    "AA-981",
+    "AA-982",
+    "AA-983",
+    "AA-984",
+    "AA-985",
+    "AA-986"
+   ],
+   "canceled": [
+    "AA-762"
+   ],
+   "created": [
+    "AA-981",
+    "AA-982",
+    "AA-983",
+    "AA-984",
+    "AA-985",
+    "AA-986"
+   ],
+   "reopened": [],
+   "notes": [
+    "15 issue Done (Ultracode): AA-986 lan truyền xoá tour toàn hệ (ADR 0015, L1–L7, CIS 271–274, Booking #75, TP #142, gate hằng đêm; E2E 2 tour trên Dev retire → ẩn mọi nơi, tenant được cảnh báo; restore → phục vụ lại)",
+    "B2B Booking AA-972/973/974 live (bk-019/020/021; 24/24 + 36/36 trên seed tổng hợp); CRM W1 AA-932/933 (owner crm, KMS, repo AA-Partner)",
+    "AA-981 secret scanning 6 repo; AA-839 drill xoá thật cùng Nghiệp; AA-712 TripPlanner chỉ đọc CIS qua catalog, tp-018; AA-906/837 TripPlanner Next 16 + tương phản (axe prod 0)",
+    "AA-645: chọn writer W×Sonnet, bước 0 live; 18 quyết định đã duyệt (trang 6MTgUdky…); bỏ cổng do agent tự đặt"
+   ]
+  },
   {
    "session": "S247",
    "date": "22/10/2026",
@@ -726,8 +760,8 @@
    "milestone": "M5",
    "session": "S259",
    "size": "M",
-   "next": "L3 · S259 restore drill; dumps: DRY RUN then move/delete once approved; DSN CNAME",
-   "needs": "Approve dumps; DSN secrets by hand"
+   "next": "S248: db.dev.internal live (7 DSNs), dumps 16/09 deleted; left: restore drill with CNAME repoint + single-schema rehearsal",
+   "needs": ""
   },
   {
    "id": "AA-896",
@@ -768,14 +802,14 @@
   {
    "id": "AA-910",
    "title": "Booking staff admin at 1440 px (table overflow, FX wrap, scrollbar) + audit rows for room type / rate",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M3",
-   "session": "S255",
+   "session": "S249",
    "size": "S",
-   "next": "L4 · Fallback in S255/S260 while AA-682 still waits for Ms. Thư",
-   "needs": ""
+   "next": "Booking #68 deployed S248; Nghiệp opens the staff pages at 1440 px, then close",
+   "needs": "Nghiệp checks 1440 px"
   },
   {
    "id": "AA-908",
@@ -800,18 +834,6 @@
    "size": "L",
    "next": "In-app AI assistant — after AA-703 phases 1 and 3",
    "needs": "Keep on the roadmap?"
-  },
-  {
-   "id": "AA-712",
-   "title": "ADR 0002: move the place pipeline (itinerary places, geocoding, tour graph) from TripPlanner into CIS",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2b",
-   "session": "S254",
-   "size": "M",
-   "next": "L2 · S254 trial place pass (3, then ≤50 tours), only in a session without an A/B run. AA-847 flip live S247 (PLACES_SOURCE=cis, PLACE_SHAPES_ENABLED=on, in Terraform; CIS 254 applied). Left from AA-847: revoke TP raw grants, AA-807 X4 drop of frozen TP tables (check feat/aa-847-* branches)",
-   "needs": "Quote and country order"
   },
   {
    "id": "AA-905",
@@ -872,18 +894,6 @@
    "size": "S",
    "next": "L7 · S261 retention rollups: one real Booking retention run under a Dev override, or drop the Done-when line",
    "needs": "Drop the line or allow the run"
-  },
-  {
-   "id": "AA-906",
-   "title": "TripPlanner Next.js 15 → 16 upgrade (React Compiler lint refactor)",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "tpbk",
-   "milestone": "M4",
-   "session": "S252",
-   "size": "M",
-   "next": "L5 · S252 Next 15 → 16 + React Compiler refactor (after AA-847 6d; not in the same session as AA-934/935)",
-   "needs": ""
   },
   {
    "id": "AA-900",
@@ -1030,18 +1040,6 @@
    "needs": "Approve the DRY RUN"
   },
   {
-   "id": "AA-839",
-   "title": "Erasure runbook + DRY RUN job for a traveller and an offboarded tenant",
-   "status": "In Progress",
-   "priority": "Low",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S253",
-   "size": "XS",
-   "next": "Now: remove the \"GDPR\" wording from the offboard endpoint; erasure runbook before prod",
-   "needs": ""
-  },
-  {
    "id": "AA-813",
    "title": "Tenant user accounts — invites, roles (owner/editor/viewer), API key rotation",
    "status": "Backlog",
@@ -1184,18 +1182,6 @@
    "size": "L",
    "next": "Shared design system package; after P2a the kit lives in 3 copies (CIS admin, portal, CRM web), byte guard until then",
    "needs": "Package vs copies"
-  },
-  {
-   "id": "AA-837",
-   "title": "TripPlanner /plan UI leftovers: 7 WCAG AA contrast violations, Customise 404, \"1 DAYS\"",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "tpbk",
-   "milestone": "M4",
-   "session": "S253",
-   "size": "S",
-   "next": "L5 · S253 /plan contrast and labels (after AA-906, same files)",
-   "needs": "Clarify dark mode"
   },
   {
    "id": "AA-835",
@@ -1452,13 +1438,13 @@
   {
    "id": "AA-645",
    "title": "[EVAL] Claude Sonnet 5 for writer stages (t2_generate, t8_angle_gen, t9_write, s1_atom_writer) vs Sonnet 4.5/4.6 on Bedrock",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Low",
    "project": "core",
    "milestone": "M2a",
    "session": "S248",
    "size": "S",
-   "next": "L1 · Folded into S1 step 2 (S248): 3-model screen on 12 tours (~$2.5)",
+   "next": "S248: writer W×Sonnet chosen (n=50, 2 blind panels); step 0 live (CIS 273, first published_at kept, S1_WRITER_V2 off). Next: brand-fit rubric v2 + re-measure, then pilot 3 → ≤50 shadow",
    "needs": ""
   },
   {
@@ -1472,42 +1458,6 @@
    "size": "M",
    "next": "LP · S257 account pages in AA-Partner/portal (after P2a); blocked by AA-979",
    "needs": ""
-  },
-  {
-   "id": "AA-762",
-   "title": "Team & roles — tenant users (owner/editor/viewer), invites, self-serve API keys — after the ecosystem identity ADR",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "portal",
-   "milestone": "C-M2",
-   "session": "S254",
-   "size": "S",
-   "next": "LP · Close as a duplicate of AA-939 (CRM-11) in S254",
-   "needs": ""
-  },
-  {
-   "id": "AA-932",
-   "title": "[CRM W1] CRM-04 Infra + DB owner `crm`",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "C-M1",
-   "session": "S249",
-   "size": "L",
-   "next": "L6 · W1 · S249; blockers AA-928/929/931 Done S247. Connection budget: cis-api main pool stays 10 (burst S247) → 132/135 with crm_app limit 6 / pool 3; a crm pool of 6 would reach 138 — size it to fit",
-   "needs": "MFA (KMS policies)"
-  },
-  {
-   "id": "AA-933",
-   "title": "[CRM W1] CRM-05 AA-Partner repo, API, job runner",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "C-M1",
-   "session": "S250",
-   "size": "L",
-   "next": "L6 · W1 · S250: branch protection + required CI from day one; blocked by AA-928, AA-932",
-   "needs": "Create the AA-Partner repo if repo creation is turned off (access review Q-2)"
   },
   {
    "id": "AA-934",
@@ -1964,42 +1914,6 @@
    "size": "L",
    "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-939, AA-940, AA-941",
    "needs": "MFA; Ms. Thư names the second alarm recipient"
-  },
-  {
-   "id": "AA-972",
-   "title": "[CRM LB] CRM-B1 M2M + B2B quote",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M3",
-   "session": "S249",
-   "size": "L",
-   "next": "L4 · Lane B · S249: bk-019, review; blocked by AA-911 (AA-928 Done S247)",
-   "needs": "MFA (M2M pool); Ms. Thư: B2B margin"
-  },
-  {
-   "id": "AA-973",
-   "title": "[CRM LB] CRM-B2 Departures, capacity, holds",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M3",
-   "session": "S251",
-   "size": "L",
-   "next": "L4 · Lane B · S251: bk-020 + channel on trip_cases, review; blocked by AA-972",
-   "needs": ""
-  },
-  {
-   "id": "AA-974",
-   "title": "[CRM LB] CRM-B2b Booking commercial rules (new, Fix C2, A3, A8)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M3",
-   "session": "S252",
-   "size": "L",
-   "next": "L4 · Lane B · S252: bk-021: VND, shared cancellation fees, hold extension (ADR 0005 d5); blocked by AA-973",
-   "needs": ""
   },
   {
    "id": "AA-975",

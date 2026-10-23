@@ -1,0 +1,121 @@
+{
+ "judge_model": "gpt-5.6-luna",
+ "judge_mode": "prod_aa714_near_band_median3",
+ "spend_usd": 0.2476,
+ "calls": 351,
+ "skipped_cost_cap": 0,
+ "arms": {
+  "aplus|haiku": {
+   "n": 25,
+   "brand_fit_mean": 7.56,
+   "brand_fit_median": 8.0,
+   "retry_pct": 16.0,
+   "retry_outside_tie_pct": 16.0,
+   "distinct_mean": 3.2,
+   "generic_feedback_pct": 40.0,
+   "panel_serious_per_claim": 0.0385,
+   "panel_serious_per_page": 2.38,
+   "panel_rank_mean": 0.84,
+   "vs_baseline": null
+  },
+  "e|gpt-6-luna": {
+   "n": 25,
+   "brand_fit_mean": 6.68,
+   "brand_fit_median": 7.0,
+   "retry_pct": 36.0,
+   "retry_outside_tie_pct": 36.0,
+   "distinct_mean": 2.6,
+   "generic_feedback_pct": 72.0,
+   "panel_serious_per_claim": 0.013,
+   "panel_serious_per_page": 0.38,
+   "panel_rank_mean": 0.56,
+   "vs_baseline": {
+    "paired": 25,
+    "mean_diff": -0.88,
+    "lower": 16,
+    "higher": 4,
+    "ties": 5,
+    "p": 0.0118
+   }
+  },
+  "e|sonnet-5-5": {
+   "n": 25,
+   "brand_fit_mean": 7.16,
+   "brand_fit_median": 7.0,
+   "retry_pct": 8.0,
+   "retry_outside_tie_pct": 8.0,
+   "distinct_mean": 2.76,
+   "generic_feedback_pct": 52.0,
+   "panel_serious_per_claim": 0.0065,
+   "panel_serious_per_page": 0.24,
+   "panel_rank_mean": 0.328,
+   "vs_baseline": {
+    "paired": 25,
+    "mean_diff": -0.4,
+    "lower": 11,
+    "higher": 3,
+    "ties": 11,
+    "p": 0.0574
+   }
+  },
+  "w|gpt-6-luna": {
+   "n": 25,
+   "brand_fit_mean": 6.72,
+   "brand_fit_median": 7.0,
+   "retry_pct": 32.0,
+   "retry_outside_tie_pct": 32.0,
+   "distinct_mean": 2.6,
+   "generic_feedback_pct": 56.0,
+   "panel_serious_per_claim": 0.0056,
+   "panel_serious_per_page": 0.24,
+   "panel_rank_mean": 0.302,
+   "vs_baseline": {
+    "paired": 25,
+    "mean_diff": -0.84,
+    "lower": 15,
+    "higher": 1,
+    "ties": 9,
+    "p": 0.0005
+   }
+  },
+  "w|sonnet-5-5": {
+   "n": 25,
+   "brand_fit_mean": 6.72,
+   "brand_fit_median": 7.0,
+   "retry_pct": 36.0,
+   "retry_outside_tie_pct": 36.0,
+   "distinct_mean": 2.96,
+   "generic_feedback_pct": 60.0,
+   "panel_serious_per_claim": 0.0033,
+   "panel_serious_per_page": 0.18,
+   "panel_rank_mean": 0.148,
+   "vs_baseline": {
+    "paired": 25,
+    "mean_diff": -0.84,
+    "lower": 13,
+    "higher": 3,
+    "ties": 9,
+    "p": 0.0213
+   }
+  }
+ },
+ "page_level": {
+  "pages_joined": 125,
+  "spearman_brand_fit_vs_serious_rate": 0.081,
+  "note": "negative = the judge scores pages with fewer serious errors higher (rewards fidelity); positive = it scores error-heavy pages higher (rewards embellishment)"
+ },
+ "arm_level_spearman": 0.359,
+ "answer": {
+  "arms_scored_significantly_lower_than_baseline": [
+   "e|gpt-6-luna",
+   "w|gpt-6-luna",
+   "w|sonnet-5-5"
+  ],
+  "arms_with_retry_rate_10pts_above_baseline": [
+   "e|gpt-6-luna",
+   "w|gpt-6-luna",
+   "w|sonnet-5-5"
+  ],
+  "would_trigger_extra_retries": true
+ }
+}

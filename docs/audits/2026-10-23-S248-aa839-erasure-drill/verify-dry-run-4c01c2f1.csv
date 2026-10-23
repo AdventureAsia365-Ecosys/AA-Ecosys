@@ -1,0 +1,62 @@
+﻿Table,Action,Rows,Why
+acp_contract.atom_embedding,cascade,0,reached through atom_embedding_atom_id_fkey from acp_contract.tour_atoms
+acp_contract.atom_matches,cascade,0,reached through atom_matches_atom_id_fkey from acp_contract.tour_atoms
+acp_contract.atom_ranking,cascade,0,reached through atom_ranking_tour_id_fkey from silver_aa_internal.raw_tours
+acp_contract.atom_segment_member,cascade,0,reached through atom_segment_member_atom_id_fkey from acp_contract.tour_atoms
+acp_contract.atomize_day_fingerprint,delete,0,A3 per-day fingerprints of the tenant's versions (soft key)
+acp_contract.route,cascade,0,reached through route_tour_id_fkey from silver_aa_internal.raw_tours
+acp_contract.route_pick,delete,0,tenant route picks (T7)
+acp_contract.s1_from_atom_runs,cascade,0,reached through s1_from_atom_runs_tour_id_fkey from silver_aa_internal.raw_tours
+acp_contract.tour_atoms,delete,0,atoms owned by the tenant (owner_scope) or on the tenant's own raw tours
+acp_deliver.tenant_tour_pages,delete,0,tenant tour page URLs
+acp_shared.acp_output_rules,delete,0,"tenant output rules (NULL tenant = global rules, untouched)"
+acp_shared.acp_quota_ledger,delete,0,tenant quota ledger
+acp_shared.angle_gate_option,cascade,0,reached through angle_gate_option_request_id_fkey from acp_shared.angle_gate_request
+acp_shared.angle_gate_request,delete,0,T8 angle requests (options follow through the FK)
+acp_shared.atom_place_card,cascade,0,reached through atom_place_card_atom_id_fkey from acp_contract.tour_atoms
+acp_shared.audit_log,keep,4,append-only hash chain (triggers refuse UPDATE/DELETE); AA-839 keeps the audit row
+acp_shared.content_piece,delete,0,T9 content pieces (labels and publish rows follow)
+acp_shared.content_piece_label,cascade,0,reached through content_piece_label_piece_id_fkey from acp_shared.content_piece
+acp_shared.debate_brand_fit_cache,delete,0,brand-fit cache of the tenant
+acp_shared.facts,delete,0,tenant-scope facts (platform facts have no tenant)
+acp_shared.publish_log,delete,0,tenant publish history (channels)
+acp_shared.quarter_plan,delete,0,quarter plans (versions follow through the FK)
+acp_shared.quarter_plan_version,cascade,0,reached through quarter_plan_version_plan_id_fkey from acp_shared.quarter_plan
+acp_shared.subject,delete,0,tenant subjects (T7 slate)
+acp_shared.tenant_atom_state,delete,0,tenant atom state
+acp_shared.tenant_config,delete,0,"planning config: markets, channels, posts/week"
+acp_shared.year_plan,delete,0,year plans
+gold_aa_internal.content_exports,delete,0,export rows
+gold_aa_internal.published_tours,delete,0,tours published under the tenant
+gold_aa_internal.tenant_tour_versions,delete,0,T2 tour versions
+gold_aa_internal.webhook_deliveries,delete,0,webhook delivery log
+shared.acp_runs,delete,0,ACP run rows
+shared.decision_log,detach,0,Jev decision history and cache
+shared.dfs_call_log,detach,0,DataForSEO cost history
+shared.jev_tenant_allowlist,delete,0,Jev allow-list (offboard already removed it)
+shared.job,delete,0,the tenant's finished jobs (payload tenant_id)
+shared.llm_call_daily,merge,0,"daily LLM rollup; added into the NULL-tenant row of the same key, then deleted"
+shared.llm_call_log,detach,0,"LLM cost history; the totals stay, the tenant link goes"
+shared.notifications,delete,0,tenant notifications (bell)
+shared.pipeline_jobs,delete,0,historic run-tour jobs of the tenant (column tenant)
+shared.pipeline_runs,delete,0,tenant pipeline batches (acp_runs and raw rows follow through FKs)
+shared.place_photo,cascade,0,reached through place_photo_tour_id_fkey from silver_aa_internal.raw_tours
+shared.tenant_api_usage,delete,0,per-request API usage; a CHECK forbids a tenant-actor row without a tenant
+shared.tenant_api_usage_monthly,delete,0,monthly API usage rollup of the tenant
+shared.tenant_brand_rule_versions,delete,0,brand identity history
+shared.tenant_brand_rules,delete,0,brand identity
+shared.tenant_brand_rules_deleted_aa404,delete,0,AA-404 backup copy of brand rules
+shared.tenant_export_config,delete,0,export settings
+shared.tenant_integrations,delete,0,CMS / social connections (secret names; the secrets are a checklist step)
+shared.tenant_rewrite_usage,delete,0,rewrite counters
+shared.tenant_seo_config,delete,0,SEO settings
+shared.tenants,delete,0,the tenant account row
+shared.unmapped_market_requests,delete,0,market requests
+silver_aa_internal.generated_content,delete,0,rewrites under the tenant
+silver_aa_internal.quality_scores,delete,0,quality scores under the tenant
+silver_aa_internal.raw_sources,delete,0,the tenant's uploaded sources
+silver_aa_internal.raw_tours,delete,0,the tenant's own raw tours (derived atoms/routes follow through FKs)
+silver_aa_internal.review_queue,delete,0,review queue rows
+silver_aa_internal.seo_context,delete,0,SEO context rows
+silver_aa_internal.upload_staging,delete,0,upload staging rows
+acp_shared.quarter_plan,null_first:current_version_id,0,breaks the FK cycle fk_quarter_plan_current_version before the deletes
