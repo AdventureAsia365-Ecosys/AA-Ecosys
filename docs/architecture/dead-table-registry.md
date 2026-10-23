@@ -30,5 +30,17 @@ One row per table that is frozen (kept, no writer) or dropped. Procedure for a d
 | `tripplanner.tour_leg` | AA-TripPlanner-Web | frozen → drop pending approval | 14/10/2026 | tp-018 | replaced by `geo.tour_leg` / `catalog.v_tour_leg` | same DRY RUN |
 | `tripplanner.tour_junction` | AA-TripPlanner-Web | frozen → drop pending approval | 14/10/2026 | tp-018 | replaced by `geo.tour_junction` / `catalog.v_tour_junction` | same DRY RUN |
 
+**Exception for the eight `tripplanner` place tables (tp-018), needs Nghiệp's written approval in the tp-018 PR and
+the session log** (data standards README: an exception to a MUST): root ADR 0007 decision 10 says "14 days after the
+flip" (05/11/2026) and DM-3.8 / DM-3.9 ask for 14 days of `pg_stat_user_tables`, a quarantine (`ALTER … SET SCHEMA
+retired`) and an S3 archive first. On Dev these are replaced by: two DRY RUN dispatches (before and after a
+TripPlanner smoke) whose read and write counters must not move; no quarantine (the rows are derived data CIS rebuilds
+in `geo`; a quarantine keeps the foreign keys to `shared.destinations` and needs a second destructive apply);
+**archive location** = the DB Migrate pre-apply RDS snapshot of the tp-018 apply, tagged `aa:retain-until` = apply
+date + 180 days and `aa:purpose` = `aa712-tp018-pre-drop` (the DM-7.3 S3 archive does not exist yet, N4). ADR 0007
+carries the matching conditional amendment (S248). Lock note: the drop takes ACCESS EXCLUSIVE on CIS's
+`shared.destinations` for its length (RI triggers of 11 foreign keys); apply while the job tables are idle, retry on a
+lock timeout. Fill in, before the apply: approval (who, date, link); after it: snapshot id, apply run, verify.
+
 Kept on purpose: `tripplanner.component_id_map` (tp-017) maps the pre-flip component ids that old drafts' trip events
 still carry to catalog ids; it has no foreign key to `itinerary_components` and outlives it.
