@@ -10,13 +10,14 @@ info:
     of birth or passports; pax are counts by age band plus room configuration. The agency-facing price is b2b_price
     (root ADR 0005a decision 2); the supplier net cost never leaves Booking and no field is named supplier_net (the
     root contracts CI rejects it). Prices are decimal strings. Errors: 409 price_changed (re-quote), 410
-    hold_expired (re-hold), 422 sold_out, 429 rehold_limit, 409 extend_limit; on 503 or a timeout the CRM shows an
+    hold_expired (re-hold), 422 sold_out, 429 rehold_limit, 409 extend_limit, 409 tour_not_served (the tour left the
+    AA catalog: retired, paused or gone; root ADR 0015, AA-986); on 503 or a timeout the CRM shows an
     indicative price and disables deposits until a hold is active. Path prefix /booking/b2b/v1 is provisional until
     ADR 0013 (AA-899) fixes HTTP conventions; the contract name and major do not change with it.
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-928, AA-972, AA-973, AA-974, AA-975]
+  x-aa-issues: [AA-928, AA-972, AA-973, AA-974, AA-975, AA-986]
 servers:
   - url: /booking/b2b/v1
 security:
@@ -26,6 +27,13 @@ paths:
     get:
       operationId: listProducts
       summary: Sellable AA trip plans and their bookable components (no prices; content comes from catalog.http.v1)
+      description: >-
+        Without updated_since: the current offer (sellable plans whose tour is in the AA catalog). With updated_since
+        (a delta): also plans that stopped being sellable (sellable false, no components) and, since AA-986 (root ADR
+        0015 decision 5), plans that were offered to agencies (sellable, or with components) whose tour AA retired,
+        listed once with withdrawn true, withdrawn_reason and updated_at = the retirement time. A paused tour (temporarily unavailable) is not listed as withdrawn; it is only absent
+        until it is served again, and a tour that comes back is listed again with a later updated_at. Overlap the
+        updated_since window by a few minutes.
       security:
         - m2m: [booking.b2b/read]
       parameters:
@@ -65,6 +73,7 @@ paths:
           content:
             application/json:
               schema: {$ref: "#/components/schemas/Quote"}
+        "409": {$ref: "#/components/responses/Problem"}
         "422": {$ref: "#/components/responses/Problem"}
   /departures:
     get:
@@ -106,7 +115,10 @@ paths:
         whatever the version) and per departure (a hold of a departure after a hold of it the agency placed the same
         day and released or let expire, whatever the proposal_ref). Holds still active or confirmed never count
         toward the departure limit. A replay of the same Idempotency-Key, or the same quote for a version that
-        already holds, is answered before the limit and never counts.
+        already holds, is answered before the limit and never counts. 409 tour_not_served (AA-986, root ADR 0015): a
+        trip_plan line whose tour is no longer served by AA (retired, paused or out of the catalog) cannot be held;
+        tour, tour_state and reason say which and why. hotel_room and service lines carry no tour and are not
+        checked. A replay of an existing hold is still answered.
       security:
         - m2m: [booking.b2b/hold]
       parameters:
@@ -194,8 +206,10 @@ paths:
       summary: Turn a hold into a booking after the deposit; fixed departures confirm, others go on request
       description: >-
         Idempotent on the hold: a confirmed hold returns its booking again. 409 price_changed (hash differs from the
-        hold's quote), 410 hold_expired (expired, released, or its seats no longer fit when the confirm gets the
-        departure locks), 422 sold_out (a departure was cancelled) or invalid (request), 404 unknown hold.
+        hold's quote) or tour_not_served (AA-986: a trip_plan line's tour is no longer served; AA never sells it, the
+        hold expires on its own), 410 hold_expired (expired, released, or its seats no longer fit when the confirm gets
+        the departure locks), 422 sold_out (a departure was cancelled) or invalid (request), 404 unknown hold. A booking
+        already confirmed is kept and its replay answered even when its tour is withdrawn later.
       security:
         - m2m: [booking.b2b/book]
       parameters:
@@ -374,8 +388,23 @@ components:
         error:
           type: string
           enum: [unauthorized, forbidden, unknown_partner, not_found, price_changed, hold_expired, sold_out,
-                 rehold_limit, extend_limit, invalid, unavailable]
+                 rehold_limit, extend_limit, tour_not_served, invalid, unavailable]
         message: {type: string, maxLength: 500}
+        tour:
+          $ref: "#/components/schemas/TourKey"
+          description: On tour_not_served, the tour that is not served (AA-986).
+        tour_state:
+          type: string
+          enum: [retired, paused, not_in_catalog]
+          description: >-
+            On tour_not_served. retired = AA no longer offers it (drop it from offers); paused = temporarily
+            unavailable (keep the offer, try later); not_in_catalog = absent from the catalog, reason unknown.
+        reason:
+          type: string
+          maxLength: 64
+          description: >-
+            On tour_not_served, why (root ADR 0015): source_deleted, master_trashed, superseded_orphan (retired);
+            master_inactive, superseded_pending (paused); not_in_catalog.
         price_hash:
           type: string
           description: On price_changed, the new price hash to re-quote against.
@@ -439,6 +468,16 @@ components:
           type: array
           items: {$ref: "#/components/schemas/Component"}
         updated_at: {type: string, format: date-time}
+        withdrawn:
+          type: boolean
+          default: false
+          description: >-
+            AA-986: true on a delta row of a plan whose tour AA retired (sellable false, no components, updated_at =
+            the retirement time). Mark open proposal lines "no longer offered".
+        withdrawn_reason:
+          type: [string, "null"]
+          maxLength: 64
+          description: On a withdrawn row, why (source_deleted, master_trashed, superseded_orphan).
     ProductPage:
       type: object
       additionalProperties: false
