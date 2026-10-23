@@ -24,11 +24,23 @@ after the Dev drill: a DRY RUN and an apply on the synthetic traveller and the s
 
 **What is automated.** CIS has one job kind, `data_erasure` (AA-CIS-App `services/jobs/erasure_job.py`, inventory
 `services/erasure/inventory.py`). It runs a **DRY RUN** by default: counts per CIS table and action, blockers, the
-delete order, the tenant's S3 objects and secrets, the per-app checklist and a `fingerprint` of the counts. Its
+delete order, the tenant's S3 objects and secrets, the per-app checklist and a `fingerprint` that binds the subject
+and the counts (`fingerprint_version` 2): for a tenant it hashes the tenant id with the counts, so another tenant
+with the same counts has another fingerprint; for a traveller it hashes the address hash with a random salt drawn by
+that DRY RUN (kept in the job's `result.subject_salt` and removed together with the hash after the apply), so the
+fingerprint left in the job rows and the audit row cannot be tested against a guessed address. Its
 **apply** exists but is off (`ERASURE_APPLY_ENABLED` is set nowhere); turning it on is a Terraform change that needs
 Nghiệp's approval. Booking and TripPlanner rows are other owners' schemas: their lookup and erasure run through DB
 Migrate `mode=run-script` (sections 2 and 3). Every erasure follows the DRY RUN procedure
 ([`destructive-ops.md`](../../skill/aa-cis-schema/references/destructive-ops.md)) with Nghiệp's approval.
+
+**Operator UI.** The CIS admin page **Jobs › Data erasure** (`/admin/data-erasure`, admin role; AA-CIS-App #960) is
+the usual way to run the CIS part: it shows the settings (apply on or off, retention days, DRY RUN max age), starts a
+DRY RUN for an offboarded tenant or for a traveller (the address is hashed in the browser and cleared; only the hash
+is sent), shows the plan and the fingerprint, opens the apply panel only while apply is on and only for a succeeded,
+unblocked, unused DRY RUN within the max age, starts the verification DRY RUN after a traveller apply, and lists the
+history. The apply needs a Cognito staff sign-in. The `curl` commands below call the same API and stay as the
+terminal fallback.
 
 Scope: travellers and customers (TripPlanner guests, Booking customers) and offboarded tenants. Staff data is out of
 scope. A tenant's own CRM contacts (AA-Partner, schema `crm`) are the tenant's records (DM-6.8): forward such a
@@ -143,13 +155,16 @@ repo and the work item, nowhere else. After the erasure it matches no row.
    curl -s -X POST https://api-cis.lumiguides.it.com/admin/job-runner/erasure/run -H "x-admin-secret: $A" -H "x-admin-role: admin" -H "content-type: application/json" -d '{"subject":"traveller","email_sha256":"<64-hex-characters>"}'
    ```
 
-   Expected: `{"job_id": "...", "mode": "dry_run"}`. Read the result with
+   Or on `/admin/data-erasure`, tab "Traveller (DSAR)": type the address there (it is hashed in the browser and
+   cleared) and start the DRY RUN. Expected: `{"job_id": "...", "mode": "dry_run"}`. Read the result with
    `curl -s https://api-cis.lumiguides.it.com/admin/job-runner/jobs/<job_id> -H "x-admin-secret: $A" -H "x-admin-role: admin"`
    (or the admin Jobs page, kind `data_erasure`). Expected: `status` `succeeded`, every `rows` 0, `blocked` false.
    A non-zero `delete` or `redact` row is a CIS copy to erase in section 3 step 4b; a non-zero `manual` row
    (staff account, alert recipient, audit chain) is not a traveller erasure: record it and ask Nghiệp. Abort: the job
    fails → read `error`; nothing was written.
-7. Record the counts and full ids per tag in the DSAR work item, and the CIS job id and `fingerprint`. No address,
+7. Record the counts and full ids per tag in the DSAR work item, and the CIS job id and `fingerprint` as one pair. A
+   traveller fingerprint is salted per DRY RUN, so it changes with every DRY RUN even when the counts do not: an
+   approval names the fingerprint of that exact `dry_run_job_id`, and a new DRY RUN needs a new approval. No address,
    name or phone goes there.
 
 **Access requests.** The task log must not hold row values, so this lookup cannot produce the copy the person asked
@@ -220,14 +235,22 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    `ERASURE_APPLY_ENABLED=true` on the api and worker (Terraform, approved). From a Cognito staff session (admin role;
    the apply refuses a password session or the bare secret):
 
+   The usual path is the apply panel of `/admin/data-erasure` on that DRY RUN (it builds the body from the DRY RUN
+   job). The terminal equivalent:
+
    ```bash
    curl -s -X POST https://api-cis.lumiguides.it.com/admin/job-runner/erasure/run -H "Authorization: Bearer <staff-id-token>" -H "content-type: application/json" -d '{"subject":"traveller","email_sha256":"<64-hex>","dry_run":false,"dry_run_job_id":"<dry-run job id>","approved_fingerprint":"<its fingerprint>","approved_by":"Nghiep","snapshot_id":"dsar-<yyyymmdd>-pre"}' # WRITE
    ```
 
-   The job refuses unless the DRY RUN is a succeeded one for the same hash, at most 24 hours old, and the recount in
-   its transaction gives the same fingerprint. It deletes / redacts exactly the approved rows, writes one
+   `approved_fingerprint` is the fingerprint Nghiệp approved for exactly this `dry_run_job_id` (section 2 step 7):
+   the fingerprint of another DRY RUN of the same person differs (its salt differs) and is refused. The job refuses
+   unless the DRY RUN is a succeeded one for the same hash, at most 24 hours old, still holds its salt, and has
+   `fingerprint_version` 2; it then recomputes the fingerprint with that DRY RUN's salt, and the recount in its
+   transaction must give the same fingerprint. A DRY RUN made before the deploy of the subject-bound fingerprint (v1,
+   no `fingerprint_version`) is refused: run a new DRY RUN after the deploy and get that one approved. It deletes / redacts exactly the approved rows, writes one
    `acp_shared.audit_log` row (`dsar.cis_erased`, counts only) and replaces the hash with `stripped-after-apply` in
-   every `data_erasure` job row that holds it (this apply, its DRY RUN and any earlier DRY RUN of the request).
+   every `data_erasure` job row that holds it (this apply, its DRY RUN and any earlier DRY RUN of the request),
+   removing each row's `subject_salt` with it.
    Expected: result `verified: true`. Abort: the job fails, nothing is committed. A DRY RUN serves one apply only,
    and a failed apply is never retried (the Jobs page retry answers 409): run a new DRY RUN, get it approved, and
    start a new apply.
@@ -252,8 +275,10 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    curl -s -X POST https://api-cis.lumiguides.it.com/admin/job-runner/erasure/run -H "x-admin-secret: $A" -H "x-admin-role: admin" -H "content-type: application/json" -d '{"subject":"traveller","email_sha256":"<64-hex-characters>","verify":true}'
    ```
 
-   The verification job replaces the hash in its own row with `stripped-after-verify` when it ends
-   (`result.hash_stripped: true`), so it leaves no copy behind.
+   On `/admin/data-erasure` the verification DRY RUN is started from the finished apply (it uses the hash held in
+   the page's memory; after a reload, type the address again). The verification job replaces the hash in its own
+   row with `stripped-after-verify` when it ends (`result.hash_stripped: true`) and never stores a salt, so it
+   leaves no copy behind.
    Expected: 0 rows in every tag and every CIS `delete` / `redact` row, the name found in no trip-case notes, and the
    Cognito user is gone.
 8. **Delete the pre-erasure snapshot** once step 7 passes, so no manual copy of the person's data remains.
@@ -332,8 +357,11 @@ deleted.
    Abort: any blocker → resolve it first (wait for or cancel live jobs; a `cross_tenant` or `self_reference` row,
    e.g. another tenant's T2 version or a child job pointing at the tenant's rows, is a question for Nghiệp;
    `s3_refs_unlisted` = more than 200 keys outside the prefixes, list them by hand first), then run a new DRY RUN.
-4. **Approval.** Post the totals per action, the per-table rows and the fingerprint in the work item; Nghiệp approves
-   that fingerprint (destructive-ops.md step 1). Abort: no approval, no erasure.
+4. **Approval.** Post the totals per action, the per-table rows, the DRY RUN job id and its fingerprint in the work
+   item; Nghiệp approves that fingerprint (destructive-ops.md step 1). The fingerprint binds the tenant id: it cannot
+   approve another tenant with the same counts. A DRY RUN made before the deploy of the subject-bound fingerprint
+   (no `fingerprint_version` in its result) is refused at apply: run a new DRY RUN after the deploy. Abort: no
+   approval, no erasure.
 5. **Snapshot** (destructive-ops.md step 2):
 
    ```bash
@@ -344,7 +372,8 @@ deleted.
 6. **Enable the apply** (approved Terraform change in AA-CIS-Infra): `ERASURE_APPLY_ENABLED=true` on the api and
    worker task definitions, and `ERASURE_TENANT_RETENTION_DAYS` if Nghiệp set a value; deploy. Without it the API
    answers 403 and the job refuses.
-7. **Apply**, within 24 hours of the DRY RUN, from a Cognito staff session (admin role):
+7. **Apply**, within 24 hours of the DRY RUN, from a Cognito staff session (admin role): the apply panel of
+   `/admin/data-erasure` on that DRY RUN, or:
 
    ```bash
    curl -s -X POST https://api-cis.lumiguides.it.com/admin/job-runner/erasure/run -H "Authorization: Bearer <staff-id-token>" -H "content-type: application/json" -d '{"subject":"tenant","tenant_id":"<tenant uuid>","dry_run":false,"dry_run_job_id":"<dry-run job id>","approved_fingerprint":"<fingerprint>","approved_by":"Nghiep","snapshot_id":"tenant-erase-<yyyymmdd>-pre"}' # WRITE
