@@ -1,0 +1,583 @@
+{
+ "pass": "a",
+ "rubric": "s1-panel-v1",
+ "pages": [
+  {
+   "page_id": "p01",
+   "sample_id": "s1-014",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 92,
+   "errors": [
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "elevated vantage of K2's north face",
+     "why": "The source only says the view of K2 is more spectacular than from Concordia; from Broad Peak BC on the Baltoro side the visible face is the south face (also in Day 11: \"direct view of K2's north face\")."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Named by mountaineer Martin Conway after the Piazza della Concordia in Rome",
+     "why": "Source says Conway named it after the place de la Concordia in Paris."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "a six-hour jeep journey departs for Jhola at 3,140 meters via Askoli",
+     "why": "Source gives about six hours Skardu to Askoli, with the road then extended further to Jhola; six hours is not the time to Jhola."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "Finishing through Hushe Valley and Khaplu: traditional gateway villages of Baltistan's high-altitude porter and guide community",
+     "why": "Source calls Hushe the gateway village of porters; Khaplu is only a short stop on the jeep drive, described as an old Baltistan kingdom."
+    },
+    {
+     "class": "overclaim",
+     "severity": "minor",
+     "field": "subtitle",
+     "quote": "Alpine crossing of the Karakoram's highest passes",
+     "why": "The route crosses one pass (Gondogoro La); the source never calls it the Karakoram's highest passes."
+    },
+    {
+     "class": "overclaim",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "traverses the Karakoram's most challenging high-altitude terrain",
+     "why": "Source says one of the most demanding treks on earth, not the Karakoram's most challenging terrain."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "weather, permits, and porter availability are subject to seasonal conditions",
+     "why": "Porter availability as a seasonal constraint is not in the source."
+    }
+   ]
+  },
+  {
+   "page_id": "p02",
+   "sample_id": "s1-008",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 20,
+   "errors": [
+    {
+     "class": "invented_fact",
+     "severity": "serious",
+     "field": "subtitle",
+     "quote": "Four-hour run from Fishling to Mugling on Class III–IV rapids",
+     "why": "The source gives no rapid grade; Class III–IV repeats in summary, highlights, itinerary and seo_meta."
+    },
+    {
+     "class": "invented_promise",
+     "severity": "serious",
+     "field": "summary",
+     "quote": "sections of open water suitable for swimmers and less experienced paddlers",
+     "why": "Source makes no suitability statement for swimmers or less experienced paddlers; it stresses extreme rapids."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "delivers a full-day run of intermediate whitewater",
+     "why": "Source describes 'extreme rapids'; 'intermediate' is an invented difficulty that contradicts it."
+    },
+    {
+     "class": "invented_promise",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "onward connection to Pokhara or Chitwan",
+     "why": "Source only says you can return to Kathmandu, Chitwan or Pokhara after rafting; it does not include onward transport (also in highlight 'Return logistics ... the same day')."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "Riverbank lunch break on a sandy beach between paddle sections",
+     "why": "Source mentions a lunch on the river bank; 'sandy beach' is not stated, and the inclusions say lunch is served after the rafting."
+    }
+   ]
+  },
+  {
+   "page_id": "p03",
+   "sample_id": "s1-040",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 20,
+   "errors": [
+    {
+     "class": "invented_fact",
+     "severity": "serious",
+     "field": "seo_meta",
+     "quote": "moderate climbing difficulty",
+     "why": "The source gives no difficulty grade."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "a 30-minute walk ascends from the entrance to reach Watchtower 8, where the formal wall begins",
+     "why": "Source: 30 minutes from the entrance to the Wall, then about 30 more minutes up stairs to Watchtower 8 (about an hour in total)."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "this section connected the capital's northern defense line with the imperial tombs",
+     "why": "Source says the section was the northern barrier defending the capital and the imperial tombs, not a link between them."
+    }
+   ]
+  },
+  {
+   "page_id": "p04",
+   "sample_id": "s1-019",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 18,
+   "errors": [
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "The site contains three main excavation pits, each revealing roughly 2,000 of an estimated 6,000 clay figures",
+     "why": "Source: just under 2,000 warriors in total are visible across the three pits, not about 2,000 per pit."
+    },
+    {
+     "class": "cut_text",
+     "severity": "minor",
+     "field": "seo_meta",
+     "quote": "with a local guide all in one full",
+     "why": "Meta stops mid-phrase ('one full ...')."
+    }
+   ]
+  },
+  {
+   "page_id": "p05",
+   "sample_id": "s1-006",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 75,
+   "errors": [
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "field": "itineraries",
+     "quote": "Activity duration: approximately 6–7 hours on the water",
+     "why": "Source gives Day 9 kayaking as 3-4 hrs / 10 km, with lunch ashore; 6-7 hours on the water misstates the paddling load a customer plans around."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "Tiger Cave Temple's golden Buddha at 600 metres elevation",
+     "why": "Source gives 600 m up/down for the day's hike (elevation gain), not the temple's altitude."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Activity duration: approximately 3 hours. Terrain: calm mangrove channels; experience level: beginner to intermediate",
+     "why": "Source gives no experience level for the Koh Yao Yai paddle (and gives 3-4 hrs)."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "the Grand Palace and its Emerald Buddha are walkable from your hotel",
+     "why": "Source only suggests the Grand Palace as a sight to visit; it does not say it is walkable from the Chinatown hotel."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Travel time: approximately 12 hours.",
+     "why": "Source gives no train journey time."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "passing through villages, rubber plantations, and coconut groves",
+     "why": "Source says a rubber and palm plantation; no coconut groves on Day 4."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Transfer time: approximately 2 hours from Khao Sok.",
+     "why": "Source gives 2.5 hrs driving on Day 5."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "a local guide leads a nocturnal hike through the forest canopy",
+     "why": "The night hike is on the forest floor; nothing in the source puts it in the canopy."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Evening brings a shuttle to Ao Nang for dinner and a visit to the night market.",
+     "why": "Source says sunset cocktails and the night market; dinner at Ao Nang is not stated (only 4 dinners are included)."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "field": "name",
+     "quote": "Thailand by Water, Rail & Trail — 9 Days",
+     "why": "The page's itinerary runs Day 1 to Day 10 (the source summary says 10-day, nights add to 9); the 9-day label and 10 day blocks need reconciling."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Transfer to the airport for your flight home.",
+     "why": "Day 10 repeats the airport transfer sentence."
+    }
+   ]
+  },
+  {
+   "page_id": "p06",
+   "sample_id": "s1-024",
+   "verdict": "reject",
+   "agency_use": "no",
+   "checkable_claims": 64,
+   "errors": [
+    {
+     "class": "day_structure",
+     "severity": "serious",
+     "field": "itineraries",
+     "quote": "Day 7 — Departure\nYour journey through Sri Lanka's natural wonders concludes.",
+     "why": "A departure day is inserted mid-trip on Day 7; source Days 6-7 are in Kitulgala and the trip ends on Day 17."
+    },
+    {
+     "class": "day_structure",
+     "severity": "serious",
+     "field": "itineraries",
+     "quote": "Day 3 — Bentota to Galle and Yala",
+     "why": "Source keeps Days 1-3 in Bentota and Days 4-5 in Yala, Days 6-7 Kitulgala; the page moves Yala to Day 3 and Kitulgala to Day 5, so overnights no longer match the source."
+    },
+    {
+     "class": "invented_promise",
+     "severity": "serious",
+     "field": "itineraries",
+     "quote": "Guides use 4x4 vehicles and track animals on foot.",
+     "why": "Source offers guided safaris only; tracking animals on foot is an activity the source never offers."
+    },
+    {
+     "class": "scope_drift",
+     "severity": "minor",
+     "field": "name",
+     "quote": "Sri Lanka: Coast, Rainforest & Mountain — 17 Days",
+     "why": "Source is a luxury family adventure recommended for families with young adults (excursions suitable for children over 12); the page drops the family and luxury theme and the 12+ suitability."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "The route is open year-round but optimal between November and March.",
+     "why": "Source only says good during November to March; 'open year-round' is not stated."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Day 5 — Yala National Park Morning Safari",
+     "why": "Source gives an afternoon and a morning safari; the page has two morning safaris."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Safari duration is typically 4 to 5 hours.",
+     "why": "Source gives no safari duration."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "learning net casting and trap techniques",
+     "why": "Source only says traditional fishing with a local fisherman."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Duration is 6 to 7 hours of active walking.",
+     "why": "Source gives no trek duration for the Knuckles."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "a transfer from the Knuckles mountains westward toward the central plateau and then to Sigiriya",
+     "why": "Sigiriya lies north of the Knuckles range, not west; the drive time (2-3 hours) is also not in the source."
+    },
+    {
+     "class": "day_structure",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Day 12 — Cycling and Scenic Picnic near Sigiriya",
+     "why": "Source has one cycle to Sigiriya Rock, the climb, then a cycle to a picnic; the page repeats the cycle to the Rock on Day 12 after the climb on Day 11."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Private transfer from Colombo airport to Bentota, a coastal town on the south shore. Upon arrival in Sri Lanka our chauffeur will transfer you to Bentota",
+     "why": "Day 1 states the same transfer twice (second sentence copied from the source)."
+    }
+   ]
+  },
+  {
+   "page_id": "p07",
+   "sample_id": "s1-035",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 90,
+   "errors": [
+    {
+     "class": "invented_promise",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "The route is accessible for all cycling levels.",
+     "why": "Source states no elevation gain but makes no suitability claim for all levels."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "wild boar",
+     "why": "Source lists tigers, leopards, Bengal foxes, langurs, deer, birds, monkeys; wild boar is not mentioned."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "These pillars reflect the Jain principle of ahimsa, non-violence toward all living beings.",
+     "why": "Source states Jains believe in ahimsa; it does not link the 1,444 pillars to ahimsa."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "Block printing workshop with artisans in Jaipur and Chandelao",
+     "why": "Only Jaipur (Anoothi) is a hands-on block printing activity; Pipar near Chandelao is a village visit to meet families practising the craft."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Start before dawn with a 12-kilometer bicycle ride",
+     "why": "Source says the ride starts the day; 'before dawn' is not stated."
+    }
+   ]
+  },
+  {
+   "page_id": "p08",
+   "sample_id": "s1-007",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 45,
+   "errors": [
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Chaukhamba and Trishul frame the western horizon",
+     "why": "Source gives no compass directions; Trishul lies to the south-east of Kuari Pass, not west."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Chaukhamba (left behind to the south)",
+     "why": "Source gives no direction; Chaukhamba lies north-west of Akhod Getha/Gulling, not south."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "following traditional shepherd routes through the landscape",
+     "why": "Source mentions shepherds at the meadow, not that the trail follows shepherd routes."
+    },
+    {
+     "class": "cut_text",
+     "severity": "minor",
+     "field": "seo_meta",
+     "quote": "Route connects.",
+     "why": "Meta ends with an unfinished phrase."
+    }
+   ]
+  },
+  {
+   "page_id": "p09",
+   "sample_id": "s1-010",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 51,
+   "errors": [
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "The evening returns to the hot spring hotel, where thermal baths and spa facilities are available.",
+     "why": "Source Day 5 is titled Yuli Hot Springs and ends 'at a historic hot spring hotel' (a different stay); the page implies a second night at the Ruisui hotel, and the summary's 'hot spring hotels in Ruisui and Mudan' drops Yuli. Spa facilities are not in the source."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "a hot spring hotel with direct access to thermal pools",
+     "why": "Source only says hot spring hotel in Ruisui; 'direct access to thermal pools' is an invented amenity."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "visit night markets in Hualien and Taipei",
+     "why": "Source names only Dadongmen Night Market (Hualien); in Taipei it is a stroll through a shopping district."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "at a local Hunter's School in Kiwit Village",
+     "why": "Source lists the Hunter's School and a walking tour with foot bath in Kiwit separately; it does not place the school in Kiwit."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "Visit the Indigenous Wild Vegetable Center near Liyu Lake",
+     "why": "Source does not say where the Wild Vegetable Center is."
+    }
+   ]
+  },
+  {
+   "page_id": "p10",
+   "sample_id": "s1-049",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 46,
+   "errors": [
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "field": "itineraries",
+     "quote": "descending 1,570 meters over 126 kilometers",
+     "why": "In the source stage format (km / m / hrs) 1,570 m is the day's climbing, as the page itself reads 456 m on Day 7; presenting it as descent hides 1,570 m of climbing a rider plans around."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "Arrival in Lishan comes as the day's light fades",
+     "why": "Source says arrival at Lishan in the afternoon."
+    },
+    {
+     "class": "overclaim",
+     "severity": "minor",
+     "field": "seo_meta",
+     "quote": "ranking among the best bike tours in Taiwan",
+     "why": "Source makes no ranking claim about this tour."
+    }
+   ]
+  },
+  {
+   "page_id": "p11",
+   "sample_id": "s1-050",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 65,
+   "errors": [
+    {
+     "class": "invented_promise",
+     "severity": "serious",
+     "field": "highlights",
+     "quote": "hands-on time with rescued and rehabilitated elephants",
+     "why": "Source says you learn about the hospital and become acquainted with resident patients; it never offers hands-on contact (the page's own itinerary says 'observing')."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "Khao Phraya River cruise",
+     "why": "The river is the Chao Phraya."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "You'll spend nights in a Hmong village lodge",
+     "why": "Source has one night at the Hmong Lodge."
+    },
+    {
+     "class": "invented_promise",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "are built into each day's rhythm",
+     "why": "Source includes only the meals listed per day; exclusions say meals unless specified are not included."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "between Nam Tok and Kanchanaburi stations",
+     "why": "Source says boarding at Nam Tok; the end station is not stated."
+    },
+    {
+     "class": "overclaim",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "Thailand's three most distinct regions",
+     "why": "Source makes no such claim."
+    }
+   ]
+  },
+  {
+   "page_id": "p12",
+   "sample_id": "s1-015",
+   "verdict": "heavy_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 115,
+   "errors": [
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "highlights",
+     "quote": "Stay overnight at Rombuk monastery (5,000 m)",
+     "why": "Source puts the night at the Rombuk guesthouse, not in the monastery."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "minor",
+     "field": "summary",
+     "quote": "which sits directly across a valley from Mount Everest's north face",
+     "why": "Source: the view is directly up the valley to Base Camp and Everest, not across a valley."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "minor",
+     "field": "itineraries",
+     "quote": "The descent to Kathmandu is a long drive on roads in variable condition.",
+     "why": "Source warns much of the road is in very bad condition; the page softens a condition travellers plan around."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "field": "seo_meta",
+     "quote": "Mount Kailash kora at 5,200m",
+     "why": "Source gives Drolma-la at 5,630 m and Dirapuk at 5,210 m; the kora is not described as at 5,200 m."
+    }
+   ]
+  }
+ ]
+}

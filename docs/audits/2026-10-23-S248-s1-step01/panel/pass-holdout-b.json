@@ -1,0 +1,1298 @@
+{
+ "pass": "h2",
+ "rubric": "s1-panel-v1.1",
+ "pages": [
+  {
+   "page_id": "h01",
+   "sample_id": "s1-013",
+   "verdict": "light_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 55,
+   "errors": [
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary",
+      "highlights"
+     ],
+     "field": "summary",
+     "quote": "Throughout the trek, accommodation is fully tented camp",
+     "why": "Source day list puts Day 3 (Dunai) in teahouses/lodges; its own highlights say fully tented throughout (self-contradiction copied; the page's Day 3 also says teahouses)."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "also referred to as Yak Kharka in local usage",
+     "why": "Source says Roman Kharka is also known as Yak Kharka, not the Baga La pass."
+    },
+    {
+     "class": "overclaim",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "The longest and most demanding day of the trek",
+     "why": "Source calls Day 10 'long and strenuous'; Day 11 is 19 km vs Day 10's 18 km."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "becomes visible below to the west",
+     "why": "Source gives no direction for the lake view."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "walk the lake perimeter",
+     "why": "Source: explore the lake surroundings and Ringmo village; loose paraphrase."
+    }
+   ]
+  },
+  {
+   "page_id": "h02",
+   "sample_id": "s1-041",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 40,
+   "errors": [
+    {
+     "class": "invented_promise",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "3-star hotels in Kathmandu and Pokhara",
+     "why": "Source gives a 3-star category only for Kathmandu; Pokhara hotel standard is not stated."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "highlights"
+     ],
+     "field": "highlights",
+     "quote": "High Camp at 3,700 meters",
+     "why": "Source: High Camp is 3,850m; 3,700m is where the trail breaks above the tree line (page summary itself says 3,850)."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "tea houses and homestays during the trekking days",
+     "why": "Source: homestay only 'as per necessity' / 'we might stay at a homestay'; conditional presented as certain (S5)."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Kande to Pitam Deurali and Forest Camp",
+     "why": "Copies the source's own contradiction (Pitam Deurali / Forest Camp / Pothana overnight)."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "(approximately 6 hours)",
+     "why": "Source gives no duration for the return bus; consistent with its 6-7 h outbound figure."
+    }
+   ]
+  },
+  {
+   "page_id": "h03",
+   "sample_id": "s1-020",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 30,
+   "errors": [
+    {
+     "class": "cut_text",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "seo_meta"
+     ],
+     "field": "seo_meta",
+     "quote": "with professional.",
+     "why": "seo_meta stops mid-phrase."
+    },
+    {
+     "class": "invented_promise",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "meals and entrance fees are included",
+     "why": "Source includes breakfasts and dinners only; lunches are an explicit exclusion."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "through the Karakoram Highway",
+     "why": "Source gives no route; Islamabad to Mingora does not run on the Karakoram Highway (wrong road for the leg)."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "subtitle"
+     ],
+     "field": "subtitle",
+     "quote": "high-altitude lakes",
+     "why": "Only one lake (Mahodand) is visited."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary",
+      "highlights"
+     ],
+     "field": "summary",
+     "quote": "1st century CE",
+     "why": "Background dating not in source."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "seo_title"
+     ],
+     "field": "seo_title",
+     "quote": "Swat Valley Trek",
+     "why": "Source is a driving tour with short hikes, not a trek."
+    }
+   ]
+  },
+  {
+   "page_id": "h04",
+   "sample_id": "s1-002",
+   "verdict": "light_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 35,
+   "errors": [
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "subtitle"
+     ],
+     "field": "subtitle",
+     "quote": "Cross the Nam Khan River",
+     "why": "Source: 'across the river' by boat downstream; Chomphet district lies across the Mekong, not the Nam Khan."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary",
+      "seo_meta"
+     ],
+     "field": "summary",
+     "quote": "no road access",
+     "why": "Source says no running water/electricity; road access not stated."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "relocating the community by 2024",
+     "why": "Source: relocation 'slated to begin in 2024'."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary",
+      "highlights",
+      "itineraries"
+     ],
+     "field": "summary",
+     "quote": "12km cycle to Ban Som",
+     "why": "Source writes 'Ban Som (12)' with no unit."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "dependent on subsistence farming",
+     "why": "Not in source."
+    }
+   ]
+  },
+  {
+   "page_id": "h05",
+   "sample_id": "s1-032",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 120,
+   "errors": [
+    {
+     "class": "day_structure",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Overnight at a heritage hotel in Jaipur",
+     "why": "Source Day 3 is an excursion to Jaipur from Samode with overnight at the palace hotel (Samode Palace); the page moves the night to Jaipur and starts Day 4 'from Jaipur'."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "highlights"
+     ],
+     "field": "highlights",
+     "quote": "Camel safaris across the Thar Desert near Samode and Chandelao",
+     "why": "Source has only an optional camel ride at Samode's dunes; no camel activity at Chandelao."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Samode, a village settlement on the edge of the Thar Desert",
+     "why": "Background not in source."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Optional afternoon visit to Bhangarh village",
+     "why": "Source only mentions nearby Bhangarh's history; no visit."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Optional visit to Glass Temple",
+     "why": "Source lists Glass Temple among the visits, not optional."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "The route connects ten major stops",
+     "why": "Source lists 20 destinations."
+    }
+   ]
+  },
+  {
+   "page_id": "h06",
+   "sample_id": "s1-038",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 55,
+   "errors": [
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "The drive south crosses Dochu La Pass",
+     "why": "Thimphu to Dochu La to Punakha runs east, not south."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "summer travellers encounter clearer mountain views and accessible higher trails",
+     "why": "Source makes no seasonal claim beyond winter cranes; summer is monsoon season (season claim customers plan around)."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "northward along the Paro and Thimphu rivers",
+     "why": "Thimphu lies east of Paro; loose direction."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "depart in March",
+     "why": "Not in source."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "both established by expatriates and now integrated into local agricultural routines",
+     "why": "Not in source."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "designed around Buddhist planning principles rather than colonial precedent",
+     "why": "Not in source."
+    }
+   ]
+  },
+  {
+   "page_id": "h07",
+   "sample_id": "s1-011",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 120,
+   "errors": [
+    {
+     "class": "cut_text",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "seo_meta"
+     ],
+     "field": "seo_meta",
+     "quote": "with local guides, trains.",
+     "why": "seo_meta list stops mid-list."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "highlights"
+     ],
+     "field": "highlights",
+     "quote": "Sunrise and sunset boat rides on the Ganges",
+     "why": "Both boat trips are optional options in the source, presented here as included (S5)."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "with an optional stop at Fatehpur Sikri",
+     "why": "Source: the stop is part of the route; only going inside is optional."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "local vendors often sell tea at the summit",
+     "why": "Source: 'If the chai man is there'."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "spending the night under open sky",
+     "why": "Source: camping with basic facilities; open sky not stated."
+    }
+   ]
+  },
+  {
+   "page_id": "h08",
+   "sample_id": "s1-003",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 60,
+   "errors": [
+    {
+     "class": "invented_promise",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "before transferring to the airport or your next destination",
+     "why": "Source has no airport transfer; Day 8 is Hualien-Taroko-Taipei, ending with a group meal."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Taroko Gorge and Hualien Departure",
+     "why": "Source Day 8 ends in Taipei, not Hualien."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "highlights"
+     ],
+     "field": "highlights",
+     "quote": "Ride from Kenting south to Taiwan's southernmost point",
+     "why": "Source Day 2 rides from Fangliao along the coast to the southern tip and arrives at Kenting."
+    },
+    {
+     "class": "overclaim",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary",
+      "itineraries"
+     ],
+     "field": "summary",
+     "quote": "one of the island's most technical cycling corridors",
+     "why": "Source: 'one of Taiwan's most scenic routes'."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "a distinctive rock formation visible from the saddle",
+     "why": "Source: a visit to Sanxiantai Arch Bridge."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Arrive at oceanfront accommodation in Chenggong",
+     "why": "Source: oceanfront accommodation, then head to Chenggong for dinner."
+    }
+   ]
+  },
+  {
+   "page_id": "h09",
+   "sample_id": "s1-042",
+   "verdict": "light_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 45,
+   "errors": [
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries",
+      "summary"
+     ],
+     "field": "itineraries",
+     "quote": "accommodation at a nearby guesthouse may be arranged for an overnight stay",
+     "why": "Source day list returns to Lhasa; the lake-overnight option comes from the source summary (self-contradiction copied)."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "highlights",
+      "itineraries"
+     ],
+     "field": "highlights",
+     "quote": "known for its scholarly tradition and monastic debate practices",
+     "why": "Source describes Sera for its warrior monks (Dob-Dob); background."
+    }
+   ]
+  },
+  {
+   "page_id": "h10",
+   "sample_id": "s1-027",
+   "verdict": "light_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 150,
+   "errors": [
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "seo_meta"
+     ],
+     "field": "seo_meta",
+     "quote": "Bukchon Hanok Village",
+     "why": "The tour's hanok village (stay) is Jeonju; Bukchon appears only on an optional Day 3 city tour."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "As evening approaches, gather for the haenyeo performance",
+     "why": "Source: in the afternoon."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "480-meter observation deck",
+     "why": "Source: tower top at 480m above sea level."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "wandering its lanes unguided",
+     "why": "Source: join your CEO at Dongmun Market."
+    }
+   ]
+  },
+  {
+   "page_id": "h11",
+   "sample_id": "s1-030",
+   "verdict": "reject",
+   "agency_use": "no",
+   "checkable_claims": 50,
+   "errors": [
+    {
+     "class": "day_structure",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Day 4 — Negombo — Elephant Encounter and Beach Rest",
+     "why": "Source Days 3-5 are in Sigiriya; Negombo is Day 9. The block is duplicated out of order."
+    },
+    {
+     "class": "day_structure",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "before the overnight flight to the Maldives",
+     "why": "Source: rest the last night in a Negombo beach hotel before the flight; the page removes the Negombo night."
+    },
+    {
+     "class": "day_structure",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Beach and island time before the evening departure",
+     "why": "Departure placed on Day 13; source departure is Day 14."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Transfer westward and upward into Kandy",
+     "why": "Kandy lies south of Sigiriya."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "(approximately 100 kilometers)",
+     "why": "Source gives no distance."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Optional visits to smaller local temples",
+     "why": "Not in source."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "viewing tea plantations",
+     "why": "Not in source."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "a morning spent bathing an elephant",
+     "why": "Time of day not in source."
+    }
+   ]
+  },
+  {
+   "page_id": "h12",
+   "sample_id": "s1-022",
+   "verdict": "light_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 25,
+   "errors": [
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "highlights",
+      "summary"
+     ],
+     "field": "highlights",
+     "quote": "at dawn or near sunset when they approach local streams",
+     "why": "Source tour leaves Ulaanbaatar early, sees the horses after a 2-hour drive and returns for lunch; dawn/sunset viewing is not when the tour is there."
+    }
+   ]
+  },
+  {
+   "page_id": "h13",
+   "sample_id": "s1-025",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 35,
+   "errors": [
+    {
+     "class": "cut_text",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "seo_title"
+     ],
+     "field": "seo_title",
+     "quote": "5-Day Southern",
+     "why": "seo_title stops mid-phrase."
+    },
+    {
+     "class": "invented_promise",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "itineraries",
+      "subtitle",
+      "highlights",
+      "seo_meta"
+     ],
+     "field": "itineraries",
+     "quote": "the first night is spent at a hot spring hotel",
+     "why": "Source: 3 nights in hot spring hotels (Zhiben x2, Mudan); the Fangliao night is a hotel, so 'three hot spring hotels' is also wrong."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "roughly 50 minutes from the station",
+     "why": "Not in source; below the 1-hour floor."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Japanese forces",
+     "why": "Source: Japanese sailors."
+    }
+   ]
+  },
+  {
+   "page_id": "h14",
+   "sample_id": "s1-033",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 45,
+   "errors": [
+    {
+     "class": "cut_text",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "seo_meta"
+     ],
+     "field": "seo_meta",
+     "quote": "visits to forest.",
+     "why": "seo_meta stops mid-phrase."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "subtitle"
+     ],
+     "field": "subtitle",
+     "quote": "with nights aboard a traditional houseboat",
+     "why": "Source: one night on the houseboat."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "south-westward path from Kochi",
+     "why": "Athirapally lies north-east of Kochi."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries",
+      "highlights"
+     ],
+     "field": "itineraries",
+     "quote": "The evening typically includes a sunset cruise on the backwaters and a screening of Kathakali",
+     "why": "Source: 'you may enjoy' a sunset cruise and Kathakali (optional presented as included)."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "south of Alleppey",
+     "why": "Marari lies north of Alleppey."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries",
+      "highlights"
+     ],
+     "field": "itineraries",
+     "quote": "Morning visits to a fisherman village",
+     "why": "Source: 'you may visit' (optional presented as certain)."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "tea country",
+     "why": "Source lists tea estates as an attraction but no day visits them (copied contradiction)."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "flows year-round from a catchment",
+     "why": "Not in source."
+    }
+   ]
+  },
+  {
+   "page_id": "h15",
+   "sample_id": "s1-009",
+   "verdict": "light_edit",
+   "agency_use": "with_edits",
+   "checkable_claims": 45,
+   "errors": [
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Early morning game drive, then breakfast at the campsite",
+     "why": "Source Day 7: breakfast at the campsite, then the morning game drive (before/after breakfast swapped)."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "approximately 30 natural freshwater lakes",
+     "why": "Source's 30 refers to mammal species; no lake count."
+    }
+   ]
+  },
+  {
+   "page_id": "h16",
+   "sample_id": "s1-021",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 25,
+   "errors": [
+    {
+     "class": "day_structure",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "itineraries",
+      "summary"
+     ],
+     "field": "itineraries",
+     "quote": "Final night's accommodation is at Kitulgala Adventures",
+     "why": "Source day list returns to Colombo on Day 3; Kitulgala is never visited (from the source's accommodation list)."
+    },
+    {
+     "class": "day_structure",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "name",
+      "summary",
+      "seo_title",
+      "seo_meta"
+     ],
+     "field": "name",
+     "quote": "4 Days",
+     "why": "Page has 3 day blocks; the source day list has 3 days."
+    },
+    {
+     "class": "wrong_place_or_direction",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Haven Beach Club",
+     "why": "Source: Paradise Beach Club."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "highlights"
+     ],
+     "field": "highlights",
+     "quote": "Sea turtle hatchery visit at Hikkaduwa",
+     "why": "Hatchery location not stated."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "highlights"
+     ],
+     "field": "highlights",
+     "quote": "(optional, additional cost)",
+     "why": "Additional cost not stated."
+    }
+   ]
+  },
+  {
+   "page_id": "h17",
+   "sample_id": "s1-044",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 70,
+   "errors": [
+    {
+     "class": "invented_promise",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "All meals, park entrance fees, and English-speaking guide services are included.",
+     "why": "Source: 'meals as per mentioned meal plans'; not all meals."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "subtitle"
+     ],
+     "field": "subtitle",
+     "quote": "Jeep safaris through four national parks",
+     "why": "Jeep safaris in three parks (Udawalawe, Bundala, Yala); Kitulgala has bird-watching trails."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "accommodation is provided in safari lodges positioned near park gates",
+     "why": "Accommodation location not in source; Kitulgala and Colombo nights are not safari lodges."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary",
+      "itineraries"
+     ],
+     "field": "summary",
+     "quote": "Yala, the largest reserve",
+     "why": "Not in source."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "leopards (elusive and primarily nocturnal)",
+     "why": "Source calls the sloth bear nocturnal, not the leopard."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "montane forests of Kitulgala",
+     "why": "Not in source."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "summary"
+     ],
+     "field": "summary",
+     "quote": "Transfers between parks involve three to four-hour drives",
+     "why": "Source gives only the 3.5 h Kitulgala-Udawalawe figure."
+    }
+   ]
+  },
+  {
+   "page_id": "h18",
+   "sample_id": "s1-048",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 160,
+   "errors": [
+    {
+     "class": "cut_text",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "From there, continue to Boseong Green Tea Field, where endless",
+     "why": "Itinerary breaks off mid-sentence in Day 9."
+    },
+    {
+     "class": "day_structure",
+     "severity": "serious",
+     "hard_fail": true,
+     "fields": [
+      "itineraries",
+      "name",
+      "summary",
+      "seo_title"
+     ],
+     "field": "itineraries",
+     "quote": "South Korea: Palace, Temple & Island — 13 Days",
+     "why": "Day blocks stop at Day 9; source Days 10-13 (Yeosu, Jeju) are missing, so the 13-day count disagrees with the blocks."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Walking time: approximately 1–2 hours depending on chosen routes.",
+     "why": "Source gives no walking time for the bamboo forest."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "By late morning, board the high-speed train",
+     "why": "Time not in source."
+    }
+   ]
+  },
+  {
+   "page_id": "h19",
+   "sample_id": "s1-043",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 55,
+   "errors": [
+    {
+     "class": "invented_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "The 3-hour journey ascends",
+     "why": "Source gives no train duration."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Trek includes moderate difficulty.",
+     "why": "Source gives no difficulty grade."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "a guesthouse in the town center",
+     "why": "Accommodation location not in source."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Afternoon climb of Sigiriya Rock Fortress",
+     "why": "Time of day not in source."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "Morning trek through Haputale's working tea estates",
+     "why": "Time of day not in source."
+    }
+   ]
+  },
+  {
+   "page_id": "h20",
+   "sample_id": "s1-039",
+   "verdict": "heavy_edit",
+   "agency_use": "no",
+   "checkable_claims": 40,
+   "errors": [
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "summary",
+      "highlights"
+     ],
+     "field": "summary",
+     "quote": "number roughly 6,000 across three open pits",
+     "why": "Source: just under 2,000 of the 6,000 warriors stand in the three open pits."
+    },
+    {
+     "class": "wrong_fact",
+     "severity": "serious",
+     "hard_fail": false,
+     "fields": [
+      "highlights"
+     ],
+     "field": "highlights",
+     "quote": "musical fountain show at north square",
+     "why": "Source: 'if you are lucky you may catch' the show (conditional presented as certain)."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "before dawn",
+     "why": "Source: guide meets at 07:30."
+    },
+    {
+     "class": "other",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "By afternoon, you depart Xi'an",
+     "why": "Copies the source's timing contradiction (6-hour train, late-afternoon arrival)."
+    },
+    {
+     "class": "invented_fact",
+     "severity": "minor",
+     "hard_fail": false,
+     "fields": [
+      "itineraries"
+     ],
+     "field": "itineraries",
+     "quote": "brought westward from India",
+     "why": "Direction not in source (India to China is eastward); background."
+    }
+   ]
+  }
+ ]
+}
