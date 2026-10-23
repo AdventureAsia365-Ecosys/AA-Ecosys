@@ -1,0 +1,20 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "TourPage",
+  "expect": "valid",
+  "why": "One page of served tours with the cursor to the next page",
+  "payload": {
+    "items": [
+      {
+        "source_system": "cis",
+        "source_id": "1f0e8c1e-0000-4000-8000-00000000000a",
+        "title": "Hanoi and Ha Long Bay, 3 days",
+        "country_code": "VN",
+        "duration_days": 3,
+        "content_hash": "sha256:2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+        "updated_at": "2026-10-20T08:00:00Z"
+      }
+    ],
+    "next_cursor": "v1.MWYwZThjMWUtMDAwMC00MDAwLTgwMDAtMDAwMDAwMDAwMDBh.3f8a1c2e"
+  }
+}

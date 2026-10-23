@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: catalog.http.v1 (AA-CIS-App → AA-Partner CRM, published tour content and AA-authored content)
-  version: "1.0"
+  version: "1.1"
   description: >-
     Read-only HTTP view of CIS published content for the partner CRM (root ADR 0010 decision 4), because the CRM
     holds no grant on the catalog schema (root ADR 0008a decision 1). Two parts: (1) published tours with days,
@@ -13,6 +13,18 @@ info:
     (root ADR 0006b decision 7). Every GET returns an ETag and honours If-None-Match. An unpublished tour or draft
     content is 404; a removed tour is 410 (the CRM marks its lines "no longer offered"). Path prefix /catalog/v1 is
     provisional until ADR 0013 (AA-899).
+    v1.1 (AA-976, additive): liveness follows root ADR 0015 decision 5 (AA-Partner row) — a served key answers
+    200; a key whose served state is `retired` answers 410 `gone` with `reason` (the CIS lifecycle reason, e.g.
+    source_deleted, master_trashed, superseded_orphan); a `paused` key (Master inactive, or a supersede waiting for
+    its new Master) answers 404 `not_found` with `reason`, so the CRM hides it without marking lines; a key never
+    served answers 404 without `reason`. Every 200 carries ETag (a tour's ETag is its content_hash), Cache-Control
+    `private, max-age=60` and Vary `Authorization`; If-None-Match on any GET answers 304. Errors: 400 `invalid`
+    (bad parameter or cursor), 401 `unauthorized` (no or bad token, with WWW-Authenticate), 403 `forbidden`
+    (another client, or no cis.catalog/read scope), 503 `unavailable` (key set, configuration or database
+    unavailable, with Retry-After). `listTours` takes `limit` (1–50, default 20) and orders by source_id; the cursor
+    is bound to the filters it was issued with. TourDay gains `time_zone` (the day's IANA zone: its last place, else
+    the tour's country); Destination.country_code may be null (a place outside the countries CIS knows).
+    content_hash is `sha256:<hex>` over the served body, so it also changes when places, time zones or photos change.
   x-aa-contract: catalog.http.v1
   x-aa-producer: AA-CIS-App
   x-aa-consumers: [AA-Partner]
@@ -36,12 +48,23 @@ paths:
           required: false
           schema: {type: string, pattern: "^[A-Z]{2}$"}
         - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/IfNoneMatch"
       responses:
         "200":
-          description: One page of tours
+          description: One page of tours, ordered by source_id
+          headers:
+            ETag: {$ref: "#/components/headers/ETag"}
+            Cache-Control: {$ref: "#/components/headers/CacheControl"}
           content:
             application/json:
               schema: {$ref: "#/components/schemas/TourPage"}
+        "304":
+          description: Not modified
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
   /tours/{source_system}/{source_id}:
     parameters:
       - name: source_system
@@ -60,19 +83,32 @@ paths:
           description: The published tour
           headers:
             ETag: {$ref: "#/components/headers/ETag"}
+            Cache-Control: {$ref: "#/components/headers/CacheControl"}
           content:
             application/json:
               schema: {$ref: "#/components/schemas/Tour"}
         "304":
           description: Not modified
-        "404": {$ref: "#/components/responses/Problem"}
-        "410": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "404":
+          description: Never published (no reason), or paused (reason set; the CRM hides it, lines not marked)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Problem"}
+        "410":
+          description: Retired; the CRM marks its proposal lines "no longer offered" (reason set)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
   /destinations/{destination_id}:
     parameters:
       - name: destination_id
         in: path
         required: true
         schema: {type: string, minLength: 1, maxLength: 64}
+      - $ref: "#/components/parameters/IfNoneMatch"
     get:
       operationId: getDestination
       responses:
@@ -80,10 +116,16 @@ paths:
           description: Destination
           headers:
             ETag: {$ref: "#/components/headers/ETag"}
+            Cache-Control: {$ref: "#/components/headers/CacheControl"}
           content:
             application/json:
               schema: {$ref: "#/components/schemas/Destination"}
+        "304":
+          description: Not modified
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
         "404": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
   /aa-content:
     get:
       operationId: listAaContent
@@ -104,6 +146,10 @@ paths:
           content:
             application/json:
               schema: {$ref: "#/components/schemas/AaContentPage"}
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
   /aa-content/{content_id}/versions/{version}:
     parameters:
       - name: content_id
@@ -128,7 +174,10 @@ paths:
               schema: {$ref: "#/components/schemas/AaContent"}
         "304":
           description: Not modified
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
         "404": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
 components:
   securitySchemes:
     m2m:
@@ -142,12 +191,20 @@ components:
   headers:
     ETag:
       schema: {type: string, maxLength: 100}
+    CacheControl:
+      description: private, max-age=60 (with Vary Authorization)
+      schema: {type: string, maxLength: 100}
   parameters:
     Cursor:
       name: cursor
       in: query
       required: false
       schema: {type: string, maxLength: 200}
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema: {type: integer, minimum: 1, maximum: 50, default: 20}
     IfNoneMatch:
       name: If-None-Match
       in: header
@@ -165,8 +222,15 @@ components:
       additionalProperties: false
       required: [error, message]
       properties:
-        error: {type: string, enum: [unauthorized, forbidden, not_found, gone, invalid]}
+        error: {type: string, enum: [unauthorized, forbidden, not_found, gone, invalid, unavailable]}
         message: {type: string, maxLength: 500}
+        reason:
+          type: [string, "null"]
+          maxLength: 64
+          description: >-
+            For a tour that is not served (410 retired, 404 paused): the CIS lifecycle reason (catalog.tour.v1.3
+            tour_retired.reason, e.g. source_deleted, master_trashed, superseded_orphan, master_inactive,
+            superseded_pending). Absent otherwise.
     Locale:
       type: string
       enum: [en, vi]
@@ -215,6 +279,10 @@ components:
         day_no: {type: integer, minimum: 1}
         title: {type: string, maxLength: 300}
         description: {type: [string, "null"]}
+        time_zone:
+          type: string
+          maxLength: 64
+          description: The day's IANA time zone (R33) — its last place's zone, else the tour country's zone.
         places:
           type: array
           items: {$ref: "#/components/schemas/Place"}
@@ -223,7 +291,13 @@ components:
       additionalProperties: false
       required: [text]
       properties:
-        code: {type: [string, "null"], maxLength: 64}
+        code:
+          type: [string, "null"]
+          maxLength: 64
+          description: >-
+            Rule-based class of the line, null when no rule matches. CIS v1.1 emits visa_on_arrival, visa, tips,
+            permit, camera_fee, entrance_local, single_supplement, international_flights, flights, travel_insurance,
+            drinks, meals, personal_expenses; the list may grow (treat an unknown code as null).
         text: {type: string, maxLength: 500}
         suggests_collect_on_arrival:
           type: boolean
@@ -277,7 +351,7 @@ components:
       properties:
         destination_id: {type: string, maxLength: 64}
         name: {type: string, maxLength: 200}
-        country_code: {type: string, pattern: "^[A-Z]{2}$"}
+        country_code: {type: [string, "null"], pattern: "^[A-Z]{2}$"}
         time_zone: {type: string, maxLength: 64}
         lat: {type: [number, "null"], minimum: -90, maximum: 90}
         lng: {type: [number, "null"], minimum: -180, maximum: 180}
