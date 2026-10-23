@@ -291,5 +291,17 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   - *Flip.* `PLACES_SOURCE=cis` is set on both TripPlanner Lambdas together, after the coverage gate
     (`missing_in_cis_live = 0`), with `tripplanner.component_id_map` (tp-017) bridging old component ids; then CIS
     254 revokes TripPlanner's grandfathered `raw_tours` (179) and `tour_atoms` (180) reads.
+- **Amended S248 (AA-712 X4), conditional — the legacy drop may come before day 14 on Dev:** decision 10 says the
+  legacy tables are dropped 14 days after the flip (flip 22/10/2026, so 05/11/2026). TripPlanner tp-018 may drop
+  them earlier **on Dev only, and only when Nghiệp approves it in writing** in the tp-018 PR and the session log,
+  after two DRY RUN dispatches (AA-CIS-Infra `db/scripts/aa712_frozen_tables_dry_run.py`) show no write after the
+  freeze, no dependent outside the eight tables and unmoved read counters. Without that approval the 14-day date
+  stands. The same approval is the written exception to data standards DM-3.8 (14 days of `pg_stat_user_tables`)
+  and DM-3.9 (quarantine with `SET SCHEMA retired`; S3 archive first), with this reason: the rows are derived data
+  CIS rebuilds in `geo`; the S3 archive of DM-7.3 does not exist yet (N4), so the archive is the DB Migrate
+  pre-apply RDS snapshot, tagged `aa:retain-until` = apply date + 180 days (instead of the default 30) and
+  `aa:purpose` = `aa712-tp018-pre-drop`. Recorded in the Dead Table Registry rows. The drop also takes ACCESS
+  EXCLUSIVE on CIS's `shared.destinations` for its length (the RI triggers of 11 foreign keys go with the tables), so
+  it is applied while the job tables are idle and retried on a lock timeout.
 - **Revisit** if Geoapify's terms stop allowing storage or the free tier, if the confirm rate per
   country after the trial is too low to be useful, or if a second app needs to author places.
