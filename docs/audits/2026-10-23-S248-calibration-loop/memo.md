@@ -115,6 +115,25 @@ vị trí). Sửa xong một trục chưa có nghĩa là xong luật. Test viế
 ledger thật mới lộ ra trục còn lại. Vì vậy mỗi bản sửa detector phải đi kèm replay trên stored hit (§5.3) **trước khi** đóng
 issue, không phải sau. Đây là lý do mạnh nhất để biến census thủ công thành bước chuẩn của vòng hiệu chuẩn.
 
+**Vòng 2, review độc lập: sửa trục thực thể bằng danh sách từ lại mở cửa cho chính lỗi đó.** Review commit vòng 2 tìm ra 7 lỗ.
+Mỗi lỗ là một nhóm câu: hoặc fire sai về chỗ khác, hoặc im lặng trước một claim thật mà #955 vẫn bắt được.
+
+- Chủ ngữ "the government" được gắn với thực thể theo việc **động từ có trong danh sách** hay không, nên "The government still
+  maintains the dzong" vẫn fire. Đã thay bằng **quan hệ vị trí**: "meets inside Punakha Dzong", "governs … from the dzong".
+- Tiền ngữ chỉ nhận tên có đuôi "Dzong/Palace…", nên "Hanoi lies … It is the capital" fire. Giờ chủ ngữ riêng một từ của
+  câu trước cũng được tính.
+- Bí danh so khớp phân biệt hoa/thường và dấu, nên "Huế", "Kyōto" im lặng. Giờ so trên chữ đã `fold()`.
+- Còn các lỗ khác: ", still the …" là đồng vị ngữ; tên moment là thực thể khi seed nêu thành phố; vế "Unlike X," không bao giờ
+  là tiền ngữ; bí danh trong Naming.
+
+Toàn bộ câu review thành test (`test_aa985_f17_entity_binding_review.py`, 74 test). Bảng đúng/tổng theo #955 / vòng 2 / bản
+review: false positive của finding 1 là 0/0/12, của finding 2 là 0/0/8; 21 câu true positive là 20/5/21.
+
+**Bài học (bổ sung):** khi sửa một trục danh tính, quyết định phải dựa vào **cấu trúc câu** (chủ ngữ, quan hệ vị trí, tiền
+ngữ), không dựa vào **danh sách từ** ở vị trí khác. Danh sách luôn thiếu một từ, và từ thiếu đó rơi lại đúng vào lớp lỗi vừa
+sửa. Mỗi bản sửa detector cũng cần một **bộ câu đối kháng ở seed khác** (Hue, Kyoto, Luang Prabang…). Seed của ca bị giữ
+(Bhutan, có nơi kế nhiệm) che đi các nhánh mà seed khác sẽ đi vào.
+
 ### 1.3 Các lỗi tương tự: một họ, không phải một ca
 
 | Ca (phiên, issue) | Luật thấy gì (dấu hiệu từ vựng) | Danh tính bị nhầm | Đã vá thế nào |
