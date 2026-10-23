@@ -11,7 +11,10 @@ Repeatable layout check, committed in AA-Booking (branch `feat/aa-910-layout-che
   purpose).
 - **Viewports**: 1440 x 900 light and dark, a 1280 x 800 squeeze (light, measured only) and 390 x 844 phone (light).
   Chromium (Playwright 1.59) with scrollbars on (`<main>` scrollbar 6 px), Poppins loaded from Google Fonts.
-- **Result: 88 / 88 tests pass** (22 page entries). On every page and viewport: horizontal page scroll 0 (document and `<main>`),
+- **Clock and dates**: the browser clock is frozen at 23 Oct 2026 and every fixture timestamp is more than 7 days
+  older, so each relative "Updated" / "Last seen" / "Last activity" shows the full date ("28 Sept 2026", the widest
+  en-GB month in Poppins), as most rows on Dev do. The result does not depend on the day the check runs.
+- **Result: 88 / 88 tests pass** (22 page entries, 1.3 min). On every page and viewport: horizontal page scroll 0 (document and `<main>`),
   console errors 0, unmocked API calls 0, tab strips 0 px overflow (no 1 px scrollbar). At 1440 every table fits its
   frame with at least 20 px to spare (min-content vs frame); FX currency / rate / buffer / as-of / source cells
   35 / 35 on one line. At 1280 wide tables scroll inside their own box and the row-menu column stays pinned and in
@@ -27,15 +30,15 @@ Repeatable layout check, committed in AA-Booking (branch `feat/aa-910-layout-che
 | customer-cases | `/customers/CUS-000001?tab=cases` | 476 / 1086 | 610 | page 0, fits | page 0 | page 0 | [1440 light](customer-cases-1440-light.png) · [1440 dark](customer-cases-1440-dark.png) · [390](customer-cases-390-light.png) |
 | trip-plans | `/catalog/trip-plans` | 944 / 1078 | 134 | page 0, fits | page 0, table scrolls in its box | page 0 | [1440 light](trip-plans-1440-light.png) · [1440 dark](trip-plans-1440-dark.png) · [390](trip-plans-390-light.png) |
 | trip-plans-orphaned | `/catalog/trip-plans?show=orphaned` | 602 / 1078 | 476 | page 0, fits | page 0 | page 0 | [1440 light](trip-plans-orphaned-1440-light.png) · [1440 dark](trip-plans-orphaned-1440-dark.png) · [390](trip-plans-orphaned-390-light.png) |
-| suppliers | `/suppliers` | 1055 / 1078, pinned ⋯ | 23 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](suppliers-1440-light.png) · [1440 dark](suppliers-1440-dark.png) · [390](suppliers-390-light.png) |
+| suppliers | `/suppliers` | 1039 / 1078, pinned ⋯ | 39 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](suppliers-1440-light.png) · [1440 dark](suppliers-1440-dark.png) · [390](suppliers-390-light.png) |
 | supplier-contracts | `/suppliers/SUP-000001?tab=contracts` | 1053 / 1086, pinned ⋯ | 33 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](supplier-contracts-1440-light.png) · [1440 dark](supplier-contracts-1440-dark.png) · [390](supplier-contracts-390-light.png) |
 | supplier-rates | `/suppliers/SUP-000001?tab=rates` | 948 / 1086, pinned ⋯ | 138 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](supplier-rates-1440-light.png) · [1440 dark](supplier-rates-1440-dark.png) · [390](supplier-rates-390-light.png) |
-| hotels | `/hotels` | 1056 / 1078, pinned ⋯ | 22 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](hotels-1440-light.png) · [1440 dark](hotels-1440-dark.png) · [390](hotels-390-light.png) |
-| hotel-drawer | `/hotels?hotel=HTL-000001` | 1056 / 1078, pinned ⋯; 803 / 831, drawer | 22 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](hotel-drawer-1440-light.png) · [1440 dark](hotel-drawer-1440-dark.png) · [390](hotel-drawer-390-light.png) |
-| services | `/services` | 1058 / 1078, pinned ⋯ | 20 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](services-1440-light.png) · [1440 dark](services-1440-dark.png) · [390](services-390-light.png) |
+| hotels | `/hotels` | 1032 / 1078, pinned ⋯ | 46 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](hotels-1440-light.png) · [1440 dark](hotels-1440-dark.png) · [390](hotels-390-light.png) |
+| hotel-drawer | `/hotels?hotel=HTL-000001` | 1032 / 1078, pinned ⋯; 803 / 831, drawer | 28 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](hotel-drawer-1440-light.png) · [1440 dark](hotel-drawer-1440-dark.png) · [390](hotel-drawer-390-light.png) |
+| services | `/services` | 1034 / 1078, pinned ⋯ | 44 | page 0, fits | page 0, table scrolls in its box, ⋯ pinned | page 0 | [1440 light](services-1440-light.png) · [1440 dark](services-1440-dark.png) · [390](services-390-light.png) |
 | service-rates | `/services/SVC-000001?tab=rates` | 755 / 1086 | 331 | page 0, fits | page 0 | page 0 | [1440 light](service-rates-1440-light.png) · [1440 dark](service-rates-1440-dark.png) · [390](service-rates-390-light.png) |
 | pricing-rules | `/pricing/rules` | 1017 / 1078 | 61 | page 0, fits | page 0, table scrolls in its box | page 0 | [1440 light](pricing-rules-1440-light.png) · [1440 dark](pricing-rules-1440-dark.png) · [390](pricing-rules-390-light.png) |
-| pricing-fx | `/pricing/rules?tab=fx` | 1045 / 1078 (FX cells one line: 35 / 35) | 33 | page 0, fits | page 0, table scrolls in its box | page 0 | [1440 light](pricing-fx-1440-light.png) · [1440 dark](pricing-fx-1440-dark.png) · [390](pricing-fx-390-light.png) |
+| pricing-fx | `/pricing/rules?tab=fx` | 1056 / 1078 (FX cells one line: 35 / 35) | 22 | page 0, fits | page 0, table scrolls in its box | page 0 | [1440 light](pricing-fx-1440-light.png) · [1440 dark](pricing-fx-1440-dark.png) · [390](pricing-fx-390-light.png) |
 | b2b-desk-on-request | `/b2b-desk` | 1024 / 1078 | 54 | page 0, fits | page 0, table scrolls in its box | page 0 | [1440 light](b2b-desk-on-request-1440-light.png) · [1440 dark](b2b-desk-on-request-1440-dark.png) · [390](b2b-desk-on-request-390-light.png) |
 | b2b-desk-departures | `/b2b-desk?tab=departures` | 926 / 1078 | 152 | page 0, fits | page 0, table scrolls in its box | page 0 | [1440 light](b2b-desk-departures-1440-light.png) · [1440 dark](b2b-desk-departures-1440-dark.png) · [390](b2b-desk-departures-390-light.png) |
 | staff | `/staff` | 870 / 1078 | 208 | page 0, fits | page 0 | page 0 | [1440 light](staff-1440-light.png) · [1440 dark](staff-1440-dark.png) · [390](staff-390-light.png) |
@@ -59,10 +62,23 @@ Full per-test numbers (all viewports, column widths, FX cells, tab strips): [mea
 
 Fixes in the same Booking branch (details: AA-Booking `docs/implementation-notes/AA-910.md`, section S249).
 
+## Review round: full dates (same day)
+
+The first version of the check used fixture times 4 days before the run and the real browser clock, so the
+"Updated" lines showed "4 d ago". With full dates (rows older than 7 days, as on Dev), a review probe measured, at
+1440: `/services` 1082 / 1078 and `/hotels` 1080 / 1078 (both scroll), `/suppliers` 1072 / 1078 (6 px to spare).
+After the clock freeze and the fixes (the date may drop under "Updated" on services, hotels and cases; supplier
+cell 220 px and contact 200 px on desktop): services 1034 / 1078, hotels 1032 / 1078, suppliers 1039 / 1078, cases
+1039 / 1078. The table above and the screenshots are from this run.
+
 ## Not covered
 
 - Real Dev data and a real staff session (by design: mocked API, no sign-in). The fixtures are longer than typical
   rows, so this is the stricter case.
 - Firefox / Safari, and 390 px in dark (geometry does not depend on the theme).
-- Not wired into Booking CI (run ~4.7 min plus build and browser download); the command is in
-  `frontend/README.md`.
+- Not wired into Booking CI (run ~1.3 min plus build and browser download; a CI workflow change is left to its own
+  reviewed PR); the command is in `frontend/README.md`.
+- The rest of the AA-910 Linear Done-when is **not** met by this evidence: screenshots on the Vercel preview and
+  production with a real staff session (1440 / 390, light / dark, console clean), and the audit rows on Dev shown in
+  the PR (needs a staff action: create / edit / delete a rate, send V2 of a case). This mocked check replaces them
+  only if Nghiệp agrees; until then AA-910 stays open.

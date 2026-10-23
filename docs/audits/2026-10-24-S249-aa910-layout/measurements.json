@@ -29,10 +29,10 @@
     "colWidths": [
      "Case:101",
      "Customer:252",
-     "Trip:334",
+     "Trip:326",
      "Status:149",
-     "Sales:149",
-     "Updated:93"
+     "Sales:147",
+     "Updated:103"
     ]
    }
   ],
@@ -120,12 +120,12 @@
     "minContent": 703,
     "colWidths": [
      "Version:89",
-     "Title / notes:474",
+     "Title / notes:457",
      "Status:135",
      "Items:72",
      "Total:123",
-     "Sent:93",
-     "Updated:93"
+     "Sent:96",
+     "Updated:107"
     ]
    }
   ],
@@ -260,10 +260,10 @@
     "lastHeaderPosition": "sticky",
     "minContent": 476,
     "colWidths": [
-     "Case:114",
-     "Trip:660",
-     "Status:207",
-     "Updated:105"
+     "Case:112",
+     "Trip:644",
+     "Status:202",
+     "Updated:128"
     ]
    }
   ],
@@ -376,10 +376,10 @@
     "minContent": 602,
     "colWidths": [
      "CIS tour key:124",
-     "Catalog:440",
-     "Since:94",
+     "Catalog:438",
+     "Since:98",
      "Status:135",
-     "Still attached:284"
+     "Still attached:283"
     ]
    }
   ],
@@ -415,14 +415,14 @@
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1055,
+    "minContent": 1039,
     "colWidths": [
-     "Supplier:272",
-     "Categories:140",
-     "Contact:252",
+     "Supplier:252",
+     "Categories:156",
+     "Contact:232",
      "Contracts:116",
      "Status:113",
-     "Updated:93",
+     "Updated:116",
      "Actions:93"
     ]
    }
@@ -556,16 +556,16 @@
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1056,
+    "minContent": 1032,
     "colWidths": [
-     "Hotel:237",
-     "Stars:107",
-     "Place (CIS):186",
-     "Supplier:155",
-     "Rooms:83",
-     "Rates:75",
-     "Status:140",
-     "Actions:95"
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:159",
+     "Actions:93"
     ]
    }
   ],
@@ -601,16 +601,16 @@
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1056,
+    "minContent": 1032,
     "colWidths": [
-     "Hotel:237",
-     "Stars:107",
-     "Place (CIS):186",
-     "Supplier:155",
-     "Rooms:83",
-     "Rates:75",
-     "Status:140",
-     "Actions:95"
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:159",
+     "Actions:93"
     ]
    },
    {
@@ -668,16 +668,16 @@
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1058,
+    "minContent": 1034,
     "colWidths": [
-     "Service:236",
-     "Type:99",
-     "Place (CIS):185",
-     "Supplier:155",
-     "Max pax:93",
-     "Rates:75",
-     "Status:140",
-     "Actions:95"
+     "Service:232",
+     "Type:97",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Max pax:92",
+     "Rates:74",
+     "Status:157",
+     "Actions:93"
     ]
    }
   ],
@@ -811,16 +811,16 @@
     "lastHeaderVisible": true,
     "stickyEnd": false,
     "lastHeaderPosition": "sticky",
-    "minContent": 1045,
+    "minContent": 1056,
     "colWidths": [
      "Currency:102",
      "Units per 1 USD:139",
      "Selling buffer:134",
-     "As of:105",
+     "As of:116",
      "Source:192",
      "Status:135",
-     "Entered by:131",
-     "Approved by:141"
+     "Entered by:126",
+     "Approved by:134"
     ]
    }
   ],
@@ -848,7 +848,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -873,7 +873,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -898,7 +898,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -923,7 +923,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -948,7 +948,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -973,7 +973,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -998,7 +998,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -1041,9 +1041,9 @@
     "colWidths": [
      "SLA:129",
      "Item:272",
-     "Service date:148",
+     "Service date:145",
      "Booking:192",
-     "Status:157",
+     "Status:159",
      "#6:181"
     ]
    }
@@ -1089,10 +1089,10 @@
     "colWidths": [
      "Departure:332",
      "Status:138",
-     "Seats:149",
+     "Seats:141",
      "Agencies:98",
-     "Incident:231",
-     "#6:130"
+     "Incident:241",
+     "#6:128"
     ]
    }
   ],
@@ -1135,12 +1135,12 @@
     "lastHeaderPosition": "sticky",
     "minContent": 870,
     "colWidths": [
-     "User:337",
-     "Booking role:191",
-     "CIS role:113",
-     "Status:140",
-     "Last seen:124",
-     "Actions:174"
+     "User:331",
+     "Booking role:187",
+     "CIS role:111",
+     "Status:138",
+     "Last seen:141",
+     "Actions:170"
     ]
    }
   ],
@@ -1178,12 +1178,12 @@
     "lastHeaderPosition": "sticky",
     "minContent": 741,
     "colWidths": [
-     "Case:114",
-     "Customer:374",
-     "Assigned as:134",
-     "Status:206",
-     "Trip starts:132",
-     "Assigned:118"
+     "Case:113",
+     "Customer:370",
+     "Assigned as:133",
+     "Status:204",
+     "Trip starts:130",
+     "Assigned:129"
     ]
    }
   ],
@@ -1248,10 +1248,10 @@
     "colWidths": [
      "Case:101",
      "Customer:252",
-     "Trip:334",
+     "Trip:326",
      "Status:149",
-     "Sales:149",
-     "Updated:93"
+     "Sales:147",
+     "Updated:103"
     ]
    }
   ],
@@ -1339,12 +1339,12 @@
     "minContent": 703,
     "colWidths": [
      "Version:89",
-     "Title / notes:474",
+     "Title / notes:457",
      "Status:135",
      "Items:72",
      "Total:123",
-     "Sent:93",
-     "Updated:93"
+     "Sent:96",
+     "Updated:107"
     ]
    }
   ],
@@ -1479,10 +1479,10 @@
     "lastHeaderPosition": "sticky",
     "minContent": 476,
     "colWidths": [
-     "Case:114",
-     "Trip:660",
-     "Status:207",
-     "Updated:105"
+     "Case:112",
+     "Trip:644",
+     "Status:202",
+     "Updated:128"
     ]
    }
   ],
@@ -1563,7 +1563,10 @@
    "image api-cis.lumiguides.it.com/media/photos/layout-21.jpg",
    "image api-cis.lumiguides.it.com/media/photos/layout-22.jpg",
    "image api-cis.lumiguides.it.com/media/photos/layout-23.jpg",
-   "image api-cis.lumiguides.it.com/media/photos/layout-24.jpg"
+   "image api-cis.lumiguides.it.com/media/photos/layout-24.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-0.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-1.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-2.jpg"
   ]
  },
  {
@@ -1595,10 +1598,10 @@
     "minContent": 602,
     "colWidths": [
      "CIS tour key:124",
-     "Catalog:440",
-     "Since:94",
+     "Catalog:438",
+     "Since:98",
      "Status:135",
-     "Still attached:284"
+     "Still attached:283"
     ]
    }
   ],
@@ -1634,14 +1637,14 @@
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1055,
+    "minContent": 1039,
     "colWidths": [
-     "Supplier:272",
-     "Categories:140",
-     "Contact:252",
+     "Supplier:252",
+     "Categories:156",
+     "Contact:232",
      "Contracts:116",
      "Status:113",
-     "Updated:93",
+     "Updated:116",
      "Actions:93"
     ]
    }
@@ -1775,16 +1778,16 @@
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1056,
+    "minContent": 1032,
     "colWidths": [
-     "Hotel:237",
-     "Stars:107",
-     "Place (CIS):186",
-     "Supplier:155",
-     "Rooms:83",
-     "Rates:75",
-     "Status:140",
-     "Actions:95"
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:159",
+     "Actions:93"
     ]
    }
   ],
@@ -1820,16 +1823,16 @@
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1056,
+    "minContent": 1032,
     "colWidths": [
-     "Hotel:237",
-     "Stars:107",
-     "Place (CIS):186",
-     "Supplier:155",
-     "Rooms:83",
-     "Rates:75",
-     "Status:140",
-     "Actions:95"
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:159",
+     "Actions:93"
     ]
    },
    {
@@ -1887,16 +1890,16 @@
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1058,
+    "minContent": 1034,
     "colWidths": [
-     "Service:236",
-     "Type:99",
-     "Place (CIS):185",
-     "Supplier:155",
-     "Max pax:93",
-     "Rates:75",
-     "Status:140",
-     "Actions:95"
+     "Service:232",
+     "Type:97",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Max pax:92",
+     "Rates:74",
+     "Status:157",
+     "Actions:93"
     ]
    }
   ],
@@ -2030,16 +2033,16 @@
     "lastHeaderVisible": true,
     "stickyEnd": false,
     "lastHeaderPosition": "sticky",
-    "minContent": 1045,
+    "minContent": 1056,
     "colWidths": [
      "Currency:102",
      "Units per 1 USD:139",
      "Selling buffer:134",
-     "As of:105",
+     "As of:116",
      "Source:192",
      "Status:135",
-     "Entered by:131",
-     "Approved by:141"
+     "Entered by:126",
+     "Approved by:134"
     ]
    }
   ],
@@ -2067,7 +2070,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -2092,7 +2095,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -2117,7 +2120,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -2142,7 +2145,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -2167,7 +2170,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -2192,7 +2195,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -2217,7 +2220,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -2260,9 +2263,9 @@
     "colWidths": [
      "SLA:129",
      "Item:272",
-     "Service date:148",
+     "Service date:145",
      "Booking:192",
-     "Status:157",
+     "Status:159",
      "#6:181"
     ]
    }
@@ -2308,10 +2311,10 @@
     "colWidths": [
      "Departure:332",
      "Status:138",
-     "Seats:149",
+     "Seats:141",
      "Agencies:98",
-     "Incident:231",
-     "#6:130"
+     "Incident:241",
+     "#6:128"
     ]
    }
   ],
@@ -2354,12 +2357,12 @@
     "lastHeaderPosition": "sticky",
     "minContent": 870,
     "colWidths": [
-     "User:337",
-     "Booking role:191",
-     "CIS role:113",
-     "Status:140",
-     "Last seen:124",
-     "Actions:174"
+     "User:331",
+     "Booking role:187",
+     "CIS role:111",
+     "Status:138",
+     "Last seen:141",
+     "Actions:170"
     ]
    }
   ],
@@ -2397,12 +2400,12 @@
     "lastHeaderPosition": "sticky",
     "minContent": 741,
     "colWidths": [
-     "Case:114",
-     "Customer:374",
-     "Assigned as:134",
-     "Status:206",
-     "Trip starts:132",
-     "Assigned:118"
+     "Case:113",
+     "Customer:370",
+     "Assigned as:133",
+     "Status:204",
+     "Trip starts:130",
+     "Assigned:129"
     ]
    }
   ],
@@ -2467,10 +2470,10 @@
     "colWidths": [
      "Case:101",
      "Customer:252",
-     "Trip:214",
+     "Trip:210",
      "Status:149",
-     "Sales:109",
-     "Updated:93"
+     "Sales:108",
+     "Updated:98"
     ]
    }
   ],
@@ -2558,12 +2561,12 @@
     "minContent": 703,
     "colWidths": [
      "Version:89",
-     "Title / notes:326",
+     "Title / notes:316",
      "Status:135",
      "Items:72",
      "Total:123",
-     "Sent:81",
-     "Updated:93"
+     "Sent:83",
+     "Updated:101"
     ]
    }
   ],
@@ -2699,9 +2702,9 @@
     "minContent": 476,
     "colWidths": [
      "Case:101",
-     "Trip:549",
+     "Trip:528",
      "Status:183",
-     "Updated:93"
+     "Updated:113"
     ]
    }
   ],
@@ -2814,10 +2817,10 @@
     "minContent": 602,
     "colWidths": [
      "CIS tour key:124",
-     "Catalog:336",
-     "Since:86",
+     "Catalog:335",
+     "Since:89",
      "Status:135",
-     "Still attached:236"
+     "Still attached:235"
     ]
    }
   ],
@@ -2846,21 +2849,21 @@
     "inDialog": false,
     "boxIsMain": false,
     "boxClient": 918,
-    "boxScroll": 1055,
-    "tableWidth": 1055,
+    "boxScroll": 1039,
+    "tableWidth": 1039,
     "cols": 7,
     "lastHeader": "Actions",
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1055,
+    "minContent": 1039,
     "colWidths": [
-     "Supplier:272",
+     "Supplier:252",
      "Categories:117",
-     "Contact:252",
+     "Contact:232",
      "Contracts:116",
      "Status:113",
-     "Updated:93",
+     "Updated:116",
      "Actions:93"
     ]
    }
@@ -2987,14 +2990,14 @@
     "inDialog": false,
     "boxIsMain": false,
     "boxClient": 918,
-    "boxScroll": 1056,
-    "tableWidth": 1056,
+    "boxScroll": 1032,
+    "tableWidth": 1032,
     "cols": 8,
     "lastHeader": "Actions",
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1056,
+    "minContent": 1032,
     "colWidths": [
      "Hotel:232",
      "Stars:105",
@@ -3002,7 +3005,7 @@
      "Supplier:152",
      "Rooms:82",
      "Rates:74",
-     "Status:137",
+     "Status:113",
      "Actions:93"
     ]
    }
@@ -3032,14 +3035,14 @@
     "inDialog": false,
     "boxIsMain": false,
     "boxClient": 918,
-    "boxScroll": 1056,
-    "tableWidth": 1056,
+    "boxScroll": 1032,
+    "tableWidth": 1032,
     "cols": 8,
     "lastHeader": "Actions",
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1056,
+    "minContent": 1032,
     "colWidths": [
      "Hotel:232",
      "Stars:105",
@@ -3047,7 +3050,7 @@
      "Supplier:152",
      "Rooms:82",
      "Rates:74",
-     "Status:137",
+     "Status:113",
      "Actions:93"
     ]
    },
@@ -3099,14 +3102,14 @@
     "inDialog": false,
     "boxIsMain": false,
     "boxClient": 918,
-    "boxScroll": 1058,
-    "tableWidth": 1058,
+    "boxScroll": 1034,
+    "tableWidth": 1034,
     "cols": 8,
     "lastHeader": "Actions",
     "lastHeaderVisible": true,
     "stickyEnd": true,
     "lastHeaderPosition": "sticky",
-    "minContent": 1058,
+    "minContent": 1034,
     "colWidths": [
      "Service:232",
      "Type:97",
@@ -3114,7 +3117,7 @@
      "Supplier:152",
      "Max pax:92",
      "Rates:74",
-     "Status:137",
+     "Status:113",
      "Actions:93"
     ]
    }
@@ -3242,19 +3245,19 @@
     "inDialog": false,
     "boxIsMain": false,
     "boxClient": 918,
-    "boxScroll": 1045,
-    "tableWidth": 1045,
+    "boxScroll": 1056,
+    "tableWidth": 1056,
     "cols": 8,
     "lastHeader": "Approved by",
     "lastHeaderVisible": false,
     "stickyEnd": false,
     "lastHeaderPosition": "sticky",
-    "minContent": 1045,
+    "minContent": 1056,
     "colWidths": [
      "Currency:102",
      "Units per 1 USD:139",
      "Selling buffer:134",
-     "As of:105",
+     "As of:116",
      "Source:192",
      "Status:135",
      "Entered by:116",
@@ -3286,7 +3289,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -3311,7 +3314,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -3336,7 +3339,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -3361,7 +3364,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -3386,7 +3389,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -3411,7 +3414,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -3436,7 +3439,7 @@
    },
    {
     "header": "As of",
-    "text": "19 Oct 2026",
+    "text": "28 Sept 2026",
     "lines": 1
    },
    {
@@ -3573,12 +3576,12 @@
     "lastHeaderPosition": "sticky",
     "minContent": 870,
     "colWidths": [
-     "User:287",
-     "Booking role:163",
-     "CIS role:96",
-     "Status:119",
-     "Last seen:105",
-     "Actions:148"
+     "User:282",
+     "Booking role:160",
+     "CIS role:94",
+     "Status:117",
+     "Last seen:120",
+     "Actions:145"
     ]
    }
   ],
@@ -3617,11 +3620,11 @@
     "minContent": 741,
     "colWidths": [
      "Case:101",
-     "Customer:294",
+     "Customer:286",
      "Assigned as:119",
      "Status:183",
      "Trip starts:117",
-     "Assigned:104"
+     "Assigned:112"
     ]
    }
   ],
@@ -3823,7 +3826,21 @@
    "image api-cis.lumiguides.it.com/media/photos/layout-5.jpg",
    "image api-cis.lumiguides.it.com/media/photos/layout-6.jpg",
    "image api-cis.lumiguides.it.com/media/photos/layout-7.jpg",
-   "image api-cis.lumiguides.it.com/media/photos/layout-8.jpg"
+   "image api-cis.lumiguides.it.com/media/photos/layout-8.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-9.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-0.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-1.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-2.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-3.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-4.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-5.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-6.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-7.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-8.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-9.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-10.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-11.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-12.jpg"
   ]
  },
  {
