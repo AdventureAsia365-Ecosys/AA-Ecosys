@@ -2,7 +2,7 @@
 
 <!-- schema-fingerprint: ab2aae3e70d98c171a81a5574eebfe7d759d22e0a017ba786bd809ff40cd1d7b -->
 
-**Verified:** 2026-10-23 04:48 UTC — live catalog dump of the shared RDS (`aa-cis-dev-db`, `aa-cis/dev/rds`, acc2 `005097885195`, us-west-1, PostgreSQL 15.17). Latest migration per owner: CIS **270**, TripPlanner **tp-017**, Booking **bk-020** (286 versions registered).
+**Verified:** 2026-10-23 04:48 UTC — live catalog dump of the shared RDS (`aa-cis-dev-db`, `aa-cis/dev/rds`, acc2, us-west-1, PostgreSQL 15.17). Latest migration per owner: CIS **270**, TripPlanner **tp-017**, Booking **bk-020** (286 versions registered).
 
 > **Generated file — do not edit by hand** (data standards DM-3.1). It is the single source of truth for table/column names, owners, grants and RLS across CIS, TripPlanner and Booking (one RDS, one schema per owner; ownership rules: `docs/database/schema-ownership.md`). Read it before introspecting columns. AA-CIS-Infra `.github/workflows/db-schema-dump.yml` regenerates it after every DB Migrate apply and every night (`db/schema_dump.py` in a one-off ECS task, then `db/gen_schema_reference.py`) and opens a PR here when the structure changed.
 > Source: AA-CIS-Infra DB Schema Dump (after DB Migrate run-script of db/scripts/aa712_frozen_tables_dry_run.py (run 39902107443)), https://github.com/AdventureAsia365-Ecosys/AA-CIS-Infra/actions/runs/39902233601
