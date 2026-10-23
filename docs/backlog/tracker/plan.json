@@ -14,7 +14,7 @@
   {
    "id": "M1",
    "name": "Đóng khối identity",
-   "window": "S244–S249",
+   "window": "S244–S248 (AA-911 P5–P8 cuối dự án)",
    "status": "active",
    "criteria": [
     {
@@ -39,11 +39,11 @@
     },
     {
      "text": "AA-816 S2: LEGACY_ADMIN_LOGIN_ENABLED=false trên API Dev, POST login cũ trả 404 (A10 dời cuối dự án)",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-703: comment trạng thái Phase 2/3 có link bằng chứng",
-     "done": false
+     "done": true
     }
    ]
   },
@@ -90,7 +90,7 @@
   {
    "id": "M2a",
    "name": "Chất lượng CIS: S1-first",
-   "window": "S247–S253",
+   "window": "S247–S251",
    "status": "active",
    "criteria": [
     {
@@ -150,7 +150,7 @@
   {
    "id": "M3",
    "name": "Lõi thương mại Booking + Lane B",
-   "window": "S247–S256 (AA-682 tuỳ chị Thư)",
+   "window": "S247–S254 (AA-682 tuỳ chị Thư)",
    "status": "next",
    "criteria": [
     {
@@ -174,8 +174,8 @@
   {
    "id": "C-M1",
    "name": "CRM chạy trên Dev (W0–W1)",
-   "window": "S252–S254 (nhịp Ultracode); ~giữa 11 nếu phiên thường",
-   "status": "next",
+   "window": "S249–S250 (nhịp Ultracode)",
+   "status": "active",
    "criteria": [
     {
      "text": "AA-928..931 merged/applied; host không phải partner trả 403 qua CloudFront→VPC origin",
@@ -194,7 +194,7 @@
   {
    "id": "P-M1",
    "name": "Portal tách repo",
-   "window": "P2a S255; P1 S256; P2b S258; gỡ Vercel ≥ P2b + 7 ngày (~S265)",
+   "window": "P2a S253; P1 S254; P2b S256; gỡ Vercel ≥ P2b + 7 ngày (~S263)",
    "status": "later",
    "criteria": [
     {
@@ -218,7 +218,7 @@
   {
    "id": "C-M2",
    "name": "CRM full lifecycle hàng của đại lý (W2–W3)",
-   "window": "S258–S260 (Ultracode); ~giữa 12 nếu phiên thường",
+   "window": "S256–S258 (Ultracode); ~giữa 12 nếu phiên thường",
    "status": "later",
    "criteria": [
     {
@@ -234,7 +234,7 @@
   {
    "id": "C-M3",
    "name": "AA supply trong CRM (W4)",
-   "window": "S261–S265; ~đầu 1/2027 nếu phiên thường",
+   "window": "S259–S263; ~đầu 1/2027 nếu phiên thường",
    "status": "later",
    "criteria": [
     {
@@ -287,8 +287,8 @@
  "checks": [
   {
    "due": "ngay S249",
-   "issue": "Jira S248",
-   "text": "Đăng các nháp Jira S248 Nghiệp đã duyệt (PR-13, PR-25, PR-26, PR-27, PR-22, PR-24, PR-23); kiểm JQL trước khi đăng lại nếu MCP timeout"
+   "issue": "S248 e01–e06",
+   "text": "Làm các việc Nghiệp duyệt cuối S248: AA-645 tới shadow ≤ 50, AA-783 báo cáo, AA-829 restore drill, AA-910 tự kiểm 1440 px, cắt 4 release, AA-987"
   },
   {
    "due": "hằng đêm",
@@ -336,11 +336,6 @@
    "who": "Nghiệp",
    "text": "Duyệt 7 nháp Jira S248 rồi agent đăng",
    "issue": ""
-  },
-  {
-   "who": "Nghiệp",
-   "text": "Mở trang staff Booking ở 1440 px (phiên Cognito) và báo OK để đóng",
-   "issue": "AA-910"
   },
   {
    "who": "Nghiệp",
@@ -438,14 +433,17 @@
     "AA-983",
     "AA-984",
     "AA-985",
-    "AA-986"
+    "AA-986",
+    "AA-987"
    ],
    "reopened": [],
    "notes": [
     "15 issue Done (Ultracode): AA-986 lan truyền xoá tour toàn hệ (ADR 0015, L1–L7, CIS 271–274, Booking #75, TP #142, gate hằng đêm; E2E 2 tour trên Dev retire → ẩn mọi nơi, tenant được cảnh báo; restore → phục vụ lại)",
     "B2B Booking AA-972/973/974 live (bk-019/020/021; 24/24 + 36/36 trên seed tổng hợp); CRM W1 AA-932/933 (owner crm, KMS, repo AA-Partner)",
     "AA-981 secret scanning 6 repo; AA-839 drill xoá thật cùng Nghiệp; AA-712 TripPlanner chỉ đọc CIS qua catalog, tp-018; AA-906/837 TripPlanner Next 16 + tương phản (axe prod 0)",
-    "AA-645: chọn writer W×Sonnet, bước 0 live; 18 quyết định đã duyệt (trang 6MTgUdky…); bỏ cổng do agent tự đặt"
+    "AA-645: chọn writer W×Sonnet, bước 0 live; 18 quyết định đã duyệt (trang 6MTgUdky…); bỏ cổng do agent tự đặt",
+    "Cuối phiên: đăng 7 comment Jira (PR-13/22/23/24/25/26/27, 10496–10502); Nghiệp duyệt e01–e06 làm đầu S249, e07 (AA-934/935/975) để S249; tạo AA-987",
+    "Dời master plan cuối S248: slot S252+ lên sớm 2 phiên (S252→S250 … S262→S260); việc theo ngày giữ ngày (≥01/11, ≤11/11); AA-905/AA-784 sau lần viết lại S1 (d10)"
    ]
   },
   {
@@ -734,9 +732,9 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M1",
-   "session": "S249",
+   "session": "later",
    "size": "S",
-   "next": "L3 · S249 S2: API legacy login flag off (idle shared.job window); re-check what S2 depends on now that AA-911 P5–P8 wait for the end of the project. A10 (E2E exception removal) at the end of the project",
+   "next": "L3 · S2 xong S248 (legacy login tắt mặc định, root #184, CIS #942). Còn A10 (gỡ ngoại lệ mail E2E) ở cuối dự án",
    "needs": ""
   },
   {
@@ -758,9 +756,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "M5",
-   "session": "S259",
+   "session": "S249",
    "size": "M",
-   "next": "S248: db.dev.internal live (7 DSNs), dumps 16/09 deleted; left: restore drill with CNAME repoint + single-schema rehearsal",
+   "next": "L3 · S249 first (e03): restore drill có lật db.dev.internal (~$0,10) + tập dượt khôi phục 1 schema, rồi đóng",
    "needs": ""
   },
   {
@@ -770,9 +768,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "S257",
+   "session": "≥01/11",
    "size": "S",
-   "next": "L7 · First session ≥01/11 (≈S257, slotted by date): cost report Aug/Sep/Oct per App tag and service, acc3 Bedrock + credits, unit costs",
+   "next": "L7 · First session ≥01/11 (≈S255, slotted by date): cost report Aug/Sep/Oct per App tag and service, acc3 Bedrock + credits, unit costs",
    "needs": "Decision list"
   },
   {
@@ -784,7 +782,7 @@
    "milestone": "M2a",
    "session": "later",
    "size": "M",
-   "next": "L1 · Gateway refactor + AA-799 follow-ups; after the S253 go/no-go",
+   "next": "L1 · Gateway refactor + AA-799 follow-ups; after the S251 go/no-go",
    "needs": ""
   },
   {
@@ -794,9 +792,9 @@
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M3",
-   "session": "S255",
+   "session": "S253",
    "size": "XL",
-   "next": "L4 · Part 1 S255, part 2 S258 (payment schedule, manual payment marking), part 3 S260 — only once Ms. Thư settles tax, deposit % and payment marking. Blocked by AA-928 (commercial-core memo) and AA-974; never between B1–B3 (same files)",
+   "next": "L4 · Part 1 S253, part 2 S256 (payment schedule, manual payment marking), part 3 S258 — only once Ms. Thư settles tax, deposit % and payment marking. Blocked by AA-928 (commercial-core memo) and AA-974; never between B1–B3 (same files)",
    "needs": "Ms. Thư: tax, deposit %, payment marking"
   },
   {
@@ -808,8 +806,8 @@
    "milestone": "M3",
    "session": "S249",
    "size": "S",
-   "next": "Booking #68 deployed S248; Nghiệp opens the staff pages at 1440 px, then close",
-   "needs": "Nghiệp checks 1440 px"
+   "next": "L4 · S249 first (e04): tôi tự chụp 1440 px bằng tài khoản E2E rồi đóng",
+   "needs": ""
   },
   {
    "id": "AA-908",
@@ -818,9 +816,9 @@
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M5",
-   "session": "S255",
+   "session": "S253",
    "size": "M",
-   "next": "L5 · S255 traveller sign-in on Cognito EXTERNAL, guest linking, My Trips (after AA-909)",
+   "next": "L5 · S253 traveller sign-in on Cognito EXTERNAL, guest linking, My Trips (after AA-909)",
    "needs": ""
   },
   {
@@ -842,9 +840,9 @@
    "priority": "Low",
    "project": "core",
    "milestone": "M2b",
-   "session": "S256",
+   "session": "after M2a",
    "size": "M",
-   "next": "L2 · S256 geo backfill subset inside the place pass",
+   "next": "L2 · sau lần viết lại S1 (d10) · S254 geo backfill subset inside the place pass",
    "needs": "Quote first"
   },
   {
@@ -854,9 +852,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2b",
-   "session": "S260",
+   "session": "after M2a",
    "size": "L",
-   "next": "L2 · S260 place cards in paid subsets by country",
+   "next": "L2 · sau lần viết lại S1 (d10) · S258 place cards in paid subsets by country",
    "needs": "Quote"
   },
   {
@@ -866,9 +864,9 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M4",
-   "session": "S259",
+   "session": "S257",
    "size": "M",
-   "next": "LP · S259 My Content DataTable in AA-Partner/portal (after P2a, AA-979)",
+   "next": "LP · S257 My Content DataTable in AA-Partner/portal (after P2a, AA-979)",
    "needs": "Rescope or build"
   },
   {
@@ -878,9 +876,9 @@
    "priority": "High",
    "project": "portal",
    "milestone": "M5",
-   "session": "S257",
+   "session": "≥01/11",
    "size": "L",
-   "next": "L7 · First session ≥01/11 (≈S257): Cost Operations page (reopened)",
+   "next": "L7 · First session ≥01/11 (≈S255): Cost Operations page (reopened)",
    "needs": ""
   },
   {
@@ -890,9 +888,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M5",
-   "session": "S261",
+   "session": "S259",
    "size": "S",
-   "next": "L7 · S261 retention rollups: one real Booking retention run under a Dev override, or drop the Done-when line",
+   "next": "L7 · S259 retention rollups: one real Booking retention run under a Dev override, or drop the Done-when line",
    "needs": "Drop the line or allow the run"
   },
   {
@@ -904,7 +902,7 @@
    "milestone": "M2a",
    "session": "later",
    "size": "M",
-   "next": "L1 · LLM ops docs, prompt register, manual eval gate; after the S253 go/no-go",
+   "next": "L1 · LLM ops docs, prompt register, manual eval gate; after the S251 go/no-go",
    "needs": ""
   },
   {
@@ -926,9 +924,9 @@
    "priority": "Low",
    "project": "data",
    "milestone": "M5",
-   "session": "S262",
+   "session": "S260",
    "size": "L",
-   "next": "L7 · S262 ADR 0012 draft (before CRM W8); L9 prod blueprint on the go-live date",
+   "next": "L7 · S260 ADR 0012 draft (before CRM W8); L9 prod blueprint on the go-live date",
    "needs": "Date; account (AA-864)"
   },
   {
@@ -938,9 +936,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M5",
-   "session": "S256",
+   "session": "S254",
    "size": "",
-   "next": "L3 · S256, deadline ≤11/11: tenant terms AI clause; Ms. Thư decides on counsel",
+   "next": "L3 · S254, deadline ≤11/11: tenant terms AI clause; Ms. Thư decides on counsel",
    "needs": "Ms. Thư (counsel)"
   },
   {
@@ -952,7 +950,7 @@
    "milestone": "M4",
    "session": "after M2a",
    "size": "L",
-   "next": "L7 · UAT videos for all apps after all technical work (>S262), Cognito login, bilingual guides",
+   "next": "L7 · UAT videos for all apps after all technical work (>S260), Cognito login, bilingual guides",
    "needs": "Go signal"
   },
   {
@@ -986,9 +984,9 @@
    "priority": "Low",
    "project": "data",
    "milestone": "M5",
-   "session": "S259",
+   "session": "S257",
    "size": "M",
-   "next": "L7 · S259 OpenAPI export + breaking-change check (after AA-891)",
+   "next": "L7 · S257 OpenAPI export + breaking-change check (after AA-891)",
    "needs": ""
   },
   {
@@ -998,9 +996,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M5",
-   "session": "S255",
+   "session": "S253",
    "size": "M",
-   "next": "L3 · S255 Redis AUTH/TLS/at-rest + flag alarm, in an idle CIS window",
+   "next": "L3 · S253 Redis AUTH/TLS/at-rest + flag alarm, in an idle CIS window",
    "needs": "Cost (D-19)"
   },
   {
@@ -1010,9 +1008,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "M5",
-   "session": "S261",
+   "session": "S259",
    "size": "M",
-   "next": "L3 · S261 after the GuardDuty quote; reuse the KMS/alarm pattern of AA-932",
+   "next": "L3 · S259 after the GuardDuty quote; reuse the KMS/alarm pattern of AA-932",
    "needs": "Cost per item"
   },
   {
@@ -1046,9 +1044,9 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M5",
-   "session": "S254",
+   "session": "S252",
    "size": "M",
-   "next": "L3 · Not built alone: re-scope posted under AA-928 (Done S247); delivered through AA-939 (partner pool, S254) + AA-978 (membership feed, S256); blocks AA-978",
+   "next": "L3 · Not built alone: re-scope posted under AA-928 (Done S247); delivered through AA-939 (partner pool, S252) + AA-978 (membership feed, S254); blocks AA-978",
    "needs": ""
   },
   {
@@ -1058,9 +1056,9 @@
    "priority": "Low",
    "project": "data",
    "milestone": "M5",
-   "session": "S257",
+   "session": "≥01/11",
    "size": "M",
-   "next": "L7 · First session ≥01/11 (≈S257): first capacity review",
+   "next": "L7 · First session ≥01/11 (≈S255): first capacity review",
    "needs": ""
   },
   {
@@ -1118,9 +1116,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S260",
+   "session": "S258",
    "size": "XL",
-   "next": "L1 · S260 T-series G7 + G8 report (paid), per the S253 go/no-go",
+   "next": "L1 · S258 T-series G7 + G8 report (paid), per the S251 go/no-go",
    "needs": "Paid run ~$10–20"
   },
   {
@@ -1130,10 +1128,10 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S251",
+   "session": "S249",
    "size": "M",
-   "next": "L1 · Agreement analysis once Nghiệp's 40 labels exist (not slotted in the S247–S262 sessions; kept at S251)",
-   "needs": "2–3 h labelling"
+   "next": "L1 · S249 first (e02): chạy báo cáo đồng thuận người–panel ($0), commit, đóng",
+   "needs": ""
   },
   {
    "id": "AA-853",
@@ -1154,9 +1152,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S253",
+   "session": "S251",
    "size": "L",
-   "next": "L1 · Held until the S253 written go/no-go",
+   "next": "L1 · Held until the S251 (sau shadow ≤ 50 của AA-645) written go/no-go",
    "needs": "LLM judge vs deterministic rubric"
   },
   {
@@ -1166,9 +1164,9 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M4",
-   "session": "S261",
+   "session": "S259",
    "size": "M",
-   "next": "LP · S261 Marketplace redesign in AA-Partner/portal (after P2a)",
+   "next": "LP · S259 Marketplace redesign in AA-Partner/portal (after P2a)",
    "needs": "Merge with Browse Tours? (Ms. Thư)"
   },
   {
@@ -1190,9 +1188,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M3",
-   "session": "S253",
+   "session": "S251",
    "size": "",
-   "next": "L4 · Its outbox pattern merges into AA-975 (CRM-B3, S253); paid consumer trial later",
+   "next": "L4 · Its outbox pattern merges into AA-975 (CRM-B3, S251); paid consumer trial later",
    "needs": "Paid consumer trial"
   },
   {
@@ -1298,9 +1296,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S253",
+   "session": "S251",
    "size": "M",
-   "next": "L1 · Built on branch feat/aa-926-quality-registry (11 commits), parked per Q1; merge only on a go at S253",
+   "next": "L1 · Built on branch feat/aa-926-quality-registry (11 commits), parked per Q1; merge only on a go at S251 (sau shadow ≤ 50 của AA-645)",
    "needs": ""
   },
   {
@@ -1310,9 +1308,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S253",
+   "session": "S251",
    "size": "M",
-   "next": "L1 · Held until the S253 go/no-go; on go: Writing Memory P0 (migration + RLS → agent review)",
+   "next": "L1 · Held until the S251 (sau shadow ≤ 50 của AA-645) go/no-go; on go: Writing Memory P0 (migration + RLS → agent review)",
    "needs": ""
   },
   {
@@ -1322,9 +1320,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S253",
+   "session": "S251",
    "size": "M",
-   "next": "L1 · Held until the S253 go/no-go (after AA-926)",
+   "next": "L1 · Held until the S251 (sau shadow ≤ 50 của AA-645) go/no-go (after AA-926)",
    "needs": ""
   },
   {
@@ -1334,9 +1332,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S257",
+   "session": "S255",
    "size": "M",
-   "next": "L1 · Writing Memory P1 at S257 if the S253 decision is go",
+   "next": "L1 · Writing Memory P1 at S255 if the S251 decision is go",
    "needs": "Release click per rule set"
   },
   {
@@ -1346,9 +1344,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S257",
+   "session": "S255",
    "size": "M",
-   "next": "L1 · Writing Memory P1 at S257 if the S253 decision is go",
+   "next": "L1 · Writing Memory P1 at S255 if the S251 decision is go",
    "needs": ""
   },
   {
@@ -1358,9 +1356,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S259",
+   "session": "S257",
    "size": "L",
-   "next": "L1 · Writing Memory P2 at S259 if go",
+   "next": "L1 · Writing Memory P2 at S257 if go",
    "needs": "Each release"
   },
   {
@@ -1370,9 +1368,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S259",
+   "session": "S257",
    "size": "M",
-   "next": "L1 · Writing Memory P2 at S259 if go",
+   "next": "L1 · Writing Memory P2 at S257 if go",
    "needs": ""
   },
   {
@@ -1382,9 +1380,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S262",
+   "session": "S260",
    "size": "M",
-   "next": "L1 · Writing Memory P3 at S262 if go",
+   "next": "L1 · Writing Memory P3 at S260 if go",
    "needs": ""
   },
   {
@@ -1394,9 +1392,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S262",
+   "session": "S260",
    "size": "M",
-   "next": "L1 · Writing Memory P3 at S262 if go",
+   "next": "L1 · Writing Memory P3 at S260 if go",
    "needs": ""
   },
   {
@@ -1406,9 +1404,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S262",
+   "session": "S260",
    "size": "M",
-   "next": "L1 · Writing Memory P3 at S262 if go",
+   "next": "L1 · Writing Memory P3 at S260 if go",
    "needs": ""
   },
   {
@@ -1442,9 +1440,9 @@
    "priority": "Low",
    "project": "core",
    "milestone": "M2a",
-   "session": "S248",
+   "session": "S249",
    "size": "S",
-   "next": "S248: writer W×Sonnet chosen (n=50, 2 blind panels); step 0 live (CIS 273, first published_at kept, S1_WRITER_V2 off). Next: brand-fit rubric v2 + re-measure, then pilot 3 → ≤50 shadow",
+   "next": "L1 · S249 first (e01): rubric v2 + re-measure, pilot 3 → shadow ≤ 50 (~$4,5); toàn catalogue duyệt riêng",
    "needs": ""
   },
   {
@@ -1454,9 +1452,9 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M4",
-   "session": "S257",
+   "session": "S255",
    "size": "M",
-   "next": "LP · S257 account pages in AA-Partner/portal (after P2a); blocked by AA-979",
+   "next": "LP · S255 account pages in AA-Partner/portal (after P2a); blocked by AA-979",
    "needs": ""
   },
   {
@@ -1466,9 +1464,9 @@
    "priority": "High",
    "project": "crm",
    "milestone": "C-M1",
-   "session": "S251",
+   "session": "S249",
    "size": "M",
-   "next": "L6 · W1 · S251; blocked by AA-932, AA-933",
+   "next": "L6/L4 · S249 (e07): làm trong S249; review độc lập phần mã hoá/migration",
    "needs": ""
   },
   {
@@ -1478,9 +1476,9 @@
    "priority": "High",
    "project": "crm",
    "milestone": "C-M1",
-   "session": "S251",
+   "session": "S249",
    "size": "M",
-   "next": "L6 · W1 · S251; blocked by AA-933",
+   "next": "L6/L4 · S249 (e07): làm trong S249; review độc lập phần mã hoá/migration",
    "needs": "Create the e2e-test-crm-* users"
   },
   {
@@ -1490,9 +1488,9 @@
    "priority": "High",
    "project": "crm",
    "milestone": "C-M1",
-   "session": "S252",
+   "session": "S250",
    "size": "L",
-   "next": "L6 · W1 · S252: → C-M1; blocked by AA-934, AA-935",
+   "next": "L6 · W1 · S250: → C-M1; cần AA-934, AA-935 (S249)",
    "needs": ""
   },
   {
@@ -1502,9 +1500,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S253",
+   "session": "S251",
    "size": "L",
-   "next": "L6 · W2 · S253; blocked by AA-934, AA-936",
+   "next": "L6 · W2 · S251; blocked by AA-934, AA-936",
    "needs": ""
   },
   {
@@ -1514,9 +1512,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S255",
+   "session": "S253",
    "size": "M",
-   "next": "L6 · W2 · S255; blocked by AA-930, AA-937",
+   "next": "L6 · W2 · S253; blocked by AA-930, AA-937",
    "needs": ""
   },
   {
@@ -1526,9 +1524,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S254",
+   "session": "S252",
    "size": "L",
-   "next": "L6 · W2 · S254; blocked by AA-928, AA-937",
+   "next": "L6 · W2 · S252; blocked by AA-928, AA-937",
    "needs": "MFA (Cognito)"
   },
   {
@@ -1538,9 +1536,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S254",
+   "session": "S252",
    "size": "M",
-   "next": "L6 · W2 · S254; blocked by AA-937",
+   "next": "L6 · W2 · S252; blocked by AA-937",
    "needs": ""
   },
   {
@@ -1550,9 +1548,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S257",
+   "session": "S255",
    "size": "M",
-   "next": "L6 · W2 · S257; blocked by AA-939, AA-940",
+   "next": "L6 · W2 · S255; blocked by AA-939, AA-940",
    "needs": ""
   },
   {
@@ -1562,9 +1560,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S255",
+   "session": "S253",
    "size": "M",
-   "next": "L6 · W2 · S255; blocked by AA-940",
+   "next": "L6 · W2 · S253; blocked by AA-940",
    "needs": ""
   },
   {
@@ -1574,9 +1572,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S256",
+   "session": "S254",
    "size": "L",
-   "next": "L6 · W3 · S256; blocked by AA-937, AA-939",
+   "next": "L6 · W3 · S254; blocked by AA-937, AA-939",
    "needs": ""
   },
   {
@@ -1586,9 +1584,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S257",
+   "session": "S255",
    "size": "M",
-   "next": "L6 · W3 · S257; blocked by AA-943",
+   "next": "L6 · W3 · S255; blocked by AA-943",
    "needs": ""
   },
   {
@@ -1598,9 +1596,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S257",
+   "session": "S255",
    "size": "L",
-   "next": "L6 · W3 · S257; blocked by AA-938, AA-943",
+   "next": "L6 · W3 · S255; blocked by AA-938, AA-943",
    "needs": ""
   },
   {
@@ -1610,9 +1608,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S258",
+   "session": "S256",
    "size": "L",
-   "next": "L6 · W3 · S258: → C-M2; blocked by AA-944, AA-945",
+   "next": "L6 · W3 · S256: → C-M2; blocked by AA-944, AA-945",
    "needs": ""
   },
   {
@@ -1622,9 +1620,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M3",
-   "session": "S259",
+   "session": "S257",
    "size": "M",
-   "next": "L6 · W4 · S259; blocked by AA-944, AA-972, AA-973, AA-974, AA-975, AA-976",
+   "next": "L6 · W4 · S257; blocked by AA-944, AA-972, AA-973, AA-974, AA-975, AA-976",
    "needs": ""
   },
   {
@@ -1634,9 +1632,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M3",
-   "session": "S260",
+   "session": "S258",
    "size": "M",
-   "next": "L6 · W4 · S260: enhancement, does not block C-M3; needs T13 (no issue yet) + AA-906 + 6d; blocked by AA-935, AA-906 (AA-847 Done S247)",
+   "next": "L6 · W4 · S258: enhancement, does not block C-M3; needs T13 (no issue yet) + AA-906 + 6d; blocked by AA-935, AA-906 (AA-847 Done S247)",
    "needs": ""
   },
   {
@@ -1646,9 +1644,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M3",
-   "session": "S260",
+   "session": "S258",
    "size": "L",
-   "next": "L6 · W4 · S260; blocked by AA-947",
+   "next": "L6 · W4 · S258; blocked by AA-947",
    "needs": ""
   },
   {
@@ -1658,9 +1656,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M3",
-   "session": "S261",
+   "session": "S259",
    "size": "L",
-   "next": "L6 · W4 · S261: → C-M3; blocked by AA-949, AA-973, AA-974",
+   "next": "L6 · W4 · S259: → C-M3; blocked by AA-949, AA-973, AA-974",
    "needs": ""
   },
   {
@@ -1670,9 +1668,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M3",
-   "session": "S261",
+   "session": "S259",
    "size": "M",
-   "next": "L6 · W4 · S261; blocked by AA-949, AA-977",
+   "next": "L6 · W4 · S259; blocked by AA-949, AA-977",
    "needs": ""
   },
   {
@@ -1684,7 +1682,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-946, AA-950, AA-974",
+   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-946, AA-950, AA-974",
    "needs": ""
   },
   {
@@ -1696,7 +1694,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-946, AA-952",
+   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-946, AA-952",
    "needs": ""
   },
   {
@@ -1708,7 +1706,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-953",
+   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-953",
    "needs": ""
   },
   {
@@ -1720,7 +1718,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-946",
+   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-946",
    "needs": ""
   },
   {
@@ -1732,7 +1730,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-953, AA-975",
+   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-953, AA-975",
    "needs": ""
   },
   {
@@ -1744,7 +1742,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W5, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-952, AA-956, AA-974",
+   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-952, AA-956, AA-974",
    "needs": ""
   },
   {
@@ -1756,7 +1754,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-930, AA-945",
+   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-930, AA-945",
    "needs": ""
   },
   {
@@ -1768,7 +1766,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-943, AA-953, AA-958",
+   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-943, AA-953, AA-958",
    "needs": ""
   },
   {
@@ -1780,7 +1778,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-959, AA-976",
+   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-959, AA-976",
    "needs": ""
   },
   {
@@ -1792,7 +1790,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-945, AA-975",
+   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-945, AA-975",
    "needs": ""
   },
   {
@@ -1804,7 +1802,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-939, AA-945",
+   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-939, AA-945",
    "needs": ""
   },
   {
@@ -1816,7 +1814,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W6, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-947, AA-959, AA-977",
+   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-947, AA-959, AA-977",
    "needs": ""
   },
   {
@@ -1828,7 +1826,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-938, AA-940, AA-945, AA-949, AA-958",
+   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-938, AA-940, AA-945, AA-949, AA-958",
    "needs": "MFA (acc3 role)"
   },
   {
@@ -1840,7 +1838,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-964",
+   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-964",
    "needs": ""
   },
   {
@@ -1852,7 +1850,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-950, AA-952",
+   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-950, AA-952",
    "needs": ""
   },
   {
@@ -1864,7 +1862,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-941, AA-942",
+   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-941, AA-942",
    "needs": ""
   },
   {
@@ -1876,7 +1874,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-945, AA-959, AA-977",
+   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-945, AA-959, AA-977",
    "needs": ""
   },
   {
@@ -1888,7 +1886,7 @@
    "milestone": "M5",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-954, AA-955, AA-957, AA-960, AA-961, AA-962, AA-963, AA-965, AA-966, AA-967, AA-968, AA-971, AA-979",
+   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-954, AA-955, AA-957, AA-960, AA-961, AA-962, AA-963, AA-965, AA-966, AA-967, AA-968, AA-971, AA-979",
    "needs": ""
   },
   {
@@ -1900,7 +1898,7 @@
    "milestone": "M5",
    "session": "≥S263",
    "size": "M",
-   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-969",
+   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-969",
    "needs": ""
   },
   {
@@ -1912,7 +1910,7 @@
    "milestone": "later",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W7, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-939, AA-940, AA-941",
+   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-939, AA-940, AA-941",
    "needs": "MFA; Ms. Thư names the second alarm recipient"
   },
   {
@@ -1922,9 +1920,9 @@
    "priority": "High",
    "project": "crm",
    "milestone": "M3",
-   "session": "S253",
+   "session": "S249",
    "size": "M",
-   "next": "L4 · Lane B · S253: bk-022, shared outbox (takes the AA-835 pattern) + on-request desk; blocked by AA-973",
+   "next": "L6/L4 · S249 (e07): làm trong S249; review độc lập phần mã hoá/migration",
    "needs": ""
   },
   {
@@ -1934,9 +1932,9 @@
    "priority": "High",
    "project": "crm",
    "milestone": "M3",
-   "session": "S254",
+   "session": "S250",
    "size": "M",
-   "next": "L4 · Lane B · S254: places flip live (AA-847 Done S247); blocked by AA-972",
+   "next": "L4 · Lane B · S250: catalog.http.v1 từ read model đã lật; AA-972 đã xong",
    "needs": ""
   },
   {
@@ -1946,9 +1944,9 @@
    "priority": "High",
    "project": "crm",
    "milestone": "M3",
-   "session": "S256",
+   "session": "S254",
    "size": "M",
-   "next": "L4 · Lane B · S256: CIS migration, review; blocked by AA-976",
+   "next": "L4 · Lane B · S254: CIS migration, review; blocked by AA-976",
    "needs": ""
   },
   {
@@ -1958,9 +1956,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "P-M1",
-   "session": "S256",
+   "session": "S254",
    "size": "M",
-   "next": "LP · Lane P · S256: membership feed + cis.tenant-api.v1 (CIS); blocked by AA-939, AA-813",
+   "next": "LP · Lane P · S254: membership feed + cis.tenant-api.v1 (CIS); blocked by AA-939, AA-813",
    "needs": ""
   },
   {
@@ -1970,9 +1968,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "P-M1",
-   "session": "S255",
+   "session": "S253",
    "size": "L",
-   "next": "LP · Lane P · S255: P2a S255 (portal/ into AA-Partner/portal, keep history + Vercel + API-key auth); P2b S258 (CloudFront → Fargate, partner pool, 301 /trip/*, Sentry); remove Vercel ≥7 days after P2b (~S265); blocked by AA-978, AA-935, AA-931",
+   "next": "LP · Lane P · S253: P2a S253 (portal/ into AA-Partner/portal, keep history + Vercel + API-key auth); P2b S256 (CloudFront → Fargate, partner pool, 301 /trip/*, Sentry); remove Vercel ≥7 days after P2b (~S265); blocked by AA-978, AA-935, AA-931",
    "needs": "Approve P2a before P1 (split AA-979 or note the exception)"
   },
   {
@@ -1984,7 +1982,19 @@
    "milestone": "M5",
    "session": "≥S263",
    "size": "L",
-   "next": "L6 · W8, not slotted before S262: re-plan at S262 from the real pace; blocked by AA-969, AA-970, AA-971, AA-979, AA-880, AA-873, AA-874",
+   "next": "L6 · W8, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-969, AA-970, AA-971, AA-979, AA-880, AA-873, AA-874",
+   "needs": ""
+  },
+  {
+   "id": "AA-987",
+   "title": "TripPlanner drops a retired tour at once: CIS lifecycle event triggers a TripPlanner cache purge",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M2a",
+   "session": "S249",
+   "size": "S",
+   "next": "L5 · S249 (e06): CIS lifecycle → purge cache TripPlanner, ≤ 2 phút thay vì ≤ 30",
    "needs": ""
   }
  ]
