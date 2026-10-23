@@ -61,7 +61,7 @@ and what stands in for it where GitHub cannot.
 | Human review of risky PRs (from prod, ADR 0011 decision 4) | CODEOWNERS + "Require review from Code Owners" | not enforceable by GitHub on Free; see decision 4 |
 | Secrets only for `main` | environment with a `main`-only branch policy | repo or environment secret plus a job guard `if: github.ref == 'refs/heads/main'` (AA-866) |
 | AWS access from CI | OIDC trust limited to `refs/heads/main` or a named environment | same; the apply role's trust is the real fence |
-| Secret scanning | GitHub secret scanning and push protection (free on public) + gitleaks in CI | gitleaks in CI: PR scan + full-history job (`secret-scan.yml` in root and Infra, AA-981); GitHub secret scanning only while the repo is public (paid on private) |
+| Secret scanning | GitHub secret scanning and push protection (free on public) + gitleaks in CI | gitleaks in CI: PR scan (`secret-scan.yml`) + full-history job (`secret-scan-history.yml`), in all six repos (AA-981); GitHub secret scanning only while the repo is public (paid on private) |
 
 ### 4. Prod trigger: re-decide for the private repos
 
@@ -107,8 +107,10 @@ tracked in the private record (Linear AA-981), not in this public page.
 - **Precondition before any private → public switch** (a repo, or a fork or mirror of one):
   1. run a full-history gitleaks scan **with the repo's `.gitleaks.toml`** (not the default rules alone), over every
      branch, tag and pull request head (`refs/pull/*/head`, closed PRs included; a `git clone --mirror` has them):
-     `git` mode with `--log-opts="--all --full-history --diff-filter=tuxdb --diff-merges=remerge"` (gitleaks'
-     default plus the content of merge commits; local command: header of the root `secret-scan.yml`);
+     `git` mode with `--log-opts="--all --full-history --diff-filter=uxdb --diff-merges=remerge --no-renames"` and
+     `* !diff` in the git attributes file (gitleaks' default plus type changes, renamed files read whole, every file
+     as text and the content of merge commits; no merge with three or more parents; check the log for git errors,
+     gitleaks exits 0 when git fails; local command: header of the root `secret-scan.yml`);
   2. treat each finding as real until shown otherwise; **rotate** every real credential **before** the switch (a
      history rewrite is not enough: forks, caches and the GitHub event API keep old commits);
   3. pin the rotated or false-positive findings by fingerprint in `.gitleaksignore`, with a comment, so the
@@ -119,9 +121,10 @@ tracked in the private record (Linear AA-981), not in this public page.
   the gitleaks PR and full-history jobs stay and become the only scanner. They use private Actions minutes (about a
   minute a night per repo), to count in the re-decision above.
 - **State on 23/10/2026:** all five repos are public with secret scanning and push protection on. Root and Infra
-  run `secret-scan.yml`: a PR scan that reads its rules and baseline from the base commit (a PR that changes them
+  run `secret-scan.yml` and `secret-scan-history.yml`: a PR scan that reads its rules and baseline from the base commit (a PR that changes them
   needs the label `secret-scan-baseline-reviewed`), and a nightly full-history scan over branches, tags and PR
-  heads, merge commits included. Same rules in both, incl. `credential-key-literal` for credential-named keys with literal values in tfvars,
+  heads, merge commits, renames and type changes included. A red result means the value is public: rotate it, even
+  if it was force-pushed away. Same rules in both, incl. `credential-key-literal` for credential-named keys with literal values in tfvars,
   `.env*`, JSON and YAML. Historical findings are pinned by fingerprint.
 - **Not yet covered:** the three app repos (AA-CIS-App, AA-Booking, AA-TripPlanner-Web) and AA-Partner have no
   full-history job; their full-history check with these rules is still a manual step (lesson log, AA-981).
