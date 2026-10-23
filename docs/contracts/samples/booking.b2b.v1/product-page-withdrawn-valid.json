@@ -1,0 +1,21 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "ProductPage",
+  "expect": "valid",
+  "why": "AA-986 (root ADR 0015): a delta (updated_since) lists a plan whose tour AA retired once, withdrawn, with no components",
+  "payload": {
+    "items": [
+      {
+        "tour": {"source_system": "cis", "source_id": "5a000000-0000-4000-8000-000000000001"},
+        "trip_plan_id": "8e000000-0000-4000-8000-0000000000e1",
+        "sellable": false,
+        "has_fixed_departures": false,
+        "components": [],
+        "updated_at": "2026-10-23T08:00:00Z",
+        "withdrawn": true,
+        "withdrawn_reason": "source_deleted"
+      }
+    ],
+    "next_cursor": null
+  }
+}
