@@ -78,12 +78,18 @@ nguồn ghi là đã chấm dứt không?". Luật nhận ra **địa điểm** 
 **Đã sửa** (CIS, nhánh `fix/aa985-f17-role-identity`):
 
 - Hàm `role_claim` quyết định theo danh tính vai trò.
-- Cụm địa phương được nhận ở **cả hai** thứ tự từ, và kéo cả mệnh đề về vai trò địa phương trừ khi có phạm vi quốc gia.
+- Cụm địa phương được nhận ở **cả hai** thứ tự từ và chỉ **chính cụm đó** bị gỡ ra; từ mạnh còn lại bên cạnh vẫn fire
+  ("It remains the capital and the district seat").
 - "government offices/officials" (cơ quan *được đặt* trong toà nhà) và "spiritual/cultural capital" (một loại thủ đô khác)
   chỉ tính khi có phạm vi quốc gia.
 - Khi vai trò đã chấm dứt *là* vai trò địa phương, luật so cụm địa phương với cụm địa phương.
 - Kiểm khoảng năm (span) chỉ chạy trên câu nói về chính vai trò đó.
-- Test hai chiều: 8 câu "vai trò khác, còn hiện hữu" không fire; 7 câu "đúng vai trò đã chấm dứt" vẫn fire.
+- Test hai chiều: 8 câu "vai trò khác, còn hiện hữu" không fire; 16 câu "đúng vai trò đã chấm dứt" vẫn fire; span cạnh
+  cụm địa phương vẫn được kiểm.
+- Review vòng 1 bắt được chính bản sửa đầu tiên mắc lỗi cùng họ: nó gắn phạm vi địa phương cho **cả mệnh đề** thay vì
+  cho **cụm** ("có chữ district và không có Bhutan → bỏ qua cả câu"), làm mất 5 true positive mà luật cũ bắt được.
+  Bài học cho §1.3: khi sửa một lỗi gắn sai danh tính, test phải có câu *trộn* (vai trò khác + vai trò đã chấm dứt
+  trong cùng mệnh đề), không chỉ câu thuần một vai trò.
 
 Replay offline $0 trên 40 bài AA-783: 12 bài có vai trò đã chấm dứt, trước 1 finding, sau 1 finding. Finding đó là true positive
 ("why it remains Bhutan's spiritual and administrative center") và vẫn được giữ. Census trên toàn bộ ledger từ 01/10 do agent
