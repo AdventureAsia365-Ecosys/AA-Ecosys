@@ -1,0 +1,555 @@
+{
+    "MetricDataResults": [
+        {
+            "Id": "m0_0",
+            "Label": "global.anthropic.claude-haiku-4-5-20251001-v1:0|Invocations",
+            "Timestamps": [
+                "2026-09-21T07:00:00+07:00",
+                "2026-09-17T07:00:00+07:00",
+                "2026-09-03T07:00:00+07:00",
+                "2026-09-02T07:00:00+07:00",
+                "2026-08-09T07:00:00+07:00",
+                "2026-08-07T07:00:00+07:00",
+                "2026-08-06T07:00:00+07:00",
+                "2026-08-01T07:00:00+07:00"
+            ],
+            "Values": [
+                8.0,
+                212.0,
+                52.0,
+                3.0,
+                3.0,
+                47.0,
+                11.0,
+                963.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m0_1",
+            "Label": "global.anthropic.claude-haiku-4-5-20251001-v1:0|InputTokenCount",
+            "Timestamps": [
+                "2026-09-21T07:00:00+07:00",
+                "2026-09-17T07:00:00+07:00",
+                "2026-09-03T07:00:00+07:00",
+                "2026-09-02T07:00:00+07:00",
+                "2026-08-09T07:00:00+07:00",
+                "2026-08-07T07:00:00+07:00",
+                "2026-08-06T07:00:00+07:00",
+                "2026-08-01T07:00:00+07:00"
+            ],
+            "Values": [
+                13292.0,
+                264812.0,
+                29363.0,
+                30.0,
+                3694.0,
+                85849.0,
+                11373.0,
+                1199067.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m0_2",
+            "Label": "global.anthropic.claude-haiku-4-5-20251001-v1:0|OutputTokenCount",
+            "Timestamps": [
+                "2026-09-21T07:00:00+07:00",
+                "2026-09-17T07:00:00+07:00",
+                "2026-09-03T07:00:00+07:00",
+                "2026-09-02T07:00:00+07:00",
+                "2026-08-09T07:00:00+07:00",
+                "2026-08-07T07:00:00+07:00",
+                "2026-08-06T07:00:00+07:00",
+                "2026-08-01T07:00:00+07:00"
+            ],
+            "Values": [
+                4562.0,
+                93011.0,
+                9243.0,
+                15.0,
+                219.0,
+                40743.0,
+                893.0,
+                639209.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m0_3",
+            "Label": "global.anthropic.claude-haiku-4-5-20251001-v1:0|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m1_0",
+            "Label": "global.anthropic.claude-haiku-5-5|Invocations",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m1_1",
+            "Label": "global.anthropic.claude-haiku-5-5|InputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m1_2",
+            "Label": "global.anthropic.claude-haiku-5-5|OutputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m1_3",
+            "Label": "global.anthropic.claude-haiku-5-5|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m2_0",
+            "Label": "global.anthropic.claude-sonnet-4-6|Invocations",
+            "Timestamps": [
+                "2026-10-07T07:00:00+07:00",
+                "2026-09-13T07:00:00+07:00",
+                "2026-09-02T07:00:00+07:00",
+                "2026-09-01T07:00:00+07:00",
+                "2026-08-30T07:00:00+07:00",
+                "2026-08-29T07:00:00+07:00",
+                "2026-08-27T07:00:00+07:00",
+                "2026-08-26T07:00:00+07:00",
+                "2026-08-24T07:00:00+07:00",
+                "2026-08-23T07:00:00+07:00",
+                "2026-08-22T07:00:00+07:00",
+                "2026-08-21T07:00:00+07:00",
+                "2026-08-17T07:00:00+07:00",
+                "2026-08-13T07:00:00+07:00",
+                "2026-08-12T07:00:00+07:00",
+                "2026-08-09T07:00:00+07:00",
+                "2026-08-07T07:00:00+07:00",
+                "2026-08-06T07:00:00+07:00",
+                "2026-08-01T07:00:00+07:00"
+            ],
+            "Values": [
+                16.0,
+                1.0,
+                3.0,
+                10.0,
+                1.0,
+                3.0,
+                1.0,
+                1.0,
+                2.0,
+                2.0,
+                7.0,
+                2.0,
+                1.0,
+                58.0,
+                20.0,
+                299.0,
+                38.0,
+                40.0,
+                365.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m2_1",
+            "Label": "global.anthropic.claude-sonnet-4-6|InputTokenCount",
+            "Timestamps": [
+                "2026-10-07T07:00:00+07:00",
+                "2026-09-13T07:00:00+07:00",
+                "2026-09-02T07:00:00+07:00",
+                "2026-09-01T07:00:00+07:00",
+                "2026-08-30T07:00:00+07:00",
+                "2026-08-29T07:00:00+07:00",
+                "2026-08-27T07:00:00+07:00",
+                "2026-08-26T07:00:00+07:00",
+                "2026-08-24T07:00:00+07:00",
+                "2026-08-23T07:00:00+07:00",
+                "2026-08-22T07:00:00+07:00",
+                "2026-08-21T07:00:00+07:00",
+                "2026-08-17T07:00:00+07:00",
+                "2026-08-13T07:00:00+07:00",
+                "2026-08-12T07:00:00+07:00",
+                "2026-08-09T07:00:00+07:00",
+                "2026-08-07T07:00:00+07:00",
+                "2026-08-06T07:00:00+07:00",
+                "2026-08-01T07:00:00+07:00"
+            ],
+            "Values": [
+                5044.0,
+                9.0,
+                30.0,
+                6870.0,
+                4478.0,
+                13434.0,
+                665.0,
+                2601.0,
+                5638.0,
+                3086.0,
+                13700.0,
+                2214.0,
+                749.0,
+                180879.0,
+                37957.0,
+                744224.0,
+                54122.0,
+                59103.0,
+                966144.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m2_2",
+            "Label": "global.anthropic.claude-sonnet-4-6|OutputTokenCount",
+            "Timestamps": [
+                "2026-10-07T07:00:00+07:00",
+                "2026-09-13T07:00:00+07:00",
+                "2026-09-02T07:00:00+07:00",
+                "2026-09-01T07:00:00+07:00",
+                "2026-08-30T07:00:00+07:00",
+                "2026-08-29T07:00:00+07:00",
+                "2026-08-27T07:00:00+07:00",
+                "2026-08-26T07:00:00+07:00",
+                "2026-08-24T07:00:00+07:00",
+                "2026-08-23T07:00:00+07:00",
+                "2026-08-22T07:00:00+07:00",
+                "2026-08-21T07:00:00+07:00",
+                "2026-08-17T07:00:00+07:00",
+                "2026-08-13T07:00:00+07:00",
+                "2026-08-12T07:00:00+07:00",
+                "2026-08-09T07:00:00+07:00",
+                "2026-08-07T07:00:00+07:00",
+                "2026-08-06T07:00:00+07:00",
+                "2026-08-01T07:00:00+07:00"
+            ],
+            "Values": [
+                4905.0,
+                4.0,
+                15.0,
+                2089.0,
+                3826.0,
+                11917.0,
+                339.0,
+                2820.0,
+                4999.0,
+                2222.0,
+                10305.0,
+                1965.0,
+                580.0,
+                98767.0,
+                27760.0,
+                557548.0,
+                8268.0,
+                11618.0,
+                695239.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m2_3",
+            "Label": "global.anthropic.claude-sonnet-4-6|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m3_0",
+            "Label": "global.anthropic.claude-sonnet-5|Invocations",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m3_1",
+            "Label": "global.anthropic.claude-sonnet-5|InputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m3_2",
+            "Label": "global.anthropic.claude-sonnet-5|OutputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m3_3",
+            "Label": "global.anthropic.claude-sonnet-5|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m4_0",
+            "Label": "global.anthropic.claude-sonnet-5-5|Invocations",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m4_1",
+            "Label": "global.anthropic.claude-sonnet-5-5|InputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m4_2",
+            "Label": "global.anthropic.claude-sonnet-5-5|OutputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m4_3",
+            "Label": "global.anthropic.claude-sonnet-5-5|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m5_0",
+            "Label": "global.cohere.embed-v4:0|Invocations",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m5_1",
+            "Label": "global.cohere.embed-v4:0|InputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m5_2",
+            "Label": "global.cohere.embed-v4:0|OutputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m5_3",
+            "Label": "global.cohere.embed-v4:0|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m6_0",
+            "Label": "global.openai.gpt-5.6-luna|Invocations",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m6_1",
+            "Label": "global.openai.gpt-5.6-luna|InputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m6_2",
+            "Label": "global.openai.gpt-5.6-luna|OutputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m6_3",
+            "Label": "global.openai.gpt-5.6-luna|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m7_0",
+            "Label": "global.openai.gpt-6-luna|Invocations",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m7_1",
+            "Label": "global.openai.gpt-6-luna|InputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m7_2",
+            "Label": "global.openai.gpt-6-luna|OutputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m7_3",
+            "Label": "global.openai.gpt-6-luna|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m8_0",
+            "Label": "us.anthropic.claude-sonnet-4-6|Invocations",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                1.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m8_1",
+            "Label": "us.anthropic.claude-sonnet-4-6|InputTokenCount",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                9.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m8_2",
+            "Label": "us.anthropic.claude-sonnet-4-6|OutputTokenCount",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                4.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m8_3",
+            "Label": "us.anthropic.claude-sonnet-4-6|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m9_0",
+            "Label": "us.anthropic.claude-haiku-4-5-20251001-v1:0|Invocations",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                1.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m9_1",
+            "Label": "us.anthropic.claude-haiku-4-5-20251001-v1:0|InputTokenCount",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                9.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m9_2",
+            "Label": "us.anthropic.claude-haiku-4-5-20251001-v1:0|OutputTokenCount",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                4.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m9_3",
+            "Label": "us.anthropic.claude-haiku-4-5-20251001-v1:0|InvocationClientErrors",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m10_0",
+            "Label": "anthropic.claude-sonnet-4-6|Invocations",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                1.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m10_1",
+            "Label": "anthropic.claude-sonnet-4-6|InputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m10_2",
+            "Label": "anthropic.claude-sonnet-4-6|OutputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m10_3",
+            "Label": "anthropic.claude-sonnet-4-6|InvocationClientErrors",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                1.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m11_0",
+            "Label": "anthropic.claude-haiku-4-5-20251001-v1:0|Invocations",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                1.0
+            ],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m11_1",
+            "Label": "anthropic.claude-haiku-4-5-20251001-v1:0|InputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m11_2",
+            "Label": "anthropic.claude-haiku-4-5-20251001-v1:0|OutputTokenCount",
+            "Timestamps": [],
+            "Values": [],
+            "StatusCode": "Complete"
+        },
+        {
+            "Id": "m11_3",
+            "Label": "anthropic.claude-haiku-4-5-20251001-v1:0|InvocationClientErrors",
+            "Timestamps": [
+                "2026-09-13T07:00:00+07:00"
+            ],
+            "Values": [
+                1.0
+            ],
+            "StatusCode": "Complete"
+        }
+    ],
+    "Messages": []
+}
