@@ -166,15 +166,17 @@ R3. Move the open connections. New connections follow within the 60 s TTL; poole
    Rollback: R2 rollback, then the same redeploys.
 
 R4. Make it permanent before the next CI apply. Never leave the override only on a laptop.
-   - **Default: keep the override and record it in the Infra repo by PR** (`db_dns_target_override` = the R1 address
-     in the account's tfvars), so a CI apply keeps the name on the restored instance.
-   - Only after a drill has tested it: bring the restored instance under Terraform. Renaming alone does not work: the
-     state of `module.rds.aws_db_instance.main` is keyed by the instance's resource id, so Terraform keeps tracking the
-     OLD instance and the next plan tries to rename it back (and the CI plan guard refuses `aws_db_instance` changes
-     anyway). Do it in a local MFA session: rename the old instance away and the restored one to `aa-cis-dev-db` (AWS
-     CLI), `terraform state rm module.rds.aws_db_instance.main`, then
-     `terraform import module.rds.aws_db_instance.main aa-cis-dev-db`; the next plan must show no replace of the instance
-     before a PR removes the override. (An import in CI would need `allow_guarded`.)
+
+   **Default: keep the override and record it in the Infra repo by PR** (`db_dns_target_override` = the R1 address
+   in `accounts/aa365/terraform.tfvars`), so a CI apply keeps the name on the restored instance.
+
+   Only after a drill has tested it: bring the restored instance under Terraform. Renaming alone does not work: the
+   state of `module.rds.aws_db_instance.main` is keyed by the instance's resource id, so Terraform keeps tracking the
+   OLD instance and the next plan tries to rename it back (and the CI plan guard refuses `aws_db_instance` changes
+   anyway). Do it in a local MFA session: rename the old instance away and the restored one to `aa-cis-dev-db` (AWS
+   CLI), `terraform state rm module.rds.aws_db_instance.main`, then
+   `terraform import module.rds.aws_db_instance.main aa-cis-dev-db`; the next plan must show no replace of the instance
+   before a PR removes the override. (An import in CI would need `allow_guarded`.)
 
    The DSN secrets do not change: after the AA-829 switch they name `db.dev.internal`. DB Migrate `set-password` keeps
    working because the master secret and every role secret name the same host.
