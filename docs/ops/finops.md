@@ -113,6 +113,12 @@ follows the how-to.
 
 Denominators come from read-only counts in the monthly review; Dev numbers are for trend only.
 
+Per-model LLM unit costs (USD per 1,000 calls, USD per 1M tokens, tokens per call) need no DB: join the Cost
+Explorer service line of each model with the CloudWatch `AWS/Bedrock` metrics `Invocations`, `InputTokenCount`,
+`OutputTokenCount` and `InvocationClientErrors` (daily sums, us-west-1, acc3 and acc1). The 2026-10-23 report keeps
+the pull (`scripts/fetch_cw_bedrock.sh`, about 0.001 USD) and the join (`scripts/bedrock_units.py`). Price per token
+is stable per model, so a month-over-month LLM jump is explained by calls and tokens per call; check both.
+
 ## When an alert fires
 
 1. Open the anomaly link in the e-mail (Cost Anomaly Detection shows the service, usage type and Region).

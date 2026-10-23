@@ -20,6 +20,10 @@ related: [FIN-01, FIN-02, OPS-08, AA-896, AA-838, AA-884, AA-624]
 - Thêm (chỉ đọc): `aws budgets describe-budgets`, `aws ce get-anomaly-*`, `ecs describe-services` /
   `describe-task-definition`, `rds describe-db-instances`, `secretsmanager list-secrets` (chỉ đếm), log CI của
   Terraform Apply.
+- Bổ sung cùng ngày (lane tiếp theo): số lượt gọi và token theo model từ CloudWatch `AWS/Bedrock` của acc3 và acc1
+  (`get-metric-data`, 48 metric × 2 account ≈ 0,001 USD), lệnh trong
+  [`scripts/fetch_cw_bedrock.sh`](scripts/fetch_cw_bedrock.sh), bảng tính bằng
+  [`scripts/bedrock_units.py`](scripts/bedrock_units.py) (chỉ đọc file local). Dùng cho mục 5 và mục 6.
 - **Chi phí của chính báo cáo này:** 18 request Cost Explorer × 0,01 USD = **khoảng 0,18 USD** (acc2 6, acc3 8, acc1 4;
   gồm cả các lệnh đọc anomaly monitor/subscription, tính phòng xa như request có phí).
 - **Tháng 10 chưa chốt.** Số tháng 10 là 01–22/10 + dự báo của AWS cho cả tháng. Bước **làm lại sau 01/11** ở
@@ -129,6 +133,12 @@ Giải thích từng bước nhảy (theo usage type trong `data/acc2-usage-type
   - 09–10/10: regenerate tour rớt + wave India ×2 + A/B (10/10: 22,84 USD).
   - Haiku 4.5 chiếm 62 % tháng 10 (judge/review/atomize S1 theo wave); GPT-5.6 Luna mới (place card AA-772,
     judge/brand audit AA-714), GPT-6 Luna (atomize, S224).
+  - **Haiku 4.5 tăng 4,7 lần (18,27 → 86,45 USD) = số lượt gọi × 2,2 và giá mỗi lượt × 2,2** (CloudWatch, mục 6):
+    9.688 → 21.104 lượt (01–22/10); token vào mỗi lượt 716 → 1.729 (prompt dài hơn: chấm/atomize đọc cả bài S1),
+    token ra 234 → 480. Giá theo token gần như không đổi (1,99 → 1,85 USD / 1M token). Nghĩa là phần tăng là do
+    **khối lượng và độ dài prompt**, không phải đổi model hay giá.
+  - Sonnet 4.6 gần như đứng yên về số lượt (1.644 → 1.638) và giá mỗi lượt (~20–23 USD / 1.000 lượt); chỉ chiếm 4 %
+    số lượt nhưng 27 % tiền LLM tháng 10.
   - 12–20/10: pilot tenant T-series (T2/T9 Sonnet 4.6), golden set baseline 20/10. Từ 17/10 nhịp thấp: 0–8 USD/ngày.
 - **acc1:** tháng 8 = 45,15 USD, gồm Sonnet 4.6 27,84 (trước khi acc3 thành primary), **Secrets Manager 8,09 + RDS
   0,41 là tài nguyên lạc** do `default` profile từng trỏ acc1 (đã dọn ở AA-517, 02/09). Từ tháng 9 chỉ còn fallback:
@@ -138,17 +148,57 @@ Giải thích từng bước nhảy (theo usage type trong `data/acc2-usage-type
 
 ## 6. Đơn giá (unit cost)
 
-**Chưa tính được trong lane này.** Mẫu số (số tour publish/republish trong tháng, content piece) và LLM theo stage
-cần đọc DB qua ECS exec, mà hook chặn ECS exec với subagent. Script chỉ-đọc đã sẵn:
-[`scripts/aa896_units.py`](scripts/aa896_units.py) (LLM theo app/account/provider/stage/model/ngày, DataForSEO,
-geocoder, Jev `decision_log`, `published_tours` theo `published_at`, `acp_shared.content_piece` theo kênh). Bảng
-cần điền sau khi chạy:
+### 6a. Theo model — tính được ngay (CloudWatch × Cost Explorer)
+
+Tử số: tiền Cost Explorer của dòng dịch vụ model (Unblended). Mẫu số: `Invocations` (lượt gọi thành công),
+`InputTokenCount`, `OutputTokenCount` của CloudWatch `AWS/Bedrock` (us-west-1), cộng theo ngày UTC; tháng 10 = 01–22.
+Đối chiếu: số token × giá niêm yết khớp Cost Explorer trong ±2 % (Haiku 4.5 tháng 10: 36,48M vào × 1 + 10,13M ra × 5
+= 87,1 USD so với 86,45; Sonnet 4.6: 4,12M × 3 + 1,71M × 15 = 38,0 so với 37,41).
+
+| Account | Model | Tháng | Lượt OK | Lỗi phía client | Token vào / lượt | Token ra / lượt | USD (CE) | USD / 1.000 lượt | USD / 1M token |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|
+| acc3 | Claude Haiku 4.5 | 8 | 397 | 2 | 1.881 | 880 | 2,49 | 6,26 | 2,27 |
+| acc3 | Claude Haiku 4.5 | 9 | 9.688 | 0 | 716 | 234 | 18,27 | 1,89 | 1,99 |
+| acc3 | Claude Haiku 4.5 | 10 (01–22) | 21.104 | 0 | 1.729 | 480 | 86,45 | **4,10** | 1,85 |
+| acc3 | Claude Sonnet 4.6 | 8 | 984 | 0 | 2.501 | 800 | 18,23 | 18,53 | 5,61 |
+| acc3 | Claude Sonnet 4.6 | 9 | 1.644 | 0 | 1.487 | 1.043 | 33,05 | 20,10 | 7,95 |
+| acc3 | Claude Sonnet 4.6 | 10 (01–22) | 1.638 | 0 | 2.512 | 1.044 | 37,41 | **22,84** | 6,42 |
+| acc3 | OpenAI GPT-5.6 Luna | 10 (01–22) | 11.827 | 0 | 83 | 560 | 10,73 | **0,91** | 1,41 |
+| acc3 | OpenAI GPT-6 Luna | 10 (01–22) | 7.090 | 0 | 69 | 666 | 3,40 | **0,48** | 0,65 |
+| acc3 | Claude Sonnet 5 (thử) | 10 (01–22) | 102 | **90** | 551 | 308 | 0,43 | 4,18 | 4,87 |
+| acc3 | Cohere Embed v4 (thử) | 10 (01–22) | 525 | **56** | 13 | 0 | ~0 | — | — |
+| acc1 | Claude Haiku 4.5 | 8 | 1.024 | 0 | 1.270 | 665 | 4,71 | 4,60 | 2,38 |
+| acc1 | Claude Sonnet 4.6 | 8 | 840 | 0 | 2.487 | 1.712 | 27,84 | 33,14 | 7,89 |
+| acc1 | Claude Sonnet 4.6 | 9 / 10 | 16 / 16 | 1 / 0 | — | — | 0,05 / 0,10 | — | — |
+
+Đọc nhanh:
+
+- Một lượt Sonnet 4.6 đắt **~5,6 lần** một lượt Haiku 4.5 tháng 10 và **~25–47 lần** một lượt GPT-5.6/6 Luna.
+  Các lượt GPT Luna rất ngắn ở đầu vào (69–83 token) và dài ở đầu ra (560–666): đúng kiểu sinh place card / atom.
+- Giá **mỗi token** của từng model ổn định giữa các tháng; giá **mỗi lượt** thay đổi theo độ dài prompt. Muốn hạ tiền
+  LLM thì nhắm vào số lượt (chạy lại theo tập con, DM-10.6) và độ dài prompt (cache, cắt ngữ cảnh), không phải đổi giá.
+- acc1 tháng 8: Sonnet 4.6 mỗi lượt đắt hơn acc3 (33 so với 19 USD / 1.000 lượt) vì đầu ra dài gấp đôi (1.712 token)
+  — khi đó acc1 còn chạy writer S1 trước khi acc3 thành primary.
+- Haiku 5.5, Sonnet 5.5 (thử, < 30 lượt) không có dòng tiền riêng đáng kể nên bỏ khỏi bảng (số đầy đủ:
+  `python3 -I scripts/bedrock_units.py data`).
+
+### 6b. Theo sản phẩm — ước lượng, chốt sau 01/11
+
+- **USD LLM / tour trong catalog, tháng 10 (ước lượng trần):** 138,43 USD LLM acc3 (01–22/10, trừ phí Cost Explorer)
+  ÷ ~892 tour trong `gold_aa_internal.published_tours` (`reltuples`, dump 22/10) ≈ **0,16 USD / tour**; khoảng
+  **24 lượt Haiku + 2 lượt Sonnet + 21 lượt GPT Luna cho mỗi tour**. Đây là trần vì tháng 10 = chạy lại cả 14 nước
+  cộng pilot tenant T-series và A/B; mẫu số là cả catalog chứ chưa phải số tour publish/republish trong tháng.
+- Thêm phần hạ tầng `cis` acc2 (≈ 58 USD/tháng, nhịp từ 16/10) thì **≈ 0,22 USD / tour / tháng** khi chạy lại toàn bộ.
+- Các ô dưới đây vẫn cần DB (theo stage, theo tháng). Mẫu số và LLM theo stage đọc qua ECS exec, mà hook chặn ECS exec
+  với subagent; script chỉ-đọc đã sẵn: [`scripts/aa896_units.py`](scripts/aa896_units.py) (LLM theo
+  app/account/provider/stage/model/ngày, DataForSEO, geocoder, Jev `decision_log`, `published_tours` theo
+  `published_at`, `acp_shared.content_piece` theo kênh).
 
 | Đơn vị | Tử số | Mẫu số | T9 | T10 |
 |---|---|---|---:|---:|
 | USD / tour publish | cis acc2 (≈ 58 USD/tháng từ 16/10) + LLM stage `s1_*`/`a*` | `published_tours` có `published_at` trong tháng | | |
 | USD LLM / tour publish | LLM stage `s1_*`, `a1_*`–`a3_*` | như trên | | |
-| USD / content piece | LLM stage `t*_` | `acp_shared.content_piece` trong tháng | | |
+| USD / content piece | LLM stage `t*_` | `acp_shared.content_piece` trong tháng (~293 bản ghi tổng, dump 22/10) | | |
 | USD / trip plan | tripplanner (≈ 1 USD/tháng) + `tp_*` | không đọc được bằng `cis_app` (schema `tripplanner`) | | |
 | USD / booking | booking (≈ 10 USD/tháng) | 0 booking thật ở Dev | — | — |
 
@@ -177,15 +227,20 @@ cần điền sau khi chạy:
 | F6 | Giá trị tag `identity`, `platform` nằm ngoài danh sách DM-10.1 (cis, booking, tripplanner, crm, shared) | Gộp `identity` → `shared` hoặc thêm vào DM-10.1; tiền chỉ vài cent | Đề xuất |
 | F7 | Cost Anomaly Detection acc2 **đã live** từ 19/10 (Terraform Apply run 39199328963: import monitor + tạo subscription IMMEDIATE ≥ 5 USD → topic alerts). Chưa có alert nào được ghi nhận | Không cần làm thêm | Xong |
 | F8 | acc1 có 2 budget tạo tay (180 và 150 USD), chi < 1 USD/tháng | Không cần làm thêm | Xong |
+| F9 | Model đang thử trên acc3 có tỉ lệ lỗi phía client cao trong tháng 10: Sonnet 5 90/192 lượt (47 %), Sonnet 5.5 6/16, Haiku 5.5 7/26, Cohere Embed v4 56/581 (10 %). Tiền gần 0, nhưng là dấu hiệu cấu hình/quyền model hoặc tham số request sai | Khi bật một model mới qua `shared.llm_model_catalog`, kiểm `InvocationClientErrors` trên CloudWatch cùng lúc với `llm_call_log`; đưa vào bước thử ~3 lượt (DM-10.6) | Đề xuất |
+| F10 | Sonnet 4.6 = 4 % số lượt nhưng 27 % tiền LLM tháng 10 (22,84 USD / 1.000 lượt, gấp ~5,6 lần Haiku) | Khi có `llm_call_log` theo stage (mục 9): liệt kê stage nào dùng Sonnet; chỉ đổi model sau A/B chất lượng + duyệt (S245 systematic quality) | Đề xuất |
 
 ## 9. Làm lại sau 01/11 (bắt buộc)
 
 Tháng 10 ở trên là **01–22/10 + dự báo**. Phiên đầu tiên từ **03/11** (Cost Explorer còn sửa số ~48 giờ sau cuối tháng):
 
 1. `bash scripts/fetch_ce.sh 2026-11-01 data-final` (từ thư mục này; 11 request ≈ 0,11 USD; MFA cho `aa365-admin`).
-2. Orchestrator chạy `scripts/aa896_units.py` qua ECS exec S3-mediated (sửa ngày cuối `2026-10-23` → `2026-11-01`),
+2. `bash scripts/fetch_cw_bedrock.sh 2026-11-01 data-final` rồi `python3 -I scripts/bedrock_units.py data-final`
+   (≈ 0,001 USD) để thay bảng 6a; thêm model ID mới vào script nếu `list-metrics` thấy model mới.
+3. Orchestrator chạy `scripts/aa896_units.py` qua ECS exec S3-mediated (sửa ngày cuối `2026-10-23` → `2026-11-01`),
    tải `scripts/aa896_result.json` từ bucket bronze, xoá 2 object `scripts/aa896_*` trên S3.
-3. Thay số tháng 10 ở mục 2–5 bằng số chốt, điền mục 6, tính lại F3 bằng nhịp cả tháng 10 theo `App`.
-4. Đối chiếu tổng LLM của `llm_call_log` với Cost Explorer acc3 (S195 từng thấy log thiếu ~20 % so với bill).
-5. Viết báo cáo tháng 10 chuẩn theo [`docs/ops/cost/README.md`](../../ops/cost/README.md) (C8 capacity + cost),
+4. Thay số tháng 10 ở mục 2–5 bằng số chốt, điền mục 6b, tính lại F3 bằng nhịp cả tháng 10 theo `App`.
+5. Đối chiếu tổng tiền và số lượt LLM của `llm_call_log` với Cost Explorer và CloudWatch acc3 (bảng 6a); S195 từng
+   thấy log thiếu ~20 % so với bill.
+6. Viết báo cáo tháng 10 chuẩn theo [`docs/ops/cost/README.md`](../../ops/cost/README.md) (C8 capacity + cost),
    chốt 5 dòng cho chị Thư ở mục 1, rồi đổi `status` của file này thành `superseded`.
