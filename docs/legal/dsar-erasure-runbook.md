@@ -226,8 +226,11 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
 
    The job refuses unless the DRY RUN is a succeeded one for the same hash, at most 24 hours old, and the recount in
    its transaction gives the same fingerprint. It deletes / redacts exactly the approved rows, writes one
-   `acp_shared.audit_log` row (`dsar.cis_erased`, counts only) and replaces the hash in both job rows with
-   `stripped-after-apply`. Expected: result `verified: true`. Abort: the job fails, nothing is committed.
+   `acp_shared.audit_log` row (`dsar.cis_erased`, counts only) and replaces the hash with `stripped-after-apply` in
+   every `data_erasure` job row that holds it (this apply, its DRY RUN and any earlier DRY RUN of the request).
+   Expected: result `verified: true`. Abort: the job fails, nothing is committed. A DRY RUN serves one apply only,
+   and a failed apply is never retried (the Jobs page retry answers 409): run a new DRY RUN, get it approved, and
+   start a new apply.
 5. **Cognito EXTERNAL user**, if one exists. No traveller sign-in is wired today, so none is expected before ADR 0006
    Phase 4; check anyway. The pool id comes from `aws cognito-idp list-user-pools --max-results 20 --profile aa365-admin --region us-west-1`.
    Cognito filters on the plain address, so type it at the prompt only: never in a script or file, and clear it from
@@ -243,7 +246,14 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    (`backend/app/retention/policy.py:9-15`); job archives hold job rows. Check `archive/booking/` for an
    `inbox_events` prefix before assuming there is nothing to erase.
 7. **Verify** from a new session: re-run the section 2 lookup with the same hash, the CIS DRY RUN (section 2 step 6)
-   and repeat the name check by hand.
+   with `"verify": true`, and repeat the name check by hand:
+
+   ```bash
+   curl -s -X POST https://api-cis.lumiguides.it.com/admin/job-runner/erasure/run -H "x-admin-secret: $A" -H "x-admin-role: admin" -H "content-type: application/json" -d '{"subject":"traveller","email_sha256":"<64-hex-characters>","verify":true}'
+   ```
+
+   The verification job replaces the hash in its own row with `stripped-after-verify` when it ends
+   (`result.hash_stripped: true`), so it leaves no copy behind.
    Expected: 0 rows in every tag and every CIS `delete` / `redact` row, the name found in no trip-case notes, and the
    Cognito user is gone.
 8. **Delete the pre-erasure snapshot** once step 7 passes, so no manual copy of the person's data remains.
@@ -255,12 +265,20 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    Expected: `describe-db-snapshots --db-snapshot-identifier dsar-<yyyymmdd>-pre` returns `DBSnapshotNotFound`. The
    automated backups (7 days on Dev, `backup_retention_period = 7` in AA-CIS-Infra `modules/rds/main.tf:143`) still hold
    the erased rows and cannot be edited; they age out within 7 days of the erasure. The reply to the person can say so.
+
+   The hash itself: after steps 4b and 7 no `data_erasure` job row holds it (apply and `verify` strip it), and a
+   traveller job that failed or was cancelled had it replaced at once (`stripped-on-failed` / `stripped-on-cancelled`),
+   so the AA-825 archive of failed jobs (`archive/job/`, 90 days) never carries it. Check:
+   `SELECT count(*) FROM shared.job WHERE kind = 'data_erasure' AND payload ->> 'email_sha256' = '<64-hex>'` in a
+   DB Migrate run-script (expected 0). Only a DRY RUN of a request that never reached an apply keeps it, until
+   `retention_job` deletes that succeeded row after 30 days (not archived).
 9. **Copies outside the database.**
    - **Staff mailbox:** each inquiry sent a `bk_notify_email` message with the traveller's name, e-mail and phone to
      the Booking staff inbox (AA-Booking `backend/app/notifications/staff_email.py:174-190`). Staff delete those
      messages, and the privacy request thread once it is closed, from that mailbox and its trash.
-   - **Sentry:** CIS events carry no default PII (`send_default_pii=False`), but search the CIS Sentry project for the
-     e-mail address (in the Sentry search box, not in a file) and delete any event that holds it. Booking and
+   - **Sentry:** CIS events carry no default PII (`send_default_pii=False`), and events of `data_erasure` jobs carry
+     no stack-frame locals (so no hash), but search the CIS Sentry project for the e-mail address (in the Sentry
+     search box, not in a file) and delete any event that holds it. Booking and
      TripPlanner have no Sentry.
    Expected: 0 hits in both. Abort: none; record what was found.
 10. **Record**: one `booking.audit_logs` row for the erasure (actor, action, entity, no personal data in `after`), a row
@@ -308,9 +326,12 @@ deleted.
    Expected: `status` `succeeded`; `result.tenant_state` `offboarded`; `result.blockers` empty; `result.unregistered`
    empty; `result.rows` lists rows per table and action (`delete`, `cascade`, `detach`, `merge`, `keep`,
    `null_first:*`); `result.s3` and `result.secrets` list what exists outside the DB (an `error` there means the
-   worker could not look: check by hand with the commands of step 8); `result.fingerprint` is 64 hex characters.
-   Abort: any blocker → resolve it first (wait for or cancel live jobs; a cross-tenant reference is a question for
-   Nghiệp), then run a new DRY RUN.
+   worker could not look: check by hand with the commands of step 8); `result.s3_refs[]` lists, per DB column the
+   apply deletes, the S3 keys outside the tenant's two prefixes (`outside_keys`): copy that list into the work item,
+   it is the only pointer to those objects once the rows are gone; `result.fingerprint` is 64 hex characters.
+   Abort: any blocker → resolve it first (wait for or cancel live jobs; a `cross_tenant` or `self_reference` row,
+   e.g. another tenant's T2 version or a child job pointing at the tenant's rows, is a question for Nghiệp;
+   `s3_refs_unlisted` = more than 200 keys outside the prefixes, list them by hand first), then run a new DRY RUN.
 4. **Approval.** Post the totals per action, the per-table rows and the fingerprint in the work item; Nghiệp approves
    that fingerprint (destructive-ops.md step 1). Abort: no approval, no erasure.
 5. **Snapshot** (destructive-ops.md step 2):
@@ -331,8 +352,10 @@ deleted.
 
    One transaction: the recount must give the approved fingerprint and no blocker; nullable FK columns that close a
    cycle are nulled first, then detach, merge, and deletes children-first; every statement must touch exactly the
-   approved rows; a recount must find 0; one `tenant.erased` audit row (counts, approval, snapshot id). Expected:
-   result `verified: true`. Abort: the job fails with a reason, nothing is committed.
+   approved rows; a recount must find 0; one `tenant.erased` audit row (counts, approval, snapshot id). Before the
+   recount it locks the tenant row and checks again that the tenant is offboarded and past the retention window, so
+   a restore in between stops it. Expected: result `verified: true`. Abort: the job fails with a reason, nothing is
+   committed; the DRY RUN is used up and the apply is never retried: start again at step 3.
 8. **Outside the database** (only after step 7 succeeded):
 
    ```bash
@@ -342,9 +365,20 @@ deleted.
    aws secretsmanager delete-secret --secret-id acp/social/<tenant uuid> --recovery-window-in-days 7 --profile aa365-admin --region us-west-1 # WRITE
    ```
 
-   Run only the lines whose object the DRY RUN listed. Expected: `aws s3 ls` of each prefix prints nothing;
-   `describe-secret` shows `DeletedDate`. Then the AA-Partner CRM erasure for the tenant (DM-6.8, its own runbook),
-   and Sentry events tagged with the tenant id.
+   Run only the lines whose object the DRY RUN listed. Then remove each key of the DRY RUN's
+   `s3_refs[].outside_keys` (the bucket is the one in the key when it starts with `s3://`, else the bronze bucket):
+
+   ```bash
+   aws s3 rm s3://<bucket>/<key> --profile aa365-admin --region us-west-1 # WRITE
+   ```
+
+   Expected: `aws s3 ls` of each prefix and key prints nothing; `describe-secret` shows `DeletedDate`.
+   **Retention archives (AA-825):** `s3://<bronze>/archive/{llm_call_log,tenant_api_usage,job,decision_log}/` hold
+   gzipped JSONL rows archived before the erasure, some with the tenant id (cost rows, API usage, failed job
+   payloads). They hold no personal data; Nghiệp decides per erasure: keep them until their lifecycle expiry
+   (record that decision in the work item), or scan the objects of the tenant's active months for the tenant id
+   (S3 Select) and rewrite or remove the matching objects. Then the AA-Partner CRM erasure for the tenant (DM-6.8,
+   its own runbook), and Sentry events tagged with the tenant id.
 9. **Verify** with a new DRY RUN (step 3). Expected: every `delete`, `cascade`, `detach`, `merge` row 0 and
    `tenant_state` null; only the `keep` audit rows remain.
 10. **Clean up:** delete the step 5 snapshot; set `ERASURE_APPLY_ENABLED` back off (Terraform); add a row to the
