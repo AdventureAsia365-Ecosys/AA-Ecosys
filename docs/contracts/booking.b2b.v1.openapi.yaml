@@ -101,9 +101,11 @@ paths:
       operationId: createHold
       summary: Hold the lines of a quote; one active hold set per (tenant, proposal_ref, proposal_version)
       description: >-
-        Re-hold limit (Fix A3, AA-974): every hold of a proposal_ref after its first one is a re-hold, whatever the
-        version; at most 3 re-holds per proposal_ref per UTC day (Booking setting), then 429 rehold_limit with
-        retry_after_s until 00:00 UTC. A replay of the same Idempotency-Key, or the same quote for a version that
+        Re-hold limit (Fix A3, AA-974): at most 3 re-holds per UTC day (Booking setting), then 429 rehold_limit with
+        retry_after_s until 00:00 UTC, counted per proposal_ref (every hold of a proposal_ref after its first one,
+        whatever the version) and per departure (a hold of a departure after a hold of it the agency placed the same
+        day and released or let expire, whatever the proposal_ref). Holds still active or confirmed never count
+        toward the departure limit. A replay of the same Idempotency-Key, or the same quote for a version that
         already holds, is answered before the limit and never counts.
       security:
         - m2m: [booking.b2b/hold]
@@ -225,7 +227,8 @@ paths:
       summary: Cancel a booking, or preview the fee with dry_run=true (C12)
       description: >-
         booking_id is Booking.booking_id. The fee comes from the booking's cancellation policy (ADR 0005a decision 4),
-        the one in force when the hold was confirmed: tiers by days before departure (the UTC day of the cancel to
+        the one in force when the hold was confirmed (a policy approved after that never applies, whatever its start
+        date): tiers by days before departure (the UTC day of the cancel to
         the start date), fee = the quoted total x fee_pct, in the quote currency (half-up to the cent, whole VND),
         refundable = total - fee; a booking on a departure AA cancelled costs no fee (fee_pct 0). dry_run=true returns
         the same numbers and changes nothing (cancelled_at null). A
