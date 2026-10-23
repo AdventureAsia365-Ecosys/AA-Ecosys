@@ -30,15 +30,18 @@ by three KMS keys (design v3 §4.1, AA-932):
 - `alias/crm-dev/ingest` - raw inbound mail (kept at most 1 day) and the audit export;
 - `alias/crm-dev/seal` - the platform seal on signed agreements (asymmetric, signing only).
 
-Only the CRM task role `aa-crm-dev-ecs-task-role` may use them; every other principal is denied by the key policy
-(the CRM break-glass role excepted). The agency is the data controller and AA the processor (ADR 0008a): a key policy
+Only the CRM task role `aa-crm-dev-ecs-task-role` may use them; every other principal is denied by the key policy.
+One narrow exception: the CRM break-glass role `aa-crm-dev-breakglass` (CRM-13b; not created yet) may `Decrypt` with
+the **data** key only, and only the envelope keys whose context `tenant_id` equals its session tag `tenant_id`, so one
+agency per session (statement `CrmBreakGlassOneAgency`, design v3 §5.5 L3). It cannot encrypt, and has no use of the
+ingest or seal key. Every break-glass call fires `aa-crm-dev-kms-foreign-use`. The agency is the data controller and AA the processor (ADR 0008a): a key policy
 changed without a plan, or a decrypt by an AA admin, is a processor incident the agency must hear about.
 
 ## The two alarms (AA-CIS-Infra `accounts/aa365/crm_data.tf`)
 
 | Rule | Fires on | Expected sources |
 |---|---|---|
-| `aa-crm-dev-kms-key-admin` | `PutKeyPolicy`, `CreateGrant`, `ScheduleKeyDeletion`, `DisableKey`, rotation off, alias move or delete, key material, `CancelKeyDeletion`, `EnableKey` on any of the three keys | a planned local MFA Terraform apply that changes a key policy (the CI apply role cannot) |
+| `aa-crm-dev-kms-key-admin` | `PutKeyPolicy`, `CreateGrant`, `ScheduleKeyDeletion`, `DisableKey`, rotation off, alias move or delete, key material, `CancelKeyDeletion`, `EnableKey`, `TagResource`, `UntagResource` on any of the three keys | a planned local MFA Terraform apply that changes a key policy (the CI apply role cannot); a planned apply that changes the keys' tags (CI may tag; it may not remove `App`) |
 | `aa-crm-dev-kms-foreign-use` | a crypto call (`Decrypt`, `Encrypt`, `GenerateDataKey*`, `ReEncrypt`, `Sign`), allowed **or denied**, by any principal other than the task role or an AWS service | a ticketed CRM break-glass session; nothing else |
 
 E-mail: the alerts topic, text starting `[aa-crm]`, with the event, key, principal, source IP and error code.
@@ -77,6 +80,10 @@ E-mail: the alerts topic, text starting `[aa-crm]`, with the event, key, princip
 
    Then `aws kms enable-key` (a cancelled deletion leaves the key disabled) and re-apply Terraform locally with MFA.
    Rollback: schedule the deletion again only through a reviewed Terraform change.
+
+   If the tag `App = crm` was removed or changed (`UntagResource` / `TagResource` event): put it back with a local MFA
+   `terraform apply -target=aws_kms_key.<key>` from `main`. Until then the CI boundary deny on CRM keys
+   (`DenyCrmKeyUseAndPolicyEdits`, keyed on that tag) does not cover the key, so pause CI applies of `accounts/aa365`.
 
 5. If the policy was changed: restore it with a local MFA `terraform apply -target=aws_kms_key.<key>` from `main`
    (the reviewed policy). This fires `aa-crm-dev-kms-key-admin` once more: expected.
