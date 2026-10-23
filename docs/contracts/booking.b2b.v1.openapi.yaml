@@ -283,9 +283,10 @@ paths:
         exists if and only if the change it reports committed. Delivery is at least once: store next_cursor after
         processing a page and poll again with it (the CRM pulls every minute into crm.inbox_events); a replay from an
         older cursor returns the same events again (same event_id, same order), each once, so consumers dedupe on
-        event_id. Omit after to read from the start. Cursors are opaque; next_cursor is always present (the last
-        item's cursor, or after itself when nothing is new). A malformed cursor, or one that is ahead of the feed,
-        is 422 invalid. Departure events (guaranteed, cancelled, incident, incident_cleared) go to every agency with
+        event_id. Omit after to read from the start. Cursors are opaque (never parse or compare them; their format
+        may change within v1); next_cursor is always present (the last item's cursor, or after itself when nothing
+        is new). A malformed cursor, or one this feed never issued to the calling agency (ahead of its own feed), is
+        422 invalid. Departure events (guaranteed, cancelled, incident, incident_cleared) go to every agency with
         a live hold or a confirmed, not declined or cancelled line on the departure. Events carry ids and codes
         only, never personal data or free text. departure.time_change has no producer yet (departures carry no
         start time); new_start_time is null until it has.
