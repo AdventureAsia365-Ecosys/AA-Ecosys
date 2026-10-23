@@ -550,7 +550,7 @@
   "$defs": {
     "tour_retired": {
       "title": "catalog.v_tour_retired row",
-      "description": "The tombstone of one catalog key (CIS 274). Derived from the served state of CIS (gold_aa_internal.v_tour_liveness), so it never disagrees with catalog.v_tour: a retired / paused key is never in v_tour; a restored key is.",
+      "description": "The tombstone of one catalog key (CIS 274). Derived from the served state of CIS (gold_aa_internal.v_tour_liveness), so it never disagrees with catalog.v_tour: a retired / paused key is never in v_tour; a restored key is. A restored row means the key was retired or paused (not paused / superseded_pending) and is served again: its latest lifecycle event is restored and the newest event before that which is not superseded is retired or paused. A supersede never gives a restored row (root ADR 0015 Q2), even when the outbox carries a restored event after it (the CIS service closes every supersede with one). A restored row stays until the key's next lifecycle event; process it once per (source_id, changed_at).",
       "type": "object",
       "required": [
         "source_system",
@@ -580,7 +580,7 @@
             "paused",
             "restored"
           ],
-          "description": "retired: AA no longer serves the tour (410, withdrawn). paused: hidden for now (404, keep the URL). restored: served again after a change (undo)."
+          "description": "retired: AA no longer serves the tour (410, withdrawn). paused: hidden for now (404, keep the URL). restored: served again after being retired or paused (undo what was done for retired / paused); never for a supersede."
         },
         "reason": {
           "enum": [
@@ -615,7 +615,7 @@
     },
     "tour_lifecycle_event": {
       "title": "catalog.v_tour_lifecycle_outbox row",
-      "description": "One served-state change of a catalog key (CIS 272 gold_aa_internal.tour_lifecycle_event, append-only; written only by the CIS tour lifecycle service in the transaction of the change).",
+      "description": "One served-state change of a catalog key (CIS 272 gold_aa_internal.tour_lifecycle_event, append-only; written only by the CIS tour lifecycle service in the transaction of the change). A restored event follows every superseded event once the key is served again, also when the key stayed served throughout (supersede onto a version whose Master is live) or only waited for the new Master (paused / superseded_pending, which writes no paused event): treat a restored for a key you hold no retired / paused record of as a no-op, or read catalog.v_tour_retired, which lists only real restores.",
       "type": "object",
       "required": [
         "event_id",
