@@ -1,6 +1,6 @@
 ---
 name: aa-cis-schema
-description: Làm việc với database AA-CIS (PostgreSQL trên RDS acc2, dùng chung với TripPlanner và AA-Booking) — nguồn tên bảng/cột, pattern query qua ECS exec + S3, các bẫy hay gặp, và quy trình bắt buộc khi xoá bảng hoặc dữ liệu. Dùng khi query DB, viết script ECS exec, debug pipeline, viết migration, hoặc gặp tên bảng như raw_tours, published_tours, tour_atoms, review_queue, shared.job, content_piece, publish_log, itinerary_components.
+description: Làm việc với database AA-CIS (PostgreSQL trên RDS acc2, dùng chung với TripPlanner và AA-Booking) — nguồn tên bảng/cột, pattern query qua ECS exec + S3, các bẫy hay gặp, và quy trình bắt buộc khi xoá bảng hoặc dữ liệu. Dùng khi query DB, viết script ECS exec, debug pipeline, viết migration, hoặc gặp tên bảng như raw_tours, published_tours, tour_atoms, review_queue, shared.job, content_piece, publish_log, itinerary_components (đã xoá, tp-018).
 ---
 
 # aa-cis-schema
@@ -30,6 +30,8 @@ description: Làm việc với database AA-CIS (PostgreSQL trên RDS acc2, dùng
 - Atom **platform-wide** (AA-526) và đi theo trạng thái Master qua view `acp_contract.v_active_tour_atoms` (AA-713). Đọc qua view, không đọc thẳng bảng.
 - Job: mọi tác vụ nền nằm ở `shared.job` (AA-723). `shared.pipeline_jobs` chỉ còn dữ liệu lịch sử; không ghi mới vào đó. Trang Jobs đọc `shared.job`.
 - Quyền ghi nội dung: chỉ CIS ghi. App khác chỉ đọc (ADR 0002). Role `tripplanner` không ghi `shared.destinations`.
+- **Dữ liệu địa điểm/tour graph ở CIS `geo.*`, đọc qua view `catalog.v_*`** (ADR 0007). 8 bảng place cũ của TripPlanner (`tripplanner.itinerary_components`, `tour_day`, `tour_stop`, `tour_graph_build`, `tour_graph_edge`, `tour_graph_node`, `tour_leg`, `tour_junction`) **đã DROP bằng tp-018 ngày 23/10/2026** (AA-712 X4, S248): query nào còn nhắc chúng là sai → dùng `catalog.v_tour_component`, `v_tour_day`, `v_tour_stop`, `v_tour_leg`, `v_tour_junction`, `v_graph_node`, `v_graph_edge` (tên cột: `db-schema-reference.md`). Còn giữ `tripplanner.component_id_map` (tp-017, id cũ → id catalog). Số liệu DRY RUN, run apply, snapshot trước khi xoá: Dead Table Registry.
+- Role `tripplanner` không còn quyền đọc trực tiếp bảng CIS nào (CIS 270): chỉ qua `catalog.*`.
 
 ## Bẫy hay gặp
 

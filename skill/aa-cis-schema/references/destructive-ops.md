@@ -15,7 +15,7 @@
 ## Năm bước thực thi
 
 1. **DRY RUN** — đếm đúng số dòng/bảng sẽ bị ảnh hưởng, đưa Nghiệp xem.
-2. **Snapshot** — RDS snapshot hoặc export bảng, nếu có dữ liệu thật.
+2. **Snapshot** — RDS snapshot hoặc export bảng, nếu có dữ liệu thật. Migration có `-- migrate: destructive` thì DB Migrate `apply` tự chụp snapshot `db-migrate-<key>-<run id>-<attempt>` trước khi chạy, tag `aa:retain-until` = hôm nay + 30 ngày (Lambda expiry xoá sau đó). Snapshot đó là bản lưu trữ duy nhất → dời `aa:retain-until` ngay sau apply và ghi id + hạn vào Dead Table Registry (ví dụ tp-018: `db-migrate-tp-018-39905424239-1`, giữ tới 2027-04-21).
 3. **SAVEPOINT** — chạy trong transaction, verify số liệu khớp DRY RUN.
 4. **COMMIT** — chỉ khi Nghiệp đồng ý.
 5. **Verify độc lập** — kết nối mới, re-query `information_schema`/đếm dòng. Không tin lại transaction cũ.

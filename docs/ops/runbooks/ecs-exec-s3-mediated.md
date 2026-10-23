@@ -7,12 +7,12 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-cis-dev-db]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-23
 review_every_days: 90
 last_tested: 2026-10-17
 tested_where: dev-acc2
 tested_evidence: docs/audits/2026-10-17-S241-restore-drill/ (drill_check.py ran through this pattern)
-related: [OPS-05, OPS-05-db-migrate, skill/aa-cis-schema/references/ecs-exec.md, AA-852, AA-860, AA-892]
+related: [OPS-05, OPS-05-db-migrate, skill/aa-cis-schema/references/ecs-exec.md, AA-829, AA-852, AA-860, AA-892]
 ---
 
 # Query the database through ECS exec and S3
@@ -114,17 +114,21 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 ## Port-forward for a GUI client (optional)
 
 ECS exec also carries the `AWS-StartPortForwardingSessionToRemoteHost` document, so DBeaver can reach the DB through
-the running api task. Get the RDS endpoint with
-`aws rds describe-db-instances --db-instance-identifier aa-cis-dev-db --profile aa365-admin --region us-west-1 --query "DBInstances[0].Endpoint.Address" --output text`,
-then:
+the running api task. The remote host is the private DB name **`db.dev.internal`** (AA-829, S248): the task resolves
+it inside the VPC, and it follows a restore or replacement of the instance, so this page needs no endpoint lookup.
+The CNAME points at `aa-cis-dev-db`, and since the AA-829 DSN switch (23/10/2026) every DSN secret names the same
+host. Fallback, only if the name does not resolve (private zone missing): the RDS
+endpoint from
+`aws rds describe-db-instances --db-instance-identifier aa-cis-dev-db --profile aa365-admin --region us-west-1 --query "DBInstances[0].Endpoint.Address" --output text`.
 
 ```bash
 TASK_ID=$(echo $TASK_ARN | cut -d'/' -f3)
 RUNTIME_ID=$(aws ecs describe-tasks --cluster aa-cis-dev-cluster --tasks $TASK_ARN --profile aa365-admin --region us-west-1 --query 'tasks[0].containers[0].runtimeId' --output text)
-aws ssm start-session --target "ecs:aa-cis-dev-cluster_${TASK_ID}_${RUNTIME_ID}" --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters "{\"host\":[\"<rds-endpoint>\"],\"portNumber\":[\"5432\"],\"localPortNumber\":[\"15432\"]}" --profile aa365-admin --region us-west-1
+aws ssm start-session --target "ecs:aa-cis-dev-cluster_${TASK_ID}_${RUNTIME_ID}" --document-name AWS-StartPortForwardingSessionToRemoteHost --parameters "{\"host\":[\"db.dev.internal\"],\"portNumber\":[\"5432\"],\"localPortNumber\":[\"15432\"]}" --profile aa365-admin --region us-west-1
 ```
 
-DBeaver: `localhost:15432`, database `aa_cis_dev`, the login the task uses (see step 0). Never SSH; never a public
+DBeaver: `localhost:15432`, database `aa_cis_dev`, the login the task uses (see step 0), SSL mode `require` (the RDS
+certificate does not name `db.dev.internal` or `localhost`, so `verify-full` fails by design). Never SSH; never a public
 endpoint (DM-8.8). The older bastion note `docs/db-access-ssm-tunnel.md` is superseded by this section (cleanup:
 AA-889).
 

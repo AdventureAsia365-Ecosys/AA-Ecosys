@@ -21,17 +21,16 @@ One row per table that is frozen (kept, no writer) or dropped. Procedure for a d
 
 | Table | Owner | State | Since | Migration | Why | Evidence |
 |---|---|---|---|---|---|---|
-| `tripplanner.itinerary_components` | AA-TripPlanner-Web | frozen → drop pending approval | frozen 14/10/2026 (AA-712 slice 6a, TP #75) | tp-018 (AA-712 X4) | the pilot's extraction output; CIS builds `geo.tour_place` behind `catalog.v_tour_component` (ADR 0007); unread since the TripPlanner X4 reader removal | DRY RUN `aa712_frozen_tables_dry_run.py` (rows, last write, dependents): to fill before apply |
-| `tripplanner.tour_day` | AA-TripPlanner-Web | frozen → drop pending approval | 14/10/2026 | tp-018 | replaced by `geo.tour_day` / `catalog.v_tour_day` | same DRY RUN |
-| `tripplanner.tour_stop` | AA-TripPlanner-Web | frozen → drop pending approval | 14/10/2026 | tp-018 | replaced by `geo.tour_stop` / `catalog.v_tour_stop` | same DRY RUN |
-| `tripplanner.tour_graph_build` | AA-TripPlanner-Web | frozen → drop pending approval | 14/10/2026 | tp-018 | replaced by `geo.graph_build` | same DRY RUN |
-| `tripplanner.tour_graph_edge` | AA-TripPlanner-Web | frozen → drop pending approval | 14/10/2026 | tp-018 | replaced by `geo.graph_edge` / `catalog.v_graph_edge` | same DRY RUN |
-| `tripplanner.tour_graph_node` | AA-TripPlanner-Web | frozen → drop pending approval | 14/10/2026 | tp-018 | replaced by `geo.graph_node` / `catalog.v_graph_node` | same DRY RUN |
-| `tripplanner.tour_leg` | AA-TripPlanner-Web | frozen → drop pending approval | 14/10/2026 | tp-018 | replaced by `geo.tour_leg` / `catalog.v_tour_leg` | same DRY RUN |
-| `tripplanner.tour_junction` | AA-TripPlanner-Web | frozen → drop pending approval | 14/10/2026 | tp-018 | replaced by `geo.tour_junction` / `catalog.v_tour_junction` | same DRY RUN |
+| `tripplanner.itinerary_components` | AA-TripPlanner-Web | **dropped** 23/10/2026 | frozen 14/10/2026 (AA-712 slice 6a, TP #75); dropped 23/10/2026 | tp-018 (AA-712 X4) | the pilot's extraction output; CIS builds `geo.tour_place` behind `catalog.v_tour_component` (ADR 0007); unread since the TripPlanner X4 reader removal | DRY RUN: 3,905 rows, last write 2026-09-29 06:43 UTC (`created_at`), insert and update counters 0; dropped by DB Migrate apply run 39905424239; verify run 39905942615 `exists=f` |
+| `tripplanner.tour_day` | AA-TripPlanner-Web | **dropped** 23/10/2026 | frozen 14/10/2026; dropped 23/10/2026 | tp-018 (AA-712 X4) | replaced by `geo.tour_day` / `catalog.v_tour_day` | DRY RUN: 599 rows, last write 2026-09-29 05:56 UTC (`extracted_at`), insert and update counters 0; dropped by DB Migrate apply run 39905424239; verify run 39905942615 `exists=f` |
+| `tripplanner.tour_stop` | AA-TripPlanner-Web | **dropped** 23/10/2026 | frozen 14/10/2026; dropped 23/10/2026 | tp-018 (AA-712 X4) | replaced by `geo.tour_stop` / `catalog.v_tour_stop` | DRY RUN: 622 rows, last write unknown (no write-time column), insert and update counters 0; dropped by DB Migrate apply run 39905424239; verify run 39905942615 `exists=f` |
+| `tripplanner.tour_graph_build` | AA-TripPlanner-Web | **dropped** 23/10/2026 | frozen 14/10/2026; dropped 23/10/2026 | tp-018 (AA-712 X4) | replaced by `geo.graph_build` | DRY RUN: 4 rows, last write 2026-09-29 06:44 UTC (`built_at`), insert and update counters 0; dropped by DB Migrate apply run 39905424239; verify run 39905942615 `exists=f` |
+| `tripplanner.tour_graph_edge` | AA-TripPlanner-Web | **dropped** 23/10/2026 | frozen 14/10/2026; dropped 23/10/2026 | tp-018 (AA-712 X4) | replaced by `geo.graph_edge` / `catalog.v_graph_edge` | DRY RUN: 379 rows, last write unknown (no write-time column), insert and update counters 0; dropped by DB Migrate apply run 39905424239; verify run 39905942615 `exists=f` |
+| `tripplanner.tour_graph_node` | AA-TripPlanner-Web | **dropped** 23/10/2026 | frozen 14/10/2026; dropped 23/10/2026 | tp-018 (AA-712 X4) | replaced by `geo.graph_node` / `catalog.v_graph_node` | DRY RUN: 299 rows, last write unknown (no write-time column), insert and update counters 0; dropped by DB Migrate apply run 39905424239; verify run 39905942615 `exists=f` |
+| `tripplanner.tour_leg` | AA-TripPlanner-Web | **dropped** 23/10/2026 | frozen 14/10/2026; dropped 23/10/2026 | tp-018 (AA-712 X4) | replaced by `geo.tour_leg` / `catalog.v_tour_leg` | DRY RUN: 3,871 rows, last write unknown (no write-time column), insert and update counters 0; dropped by DB Migrate apply run 39905424239; verify run 39905942615 `exists=f` |
+| `tripplanner.tour_junction` | AA-TripPlanner-Web | **dropped** 23/10/2026 | frozen 14/10/2026; dropped 23/10/2026 | tp-018 (AA-712 X4) | replaced by `geo.tour_junction` / `catalog.v_tour_junction` | DRY RUN: 3,496 rows, last write unknown (no write-time column), insert and update counters 0; dropped by DB Migrate apply run 39905424239; verify run 39905942615 `exists=f` |
 
-**Exception for the eight `tripplanner` place tables (tp-018), needs Nghiệp's written approval in the tp-018 PR and
-the session log** (data standards README: an exception to a MUST): root ADR 0007 decision 10 says "14 days after the
+**Exception for the eight `tripplanner` place tables (tp-018), approved by Nghiệp in S248 (decision d14)** (data standards README: an exception to a MUST): root ADR 0007 decision 10 says "14 days after the
 flip" (05/11/2026) and DM-3.8 / DM-3.9 ask for 14 days of `pg_stat_user_tables`, a quarantine (`ALTER … SET SCHEMA
 retired`) and an S3 archive first. On Dev these are replaced by: two DRY RUN dispatches (before and after a
 TripPlanner smoke) whose read and write counters must not move; no quarantine (the rows are derived data CIS rebuilds
@@ -40,7 +39,15 @@ in `geo`; a quarantine keeps the foreign keys to `shared.destinations` and needs
 date + 180 days and `aa:purpose` = `aa712-tp018-pre-drop` (the DM-7.3 S3 archive does not exist yet, N4). ADR 0007
 carries the matching conditional amendment (S248). Lock note: the drop takes ACCESS EXCLUSIVE on CIS's
 `shared.destinations` for its length (RI triggers of 11 foreign keys); apply while the job tables are idle, retry on a
-lock timeout. Fill in, before the apply: approval (who, date, link); after it: snapshot id, apply run, verify.
+lock timeout. Record (S248, 23/10/2026):
+
+| Step | Value |
+|---|---|
+| DRY RUN (before, after a TripPlanner smoke) | DB Migrate run-script `aa712_frozen_tables_dry_run.py`: rows itinerary_components 3,905, tour_day 599, tour_stop 622, tour_graph_build 4, tour_graph_edge 379, tour_graph_node 299, tour_leg 3,871, tour_junction 3,496; last write 2026-09-29 (`itinerary_components`, `tour_day`, `tour_graph_build`; the other five have no write-time column); verdict `drop_ready=true` |
+| Approval | Nghiệp, S248 decision d14 (the exception above and the drop) |
+| Apply | DB Migrate `apply` of `tripplanner/018_drop_frozen_place_tables.sql`, run 39905424239 |
+| Archive (pre-drop snapshot) | `db-migrate-tp-018-39905424239-1`, retained until 2027-04-21 (`aa:retain-until`, apply + 180 days; the default for a DB Migrate snapshot is 30 days) |
+| Independent verify | DRY RUN V3, run 39905942615: all eight `exists=f`; `component_id_map` 750 rows kept; no CIS grant left to `tripplanner` |
 
 Kept on purpose: `tripplanner.component_id_map` (tp-017) maps the pre-flip component ids that old drafts' trip events
-still carry to catalog ids; it has no foreign key to `itinerary_components` and outlives it.
+still carry to catalog ids; it had no foreign key to `itinerary_components` and is kept after the drop.

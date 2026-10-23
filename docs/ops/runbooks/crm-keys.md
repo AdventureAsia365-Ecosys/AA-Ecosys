@@ -1,7 +1,7 @@
 ---
 id: OPS-04-crm-keys
 title: Handle a CRM KMS key alarm
-description: What to do when aa-crm-dev-kms-key-admin or aa-crm-dev-kms-foreign-use fires - a change to, or a use by a foreign principal of, the partner CRM's data, ingest or seal key.
+description: What to do when aa-crm-dev-kms-key-admin, aa-crm-dev-kms-foreign-use or aa-crm-dev-kms-decrypt-anomaly fires, or the nightly CRM key-policy diff is red - a change to, a use by a foreign principal of, or a Decrypt spike on the partner CRM's data, ingest or seal key.
 type: how-to
 status: draft
 owner: nghiep
@@ -37,14 +37,17 @@ agency per session (statement `CrmBreakGlassOneAgency`, design v3 §5.5 L3). It 
 ingest or seal key. Every break-glass call fires `aa-crm-dev-kms-foreign-use`. The agency is the data controller and AA the processor (ADR 0008a): a key policy
 changed without a plan, or a decrypt by an AA admin, is a processor incident the agency must hear about.
 
-## The two alarms (AA-CIS-Infra `accounts/aa365/crm_data.tf`)
+## The alarms and checks (AA-CIS-Infra `accounts/aa365/crm_data.tf`, `crm_storage.tf`)
 
 | Rule | Fires on | Expected sources |
 |---|---|---|
 | `aa-crm-dev-kms-key-admin` | `PutKeyPolicy`, `CreateGrant`, `ScheduleKeyDeletion`, `DisableKey`, rotation off, alias move or delete, key material, `CancelKeyDeletion`, `EnableKey`, `TagResource`, `UntagResource` on any of the three keys | a planned local MFA Terraform apply that changes a key policy (the CI apply role cannot); a planned apply that changes the keys' tags (CI may tag; it may not remove `App`) |
 | `aa-crm-dev-kms-foreign-use` | a crypto call (`Decrypt`, `Encrypt`, `GenerateDataKey*`, `ReEncrypt`, `Sign`), allowed **or denied**, by any principal other than the task role or an AWS service | a ticketed CRM break-glass session; nothing else |
+| `aa-crm-dev-kms-decrypt-anomaly` (CloudWatch alarm, `crm_storage.tf`) | `Decrypt` calls on the three keys (any principal, metric `AA/Crm/Kms` `DecryptCalls`, 5-minute sums) above the anomaly band in 2 of 3 periods | a DEK cache miss storm after a deploy or restart, a bulk export or erasure run, a load test; until the model has about two weeks of data it stays `INSUFFICIENT_DATA` |
+| **CRM Key Policy Diff** (nightly GitHub workflow in AA-CIS-Infra, `crm-key-policy-diff.yml`) | the live key policy of a key differs from the policy in the Terraform state (red run, GitHub failure e-mail; the summary names the key and the statement Sids) | a policy change outside Terraform (never planned), or a local MFA apply whose state upload failed |
 
-E-mail: the alerts topic, text starting `[aa-crm]`, with the event, key, principal, source IP and error code.
+E-mail: the alerts topic, text starting `[aa-crm]`, with the event, key, principal, source IP and error code (the
+anomaly alarm uses the standard CloudWatch alarm e-mail).
 
 ## Steps
 
@@ -93,6 +96,35 @@ E-mail: the alerts topic, text starting `[aa-crm]`, with the event, key, princip
    in `docs/audits/<date>-S<nnn>-crm-key-incident/`, and bring Nghiệp the agency notification draft (the agency is
    the controller; DPA wording, ADR 0010 decision 9).
 
+## Decrypt-rate anomaly
+
+1. Read who decrypted, from the alarm's log group (CloudTrail events copied by EventBridge, kept 365 days):
+
+   ```bash
+   aws logs filter-log-events --log-group-name /aws/events/aa-crm-dev-kms-decrypt --start-time $(date -u -d '-2 hour' +%s000) --profile aa365-admin --region us-west-1 --query "events[].message" --output text
+   ```
+
+   Expected: `detail.userIdentity` of almost every event is the CRM task role. Count by
+   `detail.requestParameters.encryptionContext.tenant_id` and `purpose`.
+2. Task role only, one tenant and purpose `export` or `docs`: a bulk export or documents batch; match it with the
+   CRM job table (`crm.job`) and note it in the session log. Many tenants at once right after a deploy: the DEK cache
+   was cold; note it. Anything else, or a principal that is not the task role (`aa-crm-dev-kms-foreign-use` fires
+   too): steps 2 to 6 above.
+   Rollback: none - read-only.
+
+## Nightly key-policy diff is red
+
+The AA-CIS-Infra workflow **CRM Key Policy Diff** compares each key's live policy with the Terraform state every night
+(read-only plan role). Red = a key policy changed outside Terraform, or the check could not read a key.
+
+1. Open the run summary: it names the key (`data`, `ingest`, `seal`) and the statement Sids that differ, or the error.
+   An `ERROR ... GetKeyPolicy failed: AccessDeniedException` means the plan role lost read access: someone changed
+   the key policy's `IamAdministration` statement, so treat it like a drift.
+2. Drift: steps 2, 3 and 5 above (CloudTrail `PutKeyPolicy` event, compare, restore the reviewed policy with a local
+   MFA apply from `main`). The `aa-crm-dev-kms-key-admin` alarm should have fired at the time of the change; if it did
+   not, check the rule (`crm_kms_alarm_check.py` below).
+3. Re-run the workflow (`workflow_dispatch`): expected green, every key "live policy = Terraform state".
+
 ## Verify the alarms without touching a key
 
 After any change to the rules (read-only, EventBridge evaluates sample events against the live patterns):
@@ -106,4 +138,5 @@ Run it from the AA-CIS-Infra checkout. Expected: every line `ok`, `0 failed`.
 ## Cost
 
 KMS: 3 keys x 1 USD/month (+1 USD/month per symmetric key for each of its first two yearly rotations). The two rules
-and the e-mails: 0 USD.
+and the e-mails: 0 USD. Decrypt-rate anomaly alarm about 0.60 USD/month (anomaly-detection alarm 0.30 + metric-filter
+metric 0.30; log ingestion negligible). The nightly diff: 0 USD.
