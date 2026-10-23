@@ -59,7 +59,7 @@ Account IDs and profiles: the account map in `docs/onboarding.md` (AA-897).
 | Guard | Threshold | Goes to | Defined in |
 |---|---|---|---|
 | Account budget `aa-cis-dev-monthly-total` | 250 USD/month; 80 % and 100 % of actual | Alert e-mail | INF `accounts/aa365/observability.tf` |
-| Per-App budgets `aa-cis-dev-monthly-app-*` | cis 90, tripplanner 25, booking 25, shared 100 USD (rebalanced S248 from the October run-rate: cis ~58, shared ~84); 80 % actual, 100 % forecast | Alert e-mail | Same file, `var.per_app_monthly_budgets` |
+| Per-App budgets `aa-cis-dev-monthly-app-*` | cis 90, tripplanner 10, booking 25, crm 25, shared 100 USD (rebalanced S248 from the October run-rate: cis ~58, shared ~84; crm added and tripplanner lowered from 25, run-rate ~1, by AA-932); 80 % actual, 100 % forecast | Alert e-mail | Same file, `var.per_app_monthly_budgets` |
 | Cost Anomaly Detection, AWS services monitor | Total impact of an anomaly at least 5 USD | Alerts SNS topic (e-mail, immediate) | INF `accounts/aa365/cost_anomaly.tf` (AA-896) |
 | Same monitor, AWS default subscription | Daily summary when impact is at least 100 USD and 40 % | Account e-mail | Created by AWS, not in Terraform |
 | acc3 budget `aa3-llm-monthly-total` | 250 USD/month gross of credits (= AWS Lift tier 1); 80 % and 100 % actual, 100 % forecast | E-mail to the bootstrap alert inbox | INF `accounts/acc3-bedrock/cost_guard.tf` (AA-896, applied locally with MFA) |
