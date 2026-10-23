@@ -6,61 +6,84 @@
 #   <commit sha>:<file>:<rule id>:<line>   pinned: that finding in that one commit only. Use this format.
 #   <file>:<rule id>:<line>                global: that file, rule and line in EVERY commit. gitleaks 8.30 honours it
 #                                          in git mode too, so it suppresses the PR job and the full-history job
-#                                          for any later commit, a real secret at the same place included. Avoid
-#                                          it; if one is unavoidable, put it in its own block with a comment why.
-# Squash merges: a pinned fingerprint names the PR's commit, and the squash merge writes the same line in a new
-# commit on main. The PR job is green with the PR-commit pin, but the full-history job then reports the squash
-# commit (and keeps scanning the PR commit through refs/pull/N/head). For a false positive that a PR adds:
-#   1. prefer a narrow allowlist entry (regex or path) in .gitleaks.toml: it matches every commit;
-#   2. otherwise pin the PR commit in the PR, then pin the squash commit in a follow-up PR right after the merge.
+#                                          for any later commit, a real secret at the same place included. Never
+#                                          use it: this file has no global entry (AA-981 review, round 4).
+# Squash merges: a pinned fingerprint names one commit, and the squash merge writes the same line in a new commit on
+# main. The PR check also scans a squash preview (the PR's final tree as one commit), which a pin of a PR commit does
+# not cover, so it stays red, as the full-history job would after the merge. For a false positive that a PR adds, use
+# a narrow allowlist entry (regex or path) in .gitleaks.toml: it matches every commit. Pins are for findings already
+# in history (old commits, squash commits on the default branch, closed PR heads).
 # An inline gitleaks:allow comment on the line also survives the squash, but it hides that line from both jobs, so
 # the PR job treats it like a change to this file (label needed).
 # Add a short comment above each entry: what the value is and why it is not a secret. Never write the value here.
 # A real secret is never ignored here: remove it, rotate it, then pin the old commit.
 # A change to this file needs the PR label `secret-scan-baseline-reviewed` (see the workflow header).
 
-# --- Global entries (file:rule:line, every commit). Reviewed exceptions to the rule above: all of them are in
-# frozen audit evidence under docs/audits/ (never edited after the session that wrote it), and most lines exist
-# on two commits (lane branch + squash merge). A later commit that changes one of these files is still
-# suppressed at the same line, so review any PR that edits a file listed here with that in mind.
+# --- Frozen audit evidence under docs/audits/ (never edited after the session that wrote it). Each line exists on
+# two commits, the lane commit and the squash merge (or the PR head and the squash merge), so each finding is pinned
+# on both. These were global file:rule:line entries until the AA-981 review (round 4): a global entry also hid a
+# real secret written later at the same file and line, in any commit.
 # S247 audit evidence: S3 object keys (`BUCKET, KEY = ...`) in helper scripts and Jev `question_key`
 # names in a question-catalog export. None is a credential.
-docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_existing_stats.json:generic-api-key:1
-docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_reuse_t_map.md:generic-api-key:193
-docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave3_flag.py:generic-api-key:54
-docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave4_flag.py:generic-api-key:62
+19451921b3d67549e81c99f7179a8e87a72f2612:docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_existing_stats.json:generic-api-key:1
+6aca458d896a57e7f2d615c654ba02f38db962fa:docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_existing_stats.json:generic-api-key:1
+19451921b3d67549e81c99f7179a8e87a72f2612:docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_reuse_t_map.md:generic-api-key:193
+6aca458d896a57e7f2d615c654ba02f38db962fa:docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_reuse_t_map.md:generic-api-key:193
+19451921b3d67549e81c99f7179a8e87a72f2612:docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave3_flag.py:generic-api-key:54
+6aca458d896a57e7f2d615c654ba02f38db962fa:docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave3_flag.py:generic-api-key:54
+19451921b3d67549e81c99f7179a8e87a72f2612:docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave4_flag.py:generic-api-key:62
+6aca458d896a57e7f2d615c654ba02f38db962fa:docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave4_flag.py:generic-api-key:62
 
 # Full-history baseline (AA-981, S248): the first full-history scan with .gitleaks.toml found only
 # these, all in frozen audit evidence. None is a credential:
 # - Jev `question_key` names, TripPlanner `tp_key` UUIDs and backlog `key` slugs in JSON exports;
-# - an S3 object key (`BUCKET, KEY = ...`) in an audit helper script (line 43 when added, 51 now);
+# - an S3 object key (`BUCKET, KEY = ...`) in an audit helper script;
 # - a Cognito app client ID quoted as the token `aud` (public, not a secret);
 # - a table cell of a CRM design note that the generic rule reads as `auth, <word>`.
-# The same lines exist on two commits each (lane branch + squash merge), so they are listed
-# without a commit (file:rule:line), the format this file already uses.
-docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:95
-docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:134
-docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:212
-docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:251
-docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:264
-docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:45
-docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:421
-docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:876
-docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1442
-docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1474
-docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1702
-docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1858
-docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1876
-docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:2009
-docs/audits/2026-10-16-S240-aa859/aa859_flag.py:generic-api-key:43
-docs/audits/2026-10-16-S240-aa859/aa859_flag.py:generic-api-key:51
-docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md:generic-api-key:39
-docs/audits/2026-10-20-S245-tenant-crm/v2/crm-design-B-serverless.md:generic-api-key:715
-docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:30
-docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:507
-docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:546
-docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:646
-docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:721
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:95
+c4d5958e2c774aae3b911c088ec9c048f06fa31b:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:95
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:134
+c4d5958e2c774aae3b911c088ec9c048f06fa31b:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:134
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:212
+c4d5958e2c774aae3b911c088ec9c048f06fa31b:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:212
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:251
+c4d5958e2c774aae3b911c088ec9c048f06fa31b:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:251
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:264
+c4d5958e2c774aae3b911c088ec9c048f06fa31b:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:264
+33c49ea7fb27ee4d0ff5c7f1e05addad26b95d69:docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:45
+5300ea127513fea5c0e0b6ca111d275170ab45af:docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:45
+33c49ea7fb27ee4d0ff5c7f1e05addad26b95d69:docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:421
+5300ea127513fea5c0e0b6ca111d275170ab45af:docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:421
+33c49ea7fb27ee4d0ff5c7f1e05addad26b95d69:docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:876
+5300ea127513fea5c0e0b6ca111d275170ab45af:docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:876
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1442
+8cb36a65710facc8f8a1e87492557df11165f319:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1442
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1474
+8cb36a65710facc8f8a1e87492557df11165f319:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1474
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1702
+8cb36a65710facc8f8a1e87492557df11165f319:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1702
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1858
+8cb36a65710facc8f8a1e87492557df11165f319:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1858
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1876
+8cb36a65710facc8f8a1e87492557df11165f319:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1876
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:2009
+8cb36a65710facc8f8a1e87492557df11165f319:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:2009
+19d65e9dcf0fbdde4471ad7a039e82998cbafc8d:docs/audits/2026-10-16-S240-aa859/aa859_flag.py:generic-api-key:43
+752ba567383a15f4c78152427b890a597f0dfbcc:docs/audits/2026-10-16-S240-aa859/aa859_flag.py:generic-api-key:43
+5b48cbf295ee4a3946c92198fce54c751848db43:docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md:generic-api-key:39
+f0db9f63e4180097def968c7107d2da1ca939db9:docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md:generic-api-key:39
+b1b72170c38f02670c0e287375c41dfe06c22a2d:docs/audits/2026-10-20-S245-tenant-crm/v2/crm-design-B-serverless.md:generic-api-key:715
+dd253383848704640f8930d8df5ac69ca73729f6:docs/audits/2026-10-20-S245-tenant-crm/v2/crm-design-B-serverless.md:generic-api-key:715
+881c2cc2e12368f17c7013146176b31d2bcb0fe8:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:30
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:30
+881c2cc2e12368f17c7013146176b31d2bcb0fe8:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:507
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:507
+881c2cc2e12368f17c7013146176b31d2bcb0fe8:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:546
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:546
+881c2cc2e12368f17c7013146176b31d2bcb0fe8:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:646
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:646
+881c2cc2e12368f17c7013146176b31d2bcb0fe8:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:721
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:721
 
 # AA-981 canary (test/aa981-canary, closed unmerged): a FAKE random value committed on purpose to prove
 # the scan goes red. Its PR head stays fetchable, so it is pinned by commit.

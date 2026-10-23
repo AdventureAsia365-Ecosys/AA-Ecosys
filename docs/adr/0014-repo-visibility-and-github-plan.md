@@ -108,8 +108,9 @@ tracked in the private record (Linear AA-981), not in this public page.
   1. run a full-history gitleaks scan **with the repo's `.gitleaks.toml`** (not the default rules alone), over every
      branch, tag and pull request head (`refs/pull/*/head`, closed PRs included; a `git clone --mirror` has them):
      `git` mode with `--log-opts="--all --full-history --diff-filter=uxdb --diff-merges=remerge --no-renames"` and
-     `* !diff` in the git attributes file (gitleaks' default plus type changes, renamed files read whole, every file
-     as text and the content of merge commits; no merge with three or more parents; check the log for git errors,
+     `* diff` in the git attributes file (gitleaks' default plus type changes, renamed files read whole, every file
+     as text even with a NUL byte, and the content of merge commits; the rules are the gitleaks v8.30.1 defaults
+     copied into `.gitleaks.toml` without gitleaks' global path allowlist, which skips text files such as `.svg`; no merge with three or more parents; check the log for git errors,
      gitleaks exits 0 when git fails; local command: header of the root `secret-scan.yml`);
   2. treat each finding as real until shown otherwise; **rotate** every real credential **before** the switch (a
      history rewrite is not enough: forks, caches and the GitHub event API keep old commits);
@@ -121,7 +122,8 @@ tracked in the private record (Linear AA-981), not in this public page.
   the gitleaks PR and full-history jobs stay and become the only scanner. They use private Actions minutes (about a
   minute a night per repo), to count in the re-decision above.
 - **State on 23/10/2026:** all five repos are public with secret scanning and push protection on. Root and Infra
-  run `secret-scan.yml` and `secret-scan-history.yml`: a PR scan that reads its rules and baseline from the base commit (a PR that changes them
+  run `secret-scan.yml` and `secret-scan-history.yml`: a PR scan (on `pull_request_target`, so GitHub always runs the
+  base branch's copy of it; it also scans a squash preview of the PR) that reads its rules and baseline from the base commit (a PR that changes them
   needs the label `secret-scan-baseline-reviewed`), and a nightly full-history scan over branches, tags and PR
   heads, merge commits, renames and type changes included. A red result means the value is public: rotate it, even
   if it was force-pushed away. Same rules in both, incl. `credential-key-literal` for credential-named keys with literal values in tfvars,
