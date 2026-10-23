@@ -1,8 +1,8 @@
 # ADR 0015 — Tour liveness and retirement propagation
 
-- **Status:** Proposed (23/10/2026, S248). Nghiệp asked for the rule in S248; the open questions Q1–Q11 at the end
-  carry proposed answers that are **pending Nghiệp**. Decisions that depend on one of them name it, so a different
-  answer changes one paragraph, not the design.
+- **Status:** Accepted (23/10/2026, S248). Nghiệp asked for the rule in S248 and decided Q1–Q10 on the S248 decision
+  page (table at the end); Q2, Q4 and Q8 differ from the first proposal. Q11 (added by this ADR) takes its proposed
+  answer; Nghiệp can change it, and the decision it affects is named.
 - **Scope:** AA-Ecosys: AA-CIS-App (the served state, the write service, the read view, tenant `/v1` and portal,
   schema `catalog`), AA-Booking (quote, hold, trip case legs, B2B feed), AA-TripPlanner-Web (tour page, saved trips,
   hand-off), AA-Partner (offer lists, through `catalog.http.v1` and `booking.b2b.v1`), AA-CIS-Infra (grants, the
@@ -68,12 +68,12 @@ The unit is the **catalog key** `(source_system = 'cis', source_id = silver_aa_i
   The probe's Master counts (892 Master rows, all `master_status = 'active'`, and zero active Masters in any dead
   group) say none of them ever had a Master, so today they are "never served" and answer 404; slice L1 confirms that
   with one read-only count before the view relies on it. A group of this shape that once had a Master is `retired`
-  (410). Alternative (pending Nghiệp with Q11): treat the shape as an anomaly the nightly probe reports and slice L2
+  (410). Alternative (Q11, not yet decided): treat the shape as an anomaly the nightly probe reports and slice L2
   cleans up (the group is set to trashed through the service); that answer changes decisions 1 and 6 only.
 - **Supersede is not deletion.** Replacing a version (Excel replace/update) keeps the key `served` under the same
   `source_key`. What belonged to the old version (Master, atoms, ranking, route) moves to the new version or is
-  switched off. **Never two active Masters in one group.** A tenant T2 copy that points at the old version gets the flag
-  "AA source updated", not "discontinued" (Q2).
+  switched off. **Never two active Masters in one group.** A tenant T2 copy that points at the old version gets no badge
+  and no notification: a supersede is invisible to the tenant (Q2, Nghiệp S248).
 - `raw_tours.lifecycle_stage` is **not** a deletion signal (no code writes it; Q9). It keeps its sales meaning
   (`phasing_out`); readers that filter `retired` on it switch to the served state.
 - `restored` is a recorded transition (decision 4) more than a fourth steady state: the derived state of a restored key
@@ -116,8 +116,8 @@ Rules the service enforces:
   trashed row.
 - Re-uploading a deleted tour (exact or near-duplicate match) shows "deleted on <date>" in staging and offers
   **Restore** or **Create a new tour**; it never revives silently (Q6).
-- Retiring a published tour is open to staff with Master Content rights; the confirm dialog shows a dry run of the
-  tenants, pieces, posts and bookings affected (Q8).
+- Retiring a published tour is open to staff with Master Content rights and to admins; the confirm dialog shows a dry
+  run of the tenants, pieces, posts and bookings affected (Q8, Nghiệp S248).
 - No other CIS code changes `raw_tours.source_status`, `raw_tours.deleted_at`, `published_tours.master_status` or
   `published_tours.deleted_at`, and no other code inserts into `raw_tours` or `published_tours`. A CIS guard test
   enforces both, UPDATE and INSERT alike (the service is the only allowed writer): it scans for SQL that writes these
@@ -175,7 +175,7 @@ The names in decisions 2–4 are working names; the slice PRs fix them.
 - Add `served_status`, `served_reason` and `discontinued_at` to my-versions, version detail, marketplace, review /
   piece and publish-pending responses.
 - A persistent **badge** on My Tours, Content and Publish ("AA no longer serves this tour"; "paused" for `paused`,
-  "AA source updated" for a supersede).
+  none for a supersede, Q2).
 - The portal **bell** reads the tenant's real notifications (`tour.discontinued`, `tour.reinstated`) through a
   tenant-scoped `/v1/notifications` route (Q7). Email and webhooks come later, from the outbox of decision 4.
 - **New work on the tour is refused** with 409 `tour_discontinued` and a plain sentence: rewrite, retry, T8 goal,
@@ -188,8 +188,9 @@ The names in decisions 2–4 are working names; the slice PRs fix them.
 
 - Refuse **new** quotes and holds on a key that is not `served`: 409 `tour_not_served` (additive error in
   `booking.b2b.v1`).
-- **Keep** confirmed bookings, confirmed holds and existing trip cases, with a staff flag on the leg and the plan.
-  Cancelling them is a business decision for Ms. Thư, not automatic (Q4).
+- **Keep** confirmed bookings, confirmed holds and existing trip cases, with a staff flag on the leg and the plan,
+  **and notify staff** (a staff notification per affected trip case / plan when the key is retired, through the
+  staff bell; Q4, Nghiệp S248). Cancelling them is an operations decision taken by staff, never automatic.
 - The plan list gets an "orphaned plans" filter (plans whose tour left the catalog, with the reason).
 - The B2B delta feed lists withdrawn products (`withdrawn`, from `catalog.v_tour_retired`); the event
   `product.withdrawn` goes into AA-975.
@@ -274,20 +275,20 @@ changes a view, a grant or auth is reviewed by an agent before merge (DM-11.5).
 - **Push webhooks from CIS to each app.** Rejected for now: the ecosystem pattern is outbox → pull → inbox
   (ADR 0001, 0008); a tenant webhook can be fed from the same outbox later (Q7).
 
-## Open questions (proposed answers, pending Nghiệp)
+## Questions and decisions (Nghiệp, S248 decision page)
 
-Each answer below is what this ADR assumes. A different answer changes only the decision named in the last column.
+Q1–Q10 were decided by Nghiệp on the S248 decision page (23/10/2026). Q11 keeps its proposed answer until he changes it; a different answer changes only the decisions named in the last column.
 
-| # | Question | Proposed answer (pending Nghiệp) | Changes |
+| # | Question | Decision | Changes |
 |---|---|---|---|
 | Q1 | Does deactivating a Master (source still live) count as "no longer served"? | Hidden exactly like `retired`, but the badge says "paused" and no notification is pushed. **Trashing** a Master counts as `retired`, with the warning | 1, 5 |
-| Q2 | Supersede (Excel replace): what happens to a tenant T2 copy of the old version? | Not a discontinuation. Badge "AA source updated" and a rewrite button on the new version that does not use quota | 1, 5 |
+| Q2 | Supersede (Excel replace): what happens to a tenant T2 copy of the old version? | Not a discontinuation, and **nothing is shown to the tenant** (no badge, no notification). (Proposed was a badge "AA source updated"; Nghiệp chose none.) | 1, 5 |
 | Q3 | Tenant posts already live about a retired tour: unpublish automatically? | No. Flag, one-click unpublish, and mention in the notification | 5 |
-| Q4 | Booking: future departures with seats sold, confirmed bookings of a retired tour? | Keep, staff flag; refuse new quotes and holds. Cancelling is Ms. Thư's business decision (a proposal, not forced) | 5 |
+| Q4 | Booking: future departures with seats sold, confirmed bookings of a retired tour? | Keep, staff flag **and a staff notification**; refuse new quotes and holds. Cancelling is a staff operations decision, never automatic | 5 |
 | Q5 | SEO: 410 or redirect? | 410 when retired; 301 when superseded (same `source_key`); the page returns on restore | 5 |
 | Q6 | Re-uploading a deleted tour: restore automatically or ask? | Staging shows "deleted on <date>"; staff choose Restore (runs `restore` + `tour.reinstated`) or Create a new tour | 2 |
 | Q7 | Channel for the tenant warning? | Persistent badge (the source of truth) + the portal bell reading the tenant's notifications. Email and webhook later, from the outbox | 5 |
-| Q8 | Who may retire a published tour? | Staff with Master Content rights; the confirm dialog shows a dry run of affected tenants, posts and bookings | 2 |
+| Q8 | Who may retire a published tour? | Staff with Master Content rights **and admins**; the confirm dialog shows a dry run of affected tenants, posts and bookings | 2 |
 | Q9 | `lifecycle_stage` (nothing writes it)? | Not a deletion signal. Kept for sales (`phasing_out`); T7 and TripPlanner switch to the served state | 1 |
 | Q10 | Is a tenant that uses the tour only through Slate / planning (no T2) warned? | Yes: every tenant with any derivative (subject, angle request, piece, publish-log row) | 2 |
-| Q11 | Between a supersede and the publish of the new version's Master, is the key served? (added by this ADR; today the tour drops out of the catalog in that gap) | `paused`, reason `superseded_pending`, no notification; consumers treat it as temporary (decision 5 `paused` table: TripPlanner and SEO 404, not 410). The `publish` action of the new Master closes it with `restored`. Same question for a group whose versions are all `superseded`: retired (410) if it ever had a Master, no state (404) if not; alternative, a probe anomaly that L2 cleans up. Alternative for the gap: keep serving the old version until the new Master is published | 1, 2, 5, 6 |
+| Q11 (proposed, not yet decided) | Between a supersede and the publish of the new version's Master, is the key served? (added by this ADR; today the tour drops out of the catalog in that gap) | `paused`, reason `superseded_pending`, no notification; consumers treat it as temporary (decision 5 `paused` table: TripPlanner and SEO 404, not 410). The `publish` action of the new Master closes it with `restored`. Same question for a group whose versions are all `superseded`: retired (410) if it ever had a Master, no state (404) if not; alternative, a probe anomaly that L2 cleans up. Alternative for the gap: keep serving the old version until the new Master is published | 1, 2, 5, 6 |
