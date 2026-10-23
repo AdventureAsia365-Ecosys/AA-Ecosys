@@ -1,0 +1,21 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Event",
+  "expect": "invalid",
+  "why": "An incident flag never carries traveller data (AA-975 E): no name, no free-text note",
+  "rule": "pii-name",
+  "payload": {
+    "event_id": "6f0d2a41-0000-4000-8000-000000000301",
+    "cursor": "bk1.301",
+    "type": "departure.incident",
+    "occurred_at": "2026-11-15T01:00:00Z",
+    "hold_id": null,
+    "booking_id": null,
+    "line_ref": null,
+    "departure_id": "9f000000-0000-4000-8000-000000000975",
+    "incident_code": "health",
+    "decline_code": null,
+    "new_start_time": null,
+    "traveller_name": "Synthetic Person"
+  }
+}

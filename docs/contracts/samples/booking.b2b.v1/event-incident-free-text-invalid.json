@@ -1,0 +1,14 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Event",
+  "expect": "invalid",
+  "why": "incident_code is a fixed list; free text in it (which could name a traveller) is rejected by the schema",
+  "payload": {
+    "event_id": "6f0d2a41-0000-4000-8000-000000000302",
+    "cursor": "bk1.302",
+    "type": "departure.incident",
+    "occurred_at": "2026-11-15T01:00:00Z",
+    "departure_id": "9f000000-0000-4000-8000-000000000975",
+    "incident_code": "guest in room 12 fell ill"
+  }
+}
