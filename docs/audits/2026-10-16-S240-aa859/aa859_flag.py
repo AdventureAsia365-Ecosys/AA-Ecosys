@@ -24,6 +24,8 @@ ALLOWED = {
     # AA-544 / AA-815 / AA-817 (same fail-closed encoding since S241 D-12)
     "aa544:stage1:publish_pending_pool", "aa544:stage5:get_piece_pool", "aa544:publish_log_list_pool",
     "aa544:integration_disconnect_pool", "aa817:content_piece_reads_pool",
+    # AA-986 L3 (S248): GET /v1/notifications + mark read, needs CIS 274
+    "aa986:tenant_notifications_pool",
 }
 ON_VALUE, OFF_VALUE = "true", "false"   # must match FLAG_ON_VALUE / FLAG_OFF_VALUE in aa544_tenant_pool.py
 
