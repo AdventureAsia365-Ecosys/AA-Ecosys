@@ -135,7 +135,7 @@ account Lambda quota of 10 and `desired_count = 1` hide it.
 | `crm-api` (+ in-process `crm.job` worker; AA-Partner, planned) | `crm_app` (planned: created by an Infra `roles/` file before the first `crm` migration, C2.3a; v1.3, AA-929) | **3** | 2 (1 task + deploy overlap) | 6 | **6** | set with the pool (C2.3f) | set with the pool |
 | `db-migrate`, DB Schema Dump, DB Isolation Probe | `db_migrator` (X1 S22) | 1 | 3 (three workflow concurrency groups can overlap) | 3 | `db_migrator` **5** (`rl-002`) | 15 min (N5 runner default, set per session) | 5 s (MIG-9 runner default) |
 | ECS exec scripts (S3-mediated, container `DATABASE_URL`) | `cis_app` | — | — | (inside the 90) | (in `cis_app` 90) | per session | per session |
-| `roles/` files, DB Migrate `set-password` / `run-script`, break-glass | `aa_cis_admin` (master; its DSN is read only inside the migrator task, or for break-glass) | — | — | 10 (reserve) | none (break-glass, C2.3b) | per session | per session |
+| `roles/` files, DB Migrate `set-password` / `run-script`, DB Tour Liveness Gate (nightly READ_ONLY run-script, seconds), break-glass | `aa_cis_admin` (master; its DSN is read only inside the migrator task, or for break-glass) | — | — | 10 (reserve) | none (break-glass, C2.3b) | per session | per session |
 | RDS internal + `superuser_reserved_connections` | `rdsadmin` | — | — | ~5 | — | — | — |
 | **Total** | | | | **~132** (after AA-859 sizing: api 35, tenant 14; `db_migrator` 3; `crm_app` 6 planned) | | ≤ 135 ceiling (75 % of 181) | |
 
