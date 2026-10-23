@@ -9,6 +9,10 @@
 /.github/                              @pqnghiep1354
 /.gitignore                            @pqnghiep1354
 
+# Secret scan rules and baseline (AA-981): a change here can hide a leaked secret from CI
+/.gitleaks.toml                        @pqnghiep1354
+/.gitleaksignore                       @pqnghiep1354
+
 # Agent rules, hooks and skills (they decide what agents may do)
 /.claude/                              @pqnghiep1354
 /.kiro/                                @pqnghiep1354

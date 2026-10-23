@@ -148,7 +148,7 @@ identity (GitHub App) and least-privilege agent role are trigger items (U-25, U-
 | Gate | Where |
 |---|---|
 | Required CI: CIS 5 (Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check), Booking 5, TripPlanner 2 | Branch protection on the public repos; root and Infra (private, GitHub Free) have none, compensated by `main`-only OIDC trust (AA-866) |
-| Security scans | CodeQL default setup, secret scanning + push protection (public repos), gitleaks (Infra), blocking `pip-audit` (CIS), Dependabot |
+| Security scans | CodeQL default setup, secret scanning + push protection (public repos), gitleaks PR + full-history scans (Infra, root), blocking `pip-audit` (CIS), Dependabot |
 | Data | Migration Copy Guard, DB Migrate version check, isolation probe, no raw model calls test (`test_aa685_no_raw_model_calls.py`) |
 | UI | Playwright UI smoke on every CIS admin and portal preview |
 | Definition of Done | Merged + CI green + deploy COMPLETED + verified live with evidence (`skill/aa-ship`) |

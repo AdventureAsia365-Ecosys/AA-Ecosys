@@ -39,7 +39,7 @@ The control checklist is `docs/security/baseline.md` (AA-895); each control link
 | Control | State |
 |---|---|
 | CI to AWS through OIDC, trust limited to `main` | Done (AA-866) |
-| Org 2FA (no SMS), CodeQL, secret scanning and push protection on public repos, gitleaks on Infra | Done (AA-867, AA-841) |
+| Org 2FA (no SMS), CodeQL, secret scanning and push protection on public repos, gitleaks PR + full-history scans on Infra and root | Done (AA-867, AA-841, AA-981) |
 | Server-side staff role checks; staff sign-in by company e-mail code on Cognito; owner-only access changes | Done (AA-882, AA-816; legacy password login retired at cutover) |
 | ECS exec session logs and PostgreSQL connection logs | Done (D-07, D-08) |
 | One security group per caller; DB owner/runtime role split (X1) | Network done (ADR 0004b); roles in progress (AA-852, AA-860) |
