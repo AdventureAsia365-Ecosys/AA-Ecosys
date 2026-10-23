@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [aa-cis-dev-db]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-23
 review_every_days: 90
 last_tested: 2026-10-17
 tested_where: drill
@@ -21,8 +21,9 @@ related: [OPS-03, OPS-03-schema, OPS-03-drills, OPS-05, AA-829, AA-892]
 
 - The restore drill (DM-9.3): on Dev when this procedure changes and once before prod; quarterly from prod.
 - First half of a [single-schema restore](restore-schema.md) after data loss in one app (DM-9.4).
-- Not for: replacing the live instance. An in-place restore of the shared instance rolls back all three apps; it
-  needs every owner's agreement (DM-9.4) and a DSN cutover that does not exist yet (DM-9.5 CNAME, AA-829).
+- Not for, on its own: replacing the live instance. A restore that replaces the shared instance rolls back every app;
+  it needs every owner's agreement (DM-9.4). The DSN cutover for that case exists since S248 (DM-9.5 CNAME,
+  AA-829): see [Repoint db.dev.internal after a restore](#repoint-dbdevinternal-after-a-restore) below.
 
 ## Facts (read 19/10/2026)
 
@@ -34,6 +35,10 @@ related: [OPS-03, OPS-03-schema, OPS-03-drills, OPS-05, AA-829, AA-892]
   end against the Dev target RTO < 1 h (C1.2). 148/148 tables, migration heads equal; 18 Booking and 25 shared rows
   differed, all written after the restore point.
 - Cost: a `db.t4g.micro` for under an hour, well under 1 USD.
+- Since S248 (AA-829) every DSN secret (master, `db-migrator`, `rds-cis-app`, `rds-app-user`, Booking, TripPlanner,
+  CRM) names the private host **`db.dev.internal`**, a Route 53 CNAME (TTL 60 s, private zone `dev.internal`, VPC only)
+  to the RDS endpoint (`accounts/aa365/db_dns.tf` in AA-CIS-Infra). Pointing the apps at another instance = changing
+  that one record, not seven secrets.
 
 ## Preconditions
 
@@ -106,6 +111,51 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
    Verify: `aws rds describe-db-instances --profile aa365-admin --region us-west-1 --query "DBInstances[].DBInstanceIdentifier" --output text`
    lists only `aa-cis-dev-db`.
    Rollback: none (it was a copy). Double-check the identifier before running: never the source name.
+
+## Repoint db.dev.internal after a restore
+
+Use only when a restored instance must **take over** from `aa-cis-dev-db` (every owner agreed, DM-9.4). A drill copy is
+never repointed. This section is UNTESTED (written 23/10/2026 from `db_dns.tf`); the next drill should run it against
+the drill copy and back.
+
+Preconditions: the restored instance is `available` and step 4 passed against it; every job table is idle
+(`shared.job`, `booking.job`, `crm.job`; DM-11.4); an MFA session; a local checkout of AA-CIS-Infra `main`, pulled
+(apply from `main`, never from a branch). No CI **Terraform Apply** may run while the override is set (it would point
+the name back to the old instance): tell the team before step R2.
+
+R1. Read the restored instance's address (bare hostname, no port).
+
+   ```bash
+   aws rds describe-db-instances --db-instance-identifier <restored-id> --profile aa365-admin --region us-west-1 --query "DBInstances[0].Endpoint.Address" --output text
+   ```
+
+   Expected: a hostname ending in `.rds.amazonaws.com`.
+   Rollback: none - read-only.
+
+R2. Point the CNAME at it: a targeted local apply with the override (the variable validation refuses a scheme or a
+   port).
+
+   ```bash
+   bash -c 'cd /home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra/accounts/aa365 && C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform apply -target=aws_route53_record.db -var db_dns_target_override=<address-from-R1>' # WRITE
+   ```
+
+   Expected: the plan shows only `aws_route53_record.db` updated in place (its `records`), 0 to add, 0 to destroy.
+   Verify: `aws route53 list-hosted-zones-by-name --dns-name dev.internal --max-items 1 --profile aa365-admin --region us-west-1 --query "HostedZones[0].Id" --output text`, then
+   `aws route53 list-resource-record-sets --hosted-zone-id <zone-id> --profile aa365-admin --region us-west-1 --query "ResourceRecordSets[?Name=='db.dev.internal.'].ResourceRecords[0].Value" --output text`
+   prints the R1 address.
+   Rollback: the same command without `-var db_dns_target_override=...` points the name back to `aa-cis-dev-db`.
+
+R3. Move the open connections. New connections follow within the 60 s TTL; pooled ones stay on the old instance until
+   they are recycled. With Nghiệp's go, force a new deployment of each running ECS service (CIS api + worker, Booking,
+   CRM) and let the TripPlanner Lambdas cycle; then check CIS `/health/ready` and Booking `/booking/health`, and run
+   [DB Migrate](db-migrate.md) `check` to see the restored instance's migration heads.
+   Rollback: R2 rollback, then the same redeploys.
+
+R4. Make it permanent before the next CI apply: either bring the restored instance under Terraform (rename the old
+   instance away, rename the restored one to `aa-cis-dev-db`, then a targeted local apply **without** the override),
+   or keep the override and record it in the Infra repo by PR. Never leave the override only on a laptop.
+   The DSN secrets do not change: they already name `db.dev.internal`. DB Migrate `set-password` keeps working because
+   the master secret and every role secret name the same host.
 
 ## Verify the result
 
