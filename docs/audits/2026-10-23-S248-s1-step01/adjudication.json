@@ -1,0 +1,1086 @@
+{
+ "schema": "s1-step01-adjudication/1",
+ "by": "S248 lane s1-step01 (Claude Code), one reader, against the full source in the fixture",
+ "legend": {
+  "L": "the labelled error (matches the golden label's cited fault, or the lane's meta read for meta_cut)",
+  "Run": "real, not labelled: a tour fact or figure the source does not support",
+  "Rbg": "real, not labelled: place background the source does not state (allowed by the writer policy, not an error)",
+  "S": "a source contradiction, correctly reported and not charged to the writer",
+  "M": "meta outside the 140-155 band (format; no label class)",
+  "U": "unclear from the source text",
+  "F": "false alarm: the checker is wrong"
+ },
+ "findings": [
+  {
+   "n": 1,
+   "sample_id": "s1-001",
+   "code": "DAY_SUBDAY_SPLIT",
+   "verdict": "L",
+   "note": "",
+   "detail": "duration '3 hours\\n20km/12.5miles\\n9:30am-12:30pm' is under a day but the output has 4 days",
+   "sentence": ""
+  },
+  {
+   "n": 2,
+   "sample_id": "s1-001",
+   "code": "META_CUT",
+   "verdict": "L",
+   "note": "",
+   "detail": "number compound '20-kilometre' with no noun",
+   "sentence": "A 3-hour guided bicycle loop through central Tokyo covers Zojoji Temple, Tokyo Tower, Roppongi, Shibuya Crossing, and Yoyogi Park on a single 20-kilometre."
+  },
+  {
+   "n": 3,
+   "sample_id": "s1-001",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Akita' (akita)",
+   "sentence": "The route then passes through Aoyama Cemetery (notable for cherry blossom tunnels in spring and the grave of Hachiko, the famous Akita dog) and Hikawa Shrine, a wooded shrine situated within the urban"
+  },
+  {
+   "n": 4,
+   "sample_id": "s1-001",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Hachiko' (hachiko)",
+   "sentence": "The route then passes through Aoyama Cemetery (notable for cherry blossom tunnels in spring and the grave of Hachiko, the famous Akita dog) and Hikawa Shrine, a wooded shrine situated within the urban"
+  },
+  {
+   "n": 5,
+   "sample_id": "s1-002",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "'Nam Khan River' (nam, khan)",
+   "sentence": "Cross the Nam Khan River to a remote Hmong settlement above Chomphet District; 6km uphill trek, 20km circuit ride on dirt roads."
+  },
+  {
+   "n": 6,
+   "sample_id": "s1-004",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Deccan' (deccan)",
+   "sentence": "This 14-day cycling route traverses South India from Bangalore to Goa, moving through three distinct geographical zones: the Deccan plateau around Mysore, the coffee and spice plantations of the Weste"
+  },
+  {
+   "n": 7,
+   "sample_id": "s1-004",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Hoysala' (hoysala)",
+   "sentence": "Hoysaleswara temple at Halebidu, showcasing 12th-century Hoysala architecture"
+  },
+  {
+   "n": 8,
+   "sample_id": "s1-004",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Arabian Sea' (arabian)",
+   "sentence": "The route follows the Konkan Coast, a region of coastal lowlands and beaches along the Arabian Sea."
+  },
+  {
+   "n": 9,
+   "sample_id": "s1-005",
+   "code": "SOURCE_DAY_CONTRADICTION",
+   "verdict": "S",
+   "note": "",
+   "detail": "duration '14 days' says 14 days, the source has 12 day(s) (max day 12)",
+   "sentence": ""
+  },
+  {
+   "n": 10,
+   "sample_id": "s1-005",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "F",
+   "note": "'Laos' is the region of the day, not a misplaced stop",
+   "detail": "laos: source day(s) 4, not day 6",
+   "sentence": "Day 6 — Tad Lo Waterfalls to Sekong — Ethnic Diversity of Southern Laos"
+  },
+  {
+   "n": 11,
+   "sample_id": "s1-005",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "Run",
+   "note": "",
+   "detail": "600",
+   "sentence": "This 14-day cycling route follows the Ho Chi Minh Trail from Hanoi through Laos to Ho Chi Minh City, covering 600+ kilometres through war sites."
+  },
+  {
+   "n": 12,
+   "sample_id": "s1-005",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "'Combat' is a word of a real museum name the source names as 'the museum' at Khe Sanh",
+   "detail": "'Khe Sanh Combat Base Museum' (combat)",
+   "sentence": "Khe Sanh Combat Base Museum and the surrounding terrain of the 1968 siege"
+  },
+  {
+   "n": 13,
+   "sample_id": "s1-005",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Savannakhet Province' (savannakhet)",
+   "sentence": "Transfer continues to Xepon, a small town in the Savannakhet Province."
+  },
+  {
+   "n": 14,
+   "sample_id": "s1-006",
+   "code": "SOURCE_DAY_CONTRADICTION",
+   "verdict": "S",
+   "note": "",
+   "detail": "duration '9 days' says 9 days, the source has 10 day(s) (max day 10)",
+   "sentence": ""
+  },
+  {
+   "n": 15,
+   "sample_id": "s1-006",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "Run",
+   "note": "Than Bok Khorani is in Krabi, not the Phang Nga area the source reaches on days 7-9",
+   "detail": "phang: source day(s) 7/8/9, not day 5",
+   "sentence": "Day 5 — Kayaking Than Bok Khorani and Mangrove Caves, Phang Nga Area"
+  },
+  {
+   "n": 16,
+   "sample_id": "s1-006",
+   "code": "NUMBER_NOUN_MISMATCH",
+   "verdict": "L",
+   "note": "",
+   "detail": "page '12 hours' vs source '12  like-minded'",
+   "sentence": "Travel time: approximately 12 hours."
+  },
+  {
+   "n": 17,
+   "sample_id": "s1-007",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "7000",
+   "sentence": "The Kuari Pass trek ascends to 4,264 meters in Garhwal, offering amphitheater views of five peaks above 7,000 meters over six days."
+  },
+  {
+   "n": 18,
+   "sample_id": "s1-007",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Alaknanda Valley' (alaknanda)",
+   "sentence": "The Kuari Pass trek crosses the high-altitude frontier between the Hindu pilgrimage towns of the Alaknanda Valley and the skiing meadows of Auli."
+  },
+  {
+   "n": 19,
+   "sample_id": "s1-009",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "F",
+   "note": "source day 2-4 blocks describe the stay without naming Trincomalee",
+   "detail": "trincomalee: source day(s) 1, not day 4",
+   "sentence": "Day 4 — Trincomalee Beach Rest"
+  },
+  {
+   "n": 20,
+   "sample_id": "s1-009",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "F",
+   "note": "same: source day 6-7 blocks do not name Wilpattu",
+   "detail": "wilpattu: source day(s) 5, not day 7",
+   "sentence": "Day 7 — Wilpattu Morning Drive & Transfer to Negombo"
+  },
+  {
+   "n": 21,
+   "sample_id": "s1-010",
+   "code": "META_LENGTH",
+   "verdict": "M",
+   "note": "",
+   "detail": "139 chars, band 140–155",
+   "sentence": "Experience Taiwan's east coast with indigenous trails, temples, regional cooking classes, and hot springs led by local guides over 10 days."
+  },
+  {
+   "n": 22,
+   "sample_id": "s1-010",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Pingtung' (pingtung)",
+   "sentence": "Caoling Historic Trail to Alangyi coastline, with indigenous workshops and regional cuisine across Hualien, Taitung, and Pingtung"
+  },
+  {
+   "n": 23,
+   "sample_id": "s1-010",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Paiwan' (paiwan)",
+   "sentence": "The day begins in Sandimen with a visit to a glass bead cultural workshop, where artisans produce beads using traditional techniques specific to Paiwan communities."
+  },
+  {
+   "n": 24,
+   "sample_id": "s1-011",
+   "code": "META_CUT",
+   "verdict": "L",
+   "note": "",
+   "detail": "closing list without a conjunction: 'trains'",
+   "sentence": "Travel north India overland through Delhi, Rajasthan's forts and deserts, and Varanasi's Ganges ghats over 22 days with local guides, trains."
+  },
+  {
+   "n": 25,
+   "sample_id": "s1-011",
+   "code": "NUMBER_NOUN_MISMATCH",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "page '10 kilometers' vs source '10 min walk taj'",
+   "sentence": "Sarnath, located approximately 10 kilometers outside the city, is the site where Gautama Buddha delivered his first sermon after achieving enlightenment; the local guide can provide directions."
+  },
+  {
+   "n": 26,
+   "sample_id": "s1-011",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "generic title word",
+   "detail": "'Stars' (stars)",
+   "sentence": "Day 6 — Thar Desert Camp with Sunset and Stars"
+  },
+  {
+   "n": 27,
+   "sample_id": "s1-012",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "L",
+   "note": "",
+   "detail": "habarana, monkeys: source day(s) 3/4/5, not day 2",
+   "sentence": "Day 2 — Habarana: Monkeys, Ruins, and Jungle Treasure"
+  },
+  {
+   "n": 28,
+   "sample_id": "s1-012",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "200",
+   "sentence": "The day includes visits to Sigiriya, a fifth-century rock fortress rising 200 meters from the central plain, and the medieval city of Polonnaruwa, where twelfth-century Buddhist temples and administra"
+  },
+  {
+   "n": 29,
+   "sample_id": "s1-012",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Vedda' (vedda)",
+   "sentence": "Interaction with Vedda indigenous community in the Ampara region"
+  },
+  {
+   "n": 30,
+   "sample_id": "s1-012",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "'Twenty-one-day' read as a name",
+   "detail": "'Twenty-one-day Sri Lanka' (twenty)",
+   "sentence": "Twenty-one-day Sri Lanka itinerary covering Sigiriya's ancient fortress, Kandy's sacred temple, Yala safari, snorkeling at Trincomalee, and stays."
+  },
+  {
+   "n": 31,
+   "sample_id": "s1-013",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Kathmandu's Tribhuvan International Airport' (tribhuvan)",
+   "sentence": "On arrival at Kathmandu's Tribhuvan International Airport, the group is met and transferred to the hotel for check-in and overnight."
+  },
+  {
+   "n": 32,
+   "sample_id": "s1-013",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "generic adjective",
+   "detail": "'Wide Himalayan' (wide)",
+   "sentence": "Wide Himalayan panoramas open across the ridge before the descent leads to Roman Kharka at 4,000 meters."
+  },
+  {
+   "n": 33,
+   "sample_id": "s1-014",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "F",
+   "note": "generic word 'Meadows'",
+   "detail": "meadows: source day(s) 2, not day 15",
+   "sentence": "Day 15 — Khuspang to Dalzampa: Descent into Flower Meadows"
+  },
+  {
+   "n": 34,
+   "sample_id": "s1-014",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "'Piazza' (piazza)",
+   "sentence": "Named by mountaineer Martin Conway after the Piazza della Concordia in Rome, the site is a natural amphitheater."
+  },
+  {
+   "n": 35,
+   "sample_id": "s1-014",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "'Rome' (rome)",
+   "sentence": "Named by mountaineer Martin Conway after the Piazza della Concordia in Rome, the site is a natural amphitheater."
+  },
+  {
+   "n": 36,
+   "sample_id": "s1-014",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Asia's' (asia)",
+   "sentence": "The route offers several notable stops: at the junction where three of Asia's greatest mountain ranges converge—the Himalayas, Karakoram, and Hindu Kush—and at viewpoints overlooking Nanga Parbat, the"
+  },
+  {
+   "n": 37,
+   "sample_id": "s1-015",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "Run",
+   "note": "5,200 m kora altitude not in the source (label notes it as a light issue)",
+   "detail": "5200",
+   "sentence": "Experience Beijing's Great Wall and Forbidden City, the Qinghai-Tibet Railway, Mount Kailash kora at 5,200m, and Rombuk monastery near Everest."
+  },
+  {
+   "n": 38,
+   "sample_id": "s1-015",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Nojin Gangzang' (nojin, gangzang)",
+   "sentence": "Cross Khambala Pass (4,750 m) for views of turquoise Yamdrok Tso lake and approach Karola Pass (5,045 m) for views of Nojin Gangzang glacier"
+  },
+  {
+   "n": 39,
+   "sample_id": "s1-015",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Sino-Nepal' (sino)",
+   "sentence": "Cross the Sino-Nepal border at Kyirong and descend to Kathmandu"
+  },
+  {
+   "n": 40,
+   "sample_id": "s1-016",
+   "code": "SOURCE_DAY_CONTRADICTION",
+   "verdict": "S",
+   "note": "",
+   "detail": "duration '18 days' says 18 days, the source has 17 day(s) (max day 17)",
+   "sentence": ""
+  },
+  {
+   "n": 41,
+   "sample_id": "s1-016",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "U",
+   "note": "the page puts Bolikhamxay one day early; not clear from the source wording",
+   "detail": "bolikhamxay: source day(s) 6, not day 5",
+   "sentence": "Day 5 — Phonsavan to Thathom: Southern Descent into Bolikhamxay"
+  },
+  {
+   "n": 42,
+   "sample_id": "s1-016",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "900",
+   "sentence": "Cycle 900 kilometres from Luang Prabang's temples through Laos's Plain of Jars and Kong Lor Cave to Vietnam's Ho Chi Minh Trail, imperial Hue, and Hoi An."
+  },
+  {
+   "n": 43,
+   "sample_id": "s1-016",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Wat Xieng Thong' (wat, xieng, thong)",
+   "sentence": "UNESCO World Heritage town of Luang Prabang, with cycling access to Wat Xieng Thong and the Hmong Night Market"
+  },
+  {
+   "n": 44,
+   "sample_id": "s1-016",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "generic adjective",
+   "detail": "'Jungled Valleys' (jungled)",
+   "sentence": "Day 10 — Vinh to Huong Khe: Jungled Valleys and Mountain Foothills"
+  },
+  {
+   "n": 45,
+   "sample_id": "s1-016",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Da Nang' (nang)",
+   "sentence": "A recently opened tunnel has substantially reduced traffic on the pass road; the climb now rewards riders with clear views toward the coast and Da Nang."
+  },
+  {
+   "n": 46,
+   "sample_id": "s1-017",
+   "code": "INCLUSION_CONTRADICTED",
+   "verdict": "L",
+   "note": "",
+   "detail": "lunch (source: 'There are several spots where guests can rest along the hike and we’ve selected ')",
+   "sentence": "Trek Taiwan's Caoling Historic Trail from Yuanwangkeng to Dali on this 7 km coastal day tour with private guide, transport, and lunch included."
+  },
+  {
+   "n": 47,
+   "sample_id": "s1-018",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "150",
+   "sentence": "Admission: ¥150."
+  },
+  {
+   "n": 48,
+   "sample_id": "s1-018",
+   "code": "NUMBER_NOUN_MISMATCH",
+   "verdict": "L",
+   "note": "",
+   "detail": "page '4-hectare' vs source '4  fukagawa edo museum'",
+   "sentence": "This 4-hectare garden contains a central pond and was designed in the Edo period."
+  },
+  {
+   "n": 49,
+   "sample_id": "s1-018",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "400",
+   "sentence": "Admission: ¥400."
+  },
+  {
+   "n": 50,
+   "sample_id": "s1-018",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Iwasaki Yataro' (yataro)",
+   "sentence": "The grounds were owned by Iwasaki Yataro, founder of Mitsubishi."
+  },
+  {
+   "n": 51,
+   "sample_id": "s1-018",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "'Onagigawa' (onagigawa)",
+   "sentence": "The park is positioned at the confluence of the Onagigawa and Sumidagawa canals in eastern Tokyo."
+  },
+  {
+   "n": 52,
+   "sample_id": "s1-018",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "'Sumidagawa' (sumidagawa)",
+   "sentence": "The park is positioned at the confluence of the Onagigawa and Sumidagawa canals in eastern Tokyo."
+  },
+  {
+   "n": 53,
+   "sample_id": "s1-019",
+   "code": "META_CUT",
+   "verdict": "L",
+   "note": "",
+   "detail": "not a complete sentence",
+   "sentence": "Visit Xi'an's Terracotta Warriors museum, cycle the ancient city wall, and sample authentic Muslim Quarter street food with a local guide all in one full"
+  },
+  {
+   "n": 54,
+   "sample_id": "s1-020",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Hindu Kush' (kush)",
+   "sentence": "Swat Valley sits in northern Pakistan's Khyber Pakhtunkhwa province, a region of steep forested ridges, clear rivers, and meadows that rise toward the Hindu Kush."
+  },
+  {
+   "n": 55,
+   "sample_id": "s1-020",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Pakistan's Khyber Pakhtunkhwa' (khyber, pakhtunkhwa)",
+   "sentence": "Swat Valley sits in northern Pakistan's Khyber Pakhtunkhwa province, a region of steep forested ridges, clear rivers, and meadows that rise toward the Hindu Kush."
+  },
+  {
+   "n": 56,
+   "sample_id": "s1-020",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Greek' (greek)",
+   "sentence": "Swat Museum in Mingora — artifacts, sculpture, and pottery spanning Greek, Buddhist, and Islamic periods"
+  },
+  {
+   "n": 57,
+   "sample_id": "s1-020",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "'Karakoram Highway' (karakoram, highway)",
+   "sentence": "Early morning drive north to Mingora through the Karakoram Highway."
+  },
+  {
+   "n": 58,
+   "sample_id": "s1-020",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Greco-Buddhist' (greco)",
+   "sentence": "Visit the Swat Museum's Buddhist and Greco-Buddhist collections."
+  },
+  {
+   "n": 59,
+   "sample_id": "s1-020",
+   "code": "INCLUSION_CONTRADICTED",
+   "verdict": "L",
+   "note": "",
+   "detail": "meals (source excludes lunch: 'Lunches')",
+   "sentence": "Accommodation consists of hotels and guesthouses in the three main towns; guides are English-speaking; meals and entrance fees are included."
+  },
+  {
+   "n": 60,
+   "sample_id": "s1-021",
+   "code": "SOURCE_DAY_CONTRADICTION",
+   "verdict": "S",
+   "note": "",
+   "detail": "duration '4 DAYS' says 4 days, the source has 3 day(s) (max day 3)",
+   "sentence": ""
+  },
+  {
+   "n": 61,
+   "sample_id": "s1-021",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "'Haven Beach Club' (haven)",
+   "sentence": "Overnight accommodation is at Haven Beach Club in Mirissa on a half-board basis."
+  },
+  {
+   "n": 62,
+   "sample_id": "s1-022",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "generic title word",
+   "detail": "'Mountain Refuge' (refuge)",
+   "sentence": "Day 1 — Khustai National Park: Przewalski Horses & Mountain Refuge"
+  },
+  {
+   "n": 63,
+   "sample_id": "s1-023",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Central Asia' (asia)",
+   "sentence": "Keoladeo Ghana Bird Sanctuary near Bharatpur — over 350 documented bird species, including migratory waterfowl from Central Asia"
+  },
+  {
+   "n": 64,
+   "sample_id": "s1-023",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Aravalli Valley' (aravalli)",
+   "sentence": "Elephant ride to the summit of Amber Fort in Jaipur, overlooking the Aravalli Valley"
+  },
+  {
+   "n": 65,
+   "sample_id": "s1-023",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Yamuna' (yamuna)",
+   "sentence": "Drive toward Delhi with stops at Sikandra, Mathura, and Vrindavan—Krishna pilgrimage sites along the Yamuna—before arriving in Delhi to conclude the tour."
+  },
+  {
+   "n": 66,
+   "sample_id": "s1-024",
+   "code": "DAY_DEPARTURE_MIDTRIP",
+   "verdict": "L",
+   "note": "",
+   "detail": "departure title on day 7/16",
+   "sentence": ""
+  },
+  {
+   "n": 67,
+   "sample_id": "s1-024",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "L",
+   "note": "",
+   "detail": "galle, yala: source day(s) 4/5, not day 3",
+   "sentence": "Day 3 — Bentota to Galle and Yala"
+  },
+  {
+   "n": 68,
+   "sample_id": "s1-024",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "200",
+   "sentence": "Early morning ascent of Sigiriya Rock, a 5th-century fortress and palace site rising approximately 200 meters above the surrounding plain."
+  },
+  {
+   "n": 69,
+   "sample_id": "s1-024",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Dutch East India Company' (india, company)",
+   "sentence": "Visit the Dutch Fortress, a 17th-century fortified compound built by the Dutch East India Company, with ramparts, cannons, and colonial-era architecture still intact."
+  },
+  {
+   "n": 70,
+   "sample_id": "s1-024",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'King Kasyapa' (king, kasyapa)",
+   "sentence": "The structure was built by King Kasyapa and includes a network of stairs carved or constructed into the rock face, leading through defensive gates, landscaped terraces, and mirror wall galleries to th"
+  },
+  {
+   "n": 71,
+   "sample_id": "s1-025",
+   "code": "NUMBER_NOUN_MISMATCH",
+   "verdict": "L",
+   "note": "",
+   "detail": "page '50 minutes' vs source '50  slate stone house'",
+   "sentence": "A guided hike leads to Tjuvecekadan, a Paiwan settlement roughly 50 minutes from the station, where a Paiwan host conducts a walking tour of the village's slate-stone architecture and settlement layou"
+  },
+  {
+   "n": 72,
+   "sample_id": "s1-025",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "title-case phrase",
+   "detail": "'Coastal Hike Along Southern Taiwan's Undeveloped Shoreline' (shoreline)",
+   "sentence": "Day 4 — Alangyi Historic Trail: Coastal Hike Along Southern Taiwan's Undeveloped Shoreline"
+  },
+  {
+   "n": 73,
+   "sample_id": "s1-026",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "L",
+   "note": "",
+   "detail": "bohol: source day(s) 9/10/11/12/13/14, not day 8",
+   "sentence": "Day 8 — Cebu to Bohol by Ferry"
+  },
+  {
+   "n": 74,
+   "sample_id": "s1-026",
+   "code": "NUMBER_NOUN_MISMATCH",
+   "verdict": "L",
+   "note": "",
+   "detail": "page '30-hectare' vs source '30 min'",
+   "sentence": "Man-made Forest near Tagbilaran, a 30-hectare planted grove accessible by ground transfer"
+  },
+  {
+   "n": 75,
+   "sample_id": "s1-026",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Tagbilaran' (tagbilaran)",
+   "sentence": "Man-made Forest near Tagbilaran, a 30-hectare planted grove accessible by ground transfer"
+  },
+  {
+   "n": 76,
+   "sample_id": "s1-026",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Roman Catholic' (roman, catholic)",
+   "sentence": "Morning departure on guided city tour visiting Fort San Pedro, a military fortress; Magellan's Cross, housed in a chapel; and the Basilica Minore del Santo Niño, a Roman Catholic church in the Philipp"
+  },
+  {
+   "n": 77,
+   "sample_id": "s1-026",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Santo Niño' (santo)",
+   "sentence": "Morning departure on guided city tour visiting Fort San Pedro, a military fortress; Magellan's Cross, housed in a chapel; and the Basilica Minore del Santo Niño, a Roman Catholic church in the Philipp"
+  },
+  {
+   "n": 78,
+   "sample_id": "s1-026",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Cebu's Spanish' (spanish)",
+   "sentence": "Fifteen-day circuit through Cebu's Spanish heritage sites, three-day Sumilon Island stay, coastal Argao countryside, and Bohol's Chocolate Hills and Loboc."
+  },
+  {
+   "n": 79,
+   "sample_id": "s1-027",
+   "code": "META_LENGTH",
+   "verdict": "M",
+   "note": "",
+   "detail": "134 chars, band 140–155",
+   "sentence": "Visit Seoul, Bukchon Hanok Village, Busan's historic temples and markets, and Jeju Island's natural sites over 10 days in South Korea."
+  },
+  {
+   "n": 80,
+   "sample_id": "s1-027",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Asia-Pacific Economic Cooperation' (cooperation)",
+   "sentence": "Adjacent Dongbaek Island features the APEC House, a distinctive structure built to host the 2005 Asia-Pacific Economic Cooperation summit."
+  },
+  {
+   "n": 81,
+   "sample_id": "s1-027",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Busan International Film Festival' (film, festival)",
+   "sentence": "Nearby, visit Gukje Traditional Market, set close to BIFF Square (named after the Busan International Film Festival)."
+  },
+  {
+   "n": 82,
+   "sample_id": "s1-028",
+   "code": "META_LENGTH",
+   "verdict": "M",
+   "note": "",
+   "detail": "127 chars, band 140–155",
+   "sentence": "Trek 8 days in the Annapurna region to Poonhill at 3,210m for panoramic views of Dhaulagiri, Machhapuchre, and Annapurna South."
+  },
+  {
+   "n": 83,
+   "sample_id": "s1-029",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "generic title word",
+   "detail": "'Astronomy' (astronomy)",
+   "sentence": "Day 3 — Jaipur: Palaces, Astronomy & City Architecture"
+  },
+  {
+   "n": 84,
+   "sample_id": "s1-030",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "L",
+   "note": "",
+   "detail": "elephant, negombo: source day(s) 9, not day 4",
+   "sentence": "Day 4 — Negombo — Elephant Encounter and Beach Rest"
+  },
+  {
+   "n": 85,
+   "sample_id": "s1-030",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "200",
+   "sentence": "Cycling through farming fields and villages to Sigiriya Rock, a fifth-century fortified palace site rising 200 meters from the plains"
+  },
+  {
+   "n": 86,
+   "sample_id": "s1-030",
+   "code": "NUMBER_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "200",
+   "sentence": "Cycling across farming fields and through villages approaches Sigiriya Rock, a fifth-century fortified palace rising 200 meters, with views across dry-zone grassland and reservoirs."
+  },
+  {
+   "n": 87,
+   "sample_id": "s1-030",
+   "code": "NUMBER_NOUN_MISMATCH",
+   "verdict": "L",
+   "note": "",
+   "detail": "page '100 kilometers' vs source '100 pct customised suite budget'",
+   "sentence": "Transfer westward and upward into Kandy's hill-country region (approximately 100 kilometers)."
+  },
+  {
+   "n": 88,
+   "sample_id": "s1-031",
+   "code": "META_CUT",
+   "verdict": "L",
+   "note": "",
+   "detail": "closing list without a conjunction: 'volcanic archaeology'",
+   "sentence": "A seven-day Philippines route combining the Calamian Islands with Albay province, featuring reef and thermal springs, marine parks, volcanic archaeology."
+  },
+  {
+   "n": 89,
+   "sample_id": "s1-031",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Albay' (albay)",
+   "sentence": "7 days across the Calamian Islands and Albay province, combining reef and wreck diving, geothermal springs, and volcanic archaeology"
+  },
+  {
+   "n": 90,
+   "sample_id": "s1-031",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Calamian Islands' (calamian)",
+   "sentence": "7 days across the Calamian Islands and Albay province, combining reef and wreck diving, geothermal springs, and volcanic archaeology"
+  },
+  {
+   "n": 91,
+   "sample_id": "s1-031",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Bicol Peninsula' (bicol)",
+   "sentence": "This seven-day route moves through the northern Calamian Islands and into Albay province on the Bicol Peninsula."
+  },
+  {
+   "n": 92,
+   "sample_id": "s1-031",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Mayon Volcano' (mayon)",
+   "sentence": "Days 4 through 6 shift inland to Legazpi, where ATV routes traverse lava fields and the ruins of Cagsawa Church stand on the flank of Mayon Volcano."
+  },
+  {
+   "n": 93,
+   "sample_id": "s1-031",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "title-case phrase",
+   "detail": "'Community Engagement' (engagement)",
+   "sentence": "Day 2 — Salvacion: Coastal Drive & Community Engagement"
+  },
+  {
+   "n": 94,
+   "sample_id": "s1-032",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "F",
+   "note": "architecture style, not a stop",
+   "detail": "rajput: source day(s) 11, not day 14",
+   "sentence": "Day 14 — Bhandarej: Mughal and Rajput Architecture"
+  },
+  {
+   "n": 95,
+   "sample_id": "s1-032",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "U",
+   "note": "the Ganges boat ride sits on source day 21, the page day 20: possible one-day drift",
+   "detail": "ganges: source day(s) 21, not day 20",
+   "sentence": "Day 20 — Varanasi: Flight, Sarnath & Ganges Boat Ride"
+  },
+  {
+   "n": 96,
+   "sample_id": "s1-032",
+   "code": "META_CUT",
+   "verdict": "L",
+   "note": "",
+   "detail": "closing list without a conjunction: 'Khajuraho'",
+   "sentence": "This 22-day journey connects five UNESCO World Heritage sites across Rajasthan and the Ganges Valley, visiting Jaipur, Jodhpur, Udaipur, Agra, Khajuraho."
+  },
+  {
+   "n": 97,
+   "sample_id": "s1-032",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Ganga Aarti' (aarti)",
+   "sentence": "Varanasi and the Ganges ghats at sunrise, including the evening Ganga Aarti ceremony"
+  },
+  {
+   "n": 98,
+   "sample_id": "s1-032",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Lake Pichola' (pichola)",
+   "sentence": "Afternoon tour of the City Palace, a complex of courtyards and rooms overlooking Lake Pichola, and Saheliyon ki Bari (Garden of the Maidens), a formal garden with fountains and pavilions."
+  },
+  {
+   "n": 99,
+   "sample_id": "s1-032",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "word of a translated name",
+   "detail": "'Maidens' (maidens)",
+   "sentence": "Afternoon tour of the City Palace, a complex of courtyards and rooms overlooking Lake Pichola, and Saheliyon ki Bari (Garden of the Maidens), a formal garden with fountains and pavilions."
+  },
+  {
+   "n": 100,
+   "sample_id": "s1-032",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "word of a translated name",
+   "detail": "'Victory' (victory)",
+   "sentence": "Visit Vijay Stambh (Tower of Victory), a tall commemorative tower within the fort complex, and Sanwalia Seth Temple, dedicated to Lord Krishna."
+  },
+  {
+   "n": 101,
+   "sample_id": "s1-032",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "source spells it 'Chand Baori' (variant spelling, too short for the one-edit rule)",
+   "detail": "'Chand Baoli' (chand, baoli)",
+   "sentence": "Evening visit to Abhaneri village to see Chand Baoli, a large stepwell with multiple levels of arched recesses, among the largest stepwells in Rajasthan."
+  },
+  {
+   "n": 102,
+   "sample_id": "s1-032",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Royal Chhatris' (chhatris)",
+   "sentence": "Visit the Royal Chhatris, cenotaphs of former rulers."
+  },
+  {
+   "n": 103,
+   "sample_id": "s1-032",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "'Buddha' as a person",
+   "detail": "'Buddha' (buddha)",
+   "sentence": "Afternoon visit to Sarnath, approximately 10 kilometres away, home to a Buddhist temple and stupa marking the location where Buddha taught."
+  },
+  {
+   "n": 104,
+   "sample_id": "s1-033",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Arabian Sea' (arabian)",
+   "sentence": "From Athirapally's waterfalls through Kumarakom's backwaters to the Arabian Sea coast, with nights aboard a traditional houseboat."
+  },
+  {
+   "n": 105,
+   "sample_id": "s1-035",
+   "code": "META_CUT",
+   "verdict": "L",
+   "note": "",
+   "detail": "closing list without a conjunction: 'Ranthambore wildlife safaris'",
+   "sentence": "This 15-day Northern India journey covers Delhi, Agra, Jaipur, Jodhpur, Udaipur and Mumbai with Taj Mahal visits, Ranthambore wildlife safaris."
+  },
+  {
+   "n": 106,
+   "sample_id": "s1-035",
+   "code": "NUMBER_NOUN_MISMATCH",
+   "verdict": "F",
+   "note": "source '3h45m' read as metres",
+   "detail": "page '45 minutes' vs source '45 m km'",
+   "sentence": "The drive to Jaipur spans approximately 165 kilometers, requiring 3 hours 45 minutes to 4 hours 15 minutes by private vehicle."
+  },
+  {
+   "n": 107,
+   "sample_id": "s1-035",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "source glues 'SisGanj'",
+   "detail": "'Gurdwara Sis' (sis)",
+   "sentence": "Visit this structure alongside the Gurdwara SisGanj, a Sikh temple established in 1783."
+  },
+  {
+   "n": 108,
+   "sample_id": "s1-036",
+   "code": "META_CUT",
+   "verdict": "L",
+   "note": "",
+   "detail": "closing list without a conjunction: 'professional guides'",
+   "sentence": "Sixteen-day wildlife tour covering Jim Corbett, Ranthambore, Bandhavgarh, and Kanha national parks with twice-daily safaris, professional guides."
+  },
+  {
+   "n": 109,
+   "sample_id": "s1-036",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Madhya Pradesh' (madhya, pradesh)",
+   "sentence": "This 16-day itinerary moves through four of India's principal tiger reserves—Jim Corbett in the Himalayan foothills, Ranthambore in Rajasthan, Bandhavgarh in Madhya Pradesh, and Kanha in the central h"
+  },
+  {
+   "n": 110,
+   "sample_id": "s1-036",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Rajasthan' (rajasthan)",
+   "sentence": "This 16-day itinerary moves through four of India's principal tiger reserves—Jim Corbett in the Himalayan foothills, Ranthambore in Rajasthan, Bandhavgarh in Madhya Pradesh, and Kanha in the central h"
+  },
+  {
+   "n": 111,
+   "sample_id": "s1-036",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Uttarakhand' (uttarakhand)",
+   "sentence": "The park lies in the Himalayan foothills of Uttarakhand."
+  },
+  {
+   "n": 112,
+   "sample_id": "s1-037",
+   "code": "META_CUT",
+   "verdict": "L",
+   "note": "",
+   "detail": "not a complete sentence",
+   "sentence": "Trek Bhutan's most challenging alpine route across Pagalabtsa Pass at 4,250 metres to reach the Thousand Lakes plateau and experience high-altitude"
+  },
+  {
+   "n": 113,
+   "sample_id": "s1-041",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "Rbg",
+   "note": "",
+   "detail": "'Phewa Lake' (phewa)",
+   "sentence": "Pokhara, situated at the base of the Annapurna range alongside Phewa Lake, serves as the launching point for the trek."
+  },
+  {
+   "n": 114,
+   "sample_id": "s1-044",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "title-case words",
+   "detail": "'Bundala's Waterbirds' (waterbirds)",
+   "sentence": "Day 4 — Udawalawe Elephants to Bundala's Waterbirds"
+  },
+  {
+   "n": 115,
+   "sample_id": "s1-044",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "F",
+   "note": "bird name list",
+   "detail": "'Black-headed Ibises' (ibises)",
+   "sentence": "Year-round residents include Lesser Whistling Ducks, Garganey, Little Cormorants, Indian Cormorants, Grey Herons, Black-headed Ibises, Eurasian Spoonbills, Asian Openbills, and Painted Storks."
+  },
+  {
+   "n": 116,
+   "sample_id": "s1-046",
+   "code": "DAY_PLACE_MISMATCH",
+   "verdict": "F",
+   "note": "'Protected' in 'Nam Ha Protected Area' (the source says 'NPA')",
+   "detail": "protected: source day(s) 4, not day 3",
+   "sentence": "Day 3 — Nam Ha Protected Area Trek — Day One"
+  },
+  {
+   "n": 117,
+   "sample_id": "s1-048",
+   "code": "DAY_COUNT_VS_DURATION",
+   "verdict": "L",
+   "note": "",
+   "detail": "9 output day(s) for a 13-day duration",
+   "sentence": ""
+  },
+  {
+   "n": 118,
+   "sample_id": "s1-048",
+   "code": "TEXT_TRUNCATED",
+   "verdict": "L",
+   "note": "",
+   "detail": "ends without terminal punctuation",
+   "sentence": "From there, continue to Boseong Green Tea Field, where endless"
+  },
+  {
+   "n": 119,
+   "sample_id": "s1-050",
+   "code": "NAME_NOT_IN_SOURCE",
+   "verdict": "L",
+   "note": "",
+   "detail": "'Khao Phraya River' (khao)",
+   "sentence": "Khao Phraya River cruise and Grand Palace complex in Bangkok, including the Temple of the Emerald Buddha"
+  }
+ ]
+}
