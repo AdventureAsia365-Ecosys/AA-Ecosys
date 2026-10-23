@@ -259,6 +259,7 @@ These meanings are binding. A new column MUST NOT reuse a name below with a diff
 | `shared.dfs_balance_snapshot` | CIS | latest per day kept (proposed) | — | No |
 | `acp_contract.atom_ranking`, `acp_contract.route` (superseded rows, `superseded_at IS NOT NULL`) | CIS | proposed: superseded rows older than 90 days deleted; current rows never | — | No |
 | `shared.notifications`, `booking.notifications` (+ `notification_reads`) | owner | proposed: read rows after 90 days, unread after 180 days | — | No |
+| `gold_aa_internal.tour_lifecycle_event` | CIS | proposed: kept (the served-state record of AA's catalog keys, append-only, no tenant column, no personal data, a few rows per tour change; read by `catalog.v_tour_lifecycle_outbox`, CIS 272 / 274, AA-986); a window is set before prod, after every consumer keeps its own cursor | — | No |
 | `booking.customer_otps`, `booking.customer_sessions` | Booking | proposed: 7 days after `expires_at` / `used_at` / `revoked_at`; tables dropped in ADR 0006 Phase 4 | — | No (`conf:credential`) |
 | `tripplanner.sessions` | TripPlanner | proposed in L3 (guest claiming in ADR 0006 Phase 4 needs `guest_token` while the guest trip lives) | — | No |
 | `tripplanner.trip_events` | TripPlanner | proposed in L3 | — | Yes |
