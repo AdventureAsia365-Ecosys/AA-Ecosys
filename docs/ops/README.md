@@ -125,11 +125,13 @@ Read from each repo's `.github/workflows/` on `main`, 19/10/2026.
 | AA-CIS-Infra | `db-schema-dump.yml` | nightly 03:43 UTC; after each apply; dispatch | Dump schema, regenerate reference | opens the root PR `bot/db-schema-reference` |
 | AA-CIS-Infra | `db-isolation-probe.yml` | nightly 04:13 UTC; after each apply; dispatch | Isolation probe | read-only |
 | AA-CIS-Infra | `migration-copy-guard.yml` | PR (migration paths); nightly 02:17 UTC; dispatch | Copies match owner main, Migration lint and unique numbers | |
-| AA-CIS-Infra | `secret-scan.yml` | PR to `main`; push `main`; nightly 19:23 UTC; dispatch | gitleaks (PR lines), gitleaks full history | full history: every branch, tag and PR head, baseline in `.gitleaksignore`; PR scan uses the base commit rules (AA-981) |
+| AA-CIS-Infra | `secret-scan.yml` | PR to `main` | gitleaks (PR lines) | uses the base commit rules (AA-981) |
+| AA-CIS-Infra | `secret-scan-history.yml` | push `main`; nightly 19:23 UTC; dispatch | gitleaks full history; gitleaks working tree (dispatch only) | every branch, tag and PR head, baseline in `.gitleaksignore` (AA-981) |
 | AA-CIS-Infra | `identity-triggers-test.yml`, `ops-probe-test.yml`, `rds-snapshot-expiry-test.yml`, `secrets-register-check-test.yml` | PR / push `main` (their paths) | unit tests of the Lambdas and tools | |
 | AA-Ecosys (root) | `docs-lint.yml` | PR to `master` (docs paths); weekly Monday 01:17 UTC; dispatch | Docs lint, Docs freshness report | AA-888 |
 | AA-Ecosys (root) | `contracts.yml` | PR to `master` (contracts, ADR and tool paths); dispatch | Contracts and ADR numbers | |
-| AA-Ecosys (root) | `secret-scan.yml` | PR to `master`; push `master`; nightly 19:41 UTC; dispatch | gitleaks (PR lines), gitleaks full history | same rules as Infra (AA-981) |
+| AA-Ecosys (root) | `secret-scan.yml` | PR to `master` | gitleaks (PR lines) | same rules as Infra (AA-981) |
+| AA-Ecosys (root) | `secret-scan-history.yml` | push `master`; nightly 19:41 UTC; dispatch | gitleaks full history | every branch, tag and PR head (AA-981) |
 
 Scheduled jobs outside GitHub: the ops-probe Lambda `aa-cis-dev-dfs-balance-check` (EventBridge schedules; the daily
 06:15 UTC run calls the DataForSEO balance check, the Jev canary (a real paid call), the Jev 402 sweep, the wave check and

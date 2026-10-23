@@ -9,7 +9,8 @@ name: Docs lint
 #   - internal links, offline (lychee): no network, no external sites
 #   - every alarm row of docs/generated/alarms.md links to an existing runbook (AA-893)
 #   - PRDs (docs/product/): required PRD fields, acceptance criteria, and every referenced path exists (AA-894)
-# Secrets: gitleaks runs on every PR (any path) and nightly over the full history in secret-scan.yml (AA-981),
+# Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
+# secret-scan-history.yml (AA-981),
 # so it is not repeated here (secret names are fine in docs, values never are).
 # Weekly (and on demand): freshness report of pages past their review date, as a run artifact.
 # Nothing is committed; no AWS access, no secrets beyond the default read-only token.
