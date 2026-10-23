@@ -29,7 +29,7 @@ only — never a value.** The machine-readable twin is [`secrets-register.yaml`]
 
 | | Count |
 |---|---|
-| Rows | 98: 37 Secrets Manager (32 live + 1 planned + 4 deleted 19/10, in the recovery window), 33 GitHub (26 live + 7 deleted/removed), 10 Vercel (9 live + 1 planned), 4 Lambda env (all removed), 14 vendor |
+| Rows | 99: 38 Secrets Manager (32 live + 2 planned + 4 deleted 19/10, in the recovery window), 33 GitHub (26 live + 7 deleted/removed), 10 Vercel (9 live + 1 planned), 4 Lambda env (all removed), 14 vendor |
 | Changed 22/10/2026 (S247) | GitHub AA-CIS-Infra `ROOT_REPO_DOCS_TOKEN` **deleted** (Infra docs workflows on the `aa-ecosys-ci-bot` App token, AA-CIS-Infra #281); vendor rows: three unused GitHub PATs, revoke recommended (pending Nghiệp); DataForSEO password exposed in public AA-CIS-Infra history, rotation declined for now (Nghiệp, ADR 0014 amendment). Drift check not re-run (no fresh inventories) |
 | Drift check (S245, all four inventories) | **`diff = 0`** (was 8 before this update). Not checked: GitHub org secrets (the listing answers 403, no org-admin scope; no `github:org` row) |
 | Orphans | 4 Secrets Manager — **deleted 19/10/2026**, recovery until 18/11 (`aa-cis/dev/api-keys`, `aa-cis/dev/acp-webhook-secret`, `aa-cis/dev/acp-partner-api`, `tripplanner/dev/mapbox-geocoding-token`); 2 GitHub — **deleted 17/10/2026** (AA-866: `VERCEL_DEPLOY_HOOK`, `ACPCORE_READ_TOKEN`), absent on 20/10; the repo-level `ADMIN_SECRET` and `AWS_ROLE_ARN` on AA-CIS-App are absent too |
@@ -218,7 +218,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 ## Register
 
-### Secrets Manager, acc2 (005097885195, us-west-1) (37)
+### Secrets Manager, acc2 (005097885195, us-west-1) (38)
 
 | Name | Owner app | Consumers (main) | Managed by | Rotation | Last changed | Status | Notes |
 |---|---|---|---|---|---|---|---|
@@ -243,6 +243,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `aa-cis/dev/e2e-tenant/trail-pulse` | cis | AA-CIS-App services/acp_shared/e2e_tenant_key_sync.py:28 (writes after key issue), task role grant AA-CIS-Infra modules/ecs/main.tf:250; agent UI verify / paid E2E runs (tenant portal API key) | cli (value kept in sync by app-runtime) | app-runtime (key re-issue) | 2026-10-12 | **keep** | Test tenant Trail Pulse portal API key. |
 | `aa-cis/dev/e2e-tenant/wildkind-travel` | cis | AA-CIS-App services/acp_shared/e2e_tenant_key_sync.py:28 (writes after key issue), task role grant AA-CIS-Infra modules/ecs/main.tf:250; agent UI verify / paid E2E runs (tenant portal API key) | cli (value kept in sync by app-runtime) | app-runtime (key re-issue) | 2026-10-12 | **keep** | Test tenant WildKind Travel portal API key. |
 | `booking/dev/database-url` | booking | ECS aa-booking-dev-api DATABASE_URL (AA-CIS-Infra accounts/aa365/booking.tf:304); AA-CIS-Infra db/isolation_probe.py:122, db/owners.yaml:131 | terraform aws_secretsmanager_secret.booking_db (container only, value out-of-band) | none | 2026-10-14 | **keep** |  |
+| `crm/dev/database-url` | crm | AA-Partner api + crm.job worker DATABASE_URL (AA-933; execution role only); AA-CIS-Infra db/isolation_probe.py (login crm_app), db/run_migration.py set-password crm_app, db/owners.yaml crm | terraform aws_secretsmanager_secret.crm_db (accounts/aa365/crm_data.tf, shell only, value out-of-band) | none | TBD | **planned** | AA-932. DSN of crm_app (LOGIN, limit 6, schema crm). Nghiệp writes it in the Console after the apply, then DB Migrate set-password role=crm_app. CIS task role denied crm/* (DenyMasterAndOtherAppSecrets). |
 | `booking/dev/sentry-dsn` | booking | ECS aa-booking-dev-api SENTRY_DSN via the task-definition `secrets` block, only while AA-CIS-Infra `booking_sentry_enabled` is true (accounts/aa365/booking.tf, AA-871); AA-Booking backend/app/observability/sentry.py | terraform aws_secretsmanager_secret.booking_sentry_dsn (shell only, value out-of-band) | none | TBD-M0 | **keep** | AA-871. Sentry DSN of project aa-booking-api (low sensitivity: ingest-only). Created and wired S247 (22/10/2026); test events verified in Sentry. |
 | `tripplanner/dev/sentry-dsn` | tripplanner | TP Lambdas browse + assembly, by name tripplanner/<ENVIRONMENT>/sentry-dsn at cold start (AA-TripPlanner-Web backend/shared/observability.py resolve_dsn, AA-871); grant ReadSentryDsnSecret (AA-CIS-Infra accounts/aa365/tripplanner.tf) | terraform aws_secretsmanager_secret.tripplanner_sentry_dsn (shell only, value out-of-band) | none | TBD-M0 | **keep** | AA-871. Sentry DSN of project aa-tripplanner-lambdas (low sensitivity: ingest-only). No DSN in the Lambda env. Created and wired S247 (22/10/2026); test events verified in Sentry. |
 | `aa-ecosys/github/aa-agent-app-key` | ecosystem | AA-Ecosys `tools/github/as-app.sh` (orchestrating session, MFA admin profile; mints 1-hour installation tokens) | cli | manual (2026-10-22); on leak / go-live / reader leaving (ADR 0011) | 2026-10-22 | **keep** | AA-901. Private key of the GitHub App `aa-agent` (app id 5421824). The `.pem` was shredded after storing. |
