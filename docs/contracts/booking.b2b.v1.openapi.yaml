@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.0"
+  version: "1.1"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -14,6 +14,8 @@ info:
     AA catalog: retired, paused or gone; root ADR 0015, AA-986); on 503 or a timeout the CRM shows an
     indicative price and disables deposits until a hold is active. Path prefix /booking/b2b/v1 is provisional until
     ADR 0013 (AA-899) fixes HTTP conventions; the contract name and major do not change with it.
+    Minor 1.1 (AA-975, additive): Event types departure.cancelled and departure.incident_cleared, Event.decline_code,
+    and the GET /events cursor and delivery rules.
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
@@ -276,6 +278,17 @@ paths:
     get:
       operationId: listEvents
       summary: Cursor feed of hold, line, booking and departure events for the calling agency
+      description: >-
+        The calling agency's events (and only its own), oldest first, from Booking's transactional outbox: an event
+        exists if and only if the change it reports committed. Delivery is at least once: store next_cursor after
+        processing a page and poll again with it (the CRM pulls every minute into crm.inbox_events); a replay from an
+        older cursor returns the same events again (same event_id, same order), each once, so consumers dedupe on
+        event_id. Omit after to read from the start. Cursors are opaque; next_cursor is always present (the last
+        item's cursor, or after itself when nothing is new). A malformed cursor, or one that is ahead of the feed,
+        is 422 invalid. Departure events (guaranteed, cancelled, incident, incident_cleared) go to every agency with
+        a live hold or a confirmed, not declined or cancelled line on the departure. Events carry ids and codes
+        only, never personal data or free text. departure.time_change has no producer yet (departures carry no
+        start time); new_start_time is null until it has.
       security:
         - m2m: [booking.b2b/read]
       parameters:
@@ -283,6 +296,7 @@ paths:
         - name: after
           in: query
           required: false
+          description: The cursor of the last event already processed (next_cursor of the previous page).
           schema: {type: string, maxLength: 200}
         - name: limit
           in: query
@@ -294,6 +308,9 @@ paths:
           content:
             application/json:
               schema: {$ref: "#/components/schemas/EventPage"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}  # forbidden (not the CRM client, no read scope), unknown_partner
+        "422": {$ref: "#/components/responses/Problem"}  # invalid: malformed or future cursor, limit out of range
   /fx-rates:
     get:
       operationId: getFxRates
@@ -685,7 +702,7 @@ components:
         type:
           type: string
           enum: [hold.expired, hold.extended, line.confirmed, line.declined, booking.cancelled, departure.guaranteed,
-                 departure.incident, departure.time_change]
+                 departure.cancelled, departure.incident, departure.incident_cleared, departure.time_change]
         occurred_at: {type: string, format: date-time}
         hold_id: {type: [string, "null"], maxLength: 64}
         booking_id: {type: [string, "null"], maxLength: 64}
@@ -694,7 +711,13 @@ components:
         incident_code:
           type: [string, "null"]
           enum: [weather, road, health, political, supplier, other, null]
-          description: For departure.incident; never traveller data.
+          description: For departure.incident and departure.incident_cleared; never traveller data.
+        decline_code:
+          type: [string, "null"]
+          enum: [sold_out, supplier_unavailable, minimum_not_met, other, null]
+          description: >-
+            1.1. For line.declined: why AA declined an on-request line (the CRM pre-selects the Lost reason "AA
+            on-request declined"); null otherwise.
         new_start_time: {type: [string, "null"], format: date-time}
     EventPage:
       type: object
