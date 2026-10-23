@@ -30,8 +30,8 @@ paths:
       description: >-
         Without updated_since: the current offer (sellable plans whose tour is in the AA catalog). With updated_since
         (a delta): also plans that stopped being sellable (sellable false, no components) and, since AA-986 (root ADR
-        0015 decision 5), plans whose tour AA retired, listed once with withdrawn true, withdrawn_reason and updated_at
-        = the retirement time. A paused tour (temporarily unavailable) is not listed as withdrawn; it is only absent
+        0015 decision 5), plans that were offered to agencies (sellable, or with components) whose tour AA retired,
+        listed once with withdrawn true, withdrawn_reason and updated_at = the retirement time. A paused tour (temporarily unavailable) is not listed as withdrawn; it is only absent
         until it is served again, and a tour that comes back is listed again with a later updated_at. Overlap the
         updated_since window by a few minutes.
       security:
