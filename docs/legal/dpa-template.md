@@ -126,7 +126,7 @@ Register rows 5 and 6 of [register.md](register.md) hold the table-level detail.
 | Security log retention 365 days | Live | [§7 retention table](../architecture/data-standards/02-data-management.md#7-retention-and-archival) (CloudWatch security/audit class, AA-872) |
 | No personal data in AI prompts or AI call records | Live as a rule, checked by review | DM-6.4; no automated PII check exists |
 | Retention jobs for event payload PII | Planned | Booking job built, DRY RUN only; TripPlanner not built (DM-6.6; AA-825, AA-861). See the [retention log](retention-log.md) |
-| Tested erasure job for a traveller and a tenant | Planned | AA-839; [DSAR and erasure runbook](dsar-erasure-runbook.md) (untested; finds a traveller's records by a one-way hash of the e-mail address and erases by record id) |
+| Tested erasure job for a traveller and a tenant | In progress | AA-839: the CIS erasure job is built and tested on synthetic data (DRY RUN; the apply stays off until approved); [DSAR and erasure runbook](dsar-erasure-runbook.md) covers travellers and tenant erasure (finds a traveller's records by a one-way hash of the e-mail address and erases by record id); the Dev drill and the Booking / TripPlanner scripts are still to do |
 | Machine-readable PII inventory (`pii:` column tags) | Planned | AA-877 (DM-6.1) |
 | Individual tenant user accounts and key rotation | Planned | AA-813 |
 
