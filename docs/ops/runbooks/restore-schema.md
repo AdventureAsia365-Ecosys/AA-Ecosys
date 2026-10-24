@@ -7,20 +7,19 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-dev-db]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-24
 review_every_days: 90
-last_tested: null
-tested_where: null
-tested_evidence: null
+last_tested: 2026-10-24
+tested_where: drill
+tested_evidence: docs/audits/2026-10-24-S249-restore-drill/
 related: [OPS-03-pitr, OPS-05-db-migrate, OPS-03-drills, AA-829, AA-892]
 ---
 
 # Restore one schema or table from a point-in-time copy
 
-> [!WARNING]
-> UNTESTED - do not follow in an incident without checking each step.
-> The rehearsal is the open part of AA-829 (U-20). Only the PITR half ([restore-rds-pitr](restore-rds-pitr.md)) has
-> been drilled.
+> [!NOTE]
+> Option A was rehearsed on Dev on 24/10/2026 (S249 drill, synthetic table): restore point between two marked writes,
+> 40 rows copied back in one transaction with a count guard. Option B (pg_dump task) is still untested.
 <!-- callout break -->
 > [!CAUTION]
 > This writes production-shaped data back into the live shared instance. It follows the DRY RUN procedure
@@ -111,4 +110,4 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
-| - | - | - | - | not run yet (AA-829 rehearsal) |
+| 2026-10-24 | drill (Dev acc2), option A on a synthetic table | Claude Code (main session) | `docs/audits/2026-10-24-S249-restore-drill/` | pass: 40/40 rows, live = copy |

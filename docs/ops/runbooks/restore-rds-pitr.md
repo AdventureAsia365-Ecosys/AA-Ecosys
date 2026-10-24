@@ -7,11 +7,11 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [aa-cis-dev-db]
-last_reviewed: 2026-10-23
+last_reviewed: 2026-10-24
 review_every_days: 90
-last_tested: 2026-10-17
+last_tested: 2026-10-24
 tested_where: drill
-tested_evidence: docs/audits/2026-10-17-S241-restore-drill/
+tested_evidence: docs/audits/2026-10-24-S249-restore-drill/
 related: [OPS-03, OPS-03-schema, OPS-03-drills, OPS-05, AA-829, AA-892]
 ---
 
@@ -117,8 +117,9 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 ## Repoint db.dev.internal after a restore
 
 Use only when a restored instance must **take over** from `aa-cis-dev-db` (every owner agreed, DM-9.4). A drill copy is
-never repointed. This section is UNTESTED (written 23/10/2026 from `db_dns.tf`); the next drill should run it against
-the drill copy and back.
+never repointed outside a drill. Tested 24/10/2026 (S249 drill: repoint to the copy and back, 4 services redeployed each way,
+no Terraform drift afterwards). If the restored copy predates a migration a service requires, that service reports
+`not_ready` until the migration is re-applied with DB Migrate (readiness check, seen in the S249 drill).
 
 Preconditions: the AA-829 DSN switch is applied (R0); the restored instance is `available` and step 4 passed against
 it; every job table is idle
@@ -200,4 +201,5 @@ R4. Make it permanent before the next CI apply. Never leave the override only on
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
 | 2026-10-17 | drill (Dev acc2) | Claude Code (main session) + Nghiệp | `docs/audits/2026-10-17-S241-restore-drill/`, S241 decisions D-10, AA-829 comment | pass, ~22 min |
+| 2026-10-24 | drill (Dev acc2) incl. repoint R0–R3 and back | Claude Code (main session), approved by Nghiệp | `docs/audits/2026-10-24-S249-restore-drill/` | pass, restore 21 min 20 s |
 | 2026-10-19 | dev-acc2, step 1 only | Claude Code | `docs/audits/2026-10-19-S243-ops-runbooks/readonly-checks.md` | read-only |
