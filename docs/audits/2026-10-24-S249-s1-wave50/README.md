@@ -3,7 +3,7 @@ id: PROD-01-s1-wave50
 title: "S1 catalogue rewrite: real wave ≤50 (writer v2 × Sonnet 5.5, A3 on), S249"
 description: "Báo cáo wave thật ≤50 tour của lần viết lại S1 cả catalogue (AA-645, quyết định d04): kết quả, điều kiện dừng, chất lượng d13, chi phí theo stage, slug 308, khôi phục công tắc."
 type: report
-status: final
+status: active
 owner: nghiep
 audience: [engineer, cto, agent]
 applies_to: [cis-core]
