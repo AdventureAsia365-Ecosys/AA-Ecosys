@@ -1,0 +1,4186 @@
+[
+ {
+  "name": "dashboard",
+  "path": "/",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Customer | Trip",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Updated",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 764,
+    "colWidths": [
+     "Case:101",
+     "Customer:252",
+     "Trip:326",
+     "Status:149",
+     "Sales:147",
+     "Updated:103"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "cases",
+  "path": "/cases",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Customer | Trip",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 7,
+    "lastHeader": "",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1039,
+    "colWidths": [
+     "Case:101",
+     "Customer:222",
+     "Trip:222",
+     "Dates / pax:154",
+     "Status:183",
+     "Sales:132",
+     "#7:64"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "case-proposals",
+  "path": "/cases/TC-000001?tab=proposals",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Version | Title / notes | Status",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 7,
+    "lastHeader": "Updated",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 703,
+    "colWidths": [
+     "Version:89",
+     "Title / notes:457",
+     "Status:135",
+     "Items:72",
+     "Total:123",
+     "Sent:96",
+     "Updated:107"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "proposals",
+  "path": "/proposals",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Proposal | Trip | Status",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1004,
+    "colWidths": [
+     "Proposal:275",
+     "Trip:210",
+     "Status:135",
+     "Total:123",
+     "Last edited:127",
+     "Actions:208"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "customers",
+  "path": "/customers",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Customer | Phone | Location",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 7,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1044,
+    "colWidths": [
+     "Customer:252",
+     "Phone:96",
+     "Location:252",
+     "Status:146",
+     "Trip cases:108",
+     "Last activity:131",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "customer-cases",
+  "path": "/customers/CUS-000001?tab=cases",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Trip | Status",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1086,
+    "boxScroll": 1086,
+    "tableWidth": 1086,
+    "cols": 4,
+    "lastHeader": "Updated",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 476,
+    "colWidths": [
+     "Case:112",
+     "Trip:644",
+     "Status:202",
+     "Updated:128"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "trip-plans",
+  "path": "/catalog/trip-plans",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Tour | Country | Days",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Price hint",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 944,
+    "colWidths": [
+     "Tour:420",
+     "Country:103",
+     "Days:66",
+     "Status:135",
+     "Trip style:218",
+     "Price hint:136"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": [
+   "image api-cis.lumiguides.it.com/media/photos/layout-0.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-1.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-2.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-3.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-4.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-5.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-6.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-7.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-8.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-9.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-10.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-11.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-12.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-13.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-14.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-15.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-16.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-17.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-18.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-19.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-20.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-21.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-22.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-23.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-24.jpg"
+  ]
+ },
+ {
+  "name": "trip-plans-orphaned",
+  "path": "/catalog/trip-plans?show=orphaned",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "CIS tour key | Catalog | Since",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 5,
+    "lastHeader": "Still attached",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 602,
+    "colWidths": [
+     "CIS tour key:124",
+     "Catalog:438",
+     "Since:98",
+     "Status:135",
+     "Still attached:283"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "suppliers",
+  "path": "/suppliers",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Supplier | Categories | Contact",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 7,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1039,
+    "colWidths": [
+     "Supplier:252",
+     "Categories:156",
+     "Contact:232",
+     "Contracts:116",
+     "Status:113",
+     "Updated:116",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "supplier-contracts",
+  "path": "/suppliers/SUP-000001?tab=contracts",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Contract | Validity | Currency",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1086,
+    "boxScroll": 1086,
+    "tableWidth": 1086,
+    "cols": 7,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1053,
+    "colWidths": [
+     "Contract:260",
+     "Validity:120",
+     "Currency:105",
+     "Payment terms:177",
+     "Status:130",
+     "Entered by:198",
+     "Actions:96"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "supplier-rates",
+  "path": "/suppliers/SUP-000001?tab=rates",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Room type / service | Season / valid | Meal / pax",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1086,
+    "boxScroll": 1086,
+    "tableWidth": 1086,
+    "cols": 6,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 948,
+    "colWidths": [
+     "Room type / serv:312",
+     "Season / valid:266",
+     "Meal / pax:121",
+     "Net:155",
+     "Status:126",
+     "Actions:106"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "hotels",
+  "path": "/hotels",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Hotel | Stars | Place (CIS)",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 8,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1032,
+    "colWidths": [
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:159",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "hotel-drawer",
+  "path": "/hotels?hotel=HTL-000001",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Hotel | Stars | Place (CIS)",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 8,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1032,
+    "colWidths": [
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:159",
+     "Actions:93"
+    ]
+   },
+   {
+    "head": "Room type / service | Contract | Season / valid",
+    "inDialog": true,
+    "boxIsMain": false,
+    "boxClient": 831,
+    "boxScroll": 831,
+    "tableWidth": 831,
+    "cols": 6,
+    "lastHeader": "Status",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 803,
+    "colWidths": [
+     "Room type / serv:184",
+     "Contract:126",
+     "Season / valid:157",
+     "Meal / pax:110",
+     "Net:140",
+     "Status:114"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "services",
+  "path": "/services",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Service | Type | Place (CIS)",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 8,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1034,
+    "colWidths": [
+     "Service:232",
+     "Type:97",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Max pax:92",
+     "Rates:74",
+     "Status:157",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "service-rates",
+  "path": "/services/SVC-000001?tab=rates",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Contract | Season / valid | Meal / pax",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1086,
+    "boxScroll": 1086,
+    "tableWidth": 1086,
+    "cols": 5,
+    "lastHeader": "Status",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 755,
+    "colWidths": [
+     "Contract:247",
+     "Season / valid:334",
+     "Meal / pax:152",
+     "Net:194",
+     "Status:158"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "pricing-rules",
+  "path": "/pricing/rules",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Channel | Margin | Peak uplift",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 9,
+    "lastHeader": "Note",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1017,
+    "colWidths": [
+     "Channel:102",
+     "Margin:85",
+     "Peak uplift:113",
+     "Card fee:94",
+     "Valid from:111",
+     "Status:135",
+     "Entered by:124",
+     "Approved by:132",
+     "Note:182"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "pricing-fx",
+  "path": "/pricing/rules?tab=fx",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Currency | Units per 1 USD | Selling buffer",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 8,
+    "lastHeader": "Approved by",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1056,
+    "colWidths": [
+     "Currency:102",
+     "Units per 1 USD:139",
+     "Selling buffer:134",
+     "As of:116",
+     "Source:192",
+     "Status:135",
+     "Entered by:126",
+     "Approved by:134"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [
+   {
+    "header": "Currency",
+    "text": "VND",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "25,432.5",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "VND",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "25,410",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "THB",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "33.875",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "IDR",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "16,250",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "KHR",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "4,105.25",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "LAK",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "21,875.125",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "MMK",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "2,099.987654",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   }
+  ],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "b2b-desk-on-request",
+  "path": "/b2b-desk",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "SLA | Item | Service date",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1024,
+    "colWidths": [
+     "SLA:129",
+     "Item:272",
+     "Service date:145",
+     "Booking:192",
+     "Status:159",
+     "#6:181"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "b2b-desk-departures",
+  "path": "/b2b-desk?tab=departures",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Departure | Status | Seats",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 926,
+    "colWidths": [
+     "Departure:332",
+     "Status:138",
+     "Seats:141",
+     "Agencies:98",
+     "Incident:241",
+     "#6:128"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "staff",
+  "path": "/staff",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "User | Booking role | CIS role",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 870,
+    "colWidths": [
+     "User:331",
+     "Booking role:187",
+     "CIS role:111",
+     "Status:138",
+     "Last seen:141",
+     "Actions:170"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "staff-cases",
+  "path": "/staff/u-001?tab=cases",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Customer | Assigned as",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Assigned",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 741,
+    "colWidths": [
+     "Case:113",
+     "Customer:370",
+     "Assigned as:133",
+     "Status:204",
+     "Trip starts:130",
+     "Assigned:129"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "audit-log",
+  "path": "/audit-log",
+  "width": 1440,
+  "scheme": "dark",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "dark",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "dashboard",
+  "path": "/",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Customer | Trip",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Updated",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 764,
+    "colWidths": [
+     "Case:101",
+     "Customer:252",
+     "Trip:326",
+     "Status:149",
+     "Sales:147",
+     "Updated:103"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "cases",
+  "path": "/cases",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Customer | Trip",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 7,
+    "lastHeader": "",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1039,
+    "colWidths": [
+     "Case:101",
+     "Customer:222",
+     "Trip:222",
+     "Dates / pax:154",
+     "Status:183",
+     "Sales:132",
+     "#7:64"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "case-proposals",
+  "path": "/cases/TC-000001?tab=proposals",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Version | Title / notes | Status",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 7,
+    "lastHeader": "Updated",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 703,
+    "colWidths": [
+     "Version:89",
+     "Title / notes:457",
+     "Status:135",
+     "Items:72",
+     "Total:123",
+     "Sent:96",
+     "Updated:107"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "proposals",
+  "path": "/proposals",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Proposal | Trip | Status",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1004,
+    "colWidths": [
+     "Proposal:275",
+     "Trip:210",
+     "Status:135",
+     "Total:123",
+     "Last edited:127",
+     "Actions:208"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "customers",
+  "path": "/customers",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Customer | Phone | Location",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 7,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1044,
+    "colWidths": [
+     "Customer:252",
+     "Phone:96",
+     "Location:252",
+     "Status:146",
+     "Trip cases:108",
+     "Last activity:131",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "customer-cases",
+  "path": "/customers/CUS-000001?tab=cases",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Trip | Status",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1086,
+    "boxScroll": 1086,
+    "tableWidth": 1086,
+    "cols": 4,
+    "lastHeader": "Updated",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 476,
+    "colWidths": [
+     "Case:112",
+     "Trip:644",
+     "Status:202",
+     "Updated:128"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "trip-plans",
+  "path": "/catalog/trip-plans",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Tour | Country | Days",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Price hint",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 944,
+    "colWidths": [
+     "Tour:420",
+     "Country:103",
+     "Days:66",
+     "Status:135",
+     "Trip style:218",
+     "Price hint:136"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": [
+   "image api-cis.lumiguides.it.com/media/photos/layout-0.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-1.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-2.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-3.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-4.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-5.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-6.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-7.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-8.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-9.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-10.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-11.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-12.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-13.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-14.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-15.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-16.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-17.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-18.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-19.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-20.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-21.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-22.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-23.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-24.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-0.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-1.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-2.jpg"
+  ]
+ },
+ {
+  "name": "trip-plans-orphaned",
+  "path": "/catalog/trip-plans?show=orphaned",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "CIS tour key | Catalog | Since",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 5,
+    "lastHeader": "Still attached",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 602,
+    "colWidths": [
+     "CIS tour key:124",
+     "Catalog:438",
+     "Since:98",
+     "Status:135",
+     "Still attached:283"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "suppliers",
+  "path": "/suppliers",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Supplier | Categories | Contact",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 7,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1039,
+    "colWidths": [
+     "Supplier:252",
+     "Categories:156",
+     "Contact:232",
+     "Contracts:116",
+     "Status:113",
+     "Updated:116",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "supplier-contracts",
+  "path": "/suppliers/SUP-000001?tab=contracts",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Contract | Validity | Currency",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1086,
+    "boxScroll": 1086,
+    "tableWidth": 1086,
+    "cols": 7,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1053,
+    "colWidths": [
+     "Contract:260",
+     "Validity:120",
+     "Currency:105",
+     "Payment terms:177",
+     "Status:130",
+     "Entered by:198",
+     "Actions:96"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "supplier-rates",
+  "path": "/suppliers/SUP-000001?tab=rates",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Room type / service | Season / valid | Meal / pax",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1086,
+    "boxScroll": 1086,
+    "tableWidth": 1086,
+    "cols": 6,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 948,
+    "colWidths": [
+     "Room type / serv:312",
+     "Season / valid:266",
+     "Meal / pax:121",
+     "Net:155",
+     "Status:126",
+     "Actions:106"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "hotels",
+  "path": "/hotels",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Hotel | Stars | Place (CIS)",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 8,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1032,
+    "colWidths": [
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:159",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "hotel-drawer",
+  "path": "/hotels?hotel=HTL-000001",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Hotel | Stars | Place (CIS)",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 8,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1032,
+    "colWidths": [
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:159",
+     "Actions:93"
+    ]
+   },
+   {
+    "head": "Room type / service | Contract | Season / valid",
+    "inDialog": true,
+    "boxIsMain": false,
+    "boxClient": 831,
+    "boxScroll": 831,
+    "tableWidth": 831,
+    "cols": 6,
+    "lastHeader": "Status",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 803,
+    "colWidths": [
+     "Room type / serv:184",
+     "Contract:126",
+     "Season / valid:157",
+     "Meal / pax:110",
+     "Net:140",
+     "Status:114"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "services",
+  "path": "/services",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Service | Type | Place (CIS)",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 8,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1034,
+    "colWidths": [
+     "Service:232",
+     "Type:97",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Max pax:92",
+     "Rates:74",
+     "Status:157",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "service-rates",
+  "path": "/services/SVC-000001?tab=rates",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Contract | Season / valid | Meal / pax",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1086,
+    "boxScroll": 1086,
+    "tableWidth": 1086,
+    "cols": 5,
+    "lastHeader": "Status",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 755,
+    "colWidths": [
+     "Contract:247",
+     "Season / valid:334",
+     "Meal / pax:152",
+     "Net:194",
+     "Status:158"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "pricing-rules",
+  "path": "/pricing/rules",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Channel | Margin | Peak uplift",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 9,
+    "lastHeader": "Note",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1017,
+    "colWidths": [
+     "Channel:102",
+     "Margin:85",
+     "Peak uplift:113",
+     "Card fee:94",
+     "Valid from:111",
+     "Status:135",
+     "Entered by:124",
+     "Approved by:132",
+     "Note:182"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "pricing-fx",
+  "path": "/pricing/rules?tab=fx",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Currency | Units per 1 USD | Selling buffer",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 8,
+    "lastHeader": "Approved by",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1056,
+    "colWidths": [
+     "Currency:102",
+     "Units per 1 USD:139",
+     "Selling buffer:134",
+     "As of:116",
+     "Source:192",
+     "Status:135",
+     "Entered by:126",
+     "Approved by:134"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [
+   {
+    "header": "Currency",
+    "text": "VND",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "25,432.5",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "VND",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "25,410",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "THB",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "33.875",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "IDR",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "16,250",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "KHR",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "4,105.25",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "LAK",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "21,875.125",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "MMK",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "2,099.987654",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   }
+  ],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "b2b-desk-on-request",
+  "path": "/b2b-desk",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "SLA | Item | Service date",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1024,
+    "colWidths": [
+     "SLA:129",
+     "Item:272",
+     "Service date:145",
+     "Booking:192",
+     "Status:159",
+     "#6:181"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "b2b-desk-departures",
+  "path": "/b2b-desk?tab=departures",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Departure | Status | Seats",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 926,
+    "colWidths": [
+     "Departure:332",
+     "Status:138",
+     "Seats:141",
+     "Agencies:98",
+     "Incident:241",
+     "#6:128"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "staff",
+  "path": "/staff",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "User | Booking role | CIS role",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 870,
+    "colWidths": [
+     "User:331",
+     "Booking role:187",
+     "CIS role:111",
+     "Status:138",
+     "Last seen:141",
+     "Actions:170"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "staff-cases",
+  "path": "/staff/u-001?tab=cases",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Customer | Assigned as",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 1078,
+    "boxScroll": 1078,
+    "tableWidth": 1078,
+    "cols": 6,
+    "lastHeader": "Assigned",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 741,
+    "colWidths": [
+     "Case:113",
+     "Customer:370",
+     "Assigned as:133",
+     "Status:204",
+     "Trip starts:130",
+     "Assigned:129"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "audit-log",
+  "path": "/audit-log",
+  "width": 1440,
+  "scheme": "light",
+  "innerWidth": 1440,
+  "docScrollWidth": 1440,
+  "docClientWidth": 1440,
+  "mainScrollWidth": 1186,
+  "mainClientWidth": 1186,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "dashboard",
+  "path": "/",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Customer | Trip",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 918,
+    "tableWidth": 918,
+    "cols": 6,
+    "lastHeader": "Updated",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 764,
+    "colWidths": [
+     "Case:101",
+     "Customer:252",
+     "Trip:210",
+     "Status:149",
+     "Sales:108",
+     "Updated:98"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "cases",
+  "path": "/cases",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Customer | Trip",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1039,
+    "tableWidth": 1039,
+    "cols": 7,
+    "lastHeader": "",
+    "lastHeaderVisible": false,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1039,
+    "colWidths": [
+     "Case:101",
+     "Customer:222",
+     "Trip:222",
+     "Dates / pax:115",
+     "Status:183",
+     "Sales:132",
+     "#7:64"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "case-proposals",
+  "path": "/cases/TC-000001?tab=proposals",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Version | Title / notes | Status",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 918,
+    "tableWidth": 918,
+    "cols": 7,
+    "lastHeader": "Updated",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 703,
+    "colWidths": [
+     "Version:89",
+     "Title / notes:316",
+     "Status:135",
+     "Items:72",
+     "Total:123",
+     "Sent:83",
+     "Updated:101"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "proposals",
+  "path": "/proposals",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Proposal | Trip | Status",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1004,
+    "tableWidth": 1004,
+    "cols": 6,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": false,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1004,
+    "colWidths": [
+     "Proposal:232",
+     "Trip:192",
+     "Status:135",
+     "Total:123",
+     "Last edited:114",
+     "Actions:208"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "customers",
+  "path": "/customers",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Customer | Phone | Location",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1044,
+    "tableWidth": 1044,
+    "cols": 7,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": false,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1044,
+    "colWidths": [
+     "Customer:252",
+     "Phone:77",
+     "Location:252",
+     "Status:131",
+     "Trip cases:108",
+     "Last activity:131",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "customer-cases",
+  "path": "/customers/CUS-000001?tab=cases",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Trip | Status",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 926,
+    "boxScroll": 926,
+    "tableWidth": 926,
+    "cols": 4,
+    "lastHeader": "Updated",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 476,
+    "colWidths": [
+     "Case:101",
+     "Trip:528",
+     "Status:183",
+     "Updated:113"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "trip-plans",
+  "path": "/catalog/trip-plans",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Tour | Country | Days",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 944,
+    "tableWidth": 944,
+    "cols": 6,
+    "lastHeader": "Price hint",
+    "lastHeaderVisible": false,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 944,
+    "colWidths": [
+     "Tour:420",
+     "Country:103",
+     "Days:66",
+     "Status:135",
+     "Trip style:104",
+     "Price hint:116"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": [
+   "image api-cis.lumiguides.it.com/media/photos/layout-0.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-1.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-2.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-3.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-4.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-5.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-6.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-7.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-8.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-9.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-10.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-11.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-12.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-13.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-14.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-15.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-16.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-17.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-18.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-19.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-20.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-21.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-22.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-23.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-24.jpg"
+  ]
+ },
+ {
+  "name": "trip-plans-orphaned",
+  "path": "/catalog/trip-plans?show=orphaned",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "CIS tour key | Catalog | Since",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 918,
+    "tableWidth": 918,
+    "cols": 5,
+    "lastHeader": "Still attached",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 602,
+    "colWidths": [
+     "CIS tour key:124",
+     "Catalog:335",
+     "Since:89",
+     "Status:135",
+     "Still attached:235"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "suppliers",
+  "path": "/suppliers",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Supplier | Categories | Contact",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1039,
+    "tableWidth": 1039,
+    "cols": 7,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1039,
+    "colWidths": [
+     "Supplier:252",
+     "Categories:117",
+     "Contact:232",
+     "Contracts:116",
+     "Status:113",
+     "Updated:116",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "supplier-contracts",
+  "path": "/suppliers/SUP-000001?tab=contracts",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Contract | Validity | Currency",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 926,
+    "boxScroll": 1053,
+    "tableWidth": 1053,
+    "cols": 7,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1053,
+    "colWidths": [
+     "Contract:252",
+     "Validity:116",
+     "Currency:102",
+     "Payment terms:172",
+     "Status:126",
+     "Entered by:192",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "supplier-rates",
+  "path": "/suppliers/SUP-000001?tab=rates",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Room type / service | Season / valid | Meal / pax",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 926,
+    "boxScroll": 948,
+    "tableWidth": 948,
+    "cols": 6,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 948,
+    "colWidths": [
+     "Room type / serv:272",
+     "Season / valid:232",
+     "Meal / pax:106",
+     "Net:135",
+     "Status:110",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "hotels",
+  "path": "/hotels",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Hotel | Stars | Place (CIS)",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1032,
+    "tableWidth": 1032,
+    "cols": 8,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1032,
+    "colWidths": [
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:113",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "hotel-drawer",
+  "path": "/hotels?hotel=HTL-000001",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Hotel | Stars | Place (CIS)",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1032,
+    "tableWidth": 1032,
+    "cols": 8,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1032,
+    "colWidths": [
+     "Hotel:232",
+     "Stars:105",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Rooms:82",
+     "Rates:74",
+     "Status:113",
+     "Actions:93"
+    ]
+   },
+   {
+    "head": "Room type / service | Contract | Season / valid",
+    "inDialog": true,
+    "boxIsMain": false,
+    "boxClient": 831,
+    "boxScroll": 831,
+    "tableWidth": 831,
+    "cols": 6,
+    "lastHeader": "Status",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 803,
+    "colWidths": [
+     "Room type / serv:184",
+     "Contract:126",
+     "Season / valid:157",
+     "Meal / pax:110",
+     "Net:140",
+     "Status:114"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "services",
+  "path": "/services",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Service | Type | Place (CIS)",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1034,
+    "tableWidth": 1034,
+    "cols": 8,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": true,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1034,
+    "colWidths": [
+     "Service:232",
+     "Type:97",
+     "Place (CIS):182",
+     "Supplier:152",
+     "Max pax:92",
+     "Rates:74",
+     "Status:113",
+     "Actions:93"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "service-rates",
+  "path": "/services/SVC-000001?tab=rates",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Contract | Season / valid | Meal / pax",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 926,
+    "boxScroll": 926,
+    "tableWidth": 926,
+    "cols": 5,
+    "lastHeader": "Status",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 755,
+    "colWidths": [
+     "Contract:211",
+     "Season / valid:285",
+     "Meal / pax:130",
+     "Net:166",
+     "Status:135"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "pricing-rules",
+  "path": "/pricing/rules",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Channel | Margin | Peak uplift",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1017,
+    "tableWidth": 1017,
+    "cols": 9,
+    "lastHeader": "Note",
+    "lastHeaderVisible": false,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1017,
+    "colWidths": [
+     "Channel:99",
+     "Margin:85",
+     "Peak uplift:113",
+     "Card fee:94",
+     "Valid from:111",
+     "Status:135",
+     "Entered by:116",
+     "Approved by:122",
+     "Note:142"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "pricing-fx",
+  "path": "/pricing/rules?tab=fx",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Currency | Units per 1 USD | Selling buffer",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1056,
+    "tableWidth": 1056,
+    "cols": 8,
+    "lastHeader": "Approved by",
+    "lastHeaderVisible": false,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1056,
+    "colWidths": [
+     "Currency:102",
+     "Units per 1 USD:139",
+     "Selling buffer:134",
+     "As of:116",
+     "Source:192",
+     "Status:135",
+     "Entered by:116",
+     "Approved by:122"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [
+   {
+    "header": "Currency",
+    "text": "VND",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "25,432.5",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "VND",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "25,410",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "THB",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "33.875",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "IDR",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "16,250",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "KHR",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "4,105.25",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "LAK",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "21,875.125",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   },
+   {
+    "header": "Currency",
+    "text": "MMK",
+    "lines": 1
+   },
+   {
+    "header": "Units per 1 USD",
+    "text": "2,099.987654",
+    "lines": 1
+   },
+   {
+    "header": "Selling buffer",
+    "text": "1.5%",
+    "lines": 1
+   },
+   {
+    "header": "As of",
+    "text": "28 Sept 2026",
+    "lines": 1
+   },
+   {
+    "header": "Source",
+    "text": "Vietcombank published sell rate, 08:30 I",
+    "lines": 1
+   }
+  ],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "b2b-desk-on-request",
+  "path": "/b2b-desk",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "SLA | Item | Service date",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 1024,
+    "tableWidth": 1024,
+    "cols": 6,
+    "lastHeader": "",
+    "lastHeaderVisible": false,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 1024,
+    "colWidths": [
+     "SLA:123",
+     "Item:272",
+     "Service date:124",
+     "Booking:192",
+     "Status:132",
+     "#6:181"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "b2b-desk-departures",
+  "path": "/b2b-desk?tab=departures",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Departure | Status | Seats",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 926,
+    "tableWidth": 926,
+    "cols": 6,
+    "lastHeader": "",
+    "lastHeaderVisible": false,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 926,
+    "colWidths": [
+     "Departure:332",
+     "Status:138",
+     "Seats:74",
+     "Agencies:98",
+     "Incident:176",
+     "#6:109"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "staff",
+  "path": "/staff",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "User | Booking role | CIS role",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 918,
+    "tableWidth": 918,
+    "cols": 6,
+    "lastHeader": "Actions",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 870,
+    "colWidths": [
+     "User:282",
+     "Booking role:160",
+     "CIS role:94",
+     "Status:117",
+     "Last seen:120",
+     "Actions:145"
+    ]
+   }
+  ],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "staff-cases",
+  "path": "/staff/u-001?tab=cases",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [
+   {
+    "head": "Case | Customer | Assigned as",
+    "inDialog": false,
+    "boxIsMain": false,
+    "boxClient": 918,
+    "boxScroll": 918,
+    "tableWidth": 918,
+    "cols": 6,
+    "lastHeader": "Assigned",
+    "lastHeaderVisible": true,
+    "stickyEnd": false,
+    "lastHeaderPosition": "sticky",
+    "minContent": 741,
+    "colWidths": [
+     "Case:101",
+     "Customer:286",
+     "Assigned as:119",
+     "Status:183",
+     "Trip starts:117",
+     "Assigned:112"
+    ]
+   }
+  ],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "audit-log",
+  "path": "/audit-log",
+  "width": 1280,
+  "scheme": "light",
+  "innerWidth": 1280,
+  "docScrollWidth": 1280,
+  "docClientWidth": 1280,
+  "mainScrollWidth": 1026,
+  "mainClientWidth": 1026,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "dashboard",
+  "path": "/",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "cases",
+  "path": "/cases",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "case-proposals",
+  "path": "/cases/TC-000001?tab=proposals",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "proposals",
+  "path": "/proposals",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "customers",
+  "path": "/customers",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "customer-cases",
+  "path": "/customers/CUS-000001?tab=cases",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "trip-plans",
+  "path": "/catalog/trip-plans",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": [
+   "image api-cis.lumiguides.it.com/media/photos/layout-0.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-1.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-2.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-3.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-4.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-5.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-6.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-7.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-8.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-9.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-0.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-1.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-2.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-3.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-4.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-5.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-6.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-7.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-8.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-9.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-10.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-11.jpg",
+   "image api-cis.lumiguides.it.com/media/photos/layout-12.jpg"
+  ]
+ },
+ {
+  "name": "trip-plans-orphaned",
+  "path": "/catalog/trip-plans?show=orphaned",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "suppliers",
+  "path": "/suppliers",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "supplier-contracts",
+  "path": "/suppliers/SUP-000001?tab=contracts",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "supplier-rates",
+  "path": "/suppliers/SUP-000001?tab=rates",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "hotels",
+  "path": "/hotels",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "hotel-drawer",
+  "path": "/hotels?hotel=HTL-000001",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "services",
+  "path": "/services",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "service-rates",
+  "path": "/services/SVC-000001?tab=rates",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "pricing-rules",
+  "path": "/pricing/rules",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "pricing-fx",
+  "path": "/pricing/rules?tab=fx",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "b2b-desk-on-request",
+  "path": "/b2b-desk",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "b2b-desk-departures",
+  "path": "/b2b-desk?tab=departures",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "staff",
+  "path": "/staff",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "staff-cases",
+  "path": "/staff/u-001?tab=cases",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [
+   {
+    "overflowY": 0,
+    "hScrollbar": 0
+   }
+  ],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ },
+ {
+  "name": "audit-log",
+  "path": "/audit-log",
+  "width": 390,
+  "scheme": "light",
+  "innerWidth": 390,
+  "docScrollWidth": 390,
+  "docClientWidth": 390,
+  "mainScrollWidth": 384,
+  "mainClientWidth": 384,
+  "mainScrollbar": 6,
+  "theme": "light",
+  "poppinsLoaded": true,
+  "tables": [],
+  "tabstrips": [],
+  "fxCells": [],
+  "unmocked": [],
+  "consoleErrors": [],
+  "blockedExternal": []
+ }
+]
