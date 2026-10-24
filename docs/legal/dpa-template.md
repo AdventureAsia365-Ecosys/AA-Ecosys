@@ -164,4 +164,5 @@ an earlier claim ("no database reader can join the profile to an identity") was 
    separation.
 4. **Every view is recorded.** Lists show names only; a member of the Tenant's staff sees any other identity field or
    document only by asking for it with a reason, and each such view, and each list shown, is written to the Tenant's
-   audit trail.
+   audit trail. An unusually high number of such views by one person within an hour raises an alert to AA's operators.
+   Health information is shown only while the traveller's consent to it stands.
