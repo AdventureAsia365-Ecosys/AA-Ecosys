@@ -1,0 +1,28 @@
+run 39991070753: success
+MIGRATE run-script: file=db/scripts/s249_drill_compare.py sha256=20236c62219b
+MIGRATE master login: run-script needs the RDS master aa_cis_admin and the task logs in as db_migrator: reading the master DSN in the task from aa-cis/dev/rds (X1 S22)
+MIGRATE master login: aa_cis_admin (in-task DSN from aa-cis/dev/rds)
+MIGRATE ran as: aa_cis_admin (run-script, READ_ONLY: default_transaction_read_only=on)
+MIGRATE idle: booking.job running=0 queued=0 (exempt: bk_inquiry_pull)
+MIGRATE idle: crm.job running=0 queued=0 (exempt: crm_heartbeat)
+MIGRATE idle: shared.job running=0 queued=0
+MIGRATE idle: shared.rerun_wave open=0
+MIGRATE run-script: READ_ONLY script, the idle check is report-only (no wait, no refusal)
+MIGRATE run-script: main(conn) starts; its output follows
+SCRIPT drill_server_started=2026-10-23 16:45:16.620290+00:00
+SCRIPT {"tables_live": 164, "tables_drill": 164, "heads_live": ["274", "273", "272", "271", "bk-021"], "heads_drill": ["274", "273", "272", "271", "bk-021"], "secs_live": 0.9, "secs_drill": 3.7}
+SCRIPT schema acp_contract {"tables_live": 16, "tables_drill": 16, "rows_live": 221514, "rows_drill": 221514, "missing_in_drill": 0, "diff_tables": 0}
+SCRIPT schema acp_deliver {"tables_live": 1, "tables_drill": 1, "rows_live": 0, "rows_drill": 0, "missing_in_drill": 0, "diff_tables": 0}
+SCRIPT schema acp_shared {"tables_live": 21, "tables_drill": 21, "rows_live": 4176, "rows_drill": 4176, "missing_in_drill": 0, "diff_tables": 0}
+SCRIPT schema booking {"tables_live": 41, "tables_drill": 41, "rows_live": 7272, "rows_drill": 7273, "missing_in_drill": 0, "diff_tables": 1}
+SCRIPT schema crm {"tables_live": 4, "tables_drill": 4, "rows_live": 813, "rows_drill": 783, "missing_in_drill": 0, "diff_tables": 1}
+SCRIPT schema drill_s249 {"tables_live": 1, "tables_drill": 1, "rows_live": 60, "rows_drill": 100, "missing_in_drill": 0, "diff_tables": 1}
+SCRIPT schema geo {"tables_live": 17, "tables_drill": 17, "rows_live": 50440, "rows_drill": 50440, "missing_in_drill": 0, "diff_tables": 0}
+SCRIPT schema gold_aa_internal {"tables_live": 5, "tables_drill": 5, "rows_live": 951, "rows_drill": 951, "missing_in_drill": 0, "diff_tables": 0}
+SCRIPT schema public {"tables_live": 1, "tables_drill": 1, "rows_live": 10, "rows_drill": 10, "missing_in_drill": 0, "diff_tables": 0}
+SCRIPT schema shared {"tables_live": 42, "tables_drill": 42, "rows_live": 738120, "rows_drill": 738023, "missing_in_drill": 0, "diff_tables": 1}
+SCRIPT schema silver_aa_internal {"tables_live": 7, "tables_drill": 7, "rows_live": 5193, "rows_drill": 5193, "missing_in_drill": 0, "diff_tables": 0}
+SCRIPT schema tripplanner {"tables_live": 8, "tables_drill": 8, "rows_live": 1406, "rows_drill": 1406, "missing_in_drill": 0, "diff_tables": 0}
+SCRIPT diff_tables (live minus drill) booking.job:-1 crm.job:+30 drill_s249.restore_rehearsal:-40 shared.tenant_api_usage:+97
+SCRIPT rehearsal live=60 drill=100
+MIGRATE run-script: done
