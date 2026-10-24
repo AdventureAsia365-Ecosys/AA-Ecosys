@@ -1,0 +1,31 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "AaContentPage",
+  "expect": "valid",
+  "why": "v1.2: one item per locale; the EN and VI copies of one pack share group_key, the list shows the latest published version of each",
+  "payload": {
+    "items": [
+      {
+        "content_id": "3c9e2b1a-7d4f-4e6a-9b8c-1a2b3c4d5e6f",
+        "kind": "prep_pack",
+        "version": 3,
+        "locale": "vi",
+        "group_key": "prep-ha-giang",
+        "title": "Trước khi đi: Hà Giang",
+        "published_at": "2026-12-01T00:00:00Z",
+        "content_hash": "sha256:9a0364b9e99bb480"
+      },
+      {
+        "content_id": "5d1a7c2e-9b3f-4c8d-8e2a-6f5b4c3d2e1a",
+        "kind": "prep_pack",
+        "version": 2,
+        "locale": "en",
+        "group_key": "prep-ha-giang",
+        "title": "Before you go: Ha Giang",
+        "published_at": "2026-11-28T00:00:00Z",
+        "content_hash": "sha256:1b4f0e9851971998"
+      }
+    ],
+    "next_cursor": "v1.NWQxYTdjMmUtOWIzZi00YzhkLThlMmEtNmY1YjRjM2QyZTFh.7c21e0aa"
+  }
+}

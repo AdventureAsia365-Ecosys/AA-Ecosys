@@ -4,7 +4,10 @@
 Checks every contract in docs/contracts/:
 
   JSON Schema event / view contracts (`<name>.v<major>[.<minor>].json`):
-    J1  the file is a valid JSON Schema 2020-12 document.
+    J1  the file is a valid JSON Schema 2020-12 document;
+    P1  the field policy of its major (`supply.hotel.v1` for `supply.hotel.v1.json` and `supply.hotel.v1.1.json`),
+        as for HTTP contracts. A contract file added after the checker learnt JSON Schema contracts (AA-835) fails
+        without a POLICY entry; the files that predate it are listed in JSON_PRE_CHECKER.
 
   HTTP contracts (`<name>.v<major>.openapi.yaml`, OpenAPI 3.1):
     O1  `openapi` is 3.1.x;
@@ -16,13 +19,15 @@ Checks every contract in docs/contracts/:
     P1  the contract's field policy (POLICY below, from the CRM design): forbidden field names, PII markers
         (`x-pii`, keys starting `pii:`) and personal-data field names in contracts that must carry none.
 
-  Samples (`docs/contracts/samples/<contract>/<case>.json`, see the folder README):
-    S1  the sample names an existing contract and component schema;
+  Samples (`docs/contracts/samples/<contract>/<case>.json`, see the folder README; <contract> is the HTTP contract
+  name or the JSON Schema file name without `.json`):
+    S1  the sample names an existing contract and, for an HTTP contract, a component schema (a JSON Schema contract
+        sample has no `schema`: the payload is validated against the whole file);
     S2  `expect: valid` → the payload validates against the schema AND passes the field policy;
         `expect: invalid` → the schema or the policy rejects it;
     S3  a sample with `rule: <r>` must be rejected by that policy rule (proves the scan, independent of the schema);
-    S4  every HTTP contract has at least one valid sample, and the negative samples the design requires exist
-        (REQUIRED_NEGATIVES).
+    S4  every HTTP contract and every JSON Schema contract outside JSON_PRE_CHECKER has at least one valid sample,
+        and the negative samples the design requires exist (REQUIRED_NEGATIVES).
 
   Registry:
     R1  docs/contracts/README.md names every contract file.
@@ -56,6 +61,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 CONTRACTS = Path("docs/contracts")
 OPENAPI_FILE = re.compile(r"^(?P<name>[a-z0-9_.-]+\.v\d+)\.openapi\.yaml$")
 SCHEMA_FILE = re.compile(r"^[a-z0-9_.-]+\.v\d+(\.\d+)?\.json$")
+MAJOR = re.compile(r"^(?P<major>[a-z0-9_.-]+?\.v\d+)(\.\d+)?$")
 HTTP_METHODS = {"get", "put", "post", "delete", "patch", "head", "options", "trace"}
 
 # Personal-data field names that a no-PII contract must not carry (heuristic on top of the x-pii / pii: markers).
@@ -80,6 +86,9 @@ class Policy:
     # (component schema, property, x-pii class): the only personal-data fields a no-PII contract may carry. Each one
     # must be tagged with exactly that class and be writeOnly (sent once, never returned) — AA-941 first-owner invite.
     pii_write_only_fields: frozenset[tuple[str, str, str]] = frozenset()
+    # Field names the personal-data name heuristic must not flag in this contract: business data that shares a name
+    # with personal data (a hotel's street address). Forbidden keys and x-pii / pii: markers still apply.
+    pii_name_exempt: frozenset[str] = frozenset()
     why: str = ""
 
     def write_only_pii(self, schema: str | None, prop: str) -> str | None:
@@ -89,6 +98,17 @@ class Policy:
                 return cls
         return None
 
+
+_SUPPLY_POLICY = Policy(
+    forbidden_keys=frozenset({"supplier", "supplier_id", "net_amount", "net_rate", "rate", "rates", "margin",
+                              "internal_notes", "notes", "links", "url"}),
+    forbidden_patterns=(r"^suppliers?(_|$)", r"(^|_)net(_|$)", r"^rates?(_|$)", r"(^|_)rates?$",
+                        r"(^|_)margins?(_|$)", r"(^|_)notes?$", r"(^|_)links?$", r"(^|_)urls?(_|$)",
+                        r"(^|_)(price|cost|commission)s?(_|$)"),
+    pii_name_exempt=frozenset({"address"}),
+    why="supply facts only: no supplier identity, rates, margins, notes or links, and photos by entity_media id, "
+        "never a URL (ADR 0004a decision 3); a hotel's address is business data",
+)
 
 POLICY: dict[str, Policy] = {
     # L1 console: "a response test forbids trip, pipeline and revenue keys"; no PII (design v3 §4.8, AA-928 R case).
@@ -127,13 +147,44 @@ POLICY: dict[str, Policy] = {
         forbidden_patterns=(r"supplier_net",),
         why="tour keys and served-state events only, no prices, no personal data",
     ),
+    # ADR 0004a decision 3 (AA-835): supply facts only. Supplier identity, contracts, rates, margins and internal
+    # notes never reach CIS; photos travel as entity_media ids, never a free URL (SSRF, unlicensed images).
+    "supply.hotel.v1": _SUPPLY_POLICY,
+    "supply.service.v1": _SUPPLY_POLICY,
+    # TripPlanner hand-off (AA-908 v1.4): the contact the traveller gave and, when signed in, the verified identity
+    # (iss, sub) read from the token. The token itself, a password or a one-time code never crosses.
+    "inquiry.submitted.v1": Policy(
+        forbidden_keys=frozenset({"access_token", "id_token", "refresh_token", "token", "password", "otp"}),
+        forbidden_patterns=(r"(^|_)tokens?$", r"(^|_)password", r"(^|_)otp(_|$)"),
+        no_pii=False,
+        why="the traveller's contact and verified identity only; never a token, password or one-time code",
+    ),
 }
 
 # The negative samples the design requires (AA-928 Done-when R case). rule = a forbidden key, or "pii:".
 REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     "crm.ops.v1": ("trip_count", "revenue", "pii:"),
     "booking.b2b.v1": ("supplier_net",),
+    # AA-835 S1: a supplier net amount, the supplier id, internal notes and a free photo URL are each refused.
+    "supply.hotel.v1": ("net_amount", "supplier_id", "internal_notes", "url"),
+    "supply.service.v1": ("net_amount", "supplier_id", "internal_notes", "url"),
+    # AA-908: the hand-off never carries the traveller's token.
+    "inquiry.submitted.v1.4": ("access_token",),
 }
+
+# JSON Schema contract files that predate the JSON field policy (AA-835): no POLICY entry or sample is required
+# for them. A new file, including a new minor of these families, needs both (its family may add the entry).
+JSON_PRE_CHECKER: frozenset[str] = frozenset({
+    "catalog.graph.v1", "catalog.graph.v1.1", "catalog.graph.v1.2",
+    "catalog.tour.v1", "catalog.tour.v1.1", "catalog.tour.v1.2", "catalog.tour.v1.3",
+    "inquiry.submitted.v1", "inquiry.submitted.v1.1", "inquiry.submitted.v1.2", "inquiry.submitted.v1.3",
+})
+
+
+def policy_name(contract: str) -> str:
+    """The POLICY key of a contract: its major (`supply.hotel.v1.1` -> `supply.hotel.v1`)."""
+    m = MAJOR.match(contract)
+    return m.group("major") if m else contract
 
 
 @dataclass
@@ -176,11 +227,12 @@ def key_violation(policy: Policy, key: str) -> str | None:
         return low
     for pattern in policy.forbidden_patterns:
         if re.search(pattern, low):
-            for fk in policy.forbidden_keys:  # report the design's key name when the pattern stands for it
+            for fk in sorted(policy.forbidden_keys):  # report the design's key name when the pattern stands for it
                 if re.search(pattern, fk):
                     return fk
             return pattern
-    if policy.no_pii and (low in PII_FIELD_NAMES or low.endswith(PII_FIELD_SUFFIXES)):
+    if policy.no_pii and low not in policy.pii_name_exempt and (low in PII_FIELD_NAMES
+                                                                or low.endswith(PII_FIELD_SUFFIXES)):
         return "pii-name"
     return None
 
@@ -348,14 +400,20 @@ def check_openapi(path: Path, doc: Any, root: Path, report: Report) -> str | Non
                 if needed not in declared:
                     report.error(where, f"O5 {trail}: path parameter '{needed}' is not declared")
             check_security(op.get("security"), trail)
-    policy = POLICY.get(expected_name)
-    if policy is None:
-        report.error(where, f"P1 no field policy for {expected_name}: add an entry to POLICY in "
-                            "tools/contracts/check_contracts.py (reviewed code, not the contract file)")
-    else:
-        for problem in scan_schema_doc(expected_name, doc, policy):
-            report.error(where, f"P1 {problem}")
+    check_policy(where, expected_name, doc, report)
     return expected_name
+
+
+def check_policy(where: str, name: str, doc: dict, report: Report, required: bool = True) -> None:
+    """P1: the contract's field policy (by major) exists and its document breaks none of it."""
+    policy = POLICY.get(policy_name(name))
+    if policy is None:
+        if required:
+            report.error(where, f"P1 no field policy for {policy_name(name)}: add an entry to POLICY in "
+                                "tools/contracts/check_contracts.py (reviewed code, not the contract file)")
+        return
+    for problem in scan_schema_doc(name, doc, policy):
+        report.error(where, f"P1 {problem}")
 
 
 # ---------------------------------------------------------------- samples
@@ -369,9 +427,13 @@ def validator_for(name: str, doc: dict, schema_name: str) -> Draft202012Validato
     return Draft202012Validator(schema, registry=registry, format_checker=FormatChecker())
 
 
-def check_samples(samples_dir: Path, docs: dict[str, dict], root: Path, report: Report) -> None:
-    valid_count: dict[str, int] = {name: 0 for name in docs}
-    negatives_seen: dict[str, set[str]] = {name: set() for name in docs}
+def check_samples(samples_dir: Path, docs: dict[str, dict], root: Path, report: Report,
+                  json_docs: dict[str, dict] | None = None) -> None:
+    """Samples of HTTP contracts (`docs`, by contract name) and JSON Schema contracts (`json_docs`, by file stem)."""
+    json_docs = json_docs or {}
+    need_samples = set(docs) | {n for n in json_docs if n not in JSON_PRE_CHECKER}
+    valid_count: dict[str, int] = {name: 0 for name in need_samples}
+    negatives_seen: dict[str, set[str]] = {name: set() for name in set(docs) | set(json_docs)}
     if samples_dir.is_dir():
         files = sorted(p for p in samples_dir.rglob("*.json"))
     else:
@@ -387,12 +449,20 @@ def check_samples(samples_dir: Path, docs: dict[str, dict], root: Path, report: 
         if name != path.parent.name:
             report.error(where, f"S1 'contract' is {name!r} but the sample sits in {path.parent.name}/")
             continue
-        if name not in docs:
-            report.error(where, f"S1 no HTTP contract named {name}")
-            continue
         schema_name = sample.get("schema")
-        if schema_name not in ((docs[name].get("components") or {}).get("schemas") or {}):
-            report.error(where, f"S1 {name} has no component schema {schema_name!r}")
+        if name in json_docs:
+            if schema_name is not None:
+                report.error(where, f"S1 {name} is a JSON Schema contract: drop 'schema' (the whole file is the "
+                                    "schema)")
+                continue
+            validator = Draft202012Validator(json_docs[name], format_checker=FormatChecker())
+        elif name in docs:
+            if schema_name not in ((docs[name].get("components") or {}).get("schemas") or {}):
+                report.error(where, f"S1 {name} has no component schema {schema_name!r}")
+                continue
+            validator = validator_for(name, docs[name], schema_name)
+        else:
+            report.error(where, f"S1 no contract named {name}")
             continue
         expect = sample.get("expect")
         if expect not in ("valid", "invalid"):
@@ -400,12 +470,11 @@ def check_samples(samples_dir: Path, docs: dict[str, dict], root: Path, report: 
             continue
         payload = sample.get("payload")
         try:
-            schema_errors = sorted(validator_for(name, docs[name], schema_name).iter_errors(payload),
-                                   key=lambda e: [str(x) for x in e.absolute_path])
+            schema_errors = sorted(validator.iter_errors(payload), key=lambda e: [str(x) for x in e.absolute_path])
         except Exception as exc:  # noqa: BLE001 - a broken $ref (already reported as O4) must not crash the run
             report.error(where, f"S2 cannot validate against {schema_name}: {type(exc).__name__}: {str(exc)[:200]}")
             continue
-        policy_hits = scan_payload(POLICY.get(name, Policy()), payload, schema_name)
+        policy_hits = scan_payload(POLICY.get(policy_name(name), Policy()), payload, schema_name)
         if expect == "valid":
             for e in schema_errors:
                 loc = "/".join(str(x) for x in e.absolute_path) or "(root)"
@@ -413,7 +482,7 @@ def check_samples(samples_dir: Path, docs: dict[str, dict], root: Path, report: 
             for _, msg in policy_hits:
                 report.error(where, f"S2 expected valid, field policy: {msg}")
             if not schema_errors and not policy_hits:
-                valid_count[name] += 1
+                valid_count[name] = valid_count.get(name, 0) + 1
         else:
             if not schema_errors and not policy_hits:
                 report.error(where, "S2 expected invalid, but both the schema and the field policy accept it")
@@ -432,7 +501,7 @@ def check_samples(samples_dir: Path, docs: dict[str, dict], root: Path, report: 
             report.error(f"{CONTRACTS.as_posix()}/samples/{name}/", f"S4 {name} has no valid sample")
     for name, rules in REQUIRED_NEGATIVES.items():
         for rule in rules:
-            if name in docs and rule not in negatives_seen.get(name, set()):
+            if (name in docs or name in json_docs) and rule not in negatives_seen.get(name, set()):
                 report.error(f"{CONTRACTS.as_posix()}/samples/{name}/",
                              f"S4 the design requires a rejected {name} sample with rule '{rule}'")
 
@@ -459,14 +528,19 @@ def run(root: Path) -> Report:
     report = Report()
     contracts = root / CONTRACTS
     readme = (contracts / "README.md").read_text(encoding="utf-8") if (contracts / "README.md").exists() else ""
+    json_docs: dict[str, dict] = {}
     for path in sorted(contracts.glob("*.json")):
         if not SCHEMA_FILE.match(path.name):
             report.error(rel(path, root), "J1 file name must be <name>.v<major>[.<minor>].json")
             continue
         try:
-            Draft202012Validator.check_schema(json.loads(path.read_text(encoding="utf-8")))
+            schema = json.loads(path.read_text(encoding="utf-8"))
+            Draft202012Validator.check_schema(schema)
         except (json.JSONDecodeError, SchemaError) as exc:
             report.error(rel(path, root), f"J1 not a valid JSON Schema 2020-12 document: {exc}")
+        else:
+            json_docs[path.stem] = schema
+            check_policy(rel(path, root), path.stem, schema, report, required=path.stem not in JSON_PRE_CHECKER)
         if path.name not in readme:
             report.error(rel(path, root), "R1 not listed in docs/contracts/README.md")
     docs: dict[str, dict] = {}
@@ -484,7 +558,7 @@ def run(root: Path) -> Report:
             docs[name] = doc
         if path.name not in readme:
             report.error(rel(path, root), "R1 not listed in docs/contracts/README.md")
-    check_samples(contracts / "samples", docs, root, report)
+    check_samples(contracts / "samples", docs, root, report, json_docs)
     check_app_copies(root, report)
     report.notes.insert(0, f"{len(list(contracts.glob('*.json')))} JSON Schema contracts, {len(docs)} HTTP contracts")
     return report

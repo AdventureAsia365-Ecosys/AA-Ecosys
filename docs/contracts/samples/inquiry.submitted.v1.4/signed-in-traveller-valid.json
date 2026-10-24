@@ -1,0 +1,58 @@
+{
+  "contract": "inquiry.submitted.v1.4",
+  "expect": "valid",
+  "why": "A signed-in traveller: identity (iss, sub) and email from the verified token, verified true",
+  "payload": {
+    "contract": "inquiry.submitted",
+    "version": 1.4,
+    "idempotency_key": "8f1c2d3e-0000-4a5b-9c6d-000000000501:41",
+    "source": "tripplanner",
+    "trip_id": "8f1c2d3e-0000-4a5b-9c6d-000000000501",
+    "handoff_id": "41",
+    "submitted_at": "2026-10-24T10:00:00Z",
+    "customer": {
+      "customer_id": null,
+      "name": "Test Traveller",
+      "phone": null,
+      "email": "traveller@mail.example",
+      "consent": true,
+      "consent_at": "2026-10-24T09:59:30Z",
+      "verified": true,
+      "identity": {
+        "iss": "https://cognito-idp.us-west-1.amazonaws.com/us-west-1_EXAMPLE00",
+        "sub": "0f1e2d3c-4b5a-4968-8776-655443322110"
+      }
+    },
+    "itinerary": {
+      "legs": [
+        {
+          "position": 1,
+          "source_tour_id": "vn-ha-giang-loop-4d",
+          "source_system": "cis",
+          "source_id": "vn-ha-giang-loop-4d",
+          "day_from": 1,
+          "day_to": 2,
+          "available": true,
+          "reason": null,
+          "reason_detail": null
+        }
+      ],
+      "days": [
+        {
+          "day": 1,
+          "component_id": "c-0001",
+          "name": "Ha Giang to Dong Van",
+          "source_tour_id": "vn-ha-giang-loop-4d",
+          "source_day_index": 1,
+          "destination_id": "vn-dong-van",
+          "lat": 23.278,
+          "lng": 105.362,
+          "available": true,
+          "reason": null,
+          "reason_detail": null
+        }
+      ],
+      "custom_days": []
+    }
+  }
+}

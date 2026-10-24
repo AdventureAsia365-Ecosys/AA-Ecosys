@@ -79,9 +79,10 @@ customer-facing description and photos **from** that data.
      application role, "CIS never sees commercial data" is enforced by the contract, the views and code
      review only, not by the database. Tracked as a follow-up below.
 5. **CIS → Booking read-back (read-only):**
-   - CIS publishes a view (e.g. `shared.v_supply_content`) keyed by the Booking entity id
-     (`source_system = 'booking'`, `source_id`): description, highlights, photo URLs, `content_status`
-     (`draft` / `in_review` / `published` / `stale`), `content_version`, and the CIS admin edit URL.
+   - CIS publishes a view keyed by the Booking entity id (`source_system = 'booking'`, `source_id`):
+     description, highlights, photo URLs, `content_status` (`draft` / `in_review` / `published` / `stale`),
+     `content_version`, and the CIS admin edit URL. AA-835 places it at `catalog.v_supply_content`, not
+     `shared.*`, so it reuses the `catalog_owner` recipe and the existing `catalog.*` contract grant to `booking`.
    - A CIS migration grants `SELECT` on it to role `booking` (unguarded, after the role exists).
    - **Booking UI shows these fields read-only** with an **"Edit in CIS"** button linking to the CIS
      admin page. Both admin UIs use the WORKFORCE pool (ADR 0006), so the link usually needs no second
@@ -122,15 +123,19 @@ customer-facing description and photos **from** that data.
   contracts and are maintained by contracting staff in Booking next to the rates (ADR 0005).
 - **CIS reads Booking tables directly.** Rejected by ADR 0001 decision 6 (published views and outbox only).
 
-## Follow-ups (no Linear issue created yet — ask Nghiệp)
+## Follow-ups (AA-835)
 
-- `docs/contracts/supply.hotel.v1.json`, `supply.service.v1.json` + `docs/contracts/README.md` entry.
-- `docs/database/schema-ownership.md`: the new views and their owners.
+- Done (AA-835, S250): `docs/contracts/supply.hotel.v1.json`, `supply.service.v1.json`, their samples, the
+  `docs/contracts/README.md` entries and the contracts CI field policy (no supplier identity, rates, margins,
+  internal notes, links or URLs).
+- `docs/database/schema-ownership.md`: the new views and their owners (AA-835).
 - `bk-002` scope note in ADR 0004 decision 7: `hotels` / `activities` carry facts only, no description
   columns.
 - Run the CIS API as a non-owner application role (not `aa_cis_admin`), so the Booking grants become a
   real boundary (see decision 4, known gap). Cross-repo; needs Nghiệp's go-ahead and its own issue.
-- `entity_media` usage-rights flag and the Booking-owned S3 prefix readable by CIS (decision 2).
+  Done by X1 S18/S19 (AA-860, 19/10/2026): the CIS runtime login is `cis_app`, which reads only the
+  `booking.v_*` contract views it is granted.
+- `entity_media` usage-rights flag and the Booking-owned S3 prefix readable by CIS (decision 2): AA-835 (bk-023).
 
 ## Review notes (S236)
 

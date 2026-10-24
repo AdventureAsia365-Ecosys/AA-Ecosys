@@ -1,0 +1,26 @@
+{
+  "contract": "supply.service.v1",
+  "expect": "valid",
+  "why": "A deactivated transfer with no photos and no duration",
+  "payload": {
+    "contract": "supply.service.v1",
+    "version": 1,
+    "idempotency_key": "8f1c2d3e-0000-4a5b-9c6d-000000000609",
+    "emitted_at": "2026-10-24T08:20:00Z",
+    "entity_id": "5b9d3f21-3333-4c3d-8e4f-000000000301",
+    "supply_version": 2,
+    "change": "deactivate",
+    "facts": {
+      "service_type": "transfer",
+      "working_title": "Airport transfer DAD - Hoi An",
+      "unit": "vehicle",
+      "destination_id": "2a2a2a2a-0000-4000-8000-000000000010",
+      "country_code": "VN",
+      "duration_minutes": null,
+      "max_group_size": null,
+      "inclusions": [],
+      "status": "inactive",
+      "media": []
+    }
+  }
+}

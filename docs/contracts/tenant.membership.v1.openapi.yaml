@@ -8,11 +8,19 @@ info:
     agency lifecycle (root ADR 0006b decision 4, ADR 0010 decision 5). It never carries a CRM role (owner / agent /
     assistant): the CRM owns those, and a CIS change can never grant one (AA-978 refusal case). It carries no email
     and no display name (AA-813 data-standards addendum, S238); (iss, sub) is tagged pii online_id there and here.
-    Served by the CIS API from catalog.v_tenant_member, keyed by (iss, sub), never sub alone (ADR 0006 decision 9).
-    Snapshot with ETag plus a cursor feed; the CRM applies removals within 60 s and refuses a request whose membership
-    it cannot confirm. Removing the last owner locks the agency in the CRM until owner recovery. Auth: M2M token of
-    the aa-m2m pool, scope cis.tenant/read (root ADR 0006b decision 7). Path prefix /tenant/membership/v1 is
-    provisional until ADR 0013 (AA-899).
+    Served by the CIS API from CIS's own tables shared.tenant_members and shared.tenant_membership_event (AA-978),
+    keyed by (iss, sub), never sub alone (ADR 0006 decision 9). No catalog view: the CRM reads CIS over HTTP only and
+    holds no database grant (root ADR 0008a), so catalog.v_tenant_member is deferred (AA-813 addendum option 2).
+    Snapshot with ETag plus a cursor feed. The CRM uses CIS as a revocation and lifecycle source, not as a positive
+    gate: members that exist only in the CRM have no CIS row, so a missing CIS membership never refuses a CRM request.
+    The CRM applies a membership.removed event and every agency lifecycle event (locked, unlocked, deleted) within
+    60 s (tenant.unlocked only lifts a lock that a CIS lifecycle event set); created, invited, activated and
+    role_changed never create a CRM member or change a CRM role. Removing the last owner locks the agency in the CRM
+    until owner recovery. Feed cursor: opaque, oldest first; the feed only
+    returns events whose writing transaction is older than every transaction still open (a transaction-id snapshot
+    horizon), so an event committed out of order is delivered later, never skipped (contracts rule 4); a consumer
+    stores event_id and applies each event once. Auth: M2M token of the aa-m2m pool, scope cis.tenant/read (root ADR
+    0006b decision 7). Path prefix /tenant/membership/v1 is provisional until ADR 0013 (AA-899).
   x-aa-contract: tenant.membership.v1
   x-aa-producer: AA-CIS-App
   x-aa-consumers: [AA-Partner]

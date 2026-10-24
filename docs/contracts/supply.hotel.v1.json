@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://adventure.asia/contracts/supply.hotel.v1.json",
+  "title": "supply.hotel v1 (AA-Booking → CIS)",
+  "description": "Hotel supply facts that Booking owns and CIS writes customer-facing content from (root ADR 0004a, AA-835). Envelope as inquiry.submitted (ADR 0004a decision 3). The event is assembled from one booking.v_supply_outbox row (idempotency_key = its event_id, emitted_at, entity_id) and the current-state row of the facts view read with it (facts, supply_version). Outbox rows carry typed ids only, so the facts can be newer than the change that queued the event: supply_version is always the version the facts reflect. The consumer stores idempotency_key in its inbox (rule 3) and applies the facts only when supply_version is greater than the version it holds for entity_id; an older or equal version is recorded as skipped (ADR 0004a decision 4). Payload = facts only: supplier identity, contracts, rates, margins, internal notes and links never appear, every object is closed (additionalProperties false) and the root contracts CI field policy refuses those names. Not personal data: a hotel's address is a business address.",
+  "type": "object",
+  "required": [
+    "contract",
+    "version",
+    "idempotency_key",
+    "emitted_at",
+    "entity_id",
+    "supply_version",
+    "change",
+    "facts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "supply.hotel.v1"
+    },
+    "version": {
+      "enum": [
+        1
+      ],
+      "description": "major.minor; consumers accept every minor of major 1"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "format": "uuid",
+      "description": "booking.outbox.event_id of the outbox row that queued this event; unique per contract."
+    },
+    "emitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When Booking wrote the outbox row (occurred_at)."
+    },
+    "entity_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The Booking entity id. CIS keys its content on (source_system 'booking', source_id = entity_id)."
+    },
+    "supply_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic per entity_id; bumped by Booking on every material change (name, facts, room types, media, status). The version the facts reflect."
+    },
+    "change": {
+      "enum": [
+        "upsert",
+        "deactivate"
+      ],
+      "description": "deactivate exactly when facts.status is inactive: CIS unpublishes the content and keeps it (ADR 0004a decision 6). upsert otherwise: CIS marks published content stale and queues a draft."
+    },
+    "facts": {
+      "$ref": "#/$defs/HotelFacts"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "change": {
+            "const": "deactivate"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "facts": {
+            "properties": {
+              "status": {
+                "const": "inactive"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "change": {
+            "const": "upsert"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "facts": {
+            "properties": {
+              "status": {
+                "const": "active"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "HotelFacts": {
+      "type": "object",
+      "description": "One booking.v_supply_hotels row. A material change to any of these fields, a room type or a photo bumps supply_version.",
+      "required": [
+        "name",
+        "hotel_style",
+        "star_rating",
+        "address",
+        "destination_id",
+        "country_code",
+        "lat",
+        "lng",
+        "check_in_time",
+        "check_out_time",
+        "amenities",
+        "room_types",
+        "status",
+        "media"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "hotel_style": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "star_rating": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 5
+        },
+        "address": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The hotel's street address (business data, not personal data)."
+        },
+        "destination_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid",
+          "description": "CIS shared.destinations.id"
+        },
+        "country_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Z]{2}$"
+        },
+        "lat": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": -90,
+          "maximum": 90,
+          "description": "null exactly when lng is null"
+        },
+        "lng": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": -180,
+          "maximum": 180
+        },
+        "check_in_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$",
+          "description": "Local time, HH:MM or HH:MM:SS"
+        },
+        "check_out_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$",
+          "description": "Local time, HH:MM or HH:MM:SS"
+        },
+        "amenities": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "room_types": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RoomType"
+          },
+          "description": "Every room type of the hotel, active and inactive."
+        },
+        "status": {
+          "enum": [
+            "active",
+            "inactive"
+          ]
+        },
+        "media": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Media"
+          },
+          "description": "Active photos only; removed ones are absent."
+        }
+      },
+      "allOf": [
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "lat": {
+                  "type": "number"
+                },
+                "lng": {
+                  "type": "number"
+                }
+              }
+            },
+            {
+              "properties": {
+                "lat": {
+                  "type": "null"
+                },
+                "lng": {
+                  "type": "null"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "RoomType": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "max_occupancy",
+        "bed_types",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "booking.hotel_room_types.id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "max_occupancy": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 20
+        },
+        "bed_types": {
+          "type": "array",
+          "maxItems": 10,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "status": {
+          "enum": [
+            "active",
+            "inactive"
+          ]
+        }
+      }
+    },
+    "Media": {
+      "type": "object",
+      "description": "A supplier photo attached in Booking (booking.entity_media, status active). Passed by id only, never as a URL: CIS reads the object through booking.v_supply_media (a Booking-owned S3 prefix its task role may read) and publishes it only while usage_rights is true (ADR 0004a decision 2).",
+      "required": [
+        "media_id",
+        "usage_rights",
+        "content_type",
+        "width",
+        "height",
+        "sha256"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "media_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "booking.entity_media.id"
+        },
+        "usage_rights": {
+          "type": "boolean",
+          "description": "Set by contracting: true = AA may publish this photo. CIS never publishes a photo while it is false."
+        },
+        "content_type": {
+          "enum": [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+          ]
+        },
+        "width": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "height": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Hex SHA-256 of the stored object; CIS re-checks it after the copy."
+        }
+      }
+    }
+  }
+}

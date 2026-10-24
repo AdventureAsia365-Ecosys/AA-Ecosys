@@ -1,0 +1,58 @@
+{
+  "contract": "supply.hotel.v1",
+  "expect": "invalid",
+  "why": "A photo is an entity_media id, never a free URL (SSRF, unlicensed images; ADR 0004a decision 2)",
+  "rule": "url",
+  "payload": {
+    "contract": "supply.hotel.v1",
+    "version": 1,
+    "idempotency_key": "8f1c2d3e-0000-4a5b-9c6d-000000000604",
+    "emitted_at": "2026-10-24T08:15:00Z",
+    "entity_id": "4a8c2e10-1111-4b2c-8d3e-000000000101",
+    "supply_version": 3,
+    "change": "upsert",
+    "facts": {
+      "name": "Riverside Boutique Hotel",
+      "hotel_style": "boutique",
+      "star_rating": 4,
+      "address": "12 Example Street, Hoi An",
+      "destination_id": "2a2a2a2a-0000-4000-8000-000000000010",
+      "country_code": "VN",
+      "lat": 15.8801,
+      "lng": 108.338,
+      "check_in_time": "14:00",
+      "check_out_time": "12:00:00",
+      "amenities": [
+        "Outdoor pool",
+        "Free bicycles",
+        "Breakfast included"
+      ],
+      "room_types": [
+        {
+          "id": "7e3d1b20-2222-4c3d-9e4f-000000000201",
+          "name": "Deluxe River View",
+          "max_occupancy": 2,
+          "bed_types": [
+            "double",
+            "twin"
+          ],
+          "status": "active"
+        },
+        {
+          "id": "7e3d1b20-2222-4c3d-9e4f-000000000202",
+          "name": "Family Suite",
+          "max_occupancy": null,
+          "bed_types": [],
+          "status": "inactive"
+        }
+      ],
+      "status": "active",
+      "media": [
+        {
+          "url": "https://supplier.example/photos/pool.jpg",
+          "usage_rights": true
+        }
+      ]
+    }
+  }
+}

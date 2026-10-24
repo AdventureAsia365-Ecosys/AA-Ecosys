@@ -1,0 +1,10 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "Problem",
+  "expect": "valid",
+  "why": "A draft (or unknown or never-published) version answers 404 not_found without a reason: draft content is never served",
+  "payload": {
+    "error": "not_found",
+    "message": "No published version 4 of this content."
+  }
+}
