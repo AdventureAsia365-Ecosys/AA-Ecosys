@@ -31,10 +31,11 @@ the two disagree, `owners.yaml` wins and this page is fixed in the same PR train
 
 1. **A schema has one owner repo.** Its migrations live in that repo, next to the code that uses
    the schema, so schema and code change in one PR. An app never migrates another app's schema and
-   never writes another app's rows. The Migration Copy Guard ownership lint (AA-853) fails a copy that touches a
-   schema outside its owner's `owners.yaml` entry (DDL, comments, grants, writes; the file's own
-   `shared.schema_versions` row excepted), and the nightly DB Schema Dump drift report lists live objects no
-   migration creates.
+   never writes another app's rows. The Migration Copy Guard ownership lint (AA-853; static, at copy time:
+   function bodies and dynamic SQL are not read) fails a copy that touches a schema outside its owner's
+   `owners.yaml` entry (DDL, comments, grants, writes; the file's own `shared.schema_versions` row excepted); at run
+   time the X1 owner-role switch of DB Migrate is the boundary. The nightly DB Schema Dump drift report (report
+   only, it fails nothing) lists live objects no migration creates, with their owner decision or as open.
 2. **Other apps read only through contract views the owner grants** in its own migration
    (ADR 0008 decision 5, S237): tenant/catalog contract views live in `catalog`, others are
    `<schema>.v_<entity>` or `v_<event>_outbox`. No new table or column grant to another app's role.

@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-dev-db]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-25
 review_every_days: 90
 related: [ARCH-08, ARCH-08-data-management, ARCH-08-scaling, ARCH-08-schema-ownership]
 ---
@@ -70,7 +70,7 @@ roadmap id; until it lands, the review checklist (section 8) carries the check.
 
 | Tool | Status | What it checks |
 |---|---|---|
-| Migration Copy Guard — `infra/AA-CIS-Infra/db/check_migration_copies.py`, `.github/workflows/migration-copy-guard.yml` (AA-807) | exists | path pattern, owner key prefix, file on the owner's `main`, byte identity; nightly over all copies |
+| Migration Copy Guard — `infra/AA-CIS-Infra/db/check_migration_copies.py`, `.github/workflows/migration-copy-guard.yml` (AA-807) | exists | path pattern, owner key prefix, file on the owner's `main`, byte identity; nightly over all copies; ownership lint (AA-853, `db/check_migration_ownership.py`, static): an owner dir touches only its own schemas (MIG-6) |
 | DB Migrate — `.github/workflows/db-migrate.yml` + `db/run_migration.py` | exists | sha256 of the file, `check`/`apply`, fails (exit 3) if the version is not registered after the run |
 | Booking migration guard — `apps/AA-Booking/backend/tests/migration_guard.py` | exists | BEGIN/COMMIT, `bk-NNN` self-registration, nothing outside schema `booking`, no login/password/extension/SECURITY DEFINER/PUBLIC grant, views revoke writes |
 | Booking Integration Tests (`postgres:15`, login `aa_cis_admin`, re-apply for idempotency, no skips) | exists | every Booking migration applies twice on PG15 |
@@ -78,7 +78,7 @@ roadmap id; until it lands, the review checklist (section 8) carries the check.
 | AA-817 tenant isolation test `tests/integration/test_aa817_rls_tenant_isolation.py` | lands with AA-817 / migration 229 | WHERE-less reads and writes as `aa_app_user` under own / foreign / forged / empty GUC |
 | Live probe `docs/audits/2026-10-14-S237-lane-backlog/aa817/aa817_probe.py` | exists (manual, read-only, ECS exec) | role chain, owners, RLS/FORCE, policies, privileges, isolation matrix on Dev |
 | CloudWatch alarm `DatabaseConnections` > 70 for 10 min (`accounts/aa365/observability_ecosys.tf`) | exists | connection saturation |
-| Schema dump + nightly drift check, policies/indexes/grants/owners/default ACLs/sizes | *to build* **N1** | live vs repo; fails on unmanaged objects |
+| Schema dump + nightly drift check, policies/indexes/grants/owners/default ACLs/sizes | dump exists (**N1**, AA-807: `db-schema-dump.yml`, nightly + after every apply); drift report exists (AA-853: replay of every migration, *Schema drift* section), **report only, not failing**; fail-on-unmanaged deferred until the replay baseline and the owner decisions exist | live vs a replay of the repos: unmanaged / missing / changed objects, owner decision or open |
 | Instance guardrails, parameter group, `pg_stat_statements`, new alarms, `CONNECTION LIMIT`, `application_name`, Lambda reserved concurrency | *to build* **N3** | slow queries, lock waits, idle-in-transaction, connection budget |
 | Safe runner defaults, `-- migrate:` headers, pre-snapshot, SQL lint (squawk or grep rules), unique-number check | *to build* **N5** | lock/statement timeouts, CONCURRENTLY, destructive snapshot |
 | Infra role bootstrap (role attributes: LOGIN, `CONNECTION LIMIT`, role-level backstop timeouts, `application_name`) in git, applied through a reviewed Infra path | exists (X1, v1.2): AA-CIS-Infra `db/migrations/roles/` (key `rl-NNN`, runs as the master): `rl-001` (`bk_owner`, `tp_owner`, `cis_app` limit 90, the N3 limits restated from CIS 234), `rl-002` (`cis_owner`, `db_migrator` limit 5). Role-level backstop timeouts and new apps' roles: later `rl-` files | roles are Infra-owned (`schema-ownership.md` rule 3); DB Migrate accepts `cis`/`tripplanner`/`booking`/`roles` dirs and the Booking guard rejects `ALTER ROLE` |
@@ -284,9 +284,13 @@ tables only, follow DRY RUN when they delete or overwrite, and keep the script i
 `docs/audits/<date>-S<nnn>-<slug>/`.
 *Why:* S225 rule; an unreviewed DDL on the shared instance hits all three apps, and live-only objects
 (two RLS policies and `acp_shared.acp_output_rules`, review P3) are invisible to review.
-*Enforced:* review; the DB Schema Dump drift report (AA-853, report only) replays every applied migration into a
-scratch PostgreSQL each night and lists the live objects no migration creates in the *Schema drift* section of
-`db-schema-reference.md`, each with its owner decision (AA-CIS-Infra `db/schema_drift_decisions.json`).
+*Enforced:* review; the DB Schema Dump drift report (AA-853), **report only, it fails nothing**: each night it replays
+every applied migration into a scratch PostgreSQL and lists, in the *Schema drift* section of
+`db-schema-reference.md`, the live objects no migration creates (unmanaged), the ones a migration creates that Dev
+lacks (missing) and changed definitions, each with its owner decision from AA-CIS-Infra
+`db/schema_drift_decisions.json` or marked **open**. The first runs are dominated by replay gaps (the `acp_*` history
+of the AA-ACP-Core lineage is in no repo); the replay baseline file and the owner decisions are pending, and failing
+on unmanaged objects waits for them.
 
 **MIG-6 (MUST)** A migration touches only its owner's schemas, its own `schema_versions` row, and grants
 on its own objects to consumer roles. It MAY create its own NOLOGIN roles idempotently (bk-001 pattern
@@ -302,10 +306,12 @@ carry `ALTER ROLE`. Instance-level extensions (e.g. `pg_stat_statements`, **N3**
 in a CIS migration (or by the bootstrap once the migrator no longer holds `rds_superuser`).
 *Why:* ownership is a convention until **X1**; the migration review is the boundary.
 *Enforced:* Booking migration guard (`no-login`, `no-alter-role`, `no-password`, `no-security-definer`,
-`no-extension`, `create-role`); review for CIS/TP; **X2** (*to build*). The schema boundary is enforced for every
-owner by the Migration Copy Guard ownership lint (AA-853, AA-CIS-Infra `db/check_migration_ownership.py`): a copy
-that creates, alters, drops, comments on, grants on or writes to an object outside its owner's schemas
-(`db/owners.yaml`) fails, apart from its own `shared.schema_versions` row.
+`no-extension`, `create-role`); review for CIS/TP; **X2** (*to build*). The schema boundary is linted at copy time
+for every owner by the Migration Copy Guard ownership lint (AA-853, AA-CIS-Infra `db/check_migration_ownership.py`):
+a copy that creates, alters, drops, comments on, grants on or writes to an object outside its owner's schemas
+(`db/owners.yaml`) fails, apart from its own `shared.schema_versions` row. It is a static lint: function bodies and
+dynamic SQL (`EXECUTE`) are not read. The runtime boundary is the X1 owner-role switch of DB Migrate (a file runs as
+its owner role, which holds no rights on other owners' objects).
 
 **MIG-7 (MUST)** Expand/contract for every shape change: expand (add) → ship readers and writers on the
 new shape → wait ≥ 14 days → contract (drop) in a separate migration under DRY RUN.
