@@ -1,0 +1,11 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "Problem",
+  "expect": "valid",
+  "why": "A retired tour answers 410 gone with the CIS lifecycle reason; the CRM marks its lines no longer offered",
+  "payload": {
+    "error": "gone",
+    "message": "Adventure Asia no longer offers this tour.",
+    "reason": "source_deleted"
+  }
+}

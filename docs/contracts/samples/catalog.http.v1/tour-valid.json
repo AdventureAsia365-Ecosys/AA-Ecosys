@@ -2,7 +2,7 @@
   "contract": "catalog.http.v1",
   "schema": "Tour",
   "expect": "valid",
-  "why": "Published tour with places, time zones and exclusions",
+  "why": "Published tour with places, per-day and per-place time zones and exclusions",
   "payload": {
     "source_system": "cis",
     "source_id": "vn-ha-giang-loop-4d",
@@ -25,7 +25,8 @@
             "lng": 105.362,
             "precision": "point"
           }
-        ]
+        ],
+        "time_zone": "Asia/Ho_Chi_Minh"
       }
     ],
     "inclusions": [

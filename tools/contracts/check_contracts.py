@@ -27,6 +27,12 @@ Checks every contract in docs/contracts/:
   Registry:
     R1  docs/contracts/README.md names every contract file.
 
+  App copies:
+    M1  an app that vendors a contract (`apps/<repo>/docs/contracts/<same file name>`, e.g. AA-CIS-App's copy of
+        catalog.http.v1 that its conformance test reads) holds a byte-identical copy. The app repos are separate
+        checkouts under the workspace, so this runs where they are present (the workspace) and is skipped in this
+        repo's CI, where apps/ is absent.
+
 Usage:  python tools/contracts/check_contracts.py [--root <repo>]
 """
 
@@ -391,6 +397,21 @@ def check_samples(samples_dir: Path, docs: dict[str, dict], root: Path, report: 
 # ---------------------------------------------------------------- main
 
 
+def check_app_copies(root: Path, report: Report) -> None:
+    """M1: every app copy of a contract file equals the root file byte for byte."""
+    compared = 0
+    for path in sorted((root / CONTRACTS).glob("*")):
+        if path.suffix not in (".json", ".yaml") or not path.is_file():
+            continue
+        for copy in sorted((root / "apps").glob(f"*/{CONTRACTS.as_posix()}/{path.name}")):
+            compared += 1
+            if copy.read_bytes() != path.read_bytes():
+                report.error(rel(copy, root), f"M1 differs from the root {rel(path, root)}: copy the root file "
+                                              "into the app (change the root first)")
+    if compared:
+        report.notes.append(f"M1 {compared} app contract copies compared")
+
+
 def run(root: Path) -> Report:
     report = Report()
     contracts = root / CONTRACTS
@@ -421,6 +442,7 @@ def run(root: Path) -> Report:
         if path.name not in readme:
             report.error(rel(path, root), "R1 not listed in docs/contracts/README.md")
     check_samples(contracts / "samples", docs, root, report)
+    check_app_copies(root, report)
     report.notes.insert(0, f"{len(list(contracts.glob('*.json')))} JSON Schema contracts, {len(docs)} HTTP contracts")
     return report
 

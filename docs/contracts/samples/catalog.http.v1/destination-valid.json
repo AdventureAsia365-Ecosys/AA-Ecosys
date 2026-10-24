@@ -1,0 +1,14 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "Destination",
+  "expect": "valid",
+  "why": "A destination in a country with several zones gets the zone of its longitude (Bali: Asia/Makassar)",
+  "payload": {
+    "destination_id": "2a2a2a2a-0000-4000-8000-000000000003",
+    "name": "Ubud",
+    "country_code": "ID",
+    "time_zone": "Asia/Makassar",
+    "lat": -8.5,
+    "lng": 115.26
+  }
+}

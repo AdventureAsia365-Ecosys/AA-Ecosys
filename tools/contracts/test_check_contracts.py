@@ -103,6 +103,15 @@ class Mutations(unittest.TestCase):
         self.assertTrue(any("usage-with-trip-count-invalid" in n and "schema alone would accept" in n
                             for n in report.notes))
 
+    def test_app_copy_must_be_byte_identical(self) -> None:
+        name = "catalog.http.v1.openapi.yaml"
+        app = self.root / "apps" / "AA-CIS-App" / "docs" / "contracts"
+        app.mkdir(parents=True)
+        shutil.copyfile(self.contracts / name, app / name)
+        self.assertFalse(any(m.startswith("M1 ") for m in self.errors()))
+        (app / name).write_text((self.contracts / name).read_text(encoding="utf-8") + "# drift\n", encoding="utf-8")
+        self.assertTrue(any(m.startswith("M1 ") for m in self.errors()))
+
     def test_schema_field_named_supplier_net_fails(self) -> None:
         doc = self.load("booking.b2b.v1")
         doc["components"]["schemas"]["QuoteLine"]["properties"]["supplier_net"] = {"type": "string"}
