@@ -190,3 +190,97 @@ class WriteOnlyPiiFieldTest(unittest.TestCase):
         self.assertEqual(cc.scan_payload(self.P, {"owner_email": "a@b.example"}, "OwnerInviteRequest"), [])
         self.assertTrue(cc.scan_payload(self.P, {"owner_email": "a@b.example"}, "TenantSummary"))
         self.assertTrue(cc.scan_payload(self.P, {"x": {"owner_email": "a@b.example"}}, "OwnerInviteRequest"))
+
+
+class JsonSchemaContractTest(unittest.TestCase):
+    """AA-835 / AA-908: JSON Schema contracts get the field policy of their major and samples, like HTTP contracts."""
+
+    SUPPLY = cc.POLICY["supply.hotel.v1"]
+    INQUIRY = cc.POLICY["inquiry.submitted.v1"]
+
+    def setUp(self) -> None:
+        self.root = Path(tempfile.mkdtemp())
+        shutil.copytree(REAL, self.root / "docs" / "contracts")
+        self.contracts = self.root / "docs" / "contracts"
+
+    def errors(self) -> list[str]:
+        return [msg for _, msg in cc.run(self.root).errors]
+
+    def test_policy_name_is_the_major(self):
+        self.assertEqual(cc.policy_name("supply.hotel.v1"), "supply.hotel.v1")
+        self.assertEqual(cc.policy_name("supply.hotel.v1.1"), "supply.hotel.v1")
+        self.assertEqual(cc.policy_name("inquiry.submitted.v1.4"), "inquiry.submitted.v1")
+        self.assertEqual(cc.policy_name("crm.ops.v1"), "crm.ops.v1")
+
+    def test_supply_forbids_commercial_fields_and_urls(self):
+        for key, rule in (("supplier_id", "supplier_id"), ("net_amount", "net_amount"),
+                          ("internal_notes", "internal_notes"), ("url", "url"), ("links", "links"),
+                          ("reservation_email", "pii-name"), ("front_desk_phone", "pii-name")):
+            self.assertEqual(cc.key_violation(self.SUPPLY, key), rule, key)
+        for key in ("supplier_name", "room_rate", "rate_plan", "margin_pct", "notes", "photo_url", "net",
+                    "unit_price", "cost"):
+            self.assertIsNotNone(cc.key_violation(self.SUPPLY, key), key)
+        for key in ("name", "address", "star_rating", "amenities", "check_in_time", "media_id", "usage_rights",
+                    "contract", "supply_version", "working_title", "inclusions"):
+            self.assertIsNone(cc.key_violation(self.SUPPLY, key), key)
+
+    def test_inquiry_carries_contact_but_never_a_token(self):
+        self.assertEqual(cc.key_violation(self.INQUIRY, "access_token"), "access_token")
+        self.assertIsNotNone(cc.key_violation(self.INQUIRY, "session_token"))
+        self.assertIsNotNone(cc.key_violation(self.INQUIRY, "password"))
+        for key in ("email", "phone", "name", "identity", "iss", "sub", "idempotency_key", "verified"):
+            self.assertIsNone(cc.key_violation(self.INQUIRY, key), key)
+
+    def test_every_new_json_contract_has_a_policy_and_the_exempt_list_is_current(self):
+        stems = {p.stem for p in REAL.glob("*.json")}
+        self.assertLessEqual(cc.JSON_PRE_CHECKER, stems, "JSON_PRE_CHECKER names a file that no longer exists")
+        for stem in stems - cc.JSON_PRE_CHECKER:
+            self.assertIn(cc.policy_name(stem), cc.POLICY, stem)
+
+    def test_new_json_contract_without_policy_fails(self):
+        (self.contracts / "new.thing.v1.json").write_text(
+            (self.contracts / "supply.hotel.v1.json").read_text(encoding="utf-8"), encoding="utf-8")
+        readme = self.contracts / "README.md"
+        readme.write_text(readme.read_text(encoding="utf-8") + "\n`new.thing.v1.json`\n", encoding="utf-8")
+        errs = self.errors()
+        self.assertTrue(any(m.startswith("P1 no field policy for new.thing.v1") for m in errs), errs)
+        self.assertTrue(any(m.startswith("S4 new.thing.v1 has no valid sample") for m in errs), errs)
+
+    def test_new_minor_of_an_old_family_needs_samples(self):
+        src = self.contracts / "catalog.tour.v1.3.json"
+        (self.contracts / "catalog.tour.v1.9.json").write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+        readme = self.contracts / "README.md"
+        readme.write_text(readme.read_text(encoding="utf-8") + "\n`catalog.tour.v1.9.json`\n", encoding="utf-8")
+        errs = self.errors()
+        self.assertTrue(any(m.startswith("P1 no field policy for catalog.tour.v1") for m in errs), errs)
+        self.assertFalse(any("catalog.tour.v1.3" in m for m in errs), errs)
+
+    def test_schema_field_supplier_id_in_supply_fails(self):
+        path = self.contracts / "supply.hotel.v1.json"
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        doc["$defs"]["HotelFacts"]["properties"]["supplier_id"] = {"type": "string"}
+        path.write_text(json.dumps(doc), encoding="utf-8")
+        self.assertTrue(any(m.startswith("P1 ") and "supplier_id" in m for m in self.errors()))
+
+    def test_deleting_a_required_supply_negative_fails(self):
+        (self.contracts / "samples" / "supply.service.v1" / "service-with-free-photo-url-invalid.json").unlink()
+        self.assertTrue(any(m.startswith("S4 ") and "supply.service.v1" in m and "'url'" in m
+                            for m in self.errors()))
+
+    def test_json_sample_must_not_name_a_component_schema(self):
+        path = self.contracts / "samples" / "supply.hotel.v1" / "hotel-upsert-valid.json"
+        sample = json.loads(path.read_text(encoding="utf-8"))
+        sample["schema"] = "HotelFacts"
+        path.write_text(json.dumps(sample), encoding="utf-8")
+        self.assertTrue(any(m.startswith("S1 supply.hotel.v1 is a JSON Schema contract") for m in self.errors()))
+
+    def test_verified_without_identity_is_rejected_by_the_v1_4_schema(self):
+        doc = json.loads((REAL / "inquiry.submitted.v1.4.json").read_text(encoding="utf-8"))
+        sample = json.loads((REAL / "samples" / "inquiry.submitted.v1.4" / "signed-in-traveller-valid.json")
+                            .read_text(encoding="utf-8"))["payload"]
+        validator = cc.Draft202012Validator(doc)
+        self.assertEqual(list(validator.iter_errors(sample)), [])
+        sample["customer"]["identity"] = None
+        self.assertTrue(list(validator.iter_errors(sample)))
+        sample["customer"]["verified"] = False
+        self.assertEqual(list(validator.iter_errors(sample)), [])
