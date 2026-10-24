@@ -1,17 +1,3 @@
----
-id: OPS-S249-state-snapshot
-title: "S249 close — live state snapshot"
-description: "Trạng thái live lúc đóng S249 (24/10/2026 ~11:53 UTC): ECS, health, migration, Lambda, repo, công tắc wave S1 cố ý để bật cho S250."
-type: report
-status: active
-owner: nghiep
-audience: [engineer, agent]
-applies_to: [cis-core]
-last_reviewed: 2026-10-24
-review_every_days: 180
-related: [AA-645, AA-941]
----
-
 # S249 close — live state snapshot (24/10/2026, ~11:53 UTC)
 
 Read from the live sources, not from memory. Account ids, ARNs and internal hostnames are left out.
