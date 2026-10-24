@@ -1,0 +1,13 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "Problem",
+  "expect": "valid",
+  "why": "A 422 names the failing fields only, never the submitted values (the owner's address on the invite)",
+  "payload": {
+    "detail": "invalid_request",
+    "message": "the request does not match crm.ops.v1",
+    "fields": [
+      "owner_email"
+    ]
+  }
+}

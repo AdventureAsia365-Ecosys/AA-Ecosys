@@ -2,9 +2,9 @@
   "contract": "crm.ops.v1",
   "schema": "OwnerInviteRequest",
   "expect": "valid",
-  "why": "First-owner invite carries a CIS invitation id, never an email",
+  "why": "First-owner invite (AA-941): the address is write-only personal data, sent once and never returned",
   "payload": {
-    "membership_invitation_id": "5f0b7a52-1d7e-4a3e-8a8f-2f7a9c1d0e11",
+    "owner_email": "first.owner@synthetic.example",
     "ticket_ref": "AA-941"
   }
 }
