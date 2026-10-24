@@ -1,8 +1,8 @@
 {
- "updated": "2026-10-23",
- "session": "S248",
- "next_session": "S249",
- "source": "Linear (23/10/2026, S248 close) + docs/backlog/README.md + docs/audits/2026-10-23-S248-wrap/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
+ "updated": "2026-10-24",
+ "session": "S249",
+ "next_session": "S250",
+ "source": "Linear (24/10/2026, S249 close) + docs/backlog/README.md + docs/audits/2026-10-24-S249-wrap/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -158,11 +158,11 @@
      "done": true
     },
     {
-     "text": "AA-972..975 live trên Dev: quote M2M, hold hết hạn bằng reaper, VND + phí huỷ, outbox phát sự kiện; review độc lập mỗi bk-019..022 — S248: AA-972/973/974 Done; AA-975 còn lại",
-     "done": false
+     "text": "AA-972..975 live trên Dev: quote M2M, hold hết hạn bằng reaper, VND + phí huỷ, outbox phát sự kiện; review độc lập mỗi bk-019..022 — AA-972/973/974 Done S248, AA-975 Done S249",
+     "done": true
     },
     {
-     "text": "AA-976/977: catalog.http.v1 trả dữ liệu từ read model đã lật",
+     "text": "AA-976/977: catalog.http.v1 trả dữ liệu từ read model đã lật — AA-976 Done S249; còn AA-977",
      "done": false
     },
     {
@@ -174,7 +174,7 @@
   {
    "id": "C-M1",
    "name": "CRM chạy trên Dev (W0–W1)",
-   "window": "S249–S250 (nhịp Ultracode)",
+   "window": "S249–S250 (nhịp Ultracode) — đạt S249 (AA-934/935/936)",
    "status": "active",
    "criteria": [
     {
@@ -187,7 +187,7 @@
     },
     {
      "text": "Agency giả đăng nhập; form traveller → thẻ Inquiry < 1 phút; F1 chỉ có ciphertext; CIS thấy crm.job",
-     "done": false
+     "done": true
     }
    ]
   },
@@ -219,7 +219,7 @@
    "id": "C-M2",
    "name": "CRM full lifecycle hàng của đại lý (W2–W3)",
    "window": "S256–S258 (Ultracode); ~giữa 12 nếu phiên thường",
-   "status": "later",
+   "status": "active",
    "criteria": [
     {
      "text": "AA-937..946 xong; 1 trip đi từ Inquiry tới Completed với supplier của đại lý trên Dev",
@@ -286,14 +286,19 @@
  ],
  "checks": [
   {
-   "due": "ngay S249",
-   "issue": "S248 e01–e06",
-   "text": "Làm các việc Nghiệp duyệt cuối S248: AA-645 tới shadow ≤ 50, AA-783 báo cáo, AA-829 restore drill, AA-910 tự kiểm 1440 px, cắt 4 release, AA-987"
+   "due": "ngay S250",
+   "issue": "Jira S249",
+   "text": "Nháp Jira S249 (Nghiệp dời sang phiên sau vì cùng ngày): PR-22 tiến độ viết lại S1, PR-26 CRM W1/W2 đã ship, PR-24 TripPlanner gỡ tour tức thì, PR-25 Booking B2B feed, PR-27 nền tảng (restore drill, Sentry, MFA partner); nháp → Nghiệp duyệt → đăng"
   },
   {
-   "due": "ngay S249",
-   "issue": "AA-679",
-   "text": "Re-land bản sửa Booking chưa lên main (nhánh review/aa-679-trip-plans-s237): facets() + timeout catalog trả 500; merge dependabot CIS #968"
+   "due": "ngay S250",
+   "issue": "AA-835 · AA-910",
+   "text": "Lane đầu AA-835 (5 phần còn lại); AA-910 tự kiểm live 1440 px bằng phiên staff rồi đóng; AA-941 kiểm UI /admin/platform/agencies; tiếp các wave AA-645"
+  },
+  {
+   "due": "hằng đêm",
+   "issue": "AA-938",
+   "text": "Scrub corpus (AA-Partner) đỏ ở 9,1% over-scrub (ngưỡng < 5%) cho tới khi có phương án B hoặc cách sửa khác (GitHub AA-Partner #27); 0 rò rỉ"
   },
   {
    "due": "hằng đêm",
@@ -339,13 +344,13 @@
  "waiting": [
   {
    "who": "Nghiệp",
-   "text": "CRM API đang chạy trên Dev (~$7/tháng): giữ hay scale về 0 tới khi có màn hình CRM",
+   "text": "Duyệt nháp Jira S249 (PR-22, PR-26, PR-24, PR-25, PR-27) ở phiên sau rồi agent đăng",
    "issue": ""
   },
   {
    "who": "Nghiệp",
-   "text": "Duyệt 7 nháp Jira S248 rồi agent đăng",
-   "issue": ""
+   "text": "Quyết phương án B cho scrubber để đưa over-scrub corpus 9,1% xuống < 5% (Scrub corpus đỏ hằng đêm tới lúc đó; không phải issue Linear)",
+   "issue": "AA-938"
   },
   {
    "who": "Nghiệp",
@@ -356,11 +361,6 @@
    "who": "Nghiệp",
    "text": "Tuỳ chọn: xoay mật khẩu DataForSEO còn trong lịch sử Infra (hiện giữ nguyên theo quyết định AA-841)",
    "issue": ""
-  },
-  {
-   "who": "Nghiệp",
-   "text": "MFA đúng phiên: AA-932 + AA-972 (S249, gom 1 lần), AA-939 (S254)",
-   "issue": "AA-932"
   },
   {
    "who": "Nghiệp",
@@ -414,6 +414,36 @@
   }
  ],
  "log": [
+  {
+   "session": "S249",
+   "date": "24/10/2026",
+   "closed": [
+    "AA-783",
+    "AA-829",
+    "AA-899",
+    "AA-934",
+    "AA-935",
+    "AA-936",
+    "AA-937",
+    "AA-938",
+    "AA-939",
+    "AA-940",
+    "AA-942",
+    "AA-975",
+    "AA-976",
+    "AA-987"
+   ],
+   "canceled": [],
+   "created": [],
+   "reopened": [],
+   "notes": [
+    "14 issue Done (Claude Code, Ultracode, 23/10 23:20 → 24/10 ~19:00): CRM W1 xong → đạt C-M1 (AA-934 KeyProvider + mã hoá trường crm-003, AA-935 web + đăng nhập crm-004, AA-936 slice 1 intake → board + E2E crm-005); CRM W2 AA-937 (crm-006), AA-940 audit (crm-007, export hằng giờ ra 2 bucket audit), AA-939 partner pool MFA + vai trò/team/lời mời (crm-008, mời → active 10 s E2E), AA-938 scrubber (crm-009, 242 mẫu 0 rò rỉ, phương án C placeholder PLACE), AA-942 vòng đời dữ liệu + legal hold (crm-010, 4 vòng review đối kháng)",
+    "Lane B: AA-975 B2B event feed + bàn on-request + cờ sự cố (bk-022), AA-976 catalog CIS qua HTTP cho CRM; AA-987 TripPlanner gỡ tour ngay khi nhận thông báo lifecycle có ký của CIS; AA-829 restore drill (PITR 21′20″, khôi phục 1 schema, lật db.dev.internal); AA-783 báo cáo đồng thuận người–panel; AA-899 xuất OpenAPI + gate oasdiff",
+    "AA-645 viết lại S1 cả catalogue được duyệt (d04 + checkpoint 2): pilot 3, wave ≤50, Mongolia 13, Pakistan 14, South Korea 26, Bhutan 27 published (0 review, 0 stop), Taiwan 29 đang chạy lúc đóng; $10,35 / trần $120; còn 17 wave; công tắc S1_WRITER_V2 + route sonnet-5-5 giữ ON",
+    "Còn In Progress: AA-645, AA-941 (console L1 đã ship crm-011, còn kiểm UI live), AA-910 (kiểm live phiên staff 1440 px); S250 bắt đầu bằng AA-835 + AA-910",
+    "Ngoài issue: release CIS 0.7.0 + 0.8.0, Booking 0.4.0 + 0.5.0, TripPlanner 0.6.0 + 0.7.0, AA-Partner 0.2.0 + 0.3.0; re-land AA-679 (Booking #78); Sentry CIS bỏ frame locals, che token/e-mail (#979); role tf-plan đọc Bedrock (Infra #350); không tạo issue Linear mới; nháp Jira S249 dời sang S250"
+   ]
+  },
   {
    "session": "S248",
    "date": "23/10/2026",
@@ -761,18 +791,6 @@
    "needs": ""
   },
   {
-   "id": "AA-829",
-   "title": "Restore drill on Dev + private DSN CNAME + secure the real-data dumps (2026-09-16)",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S249",
-   "size": "M",
-   "next": "L3 · S249 first (e03): restore drill có lật db.dev.internal (~$0,10) + tập dượt khôi phục 1 schema, rồi đóng",
-   "needs": ""
-  },
-  {
    "id": "AA-896",
    "title": "FinOps doc, Cost Anomaly Detection and the monthly cost report with unit costs",
    "status": "In Progress",
@@ -815,9 +833,9 @@
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M3",
-   "session": "S249",
-   "size": "S",
-   "next": "L4 · S249 first (e04): tôi tự chụp 1440 px bằng tài khoản E2E rồi đóng",
+   "session": "S250",
+   "size": "XS",
+   "next": "L4 · S250: tự kiểm live bằng phiên staff Cognito ở 1440 px (làm luôn, không hỏi), so với docs/audits/2026-10-24-S249-aa910-layout/, rồi đóng",
    "needs": ""
   },
   {
@@ -989,18 +1007,6 @@
    "needs": "Accept the ADR"
   },
   {
-   "id": "AA-899",
-   "title": "OpenAPI export and breaking-change check for CIS and Booking",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S257",
-   "size": "M",
-   "next": "L7 · S257 OpenAPI export + breaking-change check (after AA-891)",
-   "needs": ""
-  },
-  {
    "id": "AA-874",
    "title": "Redis AUTH/TLS/at-rest encryption + tenant-flag read-failure alarm",
    "status": "Backlog",
@@ -1057,7 +1063,7 @@
    "milestone": "M5",
    "session": "S252",
    "size": "M",
-   "next": "L3 · Not built alone: re-scope posted under AA-928 (Done S247); delivered through AA-939 (partner pool, S252) + AA-978 (membership feed, S254); blocks AA-978",
+   "next": "L3 · Không làm riêng: re-scope dưới AA-928 (Done S247); giao qua AA-939 (Done S249: partner pool, vai trò, team, lời mời) + AA-978 (membership feed, S250); đóng cùng AA-978",
    "needs": ""
   },
   {
@@ -1133,18 +1139,6 @@
    "needs": "Paid run ~$10–20"
   },
   {
-   "id": "AA-783",
-   "title": "Human calibration of the T9 commercial panel — 40 pieces labelled by Nghiệp",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S249",
-   "size": "M",
-   "next": "L1 · S249 first (e02): chạy báo cáo đồng thuận người–panel ($0), commit, đóng",
-   "needs": ""
-  },
-  {
    "id": "AA-853",
    "title": "Schema drift diff against a replayed DB + migration ownership lint",
    "status": "Backlog",
@@ -1199,10 +1193,10 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M3",
-   "session": "S251",
-   "size": "",
-   "next": "L4 · Its outbox pattern merges into AA-975 (CRM-B3, S251); paid consumer trial later",
-   "needs": "Paid consumer trial"
+   "session": "S250",
+   "size": "M",
+   "next": "L4 · S250 lane đầu: 5 phần còn lại theo comment Linear S249 (hợp đồng supply, outbox supply Booking, consumer CIS); AA-975 (bk-022) Done S249; được chạy thử consumer trả phí theo luật tập con",
+   "needs": "Paid consumer trial (subset rule)"
   },
   {
    "id": "AA-814",
@@ -1451,9 +1445,9 @@
    "priority": "Low",
    "project": "core",
    "milestone": "M2a",
-   "session": "S249",
-   "size": "S",
-   "next": "L1 · S249 first (e01): rubric v2 + re-measure, pilot 3 → shadow ≤ 50 (~$4,5); toàn catalogue duyệt riêng",
+   "session": "S250",
+   "size": "L",
+   "next": "L1 · Viết lại S1 cả catalogue (duyệt d04 + checkpoint 2): xong pilot 3, wave ≤50, Mongolia 13, Pakistan 14, South Korea 26, Bhutan 27 (đều published, 0 review, 0 stop); Taiwan 29 đang chạy lúc đóng phiên. Còn 17 wave: Thailand 34, Laos 36, Philippines 40, Japan 50+22, Nepal 50+26, China 50+50+11, Sri Lanka 50+50+12, India 50+50+50+17. $10,35 / trần $120 (chưa tính Taiwan). Công tắc giữ ON (S1_WRITER_V2=on, s1_generate=sonnet-5-5); 54 tour golden + 39 tour cưỡi voi giữ v1",
    "needs": ""
   },
   {
@@ -1469,111 +1463,15 @@
    "needs": ""
   },
   {
-   "id": "AA-934",
-   "title": "[CRM W1] CRM-06 KeyProvider and field encryption",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "C-M1",
-   "session": "S249",
-   "size": "M",
-   "next": "L6/L4 · S249 (e07): làm trong S249; review độc lập phần mã hoá/migration",
-   "needs": ""
-  },
-  {
-   "id": "AA-935",
-   "title": "[CRM W1] CRM-07 Web skeleton + synthetic agencies",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "C-M1",
-   "session": "S249",
-   "size": "M",
-   "next": "L6/L4 · S249 (e07): làm trong S249; review độc lập phần mã hoá/migration",
-   "needs": "Create the e2e-test-crm-* users"
-  },
-  {
-   "id": "AA-936",
-   "title": "[CRM W1] CRM-08 Slice 1: intake → Inquiry → board",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "C-M1",
-   "session": "S250",
-   "size": "L",
-   "next": "L6 · W1 · S250: → C-M1; cần AA-934, AA-935 (S249)",
-   "needs": ""
-  },
-  {
-   "id": "AA-937",
-   "title": "[CRM W2] CRM-09 F1/F2 complete",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M2",
-   "session": "S251",
-   "size": "L",
-   "next": "L6 · W2 · S251; blocked by AA-934, AA-936",
-   "needs": ""
-  },
-  {
-   "id": "AA-938",
-   "title": "[CRM W2] CRM-10 F3 scrubber",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M2",
-   "session": "S253",
-   "size": "M",
-   "next": "L6 · W2 · S253; blocked by AA-930, AA-937",
-   "needs": ""
-  },
-  {
-   "id": "AA-939",
-   "title": "[CRM W2] CRM-11 F4 roles, partner pool, MFA, permission matrix",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M2",
-   "session": "S252",
-   "size": "L",
-   "next": "L6 · W2 · S252; blocked by AA-928, AA-937",
-   "needs": "MFA (Cognito)"
-  },
-  {
-   "id": "AA-940",
-   "title": "[CRM W2] CRM-12 F5 audit",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M2",
-   "session": "S252",
-   "size": "M",
-   "next": "L6 · W2 · S252; blocked by AA-937",
-   "needs": ""
-  },
-  {
    "id": "AA-941",
    "title": "[CRM W2] CRM-13a AA admin L1 console",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S255",
-   "size": "M",
-   "next": "L6 · W2 · S255; blocked by AA-939, AA-940",
-   "needs": ""
-  },
-  {
-   "id": "AA-942",
-   "title": "[CRM W2] CRM-14 Data lifecycle rules",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M2",
-   "session": "S253",
-   "size": "M",
-   "next": "L6 · W2 · S253; blocked by AA-940",
+   "session": "S250",
+   "size": "XS",
+   "next": "L6 · W2 · Đã ship S249 (crm-011, Partner #34/#35, CIS #978/#979, Infra #352, root #235 hợp đồng 1.1); còn kiểm UI live /admin/platform/agencies bằng phiên crm-platform-admin rồi đóng",
    "needs": ""
   },
   {
@@ -1583,9 +1481,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S254",
+   "session": "S250",
    "size": "L",
-   "next": "L6 · W3 · S254; blocked by AA-937, AA-939",
+   "next": "L6 · W3 · S250: kế tiếp trên critical path; AA-937, AA-939 Done S249",
    "needs": ""
   },
   {
@@ -1609,7 +1507,7 @@
    "milestone": "C-M2",
    "session": "S255",
    "size": "L",
-   "next": "L6 · W3 · S255; blocked by AA-938, AA-943",
+   "next": "L6 · W3 · S255; blocked by AA-943 (AA-938 Done S249)",
    "needs": ""
   },
   {
@@ -1633,7 +1531,7 @@
    "milestone": "C-M3",
    "session": "S257",
    "size": "M",
-   "next": "L6 · W4 · S257; blocked by AA-944, AA-972, AA-973, AA-974, AA-975, AA-976",
+   "next": "L6 · W4 · S257; blocked by AA-944 (AA-972, AA-973, AA-974 Done S248; AA-975, AA-976 Done S249)",
    "needs": ""
   },
   {
@@ -1645,7 +1543,7 @@
    "milestone": "C-M3",
    "session": "S258",
    "size": "M",
-   "next": "L6 · W4 · S258: enhancement, does not block C-M3; needs T13 (no issue yet) + AA-906 + 6d; blocked by AA-935, AA-906 (AA-847 Done S247)",
+   "next": "L6 · W4 · S258: enhancement, does not block C-M3; needs T13 (no issue yet) + 6d (AA-935 Done S249, AA-906 Done S248, AA-847 Done S247)",
    "needs": ""
   },
   {
@@ -1925,39 +1823,15 @@
    "needs": "MFA; Ms. Thư names the second alarm recipient"
   },
   {
-   "id": "AA-975",
-   "title": "[CRM LB] CRM-B3 Event feed + on-request desk + incident flag",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M3",
-   "session": "S249",
-   "size": "M",
-   "next": "L6/L4 · S249 (e07): làm trong S249; review độc lập phần mã hoá/migration",
-   "needs": ""
-  },
-  {
-   "id": "AA-976",
-   "title": "[CRM LB] CRM-B4 CIS catalog over HTTP",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M3",
-   "session": "S250",
-   "size": "M",
-   "next": "L4 · Lane B · S250: catalog.http.v1 từ read model đã lật; AA-972 đã xong",
-   "needs": ""
-  },
-  {
    "id": "AA-977",
    "title": "[CRM LB] CRM-B5 AA-authored content in CIS (new, Fix C1)",
    "status": "Backlog",
    "priority": "High",
    "project": "crm",
    "milestone": "M3",
-   "session": "S254",
+   "session": "S250",
    "size": "M",
-   "next": "L4 · Lane B · S254: CIS migration, review; blocked by AA-976",
+   "next": "L4 · Lane B · S250: migration CIS, review độc lập; AA-976 Done S249",
    "needs": ""
   },
   {
@@ -1967,9 +1841,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "P-M1",
-   "session": "S254",
+   "session": "S250",
    "size": "M",
-   "next": "LP · Lane P · S254: membership feed + cis.tenant-api.v1 (CIS); blocked by AA-939, AA-813",
+   "next": "LP · Lane P · S250: membership feed + cis.tenant-api.v1 (CIS); AA-939 Done S249, AA-813 được giao qua AA-939 + issue này nên không còn chặn",
    "needs": ""
   },
   {
@@ -1981,7 +1855,7 @@
    "milestone": "P-M1",
    "session": "S253",
    "size": "L",
-   "next": "LP · Lane P · S253: P2a S253 (portal/ into AA-Partner/portal, keep history + Vercel + API-key auth); P2b S256 (CloudFront → Fargate, partner pool, 301 /trip/*, Sentry); remove Vercel ≥7 days after P2b (~S265); blocked by AA-978, AA-935, AA-931",
+   "next": "LP · Lane P · P2a sau AA-978 (portal/ vào AA-Partner/portal, giữ history + Vercel + API-key auth); P2b sau đó (CloudFront → Fargate, partner pool, 301 /trip/*, Sentry); gỡ Vercel ≥7 ngày sau P2b; còn chặn bởi AA-978 (AA-935 Done S249, AA-931 Done S247)",
    "needs": "Approve P2a before P1 (split AA-979 or note the exception)"
   },
   {
@@ -1994,18 +1868,6 @@
    "session": "≥S263",
    "size": "L",
    "next": "L6 · W8, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-969, AA-970, AA-971, AA-979, AA-880, AA-873, AA-874",
-   "needs": ""
-  },
-  {
-   "id": "AA-987",
-   "title": "TripPlanner drops a retired tour at once: CIS lifecycle event triggers a TripPlanner cache purge",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M2a",
-   "session": "S249",
-   "size": "S",
-   "next": "L5 · S249 (e06): CIS lifecycle → purge cache TripPlanner, ≤ 2 phút thay vì ≤ 30",
    "needs": ""
   }
  ]
