@@ -147,6 +147,12 @@ POLICY: dict[str, Policy] = {
         forbidden_patterns=(r"supplier_net",),
         why="tour keys and served-state events only, no prices, no personal data",
     ),
+    # ISO 3166-1 reference data (AA-851, CIS 279): codes and names only, no prices, no personal data.
+    "catalog.country.v1": Policy(
+        forbidden_keys=frozenset({"supplier_net", "b2b_price", "price"}),
+        forbidden_patterns=(r"supplier_net", r"(^|_)prices?(_|$)"),
+        why="ISO 3166-1 reference data and destination country keys only; no prices, no personal data",
+    ),
     # ADR 0004a decision 3 (AA-835): supply facts only. Supplier identity, contracts, rates, margins and internal
     # notes never reach CIS; photos travel as entity_media ids, never a free URL (SSRF, unlicensed images).
     "supply.hotel.v1": _SUPPLY_POLICY,

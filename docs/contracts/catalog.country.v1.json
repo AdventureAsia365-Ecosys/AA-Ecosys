@@ -1,0 +1,104 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://adventure.asia/contracts/catalog.country.v1.json",
+ "title": "catalog.country v1 (CIS → AA-Booking, TripPlanner)",
+ "description": "ISO 3166-1 countries as the CIS catalog read model exposes them (AA-851, CIS migration 279; data standards X5 / DM-2.4 / NAM-11). `countries` = rows of catalog.v_country over the CIS table shared.countries, the one country table of the ecosystem (249 entries, seeded from Debian iso-codes 4.16.0), key iso2. `name` is the common English short name AA writes in its catalog (Vietnam, South Korea, Laos, Taiwan), `iso_name` the ISO 3166-1 English short name (Viet Nam, Korea, Republic of). `destinations` = the country key of catalog.v_destination: CIS 279 appends `country_iso2` (NULL when the free-text country did not resolve; CIS lists those in its orphan report), so a consumer joins v_destination.country_iso2 = v_country.iso2 instead of matching names; that column is folded into the next catalog.tour minor. SELECT on catalog.v_country to `booking` and `tripplanner` (contracts rule 5). Reference data, read on demand or cached; no events. booking.countries stays Booking's own list of markets it sells, keyed by the same iso2. Columns may be appended (minor); removing or renaming one needs a v2 view (contracts README rule 2). No prices, no personal data.",
+ "type": "object",
+ "required": [
+  "contract",
+  "version"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "contract": {
+   "const": "catalog.country"
+  },
+  "version": {
+   "enum": [
+    1
+   ],
+   "description": "Contract version."
+  },
+  "countries": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/country"
+   }
+  },
+  "destinations": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/destination_country"
+   }
+  }
+ },
+ "$defs": {
+  "country": {
+   "type": "object",
+   "description": "One catalog.v_country row.",
+   "required": [
+    "iso2",
+    "iso3",
+    "numeric_code",
+    "name",
+    "iso_name"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "iso2": {
+     "type": "string",
+     "pattern": "^[A-Z]{2}$",
+     "description": "ISO 3166-1 alpha-2; the key."
+    },
+    "iso3": {
+     "type": "string",
+     "pattern": "^[A-Z]{3}$",
+     "description": "ISO 3166-1 alpha-3."
+    },
+    "numeric_code": {
+     "type": "string",
+     "pattern": "^[0-9]{3}$",
+     "description": "ISO 3166-1 numeric, zero-padded."
+    },
+    "name": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Common English short name (the spelling AA uses)."
+    },
+    "iso_name": {
+     "type": "string",
+     "minLength": 1,
+     "description": "ISO 3166-1 English short name."
+    }
+   }
+  },
+  "destination_country": {
+   "type": "object",
+   "description": "The country columns of one catalog.v_destination row (the other columns: catalog.tour).",
+   "required": [
+    "destination_id",
+    "country",
+    "country_iso2"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "destination_id": {
+     "type": "string",
+     "format": "uuid"
+    },
+    "country": {
+     "type": "string",
+     "description": "Free-text country, display only."
+    },
+    "country_iso2": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "pattern": "^[A-Z]{2}$",
+     "description": "Key into countries.iso2; NULL when the country text did not resolve."
+    }
+   }
+  }
+ }
+}
