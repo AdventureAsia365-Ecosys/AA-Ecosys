@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-21
+last_reviewed: 2026-10-24
 review_every_days: 90
 related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, AA-886, AA-820, AA-839, AA-877]
 ---
@@ -53,7 +53,7 @@ cho chủ đề nào, là chị Thư quyết định.
 | 9 | Support address / Địa chỉ hỗ trợ | `support@` to a shared mailbox / `support@` về một hộp thư chung |
 | 10 | Status page / Trang trạng thái | None until the first paying partner / Chưa làm tới khi có đối tác trả tiền đầu tiên |
 | 11 | Vercel plan / Gói Vercel | Pro before the first partner is charged (D-18) / Lên Pro trước lần thu tiền đối tác đầu tiên (D-18) |
-| 12 | AI acceptable-use clause / Điều khoản sử dụng AI | Separate draft; answer needed by 11/11/2026, policy effective 12/11/2026 / Bản nháp riêng; cần chị trả lời trước 11/11/2026, chính sách có hiệu lực 12/11/2026 |
+| 12 | AI acceptable-use clause / Điều khoản sử dụng AI | A or C: adopt the AI Schedule now (no partners yet); answer needed by 11/11/2026 / A hoặc C: áp dụng Phụ lục AI ngay (chưa có đối tác); cần chị trả lời trước 11/11/2026 |
 
 ## 1. Data controller entity
 
@@ -277,27 +277,46 @@ Mọi khoản chi mới cần Nghiệp duyệt (DM-10.7). *Đề xuất:* A. *Ch
 
 ## 12. AI acceptable-use clause
 
-**EN.** *Current fact:* Anthropic's Usage Policy takes effect on 12/11/2026 and reaches partners whose content is
-written with Claude through Amazon Bedrock. A separate draft clause for the partner terms is ready for review. The portal
-terms say "The full AI acceptable-use terms are [to be confirmed]" (§3) until that clause is approved. Ms. Thư's answer
-is needed by 11/11/2026, one day before the policy takes effect. *Options:* as set out in the draft clause. *Proposed answer:* as set out in the draft clause. *Detail:*
-[AI acceptable-use clause draft](tenant-terms-ai-clause-draft.md).
+**EN.** *Current fact:* Anthropic's Usage Policy takes effect on 12/11/2026 (the live text was re-read on 24/10/2026)
+and reaches partners whose content is written with Claude through Amazon Bedrock. The full AI Schedule for the partner
+terms is at Draft v0.2. Since the AA-820 portal change, the portal terms §3 carry a short summary of it (Annex A.4),
+still under the "Draft — pending legal review" banner. There are no real or paying partners yet, so nobody needs a
+notice: each partner accepts the Schedule when it joins, with its partner agreement. The agency CRM does not call
+Claude yet; the Schedule must be part of the agency terms before it does. Ms. Thư's answer is needed by 11/11/2026, one
+day before the policy takes effect. *Options:* (A) adopt the Schedule as written: the portal summary is already live
+before 11/11, the Schedule is attached to every partner agreement at onboarding, and a lawyer's review is optional and
+her call; (B) a lawyer reviews the Schedule first, and the portal keeps the summary marked as a draft until then;
+(C) adopt it now as in A, and have a lawyer review it before the first paying partner. *Proposed answer:* A or C. With
+no partners yet, adopting now costs nothing and covers the 12/11 date; C adds a review before the first partner pays.
+*Detail:* [AI acceptable-use clause draft](tenant-terms-ai-clause-draft.md): where each part goes (§0), the Schedule
+(§2) and 14 questions for a lawyer (§6).
 
-**VI.** *Hiện trạng:* Chính sách sử dụng của Anthropic có hiệu lực từ 12/11/2026 và áp dụng cho các đối tác có nội dung
-được viết bằng Claude qua Amazon Bedrock. Đã có bản nháp điều khoản riêng để đưa vào điều khoản đối tác, sẵn sàng để xem.
-Điều khoản portal ghi "The full AI acceptable-use terms are [to be confirmed]" (mục 3) cho tới khi điều khoản đó được duyệt.
-Cần chị Thư trả lời trước ngày 11/11/2026, một ngày trước khi chính sách có hiệu lực. *Phương án:* như trong bản nháp điều khoản. *Đề xuất:* như trong bản nháp điều khoản. *Chi tiết:*
-[bản nháp điều khoản sử dụng AI](tenant-terms-ai-clause-draft.md).
+**VI.** *Hiện trạng:* Chính sách sử dụng của Anthropic có hiệu lực từ 12/11/2026 (bản đang đăng đã được đọc lại ngày
+24/10/2026) và áp dụng cho các đối tác có nội dung được viết bằng Claude qua Amazon Bedrock. Phụ lục AI đầy đủ cho điều
+khoản đối tác đang ở bản Draft v0.2. Từ thay đổi AA-820 trên portal, mục 3 của điều khoản portal có một bản tóm tắt ngắn
+của phụ lục này (Phụ lục A.4), vẫn nằm dưới nhãn "Draft — pending legal review". Hiện chưa có đối tác thật hay đối tác
+trả tiền, nên không cần gửi thông báo cho ai: mỗi đối tác chấp nhận phụ lục khi tham gia, cùng với hợp đồng đối tác. CRM
+cho đại lý chưa gọi Claude; phụ lục phải nằm trong điều khoản cho đại lý trước khi CRM gọi Claude. Cần chị Thư trả lời
+trước ngày 11/11/2026, một ngày trước khi chính sách có hiệu lực. *Phương án:* (A) áp dụng phụ lục như bản hiện tại: bản
+tóm tắt trên portal đã có trước 11/11, phụ lục được đính kèm mọi hợp đồng đối tác khi đối tác tham gia, còn việc nhờ luật
+sư xem là tùy chị quyết định; (B) luật sư xem phụ lục trước, và portal giữ bản tóm tắt ở trạng thái bản nháp cho tới
+lúc đó; (C) áp dụng ngay như phương án A, và nhờ luật sư xem trước khi có đối tác trả tiền đầu tiên. *Đề xuất:* A hoặc C.
+Vì chưa có đối tác, áp dụng ngay không tốn gì và kịp mốc 12/11; phương án C thêm một lần xem của luật sư trước khi đối
+tác đầu tiên trả tiền. *Chi tiết:* [bản nháp điều khoản sử dụng AI](tenant-terms-ai-clause-draft.md): từng phần đặt ở đâu
+(mục 0), phụ lục (mục 2) và 14 câu hỏi cho luật sư (mục 6).
 
 ## Annex A: current text of the four pages
 
 **EN.** The text below is copied from the page source as rendered, at AA-TripPlanner-Web commit `c497489` (2026-10-20)
-and AA-CIS-App commit `6e00458d` (2026-10-20). Each page shows the banner "Draft — pending legal review" and the version
-"Draft v0.1". Links are shown as their text. If a page changes after those commits, the live page wins.
+and AA-CIS-App commit `6e00458d` (2026-10-20), except A.4 §3, which is the AA-820 text of 24/10/2026. Each page shows
+the banner "Draft — pending legal review". The Trip Planner pages show the version "Draft v0.1"; the two portal pages
+show "Draft v0.2" (24 October 2026) since the AA-820 change. Links are shown as their text. If a page changes after
+those commits, the live page wins.
 
 **VI.** Nội dung dưới đây được chép từ mã nguồn trang, đúng như hiển thị, tại commit `c497489` (20/10/2026) của
-AA-TripPlanner-Web và commit `6e00458d` (20/10/2026) của AA-CIS-App. Mỗi trang có nhãn "Draft — pending legal review" và
-phiên bản "Draft v0.1". Link được ghi bằng chữ hiển thị. Nếu trang thay đổi sau các commit trên, trang đang chạy là bản đúng.
+AA-TripPlanner-Web và commit `6e00458d` (20/10/2026) của AA-CIS-App, trừ mục 3 của A.4 là nội dung AA-820 ngày
+24/10/2026. Mỗi trang có nhãn "Draft — pending legal review". Hai trang Trip Planner ghi phiên bản "Draft v0.1"; hai
+trang portal ghi "Draft v0.2" (24 October 2026) từ thay đổi AA-820. Link được ghi bằng chữ hiển thị. Nếu trang thay đổi sau các commit trên, trang đang chạy là bản đúng.
 Nội dung trang giữ nguyên tiếng Anh như trên website. Bảng A.0 dưới đây liệt kê song ngữ mọi điểm "[to be confirmed]"
 trên bốn trang, để chị Thư trả lời mà không cần đọc hết bản tiếng Anh.
 
@@ -323,7 +342,7 @@ trên bốn trang, để chị Thư trả lời mà không cần đọc hết b�
 | A.2 §8, A.4 §9 | Governing law and competent courts (A.4 §9 also limits of liability) | Luật áp dụng và tòa án có thẩm quyền (A.4 mục 9 gồm cả giới hạn trách nhiệm) | 2 |
 | A.3 §10 | Data processing agreement between the partner and Adventure Asia | Thỏa thuận xử lý dữ liệu giữa đối tác và Adventure Asia | 4 |
 | A.4 intro | How the terms relate to the signed partner agreement | Quan hệ giữa điều khoản này và hợp đồng đối tác đã ký | 2 |
-| A.4 §3 | Full AI acceptable-use terms | Điều khoản đầy đủ về sử dụng AI | 12 |
+| A.4 §3 | Approval of the AI acceptable-use summary (draft; no longer marked [to be confirmed]) | Duyệt bản tóm tắt điều khoản sử dụng AI (bản nháp; không còn ghi [to be confirmed]) | 12 |
 | A.4 §5 | Notice periods, termination, and what happens to the content afterwards | Thời hạn báo trước, chấm dứt, và nội dung được xử lý thế nào sau đó | 2 |
 | A.4 §6 | Ownership of generated content; licence to the catalog tours | Quyền sở hữu nội dung tạo ra; giấy phép dùng tour trong danh mục | 2 |
 | A.4 §7 | Plans, fees and payment terms | Gói dịch vụ, phí và điều khoản thanh toán | 2 |
@@ -537,12 +556,31 @@ pieces about those tours, and tools to export them or publish them to your own c
 - Keep your API key secret. Activity under your key is treated as yours.
 - Tell us at once at `info@adventure.asia` if you think the key is known to someone else, so we can revoke it.
 
-**3. AI-generated content.**
+**3. AI-generated content and acceptable use.**
 
 - Content is generated with AI and can contain mistakes. The portal shows this at review, publish and export: "This
   content was generated with AI. Review it before publishing; you are responsible for what you publish."
-- You must not use the content to mislead people, for example as fake customer reviews or testimonials.
-- The full AI acceptable-use terms are [to be confirmed].
+- The content is written with models from third-party providers, including Anthropic's Claude through Amazon Web
+  Services. You must follow their usage policies, including the Anthropic Usage Policy and the AWS Acceptable Use
+  Policy, as well as these terms.
+- You must not use the portal or its content for:
+  - fake reviews, ratings or testimonials, or quotes and stories presented as coming from customers who did not give
+    them;
+  - invented personas, sockpuppet accounts, or content attributed to a real person who did not write or approve it;
+  - astroturfing, or networks of websites or accounts that look independent but are not;
+  - hiding sponsorship or a commercial relationship, or removing a disclosure the law or a channel requires;
+  - seeding search engines or AI systems with content that misrepresents its origin, authorship or independence;
+  - spam, or posting meant to get around the publishing limit;
+  - false or misleading information, in particular about visas and entry rules, health, safety, prices or
+    availability;
+  - advice on insurance, finance, visas or other high-risk matters, unless a qualified person reviews it before it is
+    delivered and the person receiving it is told that AI was used;
+  - getting around Adventure Asia's content checks, limits or other safeguards.
+- If the law or a channel's rules require content to be labelled as AI-generated, you add that label.
+- You review each piece before it is published, and you are its publisher. Telling Adventure Asia to publish a piece,
+  in the portal or through the API, confirms that you have reviewed it.
+- Adventure Asia may hold, rewrite or decline to generate or publish content that breaks these rules. Unpublishing and
+  suspension are covered in sections 4 and 5.
 
 **4. Publishing to your channels.**
 
