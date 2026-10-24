@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-21
+last_reviewed: 2026-10-24
 review_every_days: 90
 related: [SEC-04, SEC-04-packet, AA-886, AA-820, AA-839, AA-877]
 ---
@@ -140,3 +140,28 @@ eCloudvalley for the AI account) and the model makers behind Amazon Bedrock are 
 
 Reserved for the CRM legal track (DM-6.8): CRM data categories, per-tenant retention and hard delete, CRM
 sub-processors and the transfer annexes. Written by that track when the CRM design is approved; not part of this draft.
+
+### Annex 4 draft text: how traveller identity is separated (AA-937, design v3 §4.3)
+
+*Drafting note: product facts for counsel, from the partner CRM design v3 §4.3 (Fix A1) and the code of AA-Partner
+`crm-006` (card CRM-09). Counsel decides the wording; the limits in the second paragraph must stay in substance, because
+an earlier claim ("no database reader can join the profile to an identity") was withdrawn as untrue.*
+
+1. **Two stores.** The CRM keeps each traveller's identity (names, contact details, date of birth, passport, emergency
+   contact, health codes, documents) in an encrypted identity vault: every value is encrypted with a key that belongs
+   to the Tenant alone (one data key per Tenant and purpose, wrapped by AWS KMS), and documents are encrypted the same
+   way before they are stored. Preferences used for planning and reports (budget, pace, fitness, interests, dietary and
+   mobility codes, age band at departure) sit in a separate pseudonymous profile identified by a random token. The only
+   link from an identity to its profile is itself encrypted.
+2. **What the separation protects against.** The database roles used for AI features, for aggregated insights and for
+   Tenant-approved AA support are not allowed to read the identity vault or the table that places travellers on trips;
+   the database refuses it, and an automated check (the "isolation probe") verifies it. AI features and insights only
+   ever see the pseudonymous profile and trip bands.
+3. **What it does not protect against.** The CRM application itself, and AA's database administrator account, can
+   connect a trip's lead traveller (or a solo traveller) to their profile through the trip. The separation is therefore
+   a control against the AI, insights and support paths, not against the application or AA's administrators. Those are
+   covered by access controls, encryption at rest, the audit trail and AA's staff obligations (clause 2), not by the
+   separation.
+4. **Every view is recorded.** Lists show names only; a member of the Tenant's staff sees any other identity field or
+   document only by asking for it with a reason, and each such view, and each list shown, is written to the Tenant's
+   audit trail.
