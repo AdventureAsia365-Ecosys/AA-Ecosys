@@ -730,11 +730,12 @@ components:
           minLength: 3
           maxLength: 254
           writeOnly: true
+          x-pii: contact
           description: >-
             Personal data (DM-6.1 class contact), write-only: the first owner's address, normalised and checked by the
             server (422 `invalid_email`), stored vault-encrypted with a blind index, never stored in clear, logged,
-            echoed or returned. Not tagged `x-pii` because the root checker's crm.ops.v1 policy refuses every `x-pii`
-            tag; see the registry note in docs/contracts/README.md.
+            echoed or returned. The only personal-data field crm.ops.v1 may carry (root checker policy
+            `pii_write_only_fields`).
         ticket_ref: {$ref: "#/components/schemas/TicketRef"}
     OwnerInviteAccepted:
       type: object
