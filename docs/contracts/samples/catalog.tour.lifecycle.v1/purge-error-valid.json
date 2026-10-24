@@ -1,0 +1,10 @@
+{
+  "contract": "catalog.tour.lifecycle.v1",
+  "schema": "PurgeError",
+  "expect": "valid",
+  "why": "A failed CDN step: 502, CIS retries",
+  "payload": {
+    "error": "purge_failed",
+    "step": "cdn"
+  }
+}

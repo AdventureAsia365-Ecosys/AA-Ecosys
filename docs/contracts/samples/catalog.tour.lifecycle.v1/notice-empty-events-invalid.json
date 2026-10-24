@@ -1,0 +1,10 @@
+{
+  "contract": "catalog.tour.lifecycle.v1",
+  "schema": "LifecycleNotice",
+  "expect": "invalid",
+  "why": "A notice carries at least one event (TripPlanner answers 400 invalid_events)",
+  "payload": {
+    "contract": "catalog.tour.lifecycle.v1",
+    "events": []
+  }
+}

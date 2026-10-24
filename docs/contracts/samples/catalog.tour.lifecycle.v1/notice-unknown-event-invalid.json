@@ -1,0 +1,22 @@
+{
+  "contract": "catalog.tour.lifecycle.v1",
+  "schema": "LifecycleNotice",
+  "expect": "invalid",
+  "why": "Only the four served-state events exist (catalog.tour.v1.3)",
+  "payload": {
+    "contract": "catalog.tour.lifecycle.v1",
+    "events": [
+      {
+        "event_id": 42,
+        "source_system": "cis",
+        "source_id": "3f0c2a8e-0000-4000-8000-000000000001",
+        "tour_id": "00000000-0000-4000-8000-0000000000a1",
+        "event": "deleted",
+        "reason": "master_trashed",
+        "replaced_by_tour_id": null,
+        "occurred_at": "2026-10-23T14:33:41+00:00",
+        "idempotency_key": "trash_master:00000000-0000-4000-8000-0000000000a1:retired:abc"
+      }
+    ]
+  }
+}

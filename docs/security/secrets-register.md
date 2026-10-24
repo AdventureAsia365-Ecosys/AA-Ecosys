@@ -227,7 +227,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 
 ## Register
 
-### Secrets Manager, acc2 (005097885195, us-west-1) (38)
+### Secrets Manager, acc2 (005097885195, us-west-1) (39)
 
 | Name | Owner app | Consumers (main) | Managed by | Rotation | Last changed | Status | Notes |
 |---|---|---|---|---|---|---|---|
@@ -241,6 +241,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `aa-cis/dev/api-keys` | cis | — | cli | none | 2026-07-07 | **deleted** | APIFY_API_TOKEN placeholder; api/main.py no longer reads it (no reader on main of any repo). LastAccessedDate 2026-09-07. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
 | `aa-cis/dev/e2e-test-admin` | cis | agent Booking UI checks (Booking BFF → CIS /auth/admin-login) and legacy sign-in on CIS PR previews (skill/aa-ui-verify/SKILL.md), user e2e-claude-code | cli | none | 2026-10-08 | **open-item** | Full CIS admin + Booking admin, legacy password login. Not in GitHub any more (N1 done S244). No password form on Production since S1; on a Preview it reaches only viewer rights (C9). Disable at S2. |
 | `aa-cis/dev/jwt-secret` | cis | ECS api + worker JWT_SECRET (modules/ecs/main.tf:503, :707); AA-CIS-App api/routers/auth.py:34 | cli (var.secret_jwt_arn, terraform.tfvars) | none | 2026-09-01 | **keep** | HS256, one key for staff + tenant JWT (S241 P1-3). |
+| `aa-cis/dev/tripplanner-revalidate-hmac` | cis | ECS api + worker, read by name aa-cis/<ENVIRONMENT>/tripplanner-revalidate-hmac at run time (AA-CIS-App services/jobs/tripplanner_purge_job.py, job `tripplanner_purge`, 10-min cache); copy: Vercel aa-tripplanner CATALOG_REVALIDATE_SECRET (AA-TripPlanner-Web frontend/app/api/revalidate/catalog/route.ts) | cli (by hand, orchestrating session) | manual (rotate both copies together) | TBD-M0 | **planned** | AA-987: HMAC key of the signed cache purge notice `catalog.tour.lifecycle.v1` (root ADR 0015 A1). Bare string (JSON `{"secret": "..."}` also read by CIS), 32+ random bytes. Not under `tripplanner/*` (the CIS task role is denied that prefix); the task role's existing GetSecretValue covers it, no IAM change. Unset = the CIS job succeeds with `skipped: not_configured`. ~$0.40/month. Flip to keep once created. |
 | `aa-cis/dev/rds-app-user` | cis | AA-CIS-App api/core/aa544_tenant_pool.py:128 (tenant pool, aa_app_user); AA-CIS-Infra db/isolation_probe.py:116, db/owners.yaml:64 | cli | none | 2026-09-10 | **keep** | DSN of the non-BYPASSRLS tenant role (AA-544). |
 | `tripplanner/dev/database-url` | tripplanner | TP Lambdas browse + assembly by ARN TRIPPLANNER_DATABASE_URL_ARN (AA-CIS-Infra accounts/aa365/tripplanner.tf env; AA-TripPlanner-Web backend/shared/db.py:33); AA-CIS-Infra db/isolation_probe.py:127, db/owners.yaml:161 | terraform aws_secretsmanager_secret.tripplanner_db (value out-of-band, ignore_changes) | none | 2026-10-14 | **keep** | Read by the plan role on refresh (tf_plan_secret_arns). |
 | `tripplanner/dev/api-key` | tripplanner | TP Lambdas browse + assembly, by name tripplanner/<ENVIRONMENT>/api-key (AA-TripPlanner-Web backend/shared/auth.py, AA-878 T1); copy: Vercel aa-tripplanner TRIPPLANNER_API_KEY (BFF frontend/app/api/browse/route.ts:9, trip/route.ts:15, lib/catalog.ts:46) | terraform aws_secretsmanager_secret.tripplanner_api_key + random_password.tripplanner_api_key | none | 2026-10-14 | **keep** | Edge shared secret X-TripPlanner-Key. Until AA-878 I2 is applied the value is also a plaintext Lambda env (see lambda-env rows). Still in Terraform state (random_password) by design. |
@@ -309,7 +310,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `AA_CI_BOT_PRIVATE_KEY` | `github:AA-CIS-Infra` | ecosystem | db-schema-dump.yml:233; docs-gen.yml:102, :199; migration-copy-guard.yml:172 (retention-rows job, Contents read; AA-929) — replaced `ROOT_REPO_DOCS_TOKEN` (AA-CIS-Infra #281, S247) | manual (2026-10-22) | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
 | `ROOT_REPO_DOCS_TOKEN` | `github:AA-CIS-Infra` | infra | — | none | **deleted** | Personal access token with write to the root repo (S241 P1-2). Its three Infra docs workflows moved to the `aa-ecosys-ci-bot` App token (AA-CIS-Infra #281); GitHub secret deleted 22/10/2026 (S247). The PAT behind it (most likely `aa-cis-infra-schema-dump`) is still unrevoked: see the GitHub tokens vendor row. |
 
-### Vercel environment variables (secret-bearing) (10)
+### Vercel environment variables (secret-bearing) (11)
 
 | Name | Store | Owner app | Consumers (main) | Rotation | Status | Notes |
 |---|---|---|---|---|---|---|
@@ -321,6 +322,7 @@ Filled in by AA-878 step M2: DRY RUN list → Nghiệp OK → `delete-secret --r
 | `COGNITO_CIS_ADMIN_CLIENT_SECRET` | `vercel:aa-cis-frontend` | identity | AA-CIS-App frontend (staff sign-in BFF, process.env.COGNITO_CIS_ADMIN_CLIENT_SECRET) | none | **keep** | AA-816 / ADR 0006a. The secret also sits in Terraform state (client resource). |
 | `COGNITO_BREAKGLASS_CLIENT_SECRET` | `vercel:aa-cis-frontend` | identity | AA-CIS-App frontend (break-glass sign-in, process.env.COGNITO_BREAKGLASS_CLIENT_SECRET) | none | **keep** | AA-816. |
 | `TRIPPLANNER_API_KEY` | `vercel:aa-tripplanner` | tripplanner | AA-TripPlanner-Web frontend/app/api/browse/route.ts:9, trip/route.ts:15, lib/catalog.ts:46 | with tripplanner/dev/api-key | **keep** | Must be set on Production, Preview and Development (S237 lesson). S245: Production Sensitive; Development + Preview Encrypted (`readable-secret`, F-5). |
+| `CATALOG_REVALIDATE_SECRET` | `vercel:aa-tripplanner` | tripplanner | AA-TripPlanner-Web frontend/app/api/revalidate/catalog/route.ts (lib/catalogPurge.ts verifies X-AA-Signature; trimmed) | with aa-cis/dev/tripplanner-revalidate-hmac | **planned** | AA-987. Same value as the CIS secret; Production + Preview, Sensitive. Set with printf, not echo (both sides trim, but a newline elsewhere refuses every notice with 401). Unset = the route answers 503. Flip to keep once set. |
 | `SENTRY_DSN` | `vercel:aa-tripplanner` | tripplanner | AA-TripPlanner-Web frontend/instrumentation.ts -> lib/sentryLite.ts (server-side onRequestError reporter, env.SENTRY_DSN) | none | **planned** | AA-871. DSN of Sentry project aa-tripplanner-web; server-only (never NEXT_PUBLIC_). Production + Preview. Flip to keep once set. |
 | `COGNITO_BOOKING_STAFF_CLIENT_SECRET` | `vercel:aa-booking-admin` | booking | AA-Booking frontend staff sign-in (AA-680 S3) | none | **keep** | AA-680. Sensitive, Production only; created 18/10/2026. |
 
