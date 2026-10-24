@@ -1,0 +1,1221 @@
+{
+ "sources": {
+  "shadow": "/home/nghiep/projects/AA-Ecosys/.tmp-session/s249/aa645/wave50-shadow.json",
+  "summary": "/home/nghiep/projects/AA-Ecosys/.tmp-session/s249/aa645/wave50-summary.json",
+  "pilot": "/home/nghiep/projects/AA-Ecosys/.tmp-session/s249/aa645/pilot.json",
+  "brandfit": "/home/nghiep/projects/AA-Ecosys/.tmp-session/s249/aa645/brandfit-analysis.json"
+ },
+ "run": {
+  "run_id": "cfebc266-c1df-4074-a8ed-f398a8419205",
+  "started_at": "2026-10-24T02:24:15.021525+00:00",
+  "updated_at": "2026-10-24T02:43:47.319390+00:00",
+  "concurrency": 3,
+  "cap_usd": 6.0,
+  "candidates": 846,
+  "eligible": 807,
+  "dropped": {
+   "excluded_ids": 0,
+   "elephant": 39
+  },
+  "excluded_ids": 57,
+  "cost_llm_call_log": 3.557784
+ },
+ "all": {
+  "tours": 50,
+  "done": 50,
+  "errors": 0,
+  "cost_cap_skipped": 0,
+  "publishable": 50,
+  "publishable_rate": 1.0,
+  "stayed_v1_rate": 0.0,
+  "attempts_mean": 1,
+  "attempts_max": 1,
+  "attempts_dist": {
+   "1": 50
+  },
+  "judged_drafts": 87,
+  "judge_pass_rate_drafts": 0.494,
+  "judge_pass_rate_final": 0.44,
+  "judge_brand_fit_final_mean": 7.2,
+  "judge_rubrics": {
+   "a1-voice-v2/1": 87
+  },
+  "judge_gates": {
+   "brand_fit_report_only": 87
+  },
+  "judge_capped_final": 28,
+  "paired_with_live": 50,
+  "gate_pages_new": 4,
+  "gate_pages_live": 13,
+  "gate_page_rate_new": 0.08,
+  "gate_page_rate_live": 0.26,
+  "gate_pages_new_all": 4,
+  "gate_codes_new": {
+   "DAY_*": 4
+  },
+  "gate_codes_live": {
+   "DAY_*": 2,
+   "META_CUT": 4,
+   "META_LENGTH": 1,
+   "NUMBER_NOT_IN_SOURCE": 8
+  },
+  "figure_coverage_new": 0.6758,
+  "figure_coverage_live": 0.4151,
+  "validate_codes": {
+   "ITINERARY_DAY_COUNT_MISMATCH": 1
+  },
+  "surviving_hard_codes": {},
+  "brand_audit": {
+   "fixed": 37,
+   "pass": 13
+  },
+  "flag_fix_applied": 37,
+  "revalidate_passed": 37,
+  "grounding_found": 2,
+  "grounding_still_unsupported": 0,
+  "jev_ran": 50,
+  "jev_problem": 0,
+  "degraded_hard": 0,
+  "cost_per_tour_mean": 0.0712,
+  "cost_per_tour_max": 0.19069,
+  "cost_total": 3.5578,
+  "cost_per_tour_by_stage": {
+   "s1_flag_fix": 0.0071,
+   "s1_generate": 0.0562,
+   "s1_grounding": 0.0032,
+   "s1_judge": 0.0065
+  },
+  "fallback_rows": 0,
+  "throttle_rows": 0,
+  "throttle_errors": 0,
+  "leak_pages": 0,
+  "legacy_pages": 0,
+  "days_match_plan": 49,
+  "day_count_changed": 2,
+  "day_count_dropped": 2,
+  "not_v2": 0,
+  "sonnet_retried": 0,
+  "writer_models": {
+   "satellite-sonnet-5-5": 50
+  }
+ },
+ "stop_conditions": {
+  "stayed_v1_over_10pct": false,
+  "legacy_itinerary_path": false,
+  "cost_per_tour_over_model": false,
+  "bedrock_throttle": false,
+  "tour_errors": false,
+  "not_written_by_v2": false,
+  "degraded_hard": false,
+  "brand_leak_pages": false,
+  "not_better_than_live": false
+ },
+ "derived": {
+  "tours": 50,
+  "status": {
+   "success": 50
+  },
+  "has_places": 7,
+  "publishable_wilson95": [
+   0.9286,
+   1.0
+  ],
+  "publishable_clopper_lower95_one_sided": 0.9418,
+  "cost_mean": 0.07116,
+  "cost_p50": 0.0589,
+  "cost_p90": 0.1135,
+  "cost_p95": 0.1241,
+  "cost_max": 0.19069,
+  "cost_min": 0.032211,
+  "cost_mean_bootstrap95": [
+   0.0621,
+   0.081
+  ],
+  "model_cost_per_tour_s248": 0.08,
+  "real_vs_model": -0.111,
+  "seconds_p50": 62.8,
+  "seconds_p90": 108.3,
+  "seconds_max": 168.3,
+  "wall_minutes": 19.5,
+  "gate_pages": {
+   "new": 4,
+   "live": 13,
+   "both": 3,
+   "new_only": 1,
+   "live_only": 10,
+   "mcnemar_exact_p": 0.0117,
+   "new_excl_departure_midtrip": 1,
+   "live_excl_departure_midtrip": 12
+  },
+  "gate_codes_raw_new": {
+   "DAY_DEPARTURE_MIDTRIP": 3,
+   "DAY_COUNT_VS_DURATION": 1
+  },
+  "gate_codes_raw_live": {
+   "META_CUT": 4,
+   "DAY_DEPARTURE_MIDTRIP": 2,
+   "NUMBER_NOT_IN_SOURCE": 8,
+   "META_LENGTH": 1
+  },
+  "report_codes_new": {
+   "NAME_NOT_IN_SOURCE": 5,
+   "NUMBER_NOUN_MISMATCH": 4,
+   "DAY_PLACE_MISMATCH": 2
+  },
+  "report_codes_live": {
+   "NUMBER_NOUN_MISMATCH": 7,
+   "NAME_NOT_IN_SOURCE": 28,
+   "DAY_PLACE_MISMATCH": 5
+  },
+  "figure_coverage": {
+   "n_pairs": 46,
+   "new_mean": 0.6758,
+   "live_mean": 0.4151,
+   "higher": 27,
+   "lower": 0,
+   "tie": 19,
+   "sign_p": 0.0
+  },
+  "judge_v2": {
+   "drafts": 87,
+   "drafts_pass_rate": 0.494,
+   "final_pass_rate": 0.44,
+   "final_pass": 22,
+   "final_caps": {
+    "unsupported_many": 14,
+    "unsupported": 14
+   },
+   "final_brand_fit_dist": {
+    "10.0": 22,
+    "4.0": 14,
+    "6.0": 14
+   },
+   "unsupported_quotes_final": {
+    "0": 22,
+    "10": 1,
+    "6": 2,
+    "3": 6,
+    "1": 6,
+    "12": 1,
+    "2": 8,
+    "4": 3,
+    "9": 1
+   },
+   "all_report_only": true
+  },
+  "brand_audit": {
+   "status": {
+    "fixed": 37,
+    "pass": 13
+   },
+   "codes": {
+    "ITINERARY_MEAL_TIME_INVENTED": 36,
+    "HIGHLIGHTS_OPTIONAL_LANGUAGE": 2
+   }
+  },
+  "flag_fix_fields": {
+   "itineraries": 34,
+   "highlights": 2,
+   "seo_meta": 1
+  },
+  "quality_shadow_codes": {
+   "ITINERARY_STILL_COMPRESSED": 26,
+   "DFS_INTENT_UNDERUSED": 7,
+   "DAY_DEPARTURE_MIDTRIP": 3,
+   "DAY_CHECK_SKIPPED": 2,
+   "DAY_COUNT_VS_DURATION": 1
+  },
+  "degraded": {
+   "day_check_skipped": 2,
+   "repair_contract": 2
+  },
+  "jev_zones": {
+   "a1_claim_supported": {
+    "accept": 2223,
+    "grey": 152,
+    "error": 4
+   },
+   "a1_promise_unsupported": {
+    "grey": 2375,
+    "error": 4
+   }
+  },
+  "plan_mode": {
+   "single_day": 12,
+   "source_days": 38
+  },
+  "days_rows": [
+   {
+    "tour": "9cf4b325",
+    "country": "India",
+    "name": "Rajasthan Adventure",
+    "plan_days": 15,
+    "new_days": 10,
+    "live_days": 15,
+    "matches_plan": false,
+    "publishable": true,
+    "quality_score": 9.75,
+    "failure_codes": [
+     "ITINERARY_DAY_COUNT_MISMATCH"
+    ],
+    "new_gate_raw": [
+     "DAY_COUNT_VS_DURATION"
+    ]
+   },
+   {
+    "tour": "84896c9b",
+    "country": "Japan",
+    "name": "Okinawa’s Top 10 Marine Activities",
+    "plan_days": 1,
+    "new_days": 1,
+    "live_days": 4,
+    "matches_plan": true,
+    "publishable": true,
+    "quality_score": 10.0,
+    "failure_codes": [],
+    "new_gate_raw": []
+   }
+  ],
+  "days_not_plan_wilson95": [
+   0.0035,
+   0.105
+  ],
+  "cost_by_stage_over_50": {
+   "s1_judge": 0.0065,
+   "s1_grounding": 0.0032,
+   "s1_flag_fix": 0.0053,
+   "s1_generate": 0.0562
+  },
+  "flag_fix_cost": {
+   "tours_with_flag_fix": 37,
+   "mean_per_fixed_tour": 0.0071,
+   "mean_over_50": 0.0053
+  },
+  "days_not_plan_by_band": {
+   "1": {
+    "tours": 12,
+    "days_not_plan": 0,
+    "wilson95": [
+     0.0,
+     0.2425
+    ]
+   },
+   "2-7": {
+    "tours": 13,
+    "days_not_plan": 0,
+    "wilson95": [
+     0.0,
+     0.2281
+    ]
+   },
+   "8-14": {
+    "tours": 19,
+    "days_not_plan": 0,
+    "wilson95": [
+     0.0,
+     0.1682
+    ]
+   },
+   ">=15": {
+    "tours": 6,
+    "days_not_plan": 1,
+    "wilson95": [
+     0.0301,
+     0.5635
+    ]
+   }
+  },
+  "rajasthan": {
+   "tour": "9cf4b325-60ef-4a69-a5fb-f4a6fbbe7d1a",
+   "job_id": "caf9c751-38e2-5a2d-9c73-102247ac18bb",
+   "plan_days": 15,
+   "new_days": 10,
+   "flag_fix_fields": [
+    "itineraries"
+   ],
+   "revalidate_passed": true,
+   "new_page_name": "Rajasthan Tour: Delhi, Jodhpur, Udaipur, Jaipur, Ranthambore and Agra — 15 days",
+   "new_page_last_day": "Day 10 (Jaipur, \"Overnight: Jaipur.\")",
+   "generate_draft_kept": false,
+   "note": "shadow outputs on S3 hold only shadow.json, shadow.partial.json, panel packet/key/pages (final pages); the s1_generate draft is not kept, so the step that dropped days 11-15 is not identified"
+  },
+  "day_count_changed_rows_note": "2 tours changed day count vs live: Rajasthan 15->10 (wrong, plan 15) and Okinawa 4->1 (right: source duration null, plan single_day)",
+  "day_count_vs_duration_precision": {
+   "s248_combined_row": "F §2.2: DAY_SUBDAY_SPLIT / DAY_COUNT_VS_DURATION / DAY_DEPARTURE_MIDTRIP together 3 hits, 3 L",
+   "this_run": "1/1 (Rajasthan)",
+   "n_upper_bound": 4,
+   "wilson95_if_4_of_4": [
+    0.5101,
+    1.0
+   ],
+   "departure_midtrip_this_run": "0/3 (farewell dinner on day N-1)"
+  },
+  "jev_note": "jev_problem = 0 counts tours; verdict-level errors: a1_claim_supported 4, a1_promise_unsupported 4",
+  "brandfit_v2_spearman": {
+   "all_arms": {
+    "pages_joined": 121,
+    "spearman_brand_fit_vs_serious_rate": -0.422
+   },
+   "w_and_e_arms": {
+    "pages_joined": 100,
+    "spearman_brand_fit_vs_serious_rate": -0.215
+   },
+   "aplus|haiku": {
+    "pages_joined": 21,
+    "spearman_brand_fit_vs_serious_rate": null
+   },
+   "e|gpt-6-luna": {
+    "pages_joined": 25,
+    "spearman_brand_fit_vs_serious_rate": -0.311
+   },
+   "e|sonnet-5-5": {
+    "pages_joined": 25,
+    "spearman_brand_fit_vs_serious_rate": -0.169
+   },
+   "w|gpt-6-luna": {
+    "pages_joined": 25,
+    "spearman_brand_fit_vs_serious_rate": -0.247
+   },
+   "w|sonnet-5-5": {
+    "pages_joined": 25,
+    "spearman_brand_fit_vs_serious_rate": -0.202
+   }
+  },
+  "live_vs_aplus_s248": {
+   "gate_pages_of_25": {
+    "aplus": 16,
+    "stored_live": 13
+   },
+   "figure_coverage": {
+    "aplus": 0.443,
+    "stored_live": 0.479
+   },
+   "panel": "stored live pages were never panel-scored in S248",
+   "source": "docs/audits/2026-10-23-S248-aa645-writer-decision/decision-memo.md §2 table"
+  },
+  "figure_coverage_detail": {
+   "China": [
+    {
+     "tour": "Private day tour of Hangzhou",
+     "new": 0.0,
+     "live": 0.0
+    },
+    {
+     "tour": "Highlights Of China",
+     "new": 0.714,
+     "live": 0.571
+    },
+    {
+     "tour": "Beijing: Old and New",
+     "new": 0.0,
+     "live": 0.0
+    },
+    {
+     "tour": "China Tibet Encompassed",
+     "new": 0.688,
+     "live": 0.562
+    },
+    {
+     "tour": "China Express",
+     "new": 0.375,
+     "live": 0.125
+    },
+    {
+     "tour": "Bike Beijing: Hutong, Lama Temple, Forbidden City",
+     "new": 0.0,
+     "live": 0.0
+    }
+   ],
+   "Philippines": [
+    {
+     "tour": "Southern Luzon Run",
+     "new": null,
+     "live": null
+    },
+    {
+     "tour": "Cebu-Bohol Adventure",
+     "new": 1.0,
+     "live": 0.0
+    },
+    {
+     "tour": "Paddle and Surf",
+     "new": null,
+     "live": null
+    }
+   ]
+  }
+ },
+ "pilot": {
+  "run_id": "2007e626-12b1-46fa-9057-ccfeb6bd2315",
+  "cost": 0.253188,
+  "tours": [
+   {
+    "name": "VIENTIANE STOPOVER",
+    "publishable": false,
+    "brand_audit": {
+     "status": "manual_check",
+     "codes": [
+      "ITINERARY_MEAL_TIME_INVENTED"
+     ]
+    },
+    "failure_codes": [
+     "HIGHLIGHTS_TOO_GENERIC",
+     "UNSUPPORTED_NUMBER"
+    ],
+    "flag_fix_revalidate_passed": false,
+    "grounding_still_unsupported": 1
+   },
+   {
+    "name": "Luang Prabang - Namet NP - Halong Bay",
+    "publishable": true,
+    "brand_audit": {
+     "status": "fixed",
+     "codes": [
+      "ITINERARY_MEAL_TIME_INVENTED"
+     ]
+    },
+    "failure_codes": [],
+    "flag_fix_revalidate_passed": true,
+    "grounding_still_unsupported": 0
+   },
+   {
+    "name": "Luang Prabang - Vientiane",
+    "publishable": true,
+    "brand_audit": {
+     "status": "fixed",
+     "codes": [
+      "ITINERARY_MEAL_TIME_INVENTED"
+     ]
+    },
+    "failure_codes": [],
+    "flag_fix_revalidate_passed": true,
+    "grounding_still_unsupported": 0
+   }
+  ],
+  "run_id_paid": "2007e626-12b1-46fa-9057-ccfeb6bd2315",
+  "run_id_dry": "d0c7ab08-1ae6-4fe0-8e3d-f0f31ebf3692",
+  "stayed_v1_rate": 0.333,
+  "stop_conditions": {
+   "stayed_v1_over_10pct": true,
+   "legacy_itinerary_path": false,
+   "cost_per_tour_over_model": false,
+   "bedrock_throttle": false,
+   "tour_errors": false,
+   "not_written_by_v2": false,
+   "degraded_hard": false,
+   "brand_leak_pages": false,
+   "not_better_than_live": false
+  },
+  "stop": true,
+  "tour_ids": [
+   "7df4db05-3a76-4843-b1be-55c00fe77185",
+   "a6254fcf-e1bb-4caa-bad7-867fc80e5792",
+   "c97a5713-1cf0-4832-a2d5-f7c356aa5d8a"
+  ],
+  "note": "RUN.md step C: any stop condition true -> stop and report to Nghiep, no step D. stayed_v1_over_10pct fired (1/3) and step D ran anyway."
+ },
+ "pilot_plus_wave": {
+  "tours": 53,
+  "meal_time_invented": 39,
+  "manual_check": 1,
+  "publishable": 52
+ },
+ "per_country": {
+  "Bhutan": {
+   "sample_n": 2,
+   "publishable": 2,
+   "gate_pages_new": 0,
+   "gate_pages_live": 0,
+   "figure_coverage_new": 0.8125,
+   "figure_coverage_live": 0.521,
+   "judge_pass_final": 0.0,
+   "judge_brand_fit_final_mean": 4.0,
+   "cost_per_tour_mean": 0.0638,
+   "cost_per_tour_max": 0.079593,
+   "days_not_plan": 0,
+   "est_eligible_tours": 32,
+   "est_s1_cost_usd_pooled_mean": 2.28,
+   "est_s1_cost_usd_country_mean": 2.04,
+   "note": "tour count estimated (sample x 807/50); country mean from n=2, noisy"
+  },
+  "China": {
+   "sample_n": 6,
+   "publishable": 6,
+   "gate_pages_new": 0,
+   "gate_pages_live": 2,
+   "figure_coverage_new": 0.2962,
+   "figure_coverage_live": 0.2097,
+   "judge_pass_final": 0.5,
+   "judge_brand_fit_final_mean": 7.6667,
+   "cost_per_tour_mean": 0.066,
+   "cost_per_tour_max": 0.123936,
+   "days_not_plan": 0,
+   "est_eligible_tours": 97,
+   "est_s1_cost_usd_pooled_mean": 6.9,
+   "est_s1_cost_usd_country_mean": 6.4,
+   "note": "tour count estimated (sample x 807/50); country mean from n=6, noisy"
+  },
+  "India": {
+   "sample_n": 9,
+   "publishable": 9,
+   "gate_pages_new": 1,
+   "gate_pages_live": 4,
+   "figure_coverage_new": 0.6232,
+   "figure_coverage_live": 0.3486,
+   "judge_pass_final": 0.333,
+   "judge_brand_fit_final_mean": 6.4444,
+   "cost_per_tour_mean": 0.0841,
+   "cost_per_tour_max": 0.19069,
+   "days_not_plan": 1,
+   "est_eligible_tours": 145,
+   "est_s1_cost_usd_pooled_mean": 10.32,
+   "est_s1_cost_usd_country_mean": 12.19,
+   "note": "tour count estimated (sample x 807/50); country mean from n=9, noisy"
+  },
+  "Japan": {
+   "sample_n": 5,
+   "publishable": 5,
+   "gate_pages_new": 0,
+   "gate_pages_live": 0,
+   "figure_coverage_new": 0.9375,
+   "figure_coverage_live": 0.6458,
+   "judge_pass_final": 0.4,
+   "judge_brand_fit_final_mean": 6.4,
+   "cost_per_tour_mean": 0.0497,
+   "cost_per_tour_max": 0.064424,
+   "days_not_plan": 0,
+   "est_eligible_tours": 81,
+   "est_s1_cost_usd_pooled_mean": 5.76,
+   "est_s1_cost_usd_country_mean": 4.03,
+   "note": "tour count estimated (sample x 807/50); country mean from n=5, noisy"
+  },
+  "Laos": {
+   "sample_n": 3,
+   "publishable": 3,
+   "gate_pages_new": 0,
+   "gate_pages_live": 1,
+   "figure_coverage_new": 0.4027,
+   "figure_coverage_live": 0.4027,
+   "judge_pass_final": 0.667,
+   "judge_brand_fit_final_mean": 8.6667,
+   "cost_per_tour_mean": 0.0684,
+   "cost_per_tour_max": 0.097172,
+   "days_not_plan": 0,
+   "est_eligible_tours": 48,
+   "est_s1_cost_usd_pooled_mean": 3.42,
+   "est_s1_cost_usd_country_mean": 3.28,
+   "note": "tour count estimated (sample x 807/50); country mean from n=3, noisy"
+  },
+  "Mongolia": {
+   "sample_n": 2,
+   "publishable": 2,
+   "gate_pages_new": 0,
+   "gate_pages_live": 0,
+   "figure_coverage_new": 0.8335,
+   "figure_coverage_live": 0.5,
+   "judge_pass_final": 0.5,
+   "judge_brand_fit_final_mean": 7.0,
+   "cost_per_tour_mean": 0.0395,
+   "cost_per_tour_max": 0.040352,
+   "days_not_plan": 0,
+   "est_eligible_tours": 32,
+   "est_s1_cost_usd_pooled_mean": 2.28,
+   "est_s1_cost_usd_country_mean": 1.26,
+   "note": "tour count estimated (sample x 807/50); country mean from n=2, noisy"
+  },
+  "Nepal": {
+   "sample_n": 5,
+   "publishable": 5,
+   "gate_pages_new": 0,
+   "gate_pages_live": 0,
+   "figure_coverage_new": 0.7984,
+   "figure_coverage_live": 0.3114,
+   "judge_pass_final": 0.8,
+   "judge_brand_fit_final_mean": 9.2,
+   "cost_per_tour_mean": 0.0897,
+   "cost_per_tour_max": 0.160811,
+   "days_not_plan": 0,
+   "est_eligible_tours": 81,
+   "est_s1_cost_usd_pooled_mean": 5.76,
+   "est_s1_cost_usd_country_mean": 7.27,
+   "note": "tour count estimated (sample x 807/50); country mean from n=5, noisy"
+  },
+  "Pakistan": {
+   "sample_n": 2,
+   "publishable": 2,
+   "gate_pages_new": 1,
+   "gate_pages_live": 1,
+   "figure_coverage_new": 0.966,
+   "figure_coverage_live": 0.483,
+   "judge_pass_final": 0.5,
+   "judge_brand_fit_final_mean": 8.0,
+   "cost_per_tour_mean": 0.0824,
+   "cost_per_tour_max": 0.124309,
+   "days_not_plan": 0,
+   "est_eligible_tours": 32,
+   "est_s1_cost_usd_pooled_mean": 2.28,
+   "est_s1_cost_usd_country_mean": 2.64,
+   "note": "tour count estimated (sample x 807/50); country mean from n=2, noisy"
+  },
+  "Philippines": {
+   "sample_n": 3,
+   "publishable": 3,
+   "gate_pages_new": 0,
+   "gate_pages_live": 0,
+   "figure_coverage_new": 1.0,
+   "figure_coverage_live": 0.0,
+   "judge_pass_final": 0.333,
+   "judge_brand_fit_final_mean": 7.3333,
+   "cost_per_tour_mean": 0.0575,
+   "cost_per_tour_max": 0.071556,
+   "days_not_plan": 0,
+   "est_eligible_tours": 48,
+   "est_s1_cost_usd_pooled_mean": 3.42,
+   "est_s1_cost_usd_country_mean": 2.76,
+   "note": "tour count estimated (sample x 807/50); country mean from n=3, noisy"
+  },
+  "South Korea": {
+   "sample_n": 2,
+   "publishable": 2,
+   "gate_pages_new": 1,
+   "gate_pages_live": 1,
+   "figure_coverage_new": 0.8875,
+   "figure_coverage_live": 0.8875,
+   "judge_pass_final": 0.5,
+   "judge_brand_fit_final_mean": 8.0,
+   "cost_per_tour_mean": 0.0779,
+   "cost_per_tour_max": 0.079828,
+   "days_not_plan": 0,
+   "est_eligible_tours": 32,
+   "est_s1_cost_usd_pooled_mean": 2.28,
+   "est_s1_cost_usd_country_mean": 2.49,
+   "note": "tour count estimated (sample x 807/50); country mean from n=2, noisy"
+  },
+  "Sri Lanka": {
+   "sample_n": 6,
+   "publishable": 6,
+   "gate_pages_new": 0,
+   "gate_pages_live": 2,
+   "figure_coverage_new": 0.557,
+   "figure_coverage_live": 0.2625,
+   "judge_pass_final": 0.333,
+   "judge_brand_fit_final_mean": 6.6667,
+   "cost_per_tour_mean": 0.0663,
+   "cost_per_tour_max": 0.103621,
+   "days_not_plan": 0,
+   "est_eligible_tours": 97,
+   "est_s1_cost_usd_pooled_mean": 6.9,
+   "est_s1_cost_usd_country_mean": 6.43,
+   "note": "tour count estimated (sample x 807/50); country mean from n=6, noisy"
+  },
+  "Taiwan": {
+   "sample_n": 2,
+   "publishable": 2,
+   "gate_pages_new": 0,
+   "gate_pages_live": 0,
+   "figure_coverage_new": 0.8075,
+   "figure_coverage_live": 0.644,
+   "judge_pass_final": 0.5,
+   "judge_brand_fit_final_mean": 8.0,
+   "cost_per_tour_mean": 0.0472,
+   "cost_per_tour_max": 0.054482,
+   "days_not_plan": 0,
+   "est_eligible_tours": 32,
+   "est_s1_cost_usd_pooled_mean": 2.28,
+   "est_s1_cost_usd_country_mean": 1.51,
+   "note": "tour count estimated (sample x 807/50); country mean from n=2, noisy"
+  },
+  "Thailand": {
+   "sample_n": 3,
+   "publishable": 3,
+   "gate_pages_new": 1,
+   "gate_pages_live": 2,
+   "figure_coverage_new": 0.9207,
+   "figure_coverage_live": 0.73,
+   "judge_pass_final": 0.333,
+   "judge_brand_fit_final_mean": 6.6667,
+   "cost_per_tour_mean": 0.1034,
+   "cost_per_tour_max": 0.106205,
+   "days_not_plan": 0,
+   "est_eligible_tours": 48,
+   "est_s1_cost_usd_pooled_mean": 3.42,
+   "est_s1_cost_usd_country_mean": 4.96,
+   "note": "tour count estimated (sample x 807/50); country mean from n=3, noisy"
+  }
+ },
+ "catalogue": {
+  "eligible_nongolden_incl_pilot": 810,
+  "golden_ids": 54,
+  "pool_max_if_golden_included": 864,
+  "elephant_excluded": 39,
+  "s1_cost_810": 57.64,
+  "s1_cost_810_ci": [
+   50.3,
+   65.61
+  ],
+  "s1_cost_864": 61.48,
+  "s1_cost_864_ci": [
+   53.65,
+   69.98
+  ],
+  "s1_cost_864_if_every_tour_at_p90": 98.09,
+  "atomize_usd": [
+   7,
+   15
+  ],
+  "atomize_worst_usd": 50,
+  "place_reextract_usd": [
+   1,
+   3
+  ],
+  "place_cards_usd": "<1",
+  "dfs_usd": 0,
+  "total_central_864": [
+   69.5,
+   80.5
+  ],
+  "expected_stayed_v1_tours_864": [
+   0,
+   50
+  ],
+  "expected_days_not_plan_tours_864": [
+   3,
+   91
+  ],
+  "s1_hours_at_conc3": 5.6,
+  "s1_hours_at_conc6_if_quota": 2.8,
+  "atomize_tail_hours": [
+   30,
+   45
+  ],
+  "total_central_810": [
+   65.6,
+   76.6
+  ],
+  "approval_ceiling_810": 84.6,
+  "worst_case_810": 145.9,
+  "approval_ceiling_864": 89.0,
+  "worst_case_864": 152.1,
+  "total_build": "central = S1 mean + atomize 7..15 + place 1..3 + cards 0..1; ceiling = S1 bootstrap CI high + atomize 15 + place 3 + cards 1; worst = every tour at p90 + atomize worst 50 + place 3 + cards 1",
+  "s248_model_total": {
+   "usd": 85,
+   "range": [
+    70,
+    160
+   ],
+   "tours": "~892"
+  },
+  "golden_ids_note": "54 = 50 golden S1 tours + 4 T2 tours (RUN.md step 1)"
+ },
+ "brandfit_v2": {
+  "judge_model": "gpt-5.6-luna",
+  "judge_mode": "prod_aa714_near_band_median3",
+  "code": {
+   "source": "overlay",
+   "files": {
+    "services/content_generation/brand_fit_v2.py": "35b53d6135bad8b9",
+    "services/content_generation/brand_fit.py": "b8637d61ff739f4d"
+   }
+  },
+  "rubric_v2_version": "a1-voice-v2/1",
+  "spend_usd": 0.6491,
+  "calls": {
+   "v1": 346,
+   "v2": 176
+  },
+  "skipped_cost_cap": 0,
+  "rubrics": {
+   "v1": {
+    "arms": {
+     "aplus|haiku": {
+      "n": 25,
+      "brand_fit_mean": 7.48,
+      "brand_fit_median": 8.0,
+      "retry_pct": 12.0,
+      "retry_outside_tie_pct": 12.0,
+      "generic_feedback_pct": 28.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.0385,
+      "panel_serious_per_page": 2.38,
+      "vs_baseline": null
+     },
+     "e|gpt-6-luna": {
+      "n": 25,
+      "brand_fit_mean": 6.56,
+      "brand_fit_median": 7.0,
+      "retry_pct": 40.0,
+      "retry_outside_tie_pct": 40.0,
+      "generic_feedback_pct": 72.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.013,
+      "panel_serious_per_page": 0.38,
+      "vs_baseline": {
+       "paired": 25,
+       "mean_diff": -0.92,
+       "lower": 17,
+       "higher": 1,
+       "ties": 7,
+       "p": 0.0001
+      }
+     },
+     "e|sonnet-5-5": {
+      "n": 25,
+      "brand_fit_mean": 7.04,
+      "brand_fit_median": 7.0,
+      "retry_pct": 24.0,
+      "retry_outside_tie_pct": 24.0,
+      "generic_feedback_pct": 44.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.0065,
+      "panel_serious_per_page": 0.24,
+      "vs_baseline": {
+       "paired": 25,
+       "mean_diff": -0.44,
+       "lower": 10,
+       "higher": 3,
+       "ties": 12,
+       "p": 0.0923
+      }
+     },
+     "w|gpt-6-luna": {
+      "n": 25,
+      "brand_fit_mean": 6.64,
+      "brand_fit_median": 7.0,
+      "retry_pct": 36.0,
+      "retry_outside_tie_pct": 36.0,
+      "generic_feedback_pct": 68.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.0056,
+      "panel_serious_per_page": 0.24,
+      "vs_baseline": {
+       "paired": 25,
+       "mean_diff": -0.84,
+       "lower": 17,
+       "higher": 3,
+       "ties": 5,
+       "p": 0.0026
+      }
+     },
+     "w|sonnet-5-5": {
+      "n": 25,
+      "brand_fit_mean": 6.92,
+      "brand_fit_median": 7.0,
+      "retry_pct": 28.0,
+      "retry_outside_tie_pct": 28.0,
+      "generic_feedback_pct": 52.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.0033,
+      "panel_serious_per_page": 0.18,
+      "vs_baseline": {
+       "paired": 25,
+       "mean_diff": -0.56,
+       "lower": 11,
+       "higher": 2,
+       "ties": 12,
+       "p": 0.0225
+      }
+     }
+    },
+    "page_level": {
+     "pages_joined": 125,
+     "spearman_brand_fit_vs_serious_rate": -0.029
+    },
+    "arm_level_spearman": 0.3,
+    "criterion": {
+     "pass": false,
+     "retry_ok": false,
+     "spearman_ok": true,
+     "candidate_retry_pct": 28.0,
+     "baseline_retry_pct": 12.0,
+     "retry_margin_points": 5.0,
+     "spearman": -0.029,
+     "spearman_max": 0.0,
+     "candidate": "w|sonnet-5-5",
+     "baseline": "aplus|haiku"
+    }
+   },
+   "v1_s248": {
+    "arms": {
+     "aplus|haiku": {
+      "n": 25,
+      "brand_fit_mean": 7.56,
+      "brand_fit_median": 8.0,
+      "retry_pct": 16.0,
+      "retry_outside_tie_pct": 16.0,
+      "generic_feedback_pct": 40.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.0385,
+      "panel_serious_per_page": 2.38,
+      "vs_baseline": null
+     },
+     "e|gpt-6-luna": {
+      "n": 25,
+      "brand_fit_mean": 6.68,
+      "brand_fit_median": 7.0,
+      "retry_pct": 36.0,
+      "retry_outside_tie_pct": 36.0,
+      "generic_feedback_pct": 72.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.013,
+      "panel_serious_per_page": 0.38,
+      "vs_baseline": {
+       "paired": 25,
+       "mean_diff": -0.88,
+       "lower": 16,
+       "higher": 4,
+       "ties": 5,
+       "p": 0.0118
+      }
+     },
+     "e|sonnet-5-5": {
+      "n": 25,
+      "brand_fit_mean": 7.16,
+      "brand_fit_median": 7.0,
+      "retry_pct": 8.0,
+      "retry_outside_tie_pct": 8.0,
+      "generic_feedback_pct": 52.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.0065,
+      "panel_serious_per_page": 0.24,
+      "vs_baseline": {
+       "paired": 25,
+       "mean_diff": -0.4,
+       "lower": 11,
+       "higher": 3,
+       "ties": 11,
+       "p": 0.0574
+      }
+     },
+     "w|gpt-6-luna": {
+      "n": 25,
+      "brand_fit_mean": 6.72,
+      "brand_fit_median": 7.0,
+      "retry_pct": 32.0,
+      "retry_outside_tie_pct": 32.0,
+      "generic_feedback_pct": 56.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.0056,
+      "panel_serious_per_page": 0.24,
+      "vs_baseline": {
+       "paired": 25,
+       "mean_diff": -0.84,
+       "lower": 15,
+       "higher": 1,
+       "ties": 9,
+       "p": 0.0005
+      }
+     },
+     "w|sonnet-5-5": {
+      "n": 25,
+      "brand_fit_mean": 6.72,
+      "brand_fit_median": 7.0,
+      "retry_pct": 36.0,
+      "retry_outside_tie_pct": 36.0,
+      "generic_feedback_pct": 60.0,
+      "capped_pct": 0.0,
+      "unsupported_per_page": null,
+      "panel_serious_per_claim": 0.0033,
+      "panel_serious_per_page": 0.18,
+      "vs_baseline": {
+       "paired": 25,
+       "mean_diff": -0.84,
+       "lower": 13,
+       "higher": 3,
+       "ties": 9,
+       "p": 0.0213
+      }
+     }
+    },
+    "page_level": {
+     "pages_joined": 125,
+     "spearman_brand_fit_vs_serious_rate": 0.081
+    },
+    "arm_level_spearman": 0.359,
+    "criterion": {
+     "pass": false,
+     "retry_ok": false,
+     "spearman_ok": false,
+     "candidate_retry_pct": 36.0,
+     "baseline_retry_pct": 16.0,
+     "retry_margin_points": 5.0,
+     "spearman": 0.081,
+     "spearman_max": 0.0,
+     "candidate": "w|sonnet-5-5",
+     "baseline": "aplus|haiku"
+    }
+   },
+   "v2": {
+    "arms": {
+     "aplus|haiku": {
+      "n": 21,
+      "brand_fit_mean": 4.0,
+      "brand_fit_median": 4.0,
+      "retry_pct": 100.0,
+      "retry_outside_tie_pct": 100.0,
+      "generic_feedback_pct": 0.0,
+      "capped_pct": 100.0,
+      "unsupported_per_page": 11.1,
+      "panel_serious_per_claim": 0.0385,
+      "panel_serious_per_page": 2.38,
+      "vs_baseline": null
+     },
+     "e|gpt-6-luna": {
+      "n": 25,
+      "brand_fit_mean": 8.72,
+      "brand_fit_median": 10.0,
+      "retry_pct": 32.0,
+      "retry_outside_tie_pct": 32.0,
+      "generic_feedback_pct": 4.0,
+      "capped_pct": 32.0,
+      "unsupported_per_page": 0.4,
+      "panel_serious_per_claim": 0.013,
+      "panel_serious_per_page": 0.38,
+      "vs_baseline": {
+       "paired": 21,
+       "mean_diff": 5.05,
+       "lower": 0,
+       "higher": 21,
+       "ties": 0,
+       "p": 0.0
+      }
+     },
+     "e|sonnet-5-5": {
+      "n": 25,
+      "brand_fit_mean": 8.4,
+      "brand_fit_median": 10.0,
+      "retry_pct": 32.0,
+      "retry_outside_tie_pct": 32.0,
+      "generic_feedback_pct": 0.0,
+      "capped_pct": 32.0,
+      "unsupported_per_page": 1.16,
+      "panel_serious_per_claim": 0.0065,
+      "panel_serious_per_page": 0.24,
+      "vs_baseline": {
+       "paired": 21,
+       "mean_diff": 4.57,
+       "lower": 0,
+       "higher": 18,
+       "ties": 3,
+       "p": 0.0
+      }
+     },
+     "w|gpt-6-luna": {
+      "n": 25,
+      "brand_fit_mean": 8.88,
+      "brand_fit_median": 10.0,
+      "retry_pct": 28.0,
+      "retry_outside_tie_pct": 28.0,
+      "generic_feedback_pct": 0.0,
+      "capped_pct": 28.0,
+      "unsupported_per_page": 0.32,
+      "panel_serious_per_claim": 0.0056,
+      "panel_serious_per_page": 0.24,
+      "vs_baseline": {
+       "paired": 21,
+       "mean_diff": 5.05,
+       "lower": 0,
+       "higher": 21,
+       "ties": 0,
+       "p": 0.0
+      }
+     },
+     "w|sonnet-5-5": {
+      "n": 25,
+      "brand_fit_mean": 7.84,
+      "brand_fit_median": 10.0,
+      "retry_pct": 44.0,
+      "retry_outside_tie_pct": 44.0,
+      "generic_feedback_pct": 0.0,
+      "capped_pct": 44.0,
+      "unsupported_per_page": 1.2,
+      "panel_serious_per_claim": 0.0033,
+      "panel_serious_per_page": 0.18,
+      "vs_baseline": {
+       "paired": 21,
+       "mean_diff": 4.19,
+       "lower": 0,
+       "higher": 18,
+       "ties": 3,
+       "p": 0.0
+      }
+     }
+    },
+    "page_level": {
+     "pages_joined": 121,
+     "spearman_brand_fit_vs_serious_rate": -0.422
+    },
+    "arm_level_spearman": -0.3,
+    "criterion": {
+     "pass": true,
+     "retry_ok": true,
+     "spearman_ok": true,
+     "candidate_retry_pct": 44.0,
+     "baseline_retry_pct": 100.0,
+     "retry_margin_points": 5.0,
+     "spearman": -0.422,
+     "spearman_max": 0.0,
+     "candidate": "w|sonnet-5-5",
+     "baseline": "aplus|haiku"
+    }
+   }
+  },
+  "verdict": {
+   "rubric_v2_passes": true,
+   "next": "rubric v2 may gate writer-v2 drafts again: A1_V2_BRAND_FIT_GATE=enforce on the worker (Nghiep's call)"
+  }
+ },
+ "waves_estimate": {
+  "A": {
+   "countries": [
+    "Bhutan",
+    "Mongolia",
+    "Pakistan",
+    "South Korea",
+    "Taiwan"
+   ],
+   "est_tours": 160,
+   "est_s1_usd": 9.94
+  },
+  "B": {
+   "countries": [
+    "Laos",
+    "Philippines",
+    "Thailand"
+   ],
+   "est_tours": 144,
+   "est_s1_usd": 11.0
+  },
+  "C": {
+   "countries": [
+    "Japan",
+    "Nepal"
+   ],
+   "est_tours": 162,
+   "est_s1_usd": 11.3
+  },
+  "D": {
+   "countries": [
+    "China",
+    "Sri Lanka"
+   ],
+   "est_tours": 194,
+   "est_s1_usd": 12.83
+  },
+  "E": {
+   "countries": [
+    "India"
+   ],
+   "est_tours": 145,
+   "est_s1_usd": 12.19
+  }
+ }
+}
