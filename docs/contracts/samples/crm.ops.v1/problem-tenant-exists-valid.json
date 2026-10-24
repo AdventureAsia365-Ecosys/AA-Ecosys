@@ -1,0 +1,10 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "Problem",
+  "expect": "valid",
+  "why": "POST /tenants on an existing id: 409, nothing written",
+  "payload": {
+    "detail": "tenant_exists",
+    "message": "an agency with this id already exists; nothing was changed"
+  }
+}

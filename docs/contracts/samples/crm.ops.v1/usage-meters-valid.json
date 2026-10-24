@@ -8,7 +8,7 @@
     "period_start": "2026-10-01",
     "period_end": "2026-10-31",
     "seats_used": 3,
-    "seats_allowed": null,
+    "seats_allowed": 5,
     "active_members_30d": 3,
     "storage_bytes": 52428800,
     "inbound_mail_30d": 41,

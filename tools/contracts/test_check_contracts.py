@@ -26,6 +26,8 @@ class Policy(unittest.TestCase):
         self.assertIsNotNone(cc.key_violation(p, "pipeline_stage_counts"))
         self.assertEqual(cc.key_violation(p, "pii:contact"), "pii:")
         self.assertEqual(cc.key_violation(p, "email"), "pii-name")
+        self.assertEqual(cc.key_violation(p, "owner_email"), "pii-name")
+        self.assertEqual(cc.key_violation(p, "guest_phone"), "pii-name")
         self.assertIsNone(cc.key_violation(p, "seats_used"))
         self.assertIsNone(cc.key_violation(p, "holds_travellers"))
 
@@ -159,3 +161,32 @@ class Mutations(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class WriteOnlyPiiFieldTest(unittest.TestCase):
+    """AA-941: crm.ops.v1 may carry exactly one personal-data field, write-only and tagged, by schema + name."""
+
+    P = cc.POLICY["crm.ops.v1"]
+
+    @staticmethod
+    def doc(schema: str, spec: dict) -> dict:
+        return {"components": {"schemas": {schema: {"type": "object", "required": ["owner_email"],
+                                                    "properties": {"owner_email": spec}}}}}
+
+    def test_the_named_field_tagged_and_write_only_passes(self):
+        ok = self.doc("OwnerInviteRequest", {"type": "string", "writeOnly": True, "x-pii": "contact"})
+        self.assertEqual(cc.scan_schema_doc("crm.ops.v1", ok, self.P), [])
+
+    def test_untagged_or_readable_or_other_class_fails(self):
+        for spec in ({"type": "string", "writeOnly": True}, {"type": "string", "x-pii": "contact"},
+                     {"type": "string", "writeOnly": True, "x-pii": "identity"}):
+            self.assertTrue(cc.scan_schema_doc("crm.ops.v1", self.doc("OwnerInviteRequest", spec), self.P), spec)
+
+    def test_the_same_field_in_another_schema_fails(self):
+        bad = self.doc("TenantSummary", {"type": "string", "writeOnly": True, "x-pii": "contact"})
+        self.assertTrue(cc.scan_schema_doc("crm.ops.v1", bad, self.P))
+
+    def test_payload_scan_accepts_it_only_at_the_top_of_that_schema(self):
+        self.assertEqual(cc.scan_payload(self.P, {"owner_email": "a@b.example"}, "OwnerInviteRequest"), [])
+        self.assertTrue(cc.scan_payload(self.P, {"owner_email": "a@b.example"}, "TenantSummary"))
+        self.assertTrue(cc.scan_payload(self.P, {"x": {"owner_email": "a@b.example"}}, "OwnerInviteRequest"))
