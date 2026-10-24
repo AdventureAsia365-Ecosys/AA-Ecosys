@@ -1,0 +1,4407 @@
+{
+ "window": {
+  "since": "2026-10-24T07:05:00+00:00",
+  "until": "2026-10-24T08:11:03.558139+00:00",
+  "country": null
+ },
+ "countries": {
+  "Bhutan": {
+   "tours": 2,
+   "outcomes": {
+    "published": 2
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 2,
+   "gate_pages_before": 0,
+   "gate_pages_after": 0,
+   "gate_page_rate_before": 0.0,
+   "gate_page_rate_after": 0.0,
+   "gate_codes_before": {},
+   "gate_codes_after": {},
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.521,
+   "figure_coverage_after": 0.812,
+   "brand_fit_before": 7.5,
+   "brand_fit_after_report_only": 4.0,
+   "brand_fit_rubrics_before": {
+    "v1": 2
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 2
+   },
+   "writer_versions_after": {
+    "v2": 2
+   },
+   "cost_per_tour_after": 0.073,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": false
+  },
+  "China": {
+   "tours": 6,
+   "outcomes": {
+    "published": 6
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 6,
+   "gate_pages_before": 2,
+   "gate_pages_after": 0,
+   "gate_page_rate_before": 0.333,
+   "gate_page_rate_after": 0.0,
+   "gate_codes_before": {
+    "META_LENGTH": 1,
+    "NUMBER_NOT_IN_SOURCE": 2
+   },
+   "gate_codes_after": {},
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.21,
+   "figure_coverage_after": 0.272,
+   "brand_fit_before": 7.5,
+   "brand_fit_after_report_only": 8.667,
+   "brand_fit_rubrics_before": {
+    "v1": 6
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 6
+   },
+   "writer_versions_after": {
+    "v2": 6
+   },
+   "cost_per_tour_after": 0.062,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": true
+  },
+  "India": {
+   "tours": 9,
+   "outcomes": {
+    "published": 9
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 9,
+   "gate_pages_before": 4,
+   "gate_pages_after": 0,
+   "gate_page_rate_before": 0.444,
+   "gate_page_rate_after": 0.0,
+   "gate_codes_before": {
+    "META_CUT": 2,
+    "NUMBER_NOT_IN_SOURCE": 2
+   },
+   "gate_codes_after": {},
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.349,
+   "figure_coverage_after": 0.647,
+   "brand_fit_before": 7.556,
+   "brand_fit_after_report_only": 6.222,
+   "brand_fit_rubrics_before": {
+    "v1": 9
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 9
+   },
+   "writer_versions_after": {
+    "v2": 9
+   },
+   "cost_per_tour_after": 0.079,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": true
+  },
+  "Japan": {
+   "tours": 5,
+   "outcomes": {
+    "published": 5
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 5,
+   "gate_pages_before": 0,
+   "gate_pages_after": 0,
+   "gate_page_rate_before": 0.0,
+   "gate_page_rate_after": 0.0,
+   "gate_codes_before": {},
+   "gate_codes_after": {},
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.646,
+   "figure_coverage_after": 0.938,
+   "brand_fit_before": 7.8,
+   "brand_fit_after_report_only": 7.2,
+   "brand_fit_rubrics_before": {
+    "v1": 5
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 5
+   },
+   "writer_versions_after": {
+    "v2": 5
+   },
+   "cost_per_tour_after": 0.048,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": false
+  },
+  "Laos": {
+   "tours": 3,
+   "outcomes": {
+    "published": 3
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 3,
+   "gate_pages_before": 1,
+   "gate_pages_after": 0,
+   "gate_page_rate_before": 0.333,
+   "gate_page_rate_after": 0.0,
+   "gate_codes_before": {
+    "META_CUT": 1
+   },
+   "gate_codes_after": {},
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.403,
+   "figure_coverage_after": 0.403,
+   "brand_fit_before": 7.333,
+   "brand_fit_after_report_only": 10.0,
+   "brand_fit_rubrics_before": {
+    "v1": 3
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 3
+   },
+   "writer_versions_after": {
+    "v2": 3
+   },
+   "cost_per_tour_after": 0.062,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": true
+  },
+  "Mongolia": {
+   "tours": 2,
+   "outcomes": {
+    "published": 2
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 2,
+   "gate_pages_before": 0,
+   "gate_pages_after": 0,
+   "gate_page_rate_before": 0.0,
+   "gate_page_rate_after": 0.0,
+   "gate_codes_before": {},
+   "gate_codes_after": {},
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.5,
+   "figure_coverage_after": 0.834,
+   "brand_fit_before": 7.5,
+   "brand_fit_after_report_only": 6.0,
+   "brand_fit_rubrics_before": {
+    "v1": 2
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 2
+   },
+   "writer_versions_after": {
+    "v2": 2
+   },
+   "cost_per_tour_after": 0.056,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": false
+  },
+  "Nepal": {
+   "tours": 5,
+   "outcomes": {
+    "published": 5
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 5,
+   "gate_pages_before": 0,
+   "gate_pages_after": 1,
+   "gate_page_rate_before": 0.0,
+   "gate_page_rate_after": 0.2,
+   "gate_codes_before": {},
+   "gate_codes_after": {
+    "META_CUT": 1
+   },
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.311,
+   "figure_coverage_after": 0.776,
+   "brand_fit_before": 7.8,
+   "brand_fit_after_report_only": 6.8,
+   "brand_fit_rubrics_before": {
+    "v1": 5
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 5
+   },
+   "writer_versions_after": {
+    "v2": 5
+   },
+   "cost_per_tour_after": 0.082,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": false
+  },
+  "Pakistan": {
+   "tours": 2,
+   "outcomes": {
+    "published": 2
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 2,
+   "gate_pages_before": 1,
+   "gate_pages_after": 1,
+   "gate_page_rate_before": 0.5,
+   "gate_page_rate_after": 0.5,
+   "gate_codes_before": {
+    "DAY_*": 1
+   },
+   "gate_codes_after": {
+    "DAY_*": 1
+   },
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.483,
+   "figure_coverage_after": 0.966,
+   "brand_fit_before": 7.5,
+   "brand_fit_after_report_only": 8.0,
+   "brand_fit_rubrics_before": {
+    "v1": 2
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 2
+   },
+   "writer_versions_after": {
+    "v2": 2
+   },
+   "cost_per_tour_after": 0.099,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": false
+  },
+  "Philippines": {
+   "tours": 3,
+   "outcomes": {
+    "published": 3
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 3,
+   "gate_pages_before": 0,
+   "gate_pages_after": 0,
+   "gate_page_rate_before": 0.0,
+   "gate_page_rate_after": 0.0,
+   "gate_codes_before": {},
+   "gate_codes_after": {},
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.0,
+   "figure_coverage_after": 1.0,
+   "brand_fit_before": 7.333,
+   "brand_fit_after_report_only": 7.333,
+   "brand_fit_rubrics_before": {
+    "v1": 3
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 3
+   },
+   "writer_versions_after": {
+    "v2": 3
+   },
+   "cost_per_tour_after": 0.042,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": false
+  },
+  "South Korea": {
+   "tours": 2,
+   "outcomes": {
+    "published": 2
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 2,
+   "gate_pages_before": 1,
+   "gate_pages_after": 1,
+   "gate_page_rate_before": 0.5,
+   "gate_page_rate_after": 0.5,
+   "gate_codes_before": {
+    "DAY_*": 1,
+    "NUMBER_NOT_IN_SOURCE": 1
+   },
+   "gate_codes_after": {
+    "DAY_*": 1
+   },
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.887,
+   "figure_coverage_after": 0.887,
+   "brand_fit_before": 7.5,
+   "brand_fit_after_report_only": 8.0,
+   "brand_fit_rubrics_before": {
+    "v1": 2
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 2
+   },
+   "writer_versions_after": {
+    "v2": 2
+   },
+   "cost_per_tour_after": 0.063,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": false
+  },
+  "Sri Lanka": {
+   "tours": 6,
+   "outcomes": {
+    "published": 6
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 6,
+   "gate_pages_before": 2,
+   "gate_pages_after": 0,
+   "gate_page_rate_before": 0.333,
+   "gate_page_rate_after": 0.0,
+   "gate_codes_before": {
+    "NUMBER_NOT_IN_SOURCE": 2
+   },
+   "gate_codes_after": {},
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.263,
+   "figure_coverage_after": 0.557,
+   "brand_fit_before": 7.833,
+   "brand_fit_after_report_only": 9.0,
+   "brand_fit_rubrics_before": {
+    "v1": 6
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 6
+   },
+   "writer_versions_after": {
+    "v2": 6
+   },
+   "cost_per_tour_after": 0.064,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": true
+  },
+  "Taiwan": {
+   "tours": 2,
+   "outcomes": {
+    "published": 2
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 2,
+   "gate_pages_before": 0,
+   "gate_pages_after": 0,
+   "gate_page_rate_before": 0.0,
+   "gate_page_rate_after": 0.0,
+   "gate_codes_before": {},
+   "gate_codes_after": {},
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.644,
+   "figure_coverage_after": 0.76,
+   "brand_fit_before": 7.5,
+   "brand_fit_after_report_only": 10.0,
+   "brand_fit_rubrics_before": {
+    "v1": 2
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 2
+   },
+   "writer_versions_after": {
+    "v2": 2
+   },
+   "cost_per_tour_after": 0.058,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": false
+  },
+  "Thailand": {
+   "tours": 3,
+   "outcomes": {
+    "published": 3
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 3,
+   "gate_pages_before": 2,
+   "gate_pages_after": 1,
+   "gate_page_rate_before": 0.667,
+   "gate_page_rate_after": 0.333,
+   "gate_codes_before": {
+    "META_CUT": 1,
+    "NUMBER_NOT_IN_SOURCE": 1
+   },
+   "gate_codes_after": {
+    "DAY_*": 1
+   },
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.73,
+   "figure_coverage_after": 0.905,
+   "brand_fit_before": 7.333,
+   "brand_fit_after_report_only": 7.333,
+   "brand_fit_rubrics_before": {
+    "v1": 3
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 3
+   },
+   "writer_versions_after": {
+    "v2": 3
+   },
+   "cost_per_tour_after": 0.098,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": true
+  },
+  "ALL": {
+   "tours": 50,
+   "outcomes": {
+    "published": 50
+   },
+   "stayed_v1_rate": 0.0,
+   "paired": 50,
+   "gate_pages_before": 13,
+   "gate_pages_after": 4,
+   "gate_page_rate_before": 0.26,
+   "gate_page_rate_after": 0.08,
+   "gate_codes_before": {
+    "DAY_*": 2,
+    "META_CUT": 4,
+    "META_LENGTH": 1,
+    "NUMBER_NOT_IN_SOURCE": 8
+   },
+   "gate_codes_after": {
+    "DAY_*": 3,
+    "META_CUT": 1
+   },
+   "grounding_unsupported_before": 0,
+   "grounding_unsupported_after": 0,
+   "figure_coverage_before": 0.415,
+   "figure_coverage_after": 0.672,
+   "brand_fit_before": 7.58,
+   "brand_fit_after_report_only": 7.56,
+   "brand_fit_rubrics_before": {
+    "v1": 50
+   },
+   "brand_fit_rubrics_after": {
+    "a1-voice-v2/1": 50
+   },
+   "writer_versions_after": {
+    "v2": 50
+   },
+   "cost_per_tour_after": 0.068,
+   "published_not_atomized": 0,
+   "atoms_off_days": 0,
+   "fact_check_holds": 0,
+   "stayed_v1_by_brand_audit": {},
+   "stayed_v1_brand_audit_codes": {},
+   "brand_audit_report_only_codes_after": {},
+   "legacy_itinerary_pages": 0,
+   "clearly_better": true
+  }
+ },
+ "stop_conditions": {
+  "stayed_v1_over_10pct": false,
+  "legacy_itinerary_path": false,
+  "atoms_on_days_past_new_count": false,
+  "cost_per_tour_over_model": false,
+  "published_not_atomized": false,
+  "not_clearly_better": false
+ },
+ "tours": [
+  {
+   "tour_id": "5a6201bb-b7ab-43aa-82f0-d6c2acbff9c2",
+   "country": "Bhutan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "a0df194b-f440-4d63-af53-289d6504d7ee",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.625,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 4.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.079648,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "d3d07de9-5ed9-4922-a16d-722d16f898ac",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.375,
+    "failure_codes": [
+     "FORBIDDEN_WORD"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 5,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.049597999999999996,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "5a6201bb-b7ab-43aa-82f0-d6c2acbff9c2",
+    "fingerprint_days": 10,
+    "live_atoms": 26,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "fb4dd7e9-6ed0-460d-b836-11e124bcdb75",
+   "country": "Bhutan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "9c757467-2fda-496b-baaf-5a8daee70cfe",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 4.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.066719,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "c4a36186-0c1c-466a-ada1-72a61cc93168",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.667,
+    "failure_codes": [
+     "FORBIDDEN_WORD"
+    ],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 5,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.048603999999999994,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "fb4dd7e9-6ed0-460d-b836-11e124bcdb75",
+    "fingerprint_days": 13,
+    "live_atoms": 52,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "140c8f35-41c8-436b-b859-aa2c34039a0d",
+   "country": "China",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "da2b5f92-36b8-4f50-937c-428972e30f0b",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.571,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.096629,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "83f3fce2-0846-4e8e-895b-6800a1ed2aac",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.571,
+    "failure_codes": [
+     "FORBIDDEN_WORD"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.032376,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "140c8f35-41c8-436b-b859-aa2c34039a0d",
+    "fingerprint_days": 11,
+    "live_atoms": 47,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "2d785fb8-38a6-4285-8d99-d929cfb94b93",
+   "country": "China",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "9a7e425b-a75d-4405-9ed4-56d56ad49db2",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.038587,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "58e9a634-a324-4ef8-b229-189c008e8bb9",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.014451000000000002,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "2d785fb8-38a6-4285-8d99-d929cfb94b93",
+    "fingerprint_days": 1,
+    "live_atoms": 11,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "47b163c9-5000-4962-8b04-4ebde18318f2",
+   "country": "China",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "a1a88ea7-a42e-48dc-aeba-834df43e948d",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.045462999999999996,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "0e1ca76a-f5ef-4d6d-b17f-3615cb5fa011",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "META_LENGTH",
+     "NUMBER_NOT_IN_SOURCE"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.0,
+    "failure_codes": [
+     "FORBIDDEN_WORD",
+     "META_TOO_SHORT"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.013418000000000001,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "47b163c9-5000-4962-8b04-4ebde18318f2",
+    "fingerprint_days": 1,
+    "live_atoms": 8,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "4d061c60-53e5-422c-81ff-5ea3a38d795a",
+   "country": "China",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "54ebfc25-a42e-4ee8-a82d-3aed0806d70e",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.375,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.064177,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "8f66fb7a-97f9-46dd-bbfe-eaac94d764ee",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.125,
+    "failure_codes": [
+     "FORBIDDEN_WORD"
+    ],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.020020999999999997,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "4d061c60-53e5-422c-81ff-5ea3a38d795a",
+    "fingerprint_days": 8,
+    "live_atoms": 29,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "5f700c04-b97d-44d7-81f8-6b62cc8846d8",
+   "country": "China",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "3602ad95-2a23-4793-8a7b-d9df32e462ae",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.043383000000000005,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "d15d205e-3cd3-48d9-ad0b-2095668ee20c",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.011705,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "5f700c04-b97d-44d7-81f8-6b62cc8846d8",
+    "fingerprint_days": 1,
+    "live_atoms": 11,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "d3710e15-69c1-422b-ad6b-f5a8cab533f8",
+   "country": "China",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "bb338703-7469-4d28-bd2c-2198890814a1",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.688,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.08243400000000001,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "b9706daa-1593-46f8-85e7-12a565cf179f",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "NUMBER_NOT_IN_SOURCE"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.562,
+    "failure_codes": [
+     "FORBIDDEN_WORD",
+     "ITINERARY_STILL_COMPRESSED"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.055185,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "d3710e15-69c1-422b-ad6b-f5a8cab533f8",
+    "fingerprint_days": 16,
+    "live_atoms": 52,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "0d2bbccc-7951-41fc-bec5-f4c9d1d970e8",
+   "country": "India",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "82a63909-c4b5-4739-8e58-b6b7e5ddc52d",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE",
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.333,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.06651199999999999,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "9047da1b-5006-4861-a85f-b36bb44b199c",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.333,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.018525999999999997,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "0d2bbccc-7951-41fc-bec5-f4c9d1d970e8",
+    "fingerprint_days": 14,
+    "live_atoms": 45,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "1dae6664-d6f7-4a93-9e18-74b306ea6df3",
+   "country": "India",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "d69c1354-03d8-4c49-b5b8-1ffe9eb90397",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.06103600000000001,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "d624e276-5bb1-4250-bc26-180913e9c9a4",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 9,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.031433,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "1dae6664-d6f7-4a93-9e18-74b306ea6df3",
+    "fingerprint_days": 12,
+    "live_atoms": 38,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "1fa7fddd-1598-4a22-b246-1e0a875162b2",
+   "country": "India",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "16e8e863-b30a-4c9a-9211-8f780fad7cd5",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.667,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.057571,
+    "days": [
+     1,
+     2,
+     3
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "0c5157a0-e4c6-44de-9711-fab4629e7d7d",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "NUMBER_NOT_IN_SOURCE"
+    ],
+    "report_codes": [],
+    "figure_coverage": 0.667,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.013722,
+    "days": [
+     1,
+     2,
+     3
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "1fa7fddd-1598-4a22-b246-1e0a875162b2",
+    "fingerprint_days": 3,
+    "live_atoms": 8,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "3a345a74-cac3-4ffa-a7e1-0c9859a177b8",
+   "country": "India",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "8b559dc8-566c-4026-a62b-3e7194b9f2f3",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.333,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.103325,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "22899cf6-5420-4104-aa13-b1011f2e9cf0",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.025122000000000002,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "3a345a74-cac3-4ffa-a7e1-0c9859a177b8",
+    "fingerprint_days": 13,
+    "live_atoms": 47,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "5636c72f-3f78-43ef-a698-b6bd56a3b2ab",
+   "country": "India",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "a4ccb766-f7d2-4f76-b224-827d98582a83",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "HIGHLIGHTS_OPTIONAL_LANGUAGE",
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.05288299999999999,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "5031839f-e052-4cb7-afd5-65881f8b5c5f",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.029241999999999997,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "5636c72f-3f78-43ef-a698-b6bd56a3b2ab",
+    "fingerprint_days": 1,
+    "live_atoms": 12,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "9cf4b325-60ef-4a69-a5fb-f4a6fbbe7d1a",
+   "country": "India",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "f38acb2e-90b2-4ba8-a367-15ca564d8a08",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.947,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 4.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.101486,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "80250d23-05e8-4803-b82a-d5e146e57372",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "META_CUT"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE",
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.737,
+    "failure_codes": [
+     "ITINERARY_STILL_COMPRESSED"
+    ],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 5,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.109326,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "9cf4b325-60ef-4a69-a5fb-f4a6fbbe7d1a",
+    "fingerprint_days": 15,
+    "live_atoms": 49,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "c0b208ba-9a42-4bba-baff-710225811abb",
+   "country": "India",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "7cd4e2d3-ff01-4c5d-a786-079fbed96cfb",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.75,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "HIGHLIGHTS_OPTIONAL_LANGUAGE"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.047743999999999995,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "e46c3739-d1a2-4b61-b41b-cdb8606e5600",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.5,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.011089,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "c0b208ba-9a42-4bba-baff-710225811abb",
+    "fingerprint_days": 1,
+    "live_atoms": 12,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "c3fa4248-dc23-46c9-9f34-87b3f3f4a25a",
+   "country": "India",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "c1bee8a8-94c5-482b-a0ba-4df8fd63a57f",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.943,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 4.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.143294,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "052d1074-1c91-4f9e-9a90-6a57dca961a4",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "NUMBER_NOT_IN_SOURCE"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.9,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.054548,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "c3fa4248-dc23-46c9-9f34-87b3f3f4a25a",
+    "fingerprint_days": 21,
+    "live_atoms": 123,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "fabcaf87-664a-4a31-999a-b0b899f21931",
+   "country": "India",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "dfe66f87-73ba-4952-8b98-ee41fa29feaa",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.846,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 4.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.079819,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "8a903f32-22de-464a-acbd-bcf34acc5d35",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "META_CUT"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.0,
+    "failure_codes": [
+     "ITINERARY_STILL_COMPRESSED"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.06123200000000001,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "fabcaf87-664a-4a31-999a-b0b899f21931",
+    "fingerprint_days": 9,
+    "live_atoms": 52,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "1a12a9a7-3669-417e-91fd-f05bb743378a",
+   "country": "Japan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "2185bb9d-e770-40d3-b24b-95634feb317c",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.037839,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "c7471bb7-ebf0-4878-ba1a-84f19a52711e",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.333,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.011555,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "1a12a9a7-3669-417e-91fd-f05bb743378a",
+    "fingerprint_days": 1,
+    "live_atoms": 10,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "40e147ec-f547-47bf-a0c5-232841399bff",
+   "country": "Japan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "10000290-50f1-4f4d-9c52-a34e07ec10dc",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": null,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 4.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.049322,
+    "days": [
+     1,
+     2
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "d061884e-0034-4393-9bc2-a1dd5b87c479",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": null,
+    "failure_codes": [
+     "DFS_INTENT_UNDERUSED"
+    ],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.024729,
+    "days": [
+     1,
+     2
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "40e147ec-f547-47bf-a0c5-232841399bff",
+    "fingerprint_days": 2,
+    "live_atoms": 12,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "456dee1b-849e-4736-97af-4d980e53d3cd",
+   "country": "Japan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "a09bea89-213c-442b-b207-28105a3022aa",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.043495,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "4a573317-e610-4d35-a34d-0fb3c62d73c6",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.5,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.025283,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "456dee1b-849e-4736-97af-4d980e53d3cd",
+    "fingerprint_days": 1,
+    "live_atoms": 13,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "6f72dde9-5359-49cc-b864-b7e059cb34a8",
+   "country": "Japan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "282f1986-0781-45b0-9c35-9b4a845b597a",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.75,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.056947,
+    "days": [
+     1,
+     2,
+     3
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "6831ecea-ef2f-408c-814f-6c4472be3fce",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.75,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.03582,
+    "days": [
+     1,
+     2,
+     3
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "6f72dde9-5359-49cc-b864-b7e059cb34a8",
+    "fingerprint_days": 3,
+    "live_atoms": 21,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "84896c9b-a57a-48fd-b073-1f86499eaa1f",
+   "country": "Japan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "c4526786-c41c-452d-be3e-13ab1e67b0b1",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.054403,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "ebb2f7da-b536-4189-9eea-34821d6f0a6e",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 1.0,
+    "failure_codes": [
+     "DFS_INTENT_UNDERUSED"
+    ],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.022052000000000002,
+    "days": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "84896c9b-a57a-48fd-b073-1f86499eaa1f",
+    "fingerprint_days": 1,
+    "live_atoms": 6,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "2b621cb5-1366-434f-a366-d474640f2a3f",
+   "country": "Laos",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "80b0e6f8-8c74-451b-a33c-1c13af2b5edc",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.091,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.055616,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "a2d98f55-cd1b-4adb-ae4e-2aa3ebacaff7",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.091,
+    "failure_codes": [
+     "FORBIDDEN_WORD"
+    ],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.012631999999999999,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "2b621cb5-1366-434f-a366-d474640f2a3f",
+    "fingerprint_days": 5,
+    "live_atoms": 17,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "56233353-30fb-4f00-a7b6-f5de9a9c086a",
+   "country": "Laos",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "3b998c36-3741-4c67-ab03-a49b35736696",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.917,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.077124,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "0db0c5c1-657b-4293-853f-9a89f53b56f4",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "META_CUT"
+    ],
+    "report_codes": [
+     "DAY_PLACE_MISMATCH",
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.917,
+    "failure_codes": [
+     "SEO_META_TOO_LONG",
+     "ITINERARY_STILL_COMPRESSED"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.041422,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "56233353-30fb-4f00-a7b6-f5de9a9c086a",
+    "fingerprint_days": 9,
+    "live_atoms": 58,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "a679995c-c205-4fbe-ba39-a7586789d464",
+   "country": "Laos",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "31a50b68-c1e1-454e-afe0-01f0238571cb",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.2,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.052645,
+    "days": [
+     1,
+     2
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "76e936c9-0769-4701-938f-e8f50586353e",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.2,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.017276,
+    "days": [
+     1,
+     2
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "a679995c-c205-4fbe-ba39-a7586789d464",
+    "fingerprint_days": 2,
+    "live_atoms": 14,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "66a2e97d-56c7-4d82-96be-69dac25cf1fc",
+   "country": "Mongolia",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "3bac5915-8700-4891-9b1b-de545eb746a6",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.667,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.052508,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "3f849964-dbf1-4b21-94a8-7d943f9e93e3",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [
+     "HIGHLIGHTS_TOO_GENERIC"
+    ],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.008558,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "66a2e97d-56c7-4d82-96be-69dac25cf1fc",
+    "fingerprint_days": 1,
+    "live_atoms": 3,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "ade2a433-b137-4cfb-bbd8-7c1626328f38",
+   "country": "Mongolia",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "89396b61-3913-4de3-a720-1c992d7c3ce4",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [
+     "DAY_PLACE_MISMATCH"
+    ],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "HIGHLIGHTS_OPTIONAL_LANGUAGE"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.059114,
+    "days": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "df972760-ef52-4a13-b19c-f421c206c30d",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "DAY_PLACE_MISMATCH",
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.015885,
+    "days": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "ade2a433-b137-4cfb-bbd8-7c1626328f38",
+    "fingerprint_days": 4,
+    "live_atoms": 12,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "2fa7570b-03c7-4647-b0a9-bc9af0e14d8e",
+   "country": "Nepal",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "d2dab57a-0a66-447e-acf7-e0bb11398df1",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.929,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.075941,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "dc674b33-788c-4cc8-b5d2-24ca3e912699",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.393,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.036757,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "2fa7570b-03c7-4647-b0a9-bc9af0e14d8e",
+    "fingerprint_days": 7,
+    "live_atoms": 48,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "3cfb7305-a38d-4e77-8d49-b872c0472050",
+   "country": "Nepal",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "381daae8-5e11-4b6b-af53-0c5733eab95a",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.333,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.035232,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "47473e5f-dbb6-494d-98e1-d756ca4a89be",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [
+     "HIGHLIGHTS_TOO_GENERIC"
+    ],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.011495,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "3cfb7305-a38d-4e77-8d49-b872c0472050",
+    "fingerprint_days": 1,
+    "live_atoms": 6,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "8c9e4c76-3cdc-44ce-90e3-96590119dde6",
+   "country": "Nepal",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "698f18b4-5f8b-4aff-8457-92b7dd3fbfe4",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.833,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.060824,
+    "days": [
+     1,
+     2
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "0af28c66-9ef8-4480-a0c4-b57450f3eab2",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE",
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.417,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "HIGHLIGHTS_OPTIONAL_LANGUAGE"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.046497,
+    "days": [
+     1,
+     2
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "8c9e4c76-3cdc-44ce-90e3-96590119dde6",
+    "fingerprint_days": 2,
+    "live_atoms": 10,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "a349bf09-a5da-4571-8567-7013d3216ecc",
+   "country": "Nepal",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "dc709ab1-3283-4265-a000-3cf13006a15c",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.845,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.14512399999999998,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "65165a24-848c-4aed-87ce-f872c1350e12",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.276,
+    "failure_codes": [
+     "FORBIDDEN_WORD"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 5,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.054987,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "a349bf09-a5da-4571-8567-7013d3216ecc",
+    "fingerprint_days": 22,
+    "live_atoms": 84,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "a356fe16-830e-4396-976d-49213c6499d2",
+   "country": "Nepal",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "dfb63d66-1332-4fe2-b955-f2852e20c2ba",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [
+     "META_CUT"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE",
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.941,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.091514,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "90c4ddb3-b86b-4006-875e-1e01ef815a9c",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE",
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.471,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 5,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.024064000000000002,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "a356fe16-830e-4396-976d-49213c6499d2",
+    "fingerprint_days": 15,
+    "live_atoms": 37,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "51048805-d3ee-4aed-9742-8c2054499871",
+   "country": "Pakistan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "6294de82-45ca-4bed-af11-d37c8d40f10c",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [
+     "DAY_*"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.966,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.15391899999999997,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "160c6bbb-4977-4b5f-bde2-4fec2c4a9818",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "DAY_*"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.483,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.031544,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "51048805-d3ee-4aed-9742-8c2054499871",
+    "fingerprint_days": 22,
+    "live_atoms": 81,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "7433d380-f810-4516-8493-37c8189f90f7",
+   "country": "Pakistan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "3472ea2f-c53a-43a2-bbe5-453ef9c7bf25",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": null,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.044457,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "bd8e4846-bfb5-4b17-9d28-cf9852f7d8fd",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": null,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.015758,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "7433d380-f810-4516-8493-37c8189f90f7",
+    "fingerprint_days": 7,
+    "live_atoms": 13,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "034f0e4d-9270-461a-915b-7eee1dfb987d",
+   "country": "Philippines",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "0a2c8618-d632-4ab7-b007-74f897202c57",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": null,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.05606100000000001,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "26796b85-698e-45e9-b2ac-1cb594643010",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "DAY_PLACE_MISMATCH",
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": null,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.033095,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "034f0e4d-9270-461a-915b-7eee1dfb987d",
+    "fingerprint_days": 10,
+    "live_atoms": 35,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "44578435-a24c-4aa8-9b4a-f5cd89a71d65",
+   "country": "Philippines",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "c941e9e8-7238-457d-8b7e-a67e6fe4a54c",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": null,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.032144,
+    "days": [
+     1,
+     2,
+     3
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "ec768f30-73ee-4555-9bc6-66fad6b07766",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": null,
+    "failure_codes": [
+     "ITINERARY_STILL_COMPRESSED"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.019328,
+    "days": [
+     1,
+     2,
+     3
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "44578435-a24c-4aa8-9b4a-f5cd89a71d65",
+    "fingerprint_days": 3,
+    "live_atoms": 15,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "9e66daf1-f7bd-4265-9e85-00edcdc6603b",
+   "country": "Philippines",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "bcf3b53f-45dd-4243-9951-7a2e30aafe4d",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.037874000000000005,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "8fded897-87be-4bf8-adc9-4e6a83c8dd53",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.011408,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "9e66daf1-f7bd-4265-9e85-00edcdc6603b",
+    "fingerprint_days": 5,
+    "live_atoms": 13,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "e2f28ac2-963c-4ffb-8769-28a8db417f5e",
+   "country": "South Korea",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "4c8e6e52-ef8e-45c2-a778-6856bad96036",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.9,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.066917,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "287abf73-a0eb-4e14-827c-5cd9e7542323",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.9,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.02939,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "e2f28ac2-963c-4ffb-8769-28a8db417f5e",
+    "fingerprint_days": 10,
+    "live_atoms": 28,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "ff413f0e-a256-4d27-825d-a34ac628a63e",
+   "country": "South Korea",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "44f03505-5cee-40ed-b161-ec0784c18227",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [
+     "DAY_*"
+    ],
+    "report_codes": [],
+    "figure_coverage": 0.875,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.05910199999999999,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "71b30b1f-c42a-4970-8b47-ed2a9dca62a2",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "DAY_*",
+     "NUMBER_NOT_IN_SOURCE"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.875,
+    "failure_codes": [
+     "FORBIDDEN_WORD"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.018037,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "ff413f0e-a256-4d27-825d-a34ac628a63e",
+    "fingerprint_days": 9,
+    "live_atoms": 39,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "2fbbe87d-f14a-4487-8884-07077703d706",
+   "country": "Sri Lanka",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "a56d1992-4602-4dc2-ac8a-230e83568dd0",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.045387,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "68eaa54e-22e4-4f9f-87e5-5f14bc495248",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "NUMBER_NOT_IN_SOURCE"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.015130999999999999,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "2fbbe87d-f14a-4487-8884-07077703d706",
+    "fingerprint_days": 1,
+    "live_atoms": 5,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "46781343-e63d-4818-b862-7ee4908d92e2",
+   "country": "Sri Lanka",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "f494e29a-85cc-4586-a047-0cff94212b74",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.667,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.03964299999999999,
+    "days": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "d5a06ab8-fa06-47a4-bf37-9dba5d51a317",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.014686,
+    "days": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "46781343-e63d-4818-b862-7ee4908d92e2",
+    "fingerprint_days": 4,
+    "live_atoms": 12,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "5dc33332-1126-43c6-83a7-62bdf472b6f6",
+   "country": "Sri Lanka",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "307b1d32-325f-4928-9318-4eafa030293d",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.5,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.078986,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "0e295949-ecfb-4ddc-b86d-2be84a6bcd54",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "DAY_PLACE_MISMATCH",
+     "NAME_NOT_IN_SOURCE",
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.5,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.069148,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "5dc33332-1126-43c6-83a7-62bdf472b6f6",
+    "fingerprint_days": 14,
+    "live_atoms": 29,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "881c3bca-a8b1-4cdc-b020-0847d5a07e6a",
+   "country": "Sri Lanka",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "e88b1133-1c27-4e65-8a7b-09d07460bb1a",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.875,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.112042,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "6754e53b-7b92-46d0-9a5a-dcd99922b850",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "NUMBER_NOT_IN_SOURCE"
+    ],
+    "report_codes": [],
+    "figure_coverage": 0.875,
+    "failure_codes": [
+     "HIGHLIGHTS_TOO_GENERIC",
+     "ITINERARY_STILL_COMPRESSED"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.047366,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "881c3bca-a8b1-4cdc-b020-0847d5a07e6a",
+    "fingerprint_days": 14,
+    "live_atoms": 44,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "913b0a3e-440d-4721-8294-95edc8dd9297",
+   "country": "Sri Lanka",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "cfbd6e7f-3d55-4f23-9ea3-1a29dedb84e0",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [
+     "DAY_PLACE_MISMATCH",
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.8,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 4.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.061652000000000005,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "790ccfa3-0259-4c3f-bc81-c71c70289f63",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "DAY_PLACE_MISMATCH"
+    ],
+    "figure_coverage": 0.2,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.019035,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "913b0a3e-440d-4721-8294-95edc8dd9297",
+    "fingerprint_days": 10,
+    "live_atoms": 18,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "a5078a8c-f169-4ae4-a230-5d56bea580ef",
+   "country": "Sri Lanka",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "f865ffc2-d68f-42fb-8ef6-5a8756f47981",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.5,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.046485,
+    "days": [
+     1,
+     2,
+     3
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "e393ff04-24c8-4987-92fd-65c5521d7205",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.0,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.018401999999999998,
+    "days": [
+     1,
+     2,
+     3
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "a5078a8c-f169-4ae4-a230-5d56bea580ef",
+    "fingerprint_days": 3,
+    "live_atoms": 13,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "18d05c80-63be-4c03-8533-ac3166afd3bc",
+   "country": "Taiwan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "c2522615-ddba-46e7-b5c1-d86a200535fa",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.769,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.052662,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "ea13e6ea-518e-4c0d-8337-d6350fc2253a",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.538,
+    "failure_codes": [
+     "FORBIDDEN_WORD"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 1,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.015295,
+    "days": [
+     1
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "18d05c80-63be-4c03-8533-ac3166afd3bc",
+    "fingerprint_days": 1,
+    "live_atoms": 2,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "c31ed889-1914-4057-bb28-853ceb885d07",
+   "country": "Taiwan",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "c56a2b4e-a323-461a-b1dc-179a4914cd95",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 0.75,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.062529,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "d3508dfe-6f31-4b93-8776-c4ca7be1c994",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.75,
+    "failure_codes": [
+     "FORBIDDEN_WORD"
+    ],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.01952,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "c31ed889-1914-4057-bb28-853ceb885d07",
+    "fingerprint_days": 9,
+    "live_atoms": 30,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "335c1a57-9e06-4e1c-8b89-22669993ab63",
+   "country": "Thailand",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "49808743-defe-49e5-b728-3692a9ed373d",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.096736,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "0484807b-1874-43c4-a71c-480db7e334bc",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "NUMBER_NOT_IN_SOURCE"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE"
+    ],
+    "figure_coverage": 0.619,
+    "failure_codes": [
+     "FORBIDDEN_WORD",
+     "META_TOO_SHORT",
+     "DFS_INTENT_UNDERUSED"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 2,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.031787,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "335c1a57-9e06-4e1c-8b89-22669993ab63",
+    "fingerprint_days": 12,
+    "live_atoms": 61,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "e55107e7-e4fe-4392-90d0-101071dcb73a",
+   "country": "Thailand",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "ae5c8122-5d57-4265-bc6d-0e0567d930f9",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [
+     "DAY_*"
+    ],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE",
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 1.0,
+    "failure_codes": [],
+    "brand_audit_status": "pass",
+    "brand_audit_codes": [],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 6.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.08791600000000001,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "46729490-c773-498a-af34-4fb2e734e957",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [],
+    "report_codes": [
+     "NAME_NOT_IN_SOURCE",
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 1.0,
+    "failure_codes": [
+     "FORBIDDEN_WORD",
+     "ITINERARY_STILL_COMPRESSED"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 7.0,
+    "brand_fit_rubric": "v1",
+    "score": 7.0,
+    "cost_usd": 0.050255,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "e55107e7-e4fe-4392-90d0-101071dcb73a",
+    "fingerprint_days": 14,
+    "live_atoms": 73,
+    "atoms_off_days": 0
+   }
+  },
+  {
+   "tour_id": "e90c950d-7354-43f7-99f8-ffe1ec8fd451",
+   "country": "Thailand",
+   "outcome": "published",
+   "master_status": "active",
+   "after": {
+    "version_id": "f1d0a8db-2cdb-42b4-8097-609d7735a20e",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v2",
+    "gate_codes": [],
+    "report_codes": [
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.714,
+    "failure_codes": [],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 10.0,
+    "brand_fit_rubric": "a1-voice-v2/1",
+    "score": 10.0,
+    "cost_usd": 0.107906,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "before": {
+    "version_id": "e7ba98d7-1768-42bc-828b-053da8f6d27e",
+    "status": "approved",
+    "review_status": null,
+    "writer_version": "v1",
+    "gate_codes": [
+     "META_CUT"
+    ],
+    "report_codes": [
+     "NUMBER_NOUN_MISMATCH"
+    ],
+    "figure_coverage": 0.571,
+    "failure_codes": [
+     "FORBIDDEN_WORD",
+     "SEO_META_TOO_LONG",
+     "ITINERARY_STILL_COMPRESSED"
+    ],
+    "brand_audit_status": "fixed",
+    "brand_audit_codes": [
+     "ITINERARY_MEAL_TIME_INVENTED"
+    ],
+    "brand_audit_report_only": [],
+    "grounding_found": 0,
+    "grounding_unsupported": 0,
+    "brand_fit": 8.0,
+    "brand_fit_rubric": "v1",
+    "score": 8.0,
+    "cost_usd": 0.036148,
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10
+    ],
+    "canonical_days": true
+   },
+   "atoms": {
+    "tour_id": "e90c950d-7354-43f7-99f8-ffe1ec8fd451",
+    "fingerprint_days": 10,
+    "live_atoms": 49,
+    "atoms_off_days": 0
+   }
+  }
+ ]
+}
