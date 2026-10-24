@@ -1,0 +1,29 @@
+{
+  "contract": "catalog.tour.lifecycle.v1",
+  "schema": "PurgeResult",
+  "expect": "valid",
+  "why": "TripPlanner's 200: what it purged, event ids and kinds only",
+  "payload": {
+    "ok": true,
+    "events": 1,
+    "event_ids": [
+      42
+    ],
+    "kinds": [
+      "retired"
+    ],
+    "purged": {
+      "tags": [
+        "tp-catalog"
+      ],
+      "paths": [
+        "/",
+        "/tours/[slug]",
+        "/destinations/[country]"
+      ],
+      "cdn_tags": [
+        "tp-catalog"
+      ]
+    }
+  }
+}

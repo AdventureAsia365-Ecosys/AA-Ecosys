@@ -7,6 +7,8 @@
   schema `catalog`), AA-Booking (quote, hold, trip case legs, B2B feed), AA-TripPlanner-Web (tour page, saved trips,
   hand-off), AA-Partner (offer lists, through `catalog.http.v1` and `booking.b2b.v1`), AA-CIS-Infra (grants, the
   nightly probe), the root repo (contracts).
+- **Amended:** A1, 23/10/2026 (AA-987, S249): TripPlanner cache purge notice fed from the outbox (section
+  "Amendments").
 - **Amends / Supersedes:** none. It keeps ADR 0007's rule that liveness is derived from columns, not stored (decision
   1), and adds the change record that rule did not cover (decision 4).
 - **Implements:** ADR 0001 decision 1 and ADR 0002 (CIS is the content system of record and the only writer);
@@ -273,7 +275,8 @@ changes a view, a grant or auth is reviewed by an agent before merge (DM-11.5).
 - **Let consumers detect retirement by diffing `catalog.v_tour`.** Rejected: they cannot tell 410 from 404 or say
   why, and the CRM would have to resync everything.
 - **Push webhooks from CIS to each app.** Rejected for now: the ecosystem pattern is outbox → pull → inbox
-  (ADR 0001, 0008); a tenant webhook can be fed from the same outbox later (Q7).
+  (ADR 0001, 0008); a tenant webhook can be fed from the same outbox later (Q7). Narrowed by amendment A1 (below): a signed
+  cache purge notice to TripPlanner, fed from this outbox, is allowed; the outbox stays the source.
 
 ## Questions and decisions (Nghiệp, S248 decision page)
 
@@ -292,3 +295,25 @@ Q1–Q10 were decided by Nghiệp on the S248 decision page (23/10/2026). Q11 ke
 | Q9 | `lifecycle_stage` (nothing writes it)? | Not a deletion signal. Kept for sales (`phasing_out`); T7 and TripPlanner switch to the served state | 1 |
 | Q10 | Is a tenant that uses the tour only through Slate / planning (no T2) warned? | Yes: every tenant with any derivative (subject, angle request, piece, publish-log row) | 2 |
 | Q11 (proposed, not yet decided) | Between a supersede and the publish of the new version's Master, is the key served? (added by this ADR; today the tour drops out of the catalog in that gap) | `paused`, reason `superseded_pending`, no notification; consumers treat it as temporary (decision 5 `paused` table: TripPlanner and SEO 404, not 410). The `publish` action of the new Master closes it with `restored`. Same question for a group whose versions are all `superseded`: retired (410) if it ever had a Master, no state (404) if not; alternative, a probe anomaly that L2 cleans up. Alternative for the gap: keep serving the old version until the new Master is published | 1, 2, 5, 6 |
+
+## Amendments
+
+### A1 (23/10/2026, AA-987, S249): a signed cache purge notice from the outbox to TripPlanner
+
+- **Why.** Decision 5 asks TripPlanner to answer 410 and drop a retired tour; pulling `catalog.v_tour_retired` alone
+  left it on the public site for up to 30 minutes (S248 measurement on Dev: tour page 410 after ~16 min, browse list
+  after ~30 min), because the tour page, the lists and the Vercel CDN copies of the browse BFF are cached for the
+  catalog TTL. TripPlanner has no scheduler that runs every minute (Vercel Hobby cron runs once a day), and a new
+  EventBridge schedule for a pull job would add an AWS resource for one consumer.
+- **Decision.** CIS delivers every row of `catalog.v_tour_lifecycle_outbox` to TripPlanner as an HTTP notice,
+  contract [`catalog.tour.lifecycle.v1`](../contracts/catalog.tour.lifecycle.v1.openapi.yaml): CIS job
+  `tripplanner_purge`, one job per event, idempotency key `tripplanner_purge:<event idempotency_key>` (shared.job is
+  the delivery inbox, contracts rules 3 and 4), enqueued after commit, by the export publish, and by a sweep of the
+  last 2 hours in the api ops sampler; signed with HMAC-SHA256 (`X-AA-Signature`, ±300 s), secret
+  `aa-cis/<env>/tripplanner-revalidate-hmac` = Vercel env `CATALOG_REVALIDATE_SECRET`. TripPlanner
+  (`POST /api/revalidate/catalog`) verifies it and drops its caches; it stores nothing, so a replay is harmless.
+- **What does not change.** The outbox stays the one source of the change record (decision 4) and the pull contract
+  for every consumer: the notice carries the outbox row as is, and TripPlanner still reads `catalog.v_tour_retired`
+  for the 410 and its reason. A lost or refused notice costs freshness only (the TTLs still bound the lag), never
+  correctness. AA-Booking and AA-Partner keep pulling. A tenant webhook (Q7) remains "later, from the outbox".
+- **Cost.** One Secrets Manager secret (about $0.40 a month); no other AWS resource.

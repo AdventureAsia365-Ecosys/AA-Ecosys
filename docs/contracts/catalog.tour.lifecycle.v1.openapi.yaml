@@ -1,0 +1,151 @@
+openapi: 3.1.0
+info:
+  title: catalog.tour.lifecycle.v1 (AA-CIS-App → AA-TripPlanner-Web, signed cache purge notice)
+  version: "1.0"
+  description: >-
+    CIS tells TripPlanner that a catalog key's served state changed (retired / paused / restored / superseded), so
+    TripPlanner drops every cache that could still show the old state: the tour page, the destination pages, the home
+    page and the Vercel CDN copies of the browse BFF (AA-987). Without it a retired tour stayed on the public site for
+    up to 30 minutes (the catalog TTLs). Each event in the body is one row of catalog.v_tour_lifecycle_outbox
+    (catalog.tour.v1.3, $defs tour_lifecycle_event), read by CIS from its own base table
+    gold_aa_internal.tour_lifecycle_event; the notice is a delivery of that outbox, not a second source of truth
+    (root ADR 0015, amendment of 23/10/2026). CIS sends one notice per event from the job `tripplanner_purge`
+    (idempotency key `tripplanner_purge:<event idempotency_key>`, shared.job is the delivery inbox; 4 attempts with
+    backoff; 2xx = delivered, 408 / 425 / 429 / 5xx / network = retried, any other 4xx = final). TripPlanner stores
+    nothing: every step drops a cache, so a replay or a retry gives the same state. Auth: HMAC-SHA256 over
+    `<t>.<raw body>` with a secret shared by CIS (Secrets Manager aa-cis/<env>/tripplanner-revalidate-hmac) and
+    TripPlanner (Vercel env CATALOG_REVALIDATE_SECRET), header `X-AA-Signature: t=<unix seconds>,v1=<hex digest>`,
+    constant-time compare, a timestamp more than 300 s away is refused. Both sides trim the secret. The route path
+    carries no major (a Next.js revalidation route, not a public API); the major is the body's `contract` field, and a
+    breaking change is a new `contract` value accepted in parallel, as in contracts rule 2. The body has no personal
+    data and no prices. The shared signature vector is pinned in AA-CIS-App
+    tests/unit/test_aa987_tripplanner_purge.py and AA-TripPlanner-Web frontend/lib/catalogPurge.test.ts.
+  x-aa-contract: catalog.tour.lifecycle.v1
+  x-aa-producer: AA-CIS-App
+  x-aa-consumers: [AA-TripPlanner-Web]
+  x-aa-issues: [AA-987, AA-986]
+servers:
+  - url: /api/revalidate
+security:
+  - aaSignature: []
+paths:
+  /catalog:
+    post:
+      operationId: purgeCatalogCaches
+      summary: Drop every TripPlanner cache that can show the old served state of the notice's tours
+      parameters:
+        - name: X-AA-Signature
+          in: header
+          required: true
+          description: "`t=<unix seconds>,v1=<hex HMAC-SHA256 of \"<t>.\" + raw body>`"
+          schema: {type: string, pattern: "^t=\\d+,v1=[0-9a-f]{64}$", maxLength: 200}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/LifecycleNotice"}
+      responses:
+        "200":
+          description: Purged (also for a replay)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PurgeResult"}
+        "400":
+          description: Body is not a catalog.tour.lifecycle.v1 notice (final for CIS)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PurgeError"}
+        "401":
+          description: Missing, wrong or stale signature (final for CIS)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PurgeError"}
+        "413":
+          description: Body over 64 KiB (final for CIS)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PurgeError"}
+        "502":
+          description: A purge step failed (CIS retries)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PurgeError"}
+        "503":
+          description: CATALOG_REVALIDATE_SECRET is not set (CIS retries)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PurgeError"}
+components:
+  securitySchemes:
+    aaSignature:
+      type: apiKey
+      in: header
+      name: X-AA-Signature
+      description: HMAC-SHA256 signature of `<t>.<raw body>` with the shared secret; ±300 s window.
+  schemas:
+    LifecycleNotice:
+      type: object
+      additionalProperties: false
+      required: [contract, events]
+      properties:
+        contract: {const: catalog.tour.lifecycle.v1}
+        events:
+          type: array
+          minItems: 1
+          maxItems: 100
+          description: CIS sends one event per notice today; TripPlanner accepts up to 100.
+          items: {$ref: "#/components/schemas/LifecycleEvent"}
+    LifecycleEvent:
+      title: catalog.v_tour_lifecycle_outbox row (same columns as catalog.tour.v1.3 $defs tour_lifecycle_event)
+      type: object
+      additionalProperties: false
+      required: [event_id, source_system, source_id, tour_id, event, reason, replaced_by_tour_id, occurred_at,
+                 idempotency_key]
+      properties:
+        event_id:
+          type: integer
+          minimum: 1
+          description: Outbox cursor (identity); not gap-free. TripPlanner logs it.
+        source_system: {const: cis}
+        source_id: {type: string, minLength: 1, maxLength: 64}
+        tour_id: {type: string, maxLength: 64, description: The version the event is about (a uuid in CIS).}
+        event: {enum: [retired, paused, restored, superseded]}
+        reason:
+          enum: [source_deleted, master_trashed, superseded_orphan, master_inactive, superseded_pending, replaced,
+                 restore, publish, activate, set_active]
+        replaced_by_tour_id:
+          type: [string, "null"]
+          maxLength: 64
+          description: Set exactly when event = superseded.
+        occurred_at: {type: string, format: date-time}
+        idempotency_key: {type: string, minLength: 1, maxLength: 300}
+    PurgeResult:
+      type: object
+      additionalProperties: false
+      required: [ok, events, event_ids, kinds, purged]
+      properties:
+        ok: {const: true}
+        events: {type: integer, minimum: 1}
+        event_ids:
+          type: array
+          items: {type: integer}
+        kinds:
+          type: array
+          items: {enum: [retired, paused, restored, superseded]}
+        purged:
+          type: object
+          additionalProperties: false
+          required: [tags, paths, cdn_tags]
+          properties:
+            tags: {type: array, items: {type: string}}
+            paths: {type: array, items: {type: string}}
+            cdn_tags: {type: array, items: {type: string}}
+    PurgeError:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          enum: [unauthorized, not_configured, too_large, invalid_json, invalid_body, unknown_contract, invalid_events,
+                 invalid_event_id, invalid_source_id, invalid_event, purge_failed]
+        step: {enum: [next, cdn]}

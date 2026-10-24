@@ -100,6 +100,12 @@ POLICY: dict[str, Policy] = {
         allowed_pii_classes=frozenset({"online_id"}),
         why="identity (iss, sub) and Content studio role only; never a CRM role, email or name",
     ),
+    # Signed cache purge notice (AA-987): served-state events only; no prices, no personal data.
+    "catalog.tour.lifecycle.v1": Policy(
+        forbidden_keys=frozenset({"supplier_net", "b2b_price", "price"}),
+        forbidden_patterns=(r"supplier_net",),
+        why="tour keys and served-state events only, no prices, no personal data",
+    ),
 }
 
 # The negative samples the design requires (AA-928 Done-when R case). rule = a forbidden key, or "pii:".
