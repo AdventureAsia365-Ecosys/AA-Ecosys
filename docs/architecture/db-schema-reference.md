@@ -1,15 +1,15 @@
 # AA-Ecosys DB Schema Reference (live dump)
 
-<!-- schema-fingerprint: bc2fe55b1bb47a1d23049b65b876b0ea07293ec50ba9b84481463e628ed9e2dd -->
+<!-- schema-fingerprint: 2548fe15ca13b076173c1c0cd6f6e2cd36d41e8b929b241ba4bf3ec2e48e6aca -->
 
-**Verified:** 2026-10-23 13:44 UTC — live catalog dump of the shared RDS (`aa-cis-dev-db`, `aa-cis/dev/rds`, acc2, us-west-1, PostgreSQL 15.17). Latest migration per owner: CIS **274**, TripPlanner **tp-018**, Booking **bk-021** (292 versions registered).
+**Verified:** 2026-10-24 10:33 UTC — live catalog dump of the shared RDS (`aa-cis-dev-db`, `aa-cis/dev/rds`, acc2, us-west-1, PostgreSQL 15.17). Latest migration per owner: CIS **274**, TripPlanner **tp-018**, Booking **bk-022** (302 versions registered).
 
 > **Generated file — do not edit by hand** (data standards DM-3.1). It is the single source of truth for table/column names, owners, grants and RLS across CIS, TripPlanner and Booking (one RDS, one schema per owner; ownership rules: `docs/database/schema-ownership.md`). Read it before introspecting columns. AA-CIS-Infra `.github/workflows/db-schema-dump.yml` regenerates it after every DB Migrate apply and every night (`db/schema_dump.py` in a one-off ECS task, then `db/gen_schema_reference.py`) and opens a PR here when the structure changed.
-> Source: AA-CIS-Infra DB Schema Dump (after DB Migrate apply of cis/274_tour_retired_outbox_tenant_notifications.sql (run 39963346374)), https://github.com/AdventureAsia365-Ecosys/AA-CIS-Infra/actions/runs/39963550910
+> Source: AA-CIS-Infra DB Schema Dump (after DB Migrate apply of crm/011_crm_l1_console.sql (run 40086257081)), https://github.com/AdventureAsia365-Ecosys/AA-CIS-Infra/actions/runs/40086353427
 
 **ERD:** [one Mermaid diagram per schema](erd/README.md) (keys and foreign keys), generated from the same dump by AA-CIS-Infra `db/gen_erd.py` (AA-894).
 
-**Totals:** 16 schemas (4 empty: acp_gold_output, acp_silver_s2, acp_silver_s3, acp_silver_s4), 199 tables/views, 461 indexes, 204 FKs, 69 RLS policy(ies), 24 functions, 13 enums. Database size 928 MB, max_connections 181. RLS catalogue guard: 1 unallowlisted violation(s) (see *RLS catalogue guard (X2)*). DM-6.1 tags: 94 tagged column(s), 4 untagged candidate(s).
+**Totals:** 16 schemas (4 empty: acp_gold_output, acp_silver_s2, acp_silver_s3, acp_silver_s4), 242 tables/views, 574 indexes, 277 FKs, 110 RLS policy(ies), 63 functions, 13 enums. Database size 981.2 MB, max_connections 181. RLS catalogue guard: 1 unallowlisted violation(s) (see *RLS catalogue guard (X2)*). DM-6.1 tags: 119 tagged column(s), 13 untagged candidate(s).
 
 ## Conventions
 - Column format: `name type` — `NN` suffix = NOT NULL. Types are `format_type()` output (`character varying(64)`, `text[]`, `vector(1024)`, enums schema-qualified). A ` · pii:<class>` / ` · conf:<class>` suffix is the column's data standards DM-6.1 tag (its comment starts with it), `(also …)` = further tags named in the same comment; see *Personal and confidential data tags (DM-6.1)*.
@@ -21,21 +21,21 @@
 
 | schema | owner | objects | size | grants (USAGE / CREATE) |
 |---|---|---|---|---|
-| `acp_contract` | cis_owner | 18 | 235.3 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
+| `acp_contract` | cis_owner | 18 | 247.4 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
 | `acp_deliver` | cis_owner | 1 | 40 kB | aa_app_user: USAGE; cis_app: USAGE |
 | `acp_gold_output` | cis_owner | 0 |  | cis_app: USAGE |
 | `acp_shared` | cis_owner | 21 | 14.8 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
 | `acp_silver_s2` | cis_owner | 0 |  | cis_app: USAGE |
 | `acp_silver_s3` | cis_owner | 0 |  | cis_app: USAGE |
 | `acp_silver_s4` | cis_owner | 0 |  | cis_app: USAGE |
-| `booking` | bk_owner | 45 | 6.3 MB | booking: USAGE; cis_app: USAGE |
+| `booking` | bk_owner | 47 | 6.5 MB | booking: USAGE; cis_app: USAGE |
 | `catalog` | cis_owner | 21 |  | aa_app_user: USAGE; booking: USAGE; catalog_owner: USAGE; tripplanner: USAGE |
-| `crm` | crm_owner | 5 | 496 kB | crm_ai_reader: USAGE; crm_app: USAGE; crm_eraser: USAGE; crm_insights: USAGE; crm_support_reader: USAGE |
-| `geo` | cis_owner | 17 | 52.7 MB | catalog_owner: USAGE; cis_app: USAGE |
+| `crm` | crm_owner | 46 | 2.8 MB | crm_ai_reader: USAGE; crm_app: USAGE; crm_eraser: USAGE; crm_insights: USAGE; crm_support_reader: USAGE |
+| `geo` | cis_owner | 17 | 63.5 MB | catalog_owner: USAGE; cis_app: USAGE |
 | `gold_aa_internal` | cis_owner | 6 | 7.5 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
 | `public` | pg_database_owner | 1 | 24 kB | PUBLIC: USAGE |
-| `shared` | cis_owner | 47 | 571 MB | aa_app_user: USAGE; bk_owner: USAGE; catalog_owner: USAGE; cis_app: USAGE; crm_owner: USAGE; tp_owner: USAGE; tripplanner: USAGE |
-| `silver_aa_internal` | cis_owner | 7 | 23.3 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
+| `shared` | cis_owner | 47 | 596.5 MB | aa_app_user: USAGE; bk_owner: USAGE; catalog_owner: USAGE; cis_app: USAGE; crm_owner: USAGE; tp_owner: USAGE; tripplanner: USAGE |
+| `silver_aa_internal` | cis_owner | 7 | 24 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
 | `tripplanner` | tp_owner | 10 | 792 kB | booking: USAGE; cis_app: USAGE; tripplanner: USAGE |
 
 ## `acp_contract` (18 objects)
@@ -61,7 +61,7 @@ failed_count integer
 - check `atom_decompose_jobs_status_check`: CHECK ((status = ANY (ARRAY['submitted'::text, 'in_progress'::text, 'completed'::text, 'failed'::text])))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_contract.atom_embedding` (table, ~7298 rows, 118.4 MB)
+### `acp_contract.atom_embedding` (table, ~7728 rows, 126.6 MB)
 ```
 atom_id text NN
 view text NN
@@ -74,7 +74,7 @@ created_at timestamp with time zone NN
 - check `atom_embedding_view_check`: CHECK ((view = ANY (ARRAY['place'::text, 'place_action'::text])))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_contract.atom_matches` (table, ~10119 rows, 3.3 MB)
+### `acp_contract.atom_matches` (table, ~10947 rows, 3.4 MB)
 ```
 id bigint NN
 query text NN
@@ -92,7 +92,7 @@ matched_at timestamp with time zone NN
 - check `atom_matches_matched_by_check`: CHECK ((matched_by = ANY (ARRAY['vector'::text, 'tokens'::text])))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_contract.atom_ranking` (table, ~107748 rows, 66 MB)
+### `acp_contract.atom_ranking` (table, ~105606 rows, 67.1 MB)
 ```
 tour_id uuid NN
 segment_id text NN
@@ -120,7 +120,7 @@ superseded_at timestamp with time zone
 - check `atom_ranking_excluded_reason_check`: CHECK ((excluded_reason = ANY (ARRAY['transit'::text, 'unnamed_place'::text])))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_contract.atom_segment` (table, ~12496 rows, 3.8 MB)
+### `acp_contract.atom_segment` (table, ~13606 rows, 3.8 MB)
 ```
 segment_id text NN
 canonical_place text NN
@@ -136,7 +136,7 @@ contested_computed_at timestamp with time zone
 - grant `aa_app_user`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_contract.atom_segment_alias` (table, ~410 rows, 352 kB)
+### `acp_contract.atom_segment_alias` (table, ~438 rows, 352 kB)
 ```
 segment_id_old text NN
 segment_id_canonical text NN
@@ -147,7 +147,7 @@ merged_at timestamp with time zone NN
 - grant `aa_app_user`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_contract.atom_segment_member` (table, ~23987 rows, 5.4 MB)
+### `acp_contract.atom_segment_member` (table, ~26280 rows, 5.5 MB)
 ```
 segment_id text NN
 atom_id text NN
@@ -159,7 +159,7 @@ is_alias boolean NN
 - grant `aa_app_user`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_contract.atomize_day_fingerprint` (table, ~10062 rows, 1.9 MB)
+### `acp_contract.atomize_day_fingerprint` (table, ~10617 rows, 2.1 MB)
 ```
 tenant_tour_version_id uuid NN
 day_number integer NN
@@ -181,7 +181,7 @@ updated_at timestamp with time zone NN
 - index `hub_pkey` PRIMARY KEY: UNIQUE btree (hub_id)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_contract.question_embedding` (table, ~847 rows, 8.1 MB)
+### `acp_contract.question_embedding` (table, ~847 rows, 8.2 MB)
 ```
 question_hash text NN
 question_text text NN
@@ -279,7 +279,7 @@ researched_at timestamp with time zone NN
 - index `segment_research_log_pkey` PRIMARY KEY: UNIQUE btree (canonical_place, market)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_contract.tour_atoms` (table, ~32019 rows, 19.8 MB)
+### `acp_contract.tour_atoms` (table, ~35737 rows, 22.1 MB)
 ```
 atom_id text NN
 tour_id uuid NN
@@ -603,7 +603,7 @@ labelled_at timestamp with time zone NN
 - check `content_piece_label_reason_check`: CHECK (((reason IS NULL) OR (length(reason) <= 4000)))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_shared.debate_brand_fit_cache` (table, ~528 rows, 440 kB)
+### `acp_shared.debate_brand_fit_cache` (table, ~414 rows, 504 kB)
 ```
 id uuid NN
 tenant_id uuid NN
@@ -804,7 +804,7 @@ created_at timestamp with time zone NN
    FROM acp_shared.quarter_plan qp
   WHERE ((qp.plan_id = quarter_plan_version.plan_id) AND (qp.tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid))))`
 
-### `acp_shared.subject` (table, ~416 rows, 600 kB)
+### `acp_shared.subject` (table, ~409 rows, 600 kB)
 ```
 subject_id uuid NN
 tenant_id uuid NN
@@ -876,9 +876,9 @@ created_at timestamp with time zone NN
 - policy `tenant_isolation` (PERMISSIVE ALL TO aa_app_user): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
 - policy `year_plan_cis_app_all` (PERMISSIVE ALL TO cis_app): USING `true` WITH CHECK `true`
 
-## `booking` (45 objects)
+## `booking` (47 objects)
 
-### `booking.audit_logs` (table, ~54 rows, 176 kB)
+### `booking.audit_logs` (table, ~108 rows, 184 kB)
 ```
 id uuid NN
 actor_type text NN
@@ -932,8 +932,9 @@ cancelled_at timestamp with time zone NN
 - check `b2b_cancellations_key_chk`: CHECK (((length(idempotency_key) >= 8) AND (length(idempotency_key) <= 200)))
 - check `b2b_cancellations_reason_chk`: CHECK ((reason_code = ANY (ARRAY['client_cancelled'::text, 'agency_cancelled'::text, 'departure_cancelled'::text, 'other'::text])))
 - grant `booking`: INSERT, SELECT
+- trigger `b2b_cancellations_outbox`: AFTER INSERT ON booking.b2b_cancellations FOR EACH ROW EXECUTE FUNCTION booking.b2b_cancellations_outbox()
 
-### `booking.b2b_hold_lines` (table, 64 kB)
+### `booking.b2b_hold_lines` (table, ~12 rows, 72 kB)
 ```
 hold_id uuid NN
 line_no smallint NN
@@ -943,17 +944,25 @@ seats smallint NN
 held_as text NN
 status text NN
 updated_at timestamp with time zone NN
+answer_due_at timestamp with time zone
+answered_at timestamp with time zone
+answered_by text
+decline_code text
 ```
 - owner `bk_owner`
 - index `b2b_hold_lines_departure_idx`: btree (departure_id) WHERE (departure_id IS NOT NULL)
+- index `b2b_hold_lines_on_request_idx`: btree (answer_due_at) WHERE (status = 'on_request'::text)
 - index `b2b_hold_lines_pkey` PRIMARY KEY: UNIQUE btree (hold_id, line_no)
 - index `b2b_hold_lines_ref_uq`: UNIQUE btree (hold_id, line_ref)
+- check `b2b_hold_lines_answer_chk`: CHECK ((((answered_by IS NULL) OR (answered_at IS NOT NULL)) AND ((answered_at IS NULL) OR (status = ANY (ARRAY['confirmed'::text, 'declined'::text, 'cancelled'::text])))))
+- check `b2b_hold_lines_decline_chk`: CHECK ((((status = 'declined'::text) = (decline_code IS NOT NULL)) AND ((decline_code IS NULL) OR (decline_code = ANY (ARRAY['sold_out'::text, 'supplier_unavailable'::text, 'minimum_not_met'::text, 'other'::text])))))
 - check `b2b_hold_lines_held_as_chk`: CHECK ((held_as = ANY (ARRAY['available'::text, 'on_request'::text])))
 - check `b2b_hold_lines_no_chk`: CHECK (((line_no >= 1) AND (line_no <= 200)))
 - check `b2b_hold_lines_ref_chk`: CHECK (((length(line_ref) >= 1) AND (length(line_ref) <= 64)))
 - check `b2b_hold_lines_seats_chk`: CHECK (((seats >= 0) AND (seats <= 120)))
 - check `b2b_hold_lines_status_chk`: CHECK ((status = ANY (ARRAY['available'::text, 'on_request'::text, 'confirmed'::text, 'declined'::text, 'cancelled'::text])))
 - grant `booking`: INSERT, SELECT, UPDATE
+- trigger `b2b_hold_lines_outbox`: AFTER UPDATE OF status ON booking.b2b_hold_lines FOR EACH ROW EXECUTE FUNCTION booking.b2b_hold_lines_outbox()
 - trigger `b2b_hold_lines_set_updated_at`: BEFORE UPDATE ON booking.b2b_hold_lines FOR EACH ROW EXECUTE FUNCTION booking.set_updated_at()
 
 ### `booking.b2b_holds` (table, ~2 rows, 128 kB)
@@ -1000,6 +1009,7 @@ cancellation_policy_id uuid
 - check `b2b_holds_released_chk`: CHECK (((status = 'released'::text) = (released_at IS NOT NULL)))
 - check `b2b_holds_status_chk`: CHECK ((status = ANY (ARRAY['active'::text, 'confirmed'::text, 'expired'::text, 'released'::text])))
 - grant `booking`: INSERT, SELECT, UPDATE
+- trigger `b2b_holds_outbox`: AFTER UPDATE OF status, extended_count ON booking.b2b_holds FOR EACH ROW EXECUTE FUNCTION booking.b2b_holds_outbox()
 - trigger `b2b_holds_set_updated_at`: BEFORE UPDATE ON booking.b2b_holds FOR EACH ROW EXECUTE FUNCTION booking.set_updated_at()
 
 ### `booking.b2b_partners` (table, 64 kB)
@@ -1202,6 +1212,26 @@ code text NN
 - grant `booking`: DELETE, INSERT, SELECT, UPDATE
 - trigger `customers_set_updated_at`: BEFORE UPDATE ON booking.customers FOR EACH ROW EXECUTE FUNCTION booking.set_updated_at()
 
+### `booking.departure_incidents` (table, 32 kB)
+```
+id uuid NN
+departure_id uuid NN
+incident_code text NN
+flagged_by text NN
+flagged_at timestamp with time zone NN
+cleared_by text
+cleared_at timestamp with time zone
+```
+- owner `bk_owner`
+- index `departure_incidents_departure_idx`: btree (departure_id, flagged_at DESC)
+- index `departure_incidents_open_uq`: UNIQUE btree (departure_id) WHERE (cleared_at IS NULL)
+- index `departure_incidents_pkey` PRIMARY KEY: UNIQUE btree (id)
+- check `departure_incidents_cleared_chk`: CHECK ((((cleared_at IS NULL) = (cleared_by IS NULL)) AND ((cleared_at IS NULL) OR (cleared_at >= flagged_at))))
+- check `departure_incidents_code_chk`: CHECK ((incident_code = ANY (ARRAY['weather'::text, 'road'::text, 'health'::text, 'political'::text, 'supplier'::text, 'other'::text])))
+- grant `booking`: INSERT, SELECT
+- column grant `booking`: UPDATE (cleared_at, cleared_by)
+- trigger `departure_incidents_outbox`: AFTER INSERT OR UPDATE OF cleared_at ON booking.departure_incidents FOR EACH ROW EXECUTE FUNCTION booking.departure_incidents_outbox()
+
 ### `booking.departures` (table, 64 kB)
 ```
 id uuid NN
@@ -1222,6 +1252,7 @@ updated_at timestamp with time zone NN
 - check `departures_capacity_chk`: CHECK (((capacity >= 0) AND (capacity <= 1000)))
 - check `departures_status_chk`: CHECK ((status = ANY (ARRAY['scheduled'::text, 'guaranteed'::text, 'cancelled'::text])))
 - grant `booking`: INSERT, SELECT, UPDATE
+- trigger `departures_outbox`: AFTER UPDATE OF status ON booking.departures FOR EACH ROW EXECUTE FUNCTION booking.departures_outbox()
 - trigger `departures_set_updated_at`: BEFORE UPDATE ON booking.departures FOR EACH ROW EXECUTE FUNCTION booking.set_updated_at()
 
 ### `booking.fx_rates` (table, 48 kB)
@@ -1311,7 +1342,7 @@ updated_at timestamp with time zone NN
 - grant `booking`: INSERT, SELECT, UPDATE
 - trigger `hotels_set_updated_at`: BEFORE UPDATE ON booking.hotels FOR EACH ROW EXECUTE FUNCTION booking.set_updated_at()
 
-### `booking.inbox_cursor` (table, ~1 rows, 64 kB)
+### `booking.inbox_cursor` (table, ~2 rows, 64 kB)
 ```
 source text NN
 contract text NN
@@ -1325,7 +1356,7 @@ updated_at timestamp with time zone NN
 - grant `booking`: DELETE, INSERT, SELECT, UPDATE
 - trigger `inbox_cursor_set_updated_at`: BEFORE UPDATE ON booking.inbox_cursor FOR EACH ROW EXECUTE FUNCTION booking.set_updated_at()
 
-### `booking.inbox_events` (table, ~5 rows, 128 kB)
+### `booking.inbox_events` (table, ~5 rows, 136 kB)
 ```
 id uuid NN
 source text NN
@@ -1350,7 +1381,7 @@ redacted_at timestamp with time zone
 - check `inbox_events_status_chk`: CHECK ((status = ANY (ARRAY['received'::text, 'processed'::text, 'parked'::text, 'failed'::text])))
 - grant `booking`: DELETE, INSERT, SELECT, UPDATE
 
-### `booking.job` (table, ~6881 rows, 3.5 MB)
+### `booking.job` (table, ~6899 rows, 3.5 MB)
 ```
 id uuid NN
 kind text NN
@@ -1423,7 +1454,7 @@ read_at timestamp with time zone NN
 - index `notification_reads_staff_idx`: btree (cis_user_id, read_at DESC)
 - grant `booking`: DELETE, INSERT, SELECT
 
-### `booking.notifications` (table, ~1 rows, 64 kB)
+### `booking.notifications` (table, ~1 rows, 96 kB)
 ```
 id uuid NN
 recipient_type text NN
@@ -1445,6 +1476,43 @@ recipient_ref text
 - check `notifications_customer_recipient_chk`: CHECK (((recipient_type <> 'customer'::text) OR (recipient_id IS NOT NULL)))
 - check `notifications_recipient_type_chk`: CHECK ((recipient_type = ANY (ARRAY['customer'::text, 'staff'::text])))
 - grant `booking`: DELETE, INSERT, SELECT, UPDATE
+
+### `booking.outbox` (table, 96 kB)
+```
+id bigint NN
+event_id uuid NN
+stream text NN
+event_type text NN
+partner_id uuid
+hold_id uuid
+booking_id uuid
+line_ref text
+departure_id uuid
+incident_code text
+decline_code text
+occurred_at timestamp with time zone NN
+feed_seq bigint
+sequenced_at timestamp with time zone
+```
+- owner `bk_owner`
+- index `outbox_event_id_uq`: UNIQUE btree (event_id)
+- index `outbox_feed_seq_uq`: UNIQUE btree (feed_seq)
+- index `outbox_partner_feed_idx`: btree (partner_id, feed_seq) WHERE (feed_seq IS NOT NULL)
+- index `outbox_pending_idx`: btree (id) WHERE (feed_seq IS NULL)
+- index `outbox_pkey` PRIMARY KEY: UNIQUE btree (id)
+- check `outbox_b2b_partner_chk`: CHECK (((stream <> 'b2b'::text) OR (partner_id IS NOT NULL)))
+- check `outbox_booking_chk`: CHECK (((event_type <> 'booking.cancelled'::text) OR (booking_id IS NOT NULL)))
+- check `outbox_decline_chk`: CHECK ((((event_type = 'line.declined'::text) = (decline_code IS NOT NULL)) AND ((decline_code IS NULL) OR (decline_code = ANY (ARRAY['sold_out'::text, 'supplier_unavailable'::text, 'minimum_not_met'::text, 'other'::text])))))
+- check `outbox_departure_chk`: CHECK (((event_type !~~ 'departure.%'::text) OR (departure_id IS NOT NULL)))
+- check `outbox_event_type_chk`: CHECK ((event_type = ANY (ARRAY['hold.expired'::text, 'hold.extended'::text, 'line.confirmed'::text, 'line.declined'::text, 'booking.cancelled'::text, 'departure.guaranteed'::text, 'departure.cancelled'::text, 'departure.incident'::text, 'departure.incident_cleared'::text])))
+- check `outbox_hold_chk`: CHECK (((event_type = ANY (ARRAY['hold.expired'::text, 'hold.extended'::text, 'line.confirmed'::text, 'line.declined'::text, 'booking.cancelled'::text])) = (hold_id IS NOT NULL)))
+- check `outbox_incident_chk`: CHECK ((((event_type = ANY (ARRAY['departure.incident'::text, 'departure.incident_cleared'::text])) = (incident_code IS NOT NULL)) AND ((incident_code IS NULL) OR (incident_code = ANY (ARRAY['weather'::text, 'road'::text, 'health'::text, 'political'::text, 'supplier'::text, 'other'::text])))))
+- check `outbox_line_chk`: CHECK ((((event_type = ANY (ARRAY['line.confirmed'::text, 'line.declined'::text])) = (line_ref IS NOT NULL)) AND ((line_ref IS NULL) OR ((length(line_ref) >= 1) AND (length(line_ref) <= 64)))))
+- check `outbox_sequenced_chk`: CHECK (((feed_seq IS NULL) = (sequenced_at IS NULL)))
+- check `outbox_stream_chk`: CHECK ((stream = 'b2b'::text))
+- grant `booking`: SELECT
+- column grant `booking`: INSERT (booking_id, decline_code, departure_id, event_type, hold_id, incident_code, line_ref, partner_id, stream)
+- column grant `booking`: UPDATE (feed_seq, sequenced_at)
 
 ### `booking.policy_approvals` (table, ~6 rows, 80 kB)
 ```
@@ -2417,9 +2485,547 @@ build_id uuid
 - grant `booking`: SELECT
 - grant `tripplanner`: SELECT
 
-## `crm` (5 objects)
+## `crm` (46 objects)
 
-### `crm.job` (table, ~604 rows, 416 kB)
+### `crm.audit_event` (partitioned table, 0 B)
+```
+event_id uuid NN
+tenant_id uuid NN
+at timestamp with time zone NN
+actor_kind text NN
+actor_ref text NN
+action text NN
+outcome text NN
+object_kind text NN
+object_id text
+fields text[] NN
+reason text
+request_id text
+created_at timestamp with time zone NN
+created_by text NN
+object_ids text[] NN
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `audit_event_object_idx`: btree (tenant_id, object_kind, object_id)
+- index `audit_event_pkey` PRIMARY KEY: UNIQUE btree (event_id, at)
+- index `audit_event_tenant_at_idx`: btree (tenant_id, at DESC)
+- check `audit_event_action_chk`: CHECK ((action ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_actor_kind_chk`: CHECK ((actor_kind = ANY (ARRAY['user'::text, 'traveler'::text, 'ai_agent'::text, 'aa_ops'::text, 'aa_staff'::text, 'support'::text, 'breakglass'::text, 'system'::text])))
+- check `audit_event_actor_ref_chk`: CHECK ((actor_ref ~ '^[A-Za-z0-9:_-]{1,80}$'::text))
+- check `audit_event_fields_chk`: CHECK (((cardinality(fields) <= 32) AND (array_to_string(fields, ','::text, '!'::text) ~ '^([a-z][a-z0-9_]{0,62}(,|$))*$'::text)))
+- check `audit_event_object_id_chk`: CHECK (((object_id IS NULL) OR (object_id ~ '^[A-Za-z0-9:_-]{1,80}$'::text)))
+- check `audit_event_object_ids_chk`: CHECK (((cardinality(object_ids) <= 200) AND (array_to_string(object_ids, ','::text, '!'::text) ~ '^([A-Za-z0-9:_-]{1,80}(,|$))*$'::text)))
+- check `audit_event_object_kind_chk`: CHECK ((object_kind ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_outcome_chk`: CHECK ((outcome = ANY (ARRAY['allowed'::text, 'denied'::text])))
+- check `audit_event_reason_chk`: CHECK (((reason IS NULL) OR (reason ~ '^[a-z][a-z0-9_]{0,63}$'::text)))
+- check `audit_event_request_id_chk`: CHECK (((request_id IS NULL) OR (request_id ~ '^[A-Za-z0-9._:-]{1,128}$'::text)))
+- grant `crm_app`: INSERT, SELECT
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `audit_event_append_only`: BEFORE DELETE OR UPDATE ON crm.audit_event FOR EACH ROW EXECUTE FUNCTION crm.reject_append_only_change()
+- trigger `audit_event_check_at`: BEFORE INSERT ON crm.audit_event FOR EACH ROW EXECUTE FUNCTION crm.audit_event_check_at()
+- trigger `audit_event_no_truncate`: BEFORE TRUNCATE ON crm.audit_event FOR EACH STATEMENT EXECUTE FUNCTION crm.reject_append_only_change()
+
+### `crm.audit_event_legacy` (table, ~114 rows, 136 kB)
+```
+event_id uuid NN
+tenant_id uuid NN
+at timestamp with time zone NN
+actor_kind text NN
+actor_ref text NN
+action text NN
+outcome text NN
+object_kind text NN
+object_id text
+fields text[] NN
+reason text
+request_id text
+created_at timestamp with time zone NN
+created_by text NN
+object_ids text[] NN
+```
+- owner `crm_owner` · RLS on + FORCE · partition
+- index `audit_event_legacy_object_idx`: btree (tenant_id, object_kind, object_id)
+- index `audit_event_legacy_pkey` PRIMARY KEY: UNIQUE btree (event_id, at)
+- index `audit_event_legacy_tenant_at_idx`: btree (tenant_id, at DESC)
+- check `audit_event_action_chk`: CHECK ((action ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_actor_kind_chk`: CHECK ((actor_kind = ANY (ARRAY['user'::text, 'traveler'::text, 'ai_agent'::text, 'aa_ops'::text, 'aa_staff'::text, 'support'::text, 'breakglass'::text, 'system'::text])))
+- check `audit_event_actor_ref_chk`: CHECK ((actor_ref ~ '^[A-Za-z0-9:_-]{1,80}$'::text))
+- check `audit_event_fields_chk`: CHECK (((cardinality(fields) <= 32) AND (array_to_string(fields, ','::text, '!'::text) ~ '^([a-z][a-z0-9_]{0,62}(,|$))*$'::text)))
+- check `audit_event_object_id_chk`: CHECK (((object_id IS NULL) OR (object_id ~ '^[A-Za-z0-9:_-]{1,80}$'::text)))
+- check `audit_event_object_ids_chk`: CHECK (((cardinality(object_ids) <= 200) AND (array_to_string(object_ids, ','::text, '!'::text) ~ '^([A-Za-z0-9:_-]{1,80}(,|$))*$'::text)))
+- check `audit_event_object_kind_chk`: CHECK ((object_kind ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_outcome_chk`: CHECK ((outcome = ANY (ARRAY['allowed'::text, 'denied'::text])))
+- check `audit_event_reason_chk`: CHECK (((reason IS NULL) OR (reason ~ '^[a-z][a-z0-9_]{0,63}$'::text)))
+- check `audit_event_request_id_chk`: CHECK (((request_id IS NULL) OR (request_id ~ '^[A-Za-z0-9._:-]{1,128}$'::text)))
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `audit_event_append_only`: BEFORE DELETE OR UPDATE ON crm.audit_event_legacy FOR EACH ROW EXECUTE FUNCTION crm.reject_append_only_change()
+- trigger `audit_event_check_at`: BEFORE INSERT ON crm.audit_event_legacy FOR EACH ROW EXECUTE FUNCTION crm.audit_event_check_at()
+- trigger `audit_event_no_truncate`: BEFORE TRUNCATE ON crm.audit_event_legacy FOR EACH STATEMENT EXECUTE FUNCTION crm.reject_append_only_change()
+
+### `crm.audit_event_p202611` (table, 32 kB)
+```
+event_id uuid NN
+tenant_id uuid NN
+at timestamp with time zone NN
+actor_kind text NN
+actor_ref text NN
+action text NN
+outcome text NN
+object_kind text NN
+object_id text
+fields text[] NN
+reason text
+request_id text
+created_at timestamp with time zone NN
+created_by text NN
+object_ids text[] NN
+```
+- owner `crm_owner` · RLS on + FORCE · partition
+- index `audit_event_p202611_pkey` PRIMARY KEY: UNIQUE btree (event_id, at)
+- index `audit_event_p202611_tenant_id_at_idx`: btree (tenant_id, at DESC)
+- index `audit_event_p202611_tenant_id_object_kind_object_id_idx`: btree (tenant_id, object_kind, object_id)
+- check `audit_event_action_chk`: CHECK ((action ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_actor_kind_chk`: CHECK ((actor_kind = ANY (ARRAY['user'::text, 'traveler'::text, 'ai_agent'::text, 'aa_ops'::text, 'aa_staff'::text, 'support'::text, 'breakglass'::text, 'system'::text])))
+- check `audit_event_actor_ref_chk`: CHECK ((actor_ref ~ '^[A-Za-z0-9:_-]{1,80}$'::text))
+- check `audit_event_fields_chk`: CHECK (((cardinality(fields) <= 32) AND (array_to_string(fields, ','::text, '!'::text) ~ '^([a-z][a-z0-9_]{0,62}(,|$))*$'::text)))
+- check `audit_event_object_id_chk`: CHECK (((object_id IS NULL) OR (object_id ~ '^[A-Za-z0-9:_-]{1,80}$'::text)))
+- check `audit_event_object_ids_chk`: CHECK (((cardinality(object_ids) <= 200) AND (array_to_string(object_ids, ','::text, '!'::text) ~ '^([A-Za-z0-9:_-]{1,80}(,|$))*$'::text)))
+- check `audit_event_object_kind_chk`: CHECK ((object_kind ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_outcome_chk`: CHECK ((outcome = ANY (ARRAY['allowed'::text, 'denied'::text])))
+- check `audit_event_reason_chk`: CHECK (((reason IS NULL) OR (reason ~ '^[a-z][a-z0-9_]{0,63}$'::text)))
+- check `audit_event_request_id_chk`: CHECK (((request_id IS NULL) OR (request_id ~ '^[A-Za-z0-9._:-]{1,128}$'::text)))
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `audit_event_append_only`: BEFORE DELETE OR UPDATE ON crm.audit_event_p202611 FOR EACH ROW EXECUTE FUNCTION crm.reject_append_only_change()
+- trigger `audit_event_check_at`: BEFORE INSERT ON crm.audit_event_p202611 FOR EACH ROW EXECUTE FUNCTION crm.audit_event_check_at()
+- trigger `audit_event_no_truncate`: BEFORE TRUNCATE ON crm.audit_event_p202611 FOR EACH STATEMENT EXECUTE FUNCTION crm.reject_append_only_change()
+
+### `crm.audit_event_p202612` (table, 32 kB)
+```
+event_id uuid NN
+tenant_id uuid NN
+at timestamp with time zone NN
+actor_kind text NN
+actor_ref text NN
+action text NN
+outcome text NN
+object_kind text NN
+object_id text
+fields text[] NN
+reason text
+request_id text
+created_at timestamp with time zone NN
+created_by text NN
+object_ids text[] NN
+```
+- owner `crm_owner` · RLS on + FORCE · partition
+- index `audit_event_p202612_pkey` PRIMARY KEY: UNIQUE btree (event_id, at)
+- index `audit_event_p202612_tenant_id_at_idx`: btree (tenant_id, at DESC)
+- index `audit_event_p202612_tenant_id_object_kind_object_id_idx`: btree (tenant_id, object_kind, object_id)
+- check `audit_event_action_chk`: CHECK ((action ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_actor_kind_chk`: CHECK ((actor_kind = ANY (ARRAY['user'::text, 'traveler'::text, 'ai_agent'::text, 'aa_ops'::text, 'aa_staff'::text, 'support'::text, 'breakglass'::text, 'system'::text])))
+- check `audit_event_actor_ref_chk`: CHECK ((actor_ref ~ '^[A-Za-z0-9:_-]{1,80}$'::text))
+- check `audit_event_fields_chk`: CHECK (((cardinality(fields) <= 32) AND (array_to_string(fields, ','::text, '!'::text) ~ '^([a-z][a-z0-9_]{0,62}(,|$))*$'::text)))
+- check `audit_event_object_id_chk`: CHECK (((object_id IS NULL) OR (object_id ~ '^[A-Za-z0-9:_-]{1,80}$'::text)))
+- check `audit_event_object_ids_chk`: CHECK (((cardinality(object_ids) <= 200) AND (array_to_string(object_ids, ','::text, '!'::text) ~ '^([A-Za-z0-9:_-]{1,80}(,|$))*$'::text)))
+- check `audit_event_object_kind_chk`: CHECK ((object_kind ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_outcome_chk`: CHECK ((outcome = ANY (ARRAY['allowed'::text, 'denied'::text])))
+- check `audit_event_reason_chk`: CHECK (((reason IS NULL) OR (reason ~ '^[a-z][a-z0-9_]{0,63}$'::text)))
+- check `audit_event_request_id_chk`: CHECK (((request_id IS NULL) OR (request_id ~ '^[A-Za-z0-9._:-]{1,128}$'::text)))
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `audit_event_append_only`: BEFORE DELETE OR UPDATE ON crm.audit_event_p202612 FOR EACH ROW EXECUTE FUNCTION crm.reject_append_only_change()
+- trigger `audit_event_check_at`: BEFORE INSERT ON crm.audit_event_p202612 FOR EACH ROW EXECUTE FUNCTION crm.audit_event_check_at()
+- trigger `audit_event_no_truncate`: BEFORE TRUNCATE ON crm.audit_event_p202612 FOR EACH STATEMENT EXECUTE FUNCTION crm.reject_append_only_change()
+
+### `crm.audit_event_p202701` (table, 32 kB)
+```
+event_id uuid NN
+tenant_id uuid NN
+at timestamp with time zone NN
+actor_kind text NN
+actor_ref text NN
+action text NN
+outcome text NN
+object_kind text NN
+object_id text
+fields text[] NN
+reason text
+request_id text
+created_at timestamp with time zone NN
+created_by text NN
+object_ids text[] NN
+```
+- owner `crm_owner` · RLS on + FORCE · partition
+- index `audit_event_p202701_pkey` PRIMARY KEY: UNIQUE btree (event_id, at)
+- index `audit_event_p202701_tenant_id_at_idx`: btree (tenant_id, at DESC)
+- index `audit_event_p202701_tenant_id_object_kind_object_id_idx`: btree (tenant_id, object_kind, object_id)
+- check `audit_event_action_chk`: CHECK ((action ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_actor_kind_chk`: CHECK ((actor_kind = ANY (ARRAY['user'::text, 'traveler'::text, 'ai_agent'::text, 'aa_ops'::text, 'aa_staff'::text, 'support'::text, 'breakglass'::text, 'system'::text])))
+- check `audit_event_actor_ref_chk`: CHECK ((actor_ref ~ '^[A-Za-z0-9:_-]{1,80}$'::text))
+- check `audit_event_fields_chk`: CHECK (((cardinality(fields) <= 32) AND (array_to_string(fields, ','::text, '!'::text) ~ '^([a-z][a-z0-9_]{0,62}(,|$))*$'::text)))
+- check `audit_event_object_id_chk`: CHECK (((object_id IS NULL) OR (object_id ~ '^[A-Za-z0-9:_-]{1,80}$'::text)))
+- check `audit_event_object_ids_chk`: CHECK (((cardinality(object_ids) <= 200) AND (array_to_string(object_ids, ','::text, '!'::text) ~ '^([A-Za-z0-9:_-]{1,80}(,|$))*$'::text)))
+- check `audit_event_object_kind_chk`: CHECK ((object_kind ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `audit_event_outcome_chk`: CHECK ((outcome = ANY (ARRAY['allowed'::text, 'denied'::text])))
+- check `audit_event_reason_chk`: CHECK (((reason IS NULL) OR (reason ~ '^[a-z][a-z0-9_]{0,63}$'::text)))
+- check `audit_event_request_id_chk`: CHECK (((request_id IS NULL) OR (request_id ~ '^[A-Za-z0-9._:-]{1,128}$'::text)))
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `audit_event_append_only`: BEFORE DELETE OR UPDATE ON crm.audit_event_p202701 FOR EACH ROW EXECUTE FUNCTION crm.reject_append_only_change()
+- trigger `audit_event_check_at`: BEFORE INSERT ON crm.audit_event_p202701 FOR EACH ROW EXECUTE FUNCTION crm.audit_event_check_at()
+- trigger `audit_event_no_truncate`: BEFORE TRUNCATE ON crm.audit_event_p202701 FOR EACH STATEMENT EXECUTE FUNCTION crm.reject_append_only_change()
+
+### `crm.audit_export_manifest` (table, 64 kB)
+```
+manifest_id uuid NN
+tenant_id uuid NN
+seq bigint NN
+period_start timestamp with time zone NN
+period_end timestamp with time zone NN
+event_count integer NN
+content_sha256 text NN
+prev_manifest_sha256 text NN
+manifest_sha256 text NN
+object_key text NN
+object_sha256 text NN
+format_version smallint NN
+created_at timestamp with time zone NN
+created_by text NN
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `audit_export_manifest_period_uq`: UNIQUE btree (tenant_id, period_start)
+- index `audit_export_manifest_pkey` PRIMARY KEY: UNIQUE btree (manifest_id)
+- index `audit_export_manifest_seq_uq`: UNIQUE btree (tenant_id, seq)
+- check `audit_export_manifest_count_chk`: CHECK ((event_count >= 0))
+- check `audit_export_manifest_format_chk`: CHECK ((format_version = 1))
+- check `audit_export_manifest_hashes_chk`: CHECK (((content_sha256 ~ '^[0-9a-f]{64}$'::text) AND (prev_manifest_sha256 ~ '^[0-9a-f]{64}$'::text) AND (manifest_sha256 ~ '^[0-9a-f]{64}$'::text) AND (object_sha256 ~ '^[0-9a-f]{64}$'::text)))
+- check `audit_export_manifest_key_chk`: CHECK (((object_key ~~ (('audit/v1/tenants/'::text || (tenant_id)::text) || '/%'::text)) AND (object_key ~ '^audit/v1/tenants/[0-9a-f-]{36}/[0-9]{4}/[0-9]{2}/[0-9]{2}/[0-9]{4}Z-[0-9]{10}\.jsonl$'::text)))
+- check `audit_export_manifest_period_chk`: CHECK (((period_end > period_start) AND (period_start = (date_trunc('hour'::text, (period_start AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text)) AND (period_end = (date_trunc('hour'::text, (period_end AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text))))
+- check `audit_export_manifest_seq_chk`: CHECK ((seq >= 1))
+- grant `crm_app`: INSERT, SELECT
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `audit_export_manifest_append_only`: BEFORE DELETE OR UPDATE ON crm.audit_export_manifest FOR EACH ROW EXECUTE FUNCTION crm.reject_append_only_change()
+- trigger `audit_export_manifest_chain`: BEFORE INSERT ON crm.audit_export_manifest FOR EACH ROW EXECUTE FUNCTION crm.audit_manifest_chain()
+- trigger `audit_export_manifest_no_truncate`: BEFORE TRUNCATE ON crm.audit_export_manifest FOR EACH STATEMENT EXECUTE FUNCTION crm.reject_append_only_change()
+
+### `crm.audit_export_tenant` (table, 24 kB)
+```
+tenant_id uuid NN
+exported_until timestamp with time zone NN
+verified_until timestamp with time zone
+last_seq bigint NN
+created_at timestamp with time zone NN
+updated_at timestamp with time zone NN
+```
+- owner `crm_owner` · RLS on
+- index `audit_export_tenant_pkey` PRIMARY KEY: UNIQUE btree (tenant_id)
+- check `audit_export_tenant_hour_chk`: CHECK (((exported_until = (date_trunc('hour'::text, (exported_until AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text)) AND ((verified_until IS NULL) OR (verified_until = (date_trunc('hour'::text, (verified_until AT TIME ZONE 'UTC'::text)) AT TIME ZONE 'UTC'::text)))))
+- check `audit_export_tenant_seq_chk`: CHECK ((last_seq >= 0))
+- check `audit_export_tenant_verified_chk`: CHECK (((verified_until IS NULL) OR (verified_until <= exported_until)))
+- grant `crm_app`: SELECT
+- column grant `crm_app`: INSERT (tenant_id)
+- column grant `crm_app`: INSERT, UPDATE (exported_until)
+- column grant `crm_app`: UPDATE (last_seq)
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `audit_export_tenant_set_updated_at`: BEFORE UPDATE ON crm.audit_export_tenant FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.consent` (table, 48 kB)
+```
+consent_id uuid NN
+tenant_id uuid NN
+traveler_id uuid NN
+purpose text NN
+value boolean NN
+at timestamp with time zone NN
+source text NN
+submission_id uuid
+notice_version text
+created_at timestamp with time zone NN
+created_by text NN
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `consent_pkey` PRIMARY KEY: UNIQUE btree (consent_id)
+- index `consent_traveler_idx`: btree (traveler_id, purpose, at DESC)
+- check `consent_notice_chk`: CHECK (((notice_version IS NULL) OR (notice_version ~ '^[a-z0-9_.-]{1,40}$'::text)))
+- check `consent_purpose_chk`: CHECK ((purpose = ANY (ARRAY['contact'::text, 'marketing'::text, 'health_data'::text, 'ops_release'::text, 'ai_processing'::text, 'terms'::text])))
+- check `consent_source_chk`: CHECK ((source = ANY (ARRAY['form'::text, 'portal'::text, 'agent_recorded'::text, 'import'::text])))
+- grant `crm_app`: INSERT, SELECT
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `consent_append_only`: BEFORE DELETE OR UPDATE ON crm.consent FOR EACH ROW EXECUTE FUNCTION crm.erasable_append_only()
+- trigger `consent_no_truncate`: BEFORE TRUNCATE ON crm.consent FOR EACH STATEMENT EXECUTE FUNCTION crm.erasable_append_only()
+
+### `crm.dispatch_queue` (table, 32 kB)
+```
+dispatch_id uuid NN
+tenant_id uuid NN
+traveler_id uuid NN
+trip_id uuid
+channel text NN
+purpose text NN
+origin text NN
+message_ref uuid
+not_before timestamp with time zone NN
+status text NN
+gate_result text
+attempts smallint NN
+decided_at timestamp with time zone
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `dispatch_queue_due_idx`: btree (tenant_id, not_before) WHERE (status = 'queued'::text)
+- index `dispatch_queue_pkey` PRIMARY KEY: UNIQUE btree (dispatch_id)
+- index `dispatch_queue_traveler_idx`: btree (traveler_id)
+- check `dispatch_queue_attempts_chk`: CHECK (((attempts >= 0) AND (attempts <= 100)))
+- check `dispatch_queue_channel_chk`: CHECK ((channel = ANY (ARRAY['email'::text, 'sms'::text, 'whatsapp'::text])))
+- check `dispatch_queue_gate_chk`: CHECK ((((status = 'queued'::text) = (gate_result IS NULL)) AND ((gate_result IS NULL) OR (gate_result = ANY (ARRAY['sent'::text, 'archived'::text, 'traveler_trashed'::text, 'trip_trashed'::text, 'no_consent'::text, 'no_sender'::text, 'undone'::text]))) AND ((status = 'queued'::text) = (decided_at IS NULL))))
+- check `dispatch_queue_origin_chk`: CHECK ((origin = ANY (ARRAY['user_action'::text, 'workflow'::text, 'system'::text])))
+- check `dispatch_queue_purpose_chk`: CHECK ((purpose = ANY (ARRAY['transactional'::text, 'marketing'::text])))
+- check `dispatch_queue_status_chk`: CHECK ((status = ANY (ARRAY['queued'::text, 'held'::text, 'sent'::text, 'dropped'::text, 'cancelled'::text])))
+- check `dispatch_queue_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `dispatch_queue_hold_guard`: BEFORE DELETE OR UPDATE ON crm.dispatch_queue FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('trip_id', 'traveler_id')
+- trigger `dispatch_queue_set_updated_at`: BEFORE UPDATE ON crm.dispatch_queue FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `dispatch_queue_status_transition`: BEFORE UPDATE OF status ON crm.dispatch_queue FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.document` (table, 40 kB)
+```
+document_id uuid NN
+tenant_id uuid NN
+trip_id uuid
+traveler_id uuid
+kind text NN
+s3_key text NN
+sha256 bytea NN
+size_bytes bigint NN
+content_type text NN
+filename_enc bytea NN · pii:free_text
+visible_to_travelers boolean NN
+write_only boolean NN
+uploaded_by_kind text NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `document_pkey` PRIMARY KEY: UNIQUE btree (document_id)
+- index `document_s3_key_uq`: UNIQUE btree (s3_key)
+- index `document_traveler_idx`: btree (traveler_id) WHERE (traveler_id IS NOT NULL)
+- index `document_trip_idx`: btree (trip_id) WHERE (trip_id IS NOT NULL)
+- check `document_content_type_chk`: CHECK ((content_type = ANY (ARRAY['application/pdf'::text, 'image/jpeg'::text, 'image/png'::text, 'image/webp'::text, 'image/heic'::text])))
+- check `document_filename_chk`: CHECK ((octet_length(filename_enc) >= 30))
+- check `document_kind_chk`: CHECK ((kind = ANY (ARRAY['passport_scan'::text, 'waiver_pdf'::text, 'terms_pdf'::text, 'ticket'::text, 'voucher'::text, 'invoice_pdf'::text, 'supplier_confirmation'::text, 'other'::text])))
+- check `document_s3_key_chk`: CHECK ((s3_key = ((('tenants/'::text || (tenant_id)::text) || '/documents/'::text) || (document_id)::text)))
+- check `document_sha256_chk`: CHECK ((octet_length(sha256) = 32))
+- check `document_size_chk`: CHECK (((size_bytes >= 1) AND (size_bytes <= 10485760)))
+- check `document_subject_chk`: CHECK (((trip_id IS NOT NULL) OR (traveler_id IS NOT NULL)))
+- check `document_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- check `document_uploader_chk`: CHECK ((uploaded_by_kind = ANY (ARRAY['member'::text, 'traveler'::text, 'aa_booking'::text])))
+- check `document_write_only_chk`: CHECK ((((kind <> 'passport_scan'::text) OR write_only) AND (NOT (write_only AND visible_to_travelers))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `document_hold_guard`: BEFORE DELETE OR UPDATE ON crm.document FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('trip_id', 'traveler_id', 's3_key', 'sha256', 'filename_enc')
+- trigger `document_set_updated_at`: BEFORE UPDATE ON crm.document FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.erasure_request` (table, 24 kB)
+```
+request_id uuid NN
+tenant_id uuid NN
+scope text NN
+subject_id uuid NN
+status text NN
+requested_by text NN
+confirmed_by text
+dry_run_counts jsonb NN
+export_waived boolean NN
+export_object_key text
+export_sha256 text
+export_expires_at timestamp with time zone
+export_downloaded_at timestamp with time zone
+executed_at timestamp with time zone
+keys_destroyed_at timestamp with time zone
+backup_purge_by date
+receipt jsonb NN
+failure_class text
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+purpose text NN
+owner_accepted_at timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `erasure_request_open_tenant_uq`: UNIQUE btree (tenant_id) WHERE ((scope = 'tenant'::text) AND (status = ANY (ARRAY['requested'::text, 'export_ready'::text, 'erasing'::text, 'failed'::text])))
+- index `erasure_request_pkey` PRIMARY KEY: UNIQUE btree (request_id)
+- check `erasure_request_actor_chk`: CHECK (((requested_by ~ '^[A-Za-z0-9:_-]{1,80}$'::text) AND ((confirmed_by IS NULL) OR (confirmed_by ~ '^[A-Za-z0-9:_-]{1,80}$'::text))))
+- check `erasure_request_counts_chk`: CHECK (((jsonb_typeof(dry_run_counts) = 'object'::text) AND (octet_length((dry_run_counts)::text) <= 4096) AND (jsonb_typeof(receipt) = 'object'::text) AND (octet_length((receipt)::text) <= 8192)))
+- check `erasure_request_done_chk`: CHECK (((status = 'erased'::text) = (executed_at IS NOT NULL)))
+- check `erasure_request_export_chk`: CHECK ((((export_object_key IS NULL) = (export_sha256 IS NULL)) AND ((export_object_key IS NULL) = (export_expires_at IS NULL)) AND ((export_object_key IS NULL) OR (export_object_key ~ '^exports/tenants/[0-9a-f-]{36}/[0-9a-f-]{36}\.jsonl\.enc$'::text)) AND ((export_sha256 IS NULL) OR (export_sha256 ~ '^[0-9a-f]{64}$'::text)) AND (NOT (export_waived AND (export_object_key IS NOT NULL)))))
+- check `erasure_request_failure_chk`: CHECK (((failure_class IS NULL) OR (failure_class ~ '^[A-Za-z][A-Za-z0-9_]{0,63}$'::text)))
+- check `erasure_request_purpose_chk`: CHECK (((purpose = ANY (ARRAY['offboard'::text, 'export_only'::text])) AND ((purpose = 'offboard'::text) OR (scope = 'tenant'::text))))
+- check `erasure_request_scope_chk`: CHECK (((scope = ANY (ARRAY['traveler'::text, 'tenant'::text])) AND ((scope <> 'tenant'::text) OR (subject_id = tenant_id))))
+- check `erasure_request_status_chk`: CHECK ((status = ANY (ARRAY['requested'::text, 'export_ready'::text, 'erasing'::text, 'erased'::text, 'cancelled'::text, 'failed'::text])))
+- check `erasure_request_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `erasure_request_owner_confirm`: BEFORE INSERT OR UPDATE ON crm.erasure_request FOR EACH ROW EXECUTE FUNCTION crm.guard_erasure_request_owner_confirm()
+- trigger `erasure_request_set_updated_at`: BEFORE UPDATE ON crm.erasure_request FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `erasure_request_status_transition`: BEFORE UPDATE OF status ON crm.erasure_request FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.form_definition` (table, 48 kB)
+```
+form_definition_id uuid NN
+tenant_id uuid NN
+stage text NN
+version integer NN
+schema_key text NN
+schema jsonb NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `form_definition_pkey` PRIMARY KEY: UNIQUE btree (form_definition_id)
+- index `form_definition_version_uq`: UNIQUE btree (tenant_id, stage, version)
+- check `form_definition_schema_chk`: CHECK (((jsonb_typeof(schema) = 'object'::text) AND (octet_length((schema)::text) <= 65536)))
+- check `form_definition_schema_key_chk`: CHECK ((schema_key ~ '^[a-z][a-z0-9_.]{0,39}$'::text))
+- check `form_definition_stage_chk`: CHECK ((stage = ANY (ARRAY['s1'::text, 's2'::text, 's3'::text])))
+- check `form_definition_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- check `form_definition_version_chk`: CHECK (((version >= 1) AND (version <= 100000)))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `form_definition_set_updated_at`: BEFORE UPDATE ON crm.form_definition FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.form_submission` (table, 112 kB)
+```
+submission_id uuid NN
+tenant_id uuid NN
+intake_form_id uuid NN
+stage text NN
+schema_key text NN
+payload_enc bytea · pii:contact
+idempotency_key text NN
+hidden_answers_dropped integer NN
+status text NN
+outcome text
+failure_class text
+trip_id uuid
+traveler_id uuid
+processed_at timestamp with time zone
+redact_after timestamp with time zone NN
+payload_redacted_at timestamp with time zone
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `form_submission_idempotency_uq`: UNIQUE btree (tenant_id, idempotency_key)
+- index `form_submission_pkey` PRIMARY KEY: UNIQUE btree (submission_id)
+- index `form_submission_redact_idx`: btree (redact_after) WHERE (payload_redacted_at IS NULL)
+- index `form_submission_trip_idx`: btree (trip_id) WHERE (trip_id IS NOT NULL)
+- check `form_submission_dropped_chk`: CHECK (((hidden_answers_dropped >= 0) AND (hidden_answers_dropped <= 1000)))
+- check `form_submission_failure_chk`: CHECK (((failure_class IS NULL) OR (failure_class ~ '^[A-Za-z][A-Za-z0-9_]{0,63}$'::text)))
+- check `form_submission_idempotency_chk`: CHECK ((idempotency_key ~ '^[A-Za-z0-9:_-]{8,80}$'::text))
+- check `form_submission_outcome_chk`: CHECK ((((status = 'processed'::text) = (outcome IS NOT NULL)) AND ((outcome IS NULL) OR (outcome = ANY (ARRAY['created'::text, 'attached'::text])))))
+- check `form_submission_payload_chk`: CHECK ((((payload_enc IS NOT NULL) AND (octet_length(payload_enc) >= 30)) OR (payload_redacted_at IS NOT NULL)))
+- check `form_submission_schema_key_chk`: CHECK ((schema_key ~ '^[a-z][a-z0-9_.]{0,39}$'::text))
+- check `form_submission_stage_chk`: CHECK ((stage = ANY (ARRAY['s1'::text, 's2'::text, 's3'::text])))
+- check `form_submission_status_chk`: CHECK ((status = ANY (ARRAY['received'::text, 'processed'::text, 'failed'::text])))
+- check `form_submission_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `form_submission_hold_guard`: BEFORE DELETE OR UPDATE ON crm.form_submission FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('trip_id', 'traveler_id', 'payload_enc')
+- trigger `form_submission_set_updated_at`: BEFORE UPDATE ON crm.form_submission FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `form_submission_status_transition`: BEFORE UPDATE OF status ON crm.form_submission FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.intake_form` (table, 48 kB)
+```
+intake_form_id uuid NN
+tenant_id uuid NN
+public_key text NN
+label text NN
+form_definition_id uuid NN
+allowed_origins text[] NN
+honeypot_field text NN
+default_owner_member_id uuid
+lead_source text NN
+privacy_notice_url text
+status text NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `intake_form_pkey` PRIMARY KEY: UNIQUE btree (intake_form_id)
+- index `intake_form_public_key_uq`: UNIQUE btree (public_key)
+- check `intake_form_honeypot_chk`: CHECK ((honeypot_field ~ '^[a-z][a-z_]{2,30}$'::text))
+- check `intake_form_label_chk`: CHECK ((((length(btrim(label)) >= 1) AND (length(btrim(label)) <= 80)) AND (label = btrim(label))))
+- check `intake_form_lead_source_chk`: CHECK ((lead_source ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `intake_form_origins_chk`: CHECK (((cardinality(allowed_origins) <= 10) AND (array_to_string(allowed_origins, ' '::text, '!'::text) ~ '^(https://[a-z0-9.-]+(:[0-9]{1,5})?( |$))*$'::text)))
+- check `intake_form_privacy_url_chk`: CHECK (((privacy_notice_url IS NULL) OR ((privacy_notice_url ~ '^https://[^\s]+$'::text) AND (length(privacy_notice_url) <= 500))))
+- check `intake_form_public_key_chk`: CHECK ((public_key ~ '^[A-Za-z0-9_-]{20,64}$'::text))
+- check `intake_form_status_chk`: CHECK ((status = ANY (ARRAY['active'::text, 'disabled'::text])))
+- check `intake_form_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `intake_form_public_lookup` (PERMISSIVE SELECT TO crm_app): USING `((status = 'active'::text) AND (deleted_at IS NULL) AND (public_key = NULLIF(current_setting('app.intake_key'::text, true), ''::text)))`
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `intake_form_set_updated_at`: BEFORE UPDATE ON crm.intake_form FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `intake_form_status_transition`: BEFORE UPDATE OF status ON crm.intake_form FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.integration_credential` (table, 24 kB)
+```
+integration_credential_id uuid NN
+tenant_id uuid NN
+provider text NN
+account_ref text · pii:contact
+secret_enc bytea NN · conf:credential
+status text NN
+failure_class text
+last_checked_at timestamp with time zone
+last_ok_at timestamp with time zone
+last_test_at timestamp with time zone
+last_test_result text
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `integration_credential_pkey` PRIMARY KEY: UNIQUE btree (integration_credential_id)
+- index `integration_credential_provider_uq`: UNIQUE btree (tenant_id, provider)
+- check `integration_credential_account_ref_chk`: CHECK (((account_ref IS NULL) OR ((length(account_ref) >= 1) AND (length(account_ref) <= 320))))
+- check `integration_credential_failure_chk`: CHECK (((failure_class IS NULL) OR (failure_class = ANY (ARRAY['auth_revoked'::text, 'permission_missing'::text, 'vendor_rejected'::text, 'rate_limited'::text, 'unreachable'::text]))))
+- check `integration_credential_failure_state_chk`: CHECK (((failure_class IS NULL) OR (status = ANY (ARRAY['needs_attention'::text, 'disconnected'::text]))))
+- check `integration_credential_provider_chk`: CHECK ((provider = ANY (ARRAY['twilio'::text, 'stripe_key'::text, 'stripe_webhook_secret'::text, 'google'::text, 'microsoft'::text, 'smtp'::text, 'esign'::text])))
+- check `integration_credential_secret_chk`: CHECK (((octet_length(secret_enc) >= 30) AND (octet_length(secret_enc) <= 16384)))
+- check `integration_credential_status_chk`: CHECK ((status = ANY (ARRAY['not_set_up'::text, 'connected'::text, 'needs_attention'::text, 'disconnected'::text])))
+- check `integration_credential_test_result_chk`: CHECK (((last_test_result IS NULL) OR (last_test_result = ANY (ARRAY['ok'::text, 'failed'::text]))))
+- check `integration_credential_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `integration_credential_set_updated_at`: BEFORE UPDATE ON crm.integration_credential FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `integration_credential_status_transition`: BEFORE UPDATE OF status ON crm.integration_credential FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.job` (table, ~1852 rows, 968 kB)
 ```
 id uuid NN
 kind text NN
@@ -2458,7 +3064,120 @@ finished_at timestamp with time zone
 - grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
 - trigger `job_set_updated_at`: BEFORE UPDATE ON crm.job FOR EACH ROW EXECUTE FUNCTION crm.job_set_updated_at()
 
-### `crm.member` (table, 32 kB)
+### `crm.legal_hold` (table, 24 kB)
+```
+hold_id uuid NN
+tenant_id uuid NN
+scope text NN
+subject_id uuid
+reason_code text NN
+status text NN
+placed_by text NN
+released_at timestamp with time zone
+released_by text
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `legal_hold_active_uq`: UNIQUE btree (tenant_id, scope, COALESCE(subject_id, '00000000-0000-0000-0000-000000000000'::uuid)) WHERE (status = 'active'::text)
+- index `legal_hold_pkey` PRIMARY KEY: UNIQUE btree (hold_id)
+- check `legal_hold_actor_chk`: CHECK (((placed_by ~ '^[A-Za-z0-9:_-]{1,80}$'::text) AND ((released_by IS NULL) OR (released_by ~ '^[A-Za-z0-9:_-]{1,80}$'::text))))
+- check `legal_hold_never_trashed_chk`: CHECK (((deleted_at IS NULL) AND (deleted_by IS NULL) AND (purge_after IS NULL)))
+- check `legal_hold_reason_chk`: CHECK ((reason_code = ANY (ARRAY['litigation'::text, 'regulator_request'::text, 'dispute'::text, 'insurance_claim'::text, 'other'::text])))
+- check `legal_hold_release_chk`: CHECK ((((status = 'released'::text) = (released_at IS NOT NULL)) AND ((released_at IS NULL) = (released_by IS NULL))))
+- check `legal_hold_scope_chk`: CHECK (((scope = ANY (ARRAY['tenant'::text, 'trip'::text, 'traveler'::text])) AND ((scope = 'tenant'::text) = (subject_id IS NULL))))
+- check `legal_hold_status_chk`: CHECK ((status = ANY (ARRAY['active'::text, 'released'::text])))
+- check `legal_hold_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `legal_hold_guard`: BEFORE UPDATE ON crm.legal_hold FOR EACH ROW EXECUTE FUNCTION crm.guard_legal_hold()
+- trigger `legal_hold_set_updated_at`: BEFORE UPDATE ON crm.legal_hold FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `legal_hold_status_transition`: BEFORE UPDATE OF status ON crm.legal_hold FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.lifecycle_run` (table, 24 kB)
+```
+run_id uuid NN
+tenant_id uuid NN
+kind text NN
+dry_run boolean NN
+counts jsonb NN
+created_at timestamp with time zone NN
+created_by text NN
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `lifecycle_run_pkey` PRIMARY KEY: UNIQUE btree (run_id)
+- index `lifecycle_run_tenant_idx`: btree (tenant_id, created_at DESC)
+- check `lifecycle_run_counts_chk`: CHECK (((jsonb_typeof(counts) = 'object'::text) AND (octet_length((counts)::text) <= 4096) AND (NOT jsonb_path_exists(counts, '$.*?(@.type() != "number")'::jsonpath))))
+- check `lifecycle_run_kind_chk`: CHECK ((kind ~ '^crm_[a-z0-9_]{1,40}$'::text))
+- grant `crm_app`: INSERT, SELECT
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `lifecycle_run_append_only`: BEFORE DELETE OR UPDATE ON crm.lifecycle_run FOR EACH ROW EXECUTE FUNCTION crm.reject_append_only_change()
+- trigger `lifecycle_run_no_truncate`: BEFORE TRUNCATE ON crm.lifecycle_run FOR EACH STATEMENT EXECUTE FUNCTION crm.reject_append_only_change()
+
+### `crm.llm_call` (table, 32 kB)
+```
+llm_call_id uuid NN
+tenant_id uuid NN
+at timestamp with time zone NN
+stage text NN
+role text NN
+provider text NN
+model text NN
+input_tokens integer NN
+output_tokens integer NN
+cost_usd_est numeric(12,6) NN
+latency_ms integer NN
+outcome text NN
+refusal_code text
+error_class text
+scrub_receipt jsonb NN
+created_at timestamp with time zone NN
+created_by text NN
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `llm_call_pkey` PRIMARY KEY: UNIQUE btree (llm_call_id)
+- index `llm_call_tenant_at_idx`: btree (tenant_id, at DESC)
+- index `llm_call_tenant_id_uq`: UNIQUE btree (tenant_id, llm_call_id)
+- check `llm_call_cost_chk`: CHECK ((cost_usd_est >= (0)::numeric))
+- check `llm_call_error_chk`: CHECK (((error_class IS NULL) OR (error_class ~ '^[A-Za-z][A-Za-z0-9_]{0,63}$'::text)))
+- check `llm_call_model_chk`: CHECK ((model ~ '^[A-Za-z0-9._:/-]{1,120}$'::text))
+- check `llm_call_outcome_chk`: CHECK ((outcome = ANY (ARRAY['ok'::text, 'refused'::text, 'error'::text])))
+- check `llm_call_provider_chk`: CHECK ((provider ~ '^[a-z][a-z0-9_]{0,30}$'::text))
+- check `llm_call_receipt_chk`: CHECK (((jsonb_typeof(scrub_receipt) = 'object'::text) AND (octet_length((scrub_receipt)::text) <= 2048)))
+- check `llm_call_receipt_keys_chk`: CHECK ((((scrub_receipt - ARRAY['scrubber'::text, 'detector'::text, 'entities'::text, 'counts'::text, 'passes'::text, 'known_persons'::text]) = '{}'::jsonb) AND ((NOT (scrub_receipt ? 'scrubber'::text)) OR ((jsonb_typeof((scrub_receipt -> 'scrubber'::text)) = 'string'::text) AND ((scrub_receipt ->> 'scrubber'::text) ~ '^[a-z0-9][a-z0-9.-]{0,19}$'::text))) AND ((NOT (scrub_receipt ? 'detector'::text)) OR ((jsonb_typeof((scrub_receipt -> 'detector'::text)) = 'string'::text) AND ((scrub_receipt ->> 'detector'::text) ~ '^[a-z0-9][a-z0-9_.-]{0,39}$'::text))) AND ((NOT (scrub_receipt ? 'entities'::text)) OR (jsonb_typeof((scrub_receipt -> 'entities'::text)) = 'number'::text)) AND ((NOT (scrub_receipt ? 'known_persons'::text)) OR (jsonb_typeof((scrub_receipt -> 'known_persons'::text)) = 'number'::text)) AND ((NOT (scrub_receipt ? 'counts'::text)) OR ((jsonb_typeof((scrub_receipt -> 'counts'::text)) = 'object'::text) AND (NOT jsonb_path_exists((scrub_receipt -> 'counts'::text), 'strict $.keyvalue()?(!(@."key" like_regex "^[A-Z][A-Z_]{1,23}$") || @."value".type() != "number")'::jsonpath)))) AND ((NOT (scrub_receipt ? 'passes'::text)) OR ((jsonb_typeof((scrub_receipt -> 'passes'::text)) = 'object'::text) AND (((scrub_receipt -> 'passes'::text) - ARRAY['known'::text, 'regex'::text, 'detector'::text]) = '{}'::jsonb) AND (NOT jsonb_path_exists((scrub_receipt -> 'passes'::text), 'strict $.keyvalue()?(@."value".type() != "number")'::jsonpath))))))
+- check `llm_call_refusal_chk`: CHECK ((((outcome = 'refused'::text) = (refusal_code IS NOT NULL)) AND ((refusal_code IS NULL) OR (refusal_code ~ '^[a-z][a-z0-9_]{0,39}$'::text))))
+- check `llm_call_role_chk`: CHECK ((role = ANY (ARRAY['writer'::text, 'judge'::text, 'validate'::text])))
+- check `llm_call_stage_chk`: CHECK ((stage ~ '^crm_[a-z0-9_]{1,40}$'::text))
+- check `llm_call_tokens_chk`: CHECK (((input_tokens >= 0) AND (output_tokens >= 0) AND (latency_ms >= 0)))
+- grant `crm_app`: INSERT, SELECT
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `llm_call_append_only`: BEFORE DELETE OR UPDATE ON crm.llm_call FOR EACH ROW EXECUTE FUNCTION crm.erasable_append_only()
+- trigger `llm_call_no_truncate`: BEFORE TRUNCATE ON crm.llm_call FOR EACH STATEMENT EXECUTE FUNCTION crm.erasable_append_only()
+
+### `crm.llm_usage_daily` (table, 16 kB)
+```
+day date NN
+stage text NN
+model text NN
+calls integer NN
+failed_calls integer NN
+input_tokens bigint NN
+output_tokens bigint NN
+cost_usd numeric(14,6) NN
+updated_at timestamp with time zone NN
+```
+- owner `crm_owner`
+- index `llm_usage_daily_pkey` PRIMARY KEY: UNIQUE btree (day, stage, model)
+- check `llm_usage_daily_counts_chk`: CHECK (((calls >= 0) AND (failed_calls >= 0) AND (failed_calls <= calls) AND (input_tokens >= 0) AND (output_tokens >= 0) AND (cost_usd >= (0)::numeric)))
+- check `llm_usage_daily_model_chk`: CHECK ((model ~ '^[A-Za-z0-9._:/-]{1,120}$'::text))
+- check `llm_usage_daily_stage_chk`: CHECK ((stage ~ '^crm_[a-z0-9_]{1,40}$'::text))
+- grant `crm_app`: INSERT, SELECT, UPDATE
+
+### `crm.member` (table, ~6 rows, 80 kB)
 ```
 member_id uuid NN
 tenant_id uuid NN
@@ -2477,17 +3196,182 @@ purge_after timestamp with time zone
 - index `member_identity_idx`: btree (cognito_iss, cognito_sub) WHERE (deleted_at IS NULL)
 - index `member_identity_uq`: UNIQUE btree (tenant_id, cognito_iss, cognito_sub)
 - index `member_pkey` PRIMARY KEY: UNIQUE btree (member_id)
+- index `member_tenant_member_uq`: UNIQUE btree (tenant_id, member_id)
 - check `member_iss_chk`: CHECK ((cognito_iss ~ '^https://[^/]+/[^/]+$'::text))
 - check `member_role_chk`: CHECK ((role = ANY (ARRAY['owner'::text, 'agent'::text, 'assistant'::text])))
 - check `member_status_chk`: CHECK ((status = ANY (ARRAY['invited'::text, 'active'::text, 'disabled'::text])))
 - check `member_sub_chk`: CHECK (((length(cognito_sub) >= 1) AND (length(cognito_sub) <= 128)))
 - check `member_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
 - grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `member_self_lookup` (PERMISSIVE SELECT TO crm_app): USING `((deleted_at IS NULL) AND (cognito_iss = NULLIF(current_setting('app.caller_iss'::text, true), ''::text)) AND (cognito_sub = NULLIF(current_setting('app.caller_sub'::text, true), ''::text)))`
 - policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `member_guard_write`: BEFORE INSERT OR DELETE OR UPDATE ON crm.member FOR EACH ROW EXECUTE FUNCTION crm.guard_member_write()
 - trigger `member_set_updated_at`: BEFORE UPDATE ON crm.member FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
 - trigger `member_status_transition`: BEFORE UPDATE OF status ON crm.member FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
 
-### `crm.status_transition` (table, 32 kB)
+### `crm.member_invitation` (table, 80 kB)
+```
+invitation_id uuid NN
+tenant_id uuid NN
+role text NN
+email_enc bytea NN
+email_bidx bytea NN
+token_hash bytea NN
+status text NN
+expires_at timestamp with time zone NN
+cognito_iss text
+cognito_sub text
+claimed_at timestamp with time zone
+accepted_at timestamp with time zone
+member_id uuid
+invited_by text NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `member_invitation_live_email_uq`: UNIQUE btree (tenant_id, email_bidx) WHERE ((status = ANY (ARRAY['pending'::text, 'claimed'::text])) AND (deleted_at IS NULL))
+- index `member_invitation_pkey` PRIMARY KEY: UNIQUE btree (invitation_id)
+- index `member_invitation_tenant_status_idx`: btree (tenant_id, status, created_at DESC)
+- index `member_invitation_token_uq`: UNIQUE btree (token_hash)
+- check `member_invitation_accept_chk`: CHECK (((status = 'accepted'::text) = ((accepted_at IS NOT NULL) AND (member_id IS NOT NULL))))
+- check `member_invitation_bidx_chk`: CHECK (((octet_length(email_bidx) >= 8) AND (octet_length(email_bidx) <= 64)))
+- check `member_invitation_claim_chk`: CHECK ((((status = 'pending'::text) AND (cognito_sub IS NULL) AND (claimed_at IS NULL)) OR ((status = ANY (ARRAY['claimed'::text, 'accepted'::text])) AND (cognito_sub IS NOT NULL) AND (claimed_at IS NOT NULL)) OR (status = ANY (ARRAY['revoked'::text, 'expired'::text]))))
+- check `member_invitation_expiry_chk`: CHECK (((expires_at > created_at) AND (expires_at <= (created_at + '30 days'::interval))))
+- check `member_invitation_identity_chk`: CHECK ((((cognito_iss IS NULL) = (cognito_sub IS NULL)) AND ((cognito_iss IS NULL) OR ((cognito_iss ~ '^https://[^/]+/[^/]+$'::text) AND ((length(cognito_sub) >= 1) AND (length(cognito_sub) <= 128))))))
+- check `member_invitation_role_chk`: CHECK ((role = ANY (ARRAY['owner'::text, 'agent'::text, 'assistant'::text])))
+- check `member_invitation_status_chk`: CHECK ((status = ANY (ARRAY['pending'::text, 'claimed'::text, 'accepted'::text, 'revoked'::text, 'expired'::text])))
+- check `member_invitation_token_chk`: CHECK ((octet_length(token_hash) = 32))
+- check `member_invitation_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: INSERT, SELECT, UPDATE
+- policy `invitation_token_lookup` (PERMISSIVE SELECT TO crm_app): USING `(token_hash = decode(NULLIF(current_setting('app.invite_token_hash'::text, true), ''::text), 'hex'::text))`
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `member_invitation_guard_write`: BEFORE INSERT OR UPDATE ON crm.member_invitation FOR EACH ROW EXECUTE FUNCTION crm.guard_invitation_write()
+- trigger `member_invitation_set_updated_at`: BEFORE UPDATE ON crm.member_invitation FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `member_invitation_status_transition`: BEFORE UPDATE OF status ON crm.member_invitation FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.note` (table, 48 kB)
+```
+note_id uuid NN
+tenant_id uuid NN
+trip_id uuid
+traveler_id uuid
+kind text NN
+body_enc bytea NN · pii:free_text
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `note_pkey` PRIMARY KEY: UNIQUE btree (note_id)
+- index `note_trip_idx`: btree (trip_id, created_at) WHERE (trip_id IS NOT NULL)
+- check `note_body_chk`: CHECK ((octet_length(body_enc) >= 30))
+- check `note_kind_chk`: CHECK ((kind = ANY (ARRAY['internal'::text, 'call_log'::text, 'stage2_free_text'::text, 'inquiry_message'::text])))
+- check `note_subject_chk`: CHECK (((trip_id IS NOT NULL) OR (traveler_id IS NOT NULL)))
+- check `note_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `note_hold_guard`: BEFORE DELETE OR UPDATE ON crm.note FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('trip_id', 'traveler_id', 'body_enc', 'kind')
+- trigger `note_set_updated_at`: BEFORE UPDATE ON crm.note FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.owner_recovery_request` (table, 24 kB)
+```
+request_id uuid NN
+tenant_id uuid NN
+candidate_member_id uuid NN
+reason text NN
+status text NN
+eligible_at timestamp with time zone NN
+requested_by text NN
+decided_at timestamp with time zone
+decided_by text
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `owner_recovery_one_pending_uq`: UNIQUE btree (tenant_id) WHERE ((status = 'pending'::text) AND (deleted_at IS NULL))
+- index `owner_recovery_request_pkey` PRIMARY KEY: UNIQUE btree (request_id)
+- check `owner_recovery_actor_chk`: CHECK (((requested_by ~ '^[A-Za-z0-9:_-]{1,80}$'::text) AND ((decided_by IS NULL) OR (decided_by ~ '^[A-Za-z0-9:_-]{1,80}$'::text))))
+- check `owner_recovery_decided_chk`: CHECK ((((status = 'pending'::text) = (decided_at IS NULL)) AND ((decided_at IS NULL) = (decided_by IS NULL))))
+- check `owner_recovery_reason_chk`: CHECK ((reason = ANY (ARRAY['owner_left'::text, 'owner_unreachable'::text, 'no_owner'::text])))
+- check `owner_recovery_request_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- check `owner_recovery_status_chk`: CHECK ((status = ANY (ARRAY['pending'::text, 'cancelled'::text, 'completed'::text])))
+- check `owner_recovery_wait_chk`: CHECK ((eligible_at >= (created_at + '14 days'::interval)))
+- grant `crm_app`: INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `owner_recovery_guard`: BEFORE INSERT OR UPDATE ON crm.owner_recovery_request FOR EACH ROW EXECUTE FUNCTION crm.guard_owner_recovery()
+- trigger `owner_recovery_set_updated_at`: BEFORE UPDATE ON crm.owner_recovery_request FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `owner_recovery_status_transition`: BEFORE UPDATE OF status ON crm.owner_recovery_request FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.placeholder_map` (table, 32 kB)
+```
+placeholder_map_id uuid NN
+tenant_id uuid NN
+llm_call_id uuid NN
+ai_draft_id uuid
+map_enc bytea NN · pii:free_text
+placeholder_count integer NN
+scrubber_version text NN
+expires_at timestamp with time zone NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `placeholder_map_call_uq`: UNIQUE btree (llm_call_id)
+- index `placeholder_map_expires_idx`: btree (expires_at)
+- index `placeholder_map_pkey` PRIMARY KEY: UNIQUE btree (placeholder_map_id)
+- check `placeholder_map_count_chk`: CHECK (((placeholder_count >= 1) AND (placeholder_count <= 500)))
+- check `placeholder_map_enc_chk`: CHECK (((octet_length(map_enc) >= 30) AND (octet_length(map_enc) <= 65536)))
+- check `placeholder_map_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- check `placeholder_map_ttl_chk`: CHECK (((expires_at > created_at) AND (expires_at <= (created_at + '24:00:00'::interval))))
+- check `placeholder_map_version_chk`: CHECK ((scrubber_version ~ '^[a-z0-9][a-z0-9.-]{0,19}$'::text))
+- grant `crm_app`: DELETE, INSERT, SELECT
+- policy `placeholder_map_expired_purge` (PERMISSIVE DELETE TO crm_app): USING `((current_setting('app.purge_scope'::text, true) = 'placeholder_map'::text) AND (expires_at < now()))`
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `placeholder_map_set_updated_at`: BEFORE UPDATE ON crm.placeholder_map FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.profile_history` (table, 24 kB)
+```
+history_id uuid NN
+tenant_id uuid NN
+traveler_token uuid NN
+aa_departure_id text
+aa_product_key text
+stage_reached text NN
+year_month date NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `profile_history_pkey` PRIMARY KEY: UNIQUE btree (history_id)
+- index `profile_history_token_idx`: btree (traveler_token, year_month DESC)
+- check `profile_history_ids_chk`: CHECK ((((aa_departure_id IS NULL) OR (aa_departure_id ~ '^[A-Za-z0-9:_-]{1,80}$'::text)) AND ((aa_product_key IS NULL) OR (aa_product_key ~ '^[A-Za-z0-9:_./-]{1,120}$'::text))))
+- check `profile_history_month_chk`: CHECK ((year_month = (date_trunc('month'::text, (year_month)::timestamp with time zone))::date))
+- check `profile_history_stage_chk`: CHECK ((stage_reached = ANY (ARRAY['inquiry'::text, 'qualifying'::text, 'proposal'::text, 'booked'::text, 'pre_departure'::text, 'travelling'::text, 'completed'::text, 'lost'::text, 'cancelled'::text])))
+- check `profile_history_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `profile_history_set_updated_at`: BEFORE UPDATE ON crm.profile_history FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.status_transition` (table, ~57 rows, 32 kB)
 ```
 table_name text NN
 from_status text NN
@@ -2498,7 +3382,45 @@ to_status text NN
 - check `status_transition_names_chk`: CHECK (((table_name ~ '^[a-z][a-z0-9_]*$'::text) AND (from_status ~ '^[a-z][a-z0-9_]*$'::text) AND (to_status ~ '^[a-z][a-z0-9_]*$'::text) AND (from_status <> to_status)))
 - grant `crm_app`: SELECT
 
-### `crm.tenant` (table, 16 kB)
+### `crm.task` (table, 80 kB)
+```
+task_id uuid NN
+tenant_id uuid NN
+trip_id uuid
+kind text NN
+assignee_member_id uuid
+status text NN
+due_anchor text
+due_offset_days smallint
+due_at timestamp with time zone
+due_overridden boolean NN
+done_at timestamp with time zone
+done_by text
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `task_open_idx`: btree (tenant_id, assignee_member_id, due_at) WHERE ((status = 'open'::text) AND (deleted_at IS NULL))
+- index `task_open_kind_uq`: UNIQUE btree (trip_id, kind) WHERE ((status = 'open'::text) AND (deleted_at IS NULL) AND (trip_id IS NOT NULL))
+- index `task_pkey` PRIMARY KEY: UNIQUE btree (task_id)
+- index `task_trip_idx`: btree (trip_id) WHERE (trip_id IS NOT NULL)
+- check `task_anchor_chk`: CHECK (((due_anchor IS NULL) OR (due_anchor = ANY (ARRAY['departure'::text, 'return'::text, 'created'::text, 'stage_entered'::text, 'hold_expiry'::text, 'deposit_paid'::text, 'ops_handoff'::text]))))
+- check `task_done_chk`: CHECK ((((status = 'open'::text) = (done_at IS NULL)) AND ((done_at IS NULL) = (done_by IS NULL))))
+- check `task_kind_chk`: CHECK ((kind ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `task_offset_chk`: CHECK (((due_offset_days IS NULL) OR ((due_offset_days >= '-365'::integer) AND (due_offset_days <= 365))))
+- check `task_status_chk`: CHECK ((status = ANY (ARRAY['open'::text, 'done'::text, 'skipped'::text])))
+- check `task_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `task_hold_guard`: BEFORE DELETE OR UPDATE ON crm.task FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('trip_id')
+- trigger `task_set_updated_at`: BEFORE UPDATE ON crm.task FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `task_status_transition`: BEFORE UPDATE OF status ON crm.task FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.tenant` (table, 32 kB)
 ```
 tenant_id uuid NN
 status text NN
@@ -2509,15 +3431,508 @@ updated_at timestamp with time zone NN
 deleted_at timestamp with time zone
 deleted_by text
 purge_after timestamp with time zone
+display_name text NN
+default_locale text NN
 ```
 - owner `crm_owner` · RLS on + FORCE
 - index `tenant_pkey` PRIMARY KEY: UNIQUE btree (tenant_id)
-- check `tenant_status_chk`: CHECK ((status = ANY (ARRAY['active'::text, 'locked'::text])))
+- check `tenant_default_locale_chk`: CHECK ((default_locale = ANY (ARRAY['en-AU'::text, 'en-GB'::text, 'en-US'::text, 'vi-VN'::text])))
+- check `tenant_display_name_chk`: CHECK ((((length(btrim(display_name)) >= 1) AND (length(btrim(display_name)) <= 120)) AND (display_name = btrim(display_name))))
+- check `tenant_status_chk`: CHECK ((status = ANY (ARRAY['active'::text, 'locked'::text, 'offboarding'::text, 'offboarded'::text])))
 - check `tenant_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
 - grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
 - policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- policy `tenant_member_lookup` (PERMISSIVE SELECT TO crm_app): USING `((deleted_at IS NULL) AND (EXISTS ( SELECT 1
+   FROM crm.member m
+  WHERE ((m.tenant_id = tenant.tenant_id) AND (m.status = 'active'::text) AND (m.deleted_at IS NULL) AND (m.cognito_iss = NULLIF(current_setting('app.caller_iss'::text, true), ''::text)) AND (m.cognito_sub = NULLIF(current_setting('app.caller_sub'::text, true), ''::text))))))`
+- trigger `tenant_audit_register`: AFTER INSERT ON crm.tenant FOR EACH ROW EXECUTE FUNCTION crm.audit_register_tenant()
 - trigger `tenant_set_updated_at`: BEFORE UPDATE ON crm.tenant FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
 - trigger `tenant_status_transition`: BEFORE UPDATE OF status ON crm.tenant FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
+
+### `crm.tenant_entitlement` (table, 16 kB)
+```
+tenant_id uuid NN
+plan text NN
+member_limit integer NN
+allowed_features text[] NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+insights_opt_out boolean NN
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `tenant_entitlement_pkey` PRIMARY KEY: UNIQUE btree (tenant_id)
+- check `tenant_entitlement_features_chk`: CHECK ((allowed_features <@ ARRAY['ai_assist'::text, 'whatsapp_sms'::text, 'stripe_connect'::text, 'campaigns'::text, 'custom_domain'::text, 'insights_export'::text]))
+- check `tenant_entitlement_limit_chk`: CHECK (((member_limit >= 1) AND (member_limit <= 500)))
+- check `tenant_entitlement_plan_chk`: CHECK ((plan = ANY (ARRAY['free'::text, 'core'::text, 'pro'::text])))
+- check `tenant_entitlement_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `tenant_entitlement_platform_only`: BEFORE INSERT OR UPDATE ON crm.tenant_entitlement FOR EACH ROW EXECUTE FUNCTION crm.guard_platform_write()
+- trigger `tenant_entitlement_set_updated_at`: BEFORE UPDATE ON crm.tenant_entitlement FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.tenant_key` (table, 64 kB)
+```
+tenant_key_id uuid NN
+tenant_id uuid NN
+purpose text NN
+key_version integer NN
+kek_provider text NN
+kek_id text NN
+wrapped_dek bytea · conf:credential
+encryption_context jsonb NN
+rewrapped_at timestamp with time zone
+retired_at timestamp with time zone
+destroyed_at timestamp with time zone
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `tenant_key_current_uq`: UNIQUE btree (tenant_id, purpose) WHERE (retired_at IS NULL)
+- index `tenant_key_pkey` PRIMARY KEY: UNIQUE btree (tenant_key_id)
+- index `tenant_key_version_uq`: UNIQUE btree (tenant_id, purpose, key_version)
+- check `tenant_key_context_chk`: CHECK ((encryption_context = jsonb_build_object('tenant_id', (tenant_id)::text, 'purpose', purpose)))
+- check `tenant_key_destroyed_chk`: CHECK ((((destroyed_at IS NULL) = (wrapped_dek IS NOT NULL)) AND ((destroyed_at IS NULL) OR (retired_at IS NOT NULL))))
+- check `tenant_key_kek_id_chk`: CHECK (((length(kek_id) >= 1) AND (length(kek_id) <= 2048)))
+- check `tenant_key_kek_provider_chk`: CHECK ((kek_provider = ANY (ARRAY['kms'::text, 'local'::text])))
+- check `tenant_key_purpose_chk`: CHECK ((purpose = ANY (ARRAY['vault'::text, 'docs'::text, 'integration'::text, 'scrub'::text, 'ops_release'::text, 'export'::text, 'mail'::text])))
+- check `tenant_key_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- check `tenant_key_version_chk`: CHECK (((key_version >= 1) AND (key_version <= 65535)))
+- check `tenant_key_wrapped_chk`: CHECK (((wrapped_dek IS NULL) OR ((octet_length(wrapped_dek) >= 32) AND (octet_length(wrapped_dek) <= 4096))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `tenant_key_guard`: BEFORE DELETE OR UPDATE ON crm.tenant_key FOR EACH ROW EXECUTE FUNCTION crm.tenant_key_guard()
+- trigger `tenant_key_set_updated_at`: BEFORE UPDATE ON crm.tenant_key FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.tenant_settings` (table, 16 kB)
+```
+tenant_id uuid NN
+ai_enabled boolean NN
+ai_budget_usd numeric(10,2) NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+refund_owner_threshold_base numeric(12,2) NN
+trash_days smallint NN
+auto_archive_months smallint NN
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `tenant_settings_pkey` PRIMARY KEY: UNIQUE btree (tenant_id)
+- check `tenant_settings_auto_archive_chk`: CHECK (((auto_archive_months >= 12) AND (auto_archive_months <= 120)))
+- check `tenant_settings_budget_chk`: CHECK (((ai_budget_usd >= (0)::numeric) AND (ai_budget_usd <= (10000)::numeric)))
+- check `tenant_settings_refund_threshold_chk`: CHECK (((refund_owner_threshold_base >= (0)::numeric) AND (refund_owner_threshold_base <= (10000000)::numeric)))
+- check `tenant_settings_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- check `tenant_settings_trash_days_chk`: CHECK (((trash_days >= 1) AND (trash_days <= 30)))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `tenant_settings_set_updated_at`: BEFORE UPDATE ON crm.tenant_settings FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.traveler` (table, ~8 rows, 136 kB)
+```
+traveler_id uuid NN
+tenant_id uuid NN
+given_name_enc bytea · pii:name
+family_name_enc bytea · pii:name
+display_name_enc bytea NN · pii:name
+email_enc bytea · pii:contact
+phone_enc bytea · pii:contact
+preferred_channel text
+email_bidx bytea · pii:contact
+phone_bidx bytea · pii:contact
+name_bidx bytea · pii:name
+name_token_bidx bytea[] NN · pii:name
+dob_enc bytea · pii:government_id
+nationality_enc bytea · pii:government_id
+passport_no_enc bytea · pii:government_id
+passport_expiry_enc bytea · pii:government_id
+passport_country_enc bytea · pii:government_id
+emergency_contact_enc bytea · pii:emergency_contact
+profile_token_enc bytea · pii:profile
+owner_member_id uuid
+lead_source text
+referrer_traveler_id uuid
+archived_at timestamp with time zone
+archive_reason text
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+archived_by text
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `traveler_archived_idx`: btree (tenant_id, archived_at) WHERE ((archived_at IS NOT NULL) AND (deleted_at IS NULL))
+- index `traveler_email_bidx_idx`: btree (tenant_id, email_bidx) WHERE ((email_bidx IS NOT NULL) AND (deleted_at IS NULL))
+- index `traveler_name_bidx_idx`: btree (tenant_id, name_bidx) WHERE ((name_bidx IS NOT NULL) AND (deleted_at IS NULL))
+- index `traveler_name_token_bidx_idx`: gin (name_token_bidx)
+- index `traveler_owner_member_idx`: btree (owner_member_id) WHERE (owner_member_id IS NOT NULL)
+- index `traveler_phone_bidx_idx`: btree (tenant_id, phone_bidx) WHERE ((phone_bidx IS NOT NULL) AND (deleted_at IS NULL))
+- index `traveler_pkey` PRIMARY KEY: UNIQUE btree (traveler_id)
+- index `traveler_referrer_idx`: btree (referrer_traveler_id) WHERE (referrer_traveler_id IS NOT NULL)
+- index `traveler_tenant_id_uq`: UNIQUE btree (tenant_id, traveler_id)
+- check `traveler_archive_chk`: CHECK ((((archive_reason IS NULL) OR (archived_at IS NOT NULL)) AND ((archive_reason IS NULL) OR (archive_reason ~ '^[a-z][a-z0-9_]{0,39}$'::text))))
+- check `traveler_archive_reason_chk`: CHECK ((((archived_at IS NULL) = (archive_reason IS NULL)) AND ((archived_at IS NULL) = (archived_by IS NULL)) AND ((archive_reason IS NULL) OR (archive_reason = ANY (ARRAY['agent'::text, 'client_request'::text, 'auto_inactive'::text, 'duplicate'::text, 'other'::text]))) AND ((archived_by IS NULL) OR (archived_by ~ '^[A-Za-z0-9:_-]{1,80}$'::text))))
+- check `traveler_bidx_chk`: CHECK (((COALESCE(octet_length(email_bidx), 16) = 16) AND (COALESCE(octet_length(phone_bidx), 16) = 16) AND (COALESCE(octet_length(name_bidx), 8) = 8) AND (array_position(name_token_bidx, NULL::bytea) IS NULL) AND (COALESCE(cardinality(name_token_bidx), 0) <= 16)))
+- check `traveler_bidx_pairs_chk`: CHECK ((((email_bidx IS NULL) = (email_enc IS NULL)) AND ((phone_bidx IS NULL) = (phone_enc IS NULL))))
+- check `traveler_channel_chk`: CHECK (((preferred_channel IS NULL) OR (preferred_channel = ANY (ARRAY['email'::text, 'phone'::text, 'sms'::text, 'whatsapp'::text]))))
+- check `traveler_enc_chk`: CHECK (((octet_length(display_name_enc) >= 30) AND (COALESCE(octet_length(given_name_enc), 30) >= 30) AND (COALESCE(octet_length(family_name_enc), 30) >= 30) AND (COALESCE(octet_length(email_enc), 30) >= 30) AND (COALESCE(octet_length(phone_enc), 30) >= 30) AND (COALESCE(octet_length(dob_enc), 30) >= 30) AND (COALESCE(octet_length(nationality_enc), 30) >= 30) AND (COALESCE(octet_length(passport_no_enc), 30) >= 30) AND (COALESCE(octet_length(passport_expiry_enc), 30) >= 30) AND (COALESCE(octet_length(passport_country_enc), 30) >= 30) AND (COALESCE(octet_length(emergency_contact_enc), 30) >= 30) AND (COALESCE(octet_length(profile_token_enc), 30) >= 30)))
+- check `traveler_lead_source_chk`: CHECK (((lead_source IS NULL) OR (lead_source ~ '^[a-z][a-z0-9_]{0,39}$'::text)))
+- check `traveler_referrer_chk`: CHECK ((referrer_traveler_id IS DISTINCT FROM traveler_id))
+- check `traveler_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `traveler_hold_guard`: BEFORE DELETE OR UPDATE ON crm.traveler FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('referrer_traveler_id', 'profile_token_enc')
+- trigger `traveler_set_updated_at`: BEFORE UPDATE ON crm.traveler FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.traveler_health` (table, 24 kB)
+```
+health_id uuid NN
+tenant_id uuid NN
+traveler_id uuid NN
+health_flags_enc bytea NN · pii:health
+consent_id uuid NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `traveler_health_pkey` PRIMARY KEY: UNIQUE btree (health_id)
+- index `traveler_health_traveler_uq`: UNIQUE btree (traveler_id) WHERE (deleted_at IS NULL)
+- check `traveler_health_enc_chk`: CHECK ((octet_length(health_flags_enc) >= 30))
+- check `traveler_health_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `traveler_health_consent`: BEFORE INSERT OR UPDATE OF consent_id, traveler_id ON crm.traveler_health FOR EACH ROW EXECUTE FUNCTION crm.traveler_health_consent()
+- trigger `traveler_health_hold_guard`: BEFORE DELETE OR UPDATE ON crm.traveler_health FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('traveler_id')
+- trigger `traveler_health_set_updated_at`: BEFORE UPDATE ON crm.traveler_health FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.traveler_profile` (table, ~2 rows, 48 kB)
+```
+traveler_token uuid NN
+tenant_id uuid NN
+budget_band text
+pace text
+group_pref text
+repeat_count integer NN
+stage2_completeness smallint NN
+marketing_ok boolean NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+residence_country text
+fitness_band text
+trek_experience text
+altitude_ok boolean
+accommodation_tier text
+interests text[] NN
+must_do_codes text[] NN
+must_avoid_codes text[] NN
+occasion text
+dietary_flags text[] NN
+mobility_flags text[] NN
+budget_flex text
+decision_maker text
+booking_timeline text
+competing_quotes boolean
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `traveler_profile_pkey` PRIMARY KEY: UNIQUE btree (traveler_token)
+- index `traveler_profile_tenant_token_uq`: UNIQUE btree (tenant_id, traveler_token)
+- check `traveler_profile_bands_chk`: CHECK ((((residence_country IS NULL) OR (residence_country ~ '^[A-Z]{2}$'::text)) AND ((fitness_band IS NULL) OR (fitness_band = ANY (ARRAY['up_to_2h'::text, '2_4h'::text, '4_6h'::text, 'over_6h'::text]))) AND ((trek_experience IS NULL) OR (trek_experience = ANY (ARRAY['none'::text, 'some'::text, 'experienced'::text]))) AND ((accommodation_tier IS NULL) OR (accommodation_tier = ANY (ARRAY['budget'::text, 'comfort'::text, 'premium'::text, 'luxury'::text]))) AND ((occasion IS NULL) OR (occasion = ANY (ARRAY['none'::text, 'honeymoon'::text, 'anniversary'::text, 'birthday'::text, 'family_reunion'::text, 'graduation'::text, 'retirement'::text, 'other'::text]))) AND ((budget_flex IS NULL) OR (budget_flex = ANY (ARRAY['fixed'::text, 'some'::text, 'flexible'::text]))) AND ((decision_maker IS NULL) OR (decision_maker = ANY (ARRAY['self'::text, 'partner'::text, 'family'::text, 'group'::text, 'company'::text]))) AND ((booking_timeline IS NULL) OR (booking_timeline = ANY (ARRAY['ready_now'::text, 'within_month'::text, 'within_3_months'::text, 'later'::text, 'just_looking'::text])))))
+- check `traveler_profile_budget_chk`: CHECK (((budget_band IS NULL) OR (budget_band = ANY (ARRAY['under_1000'::text, '1000_2000'::text, '2000_3500'::text, '3500_5000'::text, 'over_5000'::text, 'not_sure'::text]))))
+- check `traveler_profile_codes_chk`: CHECK (((cardinality(interests) <= 20) AND (array_to_string(interests, ','::text, '!'::text) ~ '^([a-z][a-z0-9_]{1,39}(,|$))*$'::text) AND (cardinality(must_do_codes) <= 20) AND (array_to_string(must_do_codes, ','::text, '!'::text) ~ '^([a-z][a-z0-9_]{1,39}(,|$))*$'::text) AND (cardinality(must_avoid_codes) <= 20) AND (array_to_string(must_avoid_codes, ','::text, '!'::text) ~ '^([a-z][a-z0-9_]{1,39}(,|$))*$'::text) AND (dietary_flags <@ ARRAY['vegetarian'::text, 'vegan'::text, 'halal'::text, 'kosher'::text, 'gluten_free'::text, 'lactose_free'::text, 'nut_allergy'::text, 'shellfish_allergy'::text, 'other_allergy'::text]) AND (array_position(dietary_flags, NULL::text) IS NULL) AND (mobility_flags <@ ARRAY['limited_walking'::text, 'wheelchair'::text, 'no_stairs'::text, 'no_long_drives'::text, 'other'::text]) AND (array_position(mobility_flags, NULL::text) IS NULL)))
+- check `traveler_profile_group_chk`: CHECK (((group_pref IS NULL) OR (group_pref = ANY (ARRAY['private'::text, 'small_group'::text]))))
+- check `traveler_profile_pace_chk`: CHECK (((pace IS NULL) OR (pace = ANY (ARRAY['relaxed'::text, 'balanced'::text, 'adventure'::text]))))
+- check `traveler_profile_repeat_chk`: CHECK (((repeat_count >= 0) AND (repeat_count <= 10000)))
+- check `traveler_profile_s2_chk`: CHECK (((stage2_completeness >= 0) AND (stage2_completeness <= 100)))
+- check `traveler_profile_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `traveler_profile_set_updated_at`: BEFORE UPDATE ON crm.traveler_profile FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.traveler_relation` (table, 40 kB)
+```
+relation_id uuid NN
+tenant_id uuid NN
+from_traveler_id uuid NN
+to_traveler_id uuid NN
+kind text NN
+inverse_id uuid
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `traveler_relation_one_referrer_uq`: UNIQUE btree (from_traveler_id) WHERE ((kind = 'referrer'::text) AND (deleted_at IS NULL))
+- index `traveler_relation_pair_uq`: UNIQUE btree (from_traveler_id, to_traveler_id) WHERE (deleted_at IS NULL)
+- index `traveler_relation_pkey` PRIMARY KEY: UNIQUE btree (relation_id)
+- index `traveler_relation_to_idx`: btree (to_traveler_id)
+- check `traveler_relation_kind_chk`: CHECK ((kind = ANY (ARRAY['spouse'::text, 'partner'::text, 'parent'::text, 'child'::text, 'sibling'::text, 'friend'::text, 'referrer'::text, 'referred'::text])))
+- check `traveler_relation_self_chk`: CHECK ((from_traveler_id <> to_traveler_id))
+- check `traveler_relation_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `traveler_relation_fixed`: BEFORE UPDATE ON crm.traveler_relation FOR EACH ROW EXECUTE FUNCTION crm.traveler_relation_pair()
+- trigger `traveler_relation_hold_guard`: BEFORE DELETE OR UPDATE ON crm.traveler_relation FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('from_traveler_id', 'to_traveler_id', 'kind')
+- trigger `traveler_relation_mirror`: AFTER INSERT OR DELETE OR UPDATE OF deleted_at ON crm.traveler_relation FOR EACH ROW EXECUTE FUNCTION crm.traveler_relation_mirror()
+- trigger `traveler_relation_set_updated_at`: BEFORE UPDATE ON crm.traveler_relation FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.trip` (table, ~2 rows, 72 kB)
+```
+trip_id uuid NN
+tenant_id uuid NN
+title text NN · pii:travel
+stage text NN
+stage_entered_at timestamp with time zone NN
+waiting_on text NN
+start_date date
+end_date date
+month date
+date_flex_days smallint NN
+nights smallint
+destinations text[] NN
+party_adults smallint NN
+party_child_ages smallint[] NN
+party_type text
+budget_band text
+trip_style text
+owner_member_id uuid
+intake_form_id uuid
+lead_source text
+lost_reason_code text
+last_inquiry_at timestamp with time zone NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `trip_board_idx`: btree (tenant_id, stage, last_inquiry_at DESC) WHERE (deleted_at IS NULL)
+- index `trip_owner_idx`: btree (owner_member_id) WHERE (owner_member_id IS NOT NULL)
+- index `trip_pkey` PRIMARY KEY: UNIQUE btree (trip_id)
+- index `trip_tenant_id_uq`: UNIQUE btree (tenant_id, trip_id)
+- check `trip_budget_chk`: CHECK (((budget_band IS NULL) OR (budget_band = ANY (ARRAY['under_1000'::text, '1000_2000'::text, '2000_3500'::text, '3500_5000'::text, 'over_5000'::text, 'not_sure'::text]))))
+- check `trip_dates_chk`: CHECK ((((start_date IS NULL) OR (end_date IS NULL) OR (end_date >= start_date)) AND ((month IS NULL) OR (month = (date_trunc('month'::text, (month)::timestamp with time zone))::date))))
+- check `trip_destinations_chk`: CHECK (((cardinality(destinations) <= 12) AND (array_to_string(destinations, ','::text, '!'::text) ~ '^([a-z][a-z_]{1,39}(,|$))*$'::text)))
+- check `trip_flex_chk`: CHECK (((date_flex_days >= 0) AND (date_flex_days <= 60)))
+- check `trip_lead_source_chk`: CHECK (((lead_source IS NULL) OR (lead_source ~ '^[a-z][a-z0-9_]{0,39}$'::text)))
+- check `trip_lost_reason_chk`: CHECK ((((stage = 'lost'::text) = (lost_reason_code IS NOT NULL)) AND ((lost_reason_code IS NULL) OR (lost_reason_code = ANY (ARRAY['price'::text, 'price_aa_tour'::text, 'aa_sold_out'::text, 'aa_on_request_declined'::text, 'dates_changed'::text, 'went_elsewhere'::text, 'no_response'::text, 'postponed'::text, 'other'::text])))))
+- check `trip_nights_chk`: CHECK (((nights IS NULL) OR ((nights >= 1) AND (nights <= 90))))
+- check `trip_party_chk`: CHECK ((((party_adults >= 1) AND (party_adults <= 50)) AND (cardinality(party_child_ages) <= 20) AND ((cardinality(party_child_ages) = 0) OR ((0 <= ALL (party_child_ages)) AND (17 >= ALL (party_child_ages))))))
+- check `trip_party_type_chk`: CHECK (((party_type IS NULL) OR (party_type = ANY (ARRAY['solo'::text, 'couple'::text, 'family'::text, 'friends'::text, 'group'::text]))))
+- check `trip_stage_chk`: CHECK ((stage = ANY (ARRAY['inquiry'::text, 'qualifying'::text, 'proposal'::text, 'booked'::text, 'pre_departure'::text, 'travelling'::text, 'completed'::text, 'lost'::text, 'cancelled'::text])))
+- check `trip_style_chk`: CHECK (((trip_style IS NULL) OR (trip_style = ANY (ARRAY['relaxed'::text, 'balanced'::text, 'adventure'::text]))))
+- check `trip_title_chk`: CHECK (((length(btrim(title)) >= 1) AND (length(btrim(title)) <= 120)))
+- check `trip_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- check `trip_waiting_on_chk`: CHECK ((waiting_on = ANY (ARRAY['agency'::text, 'client'::text, 'aa'::text, 'supplier'::text, 'none'::text])))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `trip_hold_guard`: BEFORE DELETE OR UPDATE ON crm.trip FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change()
+- trigger `trip_set_updated_at`: BEFORE UPDATE ON crm.trip FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+- trigger `trip_stage_transition`: BEFORE UPDATE OF stage ON crm.trip FOR EACH ROW EXECUTE FUNCTION crm.enforce_stage_transition()
+
+### `crm.trip_commitment` (table, 32 kB)
+```
+commitment_id uuid NN
+tenant_id uuid NN
+trip_id uuid NN
+kind text NN
+line_status text NN
+source_ref text NN
+checked_at timestamp with time zone
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `trip_commitment_pkey` PRIMARY KEY: UNIQUE btree (commitment_id)
+- index `trip_commitment_source_uq`: UNIQUE btree (tenant_id, kind, source_ref)
+- index `trip_commitment_trip_idx`: btree (trip_id)
+- check `trip_commitment_kind_status_chk`: CHECK ((((kind = 'aa_line'::text) AND (line_status = ANY (ARRAY['requested'::text, 'held'::text, 'confirmed'::text, 'released'::text, 'expired'::text, 'cancelled'::text, 'declined'::text]))) OR ((kind = 'invoice'::text) AND (line_status = ANY (ARRAY['draft'::text, 'open'::text, 'payment_claimed'::text, 'paid'::text, 'paid_unfulfillable'::text, 'void'::text, 'expired'::text]))) OR ((kind = 'payment'::text) AND (line_status = ANY (ARRAY['pending'::text, 'succeeded'::text, 'failed'::text, 'refunded'::text]))) OR ((kind = 'signature'::text) AND (line_status = ANY (ARRAY['pending'::text, 'signed'::text, 'declined'::text, 'expired'::text]))) OR ((kind = 'commission'::text) AND (line_status = ANY (ARRAY['expected'::text, 'claimed'::text, 'received'::text, 'cancelled'::text])))))
+- check `trip_commitment_source_chk`: CHECK ((source_ref ~ '^[A-Za-z0-9:_.-]{1,80}$'::text))
+- check `trip_commitment_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `trip_commitment_set_updated_at`: BEFORE UPDATE ON crm.trip_commitment FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.trip_party` (table, ~2 rows, 64 kB)
+```
+trip_party_id uuid NN
+tenant_id uuid NN
+trip_id uuid NN
+traveler_token uuid NN
+role text NN
+age_band_at_departure text
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `trip_party_pkey` PRIMARY KEY: UNIQUE btree (trip_party_id)
+- index `trip_party_token_idx`: btree (traveler_token)
+- index `trip_party_uq`: UNIQUE btree (trip_id, traveler_token)
+- check `trip_party_age_band_chk`: CHECK (((age_band_at_departure IS NULL) OR (age_band_at_departure ~ '^[a-z0-9_]{1,20}$'::text)))
+- check `trip_party_age_band_list_chk`: CHECK (((age_band_at_departure IS NULL) OR (age_band_at_departure = ANY (ARRAY['under_2'::text, '2_11'::text, '12_17'::text, '18_24'::text, '25_34'::text, '35_44'::text, '45_54'::text, '55_64'::text, '65_74'::text, '75_plus'::text]))))
+- check `trip_party_role_chk`: CHECK ((role = ANY (ARRAY['lead'::text, 'companion'::text])))
+- check `trip_party_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `trip_party_hold_guard`: BEFORE DELETE OR UPDATE ON crm.trip_party FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('trip_id', 'traveler_token')
+- trigger `trip_party_set_updated_at`: BEFORE UPDATE ON crm.trip_party FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.trip_stage_history` (table, 48 kB)
+```
+history_id uuid NN
+tenant_id uuid NN
+trip_id uuid NN
+from_stage text
+to_stage text NN
+reason_code text NN
+override boolean NN
+at timestamp with time zone NN
+created_at timestamp with time zone NN
+created_by text NN
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `trip_stage_history_pkey` PRIMARY KEY: UNIQUE btree (history_id)
+- index `trip_stage_history_trip_idx`: btree (trip_id, at)
+- check `trip_stage_history_reason_chk`: CHECK ((reason_code ~ '^[a-z][a-z0-9_]{0,39}$'::text))
+- check `trip_stage_history_stage_chk`: CHECK (((to_stage ~ '^[a-z_]{3,20}$'::text) AND ((from_stage IS NULL) OR (from_stage ~ '^[a-z_]{3,20}$'::text))))
+- grant `crm_app`: INSERT, SELECT
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `trip_stage_history_append_only`: BEFORE DELETE OR UPDATE ON crm.trip_stage_history FOR EACH ROW EXECUTE FUNCTION crm.erasable_append_only()
+- trigger `trip_stage_history_no_truncate`: BEFORE TRUNCATE ON crm.trip_stage_history FOR EACH STATEMENT EXECUTE FUNCTION crm.erasable_append_only()
+
+### `crm.trip_traveler` (table, 80 kB)
+```
+trip_traveler_id uuid NN
+tenant_id uuid NN
+trip_id uuid NN
+traveler_id uuid NN
+role text NN
+portal_access text NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+deleted_at timestamp with time zone
+deleted_by text
+purge_after timestamp with time zone
+```
+- owner `crm_owner` · RLS on + FORCE
+- index `trip_traveler_one_lead_uq`: UNIQUE btree (trip_id) WHERE ((role = 'lead'::text) AND (deleted_at IS NULL))
+- index `trip_traveler_pkey` PRIMARY KEY: UNIQUE btree (trip_traveler_id)
+- index `trip_traveler_traveler_idx`: btree (traveler_id)
+- index `trip_traveler_uq`: UNIQUE btree (trip_id, traveler_id)
+- check `trip_traveler_portal_chk`: CHECK ((portal_access = ANY (ARRAY['lead'::text, 'companion'::text, 'none'::text])))
+- check `trip_traveler_role_chk`: CHECK ((role = ANY (ARRAY['lead'::text, 'companion'::text])))
+- check `trip_traveler_trash_chk`: CHECK ((((deleted_at IS NULL) = (deleted_by IS NULL)) AND ((deleted_at IS NULL) = (purge_after IS NULL))))
+- grant `crm_app`: DELETE, INSERT, SELECT, UPDATE
+- policy `tenant_isolation` (PERMISSIVE ALL TO crm_ai_reader, crm_app, crm_eraser, crm_insights, crm_owner, crm_support_reader): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
+- trigger `trip_traveler_hold_guard`: BEFORE DELETE OR UPDATE ON crm.trip_traveler FOR EACH ROW EXECUTE FUNCTION crm.guard_held_change('trip_id', 'traveler_id')
+- trigger `trip_traveler_set_updated_at`: BEFORE UPDATE ON crm.trip_traveler FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
+
+### `crm.v_ai_traveler_profile` (VIEW)
+```
+traveler_token uuid
+residence_country text
+budget_band text
+pace text
+group_pref text
+fitness_band text
+trek_experience text
+altitude_ok boolean
+accommodation_tier text
+interests text[]
+must_do_codes text[]
+must_avoid_codes text[]
+occasion text
+dietary_flags text[]
+mobility_flags text[]
+budget_flex text
+decision_maker text
+booking_timeline text
+competing_quotes boolean
+repeat_count integer
+stage2_completeness smallint
+```
+- owner `crm_owner`
+- grant `crm_ai_reader`: SELECT
+- grant `crm_app`: SELECT
+
+### `crm.v_ai_trip_context` (VIEW)
+```
+trip_id uuid
+stage text
+waiting_on text
+month date
+start_date date
+end_date date
+nights smallint
+date_flex_days smallint
+destinations text[]
+party_adults smallint
+party_child_ages smallint[]
+party_type text
+budget_band text
+trip_style text
+```
+- owner `crm_owner`
+- grant `crm_ai_reader`: SELECT
+- grant `crm_app`: SELECT
+
+### `crm.v_ai_trip_party` (VIEW)
+```
+trip_id uuid
+traveler_token uuid
+role text
+age_band_at_departure text
+```
+- owner `crm_owner`
+- grant `crm_ai_reader`: SELECT
+- grant `crm_app`: SELECT
+
+### `crm.v_insight_fact` (VIEW)
+```
+tenant_id uuid
+month date
+destination text
+budget_band text
+age_band text
+party_size integer
+stage_reached text
+lost_reason_code text
+```
+- owner `crm_owner`
+- grant `crm_app`: SELECT
+- grant `crm_insights`: SELECT
 
 ### `crm.v_schema_versions` (VIEW)
 ```
@@ -2562,7 +3977,7 @@ job_id uuid
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.graph_edge` (table, ~1091 rows, 440 kB)
+### `geo.graph_edge` (table, ~1779 rows, 776 kB)
 ```
 build_id uuid NN
 from_destination_id uuid NN
@@ -2576,7 +3991,7 @@ km numeric(8,1)
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.graph_node` (table, ~782 rows, 464 kB)
+### `geo.graph_node` (table, ~1341 rows, 824 kB)
 ```
 build_id uuid NN
 destination_id uuid NN
@@ -2643,7 +4058,7 @@ undo_reason text
 - check `place_merge_undo_chk`: CHECK ((((undone_at IS NULL) = (undone_by IS NULL)) AND ((undone_at IS NULL) OR (undo_reason IS NOT NULL))))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.place_name` (table, ~1713 rows, 576 kB)
+### `geo.place_name` (table, ~1719 rows, 576 kB)
 ```
 name_norm text NN
 country_norm text NN
@@ -2705,7 +4120,7 @@ created_by text NN
 - check `place_pair_verdict_verdict_chk`: CHECK ((verdict = ANY (ARRAY['same'::text, 'different'::text, 'unsure'::text])))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.place_shape` (table, 56 kB)
+### `geo.place_shape` (table, ~39 rows, 488 kB)
 ```
 destination_id uuid NN
 kind text NN
@@ -2769,7 +4184,7 @@ updated_at timestamp with time zone NN
 - check `tour_build_status_check`: CHECK ((status = ANY (ARRAY['pending'::text, 'ok'::text, 'partial'::text, 'failed'::text, 'retired'::text])))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.tour_day` (table, ~1084 rows, 520 kB)
+### `geo.tour_day` (table, ~1084 rows, 536 kB)
 ```
 source_id text NN
 day_index integer NN
@@ -2795,7 +4210,7 @@ created_at timestamp with time zone NN
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.tour_junction` (table, ~13710 rows, 3.2 MB)
+### `geo.tour_junction` (table, ~22662 rows, 6 MB)
 ```
 build_id uuid NN
 destination_a uuid NN
@@ -2808,7 +4223,7 @@ cross_border boolean NN
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.tour_leg` (table, ~9551 rows, 6 MB)
+### `geo.tour_leg` (table, ~16041 rows, 11.7 MB)
 ```
 build_id uuid NN
 source_id text NN
@@ -2827,7 +4242,7 @@ activities text[] NN
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.tour_place` (table, ~2455 rows, 40.1 MB)
+### `geo.tour_place` (table, ~2473 rows, 40.5 MB)
 ```
 component_id uuid NN
 source_id text NN
@@ -2862,7 +4277,7 @@ embedding vector(1536)
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.tour_segment` (table, ~158 rows, 192 kB)
+### `geo.tour_segment` (table, ~192 rows, 480 kB)
 ```
 build_id uuid NN
 source_id text NN
@@ -2884,7 +4299,7 @@ segment_km numeric(8,1)
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `geo.tour_stop` (table, ~1956 rows, 760 kB)
+### `geo.tour_stop` (table, ~3081 rows, 1.3 MB)
 ```
 build_id uuid NN
 source_id text NN
@@ -3164,7 +4579,7 @@ updated_at timestamp with time zone NN
 - check `alert_recipient_status_chk`: CHECK ((status = ANY (ARRAY['pending'::text, 'confirmed'::text, 'removed'::text])))
 - grant `cis_app`: INSERT, SELECT, UPDATE
 
-### `shared.cost_explorer_app_snapshot` (table, ~4602 rows, 1.1 MB)
+### `shared.cost_explorer_app_snapshot` (table, ~5358 rows, 1.4 MB)
 ```
 id uuid NN
 account_id text NN
@@ -3182,7 +4597,7 @@ fetched_at timestamp with time zone NN
 - index `cost_explorer_app_snapshot_pkey` PRIMARY KEY: UNIQUE btree (id)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.cost_explorer_snapshot` (table, ~2561 rows, 2 MB)
+### `shared.cost_explorer_snapshot` (table, ~1678 rows, 2 MB)
 ```
 id uuid NN
 account_id text NN
@@ -3200,7 +4615,7 @@ fetched_at timestamp with time zone NN
 - index `idx_cost_explorer_fetched`: btree (fetched_at DESC)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.decision_cache_hits_daily` (table, ~237 rows, 120 kB)
+### `shared.decision_cache_hits_daily` (table, ~261 rows, 128 kB)
 ```
 day date NN
 stage text NN
@@ -3214,7 +4629,7 @@ updated_at timestamp with time zone NN
 - index `decision_cache_hits_daily_pkey` PRIMARY KEY: UNIQUE btree (day, stage, question_key, mode, zone)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.decision_log` (table, ~292729 rows, 364.5 MB)
+### `shared.decision_log` (table, ~387843 rows, 379.4 MB)
 ```
 id bigint NN
 created_at timestamp with time zone NN
@@ -3309,7 +4724,7 @@ review_reason text
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.dfs_balance_snapshot` (table, 312 kB)
+### `shared.dfs_balance_snapshot` (table, 320 kB)
 ```
 id uuid NN
 balance_usd numeric(14,4) NN
@@ -3373,7 +4788,7 @@ added_by text NN
 - index `jev_tenant_allowlist_pkey` PRIMARY KEY: UNIQUE btree (tenant_id)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.job` (table, ~3015 rows, 11.5 MB)
+### `shared.job` (table, ~3207 rows, 12.5 MB)
 ```
 id uuid NN
 kind text NN
@@ -3412,7 +4827,7 @@ finished_at timestamp with time zone
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 - trigger `job_set_updated_at`: BEFORE UPDATE ON shared.job FOR EACH ROW EXECUTE FUNCTION shared.job_set_updated_at()
 
-### `shared.job_worker` (table, ~152 rows, 312 kB)
+### `shared.job_worker` (table, ~150 rows, 312 kB)
 ```
 worker_id text NN
 host text NN
@@ -3457,7 +4872,7 @@ updated_at timestamp with time zone NN
 - index `llm_call_daily_tenant_day_idx`: btree (tenant_id, day)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.llm_call_log` (table, ~267933 rows, 136.7 MB)
+### `shared.llm_call_log` (table, ~284344 rows, 145.8 MB)
 ```
 id uuid NN
 tenant_id uuid
@@ -3750,7 +5165,7 @@ created_at timestamp with time zone NN
 - check `prompt_eval_runs_pipeline_check`: CHECK ((pipeline = ANY (ARRAY['s1_old'::text, 's1_from_atom'::text])))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.rerun_wave` (table, 48 kB)
+### `shared.rerun_wave` (table, 80 kB)
 ```
 id uuid NN
 name text NN
@@ -3771,7 +5186,7 @@ last_check jsonb
 - check `rerun_wave_status_check`: CHECK ((status = ANY (ARRAY['open'::text, 'complete'::text, 'incomplete'::text, 'closed'::text])))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.schema_versions` (table, ~239 rows, 104 kB)
+### `shared.schema_versions` (table, ~301 rows, 104 kB)
 ```
 version character varying(20) NN
 description text
@@ -3819,7 +5234,7 @@ updated_at timestamp with time zone NN
 - check `staff_app_grant_role_chk`: CHECK ((role = ANY (ARRAY['admin'::text, 'sales'::text, 'contracting'::text, 'content_creator'::text])))
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.tenant_api_usage` (table, ~145123 rows, 35.6 MB)
+### `shared.tenant_api_usage` (table, ~148083 rows, 35.8 MB)
 ```
 id uuid NN
 tenant_id uuid
@@ -4146,7 +5561,7 @@ position bigint
 
 ## `silver_aa_internal` (7 objects)
 
-### `silver_aa_internal.generated_content` (table, ~1423 rows, 14.8 MB)
+### `silver_aa_internal.generated_content` (table, ~1516 rows, 15.4 MB)
 ```
 id uuid NN
 tour_id uuid NN
@@ -4197,7 +5612,7 @@ satellite_account text
 - policy `generated_content_cis_owner_all` (PERMISSIVE ALL TO cis_owner): USING `true` WITH CHECK `true`
 - policy `tenant_isolation` (PERMISSIVE ALL TO public): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
 
-### `silver_aa_internal.quality_scores` (table, ~1432 rows, 2 MB)
+### `silver_aa_internal.quality_scores` (table, ~1550 rows, 2 MB)
 ```
 id uuid NN
 generated_content_id uuid NN
@@ -4248,7 +5663,7 @@ file_hash character varying(64)
 - index `raw_sources_pkey` PRIMARY KEY: UNIQUE btree (id)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `silver_aa_internal.raw_tours` (table, ~987 rows, 4.9 MB)
+### `silver_aa_internal.raw_tours` (table, ~987 rows, 5 MB)
 ```
 tour_id uuid NN
 tenant_id uuid NN
@@ -4604,7 +6019,14 @@ Extension-owned functions are left out. `SECURITY DEFINER` functions run with th
 |---|---|---|---|---|
 | `acp_shared.audit_log_append_only()` | trigger | plpgsql | `cis_owner` | no |
 | `acp_shared.audit_log_chain()` | trigger | plpgsql | `cis_owner` | no |
+| `booking.b2b_answer_due(start_at timestamp with time zone, business_days integer, tz text)` | timestamp with time zone | plpgsql | `bk_owner` | no |
+| `booking.b2b_cancellations_outbox()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.b2b_hold_lines_outbox()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.b2b_holds_outbox()` | trigger | plpgsql | `bk_owner` | no |
 | `booking.cancellation_policy_maker_checker()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.departure_incidents_outbox()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.departures_outbox()` | trigger | plpgsql | `bk_owner` | no |
+| `booking.outbox_departure_event(p_departure uuid, p_type text, p_incident text)` | void | sql | `bk_owner` | no |
 | `booking.policy_approval_maker_checker()` | trigger | plpgsql | `bk_owner` | no |
 | `booking.set_updated_at()` | trigger | plpgsql | `bk_owner` | no |
 | `booking.supplier_contract_lock()` | trigger | plpgsql | `bk_owner` | no |
@@ -4617,9 +6039,41 @@ Extension-owned functions are left out. `SECURITY DEFINER` functions run with th
 | `booking.trip_case_version_lock()` | trigger | plpgsql | `bk_owner` | no |
 | `booking.trip_case_version_sent_lock()` | trigger | plpgsql | `bk_owner` | no |
 | `booking.version_item_cost_lock()` | trigger | plpgsql | `bk_owner` | no |
+| `crm.audit_drop_expired_partitions(p_dry_run boolean)` | TABLE(partition_name text, range_end timestamp with time zone, action text) | plpgsql | `crm_owner` | **yes** |
+| `crm.audit_ensure_partitions()` | integer | plpgsql | `crm_owner` | **yes** |
+| `crm.audit_event_check_at()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.audit_export_agencies()` | TABLE(tenant_id uuid, exported_until timestamp with time zone, verified_until timestamp with time zone, last_seq bigint, registered_at timestamp with time zone) | sql | `crm_owner` | **yes** |
+| `crm.audit_manifest_chain()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.audit_mark_verified(p_until timestamp with time zone)` | boolean | plpgsql | `crm_owner` | **yes** |
+| `crm.audit_partition_bounds()` | TABLE(partition_name text, range_start timestamp with time zone, range_end timestamp with time zone) | sql | `crm_owner` | no |
+| `crm.audit_register_tenant()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.enforce_stage_transition()` | trigger | plpgsql | `crm_owner` | no |
 | `crm.enforce_status_transition()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.erasable_append_only()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.erase_held(p_scope text, p_subject uuid, p_token uuid)` | boolean | plpgsql | `crm_owner` | no |
+| `crm.erase_rows(p_table text, p_where text, p_subject uuid, p_token uuid, p_dry_run boolean, p_set text)` | bigint | plpgsql | `crm_owner` | no |
+| `crm.erase_subject(p_scope text, p_subject uuid, p_profile_token uuid, p_dry_run boolean)` | jsonb | plpgsql | `crm_owner` | **yes** |
+| `crm.guard_erasure_request_owner_confirm()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.guard_held_change()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.guard_invitation_write()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.guard_legal_hold()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.guard_member_write()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.guard_owner_recovery()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.guard_platform_write()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.hold_row(p_trip uuid, p_traveler uuid)` | boolean | sql | `crm_owner` | no |
+| `crm.hold_traveler(p_traveler uuid)` | boolean | sql | `crm_owner` | no |
+| `crm.hold_trip(p_trip uuid)` | boolean | sql | `crm_owner` | no |
 | `crm.job_set_updated_at()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.legal_hold_blocks(p_scope text, p_subject uuid)` | boolean | sql | `crm_owner` | no |
+| `crm.lifecycle_purge_expired(p_dry_run boolean)` | jsonb | plpgsql | `crm_owner` | **yes** |
+| `crm.reject_append_only_change()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.relation_inverse(kind text)` | text | sql | `crm_owner` | no |
 | `crm.set_updated_at()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.tenant_key_guard()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.traveler_health_consent()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.traveler_relation_mirror()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.traveler_relation_pair()` | trigger | plpgsql | `crm_owner` | no |
+| `crm.trip_delete_blockers(p_trip uuid)` | text[] | sql | `crm_owner` | no |
 | `geo.line_vertex_count(g jsonb)` | integer | sql | `cis_owner` | no |
 | `geo.name_norm(p text)` | text | sql | `cis_owner` | no |
 | `gold_aa_internal.tour_lifecycle_event_append_only()` | trigger | plpgsql | `cis_owner` | no |
@@ -4697,6 +6151,7 @@ booking.b2b_cancellations.hold_id -> booking.b2b_holds.id
 booking.b2b_cancellations.partner_id -> booking.b2b_partners.id
 booking.b2b_cancellations.policy_id -> booking.cancellation_policies.id
 booking.b2b_cancellations.trip_case_id -> booking.trip_cases.id
+booking.b2b_hold_lines.answered_by -> booking.staff_users.cis_user_id
 booking.b2b_hold_lines.departure_id -> booking.departures.id
 booking.b2b_hold_lines.hold_id -> booking.b2b_holds.id
 booking.b2b_holds.cancellation_policy_id -> booking.cancellation_policies.id
@@ -4714,6 +6169,9 @@ booking.customer_otps.customer_id -> booking.customers.id
 booking.customer_sessions.customer_id -> booking.customers.id
 booking.customers.merge_candidate_id -> booking.customers.id
 booking.customers.profile_media_id -> booking.media_files.id
+booking.departure_incidents.cleared_by -> booking.staff_users.cis_user_id
+booking.departure_incidents.departure_id -> booking.departures.id
+booking.departure_incidents.flagged_by -> booking.staff_users.cis_user_id
 booking.departures.created_by -> booking.staff_users.cis_user_id
 booking.departures.trip_plan_id -> booking.trip_plans.id
 booking.departures.updated_by -> booking.staff_users.cis_user_id
@@ -4776,8 +6234,77 @@ booking.trip_plans.updated_by -> booking.staff_users.cis_user_id
 booking.version_item_costs.entered_by -> booking.staff_users.cis_user_id
 booking.version_item_costs.supplier_rate_id -> booking.supplier_rates.id
 booking.version_item_costs.version_item_id -> booking.trip_case_version_itinerary.id
+crm.audit_event.tenant_id -> crm.tenant.tenant_id
+crm.audit_event_legacy.tenant_id -> crm.tenant.tenant_id
+crm.audit_event_p202611.tenant_id -> crm.tenant.tenant_id
+crm.audit_event_p202612.tenant_id -> crm.tenant.tenant_id
+crm.audit_event_p202701.tenant_id -> crm.tenant.tenant_id
+crm.audit_export_tenant.tenant_id -> crm.tenant.tenant_id
+crm.consent.submission_id -> crm.form_submission.submission_id
+crm.consent.tenant_id -> crm.tenant.tenant_id
+crm.consent.traveler_id -> crm.traveler.traveler_id
+crm.dispatch_queue.tenant_id -> crm.tenant.tenant_id
+crm.dispatch_queue.(tenant_id,traveler_id) -> crm.traveler.(tenant_id,traveler_id)
+crm.dispatch_queue.(tenant_id,trip_id) -> crm.trip.(tenant_id,trip_id)
+crm.document.tenant_id -> crm.tenant.tenant_id
+crm.document.(tenant_id,traveler_id) -> crm.traveler.(tenant_id,traveler_id)
+crm.document.(tenant_id,trip_id) -> crm.trip.(tenant_id,trip_id)
+crm.erasure_request.tenant_id -> crm.tenant.tenant_id
+crm.form_definition.tenant_id -> crm.tenant.tenant_id
+crm.form_submission.intake_form_id -> crm.intake_form.intake_form_id
+crm.form_submission.tenant_id -> crm.tenant.tenant_id
+crm.form_submission.traveler_id -> crm.traveler.traveler_id
+crm.form_submission.trip_id -> crm.trip.trip_id
+crm.intake_form.default_owner_member_id -> crm.member.member_id
+crm.intake_form.form_definition_id -> crm.form_definition.form_definition_id
+crm.intake_form.tenant_id -> crm.tenant.tenant_id
+crm.integration_credential.tenant_id -> crm.tenant.tenant_id
 crm.job.parent_job_id -> crm.job.id
+crm.legal_hold.tenant_id -> crm.tenant.tenant_id
+crm.lifecycle_run.tenant_id -> crm.tenant.tenant_id
+crm.llm_call.tenant_id -> crm.tenant.tenant_id
 crm.member.tenant_id -> crm.tenant.tenant_id
+crm.member_invitation.tenant_id -> crm.tenant.tenant_id
+crm.member_invitation.(tenant_id,member_id) -> crm.member.(tenant_id,member_id)
+crm.note.tenant_id -> crm.tenant.tenant_id
+crm.note.traveler_id -> crm.traveler.traveler_id
+crm.note.trip_id -> crm.trip.trip_id
+crm.owner_recovery_request.tenant_id -> crm.tenant.tenant_id
+crm.owner_recovery_request.(tenant_id,candidate_member_id) -> crm.member.(tenant_id,member_id)
+crm.placeholder_map.tenant_id -> crm.tenant.tenant_id
+crm.placeholder_map.(tenant_id,llm_call_id) -> crm.llm_call.(tenant_id,llm_call_id)
+crm.profile_history.tenant_id -> crm.tenant.tenant_id
+crm.profile_history.(tenant_id,traveler_token) -> crm.traveler_profile.(tenant_id,traveler_token)
+crm.task.assignee_member_id -> crm.member.member_id
+crm.task.tenant_id -> crm.tenant.tenant_id
+crm.task.trip_id -> crm.trip.trip_id
+crm.tenant_entitlement.tenant_id -> crm.tenant.tenant_id
+crm.tenant_key.tenant_id -> crm.tenant.tenant_id
+crm.tenant_settings.tenant_id -> crm.tenant.tenant_id
+crm.traveler.owner_member_id -> crm.member.member_id
+crm.traveler.referrer_traveler_id -> crm.traveler.traveler_id
+crm.traveler.tenant_id -> crm.tenant.tenant_id
+crm.traveler_health.consent_id -> crm.consent.consent_id
+crm.traveler_health.tenant_id -> crm.tenant.tenant_id
+crm.traveler_health.(tenant_id,traveler_id) -> crm.traveler.(tenant_id,traveler_id)
+crm.traveler_profile.tenant_id -> crm.tenant.tenant_id
+crm.traveler_relation.inverse_id -> crm.traveler_relation.relation_id
+crm.traveler_relation.tenant_id -> crm.tenant.tenant_id
+crm.traveler_relation.(tenant_id,from_traveler_id) -> crm.traveler.(tenant_id,traveler_id)
+crm.traveler_relation.(tenant_id,to_traveler_id) -> crm.traveler.(tenant_id,traveler_id)
+crm.trip.intake_form_id -> crm.intake_form.intake_form_id
+crm.trip.owner_member_id -> crm.member.member_id
+crm.trip.tenant_id -> crm.tenant.tenant_id
+crm.trip_commitment.tenant_id -> crm.tenant.tenant_id
+crm.trip_commitment.(tenant_id,trip_id) -> crm.trip.(tenant_id,trip_id)
+crm.trip_party.tenant_id -> crm.tenant.tenant_id
+crm.trip_party.traveler_token -> crm.traveler_profile.traveler_token
+crm.trip_party.trip_id -> crm.trip.trip_id
+crm.trip_stage_history.tenant_id -> crm.tenant.tenant_id
+crm.trip_stage_history.trip_id -> crm.trip.trip_id
+crm.trip_traveler.tenant_id -> crm.tenant.tenant_id
+crm.trip_traveler.traveler_id -> crm.traveler.traveler_id
+crm.trip_traveler.trip_id -> crm.trip.trip_id
 geo.graph_edge.build_id -> geo.graph_build.build_id
 geo.graph_edge.from_destination_id -> shared.destinations.id
 geo.graph_edge.to_destination_id -> shared.destinations.id
@@ -4865,169 +6392,208 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 
 | table | ~rows | size | seq scans | idx scans | ins / upd / del | dead tuples | last autovacuum |
 |---|---|---|---|---|---|---|---|
-| `acp_contract.atom_decompose_jobs` | 0 | 104 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_contract.atom_embedding` | 7298 | 118.4 MB | 415 | 66450 | 4782 / 0 / 0 | 0 | 2026-10-10 13:30 |
-| `acp_contract.atom_matches` | 10119 | 3.3 MB | 9 | 33250 | 4411 / 24546 / 0 | 778 | 2026-10-08 14:00 |
-| `acp_contract.atom_ranking` | 107748 | 66 MB | 29230 | 9703 | 4759273 / 4660075 / 4684033 | 0 | 2026-10-21 14:06 |
-| `acp_contract.atom_segment` | 12496 | 3.8 MB | 3562 | 5697017 | 14537 / 128664 / 5045 | 61 | 2026-10-16 08:22 |
-| `acp_contract.atom_segment_alias` | 410 | 352 kB | 8858 | 213248 | 1642 / 231628 / 1471 | 85 | 2026-10-10 13:29 |
-| `acp_contract.atom_segment_member` | 23987 | 5.4 MB | 6826 | 921461 | 38214 / 471 / 18800 | 2003 | 2026-10-16 08:07 |
-| `acp_contract.atomize_day_fingerprint` | 10062 | 1.9 MB | 10 | 7584 | 6718 / 43 / 0 | 4 | 2026-10-10 07:13 |
-| `acp_contract.hub` | 64 | 152 kB | 1493 | 9503 | 52 / 772 / 774 | 21 | 2026-10-11 23:36 |
-| `acp_contract.question_embedding` | 847 | 8.1 MB | 36 | 87 | 71 / 0 / 0 | 0 |  |
-| `acp_contract.route` | 9063 | 5.6 MB | 555 | 8544108 | 8420 / 7411 / 0 | 4 | 2026-10-16 08:25 |
-| `acp_contract.route_pick` |  | 48 kB | 3 | 9 | 0 / 0 / 0 | 0 |  |
-| `acp_contract.s1_from_atom_runs` |  | 64 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_contract.search_demand` | 5089 | 1.7 MB | 2978 | 1548 | 509 / 289 / 0 | 237 |  |
-| `acp_contract.segment_research_log` | 1337 | 568 kB | 4472 | 14657 | 219 / 0 / 0 | 0 |  |
-| `acp_contract.tour_atoms` | 32019 | 19.8 MB | 10813 | 15994058 | 20773 / 13515 / 0 | 457 | 2026-10-10 14:15 |
-| `acp_deliver.tenant_tour_pages` | 0 | 40 kB | 1810 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.acp_output_rules` |  | 48 kB | 38 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.acp_quota_ledger` |  | 56 kB | 2 | 15 | 6 / 0 / 1 | 1 |  |
-| `acp_shared.angle_gate_option` | 57 | 296 kB | 2544 | 44541 | 69 / 72 / 0 | 20 | 2026-10-16 03:32 |
-| `acp_shared.angle_gate_request` | 21 | 128 kB | 9983 | 13737 | 25 / 65 / 0 | 13 | 2026-10-16 08:36 |
-| `acp_shared.atom_place_card` | 291 | 120 kB | 14167 | 393535 | 298 / 28 / 0 | 27 |  |
-| `acp_shared.audit_log` | 1728 | 1.3 MB | 423 | 4808 | 1801 / 0 / 0 | 0 | 2026-10-16 12:16 |
-| `acp_shared.content_piece` | 317 | 10.7 MB | 15962 | 82520 | 324 / 647 / 0 | 81 | 2026-10-20 10:43 |
-| `acp_shared.content_piece_label` |  | 48 kB | 12 | 20398 | 1 / 0 / 0 | 0 |  |
-| `acp_shared.debate_brand_fit_cache` | 528 | 440 kB | 72 | 2148 | 589 / 0 / 0 | 5 |  |
-| `acp_shared.facts` |  | 64 kB | 56 | 3209 | 0 / 2 / 0 | 2 |  |
-| `acp_shared.marketplace_portfolios` |  | 32 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.place_card` | 112 | 344 kB | 6765 | 488983 | 128 / 123 / 18 | 22 | 2026-10-14 10:18 |
-| `acp_shared.place_card_alias` | 361 | 136 kB | 247 | 614 | 409 / 20 / 0 | 20 |  |
-| `acp_shared.place_card_miss` |  | 32 kB | 5 | 103 | 3 / 0 / 0 | 0 |  |
-| `acp_shared.publish_log` |  | 96 kB | 55 | 6198 | 7 / 14 / 0 | 11 |  |
-| `acp_shared.quarter_plan` | 6 | 88 kB | 450 | 52 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.quarter_plan_version` | 0 | 112 kB | 426 | 52 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.subject` | 416 | 600 kB | 5840 | 3920 | 659 / 708 / 243 | 2 | 2026-10-22 10:44 |
-| `acp_shared.tenant_atom_state` | 0 | 80 kB | 20 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.tenant_config` |  | 32 kB | 8 | 343 | 1 / 0 / 1 | 1 |  |
-| `acp_shared.year_plan` |  | 40 kB | 12 | 416 | 0 / 0 / 0 | 0 |  |
-| `booking.audit_logs` | 54 | 176 kB | 95 | 0 | 103 / 0 / 0 | 0 |  |
-| `booking.b2b_cancellations` |  | 80 kB | 4 | 4 | 2 / 0 / 0 | 0 |  |
-| `booking.b2b_hold_lines` |  | 64 kB | 8 | 261 | 12 / 5 / 0 | 5 |  |
-| `booking.b2b_holds` | 2 | 128 kB | 1099 | 380 | 12 / 14 / 0 | 14 |  |
-| `booking.b2b_partners` |  | 64 kB | 3 | 116 | 2 / 0 / 0 | 1 |  |
-| `booking.b2b_quote_lines` |  | 48 kB | 2 | 17 | 16 / 0 / 0 | 0 |  |
-| `booking.b2b_quotes` |  | 64 kB | 3 | 50 | 16 / 0 / 0 | 0 |  |
-| `booking.cancellation_policies` |  | 48 kB | 2 | 17 | 1 / 0 / 0 | 0 |  |
-| `booking.countries` |  | 32 kB | 91 | 141 | 17 / 0 / 0 | 0 |  |
-| `booking.customer_otps` |  | 24 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
-| `booking.customer_sessions` |  | 32 kB | 4 | 0 | 0 / 0 / 0 | 0 |  |
-| `booking.customers` | 1 | 104 kB | 2606 | 4 | 10 / 0 / 0 | 0 |  |
-| `booking.departures` |  | 64 kB | 6 | 79 | 5 / 0 / 0 | 0 |  |
-| `booking.fx_rates` |  | 48 kB | 88 | 17 | 3 / 0 / 0 | 0 |  |
-| `booking.hotel_room_types` |  | 48 kB | 9 | 210 | 3 / 0 / 0 | 0 |  |
-| `booking.hotels` |  | 136 kB | 49 | 76 | 2 / 0 / 0 | 0 |  |
-| `booking.inbox_cursor` | 1 | 64 kB | 18348 | 9323 | 1 / 9223 / 0 | 43 | 2026-10-23 12:40 |
-| `booking.inbox_events` | 5 | 128 kB | 142 | 62 | 7 / 7 / 0 | 7 |  |
-| `booking.job` | 6881 | 3.5 MB | 18249 | 847901 | 9255 / 18505 / 2362 | 58 | 2026-10-23 13:15 |
-| `booking.media_files` |  | 24 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
-| `booking.notification_reads` |  | 24 kB | 3 | 2926 | 0 / 0 / 0 | 0 |  |
-| `booking.notifications` | 1 | 64 kB | 696 | 0 | 10 / 0 / 0 | 0 |  |
-| `booking.policy_approvals` | 6 | 80 kB | 155 | 53 | 8 / 0 / 0 | 0 |  |
-| `booking.pricing_rules` |  | 48 kB | 81 | 56 | 4 / 0 / 0 | 0 |  |
-| `booking.services` |  | 152 kB | 40 | 102 | 2 / 0 / 0 | 0 |  |
-| `booking.settings` |  | 32 kB | 10 | 60 | 6 / 0 / 0 | 0 |  |
-| `booking.staff_assignments` |  | 64 kB | 40 | 2200 | 1 / 0 / 0 | 0 |  |
-| `booking.staff_users` | 3 | 64 kB | 318 | 4488 | 6 / 34 / 0 | 34 |  |
-| `booking.supplier_contracts` |  | 64 kB | 4 | 373 | 3 / 7 / 0 | 7 |  |
-| `booking.supplier_rates` |  | 80 kB | 10 | 205 | 5 / 0 / 0 | 0 |  |
-| `booking.suppliers` |  | 144 kB | 128 | 126 | 2 / 1 / 0 | 1 |  |
-| `booking.trip_case_countries` |  | 40 kB | 3 | 583 | 3 / 0 / 0 | 0 |  |
-| `booking.trip_case_legs` | 8 | 64 kB | 660 | 117 | 14 / 8 / 0 | 8 |  |
-| `booking.trip_case_status_history` | 1 | 64 kB | 103 | 0 | 18 / 0 / 0 | 0 |  |
-| `booking.trip_case_status_transitions` |  | 32 kB | 2 | 53 | 12 / 0 / 0 | 0 |  |
-| `booking.trip_case_version_itinerary` | 4 | 80 kB | 110 | 31 | 23 / 4 / 0 | 4 |  |
-| `booking.trip_case_versions` |  | 80 kB | 13 | 879 | 8 / 12 / 0 | 12 |  |
-| `booking.trip_cases` | 10 | 176 kB | 1268 | 10 | 13 / 5 / 0 | 5 |  |
-| `booking.trip_plan_components` |  | 48 kB | 4 | 30 | 2 / 0 / 0 | 0 |  |
-| `booking.trip_plans` |  | 64 kB | 372 | 13679 | 2 / 1 / 0 | 1 |  |
-| `booking.version_item_costs` | 4 | 64 kB | 50 | 19 | 10 / 0 / 1 | 1 |  |
-| `crm.job` | 604 | 416 kB | 8924 | 36219 | 613 / 1224 / 0 | 30 | 2026-10-23 13:29 |
-| `crm.member` |  | 32 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
-| `crm.status_transition` |  | 32 kB | 1 | 6 | 6 / 0 / 0 | 0 |  |
-| `crm.tenant` |  | 16 kB | 1 | 1 | 0 / 0 / 0 | 0 |  |
-| `geo.geocode_call` |  | 48 kB | 13 | 525 | 8 / 3 / 0 | 3 |  |
-| `geo.graph_build` | 2 | 96 kB | 620298 | 122745 | 9 / 17 / 6 | 23 |  |
-| `geo.graph_edge` | 1091 | 440 kB | 22 | 7 | 2063 / 0 / 972 | 0 | 2026-10-22 03:22 |
-| `geo.graph_node` | 782 | 464 kB | 54 | 44 | 1439 / 0 / 657 | 0 | 2026-10-22 03:22 |
-| `geo.place_dedupe_country` |  | 16 kB | 7 | 0 | 0 / 0 / 0 | 0 |  |
-| `geo.place_merge` |  | 40 kB | 6 | 54 | 0 / 0 / 0 | 0 |  |
-| `geo.place_name` | 1713 | 576 kB | 462 | 3296 | 1713 / 1280 / 0 | 151 | 2026-10-22 03:18 |
-| `geo.place_outlier` |  | 16 kB | 27 | 129 | 0 / 0 / 0 | 0 |  |
-| `geo.place_pair_verdict` |  | 24 kB | 55 | 0 | 0 / 0 / 0 | 0 |  |
-| `geo.place_shape` |  | 56 kB | 1716 | 5980 | 37 / 0 / 0 | 0 |  |
-| `geo.tour_build` | 110 | 184 kB | 409 | 403 | 121 / 121 / 0 | 42 |  |
-| `geo.tour_day` | 1084 | 520 kB | 112 | 404 | 1084 / 244 / 0 | 109 | 2026-10-15 00:02 |
-| `geo.tour_junction` | 13710 | 3.2 MB | 1185 | 1 | 28132 / 0 / 14422 | 0 | 2026-10-22 03:22 |
-| `geo.tour_leg` | 9551 | 6 MB | 2683 | 2 | 18586 / 0 / 9035 | 0 | 2026-10-22 03:22 |
-| `geo.tour_place` | 2455 | 40.1 MB | 3822 | 1353151 | 2455 / 1049 / 0 | 135 | 2026-10-22 03:18 |
-| `geo.tour_segment` | 158 | 192 kB | 204171 | 359600 | 344 / 0 / 186 | 0 | 2026-10-22 03:22 |
-| `geo.tour_stop` | 1956 | 760 kB | 5595 | 3062 | 3859 / 0 / 1903 | 0 | 2026-10-22 03:22 |
-| `gold_aa_internal.content_exports` |  | 24 kB | 1680 | 0 | 0 / 0 / 0 | 0 |  |
-| `gold_aa_internal.published_tours` | 892 | 6.8 MB | 48131 | 16144064 | 497 / 1421 / 0 | 1 | 2026-10-23 11:33 |
-| `gold_aa_internal.tenant_tour_versions` | 53 | 648 kB | 26677 | 4169 | 55 / 116 / 0 | 19 | 2026-10-15 14:24 |
-| `gold_aa_internal.tour_lifecycle_event` |  | 80 kB | 6 | 10706 | 1 / 0 / 0 | 1 |  |
-| `gold_aa_internal.webhook_deliveries` |  | 24 kB | 1685 | 0 | 0 / 0 / 0 | 0 |  |
-| `public.checkpoint_migrations` |  | 24 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `shared.acp_runs` |  | 40 kB | 10 | 0 | 0 / 0 / 0 | 0 |  |
-| `shared.admin_users` | 10 | 80 kB | 12058 | 75345 | 8 / 295 / 4 | 15 |  |
-| `shared.alert_recipient` | 2 | 64 kB | 3008 | 154 | 2 / 1016 / 0 | 9 |  |
-| `shared.cost_explorer_app_snapshot` | 4602 | 1.1 MB | 94 | 7 | 4602 / 0 / 0 | 0 | 2026-10-21 05:36 |
-| `shared.cost_explorer_snapshot` | 2561 | 2 MB | 498 | 10 | 7572 / 0 / 7192 | 0 | 2026-10-21 21:00 |
-| `shared.decision_cache_hits_daily` | 237 | 120 kB | 661 | 7027 | 237 / 6788 / 0 | 8 | 2026-10-21 14:06 |
-| `shared.decision_log` | 292729 | 364.5 MB | 483 | 651427 | 286709 / 4 / 695728 | 4 | 2026-10-16 08:23 |
-| `shared.decision_question` | 5 | 72 kB | 8477 | 670 | 1 / 20 / 0 | 3 |  |
-| `shared.destinations` | 1927 | 1.1 MB | 55697 | 6697782 | 752 / 1400 / 0 | 144 | 2026-10-14 14:52 |
-| `shared.dfs_balance_snapshot` |  | 312 kB | 1 | 1399 | 19 / 0 / 0 | 0 |  |
-| `shared.dfs_call_log` | 2545 | 1 MB | 2047 | 7129 | 700 / 0 / 0 | 0 |  |
-| `shared.jev_credit_topup` |  | 48 kB | 149 | 3 | 2 / 0 / 0 | 0 |  |
-| `shared.jev_tenant_allowlist` |  | 32 kB | 6556 | 4732 | 4 / 0 / 7 | 7 |  |
-| `shared.job` | 3015 | 11.5 MB | 16327 | 981559 | 2332 / 24710 / 0 | 18 | 2026-10-23 06:59 |
-| `shared.job_worker` | 152 | 312 kB | 112378 | 309706 | 341 / 93078 / 257 | 53 | 2026-10-23 13:33 |
-| `shared.llm_call_daily` |  | 48 kB | 655 | 242 | 5 / 0 / 0 | 0 |  |
-| `shared.llm_call_log` | 267933 | 136.7 MB | 8760 | 23604449 | 152819 / 0 / 200 | 200 | 2026-10-21 07:21 |
-| `shared.llm_model_catalog` |  | 32 kB | 1664 | 98 | 3 / 5 / 0 | 2 |  |
-| `shared.llm_role_config` |  | 32 kB | 1089 | 6762 | 17 / 19 / 6 | 7 |  |
-| `shared.llm_shadow_log` | 5554 | 11.9 MB | 10 | 9 | 2993 / 0 / 0 | 0 | 2026-10-08 07:37 |
-| `shared.membership_plans` |  | 48 kB | 3224 | 3484 | 0 / 0 / 0 | 0 |  |
-| `shared.notifications` | 12 | 104 kB | 18265 | 0 | 16 / 17 / 0 | 18 |  |
-| `shared.pipeline_jobs` | 523 | 480 kB | 10 | 22 | 0 / 0 / 0 | 0 |  |
-| `shared.pipeline_lessons` |  | 24 kB | 2 | 1960 | 0 / 0 / 0 | 0 |  |
-| `shared.pipeline_runs` | 46 | 208 kB | 6295 | 5828 | 0 / 840 / 0 | 24 |  |
-| `shared.place_photo` | 3232 | 2.6 MB | 11860 | 3074257 | 0 / 6464 / 0 | 79 | 2026-10-21 05:52 |
-| `shared.prompt_eval_runs` |  | 48 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
-| `shared.rerun_wave` |  | 48 kB | 5 | 181 | 1 / 1 / 0 | 1 |  |
-| `shared.schema_versions` | 239 | 104 kB | 1325 | 619 | 113 / 0 / 0 | 7 |  |
-| `shared.spend_budget` |  | 32 kB | 1049 | 191 | 6 / 0 / 0 | 0 |  |
-| `shared.staff_app_grant` |  | 32 kB | 164 | 85 | 2 / 0 / 1 | 1 |  |
-| `shared.tenant_api_usage` | 145123 | 35.6 MB | 9 | 26493 | 105897 / 0 / 200 | 206 | 2026-10-22 01:37 |
-| `shared.tenant_api_usage_monthly` |  | 48 kB | 10 | 47 | 3 / 0 / 0 | 0 |  |
-| `shared.tenant_brand_rule_versions` |  | 64 kB | 2 | 33 | 0 / 0 / 0 | 0 |  |
-| `shared.tenant_brand_rules` | 27 | 232 kB | 25326 | 669 | 25 / 56 / 1 | 13 | 2026-10-22 09:12 |
-| `shared.tenant_brand_rules_deleted_aa404` |  | 96 kB | 2 | 8 | 0 / 0 / 0 | 0 |  |
-| `shared.tenant_export_config` |  | 48 kB | 2 | 9 | 0 / 0 / 0 | 0 |  |
-| `shared.tenant_integrations` |  | 64 kB | 29 | 2043 | 14 / 11 / 14 | 8 |  |
-| `shared.tenant_rewrite_usage` | 6 | 64 kB | 107 | 151 | 4 / 50 / 0 | 3 | 2026-10-20 03:09 |
-| `shared.tenant_seo_config` |  | 48 kB | 10 | 1342 | 4 / 11 / 0 | 11 |  |
-| `shared.tenants` | 4 | 80 kB | 240074 | 3202 | 6 / 28 / 1 | 9 |  |
-| `shared.unmapped_market_requests` |  | 32 kB | 3 | 409 | 0 / 0 / 0 | 0 |  |
-| `silver_aa_internal.generated_content` | 1423 | 14.8 MB | 3218 | 650517 | 979 / 458 / 0 | 87 | 2026-10-08 02:59 |
-| `silver_aa_internal.quality_scores` | 1432 | 2 MB | 562463 | 1039 | 986 / 948 / 7 | 126 | 2026-10-10 10:07 |
-| `silver_aa_internal.raw_sources` | 34 | 96 kB | 1063 | 2020 | 0 / 0 / 0 | 0 |  |
-| `silver_aa_internal.raw_tours` | 987 | 4.9 MB | 38050 | 20314687 | 0 / 822 / 0 | 1 | 2026-10-10 09:43 |
-| `silver_aa_internal.review_queue` | 229 | 176 kB | 57373 | 25816 | 178 / 109 / 0 | 66 | 2026-10-08 03:05 |
-| `silver_aa_internal.seo_context` | 898 | 1.2 MB | 2029 | 708865 | 506 / 0 / 0 | 12 |  |
-| `silver_aa_internal.upload_staging` |  | 104 kB | 10 | 0 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.component_id_map` | 750 | 136 kB | 80 | 1299 | 750 / 0 / 0 | 0 |  |
-| `tripplanner.customers` |  | 64 kB | 17 | 25 | 7 / 7 / 1 | 8 |  |
-| `tripplanner.llm_spend_daily` | 8 | 64 kB | 927 | 1637 | 8 / 1502 / 0 | 50 | 2026-10-16 09:06 |
-| `tripplanner.narration_cache` |  | 48 kB | 4 | 12 | 1 / 1 / 0 | 1 |  |
-| `tripplanner.outbox` |  | 96 kB | 14 | 18492 | 8 / 0 / 3 | 1 |  |
-| `tripplanner.sessions` | 93 | 80 kB | 743 | 370 | 77 / 42 / 3 | 37 |  |
-| `tripplanner.trip_drafts` | 98 | 120 kB | 326 | 450 | 75 / 260 / 1 | 14 |  |
-| `tripplanner.trip_events` | 416 | 184 kB | 908 | 654 | 335 / 0 / 6 | 5 |  |
+| `acp_contract.atom_decompose_jobs` | 0 | 104 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_contract.atom_embedding` | 7728 | 126.6 MB | 421 | 71846 | 5330 / 0 / 0 | 0 | 2026-10-10 13:30 |
+| `acp_contract.atom_matches` | 10947 | 3.4 MB | 10 | 34456 | 5200 / 24963 / 0 | 864 | 2026-10-08 14:00 |
+| `acp_contract.atom_ranking` | 105606 | 67.1 MB | 29341 | 10015 | 6366311 / 6269255 / 6293213 | 0 | 2026-10-24 10:26 |
+| `acp_contract.atom_segment` | 13606 | 3.8 MB | 3824 | 7551255 | 15740 / 131892 / 5045 | 974 | 2026-10-16 08:22 |
+| `acp_contract.atom_segment_alias` | 438 | 352 kB | 9068 | 213333 | 1690 / 231643 / 1475 | 12 | 2026-10-24 09:04 |
+| `acp_contract.atom_segment_member` | 26280 | 5.5 MB | 7228 | 956990 | 40588 / 471 / 18969 | 1 | 2026-10-24 10:13 |
+| `acp_contract.atomize_day_fingerprint` | 10617 | 2.1 MB | 13 | 8735 | 7601 / 43 / 0 | 4 | 2026-10-10 07:13 |
+| `acp_contract.hub` | 64 | 152 kB | 1634 | 9863 | 52 / 1031 / 774 | 0 | 2026-10-24 10:26 |
+| `acp_contract.question_embedding` | 847 | 8.2 MB | 45 | 97 | 77 / 0 / 0 | 0 |  |
+| `acp_contract.route` | 9063 | 5.6 MB | 676 | 8544664 | 8667 / 7654 / 0 | 247 | 2026-10-16 08:25 |
+| `acp_contract.route_pick` |  | 48 kB | 4 | 9 | 0 / 0 / 0 | 0 |  |
+| `acp_contract.s1_from_atom_runs` |  | 64 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_contract.search_demand` | 5089 | 1.7 MB | 3194 | 1548 | 509 / 289 / 0 | 237 |  |
+| `acp_contract.segment_research_log` | 1337 | 568 kB | 4803 | 14657 | 219 / 0 / 0 | 0 |  |
+| `acp_contract.tour_atoms` | 35737 | 22.1 MB | 11606 | 16118037 | 24098 / 16830 / 0 | 60 | 2026-10-24 10:18 |
+| `acp_deliver.tenant_tour_pages` | 0 | 40 kB | 2069 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.acp_output_rules` |  | 48 kB | 39 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.acp_quota_ledger` |  | 56 kB | 3 | 15 | 6 / 0 / 1 | 1 |  |
+| `acp_shared.angle_gate_option` | 57 | 296 kB | 2544 | 45610 | 69 / 72 / 0 | 20 | 2026-10-16 03:32 |
+| `acp_shared.angle_gate_request` | 21 | 128 kB | 10542 | 13905 | 25 / 65 / 0 | 13 | 2026-10-16 08:36 |
+| `acp_shared.atom_place_card` | 291 | 120 kB | 14341 | 403678 | 298 / 28 / 0 | 27 |  |
+| `acp_shared.audit_log` | 1728 | 1.3 MB | 424 | 4831 | 1824 / 0 / 0 | 0 | 2026-10-16 12:16 |
+| `acp_shared.content_piece` | 317 | 10.7 MB | 16074 | 82994 | 324 / 647 / 0 | 81 | 2026-10-20 10:43 |
+| `acp_shared.content_piece_label` |  | 48 kB | 14 | 20398 | 1 / 0 / 0 | 0 |  |
+| `acp_shared.debate_brand_fit_cache` | 414 | 504 kB | 179 | 2294 | 662 / 0 / 275 | 27 | 2026-10-24 09:02 |
+| `acp_shared.facts` |  | 64 kB | 57 | 3593 | 0 / 2 / 0 | 2 |  |
+| `acp_shared.marketplace_portfolios` |  | 32 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.place_card` | 112 | 344 kB | 7070 | 502672 | 128 / 123 / 18 | 22 | 2026-10-14 10:18 |
+| `acp_shared.place_card_alias` | 361 | 136 kB | 249 | 614 | 409 / 20 / 0 | 20 |  |
+| `acp_shared.place_card_miss` |  | 32 kB | 6 | 103 | 3 / 0 / 0 | 0 |  |
+| `acp_shared.publish_log` |  | 96 kB | 56 | 6512 | 7 / 14 / 0 | 11 |  |
+| `acp_shared.quarter_plan` | 6 | 88 kB | 643 | 52 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.quarter_plan_version` | 0 | 112 kB | 619 | 52 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.subject` | 409 | 600 kB | 5860 | 4226 | 674 / 766 / 265 | 81 | 2026-10-22 10:44 |
+| `acp_shared.tenant_atom_state` | 0 | 80 kB | 21 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.tenant_config` |  | 32 kB | 9 | 356 | 1 / 0 / 1 | 1 |  |
+| `acp_shared.year_plan` |  | 40 kB | 13 | 608 | 0 / 0 / 0 | 0 |  |
+| `booking.audit_logs` | 108 | 184 kB | 98 | 0 | 114 / 0 / 0 | 0 |  |
+| `booking.b2b_cancellations` |  | 80 kB | 5 | 4 | 2 / 0 / 0 | 0 |  |
+| `booking.b2b_hold_lines` | 12 | 72 kB | 112 | 292 | 13 / 5 / 0 | 5 |  |
+| `booking.b2b_holds` | 2 | 128 kB | 3779 | 452 | 13 / 16 / 0 | 16 |  |
+| `booking.b2b_partners` |  | 64 kB | 4 | 158 | 2 / 0 / 0 | 1 |  |
+| `booking.b2b_quote_lines` |  | 48 kB | 3 | 20 | 20 / 0 / 0 | 0 |  |
+| `booking.b2b_quotes` |  | 64 kB | 4 | 58 | 20 / 0 / 0 | 0 |  |
+| `booking.cancellation_policies` |  | 48 kB | 3 | 17 | 1 / 0 / 0 | 0 |  |
+| `booking.countries` |  | 32 kB | 92 | 141 | 17 / 0 / 0 | 0 |  |
+| `booking.customer_otps` |  | 24 kB | 4 | 0 | 0 / 0 / 0 | 0 |  |
+| `booking.customer_sessions` |  | 32 kB | 5 | 0 | 0 / 0 / 0 | 0 |  |
+| `booking.customers` | 1 | 104 kB | 2607 | 4 | 10 / 0 / 0 | 0 |  |
+| `booking.departure_incidents` |  | 32 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
+| `booking.departures` |  | 64 kB | 7 | 121 | 5 / 0 / 0 | 0 |  |
+| `booking.fx_rates` |  | 48 kB | 89 | 17 | 3 / 0 / 0 | 0 |  |
+| `booking.hotel_room_types` |  | 48 kB | 19 | 214 | 3 / 0 / 0 | 0 |  |
+| `booking.hotels` |  | 136 kB | 50 | 92 | 2 / 0 / 0 | 0 |  |
+| `booking.inbox_cursor` | 2 | 64 kB | 22513 | 10179 | 2 / 10079 / 0 | 32 | 2026-10-24 09:46 |
+| `booking.inbox_events` | 5 | 136 kB | 2615 | 70 | 15 / 15 / 0 | 15 |  |
+| `booking.job` | 6899 | 3.5 MB | 18284 | 940453 | 10112 / 20221 / 3213 | 170 | 2026-10-24 09:11 |
+| `booking.media_files` |  | 24 kB | 4 | 0 | 0 / 0 / 0 | 0 |  |
+| `booking.notification_reads` |  | 24 kB | 4 | 2926 | 0 / 0 / 0 | 0 |  |
+| `booking.notifications` | 1 | 96 kB | 701 | 0 | 22 / 0 / 0 | 0 |  |
+| `booking.outbox` |  | 96 kB | 5 | 2072 | 1 / 1 / 0 | 1 |  |
+| `booking.policy_approvals` | 6 | 80 kB | 160 | 53 | 8 / 0 / 0 | 0 |  |
+| `booking.pricing_rules` |  | 48 kB | 82 | 60 | 4 / 0 / 0 | 0 |  |
+| `booking.services` |  | 152 kB | 47 | 112 | 2 / 0 / 0 | 0 |  |
+| `booking.settings` |  | 32 kB | 11 | 71 | 8 / 0 / 0 | 0 |  |
+| `booking.staff_assignments` |  | 64 kB | 41 | 2200 | 1 / 0 / 0 | 0 |  |
+| `booking.staff_users` | 3 | 64 kB | 319 | 4488 | 6 / 34 / 0 | 34 |  |
+| `booking.supplier_contracts` |  | 64 kB | 5 | 381 | 3 / 7 / 0 | 7 |  |
+| `booking.supplier_rates` |  | 80 kB | 11 | 229 | 5 / 0 / 0 | 0 |  |
+| `booking.suppliers` |  | 144 kB | 129 | 126 | 2 / 1 / 0 | 1 |  |
+| `booking.trip_case_countries` |  | 40 kB | 4 | 583 | 3 / 0 / 0 | 0 |  |
+| `booking.trip_case_legs` | 8 | 64 kB | 725 | 117 | 14 / 8 / 0 | 8 |  |
+| `booking.trip_case_status_history` | 1 | 64 kB | 106 | 0 | 18 / 0 / 0 | 0 |  |
+| `booking.trip_case_status_transitions` |  | 32 kB | 3 | 53 | 12 / 0 / 0 | 0 |  |
+| `booking.trip_case_version_itinerary` | 4 | 80 kB | 317 | 31 | 23 / 4 / 0 | 4 |  |
+| `booking.trip_case_versions` |  | 80 kB | 30 | 908 | 8 / 12 / 0 | 12 |  |
+| `booking.trip_cases` | 10 | 176 kB | 1314 | 17 | 13 / 5 / 0 | 5 |  |
+| `booking.trip_plan_components` |  | 48 kB | 8 | 42 | 2 / 0 / 0 | 0 |  |
+| `booking.trip_plans` |  | 64 kB | 375 | 13823 | 2 / 1 / 0 | 1 |  |
+| `booking.version_item_costs` | 4 | 64 kB | 51 | 19 | 10 / 0 / 1 | 1 |  |
+| `crm.audit_event` |  | 0 B | 0 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.audit_event_legacy` | 114 | 136 kB | 12 | 11 | 126 / 0 / 0 | 0 |  |
+| `crm.audit_event_p202611` |  | 32 kB | 3 | 2 | 0 / 0 / 0 | 0 |  |
+| `crm.audit_event_p202612` |  | 32 kB | 3 | 2 | 0 / 0 / 0 | 0 |  |
+| `crm.audit_event_p202701` |  | 32 kB | 3 | 2 | 0 / 0 / 0 | 0 |  |
+| `crm.audit_export_manifest` |  | 64 kB | 3 | 28 | 14 / 0 / 0 | 0 |  |
+| `crm.audit_export_tenant` |  | 24 kB | 1 | 143 | 3 / 14 / 0 | 14 |  |
+| `crm.consent` |  | 48 kB | 2 | 6 | 18 / 0 / 0 | 0 |  |
+| `crm.dispatch_queue` |  | 32 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.document` |  | 40 kB | 4 | 24 | 0 / 0 / 0 | 0 |  |
+| `crm.erasure_request` |  | 24 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.form_definition` |  | 48 kB | 2 | 27 | 3 / 0 / 0 | 0 |  |
+| `crm.form_submission` |  | 112 kB | 5 | 145 | 9 / 9 / 0 | 9 |  |
+| `crm.intake_form` |  | 48 kB | 20 | 54 | 3 / 0 / 0 | 0 |  |
+| `crm.integration_credential` |  | 24 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.job` | 1852 | 968 kB | 8977 | 130166 | 1877 / 3752 / 0 | 10 | 2026-10-24 10:28 |
+| `crm.legal_hold` |  | 24 kB | 2 | 3 | 0 / 0 / 0 | 0 |  |
+| `crm.lifecycle_run` |  | 24 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.llm_call` |  | 32 kB | 4 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.llm_usage_daily` |  | 16 kB | 1 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.member` | 6 | 80 kB | 821 | 288 | 13 / 1 / 0 | 1 |  |
+| `crm.member_invitation` |  | 80 kB | 4 | 288 | 3 / 4 / 0 | 5 |  |
+| `crm.note` |  | 48 kB | 2 | 22 | 9 / 0 / 0 | 0 |  |
+| `crm.owner_recovery_request` |  | 24 kB | 2 | 37 | 0 / 0 / 0 | 0 |  |
+| `crm.placeholder_map` |  | 32 kB | 7 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.profile_history` |  | 24 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.status_transition` | 57 | 32 kB | 5 | 82 | 57 / 0 / 0 | 0 |  |
+| `crm.task` |  | 80 kB | 4 | 109 | 9 / 0 / 0 | 0 |  |
+| `crm.tenant` |  | 32 kB | 6 | 798 | 3 / 0 / 0 | 0 |  |
+| `crm.tenant_entitlement` |  | 16 kB | 1 | 14 | 0 / 0 / 0 | 0 |  |
+| `crm.tenant_key` |  | 64 kB | 3 | 20 | 1 / 0 / 0 | 0 |  |
+| `crm.tenant_settings` |  | 16 kB | 4 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.traveler` | 8 | 136 kB | 175 | 13 | 9 / 0 / 0 | 0 |  |
+| `crm.traveler_health` |  | 24 kB | 2 | 6 | 0 / 0 / 0 | 0 |  |
+| `crm.traveler_profile` | 2 | 48 kB | 17 | 2 | 9 / 0 / 0 | 0 |  |
+| `crm.traveler_relation` |  | 40 kB | 4 | 6 | 0 / 0 / 0 | 0 |  |
+| `crm.trip` | 2 | 72 kB | 240 | 34 | 9 / 14 / 0 | 14 |  |
+| `crm.trip_commitment` |  | 32 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
+| `crm.trip_party` | 2 | 64 kB | 10 | 0 | 9 / 0 / 0 | 0 |  |
+| `crm.trip_stage_history` |  | 48 kB | 2 | 22 | 23 / 0 / 0 | 0 |  |
+| `crm.trip_traveler` |  | 80 kB | 4 | 184 | 9 / 0 / 0 | 0 |  |
+| `geo.geocode_call` |  | 48 kB | 14 | 641 | 11 / 3 / 0 | 3 |  |
+| `geo.graph_build` | 2 | 96 kB | 711337 | 123573 | 14 / 27 / 11 | 38 |  |
+| `geo.graph_edge` | 1779 | 776 kB | 28 | 7 | 5022 / 0 / 3243 | 0 | 2026-10-24 03:33 |
+| `geo.graph_node` | 1341 | 824 kB | 60 | 44 | 3671 / 0 / 2330 | 0 | 2026-10-24 03:33 |
+| `geo.place_dedupe_country` |  | 16 kB | 9 | 0 | 0 / 0 / 0 | 0 |  |
+| `geo.place_merge` |  | 40 kB | 7 | 67 | 0 / 0 / 0 | 0 |  |
+| `geo.place_name` | 1719 | 576 kB | 472 | 3609 | 1729 / 1553 / 0 | 175 | 2026-10-23 14:43 |
+| `geo.place_outlier` |  | 16 kB | 32 | 133 | 0 / 0 / 0 | 0 |  |
+| `geo.place_pair_verdict` |  | 24 kB | 69 | 0 | 0 / 0 / 0 | 0 |  |
+| `geo.place_shape` | 39 | 488 kB | 1845 | 6046 | 39 / 39 / 0 | 39 |  |
+| `geo.tour_build` | 110 | 184 kB | 429 | 417 | 123 / 123 / 0 | 44 |  |
+| `geo.tour_day` | 1084 | 536 kB | 124 | 410 | 1098 / 247 / 0 | 112 | 2026-10-15 00:02 |
+| `geo.tour_junction` | 22662 | 6 MB | 1192 | 1 | 65828 / 0 / 43166 | 0 | 2026-10-24 03:33 |
+| `geo.tour_leg` | 16041 | 11.7 MB | 2691 | 2 | 45277 / 0 / 29236 | 0 | 2026-10-24 03:33 |
+| `geo.tour_place` | 2473 | 40.5 MB | 3863 | 1370480 | 2480 / 1084 / 0 | 170 | 2026-10-22 03:18 |
+| `geo.tour_segment` | 192 | 480 kB | 205145 | 374621 | 662 / 0 / 470 | 64 | 2026-10-24 02:21 |
+| `geo.tour_stop` | 3081 | 1.3 MB | 5605 | 3067 | 8984 / 0 / 5903 | 0 | 2026-10-24 03:33 |
+| `gold_aa_internal.content_exports` |  | 24 kB | 1935 | 0 | 0 / 0 / 0 | 0 |  |
+| `gold_aa_internal.published_tours` | 892 | 6.8 MB | 49320 | 16610838 | 497 / 1536 / 0 | 110 | 2026-10-23 11:33 |
+| `gold_aa_internal.tenant_tour_versions` | 53 | 648 kB | 27733 | 4343 | 55 / 116 / 0 | 19 | 2026-10-15 14:24 |
+| `gold_aa_internal.tour_lifecycle_event` |  | 80 kB | 2527 | 33104 | 10 / 0 / 0 | 2 |  |
+| `gold_aa_internal.webhook_deliveries` |  | 24 kB | 1940 | 0 | 0 / 0 / 0 | 0 |  |
+| `public.checkpoint_migrations` |  | 24 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.acp_runs` |  | 40 kB | 11 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.admin_users` | 10 | 80 kB | 12715 | 75345 | 8 / 332 / 4 | 14 |  |
+| `shared.alert_recipient` | 2 | 64 kB | 3774 | 154 | 2 / 1271 / 0 | 24 |  |
+| `shared.cost_explorer_app_snapshot` | 5358 | 1.4 MB | 97 | 8 | 5358 / 0 / 0 | 0 | 2026-10-24 02:43 |
+| `shared.cost_explorer_snapshot` | 1678 | 2 MB | 506 | 10 | 7572 / 0 / 8075 | 0 | 2026-10-23 21:00 |
+| `shared.decision_cache_hits_daily` | 261 | 128 kB | 662 | 10232 | 261 / 9969 / 0 | 16 | 2026-10-24 10:26 |
+| `shared.decision_log` | 387843 | 379.4 MB | 503 | 748155 | 310886 / 4 / 695728 | 0 | 2026-10-24 10:24 |
+| `shared.decision_question` | 5 | 72 kB | 9731 | 670 | 1 / 20 / 0 | 3 |  |
+| `shared.destinations` | 1927 | 1.1 MB | 55936 | 6899867 | 786 / 1401 / 0 | 145 | 2026-10-14 14:52 |
+| `shared.dfs_balance_snapshot` |  | 320 kB | 2 | 1509 | 20 / 0 / 0 | 0 |  |
+| `shared.dfs_call_log` | 2545 | 1 MB | 2048 | 7411 | 701 / 0 / 0 | 0 |  |
+| `shared.jev_credit_topup` |  | 48 kB | 198 | 3 | 2 / 0 / 0 | 0 |  |
+| `shared.jev_tenant_allowlist` |  | 32 kB | 7723 | 4732 | 4 / 0 / 7 | 7 |  |
+| `shared.job` | 3207 | 12.5 MB | 16509 | 1050605 | 2590 / 28253 / 0 | 96 | 2026-10-24 10:03 |
+| `shared.job_worker` | 150 | 312 kB | 112642 | 332166 | 355 / 98145 / 266 | 49 | 2026-10-24 10:21 |
+| `shared.llm_call_daily` |  | 48 kB | 990 | 354 | 5 / 0 / 0 | 0 |  |
+| `shared.llm_call_log` | 284344 | 145.8 MB | 9159 | 23648286 | 169688 / 0 / 200 | 200 | 2026-10-24 09:26 |
+| `shared.llm_model_catalog` |  | 32 kB | 1735 | 98 | 3 / 5 / 0 | 2 |  |
+| `shared.llm_role_config` |  | 32 kB | 1107 | 7540 | 17 / 24 / 6 | 12 |  |
+| `shared.llm_shadow_log` | 5554 | 11.9 MB | 10 | 10 | 3001 / 0 / 0 | 0 | 2026-10-08 07:37 |
+| `shared.membership_plans` |  | 48 kB | 3434 | 3615 | 0 / 0 / 0 | 0 |  |
+| `shared.notifications` | 12 | 104 kB | 18904 | 0 | 27 / 23 / 0 | 25 |  |
+| `shared.pipeline_jobs` | 523 | 480 kB | 11 | 22 | 0 / 0 / 0 | 0 |  |
+| `shared.pipeline_lessons` |  | 24 kB | 3 | 1960 | 0 / 0 / 0 | 0 |  |
+| `shared.pipeline_runs` | 46 | 208 kB | 6704 | 6046 | 0 / 946 / 0 | 36 |  |
+| `shared.place_photo` | 3232 | 2.6 MB | 12325 | 3532110 | 0 / 9696 / 0 | 173 | 2026-10-21 05:52 |
+| `shared.prompt_eval_runs` |  | 48 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.rerun_wave` |  | 80 kB | 6 | 353 | 6 / 20 / 0 | 11 |  |
+| `shared.schema_versions` | 301 | 104 kB | 1504 | 673 | 123 / 0 / 0 | 7 |  |
+| `shared.spend_budget` |  | 32 kB | 1160 | 201 | 6 / 0 / 0 | 0 |  |
+| `shared.staff_app_grant` |  | 32 kB | 166 | 85 | 2 / 0 / 1 | 1 |  |
+| `shared.tenant_api_usage` | 148083 | 35.8 MB | 9 | 27965 | 106454 / 0 / 200 | 206 | 2026-10-22 01:37 |
+| `shared.tenant_api_usage_monthly` |  | 48 kB | 11 | 47 | 3 / 0 / 0 | 0 |  |
+| `shared.tenant_brand_rule_versions` |  | 64 kB | 3 | 33 | 0 / 0 / 0 | 0 |  |
+| `shared.tenant_brand_rules` | 27 | 232 kB | 25465 | 1192 | 25 / 56 / 1 | 13 | 2026-10-22 09:12 |
+| `shared.tenant_brand_rules_deleted_aa404` |  | 96 kB | 3 | 8 | 0 / 0 / 0 | 0 |  |
+| `shared.tenant_export_config` |  | 48 kB | 3 | 9 | 0 / 0 / 0 | 0 |  |
+| `shared.tenant_integrations` |  | 64 kB | 30 | 2271 | 14 / 11 / 14 | 8 |  |
+| `shared.tenant_rewrite_usage` | 6 | 64 kB | 125 | 151 | 4 / 50 / 0 | 3 | 2026-10-20 03:09 |
+| `shared.tenant_seo_config` |  | 48 kB | 11 | 1541 | 4 / 11 / 0 | 11 |  |
+| `shared.tenants` | 4 | 80 kB | 240989 | 3202 | 6 / 28 / 1 | 9 |  |
+| `shared.unmapped_market_requests` |  | 32 kB | 4 | 409 | 0 / 0 / 0 | 0 |  |
+| `silver_aa_internal.generated_content` | 1516 | 15.4 MB | 3592 | 658205 | 1085 / 512 / 0 | 106 | 2026-10-08 02:59 |
+| `silver_aa_internal.quality_scores` | 1550 | 2 MB | 568023 | 1251 | 1092 / 1054 / 7 | 189 | 2026-10-10 10:07 |
+| `silver_aa_internal.raw_sources` | 34 | 96 kB | 1073 | 2038 | 0 / 0 / 0 | 0 |  |
+| `silver_aa_internal.raw_tours` | 987 | 5 MB | 40748 | 22324612 | 0 / 937 / 0 | 87 | 2026-10-10 09:43 |
+| `silver_aa_internal.review_queue` | 229 | 176 kB | 58693 | 26290 | 178 / 109 / 0 | 66 | 2026-10-08 03:05 |
+| `silver_aa_internal.seo_context` | 898 | 1.2 MB | 2284 | 709024 | 506 / 0 / 0 | 12 |  |
+| `silver_aa_internal.upload_staging` |  | 104 kB | 11 | 0 | 0 / 0 / 0 | 0 |  |
+| `tripplanner.component_id_map` | 750 | 136 kB | 81 | 1299 | 750 / 0 / 0 | 0 |  |
+| `tripplanner.customers` |  | 64 kB | 18 | 25 | 7 / 7 / 1 | 8 |  |
+| `tripplanner.llm_spend_daily` | 8 | 64 kB | 928 | 1637 | 8 / 1502 / 0 | 50 | 2026-10-16 09:06 |
+| `tripplanner.narration_cache` |  | 48 kB | 5 | 12 | 1 / 1 / 0 | 1 |  |
+| `tripplanner.outbox` |  | 96 kB | 15 | 20191 | 8 / 0 / 3 | 1 |  |
+| `tripplanner.sessions` | 93 | 80 kB | 761 | 386 | 77 / 42 / 3 | 37 |  |
+| `tripplanner.trip_drafts` | 98 | 120 kB | 380 | 466 | 75 / 260 / 1 | 14 |  |
+| `tripplanner.trip_events` | 416 | 184 kB | 910 | 654 | 335 / 0 / 6 | 5 |  |
 
 ## Unused indexes
 
@@ -5049,6 +6615,7 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `booking.audit_logs_created_idx` on `audit_logs` (16 kB)
 - `booking.audit_logs_entity_idx` on `audit_logs` (16 kB)
 - `booking.b2b_cancellations_partner_idx` on `b2b_cancellations` (16 kB)
+- `booking.b2b_hold_lines_on_request_idx` on `b2b_hold_lines` (8 kB)
 - `booking.b2b_holds_proposal_day_idx` on `b2b_holds` (16 kB)
 - `booking.b2b_holds_quote_idx` on `b2b_holds` (16 kB)
 - `booking.b2b_partners_client_idx` on `b2b_partners` (16 kB)
@@ -5057,6 +6624,7 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `booking.customer_sessions_customer_idx` on `customer_sessions` (8 kB)
 - `booking.customers_merge_review_idx` on `customers` (16 kB)
 - `booking.customers_phone_lookup_idx` on `customers` (8 kB)
+- `booking.departure_incidents_departure_idx` on `departure_incidents` (8 kB)
 - `booking.hotels_country_idx` on `hotels` (16 kB)
 - `booking.hotels_destination_idx` on `hotels` (8 kB)
 - `booking.hotels_updated_idx` on `hotels` (16 kB)
@@ -5083,16 +6651,36 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `booking.trip_cases_customer_idx` on `trip_cases` (16 kB)
 - `booking.trip_cases_party_idx` on `trip_cases` (16 kB)
 - `booking.trip_cases_source_idx` on `trip_cases` (16 kB)
-- `booking.trip_cases_updated_idx` on `trip_cases` (16 kB)
 - `booking.version_item_costs_rate_idx` on `version_item_costs` (16 kB)
+- `crm.audit_event_object_idx` on `audit_event` (0 B)
+- `crm.audit_event_tenant_at_idx` on `audit_event` (0 B)
+- `crm.audit_event_p202611_tenant_id_object_kind_object_id_idx` on `audit_event_p202611` (8 kB)
+- `crm.audit_event_p202612_tenant_id_object_kind_object_id_idx` on `audit_event_p202612` (8 kB)
+- `crm.audit_event_p202701_tenant_id_object_kind_object_id_idx` on `audit_event_p202701` (8 kB)
+- `crm.dispatch_queue_due_idx` on `dispatch_queue` (8 kB)
+- `crm.dispatch_queue_traveler_idx` on `dispatch_queue` (8 kB)
+- `crm.form_submission_redact_idx` on `form_submission` (16 kB)
 - `crm.job_parent_idx` on `job` (8 kB)
-- `crm.member_identity_idx` on `member` (8 kB)
+- `crm.lifecycle_run_tenant_idx` on `lifecycle_run` (8 kB)
+- `crm.llm_call_tenant_at_idx` on `llm_call` (8 kB)
+- `crm.placeholder_map_expires_idx` on `placeholder_map` (8 kB)
+- `crm.profile_history_token_idx` on `profile_history` (8 kB)
+- `crm.task_open_idx` on `task` (16 kB)
+- `crm.traveler_archived_idx` on `traveler` (8 kB)
+- `crm.traveler_name_bidx_idx` on `traveler` (16 kB)
+- `crm.traveler_name_token_bidx_idx` on `traveler` (24 kB)
+- `crm.traveler_owner_member_idx` on `traveler` (8 kB)
+- `crm.traveler_phone_bidx_idx` on `traveler` (8 kB)
+- `crm.traveler_referrer_idx` on `traveler` (8 kB)
+- `crm.traveler_relation_to_idx` on `traveler_relation` (8 kB)
+- `crm.trip_owner_idx` on `trip` (8 kB)
+- `crm.trip_commitment_trip_idx` on `trip_commitment` (8 kB)
+- `crm.trip_party_token_idx` on `trip_party` (16 kB)
 - `geo.place_merge_country_idx` on `place_merge` (8 kB)
 - `geo.place_merge_keeper_idx` on `place_merge` (8 kB)
 - `geo.place_pair_verdict_hi_idx` on `place_pair_verdict` (8 kB)
-- `geo.place_shape_due_idx` on `place_shape` (16 kB)
-- `geo.place_shape_osm_idx` on `place_shape` (8 kB)
-- `geo.tour_leg_countries_gin` on `tour_leg` (152 kB)
+- `geo.place_shape_osm_idx` on `place_shape` (16 kB)
+- `geo.tour_leg_countries_gin` on `tour_leg` (192 kB)
 - `geo.tour_place_unlinked_idx` on `tour_place` (72 kB)
 - `gold_aa_internal.idx_pt_embedding` on `published_tours` (168 kB)
 - `gold_aa_internal.idx_ttv_status` on `tenant_tour_versions` (16 kB)
@@ -5102,10 +6690,10 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `gold_aa_internal.idx_aa_internal_webhook_status` on `webhook_deliveries` (8 kB)
 - `shared.idx_acp_runs_country` on `acp_runs` (8 kB)
 - `shared.idx_acp_runs_status` on `acp_runs` (8 kB)
-- `shared.cost_explorer_app_snapshot_fetched_idx` on `cost_explorer_app_snapshot` (80 kB)
+- `shared.cost_explorer_app_snapshot_fetched_idx` on `cost_explorer_app_snapshot` (88 kB)
 - `shared.idx_dfs_call_log_live` on `dfs_call_log` (32 kB)
-- `shared.idx_llm_call_log_account` on `llm_call_log` (504 kB)
-- `shared.idx_llm_call_log_model_created` on `llm_call_log` (18.8 MB)
+- `shared.idx_llm_call_log_account` on `llm_call_log` (528 kB)
+- `shared.idx_llm_call_log_model_created` on `llm_call_log` (19.9 MB)
 - `shared.idx_notif_event_type` on `notifications` (16 kB)
 - `shared.idx_notif_tenant_unread` on `notifications` (16 kB)
 - `shared.ix_pipeline_jobs_created` on `pipeline_jobs` (40 kB)
@@ -5126,7 +6714,7 @@ Cross-app keys that have no FK (data standards DM-2.3) and how many rows point a
 
 Column comments that start with `pii:<class>` (personal data) or `conf:<class>` (`commercial`, `credential`), data standards DM-6.1; `also` = further tags named later in the same comment. Owners tag a column in the migration that creates it. Input of the RoPA (AA-Ecosys `docs/legal/register.md` section (a), `tools/data/gen_pii_inventory.py`) and the erasure runbook (DM-6.7).
 
-**94 tagged column(s)**, 4 untagged candidate(s) in booking, crm, tripplanner, 0 finding(s).
+**119 tagged column(s)**, 13 untagged candidate(s) in booking, crm, tripplanner, 0 finding(s).
 
 | schema | tag | columns | named as also |
 |---|---|---|---|
@@ -5139,6 +6727,15 @@ Column comments that start with `pii:<class>` (personal data) or `conf:<class>` 
 | `booking` | `pii:online_id` | 3 | 0 |
 | `booking` | `pii:profile` | 6 | 0 |
 | `booking` | `pii:travel` | 7 | 0 |
+| `crm` | `conf:credential` | 2 | 0 |
+| `crm` | `pii:contact` | 6 | 0 |
+| `crm` | `pii:emergency_contact` | 1 | 0 |
+| `crm` | `pii:free_text` | 3 | 0 |
+| `crm` | `pii:government_id` | 5 | 0 |
+| `crm` | `pii:health` | 1 | 0 |
+| `crm` | `pii:name` | 5 | 0 |
+| `crm` | `pii:profile` | 1 | 0 |
+| `crm` | `pii:travel` | 1 | 0 |
 | `shared` | `conf:credential` | 1 | 0 |
 | `shared` | `pii:contact` | 2 | 0 |
 | `shared` | `pii:name` | 1 | 0 |
@@ -5229,6 +6826,31 @@ Column comments that start with `pii:<class>` (personal data) or `conf:<class>` 
 | `booking` | `v_customer_summary` | `address` | `pii:address` |  |
 | `booking` | `version_item_costs` | `net_amount` | `conf:commercial` |  |
 | `booking` | `version_item_costs` | `supplier_note` | `conf:commercial` |  |
+| `crm` | `document` | `filename_enc` | `pii:free_text` |  |
+| `crm` | `form_submission` | `payload_enc` | `pii:contact` |  |
+| `crm` | `integration_credential` | `account_ref` | `pii:contact` |  |
+| `crm` | `integration_credential` | `secret_enc` | `conf:credential` |  |
+| `crm` | `note` | `body_enc` | `pii:free_text` |  |
+| `crm` | `placeholder_map` | `map_enc` | `pii:free_text` |  |
+| `crm` | `tenant_key` | `wrapped_dek` | `conf:credential` |  |
+| `crm` | `traveler` | `given_name_enc` | `pii:name` |  |
+| `crm` | `traveler` | `family_name_enc` | `pii:name` |  |
+| `crm` | `traveler` | `display_name_enc` | `pii:name` |  |
+| `crm` | `traveler` | `email_enc` | `pii:contact` |  |
+| `crm` | `traveler` | `phone_enc` | `pii:contact` |  |
+| `crm` | `traveler` | `email_bidx` | `pii:contact` |  |
+| `crm` | `traveler` | `phone_bidx` | `pii:contact` |  |
+| `crm` | `traveler` | `name_bidx` | `pii:name` |  |
+| `crm` | `traveler` | `name_token_bidx` | `pii:name` |  |
+| `crm` | `traveler` | `dob_enc` | `pii:government_id` |  |
+| `crm` | `traveler` | `nationality_enc` | `pii:government_id` |  |
+| `crm` | `traveler` | `passport_no_enc` | `pii:government_id` |  |
+| `crm` | `traveler` | `passport_expiry_enc` | `pii:government_id` |  |
+| `crm` | `traveler` | `passport_country_enc` | `pii:government_id` |  |
+| `crm` | `traveler` | `emergency_contact_enc` | `pii:emergency_contact` |  |
+| `crm` | `traveler` | `profile_token_enc` | `pii:profile` |  |
+| `crm` | `traveler_health` | `health_flags_enc` | `pii:health` |  |
+| `crm` | `trip` | `title` | `pii:travel` |  |
 | `shared` | `admin_users` | `username` | `pii:online_id` |  |
 | `shared` | `admin_users` | `password_hash` | `conf:credential` |  |
 | `shared` | `admin_users` | `email` | `pii:contact` |  |
@@ -5256,10 +6878,19 @@ Column comments that start with `pii:<class>` (personal data) or `conf:<class>` 
 
 Columns of `booking`, `crm`, `tripplanner` without a tag whose name contains one of the tokens `address`, `data`, `email`, `iss`, `itinerary`, `label`, `message`, `name`, `note`, `notes`, `payload`, `phone`, `snapshot`, `sub`, `summary`, `title` (whole snake_case tokens) and that are not on the allowlist (AA-CIS-Infra `db/gen_schema_reference.py` `PII_ALLOWLIST`). Tag them in an owner migration or allowlist them with a reason.
 
+- `crm.dispatch_queue.message_ref`
+- `crm.form_submission.payload_redacted_at`
+- `crm.intake_form.label`
 - `crm.job.payload`
 - `crm.member.cognito_iss`
 - `crm.member.cognito_sub`
+- `crm.member_invitation.email_enc`
+- `crm.member_invitation.email_bidx`
+- `crm.member_invitation.cognito_iss`
+- `crm.member_invitation.cognito_sub`
+- `crm.note.note_id`
 - `crm.status_transition.table_name`
+- `crm.tenant.display_name`
 
 | allowlisted column | reason |
 |---|---|
@@ -5364,15 +6995,28 @@ Client sessions per `application_name` (`(empty)` = a pool without `application_
 
 | application_name | role | state | sessions |
 |---|---|---|---|
+| aa-tripplanner-dev-browse | tripplanner | idle | 2 |
 | booking-api | booking | idle | 1 |
-| cis-api | cis_app | idle | 3 |
+| cis-api | cis_app | idle | 1 |
 | cis-worker | cis_app | idle | 1 |
 | crm-api | crm_app | idle | 1 |
+| db-isolation-probe | cis_app | active | 1 |
+| db-isolation-probe | db_migrator | idle | 1 |
 
 ## Latest migrations
 
 | version | applied_at | description |
 |---|---|---|
+| crm-011 | 2026-10-24 10:32:24.305342+00:00 | AA-941: L1 console (insights opt-out, AA-raised data requests) |
+| crm-010 | 2026-10-24 08:35:46.600908+00:00 | AA-942: data lifecycle (agency offboarding states, trash days, archive columns, legal_hold, trip_commitment, dispatch_queue, erasure_request, lifecycle_run, erase_subject, lifecycle_purge_expired) |
+| crm-009 | 2026-10-24 06:56:54.321270+00:00 | AA-938: F3 scrubber: crm.placeholder_map (scrub DEK, 24 h, purge policy), value-free llm_call receipt |
+| crm-008 | 2026-10-24 06:49:42.396963+00:00 | AA-939: F4 roles (membership write guard, last owner, invitations, owner recovery, entitlements, refund threshold) |
+| crm-007 | 2026-10-24 06:39:39.304637+00:00 | AA-940: audit_event monthly partitions (crm-003 table attached as the first), partition maker + verified drop, audit_export_tenant registry, audit_export_manifest hash chain |
+| crm-006 | 2026-10-24 05:24:13.544067+00:00 | AA-937: F1/F2 complete: relations (+inverse), health codes, documents, full F2 profile + history, age band list, list_view ids, F2 views + reader grants |
+| crm-005 | 2026-10-24 03:39:17.916619+00:00 | AA-936: intake forms + submissions, consent, F2 profile, trip + stage history, party links, task, note, llm_call + usage rollup |
+| crm-004 | 2026-10-24 02:21:28.296870+00:00 | AA-935: agency display name + default locale, caller-scoped membership lookup policies |
+| crm-003 | 2026-10-23 18:10:19.861587+00:00 | AA-934: crm vault (tenant_key DEK store, integration_credential, traveler vault columns, append-only audit_event) |
+| bk-022 | 2026-10-23 17:42:33.217758+00:00 | AA-975 (CRM-B3): shared outbox (+ feed_seq sequence, event triggers on holds, hold lines, cancellations, departures, incidents), departure_incidents, hold-line on-request desk columns, b2b_answer_due(), settings b2b_on_request_answer_business_days, b2b_ops_timezone |
 | 274 | 2026-10-23 13:42:43.623090+00:00 | AA-986 L3/L4: shared.notifications under RLS (tenant reads its own tenant-facing rows); catalog.v_tour_retired + catalog.v_tour_lifecycle_outbox (contract catalog.tour.v1.3) |
 | 273 | 2026-10-23 11:33:49.681667+00:00 | AA-645 d06: published_tours.updated_at (a rewrite keeps published_at, records updated_at); catalog._live_tour.master_updated_at, v_tour.updated_at follows it; same v_tour columns and rows |
 | 272 | 2026-10-23 11:26:22.910760+00:00 | AA-986 L2: tour lifecycle record, Master status reason, v_tour_liveness |
@@ -5383,13 +7027,3 @@ Client sessions per `application_name` (`(empty)` = a pool without `application_
 | crm-002 | 2026-10-23 03:10:52.562403+00:00 | AA-933: crm tenancy base (tenant, member, status transitions, base table template, readiness view) |
 | crm-001 | 2026-10-23 03:07:15.770984+00:00 | AA-932: crm schema privileges (crm_app DML defaults, no PUBLIC EXECUTE) + crm.job (ADR 0003a template, kinds crm_*) |
 | 269 | 2026-10-23 02:52:22.790021+00:00 | AA-932: crm_owner USAGE on shared + SELECT, INSERT on shared.schema_versions; key guard: crm_owner registers crm- keys only |
-| rl-004 | 2026-10-23 02:48:57.852282+00:00 | AA-932: partner CRM NOLOGIN roles crm_ai_reader, crm_insights, crm_support_reader, crm_eraser (granted to crm_app only; crm_app NOINHERIT, reaches them by SET LOCAL ROLE) |
-| rl-003 | 2026-10-23 02:45:30.200664+00:00 | AA-932: role bootstrap for owner crm — crm_owner NOLOGIN (granted to aa_cis_admin, db_migrator), crm_app LOGIN CONNECTION LIMIT 6 (no password), schema crm owned by crm_owner |
-| bk-020 | 2026-10-23 02:39:14.350872+00:00 | AA-973 (CRM-B2): departures, b2b_holds + lines, quote line departure_id, B2B trip case (channel, party_tenant_id, customer_id NULL for b2b, source crm), setting b2b_hold_hours |
-| bk-019 | 2026-10-23 01:23:46.550616+00:00 | AA-972 (CRM-B1): b2b_partners, b2b_quotes + lines (append-only), trip_plan_components, setting b2b_quote_valid_hours |
-| 268 | 2026-10-22 13:26:59.030553+00:00 | AA-894: FK published_tours.quality_score_id -> quality_scores(id) ON DELETE SET NULL (+ index, dangling pointers repaired) |
-| 267 | 2026-10-22 11:16:36.177035+00:00 | AA-779: llm_role_config t9_faq_answer_fit (validate, claude sonnet acc3, no fallback, no shadow) |
-| 266 | 2026-10-22 10:49:41.902103+00:00 | AA-859 wave 4: acp_contract.tour_atoms on RLS (ENABLE without FORCE): aa_app_user reads platform atoms and its own (FOR SELECT, owner_scope text compare on the NULLIF GUC), cis_app parity (FOR ALL true), catalog_owner_read (FOR SELECT true, the catalog views unchanged; D9 = 0 guarded); aa_app_user: SELECT. Needs CIS 254 (no tripplanner grant left) |
-| 265 | 2026-10-22 10:39:48.090418+00:00 | AA-859 wave 4: acp_shared.subject / quarter_plan / quarter_plan_version / year_plan and acp_deliver.tenant_tour_pages on RLS (ENABLE without FORCE; tenant_isolation TO aa_app_user on the NULLIF GUC with WITH CHECK, through quarter_plan for the versions, text compare + master read for the pages; the X1 parity policy TO cis_app); aa_app_user: the column grants of the pick / cut / trip-reallocation statements, SELECT on the pages, USAGE on acp_contract and SELECT on the platform read allowlist (route, atom_segment, atom_segment_member, atom_segment_alias, place_card_alias, atom_place_card; place_card (card_id, status) only) |
-| 254 | 2026-10-22 10:20:45.383771+00:00 | AA-847: revoke tripplanner reads of raw_tours (179) and tour_atoms (180) |
-| 264 | 2026-10-22 08:26:04.799562+00:00 | AA-779: llm_role_config t9_faq_filter (validate, claude haiku acc3, no fallback, no shadow) |
