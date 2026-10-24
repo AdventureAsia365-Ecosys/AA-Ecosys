@@ -284,7 +284,9 @@ tables only, follow DRY RUN when they delete or overwrite, and keep the script i
 `docs/audits/<date>-S<nnn>-<slug>/`.
 *Why:* S225 rule; an unreviewed DDL on the shared instance hits all three apps, and live-only objects
 (two RLS policies and `acp_shared.acp_output_rules`, review P3) are invisible to review.
-*Enforced:* review; drift check flags unmanaged objects (*to build*, **N1**).
+*Enforced:* review; the DB Schema Dump drift report (AA-853, report only) replays every applied migration into a
+scratch PostgreSQL each night and lists the live objects no migration creates in the *Schema drift* section of
+`db-schema-reference.md`, each with its owner decision (AA-CIS-Infra `db/schema_drift_decisions.json`).
 
 **MIG-6 (MUST)** A migration touches only its owner's schemas, its own `schema_versions` row, and grants
 on its own objects to consumer roles. It MAY create its own NOLOGIN roles idempotently (bk-001 pattern
@@ -300,7 +302,10 @@ carry `ALTER ROLE`. Instance-level extensions (e.g. `pg_stat_statements`, **N3**
 in a CIS migration (or by the bootstrap once the migrator no longer holds `rds_superuser`).
 *Why:* ownership is a convention until **X1**; the migration review is the boundary.
 *Enforced:* Booking migration guard (`no-login`, `no-alter-role`, `no-password`, `no-security-definer`,
-`no-extension`, `create-role`); review for CIS/TP; **X2** (*to build*).
+`no-extension`, `create-role`); review for CIS/TP; **X2** (*to build*). The schema boundary is enforced for every
+owner by the Migration Copy Guard ownership lint (AA-853, AA-CIS-Infra `db/check_migration_ownership.py`): a copy
+that creates, alters, drops, comments on, grants on or writes to an object outside its owner's schemas
+(`db/owners.yaml`) fails, apart from its own `shared.schema_versions` row.
 
 **MIG-7 (MUST)** Expand/contract for every shape change: expand (add) → ship readers and writers on the
 new shape → wait ≥ 14 days → contract (drop) in a separate migration under DRY RUN.
