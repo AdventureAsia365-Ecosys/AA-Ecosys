@@ -1,0 +1,39 @@
+{
+  "contract": "supply.service.v1",
+  "expect": "valid",
+  "why": "An activity: working title, unit, duration, group size and inclusions; one photo by entity_media id",
+  "payload": {
+    "contract": "supply.service.v1",
+    "version": 1,
+    "idempotency_key": "8f1c2d3e-0000-4a5b-9c6d-000000000610",
+    "emitted_at": "2026-10-24T08:20:00Z",
+    "entity_id": "5b9d3f21-3333-4c3d-8e4f-000000000301",
+    "supply_version": 1,
+    "change": "upsert",
+    "facts": {
+      "service_type": "activity",
+      "working_title": "Basket boat ride Cam Thanh (half day)",
+      "unit": "person",
+      "destination_id": "2a2a2a2a-0000-4000-8000-000000000010",
+      "country_code": "VN",
+      "duration_minutes": 180,
+      "max_group_size": 12,
+      "inclusions": [
+        "Local boat crew",
+        "Life jackets",
+        "Bottled water"
+      ],
+      "status": "active",
+      "media": [
+        {
+          "media_id": "6d1f0c2a-5b3e-4a7d-9c1e-0000000000a1",
+          "usage_rights": true,
+          "content_type": "image/jpeg",
+          "width": 2400,
+          "height": 1600,
+          "sha256": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+        }
+      ]
+    }
+  }
+}
