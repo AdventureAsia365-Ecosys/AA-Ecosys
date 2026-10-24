@@ -1,0 +1,17 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "DataRequestList",
+  "expect": "valid",
+  "why": "An AA export the owner downloaded but has not closed still holds the open-request slot (export_downloaded, not done)",
+  "payload": {
+    "items": [
+      {
+        "request_id": "7c1e2d3f-4a5b-4c6d-8e9f-0a1b2c3d4e5f",
+        "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+        "kind": "agency_export",
+        "status": "export_downloaded",
+        "raised_at": "2026-10-23T08:00:00Z"
+      }
+    ]
+  }
+}

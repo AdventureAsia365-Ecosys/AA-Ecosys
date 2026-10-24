@@ -65,6 +65,8 @@ PII_FIELD_NAMES = frozenset({
     "passport_number", "passport_no", "address", "street_address", "emergency_contact", "traveller_name",
     "traveler_name", "guest_name",
 })
+# Name endings that mark personal data whatever the prefix ("owner_email", "guest_phone").
+PII_FIELD_SUFFIXES = ("_email", "_email_address", "_phone", "_phone_number")
 
 
 @dataclass(frozen=True)
@@ -75,7 +77,17 @@ class Policy:
     forbidden_patterns: tuple[str, ...] = ()
     no_pii: bool = True
     allowed_pii_classes: frozenset[str] = frozenset()
+    # (component schema, property, x-pii class): the only personal-data fields a no-PII contract may carry. Each one
+    # must be tagged with exactly that class and be writeOnly (sent once, never returned) — AA-941 first-owner invite.
+    pii_write_only_fields: frozenset[tuple[str, str, str]] = frozenset()
     why: str = ""
+
+    def write_only_pii(self, schema: str | None, prop: str) -> str | None:
+        """The x-pii class allowed for this write-only field, or None."""
+        for s_name, p_name, cls in self.pii_write_only_fields:
+            if s_name == schema and p_name == prop:
+                return cls
+        return None
 
 
 POLICY: dict[str, Policy] = {
@@ -84,7 +96,10 @@ POLICY: dict[str, Policy] = {
         forbidden_keys=frozenset({"trip_count", "revenue"}),
         forbidden_patterns=(r"^trips?(_|$)", r"(^|_)trips?_count$", r"(^|_)revenue(_|$)", r"^pipeline",
                             r"(^|_)margin(_|$)", r"(^|_)commission(_|$)", r"(^|_)gmv(_|$)", r"(^|_)bookings?_value"),
-        why="L1 console: no trip, pipeline, revenue, margin or commission figures and no personal data",
+        # AA-941: the first-owner invite sends the owner's address once (vault-encrypted by the CRM, never returned).
+        pii_write_only_fields=frozenset({("OwnerInviteRequest", "owner_email", "contact")}),
+        why="L1 console: no trip, pipeline, revenue, margin or commission figures and no personal data "
+            "(one write-only field: the first-owner invite address)",
     ),
     # Fix B19: the agency price is b2b_price; the supplier net never leaves Booking. No PII crosses the API.
     "booking.b2b.v1": Policy(
@@ -165,7 +180,7 @@ def key_violation(policy: Policy, key: str) -> str | None:
                 if re.search(pattern, fk):
                     return fk
             return pattern
-    if policy.no_pii and low in PII_FIELD_NAMES:
+    if policy.no_pii and (low in PII_FIELD_NAMES or low.endswith(PII_FIELD_SUFFIXES)):
         return "pii-name"
     return None
 
@@ -173,17 +188,42 @@ def key_violation(policy: Policy, key: str) -> str | None:
 def scan_schema_doc(name: str, doc: dict, policy: Policy) -> list[str]:
     """Policy problems in a contract document: property names, required names and x-pii annotations."""
     problems: list[str] = []
+    schemas = (doc.get("components") or {}).get("schemas") or {}
+
+    def schema_of(trail: str) -> str | None:  # "/components/schemas/<S>/..." -> S
+        parts = trail.split("/")
+        return parts[3] if len(parts) > 3 and parts[1:3] == ["components", "schemas"] else None
+
+    def allowed_field(trail: str, prop: str) -> str | None:
+        cls = policy.write_only_pii(schema_of(trail), prop)
+        if cls is None or trail != f"/components/schemas/{schema_of(trail)}/properties":
+            return None
+        return cls
+
     for trail, key, value in walk(doc):
         if key == "properties" and isinstance(value, dict):
             for prop in value:
+                cls = allowed_field(trail, str(prop))
+                if cls is not None:
+                    spec = value[prop] if isinstance(value[prop], dict) else {}
+                    if spec.get("x-pii") != cls or spec.get("writeOnly") is not True:
+                        problems.append(f"{trail}/{prop}: {name} allows '{prop}' only as a writeOnly field tagged "
+                                        f"x-pii '{cls}'")
+                    continue
                 rule = key_violation(policy, str(prop))
                 if rule:
                     problems.append(f"{trail}/{prop}: field '{prop}' is not allowed in {name} ({rule}; {policy.why})")
         elif key == "required" and isinstance(value, list):
             for prop in value:
-                if isinstance(prop, str) and key_violation(policy, prop):
+                if not isinstance(prop, str) or policy.write_only_pii(schema_of(trail), prop) is not None:
+                    continue
+                if key_violation(policy, prop):
                     problems.append(f"{trail}: required field '{prop}' is not allowed in {name}")
         elif key == "x-pii":
+            parts = trail.split("/")
+            prop = parts[-2] if len(parts) >= 2 else ""
+            if allowed_field("/".join(parts[:-2]), prop) == str(value):
+                continue
             if policy.no_pii:
                 problems.append(f"{trail}: {name} must carry no personal data, but a field is tagged x-pii '{value}'")
             elif str(value) not in policy.allowed_pii_classes:
@@ -192,10 +232,13 @@ def scan_schema_doc(name: str, doc: dict, policy: Policy) -> list[str]:
     return problems
 
 
-def scan_payload(policy: Policy, payload: Any) -> list[tuple[str, str]]:
-    """(rule, message) for every policy breach in a sample payload."""
+def scan_payload(policy: Policy, payload: Any, schema: str | None = None) -> list[tuple[str, str]]:
+    """(rule, message) for every policy breach in a sample payload (a top-level write-only PII field the policy allows
+    for that schema is accepted)."""
     found: list[tuple[str, str]] = []
     for trail, key, value in walk(payload):
+        if trail.count("/") == 1 and policy.write_only_pii(schema, str(key)) is not None:
+            continue
         rule = key_violation(policy, str(key))
         if rule:
             found.append((rule, f"{trail}: field '{key}' is forbidden ({rule})"))
@@ -362,7 +405,7 @@ def check_samples(samples_dir: Path, docs: dict[str, dict], root: Path, report: 
         except Exception as exc:  # noqa: BLE001 - a broken $ref (already reported as O4) must not crash the run
             report.error(where, f"S2 cannot validate against {schema_name}: {type(exc).__name__}: {str(exc)[:200]}")
             continue
-        policy_hits = scan_payload(POLICY.get(name, Policy()), payload)
+        policy_hits = scan_payload(POLICY.get(name, Policy()), payload, schema_name)
         if expect == "valid":
             for e in schema_errors:
                 loc = "/".join(str(x) for x in e.absolute_path) or "(root)"

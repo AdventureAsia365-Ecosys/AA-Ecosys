@@ -1,0 +1,13 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "TenantCreate",
+  "expect": "valid",
+  "why": "Create a synthetic Dev agency; ticket_ref is required (AA-941 review fix)",
+  "payload": {
+    "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+    "agency_name": "Synthetic Travel Co (Dev)",
+    "is_synthetic": true,
+    "default_locale": "en-AU",
+    "ticket_ref": "SUP-1234"
+  }
+}

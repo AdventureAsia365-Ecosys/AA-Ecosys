@@ -1,0 +1,14 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "OwnerInviteAccepted",
+  "expect": "invalid",
+  "why": "The invite answer never echoes the owner's address (AA-941: not even masked)",
+  "rule": "pii-name",
+  "payload": {
+    "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+    "invitation_id": "5f0b7a52-1d7e-4a3e-8a8f-2f7a9c1d0e11",
+    "status": "pending",
+    "expires_at": "2026-10-31T09:00:00Z",
+    "email": "first.owner@synthetic.example"
+  }
+}
