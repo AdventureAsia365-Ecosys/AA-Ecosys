@@ -6,9 +6,10 @@ and F15_voice + F15_voice_warn into one **F15_voice** entry, each finding with i
 so no passed / held decision should change. This replay checks that on stored pieces, at $0.
 
 - **Harness:** AA-CIS-App `scripts/quality/replay_aa924.py` (branch `feat/aa-924-lexicon-gate-severity`).
-- **Base tree:** `074676b2` (AA-926 S250 branch head, before AA-924). **Head:** `4d9f940e` (AA-924 PR1 after the
-  review round). Both SHAs are pre-rebase: the CIS branch is rebased onto `origin/main` once AA-926 (#982) is
-  merged, and the replay is re-run with base = that `origin/main` (the SHAs here are then updated).
+- **Base tree:** `ba9e7867` (AA-CIS-App `origin/main` with AA-926 merged, before AA-924; detached worktree).
+  **Head:** `f55f26b4` (AA-924 PR1 after the review round, rebased onto `ba9e7867`). Both sets (golden + S234) were
+  re-run on this pair; the first golden-only run used the pre-rebase pair `074676b2` / `4d9f940e` and gave the
+  same golden numbers.
 - **Method:** `run_quality_gates` on each stored final text, with the gate inputs rebuilt the way the writer builds
   them (`scripts/aa729/score.py::t9_gate_replay`). The F9 judge is not called: it returns the F9 entries stored in
   the piece's own ledger (the real verdicts). A stored failing F10 entry is turned back into its similarity match.
@@ -24,14 +25,18 @@ so no passed / held decision should change. This replay checks that on stored pi
 | Set | Pieces | Routing differences | State |
 |---|---|---|---|
 | AA-729 golden T9 samples (15 t9_blog + 15 t9_linkedin) | 30 × 4 modes | **0** (plan problems included) | done (below) |
-| S234 r1–r4 final pieces | expected 80 × 4 modes | not run | **needs the read-only export** (steps below) |
+| S234 r1–r4 pieces (32 blog + 48 LinkedIn, 40/40 anchors, 0 without `writer_input`) | 80 × 4 modes | **0** (plan problems included) | done (below) |
 
-**What this evidence covers.** Until the S234 rows are in, the evidence is the golden set only. In the two
+**What this evidence covers.** 110 pieces × 4 modes = 440 rows per tree, 0 routing differences and 0 other
+differences. Golden set: in the two
 stored-text modes, 15 of 30 pieces fail first on `F2_banned_patterns` em-dashes in texts stored before AA-778 (290
 findings over all rows), and 21 of 30 are held, so for most of them first failure, hold, route and status are
 trivially equal. The writer now runs `hygiene.fix_dashes` before the gates, so the `_dashfix` modes are the
 realistic input: there no piece fails first on F2, 15 of 30 are held, and the first failures spread over F9, F13,
 F14, F15_voice, F16 and F17, which exercises the F15, waive and style-only paths. Both pairs give 0 differences.
+S234 set: in the stored-text modes 79 of 80 fail first on `F2_banned_patterns` (em-dashes, pre-AA-778), so the
+`_dashfix` modes carry the evidence: 34 approved / 46 held, first failures spread over F2_platform_truth, F9, F13,
+F14, F15_voice (8 in attempt 1) and F17, and still 0 differences.
 
 ## Golden set (root `docs/eval/aa729/fixture-1.1.0.json`)
 
@@ -104,6 +109,80 @@ replay inputs are to production.
 |---|---|---|
 | golden | 23 | 7 |
 
+## S234 pieces (read-only export of `acp_shared.content_piece`, 24/10/2026)
+
+Export: 40/40 anchors, 6 angle requests, 80 pieces (32 blog, 48 LinkedIn; stored 51 approved / 29 held), 0 without
+`writer_input`. Only counts are kept here; the export itself stays out of the repo.
+
+Reading: 0 differences in passed, status, first failure, hold, repair route, stage and repair-plan problems, in all
+four modes, and 0 other differences (legacy-view blocking failures, flags, held gate). The expected "word judged
+in two gates" case did not occur in these pieces. Counts below are over the 440 rows of golden + S234 (both trees
+on the same inputs); the golden rows are the same as in the section above.
+
+### Decisions, base vs head
+
+| source | mode | pieces | approved→approved | held→held | approved→held | held→approved | errors |
+|---|---|---|---|---|---|---|---|
+| s234 | attempt1 | 80 | 1 | 79 | 0 | 0 | 0 |
+| s234 | later | 80 | 1 | 79 | 0 | 0 | 0 |
+| s234 | attempt1_dashfix | 80 | 34 | 46 | 0 | 0 | 0 |
+| s234 | later_dashfix | 80 | 34 | 46 | 0 | 0 | 0 |
+
+### Differences in routing decisions (0) / other differences (0)
+
+None.
+
+### Head: first failure (legacy source) per mode, S234
+
+| mode | none | F2_banned_patterns | F2_platform_truth | F9_cta_fact | F13_leak | F13_repeat | F14_first_line | F14_social_shape | F15_voice | F17_trip_fact |
+|---|---|---|---|---|---|---|---|---|---|---|
+| attempt1 | 1 | 79 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| later | 1 | 79 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| attempt1_dashfix | 25 | 0 | 4 | 3 | 8 | 12 | 1 | 2 | 8 | 17 |
+| later_dashfix | 34 | 0 | 4 | 3 | 8 | 12 | 2 | 0 | 0 | 17 |
+
+### Warn flags by stored name (all 440 rows, golden + S234)
+
+| flag | base | head |
+|---|---|---|
+| F12_scope | 52 | 52 |
+| F13_hygiene | 40 | 40 |
+| F14_social_shape | 10 | 10 |
+| F15_voice | 50 | 44 |
+| F15_voice_warn | 34 | 0 |
+| F17_trip_fact | 16 | 16 |
+| F2_lexicon | 0 | 44 |
+| F2_style_warn | 4 | 4 |
+| F9_brand_style | 36 | 36 |
+
+### Head: findings of the merged entries, all 440 rows (gate / source / severity)
+
+| finding | count |
+|---|---|
+| F15_voice / F15_voice_warn / warn | 34 |
+| F15_voice / F15_voice / block | 18 |
+| F15_voice / F15_voice / warn | 18 |
+| F2_lexicon / F15_voice / block | 50 |
+| F2_lexicon / F15_voice / warn | 50 |
+| F2_lexicon / F2_banned_patterns / block | 1808 |
+
+### Results per ledger
+
+| source | base: results (rows) | head: results (rows) |
+|---|---|---|
+| golden | 24 (60), 25 (60) | 22 (60), 23 (60) |
+| s234 | 24 (192), 25 (128) | 22 (192), 23 (128) |
+
+### Context: head (later-attempt mode) vs the stored status
+
+Not a test of AA-924 (stored status came from older code and the full repair loop; the stored-text mode holds 79 of
+80 on pre-AA-778 em-dashes).
+
+| source | same | different |
+|---|---|---|
+| golden | 23 | 7 |
+| s234 | 30 | 50 |
+
 ## S234 pieces: how to run (orchestrator, needs MFA)
 
 The S234 texts are no longer on disk (S248 cleanup) and S3 has no copy. Export them read-only from
@@ -130,8 +209,8 @@ aws s3 cp s3://aa-cis-bronze-005097885195/scripts/out/aa924_s234.json.gz .tmp-se
 If the task role cannot write `scripts/out/`, run the same exec with `--gzip` instead of `--s3 …`. Copy the base64
 block between `AA924-BEGIN` and `AA924-END` to a file and `base64 -d` it into `aa924_s234.json.gz`.
 
-Then run the replay from the AA-924 CIS worktree. The base worktree is a detached checkout of `074676b2`, or of
-`origin/main` once AA-926 is merged:
+Then run the replay from the AA-924 CIS worktree. The base worktree is a detached checkout of
+`origin/main` (S250 run: `ba9e7867`, AA-926 merged):
 
 ```bash
 python -m scripts.quality.replay_aa924 all --base-tree <base-worktree> --golden <root>/docs/eval/aa729/fixture-1.1.0.json --s234 <root>/.tmp-session/s250/aa924-replay/aa924_s234.json.gz --out-dir <root>/.tmp-session/s250/aa924-replay --report <root>/.tmp-session/s250/aa924-replay/report-all.md
