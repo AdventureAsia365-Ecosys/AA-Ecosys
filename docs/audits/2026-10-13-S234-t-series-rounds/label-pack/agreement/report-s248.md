@@ -1,5 +1,5 @@
 ---
-id: AA-783-agreement
+id: PROD-01-aa783-agreement
 title: "AA-783 agreement report: 40 labels vs the S234 T9 panel and gates"
 description: Human-vs-panel and human-vs-gate agreement on the 40 pieces of the S234 label pack, computed in S248 with agree.py; labels AI-drafted and owner-approved.
 type: reference
