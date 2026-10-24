@@ -1,0 +1,261 @@
+{
+ "_about": "Numbers behind docs/audits/2026-10-24-S250-s251-go-no-go/README.md (S250). Read-only, $0. Wave rows are copied from local run files under .tmp-session/ (not in git).",
+ "snapshot_utc": "2026-10-24T12:55Z",
+ "wave_ledger": {
+  "generated_at": "2026-10-24T12:55Z",
+  "source_dir": ".tmp-session/s249/aa645/realpilot (local, not in git)",
+  "cap_usd": 120,
+  "eligible_tours": 810,
+  "waves": [
+   {
+    "wave": "real pilot 3 (Laos)",
+    "tours": 3,
+    "published": 3,
+    "stayed_v1": 0,
+    "gate_pages": "2/3 → 0/3",
+    "figure_coverage": "0.452 → 0.541",
+    "brand_fit_report_only": "7.667 → 7.333",
+    "cost_usd": 0.2678,
+    "stop": false,
+    "source": "aa645-rp-wave-report.txt, aa645-rp-report.txt",
+    "hard_errors": {
+     "day_loss": 0,
+     "legacy_itinerary_path": 0,
+     "brand_leak": 0,
+     "atomize_failure": 0
+    },
+    "jev_coverage": "3/3"
+   },
+   {
+    "wave": "real wave ≤50 (13 countries)",
+    "tours": 50,
+    "published": 50,
+    "stayed_v1": 0,
+    "gate_pages": "13/50 → 4/50",
+    "figure_coverage": "0.415 → 0.672",
+    "brand_fit_report_only": "7.58 → 7.56",
+    "cost_usd": 3.8386,
+    "stop": false,
+    "source": "aa645-w50-wave-report.txt (ALL row), aa645-w50-report2.txt (final check after atomize: stop=false; the earlier aa645-w50-report.txt was a mid-run check before A3 finished)",
+    "hard_errors": {
+     "day_loss": 0,
+     "legacy_itinerary_path": 0,
+     "brand_leak": 0,
+     "atomize_failure": 0
+    },
+    "jev_coverage": "50/50"
+   },
+   {
+    "wave": "cw_mongolia_1",
+    "tours": 13,
+    "published": 13,
+    "stayed_v1": 0,
+    "gate_pages": "9/13 → 0/13",
+    "figure_coverage": "0.724 → 0.781",
+    "brand_fit_report_only": "7.923 → 8.0",
+    "cost_usd": 0.8361,
+    "stop": false,
+    "hard_errors": {
+     "day_loss": 0,
+     "legacy_itinerary_path": 0,
+     "brand_leak": 0,
+     "atomize_failure": 0
+    },
+    "jev_coverage": "13/13",
+    "source": "cw-cw_mongolia_1-cost.json, cw-cw_mongolia_1-d13.txt, cw-cw_mongolia_1-report.json"
+   },
+   {
+    "wave": "cw_pakistan_1",
+    "tours": 14,
+    "published": 14,
+    "stayed_v1": 0,
+    "gate_pages": "5/14 → 2/14",
+    "figure_coverage": "0.477 → 0.606",
+    "brand_fit_report_only": "7.571 → 7.857",
+    "cost_usd": 1.2765,
+    "stop": false,
+    "hard_errors": {
+     "day_loss": 0,
+     "legacy_itinerary_path": 0,
+     "brand_leak": 0,
+     "atomize_failure": 0
+    },
+    "jev_coverage": "14/14",
+    "source": "cw-cw_pakistan_1-cost.json, cw-cw_pakistan_1-d13.txt, cw-cw_pakistan_1-report.json"
+   },
+   {
+    "wave": "cw_south-korea_1",
+    "tours": 26,
+    "published": 26,
+    "stayed_v1": 0,
+    "gate_pages": "15/26 → 3/26",
+    "figure_coverage": "0.48 → 0.698",
+    "brand_fit_report_only": "7.577 → 8.308",
+    "cost_usd": 2.3771,
+    "stop": false,
+    "hard_errors": {
+     "day_loss": 0,
+     "legacy_itinerary_path": 0,
+     "brand_leak": 0,
+     "atomize_failure": 0
+    },
+    "jev_coverage": "26/26",
+    "source": "cw-cw_south-korea_1-cost.json, cw-cw_south-korea_1-d13.txt, cw-cw_south-korea_1-report.json"
+   },
+   {
+    "wave": "cw_bhutan_1",
+    "tours": 27,
+    "published": 27,
+    "stayed_v1": 0,
+    "gate_pages": "9/27 → 0/27",
+    "figure_coverage": "0.446 → 0.843",
+    "brand_fit_report_only": "7.556 → 6.963",
+    "cost_usd": 1.7529,
+    "stop": false,
+    "hard_errors": {
+     "day_loss": 0,
+     "legacy_itinerary_path": 0,
+     "brand_leak": 0,
+     "atomize_failure": 0
+    },
+    "jev_coverage": "27/27",
+    "source": "cw-cw_bhutan_1-cost.json, cw-cw_bhutan_1-d13.txt, cw-cw_bhutan_1-report.json"
+   },
+   {
+    "wave": "cw_taiwan_1",
+    "tours": 29,
+    "published": 29,
+    "stayed_v1": 0,
+    "gate_pages": "8/29 → 2/29",
+    "figure_coverage": "0.481 → 0.598",
+    "brand_fit_report_only": "7.793 → 8.759",
+    "cost_usd": 1.546,
+    "stop": false,
+    "hard_errors": {
+     "day_loss": 0,
+     "legacy_itinerary_path": 0,
+     "brand_leak": 0,
+     "atomize_failure": 0
+    },
+    "jev_coverage": "29/29",
+    "source": "cw-cw_taiwan_1-cost.json, cw-cw_taiwan_1-d13.txt, cw-cw_taiwan_1-report.json"
+   }
+  ],
+  "totals_closed_waves": {
+   "waves": 7,
+   "tours": 162,
+   "tours_share_of_810": 0.2,
+   "published": 162,
+   "stayed_v1": 0,
+   "stop_conditions_fired": 0,
+   "cost_usd": 11.89,
+   "usd_per_tour": 0.0734,
+   "cap_usd": 120,
+   "cw_ledger_py_output": "country waves: 109 tours $7.7886; running total $11.89 / $120"
+  },
+  "in_flight": {
+   "wave": "cw_thailand_1",
+   "started": "2026-10-24T12:25:11Z",
+   "status": "running at writing time; not counted",
+   "source": ".tmp-session/s250/waves.log"
+  }
+ },
+ "wave_ledger_gate_pages_sum": {
+  "before": 61,
+  "after": 11,
+  "tours": 162
+ },
+ "panel50": {
+  "source": "docs/audits/2026-10-24-S249-s1-go-no-go/panel50.md",
+  "rubric": "s1-panel-v1.1",
+  "pass_a": {
+   "new_serious_per_claim": 0.0015,
+   "new_counts": "4/2599",
+   "live_serious_per_claim": 0.0511,
+   "live_counts": "145/2835",
+   "tours_new_better_worse": "42/0",
+   "wilcoxon_p": 1.7e-08,
+   "hard_fail_pages_new_live": "1/20",
+   "ranking_new_tie_live": "49/0/1"
+  },
+  "pass_b": {
+   "new_serious_per_claim": 0.0004,
+   "new_counts": "1/2565",
+   "live_serious_per_claim": 0.053,
+   "live_counts": "146/2754",
+   "tours_new_better_worse": "41/0",
+   "wilcoxon_p": 2.5e-08,
+   "hard_fail_pages_new_live": "1/20",
+   "ranking_new_tie_live": "48/0/2"
+  }
+ },
+ "dayloss_fix_cis_976": {
+  "commit": "AA-CIS-App 969d221b (#976)",
+  "replay_50_shadow_rows": {
+   "meal_claim_sentences_to_jev": {
+    "old": 211,
+    "new": 79
+   },
+   "meal_claim_sentences_source_backed_new": 132,
+   "whole_itinerary_flagfix_rewrites": {
+    "old": 34,
+    "new": 26
+   },
+   "published_with_fewer_days_than_plan": {
+    "old": 1,
+    "new": 0
+   },
+   "non_publishable": {
+    "old": 0,
+    "new": 0
+   }
+  },
+  "mechanism": [
+   "brand audit: a meal line copying the source day's own meal list is source-backed",
+   "repair_contract invariant days_kept (services/quality/repair_contract.py, INVARIANTS)",
+   "graph.V2_HARD_BLOCK_CODES = {ITINERARY_DAY_COUNT_MISMATCH} (A1 writer-v2 drafts only)"
+  ],
+  "gate_count_change": 0
+ },
+ "a1_codes_not_deciding_on_v2_drafts": {
+  "source": "AA-CIS-App origin/main 85f13ba8",
+  "items": [
+   {
+    "code": "ITINERARY_STILL_COMPRESSED",
+    "where": "services/content_generation/graph.py, _v2_report (mode report, quality_shadow); v1 path still deducts 1.5"
+   },
+   {
+    "code": "DFS_INTENT_UNDERUSED",
+    "where": "services/content_generation/graph.py, _v2_report (mode report, quality_shadow); v1 path still deducts 1.0"
+   },
+   {
+    "code": "brand-fit retry (judge v2)",
+    "where": "services/content_generation/judge_node.py, A1_V2_BRAND_FIT_GATE unset (blocks only when set to enforce)"
+   }
+  ]
+ },
+ "t10_gates_merged_by_aa924": {
+  "source": "AA-924 / S234 Report 12 §1.2",
+  "from": 26,
+  "to": 24,
+  "merges": [
+   "F15_voice_warn -> F15_voice",
+   "F2_banned_patterns + F2_brand_forbidden + F15 stock list -> one lexicon gate"
+  ]
+ },
+ "aa783_kappa": {
+  "source": "docs/audits/2026-10-24-S249-s1-go-no-go/README.md row 5 (from .tmp-session/s249/aa783_report_full_s249.md)",
+  "kappa": 0.401,
+  "ci95": [
+   0.135,
+   0.652
+  ],
+  "bar": 0.6,
+  "labels": "claude-draft (owner-approved)"
+ },
+ "gate_freeze": {
+  "rule": "S246 step 0 / S247: no new gate, regex, lexicon or repair loop for 4 weeks",
+  "from": "~2026-10-22",
+  "until": "~2026-11-19"
+ }
+}

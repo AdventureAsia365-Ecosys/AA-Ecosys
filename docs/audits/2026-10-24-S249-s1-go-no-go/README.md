@@ -14,6 +14,8 @@ related: [AA-645, AA-790, AA-926, AA-916, AA-924, PROD-01-aa645-writer-decision]
 
 # S1-first bước 5: quyết định go / no-go bằng văn bản (S249)
 
+> Điều kiện mở đã đóng, xem bản cuối [../2026-10-24-S250-s251-go-no-go/](../2026-10-24-S250-s251-go-no-go/README.md) (S250).
+
 Bản tư vấn cho Nghiệp · S249 · 24/10/2026 · Tác nhân: Claude Code · Refs AA-645, AA-926, AA-916, AA-924, AA-790
 Chỉ đọc dữ liệu có sẵn, không gọi LLM trả phí, không sửa code. Mọi số đều có nguồn (ký hiệu ở mục 0). Bản này đã sửa theo
 một lượt phản biện độc lập; số bị tranh luận đều được tính lại từ nguồn (`numbers.json`, mục `derived.*` mới).
