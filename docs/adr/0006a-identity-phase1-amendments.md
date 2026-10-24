@@ -6,7 +6,8 @@
   decision 7 (what "reset" means), decision 10 (custom domain timing, DNS), decision 11 (break-glass address,
   secret shape, guards), decision 12 (branding now in Terraform), the Phase 1 row of the Migration plan (legacy
   flag scope) and the "Remaining open risks" list (the `AdminCreateUser` line). A10 (19/10/2026, S243) adds a
-  temporary exception to the `@adventure.asia`-only staff rule for the E2E test account. A11 and A12 (22/10/2026,
+  temporary exception to the `@adventure.asia`-only staff rule for the E2E test account; A10a (24/10/2026, S250)
+  adds a second E2E address for the Booking staff admin. A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) is unchanged and still pending.
 - **Plan and evidence:** `docs/audits/2026-10-18-S242-cognito-phase1/plan.md` (judged plan, stages A/B/S/D),
@@ -253,11 +254,11 @@ mailbox or Google account". That is too strong.
 - **Decision (Nghiệp, option B):** the Cognito email-code E2E test (AA-816 E1, AA-CIS-App `e2e-cognito.yml`) signs
   in as a staff user whose address is the SES inbound test mailbox itself, `e2e@e2e-mail.lumiguides.it.com`
   (AA-CIS-Infra `e2e_mailbox.tf`). Option A, a company address forwarded to that mailbox, needed a manual
-  change in the adventure.asia mail host. This is the only staff address outside `@adventure.asia`. It is
+  change in the adventure.asia mail host. It was the only staff address outside `@adventure.asia` until A10a added the Booking E2E address. It is
   **temporary**: it is removed when the E2E work is finished.
 - **Guards:**
-  - **One exact address,** with no pattern and no other local part or sub-domain. It is a code constant in each
-    place, never configuration: CIS migration 250 (`admin_users_email_chk`), CIS
+  - **One exact address per allow-map entry** (this one; A10a adds the second), with no pattern and no other local
+    part or sub-domain. It is a code constant in each place, never configuration: CIS migration 250 (`admin_users_email_chk`), CIS
     `staff_directory.E2E_TEST_STAFF_EMAIL`, and the WORKFORCE pre sign-up and pre token triggers.
   - **Reviewer only.** The DB CHECK accepts the address only with `role = 'reviewer'`, not an owner and with no
     password. The directory refuses any other CIS role. The pre token trigger denies the token unless the
@@ -266,7 +267,8 @@ mailbox or Google account". That is too strong.
     denies any `booking-*` group on it.
   - **Short-lived codes at rest.** Mailbox objects expire after 1 day.
   - **Narrow reader.** The reader role `aa-cis-dev-e2e-mail-reader` is read-only (List + Get). Its trust is the
-    AA-CIS-App repo, the `e2e` environment and `refs/heads/main` only.
+    `e2e` environment and `refs/heads/main` of two repos: AA-CIS-App and, since AA-936, AA-Partner (its synthetic
+    agency users' codes). The bucket policy also lets the MFA admin role read the objects.
   - **Created like any staff member:** through the staff directory (`create_staff`, audited
     `staff.created`), without an invitation. The Staff page still accepts `@adventure.asia` only.
   - **Domain dependency.** Whoever receives mail for `e2e-mail.lumiguides.it.com` can receive the sign-in
@@ -283,6 +285,49 @@ mailbox or Google account". That is too strong.
      run Terraform Apply.
   5. Point the E2E test at a company address, or retire it.
   6. Add a closing line here.
+  The A10a Booking address goes in the same cleanup (see A10a "Removal").
+
+#### A10a. Second E2E address: the Booking staff admin (24/10/2026, S250, AA-910)
+
+- **Decision (Nghiệp, S250):** agents, and later CI, need a signed-in check of the Booking staff admin. A second
+  dedicated E2E staff identity, `e2e-booking@e2e-mail.lumiguides.it.com`, may sign in with the staff groups exactly
+  `booking-admin`. It is the least-privileged Booking group that reads every staff page, `/staff` and `/audit-log`
+  included (AA-Booking `backend/app/auth/staff.py`). Temporary, like A10.
+- **How the trigger holds it:** the WORKFORCE pre sign-up and pre token triggers now keep a fixed, read-only
+  allow-map `{address: exact group tuple}` (`workforce.E2E_TEST_STAFF`, a code constant, never configuration):
+  the A10 address with `cis-reviewer`, this address with `booking-admin`. Exact match after lower-casing, and only
+  when the raw email attribute is ASCII: `str.lower()` folds some non-ASCII letters to ASCII (U+212A KELVIN SIGN
+  becomes `k`), so a look-alike user would otherwise pass as this one. Any other group set on either address denies
+  the token (logged `workforce_pre_token_denied`), it is never stripped. The A10 address behaves as before.
+- **Exposure.** `booking-admin` is Booking's full write admin, not a read role: `staff.admin`, `retention.admin`
+  (DRY RUN and live delete / redaction of Booking rows), `b2b.admin` (which agencies may call `booking.b2b.v1`),
+  `customer.admin` and every write. Whoever can read a sign-in code can get that role on the production client
+  `booking-staff`. Code readers: the mailbox reader role (AA-CIS-App and AA-Partner, environment `e2e`, `main`), the
+  MFA admin role, and anyone who controls mail for `e2e-mail.lumiguides.it.com`. A10's **domain dependency**
+  applies to this address too: losing the registration, the zone or the MX triggers the removal of both
+  addresses at once.
+- **Read-only session, enforced by Booking.** Because of that exposure, AA-Booking refuses every request other than
+  GET / HEAD / OPTIONS from this user with 403 `e2e_read_only`, on every client, before any DB access
+  (`backend/app/auth/staff.py` `E2E_TEST_STAFF_EMAIL`, next to the A11 `preview_read_only` cap). Reads keep the admin
+  permissions, so the smoke can open `/staff` and `/audit-log`. What stays exposed is the admin reads of Dev Booking
+  data (synthetic, no real customers in Dev).
+- **No CIS access.** The address is not in the CIS staff directory: migration 250's CHECK accepts only the A10
+  address, so the directory cannot hold a row for it. CIS refuses its tokens with 403 `no_cis_group` (it has no
+  `cis-*` group) before any row lookup. No CIS change.
+- **Created outside the directory, without a password.** An admin creates it once with `AdminCreateUser`,
+  `MessageAction=SUPPRESS`, `email_verified=true`, and adds it to `booking-admin`. It never gets a password (the
+  identity.tf rule "nobody but break-glass holds a usable password" and the A8 alarm apply); it signs in with an
+  email code read from the SES mailbox, like the A10 user. So there is no Secrets Manager secret for it. The CIS
+  reconcile job reports it under `cognito_without_row` (expected, not in the directory).
+- **Mailbox:** the SES receipt rule `e2e-cognito` lists the address. Its codes share the `inbound/` prefix, so
+  the existing reader role can read them too (accepted for Dev). An AA-Booking CI job needs its own `sub` added to
+  the reader role's trust (AA-Booking repo, environment `e2e`, `refs/heads/main`) in the PR that adds the job.
+- **Booking side:** the first sign-in provisions a `booking.staff_users` row (`cog:<sub>`, role admin, active). It
+  shows on `/staff` and in the StaffPicker, so real staff could assign trip cases to it; deactivate it between runs if
+  that happens.
+- **Removal (with A10):** `AdminDisableUser` + global sign-out, delete the Cognito user (console), drop the map
+  entry and the receipt-rule recipient (AA-CIS-Infra), Terraform Apply, deactivate the Booking staff row, and
+  remove `E2E_TEST_STAFF_EMAIL` and its write cap from AA-Booking `app/auth/staff.py`.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
@@ -372,4 +417,6 @@ Supersedes the A6 values and closes its open cutover item.
   `api/migrations/247_admin_users_identity.sql`, `api/migrations/250_admin_users_e2e_test_email.sql` (A10).
 - AA-CIS-Infra: `accounts/aa365/identity.tf`, `identity_alerts.tf`, `identity_iam.tf`, `identity_variables.tf`,
   `dns.tf`, `tools/identity/workforce_bootstrap.py`, `e2e_mailbox.tf` and
-  `lambda_src/identity_triggers/workforce.py` (A10).
+  `lambda_src/identity_triggers/workforce.py` (A10, A10a), `docs/implementation-notes/AA-910-booking-e2e-staff.md`
+  (A10a).
+- AA-Booking: `backend/app/auth/staff.py` (A10a write cap, A11 preview cap), `frontend/e2e/SIGNED-IN-SMOKE.md` (A10a).
