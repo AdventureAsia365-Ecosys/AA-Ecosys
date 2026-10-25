@@ -30,6 +30,8 @@ mkdir -p dist
 for n in "${names[@]}"; do
   [ -f "$n/SKILL.md" ] || { echo "package_skills: $n has no SKILL.md" >&2; exit 1; }
   head -5 "$n/SKILL.md" | grep -q "^name: $n\$" || { echo "package_skills: $n/SKILL.md front matter name is not '$n'" >&2; exit 1; }
+  # claude.ai refuses a description with XML-like tags ("SKILL.md description cannot contain XML tags", S251: "S<nnn>").
+  head -5 "$n/SKILL.md" | grep -q '^description:.*[<>]' && { echo "package_skills: $n/SKILL.md description contains '<' or '>' (claude.ai rejects it)" >&2; exit 1; }
   rm -f "dist/$n.zip"
   python3 - "$n" "dist/$n.zip" <<'PY'
 import os, sys, zipfile
