@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.1"
+  version: "1.2"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -18,13 +18,15 @@ info:
     agency (only allow them), cannot invite a first owner while the agency has an owner, a pending owner invitation
     or any traveller, and cannot run an export or deletion (it raises a request the owner confirms in the CRM).
     Version 1.1 (AA-941) is the first served version: it replaces in place the unserved 1.0 proposal (AA-928), whose
-    shapes no consumer read except /jobs/summary and /llm/usage, which are unchanged. Errors are
+    shapes no consumer read except /jobs/summary and /llm/usage, which are unchanged. Version 1.2 (AA-978 follow-up, additive):
+    TenantSummary gains `lock_source` (who locked the agency: AA's L1 console or the CIS membership feed) and the CIS
+    membership feed's state and lag (`membership_feed_state`, `membership_feed_lag_s`), optional for a 1.1 reader. Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
   x-aa-producer: AA-Partner
   x-aa-consumers: [AA-CIS-App]
-  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933]
+  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978]
 servers:
   - url: /crm/ops/v1
 security:
@@ -642,6 +644,28 @@ components:
             Whether any traveller row (trashed and archived included) or stored inquiry exists (gates the first-owner
             invite). A flag, never a count.
         created_at: {type: string, format: date-time}
+        lock_source:
+          type: [string, "null"]
+          enum: [aa_ops, cis_tenant, cis_membership, null]
+          description: >-
+            1.2. Who locked the agency, set exactly while `state` is `locked` (null otherwise): `aa_ops` (the L1 console,
+            and every lock placed before the CRM recorded a source), `cis_tenant` (CIS locked or deleted the tenant; a
+            CIS unlock lifts only this one), `cis_membership` (CIS removed the last active owner; only the owner
+            recovery or an AA unlock lifts it). An L1 lock over a CIS lock turns it into `aa_ops`.
+        membership_feed_state:
+          type: string
+          enum: [ok, pending, stale, failing, unknown]
+          description: >-
+            1.2. The CIS membership feed (tenant.membership.v1) the CRM pulls, platform-wide (the same value on every
+            agency): `ok`, `pending` (no successful pull yet, also while the feed is not configured), `stale` (no
+            successful pull for 10 minutes), `failing` (the last pulls failed), `unknown` (the feed state cannot be
+            read). Absent from a 1.1 producer: read as `unknown`.
+        membership_feed_lag_s:
+          type: [integer, "null"]
+          minimum: 0
+          description: >-
+            1.2. Seconds since the last successful pull of the CIS membership feed (how late a CIS removal or lock may
+            reach the CRM, at most); null before the first successful pull.
     TenantPage:
       type: object
       additionalProperties: false
