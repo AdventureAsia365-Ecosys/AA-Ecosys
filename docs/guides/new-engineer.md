@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-25
 review_every_days: 90
 related: [GUIDE-01, GUIDE-02, GUIDE-05, ARCH-01, TPL-02, AA-897]
 ---
@@ -26,12 +26,14 @@ Accounts and the AWS account map are in [Onboarding: accounts and access](../onb
 
 ## What AA-Ecosys is
 
-Three apps on one AWS account (acc2, us-west-1), plus a Terraform repo:
+Four apps on one AWS account (acc2, us-west-1), plus a Terraform repo:
 
 - **AA-CIS-App** - content system of record: tour ingest and rewrite (A-series), atoms, tenant content (T-series),
-  admin console and tenant portal.
+  admin console, and the API behind the tenant portal.
 - **AA-TripPlanner-Web** - the traveller front door: browse places, assemble a trip, send an inquiry.
 - **AA-Booking** - customers, trip cases, proposals, pricing and suppliers for Adventure Asia staff.
+- **AA-Partner** - the CRM for partner travel agencies (ADR 0010) and, since AA-979 (25/10/2026), the tenant portal
+  (Content studio) UI, moved from AA-CIS-App with its history.
 - **AA-CIS-Infra** - Terraform for every AWS resource, and the DB Migrate workflow for the shared RDS.
 
 There is only a **Dev** environment today, holding **test data only** (D-01). Prod will be a separate RDS instance
@@ -43,12 +45,13 @@ on acc2 (ADR 0001, C7.2a, D-17), dated when go-live is set. Read the
 | Local folder | Repo (org `AdventureAsia365-Ecosys`) | Visibility | Default branch | Read first | Deploys to |
 |---|---|---|---|---|---|
 | `.` (root) | `AA-Ecosys` | private | `master` | [docs catalog](../README.md), [ADRs](../adr/README.md) | nothing (docs, skills, audits) |
-| `apps/AA-CIS-App` | `AA-CIS-App` | public | `main` | `CONTEXT.md` | ECS `aa-cis-dev-api` + `aa-cis-dev-worker`; Vercel admin + portal |
+| `apps/AA-CIS-App` | `AA-CIS-App` | public | `main` | `CONTEXT.md` | ECS `aa-cis-dev-api` + `aa-cis-dev-worker`; Vercel `aa-cis-frontend` (admin) |
 | `apps/AA-Booking` | `AA-Booking` | public | `main` | `CONTEXT.md`, ADR 0004 | ECS `aa-booking-dev-api`; Vercel `aa-booking-admin` |
+| `apps/AA-Partner` | `AA-Partner` | public | `main` | `CONTEXT.md`, ADR 0010 | ECS `aa-crm-dev-api` + `aa-crm-dev-web`; Vercel `aa-cis-portal` (tenant portal) |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | public | `main` | `CONTEXT.md` | Lambdas `aa-tripplanner-dev-browse` / `-assembly`; Vercel |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | private | `main` | `CONTEXT.md`, `README.md` | AWS acc2 (root `accounts/aa365/`) |
 
-The three app repos are **public**. Never put account IDs, ARNs, security group IDs, secret lists or security
+The app repos are **public**. Never put account IDs, ARNs, security group IDs, secret lists or security
 findings in them ([where a page may live](../STYLE.md#where-a-page-may-live-sec-06)).
 
 ## First local run per repo

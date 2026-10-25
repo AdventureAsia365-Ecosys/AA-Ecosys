@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-18
+last_reviewed: 2026-10-25
 review_every_days: 90
 related: [ARCH-05, ARCH-08, AA-697, AA-889]
 ---
@@ -37,11 +37,11 @@ AA-Ecosys is a **multi-repo**: each app deploys on its own; locally they are gat
 
 | Local folder | GitHub repo | Role | Deploy |
 |---|---|---|---|
-| `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series), durable job worker, admin frontend + tenant portal | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel (frontend) |
+| `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series, and the Content studio API `/v1/*` + `/auth/tenant-login`), durable job worker, admin frontend. The tenant portal UI moved to AA-Partner (AA-979 P2a); the `portal/` folder here is a frozen, undeployed copy until it is deleted at P2b + 7 days | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel `aa-cis-frontend` (admin) |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations and plan a trip (Next.js FE + 2 Lambda BE) | Vercel (FE) + Lambda (BE) |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform — VPC, RDS, ECS, Lambda, API GW, OIDC, alarms, cross-account Bedrock; DB Migrate workflow | GitHub Actions (`accounts/aa365` root) + a human with MFA (acc1/acc3 roots) |
 | — (separate checkout) | `AA-Booking` | AAA: advisor workflow and booking lifecycle (live on Dev since 14/10/2026: inquiry intake, staff trip case workflow and proposals, pricing + FX, suppliers and supply, sellable trip plans; staff admin frontend; see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) |
-| — (separate checkout, public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 22/10/2026): the agency CRM and, after the move (AA-979), the tenant portal; own schema `crm` (`crm-001` job table, `crm-002` agency + member tables), own LLM gateway, partner Cognito pool with MFA; integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign), maps provided by AA. Skeleton from AA-933: `/crm/health` + `/crm/health/ready`, route classes `/crm/v1` / `/crm/ops/v1` / `/crm/staff/v1`, `tenant_tx()`, `crm.job` worker in the API process | ECS Fargate ARM64 `aa-crm-dev-api` on `aa-cis-dev-cluster` (desired 0 until the first deploy), reached only through CloudFront `partner-dev.` -> VPC origin -> NLB -> ALB `/crm/*` rule (AA-931 edge, AA-933 rule); image ECR `aa-crm-dev-api` (IMMUTABLE, git SHA); deploy by GitHub OIDC role `aa-crm-dev-app-deploy` |
+| `apps/AA-Partner` (public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 22/10/2026): the agency CRM and the tenant portal (Content studio, `portal/`, moved from AA-CIS-App with its history by AA-979 P2a on 25/10/2026; still the CIS tenant API-key sign-in, business logic in the CIS API, ADR 0010 §7); own schema `crm` (`crm-001` job table, `crm-002` agency + member tables), own LLM gateway, partner Cognito pool with MFA; integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign), maps provided by AA. Skeleton from AA-933: `/crm/health` + `/crm/health/ready`, route classes `/crm/v1` / `/crm/ops/v1` / `/crm/staff/v1`, `tenant_tx()`, `crm.job` worker in the API process | ECS Fargate ARM64 `aa-crm-dev-api` and `aa-crm-dev-web` on `aa-cis-dev-cluster` (each desired 1, running 1 on 25/10/2026), reached only through CloudFront `partner-dev.` -> VPC origin -> NLB -> ALB `/crm/*` rule (AA-931 edge, AA-933 rule); image ECR `aa-crm-dev-api` (IMMUTABLE, git SHA); deploy by GitHub OIDC role `aa-crm-dev-app-deploy`. Tenant portal: Vercel project `aa-cis-portal` (`portal.lumiguides.it.com`, same project and host as before the move), deployed only by AA-Partner `vercel-deploy-portal.yml`; it moves to CloudFront -> Fargate at P2b (ADR 0010 §6) |
 
 **Boundary rule [FACT]:** *apps own code, Infra owns resources.* The clearest example is TripPlanner:
 `infra/AA-CIS-Infra/accounts/aa365/tripplanner.tf` creates the 2 Lambdas from a 209-byte placeholder zip;
@@ -61,6 +61,7 @@ flowchart TB
     R2[AA-TripPlanner-Web]
     R3[AA-CIS-Infra]
     R4[AA-Booking]
+    R5[AA-Partner]
   end
 
   subgraph acc2[AWS acc2 · 005097885195 · us-west-1]
@@ -85,7 +86,8 @@ flowchart TB
     RLEX[role: aa-tripplanner-dev-lambda-exec]
   end
 
-  VERCEL_CIS[Vercel: CIS admin + portal]
+  VERCEL_CIS[Vercel: CIS admin]
+  VERCEL_PORTAL[Vercel: aa-cis-portal · tenant portal]
   VERCEL_TP[Vercel: aa-tripplanner FE]
 
   subgraph bedrock[Bedrock cross-account]
@@ -113,6 +115,8 @@ flowchart TB
   APIG2 --> L1 & L2
   APIG3 --> BK
   VERCEL_CIS --> APIG1
+  R5 -->|vercel-deploy-portal.yml| VERCEL_PORTAL
+  VERCEL_PORTAL -->|BFF to the CIS API| APIG1
   VERCEL_TP --> APIG2
 ```
 

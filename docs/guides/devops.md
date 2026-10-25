@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [devops, engineer]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-23
+last_reviewed: 2026-10-25
 review_every_days: 90
 related: [GUIDE-01, OPS-01, OPS-04, OPS-03, SEC-02, FIN-01, AA-897, AA-892]
 ---
@@ -44,9 +44,10 @@ probe Lambda `aa-cis-dev-dfs-balance-check`; the snapshot expiry Lambda `aa-cis-
 
 | App | Backend path | Frontend path | Gate |
 |---|---|---|---|
-| CIS | Merge to `main` → `Deploy Dev` (`deploy-dev.yml`): image `dev-<sha>` to ECR (immutable tags), new task definitions for api **and** worker on the same image | `vercel-deploy.yml` (admin, `aa-cis-frontend`) and `vercel-deploy-portal.yml` (portal, `aa-cis-portal`), each followed by a Playwright UI smoke | Refuses while `shared.job` has queued or running work |
+| CIS | Merge to `main` → `Deploy Dev` (`deploy-dev.yml`): image `dev-<sha>` to ECR (immutable tags), new task definitions for api **and** worker on the same image | `vercel-deploy.yml` (admin, `aa-cis-frontend`), followed by a Playwright UI smoke. The portal is no longer deployed from here (AA-979, CIS #997) | Refuses while `shared.job` has queued or running work |
 | Booking | Merge to `main` → `Deploy Dev`: image tagged with the git SHA, role `aa-booking-dev-app-deploy`, smoke `/booking/health` (same `git_sha`) and `/booking/health/ready` | `vercel-deploy.yml` (`aa-booking-admin`) | Asks `/booking/ops/deploy-gate` whether `booking.job` is idle |
 | TripPlanner | Merge to `main` touching `backend/**` → `deploy-lambdas.yml`: zip to the artifacts bucket, `UpdateFunctionCode` on both Lambdas | `vercel-deploy.yml` | None (no job table yet, AA-861) |
+| Partner | Merge to `main` touching `api/**` → `Deploy Dev`: image tagged with the git SHA (native arm64), service `aa-crm-dev-api`; `web/**` → `Deploy Web Dev`, service `aa-crm-dev-web` | `vercel-deploy-portal.yml` (tenant portal, Vercel `aa-cis-portal`, `portal/**`; preview on a PR, production on `main`), followed by the portal UI smoke `ui-smoke-portal.yml` (AA-979) | The API deploy refuses while `crm.job` has queued or running work; the portal deploy has no job gate |
 | Infra | PR → **Terraform Plan** (required) → merge → **Terraform Apply Prod** run by hand (`workflow_dispatch` on `main`) | - | Plan read in the PR; OIDC trust only for `refs/heads/main` |
 
 Boundary: *apps own code, Infra owns resources*. Infra creates the ECS services, Lambdas and roles; the apps ship

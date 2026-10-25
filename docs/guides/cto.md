@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [cto]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-25
 review_every_days: 90
 related: [ARCH-01, ARCH-05, ARCH-08, GUIDE-09, GUIDE-07, AA-897, AA-697]
 ---
@@ -54,7 +54,8 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  cisfe["CIS admin + tenant portal<br/>[Next.js on Vercel]"]
+  cisfe["CIS admin<br/>[Next.js on Vercel]"]
+  portalfe["Tenant portal (AA-Partner portal/)<br/>[Next.js on Vercel]"]
   tpfe["TripPlanner web<br/>[Next.js on Vercel]"]
   bkfe["Booking staff admin<br/>[Next.js on Vercel]"]
   cisapi["CIS API + worker<br/>[FastAPI on ECS Fargate]"]
@@ -64,6 +65,7 @@ flowchart TB
   cognito["Cognito WORKFORCE / EXTERNAL<br/>[Identity]"]
   redis[("Redis<br/>[CIS cache and flags]")]
   cisfe -->|"REST via API Gateway"| cisapi
+  portalfe -->|"BFF, tenant API key"| cisapi
   tpfe -->|"BFF via HTTP API"| tpl
   bkfe -->|"REST via API Gateway"| bkapi
   cisapi --> rds
@@ -150,7 +152,7 @@ identity (GitHub App) and least-privilege agent role are trigger items (U-25, U-
 | Required CI: CIS 5 (Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check), Booking 5, TripPlanner 2 | Branch protection on the public repos; root and Infra (private, GitHub Free) have none, compensated by `main`-only OIDC trust (AA-866) |
 | Security scans | CodeQL default setup, secret scanning + push protection (public repos), gitleaks PR + full-history scans (Infra, root), blocking `pip-audit` (CIS), Dependabot |
 | Data | Migration Copy Guard, DB Migrate version check, isolation probe, no raw model calls test (`test_aa685_no_raw_model_calls.py`) |
-| UI | Playwright UI smoke on every CIS admin and portal preview |
+| UI | Playwright UI smoke on every CIS admin preview and every tenant portal preview (the portal smoke runs from AA-Partner since AA-979) |
 | Definition of Done | Merged + CI green + deploy COMPLETED + verified live with evidence (`skill/aa-ship`) |
 | Definition of Ready | [`templates/definition-of-ready.md`](../templates/definition-of-ready.md) |
 | LLM quality | Golden set of about 100 samples (AA-729); eval by hand or dispatch (D-23) |
