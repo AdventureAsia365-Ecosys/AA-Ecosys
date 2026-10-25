@@ -1,0 +1,37 @@
+{
+  "contract": "catalog.country.v1",
+  "expect": "valid",
+  "why": "Two countries and a destination joined on country_iso2; an unresolved destination carries null",
+  "payload": {
+    "contract": "catalog.country",
+    "version": 1,
+    "countries": [
+      {
+        "iso2": "VN",
+        "iso3": "VNM",
+        "numeric_code": "704",
+        "name": "Vietnam",
+        "iso_name": "Viet Nam"
+      },
+      {
+        "iso2": "KR",
+        "iso3": "KOR",
+        "numeric_code": "410",
+        "name": "South Korea",
+        "iso_name": "Korea, Republic of"
+      }
+    ],
+    "destinations": [
+      {
+        "destination_id": "2a2a2a2a-0000-4000-8000-000000000010",
+        "country": "Vietnam",
+        "country_iso2": "VN"
+      },
+      {
+        "destination_id": "2a2a2a2a-0000-4000-8000-000000000011",
+        "country": "Atlantis",
+        "country_iso2": null
+      }
+    ]
+  }
+}
