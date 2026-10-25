@@ -1,8 +1,8 @@
 {
- "updated": "2026-10-24",
- "session": "S249",
- "next_session": "S250",
- "source": "Linear (24/10/2026, S249 close) + docs/backlog/README.md + docs/audits/2026-10-24-S249-wrap/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
+ "updated": "2026-10-25",
+ "session": "S250",
+ "next_session": "S251",
+ "source": "Linear (25/10/2026, S250 close) + docs/backlog/README.md + docs/audits/2026-10-25-S250-wrap/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -114,8 +114,8 @@
      "done": false
     },
     {
-     "text": "Quyết định go/no-go bằng văn bản ở docs/audits cho AA-926/916/924/790/WM P1+/chạy lại catalog",
-     "done": false
+     "text": "Quyết định go/no-go bằng văn bản ở docs/audits cho AA-926/916/924/790/WM P1+/chạy lại catalog — xong S250 (root #239, GO cho 926/924/916/790)",
+     "done": true
     },
     {
      "text": "AA-779/780: không thêm cổng mới trong 4 tuần (số cổng trong registry không tăng)",
@@ -162,8 +162,8 @@
      "done": true
     },
     {
-     "text": "AA-976/977: catalog.http.v1 trả dữ liệu từ read model đã lật — AA-976 Done S249; còn AA-977",
-     "done": false
+     "text": "AA-976/977: catalog.http.v1 trả dữ liệu từ read model đã lật — AA-976 Done S249, AA-977 Done S250",
+     "done": true
     },
     {
      "text": "AA-682 (chỉ khi chị Thư đã chốt thuế/% cọc/đánh dấu thanh toán): /billing và /trip-checks thôi placeholder",
@@ -194,12 +194,12 @@
   {
    "id": "P-M1",
    "name": "Portal tách repo",
-   "window": "P2a S253; P1 S254; P2b S256; gỡ Vercel ≥ P2b + 7 ngày (~S263)",
-   "status": "later",
+   "window": "P2a xong S250; P1 (AA-978 Done S250, chờ kiểm revocation end-to-end); P2b ~S256; gỡ Vercel ≥ P2b + 7 ngày",
+   "status": "active",
    "criteria": [
     {
-     "text": "P2a: AA-Partner/portal giữ history, 24 smoke portal xanh từ CI AA-Partner, Vercel aa-cis-portal deploy từ repo mới",
-     "done": false
+     "text": "P2a: AA-Partner/portal giữ history, 24 smoke portal xanh từ CI AA-Partner, Vercel aa-cis-portal deploy từ repo mới — xong S250 (Partner #44/#46, deploy prod run 40156305885)",
+     "done": true
     },
     {
      "text": "P1: thay đổi membership ở CIS tới CRM ≤1 phút; CIS cố cấp vai CRM thì bị từ chối",
@@ -222,7 +222,7 @@
    "status": "active",
    "criteria": [
     {
-     "text": "AA-937..946 xong; 1 trip đi từ Inquiry tới Completed với supplier của đại lý trên Dev",
+     "text": "AA-937..946 xong (937–944 Done S249–S250; còn 945, 946); 1 trip đi từ Inquiry tới Completed với supplier của đại lý trên Dev",
      "done": false
     },
     {
@@ -286,19 +286,34 @@
  ],
  "checks": [
   {
-   "due": "ngay S250",
-   "issue": "Jira S249",
-   "text": "Nháp Jira S249 (Nghiệp dời sang phiên sau vì cùng ngày): PR-22 tiến độ viết lại S1, PR-26 CRM W1/W2 đã ship, PR-24 TripPlanner gỡ tour tức thì, PR-25 Booking B2B feed, PR-27 nền tảng (restore drill, Sentry, MFA partner); nháp → Nghiệp duyệt → đăng"
+   "due": "NGAY S251, trước mọi Terraform apply",
+   "issue": "Infra #380",
+   "text": "main AA-CIS-Infra af8ac53 (#380) squash từ nhánh cũ, làm mất crm_mail.tf, khoá BFF/sign-up proof traveller (identity.tf), Redis TLS/AUTH + S1_WRITER_V2 trong modules/ecs, route /me, bản copy 279/280/crm-015. Khôi phục từ 5bdde4d, plan phải không đổi gì; DB Schema Dump trên af8ac53 cũng lỗi"
   },
   {
-   "due": "ngay S250",
-   "issue": "AA-835 · AA-910",
-   "text": "Lane đầu AA-835 (5 phần còn lại); AA-910 tự kiểm live 1440 px bằng phiên staff rồi đóng; AA-941 kiểm UI /admin/platform/agencies; tiếp các wave AA-645"
+   "due": "ngay S251",
+   "issue": "Jira S249 + S250",
+   "text": "Nháp Jira S249 + S250 (Nghiệp dời tiếp, chưa đăng): S1 catalogue 631/810, CRM W2/W3 + Lane P, đăng nhập traveller, điều khoản AI cho chị Thư (AA-820), nền tảng; nháp → Nghiệp duyệt → đăng"
+  },
+  {
+   "due": "ngay S251",
+   "issue": "AA-645",
+   "text": "179 tour còn lại (Sri Lanka 3 + India 1–4, ≈ $13) rồi kiểm 308 slug cũ → mới cho các wave sau Laos"
+  },
+  {
+   "due": "hằng đêm",
+   "issue": "AA-853",
+   "text": "Báo cáo drift schema trên DB replay (Infra #380) + lint quyền migration (Infra #379): 0 object không quản lý là Done-when"
+  },
+  {
+   "due": "hằng ngày 19:00 UTC",
+   "issue": "AA-945",
+   "text": "Job crm_mail_health: đọc kết quả trong crm.job; mailbox held_reconnect là bình thường tới khi có OAuth client"
   },
   {
    "due": "hằng đêm",
    "issue": "AA-938",
-   "text": "Scrub corpus (AA-Partner) đỏ ở 9,1% over-scrub (ngưỡng < 5%) cho tới khi có phương án B hoặc cách sửa khác (GitHub AA-Partner #27); 0 rò rỉ"
+   "text": "Scrub corpus (AA-Partner) xanh từ phương án B (Partner #36, run 40102237468: 260 mẫu, 0 rò rỉ, over-scrub 3,98% < 5%; GitHub AA-Partner #27 đóng); đỏ = hồi quy thật"
   },
   {
    "due": "hằng đêm",
@@ -344,13 +359,18 @@
  "waiting": [
   {
    "who": "Nghiệp",
-   "text": "Duyệt nháp Jira S249 (PR-22, PR-26, PR-24, PR-25, PR-27) ở phiên sau rồi agent đăng",
+   "text": "Duyệt nháp Jira S249 + S250 ở S251 rồi agent đăng",
    "issue": ""
   },
   {
    "who": "Nghiệp",
-   "text": "Quyết phương án B cho scrubber để đưa over-scrub corpus 9,1% xuống < 5% (Scrub corpus đỏ hằng đêm tới lúc đó; không phải issue Linear)",
-   "issue": "AA-938"
+   "text": "Tạo OAuth client Google + app Microsoft 365 cho send-as của đại lý, đưa 4 giá trị vào crm/dev/mail-oauth (hoặc pipe cho agent); agent bật crm_mail_oauth_enabled và kiểm nốt (cần đăng nhập trình duyệt)",
+   "issue": "AA-945"
+  },
+  {
+   "who": "Nghiệp",
+   "text": "Đề xuất (không issue): bố cục gọn cho trang staff Booking khi laptop zoom 150% (~960 px CSS) — đồng ý thì thành 1 dòng việc Booking UI",
+   "issue": "AA-910"
   },
   {
    "who": "Nghiệp",
@@ -369,8 +389,8 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Hỏi trước khi tạo issue: các mục \"(no issue yet)\" của S247, T13 ghép tuyến (cho AA-948), tách P2a khỏi AA-979",
-   "issue": "AA-979"
+   "text": "Hỏi trước khi tạo issue: T13 ghép tuyến (cho AA-948); P2a đã làm trong AA-979 (S250), không cần tách",
+   "issue": "AA-948"
   },
   {
    "who": "Nghiệp",
@@ -399,7 +419,7 @@
   },
   {
    "who": "Chị Thư",
-   "text": "Điều khoản AI (≤11/11); lời văn /privacy, /terms trong gói pháp lý trên Drive — có cần luật sư là chị quyết",
+   "text": "Điều khoản AI (≤11/11): chọn phương án A/B/C cho bản Draft v0.2 + quyết luật sư (nháp Jira S250); lời văn /privacy, /terms trong gói pháp lý trên Drive",
    "issue": "AA-820"
   },
   {
@@ -414,6 +434,32 @@
   }
  ],
  "log": [
+  {
+   "session": "S250",
+   "date": "25/10/2026",
+   "closed": [
+    "AA-910",
+    "AA-941",
+    "AA-978",
+    "AA-813",
+    "AA-943",
+    "AA-944",
+    "AA-977",
+    "AA-874",
+    "AA-908",
+    "AA-851"
+   ],
+   "canceled": [],
+   "created": [],
+   "reopened": [],
+   "notes": [
+    "10 issue Done (Claude Code, Ultracode, 24/10 ~19:00 → 25/10 ~13:00 VN): AA-910 (E2E staff Booking riêng, 100/100 dòng sạch ở 1440 px; ảnh cắt cột là do zoom 150%), AA-941 (console L1 kiểm UI live), AA-978 membership feed + AA-813 (giao qua AA-939 + AA-978), AA-943 stage engine crm-012 (E2E Dev xanh), AA-944 ledger + supplier crm-014, AA-977 nội dung AA trong CIS (mig 275, seed 28 mục), AA-874 Redis TLS + AUTH + mã hoá (node cũ đã xoá), AA-908 đăng nhập traveller bằng mã email + My Trips (Playwright 1440/390 live), AA-851 shared.countries + catalog.v_country (mig 279)",
+    "AA-645: 13 wave nước trong S250 (cùng S249: 17 wave, 578 tour, 578 published, 0 review, 0 ở lại v1; gate 226 → 26; phủ số liệu 0,422 → 0,675; brand-fit 7,69 → 7,99; $42,05, $0,0728/tour) → 631/810 tour trên v2, luỹ kế $46,16 / $120; driver dừng trước Sri Lanka 3 theo Nghiệp, còn 179 tour cho S251; công tắc giữ ON, route v2 giữ làm mặc định",
+    "Ship live nhưng chưa đóng: AA-835 (còn chạy thử trả phí), AA-926/924/916/790 (GO root #239, còn pilot T9 trả phí), AA-917/918 (mig 280, CIS #998), AA-853 (Infra #379/#380), AA-945 (forward-in live, chờ OAuth của Nghiệp), AA-979 (P2a xong, portal deploy từ AA-Partner), AA-820 (Draft v0.2, chờ chị Thư)",
+    "Sự cố cuối phiên: Infra #380 (af8ac53) squash từ nhánh cũ làm mất việc S250 trên main Infra (crm_mail.tf, khoá BFF traveller, Redis TLS/AUTH + S1_WRITER_V2 trong template, route /me, bản copy migration) — không apply từ main tới khi khôi phục (việc đầu S251)",
+    "Ngoài issue: AA-938 phương án B (over-scrub 9,1% → 3,98%), go/no-go S251 bằng văn bản (root #239), contracts R1 + registers R2 (root #237/#238), S1_WRITER_V2 vào Terraform (Infra #372), secrets register cập nhật (14 tên Secrets Manager chưa đăng ký + hàng GitHub AA-Partner; drift AWS = 0); không tạo issue Linear mới; nháp Jira S249 + S250 dời sang S251"
+   ]
+  },
   {
    "session": "S249",
    "date": "24/10/2026",
@@ -787,7 +833,7 @@
    "milestone": "M1",
    "session": "later",
    "size": "",
-   "next": "L3 · Epic: post a Phase 2/3 status comment with evidence links (M1 criterion); closes when AA-816, AA-911, AA-813 and AA-908 land",
+   "next": "L3 · Epic: AA-813 + AA-908 Done S250; đóng khi AA-816 và AA-911 xong (cả hai cuối dự án)",
    "needs": ""
   },
   {
@@ -825,30 +871,6 @@
    "size": "XL",
    "next": "L4 · Part 1 S253, part 2 S256 (payment schedule, manual payment marking), part 3 S258 — only once Ms. Thư settles tax, deposit % and payment marking. Blocked by AA-928 (commercial-core memo) and AA-974; never between B1–B3 (same files)",
    "needs": "Ms. Thư: tax, deposit %, payment marking"
-  },
-  {
-   "id": "AA-910",
-   "title": "Booking staff admin at 1440 px (table overflow, FX wrap, scrollbar) + audit rows for room type / rate",
-   "status": "In Progress",
-   "priority": "Low",
-   "project": "tpbk",
-   "milestone": "M3",
-   "session": "S250",
-   "size": "XS",
-   "next": "L4 · S250: tự kiểm live bằng phiên staff Cognito ở 1440 px (làm luôn, không hỏi), so với docs/audits/2026-10-24-S249-aa910-layout/, rồi đóng",
-   "needs": ""
-  },
-  {
-   "id": "AA-908",
-   "title": "Traveller sign-in on Cognito EXTERNAL, TripPlanner guest linking and My Trips (customer half of AA-680)",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "tpbk",
-   "milestone": "M5",
-   "session": "S253",
-   "size": "M",
-   "next": "L5 · S253 traveller sign-in on Cognito EXTERNAL, guest linking, My Trips (after AA-909)",
-   "needs": ""
   },
   {
    "id": "AA-704",
@@ -961,13 +983,13 @@
   {
    "id": "AA-820",
    "title": "Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2026) + AI-content attribution",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M5",
    "session": "S254",
    "size": "",
-   "next": "L3 · S254, deadline ≤11/11: tenant terms AI clause; Ms. Thư decides on counsel",
+   "next": "L3 · Kỹ thuật xong S250: Draft v0.2 (root #240) + portal /terms §3 live (CIS #981). Còn: chị Thư chọn A/B/C và quyết luật sư (nháp Jira S250); hạn ≤ 11/11",
    "needs": "Ms. Thư (counsel)"
   },
   {
@@ -1007,18 +1029,6 @@
    "needs": "Accept the ADR"
   },
   {
-   "id": "AA-874",
-   "title": "Redis AUTH/TLS/at-rest encryption + tenant-flag read-failure alarm",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S253",
-   "size": "M",
-   "next": "L3 · S253 Redis AUTH/TLS/at-rest + flag alarm, in an idle CIS window",
-   "needs": "Cost (D-19)"
-  },
-  {
    "id": "AA-873",
    "title": "Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, CloudTrail",
    "status": "Backlog",
@@ -1031,18 +1041,6 @@
    "needs": "Cost per item"
   },
   {
-   "id": "AA-851",
-   "title": "shared.countries (ISO-3166) + v_countries / v_destinations catalog views",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "later",
-   "size": "M",
-   "next": "shared.countries + v_countries / v_destinations (unblocked by S22)",
-   "needs": ""
-  },
-  {
    "id": "AA-850",
    "title": "Dead Table Registry + wave-1 quarantine",
    "status": "Backlog",
@@ -1053,18 +1051,6 @@
    "size": "M",
    "next": "Dead Table Registry + wave-1 quarantine (unblocked by S22)",
    "needs": "Approve the DRY RUN"
-  },
-  {
-   "id": "AA-813",
-   "title": "Tenant user accounts — invites, roles (owner/editor/viewer), API key rotation",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "portal",
-   "milestone": "M5",
-   "session": "S252",
-   "size": "M",
-   "next": "L3 · Không làm riêng: re-scope dưới AA-928 (Done S247); giao qua AA-939 (Done S249: partner pool, vai trò, team, lời mời) + AA-978 (membership feed, S250); đóng cùng AA-978",
-   "needs": ""
   },
   {
    "id": "AA-838",
@@ -1141,25 +1127,25 @@
   {
    "id": "AA-853",
    "title": "Schema drift diff against a replayed DB + migration ownership lint",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "data",
    "milestone": "M5",
-   "session": "later",
+   "session": "S251",
    "size": "M",
-   "next": "Schema drift diff + ownership lint (after AA-826)",
+   "next": "Infra #379 (lint quyền migration trong Copy Guard) + #380 (báo cáo drift hằng đêm trên DB replay) đã merge; NHƯNG #380 (af8ac53) squash từ nhánh cũ làm mất việc S250 trên main Infra (crm_mail.tf, khoá BFF traveller, Redis TLS/AUTH, bản copy 279/280/crm-015) và DB Schema Dump lần đầu lỗi. Còn: khôi phục main, 1 đêm xanh với 0 object không quản lý, rồi đóng",
    "needs": ""
   },
   {
    "id": "AA-790",
    "title": "T10: tenant-voice rubric gate + post-repair integrity check",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
    "session": "S251",
    "size": "L",
-   "next": "L1 · Held until the S251 (sau shadow ≤ 50 của AA-645) written go/no-go",
+   "next": "L1 · GO (root #239); gate rubric giọng tenant + kiểm toàn vẹn sau sửa đã ship S250. Còn: pilot T9 trả phí rồi đóng; việc kèm: hygiene.sentence_spans bậc hai theo độ dài văn bản → làm tuyến tính (không issue)",
    "needs": "LLM judge vs deterministic rubric"
   },
   {
@@ -1189,13 +1175,13 @@
   {
    "id": "AA-835",
    "title": "ADR 0004a supply content — supply contracts, Booking supply outbox, CIS consumer",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M3",
-   "session": "S250",
+   "session": "S251",
    "size": "M",
-   "next": "L4 · S250 lane đầu: 5 phần còn lại theo comment Linear S249 (hợp đồng supply, outbox supply Booking, consumer CIS); AA-975 (bk-022) Done S249; được chạy thử consumer trả phí theo luật tập con",
+   "next": "L4 · Đã ship S250: bk-023 + CIS 278 áp, bucket supply-media + quyền purge (Infra #353/#368), Booking #84/#86 (outbox supply, upload + read-back), consumer CIS #991 deploy. Còn: chạy thử consumer trả phí (tập con, báo chi phí) + bằng chứng Done-when trên Dev",
    "needs": "Paid consumer trial (subset rule)"
   },
   {
@@ -1297,61 +1283,61 @@
   {
    "id": "AA-926",
    "title": "[Quality] Q-1: error taxonomy, gate registry, single thresholds file and lint",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
    "session": "S251",
    "size": "M",
-   "next": "L1 · Built on branch feat/aa-926-quality-registry (11 commits), parked per Q1; merge only on a go at S251 (sau shadow ≤ 50 của AA-645)",
+   "next": "L1 · GO ở go/no-go S251 (root #239); CIS #982 merged + deploy (12b36a6b). Còn: pilot T9 trả phí chứng minh live rồi đóng",
    "needs": ""
   },
   {
    "id": "AA-916",
    "title": "[Writing memory] Capture writing signals: before/after text, reason codes, every T9 attempt",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
    "session": "S251",
    "size": "M",
-   "next": "L1 · Held until the S251 (sau shadow ≤ 50 của AA-645) go/no-go; on go: Writing Memory P0 (migration + RLS → agent review)",
+   "next": "L1 · GO (root #239); mig 277 áp + capture tín hiệu viết đã deploy S250. Còn: kiểm live trong pilot T9 rồi đóng",
    "needs": ""
   },
   {
    "id": "AA-924",
    "title": "[T10 gates] Severity per violation in the gate ledger, then merge F15_voice_warn→F15 and F2 variants + stock list → one lexicon gate",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
    "session": "S251",
    "size": "M",
-   "next": "L1 · Held until the S251 (sau shadow ≤ 50 của AA-645) go/no-go (after AA-926)",
+   "next": "L1 · GO (root #239); severity theo vi phạm đã ship + deploy S250. Còn: kiểm live trong pilot T9 rồi đóng",
    "needs": ""
   },
   {
    "id": "AA-917",
    "title": "[Writing memory] Rule store and the mining job (scoped rules, fact filter, cheaper drafter)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S255",
+   "session": "S251",
    "size": "M",
-   "next": "L1 · Writing Memory P1 at S255 if the S251 decision is go",
+   "next": "L1 · Kéo sớm vào S250: mig 280 áp (Infra #378), rule store + job mining trong CIS #998 (deploy xếp sau gap S1 — xác nhận đã chạy). Còn: kiểm live rồi đóng",
    "needs": "Release click per rule set"
   },
   {
    "id": "AA-918",
    "title": "[Writing memory] R0 replay engine ($0) and the L0 lexicon fast path",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S255",
+   "session": "S251",
    "size": "M",
-   "next": "L1 · Writing Memory P1 at S255 if the S251 decision is go",
+   "next": "L1 · Kéo sớm vào S250: R0 replay ($0) + L0 lexicon trong CIS #998. Còn: kiểm live rồi đóng",
    "needs": ""
   },
   {
@@ -1445,9 +1431,9 @@
    "priority": "Low",
    "project": "core",
    "milestone": "M2a",
-   "session": "S250",
+   "session": "S251",
    "size": "L",
-   "next": "L1 · Viết lại S1 cả catalogue (duyệt d04 + checkpoint 2): xong pilot 3, wave ≤50, Mongolia 13, Pakistan 14, South Korea 26, Bhutan 27 (đều published, 0 review, 0 stop); Taiwan 29 đang chạy lúc đóng phiên. Còn 17 wave: Thailand 34, Laos 36, Philippines 40, Japan 50+22, Nepal 50+26, China 50+50+11, Sri Lanka 50+50+12, India 50+50+50+17. $10,35 / trần $120 (chưa tính Taiwan). Công tắc giữ ON (S1_WRITER_V2=on, s1_generate=sonnet-5-5); 54 tour golden + 39 tour cưỡi voi giữ v1",
+   "next": "L1 · Viết lại S1 cả catalogue: 631/810 tour trên writer v2 (S250: 13 wave nước, cùng S249 là 17 wave / 578 tour: 578 published, 0 review, 0 ở lại v1; trang dính gate 226 → 26; phủ số liệu 0,422 → 0,675; brand-fit 7,69 → 7,99; $42,05, $0,0728/tour; luỹ kế $46,16 / $120). Còn 179 tour (Sri Lanka 3: 12, India 1–4: 167, ≈ $13) + kiểm 308 các wave sau Laos rồi đóng. Route v2 giữ làm mặc định (Nghiệp S250); S1_WRITER_V2 nằm trong Terraform (Infra #372, cần khôi phục sau #380)",
    "needs": ""
   },
   {
@@ -1463,51 +1449,15 @@
    "needs": ""
   },
   {
-   "id": "AA-941",
-   "title": "[CRM W2] CRM-13a AA admin L1 console",
+   "id": "AA-945",
+   "title": "[CRM W3] CRM-17 Module 5 email",
    "status": "In Progress",
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S250",
-   "size": "XS",
-   "next": "L6 · W2 · Đã ship S249 (crm-011, Partner #34/#35, CIS #978/#979, Infra #352, root #235 hợp đồng 1.1); còn kiểm UI live /admin/platform/agencies bằng phiên crm-platform-admin rồi đóng",
-   "needs": ""
-  },
-  {
-   "id": "AA-943",
-   "title": "[CRM W3] CRM-15 Modules 1 + 2 complete",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M2",
-   "session": "S250",
+   "session": "S251",
    "size": "L",
-   "next": "L6 · W3 · S250: kế tiếp trên critical path; AA-937, AA-939 Done S249",
-   "needs": ""
-  },
-  {
-   "id": "AA-944",
-   "title": "[CRM W3] CRM-16 Agency-line ledger + suppliers",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M2",
-   "session": "S255",
-   "size": "M",
-   "next": "L6 · W3 · S255; blocked by AA-943",
-   "needs": ""
-  },
-  {
-   "id": "AA-945",
-   "title": "[CRM W3] CRM-17 Module 5 email",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M2",
-   "session": "S255",
-   "size": "L",
-   "next": "L6 · W3 · S255; blocked by AA-943 (AA-938 Done S249)",
+   "next": "L6 · W3 · crm-015 + nhận mail forward-in chạy live S250 (Partner #45/#47, Infra #375/#376; 1 mail SES thử → conversation đọc lại qua API). Còn: Nghiệp tạo OAuth client Google + Microsoft 365 → ghi crm/dev/mail-oauth → bật crm_mail_oauth_enabled → kiểm luồng gửi/Undo/send-as/import; khôi phục crm_mail.tf trên main Infra trước",
    "needs": ""
   },
   {
@@ -1517,9 +1467,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S256",
+   "session": "S251",
    "size": "L",
-   "next": "L6 · W3 · S256: → C-M2; blocked by AA-944, AA-945",
+   "next": "L6 · W3 · S251: kế tiếp trên critical path → C-M2; AA-944 Done S250, AA-945 đang làm (phần send-as không chặn lifecycle mỏng)",
    "needs": ""
   },
   {
@@ -1531,7 +1481,7 @@
    "milestone": "C-M3",
    "session": "S257",
    "size": "M",
-   "next": "L6 · W4 · S257; blocked by AA-944 (AA-972, AA-973, AA-974 Done S248; AA-975, AA-976 Done S249)",
+   "next": "L6 · W4 · S257; blocked by AA-944 (Done S250) → mở sau AA-946 theo nhịp CRM",
    "needs": ""
   },
   {
@@ -1579,7 +1529,7 @@
    "milestone": "C-M3",
    "session": "S259",
    "size": "M",
-   "next": "L6 · W4 · S259; blocked by AA-949, AA-977",
+   "next": "L6 · W4 · S259; blocked by AA-949 (AA-977 Done S250)",
    "needs": ""
   },
   {
@@ -1823,39 +1773,15 @@
    "needs": "MFA; Ms. Thư names the second alarm recipient"
   },
   {
-   "id": "AA-977",
-   "title": "[CRM LB] CRM-B5 AA-authored content in CIS (new, Fix C1)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M3",
-   "session": "S250",
-   "size": "M",
-   "next": "L4 · Lane B · S250: migration CIS, review độc lập; AA-976 Done S249",
-   "needs": ""
-  },
-  {
-   "id": "AA-978",
-   "title": "[CRM LP] CRM-P1 Membership feed + tenant API",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "P-M1",
-   "session": "S250",
-   "size": "M",
-   "next": "LP · Lane P · S250: membership feed + cis.tenant-api.v1 (CIS); AA-939 Done S249, AA-813 được giao qua AA-939 + issue này nên không còn chặn",
-   "needs": ""
-  },
-  {
    "id": "AA-979",
    "title": "[CRM LP] CRM-P2 Move `portal/` into AA-Partner",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "crm",
    "milestone": "P-M1",
-   "session": "S253",
+   "session": "S251",
    "size": "L",
-   "next": "LP · Lane P · P2a sau AA-978 (portal/ vào AA-Partner/portal, giữ history + Vercel + API-key auth); P2b sau đó (CloudFront → Fargate, partner pool, 301 /trip/*, Sentry); gỡ Vercel ≥7 ngày sau P2b; còn chặn bởi AA-978 (AA-935 Done S249, AA-931 Done S247)",
+   "next": "LP · P2a xong S250: portal/ vào AA-Partner giữ history (Partner #44/#46), bản CIS đóng băng (#997), secret CIS xoá; deploy prod run 40156305885, /tenant-login + /terms 200. Còn: P2a-4 tài liệu repo gốc (registers secret đã cập nhật S250), P2b (CloudFront → Fargate, partner pool, 301 /trip/*) ~S256; gỡ Vercel ≥ 7 ngày sau P2b",
    "needs": "Approve P2a before P1 (split AA-979 or note the exception)"
   },
   {
