@@ -1,109 +1,149 @@
 ---
 name: aa-ship
-description: Quy trình từ PR tới "Done" cho các repo AA_Ecosys — kiểm trước merge, guard deploy khi còn job, verify live sau deploy (api + worker + UI), và chỉ đánh Done trên Linear khi có bằng chứng. Dùng khi chuẩn bị merge PR, deploy, Terraform apply, hoặc định chuyển issue sang Done.
+description: Quy trình từ PR tới "Done" cho các repo AA_Ecosys (CIS, Booking, Partner, TripPlanner, Infra, repo gốc) — kiểm trước merge, cách merge (App aa-agent, branch protection), guard deploy khi còn job hoặc wave, Terraform apply, luồng migration, verify live sau deploy và chỉ đánh Done trên Linear khi có bằng chứng. Dùng khi chuẩn bị merge PR, deploy, Terraform apply, DB Migrate, rollback, hoặc định chuyển issue sang Done. Kiểm giao diện chi tiết thuộc aa-ui-verify.
 ---
 
 # aa-ship
 
 Mục tiêu: "Done" luôn nghĩa là đã chạy đúng trên môi trường thật, có bằng chứng.
+Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "Vận hành" — đọc trước khi merge/deploy.
+
+## 0. Ai làm bước nào
+
+- **Agent điều phối** push, mở PR, merge, `gh workflow run` (deploy, DB Migrate, Terraform apply, probe), ECS exec.
+- **Subagent** chỉ code, test, commit local. Hook `.claude/hooks/subagent-guardrails.sh` chặn push/merge/`gh workflow run`/
+  Terraform apply/`aws ecs execute-command`. Việc live (kiểm DB, verify) subagent giao lại dạng runbook/script kèm mục
+  "post-merge steps cho orchestrator" — không lách qua script helper.
 
 ## 1. Trước khi mở/merge PR
 
-- [ ] Branch `feature|fix|chore/aa-xxx-<mô tả>` từ `main`; PR vào `main`.
-- [ ] **Worktree luôn tạo bằng đường dẫn TUYỆT ĐỐI** dưới repo gốc: `/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/<tên>`.
-  `git -C apps/<repo> worktree add .tmp-session/...` (tương đối) rơi vào trong repo con, không bị gitignore — S247
-  tạo nhầm 3 cái như vậy.
-- [ ] Commit và PR body ghi **`Refs AA-xxx`**. Không dùng `[AA-xxx]` hay `Fixes AA-xxx` — chúng tự đóng issue khi merge.
-- [ ] **Danh tính GitHub (ADR 0011, AA-901, S247):** agent điều phối push, mở PR, merge bằng App `aa-agent`:
+- [ ] Branch `feat|fix|chore|docs/aa-xxx-<mô tả>` từ `origin/main` mới nhất (repo gốc: `master`).
+- [ ] **Worktree luôn tạo bằng đường dẫn TUYỆT ĐỐI**: `/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/<tên>`
+  (đường dẫn tương đối với `git -C apps/<repo>` rơi vào trong repo con, không bị gitignore).
+- [ ] Commit và PR body ghi **`Refs AA-xxx`**. Không `[AA-xxx]`, không `Fixes`/`Closes`, và tiêu đề PR không có mã
+  issue (Linear đọc "fix: AA-xxx …" là câu đóng issue). PR docs/log nhắc issue khác thì ghi tên việc, không ghi mã.
+- [ ] **Danh tính GitHub (ADR 0011):** push/PR/merge bằng App `aa-agent`:
   `/home/nghiep/projects/AA-Ecosys/tools/github/as-app.sh --repos <Repo> -- <git -C <worktree> push … | gh pr create … | gh pr merge …>`.
-  Cần phiên AWS MFA còn hạn (`aa365-admin`, script đọc key từ Secrets Manager) và gọi script từ checkout có
-  `tools/github/apps.env` điền `agent_app_id` (repo gốc `master`); `git push` cần `gh auth setup-git` một lần.
-  Kiểm: `gh pr view <n> --json author` ra `app/aa-agent`, CI chạy dưới tên `aa-agent[bot]`. App `aa-ecosys-ci-bot`
-  chỉ dành cho release-please và PR docs của Infra, phiên agent không dùng. Hướng dẫn: `docs/security/github-apps.md`.
-- [ ] **PR rủi ro → vòng review** (auth/quyền, migration/RLS, CI/workflow/secret, xoá dữ liệu, middleware trên đường
-  request): agent làm commit local → agent review độc lập (chỉ đọc, giao nhiệm vụ "phá nó") → agent sửa áp mọi
-  blocker/should-fix → agent điều phối push, chờ CI, merge. S247 lần review nào cũng bắt lỗi thật (CIS #924 chín
-  phát hiện, AA-859 một blocker, AA-894 env-config hai).
-- [ ] CI xanh — 5 job required: Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check (Vercel không nằm trong 5 job, kiểm riêng cho FE).
-- [ ] **Test xanh local, đỏ CI → so package đã cài trước** (`pip list` local vs CI/image), rồi mới sửa code. S247
-  AA-871: image có `httpx2` (log cả URL ở INFO), venv local không có.
-- [ ] **Khẳng định "CI xanh khi khớp / đỏ khi lệch"** → chứng minh bằng nhánh thử hoặc draft PR rồi đóng không merge,
-  có cài sẵn một chỗ lệch; không bao giờ merge thứ sai để thử. S247 AA-894: input `design_ref` của DB Schema Dump,
-  Docs lint trên một PRD tham chiếu hỏng.
-- [ ] PR có migration → luồng D8: PR migration-only của repo chủ merge → PR copy Infra (Copy Guard) merge → DB Migrate `check` → `apply` (job tables rảnh) → merge PR bot `bot/db-schema-reference` (DB Schema Dump tự mở sau apply) → chạy DB Isolation Probe. Từ X1 S22, log DB Migrate phải ghi login `db_migrator` và `ran as: <owner>` (`cis_owner` / `bk_owner` / `tp_owner`); `roles/` chạy bằng master.
-- [ ] **Cờ fail-closed (thiếu key = BẬT) + migration:** code cần grant của migration thì đặt cờ TẮT rõ ràng trước khi
-  deploy code → apply migration → BẬT cờ + verify lật cờ. Thiếu bước tắt thì code chạy ngay khi chưa có grant
-  (S247, AA-859 wave 3).
-- [ ] Thêm thư mục top-level → thêm `COPY` vào Dockerfile và path filter `deploy-dev.yml`.
-- [ ] PR frontend → `npm run build` đầy đủ chạy local (Node 22 qua nvm), rồi `aa-ui-verify`.
+  Cần phiên AWS MFA còn hạn (`aa365-admin`; script đọc key từ Secrets Manager) và `tools/github/apps.env` của repo gốc;
+  `git push` cần `gh auth setup-git` một lần. Kiểm `gh pr view <n> --json author` ra `app/aa-agent`. App
+  `aa-ecosys-ci-bot` chỉ cho release-please và PR bot của Infra. Hướng dẫn: `docs/security/github-apps.md`.
+- [ ] **PR rủi ro → vòng review trước merge** (auth/quyền, migration/RLS, CI/workflow/secret, xoá dữ liệu, middleware
+  trên đường request): commit local → subagent review độc lập (chỉ đọc, nhiệm vụ "phá nó") → sửa mọi blocker/should-fix
+  → điều phối push, chờ CI, merge.
+- [ ] **Required check xanh:** `gh pr checks <n> --required` (danh sách theo branch protection từng repo, không nhớ
+  cứng). Infra và repo gốc không có required check → đọc đủ `gh pr checks <n>` (Docs lint, Terraform Plan) trước merge.
+  Vercel deploy + UI smoke không phải required → PR frontend kiểm riêng (`aa-ui-verify`).
+- [ ] Test xanh local, đỏ CI → so package đã cài (`pip list` local vs CI/image) trước khi sửa code.
+- [ ] Khẳng định "check xanh khi khớp / đỏ khi lệch" → chứng minh bằng nhánh thử hoặc draft PR có cài sẵn chỗ lệch rồi
+  đóng không merge; không merge thứ sai để thử.
+- [ ] **PR có migration → luồng D8:** PR chỉ chứa file migration ở repo chủ merge trước → PR copy byte sang AA-CIS-Infra
+  `db/migrations/<owner>/` (Migration Copy Guard đỏ nếu PR repo chủ chưa vào `main`) → DB Migrate `check` → `apply`
+  (chờ mọi bảng job owner rảnh và không wave mở) → merge PR bot `bot/db-schema-reference` → DB Isolation Probe.
+  Log DB Migrate ghi login `db_migrator` và `ran as: <owner>` (`cis_owner` / `bk_owner` / `tp_owner` / `crm_owner`);
+  `roles/` chạy bằng master. Chủ schema: `docs/database/schema-ownership.md`.
+  - Migration đổi bảng/khoá/FK của schema có trang ERD thiết kế `enforce=true`
+    (`docs/architecture/erd/design/<schema>.md`, repo gốc) → sửa trang đó trong cùng đợt thay đổi, không thì DB Schema
+    Dump đêm đó đỏ bước drift.
+  - Booking và AA-Partner deploy ở mọi push vào `main` chạm backend → PR code cần migration mới chỉ merge sau `apply`.
+- [ ] **Cờ fail-closed (thiếu key = BẬT) + migration:** đặt cờ TẮT rõ ràng trước khi deploy code → apply migration →
+  BẬT cờ + verify lật cờ.
+- [ ] PR frontend → `npm run build` đầy đủ local (Node 22 qua nvm), rồi `aa-ui-verify`.
 - [ ] PR xoá bảng/dữ liệu → quy trình DRY RUN (`aa-cis-schema/references/destructive-ops.md`).
-- [ ] **Docs:** "Docs impact" của issue đã làm trong cùng PR (CONTEXT.md / ADR / runbook / contract / trang catalog `docs/README.md`), hoặc ghi "N/A". Trang catalog theo `docs/STYLE.md` (front-matter, CLI một dòng, không ID thô); chỉ bump `last_reviewed` khi đã kiểm với hệ thật.
-- [ ] **Changelog:** PR `feat`/`fix` người dùng thấy → tiêu đề PR đọc được như một dòng CHANGELOG (release-please lấy từ đây khi AA-891 xong).
-- [ ] **LLM:** đổi prompt/model/route → ghi run ID eval chạy tay/dispatch trên golden set AA-729 vào PR (D-23; không có trigger theo PR). `prompt_version` chỉ khi ledger v2 (AA-804) đã có.
-- [ ] **Cost:** thêm resource AWS hoặc lượt chạy trả phí → ghi ước tính USD/tháng trong PR body (DM-10.7); resource mới có tag `App` (DM-10.1).
+- [ ] **Docs:** "Docs impact" của issue làm trong cùng PR (CONTEXT.md / ADR / runbook / contract / trang catalog
+  `docs/README.md`), hoặc ghi "N/A". Trang catalog theo `docs/STYLE.md`; chỉ bump `last_reviewed` khi đã kiểm với hệ thật.
+- [ ] **Changelog:** PR `feat`/`fix` người dùng thấy → tiêu đề PR đọc được như một dòng CHANGELOG (release-please lấy từ đây).
+- [ ] **LLM:** đổi prompt/model/route → ghi run ID eval chạy tay/dispatch trên golden set (AA-729) vào PR (D-23).
+  `prompt_version` chỉ khi ledger v2 (AA-804) đã có.
+- [ ] **Cost:** thêm resource AWS hoặc lượt chạy trả phí → ước tính USD/tháng trong PR body (DM-10.7); resource mới có tag `App` (DM-10.1).
+
+### Cách merge
+
+- Squash chỉ sau `git fetch`; gộp commit bằng `git reset --soft $(git merge-base HEAD origin/main)`, không bằng
+  `origin/main` trần. Trước mọi merge: `gh pr diff <n> --name-only` — có file bị xoá/đổi ngoài phạm vi PR thì dừng.
+- CIS, Booking, Partner có branch protection strict: PR `BEHIND` → `gh api -X PUT repos/AdventureAsia365-Ecosys/<Repo>/pulls/<n>/update-branch`
+  (gh trên máy không có `gh pr update-branch`) → chờ CI → merge. CIS, Booking, TripPlanner: `gh pr merge <n> --auto --squash`.
+  AA-Partner, AA-CIS-Infra, repo gốc tắt auto-merge → `gh pr merge <n> --squash` sau khi check xanh.
+- Nhiều PR backend cùng repo: merge nối tiếp, PR sau chờ Deploy Dev của PR trước xong rồi mới update-branch.
+- Chờ CI: `gh pr checks <n> --watch` (CI ~3–5′), kiểm một lần, không poll dồn.
 
 ### Ngoại lệ: PR release (release-please, AA-891)
 
-- PR tên `chore(main): release x.y.z` (title mặc định của release-please, cả 3 repo app), do `aa-ecosys-ci-bot` mở và tự cập nhật; chỉ đổi `CHANGELOG.md` + manifest + file version (CIS `api/version.py`, Booking `backend/pyproject.toml`, TripPlanner chỉ manifest).
-- **Không có `Refs AA-xxx`** — đây là ngoại lệ duy nhất của luật Refs. Không sửa tay title/body để thêm Refs. Dòng CHANGELOG không chứa mã Linear (subject không có `[AA-xxx]`), nhưng mỗi dòng link tới commit/PR gốc, và body PR đó có `Refs AA-xxx`.
-- Agent điều phối merge như mọi PR: CI xanh → squash merge (giai đoạn dev). Subagent không merge.
-- Merge xong release-please tạo tag `vX.Y.Z` + GitHub Release. Commit release **không** kích hoạt deploy; code của bản đó đã deploy từ các PR `feat`/`fix` trước, nên không có gì để verify live riêng cho PR release. Riêng field `version` trên health (`/health`, `/booking/health`, TripPlanner `/api/health`) vẫn báo bản trước cho tới lần deploy kế tiếp của app; `git_sha` mới là bằng chứng commit đang chạy.
-- Sau khi tag: soạn release note theo `docs/templates/release-note.md` (chỉ tính năng đã verify live) → draft Jira (`aa-jira-update`).
+- PR `chore(main): release x.y.z` ở cả 4 repo app, do `aa-ecosys-ci-bot` mở và tự cập nhật; chỉ đổi `CHANGELOG.md` +
+  manifest + file version (CIS `api/version.py`, Booking `backend/pyproject.toml`, Partner `api/pyproject.toml`,
+  TripPlanner chỉ manifest).
+- **Không có `Refs AA-xxx`** — ngoại lệ duy nhất của luật Refs; không sửa tay title/body. Mỗi dòng CHANGELOG link tới
+  commit/PR gốc, PR đó có `Refs`.
+- Agent điều phối merge như mọi PR. Commit release **không** kích hoạt deploy; field `version` trên health (`/health`,
+  `/booking/health`, `/crm/health`, TripPlanner `/api/health`) báo bản trước tới lần deploy kế; `git_sha` mới là bằng chứng.
+- Sau khi tag: release note theo `docs/templates/release-note.md` (chỉ tính năng đã verify live) → draft Jira (`aa-jira-update`).
 
-## 2. Guard trước merge backend
+## 2. Guard trước merge backend, DB Migrate, Terraform apply
 
-- CI (`deploy-dev.yml`) tự chặn deploy khi `shared.job` còn queued/running. Override chỉ Nghiệp, phải ghi lý do
-  (`docs/ops/runbooks/deploy-gate-override.md`). Kind có cờ `deploy_gate_exempt` không tính (từ AA-751 không kind nào
-  dùng; `ops_rds_role_connections` đã nghỉ, sampler tự huỷ row của nó); `/admin/job-runner/deploy-gate` liệt kê ở `exempt_kinds`.
-- Bị chặn → không override để "cho nhanh". Chờ job xong, hoặc hỏi Nghiệp nếu job treo.
-- Có wave đang chạy → không merge PR backend/pipeline dù CI cho qua (`aa-wave-rerun`). PR chỉ FE thì được merge.
-- Kiểm tay khi cần (ECS exec, login `cis_app` chỉ thấy `shared.job`; `booking.job` xem qua DB Migrate `check`):
-
-  ```sql
-  SELECT kind, status, count(*) FROM shared.job WHERE status IN ('queued','running') GROUP BY 1,2;
-  ```
-
-- **Terraform Apply không có guard job.** Trước mỗi apply đụng `aws_ecs_service`, `aws_ecs_task_definition` hoặc
-  `aws_lambda_function` (service bị roll; ECS min healthy 50 %, worker drain 120 s) → chạy **idle gate tay**:
-  `GET /admin/job-runner/deploy-gate` → `safe_to_deploy=true` **và** một lần DB Migrate `mode=check` có dòng busy
-  `booking.job` queued/running = 0. Dán cả hai vào session log. Infra `main` không được có thay đổi đã merge mà
-  chưa apply (apply sẽ kéo theo). Apply chỉ đổi alarm/IAM/secret metadata thì không cần gate.
+- Deploy Dev của 3 app có ECS worker tự chặn khi bảng job còn queued/running: CIS `shared.job`
+  (`/admin/job-runner/deploy-gate`), Booking `booking.job` (`/booking/ops/deploy-gate`), Partner `crm.job`
+  (`/crm/ci/deploy-gate`; CRM web không có worker nên không có guard). Override chỉ Nghiệp, ghi lý do
+  (`docs/ops/runbooks/deploy-gate-override.md`). Bị chặn → chờ job xong hoặc hỏi Nghiệp nếu job treo, không tự override.
+- **Wave đang chạy** → không merge PR backend/pipeline CIS, không DB Migrate (PR chỉ FE thì được). Driver wave có cờ
+  tạm dừng trước wave kế: đặt cờ → chờ wave đang chạy đóng + bảng job rảnh → deploy/apply → verify → gỡ cờ (`aa-wave-rerun`).
+- Kiểm tay mọi bảng job một lần: DB Migrate `mode=check` (input `migration` = một file đã apply, ví dụ
+  `cis/<NNN>_<tên>.sql`; check chỉ báo cáo) liệt kê từng bảng job owner (`<schema>.job`) busy và wave mở.
+- **Terraform:** plan trên PR (`terraform-plan.yml`) phải đọc; apply chỉ qua workflow (`terraform-apply.yml`, từ `main`).
+  - Apply không có guard job. Trước apply đụng `aws_ecs_service`, `aws_ecs_task_definition` hoặc `aws_lambda_function`
+    → idle gate tay (DB Migrate `check` không bảng nào busy, không wave), dán vào session log. Apply chỉ đổi
+    alarm/IAM/secret metadata thì không cần gate. `main` của Infra không được có thay đổi đã merge mà chưa apply.
+  - Plan guard (AA-846) từ chối thay đổi secret version / `random_password` / RDS instance; `allow_guarded` +
+    `allow_reason` chỉ khi PR chủ ý đổi đúng thứ đó.
+  - Plan/apply đỏ "Error acquiring the state lock" là tranh lock giữa các run, không phải lỗi code → chờ run kia xong, chạy lại.
+  - Apply chạm task def ECS đăng ký revision mới từ template, và Deploy Dev lần sau chép revision ACTIVE mới nhất →
+    sau apply, so tên env của revision mới nhất với revision đang chạy; lệch thì sửa trước lần deploy kế.
+  - IAM vừa cấp mà apply lỗi → chạy lại lần 2 (eventual consistency).
 
 ## 3. Sau deploy — verify live
 
-1. **Revision:** api và worker cùng image SHA, rollout COMPLETED.
+1. **Revision:** service đã đổi rollout COMPLETED; CIS api và worker cùng image SHA.
 
    ```bash
-   aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api aa-cis-dev-worker --profile aa365-admin --region us-west-1 --query "services[].{n:serviceName,td:taskDefinition,r:deployments[0].rolloutState}"
+   aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api aa-cis-dev-worker aa-booking-dev-api aa-crm-dev-api aa-crm-dev-web --profile aa365-admin --region us-west-1 --query "services[].{n:serviceName,td:taskDefinition,r:deployments[0].rolloutState}"
    ```
 
-2. **Worker:** log có `job_worker_started` cho đủ mọi kind.
-3. **API:** curl **từng endpoint đã đổi** trên domain thật → 200 + đúng shape (field chính, số dòng > 0 khi phải có dữ liệu).
-4. **UI:** trang đã đổi → `aa-ui-verify`.
-5. **Infra:** `terraform-plan.yml` trên PR đã xem; idle gate tay (mục 2) nếu apply roll service; apply qua `gh workflow run terraform-apply.yml --repo AdventureAsia365-Ecosys/AA-CIS-Infra --ref main`. IAM vừa cấp mà apply lỗi → chạy lại lần 2 (eventual consistency).
-6. **DB (PR có migration, role, grant, RLS, secret DB hoặc task def DB):** DB Migrate `apply` exit 0 với `ran as: <owner>`; PR schema dump đã merge; **DB Isolation Probe** xanh (dán tóm tắt JSON: số cell pass / pending / fail), đặc biệt `rls.enable_only_has_cis_app_policy`, `rls.force_parity.cis_app`, `sessions.master_break_glass_only`. Đổi `DATABASE_URL` / task def → kiểm bảng Connections của dump (`pg_stat_activity`): `cis-api` / `cis-worker` là `cis_app`, `db-migrate` là `db_migrator`.
+2. **Health:** `git_sha` = commit vừa merge và `/health/ready` 200 — CIS `api-cis…/health`, Booking
+   `api-booking…/booking/health`, Partner `partner-dev…/crm/health` (CRM web `/healthz`), TripPlanner web
+   `tripplanner…/api/health` (host đủ: root `.claude/CLAUDE.md` mục LIVE ENDPOINTS + bảng repo của
+   `docs/ecosystem-architecture.md`).
+3. **Worker:** CIS log worker có `job_worker_started` đủ mọi kind. Booking và CRM chạy worker trong process api.
+4. **API:** curl **từng endpoint đã đổi** trên domain thật → 200 + đúng shape (field chính, số dòng > 0 khi phải có dữ liệu).
+5. **UI:** trang đã đổi → `aa-ui-verify`.
+6. **Infra:** apply `gh workflow run terraform-apply.yml --repo AdventureAsia365-Ecosys/AA-CIS-Infra --ref main` xanh;
+   plan lại không còn thay đổi ngoài dự kiến.
+7. **DB (PR có migration, role, grant, RLS, secret DB hoặc task def DB):** DB Migrate `apply` exit 0 với `ran as: <owner>`;
+   PR schema dump đã merge; **DB Isolation Probe** xanh (dán tóm tắt pass / pending / fail), đặc biệt
+   `rls.enable_only_has_cis_app_policy`, `rls.force_parity.cis_app`, `sessions.master_break_glass_only`. Đổi
+   `DATABASE_URL` / task def → bảng Connections của dump: `cis-api` / `cis-worker` là `cis_app`, `db-migrate` là `db_migrator`.
+   Kiểm DB qua ECS exec là việc của điều phối: in dòng ngắn có flush hoặc ghi ra S3 (`aa-cis-schema/references/ecs-exec.md`).
 
 ## 4. Đánh Done
 
-Chỉ khi mục 3 pass. Comment vào issue theo mẫu:
+Chỉ khi mục 3 pass và từng gạch "Done when" của issue có bằng chứng. Comment vào issue theo mẫu:
 
 ```text
 Verified live <dd/mm>:
-- PR: #<n> (merged <sha>), ECS api :<rev> / worker :<rev>
+- PR: #<n> (merged <sha>), ECS <service> :<rev>
 - <endpoint> → 200, <tóm tắt shape/số dòng>
 - UI: <trang> — screenshot đính kèm / link
 - Docs: <file/ID catalog đã sửa, hoặc N/A> · Cost: <0 USD / ước tính USD/tháng>
 - Ghi chú: <giới hạn còn lại, issue tách ra nếu có>
 ```
 
-Thiếu bằng chứng nào → để In Review và ghi rõ còn thiếu gì.
+Thiếu bằng chứng nào → để In Review và ghi rõ còn thiếu gì. Linear có thể tự chuyển Done khi merge/deploy dù chỉ có
+`Refs` → sau mỗi merge/apply của issue còn mở, `get_issue` kiểm trạng thái, mở lại nếu đóng nhầm.
 
-## 5. Rollback (AA-869)
+## 5. Rollback
 
 Deploy hỏng mà circuit breaker ECS không tự lùi → lùi app trước, sửa sau. DB không lùi theo app (migration chỉ tiến).
-Các bước đầy đủ (kiểm, verify, rollback từng bước) nay nằm ở runbook — AA-892 chuyển từ đây sang:
 
-- CIS api + worker: `docs/ops/runbooks/rollback-cis.md` (đã diễn tập S241).
-- Booking: `docs/ops/runbooks/rollback-booking.md`. Vercel: `docs/ops/runbooks/rollback-vercel.md`.
+- CIS api + worker: `docs/ops/runbooks/rollback-cis.md`.
+- Booking: `docs/ops/runbooks/rollback-booking.md`. AA-Partner (`aa-crm-dev-api`, `aa-crm-dev-web`) chưa có runbook
+  riêng: cùng cơ chế Deploy Dev (chép revision mới nhất, tag = git SHA) → theo các bước của rollback-booking.
+- Vercel (CIS admin, portal, Booking admin, TripPlanner): `docs/ops/runbooks/rollback-vercel.md`.
 - Lambda TripPlanner: `docs/ops/runbooks/rollback-tp-lambda.md`. Terraform: `docs/ops/runbooks/rollback-terraform.md`.
 - Mục lục + playbook sự cố: `docs/ops/README.md`. Sự cố ảnh hưởng người dùng → `docs/ops/incident-response.md`.

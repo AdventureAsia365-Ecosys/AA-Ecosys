@@ -1,6 +1,6 @@
-# Bộ skill AA_Ecosys — bản tái cấu trúc (nháp 06/10/2026)
+# Bộ skill AA_Ecosys
 
-Issue: AA-733. Nguồn phân tích: tài liệu "Harness Engineering → AA-CIS", mục 8.3.
+Tái cấu trúc lần đầu ở AA-733 (S215, 06/10/2026); rà soát toàn bộ gần nhất: S251 (25/10/2026, xem `VERIFY-LOG.md`).
 
 ## Vì sao
 
@@ -54,12 +54,7 @@ aa-cis-schema/    SKILL.md + references/{ecs-exec, gotchas, destructive-ops}.md
 aa-ecosys-repos/  SKILL.md + references/{cis-app, pipeline, infra, tripplanner, booking}.md
 ```
 
-## Bước tiếp
-
-1. Đưa thư mục này vào `skill/` của repo, kèm `MIGRATION-PROMPT.md` cho Claude Code hoặc Kiro.
-2. Agent xử lý mọi mốc `<!-- VERIFY ... -->` và `<!-- SINH LẠI ... -->` dựa trên code thật.
-3. Upload lại cho Claude Chat review theo `REVIEW-CHECKLIST.md`.
-4. Upload lên Claude (Settings → Skills), đồng bộ sang Kiro steering, xoá bản cũ.
+Rà soát bộ skill: `REVIEW-CHECKLIST.md`; kết quả từng lần rà + câu hỏi mở: `VERIFY-LOG.md`.
 
 ## Đồng bộ lên claude.ai (S247)
 
@@ -72,3 +67,7 @@ tools/skills/package_skills.sh --changed <ref đầu phiên>   # hoặc: tools/s
 Script tạo `skill/dist/<tên>.zip` (mỗi zip là thư mục `<tên>/` có `SKILL.md` và file kèm, đúng dạng claude.ai nhận).
 Không có zip gộp: claude.ai chỉ nhận đúng một skill mỗi zip (S247). `skill/dist/` không commit (sinh lại được). Nghiệp
 upload từng zip ở claude.ai → Settings → Capabilities → Skills (thay bản cũ cùng tên).
+
+**Đổi tài khoản claude.ai** (S251: tài khoản hiện tại `info@adventure.asia`): skill không theo tài khoản → đóng gói
+**toàn bộ** (`tools/skills/package_skills.sh`, không tham số) sau khi PR skill đã merge vào `master`, rồi upload đủ 10
+zip vào tài khoản mới. Connector (Notion/Linear/Jira) báo lỗi sau khi đổi tài khoản → mở lại phiên Claude Code.

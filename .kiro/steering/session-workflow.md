@@ -16,7 +16,7 @@ Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo l�
 ## Bắt đầu / kết thúc phiên → `skill/aa-session/SKILL.md`
 - "bắt đầu session mới": đọc memory HOT + log local + **backlog sống `docs/backlog/README.md`** (danh sách việc đã
   sắp thứ tự, mục "Time-gated checks" + "Waiting on Nghiệp"), kiểm trạng thái thật (STS, ECS api/worker cùng SHA,
-  `shared.job` queued/running), rồi **đề xuất 5–10 issue lấy từ backlog sống** chờ Nghiệp chốt. KHÔNG audit lại toàn bộ
+  `shared.job` queued/running), rồi **đề xuất issue lấy từ backlog sống / master plan** (3–5 thường, 8–10 khi Ultracode; Nghiệp có thể giao số khác) chờ Nghiệp chốt. KHÔNG audit lại toàn bộ
   Linear (S238: tốn token) — chỉ audit lại khi file cũ > ~2 tuần.
 - Trong phiên: giữ checklist sống `.tmp-session/S<nnn>-checklist.md` (Nghiệp xem bằng Markdown Preview), cập nhật sau
   mỗi bước xong; bài học chờ ở `.tmp-session/S<nnn>-lessons-pending.md` (S247, chi tiết: skill `aa-session`).
@@ -25,7 +25,7 @@ Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo l�
   + image SHA mỗi service, `/health` + `/health/ready`, migration mới nhất, Lambda/Vercel, bảng job, PR còn mở) ghi
   `state-snapshot.md`; (3) lessons; (4) **draft Jira → Nghiệp duyệt → đăng** (không tự đăng khi chưa duyệt, S237);
   (5) **rồi mới** ghi log local, prepend session block vào memory HOT (chỉ prepend, không rotate tay), backlog + tracker
-  — tất cả lấy số từ snapshot và kết quả Jira; (6) đưa **mọi repo (gốc + 4 con) về main/master cây sạch**; root PR chờ
+  — tất cả lấy số từ snapshot và kết quả Jira; (6) đưa **mọi repo (gốc + 5 con: CIS, Booking, TripPlanner, Partner, Infra) về main/master cây sạch**; root PR chờ
   thì agent điều phối tự merge (`gh pr merge <n> --squash`, repo gốc không có CI bắt buộc) theo luật merge bên dưới.
 
 ## Nguồn sự thật khi thiết kế — CONTEXT.md (BẮT BUỘC)
@@ -45,7 +45,7 @@ Hỏi "đảo ngược quyết định này thì repo nào phải sửa?": ≥2 
 ## Định nghĩa "XONG" + merge/deploy → `skill/aa-ship/SKILL.md`
 Merge + CI xanh CHƯA đủ. Issue có code backend chỉ Done khi: merge + CI xanh + deploy Dev **rollout COMPLETED**
 + **verify endpoint live** (curl 200 + shape). Commit/PR dùng `Refs AA-xxx` (KHÔNG `[AA-xxx]`/`Fixes` — tự đóng issue).
-Không merge/deploy backend khi bảng job của app (`shared.job`, `booking.job`) còn job hoặc đang có wave (CI tự chặn; override chỉ Nghiệp, ghi lý do).
+Không merge/deploy backend khi bảng job của app (`shared.job`, `booking.job`, `crm.job`) còn job hoặc đang có wave (CI tự chặn; override chỉ Nghiệp, ghi lý do).
 
 **Ai merge (S241 D-13; data standards DM-11.5, v1.1, Nghiệp duyệt S243 (N-1)):**
 
@@ -90,7 +90,7 @@ Không tạo nhiều lệnh `sleep N; check` chồng chéo hay mở terminal son
 - Chạy git/terraform từ đường dẫn WSL `/home/nghiep/...` (KHÔNG dùng UNC `\\wsl.localhost`).
 - terraform/boto3 cần MFA. KHÔNG `export $(…)` trần: lệnh lỗi/rỗng thì `export` in toàn bộ env (lộ token, S244). Dùng:
   `C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q '^AWS_ACCESS_KEY_ID=' <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr '\n' ' ' <<<"$C") <lệnh>` (chạy trong `bash -c`). Hết hạn MFA → Nghiệp chạy `aws sts get-caller-identity --profile aa365-admin` và nhập mã.
-- AA-CIS-App có branch protection (5 CI job) → merge PR dùng `gh pr merge --auto`. Repo gốc không có CI bắt buộc →
+- AA-CIS-App / AA-Booking / AA-Partner có branch protection strict: nhánh BEHIND → `update-branch` → chờ CI → `gh pr merge --squash` (Partner không bật auto-merge). Repo gốc không có CI bắt buộc →
   `gh pr merge <n> --squash` sau khi tự kiểm (lệ root PR).
 - MCP config ở `.kiro/settings/mcp.json` (gitignored). Linear endpoint `/mcp` (KHÔNG `/sse`).
 - File tạm ghi TRONG workspace tại `/home/nghiep/projects/AA-Ecosys/.tmp-session/` (đã gitignore), KHÔNG ghi ra `~/`. Dọn sau khi dùng.
