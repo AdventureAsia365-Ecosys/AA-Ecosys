@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis-dev-db, tripplanner-lambda]
-last_reviewed: 2026-10-24
+last_reviewed: 2026-10-25
 review_every_days: 90
 generated: false
 related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894]
@@ -18,7 +18,8 @@ related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894]
 <!-- erd-design schema=tripplanner enforce=true -->
 
 Design ERD of schema `tripplanner` (owner TripPlanner, migrations `tp-NNN`). Started S247 (AA-894) as a copy of the live
-model at **tp-017**, and re-synced to **tp-018** in S250: the pilot place tables tp-018 dropped (`itinerary_components`,
+model at **tp-017**, re-synced to **tp-018** in S250 and to **tp-019** in S251 (`traveller_accounts` +
+`sessions.account_id`, AA-908): the pilot place tables tp-018 dropped (`itinerary_components`,
 `tour_day`, `tour_stop`, `tour_graph_*`, `tour_leg`, `tour_junction`) are gone from the page, so the drift check passes
 again. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
 foreign keys differ from this page. A TripPlanner migration that changes
@@ -77,6 +78,14 @@ erDiagram
         timestamptz created_at
         timestamptz expires_at
         bytea guest_token_hash "conf:credential"
+        uuid account_id FK
+    }
+    traveller_accounts {
+        uuid id PK
+        text iss UK "pii:online_id"
+        text sub UK "pii:online_id"
+        timestamptz created_at
+        timestamptz last_sign_in_at
     }
     trip_drafts {
         uuid id PK
@@ -99,4 +108,5 @@ erDiagram
     customers |o--o{ sessions : "customer_id"
     sessions ||--o{ trip_drafts : "session_id"
     sessions ||--o{ trip_events : "session_id"
+    traveller_accounts |o--o{ sessions : "account_id"
 ```
