@@ -1,0 +1,18 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "TenantSummary",
+  "expect": "invalid",
+  "why": "1.2: lock_source takes the three sources only (a person or a free-text reason never goes into it)",
+  "payload": {
+    "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+    "agency_name": "Synthetic Travel Co (Dev)",
+    "state": "locked",
+    "is_synthetic": true,
+    "has_owner": true,
+    "holds_travellers": false,
+    "created_at": "2026-11-10T02:00:00Z",
+    "lock_source": "staff_member",
+    "membership_feed_state": "ok",
+    "membership_feed_lag_s": 18
+  }
+}
