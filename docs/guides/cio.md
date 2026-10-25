@@ -29,7 +29,7 @@ the [data standards](../architecture/data-standards/README.md); this page points
   customer rows were all test or internal addresses). Data standards C7.1a forbid copying prod personal data to Dev.
 - Prod will be a separate RDS instance on acc2 (ADR 0001, C7.2a, D-17), started when Ms. Thư sets a go-live date.
   Several controls are deliberately scheduled for that date (see the readiness list below).
-- Repos: all six repos are public: the four app repos (D-14, D-25), and root and Infra since 22/10/2026 until the
+- Repos: all six active repos are public: the four app repos (D-14, D-25), and root and Infra since 22/10/2026 until the
   coding phase ends ([ADR 0014](../adr/0014-repo-visibility-and-github-plan.md) amendment; a switch back is gated by
   amendment 2). Security findings and infrastructure detail are written only in root and Infra, never in an app repo.
 

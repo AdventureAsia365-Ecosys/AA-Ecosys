@@ -13,7 +13,7 @@ DevOps, CTO, CIO, PM, AI agent) and the catalog of every maintained document.
 ## Layout
 
 ```text
-AA-Ecosys/                      (this repo, private, default branch master)
+AA-Ecosys/                      (this repo, public since 22/10/2026 — ADR 0014 amendment, default branch master)
 ├── apps/
 │   ├── AA-CIS-App/             content system of record: FastAPI api + job worker (ECS), admin console (Vercel)
 │   ├── AA-TripPlanner-Web/     B2C map-first trip planner: Next.js (Vercel) + 2 Lambdas

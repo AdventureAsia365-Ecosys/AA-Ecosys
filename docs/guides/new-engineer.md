@@ -44,12 +44,12 @@ on acc2 (ADR 0001, C7.2a, D-17), dated when go-live is set. Read the
 
 | Local folder | Repo (org `AdventureAsia365-Ecosys`) | Visibility | Default branch | Read first | Deploys to |
 |---|---|---|---|---|---|
-| `.` (root) | `AA-Ecosys` | private | `master` | [docs catalog](../README.md), [ADRs](../adr/README.md) | nothing (docs, skills, audits) |
+| `.` (root) | `AA-Ecosys` | public (since 22/10/2026) | `master` | [docs catalog](../README.md), [ADRs](../adr/README.md) | nothing (docs, skills, audits) |
 | `apps/AA-CIS-App` | `AA-CIS-App` | public | `main` | `CONTEXT.md` | ECS `aa-cis-dev-api` + `aa-cis-dev-worker`; Vercel `aa-cis-frontend` (admin) |
 | `apps/AA-Booking` | `AA-Booking` | public | `main` | `CONTEXT.md`, ADR 0004 | ECS `aa-booking-dev-api`; Vercel `aa-booking-admin` |
 | `apps/AA-Partner` | `AA-Partner` | public | `main` | `CONTEXT.md`, ADR 0010 | ECS `aa-crm-dev-api` + `aa-crm-dev-web`; Vercel `aa-cis-portal` (tenant portal) |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | public | `main` | `CONTEXT.md` | Lambdas `aa-tripplanner-dev-browse` / `-assembly`; Vercel |
-| `infra/AA-CIS-Infra` | `AA-CIS-Infra` | private | `main` | `CONTEXT.md`, `README.md` | AWS acc2 (root `accounts/aa365/`) |
+| `infra/AA-CIS-Infra` | `AA-CIS-Infra` | public (since 22/10/2026) | `main` | `CONTEXT.md`, `README.md` | AWS acc2 (root `accounts/aa365/`) |
 
 The app repos are **public**. Never put account IDs, ARNs, security group IDs, secret lists or security
 findings in them ([where a page may live](../STYLE.md#where-a-page-may-live-sec-06)).
