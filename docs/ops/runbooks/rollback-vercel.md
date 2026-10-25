@@ -1,13 +1,13 @@
 ---
 id: OPS-02-vercel
 title: Roll back a Vercel deployment
-description: Return a Vercel project (CIS admin, Booking admin, TripPlanner) to the previous production deployment, then promote the fix later.
+description: Return a Vercel project (CIS admin, tenant portal, Booking admin, TripPlanner) to the previous production deployment, then promote the fix later.
 type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [aa-cis-frontend, aa-booking-admin, aa-tripplanner]
-last_reviewed: 2026-10-19
+applies_to: [aa-cis-frontend, aa-cis-portal, aa-booking-admin, aa-tripplanner]
+last_reviewed: 2026-10-25
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -19,12 +19,13 @@ related: [OPS-02-cis, OPS-04, AA-869, AA-892]
 
 > [!WARNING]
 > UNTESTED - do not follow in an incident without checking each step.
-> Moved from `skill/aa-ship/SKILL.md` §5 (S241, AA-869). Instant Rollback has not been run on any of the three
+> Moved from `skill/aa-ship/SKILL.md` §5 (S241, AA-869). Instant Rollback has not been run on any of the four
 > projects yet.
 
 ## When to use
 
-- Trigger: a frontend production deploy broke a page (admin, Booking admin or TripPlanner) and the API is fine.
+- Trigger: a frontend production deploy broke a page (admin, tenant portal, Booking admin or TripPlanner) and the API is
+  fine.
 - Not for: API problems ([rollback-cis](rollback-cis.md), [rollback-booking](rollback-booking.md)) or the
   TripPlanner Lambdas ([rollback-tp-lambda](rollback-tp-lambda.md)).
 
@@ -32,10 +33,13 @@ related: [OPS-02-cis, OPS-04, AA-869, AA-892]
 
 - Team plan: **Hobby** (D-18: Pro when the first tenant pays). Instant Rollback on Hobby returns only to the
   production deployment **immediately before** the current one.
-- Projects (19/10/2026): `aa-cis-frontend` (aa-cis.lumiguides.it.com), `aa-booking-admin`, `aa-tripplanner`
-  (tripplanner.lumiguides.it.com). The tenant portal project from AA-885 is planned.
+- Projects (25/10/2026): `aa-cis-frontend` (aa-cis.lumiguides.it.com), `aa-booking-admin`, `aa-tripplanner`
+  (tripplanner.lumiguides.it.com), and `aa-cis-portal` (portal.lumiguides.it.com, the tenant portal; deployed from
+  AA-Partner `portal/` since AA-979, 25/10/2026).
 - Deployments are created by each repo's `vercel-deploy.yml` (S241), not by the Vercel Git integration
   (`git.deploymentEnabled: false`). A push to `main` that touches `frontend/**` makes the production deployment.
+  The tenant portal is the exception: AA-Partner `vercel-deploy-portal.yml` deploys it on a push to `main` that
+  touches `portal/**` (AA-CIS-App no longer deploys it, CIS #997).
 - After a rollback Vercel stops assigning the production domains to new deployments until one is promoted.
 - Cost: 0 USD.
 
@@ -57,11 +61,11 @@ related: [OPS-02-cis, OPS-04, AA-869, AA-892]
 
    Expected: the production domain serves the previous deployment within seconds.
    Verify: open the page; `curl -s -o /dev/null -w "%{http_code}\n" https://aa-cis.lumiguides.it.com/login`
-   (or the TripPlanner home page) returns 200.
+   (or `https://portal.lumiguides.it.com/tenant-login`, or the TripPlanner home page) returns 200.
    Rollback: promote the bad deployment again (step 4 on it), only if the rollback made things worse.
 
-3. Fix on `main`: revert the bad PR. `vercel-deploy.yml` builds a new production deployment, but **it does not
-   get the domain** while the project is in rolled-back state.
+3. Fix on `main`: revert the bad PR. `vercel-deploy.yml` (portal: AA-Partner `vercel-deploy-portal.yml`) builds a new
+   production deployment, but **it does not get the domain** while the project is in rolled-back state.
 
 4. Promote the fixed deployment. Dashboard: the new deployment, **Promote**. CLI:
 

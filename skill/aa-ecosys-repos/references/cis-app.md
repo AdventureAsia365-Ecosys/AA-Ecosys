@@ -10,7 +10,8 @@
 | `services/` | Logic pipeline theo stage (content_generation, acp_shared, jobs, …) |
 | `shared/` | llm_client (gateway, satellite), jobs (queue, worker, registry), secrets, config |
 | `worker/` | `python -m worker` — job runner trên ECS worker |
-| `frontend/` | Next.js: `app/admin/*`, `app/(tenant)/portal/*`, `app/_kit/` |
+| `frontend/` | Next.js admin: `app/admin/*`, `app/login`, `app/trip`, `app/api` (BFF), `app/_kit/` |
+| `portal/` | Bản **đóng băng, không deploy** của tenant portal (AA-979): nguồn thật ở AA-Partner `portal/`; CI CIS chặn mọi thay đổi (`test_portal_copy_is_frozen`); xoá ở P2b + 7 ngày |
 | `docs/` | `CONTEXT.md`, `adr/`, `sessions/` (db-schema-reference ở repo gốc AA-Ecosys) |
 | `skill/` | Nguồn gốc các skill (version-controlled ở repo gốc AA-Ecosys) |
 
@@ -30,9 +31,13 @@
 
 `overview` (dashboard tổng), `upload` (A0), `s1-rewrite` (A1), `review` (A2 review queue), `master-content` (A3), `atom-curation` (Social Content), `tenant-activity`, `platform-stats`, `seo-intelligence`, `llm-usage` (External Spend), `tenants` (có panel 360 inline), `jobs`, `decisions` (Jev), `photos`, `settings` (gates, Brand Identity, LLM route, UI kit tab), `dashboard` (cũ).
 
-## Trang portal (tenant)
+## Trang portal (tenant) — nay ở AA-Partner
 
-`dashboard`, `t0-brand`, `t1-rewrite`, `t4-pool` (My Catalog), `t7-planning` (Social Content/Slate), `t8-angle-gate` (T8+T9), `t10-review` (My Content), `t11-publish` (+ `/connection`), `marketplace`, `billing`, `activity`, `api`, `settings`.
+Từ AA-979 (25/10/2026) UI portal nằm ở AA-Partner `portal/app/portal/*` (Vercel `aa-cis-portal`); API phía sau vẫn là
+router `/v1/*` + `/auth` của repo này. Slug hiện tại (AA-759, slug `t*` cũ trả 308): `dashboard`, `brand`, `tours`
+(`mine`, `marketplace`), `create` (`social`, `article`, `write`), `content` (+ `publish`), `account` (`activity`, `api`,
+`billing`, `integrations`, `settings`), `help/facebook`; ngoài gate: `/tenant-login`, `/privacy`, `/terms`.
+Sinh lại: `git -C ~/projects/AA-Ecosys/apps/AA-Partner ls-tree -r --name-only origin/main portal/app | grep page.tsx`.
 
 ## Job kinds (worker)
 

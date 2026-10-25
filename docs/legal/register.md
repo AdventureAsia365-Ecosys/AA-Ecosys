@@ -180,7 +180,8 @@ there only on the tenant's instruction with credentials the tenant supplies; the
 
 **Analytics:** none. No analytics or tag SDK is on main in the three app repos (grep for `@vercel/analytics`,
 `speed-insights`, `gtag`, `googletagmanager`, `posthog`, `mixpanel`, `plausible`, `hotjar`, `clarity`, `amplitude`:
-0 hits, 2026-10-21). Both privacy pages say "no advertising or analytics cookies", which matches.
+0 hits, 2026-10-21). AA-Partner, created after that check: the same grep on `main` `923e206` (25/10/2026) has only
+false positives ("plausible" in two code comments, `has-tostringtag` in the lockfiles, one integrity hash). Both privacy pages say "no advertising or analytics cookies", which matches.
 
 Notes:
 

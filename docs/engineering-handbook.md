@@ -20,9 +20,10 @@ It replaces the S241 SDLC review and platform roadmap and the four S243 advisory
 names them and links there. Where a rule lives in a data standard, an ADR or a skill, that file wins and this page
 only points at it.
 
-AA-Ecosys is three apps on one AWS account (acc2): **AA-CIS** (content and catalog), **AA-TripPlanner-Web**
-(traveller front door) and **AA-Booking** (customers, trip cases, pricing, payments), plus the Terraform repo
-**AA-CIS-Infra** and this private root repo. Today there is one environment, **Dev**, holding test data only
+AA-Ecosys is four apps on one AWS account (acc2): **AA-CIS** (content and catalog), **AA-TripPlanner-Web**
+(traveller front door), **AA-Booking** (customers, trip cases, pricing, payments) and **AA-Partner** (partner
+agencies' CRM and the tenant portal), plus the Terraform repo **AA-CIS-Infra** and this root repo (public for now,
+[ADR 0014](adr/0014-repo-visibility-and-github-plan.md) amendment). Today there is one environment, **Dev**, holding test data only
 (D-01). The team is one engineer (Nghiệp) working with AI agents (Claude Code, Kiro) for one business owner
 (Ms. Thư).
 

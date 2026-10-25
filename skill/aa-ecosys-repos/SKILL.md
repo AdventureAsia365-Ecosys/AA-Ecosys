@@ -1,6 +1,6 @@
 ---
 name: aa-ecosys-repos
-description: Bản đồ repo và kiến trúc AA_Ecosys (org AdventureAsia365-Ecosys) — repo nào làm gì, đường pipeline Admin A0–A4 và Tenant T0–T11, file/router/page nằm ở đâu, Terraform, TripPlanner, AA-Booking, deploy và auth. Dùng khi cần tìm code, giao task cho Claude Code/Kiro, hoặc gặp AA-CIS-App, AA-CIS-Infra, AA-TripPlanner-Web, AA-Booking, A0–A4, T0–T11, atom, segment, slate, admin, portal, Vercel, Lambda.
+description: Bản đồ repo và kiến trúc AA_Ecosys (org AdventureAsia365-Ecosys) — repo nào làm gì, đường pipeline Admin A0–A4 và Tenant T0–T11, file/router/page nằm ở đâu, Terraform, TripPlanner, AA-Booking, AA-Partner, deploy và auth. Dùng khi cần tìm code, giao task cho Claude Code/Kiro, hoặc gặp AA-CIS-App, AA-CIS-Infra, AA-TripPlanner-Web, AA-Booking, AA-Partner, A0–A4, T0–T11, atom, segment, slate, admin, portal, Vercel, Lambda.
 ---
 
 # aa-ecosys-repos
@@ -13,10 +13,11 @@ Workspace local: `~/projects/AA-Ecosys/` — mỗi repo một `.git` riêng. B�
 
 | Repo | Vai trò | Chạy ở đâu | Chi tiết |
 |---|---|---|---|
-| `AA-CIS-App` | FastAPI backend + Next.js admin + tenant portal + worker | ECS api + worker (acc2), Vercel | `references/cis-app.md` |
+| `AA-CIS-App` | FastAPI backend (cả API Content studio `/v1/*`, `/auth/tenant-login`) + Next.js admin + worker. `portal/` ở đây là bản đóng băng, không deploy (AA-979) | ECS api + worker (acc2), Vercel `aa-cis-frontend` | `references/cis-app.md` |
 | `AA-CIS-Infra` | Terraform `accounts/aa365` (ECS, RDS, S3, IAM, TripPlanner BE) | GitHub Actions (apply chỉ qua workflow_dispatch) | `references/infra.md` |
 | `AA-TripPlanner-Web` | B2C map-first planner: Next.js + 2 Lambda | Vercel + Lambda | `references/tripplanner.md` |
 | `AA-Booking` | AAA: khách, trip case, giá, ops (live Dev từ S235) | ECS `aa-booking-dev-api` trên acc2 + Vercel `aa-booking-admin` | `references/booking.md` |
+| `AA-Partner` | CRM cho đại lý đối tác (ADR 0010) + **tenant portal** (`portal/`, chuyển từ AA-CIS-App kèm lịch sử ở AA-979 P2a, 25/10/2026; logic vẫn ở CIS API) | ECS ARM64 `aa-crm-dev-api` + `aa-crm-dev-web` trên acc2 + Vercel `aa-cis-portal` (`portal.lumiguides.it.com`, deploy bằng `vercel-deploy-portal.yml`) | `CONTEXT.md` của repo (mục "Tenant portal") |
 
 `AA-ACP-App` / `AA-ACP-Core` đã archive và xoá. Không tìm code ở đó. Mọi task UI ghi rõ repo đích.
 

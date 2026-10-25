@@ -1,6 +1,6 @@
 ---
 name: aa-ui-verify
-description: Kiểm tra UI admin/portal AA-CIS (Next.js, UI kit app/_kit) trước khi báo xong — build, Vercel preview, mở trang bằng browser, screenshot desktop/mobile/light/dark, console và network lỗi, dữ liệu thật, và tuân thủ kit. Dùng mỗi khi sửa hoặc thêm trang, component, bảng, drawer, hoặc khi Nghiệp báo "UI không hiện / sai".
+description: Kiểm tra UI admin AA-CIS và tenant portal (AA-Partner portal/ từ AA-979) (Next.js, UI kit app/_kit) trước khi báo xong — build, Vercel preview, mở trang bằng browser, screenshot desktop/mobile/light/dark, console và network lỗi, dữ liệu thật, và tuân thủ kit. Dùng mỗi khi sửa hoặc thêm trang, component, bảng, drawer, hoặc khi Nghiệp báo "UI không hiện / sai".
 ---
 
 # aa-ui-verify
@@ -24,6 +24,10 @@ cd frontend && npm run lint && npm run build
 ```
 Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint bỏ sót.
 
+Tenant portal: từ AA-979 (25/10/2026) code portal ở **AA-Partner `portal/`** (cùng lệnh, `cd portal`), không sửa
+`portal/` của AA-CIS-App (bản đóng băng, CI CIS fail nếu đổi). Kit portal là bản copy byte của `frontend/app/_kit` CIS
+(check "Vendored CIS copies" của AA-Partner): sửa file CIS trước rồi chép sang.
+
 ## 3. Kiểm trên preview hoặc Dev
 
 1. Vercel deployment của PR = **READY/SUCCESS**.
@@ -40,8 +44,10 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
      - Chạy tay (agent điều phối): `gh workflow run ui-smoke.yml --ref main -f base_url=<một trong hai host> -f staff_session=true`.
    - Local: `BASE_URL=<URL> npx playwright test --project=smoke-public`. Smoke có đăng nhập **không chạy được từ máy
      local** (role đọc hộp thư chỉ tin `refs/heads/main` + environment `e2e`).
-   Thêm trang = thêm 1 dòng vào danh sách trong `tests/e2e/smoke/ui-smoke.spec.ts`. Portal chờ tenant test (AA-741,
-   `E2E_TENANT_API_KEY`). Smoke chỉ là sàn tối thiểu: trang vừa sửa vẫn kiểm tay các bước dưới.
+   Thêm trang = thêm 1 dòng vào danh sách trong `tests/e2e/smoke/ui-smoke.spec.ts`. Portal: smoke ở AA-Partner
+   (`e2e/smoke-portal/`, `e2e/playwright.portal.config.ts`), workflow `UI Smoke (portal)` tự chạy trên preview của PR
+   đụng `portal/**` (có đăng nhập tenant bằng secret `E2E_TENANT_API_KEY`). Smoke chỉ là sàn tối thiểu: trang vừa sửa
+   vẫn kiểm tay các bước dưới.
 3. Mở trang bằng browser (Claude in Chrome hoặc Playwright), đăng nhập đúng vai (admin / tenant test). **Không còn
    đăng nhập staff bằng mật khẩu ở bất kỳ host CIS nào** từ AA-816 S2 (22/10/2026, S247; root ADR 0006a A12): API
    từ chối mọi phiên HS256 (`/auth/verify-admin` → 401 "Password sessions are switched off"), BFF `/api/auth/login`
@@ -69,11 +75,12 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
 
 Dùng khi cần rà cả portal chứ không chỉ trang vừa sửa (S247 AA-760).
 
-1. **Chụp:** chạy smoke có sẵn local, trỏ vào production portal (`https://portal.lumiguides.it.com`), lần lượt từng
-   tenant brand: `BASE_URL=<portal> npx playwright test --project=smoke-portal --workers=1`. Key mỗi tenant đọc từ
+1. **Chụp:** chạy smoke portal của AA-Partner local (thư mục `e2e/`), trỏ vào production portal
+   (`https://portal.lumiguides.it.com`), lần lượt từng tenant brand:
+   `BASE_URL=<portal> npx playwright test -c playwright.portal.config.ts --project=portal --workers=1`. Key mỗi tenant đọc từ
    Secrets Manager `aa-cis/dev/e2e-tenant/<tenant>` vào biến `E2E_TENANT_API_KEY` ngay trong lệnh — không in, không
    ghi file.
-2. **Gom ảnh:** sau mỗi tenant, chép PNG từ `tests/e2e/results/smoke-portal/` sang
+2. **Gom ảnh:** sau mỗi tenant, chép PNG từ AA-Partner `e2e/results/smoke-portal/` sang
    `.tmp-session/<issue>-shots/<tenant>/` (lần chạy sau ghi đè thư mục kết quả).
 3. **Review:** agent review mở **từng ảnh** theo nhóm trang và điền checklist: trạng thái (loading/lỗi), empty state,
    nhãn/copy, layout desktop + phone, dark mode, dữ liệu thật, **lộ thông tin nội bộ** (tenant chỉ thấy nội dung —

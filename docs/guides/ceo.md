@@ -1,7 +1,7 @@
 ---
 id: GUIDE-04
 title: CEO guide (English and Tiếng Việt)
-description: Bilingual guide for Ms. Thư - what the three apps do for the business, where to sign in, what to look at, how to read cost, which decisions are hers and how to report a problem.
+description: Bilingual guide for Ms. Thư - what the four apps do for the business, where to sign in, what to look at, how to read cost, which decisions are hers and how to report a problem.
 type: tutorial
 status: draft
 owner: nghiep
@@ -31,16 +31,17 @@ Tài liệu này dành cho chị Thư, CEO của Adventure Asia, không cần ki
 dụng làm gì cho công ty, đăng nhập ở đâu, nên xem trang nào, đọc chi phí hằng tháng thế nào và những quyết định nào
 cần chị. Nghiệp cập nhật trang này; bản PDF được đặt trên Google Drive.
 
-## 2. The three apps / Ba ứng dụng
+## 2. The four apps / Bốn ứng dụng
 
 | App | What it does for the business | Who uses it |
 |---|---|---|
 | **CIS** (Content system) | Turns our tour files into clean, checked tour content, keeps the tour catalog, and writes content for partner brands (tenants). | Adventure Asia staff (admin console), partners (tenant portal) |
 | **TripPlanner** | The website where a traveller explores places, builds a trip and sends a request to an advisor. | Travellers |
 | **Booking** | Where staff handle each traveller request: customer, trip case, proposal, price, suppliers. | Adventure Asia sales and contracting staff |
+| **Partner** (agency app) | The app we give to partner travel agencies: a CRM to run their own clients, with our tours inside it. Since 25/10/2026 it also holds the tenant portal where partners manage their brand content. | Partner agencies |
 
-The three apps share one AWS account and one database, with a clear owner for each part. Only CIS creates or
-changes tour content; the other two read it.
+The four apps share one AWS account and one database, with a clear owner for each part. Only CIS creates or
+changes tour content; the other apps read it.
 
 ### Tiếng Việt
 
@@ -49,9 +50,10 @@ changes tour content; the other two read it.
 | **CIS** (hệ thống nội dung) | Biến file tour của mình thành nội dung tour sạch, đã kiểm tra; giữ danh mục tour; viết nội dung cho thương hiệu đối tác (tenant). | Nhân viên Adventure Asia (trang quản trị), đối tác (cổng tenant) |
 | **TripPlanner** | Trang web để khách du lịch xem điểm đến, ghép chuyến đi và gửi yêu cầu cho tư vấn viên. | Khách du lịch |
 | **Booking** | Nơi nhân viên xử lý từng yêu cầu của khách: hồ sơ khách, hồ sơ chuyến đi, đề xuất, giá, nhà cung cấp. | Nhân viên kinh doanh và hợp đồng của Adventure Asia |
+| **Partner** (ứng dụng cho đại lý) | Ứng dụng mình cung cấp cho đại lý du lịch đối tác: một CRM để họ quản lý khách của mình, có sẵn tour của mình bên trong. Từ 25/10/2026 ứng dụng này cũng chứa cổng tenant, nơi đối tác quản lý nội dung thương hiệu. | Đại lý đối tác |
 
-Ba ứng dụng dùng chung một tài khoản AWS và một cơ sở dữ liệu, mỗi phần có một chủ rõ ràng. Chỉ CIS được tạo hoặc
-sửa nội dung tour; hai ứng dụng còn lại chỉ đọc.
+Bốn ứng dụng dùng chung một tài khoản AWS và một cơ sở dữ liệu, mỗi phần có một chủ rõ ràng. Chỉ CIS được tạo hoặc
+sửa nội dung tour; các ứng dụng còn lại chỉ đọc.
 
 ## 3. Where to sign in / Đăng nhập ở đâu
 

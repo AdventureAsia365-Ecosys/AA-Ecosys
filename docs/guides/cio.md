@@ -29,8 +29,9 @@ the [data standards](../architecture/data-standards/README.md); this page points
   customer rows were all test or internal addresses). Data standards C7.1a forbid copying prod personal data to Dev.
 - Prod will be a separate RDS instance on acc2 (ADR 0001, C7.2a, D-17), started when Ms. Thư sets a go-live date.
   Several controls are deliberately scheduled for that date (see the readiness list below).
-- Repos: the three app repos are public, the root and Infra repos are private (D-14, D-25). Security findings and
-  infrastructure detail are written only in the private repos.
+- Repos: all six active repos are public: the four app repos (D-14, D-25), and root and Infra since 22/10/2026 until the
+  coding phase ends ([ADR 0014](../adr/0014-repo-visibility-and-github-plan.md) amendment; a switch back is gated by
+  amendment 2). Security findings and infrastructure detail are written only in root and Infra, never in an app repo.
 
 ## Security baseline
 
@@ -124,7 +125,7 @@ with evidence per vendor; it is regenerated in part from the `pii:` tags later. 
 | Vendor | Use | Personal data |
 |---|---|---|
 | Amazon Web Services (acc2 via a reseller; acc3 and acc1 for Bedrock) | All hosting, database, e-mail (SES), identity (Cognito), AI models (Bedrock) | Yes (customers, staff) |
-| Vercel (Hobby plan) | Frontend hosting for the three apps | In transit only |
+| Vercel (Hobby plan) | Frontend hosting: CIS admin, TripPlanner, Booking admin and the tenant portal (AA-Partner) | In transit only |
 | GitHub (Free plan) | Code, CI | No customer data |
 | Sentry (free plan) | Error reports for CIS | Must not contain personal data (DM-6.4) |
 | Jev | Content decisions | Tenant content needs a DPA / zero-retention agreement first (ADR 0001) |
