@@ -1,6 +1,6 @@
 ---
 name: aa-session
-description: Nghi thức bắt đầu và kết thúc một phiên làm việc AA_Ecosys — đầu phiên đọc memory HOT + backlog sống + master plan, kiểm STS/ECS/bảng job, đề xuất danh sách issue theo slot; trong phiên giữ checklist sống và bài học chờ; cuối phiên chụp snapshot trạng thái live, soạn draft Jira cho Nghiệp duyệt, rồi mới ghi log/memory/tracker, đóng gói skill đã đổi, để nguyên môi trường. Dùng khi Nghiệp nói "bắt đầu session mới", "dừng session này", "đầu phiên", "kết thúc/chốt phiên", "wrap up", nêu số phiên S<nnn>, hoặc khi một phiên AA bắt đầu mà chưa có bối cảnh.
+description: Nghi thức bắt đầu và kết thúc một phiên làm việc AA_Ecosys — đầu phiên đọc memory HOT + backlog sống + master plan, kiểm STS/ECS/bảng job, đề xuất danh sách issue theo slot; trong phiên giữ checklist sống và bài học chờ; cuối phiên chụp snapshot trạng thái live, soạn draft Jira cho Nghiệp duyệt, rồi mới ghi log/memory/tracker, đóng gói skill đã đổi, để nguyên môi trường. Dùng khi Nghiệp nói "bắt đầu session mới", "dừng session này", "đầu phiên", "kết thúc/chốt phiên", "wrap up", nêu số phiên (ví dụ S251), hoặc khi một phiên AA bắt đầu mà chưa có bối cảnh.
 ---
 
 # aa-session
