@@ -99,3 +99,19 @@ open/cancel, drawer meters and actions, API 200 with a session) needs one of:
    `.tmp-session/s250/aa941-admin/verify.spec.ts` is run against that session (e.g. a saved storage state); or
 2. a deliberate, reviewed change to the E2E exception (trigger code constant + migration 250 rule), which is a
    security-boundary change outside a verification run.
+
+## Admin session (Nghiệp, 24/10/2026 ~16:20 UTC, Chrome on Windows)
+
+The E2E user cannot be elevated (the workforce pre-token Lambda pins it to exactly `cis-reviewer`, A10), so Nghiệp
+opened the page with his own CIS admin session.
+
+- `https://aa-cis.lumiguides.it.com/admin/platform/agencies` renders the live CRM data: 3 E2E agencies (Southern Cross
+  Journeys, Lữ hành Sen Vàng, Harbour Lights Travel Co.), state ACTIVE, SYNTHETIC badge, owner Yes, has travellers.
+- The drawer (Southern Cross Journeys) shows: usage meters (seats 4 / 10, active members 0, storage 0 B, AI spend
+  $0.000 of $2.00 budget, failed jobs 0, inbound mail "not tracked yet", last activity none), Access, First owner
+  (owner_exists), Features allowed (plan free, 10 seats), AA insights (included), Data requests (none), Owner recovery
+  (4 members: 2 owners, 2 agents, all active), Failed jobs (7 days): none; Refresh button.
+- The page and drawer say "Read only; your staff account is not in the crm-platform-admin group", so the write actions
+  are hidden — the designed behaviour for an admin without that CRM group. Write actions were not clicked live; they
+  are covered by the CRM API tests (401 without token, 403 without the group) and the S249 console E2E.
+- Screenshot: [10-admin-agencies-drawer-nghiep.png](10-admin-agencies-drawer-nghiep.png).

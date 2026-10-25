@@ -1,0 +1,64 @@
+{
+  "results": [
+    {
+      "step": "8. T2 (UNCONFIRMED after the abandoned sign-up) starts again and finishes in the same browser",
+      "pass": true,
+      "evidence": {
+        "trail": [
+          {
+            "start": 200,
+            "body": {
+              "step": "code"
+            }
+          },
+          {
+            "verify": 200,
+            "body": {
+              "signed_in": true,
+              "claimed": null
+            }
+          },
+          {
+            "claimed": null
+          }
+        ],
+        "landed_on": "/trips"
+      }
+    },
+    {
+      "step": "8b. T2 signed in: auth status email; T1 trip not readable",
+      "pass": true,
+      "evidence": {
+        "trips_page": "error: We could not load your trips",
+        "api_me_status": 502,
+        "auth_status": {
+          "signed_in": true,
+          "email": "e2e-test-traveller-2@e2e-mail.lumiguides.it.com",
+          "email_verified": false
+        },
+        "t1_trip_read": {
+          "status": 200,
+          "itinerary_days": 0
+        }
+      }
+    },
+    {
+      "step": "8c. sign out T2",
+      "pass": true,
+      "evidence": {
+        "sign_out": {
+          "status": 200,
+          "via": "POST /api/auth/sign-out from the page (no button: /trips did not load)"
+        }
+      }
+    }
+  ],
+  "consoleErrors": [
+    "Z: Failed to load resource: the server responded with a status of 502 ()",
+    "Z: Failed to load resource: the server responded with a status of 502 ()"
+  ],
+  "serverErrors": [
+    "Z: 502 /api/me",
+    "Z: 502 /api/me"
+  ]
+}

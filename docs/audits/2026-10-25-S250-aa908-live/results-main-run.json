@@ -1,0 +1,320 @@
+{
+  "results": [
+    {
+      "step": "0. signed out: /api/me 401 sign_in_required; /trips asks to sign in",
+      "pass": true,
+      "evidence": {
+        "api_me": {
+          "status": 401,
+          "body": {
+            "error": "sign_in_required"
+          }
+        },
+        "auth_status": {
+          "status": 200,
+          "body": {
+            "signed_in": false,
+            "available": true
+          }
+        },
+        "trips_page_sign_in_prompt": true
+      }
+    },
+    {
+      "step": "1. guest starts a trip (Start with this route, Vietnam)",
+      "pass": true,
+      "evidence": {
+        "first_mutation_status": 200,
+        "trip_id": "b8623c0e-82d8-4b43-a16f-a95211e250bf",
+        "itinerary_days": 6,
+        "trip_status": null,
+        "cookies": [
+          {
+            "name": "__Host-tp_guest",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          }
+        ]
+      }
+    },
+    {
+      "step": "2. sign-in with T1 via email code (account created in run 1, so this is the sign-in path)",
+      "pass": true,
+      "evidence": {
+        "trail": [
+          {
+            "start": 200,
+            "body": {
+              "step": "code"
+            }
+          },
+          {
+            "verify": 200,
+            "body": {
+              "signed_in": true,
+              "claimed": null
+            }
+          },
+          {
+            "claimed": null
+          }
+        ],
+        "landed_on": "/trips",
+        "cookies": [
+          {
+            "name": "__Host-tp_guest",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          },
+          {
+            "name": "__Host-tp_auth",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          },
+          {
+            "name": "__Host-tp_refresh",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          }
+        ]
+      }
+    },
+    {
+      "step": "3. guest trip claimed; My Trips lists it (Draft)",
+      "pass": false,
+      "evidence": {
+        "api_me_status": 502,
+        "trip_count": 0,
+        "guest_trip_listed": false,
+        "listed_status": null,
+        "header_link": "My trips",
+        "trips_page": "error: We could not load your trips",
+        "api_me_body_error": "upstream_error"
+      }
+    },
+    {
+      "step": "4. sign out: signed out, session cookies gone, trip ids forgotten",
+      "pass": true,
+      "evidence": {
+        "sign_out_status": {
+          "status": 200,
+          "via": "POST /api/auth/sign-out from the page (no button: /trips did not load)"
+        },
+        "landed_on": "/",
+        "api_me": {
+          "status": 401,
+          "body": {
+            "error": "sign_in_required"
+          }
+        },
+        "auth_status": {
+          "status": 200,
+          "body": {
+            "signed_in": false,
+            "available": true
+          }
+        },
+        "local_trip_ids_present": false,
+        "cookies_after": [
+          {
+            "name": "__Host-tp_guest",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          }
+        ]
+      }
+    },
+    {
+      "step": "5. second sign-in (existing account, sign-in path) lists and opens the trip",
+      "pass": false,
+      "evidence": {
+        "trail": [
+          {
+            "start": 200,
+            "body": {
+              "step": "code"
+            }
+          },
+          {
+            "verify": 200,
+            "body": {
+              "signed_in": true,
+              "claimed": null
+            }
+          },
+          {
+            "claimed": null
+          }
+        ],
+        "landed_on": "/trips",
+        "trips_page": "error: We could not load your trips",
+        "api_me_status": 502,
+        "api_me_error": "upstream_error",
+        "auth_status": {
+          "status": 200,
+          "body": {
+            "signed_in": true,
+            "email": "e2e-test-traveller@e2e-mail.lumiguides.it.com",
+            "email_verified": true
+          }
+        },
+        "trip_listed": false,
+        "opened": {}
+      }
+    },
+    {
+      "step": "5c. sign out (context B)",
+      "pass": true,
+      "evidence": {
+        "sign_out": {
+          "status": 200,
+          "via": "POST /api/auth/sign-out from the page (no button: /trips did not load)"
+        },
+        "auth_status": {
+          "status": 200,
+          "body": {
+            "signed_in": false,
+            "available": true
+          }
+        }
+      }
+    },
+    {
+      "step": "6. wrong code: error shown, no session",
+      "pass": true,
+      "evidence": {
+        "verify": {
+          "status": 400,
+          "body": {
+            "error": "code_invalid"
+          }
+        },
+        "alert": "That code is not right. Check the latest email and try again.",
+        "notice_after": "We sent a code to e2e-test-traveller@e2e-mail.lumiguides.it.com. It can take a minute to arrive.",
+        "api_me": {
+          "status": 401,
+          "body": {
+            "error": "sign_in_required"
+          }
+        },
+        "cookies": [
+          {
+            "name": "__Host-tp_guest",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          },
+          {
+            "name": "__Host-tp_signin",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          }
+        ]
+      }
+    },
+    {
+      "step": "6b. (info) the real code after one wrong try",
+      "pass": null,
+      "evidence": {
+        "verify": {
+          "status": 200,
+          "body": {
+            "signed_in": true,
+            "claimed": null
+          }
+        }
+      }
+    },
+    {
+      "step": "7a. T2 first start (new address): sign-up code mailed; left unused (abandoned)",
+      "pass": true,
+      "evidence": {
+        "start": 200,
+        "mail_after_s": 2
+      }
+    },
+    {
+      "step": "7b. T2 restart of an abandoned sign-up",
+      "pass": true,
+      "evidence": {
+        "start": 200,
+        "path": "A: restart mailed a new code (UserNotConfirmed -> ResendConfirmationCode)"
+      }
+    },
+    {
+      "step": "7c. simulated-challenge fallback",
+      "pass": null,
+      "evidence": {
+        "note": "not reachable: Cognito answered the restart with UserNotConfirmed and mailed a new code, so no simulated challenge occurred"
+      }
+    },
+    {
+      "step": "7d. stale sign-up Session (> 3 min): ConfirmSignUp retried without it; ends signed in",
+      "pass": false,
+      "evidence": {
+        "trail": [
+          {
+            "verify": 400,
+            "body": {
+              "error": "code_invalid"
+            },
+            "session_age_s": 221
+          }
+        ]
+      }
+    },
+    {
+      "step": "console / 5xx",
+      "pass": false,
+      "evidence": {
+        "console_errors": [
+          "A: Failed to load resource: the server responded with a status of 401 ()",
+          "A: Failed to load resource: the server responded with a status of 502 ()",
+          "A: Failed to load resource: the server responded with a status of 502 ()",
+          "B: Failed to load resource: the server responded with a status of 502 ()",
+          "B: Failed to load resource: the server responded with a status of 502 ()",
+          "C: Failed to load resource: the server responded with a status of 400 (Bad Request)",
+          "C: Failed to load resource: the server responded with a status of 502 ()",
+          "X: Failed to load resource: the server responded with a status of 400 (Bad Request)"
+        ],
+        "server_5xx": [
+          "A: 502 /api/me",
+          "A: 502 /api/me",
+          "B: 502 /api/me",
+          "B: 502 /api/me",
+          "C: 502 /api/me"
+        ]
+      }
+    }
+  ],
+  "consoleErrors": [
+    "A: Failed to load resource: the server responded with a status of 401 ()",
+    "A: Failed to load resource: the server responded with a status of 502 ()",
+    "A: Failed to load resource: the server responded with a status of 502 ()",
+    "B: Failed to load resource: the server responded with a status of 502 ()",
+    "B: Failed to load resource: the server responded with a status of 502 ()",
+    "C: Failed to load resource: the server responded with a status of 400 (Bad Request)",
+    "C: Failed to load resource: the server responded with a status of 502 ()",
+    "X: Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  ],
+  "serverErrors": [
+    "A: 502 /api/me",
+    "A: 502 /api/me",
+    "B: 502 /api/me",
+    "B: 502 /api/me",
+    "C: 502 /api/me"
+  ]
+}

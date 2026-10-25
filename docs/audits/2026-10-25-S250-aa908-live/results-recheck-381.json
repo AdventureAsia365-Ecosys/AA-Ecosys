@@ -1,0 +1,259 @@
+{
+  "results": [
+    {
+      "step": "1. guest starts a trip on /plan (Vietnam, Start with this route)",
+      "pass": true,
+      "evidence": {
+        "first_mutation_status": 200,
+        "trip_id": "537cdedf-2e2a-48aa-a525-19a685381118",
+        "itinerary_days": 6,
+        "cookies": [
+          {
+            "name": "__Host-tp_guest",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          }
+        ]
+      }
+    },
+    {
+      "step": "2. sign-in T1 (header link -> /sign-in -> email code); verify.claimed; auth status right after",
+      "pass": true,
+      "evidence": {
+        "trail": [
+          {
+            "start": 200,
+            "body": {
+              "step": "code"
+            }
+          },
+          {
+            "verify": 200,
+            "body": {
+              "signed_in": true,
+              "claimed": 1
+            }
+          },
+          {
+            "claimed": 1
+          }
+        ],
+        "landed_on": "/trips",
+        "auth_status_right_after": {
+          "signed_in": true,
+          "email": "e2e-test-traveller@e2e-mail.lumiguides.it.com",
+          "email_verified": true
+        },
+        "cookies": [
+          {
+            "name": "__Host-tp_guest",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          },
+          {
+            "name": "__Host-tp_auth",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          },
+          {
+            "name": "__Host-tp_refresh",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          }
+        ]
+      }
+    },
+    {
+      "step": "3. claim + My Trips: verify claimed >= 1, /trips lists the trips incl. the guest trip (Draft)",
+      "pass": true,
+      "evidence": {
+        "verify_claimed": 1,
+        "api_me_status": 200,
+        "api_me_error": null,
+        "email": "e2e-test-traveller@e2e-mail.lumiguides.it.com",
+        "email_verified": true,
+        "trip_count": 1,
+        "trips": [
+          {
+            "trip_id": "537cdedf-2e2a-48aa-a525-19a685381118",
+            "status": "draft",
+            "days": 6
+          }
+        ],
+        "guest_trip_listed": true,
+        "listed_status": "draft",
+        "trips_page": "list",
+        "header_link": "My trips",
+        "sign_out_button_visible": true
+      }
+    },
+    {
+      "step": "3c. open the claimed trip from My Trips",
+      "pass": true,
+      "evidence": {
+        "opened": {
+          "trip_read_status": 200,
+          "trip_id": "537cdedf-2e2a-48aa-a525-19a685381118",
+          "itinerary_days": 6,
+          "path": "/plan"
+        }
+      }
+    },
+    {
+      "step": "4. sign out from the UI (My Trips \"Sign out\" button)",
+      "pass": true,
+      "evidence": {
+        "sign_out": {
+          "status": 200,
+          "via": "My Trips button"
+        },
+        "landed_on": "/",
+        "api_me": {
+          "status": 401,
+          "body": {
+            "error": "sign_in_required"
+          }
+        },
+        "auth_status": {
+          "status": 200,
+          "body": {
+            "signed_in": false,
+            "available": true
+          }
+        },
+        "local_trip_ids_present": false,
+        "cookies_after": [
+          {
+            "name": "__Host-tp_guest",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "Lax",
+            "path": "/"
+          }
+        ]
+      }
+    },
+    {
+      "step": "5. second sign-in (fresh browser) still lists the trips and opens the claimed one",
+      "pass": true,
+      "evidence": {
+        "trail": [
+          {
+            "start": 200,
+            "body": {
+              "step": "code"
+            }
+          },
+          {
+            "verify": 200,
+            "body": {
+              "signed_in": true,
+              "claimed": 0
+            }
+          },
+          {
+            "claimed": 0
+          }
+        ],
+        "auth_status_right_after": {
+          "signed_in": true,
+          "email": "e2e-test-traveller@e2e-mail.lumiguides.it.com",
+          "email_verified": true
+        },
+        "trips_page": "list",
+        "api_me_status": 200,
+        "trip_count": 1,
+        "same_ids_as_first_session": true,
+        "trips": [
+          {
+            "trip_id": "537cdedf-2e2a-48aa-a525-19a685381118",
+            "status": "draft",
+            "days": 6
+          }
+        ],
+        "opened": {
+          "trip_read_status": 200,
+          "trip_id": "537cdedf-2e2a-48aa-a525-19a685381118",
+          "itinerary_days": 6,
+          "path": "/plan"
+        }
+      }
+    },
+    {
+      "step": "5c. sign out (context B)",
+      "pass": true,
+      "evidence": {
+        "sign_out": {
+          "status": 200,
+          "via": "My Trips button"
+        }
+      }
+    },
+    {
+      "step": "6. T2 signs in and sees none of T1's trips",
+      "pass": true,
+      "evidence": {
+        "trail": [
+          {
+            "start": 200,
+            "body": {
+              "step": "code"
+            }
+          },
+          {
+            "verify": 200,
+            "body": {
+              "signed_in": true,
+              "claimed": 0
+            }
+          },
+          {
+            "claimed": 0
+          }
+        ],
+        "auth_status_right_after": {
+          "signed_in": true,
+          "email": "e2e-test-traveller-2@e2e-mail.lumiguides.it.com",
+          "email_verified": true
+        },
+        "trips_page": "empty",
+        "api_me_status": 200,
+        "trip_count": 0,
+        "trips": [],
+        "overlap_with_t1": [],
+        "t1_trip_read_as_t2": {
+          "status": 200,
+          "itinerary_days": 0
+        }
+      }
+    },
+    {
+      "step": "6c. sign out T2",
+      "pass": true,
+      "evidence": {
+        "sign_out": {
+          "status": 200,
+          "via": "My Trips button"
+        }
+      }
+    },
+    {
+      "step": "console / 5xx",
+      "pass": true,
+      "evidence": {
+        "console_errors": [],
+        "server_5xx": []
+      }
+    }
+  ],
+  "consoleErrors": [],
+  "serverErrors": []
+}
