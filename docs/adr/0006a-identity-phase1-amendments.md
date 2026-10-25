@@ -7,7 +7,8 @@
   secret shape, guards), decision 12 (branding now in Terraform), the Phase 1 row of the Migration plan (legacy
   flag scope) and the "Remaining open risks" list (the `AdminCreateUser` line). A10 (19/10/2026, S243) adds a
   temporary exception to the `@adventure.asia`-only staff rule for the E2E test account; A10a (24/10/2026, S250)
-  adds a second E2E address for the Booking staff admin. A11 and A12 (22/10/2026,
+  adds a second E2E address for the Booking staff admin. A10b (26/10/2026, S252) adds a third, Dev-only E2E address for
+  the CIS admin, read-only except the content-quality sentence-apply routes. A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) is unchanged and still pending.
 - **Plan and evidence:** `docs/audits/2026-10-18-S242-cognito-phase1/plan.md` (judged plan, stages A/B/S/D),
@@ -280,12 +281,13 @@ mailbox or Google account". That is too strong.
   1. Disable the user (directory disable + global sign-out).
   2. Delete the `shared.admin_users` row (DRY RUN procedure) and the Cognito user (console; the writer may
      not call `AdminDeleteUser`).
-  3. Add a new CIS migration that restores the 247 CHECK. It RAISEs while a row still uses the address.
+  3. Add a new CIS migration that restores the 247 CHECK. It RAISEs while a row still uses either E2E address
+     (A10 `e2e@`, A10b `e2e-cis-admin@`; migration 283's header holds the SQL).
   4. Remove `E2E_TEST_STAFF_EMAIL` and the scope checks from CIS. Remove the trigger exception from Infra and
      run Terraform Apply.
   5. Point the E2E test at a company address, or retire it.
   6. Add a closing line here.
-  The A10a Booking address goes in the same cleanup (see A10a "Removal").
+  The A10a Booking address and the A10b CIS admin address go in the same cleanup (see A10a and A10b "Removal").
 
 #### A10a. Second E2E address: the Booking staff admin (24/10/2026, S250, AA-910)
 
@@ -328,6 +330,70 @@ mailbox or Google account". That is too strong.
 - **Removal (with A10):** `AdminDisableUser` + global sign-out, delete the Cognito user (console), drop the map
   entry and the receipt-rule recipient (AA-CIS-Infra), Terraform Apply, deactivate the Booking staff row, and
   remove `E2E_TEST_STAFF_EMAIL` and its write cap from AA-Booking `app/auth/staff.py`.
+
+#### A10b. Third E2E address: the CIS admin, Dev only, read-only (26/10/2026, S252, AA-816)
+
+- **Decision (S252, orchestrator under Nghiệp's standing approval; design reviewed in the S252 session):** the orchestrating agent must sign itself in to the CIS
+  admin as an **admin** to screenshot the admin-only pages (`/admin/content-quality`, `/admin/writing-memory`) and to
+  produce the AA-916 WM-07 sample (admin sentence actions through the UI, on synthetic Dev tenants). The A10 account is
+  a reviewer only. A third dedicated WORKFORCE E2E identity, `e2e-cis-admin@e2e-mail.lumiguides.it.com`, signs in with
+  the staff groups exactly `cis-admin`, on Dev only. The name carries the app (`e2e-cis-admin@`, not `e2e-admin@`), so
+  nothing that greps for `admin@` (the break-glass address `admin@adventure.asia`, username `admin`) confuses them.
+  Temporary, like A10.
+- **Groups (trigger):** a second read-only map in the WORKFORCE triggers, `workforce.E2E_DEV_ONLY_TEST_STAFF =
+  {e2e-cis-admin@: ("cis-admin",)}`, a code constant consulted only while the Lambda env
+  `E2E_DEV_ONLY_STAFF_ENABLED` is exactly `"true"` (read per call; missing or anything else is off). The flag can
+  only switch the entry on; it cannot add an address or widen the group set. Any other group set (another `cis-*`,
+  any `booking-*` or `crm-*`) denies the token, never stripped. Same ASCII-only exact lookup as A10a. `e2e@` and
+  `e2e-booking@` cannot borrow `cis-admin` (the map is per address).
+- **Environment guard (two layers):**
+  - Terraform (`identity.tf`): `E2E_DEV_ONLY_STAFF_ENABLED = var.environment == "dev" ? "true" : "false"`, plus a
+    `precondition` on the trigger Lambdas that refuses `"true"` outside dev.
+  - CIS API: the directory creates, re-enables or syncs the account only where `ENVIRONMENT` is exactly `dev` (403
+    `e2e_not_allowed_here`, no `"dev"` default), and `staff_identity.resolve_staff` refuses its token with the same
+    403 anywhere else. Disabling it stays allowed everywhere.
+- **Directory row:** `shared.admin_users`, `role = 'admin'`, `is_owner = false`, `password_hash IS NULL`, no
+  `staff_app_grant`. CIS migration 283 extends `admin_users_email_chk` with exactly that tuple (the A10 clause is
+  unchanged). `staff.write` needs `is_owner`, so the account can never change the directory.
+- **Read-only cap with one allow-list (CIS):** the identity carries `e2e_read_only`. The staff bearer middleware
+  refuses every method other than GET / HEAD / OPTIONS on the staff paths with 403 `e2e_read_only`, before the route
+  runs, except POST `/admin/content-quality/pieces/{piece_id}/sentences/apply` and POST
+  `/admin/content-quality/tour-versions/{version_id}/sentences/apply` (Cut and manual Edit with a reason chip). Those
+  routes accept only `mode` `cut` / `manual` from it; `…/sentences/suggest` (the paid model call), the exemplar
+  toggle, labels, place cards and everything else stay refused. `staff_authz` refuses the same writes again by route
+  template (defence in depth). `/auth/verify-admin` returns `admin`, so the BFF opens the admin pages.
+- **Mailbox isolation (Infra `e2e_mailbox.tf`):** its own SES receipt rule `e2e-cognito-admin` (dev only; recipient
+  this address only; TLS Require; spam / virus scan), writing to its own prefix `inbound-admin/`. The address is never
+  a recipient of `e2e-cognito`. The SES PutObject statements pair rule ARN and prefix, so neither rule writes into the
+  other's prefix. A bucket-policy Deny (`DenyAdminPrefixReadsExceptMfaAdmin`) refuses object reads under
+  `inbound-admin/*` to every principal except the MFA admin role, the CI reader role included whatever its identity
+  policy says; that policy stays scoped to `inbound/*` (which does not match `inbound-admin/…`). 1-day expiry like the
+  rest of the bucket.
+- **Exposure.** Code readers: the MFA admin role (already full AWS admin) and whoever controls mail for
+  `e2e-mail.lumiguides.it.com` (A10's domain dependency applies: losing it removes all three addresses at once). What a
+  code yields: CIS admin **reads** on Dev (tenant text in writing memory, the staff directory's emails and display
+  names, the audit log, spend and AI settings, CRM ops reads) plus sentence Cut / Edit on synthetic Dev tenants. The CI
+  apply role can still rewrite the bucket policy (true for every statement; PR review and the plan guard cover it).
+- **Cross-app:** no `booking-*` group, so Booking answers `no_booking_role`; the CIS to Booking bridge mints only from
+  password sessions (A11), so no Booking token. AA-Partner `/crm/ops/v1` gives `cis-admin` reads only (writes need
+  `crm-platform-admin`, which the trigger never allows on this address); a Preview-host session is the viewer (A11).
+- **Created through the directory:** an S3-mediated ECS exec script on the CIS API calls `staff_directory.create_staff`
+  with `role="admin"`, `booking_role=None`, `send_invite=False`, the active owner row as the audited actor
+  (`staff.created`). Not Terraform (the directory is the only writer of WORKFORCE users, ADR 0006 §3), not
+  `workforce_bootstrap.py` (company addresses only, no row). `AdminCreateUser` is SUPPRESS with no password, so the A8
+  alarm does not fire.
+- **Reconcile:** before the first sign-in the user is listed under `pending_first_sign_in` (not counted); after it,
+  nowhere. Group or grant drift on the row is reported as `group_drift`.
+- **Detection:** `workforce_e2e_test_token_issued` (with `email`), `staff_bearer_verified` (`e2e_read_only`),
+  `staff_identity_e2e_read_only`, `staff_bearer_refused reason=e2e_read_only`.
+- **Used only by the agent, locally:** AA-CIS-App Playwright project `admin-evidence` (`E2EADMIN=1`, no workflow sets
+  it), run by the orchestrator with the MFA admin role (`AWS_PROFILE=aa365-admin`). Never CI: no CI role can read the
+  prefix.
+- **Removal (end of project code, with A10 / A10a):** directory disable + global sign-out; delete the row (DRY RUN
+  procedure) and the Cognito user (console); the restore-247 migration (A10 step 3); drop the CIS constants
+  (`api/core/e2e_staff.py`), the environment guard, the read-only cap and the allow-list; drop the trigger map and flag,
+  the `E2E_DEV_ONLY_STAFF_ENABLED` env and precondition, the receipt rule `e2e-cognito-admin` and the two bucket
+  statements; Terraform Apply; a closing line here.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
@@ -414,9 +480,11 @@ Supersedes the A6 values and closes its open cutover item.
 - AA-CIS-App: `CONTEXT.md` § "Staff roles and permissions"; `api/core/identity_verifier.py`,
   `api/core/identity_config.py`, `api/core/staff_identity.py`, `api/middleware/staff_bearer.py`,
   `api/services/staff_directory.py`, `services/staff_reconcile.py`, `frontend/lib/cognito.ts`,
-  `api/migrations/247_admin_users_identity.sql`, `api/migrations/250_admin_users_e2e_test_email.sql` (A10).
+  `api/migrations/247_admin_users_identity.sql`, `api/migrations/250_admin_users_e2e_test_email.sql` (A10),
+  `api/migrations/283_admin_users_e2e_cis_admin_email.sql`, `api/core/e2e_staff.py`,
+  `docs/implementation-notes/AA-816-e2e-cis-admin.md` (A10b).
 - AA-CIS-Infra: `accounts/aa365/identity.tf`, `identity_alerts.tf`, `identity_iam.tf`, `identity_variables.tf`,
   `dns.tf`, `tools/identity/workforce_bootstrap.py`, `e2e_mailbox.tf` and
   `lambda_src/identity_triggers/workforce.py` (A10, A10a), `docs/implementation-notes/AA-910-booking-e2e-staff.md`
-  (A10a).
+  (A10a); `e2e_mailbox.tf` rule `e2e-cognito-admin`, `docs/implementation-notes/AA-816-e2e-cis-admin.md` (A10b).
 - AA-Booking: `backend/app/auth/staff.py` (A10a write cap, A11 preview cap), `frontend/e2e/SIGNED-IN-SMOKE.md` (A10a).
