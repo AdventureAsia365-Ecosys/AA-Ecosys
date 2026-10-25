@@ -1,0 +1,4663 @@
+{
+ "origin": "https://booking.lumiguides.it.com",
+ "startedAt": "2026-10-24T19:30:05.600Z",
+ "ids": {
+  "case": "TC-000008",
+  "customer": "CUS-000010",
+  "supplier": "SUP-000001",
+  "hotel": "HTL-000001",
+  "service": "SVC-000002",
+  "staff": "2d8e5a2f-3722-4571-9327-177d10b74127"
+ },
+ "rows": [
+  {
+   "name": "dashboard",
+   "path": "/",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Customer | Trip",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 5,
+     "lastHeader": "Updated",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 787,
+     "colWidths": [
+      "Case:126",
+      "Customer:313",
+      "Trip:227",
+      "Status:166",
+      "Sales:137",
+      "Updated:115"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "Nothing assigned to youCases you are assigned to appear here."
+   ],
+   "kitRows": 5,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "cases",
+   "path": "/cases",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/cases",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Customer | Trip",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 7,
+     "rows": 13,
+     "lastHeader": "",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 942,
+     "colWidths": [
+      "Case:114",
+      "Customer:238",
+      "Trip:218",
+      "Dates / pax:129",
+      "Status:177",
+      "Sales:137",
+      "#7:72"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 13,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "case-proposals",
+   "path": "/cases/TC-000008?tab=proposals",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/cases/TC-000008?tab=proposals",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Version | Title / notes | Status",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 7,
+     "rows": 2,
+     "lastHeader": "Updated",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 617,
+     "colWidths": [
+      "Version:111",
+      "Title / notes:456",
+      "Status:120",
+      "Items:89",
+      "Total:95",
+      "Sent:82",
+      "Updated:131"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "proposals",
+   "path": "/proposals",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/proposals",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Proposal | Trip | Status",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 8,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 1006,
+     "colWidths": [
+      "Proposal:292",
+      "Trip:192",
+      "Status:135",
+      "Total:125",
+      "Last edited:132",
+      "Actions:208"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 8,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "customers",
+   "path": "/customers",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/customers",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Customer | Phone | Location",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 7,
+     "rows": 10,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 915,
+     "colWidths": [
+      "Customer:279",
+      "Phone:146",
+      "Location:113",
+      "Status:216",
+      "Cases:82",
+      "Last activity:145",
+      "Actions:103"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 10,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "customer-cases",
+   "path": "/customers/CUS-000010?tab=cases",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/customers/CUS-000010?tab=cases",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Trip | Status",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1092,
+     "boxScroll": 1092,
+     "tableWidth": 1092,
+     "cols": 4,
+     "rows": 1,
+     "lastHeader": "Updated",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 402,
+     "colWidths": [
+      "Case:245",
+      "Trip:298",
+      "Status:325",
+      "Updated:225"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "trip-plans",
+   "path": "/catalog/trip-plans",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/catalog/trip-plans",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Tour | Country | Days",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 25,
+     "lastHeader": "Price hint",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 932,
+     "colWidths": [
+      "Tour:488",
+      "Country:119",
+      "Days:77",
+      "Status:157",
+      "Trip style:121",
+      "Price hint:122"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 25,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "trip-plans-orphaned",
+   "path": "/catalog/trip-plans?show=orphaned",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/catalog/trip-plans?show=orphaned",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "No orphaned trip plansA trip plan shows here when CIS stops serving its tour (de"
+   ],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "suppliers",
+   "path": "/suppliers",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Supplier | Categories | Contact",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 7,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 977,
+     "colWidths": [
+      "Supplier:249",
+      "Categories:163",
+      "Contact:227",
+      "Contracts:124",
+      "Status:109",
+      "Updated:113",
+      "Actions:99"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-contracts",
+   "path": "/suppliers/SUP-000001?tab=contracts",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001?tab=contracts",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Contract | Validity | Currency",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1092,
+     "boxScroll": 1092,
+     "tableWidth": 1092,
+     "cols": 7,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 977,
+     "colWidths": [
+      "Contract:259",
+      "Validity:130",
+      "Currency:114",
+      "Payment terms:170",
+      "Status:123",
+      "Entered by:192",
+      "Actions:104"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-rates",
+   "path": "/suppliers/SUP-000001?tab=rates",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001?tab=rates",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Room type / service | Season / valid | Meal / pax",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1092,
+     "boxScroll": 1092,
+     "tableWidth": 1092,
+     "cols": 5,
+     "rows": 1,
+     "lastHeader": "Status",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 740,
+     "colWidths": [
+      "Room type / serv:391",
+      "Season / valid:253",
+      "Meal / pax:152",
+      "Net:138",
+      "Status:158"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "hotels",
+   "path": "/hotels",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/hotels",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Hotel | Stars | Place (CIS)",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 8,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 926,
+     "colWidths": [
+      "Hotel:245",
+      "Stars:99",
+      "Place (CIS):124",
+      "Supplier:168",
+      "Rooms:90",
+      "Rates:81",
+      "Status:174",
+      "Actions:102"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "hotel-drawer",
+   "path": "/hotels?hotel=HTL-000001",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/hotels?hotel=HTL-000001",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Hotel | Stars | Place (CIS)",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 8,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 926,
+     "colWidths": [
+      "Hotel:245",
+      "Stars:99",
+      "Place (CIS):124",
+      "Supplier:168",
+      "Rooms:90",
+      "Rates:81",
+      "Status:174",
+      "Actions:102"
+     ]
+    },
+    {
+     "head": "Room type / service | Contract | Season / valid",
+     "inDialog": true,
+     "boxIsMain": false,
+     "boxClient": 837,
+     "boxScroll": 837,
+     "tableWidth": 837,
+     "cols": 6,
+     "rows": 2,
+     "lastHeader": "Status",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 739,
+     "colWidths": [
+      "Room type / serv:189",
+      "Contract:129",
+      "Season / valid:161",
+      "Meal / pax:112",
+      "Net:129",
+      "Status:117"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 4,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "services",
+   "path": "/services",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/services",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Service | Type | Place (CIS)",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 8,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 942,
+     "colWidths": [
+      "Service:241",
+      "Type:104",
+      "Place (CIS):122",
+      "Supplier:165",
+      "Max pax:100",
+      "Rates:80",
+      "Status:172",
+      "Actions:101"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "service-rates",
+   "path": "/services/SVC-000002?tab=rates",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/services/SVC-000002?tab=rates",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Contract | Season / valid | Meal / pax",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1092,
+     "boxScroll": 1092,
+     "tableWidth": 1092,
+     "cols": 5,
+     "rows": 1,
+     "lastHeader": "Status",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 652,
+     "colWidths": [
+      "Contract:280",
+      "Season / valid:304",
+      "Meal / pax:173",
+      "Net:156",
+      "Status:179"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "pricing-rules",
+   "path": "/pricing/rules",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/pricing/rules",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Channel | Margin | Peak uplift",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 9,
+     "rows": 4,
+     "lastHeader": "Note",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 983,
+     "colWidths": [
+      "Channel:105",
+      "Margin:86",
+      "Peak uplift:113",
+      "Card fee:94",
+      "Valid from:111",
+      "Status:127",
+      "Entered by:115",
+      "Approved by:128",
+      "Note:206"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 4,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "pricing-fx",
+   "path": "/pricing/rules?tab=fx",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/pricing/rules?tab=fx",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Currency | Units per 1 USD | Buffer",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 8,
+     "rows": 3,
+     "lastHeader": "Approved by",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 941,
+     "colWidths": [
+      "Currency:102",
+      "Units per 1 USD:139",
+      "Buffer:79",
+      "As of:109",
+      "Source:172",
+      "Status:110",
+      "Entered by:181",
+      "Approved by:193"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [
+    {
+     "header": "Currency",
+     "text": "VND",
+     "lines": 1
+    },
+    {
+     "header": "Units per 1 USD",
+     "text": "25,000",
+     "lines": 1
+    },
+    {
+     "header": "As of",
+     "text": "23 Oct 2026",
+     "lines": 1
+    },
+    {
+     "header": "Source",
+     "text": "SYNTHETIC S248 AA-974",
+     "lines": 1
+    },
+    {
+     "header": "Currency",
+     "text": "BTN",
+     "lines": 1
+    },
+    {
+     "header": "Units per 1 USD",
+     "text": "84.1",
+     "lines": 1
+    },
+    {
+     "header": "As of",
+     "text": "16 Oct 2026",
+     "lines": 1
+    },
+    {
+     "header": "Source",
+     "text": "ZZ S239 test FX row (AA-683 pending-row ",
+     "lines": 1
+    },
+    {
+     "header": "Currency",
+     "text": "EUR",
+     "lines": 1
+    },
+    {
+     "header": "Units per 1 USD",
+     "text": "0.92",
+     "lines": 1
+    },
+    {
+     "header": "As of",
+     "text": "15 Oct 2026",
+     "lines": 1
+    },
+    {
+     "header": "Source",
+     "text": "manual-dev S237 maker-checker test (AA-8",
+     "lines": 1
+    }
+   ],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 3,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "b2b-desk-on-request",
+   "path": "/b2b-desk",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/b2b-desk",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "Nothing waits for an answerA line comes here when an agency confirms a booking w"
+   ],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "b2b-desk-departures",
+   "path": "/b2b-desk?tab=departures",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/b2b-desk?tab=departures",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Departure | Status | Seats",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 5,
+     "lastHeader": "",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 833,
+     "colWidths": [
+      "Departure:369",
+      "Status:141",
+      "Seats:210",
+      "Agencies:109",
+      "Incident:104",
+      "#6:152"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 5,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff",
+   "path": "/staff",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/staff",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "User | Booking role | CIS role",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 7,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 848,
+     "colWidths": [
+      "User:346",
+      "Booking role:168",
+      "CIS role:115",
+      "Status:144",
+      "Last seen:133",
+      "Actions:178"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 7,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff-cases",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Customer | Assigned as",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 1,
+     "lastHeader": "Assigned",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 669,
+     "colWidths": [
+      "Case:147",
+      "Customer:253",
+      "Assigned as:173",
+      "Status:186",
+      "Trip starts:171",
+      "Assigned:153"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "audit-log",
+   "path": "/audit-log",
+   "extra": false,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/audit-log",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-activity",
+   "path": "/suppliers/SUP-000001",
+   "extra": true,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "service-activity",
+   "path": "/services/SVC-000002",
+   "extra": true,
+   "width": 1440,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/services/SVC-000002",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff-activity",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=activity",
+   "extra": true,
+   "width": 1440,
+   "scheme": "light",
+   "ready": false,
+   "finalPath": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=activity",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "dashboard",
+   "path": "/",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Customer | Trip",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 5,
+     "lastHeader": "Updated",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 787,
+     "colWidths": [
+      "Case:126",
+      "Customer:313",
+      "Trip:227",
+      "Status:166",
+      "Sales:137",
+      "Updated:115"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "Nothing assigned to youCases you are assigned to appear here."
+   ],
+   "kitRows": 5,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "cases",
+   "path": "/cases",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/cases",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Customer | Trip",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 7,
+     "rows": 13,
+     "lastHeader": "",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 942,
+     "colWidths": [
+      "Case:114",
+      "Customer:238",
+      "Trip:218",
+      "Dates / pax:129",
+      "Status:177",
+      "Sales:137",
+      "#7:72"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 13,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "case-proposals",
+   "path": "/cases/TC-000008?tab=proposals",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/cases/TC-000008?tab=proposals",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Version | Title / notes | Status",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 7,
+     "rows": 2,
+     "lastHeader": "Updated",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 617,
+     "colWidths": [
+      "Version:111",
+      "Title / notes:456",
+      "Status:120",
+      "Items:89",
+      "Total:95",
+      "Sent:82",
+      "Updated:131"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "proposals",
+   "path": "/proposals",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/proposals",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Proposal | Trip | Status",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 8,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 1006,
+     "colWidths": [
+      "Proposal:292",
+      "Trip:192",
+      "Status:135",
+      "Total:125",
+      "Last edited:132",
+      "Actions:208"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 8,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "customers",
+   "path": "/customers",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/customers",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Customer | Phone | Location",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 7,
+     "rows": 10,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 915,
+     "colWidths": [
+      "Customer:279",
+      "Phone:146",
+      "Location:113",
+      "Status:216",
+      "Cases:82",
+      "Last activity:145",
+      "Actions:103"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 10,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "customer-cases",
+   "path": "/customers/CUS-000010?tab=cases",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/customers/CUS-000010?tab=cases",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Trip | Status",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1092,
+     "boxScroll": 1092,
+     "tableWidth": 1092,
+     "cols": 4,
+     "rows": 1,
+     "lastHeader": "Updated",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 402,
+     "colWidths": [
+      "Case:245",
+      "Trip:298",
+      "Status:325",
+      "Updated:225"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "trip-plans",
+   "path": "/catalog/trip-plans",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/catalog/trip-plans",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Tour | Country | Days",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 25,
+     "lastHeader": "Price hint",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 932,
+     "colWidths": [
+      "Tour:488",
+      "Country:119",
+      "Days:77",
+      "Status:157",
+      "Trip style:121",
+      "Price hint:122"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 25,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "trip-plans-orphaned",
+   "path": "/catalog/trip-plans?show=orphaned",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/catalog/trip-plans?show=orphaned",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "No orphaned trip plansA trip plan shows here when CIS stops serving its tour (de"
+   ],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "suppliers",
+   "path": "/suppliers",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/suppliers",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Supplier | Categories | Contact",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 7,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 977,
+     "colWidths": [
+      "Supplier:249",
+      "Categories:163",
+      "Contact:227",
+      "Contracts:124",
+      "Status:109",
+      "Updated:113",
+      "Actions:99"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-contracts",
+   "path": "/suppliers/SUP-000001?tab=contracts",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001?tab=contracts",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Contract | Validity | Currency",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1092,
+     "boxScroll": 1092,
+     "tableWidth": 1092,
+     "cols": 7,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 977,
+     "colWidths": [
+      "Contract:259",
+      "Validity:130",
+      "Currency:114",
+      "Payment terms:170",
+      "Status:123",
+      "Entered by:192",
+      "Actions:104"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-rates",
+   "path": "/suppliers/SUP-000001?tab=rates",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001?tab=rates",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Room type / service | Season / valid | Meal / pax",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1092,
+     "boxScroll": 1092,
+     "tableWidth": 1092,
+     "cols": 5,
+     "rows": 1,
+     "lastHeader": "Status",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 740,
+     "colWidths": [
+      "Room type / serv:391",
+      "Season / valid:253",
+      "Meal / pax:152",
+      "Net:138",
+      "Status:158"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "hotels",
+   "path": "/hotels",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/hotels",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Hotel | Stars | Place (CIS)",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 8,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 926,
+     "colWidths": [
+      "Hotel:245",
+      "Stars:99",
+      "Place (CIS):124",
+      "Supplier:168",
+      "Rooms:90",
+      "Rates:81",
+      "Status:174",
+      "Actions:102"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "hotel-drawer",
+   "path": "/hotels?hotel=HTL-000001",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/hotels?hotel=HTL-000001",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Hotel | Stars | Place (CIS)",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 8,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 926,
+     "colWidths": [
+      "Hotel:245",
+      "Stars:99",
+      "Place (CIS):124",
+      "Supplier:168",
+      "Rooms:90",
+      "Rates:81",
+      "Status:174",
+      "Actions:102"
+     ]
+    },
+    {
+     "head": "Room type / service | Contract | Season / valid",
+     "inDialog": true,
+     "boxIsMain": false,
+     "boxClient": 837,
+     "boxScroll": 837,
+     "tableWidth": 837,
+     "cols": 6,
+     "rows": 2,
+     "lastHeader": "Status",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 739,
+     "colWidths": [
+      "Room type / serv:189",
+      "Contract:129",
+      "Season / valid:161",
+      "Meal / pax:112",
+      "Net:129",
+      "Status:117"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 4,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "services",
+   "path": "/services",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/services",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Service | Type | Place (CIS)",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 8,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 942,
+     "colWidths": [
+      "Service:241",
+      "Type:104",
+      "Place (CIS):122",
+      "Supplier:165",
+      "Max pax:100",
+      "Rates:80",
+      "Status:172",
+      "Actions:101"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "service-rates",
+   "path": "/services/SVC-000002?tab=rates",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/services/SVC-000002?tab=rates",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Contract | Season / valid | Meal / pax",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1092,
+     "boxScroll": 1092,
+     "tableWidth": 1092,
+     "cols": 5,
+     "rows": 1,
+     "lastHeader": "Status",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 652,
+     "colWidths": [
+      "Contract:280",
+      "Season / valid:304",
+      "Meal / pax:173",
+      "Net:156",
+      "Status:179"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "pricing-rules",
+   "path": "/pricing/rules",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/pricing/rules",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Channel | Margin | Peak uplift",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 9,
+     "rows": 4,
+     "lastHeader": "Note",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 983,
+     "colWidths": [
+      "Channel:105",
+      "Margin:86",
+      "Peak uplift:113",
+      "Card fee:94",
+      "Valid from:111",
+      "Status:127",
+      "Entered by:115",
+      "Approved by:128",
+      "Note:206"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 4,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "pricing-fx",
+   "path": "/pricing/rules?tab=fx",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/pricing/rules?tab=fx",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Currency | Units per 1 USD | Buffer",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 8,
+     "rows": 3,
+     "lastHeader": "Approved by",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 941,
+     "colWidths": [
+      "Currency:102",
+      "Units per 1 USD:139",
+      "Buffer:79",
+      "As of:109",
+      "Source:172",
+      "Status:110",
+      "Entered by:181",
+      "Approved by:193"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [
+    {
+     "header": "Currency",
+     "text": "VND",
+     "lines": 1
+    },
+    {
+     "header": "Units per 1 USD",
+     "text": "25,000",
+     "lines": 1
+    },
+    {
+     "header": "As of",
+     "text": "23 Oct 2026",
+     "lines": 1
+    },
+    {
+     "header": "Source",
+     "text": "SYNTHETIC S248 AA-974",
+     "lines": 1
+    },
+    {
+     "header": "Currency",
+     "text": "BTN",
+     "lines": 1
+    },
+    {
+     "header": "Units per 1 USD",
+     "text": "84.1",
+     "lines": 1
+    },
+    {
+     "header": "As of",
+     "text": "16 Oct 2026",
+     "lines": 1
+    },
+    {
+     "header": "Source",
+     "text": "ZZ S239 test FX row (AA-683 pending-row ",
+     "lines": 1
+    },
+    {
+     "header": "Currency",
+     "text": "EUR",
+     "lines": 1
+    },
+    {
+     "header": "Units per 1 USD",
+     "text": "0.92",
+     "lines": 1
+    },
+    {
+     "header": "As of",
+     "text": "15 Oct 2026",
+     "lines": 1
+    },
+    {
+     "header": "Source",
+     "text": "manual-dev S237 maker-checker test (AA-8",
+     "lines": 1
+    }
+   ],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 3,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "b2b-desk-on-request",
+   "path": "/b2b-desk",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/b2b-desk",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "Nothing waits for an answerA line comes here when an agency confirms a booking w"
+   ],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "b2b-desk-departures",
+   "path": "/b2b-desk?tab=departures",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/b2b-desk?tab=departures",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Departure | Status | Seats",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 5,
+     "lastHeader": "",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 833,
+     "colWidths": [
+      "Departure:369",
+      "Status:141",
+      "Seats:210",
+      "Agencies:109",
+      "Incident:104",
+      "#6:152"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 5,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff",
+   "path": "/staff",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/staff",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "User | Booking role | CIS role",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 7,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 848,
+     "colWidths": [
+      "User:346",
+      "Booking role:168",
+      "CIS role:115",
+      "Status:144",
+      "Last seen:133",
+      "Actions:178"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 7,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff-cases",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Customer | Assigned as",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 1084,
+     "boxScroll": 1084,
+     "tableWidth": 1084,
+     "cols": 6,
+     "rows": 1,
+     "lastHeader": "Assigned",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 669,
+     "colWidths": [
+      "Case:147",
+      "Customer:253",
+      "Assigned as:173",
+      "Status:186",
+      "Trip starts:171",
+      "Assigned:153"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "audit-log",
+   "path": "/audit-log",
+   "extra": false,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/audit-log",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-activity",
+   "path": "/suppliers/SUP-000001",
+   "extra": true,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "service-activity",
+   "path": "/services/SVC-000002",
+   "extra": true,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": true,
+   "finalPath": "/services/SVC-000002",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff-activity",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=activity",
+   "extra": true,
+   "width": 1440,
+   "scheme": "dark",
+   "ready": false,
+   "finalPath": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=activity",
+   "innerWidth": 1440,
+   "docScrollWidth": 1440,
+   "docClientWidth": 1440,
+   "mainScrollWidth": 1192,
+   "mainClientWidth": 1192,
+   "mainScrollbar": 0,
+   "theme": "dark",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "dashboard",
+   "path": "/",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Customer | Trip",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 924,
+     "tableWidth": 924,
+     "cols": 6,
+     "rows": 5,
+     "lastHeader": "Updated",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 787,
+     "colWidths": [
+      "Case:107",
+      "Customer:267",
+      "Trip:194",
+      "Status:142",
+      "Sales:116",
+      "Updated:98"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "Nothing assigned to youCases you are assigned to appear here."
+   ],
+   "kitRows": 5,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "cases",
+   "path": "/cases",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/cases",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Customer | Trip",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 1000,
+     "tableWidth": 1000,
+     "cols": 7,
+     "rows": 13,
+     "lastHeader": "",
+     "lastHeaderVisible": false,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 942,
+     "colWidths": [
+      "Case:105",
+      "Customer:219",
+      "Trip:201",
+      "Dates / pax:119",
+      "Status:164",
+      "Sales:126",
+      "#7:66"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 13,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "case-proposals",
+   "path": "/cases/TC-000008?tab=proposals",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/cases/TC-000008?tab=proposals",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Version | Title / notes | Status",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 924,
+     "tableWidth": 924,
+     "cols": 7,
+     "rows": 2,
+     "lastHeader": "Updated",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 617,
+     "colWidths": [
+      "Version:94",
+      "Title / notes:389",
+      "Status:102",
+      "Items:76",
+      "Total:81",
+      "Sent:70",
+      "Updated:112"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "proposals",
+   "path": "/proposals",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/proposals",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Proposal | Trip | Status",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 1006,
+     "tableWidth": 1006,
+     "cols": 6,
+     "rows": 8,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": false,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 1006,
+     "colWidths": [
+      "Proposal:232",
+      "Trip:192",
+      "Status:135",
+      "Total:125",
+      "Last edited:114",
+      "Actions:208"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 8,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "customers",
+   "path": "/customers",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/customers",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Customer | Phone | Location",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 960,
+     "tableWidth": 960,
+     "cols": 7,
+     "rows": 10,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": false,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 915,
+     "colWidths": [
+      "Customer:252",
+      "Phone:132",
+      "Location:102",
+      "Status:176",
+      "Cases:75",
+      "Last activity:131",
+      "Actions:93"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 10,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "customer-cases",
+   "path": "/customers/CUS-000010?tab=cases",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/customers/CUS-000010?tab=cases",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Trip | Status",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 932,
+     "boxScroll": 932,
+     "tableWidth": 932,
+     "cols": 4,
+     "rows": 1,
+     "lastHeader": "Updated",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 402,
+     "colWidths": [
+      "Case:209",
+      "Trip:254",
+      "Status:277",
+      "Updated:192"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "trip-plans",
+   "path": "/catalog/trip-plans",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/catalog/trip-plans",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Tour | Country | Days",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 932,
+     "tableWidth": 932,
+     "cols": 6,
+     "rows": 25,
+     "lastHeader": "Price hint",
+     "lastHeaderVisible": false,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 932,
+     "colWidths": [
+      "Tour:420",
+      "Country:102",
+      "Days:66",
+      "Status:135",
+      "Trip style:104",
+      "Price hint:105"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 25,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "trip-plans-orphaned",
+   "path": "/catalog/trip-plans?show=orphaned",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/catalog/trip-plans?show=orphaned",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "No orphaned trip plansA trip plan shows here when CIS stops serving its tour (de"
+   ],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "suppliers",
+   "path": "/suppliers",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Supplier | Categories | Contact",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 977,
+     "tableWidth": 977,
+     "cols": 7,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 977,
+     "colWidths": [
+      "Supplier:232",
+      "Categories:117",
+      "Contact:212",
+      "Contracts:116",
+      "Status:102",
+      "Updated:105",
+      "Actions:93"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-contracts",
+   "path": "/suppliers/SUP-000001?tab=contracts",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001?tab=contracts",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Contract | Validity | Currency",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 932,
+     "boxScroll": 977,
+     "tableWidth": 977,
+     "cols": 7,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 977,
+     "colWidths": [
+      "Contract:232",
+      "Validity:116",
+      "Currency:102",
+      "Payment terms:152",
+      "Status:110",
+      "Entered by:172",
+      "Actions:93"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-rates",
+   "path": "/suppliers/SUP-000001?tab=rates",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001?tab=rates",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Room type / service | Season / valid | Meal / pax",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 932,
+     "boxScroll": 932,
+     "tableWidth": 932,
+     "cols": 5,
+     "rows": 1,
+     "lastHeader": "Status",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 740,
+     "colWidths": [
+      "Room type / serv:334",
+      "Season / valid:216",
+      "Meal / pax:130",
+      "Net:118",
+      "Status:135"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "hotels",
+   "path": "/hotels",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/hotels",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Hotel | Stars | Place (CIS)",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 926,
+     "tableWidth": 926,
+     "cols": 8,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 926,
+     "colWidths": [
+      "Hotel:222",
+      "Stars:90",
+      "Place (CIS):112",
+      "Supplier:152",
+      "Rooms:82",
+      "Rates:74",
+      "Status:102",
+      "Actions:93"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "hotel-drawer",
+   "path": "/hotels?hotel=HTL-000001",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/hotels?hotel=HTL-000001",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Hotel | Stars | Place (CIS)",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 926,
+     "tableWidth": 926,
+     "cols": 8,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 926,
+     "colWidths": [
+      "Hotel:222",
+      "Stars:90",
+      "Place (CIS):112",
+      "Supplier:152",
+      "Rooms:82",
+      "Rates:74",
+      "Status:102",
+      "Actions:93"
+     ]
+    },
+    {
+     "head": "Room type / service | Contract | Season / valid",
+     "inDialog": true,
+     "boxIsMain": false,
+     "boxClient": 837,
+     "boxScroll": 837,
+     "tableWidth": 837,
+     "cols": 6,
+     "rows": 2,
+     "lastHeader": "Status",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 739,
+     "colWidths": [
+      "Room type / serv:189",
+      "Contract:129",
+      "Season / valid:161",
+      "Meal / pax:112",
+      "Net:129",
+      "Status:117"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 4,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "services",
+   "path": "/services",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/services",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Service | Type | Place (CIS)",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 942,
+     "tableWidth": 942,
+     "cols": 8,
+     "rows": 2,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": true,
+     "lastHeaderPosition": "sticky",
+     "minContent": 942,
+     "colWidths": [
+      "Service:222",
+      "Type:96",
+      "Place (CIS):112",
+      "Supplier:152",
+      "Max pax:92",
+      "Rates:74",
+      "Status:102",
+      "Actions:93"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "service-rates",
+   "path": "/services/SVC-000002?tab=rates",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/services/SVC-000002?tab=rates",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Contract | Season / valid | Meal / pax",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 932,
+     "boxScroll": 932,
+     "tableWidth": 932,
+     "cols": 5,
+     "rows": 1,
+     "lastHeader": "Status",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 652,
+     "colWidths": [
+      "Contract:239",
+      "Season / valid:260",
+      "Meal / pax:147",
+      "Net:133",
+      "Status:153"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "pricing-rules",
+   "path": "/pricing/rules",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/pricing/rules",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Channel | Margin | Peak uplift",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 983,
+     "tableWidth": 983,
+     "cols": 9,
+     "rows": 4,
+     "lastHeader": "Note",
+     "lastHeaderVisible": false,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 983,
+     "colWidths": [
+      "Channel:99",
+      "Margin:86",
+      "Peak uplift:113",
+      "Card fee:94",
+      "Valid from:111",
+      "Status:127",
+      "Entered by:109",
+      "Approved by:122",
+      "Note:122"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 4,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "pricing-fx",
+   "path": "/pricing/rules?tab=fx",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/pricing/rules?tab=fx",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Currency | Units per 1 USD | Buffer",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 941,
+     "tableWidth": 941,
+     "cols": 8,
+     "rows": 3,
+     "lastHeader": "Approved by",
+     "lastHeaderVisible": false,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 941,
+     "colWidths": [
+      "Currency:102",
+      "Units per 1 USD:139",
+      "Buffer:79",
+      "As of:109",
+      "Source:172",
+      "Status:110",
+      "Entered by:109",
+      "Approved by:122"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [
+    {
+     "header": "Currency",
+     "text": "VND",
+     "lines": 1
+    },
+    {
+     "header": "Units per 1 USD",
+     "text": "25,000",
+     "lines": 1
+    },
+    {
+     "header": "As of",
+     "text": "23 Oct 2026",
+     "lines": 1
+    },
+    {
+     "header": "Source",
+     "text": "SYNTHETIC S248 AA-974",
+     "lines": 1
+    },
+    {
+     "header": "Currency",
+     "text": "BTN",
+     "lines": 1
+    },
+    {
+     "header": "Units per 1 USD",
+     "text": "84.1",
+     "lines": 1
+    },
+    {
+     "header": "As of",
+     "text": "16 Oct 2026",
+     "lines": 1
+    },
+    {
+     "header": "Source",
+     "text": "ZZ S239 test FX row (AA-683 pending-row ",
+     "lines": 1
+    },
+    {
+     "header": "Currency",
+     "text": "EUR",
+     "lines": 1
+    },
+    {
+     "header": "Units per 1 USD",
+     "text": "0.92",
+     "lines": 1
+    },
+    {
+     "header": "As of",
+     "text": "15 Oct 2026",
+     "lines": 1
+    },
+    {
+     "header": "Source",
+     "text": "manual-dev S237 maker-checker test (AA-8",
+     "lines": 1
+    }
+   ],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 3,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "b2b-desk-on-request",
+   "path": "/b2b-desk",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/b2b-desk",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "Nothing waits for an answerA line comes here when an agency confirms a booking w"
+   ],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "b2b-desk-departures",
+   "path": "/b2b-desk?tab=departures",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/b2b-desk?tab=departures",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Departure | Status | Seats",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 924,
+     "tableWidth": 924,
+     "cols": 6,
+     "rows": 5,
+     "lastHeader": "",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 833,
+     "colWidths": [
+      "Departure:332",
+      "Status:127",
+      "Seats:147",
+      "Agencies:98",
+      "Incident:94",
+      "#6:127"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 5,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff",
+   "path": "/staff",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/staff",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "User | Booking role | CIS role",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 924,
+     "tableWidth": 924,
+     "cols": 6,
+     "rows": 7,
+     "lastHeader": "Actions",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 848,
+     "colWidths": [
+      "User:295",
+      "Booking role:143",
+      "CIS role:98",
+      "Status:122",
+      "Last seen:114",
+      "Actions:152"
+     ]
+    }
+   ],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 7,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff-cases",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [
+    {
+     "head": "Case | Customer | Assigned as",
+     "inDialog": false,
+     "boxIsMain": false,
+     "boxClient": 924,
+     "boxScroll": 924,
+     "tableWidth": 924,
+     "cols": 6,
+     "rows": 1,
+     "lastHeader": "Assigned",
+     "lastHeaderVisible": true,
+     "stickyEnd": false,
+     "lastHeaderPosition": "sticky",
+     "minContent": 669,
+     "colWidths": [
+      "Case:126",
+      "Customer:216",
+      "Assigned as:148",
+      "Status:159",
+      "Trip starts:145",
+      "Assigned:130"
+     ]
+    }
+   ],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "audit-log",
+   "path": "/audit-log",
+   "extra": false,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/audit-log",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-activity",
+   "path": "/suppliers/SUP-000001",
+   "extra": true,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "service-activity",
+   "path": "/services/SVC-000002",
+   "extra": true,
+   "width": 1280,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/services/SVC-000002",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff-activity",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=activity",
+   "extra": true,
+   "width": 1280,
+   "scheme": "light",
+   "ready": false,
+   "finalPath": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=activity",
+   "innerWidth": 1280,
+   "docScrollWidth": 1280,
+   "docClientWidth": 1280,
+   "mainScrollWidth": 1032,
+   "mainClientWidth": 1032,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "dashboard",
+   "path": "/",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "Nothing assigned to youCases you are assigned to appear here."
+   ],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "cases",
+   "path": "/cases",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/cases",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 13,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "case-proposals",
+   "path": "/cases/TC-000008?tab=proposals",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/cases/TC-000008?tab=proposals",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "proposals",
+   "path": "/proposals",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/proposals",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 8,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "customers",
+   "path": "/customers",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/customers",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 10,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "customer-cases",
+   "path": "/customers/CUS-000010?tab=cases",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/customers/CUS-000010?tab=cases",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "trip-plans",
+   "path": "/catalog/trip-plans",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/catalog/trip-plans",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 25,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "trip-plans-orphaned",
+   "path": "/catalog/trip-plans?show=orphaned",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/catalog/trip-plans?show=orphaned",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "No orphaned trip plansA trip plan shows here when CIS stops serving its tour (de"
+   ],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "suppliers",
+   "path": "/suppliers",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-contracts",
+   "path": "/suppliers/SUP-000001?tab=contracts",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001?tab=contracts",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-rates",
+   "path": "/suppliers/SUP-000001?tab=rates",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001?tab=rates",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "hotels",
+   "path": "/hotels",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/hotels",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "hotel-drawer",
+   "path": "/hotels?hotel=HTL-000001",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/hotels?hotel=HTL-000001",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 4,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "services",
+   "path": "/services",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/services",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 2,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "service-rates",
+   "path": "/services/SVC-000002?tab=rates",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/services/SVC-000002?tab=rates",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "pricing-rules",
+   "path": "/pricing/rules",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/pricing/rules",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 4,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "pricing-fx",
+   "path": "/pricing/rules?tab=fx",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/pricing/rules?tab=fx",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 3,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "b2b-desk-on-request",
+   "path": "/b2b-desk",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/b2b-desk",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [
+    "Nothing waits for an answerA line comes here when an agency confirms a booking w"
+   ],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "b2b-desk-departures",
+   "path": "/b2b-desk?tab=departures",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/b2b-desk?tab=departures",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 5,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff",
+   "path": "/staff",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/staff",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 7,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff-cases",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 1,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "audit-log",
+   "path": "/audit-log",
+   "extra": false,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/audit-log",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "supplier-activity",
+   "path": "/suppliers/SUP-000001",
+   "extra": true,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/suppliers/SUP-000001",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "service-activity",
+   "path": "/services/SVC-000002",
+   "extra": true,
+   "width": 390,
+   "scheme": "light",
+   "ready": true,
+   "finalPath": "/services/SVC-000002",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  },
+  {
+   "name": "staff-activity",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=activity",
+   "extra": true,
+   "width": 390,
+   "scheme": "light",
+   "ready": false,
+   "finalPath": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=activity",
+   "innerWidth": 390,
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390,
+   "mainScrollbar": 0,
+   "theme": "light",
+   "poppinsLoaded": true,
+   "tables": [],
+   "tabstrips": [
+    {
+     "overflowY": 0,
+     "hScrollbar": 0
+    }
+   ],
+   "fxCells": [],
+   "offender": null,
+   "emptyStates": [],
+   "kitRows": 0,
+   "console": [],
+   "net": []
+  }
+ ],
+ "landing": "/",
+ "cookieNames": [
+  "bk_access"
+ ],
+ "staffMe": {
+  "status": 200,
+  "role": "admin",
+  "active": true,
+  "cis_role": null,
+  "cis_user_id": "cog:5969899e-a051-70ea-daac-16cc32a7192f",
+  "managed_in_directory": true,
+  "created_at": "2026-10-24T19:30:20.341253Z",
+  "last_seen_at": "2026-10-24T19:30:20.341253Z",
+  "keys": [
+   "cis_user_id",
+   "email",
+   "name",
+   "role",
+   "active",
+   "cis_role",
+   "created_at",
+   "last_seen_at",
+   "managed_in_directory",
+   "permissions",
+   "preview_viewer"
+  ]
+ },
+ "idCounts": {
+  "versions_page": 8,
+  "cases_page": 13,
+  "customers_page": 10,
+  "suppliers_page": 2,
+  "supplier_contracts": 4,
+  "hotels_page": 2,
+  "services_page": 2,
+  "service_rates": 1,
+  "staff": 7,
+  "audit_logs_status": 200,
+  "audit_logs_page": 50
+ },
+ "pages": [
+  {
+   "name": "dashboard",
+   "path": "/",
+   "extra": false
+  },
+  {
+   "name": "cases",
+   "path": "/cases",
+   "extra": false
+  },
+  {
+   "name": "case-proposals",
+   "path": "/cases/TC-000008?tab=proposals",
+   "extra": false
+  },
+  {
+   "name": "proposals",
+   "path": "/proposals",
+   "extra": false
+  },
+  {
+   "name": "customers",
+   "path": "/customers",
+   "extra": false
+  },
+  {
+   "name": "customer-cases",
+   "path": "/customers/CUS-000010?tab=cases",
+   "extra": false
+  },
+  {
+   "name": "trip-plans",
+   "path": "/catalog/trip-plans",
+   "extra": false
+  },
+  {
+   "name": "trip-plans-orphaned",
+   "path": "/catalog/trip-plans?show=orphaned",
+   "extra": false
+  },
+  {
+   "name": "suppliers",
+   "path": "/suppliers",
+   "extra": false
+  },
+  {
+   "name": "supplier-contracts",
+   "path": "/suppliers/SUP-000001?tab=contracts",
+   "extra": false
+  },
+  {
+   "name": "supplier-rates",
+   "path": "/suppliers/SUP-000001?tab=rates",
+   "extra": false
+  },
+  {
+   "name": "hotels",
+   "path": "/hotels",
+   "extra": false
+  },
+  {
+   "name": "hotel-drawer",
+   "path": "/hotels?hotel=HTL-000001",
+   "extra": false
+  },
+  {
+   "name": "services",
+   "path": "/services",
+   "extra": false
+  },
+  {
+   "name": "service-rates",
+   "path": "/services/SVC-000002?tab=rates",
+   "extra": false
+  },
+  {
+   "name": "pricing-rules",
+   "path": "/pricing/rules",
+   "extra": false
+  },
+  {
+   "name": "pricing-fx",
+   "path": "/pricing/rules?tab=fx",
+   "extra": false
+  },
+  {
+   "name": "b2b-desk-on-request",
+   "path": "/b2b-desk",
+   "extra": false
+  },
+  {
+   "name": "b2b-desk-departures",
+   "path": "/b2b-desk?tab=departures",
+   "extra": false
+  },
+  {
+   "name": "staff",
+   "path": "/staff",
+   "extra": false
+  },
+  {
+   "name": "staff-cases",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+   "extra": false
+  },
+  {
+   "name": "audit-log",
+   "path": "/audit-log",
+   "extra": false
+  },
+  {
+   "name": "supplier-activity",
+   "path": "/suppliers/SUP-000001",
+   "extra": true
+  },
+  {
+   "name": "service-activity",
+   "path": "/services/SVC-000002",
+   "extra": true
+  },
+  {
+   "name": "staff-activity",
+   "path": "/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=activity",
+   "extra": true
+  }
+ ],
+ "logoutStatus": 200,
+ "finishedAt": "2026-10-24T19:36:57.110Z"
+}
