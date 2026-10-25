@@ -1,0 +1,20 @@
+{
+  "contract": "catalog.country.v1",
+  "expect": "invalid",
+  "why": "Reference data only: no prices on a country row",
+  "rule": "price",
+  "payload": {
+    "contract": "catalog.country",
+    "version": 1,
+    "countries": [
+      {
+        "iso2": "VN",
+        "iso3": "VNM",
+        "numeric_code": "704",
+        "name": "Vietnam",
+        "iso_name": "Viet Nam",
+        "price": "0.00"
+      }
+    ]
+  }
+}

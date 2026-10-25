@@ -1,0 +1,18 @@
+{
+  "contract": "catalog.country.v1",
+  "expect": "invalid",
+  "why": "The key is the upper-case ISO alpha-2 code, never a name or a lower-case code",
+  "payload": {
+    "contract": "catalog.country",
+    "version": 1,
+    "countries": [
+      {
+        "iso2": "vn",
+        "iso3": "VNM",
+        "numeric_code": "704",
+        "name": "Vietnam",
+        "iso_name": "Viet Nam"
+      }
+    ]
+  }
+}
