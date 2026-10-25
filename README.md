@@ -3,8 +3,9 @@
 Root workspace of the Adventure Asia ecosystem. **Multi-repo**: every app keeps its own `.git` and
 deploys on its own; this root only gathers them and holds the ecosystem-wide docs, ADRs, data
 standards, skills and session logs. All repos live under the GitHub org **`AdventureAsia365-Ecosys`**.
-This root repo is **private**; the app repos are public (S241 D-14/D-25), so security reports,
-inventories and account details live here or in AA-CIS-Infra, never in an app repo.
+The app repos are public (S241 D-14/D-25), so security reports, inventories and account details
+live here or in AA-CIS-Infra, never in an app repo. This root repo and AA-CIS-Infra are public too
+since 22/10/2026, until the coding phase ends ([ADR 0014](docs/adr/0014-repo-visibility-and-github-plan.md) amendment).
 
 **Where to start:** [`docs/README.md`](docs/README.md) — "Start here" by role (CEO, new engineer,
 DevOps, CTO, CIO, PM, AI agent) and the catalog of every maintained document.

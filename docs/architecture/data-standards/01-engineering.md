@@ -124,7 +124,7 @@ plus `created_at timestamptz NOT NULL DEFAULT now()`. New tables MUST NOT use `s
 **NAM-6 (MUST)** Time columns are `timestamptz`. Entities carry `created_at` and `updated_at`
 `timestamptz NOT NULL DEFAULT now()`. Never `timestamp without time zone`. Soft delete uses
 `deleted_at timestamptz NULL`. `updated_at` is never a change cursor for consumers (CON-6).
-*Why:* three apps, several runtimes and UTC/ICT users; a naive timestamp is ambiguous.
+*Why:* several apps, several runtimes and UTC/ICT users; a naive timestamp is ambiguous.
 *Enforced:* review; lint (*to build*, **N5**).
 
 **NAM-7 (MUST NOT)** Create new enum types. Use `text NOT NULL CHECK (col IN (...))`, with the constraint
@@ -282,7 +282,7 @@ Every live object (table, view, policy, grant, role) is created by an owner migr
 bootstrap. One-off **data** fixes through the S3-mediated ECS exec pattern are DML on the owner's own
 tables only, follow DRY RUN when they delete or overwrite, and keep the script in
 `docs/audits/<date>-S<nnn>-<slug>/`.
-*Why:* S225 rule; an unreviewed DDL on the shared instance hits all three apps, and live-only objects
+*Why:* S225 rule; an unreviewed DDL on the shared instance hits every app, and live-only objects
 (two RLS policies and `acp_shared.acp_output_rules`, review P3) are invisible to review.
 *Enforced:* review; the DB Schema Dump drift report (AA-853), **report only, it fails nothing**: each night it replays
 every applied migration into a scratch PostgreSQL and lists, in the *Schema drift* section of
@@ -316,7 +316,7 @@ its owner role, which holds no rights on other owners' objects).
 **MIG-7 (MUST)** Expand/contract for every shape change: expand (add) → ship readers and writers on the
 new shape → wait ≥ 14 days → contract (drop) in a separate migration under DRY RUN.
 A rename is add + copy + switch + drop. One migration MUST NOT drop or rename something that deployed code still reads.
-*Why:* there is no per-app rollback; PITR rolls back all three apps. *Enforced:* review; lint
+*Why:* there is no per-app rollback; PITR rolls back every app. *Enforced:* review; lint
 (*to build*, **N5**).
 
 **MIG-8 (MUST)** Files are idempotent: `IF NOT EXISTS`, `CREATE OR REPLACE` (views only append columns),
@@ -359,7 +359,7 @@ a manual snapshot is taken and named in the PR. All destructive work follows the
 savepoint check, commit on approval, independent re-verify, a row in
 `docs/architecture/dead-table-registry.md` (**N6**). A first step SHOULD be reversible quarantine
 (`ALTER … SET SCHEMA retired`).
-*Why:* a snapshot is the only undo that does not roll back all three apps. *Enforced:* review; DB Migrate
+*Why:* a snapshot is the only undo that does not roll back every app. *Enforced:* review; DB Migrate
 (*to build*); the destructive-ops skill.
 
 **MIG-13 (SHOULD NOT)** Backfill or delete more than ~10k rows inside a migration. Large backfills and all

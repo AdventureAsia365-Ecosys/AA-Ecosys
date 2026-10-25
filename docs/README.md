@@ -14,9 +14,9 @@ related: [TPL-02, TPL-03, GUIDE-02, GUIDE-03, AA-887]
 
 # AA-Ecosys documentation
 
-AA-Ecosys is the Adventure Asia platform: three apps on one AWS account (acc2) - **AA-CIS** (content and catalog),
-**AA-TripPlanner-Web** (traveller front door) and **AA-Booking** (customers, trip cases, pricing, payments) - plus
-the Terraform repo **AA-CIS-Infra**. Today there is only a **Dev** environment, holding **test data only** (D-01).
+AA-Ecosys is the Adventure Asia platform: four apps on one AWS account (acc2) - **AA-CIS** (content and catalog),
+**AA-TripPlanner-Web** (traveller front door), **AA-Booking** (customers, trip cases, pricing, payments) and
+**AA-Partner** (partner agencies' CRM and the tenant portal) - plus the Terraform repo **AA-CIS-Infra**. Today there is only a **Dev** environment, holding **test data only** (D-01).
 Prod will be a separate RDS instance on acc2 (ADR 0001, C7.2a, D-17), dated when go-live is set (AA-880).
 
 This page is the doc catalog (AA-887). Git is the only source; Google Drive holds PDF exports for Ms. Thư and the
@@ -49,8 +49,10 @@ placeholders.
 - **Review**: the `review_every_days` value (days) or the event that forces a review.
 - **Audience**: O = owner (Ms. Thư), E = engineer, D = DevOps, CT = CTO, CI = CIO, P = PM, A = agent. It is a
   navigation filter, not access control.
-- **Repo**: root = AA-Ecosys (private), INF = AA-CIS-Infra (private), CIS / BK / TP = app repos (**public**:
-  public-safe content only, see [where a page may live](STYLE.md#where-a-page-may-live-sec-06)).
+- **Repo**: root = AA-Ecosys, INF = AA-CIS-Infra, CIS / BK / TP / Partner = app repos. The app repos are
+  **public** (public-safe content only, see [where a page may live](STYLE.md#where-a-page-may-live-sec-06)); root and
+  Infra are public too since 22/10/2026 until the coding phase ends ([ADR 0014](adr/0014-repo-visibility-and-github-plan.md)
+  amendment), so the same rule applies there for now.
 - **Status**: `exists` = page is in the repo (front-matter added or not); `planned` = page not written yet, with
   the issue that writes it. S241 roadmap items (U-xx) are named so nothing is built twice.
 

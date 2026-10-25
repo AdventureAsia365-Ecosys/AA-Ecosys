@@ -24,7 +24,7 @@ see which risks are open and how the roadmap is tracked. Every section points to
 
 ## The system on one page
 
-AA-Ecosys runs three apps on one AWS account (acc2, us-west-1) with one shared PostgreSQL instance, one schema owner
+AA-Ecosys runs four apps on one AWS account (acc2, us-west-1) with one shared PostgreSQL instance, one schema owner
 per schema and versioned contracts between apps. Only CIS writes content (ADR 0002). There is only a Dev environment,
 holding test data only (D-01); prod will be a separate RDS instance on acc2 (ADR 0001, C7.2a, D-17), dated at
 go-live. Full explanation: [ecosystem architecture](../ecosystem-architecture.md).

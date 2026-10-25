@@ -1,7 +1,7 @@
 ---
 id: ARCH-01
 title: AA-Ecosys — Ecosystem architecture
-description: How the three apps, the shared RDS, identity and contracts fit together, with the target direction from the ecosystem ADRs.
+description: How the four apps, the shared RDS, identity and contracts fit together, with the target direction from the ecosystem ADRs.
 type: explanation
 status: active
 owner: nghiep
@@ -40,7 +40,7 @@ AA-Ecosys is a **multi-repo**: each app deploys on its own; locally they are gat
 | `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series, and the Content studio API `/v1/*` + `/auth/tenant-login`), durable job worker, admin frontend. The tenant portal UI moved to AA-Partner (AA-979 P2a); the `portal/` folder here is a frozen, undeployed copy until it is deleted at P2b + 7 days | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel `aa-cis-frontend` (admin) |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations and plan a trip (Next.js FE + 2 Lambda BE) | Vercel (FE) + Lambda (BE) |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform — VPC, RDS, ECS, Lambda, API GW, OIDC, alarms, cross-account Bedrock; DB Migrate workflow | GitHub Actions (`accounts/aa365` root) + a human with MFA (acc1/acc3 roots) |
-| — (separate checkout) | `AA-Booking` | AAA: advisor workflow and booking lifecycle (live on Dev since 14/10/2026: inquiry intake, staff trip case workflow and proposals, pricing + FX, suppliers and supply, sellable trip plans; staff admin frontend; see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) |
+| `apps/AA-Booking` | `AA-Booking` | AAA: advisor workflow and booking lifecycle (live on Dev since 14/10/2026: inquiry intake, staff trip case workflow and proposals, pricing + FX, suppliers and supply, sellable trip plans; staff admin frontend; see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) |
 | `apps/AA-Partner` (public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 22/10/2026): the agency CRM and the tenant portal (Content studio, `portal/`, moved from AA-CIS-App with its history by AA-979 P2a on 25/10/2026; still the CIS tenant API-key sign-in, business logic in the CIS API, ADR 0010 §7); own schema `crm` (`crm-001` job table, `crm-002` agency + member tables), own LLM gateway, partner Cognito pool with MFA; integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign), maps provided by AA. Skeleton from AA-933: `/crm/health` + `/crm/health/ready`, route classes `/crm/v1` / `/crm/ops/v1` / `/crm/staff/v1`, `tenant_tx()`, `crm.job` worker in the API process | ECS Fargate ARM64 `aa-crm-dev-api` and `aa-crm-dev-web` on `aa-cis-dev-cluster` (each desired 1, running 1 on 25/10/2026), reached only through CloudFront `partner-dev.` -> VPC origin -> NLB -> ALB `/crm/*` rule (AA-931 edge, AA-933 rule); image ECR `aa-crm-dev-api` (IMMUTABLE, git SHA); deploy by GitHub OIDC role `aa-crm-dev-app-deploy`. Tenant portal: Vercel project `aa-cis-portal` (`portal.lumiguides.it.com`, same project and host as before the move), deployed only by AA-Partner `vercel-deploy-portal.yml`; it moves to CloudFront -> Fargate at P2b (ADR 0010 §6) |
 
 **Boundary rule [FACT]:** *apps own code, Infra owns resources.* The clearest example is TripPlanner:
