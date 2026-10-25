@@ -1,27 +1,41 @@
-# Bẫy DB AA-CIS
+# Bẫy DB dùng chung (CIS là chính)
+
+Tên cột chính xác luôn đọc ở `docs/architecture/db-schema-reference.md`; file này chỉ giữ bẫy về ngữ nghĩa.
 
 ## Khoá và tên cột
 
-- `silver_aa_internal.raw_tours` PK = `tour_id`.
-- `gold_aa_internal.published_tours`: tên tour là `aa_name` (không phải `title`); không có `country` → JOIN `raw_tours` qua `tour_id`.
+- `silver_aa_internal.raw_tours` PK = `tour_id`; trạng thái raw ở `source_status` / `pipeline_status` / `review_status`
+  / `lifecycle_stage` / `deleted_at` (không có `status`).
+- `gold_aa_internal.published_tours`: tên tour là `aa_name` (không phải `title`); không có `country` → JOIN `raw_tours`
+  qua `tour_id`. `published_at` là lần publish ĐẦU (giữ nguyên khi rewrite); lần publish/promote gần nhất xem `updated_at`.
 - `seo_context` không có `country` → JOIN `raw_tours`.
-- `shared.schema_versions.version` là varchar → `ORDER BY applied_at`.
-- `acp_v2_runs` / `acp_v2_slots`.`tenant_id` là TEXT.
+- `silver_aa_internal.quality_scores` dùng `evaluated_at` (không `created_at`); bản được chấp nhận qua
+  `published_tours.quality_score_id`.
+- `shared.schema_versions.version` là varchar, chứa key mọi owner → `ORDER BY applied_at`.
+- `tenant_id` không cùng kiểu ở mọi bảng (đa số uuid, vài bảng text như `acp_deliver.tenant_tour_pages`) → đọc kiểu cột
+  trước khi cast.
 - UUID khi `json.dumps` → `default=str`.
 
 ## Ngữ nghĩa dễ hiểu nhầm
 
-- `review_queue.generated_content_id` nullable: luồng A1→A2 có giá trị, luồng T3 dùng `tenant_tour_version_id`. Query tìm "dòng mồ côi" phải loại trường hợp này.
+- `review_queue.generated_content_id` nullable: luồng A1→A2 có giá trị, luồng T3 dùng `tenant_tour_version_id`. Query tìm
+  "dòng mồ côi" phải loại trường hợp này.
 - Review queue chỉ giữ bản lỗi mới nhất mỗi tour (cũ hơn = superseded). Tour đã publish → dòng review tự dismissed.
-- `tour_atoms.distinctiveness` / `weight`: giá trị mặc định, không dùng để lọc hay rank (Score thật nằm ở `acp_contract.atom_ranking`).
-- `atom_embedding` sinh lười theo thiết kế (chỉ atom vào shortlist PAA), không cần backfill.
+- `acp_contract.v_active_tour_atoms` được tạo bằng `SELECT ta.*` — Postgres bung `*` lúc tạo view, nên thêm/xoá cột ở
+  `tour_atoms` phải DROP + tạo lại view trong cùng migration (mẫu: CIS 208).
+- `tour_atoms.weight`: giá trị mặc định, không dùng để lọc hay rank (Score thật ở `acp_contract.atom_ranking`).
+  `distinctiveness` đã bị xoá (CIS 208).
+- `acp_contract.atom_embedding` sinh lười theo thiết kế (chỉ atom vào shortlist PAA), không cần backfill.
 - `shared.acp_runs` là tracker A0–A3 đang sống (khác `acp_shared.acp_runs` đã xoá).
-- `acp_output_rules.source_hitl_id` không còn FK → có thể trỏ tới giá trị không tồn tại.
+- `acp_shared.acp_output_rules.source_hitl_id` không có FK → có thể trỏ tới giá trị không tồn tại.
+- `shared.rerun_wave` (wave object, `/admin/waves`): wave `open` làm DB Migrate `apply` coi là bận.
+- Bảng 0 dòng không chứng minh "chưa từng dùng" — kiểm `git ls-files`, caller và log.
 
 ## LLM log
 
-- `llm_call_log` ghi cả lời gọi shadow (cùng stage) và lời gọi lỗi (Jev fail-open vẫn ghi cost).
-- Model thực sự quyết định: đọc route config + `llm_shadow_log`; quyết định Jev: `shared.decision_log.zone`.
+- `shared.llm_call_log` ghi cả lời gọi shadow (cùng stage) và lời gọi lỗi (Jev fail-open vẫn ghi cost).
+- Model thực sự quyết định: route ở `shared.llm_role_config` + `shared.llm_shadow_log`; quyết định Jev:
+  `shared.decision_log.zone` (dòng `error IS NULL` mới là verdict thật).
 
 ## JOIN hay dùng
 

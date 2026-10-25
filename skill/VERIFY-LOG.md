@@ -51,3 +51,67 @@ comment mốc. Kích thước cuối: 9 skill = 56.1 KB (cũ 114 KB); mỗi `SKI
 1. **Mr. Manh / QuanSolution** — KHÔNG còn liên quan AA. Giữ nguyên 3 người (chị Thư/Leigh/Trang) trong `stakeholders-english.md`.
 2. Kích thước 56.1 KB (so với mục tiêu ~55 KB) — **chấp nhận**, không cắt thêm.
 3. dead-table-registry.md đặt ở **root AA-Ecosys** (cạnh db-schema-reference) — **xác nhận đúng**.
+
+---
+
+# S251 (25/10/2026, Claude Code) — rà soát toàn bộ trước khi upload sang tài khoản claude.ai mới
+
+Từng skill do một agent rà (đối chiếu path/route/bảng/workflow với `origin/main` các repo, `db-schema-reference.md` dump
+25/10, GitHub API, Linear/Jira live), rồi một lượt chéo giữa các skill. Các dòng S215 ở trên là lịch sử; khi lệch, mục
+này thắng (ví dụ "5 job CI" → required check theo từng repo; "6 project Linear, ≤50 issue" → 5 project, ~100 issue).
+
+Kích thước: 10 `SKILL.md` 75–149 dòng; cả bộ 218 KB, trong đó `aa-lessons/lessons.md` 84 KB → phần còn lại 134 KB
+(origin/master trước phiên: 176 KB / 89 KB). Không file `references/` mồ côi; không marker VERIFY/ADDITIONS.
+
+## Sửa chính theo skill
+
+| Skill | Sửa | Bằng chứng |
+|---|---|---|
+| aa-session | 5 service ECS (thêm `aa-crm-dev-api`/`-web`), bảng job thêm `crm.job`, health Booking/CRM/CRM web, TripPlanner web `/api/health` (Lambda không có health), repo gốc + 5 con, Linear export dry run trước `--apply`, đọc `plan.json`, cỡ phiên 3–5 / 8–10 | root `.claude/CLAUDE.md` RESOURCES; Partner `api/tests/unit/test_health.py`, `web/app/healthz/route.ts`; curl `tripplanner…/api/health` 200 có `git_sha` (25/10); argparse `tools/linear/linear_export.py` |
+| aa-ship | Required check đọc bằng `gh pr checks --required` (CIS/Partner 8, Booking 7, TP 5, Infra/root 0); deploy gate 3 app; auto-merge chỉ CIS/Booking/TP; release-please 4 repo; Terraform plan guard + state lock + template revision; bỏ luật COPY Dockerfile (đã là test) | branch protection API; `deploy-dev.yml` từng repo; `allow_auto_merge`; `terraform-apply.yml`; `test_aa725_dockerfile_copy.py` |
+| aa-ui-verify | Smoke qua `workflow_call` (Vercel Git tắt), `alias_only_url`, CRM web, portal ở AA-Partner, user E2E ghim `cis-reviewer` | `vercel-deploy.yml`, `ui-smoke.yml`, `check_vendored_copies.py` |
+| aa-cis-schema (+ refs) | Schema `crm` / `crm_owner`, `cis_app` đọc được vài view `booking.v_ops_*`/`v_supply_*`/`tripplanner.v_ops_traffic_daily`, ECS exec chỉ điều phối, gotcha `acp_v2_*` sai → bỏ, `distinctiveness` đã DROP (CIS 208), Lambda còn lại sau AA-750, quarantine DM-3.8/3.9 | grant trong reference; `db/owners.yaml`; `subagent-guardrails.sh`; `208_drop_distinctiveness_competitors.sql`; `accounts/aa365/*.tf` |
+| aa-wave-rerun | Wave object `/admin/waves` (AA-727 Done), `a3_atomize` concurrency 1, thang 3 → ≤50 → theo nước, snapshot mỗi wave, báo cáo chi phí | `admin_waves.py`, `services/waves/report.py`, `a3_atomize_job.py` |
+| aa-ecosys-repos (+ refs) | AA-Partner (api/web/portal), mọi repo public, bảng job theo app, auth WORKFORCE + M2M, router/page/kind sinh lại, role CI theo việc | GitHub API visibility; Partner `CONTEXT.md`; `staff_identity.py`, `m2m_auth.py`; `cicd_split.tf` |
+| aa-lessons | Bảng mục → khi nào đọc; bài học chờ trong `.tmp-session` rồi chuyển cuối phiên; gộp dòng trùng; xoá 10 dòng đã có guard | tên guard trong change list S251 |
+| aa-linear-issue | 5 project (thêm Partner CRM, Data Platform), comment Linear tiếng Anh, hỏi trước khi tạo, cờ export/archive thật, `pr-title` chỉ ở Booking/Partner/TP | `list_projects` 25/10; steering language; `tools/linear/README.md` |
+| aa-jira-update | Epic PR-20, PR-22…27; không tự tạo issue/đổi trạng thái; nơi lưu nháp `docs/audits/…/jira-drafts.md`; ảnh nhúng 2 pha | JQL `issuetype = Epic` 25/10; `getJiraUser` @thule active |
+| ai-nghiep (+ refs) | Booking live + AA-Partner; luật cứng 9–10 (không bật/tắt hạ tầng; Terraform/migration chỉ qua workflow); quyền điều phối vs subagent; format ADR thật; commit không mã issue ở subject | AA-678/AA-725 Done (linear-export); hook; header ADR root 0011/0014 |
+
+## Lượt chéo (cross-skill)
+
+- Tên service ECS, profile (`aa365-admin` mọi lệnh), bảng job (`shared.job` / `booking.job` / `crm.job`), `Refs AA-xxx`
+  (không `[AA-xxx]`/`Fixes`/`Closes`, không mã issue trong tiêu đề), luật merge (điều phối tự merge giai đoạn dev,
+  subagent bị hook chặn): khớp giữa các skill sau khi sửa.
+- Prefix branch thống nhất `feat|fix|chore|docs/aa-xxx-…` (aa-ship, aa-ecosys-repos, handoff-prompt) — khớp tên
+  branch thật của PR CIS gần đây (`feat/` chiếm đa số).
+- Host health: aa-ship và `aws.md` trỏ thêm bảng repo của `docs/ecosystem-architecture.md` (root `.claude/CLAUDE.md`
+  chưa có host AA-Partner/TripPlanner). Curl 25/10: `partner-dev…/crm/health` 200, `/healthz` 200, TripPlanner
+  `/api/health` 200.
+- Trigger: thu hẹp `aa-ecosys-repos` (không còn bắt "admin/portal/CRM" chung chung; loại trừ aa-ui-verify), `ai-nghiep`
+  (Zalo/email; Jira thuộc aa-jira-update), thêm "schema drift / ERD drift" vào `aa-cis-schema`. Thử 9 câu của
+  `REVIEW-CHECKLIST.md`: mỗi câu một skill chính (`aa-lessons` chỉ đi kèm khi sửa code).
+- DBeaver db `aa_cis_dev`: khớp default `modules/rds/variables.tf` (không root nào ghi đè).
+- Lint cục bộ: `check_docs_text.py aws-multiline` 0 lỗi; `resource-ids` 0 cảnh báo trong `skill/`; unit test
+  `tools/docs` 30 OK. markdownlint/lychee của Docs lint chỉ quét `docs/**`, không quét `skill/`. Không có gitleaks local
+  (CI `secret-scan.yml` chạy trên PR); grep mẫu secret/DSN/key trong `skill/` = 0.
+
+## Câu hỏi mở cho Nghiệp
+
+1. **Kích thước:** phần không tính `lessons.md` tăng từ 89 KB lên 134 KB (tiếng Việt có dấu ~1,3 byte/ký tự). Giữ, hay
+   cắt bớt `aa-session` / `aa-ship` / `aa-ui-verify` (các skill lớn nhất)?
+2. **Steering lệch skill** (ngoài `skill/`, chưa sửa): `.kiro/steering/session-workflow.md` còn "gốc + 4 con", "5 CI
+   job", "đề xuất 5–10 issue", chỉ `shared.job`/`booking.job`; `.kiro/steering/db-schema.md` còn "3 app", thiếu `crm`.
+   Steering nói "khi lệch, skill thắng" nhưng nên sửa trong root PR.
+3. **Tour cưỡi voi:** memory `elephant-riding-policy` (giữ trong tập, chờ người duyệt) vs memo AA-645 §6 (bỏ khỏi
+   `expected_set`). Skill theo memory.
+4. **Account ID trong repo public:** `ai-nghiep/references/aws.md` và `ecs-exec.md` ghi account ID + tên bucket; accountId
+   Atlassian của chị Thư ở `aa-jira-update`. Giữ (cần cho lệnh/mention) hay tra mỗi lần?
+5. **Jira:** mở đầu "@thule Cập nhật …" (skill) vs "@thule Dạ chị," (memory `jira-draft-tone`); luật 7 (không chi phí
+   nội bộ chi tiết) vs nháp PR-22 S250 có cột chi phí theo nước; `docs/backlog/jira-map.md` mà memory nhắc không tồn tại.
+6. **Underscore env var:** bài học được viết lại theo memory `do-hand-steps-myself` (đặt bằng script/pipe, không chép tên
+   từ chat đã render), khác câu trong CLAUDE.md toàn cục ("edit manually in VSCode").
+7. **Thiếu ngoài skill:** runbook rollback AA-Partner; dòng Partner trong `deploy-gate-override.md` và bảng deploy của
+   `docs/ops/README.md`; `docs/ops/runbooks/preview-staff-sign-in.md` mà `vercel-deploy.yml` (CIS) trỏ tới không tồn tại.
+8. **Tracker artifact** `2VSP2stG…` thuộc tài khoản claude.ai cũ: publish từ `info@adventure.asia` có thể bị từ chối →
+   trang mới + sửa link trong `docs/backlog/tracker/README.md`.

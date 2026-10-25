@@ -1,65 +1,111 @@
 ---
 name: aa-ecosys-repos
-description: Bản đồ repo và kiến trúc AA_Ecosys (org AdventureAsia365-Ecosys) — repo nào làm gì, đường pipeline Admin A0–A4 và Tenant T0–T11, file/router/page nằm ở đâu, Terraform, TripPlanner, AA-Booking, AA-Partner, deploy và auth. Dùng khi cần tìm code, giao task cho Claude Code/Kiro, hoặc gặp AA-CIS-App, AA-CIS-Infra, AA-TripPlanner-Web, AA-Booking, AA-Partner, A0–A4, T0–T11, atom, segment, slate, admin, portal, Vercel, Lambda.
+description: Bản đồ repo và kiến trúc AA_Ecosys (org AdventureAsia365-Ecosys) — repo nào sở hữu gì (AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-Partner, AA-CIS-Infra, repo gốc), service ECS và bảng job của từng app, pipeline Admin A0–A4 / Tenant T0–T11, router/page/job kind nằm ở file nào, auth staff/tenant/M2M, Terraform roots. Dùng khi cần tìm code, chọn repo đích hoặc viết brief giao task cho Claude Code/Kiro/subagent, cần biết code admin / portal tenant / CRM nằm ở repo nào, hoặc gặp các từ A0–A4, T0–T11, atom, segment, slate, Content studio. Không dùng cho quy trình merge/deploy (aa-ship), kiểm/sửa giao diện (aa-ui-verify) hay tên bảng/cột và migration (aa-cis-schema).
 ---
 
 # aa-ecosys-repos
 
-Skill này giữ **cấu trúc ổn định**. Danh sách router/page chi tiết sinh từ repo (`references/`); khi nghi ngờ, chạy lại lệnh sinh thay vì tin bảng.
+Skill này giữ **cấu trúc ổn định**. Danh sách router/page/job kind trong `references/` là ảnh chụp; khi nghi lệch,
+chạy lại lệnh sinh ở mục "Tìm nhanh" thay vì tin bảng. Chi tiết từng repo: `CONTEXT.md` của repo đó (đọc trước khi
+thiết kế hoặc sửa code — luật steering); cả hệ: `docs/ecosystem-architecture.md`.
 
 ## Repo
 
-Workspace local: `~/projects/AA-Ecosys/` — mỗi repo một `.git` riêng. Bản đồ chung: `~/projects/AA-Ecosys/docs/ecosystem-architecture.md`.
+Workspace local: `~/projects/AA-Ecosys/` — mỗi repo một `.git` riêng. Repo gốc `AA-Ecosys` (branch `master`) chứa
+`docs/`, `skill/`, `.kiro/`, `tools/`; các repo con nằm trong `apps/` + `infra/`. **Mọi repo đều public** (repo gốc và
+Infra từ 22/10/2026, ADR 0014 amendment): không ghi account ID, ARN, SG/VPC ID, báo cáo bảo mật vào repo app.
 
-| Repo | Vai trò | Chạy ở đâu | Chi tiết |
+| Repo | Vai trò | Chạy ở đâu (acc2) | Chi tiết |
 |---|---|---|---|
-| `AA-CIS-App` | FastAPI backend (cả API Content studio `/v1/*`, `/auth/tenant-login`) + Next.js admin + worker. `portal/` ở đây là bản đóng băng, không deploy (AA-979) | ECS api + worker (acc2), Vercel `aa-cis-frontend` | `references/cis-app.md` |
-| `AA-CIS-Infra` | Terraform `accounts/aa365` (ECS, RDS, S3, IAM, TripPlanner BE) | GitHub Actions (apply chỉ qua workflow_dispatch) | `references/infra.md` |
-| `AA-TripPlanner-Web` | B2C map-first planner: Next.js + 2 Lambda | Vercel + Lambda | `references/tripplanner.md` |
-| `AA-Booking` | AAA: khách, trip case, giá, ops (live Dev từ S235) | ECS `aa-booking-dev-api` trên acc2 + Vercel `aa-booking-admin` | `references/booking.md` |
-| `AA-Partner` | CRM cho đại lý đối tác (ADR 0010) + **tenant portal** (`portal/`, chuyển từ AA-CIS-App kèm lịch sử ở AA-979 P2a, 25/10/2026; logic vẫn ở CIS API) | ECS ARM64 `aa-crm-dev-api` + `aa-crm-dev-web` trên acc2 + Vercel `aa-cis-portal` (`portal.lumiguides.it.com`, deploy bằng `vercel-deploy-portal.yml`) | `CONTEXT.md` của repo (mục "Tenant portal") |
+| `AA-CIS-App` | FastAPI API (gồm Content studio API `/v1/*`, `/auth/tenant-login`, `/catalog/v1`, `/tenant/membership/v1`) + job worker + Next.js admin. `portal/` ở đây là bản copy **đóng băng, không deploy** (AA-979) | ECS `aa-cis-dev-api` + `aa-cis-dev-worker` (cùng image); Vercel admin `aa-cis.lumiguides.it.com` | `references/cis-app.md` |
+| `AA-Booking` | Booking back office (AAA): khách, trip case, đề xuất, nhà cung cấp, B2B API `/booking/b2b/v1` | ECS `aa-booking-dev-api` (worker `booking.job` chạy trong process API); Vercel `aa-booking-admin` | `references/booking.md` |
+| `AA-TripPlanner-Web` | B2C map-first planner: Next.js + 2 Lambda (browse, assembly) | Vercel + Lambda | `references/tripplanner.md` |
+| `AA-Partner` | CRM cho đại lý (ADR 0010): `api/` (worker `crm.job` trong process API) + `web/`; **tenant portal / Content studio** `portal/` (chuyển từ CIS kèm lịch sử, AA-979 P2a; logic vẫn ở CIS API) | ECS ARM64 `aa-crm-dev-api` + `aa-crm-dev-web`; Vercel `aa-cis-portal` (`portal.lumiguides.it.com`, deploy bằng `vercel-deploy-portal.yml`) | `CONTEXT.md` của repo |
+| `AA-CIS-Infra` | Terraform (`accounts/aa365` + satellite acc1/acc3), DB Migrate, DB Schema Dump, bản copy migration | GitHub Actions (apply chỉ qua workflow_dispatch) | `references/infra.md` |
 
-`AA-ACP-App` / `AA-ACP-Core` đã archive và xoá. Không tìm code ở đó. Mọi task UI ghi rõ repo đích.
+Cùng cluster `aa-cis-dev-cluster`. `AA-ACP-App` / `AA-ACP-Core` đã xoá/archive — không tìm code ở đó. Mọi task UI ghi rõ
+repo đích: admin CIS ở `AA-CIS-App/frontend/`, portal tenant ở `AA-Partner/portal/`, CRM web ở `AA-Partner/web/`,
+staff Booking ở `AA-Booking/frontend/`.
 
-Repo gốc workspace là `AA-Ecosys` (chứa `docs/`, `skill/`, `.kiro/`, và các repo con trong `apps/` + `infra/`).
+## Bảng job (mỗi owner một bảng, template ADR 0003a)
+
+| App | Bảng | Worker chạy ở | Tiền tố kind |
+|---|---|---|---|
+| CIS | `shared.job` | service riêng `aa-cis-dev-worker` | không tiền tố |
+| Booking | `booking.job` | trong process API | `bk_` |
+| AA-Partner | `crm.job` | trong process API | `crm_` |
+
+Pre-deploy guard của mỗi app chặn deploy khi bảng job của chính nó còn bận; DB Migrate `apply` chờ **mọi** bảng job
+rảnh. Số kind và cap đổi theo thời gian — đọc từ code (lệnh dưới) hoặc `/admin/job-runner/summary`, không nhớ số.
 
 ## Pipeline (tóm tắt)
 
 **Admin / platform-wide** — không đọc brand voice của tenant:
-A0 ingest → A1 generic rewrite + DFS → A2 QA (review queue) → A3 Master Content → Atomize → Segment → Research/Search demand → Score → Route/Hub. A4 = giám sát cross-tenant, hậu kiểm, không chặn.
+A0 ingest → A1 generic rewrite + DFS → A2 QA (review queue) → A3 Master Content → Atomize → Segment → Research/Search
+demand → Score → Route/Hub. A4 = giám sát cross-tenant, hậu kiểm, không chặn.
 
 **Tenant** — đọc brand voice:
-T0 brand → T1 chọn tour → T2 rewrite → T3 QA (auto-pass sau 2 vòng, có badge) → T4 pool → Slate → Goal → Angle (chọn 1/3) → Write → Gate F1–F10 → Publish.
+T0 brand → T1 chọn tour → T2 rewrite → T3 QA (auto-pass sau 2 vòng, có badge) → T4 pool → Slate → Goal → Angle
+(chọn 1/3) → Write → Gate F1–F10 → Publish.
 
 Nguyên tắc phân tầng: **bước nào đọc brand voice thì per-tenant**; các bước còn lại dùng chung.
 
-**⚠ Atomize chỉ ở A3 platform** (Nghiệp chốt S224): mỗi tour atomize **1 lần khi lên Master** (job
-`a3_atomize` từ publish) hoặc khi admin chạy lại. **Tenant không bao giờ atomize** — tenant viết lại tour
-(T2/T3) rồi dùng atom/Segment/route/hub **của platform** để sinh topic, angle, viết social content. Thêm/bỏ
-tour chỉ **recompute** Segment/Score/Route/Hub, không atomize lại. Tên `run_t5_atomize`, `tenant_pipeline.py`,
-stage `t5_atomize` là di tích trước AA-526 (đổi tên ở AA-757) — kiểm người gọi thật, đừng suy từ tên.
-Bảng đầy đủ stage → file → bảng DB: `references/pipeline.md`.
+**Atomize chỉ ở A3 platform** (Nghiệp chốt S224): mỗi tour atomize **1 lần khi lên Master** (job `a3_atomize` từ
+publish) hoặc khi admin chạy lại. **Tenant không bao giờ atomize** — tenant viết lại tour (T2/T3) rồi dùng
+atom/Segment/route/hub **của platform**. Thêm/bỏ tour chỉ **recompute** Segment/Score/Route/Hub, không atomize lại.
+Tên `run_t5_atomize`, `tenant_pipeline.py`, stage `t5_atomize` là di tích trước AA-526 — kiểm người gọi thật, đừng
+suy từ tên. Bảng stage → file → bảng DB: `references/pipeline.md`. Model của từng stage là route của Model Gateway
+(`shared.llm_role_config`), không ghi trong skill.
 
 ## Quy ước chung
 
-- Trunk-based: chỉ `main`; branch `feature|fix|chore/aa-xxx-…`; PR ghi `Refs AA-xxx`.
-- CIS: merge vào `main` → tự deploy Dev (api + worker cùng image). Infra: merge không tự apply.
-- Thêm module top-level vào AA-CIS-App → `COPY` trong Dockerfile + path filter `deploy-dev.yml`.
-- DB (X1 xong 19/10/2026): mỗi app một role chủ NOLOGIN (`cis_owner`, `bk_owner`, `tp_owner`) + role runtime
-  (`cis_app` + `aa_app_user`, `booking`, `tripplanner`). Migration của repo chủ, copy byte-identical vào Infra
-  `db/migrations/<owner>/`, DB Migrate đăng nhập `db_migrator` và chạy file bằng role chủ. Role/extension chỉ ở Infra
-  `db/migrations/roles/` (`rl-NNN`, chạy bằng master). Master `aa_cis_admin` là break-glass. Sổ đăng ký:
-  Infra `db/owners.yaml`; giải thích: `docs/database/schema-ownership.md`. Viết migration: skill `aa-cis-schema`.
+- Trunk-based: chỉ `main` (repo gốc `master`); branch `feat|fix|chore|docs/aa-xxx-…`; PR ghi `Refs AA-xxx`.
+  Merge, deploy, verify, Done: skill `aa-ship`.
+- CIS, Booking, AA-Partner: merge vào `main` chạm đường backend → tự deploy Dev. Infra: merge **không** tự apply.
+- DB: mỗi app một role chủ NOLOGIN + role runtime; key migration theo owner. Sổ đăng ký: Infra `db/owners.yaml`;
+  giải thích: `docs/database/schema-ownership.md`; tên bảng/cột: `docs/architecture/db-schema-reference.md`;
+  cách viết migration và thứ tự copy → DB Migrate: skill `aa-cis-schema`.
+
+  | App | Schema | Key | Owner | Runtime |
+  |---|---|---|---|---|
+  | CIS | `silver_aa_internal`, `gold_aa_internal`, `acp_*`, `geo`, `catalog`, phần lớn `shared` | `NNN` | `cis_owner` | `cis_app` (api + worker), `aa_app_user` (tenant pool) |
+  | Booking | `booking` | `bk-NNN` | `bk_owner` | `booking` |
+  | TripPlanner | `tripplanner` | `tp-NNN` | `tp_owner` | `tripplanner` |
+  | AA-Partner | `crm` | `crm-NNN` | `crm_owner` | `crm_app` |
+
+  Role/extension chỉ ở Infra `db/migrations/roles/` (`rl-NNN`). Master `aa_cis_admin` là break-glass.
+- Ranh giới dữ liệu: app khác đọc CIS qua view `catalog.*` (Booking, TripPlanner) hoặc HTTP `catalog.http.v1` +
+  `tenant.membership.v1` bằng token M2M (AA-Partner — CRM không có grant trên schema CIS). Không app nào ghi schema
+  của app khác (ADR 0002: chỉ CIS ghi nội dung).
 - Frontend: Next 16 + React Compiler, UI kit `app/_kit/`, react-query, inline style + brand token. Xem `aa-ui-verify`.
-- Auth: admin dùng header `x-admin-secret` (`verify_admin_secret`); tenant dùng JWT (`/auth/tenant-login` → `_create_jwt`/`verify_jwt`). Hardening (JWT thật cho staff role, passwordless) còn ở backlog (AA-656/AA-703).
+- Auth (chi tiết: mục sign-in trong `CONTEXT.md` mỗi repo, ADR 0006/0006a/0006b):
+  - Staff: Cognito WORKFORCE (email OTP, managed login `staff-auth.lumiguides.it.com`); CIS xác minh access token ở
+    `api/core/staff_identity.py`; `verify_admin_secret` (header `x-admin-secret`) vẫn nhận secret cho gọi
+    server-to-server. Booking nhận cùng pool (client `booking-staff`).
+  - Tenant: API key → `/auth/tenant-login` → JWT tenant (`_create_jwt` / `verify_jwt` trong `api/routers/auth.py`).
+  - M2M: pool `aa-m2m-<env>` client-credentials (`api/core/m2m_auth.py`) cho `/catalog/v1`, `/tenant/membership/v1`,
+    Booking `/booking/b2b/v1`.
+
+## Brief giao việc cho subagent / Kiro
+
+- Subagent không push, merge, Terraform apply, DB Migrate, `gh workflow run`, và **không ECS exec** (hook
+  `.claude/hooks/subagent-guardrails.sh`). Mọi bước live (query DB qua ECS exec, deploy, verify) là của điều phối:
+  brief lane kết thúc bằng mục "post-merge steps cho orchestrator" (runbook/script để điều phối chạy).
+- Điều phối push / PR / merge bằng GitHub App `aa-agent` qua `tools/github/as-app.sh` (cách gọi: `aa-ship` §1).
+- Worktree luôn ở đường dẫn tuyệt đối `/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/<tên>`.
+- Bẫy khi chạy song song (scratch riêng theo lane, cổng Postgres test riêng, giữ chỗ số migration): `aa-lessons`
+  mục "Cách làm việc".
 
 ## Tìm nhanh
 
 ```bash
-# router backend
-git -C ~/projects/AA-Ecosys/apps/AA-CIS-App grep -n "APIRouter(" -- api/routers
-# trang frontend
-find ~/projects/AA-Ecosys/apps/AA-CIS-App/frontend/app -name page.tsx | sort
-# job kinds (mỗi file services/jobs/*_job.py = một kind, decorator @job_kind)
-git -C ~/projects/AA-Ecosys/apps/AA-CIS-App grep -n "@job_kind" -- services/jobs
+# router backend CIS
+git -C ~/projects/AA-Ecosys/apps/AA-CIS-App grep -hoE 'APIRouter\(prefix="[^"]*"' origin/main -- api/routers | sort -u
+# trang admin CIS / trang portal tenant
+git -C ~/projects/AA-Ecosys/apps/AA-CIS-App ls-tree -d --name-only origin/main frontend/app/admin/
+git -C ~/projects/AA-Ecosys/apps/AA-Partner ls-tree -r --name-only origin/main portal/app | grep page.tsx
+# job kinds — CIS: services/jobs/*_job.py, decorator @job_kind
+git -C ~/projects/AA-Ecosys/apps/AA-CIS-App grep -n "@job_kind(" origin/main -- services/jobs
+# Booking (runner backend/app/jobs) / AA-Partner (runner api/app/jobs): hằng KIND = "bk_…" / "crm_…"
+git -C ~/projects/AA-Ecosys/apps/AA-Booking grep -n 'KIND = "bk_' origin/main -- backend/app
 ```
