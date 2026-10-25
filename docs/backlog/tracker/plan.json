@@ -1,8 +1,8 @@
 {
  "updated": "2026-10-25",
- "session": "S250",
- "next_session": "S251",
- "source": "Linear (25/10/2026, S250 close) + docs/backlog/README.md + docs/audits/2026-10-25-S250-wrap/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
+ "session": "S251",
+ "next_session": "S252",
+ "source": "Linear (25/10/2026, S251 close) + docs/backlog/README.md + docs/audits/2026-10-25-S251-wrap/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -222,7 +222,7 @@
    "status": "active",
    "criteria": [
     {
-     "text": "AA-937..946 xong (937–944 Done S249–S250; còn 945, 946); 1 trip đi từ Inquiry tới Completed với supplier của đại lý trên Dev",
+     "text": "AA-937..946 xong (937–944 Done S249–S250, 946 Done S251; còn 945); 1 trip đi từ Inquiry tới Completed với supplier của đại lý trên Dev",
      "done": false
     },
     {
@@ -238,7 +238,7 @@
    "status": "later",
    "criteria": [
     {
-     "text": "AA-947, 949, 950, 951 xong (AA-948 là bản nâng cấp, không chặn mốc)",
+     "text": "AA-947, 949, 950, 951 xong (AA-947 Done S251; AA-948 là bản nâng cấp, không chặn mốc)",
      "done": false
     },
     {
@@ -286,24 +286,19 @@
  ],
  "checks": [
   {
-   "due": "NGAY S251, trước mọi Terraform apply",
-   "issue": "Infra #380",
-   "text": "main AA-CIS-Infra af8ac53 (#380) squash từ nhánh cũ, làm mất crm_mail.tf, khoá BFF/sign-up proof traveller (identity.tf), Redis TLS/AUTH + S1_WRITER_V2 trong modules/ecs, route /me, bản copy 279/280/crm-015. Khôi phục từ 5bdde4d, plan phải không đổi gì; DB Schema Dump trên af8ac53 cũng lỗi"
+   "due": "ngay S252",
+   "issue": "CIS #1010",
+   "text": "Xác nhận CIS #1010 đã merge với nhãn secret-scan-baseline-reviewed (gắn qua REST issues/<n>/labels rồi đọc lại) và 16 cảnh báo \"Google API key\" còn lại của CIS đã đóng (80/96 đã đóng ở 5 repo khác trong S251)"
   },
   {
-   "due": "ngay S251",
-   "issue": "Jira S249 + S250",
-   "text": "Nháp Jira S249 + S250 (Nghiệp dời tiếp, chưa đăng): S1 catalogue 631/810, CRM W2/W3 + Lane P, đăng nhập traveller, điều khoản AI cho chị Thư (AA-820), nền tảng; nháp → Nghiệp duyệt → đăng"
-  },
-  {
-   "due": "ngay S251",
-   "issue": "AA-645",
-   "text": "179 tour còn lại (Sri Lanka 3 + India 1–4, ≈ $13) rồi kiểm 308 slug cũ → mới cho các wave sau Laos"
+   "due": "hằng đêm 05:13 UTC",
+   "issue": "AA-991",
+   "text": "DB Freshness Probe (Infra #394, chế độ report): run đầu 40200002656 xanh, stale=6 (orphan_segments 8469, geo_tour_place_stale 1473, place_card_links_missing 2223, seo_context_expired_active_tours 75, angle_gate_requests_on_inactive_atoms 11, tours_with_place_atoms_but_no_segment 3). Bật ENFORCE sau khi AA-988/989 xong"
   },
   {
    "due": "hằng đêm",
    "issue": "AA-853",
-   "text": "Báo cáo drift schema trên DB replay (Infra #380) + lint quyền migration (Infra #379): 0 object không quản lý là Done-when"
+   "text": "Done S251: báo cáo drift schema trên DB replay + lint quyền migration; Schema Dump 40191477074 \"Drift verdict: clean\" (0 object mở, replay 343 file, 0 lỗi). Đỏ = object không quản lý mới"
   },
   {
    "due": "hằng ngày 19:00 UTC",
@@ -341,9 +336,9 @@
    "text": "Audit cost tháng 8/9/10 theo tag App + dịch vụ (acc2) + acc3 Bedrock + credits, giải thích từng bước nhảy"
   },
   {
-   "due": "~26/10 (hằng tuần)",
+   "due": "hằng tuần",
    "issue": "PR-20",
-   "text": "Báo cáo nền tảng hằng tuần (Jira, kỳ trước 19/10): nháp → Nghiệp duyệt → đăng"
+   "text": "Báo cáo nền tảng hằng tuần (Jira): kỳ 2 (20–26/10/2026) đã đăng S251 thành story PR-28; kỳ sau: nháp → Nghiệp duyệt → đăng"
   },
   {
    "due": "≤11/11",
@@ -357,11 +352,6 @@
   }
  ],
  "waiting": [
-  {
-   "who": "Nghiệp",
-   "text": "Duyệt nháp Jira S249 + S250 ở S251 rồi agent đăng",
-   "issue": ""
-  },
   {
    "who": "Nghiệp",
    "text": "Tạo OAuth client Google + app Microsoft 365 cho send-as của đại lý, đưa 4 giá trị vào crm/dev/mail-oauth (hoặc pipe cho agent); agent bật crm_mail_oauth_enabled và kiểm nốt (cần đăng nhập trình duyệt)",
@@ -379,12 +369,7 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Tuỳ chọn: xoay mật khẩu DataForSEO còn trong lịch sử Infra (hiện giữ nguyên theo quyết định AA-841)",
-   "issue": ""
-  },
-  {
-   "who": "Nghiệp",
-   "text": "Phân xử A/B S1 ~30 bài (S251, ~30–45′) + sửa ví dụ mẫu (~1 h)",
+   "text": "Phân xử A/B S1 ~30 bài (~30–45′) + sửa ví dụ mẫu (~1 h) — chưa làm ở S251",
    "issue": ""
   },
   {
@@ -434,6 +419,35 @@
   }
  ],
  "log": [
+  {
+   "session": "S251",
+   "date": "25/10/2026",
+   "closed": [
+    "AA-645",
+    "AA-853",
+    "AA-825",
+    "AA-926",
+    "AA-946",
+    "AA-761",
+    "AA-947",
+    "AA-835"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-988",
+    "AA-989",
+    "AA-990",
+    "AA-991"
+   ],
+   "reopened": [],
+   "notes": [
+    "8 issue Done (Claude Code, Ultracode, 25/10): AA-645 viết lại S1 xong 810/810 tour trên v2, $59,34 / $120, slug 308 toàn bộ OK, 39 tour cưỡi voi + 54 golden giữ nguyên; AA-853 (mig 281, Schema Dump 40191477074 Drift verdict clean); AA-825 retention Booking (DRY RUN 17/5 → live 17 job archive + xoá, 5 inbox redact); AA-926 Q-1; AA-946 CRM-18 (crm-016, E2E lifecycle-thin PASS); AA-761 trang Account portal (CIS #1002 + Partner #51); AA-947 CRM-19 AA lines (E2E 40202260808 xanh 5/5 + 1 skip); AA-835 supply content (sửa lỗi JSON live CIS #1016 + mig 282, S1–S12 live, ảnh do Nghiệp chụp; còn khoảng trống: 409 photo_rights live chưa chạy sạch)",
+    "Tạo AA-988…991 (lan truyền S1 v2): probe độ tươi AA-991 hằng đêm (Infra #394, stale=6); rewrite tour A: 5/8 lớp tự theo, segments / tour_place / place_cards không theo → AA-988/989; AA-990 sửa 409 atom_replaced (CIS #1013)",
+    "Còn In Progress: AA-790 (vòng 2 CIS #1017 mở; vòng 1 chưa đạt thanh AI-tells 5,5 và giọng TP/WK), AA-991, AA-990, AA-669 (chụp lại), AA-916/917/918/924 (một phần), AA-945 (crm_mail_health, OAuth), AA-979 (P2b chưa bắt đầu); AA-919 vẫn Backlog trên Linear (thiết kế + critic; WM-17 mất 2 lần)",
+    "Ngoài issue: 10 zip skill build lại (root #257/#259); cảnh báo secret gitleaks: 80/96 đóng ở 5 repo; CIS #1010 (nhãn secret-scan-baseline-reviewed) đang merge lúc chụp, 16 cảnh báo còn lại chưa verify đóng; CodeQL CIS #1011 + TP #152; xoay mật khẩu DFS (/admin/dfs-balance/check 200); key tenant test lưu secret; 7 bình luận Jira đã duyệt và đăng + story PR-28 báo cáo kỳ 2",
+    "Sự cố: tài khoản claude.ai cũ hết hạn mức giữa workflow (mất 2 workflow); WSL khởi động lại (gần như chắc hết RAM: 3 workflow code song song trên máy 8 GB) → luật mới: một agent viết code mỗi lúc"
+   ]
+  },
   {
    "session": "S250",
    "date": "25/10/2026",
@@ -911,13 +925,13 @@
   {
    "id": "AA-669",
    "title": "My Content as a DataTable — columns, filters, sort, bulk export/publish (reopened)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "portal",
    "milestone": "M4",
-   "session": "S257",
+   "session": "S252",
    "size": "M",
-   "next": "LP · S257 My Content DataTable in AA-Partner/portal (after P2a, AA-979)",
+   "next": "LP · Partner #59 merged (sửa layout My Content). Còn: chụp lại màn hình rồi đóng (S252 việc 5)",
    "needs": "Rescope or build"
   },
   {
@@ -931,18 +945,6 @@
    "size": "L",
    "next": "L7 · First session ≥01/11 (≈S255): Cost Operations page (reopened)",
    "needs": ""
-  },
-  {
-   "id": "AA-825",
-   "title": "Retention + rollups for log tables (reopened: one real Booking retention run)",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S259",
-   "size": "S",
-   "next": "L7 · S259 retention rollups: one real Booking retention run under a Dev override, or drop the Done-when line",
-   "needs": "Drop the line or allow the run"
   },
   {
    "id": "AA-900",
@@ -1125,27 +1127,15 @@
    "needs": "Paid run ~$10–20"
   },
   {
-   "id": "AA-853",
-   "title": "Schema drift diff against a replayed DB + migration ownership lint",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S251",
-   "size": "M",
-   "next": "Infra #379 (lint quyền migration trong Copy Guard) + #380 (báo cáo drift hằng đêm trên DB replay) đã merge; NHƯNG #380 (af8ac53) squash từ nhánh cũ làm mất việc S250 trên main Infra (crm_mail.tf, khoá BFF traveller, Redis TLS/AUTH, bản copy 279/280/crm-015) và DB Schema Dump lần đầu lỗi. Còn: khôi phục main, 1 đêm xanh với 0 object không quản lý, rồi đóng",
-   "needs": ""
-  },
-  {
    "id": "AA-790",
    "title": "T10: tenant-voice rubric gate + post-repair integrity check",
    "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S251",
+   "session": "S252",
    "size": "L",
-   "next": "L1 · GO (root #239); gate rubric giọng tenant + kiểm toàn vẹn sau sửa đã ship S250. Còn: pilot T9 trả phí rồi đóng; việc kèm: hygiene.sentence_spans bậc hai theo độ dài văn bản → làm tuyến tính (không issue)",
+   "next": "L1 · Vòng 1 CIS #1015 live (prompt 3c078692); panel mù 40 bài trước/sau: AI-tells 4,15 → 5,12 (thanh 5,5 chưa đạt), giọng thương hiệu 6,70 → 7,12 (Trail Pulse 6,0, WildKind 6,75 chưa đạt), trung thành nguồn 7,58 → 7,12 (LinkedIn 8,92 → 7,08: rule AUDIENCE bịa chi tiết chuyến đi), giá trị người đọc 6,88 → 7,20. Vòng 2 = CIS PR #1017 (7d8e3785, prompt 751b0a34, 1062 unit test) ĐANG MỞ. S252 việc 1: review độc lập → merge → deploy → re-panel (≤$2) → panel mù so với thanh",
    "needs": "LLM judge vs deterministic rubric"
   },
   {
@@ -1171,18 +1161,6 @@
    "size": "L",
    "next": "Shared design system package; after P2a the kit lives in 3 copies (CIS admin, portal, CRM web), byte guard until then",
    "needs": "Package vs copies"
-  },
-  {
-   "id": "AA-835",
-   "title": "ADR 0004a supply content — supply contracts, Booking supply outbox, CIS consumer",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M3",
-   "session": "S251",
-   "size": "M",
-   "next": "L4 · Đã ship S250: bk-023 + CIS 278 áp, bucket supply-media + quyền purge (Infra #353/#368), Booking #84/#86 (outbox supply, upload + read-back), consumer CIS #991 deploy. Còn: chạy thử consumer trả phí (tập con, báo chi phí) + bằng chứng Done-when trên Dev",
-   "needs": "Paid consumer trial (subset rule)"
   },
   {
    "id": "AA-814",
@@ -1281,27 +1259,15 @@
    "needs": "Park or cancel"
   },
   {
-   "id": "AA-926",
-   "title": "[Quality] Q-1: error taxonomy, gate registry, single thresholds file and lint",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S251",
-   "size": "M",
-   "next": "L1 · GO ở go/no-go S251 (root #239); CIS #982 merged + deploy (12b36a6b). Còn: pilot T9 trả phí chứng minh live rồi đóng",
-   "needs": ""
-  },
-  {
    "id": "AA-916",
    "title": "[Writing memory] Capture writing signals: before/after text, reason codes, every T9 attempt",
    "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S251",
+   "session": "S252",
    "size": "M",
-   "next": "L1 · GO (root #239); mig 277 áp + capture tín hiệu viết đã deploy S250. Còn: kiểm live trong pilot T9 rồi đóng",
+   "next": "L1 · Còn một phần S251: bằng chứng ảnh UI / thiếu dữ liệu (WM-13 cần ≥3 cụm, không ép). S252 việc 5: bổ sung bằng chứng còn thiếu rồi đóng",
    "needs": ""
   },
   {
@@ -1311,9 +1277,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S251",
+   "session": "S252",
    "size": "M",
-   "next": "L1 · GO (root #239); severity theo vi phạm đã ship + deploy S250. Còn: kiểm live trong pilot T9 rồi đóng",
+   "next": "L1 · Còn một phần S251: bằng chứng ảnh UI / thiếu dữ liệu (WM-13 cần ≥3 cụm, không ép). S252 việc 5: bổ sung bằng chứng còn thiếu rồi đóng",
    "needs": ""
   },
   {
@@ -1323,9 +1289,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S251",
+   "session": "S252",
    "size": "M",
-   "next": "L1 · Kéo sớm vào S250: mig 280 áp (Infra #378), rule store + job mining trong CIS #998 (deploy xếp sau gap S1 — xác nhận đã chạy). Còn: kiểm live rồi đóng",
+   "next": "L1 · Còn một phần S251: bằng chứng ảnh UI / thiếu dữ liệu (WM-13 cần ≥3 cụm, không ép). S252 việc 5: bổ sung bằng chứng còn thiếu rồi đóng",
    "needs": "Release click per rule set"
   },
   {
@@ -1335,9 +1301,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S251",
+   "session": "S252",
    "size": "M",
-   "next": "L1 · Kéo sớm vào S250: R0 replay ($0) + L0 lexicon trong CIS #998. Còn: kiểm live rồi đóng",
+   "next": "L1 · Còn một phần S251: bằng chứng ảnh UI / thiếu dữ liệu (WM-13 cần ≥3 cụm, không ép). S252 việc 5: bổ sung bằng chứng còn thiếu rồi đóng",
    "needs": ""
   },
   {
@@ -1347,9 +1313,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S257",
+   "session": "S252",
    "size": "L",
-   "next": "L1 · Writing Memory P2 at S257 if go",
+   "next": "L1 · Thiết kế + critic S251 (.tmp-session/s251/aa919): 4 lỗi chặn ở WM-18/20 (replay tự so với chính nó, drill trả phí, fixture AA-729 trong repo gốc public, đường duyệt AI_ADMIN). Build WM-17 (mig 283) mất 2 lần (hết hạn mức tài khoản, WSL khởi động lại). S252 việc 2: WM-17 (mig 283, importer, guard không có text tenant) theo sửa của critic; sửa plan WM-18/20 (replay so với dump trước refactor, drill $0, fixture ra khỏi repo gốc public, duyệt qua UI tối thiểu hoặc CLI + ghi chú ADR); một agent code mỗi lúc",
    "needs": "Each release"
   },
   {
@@ -1425,63 +1391,15 @@
    "needs": ""
   },
   {
-   "id": "AA-645",
-   "title": "[EVAL] Claude Sonnet 5 for writer stages (t2_generate, t8_angle_gen, t9_write, s1_atom_writer) vs Sonnet 4.5/4.6 on Bedrock",
-   "status": "In Progress",
-   "priority": "Low",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S251",
-   "size": "L",
-   "next": "L1 · Viết lại S1 cả catalogue: 631/810 tour trên writer v2 (S250: 13 wave nước, cùng S249 là 17 wave / 578 tour: 578 published, 0 review, 0 ở lại v1; trang dính gate 226 → 26; phủ số liệu 0,422 → 0,675; brand-fit 7,69 → 7,99; $42,05, $0,0728/tour; luỹ kế $46,16 / $120). Còn 179 tour (Sri Lanka 3: 12, India 1–4: 167, ≈ $13) + kiểm 308 các wave sau Laos rồi đóng. Route v2 giữ làm mặc định (Nghiệp S250); S1_WRITER_V2 nằm trong Terraform (Infra #372, cần khôi phục sau #380)",
-   "needs": ""
-  },
-  {
-   "id": "AA-761",
-   "title": "Account pages with real data — Billing usage/overage, Activity timeline, Integrations (WordPress health, API key view)",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "portal",
-   "milestone": "M4",
-   "session": "S255",
-   "size": "M",
-   "next": "LP · S255 account pages in AA-Partner/portal (after P2a); blocked by AA-979",
-   "needs": ""
-  },
-  {
    "id": "AA-945",
    "title": "[CRM W3] CRM-17 Module 5 email",
    "status": "In Progress",
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M2",
-   "session": "S251",
+   "session": "S252",
    "size": "L",
-   "next": "L6 · W3 · crm-015 + nhận mail forward-in chạy live S250 (Partner #45/#47, Infra #375/#376; 1 mail SES thử → conversation đọc lại qua API). Còn: Nghiệp tạo OAuth client Google + Microsoft 365 → ghi crm/dev/mail-oauth → bật crm_mail_oauth_enabled → kiểm luồng gửi/Undo/send-as/import; khôi phục crm_mail.tf trên main Infra trước",
-   "needs": ""
-  },
-  {
-   "id": "AA-946",
-   "title": "[CRM W3] CRM-18 Thin full lifecycle",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M2",
-   "session": "S251",
-   "size": "L",
-   "next": "L6 · W3 · S251: kế tiếp trên critical path → C-M2; AA-944 Done S250, AA-945 đang làm (phần send-as không chặn lifecycle mỏng)",
-   "needs": ""
-  },
-  {
-   "id": "AA-947",
-   "title": "[CRM W4] CRM-19 B2B client + AA lines",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "C-M3",
-   "session": "S257",
-   "size": "M",
-   "next": "L6 · W4 · S257; blocked by AA-944 (Done S250) → mở sau AA-946 theo nhịp CRM",
+   "next": "L6 · W3 · forward-in live; card live OK S251 (slug lạ → bỏ + đếm, token không khớp → Unmatched, match trip_token, PDF lưu, .txt type_not_allowed). Còn: đọc crm_mail_health sau 19:00Z; OAuth client cần Nghiệp (send-as, send/Undo, import)",
    "needs": ""
   },
   {
@@ -1505,7 +1423,7 @@
    "milestone": "C-M3",
    "session": "S258",
    "size": "L",
-   "next": "L6 · W4 · S258; blocked by AA-947",
+   "next": "L6 · W4 · S258; AA-947 Done S251 (không còn bị chặn)",
    "needs": ""
   },
   {
@@ -1779,9 +1697,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "P-M1",
-   "session": "S251",
+   "session": "S252",
    "size": "L",
-   "next": "LP · P2a xong S250: portal/ vào AA-Partner giữ history (Partner #44/#46), bản CIS đóng băng (#997), secret CIS xoá; deploy prod run 40156305885, /tenant-login + /terms 200. Còn: P2a-4 tài liệu repo gốc (registers secret đã cập nhật S250), P2b (CloudFront → Fargate, partner pool, 301 /trip/*) ~S256; gỡ Vercel ≥ 7 ngày sau P2b",
+   "next": "LP · P2a-4 xong S251 (root #253, CIS #1000, Partner #48). Còn: P2b (CloudFront → Fargate, partner pool, 301 /trip/*) chưa bắt đầu; gỡ Vercel ≥ 7 ngày sau P2b",
    "needs": "Approve P2a before P1 (split AA-979 or note the exception)"
   },
   {
@@ -1794,6 +1712,54 @@
    "session": "≥S263",
    "size": "L",
    "next": "L6 · W8, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-969, AA-970, AA-971, AA-979, AA-880, AA-873, AA-874",
+   "needs": ""
+  },
+  {
+   "id": "AA-991",
+   "title": "[S1 propagation] Downstream freshness probe + proof that automatic sync works (atom → segment/route/ranking/geo/place/tenant)",
+   "status": "In Progress",
+   "priority": "High",
+   "project": "data",
+   "milestone": "M2a",
+   "session": "S252",
+   "size": "M",
+   "next": "L1 · Infra #394 (464414aa): DB Freshness Probe hằng đêm 05:13 UTC, chế độ report; run đầu 40200002656 xanh (read_as cis_app, 0 lỗi, stale=6); thử alarm enforce=true 40200215229 đỏ như mong đợi. Bằng chứng tự đồng bộ: rewrite tour A 8a759395 (Laos) qua promote → sau 11 lần poll (tới 16:23Z, tiến trình còn chạy lúc đóng phiên, chưa có kết quả cuối) 5/8 lớp đi theo (atoms, ranking, routes trong 3–6′), segments / tour_place / place_cards KHÔNG theo, không còn job mở. S252 việc 3: chứng minh pause/restore tour B 7df4db05; rồi sửa AA-988/989; bật ENFORCE sau",
+   "needs": ""
+  },
+  {
+   "id": "AA-988",
+   "title": "[S1 propagation] Segments, routes and ranking follow the S1 v2 atoms (segment match, orphan cleanup, routes for every tour)",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S252",
+   "size": "M",
+   "next": "L1 · Tạo S251. Bằng chứng AA-991: segments không đi theo rewrite (orphan_segments 8469, tours_with_place_atoms_but_no_segment 3). S252 việc 3, sau pause/restore tour B",
+   "needs": ""
+  },
+  {
+   "id": "AA-989",
+   "title": "[S1 propagation] Places and embeddings follow the S1 v2 atoms (geo.tour_place re-sync, atom embeddings, content_embedding decision)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S252",
+   "size": "M",
+   "next": "L1 · Tạo S251. Bằng chứng AA-991: tour_place / place_cards không đi theo rewrite (geo_tour_place_stale 1473, place_card_links_missing 2223). S252 việc 3, cùng AA-988",
+   "needs": ""
+  },
+  {
+   "id": "AA-990",
+   "title": "[S1 propagation] Trip building and readers on S1 v2 data — TripPlanner parity, saved trips, CRM catalog cache, Booking proposals, SEO context",
+   "status": "In Progress",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M2a",
+   "session": "S252",
+   "size": "M",
+   "next": "L5 · Tạo S251: phát hiện + sửa 409 atom_replaced (CIS #1013) đã live. Còn: các reader khác theo phạm vi issue",
    "needs": ""
   }
  ]

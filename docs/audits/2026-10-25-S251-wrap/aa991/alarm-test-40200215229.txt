@@ -1,0 +1,8 @@
+Complete job name: Downstream freshness probe
+[36;1mjq -r '.errors[] | "::error file='"$SCRIPT"'::" + .' <<<"$INSPECT"[0m
+[36;1m  || { echo "::error file=$SCRIPT::the probe runs only a READ_ONLY = True script"; exit 1; }[0m
+[36;1m[ -n "$TASK_ARN" ] && [ "$TASK_ARN" != "None" ] || { echo "::error::run-task returned no task"; exit 1; }[0m
+[36;1m  echo "::error::the task is still $STATUS after the 30-minute wait (READ_ONLY master session; the log above is partial). Watch $STREAM in CloudWatch"[0m
+SCRIPT verdict stale=6 stale_aged=12254 errors=0 list=tours_with_place_atoms_but_no_segment,orphan_segments,geo_tour_place_stale_rows,place_card_links_missing,angle_gate_requests_on_inactive_atoms,seo_context_expired_active_tours
+##[error]freshness probe: stale: tours_with_place_atoms_but_no_segment has 3 link(s) of tours changed more than 24 h ago (sample: 18d05c80-63be-4c03-8533-ac3166afd3bc, 56929aeb-4914-40b6-a649-247ccd0158ff, 5f3665d7-bfe7-437f-ab4c-f583e24ebc51)
+##[error]freshness probe: stale: orphan_segments has 8469 link(s) of tours changed more than 24 h ago (sample: 0000fd272f2136f3, 000a08f1a0339382, 000ecc921432a723, 00130f485f482b2e, 001b9c9ce95c22eb)

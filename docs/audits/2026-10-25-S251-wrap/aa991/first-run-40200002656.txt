@@ -1,0 +1,27 @@
+Complete job name: Downstream freshness probe
+SCRIPT role read_as=cis_app login=aa_cis_admin
+SCRIPT metric name=atoms_older_than_master gate=stale n=0 aged=0 sample=-
+SCRIPT metric name=active_tours_without_atoms gate=stale n=0 aged=0 sample=-
+SCRIPT metric name=active_atoms_without_segment gate=info n=9004 aged=3230 sample=00097a483ceae9f5,0016374e5b356ce4,001d8505e2d000f1,002a16bf94d95f40,002ab624812d67d1
+SCRIPT metric name=tours_with_place_atoms_but_no_segment gate=stale n=9 aged=3 sample=18d05c80-63be-4c03-8533-ac3166afd3bc,5057f3d5-416e-46c0-9cd5-35e5f7c70e60,56929aeb-4914-40b6-a649-247ccd0158ff,5f3665d7-bfe7-437f-ab4c-f583e24ebc51,73893d4e-0b29-4481-a449-f08c1a543e84
+SCRIPT metric name=orphan_segments gate=stale n=8578 aged=8469 sample=0000fd272f2136f3,000a08f1a0339382,000ecc921432a723,00130f485f482b2e,001b9c9ce95c22eb
+SCRIPT metric name=ranking_missing gate=stale n=0 aged=0 sample=-
+SCRIPT metric name=ranking_off_active_pairs gate=stale n=0 aged=0 sample=-
+SCRIPT metric name=active_tours_without_ranking gate=info n=9 aged=3 sample=18d05c80-63be-4c03-8533-ac3166afd3bc,5057f3d5-416e-46c0-9cd5-35e5f7c70e60,56929aeb-4914-40b6-a649-247ccd0158ff,5f3665d7-bfe7-437f-ab4c-f583e24ebc51,73893d4e-0b29-4481-a449-f08c1a543e84
+SCRIPT metric name=routes_missing gate=stale n=0 aged=0 sample=-
+SCRIPT metric name=routes_differ gate=stale n=0 aged=0 sample=-
+SCRIPT metric name=active_tours_without_route gate=info n=192 aged=47 sample=00164580-b7b2-429f-a185-2f9415d1de11,00f15c2d-e48b-4ebe-b0cf-d097b4ea54b3,01155e2d-5119-4bec-bc0e-a1174cb0bd8a,05f7aa08-1d92-4d8d-9496-a47d4d6fa00f,0655c689-06a5-45bf-9361-a843d6accf79
+SCRIPT metric name=current_routes_older_than_atoms gate=info n=3 aged=3 sample=83e3b208-05e4-449b-8dc1-4eef21a7a223,913bde35-1cbf-4c5f-8497-77da759d2b9e,a860ea0e-a2fb-41da-9308-e25ce301a9ad
+SCRIPT metric name=routes_with_dead_segment gate=stale n=0 aged=0 sample=-
+SCRIPT metric name=geo_tour_place_rows_on_inactive_atoms gate=info n=2038 aged=1473 sample=0045db39-274d-5379-aff1-4e2b9451e2df,00657555-5f16-5bc0-a430-68ddc7c930df,008f02b2-36f0-59e2-99c7-693cb09ffd6e,0096d9be-1b15-5c40-a13c-988c22f0afdc,00ac749e-8a6b-560f-a235-dc9fea91aa1f
+SCRIPT metric name=geo_tour_place_stale_rows gate=stale n=2038 aged=1473 sample=0045db39-274d-5379-aff1-4e2b9451e2df,00657555-5f16-5bc0-a430-68ddc7c930df,008f02b2-36f0-59e2-99c7-693cb09ffd6e,0096d9be-1b15-5c40-a13c-988c22f0afdc,00ac749e-8a6b-560f-a235-dc9fea91aa1f
+SCRIPT metric name=place_card_links_missing gate=stale n=2286 aged=2223 sample=000ddfcea96d9cf3,0016374e5b356ce4,006a85351862e28e,009e89842e645c5a,00fa94b2b457bb64
+SCRIPT metric name=active_place_atoms_without_card_link gate=info n=25758 aged=9754 sample=00097a483ceae9f5,000c54f8cc91ad6f,000ca4c77b0db0e6,000d677d13fd411b,000ddfcea96d9cf3
+SCRIPT metric name=tenant_versions_older_than_master gate=info n=2 aged=0 sample=ee5fa669-c169-407a-8fb5-e84df69fd9b7,f4185e7e-f95d-469e-81bb-cd2f123b01b2
+SCRIPT metric name=angle_gate_requests_on_inactive_atoms gate=stale n=14 aged=11 sample=158072bf-773f-4a32-be54-8d4f1590091e,3524ad2d-76f8-43ae-a84b-a4ecec7978a8,3fa8495d-64c0-4948-8910-c9f599691389,55670945-ff4f-48eb-bb2c-857dfcdf1b05,72082375-edc4-44f1-a2d8-3317be6eb325
+SCRIPT metric name=seo_context_expired gate=info n=76 aged=76 sample=04387936-20dc-4e75-acd6-6deb4dd1c923,05e9c6e1-4d4d-4b86-8ce5-b5355c2bd4f0,0d10f2e1-471b-4e17-bfbb-0e7dfe6e1f55,0f443157-ff03-438f-9604-e7e533d7448a,121dc7ed-4fa1-4470-bec3-49c90891359b
+SCRIPT metric name=seo_context_expired_active_tours gate=stale n=75 aged=75 sample=0b6e28fb-1f90-42a0-868f-cd916ab064ac,0b7ba1d1-a33a-486a-b7fb-d9cc1120ee01,10a1b613-0102-4f73-b4fb-b53943d684d6,10f41429-cf8d-4ade-beed-47ffb349249a,11f31d98-bda8-4dd1-b392-cc92d5b8a4ad
+SCRIPT totals active_tours=892 active_atoms=25877 segments=18978 current_routes=1261 current_ranking_rows=95946 tour_place_rows=2480 place_card_links=298 tenant_versions=55 angle_gate_requests=25 seo_context_rows=918 tours_changed_within_window=578
+SCRIPT verdict stale=6 stale_aged=12254 errors=0 list=tours_with_place_atoms_but_no_segment,orphan_segments,geo_tour_place_stale_rows,place_card_links_missing,angle_gate_requests_on_inactive_atoms,seo_context_expired_active_tours
+freshness probe: report-only: red once enforced: tours_with_place_atoms_but_no_segment, orphan_segments, geo_tour_place_stale_rows, place_card_links_missing, angle_gate_requests_on_inactive_atoms, seo_context_expired_active_tours
+freshness probe (report): GREEN
