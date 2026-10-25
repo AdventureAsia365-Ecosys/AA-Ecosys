@@ -10,6 +10,9 @@ Linear từng issue (đọc 25/10), checklist sống `.tmp-session/S250-checklis
 `sum-cw_*.txt`, `.tmp-session/s249/aa645/realpilot/cw-progress.log`, danh sách PR từ `gh`. Phần chưa kiểm ghi rõ
 "chưa verify".
 
+
+> **Cập nhật 25/10 ~06:15 UTC — ĐÃ KHẮC PHỤC:** Infra **#382** (`581b6c4a`) khôi phục main = main trước #380 (5bdde4d + #379) + chỉ phần của #380; `git diff 5bdde4d..main` không còn file bị xoá; Terraform Plan của #382: **"No changes"** (hạ tầng live chưa từng bị đụng). Bài học: `skill/aa-lessons/lessons.md` (squash bằng merge-base sau fetch).
+
 ## Trạng thái
 
 - **Linear Done trong phiên (10):** AA-910, AA-941, AA-978, AA-813, AA-943, AA-944, AA-977, AA-874, AA-908, AA-851.

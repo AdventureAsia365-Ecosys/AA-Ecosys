@@ -7,6 +7,8 @@ STS: profile `aa365-admin` trả về đúng acc2 (us-west-1).
 
 ## ⚠️ Phát hiện cần xử lý trước mọi `terraform apply` (AA-CIS-Infra main)
 
+> **Cập nhật 25/10 ~06:15 UTC — ĐÃ KHẮC PHỤC:** Infra **#382** (`581b6c4a`) khôi phục main = main trước #380 (5bdde4d + #379) + chỉ phần của #380; `git diff 5bdde4d..main` không còn file bị xoá; Terraform Plan của #382: **"No changes"** (hạ tầng live chưa từng bị đụng). Bài học: `skill/aa-lessons/lessons.md` (squash bằng merge-base sau fetch).
+
 Infra **#380** (`af8ac53b`, AA-853 schema drift report, squash merge 04:17:12Z bởi `aa-agent`) là commit một cha
 (`b1d2e924`) nhưng **xoá ngược nội dung của #372–#378 và #381** (+1532 / −3616). Trên `origin/main` hiện tại:
 
