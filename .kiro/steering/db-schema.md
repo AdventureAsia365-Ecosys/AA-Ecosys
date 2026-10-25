@@ -1,8 +1,8 @@
 # DB Schema — nguồn sự thật (Nghiệp chốt 03/10/2026, S209)
 
-Shared RDS acc2 (`aa-cis-dev-db`, `005097885195`, us-west-1) dùng chung bởi **CIS, TripPlanner và AA-Booking**,
+Shared RDS acc2 (`aa-cis-dev-db`, `005097885195`, us-west-1) dùng chung bởi **CIS, TripPlanner, AA-Booking và AA-Partner (CRM)**,
 mỗi app một schema riêng: CIS (`silver_aa_internal`, `gold_aa_internal`, `acp_*`, `geo`, `catalog`, phần lớn `shared`),
-TripPlanner (`tripplanner`, key `tp-NNN`), Booking (`booking`, key `bk-NNN`; role `booking`, DSN `booking/dev/database-url`).
+TripPlanner (`tripplanner`, key `tp-NNN`), Booking (`booking`, key `bk-NNN`; role `booking`, DSN `booking/dev/database-url`), CRM (`crm`, key `crm-NNN`, role `crm_app`, chạy `crm_owner` qua DB Migrate).
 Tên bảng/cột thay đổi theo migration nên **không nhớ bằng đầu, không đoán**.
 
 ## Quy tắc BẮT BUỘC
@@ -10,7 +10,7 @@ Tên bảng/cột thay đổi theo migration nên **không nhớ bằng đầu, 
   `docs/database/schema-ownership.md`. App không bao giờ migrate schema của app khác. Migration áp lên Dev qua
   workflow **DB Migrate** của AA-CIS-Infra (bản copy y hệt ở `db/migrations/<owner>/`), không chạy từ máy cá nhân.
 - **Trước khi viết query / dùng tên bảng-cột, ĐỌC `docs/architecture/db-schema-reference.md`** —
-  file SINH TỰ ĐỘNG từ catalog live (mọi schema của cả 3 app: cột, index, FK, policy RLS, grant, owner, role,
+  file SINH TỰ ĐỘNG từ catalog live (mọi schema của cả 4 app: cột, index, FK, policy RLS, grant, owner, role,
   migration mới nhất mỗi owner). Nó là nguồn sự thật về tên bảng/cột cho CẢ Kiro và Claude Code. KHÔNG sửa tay,
   KHÔNG introspect cột lại từ đầu — dòng "Verified" ở đầu file cho biết bản dump mới tới đâu.
 - Skill `skill/aa-cis-schema/SKILL.md` giữ phần GIẢI THÍCH (vai trò bảng, Dead Table Registry, gotcha,

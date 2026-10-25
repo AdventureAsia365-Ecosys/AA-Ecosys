@@ -1,23 +1,35 @@
-# ECS exec + S3 — query DB AA-CIS
+# ECS exec + S3 — query DB từ container
 
-RDS trong private subnet → chạy script Python (asyncpg) trong container `api` qua ECS exec, lấy kết quả qua S3. Script dùng **`DATABASE_URL` của chính container** (hoặc app code: `sys.path.insert(0, "/app")` rồi `from shared.secrets import get_database_url`).
+RDS trong private subnet → chạy script Python (asyncpg) trong container qua ECS exec, lấy kết quả qua S3. Bản chuẩn là
+runbook `docs/ops/runbooks/ecs-exec-s3-mediated.md` ở repo gốc (tiếng Anh, có bước verify + dọn file S3); file này là
+bản tóm tắt nhanh — khi lệch, runbook thắng và file này được sửa theo.
 
-## Ai đăng nhập DB, được làm gì (X1, AA-860)
+**Chỉ phiên điều phối chạy ECS exec.** Hook `.claude/hooks/subagent-guardrails.sh` chặn subagent gọi
+`aws ecs execute-command` (và `run-task`, `update-service`…). Subagent soạn script + lệnh, trả về cho điều phối; đừng
+lách qua script trung gian (`bash run.sh`) — hook chỉ đọc dòng lệnh, nhưng luật thì vẫn áp.
 
-- **Từ X1 S18**, `DATABASE_URL` của api + worker là DSN của **`cis_app`** (secret `aa-cis/dev/rds-cis-app`): đọc/ghi mọi bảng CIS (11 schema runtime, kể cả bảng RLS — policy parity của CIS 244), **không** đọc được `booking.*` / `tripplanner.*` (42501), không DDL, không ghi `shared.schema_versions`. Trước S18 nó vẫn là master.
-- **Từ X1 S19**, task role của CIS bị **Deny** `GetSecretValue` trên `aa-cis/dev/rds` (master), `aa-cis/dev/db-migrator`, `booking/*`, `tripplanner/*`. Script ECS exec **không còn tự lấy DSN master** được (AccessDenied) — đừng dùng `get_secret_value(SecretId="aa-cis/dev/rds")` nữa.
-- Việc cần quyền master — đọc/ghi `booking.*` / `tripplanner.*`, role, `catalog.*`, sửa liên chủ sở hữu — đi qua **DB Migrate `mode=run-script`** với một file `db/scripts/<name>.py` đã review trong AA-CIS-Infra (`db/scripts/README.md`; `READ_ONLY = True` cho script chỉ đọc). Không qua ECS exec.
-- Đổi cấu trúc DB vẫn là migration của repo chủ (không phải script).
+## Ai đăng nhập DB, được làm gì
 
-## Script mẫu (asyncpg, ghi kết quả ra file)
+- Container CIS (`aa-cis-dev-api`, `aa-cis-dev-worker`): `DATABASE_URL` = **`cis_app`** (secret `aa-cis/dev/rds-cis-app`):
+  đọc/ghi mọi bảng CIS (kể cả bảng RLS), không DDL, không ghi `shared.schema_versions`. `booking.*` / `tripplanner.*`
+  chỉ vài view hợp đồng (`booking.v_ops_*`, `booking.v_supply_*`, `tripplanner.v_ops_traffic_daily`); bảng gốc → 42501.
+  Không có quyền gì trên `crm`.
+- Task role CIS bị **Deny** `GetSecretValue` trên `aa-cis/dev/rds` (master), `aa-cis/dev/db-migrator`, `booking/*`,
+  `tripplanner/*` → không lấy DSN master trong script.
+- Container CRM (`aa-crm-dev-api`): login `crm_app`, chỉ schema `crm`, đọc dữ liệu tenant qua `app.tenancy.tenant_tx()`
+  (RLS theo `app.tenant_id`). Task role CRM **không ghi được bucket bronze** → không có đường S3 cho output.
+- Việc cần master (bảng `booking.*` / `tripplanner.*` / `crm.*` ngoài quyền trên, role, `catalog.*`, sửa liên chủ sở
+  hữu) → **DB Migrate `mode=run-script`** với file `db/scripts/<name>.py` đã review trong AA-CIS-Infra
+  (`db/scripts/README.md`; `READ_ONLY = True` cho script chỉ đọc). Đổi cấu trúc DB là migration của repo chủ.
+
+## Script mẫu (asyncpg, kết quả ra S3)
 
 ```python
 import asyncio, json, os, boto3, asyncpg
 
 async def main():
-    # DSN của container: cis_app từ X1 S18 (master trước đó). Không đọc secret master (Deny từ S19).
-    conn = await asyncpg.connect(os.environ["DATABASE_URL"], ssl="require")
-    rows = await conn.fetch("SELECT ...")  # luôn schema-qualify; chỉ schema CIS
+    conn = await asyncpg.connect(os.environ["DATABASE_URL"], ssl="require")  # cis_app; không đọc secret master
+    rows = await conn.fetch("SELECT ...")  # luôn schema-qualify
     with open("/tmp/result.json", "w") as f:
         json.dump([dict(r) for r in rows], f, indent=2, default=str)
     await conn.close()
@@ -26,6 +38,8 @@ async def main():
 
 asyncio.run(main())
 ```
+
+Script cần code app → `sys.path.insert(0, "/app")` (có `shared.secrets.get_database_url`).
 
 ## Chạy (mỗi lệnh một dòng)
 
@@ -37,17 +51,27 @@ aws ecs execute-command --cluster aa-cis-dev-cluster --task $TASK_ARN --containe
 aws s3 cp s3://aa-cis-bronze-005097885195/scripts/result.json /tmp/result.json --profile aa365-admin --region us-west-1
 ```
 
+(File tạm trên máy: dùng `.tmp-session/` trong workspace thay cho `/tmp` như runbook.)
+
 ## Lưu ý
 
-- `execute-command` có thể treo tới ~120 giây → chạy nền, poll S3. Script > 5 phút → chia nhiều bước.
+- `--command` không qua shell: `;`, `&&`, pipe phải nằm trong `sh -c '…'`.
+- **Không đọc kết quả qua terminal SSM.** Output dài (JSON một dòng vài KB, nhiều dòng liền) làm phiên đóng sớm
+  (`Cannot perform start session: EOF`) và mất dữ liệu im lặng. Container CIS: ghi file → upload S3 → tải về, kiểm
+  `wc -c` / `json.loads` trước khi đọc. Container CRM (không có S3): in dòng ngắn, mỗi dòng một sự kiện, `flush=True`,
+  `LIMIT` nhỏ, cuối script `sleep` ngắn.
+- `execute-command` có thể treo tới ~120 giây → chạy nền, poll S3. Script > 5 phút không chạy qua exec (deploy thay task
+  là chết giữa chừng; exec nền cũng tự ngắt) → one-off ECS task, job trên worker, hoặc chạy sau khi mọi PR backend đã merge.
 - zsh không word-split biến chứa nhiều flag → `bash -c` hoặc flag rời.
-- Script cần code app → `sys.path.insert(0, "/app")`.
-- Dùng task của `aa-cis-dev-api` cho query. Job dài thì chạy trên worker qua `shared.job`, không chạy qua exec.
+- Dùng task của `aa-cis-dev-api` cho query. Việc dài thì enqueue job vào `shared.job` (chạy trên worker).
 
 ## Log
 
-- ECS: `/ecs/aa-cis-dev` — một log group chung cho cả api và worker, phân biệt bằng stream prefix. Retention 30 ngày (D-09, AA-872; nhật ký phiên exec `/ecs/aa-cis-dev/exec-sessions` 365 ngày).
-- Lambda: `/aws/lambda/aa-cis-dev-<name>` (ingestion, validation, seo, export, content, brand-brief-parser, authorizer, dfs-balance-check).
+- ECS CIS: `/ecs/aa-cis-dev` — một log group cho api và worker, phân biệt bằng stream prefix (retention 30 ngày);
+  nhật ký phiên exec `/ecs/aa-cis-dev/exec-sessions` (365 ngày). Booking: `/ecs/aa-booking-dev`; CRM: `/ecs/aa-crm-dev`.
+- Lambda còn lại trên acc2: `aa-cis-dev-dfs-balance-check` (kiêm ops probe gọi `/admin/waves/check`),
+  `aa-cis-dev-rds-snapshot-expiry`, `aa-identity-dev-*` (Cognito trigger), `aa-tripplanner-dev-browse` / `-assembly`.
+  Các Lambda pipeline CIS cũ đã gỡ (AA-750). Log group: `/aws/lambda/<tên>`.
 
 ## DBeaver qua SSM port-forward
 
@@ -58,9 +82,3 @@ aws ssm start-session --target "ecs:aa-cis-dev-cluster_${TASK_ID}_${RUNTIME_ID}"
 ```
 
 DBeaver: `localhost:15432`, db `aa_cis_dev`.
-
-## Bản chuẩn (AA-892)
-
-Bản chuẩn của pattern này là runbook `docs/ops/runbooks/ecs-exec-s3-mediated.md` (tiếng Anh, có bảng login DB theo
-từng bước X1, verify + dọn file S3). File này là bản tóm tắt nhanh cho agent; khi hai bản lệch nhau, runbook thắng và
-file này được sửa theo.
