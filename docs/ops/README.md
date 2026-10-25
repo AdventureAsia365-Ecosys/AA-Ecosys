@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-25
 review_every_days: 90
 related: [CAT-00, OPS-04, APP-01, APP-02, OPS-05, OPS-06, APP-09, skill/aa-ship/SKILL.md, AA-892]
 ---
@@ -89,7 +89,7 @@ Drills and their evidence: [drill index](drills/README.md).
 |---|---|---|---|---|---|
 | CIS API + worker | ECS `aa-cis-dev-api` + `aa-cis-dev-worker` (same image, ECR `aa-cis-dev-api`, tag `dev-<sha>`, IMMUTABLE, 30 kept) | push to `main` touching the backend paths of `deploy-dev.yml`, or dispatch | `shared.job` deploy gate (fails closed) | `/health` `git_sha`, `/health/ready` 200, both services same SHA | [rollback-cis](runbooks/rollback-cis.md) |
 | CIS admin frontend | Vercel `aa-cis-frontend` | PR (preview) / push to `main` (production) touching `frontend/**` | none (UI smoke after deploy) | `aa-ui-verify` | [rollback-vercel](runbooks/rollback-vercel.md) |
-| CIS tenant portal | Vercel project for the portal (AA-885, being set up) | `vercel-deploy-portal.yml` | none | portal UI smoke | [rollback-vercel](runbooks/rollback-vercel.md) |
+| Tenant portal (Content studio) | Vercel `aa-cis-portal` (`portal.lumiguides.it.com`); source AA-Partner `portal/` since AA-979 (25/10/2026) | AA-Partner: PR (preview) / push to `main` (production) touching `portal/**` (`vercel-deploy-portal.yml`) | none | production check of `/tenant-login`, portal UI smoke | [rollback-vercel](runbooks/rollback-vercel.md) |
 | Booking API | ECS `aa-booking-dev-api` (ECR `aa-booking-dev-api`, tag = git SHA, IMMUTABLE, 10 kept) | push to `main` touching the backend, or dispatch | `booking.job` gate over GitHub OIDC | `/booking/health` `git_sha`, `/booking/health/ready` | [rollback-booking](runbooks/rollback-booking.md) |
 | Booking admin frontend | Vercel `aa-booking-admin` | PR / push to `main` touching the frontend | none | page check | [rollback-vercel](runbooks/rollback-vercel.md) |
 | TripPlanner Lambdas | `aa-tripplanner-dev-browse`, `aa-tripplanner-dev-assembly` (zip in a versioned S3 bucket, `--publish`, no alias) | push to `main` touching `backend/**`, or dispatch | none | `/api/browse?resource=countries` 200 | [rollback-tp-lambda](runbooks/rollback-tp-lambda.md) |
@@ -110,12 +110,13 @@ Read from each repo's `.github/workflows/` on `main`, 19/10/2026.
 | AA-CIS-App | `ci.yml` | PR to `main`; push to `main`, `feature/**` | Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Lint, Portal Lint | the first five are required by branch protection |
 | AA-CIS-App | `deploy-dev.yml` | push to `main` (backend paths); dispatch (`override_running_jobs`) | Pre-deploy job guard, Build and Push ECR, Deploy to ECS Dev | concurrency `deploy-dev-cis`, never cancelled |
 | AA-CIS-App | `vercel-deploy.yml` | PR / push `main` (`frontend/**`); dispatch | Vercel deploy, UI smoke | Git integration off; Hobby cap about 100 deployments a day for the team |
-| AA-CIS-App | `vercel-deploy-portal.yml` | PR / push `main` (portal paths); dispatch | Vercel deploy (portal), UI smoke (portal) | AA-885 |
-| AA-CIS-App | `ui-smoke.yml`, `ui-smoke-portal.yml` | called by the deploy workflows; dispatch | Playwright smoke | |
+| AA-CIS-App | `ui-smoke.yml` | called by the deploy workflow; dispatch | Playwright smoke | the portal workflows were deleted by AA-979 (CIS #997); the frozen `portal/` is still built (Portal Build) and linted until it is deleted |
 | AA-CIS-App | `eval-regression.yml` | dispatch only | Run eval regression gate | by hand on the golden set (D-23); per-PR trigger only if N-4 is approved |
 | AA-Booking | `ci.yml` | PR to `main`; push `main` | Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check, Vendored CIS copies, Frontend Build | |
 | AA-Booking | `deploy-dev.yml` | push to `main` (backend paths); dispatch (`override_running_jobs`) | Deploy configuration, Pre-deploy job guard, Deploy to ECS Dev | live smoke on `/booking/health` + `/ready` |
 | AA-Booking | `vercel-deploy.yml` | PR / push `main` (frontend paths); dispatch | Vercel deploy | |
+| AA-Partner | `vercel-deploy-portal.yml` | PR (`portal/**`, the portal workflows, the portal smoke) / push `main` (`portal/**`, the portal workflows); dispatch | Vercel deploy (portal), UI smoke (portal) | AA-979; the only deployer of `aa-cis-portal` |
+| AA-Partner | `ui-smoke-portal.yml` | called by `vercel-deploy-portal.yml`; dispatch | Playwright portal smoke | |
 | AA-TripPlanner-Web | `ci.yml` | PR to `main`; push `main`, `task/**`, `chore/**`, `feature/**` | Backend (pytest), Migrations (lint, PG 15 replay), Frontend (lint + build) | |
 | AA-TripPlanner-Web | `deploy-lambdas.yml` | push to `main` (`backend/**`); dispatch | Build + deploy Lambda code | deploy role trusts `main` only |
 | AA-TripPlanner-Web | `vercel-deploy.yml` | PR / push `main` (`frontend/**`); dispatch | Vercel deploy | |

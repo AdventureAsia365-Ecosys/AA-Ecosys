@@ -28,8 +28,8 @@ Delete this comment. -->
 
 ## What AA-Ecosys is (five lines)
 
-<Three apps on one AWS account (acc2): AA-CIS (content and catalog), AA-TripPlanner-Web (traveller front door),
-AA-Booking (customers, trip cases, pricing, payments). Link ecosystem-architecture.md.>
+<Four apps on one AWS account (acc2): AA-CIS (content and catalog), AA-TripPlanner-Web (traveller front door),
+AA-Booking (customers, trip cases, pricing, payments), AA-Partner (partner agencies' CRM and the tenant portal). Link ecosystem-architecture.md.>
 
 ## Your first day
 

@@ -14,9 +14,9 @@ related: [TPL-02, TPL-03, GUIDE-02, GUIDE-03, AA-887]
 
 # AA-Ecosys documentation
 
-AA-Ecosys is the Adventure Asia platform: three apps on one AWS account (acc2) - **AA-CIS** (content and catalog),
-**AA-TripPlanner-Web** (traveller front door) and **AA-Booking** (customers, trip cases, pricing, payments) - plus
-the Terraform repo **AA-CIS-Infra**. Today there is only a **Dev** environment, holding **test data only** (D-01).
+AA-Ecosys is the Adventure Asia platform: four apps on one AWS account (acc2) - **AA-CIS** (content and catalog),
+**AA-TripPlanner-Web** (traveller front door), **AA-Booking** (customers, trip cases, pricing, payments) and
+**AA-Partner** (partner agencies' CRM and the tenant portal) - plus the Terraform repo **AA-CIS-Infra**. Today there is only a **Dev** environment, holding **test data only** (D-01).
 Prod will be a separate RDS instance on acc2 (ADR 0001, C7.2a, D-17), dated when go-live is set (AA-880).
 
 This page is the doc catalog (AA-887). Git is the only source; Google Drive holds PDF exports for Ms. Thư and the
@@ -49,8 +49,10 @@ placeholders.
 - **Review**: the `review_every_days` value (days) or the event that forces a review.
 - **Audience**: O = owner (Ms. Thư), E = engineer, D = DevOps, CT = CTO, CI = CIO, P = PM, A = agent. It is a
   navigation filter, not access control.
-- **Repo**: root = AA-Ecosys (private), INF = AA-CIS-Infra (private), CIS / BK / TP = app repos (**public**:
-  public-safe content only, see [where a page may live](STYLE.md#where-a-page-may-live-sec-06)).
+- **Repo**: root = AA-Ecosys, INF = AA-CIS-Infra, CIS / BK / TP / Partner = app repos. The app repos are
+  **public** (public-safe content only, see [where a page may live](STYLE.md#where-a-page-may-live-sec-06)); root and
+  Infra are public too since 22/10/2026 until the coding phase ends ([ADR 0014](adr/0014-repo-visibility-and-github-plan.md)
+  amendment), so the same rule applies there for now.
 - **Status**: `exists` = page is in the repo (front-matter added or not); `planned` = page not written yet, with
   the issue that writes it. S241 roadmap items (U-xx) are named so nothing is built twice.
 
@@ -65,7 +67,7 @@ placeholders.
 | ARCH-03 | Service catalog and resource inventory | Ref | root [`generated/inventory.md`](generated/inventory.md) + admin Apps page | G (tag `App` + state + root outputs; INF `docs-gen.yml`, PR into root) | nghiep | nightly + after apply | E D CT CI A, O (Apps page) | exists (generated, AA-893); live page AA-884 |
 | ARCH-04 | Access and IAM matrix | Ref + Exp | INF `docs/iam.md`, root [`generated/iam-roles.md`](generated/iam-roles.md); root `docs/security/access-matrix.md` | H+G (tables: INF `docs-gen.yml`, PR into root) | nghiep | 90; quarterly access review (SEC-05); tables nightly + after apply | E D CI A | tables exist (AA-893, `ARCH-04-tables`, acc2 roles only). Matrix: AA-697 (parked, N-9). Today also: INF `docs/ci-role-split.md`, `docs/agent-session-role.md`, ADR 0006/0006a |
 | ARCH-05 | ADR index per repo | Exp | `docs/adr/README.md` in root, CIS, BK, TP, INF | H + lint | nghiep | each new ADR | E CT A | root exists and is linted (status + index, `docs-lint.yml`; numbering + next-free line, `contracts.yml`, AA-928); CIS, BK, TP, INF indexes added by AA-888 (TP and INF have no ADR yet) |
-| ARCH-06 | CONTEXT.md per repo | Exp | `CONTEXT.md` in CIS, BK, TP, INF (root uses ARCH-01) | H | nghiep | 90; on a stack or boundary change | E A | exists in 4 repos, front-matter (AA-887): `ARCH-06-cis`, `ARCH-06-booking`, `ARCH-06-tripplanner`, `ARCH-06-infra`. App-repo lint of it: AA-888 |
+| ARCH-06 | CONTEXT.md per repo | Exp | `CONTEXT.md` in CIS, BK, TP, Partner, INF (root uses ARCH-01) | H | nghiep | 90; on a stack or boundary change | E A | exists in 5 repos, front-matter (AA-887): `ARCH-06-cis`, `ARCH-06-booking`, `ARCH-06-tripplanner`, `ARCH-06-partner` (also the tenant portal since AA-979), `ARCH-06-infra`. App-repo lint of it: AA-888 |
 | ARCH-07 | Contracts catalog and registry | Ref | root `docs/contracts/README.md` | H (G table later) | nghiep | each contract version | E A | exists; HTTP contracts (OpenAPI 3.1) with samples and field policy checked by `contracts.yml` (AA-928). Producer → consumer → version → pinned hash: AA-826 (U-35) |
 | ARCH-08 | Data standards (DM-x, C-x) and schema ownership | Ref + Exp | root [`architecture/data-standards/`](architecture/data-standards/README.md), [`database/schema-ownership.md`](database/schema-ownership.md) | H | nghiep | 90; on a rule change | E D CT CI A | exists v1.2, front-matter (AA-887) on the index (`ARCH-08`), Parts A-C (`ARCH-08-engineering`, `-data-management`, `-scaling`) and schema ownership (`ARCH-08-schema-ownership`). v1.1 edits (DM-11.5, C2.3g/DM-8.4, DM-7 rows + C4.2b, DM-11.2, DM-1.2, `owners.yaml` as registry): AA-889, wording N-1. DM-7 is the only retention registry |
 | ARCH-09 | Dead Table Registry | Ref | root `docs/architecture/dead-table-registry.md` | H | nghiep | each migration that drops or freezes a table | E A | draft (S248, AA-712 X4: the 8 frozen TripPlanner place tables). AA-850 (U-37) |

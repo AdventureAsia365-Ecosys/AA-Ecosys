@@ -52,7 +52,7 @@ D-17), dated when go-live is set (AA-880). Dev holds **test data only** (D-01).
 |---|---|---|---|---|
 | 1 | **AWS acc2** (IAM identity + MFA) | CLI reads, ECS exec, Terraform plan | Nghiệp | `aws sts get-caller-identity --profile aa365-admin` prints the acc2 ID |
 | 2 | AWS acc3 / acc1 | Only for Bedrock satellite Terraform | Nghiệp, rarely needed | `aws sts get-caller-identity --profile nghiep_aa365` |
-| 3 | **GitHub** org `AdventureAsia365-Ecosys` | Code, PRs, CI | Nghiệp (org owner) | You see the private repos `AA-Ecosys` and `AA-CIS-Infra` |
+| 3 | **GitHub** org `AdventureAsia365-Ecosys` | Code, PRs, CI | Nghiệp (org owner) | You can push branches to `AA-Ecosys`, `AA-CIS-Infra` and the four app repos (all public for now, ADR 0014 amendment) |
 | 4 | **CIS staff account** (Cognito WORKFORCE) | Admin console, Booking admin | An owner, on CIS admin → Platform → Staff | The invite e-mail arrives; "Sign in with company email" works |
 | 5 | Vercel team | Frontend deploy logs, env var names | Nghiệp | You see `aa-cis-frontend`, `aa-cis-portal`, `aa-booking-admin` and the TripPlanner project |
 | 6 | **Linear** workspace and team `AA_Ecosys` | Work items | Nghiệp | You see the four projects (see the [PM guide](guides/pm.md)) |

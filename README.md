@@ -3,8 +3,9 @@
 Root workspace of the Adventure Asia ecosystem. **Multi-repo**: every app keeps its own `.git` and
 deploys on its own; this root only gathers them and holds the ecosystem-wide docs, ADRs, data
 standards, skills and session logs. All repos live under the GitHub org **`AdventureAsia365-Ecosys`**.
-This root repo is **private**; the three app repos are public (S241 D-14/D-25), so security reports,
-inventories and account details live here or in AA-CIS-Infra, never in an app repo.
+The app repos are public (S241 D-14/D-25), so security reports, inventories and account details
+live here or in AA-CIS-Infra, never in an app repo. This root repo and AA-CIS-Infra are public too
+since 22/10/2026, until the coding phase ends ([ADR 0014](docs/adr/0014-repo-visibility-and-github-plan.md) amendment).
 
 **Where to start:** [`docs/README.md`](docs/README.md) — "Start here" by role (CEO, new engineer,
 DevOps, CTO, CIO, PM, AI agent) and the catalog of every maintained document.
@@ -12,11 +13,12 @@ DevOps, CTO, CIO, PM, AI agent) and the catalog of every maintained document.
 ## Layout
 
 ```text
-AA-Ecosys/                      (this repo, private, default branch master)
+AA-Ecosys/                      (this repo, public since 22/10/2026 — ADR 0014 amendment, default branch master)
 ├── apps/
-│   ├── AA-CIS-App/             content system of record: FastAPI api + job worker (ECS), admin + tenant portal (Vercel)
+│   ├── AA-CIS-App/             content system of record: FastAPI api + job worker (ECS), admin console (Vercel)
 │   ├── AA-TripPlanner-Web/     B2C map-first trip planner: Next.js (Vercel) + 2 Lambdas
-│   └── AA-Booking/             booking back office: FastAPI api + booking.job worker (ECS), staff admin (Vercel)
+│   ├── AA-Booking/             booking back office: FastAPI api + booking.job worker (ECS), staff admin (Vercel)
+│   └── AA-Partner/             partner agencies: CRM api + web (ECS), tenant portal / Content studio (Vercel)
 ├── infra/
 │   └── AA-CIS-Infra/           Terraform (acc2 live stack, acc1/acc3 Bedrock roots), DB Migrate, schema dump
 ├── docs/                       ecosystem docs, ADRs, data standards, contracts, ops, sessions, audits
@@ -29,14 +31,15 @@ Local folder names match the GitHub repo names exactly. On WSL the path is `~/pr
 
 ## Repos and deploy
 
-All three apps run on **one AWS account (acc2, us-west-1)** and share one RDS instance, one schema per
+All four apps run on **one AWS account (acc2, us-west-1)** and share one RDS instance, one schema per
 owner. Dev only for now; a future prod also lives on acc2 by default (ADR 0001, S241 D-16/D-17).
 
 | Folder | Repo | Deploy |
 |---|---|---|
-| `apps/AA-CIS-App` | `AdventureAsia365-Ecosys/AA-CIS-App` | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image per git SHA) via `Deploy Dev`; Vercel (admin + tenant portal) |
+| `apps/AA-CIS-App` | `AdventureAsia365-Ecosys/AA-CIS-App` | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image per git SHA) via `Deploy Dev`; Vercel `aa-cis-frontend` (admin). Its `portal/` is a frozen, undeployed copy since AA-979 |
 | `apps/AA-TripPlanner-Web` | `AdventureAsia365-Ecosys/AA-TripPlanner-Web` | Vercel (frontend); Lambdas via `deploy-lambdas.yml` |
 | `apps/AA-Booking` | `AdventureAsia365-Ecosys/AA-Booking` | ECS Fargate (`aa-booking-dev-api`, same cluster) via `Deploy Dev`; Vercel (staff admin); live `/booking/health` since S235 |
+| `apps/AA-Partner` | `AdventureAsia365-Ecosys/AA-Partner` | ECS Fargate ARM64 (`aa-crm-dev-api` via `Deploy Dev`, `aa-crm-dev-web` via `Deploy Web Dev`, same cluster); Vercel `aa-cis-portal` (tenant portal, `portal.lumiguides.it.com`) via `Vercel Deploy (portal)` since AA-979 |
 | `infra/AA-CIS-Infra` | `AdventureAsia365-Ecosys/AA-CIS-Infra` | `Terraform Apply Prod` (acc2 stack, manual dispatch); acc1/acc3 by a human with MFA; `DB Migrate` for every app's migrations; `DB Schema Dump` regenerates the schema reference |
 
 Each repo's `CONTEXT.md` is the source of truth for its stack, boundaries and ownership; read it before
