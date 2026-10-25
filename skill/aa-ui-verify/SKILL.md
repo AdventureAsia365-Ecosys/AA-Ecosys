@@ -64,17 +64,31 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
 3. Mở trang bằng browser (Claude in Chrome hoặc Playwright), đúng vai. **Không còn đăng nhập staff bằng mật khẩu ở bất kỳ
    host CIS nào** (AA-816 S2, root ADR 0006a A12): API từ chối mọi phiên HS256 (`/auth/verify-admin` → 401 "Password
    sessions are switched off"), `/login` chỉ có "Sign in with company email". Agent không đọc được hộp thư
-   `@adventure.asia` nên phần có đăng nhập staff đi qua CI.
+   `@adventure.asia` nên phần có đăng nhập staff đi qua CI — trừ trang chỉ-admin, agent tự chụp local bằng user E2E CIS
+   admin (mục 3a).
 
    | Cần kiểm | Ở đâu, bằng gì |
    |---|---|
    | Trang công khai, layout chung, trang `/login` | PR preview: smoke công khai (tự chạy) hoặc browser không đăng nhập |
    | Trang đọc (viewer xem được) trước merge | Host Preview cố định (dispatch `alias_only_url` hoặc label `preview-signin`) + smoke có đăng nhập |
    | Trang reviewer sau merge | Smoke production có đăng nhập (tự chạy sau deploy) hoặc `e2e-cognito.yml` |
-   | Trang chỉ-admin, thao tác ghi admin | User E2E bị pre-token Lambda ghim đúng `cis-reviewer`, không nâng được: sau deploy nhờ **Nghiệp** đăng nhập production và kiểm (hoặc gửi ảnh); báo cáo ghi rõ phần này chưa do agent kiểm |
+   | Trang chỉ-admin (`/admin/content-quality`, `/admin/writing-memory`, …) | Agent tự chụp local bằng user E2E CIS admin (mục 3a, A10b) |
+   | Cut / Edit câu ở Content quality (mẫu AA-916 WM-07) | Cùng phiên mục 3a: chỉ 2 route `…/sentences/apply` mode `cut` / `manual` được ghi, trên tenant tổng hợp Dev |
+   | Thao tác ghi admin khác | Phiên E2E admin bị chặn 403 `e2e_read_only`: sau deploy nhờ **Nghiệp** kiểm (hoặc gửi ảnh); báo cáo ghi rõ phần này chưa do agent kiểm |
    | Tenant portal | Key tenant E2E (mục 3b) trên preview hoặc `https://portal.lumiguides.it.com` |
    | CRM web | Phần có đăng nhập: workflow `E2E Dev` (`e2e-dev.yml`, dispatch từ `main`) trên `https://partner-dev.lumiguides.it.com`; trang không đăng nhập mở bằng browser |
    | UI Booking | Agent chưa có tài khoản Booking dùng được: nhờ Nghiệp, ghi rõ "chưa do agent kiểm" |
+
+   **3a. Trang chỉ-admin — user E2E CIS admin (AA-816 A10b, root ADR 0006a A10b; chỉ Dev).** `e2e-cis-admin@e2e-mail.lumiguides.it.com`,
+   nhóm `cis-admin`, phiên chỉ đọc (mọi ghi khác GET/HEAD/OPTIONS → 403 `e2e_read_only`) trừ Cut / Edit câu ở Content
+   quality. Mã đăng nhập vào prefix `inbound-admin/`, **chỉ role MFA admin đọc được**, nên chỉ chạy local, không có CI:
+   1. `aws sts get-caller-identity --profile aa365-admin` (hết hạn MFA 8h → nhờ Nghiệp nhập mã).
+   2. `cd apps/AA-CIS-App && AWS_PROFILE=aa365-admin E2EADMIN=1 npx playwright test --project admin-evidence`
+      (spec `tests/e2e/admin-evidence/admin-pages.spec.ts`: đăng nhập 1 lần, retries 0, chụp 1440 + 390 × light/dark,
+      thử 1 lệnh ghi phải ra 403 `e2e_read_only`, rồi sign out). Thêm trang = thêm vào `PAGES` trong spec.
+   3. Ảnh ở `tests/e2e/results/admin-evidence/` (gitignore) → chép sang root `docs/audits/<ngày>-S<nnn>-<slug>/`.
+   Không chụp, không trace khi đang ở `staff-auth` sau khi đã gõ mã. Chưa có user (runbook A10b chưa chạy) thì quay về
+   cách cũ: nhờ Nghiệp.
 
    Không in hay ghi mã email / token / API key ra file, log hay PR. Rollback đăng nhập mật khẩu (chỉ khi sự cố): runbook
    root `docs/ops/runbooks/legacy-login-flag.md`, mục "Roll back or abort"; cần deploy, không phải bật một công tắc.
