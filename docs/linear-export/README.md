@@ -258,6 +258,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-797](cis-portal-admin-tenant-ui/AA-797.md) | [Admin tenants] Bugs — status toggle does nothing, plan_id never set, offboard not wired, no audit, /usage 500 | Done | 2026-10-14 | CIS Portal — Admin & Tenant UI |
 | [AA-798](cis-portal-admin-tenant-ui/AA-798.md) | [Billing] Replace the fabricated llm_cost_usd view column and the starter defaults with real llm_call_log cost | Done | 2026-10-14 | CIS Portal — Admin & Tenant UI |
 | [AA-802](cis-portal-admin-tenant-ui/AA-802.md) | [T2/T9] Silent correction — a held piece repaired by admin/AI updates the tenant's unpublished copy (version history, no flags shown) | Done | 2026-10-16 | CIS Portal — Admin & Tenant UI |
+| [AA-813](cis-portal-admin-tenant-ui/AA-813.md) | [Portal] Tenant user accounts — invite users, roles (owner/editor/viewer), API key rotation; replace the one-shared-key login | Done | 2026-10-24 | CIS Portal — Admin & Tenant UI |
 | [AA-815](cis-portal-admin-tenant-ui/AA-815.md) | [Portal] Facebook connect UI + tenant self-unpublish — wire existing /v1/integrations/facebook* and DELETE /v1/publish-log/{id} | Done | 2026-10-15 | CIS Portal — Admin & Tenant UI |
 | [AA-819](cis-portal-admin-tenant-ui/AA-819.md) | [AUP 2026-11] Tenant AI notice at review/publish, T9 guard against reviews/testimonials/first-person-customer copy, per-tenant daily publish limit | Done | 2026-10-16 | CIS Portal — Admin & Tenant UI |
 | [AA-821](cis-portal-admin-tenant-ui/AA-821.md) | [Research] Tenant CRM — customer/lead management for tenants (Ms. Thư's idea, S236); research + design before any build | Done | 2026-10-21 | CIS Portal — Admin & Tenant UI |
@@ -285,6 +286,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-847](data-platform-schema-ops-scale/AA-847.md) | [Places] L4 catalog read model fast enough for PLACES_SOURCE=cis + flip + content-validity report | Done | 2026-10-22 | Data Platform — Schema, Ops & Scale |
 | [AA-848](data-platform-schema-ops-scale/AA-848.md) | [Security] X2 catalogue-wide RLS CI guard (rules a-e; f after AA-826) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-849](data-platform-schema-ops-scale/AA-849.md) | [Data/CI] TripPlanner migration replay CI: replay tp migrations twice, assert tp-NNN keys + tripplanner grants | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
+| [AA-851](data-platform-schema-ops-scale/AA-851.md) | [Data] shared.countries (ISO-3166) + v_countries / v_destinations catalog contract views | Done | 2026-10-25 | Data Platform — Schema, Ops & Scale |
 | [AA-852](data-platform-schema-ops-scale/AA-852.md) | [Data] Per-app DB owner roles + db_migrator task def (bk_owner / tp_owner, tripplanner role in a migration, revoke legacy grants 179/180) | Done | 2026-10-19 | Data Platform — Schema, Ops & Scale |
 | [AA-859](data-platform-schema-ops-scale/AA-859.md) | [Security] Tenant pool wave 2: move tenant write and planning routes to aa_app_user, RLS on the tables they touch | Done | 2026-10-22 | Data Platform — Schema, Ops & Scale |
 | [AA-860](data-platform-schema-ops-scale/AA-860.md) | [Security] X1: split the CIS runtime role (cis_owner owns tables, cis_app serves requests without the RLS bypass) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
@@ -295,6 +297,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-870](data-platform-schema-ops-scale/AA-870.md) | [Observability] CIS error visibility: Sentry, API GW 5xx/latency alarms, uptime checks | Done | 2026-10-17 | Data Platform — Schema, Ops & Scale |
 | [AA-871](data-platform-schema-ops-scale/AA-871.md) | [Observability] JSON logs with request ids + Sentry for Booking and TripPlanner | Done | 2026-10-22 | Data Platform — Schema, Ops & Scale |
 | [AA-872](data-platform-schema-ops-scale/AA-872.md) | chore: alarm OK e-mails back on + log retention 365 d security / 30 d app | Done | 2026-10-17 | Data Platform — Schema, Ops & Scale |
+| [AA-874](data-platform-schema-ops-scale/AA-874.md) | [Security] Redis AUTH/TLS/at-rest encryption + tenant-flag read-failure alarm | Done | 2026-10-25 | Data Platform — Schema, Ops & Scale |
 | [AA-875](data-platform-schema-ops-scale/AA-875.md) | [Security] SSRF-safe outbound HTTP client (safe_http) for tenant-supplied URLs | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-876](data-platform-schema-ops-scale/AA-876.md) | [Security] API edge hardening: login rate limit, throttle/WAF, Booking docs, CORS, headers | Done | 2026-10-21 | Data Platform — Schema, Ops & Scale |
 | [AA-877](data-platform-schema-ops-scale/AA-877.md) | [Data] Tag Booking and TripPlanner PII columns (pii:<class>, DM-6.1) | Done | 2026-10-21 | Data Platform — Schema, Ops & Scale |
@@ -523,12 +526,17 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-938](partner-crm-aa-partner/AA-938.md) | [CRM W2] CRM-10 F3 scrubber | Done | 2026-10-24 | Partner CRM — AA-Partner |
 | [AA-939](partner-crm-aa-partner/AA-939.md) | [CRM W2] CRM-11 F4 roles, partner pool, MFA, permission matrix | Done | 2026-10-24 | Partner CRM — AA-Partner |
 | [AA-940](partner-crm-aa-partner/AA-940.md) | [CRM W2] CRM-12 F5 audit | Done | 2026-10-24 | Partner CRM — AA-Partner |
+| [AA-941](partner-crm-aa-partner/AA-941.md) | [CRM W2] CRM-13a AA admin L1 console | Done | 2026-10-24 | Partner CRM — AA-Partner |
 | [AA-942](partner-crm-aa-partner/AA-942.md) | [CRM W2] CRM-14 Data lifecycle rules | Done | 2026-10-24 | Partner CRM — AA-Partner |
+| [AA-943](partner-crm-aa-partner/AA-943.md) | [CRM W3] CRM-15 Modules 1 + 2 complete | Done | 2026-10-25 | Partner CRM — AA-Partner |
+| [AA-944](partner-crm-aa-partner/AA-944.md) | [CRM W3] CRM-16 Agency-line ledger + suppliers | Done | 2026-10-25 | Partner CRM — AA-Partner |
 | [AA-972](partner-crm-aa-partner/AA-972.md) | [CRM LB] CRM-B1 M2M + B2B quote | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-973](partner-crm-aa-partner/AA-973.md) | [CRM LB] CRM-B2 Departures, capacity, holds | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-974](partner-crm-aa-partner/AA-974.md) | [CRM LB] CRM-B2b Booking commercial rules (new, Fix C2, A3, A8) | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-975](partner-crm-aa-partner/AA-975.md) | [CRM LB] CRM-B3 Event feed + on-request desk + incident flag | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-976](partner-crm-aa-partner/AA-976.md) | [CRM LB] CRM-B4 CIS catalog over HTTP | Done | 2026-10-24 | Partner CRM — AA-Partner |
+| [AA-977](partner-crm-aa-partner/AA-977.md) | [CRM LB] CRM-B5 AA-authored content in CIS (new, Fix C1) | Done | 2026-10-25 | Partner CRM — AA-Partner |
+| [AA-978](partner-crm-aa-partner/AA-978.md) | [CRM LP] CRM-P1 Membership feed + tenant API | Done | 2026-10-24 | Partner CRM — AA-Partner |
 | [AA-589](tripplanner-aa-booking/AA-589.md) | [EPIC] TripPlanner — Ms.Thư tasks (data cleanup, upload raw, auto-edit, arrival/departure map, suggest next) | Done | 2026-09-16 | TripPlanner & AA-Booking |
 | [AA-590](tripplanner-aa-booking/AA-590.md) | [#5][MAP] Suggest next place theo itinerary — kết hợp taste-similarity + geography | Done | 2026-09-16 | TripPlanner & AA-Booking |
 | [AA-591](tripplanner-aa-booking/AA-591.md) | [#4][MAP] Arrival/departure trên bản đồ — vẽ gateway airport + flight arc fly-in/fly-out | Done | 2026-09-16 | TripPlanner & AA-Booking |
@@ -560,5 +568,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-886](tripplanner-aa-booking/AA-886.md) | [Legal] /privacy and /terms pages + legal readiness proposal packet for Ms. Thư | Done | 2026-10-22 | TripPlanner & AA-Booking |
 | [AA-904](tripplanner-aa-booking/AA-904.md) | [TripPlanner] Planned Next.js 14 → 15 upgrade (replaces Dependabot PR #104) | Done | 2026-10-19 | TripPlanner & AA-Booking |
 | [AA-906](tripplanner-aa-booking/AA-906.md) | [TripPlanner] Next.js 15 → 16 upgrade (match CIS/Booking; React Compiler lint refactor) | Done | 2026-10-23 | TripPlanner & AA-Booking |
+| [AA-908](tripplanner-aa-booking/AA-908.md) | [Identity] Traveller sign-in on Cognito EXTERNAL, TripPlanner guest linking and My Trips (customer half split from AA-680) | Done | 2026-10-25 | TripPlanner & AA-Booking |
 | [AA-909](tripplanner-aa-booking/AA-909.md) | [TripPlanner] Check the guest token on the read GETs (trip, suggestions, coverage, activities) | Done | 2026-10-22 | TripPlanner & AA-Booking |
+| [AA-910](tripplanner-aa-booking/AA-910.md) | [Booking] Staff admin at 1440 px (table overflow, FX column wrap, 1 px scrollbar) + audit rows for room type / rate and superseded V1 | Done | 2026-10-24 | TripPlanner & AA-Booking |
 | [AA-987](tripplanner-aa-booking/AA-987.md) | TripPlanner drops a retired tour at once: CIS lifecycle event triggers a TripPlanner cache purge | Done | 2026-10-24 | TripPlanner & AA-Booking |
