@@ -348,16 +348,22 @@ erDiagram
         uuid proposal_id PK
         uuid tenant_id FK
         uuid trip_id FK
-        uuid agreement_doc_id FK
+        uuid terms_doc_id FK
+        uuid based_on_proposal_id FK
         int version
+        text kind
         text status
         text price_visibility
+        int edit_seq
+        int selection_seq
     }
     proposal_day {
         uuid proposal_day_id PK
         uuid tenant_id FK
         uuid proposal_id FK
         int day_no
+        text tz
+        bytea notes_enc "pii:free_text"
     }
     option_block {
         uuid option_block_id PK
@@ -365,6 +371,7 @@ erDiagram
         uuid proposal_day_id FK
         uuid default_option_id FK
         text type
+        boolean client_may_swap
     }
     option {
         uuid option_id PK
@@ -372,34 +379,43 @@ erDiagram
         uuid option_block_id FK
         uuid agency_supplier_id FK
         text source
-        numeric(14_2) net_delta "conf:commercial"
+        numeric(14_2) net_amount "conf:commercial"
     }
     option_rule {
         uuid option_rule_id PK
         uuid tenant_id FK
         uuid option_id FK
+        uuid target_option_id FK
+        text kind
     }
     selection {
         uuid selection_id PK
         uuid tenant_id FK
         uuid proposal_id FK
+        uuid option_block_id FK
         uuid option_id FK
-        text by
+        text chosen_by
     }
     trip ||--o{ proposal : "trip_id"
-    agreement_doc |o--o{ proposal : "agreement_doc_id"
+    agreement_doc |o--o{ proposal : "terms_doc_id"
+    proposal |o--o{ proposal : "based_on_proposal_id"
     proposal ||--o{ proposal_day : "proposal_id"
     proposal_day ||--o{ option_block : "proposal_day_id"
     option_block ||--o{ option : "option_block_id"
     option |o--o{ option_block : "default_option_id"
     agency_supplier |o--o{ option : "agency_supplier_id"
     option ||--o{ option_rule : "option_id"
+    option ||--o{ option_rule : "target_option_id"
     proposal ||--o{ selection : "proposal_id"
+    option_block ||--o{ selection : "option_block_id"
     option ||--o{ selection : "option_id"
 ```
 
-`proposal` is unique on `(trip_id, version)`; the hold set reference is unique on `(proposal_id, version)`.
-`price_visibility` is `total_with_deltas` (default) or `total_only`.
+`proposal` is unique on `(trip_id, version)`; `kind` is `text` (AA-946) or `builder` (AA-949, crm-019).
+`price_visibility` is `total_with_deltas` (default) or `total_only`. As built in crm-019: the option keeps its absolute
+`net_amount` (the design's `net_delta` is computed against the block's default), the pick's `by` is `chosen_by`
+(`by` is an SQL keyword), and `selection` is unique per `(proposal_id, option_block_id)`. The hold set reference,
+unique on `(proposal_id, version)`, comes with CRM-21b (AA-950).
 
 ## E. Client access and agreements (M11, M12)
 
