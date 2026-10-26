@@ -60,10 +60,19 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 
 - Squash chỉ sau `git fetch`; gộp commit bằng `git reset --soft $(git merge-base HEAD origin/main)`, không bằng
   `origin/main` trần. Trước mọi merge: `gh pr diff <n> --name-only` — có file bị xoá/đổi ngoài phạm vi PR thì dừng.
-- CIS, Booking, Partner có branch protection strict: PR `BEHIND` → `gh api -X PUT repos/AdventureAsia365-Ecosys/<Repo>/pulls/<n>/update-branch`
-  (gh trên máy không có `gh pr update-branch`) → chờ CI → merge. CIS, Booking, TripPlanner: `gh pr merge <n> --auto --squash`.
-  AA-Partner, AA-CIS-Infra, repo gốc tắt auto-merge → `gh pr merge <n> --squash` sau khi check xanh.
-- Nhiều PR backend cùng repo: merge nối tiếp, PR sau chờ Deploy Dev của PR trước xong rồi mới update-branch.
+- **CIS, Booking, Partner: merge queue (AA-889).** Không `update-branch` nữa: một lệnh mỗi PR,
+  `tools/github/mergeq.sh <Repo> <n>` — chờ check của PR, xếp hàng (`gh pr merge --squash --auto` qua `as-app.sh`),
+  chờ tới merged, in SHA. Queue chạy lại required check trên commit tạm `gh-readonly-queue/main/*` (PR đi trước +
+  `main` mới nhất) rồi tự squash vào `main`. Guard §2 (bảng job, wave) kiểm **trước khi** xếp hàng vì queue merge tự
+  động. Rút PR khỏi hàng: `tools/github/mergeq.sh <Repo> <n> --dequeue` (GraphQL `dequeuePullRequest`, hoặc "Remove
+  from queue" trên UI). `gh pr merge --disable-auto` chỉ huỷ được khi check của PR còn chạy; PR đã xanh thì đã vào
+  thẳng hàng, lệnh đó không rút được. Check không báo → queue loại PR sau `check_response_timeout`; xem
+  `gh run list --event merge_group`.
+- TripPlanner: `gh pr merge <n> --auto --squash`. AA-CIS-Infra, repo gốc tắt auto-merge → `gh pr merge <n> --squash`
+  sau khi check xanh.
+- Nhiều PR backend cùng repo: xếp hàng cùng lúc được; queue có thể đẩy cả nhóm trong một push → một Deploy Dev cho cả
+  nhóm, verify live (§3) cho từng PR của nhóm theo `git_sha` cuối. Deploy đỏ → tìm PR gây lỗi trong nhóm trước khi xếp
+  tiếp.
 - Chờ CI: `gh pr checks <n> --watch` (CI ~3–5′), kiểm một lần, không poll dồn.
 
 ### Ngoại lệ: PR release (release-please, AA-891)
