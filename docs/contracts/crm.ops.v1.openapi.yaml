@@ -14,7 +14,9 @@ info:
     that agency's own audit log (actor `platform:<staff sub>`, kind `aa_ops`; reads as `ops_read`, writes with the
     ticket reference as object id `ticket:<REF>`). Auth (root ADR 0006b decision 6): WORKFORCE access token of client
     cis-admin, relayed by the CIS admin API; groups cis-admin or crm-platform-admin may read, only crm-platform-admin
-    may write (403 `missing_group` otherwise; GET /console tells the page which). AA cannot switch features on for an
+    may write (403 `missing_group` otherwise; GET /console tells the page which). The Dev-only E2E CIS admin (root ADR
+    0006a A10b, a cis-admin token told apart by its `email` claim) is read-only: 403 `e2e_read_only` on every write,
+    `can_write` false, and the studio-invitation relay only on the terms that route states. AA cannot switch features on for an
     agency (only allow them), cannot invite a first owner while the agency has an owner, a pending owner invitation
     or any traveller, and cannot run an export or deletion (it raises a request the owner confirms in the CRM).
     Version 1.1 (AA-941) is the first served version: it replaces in place the unserved 1.0 proposal (AA-928), whose
@@ -222,7 +224,7 @@ paths:
       - $ref: "#/components/parameters/TenantId"
     post:
       operationId: deliverStudioInvitation
-      summary: Deliver a Content studio invitation CIS created (write; any OPS caller, 1.3)
+      summary: Deliver a Content studio invitation CIS created (write; any OPS caller but the Dev E2E CIS admin, 1.3)
       description: >-
         `tenant_id` is the CIS tenant (it may have no CRM agency). CIS created the invited membership and decides its
         Content studio role; the CRM sends the AA system mail with a single-use link and owns claim and accept in the
@@ -231,6 +233,12 @@ paths:
         while it is pending or expired. Any OPS caller may write it (cis-admin included): CIS checks tenant.write first
         and the call grants nothing in the CRM. No agency audit (there may be no agency). The address is never
         returned, logged or echoed; it is stored sealed under a key derived from the token.
+        The Dev-only E2E CIS admin (root ADR 0006a A10b-1; a cis-admin token whose `email` claim is that identity's
+        address) is checked again here, because the CRM is reachable without the CIS relay: only in a synthetic-only
+        environment, for an address on the E2E mailbox domain, for a synthetic CRM agency with this `tenant_id`, and
+        for a `cis_invitation_id` that CIS (tenant.membership.v1 getTenantMembers, M2M) reports as an `invited`
+        membership of this tenant with the role `viewer` or `editor`. 403 `e2e_read_only` otherwise; 503
+        `cis_unavailable` when CIS cannot answer. Other callers are unchanged.
       requestBody:
         required: true
         content:
@@ -243,7 +251,9 @@ paths:
             application/json:
               schema: {$ref: "#/components/schemas/StudioInvitationAccepted"}
         "401": {$ref: "#/components/responses/Unauthorized"}
-        "403": {$ref: "#/components/responses/Forbidden"}
+        "403":
+          $ref: "#/components/responses/Forbidden"
+          description: "`wrong_audience`, `missing_group`, `e2e_read_only` (the Dev E2E CIS admin outside its terms)"
         "409":
           $ref: "#/components/responses/Conflict"
           description: "`invitation_claimed`, `invitation_accepted`, `invitation_tenant_mismatch`"
@@ -255,7 +265,7 @@ paths:
           description: "`invalid_request`, `invalid_email`, `invalid_locale` (field names only, never the address)"
         "503":
           $ref: "#/components/responses/Unavailable"
-          description: "`mail_not_configured`"
+          description: "`mail_not_configured`, `cis_unavailable` (the Dev E2E CIS admin only: CIS did not confirm)"
   /tenants/{tenant_id}/entitlements:
     parameters:
       - $ref: "#/components/parameters/TenantId"
@@ -611,7 +621,9 @@ components:
         application/json:
           schema: {$ref: "#/components/schemas/Problem"}
     Forbidden:
-      description: "`wrong_audience`, `missing_group` (a write without crm-platform-admin)"
+      description: >-
+        `wrong_audience`, `missing_group` (a write without crm-platform-admin), `e2e_read_only` (the Dev-only E2E CIS
+        admin, root ADR 0006a A10b: read-only on every write)
       content:
         application/json:
           schema: {$ref: "#/components/schemas/Problem"}
