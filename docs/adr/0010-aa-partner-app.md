@@ -8,6 +8,9 @@
 - **Scope:** AA-Ecosys: the new public repo **AA-Partner** (CRM API, CRM web and client host, the tenant portal after
   the move), AA-CIS-App (portal code moves out; membership, catalog and AA content contracts), AA-Booking (B2B API),
   AA-CIS-Infra (ECS service, CloudFront, KMS, Cognito, DB owner `crm`, DB Migrate), the root repo (contracts, ADRs).
+- **Amended by:** [ADR 0010a](0010a-content-studio-partner-sign-in.md) (S252, AA-979 P2b: the Content studio signs in
+  through the partner pool with a CIS token exchange; studio invitations are CIS-created and CRM-delivered; the agency
+  host is cut over by one DNS value).
 - **Amends / Supersedes:** none directly. It is the placement decision that
   [ADR 0008a](0008a-crm-separate-app-exceptions.md) points to.
 - **Implements:** ADR 0008 decision 2 (gate answer 3) and its 12-step playbook, with the exceptions in ADR 0008a;
@@ -102,7 +105,8 @@ A CIS event can never grant a CRM role; one person can hold both a Content studi
 P2a (code move with history into `AA-Partner/portal/`, Vercel and API-key sign-in kept) → P1 (membership feed,
 AA-978) → P2b (host to CloudFront → Fargate, partner-pool sign-in, re-enrolment by invitation, 301 for `/trip/*`),
 Vercel kept at least 7 calendar days after P2b with a rollback drill, then the CIS copy is deleted and the AA-885
-guard inverted (final design §4.4).
+guard inverted (final design §4.4). How P2b signs people in, re-enrols them and cuts the host over:
+[ADR 0010a](0010a-content-studio-partner-sign-in.md) (S252; status of the stage: prepared, cutover not run yet).
 
 ### 7. "CIS App first" risk
 

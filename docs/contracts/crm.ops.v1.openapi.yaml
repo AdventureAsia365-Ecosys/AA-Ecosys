@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.2"
+  version: "1.3"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -20,13 +20,16 @@ info:
     Version 1.1 (AA-941) is the first served version: it replaces in place the unserved 1.0 proposal (AA-928), whose
     shapes no consumer read except /jobs/summary and /llm/usage, which are unchanged. Version 1.2 (AA-978 follow-up, additive):
     TenantSummary gains `lock_source` (who locked the agency: AA's L1 console or the CIS membership feed) and the CIS
-    membership feed's state and lag (`membership_feed_state`, `membership_feed_lag_s`), optional for a 1.1 reader. Errors are
+    membership feed's state and lag (`membership_feed_state`, `membership_feed_lag_s`), optional for a 1.1 reader. Version 1.3
+    (AA-979 P2b, root ADR 0010a, additive): POST /tenants/{tenant_id}/studio-invitations delivers a Content studio
+    invitation CIS created (the CIS staff relay of Tenant 360 Members; the tenant may have no CRM agency); its address is
+    the second write-only personal-data field, and cis-admin may call it (it grants nothing in the CRM). Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
   x-aa-producer: AA-Partner
   x-aa-consumers: [AA-CIS-App]
-  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978]
+  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979]
 servers:
   - url: /crm/ops/v1
 security:
@@ -209,6 +212,45 @@ paths:
         "503":
           $ref: "#/components/responses/Unavailable"
           description: "`mail_not_configured`, `key_provider_not_configured`"
+  /tenants/{tenant_id}/studio-invitations:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    post:
+      operationId: deliverStudioInvitation
+      summary: Deliver a Content studio invitation CIS created (write; any OPS caller, 1.3)
+      description: >-
+        `tenant_id` is the CIS tenant (it may have no CRM agency). CIS created the invited membership and decides its
+        Content studio role; the CRM sends the AA system mail with a single-use link and owns claim and accept in the
+        partner pool (crm.studio_invitation), then binds the accepted identity at CIS (tenant.membership.v1 1.1
+        activateInvitation). Sending again for the same `cis_invitation_id` re-issues it (new link, the old one dies)
+        while it is pending or expired. Any OPS caller may write it (cis-admin included): CIS checks tenant.write first
+        and the call grants nothing in the CRM. No agency audit (there may be no agency). The address is never
+        returned, logged or echoed; it is stored sealed under a key derived from the token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/StudioInvitationRequest"}
+      responses:
+        "202":
+          description: Accepted; the mail was sent
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/StudioInvitationAccepted"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "409":
+          $ref: "#/components/responses/Conflict"
+          description: "`invitation_claimed`, `invitation_accepted`, `invitation_tenant_mismatch`"
+        "410":
+          $ref: "#/components/responses/Conflict"
+          description: "`invitation_revoked`"
+        "422":
+          $ref: "#/components/responses/Invalid"
+          description: "`invalid_request`, `invalid_email`, `invalid_locale` (field names only, never the address)"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+          description: "`mail_not_configured`"
   /tenants/{tenant_id}/entitlements:
     parameters:
       - $ref: "#/components/parameters/TenantId"
@@ -773,6 +815,40 @@ components:
           description: The CRM member invitation (crm.member_invitation), not a CIS membership invitation.
         status: {type: string, enum: [pending]}
         expires_at: {type: string, format: date-time}
+    StudioInvitationRequest:
+      type: object
+      additionalProperties: false
+      required: [email, cis_invitation_id]
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 3
+          maxLength: 254
+          writeOnly: true
+          x-pii: contact
+          description: >-
+            Personal data (DM-6.1 class contact), write-only: the invited person's address, relayed once by CIS (which
+            never stores it), sealed by the CRM under a key derived from the invitation token, never stored in clear,
+            logged, echoed or returned (root checker policy `pii_write_only_fields`).
+        cis_invitation_id:
+          type: string
+          format: uuid
+          description: The invitation_id of the CIS membership (tenant.membership.v1); one CRM row per id.
+        locale: {type: string, enum: [en, vi], default: en}
+    StudioInvitationAccepted:
+      type: object
+      additionalProperties: false
+      required: [invitation_id, tenant_id, status, expires_at, reissued]
+      properties:
+        invitation_id:
+          type: string
+          format: uuid
+          description: The CIS invitation id (the CRM's own row id is not exposed).
+        tenant_id: {type: string, format: uuid}
+        status: {type: string, enum: [pending]}
+        expires_at: {type: string, format: date-time}
+        reissued: {type: boolean}
     Feature:
       type: string
       enum: [ai_assist, whatsapp_sms, stripe_connect, campaigns, custom_domain, insights_export]

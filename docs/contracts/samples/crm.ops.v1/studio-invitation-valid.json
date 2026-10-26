@@ -1,0 +1,11 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "StudioInvitationRequest",
+  "expect": "valid",
+  "why": "AA-979 P2b: the CIS staff relay sends the invited address once (write-only) with the CIS invitation id",
+  "payload": {
+    "email": "studio.editor@synthetic.example",
+    "cis_invitation_id": "00000000-0000-4000-8000-0000000000c1",
+    "locale": "vi"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "StudioInvitationAccepted",
+  "expect": "valid",
+  "why": "AA-979 P2b: the answer carries ids, the state and the expiry only, never the address",
+  "payload": {
+    "invitation_id": "00000000-0000-4000-8000-0000000000c1",
+    "tenant_id": "00000000-0000-4000-8000-0000000000a1",
+    "status": "pending",
+    "expires_at": "2026-11-02T09:00:00Z",
+    "reissued": false
+  }
+}
