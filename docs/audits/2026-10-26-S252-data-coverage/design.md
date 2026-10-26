@@ -36,7 +36,7 @@ Ground truth used (every table and column below was checked against them):
 | D3 | CIS computes everything it owns itself, as `cis_app`, on the **base tables** (coverage.py SQL, reused) | No grant, same numbers as the S252 audit |
 | D4 | TripPlanner rows that depend on view logic (day list regex, located places, served components, stops/legs, retired, purge outbox) read the **`catalog.*` views through the existing tenant pool** (`aa_app_user`, `services/catalog_http/reader.catalog_connection`), which already has SELECT on them | "Measure what the consumer reads"; `cis_app` keeps no USAGE on `catalog` (CIS 244 guard) |
 | D5 | TripPlanner-owned and Booking-owned numbers come from **new owner contract views `v_ops_*`** granted to `cis_app` (tp-020, bk-025), aggregates only | Same pattern as tp-015 / bk-017 (AA-858); the CIS 244 guard and the isolation probe already allow-list `v_ops_*` contract views |
-| D6 | CRM numbers come over **HTTP `crm.ops.v1` minor 1.3** (`GET /crm/ops/v1/data-coverage`), **not a view** | ADR 0008a decision 1: no AA role has USAGE on `crm`, both directions; the isolation probe asserts 42501. A view is not allowed |
+| D6 | CRM numbers come over **HTTP `crm.ops.v1` minor 1.4** (`GET /crm/ops/v1/data-coverage`), **not a view** | ADR 0008a decision 1: no AA role has USAGE on `crm`, both directions; the isolation probe asserts 42501. A view is not allowed |
 | D7 | Each source query has its own transaction, `statement_timeout`, `asyncio.wait_for` timeout and timing; a failed or slow query turns only its rows into `n/a` | Requested; same rule as `ops_overview.cache.cached_section` |
 | D8 | Two cache tiers in Redis: **fast 60 s** (DB counts) and **slow 600 s** (segment classification in Python, S3 listing, CRM HTTP); single-flight lock; last good value kept 24 h | Fast tier ≤ 60 s as asked; the slow sources cost more and change rarely |
 | D9 | Row status = green / amber / red / grey from **missing vs expected gap** and a per-row kind (`must` / `backlog` / `info`) | Makes "what is missing" readable at a glance without hiding by-design gaps |
@@ -588,7 +588,9 @@ Alternative if the keys view is refused (it is row-level, though not personal or
   `docs/contracts/ops.overview.v1.md` covering both families in the same PR); `schema-ownership.md` consumer-grant
   column for `tripplanner` and `booking`.
 
-### 3.4 CRM — `crm.ops.v1` minor 1.3, `GET /crm/ops/v1/data-coverage` (AA-Partner)
+### 3.4 CRM — `crm.ops.v1` minor 1.4, `GET /crm/ops/v1/data-coverage` (AA-Partner)
+
+> Renumbered 1.3 → 1.4 in the S252 fix round 2: minor 1.3 went to AA-979 P2b (root #267, `POST /tenants/{tenant_id}/studio-invitations`, AA-Partner #74) while this build was open.
 
 A view is not acceptable: ADR 0008a decision 1 and `schema-ownership.md` (`crm` row: "Nobody, in either direction ...
 The isolation probe asserts 42501 both ways"). The CIS admin already talks to the CRM over `crm.ops.v1` with the
@@ -604,12 +606,12 @@ Response (additive, every object `additionalProperties: false`, no `x-pii`, no t
                    "failures": 0, "last_error_class": null}}
 ```
 Auth: route class OPS read (`cis-admin` or `crm-platform-admin`). CIS: add `("GET", r"/data-coverage")` to
-`crm_console.ALLOWED`, read timeout 2 s. Contract CI: bump `info.version` to 1.3 in `crm.ops.v1.openapi.yaml` (the
+`crm_console.ALLOWED`, read timeout 2 s. Contract CI: bump `info.version` to 1.4 in `crm.ops.v1.openapi.yaml` (the
 1.1 → 1.2 precedent edits the same file), samples under `samples/crm.ops.v1/`, checker policy unchanged (it already
 forbids `trip_count`, `revenue`, `pii:`). Because the token is the caller's, the CRM group is computed only for
 `admin` callers (admin-only page in v1, D10).
 Critic additions: (1) the contract says every crm.ops.v1 read lands in "that agency's own audit log" as `ops_read`;
-this route is platform-wide aggregates, so the 1.3 text must say where it is audited (one platform-level `ops_read`
+this route is platform-wide aggregates, so the 1.4 text must say where it is audited (one platform-level `ops_read`
 event, or none) — not one event per agency every 10 min. (2) The CRM source is cached under its own Redis key and
 refreshed only on an admin request with a Cognito token (a legacy password session gets `na:
 cognito_session_required`, crm_console rule); it is never part of the shared slow-tier key a token-less build fills.
@@ -752,7 +754,7 @@ changes are warnings anyway.
 
 1. **AA-TripPlanner-Web** — tp-020 views + test (risky: grants → independent review subagent before merge).
 2. **AA-Booking** — bk-025 views + test (same review).
-3. **AA-Partner** — `crm.ops.v1` 1.3 `/data-coverage` (+ root contract file/samples PR, same day).
+3. **AA-Partner** — `crm.ops.v1` 1.4 `/data-coverage` (+ root contract file/samples PR, same day).
 3b. (Critic fix) **AA-CIS-App** — rule-`g` allow-list entries in the canonical `tests/integration/
    rls_catalogue_rules.py` + `api/services/data_coverage/defs.py` (shared definitions, open question 10); merged before 4
    so the Infra byte-identical copies match.

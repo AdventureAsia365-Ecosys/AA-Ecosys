@@ -37,4 +37,4 @@ Rules for both families:
 | `booking.v_ops_trip_plan_keys` | `source_system text, source_id text, sellable boolean` | the catalog key of each trip plan (no plan id, no `conf:commercial` column), so CIS counts plans whose tour left the live catalogue | bk-025 |
 
 The CRM part of the data coverage page is **not** a view: no AA role has `USAGE` on schema `crm` (ADR 0008a decision
-1). It is `crm.ops.v1` 1.3 `GET /crm/ops/v1/data-coverage` (`crm.ops.v1.openapi.yaml`).
+1). It is `crm.ops.v1` 1.4 `GET /crm/ops/v1/data-coverage` (`crm.ops.v1.openapi.yaml`).

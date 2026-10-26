@@ -541,7 +541,7 @@ paths:
   /data-coverage:
     get:
       operationId: getDataCoverage
-      summary: Platform-wide counts for the CIS admin data coverage page (1.3; counts only, no agency audit event)
+      summary: Platform-wide counts for the CIS admin data coverage page (1.4; counts only, no agency audit event)
       responses:
         "200":
           description: Counts as of now

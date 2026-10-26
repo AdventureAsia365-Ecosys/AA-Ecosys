@@ -12,7 +12,7 @@ file brand) tới raw, S1, Master, atom, segment, …, T-series, tenant, TripPla
 |---|---|---|---|
 | tp-020 | 2 view, `v_ops_pin_components (component_id, mapped_id, trips)` | 3 view: `v_ops_pin_components (component_id, trips)` + `v_ops_component_id_map (old_id, new_id)` | Từ AA-990 TripPlanner đi chuỗi map → redirect → map tới 5 bước; một bước `mapped_id` không tái tạo được chuỗi đó. Grant cho `cis_app` thành 5 (không phải 4) |
 | Lý do drop "insert failure" | một dòng / lý do | gộp thành `in.drop.insert_failed` | Lý do insert failure là text exception (có thể chứa tên tour): chỉ đếm |
-| `crm.ops.v1` 1.3 | audit: một event platform hoặc không | không ghi event vào audit từng đại lý; log 1 dòng mỗi lần gọi | Không có bảng audit cấp platform; giống `/jobs/summary` |
+| `crm.ops.v1` 1.4 | audit: một event platform hoặc không | không ghi event vào audit từng đại lý; log 1 dòng mỗi lần gọi | Không có bảng audit cấp platform; giống `/jobs/summary` |
 | `rank.markets` | "Of 6" | mẫu số = số market có search demand | critic mục 4 |
 | T0 | mọi tenant active | trừ tenant `is_canary` (dòng `ten.canary` riêng) | critic mục 5 |
 | `master.active` | expected = review + never written + failed | expected = review queue | critic mục 1: bản cũ không bao giờ đỏ |
