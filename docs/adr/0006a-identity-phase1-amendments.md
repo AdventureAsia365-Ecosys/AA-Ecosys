@@ -435,6 +435,12 @@ mailbox or Google account". That is too strong.
   for synthetic tenants. So a leaked A10b code could already call that CRM route directly before this amendment; CIS
   is the gate this amendment adds. A matching CRM check (refuse the A10b address unless the agency or tenant is
   synthetic) is an open follow-up, AA-Partner.
+  - *Closing line (26/10/2026, S252, AA-979):* AA-Partner #83 adds that CRM check (for the A10b address only:
+    synthetic-only environment, E2E mailbox address, a synthetic CRM agency with that id, and an `invited` viewer or
+    editor membership CIS confirms through `tenant.membership.v1` getTenantMembers). Because the CRM marks every Dev
+    agency synthetic, the agency term alone is weak on Dev, so `tenant.membership.v1` 1.2 adds
+    `TenantMembers.is_synthetic` (from `shared.tenants.is_canary`, NULL = false) and the CRM also requires it to be
+    true, in the same call; a CIS answer without the field is refused (fail closed). Real admins are unchanged.
 - **Exposure added.** Whoever reads an A10b code can now also send AA system invitation mails to the E2E mailbox
   and claim a partner-pool account as a viewer or editor of a synthetic Dev tenant. No real tenant and no address
   outside the mailbox domain can be reached.
