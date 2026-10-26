@@ -1,0 +1,32 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "DataCoverage",
+  "expect": "invalid",
+  "why": "the data coverage counts never carry an agency's business figures (ADR 0008a)",
+  "rule": "revenue",
+  "payload": {
+    "as_of": "2026-10-26T04:00:00Z",
+    "agencies": {
+      "active": 3,
+      "locked": 0,
+      "offboarding": 0,
+      "offboarded": 0,
+      "synthetic": 2,
+      "revenue": 1200
+    },
+    "members": {
+      "active": 5,
+      "invited": 1,
+      "disabled": 0
+    },
+    "catalog_cache": {
+      "served": 892,
+      "paused": 0,
+      "retired": 0,
+      "last_full_pass_at": "2026-10-26T03:05:00Z",
+      "last_ok_at": "2026-10-26T03:05:00Z",
+      "failures": 0,
+      "last_error_class": null
+    }
+  }
+}
