@@ -19,22 +19,22 @@ T="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/as-app.sh"
 MAXWAIT=${MAXWAIT:-5400}   # 90 min: PR CI + queue CI (CIS ~10 min each) + queue position
 
 st() { gh pr view "$N" -R "$ORG/$R" --json state,mergeCommit,mergeStateStatus,autoMergeRequest \
-         --jq '[.state, (.mergeCommit.oid // ""), .mergeStateStatus, (if .autoMergeRequest then "auto" else "" end)] | @tsv'; }
+         --jq '[.state, (.mergeCommit.oid // ""), .mergeStateStatus, (if .autoMergeRequest then "auto" else "" end)] | join("|")'; }
 inq() { gh api graphql -f query='query($o:String!,$r:String!,$n:Int!){repository(owner:$o,name:$r){pullRequest(number:$n){isInMergeQueue mergeQueueEntry{state position}}}}' \
-          -f o="$ORG" -f r="$R" -F n="$N" --jq '.data.repository.pullRequest | [(.isInMergeQueue|tostring), (.mergeQueueEntry.state // ""), ((.mergeQueueEntry.position // "")|tostring)] | @tsv'; }
+          -f o="$ORG" -f r="$R" -F n="$N" --jq '.data.repository.pullRequest | [(.isInMergeQueue|tostring), (.mergeQueueEntry.state // ""), ((.mergeQueueEntry.position // "")|tostring)] | join("|")'; }
 
-IFS=$'\t' read -r S SHA _ AUTO < <(st)
+IFS='|' read -r S SHA _ AUTO < <(st)
 [ "$S" = MERGED ] && { echo "$R #$N already merged ${SHA:0:8}"; exit 0; }
 
 if [ "$MODE" = --dequeue ]; then
   [ -n "$AUTO" ] && { "$T" --repos "$R" -- gh pr merge "$N" -R "$ORG/$R" --disable-auto && echo "$R #$N auto-merge cancelled"; }
-  IFS=$'\t' read -r Q QS _ < <(inq)
+  IFS='|' read -r Q QS _ < <(inq)
   if [ "$Q" = true ]; then
     ID=$(gh pr view "$N" -R "$ORG/$R" --json id --jq .id)
     "$T" --repos "$R" -- gh api graphql -f query='mutation($id:ID!){dequeuePullRequest(input:{id:$id}){clientMutationId}}' \
       -f id="$ID" >/dev/null || { echo "$R #$N dequeue failed (state $QS): use 'Remove from queue' in the UI"; exit 4; }
   fi
-  IFS=$'\t' read -r S SHA _ AUTO < <(st); IFS=$'\t' read -r Q QS _ < <(inq)
+  IFS='|' read -r S SHA _ AUTO < <(st); IFS='|' read -r Q QS _ < <(inq)
   [ "$S" = MERGED ] && { echo "$R #$N merged before it could be dequeued ${SHA:0:8}"; exit 4; }
   [ "$Q" = true ] || [ -n "$AUTO" ] && { echo "$R #$N still queued ($QS) / auto=$AUTO"; exit 4; }
   echo "$R #$N out of the queue, no auto-merge"; exit 0
@@ -60,9 +60,9 @@ echo "$R #$N queued: $(tail -1 <<<"$out")"
 seen=0; t0=$(date +%s); Q=""; QS=""; QP=""
 while [ $(( $(date +%s) - t0 )) -lt "$MAXWAIT" ]; do
   sleep 60
-  IFS=$'\t' read -r S SHA M AUTO < <(st)
+  IFS='|' read -r S SHA M AUTO < <(st)
   [ "$S" = MERGED ] && { echo "$R #$N MERGED ${SHA:0:8} ($SHA)"; exit 0; }
-  IFS=$'\t' read -r Q QS QP < <(inq)
+  IFS='|' read -r Q QS QP < <(inq)
   if [ "$Q" = true ]; then
     seen=1; [ $(( ($(date +%s) - t0) % 300 )) -lt 60 ] && echo "$R #$N in queue: $QS position $QP"
   elif [ "$seen" = 1 ] || { [ -z "$AUTO" ] && [ $(( $(date +%s) - t0 )) -gt 300 ]; }; then
