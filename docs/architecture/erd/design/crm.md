@@ -327,6 +327,8 @@ erDiagram
         uuid metric_event_id PK
         uuid tenant_id FK
         uuid trip_id FK
+        uuid proposal_id FK
+        uuid bell_member_id FK "AA-950 bell"
         text name
     }
     metric_daily {
@@ -356,6 +358,8 @@ erDiagram
         text price_visibility
         int edit_seq
         int selection_seq
+        text hold_set_ref UK "AA-950"
+        int recheck_count_day
     }
     proposal_day {
         uuid proposal_day_id PK
