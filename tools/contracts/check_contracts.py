@@ -117,9 +117,11 @@ POLICY: dict[str, Policy] = {
         forbidden_patterns=(r"^trips?(_|$)", r"(^|_)trips?_count$", r"(^|_)revenue(_|$)", r"^pipeline",
                             r"(^|_)margin(_|$)", r"(^|_)commission(_|$)", r"(^|_)gmv(_|$)", r"(^|_)bookings?_value"),
         # AA-941: the first-owner invite sends the owner's address once (vault-encrypted by the CRM, never returned).
-        pii_write_only_fields=frozenset({("OwnerInviteRequest", "owner_email", "contact")}),
+        # AA-979: the CIS relay of a Content studio invitation sends the invited address once (sealed by the CRM).
+        pii_write_only_fields=frozenset({("OwnerInviteRequest", "owner_email", "contact"),
+                                         ("StudioInvitationRequest", "email", "contact")}),
         why="L1 console: no trip, pipeline, revenue, margin or commission figures and no personal data "
-            "(one write-only field: the first-owner invite address)",
+            "(two write-only fields: the first-owner invite and the studio invitation addresses)",
     ),
     # Fix B19: the agency price is b2b_price; the supplier net never leaves Booking. No PII crosses the API.
     "booking.b2b.v1": Policy(
