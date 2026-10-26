@@ -18,6 +18,8 @@ file brand) tới raw, S1, Master, atom, segment, …, T-series, tenant, TripPla
 | `master.active` | expected = review + never written + failed | expected = review queue | critic mục 1: bản cũ không bao giờ đỏ |
 | `tp.pins_served` | must | info; `tp.pins_dangling` là dòng must | critic mục 2 |
 | Kiểu "phải bằng" | — | polarity `equal` (missing = abs(mẫu − số)) | `tp.tours`, `crm.cache_served` |
+| Pin của TripPlanner (review vòng 2) | `v_ops_pin_components` lấy `payload->>'component_id'` | chỉ id dạng UUID (viết thường); id khác đếm vào `pin_events_invalid_id`, không liệt kê | Lambda ghi `component_id` của request không kiểm; tránh text của khách lọt ra `cis_app`, dòng mới `tp.pins_invalid_id` |
+| Lỗi tạm thời (review vòng 2) | `unavailable` cho mọi lỗi catalog / CRM | `unavailable` chỉ khi chắc chắn (`contract_view_missing`, `cognito_session_required`, không có tenant pool); gate bận, rớt kết nối, CRM khác 200 là `error` (cache 60 s, không thành last good); 4 nguồn catalog chạy lần lượt; hết hạn tier chỉ huỷ nguồn còn chạy | Tránh n/a bị cache 10 phút / 24 h vì lỗi thoáng qua (D7) |
 | Module định nghĩa chung (Q10) | CIS `defs.py` + bản copy Infra, probe AA-991 import | chỉ có `defs.py` ở CIS | Bản copy Infra + sửa probe là việc riêng, chờ chốt Q10 |
 
 Runbook merge / DB Migrate / deploy / verify: `.tmp-session/s252/datacov/RUNBOOK.md` (agent điều phối).
