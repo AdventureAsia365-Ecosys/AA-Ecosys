@@ -60,10 +60,17 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 
 - Squash chỉ sau `git fetch`; gộp commit bằng `git reset --soft $(git merge-base HEAD origin/main)`, không bằng
   `origin/main` trần. Trước mọi merge: `gh pr diff <n> --name-only` — có file bị xoá/đổi ngoài phạm vi PR thì dừng.
-- CIS, Booking, Partner có branch protection strict: PR `BEHIND` → `gh api -X PUT repos/AdventureAsia365-Ecosys/<Repo>/pulls/<n>/update-branch`
-  (gh trên máy không có `gh pr update-branch`) → chờ CI → merge. CIS, Booking, TripPlanner: `gh pr merge <n> --auto --squash`.
-  AA-Partner, AA-CIS-Infra, repo gốc tắt auto-merge → `gh pr merge <n> --squash` sau khi check xanh.
-- Nhiều PR backend cùng repo: merge nối tiếp, PR sau chờ Deploy Dev của PR trước xong rồi mới update-branch.
+- **CIS, Booking, Partner: merge queue (AA-889).** Không `update-branch` nữa: PR xanh → `gh pr merge <n> --squash --auto`
+  (qua `as-app.sh`) đưa PR vào hàng; queue chạy lại required check trên commit tạm `gh-readonly-queue/main/*` (PR đi
+  trước + `main` mới nhất) rồi tự squash vào `main`. Một lệnh cho mỗi PR, chờ tới merged + in SHA:
+  `.tmp-session/s252/merge-queue/mergeq.sh <Repo> <n>` (chuyển vào `tools/github/` khi ổn định). Guard §2 (bảng job,
+  wave) kiểm **trước khi** xếp hàng: queue merge tự động; cần rút → `gh pr merge <n> --disable-auto`. Check bị kẹt
+  (không báo) → queue loại PR sau `check_response_timeout`; xem `gh run list --event merge_group`.
+- TripPlanner: `gh pr merge <n> --auto --squash`. AA-CIS-Infra, repo gốc tắt auto-merge → `gh pr merge <n> --squash`
+  sau khi check xanh.
+- Nhiều PR backend cùng repo: xếp hàng cùng lúc được; queue có thể đẩy cả nhóm trong một push → một Deploy Dev cho cả
+  nhóm, verify live (§3) cho từng PR của nhóm theo `git_sha` cuối. Deploy đỏ → tìm PR gây lỗi trong nhóm trước khi xếp
+  tiếp.
 - Chờ CI: `gh pr checks <n> --watch` (CI ~3–5′), kiểm một lần, không poll dồn.
 
 ### Ngoại lệ: PR release (release-please, AA-891)
