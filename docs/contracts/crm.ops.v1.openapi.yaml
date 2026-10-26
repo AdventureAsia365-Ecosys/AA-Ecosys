@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.3"
+  version: "1.4"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -23,13 +23,18 @@ info:
     membership feed's state and lag (`membership_feed_state`, `membership_feed_lag_s`), optional for a 1.1 reader. Version 1.3
     (AA-979 P2b, root ADR 0010a, additive): POST /tenants/{tenant_id}/studio-invitations delivers a Content studio
     invitation CIS created (the CIS staff relay of Tenant 360 Members; the tenant may have no CRM agency); its address is
-    the second write-only personal-data field, and cis-admin may call it (it grants nothing in the CRM). Errors are
+    the second write-only personal-data field, and cis-admin may call it (it grants nothing in the CRM). Version 1.4
+    (AA-992, additive): GET /data-coverage, platform-wide counts for the CIS admin page
+    /admin/data-coverage (agencies and members per status, the AA catalog cache); counts only, no agency id and no
+    business figure. It is the one read that lands in NO agency's audit log: it reads no agency's data, only statuses,
+    and the CIS page refreshes it every 10 minutes, so one `ops_read` event per agency per refresh would bury each
+    owner's access log; the CRM logs the call once instead (like /jobs/summary, which writes no event either). Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
   x-aa-producer: AA-Partner
   x-aa-consumers: [AA-CIS-App]
-  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979]
+  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979, AA-992]
 servers:
   - url: /crm/ops/v1
 security:
@@ -531,6 +536,18 @@ paths:
           content:
             application/json:
               schema: {$ref: "#/components/schemas/JobSummary"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+  /data-coverage:
+    get:
+      operationId: getDataCoverage
+      summary: Platform-wide counts for the CIS admin data coverage page (1.3; counts only, no agency audit event)
+      responses:
+        "200":
+          description: Counts as of now
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/DataCoverage"}
         "401": {$ref: "#/components/responses/Unauthorized"}
         "403": {$ref: "#/components/responses/Forbidden"}
   /llm/usage:
@@ -1066,6 +1083,48 @@ components:
         kinds:
           type: array
           items: {$ref: "#/components/schemas/JobKindRow"}
+    AgencyCounts:
+      type: object
+      additionalProperties: false
+      description: Agencies per lifecycle status; `synthetic` counts synthetic agencies of any status (also counted there)
+      required: [active, locked, offboarding, offboarded, synthetic]
+      properties:
+        active: {type: integer, minimum: 0}
+        locked: {type: integer, minimum: 0}
+        offboarding: {type: integer, minimum: 0}
+        offboarded: {type: integer, minimum: 0}
+        synthetic: {type: integer, minimum: 0}
+    MemberCounts:
+      type: object
+      additionalProperties: false
+      description: Agency members (all agencies) per status
+      required: [active, invited, disabled]
+      properties:
+        active: {type: integer, minimum: 0}
+        invited: {type: integer, minimum: 0}
+        disabled: {type: integer, minimum: 0}
+    CatalogCacheCounts:
+      type: object
+      additionalProperties: false
+      description: The CRM's cache of published AA tours (crm_catalog_sync) per served state, and the sync's state
+      required: [served, paused, retired, last_full_pass_at, last_ok_at, failures, last_error_class]
+      properties:
+        served: {type: integer, minimum: 0}
+        paused: {type: integer, minimum: 0}
+        retired: {type: integer, minimum: 0}
+        last_full_pass_at: {type: [string, "null"], format: date-time}
+        last_ok_at: {type: [string, "null"], format: date-time}
+        failures: {type: integer, minimum: 0}
+        last_error_class: {type: [string, "null"], pattern: "^[a-z][a-z0-9_]{0,59}$"}
+    DataCoverage:
+      type: object
+      additionalProperties: false
+      required: [as_of, agencies, members, catalog_cache]
+      properties:
+        as_of: {type: string, format: date-time}
+        agencies: {$ref: "#/components/schemas/AgencyCounts"}
+        members: {$ref: "#/components/schemas/MemberCounts"}
+        catalog_cache: {$ref: "#/components/schemas/CatalogCacheCounts"}
     LlmUsageRow:
       type: object
       additionalProperties: false
