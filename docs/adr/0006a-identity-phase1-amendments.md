@@ -419,7 +419,10 @@ mailbox or Google account". That is too strong.
     ASCII only, no sub-domain, the A10a look-alike rule). The two dedicated recipients are
     `e2e-test-studio-viewer@` and `e2e-test-studio-editor@` (AA-CIS-Infra `tools/identity/crm_e2e_users.json`
     `studio_invitees`, receipt rule `e2e-cognito`, prefix `inbound/`).
-  - **Viewer or editor only.** A new invitation from A10b may grant `viewer` or `editor`, never `owner`.
+  - **Viewer or editor only.** A new invitation from A10b may grant `viewer` or `editor`, never `owner`. A
+    send-again re-seals the existing invitation to the address in the request, so A10b may send again only an
+    `invited` membership whose stored role is `viewer` or `editor`: an `owner` invitation a real admin created on a
+    synthetic tenant cannot be redirected to an E2E mailbox (403 `e2e_read_only`, before the relay).
   - **Dev only.** Unchanged from A10b: the token exists only where the WORKFORCE flag is on (Terraform: dev), and
     CIS refuses the identity unless `ENVIRONMENT` is exactly `dev` (403 `e2e_not_allowed_here`).
 - **Audit, one row per call.** Every A10b write that passes the bearer cap gets the AA-884 `staff.request` row in
