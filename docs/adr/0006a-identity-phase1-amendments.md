@@ -361,7 +361,8 @@ mailbox or Google account". That is too strong.
   `/admin/content-quality/tour-versions/{version_id}/sentences/apply` (Cut and manual Edit with a reason chip). Those
   routes accept only `mode` `cut` / `manual` from it; `…/sentences/suggest` (the paid model call), the exemplar
   toggle, labels, place cards and everything else stay refused. `staff_authz` refuses the same writes again by route
-  template (defence in depth). `/auth/verify-admin` returns `admin`, so the BFF opens the admin pages.
+  template (defence in depth). Since A10b-1 (AA-979) the allow-list also holds the two Content studio invitation
+  routes, synthetic tenants only. `/auth/verify-admin` returns `admin`, so the BFF opens the admin pages.
 - **Mailbox isolation (Infra `e2e_mailbox.tf`):** its own SES receipt rule `e2e-cognito-admin` (dev only; recipient
   this address only; TLS Require; spam / virus scan), writing to its own prefix `inbound-admin/`. The address is never
   a recipient of `e2e-cognito`. The SES PutObject statements pair rule ARN and prefix, so neither rule writes into the
@@ -394,6 +395,56 @@ mailbox or Google account". That is too strong.
   (`api/core/e2e_staff.py`), the environment guard, the read-only cap and the allow-list; drop the trigger map and flag,
   the `E2E_DEV_ONLY_STAFF_ENABLED` env and precondition, the receipt rule `e2e-cognito-admin` and the two bucket
   statements; Terraform Apply; a closing line here.
+
+##### A10b-1. Amendment: Content studio invitations on synthetic tenants (26/10/2026, S252, AA-979)
+
+- **Decision (Nghiệp, S252, option (a)):** the A10b identity may call exactly two more write routes, the Content
+  studio invitation routes of Tenant 360, so the AA-979 phase 2 re-enrolment E2E (AA-Partner `e2e/phase2/`, mode
+  `a10b`) runs without a person:
+  - POST `/admin/tenants/{tenant_id}/members/invitations` (create an `invited` membership, relay the mail once to
+    the CRM);
+  - POST `/admin/tenants/{tenant_id}/members/{membership_id}/invitation/send` (send the same invitation again).
+  Option (b), keeping A10b read-only and having Nghiệp send each invitation from his own staff session, was not
+  chosen: every phase 2 run and every 7-day clean-up run would wait for a person.
+- **Scope, enforced by CIS (AA-CIS-App `api/core/e2e_staff.py`, `api/routers/admin_tenant360.py`):**
+  - **Two routes only.** They join `E2E_ALLOWED_WRITES` (route templates, `staff_authz`) and
+    `E2E_ALLOWED_WRITE_PATHS` (concrete paths, UUIDs, full match, bearer middleware). Every other write, including
+    every other Tenant 360 write (member role change, member removal, tenant status, plan, key, config, offboard),
+    still gets 403 `e2e_read_only` before the route runs.
+  - **Synthetic tenants only.** On both routes, for the A10b session, CIS reads `shared.tenants.is_canary` (CIS
+    migration 058: "TRUE for synthetic canary tenant") and refuses with 403 `e2e_read_only` unless it is exactly
+    TRUE. NULL, FALSE or no row count as real. The check runs after the tenant lookup and before any membership row,
+    audit row or CRM relay, so a refused call changes nothing and sends no mail.
+  - **E2E mailbox addresses only.** The invitee address must be on `e2e-mail.lumiguides.it.com` (exact domain,
+    ASCII only, no sub-domain, the A10a look-alike rule). The two dedicated recipients are
+    `e2e-test-studio-viewer@` and `e2e-test-studio-editor@` (AA-CIS-Infra `tools/identity/crm_e2e_users.json`
+    `studio_invitees`, receipt rule `e2e-cognito`, prefix `inbound/`).
+  - **Viewer or editor only.** A new invitation from A10b may grant `viewer` or `editor`, never `owner`. A
+    send-again re-seals the existing invitation to the address in the request, so A10b may send again only an
+    `invited` membership whose stored role is `viewer` or `editor`: an `owner` invitation a real admin created on a
+    synthetic tenant cannot be redirected to an E2E mailbox (403 `e2e_read_only`, before the relay).
+  - **Dev only.** Unchanged from A10b: the token exists only where the WORKFORCE flag is on (Terraform: dev), and
+    CIS refuses the identity unless `ENVIRONMENT` is exactly `dev` (403 `e2e_not_allowed_here`).
+- **Audit, one row per call.** Every A10b write that passes the bearer cap gets the AA-884 `staff.request` row in
+  `acp_shared.audit_log` (actor `admin:<the A10b admin_users.id>`, route, status), whether the route allowed or
+  refused it. An accepted invitation also writes `tenant.member_invited`. A refusal by the route is logged
+  `tenant_member_invitation_e2e_refused` with `reason` (`tenant_not_synthetic`, `address`, `role`; no address). A
+  refusal by the bearer cap stays `staff_bearer_refused reason=e2e_read_only` (log only, as before).
+- **Cross-app (corrects A10b "Cross-app" for this route).** AA-Partner `crm.ops.v1 POST
+  /tenants/{id}/studio-invitations` (AA-979 P2b) accepts any OPS caller, `cis-admin` included, and does not check
+  for synthetic tenants. So a leaked A10b code could already call that CRM route directly before this amendment; CIS
+  is the gate this amendment adds. A matching CRM check (refuse the A10b address unless the agency or tenant is
+  synthetic) is an open follow-up, AA-Partner.
+- **Exposure added.** Whoever reads an A10b code can now also send AA system invitation mails to the E2E mailbox
+  and claim a partner-pool account as a viewer or editor of a synthetic Dev tenant. No real tenant and no address
+  outside the mailbox domain can be reached.
+- **Revoke (any time, without waiting for the A10 / A10a / A10b removal):** drop the two routes from
+  `E2E_STUDIO_INVITATION_WRITES` and `E2E_ALLOWED_WRITE_PATHS` and the route check (`_refuse_e2e_invitation`) in
+  AA-CIS-App, update the guard test `test_the_write_allow_list_is_exactly_the_reviewed_routes`, deploy. Faster stop
+  on Dev: disable the A10b user (directory disable + global sign-out) or clear `is_canary` on the synthetic tenants.
+  Then drop `studio_invitees` from `crm_e2e_users.json` (AA-CIS-Infra), Terraform Apply, and delete the two
+  partner-pool accounts (`crm_dev_identity.py --pool partner invitee-reset --invitee studio-viewer|studio-editor
+  --apply`). Add a closing line here. The A10b removal list covers all of this as well.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
