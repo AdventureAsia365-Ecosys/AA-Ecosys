@@ -1,0 +1,30 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "DataCoverage",
+  "expect": "valid",
+  "why": "CIS /admin/data-coverage reads platform-wide CRM counts (1.4, AA-992)",
+  "payload": {
+    "as_of": "2026-10-26T04:00:00Z",
+    "agencies": {
+      "active": 3,
+      "locked": 0,
+      "offboarding": 0,
+      "offboarded": 0,
+      "synthetic": 2
+    },
+    "members": {
+      "active": 5,
+      "invited": 1,
+      "disabled": 0
+    },
+    "catalog_cache": {
+      "served": 892,
+      "paused": 0,
+      "retired": 0,
+      "last_full_pass_at": "2026-10-26T03:05:00Z",
+      "last_ok_at": "2026-10-26T03:05:00Z",
+      "failures": 0,
+      "last_error_class": null
+    }
+  }
+}
