@@ -22,7 +22,7 @@ review before merge.
 
 | # | Repo | Worktree (`.tmp-session/wt/…`) | Branch | Commits | Risk / review |
 |---|---|---|---|---|---|
-| R | root | `root-aa979` | `docs/aa-979-p2b-adr-0010a` | 1 | docs + contracts (no CI gate) |
+| R | root | `root-aa979` | `docs/aa-979-p2b-adr-0010a` | `12bce3c` (+ this runbook sync) | docs + contracts (no CI gate) |
 | I1 | AA-CIS-Infra | `infra-aa979` | `feat/aa-979-p2b-portal-service` | `6aba92c` | Terraform/IAM: review the plan |
 | C | AA-CIS-App | `cis-aa979` | `feat/aa-979-tenant-session-exchange` | `c73d63c5`, `c14012e4` | auth: independent review |
 | M | AA-Partner | `partner-aa979-mig` | `feat/aa-979-crm-studio-invitation` | `270f3bb` | migration: review |
@@ -30,7 +30,7 @@ review before merge.
 | A | AA-Partner | `partner-aa979-api` | `feat/aa-979-studio-invitations-api` (on top of M) | `d39f85e`, `0f60f02` | auth + job: review |
 | F | AA-Partner | `partner-aa979-freeze` | `feat/aa-979-portal-vercel-freeze` | `8ab9932` | workflow |
 | W | AA-Partner | `partner-aa979-web` | `feat/aa-979-web-per-host-origin` | `e6475c9`, `dfe49a8` | auth redirects: review |
-| P | AA-Partner | `partner-aa979` | `feat/aa-979-p2b-portal-fargate` | `d418fa1` | auth + workflow: review |
+| P | AA-Partner | `partner-aa979` | `feat/aa-979-p2b-portal-fargate` | `d418fa1`, `b57c780` | auth + workflow: review |
 
 PR A is stacked on M: after M squash-merges, rebase A onto `origin/main` (`git rebase --onto origin/main <M head> A`,
 then resolve nothing: A only adds), push, open.
