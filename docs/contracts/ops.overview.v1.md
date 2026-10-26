@@ -30,8 +30,8 @@ Rules for both families:
 
 | View | Columns | Content | Migration |
 |---|---|---|---|
-| `tripplanner.v_ops_data_totals` | `metric text, n bigint` | `sessions`, `trip_drafts`, `trip_drafts_sent`, `trips_with_events`, `pin_events`, `component_id_map_rows`, `customers`, `traveller_accounts`, `outbox_rows`, `narration_cache_rows` (totals) | tp-020 |
-| `tripplanner.v_ops_pin_components` | `component_id text, trips bigint` | one row per pinned catalog component id (pins ever added, `add_component` events) and the trips that pinned it; no trip / session id, no payload text | tp-020 |
+| `tripplanner.v_ops_data_totals` | `metric text, n bigint` | `sessions`, `trip_drafts`, `trip_drafts_sent`, `trips_with_events`, `pin_events`, `pin_events_invalid_id` (pins whose `component_id` is not UUID-shaped: counted, never listed), `component_id_map_rows`, `customers`, `traveller_accounts`, `outbox_rows`, `narration_cache_rows` (totals) | tp-020 |
+| `tripplanner.v_ops_pin_components` | `component_id text, trips bigint` | one row per pinned catalog component id (pins ever added, `add_component` events; UUID-shaped ids only, lower-cased) and the trips that pinned it; no trip / session id, no payload text | tp-020 |
 | `tripplanner.v_ops_component_id_map` | `old_id text, new_id text` | the `component_id_map` edges (catalog ids only), so CIS walks a pin to its component like TripPlanner (map first, then `geo.component_redirect`, ≤ 5 hops) | tp-020 |
 | `booking.v_ops_data_totals` | `metric text, n bigint` | `trip_plans`, `trip_plans_sellable`, `trip_plan_components`, `departures_open`, `suppliers_active`, `contracts_published`, `rates_current`, `media_active`, `media_active_with_rights`, `customers`, `b2b_partners_active`, `b2b_holds_active` (counts as of now) | bk-025 |
 | `booking.v_ops_trip_plan_keys` | `source_system text, source_id text, sellable boolean` | the catalog key of each trip plan (no plan id, no `conf:commercial` column), so CIS counts plans whose tour left the live catalogue | bk-025 |

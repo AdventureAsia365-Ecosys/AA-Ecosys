@@ -526,6 +526,8 @@ Critic additions (copy tp-015 exactly): `REVOKE INSERT, UPDATE, DELETE, TRUNCATE
 (default privileges FOR ROLE tp_owner hand role `tripplanner` DML on every new view, tp-015 line 71),
 `COMMENT ON VIEW … 'tp-020 (AA-xxx): … aggregates only, contract ops.data_coverage.v1, read by AA-CIS-App
 /admin/data-coverage (role cis_app)'`, and the `INSERT INTO shared.schema_versions ('tp-020', …)` registration row.
+> Fix round 2 (built tp-020): the pins CTE keeps only a UUID-shaped `component_id` (lower-cased); the assembly Lambda stores the request's `component_id` unchecked, so any other string is counted as `pin_events_invalid_id` in the totals and never listed.
+
 `v_ops_pin_components` reads `trip_events.payload` (tagged `pii:free_text`); it exposes only `payload->>'component_id'`
 (a CIS catalog key) — say so in the view comment so the DM-6.1 reviewer does not have to re-derive it.
 Guard `current_user = 'tp_owner'`, role `cis_app` exists; re-runnable (CREATE OR REPLACE, grants repeat). Cost: four
