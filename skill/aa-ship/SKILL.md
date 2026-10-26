@@ -60,12 +60,14 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 
 - Squash chỉ sau `git fetch`; gộp commit bằng `git reset --soft $(git merge-base HEAD origin/main)`, không bằng
   `origin/main` trần. Trước mọi merge: `gh pr diff <n> --name-only` — có file bị xoá/đổi ngoài phạm vi PR thì dừng.
-- **CIS, Booking, Partner: merge queue (AA-889).** Không `update-branch` nữa: PR xanh → `gh pr merge <n> --squash --auto`
-  (qua `as-app.sh`) đưa PR vào hàng; queue chạy lại required check trên commit tạm `gh-readonly-queue/main/*` (PR đi
-  trước + `main` mới nhất) rồi tự squash vào `main`. Một lệnh cho mỗi PR, chờ tới merged + in SHA:
-  `.tmp-session/s252/merge-queue/mergeq.sh <Repo> <n>` (chuyển vào `tools/github/` khi ổn định). Guard §2 (bảng job,
-  wave) kiểm **trước khi** xếp hàng: queue merge tự động; cần rút → `gh pr merge <n> --disable-auto`. Check bị kẹt
-  (không báo) → queue loại PR sau `check_response_timeout`; xem `gh run list --event merge_group`.
+- **CIS, Booking, Partner: merge queue (AA-889).** Không `update-branch` nữa: một lệnh mỗi PR,
+  `tools/github/mergeq.sh <Repo> <n>` — chờ check của PR, xếp hàng (`gh pr merge --squash --auto` qua `as-app.sh`),
+  chờ tới merged, in SHA. Queue chạy lại required check trên commit tạm `gh-readonly-queue/main/*` (PR đi trước +
+  `main` mới nhất) rồi tự squash vào `main`. Guard §2 (bảng job, wave) kiểm **trước khi** xếp hàng vì queue merge tự
+  động. Rút PR khỏi hàng: `tools/github/mergeq.sh <Repo> <n> --dequeue` (GraphQL `dequeuePullRequest`, hoặc "Remove
+  from queue" trên UI). `gh pr merge --disable-auto` chỉ huỷ được khi check của PR còn chạy; PR đã xanh thì đã vào
+  thẳng hàng, lệnh đó không rút được. Check không báo → queue loại PR sau `check_response_timeout`; xem
+  `gh run list --event merge_group`.
 - TripPlanner: `gh pr merge <n> --auto --squash`. AA-CIS-Infra, repo gốc tắt auto-merge → `gh pr merge <n> --squash`
   sau khi check xanh.
 - Nhiều PR backend cùng repo: xếp hàng cùng lúc được; queue có thể đẩy cả nhóm trong một push → một Deploy Dev cho cả
