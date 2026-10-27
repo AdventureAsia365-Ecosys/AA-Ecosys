@@ -188,8 +188,13 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-854](cis-core-pipeline-llm-platform/AA-854.md) | Identity Phase 0: apply Cognito pools (Infra #105), break-glass account, first staff email-code login on Dev | Done | 2026-10-18 | CIS Core — Pipeline, LLM & Platform |
 | [AA-862](cis-core-pipeline-llm-platform/AA-862.md) | [LLM] Cohere Embed v4 throughput: fall back to the acc3 and acc1 satellites before keyword search, then re-request the acc2 quota | Done | 2026-10-16 | CIS Core — Pipeline, LLM & Platform |
 | [AA-865](cis-core-pipeline-llm-platform/AA-865.md) | [T10 F9] Pooled F9_cta_fact re-flag rate after sentence repair (AA-777 residual) | Done | 2026-10-20 | CIS Core — Pipeline, LLM & Platform |
+| [AA-905](cis-core-pipeline-llm-platform/AA-905.md) | [Data] Geo graph backfill for the 8 countries without one (paid place-pipeline run, needs a quote) | Done | 2026-10-27 | CIS Core — Pipeline, LLM & Platform |
 | [AA-914](cis-core-pipeline-llm-platform/AA-914.md) | Route assembly puts Segments from another country into a tour's route | Done | 2026-10-20 | CIS Core — Pipeline, LLM & Platform |
 | [AA-915](cis-core-pipeline-llm-platform/AA-915.md) | [Writing memory] Freeze the ungated lessons loop and record app ADR 0010 (governed writing memory) | Done | 2026-10-21 | CIS Core — Pipeline, LLM & Platform |
+| [AA-916](cis-core-pipeline-llm-platform/AA-916.md) | [Writing memory] Capture writing signals: before/after text, reason codes, every T9 attempt | Done | 2026-10-26 | CIS Core — Pipeline, LLM & Platform |
+| [AA-917](cis-core-pipeline-llm-platform/AA-917.md) | [Writing memory] Rule store and the mining job (scoped rules, fact filter, cheaper drafter) | Done | 2026-10-26 | CIS Core — Pipeline, LLM & Platform |
+| [AA-918](cis-core-pipeline-llm-platform/AA-918.md) | [Writing memory] R0 replay engine ($0) and the L0 lexicon fast path | Done | 2026-10-26 | CIS Core — Pipeline, LLM & Platform |
+| [AA-924](cis-core-pipeline-llm-platform/AA-924.md) | [T10 gates] Severity per violation in the gate ledger, then merge F15_voice_warn→F15 and F2 variants + stock list → one lexicon gate | Done | 2026-10-26 | CIS Core — Pipeline, LLM & Platform |
 | [AA-925](cis-core-pipeline-llm-platform/AA-925.md) | [Quality] Q-2: repair contract, degraded counters, S1 day-count oracle and Q0 corpus | Done | 2026-10-21 | CIS Core — Pipeline, LLM & Platform |
 | [AA-926](cis-core-pipeline-llm-platform/AA-926.md) | [Quality] Q-1: error taxonomy, gate registry, single thresholds file and lint | Done | 2026-10-25 | CIS Core — Pipeline, LLM & Platform |
 | [AA-927](cis-core-pipeline-llm-platform/AA-927.md) | [Cost] LLM calls with no llm_call_log row (AA-729 eval runs: 116/216 and 188/815) | Done | 2026-10-21 | CIS Core — Pipeline, LLM & Platform |
@@ -198,6 +203,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-984](cis-core-pipeline-llm-platform/AA-984.md) | T9 blog holds: F9 claims on heading lines are unrepairable; over-long rewrites held at attempt 2 | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
 | [AA-985](cis-core-pipeline-llm-platform/AA-985.md) | T9 F17 temporal-role false positives + systematic gate-error calibration | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
 | [AA-986](cis-core-pipeline-llm-platform/AA-986.md) | Tour retirement propagation: a tour deleted at S0/A0 hides every derivative, tenant keeps T2 with a warning | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
+| [AA-992](cis-core-pipeline-llm-platform/AA-992.md) | [Admin] Data coverage page: one live numbers table from raw uploads to TripPlanner, Booking and CRM | Done | 2026-10-26 | CIS Core — Pipeline, LLM & Platform |
 | [AA-588](cis-data-reset-pipeline-rerun-audit/AA-588.md) | [INFRA][G5] Gỡ OIDC trust org cũ (AdventureAsia365-CIS) sau khi ổn định | Done | 2026-09-21 | CIS Data Reset & Pipeline Rerun (Audit) |
 | [AA-595](cis-data-reset-pipeline-rerun-audit/AA-595.md) | [G0] Dựng bastion EC2 + SSM tunnel + BACKUP toàn bộ (chặn mọi việc sau) | Done | 2026-09-16 | CIS Data Reset & Pipeline Rerun (Audit) |
 | [AA-596](cis-data-reset-pipeline-rerun-audit/AA-596.md) | [G1] Điều tra hiện trạng DB (read-only) — đếm row mọi bảng/schema, xác nhận ranh giới raw vs dẫn xuất | Done | 2026-09-16 | CIS Data Reset & Pipeline Rerun (Audit) |
@@ -242,6 +248,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-666](cis-portal-admin-tenant-ui/AA-666.md) | [Admin] Tenant 360 — full tenant management page (profile, brand, content, channels, usage/billing, quality, audit, settings) | Done | 2026-10-05 | CIS Portal — Admin & Tenant UI |
 | [AA-667](cis-portal-admin-tenant-ui/AA-667.md) | [Admin] S1 Rewrite page — live streaming while writing (reuse LiveWriter / ADR 0004) + job-based progress | Done | 2026-10-05 | CIS Portal — Admin & Tenant UI |
 | [AA-668](cis-portal-admin-tenant-ui/AA-668.md) | [Portal] Writer panel — segment/topic opens a right-side panel: Goal → Angle → auto-write with live streaming (social + tour rewrite); CTA from brand defaults | Done | 2026-10-16 | CIS Portal — Admin & Tenant UI |
+| [AA-669](cis-portal-admin-tenant-ui/AA-669.md) | [Portal] My Content as a DataTable — columns, filters, sort, bulk export/publish | Done | 2026-10-25 | CIS Portal — Admin & Tenant UI |
 | [AA-670](cis-portal-admin-tenant-ui/AA-670.md) | [Portal] Information architecture + page-by-page UI audit (fix inconsistent states, e.g. finished tour still shows "Writing…") | Duplicate | 2026-10-12 | CIS Portal — Admin & Tenant UI |
 | [AA-672](cis-portal-admin-tenant-ui/AA-672.md) | [Portal] Account pages — Billing, Activity log, Team & Settings, Integrations (commercial-grade) | Duplicate | 2026-10-12 | CIS Portal — Admin & Tenant UI |
 | [AA-687](cis-portal-admin-tenant-ui/AA-687.md) | [Admin] Jobs observability — job detail with LLM calls and cost split, worker health, progress/ETA, links from domain pages | Done | 2026-09-29 | CIS Portal — Admin & Tenant UI |
@@ -384,7 +391,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-222](no-project/AA-222.md) | _execute_run_tour crashes on not-publishable runs: INSERT status="pending" invalid for content_status_enum | Done | 2026-06-22 | — |
 | [AA-226](no-project/AA-226.md) | [AA-193·F5] SEO meta lọt dưới floor 140 sau fix_pass (Trail Pulse/Sonnet = 132) | Done | 2026-06-23 | — |
 | [AA-24](no-project/AA-24.md) | [Admin] Dashboard, SEO & Cost — tất cả metrics/data dùng giá trị thực từ DB, không hardcode | Done | 2026-05-13 | — |
-| [AA-246](no-project/AA-246.md) | AWS Account Migration: 867490540162 (management acc) → <acc2> (độc lập, TrueIDC fund) + build hạ tầng mới | Done | 2026-07-15 | — |
+| [AA-246](no-project/AA-246.md) | AWS Account Migration: 867490540162 (management acc) → 005097885195 (độc lập, TrueIDC fund) + build hạ tầng mới | Done | 2026-07-15 | — |
 | [AA-25](no-project/AA-25.md) | [Admin] Tenants — fix "Failed to load" + thêm detail view (tours, SEO, keywords, cost) | Done | 2026-05-12 | — |
 | [AA-254](no-project/AA-254.md) | [CIS-OBS] Ops diagnosis panel — rule-based failure triage, extend Health tab | Canceled | 2026-09-23 | — |
 | [AA-255](no-project/AA-255.md) | [COMMAND-CENTER] Unified Admin Dashboard — Infra + LLM Ops + Cost (real-time, 1 trang) | Canceled | 2026-09-23 | — |
@@ -537,6 +544,8 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-944](partner-crm-aa-partner/AA-944.md) | [CRM W3] CRM-16 Agency-line ledger + suppliers | Done | 2026-10-25 | Partner CRM — AA-Partner |
 | [AA-946](partner-crm-aa-partner/AA-946.md) | [CRM W3] CRM-18 Thin full lifecycle | Done | 2026-10-25 | Partner CRM — AA-Partner |
 | [AA-947](partner-crm-aa-partner/AA-947.md) | [CRM W4] CRM-19 B2B client + AA lines | Done | 2026-10-25 | Partner CRM — AA-Partner |
+| [AA-949](partner-crm-aa-partner/AA-949.md) | [CRM W4] CRM-21a Proposal model + day-list builder | Done | 2026-10-26 | Partner CRM — AA-Partner |
+| [AA-950](partner-crm-aa-partner/AA-950.md) | [CRM W4] CRM-21b Client proposal + accept + hold | Done | 2026-10-26 | Partner CRM — AA-Partner |
 | [AA-972](partner-crm-aa-partner/AA-972.md) | [CRM LB] CRM-B1 M2M + B2B quote | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-973](partner-crm-aa-partner/AA-973.md) | [CRM LB] CRM-B2 Departures, capacity, holds | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-974](partner-crm-aa-partner/AA-974.md) | [CRM LB] CRM-B2b Booking commercial rules (new, Fix C2, A3, A8) | Done | 2026-10-23 | Partner CRM — AA-Partner |

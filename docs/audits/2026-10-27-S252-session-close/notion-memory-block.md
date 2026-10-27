@@ -15,6 +15,7 @@ Phiên chạy 25/10 → 27/10 (Ultracode, nhiều workflow; qua nửa đêm). Lo
 - Draft Jira gom sang S253 (phiên qua 27/10).
 - 27/10: "làm dứt điểm việc hiện tại rồi chuẩn bị dừng phiên" → AA-994 S1a, AA-790 r7, build AA-995 sang S253.
 - Repo gốc giữ public tới tháng 11; ID trong repo được chấp nhận.
+- Vercel 403: máy đang bật VPN (cần cho LinkedIn) → Nghiệp tắt; lần sau dùng split tunnel.
 
 **Kết quả chính**
 - Done (10): AA-916, AA-917, AA-918, AA-924 (Writing memory), AA-669, AA-949 (E2E run 40266164840), AA-950 (Booking #97, Partner #77/#78, crm-021), AA-992 trang Data coverage (CIS #1032 + #1034, live 1440/390 0 lỗi), AA-908 (Infra #396, `email_verified` true), AA-905 (8 lô, $4,31).
@@ -47,8 +48,12 @@ Phiên chạy 25/10 → 27/10 (Ultracode, nhiều workflow; qua nửa đêm). Lo
 8. AA-993 còn lại (Phase C, E, V3, H2, đo lại CI).
 9. AA-919 tab Releases; AA-945 M365; AA-682 S2+; AA-979 phase 2; AA-861; AA-816.
 10. 82 tour published còn writer v1: tìm vì sao wave bỏ qua; viết lại (trả phí, subset trước).
+11. 11 worktree giữ lại trong `.tmp-session/wt/` (nhánh không có PR khớp tên, có commit chưa thấy PR) — rà xem đã ship qua PR khác chưa rồi dọn.
 
 **Lưu ý kỹ thuật**
 - Bài học S252 đã vào `skill/aa-lessons/lessons.md`: máy WSL tối đa 2 lane nặng, một workflow viết code mỗi lúc (VM đã khởi động lại giữa phiên do hết RAM).
 - Vercel 403 "Code 21" cho máy agent: kiểm VPN trước (S252 do VPN datacenter) và không quét lớn vào site Vercel từ máy agent.
 - Job `succeeded` chưa phải việc xong — driver/probe đọc bộ đếm trong `result` (place_geocode hết credit Geoapify vẫn succeeded).
+- `gh run watch` có thể treo trên run đã xong; `mergeq.sh` đợi mãi khi PR thành DIRTY — kiểm trạng thái thật trước khi chờ tiếp.
+
+Đã prepend vào Notion `Program Brain / memory.md` lúc chốt phiên (27/10/2026).
