@@ -1,0 +1,2057 @@
+[
+ {
+  "tour_id": "2c235893-7676-4db5-86fa-4cccd6b47431",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   11
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "7d64faca-c732-4d83-8471-9383c99fd7c6",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   1,
+   10
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "7f21308d-3be5-40f3-b1cd-9c5199f1424e",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   1
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "c31ed889-1914-4057-bb28-853ceb885d07",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   9
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "a7477efc-f794-46e7-a955-5aab7d392923",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   1,
+   12
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "739d7c86-bb62-4e36-b7a1-3e313f54b28b",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   1
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "ec16a4de-7220-468f-a291-0ff0ddac5af3",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   11
+  ],
+  "now": [
+   "tour_graph",
+   9,
+   12
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e2f28ac2-963c-4ffb-8769-28a8db417f5e",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   2,
+   10
+  ],
+  "now": [
+   "tour_graph",
+   7,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "81cd098e-5ecc-4cab-8593-6a6ebace67f7",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   2
+  ],
+  "now": [
+   "places",
+   3,
+   3
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "6fe4f020-1cc8-4a2f-9fba-098c5a0160a2",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   5,
+   11
+  ],
+  "now": [
+   "tour_graph",
+   8,
+   14
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "0b3514be-312b-4ad0-8ab5-f6247935ae9f",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "places",
+   6,
+   8
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "89bdaab7-12d6-4472-9ab0-dd79f8135955",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   7,
+   17
+  ],
+  "now": [
+   "tour_graph",
+   12,
+   18
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "f98bfa02-9609-4753-a958-605829329205",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   7,
+   13
+  ],
+  "now": [
+   "tour_graph",
+   11,
+   15
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "7169e030-c618-40c9-9172-0691ba3f7174",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   7
+  ],
+  "now": [
+   "tour_graph",
+   4,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "c7accc28-d64c-4c2d-a2ef-6579fdeb0e69",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   2
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "01155e2d-5119-4bec-bc0e-a1174cb0bd8a",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   6
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "6bf91a8b-aa6d-415a-8a70-70d46e5410b1",
+  "before_class": "DAYS_MISMATCH",
+  "before": [
+   "tour_graph",
+   3,
+   4
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "fed8d5e8-9a63-4c77-b766-df2f8f62b726",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   1
+  ],
+  "now": [
+   "tour_graph",
+   4,
+   4
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "5c7f8b13-dc00-43eb-adc0-538d6071a84f",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   8
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   8
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "d85908a3-f1ad-4230-b75a-20be44f018ff",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   1
+  ],
+  "now": [
+   "tour_graph",
+   2,
+   3
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "a3afaed4-4492-45d7-9a41-ff60314d4439",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   1
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "49204a90-f84a-4264-a812-91cad63274dc",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   5
+  ],
+  "now": [
+   "tour_graph",
+   7,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "1430bf90-1a57-4259-9f69-b719284f89f2",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   1,
+   3
+  ],
+  "now": [
+   "tour_graph",
+   3,
+   3
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "04ec22e8-6d7d-4689-b0ea-d19139ad6b5e",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   8
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e5991763-b514-45ac-a812-f7583ded857e",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   5
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "11b4cd7e-0e07-4292-a5c0-3918aaecf768",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   7,
+   18
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "fb44e762-7af5-498b-b246-0b718e0feccf",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   7
+  ],
+  "now": [
+   "tour_graph",
+   6,
+   8
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "ebef1812-7b20-439e-9535-43226008b8eb",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   7
+  ],
+  "now": [
+   "tour_graph",
+   13,
+   16
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "ad8dbf20-29b8-4da5-9599-775c9294780c",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   4,
+   13
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "4b2d0e72-462e-47a6-ab1f-a1a199e3df08",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "tour_graph",
+   6,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "90c05ab2-75e0-4b87-8df2-d5474516ac5c",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   2,
+   5
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   5
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e350ef05-b17d-4eaa-8bbf-5b4807573bfd",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "places",
+   6,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "69fe6398-3efe-4698-960e-b18bcc35f390",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   10,
+   21
+  ],
+  "now": [
+   "tour_graph",
+   12,
+   22
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "fb2229ba-1fee-4fc4-8748-50ceda242fc2",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   12
+  ],
+  "now": [
+   "tour_graph",
+   7,
+   12
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "26c7ba62-3830-474f-a76b-e3d32c7615d7",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   8
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "9c688b7d-a73a-4e81-adac-948fc34e4411",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "1055c3a3-a4d8-4c60-b381-8f19a3fcd645",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   6,
+   14
+  ],
+  "now": [
+   "places",
+   9,
+   13
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e88d015d-3e90-44cc-9137-aa9c29d6354b",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   8,
+   18
+  ],
+  "now": [
+   "tour_graph",
+   12,
+   21
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "81702bab-96f6-4762-b551-44d3edad6728",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "9b59dd50-a5bf-425f-8ac2-45cb9ca43e73",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   5,
+   11
+  ],
+  "now": [
+   "tour_graph",
+   6,
+   12
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "b45db4c8-e1d1-469c-a7c9-c1d684d55981",
+  "before_class": "DAYS_MISMATCH",
+  "before": [
+   "tour_graph",
+   7,
+   11
+  ],
+  "now": [
+   "tour_graph",
+   8,
+   16
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "a553881f-9019-4d29-9a9e-8c41eab823d6",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   8
+  ],
+  "now": [
+   "places",
+   6,
+   8
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "453a8d51-ab48-44e0-9dc3-1426ee91a27c",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   3
+  ],
+  "now": [
+   "tour_graph",
+   4,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "9b74a857-c73a-4423-9e3b-a528a20e2b84",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   5,
+   14
+  ],
+  "now": [
+   "tour_graph",
+   7,
+   14
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e32bcc32-ac62-40d8-bfb7-52fba7b4f796",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   8
+  ],
+  "now": [
+   "places",
+   5,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "41f58a8f-c842-4207-8bb0-98472a3a5dc4",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   14
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "1ff2935f-bcd3-4103-bd5e-05246eaf3490",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   5,
+   18
+  ],
+  "now": [
+   "tour_graph",
+   14,
+   18
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e81c097a-86e2-4c80-89f4-1a96492a2ec9",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   6
+  ],
+  "now": [
+   "tour_graph",
+   7,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e2338ec1-6b74-4e20-8f91-0da7ecf48686",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   7,
+   14
+  ],
+  "now": [
+   "tour_graph",
+   8,
+   15
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "1ee41f95-5a4f-423b-ace8-eb7897a7920a",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   2,
+   15
+  ],
+  "now": [
+   "tour_graph",
+   8,
+   15
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "59323993-3620-47a2-938e-bf04d81e9b33",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "8908e6ad-69a9-48cf-b368-fef218009f46",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   8,
+   17
+  ],
+  "now": [
+   "tour_graph",
+   11,
+   17
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "af05d068-f133-4630-96c4-8e451380ca81",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "35d141d6-71e4-46be-ab51-c810b0dcfa78",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   8
+  ],
+  "now": [
+   "places",
+   5,
+   8
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "52313e94-24c4-4d10-a6ce-04e881eaa8e6",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   2,
+   7
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "bb69163f-790b-443b-9c16-15728cb1cba2",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   6
+  ],
+  "now": [
+   "places",
+   4,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "c58258db-1499-46e3-8bbb-c06ce6209e2c",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "places",
+   6,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "d9fd3fdf-9dd0-48a7-800b-3649949b98c6",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   1,
+   4
+  ],
+  "now": [
+   "places",
+   2,
+   4
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "36aef5b3-f8c3-474e-9133-989494a6b5dd",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   1
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "8f275fea-6c1e-45bb-bc27-ba84212c84c2",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   6
+  ],
+  "now": [
+   "places",
+   4,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "f3b584fe-fe67-4859-9eaa-a8ec09eea567",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   4
+  ],
+  "now": [
+   "places",
+   4,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "3fdf6f3e-0320-4864-ad2c-87cc6641a3db",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   6
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "34b22b9a-2962-4465-af95-0e5fabd1fba3",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "places",
+   8,
+   12
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "963b3cc7-0c9d-42ac-a374-49a364d6afe7",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   7
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "97e66661-59a5-4756-a94d-a2019730ed0d",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   5
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "51150472-611f-4ed0-9299-6a1632b3de07",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   5,
+   14
+  ],
+  "now": [
+   "places",
+   11,
+   14
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "68903cb4-fe63-4bb6-8652-2a72d8e4641a",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   13
+  ],
+  "now": [
+   "tour_graph",
+   9,
+   14
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "ab9d02cd-8884-4a32-9b07-fee0c5c75f87",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   4,
+   15
+  ],
+  "now": [
+   "places",
+   8,
+   13
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "3760a8a8-68ce-48b9-a75c-273c6a8fc971",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   2,
+   9
+  ],
+  "now": [
+   "places",
+   6,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "81792a98-038b-4b00-adfd-099f5ef3376b",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   6
+  ],
+  "now": [
+   "places",
+   4,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "6a3ae0cd-5e01-442f-9c3b-7a9e0ae15d22",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   6
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "682b324f-ff2d-4e2b-b92a-56fa6fd8bc45",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   1,
+   5
+  ],
+  "now": [
+   "tour_graph",
+   3,
+   5
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "79ec48e9-f391-4137-9153-4a33262debd9",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   2,
+   5
+  ],
+  "now": [
+   "tour_graph",
+   4,
+   5
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "5c51cf8e-4103-4a5f-89b3-4f3a7acfb724",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   8
+  ],
+  "now": [
+   "places",
+   7,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "30304aa8-8504-4ed7-9393-d0512e651f8d",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   3
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "e21ebe43-0728-4957-a4a4-98361be9a22c",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   5
+  ],
+  "now": [
+   "places",
+   5,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "f1d923a1-b7a7-46ed-a0b2-89dec988268f",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   6,
+   11
+  ],
+  "now": [
+   "places",
+   8,
+   12
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "586a3230-1d17-4952-9989-68431bcfbcbd",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   6
+  ],
+  "now": [
+   "tour_graph",
+   4,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "916a8755-50de-4813-95bb-12336bbb8d1c",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   9
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "8173545e-2aac-4ce3-9dfe-4dbe2a74ee5d",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "places",
+   6,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "256f07bd-c09e-44d7-9efa-0b32b24b0d52",
+  "before_class": "DAYS_MISMATCH",
+  "before": [
+   "tour_graph",
+   2,
+   7
+  ],
+  "now": [
+   "places",
+   5,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "992c223e-1afa-4a4d-89fd-5a5f2520b067",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   2
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "9675ba96-c3be-4952-a96e-a2a75cc0f2ba",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   5
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "f64f2482-1e3a-46c5-83d8-e5e47cd4f17d",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   7
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "913b0a3e-440d-4721-8294-95edc8dd9297",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   3
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "d3752d5b-b194-4bd1-8b75-82c7260f3c2a",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   3
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "96a22bbc-505d-4d87-a8f1-4d85f84c4256",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   4
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "beaa214f-e2c9-48cc-95a9-9ccc4d4c4b93",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   3
+  ],
+  "now": [
+   "tour_graph",
+   4,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "dc7d6bcc-f56f-4f25-87c7-a5e4de34ec61",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   7
+  ],
+  "now": [
+   "places",
+   5,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "9ad03121-661c-4b9c-ab71-49e598770d61",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   6,
+   19
+  ],
+  "now": [
+   "places",
+   11,
+   19
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "196df8e7-2cd4-4674-9563-f9e14f459169",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   4
+  ],
+  "now": [
+   "places",
+   4,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "95e9b7ef-baf1-4032-8881-e45b202325fc",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   2,
+   14
+  ],
+  "now": [
+   "places",
+   12,
+   14
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "118b0c02-05da-48a8-bd41-00f54dda649e",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   5,
+   12
+  ],
+  "now": [
+   "places",
+   10,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "ae03328c-86e7-4a69-93f7-568a9a92d8c3",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   9
+  ],
+  "now": [
+   "tour_graph",
+   6,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "b7ba4ee7-5661-4d53-bc2d-c0e23179a5fb",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   3
+  ],
+  "now": [
+   "places",
+   3,
+   3
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "be66c919-cd9e-48c8-a20d-329e84c6bfc4",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   4
+  ],
+  "now": [
+   "tour_graph",
+   3,
+   5
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "9bef0a77-d635-4e43-b378-d14f21cc552a",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   9
+  ],
+  "now": [
+   "tour_graph",
+   6,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "21cf2928-1880-4a49-bc0c-f22a8f7b0f93",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   6
+  ],
+  "now": [
+   "places",
+   6,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "d97ffe56-91b2-4c91-909f-b36385d133dc",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   14
+  ],
+  "now": [
+   "tour_graph",
+   10,
+   15
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "a959a339-8017-488d-8aec-a4a7f6ba57da",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "tour_graph",
+   7,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "1d1cfe7c-7f44-4cab-b694-4d086a62ed88",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   6,
+   13
+  ],
+  "now": [
+   "tour_graph",
+   9,
+   14
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "a356fe16-830e-4396-976d-49213c6499d2",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   6,
+   14
+  ],
+  "now": [
+   "tour_graph",
+   8,
+   15
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "45107c2e-5b02-40bf-9135-2a9514886383",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   5,
+   10
+  ],
+  "now": [
+   "tour_graph",
+   8,
+   11
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "1477121c-1fe0-4043-9864-8e4148c79322",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   6
+  ],
+  "now": [
+   "places",
+   8,
+   8
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "97faf944-7709-4cc5-89f0-88963a0eec58",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   1,
+   6
+  ],
+  "now": [
+   "tour_graph",
+   3,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "acb5a051-4914-4fea-8ef4-1b02867aa9e1",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   5
+  ],
+  "now": [
+   "tour_graph",
+   4,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "7272b17f-e1c0-4755-bec4-c1f2998ad627",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   7,
+   15
+  ],
+  "now": [
+   "tour_graph",
+   9,
+   16
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "9829e6e2-a214-4625-92a8-4b22af4f78f4",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   11,
+   23
+  ],
+  "now": [
+   "tour_graph",
+   12,
+   24
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "955b704b-f70b-47f5-9bd9-c5826f50b640",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   7,
+   21
+  ],
+  "now": [
+   "tour_graph",
+   18,
+   23
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "a8e6904d-cb21-4b54-b5ed-0a1e7b79f8b2",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   9
+  ],
+  "now": [
+   "tour_graph",
+   6,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "5e7317ec-500c-4020-ac58-0531b3c431bc",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   6
+  ],
+  "now": [
+   "tour_graph",
+   7,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "a2341c55-4b21-4e7c-8e67-989b9d917f09",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   4
+  ],
+  "now": [
+   "tour_graph",
+   6,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e8dedd45-5151-4670-ba03-a024e534eeb7",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   2,
+   8
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "bb4b4708-6f1b-4dfa-9c4a-b8ebe3eb31de",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   6,
+   13
+  ],
+  "now": [
+   "tour_graph",
+   8,
+   14
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e763eb47-0e0b-44a4-ac0d-3ca08b41388a",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   8
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   8
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "ea3ab3a6-f377-4ac8-b585-5988de408630",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   1,
+   4
+  ],
+  "now": [
+   "tour_graph",
+   2,
+   4
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "a6254fcf-e1bb-4caa-bad7-867fc80e5792",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   5,
+   15
+  ],
+  "now": [
+   "places",
+   10,
+   13
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "f67a2eb8-798a-40fa-a745-cd35b69a3316",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   4
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "e227ec28-d0e4-4218-8a1e-cb63f517920c",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   7
+  ],
+  "now": [
+   "tour_graph",
+   5,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "e55107e7-e4fe-4392-90d0-101071dcb73a",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   6,
+   14
+  ],
+  "now": [
+   "places",
+   7,
+   14
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "5e2bdb4f-9fe9-42e6-80dc-d8133a02c8c7",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "places",
+   5,
+   8
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "10f41429-cf8d-4ade-beed-47ffb349249a",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   6
+  ],
+  "now": [
+   "places",
+   4,
+   6
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "9e46cae8-b8b8-40be-96ef-b6d04925d8ea",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   4
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "64e291e2-31f3-4ccb-ba32-0c84c2dbef15",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   2,
+   11
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "468a38a7-b7ce-4fde-9683-3a619a65c33c",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   8
+  ],
+  "now": [
+   "tour_graph",
+   6,
+   10
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "0b7ba1d1-a33a-486a-b7fb-d9cc1120ee01",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   8
+  ],
+  "now": [
+   "places",
+   6,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "15df6db5-a1a7-4f3d-b12e-f806f899761d",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   2
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "7bc182fb-30b7-4be1-979a-ce8a4d48e841",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   5,
+   12
+  ],
+  "now": [
+   "places",
+   7,
+   7
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "16350d17-8d90-4163-ae4b-0f3d824ea9f6",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   5
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "e90c950d-7354-43f7-99f8-ffe1ec8fd451",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   2,
+   9
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "6b7cae6b-7b38-4300-b206-fbc470828d09",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   3,
+   9
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "f01096a9-bbb0-402f-aa9d-e90d0c7e3b02",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   4,
+   9
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "da355e07-59da-4c49-a0d2-a25b1fc097c1",
+  "before_class": "OK",
+  "before": [
+   "tour_graph",
+   1,
+   9
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "c46da329-4188-4134-a0a4-9cafed5ec7b9",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   1,
+   10
+  ],
+  "now": [
+   "none",
+   0,
+   null
+  ],
+  "ok": null
+ },
+ {
+  "tour_id": "5ecb6e55-a11a-4c1e-b351-4aeb5a8c2d39",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   7
+  ],
+  "now": [
+   "tour_graph",
+   8,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "ff413f0e-a256-4d27-825d-a34ac628a63e",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   4,
+   8
+  ],
+  "now": [
+   "tour_graph",
+   8,
+   9
+  ],
+  "ok": true
+ },
+ {
+  "tour_id": "99a17f81-8fb5-4314-b593-74352dae2670",
+  "before_class": "SHORT_ROUTE",
+  "before": [
+   "tour_graph",
+   3,
+   8
+  ],
+  "now": [
+   "tour_graph",
+   7,
+   9
+  ],
+  "ok": true
+ }
+]
