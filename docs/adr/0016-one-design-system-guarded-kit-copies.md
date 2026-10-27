@@ -204,7 +204,8 @@ lockfile.
 
 A PreToolUse hook in the root repo (`.claude/hooks/kit-core-edit-guard.sh`, registered in `.claude/settings.json` for
 Edit, Write, MultiEdit and NotebookEdit) blocks edits to any path under a `_kit/core/` or `ui/core/` folder unless the
-path is inside `apps/AA-CIS-App/frontend/app/_kit/core/`, with the message "edit the CIS canonical copy, then sync".
+file is the canonical copy: `frontend/app/_kit/core/` inside an AA-CIS-App checkout (the main checkout
+`apps/AA-CIS-App/` or any worktree whose git `origin` is AA-CIS-App), with the message "edit the CIS canonical copy, then sync".
 The same rule is in `.kiro/steering/session-workflow.md` for Kiro. The integrity check stays the real gate; the hook
 only saves wasted work.
 
