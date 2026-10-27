@@ -34,7 +34,7 @@ The PAT is also long-lived, tied to one person and listed as an open item in the
 | App | Used by | Installed on | Repository permissions |
 |---|---|---|---|
 | `aa-agent` | The orchestrating agent session (Claude Code or Kiro, main session only) | All five repos | Contents RW, Pull requests RW, Workflows RW, Actions RW, Checks R, Commit statuses R, Issues R, Metadata R |
-| `aa-ci-bot` | CI workflows: release-please in the app repos (and Infra if it adopts it); the Infra workflows that open root PRs | AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-CIS-Infra, AA-Ecosys | Contents RW, Pull requests RW, Issues RW (release-please labels), Metadata R |
+| `aa-ci-bot` | CI workflows: release-please in the app repos (and Infra if it adopts it); the Infra workflows that open root PRs | AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-Partner, AA-CIS-Infra, AA-Ecosys (AA-Partner row fixed S252, ADR 0016 decision 13: already installed, release PRs such as #64 come from `aa-ecosys-ci-bot[bot]`) | Contents RW, Pull requests RW, Issues RW (release-please labels), Metadata R |
 
 - Both Apps are **private** to the org ("Only on this account"), have **no webhook**, no callback URL, no user
   authorization (no OAuth on behalf of users) and **no organization permissions**.
