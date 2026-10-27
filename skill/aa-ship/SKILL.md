@@ -92,7 +92,9 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   (`shared.rerun_wave.status = 'open'`) hoặc đang **chạy** một job kind `deploy_blocking` (`data_erasure`,
   `s1_batch_ingest`) — `/admin/job-runner/deploy-gate`; Booking đang chạy job retention (`bk_retention_job`,
   `bk_retention_inbox_redact`) — `/booking/ops/deploy-gate`; Partner đang chạy `crm_dispatch` — `/crm/ci/deploy-gate`
-  (CRM web không có worker nên không có guard). Job queued/running loại khác **không** chặn nữa: worker drain khi
+  (CRM web không có worker nên không có guard). "Đang chạy" gồm cả job kind đó **queued đến hạn trong 15 phút**
+  (`blocking_due`: preflight chạy trước khi build, task cũ sẽ claim nó trước SIGTERM). Job queued/running loại khác
+  **không** chặn nữa: worker drain khi
   SIGTERM, job còn chạy được release và task mới claim lại (G1–G4). Lý do bị chặn nằm ở `blocked_by` trong log
   preflight. Override chỉ Nghiệp, ghi lý do (`docs/ops/runbooks/deploy-gate-override.md`). Bị chặn → chờ job đó xong
   / đóng wave, hoặc hỏi Nghiệp nếu job treo, không tự override.
