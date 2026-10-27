@@ -21,7 +21,7 @@ info:
     personal data are the traveller's own trip dates (x-pii travel). "paid_amount" is the verified net (receipts minus
     refunds); the word "net" is reserved for costs and never appears in this contract. Money is a decimal string with
     two places (numeric(16,2); a VND amount reads "2400000.00") with an ISO 4217 currency. Every answer is
-    Cache-Control no-store.
+    Cache-Control no-store, the 401, 404 and 503 refusals included.
   x-aa-contract: booking.customer.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-TripPlanner-Web]
@@ -55,8 +55,10 @@ paths:
         - name: number
           in: path
           required: true
-          description: Invoice number (INV-000123, case-insensitive)
-          schema: {type: string, minLength: 1, maxLength: 64}
+          description: >-
+            Invoice number (INV-000123, case-insensitive). No length limit on the wire: anything that is not one of
+            the traveller's numbers, an over-long or malformed one included, is 404 invoice_not_found (never 422).
+          schema: {type: string, minLength: 1}
       responses:
         "200":
           description: The payment request
