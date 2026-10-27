@@ -1,0 +1,646 @@
+[
+ {
+  "id": "I00",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the label and could not. The card is the Summer Palace (Yiheyuan) in Beijing, China, which is the imperial garden the itinerary sentence describes. So name=ok, entity=same and country=correct all stand. Locality \"Beijing\" is correct. The disputed field is region. Under the rules, region means a first-level division such as a province, autonomous region or municipality. For this site that is Beijing Municipality. Wikipedia describes Haidian as \"a northwest urban district of Beijing\", which makes it a lower-level unit inside the municipality. It is not a first-level division, and it is not a well-known historical region either. The rules say a lower-level unit is \"not automatically correct\" and that the value must be judged at the first-level layer. At that layer \"Haidian District\" is the wrong unit, so neither \"correct\" nor \"acceptable_historical\" applies, and the field is not empty. Haidian really does contain the Summer Palace, but that fact does not make it a first-level region. Region=wrong is therefore the right label under the rules as written.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Haidian,_Beijing",
+    "quote": "Haidian (海淀区) is a northwest urban district of Beijing, bordering Xicheng and Fengtai."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+    "quote": "location = [[Haidian, Beijing]], China"
+   }
+  ]
+ },
+ {
+  "id": "I00",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "The label stands; I could not refute it. The card is about the Summer Palace (Yiheyuan) in Beijing, which is the imperial garden the itinerary sentence describes, so name \"ok\" and entity \"same\" hold. The alias list and the note separating it from Yuanmingyuan are accurate. Locality \"Beijing\" is correct. Country \"China\" is correct. The only field in question is region. Under the rules, \"region\" means the first-level division: a province, autonomous region or municipality. The correct first-level region here is Beijing Municipality. Wikipedia places the Summer Palace in \"Haidian, Beijing\" and calls Haidian \"a northwest urban district of Beijing\", which makes it a county-level unit below the municipality. The rules say a lower-level unit is not automatically correct. Haidian is not a historical region either, so \"acceptable_historical\" does not apply. The field is filled in, so \"empty\" does not apply. That leaves \"wrong\", which matches the panel's label.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Haidian,_Beijing",
+    "quote": "Haidian (海淀区) is a northwest urban district of Beijing, bordering Xicheng and Fengtai."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+    "quote": "location = Haidian, Beijing, China"
+   }
+  ]
+ },
+ {
+  "id": "I00",
+  "judge": 3,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the label and could not, so it stands. The Summer Palace (Yiheyuan) is in Haidian District, Beijing, China, and the itinerary sentence (\"an imperial garden visited with a local guide\") means that site. The variant's naming note also keeps it apart from the Old Summer Palace (Yuanmingyuan). So name=ok and entity=same are right. Locality \"Beijing\" is the usual reference city, so it is correct. Country \"China\" is correct. Under the rules, \"region\" is the first-level division, and for this site that is Beijing Municipality. Haidian is an urban district of Beijing, one level lower, so it is not a first-level unit. It is also not a well-known historical region, which rules out acceptable_historical. The rules say a lower-level value is \"not automatically correct\". The field is filled in, so it is not empty, and the value is not a correct region at the required level. \"wrong\" is the right call for region.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+    "quote": "location = [[Haidian, Beijing]], China"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Haidian_District",
+    "quote": "is a northwest urban district of Beijing, bordering Xicheng and Fengtai."
+   }
+  ]
+ },
+ {
+  "id": "I01",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute each field and none of them changed. Name \"Centum Spa Land\" is a recognisable form of Spa Land at Shinsegae Centum City, so it is ok. Locality \"Busan\" is correct, because the flagship Shinsegae Centum City store that houses Spa Land is in Centum City, Busan (Haeundae-gu). Country \"South Korea\" is correct. Entity is \"same\": the itinerary means the jjimjilbang the traveller visits, and the card describes that spa. Region is the only contested field. Under the rules, region must be the first-level administrative division. For this place that is Busan Metropolitan City, a metropolitan city at provincial level. \"Haeundae District\" (해운대구) is an autonomous district (gu) below the city, which makes it a lower-level unit. The rules say such a value \"is not automatically correct\". The field is not empty, and \"acceptable_historical\" does not apply, because Haeundae is not a historical region at that level. The district is the right place for the spa, but it is the wrong level for this field, so \"wrong\" is the label the rules give. The panel label stands.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Busan",
+    "quote": "officially Busan Metropolitan City, is the second most populous city"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Shinsegae_Centum_City",
+    "quote": "Its flagship store in Centum City, Busan, is the world's largest department store."
+   }
+  ]
+ },
+ {
+  "id": "I01",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the label and could not. The rules say \"region\" means the first-level administrative division or a well-known historical region, and that naming a lower-level unit is not automatically correct. Wikipedia describes Haeundae District as a gu (district) of Busan. It lists Busan Metropolitan City as one of South Korea's first-tier divisions, and it places gu below the municipal level. So \"Haeundae District\" is a sub-city district, not a region at the level the rules require. It is also not a historical region, so acceptable_historical does not apply. Spa Land does sit in Centum City in Haeundae-gu, so the value is geographically true, but it names the wrong level. The correct region is Busan Metropolitan City, which makes \"wrong\" the right label. The other fields hold up. Name \"Centum Spa Land\" matches the common alias for Shinsegae Centum City Spa Land, so name=ok. Locality Busan is correct. Country South Korea is correct. Entity=same, because the sentence means the jjimjilbang the traveller visits.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Haeundae_District",
+    "quote": "Haeundae District (Korean: 해운대구) is a district (gu) of Busan, South Korea."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Administrative_divisions_of_South_Korea",
+    "quote": "South Korea is made up of 16 first-tier administrative divisions: 5 metropolitan cities"
+   }
+  ]
+ },
+ {
+  "id": "I01",
+  "judge": 3,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the panel label and could not. The traveller visits Spa Land in Shinsegae Centum City, Busan, South Korea. Name ok and entity same: the card names the spa itself, which is what the sentence means. Locality Busan is correct. Country South Korea is correct. On region, the rules say \"region\" must be the first-level administrative division, and a value naming a lower-level unit is not automatically correct. Wikipedia describes Haeundae District as a \"gu\", meaning a district of Busan. The first-level division is Busan Metropolitan City, which is a metropolitan city. So \"Haeundae District\" names a second-level unit. That fails the region test. It is also not a historical region, so acceptable_historical does not apply. Region = wrong, and the panel label stands.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Haeundae_District",
+    "quote": "Haeundae District (해운대구) is a district (gu) of Busan, South Korea."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Busan",
+    "quote": "Busan ... officially Busan Metropolitan City, is the second most populous city in South Korea"
+   }
+  ]
+ },
+ {
+  "id": "I02",
+  "judge": 1,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "Name, region and country hold. Khamar Monastery (Khamariin Khiid) is the standard name for \"Hamulin Temple\", Dornogovi is a first-level aimag, and the country is Mongolia. The entity label does not hold under the rule that entity is judged by what the itinerary sentence means, not by the bare place string. The sentence takes travellers to three features of the same complex: \"the bell pavilion and white double Aobao of Hamulin Temple and the World Energy Center\". Lonely Planet places the bell tower at Khamar's Shambhala energy centre, about 2 km from the temple buildings. Together these are the Khamar Monastery site, which is what the card describes. The rule's example of other_entity is two different places (a valley vs a monastery), not a part vs its own complex, so entity should be \"same\". On locality, Wikipedia (T1) gives the monastery's location as Sainshand. Its coordinates (44.597N, 110.273E) are about 34 km straight-line from Sainshand town, which is just over the ~30 km acceptable_nearby threshold, and Lonely Planet says about 50 km by road. Because T1 names Sainshand as the location, \"correct\" is the better label, though \"acceptable_nearby\" is close. The main reason for overturning is the entity field.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/w/index.php?title=Khamar_Monastery&action=raw",
+    "quote": "Khamar Monastery (Хамарын хийд) is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+   },
+   {
+    "url": "https://www.lonelyplanet.com/points-of-interest/shambhala/1406477",
+    "quote": "a bell tower about 2km from the monastery, which visitors strike three times to announce their arrival at the energy centre"
+   }
+  ]
+ },
+ {
+  "id": "I02",
+  "judge": 2,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "I would not uphold this label. Two of its fields are wrong under the rules.\n\n(1) Entity. The rules say to judge the entity by what the itinerary sentence means, not by the bare place string. The sentence says the group \"visits the bell pavilion and white double Aobao of Hamulin Temple and the World Energy Center\". So the traveller is visiting the grounds of Hamulin Temple, which is Khamar Monastery. The bell pavilion is just one structure on those grounds. A card about the monastery therefore covers the same entity the traveller visits. This is a part of the same complex the traveller tours. It is not a different entity like the rule's examples (valley vs monastery, county vs town). The panel gave other_entity because of the bare string \"bell pavilion\", which is exactly what the rule says not to do. It should be \"same\".\n\n(2) Locality. Wikipedia and Wikidata (both T1) give the monastery's location as Sainshand. Wikipedia's infobox reads \"location = Sainshand, Dornogovi, Mongolia\", and Wikidata Q6399902 describes it the same way. The infobox coordinates (44.597N, 110.274E) put it about 35 km south of the town centre. Sainshand sum covers 2,300 km², and Wikipedia says that territory includes Züünbayan, 46 km south of the town. So the monastery very plausibly lies inside Sainshand sum itself. T1 sources name the locality directly, so it should be \"correct\", not acceptable_nearby. Even if you prefer acceptable_nearby, ~35 km is slightly above the ~30 km guideline, and that weakens the panel's choice further.\n\nThe other fields hold. Name: ok, since \"Hamulin\" is a rendering of Khamar/Хамарын. Region: correct, since Dornogovi is a first-level aimag. Country: correct, Mongolia.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "Khamar Monastery (Mongolian: Хамарын хийд) is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Sainshand",
+    "quote": "the fifth bag is the remote oil production settlement Züünbayan, 46 km south from the main part of the city."
+   }
+  ]
+ },
+ {
+  "id": "I02",
+  "judge": 3,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "Four of the five fields hold up. Name ok: \"Hamulin Temple\" is a non-standard rendering of Khamar / Khamaryn Khiid, the Gobi monastery known for its Shambhala \"energy center\". Region correct: Dornogovi is a first-level aimag. Country correct: Mongolia. Locality acceptable_nearby can stand. Wikipedia and Wikidata both place the monastery \"in Sainshand\". From the Wikipedia coordinates (44.597N, 110.273E) it sits about 34-35 km straight-line from Sainshand town (by road, guidebooks say 45-50 km). Sainshand is the usual reference town, so acceptable_nearby (or even correct) fits.\n\nThe entity field is wrong. The rules say to judge entity against what the itinerary sentence means, not the bare place string. The sentence has the group visit \"the bell pavilion and white double Aobao of Hamulin Temple and the World Energy Center\". That is several features of the Khamar Monastery / Shambhala complex. Lonely Planet places the bell tower on the 2 km path to the energy center. So the traveller is visiting the monastery complex as a whole. The pavilion is only one item in a list of parts of that complex, not a separate destination. A card for Khamar Monastery therefore describes the same entity the traveller visits. The panel chose other_entity because the bare place string names one structure (\"bell pavilion\"), which is exactly the reading the rules exclude. The card does not mix facts from two different entities either. Corrected entity: same.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "Khamar Monastery (Mongolian: Хамарын хийд) is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+   },
+   {
+    "url": "https://www.lonelyplanet.com/points-of-interest/khamaryn-khiid/1406482",
+    "quote": "a path, and more recently a paved road, leads for 2km to a bell tower that visitors ring to mark their arrival"
+   }
+  ]
+ },
+ {
+  "id": "I03",
+  "judge": 1,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "I agree with the panel on name, locality, region and country. Name: \"Lijiang Old Town\" is fine, and Ancient Town and Dayan are standard aliases. Locality: Lijiang is correct. Region: Yunnan is the correct province. Country: China is correct.\n\nI disagree on entity. The rules say entity is judged by what the itinerary sentence means, meaning the place the traveller actually visits, and not by the bare place string. The sentence says \"the group wanders around the old town\". The old town is the only place in Lijiang the traveller visits. The bikes are fitted and the meeting and dinner are held at the same base. \"Returning to Lijiang\" only names the base the group comes back to, not something new they visit.\n\nWikipedia says Lijiang city is \"famous for\" the Old Town of Lijiang. So the old town is the well-known place people mean by \"Lijiang\" as a sight, and the card describes the same place the sentence describes. The panel's own rationale admits \"the walk is in the old town\". It labels the card other_entity only by comparing it with the bare string \"Lijiang\", and that is exactly the comparison the rules forbid.\n\nThis is not a valley-vs-monastery or county-vs-town swap. The card names the specific place the sentence says the group visits. Under the rules entity should be \"same\", not other_entity. At most the case is borderline, and the rules do not clearly support other_entity.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Lijiang",
+    "quote": "Lijiang is famous for its UNESCO Heritage Site, the Old Town of Lijiang, which contains a mixture of different historical architecture styles"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Lijiang",
+    "quote": "Lijiang ... is a prefecture-level city in the northwest of Yunnan Province, China."
+   }
+  ]
+ },
+ {
+  "id": "I03",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to overturn the label and could not. Name, locality, region and country all check out. Wikipedia says the Old Town of Lijiang (Dayan) is \"the historical center of Lijiang City, in Yunnan, China\", and its infobox gives the location as Lijiang, Yunnan, China. So the name \"Lijiang Old Town\" with the aliases Lijiang Ancient Town and Dayan is ok. Locality Lijiang is correct, Yunnan is the correct first-level province, and China is correct.\n\nEntity is the only field in doubt. The case for \"same\" is that the old-town walk is what the traveller does in Lijiang. That case fails on the itinerary's own wording. Its place string \"Lijiang\" shows up in \"returning to Lijiang by private bus\", which means the city the group uses as a base. The old town is named separately as one area inside that city. Lijiang is a prefecture-level city, and Dayan is a 145.6 ha UNESCO-listed historic centre inside it, so it is a separate, smaller entity. This matches the rule's own example of \"county vs town\". The card is about the historic quarter and the itinerary place is the whole city, so \"other_entity\" fits.\n\n\"mixed\" does not fit either. The card points to the Old Town throughout and gives Lijiang only as the locality. It does not blend the two entities. The label stands, though it is a close call.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+    "quote": "Dayan, commonly called the Old Town of Lijiang is the historical center of Lijiang City, in Yunnan, China. It is a UNESCO World Heritage Site."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Lijiang",
+    "quote": "type = Prefecture-level city ... caption2= Old Town of Lijiang ... seat = Gucheng"
+   }
+  ]
+ },
+ {
+  "id": "I03",
+  "judge": 3,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "Name, locality, region and country are fine. Lijiang Old Town (Dayan) is the historic centre of Lijiang City, the card gives Lijiang as its locality, and Yunnan is the province (first-level division). The entity field is where the panel goes wrong. It marked other_entity because \"the itinerary place is the city\", which judges against the bare place string. The rules say not to do that: the entity is judged by the place the traveller actually visits in the sentence. That sentence says \"the group wanders around the old town\", which is Lijiang Old Town/Dayan, the same thing the card describes. The second clause, \"returning to Lijiang by private bus\", only uses Lijiang as the overnight base. It is not a separate sight that the card swaps for something else. Wikipedia also treats \"Old Town of Lijiang\" as the standard name for Lijiang's historic centre, and Lijiang is known mainly for this old town. So the card names the visited place and is not a different entity. The panel's own rationale called this borderline, and the rules do not clearly support other_entity. The entity should be \"same\".",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+    "quote": "Dayan, commonly called the Old Town of Lijiang, is the historical center of Lijiang City, in Yunnan, China."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Lijiang",
+    "quote": "Lijiang is famous for its UNESCO Heritage Site, the Old Town of Lijiang"
+   }
+  ]
+ },
+ {
+  "id": "I04",
+  "judge": 1,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "empty",
+   "region": "empty",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "The \"Hamulin Temple\" in the itinerary is Khamar Monastery (Khamariin Khiid), the Red Hat monastery near Sainshand in Dornogovi Province, Mongolia. The \"World Energy Center\" (Shambhala energy centre) in the same sentence belongs to the same monastery complex. The panel's locality=empty, region=empty and country=correct labels are right as stated: the variant gives null locality and region and country Mongolia. Name=ok is arguable. \"Hamulin\" appears in no reliable source (the usual forms are Khamar, Khamariin or Hamaryn), but it is the itinerary's own spelling and points to the right site, so it stays ok.\n\nI reject the entity label. The rules say to judge the entity against what the itinerary sentence means, not against the bare place string. The sentence says the group \"visits the bell pavilion and white double Aobao of Hamulin Temple and the World Energy Center\". All three are parts of one monastery complex, and walking through its grounds is the visit itself. A card for the monastery is the site the traveller actually goes to. It is not a different place in the sense of the rule's examples (valley vs monastery, county vs town), which pair two separate, distinct places. A whole that contains the named feature, where the visit covers several of its features, is the same entity. So entity should be \"same\" rather than \"other_entity\", and the label does not stand as given.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "Khamar Monastery (Mongolian: Хамарын хийд, Khamar khiid) is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "At its height, the monastery reportedly accommodated over 80 temples and some 500 monks."
+   }
+  ]
+ },
+ {
+  "id": "I04",
+  "judge": 2,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "empty",
+   "region": "empty",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "Four of the five fields hold. The name \"Hamulin Temple\" follows the itinerary and points at the right place, Khamar Monastery (Khamariin Khiid) in Dornogovi. \"Hamulin\" is a non-standard rendering of Khamar and should have been added as an alias, but that does not make the name wrong. Locality and region are null, so \"empty\" is correct for both. Country \"Mongolia\" is correct.\n\nThe entity field fails. Under the rules, entity is judged by what the itinerary sentence means, not by the bare place string. The sentence describes a visit to several features of the temple complex: the bell pavilion, the white double Aobao (ovoo/stupas) and the World Energy Center (Shambhala). Sources place the bell tower about 2 km from the monastery, at the energy centre. That makes the bell pavilion one part of the Khamar complex, not a separate place. The place the traveller actually visits is Hamulin/Khamar Temple and its grounds, which is exactly what the card names. This is not like the rule's examples of other_entity (a valley vs a monastery, a county vs a town), which are different places. Here the card names the whole complex the sentence is about, so entity should be \"same\", not \"other_entity\".",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "located in Sainshand, Dornogovi Province, Mongolia"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "chose the site of the monastery believing the surrounding area radiated with a spiritual energy fostered by the Gobi desert"
+   }
+  ]
+ },
+ {
+  "id": "I04",
+  "judge": 3,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "empty",
+   "region": "empty",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "\"Hamulin Temple\" is a Chinese-style spelling of Khamar Monastery (Khamariin Khiid). Wikipedia places it in Sainshand, Dornogovi Province, Mongolia. That matches the tour (Ulaanbaatar to Sainshand). The \"World Energy Center\" stop is the monastery's well-known \"Center of the World's Spiritual Energy\". So the panel's country=correct is right. Locality and region are null, so \"empty\" is right for both. name=ok can stand: the card uses the itinerary's spelling, which points to the right place even though it is not the usual English form (Khamar). The entity label is wrong. The rules say entity is judged against what the itinerary sentence means, not the bare place string. The traveller visits the temple's grounds: its bell pavilion, its white double ovoo (Aobao) and the energy centre next to it. The place visited is therefore the Hamulin/Khamar temple complex, and that is what the card describes. The panel's reason (\"names the temple, not the pavilion\") applies the bare-string test the rules forbid. A pavilion inside the temple is a part of the same site, not a different entity like a valley versus a monastery or a county versus a town. Entity should be \"same\".",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "Danzanravjaa chose the site of the monastery believing the surrounding area radiated with a spiritual energy fostered by the Gobi desert."
+   }
+  ]
+ },
+ {
+  "id": "I05",
+  "judge": 1,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "I found no problem with name, region or country. \"Hamulin Temple\" is a transliteration of Khamar Monastery (Khamariin Khiid). Dornogovi is the first-level province. The country is Mongolia. For locality, Wikipedia says the monastery is \"located in Sainshand\", and its coordinates (44.597N, 110.274E) put it about 34-35 km straight-line south of Sainshand town. Sainshand is the usual reference town, so acceptable_nearby stands (correct could also be argued). The entity label does not hold. The rules say entity is judged against what the itinerary sentence means, not the bare place string. In that sentence the group visits the bell pavilion, the white double ovoo and the World Energy Center (Shambhala). Lonely Planet (T2) places Shambhala at the northern entrance to the Khamar complex, with its bell tower and the ovoo set up after Danzanravjaa died, about 2 km from the main temple. All the listed features belong to one complex, so the place the traveller visits is Khamar Monastery. A card describing Khamariin Khiid is the same entity. A whole-versus-part mismatch like valley vs monastery or county vs town does not apply: the bell pavilion is only one stop inside the site the card describes. The panel judged the bare string \"bell pavilion\", which the rules say not to do.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+   },
+   {
+    "url": "https://www.lonelyplanet.com/pois/1406477",
+    "quote": "Shambhala ... an earth energy centre at the northern entrance to the complex (search-result summary of the Lonely Planet entry; the page itself did not load)"
+   }
+  ]
+ },
+ {
+  "id": "I05",
+  "judge": 2,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "Name, region and country check out. \"Hamulin Temple\" is a transliteration of Khamar (Khamariin Khiid). Wikipedia places Khamar Monastery in Dornogovi Province, Mongolia, so those three fields are ok/correct/correct. Locality also holds. Wikipedia's infobox gives the location as \"Sainshand, Dornogovi\". Computing from Wikipedia's coordinates (monastery 44°35'50\"N 110°16'25\"E, Sainshand 44°53'30\"N 110°08'12\"E) gives about 34.5 km straight-line. That is slightly over the ~30 km guide, but Sainshand is the usual reference town (Wikipedia even says \"located in Sainshand\"). So acceptable_nearby is defensible, and arguably even \"correct\". The label I refute is the entity field. The rule says to judge the entity by what the ITINERARY SENTENCE means, not by the bare place string. The sentence has the group visit \"the bell pavilion and white double Aobao of Hamulin Temple and the World Energy Center\". These are all features of one site: the bell tower, the ovoo and the Shambhala \"energy centre\" all sit on the Khamar Monastery grounds and complex. Search results summarising Lonely Planet and Atlas Obscura say Shambhala is entered through the monastery grounds, which hold the bell and ovoo. So the place the traveller actually visits is the Khamar Monastery complex. A card describing Khamariin Khiid as a whole is the same entity, not a different one. The panel's reason (\"describes the whole monastery rather than the bell pavilion structure\") judges the bare place string, which the rule forbids. The bell pavilion is not a separate place like \"valley vs monastery\" or \"county vs town\". It is a feature that the sentence itself attributes to the temple (\"of Hamulin Temple\"), and the sentence lists several such features together. Corrected entity: same. All other fields stay as the panel set them.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "Khamar Monastery (Mongolian: Хамарын хийд) is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Sainshand",
+    "quote": "coordinates = {{coord|44|53|30|N|110|8|12|E}} (vs monastery 44|35|49.98|N|110|16|24.53|E -> ~34.5 km apart)"
+   }
+  ]
+ },
+ {
+  "id": "I05",
+  "judge": 3,
+  "uphold": false,
+  "corrected_label": {
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same"
+  },
+  "rationale": "The label does not hold, mainly because of the entity field. The rules say to judge the entity by what the itinerary sentence means (the place the traveller actually visits), not by the bare place string. The sentence says the group \"visits the bell pavilion and white double Aobao of Hamulin Temple and the World Energy Center\". These are all parts of the Khamar Monastery complex, so the place visited is the monastery itself. A card for Khamariin Khiid / Khamar Monastery describes the same place the traveller tours. It is not a different entity like the rule's examples (valley vs monastery, county vs town). The bell pavilion is a structure inside that monastery, so the entity should be \"same\", not \"other_entity\".\n\nLocality: Wikipedia's infobox and Wikidata both give the monastery's location as Sainshand, Dornogovi. Sainshand is also the sum (district) that contains it. That supports \"correct\", although \"acceptable_nearby\" would also pass. Using the Wikipedia coordinates (44.597N 110.273E), the monastery is about 34 km straight-line from Sainshand city, which is within \"~30 km\" and is the usual reference town.\n\nThe other fields hold. Name: Khamariin Khiid / Khamar Monastery is the standard romanization, and the aliases include \"Hamulin Temple\", so the name is ok. Region: Dornogovi is the first-level aimag, so it is correct. Country: Mongolia is correct.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "quote": "Khamar Monastery ... is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+   },
+   {
+    "url": "https://www.wikidata.org/wiki/Q6399902",
+    "quote": "Khamar Monastery — Buddhist monastery in Sainshand, Dornogovi, Mongolia"
+   }
+  ]
+ },
+ {
+  "id": "I06",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "The panel label should stand. The card says the Himalayas cover six countries, Afghanistan among them. Wikipedia (T1), citing Britannica, names five countries and leaves Afghanistan out. It says the Hindu Kush, a separate range that borders the Himalayas on the northwest, is where the Himalayas stop. I tried to refute the label by looking for a reliable definition that places Afghanistan inside the Himalayas. The only grouping that includes Afghanistan is the wider \"Hindu Kush Himalaya\" (HKH) region. That is a different entity from the Himalayan range, and the rules count a claim that is true only of a different entity as contradicted. The rest of the sentence (\"mountain system in South Asia\", the other five countries) is correct, but adding Afghanistan makes the claim false as a whole. Britannica's page could not be fetched directly (HTTP 403), but Wikipedia cites it as the source for the five-country list.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Himalayas",
+    "quote": "The Himalayas span five countries: Nepal, India, China, Bhutan, and Pakistan."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Himalayas",
+    "quote": "The Himalayan range is bordered on the northwest by the Karakoram and Hindu Kush ranges"
+   }
+  ]
+ },
+ {
+  "id": "I06",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the label and could not. The claim lists Afghanistan among the countries the Himalayas run across. T1 sources say otherwise. The Wikipedia Himalayas article names exactly five countries (Nepal, India, China, Bhutan, Pakistan) in both its lead and its infobox. It describes the Hindu Kush, the range that covers Afghanistan, as a separate range on the Himalayas' northwest border. Britannica, cited in that article, gives the range as running from Nanga Parbat in Pakistani-administered Kashmir to Namjagbarwa in Tibet, which leaves Afghanistan out. The strongest counter-evidence is the Wikipedia \"Himalayan states\" article, which says \"some definitions\" also include Afghanistan and Myanmar. That line rests on a PBS page and a tour-operator site, it describes a loose grouping of countries rather than the mountain system itself, and it does not outweigh the main T1 definition. Because a reliable T1 source states a different list of countries, the fact as written is wrong in one listed country. Under the rules that makes it \"contradicted\", so the panel label stands.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Himalayas",
+    "quote": "The Himalayas span five countries: Nepal, India, China, Bhutan, and Pakistan."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Himalayas",
+    "quote": "The Himalayan range is bordered on the northwest by the Karakoram and Hindu Kush ranges"
+   }
+  ]
+ },
+ {
+  "id": "I07",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I could not refute the panel's label. Spa Land is part of the Shinsegae Centum City complex in Haeundae, Busan, and opened with it in March 2009. Korea JoongAng Daily (T2), on 26 February 2009, said the new store with \"a hot spring complex called Spa Land\" would open \"next Tuesday\", which is 3 March 2009. Money Today (T2) marks the first anniversary of the 3 March 2009 opening. A search summary of a Busan city government page (busan.go.kr, T1) also gives 3 March 2009 and lists Spa Land among the complex's facilities, but the page itself would not load, so I could not quote it. I found no reliable source for a 2005 opening, and Wikipedia does not contradict 2009. Dates must match exactly, and 2005 is four years off, so \"contradicted / numeric_off\" stands.",
+  "sources": [
+   {
+    "url": "https://www.koreajoongangdaily.com/business/new-shinsegae-is-biggest-ever/10762352",
+    "quote": "will open the biggest department store in Korea here in Haeundae District, Busan, next Tuesday ... a hot spring complex called Spa Land"
+   },
+   {
+    "url": "https://www.mt.co.kr/article/2010030417578163617",
+    "quote": "2009년 3월3일 오픈 이후 1주년을 맞아 누적 고객수만 해도 1600만명에 달한다"
+   }
+  ]
+ },
+ {
+  "id": "I07",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the label and could not. Spa Land opened inside Shinsegae Centum City in Busan, and the store opened on Tuesday 3 March 2009, with Spa Land as one of its launch facilities. Korea JoongAng Daily (T2, major news), writing before the opening, says Spa Land was part of the complex opening \"next Tuesday\". The panel's T2 source, Money Today, says Spa Land opened on 3 March 2009. A web search summary of a Busan city government English news page also gives 3 March as the opening date and lists a spa land among the facilities, but I could not open that page myself. I found no reliable source that dates Spa Land Centum City to 2005, and the Busan store did not exist before 2009. The rules require dates to be exact, so \"opened in 2005\" is contradicted by reliable sources. The reason is numeric_off.",
+  "sources": [
+   {
+    "url": "https://www.koreajoongangdaily.com/business/new-shinsegae-is-biggest-ever/10762352",
+    "quote": "The complex includes a hot spring complex called Spa Land, the Trinity Membership Club luxury fitness center/spa..."
+   },
+   {
+    "url": "https://www.mt.co.kr/article/2010030417578163617",
+    "quote": "2009년 3월3일 오픈 이후 1주년을 맞아 누적 고객수만 해도 1600만명에 달한다"
+   }
+  ]
+ },
+ {
+  "id": "I08",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the label and could not. Both T1 sources contradict the claim twice. (1) The Jesuit founding year is wrong. Wikipedia and the Baclayon municipal government page both say the first Jesuits, Frs. Juan de Torres and Gabriel Sánchez, arrived on 17 November 1596, not 1595. Wikipedia's infobox also lists \"founded 1596\". The rules require dates to be exact, so 1595 fails. (2) The claim calls it the founding of the \"parish\", but both sources say Baclayon was elevated to a parish only in 1717. Read either as the mission founding (1596) or as the parish (1717), the year 1595 is off. The panel's sources and quotes match what the pages say. Its rationale gives the mission date as \"1595/1596\", but the sources say 1596 only, which makes the contradiction stronger. Verdict contradicted, reason numeric_off, is correct.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+    "quote": "Baclayon was founded by the Jesuit priest Juan de Torres and Gabriel Sánchez in 1596... It was elevated as a parish in 1717"
+   },
+   {
+    "url": "https://baclayon.bohol.gov.ph/?p=323",
+    "quote": "In November 17, 1596, the first Jesuits, Father Juan de Torres, SJ and Father Gabriel Sánchez, SJ , came to Baclayon."
+   }
+  ]
+ },
+ {
+  "id": "I08",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the label but could not. The card says the parish was founded by Jesuits in 1595. Two T1 sources, the English Wikipedia article and the Baclayon municipal government history page, give the same two dates. The first Jesuits (Juan de Torres and Gabriel Sanchez) arrived in Baclayon on 17 November 1596, and Baclayon was elevated to a parish in 1717. The card's date is wrong either way. Read as the parish founding, it is off by 122 years (1717). Read loosely as the start of the Jesuit mission, it is still off by one year (1596), and the rules require dates to be exact. No T1 source I found gives 1595 for either the mission or the parish. The Wikipedia infobox reads 'founded 1596 / 1717 (as Parish)'. The second half of the claim, 'one of the oldest Christian parishes in Bohol', is roughly in line with Wikipedia ('oldest Christian settlement in Bohol'), but it does not fix the wrong date. The label contradicted / numeric_off stands.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+    "quote": "Baclayon was founded by the Jesuit priest Juan de Torres and Gabriel Sánchez in 1596... It was elevated as a parish in 1717"
+   },
+   {
+    "url": "https://baclayon.bohol.gov.ph/?p=323",
+    "quote": "In November 17, 1596, the first Jesuits, Father Juan de Torres, SJ and Father Gabriel Sánchez, SJ , came to Baclayon."
+   }
+  ]
+ },
+ {
+  "id": "I09",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I upheld the \"contradicted\" label. The fact makes two claims: the convento is coral stone, and the bell tower is separate. The first claim mostly holds. Wikipedia (T1) says the convento's first floor is coral stone, but its second floor is light materials such as bamboo. The second claim is wrong according to the same T1 article. Its Watchtower section says the quadrangular watchtower, which is also the bell tower, \"used to be a detached structure\" and was connected to the church when the portico was added in 1875.\n\nI tried to refute the label in two ways:\n1. \"Separate\" could loosely mean a distinct structure rather than a free-standing one. I rejected this reading. In a description of a church complex, \"a separate bell tower\" normally means a detached or free-standing campanile, and the T1 source says that is no longer true.\n2. The 2013 earthquake collapsed both the portico and the bell tower, so the tower might have been rebuilt free-standing. The search results report that restoration was finished and the church reopened in 2018 with the façade and bell tower restored. Nothing found says the tower is detached now. This comes from news coverage I saw only in search results, without opening the pages.\n\nNo T1 or T2 source I found supports \"separate bell tower\". A compound fact with one false part is contradicted, so the label stands. The reason \"false\" also fits: the source states the tower is now connected, so the claim is wrong rather than overstated.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+    "quote": "It is used to be a detached structure from the church and was connected after the addition of the portico."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+    "quote": "The convento is a typical bahay-na-bato with its first floor made out of coral stones"
+   }
+  ]
+ },
+ {
+  "id": "I09",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I upheld the panel's label (contradicted, reason false), though it is borderline. The fact claims the complex includes a coral-stone convento and a separate bell tower. The convento part mostly holds. Wikipedia says its first floor is coral stone, but the second floor is bamboo and other light materials. The bell tower part is the problem. Wikipedia's Watchtower section says the tower \"used to be a detached structure from the church and was connected after the addition of the portico.\" The portico was added in 1875, so the tower has been joined to the church for about 150 years. The fact uses the present tense, so a T1 source says otherwise. Under the rule \"supported only if no T1 source contradicts,\" the fact cannot be supported.\n\nI tried to refute the label. The Bohol provincial Geopark page (geopark.bohol.gov.ph, a government source) appears in search snippets calling it \"an adjoining but separate tower\" started by the Jesuits and finished in 1777. I could not fetch that page's text, so I could not check the quote word for word. Even so, it describes how the tower was first built, not how it stands today. It also says \"adjoining,\" which fits Wikipedia's account. A travel site (not a reliable source) likewise says the 1875 portico \"finally joined the two structures.\" The tower collapsed in the 2013 earthquake and was rebuilt between 2014 and 2018. I found no source saying it was rebuilt as a detached structure. One small weakness: \"separate\" could loosely mean \"a distinct structure.\" Read literally as detached, though, the fact is wrong today, so contradicted/false holds.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+    "quote": "It is used to be a detached structure from the church and was connected after the addition of the portico."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+    "quote": "A way of glazed blue tiles connects the façade and portico, which was added in 1875 as an extension to the façade by the Augustinian Recollects."
+   }
+  ]
+ },
+ {
+  "id": "I10",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the label and could not. The strongest case against it is the US history of the hilltop. The Batanes Wikipedia article (T1) says Radar Tukon \"was a United States weather station\", so you could read \"former installation\" as referring to that. But Wikipedia calls the US facility a weather station, not a radar installation. The same passage then says the site \"at present\" houses the Basco Radar Station, the northernmost weather station in the Philippines. The PAGASA article (T1) lists Basco among PAGASA's current radar sites, marked \"currently under repair\". A radar under repair is still an existing installation, not a former one. So a T1 source says the radar site is current, which contradicts the claim that it is a \"former radar installation\". Under the rules, \"contradicted\" stands.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Batanes",
+    "quote": "Radar Tukon was a United States weather station on a hilltop... At present, it houses the northernmost weather station in the Philippines, the Basco Radar Station"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/PAGASA",
+    "quote": "Basco (in Batanes, currently under repair), Aparri (Cagayan), Baguio"
+   }
+  ]
+ },
+ {
+  "id": "I10",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "\"Radar\" in the itinerary sentence is the hilltop site called Radar Tukon above Basco on Batan Island. According to the Wikipedia article on Batanes, the site \"was a United States weather station\". It also says the site \"at present\" houses PAGASA's Basco Radar Station. PAGASA's Wikipedia article lists Basco among its operational Doppler weather radar stations and marks it \"currently under repair\". So the radar on the site is a current installation, not a former one. The earlier installation was a weather station, and no T1 source calls it a radar. The card says the site is that of a \"former radar installation\", which means the radar is gone. A T1 source says the opposite, so the claim is contradicted, not just unverifiable. I tried to argue the claim is partly true because of the old US station. That fails: the source calls the US site a weather station, not a radar, and the radar there today is current. The panel's \"contradicted\" verdict stands.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Batanes",
+    "quote": "Radar Tukon was a United States weather station on a hilltop. At present, it houses the northernmost weather station in the Philippines, the Basco Radar Station"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/PAGASA",
+    "quote": "currently operational stations are as follows: ... Basco (in Batanes, currently under repair)"
+   }
+  ]
+ },
+ {
+  "id": "I11",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "The fact says Lijiang is the seat of \"Lijiang Naxi Autonomous Prefecture\". No such prefecture exists. Wikipedia (T1) says Lijiang is itself a prefecture-level city. It was created in 2002 and replaced the former Lijiang Naxi Autonomous County, a county-level unit. Wikipedia also says Lijiang has the only Naxi autonomous county in China, which rules out a Naxi autonomous prefecture. The urban seat is Gucheng District, which sits inside Lijiang City, not inside an autonomous prefecture. The first half of the claim, \"a city in northwestern Yunnan\", is correct. The second half names an administrative unit that does not exist, so a reliable T1 source contradicts it. I found nothing that supports the panel's label being wrong, so \"contradicted\" stands.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Lijiang",
+    "quote": "In 2002 Lijiang City was established, replacing the former Lijiang Naxi Autonomous County."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Lijiang",
+    "quote": "Lijiang has the only Naxi autonomous county in China."
+   }
+  ]
+ },
+ {
+  "id": "I11",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I tried to refute the label and could not. The current English Wikipedia (T1) text confirms that Lijiang itself is a prefecture-level city in northwestern Yunnan. The first half of the fact is therefore true. The second half is false: no \"Lijiang Naxi Autonomous Prefecture\" exists. Lijiang is the prefecture-level unit, and it has governed counties including Yulong Naxi Autonomous County since 2002, when it replaced the former Lijiang Naxi Autonomous County. Before 2002 the Naxi autonomous unit was a county, not a prefecture. Wikipedia also says \"Lijiang has the only Naxi autonomous county in China\", so no Naxi autonomous prefecture exists anywhere. A T1 source says otherwise, so under the rules the fact is contradicted. The panel's quotes match the live article verbatim.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Lijiang",
+    "quote": "In 2002 Lijiang City was established, replacing the former Lijiang Naxi Autonomous County."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Lijiang",
+    "quote": "Lijiang has the only Naxi autonomous county in China."
+   }
+  ]
+ },
+ {
+  "id": "I12",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "I could not refute the panel. Spa Land is part of Shinsegae Centum City, and the store opened on Tuesday, 3 March 2009. The Korea JoongAng Daily article dated 26 Feb 2009 says the store \"opens Tuesday\" and lists Spa Land in the complex. The Busan city government gives 3 March as the opening date, and the panel's Money Today articles say the same (grand opening 3 March 2009). English Wikipedia also ties the Centum City store's world-record status to 2009. I found no reliable source for a 2005 opening of Spa Land or of the Centum City complex. Under the rules, dates must be exact, so \"opened in 2005\" is wrong by four years. The label contradicted / numeric_off is correct.",
+  "sources": [
+   {
+    "url": "https://www.koreajoongangdaily.com/business/new-shinsegae-is-biggest-ever/10762352",
+    "quote": "The largest department store in Korea opens Tuesday. ... The complex includes a hot spring complex called Spa Land"
+   },
+   {
+    "url": "https://www.mt.co.kr/living/2009/02/26/2009022610132547457",
+    "quote": "신세계 센텀시티가 오는 3월 3일 대망의 '그랜드오픈'을 앞두고 있다"
+   }
+  ]
+ },
+ {
+  "id": "I12",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "The fact says Spa Land opened in 2005 \"as part of the Shinsegae Centum City complex\". T1 Korean Wikipedia says Shinsegae Centum City opened on 3 March 2009, so the complex did not exist in 2005. Spa Land could not have opened as part of it that year. Korea JoongAng Daily (T2) confirms Spa Land is inside Centum City; the hot springs were found while the building was being built, so the spa came with the 2009 building. The panel's Money Today source (T2) shows the same 2009-03-03 opening. It is an interview with the complex's PR manager and mentions Spa Land. I found no reliable source that gives 2005. The rules require exact dates, so 2005 against 2009 is a contradiction, and \"numeric_off\" is the right reason. I tried to refute the label and could not.",
+  "sources": [
+   {
+    "url": "https://ko.wikipedia.org/wiki/신세계백화점_센텀시티",
+    "quote": "전 세계에서 제일 큰 백화점으로 기획된 신세계백화점 센텀시티점은 2009년 3월 3일에 개관하였으며"
+   },
+   {
+    "url": "https://www.koreajoongangdaily.com/lifestyle/warm-up-this-winter-at-busans-hot-springs/10478553",
+    "quote": "hot springs were discovered 300 meters (984 feet) below ground level when the building was under construction."
+   }
+  ]
+ },
+ {
+  "id": "I13",
+  "judge": 1,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "The 'Radar' in the itinerary is the PAGASA Basco weather radar station on Tukon hill. PAGASA's official climatological sheet for the station puts it at 20°25'39.83\"N, 121°58'14.31\"E. Wikipedia puts Basco Cathedral, in the town centre, at 20.450894N, 121.969267E. The two longitudes are almost the same and the radar is about 0.023° of latitude further south, so it sits roughly 2.6 km south of central Basco, not north of it. Wikipedia's Basco article lists Chanarian as one of Basco's barangays and names Mahatao as the town's southern neighbour; Chanarian, the barangay that holds Sitio Tukon, lies on the Mahatao side. The fact's key claim, that the radar is in an elevated Tukon area north of Basco, is therefore false. The rest of the sentence, about the rugged hill country of northern Batan near Mount Iraya, describes terrain north of Basco and does not fit Tukon either. A T1 government source contradicts the fact, so the 'contradicted' verdict stands under the rules.",
+  "sources": [
+   {
+    "url": "https://pubfiles.pagasa.dost.gov.ph/pagasaweb/files/cad/CLIMATOLOGICAL%20NORMALS%20(1991-2020)/BASCO%20RADAR.pdf",
+    "quote": "LATITUDE: 20o25'39.83''N ... STATION: BASCO, BATANES ... LONGITUDE: 121o58'14.31''E"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Basco_Cathedral",
+    "quote": "coordinates = {{coord|20.450894|121.969267|...}}"
+   }
+  ]
+ },
+ {
+  "id": "I13",
+  "judge": 2,
+  "uphold": true,
+  "corrected_label": null,
+  "rationale": "The fact says the radar stands \"north of Basco\" in the \"rugged hill country of northern Batan\". PAGASA, the government weather agency (T1), puts the Basco radar station at 20°25'39.83\"N, 121°58'14.31\"E. Wikipedia puts Basco Cathedral, the centre of the town, at 20.4509°N, 121.9693°E. The station is about 0.023° further south and almost on the same longitude, so it is roughly 2.6 km south of central Basco, not north of it. Sources give its address as Sitio Tukon, Brgy. Chanarian, uphill from town toward Mahatao. The northern hill country of Batan is around Mt. Iraya, north of Basco. So the direction in the fact is wrong for the place the itinerary visits. The relevant rule is: contradicted when \"a reliable source says otherwise\". I found no T1 source that places the station north of Basco, so the panel's label of contradicted stands.",
+  "sources": [
+   {
+    "url": "https://pubfiles.pagasa.dost.gov.ph/pagasaweb/files/cad/CLIMATOLOGICAL%20NORMALS%20(1991-2020)/BASCO%20RADAR.pdf",
+    "quote": "LATITUDE: 20°25'39.83\"N LONGITUDE: 121°58'14.31\"E"
+   },
+   {
+    "url": "https://en.wikipedia.org/w/index.php?title=Basco_Cathedral&action=raw",
+    "quote": "coordinates = {{coord|20.450894|121.969267|"
+   }
+  ]
+ }
+]

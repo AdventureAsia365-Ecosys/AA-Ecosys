@@ -1,0 +1,762 @@
+[
+ {
+  "card": "C01",
+  "card_id": "37ff9612-ffab-4fb6-9487-e79e725f1fde",
+  "display_name": "Karakoram",
+  "locality": null,
+  "region": "Ladakh, Gilgit-Baltistan, Xinjiang",
+  "country": "India, Pakistan, China",
+  "naming_note": "Karakoram is the usual English name; Karakoram Range is also widely used. The range crosses India, Pakistan and China, and the itinerary’s reference is to its Ladakh sector.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "The Karakoram is a mountain range in Central Asia."
+   },
+   {
+    "kind": "setting",
+    "text": "The range extends across parts of Ladakh, Gilgit-Baltistan and Xinjiang."
+   },
+   {
+    "kind": "setting",
+    "text": "K2, the world’s second-highest mountain, is in the Karakoram."
+   },
+   {
+    "kind": "setting",
+    "text": "The range contains extensive glaciers, including the Siachen, Baltoro and Biafo glaciers."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Peaks and Passes of the Nubra Valley",
+    "day": 15,
+    "place": "the Karakoram",
+    "sentence": "the Karakoram — view"
+   }
+  ]
+ },
+ {
+  "card": "C02",
+  "card_id": "932247a2-c6e0-48e4-a04e-9d2ec934148c",
+  "display_name": "Pleiku",
+  "locality": "Pleiku",
+  "region": "Gia Lai",
+  "country": "Vietnam",
+  "naming_note": "Use Pleiku, the city and provincial capital in Vietnam’s Central Highlands; Plei Ku is an occasional spelling variant.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Pleiku is a city in Gia Lai Province and the province’s capital."
+   },
+   {
+    "kind": "setting",
+    "text": "The city lies in Vietnam’s Central Highlands, on the Pleiku Plateau."
+   },
+   {
+    "kind": "setting",
+    "text": "The surrounding highlands are an important coffee-growing area."
+   },
+   {
+    "kind": "history",
+    "text": "Pleiku was a center of military activity during the Vietnam War."
+   },
+   {
+    "kind": "history",
+    "text": "North Vietnamese forces took Pleiku in March 1975 during the Central Highlands campaign."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Ride the Trail",
+    "day": 9,
+    "place": "Pleiku",
+    "sentence": "Pleiku — cycle to and overnight"
+   }
+  ]
+ },
+ {
+  "card": "C03",
+  "card_id": "3495b676-82f5-4fae-af69-544af365e967",
+  "display_name": "Askole",
+  "locality": "Shigar",
+  "region": "Gilgit-Baltistan",
+  "country": "Pakistan",
+  "naming_note": "Askole is the common English spelling; the itinerary’s “Askoli” is a spelling variant.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Askole is a village in Shigar District, Gilgit-Baltistan, Pakistan."
+   },
+   {
+    "kind": "setting",
+    "text": "The village lies in the upper Shigar Valley in the Karakoram."
+   },
+   {
+    "kind": "setting",
+    "text": "Askole is situated near the Braldu River."
+   },
+   {
+    "kind": "setting",
+    "text": "It is commonly described as the last permanently inhabited village in the Shigar Valley."
+   }
+  ],
+  "context": [
+   {
+    "tour": "FAIRY MEADOWS K2 BC CONCORDIA TREK VIA GONDOGORO LA",
+    "day": 6,
+    "place": "Askoli",
+    "sentence": "Askoli — pass through"
+   },
+   {
+    "tour": "K2 Base Camp Trek",
+    "day": 15,
+    "place": "Askole village",
+    "sentence": "Askole village — end trekking"
+   }
+  ]
+ },
+ {
+  "card": "C04",
+  "card_id": "99357965-746e-453e-85f6-19c0971b9183",
+  "display_name": "Thado Koshi",
+  "locality": "Lukla",
+  "region": "Khumbu",
+  "country": "Nepal",
+  "naming_note": "Use “Thado Koshi” for an international audience; “Thado Koshigaon” and “Thado Koshi Gaon” are expanded spellings, with gaon meaning village.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Thado Koshi is a small settlement in the Khumbu region of Solukhumbu District."
+   },
+   {
+    "kind": "setting",
+    "text": "The settlement lies in the Dudh Koshi River valley in the Himalayas of eastern Nepal."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Short Everest Base Camp Trek-Helicopter Return",
+    "day": 1,
+    "place": "Thado Koshigaon",
+    "sentence": "Thado Koshigaon — continue to"
+   }
+  ]
+ },
+ {
+  "card": "C05",
+  "card_id": "adb5ff46-20c7-426e-b420-08130f0ce444",
+  "display_name": "Khöshöö Tsaidam",
+  "locality": "Khashaat",
+  "region": "Arkhangai",
+  "country": "Mongolia",
+  "naming_note": "Use “Khöshöö Tsaidam” for an international audience; “Khoshoo Tsaidam” and the itinerary spelling “KhushuuTsaidam” are also used.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Khöshöö Tsaidam is an archaeological memorial complex in Mongolia’s Orkhon Valley."
+   },
+   {
+    "kind": "history",
+    "text": "The complex includes memorials to the Turkic rulers Kül Tigin and Bilge Khagan."
+   },
+   {
+    "kind": "history",
+    "text": "The memorials were erected in the 8th century during the Second Turkic Khaganate."
+   },
+   {
+    "kind": "history",
+    "text": "Stone steles at the site bear inscriptions in the Old Turkic script."
+   },
+   {
+    "kind": "setting",
+    "text": "The complex is part of the Orkhon Valley Cultural Landscape, a UNESCO World Heritage property."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Mini Gobi and Kharkhorin 3 day tour",
+    "day": 2,
+    "place": "KhushuuTsaidam area",
+    "sentence": "KhushuuTsaidam area — drive"
+   }
+  ]
+ },
+ {
+  "card": "C06",
+  "card_id": "60f51f8d-fd39-4553-b054-afffd0e6b589",
+  "display_name": "Thar Desert",
+  "locality": null,
+  "region": "Rajasthan, Sindh",
+  "country": "India and Pakistan",
+  "naming_note": "“Thar Desert” is widely used internationally; “Great Indian Desert” is another name, although the desert also extends into Pakistan.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "The Thar is an arid region in the northwestern Indian subcontinent."
+   },
+   {
+    "kind": "setting",
+    "text": "Most of the desert lies in India, chiefly in Rajasthan; it also extends into Pakistan, particularly Sindh."
+   },
+   {
+    "kind": "setting",
+    "text": "Its landscape includes sandy plains and shifting sand dunes."
+   },
+   {
+    "kind": "setting",
+    "text": "Rainfall is sparse and irregular, and much of the region has a hot desert climate."
+   },
+   {
+    "kind": "naming",
+    "text": "The name “Thar” is also commonly rendered as “Thar Desert”; “Great Indian Desert” is an alternate name."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Rajasthan: Laneways & Local Villages",
+    "day": 9,
+    "place": "the surrounding Thar desert",
+    "sentence": "the surrounding Thar desert — see sunrise"
+   },
+   {
+    "tour": "India: Women's Expedition",
+    "day": 5,
+    "place": "Thar Desert",
+    "sentence": "Thar Desert — head into the Thar Desert"
+   }
+  ]
+ },
+ {
+  "card": "C07",
+  "card_id": "a64b4802-00e7-49f3-bd8a-3a674a765d27",
+  "display_name": "China–Nepal Friendship Bridge",
+  "locality": "Kodari / Zhangmu",
+  "region": "Bagmati Province / Tibet Autonomous Region",
+  "country": "Nepal and China",
+  "naming_note": "For an international audience, “China–Nepal Friendship Bridge” is a clear name; it is also commonly called the Sino-Nepal Friendship Bridge.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "It is an international road bridge at the Nepal–China border."
+   },
+   {
+    "kind": "setting",
+    "text": "The bridge links Kodari in Nepal with Zhangmu in China's Tibet Autonomous Region."
+   },
+   {
+    "kind": "setting",
+    "text": "It spans the Bhote Koshi River, known as the Poiqu on the Tibetan side."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "It connects Nepal's Araniko Highway with the road network in Tibet."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Nepal Tibet Tour",
+    "day": 19,
+    "place": "Friendship Bridge",
+    "sentence": "Friendship Bridge — cross the Bhote Koshi River"
+   },
+   {
+    "tour": "Lhasa Kailash EBC Tour",
+    "day": 1,
+    "place": "Friendship Bridge",
+    "sentence": "Friendship Bridge — walk across"
+   }
+  ]
+ },
+ {
+  "card": "C08",
+  "card_id": "6efcfa8b-d75d-43eb-bf26-2ad1c97b2bbf",
+  "display_name": "Old Goa",
+  "locality": "Goa Velha",
+  "region": "Goa",
+  "country": "India",
+  "naming_note": "Use “Old Goa” for an international audience; “Goa Velha” and “Velha Goa” are also used.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Old Goa is a historic settlement in the Indian state of Goa."
+   },
+   {
+    "kind": "history",
+    "text": "It served as the capital of Portuguese India during the period of Portuguese rule."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "Its historic churches and convents include the Basilica of Bom Jesus and the Sé Cathedral."
+   },
+   {
+    "kind": "history",
+    "text": "The churches and convents of Old Goa are recognized together as a UNESCO World Heritage property under the name “Churches and Convents of Goa.”"
+   },
+   {
+    "kind": "history",
+    "text": "Many of its landmark churches and convents date from the 16th and 17th centuries."
+   }
+  ],
+  "context": [
+   {
+    "tour": "South India at a Glance",
+    "day": 20,
+    "place": "Old Goa",
+    "sentence": "Old Goa — tour colonial-era churches"
+   }
+  ]
+ },
+ {
+  "card": "C09",
+  "card_id": "8602e7f0-d815-44d5-902f-4116c7dfda45",
+  "display_name": "Olango Island",
+  "locality": "Lapu-Lapu City",
+  "region": "Cebu",
+  "country": "Philippines",
+  "naming_note": "Use “Olango Island” for the island itself; the Olango Island Wildlife Sanctuary is a protected area on the island.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Olango Island is part of the Olango Island Group in Cebu."
+   },
+   {
+    "kind": "setting",
+    "text": "It lies east of Mactan Island, separated from it by the Hilutungan Channel."
+   },
+   {
+    "kind": "setting",
+    "text": "The island has coastal tidal flats and mangrove habitats that support waterbirds."
+   },
+   {
+    "kind": "history",
+    "text": "The Olango Island Wildlife Sanctuary on the island was designated a Wetland of International Importance under the Ramsar Convention in 1994."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Cebu / Sumilon / Negros Oriental / Bohol",
+    "day": 2,
+    "place": "Olango Island",
+    "sentence": "Olango Island — travel by boat"
+   },
+   {
+    "tour": "Cebu / Sumilon / Negros Oriental / Bohol",
+    "day": 2,
+    "place": "Olango Island",
+    "sentence": "Olango Island — snorkel"
+   }
+  ]
+ },
+ {
+  "card": "C10",
+  "card_id": "bb6a0522-2dc9-49ea-ad41-26ba6b18acdc",
+  "display_name": "Kangchenjunga",
+  "locality": null,
+  "region": "Sikkim",
+  "country": "India and Nepal",
+  "naming_note": "Kangchenjunga is the widely used English spelling; Khangchendzonga is also used, particularly in India. The mountain lies on the India–Nepal border.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Kangchenjunga is a mountain massif in the eastern Himalayas."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "Its main summit rises to 8,586 metres, making it the world's third-highest mountain."
+   },
+   {
+    "kind": "setting",
+    "text": "The mountain lies on the border between Nepal and the Indian state of Sikkim."
+   },
+   {
+    "kind": "naming",
+    "text": "The massif has five principal peaks; its name is commonly interpreted as “the five treasures of snow.”"
+   },
+   {
+    "kind": "history",
+    "text": "The first confirmed ascent of the main summit was made by Joe Brown and George Band in 1955."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Sikkim - Beneath Kangchenjunga Trek",
+    "day": 2,
+    "place": "Kangchenjunga",
+    "sentence": "Kangchenjunga — view"
+   },
+   {
+    "tour": "Sikkim - Beneath Kangchenjunga Trek",
+    "day": 6,
+    "place": "Kangchenjunga",
+    "sentence": "Kangchenjunga — view the panorama"
+   }
+  ]
+ },
+ {
+  "card": "C11",
+  "card_id": "c440c701-1ece-453f-8d5a-a0c2461646a0",
+  "display_name": "Bulgan Province",
+  "locality": null,
+  "region": "Northern Mongolia",
+  "country": "Mongolia",
+  "naming_note": "“Bulgan Province” is the usual English name; it is also called Bulgan aimag and is distinct from the town of Bulgan.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Bulgan is one of Mongolia’s administrative provinces, known locally as an aimag."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "The town of Bulgan is the provincial capital."
+   },
+   {
+    "kind": "setting",
+    "text": "Bulgan Province lies in north-central Mongolia."
+   },
+   {
+    "kind": "setting",
+    "text": "The Selenge River and its tributaries form part of the province’s river landscape."
+   },
+   {
+    "kind": "setting",
+    "text": "The province includes forest-steppe landscapes in the north and more open steppe areas farther south."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Naadam festival in Khuvsgul province",
+    "day": 8,
+    "place": "Bulgan province",
+    "sentence": "Bulgan province — drive towards"
+   }
+  ]
+ },
+ {
+  "card": "C12",
+  "card_id": "511317d7-de75-407b-ba25-e173197d636e",
+  "display_name": "Namhae Island",
+  "locality": "Namhae County",
+  "region": "South Gyeongsang",
+  "country": "South Korea",
+  "naming_note": "Use “Namhae Island” for an international audience; Namhae-do is a common romanized form of its Korean name.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Namhae Island is an island off the southern coast of the Korean Peninsula and the principal island of Namhae County."
+   },
+   {
+    "kind": "setting",
+    "text": "The island is part of South Gyeongsang Province in South Korea."
+   },
+   {
+    "kind": "setting",
+    "text": "Its terrain is mountainous, with an indented coastline and bays."
+   },
+   {
+    "kind": "setting",
+    "text": "Terraced rice fields are a characteristic feature of parts of the island’s agricultural landscape."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Namhae Island Adventure",
+    "day": 1,
+    "place": "Namhae Island",
+    "sentence": "Namhae Island — depart for"
+   }
+  ]
+ },
+ {
+  "card": "C13",
+  "card_id": "b5f67f46-9400-46ca-9d44-662a8465940f",
+  "display_name": "Barafu Camp",
+  "locality": "Moshi",
+  "region": "Kilimanjaro",
+  "country": "Tanzania",
+  "naming_note": "For an international audience, use “Barafu Camp,” the more common name; “Barafu Hut” is also used for the site.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Barafu Camp is a high-altitude camp on the southern slopes of Mount Kilimanjaro."
+   },
+   {
+    "kind": "setting",
+    "text": "It lies at approximately 4,673 metres (15,331 feet) above sea level."
+   },
+   {
+    "kind": "setting",
+    "text": "The camp is within Kilimanjaro National Park, in Tanzania’s Kilimanjaro Region."
+   },
+   {
+    "kind": "setting",
+    "text": "Its surroundings are rocky and sparsely vegetated, in Kilimanjaro’s alpine desert zone."
+   },
+   {
+    "kind": "naming",
+    "text": "“Barafu” means “ice” in Swahili."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Kilimanjaro Trekking Via Machame Route",
+    "day": 5,
+    "place": "Barafu hut",
+    "sentence": "Barafu hut — continue up to Barafu hut"
+   },
+   {
+    "tour": "Kilimanjaro Trekking Via Machame Route",
+    "day": 5,
+    "place": "Barafu",
+    "sentence": "Barafu — complete the Southern Circuit"
+   }
+  ]
+ },
+ {
+  "card": "C14",
+  "card_id": "fb84e414-0ff2-4b73-b3ec-22bbe6ecf0ce",
+  "display_name": "Malé",
+  "locality": "Malé",
+  "region": "North Malé Atoll",
+  "country": "Maldives",
+  "naming_note": "Use Malé, the standard English spelling with an accent; Male is a common spelling without it.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Malé is the capital and most populous city of the Maldives."
+   },
+   {
+    "kind": "setting",
+    "text": "The city occupies Malé Island and adjoining reclaimed land in the Indian Ocean."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "The Islamic Centre and its gold-domed Grand Friday Mosque are prominent landmarks in the city."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Maldives and Sri Lanka on a budget",
+    "day": 12,
+    "place": "Colombo International Airport to Male",
+    "sentence": "Colombo International Airport to Male — fly"
+   }
+  ]
+ },
+ {
+  "card": "C15",
+  "card_id": "27df536d-b1cd-4b3b-a72b-dea905f2d531",
+  "display_name": "Thien Mu Pagoda",
+  "locality": "Hue",
+  "region": "Central Vietnam",
+  "country": "Vietnam",
+  "naming_note": "Thien Mu Pagoda is the usual English name; it is also known as Linh Mu Pagoda, and the surrounding area is now part of Hue, formerly Thua Thien Hue Province.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Thien Mu Pagoda is a Buddhist temple complex on the north bank of the Perfume River."
+   },
+   {
+    "kind": "history",
+    "text": "The temple was founded in 1601 under Nguyen Hoang, ruler of the southern Vietnamese territories."
+   },
+   {
+    "kind": "history",
+    "text": "Its seven-storey Phuoc Duyen Tower was built in 1844 during the reign of Emperor Thieu Tri."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "The complex includes the Phuoc Duyen Tower and Buddhist worship halls."
+   },
+   {
+    "kind": "naming",
+    "text": "The pagoda is also called Linh Mu Pagoda; Thien Mu is commonly translated as “Celestial Lady.”"
+   }
+  ],
+  "context": [
+   {
+    "tour": "Luang Prabang - Hoi An",
+    "day": 15,
+    "place": "backstreets and the Perfume River's banks to Thien Mu Pagoda",
+    "sentence": "backstreets and the Perfume River's banks to Thien Mu Pagoda — cycle"
+   },
+   {
+    "tour": "Ride the Trail",
+    "day": 1,
+    "place": "Thien Mu Pagoda",
+    "sentence": "Thien Mu Pagoda — cycle to"
+   }
+  ]
+ },
+ {
+  "card": "C16",
+  "card_id": "d7f9989b-6495-43d4-9b75-4481276c6f49",
+  "display_name": "Tsukuda Island",
+  "locality": "Chuo City",
+  "region": "Tokyo",
+  "country": "Japan",
+  "naming_note": "Use “Tsukuda Island” for the historic island and neighborhood; “Tsukuda” is also used, and it is distinct from adjacent Tsukishima.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Tsukuda is a historic neighborhood on Tsukuda Island in central Tokyo."
+   },
+   {
+    "kind": "setting",
+    "text": "The island lies in the Sumida River estuary."
+   },
+   {
+    "kind": "history",
+    "text": "Fishermen from Tsukuda village in Settsu Province, in present-day Osaka Prefecture, settled there in the early Edo period."
+   },
+   {
+    "kind": "history",
+    "text": "Tsukuda is associated with tsukudani, foods simmered in soy sauce and traditionally preserved."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Route C: Tokyo Transformation",
+    "day": 1,
+    "place": "Tsukuda Island",
+    "sentence": "Tsukuda Island — start the route"
+   }
+  ]
+ },
+ {
+  "card": "C17",
+  "card_id": "8bbcf3db-fe10-45d0-840f-031b881f406c",
+  "display_name": "Kuaishan Giant Trees Trail",
+  "locality": "Wufeng Township",
+  "region": "Hsinchu County",
+  "country": "Taiwan",
+  "naming_note": "“Kuaishan Giant Trees Trail” is a common English rendering; “Kuaishan Big Trees Trail” is another spelling used in itineraries.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "It is a forest trail within Guanwu National Forest Recreation Area."
+   },
+   {
+    "kind": "setting",
+    "text": "The trail lies in the montane forests of Taiwan’s Xueshan Range."
+   },
+   {
+    "kind": "setting",
+    "text": "The area includes stands of Taiwan red cypress, including large old trees associated with the trail’s name."
+   },
+   {
+    "kind": "naming",
+    "text": "The trail’s Chinese name, 檜山巨木群步道, refers to the giant-tree group at Kuaishan."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Guanwu National Forest – Day Tour (Guided)",
+    "day": 1,
+    "place": "The Kuaishan Big Trees Trail",
+    "sentence": "The Kuaishan Big Trees Trail — walk"
+   }
+  ]
+ },
+ {
+  "card": "C18",
+  "card_id": "2055b3f9-b62a-4c51-9424-02d2f7f20863",
+  "display_name": "Nuwara Eliya Post Office",
+  "locality": "Nuwara Eliya",
+  "region": "Central Province",
+  "country": "Sri Lanka",
+  "naming_note": "Use “Nuwara Eliya Post Office” to distinguish it from post offices elsewhere.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "It is a historic post office building in Nuwara Eliya."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "The building continues to serve as a post office."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Sri Lanka Ultimate Highlights & Local Immersion",
+    "day": 13,
+    "place": "the Post Office",
+    "sentence": "the Post Office — take in"
+   },
+   {
+    "tour": "Sri Lanka Complete Highlights & Local Experiences",
+    "day": 7,
+    "place": "the Post Office",
+    "sentence": "the Post Office — walk past"
+   }
+  ]
+ },
+ {
+  "card": "C19",
+  "card_id": "f6711711-26fb-4c16-8112-ea74189e8bd4",
+  "display_name": "Bahundanda",
+  "locality": "Marsyangdi",
+  "region": "Gandaki Province",
+  "country": "Nepal",
+  "naming_note": "Use “Bahundanda,” the commonly used English spelling; the name is often glossed as “Brahmin hill.”",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Bahundanda is a village in Marsyangdi Rural Municipality, Lamjung District."
+   },
+   {
+    "kind": "setting",
+    "text": "The village is in the Marsyangdi River valley in the Himalayan foothills."
+   },
+   {
+    "kind": "setting",
+    "text": "Bahundanda is built on a hillside amid cultivated terraces."
+   },
+   {
+    "kind": "naming",
+    "text": "The name combines “bahun,” meaning Brahmin, with “danda,” meaning hill or ridge."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Annapurna Circuit Trek",
+    "day": 3,
+    "place": "Ngadi village to Bahundanda",
+    "sentence": "Ngadi village to Bahundanda — continue over difficult ground"
+   }
+  ]
+ },
+ {
+  "card": "C20",
+  "card_id": "73974818-6bc3-48a9-8cfb-7d0f9a8095e1",
+  "display_name": "Zenkov Cathedral",
+  "locality": "Almaty",
+  "region": null,
+  "country": "Kazakhstan",
+  "naming_note": "For an international audience, “Zenkov Cathedral” is widely used; its formal name is the Ascension Cathedral.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "It is a Russian Orthodox cathedral dedicated to the Ascension of the Lord."
+   },
+   {
+    "kind": "setting",
+    "text": "The cathedral is a wooden building in Panfilov Park in Almaty."
+   },
+   {
+    "kind": "history",
+    "text": "It was designed by architect Andrei Zenkov and built from 1904 to 1907."
+   },
+   {
+    "kind": "history",
+    "text": "The cathedral survived the 1911 earthquake that struck Almaty."
+   }
+  ],
+  "context": [
+   {
+    "tour": "Cultural tour to Kyrgyzstan, China and Kazakhstan",
+    "day": 4,
+    "place": "Zenkov Cathedral",
+    "sentence": "Zenkov Cathedral — visit"
+   }
+  ]
+ }
+]

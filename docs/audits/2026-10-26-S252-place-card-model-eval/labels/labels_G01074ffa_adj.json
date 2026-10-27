@@ -1,0 +1,982 @@
+{
+ "group_id": "G01074ffa",
+ "labeller": "adj",
+ "reference": {
+  "name": "Sangchen Choekhor Shedra (Sang Choekor Buddhist College)",
+  "locality": "Paro",
+  "region": "Paro District",
+  "country": "Bhutan",
+  "lat": 27.4564,
+  "lon": 89.3895,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+    "tier": "T1",
+    "quote": "from Tango Shedra and Sangngag Chokhor Shedra in Paro held their graduation ceremonies at Tango."
+   },
+   {
+    "url": "https://www.bbs.bt/?p=225659",
+    "tier": "T2",
+    "quote": "the reconstruction of Sangchen Choekhor monastery in Paro is progressing well."
+   },
+   {
+    "url": "https://photon.komoot.io/api/?q=Sangchen%20Choekhor%20Shedra&limit=1",
+    "tier": "T1",
+    "quote": "\"name\":\"Sangchen Choekhor Shedra\",\"street\":\"Sangchoekhor Lam\""
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "Vf8f8d361",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Spelling variant of the same shedra; ~3.5 km from Paro town in Paro District.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V0f173c7e",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Sang Choekhor = Sangchen Choekhor Shedra, Paro.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V4e752471",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Right shedra but locality Thimphu is wrong (it is above Paro, ~50 km from Thimphu).",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V2e31fdf0",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Spacing variant of the same name; Paro correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V67952b3d",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Spelling variant; Paro correct.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Fa7320d11",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Paro_District",
+     "tier": "T1",
+     "quote": "It is one of the most historic valleys in Bhutan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Paro,_Bhutan",
+     "tier": "T1",
+     "quote": "outside Paro is the famous Paro Taktsang (Tiger's Nest) Buddhist monastery and hermitage."
+    }
+   ],
+   "rationale": "Paro District: historic valley, sole international airport; Tiger's Nest is near Paro.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8991518d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://api.open-elevation.com/api/v1/lookup?locations=27.456446,89.38951",
+     "tier": "T2",
+     "quote": "\"elevation\":2850.355469"
+    },
+    {
+     "url": "https://api.opentopodata.org/v1/srtm30m?locations=27.456446,89.38951",
+     "tier": "T2",
+     "quote": "\"elevation\": 2899.0"
+    }
+   ],
+   "rationale": "DEM at the OSM shedra point gives ~2,850-2,900 m; 'approximately 2,800 m' is within tolerance of the open-elevation value.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F20d5c9c5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "and Shedras (Buddhist colleges), increased in Wangchuck's reign."
+    },
+    {
+     "url": "https://www.bbs.bt/?p=225659",
+     "tier": "T2",
+     "quote": "It currently houses over 200 monks serving as one of the Buddhist universities in the country."
+    }
+   ],
+   "rationale": "Shedra = Buddhist college; houses 200+ monks as a Buddhist university.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff10e5c11",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "from Tango Shedra and Sangngag Chokhor Shedra in Paro held their graduation ceremonies at Tango."
+    },
+    {
+     "url": "https://www.bbs.bt/?p=225659",
+     "tier": "T2",
+     "quote": "the reconstruction of Sangchen Choekhor monastery in Paro is progressing well."
+    }
+   ],
+   "rationale": "Restates identity: Buddhist college in Paro.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5d776e56",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.bbs.bt/?p=225659",
+     "tier": "T2",
+     "quote": "the reconstruction of Sangchen Choekhor monastery in Paro is progressing well."
+    },
+    {
+     "url": "https://www.bbs.bt/?p=225659",
+     "tier": "T2",
+     "quote": "It currently houses over 200 monks serving as one of the Buddhist universities in the country."
+    }
+   ],
+   "rationale": "Monastery buildings housing a monk community.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb9b9155e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "and Shedras (Buddhist colleges), increased in Wangchuck's reign."
+    },
+    {
+     "url": "https://www.lonelyplanet.com/bhutan/upper-paro-valley/attractions/sangchen-choekor-shedra/a/poi-sig/1371298/1335506",
+     "tier": "T2",
+     "quote": "home to about 150 monks, studying for six years before they move on to Tango Monastery upon graduation"
+    }
+   ],
+   "rationale": "Monks study at the shedra (Buddhist college) for six years.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2ad8ab1d",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [],
+   "rationale": "Naming claim; reliable sources use several forms (Sangchen Choekhor, Sangngag Chokhor, Sanga Choekhor); 'Sang Choekor' as the common English form not confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7eb3e68d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/bhutan/upper-paro-valley/attractions/sangchen-choekor-shedra/a/poi-sig/1371298/1335506",
+     "tier": "T2",
+     "quote": "drive 12km up the north bank road and then 7km up the switchbacking mountainside road"
+    },
+    {
+     "url": "https://photon.komoot.io/api/?q=Sangchen%20Choekhor%20Shedra&limit=1",
+     "tier": "T1",
+     "quote": "\"name\":\"Sangchen Choekhor Shedra\",\"street\":\"Sangchoekhor Lam\""
+    }
+   ],
+   "rationale": "Reached by a mountainside road above the Paro valley; OSM places it ~3.5 km from Paro town.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0a4831da",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Bhutan",
+     "tier": "T1",
+     "quote": "between two-thirds and three-quarters of the Bhutanese population follow Vajrayana Buddhism, which is also the state religion"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Bhutan",
+     "tier": "T1",
+     "quote": "traditionally follow the Nyingmapa rather than the official Drukpa Kagyu form of Tibetan Buddhism"
+    }
+   ],
+   "rationale": "State religion is Vajrayana Buddhism in the official Drukpa Kagyu form.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa8fdd34b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "and Shedras (Buddhist colleges), increased in Wangchuck's reign."
+    },
+    {
+     "url": "https://www.lonelyplanet.com/bhutan/upper-paro-valley/attractions/sangchen-choekor-shedra/a/poi-sig/1371298/1335506",
+     "tier": "T2",
+     "quote": "home to about 150 monks, studying for six years before they move on to Tango Monastery upon graduation"
+    }
+   ],
+   "rationale": "Shedra = Buddhist college where monks study.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F94367670",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "from Tango Shedra and Sangngag Chokhor Shedra in Paro held their graduation ceremonies at Tango."
+    }
+   ],
+   "rationale": "Restates identity: Buddhist college in Paro.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9e35369d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.bbs.bt/?p=225659",
+     "tier": "T2",
+     "quote": "It currently houses over 200 monks serving as one of the Buddhist universities in the country."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Bhutan",
+     "tier": "T1",
+     "quote": "between two-thirds and three-quarters of the Bhutanese population follow Vajrayana Buddhism, which is also the state religion"
+    }
+   ],
+   "rationale": "Buddhist university in a Vajrayana country.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff59004d3",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/bhutan/upper-paro-valley/attractions/sangchen-choekor-shedra/a/poi-sig/1371298/1335506",
+     "tier": "T2",
+     "quote": "drive 12km up the north bank road and then 7km up the switchbacking mountainside road"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "from Tango Shedra and Sangngag Chokhor Shedra in Paro held their graduation ceremonies at Tango."
+    }
+   ],
+   "rationale": "Monastic college reached by a switchback mountainside road above Paro valley.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0118adbf",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.bbs.bt/?p=225659",
+     "tier": "T2",
+     "quote": "It currently houses over 200 monks serving as one of the Buddhist universities in the country."
+    }
+   ],
+   "rationale": "Buddhist university with resident monks.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd5a25f58",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://www.bbs.bt/?p=225659",
+     "tier": "T2",
+     "quote": "the reconstruction of Sangchen Choekhor monastery in Paro is progressing well."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "By 2006, there were 13 Shedras located in Tango, Dodeydrag, Khothokha, Sanga Choekhor, Gontey"
+    }
+   ],
+   "rationale": "Spellings vary across reliable sources (Sangchen Choekhor, Sanga Choekhor, Sangngag Chokhor).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5170cd00",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "from Tango Shedra and Sangngag Chokhor Shedra in Paro held their graduation ceremonies at Tango."
+    }
+   ],
+   "rationale": "Restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff7918a6f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Paro_District",
+     "tier": "T1",
+     "quote": "It is one of the most historic valleys in Bhutan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Paro_Chhu",
+     "tier": "T1",
+     "quote": "The Paro Chhu is a river of western Bhutan."
+    }
+   ],
+   "rationale": "Historic valley drained by the Paro Chhu; 'broad, fertile' is descriptive.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3d354b1f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://api.open-elevation.com/api/v1/lookup?locations=27.456446,89.38951",
+     "tier": "T2",
+     "quote": "\"elevation\":2850.355469"
+    },
+    {
+     "url": "https://api.opentopodata.org/v1/srtm30m?locations=27.456446,89.38951",
+     "tier": "T2",
+     "quote": "\"elevation\": 2899.0"
+    }
+   ],
+   "rationale": "DEM ~2,850-2,900 m; 'about 2,800 m' acceptable.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2d571ffb",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/bhutan/upper-paro-valley/attractions/sangchen-choekor-shedra/a/poi-sig/1371298/1335506",
+     "tier": "T2",
+     "quote": "drive 12km up the north bank road and then 7km up the switchbacking mountainside road"
+    }
+   ],
+   "rationale": "Hillside above Paro valley.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff3fad99d",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://api.opentopodata.org/v1/srtm30m?locations=27.456446,89.38951",
+     "tier": "T2",
+     "quote": "\"elevation\": 2899.0"
+    },
+    {
+     "url": "https://api.open-elevation.com/api/v1/lookup?locations=27.456446,89.38951",
+     "tier": "T2",
+     "quote": "\"elevation\":2850.355469"
+    }
+   ],
+   "rationale": "DEM elevation at the shedra is ~2,850-2,900 m, not 4,760 m.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5f41f998",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://www.bbs.bt/?p=225659",
+     "tier": "T2",
+     "quote": "the reconstruction of Sangchen Choekhor monastery in Paro is progressing well."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "By 2006, there were 13 Shedras located in Tango, Dodeydrag, Khothokha, Sanga Choekhor, Gontey"
+    }
+   ],
+   "rationale": "Transliteration variants attested; restates aliases.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0ad2385b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/bhutan/upper-paro-valley/attractions/sangchen-choekor-shedra/a/poi-sig/1371298/1335506",
+     "tier": "T2",
+     "quote": "drive 12km up the north bank road and then 7km up the switchbacking mountainside road"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Paro_District",
+     "tier": "T1",
+     "quote": "is a district (dzongkhag), valley, river and town (population 20,000) in Bhutan."
+    }
+   ],
+   "rationale": "Paro District, hillside above valley; 'forested' not separately confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff93901a6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Paro_District",
+     "tier": "T1",
+     "quote": "is a district (dzongkhag), valley, river and town (population 20,000) in Bhutan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Paro_Chhu",
+     "tier": "T1",
+     "quote": "The Paro Chhu is a river of western Bhutan."
+    }
+   ],
+   "rationale": "Deciding source: Wikipedia 'Paro District' treats Paro as district, valley, river and town in one; the northern extension to the Tibet border (B's quote) makes the sentence loose, not false. 'Himalayan foothills' is a loose descriptor.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F6f6cd0c2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://api.open-elevation.com/api/v1/lookup?locations=27.456446,89.38951",
+     "tier": "T2",
+     "quote": "\"elevation\":2850.355469"
+    },
+    {
+     "url": "https://api.opentopodata.org/v1/srtm30m?locations=27.456446,89.38951",
+     "tier": "T2",
+     "quote": "\"elevation\": 2899.0"
+    }
+   ],
+   "rationale": "DEM ~2,850-2,900 m; 'about 2,800 m' acceptable.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F14d5684c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "from Tango Shedra and Sangngag Chokhor Shedra in Paro held their graduation ceremonies at Tango."
+    }
+   ],
+   "rationale": "Restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F12b6cb0c",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Both unverifiable (no reliable source). trip_leak true: the sentence ties the college to the Bumdra plateau, the trek's destination, i.e. it frames the place by the trip route.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fc75ed185",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/bhutan/upper-paro-valley/attractions/sangchen-choekor-shedra/a/poi-sig/1371298/1335506",
+     "tier": "T2",
+     "quote": "drive 12km up the north bank road and then 7km up the switchbacking mountainside road"
+    }
+   ],
+   "rationale": "Hillside above Paro valley; 'wooded' not separately confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd13900f9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Bhutan",
+     "tier": "T1",
+     "quote": "between two-thirds and three-quarters of the Bhutanese population follow Vajrayana Buddhism, which is also the state religion"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jigme_Singye_Wangchuck",
+     "tier": "T1",
+     "quote": "and Shedras (Buddhist colleges), increased in Wangchuck's reign."
+    }
+   ],
+   "rationale": "Vajrayana is the state religion; shedras are established institutions.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

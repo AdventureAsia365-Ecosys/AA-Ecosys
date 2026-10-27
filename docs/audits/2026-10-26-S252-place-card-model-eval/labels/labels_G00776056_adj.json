@@ -1,0 +1,1090 @@
+{
+ "group_id": "G00776056",
+ "labeller": "adj",
+ "reference": {
+  "name": "Spa Land Centum City (Shinsegae Centum City)",
+  "locality": "Haeundae-gu, Busan",
+  "region": "Busan Metropolitan City",
+  "country": "South Korea",
+  "lat": 35.1687,
+  "lon": 129.1294,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+    "tier": "T2",
+    "quote": "a gigantic, modern jjimjilbang (Korean-style sauna/spa) located inside Shinsegae Department Store Centum City"
+   },
+   {
+    "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+    "tier": "T2",
+    "quote": "Centum City, 35 Centumnam-daero, Haeundae-gu, Busan, South Korea"
+   }
+  ],
+  "rationale": "Busan leg, jjimjilbang 'Centum Spa Land' = Spa Land inside Shinsegae Centum City, Haeundae-gu (A and B agree)."
+ },
+ "variants": [
+  {
+   "vid": "Vc52b1970",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Haeundae / Busan correct; name is a valid English form.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Ve0f45a05",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Busan / Busan Metropolitan City correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Va6c089c9",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Busan / Busan correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vbc92f657",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Locality Jeonju is a different city ~200 km away; Spa Land is in Busan.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V378a8501",
+   "name": "ok",
+   "locality": "correct",
+   "region": "wrong",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Locality Busan fine, but region given as Haeundae District, a sub-city district, not the first-level region (Busan Metropolitan City).",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F4543288b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "The facility consists of two floors and an outdoor spa."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Busan",
+     "tier": "T1",
+     "quote": "It is home to the world's largest department store, the Shinsegae Centum City."
+    }
+   ],
+   "rationale": "A supported vs B contradicted (MT 2010 says floors 1-3). Resolved supported: the Korea Tourism Organization page (T1) says two floors plus an outdoor spa, which outranks the T2 news item; Wikipedia (citing Guinness) and MT confirm world's-largest-department-store record and 2009 opening.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F22f7c83a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "The water in Spa Land’s baths and pools is pumped from two types of hot springs that lie 100 meters underground"
+    },
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "Spaland offers services tailored to customer's preferences by using carbonated and saline hot springs drawn from 1,000 meters underground."
+    }
+   ],
+   "rationale": "Both supported; numeric resolved true because the fact states a count ('two underground sources'). CNN quote checked on page; VisitKorea confirms carbonated + saline springs.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F625392b8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "Noteworthy facilities include Roman Sauna, which is a recreation of an ancient Roman bath; a dry sauna where visitors can experience traditional Finnish-style saunas"
+    },
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "Spaland Centum City has the merit of being both a traditional Korean-style public bath and an urban Japanese-style public bath."
+    }
+   ],
+   "rationale": "Themed saunas incl. Roman and Finnish, Korean-style bath, many baths documented by VisitKorea.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9de98012",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land Centum City, a gigantic, modern jjimjilbang (Korean-style sauna/spa) located inside Shinsegae Department Store Centum City."
+    },
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land, Centum City, 35 Centumnam-daero, Haeundae-gu, Busan, South Korea"
+    }
+   ],
+   "rationale": "Jjimjilbang inside Shinsegae Centum City, Haeundae-gu, Busan.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0d3457d8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/센텀시티",
+     "tier": "T1",
+     "quote": "정보통신·영상·오락·국제업무 등의 기능을 갖춘 첨단 복합 산업단지이다."
+    }
+   ],
+   "rationale": "Centum City is a commercial/industrial complex district in Haeundae-gu, Busan.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fad63b3cd",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "a gigantic, modern jjimjilbang (Korean-style sauna/spa) located inside Shinsegae Department Store Centum City"
+    }
+   ],
+   "rationale": "Both supported; trivial resolved false: the variants carrying this fact (Ve0f45a05, Vbc92f657) have identity fields Spa Land Centum City / Busan, so the host complex (Shinsegae Centum City) is added information, not a restatement.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Ff13653c9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land Centum City, a gigantic, modern jjimjilbang (Korean-style sauna/spa) located inside Shinsegae Department Store Centum City."
+    },
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land, Centum City, 35 Centumnam-daero, Haeundae-gu, Busan, South Korea"
+    }
+   ],
+   "rationale": "Korean bathhouse/jjimjilbang inside Shinsegae Centum City, Haeundae-gu.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F06ccc1d8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land Centum City, a gigantic, modern jjimjilbang (Korean-style sauna/spa) located inside Shinsegae Department Store Centum City."
+    },
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "Spaland offers services tailored to customer's preferences by using carbonated and saline hot springs drawn from 1,000 meters underground."
+    }
+   ],
+   "rationale": "Large jjimjilbang using natural hot-spring water.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd0779d21",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/센텀시티",
+     "tier": "T1",
+     "quote": "정보통신·영상·오락·국제업무 등의 기능을 갖춘 첨단 복합 산업단지이다."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Haeundae_District",
+     "tier": "T1",
+     "quote": "covers an area of 51.44 km2 (19.86 sq mi) in eastern Busan."
+    }
+   ],
+   "rationale": "Centum City: IT/media/entertainment/business complex in Haeundae-gu, which lies in eastern Busan.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4e2d52e4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "There are 22 baths including a kid's bath, 13 jjimjilbang facilities (Korean sauna), saunas, and an open-air foot bath."
+    },
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "My favorite spot in the spa is the outdoor rock pool in the women-only bathing area."
+    }
+   ],
+   "rationale": "Jjimjilbang with 13 themed rooms, 22 baths and outdoor foot bath/rock pool.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa60c0dc8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land, Centum City, 35 Centumnam-daero, Haeundae-gu, Busan, South Korea"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Haeundae_District",
+     "tier": "T1",
+     "quote": "Haeundae Beach is regarded as one of the most famous beaches in South Korea."
+    }
+   ],
+   "rationale": "Address Haeundae-gu; Haeundae is the coastal district with Haeundae Beach.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F6d219a56",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land, Centum City, 35 Centumnam-daero, Haeundae-gu, Busan, South Korea"
+    },
+    {
+     "url": "https://www.koreatimes.co.kr/lifestyle/travel-food/20250827/what-to-do-at-spa-land-in-busan-from-body-scrubs-to-plunge-pools",
+     "tier": "T2",
+     "quote": "Spa Land in Busan is a high-end jjimjilbang inside Shinsegae Centum City"
+    }
+   ],
+   "rationale": "Inside Shinsegae Centum City, Haeundae-gu.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F54f284eb",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Busan",
+     "tier": "T1",
+     "quote": "is the second most populous city in South Korea, after Seoul"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Busan",
+     "tier": "T1",
+     "quote": "its port being South Korea's busiest and the sixth-busiest in the world"
+    }
+   ],
+   "rationale": "Second most populous city, busiest port, southeastern South Korea.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5a33c34f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Haeundae_District",
+     "tier": "T1",
+     "quote": "Haeundae Beach is regarded as one of the most famous beaches in South Korea."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Busan",
+     "tier": "T1",
+     "quote": "It is the economic, cultural and educational center of southeastern South Korea"
+    }
+   ],
+   "rationale": "Haeundae is Busan's famous beach district; Busan lies on the south(east) coast. \"southern coast\" is acceptable for the southeast tip.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4d2de97c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.mt.co.kr/stock/2009/02/16/2009021515163318849",
+     "tier": "T2",
+     "quote": "백화점, 식품관, 고급 피트니스 센터, 실내 골프연습장, 영화관, 아이스링크, 스파랜드, 교보문고, 문화센터 등이 들어선다."
+    }
+   ],
+   "rationale": "Complex includes department store, food hall, fitness, golf range, cinema, ice rink, Spa Land, bookstore.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F62251207",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land Centum City, a gigantic, modern jjimjilbang (Korean-style sauna/spa) located inside Shinsegae Department Store Centum City."
+    },
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "Spaland offers services tailored to customer's preferences by using carbonated and saline hot springs drawn from 1,000 meters underground."
+    }
+   ],
+   "rationale": "Jjimjilbang using hot-spring water.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F617c8b46",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.mt.co.kr/living/2009/02/26/2009022610132547457",
+     "tier": "T2",
+     "quote": "신세계 센텀시티가 오는 3월 3일 대망의 '그랜드오픈'을 앞두고 있다"
+    },
+    {
+     "url": "https://www.mt.co.kr/article/2010030417578163617",
+     "tier": "T2",
+     "quote": "2009년 3월3일 오픈 이후 1주년을 맞아 누적 고객수만 해도 1600만명에 달한다"
+    }
+   ],
+   "rationale": "Opened with the complex on 3 March 2009.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F936c9c91",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/센텀시티",
+     "tier": "T1",
+     "quote": "예전에 수영비행장(또는 부산비행장)이 있던 자리로 해운대구 재송동에서 우동까지의 수영강 변에 있다."
+    },
+    {
+     "url": "https://www.mt.co.kr/article/2010030417578163617",
+     "tier": "T2",
+     "quote": "2009년 3월3일 오픈 이후 1주년을 맞아 누적 고객수만 해도 1600만명에 달한다"
+    }
+   ],
+   "rationale": "Centum City was built on the former Suyeong airfield (not a heavy-industry plant), and the store opened in 2009, not the early 2010s.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F21dbb632",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.mt.co.kr/article/2010030417578163617",
+     "tier": "T2",
+     "quote": "국제전시컨벤션센터인 벡스코 맞은 편으로 신세계백화점 센텀시티와 롯데백화점, 홈플러스가 나란히 서 있다."
+    },
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Centum City, 35 Centumnam-daero, Haeundae-gu, Busan, South Korea"
+    }
+   ],
+   "rationale": "Shinsegae Centum City stands opposite BEXCO in Haeundae-gu.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F88567d71",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "Spaland offers services tailored to customer's preferences by using carbonated and saline hot springs drawn from 1,000 meters underground."
+    },
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land has dreamed up a variety of themes for its many steam and sauna rooms."
+    }
+   ],
+   "rationale": "Hot-spring baths and themed heated rooms.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2b473fc0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Located inside Shinsegae Centum City, the world's largest department store, Spa Land is an upscale, yet affordable playground for adults"
+    },
+    {
+     "url": "https://www.mt.co.kr/article/2010030417578163617",
+     "tier": "T2",
+     "quote": "2009년 3월3일 오픈 이후 1주년을 맞아 누적 고객수만 해도 1600만명에 달한다"
+    }
+   ],
+   "rationale": "Part of the Shinsegae Centum City store, opened 2009.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4e4aa313",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Baths are single-sex only"
+    },
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Visitors change into cotton shirts and pants handed out at reception. Then they head to communal areas."
+    }
+   ],
+   "rationale": "Single-sex baths; cotton shirts and pants for communal areas.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0d70b725",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "a gigantic, modern jjimjilbang (Korean-style sauna/spa) located inside Shinsegae Department Store Centum City"
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/센텀시티",
+     "tier": "T1",
+     "quote": "정보통신·영상·오락·국제업무 등의 기능을 갖춘 첨단 복합 산업단지이다."
+    }
+   ],
+   "rationale": "Jjimjilbang in Centum City, Busan.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa47ccb72",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.mt.co.kr/article/2010030417578163617",
+     "tier": "T2",
+     "quote": "2009년 3월3일 오픈 이후 1주년을 맞아 누적 고객수만 해도 1600만명에 달한다"
+    }
+   ],
+   "rationale": "Opened 3 March 2009, not 1868.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fde597c50",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/센텀시티",
+     "tier": "T1",
+     "quote": "예전에 수영비행장(또는 부산비행장)이 있던 자리로 해운대구 재송동에서 우동까지의 수영강 변에 있다."
+    }
+   ],
+   "rationale": "Centum City occupies the former Suyeong airfield site.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fcbadf159",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Baths are single-sex only"
+    },
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Visitors change into cotton shirts and pants handed out at reception. Then they head to communal areas."
+    }
+   ],
+   "rationale": "Single-sex baths; provided clothing in common areas.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc4f08cb1",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.mt.co.kr/article/2010030417578163617",
+     "tier": "T2",
+     "quote": "2009년 3월3일 오픈 이후 1주년을 맞아 누적 고객수만 해도 1600만명에 달한다"
+    }
+   ],
+   "rationale": "Opened 2009, not 2005.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F879cc13b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jjimjilbang",
+     "tier": "T1",
+     "quote": "They are separated by gender and typically have hot tubs, showers, Korean traditional kiln saunas, and massage tables."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jjimjilbang",
+     "tier": "T1",
+     "quote": "In other areas of the building or on other floors there are unisex areas"
+    }
+   ],
+   "rationale": "Generic jjimjilbang description (heated rooms, baths, unisex rest areas in one building) matches Wikipedia; \"traditional\" is slightly loose since jjimjilbang became popular in the 1990s.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fdb73b746",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.mt.co.kr/article/2010030417578163617",
+     "tier": "T2",
+     "quote": "2009년 3월3일 오픈 이후 1주년을 맞아 누적 고객수만 해도 1600만명에 달한다"
+    },
+    {
+     "url": "https://www.mt.co.kr/living/2009/02/26/2009022610132547457",
+     "tier": "T2",
+     "quote": "신세계 센텀시티가 오는 3월 3일 대망의 '그랜드오픈'을 앞두고 있다"
+    }
+   ],
+   "rationale": "Spa Land opened with Shinsegae Centum City in March 2009, not 2005.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F240af290",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "Spaland offers services tailored to customer's preferences by using carbonated and saline hot springs drawn from 1,000 meters underground."
+    },
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land has dreamed up a variety of themes for its many steam and sauna rooms."
+    }
+   ],
+   "rationale": "Hot-spring baths, themed saunas, ice/cold room, rest areas.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F86585dc9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://english.visitkorea.or.kr/svc/whereToGo/locIntrdn/rgnContentsView.do?vcontsId=91626",
+     "tier": "T1",
+     "quote": "Spaland offers services tailored to customer's preferences by using carbonated and saline hot springs drawn from 1,000 meters underground."
+    },
+    {
+     "url": "https://edition.cnn.com/travel/article/busan-spa-land",
+     "tier": "T2",
+     "quote": "Spa Land has dreamed up a variety of themes for its many steam and sauna rooms."
+    }
+   ],
+   "rationale": "Hot-spring baths, themed sauna rooms, cold rooms, relaxation areas.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

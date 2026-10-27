@@ -1,0 +1,36 @@
+{
+ "scores": [
+  {
+   "key": "immersive",
+   "brand_fit": 9,
+   "polish": 9,
+   "conversion": 7,
+   "performance_risk": 6,
+   "a11y": 9,
+   "feasibility": 6,
+   "notes": "Closest to adventure.asia: square full-bleed photo heroes, UPPERCASE place names, Satisfy section titles, cream/white/navy bands and a strict 'no two adjacent bands share a surface' rule. It has the best motion discipline: the hero settle plays once in 4.8 s (under the WCAG 2.2.2 5 s limit), only one element moves on its own per viewport, the data-motion gate hides content only under [data-motion=ok], and keyboard focus puts the ribbon into still mode. It also adds a skip link and a native <dialog> mobile menu, and requires white text to sit on scrim >= .65. Risks: every page opens on a big photo hero (home is 86svh), but 8 of 14 countries have no cover and every image still pays the 302 hop. heroes.ts reduces that, yet the hero images are still remote catalog files rather than optimised static files. Satisfy loads with display:swap and preload:false at 56 px, which risks some CLS. The magazine grid (lead card 2x2) and transparent headers on 3 page types add build work. Conversion is decent: the search card overlaps the hero, there is a proof strip, an advisor split and a sticky CTA. But it has fewer reassurance and CTA moments than warm-clean, and the mobile featured row is a plain snap row."
+  },
+  {
+   "key": "warm-clean",
+   "brand_fit": 8,
+   "polish": 8,
+   "conversion": 9,
+   "performance_risk": 8,
+   "a11y": 7,
+   "feasibility": 8,
+   "notes": "The strongest at turning visitors into planners: one gold primary plus 'Ask an advisor' on every screen, a navy CTA band with three plain reassurances ('No payment to send a draft'), a 'Ways in' trio, a sticky aside on desktop and a 50/50 sticky bar on mobile, and the tour CTA worded 'Customise this trip'. It has the best plan for LCP: the home hero is a static AVIF/WebP <picture> in public/ with an art-directed portrait crop, a size budget and a preload. Destination heroes get the server-side resolvePhotoUrl (redirect:'manual') plus preconnect. Satisfy uses display:optional, so it cannot shift layout. Contrast is actually calculated, including the needed muted -> #5A6270 change on the new sand surface. It keeps the AA-812 'Photo: {place}' caption and the AA-805 AI chip. A11y gaps: the 16 s Ken Burns zoom goes past the 5 s WCAG 2.2.2 limit and has no pause, so cut it to under 5 s or drop it. There is no mobile nav ('no hamburger', so Destinations and Tours cannot be reached from the header at 390). The featured carousel adds about 1.5 KB of JS and carousel ARIA, where a plain snap row would be simpler. Feasible this week: 4 tiny islands, no new dependencies, and 7 clear slices."
+  },
+  {
+   "key": "map-first",
+   "brand_fit": 6,
+   "polish": 8,
+   "conversion": 8,
+   "performance_risk": 7,
+   "a11y": 8,
+   "feasibility": 4,
+   "notes": "The most original idea: the product itself is the hero, with a plan card in the hero and a route that draws itself on a navy SVG map of Asia. The home LCP is the h1 text, so home is safe. But it moves away from the photo-led brand: the home page still has no photo at the top, which was the main gap research found. It also moves the AI pill to the footer, which weakens the AA-805 disclosure. It is not feasible in a week: a Natural Earth generator script, route projection at ISR time, an SVG pin layer that must line up with Mapbox static images to within 2 px (custom Web-Mercator centre/zoom maths), tour scroll-spy, country silhouettes and a lightbox <dialog>. Each of these is a slice with its own risk. Good engineering details: a server-computed ribbon duration and fill rule with no JS measuring, focus-within static mode citing WCAG 2.4.11, a lib/tokens.test.ts that bans raw px/hex/duration values, a :lang(vi) fallback for Satisfy, transitions turned off while the theme switches, and route and pin contrast against the map land (1.4.11). The 'playful' ease-pop overshoot and the pins dropping in add motion beyond what the restrained brand uses."
+  }
+ ],
+ "winner": "warm-clean",
+ "graft": "Base: warm-clean (\"Golden Hour\"). It converts best, has the safest LCP plan (static AVIF home hero + server-side resolvePhotoUrl + Satisfy display:optional) and can be built this week. Fix and graft:\n\nFrom immersive:\n1. Replace the 16 s Ken Burns with immersive's M1 \"settle\" (scale 1.06 -> 1, 4.8 s, plays once). This fixes the WCAG 2.2.2 gap.\n2. Add the native <dialog> mobile menu sheet (Esc closes it, focus returns to the button) and a \"Skip to content\" link, so nav works at 390.\n3. Destination h1 uses --aa-text-place: UPPERCASE, .12em tracking, 40 -> 96 px. This is the brand's signature, bigger than warm-clean's h1.\n4. Use the stricter scrim rule: white text only where the gradient is >= .65, plus a contrast-test case for white on the scrim's worst point.\n5. Add lib/heroes.ts: a curated map of the 14 destinations with final CDN URL, srcSet, width/height, focal point and alt, plus a unit test. Fall back to resolvePhotoUrl, then to the navy typographic hero.\n6. Add the band rule (two bands next to each other never share a surface) and the advisor split section (\"Real trips, shaped by you\"), with the TrustStrip content moved into it.\n7. Ribbon: still mode on keyboard focus (:has(:focus-visible)), the pause button placed before the track in DOM order, and the pause stored as a viewer preference (tp_motion_paused).\n\nFrom map-first:\n8. Server-computed ribbon duration (n x (tile + gap) / speed, written inline per breakpoint) and the fill rule that repeats the set when one copy is narrower than about 2400 px. No JS measuring, and no gap in the loop with few items.\n9. Add lib/tokens.test.ts that bans text-[NNpx], raw hex and raw duration/ease values in app/ and components/site/.\n10. Turn transitions off for one frame while the theme switches (data-theme-switching), and add a :lang(vi) fallback from Satisfy to Poppins 600.\n11. Tour Day-by-day timeline: day discs numbered to match the static-map pins. Keep the scroll-spy route, the hero living map and the Mapbox SVG overlay as later slices, not this week.\n\nSimplify:\n12. Keep the featured tours as a plain scroll-snap row with prev/next buttons, without aria-roledescription carousel and dot widgets. That saves JS and ARIA noise.\n13. Keep the AI chip in the header, as warm-clean does (AA-805). Do not move it to the footer as map-first proposes.\n\nRequired alongside, regardless of design:\n14. A CIS issue to return final image URLs in the catalog.\n15. A data issue for the missing country and tour cover photos."
+}
