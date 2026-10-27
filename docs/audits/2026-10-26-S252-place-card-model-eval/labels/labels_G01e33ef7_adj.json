@@ -1,0 +1,1056 @@
+{
+ "group_id": "G01e33ef7",
+ "labeller": "adj",
+ "reference": {
+  "name": "Nam Ou valley",
+  "locality": "Nong Khiaw area (Ngoy district) - best guess for the falls viewpoint; valley as a whole",
+  "region": "Luang Prabang Province (northern Laos)",
+  "country": "Laos",
+  "lat": 20.571,
+  "lon": 102.611,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+    "tier": "T1",
+    "quote": "It runs 448 km from Phongsaly Province to Luang Prabang Province."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Nong_Khiaw",
+    "tier": "T1",
+    "quote": "It is located on the Nam Ou river in Ngoy district."
+   }
+  ],
+  "note": "The itinerary refers to the river valley of the Nam Ou seen from a waterfall trail on a Pakbeng-Luang Prabang cycling loop; the valley itself is unambiguous, exact viewpoint is not. Coordinates are Nong Khiaw (Wikipedia) as a representative point."
+ },
+ "variants": [
+  {
+   "vid": "V54c24243",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct valley, northern Laos; naming note wrongly says Nam Ou is also written 'Nam Khan' (a different river).",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V831ed12c",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct valley; Luang Prabang and Oudomxay are provinces the river/basin covers and those of the tour route.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V2e4dde9b",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct valley; Phongsali/Luang Prabang are the provinces the main stem runs through.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F71e94580",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The Nam Ou is one of the 12 principal tributaries of the Mekong River."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "traverses the northern Laos mountains and gorges until meeting the Mekong River in Ban Pak Ou."
+    }
+   ],
+   "rationale": "Nam Ou is a principal Mekong tributary meeting it at Ban Pak Ou in Luang Prabang Province.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1a8af650",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "traverses the northern Laos mountains and gorges until meeting the Mekong River in Ban Pak Ou."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pak_Ou_Caves",
+     "tier": "T1",
+     "quote": "25 km to the north (about two hours upstream) of Luang Prabang, Laos"
+    }
+   ],
+   "rationale": "Flows south through northern Laos; Pak Ou is about 25 km north of Luang Prabang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F96d225e8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "is one of the most important rivers of Laos"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river is also surrounded by limestone karts, forests, and valleys. The river supports Lao rice cultivation."
+    }
+   ],
+   "rationale": "Restates that the valley is the Nam Ou's river corridor in northern Laos.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbde74123",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river is also surrounded by limestone karts, forests, and valleys. The river supports Lao rice cultivation."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nong_Khiaw",
+     "tier": "T1",
+     "quote": "The bridge gives you a great view of the Nam Ou river, and the breathtaking rocks, mountains, and hills around it."
+    }
+   ],
+   "rationale": "Limestone karst surrounds the river; Nong Khiaw is on the Nam Ou amid dramatic rocks and mountains.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7017e46d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river rises in Muang Ou Nua near the Lao-Chinese border"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "It runs 448 km from Phongsaly Province to Luang Prabang Province."
+    }
+   ],
+   "rationale": "Rises near the Lao-Chinese border in Phongsaly and runs south to Luang Prabang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff0abbc7c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "is one of the most important rivers of Laos"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "It runs 448 km from Phongsaly Province to Luang Prabang Province."
+    }
+   ],
+   "rationale": "Restates identity: the river valley of the Nam Ou in northern Laos.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb0ef8531",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "is one of the most important rivers of Laos"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "It runs 448 km from Phongsaly Province to Luang Prabang Province."
+    }
+   ],
+   "rationale": "Restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fcd1efbf7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://hywr.kuciv.kyoto-u.ac.jp/ihp/riverCatalogue/Vol_04/05_Lao-7.pdf",
+     "tier": "T1",
+     "quote": "It originates at Ban Lantoug Gnai near the Lao-China border and flows to the south."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "It runs 448 km from Phongsaly Province to Luang Prabang Province."
+    }
+   ],
+   "rationale": "Originates near the China border (Phongsaly) and flows to the south.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd3bcaaf5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The Nam Ou is one of the 12 principal tributaries of the Mekong River."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pak_Ou_Caves",
+     "tier": "T1",
+     "quote": "25 km to the north (about two hours upstream) of Luang Prabang, Laos"
+    }
+   ],
+   "rationale": "Major Mekong tributary; confluence at Pak Ou, ~25 km north of Luang Prabang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd9a9e6b2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "It runs 448 km from Phongsaly Province to Luang Prabang Province."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The Nam Ou is one of the 12 principal tributaries of the Mekong River."
+    }
+   ],
+   "rationale": "Wikipedia gives 448 km (within 5% of ~450). Note T1/T2 sources disagree on length (Kyoto catalogue 390 km, Focus 485 km).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F606e4c45",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river is also surrounded by limestone karts, forests, and valleys. The river supports Lao rice cultivation."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "Different ethnic minorities' villages with generations of history are located on the river and rely on the river for survival."
+    }
+   ],
+   "rationale": "Karst, forests and ethnic-minority villages along the river are documented; 'steep-sided' consistent with 'mountains and gorges'.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa25764a2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "Different ethnic minorities' villages with generations of history are located on the river and rely on the river for survival."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The Khmu are also the main ethnic group in Luang Prabang"
+    }
+   ],
+   "rationale": "Ethnic-minority villages with generations of history line the river; Khmu and Hmong are major groups in the basin provinces.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F871c98bc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "Near its confluence with the Mekong are the Pak Ou Caves, famous for their Buddha statues."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pak_Ou_Caves",
+     "tier": "T1",
+     "quote": "25 km to the north (about two hours upstream) of Luang Prabang, Laos"
+    }
+   ],
+   "rationale": "Pak Ou Caves with Buddha statues lie near the confluence.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F422989b5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "is one of the most important rivers of Laos"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The Nam Ou is one of the 12 principal tributaries of the Mekong River."
+    }
+   ],
+   "rationale": "River in northern Laos and principal Mekong tributary.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff209cca2",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved to unverifiable: karst, forest and gorges are backed by Wikipedia Nam Ou ('surrounded by limestone karts, forests, and valleys'), but the substantive clause that these are 'characteristic of the broader Mekong basin geology' (and the river terraces) has no reliable source; A's sources do not cover it.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F06dc61bd",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The Nam Ou is one of the 12 principal tributaries of the Mekong River."
+    }
+   ],
+   "rationale": "Tributary of the Mekong.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb873b3a0",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://hywr.kuciv.kyoto-u.ac.jp/ihp/riverCatalogue/Vol_04/05_Lao-7.pdf",
+     "tier": "T1",
+     "quote": "The total drainage area is 25,000 km2 covering Phongsaly province, one third of Oudomxay province, and one half of Luang Prabang province."
+    },
+    {
+     "url": "https://focusweb.org/the-loss-of-the-ou-river/",
+     "tier": "T2",
+     "quote": "It flows north to south through three provinces: Phongsaly, Oudomxay, and Luang Prabang, and meets the Mekong River just upstream of Luang Prabang town."
+    }
+   ],
+   "rationale": "Sources list only Phongsaly, Oudomxay and Luang Prabang provinces; the Nam Ou does not pass through Houaphanh.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff643b40d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river rises in Muang Ou Nua near the Lao-Chinese border"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "traverses the northern Laos mountains and gorges until meeting the Mekong River in Ban Pak Ou."
+    }
+   ],
+   "rationale": "Rises near the China border in Phongsaly, flows through mountains/gorges with karst, joins Mekong at Ban Pak Ou.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbe94ddf9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river is also surrounded by limestone karts, forests, and valleys. The river supports Lao rice cultivation."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river is also surrounded by limestone karts, forests, and valleys."
+    }
+   ],
+   "rationale": "Forests, limestone and valleys with rice cultivation.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc93749cc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://hywr.kuciv.kyoto-u.ac.jp/ihp/riverCatalogue/Vol_04/05_Lao-7.pdf",
+     "tier": "T1",
+     "quote": "The total drainage area is 25,000 km2 covering Phongsaly province, one third of Oudomxay province, and one half of Luang Prabang province."
+    },
+    {
+     "url": "https://focusweb.org/the-loss-of-the-ou-river/",
+     "tier": "T2",
+     "quote": "It flows north to south through three provinces: Phongsaly, Oudomxay, and Luang Prabang, and meets the Mekong River just upstream of Luang Prabang town."
+    }
+   ],
+   "rationale": "Basin/course spans Phongsaly, Oudomxay and Luang Prabang provinces.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F751b9e9b",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://hywr.kuciv.kyoto-u.ac.jp/ihp/riverCatalogue/Vol_04/05_Lao-7.pdf",
+     "tier": "T1",
+     "quote": "The Nam Ou is the longest river in the northern region of Lao PDR."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "is one of the most important rivers of Laos"
+    }
+   ],
+   "rationale": "A river valley is a natural feature, not a settlement founded in 1742 by a Portuguese mission; the claim is fabricated (likely copied from another entity).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F71ab1233",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou_river_cascade_dams",
+     "tier": "T1",
+     "quote": "Phase I of the dams, including Nam Ou 2, Nam Ou 5, and Nam Ou 6 began operating on May 12, 2016."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou_river_cascade_dams",
+     "tier": "T1",
+     "quote": "Phase II of the dams, including Nam Ou 1, 3, 4, and 7 is expected to be completed in 2020."
+    }
+   ],
+   "rationale": "Supported by Wikipedia (Nam Ou river cascade dams): seven-dam cascade, phase I operating 2016, phase II c.2020. numeric=true because the fact states a dated period ('the 2010s'), which falls under the date rule.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fa7ec4ed0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou_river_cascade_dams",
+     "tier": "T1",
+     "quote": "Phase I of the dams, including Nam Ou 2, Nam Ou 5, and Nam Ou 6 began operating on May 12, 2016."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The Nam Ou River is the site of the Nam Ou river cascade project, a series of seven dams at different sites along the river."
+    }
+   ],
+   "rationale": "Supported (Wikipedia Nam Ou / cascade dams). numeric=true: 'since the 2010s' is a dated claim.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F6cbc1f86",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "traverses the northern Laos mountains and gorges until meeting the Mekong River in Ban Pak Ou."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pak_Ou_Caves",
+     "tier": "T1",
+     "quote": "25 km to the north (about two hours upstream) of Luang Prabang, Laos"
+    }
+   ],
+   "rationale": "Joins Mekong at (Ban) Pak Ou, about 25 km upstream of Luang Prabang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5cb26764",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river rises in Muang Ou Nua near the Lao-Chinese border"
+    },
+    {
+     "url": "https://focusweb.org/the-loss-of-the-ou-river/",
+     "tier": "T2",
+     "quote": "It flows north to south through three provinces: Phongsaly, Oudomxay, and Luang Prabang"
+    }
+   ],
+   "rationale": "Resolved to supported. Focus on the Global South (whose Ou River report Wikipedia cites) states verbatim that the river flows through Phongsaly, Oudomxay and Luang Prabang. B's counter-evidence (dams only in Phongsaly/Luang Prabang; no OSM segment found) does not state the river's course and no T1 source contradicts the Oudomxay claim; Wikipedia's '448 km from Phongsaly Province to Luang Prabang Province' gives only the endpoints. Moderate confidence.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F0051619c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "traverses the northern Laos mountains and gorges until meeting the Mekong River in Ban Pak Ou."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river is also surrounded by limestone karts, forests, and valleys. The river supports Lao rice cultivation."
+    }
+   ],
+   "rationale": "Flows through mountains, gorges and forests before meeting the Mekong.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7b0ea5b7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river rises in Muang Ou Nua near the Lao-Chinese border"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "It runs 448 km from Phongsaly Province to Luang Prabang Province."
+    }
+   ],
+   "rationale": "Headwaters near the Lao-Chinese border in Phongsaly.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F03066b57",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Muang_Khua",
+     "tier": "T1",
+     "quote": "The best way to get in the village from other parts of the country is by boat over the Nam Ou river."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nong_Khiaw",
+     "tier": "T1",
+     "quote": "It is located on the Nam Ou river in Ngoy district."
+    }
+   ],
+   "rationale": "Muang Khua, Nong Khiaw and Muang Ngoi (Neua) all lie on the Nam Ou.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2540f907",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river is also surrounded by limestone karts, forests, and valleys. The river supports Lao rice cultivation."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "Different ethnic minorities' villages with generations of history are located on the river and rely on the river for survival."
+    }
+   ],
+   "rationale": "Mountains, forests, limestone, riverside villages.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd02c1ea7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "Along with the Mekong, the Nam Ou is the only natural channel suitable for large-draft boat transportation."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Muang_Khua",
+     "tier": "T1",
+     "quote": "The best way to get in the village from other parts of the country is by boat over the Nam Ou river."
+    }
+   ],
+   "rationale": "River has been the key transport channel (boats) for local communities; describes local mobility, not visitor access.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F43be51dc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "The river is also surrounded by limestone karts, forests, and valleys. The river supports Lao rice cultivation."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nam_Ou",
+     "tier": "T1",
+     "quote": "collecting resources from the river and surrounding forests for income, food, and spiritual practices"
+    }
+   ],
+   "rationale": "Limestone karst, riverside villages, rice farming and river resources (fish).",
+   "agreement": "agree"
+  }
+ ],
+ "links": [
+  {
+   "lid": "L4ce62f28",
+   "same_place": "yes",
+   "rationale": "Existing card 'Nam Ou River Valley' (Phongsali/Luang Prabang, Laos) is the same river valley the itinerary means.",
+   "agreement": "agree"
+  }
+ ],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": [
+   [
+    "yes",
+    "yes"
+   ]
+  ]
+ }
+}

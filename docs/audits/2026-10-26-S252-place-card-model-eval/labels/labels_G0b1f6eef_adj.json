@@ -1,0 +1,1055 @@
+{
+ "group_id": "G0b1f6eef",
+ "labeller": "adj",
+ "reference": {
+  "name": "Dhaulagiri (Dhaulagiri I)",
+  "locality": "Myagdi District",
+  "region": "Gandaki Province",
+  "country": "Nepal",
+  "lat": 28.6961,
+  "lon": 83.4953,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+    "tier": "T1",
+    "quote": "Dhaulagiri, located in Nepal, is the seventh highest mountain in the world at 8,167 metres (26,795 ft) above sea level"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+    "tier": "T1",
+    "quote": "Coordinates 28°41′46″N 83°29′43″E"
+   }
+  ],
+  "note": "Itinerary names Dhaulagiri (8167m) among peaks seen from Pikey Peak: the eight-thousander Dhaulagiri I, not the range or former zone."
+ },
+ "variants": [
+  {
+   "vid": "Vdbb00b58",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Mount Dhaulagiri = Dhaulagiri I; no locality given; Gandaki Province correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Va71adf26",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Dhaulagiri I, 8167 m; Gandaki Province correct; locality empty.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Veb02ac43",
+   "name": "ok",
+   "locality": "empty",
+   "region": "acceptable_historical",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Mountain identified correctly; Dhaulagiri Zone was dissolved in 2015 (now Gandaki Province), so historical region.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V50d70658",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Region 'Dhaulagiri Himal, Gandaki Province' combines range and province, both correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vc691ca07",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Dhaulagiri I lies in Myagdi District (no town); province and country correct.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Ffe054ebc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri, located in Nepal, is the seventh highest mountain in the world at 8,167 metres (26,795 ft) above sea level"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Listing Eight-thousander"
+    }
+   ],
+   "rationale": "Height 8,167 m and eight-thousander status confirmed; west-central Nepal matches.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F66a35951",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri, located in Nepal, is the seventh highest mountain in the world at 8,167 metres (26,795 ft) above sea level"
+    }
+   ],
+   "rationale": "8,167 m confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb4667a99",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri, located in Nepal, is the seventh highest mountain in the world at 8,167 metres (26,795 ft) above sea level"
+    }
+   ],
+   "rationale": "8,167 m confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5b438b05",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_(mountain_range)",
+     "tier": "T1",
+     "quote": "The Dhaulagiri massif in Nepal extends 120 km (70 mi) from the Kaligandaki River west to the Bheri."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_Zone",
+     "tier": "T1",
+     "quote": "Dhaulagiri was divided into four districts; since 2015 these districts have been redesignated as part of Gandaki Province."
+    }
+   ],
+   "rationale": "Massif extends west from the Kali Gandaki; its districts are in Gandaki Province.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F91b4652d",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri, located in Nepal, is the seventh highest mountain in the world at 8,167 metres (26,795 ft) above sea level"
+    }
+   ],
+   "rationale": "Elevation is 8,167 m, not 13,884 m.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F16e641f3",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "It was first climbed on 13 May 1960 by a Swiss-Austrian-Nepali expedition."
+    },
+    {
+     "url": "https://publications.americanalpineclub.org/articles/12196230200/The-Ascent-of-Dhaulagiri",
+     "tier": "T2",
+     "quote": "using a ski-wheeled plane to land men and supplies for a full-scale expedition at 18,700 feet on the Northeast Col of Dhaulagiri"
+    }
+   ],
+   "rationale": "13 May 1960, Swiss-led international party via NE spur/ridge, supported by Pilatus 'Yeti' ski-wheeled aircraft landing men and supplies on the NE col.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa47889c7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "comes from Sanskrit where धवल (dhawala) means dazzling, white, beautiful and गिरि (giri) means mountain."
+    }
+   ],
+   "rationale": "Sanskrit dhawala (white) + giri (mountain).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8eab907b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "comes from Sanskrit where धवल (dhawala) means dazzling, white, beautiful and गिरि (giri) means mountain."
+    }
+   ],
+   "rationale": "Sanskrit etymology 'white mountain' confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0fff704e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_(mountain_range)",
+     "tier": "T1",
+     "quote": "Despite deriving its name from Dhaulagiri I"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_(mountain_range)",
+     "tier": "T1",
+     "quote": "Dhaulagiri I 8,167"
+    }
+   ],
+   "rationale": "Range infobox: highest = Dhaulagiri; peak table lists Dhaulagiri I highest at 8,167 m.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff51c0a54",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "In 1808, survey computations showed it to be the highest mountain yet surveyed. This lasted until 1838 when Kangchenjunga took its place"
+    }
+   ],
+   "rationale": "1808–1838 'highest yet surveyed' period confirmed; the Annapurna-1950 lead-in is irrelevant but not false.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0c51d21e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "The Kali Gandaki River flows between the two in the Kali Gandaki Gorge, the world's deepest."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kali_Gandaki_Gorge",
+     "tier": "T1",
+     "quote": "The gorge separates the major peaks of Dhaulagiri (8,167 m or 26,795 ft) on the west and Annapurna"
+    }
+   ],
+   "rationale": "Kali Gandaki gorge lies between Dhaulagiri (west) and Annapurna (east).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbb1d8532",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_(mountain_range)",
+     "tier": "T1",
+     "quote": "The range lies 40 miles (65 km) northwest of Annapurna and is located in Myagdi District of Nepal."
+    }
+   ],
+   "rationale": "Wikipedia places the range/mountain in Myagdi District.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ffc49ecd7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "It was first climbed on 13 May 1960 by a Swiss-Austrian-Nepali expedition."
+    }
+   ],
+   "rationale": "Swiss-Austrian-Nepali first ascent 1960.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa8ac3366",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_Zone",
+     "tier": "T1",
+     "quote": "Dhaulagiri was divided into four districts; since 2015 these districts have been redesignated as part of Gandaki Province."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_Zone",
+     "tier": "T1",
+     "quote": "Famous trekking areas like Mustang, Muktinath, Kali Gandaki valley and Mt Dhaulagiri fall in this zone."
+    }
+   ],
+   "rationale": "Mountain lies in former Dhaulagiri Zone districts now part of Gandaki Province.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0c60e968",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "comes from Sanskrit where धवल (dhawala) means dazzling, white, beautiful and गिरि (giri) means mountain."
+    }
+   ],
+   "rationale": "Sanskrit white + mountain.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9fb737c6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "It was first climbed on 13 May 1960 by a Swiss-Austrian-Nepali expedition."
+    }
+   ],
+   "rationale": "Date and expedition nationality confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F40cfbabf",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_(mountain_range)",
+     "tier": "T1",
+     "quote": "The Dhaulagiri massif in Nepal extends 120 km (70 mi) from the Kaligandaki River west to the Bheri."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kali_Gandaki_Gorge",
+     "tier": "T1",
+     "quote": "The gorge separates the major peaks of Dhaulagiri (8,167 m or 26,795 ft) on the west and Annapurna"
+    }
+   ],
+   "rationale": "Highest peak of Dhaulagiri Himal; massif west of Kali Gandaki opposite Annapurna.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F6438ba5c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "comes from Sanskrit where धवल (dhawala) means dazzling, white, beautiful and गिरि (giri) means mountain."
+    }
+   ],
+   "rationale": "Exact etymology wording matches Wikipedia.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1d0fe360",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "The Kali Gandaki River flows between the two in the Kali Gandaki Gorge, the world's deepest."
+    }
+   ],
+   "rationale": "Gorge between Dhaulagiri and Annapurna I described as deepest.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F174af323",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "In 1808, survey computations showed it to be the highest mountain yet surveyed. This lasted until 1838 when Kangchenjunga took its place"
+    }
+   ],
+   "rationale": "Considered highest 1808–1838 by survey.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ffc832754",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri, located in Nepal, is the seventh highest mountain in the world at 8,167 metres (26,795 ft) above sea level"
+    }
+   ],
+   "rationale": "Seventh highest, 8,167 m.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F82aef8cc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Range Dhaulagiri Himal"
+    }
+   ],
+   "rationale": "Infobox range = Dhaulagiri Himal.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F98826ebc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri, located in Nepal, is the seventh highest mountain in the world at 8,167 metres (26,795 ft) above sea level"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "comes from Sanskrit where धवल (dhawala) means dazzling, white, beautiful and गिरि (giri) means mountain."
+    }
+   ],
+   "rationale": "Located in Nepal Himalaya; 'white mountain' etymology. 'central' vs west-central is acceptable.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8900afb0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "1960 – Swiss-Austrian expedition led by Max Eiselin makes the first successful ascent to the summit of Dhaulagiri."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri was the penultimate eight-thousander to be summitted, and the final in Nepal."
+    }
+   ],
+   "rationale": "Eiselin-led Swiss-Austrian first ascent; penultimate eight-thousander climbed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2de206dc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri, located in Nepal, is the seventh highest mountain in the world at 8,167 metres (26,795 ft) above sea level"
+    }
+   ],
+   "rationale": "8,167 m.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1d5a18db",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_(mountain_range)",
+     "tier": "T1",
+     "quote": "The Dhaulagiri massif in Nepal extends 120 km (70 mi) from the Kaligandaki River west to the Bheri."
+    }
+   ],
+   "rationale": "Massif extends from Kaligandaki west to the Bheri.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9a07e923",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Successful ascent by Kurt Diemberger, Peter Diener, Ernst Forrer, Albin Schelbert, Nyima Dorje Sherpa, Nawang Dorje Sherpa on 13 May."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "1960 – Swiss-Austrian expedition led by Max Eiselin makes the first successful ascent to the summit of Dhaulagiri."
+    }
+   ],
+   "rationale": "Diemberger was in the summit party of the Eiselin-led expedition on 13 May 1960.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb8445702",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "comes from Sanskrit where धवल (dhawala) means dazzling, white, beautiful and गिरि (giri) means mountain."
+    }
+   ],
+   "rationale": "dhavala/dhawala + giri = white mountain.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9bd602af",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri I stands to the east of the range which bears its name."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_(mountain_range)",
+     "tier": "T1",
+     "quote": "Dhaulagiri I, which stands alone immediately due east of 5,355m French Pass"
+    }
+   ],
+   "rationale": "Dhaulagiri I stands alone at the east end of the range, not at its centre (the 7,000 m peaks run WNW from it).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4fa194c6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_Zone",
+     "tier": "T1",
+     "quote": "Famous trekking areas like Mustang, Muktinath, Kali Gandaki valley and Mt Dhaulagiri fall in this zone."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kali_Gandaki_Gorge",
+     "tier": "T1",
+     "quote": "The gorge separates the major peaks of Dhaulagiri (8,167 m or 26,795 ft) on the west and Annapurna"
+    }
+   ],
+   "rationale": "Resolved supported. Wikipedia Dhaulagiri_Zone (quote verified) places Mt Dhaulagiri in that pre-2015 zone (same status as the region label both labellers accepted as acceptable_historical, not false), and Kali_Gandaki_Gorge puts Dhaulagiri on the gorge's west side. 'Northwestern Nepal' is loose (zone was in the Western Development Region; Britannica says west-central) but not a contradiction of the location.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fc7a2b3c7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "Dhaulagiri, located in Nepal, is the seventh highest mountain in the world at 8,167 metres (26,795 ft) above sea level"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri_(mountain_range)",
+     "tier": "T1",
+     "quote": "Dhaulagiri I 8,167"
+    }
+   ],
+   "rationale": "8,167 m, highest of the massif.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe6139eba",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dhaulagiri",
+     "tier": "T1",
+     "quote": "It was first climbed on 13 May 1960 by a Swiss-Austrian-Nepali expedition."
+    }
+   ],
+   "rationale": "13 May 1960 Swiss-Austrian-Nepali expedition.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "acceptable_historical",
+    "acceptable_historical"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

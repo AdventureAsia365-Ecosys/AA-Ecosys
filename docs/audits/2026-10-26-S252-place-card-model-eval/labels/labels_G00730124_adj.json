@@ -1,0 +1,821 @@
+{
+ "group_id": "G00730124",
+ "labeller": "adj",
+ "reference": {
+  "name": "Fort Road Food Street",
+  "locality": "Lahore (Walled City, Fort Road / Hazuri Bagh)",
+  "region": "Punjab",
+  "country": "Pakistan",
+  "lat": 31.586,
+  "lon": 74.31,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+    "tier": "T1",
+    "quote": "is a food street located between Fort Road and Hazoori Bagh Gateway mostly misunderstood as Roshanai Gate of the Walled City in Lahore"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+    "tier": "T1",
+    "quote": "The street was inaugurated on 21 January 2012, by Hamza Shahbaz Sharif to replace Gawalmandi Food Street."
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "Ve89070cd",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Same street (Fort Road Food Street) in Lahore, Punjab; its naming note wrongly puts it near Delhi Gate, but the identity fields are right.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V61f4b9ef",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Fort Road Food Street, Walled City of Lahore, Punjab, Pakistan; correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V6f66635b",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Food Street, Fort Road (Old Lahore); correct, and rightly told apart from Gawalmandi.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F7b72b4df",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Historic buildings now used as restaurants are supported, but 'havelis' are not; Wikipedia notes no Mughal havelis survive in Lahore.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F44053d04",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Historic buildings are supported; 'restored havelis' is not.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ffdd8733c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "The street was reconstructed and opened in 2012 as a tourist attraction, by offering Lahori cuisine and views of Badshahi Mosque."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "The street was inaugurated on 21 January 2012, by Hamza Shahbaz Sharif to replace Gawalmandi Food Street."
+    }
+   ],
+   "rationale": "Reconstructed and opened in 2012.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F63962471",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Lahori cuisine is supported (Friday Times lists siri paye), but nihari and 'centuries-old bazaar culture' are not sourced.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F762c5467",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "is a food street located between Fort Road and Hazoori Bagh Gateway mostly misunderstood as Roshanai Gate of the Walled City in Lahore"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road,_Lahore",
+     "tier": "T1",
+     "quote": "It is so named because it flanks the Lahore Fort on its southern and eastern sides."
+    }
+   ],
+   "rationale": "On Fort Road by the Lahore Fort and Badshahi Mosque.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F41ef3160",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "is a pedestrianised area located on the Fort Road within the walled city that is dedicated to culinary stalls and restaurants specialising Lahori cuisine."
+    }
+   ],
+   "rationale": "A pedestrianised restaurant area on Fort Road within the Walled City.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc5ddf673",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "is a pedestrianised area located on the Fort Road within the walled city that is dedicated to culinary stalls and restaurants specialising Lahori cuisine."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "is a food street located between Fort Road and Hazoori Bagh Gateway mostly misunderstood as Roshanai Gate of the Walled City in Lahore"
+    }
+   ],
+   "rationale": "The street is inside the Walled City at its north-west, by Hazuri Bagh and Roshnai Gate, not just outside near Delhi Gate on the east side.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8e2ed3f4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "is a food street located between Fort Road and Hazoori Bagh Gateway mostly misunderstood as Roshanai Gate of the Walled City in Lahore"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road,_Lahore",
+     "tier": "T1",
+     "quote": "Famous landmarks on Fort Road include the world's fifth largest mosque, the Badshahi Mosque"
+    }
+   ],
+   "rationale": "Same as F762c5467.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fec0e2ab3",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Badshahi_Mosque",
+     "tier": "T1",
+     "quote": "It was constructed between 1671 and 1673 by the Mughal emperor Aurangzeb, opposite to the Lahore Fort in the northern outskirts of the historic Walled City."
+    }
+   ],
+   "rationale": "Built 1671-1673 by Aurangzeb, facing the fort.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff3f859f7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Heera_Mandi",
+     "tier": "T1",
+     "quote": "Heera Mandi is located inside the Walled City of Lahore, near the Taxali Gate, and south of the Badshahi Mosque."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "is a food street located between Fort Road and Hazoori Bagh Gateway mostly misunderstood as Roshanai Gate of the Walled City in Lahore"
+    }
+   ],
+   "rationale": "Heera Mandi (Shahi Mohalla) lies just south of Badshahi Mosque; the food street runs to Shahi Mohalla Street.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F24b72fbe",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "The street was reconstructed and opened in 2012 as a tourist attraction, by offering Lahori cuisine and views of Badshahi Mosque."
+    }
+   ],
+   "rationale": "Opened in 2012.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5a425d88",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "The building that the street is based on was built during the era of the Mughal Empire and the British rule."
+    }
+   ],
+   "rationale": "Its buildings date from the Mughal and British eras.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F51a7b8d7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lahore_Fort",
+     "tier": "T1",
+     "quote": "The foundations of the present fort was laid in 1566, during the reign of Akbar"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Lahore_Fort",
+     "tier": "T1",
+     "quote": "Shah Jahan's first contribution to the fort commenced in the year of his coronation, 1628, and continued until 1645."
+    }
+   ],
+   "rationale": "Akbar founded the present fort in 1566; Shah Jahan expanded it 1628-1645.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F64ec7b9a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "The Mughal period beginning in the Akbari period until the early 18th century most decisively determined the city's character."
+    }
+   ],
+   "rationale": "Mughal-era development shaped the historic core.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4c3b12e8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lahore_Fort",
+     "tier": "T1",
+     "quote": "The fortress is located at the northern end of the Walled City"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Badshahi_Mosque",
+     "tier": "T1",
+     "quote": "It was constructed between 1671 and 1673 by the Mughal emperor Aurangzeb, opposite to the Lahore Fort in the northern outskirts of the historic Walled City."
+    }
+   ],
+   "rationale": "The Mughal fort sits at the northern (north-western) end of the Walled City; the direction is within tolerance.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F82e4936d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "is a pedestrianised area located on the Fort Road within the walled city that is dedicated to culinary stalls and restaurants specialising Lahori cuisine."
+    }
+   ],
+   "rationale": "A street of food stalls and restaurants within the Walled City.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F32ba7f8d",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "The street was reconstructed and opened in 2012 as a tourist attraction, by offering Lahori cuisine and views of Badshahi Mosque."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "The street was inaugurated on 21 January 2012, by Hamza Shahbaz Sharif to replace Gawalmandi Food Street."
+    }
+   ],
+   "rationale": "It was opened in 2012 by the Punjab government; the Portuguese founding in 1742 is invented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8ebe58d4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "is a pedestrianised area located on the Fort Road within the walled city that is dedicated to culinary stalls and restaurants specialising Lahori cuisine."
+    }
+   ],
+   "rationale": "Restates the dining-street identity in the Walled City.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd9f33c8b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "is a pedestrianised area located on the Fort Road within the walled city that is dedicated to culinary stalls and restaurants specialising Lahori cuisine."
+    }
+   ],
+   "rationale": "Pedestrianised dining street in the Walled City.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7fca3470",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "The early settlements were established between the 1st and 7th centuries, with Lahore attaining the status of a proper city in 1040"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "He also ordered rebuilt and fortified the city's walls, and ordered their extension east of the modern Shah Alami Bazaar"
+    }
+   ],
+   "rationale": "Settlement from the 1st-7th centuries; Akbar rebuilt the walls (and the gates date from his reign).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F627bfee4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "The building that the street is based on was built during the era of the Mughal Empire and the British rule."
+    },
+    {
+     "url": "https://thefridaytimes.com/03-Jul-2015/scrumptious-servings-surreal-setting",
+     "tier": "T2",
+     "quote": "Cuckoo's Den, the oldest heritage building on the street"
+    }
+   ],
+   "rationale": "Old Mughal- and British-era buildings now house restaurants (e.g. Cuckoo's Den); 'multi-storey' is a minor unsourced detail.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F985bd5ea",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Badshahi_Mosque",
+     "tier": "T1",
+     "quote": "It was constructed between 1671 and 1673 by the Mughal emperor Aurangzeb, opposite to the Lahore Fort in the northern outskirts of the historic Walled City."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Lahore_Fort",
+     "tier": "T1",
+     "quote": "Shah Jahan's first contribution to the fort commenced in the year of his coronation, 1628, and continued until 1645."
+    }
+   ],
+   "rationale": "Mosque 1671-73; the fort was founded 1566 but its surviving fabric is largely 17th-century (Jahangir, Shah Jahan, Aurangzeb), so 'primarily 17th century' holds.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ffbdb7bd4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "The early settlements were established between the 1st and 7th centuries, with Lahore attaining the status of a proper city in 1040"
+    }
+   ],
+   "rationale": "Only numeric differed: 'over a thousand years' is a quantitative age claim, numeric=true; Wikipedia Walled City of Lahore gives settlement from the 1st-7th centuries.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F761737b4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fort_Road_Food_Street",
+     "tier": "T1",
+     "quote": "The street was inaugurated on 21 January 2012, by Hamza Shahbaz Sharif to replace Gawalmandi Food Street."
+    }
+   ],
+   "rationale": "It was opened to replace Gawalmandi Food Street, a separate street.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3ed28b83",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Badshahi_Mosque",
+     "tier": "T1",
+     "quote": "It was constructed between 1671 and 1673 by the Mughal emperor Aurangzeb, opposite to the Lahore Fort in the northern outskirts of the historic Walled City."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Lahore_Fort",
+     "tier": "T1",
+     "quote": "In 1981, the fort was inscribed as a UNESCO World Heritage Site"
+    }
+   ],
+   "rationale": "Mosque 1671-73; fort inscribed by UNESCO in 1981 with the Shalimar Gardens.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe4bf81e3",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Walled_City_of_Lahore",
+     "tier": "T1",
+     "quote": "The early settlements were established between the 1st and 7th centuries, with Lahore attaining the status of a proper city in 1040"
+    }
+   ],
+   "rationale": "The Walled City long predates the Mughals (settlement from the 1st-7th centuries, a city by 1040); Mughal rule only rebuilt it.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

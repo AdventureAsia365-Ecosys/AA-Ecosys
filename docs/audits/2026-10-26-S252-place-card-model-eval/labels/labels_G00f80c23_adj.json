@@ -1,0 +1,1295 @@
+{
+ "group_id": "G00f80c23",
+ "labeller": "adj",
+ "reference": {
+  "name": "Summer Palace (Yiheyuan)",
+  "locality": "Haidian District, Beijing",
+  "region": "Beijing",
+  "country": "China",
+  "lat": 39.9975,
+  "lon": 116.2689,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+    "tier": "T1",
+    "quote": "It consists of a vast ensemble of lakes, gardens and palaces located in Beijing."
+   },
+   {
+    "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+    "tier": "T1",
+    "quote": "Situated in Haidian District, it is 15 kilometers from downtown Beijing, covering an area of about 290 hectares."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+    "tier": "T1",
+    "quote": "The Summer Palace or Yihe Garden"
+   }
+  ],
+  "labeller_note": "A and B agree on the reference identity."
+ },
+ "variants": [
+  {
+   "vid": "V09003e88",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "A and B agree. Summer Palace, Haidian District, Beijing, China: all correct; the naming note about the Old Summer Palace is awkward but does not change the identity.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V4a905cd1",
+   "name": "ok",
+   "locality": "correct",
+   "region": "wrong",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "A and B agree. Locality Beijing is fine, but region 'Haidian District' is a district of Beijing, not the province-level region (Beijing municipality).",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V0e05a5f7",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "A and B agree. Summer Palace, Beijing, Beijing, China: correct.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F8cd58f61",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Wikipedia: whole complex centred on Longevity Hill and Kunming Lake.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The entire Summer Palace is centered around Longevity Hill and Kunming Lake, with the latter covering about three-quarters of the area."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fef56d309",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Qianlong-era construction 1750-1764 shaped the lake and hill landscape; Qing dynasty.",
+   "sources": [
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Its construction began in 1750 and was completed in 1764."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "Around 1749, the Qianlong Emperor decided to build a palace in the vicinity of Jar Hill and the Western Lake"
+    },
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "first built in 1750, largely destroyed in the war of 1860 and restored on its original foundations in 1886"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc021011d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Laid out from 1750 under Qianlong, originally named Qingyiyuan (Gardens of Clear Ripples).",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "was initially named \"Qingyiyuan\" (清漪園; 'Gardens of Clear Ripples')."
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Its construction began in 1750 and was completed in 1764."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "whose construction was completed in 1764 at a cost of over 4.8 million silver taels, was initially named \"Qingyiyuan\""
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0364a743",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "rationale": "A and B agree. Imperial garden/palace ensemble in Haidian, the northwest of Beijing.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "It consists of a vast ensemble of lakes, gardens and palaces located in Beijing. An imperial garden during the Qing dynasty"
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Situated in Haidian District, it is 15 kilometers from downtown Beijing, covering an area of about 290 hectares."
+    },
+    {
+     "url": "https://www.wikidata.org/wiki/Q4132",
+     "tier": "T1",
+     "quote": "Ensemble of lakes, gardens and palaces in Beijing, China"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1d951e9b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "Only numeric differed (A false, B true). The fact states a year (1998), a date claim, so numeric=true, consistent with the identical F69cb7609/Fbe6a8545 where both labellers said true. Verdict supported: Wikipedia says UNESCO listed it in December 1998.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "In December 1998, UNESCO included the Summer Palace on its World Heritage List."
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "in November 1998, it was designated a World Heritage Site by UNESCO."
+    }
+   ],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F2a18a419",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Qing imperial retreat strongly associated with Cixi, who rebuilt it and used it as a retreat.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "was a pavilion built by the Chinese Empress Dowager Cixi for quiet retreat."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "to be used for reconstructing and enlarging the Summer Palace to celebrate her 60th birthday"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "An imperial garden during the Qing dynasty, it includes Longevity Hill"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fcda6b53f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Sacked/burned 1860; reconstructed and enlarged 1884-95.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "British and French forces occupied the Summer Palace and the nearby Old Summer Palace in December 1860, sacking and burning both."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "to be used for reconstructing and enlarging the Summer Palace to celebrate her 60th birthday"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7cb34f86",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Tower of Buddhist Incense on Longevity Hill, painted Long Corridor, and the marble (Stone) Boat are all documented structures.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "Tower of Buddhist Incense (佛香阁; 佛香閣; Fóxiānggé): Located right in the centre of the front hill of Longevity Mountain."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The original wooden boat was burnt in 1860 and has been replaced with a marble copy with western-style paddle wheels."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "Located right in the centre of the front hill of Longevity Mountain."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F89a173a8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "rationale": "A and B agree. Restates type and location (Haidian, northwest Beijing).",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "It consists of a vast ensemble of lakes, gardens and palaces located in Beijing. An imperial garden during the Qing dynasty"
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Situated in Haidian District, it is 15 kilometers from downtown Beijing, covering an area of about 290 hectares."
+    },
+    {
+     "url": "https://www.wikidata.org/wiki/Q4132",
+     "tier": "T1",
+     "quote": "Ensemble of lakes, gardens and palaces in Beijing, China"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff9a0c723",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Grounds centred on Kunming Lake and Longevity Hill.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The entire Summer Palace is centered around Longevity Hill and Kunming Lake, with the latter covering about three-quarters of the area."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd0e20f84",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Damaged by British and French forces in Dec 1860 (Second Opium War); Cixi rebuilt and enlarged it in 1884-95.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "British and French forces occupied the Summer Palace and the nearby Old Summer Palace in December 1860, sacking and burning both."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "to be used for reconstructing and enlarging the Summer Palace to celebrate her 60th birthday"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "Between 1884–95, during the reign of the Guangxu Emperor (r. 1875–1908), Empress Dowager Cixi reportedly ordered up to 22 million silver taels"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F69cb7609",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Inscribed 1998.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "In December 1998, UNESCO included the Summer Palace on its World Heritage List."
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "in November 1998, it was designated a World Heritage Site by UNESCO."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb630a835",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. UNESCO: largely destroyed in 1860 and restored on original foundations in 1886 (renamed Yiheyuan 1888).",
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "The Summer Palace in Beijing – first built in 1750, largely destroyed in the war of 1860 and restored on its original foundations in 1886"
+    },
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "first built in 1750, largely destroyed in the war of 1860 and restored on its original foundations in 1886"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The Summer Palace was also given its present-day Chinese name, \"Yiheyuan\" (頤和園), in 1888."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1149f31f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Beijing government: Haidian District, 15 km from downtown Beijing. Straight-line location distance, not a road distance.",
+   "sources": [
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Situated in Haidian District, it is 15 kilometers from downtown Beijing, covering an area of about 290 hectares."
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/beijingtownscape/parks/202401/t20240116_3536943.html",
+     "tier": "T1",
+     "quote": "Located in the western suburbs of Beijing, and 15 kilometers away from central Beijing"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F93ab1f2a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Large imperial garden of the Qing court in northwest Beijing used as a retreat.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "It consists of a vast ensemble of lakes, gardens and palaces located in Beijing. An imperial garden during the Qing dynasty"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "was a pavilion built by the Chinese Empress Dowager Cixi for quiet retreat."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "An imperial garden during the Qing dynasty, it includes Longevity Hill"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fcfc31649",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. UNESCO description of hills, water, pavilions and halls; Long Corridor along the lake documented.",
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "The natural landscape of hills and open water is combined with artificial features such as pavilions, halls, palaces, temples and bridges"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The entire corridor is 728 metres (2,388 ft) long and contains artistic decorations"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The natural landscape of hills and open water is combined with artificial features such as pavilions, halls, palaces, temples and bridges"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F663fd695",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Begun 1750 under Qing, originally Qingyiyuan.",
+   "sources": [
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Its construction began in 1750 and was completed in 1764."
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Formerly known as Qingyiyuan (Gardens of Clear Ripples)"
+    },
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "first built in 1750, largely destroyed in the war of 1860 and restored on its original foundations in 1886"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F62ac1573",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "Only numeric differed. The fact contains the year 1998, so numeric=true (as for F401c0440, which both labelled true). Supported by the UNESCO document page (\"is a masterpiece of Chinese landscape garden design\") and Wikipedia (December 1998 listing).",
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "is a masterpiece of Chinese landscape garden design."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "In December 1998, UNESCO included the Summer Palace on its World Heritage List."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "It declared the Summer Palace \"a masterpiece of Chinese landscape garden design."
+    }
+   ],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fe1b21eae",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Damaged 1860 and 1900; rebuilt and renamed Yiheyuan (1888) under Cixi. Order of events in the sentence is loose but each element is correct.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "British and French forces occupied the Summer Palace and the nearby Old Summer Palace in December 1860, sacking and burning both."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "In 1900, towards the end of the Boxer Rebellion, the Summer Palace suffered damage again"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The Summer Palace was also given its present-day Chinese name, \"Yiheyuan\" (頤和園), in 1888."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F00640436",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Imperial garden/palace complex in Beijing centred on Kunming Lake and Longevity Hill.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "It consists of a vast ensemble of lakes, gardens and palaces located in Beijing. An imperial garden during the Qing dynasty"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The entire Summer Palace is centered around Longevity Hill and Kunming Lake, with the latter covering about three-quarters of the area."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F24c6e64b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Centred on lake and hill with palaces, pavilions and halls.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The entire Summer Palace is centered around Longevity Hill and Kunming Lake, with the latter covering about three-quarters of the area."
+    },
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "combined with artificial features such as pavilions, halls, palaces, temples and bridges"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The natural landscape of hills and open water is combined with artificial features such as pavilions, halls, palaces, temples and bridges"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbe6a8545",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Inscribed 1998.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "In December 1998, UNESCO included the Summer Palace on its World Heritage List."
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "in November 1998, it was designated a World Heritage Site by UNESCO."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4e8f2625",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. 2.9 km2 (about 290 ha), three-quarters water, mainly Kunming Lake.",
+   "sources": [
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Situated in Haidian District, it is 15 kilometers from downtown Beijing, covering an area of about 290 hectares."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "It covers an expanse of 2.9 square kilometres (1.1 sq mi), three-quarters of which is water."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kunming_Lake",
+     "tier": "T1",
+     "quote": "Kunming Lake covers approximately three-quarters of the Summer Palace grounds."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F33e6780f",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Qianlong reigned 1735-1796; development was in the 18th century, not the 13th.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "At the beginning of the reign of the Qianlong Emperor (r. 1735–1796), many imperial gardens were built in the area"
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Its construction began in 1750 and was completed in 1764."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "At the beginning of the reign of the Qianlong Emperor (r. 1735–1796)"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F58ba8782",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Rebuilding 1884-95; renamed Yiheyuan in 1888.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "Between 1884–95, during the reign of the Guangxu Emperor (r. 1875–1908), Empress Dowager Cixi reportedly ordered up to 22 million silver taels"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The Summer Palace was also given its present-day Chinese name, \"Yiheyuan\" (頤和園), in 1888."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2c6f1814",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Foxiangge on Longevity Hill; Long Corridor 728 m along the lake's north shore.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "Tower of Buddhist Incense (佛香阁; 佛香閣; Fóxiānggé): Located right in the centre of the front hill of Longevity Mountain."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The entire corridor is 728 metres (2,388 ft) long and contains artistic decorations"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "Located right in the centre of the front hill of Longevity Mountain."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F401c0440",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. 1998 inscription; masterpiece of Chinese landscape garden design.",
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "is a masterpiece of Chinese landscape garden design."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "In December 1998, UNESCO included the Summer Palace on its World Heritage List."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "It declared the Summer Palace \"a masterpiece of Chinese landscape garden design."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F737c5166",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Longevity Hill (Wanshou Shan) and Kunming Lake (3/4 of area) make up most of the grounds.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The entire Summer Palace is centered around Longevity Hill and Kunming Lake, with the latter covering about three-quarters of the area."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "it includes Longevity Hill (萬壽山; Wànshòu Shān), Kunming Lake, and Seventeen-Arch Bridge."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kunming_Lake",
+     "tier": "T1",
+     "quote": "Kunming Lake covers approximately three-quarters of the Summer Palace grounds."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd8d01ae7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "rationale": "A and B agree. Restates type and location.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "It consists of a vast ensemble of lakes, gardens and palaces located in Beijing. An imperial garden during the Qing dynasty"
+    },
+    {
+     "url": "https://www.wikidata.org/wiki/Q4132",
+     "tier": "T1",
+     "quote": "Ensemble of lakes, gardens and palaces in Beijing, China"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa15cd470",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "Only numeric differed. The fact gives only dynasty/century framing (Jin dynasty, 18th century) with no figure, matching Fef56d309 and F8600aa8c, which both labellers marked numeric=false. Supported: Wikipedia says the origins date to the Jin dynasty; Beijing government says construction began in 1750.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The origins of the Summer Palace date back to the Jurchen-led Jin dynasty."
+    },
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Its construction began in 1750 and was completed in 1764."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "whose construction was completed in 1764 at a cost of over 4.8 million silver taels, was initially named \"Qingyiyuan\""
+    }
+   ],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fa33e8937",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. British and French forces burned the Summer Palace and the nearby Old Summer Palace in 1860; later restored. Fact understates that this site itself was also burned.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "British and French forces occupied the Summer Palace and the nearby Old Summer Palace in December 1860, sacking and burning both."
+    },
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "The Summer Palace in Beijing – first built in 1750, largely destroyed in the war of 1860 and restored on its original foundations in 1886"
+    },
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "first built in 1750, largely destroyed in the war of 1860 and restored on its original foundations in 1886"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4326a136",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Qianlong built the garden from 1750.",
+   "sources": [
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Its construction began in 1750 and was completed in 1764."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "Around 1749, the Qianlong Emperor decided to build a palace in the vicinity of Jar Hill and the Western Lake"
+    },
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "first built in 1750, largely destroyed in the war of 1860 and restored on its original foundations in 1886"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8600aa8c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Took shape 1750-1764, Qing dynasty.",
+   "sources": [
+    {
+     "url": "https://english.beijing.gov.cn/beijinginfo/culture/culturaltreasures/sevenculture/202401/t20240111_3532659.html",
+     "tier": "T1",
+     "quote": "Its construction began in 1750 and was completed in 1764."
+    },
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "first built in 1750, largely destroyed in the war of 1860 and restored on its original foundations in 1886"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "whose construction was completed in 1764 at a cost of over 4.8 million silver taels, was initially named \"Qingyiyuan\""
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4113369e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Long Corridor, Tower of Buddhist Incense and Marble Boat documented.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The entire corridor is 728 metres (2,388 ft) long and contains artistic decorations"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "Tower of Buddhist Incense (佛香阁; 佛香閣; Fóxiānggé): Located right in the centre of the front hill of Longevity Mountain."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "The original wooden boat was burnt in 1860 and has been replaced with a marble copy with western-style paddle wheels."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F89bc2665",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. The 1998 inscription is the single property 'Summer Palace, an Imperial Garden in Beijing', not part of a group of Beijing imperial gardens.",
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/documents/125726",
+     "tier": "T1",
+     "quote": "Summer Palace, an Imperial Garden in Beijing"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Summer_Palace",
+     "tier": "T1",
+     "quote": "In December 1998, UNESCO included the Summer Palace on its World Heritage List."
+    }
+   ],
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

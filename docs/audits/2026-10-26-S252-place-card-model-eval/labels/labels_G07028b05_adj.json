@@ -1,0 +1,1098 @@
+{
+ "group_id": "G07028b05",
+ "labeller": "adj",
+ "reference": {
+  "name": "Lijiang",
+  "locality": "Lijiang (Gucheng District)",
+  "region": "Yunnan",
+  "country": "China",
+  "lat": 26.8552,
+  "lon": 100.2259,
+  "identifiable": "yes",
+  "note": "The itinerary uses Lijiang as the overnight base city (returning to Lijiang by bus); the afternoon walk is in its old town (Dayan).",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Lijiang",
+    "tier": "T1",
+    "quote": "is a prefecture-level city in the northwest of Yunnan Province, China"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+    "tier": "T1",
+    "quote": "is the historical center of Lijiang City, in Yunnan, China. It is a UNESCO World Heritage Site."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+    "tier": "T1",
+    "quote": "is the historical center of Lijiang City, in Yunnan, China."
+   }
+  ],
+  "agreement": "agree"
+ },
+ "variants": [
+  {
+   "vid": "V4fcbcc6f",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Name, region and country are right for Lijiang city, but locality 'Lhasa' is a different city in Tibet, hundreds of km away. (A and B agree.)"
+  },
+  {
+   "vid": "V245cbe74",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Lijiang city, Yunnan, China: matches the base city the itinerary means. (A and B agree.)"
+  },
+  {
+   "vid": "Vb61be558",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "other_entity",
+   "agreement": "agree",
+   "rationale": "Card narrows Lijiang (the base city the group returns to) to its historic quarter Lijiang Old Town/Dayan; the walk is in the old town, but the itinerary place is the city, so the entity is a sub-area (borderline). (A and B agree.)"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F7126ffb4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dongba_symbols",
+     "tier": "T1",
+     "quote": "By the Song dynasty in the 10th century, Dongba was widely used by the Naxi people."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "The Naxi, originally from northwestern China and having a Tibeto-Burman language with pictographic characters of their own, are mainly distributed in Lijiang"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "UNESCO ties Dongba culture and Naxi character to the town; Dongba is the Naxi priestly tradition. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fb2b856c6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "was registered on the UNESCO World Heritage List on December 4, 1997"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1997"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Inscribed December 1997. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "Ff0790deb",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tea_Horse_Road",
+     "tier": "T1",
+     "quote": "entered Tibet through today's Dali Bai Autonomous Prefecture, Lijiang City and Shangri-La, and went directly to Lhasa"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tea_Horse_Road",
+     "tier": "T1",
+     "quote": "entered Tibet through today's Dali Bai Autonomous Prefecture, Lijiang City"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "UNESCO and Wikipedia place Lijiang on the Tea and Horse road to Tibet. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fe5beb4ed",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.chinadailyhk.com/article/639355",
+     "tier": "T2",
+     "quote": "The streets are paved with locally quarried five-colored stone from Yulong (Jade Dragon) Snow Mountain"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "from where waterways feed into a network of canals and channels to supply the town"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Stone-paved streets (China Daily) and canals fed by snow-mountain rivers and springs (UNESCO). (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F3780246e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "The Old Town of Lijiang is located on the Lijiang plain at an elevation of 2,400 meters"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "The Yulong Snow Mount to the north-west is the source of the rivers and springs which water the plain and supply the Heilong Pool"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "UNESCO gives 2,400 m; Yulong (Jade Dragon) Snow Mountain lies to the north-west. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "Fccbb7044",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "was registered on the UNESCO World Heritage List on December 4, 1997"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1997"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Inscribed 1997. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F35e7388b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "is the historical center of Lijiang City, in Yunnan, China. It is a UNESCO World Heritage Site."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Old Town (Dayan) is the historic centre of Lijiang City, Yunnan; restates identity. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F8209450e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Black_Dragon_Pool",
+     "tier": "T1",
+     "quote": "is a famous pond in the scenic Jade Spring Park (Yu Quan Gong Yuan) located at the foot of Elephant Hill"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "from where waterways feed into a network of canals and channels to supply the town"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Canal network fed from Heilong (Black Dragon) Pool in Jade Spring (Yuquan) Park; timber Naxi houses per UNESCO; stone lanes per China Daily. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F659e0dbf",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "important center for the economic and cultural communication between various ethnic groups such as the Naxi, Han, Tibetan and Bai"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Numerous two-storeyed, tile-roofed, timber-framed houses combining elements of Han and Zang architecture"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "UNESCO links the town's architecture and culture to the Naxi. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F4d89fc40",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "The highest point is the main peak of Yulong Snow Mountain, with an elevation of 5,596 meters"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jade_Dragon_Snow_Mountain",
+     "tier": "T1",
+     "quote": "Jade Dragon Snow Mountain towering over nearby Lijiang"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Shanzidou 5,596 m, within tolerance of 'about 5,600 m'. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F66e648c4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "It is within the region encompassed by the Hengduan Mountains, where the Qinghai-Tibet Plateau and Yunnan–Guizhou Plateau converge."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jade_Dragon_Snow_Mountain",
+     "tier": "T1",
+     "quote": "Jade Dragon Snow Mountain towering over nearby Lijiang"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Lijiang lies in the Hengduan Mountains region of NW Yunnan near Jade Dragon Snow Mountain. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fed723aaa",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "the area had been hit by a devastating earthquake, which necessitated reconstruction of numerous old town structures"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "the area had been hit by a devastating earthquake, which necessitated reconstruction of numerous old town structures."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "1996 earthquake damaged the old town, followed by reconstruction; 'much of' is slightly stronger than 'numerous structures' but consistent. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fbdeabb0c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "is the historical center of Lijiang City, in Yunnan, China. It is a UNESCO World Heritage Site."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "Dayan old town is famous for its orderly system of waterways and bridges"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Dayan alias and the canal/stone-street townscape are documented. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fecee8f4f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dongba_symbols",
+     "tier": "T1",
+     "quote": "By the Song dynasty in the 10th century, Dongba was widely used by the Naxi people."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "the Dongba of the Naxi nationality is known as the only \"living pictograph\" in the world that has been preserved intact."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Naxi centre; Dongba culture and pictographic script associated with the area. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F6d4febfa",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "was registered on the UNESCO World Heritage List on December 4, 1997"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1997"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Inscribed 1997. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F30703de4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "is the historical center of Lijiang City, in Yunnan, China. It is a UNESCO World Heritage Site."
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "important center for the economic and cultural communication between various ethnic groups such as the Naxi, Han, Tibetan and Bai"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Historic urban area in Yunnan tied to the Naxi. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F9bea4911",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "was registered on the UNESCO World Heritage List on December 4, 1997"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "has retained a historic townscape of high quality and authenticity"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "UNESCO: townscape of high quality and authenticity; inscribed 1997. 'One of the best-preserved' is evaluative but consistent. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F2746add3",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "is a prefecture-level city in the northwest of Yunnan Province, China"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "The Old Town of Lijiang is located on the Lijiang plain at an elevation of 2,400 meters"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Plateau/plain at 2,400 m; Jade Dragon Snow Mountain to the north(-west). (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F204d0e51",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "is a prefecture-level city in the northwest of Yunnan Province, China"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "The Old Town of Lijiang is located on the Lijiang plain at an elevation of 2,400 meters"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "NW Yunnan, ~2,400 m. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F89710a91",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "is the historical center of Lijiang City, in Yunnan, China. It is a UNESCO World Heritage Site."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "Dayan old town is famous for its orderly system of waterways and bridges"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Dayan alias, canal network, traditional buildings. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F8faa564b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "The Old Town of Lijiang comprises three component parts: Dayan Old Town (including the Black Dragon Pond), Baisha and Shuhe housing clusters."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Property comprises Dayan, Baisha and Shuhe. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F883c834b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "The Naxi, originally from northwestern China and having a Tibeto-Burman language with pictographic characters of their own, are mainly distributed in Lijiang"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "The intangible heritage including Dongba culture, Naxi character, and the building skills of traditional residences"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Lijiang is a cultural centre of the Naxi. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F1595a2ee",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "was registered on the UNESCO World Heritage List on December 4, 1997"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1997"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Inscribed 1997. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F815a31db",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Cultural and technological exchanges over the past 800 years resulted in the particular local architecture"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "is where the Silk Road in the south joins the Ancient Chama (Tea and Horse) Roads"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "UNESCO: trade hub from the 12th century, exchanges over the past 800 years. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F147382a7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dongba_symbols",
+     "tier": "T1",
+     "quote": "By the Song dynasty in the 10th century, Dongba was widely used by the Naxi people."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dongba_symbols",
+     "tier": "T1",
+     "quote": "It continues to be used in certain areas; thus, it is the only pictographic writing system in the world still actively maintained."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Dongba pictographic script of Naxi priests, still maintained. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F6b29d4d1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.chinadailyhk.com/article/639355",
+     "tier": "T2",
+     "quote": "More than 350 stone and wood bridges link homes, courtyards and winding alleys."
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Numerous two-storeyed, tile-roofed, timber-framed houses combining elements of Han and Zang architecture"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Waterways with stone and wood bridges; timber-framed houses. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F02a46c57",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "the area had been hit by a devastating earthquake, which necessitated reconstruction of numerous old town structures"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "the area had been hit by a devastating earthquake, which necessitated reconstruction of numerous old town structures."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "1996 earthquake damage and reconstruction. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F01858b76",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "was registered on the UNESCO World Heritage List on December 4, 1997"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1997"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Inscription year is 1997, not 1860 (the World Heritage List did not exist in 1860). (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "Fac27e988",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tea_Horse_Road",
+     "tier": "T1",
+     "quote": "entered Tibet through today's Dali Bai Autonomous Prefecture, Lijiang City and Shangri-La, and went directly to Lhasa"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "is where the Silk Road in the south joins the Ancient Chama (Tea and Horse) Roads"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Trade centre between Sichuan, Yunnan and Tibet. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F7cfd2052",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Town_of_Lijiang",
+     "tier": "T1",
+     "quote": "was registered on the UNESCO World Heritage List on December 4, 1997"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1997"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Inscribed 1997. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F0505bfde",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "In 2002 Lijiang City was established, replacing the former Lijiang Naxi Autonomous County."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "is a prefecture-level city in the northwest of Yunnan Province, China"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "There is no 'Lijiang Naxi Autonomous Prefecture': Lijiang is itself a prefecture-level city (2002) that replaced the Lijiang Naxi Autonomous County. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F54890ad0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "is a prefecture-level city in the northwest of Yunnan Province, China"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "The government of Lijiang City sits in Gucheng District."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Loose wording: Lijiang is the prefecture-level city whose urban seat is Gucheng; the old Lijiang Prefecture (diqu) was converted in 2002. Substantively correct, terminology dated. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "F4fd297fc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "from where waterways feed into a network of canals and channels to supply the town"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/811/",
+     "tier": "T1",
+     "quote": "Numerous two-storeyed, tile-roofed, timber-framed houses combining elements of Han and Zang architecture"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Canals, stone lanes (China Daily), tile-roofed timber houses (UNESCO). (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "Fb35c8d34",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "It is within the region encompassed by the Hengduan Mountains, where the Qinghai-Tibet Plateau and Yunnan–Guizhou Plateau converge."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Lijiang",
+     "tier": "T1",
+     "quote": "The highest point is the main peak of Yulong Snow Mountain, with an elevation of 5,596 meters"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Hengduan Mountains region, Jade Dragon Snow Mountain nearby. (A and B agree on all fields.)"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "name=ok|locality=wrong|region=correct|country=correct|entity=same",
+    "name=ok|locality=wrong|region=correct|country=correct|entity=same"
+   ],
+   [
+    "name=ok|locality=correct|region=correct|country=correct|entity=same",
+    "name=ok|locality=correct|region=correct|country=correct|entity=same"
+   ],
+   [
+    "name=ok|locality=correct|region=correct|country=correct|entity=other_entity",
+    "name=ok|locality=correct|region=correct|country=correct|entity=other_entity"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

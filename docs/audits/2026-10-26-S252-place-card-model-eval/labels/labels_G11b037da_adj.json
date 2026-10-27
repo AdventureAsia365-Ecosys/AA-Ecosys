@@ -1,0 +1,1023 @@
+{
+ "group_id": "G11b037da",
+ "labeller": "adj",
+ "reference": {
+  "name": "Baclayon Church (Immaculate Conception Parish Church)",
+  "locality": "Baclayon",
+  "region": "Bohol (Central Visayas)",
+  "country": "Philippines",
+  "lat": 9.6227,
+  "lon": 123.9122,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+    "tier": "T1",
+    "quote": "is a Roman Catholic church in the municipality of Baclayon, Bohol, Philippines within the jurisdiction of the Diocese of Tagbilaran."
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "V7c48d9f4",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Right church, but locality 'Basco' is the capital of Batanes, far from Bohol; correct locality is Baclayon.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V1815b635",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Baclayon Church in Baclayon, Bohol, Philippines - all correct.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F57ff4b87",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "Baclayon Church was declared a National Cultural Treasure by the National Museum of the Philippines in 2010."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon",
+     "tier": "T1",
+     "quote": "declared a National Cultural Treasure in 1995 because it is considered the best preserved of its kind in the region"
+    }
+   ],
+   "rationale": "Declaration year is 2010 per the church article (1995 per the town article); no source gives 2001.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4d4ca40e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The church, built out of coral stones, is a cross-shaped (cruciform) church"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The convento is a typical bahay-na-bato with its first floor made out of coral stones"
+    }
+   ],
+   "rationale": "Church and convento ground floor are coral stone.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbb4bab7c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The convent which serves as the priest's house, it is much used as the church's ecclesiastical museum."
+    },
+    {
+     "url": "https://www.ust.edu.ph/cccpet-redevelops-baclayon-museum-in-bohol/",
+     "tier": "T2",
+     "quote": "is located at a section of the old convent of one of the oldest churches in the country"
+    }
+   ],
+   "rationale": "Convent serves as ecclesiastical museum; specific items (vestments, manuscripts) not individually confirmed by T1 but consistent with liturgical artifacts.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F6a9e7050",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The church, built out of coral stones, is a cross-shaped (cruciform) church"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "is a Roman Catholic church in the municipality of Baclayon, Bohol, Philippines within the jurisdiction of the Diocese of Tagbilaran."
+    }
+   ],
+   "rationale": "Coral-stone church in Baclayon, Bohol; 'locally quarried' detail not separately confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F35420bf5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The church, built out of coral stones, is a cross-shaped (cruciform) church"
+    }
+   ],
+   "rationale": "Built of coral stones.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F61db7a8d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "is a Roman Catholic church in the municipality of Baclayon, Bohol, Philippines within the jurisdiction of the Diocese of Tagbilaran."
+    }
+   ],
+   "rationale": "Restates identity: RC church in Baclayon, Bohol.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd34e26af",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "is a Roman Catholic church in the municipality of Baclayon, Bohol, Philippines within the jurisdiction of the Diocese of Tagbilaran."
+    }
+   ],
+   "rationale": "Restates identity: RC church in Baclayon, Bohol (Visayas).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9b45cec2",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It is used to be a detached structure from the church and was connected after the addition of the portico."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The convento is a typical bahay-na-bato with its first floor made out of coral stones"
+    }
+   ],
+   "rationale": "Both agree contradicted; reason set to false: Wikipedia (Baclayon Church, Watchtower) says the bell tower was once detached but is now connected to the church, so 'separate bell tower' is factually wrong today, not an exaggeration.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F8edcb20e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The church sustained major damage with its collapsed portico and bell tower."
+    },
+    {
+     "url": "https://www.cbcplaiko.org/2018/03/02/centuries-old-philippine-church-restored-after-earthquake/",
+     "tier": "T2",
+     "quote": "The facade and bell tower of the centuries-old Baclayon church, that collapsed in October 2013, has been restored."
+    }
+   ],
+   "rationale": "2013 quake collapsed portico/facade and bell tower; restored by 2018.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F94f6462e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "declared a National Cultural Treasure by the National Museum of the Philippines and a National Historical Landmark"
+    }
+   ],
+   "rationale": "Both designations confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2c21eedd",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It was elevated as a parish in 1717 and the present coral stone church was completed in 1727."
+    }
+   ],
+   "rationale": "Spanish-era church; 1717 (parish elevation/start) to 1727 completion.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb42795b8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The church, built out of coral stones, is a cross-shaped (cruciform) church"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon",
+     "tier": "T1",
+     "quote": "they built a stone church which is considered one of the oldest stone churches in the Philippines"
+    }
+   ],
+   "rationale": "Coral stone; considered one of the oldest stone churches in the Philippines.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F816adbb5",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://baclayon.bohol.gov.ph/?p=323",
+     "tier": "T1",
+     "quote": "In 1717, Baclayon was elevated as a parish."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It was elevated as a parish in 1717 and the present coral stone church was completed in 1727."
+    }
+   ],
+   "rationale": "Deciding source: Baclayon municipal history page and Wikipedia both date parish status to 1717; the Jesuit mission (1595/1596) is not the parish founding, so '1595 parish' is wrong.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F0e3ade58",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "T1 sources conflict on the church's construction: Wikipedia 'Baclayon' says the 1595 Jesuits built a stone church, while Wikipedia 'Baclayon Church' and the municipal page say a chapel existed in 1596 and the present stone church was finished in 1727. Left unverifiable.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fc6a3d6d0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It was elevated as a parish in 1717 and the present coral stone church was completed in 1727."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The church, built out of coral stones, is a cross-shaped (cruciform) church"
+    }
+   ],
+   "rationale": "Built of coral stone, completed 1727 after 1717 parish elevation; 'lime mortar' binder not separately confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff4abccf8",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://baclayon.bohol.gov.ph/?p=323",
+     "tier": "T1",
+     "quote": "In 1717, Baclayon was elevated as a parish."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It was elevated as a parish in 1717 and the present coral stone church was completed in 1727."
+    }
+   ],
+   "rationale": "Deciding source: Baclayon municipal page 'In 1717, Baclayon was elevated as a parish'; the Jesuits arrived 1596 (1595 in the town article), so the parish was not founded in 1595.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F877e5c68",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "the Baclayon Church was formerly included for the UNESCO World Heritage Tentative List of the Philippines since 1993 under the collective group of Jesuit Churches"
+    }
+   ],
+   "rationale": "Not part of the inscribed Baroque Churches of the Philippines; it was only on the Tentative List (Jesuit Churches) and later removed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fda84e497",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Pamilacan",
+     "tier": "T1",
+     "quote": "surrounded by the Bohol Sea (also called Mindanao Sea). It is one of the 17 barangays that compose the municipality of Baclayon."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Cebu_Strait",
+     "tier": "T1",
+     "quote": "separates the island provinces of Cebu and Bohol."
+    }
+   ],
+   "rationale": "Quotes verified on Wikipedia: Baclayon's waters (Pamilacan barangay) are the Bohol Sea south of Bohol; Bohol Strait is another name for Cebu Strait between Cebu and Bohol, so 'facing Bohol Strait' is wrong.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F8206a621",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "When a 7.2 magnitude earthquake struck Bohol and other parts of Central Visayas in 2013, the church building sustained major damage."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It was reconstructed by the National Historical Commission of the Philippines from 2014 to 2018."
+    }
+   ],
+   "rationale": "Severe 2013 damage and 2014-2018 restoration.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F847c5795",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "On November 17, 1596, the first Jesuits, Father Juan de Torres, SJ and Father Gabriel Sánchez, SJ, came to Baclayon."
+    }
+   ],
+   "rationale": "Jesuits arrived in Baclayon on 17 November 1596.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc824ae1f",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It was elevated as a parish in 1717 and the present coral stone church was completed in 1727."
+    }
+   ],
+   "rationale": "Completed 1727, i.e. 18th century; 'built in the 17th century' is wrong.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbefad109",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The church, built out of coral stones, is a cross-shaped (cruciform) church"
+    }
+   ],
+   "rationale": "Coral stone construction; style generalisation is benign.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe59e6c98",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "When a 7.2 magnitude earthquake struck Bohol and other parts of Central Visayas in 2013, the church building sustained major damage."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It was reconstructed by the National Historical Commission of the Philippines from 2014 to 2018."
+    }
+   ],
+   "rationale": "Major damage 2013, restored 2014-2018.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F661ebb97",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The convent which serves as the priest's house, it is much used as the church's ecclesiastical museum."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon",
+     "tier": "T1",
+     "quote": "The church includes a small museum, with relics dating back to the early 16th century"
+    }
+   ],
+   "rationale": "Convent used as museum with old relics; vestments/manuscripts specifics not separately confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3e681614",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It is used to be a detached structure from the church and was connected after the addition of the portico."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The convent which serves as the priest's house, it is much used as the church's ecclesiastical museum."
+    }
+   ],
+   "rationale": "Bell tower (watchtower) and adjoining convent both documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F86d547bf",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "When a 7.2 magnitude earthquake struck Bohol and other parts of Central Visayas in 2013, the church building sustained major damage."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It was reconstructed by the National Historical Commission of the Philippines from 2014 to 2018."
+    }
+   ],
+   "rationale": "Magnitude 7.2, 15 October 2013; restored 2014-2018.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8c424f6d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "is a Roman Catholic church in the municipality of Baclayon, Bohol, Philippines within the jurisdiction of the Diocese of Tagbilaran."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "The church complex is strategically located facing the sea."
+    }
+   ],
+   "rationale": "Supported by Wikipedia; trivial because it only restates locality (Baclayon) and region (Bohol), consistent with F61db7a8d.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Ff7260073",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "On November 17, 1596, the first Jesuits, Father Juan de Torres, SJ and Father Gabriel Sánchez, SJ, came to Baclayon."
+    }
+   ],
+   "rationale": "Supported by Wikipedia; numeric true because it carries a dated claim (late 16th century), consistent with F4157b458.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F6b6fd300",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Bohol",
+     "tier": "T1",
+     "quote": "is an island province of the Philippines located in the Central Visayas region, consisting of the island itself and 75 minor surrounding islands."
+    }
+   ],
+   "rationale": "Supported by Wikipedia 'Bohol'; trivial because it only describes the region field (Bohol, Visayas, Philippines), consistent with Fd34e26af.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F6c5c6971",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "Immaculate Conception Parish Church, (formally: La Purísima Concepción de la Virgen María Parish Church) and informally called Baclayon Church"
+    }
+   ],
+   "rationale": "Supported by Wikipedia; trivial because the dedication only restates the alias 'Immaculate Conception Parish Church' and the naming note.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F48f5194c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "Immaculate Conception Parish Church, (formally: La Purísima Concepción de la Virgen María Parish Church) and informally called Baclayon Church"
+    }
+   ],
+   "rationale": "Supported by Wikipedia; trivial because it restates the alias 'Church of Our Lady of the Immaculate Conception' and the naming note.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F02c4e0a2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "declared a National Cultural Treasure by the National Museum of the Philippines and a National Historical Landmark"
+    }
+   ],
+   "rationale": "National Cultural Treasure confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1b901c9d",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "On November 17, 1596, the first Jesuits, Father Juan de Torres, SJ and Father Gabriel Sánchez, SJ, came to Baclayon."
+    }
+   ],
+   "rationale": "Both agree contradicted; reason numeric_off because the error is a wrong year (1458 vs 1595/1596 Jesuit arrival), consistent with F3049c783-style wrong-year labels.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F4157b458",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Baclayon_Church",
+     "tier": "T1",
+     "quote": "It was elevated as a parish in 1717 and the present coral stone church was completed in 1727."
+    }
+   ],
+   "rationale": "Coral stone church, 1717-1727.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "contradicted"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "unverifiable",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

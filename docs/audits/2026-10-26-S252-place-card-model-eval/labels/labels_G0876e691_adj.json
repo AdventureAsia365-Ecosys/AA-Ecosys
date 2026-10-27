@@ -1,0 +1,1208 @@
+{
+ "group_id": "G0876e691",
+ "labeller": "adj",
+ "reference": {
+  "name": "Sigiriya (Sigiriya Rock Fortress; UNESCO 'Ancient City of Sigiriya')",
+  "locality": "Sigiriya",
+  "region": "Central Province (Matale District)",
+  "country": "Sri Lanka",
+  "lat": 7.9569,
+  "lon": 80.7597,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Sigiriya",
+    "tier": "T1",
+    "quote": "is an ancient rock fortress located in the northern Matale District near the town of Dambulla in the Central Province, Sri Lanka."
+   },
+   {
+    "url": "https://whc.unesco.org/en/list/202/",
+    "tier": "T1",
+    "quote": "Date of Inscription: 1982"
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "Vac874294",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Sigiriya village/rock in Matale District, Central Province, Sri Lanka."
+  },
+  {
+   "vid": "Vb9b00190",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Peradeniya is near Kandy, roughly 75-80 km south of Sigiriya; locality should be Sigiriya (or Dambulla)."
+  },
+  {
+   "vid": "V1cddbd82",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Sigiriya, Central Province, Sri Lanka."
+  },
+  {
+   "vid": "Va4ebdf6a",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Sigiriya Rock Fortress at Sigiriya, Central Province, Sri Lanka."
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F3f63be9f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "The capital and the royal palace were abandoned after the king's death. It was used as a Buddhist monastery until the 14th century."
+    }
+   ],
+   "rationale": "Wikipedia: capital abandoned after Kashyapa's death; site then used as a Buddhist monastery.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fff23fd8f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Kashyapa moved the capital and his residence from the traditional capital of Anuradhapura to the more secure summit of Sigiriya."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "During King Kashyapa's reign (477–495 CE), Sigiriya was developed into a complex city and fortress."
+    }
+   ],
+   "rationale": "Kashyapa I moved his capital from Anuradhapura to Sigiriya and developed it as city and fortress in 477-495 CE.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fdf6438fe",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "It is an inselberg, a hardened granite outcrop deriving from a solidified magma plug of a former volcano."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "is an ancient rock fortress located in the northern Matale District near the town of Dambulla in the Central Province, Sri Lanka."
+    }
+   ],
+   "rationale": "Sigiriya rock is an inselberg; the site is an ancient rock fortress.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3dc8f701",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "The gardens are divided into three distinct but linked forms: water gardens, cave and boulder gardens, and terraced gardens."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "It is one of the best preserved examples of ancient urban planning."
+    }
+   ],
+   "rationale": "Wikipedia lists water, boulder and terraced gardens, moats/walls, and calls it one of the best preserved examples of ancient urban planning.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F62c0f1cc",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "a granite peak standing some 180m high (the 'Lion's Rock', which dominates the jungle from all sides)"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "dominated by a massive column of granite approximately 180 m"
+    }
+   ],
+   "rationale": "UNESCO and Wikipedia give ~180 m; 200 m is ~11% off, beyond tolerance. Rock is a granite magma plug (not strictly 'volcanic rock'). Matale District/Central Province is correct.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa9d22d2d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Most of the elaborate constructions on the rock summit and around it, including defensive structures, palaces, and gardens, date from this period."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "The south contains a man-made reservoir"
+    }
+   ],
+   "rationale": "Palaces, gardens, defensive structures and a man-made reservoir are documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fcb26ac54",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1982"
+    }
+   ],
+   "rationale": "UNESCO: Ancient City of Sigiriya, date of inscription 1982.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd79350d4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "The Sigiriya site contains the ruins of an upper palace located on the flat top of the rock"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Fountains made of circular limestone plates are placed here."
+    }
+   ],
+   "rationale": "Upper palace ruins on the summit; water gardens with pools and fountains below; terraced gardens around the base.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4124ea83",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1982"
+    }
+   ],
+   "rationale": "UNESCO inscription 1982.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa015c7c9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "He built his palace on top of this rock and decorated its sides with colourful frescoes."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "the wall is now partially covered with verses scribbled by visitors, some of them dating from as early as the 8th century."
+    }
+   ],
+   "rationale": "Frescoes of female figures on the rock face; polished mirror wall carries visitors' verses (ancient Sinhala).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe8b94b06",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "a mid-level terrace that includes the Lion Gate and the mirror wall with its frescoes"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "the wall is now partially covered with verses scribbled by visitors, some of them dating from as early as the 8th century."
+    }
+   ],
+   "rationale": "Frescoes and the mirror wall with historic verse graffiti are documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F580c034e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "dominated by a massive column of granite approximately 180 m"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "is an ancient rock fortress located in the northern Matale District near the town of Dambulla in the Central Province, Sri Lanka."
+    }
+   ],
+   "rationale": "Wikipedia: rock fortress dominated by a massive granite column.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc10876b7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Moggallana returned the capital to Anuradhapura, converting Sigiriya into a Buddhist monastery complex, which survived until the 13th or 14th century."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "The capital and the royal palace were abandoned after the king's death. It was used as a Buddhist monastery until the 14th century."
+    }
+   ],
+   "rationale": "Kashyapa defeated 495 CE; Moggallana converted Sigiriya into a Buddhist monastery that survived until the 13th/14th century.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa43ac9ce",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "a granite peak standing some 180m high (the 'Lion's Rock', which dominates the jungle from all sides)"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "dominated by a massive column of granite approximately 180 m"
+    }
+   ],
+   "rationale": "UNESCO: granite peak some 180 m high.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0831cc5e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "He built his palace on top of this rock and decorated its sides with colourful frescoes."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "the wall is now partially covered with verses scribbled by visitors, some of them dating from as early as the 8th century."
+    }
+   ],
+   "rationale": "Frescoes of women and visitor graffiti on the polished mirror wall are documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8faf7a58",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "He built his palace on top of this rock and decorated its sides with colourful frescoes."
+    }
+   ],
+   "rationale": "Frescoes on the rock face are documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe4e170c9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "The capital and the royal palace were abandoned after the king's death. It was used as a Buddhist monastery until the 14th century."
+    }
+   ],
+   "rationale": "After Kashyapa's death the site was used as a Buddhist monastery until about the 14th century, then no records until the 16th.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2440a628",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1982"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Ancient City of Sigiriya"
+    }
+   ],
+   "rationale": "Property named Ancient City of Sigiriya, inscribed 1982.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F68891bd5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "There was a sculpted lion's head above the legs and paws flanking the entrance, but the head collapsed years ago."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "a mid-level terrace that includes the Lion Gate and the mirror wall with its frescoes"
+    }
+   ],
+   "rationale": "Lion's paws flank the entrance on the mid-level terrace; frescoes survive. 'Lion's Paw terrace' is the common name of that terrace.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F738bd191",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "During King Kashyapa's reign (477–495 CE), Sigiriya was developed into a complex city and fortress."
+    }
+   ],
+   "rationale": "Kashyapa's reign 477-495 CE, late 5th century.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F44f393d4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "During King Kashyapa's reign (477–495 CE), Sigiriya was developed into a complex city and fortress."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Kashyapa moved the capital and his residence from the traditional capital of Anuradhapura to the more secure summit of Sigiriya."
+    }
+   ],
+   "rationale": "Capital and residence moved to Sigiriya, developed as city and fortress during 477-495.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F80534106",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "is an ancient rock fortress located in the northern Matale District near the town of Dambulla in the Central Province, Sri Lanka."
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "Central Province, Matale District"
+    }
+   ],
+   "rationale": "Wikipedia: in northern Matale District near Dambulla, Central Province.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F96e15179",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "During King Kashyapa's reign (477–495 CE), Sigiriya was developed into a complex city and fortress."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Kashyapa moved the capital and his residence from the traditional capital of Anuradhapura to the more secure summit of Sigiriya."
+    }
+   ],
+   "rationale": "5th-century development by Kashyapa as capital and fortress.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5e6d70c2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1982"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Cultural_triangle",
+     "tier": "T1",
+     "quote": "World Heritage cultural sites of the Sacred City of Anuradhapura, the Ancient City of Polonnaruwa, the Ancient City of Sigiriya"
+    }
+   ],
+   "rationale": "Inscribed 1982; the Ancient City of Sigiriya is one of the Cultural Triangle World Heritage sites.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F00219a17",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "covered in highly polished white plaster, the wall is now partially covered with verses scribbled by visitors, some of them dating from as early as the 8th century."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sinhala_script",
+     "tier": "T1",
+     "quote": "Medieval Sinhalese, which emerged around 750 AD, is thought to be derived from Grantha script."
+    }
+   ],
+   "rationale": "Resolved: A unverifiable, B contradicted/overstated. Deciding source Wikipedia Sinhala_script: the script's infobox time period is '8th century CE - present' and Medieval Sinhalese emerged c. 750 AD (earlier Brahmi-stage inscriptions are described as a break), so 8th-century mirror-wall verses (Wikipedia Sigiriya) do rank among the oldest Sinhala-script examples; B's 3rd-century-BCE Brahmi ancestry does not contradict that.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fa869b17a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Most of the elaborate constructions on the rock summit and around it, including defensive structures, palaces, and gardens, date from this period."
+    }
+   ],
+   "rationale": "Palaces, fortifications and gardens documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb5601c4f",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1982"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Official name Ancient City of Sigiriya Type Cultural Criteria ii, iii, iv Designated 1982 (6th session )"
+    }
+   ],
+   "rationale": "Resolved reason only (A false, B numeric_off): both agree contradicted; UNESCO gives inscription 1982, so the error is a wrong year -> numeric_off, consistent with the other numeric errors in this group.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F8a9cca24",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Frescoes of maidens are documented (Wikipedia captions them as apsaras), but their identity is described as unconfirmed and 'among the best-preserved examples of ancient Sri Lankan painting' lacks a reliable source; Wikipedia notes most have been lost and colours are fading.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3f286f9f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "seized the throne in a coup assisted by Migara, the King's nephew and army commander."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "During King Kashyapa's reign (477–495 CE), Sigiriya was developed into a complex city and fortress."
+    }
+   ],
+   "rationale": "Kashyapa seized the throne in 477 CE and developed Sigiriya as his capital.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F91f9d862",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Most of the elaborate constructions on the rock summit and around it, including defensive structures, palaces, and gardens, date from this period."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "The south contains a man-made reservoir"
+    }
+   ],
+   "rationale": "Palace, gardens, reservoir and defensive structures documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa8c47c31",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "It is an inselberg, a hardened granite outcrop deriving from a solidified magma plug of a former volcano."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "is an ancient rock fortress located in the northern Matale District near the town of Dambulla in the Central Province, Sri Lanka."
+    }
+   ],
+   "rationale": "Inselberg; rock fortress in central Sri Lanka.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F6cf97ff0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "is an ancient rock fortress located in the northern Matale District near the town of Dambulla in the Central Province, Sri Lanka."
+    }
+   ],
+   "rationale": "Restates the site type and country.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Faf074f66",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Moggallana returned the capital to Anuradhapura, converting Sigiriya into a Buddhist monastery complex, which survived until the 13th or 14th century."
+    }
+   ],
+   "rationale": "Buddhist monastery until the 13th/14th century, then abandoned.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fca0f75a1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1982"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Ancient City of Sigiriya"
+    }
+   ],
+   "rationale": "Inscribed 1982 as 'Ancient City of Sigiriya'.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3889f874",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "On a small plateau about halfway up the side of this rock he built a gateway in the form of an enormous lion."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "The name of this place is derived from this structure; Sinhagiri, the Lion Rock."
+    }
+   ],
+   "rationale": "Name Sinhagiri (Lion Rock) derives from the lion-shaped gateway.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fabaf877a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "During King Kashyapa's reign (477–495 CE), Sigiriya was developed into a complex city and fortress."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sigiriya",
+     "tier": "T1",
+     "quote": "Kashyapa moved the capital and his residence from the traditional capital of Anuradhapura to the more secure summit of Sigiriya."
+    }
+   ],
+   "rationale": "Capital and residence moved to Sigiriya in 477 CE.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb1219b1d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/202/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1982"
+    }
+   ],
+   "rationale": "UNESCO inscription 1982.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

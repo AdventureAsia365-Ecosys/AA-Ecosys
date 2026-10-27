@@ -1,0 +1,389 @@
+{
+ "group_id": "G00561238",
+ "labeller": "adj",
+ "reference": {
+  "name": "Chilas (overnight stop on the Chilas–Islamabad road transfer)",
+  "locality": "Chilas",
+  "region": "Gilgit-Baltistan",
+  "country": "Pakistan",
+  "lat": 35.4194,
+  "lon": 74.0944,
+  "identifiable": "ambiguous",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Chilas",
+    "tier": "T1",
+    "quote": "is a city in Pakistan-administered territory of Gilgit-Baltistan in the disputed Kashmir region."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Chilas",
+    "tier": "T1",
+    "quote": "It is the headquarters of Diamer District and the divisional capital of Diamer Division."
+   }
+  ],
+  "note": "'Chilas to Islamabad' is a road transfer, not one place; the only placeable stop in it is Chilas town (Diamer District), where the group overnights. Pakistan administers GB de facto."
+ },
+ "variants": [
+  {
+   "vid": "V487afd25",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Resolved same: the card is about Chilas town (locality Chilas, town facts). The alias 'Chilas District' is imprecise (today's district is Diamer) but has a historical basis: Wikipedia Diamer_District says 'During the British Raj, the area was known as Chilas'. So the card is not a blend of two entities.",
+   "agreement": "resolved"
+  },
+  {
+   "vid": "V251bfab9",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Chilas town in Gilgit-Baltistan; locality left empty; correctly notes the label is a transfer.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Ff2fa6b07",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "It is the headquarters of Diamer District and the divisional capital of Diamer Division."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "Chilas is located on the left bank of Indus River."
+    }
+   ],
+   "rationale": "Town on the Indus, HQ of Diamer District.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3d359d7b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "is a city in Pakistan-administered territory of Gilgit-Baltistan in the disputed Kashmir region."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Gilgit-Baltistan",
+     "tier": "T1",
+     "quote": "It borders Azad Kashmir to the south, the province of Khyber Pakhtunkhwa to the west"
+    }
+   ],
+   "rationale": "GB borders Azad (Pakistan-administered) Kashmir and Khyber Pakhtunkhwa.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F29cc5dcb",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "More than 50,000 Buddhist petroglyphs and inscriptions line the Karakoram Highway in Gilgit-Baltistan, Pakistan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "The carvings were left by various invaders, traders and pilgrims who passed along the trade route, as well as by locals."
+    }
+   ],
+   "rationale": "More than 50,000 petroglyphs along the KKH from prehistoric to Buddhist era left by traders/pilgrims; 'one of the largest in the world' is emphatic but consistent.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7dd4eaed",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "The earliest date back to between 5000 and 1000 BC, showing single animals, triangular men and hunting scenes"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "More than 50,000 Buddhist petroglyphs and inscriptions line the Karakoram Highway in Gilgit-Baltistan, Pakistan."
+    }
+   ],
+   "rationale": "Prehistoric animals/hunting scenes and Buddhist carvings near Chilas.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F719befa6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "It can be reached by the Karakoram Highway and also through the Kaghan Valley via the Babusar Pass."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Karakoram_Highway",
+     "tier": "T1",
+     "quote": "The route of the KKH traces one of the many paths of the ancient Silk Road."
+    }
+   ],
+   "rationale": "Chilas is on the KKH, which links Pakistan and China and traces a Silk Road path.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Feed7fda2",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Nanga_Parbat",
+     "tier": "T1",
+     "quote": "Lying immediately southeast of the northernmost bend of the Indus River in the Gilgit-Baltistan region of Pakistan-administered Kashmir"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Nanga_Parbat",
+     "tier": "T1",
+     "quote": "The mountain is known locally by its Shina name Diamer or Deo Mir"
+    }
+   ],
+   "rationale": "Both agree contradicted/false (Diamer is Nanga Parbat's Shina name glossed 'mountain of God', and the peak lies south-east of Chilas, not north). Numeric resolved true: the fact makes an ordinal rank claim ('world's ninth-highest peak'), which Wikipedia confirms ('is the ninth-highest mountain on Earth'), so it is a numeric fact even though the number is not the error.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fea50d8dc",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Arid Indus valley is plausible, but no reliable source found naming the flanking slopes as Karakoram and Hindu Kush foothills (Nanga Parbat Himalaya lies south).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F64c90e85",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "Chilas is located on the left bank of Indus River."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "Elevation 1,265 m"
+    }
+   ],
+   "rationale": "Left bank of the westward-flowing Indus = south bank; 1,265 m within tolerance of ~1,250 m.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd1f1abdd",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "It is the headquarters of Diamer District and the divisional capital of Diamer Division."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "is a city in Pakistan-administered territory of Gilgit-Baltistan in the disputed Kashmir region."
+    }
+   ],
+   "rationale": "Town and HQ of Diamer District in Gilgit-Baltistan.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff66eab65",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chilas",
+     "tier": "T1",
+     "quote": "The carvings were left by various invaders, traders and pilgrims who passed along the trade route, as well as by locals."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Karakoram_Highway",
+     "tier": "T1",
+     "quote": "The route of the KKH traces one of the many paths of the ancient Silk Road."
+    }
+   ],
+   "rationale": "Traders and pilgrims passed along the trade route; Buddhist petroglyphs show Silk Road-era contacts.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "mixed",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

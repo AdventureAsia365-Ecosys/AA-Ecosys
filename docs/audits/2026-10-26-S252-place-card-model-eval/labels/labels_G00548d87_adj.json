@@ -1,0 +1,1023 @@
+{
+ "group_id": "G00548d87",
+ "labeller": "adj",
+ "reference": {
+  "name": "Higashiyama Onsen (Aizu Higashiyama Onsen, 東山温泉)",
+  "locality": "Aizuwakamatsu",
+  "region": "Fukushima Prefecture (Aizu region)",
+  "country": "Japan",
+  "lat": 37.4797,
+  "lon": 139.9608,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+    "tier": "T1",
+    "quote": "東山温泉（ひがしやまおんせん）とは、福島県会津若松市にある温泉。"
+   },
+   {
+    "url": "https://www.japan-guide.com/e/e7708.html",
+    "tier": "T2",
+    "quote": "is a hot spring resort in a valley just east of the downtown area of Aizu Wakamatsu"
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "V88b1d866",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Higashiyama Onsen with Aizu alias; Aizuwakamatsu, Fukushima, Japan all correct."
+  },
+  {
+   "vid": "Vfe0eb857",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Aizu Higashiyama Onsen in Aizuwakamatsu, Fukushima — correct."
+  },
+  {
+   "vid": "V57c247c4",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Same onsen district, correct admin fields."
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F0bd4d459",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    },
+    {
+     "url": "https://www.japan-guide.com/e/e7708.html",
+     "tier": "T2",
+     "quote": "is a hot spring resort in a valley just east of the downtown area of Aizu Wakamatsu"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Ja Wikipedia places it ~3 km southeast of Tsuruga Castle along the Yugawa (湯川); japan-guide confirms the valley setting."
+  },
+  {
+   "fid": "F077d2e00",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Aizu",
+     "tier": "T1",
+     "quote": "Aizu is the westernmost of the three regions of Fukushima Prefecture, Japan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Aizu",
+     "tier": "T1",
+     "quote": "Aizu Domain was a feudal domain under the Tokugawa shogunate which ruled most of the region from Aizuwakamatsu Castle."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Aizu is the western region of Fukushima; the domain was ruled from Aizuwakamatsu Castle in the Edo period. Background fact about the region, not the onsen itself."
+  },
+  {
+   "fid": "F6aa44223",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    },
+    {
+     "url": "https://www.gltjp.com/en/directory/item/12345/",
+     "tier": "T2",
+     "quote": "Along the Yukawa River that runs through the town, classic Japanese inns remain to this day"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Inns line the 湯川 through a narrow valley; 'Yukawa' is a romanisation used by some sources (ja wiki reads it Yugawa)."
+  },
+  {
+   "fid": "F047b88f4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "開湯は8世紀後半、または天平年間に行基によってなされたと伝えられる"
+    },
+    {
+     "url": "https://www.gltjp.com/en/directory/item/12345/",
+     "tier": "T2",
+     "quote": "Higashiyama Onsen was opened by Reverend Gyoki 1300 years ago led by a 3-legged crow according to a legend."
+    }
+   ],
+   "agreement": "resolved",
+   "rationale": "Supported by ja.wikipedia (opened in the 8th century, attributed to Gyoki, as tradition). Resolved numeric=true: the fact carries a date (8th century), consistent with Fa1106d81/Faa1b4ff4 which both labellers marked numeric."
+  },
+  {
+   "fid": "Ff4a66121",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    },
+    {
+     "url": "https://www.japan-guide.com/e/e7708.html",
+     "tier": "T2",
+     "quote": "is a hot spring resort in a valley just east of the downtown area of Aizu Wakamatsu"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Valley just east (strictly southeast) of central Aizuwakamatsu, on the 湯川 (Yu River = Yugawa)."
+  },
+  {
+   "fid": "F87a792cc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Aizuwakamatsu",
+     "tier": "T1",
+     "quote": "Aizuwakamatsu is located in the western part of Fukushima Prefecture, in the southeast part of Aizu basin."
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "東山温泉（ひがしやまおんせん）とは、福島県会津若松市にある温泉。"
+    }
+   ],
+   "agreement": "resolved",
+   "rationale": "Supported (japan-guide: valley 'just east of the downtown area'; ja.wikipedia: ~3 km SE of Tsuruga Castle). Resolved trivial=false: adds position in the hills east of the centre and 'northern Honshu', not only identity fields; consistent with Ff4a94e9b."
+  },
+  {
+   "fid": "F8aaf8a3b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "開湯は8世紀後半、または天平年間に行基によってなされたと伝えられる"
+    },
+    {
+     "url": "https://www.gltjp.com/en/directory/item/12345/",
+     "tier": "T2",
+     "quote": "Higashiyama Onsen was opened by Reverend Gyoki 1300 years ago led by a 3-legged crow according to a legend."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Gyoki attribution and ~1,300-year history both stated by sources."
+  },
+  {
+   "fid": "F68cfaca4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "東山温泉（ひがしやまおんせん）とは、福島県会津若松市にある温泉。"
+    },
+    {
+     "url": "https://www.japan-guide.com/e/e7708.html",
+     "tier": "T2",
+     "quote": "is a hot spring resort in a valley just east of the downtown area of Aizu Wakamatsu"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Restates identity: hot-spring area in Aizuwakamatsu."
+  },
+  {
+   "fid": "Fd973cf92",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "agreement": "agree",
+   "rationale": "Aizu domain association is supported, but no reliable source links novelist Higuchi Ichiyo to Higashiyama Onsen (sources name Yosano Akiko and Takehisa Yumeji instead); the Ichiyo claim is likely false but could not be refuted with a quote."
+  },
+  {
+   "fid": "F908c3edf",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "江戸時代には会津藩の湯治場として栄え、会津若松の奥座敷として発展した。"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Ja Wikipedia: flourished as the Aizu domain's toji (bathing) place in the Edo period."
+  },
+  {
+   "fid": "F587bad9b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Inns and hotels are concentrated along the Yugawa valley."
+  },
+  {
+   "fid": "F14eae7ec",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Onsen",
+     "tier": "T1",
+     "quote": "are hot springs and the bathing facilities and traditional inns around them"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Hot-spring sources (1,500 L/min), 20+ inns; bathing facilities are part of any onsen area. 'Communal' facilities not separately documented."
+  },
+  {
+   "fid": "Ff4a94e9b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "東山温泉（ひがしやまおんせん）とは、福島県会津若松市にある温泉。"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Valley resort just east of downtown Aizuwakamatsu; 'eastern edge' refers to the urban area (the municipality extends further east)."
+  },
+  {
+   "fid": "F321e85da",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Hot-spring inns and hotels (20+) operate along the river."
+  },
+  {
+   "fid": "Fa1106d81",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "開湯は8世紀後半、または天平年間に行基によってなされたと伝えられる"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Tradition: opened by Gyoki in the 8th century."
+  },
+  {
+   "fid": "F2beb8111",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Higashiyama-ku,_Kyoto",
+     "tier": "T1",
+     "quote": "Higashiyama-ku, meaning \"east mountain\""
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Aizu",
+     "tier": "T1",
+     "quote": "Aizu is the westernmost of the three regions of Fukushima Prefecture, Japan."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "東山 literally 'east mountain'; Aizu is the region name."
+  },
+  {
+   "fid": "Fd25850b3",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "硫酸塩泉（カルシウム・ナトリウム-硫酸塩・塩化物温泉）"
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Spring type is calcium-sodium sulfate-chloride; 20+ inns use it."
+  },
+  {
+   "fid": "F4a956209",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Aizuwakamatsu",
+     "tier": "T1",
+     "quote": "Aizuwakamatsu is located in the western part of Fukushima Prefecture, in the southeast part of Aizu basin."
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E4%BC%9A%E6%B4%A5%E7%9B%86%E5%9C%B0",
+     "tier": "T1",
+     "quote": "東は磐梯山・猪苗代湖を含む奥羽山脈、南は会津高原と呼ばれる山間地、西は越後山脈、北は飯豊山地に囲まれている。"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Resort lies in the hills east of the city on the basin's eastern rim; the basin is ringed by mountains."
+  },
+  {
+   "fid": "Fe94d92e1",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "硫酸塩泉（カルシウム・ナトリウム-硫酸塩・塩化物温泉）"
+    }
+   ],
+   "agreement": "resolved",
+   "rationale": "Resolved to B: sulfate type is confirmed (ja.wikipedia; official site 'sodium-sulphate hot springs'), but neither cited page nor a further search gives any reliable source calling the water 'gentle' or 'suited to long soaking' (official site only says 'Slowly unwind your mind and body'); half the claim is unsourced promotional bathing advice, so unverifiable."
+  },
+  {
+   "fid": "Fbf042e18",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Aizu",
+     "tier": "T1",
+     "quote": "Aizu is the westernmost of the three regions of Fukushima Prefecture, Japan."
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "東山温泉（ひがしやまおんせん）とは、福島県会津若松市にある温泉。"
+    }
+   ],
+   "agreement": "resolved",
+   "rationale": "Supported (japan-guide: 'hot spring resort in a valley just east of the downtown area of Aizu Wakamatsu'; en.wikipedia Aizu). Resolved trivial=false: beyond the identity fields it adds the relative position (eastern edge of the city), consistent with Ff4a94e9b which both labellers marked non-trivial."
+  },
+  {
+   "fid": "F5ea9cd98",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "開湯は8世紀後半、または天平年間に行基によってなされたと伝えられる"
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "江戸時代には会津藩の湯治場として栄え、会津若松の奥座敷として発展した。"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Not founded by a Portuguese mission in 1742; tradition dates it to Gyoki in the 8th century (and Portuguese were barred from Japan after 1639)."
+  },
+  {
+   "fid": "F2e676bea",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Onsen",
+     "tier": "T1",
+     "quote": "are hot springs and the bathing facilities and traditional inns around them"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Onsen",
+     "tier": "T1",
+     "quote": "In Japan, onsen are hot springs and the bathing facilities and traditional inns around them."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Onsen means hot springs with the bathing facilities and inns around them."
+  },
+  {
+   "fid": "Fbe1e74e2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "東山温泉（ひがしやまおんせん）とは、福島県会津若松市にある温泉。"
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "開湯は8世紀後半、または天平年間に行基によってなされたと伝えられる"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Historic hot-spring area in Aizuwakamatsu; restates identity."
+  },
+  {
+   "fid": "F70dcac78",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "江戸時代には会津藩の湯治場として栄え、会津若松の奥座敷として発展した。"
+    },
+    {
+     "url": "https://www.aizu-higashiyama.com/english/",
+     "tier": "T2",
+     "quote": "During the Edo period, it was popular with the Aizu samurai, and developed as a retreat area."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Toji (therapeutic bathing) place of the Aizu domain that developed in the Edo period."
+  },
+  {
+   "fid": "F1b72cebd",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "東山温泉（ひがしやまおんせん）とは、福島県会津若松市にある温泉。"
+    },
+    {
+     "url": "https://www.japan-guide.com/e/e7708.html",
+     "tier": "T2",
+     "quote": "is a hot spring resort in a valley just east of the downtown area of Aizu Wakamatsu"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Restates identity."
+  },
+  {
+   "fid": "Fe509efb0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.gltjp.com/en/directory/item/12345/",
+     "tier": "T2",
+     "quote": "Memorials were erected for the poet Yosano Akiko and the painter of beautiful women, Takehisa Yumeji."
+    },
+    {
+     "url": "https://www.mapple.net/article/72854/",
+     "tier": "T2",
+     "quote": "竹久夢二や与謝野晶子の歌碑があり、文人たちに愛されていたことがわかる。"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Takehisa Yumeji (and Yosano Akiko) are commemorated with memorials at the onsen; 'known in literature and art' is mild."
+  },
+  {
+   "fid": "F5120e2b4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "江戸時代には会津藩の湯治場として栄え、会津若松の奥座敷として発展した。"
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "会津藩指定保養所の歴史を持つ「向瀧」"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Edo-period toji place of the Aizu domain, popular with Aizu samurai."
+  },
+  {
+   "fid": "Fda74ccb2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    },
+    {
+     "url": "https://www.gltjp.com/en/directory/item/12345/",
+     "tier": "T2",
+     "quote": "Along the Yukawa River that runs through the town, classic Japanese inns remain to this day"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Yugawa runs through the town with inns along it; valley sides are wooded."
+  },
+  {
+   "fid": "Fa543e702",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "開湯は8世紀後半、または天平年間に行基によってなされたと伝えられる"
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "江戸時代には会津藩の湯治場として栄え、会津若松の奥座敷として発展した。"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Recognised as a historical onsen village in Aizu."
+  },
+  {
+   "fid": "F9461e15c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "鶴ヶ城から南東に約3km、湯川（ゆがわ）沿いに温泉宿・ホテル計20軒以上が営業している。"
+    },
+    {
+     "url": "https://www.gltjp.com/en/directory/item/12345/",
+     "tier": "T2",
+     "quote": "Along the Yukawa River that runs through the town, classic Japanese inns remain to this day"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Valley location on the river written Yukawa/Yugawa (湯川)."
+  },
+  {
+   "fid": "Faa1b4ff4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "開湯は8世紀後半、または天平年間に行基によってなされたと伝えられる"
+    },
+    {
+     "url": "https://ja.wikipedia.org/wiki/%E6%9D%B1%E5%B1%B1%E6%B8%A9%E6%B3%89",
+     "tier": "T1",
+     "quote": "山形県の上山温泉、湯野浜温泉とともにかつて奥羽三楽郷と呼ばれた"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Tenpyo era is in the Nara period; counted among the three great old onsen of Tohoku (Ou Sanrakkyo)."
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

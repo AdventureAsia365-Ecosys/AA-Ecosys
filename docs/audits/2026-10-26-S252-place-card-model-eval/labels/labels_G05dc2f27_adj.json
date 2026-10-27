@@ -1,0 +1,41 @@
+{
+ "group_id": "G05dc2f27",
+ "labeller": "adj",
+ "reference": {
+  "name": "Unnamed onsen ryokan in Nasu",
+  "locality": "Nasu",
+  "region": "Tochigi",
+  "country": "Japan",
+  "lat": 37.0198,
+  "lon": 140.121,
+  "identifiable": "no",
+  "note": "Generic accommodation: the itinerary names no specific inn ('a hotel or an onsen ryokan'); only the town (Nasu, Nasu District, Tochigi) is identifiable.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Nasu,_Tochigi",
+    "tier": "T1",
+    "quote": "Nasu is located in the mountainous far northeast of Tochigi Prefecture."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Nasu,_Tochigi",
+    "tier": "T1",
+    "quote": "is a town located in Tochigi Prefecture, Japan."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Nasu,_Tochigi",
+    "tier": "T1",
+    "quote": "The economy of Nasu is heavily dependent on tourism from its numerous hot spring and ski resorts."
+   }
+  ],
+  "agreement": "agree"
+ },
+ "variants": [],
+ "facts": [],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [],
+  "verdict": [],
+  "trip_leak": [],
+  "link": []
+ }
+}

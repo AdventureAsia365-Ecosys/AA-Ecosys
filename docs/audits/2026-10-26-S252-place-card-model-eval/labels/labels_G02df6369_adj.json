@@ -1,0 +1,978 @@
+{
+ "group_id": "G02df6369",
+ "labeller": "adj",
+ "reference": {
+  "name": "Panaji (Panjim)",
+  "locality": "Panaji",
+  "region": "Goa",
+  "country": "India",
+  "lat": 15.4989,
+  "lon": 73.8278,
+  "identifiable": "yes",
+  "note": "'Panjim, the present capital' = Panaji, capital of Goa; Altinho and Dona Paula are its neighbourhoods.",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Panaji",
+    "tier": "T1",
+    "quote": "also known as Panjim, is the capital of the Indian state of Goa and the headquarters of the North Goa district"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Panaji",
+    "tier": "T1",
+    "quote": "Panaji is located at 15°29′56″N 73°49′40″E"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Panaji",
+    "tier": "T1",
+    "quote": "also known as Panjim, is the capital of the Indian state of Goa"
+   }
+  ],
+  "agreement": "agree"
+ },
+ "variants": [
+  {
+   "vid": "V7bb32b0b",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Panaji/Goa/India correct, but locality 'Jaipur' is a city in Rajasthan, ~1,500 km away. (A and B agree.)"
+  },
+  {
+   "vid": "V4eed9d1d",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Panaji, Goa, India: exactly the city the itinerary means. (A and B agree.)"
+  },
+  {
+   "vid": "V7599c03b",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Correct city and state, locality left empty. (Alias 'Panjin' is actually a different city in Liaoning, China.) (A and B agree.)"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Feb1aecad",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fontainhas_(quarter)",
+     "tier": "T1",
+     "quote": "is an old Latin quarter in Panjim, capital city of the state of Goa, India. It maintains its Portuguese influence"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fontainhas_(quarter)",
+     "tier": "T1",
+     "quote": "narrow and picturesque winding streets like those found in many European cities, old villas and buildings with projecting balconies"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Fontainhas is Panaji's old Latin quarter with Portuguese-influenced architecture and narrow streets. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F23732ec4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fontainhas_(quarter)",
+     "tier": "T1",
+     "quote": "is an old Latin quarter in Panjim, capital city of the state of Goa, India. It maintains its Portuguese influence"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "on a planned grid system after the Portuguese relocated the capital from Old Goa"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Portuguese colonial capital with colonial houses; Fontainhas keeps Portuguese influence. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fe96f4a5d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "is the capital of the Indian state of Goa and the headquarters of the North Goa district"
+    },
+    {
+     "url": "https://www.britannica.com/place/Panaji",
+     "tier": "T1",
+     "quote": "Panaji, town, capital of Goa state, western India. It lies on the estuary of the Mandavi River at the river’s mouth on the Arabian Sea."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Capital of Goa. (A and B agree on all fields.) Adjudicator checked Wikipedia/other quotes verbatim; UNESCO/Britannica pages return 403 to the adjudicator, quotes kept as given by both labellers."
+  },
+  {
+   "fid": "Fcef1a263",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Mandovi_River",
+     "tier": "T1",
+     "quote": "Panaji, the state capital, and Old Goa, the former capital of Goa, are both situated on the left bank of the Mandovi."
+    },
+    {
+     "url": "https://www.worldatlas.com/cities/panaji-india.html",
+     "tier": "T2",
+     "quote": "Set on the southern left bank of the Mandovi River skirting the town"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Left bank of the west-flowing Mandovi = south bank; at the estuary mouth on the Arabian Sea. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fe48de4d9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Altinho,_Goa",
+     "tier": "T1",
+     "quote": "is a hill neighbourhood of Panaji, the state capital of India's smallest state Goa"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dona_Paula",
+     "tier": "T1",
+     "quote": "lies at the spot where the Mandovi and the Zuari rivers meet and flow into the Arabian Sea"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Altinho is a hill neighbourhood; Dona Paula is the headland where the Mandovi and Zuari meet, a few km south-west of the centre (Wikipedia counts it within Panaji city). (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F4c35764f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "is the capital of the Indian state of Goa and the headquarters of the North Goa district"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Mandovi_River",
+     "tier": "T1",
+     "quote": "Panaji, the state capital, and Old Goa, the former capital of Goa, are both situated on the left bank of the Mandovi."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Capital of Goa on the south (left) bank of the Mandovi. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Faee0477b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "also known as Panjim, is the capital of the Indian state of Goa and the headquarters of the North Goa district"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "also known as Panjim"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Panaji official, also known as Panjim; restates name/alias. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F6bd73fe9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Altinho,_Goa",
+     "tier": "T1",
+     "quote": "is a hill neighbourhood of Panaji, the state capital of India's smallest state Goa"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Altinho,_Goa",
+     "tier": "T1",
+     "quote": "considered an elite residential colony, with the State's chief minister's residence and the Archbishop's palace located here"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Hill residential neighbourhood with the Archbishop's palace; 'colonial-era bungalows' not explicitly sourced but core claim holds. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fb672f0dc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "is the capital of the Indian state of Goa and the headquarters of the North Goa district"
+    },
+    {
+     "url": "https://www.worldatlas.com/cities/panaji-india.html",
+     "tier": "T2",
+     "quote": "Set on the southern left bank of the Mandovi River skirting the town"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "State capital at the Mandovi mouth on the Arabian Sea. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fc29bd101",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fontainhas_(quarter)",
+     "tier": "T1",
+     "quote": "narrow and picturesque winding streets like those found in many European cities, old villas and buildings with projecting balconies"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fontainhas_(quarter)",
+     "tier": "T1",
+     "quote": "painted in the traditional tones of pale yellow, green, or blue, and roofs made of red coloured tiles"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Fontainhas (with Sao Tome, listed together by Goa Tourism) has Portuguese-style narrow lanes and coloured houses. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F45a55b21",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "is the capital of the Indian state of Goa and the headquarters of the North Goa district"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Capital of Goa. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F8a8e9f01",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Goa",
+     "tier": "T1",
+     "quote": "It continued to be the de jure capital of Goa until 1843, when the capital was shifted to Panjim"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Portuguese_India",
+     "tier": "T1",
+     "quote": "In 1843, the capital was moved to Panjim (Nova Goa or New Goa)"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Capital shifted from Old Goa to Panjim in 1843. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fcff28e01",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Goa",
+     "tier": "T1",
+     "quote": "It continued to be the de jure capital of Goa until 1843, when the capital was shifted to Panjim"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "It was previously the territorial capital of the former Portuguese India (Estado da Índia)."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "In 1843 Panjim replaced Old Goa as capital of the Estado da India. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fb619e81c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Fontainhas_(quarter)",
+     "tier": "T1",
+     "quote": "In the late eighteenth century, a Goan expatriate named António João de Sequeira (nicknamed Mossmikar)"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fontainhas_(quarter)",
+     "tier": "T1",
+     "quote": "painted in the traditional tones of pale yellow, green, or blue, and roofs made of red coloured tiles"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Heritage quarter founded late 18th century with painted Portuguese-style houses; exact colour list (ochre/terracotta) differs slightly from sources (pale yellow, green, blue). (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F89eeac8d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Mandovi_River",
+     "tier": "T1",
+     "quote": "Panaji, the state capital, and Old Goa, the former capital of Goa, are both situated on the left bank of the Mandovi."
+    },
+    {
+     "url": "https://www.worldatlas.com/cities/panaji-india.html",
+     "tier": "T2",
+     "quote": "Set on the southern left bank of the Mandovi River skirting the town"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "South (left) bank near the Mandovi mouth. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F67831781",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Portuguese_India",
+     "tier": "T1",
+     "quote": "In 1843, the capital was moved to Panjim (Nova Goa or New Goa)"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "after a devastating epidemic decimated the population of the Cidade de Goa (Old Goa) in the mid-18th century."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Britannica: plagues forced abandonment of Old Goa; Panaji capital in 1843. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fb6cea088",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Dona_Paula",
+     "tier": "T1",
+     "quote": "Dona Paula (Named after Dona Paula de Souto Maior) is a neighborhood and tourist destination in the city of Panaji, Goa, India."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dona_Paula",
+     "tier": "T1",
+     "quote": "lies at the spot where the Mandovi and the Zuari rivers meet and flow into the Arabian Sea"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Dona Paula is a neighbourhood of Panaji at the Mandovi–Zuari confluence before the Arabian Sea. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fde0ca007",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Goa",
+     "tier": "T1",
+     "quote": "It continued to be the de jure capital of Goa until 1843, when the capital was shifted to Panjim"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Portuguese_India",
+     "tier": "T1",
+     "quote": "In 1843, the capital was moved to Panjim (Nova Goa or New Goa)"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Capital moved in 1843, not 1706. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F4edb94e6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Mandovi_River",
+     "tier": "T1",
+     "quote": "Panaji, the state capital, and Old Goa, the former capital of Goa, are both situated on the left bank of the Mandovi."
+    },
+    {
+     "url": "https://www.worldatlas.com/cities/panaji-india.html",
+     "tier": "T2",
+     "quote": "Set on the southern left bank of the Mandovi River skirting the town"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "South bank, near the estuary on the Arabian Sea. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fbcd9f388",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Mandovi_River",
+     "tier": "T1",
+     "quote": "Panaji, the state capital, and Old Goa, the former capital of Goa, are both situated on the left bank of the Mandovi."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "A new Legislative Assembly complex was inaugurated in March 2000, across the Mandovi River"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Panaji is on the left (south) bank; Porvorim lies across the river on the north side. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fc4b73715",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Portuguese_India",
+     "tier": "T1",
+     "quote": "signed the Instrument of Surrender on 19 December 1961, thus ending 450 years of Portuguese rule in India"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "It became a state-capital on Goa's elevation to statehood in 1987 and between 1961 and 1987 it was the capital of the Union Territory"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "About 450 years of Portuguese rule ended 1961; UT capital 1961-87, state capital from 1987. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fe07645c5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Goa",
+     "tier": "T1",
+     "quote": "It continued to be the de jure capital of Goa until 1843, when the capital was shifted to Panjim"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "It was previously the territorial capital of the former Portuguese India (Estado da Índia)."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Capital of Portuguese India from 1843 until the 1961 annexation. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F4705e000",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Portuguese_India",
+     "tier": "T1",
+     "quote": "signed the Instrument of Surrender on 19 December 1961, thus ending 450 years of Portuguese rule in India"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "Panaji was annexed by India with the rest of Goa and the former Portuguese territories after the Indian annexation of Portuguese India in 1961."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Portuguese rule ended in 1961. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fed8630c8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Goa",
+     "tier": "T1",
+     "quote": "It continued to be the de jure capital of Goa until 1843, when the capital was shifted to Panjim"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Portuguese_India",
+     "tier": "T1",
+     "quote": "In 1843, the capital was moved to Panjim (Nova Goa or New Goa)"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Capital from 1843, replacing Old Goa. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F708eac40",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Altinho,_Goa",
+     "tier": "T1",
+     "quote": "is a hill neighbourhood of Panaji, the state capital of India's smallest state Goa"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Altinho,_Goa",
+     "tier": "T1",
+     "quote": "is a hill neighbourhood of Panaji, the state capital of India's smallest state Goa."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Altinho is a hill neighbourhood of Panaji. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "Fec8c1f4b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "Panaji has terraced hills, concrete buildings with balconies and red-tiled roofs, churches, and a riverside promenade."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Fontainhas_(quarter)",
+     "tier": "T1",
+     "quote": "is an old Latin quarter in Panjim, capital city of the state of Goa, India. It maintains its Portuguese influence"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Churches, red-tiled roofs and the Fontainhas quarter. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F5ab0fcd8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "also known as Panjim, is the capital of the Indian state of Goa and the headquarters of the North Goa district"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "The city had been renamed Nova Goa (Portuguese for \"New Goa\") when it officially replaced the City of Goa (now Old Goa) as the capital"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Formerly Nova Goa. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F31329c70",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "Panaji is Goa's largest urban agglomeration, ahead of Margão and Mormugão"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "Panaji is Goa's largest urban agglomeration"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Part of Goa's largest urban agglomeration at the Mandovi estuary on the Arabian Sea. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F90e23a61",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "is the capital of the Indian state of Goa and the headquarters of the North Goa district"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Capital of Goa and HQ of North Goa district. (A and B agree on all fields.)"
+  },
+  {
+   "fid": "F35488b83",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_Goa",
+     "tier": "T1",
+     "quote": "It continued to be the de jure capital of Goa until 1843, when the capital was shifted to Panjim"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Panaji",
+     "tier": "T1",
+     "quote": "It was previously the territorial capital of the former Portuguese India (Estado da Índia)."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "1843 capital of Portuguese India, replacing Old Goa. (A and B agree on all fields.)"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "name=ok|locality=wrong|region=correct|country=correct|entity=same",
+    "name=ok|locality=wrong|region=correct|country=correct|entity=same"
+   ],
+   [
+    "name=ok|locality=correct|region=correct|country=correct|entity=same",
+    "name=ok|locality=correct|region=correct|country=correct|entity=same"
+   ],
+   [
+    "name=ok|locality=empty|region=correct|country=correct|entity=same",
+    "name=ok|locality=empty|region=correct|country=correct|entity=same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

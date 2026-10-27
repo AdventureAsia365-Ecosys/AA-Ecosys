@@ -1,0 +1,30 @@
+{
+ "V6272a661": {
+  "name": "ok",
+  "locality": "correct",
+  "region": "correct",
+  "country": "correct",
+  "entity": "same"
+ },
+ "Vb61be558": {
+  "name": "ok",
+  "locality": "correct",
+  "region": "correct",
+  "country": "correct",
+  "entity": "same"
+ },
+ "Vd080455c": {
+  "name": "ok",
+  "locality": "empty",
+  "region": "empty",
+  "country": "correct",
+  "entity": "same"
+ },
+ "Vb62dc96c": {
+  "name": "ok",
+  "locality": "acceptable_nearby",
+  "region": "correct",
+  "country": "correct",
+  "entity": "same"
+ }
+}

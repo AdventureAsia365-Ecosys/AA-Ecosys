@@ -1,0 +1,986 @@
+{
+ "group_id": "G0071c4d5",
+ "labeller": "adj",
+ "reference": {
+  "name": "Bell pavilion (bell tower) of Khamar Monastery (Khamaryn Khiid, 'Hamulin Temple') at the Shambhala energy centre",
+  "locality": "Sainshand",
+  "region": "Dornogovi Province",
+  "country": "Mongolia",
+  "lat": 44.5972,
+  "lon": 110.2735,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+    "tier": "T1",
+    "quote": "is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+   },
+   {
+    "url": "https://www.lonelyplanet.com/points-of-interest/khamaryn-khiid/1406482",
+    "tier": "T2",
+    "quote": "a paved road, leads for 2km to a bell tower which you must strike three times to announce your arrival at the"
+   },
+   {
+    "url": "https://www.lonelyplanet.fr/poi/khamaryn-khiid",
+    "tier": "T2",
+    "quote": "À une heure de route au sud de Saïnshand, ce monastère s’est construit autour du culte de Danzan Ravjaa"
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "V4b29e28c",
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Bell pavilion of Khamar Monastery; Sainshand is the usual reference town; monastery ~35 km straight-line (~45 km by road) south of it.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vca4e28db",
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Bell pavilion of Khamar Monastery; Sainshand is the usual reference town; monastery ~35 km straight-line (~45 km by road) south of it.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V9332f5b3",
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Bell pavilion of Khamariin Khiid; Sainshand is the usual reference town; monastery ~35 km straight-line (~45 km by road) south of it.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vb62dc96c",
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "other_entity",
+   "rationale": "Describes the whole monastery rather than the bell pavilion structure; Sainshand is the usual reference town; monastery ~35 km straight-line (~45 km by road) south of it.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V6272a661",
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "other_entity",
+   "rationale": "Describes the whole monastery; naming note itself says the pavilion is one structure within it. Sainshand is the usual reference town; monastery ~35 km straight-line (~45 km by road) south of it.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V2452fa7b",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Locality 'Lhasa' (Tibet, China) is wrong; site is near Sainshand, Dornogovi.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vd080455c",
+   "name": "ok",
+   "locality": "empty",
+   "region": "empty",
+   "country": "correct",
+   "entity": "other_entity",
+   "rationale": "Names the temple (itinerary spelling) not the pavilion; locality and region left empty; country right.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F5dbb1dd4",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Both unverifiable. trip_leak false: it describes a structure of the site, not access, a stop or visitor activity (consistent with the museum/convent facts in other groups).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fd6452f2d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sainshand",
+     "tier": "T1",
+     "quote": "Sainshand is the capital of Dornogovi Province in Mongolia. It is located in the eastern Gobi Desert steppe"
+    }
+   ],
+   "rationale": "Monastery in the Gobi near Sainshand, capital of Dornogovi.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3aea2e2f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/khamaryn-khiid/1406482",
+     "tier": "T2",
+     "quote": "a paved road, leads for 2km to a bell tower which you must strike three times to announce your arrival at the"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Founded in 1820, the Khamar Monastery was an important Red Hat sect Buddhist monastic, cultural, and education center in Mongolia's Gobi Desert region"
+    }
+   ],
+   "rationale": "Deciding source: Lonely Planet (verbatim, checked) places a bell tower 2 km from Khamaryn Khiid at its Shambhala energy centre; Wikipedia puts the monastery in the Gobi. (Labeller A's quote at lonelyplanet.com/pois/1406482 is a paraphrase on a URL that now redirects; replaced with the verbatim Lonely Planet text.) Not trivial: adds the monastery type, like Fd6452f2d.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Ff92b3130",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/khamaryn-khiid/1406482",
+     "tier": "T2",
+     "quote": "a paved road, leads for 2km to a bell tower which you must strike three times to announce your arrival at the"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Founded in 1820, the Khamar Monastery was an important Red Hat sect Buddhist monastic, cultural, and education center in Mongolia's Gobi Desert region"
+    }
+   ],
+   "rationale": "Deciding source: Lonely Planet (verbatim, checked) documents the bell tower on the monastery's path to the energy centre; Wikipedia gives the Gobi setting. (Labeller A's quote at lonelyplanet.com/pois/1406482 is a paraphrase on a URL that now redirects; replaced with the verbatim Lonely Planet text.)",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F81d50209",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Danzanravjaa chose the site of the monastery believing the surrounding area radiated with a spiritual energy fostered by the Gobi desert."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sainshand",
+     "tier": "T1",
+     "quote": "Sainshand is the capital of Dornogovi Province in Mongolia. It is located in the eastern Gobi Desert steppe"
+    }
+   ],
+   "rationale": "Site chosen for its spiritual energy in the Gobi steppe; 'rocky hills, sparse vegetation' descriptive.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F877998e8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Khamar Monastery was founded in 1820 by Dulduityn Danzanravjaa, a charismatic 17-year-old monk of the Nyingma red hat school of Buddhism."
+    }
+   ],
+   "rationale": "Founded 1820 by Danzanravjaa.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2bb65b64",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "In 1937 the monastery's lamas were driven from the grounds and the complex completely burned to the ground"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "as part of Khorloogiin Choibalsan's Stalinist purges."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "The current monastery was built after the 1990 Democratic Revolution in Mongolia and restoration efforts continue."
+    }
+   ],
+   "rationale": "Burned 1937 in Stalinist purges, rebuilt after 1990.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F893f897f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "In 1937 the monastery's lamas were driven from the grounds and the complex completely burned to the ground"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "The current monastery was built after the 1990 Democratic Revolution in Mongolia and restoration efforts continue."
+    }
+   ],
+   "rationale": "Destroyed 1937; rebuilt after 1990 Democratic Revolution.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7e758a06",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sainshand",
+     "tier": "T1",
+     "quote": "Sainshand is the capital of Dornogovi Province in Mongolia. It is located in the eastern Gobi Desert steppe"
+    }
+   ],
+   "rationale": "Dornogovi, eastern Gobi, Sainshand.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F260e339f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/pois/1406477",
+     "tier": "T2",
+     "quote": "Earth energy center - northern entrance to Shambhala in Gobi desert near Sainshand."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Danzanravjaa chose the site of the monastery believing the surrounding area radiated with a spiritual energy fostered by the Gobi desert."
+    }
+   ],
+   "rationale": "Site is believed to be the northern entrance to Shambhala and a place of spiritual energy.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F67831d23",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+    }
+   ],
+   "rationale": "Supported by Wikipedia. Not trivial: adds the desert setting beyond locality/region, consistent with agreed F7e758a06.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F59aee46c",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Both unverifiable (white double ovoo and red volcanic rock not in reliable sources). trip_leak false: lists site components, not what visitors do or a stop.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F1a33b70e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "In 1937 the monastery's lamas were driven from the grounds and the complex completely burned to the ground"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "as part of Khorloogiin Choibalsan's Stalinist purges."
+    }
+   ],
+   "rationale": "Destroyed in 1937 purges.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F51eac158",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "In 1937 the monastery's lamas were driven from the grounds and the complex completely burned to the ground"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "The current monastery was built after the 1990 Democratic Revolution in Mongolia and restoration efforts continue."
+    }
+   ],
+   "rationale": "Destroyed 1937; rebuilt after 1990.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F134b7e22",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Khamar Monastery was founded in 1820 by Dulduityn Danzanravjaa, a charismatic 17-year-old monk of the Nyingma red hat school of Buddhism."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dulduityn_Danzanravjaa",
+     "tier": "T1",
+     "quote": "(1803–1856) was a Mongolian polymath who variously worked as a writer, composer, painter, Buddhist scholar, physician."
+    }
+   ],
+   "rationale": "Founded 1820; Danzanravjaa 1803-1856, writer and composer (also founded a theatre).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F775a3890",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Khamar Monastery was founded in 1820 by Dulduityn Danzanravjaa, a charismatic 17-year-old monk of the Nyingma red hat school of Buddhism."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Often referred to as \"the Terrible Noble Saint of the Gobi\", Danzanravjaa was an educator, poet, and harsh critic of Mongolian society."
+    }
+   ],
+   "rationale": "Founded 19th c. by Danzanravjaa (1803-1856); epithet is 'Terrible Noble Saint of the Gobi' (minor wording difference).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fee1fba87",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sainshand",
+     "tier": "T1",
+     "quote": "Sainshand is the capital of Dornogovi Province in Mongolia. It is located in the eastern Gobi Desert steppe"
+    }
+   ],
+   "rationale": "Tibetan Buddhist monastery in Dornogovi, Gobi.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F029ffcf1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Khamar Monastery was founded in 1820 by Dulduityn Danzanravjaa, a charismatic 17-year-old monk of the Nyingma red hat school of Buddhism."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Often referred to as \"the Terrible Noble Saint of the Gobi\", Danzanravjaa was an educator, poet, and harsh critic of Mongolian society."
+    }
+   ],
+   "rationale": "Founded 1820 by Danzanravjaa, scholar/poet/critic of society.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5c211f2e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Khamar Monastery was founded in 1820 by Dulduityn Danzanravjaa, a charismatic 17-year-old monk of the Nyingma red hat school of Buddhism."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dulduityn_Danzanravjaa",
+     "tier": "T1",
+     "quote": "He was the fifth reincarnation (tulku or hutagt) of Noyon Khutagt, a Nyingma tulku lineage based in the Gobi Desert."
+    }
+   ],
+   "rationale": "Fifth Noyon Khutagt reincarnation.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F731ac65b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+    }
+   ],
+   "rationale": "Supported by Wikipedia; trivial because it only restates region (Dornogovi) and locality (Sainshand).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fa72f2e89",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/khamaryn-khiid/1406482",
+     "tier": "T2",
+     "quote": "a paved road, leads for 2km to a bell tower which you must strike three times to announce your arrival at the"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "is a Tibetan Buddhist monastery belonging to the Red Hat sect, located in Sainshand, Dornogovi Province, Mongolia."
+    }
+   ],
+   "rationale": "Deciding source: Lonely Planet (verbatim, checked) says the bell must be struck three times to announce arrival (a ritual use); Wikipedia: Tibetan Buddhist monastery. (Labeller A's quote at lonelyplanet.com/pois/1406482 is a paraphrase on a URL that now redirects; replaced with the verbatim Lonely Planet text.)",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fff497a35",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "In 1937 the monastery's lamas were driven from the grounds and the complex completely burned to the ground"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "as part of Khorloogiin Choibalsan's Stalinist purges."
+    }
+   ],
+   "rationale": "Destroyed 1937 in Stalinist purges.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F26a45d1f",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "General landscape description (rocky outcrops, sparse vegetation) not confirmed by a reliable source.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F6236b718",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/pois/1406477",
+     "tier": "T2",
+     "quote": "Earth energy center - northern entrance to Shambhala in Gobi desert near Sainshand."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Danzanravjaa chose the site of the monastery believing the surrounding area radiated with a spiritual energy fostered by the Gobi desert."
+    }
+   ],
+   "rationale": "Associated with Shambhala and the energy centre.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3049c783",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "Khamar Monastery was founded in 1820 by Dulduityn Danzanravjaa, a charismatic 17-year-old monk of the Nyingma red hat school of Buddhism."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Dulduityn_Danzanravjaa",
+     "tier": "T1",
+     "quote": "(1803–1856) was a Mongolian polymath who variously worked as a writer, composer, painter, Buddhist scholar, physician."
+    }
+   ],
+   "rationale": "Founded 1820; Danzanravjaa was born 1803, so 1683 is impossible.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fba974cff",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Khamar_Monastery",
+     "tier": "T1",
+     "quote": "The current monastery was built after the 1990 Democratic Revolution in Mongolia and restoration efforts continue."
+    }
+   ],
+   "rationale": "Rebuilt after 1990 democratic revolution.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "acceptable_nearby",
+    "acceptable_nearby"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "acceptable_nearby",
+    "acceptable_nearby"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "acceptable_nearby",
+    "acceptable_nearby"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "acceptable_nearby",
+    "acceptable_nearby"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "other_entity",
+    "other_entity"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "acceptable_nearby",
+    "acceptable_nearby"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "other_entity",
+    "other_entity"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "other_entity",
+    "other_entity"
+   ]
+  ],
+  "verdict": [
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    true,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

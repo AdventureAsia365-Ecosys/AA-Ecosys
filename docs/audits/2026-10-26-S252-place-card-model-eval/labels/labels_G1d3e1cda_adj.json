@@ -1,0 +1,903 @@
+{
+ "group_id": "G1d3e1cda",
+ "labeller": "adj",
+ "reference": {
+  "name": "Royal Botanic Gardens, Peradeniya",
+  "locality": "Peradeniya",
+  "region": "Central Province",
+  "country": "Sri Lanka",
+  "lat": 7.2711,
+  "lon": 80.5956,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+    "tier": "T1",
+    "quote": "Royal Botanic Gardens, Peradeniya are about 5.5 km to the west of the city of Kandy in the Central Province of Sri Lanka."
+   }
+  ],
+  "rationale": "Kandy day pairing the Temple of the Tooth with the Royal Botanical Garden = Royal Botanic Gardens, Peradeniya (A and B agree)."
+ },
+ "variants": [
+  {
+   "vid": "V6a0c4a72",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Official name, Peradeniya, Central Province, Sri Lanka all match the reference.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Fa6db2566",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Both unverifiable (official site only says the Java fig on the Great Lawn spreads 'like a giant living umbrella'; roots/most-photographed claims unsourced). trip_leak resolved true: 'one of the most photographed trees' describes what visitors do/see.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Ffd091f45",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "There are over 200 species of palms in the Gardens."
+    },
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The bamboo collection is along River Drive to the right of the Lake."
+    }
+   ],
+   "rationale": "Official site documents palm and bamboo collections; orchids are its best-known collection (Wikipedia).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F6e25363b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "Later, in the reign of King Kirti Sri from 1747 to 1780 this was made a Royal Garden"
+    }
+   ],
+   "rationale": "Official history: made a Royal Garden under Kandyan king Kirti Sri (1747-1780).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa8e3dd69",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "There are avenues in the River Drive such as Cook's Pine Avenue, Palmyra Palm Avenue, Double Coconut Avenue, Cabbage Palm Avenue, and Royal Palm Avenue."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "The garden includes more than 4000 species of plants, including orchids, spices, medicinal plants and palm trees."
+    }
+   ],
+   "rationale": "Palm avenues, orchids, spices, medicinal plants all documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0d079bde",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "Extent: 147 acres (59 hectares)."
+    },
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The area 61.25 ha in extent, is about 1550ft from sea level."
+    }
+   ],
+   "rationale": "147 acres = 59 ha (official 59-61.25 ha); \"about 60 hectares\" within tolerance.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1509b0ad",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The Royal Botanic Gardens at Peradeniya was established in 1821, six years after the final occupation of the Kandyan Kingdom by the English."
+    },
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "In the early years work was mainly directed towards the introduction and acclimatization of useful and ornamental plants"
+    }
+   ],
+   "rationale": "Established 1821 under the British; early work on introducing useful/economic plants.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F693d87dc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "Royal Botanic Gardens, Peradeniya are about 5.5 km to the west of the city of Kandy in the Central Province of Sri Lanka."
+    }
+   ],
+   "rationale": "Basic identity statement.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F13c4331d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "the Botanic Garden was used by Lord Louis Mountbatten, the supreme commander of the allied forces in the South Asia, as the headquarters of the South East Asia Command"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/South_East_Asia_Command",
+     "tier": "T1",
+     "quote": "SEAC headquarters moved in April 1944 to Kandy in Ceylon."
+    }
+   ],
+   "rationale": "Both supported; numeric resolved true because the fact states a year (1944). Deciding sources: Wikipedia garden article + SEAC article (April 1944 move to Kandy), both quotes checked on the raw pages.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F271f7687",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "Extent: 147 acres (59 hectares)."
+    },
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "occupies a loop of the river Mahaweli, which surrounds it on all sides except the south"
+    }
+   ],
+   "rationale": "About 59-61 ha, on a loop of the Mahaweli.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F89caee0d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "Later, in the reign of King Kirti Sri from 1747 to 1780 this was made a Royal Garden"
+    },
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The Royal Botanic Gardens at Peradeniya was established in 1821, six years after the final occupation of the Kandyan Kingdom by the English."
+    }
+   ],
+   "rationale": "Royal Garden of Kandyan kings, then established 1821 under the British (official site; Wikipedia gives 1843 as formal establishment, but the official body says 1821).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff59e7966",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "Royal Botanic Gardens, Peradeniya are about 5.5 km to the west of the city of Kandy in the Central Province of Sri Lanka."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "It is near the Mahaweli River (the longest river in Sri Lanka)."
+    }
+   ],
+   "rationale": "Near Kandy and beside the Mahaweli.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb54021d2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "occupies a loop of the river Mahaweli, which surrounds it on all sides except the south"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Mahaweli_River",
+     "tier": "T1",
+     "quote": "ranking as the longest river in Sri Lanka"
+    }
+   ],
+   "rationale": "Occupies a loop of the Mahaweli, the longest river in Sri Lanka.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F54d55023",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "the supreme commander of the allied forces in the South Asia, as the headquarters of the South East Asia Command"
+    }
+   ],
+   "rationale": "Wikipedia: used by Mountbatten as SEAC headquarters during WWII.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa42d5428",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "occupies a loop of the river Mahaweli, which surrounds it on all sides except the south"
+    }
+   ],
+   "rationale": "River surrounds the site on three sides.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F83e99593",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "Later, in the reign of King Kirti Sri from 1747 to 1780 this was made a Royal Garden"
+    },
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The Royal Botanic Gardens at Peradeniya was established in 1821, six years after the final occupation of the Kandyan Kingdom by the English."
+    }
+   ],
+   "rationale": "Royal garden under Kandyan kings; established as botanic garden in 1821.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F87ac7c03",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.timeout.com/sri-lanka/things-to-do/royal-botanical-gardens-peradeniya",
+     "tier": "T2",
+     "quote": "Considered Sri Lanka’s largest botanical garden, with 147 acres and over 4000 species of plants, Peradeniya Botanical Garden is a well-known attraction in Sri Lanka"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "It is renowned for its collection of orchids. The garden includes more than 4000 species of plants, including orchids, spices, medicinal plants and palm trees."
+    }
+   ],
+   "rationale": "A supported vs B unverifiable (superlative). Resolved supported: Time Out (T2, no T1 contrary) calls it Sri Lanka's largest botanical garden and a well-known attraction; Wikipedia/official site give 1.6 million visitors (2016) and the orchid/palm/spice collections. 'Best-known' is a mild, sourced superlative.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fad2ec2a1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "occupies a loop of the river Mahaweli, which surrounds it on all sides except the south"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Mahaweli_River",
+     "tier": "T1",
+     "quote": "ranking as the longest river in Sri Lanka"
+    }
+   ],
+   "rationale": "River loop surrounding all sides except south = peninsula in a river bend; near Kandy.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fdf559af6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "The garden includes more than 4000 species of plants, including orchids, spices, medicinal plants and palm trees."
+    }
+   ],
+   "rationale": "Collections of palms, orchids, spices documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbd753fa7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "Later, in the reign of King Kirti Sri from 1747 to 1780 this was made a Royal Garden"
+    }
+   ],
+   "rationale": "Royal Garden in the Kandyan period (Kirti Sri).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe8b3f862",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "The garden includes more than 4000 species of plants, including orchids, spices, medicinal plants and palm trees."
+    }
+   ],
+   "rationale": "Palms, orchids, spices documented.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5780b9ab",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "Extent: 147 acres (59 hectares)."
+    }
+   ],
+   "rationale": "Official extent is 147 acres (59 ha), not 102 ha.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8041edbc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The Royal Botanic Gardens at Peradeniya was established in 1821, six years after the final occupation of the Kandyan Kingdom by the English."
+    }
+   ],
+   "rationale": "Official: established 1821.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fba6644cd",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The total area of the botanical garden is 147 acres (0.59 km2), at 460 meters above sea level"
+    },
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "It is managed by the Department of National Botanic Gardens, Sri Lanka."
+    }
+   ],
+   "rationale": "147 acres (~60 ha), managed by Department of National Botanic Gardens.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F35607a7f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "Royal Botanic Gardens, Peradeniya are about 5.5 km to the west of the city of Kandy in the Central Province of Sri Lanka."
+    }
+   ],
+   "rationale": "Basic identity statement.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F6b48dcc1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "Royal Botanic Gardens, Peradeniya are about 5.5 km to the west of the city of Kandy in the Central Province of Sri Lanka."
+    }
+   ],
+   "rationale": "Basic identity statement.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F17831194",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "147 acres and 4000+ species (palms, orchids, spices, medicinal plants) are supported, but 'one of Asia's largest collections of labelled trees' has no reliable source.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fba7bfb81",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The history of the Royal Botanic Gardens dates as far back as 1371 when King Wickramabahu iii ascended the throne and kept court at Peradeniya"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kingdom_of_Kandy",
+     "tier": "T1",
+     "quote": "It was founded in the late 15th century and endured until the early 19th century."
+    }
+   ],
+   "rationale": "A contradicted vs B supported. Resolved contradicted: the official site dates the 1371 link to King Wickramabahu III keeping court (a Gampola-era king) and says the site was 'made a Royal Garden' only under Kirti Sri (1747-1780); the Kandyan kingdom itself dates from the late 15th century (Wikipedia), so a 14th-century pleasure garden 'of the Kandyan kings' is false.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F6840a6c5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "Later, in the reign of King Kirti Sri from 1747 to 1780 this was made a Royal Garden"
+    }
+   ],
+   "rationale": "Royal Garden under a Kandyan king.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F30420c66",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "occupies a loop of the river Mahaweli, which surrounds it on all sides except the south"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Royal_Botanic_Gardens,_Peradeniya",
+     "tier": "T1",
+     "quote": "The total area of the botanical garden is 147 acres (0.59 km2), at 460 meters above sea level"
+    }
+   ],
+   "rationale": "River loop and 460 m elevation (official ~1550 ft).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F09777af0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The Royal Botanic Gardens at Peradeniya was established in 1821, six years after the final occupation of the Kandyan Kingdom by the English."
+    }
+   ],
+   "rationale": "Established 1821 after British occupation.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1180e4b4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://botanicgardens.gov.lk/?p=2600",
+     "tier": "T1",
+     "quote": "The Royal Botanic Gardens at Peradeniya was established in 1821, six years after the final occupation of the Kandyan Kingdom by the English."
+    }
+   ],
+   "rationale": "Established 1821 under British administration.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "contradicted",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    true,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

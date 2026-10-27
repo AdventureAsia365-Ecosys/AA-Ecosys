@@ -1,0 +1,29 @@
+{
+ "group_id": "G02bfed6f",
+ "labeller": "adj",
+ "reference": {
+  "name": "Galle markets (town markets of Galle; generic, no single named market)",
+  "locality": "Galle",
+  "region": "Southern Province",
+  "country": "Sri Lanka",
+  "lat": 6.0328,
+  "lon": 80.2156,
+  "identifiable": "ambiguous",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Galle",
+    "tier": "T1",
+    "quote": "Galle is the provincial capital and largest city of Southern Province, Sri Lanka and is the capital of Galle District."
+   }
+  ]
+ },
+ "variants": [],
+ "facts": [],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [],
+  "verdict": [],
+  "trip_leak": [],
+  "link": []
+ }
+}

@@ -1,0 +1,1049 @@
+{
+ "group_id": "G0dc95872",
+ "labeller": "adj",
+ "reference": {
+  "name": "Luoyang Old Town (Laocheng old-city quarter around Lijingmen and the historic cultural street)",
+  "locality": "Luoyang",
+  "region": "Henan",
+  "country": "China",
+  "lat": 34.683,
+  "lon": 112.47,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+    "tier": "T1",
+    "quote": "Laocheng is a historical district and a cultural and business center."
+   },
+   {
+    "url": "https://www.news.cn/local/20240319/44de1dd002ee405a8395860fee3ffa65/c.html",
+    "tier": "T2",
+    "quote": "位于洛阳市老城区的丽景门，曾是金明洛阳城的西门"
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "V6f89a158",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "The historic old-city quarter (Laocheng) of Luoyang, Henan, China, matching the evening old-town walk.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vc0d04aa4",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Name, region and country are right, but the locality Lhasa (Tibet) is wrong; the old town is in Luoyang.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F755b0875",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "La vieille ville de Luòyáng se situe à l'est de la porte de Lìjīng (丽京门), reconstruite."
+    },
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Dans ce dédale de ruelles sinueuses subsistent des maisons anciennes à cour carrée"
+    },
+    {
+     "url": "https://www.news.cn/local/20240319/44de1dd002ee405a8395860fee3ffa65/c.html",
+     "tier": "T2",
+     "quote": "位于洛阳市老城区的丽景门，曾是金明洛阳城的西门"
+    }
+   ],
+   "rationale": "Old town of lanes and old courtyard houses with the (rebuilt) Lijing Gate as a landmark; archway detail not separately verified.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F41c34dd3",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Eastern Zhou dynasty, from 510 BC to 314 BC."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Northern Wei dynasty from AD 493 to 534."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "When Emperor Yang of Sui took control in 604 AD he founded the new Luoyang on the site of the existing city"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "It has also been called Dongdu (eastern capital) during the Tang dynasty"
+    }
+   ],
+   "rationale": "Capital of Eastern Zhou, Eastern Han, Northern Wei; Sui eastern capital built by Emperor Yang; Tang eastern capital.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff3955604",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "Lao in Chinese means \"old\", and cheng means \"city, downtown\", so Laocheng's original meaning is \"old downtown\"."
+    }
+   ],
+   "rationale": "Laocheng means old city / old downtown.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4a4c7fed",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "Laocheng is a historical district and a cultural and business center."
+    },
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Dans ce dédale de ruelles sinueuses subsistent des maisons anciennes à cour carrée"
+    }
+   ],
+   "rationale": "A historical district of lanes and houses, not a single monument.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1933326e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "It is the earliest of the Four Great Ancient Capitals of China."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Eastern Han dynasty from AD 25 to 190 and then briefly in AD 196."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "It has also been called Dongdu (eastern capital) during the Tang dynasty"
+    }
+   ],
+   "rationale": "One of the Four Great Ancient Capitals; Eastern Han capital; Tang eastern capital.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Feb2ff63b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "is a city located in the confluence area of the Luo River and the Yellow River in the west of Henan province, China."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luo_River_(Henan)",
+     "tier": "T1",
+     "quote": "The Luo's main tributary is the Yi River, which joins it at Yanshi, after which the river is called the Yiluo River."
+    }
+   ],
+   "rationale": "West Henan on the Luo (Yiluo system), a Yellow River tributary; city proper is on the Luo just above the Yi confluence at Yanshi (a Luoyang district).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F13ef356c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "Laocheng is a historical district and a cultural and business center."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "is a district of Luoyang in Henan, China."
+    }
+   ],
+   "rationale": "Historic district of Luoyang, Henan.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F172e0317",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "Luoyi Ancient City in Laocheng"
+    },
+    {
+     "url": "https://www.news.cn/local/20240319/44de1dd002ee405a8395860fee3ffa65/c.html",
+     "tier": "T2",
+     "quote": "西大街往东，洛邑古城园区尽享市井繁华。"
+    }
+   ],
+   "rationale": "Luoyi Ancient City lies in Laocheng.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F47bac1c7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Longmen_Grottoes",
+     "tier": "T1",
+     "quote": "located 12 kilometres (7.5 mi) south of present-day Luoyang in Henan province, China"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Longmen_Grottoes",
+     "tier": "T1",
+     "quote": "Inscription 2000"
+    }
+   ],
+   "rationale": "Longmen Grottoes 12 km south of Luoyang, inscribed 2000 (a different, nearby site).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F63dadfaa",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "is a city located in the confluence area of the Luo River and the Yellow River in the west of Henan province, China."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "Situated on the central plain of China, Luoyang is among the oldest cities in China and one of the cradles of Chinese civilization."
+    }
+   ],
+   "rationale": "West Henan, Luo River, Central Plain, cradle of Chinese civilization.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb185208f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Dans ce dédale de ruelles sinueuses subsistent des maisons anciennes à cour carrée"
+    },
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Une joyeuse animation règne dans Dong Dajie, à laquelle participent coiffeurs, échoppes de nouilles et autres commerces"
+    }
+   ],
+   "rationale": "Old courtyard houses, lanes and shops in the old town.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F87de6e4b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://news.cgtn.com/news/2023-05-05/Night-economy-lights-up-Luoyang-historical-and-cultural-block-1jyF3biJyk8/share_amp.html",
+     "tier": "T2",
+     "quote": "Most of the buildings were built in the Ming (1368-1644) and Qing (1644-1911) dynasties and are very well preserved."
+    },
+    {
+     "url": "https://www.news.cn/local/20240319/44de1dd002ee405a8395860fee3ffa65/c.html",
+     "tier": "T2",
+     "quote": "这是一条明清风格的历史文化古街"
+    }
+   ],
+   "rationale": "Historic block of mostly Ming/Qing buildings, now redeveloped as a cultural street district.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8fcbda6d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Dans ce dédale de ruelles sinueuses subsistent des maisons anciennes à cour carrée"
+    },
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Une joyeuse animation règne dans Dong Dajie, à laquelle participent coiffeurs, échoppes de nouilles et autres commerces"
+    },
+    {
+     "url": "https://www.news.cn/local/20240319/44de1dd002ee405a8395860fee3ffa65/c.html",
+     "tier": "T2",
+     "quote": "这是一条明清风格的历史文化古街"
+    }
+   ],
+   "rationale": "Old courtyard houses, alleys and commercial streets.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F65dbb49c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "is a city located in the confluence area of the Luo River and the Yellow River in the west of Henan province, China."
+    }
+   ],
+   "rationale": "Henan, at the Luo-Yellow River confluence area (middle reaches).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F269332b5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://zh.wikipedia.org/wiki/%E6%B4%9B%E9%98%B3%E5%9F%8E",
+     "tier": "T1",
+     "quote": "明清时期在金元旧城上重筑的城池"
+    },
+    {
+     "url": "https://zh.wikipedia.org/wiki/%E6%B4%9B%E9%98%B3%E5%9F%8E",
+     "tier": "T1",
+     "quote": "明城墙设四门，东为建春门，西为丽景门，南为长夏门，北为安喜门。"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "Laocheng is a historical district and a cultural and business center."
+    }
+   ],
+   "rationale": "Laocheng corresponds to the Ming-Qing walled city of Luoyang (walls demolished 1939).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8028adf9",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://news.cgtn.com/news/2023-05-05/Night-economy-lights-up-Luoyang-historical-and-cultural-block-1jyF3biJyk8/share_amp.html",
+     "tier": "T2",
+     "quote": "first built in the Jin Dynasty (1115-1234), consists of five streets dotted with 32 cultural relics and 81 ancient buildings."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "Laocheng District's history could be retrospect to BC 1042 the Xizhou Dynasty."
+    }
+   ],
+   "rationale": "No Portuguese founding; the old-town block dates to the Jin dynasty and the district's history to the Western Zhou.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8a941c2f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "Situated on the central plain of China, Luoyang is among the oldest cities in China and one of the cradles of Chinese civilization."
+    },
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Dans ce dédale de ruelles sinueuses subsistent des maisons anciennes à cour carrée"
+    }
+   ],
+   "rationale": "Living neighbourhoods and commercial streets in one of China's oldest cities.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe7bdde1d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "Situated on the central plain of China, Luoyang is among the oldest cities in China and one of the cradles of Chinese civilization."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Old_City_of_Luoyang",
+     "tier": "T1",
+     "quote": "The Old City of Luoyang is a site located 15 kilometres (9.3 mi) east of the urban area of modern Luoyang."
+    }
+   ],
+   "rationale": "On the Central Plain by the Luo; earlier Han-Wei capital site lies 15 km east of the modern urban area.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F81e33187",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Eastern Han dynasty from AD 25 to 190 and then briefly in AD 196."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Northern Wei dynasty from AD 493 to 534."
+    }
+   ],
+   "rationale": "Capital of several dynasties.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7ef36902",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "Laocheng is a historical district and a cultural and business center."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "is a district of Luoyang in Henan, China."
+    }
+   ],
+   "rationale": "Historic quarter in Laocheng District, Luoyang, Henan.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7ca7796a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "Laocheng is a historical district and a cultural and business center."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "is a district of Luoyang in Henan, China."
+    }
+   ],
+   "rationale": "Same as above.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F38c8e18f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Eastern Zhou dynasty, from 510 BC to 314 BC."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Eastern Han dynasty from AD 25 to 190 and then briefly in AD 196."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Cao Wei (AD 220–265) during the Three Kingdoms period."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Western Jin dynasty, from AD 265 to 311."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luoyang",
+     "tier": "T1",
+     "quote": "It has also been called Dongdu (eastern capital) during the Tang dynasty"
+    }
+   ],
+   "rationale": "Capital from Eastern Zhou to Tang/later periods, spanning well over a thousand years.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa5ff214e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.news.cn/local/20240319/44de1dd002ee405a8395860fee3ffa65/c.html",
+     "tier": "T2",
+     "quote": "这是一条明清风格的历史文化古街"
+    }
+   ],
+   "rationale": "A Ming-Qing-style historic cultural street in the old-city district.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F44c654ac",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Une joyeuse animation règne dans Dong Dajie, à laquelle participent coiffeurs, échoppes de nouilles et autres commerces"
+    },
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Dans ce dédale de ruelles sinueuses subsistent des maisons anciennes à cour carrée"
+    }
+   ],
+   "rationale": "Living neighbourhood with old houses; Dong Dajie a well-known old-town street.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe3e8d4d1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "La vieille ville de Luòyáng se situe à l'est de la porte de Lìjīng (丽京门), reconstruite."
+    },
+    {
+     "url": "https://www.news.cn/local/20240319/44de1dd002ee405a8395860fee3ffa65/c.html",
+     "tier": "T2",
+     "quote": "位于洛阳市老城区的丽景门，曾是金明洛阳城的西门"
+    },
+    {
+     "url": "https://zh.wikipedia.org/wiki/%E6%B4%9B%E9%98%B3%E5%9F%8E",
+     "tier": "T1",
+     "quote": "1939年12月，抗战期间为便于民众疏散拆除城墙，改为环城道路。"
+    }
+   ],
+   "rationale": "Lijing Gate was the historic west gate; walls demolished 1939 and the present gate is reconstructed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fda2ecb7a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://news.cgtn.com/news/2023-05-05/Night-economy-lights-up-Luoyang-historical-and-cultural-block-1jyF3biJyk8/share_amp.html",
+     "tier": "T2",
+     "quote": "Most of the buildings were built in the Ming (1368-1644) and Qing (1644-1911) dynasties and are very well preserved."
+    },
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "La vieille ville de Luòyáng se situe à l'est de la porte de Lìjīng (丽京门), reconstruite."
+    },
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Une joyeuse animation règne dans Dong Dajie, à laquelle participent coiffeurs, échoppes de nouilles et autres commerces"
+    }
+   ],
+   "rationale": "Old town redeveloped as a historic cultural block with rebuilt gate, alongside living streets.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc5c71f58",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Laocheng,_Luoyang",
+     "tier": "T1",
+     "quote": "is a district of Luoyang in Henan, China."
+    }
+   ],
+   "rationale": "Laocheng is a district of Luoyang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe1a251db",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Eastern Han dynasty from AD 25 to 190 and then briefly in AD 196."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Cao Wei (AD 220–265) during the Three Kingdoms period."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Western Jin dynasty, from AD 265 to 311."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Northern Wei dynasty from AD 493 to 534."
+    }
+   ],
+   "rationale": "Eastern Han, Cao Wei, Western Jin, Northern Wei capitals.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Faacd2e13",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://news.cgtn.com/news/2023-05-05/Night-economy-lights-up-Luoyang-historical-and-cultural-block-1jyF3biJyk8/share_amp.html",
+     "tier": "T2",
+     "quote": "first built in the Jin Dynasty (1115-1234), consists of five streets dotted with 32 cultural relics and 81 ancient buildings."
+    },
+    {
+     "url": "https://news.cgtn.com/news/2023-05-05/Night-economy-lights-up-Luoyang-historical-and-cultural-block-1jyF3biJyk8/share_amp.html",
+     "tier": "T2",
+     "quote": "Most of the buildings were built in the Ming (1368-1644) and Qing (1644-1911) dynasties and are very well preserved."
+    },
+    {
+     "url": "https://www.lonelyplanet.fr/poi/vieille-ville-6",
+     "tier": "T2",
+     "quote": "Dans ce dédale de ruelles sinueuses subsistent des maisons anciennes à cour carrée"
+    }
+   ],
+   "rationale": "Historic street grid with Ming/Qing buildings and old courtyard-house lanes.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5ca351ab",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Eastern Han dynasty from AD 25 to 190 and then briefly in AD 196."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Historical_capitals_of_China",
+     "tier": "T1",
+     "quote": "The Northern Wei dynasty from AD 493 to 534."
+    }
+   ],
+   "rationale": "Eastern Han and Northern Wei capitals.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

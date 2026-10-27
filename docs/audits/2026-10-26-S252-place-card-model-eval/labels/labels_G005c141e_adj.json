@@ -1,0 +1,328 @@
+{
+ "group_id": "G005c141e",
+ "labeller": "adj",
+ "reference": {
+  "name": "Self-Guided Trail (自導式步道), Manyueyuan National Forest Recreation Area",
+  "locality": "Sanxia District",
+  "region": "New Taipei",
+  "country": "Taiwan",
+  "lat": 24.8225,
+  "lon": 121.4477,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+    "tier": "T1",
+    "quote": "自導式步道由遊客中心旁拾級而上， 沿途設有導覽解說標誌牌， 尾端為東滿步道入口及滿月圓瀑布觀瀑亭。"
+   },
+   {
+    "url": "https://www.forest.gov.tw/EN/0000183",
+    "tier": "T1",
+    "quote": "Administrative District Sanxia District, New Taipei City"
+   }
+  ],
+  "rationale": "Manyueyuan day tour; trail starting by the visitor centre toward the waterfalls = the park's 自導式步道 (A and B agree)."
+ },
+ "variants": [
+  {
+   "vid": "V4df5ca2d",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Trail in Manyueyuan NFRA, Sanxia District, New Taipei, Taiwan.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F57270613",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.forest.gov.tw/EN/0000183",
+     "tier": "T1",
+     "quote": "Manyueyuan (Full Round Moon) National Forest Recreation Area."
+    }
+   ],
+   "rationale": "滿月圓 means \"full round moon\" (圓 = round), not \"Full Moon Garden\" (園); the official English gloss is \"Full Round Moon\". The second half (descriptive English trail name) is fine.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5d37e4f2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+     "tier": "T1",
+     "quote": "自導式步道由遊客中心旁拾級而上， 沿途設有導覽解說標誌牌， 尾端為東滿步道入口及滿月圓瀑布觀瀑亭。"
+    },
+    {
+     "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+     "tier": "T1",
+     "quote": "位於滿月圓國家森林遊樂區遊客中心旁右側為自導式步道的起點，另一端為滿月圓瀑布公廁為出口"
+    }
+   ],
+   "rationale": "Trail climbs from the visitor center through the cedar forest and ends at the Manyueyuan waterfall viewing pavilion.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F01ebc0a5",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved unverifiable (A contradicted via TVBS Supertaste 1,200 m; B unverifiable). The Supertaste page is a blogger-sourced roundup ('圖文提供 食尚部落客', 推薦達人 Sweet Tina), i.e. not a reliable source, and the official Forestry Agency page gives lengths for other park trails but none for 自導式步道. The ~1.1-1.2 km hints suggest the figure is likely off, but no T1/T2 source states the length.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fbc0dca80",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+     "tier": "T1",
+     "quote": "自導式步道由遊客中心旁拾級而上， 沿途設有導覽解說標誌牌， 尾端為東滿步道入口及滿月圓瀑布觀瀑亭。"
+    }
+   ],
+   "rationale": "Official name 自導式步道 is descriptive (trail with self-guiding interpretive signs).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc63b5b2b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+     "tier": "T1",
+     "quote": "位於滿月圓國家森林遊樂區遊客中心旁右側為自導式步道的起點，另一端為滿月圓瀑布公廁為出口"
+    }
+   ],
+   "rationale": "Both supported; trivial resolved true: 'a forest trail within Manyueyuan NFRA' only restates the variant's name (Manyueyuan Self-Guided Trail) and entity type. Official Forestry Agency page lists it as a park trail.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fbe8f04f5",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved unverifiable (A contradicted via TVBS Supertaste 1,200 m; B unverifiable). The Supertaste page is a blogger-sourced roundup ('圖文提供 食尚部落客', 推薦達人 Sweet Tina), i.e. not a reliable source, and the official Forestry Agency page gives lengths for other park trails but none for 自導式步道. The ~1.1-1.2 km hints suggest the figure is likely off, but no T1/T2 source states the length.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F23395bcc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+     "tier": "T1",
+     "quote": "距離三峽市區約40分鐘的滿月圓國家森林遊樂區，海拔在300至1700公尺之間"
+    },
+    {
+     "url": "https://www.wikidata.org/wiki/Q15902113",
+     "tier": "T1",
+     "quote": "forest in Sanxia, New Taipei, Taiwan"
+    }
+   ],
+   "rationale": "Forest area in Sanxia District at 300-1700 m in northern Taiwan.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F94d7f346",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+     "tier": "T1",
+     "quote": "自導式步道由遊客中心旁拾級而上， 沿途設有導覽解說標誌牌， 尾端為東滿步道入口及滿月圓瀑布觀瀑亭。"
+    },
+    {
+     "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+     "tier": "T1",
+     "quote": "在三峽大豹溪的上游，一條叫做蚋子溪的支流上，座落著一個擁有瀑布、生態與楓紅的美麗小天地：滿月圓國家森林遊樂區。"
+    }
+   ],
+   "rationale": "Trail ends at the Manyueyuan waterfall pavilion; park lies on streams with waterfalls.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F56bc1fde",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+     "tier": "T1",
+     "quote": "位於滿月圓國家森林遊樂區遊客中心旁右側為自導式步道的起點，另一端為滿月圓瀑布公廁為出口"
+    }
+   ],
+   "rationale": "Both supported; trivial resolved true for the same reason as Fc63b5b2b (bare identity sentence). Official Forestry Agency page.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fb59e1a36",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200001",
+     "tier": "T1",
+     "quote": "距離三峽市區約40分鐘的滿月圓國家森林遊樂區，海拔在300至1700公尺之間"
+    },
+    {
+     "url": "https://www.wikidata.org/wiki/Q15902113",
+     "tier": "T1",
+     "quote": "forest in Sanxia, New Taipei, Taiwan"
+    }
+   ],
+   "rationale": "Hilly forested landscape of Sanxia District.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

@@ -1,0 +1,1057 @@
+{
+ "group_id": "G0615dbeb",
+ "labeller": "adj",
+ "reference": {
+  "name": "Jeondong Cathedral (Jeondong Catholic Church, 전동성당)",
+  "locality": "Jeonju (Wansan-gu)",
+  "region": "Jeonbuk State (North Jeolla Province)",
+  "country": "South Korea",
+  "lat": 35.8135,
+  "lon": 127.149,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+    "tier": "T1",
+    "quote": "is an important Catholic church in Jeonju, South Korea."
+   },
+   {
+    "url": "https://www.wikidata.org/wiki/Q2942222",
+    "tier": "T1",
+    "quote": "coordinate location: 35.8135, 127.149 (Jeondong Cathedral)"
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "V447045d7",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct church in Jeonju, North Jeolla Province (now Jeonbuk State), South Korea.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V74935fc2",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct church and admin fields; 'Jeonju Cathedral' alias is loose (the see moved to Jungang in 1957), but identity is right.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V4b34aabc",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct; Jeonbuk is the current official name of the province.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vdc70c374",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct; 'Jeondong Cathedral' is the Wikipedia title.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Fb98bc8a5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "전동성당은 호남 지역 최초의 서양식 건물이다."
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "1981년 9월 25일 대한민국의 사적 제288호로 지정되었다."
+    }
+   ],
+   "rationale": "Korean Wikipedia: first Western-style building in Honam; Historic Site No. 288.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0a81b84d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "The cathedral building, of Roman-Byzantine style, was built between 1908 and 1914 by Victor Louis Poisnel (1855–1925)."
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "1908년 명동성당의 내부를 건축한 프와넬 신부의 설계로 성당이 착공되었다. 성당은 1914년에 비로소 외관 공사가 끝났으며"
+    }
+   ],
+   "rationale": "Begun 1908, exterior finished 1914 (final fit-out to 1931); Poisnel designed it.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff4489861",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "1981년 9월 25일 대한민국의 사적 제288호로 지정되었다."
+    }
+   ],
+   "rationale": "Designated Historic Site No. 288 in 1981.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc878a248",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Close to Gyeonggijeon (about 150 m by Wikidata coordinates, across Taejo-ro), but 'directly adjacent' and the Pungnam-dong address (the church lies in Jeon-dong) could not be confirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd046643e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "is an important Catholic church in Jeonju, South Korea."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/North_Jeolla_Province",
+     "tier": "T1",
+     "quote": "North Jeolla Province, officially Jeonbuk State"
+    }
+   ],
+   "rationale": "Catholic church in Jeonju, North Jeolla (now Jeonbuk State).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd08e2f49",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "원래 전동성당이 위치한 자리는 풍남문의 밖으로 1791년 신해박해 때 한국 교회 최초의 순교자인 윤지충 바오로(1759-1791)를 비롯하여"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeonju",
+     "tier": "T1",
+     "quote": "Jeongdong Catholic Church was built on 1908–1914 by French priest Xavier Baudonet on the site of the Korean Catholic martyrs in 1791 and 1801."
+    }
+   ],
+   "rationale": "Site outside Pungnammun where Yun Ji-chung was martyred in 1791.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F36671a96",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "성당은 화강암을 주춧돌로 하여 붉은 벽돌로 지어졌다."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeonju_Hanok_Village",
+     "tier": "T1",
+     "quote": "The architectural style of the Jeondong Cathedral is a mixture of the Romanesque and Byzantine styles"
+    }
+   ],
+   "rationale": "Romanesque-Byzantine is right, but the church is red brick on granite footings, not grey and black brick.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3b4ec390",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "is an important Catholic church in Jeonju, South Korea."
+    }
+   ],
+   "rationale": "Restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F79774aea",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "is an important Catholic church in Jeonju, South Korea."
+    }
+   ],
+   "rationale": "Restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F29a06ee5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "1908년 명동성당의 내부를 건축한 프와넬 신부의 설계로 성당이 착공되었다. 성당은 1914년에 비로소 외관 공사가 끝났으며"
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "원래 전동성당이 위치한 자리는 풍남문의 밖으로 1791년 신해박해 때 한국 교회 최초의 순교자인 윤지충 바오로(1759-1791)를 비롯하여"
+    }
+   ],
+   "rationale": "Only numeric differed: 'late 18th century' is a date claim (treated as numeric, like the century facts elsewhere); verdict supported by ko.wikipedia (1791 Sinhae martyrs at the site) and en.wikipedia (Poisnel).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fc659d06c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "성당은 화강암을 주춧돌로 하여 붉은 벽돌로 지어졌다."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeonju_Hanok_Village",
+     "tier": "T1",
+     "quote": "The architectural style of the Jeondong Cathedral is a mixture of the Romanesque and Byzantine styles"
+    }
+   ],
+   "rationale": "Romanesque with Byzantine elements; red brick on granite foundations.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F092ae0ac",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "원래 전동성당이 위치한 자리는 풍남문의 밖으로 1791년 신해박해 때 한국 교회 최초의 순교자인 윤지충 바오로(1759-1791)를 비롯하여"
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "그의 외종형 권상연 야고보(1751-1791)가, 1801년 신유박해 때에는 유항검 아우구스티노 (1756-1801), 유관검 (1768-1801) 형제가 육시형을"
+    }
+   ],
+   "rationale": "Yun Ji-chung and his cousin Kwon Sang-yeon (1791), plus 1801 martyrs, were executed at the site.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0956feb0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "성당을 구성하는 벽돌의 일부도 헐린 성벽에서 나온 흙을 구워 만들었다."
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "주춧돌인 화강암은 착공 당시인 1908년에 대한제국을 간접 통치하고 있던 일본 제국 통감부가 헐은 전주읍성의 풍남문 인근 성벽 돌을 이용하였다."
+    }
+   ],
+   "rationale": "Part of the bricks were fired from soil from the demolished walls near Pungnammun; the gate itself survives, so 'gate area' is loose but acceptable.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5d7fe721",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Red brick and Romanesque-Byzantine are supported; 'Korean decorative elements' is not found in any reliable source.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff5a11948",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "시대 = 대한제국 시대, 일제강점기 (1908년 - 1914년)"
+    }
+   ],
+   "rationale": "Heritage record dates it 1908-1914, Korean Empire to early colonial period.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F49fdb360",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "The cathedral building, of Roman-Byzantine style, was built between 1908 and 1914 by Victor Louis Poisnel (1855–1925)."
+    }
+   ],
+   "rationale": "Construction began in 1908, not 1771.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F94e8c689",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "is an important Catholic church in Jeonju, South Korea."
+    }
+   ],
+   "rationale": "Restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2d2f9f7f",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeonju_Hanok_Village",
+     "tier": "T1",
+     "quote": "The architectural style of the Jeondong Cathedral is a mixture of the Romanesque and Byzantine styles"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "The cathedral building, of Roman-Byzantine style, was built between 1908 and 1914 by Victor Louis Poisnel (1855–1925)."
+    }
+   ],
+   "rationale": "The style is Romanesque-Byzantine, not Romanesque-Gothic.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fff9c1d47",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "This church, located in the city center, near the traditional Jeonju Hanok Village, is a historic site (KB) #288."
+    },
+    {
+     "url": "https://www.wikidata.org/wiki/Q27951512",
+     "tier": "T1",
+     "quote": "coordinate location: 35.81481, 127.14981 (Jeonju Gyeonggijeon)"
+    }
+   ],
+   "rationale": "City centre, next to Hanok Village; Gyeonggijeon about 150 m away by coordinates.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fff2ce05c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "This church, located in the city center, near the traditional Jeonju Hanok Village, is a historic site (KB) #288."
+    },
+    {
+     "url": "https://www.wikidata.org/wiki/Q27951512",
+     "tier": "T1",
+     "quote": "coordinate location: 35.81481, 127.14981 (Jeonju Gyeonggijeon)"
+    }
+   ],
+   "rationale": "City centre; Gyeonggijeon about 150 m away.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F980c62e3",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "성당은 화강암을 주춧돌로 하여 붉은 벽돌로 지어졌다."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeonju_Hanok_Village",
+     "tier": "T1",
+     "quote": "The architectural style of the Jeondong Cathedral is a mixture of the Romanesque and Byzantine styles"
+    }
+   ],
+   "rationale": "Red brick; Romanesque and Byzantine.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F87c5910c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "is an important Catholic church in Jeonju, South Korea."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeonju",
+     "tier": "T1",
+     "quote": "is the capital and largest city of the province of Jeonbuk, South Korea."
+    }
+   ],
+   "rationale": "Jeonju is the provincial capital of Jeonbuk (North Jeolla).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd9af8ae7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "The cathedral building, of Roman-Byzantine style, was built between 1908 and 1914 by Victor Louis Poisnel (1855–1925)."
+    }
+   ],
+   "rationale": "1908-1914.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbdf5e35e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "The cathedral building, of Roman-Byzantine style, was built between 1908 and 1914 by Victor Louis Poisnel (1855–1925)."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeonju",
+     "tier": "T1",
+     "quote": "Jeongdong Catholic Church was built on 1908–1914 by French priest Xavier Baudonet on the site of the Korean Catholic martyrs in 1791 and 1801."
+    }
+   ],
+   "rationale": "Built 1908-1914 by French priests (Poisnel, Baudounet).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F792ffd6d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "성당은 화강암을 주춧돌로 하여 붉은 벽돌로 지어졌다."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeonju_Hanok_Village",
+     "tier": "T1",
+     "quote": "The architectural style of the Jeondong Cathedral is a mixture of the Romanesque and Byzantine styles"
+    }
+   ],
+   "rationale": "Red brick; Romanesque and Byzantine.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F43259f09",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "현재 전주시 안에 세워진 가장 오래된 성당이자, 호남 전체에서 최초로 세워진 로마네스크 양식 건물"
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "원래 전동성당이 위치한 자리는 풍남문의 밖으로 1791년 신해박해 때 한국 교회 최초의 순교자인 윤지충 바오로(1759-1791)를 비롯하여"
+    }
+   ],
+   "rationale": "Oldest church in Jeonju, on the site of the 1791 martyrdoms that marked Korean Catholicism's early persecution.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fab8004ad",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "원래 전동성당이 위치한 자리는 풍남문의 밖으로 1791년 신해박해 때 한국 교회 최초의 순교자인 윤지충 바오로(1759-1791)를 비롯하여"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeonju",
+     "tier": "T1",
+     "quote": "Jeongdong Catholic Church was built on 1908–1914 by French priest Xavier Baudonet on the site of the Korean Catholic martyrs in 1791 and 1801."
+    }
+   ],
+   "rationale": "Site of the 1791/1801 executions in the Joseon period.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe1061591",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "The cathedral building, of Roman-Byzantine style, was built between 1908 and 1914 by Victor Louis Poisnel (1855–1925)."
+    }
+   ],
+   "rationale": "1908-1914 by Victor Louis Poisnel.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ffd6459c4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "The cathedral building, of Roman-Byzantine style, was built between 1908 and 1914 by Victor Louis Poisnel (1855–1925)."
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "1908년 명동성당의 내부를 건축한 프와넬 신부의 설계로 성당이 착공되었다. 성당은 1914년에 비로소 외관 공사가 끝났으며"
+    }
+   ],
+   "rationale": "Poisnel designed it.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4815a813",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "The cathedral building, of Roman-Byzantine style, was built between 1908 and 1914 by Victor Louis Poisnel (1855–1925)."
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "전동성당은 호남 지역 최초의 서양식 건물이다."
+    }
+   ],
+   "rationale": "Exterior completed 1914; the first Western-style building in Honam (Jeolla).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F81e2e18d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jeondong_Cathedral",
+     "tier": "T1",
+     "quote": "This church, located in the city center, near the traditional Jeonju Hanok Village, is a historic site (KB) #288."
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "1981년 9월 25일 대한민국의 사적 제288호로 지정되었다."
+    }
+   ],
+   "rationale": "Historic Site No. 288.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F39b884ce",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "원래 전동성당이 위치한 자리는 풍남문의 밖으로 1791년 신해박해 때 한국 교회 최초의 순교자인 윤지충 바오로(1759-1791)를 비롯하여"
+    },
+    {
+     "url": "https://ko.wikipedia.org/wiki/%EC%A0%84%EB%8F%99%EC%84%B1%EB%8B%B9",
+     "tier": "T1",
+     "quote": "그의 외종형 권상연 야고보(1751-1791)가, 1801년 신유박해 때에는 유항검 아우구스티노 (1756-1801), 유관검 (1768-1801) 형제가 육시형을"
+    }
+   ],
+   "rationale": "Yun Ji-chung and Kwon Sang-yeon were martyred there in 1791.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}
