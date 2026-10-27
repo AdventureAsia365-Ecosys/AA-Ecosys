@@ -1,0 +1,16 @@
+{
+  "contract": "booking.customer.v1",
+  "schema": "Payment",
+  "expect": "invalid",
+  "why": "No staff member who recorded, verified or voided a payment reaches the traveller (design §5)",
+  "rule": "recorded_by",
+  "payload": {
+    "ref": "PMT-000007",
+    "kind": "receipt",
+    "amount": "720.00",
+    "currency": "USD",
+    "method": "bank_transfer",
+    "received_on": "2026-10-28",
+    "recorded_by": "staff-user-1"
+  }
+}

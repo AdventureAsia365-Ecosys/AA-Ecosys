@@ -1,0 +1,217 @@
+openapi: 3.1.0
+info:
+  title: booking.customer.v1 (AA-Booking → TripPlanner, My Payments of a signed-in traveller)
+  version: "1.0"
+  description: >-
+    The customer surface of AA-Booking (root ADR 0004 O8, ADR 0006 client table; AA-682 slice S5, S252 design §5, §7,
+    §8). Read only: a signed-in traveller sees the payment requests (proforma invoices) of their own trips, the
+    payment schedule, the payments AA has verified and how to pay. No pay button, no upload, no payment provider
+    (money is marked by AA staff by hand, AA-682 D6). Caller today: the TripPlanner BFF (My Trips, /trips), which
+    forwards the traveller's own Cognito access token; the booking-customer client may call it later.
+    Auth: a Cognito EXTERNAL access token (token_use access, never an ID token) of the tripplanner or booking-customer
+    client; any other token (staff WORKFORCE, M2M, another EXTERNAL client) is 401 sign_in_required, the same answer as
+    no token. Booking maps the token's (iss, sub) to its customer (booking.customer_identities); a sign-in that is not
+    linked to a customer sees an empty list.
+    Scope: invoices of the traveller's own B2C trips that were sent to them (never a draft); a cancelled request stays
+    listed. Anything else, including another customer's invoice number, is 404 invoice_not_found, so the answer never
+    says whether a number exists.
+    Field policy (root contracts CI, tools/contracts/check_contracts.py): never a staff member (sent, recorded,
+    verified or voided by), a payment evidence file or its URL, a bank reference or staff note, an internal note or
+    reason, the bill-to snapshot, a net cost, a margin or anything about a supplier; no name, e-mail or phone. The only
+    personal data are the traveller's own trip dates (x-pii travel). "paid_amount" is the verified net (receipts minus
+    refunds); the word "net" is reserved for costs and never appears in this contract. Money is a decimal string with
+    two places (numeric(16,2); a VND amount reads "2400000.00") with an ISO 4217 currency. Every answer is
+    Cache-Control no-store.
+  x-aa-contract: booking.customer.v1
+  x-aa-producer: AA-Booking
+  x-aa-consumers: [AA-TripPlanner-Web]
+  x-aa-issues: [AA-682]
+servers:
+  - url: /booking/customer/v1
+security:
+  - traveller: []
+paths:
+  /payments:
+    get:
+      operationId: listMyPayments
+      summary: The signed-in traveller's payment requests, newest first (at most 50), each in full
+      description: >-
+        Each invoice carries its schedule, its verified payments and, while money is owed (status sent or
+        partially_paid), the payment instructions, so one call fills the page. An unlinked sign-in gets
+        {"invoices": []}.
+      responses:
+        "200":
+          description: The traveller's payment requests
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Payments"}
+        "401": {$ref: "#/components/responses/SignInRequired"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+  /invoices/{number}:
+    get:
+      operationId: getMyInvoice
+      summary: One payment request of the signed-in traveller
+      parameters:
+        - name: number
+          in: path
+          required: true
+          description: Invoice number (INV-000123, case-insensitive)
+          schema: {type: string, minLength: 1, maxLength: 64}
+      responses:
+        "200":
+          description: The payment request
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Invoice"}
+        "401": {$ref: "#/components/responses/SignInRequired"}
+        "404":
+          description: Not one of the traveller's visible payment requests (detail invoice_not_found)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Error"}
+        "503": {$ref: "#/components/responses/Unavailable"}
+components:
+  securitySchemes:
+    traveller:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        Cognito EXTERNAL pool access token of the tripplanner or booking-customer app client (root ADR 0006).
+  responses:
+    SignInRequired:
+      description: No token, or a token this route class does not accept (detail sign_in_required)
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+    Unavailable:
+      description: The pool's signing keys or the database cannot be reached yet (detail auth_unavailable or database_not_configured)
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Error"}
+  schemas:
+    Amount:
+      type: string
+      pattern: "^-?\\d+\\.\\d{2}$"
+      description: Decimal string with two places.
+    Currency:
+      type: string
+      pattern: "^[A-Z]{3}$"
+      description: ISO 4217 code.
+    Payments:
+      type: object
+      additionalProperties: false
+      required: [invoices]
+      properties:
+        invoices:
+          type: array
+          maxItems: 50
+          items: {$ref: "#/components/schemas/Invoice"}
+    Invoice:
+      type: object
+      additionalProperties: false
+      description: A payment request (proforma invoice, tax-inclusive, not a VAT invoice).
+      required: [invoice_number, status, document_type, currency, total_amount, paid_amount, balance, next_due_date,
+                 overdue_amount, issued_at, trip, schedule, payments, payment_instructions]
+      properties:
+        invoice_number: {type: string, pattern: "^INV-[0-9]{6,}$"}
+        status:
+          type: string
+          enum: [sent, partially_paid, paid, cancelled]
+        document_type:
+          type: string
+          enum: [proforma]
+        currency: {$ref: "#/components/schemas/Currency"}
+        total_amount: {$ref: "#/components/schemas/Amount"}
+        paid_amount:
+          $ref: "#/components/schemas/Amount"
+          description: Verified receipts minus verified refunds.
+        balance:
+          description: Total minus paid; negative = overpaid; null when cancelled.
+          oneOf:
+            - {$ref: "#/components/schemas/Amount"}
+            - {type: "null"}
+        next_due_date:
+          description: Earliest schedule row not yet covered; null when none or when cancelled.
+          type: [string, "null"]
+          format: date
+        overdue_amount: {$ref: "#/components/schemas/Amount"}
+        issued_at:
+          description: When the request was sent to the traveller.
+          type: [string, "null"]
+          format: date-time
+        trip: {$ref: "#/components/schemas/TripRef"}
+        schedule:
+          type: array
+          maxItems: 10
+          items: {$ref: "#/components/schemas/ScheduleRow"}
+        payments:
+          type: array
+          description: Verified, non-voided payments only, oldest first.
+          items: {$ref: "#/components/schemas/Payment"}
+        payment_instructions:
+          description: How to pay (AA's bank details text); only while status is sent or partially_paid, else null.
+          type: [string, "null"]
+          maxLength: 2000
+    TripRef:
+      type: object
+      additionalProperties: false
+      required: [code, planner_trip_id, start_date, end_date]
+      properties:
+        code: {type: string, description: "AA-Booking trip reference (TC-000123)"}
+        planner_trip_id:
+          description: The TripPlanner trip this booking came from (the hand-off's trip id); null for a trip AA staff created.
+          type: [string, "null"]
+          maxLength: 128
+        start_date:
+          type: [string, "null"]
+          format: date
+          x-pii: travel
+        end_date:
+          type: [string, "null"]
+          format: date
+          x-pii: travel
+    ScheduleRow:
+      type: object
+      additionalProperties: false
+      required: [seq, kind, amount, due_date, remaining_amount, state]
+      properties:
+        seq: {type: integer, minimum: 1, maximum: 10}
+        kind:
+          type: string
+          enum: [deposit, second, final, other]
+        amount: {$ref: "#/components/schemas/Amount"}
+        due_date: {type: string, format: date}
+        remaining_amount:
+          $ref: "#/components/schemas/Amount"
+          description: What the verified payments do not cover yet (oldest due row first); 0.00 when cancelled.
+        state:
+          type: string
+          enum: [scheduled, due_soon, paid, overdue, cancelled]
+          description: >-
+            The customer chip: Scheduled, Due soon (within the payment_due_soon_days setting, 7 by default), Paid,
+            Overdue; cancelled on a cancelled request.
+    Payment:
+      type: object
+      additionalProperties: false
+      required: [ref, kind, amount, currency, method, received_on]
+      properties:
+        ref: {type: string, pattern: "^PMT-[0-9]{6,}$"}
+        kind:
+          type: string
+          enum: [receipt, refund]
+        amount: {$ref: "#/components/schemas/Amount"}
+        currency: {$ref: "#/components/schemas/Currency"}
+        method:
+          type: string
+          enum: [bank_transfer, card_offline, cash, other]
+        received_on: {type: string, format: date}
+    Error:
+      type: object
+      additionalProperties: false
+      required: [detail]
+      properties:
+        detail:
+          type: string
+          enum: [sign_in_required, invoice_not_found, auth_unavailable, database_not_configured]
+        message: {type: string}

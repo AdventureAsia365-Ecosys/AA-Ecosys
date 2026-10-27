@@ -1,0 +1,9 @@
+{
+  "contract": "booking.customer.v1",
+  "schema": "Payments",
+  "expect": "valid",
+  "why": "A sign-in not linked to any customer, or with nothing sent yet",
+  "payload": {
+    "invoices": []
+  }
+}

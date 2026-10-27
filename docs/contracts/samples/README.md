@@ -27,7 +27,8 @@ One file per case, in the folder of its contract (`samples/<contract>/<case>.jso
   field; `pii-name` for a personal-data field name), so the check does not rest on `additionalProperties: false`
   alone.
 - The rejected samples the designs require (AA-928: `crm.ops.v1` with `trip_count`, `revenue`, `pii:`;
-  `booking.b2b.v1` with `supplier_net`; AA-835: `supply.hotel.v1` and `supply.service.v1` with `net_amount`,
+  `booking.b2b.v1` with `supplier_net`; AA-682 S5: `booking.customer.v1` with `recorded_by`, `evidence_url`,
+  `net_amount`, `supplier_id`, `notes`; AA-835: `supply.hotel.v1` and `supply.service.v1` with `net_amount`,
   `supplier_id`, `internal_notes`, `url`; AA-908: `inquiry.submitted.v1.4` with `access_token`) are listed in the
   checker (`REQUIRED_NEGATIVES`); deleting one fails CI.
 - Samples use synthetic data only (`*.example` mail domains, made-up ids). Never paste real payloads.
