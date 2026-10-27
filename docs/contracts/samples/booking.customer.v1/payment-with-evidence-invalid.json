@@ -1,0 +1,16 @@
+{
+  "contract": "booking.customer.v1",
+  "schema": "Payment",
+  "expect": "invalid",
+  "why": "Payment evidence (bank slips) stays with staff, never on a customer route",
+  "rule": "evidence_url",
+  "payload": {
+    "ref": "PMT-000007",
+    "kind": "receipt",
+    "amount": "720.00",
+    "currency": "USD",
+    "method": "bank_transfer",
+    "received_on": "2026-10-28",
+    "evidence_url": "https://files.example.invalid/slip.pdf"
+  }
+}

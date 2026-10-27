@@ -1,0 +1,9 @@
+{
+  "contract": "booking.customer.v1",
+  "schema": "Error",
+  "expect": "valid",
+  "why": "No token, or a staff / M2M / other-client token",
+  "payload": {
+    "detail": "sign_in_required"
+  }
+}

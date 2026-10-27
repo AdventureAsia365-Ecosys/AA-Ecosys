@@ -130,6 +130,24 @@ POLICY: dict[str, Policy] = {
                             r"(^|_)supplier_rate(_|$)"),
         why="b2b_price only; supplier net cost never leaves Booking; pax counts only",
     ),
+    # AA-682 S5 My Payments (S252 design §5, §8): the traveller's own payment requests. Never a staff member, payment
+    # evidence, a bank reference or staff note, an internal note or reason, the bill-to snapshot, a net cost, a margin
+    # or a supplier; no name, e-mail or phone. The only personal data are the traveller's own trip dates (pii:travel).
+    "booking.customer.v1": Policy(
+        forbidden_keys=frozenset({"recorded_by", "verified_by", "voided_by", "sent_by", "created_by", "updated_by",
+                                  "staff", "evidence_url", "evidence_file_id", "net_amount", "supplier_net",
+                                  "supplier_id", "supplier", "notes", "note", "internal_notes", "reference",
+                                  "cancel_reason", "void_reason", "bill_to_name", "bill_to_email", "bill_to_address",
+                                  "email", "phone", "name", "margin", "idempotency_key", "request_sha256"}),
+        forbidden_patterns=(r"_by$", r"^staff", r"(^|_)evidence(_|$)", r"(^|_)net(_|$)", r"(^|_)suppliers?(_|$)",
+                            r"(^|_)notes?$", r"(^|_)references?$", r"(^|_)reasons?$", r"^bill_to",
+                            r"(^|_)e?mails?(_|$)", r"(^|_)phones?(_|$)", r"(^|_)names?$", r"(^|_)margins?(_|$)",
+                            r"(^|_)costs?(_|$)", r"(^|_)idempotency"),
+        no_pii=False,
+        allowed_pii_classes=frozenset({"travel"}),
+        why="the traveller's own payment requests: no staff, evidence, bank reference, note, reason, bill-to, net, "
+            "margin, cost or supplier field and no name or contact; trip dates (pii:travel) only",
+    ),
     # Content only: prices come from booking.b2b.v1.
     "catalog.http.v1": Policy(
         forbidden_keys=frozenset({"supplier_net", "b2b_price"}),
@@ -173,6 +191,8 @@ POLICY: dict[str, Policy] = {
 REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     "crm.ops.v1": ("trip_count", "revenue", "pii:"),
     "booking.b2b.v1": ("supplier_net",),
+    # AA-682 S5: a staff name, an evidence URL, a net cost, a supplier and an internal note are each refused.
+    "booking.customer.v1": ("recorded_by", "evidence_url", "net_amount", "supplier_id", "notes"),
     # AA-835 S1: a supplier net amount, the supplier id, internal notes and a free photo URL are each refused.
     "supply.hotel.v1": ("net_amount", "supplier_id", "internal_notes", "url"),
     "supply.service.v1": ("net_amount", "supplier_id", "internal_notes", "url"),

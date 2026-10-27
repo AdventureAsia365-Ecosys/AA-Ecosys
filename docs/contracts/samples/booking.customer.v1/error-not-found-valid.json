@@ -1,0 +1,10 @@
+{
+  "contract": "booking.customer.v1",
+  "schema": "Error",
+  "expect": "valid",
+  "why": "Another customer's number, a draft or an unknown number: the same 404",
+  "payload": {
+    "detail": "invoice_not_found",
+    "message": "invoice not found"
+  }
+}
