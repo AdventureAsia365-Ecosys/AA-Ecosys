@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Git pre-push hook (AA-993 H1): runs the CI checks of this repo locally, fast mode by default.
+# Installed by scripts/install-hooks.sh (git config core.hooksPath .githooks). Full CI-equivalent run on a push:
+# AA_PREPUSH=full git push. Bypass one push: git push --no-verify.
+root=$(git rev-parse --show-toplevel) || exit 1
+if [ ! -x "$root/scripts/pre-push.sh" ]; then
+  echo "pre-push hook: $root/scripts/pre-push.sh missing (branch older than AA-993 H1?); skipping checks."
+  exit 0
+fi
+exec "$root/scripts/pre-push.sh" --hook "$@"
