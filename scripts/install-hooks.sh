@@ -33,8 +33,10 @@ chmod +x .githooks/pre-push scripts/pre-push.sh
 echo "core.hooksPath = .githooks"
 
 if [ "${1:-}" != "--no-venv" ]; then
-  if [ ! -x "$venv_dir/bin/python" ]; then
-    python3 -m venv "$venv_dir"
+  # Recreate when pip is missing: a first `python3 -m venv` without python3-venv dies at ensurepip after it has
+  # already created bin/python, and a plain existence test would then skip creation forever.
+  if ! "$venv_dir/bin/python" -m pip --version >/dev/null 2>&1; then
+    python3 -m venv --clear "$venv_dir" || { echo "python3 -m venv failed: sudo apt install python3-venv, then rerun" >&2; exit 1; }
   fi
   "$venv_dir/bin/python" -m pip install --quiet --disable-pip-version-check -r tools/docs/requirements.txt -r tools/contracts/requirements.txt
   echo "Python venv ready: $venv_dir"
@@ -43,4 +45,6 @@ fi
 for b in npx lychee gitleaks; do
   if command -v "$b" >/dev/null 2>&1; then echo "found $b"; else echo "not found: $b (that check is skipped locally; CI still runs it)"; fi
 done
+echo "Versions CI uses: lychee 0.24.2 (https://github.com/lycheeverse/lychee/releases), gitleaks 8.30.1"
+echo "(https://github.com/gitleaks/gitleaks/releases), markdownlint-cli2 0.23.2 through npx (Node.js)."
 echo "Check the setup: scripts/pre-push.sh --self-test && scripts/pre-push.sh --plan"
