@@ -4,6 +4,7 @@
   (`docs/audits/2026-10-14-S235-ecosystem-team-pilot/01-ecosystem-blueprint.html`). Proposed
   28/09/2026 (S199). See "Amendments (S235)" below.
 - **Tightened by:** ADR 0008 (S237): decision 6 contracts are views only; new-app integration follows ADR 0008's gate and playbook.
+- **Implemented by:** [ADR 0016](0016-one-design-system-guarded-kit-copies.md) (S252): decision 7 "one design system" through a canonical CIS kit core and guarded copies.
 - **Scope:** AA-Ecosys as a whole (AA-CIS-App, AA-TripPlanner-Web, AA-CIS-Infra, future AA-Booking).
   Repo-level ADRs (for example `apps/AA-CIS-App/docs/adr/0001..0004`) stay in their repos. This series
   covers only cross-repo decisions.
@@ -69,6 +70,8 @@ can solve on its own:
    - AA-CIS-Infra provisions AA-Booking inside acc2: ECS service, ECR, DB role, API route. There are no
      new accounts.
    - All frontends consume one token source and one shared component set.
+     **How (S252):** [ADR 0016](0016-one-design-system-guarded-kit-copies.md): one canonical kit core in
+     AA-CIS-App `frontend/app/_kit/core/`, guarded byte copies in the other apps, one token set (AA-994).
 8. **Language.** Everything in Git is English, including root docs, READMEs and CONTEXT files.
    Session logs and the Notion memory stay in Vietnamese.
 

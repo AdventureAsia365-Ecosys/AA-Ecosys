@@ -43,7 +43,9 @@ membership table. The repo AA-Partner does not exist yet.
 
 - Repo **AA-Partner** in org AdventureAsia365-Ecosys, public, same stack as AA-Booking: `api/` (FastAPI, Pydantic v2,
   asyncpg with plain SQL, in-process `crm.job` worker), `web/` (Next.js CRM UI and the client host), `portal/` (Content
-  studio, moved from CIS with history in P2a). One UI kit shared with CIS (byte-compare guard until a package exists).
+  studio, moved from CIS with history in P2a). One UI kit shared with CIS (byte-compare guard until a package exists;
+  superseded S252 by [ADR 0016](0016-one-design-system-guarded-kit-copies.md): `portal/` and `web/` vendor the canonical
+  CIS kit core with integrity and provenance checks, no package).
 - Branch protection and required CI from the first commit, including the public-repo scan for account IDs, ARNs and
   network IDs (DM-6.10) and an import-boundary test (no CIS or TripPlanner backend modules).
 - A `CONTEXT.md` at the repo root from the first PR (AA-933); `docs/ecosystem-architecture.md` gets the app row when

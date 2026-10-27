@@ -59,6 +59,9 @@ the answer Nghiệp gave on 14/10/2026.
      `@tanstack/react-query` and `@tanstack/react-table`, deployed on Vercel. It copies the CIS UI kit
      (`app/_kit`) and brand tokens until the shared design-system package (ADR 0001 decision 7,
      AA-655) is published, then switches to it.
+     **Superseded S252 by [ADR 0016](0016-one-design-system-guarded-kit-copies.md):** no package; Booking vendors
+     the canonical CIS kit core into `frontend/ui/core/` (full profile, `frontend/kit.lock.json`), checked byte for
+     byte; AA-655 is folded into AA-994.
    - Database: PostgreSQL 15 on the shared RDS.
 
 2. **Repo `AdventureAsia365-Ecosys/AA-Booking`, layout:**
@@ -275,7 +278,8 @@ All eight steps were completed in this order on 14/10/2026.
   - grants depend on CIS and TripPlanner migrations applied after the role exists, so cross-repo
     ordering must be planned;
   - a second job table and worker to operate (`booking.job`, O3), instead of one shared queue;
-  - the UI kit is copied until AA-655 ships;
+  - the UI kit is copied until AA-655 ships (superseded S252 by ADR 0016: guarded byte copies of the CIS kit core,
+    no package);
   - the `bk-001` first slice means later `ALTER`s on a young schema.
 
 ## Alternatives considered

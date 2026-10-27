@@ -32,6 +32,8 @@ Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo l�
 Trước khi thiết kế/sửa code một repo, ĐỌC `CONTEXT.md` của repo đó và bám sát (stack, ranh giới, ownership).
 `docs/ecosystem-architecture.md` cho cả hệ sinh thái. Thay đổi kiến trúc/ranh giới → cập nhật CONTEXT.md cùng phiên.
 Code lệch CONTEXT.md = mâu thuẫn cần làm rõ, không bỏ qua.
+UI kit (ADR 0016): never edit a file under `**/_kit/core/**` or `**/ui/core/**` outside
+`frontend/app/_kit/core/` of an AA-CIS-App checkout (main or worktree) — edit the CIS canonical copy, then sync (`tools/kit/kit-sync.sh`); Claude hook `kit-core-edit-guard.sh`.
 
 ## Bài học (lesson log) → `skill/aa-lessons/SKILL.md`
 Gặp lỗi do làm/code sai cách hoặc giả định sai → **ghi ngay** 1 nguyên tắc vào `skill/aa-lessons/lessons.md`

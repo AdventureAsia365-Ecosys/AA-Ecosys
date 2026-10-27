@@ -180,7 +180,7 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-864 | Research: consolidate on one AWS account | later | later. Consolidate on one AWS account — decide before AA-880 | Still wanted? |
 | AA-900 | LLM operations docs, prompt versioning and eval gate | M2a | later. LLM ops docs, prompt register, manual eval gate; after the S253 go/no-go | — |
 | AA-881 | PostgreSQL 15 major-upgrade rehearsal on a restored snapshot (trigger 05/2027) | parked | 05/2027. PG 15 major-upgrade rehearsal | — |
-| AA-655 | One design system for the ecosystem — shared tokens + component kit | parked | parked. Shared design system package; after P2a the kit lives in 3 copies (CIS admin, portal, CRM web), byte guard until then | Package vs copies |
+| AA-655 | One design system for the ecosystem — shared tokens + component kit | parked | **folded into AA-994** (S252, 27/10/2026): [ADR 0016](../adr/0016-one-design-system-guarded-kit-copies.md) chose guarded byte copies of a canonical CIS kit core over a package (package re-evaluated under ADR 0016 decision 12); close AA-655 in Linear as folded, the work is tracked as AA-994 | — |
 | AA-704 | In-app AI assistant for admin + tenant | parked | parked. In-app AI assistant — after AA-703 phases 1 and 3 | Keep on the roadmap? |
 | AA-781 | F9 v2: fix place_background / opinion claim classification | parked | parked. F9 v2 claim rules | Keep or park |
 | AA-782 | T9 cost: A/B a cheaper blog writer on 8 paired blogs | parked | parked. Cheaper T9 blog writer A/B (~$1.20) | Vendor rule |
