@@ -1,0 +1,44 @@
+{
+  "contract": "booking.customer.v1",
+  "schema": "Invoice",
+  "expect": "valid",
+  "why": "A cancelled request stays listed: balance null, rows cancelled, no bank details",
+  "payload": {
+    "invoice_number": "INV-000005",
+    "status": "cancelled",
+    "document_type": "proforma",
+    "currency": "USD",
+    "total_amount": "2400.00",
+    "paid_amount": "0.00",
+    "balance": null,
+    "next_due_date": null,
+    "overdue_amount": "0.00",
+    "issued_at": "2026-10-27T09:30:00Z",
+    "trip": {
+      "code": "TC-000022",
+      "planner_trip_id": "0b8f1c2e-5d4a-4c1b-9e7f-1a2b3c4d5e6f",
+      "start_date": "2027-01-10",
+      "end_date": "2027-01-14"
+    },
+    "schedule": [
+      {
+        "seq": 1,
+        "kind": "deposit",
+        "amount": "720.00",
+        "due_date": "2026-10-30",
+        "remaining_amount": "0.00",
+        "state": "cancelled"
+      },
+      {
+        "seq": 2,
+        "kind": "final",
+        "amount": "1680.00",
+        "due_date": "2026-12-11",
+        "remaining_amount": "0.00",
+        "state": "cancelled"
+      }
+    ],
+    "payments": [],
+    "payment_instructions": null
+  }
+}

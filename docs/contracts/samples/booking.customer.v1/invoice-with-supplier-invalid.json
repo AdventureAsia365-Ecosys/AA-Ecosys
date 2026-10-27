@@ -1,0 +1,55 @@
+{
+  "contract": "booking.customer.v1",
+  "schema": "Invoice",
+  "expect": "invalid",
+  "why": "Suppliers are AA's business, not the traveller's",
+  "rule": "supplier_id",
+  "payload": {
+    "invoice_number": "INV-000003",
+    "status": "partially_paid",
+    "document_type": "proforma",
+    "currency": "USD",
+    "total_amount": "2400.00",
+    "paid_amount": "720.00",
+    "balance": "1680.00",
+    "next_due_date": "2026-12-11",
+    "overdue_amount": "0.00",
+    "issued_at": "2026-10-27T09:30:00Z",
+    "trip": {
+      "code": "TC-000022",
+      "planner_trip_id": "0b8f1c2e-5d4a-4c1b-9e7f-1a2b3c4d5e6f",
+      "start_date": "2027-01-10",
+      "end_date": "2027-01-14",
+      "supplier_id": "5d1c0000-0000-4000-8000-000000000001"
+    },
+    "schedule": [
+      {
+        "seq": 1,
+        "kind": "deposit",
+        "amount": "720.00",
+        "due_date": "2026-10-30",
+        "remaining_amount": "0.00",
+        "state": "paid"
+      },
+      {
+        "seq": 2,
+        "kind": "final",
+        "amount": "1680.00",
+        "due_date": "2026-12-11",
+        "remaining_amount": "1680.00",
+        "state": "scheduled"
+      }
+    ],
+    "payments": [
+      {
+        "ref": "PMT-000007",
+        "kind": "receipt",
+        "amount": "720.00",
+        "currency": "USD",
+        "method": "bank_transfer",
+        "received_on": "2026-10-28"
+      }
+    ],
+    "payment_instructions": "Payment details will be confirmed by your trip consultant."
+  }
+}
