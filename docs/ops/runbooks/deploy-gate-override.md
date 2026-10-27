@@ -1,7 +1,7 @@
 ---
 id: OPS-10-deploy-gate
 title: Override a deploy or migration gate
-description: When and how Nghiệp lets a CIS or Booking deploy, or a DB Migrate apply, through while jobs are queued or running.
+description: When and how Nghiệp lets a CIS, Booking or Partner deploy through while a wave is open or a deploy-blocking job runs, or a DB Migrate apply while jobs are busy.
 type: how-to
 status: draft
 owner: nghiep
@@ -37,11 +37,13 @@ related: [OPS-10, OPS-02-cis, OPS-05-db-migrate, OPS-04-queue-stuck, AA-725, AA-
 
 | Gate | Asks | Exempt kinds | Override input |
 |---|---|---|---|
-| CIS Deploy Dev (`deploy-dev.yml`, job "Pre-deploy job guard") | `GET https://api-cis.lumiguides.it.com/admin/job-runner/deploy-gate` (admin secret), counts `shared.job` queued + running | kinds registered `deploy_gate_exempt` (none since AA-751) | `override_running_jobs` (workflow_dispatch) |
-| Booking Deploy Dev (`deploy-dev.yml`) | `GET https://api-booking.lumiguides.it.com/booking/ops/deploy-gate` with the run's GitHub OIDC token; skipped when the service runs 0 tasks | `bk_inquiry_pull` (always queued) | `override_running_jobs` (workflow_dispatch) |
+| CIS Deploy Dev (`deploy-dev.yml`, job "Pre-deploy job guard") | `GET https://api-cis.lumiguides.it.com/admin/job-runner/deploy-gate` (admin secret). Since AA-993 G5: blocks only while a rerun wave is open or a `deploy_blocking` kind runs (`data_erasure`, `s1_batch_ingest`); other queued / running jobs are drained and re-claimed | not needed (queued rows no longer block); `deploy_gate_exempt` only trims the info counts | `override_running_jobs` (workflow_dispatch) |
+| Booking Deploy Dev (`deploy-dev.yml`) | `GET https://api-booking.lumiguides.it.com/booking/ops/deploy-gate` with the run's GitHub OIDC token; skipped when the service runs 0 tasks. Since AA-993 G5: blocks only while a retention job (`bk_retention_job`, `bk_retention_inbox_redact`) runs | info counts leave out `bk_inquiry_pull`, `bk_noop_sleep` | `override_running_jobs` (workflow_dispatch) |
+| Partner Deploy Dev (`deploy-dev.yml`) | `GET /crm/ci/deploy-gate` with the run's GitHub OIDC token. Since AA-993 G5: blocks only while `crm_dispatch` runs (until the G4b send marker) | info counts leave out the Recurring kinds | `override_running_jobs` (workflow_dispatch) |
 | DB Migrate (`db-migrate.yml`, apply and writing run-script) | every owner job table and open `shared.rerun_wave`, 3 checks 20 s apart | `owners.yaml` idle-exempt kinds | `override_busy_jobs` (one line, at most 200 characters) |
 
-All three fail closed: an unreachable gate or an unreadable answer blocks, like active jobs.
+All of them fail closed: an unreachable gate or an unreadable answer blocks. The deploy gates name the reason in
+`blocked_by` (the `deploy-gate: {...}` log line).
 
 ## Preconditions
 

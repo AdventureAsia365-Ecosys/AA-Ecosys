@@ -88,12 +88,18 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 
 ## 2. Guard trước merge backend, DB Migrate, Terraform apply
 
-- Deploy Dev của 3 app có ECS worker tự chặn khi bảng job còn queued/running: CIS `shared.job`
-  (`/admin/job-runner/deploy-gate`), Booking `booking.job` (`/booking/ops/deploy-gate`), Partner `crm.job`
-  (`/crm/ci/deploy-gate`; CRM web không có worker nên không có guard). Override chỉ Nghiệp, ghi lý do
-  (`docs/ops/runbooks/deploy-gate-override.md`). Bị chặn → chờ job xong hoặc hỏi Nghiệp nếu job treo, không tự override.
-- **Wave đang chạy** → không merge PR backend/pipeline CIS, không DB Migrate (PR chỉ FE thì được). Driver wave có cờ
-  tạm dừng trước wave kế: đặt cờ → chờ wave đang chạy đóng + bảng job rảnh → deploy/apply → verify → gỡ cờ (`aa-wave-rerun`).
+- Deploy Dev của 3 app có ECS worker tự chặn (AA-993 G5, C6.3a), nhưng **chỉ** khi: CIS có wave mở
+  (`shared.rerun_wave.status = 'open'`) hoặc đang **chạy** một job kind `deploy_blocking` (`data_erasure`,
+  `s1_batch_ingest`) — `/admin/job-runner/deploy-gate`; Booking đang chạy job retention (`bk_retention_job`,
+  `bk_retention_inbox_redact`) — `/booking/ops/deploy-gate`; Partner đang chạy `crm_dispatch` — `/crm/ci/deploy-gate`
+  (CRM web không có worker nên không có guard). Job queued/running loại khác **không** chặn nữa: worker drain khi
+  SIGTERM, job còn chạy được release và task mới claim lại (G1–G4). Lý do bị chặn nằm ở `blocked_by` trong log
+  preflight. Override chỉ Nghiệp, ghi lý do (`docs/ops/runbooks/deploy-gate-override.md`). Bị chặn → chờ job đó xong
+  / đóng wave, hoặc hỏi Nghiệp nếu job treo, không tự override.
+- **Wave đang chạy** → không merge PR backend/pipeline CIS, không DB Migrate (PR chỉ FE thì được); Deploy Dev CIS tự
+  chặn khi wave mở. Booking/Partner không đọc wave CIS (design Q4). Driver wave có cờ tạm dừng trước wave kế: đặt cờ →
+  chờ wave đang chạy đóng → deploy → verify → gỡ cờ (`aa-wave-rerun`). DB Migrate `apply` vẫn chờ **mọi** bảng job rảnh
+  (C6.3b, không đổi).
 - Kiểm tay mọi bảng job một lần: DB Migrate `mode=check` (input `migration` = một file đã apply, ví dụ
   `cis/<NNN>_<tên>.sql`; check chỉ báo cáo) liệt kê từng bảng job owner (`<schema>.job`) busy và wave mở.
 - **Terraform:** plan trên PR (`terraform-plan.yml`) phải đọc; apply chỉ qua workflow (`terraform-apply.yml`, từ `main`).

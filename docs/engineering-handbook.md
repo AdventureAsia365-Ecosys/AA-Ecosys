@@ -1007,7 +1007,7 @@ Full glossary (EN and VI, by area): [`glossary.md`](glossary.md). The fifteen te
 | Trunk-based development | Phát triển trên một nhánh chính | Short branches, squash merge to `main` (ADR-2026-023) |
 | Definition of Ready (DoR) | Điều kiện sẵn sàng | What an issue needs before an agent builds it ([template](templates/definition-of-ready.md)) |
 | Definition of Done (DoD) | Điều kiện hoàn thành | Merged + CI green + rollout COMPLETED + verified live (`aa-ship`) |
-| Deploy gate | Cổng chặn deploy | CI step that blocks a backend deploy while the job table has work (DM-11.4) |
+| Deploy gate | Cổng chặn deploy | CI step that blocks a backend deploy while a rerun wave is open or a deploy-blocking job runs (DM-11.4, AA-993 G5) |
 | Deploy vs release | Triển khai và phát hành | Code running vs users seeing it; a flag separates them |
 | Feature flag | Cờ tính năng | A switch without a deploy; kinds release, ops, security ([register](ops/feature-flags.md)) |
 | Expand / contract | Mở rộng / thu hẹp | Change schema or API in steps so old and new run together |
