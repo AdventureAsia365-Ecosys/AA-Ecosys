@@ -1,0 +1,146 @@
+[
+ {
+  "tag": "light-390",
+  "home": {
+   "motion": "ok",
+   "overflow": 0,
+   "ribbon": {
+    "animate": true,
+    "tiles": 28
+   },
+   "tourLink": "/tours/sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489"
+  },
+  "headerBg": "rgb(31, 41, 51)",
+  "menu": {
+   "open": true,
+   "closed": true
+  },
+  "pages": {
+   "/destinations/vietnam": {
+    "status": "ok",
+    "overflow": 0
+   },
+   "/tours/sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489": {
+    "status": "ok",
+    "overflow": 0
+   },
+   "/plan": {
+    "status": "ok",
+    "overflow": 0
+   }
+  },
+  "errors": []
+ },
+ {
+  "tag": "light-1440",
+  "home": {
+   "motion": "ok",
+   "overflow": 0,
+   "ribbon": {
+    "animate": true,
+    "tiles": 28
+   },
+   "tourLink": "/tours/sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489"
+  },
+  "headerBg": "rgb(31, 41, 51)",
+  "menu": null,
+  "pages": {
+   "/destinations/vietnam": {
+    "status": "ok",
+    "overflow": 0
+   },
+   "/tours/sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489": {
+    "status": "ok",
+    "overflow": 0
+   },
+   "/plan": {
+    "status": "ok",
+    "overflow": 0
+   }
+  },
+  "errors": []
+ },
+ {
+  "tag": "dark-390",
+  "home": {
+   "motion": "ok",
+   "overflow": 0,
+   "ribbon": {
+    "animate": true,
+    "tiles": 28
+   },
+   "tourLink": "/tours/sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489"
+  },
+  "headerBg": "rgb(10, 14, 19)",
+  "menu": {
+   "open": true,
+   "closed": true
+  },
+  "pages": {
+   "/destinations/vietnam": {
+    "status": "ok",
+    "overflow": 0
+   },
+   "/tours/sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489": {
+    "status": "ok",
+    "overflow": 0
+   },
+   "/plan": {
+    "status": "ok",
+    "overflow": 0
+   }
+  },
+  "errors": []
+ },
+ {
+  "tag": "dark-1440",
+  "home": {
+   "motion": "ok",
+   "overflow": 0,
+   "ribbon": {
+    "animate": true,
+    "tiles": 28
+   },
+   "tourLink": "/tours/sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489"
+  },
+  "headerBg": "rgb(10, 14, 19)",
+  "menu": null,
+  "pages": {
+   "/destinations/vietnam": {
+    "status": "ok",
+    "overflow": 0
+   },
+   "/tours/sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489": {
+    "status": "ok",
+    "overflow": 0
+   },
+   "/plan": {
+    "status": "ok",
+    "overflow": 0
+   }
+  },
+  "errors": []
+ },
+ {
+  "tag": "reduced-390",
+  "rm": {
+   "motion": "reduce",
+   "hiddenReveal": 0
+  }
+ },
+ {
+  "tag": "reduced-1440",
+  "rm": {
+   "motion": "reduce",
+   "hiddenReveal": 0
+  }
+ },
+ {
+  "tag": "ribbon",
+  "before": "paused/tp-marquee",
+  "after": [
+   "true",
+   "paused"
+  ]
+ }
+]

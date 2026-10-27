@@ -1,0 +1,454 @@
+[
+ {
+  "id": "E01",
+  "name": "The Loft",
+  "locality": "Kunming",
+  "region": "Yunnan",
+  "country": "China",
+  "naming_note": "For an international audience, The Loft is also known as Chuangku (创库).",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "The Loft is an arts district in Kunming."
+   },
+   {
+    "kind": "history",
+    "text": "The site occupies former factory premises."
+   },
+   {
+    "kind": "history",
+    "text": "The industrial buildings were adapted for art galleries and cafés."
+   },
+   {
+    "kind": "setting",
+    "text": "The district lies west of Kunming’s city centre."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "China Adventure",
+    "sentence": "The Loft — walk through"
+   }
+  ]
+ },
+ {
+  "id": "E02",
+  "name": "Roluos",
+  "locality": null,
+  "region": "Siem Reap",
+  "country": "Cambodia",
+  "naming_note": "The usual English spelling is Roluos; “Ruluos” is a spelling variant.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Roluos is a settlement in Prasat Bakong district, Siem Reap province."
+   },
+   {
+    "kind": "setting",
+    "text": "The settlement is beside the Roluos River, in the Tonle Sap basin."
+   },
+   {
+    "kind": "setting",
+    "text": "The Roluos River flows into Tonle Sap."
+   },
+   {
+    "kind": "history",
+    "text": "The surrounding Roluos area is associated with Hariharalaya, an early Khmer royal centre."
+   },
+   {
+    "kind": "history",
+    "text": "The nearby Roluos Group includes early Angkorian temples such as Bakong, Preah Ko and Lolei."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Thailand & Cambodia Multisport Adventure",
+    "sentence": "Ruluos town — stop at a local market"
+   },
+   {
+    "tour": "Thailand & Cambodia Multisport Adventure",
+    "sentence": "Ruluos town — stop for a refreshment"
+   }
+  ]
+ },
+ {
+  "id": "E04",
+  "name": "Yol Valley",
+  "locality": null,
+  "region": "Ömnögovi",
+  "country": "Mongolia",
+  "naming_note": "“Yol Valley” is clear for an international audience; the Mongolian name is Yolyn Am, also spelled Yoliin Am, and it is sometimes called Vulture Valley.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Yol Valley is a narrow gorge in the Gurvan Saikhan Mountains of southern Mongolia."
+   },
+   {
+    "kind": "setting",
+    "text": "The valley lies within Gobi Gurvansaikhan National Park."
+   },
+   {
+    "kind": "setting",
+    "text": "A stream runs along the gorge floor."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Khovsgol and Gobi tour",
+    "sentence": "Yol Valley — trek through"
+   },
+   {
+    "tour": "Gobi by land 10 days tour",
+    "sentence": "Yol Valley — trek"
+   }
+  ]
+ },
+ {
+  "id": "E05",
+  "name": "Cloud 9",
+  "locality": "General Luna",
+  "region": "Surigao del Norte",
+  "country": "Philippines",
+  "naming_note": "The surfing area is usually called Cloud 9; Cloud Nine is a spelling variant.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Cloud 9 is a surf break on Siargao Island’s southeastern coast."
+   },
+   {
+    "kind": "setting",
+    "text": "The break is a right-hand reef break over a shallow coral reef."
+   },
+   {
+    "kind": "setting",
+    "text": "The Cloud 9 surfing area is in the municipality of General Luna."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Siargaooooo",
+    "sentence": "the Cloud Nine surfing area — visit"
+   }
+  ]
+ },
+ {
+  "id": "E06",
+  "name": "Last Water Point",
+  "locality": null,
+  "region": "Kilimanjaro",
+  "country": "Tanzania",
+  "naming_note": "This is a trail waypoint on Mount Kilimanjaro’s Marangu Route, rather than a settlement or separately named natural feature.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "It is a signposted waypoint on the Marangu Route on Mount Kilimanjaro."
+   },
+   {
+    "kind": "setting",
+    "text": "The waypoint is on the upper route between Horombo Hut and Kibo Hut."
+   },
+   {
+    "kind": "naming",
+    "text": "Its name marks the route’s last designated water point before Kibo."
+   },
+   {
+    "kind": "setting",
+    "text": "The waypoint lies within Kilimanjaro National Park."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Mt.Kilimanjaro Trekking via Marangu Route",
+    "sentence": "Last Water Point — fill bottles"
+   }
+  ]
+ },
+ {
+  "id": "E08",
+  "name": "Museum of Folk Musical Instruments named after Ykhlas",
+  "locality": "Almaty",
+  "region": "Almaty",
+  "country": "Kazakhstan",
+  "naming_note": "For clarity, use the fuller name Museum of Folk Musical Instruments; it is also named after Kazakh composer Ykhlas Dukenuly.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "The museum is devoted to folk musical instruments, including traditional Kazakh instruments."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "Its collection includes instruments from Kazakhstan and other cultures."
+   },
+   {
+    "kind": "setting",
+    "text": "The building stands in Panfilov Park in Almaty."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Cultural tour to Kyrgyzstan, China and Kazakhstan",
+    "sentence": "the Museum of Musical Instruments — visit"
+   }
+  ]
+ },
+ {
+  "id": "E10",
+  "name": "Xueshan Main Peak",
+  "locality": null,
+  "region": null,
+  "country": "Taiwan",
+  "naming_note": "Snow Mountain is the widely used English name for 雪山 (Xueshan); “Main Peak” distinguishes the summit from the mountain as a whole.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "It is the summit of Snow Mountain (Xueshan)."
+   },
+   {
+    "kind": "setting",
+    "text": "The peak rises to 3,886 metres."
+   },
+   {
+    "kind": "setting",
+    "text": "It is Taiwan’s second-highest peak, after Yushan."
+   },
+   {
+    "kind": "setting",
+    "text": "It is part of the Xueshan Range in north-central Taiwan."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Snow Mountain Trek",
+    "sentence": "Snow Mountain Main Peak — reach by sunrise"
+   }
+  ]
+ },
+ {
+  "id": "E11",
+  "name": "Thumboormuzhi Garden",
+  "locality": "Athirappilly",
+  "region": "Kerala",
+  "country": "India",
+  "naming_note": "Thumboormuzhi is the widely used English spelling; the itinerary’s “Thumpurmuzhi” is a spelling variant.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Thumboormuzhi Gardens is a landscaped garden in Athirappilly, Thrissur district."
+   },
+   {
+    "kind": "setting",
+    "text": "The garden is beside the Chalakudy River and near Thumboormuzhi Dam."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Colors of Kerala",
+    "sentence": "Thumpurmuzhi Gardens — visit"
+   },
+   {
+    "tour": "A Honeymoon Special in Luxury",
+    "sentence": "Thumpurmuzhi Gardens — visit"
+   }
+  ]
+ },
+ {
+  "id": "E12",
+  "name": "Macau",
+  "locality": null,
+  "region": "Hong Kong / Macau",
+  "country": "China",
+  "naming_note": "Use “Hong Kong–Macau ferry route” as a descriptive name; the itinerary does not specify a particular terminal-to-terminal service.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "It is a sea connection between Hong Kong and Macau."
+   },
+   {
+    "kind": "setting",
+    "text": "Its two endpoints are the Hong Kong and Macau special administrative regions of China."
+   },
+   {
+    "kind": "setting",
+    "text": "The route crosses waters of the Pearl River estuary, at the mouth of the Pearl River."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Full day Macau Tour from Hong Kong",
+    "sentence": "Hong Kong to Macau — take the ferry"
+   }
+  ]
+ },
+ {
+  "id": "E15",
+  "name": "Gasa Hot Spring",
+  "locality": "Gasa",
+  "region": "Gasa",
+  "country": "Bhutan",
+  "naming_note": "Gasa Tshachu is a common local name; “tshachu” means hot spring, and “tsachu” is a spelling variant.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Gasa Hot Springs are natural geothermal springs in Gasa District."
+   },
+   {
+    "kind": "setting",
+    "text": "The springs are in the Gasa valley, near Gasa Dzong and the Mo Chhu."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "The bathing area contains several pools fed by the hot-spring water."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "LAYA-GASA TREK",
+    "sentence": "Gasa hot spring — take another bath"
+   },
+   {
+    "tour": "LAYA-GASA TREK",
+    "sentence": "Gasa hot spring (tsachu) — stay for the night"
+   }
+  ]
+ },
+ {
+  "id": "E16",
+  "name": "Harappa",
+  "locality": null,
+  "region": "Punjab",
+  "country": "Pakistan",
+  "naming_note": "Harappa is the standard English spelling for the archaeological site and ancient city.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Harappa is an archaeological site of the Indus Valley Civilization."
+   },
+   {
+    "kind": "history",
+    "text": "The ancient city flourished during the Mature Harappan period, roughly 2600–1900 BCE."
+   },
+   {
+    "kind": "history",
+    "text": "The site includes the remains of a later settlement with Bronze Age and Iron Age occupation."
+   },
+   {
+    "kind": "naming",
+    "text": "The name Harappa gave its name to the Harappan Civilization and its archaeological culture."
+   },
+   {
+    "kind": "setting",
+    "text": "The site lies in Pakistan’s Punjab province, near the Ravi River."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Sindh & Punjab - Follow the Indus Local Life – EXT - ISB- Tour",
+    "sentence": "Harappa — drive to"
+   }
+  ]
+ },
+ {
+  "id": "E17",
+  "name": "Kollam",
+  "locality": null,
+  "region": "Kerala",
+  "country": "India",
+  "naming_note": "Kollam is the usual English name; the city was historically also known as Quilon.",
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Kollam is a coastal city in Kerala, on India’s Malabar Coast."
+   },
+   {
+    "kind": "history",
+    "text": "Kollam has a long history as a port and centre of Indian Ocean trade."
+   },
+   {
+    "kind": "setting",
+    "text": "The city is situated beside Ashtamudi Lake, which is connected to Kerala’s coastal backwaters."
+   },
+   {
+    "kind": "setting",
+    "text": "The Arabian Sea borders Kollam’s western side."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "North to South India: The Taj Mahal & Goa Good Times",
+    "sentence": "down the coast to the port city of Kollam — travel by bus"
+   },
+   {
+    "tour": "Backwaters and Beaches of Kerala Cycle Tour",
+    "sentence": "Kollam — transfer in the morning to avoid the busiest part"
+   }
+  ]
+ },
+ {
+  "id": "E18",
+  "name": "Izena Island",
+  "locality": "Izena Village",
+  "region": "Okinawa Prefecture",
+  "country": "Japan",
+  "naming_note": "The itinerary wording describes a boat crossing; the destination is commonly called Izena Island, also rendered Izena-jima.",
+  "facts": [
+   {
+    "kind": "setting",
+    "text": "Izena Island is part of the Okinawa Islands in the East China Sea."
+   },
+   {
+    "kind": "setting",
+    "text": "The island lies northwest of Okinawa Island."
+   },
+   {
+    "kind": "history",
+    "text": "The island contains the ruins of Izena Castle, also known as Izena Gusuku."
+   },
+   {
+    "kind": "setting",
+    "text": "Coral reefs fringe parts of the island’s coast."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Island Hopping Experience",
+    "sentence": "Izena's clear waters — dive"
+   },
+   {
+    "tour": "Island Hopping Experience",
+    "sentence": "Izena's clear waters — snorkel"
+   }
+  ]
+ },
+ {
+  "id": "E20",
+  "name": "Mount Kilimanjaro",
+  "locality": null,
+  "region": "Kilimanjaro Region",
+  "country": "Tanzania",
+  "naming_note": null,
+  "facts": [
+   {
+    "kind": "what_it_is",
+    "text": "Mount Kilimanjaro is a volcanic massif in northern Tanzania."
+   },
+   {
+    "kind": "what_it_is",
+    "text": "The massif has three volcanic cones: Kibo, Mawenzi and Shira."
+   },
+   {
+    "kind": "setting",
+    "text": "Uhuru Peak, at 5,895 metres, is on Kibo."
+   },
+   {
+    "kind": "setting",
+    "text": "The mountain lies near the border with Kenya."
+   }
+  ],
+  "itinerary": [
+   {
+    "tour": "Kilimanjaro Trekking Via Machame Route",
+    "sentence": "Mount Kilimanjaro — view Mount Kilimanjaro from different angles"
+   }
+  ]
+ }
+]

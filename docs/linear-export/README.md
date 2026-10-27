@@ -165,6 +165,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-779](cis-core-pipeline-llm-platform/AA-779.md) | [T9 FAQ] Questions from People Also Ask first; every answer names its question's subject | Done | 2026-10-22 | CIS Core — Pipeline, LLM & Platform |
 | [AA-780](cis-core-pipeline-llm-platform/AA-780.md) | [LinkedIn] 120-word floor (blocking on attempt 1), Trail Pulse voice, broetry + new stock lines | Done | 2026-10-22 | CIS Core — Pipeline, LLM & Platform |
 | [AA-783](cis-core-pipeline-llm-platform/AA-783.md) | [Eval] Human calibration of the T9 commercial panel — 40 pieces labelled by Nghiệp with explicit criteria vs the 4-lens AI panel | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
+| [AA-784](cis-core-pipeline-llm-platform/AA-784.md) | [Place cards] Platform-wide build — ~7–9.7k distinct places, staged by country, after the fact-kind fix (≈$15–25) | Done | 2026-10-27 | CIS Core — Pipeline, LLM & Platform |
 | [AA-785](cis-core-pipeline-llm-platform/AA-785.md) | [T10 F1] Year-format tolerance — accept "YYYY–YY" / "YYYYs" when the seed has the year (warn until fixed) | Done | 2026-10-14 | CIS Core — Pipeline, LLM & Platform |
 | [AA-786](cis-core-pipeline-llm-platform/AA-786.md) | [T10 F9] F9_cta_fact v1.1 — strip citation tags, quote-the-sentence fallback, title/meta input, LinkedIn repair-not-hold | Done | 2026-10-14 | CIS Core — Pipeline, LLM & Platform |
 | [AA-787](cis-core-pipeline-llm-platform/AA-787.md) | [T10 gates] Drop F8_framework, promises_an_option, F3, F5; merge F7→F16 | Done | 2026-10-20 | CIS Core — Pipeline, LLM & Platform |
@@ -203,6 +204,8 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-984](cis-core-pipeline-llm-platform/AA-984.md) | T9 blog holds: F9 claims on heading lines are unrepairable; over-long rewrites held at attempt 2 | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
 | [AA-985](cis-core-pipeline-llm-platform/AA-985.md) | T9 F17 temporal-role false positives + systematic gate-error calibration | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
 | [AA-986](cis-core-pipeline-llm-platform/AA-986.md) | Tour retirement propagation: a tour deleted at S0/A0 hides every derivative, tenant keeps T2 with a warning | Done | 2026-10-23 | CIS Core — Pipeline, LLM & Platform |
+| [AA-988](cis-core-pipeline-llm-platform/AA-988.md) | [S1 propagation] Segments, routes and ranking follow the S1 v2 atoms (segment match, orphan cleanup, routes for every tour) | Done | 2026-10-27 | CIS Core — Pipeline, LLM & Platform |
+| [AA-989](cis-core-pipeline-llm-platform/AA-989.md) | [S1 propagation] Places and embeddings follow the S1 v2 atoms (geo.tour_place re-sync, atom embeddings, content_embedding decision) | Done | 2026-10-27 | CIS Core — Pipeline, LLM & Platform |
 | [AA-992](cis-core-pipeline-llm-platform/AA-992.md) | [Admin] Data coverage page: one live numbers table from raw uploads to TripPlanner, Booking and CRM | Done | 2026-10-26 | CIS Core — Pipeline, LLM & Platform |
 | [AA-588](cis-data-reset-pipeline-rerun-audit/AA-588.md) | [INFRA][G5] Gỡ OIDC trust org cũ (AdventureAsia365-CIS) sau khi ổn định | Done | 2026-09-21 | CIS Data Reset & Pipeline Rerun (Audit) |
 | [AA-595](cis-data-reset-pipeline-rerun-audit/AA-595.md) | [G0] Dựng bastion EC2 + SSM tunnel + BACKUP toàn bộ (chặn mọi việc sau) | Done | 2026-09-16 | CIS Data Reset & Pipeline Rerun (Audit) |
@@ -333,6 +336,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-912](data-platform-schema-ops-scale/AA-912.md) | Triage CodeQL backlog (CIS) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-913](data-platform-schema-ops-scale/AA-913.md) | Alert recipients managed from the CIS admin page (no hard-coded e-mail) | Done | 2026-10-20 | Data Platform — Schema, Ops & Scale |
 | [AA-981](data-platform-schema-ops-scale/AA-981.md) | Secret scanning guard for public repos: push protection, full-history gitleaks, tfvars password rule | Done | 2026-10-23 | Data Platform — Schema, Ops & Scale |
+| [AA-991](data-platform-schema-ops-scale/AA-991.md) | [S1 propagation] Downstream freshness probe + proof that automatic sync works (atom → segment/route/ranking/geo/place/tenant) | Done | 2026-10-27 | Data Platform — Schema, Ops & Scale |
 | [AA-650](ecosystem-foundation-cost-guard-jobs-docs/AA-650.md) | [P1] Durable job runner — Postgres queue + worker ECS service (replaces in-process asyncio tasks and the Bedrock Batch dependency) | Done | 2026-09-28 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
 | [AA-651](ecosystem-foundation-cost-guard-jobs-docs/AA-651.md) | [P1][INFRA] Worker ECS service for the job runner (AA-CIS-Infra) | Done | 2026-10-05 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
 | [AA-652](ecosystem-foundation-cost-guard-jobs-docs/AA-652.md) | [P1] Move T2 rewrite, T9 write, research and A3 atomize onto jobs; job-based status in the portal (fixes stuck "Writing…") | Done | 2026-09-28 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
@@ -546,6 +550,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-947](partner-crm-aa-partner/AA-947.md) | [CRM W4] CRM-19 B2B client + AA lines | Done | 2026-10-25 | Partner CRM — AA-Partner |
 | [AA-949](partner-crm-aa-partner/AA-949.md) | [CRM W4] CRM-21a Proposal model + day-list builder | Done | 2026-10-26 | Partner CRM — AA-Partner |
 | [AA-950](partner-crm-aa-partner/AA-950.md) | [CRM W4] CRM-21b Client proposal + accept + hold | Done | 2026-10-26 | Partner CRM — AA-Partner |
+| [AA-951](partner-crm-aa-partner/AA-951.md) | [CRM W4] CRM-22 Module 4 + "Before you go" | Done | 2026-10-27 | Partner CRM — AA-Partner |
 | [AA-972](partner-crm-aa-partner/AA-972.md) | [CRM LB] CRM-B1 M2M + B2B quote | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-973](partner-crm-aa-partner/AA-973.md) | [CRM LB] CRM-B2 Departures, capacity, holds | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-974](partner-crm-aa-partner/AA-974.md) | [CRM LB] CRM-B2b Booking commercial rules (new, Fix C2, A3, A8) | Done | 2026-10-23 | Partner CRM — AA-Partner |

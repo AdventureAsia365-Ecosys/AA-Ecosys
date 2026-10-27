@@ -17,6 +17,8 @@ related: [OPS-05, OPS-05-db-migrate, skill/aa-cis-schema/references/ecs-exec.md,
 
 # Query the database through ECS exec and S3
 
+> **S253: use `tools/ecs/ecsx.sh <script.py> [VAR=value ...]`** for CIS containers. It runs the script detached from the SSM session (`tools/ecs/ecsx_runner.py`), puts the whole output on `s3://aa-cis-bronze-…/scripts/out/`, then downloads and prints it, so a dropped session (`Cannot perform start session: EOF`) loses nothing. The manual steps below remain the reference for what it does.
+
 This page is the canonical copy of the pattern (data standard DM-8.8). The agent quick reference in
 `skill/aa-cis-schema/references/ecs-exec.md`, the global `CLAUDE.md` block and older notes point here.
 
