@@ -1,0 +1,1061 @@
+{
+ "group_id": "G0009a0f4",
+ "labeller": "adj",
+ "reference": {
+  "name": "Barkhor (Barkhor Street / market quarter)",
+  "locality": "Lhasa",
+  "region": "Tibet Autonomous Region",
+  "country": "China",
+  "lat": 29.6503,
+  "lon": 91.1331,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Barkhor",
+    "tier": "T1",
+    "quote": "is the commercial center and busiest street of the old city of Lhasa, Tibet."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+    "tier": "T1",
+    "quote": "is an historic area of narrow streets and a public square with markets, and the circumambulation route around the Jokhang Temple in Lhasa"
+   }
+  ],
+  "note": "Sightseeing day with Potala and Jokhang: the Barkhor market street/circuit around the Jokhang in Lhasa. Tour sold under Nepal, but the place is in China (TAR)."
+ },
+ "variants": [
+  {
+   "vid": "V833e8b8c",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Barkhor in Lhasa, TAR, China.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V34dc951d",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Same Barkhor Street, but locality Beijing is wrong (it is in Lhasa).",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V51cfd219",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Barkhor Street, Lhasa, TAR, China.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V35cb72e3",
+   "name": "ok",
+   "locality": "correct",
+   "region": "acceptable_historical",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Resolved: Barkhor, Lhasa, China is right; region 'Tibet' instead of 'Tibet Autonomous Region' is the historical/common name, which the labelling rules list explicitly as acceptable_historical (example 'Tibet').",
+   "agreement": "resolved"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Ff7a547a9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "is an historic area of narrow streets and a public square with markets, and the circumambulation route around the Jokhang Temple in Lhasa"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "The Barkhor is a popular devotional circumambulation around the historic Jokhang for pilgrims and locals."
+    }
+   ],
+   "rationale": "Circumambulation route around the Jokhang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F67348022",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "is an historic area of narrow streets and a public square with markets, and the circumambulation route around the Jokhang Temple in Lhasa"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "encircles the entire Jokhang Temple complex, the former seat of the Nechung Oracle in Lhasa called the Muru Nyingba Monastery"
+    }
+   ],
+   "rationale": "Narrow streets with markets, encircling temples/monastery and nobles' houses.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe1ddc01a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "The Barkhor is a popular devotional circumambulation around the historic Jokhang for pilgrims and locals."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "is the commercial center and busiest street of the old city of Lhasa, Tibet."
+    }
+   ],
+   "rationale": "Devotional circuit around the Jokhang in old Lhasa.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd3825d37",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "The circumference of Barkhor Street is about 1,000 meters, originated in the 7th century A.D."
+    },
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "The intermediate circle, the Barkor, has existed at least since the late 14th century"
+    }
+   ],
+   "rationale": "No Portuguese 1742 founding; Barkhor dates from the 7th century (or at least late 14th c.).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fab5f9382",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jokhang",
+     "tier": "T1",
+     "quote": "In 2000, the Jokhang became a UNESCO World Heritage Site as an extension of the Potala Palace"
+    }
+   ],
+   "rationale": "Jokhang added in 2000 as an extension of the Potala Palace site (Historic Ensemble of the Potala Palace); 'surroundings' is loose.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F285ea439",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "is an historic area of narrow streets and a public square with markets, and the circumambulation route around the Jokhang Temple in Lhasa"
+    }
+   ],
+   "rationale": "Historic area around the Jokhang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa7dc5069",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "is an historic area of narrow streets and a public square with markets, and the circumambulation route around the Jokhang Temple in Lhasa"
+    }
+   ],
+   "rationale": "Historic area and circumambulation route around the Jokhang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fdaf9d0c8",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved unverifiable. Whitewashed houses (asianart THF report) and religious objects sold in the square (Wikipedia Jokhang) check out, but 'stone-paved lanes' and the goods list (thangka, incense, butter lamps) are only on tour/PR pages; T1 sources also disagree on preservation (Wikipedia Lhasa: most old streets and buildings demolished; Barkhor: original style better preserved); Lonely Planet says the stalls were moved off the circuit.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F56b04920",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "The circumference of Barkhor Street is about 1,000 meters, originated in the 7th century A.D."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jokhang",
+     "tier": "T1",
+     "quote": "The oldest part of the temple was built in 652 by Songtsen Gampo."
+    }
+   ],
+   "rationale": "Wikipedia says the street originated in the 7th century around the Jokhang built by Songtsen Gampo.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F92295b63",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "The Barkhor Ring Road is composed of Barkhor East Street, Barkhor South Street, Barkhor West Street and Barkhor North Street."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "is the commercial center and busiest street of the old city of Lhasa, Tibet."
+    }
+   ],
+   "rationale": "Ring of four Barkhor streets in the old city.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2582b51f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "is an historic area of narrow streets and a public square with markets, and the circumambulation route around the Jokhang Temple in Lhasa"
+    }
+   ],
+   "rationale": "Historic area surrounding the Jokhang in Lhasa.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F365cf1ec",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "first built the Jokhang, where Tibetan Buddhism believers began to turn around the monastery, and gradually formed a road"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jokhang",
+     "tier": "T1",
+     "quote": "The oldest part of the temple was built in 652 by Songtsen Gampo."
+    }
+   ],
+   "rationale": "Path formed as believers circled the Jokhang, built 652.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F07978259",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tibet_Autonomous_Region",
+     "tier": "T1",
+     "quote": "Capital and largest city Lhasa"
+    }
+   ],
+   "rationale": "Lhasa is capital of TAR, PRC.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd2ec7947",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.npr.org/2006/09/24/6112107/the-barkhor-gives-tibet-a-spiritual-anchor",
+     "tier": "T2",
+     "quote": "Stalls selling Tibetan jewelry and souveniers line the Barkhor. Prayer wheels, coral, turquoise and silver jewelry and Tibetan Buddhist trumpets, pictured here, are favorites."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "is the commercial center and busiest street of the old city of Lhasa, Tibet."
+    }
+   ],
+   "rationale": "Resolved supported. NPR (2006, T2, quote verified on page) says stalls selling jewellery, prayer wheels and souvenirs line the Barkhor; Wikipedia calls it Lhasa's commercial centre. Lonely Planet notes the souvenir stalls were later moved into the Barkhor Supermarket building, so 'stalls' is somewhat dated, but shops still line the circuit.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fa18a56b1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "is the commercial center and busiest street of the old city of Lhasa, Tibet."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "is an historic area of narrow streets and a public square with markets, and the circumambulation route around the Jokhang Temple in Lhasa"
+    }
+   ],
+   "rationale": "Market street encircling the Jokhang in old Lhasa.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fef6ecae0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "These layers of city quarters are entered by crooked little alleyways, lined by low, white-washed stone-and-mud houses."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Architecture_of_Lhasa",
+     "tier": "T1",
+     "quote": "The Barkhor is an area of narrow streets and a public square in the old part of the city located around Jokhang Temple"
+    }
+   ],
+   "rationale": "Resolved supported. The Tibet Heritage Fund report on asianart.com (quote verified) describes the old-city quarters as crooked alleyways lined by white-washed houses; Wikipedia Architecture of Lhasa confirms narrow streets. B found the narrow lanes but missed the whitewash source.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fb91aef7a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "The circumference of Barkhor Street is about 1,000 meters, originated in the 7th century A.D."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "Barkhor is the oldest street in Lhasa"
+    }
+   ],
+   "rationale": "Wikipedia: originated 7th century, oldest street (THF dates the present Barkor to at least the late 14th c.).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fda4dfbd2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jokhang",
+     "tier": "T1",
+     "quote": "The oldest part of the temple was built in 652 by Songtsen Gampo."
+    }
+   ],
+   "rationale": "Jokhang built 652 by Songtsen Gampo.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F98093515",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "first built the Jokhang, where Tibetan Buddhism believers began to turn around the monastery, and gradually formed a road"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jokhang",
+     "tier": "T1",
+     "quote": "The oldest part of the temple was built in 652 by Songtsen Gampo."
+    }
+   ],
+   "rationale": "Barkhor formed after the Jokhang was built in 652.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff383b501",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "The intermediate circle, the Barkor, has existed at least since the late 14th century"
+    },
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "The innermost pilgrimage circle, the Nangkor, which leads around the Tsuglakhang's central temple building"
+    }
+   ],
+   "rationale": "Resolved supported. Tibet Heritage Fund report (asianart.com, quote verified) calls the Barkor the intermediate circle between the Nangkor and the outer route; no T1 source contradicts the 'middle circuit' reading.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F8abdbce1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "The white-washed facade is further accentuated by thick black frames around and little slate roofs above the doors and windows."
+    },
+    {
+     "url": "https://asianart.com/kora/kora1.html",
+     "tier": "T2",
+     "quote": "The dark band of red at the top, dotted with white paint, was, in previous eras, a mark reserved for certain noble houses."
+    }
+   ],
+   "rationale": "Resolved supported. THF report (asianart.com, verified) gives the white-washed facade with thick black frames; the asianart kora photo essay records red bands on Barkhor-kora houses (noble houses). 'Many' with red trim is loose but not contradicted.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fcba8408f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "first built the Jokhang, where Tibetan Buddhism believers began to turn around the monastery, and gradually formed a road"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jokhang",
+     "tier": "T1",
+     "quote": "The oldest part of the temple was built in 652 by Songtsen Gampo."
+    }
+   ],
+   "rationale": "Development tied to the 7th-century Jokhang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc0783e4a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "is the commercial center and busiest street of the old city of Lhasa, Tibet."
+    },
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "Today, as it has been for centuries, the Barkor is also Lhasa's main bazaar street."
+    }
+   ],
+   "rationale": "Commercial centre / main bazaar street.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F579576d9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Lhasa",
+     "tier": "T1",
+     "quote": "the outer pilgrim road in Lhasa matching its inner twin, Barkhor."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "The Barkhor is a popular devotional circumambulation around the historic Jokhang for pilgrims and locals."
+    }
+   ],
+   "rationale": "Resolved supported. Wikipedia Lhasa (T1, quote verified) calls the Barkhor the inner twin of the Lingkhor; the THF report's 'intermediate circle' (A's source) counts the Nangkor inside the temple, a different frame, and a T2 framing cannot override the T1 wording. Not false.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fe7498eec",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "is the commercial center and busiest street of the old city of Lhasa, Tibet."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "is an historic area of narrow streets and a public square with markets, and the circumambulation route around the Jokhang Temple in Lhasa"
+    }
+   ],
+   "rationale": "Historic street and market quarter around the Jokhang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fdc0bab94",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jokhang",
+     "tier": "T1",
+     "quote": "The temple, considered the \"spiritual heart of the city\" and the most sacred in Tibet"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jokhang",
+     "tier": "T1",
+     "quote": "In 2000, the Jokhang became a UNESCO World Heritage Site as an extension of the Potala Palace"
+    }
+   ],
+   "rationale": "Jokhang is the spiritual heart of Lhasa and a UNESCO component; Barkhor is the old city's commercial centre around it.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff65a6777",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "the Barkor is still a religious circumambulation route of major importance for Lhasa citizens and pilgrims."
+    },
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "Today, as it has been for centuries, the Barkor is also Lhasa's main bazaar street."
+    }
+   ],
+   "rationale": "Both a major religious circumambulation route and the main bazaar; 'one of the most sacred' mildly emphatic.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc547b75f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "the Barkor is still a religious circumambulation route of major importance for Lhasa citizens and pilgrims."
+    },
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "Today, as it has been for centuries, the Barkor is also Lhasa's main bazaar street."
+    }
+   ],
+   "rationale": "Religious route combined with bazaar commerce for centuries.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc81e80cf",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "is an historic area of narrow streets and a public square with markets, and the circumambulation route around the Jokhang Temple in Lhasa"
+    },
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "crooked little alleyways, lined by low, white-washed stone-and-mud houses."
+    }
+   ],
+   "rationale": "Old-city historic area with traditional streetscape around Jokhang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ffdc4e64c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "The intermediate circle, the Barkor, has existed at least since the late 14th century"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Pargor_Subdistrict",
+     "tier": "T1",
+     "quote": "The Barkhor is a popular devotional circumambulation around the historic Jokhang for pilgrims and locals."
+    }
+   ],
+   "rationale": "Barkhor (bar-skor) names the circumambulation route around the Jokhang.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2cf18e45",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Barkhor",
+     "tier": "T1",
+     "quote": "that is, clockwise walking (right around)"
+    },
+    {
+     "url": "https://asianart.com/lhasa_restoration/report98/ch_02.htm",
+     "tier": "T2",
+     "quote": "Today, as it has been for centuries, the Barkor is also Lhasa's main bazaar street."
+    }
+   ],
+   "rationale": "Walked clockwise around the Jokhang; long-established bazaar.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [
+  {
+   "lid": "Lfa6b8257",
+   "same_place": "yes",
+   "rationale": "Existing card Barkhor Street, Lhasa, TAR, China is the same Barkhor market street/circuit the itinerary means.",
+   "agreement": "agree"
+  }
+ ],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "acceptable_historical"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": [
+   [
+    "yes",
+    "yes"
+   ]
+  ]
+ }
+}

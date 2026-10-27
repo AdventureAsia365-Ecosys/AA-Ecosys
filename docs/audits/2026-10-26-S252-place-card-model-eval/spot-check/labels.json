@@ -1,0 +1,2863 @@
+[
+  {
+    "id": "C01",
+    "final": {
+      "card": "C01",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "correct",
+        "country": "correct",
+        "note": "The tour is 'Peaks and Passes of the Nubra Valley', with a view of the Karakoram. Nubra lies on the Ladakh side of the Karakoram range, so it is the same range. Locality null is fine for a range. The regions and countries listed match Wikipedia, which says the range spans Pakistan, China and India and covers Indian-administered Ladakh, Xinjiang and Gilgit-Baltistan, where most of it lies. Minor omissions, not errors: Aksai Chin, and the north-western ends that reach Afghanistan and Tajikistan."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "The Karakoram ... is a mountain range in Asia which spans the borders of Pakistan, China and India",
+          "note": "'Mountain range' is clearly supported. 'Central Asia' is a loose regional label. Wikipedia says only 'Asia'. Britannica (403 to direct fetch; seen in search results) calls it a mountain system in 'south-central Asia' along 'the watershed between Central and South Asia'. Not contradicted, but less precise than the card's wording."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "extends eastwards into Indian-administered Ladakh and Chinese-administered Aksai Chin, as well as the Chinese province of Xinjiang. Most of the Karakoram is located within the Pakistani-administered Gilgit-Baltistan region.",
+          "note": "All three regions are named."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "The Karakoram contains four of the fourteen eight-thousanders, the highest of which is K2, the second highest mountain on Earth.",
+          "note": ""
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "the most glaciated place on Earth outside the polar regions. The Siachen Glacier (76 km (47 mi) long) and Biafo Glacier (63 km (39 mi) long) are the second- and third-longest glaciers outside the polar regions.",
+          "note": "Baltoro is confirmed separately at https://en.wikipedia.org/wiki/Baltoro_Glacier: 'The glacier lies in the Karakoram range'."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C01",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "correct",
+        "country": "correct",
+        "note": "The tour is 'Peaks and Passes of the Nubra Valley', with a view of the Karakoram. Nubra lies on the Ladakh side of the Karakoram range, so it is the same range. Locality null is fine for a range. The regions and countries listed match Wikipedia, which says the range spans Pakistan, China and India and covers Indian-administered Ladakh, Xinjiang and Gilgit-Baltistan, where most of it lies. Minor omissions, not errors: Aksai Chin, and the north-western ends that reach Afghanistan and Tajikistan."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "The Karakoram ... is a mountain range in Asia which spans the borders of Pakistan, China and India",
+          "note": "'Mountain range' is clearly supported. 'Central Asia' is a loose regional label. Wikipedia says only 'Asia'. Britannica (403 to direct fetch; seen in search results) calls it a mountain system in 'south-central Asia' along 'the watershed between Central and South Asia'. Not contradicted, but less precise than the card's wording."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "extends eastwards into Indian-administered Ladakh and Chinese-administered Aksai Chin, as well as the Chinese province of Xinjiang. Most of the Karakoram is located within the Pakistani-administered Gilgit-Baltistan region.",
+          "note": "All three regions are named."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "The Karakoram contains four of the fourteen eight-thousanders, the highest of which is K2, the second highest mountain on Earth.",
+          "note": ""
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "the most glaciated place on Earth outside the polar regions. The Siachen Glacier (76 km (47 mi) long) and Biafo Glacier (63 km (39 mi) long) are the second- and third-longest glaciers outside the polar regions.",
+          "note": "Baltoro is confirmed separately at https://en.wikipedia.org/wiki/Baltoro_Glacier: 'The glacier lies in the Karakoram range'."
+        }
+      ]
+    },
+    "B": {
+      "card": "C01",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary (Nubra Valley, Ladakh) gives a view of the Karakoram range, so it is the same place. Null locality is fine for a mountain range. Wikipedia names Ladakh, Gilgit-Baltistan and Xinjiang as the regions the range spans, and describes it as spanning the borders of Pakistan, China and India."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Mountains_of_Central_Asia",
+          "quote": "the Karakoram range in China, Pakistan and India",
+          "note": "The main Wikipedia Karakoram article says only 'a mountain range in Asia'. Britannica (search summary) calls it a 'great mountain system' at 'the centre of Asia' on the Central/South Asia divide, and the Wikipedia Mountains of Central Asia article includes the Karakoram range. 'Central Asia' is broadly supported but loose; south-central Asia would be more exact."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "Most of the Karakoram is located within the Pakistani-administered Gilgit-Baltistan region ... eastwards into Indian-administered Ladakh ... as well as the Chinese province of Xinjiang",
+          "note": "All three regions are named in the Wikipedia Karakoram article. The quote joins fragments returned by the fetch tool."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "contains four of the fourteen eight-thousanders, the highest of which is K2, the second highest mountain on Earth",
+          "note": "Matches the card."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Karakoram",
+          "quote": "Siachen Glacier (76 km (47 mi) long) and Biafo Glacier (63 km (39 mi) long)",
+          "note": "Baltoro is also described in the same article as being in the Central Karakoram."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C02",
+    "final": {
+      "card": "C02",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary line 'Pleiku — cycle to and overnight' refers to the Central Highlands town of Pleiku, so the card names the right place. Since 1 July 2025 Pleiku has not been a city. Its land was split into wards and communes directly under Gia Lai, and one of those wards is called Pleiku (en.wikipedia.org/wiki/Pleiku). Locality 'Pleiku' is therefore still a valid name. Region 'Gia Lai' is still correct: the province merged with Binh Dinh in 2025 and kept the name Gia Lai."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "contradicted",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Pleiku_(city)",
+          "quote": "On 1 July 2025, Pleiku ceased to exist as a municipal city due to the  elimination of district level units in Vietnam",
+          "note": "Both parts of the claim are out of date. Pleiku is no longer a city, and it is no longer the provincial capital. The Gia Lai province article lists the capital as 'Quy Nhơn ward' and says 'The administrative center is located in Quy Nhơn (the former capital of Bình Định), while Pleiku remains a cultural and economic hub' (https://en.wikipedia.org/wiki/Gia_Lai_province). The Pleiku (city) article itself says 'It was the capital of the Gia Lai Province'."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Central_Highlands_(Vietnam)",
+          "quote": "The Central Highlands are a series of plateaus ... namely Kon Tum Plateau at 500 m, Kon Plông Plateau, Kon Hà Nừng Plateau, Pleiku Plateau at 800 m",
+          "note": "The Pleiku (city) article also says Pleiku is 'located in the Central Highlands region' and refers to 'its central location on the plateau'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Central_Highlands_(Vietnam)",
+          "quote": "Coffee is the most important industrial commodity of the Central Highlands. The current coffee area here is over 290 thousand hectares, accounting for 80% of the country's coffee area.",
+          "note": "This source supports coffee for the Central Highlands as a whole. It names Dak Lak, not Gia Lai or the Pleiku area, as the biggest coffee province. I found no source about coffee around Pleiku specifically, so this rests on the regional statement."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Pleiku_(city)",
+          "quote": "made Pleiku the main centre of defense of the entire highland region of the Republic of Vietnam. ... the United States established an armed presence very early in the conflict at Camp Holloway",
+          "note": "The same section also says 'Pleiku was strategically important during the Vietnam War'."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Pleiku_Air_Base",
+          "quote": "It was captured by the People's Army of Vietnam (PAVN) in March 1975 and was abandoned for many years.",
+          "note": "This quote is about the air base. For the town and province: Nhan Dan (https://nhandan.vn/ky-niem-50-nam-ngay-giai-phong-tinh-gia-lai-post865669.html) says 'đến ngày 17/3/1975, tỉnh Gia Lai được hoàn toàn giải phóng' (by 17/3/1975 Gia Lai province was fully liberated). The Vietnamese Wikipedia article on the Central Highlands campaign (Chiến dịch Tây Nguyên) quotes Cao Văn Viên: 'Cộng sản chiếm được Kon Tum và Pleiku không tốn một viên đạn' (the communists took Kon Tum and Pleiku without firing a shot). Together these support March 1975 and the Central Highlands campaign."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C02",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary line 'Pleiku — cycle to and overnight' refers to the Central Highlands town of Pleiku, so the card names the right place. Since 1 July 2025 Pleiku has not been a city. Its land was split into wards and communes directly under Gia Lai, and one of those wards is called Pleiku (en.wikipedia.org/wiki/Pleiku). Locality 'Pleiku' is therefore still a valid name. Region 'Gia Lai' is still correct: the province merged with Binh Dinh in 2025 and kept the name Gia Lai."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "contradicted",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Pleiku_(city)",
+          "quote": "On 1 July 2025, Pleiku ceased to exist as a municipal city due to the  elimination of district level units in Vietnam",
+          "note": "Both parts of the claim are out of date. Pleiku is no longer a city, and it is no longer the provincial capital. The Gia Lai province article lists the capital as 'Quy Nhơn ward' and says 'The administrative center is located in Quy Nhơn (the former capital of Bình Định), while Pleiku remains a cultural and economic hub' (https://en.wikipedia.org/wiki/Gia_Lai_province). The Pleiku (city) article itself says 'It was the capital of the Gia Lai Province'."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Central_Highlands_(Vietnam)",
+          "quote": "The Central Highlands are a series of plateaus ... namely Kon Tum Plateau at 500 m, Kon Plông Plateau, Kon Hà Nừng Plateau, Pleiku Plateau at 800 m",
+          "note": "The Pleiku (city) article also says Pleiku is 'located in the Central Highlands region' and refers to 'its central location on the plateau'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Central_Highlands_(Vietnam)",
+          "quote": "Coffee is the most important industrial commodity of the Central Highlands. The current coffee area here is over 290 thousand hectares, accounting for 80% of the country's coffee area.",
+          "note": "This source supports coffee for the Central Highlands as a whole. It names Dak Lak, not Gia Lai or the Pleiku area, as the biggest coffee province. I found no source about coffee around Pleiku specifically, so this rests on the regional statement."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Pleiku_(city)",
+          "quote": "made Pleiku the main centre of defense of the entire highland region of the Republic of Vietnam. ... the United States established an armed presence very early in the conflict at Camp Holloway",
+          "note": "The same section also says 'Pleiku was strategically important during the Vietnam War'."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Pleiku_Air_Base",
+          "quote": "It was captured by the People's Army of Vietnam (PAVN) in March 1975 and was abandoned for many years.",
+          "note": "This quote is about the air base. For the town and province: Nhan Dan (https://nhandan.vn/ky-niem-50-nam-ngay-giai-phong-tinh-gia-lai-post865669.html) says 'đến ngày 17/3/1975, tỉnh Gia Lai được hoàn toàn giải phóng' (by 17/3/1975 Gia Lai province was fully liberated). The Vietnamese Wikipedia article on the Central Highlands campaign (Chiến dịch Tây Nguyên) quotes Cao Văn Viên: 'Cộng sản chiếm được Kon Tum và Pleiku không tốn một viên đạn' (the communists took Kon Tum and Pleiku without firing a shot). Together these support March 1975 and the Central Highlands campaign."
+        }
+      ]
+    },
+    "B": {
+      "card": "C02",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The tour stop 'Pleiku: cycle to and overnight' refers to Pleiku in the Central Highlands. Since 1 July 2025 Pleiku is no longer a city: the district-level city was dissolved and Pleiku is now a ward of the merged Gia Lai province (Gia Lai and Binh Dinh). Locality 'Pleiku' (now a ward name) and region 'Gia Lai' still hold."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "contradicted",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Gia_Lai_province",
+          "quote": "The administrative center is located in Quy Nhơn (the former capital of Bình Định).",
+          "note": "The fact is out of date since the 2025 reform (Resolution 202/2025/QH15, effective 1/7/2025): the capital of the merged Gia Lai is Quy Nhon, and Pleiku city was dissolved. en.wikipedia.org/wiki/Pleiku says 'The ward inherited its name from the former city of Pleiku, the provincial capital of Gia Lai.' vi.wikipedia Pleiku (thành phố) says 'trước đây là thành phố tỉnh lỵ cũ thuộc tỉnh Gia Lai' and lists dissolution on 1/7/2025."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://vi.wikipedia.org/wiki/Cao_nguyên_Pleiku",
+          "quote": "Cao nguyên Pleiku là một cao nguyên ở Nam Trung Bộ, có phần lớn diện tích thuộc tỉnh Gia Lai ... bao gồm phường Pleiku và các xã, phường gần đó.",
+          "note": "Wikivoyage (https://en.wikivoyage.org/wiki/Pleiku) describes Pleiku as 'a city in the Central Highlands of Vietnam'. en.wikipedia Central Highlands (Vietnam) lists the 'Pleiku Plateau at 800 m'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Central_Highlands_(Vietnam)",
+          "quote": "Coffee is the most important industrial commodity of the Central Highlands.",
+          "note": "The same page says production is centred in Dak Lak. vi.wikipedia Pleiku (thành phố) says local soil and climate suit industrial crops 'như cao su, cà phê, hồ tiêu'. This supports the general claim of 'important coffee-growing area'."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Pleiku_Air_Base",
+          "quote": "Pleiku AB became a center of reconnaissance in the Central Highlands",
+          "note": "The page also says the base's importance increased as infiltration along the Laotian/Cambodian borders grew. 1975 in the Vietnam War mentions ARVN troops 'stationed in the cities of Pleiku and Kon Tum'."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Pleiku_Air_Base",
+          "quote": "It was captured by the People's Army of Vietnam (PAVN) in March 1975",
+          "note": "https://en.wikipedia.org/wiki/1975_in_the_Vietnam_War: on 4 March the PAVN began 'Campaign 275' to capture the Central Highlands, and the ARVN withdrawal from Pleiku and Kon Tum began on 16 March. These match 'March 1975' and 'Central Highlands campaign'."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C03",
+    "final": {
+      "card": "C03",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Both itinerary lines ('Askoli — pass through' on the Gondogoro La/K2 trek, 'Askole village — end trekking' on the K2 BC trek) mean the trailhead village Askole/Askoli in the Braldu valley. Wikipedia places it in Shigar district, Gilgit-Baltistan, Pakistan, with tehsil Shigar and union council Braldo. On the locality: 'Shigar' is right as the tehsil/district. Askole is not inside Shigar town, which is roughly 100 km downvalley, so if locality is read as a town, 'Askole' itself or the 'Braldo' union council would be more precise."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Askole",
+          "quote": "located in Braldo Valley (district Shigar), in the Gilgit–Baltistan region of Pakistan.",
+          "note": "Village, Shigar District, Gilgit-Baltistan and Pakistan all match."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Shigar_Valley",
+          "quote": "The valley stretches about 170 km from Skardu to Askole and is the gateway to the high mountains of the Karakoram.",
+          "note": "Askole sits at the upper end of the Shigar Valley as Wikipedia defines it. The Askole article says 'Askole lies in a remote region of the Karakoram mountains'. Strictly, its immediate valley is the Braldu/Braldo valley, a branch of the Shigar valley."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Askole",
+          "quote": "Askole village on the banks of the Braldu River",
+          "note": "This quote is a photo caption on the Wikipedia article. Dawn also places Askole on the Braldo River."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Shigar_Valley",
+          "quote": "Askole is the last settlement in the Shigar Valley, which is still far from the high mountains.",
+          "note": "The 'permanently' wording is backed by Ev-K2-CNR's Askole project PDF: 'the latest permanent settlement before the access to the glaciated area'. Pakistan Highlands calls it 'the last village of Shigar valley'."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C03",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Both itinerary lines ('Askoli — pass through' on the Gondogoro La/K2 trek, 'Askole village — end trekking' on the K2 BC trek) mean the trailhead village Askole/Askoli in the Braldu valley. Wikipedia places it in Shigar district, Gilgit-Baltistan, Pakistan, with tehsil Shigar and union council Braldo. On the locality: 'Shigar' is right as the tehsil/district. Askole is not inside Shigar town, which is roughly 100 km downvalley, so if locality is read as a town, 'Askole' itself or the 'Braldo' union council would be more precise."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Askole",
+          "quote": "located in Braldo Valley (district Shigar), in the Gilgit–Baltistan region of Pakistan.",
+          "note": "Village, Shigar District, Gilgit-Baltistan and Pakistan all match."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Shigar_Valley",
+          "quote": "The valley stretches about 170 km from Skardu to Askole and is the gateway to the high mountains of the Karakoram.",
+          "note": "Askole sits at the upper end of the Shigar Valley as Wikipedia defines it. The Askole article says 'Askole lies in a remote region of the Karakoram mountains'. Strictly, its immediate valley is the Braldu/Braldo valley, a branch of the Shigar valley."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Askole",
+          "quote": "Askole village on the banks of the Braldu River",
+          "note": "This quote is a photo caption on the Wikipedia article. Dawn also places Askole on the Braldo River."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Shigar_Valley",
+          "quote": "Askole is the last settlement in the Shigar Valley, which is still far from the high mountains.",
+          "note": "The 'permanently' wording is backed by Ev-K2-CNR's Askole project PDF: 'the latest permanent settlement before the access to the glaciated area'. Pakistan Highlands calls it 'the last village of Shigar valley'."
+        }
+      ]
+    },
+    "B": {
+      "card": "C03",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Askole/Askoli is the trailhead village for the K2 BC / Concordia / Gondogoro La treks, so both itinerary mentions are this place. Wikipedia's infobox gives District: Shigar, Tehsil: Shigar, Union council: Braldo. 'Shigar' is right as the tehsil/district, but Askole is not in Shigar town itself. It lies about 170 km up the valley, in the Braldu (Braldo) valley. Region Gilgit-Baltistan and country Pakistan are correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Askole",
+          "quote": "is a small town located in Braldo Valley (district Shigar), in the Gilgit–Baltistan region of Pakistan.",
+          "note": "Wikipedia calls it a 'small town'; the image caption calls it 'Askole village'. District, region and country match."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Shigar_Valley",
+          "quote": "The valley stretches about 170 km from Skardu to Askole and is the gateway to the high mountains of the Karakoram.",
+          "note": "Askole is at the far upper end of the Shigar Valley. Strictly, it sits in the Braldu side valley, which drains into the Shigar. The Askole article adds: 'Askole lies in a remote region of the Karakoram mountains 3,040 meters (9,970 feet) above sea level.'"
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Askole",
+          "quote": "Askole village on the banks of the Braldu River",
+          "note": "Image caption on the Askole article. The village is on the river's banks, so 'near' is accurate."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Shigar_Valley",
+          "quote": "Askole is the last settlement in the Shigar Valley, which is still far from the high mountains.",
+          "note": "The source says 'last settlement'. The card's 'permanently inhabited' wording is a mild paraphrase, and the card hedges it with 'commonly described'. The Askole article also has: 'notable for being the final settlement before the wilderness of the high Karakorams begins.'"
+        }
+      ]
+    }
+  },
+  {
+    "id": "C04",
+    "final": {
+      "card": "C04",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "wrong",
+        "country": "correct",
+        "note": "Both labellers agree, and I confirm. The card is the same place as the itinerary's 'Thado Koshigaon'. It is the small village and stream crossing (Thadokoshi/Thado Koshi/Thadokosi) on the Lukla-Ghat-Phakding trail, below Chheplung and before Ghat. 'Thado Koshi' is an acceptable display name. Locality 'Lukla' is wrong because this is a separate village down-trail from Lukla and Chheplung. The admin unit is Khumbu Pasanglhamu Rural Municipality, ward unconfirmed. Region 'Khumbu' is wrong as an admin region because it is a trekking sub-region name, and strictly this stretch is Pharak. The admin region is Koshi Province (Solukhumbu District). Country Nepal is correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://natureexcursion.com/blog/lukla-to-everest-base-camp-trek",
+          "quote": "We will then pass through small villages like Thadokoshi and Ghat ... The second-day trek from Lukla to Phakding introduces trekkers to the Khumbu region.",
+          "note": "I re-fetched this page and confirmed both quotes. They support the 'small village' and 'Khumbu region' parts as trekking sources use those terms. The 'of Solukhumbu District' part is a definition of Khumbu, not a separate claim about this village. Wikivoyage (https://en.wikivoyage.org/wiki/Khumbu) says 'Khumbu (also known as the Everest Region) is a sub-region in Solu Khumbu', and Wikipedia says Solukhumbu District 'consists of the sub-regions Solu and Khumbu'. No source contradicts the fact. A's unverifiable verdict hinged on there being no single page naming the district for Thado Koshi, but here the district follows from the definition of Khumbu. Caveat: strictly, the area south of Monjo/Namche is Pharak, but trekking usage calls the Lukla-Phakding stretch Khumbu. My searches in English and Nepali found no gazetteer page for Thadokoshi."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://nepalecoadventure.com/trip/10-days-gokyo-valley-trek/",
+          "quote": "cross the crystal clear Thadokoshi on a locally built suspension bridge. ... It is an easy 3 hour hike through the Dudhkoshi valley.",
+          "note": "Both labellers agree. The Lukla-Phakding stage that passes Thadokoshi runs through the Dudh Koshi valley. Wikipedia's Dudh Koshi article says 'Dudh Koshi ... is a river in eastern Nepal'. The Thadokoshi itself is a side stream that joins the Dudh Koshi."
+        }
+      ]
+    },
+    "adjudicated": true,
+    "disagreements": [
+      "fact 0: A=unverifiable/false B=supported/false"
+    ],
+    "A": {
+      "card": "C04",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The card is the same place as the itinerary's 'Thado Koshigaon': the small village and usual lunch stop on the Lukla-Phakding trail, between Chheplung and Ghat (10adventures: 'Descending for about 500 m from Chheplung takes you to Thado Koshi'). The display name 'Thado Koshi' is fine. Locality 'Lukla' is wrong. Thado Koshi is a separate village roughly 500 m below Chheplung, not part of Lukla town. Its municipality is Khumbu Pasanglhamu Rural Municipality, whose official wards include Lukla (2) and Nachipang (3). I could not confirm which ward Thado Koshi is in. Region 'Khumbu' is wrong because it is a loose trekking-area name, not an administrative region. The real units are Solukhumbu District, Koshi Province. The Lukla-Phakding stretch is also traditionally called Pharak, not Khumbu proper. Country Nepal is correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "unverifiable",
+          "trip_leak": false,
+          "url": "https://himalayatrip.com/everest-base-camp-trek/",
+          "quote": "Similarly, you will pass through small villages such as Chheplung, Thado Koshi (Lunch), and Ghat",
+          "note": "A source supports that it is a small village. I found no source that places Thado Koshi itself in the 'Khumbu region of Solukhumbu District'. Tripatini calls nearby Chheplung 'in the Khumbu Region', and the trail is in Solukhumbu, but nothing states this for Thado Koshi. The area is often called Pharak rather than Khumbu. I am leaving it unverifiable rather than inferring it."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://himalayatrip.com/everest-base-camp-trek/",
+          "quote": "Similarly, you will pass through small villages such as Chheplung, Thado Koshi (Lunch), and Ghat... The route goes through pine forests and follows the Dudhkoshi River.",
+          "note": "The same itinerary day places Thado Koshi on the route that follows the Dudh Koshi. Wikipedia (https://en.wikipedia.org/wiki/Dudh_Koshi) supports 'eastern Nepal' with: 'Dudh Koshi ... is a river in eastern Nepal.' This is a trek-operator source, not an official gazetteer."
+        }
+      ]
+    },
+    "B": {
+      "card": "C04",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The context is day 1 of an Everest Base Camp trek, so this is the same place: Thadokoshi/Thado Koshi, the small village and suspension-bridge crossing of the Thadokoshi stream on the Lukla-Ghat-Phakding trail (Mapcarta: 'Thadokosi', a village in Koshi Province, about 27.71N 86.72E, near Nurning Ghat). The display name is an acceptable spelling; sources also use Thadokoshi, Thadakoshi and Thadokosi. Locality 'Lukla' is wrong: Thadokoshi is a separate village down-trail from Lukla and Chheplung. The proper locality would be Khumbu Pasanglhamu Rural Municipality (Solukhumbu District), which Wikipedia says took in the former Chaurikharka VDC, but I found no source naming the ward. Region 'Khumbu' is a trekking area, not an administrative region; the admin region is Koshi Province (district Solukhumbu). Strictly, the area south of Namche is Pharak, but trekking sources call it Khumbu. Country Nepal is correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://natureexcursion.com/blog/lukla-to-everest-base-camp-trek",
+          "quote": "We will then pass through small villages like Thadokoshi and Ghat",
+          "note": "The same page says 'The second-day trek from Lukla to Phakding introduces trekkers to the Khumbu region.' No source names Solukhumbu District for Thadokoshi itself. That part is inferred from its position between Lukla and Phakding, and Wikipedia puts Lukla in Khumbu Pasanglhamu RM, Solukhumbu District. Mapcarta (search snippet; the page itself returned 403) lists Thadokosi as a village in Koshi Province. 'Khumbu region' is used loosely, since strictly this is the Pharak area."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://nepalecoadventure.com/trip/10-days-gokyo-valley-trek/",
+          "quote": "cross the crystal clear Thadokoshi on a locally built suspension bridge. ... It is an easy 3 hour hike through the Dudhkoshi valley.",
+          "note": "This Lukla-to-Phakding day passes Thadokoshi and is described as going through the Dudh Koshi valley. Wikipedia's Phakding article also puts the trail 'in the Dudh Kosi river valley just north of Lukla'. Note that the Thadokoshi itself is a side stream that runs into the Dudh Koshi. 'Eastern Nepal' fits Koshi Province."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C05",
+    "final": {
+      "card": "C05",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary's 'KhushuuTsaidam area' on a Mini Gobi/Kharkhorin tour is the Khöshöö Tsaidam Turkic memorial site. Wikipedia's Göktürk Museum infobox lists the museum, which stands on the original monument site, as 'Khashaat, Arkhangai, Mongolia'. escapetomongolia.com says the site 'is located in Khashaat soum, Arkhangai province'."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kul_Tigin",
+          "quote": "was erected at his memorial complex of Khoshoo Tsaidam",
+          "note": "Wikipedia's Orkhon inscriptions article places the memorial installations in the Orkhon Valley, Mongolia. The Göktürk Museum article says the monuments 'were found in the Orkhon Valley Cultural Landscape'."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_Valley",
+          "quote": "Turkic memorials to Bilge Khan and Kul Tigin",
+          "note": "The Göktürk Museum article also says: 'The Bilge Qaghan and Kul Tigin monuments were found in the Orkhon Valley Cultural Landscape'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "Both were descendants of Ilterish Qaghan of the Second Turkic Khaganate",
+          "note": "The same article says the steles were erected by the Göktürks in the early 8th century, commemorating Bilge Qaghan (683–734) and Kul Tigin (684–731). That is consistent with the Second Turkic Khaganate, 8th century."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "The original text was written in the Old Turkic alphabet.",
+          "note": "The steles are bilingual, in Old Turkic and Middle Chinese, so the claim is true but incomplete."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "Both inscriptions are part of the Orkhon Valley Cultural Landscape UNESCO World Heritage Site in Mongolia.",
+          "note": "Wikipedia's Göktürk Museum article confirms this. The whc.unesco.org page could not be fetched (403)."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C05",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary's 'KhushuuTsaidam area' on a Mini Gobi/Kharkhorin tour is the Khöshöö Tsaidam Turkic memorial site. Wikipedia's Göktürk Museum infobox lists the museum, which stands on the original monument site, as 'Khashaat, Arkhangai, Mongolia'. escapetomongolia.com says the site 'is located in Khashaat soum, Arkhangai province'."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kul_Tigin",
+          "quote": "was erected at his memorial complex of Khoshoo Tsaidam",
+          "note": "Wikipedia's Orkhon inscriptions article places the memorial installations in the Orkhon Valley, Mongolia. The Göktürk Museum article says the monuments 'were found in the Orkhon Valley Cultural Landscape'."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_Valley",
+          "quote": "Turkic memorials to Bilge Khan and Kul Tigin",
+          "note": "The Göktürk Museum article also says: 'The Bilge Qaghan and Kul Tigin monuments were found in the Orkhon Valley Cultural Landscape'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "Both were descendants of Ilterish Qaghan of the Second Turkic Khaganate",
+          "note": "The same article says the steles were erected by the Göktürks in the early 8th century, commemorating Bilge Qaghan (683–734) and Kul Tigin (684–731). That is consistent with the Second Turkic Khaganate, 8th century."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "The original text was written in the Old Turkic alphabet.",
+          "note": "The steles are bilingual, in Old Turkic and Middle Chinese, so the claim is true but incomplete."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "Both inscriptions are part of the Orkhon Valley Cultural Landscape UNESCO World Heritage Site in Mongolia.",
+          "note": "Wikipedia's Göktürk Museum article confirms this. The whc.unesco.org page could not be fetched (403)."
+        }
+      ]
+    },
+    "B": {
+      "card": "C05",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Itinerary 'KhushuuTsaidam area' (Mini Gobi and Kharkhorin tour) = Khöshöö Tsaidam Turkic memorial complex, Orkhon Valley. Wikipedia (Orkhon inscriptions) gives the Kul Tigin stele at 'Göktürk Museum, Khashaat, Mongolia'; Göktürk/Khoshoo Tsaidam Museum is 'in Khashaat, Arkhangai Province, Mongolia', and the Khashaat District article (a district in Arkhangai Province) lists Tsaidam. Display name spelling matches the Wikipedia/UNESCO form 'Khöshöö Tsaidam'."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "Inscriptions together also known as the Khöshöö Tsaidam Turkic memorial complex ... which comes from Khoshoo Tsaidam archaeological site where the monuments were found.",
+          "note": "The same article puts the steles 'in the Orkhon Valley in what is modern-day Mongolia'."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "They were created in honor of two Turkic princes, Kul Tigin and his brother Bilge Qaghan.",
+          "note": "The article also says 'They commemorate the brothers Bilge Qaghan (683–734) and Kul Tigin (684–731)'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "The steles were erected by the Göktürks in the early 8th century. ... Both were descendants of Ilterish Qaghan of the Second Turkic Khaganate",
+          "note": "The 8th-century date is stated outright. The Second Turkic Khaganate link follows from the honourees, who were Second Khaganate rulers (died 731 and 734), not from a sentence that says it word for word."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "bilingual texts in Middle Chinese and Old Turkic, the latter written in the Old Turkic alphabet, carved into two memorial steles",
+          "note": "Correct, though the card leaves out that the inscriptions are bilingual and also in Chinese."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Orkhon_inscriptions",
+          "quote": "Both inscriptions are part of the Orkhon Valley Cultural Landscape UNESCO World Heritage Site in Mongolia.",
+          "note": "The UNESCO nomination file 1081rev, cited in the same article, lists 'Turkic memorials of Khöshöö Tsaidam' as a component."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C06",
+    "final": {
+      "card": "C06",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "correct",
+        "country": "correct",
+        "note": "Both itinerary sentences (Rajasthan tour, 'the surrounding Thar desert'; India tour, 'head into the Thar Desert') mean the Thar Desert. Locality null is fine for a large desert. Region 'Rajasthan, Sindh' names the main parts but leaves some out: Wikipedia says it also extends into Gujarat, Haryana and Punjab (India) and into Punjab (Pakistan). Country 'India and Pakistan' is correct (en.wikipedia.org/wiki/Thar_Desert)."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "also known as the Great Indian Desert, is an arid region in the north-western part of the Indian subcontinent",
+          "note": "Matches what the card says the place is."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "About two-thirds of the desert area lies in India, with the remainder in Pakistan. ... the majority of the desert lying in the state of Rajasthan ... Towards the west, it extends into the provinces of Sindh and Punjab in Pakistan.",
+          "note": "Quote joins sentences from the lead. 'Particularly Sindh' is fair, but Pakistani Punjab is left out. No percentage is claimed, so there are no numbers to conflict."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "The topography consists of sandy plains intercepted by eroded hills of low elevation. ... Much of the desert area is covered by sand dunes. ... causing sand dunes within the desert to shift.",
+          "note": "Wikipedia supports sandy plains, sand dunes and shifting dunes."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "The rainfall varies over the years, often with large spells of drought. ... The region has a tropical desert climate with extremely hot summers and cooler winters.",
+          "note": "Wikipedia says 'tropical desert climate', which is the same thing as 'hot desert climate'. Rainfall is low (Wikipedia: less than 500 mm a year in the lead, 100–300 mm in the climate section) and varies from year to year, so 'sparse and irregular' holds."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "The Thar Desert, also known as the Great Indian Desert",
+          "note": "Wikipedia confirms 'Great Indian Desert' as the other name. The 'Thar' / 'Thar Desert' part only restates the name and has nothing to check."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C06",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "correct",
+        "country": "correct",
+        "note": "Both itinerary sentences (Rajasthan tour, 'the surrounding Thar desert'; India tour, 'head into the Thar Desert') mean the Thar Desert. Locality null is fine for a large desert. Region 'Rajasthan, Sindh' names the main parts but leaves some out: Wikipedia says it also extends into Gujarat, Haryana and Punjab (India) and into Punjab (Pakistan). Country 'India and Pakistan' is correct (en.wikipedia.org/wiki/Thar_Desert)."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "also known as the Great Indian Desert, is an arid region in the north-western part of the Indian subcontinent",
+          "note": "Matches what the card says the place is."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "About two-thirds of the desert area lies in India, with the remainder in Pakistan. ... the majority of the desert lying in the state of Rajasthan ... Towards the west, it extends into the provinces of Sindh and Punjab in Pakistan.",
+          "note": "Quote joins sentences from the lead. 'Particularly Sindh' is fair, but Pakistani Punjab is left out. No percentage is claimed, so there are no numbers to conflict."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "The topography consists of sandy plains intercepted by eroded hills of low elevation. ... Much of the desert area is covered by sand dunes. ... causing sand dunes within the desert to shift.",
+          "note": "Wikipedia supports sandy plains, sand dunes and shifting dunes."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "The rainfall varies over the years, often with large spells of drought. ... The region has a tropical desert climate with extremely hot summers and cooler winters.",
+          "note": "Wikipedia says 'tropical desert climate', which is the same thing as 'hot desert climate'. Rainfall is low (Wikipedia: less than 500 mm a year in the lead, 100–300 mm in the climate section) and varies from year to year, so 'sparse and irregular' holds."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "The Thar Desert, also known as the Great Indian Desert",
+          "note": "Wikipedia confirms 'Great Indian Desert' as the other name. The 'Thar' / 'Thar Desert' part only restates the name and has nothing to check."
+        }
+      ]
+    },
+    "B": {
+      "card": "C06",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary sentences ('the surrounding Thar desert', 'head into the Thar Desert') both mean the Thar Desert, so the card is the same place. A null locality suits a desert spanning two countries. 'Rajasthan, Sindh' names the main region on each side, but the list is not complete: Wikipedia says the desert also extends into Pakistani Punjab ('Towards the west, it extends into the provinces of Sindh and Punjab in Pakistan'), and it also reaches parts of Gujarat, Haryana and Indian Punjab. I accepted 'Rajasthan, Sindh' as the main regions. 'India and Pakistan' is correct (https://en.wikipedia.org/wiki/Thar_Desert)."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "is an arid region in the north-western part of the Indian subcontinent stretching across India and Pakistan.",
+          "note": "Matches the definition directly."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "About two-thirds of the desert area lies in India, with the remainder in Pakistan. ... Towards the west, it extends into the provinces of Sindh and Punjab in Pakistan.",
+          "note": "The quote joins two separate sentences from the same article. The article also says 'with the majority of the desert lying in the state of Rajasthan'. The card leaves out Pakistani Punjab, but 'particularly Sindh' is not false."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.jpl.nasa.gov/images/pia11094-thar-desert/",
+          "quote": "The sand dunes of the Thar Desert constantly shift and take on new shapes.",
+          "note": "Wikipedia confirms the sandy plains: 'The topography consists of sandy plains intercepted by eroded hills of low elevation.'"
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "The region has a tropical desert climate with extremely hot summers and cooler winters. ... The rainfall varies over the years, often with large spells of drought.",
+          "note": "The quote joins two separate sentences. Wikipedia gives annual rainfall as under 500 mm, and NASA JPL says 'Only about 12 to 25 centimeters of rain fall on the desert each year'. That supports 'sparse and irregular'. Wikipedia's wording is 'tropical desert climate', which is consistent with the card's 'hot desert climate'."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thar_Desert",
+          "quote": "also known as the Great Indian Desert",
+          "note": "The alternate name is confirmed. I found no source on 'Thar' alone versus 'Thar Desert', but the claim is trivial."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C07",
+    "final": {
+      "card": "C07",
+      "identity": {
+        "same_place_as_context": "unclear",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The card describes the Kodari–Zhangmu Sino-Nepal Friendship Bridge, and its name, locality (Kodari / Zhangmu), region (Bagmati Province / Tibet Autonomous Region) and country (Nepal and China) are correct for that bridge. The Wikipedia infobox gives the locale as 'Kodari, Sindhulpalchok District, Nepal' and 'Zhangmu, Tibet Autonomous Region, China'. The context does not identify the crossing. The Rasuwagadhi–Kerung crossing also has a bridge called the 'Friendship Bridge' over the Bhotekoshi: AP and the Himalayan Times (8 Jul 2025) report floods 'destroyed the Friendship Bridge at Rasuwagadi'. That crossing has been the main alternative since the Kodari route closed after the 2015 earthquake (Wikipedia: 'The quakes closed the route'). Tatopani/Kodari reopened in 2023 to local residents only and was closed again in Aug 2026 (Kathmandu Post). So 'cross the Bhote Koshi River' and 'walk across' fit either bridge, and modern Nepal–Tibet and Kailash tours more likely use Rasuwagadhi. This makes the identity unclear, not confirmed. Labeller B is right."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Sino-Nepal_Friendship_Bridge",
+          "quote": "the only official border crossing between the two states until the 2010s ... the road bridge is connected to the Araniko Highway",
+          "note": "Two separate phrases from the same article. The infobox says it carries 'Motor vehicles, pedestrians and bicycles', and the article is in the category 'International bridges in China'. So it is an international road bridge at the Nepal–China border."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Sino-Nepal_Friendship_Bridge",
+          "quote": "linking Kodari in Sindhulpalchok District, Nepal, and Zhangmu, China",
+          "note": "The infobox gives the locale as 'Zhangmu, Tibet Autonomous Region, China'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bhote_Koshi",
+          "quote": "Bhote Koshi in Nepal and Poiqu in Tibet (both names roughly mean \"Tibetan river\")",
+          "note": "The bridge article says it is 'a bridge spanning the Bhote Koshi river'. Read together, the two articles support the claim."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Sino-Nepal_Friendship_Bridge",
+          "quote": "the road bridge is connected to the Araniko Highway ... This is part of National Road 318 and leads via Lhasa",
+          "note": "Two separate phrases from the same article. The bridge connects to the Araniko Highway on the Nepal side and to China National Road 318 on the Tibet side, which counts as the road network in Tibet."
+        }
+      ]
+    },
+    "adjudicated": true,
+    "disagreements": [
+      "identity.same_place_as_context: A=yes B=unclear"
+    ],
+    "A": {
+      "card": "C07",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The context says 'Friendship Bridge — cross the Bhote Koshi River', which matches the Sino-Nepal Friendship Bridge between Kodari and Zhangmu. Kodari is in Sindhupalchok District, which Wikipedia places in Bagmati Province ('is a part of Bagmati Province'). Zhangmu is in the Tibet Autonomous Region. Because the bridge sits on the border, the two-part locality, region and country values are all correct. One caveat: the second context (Lhasa Kailash EBC tour, day 1, 'walk across') does not name the river. Since the 2015 earthquake, many Tibet tours cross at Rasuwagadhi–Gyirong instead, so this context alone is less certain."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Sino-Nepal_Friendship_Bridge",
+          "quote": "Opened in 1964, the bridge was the only official border crossing between the two states until the 2010s. ... the road bridge is connected to the Araniko Highway",
+          "note": "Wikipedia confirms it is a road bridge and a border crossing between Nepal and China. 'International' follows from that, and Wikipedia also lists it under 'List of international bridges'."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Sino-Nepal_Friendship_Bridge",
+          "quote": "is a bridge spanning the Bhote Koshi river (a tributary of Sun Koshi), linking Kodari in Sindhulpalchok District, Nepal, and Zhangmu, China",
+          "note": "The infobox puts Zhangmu in the Tibet Autonomous Region, China."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bhote_Koshi",
+          "quote": "Bhote Koshi in Nepal and Poiqu in Tibet (both names roughly mean \"Tibetan river\")",
+          "note": "The bridge article says it spans the Bhote Koshi. The Bhote Koshi article gives Poiqu as the name on the Tibetan side."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Sino-Nepal_Friendship_Bridge",
+          "quote": "the road bridge is connected to the Araniko Highway ... This is part of National Road 318 and leads via Lhasa",
+          "note": "On the Nepal side it connects to the Araniko Highway. On the Tibet side it connects to National Road 318 / the Friendship Highway, which counts as 'the road network in Tibet'."
+        }
+      ]
+    },
+    "B": {
+      "card": "C07",
+      "identity": {
+        "same_place_as_context": "unclear",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The card describes the Kodari–Zhangmu Sino-Nepal Friendship Bridge, and its fields are correct for that bridge. Wikipedia places Kodari in Ward 2 of Bhotekoshi Rural Municipality, Sindhupalchok District, Bagmati Province, and Zhangmu in the Tibet Autonomous Region. The itinerary sentences ('Friendship Bridge — cross the Bhote Koshi River' / 'walk across') do not say which crossing they mean. The Rasuwagadhi–Kerung (Gyirong) crossing also has a 'Nepal-China Friendship Bridge' over the Bhote Koshi, and it became an international crossing for third-country nationals in 2017 (Kathmandu Post 2017-08-31; Ratopati, 'Vehicular movement through Friendship Bridge resumed in Rasuwa'). Many current Nepal–Tibet tours cross there, so the tours may mean the Rasuwagadhi bridge, not the Kodari one."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Sino-Nepal_Friendship_Bridge",
+          "quote": "the only official border crossing between the two states until the 2010s ... the road bridge is connected to the Araniko Highway",
+          "note": "Two separate phrases from the same article, joined here with an ellipsis. The infobox says it carries motor vehicles, pedestrians and bicycles, so it is a road bridge at the Nepal–China border."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Sino-Nepal_Friendship_Bridge",
+          "quote": "linking Kodari in Sindhulpalchok District, Nepal, and Zhangmu, China.",
+          "note": "The infobox gives the locale as 'Zhangmu, Tibet Autonomous Region, China'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bhote_Koshi",
+          "quote": "Bhote Koshi in Nepal and Poiqu in Tibet (both names roughly mean \"Tibetan river\")",
+          "note": "The bridge article states that it is 'a bridge spanning the Bhote Koshi river'."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Sino-Nepal_Friendship_Bridge",
+          "quote": "the road bridge is connected to the Araniko Highway ... This is part of National Road 318 and leads via Lhasa, the capital of the Tibet Autonomous Region, to Shanghai.",
+          "note": "Two separate phrases from the same article, joined here with an ellipsis. The Kodari article also says Kodari is 'the northern terminus of Nepal's Araniko Highway (NH34)'."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C08",
+    "final": {
+      "card": "C08",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary sentence means Old Goa (Velha Goa), the former Portuguese capital on the south bank of the Mandovi in Tiswadi (Ilhas) taluka, North Goa district. The card's locality 'Goa Velha' is wrong because Goa Velha is a separate village a few miles away. Wikipedia Old Goa: 'Velha Goa should not be confused with Goa Velha lying a few miles away.' The naming_note claim that 'Goa Velha' is another name for the place is wrong for the same reason. The locality should be Old Goa itself, or Tiswadi taluka. Region Goa and country India are correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Old_Goa",
+          "quote": "Old Goa (Originally 'Goa' or 'The city of Goa') was a historic city situated on the southern bank of the River Mandovi",
+          "note": "The infobox gives Goa as the state and North Goa as the district."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Old_Goa",
+          "quote": "the administrative seat of Portuguese India",
+          "note": "The article also says it 'became the capital of the Portuguese East Indies'. The capital moved to Panjim in 1843 (the viceroy moved in 1759), so Old Goa was not the capital for the whole Portuguese period. The card's wording is loose but not contradicted."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Churches_and_convents_of_Goa",
+          "quote": "The great Jesuit monument that survived is the Basilica of Bom Jesus, begun in 1594.",
+          "note": "The same article covers the Se Cathedral as part of the Old Goa ensemble. The Old Goa article names the 'Se Cathedral' as 'the seat of the Archbishop of Goa'."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Churches_and_convents_of_Goa",
+          "quote": "Churches and Convents of Goa is the name given by UNESCO to a set of religious monuments located in Goa Velha.",
+          "note": "This is UNESCO property no. 234 (whc.unesco.org/en/list/234), inscribed in 1986. Wikipedia's 'Goa Velha' here uses the Portuguese name for Old Goa."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Churches_and_convents_of_Goa",
+          "quote": "This small church, insufficient to meet the faithful, was rebuilt from 1562.",
+          "note": "This sentence is about the Se Cathedral; its facade was completed in 1631. Other dates in the article: Bom Jesus begun 1594 and consecrated 1605, Our Lady of the Rosary 1543, the Augustinian church 1597, St Francis church rebuilt from 1661, and St Cajetan built by 1665. Together these support 16th-17th century dates."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C08",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary sentence means Old Goa (Velha Goa), the former Portuguese capital on the south bank of the Mandovi in Tiswadi (Ilhas) taluka, North Goa district. The card's locality 'Goa Velha' is wrong because Goa Velha is a separate village a few miles away. Wikipedia Old Goa: 'Velha Goa should not be confused with Goa Velha lying a few miles away.' The naming_note claim that 'Goa Velha' is another name for the place is wrong for the same reason. The locality should be Old Goa itself, or Tiswadi taluka. Region Goa and country India are correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Old_Goa",
+          "quote": "Old Goa (Originally 'Goa' or 'The city of Goa') was a historic city situated on the southern bank of the River Mandovi",
+          "note": "The infobox gives Goa as the state and North Goa as the district."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Old_Goa",
+          "quote": "the administrative seat of Portuguese India",
+          "note": "The article also says it 'became the capital of the Portuguese East Indies'. The capital moved to Panjim in 1843 (the viceroy moved in 1759), so Old Goa was not the capital for the whole Portuguese period. The card's wording is loose but not contradicted."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Churches_and_convents_of_Goa",
+          "quote": "The great Jesuit monument that survived is the Basilica of Bom Jesus, begun in 1594.",
+          "note": "The same article covers the Se Cathedral as part of the Old Goa ensemble. The Old Goa article names the 'Se Cathedral' as 'the seat of the Archbishop of Goa'."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Churches_and_convents_of_Goa",
+          "quote": "Churches and Convents of Goa is the name given by UNESCO to a set of religious monuments located in Goa Velha.",
+          "note": "This is UNESCO property no. 234 (whc.unesco.org/en/list/234), inscribed in 1986. Wikipedia's 'Goa Velha' here uses the Portuguese name for Old Goa."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Churches_and_convents_of_Goa",
+          "quote": "This small church, insufficient to meet the faithful, was rebuilt from 1562.",
+          "note": "This sentence is about the Se Cathedral; its facade was completed in 1631. Other dates in the article: Bom Jesus begun 1594 and consecrated 1605, Our Lady of the Rosary 1543, the Augustinian church 1597, St Francis church rebuilt from 1661, and St Cajetan built by 1665. Together these support 16th-17th century dates."
+        }
+      ]
+    },
+    "B": {
+      "card": "C08",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "correct",
+        "country": "correct",
+        "note": "The card is the right place: Old Goa is the historic city whose colonial-era churches the itinerary means. The locality 'Goa Velha' is wrong. Goa Velha is a separate small town next to Pilar in Ilhas, North Goa (the old Govapuri site). Wikipedia's Goa Velha article says it 'should not be confused with the World Heritage Site of the historical city of Old Goa'. The Old Goa article says 'Velha Goa should not be confused with Goa Velha lying a few miles away.' The locality should be Old Goa itself, also called Velha Goa (India Post / ASI) or Se-Old Goa (village panchayat), in Tiswadi (Ilhas) taluka, North Goa district. The naming_note is wrong for the same reason: 'Goa Velha' is not another name for Old Goa, though 'Velha Goa' is. One loose Wikipedia sentence (Churches and convents of Goa) does write 'Goa Velha (or Old Goa)', but the dedicated articles on both places clearly separate them. Region Goa (state) and country India are correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Old_Goa",
+          "quote": "Old Goa (Originally 'Goa' or 'The city of Goa') was a historic city situated on the southern bank of the River Mandovi, on the island of Tiswadi.",
+          "note": "Wikipedia says 'historic city' rather than 'settlement'. The infobox places it in North Goa district, Goa state, India."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Old_Goa",
+          "quote": "The city was captured by the Portuguese and was under Portuguese rule from 1510 as the administrative seat of Portuguese India.",
+          "note": "Mostly right. It was the capital from 1510 until the viceroy left for Panjim in 1759, and it lost capital status officially in 1843. It was not the capital for the whole period of Portuguese rule, which lasted until 1961, so 'during the period' is slightly loose but not false."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Old_Goa",
+          "quote": "Today, the only surviving churches include the Se Cathedral (the seat of the Archbishop of Goa), the Church and Convent of St. Francis of Assisi, ... and, notably, the Basilica of Bom Jesus",
+          "note": "Both the Basilica of Bom Jesus and the Se Cathedral are in Old Goa."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Churches_and_convents_of_Goa",
+          "quote": "Churches and Convents of Goa is the name given by UNESCO to a set of religious monuments located in Goa Velha (or Old Goa), in the state of Goa, India, which were declared a World Heritage Site in 1986.",
+          "note": "The UNESCO property name matches exactly (whc.unesco.org/en/list/234 returned 403, so the quote comes from Wikipedia, which cites UNESCO). Inscribed in 1986."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Churches_and_convents_of_Goa",
+          "quote": "The great Jesuit monument that survived is the Basilica of Bom Jesus, begun in 1594 and consecrated in 1605",
+          "note": "The same article dates the other main buildings to the 16th and 17th centuries too: the Se Cathedral was rebuilt from 1562, its body finished in 1619 and its facade in 1631; the Augustinian church dates from 1597; St Cajetan from 1665. 'Many ... 16th and 17th centuries' fits these dates."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C09",
+    "final": {
+      "card": "C09",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary sentences ('Olango Island — travel by boat', '— snorkel') mean the main island of the Olango Island Group off Mactan, in Cebu. The island group is split between Lapu-Lapu City and Cordova, but every barangay on Olango Island itself belongs to Lapu-Lapu, so locality = Lapu-Lapu City is correct. Region Cebu (province) and country Philippines are correct. Source: https://en.wikipedia.org/wiki/Olango_Island_Group (Administration section: 'Lapu-Lapu, includes 10 barangays: Baring, Caw-oy, Sabang, Santa Rosa, Talima, Tingo, Tungasan, San Vicente (all on Olango island)')."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island_Group",
+          "quote": "It comprises Olango island and 6 satellite islets ... It is divided under the jurisdiction of the city of Lapu-Lapu and the municipality of Cordova, Cebu.",
+          "note": "Wikipedia's 'Olango Island' title redirects to 'Olango Island Group'. Infobox: location = Cebu, major island = Olango Island."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island_Group",
+          "quote": "Located 5 kilometres east of Mactan Island ... To the west is the Hilutangan Channel (which separates it from Mactan Island)",
+          "note": "Wikipedia spells it 'Hilutangan Channel', with 'Gilutungan Channel' as an alternative (https://en.wikipedia.org/wiki/Hilutangan_Channel). The card's 'Hilutungan' is a common variant spelling of the same channel. The fact is right, but the spelling differs from the main source."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island_Group",
+          "quote": "Olango Island is a diverse coastal ecosystem consisting of extensive coralline sandflats, mangroves, seagrass beds ... Then President Corazon Aquino declared the 1,020 hectares tidal flats in Olango a protected area",
+          "note": "The same article says the sanctuary 'supports the largest concentration of migratory birds found so far in the Philippines' and is 'the Philippines' first wetland of international importance for waterfowl'. The waterbird link to the tidal-flat and mangrove habitats is therefore supported."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island_Group",
+          "quote": "It was included on the Ramsar List of Wetlands of International Importance on July 1, 1994.",
+          "note": "The infobox gives the Ramsar official name as 'Olango Island Wildlife Sanctuary', designated July 1, 1994, Ramsar site no. 656. The Ramsar RSIS page (rsis.ramsar.org/ris/656) could not be fetched (connection refused)."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C09",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary sentences ('Olango Island — travel by boat', '— snorkel') mean the main island of the Olango Island Group off Mactan, in Cebu. The island group is split between Lapu-Lapu City and Cordova, but every barangay on Olango Island itself belongs to Lapu-Lapu, so locality = Lapu-Lapu City is correct. Region Cebu (province) and country Philippines are correct. Source: https://en.wikipedia.org/wiki/Olango_Island_Group (Administration section: 'Lapu-Lapu, includes 10 barangays: Baring, Caw-oy, Sabang, Santa Rosa, Talima, Tingo, Tungasan, San Vicente (all on Olango island)')."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island_Group",
+          "quote": "It comprises Olango island and 6 satellite islets ... It is divided under the jurisdiction of the city of Lapu-Lapu and the municipality of Cordova, Cebu.",
+          "note": "Wikipedia's 'Olango Island' title redirects to 'Olango Island Group'. Infobox: location = Cebu, major island = Olango Island."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island_Group",
+          "quote": "Located 5 kilometres east of Mactan Island ... To the west is the Hilutangan Channel (which separates it from Mactan Island)",
+          "note": "Wikipedia spells it 'Hilutangan Channel', with 'Gilutungan Channel' as an alternative (https://en.wikipedia.org/wiki/Hilutangan_Channel). The card's 'Hilutungan' is a common variant spelling of the same channel. The fact is right, but the spelling differs from the main source."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island_Group",
+          "quote": "Olango Island is a diverse coastal ecosystem consisting of extensive coralline sandflats, mangroves, seagrass beds ... Then President Corazon Aquino declared the 1,020 hectares tidal flats in Olango a protected area",
+          "note": "The same article says the sanctuary 'supports the largest concentration of migratory birds found so far in the Philippines' and is 'the Philippines' first wetland of international importance for waterfowl'. The waterbird link to the tidal-flat and mangrove habitats is therefore supported."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island_Group",
+          "quote": "It was included on the Ramsar List of Wetlands of International Importance on July 1, 1994.",
+          "note": "The infobox gives the Ramsar official name as 'Olango Island Wildlife Sanctuary', designated July 1, 1994, Ramsar site no. 656. The Ramsar RSIS page (rsis.ramsar.org/ris/656) could not be fetched (connection refused)."
+        }
+      ]
+    },
+    "B": {
+      "card": "C09",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary's 'Olango Island, travel by boat / snorkel' on a Cebu tour is Olango Island off Mactan, Cebu. Wikipedia's Olango Island Group article lists all the barangays on Olango Island itself under Lapu-Lapu City. Cordova administers only Gilutongan barangay (Gilutongan and Nalusuan islets), so Lapu-Lapu City is the correct locality. Region Cebu and country Philippines are correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island",
+          "quote": "It comprises Olango island and 6 satellite islets namely: Caubian, Camungi, Caohagan, Gilutongan, Nalusuan, Pangan-an, and Sulpa.",
+          "note": "The same article calls Olango 'a major tourist destination in Cebu', and the Olango Island Group article places the group in Cebu."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island",
+          "quote": "It lies 5 kilometers (3.1 mi) east of Mactan ... To the west is the Hilutangan Channel (which separates it from Mactan Island)",
+          "note": "Wikipedia spells the channel 'Hilutangan' and the card spells it 'Hilutungan'. Both spellings are used for the same channel, so this is a spelling difference only."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island",
+          "quote": "At the center of these islands is a vast tidal flat ... The island's mangroves are most extensive in the Cebu province ... The sanctuary supports the largest concentration of migratory birds",
+          "note": "Search results summarising the official Ramsar record (RIS 656) say the site is one of the most important in the Philippines for migratory waterbirds and shorebirds. The Ramsar page itself could not be opened (connection refused)."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Olango_Island",
+          "quote": "The entire area is the first declared Ramsar Wetland Site in the Philippines, as recognized in 1994.",
+          "note": "Search results summarising the official Ramsar record https://rsis.ramsar.org/ris/656 give the name 'Olango Island Wildlife Sanctuary' and a designation date of 1 July 1994. The record could not be opened directly to quote it, but the year matches."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C10",
+    "final": {
+      "card": "C10",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "correct",
+        "country": "correct",
+        "note": "The tour is 'Sikkim - Beneath Kangchenjunga Trek' and both itinerary lines are about viewing the Kangchenjunga panorama, so this is the same mountain. A massif has no single town, so a null locality is fine. Sikkim is right for the Indian side, which is the side this tour is on. The Nepali side is in Koshi Province (Taplejung District), which the card does not mention. Wikipedia: 'It lies in the border region between Koshi Province of Nepal and Sikkim state of India.' The country 'India and Nepal' is correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.britannica.com/place/Kanchenjunga",
+          "quote": "It is situated in the eastern Himalayas on the border between Sikkim state, northeastern India, and eastern Nepal",
+          "note": "Fetching Britannica directly returned 403, so this wording comes from the search-result snippet of that page. Wikipedia (https://en.wikipedia.org/wiki/Kangchenjunga) separately confirms the 'massif' part: 'Kangchenjunga and its satellite peaks form a huge mountain massif.'"
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "Its summit lies at 8,586 m (28,169 ft) ... is the third-highest mountain in the world.",
+          "note": "The height (8,586 m) and the rank (third-highest) both match. Britannica gives the same figures: 28,169 feet (8,586 metres), world's third highest."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "It lies in the border region between Koshi Province of Nepal and Sikkim state of India.",
+          "note": "Britannica says the same: on the border between Sikkim state and eastern Nepal."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://ecoheritage.cpreec.org/mount-kangchenjunga/",
+          "quote": "It has five peaks, four of them over 8450m. ... Kanchenjunga literally means\" the five treasures of snow\".",
+          "note": "Wikipedia gives the meaning as 'the five treasures of the high snow' and refers to 'the massif's five highest peaks'. The American Alpine Club says that, strictly, the mountain culminates in three peaks, and that some experts count five. 'Commonly interpreted' is fair wording for this."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "It was first climbed on 25 May 1955 by Joe Brown and George Band.",
+          "note": "The names and the year (1955) match."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C10",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "correct",
+        "country": "correct",
+        "note": "The tour is 'Sikkim - Beneath Kangchenjunga Trek' and both itinerary lines are about viewing the Kangchenjunga panorama, so this is the same mountain. A massif has no single town, so a null locality is fine. Sikkim is right for the Indian side, which is the side this tour is on. The Nepali side is in Koshi Province (Taplejung District), which the card does not mention. Wikipedia: 'It lies in the border region between Koshi Province of Nepal and Sikkim state of India.' The country 'India and Nepal' is correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.britannica.com/place/Kanchenjunga",
+          "quote": "It is situated in the eastern Himalayas on the border between Sikkim state, northeastern India, and eastern Nepal",
+          "note": "Fetching Britannica directly returned 403, so this wording comes from the search-result snippet of that page. Wikipedia (https://en.wikipedia.org/wiki/Kangchenjunga) separately confirms the 'massif' part: 'Kangchenjunga and its satellite peaks form a huge mountain massif.'"
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "Its summit lies at 8,586 m (28,169 ft) ... is the third-highest mountain in the world.",
+          "note": "The height (8,586 m) and the rank (third-highest) both match. Britannica gives the same figures: 28,169 feet (8,586 metres), world's third highest."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "It lies in the border region between Koshi Province of Nepal and Sikkim state of India.",
+          "note": "Britannica says the same: on the border between Sikkim state and eastern Nepal."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://ecoheritage.cpreec.org/mount-kangchenjunga/",
+          "quote": "It has five peaks, four of them over 8450m. ... Kanchenjunga literally means\" the five treasures of snow\".",
+          "note": "Wikipedia gives the meaning as 'the five treasures of the high snow' and refers to 'the massif's five highest peaks'. The American Alpine Club says that, strictly, the mountain culminates in three peaks, and that some experts count five. 'Commonly interpreted' is fair wording for this."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "It was first climbed on 25 May 1955 by Joe Brown and George Band.",
+          "note": "The names and the year (1955) match."
+        }
+      ]
+    },
+    "B": {
+      "card": "C10",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "correct",
+        "country": "correct",
+        "note": "Itinerary 'Sikkim - Beneath Kangchenjunga Trek' views of Kangchenjunga = the mountain on the Nepal-Sikkim border. Mountain on a border, so locality null is fine. Region 'Sikkim' is right for the Indian side and the tour context but leaves out Nepal's Koshi Province (Taplejung District). Wikipedia: 'It lies in the border region between Koshi Province of Nepal and Sikkim state of India'. Country 'India and Nepal' matches the border location."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.britannica.com/place/Kanchenjunga",
+          "quote": "situated in the eastern Himalayas on the border between Sikkim state, northeastern India, and eastern Nepal",
+          "note": "Britannica returned 403 to direct fetch; quote taken from the search-result excerpt. Wikipedia also says 'Kangchenjunga and its satellite peaks form a huge mountain massif.'"
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "Kangchenjunga ... is the third-highest mountain in the world. Its summit lies at 8586 m in a section of the Himalayas",
+          "note": "Both 8,586 m and the third-highest rank match."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "It lies in the border region between Koshi Province of Nepal and Sikkim state of India, with the West and Kangbachen peaks located in Nepal's Taplejung District and the Main, Central and South peaks directly on the border.",
+          "note": "Matches."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "explained the local name ... as meaning \"the five treasures of the high snow\"; The massif's five highest peaks are listed in the table",
+          "note": "Wikipedia gives 'five treasures of the high snow' and WorldAtlas gives 'Five Treasuries of the Great Snow'. The card's 'five treasures of snow' is a fair short form. Five main peaks: WorldAtlas says 'Three of its five main peaks are located in the border...'"
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kangchenjunga",
+          "quote": "It was first climbed on 25 May 1955 by Joe Brown and George Band, who were part of the 1955 British Kangchenjunga expedition.",
+          "note": "Year 1955 and both climbers match. Wikipedia adds that they stopped just short of the true summit by agreement, but it still counts the climb as the first ascent."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C11",
+    "final": {
+      "card": "C11",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "wrong",
+        "country": "correct",
+        "note": "In the context (Naadam in Khuvsgul tour, day 8, 'Bulgan province - drive towards') the itinerary means Bulgan aimag, the same place as the card. A null locality is fine because the card is a whole province. 'Northern Mongolia' is a loose geographic description, not an administrative region. The province is itself the first-level unit, and Mongolia's official regional grouping puts Bulgan in the Khangai region. So the region should be null or Khangai, not 'Northern Mongolia'. Country Mongolia is correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "is one of the 21 provinces of Mongolia, located in the north of the country.",
+          "note": "Wikipedia names the article 'Bulgan Province' and describes it as a province, or aimag."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "Its capital is also named Bulgan.",
+          "note": "mongolia-guide.com also gives Bulgan as the aimag centre."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "is one of the 21 provinces of Mongolia, located in the north of the country.",
+          "note": "Sources say 'north' and border with Russia (Buryatia), not literally 'north-central'. The province lies at roughly the middle of Mongolia's east-west span, so 'north-central' agrees with the sources but is not quoted word for word. This is a soft support."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "The main rivers are the Orkhon and the Selenge.",
+          "note": "Tributaries confirmed by https://en.wikipedia.org/wiki/Khanui_River: 'ends in the Khutag-Ondor sum of Bulgan aimag where it discharges into Selenga River.' The Orkhon is itself a Selenge tributary."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "The north of the aimag is characterized by alpine forests, gradually blending into the arid steppe plains of the central Mongolian highland.",
+          "note": "mongolia-guide.com agrees: 'the south is dry grassland and the north is green and has enough forest to support a small timber industry.' blueprint.nomadsland.travel mentions 'northern forest-steppe'."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C11",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "wrong",
+        "country": "correct",
+        "note": "In the context (Naadam in Khuvsgul tour, day 8, 'Bulgan province - drive towards') the itinerary means Bulgan aimag, the same place as the card. A null locality is fine because the card is a whole province. 'Northern Mongolia' is a loose geographic description, not an administrative region. The province is itself the first-level unit, and Mongolia's official regional grouping puts Bulgan in the Khangai region. So the region should be null or Khangai, not 'Northern Mongolia'. Country Mongolia is correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "is one of the 21 provinces of Mongolia, located in the north of the country.",
+          "note": "Wikipedia names the article 'Bulgan Province' and describes it as a province, or aimag."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "Its capital is also named Bulgan.",
+          "note": "mongolia-guide.com also gives Bulgan as the aimag centre."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "is one of the 21 provinces of Mongolia, located in the north of the country.",
+          "note": "Sources say 'north' and border with Russia (Buryatia), not literally 'north-central'. The province lies at roughly the middle of Mongolia's east-west span, so 'north-central' agrees with the sources but is not quoted word for word. This is a soft support."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "The main rivers are the Orkhon and the Selenge.",
+          "note": "Tributaries confirmed by https://en.wikipedia.org/wiki/Khanui_River: 'ends in the Khutag-Ondor sum of Bulgan aimag where it discharges into Selenga River.' The Orkhon is itself a Selenge tributary."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "The north of the aimag is characterized by alpine forests, gradually blending into the arid steppe plains of the central Mongolian highland.",
+          "note": "mongolia-guide.com agrees: 'the south is dry grassland and the north is green and has enough forest to support a small timber industry.' blueprint.nomadsland.travel mentions 'northern forest-steppe'."
+        }
+      ]
+    },
+    "B": {
+      "card": "C11",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "null_ok",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The itinerary says 'Bulgan province — drive towards' on a Khuvsgul Naadam tour, so it means Bulgan aimag, which is right next to Khövsgöl. Locality null is fine because the place is a whole province. The region 'Northern Mongolia' is an informal geographic label, not an administrative region. The place is itself a first-level province. If a higher-level region is wanted, Mongolia's statistical grouping puts Bulgan in the Khangai region, though I did not confirm that with a fetched source."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "is one of the 21 provinces of Mongolia, located in the north of the country, bordering Russia.",
+          "note": "Wikipedia calls it one of Mongolia's 21 provinces, and its lead names them as aimags. mongolia-guide.com also uses 'Bulgan aimag'."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "Its capital is also named Bulgan.",
+          "note": ""
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://admin.aimagindex.mn/en/2022/01/27/%D0%B1%D1%83%D0%BB%D0%B3%D0%B0%D0%BD/",
+          "quote": "Located in central-northern Mongolia, the province share a 290km border with Khuvsgul Province",
+          "note": "Wikipedia only says 'located in the north of the country'. The provincial index site says 'central-northern', which matches 'north-central'."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Bulgan_Province",
+          "quote": "The main rivers are the Orkhon and the Selenge.",
+          "note": "The Orkhon is a tributary of the Selenge, so 'Selenge and its tributaries' fits. mongolia-guide.com adds: 'Mongolia's largest river, the Selenge Gol, crosses the aimag's north'."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://mongolia-guide.com/destination/bulgan",
+          "quote": "the south is dry grassland and the north is green and has enough forest to support a small timber industry",
+          "note": "Wikipedia agrees: the north has 'alpine forests, gradually blending into the arid steppe plains of the central Mongolian highland'. mongolia-guide.com puts the aimag in the 'Khangai mountain forest steppe zone'."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C12",
+    "final": {
+      "card": "C12",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "In the 'Namhae Island Adventure' tour, 'Namhae Island' means Namhaedo, the principal island of Namhae County in South Gyeongsang Province, South Korea. The island makes up most of Namhae County, so 'Namhae County' is the right locality."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Namhae_Island",
+          "quote": "is the principal island of Namhae County, on the southern coast of South Gyeongsang Province",
+          "note": "Wikipedia says the island is on the southern coast of South Gyeongsang. 'Off the southern coast of the Korean Peninsula' matches this. EncyKorea also says its southern side faces the Korea Strait (남쪽은 대한해협에 면하고 있다)."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://encykorea.aks.ac.kr/Article/E0012280",
+          "quote": "경상남도 남해군에 있는 섬.",
+          "note": "The quote means 'an island in Namhae County, South Gyeongsang Province'. Wikipedia agrees."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://encykorea.aks.ac.kr/Article/E0012280",
+          "quote": "산세가 매우 험준하고 금산(錦山, 701m) · 원산(猿山, 627m) · 망운산(望雲山, 785m) 등의 높은 산이 있다. ... 해안선 출입이 심하여 어항이 많고",
+          "note": "The quote says the mountains are very steep and the coastline is heavily indented. The source does not use the word 'bays', but a heavily indented coastline (해안선 출입이 심하다) means many inlets and bays, so the claim holds."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.koreatimes.co.kr/southkorea/20111202/namhae-an-island-famous-for-being-lesser-known",
+          "quote": "Terraced rice paddies -- 108 steps held together with stones and soil",
+          "note": "The Korea Times (2011) describes the terraced paddies at Daraengi (Gacheon Darangi) Village on Namhae, which run down to the shoreline. This fits 'parts of the island'. EncyKorea adds that the island has little flat farmland."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C12",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "In the 'Namhae Island Adventure' tour, 'Namhae Island' means Namhaedo, the principal island of Namhae County in South Gyeongsang Province, South Korea. The island makes up most of Namhae County, so 'Namhae County' is the right locality."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Namhae_Island",
+          "quote": "is the principal island of Namhae County, on the southern coast of South Gyeongsang Province",
+          "note": "Wikipedia says the island is on the southern coast of South Gyeongsang. 'Off the southern coast of the Korean Peninsula' matches this. EncyKorea also says its southern side faces the Korea Strait (남쪽은 대한해협에 면하고 있다)."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://encykorea.aks.ac.kr/Article/E0012280",
+          "quote": "경상남도 남해군에 있는 섬.",
+          "note": "The quote means 'an island in Namhae County, South Gyeongsang Province'. Wikipedia agrees."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://encykorea.aks.ac.kr/Article/E0012280",
+          "quote": "산세가 매우 험준하고 금산(錦山, 701m) · 원산(猿山, 627m) · 망운산(望雲山, 785m) 등의 높은 산이 있다. ... 해안선 출입이 심하여 어항이 많고",
+          "note": "The quote says the mountains are very steep and the coastline is heavily indented. The source does not use the word 'bays', but a heavily indented coastline (해안선 출입이 심하다) means many inlets and bays, so the claim holds."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.koreatimes.co.kr/southkorea/20111202/namhae-an-island-famous-for-being-lesser-known",
+          "quote": "Terraced rice paddies -- 108 steps held together with stones and soil",
+          "note": "The Korea Times (2011) describes the terraced paddies at Daraengi (Gacheon Darangi) Village on Namhae, which run down to the shoreline. This fits 'parts of the island'. EncyKorea adds that the island has little flat farmland."
+        }
+      ]
+    },
+    "B": {
+      "card": "C12",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Itinerary 'Namhae Island Adventure' day 1 'depart for Namhae Island' = Namhaedo, principal island of Namhae County, South Gyeongsang, South Korea (Wikipedia, Encyclopedia of Korean Culture). Locality 'Namhae County' is the county the island forms with Changseondo; acceptable."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Namhaedo",
+          "quote": "Namhaedo or Namhae Island is the principal island of Namhae County, on the southern coast of South Gyeongsang Province, South Korea.",
+          "note": "Wikipedia says southern coast of South Gyeongsang Province; card's 'southern coast of the Korean Peninsula' is consistent."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Namhaedo",
+          "quote": "Namhaedo or Namhae Island is the principal island of Namhae County, on the southern coast of South Gyeongsang Province, South Korea.",
+          "note": ""
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://encykorea.aks.ac.kr/Article/E0012280",
+          "quote": "산지가 많고 평야가 협소하여 농경지가 넓게 발달하지 못하였다. ... 해안선 출입이 심하여 어항이 많고, 반농반어의 가구가 많다.",
+          "note": "Encyclopedia of Korean Culture: many mountains, steep terrain ('산세가 매우 험준하고'), heavily indented coastline. Bays are not described generically; only Yeosu Bay to the west is named, but 'indented coastline' implies inlets."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.koreatimes.co.kr/southkorea/20111202/namhae-an-island-famous-for-being-lesser-known",
+          "quote": "Terraced rice paddies -- 108 steps held together with stones and soil",
+          "note": "Korea Times article on Namhae describes the terraced paddies (Daraengi/Gacheon village). The card's wording 'parts of the island' is suitably hedged."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C13",
+    "final": {
+      "card": "C13",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "correct",
+        "country": "correct",
+        "note": "Itinerary (Machame route day 5, 'continue up to Barafu hut', 'complete the Southern Circuit') means Barafu Camp/Hut, the summit base camp on Kibo's south-east slope, so it is the same place. Region Kilimanjaro and country Tanzania are correct. Kilimanjaro National Park is in Kilimanjaro Region (https://en.wikipedia.org/wiki/Kilimanjaro_National_Park). Locality 'Moshi' is wrong as a town: the camp is a remote high-altitude site inside the national park, not in Moshi town or municipality. At most it falls in Moshi Rural District, whose Wikipedia page lists Kilimanjaro National Park and has Moshi as capital, but I found no source placing Barafu in that district. Null, as for a mountain or park site, would have been appropriate."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://altezzatravel.com/articles/barafu-camp",
+          "quote": "Barafu Camp is situated on the southern slope of Mt Kilimanjaro.",
+          "note": "Other operator pages say it is on the south-east slope of the Kibo cone, which is consistent."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://footslopestours.com/accommodations/barafu-camp",
+          "quote": "an elevation of approximately 4,673 meters (15,331 feet) above sea level",
+          "note": "Altezza Travel gives 4,673 m (15,330 ft). Other sources differ (4,550 / 4,600 / 4,640 / 4,662 / 4,680 m), but the card hedges with 'approximately'. 4,673 m converts to 15,331 ft."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kilimanjaro_National_Park",
+          "quote": "the whole of Mount Kilimanjaro above the tree line",
+          "note": "The park covers the whole mountain above the tree line (about 2,700 m), so a camp at about 4,673 m is inside it. The same article places the park in Tanzania's Kilimanjaro Region. No single source names Barafu together with the park, so this verdict rests on that inference."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://footslopestours.com/accommodations/barafu-camp",
+          "quote": "sits in a harsh alpine desert zone on Mount Kilimanjaro ... mostly rocky terrain, volcanic ash, and loose scree rather than lush greenery",
+          "note": "Altezza Travel also says: 'This area is considered an Afro-alpine Desert Zone, largely devoid of flora or fauna.'"
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://altezzatravel.com/articles/barafu-camp",
+          "quote": "In Swahili, the camp's name translates to \"ice.\"",
+          "note": "Matches the standard Swahili word barafu, meaning ice."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C13",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "correct",
+        "country": "correct",
+        "note": "Itinerary (Machame route day 5, 'continue up to Barafu hut', 'complete the Southern Circuit') means Barafu Camp/Hut, the summit base camp on Kibo's south-east slope, so it is the same place. Region Kilimanjaro and country Tanzania are correct. Kilimanjaro National Park is in Kilimanjaro Region (https://en.wikipedia.org/wiki/Kilimanjaro_National_Park). Locality 'Moshi' is wrong as a town: the camp is a remote high-altitude site inside the national park, not in Moshi town or municipality. At most it falls in Moshi Rural District, whose Wikipedia page lists Kilimanjaro National Park and has Moshi as capital, but I found no source placing Barafu in that district. Null, as for a mountain or park site, would have been appropriate."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://altezzatravel.com/articles/barafu-camp",
+          "quote": "Barafu Camp is situated on the southern slope of Mt Kilimanjaro.",
+          "note": "Other operator pages say it is on the south-east slope of the Kibo cone, which is consistent."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://footslopestours.com/accommodations/barafu-camp",
+          "quote": "an elevation of approximately 4,673 meters (15,331 feet) above sea level",
+          "note": "Altezza Travel gives 4,673 m (15,330 ft). Other sources differ (4,550 / 4,600 / 4,640 / 4,662 / 4,680 m), but the card hedges with 'approximately'. 4,673 m converts to 15,331 ft."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kilimanjaro_National_Park",
+          "quote": "the whole of Mount Kilimanjaro above the tree line",
+          "note": "The park covers the whole mountain above the tree line (about 2,700 m), so a camp at about 4,673 m is inside it. The same article places the park in Tanzania's Kilimanjaro Region. No single source names Barafu together with the park, so this verdict rests on that inference."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://footslopestours.com/accommodations/barafu-camp",
+          "quote": "sits in a harsh alpine desert zone on Mount Kilimanjaro ... mostly rocky terrain, volcanic ash, and loose scree rather than lush greenery",
+          "note": "Altezza Travel also says: 'This area is considered an Afro-alpine Desert Zone, largely devoid of flora or fauna.'"
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://altezzatravel.com/articles/barafu-camp",
+          "quote": "In Swahili, the camp's name translates to \"ice.\"",
+          "note": "Matches the standard Swahili word barafu, meaning ice."
+        }
+      ]
+    },
+    "B": {
+      "card": "C13",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary's 'Barafu hut' on day 5 of the Machame Route is Barafu Camp (also called Barafu Hut), the last camp before the summit on Kilimanjaro's southern slope. Region (Kilimanjaro) and country (Tanzania) are right. The locality 'Moshi' is wrong: the camp sits on the upper slopes of Kibo inside Kilimanjaro National Park, about 40 km from Moshi town. Wikipedia only says the park is 'near' Moshi. At most the camp falls in the rural district around Moshi, not in the town or municipality. A null locality, or the national park, would have been acceptable."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://altezzatravel.com/articles/barafu-camp",
+          "quote": "Barafu Camp is situated on the southern slope of Mt Kilimanjaro, at the southeastern base of the volcanic cone Kibo",
+          "note": "The southern slope location is stated directly. The camp's altitude, about 4,673 m, confirms it is a high-altitude camp."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://footslopestours.com/accommodations/barafu-camp",
+          "quote": "located at an elevation of approximately 4,673 meters (15,331 feet) above sea level",
+          "note": "Both numbers match exactly. Altezza gives 4,673 m (15,330 ft), a rounding difference. Some operators give other figures (4,550, 4,640 or 4,750 m), but 4,673 m is the most widely cited value. All sources found are tour operators, not TANAPA itself."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Kilimanjaro_National_Park",
+          "quote": "situated about 300 kilometres (190 mi) south of the equator in the Kilimanjaro Region, Tanzania, near the region of Moshi.",
+          "note": "This confirms the park is in Kilimanjaro Region. That the camp is inside the park follows from its position high on Kibo: Altezza describes the descent route continuing 'to the exit of Kilimanjaro National Park at Mweka Gate'."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://footslopestours.com/accommodations/barafu-camp",
+          "quote": "Barafu Camp sits in a harsh alpine desert zone on Mount Kilimanjaro ... vegetation is extremely sparse ... Rocky and narrow, making it difficult to find good spots for pitching tents",
+          "note": "The same page states rocky terrain, sparse vegetation and the alpine desert zone. Altezza also says: 'Afro-alpine Desert Zone, largely devoid of flora or fauna.'"
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://altezzatravel.com/articles/barafu-camp",
+          "quote": "In Swahili, the camp's name translates to \"ice.\"",
+          "note": "Stated directly."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C14",
+    "final": {
+      "card": "C14",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The itinerary flight from Colombo to 'Male' means the Maldivian capital, Malé. Flights land at Velana airport on Hulhulé, which is part of the Malé City administrative area. Display name and locality Malé are correct, and so is the country, Maldives. The region is wrong in strict admin terms: Wikipedia says the city 'is geographically located in the southern edge of North Malé Atoll' but 'administratively it is not considered part of it'. Malé City is its own first-level division, so North Malé Atoll (Kaafu) is only its geographic atoll."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Malé",
+          "quote": "the capital and most populous city of the Maldives",
+          "note": "Wikipedia's lead sentence."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Malé",
+          "quote": "In the last few decades, the island has been considerably expanded in size through land reclamation.",
+          "note": "Supports the central island plus reclaimed land. This fact is incomplete, not contradicted: the city's administrative area also takes in several other islands ('a central island, an airport island, and five other islands', such as Hulhumalé and Vilimalé), and not all of them adjoin Malé island. Wikipedia does not name the Indian Ocean on that page, but the Maldives lies in the Indian Ocean."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Islamic_Centre_(Maldives)",
+          "quote": "The mosque's golden dome is evident on the skyline of Malé and is highly visible.",
+          "note": "The same article says 'The Grand Friday Mosque, located in the Islamic Centre' and describes it as an 'Architectural landmark in Malé, Maldives'."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C14",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The itinerary flight from Colombo to 'Male' means the Maldivian capital, Malé. Flights land at Velana airport on Hulhulé, which is part of the Malé City administrative area. Display name and locality Malé are correct, and so is the country, Maldives. The region is wrong in strict admin terms: Wikipedia says the city 'is geographically located in the southern edge of North Malé Atoll' but 'administratively it is not considered part of it'. Malé City is its own first-level division, so North Malé Atoll (Kaafu) is only its geographic atoll."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Malé",
+          "quote": "the capital and most populous city of the Maldives",
+          "note": "Wikipedia's lead sentence."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Malé",
+          "quote": "In the last few decades, the island has been considerably expanded in size through land reclamation.",
+          "note": "Supports the central island plus reclaimed land. This fact is incomplete, not contradicted: the city's administrative area also takes in several other islands ('a central island, an airport island, and five other islands', such as Hulhumalé and Vilimalé), and not all of them adjoin Malé island. Wikipedia does not name the Indian Ocean on that page, but the Maldives lies in the Indian Ocean."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Islamic_Centre_(Maldives)",
+          "quote": "The mosque's golden dome is evident on the skyline of Malé and is highly visible.",
+          "note": "The same article says 'The Grand Friday Mosque, located in the Islamic Centre' and describes it as an 'Architectural landmark in Malé, Maldives'."
+        }
+      ]
+    },
+    "B": {
+      "card": "C14",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The itinerary leg 'Colombo International Airport to Male — fly' means Malé, the capital of the Maldives. Velana International Airport is on Hulhulé, which is administratively part of Malé City, so the card names the right place. The region 'North Malé Atoll' is only geographic. Wikipedia: 'Although Malé is geographically located in Kaafu Atoll, administratively it is not considered part of it.' Malé City is its own administrative division, so the administrative region should be Malé City, not North Malé Atoll or Kaafu."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Malé",
+          "quote": "is the capital and most populous city of the Maldives.",
+          "note": "Matches the Wikipedia lead sentence."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Malé",
+          "quote": "In the last few decades, the island has been considerably expanded in size through land reclamation.",
+          "note": "The core claim holds: Malé Island has been enlarged by land reclamation. The fact is incomplete, though. Administratively the city also takes in other islands: 'Administratively, the city consists of a central island, an airport island, and five other islands'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Islamic_Centre_(Maldives)",
+          "quote": "The mosque's golden dome is evident on the skyline of Malé and is highly visible.",
+          "note": "The same article says 'The Grand Friday Mosque, located in the Islamic Centre' and 'The Islamic Centre acts as a major tourist attraction in Malé'."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C15",
+    "final": {
+      "card": "C15",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "wrong",
+        "country": "correct",
+        "note": "Both itineraries (cycling along the Perfume River banks to Thien Mu Pagoda) clearly mean Chua Thien Mu on Ha Khe hill in Hue. Wikipedia: 'a historic temple in the city of Huế in Vietnam'. Locality Hue is correct. Region 'Central Vietnam' is a broad geographic area, not an administrative unit. The admin region is Hue (a centrally run city, formerly Thua Thien Hue Province), so it is labelled wrong under the strict admin-region rule."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "It is around 5 kilometres (3.1 mi) from the Citadel of Huế ... and sits on the northern bank of the Perfume River.",
+          "note": "The page describes it as a Buddhist temple with many halls, towers and shrines, which supports 'complex'. The north bank location matches."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "Built in 1601 on the order of the first Nguyễn lords, Nguyễn Hoàng, who at that time was the governor of Thuận Hóa (now known as Huế).",
+          "note": "The 'ruler of the southern Vietnamese territories' wording is supported by https://en.wikipedia.org/wiki/Nguy%E1%BB%85n_Ho%C3%A0ng: 'a Vietnamese official who ruled southern Vietnam from 1558 to his death in 1613.'"
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "Emperor Thiệu Trị, who succeeded Minh Mạng, erected the Từ Nhân Pagoda in 1844, which is now known as the Phước Duyên Pagoda. The brick pagoda stands 21 m ... and has seven stories",
+          "note": "The year 1844, Emperor Thieu Tri and the seven storeys all match."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "halls for preaching dharma, towers for storing sutras, bell towers, drum towers, meditation halls and halls to venerate Avalokiteśvara and the Medicine Buddha",
+          "note": "The same page names the seven-story Phước Duyên pagoda as part of the temple, and also mentions 'In the main hall, there is a statue of Maitreya'."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "The Thiên Mụ Temple (meaning Temple of the Celestial Lady, Vietnamese: Chùa Thiên Mụ; also called Linh Mụ Temple)",
+          "note": "The page also says: 'Thiên Mụ (literally \"celestial lady\")'."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C15",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "wrong",
+        "country": "correct",
+        "note": "Both itineraries (cycling along the Perfume River banks to Thien Mu Pagoda) clearly mean Chua Thien Mu on Ha Khe hill in Hue. Wikipedia: 'a historic temple in the city of Huế in Vietnam'. Locality Hue is correct. Region 'Central Vietnam' is a broad geographic area, not an administrative unit. The admin region is Hue (a centrally run city, formerly Thua Thien Hue Province), so it is labelled wrong under the strict admin-region rule."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "It is around 5 kilometres (3.1 mi) from the Citadel of Huế ... and sits on the northern bank of the Perfume River.",
+          "note": "The page describes it as a Buddhist temple with many halls, towers and shrines, which supports 'complex'. The north bank location matches."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "Built in 1601 on the order of the first Nguyễn lords, Nguyễn Hoàng, who at that time was the governor of Thuận Hóa (now known as Huế).",
+          "note": "The 'ruler of the southern Vietnamese territories' wording is supported by https://en.wikipedia.org/wiki/Nguy%E1%BB%85n_Ho%C3%A0ng: 'a Vietnamese official who ruled southern Vietnam from 1558 to his death in 1613.'"
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "Emperor Thiệu Trị, who succeeded Minh Mạng, erected the Từ Nhân Pagoda in 1844, which is now known as the Phước Duyên Pagoda. The brick pagoda stands 21 m ... and has seven stories",
+          "note": "The year 1844, Emperor Thieu Tri and the seven storeys all match."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "halls for preaching dharma, towers for storing sutras, bell towers, drum towers, meditation halls and halls to venerate Avalokiteśvara and the Medicine Buddha",
+          "note": "The same page names the seven-story Phước Duyên pagoda as part of the temple, and also mentions 'In the main hall, there is a statue of Maitreya'."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "The Thiên Mụ Temple (meaning Temple of the Celestial Lady, Vietnamese: Chùa Thiên Mụ; also called Linh Mụ Temple)",
+          "note": "The page also says: 'Thiên Mụ (literally \"celestial lady\")'."
+        }
+      ]
+    },
+    "B": {
+      "card": "C15",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The itinerary cycles along the Perfume River to Thien Mu Pagoda in Hue, and the card describes the same temple. Wikipedia: 'a historic temple in the city of Huế in Vietnam'. Locality Hue is correct. Region 'Central Vietnam' is a geographic area, not an administrative unit. The admin unit is Huế, a centrally governed city that was formerly Thừa Thiên Huế province, so under a strict admin-region reading the region is wrong. Country Vietnam is correct."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "constructed by the first emperor of the Nguyễn dynasty on the site of a pre-existing shrine and sits on the northern bank of the Perfume River.",
+          "note": "Confirms a Buddhist temple on the north bank of the Perfume River. The article's history section describes the multi-building complex."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "Built in 1601 on the order of the first Nguyễn lords, Nguyễn Hoàng, who at that time was the governor of Thuận Hóa (now known as Huế).",
+          "note": "1601 and Nguyễn Hoàng match. The source calls him the governor of Thuận Hóa and the first Nguyễn lord. The card's 'ruler of the southern Vietnamese territories' is a loose paraphrase."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "Emperor Thiệu Trị, who succeeded Minh Mạng, erected the Từ Nhân Pagoda in 1844, which is now known as the Phước Duyên Pagoda. ... has seven stories",
+          "note": "1844, Thiệu Trị and seven storeys all match."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "halls for preaching dharma, towers for storing sutras, bell towers, drum towers, meditation halls and halls to venerate Avalokiteśvara and the Medicine Buddha",
+          "note": "Worship halls are confirmed here. The same article confirms the Phước Duyên tower, quoted for fact 2."
+        },
+        {
+          "index": 4,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Thi%C3%AAn_M%E1%BB%A5_Temple",
+          "quote": "The Thiên Mụ Temple (meaning Temple of the Celestial Lady, Vietnamese: Chùa Thiên Mụ; also called Linh Mụ Temple)",
+          "note": "Both the alternate name Linh Mụ and the meaning 'Celestial Lady' match."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C16",
+    "final": {
+      "card": "C16",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary line 'Tsukuda Island — start the route' (Route C: Tokyo Transformation) refers to Tsukuda/Tsukudajima. It lies in Chuo Ward, which officially calls itself Chuo City in English, in Tokyo, Japan. Metropolis Japan describes it as 'this waterside portion of Chuo Ward', and a Wikipedia photo caption places it in 'Chūō Ward, Tokyo, Japan'. One small point: landfill has joined Tsukuda to Tsukishima, so today it is a neighbourhood rather than a separate island. The card's naming note already reflects this."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://metropolisjapan.com/heartlands-tsukishima-tsukuda/",
+          "quote": "this waterside portion of Chuo Ward",
+          "note": "Sources describe Tsukuda as a historic fishing-village neighbourhood in Chuo Ward, central Tokyo. Wikipedia calls Tsukudajima 'a small island in Tokyo Bay, facing Tsukiji to its west'. The fact is partly circular (Tsukuda on Tsukuda Island), but it is not wrong."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.ndl.go.jp/en/landmarks/sights/tsukudajima",
+          "quote": "An island near the mouth of the Sumida-gawa River.",
+          "note": "The National Diet Library places the island at the mouth of the Sumida, which is consistent with 'estuary'. English Wikipedia says instead 'at the mouth of the Edogawa river in Tokyo Bay', which looks like an outlier."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.tsukishima.arc.shibaura-it.ac.jp/?p=208",
+          "quote": "In 1612, Tokugawa Ieyasu brought to Edo a group of fishermen from the village of Tsukuda in what is now Osaka ... to build Tsukudajima, the island that became their home in 1644.",
+          "note": "This quote joins two separate passages from the page with an ellipsis. The page also says the village was 'then Settsu province'. The NDL page backs this up: 'The fishermen of Tsukuda in Setsu Province built a residential area and moved here'. Both 1612 and 1644 count as the early Edo period. Exact dates differ between sources (1590, 1603, 1612, 1644), but the card does not give a year."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.ndl.go.jp/en/landmarks/sights/tsukudajima",
+          "quote": "Tsukudani (fish boiled in soy sauce)",
+          "note": "The preserved aspect is backed by Unseen Japan (https://unseen-japan.com/tsukudani-the-fishy-preserves-that-saved-a-shogun/): 'Fish and seaweed, extensively boiled in soy sauce and sugar, transform into tsukudani–––a long-lasting food perfect for emergencies.' The fact attributes the name to Tsukuda but not the invention, and that much is supported."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C16",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary line 'Tsukuda Island — start the route' (Route C: Tokyo Transformation) refers to Tsukuda/Tsukudajima. It lies in Chuo Ward, which officially calls itself Chuo City in English, in Tokyo, Japan. Metropolis Japan describes it as 'this waterside portion of Chuo Ward', and a Wikipedia photo caption places it in 'Chūō Ward, Tokyo, Japan'. One small point: landfill has joined Tsukuda to Tsukishima, so today it is a neighbourhood rather than a separate island. The card's naming note already reflects this."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://metropolisjapan.com/heartlands-tsukishima-tsukuda/",
+          "quote": "this waterside portion of Chuo Ward",
+          "note": "Sources describe Tsukuda as a historic fishing-village neighbourhood in Chuo Ward, central Tokyo. Wikipedia calls Tsukudajima 'a small island in Tokyo Bay, facing Tsukiji to its west'. The fact is partly circular (Tsukuda on Tsukuda Island), but it is not wrong."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.ndl.go.jp/en/landmarks/sights/tsukudajima",
+          "quote": "An island near the mouth of the Sumida-gawa River.",
+          "note": "The National Diet Library places the island at the mouth of the Sumida, which is consistent with 'estuary'. English Wikipedia says instead 'at the mouth of the Edogawa river in Tokyo Bay', which looks like an outlier."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.tsukishima.arc.shibaura-it.ac.jp/?p=208",
+          "quote": "In 1612, Tokugawa Ieyasu brought to Edo a group of fishermen from the village of Tsukuda in what is now Osaka ... to build Tsukudajima, the island that became their home in 1644.",
+          "note": "This quote joins two separate passages from the page with an ellipsis. The page also says the village was 'then Settsu province'. The NDL page backs this up: 'The fishermen of Tsukuda in Setsu Province built a residential area and moved here'. Both 1612 and 1644 count as the early Edo period. Exact dates differ between sources (1590, 1603, 1612, 1644), but the card does not give a year."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.ndl.go.jp/en/landmarks/sights/tsukudajima",
+          "quote": "Tsukudani (fish boiled in soy sauce)",
+          "note": "The preserved aspect is backed by Unseen Japan (https://unseen-japan.com/tsukudani-the-fishy-preserves-that-saved-a-shogun/): 'Fish and seaweed, extensively boiled in soy sauce and sugar, transform into tsukudani–––a long-lasting food perfect for emergencies.' The fact attributes the name to Tsukuda but not the invention, and that much is supported."
+        }
+      ]
+    },
+    "B": {
+      "card": "C16",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Itinerary says 'Tsukuda Island — start the route' on a Tokyo route. Tsukudajima (Tsukuda Island) is a district of Chūō, Tokyo, per Wikipedia 'Tsukuda, Tokyo', which lists it among the districts of Chūō in the Tsukishima area. Locality Chuo City, region Tokyo and country Japan are all correct. Several sources note the island has since been joined to reclaimed land and is no longer a separate island."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Tsukuda,_Tokyo",
+          "quote": "Tsukudajima (佃島, \"Tsukuda Island\") is a small island in Tokyo Bay, facing Tsukiji to its west.",
+          "note": "Wikipedia also lists Tsukuda as a district of Chūō, Tokyo, so 'historic neighborhood on Tsukuda Island in central Tokyo' holds. The sentence is a bit circular, but it is accurate."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.ndl.go.jp/en/landmarks/sights/tsukudajima",
+          "quote": "An island near the mouth of the Sumida-gawa River.",
+          "note": "The National Diet Library supports 'Sumida River estuary'. English Wikipedia instead says 'at the mouth of the Edogawa river', which looks like an error in that article. The NDL adds that the area 'has been reclaimed and is solid land', so 'island' is historical."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.tsukishima.arc.shibaura-it.ac.jp/?p=208",
+          "quote": "a group of fishermen from the village of Tsukuda in what is now Osaka (then Settsu province)",
+          "note": "The same page says the tideland was granted in 1630 and the island was completed in 1644. Wikipedia says 'It was inhabited by a fishing community who migrated from Osaka in early 1600s.' Both fit 'early Edo period'. Sources give different years for the move (about 1590, 1603, 1612) but all fall around the start of the Edo period."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://ndl.go.jp/landmarks/e/sights/tsukudajima",
+          "quote": "The area is also famous as the home of icefish fishing and Tsukudani (fish boiled in soy sauce).",
+          "note": "Wikipedia 'Tsukudani' supports the preservation part: the dish is 'simmered in soy sauce and mirin' and 'made salty enough to not go bad'. Nippon.com says it was 'Originally a preserved food for fishermen.'"
+        }
+      ]
+    }
+  },
+  {
+    "id": "C17",
+    "final": {
+      "card": "C17",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The itinerary's 'Kuaishan Big Trees Trail' (Guanwu day tour) is 檜山巨木群步道 in Guanwu National Forest Recreation Area, so this is the same place and the name is fine. Guanwu as a whole straddles Wufeng Township (Hsinchu) and Tai'an Township (Miaoli). The trail itself looks to be on the Miaoli side. The official recreation-area address is '苗栗縣泰安鄉梅園村8鄰觀霧1-3號' (recreation.forest.gov.tw). The trail's trailheads are at Leshan Forest Road 1.2K and 6K, and a search summary places Leshan Forest Road in Tai'an Township, Miaoli; I did not fetch a page that says this verbatim. GaiaGPS lists the trail under 'County: Miaoli'. On that basis, locality should be Tai'an Township and region Miaoli County, not Wufeng/Hsinchu. Confidence is moderate: I found no single page that names the trail's own township, but every trail-specific source points to Miaoli."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200004",
+          "quote": "檜山巨木群步道起點位於樂山林道1.2K處及6K處，全程約4公里。",
+          "note": "This is on the official Guanwu National Forest Recreation Area page, which lists the trail as one of the area's trails."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200004",
+          "quote": "屬於中央山脈西翼地質區之雪山山脈帶地質",
+          "note": "The official page places Guanwu in the Xueshan Range geological belt, and Guanwu sits at about 2,000 m. The source supports the Xueshan Range part, but it does not literally say 'montane forests'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://travel.yam.com/article/132252",
+          "quote": "檜山巨木群步道的特色是有五棵千年紅檜巨木",
+          "note": "Supported: the trail's main feature is five thousand-year-old Taiwan red cypresses (紅檜). The Forestry Bureau map gives the same detail."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200004",
+          "quote": "檜山巨木群步道起點位於樂山林道1.2K處及6K處",
+          "note": "The official Chinese name 檜山巨木群步道 is confirmed. Literally it is 檜山 (Kuaishan) + 巨木群 (giant-tree group) + 步道 (trail)."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C17",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The itinerary's 'Kuaishan Big Trees Trail' (Guanwu day tour) is 檜山巨木群步道 in Guanwu National Forest Recreation Area, so this is the same place and the name is fine. Guanwu as a whole straddles Wufeng Township (Hsinchu) and Tai'an Township (Miaoli). The trail itself looks to be on the Miaoli side. The official recreation-area address is '苗栗縣泰安鄉梅園村8鄰觀霧1-3號' (recreation.forest.gov.tw). The trail's trailheads are at Leshan Forest Road 1.2K and 6K, and a search summary places Leshan Forest Road in Tai'an Township, Miaoli; I did not fetch a page that says this verbatim. GaiaGPS lists the trail under 'County: Miaoli'. On that basis, locality should be Tai'an Township and region Miaoli County, not Wufeng/Hsinchu. Confidence is moderate: I found no single page that names the trail's own township, but every trail-specific source points to Miaoli."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200004",
+          "quote": "檜山巨木群步道起點位於樂山林道1.2K處及6K處，全程約4公里。",
+          "note": "This is on the official Guanwu National Forest Recreation Area page, which lists the trail as one of the area's trails."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200004",
+          "quote": "屬於中央山脈西翼地質區之雪山山脈帶地質",
+          "note": "The official page places Guanwu in the Xueshan Range geological belt, and Guanwu sits at about 2,000 m. The source supports the Xueshan Range part, but it does not literally say 'montane forests'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://travel.yam.com/article/132252",
+          "quote": "檜山巨木群步道的特色是有五棵千年紅檜巨木",
+          "note": "Supported: the trail's main feature is five thousand-year-old Taiwan red cypresses (紅檜). The Forestry Bureau map gives the same detail."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200004",
+          "quote": "檜山巨木群步道起點位於樂山林道1.2K處及6K處",
+          "note": "The official Chinese name 檜山巨木群步道 is confirmed. Literally it is 檜山 (Kuaishan) + 巨木群 (giant-tree group) + 步道 (trail)."
+        }
+      ]
+    },
+    "B": {
+      "card": "C17",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "wrong",
+        "region": "wrong",
+        "country": "correct",
+        "note": "The itinerary's 'Kuaishan Big Trees Trail' is the same trail as 檜山巨木群步道 in Guanwu National Forest Recreation Area, so the identity and name are right. Guanwu itself straddles Wufeng Township in Hsinchu County and Tai'an Township in Miaoli County, and its official address is 苗栗縣泰安鄉梅園村8鄰觀霧1-3號. The official recreation page says the trail starts at 1.2K and 6K on Leshan Forest Road (樂山林道). A Forestry Bureau engineering PDF (forest.gov.tw/File.aspx?fno=73073) puts Leshan Forest Road in Tai'an Township, Miaoli County, reached only via Wufeng's Zhu-122 road. I saw that only through a search summary and could not extract the PDF text to quote it. On that evidence the trail is in Tai'an Township, Miaoli County, not Wufeng Township, Hsinchu County. 'Guanwu, on the Wufeng/Tai'an border' would be defensible, but Wufeng/Hsinchu on its own is not."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.forest.gov.tw/en/0000179",
+          "quote": "the five stout Taiwan Red Cypress trees by the Kuaishan Giant Trees Trail",
+          "note": "Quoted from the Guanwu National Forest Recreation Area page. The official recreation site (recreation.forest.gov.tw/Forest/RA?typ_id=0200004) also lists 檜山巨木群步道 as one of the area's trails."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200004",
+          "quote": "屬於中央山脈西翼地質區之雪山山脈帶地質",
+          "note": "The official site places Guanwu in the Xueshan (Snow Mountain) Range geological zone. The trail is at about 2,000 m in mid-elevation cypress forest, which fits 'montane forest'."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200004",
+          "quote": "於此步道2.8K處有5棵紅檜巨木，以二號神木樹圍最大，約17.2公尺",
+          "note": "Five giant Taiwan red cypresses stand at the 2.8K mark of the trail."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://recreation.forest.gov.tw/Forest/RA?typ_id=0200004",
+          "quote": "檜山巨木群步道起點位於樂山林道1.2K處及6K處，全程約4公里。",
+          "note": "The official site uses the Chinese name 檜山巨木群步道, which literally means 'Kuaishan giant-tree-group trail'. The giant trees are the five red cypresses on the trail."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C18",
+    "final": {
+      "card": "C18",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Both labellers agree, and I agree. The context only says 'the Post Office' on Sri Lanka highlight-tour days ('take in' / 'walk past'). The landmark that fits is the colonial Nuwara Eliya Post Office, so the match is inferred and very likely right, though the snippet never names the town. Nuwara Eliya is the capital of Nuwara Eliya District in Central Province, Sri Lanka. The display name matches the Wikipedia article title."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Nuwara_Eliya_Post_Office",
+          "quote": "is located in the centre of Nuwara Eliya and is one of the oldest post offices in Sri Lanka",
+          "note": "Both labellers agree. Sunday Times (14/06/2026) calls it 'the Nuwara Eliya main post office', and Ada Derana calls it a 'colonial-era building'. The card gives no build date, so the sources' different dates (1815 vs 1894) do not matter."
+        },
+        {
+          "index": 1,
+          "verdict": "contradicted",
+          "trip_leak": false,
+          "url": "https://www.sundaytimes.lk/260614/news/nuwara-eliyas-132-year-old-iconic-post-office-undergoes-rs-200-mn-restoration-645472.html",
+          "quote": "Postal services operations in Nuwara Eliya are being carried out in the children's library section of the Public Library.",
+          "note": "I side with A. B's source, Ada Derana (Oct 2024), is a government plan saying the building 'will be used exclusively for postal department operations'. That sets future intent; it does not show postal use today. The Sunday Times (14/06/2026) says the building is 'currently undergoing conservation at a cost of Rs. 200 million' and that postal operations have moved to the Public Library. Newswire.lk (17/10/2026) says the building 'is currently undergoing restoration and development' to make it 'a national-level tourist attraction'. That article does not say any post office counter has reopened. So the present-tense claim 'continues to serve as a post office' is wrong right now, and a visitor walking past will find a building under restoration. The move is temporary: the plan keeps the post office on the ground floor after the works. Better wording: 'Its historic building houses the town's main post office; it is under restoration as of 2026.'"
+        }
+      ]
+    },
+    "adjudicated": true,
+    "disagreements": [
+      "fact 1: A=contradicted/false B=supported/false"
+    ],
+    "A": {
+      "card": "C18",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The context sentences say only 'the Post Office' ('take in' / 'walk past') and do not name a town. In Sri Lanka highlight tours, the post office that tourists see is the colonial red-brick Nuwara Eliya Post Office on Queen Elizabeth Drive, so the match is very likely, but I inferred it because the snippet does not state it. Nuwara Eliya town is in Nuwara Eliya District, Central Province, Sri Lanka. The display name matches the Wikipedia article title 'Nuwara Eliya Post Office'."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Nuwara_Eliya_Post_Office",
+          "quote": "is located in the centre of Nuwara Eliya and is one of the oldest post offices in Sri Lanka",
+          "note": "Amazing Lanka also says it is 'Recognized as an archaeological monument under the protection of the Department of Archaeology'. Sunday Times (June 2026) calls it 'The 132-year-old Nuwara Eliya main post office'."
+        },
+        {
+          "index": 1,
+          "verdict": "contradicted",
+          "trip_leak": false,
+          "url": "https://www.sundaytimes.lk/260614/news/nuwara-eliyas-132-year-old-iconic-post-office-undergoes-rs-200-mn-restoration-645472.html",
+          "quote": "Postal services operations in Nuwara Eliya are being carried out in the children's library section of the Public Library.",
+          "note": "The Sunday Times (14/06/2026) says the building 'is currently undergoing conservation at a cost of Rs. 200 million' and that postal services have moved out to the Public Library while the work runs. Postal use is the long-term plan: Ada Derana (09/10/2024) says it 'will be used exclusively for postal department operations', and in 2012 the upper floor was turned into tourist accommodation. So 'continues to serve as a post office' is not true right now, even though the move is temporary. Verdict: contradicted, for now."
+        }
+      ]
+    },
+    "B": {
+      "card": "C18",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "The itinerary text only says 'the Post Office — walk past / take in'. On a Sri Lanka highlights tour that means the landmark Tudor-style Nuwara Eliya Post Office, a well-known tourist stop, so the identity is very likely right, but the snippet does not name the town. Nuwara Eliya is in Nuwara Eliya District, Central Province, Sri Lanka. Wikipedia names the district but not the province; Central Province comes from standard administrative geography."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Nuwara_Eliya_Post_Office",
+          "quote": "is located in the centre of Nuwara Eliya and is one of the oldest post offices in Sri Lanka.",
+          "note": "Ada Derana also calls it a 'colonial-era building' and the '130-year-old iconic Nuwara Eliya Post Office building'. Sources give different build dates (1815 vs 1894), but the card states no date."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.adaderana.lk/news/102559/new-govt-scraps-previous-decisions-on-iconic-neliya-post-office-building",
+          "quote": "will be used exclusively for postal department operations",
+          "note": "Minister Vijitha Herath, October 2024: the building and its premises stay in postal use and the earlier hotel-conversion plans are scrapped. In 2012 the former postmaster's quarters became tourist accommodation (Wikipedia), but the building is still a post office."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C19",
+    "final": {
+      "card": "C19",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Bahundanda is the Annapurna Circuit village on the east bank of the Marsyangdi, just above Ngadi, and a former VDC of Lamjung District. Its wards now belong to Marsyangdi Rural Municipality (en.wikipedia Marsyangdi_Rural_Municipality), so locality 'Marsyangdi' is the municipality name and is correct. The en.wikipedia Bahundanda map caption says 'Bahundanda is located in Gandaki Province'."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Marsyangdi_Rural_Municipality",
+          "quote": "Taghring V.D.C. (all wards), Ghermu V.D.C. (all wards), Bahundanda V.D.C (all wards), Bhulbhule V.D.C (all wards) and Simpani V.D.C.(all wards) are included in this newly made rural municipality.",
+          "note": "The same article calls it 'one of eight municipalities in Lamjung District, Nepal'. en.wikipedia/Bahundanda calls it 'a village development committee in Lamjung District'."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.routard.com/fr/guide/asie/nepal/region-de-pokhara/bahun-danda",
+          "quote": "Le principal attrait visuel du village est le panorama qu'il offre sur la vallée de la rivière Marshyangdi en contrebas.",
+          "note": "de.wikipedia adds 'Bahundanda liegt am Ostufer des Marsyangdi, 15 km nördlich der Distrikthauptstadt Besisahar.' The Marsyangdi valley part is supported. The phrase 'Himalayan foothills' is generic and no source states it explicitly."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.routard.com/fr/guide/asie/nepal/region-de-pokhara/bahun-danda",
+          "quote": "Perché sur une colline ... Les cultures en terrasses, sculptant les flancs de la colline, composent un paysage remarquable",
+          "note": "Two phrases from the same Routard page, joined with an ellipsis. himalayanexpeditions.com also mentions the climb to Bahundanda and 'extensive rice terraces'."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://himalayanexpeditions.com/wp/trips/annapurna-circuit",
+          "quote": "climbing steadily to the village of Bahundanda (“Brahmin Hill”).",
+          "note": "Routard: 'son nom se traduit littéralement par la « colline des Brahmanes »'. en.wikipedia Duradanda: 'danda (डाँडा)= a hill (in Nepali)'; Nepal Traveller says danda means ridge or hill. en.wikipedia Bahun: 'Bahun' is the Hill Brahmin varna."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C19",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Bahundanda is the Annapurna Circuit village on the east bank of the Marsyangdi, just above Ngadi, and a former VDC of Lamjung District. Its wards now belong to Marsyangdi Rural Municipality (en.wikipedia Marsyangdi_Rural_Municipality), so locality 'Marsyangdi' is the municipality name and is correct. The en.wikipedia Bahundanda map caption says 'Bahundanda is located in Gandaki Province'."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Marsyangdi_Rural_Municipality",
+          "quote": "Taghring V.D.C. (all wards), Ghermu V.D.C. (all wards), Bahundanda V.D.C (all wards), Bhulbhule V.D.C (all wards) and Simpani V.D.C.(all wards) are included in this newly made rural municipality.",
+          "note": "The same article calls it 'one of eight municipalities in Lamjung District, Nepal'. en.wikipedia/Bahundanda calls it 'a village development committee in Lamjung District'."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.routard.com/fr/guide/asie/nepal/region-de-pokhara/bahun-danda",
+          "quote": "Le principal attrait visuel du village est le panorama qu'il offre sur la vallée de la rivière Marshyangdi en contrebas.",
+          "note": "de.wikipedia adds 'Bahundanda liegt am Ostufer des Marsyangdi, 15 km nördlich der Distrikthauptstadt Besisahar.' The Marsyangdi valley part is supported. The phrase 'Himalayan foothills' is generic and no source states it explicitly."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.routard.com/fr/guide/asie/nepal/region-de-pokhara/bahun-danda",
+          "quote": "Perché sur une colline ... Les cultures en terrasses, sculptant les flancs de la colline, composent un paysage remarquable",
+          "note": "Two phrases from the same Routard page, joined with an ellipsis. himalayanexpeditions.com also mentions the climb to Bahundanda and 'extensive rice terraces'."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://himalayanexpeditions.com/wp/trips/annapurna-circuit",
+          "quote": "climbing steadily to the village of Bahundanda (“Brahmin Hill”).",
+          "note": "Routard: 'son nom se traduit littéralement par la « colline des Brahmanes »'. en.wikipedia Duradanda: 'danda (डाँडा)= a hill (in Nepali)'; Nepal Traveller says danda means ridge or hill. en.wikipedia Bahun: 'Bahun' is the Hill Brahmin varna."
+        }
+      ]
+    },
+    "B": {
+      "card": "C19",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "correct",
+        "country": "correct",
+        "note": "Bahundanda is the Annapurna Circuit village above Ngadi on the Marsyangdi, a former VDC in Lamjung District. Since the 2017 restructuring it has been part of Marsyangdi Rural Municipality (Wikipedia lists Bahundanda V.D.C, all wards, as merged into it). Lamjung is in Gandaki Province, Nepal. The locality 'Marsyangdi' refers to the rural municipality, not the river."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Marsyangdi_Rural_Municipality",
+          "quote": "Marsyangdi is one of eight municipalities in Lamjung District, Nepal ... Previous portions of ... Bahundanda V.D.C (all wards) ... are included in this newly made rural municipality.",
+          "note": "The Bahundanda Wikipedia article also says it is a village development committee in Lamjung District."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.routard.com/fr/guide/asie/nepal/region-de-pokhara/bahun-danda",
+          "quote": "le panorama qu'il offre sur la vallée de la rivière Marshyangdi en contrebas",
+          "note": "A German Wikipedia mirror places it on the east bank of the Marsyangdi, 15 km north of Besisahar, at 1370 m. The 'Himalayan foothills' part is generic, and sources only hint at it: Routard mentions 'les contreforts de l'Himalaya' for the region. The valley claim is the part that is supported."
+        },
+        {
+          "index": 2,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.routard.com/fr/guide/asie/nepal/region-de-pokhara/bahun-danda",
+          "quote": "Perché sur une colline ... Les cultures en terrasses, sculptant les flancs de la colline",
+          "note": "Trek sources also describe the village as sitting on a ridge top among rice terraces."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://www.routard.com/fr/guide/asie/nepal/region-de-pokhara/bahun-danda",
+          "quote": "son nom se traduit littéralement par la « colline des Brahmanes »",
+          "note": "The guide gives only the overall gloss 'hill of the Brahmins', not the split into bahun = Brahmin and danda = hill or ridge. The English Wikipedia article 'Bahun' supports Bahun = Brahmin. No source found splits out 'danda' = hill or ridge, but the overall meaning matches."
+        }
+      ]
+    }
+  },
+  {
+    "id": "C20",
+    "final": {
+      "card": "C20",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "null_ok",
+        "country": "correct",
+        "note": "The itinerary line 'Zenkov Cathedral — visit' refers to the Ascension (Zenkov) Cathedral in Panfilov Park, Almaty, Kazakhstan. Almaty is a city of republican significance and is not part of Almaty Region, so a null region is acceptable."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://archaeology.kz/en/heritages/voznesensk-kafedraly-sobory",
+          "quote": "The cathedral was named Voznesensky, as its main altar was dedicated to the Ascension of the Lord",
+          "note": "Russian Orthodox: en.wikipedia (Ascension Cathedral, Almaty) says 'is a Russian Orthodox cathedral located in Panfilov Park in Almaty, Kazakhstan.' Strictly, the Ascension of the Lord is the dedication of the main altar. The other two altars honour the Annunciation and Saints Faith, Hope, Love and Sophia."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Ascension_Cathedral,_Almaty",
+          "quote": "is a Russian Orthodox cathedral located in Panfilov Park in Almaty, Kazakhstan. ... Completed in 1907, the cathedral is made out of wood but without nails.",
+          "note": "Both the wooden construction and the Panfilov Park location are stated."
+        },
+        {
+          "index": 2,
+          "verdict": "contradicted",
+          "trip_leak": false,
+          "url": "https://archaeology.kz/en/heritages/voznesensk-kafedraly-sobory",
+          "quote": "The author of the project of the Ascension Cathedral was the architect K.A. Borisoglebskiy ... A.P. Zenkov supplemented and partially redesigned the project",
+          "note": "The 1904–1907 dates are correct (en.wikipedia: 'Construction took place between 1904 and 1907.'). Crediting Zenkov alone with the design is wrong. Reputable sources name Konstantin Borisoglebsky as the designer and Zenkov as the engineer who revised the design and supervised construction. oq.gov.kz: 'a design by architect Borisoglebsky was adopted and later improved by engineer Andrey Pavlovich Zenkov.' welcome.kz: 'Engineer Andrei Zenkov supervised the construction.' Only the Panfilov Park Wikipedia article says 'Designed by Andrei Pavlovich Zenkov in 1904', and that line is marked citation needed."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Ascension_Cathedral,_Almaty",
+          "quote": "The cathedral survived the 1911 earthquake with minimal damage.",
+          "note": "archaeology.kz confirms it: 'withstood with dignity the devastating earthquake in Vernyi in January 1911'. Vernyi was the old name of Almaty."
+        }
+      ]
+    },
+    "adjudicated": false,
+    "A": {
+      "card": "C20",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "null_ok",
+        "country": "correct",
+        "note": "The itinerary line 'Zenkov Cathedral — visit' refers to the Ascension (Zenkov) Cathedral in Panfilov Park, Almaty, Kazakhstan. Almaty is a city of republican significance and is not part of Almaty Region, so a null region is acceptable."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://archaeology.kz/en/heritages/voznesensk-kafedraly-sobory",
+          "quote": "The cathedral was named Voznesensky, as its main altar was dedicated to the Ascension of the Lord",
+          "note": "Russian Orthodox: en.wikipedia (Ascension Cathedral, Almaty) says 'is a Russian Orthodox cathedral located in Panfilov Park in Almaty, Kazakhstan.' Strictly, the Ascension of the Lord is the dedication of the main altar. The other two altars honour the Annunciation and Saints Faith, Hope, Love and Sophia."
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Ascension_Cathedral,_Almaty",
+          "quote": "is a Russian Orthodox cathedral located in Panfilov Park in Almaty, Kazakhstan. ... Completed in 1907, the cathedral is made out of wood but without nails.",
+          "note": "Both the wooden construction and the Panfilov Park location are stated."
+        },
+        {
+          "index": 2,
+          "verdict": "contradicted",
+          "trip_leak": false,
+          "url": "https://archaeology.kz/en/heritages/voznesensk-kafedraly-sobory",
+          "quote": "The author of the project of the Ascension Cathedral was the architect K.A. Borisoglebskiy ... A.P. Zenkov supplemented and partially redesigned the project",
+          "note": "The 1904–1907 dates are correct (en.wikipedia: 'Construction took place between 1904 and 1907.'). Crediting Zenkov alone with the design is wrong. Reputable sources name Konstantin Borisoglebsky as the designer and Zenkov as the engineer who revised the design and supervised construction. oq.gov.kz: 'a design by architect Borisoglebsky was adopted and later improved by engineer Andrey Pavlovich Zenkov.' welcome.kz: 'Engineer Andrei Zenkov supervised the construction.' Only the Panfilov Park Wikipedia article says 'Designed by Andrei Pavlovich Zenkov in 1904', and that line is marked citation needed."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Ascension_Cathedral,_Almaty",
+          "quote": "The cathedral survived the 1911 earthquake with minimal damage.",
+          "note": "archaeology.kz confirms it: 'withstood with dignity the devastating earthquake in Vernyi in January 1911'. Vernyi was the old name of Almaty."
+        }
+      ]
+    },
+    "B": {
+      "card": "C20",
+      "identity": {
+        "same_place_as_context": "yes",
+        "display_name": "ok",
+        "locality": "correct",
+        "region": "null_ok",
+        "country": "correct",
+        "note": "Itinerary 'Zenkov Cathedral — visit' on a Kyrgyzstan/China/Kazakhstan tour = Ascension (Zenkov) Cathedral in Panfilov Park, Almaty, Kazakhstan. Almaty is a city of republican significance (not part of Almaty Region), so region null is acceptable."
+      },
+      "facts": [
+        {
+          "index": 0,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://archaeology.kz/en/heritages/voznesensk-kafedraly-sobory",
+          "quote": "its main altar was dedicated to the Ascension of the Lord.",
+          "note": "Wikipedia also: 'is a Russian Orthodox cathedral located in Panfilov Park in Almaty, Kazakhstan.'"
+        },
+        {
+          "index": 1,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Ascension_Cathedral,_Almaty",
+          "quote": "is a Russian Orthodox cathedral located in Panfilov Park in Almaty, Kazakhstan. ... Completed in 1907, the cathedral is made out of wood but without nails.",
+          "note": "Two sentences from the same article; both parts (wooden, Panfilov Park) are supported."
+        },
+        {
+          "index": 2,
+          "verdict": "contradicted",
+          "trip_leak": false,
+          "url": "https://archaeology.kz/en/heritages/voznesensk-kafedraly-sobory",
+          "quote": "was the architect K.A. Borisoglebskiy ... A.P. Zenkov supplemented and partially redesigned the project.",
+          "note": "The dates are right (Wikipedia: 'Construction took place between 1904 and 1907'). The attribution is wrong: the original architect was Konstantin Borisoglebsky (1899 design). Engineer Andrei Zenkov revised the design and oversaw construction. pck.kz (Orthodox Church of Kazakhstan) agrees."
+        },
+        {
+          "index": 3,
+          "verdict": "supported",
+          "trip_leak": false,
+          "url": "https://en.wikipedia.org/wiki/Ascension_Cathedral,_Almaty",
+          "quote": "The cathedral survived the 1911 earthquake with minimal damage.",
+          "note": "archaeology.kz confirms it 'withstood with dignity the devastating earthquake in Vernyi in January 1911' (Vernyi = old name of Almaty)."
+        }
+      ]
+    }
+  }
+]

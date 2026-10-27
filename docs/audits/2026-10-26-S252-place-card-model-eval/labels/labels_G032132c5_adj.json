@@ -1,0 +1,870 @@
+{
+ "group_id": "G032132c5",
+ "labeller": "adj",
+ "reference": {
+  "name": "Sagarmatha National Park Visitor Centre (and museum)",
+  "locality": "Namche Bazaar",
+  "region": "Solukhumbu District (Khumbu), Koshi Province",
+  "country": "Nepal",
+  "lat": 27.81,
+  "lon": 86.715,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://whc.unesco.org/en/intassistance/987",
+    "tier": "T1",
+    "quote": "Upgrading of interpretation displays and visitor amenities at the Park Entrance Station (PES) and the Namche Bazar visitor centre (NBVC) of Sagarmatha National Park"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Namche_Bazaar",
+    "tier": "T1",
+    "quote": "It is located within the Khumbu area at 3,440 metres (11,286 ft) at its low point, populating the sides of a hill."
+   }
+  ],
+  "note": "On an Everest/Gokyo trek, 'the National Park Centre and Museum just above the village' is the Sagarmatha NP visitor centre at Namche Bazaar. Coordinates approximate (Namche Bazaar, Wikipedia 27°49'N 86°43'E)."
+ },
+ "variants": [
+  {
+   "vid": "V499d33c3",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Sagarmatha NP centre/museum at Namche; Khumbu, Solukhumbu District correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Va17c5948",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct; Solukhumbu is the district.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vfa0d225d",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct; Koshi Province is the current province.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vbd8f0f12",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct; same visitor centre/museum.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Vf21d1bfc",
+   "name": "ok",
+   "locality": "correct",
+   "region": "acceptable_historical",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct entity; 'Khumbu' is a traditional/ethnographic region rather than an administrative unit.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Fccbcb8ff",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved to unverifiable: Lonely Planet (T2) confirms flora/fauna and Sherpa culture, and Outlook Traveller (T2) confirms 'culture, history, geology and people', but no reliable source names mountaineering history as an exhibit theme. B's quotes are on the page but do not cover the full claim.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fba3b0c81",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "Sagarmatha National Park is a National Park northeastern of Nepal, and was established on 19 July 1976."
+    },
+    {
+     "url": "https://snp.gov.np/tourism",
+     "tier": "T1",
+     "quote": "was established in 19 July 1976, covering an area of 1148 km2 in Solukhumbu district"
+    }
+   ],
+   "rationale": "Park established 1976.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2517811e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/sagarmatha-national-park-visitor-centre/1433152",
+     "tier": "T2",
+     "quote": "To get here, hike up to Chhorkhung saddle and then follow the signed path beside the local army barracks."
+    },
+    {
+     "url": "https://www.outlooktraveller.com/destinations/international/namche-bazaar-in-nepal-a-hidden-gem-for-avid-trekkers",
+     "tier": "T2",
+     "quote": "Sitting atop an elevated location, the Sagarmatha National Park Museum"
+    }
+   ],
+   "rationale": "Resolved to supported (T2 only, moderate confidence): Lonely Planet says to hike up to Chhorkhung saddle to reach the centre, and Outlook Traveller's Namche article puts the museum 'atop an elevated location'. No T1 source contradicts.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fd078684e",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved to unverifiable: natural history and Sherpa culture are backed (Lonely Planet: 'Himalayan flora and fauna and the culture of the Khumbu Sherpas'), but 'history of mountaineering in the Himalaya' as exhibit content has no reliable source.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F0c6122cf",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "In 1979, it became the country's first national park that was inscribed as a Natural World Heritage Site."
+    }
+   ],
+   "rationale": "Inscribed 1979.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd8bf9fec",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved to unverifiable: UNESCO (intassistance/987) confirms a 'Namche Bazar visitor centre (NBVC)' of the park and snp.gov.np puts the Head Office in Namche Bazaar, but no source says the visitor centre is at the headquarters. B's quotes are real but do not show it is co-located.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F1b3603ba",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "Sagarmatha National Park contains the upper catchment areas of the Dudh Kosi and Bhotekoshi rivers and the Gokyo Lakes."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Khumbu",
+     "tier": "T1",
+     "quote": "is a region of northeastern Nepal on the Nepalese side of Mount Everest."
+    }
+   ],
+   "rationale": "Park/Khumbu contains high valleys, glacial lakes and major Himalayan peaks; 'central Himalaya' is a standard regional term for the Nepal Himalaya.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fde843b30",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "Sagarmatha National Park is a National Park northeastern of Nepal, and was established on 19 July 1976."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "in the Himalayas of eastern Nepal that was established in 1976"
+    }
+   ],
+   "rationale": "Established 1976; covers the high Khumbu/Everest area.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F494b428b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/intassistance/987",
+     "tier": "T1",
+     "quote": "Upgrading of interpretation displays and visitor amenities at the Park Entrance Station (PES) and the Namche Bazar visitor centre (NBVC) of Sagarmatha National Park"
+    },
+    {
+     "url": "https://whc.unesco.org/en/intassistance/987",
+     "tier": "T1",
+     "quote": "interpretation displays and visitor amenities at the Park Entrance Station (PES) and the Namche Bazar visitor centre (NBVC) of Sagarmatha National Park"
+    }
+   ],
+   "rationale": "UNESCO describes the Namche Bazar visitor centre of Sagarmatha NP with interpretation displays; restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fba8d36f0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "Sagarmatha National Park is a National Park northeastern of Nepal, and was established on 19 July 1976."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "In 1979, it became the country's first national park that was inscribed as a Natural World Heritage Site."
+    }
+   ],
+   "rationale": "1976 and 1979 both correct.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe1f6c6a1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/sagarmatha-national-park-visitor-centre/1433152",
+     "tier": "T2",
+     "quote": "To get here, hike up to Chhorkhung saddle and then follow the signed path beside the local army barracks."
+    },
+    {
+     "url": "https://www.outlooktraveller.com/destinations/international/namche-bazaar-in-nepal-a-hidden-gem-for-avid-trekkers",
+     "tier": "T2",
+     "quote": "Sitting atop an elevated location, the Sagarmatha National Park Museum"
+    }
+   ],
+   "rationale": "Resolved to supported (T2, moderate confidence): Lonely Planet places the centre beyond Chhorkhung saddle (a ridge saddle reached by hiking up from Namche); Outlook Traveller has it 'atop an elevated location'.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F9a67a5fb",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved to unverifiable: being part of the park headquarters is not stated by any reliable source. UNESCO and snp.gov.np show only that both the visitor centre and the Head Office are in Namche Bazaar.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F1e465d59",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Namche_Bazaar",
+     "tier": "T1",
+     "quote": "It is located within the Khumbu area at 3,440 metres (11,286 ft) at its low point, populating the sides of a hill."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Namche_Bazaar",
+     "tier": "T1",
+     "quote": "Namche is also the main trading center and hub for the Lanjey region."
+    }
+   ],
+   "rationale": "Namche at 3,440 m, main trading centre in Khumbu.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb0afb2da",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/sagarmatha-national-park-visitor-centre/1433152",
+     "tier": "T2",
+     "quote": "This park center is worth a visit for its displays on Himalayan flora and fauna and the culture of the Khumbu Sherpas."
+    },
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/sagarmatha-national-park-visitor-centre/1433152",
+     "tier": "T2",
+     "quote": "To get here, hike up to Chhorkhung saddle and then follow the signed path beside the local army barracks."
+    }
+   ],
+   "rationale": "Resolved to supported (Lonely Planet POI, T2): displays on Himalayan flora and fauna and Khumbu Sherpa culture; reached by hiking up to Chhorkhung saddle, the ridge above Namche (Outlook Traveller also says 'Sitting atop an elevated location'). A found only blogs; both quotes verified.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fd441b8b4",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Namche_Bazaar",
+     "tier": "T1",
+     "quote": "It is located within the Khumbu area at 3,440 m (11,286 ft) at its low point, populating the sides of a hill."
+    }
+   ],
+   "rationale": "Elevation of the centre itself not found in reliable sources (Namche low point 3,440 m; centre is higher). Position above Namche not reliably sourced.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0964422d",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "Sagarmatha National Park is a National Park northeastern of Nepal, and was established on 19 July 1976."
+    },
+    {
+     "url": "https://snp.gov.np/tourism",
+     "tier": "T1",
+     "quote": "was established in 19 July 1976, covering an area of 1148 km2 in Solukhumbu district"
+    }
+   ],
+   "rationale": "Park established in 1976, not 1839.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F78460077",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "In 1979, it became the country's first national park that was inscribed as a Natural World Heritage Site."
+    }
+   ],
+   "rationale": "Both labellers: contradicted. Reason resolved to 'false' (Wikipedia Sagarmatha National Park; infobox criteria 'Natural: vii'): the park was inscribed only as a Natural site, so 'recognised for its ... cultural values' is a factual error, not an exaggeration of a true claim.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F44a64a93",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "Sagarmatha National Park is a National Park northeastern of Nepal, and was established on 19 July 1976."
+    },
+    {
+     "url": "https://snp.gov.np/tourism",
+     "tier": "T1",
+     "quote": "was established in 19 July 1976, covering an area of 1148 km2 in Solukhumbu district"
+    }
+   ],
+   "rationale": "Established 1976.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1247d88b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/sagarmatha-national-park-visitor-centre/1433152",
+     "tier": "T2",
+     "quote": "This park center is worth a visit for its displays on Himalayan flora and fauna and the culture of the Khumbu Sherpas."
+    },
+    {
+     "url": "https://www.outlooktraveller.com/destinations/international/namche-bazaar-in-nepal-a-hidden-gem-for-avid-trekkers",
+     "tier": "T2",
+     "quote": "Sitting atop an elevated location, the Sagarmatha National Park Museum"
+    }
+   ],
+   "rationale": "Resolved to supported (Lonely Planet POI page, T2, quote verified): displays on Himalayan flora and fauna (natural environment) and Khumbu Sherpa culture. No T1 source contradicts.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F16079997",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Mount_Everest",
+     "tier": "T1",
+     "quote": "Mount Everest (known in Nepali as Sagarmāthā"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "in the Himalayas of eastern Nepal that was established in 1976"
+    }
+   ],
+   "rationale": "Sagarmatha is the Nepali name of Everest; the park includes Everest and surrounding terrain.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2173929e",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved to unverifiable: Sherpa culture, ecology and wildlife are backed by Lonely Planet (T2), but mountaineering history as display content has no reliable source.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fa1b1aa8a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Mount_Everest",
+     "tier": "T1",
+     "quote": "Mount Everest (known in Nepali as Sagarmāthā"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "in the Himalayas of eastern Nepal that was established in 1976"
+    }
+   ],
+   "rationale": "Nepali name for Everest; Everest is in the park.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd49bc9da",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "in the Himalayas of eastern Nepal that was established in 1976"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sagarmatha_National_Park",
+     "tier": "T1",
+     "quote": "Sagarmatha National Park contains the upper catchment areas of the Dudh Kosi and Bhotekoshi rivers and the Gokyo Lakes."
+    }
+   ],
+   "rationale": "Established 1976; includes Mount Everest.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F10d05ef2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/sagarmatha-national-park-visitor-centre/1433152",
+     "tier": "T2",
+     "quote": "To get here, hike up to Chhorkhung saddle and then follow the signed path beside the local army barracks."
+    },
+    {
+     "url": "https://www.outlooktraveller.com/destinations/international/namche-bazaar-in-nepal-a-hidden-gem-for-avid-trekkers",
+     "tier": "T2",
+     "quote": "Sitting atop an elevated location, the Sagarmatha National Park Museum"
+    }
+   ],
+   "rationale": "Resolved to supported (T2, moderate confidence): reached by hiking up to Chhorkhung saddle above Namche (Lonely Planet); 'atop an elevated location' (Outlook Traveller).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F440ec516",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/intassistance/987",
+     "tier": "T1",
+     "quote": "Upgrading of interpretation displays and visitor amenities at the Park Entrance Station (PES) and the Namche Bazar visitor centre (NBVC) of Sagarmatha National Park"
+    },
+    {
+     "url": "https://whc.unesco.org/en/intassistance/987",
+     "tier": "T1",
+     "quote": "interpretation displays and visitor amenities at the Park Entrance Station (PES) and the Namche Bazar visitor centre (NBVC) of Sagarmatha National Park"
+    }
+   ],
+   "rationale": "Restates identity; UNESCO confirms the visitor/interpretation centre of Sagarmatha NP at Namche.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "acceptable_historical",
+    "acceptable_historical"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

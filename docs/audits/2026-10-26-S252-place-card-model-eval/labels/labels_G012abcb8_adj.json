@@ -1,0 +1,998 @@
+{
+ "group_id": "G012abcb8",
+ "labeller": "adj",
+ "reference": {
+  "name": "Radar Tukon (PAGASA Basco Radar Station)",
+  "locality": "Basco (Tukon, barangay Chanarian)",
+  "region": "Batanes",
+  "country": "Philippines",
+  "lat": 20.4277,
+  "lon": 121.9706,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Batanes",
+    "tier": "T1",
+    "quote": "Radar Tukon was a United States weather station on a hilltop."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Batanes",
+    "tier": "T1",
+    "quote": "At present, it houses the northernmost weather station in the Philippines, the Basco Radar Station"
+   },
+   {
+    "url": "https://pubfiles.pagasa.dost.gov.ph/cds/Basco.pdf",
+    "tier": "T1",
+    "quote": "LATITUDE: 20o25'39.83''N"
+   }
+  ],
+  "labeller_note": "A and B agree on the reference identity."
+ },
+ "variants": [
+  {
+   "vid": "V35342b30",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "A and B agree. Basco Radar Station / Radar Tukon in Basco, Batanes: the same hilltop station site.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V75e7b408",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "A and B agree. PAGASA radar station at Tukon, Basco: same site.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Va7554813",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "A and B agree. Bare 'Radar' with no locality; region and country right, and it points at the same radar site.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Ve68ec92e",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "A and B agree. 'Radar Hill' is not the usual name (Radar Tukon), but it describes the same hilltop radar site in Basco.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V85d6fc4b",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "A and B agree. Radar Station / Radar Tukon in Basco: same site (calling it a former radar site is a fact-level error).",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Fb5a888dc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "Only trivial differed. The fact adds that Basco is the provincial capital, which goes beyond the identity fields, so trivial=false. Supported: Wikipedia (Basco) says it is the capital of Batanes; the Tukon site is in Chanarian, Basco (Wikipedia Batanes; the station is 2.75 km from Basco).",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "Tukon Chapel, also known as Mt. Carmel Chapel in Chanarian, Basco"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Basco,_Batanes",
+     "tier": "T1",
+     "quote": "is a municipality and capital of the province of Batanes, Philippines."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "At present, it houses the northernmost weather station in the Philippines, the Basco Radar Station"
+    }
+   ],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F313326f3",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Wikipedia: formerly a US weather station, and at present still houses the Basco Radar Station; it is not a 'former' installation, and a military role is unsourced.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "Radar Tukon was a United States weather station on a hilltop."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "At present, it houses the northernmost weather station in the Philippines, the Basco Radar Station"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F35a6ba5b",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "Resolved to unverifiable (A). B's quote is really on Wikipedia Batanes, but it says Batanes is mentioned with typhoons because it holds the northernmost weather station. That is the reverse causality, and the same paragraph calls the 'constantly battered' idea a misconception. No reliable source gives typhoon exposure as the reason the station is sited here.",
+   "sources": [],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Ff804213b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Hilltop at Tukon on Batan, the main island; Basco is the capital.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "Radar Tukon was a United States weather station on a hilltop."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "is the main island of Batanes, an archipelagic province in the Philippines. It is the second largest of the Batanes Islands"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Basco,_Batanes",
+     "tier": "T1",
+     "quote": "is a municipality and capital of the province of Batanes, Philippines."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8ee64ad2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Basco Radar Station is the northernmost PAGASA weather station; PAGASA installs radar at Basco.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "At present, it houses the northernmost weather station in the Philippines, the Basco Radar Station"
+    },
+    {
+     "url": "https://www.philstar.com/the-freeman/cebu-news/2013/12/11/1266797/damaged-pagasa-equipment-can-affect-forecasts",
+     "tier": "T2",
+     "quote": "By 2015, PAGASA will be installing five more doppler radars in Iloilo, Palawan, Busuanga, Zamboanga and Basco, Batanes."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/PAGASA",
+     "tier": "T1",
+     "quote": "Basco (in Batanes, currently under repair), Aparri (Cagayan), Baguio"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1480ae1e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Northernmost province, in the Luzon Strait between Luzon (Balintang Channel) and Taiwan.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "It is the northernmost province in the Philippines, and the smallest, both in population and land area."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "comprising ten islands situated within the Luzon Strait between the Balintang Channel and Taiwan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "comprising ten islands situated within the Luzon Strait between the Balintang Channel and Taiwan"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F50f7803b",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. No reliable source describes physical remains of a former installation; the site has an active station.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd314af05",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Batan is the main island of Batanes, in the Luzon Strait north of Luzon.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "is the main island of Batanes, an archipelagic province in the Philippines. It is the second largest of the Batanes Islands"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "comprising ten islands situated within the Luzon Strait between the Balintang Channel and Taiwan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "is the main island of Batanes, an archipelagic province in the Philippines."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc35fc8a8",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Basco is the capital on Batan, but Batan is the second largest island; Itbayat is the largest.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "Itbayat, the largest island of the archipelago"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Basco,_Batanes",
+     "tier": "T1",
+     "quote": "located on Batan Island, the second largest among the Batanes Islands"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "It is the second largest of the Batanes Islands, the northernmost group of islands in the Philippines."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7170a68f",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Wikipedia only says it was a US weather station; wartime dating and military operations are not supported by reliable sources.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3fc275a4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Volcanic (Luzon Volcanic Arc) islands with limestone formations, in the Luzon Strait between Luzon and Taiwan.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "Batan is a dumbbell-shaped volcanic island, part of the Luzon Volcanic Arc."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "The Middle Miocene Bilbao limestone overlies the Early Miocene Caracaran siltstone, which overlies the Liguan limestone."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "comprising ten islands situated within the Luzon Strait between the Balintang Channel and Taiwan."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa7d8daca",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. The hilltop still houses the Basco Radar Station; it is a current radar site, not a former one.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "At present, it houses the northernmost weather station in the Philippines, the Basco Radar Station"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/PAGASA",
+     "tier": "T1",
+     "quote": "Basco (in Batanes, currently under repair), Aparri (Cagayan), Baguio"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0d5a667a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Radar Tukon is a hilltop site on Batan Island.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "Radar Tukon was a United States weather station on a hilltop."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "is the main island of Batanes, an archipelagic province in the Philippines. It is the second largest of the Batanes Islands"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2be90578",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "rationale": "A and B agree. Wikipedia: hilltop with 360-degree views of Basco proper and the South China Sea (West Philippine Sea in Philippine usage).",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "It offers a magnificent 360-degree view of Batan Island, the South China Sea, Mt. Iraya, Basco proper"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "Radar Tukon was a United States weather station on a hilltop."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "It offers a magnificent 360-degree view of Batan Island, the South China Sea, Mt. Iraya, Basco proper, boulder lined cliffs and the Pacific Ocean."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F14b44775",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. No Portuguese trading mission founded the site; it was a US weather station and now a PAGASA radar station.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "Radar Tukon was a United States weather station on a hilltop."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "In 1783, the Spanish claimed Batanes as part of the Philippines"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/PAGASA",
+     "tier": "T1",
+     "quote": "Weather surveillance radar was first installed in the Philippines in 1963 atop the Central Office of the Weather Bureau"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1489f0bf",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. The station on Tukon (PAGASA Basco station, 20°25'40\"N, elevation 167 m) lies about 2.5 km south of central Basco (cathedral at 20°27'03\"N), not north of it, and is not in the northern Iraya hill country.",
+   "sources": [
+    {
+     "url": "https://pubfiles.pagasa.dost.gov.ph/cds/Basco.pdf",
+     "tier": "T1",
+     "quote": "LATITUDE: 20o25'39.83''N"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Basco_Cathedral",
+     "tier": "T1",
+     "quote": "20°27′03″N 121°58′09″E"
+    },
+    {
+     "url": "https://pubfiles.pagasa.dost.gov.ph/pagasaweb/files/cad/CLIMATOLOGICAL%20NORMALS%20(1991-2020)/BASCO%20RADAR.pdf",
+     "tier": "T1",
+     "quote": "LATITUDE: 20°25'39.83\"N LONGITUDE: 121°58'14.31\"E"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5686d28e",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. No reliable source describes surviving concrete structures tied to a former radar function.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F90782cfb",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "Resolved to unverifiable (A). B's quotes are on Wikipedia Batanes and support only the seas (South China Sea / Pacific). The central claim, open, treeless, rolling grassland around the site, has no reliable source; Wikipedia only describes provincial terrain as rolling to steep hills. One half of the fact is unsupported, so the fact as a whole is unverifiable.",
+   "sources": [],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F3cd67e92",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Only a US weather station history is documented; links to military and communications infrastructure are unsourced.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8b116732",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Hilltop site in the Tukon area of Basco (barangay Chanarian).",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "Radar Tukon was a United States weather station on a hilltop."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "Tukon Chapel, also known as Mt. Carmel Chapel in Chanarian, Basco"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "At present, it houses the northernmost weather station in the Philippines, the Basco Radar Station"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9b74c178",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. PAGASA weather radar on the Tukon hilltop near Basco.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "At present, it houses the northernmost weather station in the Philippines, the Basco Radar Station"
+    },
+    {
+     "url": "https://www.philstar.com/the-freeman/cebu-news/2013/12/11/1266797/damaged-pagasa-equipment-can-affect-forecasts",
+     "tier": "T2",
+     "quote": "By 2015, PAGASA will be installing five more doppler radars in Iloilo, Palawan, Busuanga, Zamboanga and Basco, Batanes."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/PAGASA",
+     "tier": "T1",
+     "quote": "Basco (in Batanes, currently under repair), Aparri (Cagayan), Baguio"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5bcde38b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "Resolved to supported (B). Wikipedia PAGASA lists Basco among its Doppler radar stations and says the new weather radars can monitor typhoons and the amount of rainfall. Both quotes were checked on the page. A's generic-function objection is answered by this agency-level description.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/PAGASA",
+     "tier": "T1",
+     "quote": "The new weather radars can monitor the typhoon and its movements, amount of rainfall"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/PAGASA",
+     "tier": "T1",
+     "quote": "Basco (in Batanes, currently under repair), Aparri (Cagayan), Baguio"
+    }
+   ],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F9786b7e6",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Batan is the main and most populated island, but not the largest; Itbayat is the largest.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "Itbayat, the largest island of the archipelago"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "is the main island of Batanes, an archipelagic province in the Philippines. It is the second largest of the Batanes Islands"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batan_Island",
+     "tier": "T1",
+     "quote": "It is the second largest of the Batanes Islands, the northernmost group of islands in the Philippines."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F82a72f61",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Ivatans are the natives; Ivatan is the main language (Itbayaten on Itbayat).",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "The natives are called Ivatans."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "The main languages spoken in Batanes are Ivatan, which is spoken on the islands of Batan and Sabtang."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Ivatan_people",
+     "tier": "T1",
+     "quote": "The Ivatan people are an Austronesian ethnolinguistic group native to the Batanes and Babuyan Islands of the northernmost Philippines."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fead71756",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. In the Luzon Strait between the Philippines and Taiwan, northernmost, subject to frequent typhoons.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "comprising ten islands situated within the Luzon Strait between the Balintang Channel and Taiwan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "It is the northernmost province in the Philippines, and the smallest, both in population and land area."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "The islands are sparsely populated and subject to frequent typhoons."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb9bb6dd7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Northernmost province.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Batanes",
+     "tier": "T1",
+     "quote": "It is the northernmost province in the Philippines, and the smallest, both in population and land area."
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fda6bde12",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Name derives from the radar/weather station, but its historical use for navigation is not supported by reliable sources.",
+   "sources": [],
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

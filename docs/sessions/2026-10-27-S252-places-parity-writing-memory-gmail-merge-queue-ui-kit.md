@@ -16,8 +16,8 @@ thì không ghi; phần chưa kiểm ghi rõ "chưa verify". Không đếm tổn
   AA-995 (trang khách TripPlanner thân thiện, có chuyển động).
 - **Đang dở:** AA-790, AA-991, AA-988, AA-989, AA-990, AA-919, AA-784, AA-945, AA-682, AA-979, AA-993 (In Review),
   AA-994, AA-995. Chưa đụng: AA-861, AA-816. Chi tiết ở mục "Đang dở".
-- **Migration áp Dev:** CIS từ 282 (đầu phiên) lên **288** (checklist ghi: 284 WM-17, 286 route place card, 287 WM-18/20,
-  288 FK `raw_tours.country` → `shared.countries`); Booking **bk-025**, **bk-026**; TripPlanner **tp-020**;
+- **Migration áp Dev:** CIS từ 282 (đầu phiên) lên **288** (283 A10b (AA-816), 284 WM-17, 285 AA-990 D1 redirect, 286 route place card,
+  287 WM-18/20, 288 FK `raw_tours.country` → `shared.countries`); Booking **bk-025**, **bk-026**; TripPlanner **tp-020**;
   CRM **crm-020**, **crm-021**.
 - **Jira:** không soạn, không đăng trong S252 — gom sang S253 (xem mục Jira).
 

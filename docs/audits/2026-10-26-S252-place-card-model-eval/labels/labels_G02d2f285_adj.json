@@ -1,0 +1,1084 @@
+{
+ "group_id": "G02d2f285",
+ "labeller": "adj",
+ "reference": {
+  "name": "Tonle Sap (Tonle Sap Lake)",
+  "locality": "Siem Reap (usual access town; lake spans several provinces)",
+  "region": "Central Cambodia",
+  "country": "Cambodia",
+  "lat": 12.883,
+  "lon": 104.067,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+    "tier": "T1",
+    "quote": "is a lake in central Cambodia"
+   },
+   {
+    "url": "https://www.unesco.org/en/mab/tonle-sap",
+    "tier": "T1",
+    "quote": "Tonle Sap Lake, the most extensive freshwater lake in South-east Asia"
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "V540bff2d",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Tonle Sap Lake, central Cambodia; no locality given. Sold-as Thailand is wrong but variant correctly says Cambodia."
+  },
+  {
+   "vid": "Vffe8a5a2",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Region 'Tonle Sap basin' is a valid geographic region for the lake; Cambodia correct."
+  },
+  {
+   "vid": "V6f95355e",
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Siem Reap is the usual reference town (~15 km to Chong Kneas); lake borders Siem Reap Province among others."
+  },
+  {
+   "vid": "V3713b74d",
+   "name": "ok",
+   "locality": "acceptable_nearby",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Same as above; Siem Reap Province borders the lake."
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F63423657",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "As the monsoon rain begins, the water level of the river begins to rise, eventually reversing the flow of the river."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River flows six months a year from southeast (Mekong) to northwest (lake) and six months a year in the opposite direction."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Tonle Sap River reverses seasonally; lake expands in the wet season."
+  },
+  {
+   "fid": "F49c24d74",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "is a lake in central Cambodia"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap is the largest freshwater lake in Southeast Asia and one of the most diverse and productive ecosystems in the world"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Restates identity (freshwater lake in Cambodia)."
+  },
+  {
+   "fid": "F67d945f9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The lake is surrounded by freshwater mangroves known as \"flood forests\""
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The Tonle Sap Lake District has always been a vital fishing and agricultural production area for Cambodia"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Flooded forests, wetlands and fisheries are documented."
+  },
+  {
+   "fid": "F2c9b64cf",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River flows six months a year from southeast (Mekong) to northwest (lake) and six months a year in the opposite direction."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "the water body expands in the rainy season, increasing the depth to"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Mekong water flows into the lake in the wet season, increasing area and depth."
+  },
+  {
+   "fid": "F07619ad4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap is the largest freshwater lake in Southeast Asia and one of the most diverse and productive ecosystems in the world"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "is a lake in central Cambodia"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Largest freshwater lake in Southeast Asia, central Cambodia."
+  },
+  {
+   "fid": "Fbd9dddb8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "It was designated as a Biosphere Reserve by UNESCO in 1997 due to its high biodiversity."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap_Biosphere_Reserve",
+     "tier": "T1",
+     "quote": "In 1997, it was successfully nominated as a UNESCO Biosphere Reserve."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "UNESCO biosphere reserve 1997."
+  },
+  {
+   "fid": "F75106e9b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.unesco.org/en/mab/tonle-sap",
+     "tier": "T1",
+     "quote": "The ethnic origins of residents include Cham, Vietnamese and Khmer."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The area is home to many ethnic Vietnamese and numerous Cham communities, living in floating villages around the lake."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Khmer, Vietnamese and Cham residents; floating villages dependent on fishing."
+  },
+  {
+   "fid": "Fbcd5a899",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The area is home to many ethnic Vietnamese and numerous Cham communities, living in floating villages around the lake."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap stilt houses"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Floating villages and stilt houses documented."
+  },
+  {
+   "fid": "F920b2fd4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "who live in floating villages on boats by the lake"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The area is home to many ethnic Vietnamese and numerous Cham communities, living in floating villages around the lake."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Residents live in floating villages on boats; long-established communities."
+  },
+  {
+   "fid": "F21cde519",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "It was designated as a Biosphere Reserve by UNESCO in 1997 due to its high biodiversity."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap_Biosphere_Reserve",
+     "tier": "T1",
+     "quote": "In 1997, it was successfully nominated as a UNESCO Biosphere Reserve."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "UNESCO Biosphere Reserve 1997."
+  },
+  {
+   "fid": "Fc4ba526b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "is a lake in central Cambodia"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "is a lake in central Cambodia."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Restates identity."
+  },
+  {
+   "fid": "F5c834300",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River connects the Tonle Sap Lake with the Mekong River and contributes 9% of the flow of the Mekong."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River flows six months a year from southeast (Mekong) to northwest (lake) and six months a year in the opposite direction."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Connected by the Tonle Sap River whose flow reverses seasonally."
+  },
+  {
+   "fid": "Fb703c498",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "It was designated as a Biosphere Reserve by UNESCO in 1997 due to its high biodiversity."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap_Biosphere_Reserve",
+     "tier": "T1",
+     "quote": "In 1997, it was successfully nominated as a UNESCO Biosphere Reserve."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Tonle Sap Biosphere Reserve, UNESCO 1997."
+  },
+  {
+   "fid": "Fc15b21fc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "As the monsoon rain begins, the water level of the river begins to rise, eventually reversing the flow of the river."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap_River",
+     "tier": "T1",
+     "quote": "in the monsoon season (May to October), the Mekong's floods cause the Tonle Sap river to reverse its flow."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Wikipedia ties the reversal to the monsoon rains; area and depth vary."
+  },
+  {
+   "fid": "Fcdbf5100",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.unesco.org/en/mab/tonle-sap",
+     "tier": "T1",
+     "quote": "Tonle Sap Lake is one of the top four fishery production areas in the world."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The Tonle Sap Lake District has always been a vital fishing and agricultural production area for Cambodia"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "One of the world's top fishery production areas; long central to Cambodian fishing."
+  },
+  {
+   "fid": "Fe87bc845",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.unesco.org/en/mab/tonle-sap",
+     "tier": "T1",
+     "quote": "the Mekong River overflows and can expand the size of the lake by up to five times"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "with a minimum area of about 2,500–3,000 km2"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Area grows from ~2,500–3,000 km2 to ~16,000 km2 (5-6x)."
+  },
+  {
+   "fid": "Fd41a36e4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The Tonle Sap Lake District has always been a vital fishing and agricultural production area for Cambodia"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "account for 60% of the country's population's protein intake"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Vital fishing area that sustained settlements (incl. Angkor)."
+  },
+  {
+   "fid": "Ffc862e64",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River flows six months a year from southeast (Mekong) to northwest (lake) and six months a year in the opposite direction."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River connects the Tonle Sap Lake with the Mekong River and contributes 9% of the flow of the Mekong."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Reverses twice a year (six months each way); 'uniquely' is mild hyperbole."
+  },
+  {
+   "fid": "F78fb8b21",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.unesco.org/en/mab/tonle-sap",
+     "tier": "T1",
+     "quote": "Tonle Sap Lake is one of the top four fishery production areas in the world."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "account for 60% of the country's population's protein intake"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Top fishery production area; ~60% of Cambodians' protein intake."
+  },
+  {
+   "fid": "Fec872381",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "the remaining waters in the northwest corner of the lower Mekong plain formed the Tonle Sap"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap is the largest freshwater lake in Southeast Asia and one of the most diverse and productive ecosystems in the world."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "A natural lake formed over millennia, not founded by a Portuguese mission in 1742."
+  },
+  {
+   "fid": "Ffba06cd2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "is a lake in central Cambodia"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The lake is surrounded by freshwater mangroves known as \"flood forests\""
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Freshwater lake and wetland system in central Cambodia; near-identity restatement."
+  },
+  {
+   "fid": "Fefdda1eb",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "It was designated as a Biosphere Reserve by UNESCO in 1997 due to its high biodiversity."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap_Biosphere_Reserve",
+     "tier": "T1",
+     "quote": "In 1997, it was successfully nominated as a UNESCO Biosphere Reserve."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "UNESCO 1997."
+  },
+  {
+   "fid": "Fd552e79f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River flows six months a year from southeast (Mekong) to northwest (lake) and six months a year in the opposite direction."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap_Biosphere_Reserve",
+     "tier": "T1",
+     "quote": "This causes the Mekong River to rise enough to reverse the flow of the Tonle Sap River causing it to flow back into the lake."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Mekong water pushes up the Tonle Sap River into the lake in the wet season and drains back in the dry season."
+  },
+  {
+   "fid": "F11f9261e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "It was designated as a Biosphere Reserve by UNESCO in 1997 due to its high biodiversity."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Designated 1997 due to high biodiversity."
+  },
+  {
+   "fid": "F3245e879",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.unesco.org/en/mab/tonle-sap",
+     "tier": "T1",
+     "quote": "The ethnic origins of residents include Cham, Vietnamese and Khmer."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The area is home to many ethnic Vietnamese and numerous Cham communities, living in floating villages around the lake."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Khmer, Vietnamese and Cham fishing communities in floating/stilt villages."
+  },
+  {
+   "fid": "Fb965fa8d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Fresh River or commonly translated as 'Great Lake'"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Literal translation Fresh River or commonly translated as 'Great Lake'"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Commonly translated 'Great Lake'."
+  },
+  {
+   "fid": "F13700e58",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The lake is surrounded by freshwater mangroves known as \"flood forests\""
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "the water body expands in the rainy season, increasing the depth to"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Swells in wet season flooding forests; shrinks in dry season."
+  },
+  {
+   "fid": "F3fc1d11f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The area is home to many ethnic Vietnamese and numerous Cham communities, living in floating villages around the lake."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap stilt houses"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Stilt and floating settlements around the lake."
+  },
+  {
+   "fid": "F64b6d3e2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The area is home to many ethnic Vietnamese and numerous Cham communities, living in floating villages around the lake."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "The lake is surrounded by freshwater mangroves known as \"flood forests\""
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Floating/stilted fishing communities and wetlands."
+  },
+  {
+   "fid": "F027d501c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River connects the Tonle Sap Lake with the Mekong River and contributes 9% of the flow of the Mekong."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River flows six months a year from southeast (Mekong) to northwest (lake) and six months a year in the opposite direction."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Connected by the Tonle Sap River, which reverses seasonally."
+  },
+  {
+   "fid": "F32dcbe3c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap",
+     "tier": "T1",
+     "quote": "Tonle Sap River connects the Tonle Sap Lake with the Mekong River and contributes 9% of the flow of the Mekong."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Tonle_Sap_River",
+     "tier": "T1",
+     "quote": "is a river in Cambodia that connects the Tonle Sap lake with the Mekong river."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Connected to the Mekong by the Tonle Sap River."
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "acceptable_nearby",
+    "acceptable_nearby"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "acceptable_nearby",
+    "acceptable_nearby"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

@@ -1,0 +1,841 @@
+{
+ "group_id": "G109b1c47",
+ "labeller": "adj",
+ "reference": {
+  "name": "Zilukha Nunnery (Zilukha Anim Dratshang / Drubthob Goemba)",
+  "locality": "Thimphu (Zilukha district)",
+  "region": "Thimphu District",
+  "country": "Bhutan",
+  "lat": 27.489,
+  "lon": 89.631,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Thimphu",
+    "tier": "T1",
+    "quote": "It contains the Drubthob Gonpa/Zilukha Nunnery once belonged to the Drubthob (Realized one) Thang Thong Gyalpo"
+   },
+   {
+    "url": "https://www.lonelyplanet.com/points-of-interest/zilukha-nunnery/1366178",
+    "tier": "T2",
+    "quote": "Just off Gadem Lam, on the hillside above Trashi Chho Dzong, this small, friendly nunnery has links to Thangtong Gyelpo"
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "Vbac24066",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct nunnery in Zilukha, Thimphu; the Thimphu region equals Thimphu dzongkhag.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V755ebf2f",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Correct nunnery in Thimphu, Thimphu District, Bhutan.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Fc53ca4da",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "The building layout (temple, prayer hall, nuns' quarters) is plausible but no reliable source describes it.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F35e93396",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/zilukha-nunnery/1366178",
+     "tier": "T2",
+     "quote": "Just off Gadem Lam, on the hillside above Trashi Chho Dzong, this small, friendly nunnery has links to Thangtong Gyelpo"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "Zilukha is a northern district, located between Jungshina to the north and Sangyegang to the south."
+    }
+   ],
+   "rationale": "Lonely Planet POI page (quote verified at the canonical POI URL; A's old URL now redirects to a generic Bhutan page) puts it on the hillside above Trashi Chho Dzong; Wikipedia places it in Zilukha, Thimphu; no T1 contradiction.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F5323b310",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Thangtong_Gyalpo",
+     "tier": "T1",
+     "quote": "Thangtong Gyalpo (1385 CE–1464 CE"
+    }
+   ],
+   "rationale": "1385-1464 is the 15th century.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fac500ad3",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "'One of the few active nunneries in Bhutan' is unsourced and probably overstated (Bhutan has many nunneries); daily pujas are not documented by a reliable source.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd6f538ab",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "Drubthob Goemba (now the Zilluka nunnery)"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "It contains the Drubthob Gonpa/Zilukha Nunnery once belonged to the Drubthob (Realized one) Thang Thong Gyalpo"
+    }
+   ],
+   "rationale": "Wikipedia equates Drubthob Goemba with the Zilukha nunnery, linked to Thangtong Gyalpo.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4c66bf92",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://thebhutanese.bt/mixed-feelings-about-surge-in-number-of-tourists-at-anim-dratshang/",
+     "tier": "T2",
+     "quote": "'Anim Dratshang' in Thimphu located at Zilukha"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "It contains the Drubthob Gonpa/Zilukha Nunnery once belonged to the Drubthob (Realized one) Thang Thong Gyalpo"
+    }
+   ],
+   "rationale": "Restates identity: a nunnery (anim dratshang) in Thimphu.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa2eaf573",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "It contains the Drubthob Gonpa/Zilukha Nunnery once belonged to the Drubthob (Realized one) Thang Thong Gyalpo"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thangtong_Gyalpo",
+     "tier": "T1",
+     "quote": "Thangtong Gyalpo (1385 CE–1464 CE"
+    }
+   ],
+   "rationale": "Only numeric differed: '15th-century' is a date claim, so numeric=true; Wikipedia Thimphu ties the nunnery to Thang Thong Gyalpo (1385-1464).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fb1c7ba32",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "No reliable source gives the nuns' school; the nunnery is linked to Thangtong Gyalpo's lineage, and the Drukpa Kagyu affiliation is unconfirmed.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe6ac3964",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://thebhutanese.bt/mixed-feelings-about-surge-in-number-of-tourists-at-anim-dratshang/",
+     "tier": "T2",
+     "quote": "'Anim Dratshang' in Thimphu located at Zilukha"
+    },
+    {
+     "url": "https://thebhutanese.bt/mixed-feelings-about-surge-in-number-of-tourists-at-anim-dratshang/",
+     "tier": "T2",
+     "quote": "We have around 50 nuns and our nunnery welcomes people of all cultures and faith."
+    }
+   ],
+   "rationale": "A nunnery (Anim Dratshang) at Zilukha, Thimphu.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F27591b08",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/zilukha-nunnery/1366178",
+     "tier": "T2",
+     "quote": "Just off Gadem Lam, on the hillside above Trashi Chho Dzong, this small, friendly nunnery has links to Thangtong Gyelpo"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "It contains the Drubthob Gonpa/Zilukha Nunnery once belonged to the Drubthob (Realized one) Thang Thong Gyalpo"
+    }
+   ],
+   "rationale": "Lonely Planet (verified at canonical POI URL): hillside above Trashi Chho Dzong, i.e. above the valley floor in the Thimphu valley; Wikipedia confirms it is in Thimphu.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F1cb1b5cd",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Hillside above the city is supported, but 'wooded' and 'western edge' are not; Wikipedia places Zilukha in northern Thimphu.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc41df8c1",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "No reliable source confirms a Drukpa Kagyu affiliation.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3c947cb5",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Thangtong_Gyalpo",
+     "tier": "T1",
+     "quote": "Thangtong Gyalpo (1385 CE–1464 CE"
+    }
+   ],
+   "rationale": "Thangtong Gyalpo lived 1385-1464 (15th century), not the 19th.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9fde17f7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://thebhutanese.bt/mixed-feelings-about-surge-in-number-of-tourists-at-anim-dratshang/",
+     "tier": "T2",
+     "quote": "We have around 50 nuns and our nunnery welcomes people of all cultures and faith."
+    }
+   ],
+   "rationale": "A nunnery, i.e. a monastic house for nuns.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fac187b34",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "No reliable source describes a central lhakhang used for communal ceremonies.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F37101afc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "traditional Bhutanese building structures in Thimphu are the Tashichho Dzong, Drubthob Goemba (now the Zilluka nunnery)"
+    },
+    {
+     "url": "https://thebhutanese.bt/mixed-feelings-about-surge-in-number-of-tourists-at-anim-dratshang/",
+     "tier": "T2",
+     "quote": "We have around 50 nuns and our nunnery welcomes people of all cultures and faith"
+    }
+   ],
+   "rationale": "Wikipedia lists Drubthob Goemba (now the Zilluka nunnery) among Thimphu's most prominent traditional buildings; The Bhutanese (2017) quotes a senior nun: around 50 nuns, learning Buddha's teaching. Wikivoyage (B) not used.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F2aed3fbd",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "No reliable source gives a founding year; a local blog says the temple was built 1981-1983, which conflicts with 1976 but is not a reliable source.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F30041bf8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "It contains the Drubthob Gonpa/Zilukha Nunnery once belonged to the Drubthob (Realized one) Thang Thong Gyalpo"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thangtong_Gyalpo",
+     "tier": "T1",
+     "quote": "Thangtong Gyalpo (1385 CE–1464 CE"
+    }
+   ],
+   "rationale": "Linked to Thangtong Gyalpo, whose dates are 1385-1464.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1949894d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://thebhutanese.bt/mixed-feelings-about-surge-in-number-of-tourists-at-anim-dratshang/",
+     "tier": "T2",
+     "quote": "'Anim Dratshang' in Thimphu located at Zilukha has become a popular tourist destination"
+    },
+    {
+     "url": "https://thebhutanese.bt/mixed-feelings-about-surge-in-number-of-tourists-at-anim-dratshang/",
+     "tier": "T2",
+     "quote": "One tourist visiting the Anim dratshang questioned why the nunnery had male gods"
+    }
+   ],
+   "rationale": "The Bhutanese uses 'Anim Dratshang' at Zilukha interchangeably with 'the nunnery' (quotes verified on page); T2, no T1 contradiction.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F9d22ac5a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/zilukha-nunnery/1366178",
+     "tier": "T2",
+     "quote": "Just off Gadem Lam, on the hillside above Trashi Chho Dzong, this small, friendly nunnery has links to Thangtong Gyelpo"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "Zilukha is a northern district, located between Jungshina to the north and Sangyegang to the south."
+    }
+   ],
+   "rationale": "Wikipedia puts the nunnery in the Zilukha district; Lonely Planet (verified at canonical POI URL) says hillside above Trashi Chho Dzong.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F03b543a0",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "No reliable source mentions a tradition that Thangtong Gyalpo meditated at this site.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4fcbe868",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "Zilukha is a northern district, located between Jungshina to the north and Sangyegang to the south."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "Motithang is a north-western district of Thimphu."
+    }
+   ],
+   "rationale": "Wikipedia Thimphu: the nunnery is in Zilukha (northern district, north of Sangyegang), while Motithang is a separate north-western district south of Kawajangsa, so 'above Motithang' is wrong; 'overlooking the valley' is a view claim (trip_leak).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F8d1b3e43",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "A generic description of temple and residences; no reliable source.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F6051a737",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "A generic description of temple and residences; no reliable source.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F43a1f833",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Drukpa Kagyu is Bhutan's dominant school, but no source confirms this nunnery belongs to it.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2e2e256b",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Wikipedia only says it is a traditional Bhutanese building; 'whitewashed walls and a central temple' not found in a reliable source, so unverifiable (same rule as other partly-sourced facts).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F3fd833b4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "It contains the Drubthob Gonpa/Zilukha Nunnery once belonged to the Drubthob (Realized one) Thang Thong Gyalpo"
+    },
+    {
+     "url": "https://thebhutanese.bt/mixed-feelings-about-surge-in-number-of-tourists-at-anim-dratshang/",
+     "tier": "T2",
+     "quote": "'Anim Dratshang' in Thimphu located at Zilukha"
+    }
+   ],
+   "rationale": "Restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F04244d28",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Drukpa Kagyu affiliation not confirmed by a reliable source.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F71d7559c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/zilukha-nunnery/1366178",
+     "tier": "T2",
+     "quote": "Just off Gadem Lam, on the hillside above Trashi Chho Dzong, this small, friendly nunnery has links to Thangtong Gyelpo"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "It is situated in the western central part of Bhutan"
+    }
+   ],
+   "rationale": "Lonely Planet (verified at canonical POI URL): hillside above Trashi Chho Dzong; Wikipedia: Thimphu is in western central Bhutan.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F664f97e7",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Thimphu",
+     "tier": "T1",
+     "quote": "Zilukha is a northern district, located between Jungshina to the north and Sangyegang to the south."
+    },
+    {
+     "url": "https://www.lonelyplanet.com/points-of-interest/zilukha-nunnery/1366178",
+     "tier": "T2",
+     "quote": "Just off Gadem Lam, on the hillside above Trashi Chho Dzong, this small, friendly nunnery has links to Thangtong Gyelpo"
+    }
+   ],
+   "rationale": "Zilukha is the northern district of Thimphu; the nunnery is on the hillside there.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "contradicted",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

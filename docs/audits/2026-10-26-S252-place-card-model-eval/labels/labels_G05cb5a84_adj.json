@@ -1,0 +1,334 @@
+{
+ "group_id": "G05cb5a84",
+ "labeller": "adj",
+ "reference": {
+  "name": "the Night Market (ambiguous: most likely Luang Prabang Night Market on Sisavangvong Road; Vientiane's Mekong riverside night market also fits)",
+  "locality": null,
+  "region": null,
+  "country": "Laos",
+  "lat": null,
+  "lon": null,
+  "identifiable": "ambiguous",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+    "tier": "T1",
+    "quote": "is an open-air flea Night Market located in downtown of Luang Prabang, Luang Prabang Province, Laos."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Luang_Prabang",
+    "tier": "T1",
+    "quote": "At the end of the main street of Luang Prabang is a night market where stalls sell shirts, bracelets, and other souvenirs."
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "Ved70903e",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Consistent Luang Prabang Night Market identity (Sisavangvong Road, Luang Prabang, Laos). The itinerary sentence alone is ambiguous: an arrival-day Mekong walk plus 'the Night Market' fits Luang Prabang and equally Vientiane's riverside night market in Chao Anouvong Park; it cannot be confirmed from the tour text given."
+  }
+ ],
+ "facts": [
+  {
+   "fid": "Fa1cadfd5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang",
+     "tier": "T1",
+     "quote": "Designated a UNESCO World Heritage Site in 1995, the city is recognized for blending Lao architecture, European colonial buildings, and over 30 Buddhist temples"
+    },
+    {
+     "url": "https://whc.unesco.org/en/list/479/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1995"
+    }
+   ],
+   "rationale": "Town of Luang Prabang inscribed 1995 for its blend of traditional Lao and European colonial architecture with Buddhist temples. Fact is about the town, not the market. (Judged as a fact about the Luang Prabang Night Market; the itinerary's 'Night Market' could also be Vientiane's riverside market.)",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3c3682ce",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "to sell their wares such as handicrafts, textile, Hmong embroidery, jewelry, arts, food"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "Meanwhile, Hmong craftsmen and other local ethnic groups came to sell their wares to tourists and foreign passers-by."
+    }
+   ],
+   "rationale": "Hmong, Khmu and Lao sellers offer handicrafts, textiles and Hmong embroidery; 'best known for' is a mild characterisation. (Judged as a fact about the Luang Prabang Night Market; the itinerary's 'Night Market' could also be Vientiane's riverside market.)",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7aa92326",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "is an open-air flea Night Market located in downtown of Luang Prabang, Luang Prabang Province, Laos."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "It is open daily from 5:00 pm – 11:00 pm local time"
+    }
+   ],
+   "rationale": "Resolved trivial only (A true, B false): the fact restates the card's type and location (a night market in Luang Prabang); the old-town/UNESCO point is carried by F12969d45. Supported by Wikipedia Luang_Prabang_Night_Market.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fa4ee2184",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "to sell their wares such as handicrafts, textile, Hmong embroidery, jewelry, arts, food"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang",
+     "tier": "T1",
+     "quote": "At the end of the main street of Luang Prabang is a night market where stalls sell shirts, bracelets, and other souvenirs."
+    }
+   ],
+   "rationale": "Handicrafts, textiles, jewellery and souvenirs are documented. (Judged as a fact about the Luang Prabang Night Market; the itinerary's 'Night Market' could also be Vientiane's riverside market.)",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F12969d45",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/479/",
+     "tier": "T1",
+     "quote": "Date of Inscription: 1995"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "is an open-air flea Night Market located in downtown of Luang Prabang, Luang Prabang Province, Laos."
+    }
+   ],
+   "rationale": "Market is in downtown Luang Prabang on Sisavangvong Road, within the UNESCO town inscribed 1995. (Judged as a fact about the Luang Prabang Night Market; the itinerary's 'Night Market' could also be Vientiane's riverside market.)",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F845d4a7f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "on Sisavangvong Road and end at the intersections of Chao Fa Ngum and Kingkitsarat Roads."
+    }
+   ],
+   "rationale": "Market runs along Sisavangvong Road to the Chao Fa Ngum / Kingkitsarat intersections. (Judged as a fact about the Luang Prabang Night Market; the itinerary's 'Night Market' could also be Vientiane's riverside market.)",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9171eb23",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "is an open-air flea Night Market located in downtown of Luang Prabang, Luang Prabang Province, Laos."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "It is open daily from 5:00 pm – 11:00 pm local time"
+    }
+   ],
+   "rationale": "Resolved trivial only (A true, B false): restates name, type and locality (evening market in Luang Prabang, northern Laos), like F6cf97ff0 in other groups. Supported by Wikipedia Luang_Prabang_Night_Market.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fa2b3565b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://whc.unesco.org/en/list/479/",
+     "tier": "T1",
+     "quote": "The town is built on a peninsula formed by the Mekong and the Nam Khan River."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "on Sisavangvong Road and end at the intersections of Chao Fa Ngum and Kingkitsarat Roads."
+    }
+   ],
+   "rationale": "Sisavangvong Road is the main street of the old town, which is built on the Mekong-Nam Khan peninsula. (Judged as a fact about the Luang Prabang Night Market; the itinerary's 'Night Market' could also be Vientiane's riverside market.)",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F95f7ea70",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "Since then, not only the Hmong, but there are also the Lao, Khmu, and others who come to sell their know-how."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Luang_Prabang_Night_Market",
+     "tier": "T1",
+     "quote": "to sell their wares such as handicrafts, textile, Hmong embroidery, jewelry, arts, food"
+    }
+   ],
+   "rationale": "Resolved: A supported/trip_leak true, B unverifiable/false. Wikipedia Luang_Prabang_Night_Market (checked) says the market began with Hmong craftsmen and lists Hmong embroidery among its wares; A's first quote appears on the page with a stray '+' so a clean quote is used. trip_leak true as for the other 'what the stalls sell' facts both labellers marked true. Judged about the Luang Prabang market; the itinerary referent is ambiguous.",
+   "agreement": "resolved"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

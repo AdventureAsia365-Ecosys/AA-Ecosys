@@ -1,0 +1,781 @@
+{
+ "group_id": "G03258223",
+ "labeller": "adj",
+ "reference": {
+  "name": "Blue Lagoon 2",
+  "locality": "Vang Vieng (Vang Vieng district, ~8 km W-SW of town)",
+  "region": "Vientiane Province",
+  "country": "Laos",
+  "lat": 18.8894,
+  "lon": 102.3775,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://photon.komoot.io/api/?q=Blue+Lagoon+2+Vang+Vieng&limit=5",
+    "tier": "T2",
+    "quote": "\"name\":\"Blue Lagoon 2\",\"county\":\"ວັງວຽງ\",\"state\":\"ວຽງຈັນ\""
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+    "tier": "T1",
+    "quote": "is a city in the Vientiane Province of Laos."
+   }
+  ],
+  "labeller_note": "A and B agree on the reference identity."
+ },
+ "variants": [
+  {
+   "vid": "Vf3f29c99",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "A and B agree. Locality 'Lhasa' is the capital of Tibet, not a place near Vang Vieng; other fields correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V258ea45a",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Resolved locality to correct (B). OSM via Photon puts Blue Lagoon 2 (node 12295743944, 18.889N 102.377E) in county ວັງວຽງ, i.e. Vang Vieng district. 'Vang Vieng' therefore names the containing district as well as the reference town (about 8 km away), not just a nearby town. Name, region and country correct; same entity.",
+   "agreement": "resolved"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F3f1253b8",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. No reliable source describes Blue Lagoon 2 as a small natural freshwater lagoon (vs. a dammed stream pool).",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4e2e8f07",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "Resolved to unverifiable (B). A's quotes are really on the pages (Tham Phu Kham: 'Its name means \"Blue Lagoon\" due to its blue waters'; Vang Vieng tourism growth since the late 1990s). But neither addresses when or by whom Blue Lagoon 2 was founded, and Tham Phu Kham is Blue Lagoon 1, another entity. The claim is almost certainly fabricated, but no reliable source directly contradicts it.",
+   "sources": [],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fca2de613",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Limestone karst landscape with caves around Vang Vieng; the rice-field/village detail is generic but consistent.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "There are also numerous caves, such as Tham Phu Kham half an hour north of Vang Vieng by tuk-tuk"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F40ba5a75",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Blue Lagoons 1, 2 and 3 are distinct sites in the same area.",
+   "sources": [
+    {
+     "url": "http://web.archive.org/web/20240718051708/https://theculturetrip.com/asia/laos/articles/11-must-visit-attractions-in-vang-vieng-laos",
+     "tier": "T2",
+     "quote": "Blue Lagoons 2 and 3 let you in on a slightly quieter alternative to their more famous counterpart."
+    },
+    {
+     "url": "https://photon.komoot.io/api/?q=Blue+Lagoon+2+Vang+Vieng&limit=5",
+     "tier": "T2",
+     "quote": "\"name\":\"Blue Lagoon 1\",\"city\":\"ວັງວຽງ\",\"county\":\"ວັງວຽງ\""
+    },
+    {
+     "url": "https://photon.komoot.io/api/?q=Blue+Lagoon+2+Vang+Vieng&limit=5",
+     "tier": "T2",
+     "quote": "\"name\":\"Blue Lagoon 2\",\"county\":\"ວັງວຽງ\",\"state\":\"ວຽງຈັນ\""
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F03c208e2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Vang Vieng is on the Nam Song in Vientiane Province.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "is a city in the Vientiane Province of Laos."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "It is on the Nam Song River, 130km north of Vientiane"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb2ded476",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "rationale": "Only trip_leak differed. 'Natural swimming hole' frames the place by what visitors do there (swim), so trip_leak=true. Verdict unverifiable (both labellers agree): no reliable source says it is spring-fed.",
+   "sources": [],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F8a56414e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. One of the numbered Blue Lagoons near Vang Vieng.",
+   "sources": [
+    {
+     "url": "http://web.archive.org/web/20240718051708/https://theculturetrip.com/asia/laos/articles/11-must-visit-attractions-in-vang-vieng-laos",
+     "tier": "T2",
+     "quote": "Blue Lagoons 2 and 3 let you in on a slightly quieter alternative to their more famous counterpart."
+    },
+    {
+     "url": "https://photon.komoot.io/api/?q=Blue+Lagoon+2+Vang+Vieng&limit=5",
+     "tier": "T2",
+     "quote": "\"name\":\"Blue Lagoon 1\",\"city\":\"ວັງວຽງ\",\"county\":\"ວັງວຽງ\""
+    },
+    {
+     "url": "https://photon.komoot.io/api/?q=Blue+Lagoon+2+Vang+Vieng&limit=5",
+     "tier": "T2",
+     "quote": "\"name\":\"Blue Lagoon 2\",\"county\":\"ວັງວຽງ\",\"state\":\"ວຽງຈັນ\""
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F950fb29b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Countryside around Vang Vieng is limestone karst.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0104ebba",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Separate numbered Blue Lagoon sites near Vang Vieng.",
+   "sources": [
+    {
+     "url": "http://web.archive.org/web/20240718051708/https://theculturetrip.com/asia/laos/articles/11-must-visit-attractions-in-vang-vieng-laos",
+     "tier": "T2",
+     "quote": "Blue Lagoons 2 and 3 let you in on a slightly quieter alternative to their more famous counterpart."
+    },
+    {
+     "url": "https://photon.komoot.io/api/?q=Blue+Lagoon+2+Vang+Vieng&limit=5",
+     "tier": "T2",
+     "quote": "\"name\":\"Blue Lagoon 1\",\"city\":\"ວັງວຽງ\",\"county\":\"ວັງວຽງ\""
+    },
+    {
+     "url": "https://photon.komoot.io/api/?q=Blue+Lagoon+2+Vang+Vieng&limit=5",
+     "tier": "T2",
+     "quote": "\"name\":\"Blue Lagoon 2\",\"county\":\"ວັງວຽງ\",\"state\":\"ວຽງຈັນ\""
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Feb1a9bc7",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. No reliable source explains this lagoon's colour by mineral content.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa012dd23",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Limestone karst landscape surrounds Vang Vieng.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9f58c560",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Karst limestone hills typical of the Vang Vieng area.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "Other activities include trekking and rock climbing in the limestone mountains."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe5a46d47",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. No reliable source on the cause of the water colour.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7de517ff",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Plausible, but no reliable source describes Blue Lagoon 2's water and setting specifically.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff73bc025",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": true,
+   "trivial": false,
+   "rationale": "A and B agree. Distances, villages and unpaved access tracks are only in blogs/tour sites.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2c3b9f45",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Karst countryside around Vang Vieng.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa4d7948d",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "rationale": "Only trip_leak differed. 'Swimming pools' describes the visitor activity, so trip_leak=true. Verdict unverifiable (both agree): spring-fed and turquoise are not reliably sourced for Blue Lagoon 2.",
+   "sources": [],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F34db6d0a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "rationale": "Only trivial differed. 'A freshwater lagoon near Vang Vieng' restates the name, type and locality fields, so trivial=true (as for the Summer Palace one-liners). Supported: Photon/OSM puts Blue Lagoon 2 in Vang Vieng district, and Culture Trip (archived) describes Blue Lagoons 2 and 3 as a longer tuk-tuk ride from town.",
+   "sources": [
+    {
+     "url": "https://photon.komoot.io/api/?q=Blue+Lagoon+2+Vang+Vieng&limit=5",
+     "tier": "T2",
+     "quote": "\"name\":\"Blue Lagoon 2\",\"county\":\"ວັງວຽງ\",\"state\":\"ວຽງຈັນ\""
+    },
+    {
+     "url": "http://web.archive.org/web/20240718051708/https://theculturetrip.com/asia/laos/articles/11-must-visit-attractions-in-vang-vieng-laos",
+     "tier": "T2",
+     "quote": "not to mention a longer and bumpier tuk-tuk ride from town"
+    }
+   ],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fe1055e66",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Karst limestone hills around Vang Vieng; the jungle detail is generic.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "in the spectacular limestone karst landscape surrounding the town"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0424f725",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "rationale": "Resolved to unverifiable (B). A's Culture Trip quote is real (archived page: 'Still, there are plenty of zip lines, slides and swings to get you plunging into the water'). But it supports only zip lines, slides and swings, not landscaped banks or wooden platforms. Culture Trip is also at most a T2 travel outlet. trip_leak true (both agree).",
+   "sources": [],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Faae35244",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Water source (local streams) and clarity not reliably sourced.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F212f2a47",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Numbering is attested, but no reliable source on the origin of the name.",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F96f24579",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "rationale": "Only trip_leak differed. 'Natural swimming pool' describes what visitors do, so trip_leak=true. Verdict unverifiable (both agree): 'natural' is unsourced, and 'northern Laos' is loose, since Vientiane Province is usually called central Laos.",
+   "sources": [],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Ffa75aa92",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Vang Vieng is on the Nam Song in Vientiane Province.",
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "is a city in the Vientiane Province of Laos."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Vang_Vieng",
+     "tier": "T1",
+     "quote": "It is on the Nam Song River, 130km north of Vientiane"
+    }
+   ],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5db6aaba",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "Only numeric differed. The 1, 2 and 3 are lagoon names, not measured quantities, so numeric=false. Supported: OSM/Photon has separate Blue Lagoon 1 and Blue Lagoon 2 features in Vang Vieng district, and Culture Trip (archived) describes Blue Lagoons 2 and 3 separately from Blue Lagoon 1.",
+   "sources": [
+    {
+     "url": "https://photon.komoot.io/api/?q=Blue+Lagoon+2+Vang+Vieng&limit=5",
+     "tier": "T2",
+     "quote": "\"name\":\"Blue Lagoon 2\",\"county\":\"ວັງວຽງ\",\"state\":\"ວຽງຈັນ\""
+    },
+    {
+     "url": "http://web.archive.org/web/20240718051708/https://theculturetrip.com/asia/laos/articles/11-must-visit-attractions-in-vang-vieng-laos",
+     "tier": "T2",
+     "quote": "Blue Lagoons 2 and 3 let you in on a slightly quieter alternative to their more famous counterpart."
+    }
+   ],
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fdd758a94",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Colour not described by a reliable source for Blue Lagoon 2 (the 'blue waters' source is about Blue Lagoon 1 / Tham Phu Kham).",
+   "sources": [],
+   "agreement": "agree"
+  },
+  {
+   "fid": "F6ed6c189",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "rationale": "A and B agree. Size and colour not reliably sourced.",
+   "sources": [],
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "acceptable_nearby",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "contradicted",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

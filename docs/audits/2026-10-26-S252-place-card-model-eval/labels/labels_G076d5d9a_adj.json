@@ -1,0 +1,870 @@
+{
+ "group_id": "G076d5d9a",
+ "labeller": "adj",
+ "reference": {
+  "name": "Ban Mae Taman (บ้านแม่ตะมาน)",
+  "locality": "Mae Taeng (Kuet Chang subdistrict)",
+  "region": "Chiang Mai Province",
+  "country": "Thailand",
+  "lat": 19.2011,
+  "lon": 98.8879,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+    "tier": "T1",
+    "quote": "Ban Mae Taman บ้านแม่ตะมาน"
+   },
+   {
+    "url": "https://www.openstreetmap.org/node/7795859540",
+    "tier": "T1",
+    "quote": "name:th บ้านแม่ตะมาน name:en Ban Mae Taman place village"
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "V374a2f6f",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Ban Mae Taman, Kuet Chang subdistrict, Mae Taeng District, Chiang Mai Province."
+  },
+  {
+   "vid": "Vf3cf3443",
+   "name": "ok",
+   "locality": "empty",
+   "region": "empty",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Name and country right; locality and region left empty although the village is identifiable (Mae Taeng, Chiang Mai)."
+  },
+  {
+   "vid": "Vca55a617",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Mae Taeng District, Chiang Mai Province."
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F0690a111",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://commons.wikimedia.org/wiki/File:Mae_ta_mann-10.jpg",
+     "tier": "T2",
+     "quote": "La rivière Mae Taeng, Province de Chiang Mai, Thaïlande."
+    },
+    {
+     "url": "https://www.openstreetmap.org/node/7795859540",
+     "tier": "T1",
+     "quote": "\"osm_value\":\"village\",\"type\":\"city\",\"name\":\"บ้านแม่ตะมาน\",\"county\":\"อำเภอแม่แตง\",\"state\":\"จังหวัดเชียงใหม่\""
+    }
+   ],
+   "rationale": "OSM places the village at 19.2011N 98.8879E; a Commons photo titled 'Mae ta mann' geotagged ~200 m away (19.1995N 98.8894E) shows the Mae Taeng River.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7d1b8531",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "The Taeng River separates the Thanon Thong Chai Range from the Daen Lao Range; the village lies on the river, and no reliable source assigns it to the Thanon Thong Chai foothills rather than the Daen Lao side.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc5ca5693",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Kuet Chang (Thai: กื้ดช้าง) is a tambon (subdistrict) of Mae Taeng District, in Chiang Mai Province, Thailand."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Ban Mae Taman บ้านแม่ตะมาน"
+    }
+   ],
+   "rationale": "Wikipedia lists Ban Mae Taman as village no. 2 of Kuet Chang subdistrict, Mae Taeng District.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fcbe5952c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Muban",
+     "tier": "T1",
+     "quote": "Ban in the sense of Village occurs in geopolitical toponyms on maps and Thai highway network signage"
+    }
+   ],
+   "rationale": "Ban means village and is retained in Thai toponyms.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F9906cdbc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Kuet Chang (Thai: กื้ดช้าง) is a tambon (subdistrict) of Mae Taeng District, in Chiang Mai Province, Thailand."
+    }
+   ],
+   "rationale": "Village in Chiang Mai Province, northern Thailand.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff044b593",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": true,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Elephant_Nature_Park",
+     "tier": "T1",
+     "quote": "Elephant Nature Park is a sanctuary and rescue centre for elephants in Mae Taeng District, Chiang Mai province, northern Thailand"
+    }
+   ],
+   "rationale": "Elephant Nature Park (and other elephant camps) are in Mae Taeng District; the 'mahout communities' part is not separately sourced.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0cb756bb",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://th.wikipedia.org/wiki/ตำบลกื้ดช้าง",
+     "tier": "T1",
+     "quote": "กื้ดช้าง เป็นตำบลในอำเภอแม่แตง จังหวัดเชียงใหม่ มีลักษณะเป็นภูเขาสูง เป็นที่ตั้งของที่ทำการอุทยานแห่งชาติห้วยน้ำดัง"
+    },
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=Taeng_River&oldid=1254488799",
+     "tier": "T1",
+     "quote": "It then flows through Chiang Dao District and Mae Taeng District, separating the Thanon Thong Chai Range from the Daen Lao Range"
+    }
+   ],
+   "rationale": "Kuet Chang is high mountain terrain with a national park; the Taeng River valley runs through Mae Taeng District.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb55551fc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Muban",
+     "tier": "T1",
+     "quote": "Muban may function as one word, in the sense of a hamlet or village, and as such, it may be shortened to ban."
+    }
+   ],
+   "rationale": "Ban = village (shortened form of muban).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F15959db0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://commons.wikimedia.org/wiki/File:Mae_ta_mann-10.jpg",
+     "tier": "T2",
+     "quote": "La rivière Mae Taeng, Province de Chiang Mai, Thaïlande."
+    },
+    {
+     "url": "https://www.openstreetmap.org/node/7795859540",
+     "tier": "T1",
+     "quote": "\"osm_value\":\"village\",\"type\":\"city\",\"name\":\"บ้านแม่ตะมาน\",\"county\":\"อำเภอแม่แตง\",\"state\":\"จังหวัดเชียงใหม่\""
+    }
+   ],
+   "rationale": "Village sits by the Mae Taeng River at ~19.20N, roughly 45 km north of Chiang Mai city (18.79N); Kuet Chang is mountainous and forested (national park).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F00842fbb",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Kuet Chang (Thai: กื้ดช้าง) is a tambon (subdistrict) of Mae Taeng District, in Chiang Mai Province, Thailand."
+    }
+   ],
+   "rationale": "Northern Thailand.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8e7676c9",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Kuet Chang (Thai: กื้ดช้าง) is a tambon (subdistrict) of Mae Taeng District, in Chiang Mai Province, Thailand."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Ban Mae Taman บ้านแม่ตะมาน"
+    }
+   ],
+   "rationale": "Restates identity (village, Mae Taeng District, Chiang Mai).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F55e71dac",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "No reliable source on the founding of the village; a Portuguese trading mission founding a hill village in Lan Na in 1742 is highly implausible and appears fabricated, but no source directly addresses it.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F14668cda",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Northern_Thailand",
+     "tier": "T1",
+     "quote": "It is geographically characterized by several mountain ranges, which continue from the Shan Hills in neighboring Myanmar to Laos"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Thanon_Thong_Chai_Range",
+     "tier": "T1",
+     "quote": "Certain hill tribe communities live in the range, like the Hmong and the Karen whose tribal villages dot the mountainsides."
+    }
+   ],
+   "rationale": "Northern Thailand is mountainous; hill tribe villages dot the ranges.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc89bcaf1",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Karen, Lahu and Shan villages in Mae Taeng are mentioned only by tour-operator/travel pages; no reliable source found.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F59b5570a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Muban",
+     "tier": "T1",
+     "quote": "Muban may function as one word, in the sense of a hamlet or village, and as such, it may be shortened to ban."
+    }
+   ],
+   "rationale": "Ban = village.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F55a086ef",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=Taeng_River&oldid=1254488799",
+     "tier": "T1",
+     "quote": "It then flows through Chiang Dao District and Mae Taeng District, separating the Thanon Thong Chai Range from the Daen Lao Range"
+    },
+    {
+     "url": "https://commons.wikimedia.org/wiki/File:Mae_ta_mann-10.jpg",
+     "tier": "T2",
+     "quote": "La rivière Mae Taeng, Province de Chiang Mai, Thaïlande."
+    }
+   ],
+   "rationale": "The Taeng River flows through Mae Taeng District between two ranges; the village sits on it. Landscape description is generic but consistent.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc132245c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://th.wikipedia.org/wiki/ตำบลกื้ดช้าง",
+     "tier": "T1",
+     "quote": "กื้ดช้าง เป็นตำบลในอำเภอแม่แตง จังหวัดเชียงใหม่ มีลักษณะเป็นภูเขาสูง เป็นที่ตั้งของที่ทำการอุทยานแห่งชาติห้วยน้ำดัง"
+    },
+    {
+     "url": "https://th.wikipedia.org/wiki/ตำบลกื้ดช้าง",
+     "tier": "T1",
+     "quote": "ป่าสงวนแห่งชาติป่าแม่แตง และและหน่วยจัดการต้นน้ำแม่ตะมาน"
+    }
+   ],
+   "rationale": "Resolved: A supported, B unverifiable. A's Thai Wikipedia quote is on the page (checked): Kuet Chang subdistrict, which contains Ban Mae Taman, is high mountain terrain holding the Huai Nam Dang NP office, the Mae Taeng national forest reserve and the Mae Taman watershed unit -> forested and mountainous.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F4ed2e6eb",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=Taeng_River&oldid=1254488799",
+     "tier": "T1",
+     "quote": "is a tributary of the Ping River, one of the two main tributaries of the Chao Phraya River."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Mae_Taeng_district",
+     "tier": "T1",
+     "quote": "has its source in the mountains of the Daen Lao Range in Wiang Haeng district, flows into the Ping River"
+    }
+   ],
+   "rationale": "Taeng River is a tributary of the Ping, a main tributary of the Chao Phraya (cited from the pre-vandalism revision).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5a2c54d2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://th.wikipedia.org/wiki/ตำบลกื้ดช้าง",
+     "tier": "T1",
+     "quote": "กื้ดช้าง เป็นตำบลในอำเภอแม่แตง จังหวัดเชียงใหม่ มีลักษณะเป็นภูเขาสูง เป็นที่ตั้งของที่ทำการอุทยานแห่งชาติห้วยน้ำดัง"
+    },
+    {
+     "url": "https://th.wikipedia.org/wiki/ตำบลกื้ดช้าง",
+     "tier": "T1",
+     "quote": "ป่าสงวนแห่งชาติป่าแม่แตง และและหน่วยจัดการต้นน้ำแม่ตะมาน"
+    }
+   ],
+   "rationale": "Resolved: A supported, B unverifiable. Thai Wikipedia (quote verified on page) describes the village's subdistrict as high mountains with national park and national forest reserve land, which supports 'hilly, forested landscape'.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fe6b77156",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Ban Mae Taman บ้านแม่ตะมาน"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Muban",
+     "tier": "T1",
+     "quote": "Muban may function as one word, in the sense of a hamlet or village, and as such, it may be shortened to ban."
+    }
+   ],
+   "rationale": "Thai name บ้านแม่ตะมาน per Wikipedia; ban = village.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Faf971848",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Kuet Chang (Thai: กื้ดช้าง) is a tambon (subdistrict) of Mae Taeng District, in Chiang Mai Province, Thailand."
+    },
+    {
+     "url": "https://th.wikipedia.org/wiki/ตำบลกื้ดช้าง",
+     "tier": "T1",
+     "quote": "กื้ดช้าง เป็นตำบลในอำเภอแม่แตง จังหวัดเชียงใหม่ มีลักษณะเป็นภูเขาสูง เป็นที่ตั้งของที่ทำการอุทยานแห่งชาติห้วยน้ำดัง"
+    }
+   ],
+   "rationale": "Village in Mae Taeng District, Chiang Mai; mountainous terrain.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe7a1b8aa",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chao_Phraya_River",
+     "tier": "T1",
+     "quote": "Me Nam is a generic term, Me signifying \"mother,\" and Nam \"water,\""
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Mae_Nam",
+     "tier": "T1",
+     "quote": "Mae Nam (Thai: แม่น้ำ 'river') may refer to:"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Muban",
+     "tier": "T1",
+     "quote": "Muban may function as one word, in the sense of a hamlet or village, and as such, it may be shortened to ban."
+    }
+   ],
+   "rationale": "Mae = mother; Mae Nam = river; ban = village.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2a43c799",
+   "verdict": "contradicted",
+   "reason": "overstated",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chiang_Mai",
+     "tier": "T1",
+     "quote": "Chiang Mai has a tropical savanna climate (Köppen Aw)"
+    },
+    {
+     "url": "https://en.wikipedia.org/w/index.php?title=Chiang_Mai&action=raw",
+     "tier": "T1",
+     "quote": "Mar humidity = 53.6"
+    }
+   ],
+   "rationale": "Chiang Mai area has a tropical savanna (wet/dry) climate with relative humidity near 54% in March; 'high year-round humidity' overstates it.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7ef37308",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Kuet Chang (Thai: กื้ดช้าง) is a tambon (subdistrict) of Mae Taeng District, in Chiang Mai Province, Thailand."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Ban Mae Taman บ้านแม่ตะมาน"
+    }
+   ],
+   "rationale": "Restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F514c9560",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Kuet Chang (Thai: กื้ดช้าง) is a tambon (subdistrict) of Mae Taeng District, in Chiang Mai Province, Thailand."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Kuet_Chang",
+     "tier": "T1",
+     "quote": "Ban Mae Taman บ้านแม่ตะมาน"
+    }
+   ],
+   "rationale": "Restates identity.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4255a7a0",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Wet season May-October fits, but reliable sources classify the climate as tropical savanna (Aw), not tropical monsoon; the mixed evergreen/deciduous forest claim is unsourced. Partly mislabelled, partly unsupported.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F31fb150a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chao_Phraya_River",
+     "tier": "T1",
+     "quote": "Me Nam is a generic term, Me signifying \"mother,\" and Nam \"water,\""
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Mae_Nam",
+     "tier": "T1",
+     "quote": "Mae Nam (Thai: แม่น้ำ 'river') may refer to:"
+    }
+   ],
+   "rationale": "Mae (mother) forms Mae Nam 'river'; river names such as Mae Taeng use it.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    true
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

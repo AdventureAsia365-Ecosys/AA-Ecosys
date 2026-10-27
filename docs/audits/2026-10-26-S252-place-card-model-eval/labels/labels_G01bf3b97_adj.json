@@ -1,0 +1,1104 @@
+{
+ "group_id": "G01bf3b97",
+ "labeller": "adj",
+ "reference": {
+  "name": "Chinatown (Yaowarat)",
+  "locality": "Bangkok (Samphanthawong District)",
+  "region": "Bangkok",
+  "country": "Thailand",
+  "lat": 13.74,
+  "lon": 100.51,
+  "identifiable": "ambiguous",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+    "tier": "T1",
+    "quote": "the core of Chinatown now lies along Yaowarat Road, which serves as its main artery"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+    "tier": "T1",
+    "quote": "Chinatown's entire area roughly coincides with Samphanthawong District"
+   }
+  ],
+  "note": "'China Town' with no city named; on a Thailand tour an independent evening visit most likely means Bangkok's Chinatown (Yaowarat), but the sentence does not name the city (A: yes, B: ambiguous; adjudicated ambiguous)."
+ },
+ "variants": [
+  {
+   "vid": "V2041bf48",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Bangkok Chinatown / Yaowarat; correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V53a6befc",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Yaowarat, Bangkok; correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V5326d6bd",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Locality 'Mae Taeng' is a district of Chiang Mai Province, ~600 km away; should be Bangkok.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V9f1803ac",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Bangkok Chinatown; correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V3fb1813b",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Chinatown, Bangkok; correct.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F6bf57f8e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Wat_Traimit",
+     "tier": "T1",
+     "quote": "is a Theravada Buddhist temple (wat) in Samphanthawong district, the Chinatown area of the Thai capital Bangkok."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Wat_Traimit",
+     "tier": "T1",
+     "quote": "revealing a solid-gold image concealed within"
+    }
+   ],
+   "rationale": "Wat Traimit in Chinatown houses the solid-gold Buddha; Chinese shrines/temples are characteristic of the district.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Febd6329d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "Now known as Soi Wanit 1, Sampheng Lane was the original street serving Chinatown."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sampheng",
+     "tier": "T1",
+     "quote": "is now a small alleyway lined with numerous shops, and is a famous market."
+    }
+   ],
+   "rationale": "Sampheng Lane is now Soi Wanit 1, the historic original trading street.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fdfb2cfad",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "the core of Chinatown now lies along Yaowarat Road, which serves as its main artery"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "Chinatown's entire area roughly coincides with Samphanthawong District"
+    }
+   ],
+   "rationale": "Historic Chinese quarter centred on Yaowarat Road, roughly Samphanthawong District. trivial=false: the fact adds the Samphanthawong district and the 'historic Chinese quarter' description, which are not in the identity fields (name, locality, region, country, aliases).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Ffd650a47",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "By the end of 1891, King Rama V had ordered the construction of many roads, including Yaowarat Road."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "the core of Chinatown now lies along Yaowarat Road, which serves as its main artery"
+    }
+   ],
+   "rationale": "Yaowarat Road was ordered under Rama V (built 1892-1900) and is the main artery.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F5f8f25f2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "Now known as Soi Wanit 1, Sampheng Lane was the original street serving Chinatown."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sampheng",
+     "tier": "T1",
+     "quote": "is now a small alleyway lined with numerous shops, and is a famous market."
+    }
+   ],
+   "rationale": "Sampheng Lane was the original street of Chinatown; 'parallel' alignment not explicitly sourced but consistent.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe6c6618d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Wat_Traimit",
+     "tier": "T1",
+     "quote": "is a Theravada Buddhist temple (wat) in Samphanthawong district, the Chinatown area of the Thai capital Bangkok."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Wat_Traimit",
+     "tier": "T1",
+     "quote": "revealing a solid-gold image concealed within"
+    }
+   ],
+   "rationale": "Wat Traimit is in Chinatown and known for its solid-gold Buddha.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd56b6997",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "in Samphanthawong District is the main artery of Bangkok's Chinatown."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "the core of Chinatown now lies along Yaowarat Road, which serves as its main artery"
+    }
+   ],
+   "rationale": "Restates identity: main Chinese quarter, Yaowarat Road, Samphanthawong. trivial=false: the fact adds the Samphanthawong district and the 'historic Chinese quarter' description, which are not in the identity fields (name, locality, region, country, aliases).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F7c898538",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "There are many shops selling gold, garments, textiles, stationery, souvenirs"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "It now serves as a hub of Chinese culture, with numerous shops selling traditional goods, and is especially known as a culinary destination."
+    }
+   ],
+   "rationale": "Dense commercial area of shops, gold shops, food and Chinese religious sites.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd68ec3e6",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "It was founded in 1782 when the city was established as the capital of the Rattanakosin Kingdom"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sampheng",
+     "tier": "T1",
+     "quote": "It was settled during the establishment of Bangkok in 1782 by Teochew Chinese"
+    }
+   ],
+   "rationale": "Bangkok became capital in 1782, not 1645.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2f379295",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "There are many shops selling gold, garments, textiles, stationery, souvenirs"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sampheng",
+     "tier": "T1",
+     "quote": "is now a small alleyway lined with numerous shops, and is a famous market."
+    }
+   ],
+   "rationale": "Gold shops and trading businesses, narrow side lanes (Sampheng alley).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd623f194",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "served as the home of the mainly Teochew immigrant Chinese population"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sampheng",
+     "tier": "T1",
+     "quote": "It was settled during the establishment of Bangkok in 1782 by Teochew Chinese"
+    }
+   ],
+   "rationale": "Chinatown was home to a mainly Teochew population; Teochew originate from the Chaoshan area of Guangdong.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fae21f758",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "It was founded in 1782 when the city was established as the capital of the Rattanakosin Kingdom"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "He had the palace moved to the east bank of the river, which was more strategically secure. This necessitated the relocation of the Teochew community"
+    }
+   ],
+   "rationale": "Founded 1782 when the Teochew were relocated for the new palace.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4f69bfb6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Wat_Mangkon_Kamalawat",
+     "tier": "T1",
+     "quote": "is the largest and most important Chinese Buddhist temple in Bangkok, Thailand."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Wat_Mangkon_Kamalawat",
+     "tier": "T1",
+     "quote": "in the district of Pom Prap Sattru Phai in the city's Chinatown"
+    }
+   ],
+   "rationale": "Wat Mangkon Kamalawat, a Chinese (Mahayana) Buddhist temple, is in Chinatown (administratively Pom Prap Sattru Phai district).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa52156e0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "in Samphanthawong District is the main artery of Bangkok's Chinatown."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "Chinatown's entire area roughly coincides with Samphanthawong District"
+    }
+   ],
+   "rationale": "Restates identity. trivial=false: the fact adds the Samphanthawong district and the 'historic Chinese quarter' description, which are not in the identity fields (name, locality, region, country, aliases).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fcd2ac625",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "served as the home of the mainly Teochew immigrant Chinese population"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "the core of Chinatown now lies along Yaowarat Road, which serves as its main artery"
+    }
+   ],
+   "rationale": "Restates identity: historic Chinese merchant quarter on Yaowarat Road. trivial=false: the fact adds the Samphanthawong district and the 'historic Chinese quarter' description, which are not in the identity fields (name, locality, region, country, aliases).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F3eb5b5c6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "By the end of 1891, King Rama V had ordered the construction of many roads, including Yaowarat Road."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "which cleared the way for the construction of many new roads, including Yaowarat, during the reign of King Chulalongkorn (Rama V)"
+    }
+   ],
+   "rationale": "Yaowarat Road built late 19th century under Chulalongkorn.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F287b7ddc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "It was founded in 1782 when the city was established as the capital of the Rattanakosin Kingdom"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "He had the palace moved to the east bank of the river, which was more strategically secure. This necessitated the relocation of the Teochew community"
+    }
+   ],
+   "rationale": "1782 capital; Chinese relocated from the palace site.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Feda59ebc",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "He had the palace moved to the east bank of the river, which was more strategically secure. This necessitated the relocation of the Teochew community"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "It was founded in 1782 when the city was established as the capital of the Rattanakosin Kingdom"
+    }
+   ],
+   "rationale": "Community moved from land for the new royal palace in 1782.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ffa6233cd",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "By the end of 1891, King Rama V had ordered the construction of many roads, including Yaowarat Road."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "which cleared the way for the construction of many new roads, including Yaowarat, during the reign of King Chulalongkorn (Rama V)"
+    }
+   ],
+   "rationale": "Built under Rama V, late 19th century.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F0daf4778",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "It was founded in 1782 when the city was established as the capital of the Rattanakosin Kingdom"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sampheng",
+     "tier": "T1",
+     "quote": "It was settled during the establishment of Bangkok in 1782 by Teochew Chinese"
+    }
+   ],
+   "rationale": "Established 1782 when Rama I founded Bangkok as capital.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1d502a75",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "Bangkok's Chinatown is one of the largest Chinatowns in the world."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Wat_Traimit",
+     "tier": "T1",
+     "quote": "is a Theravada Buddhist temple (wat) in Samphanthawong district, the Chinatown area of the Thai capital Bangkok."
+    }
+   ],
+   "rationale": "One of the largest Chinatowns; Wat Traimit with the golden Buddha is in the district.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F05470746",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "including land on the east bank of the Chao Phraya River, opposite his palace and enclosed by city walls, on which to settle their community."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "Rama I had the Teochew resettle in the area of Sampheng, on the river's east bank southeast and downstream from the city centre."
+    }
+   ],
+   "rationale": "Resolved to contradicted/false (Wikipedia Chinatown, Bangkok): Teochew merchants were already settled on the east bank under King Taksin (1767-1782) and were relocated to Sampheng in 1782; they did not first come to the Bangkok area after 1782. Both quotes verified on the page.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fd248cab5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "There are many shops selling gold, garments, textiles, stationery, souvenirs"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "It now serves as a hub of Chinese culture, with numerous shops selling traditional goods, and is especially known as a culinary destination."
+    }
+   ],
+   "rationale": "Shops, markets, gold shops and Chinese religious buildings.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb7e55d74",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "He had the palace moved to the east bank of the river, which was more strategically secure. This necessitated the relocation of the Teochew community"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "Rama I had the Teochew resettle in the area of Sampheng, on the river's east bank southeast and downstream from the city centre."
+    }
+   ],
+   "rationale": "Moved from the Grand Palace site to Sampheng, downstream on the Chao Phraya.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F7b20189a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "in Samphanthawong District is the main artery of Bangkok's Chinatown."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "Chinatown's entire area roughly coincides with Samphanthawong District"
+    }
+   ],
+   "rationale": "Restates identity. trivial=false: the fact adds the Samphanthawong district and the 'historic Chinese quarter' description, which are not in the identity fields (name, locality, region, country, aliases).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F12bfae2c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "By the end of 1891, King Rama V had ordered the construction of many roads, including Yaowarat Road."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "By the turn of the 19th–20th centuries, Chinatown had become Bangkok's main commercial area"
+    }
+   ],
+   "rationale": "Road built late 19th century; district became main commercial area by turn of 19th-20th c.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fe683dca7",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "Yaowarat is a road with a length of about 1.5 km (0.93 mi), 20 m (65 ft) wide and takes 8 years to build (1892–1900)."
+    }
+   ],
+   "rationale": "Resolved to contradicted/numeric_off (Wikipedia Yaowarat Road): the road was built 1892-1900, so it cannot have been the commercial heart for 'over two centuries' (about 130 years). The same article's loose '200 years' refers to the Chinese trading community moving from its old site, not the road, and says 'some 200', not 'over'.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Ff9b32e11",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Resolved to unverifiable: gold shops and preserved food goods are on Wikipedia Yaowarat Road, but neon signage, apothecaries and a streetscape that 'retains much of its 19th- and early-20th-century character' were not found in any reliable source. trip_leak=false: a description of the district's character, not of visitor access or activities (consistent with F7c898538/Fe683dca7, which both labellers marked false).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F9157aa74",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "It now serves as a hub of Chinese culture, with numerous shops selling traditional goods, and is especially known as a culinary destination."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Yaowarat_Road",
+     "tier": "T1",
+     "quote": "It has been the main centre for trading by the Chinese community since they moved from their old site some 200 years ago"
+    }
+   ],
+   "rationale": "Remains a hub of Chinese culture and trade (though commercial prominence has declined).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F3c76ee1a",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Chinatown,_Bangkok",
+     "tier": "T1",
+     "quote": "served as the home of the mainly Teochew immigrant Chinese population"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Sampheng",
+     "tier": "T1",
+     "quote": "It was settled during the establishment of Bangkok in 1782 by Teochew Chinese"
+    }
+   ],
+   "rationale": "Mainly Teochew population.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbbb52e7b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Wat_Mangkon_Kamalawat",
+     "tier": "T1",
+     "quote": "is the largest and most important Chinese Buddhist temple in Bangkok, Thailand."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Wat_Mangkon_Kamalawat",
+     "tier": "T1",
+     "quote": "in the district of Pom Prap Sattru Phai in the city's Chinatown"
+    }
+   ],
+   "rationale": "Wat Mangkon Kamalawat is in Chinatown.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    true,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

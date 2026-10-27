@@ -1,0 +1,1098 @@
+{
+ "group_id": "G00595823",
+ "labeller": "adj",
+ "reference": {
+  "name": "City Palace, Jaipur",
+  "locality": "Jaipur",
+  "region": "Rajasthan",
+  "country": "India",
+  "lat": 26.9257,
+  "lon": 75.8236,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+    "tier": "T1",
+    "quote": "The City Palace, Jaipur is a royal residence and former administrative headquarters of the rulers of the Jaipur State in Jaipur, Rajasthan."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Jaipur",
+    "tier": "T1",
+    "quote": "Visitor attractions include the Albert Hall Museum, Hawa Mahal, Jal Mahal, City Palace, Amer Fort, Jantar Mantar"
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "V3d26475a",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "City Palace in Jaipur, Rajasthan, India, the palace complex the Jaipur sightseeing sentence means.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "Va26484b4",
+   "name": "ok",
+   "locality": "correct",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Same Jaipur City Palace complex; all identity fields correct.",
+   "agreement": "agree"
+  },
+  {
+   "vid": "V26ef595a",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "rationale": "Name, region and country are right, but the locality Panaji is the capital of Goa, about 900+ km away, not Jaipur.",
+   "agreement": "agree"
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F8e7b5620",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The City Palace, Jaipur is a royal residence and former administrative headquarters of the rulers of the Jaipur State in Jaipur, Rajasthan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The palace complex lies in the heart of Jaipur city, to the northeast of the very centre"
+    }
+   ],
+   "rationale": "Royal palace complex in the heart of Jaipur's old city.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fd6e81ad3",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://incredibleindia.gov.in/en/rajasthan/jaipur/city-palace",
+     "tier": "T1",
+     "quote": "Between 1729 and 1732, the Maharaja oversaw the construction of this captivating complex"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jaipur",
+     "tier": "T1",
+     "quote": "Jaipur was founded in 1727 by Sawai Jai Singh II, the Kachhwaha Rajput ruler of Amer, after whom the city is named."
+    }
+   ],
+   "rationale": "Construction 1729-1732 under Jai Singh II, who founded Jaipur in 1727 and moved from Amber.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Faa555cc1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The most prominent and most visited structures in the complex are the Chandra Mahal, Mubarak Mahal, Shri Govind Dev Temple, and the City Palace Museum."
+    }
+   ],
+   "rationale": "Chandra Mahal and Mubarak Mahal are within the complex.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F28b65c9d",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://incredibleindia.gov.in/en/rajasthan/jaipur/city-palace",
+     "tier": "T1",
+     "quote": "this beautiful palace was founded in 1727 by Maharaja Sawai Jai Singh II as part of his ambitious city project"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Construction started soon after the establishment of the city of Jaipur under the reign of Maharaja Sawai Jai Singh II"
+    }
+   ],
+   "rationale": "Resolved to supported: the Ministry of Tourism page (Incredible India, T1; quote verified on page) states the palace was founded in 1727 by Jai Singh II. Wikipedia gives 1729 as the construction start, which concerns building work, not founding, so it does not contradict the founding date.",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "Fbfe95c6c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://incredibleindia.gov.in/en/rajasthan/jaipur/city-palace",
+     "tier": "T1",
+     "quote": "his successors continued to embellish and add to the elegant buildings"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The gateways were built at different times across the 18th, 19th and 20th centuries"
+    }
+   ],
+   "rationale": "Successors added buildings and gateways through the 18th-20th centuries.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F75bf7f4c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "It now houses the Maharaja Sawai Man Singh II Museum, and continues to be the home of the Jaipur royal family."
+    }
+   ],
+   "rationale": "Still the royal family's home and houses the MSMS II Museum.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fcbfe5914",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The palace complex lies in the heart of Jaipur city, to the northeast of the very centre"
+    }
+   ],
+   "rationale": "Lies in the heart of Jaipur city, Rajasthan.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc9aff500",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "It is a unique and special complex of several courtyards, buildings, pavilions, gardens, and temples."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The most prominent and most visited structures in the complex are the Chandra Mahal, Mubarak Mahal, Shri Govind Dev Temple, and the City Palace Museum."
+    }
+   ],
+   "rationale": "Courtyards, gardens, several buildings including Chandra and Mubarak Mahal.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F8d2534c4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Combination of Rajput, Mughal and European influence"
+    }
+   ],
+   "rationale": "Infobox gives Rajput, Mughal and European influence.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F99ca8774",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Combination of Rajput, Mughal and European influence"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "It is a unique and special complex of several courtyards, buildings, pavilions, gardens, and temples."
+    }
+   ],
+   "rationale": "Style mix and layout of courtyards, gardens, buildings; gates documented in the same article.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F16f9d6d3",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Construction started soon after the establishment of the city of Jaipur under the reign of Maharaja Sawai Jai Singh II"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jaipur",
+     "tier": "T1",
+     "quote": "Jaipur was founded in 1727 by Sawai Jai Singh II, the Kachhwaha Rajput ruler of Amer, after whom the city is named."
+    }
+   ],
+   "rationale": "Construction began early 18th century under Jaipur's founder Jai Singh II.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F705b2524",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://dcp-production-container.library.cornell.edu/catalog/ss:3856929",
+     "tier": "T1",
+     "quote": "Built by Sawai Madho Singh II."
+    },
+    {
+     "url": "https://dcp-production-container.library.cornell.edu/catalog/ss:3856929",
+     "tier": "T1",
+     "quote": "Dates: last decade of the 19th C."
+    }
+   ],
+   "rationale": "Madho Singh II's 1890s Mubarak Mahal addition is documented, but no reliable source found tying a specific 20th-century addition to Man Singh II.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F42dca2a6",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "rationale": "Heart of the old city is supported, but the 'one-seventh of the old city's area' figure appears only on travel/operator sites; no T1/T2 source found.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F1dbb53a4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://incredibleindia.gov.in/en/rajasthan/jaipur/city-palace",
+     "tier": "T1",
+     "quote": "Between 1729 and 1732, the Maharaja oversaw the construction of this captivating complex"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The construction of the Palace was completed in 1732"
+    }
+   ],
+   "rationale": "Built 1729-1732 (1720s-1730s) under Jai Singh II.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F052eb856",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The City Palace, Jaipur is a royal residence and former administrative headquarters of the rulers of the Jaipur State in Jaipur, Rajasthan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The Sileh khana showcases the many arms used by the Kachhwaha Rajputs of Jaipur and Amber."
+    }
+   ],
+   "rationale": "Royal residence/HQ of the Jaipur rulers, who were Kachhwaha Rajputs.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fecda39a5",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://incredibleindia.gov.in/en/rajasthan/jaipur/city-palace",
+     "tier": "T1",
+     "quote": "his successors continued to embellish and add to the elegant buildings"
+    }
+   ],
+   "rationale": "Successors added to the buildings.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F390bee34",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "the city of Jaipur and all of its monuments (including the City Palace) are stucco painted pink"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jaipur",
+     "tier": "T1",
+     "quote": "Jaipur is also known as the Pink City due to the dominant colour scheme of its buildings in the old city."
+    }
+   ],
+   "rationale": "Pink City naming and the palace's location in it.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fca3eecfe",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "This palace, however, continued to be a residence of the royal family even after the Jaipur kingdom merged with the Indian Union in 1949"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "was the last Maharaja of Jaipur to rule from the Chandra Mahal palace"
+    }
+   ],
+   "rationale": "Chandra Mahal is the main palace and still a royal family residence.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fa815d6c6",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The City Palace, Jaipur is a royal residence and former administrative headquarters of the rulers of the Jaipur State in Jaipur, Rajasthan."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The palace complex lies in the heart of Jaipur city, to the northeast of the very centre"
+    }
+   ],
+   "rationale": "Historic royal palace complex in the heart of Jaipur.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F2f240193",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "It now houses the Maharaja Sawai Man Singh II Museum, and continues to be the home of the Jaipur royal family."
+    }
+   ],
+   "rationale": "Royal family home plus museum.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F826fb684",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "It now houses the Maharaja Sawai Man Singh II Museum, and continues to be the home of the Jaipur royal family."
+    },
+    {
+     "url": "https://incredibleindia.gov.in/en/rajasthan/jaipur/city-palace",
+     "tier": "T1",
+     "quote": "A part of this opulent building still serves as the residence for the present-day royal family."
+    }
+   ],
+   "rationale": "Part remains the residence of the royal family.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ff4fd5184",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "This palace, however, continued to be a residence of the royal family even after the Jaipur kingdom merged with the Indian Union in 1949"
+    },
+    {
+     "url": "https://incredibleindia.gov.in/en/rajasthan/jaipur/city-palace",
+     "tier": "T1",
+     "quote": "A part of this opulent building still serves as the residence for the present-day royal family."
+    }
+   ],
+   "rationale": "Chandra Mahal continues as a royal family residence.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F84303cd0",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Construction started soon after the establishment of the city of Jaipur under the reign of Maharaja Sawai Jai Singh II"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jaipur",
+     "tier": "T1",
+     "quote": "Jaipur was founded in 1727 by Sawai Jai Singh II, the Kachhwaha Rajput ruler of Amer, after whom the city is named."
+    }
+   ],
+   "rationale": "Construction started soon after Jaipur's founding in 1727.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F39f0ac80",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://dcp-production-container.library.cornell.edu/catalog/ss:3856929",
+     "tier": "T1",
+     "quote": "Dates: last decade of the 19th C."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The Mubarak Mahal courtyard at the City Palace was fully developed as late as 1900"
+    }
+   ],
+   "rationale": "Mubarak Mahal dated to the last decade of the 19th century (c. 1890-1900).",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F4c2623db",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://incredibleindia.gov.in/en/rajasthan/jaipur/city-palace",
+     "tier": "T1",
+     "quote": "from ancient weaponry and manuscripts to exquisite carpets, blue pottery, and Indian artwork"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "a set of robes (angarakhas) belonging to Maharaja Sawai Ram Singh II"
+    }
+   ],
+   "rationale": "MSMS II Museum holds weapons, manuscripts, artwork and royal robes/textiles.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fbae0ea74",
+   "verdict": "contradicted",
+   "reason": "numeric_off",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Jaipur",
+     "tier": "T1",
+     "quote": "Jaipur was founded in 1727 by Sawai Jai Singh II, the Kachhwaha Rajput ruler of Amer, after whom the city is named."
+    }
+   ],
+   "rationale": "Jaipur was founded in 1727, not 1590.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F756bac5e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Combination of Rajput, Mughal and European influence"
+    }
+   ],
+   "rationale": "Rajput, Mughal and European influences.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Ffdc78b7c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Combination of Rajput, Mughal and European influence"
+    },
+    {
+     "url": "https://incredibleindia.gov.in/en/rajasthan/jaipur/city-palace",
+     "tier": "T1",
+     "quote": "his successors continued to embellish and add to the elegant buildings"
+    }
+   ],
+   "rationale": "Style blend and additions by later rulers.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Faf777969",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Combination of Rajput, Mughal and European influence"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The gateways were built at different times across the 18th, 19th and 20th centuries"
+    }
+   ],
+   "rationale": "Style mix; buildings span 18th-20th centuries.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fc0f2fc66",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": true,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The palace complex lies in the heart of Jaipur city, to the northeast of the very centre"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jaipur_city_wall",
+     "tier": "T1",
+     "quote": "the city wall encircling the old Jaipur city in Rajasthan state, India."
+    }
+   ],
+   "rationale": "Resolved trivial=true: the sentence only restates name, locality (Jaipur old city) and region (Rajasthan, Jaipur its capital), consistent with how both labellers treated F8e7b5620 and Fa815d6c6; supported by Wikipedia (City Palace article and Jaipur article).",
+   "agreement": "resolved"
+  },
+  {
+   "fid": "F1da64548",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Construction started soon after the establishment of the city of Jaipur under the reign of Maharaja Sawai Jai Singh II"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Jaipur",
+     "tier": "T1",
+     "quote": "Jaipur was founded in 1727 by Sawai Jai Singh II, the Kachhwaha Rajput ruler of Amer, after whom the city is named."
+    }
+   ],
+   "rationale": "Begun by Jai Singh II, founder of Jaipur in 1727.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "Fb536c2c4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "It is a unique and special complex of several courtyards, buildings, pavilions, gardens, and temples."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The most prominent and most visited structures in the complex are the Chandra Mahal, Mubarak Mahal, Shri Govind Dev Temple, and the City Palace Museum."
+    }
+   ],
+   "rationale": "Several palaces, courtyards, gardens; Chandra and Mubarak Mahal.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F831f6c8f",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The most prominent and most visited structures in the complex are the Chandra Mahal, Mubarak Mahal, Shri Govind Dev Temple, and the City Palace Museum."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "The gateways were built at different times across the 18th, 19th and 20th centuries"
+    }
+   ],
+   "rationale": "Chandra Mahal, Mubarak Mahal, courtyards, gateways, gardens.",
+   "agreement": "agree"
+  },
+  {
+   "fid": "F777f7603",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "Chandra Mahal is one of the oldest buildings in the City Palace complex. It has seven floors"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/City_Palace,_Jaipur",
+     "tier": "T1",
+     "quote": "This palace, however, continued to be a residence of the royal family even after the Jaipur kingdom merged with the Indian Union in 1949"
+    }
+   ],
+   "rationale": "Seven-floor Chandra Mahal remains a royal residence; other parts house the museum.",
+   "agreement": "agree"
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}

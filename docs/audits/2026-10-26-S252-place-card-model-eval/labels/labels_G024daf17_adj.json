@@ -1,0 +1,638 @@
+{
+ "group_id": "G024daf17",
+ "labeller": "adj",
+ "reference": {
+  "name": "Himalayas (Garhwal–Kumaon Himalaya as seen on the Brahma Tal route)",
+  "locality": null,
+  "region": "Uttarakhand",
+  "country": "India",
+  "lat": 30.3,
+  "lon": 79.7,
+  "identifiable": "yes",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Himalayas",
+    "tier": "T1",
+    "quote": "is a mountain range in Asia separating the plains of the Indian subcontinent from the Tibetan Plateau."
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Himalayas",
+    "tier": "T1",
+    "quote": "The Himalayas span five countries: Nepal, India, China, Bhutan, and Pakistan."
+   }
+  ]
+ },
+ "variants": [
+  {
+   "vid": "V8c39c418",
+   "name": "ok",
+   "locality": "empty",
+   "region": "empty",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "The Himalayas; locality/region left empty; India correct for the part seen on this Uttarakhand trek."
+  },
+  {
+   "vid": "V32b575ec",
+   "name": "ok",
+   "locality": "empty",
+   "region": "empty",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Same entity; no locality/region."
+  },
+  {
+   "vid": "V08c099f2",
+   "name": "ok",
+   "locality": "empty",
+   "region": "correct",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Region lists Uttarakhand (where Brahma Tal is) plus Himachal Pradesh; both are Himalayan states, acceptable for the range."
+  },
+  {
+   "vid": "V998e479c",
+   "name": "ok",
+   "locality": "wrong",
+   "region": "empty",
+   "country": "correct",
+   "entity": "same",
+   "agreement": "agree",
+   "rationale": "Locality Jaipur (Rajasthan) is hundreds of km from the Himalayas and unrelated to the Brahma Tal route."
+  }
+ ],
+ "facts": [
+  {
+   "fid": "F5fb003b4",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://pubs.usgs.gov/gip/dynamic/himalaya.html",
+     "tier": "T1",
+     "quote": "continuing tectonic processes that began some 50 million years ago when the Indian and Eurasian continents first met"
+    },
+    {
+     "url": "https://pubs.usgs.gov/gip/dynamic/himalaya.html",
+     "tier": "T1",
+     "quote": "The impinging of the two landmasses has yet to end."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "USGS: India–Eurasia collision began ~50 Ma (40–50 Ma) and continues."
+  },
+  {
+   "fid": "Fa4f77410",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The Himalayas span five countries: Nepal, India, China, Bhutan, and Pakistan."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "The Himalayas span five countries; Afghanistan is not one (it lies in the Hindu Kush, which borders the Himalayas)."
+  },
+  {
+   "fid": "F91d2b6a8",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The Himalayas consists of four parallel mountain ranges from south to north: the Sivalik Hills on the south; the Lower Himalayan Range; the Great Himalayas"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "consists of three sub-ranges: (1) the Higher- or \"Tethys\" Himalayas, (2) the Lesser Himalayas, and (3) the Siwaliks."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Sivalik (outer foothills), Lesser/Lower Himalaya, Great Himalaya are the parallel ranges."
+  },
+  {
+   "fid": "Fc41f5652",
+   "verdict": "contradicted",
+   "reason": "false",
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://pubs.usgs.gov/gip/dynamic/himalaya.html",
+     "tier": "T1",
+     "quote": "continuing tectonic processes that began some 50 million years ago when the Indian and Eurasian continents first met"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The Himalayas were uplifted after the collision of the Indian tectonic plate with the Eurasian plate"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "A mountain system formed by plate collision over tens of millions of years, not founded by a Portuguese mission in 1742."
+  },
+  {
+   "fid": "F6e7c1412",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "is a mountain range in Asia separating the plains of the Indian subcontinent from the Tibetan Plateau."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Mountain range separating the Indian subcontinent's plains from the Tibetan Plateau, i.e. along its northern edge."
+  },
+  {
+   "fid": "F676d650e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The name of the range hails from the Sanskrit Himālaya (हिमालय 'abode of snow')"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "from the Sanskrit Himālaya (हिमालय 'abode of snow'), from hima (हिम 'frost/cold') and ālaya (आलय 'dwelling/house')"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Sanskrit himālaya, 'abode of snow'."
+  },
+  {
+   "fid": "Fdac0c0ab",
+   "verdict": "unverifiable",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [],
+   "agreement": "agree",
+   "rationale": "Everest 8,849 m (8,848.86) is correct, but no reliable source found for the claim that the Himalayas contain the majority of the world's 7,000 m peaks (Wikipedia gives only 'more than 100 peaks exceeding 7,200 m'; many 7,000 m peaks are in the Karakoram/Pamir/Hindu Kush)."
+  },
+  {
+   "fid": "F3df35ef1",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Mount_Everest",
+     "tier": "T1",
+     "quote": "Location on the border between Koshi Province, Nepal and Tibet Autonomous Region, China"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "Four eight-thousanders can be seen, Makalu (8,462 m), Everest (8,848 m), Cho Oyu (8,201 m), and Lhotse (8,516 m)."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Everest is on the Nepal–China border; several other eight-thousanders are in the range."
+  },
+  {
+   "fid": "F6c2279a2",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The Himalayas span five countries: Nepal, India, China, Bhutan, and Pakistan."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "India, Nepal, Bhutan, China (Tibet) and Pakistan."
+  },
+  {
+   "fid": "F912ded9b",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The name of the range hails from the Sanskrit Himālaya (हिमालय 'abode of snow')"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "from hima (हिम 'frost/cold') and ālaya (आलय 'dwelling/house')"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "hima (snow/frost) + ālaya (dwelling/abode)."
+  },
+  {
+   "fid": "F7d22c03c",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The Himalayas consists of four parallel mountain ranges from south to north: the Sivalik Hills on the south; the Lower Himalayan Range; the Great Himalayas"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "consists of three sub-ranges: (1) the Higher- or \"Tethys\" Himalayas, (2) the Lesser Himalayas, and (3) the Siwaliks."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Parallel ranges: Great, Lesser (Lower) and Outer (Sivalik) Himalaya."
+  },
+  {
+   "fid": "F70d687ec",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The range has some of the highest peaks on Earth, including the highest, Mount Everest."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Mount_Everest",
+     "tier": "T1",
+     "quote": "is the highest mountain on Earth above sea level. It lies in the Mahalangur Himal sub-range of the Himalayas"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Everest, the highest mountain, is in the Himalayas."
+  },
+  {
+   "fid": "F3e583f1e",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The range has some of the highest peaks on Earth, including the highest, Mount Everest."
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The Himalayas span five countries: Nepal, India, China, Bhutan, and Pakistan."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Contains the highest peaks on Earth; spans India, Nepal, Bhutan, China (Tibet) and Pakistan."
+  },
+  {
+   "fid": "F26c6d1fe",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The Himalayas were uplifted after the collision of the Indian tectonic plate with the Eurasian plate"
+    },
+    {
+     "url": "https://pubs.usgs.gov/gip/dynamic/himalaya.html",
+     "tier": "T1",
+     "quote": "The impinging of the two landmasses has yet to end."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Formed by the continuing India–Eurasia collision."
+  },
+  {
+   "fid": "Fc022cdca",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": true,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://pubs.usgs.gov/gip/dynamic/himalaya.html",
+     "tier": "T1",
+     "quote": "continuing tectonic processes that began some 50 million years ago when the Indian and Eurasian continents first met"
+    },
+    {
+     "url": "https://pubs.usgs.gov/gip/dynamic/himalaya.html",
+     "tier": "T1",
+     "quote": "The impinging of the two landmasses has yet to end."
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "USGS: collision began ~50 Ma and continues."
+  },
+  {
+   "fid": "Ff1ffddac",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "Some of the world's major rivers, the Indus, the Ganges, and the Tsangpo–Brahmaputra, rise in the vicinity of the Himalayas"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "Indus, Ganges and Brahmaputra rise in the vicinity of the Himalayas."
+  },
+  {
+   "fid": "Fbb67ce85",
+   "verdict": "supported",
+   "reason": null,
+   "numeric": false,
+   "trip_leak": false,
+   "trivial": false,
+   "sources": [
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "The Himalayan range encompasses about 15,000 glaciers"
+    },
+    {
+     "url": "https://en.wikipedia.org/wiki/Himalayas",
+     "tier": "T1",
+     "quote": "Some of the world's major rivers, the Indus, the Ganges, and the Tsangpo–Brahmaputra, rise in the vicinity of the Himalayas"
+    }
+   ],
+   "agreement": "agree",
+   "rationale": "About 15,000 glaciers; source region of the Ganges, Indus and Brahmaputra."
+  }
+ ],
+ "links": [],
+ "kappa_inputs": {
+  "identity": [
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ],
+   [
+    "ok",
+    "ok"
+   ],
+   [
+    "wrong",
+    "wrong"
+   ],
+   [
+    "empty",
+    "empty"
+   ],
+   [
+    "correct",
+    "correct"
+   ],
+   [
+    "same",
+    "same"
+   ]
+  ],
+  "verdict": [
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "contradicted",
+    "contradicted"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "unverifiable",
+    "unverifiable"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ],
+   [
+    "supported",
+    "supported"
+   ]
+  ],
+  "trip_leak": [
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ],
+   [
+    false,
+    false
+   ]
+  ],
+  "link": []
+ }
+}
