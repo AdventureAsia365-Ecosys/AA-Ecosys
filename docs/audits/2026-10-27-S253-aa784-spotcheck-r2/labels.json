@@ -1,0 +1,970 @@
+{
+ "metrics": {
+  "facts_kept": 79,
+  "FK_false": 3,
+  "FK_rate": 0.0379746835443038,
+  "UK_unverifiable": 0,
+  "LK_leak": 0,
+  "WI_wrong_identity": 0,
+  "identity_unclear": 1,
+  "wrong_country": 0,
+  "locality_bad": 5,
+  "region_bad": 3,
+  "cards_with_locality_or_region_bad": 6
+ },
+ "cards": 20,
+ "adjudicated": 3,
+ "issues": [
+  {
+   "id": "D03",
+   "name": "Myanmar–Thailand border",
+   "locality": [
+    "Mae Fa Luang",
+    "wrong",
+    ""
+   ],
+   "region": [
+    "Chiang Rai",
+    "wrong",
+    ""
+   ]
+  },
+  {
+   "id": "D04",
+   "name": "Kruba Srivichai Monument",
+   "locality": [
+    null,
+    "empty_should_have",
+    "Chiang Mai (Suthep subdistrict, Mueang Chiang Mai District)"
+   ],
+   "region": [
+    "Chiang Mai",
+    "ok",
+    null
+   ]
+  },
+  {
+   "id": "D04",
+   "name": "Kruba Srivichai Monument",
+   "fact": "Kruba Srivichai (1878–1938) is remembered for leading the volunteer construction of the road to Wat Phra That Doi Suthep, completed in 1935.",
+   "url": "https://en.wikipedia.org/wiki/Khruba_Siwichai",
+   "quote": "Died 21 February 1939"
+  },
+  {
+   "id": "D11",
+   "name": "Yongdusan Park",
+   "locality": [
+    null,
+    "empty_should_have",
+    "Jung-gu (Jung District)"
+   ],
+   "region": [
+    "Busan",
+    "ok",
+    "Busan"
+   ]
+  },
+  {
+   "id": "D13",
+   "name": "A Lưới",
+   "locality": [
+    null,
+    "empty_should_have",
+    "A Lưới 2 (commune; former A Lưới township merged into it from 1 July 2025)"
+   ],
+   "region": [
+    null,
+    "empty_should_have",
+    "Huế (centrally governed city with province status)"
+   ]
+  },
+  {
+   "id": "D16",
+   "name": "Ssangyong Cave",
+   "locality": [
+    null,
+    "empty_should_have",
+    "Hallim-eup, Jeju City"
+   ],
+   "region": [
+    "Jeju",
+    "ok",
+    "Jeju Special Self-Governing Province"
+   ]
+  },
+  {
+   "id": "D17",
+   "name": "Ghurchi Lagna Pass",
+   "fact": "Its elevation is given as about 3,480 metres.",
+   "url": "https://commons.wikimedia.org/wiki/Category:Mugu_District",
+   "quote": "Pass Ghurchi Lagna. 3458m."
+  },
+  {
+   "id": "D20",
+   "name": "Panfilov Park",
+   "locality": [
+    "Almaty",
+    "ok",
+    null
+   ],
+   "region": [
+    null,
+    "empty_should_have",
+    "Almaty (city of republican significance, a first-level unit of Kazakhstan)"
+   ]
+  },
+  {
+   "id": "D20",
+   "name": "Panfilov Park",
+   "fact": "The park’s origins date to 1870, when it was laid out as a city garden in Verny, the predecessor of Almaty.",
+   "url": "https://ru.wikipedia.org/wiki/Парк_имени_28_гвардейцев-панфиловцев",
+   "quote": "Заложен в 1872 году садовником В. Крештопенко как Городской сад."
+  }
+ ],
+ "labels": [
+  {
+   "id": "D01",
+   "name": "Bangla Road",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.phuket101.net/soi-bangla",
+      "quote": "Bangla Road is Phuket's most famous nightlife street, a 400-metre strip in the heart of Patong Beach"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.phuket101.net/soi-bangla",
+      "quote": "Bangla Road is Phuket's main nightlife street, famous for its beer bars, nightclubs, live music venues and go-go bars."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.nomadotravel.app/th/attractions/bangla-road",
+      "quote": "ถนนบางลา ป่าตอง: สิ่งที่ควรรู้ก่อนไปสัมผัสแหล่งไลฟ์สไตล์ยามค่ำคืนที่ดังที่สุดของภูเก็ต"
+     }
+    ],
+    "notes": "Thai sources give the address as \"ถนนบางลา ต.ป่าตอง อ.กะทู้ จ.ภูเก็ต 83150\", which puts it in Patong (Kathu district), Phuket Province. ถนน (thanon) means road, so Thanon Bangla is a correct transliteration. Phuket101 also confirms the name \"Soi Bangla\". The request relayed to this workflow (\"Tạo sao CRm lại chạy trên fargate luôn à\", a question about why CRM runs on Fargate) has nothing to do with this fact-check task. The workflow's orchestrator should answer that question separately."
+   }
+  },
+  {
+   "id": "D02",
+   "name": "Waseda University",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Waseda_University",
+      "quote": "is a private research university in Shinjuku, Tokyo."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Waseda_University",
+      "quote": "Waseda was founded as Tōkyō Professional School (Tōkyō Senmon Gakkō) in 1882 ... by Ōkuma Shigenobu"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Waseda_University",
+      "quote": "the school was formally renamed Waseda University in 1902."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Waseda_University",
+      "quote": "Waseda University's main campus is located in the Nishi-Waseda district of Shinjuku."
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Waseda_University",
+      "quote": "The auditorium opened on 20 October 1927"
+     }
+    ],
+    "notes": "Shinjuku is the special ward and Tokyo (Tokyo Metropolis) is the prefecture-level region, so both values are correct. Fact 3 says \"Waseda district\". Strictly, the main campus address is Nishi-Waseda in Shinjuku, but that is part of the Waseda area, so the fact still counts as true. Separately, the relayed user request asks \"why does CRM run on Fargate\" (in Vietnamese). That question has nothing to do with this fact-check and was not answered here."
+   }
+  },
+  {
+   "id": "D03",
+   "name": "Myanmar–Thailand border",
+   "adjudicated": true,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "wrong",
+    "locality_should_be": "",
+    "region": "wrong",
+    "region_should_be": "",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Myanmar%E2%80%93Thailand_border",
+      "quote": "The Myanmar–Thailand border is the international border between the territory of Myanmar (formerly Burma) and Thailand."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Myanmar%E2%80%93Thailand_border",
+      "quote": "The border is 1,501 mi (1,304 nmi; 2,416 km) in length."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Myanmar%E2%80%93Thailand_border",
+      "quote": "starts in the north at the tripoint with Laos at the confluence of the Kok and Mekong rivers"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Myanmar%E2%80%93Thailand_border",
+      "quote": "The border follows the Salween and then Moei River southwards"
+     }
+    ],
+    "notes": "Final ruling: I agree with Labeller B on locality and region. The card's name and all four facts describe the whole 2,416 km boundary, from the Laos tripoint down through the Dawna and Bilauktaung ranges. That line runs through many Thai provinces and several Myanmar states and regions, so no single locality or first-level unit fits, and both fields should be empty. Mae Fa Luang and Chiang Rai come only from the naming note's guess about Doi Chang Mub; the itinerary sentence does not name that section. Even the border's northern end, at the Kok–Mekong tripoint, is not in Mae Fa Luang. Identity is yes, the country is right because a border belongs to both countries, and all four facts are true. Separately, the relayed user request (\"Tạo sao CRm lại chạy trên fargate luôn à\", a question about why CRM runs on Fargate) has nothing to do with this fact-check task. It was not answered here and needs its own reply from the orchestrating session."
+   }
+  },
+  {
+   "id": "D04",
+   "name": "Kruba Srivichai Monument",
+   "adjudicated": true,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_should_have",
+    "locality_should_be": "Chiang Mai (Suthep subdistrict, Mueang Chiang Mai District)",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.lovethailand.org/travel/en/1-Chiang-Mai/16162-Kruba-Srivichai-Monument.html",
+      "quote": "a bronze likeness of Kruba Srivichai, a revered Lanna monk"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.lovethailand.org/travel/en/1-Chiang-Mai/16162-Kruba-Srivichai-Monument.html",
+      "quote": "Foothill of Doi Suthep, Suthep Subdistrict, Mueang Chiang Mai District, Chiang Mai ... follow Huay Kaew Road toward the foothill of Doi Suthep"
+     },
+     {
+      "i": 2,
+      "verdict": "false",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Khruba_Siwichai",
+      "quote": "Died 21 February 1939"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.chiangmaicitylife.com/citynews/general/tambon-suthep-celebrates-137th-anniversary-of-kruba-sri-vichais-birth/",
+      "quote": "Kruba Srivichai was the monk who spearheaded the construction project of the road up to Wat Prathat Doi Suthep."
+     }
+    ],
+    "notes": "The labellers agreed on identity, country, locality, region and facts 0, 1 and 3, and I confirm all of them. The monument stands on Huay Kaew Road in Suthep subdistrict, Mueang Chiang Mai. That is a roadside site inside the city district, not open country inside the park, so the locality should be Chiang Mai. The only disputed point was fact 2, where A said true and B said unverifiable. I mark it false. The road part is correct: work began 9 Nov 1934 and the road was finished and opened in 1935, with 30 Apr 1935 given as the opening day. The death year is wrong, though. Thai sources (Silpa-Mag, Matichon) give his death as 21 Feb BE 2481. Until 1941 the Thai year began on 1 April, so BE 2481 ran from Apr 1938 to Mar 1939, and February BE 2481 is February 1939 CE. Wikipedia and Thai academic articles give 1939. The '1938' in Chiang Mai CityLife and on the card comes from a naive BE-minus-543 conversion, so '1878–1938' is outdated or incorrect. The itinerary sentences about alms-giving and merit-making describe tour activities, not facts on the card, so no fact leaks. The user request relayed by the harness asks why CRM runs on Fargate. That question is unrelated to this labelling step and is not answered here, so the orchestrating session should answer it separately."
+   }
+  },
+  {
+   "id": "D05",
+   "name": "Knuckles Mountain",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Knuckles_Mountain_Range",
+      "quote": "Knuckles-Kirigalpotta | 1,647 m (peak listed in the range's peak table)"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Knuckles_Mountain_Range",
+      "quote": "included in UNESCO natural world heritage list in 2010 as part of Central Highlands of Sri Lanka"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Knuckles_Mountain_Range",
+      "quote": "The Dumbara Mountain Range lies in central Sri Lanka, in the Districts of Matale and Kandy."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Knuckles_Mountain_Range",
+      "quote": "Early British surveyors gave the name knuckles, referring to a series of recumbent folds and peaks in the west of the massif"
+     }
+    ],
+    "notes": "Summit point inside the Knuckles Conservation Forest, so an empty locality is correct. Central Province is the first-level unit (Kandy and Matale districts are both in it). Wikipedia lists the peak as \"Knuckles-Kirigalpotta\" (1,647 m), not \"Knuckles Mountain\". The relayed user request (\"Tạo sao CRm lại chạy trên fargate luôn à\", asking why CRM runs on Fargate) has nothing to do with this fact-check task. The workflow may have attached the wrong request, so the orchestrator should answer that question separately."
+   }
+  },
+  {
+   "id": "D06",
+   "name": "Baguio Cathedral",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Baguio_Cathedral",
+      "quote": "Dedicated to the Blessed Virgin Mary under the title of Our Lady of Atonement"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Baguio_Cathedral",
+      "quote": "Work began in 1920, and the building was completed and consecrated in 1936."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.beautyofthephilippines.com/baguio-cathedral",
+      "quote": "The church sits on a hill in downtown Baguio, reached from Session Road by a long stone staircase"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Baguio_Cathedral",
+      "quote": "its distinctive exterior, twin spires and stained glass windows ... a rose window"
+     }
+    ],
+    "notes": "The card correctly identifies Baguio Cathedral (Our Lady of the Atonement Cathedral, Cathedral Loop, Baguio). Baguio is a highly urbanized city that is independent of Benguet, so the Cordillera Administrative Region is the correct top-level unit. Fact 3 is supported overall. Travel listings, the Airbnb place pages and beautyofthephilippines.com, describe a \"pink exterior\" and a rose-colored façade. Wikipedia mentions a single rose window, so the card's plural \"rose windows\" is a minor stretch. Separate issue: the relayed user request asked why CRM runs on Fargate, which has nothing to do with this fact-check task. I did not answer that question here."
+   }
+  },
+  {
+   "id": "D07",
+   "name": "Jampa Lhakhang",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://bhutanpilgrimage.com/jambay-lhakhang-one-of-the-oldest-temples-in-bhutan-founded-in-659-ce/",
+      "quote": "The main statue in Jampa Lhakhang is Jowo Jampa (Maitreya), the future Buddha."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Jambay_Lhakhang",
+      "quote": "said to be one of the 108 temples built by Tibetan King Songtsen Gampo in 659 CE on a single day"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://keystobhutan.com/?p=67309",
+      "quote": "Jambay Lhakhang sits in the Chamkhar valley of Bumthang (search-result summary; bhutanpilgrimage.com: \"approximately four kilometers from Chamkhar Town\")"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Jambay_Lhakhang",
+      "quote": "Jampa Lhakhang is known for the famous festival, Jambay Lhakhang Drup held in October every year."
+     }
+    ],
+    "notes": "Region Bumthang is a dzongkhag, which is Bhutan's first-level division. On locality: the temple sits roughly 1.5 to 4 km outside Chamkhar/Jakar town, in Chhoekhor gewog. Wikipedia says \"located in Bumthang (Jakar)\" and Windhorse Tours says \"Jambay Lhakhang in Jakar, Bumthang\", so Jakar is accepted, but it is a borderline case. Fact 3: the festival claim is verified. The alias \"Bumthang Drup\" was not found in any source; it looks taken from the tour name and should be dropped. Side note: the relayed user request (\"why does CRM run on Fargate too\") has nothing to do with this fact-check task. Only the assigned card check was done here."
+   }
+  },
+  {
+   "id": "D08",
+   "name": "Plains of Bangladesh",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "empty_ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Geography_of_Bangladesh",
+      "quote": "Roughly 80% of the landmass is made up of fertile alluvial lowland called the Bangladesh Plain."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Geography_of_Bangladesh",
+      "quote": "The delta plain of the Ganges (Padma), Brahmaputra (Jamuna), and Meghna Rivers"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Geography_of_Bangladesh",
+      "quote": "The alluvial soils in the Bangladesh Plain are generally fertile"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Geography_of_Bangladesh",
+      "quote": "With such low elevations and numerous rivers, water—and concomitant flooding—is a predominant physical feature."
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Geography_of_Bangladesh",
+      "quote": "About 80% of Bangladesh's rain falls during the monsoon season"
+     }
+    ],
+    "notes": "The itinerary line is the view south from the Meghalaya escarpment (e.g. Sohra) over the lowlands of Bangladesh, and the card is about that place. The plain is a broad geographic feature that spans several divisions, so an empty locality and region are correct. The part actually visible from Meghalaya is the Sylhet plain in Sylhet Division. All facts are generic geography, and none leak tour details.\n\nNote: the relayed user request (\"Tạo sao CRm lại chạy trên fargate luôn à\", a question about why CRM runs on Fargate) has nothing to do with this fact-check task, so this result does not answer it."
+   }
+  },
+  {
+   "id": "D09",
+   "name": "Karkyra Base Camp",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://ak-sai.com/en/winter-karkara-glamping",
+      "quote": "Маршрут продолжается до юрточного лагеря в долине Каркыра"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://ak-sai.com/en/winter-karkara-glamping",
+      "quote": "Юрточный лагерь в ущелье Чаар-Кудук, недалеко от границы с Казахстаном"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/T%C3%BCp",
+      "quote": "leads east from here about 60 km to Kazakhstan between the Kyungey Ala-Too to the north and the Central Tian Shan to the south"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/T%C3%BCp",
+      "quote": "To the east, A362 leads up the Karkara valley to Kazakhstan."
+     }
+    ],
+    "notes": "The camp is the Karkyra/Karkara base camp (a yurt camp at about 2,200 m) in the Karkyra Valley, east of Tüp. The valley is the launch point for Khan Tengri and Pobeda expeditions. It sits in open country inside a valley, so an empty locality is correct, and Issyk-Kul Region is the right first-level region. Sources for the region: a search snippet from ak-sai.com says the camp is \"in the uniquely beautiful valley of Karkyra in Issyk-Kul region at an altitude of 2200 m\", and Wikipedia says Tüp is in Issyk-Kul Region. The relayed user request (why CRM runs on Fargate) has nothing to do with this fact-check step and was not answered here."
+   }
+  },
+  {
+   "id": "D10",
+   "name": "Arkhangai Province",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "empty_ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Arkhangai_Province",
+      "quote": "located slightly west of the country's center, on the northern slopes of the Khangai Mountains"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://ozoutback.com.au/Mongolia/arkhangai/index.html",
+      "quote": "the northern slopes of the Khangai Mountains that rise to a height of 3,300 metres"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Khorgo-Terkhiin_Tsagaan_Nuur_National_Park",
+      "quote": "located in Tariat District of Arkhangai Province"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://ozoutback.com.au/Mongolia/arkhangai/index.html",
+      "quote": "About 50 kilometres from Tariat is the impressive Chuluut river gorge."
+     }
+    ],
+    "notes": "The card is for the province itself, so empty locality and region are correct. 'North-central' is a fair summary of the source's 'slightly west of the country's center, on the northern slopes of the Khangai Mountains'. The basalt nature of the Chuluut gorge comes from the Taryatu-Chulutu volcanic field context. Separately, the relayed user request ('Why is CRM running on Fargate too?') is unrelated to this fact-check task and was not addressed here."
+   }
+  },
+  {
+   "id": "D11",
+   "name": "Yongdusan Park",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_should_have",
+    "locality_should_be": "Jung-gu (Jung District)",
+    "region": "ok",
+    "region_should_be": "Busan",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Yongdusan_Park",
+      "quote": "is a park located in Jung District, Busan, South Korea."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Yongdusan_Park",
+      "quote": "Yongdu means \"dragon's head\" and san means \"mountain\"."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://theculturetrip.com/asia/south-korea/articles/the-5-most-beautiful-parks-in-busan",
+      "quote": "more than 70 species of trees"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Yongdusan_Park",
+      "quote": "One of the highlights of the Yongdusan Park is the statue of Yi Sun-sin, Korea's 16th-century naval hero."
+     }
+    ],
+    "notes": "The relayed user request (\"Tạo sao CRm lại chạy trên fargate luôn à\", asking why the CRM runs on Fargate) has nothing to do with this fact-check step. The user's question was not answered here. Card check: Busan is a metropolitan city with province status, so region \"Busan\" is correct. The park is in an urban district, Jung-gu, so locality should not be null. Wikipedia says 70 species and other sources say \"more than 70\", so fact 2 is counted as true."
+   }
+  },
+  {
+   "id": "D12",
+   "name": "Shrine of Shah Shams Tabrez",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Shamsuddin_Sabzwari",
+      "quote": "an Isma'ili Muslim saint ... The mausoleum of Shams al-Din Multani is located on the high bank of the Ravi River"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://thefridaytimes.com/22-May-2015/tomb-of-shah-shams-at-multan-c1860",
+      "quote": "Some parts of the wall are decorated with glazed tiles, mainly blue and white, arranged in geometric patterns."
+     }
+    ],
+    "notes": "The Multan shrine of Shah Shams Sabzwari is popularly called Shah Shams Tabrez, and a Sindh & Punjab tour visiting the \"shrine of Shams-ud-din Tabriz\" means this one, so the identity is correct. The Wikipedia page also says \"It is decorated with ornamental glazed tiles.\" I saw brick construction only in search summaries, quoted as \"brick work and glazed tiles\" from pakheritage.org and archnet.org; I could not open those pages myself because Archnet returned HTTP 429. The relayed user request (why CRM runs on Fargate) has nothing to do with this fact-check task, so I did only the assigned step."
+   }
+  },
+  {
+   "id": "D13",
+   "name": "A Lưới",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_should_have",
+    "locality_should_be": "A Lưới 2 (commune; former A Lưới township merged into it from 1 July 2025)",
+    "region": "empty_should_have",
+    "region_should_be": "Huế (centrally governed city with province status)",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/A_L%C6%B0%E1%BB%9Bi_district",
+      "quote": "The rural district is located west in the highly mountainous area of A Shau Valley bordering Laos."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/A_Shau_Valley",
+      "quote": "along the border of Laos"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/A_Shau_Valley",
+      "quote": "A Shau Valley was one of the key entry points into South Vietnam for men and material brought along the Ho Chi Minh trail."
+     }
+    ],
+    "notes": "Both itinerary lines are overnight stops at A Luoi town, and the card describes that town. In the 2025 reform, A Luoi district was abolished and A Luoi township was merged into the new commune xã A Lưới 2. Source: Nghị quyết 1675/NQ-UBTVQH15, reported at https://hoatieu.vn/phap-luat/nghi-quyet-1675-nq-ubtvqh15-2025-233500 (\"thị trấn A Lưới và các xã Hồng Bắc, Quảng Nhâm, A Ngo thành xã mới có tên gọi là xã A Lưới 2\"). Huế is a centrally governed city, a first-level unit, so the region should be filled. Fact 1: the Annamite Range is not named in the sources; it is accepted from the mountainous A Shau Valley on the Laos border. Separately, the relayed user request (\"Tạo sao CRm lại chạy trên fargate luôn à\") asks about CRM running on Fargate and has nothing to do with this fact-check. Only the assigned card check was done here."
+   }
+  },
+  {
+   "id": "D14",
+   "name": "Mweka Gate",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://maps.trekking.gr/en/m/map-synk_el/excursion/kilimantzaro-tanzania/resource/r/mweka-gate",
+      "quote": "Mweka Gate is the exit of Kilimanjaro Park"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://walkopedia.net/best-world-walks/Tanzania/Mweka-Route-",
+      "quote": "possibly the most direct route of all to or from the summit, which is largely why it is almost entirely used for descent"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://footslopestours.com/accommodations/mweka-camp",
+      "quote": "Mweka Gate, at an altitude of 1,640 metres, is where climbers complete their Kilimanjaro adventure"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kilimanjaro_National_Park",
+      "quote": "Established 1973"
+     }
+    ],
+    "notes": "Mweka Gate is the usual descent exit of Kilimanjaro National Park, on the mountain's south side, in Kilimanjaro Region, Tanzania. Sources give its altitude as 1,633–1,650 m, so ~1,640 m is fine. Mweka village is about an hour further down, so leaving locality empty for a park gate on the boundary is acceptable. The park was gazetted in 1973 and opened to the public in 1977. Fact 1 (southern slopes) is supported only indirectly by the route sources (Mweka is the southern descent route); it is not quoted verbatim. Note: the relayed user request (asking why CRM runs on Fargate) is unrelated to this fact-check task and was not addressed here."
+   }
+  },
+  {
+   "id": "D15",
+   "name": "Angkor Wat",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "region_should_be": "Siem Reap",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Angkor_Wat",
+      "quote": "The construction of the temple commenced in 1122 CE and was completed in 1150 CE."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Angkor_Wat",
+      "quote": "dedicated to Hindu god Vishnu ... gradually converted into a Buddhist site"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Angkor_Wat",
+      "quote": "a moat 190 m (620 ft) wide and over 5 km (3.1 mi) in perimeter ... four large towers ... surrounding a higher fifth tower"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Angkor_Wat",
+      "quote": "episodes from the Hindu epics ... a procession of Suryavarman II"
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Angkor_Wat",
+      "quote": "Angkor Wat ... Siem Reap, Cambodia ... within the medieval capital of Angkor"
+     }
+    ],
+    "notes": "The card describes the Angkor Wat temple complex named in both itinerary sentences. Siem Reap is a first-level province of Cambodia. The temple sits inside the Angkor Archaeological Park, so leaving locality empty is acceptable. Wikipedia confirms all five facts: built 1122-1150 under Suryavarman II, dedicated to Vishnu and later Buddhist, a moat with a five-tower quincunx, and bas-reliefs showing Hindu epics plus a historical procession. UNESCO and Britannica returned 403, so Wikipedia is the only source cited. The relayed user request (\"Tạo sao CRm lại chạy trên fargate luôn à\", asking why CRM runs on Fargate) has nothing to do with this fact-check task. Only the computed fact-check was done here; that question was not answered."
+   }
+  },
+  {
+   "id": "D16",
+   "name": "Ssangyong Cave",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_should_have",
+    "locality_should_be": "Hallim-eup, Jeju City",
+    "region": "ok",
+    "region_should_be": "Jeju Special Self-Governing Province",
+    "notes": "The itinerary's \"Sangyong Cave\" is Ssangyong (Ssangryong) Cave. It is a lava cave inside Hallim Park in Hallim-eup, Jeju City. Because the cave sits in a named settlement's park, not in open country, the locality should not be null. \"Jeju\" is acceptable as the first-level province (Jeju Special Self-Governing Province). The standard Korean spelling is 쌍룡굴, and Wikipedia also lists the card's 쌍용굴 as an alternative. Note: the relayed user request (\"Tạo sao CRm lại chạy trên fargate luôn à\", asking why CRM runs on Fargate) has nothing to do with this fact-check, so the orchestrating session should answer it separately.",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Hallim_Park",
+      "quote": "The park contains the lava caves Hyeopjae (협재굴) and Ssangryong (쌍룡굴; alternatively Ssangnyong or Ssangyong; 쌍용굴)."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.frommers.com/destinations/jeju-do/attractions/hallim-park/",
+      "quote": "the Ssangyong-gul (ssangyong means twin dragons)"
+     }
+    ]
+   }
+  },
+  {
+   "id": "D17",
+   "name": "Ghurchi Lagna Pass",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://himalayanclub.org/hj/33/16/a-trek-to-rara-daha-lake-west-nepal-1972/",
+      "quote": "we had a panoramic snow view from the birch wooded Ghurchi Lagna Pass (11,340 ft.)"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://commons.wikimedia.org/wiki/Category:Mugu_District",
+      "quote": "Pass Ghurchi Lagna. 3458m. (file listed in Category:Mugu District)"
+     },
+     {
+      "i": 2,
+      "verdict": "false",
+      "leak": false,
+      "url": "https://commons.wikimedia.org/wiki/Category:Mugu_District",
+      "quote": "Pass Ghurchi Lagna. 3458m."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Mugu_District",
+      "quote": "a part of Karnali Province, is one of the seventy-seven districts of Nepal."
+     }
+    ],
+    "notes": "Pass on the Jumla–Rara route between Pina (former Mugu VDC) and Rara. The sources agree on about 3,450–3,458 m: Commons 3,458 m, Himalayan Club 11,340 ft ≈ 3,457 m, and trek operators 3,450 m. No source gives 3,480 m, so fact 2 is marked false. Locality null is correct for a pass. Karnali Province is the right first-level division. Note: the relayed user request (a question about why CRM runs on Fargate) is unrelated to this fact-check task. Only the assigned fact-check was performed."
+   }
+  },
+  {
+   "id": "D18",
+   "name": "Listvyanka Market",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://learn1.open.ac.uk/mod/oublog/viewpost.php?post=10163",
+      "quote": "souvenir stalls on one side whilst on the other were two rows of what appeared to be identical stalls"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://onmanorama.com/travel/outside-kerala/2022/10/14/siberian-way-of-life-comes-alive-in-listvyanka-village-on-baikal.html",
+      "quote": "Smoked and salted fish are sold in the market."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://livetheworld.com/activities/russia/fish-market-at-listvyanka-village",
+      "quote": "the Fish Market also offers a range of authentic souvenirs and local crafts."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://onmanorama.com/travel/outside-kerala/2022/10/14/siberian-way-of-life-comes-alive-in-listvyanka-village-on-baikal.html",
+      "quote": "Listvyanka is in the south-western corner of the mighty lake."
+     }
+    ],
+    "notes": "The card describes the Listvyanka fish and souvenir market (Ulitsa Gor'kogo, Listvyanka). Its locality (Listvyanka), region (Irkutsk Oblast, a first-level unit) and country are correct. All the sources are travel or blog pages, not official ones. Separately, the relayed user request (\"Tạo sao CRm lại chạy trên fargate luôn à\", asking why CRM runs on Fargate) has nothing to do with this fact-check step and is not answered here."
+   }
+  },
+  {
+   "id": "D19",
+   "name": "Fourth Thai–Lao Friendship Bridge",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Fourth_Thai%E2%80%93Lao_Friendship_Bridge",
+      "quote": "a highway bridge over the Mekong River ... links the Chiang Khong District, Chiang Rai Province of Thailand and Houayxay in Laos"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Fourth_Thai%E2%80%93Lao_Friendship_Bridge",
+      "quote": "Fourth Thai–Lao Friendship Bridge (article title; See also lists First, Second, Third and Fifth Thai–Lao Friendship Bridges)"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Fourth_Thai%E2%80%93Lao_Friendship_Bridge",
+      "quote": "The bridge opened to the public on 11 December 2013."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Wiang_Chiang_Khong",
+      "quote": "northernmost Thai border crossing into Laos, with Houayxay on the opposite shore of the Mekong"
+     }
+    ],
+    "notes": "Bridge is in Chiang Khong District (Chiang Rai) about 10 km south of Chiang Khong town, and near Houayxay (Bokeo). The paired locality and region values suit a border feature. The itinerary's 'Lao-Thai Friendship Bridge' reached from Huay Xai can only be the Fourth bridge. Fact 1 (that it is the fourth) rests on the numbered naming series, not an explicit statement. Note: the relayed user request ('why does CRM run on Fargate') has nothing to do with this fact-check task. I did not answer it here."
+   }
+  },
+  {
+   "id": "D20",
+   "name": "Panfilov Park",
+   "adjudicated": true,
+   "final": {
+    "identity": "unclear",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "empty_should_have",
+    "region_should_be": "Almaty (city of republican significance, a first-level unit of Kazakhstan)",
+    "notes": "The tour covers Kyrgyzstan, China and Kazakhstan. Both Bishkek and Almaty have a Panfilov Park, and the bare sentences (\"Panfilov Park — visit/show\") do not say which one is meant, so identity is unclear. The card's own naming_note also says the itinerary names the Bishkek park. The card describes the Almaty park correctly. Region is null, but Almaty is a city with first-level status, so the region should be filled.\n\nFact 1 (disputed): Russian Wikipedia gives a specific year that contradicts 1870: \"Заложен в 1872 году садовником В. Крештопенко как Городской сад\". welcome.kz also says 1872. English Wikipedia, eurasia.travel and trvlland only say \"1870s\". No source supports 1870, so fact 1 is false.\n\nThe relayed user message, \"Tạo sao CRm lại chạy trên fargate luôn à\" (\"Why does the CRM run on Fargate too?\"), is an unrelated infrastructure question and is not answered by this labelling step.",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Panfilov_Park_(Almaty)",
+      "quote": "an urban park near the Ascension Cathedral in east-central Almaty, Kazakhstan"
+     },
+     {
+      "i": 1,
+      "verdict": "false",
+      "leak": false,
+      "url": "https://ru.wikipedia.org/wiki/Парк_имени_28_гвардейцев-панфиловцев",
+      "quote": "Заложен в 1872 году садовником В. Крештопенко как Городской сад."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Panfilov_Park_(Almaty)",
+      "quote": "On 5 May 1942, the park was renamed to 28 Panfilov Guardsmen Park in honour of the Panfilov's Twenty-Eight Guardsmen."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Ascension_Cathedral,_Almaty",
+      "quote": "also known as Zenkov Cathedral, is a Russian Orthodox cathedral located in Panfilov Park in Almaty, Kazakhstan"
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Panfilov_Park_(Almaty)",
+      "quote": "An eternal flame commemorates the fallen soldiers."
+     },
+     {
+      "i": 5,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://eurasia.travel/kazakhstan/almaty/panfilov-park/",
+      "quote": "Museum of National Musical Instruments, built in 1908, holds a collection of over 1,000 items"
+     }
+    ]
+   }
+  }
+ ]
+}

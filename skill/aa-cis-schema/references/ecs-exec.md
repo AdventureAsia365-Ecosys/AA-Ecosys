@@ -41,15 +41,18 @@ asyncio.run(main())
 
 Script cần code app → `sys.path.insert(0, "/app")` (có `shared.secrets.get_database_url`).
 
-## Chạy (mỗi lệnh một dòng)
+## Chạy — dùng `tools/ecs/ecsx.sh` (S253), không tự viết wrapper
 
 ```bash
-aws s3 cp /tmp/script.py s3://aa-cis-bronze-005097885195/scripts/script.py --profile aa365-admin --region us-west-1
-URL=$(aws s3 presign s3://aa-cis-bronze-005097885195/scripts/script.py --profile aa365-admin --region us-west-1 --expires-in 300)
-TASK_ARN=$(aws ecs list-tasks --cluster aa-cis-dev-cluster --service-name aa-cis-dev-api --profile aa365-admin --region us-west-1 --query 'taskArns[0]' --output text)
-aws ecs execute-command --cluster aa-cis-dev-cluster --task $TASK_ARN --container api --interactive --command "sh -c 'curl -s \"$URL\" -o /tmp/s.py && python3 /tmp/s.py && echo DONE'" --profile aa365-admin --region us-west-1
-aws s3 cp s3://aa-cis-bronze-005097885195/scripts/result.json /tmp/result.json --profile aa365-admin --region us-west-1
+tools/ecs/ecsx.sh .tmp-session/S<nnn>/script.py MODE=dry          # task api (mặc định)
+ECSX_SERVICE=aa-cis-dev-worker ECSX_CONTAINER=worker tools/ecs/ecsx.sh .tmp-session/S<nnn>/script.py
 ```
+
+Công cụ đưa script + `tools/ecs/ecsx_runner.py` lên S3. Phiên SSM chỉ khởi động runner. Runner tự tách khỏi phiên
+(`setsid`), chạy script với cwd `/app` (đã có `/app` trên `sys.path`), rồi ghi toàn bộ stdout+stderr lên
+`scripts/out/` của bucket bronze. Máy local chờ file `.done`, in output, xoá object và thoát bằng exit code của script.
+Phiên SSM đứt cũng không mất output, và script không chết theo phiên. Script chỉ cần `print`, không phải tự upload S3.
+`VAR=value` thành biến môi trường của script. Chỉ cho container CIS (task role CRM không ghi được bucket bronze).
 
 (File tạm trên máy: dùng `.tmp-session/` trong workspace thay cho `/tmp` như runbook.)
 
@@ -57,8 +60,7 @@ aws s3 cp s3://aa-cis-bronze-005097885195/scripts/result.json /tmp/result.json -
 
 - `--command` không qua shell: `;`, `&&`, pipe phải nằm trong `sh -c '…'`.
 - **Không đọc kết quả qua terminal SSM.** Output dài (JSON một dòng vài KB, nhiều dòng liền) làm phiên đóng sớm
-  (`Cannot perform start session: EOF`) và mất dữ liệu im lặng. Container CIS: ghi file → upload S3 → tải về, kiểm
-  `wc -c` / `json.loads` trước khi đọc. Container CRM (không có S3): in dòng ngắn, mỗi dòng một sự kiện, `flush=True`,
+  (`Cannot perform start session: EOF`) và mất dữ liệu im lặng (S237, S248, S251, S253). Container CIS: `tools/ecs/ecsx.sh`. Container CRM (không có S3): in dòng ngắn, mỗi dòng một sự kiện, `flush=True`,
   `LIMIT` nhỏ, cuối script `sleep` ngắn.
 - `execute-command` có thể treo tới ~120 giây → chạy nền, poll S3. Script > 5 phút không chạy qua exec (deploy thay task
   là chết giữa chừng; exec nền cũng tự ngắt) → one-off ECS task, job trên worker, hoặc chạy sau khi mọi PR backend đã merge.

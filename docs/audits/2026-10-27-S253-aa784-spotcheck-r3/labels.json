@@ -1,0 +1,1602 @@
+{
+ "cards": 14,
+ "adjudicated": 4,
+ "metrics": {
+  "facts_kept": 51,
+  "FK_false": 1,
+  "FK_rate": 0.0196078431372549,
+  "UK_unverifiable": 1,
+  "LK_leak": 0,
+  "WI_wrong_identity": 0,
+  "identity_unclear": 0,
+  "wrong_country": 0,
+  "locality_bad": 2,
+  "region_bad": 1,
+  "cards_with_locality_or_region_bad": 3
+ },
+ "issues": [
+  {
+   "id": "E06",
+   "name": "Last Water Point",
+   "fact": "The waypoint is on the upper route between Horombo Hut and Kibo Hut.",
+   "url": "https://www.summitpost.org/marangu-route/159626",
+   "quote": "There is an upper route (right hand fork) and lower route (left hand fork) to choose from... it also passes the last watering point at 4130m."
+  },
+  {
+   "id": "E12",
+   "name": "Macau",
+   "locality": [
+    null,
+    "empty_ok",
+    null
+   ],
+   "region": [
+    "Hong Kong / Macau",
+    "wrong",
+    "empty (route spans two SARs, Hong Kong and Macau; no single first-level unit)"
+   ]
+  },
+  {
+   "id": "E15",
+   "name": "Gasa Hot Spring",
+   "locality": [
+    "Gasa",
+    "wrong",
+    ""
+   ],
+   "region": [
+    "Gasa",
+    "ok",
+    "Gasa"
+   ]
+  },
+  {
+   "id": "E16",
+   "name": "Harappa",
+   "locality": [
+    null,
+    "empty_should_have",
+    "Harappa"
+   ],
+   "region": [
+    "Punjab",
+    "ok",
+    null
+   ]
+  }
+ ],
+ "labels": [
+  {
+   "id": "E01",
+   "name": "The Loft",
+   "adjudicated": true,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.gokunming.com/en/blog/item/434/kunming-loft-creative-fair-starts-tomorrow",
+      "quote": "in the The Loft art compound on Xiba Lu – also known as Chuangku (创库)"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.lonelyplanet.fr/poi/chuang-ku-loft",
+      "quote": "un quartier d'usines désaffectées appelé Chuàng Kù"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://tempusmagazine.co.uk/news/yunnan-province-the-travels-of-a-gallerist/",
+      "quote": "Located in a huge former industrial complex it houses artist studios, galleries, bars, and cafés."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.lonelyplanet.fr/poi/chuang-ku-loft",
+      "quote": "À l'ouest du centre-ville, un quartier d'usines désaffectées appelé Chuàng Kù regroupe un petit nombre de galeries"
+     }
+    ],
+    "notes": "The Loft is Chuangku (创库), at 101 Xiba Lu in Kunming's Xishan District, Yunnan. The one disputed point was fact 3. When fetched, Lonely Planet (French) says verbatim \"À l'ouest du centre-ville\" (west of the city centre), and Xiba Lu lies in western Kunming, so fact 3 is true. Labeller A found no source and marked it unverifiable; that is overruled. Facts 0–2 are supported by the GoKunming, Lonely Planet and Tempus pages. Kunming is the correct locality and Yunnan, a province, is the correct region."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://tempusmagazine.co.uk/news/yunnan-province-the-travels-of-a-gallerist/",
+      "quote": "At the centre of Kunming's contemporary art scene is The Loft or \"Chuangku\" (创库)"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://m.winshang.com/news657469.html",
+      "quote": "创库位于昆明市西坝路101号，原来是昆明机模厂的生产车间"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://tempusmagazine.co.uk/news/yunnan-province-the-travels-of-a-gallerist/",
+      "quote": "Located in a huge former industrial complex it houses artist studios, galleries, bars, and cafés."
+     },
+     {
+      "i": 3,
+      "verdict": "unverifiable",
+      "leak": false,
+      "url": "https://aaa.org.hk/ideas/ideas/research-log-kunming-trip/",
+      "quote": "a commercial and industrial area in downtown Kunming"
+     }
+    ],
+    "notes": "The Loft = Chuangku (创库), 101 Xiba Lu, Kunming, in the former workshops of the Kunming machine-mould factory (昆明机模厂). Facts 0–2 are supported. The winshang page (found by search; WebFetch now returns 404) describes a decline: many artists left and Nordica later pulled out. That leaves the current café and gallery offer uncertain, but it does not contradict the history fact. No source found to confirm 'west of city centre'. Xiba Lu is in Xishan District, roughly southwest of downtown, and one 2004 account calls the area downtown, so fact 3 is unverifiable. The country is China and the region is Yunnan (a province)."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.gokunming.com/en/blog/item/434/kunming-loft-creative-fair-starts-tomorrow",
+      "quote": "in the The Loft art compound on Xiba Lu – also known as Chuangku (创库)"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.lonelyplanet.fr/poi/chuang-ku-loft",
+      "quote": "À l'ouest du centre-ville, un quartier d'usines désaffectées appelé Chuàng Kù"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.lonelyplanet.fr/poi/chuang-ku-loft",
+      "quote": "un quartier d'usines désaffectées ... galleries and cafés show work by contemporary Chinese artists and photographers (paraphrase of LP description)"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.lonelyplanet.fr/poi/chuang-ku-loft",
+      "quote": "À l'ouest du centre-ville"
+     }
+    ],
+    "notes": "The Loft / Chuangku (创库) is at 101 Xiba Lu, Kunming (Xishan District), Yunnan. A Chinese source (winshang.com, returned 404 when fetched; seen only in search snippets) says it was the production workshops of the Kunming Machine Mould Factory (昆明机模厂). For fact 2, the Lonely Planet source was summarised in English, so the quote is a paraphrase and not verbatim. Locality Kunming and region Yunnan (province) are correct."
+   }
+  },
+  {
+   "id": "E02",
+   "name": "Roluos",
+   "adjudicated": true,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Prasat_Bakong_District",
+      "quote": "the three early Angkor temples known as the \"Roluos group\" are located to the north-west of the village of this name"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.penn.museum/sites/expedition?p=4857",
+      "quote": "rises from springs at the foot of the Kulen ... eventually flows into the marshes of the Tonle [Sap]"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.penn.museum/sites/expedition?p=4857",
+      "quote": "eventually flows into the marshes of the Tonle Dap [sic, Tonle Sap]"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Hariharalaya",
+      "quote": "in an area now called Roluos (Khmer: រលួស)"
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Roluos_(temples)",
+      "quote": "three major temples: Bakong, Lolei, and Preah Ko"
+     }
+    ],
+    "notes": "The only disagreement was over facts 1 and 2, about the Roluos River. A Penn Museum Expedition article is a reliable source for both. It calls the Roluos the second most important river system on the Angkor plain. It says the river rises at the foot of the Kulen and flows into the marshes of the Tonle Sap; the page spells it \"Tonle Dap\", which is a typo. The article also says the river was canalised to supply the moats of Hariharalaya, which is the Roluos area. Tour-operator pages confirm that the river runs past Roluos town towards Kampong Phluk. Taken together, this makes both facts true.\n\nThe card describes the settlement itself, so leaving the locality empty is acceptable. Siem Reap province is the correct first-level division. This is the Roluos in Prasat Bakong district, not the Roluos commune in Banteay Meanchey."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Prasat_Bakong_District",
+      "quote": "the three early Angkor temples known as the \"Roluos group\" are located to the north-west of the village of this name ... Roluos Commune (170908)"
+     },
+     {
+      "i": 1,
+      "verdict": "unverifiable",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Roluos_(temples)",
+      "quote": "Only tour-operator pages (not reliable) mention the Roluos River; the Wikipedia articles on Roluos and Prasat Bakong District do not name a Roluos River."
+     },
+     {
+      "i": 2,
+      "verdict": "unverifiable",
+      "leak": false,
+      "url": "https://icstravelgroup.com/destinations/?p=15393",
+      "quote": "Only a tour operator page (now 404) is cited for the Roluos River flowing into the Great Lake Tonle Sap; no reliable hydrological source could be quoted."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Hariharalaya",
+      "quote": "in an area now called Roluos (Khmer: រលួស)"
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Roluos_(temples)",
+      "quote": "three major temples: Bakong, Lolei, and Preah Ko"
+     }
+    ],
+    "notes": "\"Ruluos town\" in the itinerary is Roluos, a village and commune in Prasat Bakong District, Siem Reap Province, about 13 km east of Siem Reap on NH6. It should not be confused with Roluos in Svay Chek District, Banteay Meanchey Province. The place card describes the town itself, so leaving the locality empty is acceptable; the district is Prasat Bakong. The Roluos River and Roluos watershed are mentioned in tour-operator pages and in Angkor hydrology work, but I could not get a quotable reliable source for the river's course, so facts 1 and 2 are marked unverifiable."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "notes": "The card correctly identifies the Roluos settlement and commune in Prasat Bakong district, Siem Reap, which \"Ruluos town\" refers to. This is not the Roluos commune in Svay Chek district, Banteay Meanchey. The card names the settlement itself, so leaving locality empty is acceptable; Prasat Bakong district could be an optional value. I found no authoritative hydrology source for the Roluos River, but several tour operators describe it running from Roluos town to Kampong Phluk and into the Tonle Sap. I marked facts 1 and 2 true on that weaker evidence.",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Prasat_Bakong_District",
+      "quote": "the three early Angkor temples known as the \"Roluos group\" are located to the north-west of the village of this name"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://lettap.rezdy.com/557121/exploring-the-temples-of-roluos-and-kompong-pluk-full-day?lang=it",
+      "quote": "follow the Roluos river ... from Roluos town to the nearest navigable point where we board small wooden boats"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.trazy.com/experience/detail/roluos-group-kampong-phluk-tonle-sap-floating-village-tour-vespa-scooter",
+      "quote": "overlook the Rolous River, whose waters flow into the Great Lake Tonle Sap"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Hariharalaya",
+      "quote": "in an area now called Roluos"
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Roluos_(temples)",
+      "quote": "the group is composed by three major temples: Bakong, Lolei, and Preah Ko"
+     }
+    ]
+   }
+  },
+  {
+   "id": "E04",
+   "name": "Yol Valley",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Yolyn_Am",
+      "quote": "a deep and narrow gorge in the Gurvan Saikhan Mountains of southern Mongolia"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Yolyn_Am",
+      "quote": "The valley is located within Gobi Gurvansaikhan National Park."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.escapetomongolia.com/blog/yolyn-am",
+      "quote": "A brook that flows through the gorge used be frozen on the surface all year, but due to global warming, it began to melt during summer time."
+     }
+    ],
+    "notes": "Yolyn Am is a gorge inside Gobi Gurvansaikhan National Park in Ömnögovi Province, so leaving the locality empty is correct. All three facts check out against the sources. None of them describe the tour."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Yolyn_Am",
+      "quote": "a deep and narrow gorge in the Gurvan Saikhan Mountains of southern Mongolia"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Yolyn_Am",
+      "quote": "The valley is located within Gobi Gurvansaikhan National Park."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.escapetomongolia.com/blog/yolyn-am",
+      "quote": "A brook that flows through the gorge used be frozen on the surface all year, but due to global warming, it began to melt during summer time."
+     }
+    ],
+    "notes": "Yolyn Am is a gorge inside Gobi Gurvansaikhan National Park in Ömnögovi Province, so leaving the locality empty is correct. All three facts check out against the sources. None of them describe the tour."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Yolyn_Am",
+      "quote": "a deep and narrow gorge in the Gurvan Saikhan Mountains of southern Mongolia"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Yolyn_Am",
+      "quote": "The valley is located within Gobi Gurvansaikhan National Park."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.mongolia-trips.com/guide-mongolie/destination/canyon-yoliin-am",
+      "quote": "much of the river remains locked beneath a thick layer of ice throughout most of the year"
+     }
+    ],
+    "notes": "Yolyn Am gorge inside Gobi Gurvansaikhan NP, about 60 km SW of Dalanzadgad, capital of Ömnögovi Province (birdingplaces.eu). Because it is a gorge inside a national park, an empty locality is correct. The stream fact rests on a tour-operator guide that mentions a river under ice and waterfalls. Wikipedia does not mention a stream."
+   }
+  },
+  {
+   "id": "E05",
+   "name": "Cloud 9",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.mondo.surf/surf-spot/cloud-nine/guide/13436",
+      "quote": "Cloud Nine is a surf spot located in Visayas, Philippines, specifically on Siargao Island near General Luna."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.mondo.surf/surf-spot/cloud-nine/guide/13436",
+      "quote": "The wave is generally a right, but it can break both ways... The spot is known for its powerful reef break that pitches over a shallow live coral bottom."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://citynomads.com/surfing-in-siargao-the-philippines/",
+      "quote": "within the municipality of General Luna"
+     }
+    ],
+    "notes": "Cloud 9 / Cloud Nine is the well-known surf break in barangay Catangnan, General Luna, Siargao, Surigao del Norte. For fact 0, the sources confirm Siargao and General Luna. None of the pages fetched says \"southeastern coast\" outright. General Luna is on the island's southeast side, which fits that wording. Mondo.surf notes the break is mainly a right but also has a shorter left."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.mondo.surf/surf-spot/cloud-nine/guide/13436",
+      "quote": "Cloud Nine is a surf spot located in Visayas, Philippines, specifically on Siargao Island near General Luna."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.mondo.surf/surf-spot/cloud-nine/guide/13436",
+      "quote": "The wave is generally a right, but it can break both ways... The spot is known for its powerful reef break that pitches over a shallow live coral bottom."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://citynomads.com/surfing-in-siargao-the-philippines/",
+      "quote": "within the municipality of General Luna"
+     }
+    ],
+    "notes": "Cloud 9 / Cloud Nine is the well-known surf break in barangay Catangnan, General Luna, Siargao, Surigao del Norte. For fact 0, the sources confirm Siargao and General Luna. None of the pages fetched says \"southeastern coast\" outright. General Luna is on the island's southeast side, which fits that wording. Mondo.surf notes the break is mainly a right but also has a shorter left."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.jonnymelon.com/cloud-9-siargao/",
+      "quote": "Cloud 9 is located in General Luna, which is the main tourist hub in the southeast corner"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Siargao",
+      "quote": "This right-breaking reef wave is the site of the annual Siargao Cup"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Siargao",
+      "quote": "Cloud 9 Boardwalk in General Luna"
+     }
+    ],
+    "notes": "Cloud 9 is the famous surf break in General Luna (barangay Catangnan area), Siargao, Surigao del Norte. Surigao del Norte is the province, a first-level unit. Fact 1: sources describe it mainly as a right-hander over a shallow, sharp reef. Surf-forecast notes left and right reefs, but the main wave is a right."
+   }
+  },
+  {
+   "id": "E06",
+   "name": "Last Water Point",
+   "adjudicated": true,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.nationalgeographic.com/travel/article/mars",
+      "quote": "Within the hour we reached a stark, cinematically-tilted wooden sign sticking out of a mossy puddle that read Last Water Point"
+     },
+     {
+      "i": 1,
+      "verdict": "false",
+      "leak": false,
+      "url": "https://www.summitpost.org/marangu-route/159626",
+      "quote": "There is an upper route (right hand fork) and lower route (left hand fork) to choose from... it also passes the last watering point at 4130m."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://himalayanexpeditions.com/wp/trips/mt-kilimanjaro-%e2%80%93-marangu-route",
+      "quote": "the last stream we cross popularly known as the \"last water point\", before Kibo Hut"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kilimanjaro_National_Park",
+      "quote": "includes the whole of Mount Kilimanjaro above the tree line"
+     }
+    ],
+    "notes": "Last Water Point (~4,130 m) is on the Horombo–Saddle/Kibo leg of the Marangu Route, inside Kilimanjaro National Park, Kilimanjaro Region (first-level), Tanzania. Locality empty is right for a trail point. Fact 0: National Geographic (Andrew Evans, 2012) describes a wooden sign reading \"Last Water Point\", so the signpost exists; marked true (current condition not confirmed). Fact 1: Marangu sources name two forks from Horombo, the \"upper route\" (right) and the \"lower route\" (left), and put the last watering point on the LOWER route. The card's \"upper route\" contradicts this established naming, so it is false."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "unverifiable",
+      "leak": false,
+      "url": "https://www.summitpost.org/the-last-water-point-on-the/39012",
+      "quote": "The Last Water Point on the Marangu Route"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://himalayanexpeditions.com/wp/trips/mt-kilimanjaro-%e2%80%93-marangu-route",
+      "quote": "the last stream we cross popularly known as the \"last water point\", before Kibo Hut"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.summitpost.org/marangu-route/159626",
+      "quote": "The recommended lower route is much easier and nearly an hour shorter, and it also passes the last watering point at 4130m."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.safaribookings.com/day/t27690",
+      "quote": "Marangu Gate ... the entrance of the Mt Kilimanjaro National Park (1860 m)"
+     }
+    ],
+    "notes": "Last Water Point (~4130-4200 m) is on the lower (left) fork from Horombo Hut to the Saddle/Kibo Hut on the Marangu Route, inside Kilimanjaro National Park, Kilimanjaro Region. The location is well documented. Sources describe it as a stream or water point; none I found confirms a physical signpost, so the 'signposted' claim in fact 0 is unverifiable (the 'waypoint on the Marangu Route' part is true). Fact 3: park gate source shows the route above Marangu Gate is within the park."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "unverifiable",
+      "leak": false,
+      "url": "https://www.summitpost.org/the-last-water-point-on-the/39012",
+      "quote": "The Last Water Point on the Marangu Route."
+     },
+     {
+      "i": 1,
+      "verdict": "false",
+      "leak": false,
+      "url": "https://www.safaribookings.com/day/t36306",
+      "quote": "The recommended lower route (left hand fork) is much easier and nearly an hour shorter, and it also passes the last watering point at 4130m."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.safaribookings.com/day/t36306",
+      "quote": "You will have to fill your water bottles with all the water you will need until your return to Horombo hut"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kilimanjaro_National_Park",
+      "quote": "includes the whole of Mount Kilimanjaro above the tree line"
+     }
+    ],
+    "notes": "The point is the Last Water Point (~4,130 m) on the Marangu Horombo–Kibo leg. Fact 1 is false: sources put it on the LOWER (left-hand, western) branch, not the upper route. Fact 0: no source confirms a physical signpost; the name appears in itineraries and photo captions only. Region 'Kilimanjaro' (Kilimanjaro Region) is first-level and correct. Locality is empty, which is right for a trail waypoint inside the national park. safaribookings and summitpost returned 403 when fetched, so their quotes come from search snippets."
+   }
+  },
+  {
+   "id": "E08",
+   "name": "Museum of Folk Musical Instruments named after Ykhlas",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "region_should_be": "Almaty (city of republican significance)",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kazakh_Museum_of_Folk_Musical_Instruments",
+      "quote": "divided into 60 types of Kazakh national musical instruments"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kazakh_Museum_of_Folk_Musical_Instruments",
+      "quote": "81 musical instruments from 27 countries of the world"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kazakh_Museum_of_Folk_Musical_Instruments",
+      "quote": "Located in Panfilov Park, the wooden building was erected in 1908, simultaneously with Ascension Cathedral."
+     }
+    ],
+    "notes": "The itinerary's \"Museum of Musical Instruments\" on a tour that includes Kazakhstan means the Ykhlas museum in Almaty. The region is set to \"Almaty\". Almaty city is a city of republican significance, which counts as a first-level division, so this is correct. It is not the separate Almaty Region, whose capital is Konaev. Sources disagree on the museum's founding date and collection size, but no fact on the card depends on either."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "region_should_be": "Almaty (city of republican significance)",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kazakh_Museum_of_Folk_Musical_Instruments",
+      "quote": "divided into 60 types of Kazakh national musical instruments"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kazakh_Museum_of_Folk_Musical_Instruments",
+      "quote": "81 musical instruments from 27 countries of the world"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kazakh_Museum_of_Folk_Musical_Instruments",
+      "quote": "Located in Panfilov Park, the wooden building was erected in 1908, simultaneously with Ascension Cathedral."
+     }
+    ],
+    "notes": "The itinerary's \"Museum of Musical Instruments\" on a tour that includes Kazakhstan means the Ykhlas museum in Almaty. The region is set to \"Almaty\". Almaty city is a city of republican significance, which counts as a first-level division, so this is correct. It is not the separate Almaty Region, whose capital is Konaev. Sources disagree on the museum's founding date and collection size, but no fact on the card depends on either."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://eurasia.travel/kazakhstan/almaty/musical-instruments-museum/",
+      "quote": "It wasn't until 1980 that it became home to the National Museum of Kazakh Folk Musical Instruments."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kazakh_Museum_of_Folk_Musical_Instruments",
+      "quote": "The Hall of Musical Instruments of the World Peoples - 81 musical instruments from 27 countries of the world."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kazakh_Museum_of_Folk_Musical_Instruments",
+      "quote": "Located in Panfilov Park, the wooden building was erected in 1908, simultaneously with Ascension Cathedral."
+     }
+    ],
+    "notes": "The itinerary sentence \"Museum of Musical Instruments\" on a tour that includes Kazakhstan points to the Ykhlas/Ykylas museum at 24 Zenkov St, Almaty. Region \"Almaty\" is acceptable because Almaty city has republican significance (first-level, same rank as a province). It should not be read as Almaty Region, whose capital is Konaev."
+   }
+  },
+  {
+   "id": "E10",
+   "name": "Xueshan Main Peak",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "empty_ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan_Range",
+      "quote": "The tallest peak of the Xueshan Range is Xueshan/Sekuwan, which has a height of 3,886 m (12,749 ft)."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan",
+      "quote": "3,886 m (12,749 ft) above sea level"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan",
+      "quote": "It is the 2nd-highest mountain in Taiwan."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan_Range",
+      "quote": "The Xueshan Range is a mountain range in northern Taiwan."
+     }
+    ],
+    "notes": "The summit is a mountain peak in Shei-Pa National Park, so an empty locality is correct. It sits on the border between Heping District in Taichung and Tai'an in Miaoli County, two first-level units, so an empty region is acceptable. Wikipedia places the Xueshan Range in \"northern Taiwan\"; the card's \"north-central\" still fits, because the peak is on the Taichung–Miaoli border."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "empty_ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan_Range",
+      "quote": "The tallest peak of the Xueshan Range is Xueshan/Sekuwan, which has a height of 3,886 m (12,749 ft)."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan",
+      "quote": "3,886 m (12,749 ft) above sea level"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan",
+      "quote": "It is the 2nd-highest mountain in Taiwan."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan_Range",
+      "quote": "The Xueshan Range is a mountain range in northern Taiwan."
+     }
+    ],
+    "notes": "The summit is a mountain peak in Shei-Pa National Park, so an empty locality is correct. It sits on the border between Heping District in Taichung and Tai'an in Miaoli County, two first-level units, so an empty region is acceptable. Wikipedia places the Xueshan Range in \"northern Taiwan\"; the card's \"north-central\" still fits, because the peak is on the Taichung–Miaoli border."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "empty_ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://zh.wikipedia.org/wiki/雪山_(台灣)",
+      "quote": "其最高峰雪山主峰，標高 3,886 公尺"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan",
+      "quote": "It is the 2nd-highest mountain in Taiwan, at 3,886 m (12,749 ft) above sea level."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan",
+      "quote": "improved surveys showed that Xueshan was shorter than Yushan on Taiwan."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Xueshan_Range",
+      "quote": "The tallest peak of the Xueshan Range is Xueshan/Sekuwan"
+     }
+    ],
+    "notes": "The summit is a mountain top, so leaving locality empty is correct. It sits on the boundary between Taichung City (Heping District, Pingdeng Village) and Miaoli County (Tai'an Township, Meiyuan Village). zh.wikipedia says: 位處台中市和平區平等里與苗栗縣泰安鄉梅園村之間. Because the summit lies in two first-level units, leaving region empty is acceptable. If a single unit had to be chosen, it would be Taichung City (en.wikipedia places it in Heping District, Taichung). English Wikipedia describes the Xueshan Range as being in 'northern Taiwan'. The card's 'north-central' is a reasonable description given the Taichung/Miaoli location."
+   }
+  },
+  {
+   "id": "E11",
+   "name": "Thumboormuzhi Garden",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://dtpcthrissur.com/destination/thumboormuzhy-butterfly-garden-in-thrissur",
+      "quote": "Thumboormuzhy Butterfly Garden in Thrissur, Kerala ... It is located near the Athirappilly waterfalls, about 55 km from Thrissur city."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.keralatourism.org/destination/thumboormozhi/659/",
+      "quote": "Thumboormozhi Dam and Hanging Bridge are hidden treasures of Thrissur district ... Nuzzled in the Chalakkudy River glade en route to the world-renowned Athirappally Waterfalls."
+     }
+    ],
+    "notes": "The card describes the Thumboormuzhi river garden, butterfly garden and dam on the Chalakudy River in Thrissur district, Kerala. Thumpurmuzhi is a spelling variant of the same place. The Athirappilly panchayat site lists Thumboormuzhi inside its plantation belt (\"Plantation areas extend from Thumboormuzhi to Kannankuzhi\"), so the locality is plausibly right. The site's postal address is Chalakkudy P.O., but Athirappilly is the local body. Sources do not state the panchayat boundary outright. The suspension bridge crosses into Ernakulam district at Ezhattumukham, but the garden itself is on the Thrissur bank."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://dtpcthrissur.com/destination/thumboormuzhy-butterfly-garden-in-thrissur",
+      "quote": "Thumboormuzhy Butterfly Garden in Thrissur, Kerala ... It is located near the Athirappilly waterfalls, about 55 km from Thrissur city."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.keralatourism.org/destination/thumboormozhi/659/",
+      "quote": "Thumboormozhi Dam and Hanging Bridge are hidden treasures of Thrissur district ... Nuzzled in the Chalakkudy River glade en route to the world-renowned Athirappally Waterfalls."
+     }
+    ],
+    "notes": "The card describes the Thumboormuzhi river garden, butterfly garden and dam on the Chalakudy River in Thrissur district, Kerala. Thumpurmuzhi is a spelling variant of the same place. The Athirappilly panchayat site lists Thumboormuzhi inside its plantation belt (\"Plantation areas extend from Thumboormuzhi to Kannankuzhi\"), so the locality is plausibly right. The site's postal address is Chalakkudy P.O., but Athirappilly is the local body. Sources do not state the panchayat boundary outright. The suspension bridge crosses into Ernakulam district at Ezhattumukham, but the garden itself is on the Thrissur bank."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.keralatourism.org/destination/thumboormozhi/659/",
+      "quote": "Thumboormozhi Dam and Hanging Bridge are hidden treasures of Thrissur district. ... The Butterfly Garden at Thumboormozhi is a must-visit attraction."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.keralatourism.org/kerala-article/2021/thumboormozhi-dam/1078",
+      "quote": "Built across the Chalakkudy River, the dam provides water for irrigation purposes to nearby villages."
+     }
+    ],
+    "notes": "The card is about the Thumboormuzhi/Thumboormozhi river garden next to the check dam on the Chalakudy River in Thrissur district, Kerala. The official Athirappilly Grama Panchayat site places Thumboormuzhi inside the panchayat: \"Plantation areas extend from Thumboormuzhi to Kannankuzhi\" (https://athirappillypanchayat.lsgkerala.gov.in/en/node/81), so the locality Athirappilly holds. One counterpoint: the garden's administration office uses a Chalakudy postal address. Kerala is a state, which is a first-level division."
+   }
+  },
+  {
+   "id": "E12",
+   "name": "Macau",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "wrong",
+    "region_should_be": "empty (route spans two SARs, Hong Kong and Macau; no single first-level unit)",
+    "notes": "The card is named \"Macau\", but its facts and naming_note describe the Hong Kong–Macau ferry route, which is what the itinerary sentence means. The name field should be \"Hong Kong–Macau ferry route\". The region value \"Hong Kong / Macau\" is a combined label, not a single first-level division. The route crosses two SARs, so leaving region empty is correct. If the card were taken as Macau itself, region would still be empty, because Macau is itself a first-level SAR. Facts 0–2 are true for the route. Fact 0 overlaps with the tour's ferry activity, but here it describes the place (the route), so it is not flagged as a leak.",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/TurboJET",
+      "quote": "one of the two companies operating high-speed ferry services between Hong Kong and Macau"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Macau",
+      "quote": "Macau or Macao is a special administrative region of China."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Macau",
+      "quote": "it lies west of Hong Kong, separated by the Pearl River estuary"
+     }
+    ]
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "wrong",
+    "region_should_be": "empty (route spans two SARs, Hong Kong and Macau; no single first-level unit)",
+    "notes": "The card is named \"Macau\", but its facts and naming_note describe the Hong Kong–Macau ferry route, which is what the itinerary sentence means. The name field should be \"Hong Kong–Macau ferry route\". The region value \"Hong Kong / Macau\" is a combined label, not a single first-level division. The route crosses two SARs, so leaving region empty is correct. If the card were taken as Macau itself, region would still be empty, because Macau is itself a first-level SAR. Facts 0–2 are true for the route. Fact 0 overlaps with the tour's ferry activity, but here it describes the place (the route), so it is not flagged as a leak.",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/TurboJET",
+      "quote": "one of the two companies operating high-speed ferry services between Hong Kong and Macau"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Macau",
+      "quote": "Macau or Macao is a special administrative region of China."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Macau",
+      "quote": "it lies west of Hong Kong, separated by the Pearl River estuary"
+     }
+    ]
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "wrong",
+    "region_should_be": "empty (route spans two first-level units, Hong Kong SAR and Macau SAR); if the card is read as Macau itself, Macau SAR is itself the first-level unit, so empty is still correct",
+    "notes": "The card's name is \"Macau\", but its naming_note and all three facts describe the Hong Kong–Macau ferry route. The sentence \"Hong Kong to Macau — take the ferry\" refers to that crossing, with Macau as the destination, so the card matches the intended place. The name and the content do not agree with each other, though. The region \"Hong Kong / Macau\" combines two first-level SARs and is not a single first-level division, so it is wrong. It should be empty: the route spans both SARs, and if the card means Macau, Macau is itself the first-level unit. Country China is correct. The route has no single locality, so null is right. Sources for the ferry route: TurboJET runs from the Hong Kong Macau Ferry Terminal in Sheung Wan to the Macau Outer Harbour Ferry Terminal (https://www.ferryscanner.com/en/ferry-routes/ferry-hong-kong-all-ports-outer-harbour-ferry-terminal-macau; https://macauholiday.com/transport/operators/turbojet/).",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://macauholiday.com/transport/operators/turbojet/",
+      "quote": "TurboJET ... Hong Kong Macau Ferry Terminal in Sheung Wan to Macau's Outer Harbour Ferry Terminal"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Macau",
+      "quote": "Macau or Macao is a special administrative region of China."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Macau",
+      "quote": "it lies west of Hong Kong, separated by the Pearl River estuary"
+     }
+    ]
+   }
+  },
+  {
+   "id": "E15",
+   "name": "Gasa Hot Spring",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "wrong",
+    "locality_should_be": "",
+    "region": "ok",
+    "region_should_be": "Gasa",
+    "notes": "Gasa Tshachu lies on the valley floor by the Mo Chhu, below Gasa. It is about 530 m lower than Gasa Dzong and about a 2-hour climb from it (Windhorse Tours), and about 40 min on foot from the nearest road. So \"Gasa\" as the locality names the nearest town or dzong settlement, not a town the spring is in. Locality should be empty (open valley), or at most the gewog, which I could not confirm. Region Gasa Dzongkhag is correct, because a dzongkhag is a first-level unit. Fact 1 says \"Gasa District\" and is accurate (Wikipedia: \"hot spring near the bank of the Mo Chhu River in Gasa\"). Fact 2: the Mo Chhu part is well supported. \"Near Gasa Dzong\" is loose (a 2-hour climb) but defensible, so I marked it true. Fact 3: BBS reports several ponds after the October 2023 rebuild following the 2021 flood. The official gasa.gov.bt page was unavailable when I tried it.",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Gasa_District",
+      "quote": "Gasa Tshachu is a hot spring near the bank of the Mo Chhu River in Gasa"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.windhorsetours.com/sights/gasa-hot-springs-to-gasa-dzong",
+      "quote": "roughly 2 hours with 530m of ascent, and the climb to the Dzong is steep (hot springs to Gasa Dzong); Wikipedia: near the bank of the Mo Chhu River"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.bbs.bt/?p=193390",
+      "quote": "The new hot spring has eight ponds in the two sheds for the public and one pond each in the two VIP sheds."
+     }
+    ]
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "wrong",
+    "locality_should_be": "",
+    "region": "ok",
+    "region_should_be": "Gasa",
+    "notes": "Gasa Tshachu lies on the valley floor by the Mo Chhu, below Gasa. It is about 530 m lower than Gasa Dzong and about a 2-hour climb from it (Windhorse Tours), and about 40 min on foot from the nearest road. So \"Gasa\" as the locality names the nearest town or dzong settlement, not a town the spring is in. Locality should be empty (open valley), or at most the gewog, which I could not confirm. Region Gasa Dzongkhag is correct, because a dzongkhag is a first-level unit. Fact 1 says \"Gasa District\" and is accurate (Wikipedia: \"hot spring near the bank of the Mo Chhu River in Gasa\"). Fact 2: the Mo Chhu part is well supported. \"Near Gasa Dzong\" is loose (a 2-hour climb) but defensible, so I marked it true. Fact 3: BBS reports several ponds after the October 2023 rebuild following the 2021 flood. The official gasa.gov.bt page was unavailable when I tried it.",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Gasa_District",
+      "quote": "Gasa Tshachu is a hot spring near the bank of the Mo Chhu River in Gasa"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.windhorsetours.com/sights/gasa-hot-springs-to-gasa-dzong",
+      "quote": "roughly 2 hours with 530m of ascent, and the climb to the Dzong is steep (hot springs to Gasa Dzong); Wikipedia: near the bank of the Mo Chhu River"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.bbs.bt/?p=193390",
+      "quote": "The new hot spring has eight ponds in the two sheds for the public and one pond each in the two VIP sheds."
+     }
+    ]
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "wrong",
+    "locality_should_be": "",
+    "region": "ok",
+    "region_should_be": "Gasa",
+    "notes": "The card is the right place: Gasa Tshachu, the hot springs on the Mo Chhu in Gasa Dzongkhag, Bhutan. Gasa Dzongkhag is a first-level district, so the region is correct. The locality is marked wrong because the springs are not in Gasa town. They are a stand-alone site on the riverbank about 2 km from the dzong and about 640 m lower, in open valley country (Gasa District mostly lies inside Jigme Dorji National Park), so \"Gasa\" names the nearest town and the locality should be empty. All three facts check out: the springs are on the Mo Chhu, about 2 km from Gasa Dzong, with multiple pools. Sources disagree on the pool count (about 10, or 3 to 6 bath houses), but all agree there are several pools. The official gasa.gov.bt page was down when checked, so facts 0 and 2 rely on Wikipedia and littlebhutan.com. None of the facts repeat the tour's own details.",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Gasa_District",
+      "quote": "Gasa Tshachu is a hot spring near the bank of the Mo Chhu River in Gasa"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://littlebhutan.com/attractions/gasa/",
+      "quote": "about two kilometres from the dzong, with some 640 metres of height between them ... sit on the bank of the Mo Chhu"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://littlebhutan.com/attractions/gasa/",
+      "quote": "five pools for women and five for men, each at a different temperature"
+     }
+    ]
+   }
+  },
+  {
+   "id": "E16",
+   "name": "Harappa",
+   "adjudicated": true,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_should_have",
+    "locality_should_be": "Harappa",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "Harappa is the type site of the Bronze Age Indus Valley Civilisation."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "at its greatest extent during the Mature Harappan phase (2600 BC – 1900 BC)"
+     },
+     {
+      "i": 2,
+      "verdict": "unverifiable",
+      "leak": false,
+      "url": "https://www.harappa.com/node/3000",
+      "quote": "During Periods 4 and 5 (c. 1900-1300 BC) there was a retraction of settlement to the areas of Mound AB, Harappa Town, and the NW corner of Mound E."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "The Bronze Age Harappan civilisation is named after the site"
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "a settlement in Punjab, Pakistan ... takes its name from a modern village near the former course of the Ravi River. The Ravi now runs eight kilometres (five miles) to the north."
+     }
+    ],
+    "notes": "The labellers disagreed only on locality. The ruins sit at the modern village and town of Harappa in Sahiwal District, about 24 km west of Sahiwal, and the site takes its name from it. That is a settlement, not open country or a park, so a locality should be filled in: Harappa. The region, Punjab province, is a first-level unit and is correct. Fact 2 (a later settlement with Iron Age occupation) is unverifiable. Sources confirm Late Harappan occupation (c. 1900-1300 BC) and later historic structures such as a Gupta-period temple, but none names an Iron Age phase. Fact 4: the site lies near the former course of the Ravi, and the river now runs 8 km north, so 'near the Ravi' holds loosely."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "Harappa is the type site of the Bronze Age Indus Valley Civilisation."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "Mature Harappan phase ... 2600 BC to 1900 BC"
+     },
+     {
+      "i": 2,
+      "verdict": "unverifiable",
+      "leak": false,
+      "url": "https://whc.unesco.org/en/tentativelists/1878",
+      "quote": "later historic occupation reused Bronze Age bricks in parts of the site (search summary; no source names an Iron Age settlement at Harappa)"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "Harappa is the type site of the Bronze Age Indus Valley Civilisation."
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "near the former course of the Ravi River."
+     }
+    ],
+    "notes": "The site lies in Sahiwal District, Punjab, about 24 km west of Sahiwal, next to the modern village of Harappa. The card leaves locality empty, which is fine for an archaeological site. Fact 2 (a later settlement with Iron Age occupation) is vague: sources describe a Late Harappan/Cemetery H phase (Bronze Age) and some later historic reuse of bricks, but none clearly names an Iron Age settlement. The Ravi now flows about 8 km north of the site, so 'near the Ravi River' is roughly accurate."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_should_have",
+    "locality_should_be": "Harappa (village), Sahiwal District",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "the type site of the Bronze Age Indus Valley Civilisation"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "Mature Harappan (2600 BC – 1900 BC)"
+     },
+     {
+      "i": 2,
+      "verdict": "unverifiable",
+      "leak": false,
+      "url": "https://www.harappa.com/node/3000",
+      "quote": "During Periods 4 and 5 (c. 1900-1300 BC) there was a retraction of settlement to the areas of Mound AB, Harappa Town, and the NW corner of Mound E."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "Harappan civilisation ... more commonly used by the Archaeological Survey of India after decolonization in 1947"
+     },
+     {
+      "i": 4,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Harappa",
+      "quote": "a modern village near the former course of the Ravi River ... about 24 kilometres (15 miles) west of Sahiwal"
+     }
+    ],
+    "notes": "The card correctly identifies the Indus Valley site in Punjab, Pakistan. The site sits at the modern village of Harappa in Sahiwal District, about 24 km west of Sahiwal, so a locality was due. Fact 2 (a later Bronze Age and Iron Age settlement) is unverifiable. Sources confirm Late Harappan/Cemetery H occupation (1900–1300 BC) and poorly documented historic-period reuse, but no clear Iron Age phase. Fact 4: the Ravi now runs about 8 km north, so 'near' holds loosely."
+   }
+  },
+  {
+   "id": "E17",
+   "name": "Kollam",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "Located on the southern tip of the Malabar Coast of the Arabian Sea"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "has also been a maritime entrepôt for millennia"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "Ashtamudi Lake is in the heart of the city ... the gateway to the Backwaters of Kerala"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "Located on the southern tip of the Malabar Coast of the Arabian Sea"
+     }
+    ],
+    "notes": "The card is about the city itself, so an empty locality is fine. Kollam is in Kerala, India. Fact 3: the Wikipedia geography section names the Laccadive Sea as the western border, but the lead places the city on the Arabian Sea coast, so the fact counts as true. The name note about Quilon is correct."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "Located on the southern tip of the Malabar Coast of the Arabian Sea"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "has also been a maritime entrepôt for millennia"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "Ashtamudi Lake is in the heart of the city ... the gateway to the Backwaters of Kerala"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "Located on the southern tip of the Malabar Coast of the Arabian Sea"
+     }
+    ],
+    "notes": "The card is about the city itself, so an empty locality is fine. Kollam is in Kerala, India. Fact 3: the Wikipedia geography section names the Laccadive Sea as the western border, but the lead places the city on the Arabian Sea coast, so the fact counts as true. The name note about Quilon is correct."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "Located on the southern tip of the Malabar Coast of the Arabian Sea, the city is on the banks of Ashtamudi Lake."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "The city has also been a maritime entrepôt for millennia."
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "It is a coastal city on the banks of Ashtamudi Lake."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Kollam",
+      "quote": "Located on the southern tip of the Malabar Coast of the Arabian Sea"
+     }
+    ],
+    "notes": "The card is about the city of Kollam itself, so leaving locality empty is correct. Kerala is the first-level state. The page also says Kollam was formerly called Quilon: \"The port at Kollam, then known as Quilon, was founded in 825.\" Fact 2 says Ashtamudi Lake links to the backwaters. That is widely known, but the quoted sentence only confirms the lakeside setting."
+   }
+  },
+  {
+   "id": "E18",
+   "name": "Izena Island",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "Island within the Okinawa Islands of Japan ... is located in the East China Sea"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "north-west of Okinawa Island"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "Izena Castle, a historical fortress built around in the 14th century"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "Coral reefs form a lagoon or lake and are natural breakwaters."
+     }
+    ],
+    "notes": "Izena Island makes up Izena Village (\"It is administered as Izena Village\"), Okinawa Prefecture, so locality and region are correct. The source names Izena Castle as a 14th-century gusuku; it does not use the word \"ruins\", but the castle exists, so fact 2 is accepted."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "Island within the Okinawa Islands of Japan ... is located in the East China Sea"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "north-west of Okinawa Island"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "Izena Castle, a historical fortress built around in the 14th century"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "Coral reefs form a lagoon or lake and are natural breakwaters."
+     }
+    ],
+    "notes": "Izena Island makes up Izena Village (\"It is administered as Izena Village\"), Okinawa Prefecture, so locality and region are correct. The source names Izena Castle as a 14th-century gusuku; it does not use the word \"ruins\", but the castle exists, so fact 2 is accepted."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "located in the East China Sea, north-west of Okinawa Island, in the Ryukyu Islands of Japan"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "north-west of Okinawa Island"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://samurai-archives.com/wiki/Izena_gusuku",
+      "quote": "Izena Gusuku (Izena Castle, 伊是名城) is a ruined fortress on Izena Island"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Izena_Island",
+      "quote": "is surrounded by coral reefs, blue sea, and white beaches"
+     }
+    ],
+    "notes": "The island is administered as Izena Village, Shimajiri District, Okinawa Prefecture. The itinerary sentences about diving and snorkelling in Izena's waters refer to this island. Wikipedia places it among the Okinawa Islands, part of the Ryukyu chain. For fact 3, the source says \"surrounded by\", which supports \"fringe parts of\"."
+   }
+  },
+  {
+   "id": "E20",
+   "name": "Mount Kilimanjaro",
+   "adjudicated": false,
+   "final": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "quote": "Mount Kilimanjaro is a large dormant stratovolcano in Tanzania."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "quote": "composed of three distinct volcanic cones: Kibo, the highest ... Shira, the lowest at 4,005 m"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "quote": "Uhuru Peak is the highest summit on Kibo's crater rim ... both list the height of Uhuru Peak as 5,895 m (19,341 ft)."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.altezzatravel.com/articles/is-kilimanjaro-in-kenya-or-tanzania",
+      "quote": "it is located in northeastern Tanzania, approximately 20 kilometers (12.4 miles) from the border with Kenya."
+     }
+    ],
+    "notes": "The mountain is a massif inside Kilimanjaro National Park, so leaving locality empty is correct. Wikipedia's infobox gives the location as \"Kilimanjaro Region, Tanzania\", which is a first-level region. Sources say northeastern Tanzania; the card's \"northern Tanzania\" is broadly accurate. For fact 3 the only source with a verbatim quote is a tour operator (Altezza); search results from other sites gave the same ~20 km from the Kenya border."
+   },
+   "a": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "quote": "Mount Kilimanjaro is a large dormant stratovolcano in Tanzania."
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "quote": "composed of three distinct volcanic cones: Kibo, the highest ... Shira, the lowest at 4,005 m"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "quote": "Uhuru Peak is the highest summit on Kibo's crater rim ... both list the height of Uhuru Peak as 5,895 m (19,341 ft)."
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.altezzatravel.com/articles/is-kilimanjaro-in-kenya-or-tanzania",
+      "quote": "it is located in northeastern Tanzania, approximately 20 kilometers (12.4 miles) from the border with Kenya."
+     }
+    ],
+    "notes": "The mountain is a massif inside Kilimanjaro National Park, so leaving locality empty is correct. Wikipedia's infobox gives the location as \"Kilimanjaro Region, Tanzania\", which is a first-level region. Sources say northeastern Tanzania; the card's \"northern Tanzania\" is broadly accurate. For fact 3 the only source with a verbatim quote is a tour operator (Altezza); search results from other sites gave the same ~20 km from the Kenya border."
+   },
+   "b": {
+    "identity": "yes",
+    "country_ok": true,
+    "locality": "empty_ok",
+    "region": "ok",
+    "facts": [
+     {
+      "i": 0,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.britannica.com/place/Kilimanjaro",
+      "quote": "volcanic massif in northeastern Tanzania, near the Kenya border"
+     },
+     {
+      "i": 1,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "quote": "composed of three distinct volcanic cones: Kibo, the highest; Mawenzi ... and Shira"
+     },
+     {
+      "i": 2,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "quote": "Uhuru Peak ... 5,895 m (19,341 ft)"
+     },
+     {
+      "i": 3,
+      "verdict": "true",
+      "leak": false,
+      "url": "https://www.britannica.com/place/Kilimanjaro",
+      "quote": "in northeastern Tanzania, near the Kenya border"
+     }
+    ],
+    "notes": "Mountain inside Kilimanjaro National Park; Wikipedia infobox location 'Kilimanjaro Region, Tanzania' (first-level region). Empty locality correct for a massif. Uhuru height 5,895 m is the standard figure (later surveys 5,892-5,902 m)."
+   }
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "started_at": "2026-10-27T07:29:57.912Z",
+ "staff_mode": "a10b",
+ "role": "viewer",
+ "tenant": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+ "invitee": "e2e-test-studio-viewer@e2e-mail.lumiguides.it.com",
+ "pinned_to_distribution": false,
+ "reuse": true,
+ "membership_id": "cd7c8090-6c26-42b4-a961-8d77d9799b1a",
+ "membership_status": "invited",
+ "delivery": "sent",
+ "delivery_crm_status": 202,
+ "join_host": "partner-dev.lumiguides.it.com",
+ "join_studio_status": "activated",
+ "enrol_seconds": 20,
+ "waited_for_activation_seconds": 0,
+ "studio_tenant_name": "Atlas & Hearth",
+ "studio_sign_in": "partner",
+ "role_check": {
+  "role": "viewer",
+  "write": "POST /v1/tours/pool/00000000-0000-4000-8000-0000000a0979/rewrite",
+  "results": {
+   "Bearer": 403,
+   "bearer": 403,
+   "Bearer-two-spaces": 403
+  },
+  "read_status": 200,
+  "pool_total": 892
+ },
+ "e_check": {
+  "tenant_name_equal": true,
+  "pool_total": 892
+ },
+ "signed_out": true,
+ "finished_at": "2026-10-27T07:30:39.538Z"
+}
