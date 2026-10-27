@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Git pre-push hook (AA-993 H1): runs the CI checks of this repo locally, fast mode by default.
+# Installed by scripts/install-hooks.sh (git config core.hooksPath .githooks). Full CI-equivalent run on a push:
+# AA_PREPUSH=full git push. Bypass one push: git push --no-verify.
+set -euo pipefail
+root=$(git rev-parse --show-toplevel)
+# This hook and the script ship in the same commit, so a missing script means it was deleted: block, do not skip.
+[ -f "$root/scripts/pre-push.sh" ] || {
+  echo "pre-push hook: $root/scripts/pre-push.sh missing; run scripts/install-hooks.sh --uninstall or restore it. Bypass once: git push --no-verify" >&2
+  exit 1
+}
+# Through bash, so a lost exec bit (core.fileMode=false, UNC checkout) does not matter.
+exec bash "$root/scripts/pre-push.sh" --hook "$@"
