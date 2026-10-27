@@ -450,6 +450,7 @@ erDiagram
         uuid prep_pack_selection_id PK
         uuid tenant_id FK
         uuid trip_id FK
+        uuid proposal_id FK "one builder version (crm-022)"
     }
     agreement_doc {
         uuid agreement_doc_id PK
@@ -486,6 +487,7 @@ erDiagram
     traveler ||--o{ traveler_access : "traveler_id"
     traveler ||--o{ otp_challenge : "traveler_id"
     trip ||--o{ prep_pack_selection : "trip_id"
+    proposal ||--o{ prep_pack_selection : "proposal_id"
     member |o--o{ agreement_doc : "published_by"
     trip ||--o{ terms_acceptance : "trip_id"
     traveler ||--o{ terms_acceptance : "traveler_id"
@@ -833,6 +835,14 @@ erDiagram
 `job`, `outbox` and `inbox_events` follow the ADR 0003a and contracts templates (`id` keys, ids-only payloads,
 `inbox_events` unique on `(source, contract, idempotency_key)`); `crm.job` has no RLS. `audit_event` is partitioned
 by month, so its primary key includes `at`. `release_note` is platform data without `tenant_id`.
+
+### Platform: AA content cache (crm-022, AA-951)
+
+`crm.aa_content` (PK `content_id`, `kind` prep_pack | starter_template | campaign_block) caches the AA-authored content
+CIS serves on `catalog.http.v1` `/aa-content` (prep packs for "Before you go", starter message templates). Platform
+reference data: no `tenant_id`, no personal data; refreshed by `crm_catalog_sync`. `prep_pack_selection` copies the
+pinned pack version per builder version; `message_template` holds the agency library (one AA starter copy per group
+and locale, unique `(tenant_id, aa_group_key, locale)`).
 
 ## Open points for the migration PRs
 
