@@ -51,3 +51,4 @@ docs/audits/**/*.webm
 
 # Python bytecode (docs lint tools, S243 AA-897 walkthrough)
 __pycache__/
+_site/
