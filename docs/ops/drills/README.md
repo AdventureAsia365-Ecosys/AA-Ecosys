@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-24
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [OPS-02-cis, OPS-03-pitr, OPS-03-schema, OPS-01, AA-829, AA-869]
 ---

@@ -15,14 +15,15 @@ related: [ARCH-08, ARCH-08-data-management, ARCH-08-scaling, ARCH-08-schema-owne
 # AA_Ecosys data standards — Part A: Engineering
 
 **Purpose:** binding rules for anyone (human or agent) who designs a table, writes a migration, a policy, a
-view, a contract or a query against the shared PostgreSQL 15 RDS (`aa-cis-dev-db`, acc2 `005097885195`,
-us-west-1) used by AA-CIS-App, AA-TripPlanner-Web and AA-Booking, and by any app that joins later.
+view, a contract or a query against the shared PostgreSQL 15 RDS (`aa-cis-dev-db`, acc2 ([account map](../../onboarding.md#account-map)),
+us-west-1) used by AA-CIS-App, AA-TripPlanner-Web, AA-Booking and AA-Partner (the partner CRM, schema `crm`), and by
+any app that joins later.
 
-- **Status:** Accepted 15/10/2026 (v1.0, S237); version 1.1 on 19/10/2026 (S243), 1.2 (S244, X1 close-out) and 1.3 (S247, partner CRM; changelog in [`README.md`](README.md)). Nghiệp approved every recommendation of the S237
+- **Status:** Accepted 2026-10-15 (v1.0, S237); version 1.1 on 2026-10-19 (S243), 1.2 (S244, X1 close-out) and 1.3 (S247, partner CRM; changelog in [`README.md`](README.md)). The tech lead approved every recommendation of the S237
   data-architecture review (`docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md`,
   "the review"). This page is part of the rule body that
   [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and
-  data platform rules, accepted 15/10/2026) cites; the index and golden rules are in
+  data platform rules, accepted 2026-10-15) cites; the index and golden rules are in
   [`README.md`](README.md).
 - **Consistent with:** ADR 0001–0007 incl. 0004a, `docs/database/schema-ownership.md`,
   `docs/contracts/README.md`, `infra/AA-CIS-Infra/db/README.md` (D8 flow, copy guard), the AA-817 design
@@ -75,17 +76,17 @@ roadmap id; until it lands, the review checklist (section 8) carries the check.
 | Booking migration guard — `apps/AA-Booking/backend/tests/migration_guard.py` | exists | BEGIN/COMMIT, `bk-NNN` self-registration, nothing outside schema `booking`, no login/password/extension/SECURITY DEFINER/PUBLIC grant, views revoke writes |
 | Booking Integration Tests (`postgres:15`, login `aa_cis_admin`, re-apply for idempotency, no skips) | exists | every Booking migration applies twice on PG15 |
 | CIS Integration Tests (`postgres:15`, superuser `cistest`, `apps/AA-CIS-App/tests/integration/`) | exists | migration replay + feature tests; RLS tests `test_007_rls_isolation.py`, `test_tenant_rls.py`, `test_aa544_stage1_tenant_pool_leak.py`, `test_aa679_catalog_views.py` (`rds_like_225` fixture) |
-| AA-817 tenant isolation test `tests/integration/test_aa817_rls_tenant_isolation.py` | lands with AA-817 / migration 229 | WHERE-less reads and writes as `aa_app_user` under own / foreign / forged / empty GUC |
+| AA-817 tenant isolation test `tests/integration/test_aa817_rls_tenant_isolation.py` | exists (landed with AA-817 / migration 229) | WHERE-less reads and writes as `aa_app_user` under own / foreign / forged / empty GUC |
 | Live probe `docs/audits/2026-10-14-S237-lane-backlog/aa817/aa817_probe.py` | exists (manual, read-only, ECS exec) | role chain, owners, RLS/FORCE, policies, privileges, isolation matrix on Dev |
 | CloudWatch alarm `DatabaseConnections` > 70 for 10 min (`accounts/aa365/observability_ecosys.tf`) | exists | connection saturation |
 | Schema dump + nightly drift check, policies/indexes/grants/owners/default ACLs/sizes | dump exists (**N1**, AA-807: `db-schema-dump.yml`, nightly + after every apply); drift report exists (AA-853: replay of every migration, *Schema drift* section), **report only, not failing**; fail-on-unmanaged deferred until the replay baseline and the owner decisions exist | live vs a replay of the repos: unmanaged / missing / changed objects, owner decision or open |
 | Instance guardrails, parameter group, `pg_stat_statements`, new alarms, `CONNECTION LIMIT`, `application_name`, Lambda reserved concurrency | *to build* **N3** | slow queries, lock waits, idle-in-transaction, connection budget |
 | Safe runner defaults, `-- migrate:` headers, pre-snapshot, SQL lint (squawk or grep rules), unique-number check | *to build* **N5** | lock/statement timeouts, CONCURRENTLY, destructive snapshot |
-| Infra role bootstrap (role attributes: LOGIN, `CONNECTION LIMIT`, role-level backstop timeouts, `application_name`) in git, applied through a reviewed Infra path | exists (X1, v1.2): AA-CIS-Infra `db/migrations/roles/` (key `rl-NNN`, runs as the master): `rl-001` (`bk_owner`, `tp_owner`, `cis_app` limit 90, the N3 limits restated from CIS 234), `rl-002` (`cis_owner`, `db_migrator` limit 5). Role-level backstop timeouts and new apps' roles: later `rl-` files | roles are Infra-owned (`schema-ownership.md` rule 3); DB Migrate accepts `cis`/`tripplanner`/`booking`/`roles` dirs and the Booking guard rejects `ALTER ROLE` |
-| `infra/AA-CIS-Infra/db/owners.yaml` + owner roles + `db_migrator` | `owners.yaml` exists (X1 S1, AA-CIS-Infra #163; v1.1); owner roles `cis_owner` / `bk_owner` / `tp_owner`, runtime `cis_app` and login `db_migrator` exist (X1, done 19/10/2026; v1.2) | one registry of owners, prefixes, roles, allowed grants |
+| Infra role bootstrap (role attributes: LOGIN, `CONNECTION LIMIT`, role-level backstop timeouts, `application_name`) in git, applied through a reviewed Infra path | exists (X1, v1.2): AA-CIS-Infra `db/migrations/roles/` (key `rl-NNN`, runs as the master): `rl-001` (`bk_owner`, `tp_owner`, `cis_app` limit 90, the N3 limits restated from CIS 234), `rl-002` (`cis_owner`, `db_migrator` limit 5), `rl-003` / `rl-004` (CRM roles: `crm_owner`, `crm_app` and the CRM NOLOGIN roles). Role-level backstop timeouts: later `rl-` files | roles are Infra-owned (`schema-ownership.md` rule 3); DB Migrate accepts `cis`/`tripplanner`/`booking`/`crm`/`roles` dirs and the Booking guard rejects `ALTER ROLE` |
+| `infra/AA-CIS-Infra/db/owners.yaml` + owner roles + `db_migrator` | `owners.yaml` exists (X1 S1, AA-CIS-Infra #163; v1.1); owner roles `cis_owner` / `bk_owner` / `tp_owner`, runtime `cis_app` and login `db_migrator` exist (X1, done 2026-10-19; v1.2) | one registry of owners, prefixes, roles, allowed grants |
 | Shared job-table DDL template in `shared/jobs` ([ADR 0003a](../../adr/0003a-per-owner-job-tables.md)) | *to build* **X6** | one job shape per owner schema |
 | Retention/rollup job kinds, `shared.llm_call_daily` | *to build* **N4** | TTL deletes after S3 archive; rollups other apps read |
-| `docs/architecture/dead-table-registry.md` | *to build* **N6** (referenced, does not exist) | every quarantined or dropped object |
+| [`docs/architecture/dead-table-registry.md`](../dead-table-registry.md) | exists (**N6**, AA-850, S255) | every quarantined or dropped object |
 | Catalogue CI guard | *to build* **X2** | tenant table without RLS, PUBLIC policy, `app.current_tenant`, missing NULLIF, cross-owner FK, grants vs allowlist |
 | Consumer contract-copy hash guard | *to build* **X7** | consumer copies of `docs/contracts/*.json` equal the producer's |
 
@@ -167,7 +168,10 @@ invitation token, ADR 0006 Phase 3).
 
 **NAM-14 (MUST NOT)** Create tables for passwords, OTPs, login sessions or refresh tokens of staff,
 tenant users or travellers in a new schema. Sign-in is Cognito (ADR 0006); an app stores only the
-`(iss, sub)` link and its own authorization data (membership, role).
+`(iss, sub)` link and its own authorization data (membership, role). **One exception:** the partner CRM
+keeps hashed client-link tokens and email-code challenges for an agency's travellers (`crm.client_link`,
+`crm.otp_challenge`), as [ADR 0008a](../../adr/0008a-crm-separate-app-exceptions.md) decision 4 allows. It never
+stores passwords.
 *Why:* ADR 0006 retires the home-made stacks (`shared.admin_users.password_hash`, Phase 1;
 `booking.customer_otps` / `customer_sessions`, Phase 4). *Enforced:* review; grandfathered rows in section 9.
 
@@ -213,16 +217,18 @@ contact details. After ADR 0006 Phase 4, TripPlanner keeps no profile of a signe
 the guest contact + consent an inquiry needs (Part B **DM-6.2**, ADR 0006 decision 9; **L3**).
 *Why:* one place to answer erasure and consent requests. *Enforced:* review; NAM-12 tags.
 
-**KEY-6 (MUST NOT)** A tenant-controlled app (the CRM, AA-821, if built) reads `booking.customers` or
-`tripplanner.customers`, and no other AA app (Booking, TripPlanner, CIS code outside the CRM module) reads
-`crm.*`. AA support access, if any, is a separate read-only role (`crm_staff`) with its own explicit,
-audited policy (review §6.4). AA-821 is research first (build vs HubSpot/Zoho); if built, it is a CIS
-module with its own `crm` schema, `crm_owner`, and `crm-NNN` key space, so a later move to its own repo
-needs no renumbering.
-*Why:* the tenant is the data controller there and AA is the processor; AA's own customers are under a
-different controller, and AA sales must not see a tenant's leads. *Enforced:* no grant exists or may be
-issued (SEC-5); **X2** grant allowlist (*to build*). Until the CIS role split (**X1**/AA-817),
-`aa_cis_admin` can still read `crm.*` through `pg_read_all_data` (SEC-12).
+**KEY-6 (MUST NOT)** The partner CRM (AA-Partner, schema `crm`, AA-821) reads `booking.customers` or
+`tripplanner.customers`, and no other AA app (CIS, Booking, TripPlanner) reads `crm.*`. No cross-schema grant
+exists in either direction: `crm_app` gets nothing outside `crm`, and no other app role gets anything on `crm`.
+Everything between AA-Partner and the other apps goes over versioned HTTP contracts. AA support access is the
+NOLOGIN role `crm_support_reader`, reached only by `SET LOCAL ROLE` during an owner-granted support window; there
+is no AA database login on `crm`. This is [ADR 0008a](../../adr/0008a-crm-separate-app-exceptions.md) decision 1,
+which replaced the earlier "CIS module" plan.
+*Why:* the agency (tenant) is the data controller there and AA is the processor; AA's own customers are under a
+different controller, and AA sales must not see an agency's clients. *Enforced:* no grant exists or may be
+issued (SEC-5); the isolation probe expects 42501 for `cis_app`, `booking`, `tripplanner` and `aa_app_user` on
+every `crm.*` object; **X2** grant allowlist (*to build*). Since **X1** (2026-10-19) `aa_cis_admin` is
+break-glass only (SEC-12).
 
 **KEY-7 (MUST)** Natural uniqueness and idempotency are database constraints (`UNIQUE`), not
 application checks: e.g. `booking.inbox_events UNIQUE (source, contract, idempotency_key)`.
@@ -248,7 +254,8 @@ exist today, and every new app copies whichever precedent it finds first (review
 
 **MIG-1 (MUST)** Every schema has one owner repo and one key space: CIS `NNN`
 (`apps/AA-CIS-App/api/migrations/`), TripPlanner `tp-NNN` (`apps/AA-TripPlanner-Web/migrations/`),
-Booking `bk-NNN` (`apps/AA-Booking/migrations/`), a new app `<prefix>-NNN`. A new owner is registered in
+Booking `bk-NNN` (`apps/AA-Booking/migrations/`), CRM `crm-NNN` (`apps/AA-Partner/api/migrations/`), a new app
+`<prefix>-NNN`. A new owner is registered in
 `infra/AA-CIS-Infra/db/owners.yaml` (the single registry, Part B DM-1.2); the same Infra PR updates the files
 that mirror it (`db-migrate.yml`, `run_migration.py`, `check_migration_copies.py`, `isolation_probe.py`;
 `db/tests/test_owners_registry.py` fails when they disagree) and `schema-ownership.md`.
@@ -269,10 +276,12 @@ duplicates (007, 008, 019 and `007b`) are resolved in the registry, not renumber
 (2) Infra PR with a byte copy in `infra/AA-CIS-Infra/db/migrations/<owner>/`; (3) Copy Guard green, human
 merge; (4) DB Migrate `mode=check` then `mode=apply` on `main`; (5) the app code that reads the new objects
 in a later PR; (6) regenerate `docs/architecture/db-schema-reference.md` (automated by **N1**).
-Before `apply`, every job table (`shared.job`, `booking.job`, any `<schema>.job`) is idle and no wave
-runs (Part C **C6.3b**; the aa-ship guard). Until **N1** ships, a migration or query that depends on an
-object newer than the reference's "Verified" line (today: CIS 228, 230, bk-007) is written against a
-live introspection of that object, not the stale dump (steering `db-schema.md`).
+Before `apply`, every job table (`shared.job`, `booking.job`, `crm.job`, any `<schema>.job`) is idle and no
+wave runs (Part C **C6.3b**; the aa-ship guard). This idle rule is for DB Migrate only: since AA-993 G5 an app
+deploy waits only for an open wave or a deploy-blocking job kind (Part C **C6.3a**). The reference is
+regenerated by the DB Schema Dump workflow (**N1**) after every apply. A migration or query that depends on an
+object newer than the reference's "Verified" line waits for that PR, or is written against a live
+introspection of that object, not the stale dump (steering `db-schema.md`).
 *Why:* the schema exists before code depends on it; one reviewed path for all three owners; the
 reference is trusted by agents, so a stale row becomes a wrong design (review P8).
 *Enforced:* Copy Guard (fails if the file is not on the owner's `main` or differs); DB Migrate; review.
@@ -355,7 +364,7 @@ non-volatile.
 **MIG-12 (MUST)** Destructive files (DROP TABLE/COLUMN/SCHEMA, DELETE or TRUNCATE of real data) carry
 `-- migrate: destructive`, so DB Migrate takes a manual RDS snapshot first (*to build*, **N5**). Until then,
 a manual snapshot is taken and named in the PR. All destructive work follows the DRY RUN procedure
-(`skill/aa-cis-schema/references/destructive-ops.md`): exact counts shown to Nghiệp, snapshot,
+(`skill/aa-cis-schema/references/destructive-ops.md`): exact counts shown to the tech lead, snapshot,
 savepoint check, commit on approval, independent re-verify, a row in
 `docs/architecture/dead-table-registry.md` (**N6**). A first step SHOULD be reversible quarantine
 (`ALTER … SET SCHEMA retired`).
@@ -386,7 +395,7 @@ New apps start in the target model.
 review.
 
 **SEC-2 (MUST)** The DSN of a runtime role lives in Secrets Manager at `<app>/<env>/database-url` and is set
-by Nghiệp by hand. ⚠️ This contains underscore env vars — edit manually in VSCode.
+by the tech lead by hand. ⚠️ This contains underscore env vars — edit manually in VSCode.
 *Why:* secrets never enter git or agent output. *Enforced:* review.
 
 **SEC-3 (MUST)** Grants are per object, issued by the owner in its own migration. New schemas MUST NOT use
@@ -483,6 +492,8 @@ its playbook PR).
 
 **SEC-12 (SHOULD)** Until the role split lands, document in the design that new-schema isolation is
 partial: `aa_cis_admin` can still read and write it through `pg_read_all_data`/`pg_write_all_data`.
+The split landed with **X1** (2026-10-19): `aa_cis_admin` is break-glass only (Part B DM-8.9), so a new design
+names the master as break-glass instead (ADR 0008a decision 1).
 *Why:* honest blast radius for reviewers (review §6.4). *Enforced:* review.
 
 ---
@@ -611,9 +622,9 @@ C2.2 table and an over-budget CI script (*to build*, **N3**); alarm.
 *Why:* keeps RDS Proxy possible without pinning, and pooled connections clean. *Enforced:* review.
 
 **QRY-8 (MUST)** Job queues claim with `FOR UPDATE SKIP LOCKED` (as `shared/jobs/queue.py`). Each owner
-has its own job table in its own schema (`shared.job` for CIS, `booking.job`, a new app's `<app>.job`)
+has its own job table in its own schema (`shared.job` for CIS, `booking.job`, `crm.job`, a new app's `<app>.job`)
 with a kind prefix per app; no app enqueues into another owner's job table. This is
-[ADR 0003a](../../adr/0003a-per-owner-job-tables.md) (accepted 15/10/2026), which supersedes ADR 0003
+[ADR 0003a](../../adr/0003a-per-owner-job-tables.md) (accepted 2026-10-15), which supersedes ADR 0003
 decision 4 ("non-CIS repos enqueue into `shared.job`") and the premise of AA-751; the shared DDL
 template in `shared/jobs` is *to build* (**X6**). Until the template exists, a new job table copies the
 `shared.job` columns of CIS 174 (including `cancel_requested`, `progress`, `cost_usd`, `parent_job_id`).
@@ -647,7 +658,7 @@ which raised "another operation is in progress" thousands of times and lost cost
 (the RDS major version) on each PR: CIS as superuser `cistest` (`apps/AA-CIS-App/tests/integration/`),
 Booking as `aa_cis_admin` (a superuser in CI) with a second apply for idempotency and no skips allowed.
 TripPlanner has no migration integration job today: a gap the review's roadmap does not cover (no
-N/X/L id), so it is an open item for Nghiệp; until it exists, a TripPlanner migration PR states in its
+N/X/L id), so it is an open item for the tech lead; until it exists, a TripPlanner migration PR states in its
 description how it was applied to a local `postgres:15`.
 *Why:* a migration that never ran on PG15 in CI is first tested on the shared instance. *Enforced:* CI.
 
@@ -715,7 +726,7 @@ Copy into the PR description and tick or answer "n/a + reason".
 - [ ] Lock-safe DDL (NOT VALID → VALIDATE; no rewrite; CONCURRENTLY only after **N5**, until then plain index on a small table with jobs idle) (MIG-10, MIG-11)
 - [ ] No LOGIN role, `ALTER ROLE`, password or SECURITY DEFINER in the migration (only the N3 interim CIS limits file may `ALTER ROLE`); role attributes in the Infra bootstrap (MIG-6)
 - [ ] All job tables idle before `apply`; reference introspected live if older than the objects used (MIG-4)
-- [ ] Destructive: snapshot named, DRY RUN counts shown to Nghiệp, dead-table registry row (MIG-12)
+- [ ] Destructive: snapshot named, DRY RUN counts shown to the tech lead, dead-table registry row (MIG-12)
 - [ ] No large backfill or retention delete in the migration (MIG-13)
 
 **Security:**
@@ -743,7 +754,7 @@ Copy into the PR description and tick or answer "n/a + reason".
 
 - [ ] Migration test asserting the new objects; RDS-like role for RLS/grant tests (TST-2, TST-3)
 - [ ] Isolation cases for every new tenant table (TST-4)
-- [ ] `db-schema-reference.md` regenerated after apply (MIG-4 step 6, until **N1** automates it)
+- [ ] `db-schema-reference.md` regenerated after apply: the DB Schema Dump PR is merged (MIG-4 step 6, **N1**)
 - [ ] `schema-ownership.md`, `CONTEXT.md` and the contracts registry updated if ownership or a contract changed
 
 ---
@@ -769,7 +780,6 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 | `shared.admin_users.password_hash`; `booking.customer_otps`, `booking.customer_sessions` | NAM-14 | ADR 0006 Phase 1 (AA-816) / Phase 4 (a later `bk-NNN` drop) |
 | `tripplanner.llm_spend_daily` (own spend table) | CON-8 | after `shared.llm_call_daily` (**N4**) |
 | Connection worst case above the C2.1 ceiling; no `CONNECTION LIMIT` on any role | QRY-6, SEC-11 | **N3** (before the Lambda quota of 1000) |
-| Booking job table: no deploy job guard in `deploy-dev.yml` | MIG-4 (all job tables idle) | **X6** (Part C C6.3a) |
 | `inquiry.submitted` v1/v1.1 carry `tour_id`; TP `source_tour_id` mixes key types | KEY-3 | **X3** (v1.2) |
 | CIS duplicate numbers 007, 008, 019 and the `007b` suffix | MIG-3 | registry note (no renumbering) |
 | `run_migration.py` without timeouts, no-transaction mode or snapshot | MIG-9–12 | **N5** |
@@ -778,12 +788,13 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 | CIS-private ops tables in `shared` (`decision_log`, `tenant_api_usage`, cost snapshots, `job`) | NAM-2 | stay; no new ones |
 | `tripplanner.sessions.guest_token = id::text` | NAM-13 | **X8** (before ADR 0006 Phase 4) |
 | PII copied across `tripplanner.customers`, outbox/inbox payloads and `booking.customers`, untagged | KEY-5, NAM-12 | **L3** (redaction after 90 days per the approved retention) |
-| No TripPlanner migration integration test | TST-1 | open item for Nghiệp (not in the review roadmap; no N/X/L id) |
+| No TripPlanner migration integration test | TST-1 | open item for the tech lead (not in the review roadmap; no N/X/L id) |
 
 **Retired rows** (kept here so a reader of an old link finds where they went):
 
 | Legacy state | Retired by (evidence) |
 |---|---|
-| `aa_cis_admin` is CIS API pool + worker + DB Migrate + owner of every object, incl. `booking.*` and `tripplanner.*` (SEC-1) | **X1**, done 19/10/2026 (AA-852 / AA-860): CIS api + worker log in as `cis_app` (S18), the CIS task role is denied the master secret (S19), the 12 CIS schemas belong to `cis_owner` (CIS 245, S21), DB Migrate / DB Schema Dump / DB Isolation Probe log in as `db_migrator` (S22). The master is break-glass plus `roles/`, `set-password` and `run-script` (Part B DM-8.9). Probe after S22: 58/58 cells pass |
+| `aa_cis_admin` is CIS API pool + worker + DB Migrate + owner of every object, incl. `booking.*` and `tripplanner.*` (SEC-1) | **X1**, done 2026-10-19 (AA-852 / AA-860): CIS api + worker log in as `cis_app` (S18), the CIS task role is denied the master secret (S19), the 12 CIS schemas belong to `cis_owner` (CIS 245, S21), DB Migrate / DB Schema Dump / DB Isolation Probe log in as `db_migrator` (S22). The master is break-glass plus `roles/`, `set-password` and `run-script` (Part B DM-8.9). Probe after S22: 58/58 cells pass |
 | Booking `bk-001` default privileges `FOR ROLE aa_cis_admin IN SCHEMA booking … TO booking` (SEC-3) | **X1** S6/S8: bk-014 restates them `FOR ROLE bk_owner` and revokes the `aa_cis_admin` rows; the Booking guard takes the role per file. The `bk_owner` rows stay as a grandfathered row above |
+| Booking job table: no deploy job guard in `deploy-dev.yml` (MIG-4) | AA-751 B3/B4: the Booking Deploy Dev `preflight` job calls `/booking/ops/deploy-gate`; since AA-993 G5 it blocks only on deploy-blocking `booking.job` kinds (Part C C6.3a) |
 | Booking and TripPlanner objects and views owned by `aa_cis_admin` (the migrator), not a NOLOGIN owner (SEC-1, CON-2) | **X1** S6–S8: bk-014 → `bk_owner`, tp-013 → `tp_owner` (live dump: schema `booking` owner `bk_owner`, `tripplanner` owner `tp_owner`) |

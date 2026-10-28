@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-10-23
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-23
 tested_where: dev-acc2
@@ -17,17 +17,16 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
 
 # Switch off the legacy staff password login (AA-816 cutover)
 
-> [!IMPORTANT]
-> **Both stages are done.** S1 (19/10/2026, S244): Vercel `aa-cis-frontend` Production holds `false`. S2
-> (22/10/2026, S247, CIS #922): the **code default is now off** in the API and the BFF, so every host refuses
+> [!NOTE]
+> **Both stages are done.** S1 (2026-10-19, S244): Vercel `aa-cis-frontend` Production holds `false`. S2
+> (2026-10-22, S247, CIS #922): the **code default is now off** in the API and the BFF, so every host refuses
 > password sessions, Preview included; previews sign in through Cognito on the fixed Preview host (ADR 0006a A11,
-> A12). Live check 23/10/2026 (S248): api task definition without the variable, `POST /api/auth/login` → 404,
+> A12). Live check 2026-10-23 (S248): api task definition without the variable, `POST /api/auth/login` → 404,
 > an HS256-shaped token on `/auth/verify-admin` → 401 "Password sessions are switched off; sign in again".
 > This page is now the **rollback** reference; steps 1-3 below are the history of S1.
-<!-- callout break -->
-> [!NOTE]
-> The flag is the legacy admin login flag, `LEGACY_ADMIN_LOGIN_ENABLED`. Its name contains underscores: Nghiệp edits
-> it by hand (Vercel dashboard, or Terraform in VSCode). Agents do not write commands that set it.
+
+The flag is the legacy admin login flag, `LEGACY_ADMIN_LOGIN_ENABLED`. Its name contains underscores, so the tech
+lead edits it by hand (Vercel dashboard, or Terraform in VSCode). Agents do not write commands that set it.
 
 ## What the flag does (ADR 0006a A6)
 
@@ -40,7 +39,7 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
   AA-680 (Phase 2).
 - It is read in two places: the BFF (Vercel `aa-cis-frontend` environment, per target; Production holds `false`)
   and the API (ECS task definition; not set, so off). The API serves Production and Preview alike.
-- History: S1 turned off only the Production BFF (Nghiệp's call N5); S2 flipped the code default once Preview had
+- History: S1 turned off only the Production BFF (the tech lead's call N5); S2 flipped the code default once Preview had
   a Cognito sign-in (ADR 0006a A11).
 
 ## Preconditions (readiness)
@@ -50,8 +49,8 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
 - Accounts without a person (`e2e-claude-code*`) have a decision: disabled, or kept with Preview-only use (AA-878 D4).
 - The break-glass path through managed login (`/api/auth/signin/cognito-breakglass`) was tested
   ([break-glass](break-glass.md)), so there is a way in if Cognito sign-in breaks.
-- Ms. Thư and every other staff member signed in once with the email code. S243/S244 (decision N-A): a row with no
-  password, an email and a CONFIRMED Cognito user (Ms. Thư) counts as ready, because the flag cannot lock it out; it
+- The business owner and every other staff member signed in once with the email code. S243/S244 (decision N-A): a
+  row with no password, an email and a CONFIRMED Cognito user (the business owner's row) counts as ready, because the flag cannot lock it out; it
   links itself on the first email-code sign-in.
 - Cost: 0 USD.
 
@@ -63,7 +62,7 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
    Verify: save the output under `docs/audits/<date>-S<nnn>-aa816-cutover/`.
    Rollback: none - read-only.
 
-2. Nghiệp sets the flag to `false` on Vercel `aa-cis-frontend`, **Production** target only (dashboard, Settings,
+2. The tech lead sets the flag to `false` on Vercel `aa-cis-frontend`, **Production** target only (dashboard, Settings,
    Environment Variables), then redeploys production (Vercel env changes apply only to new deployments): dispatch
    `vercel-deploy.yml` on AA-CIS-App with target production, or **Redeploy** in the dashboard. # WRITE
    Expected: a new production deployment `READY`.
@@ -82,15 +81,15 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
 4. Watch for one working day: no staff member locked out, `aa-identity-dev-workforce-pre-token-errors` stays OK.
    Two login paths coexist on the API for the legacy window (30 days after cutover, ADR 0006a).
 
-5. Rollback (any time): Nghiệp deletes the Production value or sets it to `true`, then redeploys production.
+5. Rollback (any time): the tech lead deletes the Production value or sets it to `true`, then redeploys production.
    Expected: the password form is back and `/api/auth/login` no longer answers 404.
    **Since S2 this alone is not enough** (unset = off, and the API refuses HS256): see Roll back below.
 
 6. The principal-aware admin-secret check, the Preview credential and the admin-secret rotation (AA-816 C9 + I6,
-   [secret rotation](secret-rotation.md)) did not wait for AA-680 (decision N-C): done on 19/10/2026 right after S1.
-7. S2 (22/10/2026, S247): CIS #922 flipped the default to off in `api/core/staff_identity.py` and
+   [secret rotation](secret-rotation.md)) did not wait for AA-680 (decision N-C): done on 2026-10-19 right after S1.
+7. S2 (2026-10-22, S247): CIS #922 flipped the default to off in `api/core/staff_identity.py` and
    `frontend/lib/staffSession.ts`, after the Preview Cognito sign-in (CIS #911) and the smoke split (CIS #912) were
-   live. No Terraform change: the api task definition never set the variable. Then Nghiệp disabled the legacy
+   live. No Terraform change: the api task definition never set the variable. Then the tech lead disabled the legacy
    account `e2e-claude-code` on the Staff page.
    Verify (any time, read-only):
 
@@ -131,7 +130,7 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
 
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
-| 2026-10-19 | dev-acc2, step 1 only (S243 main session) | Claude Code | `docs/audits/2026-10-19-S243-platform-lanes/aa816-readiness-snapshot.json`: Nghiệp linked; break-glass and Ms. Thư not linked yet; two e2e accounts without email | not ready |
-| 2026-10-19 | dev-acc2, steps 1-3 on Production (S244 main session) | Claude Code + Nghiệp | `docs/audits/2026-10-19-S244-aa816-cutover/cutover-report.md`: readiness snapshot (7 active rows; no email: the three `e2e-claude-code*` rows; no `cognito_sub` before the break-glass link: `admin`, the three e2e rows, `thu` — `thu` ready per N-A, `admin` linked by the break-glass test), Production flag `false` + redeploy, `POST /api/auth/login` 404, login page email-only, Cognito E2E 7/7 | pass (S1 done; rollback step 5 not run) |
-| 2026-10-22 | dev-acc2, S2 (S247 main session) | Claude Code + Nghiệp | Linear AA-816 S247 comment: HS256 on `/auth/verify-admin` 200 → 401 after CIS #922; `/auth/booking-token` unchanged; BFF `/api/auth/login` 404; Cognito E2E green (run 39720383620); `e2e-claude-code` disabled | pass |
+| 2026-10-19 | dev-acc2, step 1 only (S243 main session) | Claude Code | `docs/audits/2026-10-19-S243-platform-lanes/aa816-readiness-snapshot.json`: tech lead linked; break-glass and business owner not linked yet; two e2e accounts without email | not ready |
+| 2026-10-19 | dev-acc2, steps 1-3 on Production (S244 main session) | Claude Code + tech lead | `docs/audits/2026-10-19-S244-aa816-cutover/cutover-report.md`: readiness snapshot (7 active rows; no email: the three `e2e-claude-code*` rows; no `cognito_sub` before the break-glass link: `admin`, the three e2e rows and the business owner's row — the latter ready per N-A, `admin` linked by the break-glass test), Production flag `false` + redeploy, `POST /api/auth/login` 404, login page email-only, Cognito E2E 7/7 | pass (S1 done; rollback step 5 not run) |
+| 2026-10-22 | dev-acc2, S2 (S247 main session) | Claude Code + tech lead | Linear AA-816 S247 comment: HS256 on `/auth/verify-admin` 200 → 401 after CIS #922; `/auth/booking-token` unchanged; BFF `/api/auth/login` 404; Cognito E2E green (run 39720383620); `e2e-claude-code` disabled | pass |
 | 2026-10-23 | dev-acc2, step 7 verify, read-only (S248 lane) | Claude Code | api task definition `aa-cis-dev-api:775`, image `dev-5a54bd26…`, no `LEGACY_*` env; `POST /api/auth/login` 404; HS256-shaped token → 401 "Password sessions are switched off" | pass |

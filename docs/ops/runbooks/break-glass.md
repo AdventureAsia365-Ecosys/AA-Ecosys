@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-workforce-dev, aa-cis-frontend, aa-cis-api, aa-cis-dev-db]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-19
 tested_where: dev-acc2
@@ -18,10 +18,10 @@ related: [OPS-10-deploy-gate, OPS-06, SEC-02-rotation, OPS-05-db-migrate, docs/a
 # Use a break-glass path
 
 > [!WARNING]
-> Partly tested. Section A passed end to end on 19/10/2026 (AA-816 Stage S, S244): enable, sign-in through the
+> Partly tested. Section A passed end to end on 2026-10-19 (AA-816 Stage S, S244): enable, sign-in through the
 > managed login page with password + TOTP (token alarm to ALARM as designed), sign-out through the managed-login
 > `/logout`, a new sign-in asks for the password again, close, then password + TOTP rotation (`breakglass-init`,
-> `breakglass-verify` OK). The API-only check passed on 18/10/2026 (AA-854, S242). Sections B, C and D are untested.
+> `breakglass-verify` OK). The API-only check passed on 2026-10-18 (AA-854, S242). Sections B, C and D are untested.
 
 Every use of any path on this page is written in the session log and the Linear issue: who, when, why, what was
 done, and when it was closed again (ADR 0006 decision 11, DM-8.9).
@@ -30,7 +30,7 @@ done, and when it was closed again (ADR 0006 decision 11, DM-8.9).
 
 Facts: user `admin@adventure.asia` in the WORKFORCE pool `aa-workforce-dev`, groups `cis-admin` + `booking-admin`,
 TOTP enrolled, **disabled at rest**. Its `shared.admin_users` row (`admin`) is linked to the Cognito user since the
-19/10/2026 managed-login test and has no legacy password any more (`password_hash` cleared by AA-CIS-Infra #224
+2026-10-19 managed-login test and has no legacy password any more (`password_hash` cleared by AA-CIS-Infra #224
 run-script, with an audit row). Secret `aa-identity/dev/breakglass` (JSON: username, password, TOTP seed, pool
 and client IDs) is readable only by the MFA admin role; every read or write sends an alert e-mail by design. Each token
 issued fires `aa-identity-dev-breakglass-token-issued`.
@@ -51,8 +51,8 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
    Verify: `aws cognito-idp admin-get-user --user-pool-id $POOL --username admin@adventure.asia --profile aa365-admin --region us-west-1 --query Enabled` is `true`.
    Rollback: step 5.
 
-2. Nghiệp reads the secret in the Secrets Manager console (alert e-mail expected) and adds the TOTP seed to an
-   authenticator if it is not there yet. The password and the TOTP seed were rotated on 19/10/2026: a seed added
+2. The tech lead reads the secret in the Secrets Manager console (alert e-mail expected) and adds the TOTP seed to an
+   authenticator if it is not there yet. The password and the TOTP seed were rotated on 2026-10-19: a seed added
    before that date no longer works.
 
 3. Open `https://aa-cis.lumiguides.it.com/api/auth/signin/cognito-breakglass` and sign in with password + TOTP. The
@@ -76,7 +76,7 @@ in, revoke, disable; fails closed if cleanup fails).
 
 ## B. RDS master login
 
-- Since X1 S18 (19/10/2026) the CIS runtime logs in as `cis_app`, and since S19 the CIS task role cannot read the
+- Since X1 S18 (2026-10-19) the CIS runtime logs in as `cis_app`, and since S19 the CIS task role cannot read the
   master secret. Any use of the master outside DB Migrate counts as break-glass use (DM-8.9).
 - The master is break-glass only. The normal master path is a reviewed script through
   [DB Migrate run-script](db-migrate.md), which needs a merged PR. If even that is impossible (GitHub down, SEV1), the
@@ -100,6 +100,6 @@ in, revoke, disable; fails closed if cleanup fails).
 
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
-| 2026-10-18 | dev-acc2 | Claude Code + Nghiệp | S242 session log, `docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md` (API break-glass verify) | pass (A via API only) |
+| 2026-10-18 | dev-acc2 | Claude Code + tech lead | S242 session log, `docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md` (API break-glass verify) | pass (A via API only) |
 | 2026-10-19 | dev-acc2 | Claude Code (S243 main session) | `docs/audits/2026-10-19-S243-platform-lanes/aa816-breakglass-otp-probe.json` | pass: with TOTP enrolled, no client offers the email code to break-glass (password only, no token issued by the probe); cleanup clean |
-| 2026-10-19 | dev-acc2 | Claude Code (S244 main session) + Nghiệp | `docs/audits/2026-10-19-S244-aa816-cutover/cutover-report.md` (checklist B3-B7) | pass: managed-login sign-in (password + TOTP, alarm ALARM as designed), sign-out through managed-login `/logout`, re-ask on the next sign-in, close; legacy `password_hash` cleared (Infra #224); password + TOTP rotated by `breakglass-init`, `breakglass-verify` OK |
+| 2026-10-19 | dev-acc2 | Claude Code (S244 main session) + tech lead | `docs/audits/2026-10-19-S244-aa816-cutover/cutover-report.md` (checklist B3-B7) | pass: managed-login sign-in (password + TOTP, alarm ALARM as designed), sign-out through managed-login `/logout`, re-ask on the next sign-in, close; legacy `password_hash` cleared (Infra #224); password + TOTP rotated by `breakglass-init`, `breakglass-verify` OK |

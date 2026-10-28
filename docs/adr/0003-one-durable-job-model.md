@@ -1,8 +1,12 @@
 # ADR 0003 — One durable job model for all deferred work
 
-- **Status:** Accepted (06/10/2026, S213 — Nghiệp: module hóa job cho toàn hệ, làm tuần tự nhiều phiên).
+- **Status:** Accepted (06/10/2026, S213 — tech lead: "make jobs one module for the whole system, built in sequence over
+  several sessions").
 - **Scope:** AA-Ecosys (AA-CIS-App, AA-TripPlanner-Web, AA-CIS-Infra, future AA-Booking).
 - **Amended by:** ADR 0003a (S237): one job table per owner schema from a shared DDL template; decision 4 ("a non-CIS repo enqueues into `shared.job`") no longer holds.
+- **Update 2026-10-28:** step 5 is done (AA-735): the in-process worker is off by default and CIS jobs run on the
+  worker service `aa-cis-dev-worker`. Step 6 is replaced by ADR 0003a: each app has its own job table
+  (`shared.job`, `booking.job`, `crm.job`).
 - **Implements / tightens:** ADR 0001 (ecosystem architecture). Related: AA-650/651/652 (durable runner + worker ECS), AA-723 (move the remaining in-process tasks).
 
 ## Context
@@ -63,21 +67,22 @@ The in-process tasks are the problem AA-650/652 set out to remove but did not fi
 
 ## Consequences
 
-Delivered in sequence, verified at each step (survive-deploy; and for recompute, no-dip). Each nac
-is its own PR; later nac are their own sessions.
+Delivered in sequence, verified at each step (survive-deploy; and for recompute, no-dip). Each step
+is its own PR; later steps are their own sessions. Older text and code comments call a step "nac"
+("ADR 0003 nac 5").
 
-- **Nac 1 (CIS):** the two recompute tasks become one job kind `recompute` with `{scope, stages,
+- **Step 1 (CIS):** the two recompute tasks become one job kind `recompute` with `{scope, stages,
   reason}` in the payload; the three call-sites enqueue instead of running inline; dedup by
   idempotency key so a burst of edits does not trigger N full rebuilds. Write logic unchanged.
-- **Nac 2 (CIS):** `atom_ranking` gains a current-pointer (versioned-swap, like `route`); every
+- **Step 2 (CIS):** `atom_ranking` gains a current-pointer (versioned-swap, like `route`); every
   reader (Slate, overview, admin panels, v1_route_hub) filters on it. No more count dip.
-- **Nac 3 (CIS):** full stage registry — segment / score / route / hub become declared modules; the
+- **Step 3 (CIS):** full stage registry — segment / score / route / hub become declared modules; the
   a3_atomize job's inline recompute also goes through the one gate.
-- **Nac 4 (CIS + Infra):** cron/event Lambdas enqueue jobs instead of running work inline, so they
+- **Step 4 (CIS + Infra):** cron/event Lambdas enqueue jobs instead of running work inline, so they
   show on the Jobs page.
-- **Nac 5 (CIS):** flip `JOB_WORKER_IN_API` default to false; retire the legacy `pipeline_jobs`
+- **Step 5 (CIS):** flip `JOB_WORKER_IN_API` default to false; retire the legacy `pipeline_jobs`
   path and the dead `_background_tasks` drain.
-- **Nac 6 (cross-repo, when needed):** grant `shared.job` to a second repo; TripPlanner's extraction
+- **Step 6 (cross-repo, when needed):** grant `shared.job` to a second repo; TripPlanner's extraction
   and embeddings-backfill become job kinds instead of hand-run scripts.
 
 **Revisit** if a second repo needs a job model before AA-Booking exists, or if a job ever needs

@@ -15,7 +15,7 @@ related: [APP-07, AA-891]
 
 <!-- Release note = the business view of a release. CHANGELOG.md (written by release-please, AA-891) is the
 technical view; link it, do not copy it. One note per app release (tag vX.Y.Z). It is the source of the Jira draft
-for Ms. Thư (skill/aa-jira-update): Claude drafts, Nghiệp approves, then the Vietnamese lines are posted.
+for the business owner (skill/aa-jira-update): Claude drafts, the tech lead approves, then the Vietnamese lines are posted.
 
 How to fill it from the CHANGELOG section `## [X.Y.Z]` of the app:
 
@@ -80,7 +80,7 @@ Delete this comment and every unused block before saving the note. -->
 
 ## Jira draft (VI)
 
-<!-- The Vietnamese lines above, assembled for the Jira comment. Post only after Nghiệp approves the exact text
+<!-- The Vietnamese lines above, assembled for the Jira comment. Post only after the tech lead approves the exact text
 (skill/aa-jira-update rule 1); the mention is the ADF/HTML node from that skill, not plain "@thule". -->
 
 ```text

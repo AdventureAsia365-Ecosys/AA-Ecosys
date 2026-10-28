@@ -1,13 +1,13 @@
 # ADR 0015 — Tour liveness and retirement propagation
 
-- **Status:** Accepted (23/10/2026, S248). Nghiệp asked for the rule in S248 and decided Q1–Q10 on the S248 decision
+- **Status:** Accepted (2026-10-23, S248). The tech lead asked for the rule in S248 and decided Q1–Q10 on the S248 decision
   page (table at the end); Q2, Q4 and Q8 differ from the first proposal. Q11 (added by this ADR) takes its proposed
-  answer; Nghiệp can change it, and the decision it affects is named.
+  answer; the tech lead can change it, and the decision it affects is named.
 - **Scope:** AA-Ecosys: AA-CIS-App (the served state, the write service, the read view, tenant `/v1` and portal,
   schema `catalog`), AA-Booking (quote, hold, trip case legs, B2B feed), AA-TripPlanner-Web (tour page, saved trips,
   hand-off), AA-Partner (offer lists, through `catalog.http.v1` and `booking.b2b.v1`), AA-CIS-Infra (grants, the
   nightly probe), the root repo (contracts).
-- **Amended:** A1, 23/10/2026 (AA-987, S249): TripPlanner cache purge notice fed from the outbox (section
+- **Amended:** A1, 2026-10-23 (AA-987, S249): TripPlanner cache purge notice fed from the outbox (section
   "Amendments").
 - **Amends / Supersedes:** none. It keeps ADR 0007's rule that liveness is derived from columns, not stored (decision
   1), and adds the change record that rule did not cover (decision 4).
@@ -18,7 +18,7 @@
 - **Design and evidence:** audit memo
   [`docs/audits/2026-10-23-S248-tour-deletion-propagation/memo.md`](../audits/2026-10-23-S248-tour-deletion-propagation/memo.md)
   (§2 matrix with file:line evidence for every layer, §3 target rule, §4 slices L1–L7, §5 questions). Live probe of
-  the CIS half on Dev, 23/10/2026: 65 dead tour groups (44 trashed sources, 21 superseded without a successor), and
+  the CIS half on Dev, 2026-10-23: 65 dead tour groups (44 trashed sources, 21 superseded without a successor), and
   **zero** derivatives of a dead tour in any layer, zero anomalies. The leaks the memo found are paths that are open,
   not damage that has happened, so no data clean-up is needed before the slices.
 - **Related Linear:** AA-986 (this rule and its slices); AA-716 (the one cascading trash path today); AA-679 (catalog
@@ -27,7 +27,7 @@
 
 ## Context
 
-Nghiệp's requirement (S248): when a tour is deleted at the source (S0/A0), every derivative of it is hidden across the
+The tech lead's requirement (S248): when a tour is deleted at the source (S0/A0), every derivative of it is hidden across the
 ecosystem, tenants included; a tenant keeps its own T2 copy but is warned that AA no longer serves the tour.
 
 The audit memo (§1, §2) shows the ecosystem does not do this today:
@@ -66,7 +66,7 @@ The unit is the **catalog key** `(source_system = 'cis', source_id = silver_aa_i
 
 - A key that was never served (no version has a Master: uploaded, never published) has no state: consumers see 404,
   not 410. This covers a group whose versions are all `superseded` and that never had a Master.
-- **All-superseded groups** (`superseded_orphan`, the probe bucket of the same name): Dev has 21 of them on 23/10/2026.
+- **All-superseded groups** (`superseded_orphan`, the probe bucket of the same name): Dev has 21 of them on 2026-10-23.
   The probe's Master counts (892 Master rows, all `master_status = 'active'`, and zero active Masters in any dead
   group) say none of them ever had a Master, so today they are "never served" and answer 404; slice L1 confirms that
   with one read-only count before the view relies on it. A group of this shape that once had a Master is `retired`
@@ -75,7 +75,7 @@ The unit is the **catalog key** `(source_system = 'cis', source_id = silver_aa_i
 - **Supersede is not deletion.** Replacing a version (Excel replace/update) keeps the key `served` under the same
   `source_key`. What belonged to the old version (Master, atoms, ranking, route) moves to the new version or is
   switched off. **Never two active Masters in one group.** A tenant T2 copy that points at the old version gets no badge
-  and no notification: a supersede is invisible to the tenant (Q2, Nghiệp S248).
+  and no notification: a supersede is invisible to the tenant (Q2, tech lead, S248).
 - `raw_tours.lifecycle_stage` is **not** a deletion signal (no code writes it; Q9). It keeps its sales meaning
   (`phasing_out`); readers that filter `retired` on it switch to the served state.
 - `restored` is a recorded transition (decision 4) more than a fourth steady state: the derived state of a restored key
@@ -116,10 +116,10 @@ Rules the service enforces:
   too".
 - Approve and `process_export` refuse a source that is not live (409 `source_not_live`); `set-active` refuses a
   trashed row.
-- Re-uploading a deleted tour (exact or near-duplicate match) shows "deleted on <date>" in staging and offers
+- Re-uploading a deleted tour (exact or near-duplicate match) shows "deleted on `<date>`" in staging and offers
   **Restore** or **Create a new tour**; it never revives silently (Q6).
 - Retiring a published tour is open to staff with Master Content rights and to admins; the confirm dialog shows a dry
-  run of the tenants, pieces, posts and bookings affected (Q8, Nghiệp S248).
+  run of the tenants, pieces, posts and bookings affected (Q8, tech lead, S248).
 - No other CIS code changes `raw_tours.source_status`, `raw_tours.deleted_at`, `published_tours.master_status` or
   `published_tours.deleted_at`, and no other code inserts into `raw_tours` or `published_tours`. A CIS guard test
   enforces both, UPDATE and INSERT alike (the service is the only allowed writer): it scans for SQL that writes these
@@ -192,7 +192,7 @@ The names in decisions 2–4 are working names; the slice PRs fix them.
   `booking.b2b.v1`).
 - **Keep** confirmed bookings, confirmed holds and existing trip cases, with a staff flag on the leg and the plan,
   **and notify staff** (a staff notification per affected trip case / plan when the key is retired, through the
-  staff bell; Q4, Nghiệp S248). Cancelling them is an operations decision taken by staff, never automatic.
+  staff bell; Q4, tech lead, S248). Cancelling them is an operations decision taken by staff, never automatic.
 - The plan list gets an "orphaned plans" filter (plans whose tour left the catalog, with the reason).
 - The B2B delta feed lists withdrawn products (`withdrawn`, from `catalog.v_tour_retired`); the event
   `product.withdrawn` goes into AA-975.
@@ -259,7 +259,7 @@ changes a view, a grant or auth is reviewed by an agent before merge (DM-11.5).
   to own and test; consumers gain a pull job.
 - (−) `process_export` and the version insert of ingest / staging move behind the write service too (decision 2), so
   slice L2 touches the publish path, not only the trash and status buttons.
-- (−) More 409 paths for tenants and B2B callers; messages must be clear, or support load moves to Nghiệp.
+- (−) More 409 paths for tenants and B2B callers; messages must be clear, or support load moves to the tech lead.
 - (−) Until L4 ships, consumers still cannot tell 410 from 404, and the CRM still needs a full resync to see a
   withdrawal.
 
@@ -278,18 +278,18 @@ changes a view, a grant or auth is reviewed by an agent before merge (DM-11.5).
   (ADR 0001, 0008); a tenant webhook can be fed from the same outbox later (Q7). Narrowed by amendment A1 (below): a signed
   cache purge notice to TripPlanner, fed from this outbox, is allowed; the outbox stays the source.
 
-## Questions and decisions (Nghiệp, S248 decision page)
+## Questions and decisions (tech lead, S248 decision page)
 
-Q1–Q10 were decided by Nghiệp on the S248 decision page (23/10/2026). Q11 keeps its proposed answer until he changes it; a different answer changes only the decisions named in the last column.
+Q1–Q10 were decided by the tech lead on the S248 decision page (2026-10-23). Q11 keeps its proposed answer until the tech lead changes it; a different answer changes only the decisions named in the last column.
 
 | # | Question | Decision | Changes |
 |---|---|---|---|
 | Q1 | Does deactivating a Master (source still live) count as "no longer served"? | Hidden exactly like `retired`, but the badge says "paused" and no notification is pushed. **Trashing** a Master counts as `retired`, with the warning | 1, 5 |
-| Q2 | Supersede (Excel replace): what happens to a tenant T2 copy of the old version? | Not a discontinuation, and **nothing is shown to the tenant** (no badge, no notification). (Proposed was a badge "AA source updated"; Nghiệp chose none.) | 1, 5 |
+| Q2 | Supersede (Excel replace): what happens to a tenant T2 copy of the old version? | Not a discontinuation, and **nothing is shown to the tenant** (no badge, no notification). (Proposed was a badge "AA source updated"; the tech lead chose none.) | 1, 5 |
 | Q3 | Tenant posts already live about a retired tour: unpublish automatically? | No. Flag, one-click unpublish, and mention in the notification | 5 |
 | Q4 | Booking: future departures with seats sold, confirmed bookings of a retired tour? | Keep, staff flag **and a staff notification**; refuse new quotes and holds. Cancelling is a staff operations decision, never automatic | 5 |
 | Q5 | SEO: 410 or redirect? | 410 when retired; 301 when superseded (same `source_key`); the page returns on restore | 5 |
-| Q6 | Re-uploading a deleted tour: restore automatically or ask? | Staging shows "deleted on <date>"; staff choose Restore (runs `restore` + `tour.reinstated`) or Create a new tour | 2 |
+| Q6 | Re-uploading a deleted tour: restore automatically or ask? | Staging shows "deleted on `<date>`"; staff choose Restore (runs `restore` + `tour.reinstated`) or Create a new tour | 2 |
 | Q7 | Channel for the tenant warning? | Persistent badge (the source of truth) + the portal bell reading the tenant's notifications. Email and webhook later, from the outbox | 5 |
 | Q8 | Who may retire a published tour? | Staff with Master Content rights **and admins**; the confirm dialog shows a dry run of affected tenants, posts and bookings | 2 |
 | Q9 | `lifecycle_stage` (nothing writes it)? | Not a deletion signal. Kept for sales (`phasing_out`); T7 and TripPlanner switch to the served state | 1 |
@@ -298,7 +298,7 @@ Q1–Q10 were decided by Nghiệp on the S248 decision page (23/10/2026). Q11 ke
 
 ## Amendments
 
-### A1 (23/10/2026, AA-987, S249): a signed cache purge notice from the outbox to TripPlanner
+### A1 (2026-10-23, AA-987, S249): a signed cache purge notice from the outbox to TripPlanner
 
 - **Why.** Decision 5 asks TripPlanner to answer 410 and drop a retired tour; pulling `catalog.v_tour_retired` alone
   left it on the public site for up to 30 minutes (S248 measurement on Dev: tour page 410 after ~16 min, browse list

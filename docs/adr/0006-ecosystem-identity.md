@@ -1,6 +1,6 @@
 # ADR 0006 — Ecosystem identity on Amazon Cognito (staff, tenant users, travellers)
 
-- **Status:** Accepted (14/10/2026, S236 — Nghiệp: Cognito on acc2, email code for staff (Google dropped: mail is on DreamHost, not Workspace), AA-703 as the epic).
+- **Status:** Accepted (14/10/2026, S236 — tech lead: Cognito on acc2, email code for staff (Google dropped: mail is on DreamHost, not Workspace), AA-703 as the epic).
 - **Amended by:** [ADR 0006a](0006a-identity-phase1-amendments.md) (18/10/2026, S242): Phase 1 as shipped —
   Booking roles in `shared.staff_app_grant`, owner-only staff writes, "reset" = sign-out + re-enable,
   break-glass address `admin@adventure.asia` and its secret shape/guards, managed login on
@@ -31,8 +31,8 @@ Each app grew its own sign-in, and none of them can serve the other two:
 | Booking | Customers | `booking.customers` (`verified`, lead/merge columns) + `customer_otps` + `customer_sessions` (bk-001) — a home-made OTP stack, not built out | Own OTP, sessions, rate limits and email to build and secure; no Google/Facebook |
 | TripPlanner | Travellers | Guest sessions (`tripplanner.sessions.guest_token`) + `tripplanner.customers`; a typed email proves nothing (S235 Phase 0 fix in `registration.py`) | No way for a traveller to prove an email, so guest trips cannot be safely linked to a customer |
 
-Nghiệp's decisions (S236, 14/10/2026): one identity service for the whole ecosystem, built on
-**Amazon Cognito in acc2 (`005097885195`, us-west-1)**, with **two user pools** (WORKFORCE and
+The tech lead's decisions (S236, 14/10/2026): one identity service for the whole ecosystem, built on
+**Amazon Cognito in acc2 (us-west-1)**, with **two user pools** (WORKFORCE and
 EXTERNAL); every app verifies JWTs via JWKS; the PR #721 bridge must be swappable by configuration.
 
 ## Decisions
@@ -71,7 +71,7 @@ EXTERNAL); every app verifies JWTs via JWKS; the PR #721 bridge must be swappabl
 - **Alternative kept open:** split EXTERNAL into a tenant pool and a traveller pool (no extra cost,
   the free tier is per account; costs one more custom domain, three of four used). Chosen against for
   now because one traveller who is also a tenant user would have two accounts, and the client-aware
-  pre sign-up trigger is a small, testable function. Nghiệp confirms (Open item 4).
+  pre sign-up trigger is a small, testable function. The tech lead confirms (Open item 4).
 
 ### 2. App clients, one per app surface
 
@@ -108,7 +108,7 @@ EXTERNAL); every app verifies JWTs via JWKS; the PR #721 bridge must be swappabl
 | Group | Maps to |
 |---|---|
 | `cis-admin`, `cis-reviewer`, `cis-content` | `shared.admin_role` values `admin`, `reviewer`, `content` |
-| `booking-admin`, `booking-sales`, `booking-contracting`, `booking-content_creator` | Booking staff roles (replaces the planned `staff_role` enum in `booking.staff_users`). `booking-content_creator` added S241 (Nghiệp, Q4/Q5): staff who only write Booking content; applied with the Phase 0 pools (Infra #162). |
+| `booking-admin`, `booking-sales`, `booking-contracting`, `booking-content_creator` | Booking staff roles (replaces the planned `staff_role` enum in `booking.staff_users`). `booking-content_creator` added S241 (tech lead, Q4/Q5): staff who only write Booking content; applied with the Phase 0 pools (Infra #162). |
 
 - **Source of truth = the staff directory** (AA-816): `shared.admin_users` gains `email` (unique,
   lower-cased, `@adventure.asia`), `display_name`, `cognito_sub` and per-app role columns;
@@ -162,7 +162,7 @@ EXTERNAL); every app verifies JWTs via JWKS; the PR #721 bridge must be swappabl
 |---|---|---|---|
 | Staff | **Google** (Workspace accounts `@adventure.asia` that already exist in the staff directory) | **Email one-time code** to the same address (native profile, Essentials `EMAIL_OTP`) | Passwords, Facebook, self sign-up |
 | Break-glass | Password + TOTP MFA | — | Google, OTP |
-| Tenant users | **Email one-time code** (by invitation) | Google, once linked by verified email (decision 6) | Self sign-up, Facebook (until Nghiệp decides otherwise) |
+| Tenant users | **Email one-time code** (by invitation) | Google, once linked by verified email (decision 6) | Self sign-up, Facebook (until the tech lead decides otherwise) |
 | Travellers | **Email one-time code**, Google, Facebook | — | Passwords |
 
 - **Passkeys are off** in both pools until the production auth domain is fixed. A passkey is bound to
@@ -387,7 +387,7 @@ Rules:
 - The provider is pinned `~> 5.40` (locked 5.100.0). Pool tier, passwordless sign-in and the
   managed-login domain work on 5.x. **Managed-login branding needs provider 6.12+**: branding stays out
   of Terraform (CLI script in the repo) until a separate 5 → 6 upgrade issue is done.
-- Google and Facebook client secrets live in Secrets Manager, set out-of-band by Nghiệp (placeholder +
+- Google and Facebook client secrets live in Secrets Manager, set out-of-band by the tech lead (placeholder +
   `ignore_changes`, the `booking/dev/database-url` pattern).
 
 ## Migration plan
@@ -397,7 +397,7 @@ Each phase is shippable on its own and leaves the old path working until its cut
 | Phase | Scope | Depends on | Cutover / done when |
 |---|---|---|---|
 | **0 — Pools and triggers** | `identity.tf`: two pools, six clients (incl. `breakglass`), groups, WAF web ACL, Google IdP (WORKFORCE + EXTERNAL), Facebook IdP (EXTERNAL, disabled until the app is live), triggers, prefix domains; break-glass user. Spike (Open item 3) before the pre sign-up code is final | Google OAuth clients (Open item 1) | Plan/apply green; a test staff user signs in with Google and with an email code; the pre token trigger denies a user with no group |
-| **1 — CIS staff login + directory** (AA-816) | CIS migration: `admin_users` + `email`, `cognito_sub`, `display_name`, Booking role column; directory UI in CIS admin writes DB + Cognito; reconcile job. CIS admin UI signs in through `cis-admin`; CIS API verifier accepts Cognito; staff routes authorise from `cognito:groups`. The first two WORKFORCE users (Nghiệp + break-glass) are created by a one-off script, since the directory UI itself needs a signed-in admin | Phase 0; AA-811 for the email-code fallback (Google works without it) | **Preconditions before switching anything off:** every active `admin_users` row has an `@adventure.asia` email and a `cognito_sub` filled by a **successful Cognito sign-in** of that person; break-glass sign-in tested end to end. **Then:** password login is switched off by a config flag (`LEGACY_ADMIN_LOGIN_ENABLED=false`), **not deleted**: code and `password_hash` stay for 30 days as the rollback path if a trigger or client misconfiguration locks staff out. The BFF stops sending `X-Admin-Secret` and the secret is **rotated** (the old value lives in Vercel env and grants full admin plus tenant impersonation through `verify_tenant_api_key`); the new value stays only for docs/ops until a later issue removes it |
+| **1 — CIS staff login + directory** (AA-816) | CIS migration: `admin_users` + `email`, `cognito_sub`, `display_name`, Booking role column; directory UI in CIS admin writes DB + Cognito; reconcile job. CIS admin UI signs in through `cis-admin`; CIS API verifier accepts Cognito; staff routes authorise from `cognito:groups`. The first two WORKFORCE users (the tech lead + break-glass) are created by a one-off script, since the directory UI itself needs a signed-in admin | Phase 0; AA-811 for the email-code fallback (Google works without it) | **Preconditions before switching anything off:** every active `admin_users` row has an `@adventure.asia` email and a `cognito_sub` filled by a **successful Cognito sign-in** of that person; break-glass sign-in tested end to end. **Then:** password login is switched off by a config flag (`LEGACY_ADMIN_LOGIN_ENABLED=false`), **not deleted**: code and `password_hash` stay for 30 days as the rollback path if a trigger or client misconfiguration locks staff out. The BFF stops sending `X-Admin-Secret` and the secret is **rotated** (the old value lives in Vercel env and grants full admin plus tenant impersonation through `verify_tenant_api_key`); the new value stays only for docs/ops until a later issue removes it |
 | **2 — Booking staff** (AA-680 staff part) | Booking verifier config: add the Cognito WORKFORCE issuer, then remove the CIS bridge issuer. Booking staff UI signs in through `booking-staff`. `booking.staff_users` keyed by `sub` | Phase 1 | Booking `/login` via CIS credentials removed; the CIS bridge token endpoint and `aa-cis/dev/booking-jwt-signing-key` retired after one release with both issuers |
 | **3 — Tenant users** (AA-813) | CIS migration: tenant membership table; invitation flow: owner invites by email → CIS stores a single-use, expiring (7 days), **hashed** invitation token → `AdminCreateUser` in EXTERNAL (`MessageAction=SUPPRESS`, no password, `email_verified=true`; if the address already has a profile, nothing is created) → branded SES mail with the portal link + token → the person signs in through `cis-portal` (email code or Google) → CIS activates the membership **only if** the token is valid **and** the access token's `email_verified=true` and `email` equals `invited_email`; the membership binds to that token's `(iss, sub)`. A membership is never bound by looking a user up by email (a Facebook or unconfirmed profile can carry any address). Roles owner/editor/viewer enforced in the CIS API; only `owner` invites/removes, and the last owner cannot be removed | Phase 0, AA-811 | `/auth/tenant-login` with the API key is **closed for human sessions** (portal no longer offers it). **API keys remain for machine access** (`X-API-Key` on the public API), unchanged |
 | **4 — Travellers** (AA-680 customer part) | TripPlanner and Booking customer app sign in through their clients (email code, Google, Facebook). Booking: `customers` gains the identity `sub`; on first sign-in with a **verified** email, Booking merges the lead customer created from `inquiry.submitted` (ADR 0004 O6) and links the trip cases. Lead fields were typed by an unauthenticated guest, so the merge keeps the verified profile's contact data and imports **no** unverified field (phone, address) without the customer confirming it. TripPlanner: a signed-in session carries `(iss, sub)`; a guest trip is claimed only by **the browser that holds its `guest_token`** at the moment it signs in — never by matching a typed email against other guest sessions. Retire `booking.customer_otps` and `booking.customer_sessions` (a later `bk-NNN` drops them once nothing reads them) | Phase 0, AA-811, Facebook app live for Facebook sign-in | Booking has no own OTP or session code; `registration.py` Phase 0 rule ("typed contact proves nothing") stays for guests, and a verified sign-in is the only way to attach a guest trip to a customer |
@@ -471,9 +471,9 @@ Cost surprises to plan for:
 - Staff sign-in: **email one-time code only** (amended S236). adventure.asia mail is hosted on DreamHost (MX mailchannels.net, SPF dreamhost), not Google Workspace, so there is no Workspace organization, no Internal consent screen and no `hd` claim — Google sign-in for staff would let a personal Google account registered on an @adventure.asia address pass. The WORKFORCE Google IdP stays disabled (`count = 0` in Infra #105). Passkeys may be added once the production auth domain is fixed. Nothing to register with Google.
 - EXTERNAL pool shape: one pool with the client-aware pre sign-up (item 4).
 - SES sender for Dev: `no-reply@lumiguides.it.com` (item 5); production domain decided with AA-811.
-- Plus tier for WORKFORCE: later (item 9). Break-glass custodian: Nghiệp (item 7).
+- Plus tier for WORKFORCE: later (item 9). Break-glass custodian: the tech lead (item 7).
 
-## Open items needing Nghiệp
+## Open items needing the tech lead
 
 1. **Google OAuth clients** in Google Cloud console:
    - WORKFORCE: a client in a project whose consent screen is **Internal** — **mandatory**, not

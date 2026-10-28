@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-cis-dev-db]
-last_reviewed: 2026-10-23
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-17
 tested_where: dev-acc2
@@ -17,7 +17,13 @@ related: [OPS-05, OPS-05-db-migrate, skill/aa-cis-schema/references/ecs-exec.md,
 
 # Query the database through ECS exec and S3
 
-> **S253: use `tools/ecs/ecsx.sh <script.py> [VAR=value ...]`** for CIS containers. It runs the script detached from the SSM session (`tools/ecs/ecsx_runner.py`), puts the whole output on `s3://aa-cis-bronze-…/scripts/out/`, then downloads and prints it, so a dropped session (`Cannot perform start session: EOF`) loses nothing. The manual steps below remain the reference for what it does.
+> [!TIP]
+> For CIS containers, run `tools/ecs/ecsx.sh <script.py> [VAR=value ...]` from the root repo (S253). It starts the
+> script detached from the SSM session (`tools/ecs/ecsx_runner.py`) and writes the whole output to
+> `s3://aa-cis-bronze-005097885195/scripts/out/`. Then it prints the output and removes the objects, so a dropped
+> session (`Cannot perform start session: EOF`) loses nothing. The script header shows how to target the worker.
+> It works on CIS containers only: the CRM task role cannot write the bronze bucket. The manual steps below show
+> what it does.
 
 This page is the canonical copy of the pattern (data standard DM-8.8). The agent quick reference in
 `skill/aa-cis-schema/references/ecs-exec.md`, the global `CLAUDE.md` block and older notes point here.
@@ -37,12 +43,12 @@ This page is the canonical copy of the pattern (data standard DM-8.8). The agent
 
 | X1 step | `DATABASE_URL` in the api container | What the script can reach |
 |---|---|---|
-| Until S18 (ended 19/10/2026) | the master DSN (secret `aa-cis/dev/rds`) | everything; treat non-CIS schemas as off limits anyway (DM-8.9) |
+| Before S18 (until 2026-10-19) | the master DSN (secret `aa-cis/dev/rds`) | everything; treat non-CIS schemas as off limits anyway (DM-8.9) |
 | From S18 | `cis_app` (secret `aa-cis/dev/rds-cis-app`) | CIS schemas incl. RLS tables; **not** `booking.*` / `tripplanner.*` (error 42501), no DDL |
-| From S19 (live since 19/10/2026) | as S18, and the CIS task role is denied `GetSecretValue` on the master, `aa-cis/dev/db-migrator`, `booking/*`, `tripplanner/*` | a script that reads the master secret fails with AccessDenied |
+| From S19 (live since 2026-10-19) | as S18, and the CIS task role is denied `GetSecretValue` on the master, `aa-cis/dev/db-migrator`, `booking/*`, `tripplanner/*` | a script that reads the master secret fails with AccessDenied |
 
-So scripts read the container's own `DATABASE_URL`. They never fetch `aa-cis/dev/rds` themselves. Check which step
-is live: the `DATABASE_URL` secret reference of the api task definition (step 0).
+So scripts read the container's own `DATABASE_URL`. They never fetch `aa-cis/dev/rds` themselves. S18 and S19 are
+both live since 2026-10-19; step 0 shows the secret the api task definition injects.
 
 ## Preconditions
 
@@ -65,7 +71,8 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
    aws ecs describe-task-definition --task-definition aa-cis-dev-api --profile aa365-admin --region us-west-1 --query "taskDefinition.containerDefinitions[0].secrets[?name=='DATABASE_URL'].valueFrom" --output text
    ```
 
-   Expected: a secret ARN ending in `aa-cis/dev/rds-…` (master, before S18) or `aa-cis/dev/rds-cis-app-…` (S18+).
+   Expected: a secret ARN ending in `aa-cis/dev/rds-cis-app-…` (S18 and later). `aa-cis/dev/rds-…` alone would mean
+   the master, as before S18: stop and check the task definition.
    Rollback: none - read-only.
 
 1. Write the script locally (in `.tmp-session/` or the scratchpad, never `~/`). Template:
@@ -100,7 +107,7 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
    Expected: `DONE`. `execute-command` can hang for up to about 120 seconds: run it in the background and wait for
    the result object in S3.
    Rollback: a read-only script has nothing to undo. A script that writes follows the DRY RUN steps in
-   `skill/aa-cis-schema/references/destructive-ops.md` (count, snapshot, SAVEPOINT, COMMIT only after Nghiệp's OK).
+   `skill/aa-cis-schema/references/destructive-ops.md` (count, snapshot, SAVEPOINT, COMMIT only after the tech lead's OK).
 
 3. Fetch the result, then delete both objects (the `scripts/` prefix has no lifecycle rule, so files stay forever).
 
@@ -118,7 +125,7 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 ECS exec also carries the `AWS-StartPortForwardingSessionToRemoteHost` document, so DBeaver can reach the DB through
 the running api task. The remote host is the private DB name **`db.dev.internal`** (AA-829, S248): the task resolves
 it inside the VPC, and it follows a restore or replacement of the instance, so this page needs no endpoint lookup.
-The CNAME points at `aa-cis-dev-db`, and since the AA-829 DSN switch (23/10/2026) every DSN secret names the same
+The CNAME points at `aa-cis-dev-db`, and since the AA-829 DSN switch (2026-10-23) every DSN secret names the same
 host. Fallback, only if the name does not resolve (private zone missing): the RDS
 endpoint from
 `aws rds describe-db-instances --db-instance-identifier aa-cis-dev-db --profile aa365-admin --region us-west-1 --query "DBInstances[0].Endpoint.Address" --output text`.
@@ -131,13 +138,13 @@ aws ssm start-session --target "ecs:aa-cis-dev-cluster_${TASK_ID}_${RUNTIME_ID}"
 
 DBeaver: `localhost:15432`, database `aa_cis_dev`, the login the task uses (see step 0), SSL mode `require` (the RDS
 certificate does not name `db.dev.internal` or `localhost`, so `verify-full` fails by design). Never SSH; never a public
-endpoint (DM-8.8). The older bastion note `docs/db-access-ssm-tunnel.md` is superseded by this section (cleanup:
-AA-889).
+endpoint (DM-8.8). The older tunnel note is superseded by this section and archived as
+[db-access-ssm-tunnel](../../archive/2026/db-access-ssm-tunnel.md).
 
 ## Logs
 
 - ECS: `/ecs/aa-cis-dev` (api and worker, stream prefixes `api/` and `worker/`), 30 days; `/ecs/aa-booking-dev`,
-  30 days; exec sessions `/ecs/aa-cis-dev/exec-sessions`, 365 days.
+  30 days; `/ecs/aa-crm-dev` (Partner CRM api), 30 days; exec sessions `/ecs/aa-cis-dev/exec-sessions`, 365 days.
 - Lambda: `/aws/lambda/<function-name>`, 30 days (identity triggers 365 days).
 
 ## Tested log

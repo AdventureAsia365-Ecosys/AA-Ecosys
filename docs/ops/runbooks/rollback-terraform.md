@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-infra]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -35,10 +35,12 @@ related: [OPS-01, OPS-04, OPS-02-cis, AA-866, AA-869, AA-892]
   change merged on `main` goes out with your revert.
 - **Bootstrap roles** (`aa-cis-infra-tf-apply`, `aa-cis-dev-app-deploy`, the plan role and their inline policies) cannot
   be changed by the CI apply role. A change to them is applied by hand with MFA, targeted, from merged `main`.
-- The LLM satellite roots (`accounts/acc1-bedrock`, `accounts/acc3-bedrock`) are applied locally with their own
-  profiles (see the [account map](../../onboarding.md#account-map)); no workflow applies them.
-- State: S3 bucket `aa-cis-tfstate-005097885195`, key `dev/terraform.tfstate`, **versioning on** (206 versions on
-  19/10/2026), DynamoDB lock table `aa-cis-tfstate-lock-005097885195`.
+- The LLM satellite root `accounts/acc3-bedrock` is applied locally with its own profile (see the
+  [account map](../../onboarding.md#account-map)); no workflow applies it. `accounts/acc1-bedrock` is not a rollback
+  target: acc1 left the ecosystem (AA-998) and that root only waits for its destroy.
+- State: S3 bucket `aa-cis-tfstate-005097885195`, key `dev/terraform.tfstate`, **versioning on** (checked
+  2026-10-28). Locking is the S3 lock file `dev/terraform.tfstate.tflock` (`use_lockfile`, AA-846). The old DynamoDB
+  lock table is gone.
 - Safety nets for deleted data: RDS `deletion_protection` on; Secrets Manager deletes keep a 30-day recovery window
   (`restore-secret`); the bronze, state and Lambda-artifact buckets are versioned.
 - Cost: 0 USD (one apply run).
@@ -70,7 +72,7 @@ Expected: the acc2 account from the account map.
    `terraform-plan.yml` comment on the PR.
    Expected: the plan shows only the inverse of step 1.
    Verify: no `destroy` of a stateful resource (RDS, secret, bucket, Cognito pool). If there is one, stop and ask
-   Nghiệp.
+   the tech lead.
    Rollback: close the PR.
 
 3. Merge the revert PR, then apply from `main`.
@@ -88,27 +90,27 @@ Expected: the acc2 account from the account map.
    eventually consistent, S241).
 
 5. Bootstrap role change (the apply role cannot write it): apply by hand with MFA, targeted, from a clean checkout of
-   merged `main`.
+   merged `main`. Load the MFA credentials as below, never with a bare `export $(...)` (an empty result prints the
+   whole environment, S244).
 
    ```bash
-   export $(aws configure export-credentials --profile aa365-admin --format env | xargs) && unset AWS_PROFILE
-   terraform -chdir=accounts/aa365 plan -target=<resource-address> -out=/tmp/rb.tfplan
-   terraform -chdir=accounts/aa365 apply /tmp/rb.tfplan # WRITE
+   bash -c 'cd /home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra/accounts/aa365 && C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform plan -target=<resource-address> -out=/tmp/rb.tfplan'
+   bash -c 'cd /home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra/accounts/aa365 && C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform apply /tmp/rb.tfplan' # WRITE
    ```
 
    Expected: the plan touches only the target.
    Rollback: the same with the previous commit checked out.
 
 6. Last resort - the state file is corrupt (init or plan fails to decode it, not just a warning). Do this only with
-   Nghiệp, with no apply running. List the versions and copy the last good one back as the current object:
+   the tech lead, with no apply running. List the versions and copy the last good one back as the current object:
 
    ```bash
    aws s3api list-object-versions --bucket aa-cis-tfstate-005097885195 --prefix dev/terraform.tfstate --profile aa365-admin --region us-west-1 --query "Versions[:5].[VersionId,LastModified,IsLatest]" --output table
    aws s3api copy-object --bucket aa-cis-tfstate-005097885195 --key dev/terraform.tfstate --copy-source "aa-cis-tfstate-005097885195/dev/terraform.tfstate?versionId=<good-version-id>" --profile aa365-admin --region us-west-1 # WRITE
    ```
 
-   Expected: a new current version equal to the good one. The lock table may hold a digest of the old state; if
-   init then reports a checksum mismatch, update the digest item as the error message says.
+   Expected: a new current version equal to the good one. If a crashed run left the lock file behind, plan reports
+   the lock; run `terraform force-unlock <lock-id>` with the ID from that error, and only when no apply runs.
    Verify: `terraform plan` from `main` shows only the drift you expect.
    Rollback: copy the version that was current before step 6 back the same way.
    Note: the AWS provider 6 upgrade (S242) prints "Failed to decode resource from state" for leftover v5

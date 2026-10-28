@@ -73,4 +73,4 @@ Lesson line added to `skill/aa-lessons/lessons.md`: <yes - quote it / no - why>.
 
 ## Business summary (VI)
 
-<Ba câu cho chị Thư: chuyện gì xảy ra, ảnh hưởng gì, đã làm gì để không lặp lại. Không mã Linear, không thuật ngữ.>
+<Ba câu cho chủ doanh nghiệp: chuyện gì xảy ra, ảnh hưởng gì, đã làm gì để không lặp lại. Không mã Linear, không thuật ngữ.>

@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-cis-worker]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-17
 tested_where: drill
@@ -33,8 +33,10 @@ Moved here from `skill/aa-ship/SKILL.md` §5 (AA-869, S241). The skill now links
 ## Preconditions
 
 - Access: profile `aa365-admin` (MFA session), region `us-west-1`.
-- Jobs: a rollback restarts the api and worker containers, like a deploy. Check the deploy gate first. If jobs
-  are running and the incident is SEV1, Nghiệp decides whether to roll back anyway
+- Jobs: a rollback restarts the api and worker containers, like a deploy. The worker drains and releases running
+  jobs, and the new tasks re-claim them (AA-993). Check the deploy gate first (`GET /admin/job-runner/deploy-gate`,
+  admin secret): since AA-993 G5 it is unsafe only while a rerun wave is open or a deploy-blocking kind runs. If it
+  is unsafe and the incident is SEV1, the tech lead decides whether to roll back anyway
   ([deploy-gate override](deploy-gate-override.md)).
 - Image: CIS ECR `aa-cis-dev-api` is IMMUTABLE and keeps the last 30 `dev-<sha>` images, so any revision in
   that window still has its image.
@@ -91,8 +93,8 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
    ```
 
    Expected: the same names and secret references as the current revision.
-   Verify: run it for the current revision and compare. A difference means Nghiệp decides (rolling back may undo
-   a security change).
+   Verify: run it for the current revision and compare. A difference means the tech lead decides (rolling back may
+   undo a security change).
    Rollback: none - read-only.
 
 5. Point the api at the target revision.
@@ -140,15 +142,15 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 ## Roll back or abort
 
 - Every write step is undone by pointing the service at the revision noted in step 1.
-- Abort point: if step 4 shows a configuration difference you cannot explain, stop and ask Nghiệp.
+- Abort point: if step 4 shows a configuration difference you cannot explain, stop and ask the tech lead.
 
 ## Escalation
 
-- Severity and who to tell: [incident response](../incident-response.md). SEV1 means Ms. Thư is told within 30 minutes.
+- Severity and who to tell: [incident response](../incident-response.md). SEV1 means the business owner is told within 30 minutes.
 
 ## Tested log
 
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
-| 2026-10-17 | drill (Dev acc2) | Claude Code + Nghiệp | S241 session log, AA-869 comment: api and worker moved two revisions back to an older SHA, `/health` 200, then forward again | pass |
+| 2026-10-17 | drill (Dev acc2) | Claude Code + tech lead | S241 session log, AA-869 comment: api and worker moved two revisions back to an older SHA, `/health` 200, then forward again | pass |
 | 2026-10-19 | dev-acc2, read-only steps 1-3 | Claude Code | `docs/audits/2026-10-19-S243-ops-runbooks/readonly-checks.md` | pass (listing and ECR policy checked; no write) |

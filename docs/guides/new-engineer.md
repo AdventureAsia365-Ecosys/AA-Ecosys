@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-25
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [GUIDE-01, GUIDE-02, GUIDE-05, ARCH-01, TPL-02, AA-897]
 ---
@@ -26,14 +26,16 @@ Accounts and the AWS account map are in [Onboarding: accounts and access](../onb
 
 ## What AA-Ecosys is
 
-Four apps on one AWS account (acc2, us-west-1), plus a Terraform repo:
+Four apps on one AWS account (acc2, us-west-1), plus a Terraform repo. The AI models run on Amazon Bedrock in a
+second account, acc3:
 
 - **AA-CIS-App** - content system of record: tour ingest and rewrite (A-series), atoms, tenant content (T-series),
   admin console, and the API behind the tenant portal.
 - **AA-TripPlanner-Web** - the traveller front door: browse places, assemble a trip, send an inquiry.
 - **AA-Booking** - customers, trip cases, proposals, pricing and suppliers for Adventure Asia staff.
-- **AA-Partner** - the CRM for partner travel agencies (ADR 0010) and, since AA-979 (25/10/2026), the tenant portal
-  (Content studio) UI, moved from AA-CIS-App with its history.
+- **AA-Partner** - the CRM for partner travel agencies (ADR 0010) and, since AA-979 (2026-10-25), the tenant portal
+  (Content studio) UI, moved from AA-CIS-App with its history. The portal runs on ECS Fargate behind
+  `portal.lumiguides.it.com`.
 - **AA-CIS-Infra** - Terraform for every AWS resource, and the DB Migrate workflow for the shared RDS.
 
 There is only a **Dev** environment today, holding **test data only** (D-01). Prod will be a separate RDS instance
@@ -44,12 +46,12 @@ on acc2 (ADR 0001, C7.2a, D-17), dated when go-live is set. Read the
 
 | Local folder | Repo (org `AdventureAsia365-Ecosys`) | Visibility | Default branch | Read first | Deploys to |
 |---|---|---|---|---|---|
-| `.` (root) | `AA-Ecosys` | public (since 22/10/2026) | `master` | [docs catalog](../README.md), [ADRs](../adr/README.md) | nothing (docs, skills, audits) |
+| `.` (root) | `AA-Ecosys` | public (since 2026-10-22) | `master` | [docs catalog](../README.md), [ADRs](../adr/README.md) | nothing (docs, skills, audits) |
 | `apps/AA-CIS-App` | `AA-CIS-App` | public | `main` | `CONTEXT.md` | ECS `aa-cis-dev-api` + `aa-cis-dev-worker`; Vercel `aa-cis-frontend` (admin) |
 | `apps/AA-Booking` | `AA-Booking` | public | `main` | `CONTEXT.md`, ADR 0004 | ECS `aa-booking-dev-api`; Vercel `aa-booking-admin` |
-| `apps/AA-Partner` | `AA-Partner` | public | `main` | `CONTEXT.md`, ADR 0010 | ECS `aa-crm-dev-api` + `aa-crm-dev-web`; Vercel `aa-cis-portal` (tenant portal) |
+| `apps/AA-Partner` | `AA-Partner` | public | `main` | `CONTEXT.md`, ADR 0010 | ECS `aa-crm-dev-api`, `aa-crm-dev-web` and `aa-crm-dev-portal` (tenant portal); Vercel `aa-cis-portal` only as the portal rollback until 2026-11-03 |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | public | `main` | `CONTEXT.md` | Lambdas `aa-tripplanner-dev-browse` / `-assembly`; Vercel |
-| `infra/AA-CIS-Infra` | `AA-CIS-Infra` | public (since 22/10/2026) | `main` | `CONTEXT.md`, `README.md` | AWS acc2 (root `accounts/aa365/`) |
+| `infra/AA-CIS-Infra` | `AA-CIS-Infra` | public (since 2026-10-22) | `main` | `CONTEXT.md`, `README.md` | AWS acc2 (root `accounts/aa365/`) |
 
 The app repos are **public**. Never put account IDs, ARNs, security group IDs, secret lists or security
 findings in them ([where a page may live](../STYLE.md#where-a-page-may-live-sec-06)).
@@ -62,10 +64,11 @@ Each repo README has the exact commands; these are the shortest paths that work 
 |---|---|---|
 | AA-CIS-App | README "Local setup": venv, `uvicorn api.main:app --reload --port 8000`, `python -m worker`, `cd frontend && npm ci && npm run dev` | README "Tests": unit tests need no DB; integration tests need a local PostgreSQL 15/16 |
 | AA-Booking | README "Local development": `cd backend`, venv, `ENVIRONMENT=local .venv/bin/uvicorn app.main:app --port 8000`, then `curl -s localhost:8000/booking/health` | `ruff check`, `pytest tests/unit`; integration needs a throwaway `*_test` DB prepared by `tests.integration.bootstrap_roles` |
+| AA-Partner | README "Run the tests": `cd api`, venv, `pip install -r requirements-dev.txt`; `cd web && npm ci` (in a worktree, never in the main checkout) | `ENVIRONMENT=test .venv/bin/pytest tests/unit -q`; integration needs a throwaway `*_test` DB prepared by `tests.integration.bootstrap_roles`; `npm test` in `web/` |
 | AA-TripPlanner-Web | README "Local setup": `cd frontend && npm ci && npm run dev`; backend fixtures server `python -m backend.tests.dev_browse_server` run from the repo root, not `backend/` (no DB) | `cd backend && PYTHONPATH=.. pytest` (offline) |
 | AA-CIS-Infra | No local apply. `terraform fmt -check` and `terraform validate` locally; `plan` needs MFA credentials (onboarding) | CI "Terraform Plan" on the PR |
 
-Environment variable names with underscores are set by Nghiệp by hand (Vercel, GitHub, AWS). Copy `.env.example`
+Environment variable names with underscores are set by the tech lead by hand (Vercel, GitHub, AWS). Copy `.env.example`
 files as they are and ask for values; do not generate or rename those variables.
 
 ## Your first PR to Dev
@@ -81,18 +84,20 @@ The full gate list is `skill/aa-ship/SKILL.md`; this is the shape.
    early). The PR title becomes the squash commit, so it follows the same rule
    ([handbook §5.1](../engineering-handbook.md#51-commits)).
 5. Push and open the PR (`git push -u origin <branch>`, then `gh pr create`); every repo has a PR template, fill it
-   in. CI must be green: CIS and Booking have 5 required checks, TripPlanner 2; root and Infra have none (private
-   repos on GitHub Free), so read their CI by hand. In root that CI is **Docs lint**. Run it before you push with
+   in. CI must be green: CIS has 9 required checks, Booking 7, TripPlanner 5 and Partner 10; root and Infra have
+   none, so read their CI by hand. In root that CI is **Docs lint**. Run it before you push with
    the commands in `tools/docs/README.md` "Run locally", inside a venv (`python3 -m venv .tmp-session/docs-venv`):
    Ubuntu 24.04 refuses a system-wide `pip install` (PEP 668).
 6. Migration? It goes first, alone: migration-only PR in the owner repo → byte copy in Infra
    `db/migrations/<owner>/` → **DB Migrate** `check` then `apply` → then the code PR
    ([schema ownership](../database/schema-ownership.md), Infra `README.md` "DB Migrate").
 7. Merge (squash). During the dev phase the author merges after green CI (decision D-13, data standards DM-11.5
-   v1.1). A risky change (auth, migration, IAM or secret, data delete, CI workflow) gets an agent review first
+   v1.1). CIS, Booking and Partner use the GitHub merge queue: a green PR joins it (`tools/github/mergeq.sh`), and the
+   queue re-runs CI on the newest `main` before it squashes. A risky change (auth, migration, IAM or secret, data delete, CI workflow) gets an agent review first
    (`kiro-reviewer` or an independent reviewer subagent).
-8. Deploy happens on merge: CIS and Booking `Deploy Dev` (blocked while background jobs run), TripPlanner
-   `deploy-lambdas.yml`, frontends through `vercel-deploy*.yml`.
+8. Deploy happens on merge: CIS, Booking and Partner `Deploy Dev` (blocked only while a rerun wave is open or a
+   deploy-blocking job runs or is due, AA-993 G5), Partner web and portal `Deploy Web Dev` / `Deploy Portal Dev`,
+   TripPlanner `deploy-lambdas.yml`, the Vercel frontends through `vercel-deploy*.yml`.
 9. **Verify live** before you call it done: rollout COMPLETED, `/health` shows your commit, the endpoint or page
    returns what the issue asked. Post the evidence on the Linear issue. Done = merged + CI green + deployed +
    verified live.
@@ -127,7 +132,7 @@ memory > a skill. Report the mismatch; do not fix it silently.
 ## Day 1 checklist
 
 - [ ] All accounts in [onboarding](../onboarding.md#accounts-you-need) work; `aws sts get-caller-identity --profile aa365-admin` shows acc2.
-- [ ] Five repos cloned under one `~/projects/AA-Ecosys`.
+- [ ] The root repo cloned as `~/projects/AA-Ecosys`, with the five app and Infra repos cloned inside it.
 - [ ] Read: ecosystem architecture §1-§4, [STYLE](../STYLE.md), [glossary](../glossary.md).
 - [ ] Signed in to the CIS admin with your company e-mail code.
 - [ ] Booking backend health answers locally (`curl -s localhost:8000/booking/health`).
@@ -135,16 +140,16 @@ memory > a skill. Report the mismatch; do not fix it silently.
 ## Week 1 checklist
 
 - [ ] CIS unit tests and TripPlanner backend tests pass locally.
-- [ ] Read `CONTEXT.md` of CIS, Booking, TripPlanner and Infra; read ADR 0001, 0002, 0006/0006a and 0008.
+- [ ] Read `CONTEXT.md` of CIS, Booking, TripPlanner, Partner and Infra; read ADR 0001, 0002, 0006/0006a and 0008.
 - [ ] Read [data standards Part B](../architecture/data-standards/02-data-management.md) §6-§11 (PII, retention,
       access, backup, cost, change).
-- [ ] Ran one read-only query through the S3-mediated ECS exec pattern (`skill/aa-cis-schema`), with Nghiệp.
+- [ ] Ran one read-only query through the S3-mediated ECS exec pattern (`skill/aa-cis-schema`), with the tech lead.
 - [ ] Shipped one small PR end to end (merge → deploy → verified live) with evidence on Linear.
 - [ ] Read the [incident response](../ops/incident-response.md) page and the [DevOps guide](devops.md).
 
 ## Escalation
 
-Nghiệp is on call for everything during the dev phase. Severity and who to tell: [incident response](../ops/incident-response.md).
+The tech lead is on call for everything during the dev phase. Severity and who to tell: [incident response](../ops/incident-response.md).
 
 ## Related
 

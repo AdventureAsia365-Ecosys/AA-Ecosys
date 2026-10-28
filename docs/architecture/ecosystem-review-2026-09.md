@@ -1,13 +1,13 @@
 # AA-Ecosys — Architecture Review & Target Plan (September 2026)
 
-> **Status:** proposal for review (S199, 28/09/2026). Decisions that still need Nghiệp's sign-off are
+> **Status:** proposal for review (S199, 28/09/2026). Decisions that still need the tech lead's sign-off are
 > marked **[DECISION]**. Facts verified in this session are marked **[FACT]** with their source;
 > anything inferred but not yet proven is marked **[HYPOTHESIS]**.
 > Companion ADR: [`docs/adr/0001-ecosystem-target-architecture.md`](../adr/0001-ecosystem-target-architecture.md).
 
 ## 1. Scope and method
 
-Input: the 28/09/2026 meeting with Ms. Thư (CIS-App, TripPlanner, AA-Booking, ecosystem integration),
+Input: the 28/09/2026 meeting with the business owner (CIS-App, TripPlanner, AA-Booking, ecosystem integration),
 plus S198's Jev / model research (Linear AA-642..645).
 
 Evidence gathered in this session (read-only unless stated):
@@ -88,7 +88,7 @@ All of these are exposed only through inference profiles (`us.*` and `global.*`)
   - There is no durable queue, no retry and no reaper.
   - A deploy or task restart kills the work. ECS `stopTimeout` is 90 s, but a long tour takes
     105–207 s.
-- [HYPOTHESIS] The "tour finished but still shows Writing" bug Ms. Thư reported has two possible causes:
+- [HYPOTHESIS] The "tour finished but still shows Writing" bug the business owner reported has two possible causes:
   - A version row stays `status='pending' AND edit_source='ai_generated'` after its task died. The
     portal derives "Writing…" from exactly that condition (`CatalogTab.isAiWriting`), and 18 PRs were
     deployed on 25/09 while test writes were running.
@@ -161,7 +161,7 @@ not only reporting.
   - audit / soft-delete columns;
   - supplier bills;
   - payment schedule.
-- **Update 28/09 (Nghiệp):** AAA is built **from scratch** — only the PRD, ERD and Figma exist. It runs
+- **Update 28/09 (the tech lead):** AAA is built **from scratch** — only the PRD, ERD and Figma exist. It runs
   on the **existing acc2 infrastructure**: same RDS, new schema `booking`, no separate account or region.
   The old AAA accounts (ap-southeast-1) are closed and out of scope.
 
@@ -179,8 +179,8 @@ not only reporting.
 
 - The key exists locally (`secret_manager/`, gitignored).
 - The smoke test (`docs/research/jev/jev_smoke.py`) has not run against the real API. Sending the key
-  to an external endpoint needs Nghiệp to run it himself.
-- Ms. Thư's own measurement: **51% agreement with human labels**, uncalibrated floor. Jev must go
+  to an external endpoint needs the tech lead to run it themselves.
+- The business owner's own measurement: **51% agreement with human labels**, uncalibrated floor. Jev must go
   through offline evaluation and shadow mode before it gates anything.
 
 ## 4. Target architecture
@@ -309,13 +309,13 @@ Recommendation: **(b) now, (a) later.** (b) needs no new agreements, and the Gat
    - Each wave has a budget and a verification checklist (AA-599/600/601).
    - TripPlanner re-extraction runs after each wave.
 5. **Promote Jev** only for gates where the offline eval clears the agreement threshold agreed with
-   Ms. Thư.
+   the business owner.
 
 ### 5.4 Where Jev fits (priority order)
 
 | # | Stage | Question type | Expected gain |
 |---|---|---|---|
-| 1 | A3 search-demand research: "is this keyword really about this place/activity?" **before buying DFS** | Noul | Direct DFS and Haiku savings. This was Ms. Thư's ticket 03 |
+| 1 | A3 search-demand research: "is this keyword really about this place/activity?" **before buying DFS** | Noul | Direct DFS and Haiku savings. This was the business owner's ticket 03 |
 | 2 | Score / Questions: "does this PAA question land on this segment/country?" | Noul | Replaces loose token matching (ticket 04/05) |
 | 3 | T10 F8/F9 warn-level brand-voice / generic-AI gates | Noul/Score | Replaces GPT-4.1 on non-blocking gates |
 | 4 | Debate brand-fit | Score | Replaces a GPT-4.1 call (cached per brand version) |
@@ -447,7 +447,7 @@ Tabs:
 > `accounts/aa365/booking.tf` on acc2 (no new accounts), and item 4's webhook endpoint by the
 > outbox consumer (`booking.inbox_events`). The stack recommendation in item 2 is carried into
 > [ADR 0004](../adr/0004-aa-booking-stack-and-bootstrap.md) (Proposed), which also answers open
-> question 5 in §11 pending Nghiệp's confirmation. ERD v2 (`docs/AAA/erd-v2/`) replaces the ERD gap
+> question 5 in §11 pending the tech lead's confirmation. ERD v2 (`docs/AAA/erd-v2/`) replaces the ERD gap
 > list in item 1; it uses `(source_system, source_id)` in place of `external_ref`.
 
 1. **Close the ERD P0 gaps first**, per the handover review:
@@ -500,7 +500,7 @@ Tabs:
 
 | Phase | Goal | Contents (existing issues → new proposals) |
 |---|---|---|
-| **P0 — Stop the bleeding** (now) | No more surprise spend or stuck state | New: DFS research scope fix + budget guard. Jev smoke test (Nghiệp runs it). AA-641 |
+| **P0 — Stop the bleeding** (now) | No more surprise spend or stuck state | New: DFS research scope fix + budget guard. Jev smoke test (the tech lead runs it). AA-641 |
 | **P1 — Platform foundation** | Can run the new models and long jobs safely | AA-642 Gateway P0–P1 (Converse provider, model catalog, stage routing, acc3 IAM). AA-644 / AA-645 A/B. New: durable job runner + Jobs page; AA-621/AA-624 repointed to it. New: docs/README/CONTEXT in English |
 | **P2 — Flow sync + Jev shadow** | One correct, observable A→T flow | New: A/T flow audit on Bhutan. AA-643 Jev offline eval → shadow + `decision_log` |
 | **P3 — Clean rerun** | Full Master Content + intelligence | AA-594 / AA-599 / AA-600 / AA-601 in country waves via jobs, with budgets |
@@ -511,7 +511,7 @@ Tabs:
 
 P4 and P6 can run in parallel with P2/P3, because they touch different code. P5 depends on P3 data.
 
-## 10. Decisions taken 28/09/2026 (Nghiệp) — these supersede the earlier proposals above
+## 10. Decisions taken 28/09/2026 (the tech lead) — these supersede the earlier proposals above
 
 | Topic | Decision | Effect on this document |
 |---|---|---|
@@ -522,19 +522,19 @@ P4 and P6 can run in parallel with P2/P3, because they touch different code. P5 
 | Jev thresholds | Needs research | AA-661: calibration study + 3-zone policy (pass / abstain → Luna / fail) |
 | Job runner | Explained. Postgres queue + worker recommended | AA-650 / AA-651 / AA-652 |
 
-### 10.1 DFS deep-dive (S199, answers Ms. Thư's "is the batch/cache working?")
+### 10.1 DFS deep-dive (S199, answers the business owner's "is the batch/cache working?")
 
 1. **Trigger bug (AA-646).** Every tenant rewrite researched the whole platform (2,215 places × AU/US/UK on 25/09).
 2. **Batching ineffective (AA-648).**
    - 678 volume tasks averaged **4.5 keywords** (max 13), at a flat ~$0.057–0.059 per task.
    - DFS prices per task; one task accepts up to 1,000 keywords.
-   - Ms. Thư's reference ran 16 workers as a standalone batch; ours used 4 concurrent places with a 5 s linger.
+   - The business owner's reference ran 16 workers as a standalone batch; ours used 4 concurrent places with a 5 s linger.
 3. **Cache poisoning (AA-647).**
    - The balance ran out around 09:00 UTC. From 09–10h, **14,691** `search_demand` rows were stored with NULL volume, and 1,795 places were marked "researched" for 182 days with no data bought.
    - 18,214 of the 19,305 rows written that day are NULL.
    - Cause: `fetch_volumes_bulk()` swallows errors.
 4. **No budget (AA-649).** Only a balance alert existed.
-5. **Standard (queued) DFS mode** fits this non-urgent work (Ms. Thư: "not urgent, batch is fine"). Use it for research jobs; keep Live for interactive calls.
+5. **Standard (queued) DFS mode** fits this non-urgent work (the business owner: "not urgent, batch is fine"). Use it for research jobs; keep Live for interactive calls.
 
 ### 10.2 Jev smoke test (real API, 28/09)
 
@@ -569,6 +569,6 @@ Separation is strong on clear cases. Thresholds for borderline content still nee
 3. Job runner: Postgres queue + worker service (recommended) or SQS?
 4. TripPlanner feasibility: one tour only, or combinations of tours within one country?
 5. AAA stack and vendor: did Quanskill deliver code? Does AAA follow the CIS stack?
-   *(No vendor code was delivered; the CIS-stack answer is proposed in ADR 0004, pending Nghiệp.)*
+   *(No vendor code was delivered; the CIS-stack answer is proposed in ADR 0004, pending the tech lead.)*
 6. Jev promotion threshold (agreement vs human labels) and the DPA/ZDR status with TypeSafe.
 7. Billing provider for the tenant portal (Stripe or invoice-only) — needed for the Billing page.

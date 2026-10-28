@@ -1,7 +1,7 @@
 # Cross-app contracts
 
 Every event or read model one app exposes to another is described here as a JSON Schema
-`<name>.v<major>[.<minor>].json`. Pattern (ecosystem blueprint, S235, approved by Nghiệp 14/10/2026):
+`<name>.v<major>[.<minor>].json`. Pattern (ecosystem blueprint, S235, approved by the tech lead 14/10/2026):
 **outbox → pull consumer → inbox**.
 
 ## Rules

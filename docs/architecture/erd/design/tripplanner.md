@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis-dev-db, tripplanner-lambda]
-last_reviewed: 2026-10-25
+last_reviewed: 2026-10-28
 review_every_days: 90
 generated: false
 related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894]
@@ -21,7 +21,8 @@ Design ERD of schema `tripplanner` (owner TripPlanner, migrations `tp-NNN`). Sta
 model at **tp-017**, re-synced to **tp-018** in S250 and to **tp-019** in S251 (`traveller_accounts` +
 `sessions.account_id`, AA-908): the pilot place tables tp-018 dropped (`itinerary_components`,
 `tour_day`, `tour_stop`, `tour_graph_*`, `tour_leg`, `tour_junction`) are gone from the page, so the drift check passes
-again. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
+again. Checked against the live dump at **tp-020** in S255: tp-020 (AA-992) adds three ops views only, so no table, key
+or foreign key changed. The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
 foreign keys differ from this page. A TripPlanner migration that changes
 them updates this page in the same change (root PR next to the migration copy).
 
