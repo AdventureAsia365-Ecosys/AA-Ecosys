@@ -1,0 +1,43 @@
+db/scripts/aa993_g4_bk_noop_enqueue.py rc=0 run=40580593424
+MIGRATE run-script: file=db/scripts/aa993_g4_bk_noop_enqueue.py sha256=57bf09b02a11
+MIGRATE master login: run-script needs the RDS master aa_cis_admin and the task logs in as db_migrator: reading the master DSN in the task from aa-cis/dev/rds (X1 S22)
+MIGRATE master login: aa_cis_admin (in-task DSN from aa-cis/dev/rds)
+MIGRATE ran as: aa_cis_admin (run-script)
+MIGRATE idle: booking.job running=0 queued=0 (exempt: bk_inquiry_pull)
+MIGRATE idle: crm.job running=0 queued=0 (exempt: crm_booking_sync, crm_heartbeat, crm_membership_pull)
+MIGRATE idle: shared.job running=0 queued=0 later=1
+MIGRATE idle: shared.rerun_wave open=0
+MIGRATE run-script: main(conn) starts; its output follows
+SCRIPT aa993_g4_bk_noop_enqueue mode=APPLY
+SCRIPT queued id=3ba3085e-ffa1-418d-8666-d3ed2be3759c kind=bk_noop_sleep seconds=300 status=queued max_attempts=1
+SCRIPT state id=3ba3085e-ffa1-418d-8666-d3ed2be3759c status=running attempt=1 slept_seconds=None
+SCRIPT next step=start Booking Deploy Dev now; read the outcome with aa993_g4_bk_noop_report.py
+MIGRATE run-script: done
+redeploy booking 20:45:46
+IN_PROGRESS
+stable 20:48:20
+2026-10-28T03:47:18.409000+07:00	(service aa-booking-dev-api, taskSet ecs-svc/7696841173068896795) has begun draining connections on 1 tasks.
+2026-10-28T03:47:18.402000+07:00	(service aa-booking-dev-api) deregistered 1 targets in (target-group arn:aws:elasticloadbalancing:us-west-1:005097885195:targetgroup/aa-booking-dev-api-tg/7bde53fda487
+2026-10-28T03:47:16.882000+07:00	(service aa-booking-dev-api) has stopped 1 running tasks: (task c8b453a0a6644daf844e9e272950ab97).
+2026-10-28T03:46:37.568000+07:00	(service aa-booking-dev-api) registered 1 targets in (target-group arn:aws:elasticloadbalancing:us-west-1:005097885195:targetgroup/aa-booking-dev-api-tg/7bde53fda48798
+2026-10-28T03:46:07.430000+07:00	(service aa-booking-dev-api) has started 1 tasks: (task 7ef85e7e46f64889b438e4ec6dbc262a).
+2026-10-28T02:52:06.425000+07:00	(service aa-booking-dev-api) has reached a steady state.
+2026-10-28T02:52:06.424000+07:00	(service aa-booking-dev-api) (deployment ecs-svc/7696841173068896795) deployment completed.
+2026-10-28T02:51:05.243000+07:00	(service aa-booking-dev-api, taskSet ecs-svc/7576468318982375121) has begun draining connections on 1 tasks.
+db/scripts/aa993_g4_bk_noop_report.py rc=0 run=40582125040
+MIGRATE run-script: file=db/scripts/aa993_g4_bk_noop_report.py sha256=05c35e918c04
+MIGRATE master login: run-script needs the RDS master aa_cis_admin and the task logs in as db_migrator: reading the master DSN in the task from aa-cis/dev/rds (X1 S22)
+MIGRATE master login: aa_cis_admin (in-task DSN from aa-cis/dev/rds)
+MIGRATE ran as: aa_cis_admin (run-script, READ_ONLY: default_transaction_read_only=on)
+MIGRATE idle: booking.job running=0 queued=0 (exempt: bk_inquiry_pull)
+MIGRATE idle: crm.job running=0 queued=0 (exempt: crm_booking_sync, crm_heartbeat, crm_membership_pull)
+MIGRATE idle: shared.job running=0 queued=0 later=1
+MIGRATE idle: shared.rerun_wave open=0
+MIGRATE run-script: READ_ONLY script, the idle check is report-only (no wait, no refusal)
+MIGRATE run-script: main(conn) starts; its output follows
+SCRIPT aa993_g4_bk_noop_report mode=READ_ONLY
+SCRIPT table name=booking.job rows=1
+SCRIPT row table=booking.job kind=bk_noop_sleep id=3ba3085e-ffa1-418d-8666-d3ed2be3759c status=succeeded attempt=1/1 cancel_requested=False releases=1 released=true slept_seconds=300 resumed_at_seconds=215.0 created='2026-10-27 20:44:31' started=20:44:32 finished=20:49:36 error=None
+SCRIPT table name=crm.job rows=0
+SCRIPT g4_verdict ok=True status=succeeded releases=1 resumed_at_seconds=215.0
+MIGRATE run-script: done

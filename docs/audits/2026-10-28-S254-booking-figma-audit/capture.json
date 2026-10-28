@@ -1,0 +1,972 @@
+[
+  {
+    "figma": "ACTIVITY  DETAILS-1.png",
+    "route": "Deactivate service dialog",
+    "url": "https://booking.lumiguides.it.com/services/SVC-000002",
+    "status": "ok",
+    "note": "Deactivate service dialog from the service page",
+    "errors": []
+  },
+  {
+    "figma": "ACTIVITY  DETAILS-2.png",
+    "route": "Deactivate service dialog",
+    "url": "https://booking.lumiguides.it.com/services/SVC-000002",
+    "status": "ok",
+    "note": "Deactivate service dialog from the service page",
+    "errors": []
+  },
+  {
+    "figma": "ACTIVITY  DETAILS.png",
+    "route": "`/services/[id]`",
+    "url": "https://booking.lumiguides.it.com/services/SVC-000002",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "ACTIVITY MANAGEMENT-1.png",
+    "route": "`/services`",
+    "url": "https://booking.lumiguides.it.com/services",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "ACTIVITY MANAGEMENT-2.png",
+    "route": "`/services`",
+    "url": "https://booking.lumiguides.it.com/services",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "ACTIVITY MANAGEMENT.png",
+    "route": "`/services`",
+    "url": "https://booking.lumiguides.it.com/services",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "ADD COUNTRY.png",
+    "route": "Country profile drawer (`/catalog/countries`, `/catalog/countries/[iso]`)",
+    "url": "https://booking.lumiguides.it.com/catalog/countries?edit=VN",
+    "status": "ok",
+    "note": "Country profile drawer (edit=VN)",
+    "errors": []
+  },
+  {
+    "figma": "ADD DESTINATION.png",
+    "route": "Destination profile drawer (edit)",
+    "url": "https://booking.lumiguides.it.com/catalog/destinations?place=4eb62d18-b43b-4e2b-b076-3e0ca4cb2d0a&edit=1",
+    "status": "ok",
+    "note": "Destination drawer in edit mode",
+    "errors": []
+  },
+  {
+    "figma": "ADD NEW ACTIVITY-1.png",
+    "route": "Edit service drawer (`/services/[id]`)",
+    "url": "https://booking.lumiguides.it.com/services/SVC-000002",
+    "status": "ok",
+    "note": "Edit service drawer",
+    "errors": []
+  },
+  {
+    "figma": "ADD NEW ACTIVITY-2.png",
+    "route": "Edit case details drawer (`/cases/[code]`)",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000022",
+    "status": "ok",
+    "note": "Edit case details drawer",
+    "errors": []
+  },
+  {
+    "figma": "ADD NEW ACTIVITY.png",
+    "route": "Add service drawer (`/services`)",
+    "url": "https://booking.lumiguides.it.com/services",
+    "status": "ok",
+    "note": "Add service drawer",
+    "errors": []
+  },
+  {
+    "figma": "ADD NEW HOTEL.png",
+    "route": "`/hotels?new=1`",
+    "url": "https://booking.lumiguides.it.com/hotels",
+    "status": "ok",
+    "note": "Add hotel drawer (no ?new=1 param in code; opened by the Add hotel button)",
+    "errors": []
+  },
+  {
+    "figma": "ADD NEW TRIP 8.png",
+    "route": "`/cases/new`",
+    "url": "https://booking.lumiguides.it.com/cases/new",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "ADD SUPPLIER.png",
+    "route": "`/suppliers/new`",
+    "url": "https://booking.lumiguides.it.com/suppliers/new",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "ADMINS.png",
+    "route": "`/staff`",
+    "url": "https://booking.lumiguides.it.com/staff",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "AUDIT LOGS.png",
+    "route": "`/audit-log`",
+    "url": "https://booking.lumiguides.it.com/audit-log",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "Activity Log.png",
+    "route": "`/staff/[cisUserId]?tab=activity`",
+    "url": "https://booking.lumiguides.it.com/staff/cog%3A390909de-e0e1-70f8-2bb5-09594e54ada4?tab=activity",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "Assigned Trips-1.png",
+    "route": "`/cases/[code]` workspace layout",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000022",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "Assigned Trips.png",
+    "route": "`/staff/[cisUserId]?tab=cases`",
+    "url": "https://booking.lumiguides.it.com/staff/cog%3A390909de-e0e1-70f8-2bb5-09594e54ada4?tab=cases",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "BLOCK ADMIN.png",
+    "route": "Deactivate staff member dialog",
+    "url": "https://booking.lumiguides.it.com/staff",
+    "status": "ok",
+    "note": "Deactivate staff member dialog",
+    "errors": []
+  },
+  {
+    "figma": "CANCEL INVOICE.png",
+    "route": "Cancel invoice dialog",
+    "url": "https://booking.lumiguides.it.com/billing/invoices/INV-000004",
+    "status": "ok",
+    "note": "Cancel invoice dialog",
+    "errors": []
+  },
+  {
+    "figma": "COUNTRY DETAILS-1.png",
+    "route": "`/catalog/countries/[iso]`",
+    "url": "https://booking.lumiguides.it.com/catalog/countries/VN",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "COUNTRY DETAILS.png",
+    "route": "`/catalog/countries/[iso]`",
+    "url": "https://booking.lumiguides.it.com/catalog/countries/VN",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "COUNTRY MANAGAMENT-1.png",
+    "route": "`/catalog/countries`",
+    "url": "https://booking.lumiguides.it.com/catalog/countries",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "COUNTRY MANAGAMENT-2.png",
+    "route": "`/hotels`",
+    "url": "https://booking.lumiguides.it.com/hotels",
+    "status": "ok",
+    "note": "Misfiled frame: Hotel list",
+    "errors": []
+  },
+  {
+    "figma": "COUNTRY MANAGAMENT-3.png",
+    "route": "`/hotels`",
+    "url": "https://booking.lumiguides.it.com/hotels",
+    "status": "ok",
+    "note": "Misfiled frame: Hotel list",
+    "errors": []
+  },
+  {
+    "figma": "COUNTRY MANAGAMENT.png",
+    "route": "`/catalog/countries`",
+    "url": "https://booking.lumiguides.it.com/catalog/countries",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "CREATE INVOICE.png",
+    "route": "Create invoice stepper (case Billing tab)",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000015?tab=billing",
+    "status": "ok",
+    "note": "Create invoice stepper",
+    "errors": []
+  },
+  {
+    "figma": "CREATE NEW TEMPLATE-1.png",
+    "route": "Commercial drawer (`/catalog/trip-plans/[sourceId]`, `…/commercial`)",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans/4a2411b2-6966-4ec0-a27e-84f9fad186ea/commercial",
+    "status": "ok",
+    "note": "Commercial drawer open",
+    "errors": []
+  },
+  {
+    "figma": "CREATE NEW TEMPLATE-2.png",
+    "route": "Commercial drawer (`/catalog/trip-plans/[sourceId]`, `…/commercial`)",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans/4a2411b2-6966-4ec0-a27e-84f9fad186ea/commercial",
+    "status": "ok",
+    "note": "Commercial drawer open",
+    "errors": []
+  },
+  {
+    "figma": "CREATE NEW TEMPLATE.png",
+    "route": "Commercial drawer (`/catalog/trip-plans/[sourceId]`, `…/commercial`)",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans/4a2411b2-6966-4ec0-a27e-84f9fad186ea/commercial",
+    "status": "ok",
+    "note": "Commercial drawer open",
+    "errors": []
+  },
+  {
+    "figma": "DELETE ACTIVITY.png",
+    "route": "Deactivate service dialog",
+    "url": "https://booking.lumiguides.it.com/services",
+    "status": "ok",
+    "note": "Deactivate service dialog from the row menu",
+    "errors": []
+  },
+  {
+    "figma": "DELETE COUNTRY.png",
+    "route": "Deactivate country dialog",
+    "url": "https://booking.lumiguides.it.com/catalog/countries",
+    "status": "ok",
+    "note": "Deactivate country dialog",
+    "errors": []
+  },
+  {
+    "figma": "DELETE DESTINATION.png",
+    "route": "Deactivate destination dialog",
+    "url": "https://booking.lumiguides.it.com/catalog/destinations",
+    "status": "ok",
+    "note": "Deactivate destination dialog",
+    "errors": []
+  },
+  {
+    "figma": "DELETE HOTEL.png",
+    "route": "Deactivate hotel dialog",
+    "url": "https://booking.lumiguides.it.com/hotels",
+    "status": "ok",
+    "note": "Deactivate hotel dialog",
+    "errors": []
+  },
+  {
+    "figma": "DELETE ITINERARY BUILDER.png",
+    "route": "Delete draft version dialog",
+    "url": "https://booking.lumiguides.it.com/proposals",
+    "status": "ok",
+    "note": "Delete draft version dialog",
+    "errors": []
+  },
+  {
+    "figma": "DELETE SUPPLIER.png",
+    "route": "Archive customer dialog",
+    "url": "https://booking.lumiguides.it.com/customers",
+    "status": "ok",
+    "note": "Archive customer dialog",
+    "errors": []
+  },
+  {
+    "figma": "DELETE TRIP.png",
+    "route": "Make not sellable dialog (`/catalog/trip-plans`, trip plan detail)",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans?sellable=yes",
+    "status": "ok",
+    "note": "Make not sellable dialog over the list",
+    "errors": []
+  },
+  {
+    "figma": "DELETE USER-1.png",
+    "route": "Deactivate supplier dialog",
+    "url": "https://booking.lumiguides.it.com/suppliers",
+    "status": "ok",
+    "note": "Deactivate supplier dialog",
+    "errors": []
+  },
+  {
+    "figma": "DELETE USER.png",
+    "route": "Archive customer dialog",
+    "url": "https://booking.lumiguides.it.com/customers",
+    "status": "ok",
+    "note": "Archive customer dialog",
+    "errors": []
+  },
+  {
+    "figma": "DELETE.png",
+    "route": "Void payment dialog",
+    "url": "https://booking.lumiguides.it.com/billing/payments/PMT-000007",
+    "status": "ok",
+    "note": "Void payment dialog",
+    "errors": []
+  },
+  {
+    "figma": "DESTINATION DETAILS.png",
+    "route": "Destination drawer (view)",
+    "url": "https://booking.lumiguides.it.com/catalog/destinations?place=4eb62d18-b43b-4e2b-b076-3e0ca4cb2d0a",
+    "status": "ok",
+    "note": "Destination drawer (view)",
+    "errors": []
+  },
+  {
+    "figma": "DESTINATION MANAGEMENT-1.png",
+    "route": "`/catalog/destinations`",
+    "url": "https://booking.lumiguides.it.com/catalog/destinations",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "DESTINATION MANAGEMENT.png",
+    "route": "`/catalog/destinations`",
+    "url": "https://booking.lumiguides.it.com/catalog/destinations",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "EDIT ACTIVITY.png",
+    "route": "`/services`",
+    "url": "https://booking.lumiguides.it.com/services",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "EDIT COUNTRY.png",
+    "route": "Country profile drawer (`/catalog/countries`, `/catalog/countries/[iso]`)",
+    "url": "https://booking.lumiguides.it.com/catalog/countries?edit=VN",
+    "status": "ok",
+    "note": "Country profile drawer (edit=VN)",
+    "errors": []
+  },
+  {
+    "figma": "EDIT DESTINATION.png",
+    "route": "Destination profile drawer (edit)",
+    "url": "https://booking.lumiguides.it.com/catalog/destinations?place=4eb62d18-b43b-4e2b-b076-3e0ca4cb2d0a&edit=1",
+    "status": "ok",
+    "note": "Destination drawer in edit mode",
+    "errors": []
+  },
+  {
+    "figma": "EDIT HOTEL-1.png",
+    "route": "`/hotels?view=[id]` hotel drawer",
+    "url": "https://booking.lumiguides.it.com/hotels?hotel=HTL-000002",
+    "status": "ok",
+    "note": "Hotel drawer (param is ?hotel=, not ?view=)",
+    "errors": []
+  },
+  {
+    "figma": "EDIT HOTEL.png",
+    "route": "`/hotels?edit=[id]`",
+    "url": "https://booking.lumiguides.it.com/hotels",
+    "status": "ok",
+    "note": "Edit hotel drawer (row menu; no ?edit= param in code)",
+    "errors": []
+  },
+  {
+    "figma": "EDIT PAYMENT.png",
+    "route": "Edit payment dialog",
+    "url": null,
+    "status": "not_capturable",
+    "note": "No payment allows Edit: the API gives actions.edit=false on every live payment (PMT-000005/7/8 are verified or voided; edit is only before verify). Edit button not rendered.",
+    "errors": []
+  },
+  {
+    "figma": "EDIT PROFILE.png",
+    "route": "Staff role / activation dialog (`/staff`, `/staff/[cisUserId]`); profile read-only in `/settings`",
+    "url": "https://booking.lumiguides.it.com/staff",
+    "status": "ok",
+    "note": "Staff role dialog (fallback: activation dialog)",
+    "errors": []
+  },
+  {
+    "figma": "EDIT SUPPLIER.png",
+    "route": "`/suppliers/[id]/edit`",
+    "url": "https://booking.lumiguides.it.com/suppliers/SUP-000002/edit",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "EDIT TEMPLATE-1.png",
+    "route": "Commercial drawer (`/catalog/trip-plans/[sourceId]`, `…/commercial`)",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans/4a2411b2-6966-4ec0-a27e-84f9fad186ea/commercial",
+    "status": "ok",
+    "note": "Commercial drawer open",
+    "errors": []
+  },
+  {
+    "figma": "EDIT TEMPLATE-2.png",
+    "route": "Commercial drawer (`/catalog/trip-plans/[sourceId]`, `…/commercial`)",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans/4a2411b2-6966-4ec0-a27e-84f9fad186ea/commercial",
+    "status": "ok",
+    "note": "Commercial drawer open",
+    "errors": []
+  },
+  {
+    "figma": "EDIT TEMPLATE.png",
+    "route": "Commercial drawer (`/catalog/trip-plans/[sourceId]`, `…/commercial`)",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans/4a2411b2-6966-4ec0-a27e-84f9fad186ea/commercial",
+    "status": "ok",
+    "note": "Commercial drawer open",
+    "errors": []
+  },
+  {
+    "figma": "Group 1410084962.png",
+    "route": "`/login` (background)",
+    "url": "https://booking.lumiguides.it.com/login",
+    "status": "ok",
+    "note": "Signed-out context",
+    "errors": []
+  },
+  {
+    "figma": "HOTEL DETAILS.png",
+    "route": "`/hotels?view=[id]` hotel drawer",
+    "url": "https://booking.lumiguides.it.com/hotels?hotel=HTL-000002",
+    "status": "ok",
+    "note": "Hotel drawer (param is ?hotel=, not ?view=)",
+    "errors": []
+  },
+  {
+    "figma": "HOTEL MANAGEMENT.png",
+    "route": "`/hotels`",
+    "url": "https://booking.lumiguides.it.com/hotels",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "ITINERARY BUILDER-1.png",
+    "route": "`/proposals` (+ row actions)",
+    "url": "https://booking.lumiguides.it.com/proposals",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "ITINERARY BUILDER-2.png",
+    "route": "Send proposal dialog",
+    "url": "https://booking.lumiguides.it.com/proposals",
+    "status": "ok",
+    "note": "Send proposal dialog",
+    "errors": []
+  },
+  {
+    "figma": "ITINERARY BUILDER-3.png",
+    "route": "`/cases/[code]/proposals/[n]` builder",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000007/proposals/1",
+    "status": "ok",
+    "note": "Draft version builder",
+    "errors": [
+      {
+        "type": "http",
+        "status": 403,
+        "url": "https://booking.lumiguides.it.com/api/booking/pricing/quote-preview"
+      },
+      {
+        "type": "console",
+        "text": "Failed to load resource: the server responded with a status of 403 ()"
+      }
+    ]
+  },
+  {
+    "figma": "ITINERARY BUILDER-4.png",
+    "route": "`/cases/[code]/proposals/[n]` builder",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000022/proposals/1",
+    "status": "ok",
+    "note": "Approved version builder",
+    "errors": []
+  },
+  {
+    "figma": "ITINERARY BUILDER.png",
+    "route": "`/proposals` (+ row actions)",
+    "url": "https://booking.lumiguides.it.com/proposals",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "ITINERARY PREVIEW.png",
+    "route": "`/cases/[code]/proposals/[n]/preview`",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000022/proposals/1/preview",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "NOTIFICATION.png",
+    "route": "`/notifications`",
+    "url": "https://booking.lumiguides.it.com/notifications",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "OVERVIEW-1.png",
+    "route": "Notification popover (topbar bell)",
+    "url": "https://booking.lumiguides.it.com/",
+    "status": "ok",
+    "note": "Notification popover (topbar bell)",
+    "errors": []
+  },
+  {
+    "figma": "OVERVIEW.png",
+    "route": "`/` Dashboard",
+    "url": "https://booking.lumiguides.it.com/",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "PAYMENT & INVOICE-1.png",
+    "route": "`/billing`",
+    "url": "https://booking.lumiguides.it.com/billing?tab=invoices",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "PAYMENT & INVOICE-2.png",
+    "route": "`/billing`",
+    "url": "https://booking.lumiguides.it.com/billing?tab=payments",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "PAYMENT & INVOICE-3.png",
+    "route": "`/billing`",
+    "url": "https://booking.lumiguides.it.com/billing?tab=supplier-bills",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "PAYMENT & INVOICE.png",
+    "route": "`/billing`",
+    "url": "https://booking.lumiguides.it.com/billing",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "PAYMENT DETAILS.png",
+    "route": "`/billing/payments/[ref]`",
+    "url": "https://booking.lumiguides.it.com/billing/payments/PMT-000007",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "PAYMENT MANAGEMENt.png",
+    "route": "`/billing`",
+    "url": "https://booking.lumiguides.it.com/billing?tab=payments",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "RECORD PAYMENT.png",
+    "route": "Record payment dialog",
+    "url": "https://booking.lumiguides.it.com/billing/invoices/INV-000004",
+    "status": "ok",
+    "note": "Record payment dialog",
+    "errors": []
+  },
+  {
+    "figma": "RESET PASSWORD.png",
+    "route": "`/settings?tab=security`, staff row \"Sign-in & invites in CIS ↗\"",
+    "url": "https://booking.lumiguides.it.com/settings?tab=security",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "SEND REMAINDER.png",
+    "route": "Send reminder dialog",
+    "url": null,
+    "status": "not_capturable",
+    "note": "No reminder dialog exists: the invoice \"Remind\" button calls POST invoices/{n}/remind directly (InvoiceView.tsx L231), so opening it would send. Frame is a duplicate of CANCEL INVOICE (see that row).",
+    "errors": []
+  },
+  {
+    "figma": "SETTINGS-1.png",
+    "route": "`/settings?tab=notifications`",
+    "url": "https://booking.lumiguides.it.com/settings?tab=notifications",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "SETTINGS-2.png",
+    "route": "`/settings?tab=security` Sign-in & security",
+    "url": "https://booking.lumiguides.it.com/settings?tab=security",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "SETTINGS.png",
+    "route": "`/settings?tab=general`",
+    "url": "https://booking.lumiguides.it.com/settings?tab=general",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "SUPPLIER  DETAILS.png",
+    "route": "`/suppliers/[id]`",
+    "url": "https://booking.lumiguides.it.com/suppliers/SUP-000002",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "SUPPLIER MANAGEMENT-1.png",
+    "route": "`/suppliers`",
+    "url": "https://booking.lumiguides.it.com/suppliers",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "SUPPLIER MANAGEMENT-2.png",
+    "route": "`/suppliers`",
+    "url": "https://booking.lumiguides.it.com/suppliers",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "SUPPLIER MANAGEMENT.png",
+    "route": "`/suppliers`",
+    "url": "https://booking.lumiguides.it.com/suppliers",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TEMPLATE MANAGEMENT-1.png",
+    "route": "`/catalog/trip-plans`",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TEMPLATE MANAGEMENT.png",
+    "route": "`/catalog/trip-plans`",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP CASES  DETAILS-1.png",
+    "route": "`/cases/[code]?tab=proposals`",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000022?tab=proposals",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP CASES  DETAILS-2.png",
+    "route": "`/cases/[code]?tab=billing`",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000022?tab=billing",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP CASES  DETAILS.png",
+    "route": "`/cases/[code]` Overview",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000022",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP CASES MANAGEMENT.png",
+    "route": "`/cases`",
+    "url": "https://booking.lumiguides.it.com/cases",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP CHECKS.png",
+    "route": "`/trip-checks`",
+    "url": "https://booking.lumiguides.it.com/trip-checks",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP PLAN MANAGEMENT.png",
+    "route": "`/cases`",
+    "url": "https://booking.lumiguides.it.com/cases",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP PLAN TEMPLATES-1.png",
+    "route": "`/catalog/trip-plans`",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP PLAN TEMPLATES.png",
+    "route": "`/catalog/trip-plans`",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP TEMPLATE DETAILS-1.png",
+    "route": "Use trip plan for a trip case dialog",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans/4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+    "status": "ok",
+    "note": "Use trip plan for a trip case dialog",
+    "errors": []
+  },
+  {
+    "figma": "TRIP TEMPLATE DETAILS-2.png",
+    "route": "`/catalog/trip-plans/[sourceId]`",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans/4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP TEMPLATE DETAILS.png",
+    "route": "`/catalog/trip-plans/[sourceId]`",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans/4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP TEMPLATES-1.png",
+    "route": "`/catalog/trip-plans`",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "TRIP TEMPLATES.png",
+    "route": "`/catalog/trip-plans`",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "UNPUBLISH ACTIVITY.png",
+    "route": "Deactivate service dialog",
+    "url": "https://booking.lumiguides.it.com/services",
+    "status": "ok",
+    "note": "Deactivate service dialog from the row menu",
+    "errors": []
+  },
+  {
+    "figma": "UNPUBLISH TEMPLATE.png",
+    "route": "Make not sellable dialog",
+    "url": "https://booking.lumiguides.it.com/catalog/trip-plans?sellable=yes",
+    "status": "ok",
+    "note": "Make not sellable dialog over the list",
+    "errors": []
+  },
+  {
+    "figma": "UNPUBLISHED COUNTRY.png",
+    "route": "Deactivate country dialog",
+    "url": "https://booking.lumiguides.it.com/catalog/countries",
+    "status": "ok",
+    "note": "Deactivate country dialog",
+    "errors": []
+  },
+  {
+    "figma": "USER  DETAILS-1.png",
+    "route": "`/customers/[id]` (Overview / Trip cases / Inquiries)",
+    "url": "https://booking.lumiguides.it.com/customers/CUS-000016?tab=cases",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "USER  DETAILS-2.png",
+    "route": "`/customers/[id]` (Overview / Trip cases / Inquiries)",
+    "url": "https://booking.lumiguides.it.com/customers/CUS-000010?tab=inquiries",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "USER  DETAILS-3.png",
+    "route": "`/cases/[code]` inquiry panel",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000010",
+    "status": "ok",
+    "note": "new_inquiry case: inquiry panel",
+    "errors": []
+  },
+  {
+    "figma": "USER  DETAILS-4.png",
+    "route": "`/cases/[code]` inquiry panel",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000010",
+    "status": "ok",
+    "note": "new_inquiry case: inquiry panel",
+    "errors": []
+  },
+  {
+    "figma": "USER  DETAILS-5.png",
+    "route": "`/cases/[code]` inquiry panel",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000010",
+    "status": "ok",
+    "note": "new_inquiry case: inquiry panel",
+    "errors": []
+  },
+  {
+    "figma": "USER  DETAILS-6.png",
+    "route": "Convert inquiry dialog (case workspace)",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000010",
+    "status": "ok",
+    "note": "Convert inquiry dialog",
+    "errors": []
+  },
+  {
+    "figma": "USER  DETAILS-7.png",
+    "route": "Decline inquiry dialog (case workspace)",
+    "url": "https://booking.lumiguides.it.com/cases/TC-000010",
+    "status": "ok",
+    "note": "Decline inquiry dialog",
+    "errors": []
+  },
+  {
+    "figma": "USER  DETAILS.png",
+    "route": "`/customers/[id]` (Overview / Trip cases / Inquiries)",
+    "url": "https://booking.lumiguides.it.com/customers/CUS-000016",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "USER DETAILS.png",
+    "route": "`/staff/[cisUserId]`",
+    "url": "https://booking.lumiguides.it.com/staff/cog%3A390909de-e0e1-70f8-2bb5-09594e54ada4",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "USER MANAGEMENT-1.png",
+    "route": "`/customers` (tabs All / Leads / Active / Past, row menu)",
+    "url": "https://booking.lumiguides.it.com/customers?tab=lead",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "USER MANAGEMENT-2.png",
+    "route": "`/customers` (tabs All / Leads / Active / Past, row menu)",
+    "url": "https://booking.lumiguides.it.com/customers?tab=active",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "USER MANAGEMENT-3.png",
+    "route": "`/customers` (tabs All / Leads / Active / Past, row menu)",
+    "url": "https://booking.lumiguides.it.com/customers?tab=past",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "USER MANAGEMENT-4.png",
+    "route": "`/customers` (tabs All / Leads / Active / Past, row menu)",
+    "url": "https://booking.lumiguides.it.com/customers",
+    "status": "ok",
+    "note": "Row menu open",
+    "errors": []
+  },
+  {
+    "figma": "USER MANAGEMENT.png",
+    "route": "`/customers` (tabs All / Leads / Active / Past, row menu)",
+    "url": "https://booking.lumiguides.it.com/customers",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "USER.png",
+    "route": "`/staff` + \"Invite staff in CIS ↗\" action",
+    "url": "https://booking.lumiguides.it.com/staff",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "View Details-1.png",
+    "route": "`/billing/invoices/[number]`",
+    "url": "https://booking.lumiguides.it.com/billing/invoices/INV-000003",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "View Details-2.png",
+    "route": "`/billing/invoices/[number]`",
+    "url": "https://booking.lumiguides.it.com/billing/invoices/INV-000004",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  },
+  {
+    "figma": "View Details-3.png",
+    "route": "Trip check drawer",
+    "url": "https://booking.lumiguides.it.com/trip-checks",
+    "status": "ok",
+    "note": "Trip check drawer (first row)",
+    "errors": []
+  },
+  {
+    "figma": "View Details.png",
+    "route": "`/billing/invoices/[number]`",
+    "url": "https://booking.lumiguides.it.com/billing/invoices/INV-000004",
+    "status": "ok",
+    "note": "",
+    "errors": []
+  }
+]

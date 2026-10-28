@@ -1,0 +1,3 @@
+curl /booking/customer/v1/payments (no token) -> 401 sign_in_required
+curl /booking/customer/v1/invoices/INV-000003 (bad bearer) -> 401 sign_in_required
+curl aa-tripplanner /api/me/payments (signed out) -> 401 sign_in_required

@@ -1,8 +1,8 @@
 {
- "updated": "2026-10-27",
- "session": "S253",
- "next_session": "S254",
- "source": "Linear (27/10/2026, S253 close) + docs/backlog/README.md + docs/audits/2026-10-27-S253-session-close/state-snapshot.md + docs/sessions/2026-10-27-S253-s1-propagation-place-cards-booking-ops-golden-hour-worker-drain.md + .tmp-session/S253-checklist.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
+ "updated": "2026-10-28",
+ "session": "S254",
+ "next_session": "S255",
+ "source": "Linear (28/10/2026, S254 close) + docs/backlog/README.md + docs/audits/2026-10-28-S254-session-close/state-snapshot.md + docs/sessions/2026-10-28-S254-booking-figma-job-resume-releases-geocode-audit.md + .tmp-session/S254-checklist.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -150,7 +150,7 @@
   {
    "id": "M3",
    "name": "Lõi thương mại Booking + Lane B",
-   "window": "S247–S254 (AA-682 S4/S5 + màn Figma Booking ở S254)",
+   "window": "S247–S255 (AA-682, AA-996 Done S254)",
    "status": "next",
    "criteria": [
     {
@@ -166,7 +166,7 @@
      "done": true
     },
     {
-     "text": "AA-682 (chỉ khi chị Thư đã chốt thuế/% cọc/đánh dấu thanh toán): /billing và /trip-checks thôi placeholder — S253: /trip-checks (S2, bk-027) + /billing (S3, bk-028) live trên Dev, ảnh 1440/390; thuế/% cọc vẫn chờ chị Thư chốt",
+     "text": "AA-682 (chỉ khi chị Thư đã chốt thuế/% cọc/đánh dấu thanh toán): /billing và /trip-checks thôi placeholder — S253: /trip-checks (S2, bk-027) + /billing (S3, bk-028) live trên Dev, ảnh 1440/390; thuế/% cọc vẫn chờ chị Thư chốt; S254: S4 hoá đơn NCC + chi trả (bk-030) và S5 My Payments live, AA-682 Done",
      "done": false
     }
    ]
@@ -331,6 +331,11 @@
    "text": "Dọn dẹp portal (runbook §4.5): PORTAL_API_KEY_SIGNIN=false, xoá project Vercel aa-cis-portal + biến VERCEL_PORTAL_*, xoá portal/ đông lạnh trong CIS, đảo guard test, 301 partner-dev. → portal., chuyển origin mail OAuth, cập nhật CONTEXT.md + ecosystem-architecture"
   },
   {
+   "due": "28–29/10 → S255",
+   "issue": "AA-997",
+   "text": "Lượt geocode retry cho 1.203 tên pending (1.177 unknown_to_model, 20 outside_country_polygon, 4 Tibet): đọc kết quả, kiểm lại 14 tour N1 của AA-990, đưa số vào AA-997"
+  },
+  {
    "due": "phiên đầu ≥01/11 (≈S257)",
    "issue": "AA-896",
    "text": "Audit cost tháng 8/9/10 theo tag App + dịch vụ (acc2) + acc3 Bedrock + credits, giải thích từng bước nhảy"
@@ -364,23 +369,18 @@
  "waiting": [
   {
    "who": "Nghiệp",
-   "text": "Làn S254 #1 chưa có issue: Booking dựng đủ mọi màn Figma (nội dung CIS chỉ xem + Edit in CIS ↗, xoá cứng → vô hiệu hoá, Destinations/Countries) — tạo issue Booking mới hay chạy dưới AA-682",
-   "issue": "AA-682"
+   "text": "Nháp Jira S254 chưa soạn (Nghiệp 10:40: gom sang phiên kế tiếp cùng ngày) → S255 soạn nháp S254 + S255, duyệt một lần",
+   "issue": ""
   },
   {
    "who": "Nghiệp",
-   "text": "Branch protection H1–H3 (bằng login của Nghiệp, ADR 0011): H1 trước S2 (S2a ngay sau S1c) — AA-Partner main thêm Portal Build + Web Build vào check bắt buộc; H2 sau khi S1c xanh trên main — AA-CIS-App thêm Frontend Lint; H3 sau S2/S3b — Kit provenance bắt buộc ở CIS, Partner, Booking (TripPlanner: bắt buộc trên pull_request). H6 đã duyệt S253. Chi tiết docs/audits/2026-10-27-S252-aa994-design-system/plan.md",
+   "text": "Branch protection H3 (bằng login của Nghiệp, ADR 0011): sau S2/S3b — Kit provenance bắt buộc ở CIS, Partner, Booking (TripPlanner: bắt buộc trên pull_request). H1 (Partner Portal Build + Web Build) và H2 (CIS Frontend Lint) xong 28/10 (S254). Chi tiết docs/audits/2026-10-27-S252-aa994-design-system/plan.md",
    "issue": "AA-994"
   },
   {
    "who": "Nghiệp",
    "text": "Google xong S252 (Gmail send-as live, OAuth project aa-crm-mail, Infra #415). Còn: app Microsoft 365 cho send-as của đại lý, đưa giá trị vào crm/dev/mail-oauth (hoặc pipe cho agent) để agent kiểm M365",
    "issue": "AA-945"
-  },
-  {
-   "who": "Nghiệp",
-   "text": "Đề xuất (không issue): bố cục gọn cho trang staff Booking khi laptop zoom 150% (~960 px CSS) — đồng ý thì thành 1 dòng việc Booking UI",
-   "issue": "AA-910"
   },
   {
    "who": "Nghiệp",
@@ -394,7 +394,7 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Hỏi trước khi tạo issue: T13 ghép tuyến (cho AA-948); làn S254 \"Booking dựng đủ màn Figma\" (issue mới, hay chạy dưới AA-682)",
+   "text": "Hỏi trước khi tạo issue: T13 ghép tuyến (cho AA-948). Làn Booking Figma đã thành AA-996, kế hoạch geocode thành AA-997 (S254)",
    "issue": "AA-948"
   },
   {
@@ -434,6 +434,28 @@
   }
  ],
  "log": [
+  {
+   "session": "S254",
+   "date": "28/10/2026",
+   "closed": [
+    "AA-682",
+    "AA-996"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-996",
+    "AA-997"
+   ],
+   "reopened": [],
+   "notes": [
+    "Done AA-682 (Claude Code, Ultracode, chạy qua đêm 27→28/10; chạm hạn mức 05:20–06:08, MFA hết hạn 07:46): S4 hoá đơn NCC + chi trả (bk-030, Booking #120, dry-run 40564671027 14/14 verdict ok) + S5 My Payments (root #289, Booking #122, TP #167; scope check Infra #456 + 401 cả 3 đường). Done AA-996 (tạo mới S254): bk-029/bk-031/bk-032 + bố cục gọn + lát sửa audit 1–5 (#117–#130); hotfix #131 81fd84c2 (booking:77) verify live 12:20 +07: GET /api/booking/catalog/trip-plans?limit=25 → 200, 0 lỗi console/HTTP ở 1440 và 390",
+    "Ship, chưa đóng: AA-993 G2/G3/G4/G5 chứng minh live + ADR 0017 (Proposed) + sửa log chi phí S1 #1079; AA-994 S1c + S2a; AA-979 /trip + bỏ bridge cis-portal; AA-919 tab Releases + TenantSelect + mig 291/292 + R2 seeded-fault + bước C sạch $0,375; AA-995 trang Golden Hour còn lại + polish #171; AA-990 N1 82/101 + giữ chặng tự di chuyển #1089; AA-790 r7 không đạt panel mù → revert, vòng 6 giữ ($1,80)",
+    "Audit: Figma Booking 7,3/10 (118/120 frame, 25 lệch thật, 5 lát sửa đã ship); geocode ≈ 75% đúng trên 7.924 tên (Geoapify ≈ 91%, toạ độ LLM ≈ 55–60%) → AA-997 (Nghiệp đồng ý). Không issue: dedupe ảnh reader, 6 thẻ xuyên biên giới, Vercel sfo1 + retention, H1/H2, release PR 4 app, Dependabot gom Infra #446",
+    "Live lúc chốt (11:40 +07): CIS api:877 / worker:443 dev-8aabaf0a, schema 292; Booking :76 d78ae200 bk-032 (#130 → 503 /catalog/trip-plans) → sau hotfix #131: :77 81fd84c2, ready bk-032; CRM api :69, web :37, portal :10, crm-022; TripPlanner be5cbc41, tp-020; booking.job / crm.job / shared.job running=0 queued=0, shared.rerun_wave open=0 (DB Migrate apply 40632244244, 11:39). Để BẬT: JOB_TEST_KINDS=1 (CIS + Booking Dev), retention Vercel, H1/H2, writer S1 v2, PLACE_PIPELINE_AUTO. LLM có log ≈ $2,29 (các khoản đã biết) + 2 lượt S1 mất log (ước ≈ $0,10)",
+    "Sự cố: build web CRM vỡ trên main (#100 + #102 xanh riêng → hotfix #104, H1 bắt buộc Web/Portal Build); 2 job S1 mất dòng llm_call_log (slug aa_internal, sửa #1079); vòng chờ migration 291/292 treo ở dấu nhắc MFA; shippr.sh đẩy nhánh khi rebase dở (#120); #130 503 do truy vấn catalog chậm (đọc catalog.v_tour_day theo source_id từng dòng vượt command_timeout 5 s → TimeoutError → 503; không phải thiếu grant) — stub CI quá nhỏ nên không lộ việc đọc catalog chậm; thêm perf guard (EXPLAIN / đo thời gian) cho truy vấn catalog",
+    "S255 theo thứ tự: nháp Jira S254 + S255 → AA-996 follow-up: chụp lại 8 frame cho điểm audit cuối + perf guard (EXPLAIN / đo thời gian) cho truy vấn catalog → AA-997 geocode + kiểm retry 28–29/10 → AA-919 R2 bước D + shadow → AA-990 luật transit mức tour + 14 tour → AA-790 vòng sau qua T8 → AA-994 S2b → AA-993 G4b/Phase D/E → dọn AA-979 từ 03/11 + audit cost tháng 11"
+   ]
+  },
   {
    "session": "S253",
    "date": "27/10/2026",
@@ -945,18 +967,6 @@
    "needs": ""
   },
   {
-   "id": "AA-682",
-   "title": "Operations MVP — supplier bookings, trip checks, invoices + payment schedule, supplier bills",
-   "status": "In Progress",
-   "priority": "Low",
-   "project": "tpbk",
-   "milestone": "M3",
-   "session": "S254",
-   "size": "XL",
-   "next": "L4 · S254 #2: S2 live S253 (check trước chuyến + vòng đời hồ sơ: bk-027 #106/Infra #434, code #107, job bk_case_lifecycle go-live Infra #435→#438, run live af5c3b5d chuyển 1 hồ sơ, 0 chặn); S3 live S253 (hoá đơn, lịch thanh toán, đánh dấu thanh toán tay: bk-028 #111 + #113 qua Infra #442, code #114 ac540fc9, run-script #443 dry / #444 apply / #445 về dry, verdict ok). Tiếp: S4 (bk-029 hoá đơn nhà cung cấp + chi trả) → S5 (Thanh toán của tôi). Làn Booking S254 #1 (chưa có issue, quyết định Nghiệp S253): dựng đủ mọi màn Figma kể cả màn từng \"không dựng\" — nội dung CIS chỉ xem + \"Edit in CIS ↗\", xoá cứng → vô hiệu hoá, rồi Destinations/Countries. Audit độ khớp Figma của Booking: CUỐI CÙNG, sau mọi việc khác (thứ tự của Nghiệp)",
-   "needs": "Ms. Thư: tax, deposit %, payment marking"
-  },
-  {
    "id": "AA-704",
    "title": "In-app AI assistant for admin + tenant",
    "status": "Backlog",
@@ -1167,9 +1177,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S254",
+   "session": "S255",
    "size": "L",
-   "next": "L1 · S254: r3–r6 ship S252 (r6 #1035 live, mean tốt nhất). S253 chưa chạy round 7 (chỉ ổn định lại test linear-time #1070). Tiếp: round 7 (brand voice vài nhánh còn dưới r3)",
+   "next": "L1 · S254: round 7 (CIS #1085) so với đối chứng r6b ($0,894, n=20), panel mù 9 arm / 720 điểm: ai_tells đạt, brand_voice / reader_value không đạt luật ship → revert CIS #1087, vòng 6 giữ live; $1,80. Tiếp: sửa bộ sinh angle T8, không sửa prompt T9",
    "needs": "LLM judge vs deterministic rubric"
   },
   {
@@ -1287,9 +1297,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S254",
+   "session": "S255",
    "size": "L",
-   "next": "L1 · S254: WM-17/18/20 + release 0 live S252, tab Guide (#1054/#1055). S253 chưa đụng. Còn: tab Releases → đóng",
+   "next": "L1 · S254: tab Releases CIS #1076 (API evidence + summary), sửa tràn #1080, TenantSelect #1086/#1088, WM-19/WM-21 #1084 + mig 291/292; vòng WM-22 qua API (draft #2 → active → rollback, release 0 active lại); R2 seeded-fault fail/hard_stop/tune $0,046; R2 bước C informative/completed/tune $0,375 sạch. Tiếp: R2 bước D (≤$10) + targeted shadow",
    "needs": "Each release"
   },
   {
@@ -1637,7 +1647,7 @@
    "milestone": "P-M1",
    "session": "S254",
    "size": "L",
-   "next": "LP · P2b phase 2 xong S253: portal. lên CloudFront → Fargate (Infra #428, smoke 59/59), diễn tập rollback 3′28″/3′11″, E2E phase 2 6/6, sửa CSP đăng xuất (Partner #94, Infra #431). Còn: slice /trip (§4.3), gỡ cầu nối EXTERNAL cis-portal (§4.4); dọn dẹp từ 03/11 (check theo ngày)",
+   "next": "LP · S254: §4.3 /trip (Infra #451, Partner #100, CIS #1082 307 → go-dev; live 307 giữ query, go-dev 200) và §4.4 bỏ bridge EXTERNAL cis-portal (Partner #101, Infra #452, crm api :69 0 biến bridge) xong. Còn: dọn dẹp §4.5 từ 03/11 (check theo ngày)",
    "needs": ""
   },
   {
@@ -1659,9 +1669,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M2a",
-   "session": "S254",
+   "session": "S255",
    "size": "M",
-   "next": "L5 · S254: N4 kiểm live S253 137/137 (0 tour còn dưới ngưỡng pin nửa số ngày); mig 289 ngày dạng khoảng (Sri Lanka 16/16). Còn việc nhỏ: đọc tour 256f07bd, ảnh portal atom_replaced, N1 → đóng",
+   "next": "L5 · S254: ảnh portal atom_replaced 4/4, 256f07bd = nguồn chỉ 8 ngày (không sửa), giữ chặng tự di chuyển CIS #1089 (61/7.081 atom); N1 82/101 tour có route, BELOW_HALF 0. Tiếp: luật mức tour cho chặng transit (Seoul–Busan, Oze–Nikko) + kiểm lại 14 tour sau lượt geocode retry 28–29/10",
    "needs": ""
   },
   {
@@ -1671,9 +1681,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "S254",
+   "session": "S255",
    "size": "L",
-   "next": "L7 · S254 #4: V3 Partner #97; G1 chứng minh live S253 (CIS #1072 + Infra #440, JOB_WORKER_GRACE_SECONDS=100, JOB_TEST_KINDS chỉ Dev; job 300 s xong trong cửa sổ, job 1.800 s 3e31d444 nhả rồi nhận lại, succeeded attempt 1, /released = 1); G4 phần 1 (Booking #112, Partner #98: SIGTERM → thoát < 1 s). Tiếp: chứng minh G4 bằng job Booking (run-script), G2/G3, G5 (đổi guard), Phase E (cần ADR); H2, đo lại CI",
+   "next": "L7 · S254 chứng minh live G2/G3 (CIS #1077: job S1 nhả ở writer_done và nhận lại đúng bước; a3_atomize nhả rồi tiếp tục sau 116 s, 0 fingerprint trùng), G4 (Booking bk_noop_sleep #121 + Infra #449: nhả 1 lần, tiếp tục từ 215 s, succeeded), G5 (guard deploy mới CIS #1081, Partner #99, Booking #121; run 40577044359 safe_to_deploy: true), Phase E = ADR 0017 (Proposed, root #290); sửa mất log chi phí S1 (#1079). Tiếp: G4b, Phase D, Phase E thực thi",
    "needs": ""
   },
   {
@@ -1683,10 +1693,10 @@
    "priority": "High",
    "project": "portal",
    "milestone": "M4",
-   "session": "S254",
+   "session": "S255",
    "size": "XL",
-   "next": "LP · S254 #3: S1a #1067 (thay #1066 bị gitleaks bắt nhầm hash) + S1b #1071 51d2a65a merged S253, Nghiệp duyệt H6; smoke production có đăng nhập xanh (#1069). Tiếp: S1c (eslint-kit) → H2, rồi S2a (vendor core vào Partner, sửa check \"Vendored CIS copies\" đang đỏ) sau H1",
-   "needs": "H1–H3 branch protection (Nghiệp)"
+   "next": "LP · S254: S1c eslint-kit CIS #1078 (bằng chứng đỏ rồi xanh), S2a vendor kit core vào Partner #102 (\"Vendored CIS copies\" xanh), useMediaQuery \"use client\" #1083; H1 + H2 đã đặt. Tiếp: S2b trở đi, rồi H3",
+   "needs": "H3 branch protection (Nghiệp)"
   },
   {
    "id": "AA-995",
@@ -1695,9 +1705,21 @@
    "priority": "High",
    "project": "tpbk",
    "milestone": "M4",
-   "session": "S254",
+   "session": "S255",
    "size": "L",
-   "next": "L5 · S254: slice 1–4 live S253 (TP #163 545514a0); gộp ảnh trùng ở tầng nội dung CIS mig 290 (#1068, Infra #439: 2.629 dòng → 1.120 path); ribbon lấy 40 tour (#164 3d0840b8, 25 ảnh). Tiếp: các trang khác theo giao diện mới + follow-up: dedupe theo path ở CIS catalog_http/mapping.py:273 và TP browse/catalog.py:696, fill_destination_covers dùng id chuẩn",
+   "next": "L5 · S254: các trang còn lại theo Golden Hour TP #168, tràn 26 px /destinations/bhutan 390 → #169/#170 (0 px), polish TP #171 be5cbc41 (Poppins, giảm chuyển động, content-visibility, mở/đóng tất cả ngày); dedupe ảnh ở reader CIS #1073 + TP #165. Tiếp: rà cuối → đóng",
+   "needs": ""
+  },
+  {
+   "id": "AA-997",
+   "title": "[Places] Geocode accuracy: coordinates from the geocoder only, route-coherence guard, pre-filter non-places",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "M2b",
+   "session": "S255",
+   "size": "L",
+   "next": "L2 · tạo S254 (Nghiệp đồng ý): audit toàn bộ 7.924 tên đã resolve ≈ 75% đúng (CI 71–80%); Geoapify ≈ 91%, toạ độ LLM đề xuất ≈ 55–60%; 1.621 tên chưa resolve chia 14 nhóm. Kế hoạch 8 bước: toạ độ chỉ từ geocoder, guard độ liền mạch tuyến, lọc trước tên không phải địa điểm (docs/audits/2026-10-28-S254-geocode-audit/ §8); kiểm lượt retry 28–29/10",
    "needs": ""
   }
  ]

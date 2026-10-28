@@ -1,0 +1,3 @@
+CIS Deploy Dev run 40577044359 (0ef0d147), Pre-deploy job guard after AA-993 G5 (CIS #1081):
+deploy-gate: {"active":0,"by_status":{},"scheduled_later":1,"exempt_kinds":["noop_sleep"],"open_waves":0,"blocking_kinds":["data_erasure","s1_batch_ingest"],"blocking_running":{},"blocking_due":{},"blocked_by":[],"safe_to_deploy":true}
+No open rerun wave and no running or due deploy-blocking job — safe to deploy (0 queued/running job(s) are released and re-claimed by the new revision).
