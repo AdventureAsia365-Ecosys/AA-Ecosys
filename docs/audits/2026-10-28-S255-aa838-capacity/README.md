@@ -3,7 +3,7 @@ id: OPS-08-2026-10
 title: Capacity review 2026-10 (first monthly C8 review)
 description: "Rà soát dung lượng lần đầu của RDS dùng chung và 6 service ECS (30 ngày tới 28/10/2026) — headroom, trigger C3, ngân sách kết nối C2.2, SLI C1.2 từ probe, rủi ro, danh sách quyết định chờ Nghiệp duyệt, nhịp tuần/tháng/quý."
 type: report
-status: draft
+status: active
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem, aa-cis-api, aa-booking, tripplanner-lambda, aa-partner, aa-cis-infra]
@@ -331,7 +331,7 @@ Không service nào thiếu tài nguyên; ba service CRM đã ở cỡ Fargate n
    lần chờ advisory lock 45 s; một mẫu queue-age Booking 10,8 giờ chưa rõ nguyên nhân; alarm đĩa 50 % sẽ kêu khi ledger
    đầy cửa sổ dù còn autoscale tới 100 GB.
 
-## 4. Danh sách quyết định (C8c) — đề xuất, chờ Nghiệp duyệt
+## 4. Danh sách quyết định (C8c) — đề xuất (đã duyệt S256, xem §4a)
 
 | # | Quyết định đề xuất | Loại | Hàng C3 / quy tắc | Ai / chi phí |
 |---|---|---|---|---|
@@ -348,6 +348,30 @@ Không service nào thiếu tài nguyên; ba service CRM đã ở cỡ Fargate n
 | D11 | Alarm đĩa `< 50 %` (10 GB trống) sẽ kêu khi ledger đầy cửa sổ (~3–5 GB thêm) hoặc sớm hơn theo nhịp 7 ngày: giữ nguyên làm cảnh báo sớm, xem lại ở rà soát tháng 12 | no action | C4.1 | — |
 | D12 | Lấy text câu nặng nhất của `tripplanner` (và câu 9 lần của `booking`, câu nặng nhất của `aa_app_user`) bằng probe qua `run-script` (D6), `EXPLAIN (ANALYZE, BUFFERS)` trên Dev, rồi sửa theo thứ tự C3b: query/index (đọc theo `source_id` một lần thay vì từng dòng như hotfix #131, index khớp bộ lọc browse), sau đó mới tính materialized read model | investigate → tune | "Materialized catalog read model"; C3b | TripPlanner + CIS (chủ view `catalog.*`), S / 0 |
 | D13 | Nâng `pg_stat_statements.max` 5 000 → 10 000 trong parameter group (tham số static: áp vào lần reboot có kế hoạch kế tiếp, vài MB shared memory) | tune | C4.3 | Infra, XS / 0 |
+
+## 4a. Kết quả duyệt và thực hiện (S256, 28/10/2026)
+
+Tech lead duyệt cả danh sách D1–D13 trong S256 (trừ việc thêm dịch vụ AWS trả phí mới — danh sách này không có mục
+nào như vậy). Lane AA-838 của S256 (Claude Code) thực hiện; bước live (Terraform Apply, reboot RDS, run-script, deploy)
+là của phiên điều phối.
+
+| # | Kết quả | Ở đâu |
+|---|---|---|
+| D1 | Quyết định, không làm gì: giữ `db.t4g.small` | — |
+| D2 | **Đổi đòn bẩy, cùng mục tiêu:** pool chính `cis-api` **giữ 10**; thay vào đó `max_capacity` của api **7 → 3**. Lý do: baseline `aa859_main_pool_gauge` (16–28/10, log `/ecs/aa-cis-dev`, đọc S256): dòng gauge 60 s gần như luôn `in_use=0` (đo thưa, báo thấp), nhưng các dòng `aa859_main_pool_wait` (chờ ≥ 50 ms) cho thấy một task dùng 5–7 kết nối 55 lần và 8–10 kết nối 8 lần trong 23–28/10 với traffic admin thường, và đầy 10 trong burst AA-859 (22/10, chờ tối đa 3,9 s) — pool 5 sẽ xếp hàng các lần đó và làm burst quá `acquire timeout` 5 s (503). Autoscaling api chưa từng lên quá **3** task từ cuối tháng 9. Ngân sách C2.2: **120 / 135**, `cis_app` 60 / 90, `aa_app_user` 6 / 15; bỏ cả hai `accepted_overages`. Muốn quay về phương án pool 5: đảo PR Infra + đổi `api/main.py` | AA-CIS-Infra (`modules/ecs/main.tf`, `db/connection_budget.json`); data standards v1.7 C2.2 |
+| D3 | (a) Bằng probe mới qua `run-script` (mục `[retention]`: chế độ và trigger của từng kind, kind nào đã có live run được duyệt) — thay cho `retention_check.py`. (b) Mốc **trước 15/12/2026**: DRY RUN thủ công `retention_tenant_api_usage` → duyệt `max_rows` → live run; giữa tháng 3/2027 cho `llm_call_log` / `decision_log` (phiên điều phối ghi mốc vào backlog "Time-gated checks"). (c) Câu chữ hàng C3 "Retention" đã sửa (v1.7): ngưỡng 1 M dòng chỉ cho ledger **chưa có** job retention | root (data standards v1.7, template `capacity-review.md`); bước (a)(b) của điều phối |
+| D4 | Đã xong S255 (Infra #461): alarm `…-rds-role-connections-crm_app` tồn tại, trạng thái OK (đọc S256). Chưa nâng limit `crm_app` (chưa có lần kêu nào khi deploy) | — |
+| D5 | Đã xong S255 (data standards v1.6) | — |
+| D6 | Probe trong Infra `db/scripts/aa838_capacity_probe.py` đồng bộ bản đã sửa (cửa sổ `decision_log` 180 ngày, `shared.job` theo `finished_at`, mục `[retention]`); `PROBE_TOP` mặc định **50** vì `run-script` không truyền biến môi trường | AA-CIS-Infra `db/scripts/` (+ bản copy `scripts/capacity_probe.py` ở đây) |
+| D7 | Quyết định, không reset. Từ nay mỗi lần chạy probe qua `run-script` đã có snapshot top 50 (C4.3a) | — |
+| D8 | Đã khoanh nguyên nhân từ log task Booking: mẫu 38 746 s đến từ sampler của **task mới** 0,5 s sau khi deploy cuốn chiếu khởi động nó (24/10 03:14:46 UTC); sampler task cũ gửi 0 lúc 03:11:23, mẫu kế tiếp lại 0 → một dòng `run_after` ≈ 23/10 16:29 UTC chỉ "đến hạn mà chưa ai nhận" trong vài phút quanh deploy (nhiều khả năng kind mà worker cũ chưa có, hoặc job được tạo với `run_after` cũ). Script chỉ đọc `db/scripts/aa838_booking_queue_age_check.py` gọi tên dòng đó (kind, `run_after` so với `created_at`, lúc được nhận) | AA-CIS-Infra `db/scripts/`; chạy bởi điều phối |
+| D9 | CIS: `get_database_url()` gắn mặc định `application_name=cis-direct` (pool có tên riêng vẫn thắng), 8 chỗ `asyncpg.connect(os.environ["DATABASE_URL"])` chuyển sang `get_database_url()`; mẫu script ECS exec (runbook + skill `aa-cis-schema`) truyền `server_settings={"application_name": "cis-exec"}` | AA-CIS-App `shared/secrets.py`; root runbook + skill; data standards v1.7 C1.1a |
+| D10 | Quyết định, theo dõi, chưa làm | — |
+| D11 | Quyết định, giữ alarm đĩa 50 %, xem lại ở rà soát tháng 12 | — |
+| D12 | Bước 1 (lấy text câu nặng nhất của `tripplanner` / `booking` / `aa_app_user`) = cùng lần chạy probe qua `run-script` (D6). Bước 2 (`EXPLAIN (ANALYZE, BUFFERS)` + sửa query/index, rồi mới tính read model) là lát việc sau cho TripPlanner + CIS khi có text; phần Booking đã sửa ở S255 (#134, 15/16 đường đọc ≤ 152 ms) | điều phối (run-script), rồi lát việc sau |
+| D13 | `pg_stat_statements.max` = 10 000 trong parameter group, `apply_method = pending-reboot` (tham số static). Có hiệu lực sau lần reboot có kế hoạch kế tiếp (vài MB shared memory, 0 USD); chạy probe **trước** reboot | AA-CIS-Infra `modules/rds/main.tf`; reboot = bước của điều phối |
+
+Chi phí cả danh sách: **0 USD/tháng** thêm (D4 0,10 USD/tháng đã tính ở S255). Không mục nào cần một dịch vụ AWS trả phí mới.
 
 ## 5. Nhịp rà soát (AA-838)
 

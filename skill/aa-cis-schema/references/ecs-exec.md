@@ -28,7 +28,9 @@ lách qua script trung gian (`bash run.sh`) — hook chỉ đọc dòng lệnh, 
 import asyncio, json, os, boto3, asyncpg
 
 async def main():
-    conn = await asyncpg.connect(os.environ["DATABASE_URL"], ssl="require")  # cis_app; không đọc secret master
+    # cis_app; không đọc secret master. application_name "cis-exec" (chuẩn C1.1a; asyncpg bỏ qua PGAPPNAME)
+    conn = await asyncpg.connect(os.environ["DATABASE_URL"], ssl="require",
+                                 server_settings={"application_name": "cis-exec"})
     rows = await conn.fetch("SELECT ...")  # luôn schema-qualify
     with open("/tmp/result.json", "w") as f:
         json.dump([dict(r) for r in rows], f, indent=2, default=str)
