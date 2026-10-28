@@ -35,10 +35,12 @@ Wave nhỏ (< ~10 tour): ngưỡng phần trăm dễ bắn vì 1 tour → chốt
 
 ## 3. Trong wave
 
-- **Không merge PR backend/pipeline** khi wave mở. CI chỉ chặn deploy khi `shared.job` còn job, và DB Migrate `apply` từ
-  chối khi có wave `open` — giữa hai job vẫn có thể lọt deploy làm wave chạy hai bản code. PR thuần FE thì được.
-- Deploy / DB Migrate chỉ trong **khoảng nghỉ giữa wave**: wave trước đã đóng, `shared.job` rảnh (cả `recompute` tự sinh
-  sau `a3_atomize`), driver đang tạm dừng.
+- **Không merge PR backend/pipeline** khi wave mở. Từ AA-993 G5, Deploy Dev CIS tự chặn khi có wave `open` (và khi job kind
+  `deploy_blocking` đang chạy / sắp chạy), không còn chặn theo số job trong `shared.job`; DB Migrate `apply` cũng từ chối
+  khi có wave `open`. PR thuần FE thì được.
+- Deploy / DB Migrate chỉ trong **khoảng nghỉ giữa wave**: wave trước đã đóng, driver đang tạm dừng. Deploy không cần
+  chờ `shared.job` rảnh (job còn chạy được release và task mới claim lại); DB Migrate `apply` thì vẫn chờ `shared.job`
+  rảnh (cả `recompute` tự sinh sau `a3_atomize`, C6.3b).
 - `a3_atomize` chạy 1 job một lúc toàn hệ → hàng đợi dài là bình thường.
 - Theo dõi bằng `GET /admin/waves/{id}/report` khoảng 10 phút một lần, không poll dồn. Script theo dõi phải chịu lỗi mạng
   (502) và lưu state để resume.

@@ -65,5 +65,6 @@ Nhóm chính (danh sách đầy đủ + cap: lệnh `@job_kind` trong `SKILL.md`
   worker; model là route của stage `s1_generate` trong Model Gateway. Env đặt tay trên task def có thể mất sau một
   Terraform apply chạm task def (xem `infra.md`).
 - Live streaming S1: sink WritingProgress → redis, endpoint `/admin/progress/s1/{job}`.
-- Deploy: pre-deploy guard `GET /admin/job-runner/deploy-gate` chặn khi `shared.job` còn queued/running; post-deploy
-  live smoke (CI).
+- Deploy: pre-deploy guard `GET /admin/job-runner/deploy-gate` chỉ chặn khi có wave mở hoặc job kind `deploy_blocking`
+  (`data_erasure`, `s1_batch_ingest`) đang chạy / queued đến hạn trong 15 phút (C6.3a, AA-993 G5); job khác được
+  release và claim lại. Post-deploy verify (CI).

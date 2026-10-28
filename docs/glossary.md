@@ -29,7 +29,7 @@ everywhere ([STYLE](STYLE.md#voice-and-structure)). Add a term in the same PR th
 | CI (continuous integration) | Tích hợp liên tục | Build and test every change automatically. | CIS `ci.yml`: Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check. |
 | CD (continuous delivery / deployment) | Triển khai liên tục | Ship a change that passed CI to an environment automatically. | `deploy-dev.yml` (CIS), `deploy-lambdas.yml` (TripPlanner). |
 | Required checks / branch protection | Kiểm tra bắt buộc / bảo vệ nhánh | Checks that must be green before a merge. | Five required jobs on AA-CIS-App; private repos on GitHub Free have none. |
-| Deploy gate | Cổng chặn deploy | CI step that blocks a backend deploy while background jobs run. | `shared.job` queued/running blocks CIS deploy; override is Nghiệp's call. |
+| Deploy gate | Cổng chặn deploy | CI step that blocks a backend deploy while a rerun wave is open or a deploy-blocking job of that app runs or is due (C6.3a, AA-993 G5). | CIS: open wave or `data_erasure` / `s1_batch_ingest`; Booking: retention kinds; Partner: `crm_dispatch`. Other queued/running jobs are drained and re-claimed. Override is Nghiệp's call. |
 | Definition of Ready (DoR) | Điều kiện sẵn sàng | What an issue needs before work starts. | [`templates/definition-of-ready.md`](templates/definition-of-ready.md). |
 | Definition of Done (DoD) | Điều kiện hoàn thành | What must be true to call work done. | `skill/aa-ship`: merged, CI green, rollout COMPLETED, verified live. |
 | Kanban | Kanban | Pull work from one ordered queue with a work-in-progress limit, no sprints. | The live backlog plus sessions of 3 to 5 issues. |
