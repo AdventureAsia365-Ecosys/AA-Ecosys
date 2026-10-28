@@ -57,7 +57,7 @@ Previous review: <link>. Next: first session of <YYYY>-Q<n+1> (DM-8.10, 90 days)
 | Projects | | |
 | Secret-bearing env vars vs register; Vercel warnings (e.g. readable secret) | | |
 
-## 4. AWS IAM (acc2, plus the LLM satellite accounts)
+## 4. AWS IAM (acc2, plus the LLM satellite account acc3)
 
 ### 4.1 People
 

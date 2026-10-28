@@ -41,8 +41,8 @@ A change to a rule is a PR to the data standards, not an edit here.
 | acc3 (LLM account) | Bedrock calls through the satellite role | Cost Explorer per account in `shared.cost_explorer_snapshot`; per call in `shared.llm_call_log` |
 | OpenAI, Jev, DataForSEO, geocoder | External APIs | `shared.llm_call_log`, `shared.decision_log`, `shared.dfs_call_log`, `geo.geocode_call` |
 
-acc1 left the ecosystem on 2026-10-28 (AA-998): no LLM call goes there and there is no cross-account fallback. Its
-older rows stay in the ledgers and snapshots as history. Account IDs and profiles: the
+acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998): no LLM call goes there and there is
+no cross-account fallback. Its older rows stay in the ledgers and snapshots as history. Account IDs and profiles: the
 [account map](../onboarding.md#account-map).
 
 ## Tags
@@ -82,7 +82,7 @@ Each Cost Explorer API request costs 0.01 USD.
 
 - **Admin console, Cost per app** (page `/admin/platform/cost`, API `GET /admin/platform/cost?month=YYYY-MM`, AA-884): acc2 spend by `App`
   tag and service, LLM spend by app, acc3 Bedrock from Cost Explorer next to the gateway estimate (older months also show
-  acc1). The page
+  the retired account). The page
   refreshes a stale month by itself at most about once a day (one Cost Explorer request, about 0.30 USD/month in
   the worst case). Add `refresh_if_stale=false` to read stored data only.
 - **Admin console, Cost Operations** (page `/admin/cost-ops`, was External Spend at `/admin/llm-usage`, which now
@@ -118,7 +118,7 @@ Denominators come from read-only counts in the monthly review; Dev numbers are f
 
 Per-model LLM unit costs (USD per 1,000 calls, USD per 1M tokens, tokens per call) need no DB: join the Cost
 Explorer service line of each model with the CloudWatch `AWS/Bedrock` metrics `Invocations`, `InputTokenCount`,
-`OutputTokenCount` and `InvocationClientErrors` (daily sums, us-west-1, acc3; acc1 for months before November 2026). The 2026-10-23 report keeps
+`OutputTokenCount` and `InvocationClientErrors` (daily sums, us-west-1, acc3; months before November 2026 also have calls on the retired account). The 2026-10-23 report keeps
 the pull (`scripts/fetch_cw_bedrock.sh`, about 0.001 USD) and the join (`scripts/bedrock_units.py`). Price per token
 is stable per model, so a month-over-month LLM jump is explained by calls and tokens per call; check both.
 

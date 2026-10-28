@@ -4,6 +4,7 @@
   (`docs/audits/2026-10-14-S235-ecosystem-team-pilot/01-ecosystem-blueprint.html`). Proposed
   28/09/2026 (S199). See "Amendments (S235)" below.
 - **Tightened by:** ADR 0008 (S237): decision 6 contracts are views only; new-app integration follows ADR 0008's gate and playbook.
+- **Amended by:** [ADR 0001a](0001a-retire-acc1-llm-on-acc3-only.md) (S255, AA-998): decision 2, acc1 retired; LLM chat models run on acc3 only, no cross-account fallback.
 - **Implemented by:** [ADR 0016](0016-one-design-system-guarded-kit-copies.md) (S252): decision 7 "one design system" through a canonical CIS kit core and guarded copies.
 - **Update 2026-10-28:** decision 2: acc1 left the ecosystem (AA-998, S255). LLM calls run on acc3 only, and
   the fallback chain stays inside acc3; there is no cross-account fallback. Decision 8: an English page may have a

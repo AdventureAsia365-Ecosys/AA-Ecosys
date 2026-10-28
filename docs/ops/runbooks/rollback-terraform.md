@@ -36,8 +36,8 @@ related: [OPS-01, OPS-04, OPS-02-cis, AA-866, AA-869, AA-892]
 - **Bootstrap roles** (`aa-cis-infra-tf-apply`, `aa-cis-dev-app-deploy`, the plan role and their inline policies) cannot
   be changed by the CI apply role. A change to them is applied by hand with MFA, targeted, from merged `main`.
 - The LLM satellite root `accounts/acc3-bedrock` is applied locally with its own profile (see the
-  [account map](../../onboarding.md#account-map)); no workflow applies it. `accounts/acc1-bedrock` is not a rollback
-  target: acc1 left the ecosystem (AA-998) and that root only waits for its destroy.
+  [account map](../../onboarding.md#account-map)); no workflow applies it. There is no other satellite root to roll
+  back: acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998) and its root was destroyed.
 - State: S3 bucket `aa-cis-tfstate-005097885195`, key `dev/terraform.tfstate`, **versioning on** (checked
   2026-10-28). Locking is the S3 lock file `dev/terraform.tfstate.tflock` (`use_lockfile`, AA-846). The old DynamoDB
   lock table is gone.

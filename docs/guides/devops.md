@@ -40,7 +40,7 @@ Live components on Dev (checked 2026-10-28): ECS cluster `aa-cis-dev-cluster` wi
 `aa-cis-dev-db` (PostgreSQL, `db.t4g.small`, single-AZ, 7-day PITR); Lambdas `aa-tripplanner-dev-browse` and
 `aa-tripplanner-dev-assembly`; four Cognito trigger Lambdas (`aa-identity-dev-*`); the daily probe Lambda
 `aa-cis-dev-dfs-balance-check`; the snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry`. The AI models run on
-Amazon Bedrock in acc3; acc1 left the ecosystem on 2026-10-28 (AA-998).
+Amazon Bedrock in acc3; acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998).
 
 ## How each app deploys
 
@@ -54,7 +54,7 @@ Amazon Bedrock in acc3; acc1 left the ecosystem on 2026-10-28 (AA-998).
 
 Boundary: *apps own code, Infra owns resources*. Infra creates the ECS services, Lambdas and roles; the apps ship
 code into them. Bootstrap IAM roles and policies and the `accounts/acc3-bedrock` root are applied by a human with the
-MFA profile, never by CI. The `accounts/acc1-bedrock` root is only waiting for its one-time destroy (AA-998).
+MFA profile, never by CI.
 
 Vercel's Git integration is off in every repo; CI creates deploys with `VERCEL_TOKEN`, and only when frontend files
 change.

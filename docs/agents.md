@@ -35,7 +35,7 @@ When two sources disagree, report the mismatch to the tech lead; do not pick one
 
 | File | Read by | What it covers | Last changed | Known stale points (fix in AA-889 unless noted) |
 |---|---|---|---|---|
-| `.claude/CLAUDE.md` | Claude Code (imports the three steering files) | Workspace map, account map copy, live endpoints, git rules, Kiro mode switch | 2026-10-25 | Account table still lists acc1 as the LLM fallback (acc1 left the ecosystem, AA-998: LLM calls run on acc3 only); the workspace map puts the Content studio on Vercel `aa-cis-portal` (on Fargate at `portal.` since the S253 cutover; Vercel is only the rollback path until 2026-11-03); the git rules still hold backend deploys while any job is queued (narrowed by AA-993 G5, data standards Part C C6.3a); ADR range "0001–0008" |
+| `.claude/CLAUDE.md` | Claude Code (imports the three steering files) | Workspace map, account map copy, live endpoints, git rules, Kiro mode switch | 2026-10-28 | The workspace map puts the Content studio on Vercel `aa-cis-portal` (on Fargate at `portal.` since the S253 cutover; Vercel is only the rollback path until 2026-11-03); the git rules still hold backend deploys while any job is queued (narrowed by AA-993 G5, data standards Part C C6.3a); ADR range "0001–0008" |
 | `.kiro/steering/session-workflow.md` | Kiro and Claude Code | Session start/end, state sources, DoD, Linear, Jira, LLM cost logging, waiting for CI | 2026-10-28 | The DoD paragraph still holds merges and deploys while a job table has jobs (narrowed by AA-993 G5, Part C C6.3a) |
 | `.kiro/steering/language-convention.md` | Kiro and Claude Code | Language per artifact | 2026-10-19 | The N-7 rule (bilingual EN-VI role guides) is replaced in S255: catalog pages are English, with a Vietnamese translation in a sibling `.vi.md` file |
 | `.kiro/steering/db-schema.md` | Kiro and Claude Code | Schema source of truth, gotchas | 2026-10-25 | - |
@@ -83,7 +83,7 @@ All six repos are public until November 2026 ([ADR 0014](adr/0014-repo-visibilit
 
 | Where | What | Note |
 |---|---|---|
-| `~/.claude/CLAUDE.md` | The tech lead's per-user rules for every project (WSL, accounts, ECS exec, commit format) | Only the tech lead edits it (N-6). Its account table still lists acc1 (left the ecosystem, AA-998) |
+| `~/.claude/CLAUDE.md` | The tech lead's per-user rules for every project (WSL, accounts, ECS exec, commit format) | Only the tech lead edits it (N-6) |
 | `~/.claude/projects/<workspace>/memory/` | Claude Code auto-memory | Per user, per machine |
 | Notion → Program Brain → memory.md | Session memory (Vietnamese) | Via the claude.ai Notion connector |
 | `.kiro/settings/mcp.json` | Kiro MCP config | Git-ignored |
