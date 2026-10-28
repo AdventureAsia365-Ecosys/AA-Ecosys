@@ -276,6 +276,26 @@ class SvgAssets(TreeCase):
             self.build()
         self.assertFalse((self.out / "manifest.json").exists(), "nothing is written when an SVG is refused")
 
+    def test_prefix_and_char_reference_bypasses_are_refused(self):
+        """The parsed check (svg_tree_problems) catches what the raw-text regexes miss."""
+        xhtml = 'xmlns:h="http://www.w3.org/1999/xhtml"'
+        bad = {
+            "svg-prefixed script": _svg('<s:script xmlns:s="http://www.w3.org/2000/svg">x()</s:script>'),
+            "xhtml script": _svg(f'<h:script {xhtml}>x()</h:script>'),
+            "xhtml iframe": _svg(f'<h:iframe {xhtml} src="https://example.com/"/>'),
+            "prefixed set": _svg('<s:set xmlns:s="http://www.w3.org/2000/svg" attributeName="href" to="#a"/>'),
+            "prefixed xlink use": _svg('<use xmlns:x="http://www.w3.org/1999/xlink" x:href="https://e.example/a#p"/>'),
+            "char-ref url()": _svg('<rect style="fill:u&#114;l(https://example.com/x)"/>'),
+            "char-ref @import": _svg("<style>&#64;import 'x.css';</style>"),
+            "css escape": _svg("<style>g{fill:u\\72l(https://example.com/x)}</style>"),
+            "xml-stylesheet": _svg('<?xml-stylesheet type="text/css" href="#a"?>'),
+            "xml:base": _svg('<g xml:base="https://example.com/"/>'),
+            "char-ref account": _svg(f"<text>{FAKE_ACCOUNT[:5]}&#{ord(FAKE_ACCOUNT[5])};{FAKE_ACCOUNT[6:]}</text>"),
+        }
+        for name, text in bad.items():
+            with self.subTest(name):
+                self.assertTrue(b.svg_problems(text), f"{name} should be refused")
+
     def test_digits_inside_inline_png_are_not_an_account_id(self):
         self.assertEqual(b.svg_problems(_svg('<use href="#a"/>')), [])
 

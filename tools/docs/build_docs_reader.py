@@ -149,6 +149,20 @@ SVG_FORBIDDEN: list[tuple[str, re.Pattern[str]]] = [
 SVG_REF = re.compile(r"\s(?:xlink:)?href\s*=\s*(?:\"([^\"]*)\"|'([^']*)')", re.I)
 SVG_START = re.compile(
     r"\s*(?:<\?xml[^>]*>\s*)?(?:<!--.*?-->\s*)*(?:<!DOCTYPE svg[^>\[]*>\s*)?(?:<!--.*?-->\s*)*<svg[\s>]", re.S)
+# Rule 9 (a), parsed: the regexes above see the raw text, so a namespace prefix (<s:script>, x:href) or an XML character
+# reference (u&#114;l(...)) slips past them. The parsed check allowlists what Graphviz writes instead: SVG-namespace
+# elements from SVG_ELEMENTS only, attributes without a namespace (plus xlink:href / xlink:title / xml:space), no on*
+# attribute, every href (any namespace) a fragment or an inline PNG, and no decoded attribute value that could fetch or
+# run anything. Processing instructions other than the XML declaration are refused (xml-stylesheet).
+SVG_NS = "http://www.w3.org/2000/svg"
+XLINK_NS = "http://www.w3.org/1999/xlink"
+XML_NS = "http://www.w3.org/XML/1998/namespace"
+SVG_ELEMENTS = frozenset({
+    "svg", "g", "title", "desc", "defs", "use", "a", "image", "text", "tspan", "path", "polygon", "polyline",
+    "ellipse", "circle", "rect", "line", "linearGradient", "radialGradient", "stop", "clipPath", "marker", "symbol"})
+SVG_NS_ATTRS = frozenset({f"{{{XLINK_NS}}}href", f"{{{XLINK_NS}}}title", f"{{{XML_NS}}}space"})
+SVG_BAD_VALUE = re.compile(r"url\(\s*['\"]?(?!#)|javascript\s*:|@import|image-set|expression\s*\(|\\", re.I)
+SVG_XML_DECL = re.compile(r"\s*<\?xml\s[^>]*\?>")
 
 
 @dataclass
@@ -211,7 +225,47 @@ def svg_problems(text: str) -> list[str]:
             problems.append(f"outside reference {ref[:40]!r}")
     visible = INLINE_PNG.sub("data:image/png;base64,", text)
     problems += [f"{label} in the SVG text" for label in guard_hits(visible)]
+    if not any(p.startswith("entity declaration") for p in problems):   # never parse an entity declaration
+        problems += svg_tree_problems(text)
     return problems
+
+
+def svg_tree_problems(text: str) -> list[str]:
+    """Rule 9 (a) on the parsed document (see SVG_ELEMENTS): what the raw-text regexes cannot see."""
+    import xml.etree.ElementTree as ET
+
+    decl = SVG_XML_DECL.match(text)
+    if "<?" in text[decl.end() if decl else 0:]:
+        return ["processing instruction"]
+    try:
+        root = ET.fromstring(text)
+    except ET.ParseError as err:
+        return [f"not well-formed XML ({err})"]
+    if root.tag != f"{{{SVG_NS}}}svg":
+        return ["root element is not an SVG-namespace <svg>"]
+    problems: list[str] = []
+    decoded: list[str] = []
+    for el in root.iter():
+        ns, _, name = el.tag[1:].partition("}") if el.tag.startswith("{") else ("", "", el.tag)
+        if ns != SVG_NS or name not in SVG_ELEMENTS:
+            problems.append(f"element not allowed {el.tag[:60]!r}")
+        decoded += [el.text or "", el.tail or ""]
+        for attr, value in el.attrib.items():
+            local = attr.rpartition("}")[2]
+            if attr.startswith("{") and attr not in SVG_NS_ATTRS:
+                problems.append(f"attribute not allowed {attr[:60]!r}")
+            if local.lower().startswith("on"):
+                problems.append(f"event handler attribute {local[:40]!r}")
+            if local == "href":
+                v = value.strip()
+                if not (v.startswith("#") or INLINE_PNG.fullmatch(v)):
+                    problems.append(f"outside reference {v[:40]!r}")
+                continue
+            if SVG_BAD_VALUE.search(value):
+                problems.append(f"active attribute value {local[:40]}={value[:40]!r}")
+            decoded.append(value)
+    problems += [f"{label} in the decoded SVG text" for label in guard_hits(" ".join(decoded))]
+    return sorted(set(problems))
 
 
 def _adr_meta(relpath: str, text: str) -> dict | None:
