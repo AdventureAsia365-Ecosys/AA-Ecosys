@@ -37,7 +37,7 @@ point 1: such a token could push `db/run_migration.py`, and the next auto-apply 
    | PR | Repo | Branch | Opened by | Merged when |
    |---|---|---|---|---|
    | Migration copy | AA-CIS-Infra | `bot/migration-copy/<owner>-<NNN>`, one file per branch | `migration-sync.yml` (slice M3) | the required checks of the Infra ruleset on `main` are green (Copy Guard, migration lint, classify, Terraform Plan, gitleaks) and the diff is exactly one new file under `db/migrations/<owner>/`, byte-identical to the owner repo's `main` |
-   | Schema dump | root | `bot/db-schema-reference` | `db-schema-dump.yml` (existing) | ADR 0017 decision 9: dispatched after an apply, opened by this run, drift fingerprint unchanged, design ERD drift green, only the generated files, every root check green (`db/schema_dump_automerge.py`) |
+   | Schema dump | root | `bot/db-schema-reference` | `db-schema-dump.yml` (existing) | ADR 0017 decision 9: dispatched after an apply, opened by this run, drift fingerprint computed in this run and unchanged, design ERD drift green, only the generated files, every root check green (`db/schema_dump_automerge.py`) |
 
    Any other PR ci-bot opens (release PRs, Docs Gen PRs) is still merged by a person or the orchestrating agent, as in
    ADR 0011 decision 4.
@@ -65,9 +65,15 @@ point 1: such a token could push `db/run_migration.py`, and the next auto-apply 
 
 - **Positive:** the copy and the dump leave the critical path of a schema change; every bot merge is limited to
   generated or byte-copied content and leaves a `aa-ecosys-ci-bot[bot]` entry on the PR timeline.
-- **Negative:** a leaked ci-bot key could open and merge a copy PR in Infra or a dump PR in root, within the checks
-  above. It still cannot push to Infra `main`, change a workflow, read a secret or dispatch the apply (no Actions
-  permission), and the apply re-verifies the copied file against the owner repo.
+- **Negative:** the merge conditions of decision 1 live in the workflows, not in GitHub. A leaked ci-bot key (repo
+  secret `AA_CI_BOT_PRIVATE_KEY`) could open and merge **any** AA-CIS-Infra PR whose required checks are green (the
+  ruleset needs 0 approvals in the dev phase), e.g. a change to `db/run_migration.py` or a `.tf` file, and the next
+  auto-apply would run that runner with the migrator's rights; the byte re-check against the owner repo covers the
+  SQL file, not the runner. It still cannot push to Infra `main` directly, change a file under `.github/workflows/`
+  (no Workflows permission), read a secret or dispatch a workflow (no Actions permission). Open point for M3 (before
+  `DB_AUTO_APPLY=true`): close this with code-owner review on every path outside `db/migrations/<owner>/` (ruleset
+  `require_code_owner_review` + a CODEOWNERS file that leaves `db/migrations/` unowned), which also changes how the
+  orchestrating agent merges its own Infra PRs (Nghiệp's bypass, or an approval), so Nghiệp decides it.
 - **Cost:** 0 USD (GitHub Free, public repos).
 
 ## Alternatives considered
