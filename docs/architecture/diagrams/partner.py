@@ -2,7 +2,7 @@
 
 Facts: apps/AA-Partner CONTEXT.md ("Role in the ecosystem", "Route classes", "Job runner", "Web", "Tenant portal",
 "LLM gateway", "F3 PII scrubber"), infra/AA-CIS-Infra CONTEXT.md (crm_edge.tf, crm_agency_edge.tf, crm_portal.tf)
-and docs/ecosystem-architecture.md sections 1, 4.1, 4.6.
+and docs/ecosystem-architecture.md sections 1, 4.1, 4.6; S3 and KMS from the live aa365 state (2026-10-28).
 """
 from diagrams import Cluster, Diagram, Edge
 from diagrams.aws.compute import ECR, Fargate
@@ -10,7 +10,8 @@ from diagrams.aws.database import RDSPostgresqlInstance
 from diagrams.aws.general import Users
 from diagrams.aws.ml import Bedrock
 from diagrams.aws.network import APIGateway, CloudFront, ElbApplicationLoadBalancer, ElbNetworkLoadBalancer
-from diagrams.aws.security import IAMRole, Cognito
+from diagrams.aws.security import IAMRole, Cognito, KMS
+from diagrams.aws.storage import S3
 from diagrams.onprem.ci import GithubActions
 from diagrams.onprem.network import Internet
 
@@ -35,6 +36,8 @@ def draw(filename: str) -> None:
             role = IAMRole("deploy role")
             ecr = ECR("ECR\nimage per git SHA")
             guard = Bedrock("Bedrock Guardrails\n(PII scrubber)")
+            files = S3("S3 crm buckets\ndocuments · ingest · audit\n(SSE-KMS)")
+            kms = KMS("KMS, 3 CMKs\ndata · ingest · seal")
             with Cluster("Shared VPC", graph_attr=VPC):
                 nlb = ElbNetworkLoadBalancer("Internal NLB\n(VPC origin)")
                 alb = ElbApplicationLoadBalancer("ALB\nhost + secret rules")
@@ -56,6 +59,8 @@ def draw(filename: str) -> None:
         web >> Edge(label="BFF") >> api
         api >> rds
         api >> Edge(style="dotted") >> guard
+        api >> files
+        files >> Edge(style="dotted") >> kms
         [web, portal] >> Edge(label="sign-in", style="dotted") >> cognito
         portal >> Edge(label="tenant JWT", style="dashed") >> cis
         api >> Edge(label="M2M token", style="dashed") >> [cis, booking]

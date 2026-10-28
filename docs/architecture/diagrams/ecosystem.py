@@ -1,6 +1,7 @@
 """Ecosystem view: the four apps, the shared platform on the infrastructure account, the LLM account (AA-697).
 
-Facts: docs/ecosystem-architecture.md sections 1, 2, 4.1-4.3, 4.6 and 5 (reviewed 2026-10-28, S255).
+Facts: docs/ecosystem-architecture.md sections 1, 2, 4.1-4.3, 4.6 and 5 (reviewed 2026-10-28, S255), cross-checked
+against the live aa365 Terraform state on 2026-10-28 (docs/audits/2026-10-28-S256-aa697-drift/).
 """
 from diagrams import Cluster, Diagram, Edge
 from diagrams.aws.compute import ECR, Fargate, Lambda
@@ -37,13 +38,13 @@ def draw(filename: str) -> None:
 
         with Cluster("AWS infrastructure account (acc2) · us-west-1", graph_attr=ACCOUNT):
             with Cluster("Edge", graph_attr=GROUP):
-                cdn = CloudFront("CloudFront\nagency hosts")
-                rest = APIGateway("API Gateway REST\nCIS · Booking (WAF)")
+                cdn = CloudFront("CloudFront\nagency hosts\n+ photos")
+                rest = APIGateway("API Gateway REST\nCIS · Booking")
                 http = APIGateway("API Gateway HTTP\nTripPlanner")
 
             with Cluster("Shared VPC", graph_attr=VPC):
                 nlb = ElbNetworkLoadBalancer("Internal NLB")
-                alb = ElbApplicationLoadBalancer("ALB")
+                alb = ElbApplicationLoadBalancer("ALB\n(regional WAF)")
                 with Cluster("ECS Fargate cluster", graph_attr=GROUP) as ecs_cluster:
                     cis = Fargate("AA-CIS-App\napi + job worker")
                     booking = Fargate("AA-Booking\napi + booking.job")
@@ -54,8 +55,8 @@ def draw(filename: str) -> None:
 
             with Cluster("Platform services", graph_attr=GROUP):
                 cognito = Cognito("Cognito\nstaff · partner\ntraveller · M2M")
-                s3 = S3("S3\nbronze · docs\nmedia · ops docs")
-                embed = Bedrock("Bedrock\nembeddings")
+                s3 = S3("S3\nbronze · docs bundle\nmedia · CRM documents")
+                embed = Bedrock("Bedrock\nembeddings\nCRM guardrail")
                 oidc = IAMRole("OIDC deploy\nroles")
                 ecr = ECR("ECR")
 
