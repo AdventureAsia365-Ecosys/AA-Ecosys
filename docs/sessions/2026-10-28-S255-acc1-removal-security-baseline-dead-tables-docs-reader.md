@@ -30,7 +30,7 @@ Số liệu cuối lấy từ `docs/audits/2026-10-28-S255-session-close/state-s
 | AA-993 G4b | crm-023 send marker (Partner #105/#107), crm_dispatch không còn chặn deploy. |
 | AA-994 | S2b kit lint mức error Partner #108 (đỏ/xanh 40651211722/40651704926); bỏ mã issue khỏi UI ở CIS/Partner/Booking/TP (#1102, #110, #136, #176). |
 | AA-665 | Cost Operations CIS #1094 (mig 293) + #1097; verify live 200. (Done-when 25/09 chưa đạt: chưa quy được trigger.) |
-| AA-898 | `/admin/docs` CIS #1100 + Infra #465 + root #302 (Docs sync 99 object); rà 98 trang (root #303: 55 sửa, 31 đúng, 12 cần quyết, 4 bản `.vi.md`); EN/VI + Mermaid + callout + quyền đọc owner Dev cho E2E: CIS #1104 (đang merge lúc chốt). |
+| AA-898 | `/admin/docs` CIS #1100 + Infra #465 + root #302 (Docs sync 99 object); rà 98 trang (root #303: 55 sửa, 31 đúng, 12 cần quyết, 4 bản `.vi.md`); EN/VI + Mermaid + callout + quyền đọc owner Dev cho E2E: CIS #1104 (`a427e40c`, deploy xong). Bằng chứng: spec `admin-evidence` pass 20:55 (trang owner-only, EN/VI, Mermaid, callout; ảnh `docs/audits/2026-10-28-S255-session-close/aa898-admin-evidence/`), spec sửa ở CIS #1105. **Done.** |
 | AA-919 | Bước D $0,216 + shadow $0,057 + sửa judge kappa −0,073 → 0,235 (#1096). |
 | AA-920 | WM-26/rule injection CIS #1099; replay 0 byte diff ×4 writer; post-activation not_applicable $0. |
 | AA-790 r8 | A/B $1,629 + panel mù: FAIL → cờ tắt, r6 live; báo cáo `docs/audits/2026-10-28-S255-aa790-r8-panel/`. |
@@ -61,13 +61,14 @@ CRM api :72 / web :40 `2556d31a` crm-023; portal :12 `a33ccf4a`.
 
 ## Jira
 
-Nháp gộp S254 + S255 ở `docs/audits/2026-10-28-S255-session-close/jira-drafts.md` (6 comment PR-22…PR-27) — chờ tech lead duyệt,
-chưa đăng.
+Nháp gộp S254 + S255 (6 comment PR-22…PR-27): tech lead duyệt, đã đăng 28/10 (comment 10515–10520, ghi trong
+`docs/audits/2026-10-28-S255-session-close/jira-drafts.md`).
 
 ## Việc cần làm đầu phiên sau (S256, theo thứ tự)
 
-1. Duyệt + đăng nháp Jira.
-2. Ship/verify CIS #1104 (EN/VI, Mermaid, owner E2E) nếu chưa xong; chạy spec admin-evidence chụp trang owner → đóng AA-898.
+1. (Xong cuối S255: Jira đã đăng, AA-898 Done.) Follow-up nhỏ: chữ trong ô Mermaid bị ngắt giữa từ (đo chữ trước khi
+   font Poppins tải xong) — chờ `document.fonts.ready` trước khi vẽ.
+2. Máy tech lead: Kaspersky split tunnel không tách được lưu lượng WSL2 → tắt VPN khi agent làm việc với Vercel.
 3. "Đóng trọn" phần còn thiếu:
    - AA-665: quy trigger vụ 25/09;
    - AA-920: WM-25 (mig 297) + nút "Check now";
