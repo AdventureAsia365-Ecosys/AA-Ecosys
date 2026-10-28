@@ -1,7 +1,7 @@
 ---
 id: FIN-03-2026-10-28-s255
 title: "FinOps refresh, security baseline quote and Cost Operations slices (S255)"
-description: "acc2 is at 176 USD for 01-27/10 but now runs at ~8.7 USD/day (~260 USD/month from November, over the 250 USD budget); acc3 LLM spend is 242 USD (forecast 310). App-tag anomaly monitors are impossible on a member account. AA-873 baseline quoted at ~16-21 USD/month (GuardDuty dominates; BPA, Access Analyzer and EventBridge alerts are free). Five Cost Operations slices for AA-665."
+description: "acc2 runs at ~8.7 USD/day (~260 USD/month from November), acc3 LLM spend 242 USD for October; AA-873 baseline quoted at ~16-21 USD/month (GuardDuty dominates); five Cost Operations slices for AA-665."
 type: report
 status: draft
 owner: nghiep
