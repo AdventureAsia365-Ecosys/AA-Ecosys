@@ -14,8 +14,8 @@ Nháp Jira không soạn ở S254: gom sang phiên kế tiếp cùng ngày (Nghi
   Booking #128 `b5b2f8f4` + #127 `de3be3c3` merged + deploy; chuỗi `chain_w9.sh` áp bk-032 (DB Migrate check
   40632088145 / apply 40632244244, root bot #294) rồi merge code lát 2 Booking #130 `d78ae200` + deploy (booking:76);
   AA-919 R2 bước C `a720cfac`: informative / completed / tune, $0,375, sạch. **Regression sau #130:**
-  `GET /catalog/trip-plans` → 503 `catalog_unavailable` → hotfix Booking #131 đang merge lúc chốt «ORCH: SHA merge #131
-  + task def + verify 200».
+  `GET /catalog/trip-plans` → 503 `catalog_unavailable` (truy vấn catalog chậm, không phải thiếu grant) → hotfix Booking
+  #131 merged `81fd84c2`, deploy booking:77, verify live 12:20 +07 → 200; **AA-996 Done**.
 
 ## Quyết định của Nghiệp (trong phiên)
 
@@ -32,9 +32,9 @@ Nháp Jira không soạn ở S254: gom sang phiên kế tiếp cùng ngày (Nghi
 
 ## Done (kèm bằng chứng)
 
-Trạng thái Linear lúc chốt: **AA-682 Done** (S254, S4 + S5 xong); **AA-996** In Progress, đóng sau khi verify hotfix
-#131 «ORCH: xác nhận Done»; **AA-997** tạo mới (Backlog, 11:25, Nghiệp đồng ý); các issue còn lại trong bảng
-(AA-993, AA-994, AA-979, AA-919, AA-995, AA-990, AA-790) vẫn In Progress «ORCH: xác nhận sau đồng bộ Linear».
+Trạng thái Linear lúc chốt (sau đồng bộ): **AA-682 Done** (S254, S4 + S5 xong) và **AA-996 Done** (S254, sau verify
+hotfix #131), cả hai kèm comment bằng chứng; **AA-997** tạo mới (Backlog, 11:25, Nghiệp đồng ý); AA-919, AA-993,
+AA-994, AA-995, AA-990, AA-979, AA-790 vẫn In Progress.
 
 | Issue | Kết quả | Bằng chứng |
 |---|---|---|
@@ -54,26 +54,35 @@ Trạng thái Linear lúc chốt: **AA-682 Done** (S254, S4 + S5 xong); **AA-996
 | Vercel | Region sfo1 cho CIS admin, Booking admin, TripPlanner (hiệu lực từ deploy kế). Retention 4 project: preview 2 tuần, production 1 tháng, canceled/errored 1 tuần (06:35). | Retention đặt xong 06:35 cho cả 4 project (checklist phiên; snapshot 11:40 không đọc lại cấu hình Vercel). |
 | H1 / H2 | AA-Partner main bắt buộc Portal Build + Web Build; AA-CIS-App main bắt buộc Frontend Lint. | Đặt xong 06:35 (checklist phiên). |
 
+## AA-996 Booking phủ đủ màn Figma (Done S254)
+
+- bk-029 (Booking #115 → Infra #447 → DB Migrate check 40545909801 / apply 40546186921, root bot #287); code #117
+  `c606f60c`; Countries (PK/TW/KG + Images) #118 `71142710`; ảnh `docs/audits/2026-10-27-S254-aa996-figma-coverage/`.
+- bk-031 (Booking #123 → Infra #457 → DB Migrate 40586339735, root bot #292); layout compact cho laptop zoom #124
+  `96c1bcf4`.
+- **Audit Figma (việc 20, làm sau cùng):** 7,3/10 (118/120 frame chụp được), 25 lệch thật của sản phẩm, 5 lát sửa —
+  `docs/audits/2026-10-28-S254-booking-figma-audit/`.
+- Lát sửa 1 + 3: Booking #125 (ảnh CIS cho Countries: cover / gallery / drawer + fallback trung tính; VN/JP/IN 0 ảnh
+  vì CIS chỉ sync Drive "CON" cho 7 nước — việc nội dung CIS) và #126 `7473755c` (DateField en-GB, thanh lọc 2 hàng,
+  Export CSV 9 danh sách, bảng hoá đơn / trip-check vừa 1440).
+- Lát 4 + 5: Booking #127 (hồ sơ chuyến / proposals / trip checks; chặn approve version rỗng 422) và #128 (hoá đơn,
+  PDF, payment, thông báo, khoá staff bắt lý do, audit-log): #128 `b5b2f8f4` + #127 `de3be3c3` merged, deploy xanh
+  (`/booking/health` git_sha `de3be3c3`).
+- Lát 2 (Supplier + ma trận giá + picker): Booking #129 (bk-032) + Infra #458 `82400b9e` → DB Migrate check
+  40632088145 / apply 40632244244 (ready=bk-032, root bot #294) → code Booking #130 `d78ae200` deploy (booking:76).
+  Regression: `GET /catalog/trip-plans` → 503 `catalog_unavailable`. Nguyên nhân gốc: truy vấn chậm, không phải thiếu
+  grant — #130 đọc `catalog.v_tour_day` theo `source_id` cho từng dòng (~1,5 s mỗi lần), vượt `command_timeout` 5 s →
+  `TimeoutError` map thành 503; stub CI quá nhỏ nên không lộ việc đọc catalog chậm.
+- Hotfix **Booking #131** merged `81fd84c2` (extras đọc một lần cho cả trang theo `tour_id`, `statement_timeout` 1 s,
+  fail-soft + log SQLSTATE): deploy aa-booking-dev-api:77 COMPLETED (= revision mới nhất), image `81fd84c2`,
+  `/booking/health` git_sha `81fd84c2`, ready bk-032. Verify live 12:20 +07: `GET /api/booking/catalog/trip-plans?limit=25`
+  → 200, trang hiển thị (sellable trước, ngày/đêm, địa điểm, giá từ), 0 lỗi console/HTTP ở 1440 và 390 — ảnh
+  `docs/audits/2026-10-27-S254-aa996-figma-coverage/final/`. **AA-996 Done** (S254, comment bằng chứng trên Linear).
+- Follow-up (S255, không chặn Done): chụp lại 8 frame thiếu bằng chứng cho điểm audit cuối; thêm perf guard
+  (EXPLAIN / đo thời gian) cho các truy vấn catalog.
+
 ## Ship, chưa đóng issue (In Progress, còn slice)
 
-- **AA-996 Booking phủ đủ màn Figma.**
-  - bk-029 (Booking #115 → Infra #447 → DB Migrate check 40545909801 / apply 40546186921, root bot #287); code #117
-    `c606f60c`; Countries (PK/TW/KG + Images) #118 `71142710`; ảnh `docs/audits/2026-10-27-S254-aa996-figma-coverage/`.
-  - bk-031 (Booking #123 → Infra #457 → DB Migrate 40586339735, root bot #292); layout compact cho laptop zoom #124
-    `96c1bcf4`.
-  - **Audit Figma (việc 20, làm sau cùng):** 7,3/10 (118/120 frame chụp được), 25 lệch thật của sản phẩm, 5 lát sửa —
-    `docs/audits/2026-10-28-S254-booking-figma-audit/`.
-  - Lát sửa 1 + 3: Booking #125 (ảnh CIS cho Countries: cover / gallery / drawer + fallback trung tính; VN/JP/IN 0 ảnh
-    vì CIS chỉ sync Drive "CON" cho 7 nước — việc nội dung CIS) và #126 `7473755c` (DateField en-GB, thanh lọc 2 hàng,
-    Export CSV 9 danh sách, bảng hoá đơn / trip-check vừa 1440).
-  - Lát 4 + 5: Booking #127 (hồ sơ chuyến / proposals / trip checks; chặn approve version rỗng 422) và #128 (hoá đơn,
-    PDF, payment, thông báo, khoá staff bắt lý do, audit-log): #128 `b5b2f8f4` + #127 `de3be3c3` merged, deploy xanh
-    (`/booking/health` git_sha `de3be3c3`).
-  - Lát 2 (Supplier + ma trận giá + picker): Booking #129 (bk-032) + Infra #458 `82400b9e` → DB Migrate check
-    40632088145 / apply 40632244244 (ready=bk-032, root bot #294) → code Booking #130 `d78ae200` deploy (booking:76).
-    Regression: `GET /catalog/trip-plans` → 503 `catalog_unavailable` (truy vấn LATERAL đọc view/cột CIS chưa grant cho
-    `booking`; stub CI che lỗi) → hotfix #131 (fail-soft + log SQLSTATE + stub khớp live) «ORCH: SHA + verify».
-  - Còn: chụp lại 8 frame thiếu bằng chứng + chấm điểm audit cuối.
 - **AA-919 Writing memory.** R2 bước C (≤ $2) `a720cfac`: informative / completed / tune, $0,375 (khớp
   `llm_call_log`), sạch. Còn: bước D (lượt R2 ≤ $10 thật) + targeted shadow run — S255.
 - **AA-990.** Luật mức tour cho chặng transit (2 tour N1) + kiểm lại sau lượt geocode retry 28–29/10.
@@ -108,14 +117,14 @@ Trạng thái Linear lúc chốt: **AA-682 Done** (S254, S4 + S5 xong); **AA-996
 Xem `docs/audits/2026-10-28-S254-session-close/state-snapshot.md` (chụp 11:40 +07). Tóm tắt:
 - ECS: cis api :877 / worker :443 (`dev-8aabaf0a`, #1089; api và worker cùng SHA), booking :76 (`d78ae200`, #130),
   crm api :69 (`c35ad2d5`), web :37 (`3d338504`), portal :10 (`8af302ee`). Cả 6 service 1/1, rollout COMPLETED, revision
-  đang chạy = revision mới nhất. Booking sau hotfix #131 «ORCH: task def + SHA».
+  đang chạy = revision mới nhất. Booking sau hotfix #131 (12:20): **:77**, `81fd84c2`, COMPLETED, ready bk-032.
 - Schema: CIS **292** (sau 291/292), Booking **bk-032**, TripPlanner **tp-020** (không đổi), CRM **crm-022** (không đổi).
 - Vercel Production: CIS admin `3e5976dc` (#1088), Booking admin `d78ae200` (#130), TripPlanner `be5cbc41` (#171);
   portal chạy Fargate (`aa-crm-dev-portal:10`), Vercel `aa-cis-portal` chỉ là đường rollback tới 03/11.
-- Bảng job: `shared.job` 0 queued/running; `booking.job`, `crm.job`, wave mở «ORCH: xác nhận — snapshot chỉ đếm
-  `shared.job`».
-- PR còn mở: chỉ release (CIS #1075, Booking #116, TP #166, Partner #103) + bot root #291; Infra 0; Booking #131 hotfix
-  đang merge «ORCH».
+- Bảng job: DB Migrate `apply` run 40632244244 (11:39 +07) ghi `booking.job`, `crm.job`, `shared.job` đều running=0
+  queued=0, `shared.rerun_wave` open=0; snapshot 11:40 `shared.job` 0 queued/running.
+- PR còn mở: chỉ release-please (CIS #1075, Booking #116, TP #166, Partner #103) + bot root #291 (docs infra sinh tự
+  động); Infra 0; hotfix Booking #131 đã merge.
 - Cố ý để BẬT cho phiên sau: `JOB_TEST_KINDS=1` trên Dev (CIS api + worker và Booking: `noop_sleep`, `bk_noop_sleep`);
   Vercel retention 4 project; H1/H2 required checks; writer S1 v2 + `s1_generate` = sonnet-5-5; `PLACE_PIPELINE_AUTO=on`;
   Writing memory release 0 active.
@@ -127,8 +136,9 @@ Xem `docs/audits/2026-10-28-S254-session-close/state-snapshot.md` (chụp 11:40 
   - AA-919 R2 seeded-fault `3a72a697`: $0,046; R2 bước C `a720cfac`: $0,375.
   - AA-993: G3 a3_atomize $0,0167; job S1 kiểm log `209d9e60` $0,0514.
   - AA-784 6 thẻ địa điểm: $0,0039.
-  - Mốc 06:10: tổng có log từ 23:00 = $1,0067 (r6b $0,894). Tổng các khoản đã biết ở trên ≈ $2,29 (AA-790 $1,80 + R2 $0,421 + AA-993 $0,068 + AA-784 $0,004); tổng cả phiên
-    theo `llm_call_log` «ORCH: $ từ `llm_call_log` 23:00 27/10 → chốt».
+  - Mốc 06:10: tổng có log từ 23:00 = $1,0067 (r6b $0,894).
+  - **Tổng cả phiên:** các khoản có log ≈ **$2,29** (AA-790 r6b + r7 $1,80, AA-919 R2 $0,046 + $0,375, AA-993 proof
+    ≈ $0,068, AA-784 $0,004) + 2 lượt S1 mất log (ước ≈ $0,10) → ≈ **$2,39**.
 - **Chi phí không có log:** 2 job S1 (17:18Z / 17:29Z, proof G2) mất dòng `llm_call_log` — đã trả tiền nhưng không đếm
   được; ước theo job `209d9e60` khoảng $0,05 mỗi job (ước, chưa verify).
 - Audit geocode và audit Figma Booking: $0 (agent đọc, không gọi geocoder / LLM trả tiền).
@@ -152,15 +162,14 @@ Chưa soạn — gom sang phiên kế tiếp cùng ngày (Nghiệp, 28/10).
 ## Việc cần làm đầu phiên sau (S255, theo thứ tự)
 
 1. **Nháp Jira S254** (gom từ phiên này) cùng nháp của S255, đưa Nghiệp duyệt một lần.
-2. **Kết AA-996:** nếu hotfix Booking #131 (503 `/catalog/trip-plans`) chưa verify live lúc chốt thì verify rồi đóng
-   AA-996 kèm bằng chứng; thêm test chạy truy vấn catalog trên DB thật (stub CI đã che lỗi grant).
+2. **AA-996 follow-up:** chụp lại 8 frame cho điểm audit cuối (audit Figma Booking); stub CI quá nhỏ nên không lộ việc
+   đọc catalog chậm — thêm perf guard (EXPLAIN / đo thời gian) cho các truy vấn catalog.
 3. **AA-997 — sửa độ chính xác geocode** theo kế hoạch `docs/audits/2026-10-28-S254-geocode-audit/` (§8); kiểm lượt
    geocode retry 28–29/10.
 4. **AA-919:** lượt R2 ≤ $10 + targeted shadow run.
 5. **AA-990:** luật mức tour cho chặng transit (Seoul–Busan, Oze–Nikko) + kiểm lại 14 tour sau lượt geocode retry
    28–29/10.
 6. **AA-790:** vòng sau qua bộ sinh angle T8.
-7. **Audit Figma Booking (sau AA-996):** chụp lại 8 frame thiếu bằng chứng + điểm audit cuối.
-8. **AA-994** S2b trở đi.
-9. **AA-993:** G4b, Phase D, Phase E thực thi (ADR 0017).
-10. **AA-979** đợt dọn từ 03/11; **rà chi phí AWS** khi phiên ≥ 01/11 (memory `infra-cost-audit-nov-2026`).
+7. **AA-994** S2b trở đi.
+8. **AA-993:** G4b, Phase D, Phase E thực thi (ADR 0017).
+9. **AA-979** đợt dọn từ 03/11; **rà chi phí AWS** khi phiên ≥ 01/11 (memory `infra-cost-audit-nov-2026`).

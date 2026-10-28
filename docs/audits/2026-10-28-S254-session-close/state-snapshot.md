@@ -1,7 +1,8 @@
 # S254: snapshot trạng thái live lúc chốt phiên (28/10/2026, 11:40 +07 = 04:40 UTC)
 
 Tác nhân: Claude Code. Mọi số dưới đây đọc từ nguồn thật lúc chốt phiên (`snapshot.sh` 11:40:05 +07, STS acc2 ok),
-không chép từ trí nhớ của phiên. Chỗ ghi «ORCH» là việc điều phối điền sau (không có trong lần chụp này).
+không chép từ trí nhớ của phiên. Phần sau 11:40 (hotfix Booking #131, bảng job Booking/CRM, Linear) do phiên điều phối
+điền từ nguồn đã kiểm (ECS, `/booking/health`, log DB Migrate run 40632244244, verify live 12:20 +07).
 
 ## AWS acc2 (STS ok)
 
@@ -9,16 +10,22 @@ không chép từ trí nhớ của phiên. Chỗ ghi «ORCH» là việc điều
 |---|---|---|---|---|---|
 | aa-cis-dev-api | :877 | COMPLETED | 1/1 | `dev-8aabaf0a` | :877 (khớp) |
 | aa-cis-dev-worker | :443 | COMPLETED | 1/1 | `dev-8aabaf0a` | :443 (khớp) |
-| aa-booking-dev-api | :76 | COMPLETED | 1/1 | `d78ae200` | :76 (khớp) |
+| aa-booking-dev-api | :76 (12:20 sau #131: **:77**, `81fd84c2`, COMPLETED) | COMPLETED | 1/1 | `d78ae200` | :76 (khớp; sau hotfix :77 khớp) |
 | aa-crm-dev-api | :69 | COMPLETED | 1/1 | `c35ad2d5` | :69 (khớp) |
 | aa-crm-dev-web | :37 | COMPLETED | 1/1 | `3d338504` | :37 (khớp) |
 | aa-crm-dev-portal | :10 | COMPLETED | 1/1 | `8af302ee` | :10 (khớp) |
 
 - CIS api và worker cùng SHA `8aabaf0a` (#1089, giữ chặng tự di chuyển trong place build) = head CIS main.
 - Booking `d78ae200` = #130 (AA-996 lát 2: Supplier + ma trận giá + picker). **#130 gây regression:**
-  `GET /catalog/trip-plans` → 503 `catalog_unavailable` (truy vấn LATERAL đọc view/cột CIS chưa grant cho role
-  `booking`; stub CI che lỗi). Hotfix **Booking #131** (fail-soft + log SQLSTATE + stub khớp live) đang merge lúc chụp:
-  SHA merge «ORCH: SHA #131», task def Booking sau deploy «ORCH: :77?», verify `/catalog/trip-plans` 200 «ORCH».
+  `GET /catalog/trip-plans` → 503 `catalog_unavailable`. Nguyên nhân gốc là **truy vấn chậm, KHÔNG phải thiếu grant**:
+  #130 đọc `catalog.v_tour_day` theo `source_id` cho từng dòng của trang, mỗi lần đọc ~1,5 s, vượt `command_timeout`
+  5 s của pool → `TimeoutError` bị map thành 503 (mọi object/cột đều đã grant trên live). Stub CI quá nhỏ nên không lộ
+  được việc đọc catalog chậm.
+- **Sau hotfix (12:20 +07):** Booking #131 merged `81fd84c2` (extras đọc một lần cho cả trang theo `tour_id`,
+  `statement_timeout` 1 s, fail-soft + log SQLSTATE), deploy **aa-booking-dev-api:77** COMPLETED (= revision mới nhất),
+  image `81fd84c2`; `/booking/health` git_sha `81fd84c2`, ready **bk-032**. Verify live 12:20 +07:
+  `GET /api/booking/catalog/trip-plans?limit=25` → 200, trang hiển thị đúng (sellable trước, ngày/đêm, địa điểm, giá từ),
+  0 lỗi console/HTTP ở 1440 và 390 — ảnh `docs/audits/2026-10-27-S254-aa996-figma-coverage/final/`.
 - CRM: api `c35ad2d5` (#101 bỏ bridge `cis-portal`, redeploy sau Infra #452: 0 biến bridge); web `3d338504` (#104
   hotfix import kit); portal `8af302ee` (#102 S2a vendor kit core). Check trên head Partner main `3d338504` xanh hết,
   gồm "Vendored CIS copies", Portal Build, Web Build, Post-deploy verify.
@@ -28,7 +35,7 @@ không chép từ trí nhớ của phiên. Chỗ ghi «ORCH» là việc điều
 | App | `/health` | `/health/ready` |
 |---|---|---|
 | CIS | ok, 0.12.0, git_sha `8aabaf0a` | ok, db ok, `schema_version` **292** (required 287) |
-| Booking | ok, 0.8.0, git_sha `d78ae200` | ok, db ok, schema **bk-032** |
+| Booking | ok, 0.8.0, git_sha `d78ae200` (12:20 sau #131: `81fd84c2`) | ok, db ok, schema **bk-032** |
 | CRM (partner-dev) | ok, 0.6.0, git_sha `c35ad2d5` | ok, db ok, schema **crm-022**, membership_feed ok, keys kms |
 | TripPlanner | ok, 0.9.0, git_sha `be5cbc41` (#171) | — |
 
@@ -53,20 +60,28 @@ DB Migrate check 40632088145 / apply 40632244244, root bot #294); CIS 291/292 (A
 ## Bảng job và wave
 
 - `shared.job`: **0** queued/running (`BUSY 0 []`, 11:40).
-- `booking.job`, `crm.job`, wave mở: «ORCH: xác nhận — snapshot 11:40 chỉ đếm `shared.job`».
+- DB Migrate `apply` run 40632244244 (11:39 +07) ghi: `booking.job` running=0 queued=0, `crm.job` running=0 queued=0,
+  `shared.job` running=0 queued=0, `shared.rerun_wave` open=0.
 
 ## Repo (head nhánh mặc định; PR còn mở)
 
 | Repo | Head | PR mở |
 |---|---|---|
 | AA-CIS-App | `8aabaf0a` (#1089) | #1075 (release) |
-| AA-Booking | `d78ae200` (#130) | #116 (release); #131 hotfix đang merge «ORCH» |
+| AA-Booking | `81fd84c2` (#131 hotfix, sau 11:40) | #116 (release) |
 | AA-TripPlanner-Web | `be5cbc41` (#171) | #166 (release) |
 | AA-Partner | `3d338504` (#104) | #103 (release) |
 | AA-CIS-Infra | `82400b9e` (#458, copy bk-032) | 0 |
 | AA-Ecosys (gốc) | `a3888057` (#294) | #291 (bot infra docs); root PR S254 mở lúc chốt |
 
-Chỉ còn PR release / bot; mọi PR code của phiên đã merge (trừ #131 đang merge).
+PR mở lúc chốt: chỉ release-please (CIS #1075, Booking #116, TP #166, Partner #103) + bot root #291 (docs infra sinh
+tự động); mọi PR code của phiên đã merge, kể cả hotfix Booking #131.
+
+## Linear (sau đồng bộ)
+
+- **Done S254** (kèm comment bằng chứng): AA-682, AA-996.
+- Tạo mới: AA-997 (Backlog).
+- Vẫn In Progress: AA-919, AA-993, AA-994, AA-995, AA-990, AA-979, AA-790.
 
 ## Cố ý để BẬT cho phiên sau
 
