@@ -191,8 +191,11 @@ nothing to flag, but the rows were stale); the three TripPlanner Lambda `pending
 8. **Terraform state still holds values**: `random_password.tripplanner_api_key` (by design: the
    secret is the source of truth) and the Cognito app client secrets. The ops-probe admin secret
    left state with I1.
-9. **acc1 / acc3 secrets** (`pqnghiep-admin`, `nghiep_aa365`): not inventoried yet. The main session
-   lists their names (M0 d) and adds rows; AA-517 cleaned 20 strays from acc1 on 02/09.
+9. **acc3 secrets** (`nghiep_aa365`): not inventoried yet. The main session lists their names (M0 d) and adds
+   rows. acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998): the re-inventory after
+   the clean-up found 0 Secrets Manager secrets in us-west-1. The us-east-1 tag listing of the same inventory still
+   showed one old secret `aa/dev/db_credentials` (pre-acc2 stack), outside the us-west-1 clean-up; the tech lead
+   deletes it after a DRY RUN. No ecosystem secret may be created there.
 10. **CI apply role reads every secret** (S245 access review F-7): `aa-cis-infra-tf-apply` carries the AWS
     managed policy `SecretsManagerReadWrite` and its boundary does not limit `secretsmanager`, so any AA-CIS-Infra
     workflow on `main` in env `prod` can read (and write) the RDS master, `aa-cis/dev/db-migrator`, `booking/*`,

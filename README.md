@@ -20,7 +20,7 @@ AA-Ecosys/                      (this repo, public since 22/10/2026 — ADR 0014
 │   ├── AA-Booking/             booking back office: FastAPI api + booking.job worker (ECS), staff admin (Vercel)
 │   └── AA-Partner/             partner agencies: CRM api + web (ECS), tenant portal / Content studio (Vercel)
 ├── infra/
-│   └── AA-CIS-Infra/           Terraform (acc2 live stack, acc1/acc3 Bedrock roots), DB Migrate, schema dump
+│   └── AA-CIS-Infra/           Terraform (acc2 live stack, acc3 Bedrock root), DB Migrate, schema dump
 ├── docs/                       ecosystem docs, ADRs, data standards, contracts, ops, sessions, audits
 │   └── archive/                retired one-off pages and scripts (kept for history, not current truth)
 ├── skill/                      runbooks and skills shared by Kiro and Claude Code
@@ -40,7 +40,7 @@ owner. Dev only for now; a future prod also lives on acc2 by default (ADR 0001, 
 | `apps/AA-TripPlanner-Web` | `AdventureAsia365-Ecosys/AA-TripPlanner-Web` | Vercel (frontend); Lambdas via `deploy-lambdas.yml` |
 | `apps/AA-Booking` | `AdventureAsia365-Ecosys/AA-Booking` | ECS Fargate (`aa-booking-dev-api`, same cluster) via `Deploy Dev`; Vercel (staff admin); live `/booking/health` since S235 |
 | `apps/AA-Partner` | `AdventureAsia365-Ecosys/AA-Partner` | ECS Fargate ARM64 (`aa-crm-dev-api` via `Deploy Dev`, `aa-crm-dev-web` via `Deploy Web Dev`, same cluster); Vercel `aa-cis-portal` (tenant portal, `portal.lumiguides.it.com`) via `Vercel Deploy (portal)` since AA-979 |
-| `infra/AA-CIS-Infra` | `AdventureAsia365-Ecosys/AA-CIS-Infra` | `Terraform Apply Prod` (acc2 stack, manual dispatch); acc1/acc3 by a human with MFA; `DB Migrate` for every app's migrations; `DB Schema Dump` regenerates the schema reference |
+| `infra/AA-CIS-Infra` | `AdventureAsia365-Ecosys/AA-CIS-Infra` | `Terraform Apply Prod` (acc2 stack, manual dispatch); acc3 by a human with MFA; `DB Migrate` for every app's migrations; `DB Schema Dump` regenerates the schema reference |
 
 Each repo's `CONTEXT.md` is the source of truth for its stack, boundaries and ownership; read it before
 designing a change there.

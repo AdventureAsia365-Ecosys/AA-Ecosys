@@ -134,11 +134,6 @@
   "total_usd": 178
  },
  "llm_satellites": {
-  "acc1": {
-   "account_id": "<acc1>",
-   "ce_bedrock_usd": 1.0,
-   "llm_log_estimate_usd": 0.9
-  },
   "acc3": {
    "account_id": "<acc3>",
    "ce_bedrock_usd": 18,

@@ -5,12 +5,13 @@
 | Vai trò | Account | Region | Profile |
 |---|---|---|---|
 | App chính: ECS, RDS, S3, Lambda, API Gateway, Cognito, mọi DB query | 005097885195 (acc2) | us-west-1 | `aa365-admin` (MFA, chỉ Nghiệp) |
-| Bedrock satellite chính | 786888028788 (acc3) | us-west-1 | `nghiep_aa365` |
-| Bedrock satellite fallback | 867490540162 (acc1) | us-west-1 | `pqnghiep-admin` |
+| Bedrock satellite (duy nhất) | 786888028788 (acc3) | us-west-1 | `nghiep_aa365` |
 
 - Cả bốn app (CIS, TripPlanner, Booking, Partner) chạy trên acc2; prod sau này cũng ở acc2, không account mới.
 - Các account AAA cũ của Quanskill (ap-southeast-1) không thuộc hệ sinh thái — không deploy ở đó.
-- acc1 vẫn ACTIVE, giữ có chủ đích làm Bedrock satellite (role `AA-Bedrock-Invoker`); không tạo compute mới ở đó.
+- acc1 (867490540162, profile `pqnghiep-admin`) là tài khoản CÁ NHÂN của Nghiệp, **đã gỡ khỏi hệ sinh thái** (AA-998,
+  S255, ADR 0001a): không tạo resource, không deploy, không ghi secret, không route LLM vào đó; không thêm lại acc1 vào
+  code, Terraform hay catalog model. Trước đây nó là Bedrock satellite fallback (role `AA-Bedrock-Invoker`, AA-296).
 - Profile `default` = acc2 (cùng role với `aa365-admin`). Trước khi tạo tài nguyên: `aws sts get-caller-identity --profile <profile>`.
 - Bucket script/runner: `aa-cis-bronze-005097885195`.
 - Repo gốc và Infra đang public (ADR 0014 amendment): không ghi ARN, SG/VPC ID, inventory hay giá trị secret vào repo
@@ -34,7 +35,9 @@
 
 ## LLM routing
 
-Gateway định tuyến theo stage (`shared.llm_role_config`): acc3-first, fallback acc1, rồi model ngoài (OpenAI API).
+Gateway định tuyến theo stage (`shared.llm_role_config`): model Bedrock chat chạy trên acc3 (satellite duy nhất),
+embed native acc2 giữ như hiện tại; fallback chỉ trong cùng account (model khác trên acc3) hoặc job retry, rồi model
+ngoài (OpenAI API) nếu stage có. Không còn fallback chéo account (AA-998, Nghiệp chấp nhận mất đường dự phòng acc1).
 Vendor rule: stage **writer** chạy Anthropic, stage **judge** chạy vendor khác (không tự chấm văn của hãng mình);
 stage **validate** (trích xuất / kiểm mà judge không chấm) được dùng bất kỳ model nào trong catalog (CIS ADR 0008).
 Đọc route thật trong DB, không ghi model vào skill (đổi theo A/B). Script adhoc gọi LLM phải qua `LLMClient` và ghi

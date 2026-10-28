@@ -29,8 +29,7 @@ Tags: App and Environment (DM-10.1); untagged spend is a finding. Delete this co
 | Account | This month (USD) | Last month (USD) | Change | Note |
 |---|---|---|---|---|
 | acc2 (infra) | | | | |
-| acc3 (LLM main) | | | | |
-| acc1 (LLM fallback) | | | | |
+| acc3 (LLM satellite) | | | | |
 
 ## By app (tag `App`)
 
