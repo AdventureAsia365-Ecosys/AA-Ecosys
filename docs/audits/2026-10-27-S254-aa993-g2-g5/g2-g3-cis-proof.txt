@@ -1,0 +1,14 @@
+S1 succeeded ec5dc9d0-ad18-4ebc-b6db-95e445937eff 17:32:58
+A3 a83fa22d-3f22-47df-92a8-e637895cbd6e running
+RUNNING
+stopped 17:33:19
+JOB {'status': 'succeeded', 'attempt': 1, 'started_at': datetime.datetime(2026, 10, 27, 17, 29, 19, 667098, tzinfo=datetime.timezone.utc), 'finished_at': datetime.datetime(2026, 10, 27, 17, 32, 38, 755302, tzinfo=datetime.timezone.utc), 'stage': 'accounted', 'resumed_from': 'writer_done', 'phase': 'done', 'version': 'ec5dc9d0-ad18-4ebc-b6db-95e445937eff', 'releases': '[{"at": "2026-10-27T17:31:04.559391+00:00", "worker": "ip-10-2-11-101.us-west-1.compute.internal:1:3b3cb8", "counted": true}]', 'writer_cleared': True, 'result_cleared': True, 'error': None}
+GC 1
+QS 1
+RQ 0
+A3 [{'id': UUID('a83fa22d-3f22-47df-92a8-e637895cbd6e'), 'status': 'succeeded', 'started_at': datetime.datetime(2026, 10, 27, 17, 32, 42, 83756, tzinfo=datetime.timezone.utc)}]
+JOB {'status': 'succeeded', 'attempt': '1', 'started_at': '2026-10-27 17:32:42.083756+00:00', 'finished_at': '2026-10-27 17:38:28.092419+00:00', 'run_after': '2026-10-27 17:37:01.677660+00:00', 'rl': '[{"at": "2026-10-27T17:35:01.67766+00:00", "worker": "ip-10-2-11-164.us-west-1.compute.internal:1:5bf043", "counted": true}]', 'atom': '{"status": "success", "days_read": 10, "atom_count": 29, "days_total": 28, "orphan_atoms_deleted": 0}'}
+CALLS 116
+  17:37:08 day None att None gap 116s
+DUP_FP []
+COST 0.0167
