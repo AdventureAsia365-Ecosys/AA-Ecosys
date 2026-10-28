@@ -7,8 +7,9 @@ name: Docs sync
 # account / VPC / user-pool / API Gateway IDs redacted; a guard fails the build when one is left). Then, on master only:
 #
 #   s3://<bronze>/docs-reader/pages/...      aws s3 sync (new and changed pages first)
-#   s3://<bronze>/docs-reader/manifest.json  aws s3 cp (after the pages, so it never lists a page not uploaded yet)
-#   s3://<bronze>/docs-reader/pages/...      aws s3 sync --delete (pages dropped from the manifest go last)
+#   s3://<bronze>/docs-reader/assets/...     aws s3 sync, image/svg+xml (AA-697 rule 9: checked SVG diagrams)
+#   s3://<bronze>/docs-reader/manifest.json  aws s3 cp (after pages and assets, so it never lists one not uploaded yet)
+#   s3://<bronze>/docs-reader/{pages,assets}/... aws s3 sync --delete (objects dropped from the manifest go last)
 #
 # The CIS api reads those objects (cached 5 min), so a merged docs change shows up within minutes, with no Vercel or
 # ECS deploy. On a pull request the job only builds and checks (no AWS, no secret).
@@ -89,6 +90,7 @@ jobs:
           print("### Docs reader bundle")
           print(f"- {c['published']} pages published ({c['owner_only']} owner only), {c['skipped']} not published")
           print(f"- {sum(p['redactions'] for p in m['pages'])} values redacted")
+          print(f"- {c.get('assets', 0)} SVG assets (rule 9)")
           print(f"- source `{m['source']['sha'][:12]}`")
           PY
 
@@ -114,7 +116,14 @@ jobs:
           # Only this repo's subtree: --delete never reaches pages/<other repo>/ if a second source is added later.
           src_pages="$OUT/pages/AA-Ecosys"
           dest_pages="$dest/pages/AA-Ecosys"
+          # AA-697 rule 9: SVG diagrams, already checked by the builder (no script, no outside reference, no ID).
+          # The folder exists even with no SVG so --delete can empty the prefix.
+          src_assets="$OUT/assets/AA-Ecosys"
+          dest_assets="$dest/assets/AA-Ecosys"
+          mkdir -p "$src_assets"
           aws s3 sync "$src_pages" "$dest_pages" --only-show-errors --content-type "text/markdown; charset=utf-8"
+          aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --exclude "*" --include "*.svg" --content-type "image/svg+xml"
           aws s3 cp "$OUT/manifest.json" "$dest/manifest.json" --only-show-errors --content-type "application/json"
           aws s3 sync "$src_pages" "$dest_pages" --only-show-errors --delete --content-type "text/markdown; charset=utf-8"
-          echo "uploaded $(find "$OUT/pages" -type f | wc -l) pages and the manifest" >> "$GITHUB_STEP_SUMMARY"
+          aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --delete --exclude "*" --include "*.svg" --content-type "image/svg+xml"
+          echo "uploaded $(find "$OUT/pages" -type f | wc -l) pages, $(find "$src_assets" -type f | wc -l) SVG assets and the manifest" >> "$GITHUB_STEP_SUMMARY"

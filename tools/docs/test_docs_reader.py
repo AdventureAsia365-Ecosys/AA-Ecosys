@@ -212,5 +212,102 @@ class Redaction(TreeCase):
                          [])
 
 
+# A 1x1 PNG, base64 (rule 9 fixtures). Its payload contains a 12-digit run on purpose: digits inside an inline PNG are
+# not text and must never trip the account-ID guard.
+PNG_URI = ("data:image/png;base64,iVBORw0KGgo000000000000AAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwAD"
+           "hgGAWjR9awAAAABJRU5ErkJggg==")
+
+
+def _svg(inner: str = "", head: str = '<?xml version="1.0" encoding="UTF-8"?>\n') -> str:
+    return (f'{head}<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
+            f'width="10" height="10"><g id="a"><text>Diagram</text>'
+            f'<image xlink:href="{PNG_URI}" width="1" height="1"/>{inner}</g></svg>\n')
+
+
+class SvgAssets(TreeCase):
+    def test_svg_published_byte_for_byte_and_listed(self):
+        svg = _svg('<use href="#a"/>')
+        self.write("docs/architecture/diagrams/x.svg", svg)
+        self.write("docs/x.md", _page("OPS-01", body="![Diagram](architecture/diagrams/x.svg)\n"))
+        m = self.build()
+        self.assertEqual(m["counts"]["assets"], 1)
+        (asset,) = m["assets"]
+        self.assertEqual(asset["key"], "assets/AA-Ecosys/docs/architecture/diagrams/x.svg")
+        self.assertEqual(asset["type"], "image/svg+xml")
+        self.assertEqual(asset["access"], "staff")
+        self.assertEqual((self.out / asset["key"]).read_text(encoding="utf-8"), svg, "never redacted or rewritten")
+        self.assertEqual(asset["bytes"], len(svg.encode("utf-8")))
+
+    def test_never_folders_and_other_files_are_not_assets(self):
+        self.write("docs/audits/x/a.svg", _svg())
+        self.write("docs/security/b.svg", _svg())
+        self.write("docs/x.png", "not an svg")
+        self.write("docs/x.md", _page("OPS-01"))
+        m = self.build()
+        self.assertEqual(m["assets"], [])
+
+    def test_oversize_svg_is_skipped(self):
+        self.write("docs/big.svg", _svg("<!--" + "x" * (b.MAX_ASSET_BYTES + 1) + "-->"))
+        self.write("docs/x.md", _page("OPS-01"))
+        self.assertEqual(self.build()["assets"], [])
+
+    def test_unsafe_svgs_fail_the_build(self):
+        bad = {
+            "script": _svg("<script>alert(1)</script>"),
+            "foreign": _svg("<foreignObject><div>x</div></foreignObject>"),
+            "handler": _svg('<rect onload="x()"/>'),
+            "js-url": _svg('<a href="javascript:x()"><text>x</text></a>'),
+            "remote-image": _svg('<image href="https://example.com/x.png"/>'),
+            "file-image": _svg('<image xlink:href="/home/someone/icon.png"/>'),
+            "css-url": _svg('<style>g{fill:url(https://example.com/x)}</style>'),
+            "import": _svg("<style>@import 'x.css';</style>"),
+            "entity": _svg(head='<?xml version="1.0"?>\n<!DOCTYPE svg [<!ENTITY x "y">]>\n'),
+            "animate": _svg('<animate attributeName="href" to="javascript:x()"/>'),
+            "account": _svg(f"<text>role in {FAKE_ACCOUNT}</text>"),
+            "not-svg": "<html><body>x</body></html>",
+        }
+        for name, text in bad.items():
+            with self.subTest(name):
+                problems = b.svg_problems(text)
+                self.assertTrue(problems, f"{name} should be refused")
+        self.write("docs/x.md", _page("OPS-01"))
+        self.write("docs/bad.svg", bad["script"])
+        with self.assertRaises(SystemExit):
+            self.build()
+        self.assertFalse((self.out / "manifest.json").exists(), "nothing is written when an SVG is refused")
+
+    def test_prefix_and_char_reference_bypasses_are_refused(self):
+        """The parsed check (svg_tree_problems) catches what the raw-text regexes miss."""
+        xhtml = 'xmlns:h="http://www.w3.org/1999/xhtml"'
+        bad = {
+            "svg-prefixed script": _svg('<s:script xmlns:s="http://www.w3.org/2000/svg">x()</s:script>'),
+            "xhtml script": _svg(f'<h:script {xhtml}>x()</h:script>'),
+            "xhtml iframe": _svg(f'<h:iframe {xhtml} src="https://example.com/"/>'),
+            "prefixed set": _svg('<s:set xmlns:s="http://www.w3.org/2000/svg" attributeName="href" to="#a"/>'),
+            "prefixed xlink use": _svg('<use xmlns:x="http://www.w3.org/1999/xlink" x:href="https://e.example/a#p"/>'),
+            "char-ref url()": _svg('<rect style="fill:u&#114;l(https://example.com/x)"/>'),
+            "char-ref @import": _svg("<style>&#64;import 'x.css';</style>"),
+            "css escape": _svg("<style>g{fill:u\\72l(https://example.com/x)}</style>"),
+            "xml-stylesheet": _svg('<?xml-stylesheet type="text/css" href="#a"?>'),
+            "xml:base": _svg('<g xml:base="https://example.com/"/>'),
+            "char-ref account": _svg(f"<text>{FAKE_ACCOUNT[:5]}&#{ord(FAKE_ACCOUNT[5])};{FAKE_ACCOUNT[6:]}</text>"),
+        }
+        for name, text in bad.items():
+            with self.subTest(name):
+                self.assertTrue(b.svg_problems(text), f"{name} should be refused")
+
+    def test_digits_inside_inline_png_are_not_an_account_id(self):
+        self.assertEqual(b.svg_problems(_svg('<use href="#a"/>')), [])
+
+    def test_committed_diagrams_pass(self):
+        """The real architecture diagrams (AA-697) are publishable as committed."""
+        here = Path(__file__).resolve().parents[2] / "docs" / "architecture" / "diagrams"
+        svgs = sorted(here.glob("*.svg"))
+        self.assertTrue(svgs, "the diagram SVGs are committed")
+        for svg in svgs:
+            with self.subTest(svg.name):
+                self.assertEqual(b.svg_problems(svg.read_text(encoding="utf-8")), [])
+
+
 if __name__ == "__main__":
     unittest.main()
