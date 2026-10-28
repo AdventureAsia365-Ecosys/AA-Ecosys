@@ -1,6 +1,8 @@
 # ADR 0011 — GitHub App identity for agents and bots, and merge rights per risk tier
 
 - **Status:** Proposed (2026-10-22, S247). The tech lead accepts after the Apps exist and the test PR passes (AA-901).
+  Amended by [0011a](0011a-ci-bot-merges-copy-and-dump-prs.md) (Proposed, S255): ci-bot may merge migration-copy PRs in
+  AA-CIS-Infra and schema-dump PRs in the root repo.
 - **Scope:** AA-Ecosys: all five repos of org AdventureAsia365-Ecosys (AA-Ecosys, AA-CIS-App, AA-Booking,
   AA-TripPlanner-Web, AA-CIS-Infra); agent sessions (Claude Code, Kiro); CI workflows that write to another repo or open
   release PRs.
