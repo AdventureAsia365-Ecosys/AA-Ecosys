@@ -1,4 +1,4 @@
-# Nháp Jira S254 + S255 (28/10/2026) — chờ duyệt, CHƯA đăng
+# Nháp Jira S254 + S255 (28/10/2026) — đã duyệt và đăng 28/10
 
 Gom nháp của S254 (tech lead chốt 10:40: gộp sang phiên sau cùng ngày) và S255. Một comment cho mỗi epic, đứng tên tech
 lead, tag @thule bằng mention node khi đăng. Số liệu lấy trong ngày 28/10/2026 (giờ ghi trong log phiên S255).
@@ -74,4 +74,13 @@ lead, tag @thule bằng mention node khi đăng. Số liệu lấy trong ngày 2
 
 ## Kết quả đăng
 
-(điền sau khi tech lead duyệt: link từng comment hoặc "chưa đăng: lý do")
+Tech lead duyệt 28/10 ~20:50; đăng nguyên văn, tag @thule bằng mention node:
+
+| Epic | Comment id | Link |
+|---|---|---|
+| PR-22 | 10515 | https://adventure-asia.atlassian.net/browse/PR-22?focusedCommentId=10515 |
+| PR-23 | 10516 | https://adventure-asia.atlassian.net/browse/PR-23?focusedCommentId=10516 |
+| PR-24 | 10517 | https://adventure-asia.atlassian.net/browse/PR-24?focusedCommentId=10517 |
+| PR-25 | 10518 | https://adventure-asia.atlassian.net/browse/PR-25?focusedCommentId=10518 |
+| PR-26 | 10519 | https://adventure-asia.atlassian.net/browse/PR-26?focusedCommentId=10519 |
+| PR-27 | 10520 | https://adventure-asia.atlassian.net/browse/PR-27?focusedCommentId=10520 |
