@@ -259,7 +259,7 @@ two kinds of PR; every other PR it opens is merged by a person or the orchestrat
 | Migration copy `bot/migration-copy/<owner>-<NNN>` | AA-CIS-Infra | `migration-sync.yml` (AA-993 M3, not built yet) | AA-CIS-Infra only, Contents + Pull requests write |
 
 - No App is a bypass actor of the AA-CIS-Infra ruleset on `main` (`tools/github/infra-main-ruleset.json`, applied by
-  `tools/github/db_auto_apply_gate.sh` with Nghiệp's login): ci-bot reaches `main` only by merging a PR whose required
+  `tools/github/db_auto_apply_gate.sh` with the tech lead's login): ci-bot reaches `main` only by merging a PR whose required
   checks are green.
 - No app repo workflow mints a token for another repo.
 - Check: `gh pr view <n> --repo <repo> --json mergedBy --jq .mergedBy.login` shows `app/aa-ecosys-ci-bot`.

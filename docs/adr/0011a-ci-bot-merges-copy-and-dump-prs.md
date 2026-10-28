@@ -49,7 +49,7 @@ point 1: such a token could push `db/run_migration.py`, and the next auto-apply 
    `main` anonymously (set difference of migration files) and never trusts a payload from an app. There is no
    `repository_dispatch` from the apps.
 4. **ci-bot cannot push to AA-CIS-Infra `main`.** The ruleset on `main` (AA-CIS-Infra
-   `tools/github/infra-main-ruleset.json`, applied with Nghiệp's login by `tools/github/db_auto_apply_gate.sh`)
+   `tools/github/infra-main-ruleset.json`, applied with the tech lead's login by `tools/github/db_auto_apply_gate.sh`)
    requires a PR and green checks for every actor; ci-bot is not a bypass actor. Its merge of a copy PR is the only way
    its write reaches `main`, and the auto-apply re-checks the bytes against the owner repo and re-classifies the file
    before it runs it (ADR 0017 decision 5).
@@ -73,7 +73,7 @@ point 1: such a token could push `db/run_migration.py`, and the next auto-apply 
   (no Workflows permission), read a secret or dispatch a workflow (no Actions permission). Open point for M3 (before
   `DB_AUTO_APPLY=true`): close this with code-owner review on every path outside `db/migrations/<owner>/` (ruleset
   `require_code_owner_review` + a CODEOWNERS file that leaves `db/migrations/` unowned), which also changes how the
-  orchestrating agent merges its own Infra PRs (Nghiệp's bypass, or an approval), so Nghiệp decides it.
+  orchestrating agent merges its own Infra PRs (the tech lead's bypass, or an approval), so the tech lead decides it.
 - **Cost:** 0 USD (GitHub Free, public repos).
 
 ## Alternatives considered
