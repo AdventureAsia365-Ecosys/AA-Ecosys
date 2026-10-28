@@ -36,11 +36,11 @@ def draw(filename: str) -> None:
 
         with Cluster("AWS infrastructure account (acc2) · us-west-1", graph_attr=ACCOUNT):
             cognito = Cognito("Cognito WORKFORCE\nstaff sign-in")
-            rest = APIGateway("REST API api-cis\n(WAF, VPC link)")
+            rest = APIGateway("REST API api-cis\n(VPC link)")
             role = IAMRole("deploy role")
             ecr = ECR("ECR\nimage per git SHA")
             with Cluster("VPC", graph_attr=VPC):
-                alb = ElbApplicationLoadBalancer("NLB → ALB")
+                alb = ElbApplicationLoadBalancer("NLB → ALB\n(regional WAF)")
                 with Cluster("ECS Fargate · one image", graph_attr=GROUP):
                     api = Fargate("aa-cis-dev-api\nadmin API · /v1 studio API\nModel Gateway")
                     worker = Fargate("aa-cis-dev-worker\nshared.job runner\nA-series · T-series jobs")

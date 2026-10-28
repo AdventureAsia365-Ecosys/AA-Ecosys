@@ -35,7 +35,10 @@ LLM account (acc3). Source: [`ecosystem.py`](ecosystem.py).
 ## AA-CIS-Infra
 
 What the two Terraform roots create: edge and DNS, the VPC with the ECS cluster, Lambdas, RDS and Valkey, data and
-identity services, operations, and the acc3 roles. Source: [`infra.py`](infra.py).
+identity services, operations, and the acc3 roles. Source: [`infra.py`](infra.py). Cross-checked on 2026-10-28 against
+the live `accounts/aa365` state (a no-refresh plan reported no changes) with TerraVision 0.56.0: every service group in
+the state has a node and no node draws something that does not exist. The drift table and how to repeat the check are in
+the root audit folder `docs/audits/2026-10-28-S256-aa697-drift/`.
 
 ![AA-CIS-Infra Terraform roots and the Dev platform](infra.svg)
 
@@ -92,8 +95,22 @@ The docs reader publishes each SVG byte for byte only when it passes rule 9 of
 outside reference, and no account or resource ID in its text. `python3 render.py --check` runs the same check on the
 committed files; the docs lint unit tests run it in CI.
 
+## Check a view against Terraform
+
+Repeat the drift check after an infrastructure change that adds or removes a service:
+
+1. In an AA-CIS-Infra checkout of `main`, with read-only credentials, run
+   `terraform plan -lock=false -refresh=false -out=<plan>` in `accounts/aa365`. "No changes" means the code and the
+   state agree, so the plan lists what exists.
+2. `terraform show -json <plan>` and `terraform graph -plan=<plan>`, then
+   `terravision graphdata --planfile <plan.json> --graphfile <graph.dot> --source accounts/aa365 --show_services`.
+   TerraVision skips a few types (RDS instance, ElastiCache, SQS, EC2), so also list the managed resource types of the
+   plan JSON.
+3. Compare with the nodes of the views, fix the `.py` sources, render, and commit. Keep the plan, the JSON and any
+   TerraVision image out of the repo: they hold account IDs and, for `show -json`, sensitive values.
+
+Each repo's `CONTEXT.md` links this page.
+
 ## Not covered yet
 
-- A drift check of [AA-CIS-Infra](infra.svg) against Terraform (TerraVision or the generated inventory).
 - Inline Mermaid `architecture-beta` diagrams with an AWS icon pack in the docs reader.
-- Links from each repo's `CONTEXT.md` to its view.

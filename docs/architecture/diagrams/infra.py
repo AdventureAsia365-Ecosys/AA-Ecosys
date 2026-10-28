@@ -1,20 +1,20 @@
 """AA-CIS-Infra view: what the two Terraform roots create and how traffic reaches the workloads (AA-697).
 
 Facts: infra/AA-CIS-Infra CONTEXT.md ("Account model", "Main stack modules", "CI/CD and OIDC") and
-docs/ecosystem-architecture.md sections 4.2-4.4 and 5. Names only; IDs come from Terraform outputs.
+docs/ecosystem-architecture.md sections 4.2-4.4 and 5, cross-checked against the live aa365 state on 2026-10-28
+(TerraVision + a no-refresh plan, docs/audits/2026-10-28-S256-aa697-drift/). Names only; IDs come from Terraform outputs.
 """
 from diagrams import Cluster, Diagram, Edge
-from diagrams.aws.compute import ECR, ElasticContainerServiceService, ElasticContainerServiceTask, Lambda
+from diagrams.aws.compute import EC2, ECR, ElasticContainerServiceService, ElasticContainerServiceTask, Lambda
 from diagrams.aws.database import ElastiCache, RDSPostgresqlInstance
 from diagrams.aws.engagement import SES
-from diagrams.aws.integration import EventbridgeScheduler, SNS
-from diagrams.aws.management import Cloudwatch
+from diagrams.aws.integration import Eventbridge, EventbridgeScheduler, SNS
+from diagrams.aws.management import Cloudtrail, Cloudwatch
 from diagrams.aws.ml import Bedrock
-from diagrams.aws.network import (APIGateway, CloudFront, ElbApplicationLoadBalancer, ElbNetworkLoadBalancer,
-                                  NATGateway, Route53)
+from diagrams.aws.network import APIGateway, CloudFront, ElbApplicationLoadBalancer, ElbNetworkLoadBalancer, Route53
 from diagrams.aws.security import IAMRole, Cognito, KMS, SecretsManager, WAF
 from diagrams.aws.cost import Budgets, CostExplorer
-from diagrams.aws.storage import S3
+from diagrams.aws.storage import EFS, S3
 from diagrams.onprem.ci import GithubActions
 from diagrams.onprem.iac import Terraform
 from diagrams.onprem.network import Internet
@@ -37,36 +37,42 @@ def draw(filename: str) -> None:
 
             with Cluster("DNS and edge", graph_attr=GROUP):
                 dns = Route53("Route 53\npublic + private zones")
-                waf = WAF("Regional WAF")
+                waf = WAF("Regional WAF\non the ALB")
                 rest = APIGateway("REST APIs\nCIS · Booking")
                 http = APIGateway("HTTP API\nTripPlanner")
-                cdn = CloudFront("CloudFront\npartner · agency · client")
+                cdn = CloudFront("CloudFront\npartner · agency · client\n+ photos (S3 origin)")
 
             with Cluster("VPC", graph_attr=VPC):
-                nat = NATGateway("NAT gateway")
+                nat = EC2("NAT instance\nt4g.nano + Elastic IP")
                 nlb = ElbNetworkLoadBalancer("Internal NLB\nVPC link + VPC origin")
                 alb = ElbApplicationLoadBalancer("ALB\n(reachable from the NLB only)")
-                with Cluster("ECS cluster aa-cis-dev-cluster", graph_attr=GROUP) as ecs:
+                with Cluster("ECS cluster aa-cis-dev-cluster (Fargate + Spot)", graph_attr=GROUP) as ecs:
                     svc_cis = ElasticContainerServiceService("CIS api + worker")
-                    svc_bk = ElasticContainerServiceService("Booking api")
+                    svc_bk = ElasticContainerServiceService("Booking api\n+ booking.job")
                     svc_crm = ElasticContainerServiceService("CRM api · web · portal")
                     migrate = ElasticContainerServiceTask("one-off task\nDB Migrate")
-                lambdas = Lambda("Lambdas\nTripPlanner + ops probe")
+                lambdas = Lambda("Lambdas in the VPC\nTripPlanner browse · assembly\nDFS balance probe")
                 rds = RDSPostgresqlInstance("RDS Postgres 15\ndeletion protection")
-                cache = ElastiCache("Valkey\nTLS + AUTH")
+                cache = ElastiCache("Valkey 8\nTLS + AUTH")
+                efs = EFS("EFS\n(no task mounts it)")
 
             with Cluster("Data, secrets, identity", graph_attr=GROUP):
-                ecr = ECR("ECR\nimmutable tags")
-                s3 = S3("S3 buckets\nbronze · artifacts\nmedia · ops docs")
+                ecr = ECR("ECR, 5 repos\nimmutable tags")
+                s3 = S3("S3, 15 buckets\nCIS + ACP tiers · CRM (SSE-KMS)\nBooking media · TP artifacts\nCloudTrail · ALB logs")
                 secrets = SecretsManager("Secrets Manager\none DSN secret per app")
-                kms = KMS("KMS\n(ops docs CMK)")
+                kms = KMS("KMS, 4 CMKs\nCloudTrail · CRM data\nCRM ingest · CRM seal")
                 cognito = Cognito("Cognito\nfour user pools")
-                ses = SES("SES\nno-reply sender")
+                waf_id = WAF("WAF\non 3 user pools")
+                triggers = Lambda("Lambdas outside the VPC\n4 Cognito triggers\nRDS snapshot expiry")
+                ses = SES("SES\nno-reply sender\ninbound test mail")
+                bedrock2 = Bedrock("Bedrock (acc2)\nembeddings\nCRM scrub guardrail")
 
             with Cluster("Operations", graph_attr=GROUP):
-                sched = EventbridgeScheduler("Scheduler group\naa-cis-dev-acp")
-                cw = Cloudwatch("CloudWatch\nlogs · alarms")
-                sns = SNS("SNS alerts topic\n(e-mail)")
+                sched = EventbridgeScheduler("Scheduler group\naa-cis-dev-acp\n5 daily schedules")
+                rules = Eventbridge("EventBridge\nsecurity rules\nACP bus + DLQ")
+                trail = Cloudtrail("CloudTrail (KMS)\n+ IAM Access Analyzer")
+                cw = Cloudwatch("CloudWatch\nlogs · alarms\nflow logs")
+                sns = SNS("SNS\nalerts (e-mail)\nSES feedback")
                 budgets = Budgets("Budgets per App\n+ cost anomaly")
 
         with Cluster("AWS LLM account (acc3) · us-west-1", graph_attr=ACCOUNT):
@@ -83,7 +89,10 @@ def draw(filename: str) -> None:
         tf_main >> Edge(style="dotted") >> ci_roles
         ci_roles >> Edge(style="dotted") >> [ecr, migrate]
         dns >> [rest, cdn]
-        waf - Edge(style="dotted") - rest
+        waf - Edge(style="dotted") - alb
+        waf_id - Edge(style="dotted") - cognito
+        cognito >> Edge(label="triggers", style="dotted") >> triggers
+        cdn >> Edge(label="OAC") >> s3
         rest >> Edge(label="VPC link") >> nlb
         cdn >> Edge(label="VPC origin") >> nlb
         http >> lambdas
@@ -91,9 +100,11 @@ def draw(filename: str) -> None:
         [svc_cis, svc_bk, svc_crm, migrate, lambdas] >> rds
         svc_cis >> cache
         svc_cis >> Edge(style="dotted") >> secrets
-        svc_bk >> Edge(style="dotted") >> kms
+        svc_crm >> Edge(style="dotted") >> kms
+        [svc_cis, svc_crm, lambdas] >> Edge(style="dotted") >> bedrock2
         [svc_cis, lambdas] >> nat >> internet
-        sched >> lambdas
+        sched >> [lambdas, triggers]
+        trail >> rules >> sns
         cw >> sns
         tf_llm >> Edge(style="dotted") >> invoker
         [svc_cis, lambdas] >> Edge(label="sts:AssumeRole", **XACC) >> invoker >> bedrock
@@ -102,6 +113,7 @@ def draw(filename: str) -> None:
         budget3 - Edge(style="invis") - ce_reader
         ecr - Edge(style="invis") - s3
         cognito - Edge(style="invis") - ses
+        cache - Edge(style="invis") - efs
         budgets - Edge(style="invis") - sns
 
 

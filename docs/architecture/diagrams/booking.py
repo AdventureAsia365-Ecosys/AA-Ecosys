@@ -43,8 +43,8 @@ def draw(filename: str) -> None:
                     reads = RDSPostgresqlInstance(
                         "read through grants\ncatalog.* views (CIS)\ninquiry outbox (TripPlanner)")
             media = S3("S3\nsupplier media")
-            docs = S3("S3\nops documents")
-            kms = KMS("KMS CMK\n(ops documents)")
+            docs = S3("S3 ops documents\n(not provisioned yet)")
+            kms = KMS("KMS CMK\n(not provisioned yet)")
             ses = SES("SES\nstaff e-mail")
             cw = Cloudwatch("CloudWatch\nlogs · AA/Jobs/Booking")
 
@@ -54,7 +54,8 @@ def draw(filename: str) -> None:
         rest >> alb >> api
         api >> own
         api >> Edge(label="read only", style="dashed") >> reads
-        api >> [media, docs, ses]
+        api >> [media, ses]
+        api >> Edge(label="uploads answer 503\nuntil provisioned", style="dashed") >> docs
         docs >> Edge(style="dotted") >> kms
         api >> Edge(style="dotted") >> cw
         deploy >> Edge(label="OIDC") >> role >> ecr
