@@ -1,3 +1,16 @@
+---
+id: ARCH-09-census-2026-10
+title: Dead Table Registry census (AA-850, S255)
+description: Every table and view on the shared RDS classified live / read-only legacy / reserved / dead from a code-reference scan of all six repos, with the wave-1 quarantine set.
+type: report
+status: draft
+owner: nghiep
+audience: [engineer, agent]
+applies_to: [ecosystem, aa-cis-dev-db]
+last_reviewed: 2026-10-28
+related: [ARCH-09, docs/architecture/db-schema-reference.md, docs/database/schema-ownership.md]
+---
+
 # Dead Table Registry census — AA-850 (S255, 28/10/2026)
 
 **Scope.** All 335 objects (274 tables, 1 partitioned table, 60 views) of the 16 schemas in
