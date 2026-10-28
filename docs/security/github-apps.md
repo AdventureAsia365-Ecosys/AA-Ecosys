@@ -248,6 +248,23 @@ Add these rows to [`secrets-register.yaml`](secrets-register.yaml) and the table
 When the Infra docs workflows use `aa-ci-bot`: delete `ROOT_REPO_DOCS_TOKEN` from AA-CIS-Infra, revoke its PAT in
 `https://github.com/settings/personal-access-tokens`, and mark the row `deleted` with the date.
 
+## 8. ci-bot merges (ADR 0011a, AA-993)
+
+[ADR 0011a](../adr/0011a-ci-bot-merges-copy-and-dump-prs.md) (Proposed) lets `aa-ecosys-ci-bot` squash-merge exactly
+two kinds of PR; every other PR it opens is merged by a person or the orchestrating agent.
+
+| PR | Where | Workflow | Token (minted in the job, `main` only) |
+|---|---|---|---|
+| Schema dump `bot/db-schema-reference` | root | AA-CIS-Infra `db-schema-dump.yml` publish job, only after an apply and only when clean (AA-993 M1) | root repo, Contents + Pull requests write (unchanged from AA-901) |
+| Migration copy `bot/migration-copy/<owner>-<NNN>` | AA-CIS-Infra | `migration-sync.yml` (AA-993 M3, not built yet) | AA-CIS-Infra only, Contents + Pull requests write |
+
+- No App is a bypass actor of the AA-CIS-Infra ruleset on `main` (`tools/github/infra-main-ruleset.json`, applied by
+  `tools/github/db_auto_apply_gate.sh` with the tech lead's login): ci-bot reaches `main` only by merging a PR whose required
+  checks are green.
+- No app repo workflow mints a token for another repo.
+- Check: `gh pr view <n> --repo <repo> --json mergedBy --jq .mergedBy.login` shows `app/aa-ecosys-ci-bot`.
+- Stop: revert the workflow change, or suspend the installation (part "Emergency stop").
+
 ## Add a repo later
 
 No reinstall. Org Settings → **GitHub Apps** → **Configure** next to the App → **Select repositories** → add the
