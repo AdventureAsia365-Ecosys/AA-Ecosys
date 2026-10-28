@@ -89,7 +89,7 @@ Enums: `user_role` → `staff_role` (no `customer`); `payment_type` → `payment
 
 ## The 6 open business questions — decided (we build AA-Booking ourselves)
 
-Confirmed by Nghiệp (S226): AA builds AA-Booking in-house, so these are no longer "ask the
+Confirmed by the tech lead (S226): AA builds AA-Booking in-house, so these are no longer "ask the
 external handover team" items (Mr. Mạnh is no longer involved in AAA). The v2 schema encodes the
 answers below; revisit only if a concrete requirement contradicts one.
 

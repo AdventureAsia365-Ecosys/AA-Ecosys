@@ -6,8 +6,8 @@ type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [ses, aa-workforce-dev, aa-external-dev, aa-booking-api, aa-cis-api]
-last_reviewed: 2026-10-19
+applies_to: [ses, aa-workforce-dev, aa-external-dev, aa-booking-api, aa-cis-api, aa-partner]
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -19,21 +19,23 @@ related: [OPS-04, OPS-04-cognito-login, AA-811, AA-703, AA-816]
 
 > [!WARNING]
 > UNTESTED - do not follow in an incident without checking each step.
-> The alarms have never fired. Only the read-only facts below were checked (19/10/2026).
+> The alarms have never fired. Only the read-only facts below were checked (2026-10-19, again 2026-10-28).
 
 ## Why it matters
 
 SES sending is shared by every mail stream on acc2: staff sign-in codes (Cognito WORKFORCE), traveller sign-in codes
-(Cognito EXTERNAL), staff invites, Booking and CIS operator e-mail. AWS puts the account under review at a 5 % bounce
-rate or 0.1 % complaint rate and can pause sending at 10 % / 0.5 %. A pause stops staff sign-in.
+(Cognito EXTERNAL), e-mail change checks of the PARTNER pool (it sends no sign-in codes: password plus authenticator
+app), staff invites, Booking and CIS operator e-mail, and AA system mail of AA-Partner (agency invitations and
+notices). AWS puts the account under review at a 5 % bounce rate or 0.1 %
+complaint rate and can pause sending at 10 % / 0.5 %. A pause stops staff sign-in.
 
-## Facts (read 19/10/2026)
+## Facts (read 2026-10-28)
 
 - Account: production access on, sending enabled, enforcement `HEALTHY`; account suppression list on for BOUNCE and
   COMPLAINT (0 suppressed addresses).
 - Identity: domain `lumiguides.it.com`, sender `no-reply@lumiguides.it.com`, custom MAIL FROM sub-domain.
-- Three configuration sets, one per stream: `aa-email-dev-workforce`, `aa-email-dev-external`,
-  `aa-email-dev-transactional`. Each sends BOUNCE, COMPLAINT and REJECT events to the SNS topic
+- Three configuration sets, one per stream: `aa-email-dev-workforce` (WORKFORCE pool), `aa-email-dev-external`
+  (EXTERNAL and PARTNER pools) and `aa-email-dev-transactional` (app mail from CIS, Booking and AA-Partner). Each sends BOUNCE, COMPLAINT and REJECT events to the SNS topic
   `aa-email-dev-feedback`.
 - **The feedback topic has no subscriber** (by design until the apps implement their own suppression, AA-811 scope 3).
   So per-message details are not kept anywhere; the alarms and the suppression list are the only signals.
@@ -44,7 +46,7 @@ rate or 0.1 % complaint rate and can pause sending at 10 % / 0.5 %. A pause stop
 ## Steps
 
 1. Identify the stream. Each configuration set publishes its own reputation rate (dimension
-   `ses:configuration-set`; a set appears only after it has sent mail - on 19/10/2026 workforce and transactional):
+   `ses:configuration-set`; a set appears only after it has sent mail - on 2026-10-28 all three):
 
    ```bash
    aws cloudwatch get-metric-statistics --namespace AWS/SES --metric-name Reputation.BounceRate --dimensions Name=ses:configuration-set,Value=aa-email-dev-workforce --start-time $(date -u -d '-1 day' +%FT%TZ) --end-time $(date -u +%FT%TZ) --period 3600 --statistics Maximum --profile aa365-admin --region us-west-1 --query "Datapoints[].Maximum" --output text
@@ -52,6 +54,7 @@ rate or 0.1 % complaint rate and can pause sending at 10 % / 0.5 %. A pause stop
 
    Repeat with `aa-email-dev-transactional` and `aa-email-dev-external` (and `Reputation.ComplaintRate`).
    Expected: one stream stands out. The external stream is the usual suspect (public sign-up abuse).
+   Verify: the stream's rate is above the alarm threshold.
    Rollback: none - read-only.
 
 2. See which addresses SES now suppresses.
@@ -77,10 +80,11 @@ rate or 0.1 % complaint rate and can pause sending at 10 % / 0.5 %. A pause stop
 4. Stop the source.
    - External stream, sign-up abuse (many sign-ups to random addresses): the EXTERNAL pool has the pre sign-up trigger
      and its alarms; tighten the trigger's refusal (Infra change) or, in an emergency, allow only admin-created users on
-     the EXTERNAL pool through a Terraform change (Nghiệp decides; travellers cannot register meanwhile).
+     the EXTERNAL pool through a Terraform change (the tech lead decides; travellers cannot register meanwhile).
    - Transactional stream, an app sending to bad addresses: pause the job kind that sends (CIS `ops_alert_email` /
      `staff_invite_email`, Booking `bk_notify_email`) by cancelling its queued rows on the admin Jobs page, then fix the
-     recipient source.
+     recipient source. AA-Partner sends its system mail (agency invitations, notices) directly from the API, not as a
+     job: revoke the pending invitations to the bad addresses in that agency's team settings.
    - Workforce stream: invites to mistyped staff addresses; disable the wrong staff row on the Staff page.
    Expected: the bounce count from step 1 stops growing.
    Rollback: re-enable what you disabled.
@@ -104,7 +108,7 @@ rate or 0.1 % complaint rate and can pause sending at 10 % / 0.5 %. A pause stop
 
 ## Escalation
 
-- Account under review or `SendingEnabled` false: SEV1 (staff cannot sign in). Tell Ms. Thư; reply to the AWS case
+- Account under review or `SendingEnabled` false: SEV1 (staff cannot sign in). Tell the business owner; reply to the AWS case
   with the cause and the fix. [Incident response](../incident-response.md).
 
 ## Tested log

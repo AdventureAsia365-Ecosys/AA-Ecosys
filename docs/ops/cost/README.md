@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [FIN-01, FIN-02, OPS-08, AA-896, AA-838, AA-884]
 ---
@@ -16,13 +16,13 @@ related: [FIN-01, FIN-02, OPS-08, AA-896, AA-838, AA-884]
 
 The monthly report is **one** document: the C8 capacity review plus the cost report (FIN-02 = OPS-08). It is
 saved as `docs/audits/<date>-S<nnn>-capacity-review/README.md` with a root PR, drafted by Claude Code and
-approved by Nghiệp (C8a). This folder holds only this how-to; reports live in `docs/audits/` (DM-8.10, C8a).
+approved by the tech lead (C8a). This folder holds only this how-to; reports live in `docs/audits/` (DM-8.10, C8a).
 Rules and budgets: [FinOps process](../finops.md).
 
 > [!NOTE]
 > Not yet run on real data. `tools/finops/monthly_cost_report.py` is tested with synthetic inputs only
 > (`tools/finops/test_monthly_cost_report.py`). The first real run is the October 2026 report, in the first
-> session on or after 2026-11-01. Update this page with what that run teaches.
+> session on or after 2026-11-03 (see "Before you start"). Update this page with what that run teaches.
 
 ## Before you start
 
@@ -43,7 +43,7 @@ Rules and budgets: [FinOps process](../finops.md).
    Expected: the acc2 account (account map in `docs/onboarding.md`). Abort on any other account.
 
 2. Export the cost-per-app JSON for the month and for the month before. Choose one way:
-   - **Browser (Nghiệp):** open the admin console page **Cost per app** (`/admin/platform/cost`), pick the month,
+   - **Browser (tech lead):** open the admin console page **Cost per app** (`/admin/platform/cost`), pick the month,
      and in the browser developer tools save the response of the `cost?month=YYYY-MM` request as
      `platform-cost-YYYY-MM.json`.
    - **ECS exec (orchestrator session only):** a short script inside the api container calls
@@ -81,16 +81,16 @@ Rules and budgets: [FinOps process](../finops.md).
 6. Create `docs/audits/<date>-S<nnn>-capacity-review/README.md` from
    [`templates/cost-report.md`](../../templates/cost-report.md). Paste the drafted sections, keep the input files
    in the same folder, then fill in by hand. The inputs hold no secrets and no personal data, but the
-   `/admin/platform/cost` JSON contains the real account IDs (`aws.account_id`, `llm_satellites.*.account_id`):
-   keep them in this private root repo only, never copy them into an app repo (SEC-06, D-25). The drafted
-   Markdown does not print account IDs.
+   `/admin/platform/cost` JSON contains the real account IDs (`aws.account_id`, `llm_satellites.*.account_id`;
+   the acc1 line stays for months before November 2026). Keep them in the root repo only, which may hold account
+   IDs, and never copy them into an app repo (SEC-06, D-25). The drafted Markdown does not print account IDs.
    - the reason for each flagged change (Terraform applies, deploys, waves, batch runs in the month);
    - "Budgets and anomalies": budget e-mails and Cost Anomaly Detection alerts of the month;
    - the C8b capacity checklist (CloudWatch, Performance Insights, table sizes, ledgers, Lambda, jobs);
-   - the five-line Vietnamese summary for Ms. Thư (plain words, no Linear keys);
+   - the five-line Vietnamese summary for the business owner (plain words, no Linear keys);
    - the action list.
 
-7. Open the root PR (`docs: capacity and cost review YYYY-MM`, body `Refs AA-838, AA-896`) and ask Nghiệp to
+7. Open the root PR (`docs: capacity and cost review YYYY-MM`, body `Refs AA-838, AA-896`) and ask the tech lead to
    approve. Rollback: the PR only adds files; close it to discard.
 
 ## The first report (October 2026)

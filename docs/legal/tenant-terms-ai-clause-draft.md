@@ -1,7 +1,7 @@
 # Tenant Terms: AI Acceptable Use clause (DRAFT)
 
 > **DRAFT FOR LAWYER REVIEW. THIS IS NOT LEGAL ADVICE AND IS NOT APPROVED.**
-> Engineering (Claude Code, for Pham Quoc Nghiep) prepared this text from the product facts and from
+> Engineering (Claude Code, for the tech lead) prepared this text from the product facts and from
 > the S236 policy review. It has not been reviewed by counsel, and no tenant has been shown or has
 > agreed to it. Counsel should rewrite it to fit the existing tenant agreement (defined terms,
 > numbering, liability, governing law). Every quotation of the Anthropic Usage Policy in §3 was
@@ -242,7 +242,7 @@ particular purpose. Clause [●] (Limitation of liability) of the Agreement appl
 
 ## 4. How tenants accept the Schedule, and a notice for later
 
-*Owner: business / Ms. Thư. Updated 24/10/2026.*
+*Owner: business / the business owner. Updated 24/10/2026.*
 
 There are no real tenants today (§1), so there is nobody to notify. The Schedule binds each tenant
 **at onboarding**: it is attached to the partner agreement (§0 (b)) and summarised on the portal
@@ -359,9 +359,9 @@ changed in this PR). Proposed wording:
     invents reviews, ratings or testimonials (F19 authenticity check), but the tenant's own CTA line is
     published as the tenant wrote it. A live test with the CTA "Read the five-star reviews our travellers
     left after this journey" produced a body with no review claim and kept that CTA verbatim. Product
-    decision (Nghiệp): the portal warns the tenant when a CTA mentions reviews or ratings ("only mention
+    decision (the tech lead): the portal warns the tenant when a CTA mentions reviews or ratings ("only mention
     reviews or ratings if they are real and you can show them publicly"), still saves it, and notifies
     AA admins so each case is visible. Questions: is a warning plus the tenant's responsibility under
     clause .5 enough, or must AA refuse such a CTA unless the tenant shows a public source (US FTC 16 CFR
     Part 465, EU unfair commercial practices rules)? Should the Schedule say so explicitly? To be
-    discussed with the business owner (Ms. Thư) before counsel review.
+    discussed with the business owner before counsel review.

@@ -1,6 +1,6 @@
 # T-series — logic, DFS, LLM, and the multi-session plan (AA-741)
 
-Status: **working plan** (S229, 12/10/2026). Owner: Kiro + Nghiệp.
+Status: **working plan** (S229, 12/10/2026). Owner: Kiro + the tech lead.
 Everything here was read from code and the Dev DB (read-only), not assumed. This is the single
 source of truth for the T-series audit (AA-741) and the follow-up work; update it as items ship.
 
@@ -60,7 +60,7 @@ September), but **DE/FR/NL only 96 each, from 1–3 Sep** (one early trial, neve
 supports all six (in `DFS_LOCATION_MAP`). So the fix is operational — run `segment_research` for
 DE/FR/NL (G2) — not a code change.
 
-**Design intent (confirmed with Nghiệp, S229):** admin buys the per-market data once; a tenant
+**Design intent (confirmed with the tech lead, S229):** admin buys the per-market data once; a tenant
 NEVER runs DFS when writing. Tenants only READ what the platform already has, to filter topics,
 pick goal/angle and write. 0 tenant-tagged DFS rows since 29/09 (AA-646).
 
@@ -74,7 +74,7 @@ pick goal/angle and write. 0 tenant-tagged DFS rows since 29/09 (AA-646).
   `unmatched_markets` and are recorded in `unmapped_market_requests` for admin.
 - T8/T9: use whatever PAA/keywords exist; with none, proceed on atom text without SEO signal.
 
-**Decided (Nghiệp, S231 12/10/2026):** T2 keeps writing for ONE market per tenant (the
+**Decided (the tech lead, S231 12/10/2026):** T2 keeps writing for ONE market per tenant (the
 highest-ranked of its markets). No per-market T2 versions; revisit only with G7 numbers.
 Since #664 (S231) that market's keywords come from `search_demand` matched on the tour's atom places.
 
@@ -111,8 +111,8 @@ come from the pilot (G3); do not quote a per-piece figure until then.
 
 ## 5. Open questions
 
-- **Goal count:** code has **8** goals (`services/acp_angle_gate/goals.py`), mapped from Ms. Thư's
-  "Bảng 1". If the source table has 10, two are missing — confirm with Nghiệp / the source table,
+- **Goal count:** code has **8** goals (`services/acp_angle_gate/goals.py`), mapped from the business owner's
+  "Bảng 1". If the source table has 10, two are missing — confirm with the tech lead / the source table,
   then reconcile in the T8 audit.
 
 ## 6. Tenant isolation (verified)
@@ -137,8 +137,8 @@ UI. Each item is one PR or one session.
   (like `job_id`); remove `tenant_id=None` at the 9 call sites (judge, brand_audit, flag_fix ×2,
   itinerary_nudge, grounding, source_facts, t10_judge, f10_embed). Test: one T2 + one T9 log a
   tenant on every row. $0, 1 PR.
-- **G2 [ops, Nghiệp runs] `segment_research` for DE/FR/NL.** DFS budget $5/run hard-stop; Kiro
-  gives an estimate, Nghiệp triggers. Without it, the Europe-brand comparison is meaningless.
+- **G2 [ops, the tech lead runs] `segment_research` for DE/FR/NL.** DFS budget $5/run hard-stop; Kiro
+  gives an estimate, the tech lead triggers. Without it, the Europe-brand comparison is meaningless.
 
 ### Stage 2 — pilot (~$1)
 

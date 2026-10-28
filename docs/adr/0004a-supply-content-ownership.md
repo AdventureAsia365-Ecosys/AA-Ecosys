@@ -1,6 +1,6 @@
 # ADR 0004 — Amendment A1: supply data in Booking, customer-facing supply content in CIS (O7)
 
-- **Status:** Accepted (14/10/2026, S236 — Nghiệp chose the hybrid option C). Separate file referenced from
+- **Status:** Accepted (14/10/2026, S236 — the tech lead chose the hybrid option C). Separate file referenced from
   `docs/adr/0004-aa-booking-stack-and-bootstrap.md` (O7 row points here).
 - **Amends:** ADR 0004 O7 ("All customer-facing content (activities, country text) is authored in CIS.
   Booking keeps commercial fields only"). O7 left open who owns the **facts** about hotels and
@@ -10,6 +10,10 @@
   read-only published views, no cross-schema writes).
 - **Related Linear:** AA-679 (catalog sync), AA-681/682 (trip case, operations — proposals read the
   content), the `bk-002` slice (`suppliers`, `hotels`, `activities`, `entity_media`).
+- **Update 2026-10-28:** the known gap of decision 4 is closed (X1 S18/S19, AA-860, 19/10/2026): the CIS runtime
+  login is `cis_app`, which reads only the `booking.v_*` views it is granted. Decision 5: staff sign in with an email
+  code only ([ADR 0006a](0006a-identity-phase1-amendments.md) A9), so when the managed-login session has lapsed the
+  "Edit in CIS" link asks for a new email code, not a Google redirect.
 
 ## Context
 
@@ -21,7 +25,7 @@ Hotels, activities and other services have two kinds of data with different owne
   proposals and tenant sites. It must follow CIS's writing rules (brand voice, source fidelity, review)
   and is produced by the CIS pipeline.
 
-Nghiệp's decision (S236): **hybrid** — Booking owns supply + commercial data; CIS writes the
+The tech lead's decision (S236): **hybrid** — Booking owns supply + commercial data; CIS writes the
 customer-facing description and photos **from** that data.
 
 ## Decision
@@ -132,7 +136,7 @@ customer-facing description and photos **from** that data.
 - `bk-002` scope note in ADR 0004 decision 7: `hotels` / `activities` carry facts only, no description
   columns.
 - Run the CIS API as a non-owner application role (not `aa_cis_admin`), so the Booking grants become a
-  real boundary (see decision 4, known gap). Cross-repo; needs Nghiệp's go-ahead and its own issue.
+  real boundary (see decision 4, known gap). Cross-repo; needs the tech lead's go-ahead and its own issue.
   Done by X1 S18/S19 (AA-860, 19/10/2026): the CIS runtime login is `cis_app`, which reads only the
   `booking.v_*` contract views it is granted.
 - `entity_media` usage-rights flag and the Booking-owned S3 prefix readable by CIS (decision 2): AA-835 (bk-023).
@@ -161,6 +165,7 @@ Adversarial review, 14/10/2026, done alongside ADR 0006. Changes:
 Remaining open risks:
 
 - Until CIS stops connecting as `aa_cis_admin`, a CIS bug or compromise can read every Booking
-  commercial field (net rates, margins, internal notes) and customer PII.
+  commercial field (net rates, margins, internal notes) and customer PII. *Closed 19/10/2026 by X1 S18/S19
+  (AA-860): CIS runs as `cis_app`.*
 - Content lags supply. A deactivated or renamed hotel can stay visible in TripPlanner and tenant sites
   until the CIS job runs, and longer for any downstream caches.

@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, engineer, pm, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-22
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [APP-04-erd-design, ARCH-05, ARCH-07, AA-894]
 ---
@@ -41,7 +41,7 @@ plus five PRD fields. The docs lint (`tools/docs/check_prd_refs.py`) requires th
 | Field | Content | Rule |
 |---|---|---|
 | `id` | Catalog ID `APP-10-<feature>` | Unique (front-matter check) |
-| `status` | `draft` until Nghiệp has read it; `active` while the feature is built or live | Schema enum |
+| `status` | `draft` until the tech lead has read it; `active` while the feature is built or live | Schema enum |
 | `owner` | Person accountable | Schema pattern |
 | `linear` | Issue keys that deliver the PRD, e.g. `[AA-821, AA-928]` | At least one; `AA-<n>` |
 | `adrs` | Repo-relative paths of the ADRs, e.g. `docs/adr/0010-aa-partner-app.md` | Each path exists |

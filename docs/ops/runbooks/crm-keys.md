@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-partner, kms, aa-cis-dev-db]
-last_reviewed: 2026-10-23
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -93,7 +93,7 @@ anomaly alarm uses the standard CloudWatch alarm e-mail).
 
 6. If a foreign principal decrypted (not only attempted): treat it as a personal-data incident. Record which tenants'
    data keys could have been unwrapped (CloudTrail `requestParameters.encryptionContext.tenant_id`), keep the evidence
-   in `docs/audits/<date>-S<nnn>-crm-key-incident/`, and bring Nghiệp the agency notification draft (the agency is
+   in `docs/audits/<date>-S<nnn>-crm-key-incident/`, and bring the tech lead the agency notification draft (the agency is
    the controller; DPA wording, ADR 0010 decision 9).
 
 ## Decrypt-rate anomaly

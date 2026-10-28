@@ -1,6 +1,6 @@
 # ADR 0004 — Amendment B: one security group per caller (per-app network isolation)
 
-- **Status:** Accepted (18/10/2026, S242). Nghiệp approved X1 with "SG in the same wave" (S241 D-05/D-06).
+- **Status:** Accepted (18/10/2026, S242). The tech lead approved X1 with "SG in the same wave" (S241 D-05/D-06).
   Separate file referenced from `docs/adr/0004-aa-booking-stack-and-bootstrap.md` (Decision 5 points here).
 - **Amends:** ADR 0004 decision 5 ("existing private subnets and app security group") and its module
   boundary ("no other change to `modules/ecs`, `modules/api_gateway` or `modules/alb` resources"), for
@@ -8,10 +8,14 @@
 - **Implements:** ADR 0008 decision 6 (each app isolated from the others at the data layer) and data standards
   SEC-1 for the network layer. Plan: `docs/audits/2026-10-17-S241-x1/x1-plan.md` §2 and steps S11–S14 (AA-852).
 - **Related Linear:** AA-852 (X1), AA-860 (CIS runtime role split), AA-874 (Redis AUTH/TLS).
+- **Update 2026-10-28:** the rollout is finished. S14 removed the shared app group from the RDS, Redis and EFS
+  lists; the group itself is still defined in `modules/vpc`. AA-Partner got its own groups under decision 6:
+  `aa-cis-dev-sg-crm-api` (admitted by RDS), `aa-cis-dev-sg-crm-web` and `aa-cis-dev-sg-crm-portal` (no data-store
+  access). The current lists are in AA-CIS-Infra `accounts/aa365/app_security_groups.tf`.
 
 ## Context
 
-On acc2 Dev every workload shares one app security group `aa-cis-dev-sg-app` (`sg-038383acb15660582`): the CIS
+On acc2 Dev every workload shares one app security group `aa-cis-dev-sg-app`: the CIS
 api and worker services, the Booking service, both TripPlanner Lambdas, the dfs-balance Lambda, every DB
 Migrate / Schema Dump task, and two orphan ENIs of the deleted `aa-cis-dev-ingestion` Lambda. The RDS, Redis
 and EFS security groups admit only that group. So:

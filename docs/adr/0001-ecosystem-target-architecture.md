@@ -1,10 +1,13 @@
 # ADR 0001 — Ecosystem target architecture: shared platform services and contracts between apps
 
-- **Status:** Accepted (14/10/2026, Nghiệp, S235), together with the S235 ecosystem blueprint
+- **Status:** Accepted (14/10/2026, tech lead, S235), together with the S235 ecosystem blueprint
   (`docs/audits/2026-10-14-S235-ecosystem-team-pilot/01-ecosystem-blueprint.html`). Proposed
   28/09/2026 (S199). See "Amendments (S235)" below.
 - **Tightened by:** ADR 0008 (S237): decision 6 contracts are views only; new-app integration follows ADR 0008's gate and playbook.
 - **Implemented by:** [ADR 0016](0016-one-design-system-guarded-kit-copies.md) (S252): decision 7 "one design system" through a canonical CIS kit core and guarded copies.
+- **Update 2026-10-28:** decision 2: acc1 left the ecosystem (AA-998, S255). LLM calls run on acc3 only, and
+  the fallback chain stays inside acc3; there is no cross-account fallback. Decision 8: an English page may have a
+  Vietnamese translation next to it, `<name>.vi.md` ([STYLE, Language](../STYLE.md#language)).
 - **Scope:** AA-Ecosys as a whole (AA-CIS-App, AA-TripPlanner-Web, AA-CIS-Infra, future AA-Booking).
   Repo-level ADRs (for example `apps/AA-CIS-App/docs/adr/0001..0004`) stay in their repos. This series
   covers only cross-repo decisions.
@@ -40,7 +43,8 @@ can solve on its own:
    allow-list is changed together with the catalog.
 3. **Durable jobs.**
    - Rewrite, write, research, atomize, rerun and extraction run on a durable job runner: a Postgres
-     queue plus a worker service, pending Nghiệp's choice versus SQS.
+     queue plus a worker service, pending the tech lead's choice versus SQS
+     (a Postgres queue was chosen, ADR 0003).
    - Every job carries idempotency, retries, a reaper and per-provider concurrency caps.
    - The UI reads job status and never infers it from row state.
    - This replaces the Bedrock Batch dependency (AA-624) for the rerun.
@@ -77,9 +81,9 @@ can solve on its own:
 
 ## Amendments (S235, 14/10/2026)
 
-Approved by Nghiệp with the S235 ecosystem blueprint:
+Approved by the tech lead with the S235 ecosystem blueprint:
 
-- **Production also runs on acc2** (`005097885195`) when it comes. No new AWS account is created for
+- **Production also runs on acc2** ([account map](../onboarding.md)) when it comes. No new AWS account is created for
   any environment. The old Quanskill AAA accounts (dev/stg/prod in ap-southeast-1) are **not part of the
   ecosystem**.
 - **Dev hostnames are sub-domains of `lumiguides.it.com`** (pattern of `api-cis.lumiguides.it.com`,

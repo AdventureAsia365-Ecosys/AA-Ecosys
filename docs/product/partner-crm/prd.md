@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, engineer, pm, agent]
 applies_to: [aa-partner, aa-booking-api, aa-cis-api]
-last_reviewed: 2026-10-22
+last_reviewed: 2026-10-28
 review_every_days: 30
 related: [APP-10, APP-04-erd-design-crm, AA-821, AA-894, docs/research/partner-crm-spec.md]
 linear: [AA-821, AA-928, AA-929, AA-930, AA-931, AA-932, AA-933, AA-934, AA-935, AA-936, AA-937, AA-938, AA-939,
@@ -26,7 +26,30 @@ contracts:
   - docs/contracts/catalog.http.v1.openapi.yaml
 erd:
   - docs/architecture/erd/design/crm.md
-migrations: []
+migrations:
+  - infra/AA-CIS-Infra/db/migrations/crm/001_crm_schema_job.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/002_crm_tenancy_base.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/003_crm_vault_keys.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/004_crm_tenant_directory.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/005_crm_intake_pipeline.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/006_crm_f1_f2_complete.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/007_crm_audit_partitions_export.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/008_crm_roles_members.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/009_crm_scrub_placeholder_map.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/010_crm_data_lifecycle.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/011_crm_l1_console.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/012_crm_modules_1_2.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/013_crm_membership_feed.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/014_crm_ledger_suppliers.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/015_crm_mail.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/016_crm_thin_lifecycle.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/017_crm_aa_lines.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/018_crm_membership_inbox_purge.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/019_crm_proposal_builder.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/020_crm_studio_invitation.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/021_crm_client_proposal.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/022_crm_text_proposal_prep_packs.sql
+  - infra/AA-CIS-Infra/db/migrations/crm/023_crm_dispatch_attempt.sql
 ---
 
 # PRD: Partner CRM (AA-Partner)
@@ -38,7 +61,7 @@ is linked, not copied.
 
 | Source | What it holds |
 |---|---|
-| [Spec (Ms. Thư)](../../research/partner-crm-spec.md) | The 23 modules (F1–F5, M1–M18) as the business asked for them |
+| [Spec (business owner)](../../research/partner-crm-spec.md) | The 23 modules (F1–F5, M1–M18) as the business asked for them |
 | [Final design](../../audits/2026-10-21-S246-crm-design-v3/final/crm-design-final.md) (accepted S246) | Decisions D1–D8, scope, UX, data model, privacy, delivery plan, cost, risks |
 | [Errata S247](../../audits/2026-10-21-S246-crm-design-v3/final/errata-s247-byo.md) | Integrations are bring-your-own; wins over the final design once ADR 0010 is accepted |
 | [Design v3](../../audits/2026-10-21-S246-crm-design-v3/design-v3.md) and its lanes | Full column lists, wireframes, the 53 issue cards |
@@ -66,7 +89,7 @@ Hosts, roles and the permission matrix: final design §3.1 and §5.5.
 - **Build before any real agency (waves W0–W7):** all 23 spec modules plus the approved ideas, on Dev with synthetic
   agencies only ([final design §2.1](../../audits/2026-10-21-S246-crm-design-v3/final/crm-design-final.md#21-scope)).
 - **Go-real (W8, AA-980):** prod placement, prod partner pool, WAF, vendor verifications of AA's own OAuth apps, DPA,
-  public data page. Opens when Ms. Thư names the first real agency.
+  public data page. Opens when the business owner names the first real agency.
 - **Later (no issues):** group departures, in-app insurance sales, Messenger/Instagram, BYOK, two-way mail sync,
   Zalo, tier billing, a VN payment gateway.
 - **Not in scope:** post-trip rating form.

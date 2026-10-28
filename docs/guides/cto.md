@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [cto]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-25
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [ARCH-01, ARCH-05, ARCH-08, GUIDE-09, GUIDE-07, AA-897, AA-697]
 ---
@@ -25,7 +25,8 @@ see which risks are open and how the roadmap is tracked. Every section points to
 ## The system on one page
 
 AA-Ecosys runs four apps on one AWS account (acc2, us-west-1) with one shared PostgreSQL instance, one schema owner
-per schema and versioned contracts between apps. Only CIS writes content (ADR 0002). There is only a Dev environment,
+per schema and versioned contracts between apps. AI models run on Amazon Bedrock in a second account, acc3; acc1 left
+the ecosystem on 2026-10-28 (AA-998), so there is no cross-account fallback. Only CIS writes content (ADR 0002). There is only a Dev environment,
 holding test data only (D-01); prod will be a separate RDS instance on acc2 (ADR 0001, C7.2a, D-17), dated at
 go-live. Full explanation: [ecosystem architecture](../ecosystem-architecture.md).
 
@@ -33,17 +34,17 @@ go-live. Full explanation: [ecosystem architecture](../ecosystem-architecture.md
 
 ```mermaid
 flowchart LR
-  thu["Ms. Thu and AA staff<br/>[Person]"]
+  thu["Business owner and AA staff<br/>[Person]"]
   traveller["Traveller<br/>[Person]"]
-  partner["Tenant partner<br/>[Person]"]
-  eco["AA-Ecosys<br/>[Software system]<br/>CIS, TripPlanner, Booking"]
-  bedrock["Amazon Bedrock on acc3 / acc1<br/>[External system]"]
+  partner["Partner agency (tenant)<br/>[Person]"]
+  eco["AA-Ecosys<br/>[Software system]<br/>CIS, TripPlanner, Booking, Partner"]
+  bedrock["Amazon Bedrock on acc3<br/>[External system]"]
   jev["Jev decision service<br/>[External system]"]
   dfs["DataForSEO, Geoapify, Mapbox<br/>[External systems]"]
   drive["Google Drive<br/>[External system]"]
   thu -->|"curates tours, handles trip cases"| eco
   traveller -->|"plans a trip, sends an inquiry"| eco
-  partner -->|"gets tenant content"| eco
+  partner -->|"runs its CRM, gets tenant content"| eco
   eco -->|"writes and judges content"| bedrock
   eco -->|"content verdicts"| jev
   eco -->|"search demand, geocoding, maps"| dfs
@@ -55,29 +56,34 @@ flowchart LR
 ```mermaid
 flowchart TB
   cisfe["CIS admin<br/>[Next.js on Vercel]"]
-  portalfe["Tenant portal (AA-Partner portal/)<br/>[Next.js on Vercel]"]
+  partnerfe["Partner CRM web + Content studio<br/>[Next.js on ECS Fargate]"]
   tpfe["TripPlanner web<br/>[Next.js on Vercel]"]
   bkfe["Booking staff admin<br/>[Next.js on Vercel]"]
   cisapi["CIS API + worker<br/>[FastAPI on ECS Fargate]"]
+  crmapi["Partner CRM API + job worker<br/>[FastAPI on ECS Fargate]"]
   tpl["TripPlanner browse + assembly<br/>[Python Lambdas]"]
   bkapi["Booking API + job worker<br/>[FastAPI on ECS Fargate]"]
   rds[("Shared RDS PostgreSQL<br/>schemas per owner, RLS")]
-  cognito["Cognito WORKFORCE / EXTERNAL<br/>[Identity]"]
+  cognito["Cognito WORKFORCE / EXTERNAL / PARTNER<br/>[Identity]"]
   redis[("Redis<br/>[CIS cache and flags]")]
   cisfe -->|"REST via API Gateway"| cisapi
-  portalfe -->|"BFF, tenant API key"| cisapi
+  partnerfe -->|"Content studio: tenant API key"| cisapi
+  partnerfe -->|"CRM REST"| crmapi
   tpfe -->|"BFF via HTTP API"| tpl
   bkfe -->|"REST via API Gateway"| bkapi
   cisapi --> rds
   cisapi --> redis
+  crmapi -->|"own schema + catalog views"| rds
   tpl -->|"own schema + catalog views"| rds
   bkapi -->|"own schema + catalog views"| rds
   cisfe -.->|"staff sign-in"| cognito
   bkfe -.->|"staff sign-in"| cognito
+  partnerfe -.->|"agency sign-in"| cognito
 ```
 
 Diagrams here are a summary; the maintained C4 set belongs in `ecosystem-architecture.md` (AA-697, parked until
-Nghiệp decides N-9).
+the tech lead decides N-9). The tenant portal moved from Vercel to ECS Fargate in October 2026 (AA-979); the Vercel
+project `aa-cis-portal` stays as the rollback path until 2026-11-03.
 
 ## How decisions are recorded
 
@@ -90,43 +96,47 @@ Nghiệp decides N-9).
 | Decisions (D-01…D-25, N-1…N-12, all decided) | [Handbook §10](../engineering-handbook.md#10-decisions-log) | A new decision gets a row there |
 
 Accepted ecosystem ADRs: 0001 target architecture, 0002 only CIS writes content, 0003/0003a durable jobs per owner,
-0004/0004a/0004b Booking stack, supply ownership, one security group per caller, 0005 pricing, 0006/0006a identity,
-0007 place pipeline in CIS, 0008 new-app integration and data platform rules. Reserved: 0009 AI platform (AA-804).
-Planned: 0012 prod blueprint (AA-880), 0013 API versioning before any `/booking/v1` prefix (AA-899, N-11). Proposed
-(U-25, AA-901): [0011](../adr/0011-github-app-identity-and-merge-rights.md) GitHub App identity for agents and bots with
-merge rights per risk tier, [0014](../adr/0014-repo-visibility-and-github-plan.md) repo visibility and GitHub plan.
+0004/0004a/0004b Booking stack, supply ownership, one security group per caller, 0005/0005a pricing and B2B resale,
+0006/0006a/0006b identity and the partner and M2M pools, 0007 place pipeline in CIS, 0008/0008a new-app integration
+and data platform rules, 0010 the AA-Partner app, 0015 tour liveness, 0016 one design system. Proposed:
+[0010a](../adr/0010a-content-studio-partner-sign-in.md) Content studio sign-in through the partner pool,
+[0011](../adr/0011-github-app-identity-and-merge-rights.md) GitHub App identity for agents and bots with merge rights
+per risk tier, [0014](../adr/0014-repo-visibility-and-github-plan.md) repo visibility and GitHub plan,
+[0017](../adr/0017-migrations-in-app-pr-expand-auto-apply.md) migrations in the app PR. Reserved: 0009 AI platform
+(AA-804), 0012 prod blueprint (AA-880), 0013 API conventions before any `/booking/v1` prefix (AA-899, N-11). The
+[ADR index](../adr/README.md) holds the current status of each.
 
 ## Data standards
 
-[Data standards v1.0](../architecture/data-standards/README.md) are the binding rules for the shared RDS: Part A
+The [data standards](../architecture/data-standards/README.md) are the binding rules for the shared RDS: Part A
 engineering (migrations MIG-x), Part B data management (DM-1 ownership … DM-11 change management), Part C scaling
-(C-x, connection budget, job guard, prod layout). Schema owners: [schema ownership](../database/schema-ownership.md),
-with Infra `db/owners.yaml` as the registry. Version 1.1 collects decided-but-unwritten changes (DM-11.5 merge rights
-per D-13, C2.3g/DM-8.4 tenant pool per D-12, DM-7 log rows and C4.2b per D-09, DM-11.2, DM-1.2); wording waits for
-Nghiệp (N-1, AA-889).
+(C-x, connection budget, job guard, prod layout). The current version is 1.6 (2026-10-28); v1.0 and v1.1 were approved
+by the tech lead, and the later versions add X1, the partner CRM, tour liveness and enforcement facts (changelog in the
+README). Schema owners: [schema ownership](../database/schema-ownership.md), with Infra `db/owners.yaml` as the
+registry.
 
 ## Identity
 
 One identity service: Amazon Cognito on acc2 ([ADR 0006](../adr/0006-ecosystem-identity.md),
 [0006a](../adr/0006a-identity-phase1-amendments.md); architecture §4.6).
 
-| Population | State on 2026-10-19 |
+| Population | State on 2026-10-28 |
 |---|---|
-| CIS staff | Live: e-mail one-time code on `staff-auth.lumiguides.it.com`; directory in CIS (`shared.admin_users`, `shared.staff_app_grant`); only owners write it. Legacy password login still on until cutover (AA-816) |
+| CIS staff | Live: e-mail one-time code on `staff-auth.lumiguides.it.com`; directory in CIS (`shared.admin_users`, `shared.staff_app_grant`); only owners write it. The legacy password login is off since AA-816 S2 and kept only as a rollback |
 | Break-glass | Live, disabled at rest, password + TOTP |
-| Booking staff | Phase 2 in progress (AA-680): Booking accepts WORKFORCE tokens next to the CIS bridge token |
-| Tenant users | Phase 3 (AA-813), not started |
-| Travellers / customers | Phase 4 (AA-680), not started; WAF before self sign-up opens |
+| Booking staff | Phase 2 (AA-680): Booking accepts WORKFORCE tokens; it still accepts the CIS bridge token during the transition |
+| Partner agency people | PARTNER pool with required MFA ([ADR 0006b](../adr/0006b-partner-pool-and-mfa.md)) for the AA-Partner CRM web. The Content studio still signs in with the tenant API key until AA-979 P2b (ADR 0010a, proposed) |
+| Tenant users of the Content studio | Phase 3 (AA-813), not started |
+| Travellers / customers | Phase 4 (AA-908): e-mail code sign-in and My Trips live on TripPlanner (EXTERNAL pool, `tripplanner.traveller_accounts`, tp-019); WAF rate rules on the Cognito pools |
 
 ## Isolation: tenants, apps and roles
 
 - **Tenants**: PostgreSQL row-level security plus a tenant connection pool that fails closed globally (D-12): an
   unreadable flag means the tenant pool. Probe: `db-isolation-probe.yml` (U-16).
 - **Apps on the network**: one security group per caller ([ADR 0004b](../adr/0004b-per-app-security-groups.md)).
-- **Apps in the database (X1)**: NOLOGIN owner roles per app (`bk_owner` and `tp_owner` live, `cis_owner` next),
-  runtime login roles without DDL, DB Migrate running each file as the live owner. Steps S1-S16 shipped by 2026-10-19; the rest,
-  ending with a dedicated `db_migrator` login, is AA-852 / AA-860. Plan:
-  `docs/audits/2026-10-17-S241-x1/x1-plan.md`. While X1 runs, `catalog.*` views are frozen (backlog §1).
+- **Apps in the database (X1, closed 2026-10-19, AA-852 / AA-860)**: NOLOGIN owner roles per app (`cis_owner`,
+  `bk_owner`, `tp_owner`, `crm_owner`), runtime login roles without DDL, a dedicated `db_migrator` login, and DB
+  Migrate running each file as the live owner. Plan and record: `docs/audits/2026-10-17-S241-x1/x1-plan.md`.
 
 ## Delivery model (SDLC and ADLC)
 
@@ -136,23 +146,24 @@ features (the S243 guide, `docs/audits/2026-10-19-S243-sdlc-docs-versioning/READ
 
 | Actor | Does | Guard |
 |---|---|---|
-| Nghiệp | Writes or approves the issue (DoR), ADRs, spend, prod decisions, deploy-gate overrides | - |
+| Tech lead | Writes or approves the issue (DoR), ADRs, spend, prod decisions, deploy-gate overrides | - |
 | Claude Code (main session) | Picks work, gates, merges and deploys on Dev (D-13 dev phase), Terraform, DB Migrate | Steering + skills; runs on `aa365-admin` (D-15) |
 | Kiro / subagents | Code, tests, commits on a branch | `.claude/hooks/subagent-guardrails.sh` deny-list: no push, merge, apply or secret writes |
 | `kiro-reviewer` | Reviews risky PRs (auth, migration, CI/secret, delete) | `kiro-delegate` skill |
-| CI | Required checks | Branch protection on the public repos |
+| CI | Required checks | Branch protection on the four app repos |
 
-Human review becomes mandatory for risky classes from prod or the first paying tenant (D-13). A separate agent
-identity (GitHub App) and least-privilege agent role are trigger items (U-25, U-53, D-14, D-15), not current work.
+Human review becomes mandatory for risky classes from prod or the first paying tenant (D-13). The main session
+pushes, opens PRs and merges as the GitHub App `aa-agent` (ADR 0011, in use since S247). A least-privilege AWS role
+for agents stays a trigger item (U-53, D-15), not current work.
 
 ## Quality gates
 
 | Gate | Where |
 |---|---|
-| Required CI: CIS 5 (Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check), Booking 5, TripPlanner 2 | Branch protection on the public repos; root and Infra (private, GitHub Free) have none, compensated by `main`-only OIDC trust (AA-866) |
+| Required CI: CIS 9, Booking 7, TripPlanner 5, Partner 10 checks (read 2026-10-28) | Branch protection on the four app repos; root and Infra have none, compensated by `main`-only OIDC trust (AA-866) |
 | Security scans | CodeQL default setup, secret scanning + push protection (public repos), gitleaks PR + full-history scans (Infra, root), blocking `pip-audit` (CIS), Dependabot |
 | Data | Migration Copy Guard, DB Migrate version check, isolation probe, no raw model calls test (`test_aa685_no_raw_model_calls.py`) |
-| UI | Playwright UI smoke on every CIS admin preview and every tenant portal preview (the portal smoke runs from AA-Partner since AA-979) |
+| UI | Playwright UI smoke on every CIS admin preview and on tenant portal deploys (the portal smoke runs from AA-Partner since AA-979) |
 | Definition of Done | Merged + CI green + deploy COMPLETED + verified live with evidence (`skill/aa-ship`) |
 | Definition of Ready | [`templates/definition-of-ready.md`](../templates/definition-of-ready.md) |
 | LLM quality | Golden set of about 100 samples (AA-729); eval by hand or dispatch (D-23) |

@@ -1,6 +1,6 @@
 # ADR 0008 — Amendment: the partner CRM is a separate app; traveller OTP and an own LLM gateway as playbook exceptions
 
-- **Status:** Accepted (22/10/2026, S247, Nghiệp). Proposed the same day.
+- **Status:** Accepted (2026-10-22, S247, tech lead). Proposed the same day.
 - **Scope:** AA-Ecosys: the partner CRM (AA-821) in the new app AA-Partner ([ADR 0010](0010-aa-partner-app.md)),
   and every app that would read or write its data (AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-CIS-Infra).
 - **Amends:** [ADR 0008](0008-new-app-integration-and-data-platform-rules.md) decision 8 ("If built, it is a CIS
@@ -151,8 +151,8 @@ not collide:
 ## Alternatives considered
 
 - **CIS module with its own ECS service** (S245 panel option, ADR 0008 §8 as written). Rejected by the owner in S245
-  round 2: the CRM would share the CIS repo, deploy guard (DM-11.4 blocks CIS deploys while `shared.job` is busy) and
-  the CIS task role's secret access, and the tenant portal still had to leave CIS.
+  round 2: the CRM would share the CIS repo, deploy guard (DM-11.4 then blocked CIS deploys while `shared.job` was busy;
+  narrowed by AA-993 G5) and the CIS task role's secret access, and the tenant portal still had to leave CIS.
 - **Travellers in the EXTERNAL pool.** Rejected: AA would control agency clients' identities (controller separation,
   X4), and one managed-login session covers every EXTERNAL client.
 - **CRM writes `shared.llm_call_log`.** Rejected: needs a cross-schema INSERT grant from the CRM, and CIS would hold

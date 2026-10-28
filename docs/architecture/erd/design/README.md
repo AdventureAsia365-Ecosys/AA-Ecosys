@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis-dev-db, ecosystem]
-last_reviewed: 2026-10-22
+last_reviewed: 2026-10-28
 review_every_days: 90
 generated: false
 related: [APP-04, APP-04-erd, AA-894]
@@ -15,14 +15,15 @@ related: [APP-04, APP-04-erd, AA-894]
 
 # Design ERDs (planned schemas)
 
-A design ERD is the diagram of a schema **before** its migrations exist. It is reviewed in a PR together with the
+A design ERD is the diagram of a schema, first drawn **before** its migrations exist. It is reviewed in a PR together with the
 ADRs and the PRD, and the migration PRs are reviewed against it. The generated pages one level up
 ([live ERDs](../README.md)) show what is live; this folder shows what is planned. The DB Schema Dump workflow never
 writes here.
 
 | Schema | Owner | Page | Live? | Drift check |
 |---|---|---|---|---|
-| `crm` | AA-Partner | [crm.md](crm.md) | not yet (first tables with `crm-001`) | report only (`enforce=false`) |
+| `crm` | AA-Partner | [crm.md](crm.md) | yes, since `crm-001` (78 tables and 6 views at `crm-023`); the page is not in sync yet | report only (`enforce=false`) |
+| `tripplanner` | AA-TripPlanner-Web | [tripplanner.md](tripplanner.md) | yes | enforced (`enforce=true`) |
 
 ## Drift check
 

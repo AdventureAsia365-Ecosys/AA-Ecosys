@@ -49,7 +49,7 @@ Paths are relative to this `docs/` folder unless they start with a repo name. Re
 
 ## Optional
 
-- [Live backlog](backlog/README.md): ordered work queue, time-gated checks, decisions waiting on Nghiệp.
+- [Live backlog](backlog/README.md): ordered work queue, time-gated checks, decisions waiting on the tech lead.
 - `docs/sessions/`: session logs (Vietnamese, history, not current truth).
 - `docs/audits/`: audits and evidence (drills, access and capacity reviews), dated folders.
 - `docs/implementation-notes/`: per-issue decisions and trade-offs.

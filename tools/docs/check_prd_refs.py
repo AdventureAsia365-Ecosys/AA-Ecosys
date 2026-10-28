@@ -25,7 +25,7 @@ from pathlib import Path, PurePosixPath
 
 import yaml
 
-from docslib import REPO_ROOT, Finding, emit, is_journal, list_markdown, split_front_matter
+from docslib import REPO_ROOT, Finding, emit, is_journal, list_markdown, split_front_matter, translation_lang
 
 PRD_DIR = "docs/product/"
 PRD_INDEX = "docs/product/README.md"
@@ -38,7 +38,9 @@ HEADING_RE = re.compile(r"^#{1,2} ")
 
 
 def is_prd(relpath: str) -> bool:
-    return relpath.startswith(PRD_DIR) and relpath != PRD_INDEX
+    # A translation (<name>.vi.md, docs/STYLE.md "Language") is the same PRD in another language, not a second PRD;
+    # its front matter is checked as a translation by check_frontmatter.py.
+    return relpath.startswith(PRD_DIR) and relpath != PRD_INDEX and translation_lang(relpath) is None
 
 
 def _line_of(lines: list[str], key: str) -> int:

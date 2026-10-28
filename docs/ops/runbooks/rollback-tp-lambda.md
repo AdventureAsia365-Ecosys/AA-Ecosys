@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [tripplanner-lambda]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -19,8 +19,8 @@ related: [OPS-02-vercel, OPS-04, AA-703, AA-869, AA-892]
 
 > [!WARNING]
 > UNTESTED - do not follow in an incident without checking each step.
-> Only the read-only steps were run (19/10/2026). A Lambda alias `live` that would make this a one-line switch is
-> planned (U-54, with AA-703); it does not exist today.
+> Only the read-only steps were run (2026-10-19, facts re-checked 2026-10-28). A Lambda alias `live` would make this
+> a one-line switch. It is planned (U-54, with AA-703) and does not exist yet.
 
 ## When to use
 
@@ -29,13 +29,17 @@ related: [OPS-02-vercel, OPS-04, AA-703, AA-869, AA-892]
 - Not for: the TripPlanner frontend ([rollback-vercel](rollback-vercel.md)) or a bad `tp-NNN` migration
   ([DB Migrate](db-migrate.md): forward only).
 
-## Facts that shape this runbook (read 19/10/2026)
+## Facts that shape this runbook (read 2026-10-28)
 
 - The HTTP API invokes both functions **unqualified**, so traffic always goes to `$LATEST`. There is no alias.
-- Every deploy runs `update-function-code --publish`, so each deploy leaves a numbered version with its
-  `CodeSha256`. Both functions are built from the same zip contents and get the same version number.
+- `deploy-lambdas.yml` runs only after the full CI passed on the commit (AA-879). Every deploy runs
+  `update-function-code --publish`, so each deploy leaves a numbered version with its `CodeSha256`. Both functions
+  are deployed together and get the same version number.
 - The artifacts bucket `aa-tripplanner-dev-lambda-artifacts-005097885195` is **versioned**; each deploy overwrites
   `browse.zip` and `assembly.zip`, and the older objects stay as previous versions.
+- Since AA-993 each uploaded zip carries object metadata `git-sha`, `app-version` and `code-sha256` (the same form as
+  the function's `CodeSha256`). The deploy's `verify` job (`post-deploy-verify.yml`, app `lambdas`) compares the
+  running code with it.
 - The zips are about 45 MB, close to the 50 MB direct-upload limit, so the hand path uses S3, not `--zip-file`.
 - Configuration (environment, role, VPC, layers) is **not** rolled back by a code rollback. Example: since AA-878
   (S243) the code reads the edge API key from Secrets Manager and the plaintext variable is gone; code from before
@@ -74,8 +78,14 @@ Path B (by hand, when CI is slow or broken):
    aws s3api list-object-versions --bucket aa-tripplanner-dev-lambda-artifacts-005097885195 --prefix browse.zip --profile aa365-admin --region us-west-1 --query "Versions[:4].[VersionId,LastModified,IsLatest]" --output table
    ```
 
-   Run it again with `--prefix assembly.zip`.
-   Expected: the second row (not `IsLatest`) is the previous deploy.
+   Run it again with `--prefix assembly.zip`. Confirm a candidate version by its metadata:
+
+   ```bash
+   aws s3api head-object --bucket aa-tripplanner-dev-lambda-artifacts-005097885195 --key browse.zip --version-id <browse-version-id> --profile aa365-admin --region us-west-1 --query "Metadata" --output json
+   ```
+
+   Expected: the second row (not `IsLatest`) is the previous deploy; its `code-sha256` equals the hash from step 1
+   and its `git-sha` is the commit before the bad merge.
    Rollback: none - read-only.
 
 3. Point each function at the previous zip and publish.
@@ -101,6 +111,18 @@ aws cloudwatch describe-alarms --alarm-names aa-tripplanner-dev-browse-errors aa
 ```
 
 Expected: 200 (the response lists countries with `component_count`); both alarms `OK` within 10 minutes.
+
+For a full check after Path A (or after step 4 of Path B has deployed), dispatch the verify workflow from `main`.
+`<deploy-commit-sha>` is the full commit SHA of the last `deploy-lambdas.yml` run, that is the revert commit.
+
+```bash
+gh workflow run post-deploy-verify.yml --repo AdventureAsia365-Ecosys/AA-TripPlanner-Web --ref main -f app=lambdas -f expected_sha=<deploy-commit-sha>
+```
+
+Expected: the run is green (both functions `Active`, `CodeSha256` equal to the newest zip in the bucket, browse and
+assembly rows answer).
+Note: the workflow reads the **newest** zip object, not an older version. Right after Path B step 3 the newest zip is
+still the bad one, so the run fails until step 4 deploys the revert. Use the curl and alarm checks above meanwhile.
 
 ## Roll back or abort
 

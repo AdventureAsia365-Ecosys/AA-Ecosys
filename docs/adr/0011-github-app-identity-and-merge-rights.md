@@ -1,6 +1,6 @@
 # ADR 0011 — GitHub App identity for agents and bots, and merge rights per risk tier
 
-- **Status:** Proposed (22/10/2026, S247). Nghiệp accepts after the Apps exist and the test PR passes (AA-901).
+- **Status:** Proposed (2026-10-22, S247). The tech lead accepts after the Apps exist and the test PR passes (AA-901).
 - **Scope:** AA-Ecosys: all five repos of org AdventureAsia365-Ecosys (AA-Ecosys, AA-CIS-App, AA-Booking,
   AA-TripPlanner-Web, AA-CIS-Infra); agent sessions (Claude Code, Kiro); CI workflows that write to another repo or open
   release PRs.
@@ -11,19 +11,24 @@
   (release-please), AA-878 (secrets register), AA-880 (prod blueprint, the prod trigger). Setup guide:
   [`security/github-apps.md`](../security/github-apps.md).
 - **Related Linear:** AA-901 (U-25).
+- **Implementation status (2026-10-28):** both Apps exist since 2026-10-22 (S247). The CI App is named
+  `aa-ecosys-ci-bot` on GitHub (`aa-ci-bot` in this ADR); its ids are in `tools/github/apps.env`. The Infra docs
+  workflows mint its token, and `ROOT_REPO_DOCS_TOKEN` is deleted ([secrets register](../security/secrets-register.md)).
+  CODEOWNERS files exist in all six repos, AA-Partner included. The orchestrating session pushes, opens and merges
+  PRs as `aa-agent` through `tools/github/as-app.sh`. The status stays Proposed until the tech lead accepts it.
 
 ## Context
 
-Every GitHub action by an agent or a bot runs as Nghiệp's personal account `pqnghiep1354`: the local `gh` OAuth token
+Every GitHub action by an agent or a bot runs as the tech lead's personal account `pqnghiep1354`: the local `gh` OAuth token
 for agent sessions, and the fine-grained PAT `ROOT_REPO_DOCS_TOKEN` for the AA-CIS-Infra workflows that open root PRs
 (DB Schema Dump, Docs Gen). Three problems follow:
 
-1. **Audit.** A PR, a merge or a workflow dispatch by an agent cannot be told apart from one by Nghiệp.
+1. **Audit.** A PR, a merge or a workflow dispatch by an agent cannot be told apart from one by the tech lead.
 2. **Release PRs do not run CI.** release-please (AA-891) opens its release PR. With the default `GITHUB_TOKEN` that PR
    triggers no workflow, so the required checks never report and the PR cannot merge (GitHub does not start workflows
    from events made with `GITHUB_TOKEN`).
-3. **The prod gate cannot work.** From the first prod (D-13), Nghiệp approves risky PRs. GitHub does not let an author
-   approve their own PR; if the agent opens PRs as Nghiệp, Nghiệp can never give the required approval.
+3. **The prod gate cannot work.** From the first prod (D-13), the tech lead approves risky PRs. GitHub does not let an author
+   approve their own PR; if the agent opens PRs as the tech lead, the tech lead can never give the required approval.
 
 The PAT is also long-lived, tied to one person and listed as an open item in the secrets register.
 
@@ -39,7 +44,7 @@ The PAT is also long-lived, tied to one person and listed as an open item in the
 - Both Apps are **private** to the org ("Only on this account"), have **no webhook**, no callback URL, no user
   authorization (no OAuth on behalf of users) and **no organization permissions**.
 - Neither App gets `Administration`, `Secrets`, `Environments`, `Members` or `Deployments`. Branch protection, rulesets,
-  secrets and environments stay with Nghiệp's personal login, so a leaked App key cannot weaken a gate or read a secret.
+  secrets and environments stay with the tech lead's personal login, so a leaked App key cannot weaken a gate or read a secret.
 - `Workflows RW` on `aa-agent` is needed because agents edit `.github/workflows/*` in normal PRs; `Actions RW` because
   the orchestrator dispatches DB Migrate and DB Schema Dump. `aa-ci-bot` has neither: release-please only touches the
   CHANGELOG, the manifest and the version files.
@@ -71,8 +76,8 @@ The PAT is also long-lived, tied to one person and listed as an open item in the
 |---|---|
 | Agent pushes a branch, opens, comments on or merges a PR, dispatches a workflow | `aa-agent[bot]` via the helper |
 | release-please release PR, Infra root docs PRs | `aa-ci-bot[bot]` |
-| Branch protection, rulesets, repo settings, GitHub secrets and variables, App settings and keys | Nghiệp (`pqnghiep1354`), by hand or a script he runs |
-| Commits | The commit author stays the git author of the session (Nghiệp, with the agent's `Co-Authored-By` line); the push and the PR carry the App identity |
+| Branch protection, rulesets, repo settings, GitHub secrets and variables, App settings and keys | The tech lead (`pqnghiep1354`), by hand or with a script the tech lead runs |
+| Commits | The commit author stays the git author of the session (the tech lead, with the agent's `Co-Authored-By` line); the push and the PR carry the App identity |
 
 - Subagents never merge, push or open PRs, whatever token they could reach: the hook
   `.claude/hooks/subagent-guardrails.sh` blocks the commands, not the identity.
@@ -83,7 +88,7 @@ The PAT is also long-lived, tied to one person and listed as an open item in the
 | Phase | Normal PR | Risky PR (Terraform/IAM, migration/schema, auth/security, CI/workflow/secret, data deletion) |
 |---|---|---|
 | **Dev (now)** | `aa-agent` merges after green CI | `aa-agent` merges after green CI and an agent review (`kiro-reviewer` or an independent review subagent) |
-| **From the first prod or the first paying tenant** | `aa-agent` merges after green CI | Nghiệp approves, then `aa-agent` merges. Enforced by CODEOWNERS on the risky paths plus "Require review from Code Owners" on the protected branch (public repos; private repos per ADR 0014) |
+| **From the first prod or the first paying tenant** | `aa-agent` merges after green CI | The tech lead approves, then `aa-agent` merges. Enforced by CODEOWNERS on the risky paths plus "Require review from Code Owners" on the protected branch (public repos; private repos per ADR 0014) |
 
 - CODEOWNERS files exist from now in all five repos (AA-901), owner `@pqnghiep1354`, on the risky paths only (no `*`
   catch-all). In the dev phase they change nothing: branch protection does not require code-owner review, so the file
@@ -111,13 +116,13 @@ The PAT is also long-lived, tied to one person and listed as an open item in the
 ## Consequences
 
 - **Positive:**
-  - agent and bot actions are separable from Nghiệp's in every timeline and log;
+  - agent and bot actions are separable from the tech lead's in every timeline and log;
   - release PRs run the required checks, which unblocks AA-891;
-  - the prod gate becomes possible: the App is the author, Nghiệp the approver;
+  - the prod gate becomes possible: the App is the author, the tech lead the approver;
   - no long-lived token for the root docs PRs once `ROOT_REPO_DOCS_TOKEN` is retired.
 - **Negative / cost:**
   - two Apps and their keys to keep (a few minutes in the browser, one access-review line each);
-  - the agent needs the helper for GitHub writes; plain `gh` still uses Nghiệp's login until the session sets the
+  - the agent needs the helper for GitHub writes; plain `gh` still uses the tech lead's login until the session sets the
     App as its default (convention first; a hook check is a follow-up);
   - *(est., per month)*: 0 USD GitHub; about 0.40 USD for one Secrets Manager secret.
 
@@ -127,13 +132,13 @@ The PAT is also long-lived, tied to one person and listed as an open item in the
   workflows on every repo. Rejected for blast radius and for a less clear audit trail.
 - **A machine user (second GitHub account) with a PAT.** Uses a seat-like account, a long-lived token and a password
   plus 2FA to keep. Rejected: GitHub's recommended pattern for automation is an App.
-- **Fine-grained PATs for release-please.** Works (AA-891 fallback) but stays tied to Nghiệp's account and expires on a
+- **Fine-grained PATs for release-please.** Works (AA-891 fallback) but stays tied to the tech lead's account and expires on a
   calendar. Kept only as the fallback if this ADR is not accepted.
-- **Keep everything on Nghiệp's login.** Rejected: the three problems in Context stay.
+- **Keep everything on the tech lead's login.** Rejected: the three problems in Context stay.
 
 ## Follow-ups
 
-- AA-901: Nghiệp creates and installs both Apps (guide), stores the keys; the orchestrator runs the test PR with the
+- AA-901: the tech lead creates and installs both Apps (guide), stores the keys; the orchestrator runs the test PR with the
   helper and adds the register rows.
 - AA-891: release-please workflows mint the `aa-ci-bot` token; first release PR runs the required checks.
 - AA-CIS-Infra: switch `db-schema-dump.yml` and `docs-gen.yml` (Contents and Pull requests write) and

@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-booking-api]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -20,7 +20,7 @@ related: [OPS-02-cis, OPS-04, OPS-10-deploy-gate, AA-869, AA-892]
 > [!WARNING]
 > UNTESTED - do not follow in an incident without checking each step.
 > The same procedure was drilled on CIS (S241, [rollback-cis](rollback-cis.md)); on Booking only the read-only
-> steps 1-3 were run (19/10/2026). Set `status: active` after the first real run.
+> steps 1-3 were run (2026-10-19). Set `status: active` after the first real run.
 
 ## When to use
 
@@ -34,8 +34,11 @@ related: [OPS-02-cis, OPS-04, OPS-10-deploy-gate, AA-869, AA-892]
 ## Preconditions
 
 - Access: profile `aa365-admin` (MFA session), region `us-west-1`.
-- Jobs: Booking has its own gate over `booking.job` (`GET /booking/ops/deploy-gate`). `bk_inquiry_pull` is
-  always queued and is exempt. A rollback restarts the container like a deploy.
+- Jobs: a rollback restarts the container like a deploy. Since AA-993 G5 the Booking deploy gate
+  (`GET /booking/ops/deploy-gate`) blocks only while a retention job (`bk_retention_job`,
+  `bk_retention_inbox_redact`) runs or is queued due within 15 minutes. Check `booking.job` for those kinds (a
+  read-only DB Migrate `run-script`) before step 5. If one runs and the incident is SEV1, the tech lead decides
+  ([deploy-gate override](deploy-gate-override.md)).
 - Image: ECR `aa-booking-dev-api` is IMMUTABLE, tags are the full git SHA, and the lifecycle rule keeps only the
   **last 10 images**. Older revisions may have no image.
 - Booking has one service (`aa-booking-dev-api`, container `api`); its worker runs in the same process.
@@ -85,7 +88,7 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
    aws ecs describe-task-definition --task-definition aa-booking-dev-api:<target-rev> --profile aa365-admin --region us-west-1 --query "taskDefinition.containerDefinitions[0].[environment[].name, secrets[].valueFrom]" --output json
    ```
 
-   Expected: same names and secret references as the current revision. A difference: Nghiệp decides.
+   Expected: same names and secret references as the current revision. A difference: the tech lead decides.
    Rollback: none - read-only.
 
 5. Point the service at the target revision and wait.

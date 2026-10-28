@@ -1,6 +1,6 @@
 # ADR 0007 — Place pipeline in CIS: `geo` schema, `catalog.*` views, background jobs
 
-- **Status:** Accepted (14/10/2026, S236 — Nghiệp approved the AA-712 design with every recommendation
+- **Status:** Accepted (2026-10-14, S236 — the tech lead approved the AA-712 design with every recommendation
   Q1–Q7, and chose Geoapify as the geocoder the same session, see decision 9).
 - **Scope:** AA-Ecosys: AA-CIS-App (schema `geo`, job kinds, admin page, `catalog` views),
   AA-TripPlanner-Web (readers move to views, writers removed, legacy tables dropped), AA-CIS-Infra
@@ -14,7 +14,7 @@
 ## Context
 
 ADR 0002 made CIS the only writer of content, including a tour's itinerary places and the tour graph.
-On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
+On 2026-10-14 that pipeline still lives in TripPlanner and is frozen:
 
 - `backend/extraction/*` (Lambda) derives the day skeleton, itinerary components, stops, legs and
   junctions from CIS tours and writes them to `tripplanner.itinerary_components`, `tour_day`, `tour_stop`,
@@ -148,7 +148,7 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   point, the provider confirms it, else the model point is kept with lower precision.
 - **Only a provider/mode whose terms allow storing results indefinitely may be used**, because
   coordinates live forever in `shared.destinations`.
-- **Provider: Geoapify** (Nghiệp, S236) is the confirming geocoder for **all countries**. OpenStreetMap
+- **Provider: Geoapify** (tech lead, S236) is the confirming geocoder for **all countries**. OpenStreetMap
   data; Free plan 3,000 credits/day, commercial use allowed; results may be stored. Mapbox is the
   **basemap only** (no Mapbox geocoding is called or stored); Amazon Location is not used. Evidence:
   [`04-geocoder-research.md`](../audits/2026-10-14-S236-design-review/aa712/04-geocoder-research.md)
@@ -222,7 +222,8 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   switch to another storable provider a re-run job. Mapbox Temporary coordinates stop being a source of
   stored points.
 - Deploy gate: each 50-tour batch holds the gate ≈ 40–55 min (debounced follow-ups included); batches run
-  outside deploy windows.
+  outside deploy windows. *(Update 2026-10-28: since AA-993 G5 these kinds no longer block an app deploy; a deploy
+  waits only for an open wave or a deploy-blocking kind, data standards Part C C6.3a.)*
 - Before the catalog-wide run (not before the trial), TripPlanner's vector search (`MIN(embedding <=> q)
   GROUP BY destination`, a full scan) must be rewritten to an HNSW top-k subquery or a per-destination
   centroid. The planner may not push `ORDER BY embedding <=> q LIMIT k` into the HNSW index through a
@@ -245,7 +246,7 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
     per-tour photo count, cover, duration regex and md5. `security_barrier` stays on the contract views; turning it
     off on the graph views (they hide only non-live rows from trusted app roles) is a measured follow-up (CIS 255+)
     only if the AA-847 probe shows consumer quals blocked above a barrier subquery.
-  - *Not a pin — lines are DRAWN (Nghiệp, S246, D1; supersedes the earlier "hidden" proposal).* Linear features
+  - *Not a pin — lines are DRAWN (tech lead, S246, D1; supersedes the earlier "hidden" proposal).* Linear features
     (trail, river, road, loop, stream, path, circuit …) are stored `geo_status='ok'`, `precision='line'`, never
     hidden, never a graph stop or node. Geometry: CIS `geo.place_shape` (CIS 255). A `pending` row is created when the
     place is stored; the job kind `place_shape` draws it (Geoapify Place Details, then Overpass; accepted on name,
@@ -268,7 +269,7 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
     every graph build and on `/admin/places`, with audited, undoable fixes (duplicate merge, area, linear → line);
     the flip gate counts `linear_feature` (a linear name stored as a pin / circle) and `linear_without_shape` (a line
     with no drawn shape).
-  - *Duplicates merge automatically (Nghiệp, S246, D2; design + skeptic pass: `docs/audits/2026-10-21-S246-aa847/
+  - *Duplicates merge automatically (tech lead, S246, D2; design + skeptic pass: `docs/audits/2026-10-21-S246-aa847/
     dedupe/`).* Duplicate destinations are merged automatically by the CIS job kind `place_dedupe` (CIS 257); the
     admin duplicate fix on `/admin/places` is an override, not the normal path. One decision
     (`services/places/dedupe.decide`, rules pinned by a labelled pair set with 0 false merges in CI) is shared by the
@@ -292,8 +293,8 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
     (`missing_in_cis_live = 0`), with `tripplanner.component_id_map` (tp-017) bridging old component ids; then CIS
     254 revokes TripPlanner's grandfathered `raw_tours` (179) and `tour_atoms` (180) reads.
 - **Amended S248 (AA-712 X4), conditional — the legacy drop may come before day 14 on Dev:** decision 10 says the
-  legacy tables are dropped 14 days after the flip (flip 22/10/2026, so 05/11/2026). TripPlanner tp-018 may drop
-  them earlier **on Dev only, and only when Nghiệp approves it in writing** in the tp-018 PR and the session log,
+  legacy tables are dropped 14 days after the flip (flip 2026-10-22, so 2026-11-05). TripPlanner tp-018 may drop
+  them earlier **on Dev only, and only when the tech lead approves it in writing** in the tp-018 PR and the session log,
   after two DRY RUN dispatches (AA-CIS-Infra `db/scripts/aa712_frozen_tables_dry_run.py`) show no write after the
   freeze, no dependent outside the eight tables and unmoved read counters. Without that approval the 14-day date
   stands. The same approval is the written exception to data standards DM-3.8 (14 days of `pg_stat_user_tables`)
@@ -303,5 +304,8 @@ On 14/10/2026 that pipeline still lives in TripPlanner and is frozen:
   `aa:purpose` = `aa712-tp018-pre-drop`. Recorded in the Dead Table Registry rows. The drop also takes ACCESS
   EXCLUSIVE on CIS's `shared.destinations` for its length (the RI triggers of 11 foreign keys go with the tables), so
   it is applied while the job tables are idle and retried on a lock timeout.
+  *Done:* TripPlanner tp-018 ("drops the frozen place tables") merged on 2026-10-23 and is applied on Dev; the eight
+  legacy tables are absent from the live schema dump (`docs/architecture/db-schema-reference.md`, TripPlanner
+  latest tp-020).
 - **Revisit** if Geoapify's terms stop allowing storage or the free tier, if the confirm rate per
   country after the trial is too low to be useful, or if a second app needs to author places.

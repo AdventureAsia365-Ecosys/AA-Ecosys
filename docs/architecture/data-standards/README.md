@@ -14,10 +14,10 @@ related: [ARCH-08-engineering, ARCH-08-data-management, ARCH-08-scaling, ARCH-08
 
 # AA_Ecosys data standards
 
-**Version 1.6** · S255 · 28/10/2026 · **v1.0 and v1.1 approved by Nghiệp** (v1.0: S237 data-architecture review,
-"đồng ý duyệt hết", decisions E1–E11; v1.1: S243 N-1; v1.2: X1 close-out, Nghiệp approves its root PR; v1.3:
-partner CRM, classes and windows approved in S246 decision D6, Nghiệp approves its root PR; v1.4: tour liveness rule
-of ADR 0015, whose answers Q1–Q10 Nghiệp decided in S248, root PR merged under DM-11.5 (dev phase); v1.5: enforcement
+**Version 1.6** · S255 · 28/10/2026 · **v1.0 and v1.1 approved by the tech lead** (v1.0: S237 data-architecture review,
+every recommendation approved, decisions E1–E11; v1.1: S243 N-1; v1.2: X1 close-out, the tech lead approves its root PR; v1.3:
+partner CRM, classes and windows approved in S246 decision D6, the tech lead approves its root PR; v1.4: tour liveness rule
+of ADR 0015, whose answers Q1–Q10 the tech lead decided in S248, root PR merged under DM-11.5 (dev phase); v1.5: enforcement
 facts only (AA-853), no rule change, root PR under DM-11.5; v1.6: facts only from the first capacity review (AA-838), root PR
 under DM-11.5; see the changelog below) · Host ADR:
 [ADR 0008 — New-app integration and data platform rules](../../adr/0008-new-app-integration-and-data-platform-rules.md)
@@ -26,12 +26,12 @@ under DM-11.5; see the changelog below) · Host ADR:
 ## Purpose
 
 Binding rules for designing, changing, operating and scaling data on the shared PostgreSQL 15 RDS
-(`aa-cis-dev-db`, acc2 `005097885195`, us-west-1) that AA-CIS-App, AA-TripPlanner-Web and AA-Booking
-share, so that:
+(`aa-cis-dev-db`, acc2, us-west-1; account IDs: the account map in [onboarding](../../onboarding.md)) that
+AA-CIS-App, AA-TripPlanner-Web, AA-Booking and AA-Partner (the partner CRM) share, so that:
 
 - every schema has one owner in fact (permissions), not only in convention;
-- one app's bug, burst or migration cannot take the other two down or read their data;
-- a new app (first candidate: the tenant CRM, AA-821) joins through one gate and one playbook;
+- one app's bug, burst or migration cannot take the other apps down or read their data;
+- a new app joins through one gate and one playbook (the first one through it was the partner CRM, AA-Partner, AA-821);
 - each scale step is taken on a measured trigger, cheapest lever first.
 
 ## Scope
@@ -54,21 +54,21 @@ share, so that:
 
 **Precedence:** an accepted ADR wins over these parts; the parts win over skills, steering summaries
 and session notes. Each number lives in one part; the others cite it. A conflict found anywhere is
-fixed by PR in the same session and reported to Nghiệp.
+fixed by PR in the same session and reported to the tech lead.
 
 ## How the standard is enforced
 
-Keywords: **MUST / MUST NOT** = the reviewer blocks the PR (an exception needs Nghiệp's written
+Keywords: **MUST / MUST NOT** = the reviewer blocks the PR (an exception needs the tech lead's written
 approval in the PR and the session log); **SHOULD** = default, a deviation is explained in the PR;
 **MAY** = allowed. Every rule names its enforcement:
 
 | Layer | Exists today | To build (roadmap id, Linear) |
 |---|---|---|
-| **CI** | Migration Copy Guard (`infra/AA-CIS-Infra/db/check_migration_copies.py`); DB Migrate exit 3 when a file did not register (`db/run_migration.py`); Booking migration guard (`apps/AA-Booking/backend/tests/migration_guard.py`); CIS and Booking migration replay on `postgres:15`; CIS RLS tests (`test_007_rls_isolation.py`, `test_tenant_rls.py`, `test_aa679_catalog_views.py`); CIS gateway seam test (`tests/unit/test_aa685_no_raw_model_calls.py`); CIS deploy job guard on `shared.job`; job-table template comparison (CIS + Booking) and the Booking deploy guard by GitHub OIDC (X6, AA-751, S240–S241); DB Migrate idle check on every `<schema>.job` (exit 7); DM-6.1 class lint on migration copies and the DM-7.1 retention-row check for new-app (`crm`) tables in the Migration Copy Guard (`db/check_migration_files.py`, `db/check_retention_rows.py`, AA-929); MIG-6 ownership lint in the Migration Copy Guard (`db/check_migration_ownership.py`, AA-853, static: function bodies and dynamic SQL not read); MIG-5 drift report in DB Schema Dump (replay of every migration vs the live catalog, *Schema drift* section of the reference, AA-853, report only) | MIG-5 drift gate that fails on unmanaged objects (after the AA-853 replay baseline and owner decisions); safe runner defaults, `-- migrate:` headers, SQL lint, unique-number check (N5, AA-807); catalogue guard for RLS, grants, cross-owner FKs (X2, AA-817/AA-807); consumer contract hash guard (X7, AA-826); connection-budget check (N3, AA-824) |
-| **Database** | `catalog_owner` + role-scoped policy pattern (CIS 225); `UNIQUE` idempotency keys | `CONNECTION LIMIT` per role (N3, AA-824); owner/runtime roles, `db_migrator` (X1, AA-807/AA-817) |
-| **Alarm** | Part C C4.1 RDS baseline: connections > 60 % of `max_connections`, free storage, memory, CPU, CPU credits, read/write latency, disk queue, XID wraparound, per-role connections vs `CONNECTION LIMIT` + sampling-stopped (AA-824, AA-832); per-app budgets (AA-828); account budget $250 | Part C C4.1 baseline incl. memory, CPU credits, per-role connections, job backlog age (N3, AA-824; X6); per-app budgets (X9, AA-828) |
+| **CI** | Migration Copy Guard (`infra/AA-CIS-Infra/db/check_migration_copies.py`); DB Migrate exit 3 when a file did not register (`db/run_migration.py`); Booking migration guard (`apps/AA-Booking/backend/tests/migration_guard.py`); CIS and Booking migration replay on `postgres:15`; CIS RLS tests (`test_007_rls_isolation.py`, `test_tenant_rls.py`, `test_aa679_catalog_views.py`); CIS gateway seam test (`tests/unit/test_aa685_no_raw_model_calls.py`); CIS deploy job guard on `shared.job`; job-table template comparison (CIS + Booking) and the Booking deploy guard by GitHub OIDC (X6, AA-751, S240–S241); DB Migrate idle check on every `<schema>.job` (exit 7); DM-6.1 class lint on migration copies and the DM-7.1 retention-row check for new-app (`crm`) tables in the Migration Copy Guard (`db/check_migration_files.py`, `db/check_retention_rows.py`, AA-929); MIG-6 ownership lint in the Migration Copy Guard (`db/check_migration_ownership.py`, AA-853, static: function bodies and dynamic SQL not read); MIG-5 drift report in DB Schema Dump (replay of every migration vs the live catalog, *Schema drift* section of the reference, AA-853, report only); runner defaults, `-- migrate:` headers, SQL lint and the destructive pre-apply snapshot (`db/run_migration.py`, N5); connection-budget check (`db/check_connection_budget.py`, workflow `connection-budget.yml`, N3, AA-824); RLS catalogue guard (`db/rls_catalogue_rules.py`, X2; findings in the schema reference) | MIG-5 drift gate that fails on unmanaged objects (after the AA-853 replay baseline and owner decisions); unique-number check (N5); grant allowlist against `owners.yaml` (X2); consumer contract hash guard (X7, AA-826) |
+| **Database** | `catalog_owner` + role-scoped policy pattern (CIS 225); `UNIQUE` idempotency keys; a `CONNECTION LIMIT` on every LOGIN role except the RDS master (N3, AA-824); NOLOGIN owner roles (`cis_owner`, `bk_owner`, `tp_owner`, `crm_owner`), runtime roles and `db_migrator`, defined in AA-CIS-Infra `db/migrations/roles/` (X1, done 19/10/2026) | — |
+| **Alarm** | Part C C4.1 RDS baseline: connections > 60 % of `max_connections`, free storage, memory, CPU, CPU credits, read/write latency, disk queue, XID wraparound, per-role connections vs `CONNECTION LIMIT` + sampling-stopped (AA-824, AA-832); job backlog age per owner (AA-751); per-app budgets (AA-828); account budget $250 | — |
 | **Review** | the PR checklist in [Part A §8](01-engineering.md#8-review-checklist-for-any-pr-that-touches-sql) (copy into every PR that touches SQL); the new-app checklist (ADR 0008 / review §6.3, copy into the epic); the approval table in [Part B §11](02-data-management.md#11-change-management) | — |
-| **Runbook** | DRY RUN for destructive work (`skill/aa-cis-schema/references/destructive-ops.md`); S3-mediated ECS exec; aa-ship job guard queries; aa817 isolation probe | restore drill + single-schema restore (X10, AA-829); retention first-run DRY RUN (N4, AA-825); monthly capacity review (Part C C8) |
+| **Runbook** | DRY RUN for destructive work (`skill/aa-cis-schema/references/destructive-ops.md`); S3-mediated ECS exec; aa-ship job guard queries; aa817 isolation probe; PITR restore and single-schema restore runbooks (`docs/ops/runbooks/restore-rds-pitr.md`, `restore-schema.md`; drills 17/10 and 24/10/2026, X10, AA-829); CIS retention kinds that run as DRY RUN until a live run is approved (N4, AA-825); monthly capacity review (Part C C8; first run S255, AA-838) | — |
 
 Until a *to build* control lands, the review checklist carries its check. The full map of rules to
 roadmap items is [Part B §12](02-data-management.md#12-enforcement-still-to-build).
@@ -95,8 +95,8 @@ roadmap items is [Part B §12](02-data-management.md#12-enforcement-still-to-bui
 8. **The tenant context is set transaction-locally after a membership check;** a new app's tenant pool
    fails closed (503); no app sets the tenant GUC to read another owner's tables. (SEC-10, DM-8.4)
 9. **Ownership is a permission:** NOLOGIN `<app>_owner`, LOGIN `<app>_app` with `CONNECTION LIMIT` and
-   `application_name`, a separate `db_migrator`; Booking and TripPlanner first, CIS behind D2;
-   `aa_cis_admin` becomes break-glass. Role attributes live in git, never by hand. (SEC-1, SEC-11,
+   `application_name`, a separate `db_migrator` (in force for every app since X1, 19/10/2026);
+   `aa_cis_admin` is break-glass only. Role attributes live in git, never by hand. (SEC-1, SEC-11,
    DM-8.1–8.2, ADR 0008 d6)
 10. **The connection budget stays ≤ 75 % of `max_connections`** and lives in Part C C2.2; any PR that
     changes a pool, task count, Lambda concurrency or instance class updates it. Limits and reserved
@@ -134,28 +134,28 @@ roadmap items is [Part B §12](02-data-management.md#12-enforcement-still-to-bui
 
 ## Changing this standard
 
-A PR to the root repo, approved by Nghiệp. A rule change bumps the version below; steering
+A PR to the root repo, approved by the tech lead. A rule change bumps the version below; steering
 (`.kiro/steering/*.md`) and skills that restate a rule are updated in the same PR. A change to an
 accepted decision (role order, retention windows, contract schema, customer master) also amends
 ADR 0008.
 
 | Version | Date | Session | Change |
 |---|---|---|---|
-| 1.0 | 15/10/2026 | S237 | First version: Parts A–C, ADR 0008, ADR 0003a. Approved by Nghiệp. |
-| 1.1 | 19/10/2026 | S243 | Approved by Nghiệp (S243 N-1; the decisions are S241's, `docs/sessions/2026-10-17-S241-decisions.md`). **D-13:** DM-11.5 merge rights by phase (dev: agents merge after green CI; from prod / first paying tenant: Nghiệp approves Terraform/IAM, migration, auth/security and data-deletion PRs), enforcement "subagent hook; review" instead of "Branch protection"; Part B §11 "Who approves what" note and rows (new table/column; role, RLS or default-ACL change). **D-12:** C2.3g, DM-8.4, Part A SEC-10 and §9: tenant-pool flags fail closed globally (unreadable flag = tenant pool, explicit `"false"` = admin pool for that route, emergency `TENANT_POOL_FORCE_ADMIN_FLAGS`), with the rollback path (CIS #792). **D-09 (AA-872):** DM-7 rows for CloudWatch security/audit logs (VPC flow, WAF, ECS Exec, Cognito triggers; `postgresql` already listed) 365 days and application logs 30 days; C4.2b 14 → 365 days. **Facts (AA-889):** DM-11.2 schema reference regenerated by `db-schema-dump.yml` (nightly + after every DB Migrate apply); DM-1.2 `owners.yaml` exists (X1 S1) and is the single registry, `docs/database/schema-ownership.md` explains it (Part A tooling table and MIG-1 follow); status moved to "Exists" after a Terraform read: C4.2a, C4.2b, C7.1 (class, storage, final snapshot, parameter group, restore drill), DM-9.1. |
-| 1.2 | 19/10/2026 | S244 | X1 close-out (AA-852 / AA-860, X1 plan S23). **Exception (needs Nghiệp's approval in the PR):** Part A §9 row XD3, default privileges `FOR ROLE cis_owner … TO cis_app` in the 11 CIS runtime schemas, also cited in DM-8.3. **Facts:** Part A §9 rows retired (`aa_cis_admin` as runtime + migrator + owner; bk-001 `FOR ROLE aa_cis_admin`; Booking/TP objects owned by the migrator) into a "Retired rows" table, the Booking/TP owner default privileges listed; SEC-6 note on the runtime role `cis_app` and its `<table>_cis_app_all` policy; DM-8.2 in force (`db_migrator`); DM-8.9 break-glass text (master only for `roles/`, `set-password`, `run-script`); C2.2 role column, `db_migrator` limit 5, `cis_app` connection sites. |
+| 1.0 | 15/10/2026 | S237 | First version: Parts A–C, ADR 0008, ADR 0003a. Approved by the tech lead. |
+| 1.1 | 19/10/2026 | S243 | Approved by the tech lead (S243 N-1; the decisions are S241's, `docs/sessions/2026-10-17-S241-decisions.md`). **D-13:** DM-11.5 merge rights by phase (dev: agents merge after green CI; from prod / first paying tenant: the tech lead approves Terraform/IAM, migration, auth/security and data-deletion PRs), enforcement "subagent hook; review" instead of "Branch protection"; Part B §11 "Who approves what" note and rows (new table/column; role, RLS or default-ACL change). **D-12:** C2.3g, DM-8.4, Part A SEC-10 and §9: tenant-pool flags fail closed globally (unreadable flag = tenant pool, explicit `"false"` = admin pool for that route, emergency `TENANT_POOL_FORCE_ADMIN_FLAGS`), with the rollback path (CIS #792). **D-09 (AA-872):** DM-7 rows for CloudWatch security/audit logs (VPC flow, WAF, ECS Exec, Cognito triggers; `postgresql` already listed) 365 days and application logs 30 days; C4.2b 14 → 365 days. **Facts (AA-889):** DM-11.2 schema reference regenerated by `db-schema-dump.yml` (nightly + after every DB Migrate apply); DM-1.2 `owners.yaml` exists (X1 S1) and is the single registry, `docs/database/schema-ownership.md` explains it (Part A tooling table and MIG-1 follow); status moved to "Exists" after a Terraform read: C4.2a, C4.2b, C7.1 (class, storage, final snapshot, parameter group, restore drill), DM-9.1. |
+| 1.2 | 19/10/2026 | S244 | X1 close-out (AA-852 / AA-860, X1 plan S23). **Exception (needs the tech lead's approval in the PR):** Part A §9 row XD3, default privileges `FOR ROLE cis_owner … TO cis_app` in the 11 CIS runtime schemas, also cited in DM-8.3. **Facts:** Part A §9 rows retired (`aa_cis_admin` as runtime + migrator + owner; bk-001 `FOR ROLE aa_cis_admin`; Booking/TP objects owned by the migrator) into a "Retired rows" table, the Booking/TP owner default privileges listed; SEC-6 note on the runtime role `cis_app` and its `<table>_cis_app_all` policy; DM-8.2 in force (`db_migrator`); DM-8.9 break-glass text (master only for `roles/`, `set-password`, `run-script`); C2.2 role column, `db_migrator` limit 5, `cis_app` connection sites. |
 | 1.3 | 22/10/2026 | S247 | Partner CRM, AA-929 (card CRM-01b of the CRM design v3, `docs/audits/2026-10-21-S246-crm-design-v3/`; decision D6 = a in S246). **DM-6.1:** new classes `government_id`, `health`, `emergency_contact`; DM-6.4 keeps them out of prompts (`health` only as unidentified closed-list codes); DM-6.2 note that a CRM traveller is the agency's record. **DM-6.8 rewritten:** the CRM is a separate app, AA-Partner (ADR 0008a, AA-928); Booking never creates a customer for a CRM trip (B2B trip case with counts only); ops data stays in the CRM (`ops_release`, trip end + 90 days); AA access layers L1–L3; the threat model stated honestly. **DM-7:** CRM rows in the retention table with the DM-7.5 windows approved in D6 (backups and DEK copies ≤ 30 days, audit 12 months in the DB + Object Lock archive to 7 years, ops release + 90 days, trash 7 days, archive suggestion 36 months, scrubbed prompts 30 days), the signed-agreement (claim-period) exception trip end + 3 years (est., counsel confirms) and the accounting exception; DM-7.1 a new app's tables have rows from their first migration, CI-checked; DM-7.3 does not apply to agency data. **C2.2:** `crm_app` connection limit 6, pool 3 (planned), total ~132 of 135. **Enforcement:** Infra Migration Copy Guard (DM-6.1 class lint, DM-7.1 retention-row check). |
-| 1.4 | 23/10/2026 | S248 | Tour liveness, AA-986 slice L7b ([ADR 0015](../../adr/0015-tour-liveness-and-retirement-propagation.md), accepted S248; Nghiệp decided Q1–Q10; root PR under DM-11.5, dev phase). **DM-4.9 new:** once a CIS catalog key is no longer served (`retired` / `paused`, derived by `gold_aa_internal.v_tour_liveness`), its derivatives MUST NOT stay live in the catalog, AA-Booking or TripPlanner (sold departures, confirmed holds, open trip cases and drafts kept and flagged, Q4); never two active Masters per group, no active Master over a dead source; the lifecycle record, the L4 tombstone and an all-superseded group's `retired` record agree with the derived state. Enforced by the nightly AA-CIS-Infra **DB Tour Liveness Gate**; the CIS and tenant layers are not in the gate yet (follow-up slice). **DM-8.9** and the **C2.2** master row name the gate as an automated READ_ONLY run-script use of the master (inside the existing reserve, no budget change). |
+| 1.4 | 23/10/2026 | S248 | Tour liveness, AA-986 slice L7b ([ADR 0015](../../adr/0015-tour-liveness-and-retirement-propagation.md), accepted S248; the tech lead decided Q1–Q10; root PR under DM-11.5, dev phase). **DM-4.9 new:** once a CIS catalog key is no longer served (`retired` / `paused`, derived by `gold_aa_internal.v_tour_liveness`), its derivatives MUST NOT stay live in the catalog, AA-Booking or TripPlanner (sold departures, confirmed holds, open trip cases and drafts kept and flagged, Q4); never two active Masters per group, no active Master over a dead source; the lifecycle record, the L4 tombstone and an all-superseded group's `retired` record agree with the derived state. Enforced by the nightly AA-CIS-Infra **DB Tour Liveness Gate**; the CIS and tenant layers are not in the gate yet (follow-up slice). **DM-8.9** and the **C2.2** master row name the gate as an automated READ_ONLY run-script use of the master (inside the existing reserve, no budget change). |
 | 1.5 | 25/10/2026 | S250 | Enforcement facts only, no rule change (AA-853; root PR under DM-11.5, dev phase). **MIG-6:** the Migration Copy Guard ownership lint (AA-CIS-Infra `db/check_migration_ownership.py`) fails an owner-dir copy that creates, alters, drops, comments on, grants on or writes to an object outside its owner's `owners.yaml` schemas; it is static (function bodies and dynamic SQL not read), the X1 owner-role switch stays the runtime boundary. **MIG-5:** DB Schema Dump replays every applied migration into a scratch PostgreSQL each night and writes the *Schema drift* section (unmanaged / missing / changed, owner decision or open) into `db-schema-reference.md`; report only, it fails nothing until the replay baseline (AA-ACP-Core lineage) and the owner decisions in `db/schema_drift_decisions.json` exist. Part A tooling table, MIG-5 / MIG-6 *Enforced* and the CI row above follow. |
 | 1.6 | 28/10/2026 | S255 | Facts only, no rule change (AA-838, first monthly capacity review C8, `docs/audits/2026-10-28-S255-aa838-capacity/`; root PR under DM-11.5, dev phase). **C2.2:** TripPlanner reserved concurrency is 15 (browse) / 5 (assembly) in live Terraform, not 10 / 10; target total recomputed to 133 of 135 (`tripplanner` 20 of 30 unchanged); a dated re-check note records the paper worst case 168 with today's `cis-api` pool 10, accepted until 15/12/2026. |
 
-## Open items for Nghiệp
+## Open items for the tech lead
 
-Decisions the parts follow for now, which Nghiệp may change by PR:
+Decisions the parts follow for now, which the tech lead may change by PR:
 
-1. **N3 interim:** `CONNECTION LIMIT` of `tripplanner`, `booking`, `aa_app_user` set by one CIS
-   migration (the single MIG-6 exception) until the X1 Infra role bootstrap exists. Alternative: build
-   the bootstrap directory first (needs `db-migrate.yml`, `check_migration_copies.py` changes).
+1. **N3 interim (resolved):** the `CONNECTION LIMIT` of `tripplanner`, `booking` and `aa_app_user` was set by one
+   CIS migration (234, the single MIG-6 exception). The X1 Infra role bootstrap (`db/migrations/roles/`) now exists;
+   new limits go there.
 2. **TripPlanner traveller data:** the parts follow ADR 0006 decision 9 ("guest contact data only")
    over the E8 phrase "subject + consent".
 3. **TripPlanner job runner:** `tripplanner.job` + a scheduled Lambda worker (ADR 0003a decision 4)
@@ -169,13 +169,13 @@ Decisions the parts follow for now, which Nghiệp may change by PR:
 8. **Proposed retention rows** in Part B §7 (DFS/geocoder ledgers, superseded rankings/routes,
    notifications, Booking OTP/session rows, TripPlanner sessions/events, `decision_log`) and the
    "stop at 2x the previous run" rule need owner confirmation in N4 / L3.
-9. **Unverified facts to check during delivery:** Performance Insights support on `db.t4g.small`
-   (`terraform plan`, X9); whether any CIS job holds a transaction across an LLM call (before
-   `idle_in_transaction_session_timeout = 60s`, C2.3f); real `max_connections` after the resize
-   (recompute C2.2); the reference dump is stale (no 228 / 230 / bk-007) until N1.
+9. **Facts checked during delivery (resolved):** Performance Insights runs on `db.t4g.small` (X9;
+   `modules/rds/main.tf`); the parameter group sets `idle_in_transaction_session_timeout` (C2.3f, C4.2a); the real
+   `max_connections` after the resize is 181 (measured 16/10/2026, C2.2 recomputed); the schema reference is
+   regenerated nightly and after every DB Migrate apply (N1).
 10. **Partner CRM follow-ups (v1.3):** Part A NAM-14 (no OTP tables in a new schema) needs the exception for
     `crm.otp_challenge` that ADR 0008a step 8 (AA-928) grants; cite it in NAM-14 and §9 once 0008a is accepted.
-    The (est.) CRM windows are confirmed by counsel or Ms. Thư before Go-real.
-11. **Follow-up edits outside these files:** `schema-ownership.md` rule 2 → views only and the `job` row
-    → ADR 0003a; header pointers in ADR 0001 and ADR 0003; Booking `deploy-dev.yml:16` stale "No job
-    guard" comment; a `docs/adr/` index (none exists today).
+    The (est.) CRM windows are confirmed by counsel or the business owner before Go-real.
+11. **Follow-up edits outside these files:** header pointers in ADR 0001 and ADR 0003. Done since v1.0:
+    `schema-ownership.md` rule 2 (views only) and its `job` row (ADR 0003a); the Booking `deploy-dev.yml` job-guard
+    comment; the [ADR index](../../adr/README.md).

@@ -1,10 +1,14 @@
 # ADR 0005 — Pricing and supplier rates
 
-- **Status:** Accepted (14/10/2026, Nghiệp, S235), including the former open recommendations (decisions 8–10).
+- **Status:** Accepted (14/10/2026, tech lead, S235), including the former open recommendations (decisions 8–10).
   Tax rates are still to be confirmed by the AA accountant; margin numbers are policy data and are checked with
-  Ms. Thư before the first price load.
+  the business owner before the first price load.
 - **Amended by:** [ADR 0005a](0005a-b2b-resale-warn-and-vnd.md) (Accepted 22/10/2026, S247): decision 9
   (warn, not block, below the "from" price; no subscription line), VND quotes, `b2b_price` naming.
+- **Update 2026-10-28** (live schema dump, Booking bk-032): built in schema `booking`: `suppliers`,
+  `supplier_contracts`, `supplier_rates`, `fx_rates`, `pricing_rules`, `trip_plan_prices`. Not built yet: the view
+  `booking.v_from_prices`, the contract `price.from.v1` and the `tax_rules` table. Until then the B2B price-parity
+  read derives the "from" price from `booking.trip_plan_prices`.
 - **Scope:** AA-Booking (owner), CIS and TripPlanner (readers). Answers AA-709.
 - **Related:** ADR 0001 (Booking owns commercial data), ADR 0002 (only CIS writes content), ADR 0004 (Booking
   bootstrap, O7: all customer-facing content in CIS), ERD v2 `docs/AAA/erd-v2/booking.dbml`
@@ -39,7 +43,7 @@ version V3, the V3 price cannot change.
    | B2C direct, tailor-made (TripPlanner, AA web) | 30% (25–35%; private 2 pax up to 35%, groups ≥ 8 about 25%) | 20% |
    | B2C fixed departure / seat-in-coach | 25% | 18% |
    | B2B reseller (travel agent, CIS tenant reselling AA tours) | 15% on the net price given to them (12–18%) | 10% |
-   | Peak season (Tết, festivals, high months) | +3 to +5 points | — |
+   | Peak season (Lunar New Year, festivals, high months) | +3 to +5 points | — |
 
    Sales may override a quote price; below the floor the override needs a reason and is audited. Card/payment
    fees (~3%) are built into the price, not added as a surcharge. Prices are rounded (USD to $5).
@@ -63,11 +67,12 @@ version V3, the V3 price cannot change.
 - TripPlanner shows "from" prices only via the Booking view; it never computes prices.
 - Margin numbers are policy and editable (pricing rules table), not code constants.
 
-## Decisions on the former open items (approved by Nghiệp, 14/10/2026)
+## Decisions on the former open items (approved by the tech lead, 14/10/2026)
 
 <!-- markdownlint-disable MD029 -- numbering continues decisions 1-7 above, which other text cites (decision 8) -->
 8. **Who enters prices.** A new staff role `contracting` (next to admin / sales / content_creator) owns supplier
-   contracts and net rates; Ms. Thư or a named ops/product person holds it at first. **Maker-checker:** one person
+   contracts and net rates; the business owner or a named ops/product person holds it at
+   first. **Maker-checker:** one person
    uploads or edits, another publishes; every change is audited. Sales never edit net rates — they quote and may
    override the selling price within the floor. Ops checks availability and books suppliers.
    **Format:** one AA Excel template, one sheet per service type (hotel, transport, guide, entrance, activity,

@@ -30,7 +30,7 @@ related: []
 ## Preconditions
 
 - Access: <profile, role, Cognito group>. Start every session with the identity check below.
-- State: `shared.job` has no queued or running job of a kind this touches (deploy gate), unless SEV1 and Nghiệp decides.
+- State: `shared.job` has no queued or running job of a kind this touches (deploy gate), unless SEV1 and the tech lead decides.
 - Cost: <0 USD / estimate per run>.
 
 ```bash
@@ -71,7 +71,7 @@ Expected: the acc2 account from the [account map](../onboarding.md#account-map).
 
 ## Escalation
 
-- Severity per [incident response](../ops/incident-response.md). Tell Ms. Thư when <rule>.
+- Severity per [incident response](../ops/incident-response.md). Tell the business owner when <rule>.
 
 ## Tested log
 

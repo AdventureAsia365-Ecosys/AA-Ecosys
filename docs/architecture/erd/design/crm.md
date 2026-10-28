@@ -1,26 +1,42 @@
 ---
 id: APP-04-erd-design-crm
-title: "ERD design: crm schema (planned)"
-description: "Hand-written design ERD of the planned crm schema of AA-Partner (88 tables and one view in ten groups), reviewed before the first crm migration and compared with the live dump by the drift check."
+title: "ERD design: crm schema"
+description: "Hand-written design ERD of the crm schema of AA-Partner (88 tables and one view in ten groups); the schema is live, the page is not in sync with it yet, and the drift check reports the gap."
 type: reference
 status: draft
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis-dev-db, aa-partner]
-last_reviewed: 2026-10-22
+last_reviewed: 2026-10-28
 review_every_days: 30
 generated: false
 related: [APP-04, APP-04-erd, APP-04-erd-design, APP-10-partner-crm, AA-894, AA-932]
 ---
 
-# ERD design: crm schema (planned)
+# ERD design: crm schema
 
 <!-- erd-design schema=crm enforce=false implied-fk=tenant_id:tenant -->
 
 Design ERD of schema `crm`, owned by AA-Partner (migrations `crm-NNN`, byte copy in AA-CIS-Infra
-`db/migrations/crm/`). Nothing of it is live yet: AA-932 creates the schema and the roles; the first tables come
-with `crm-001` (base template, AA-933) and the slices after it. This page is the diagram the migration PRs are
-reviewed against. After every DB Migrate apply, the drift check of the DB Schema Dump workflow compares it with the
+`db/migrations/crm/`). The schema is live: AA-932 created the schema and the roles, `crm-001` (base template,
+AA-933) the first tables, and the slices after it the rest (78 tables and 6 views at `crm-023`, schema reference of
+28/10/2026). This page is the diagram the migration PRs are reviewed against.
+
+**Not in sync with the live schema yet** (28/10/2026, table names only; the drift check stays report only):
+
+- On this page, not live: `ai_draft`, `calendar_connection`, `campaign`, `campaign_recipient`, `commission`,
+  `export_job`, `incident_flag`, `insight_aggregate`, `insight_fact`, `invoice`, `metric_daily`, `ops_release`,
+  `outbox`, `payment_provider_account`, `refund_request`, `release_note`, `signature_event`, `spend_budget`,
+  `supplier_manifest_export`, `support_grant`, `support_session`, `tag`, `tag_link`, `terms_acceptance`,
+  `traveler_flight`, `trip_stage_transition`, `unsubscribe_token`, `voice_profile`, `workflow_rule`, `workflow_run`,
+  `workflow_template` (slices not built yet, or renamed).
+- Live, not on this page: `aa_catalog_state`, `aa_catalog_tour`, `aa_content` (described in text only), `aa_request`,
+  `audit_export_tenant`, `booking_feed_state`, `legal_hold`, `lifecycle_run`, `llm_usage_daily`, `mail_import`,
+  `member_invitation`, `membership_feed_state`, `membership_inbox`, `status_transition`, `studio_invitation`,
+  `trip_commitment`, and the `audit_event` partitions.
+
+Rule 7 of the [design ERD rules](README.md) asks each migration PR to update this page; the owner decides whether to
+redraw it from the live dump and switch it to `enforce=true`. After every DB Migrate apply, the drift check of the DB Schema Dump workflow compares it with the
 live catalog (see [design ERDs](README.md)).
 
 Sources, in order of precedence:

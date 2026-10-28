@@ -15,13 +15,13 @@ related: [ARCH-08, ARCH-08-engineering, ARCH-08-data-management, ARCH-08-schema-
 # Data platform standards — Part C: Operations and scaling
 
 **Purpose:** binding rules for running, monitoring and growing the shared PostgreSQL 15 RDS
-(`aa-cis-dev-db`, acc2 `005097885195`, us-west-1) that AA-CIS-App, AA-TripPlanner-Web and
-AA-Booking share, so that one app's load never takes the other two down and every scale step is
-taken on a measured trigger, not a guess.
+(`aa-cis-dev-db`, acc2, us-west-1; account IDs: the account map in [onboarding](../../onboarding.md)) that
+AA-CIS-App, AA-TripPlanner-Web, AA-Booking and AA-Partner (the partner CRM) share, so that one app's load never
+takes the other apps down and every scale step is taken on a measured trigger, not a guess.
 
 **Status:** Accepted with the S237 data-architecture review
 ([`docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md`](../../audits/2026-10-14-S237-lane-backlog/data-architecture/README.md),
-"the review"; Nghiệp approved every recommendation, 15/10/2026). Version 1.3 (22/10/2026, S247; changes in the README changelog), part of the rule body
+"the review"; the tech lead approved every recommendation, 15/10/2026). Version 1.6 (28/10/2026, S255; changes in the README changelog), part of the rule body
 of [ADR 0008](../../adr/0008-new-app-integration-and-data-platform-rules.md) (new-app integration and
 data platform rules, accepted 15/10/2026); index and golden rules in [`README.md`](README.md). Roadmap
 ids (N1..N7, X1..X10, L1..L10) are the review's section 7.
@@ -37,7 +37,7 @@ means the enforcement does not exist yet and is delivered by that roadmap item.
 and index builds). This part is the single home of pool sizes, connection limits, timeouts and alarm
 thresholds; it adds the operational and scaling rules and links to the other parts instead of
 repeating their values. A conflict is fixed by PR and
-reported to Nghiệp, never ignored.
+reported to the tech lead, never ignored.
 
 ## Contents
 
@@ -63,16 +63,16 @@ unchanged unless the prod ADR (L9) says otherwise.
 
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
-| C1.1a | Every pool MUST set `application_name` (`cis-api`, `cis-worker`, `cis-tenant`, `tp-browse`, `tp-assembly`, `booking-api`, `db-migrate`). A new app adds `<app>-<process>`. | Without it, `pg_stat_activity` and Performance Insights cannot attribute load to an app. | Review checklist; to build (N3): a nightly check in the N1 dump that flags sessions with an empty `application_name`. |
+| C1.1a | Every pool MUST set `application_name` (`cis-api`, `cis-worker`, `cis-tenant`, `tp-browse`, `tp-assembly`, `booking-api`, `crm-api`, `db-migrate`). A new app adds `<app>-<process>`. | Without it, `pg_stat_activity` and Performance Insights cannot attribute load to an app. | Review checklist; to build (N3): a nightly check in the N1 dump that flags sessions with an empty `application_name`. |
 | C1.1b | DB latency SLIs MUST be read from Performance Insights (sliced by `db.application.name`) when enabled, else from `pg_stat_statements` (sliced by role). p95 from `pg_stat_statements` is approximated as `mean_exec_time + 2 × stddev_exec_time`. | `pg_stat_statements` groups by role, not by `application_name`, and has no percentiles. | Capacity review (C8). |
-| C1.1c | Per-app attribution by role is only exact after the role split (X1). Until then `aa_cis_admin` mixes CIS API, CIS worker, DB Migrate and ops scripts; `tripplanner`, `booking` and `aa_app_user` are already separate. | Reports must not blame CIS for Migrate or ECS exec load. | Capacity review states the caveat until X1 is Done. |
+| C1.1c | Per-app attribution by role is exact since the role split (X1, 19/10/2026): `cis_app` carries the CIS API, the CIS worker and ECS exec scripts; `db_migrator` carries DB Migrate, the schema dump and the isolation probe; `tripplanner`, `booking`, `crm_app` and `aa_app_user` are separate. Split CIS API from worker load by `application_name`. | Reports must not blame CIS for Migrate or ECS exec load. | Capacity review (C8). |
 | C1.1d | Apps SHOULD log DB time per request (`db_ms`) in their structured logs. | App-side p95 includes pool wait, which the DB cannot see. | To build (N3). |
 
 ### C1.2 Objectives
 
 | App | SLI (key query or signal) | Dev objective | Source |
 |---|---|---|---|
-| CIS | Tenant API reads (`/v1/*` on `acp_shared.*`, `gold_aa_internal.tenant_tour_versions`, `catalog.*`): DB time p95 | < 150 ms | PI / `pg_stat_statements` (role `aa_cis_admin`, later `cis_app`; `aa_app_user` for canary routes) |
+| CIS | Tenant API reads (`/v1/*` on `acp_shared.*`, `gold_aa_internal.tenant_tour_versions`, `catalog.*`): DB time p95 | < 150 ms | PI / `pg_stat_statements` (role `cis_app`; `aa_app_user` for canary routes) |
 | CIS | Admin list and cost pages (`shared.v_tenant_monthly_usage`, `llm_call_log` aggregates, job list): p95 | < 1 s (after N4a sargable rewrite) | same |
 | CIS | Job claim (`shared/jobs/queue.py` claim under `pg_advisory_xact_lock(650001)`): mean | < 20 ms | `pg_stat_statements` |
 | TripPlanner | Browse reads (`catalog.v_tour`, `v_tour_day`, `v_destination`, photo views): DB time p95 | < 300 ms | PI / role `tripplanner` |
@@ -85,7 +85,7 @@ unchanged unless the prod ADR (L9) says otherwise.
 
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
-| C1.2a | An objective missed in **two consecutive weekly checks** MUST be raised to Nghiệp with the offending query and a proposed fix (ask before creating a Linear issue). | One bad week during a wave is noise; two is a trend. | Capacity review (C8) and weekly `pg_stat_statements` check (C4.3). |
+| C1.2a | An objective missed in **two consecutive weekly checks** MUST be raised to the tech lead with the offending query and a proposed fix (ask before creating a Linear issue). | One bad week during a wave is noise; two is a trend. | Capacity review (C8) and weekly `pg_stat_statements` check (C4.3). |
 | C1.2b | A new primary-path query SHOULD state its expected p95 and index in the PR when it touches a table > 100k rows. | Most regressions are a missing index on a growing ledger. | Review checklist. |
 
 ---
@@ -116,9 +116,9 @@ always confirm with `SHOW max_connections` after a resize):
 | db.t4g.medium | 4 GiB | ~400 | ~300 |
 | db.m7g.large | 8 GiB | ~850 | ~640 |
 
-Today's worst case (code and Terraform as of 15/10/2026) is ~235 against ~85: CIS API 10 tasks ×
+Before the resize (code and Terraform as of 15/10/2026) the worst case was ~235 against ~85: CIS API 10 tasks ×
 (10 main + 5 tenant), worker 3 × 10, TripPlanner 10 Lambda instances × 5, Booking 5. Only the
-account Lambda quota of 10 and `desired_count = 1` hide it.
+account Lambda quota of 10 and `desired_count = 1` hid it. The current budget is C2.2.
 
 ### C2.2 Budget (target, on db.t4g.small)
 
@@ -134,7 +134,7 @@ account Lambda quota of 10 and `desired_count = 1` hide it.
 | `tp-browse` | `tripplanner` | **1** (today 5, `backend/shared/db.py:60`) | reserved concurrency **15** (`tripplanner_browse_reserved_concurrency`, `accounts/aa365/tripplanner_variables.tf`) | 15 | **30** (both TP pools + 10 for backfills and Lambda deploy overlap) | 10 s (Lambda timeout 30 s) | 3 s |
 | `tp-assembly` | `tripplanner` | **1** | reserved concurrency **5** (`tripplanner_lambda_reserved_concurrency`) | 5 | (in 30) | 20 s (Lambda timeout 60 s; also the role backstop) | 5 s |
 | `booking-api` (+ in-process `booking.job` worker) | `booking` | 5 (`backend/app/db.py:54`) | 2 (1 task + deploy overlap, `booking.tf` `deployment_maximum_percent = 200`) | 10 | **10** | 15 s (also the role backstop) | 5 s |
-| `crm-api` (+ in-process `crm.job` worker; AA-Partner, planned) | `crm_app` (planned: created by an Infra `roles/` file before the first `crm` migration, C2.3a; v1.3, AA-929) | **3** | 2 (1 task + deploy overlap) | 6 | **6** | set with the pool (C2.3f) | set with the pool |
+| `crm-api` (+ in-process `crm.job` worker; AA-Partner) | `crm_app` (Infra `roles/` file rl-003, C2.3a; v1.3, AA-929) | **3** (`api/app/db.py`) | 2 (1 task + deploy overlap) | 6 | **6** | none at pool level yet (only `command_timeout`; C2.3f gap) | none at pool level yet |
 | `db-migrate`, DB Schema Dump, DB Isolation Probe | `db_migrator` (X1 S22) | 1 | 3 (three workflow concurrency groups can overlap) | 3 | `db_migrator` **5** (`rl-002`) | 15 min (N5 runner default, set per session) | 5 s (MIG-9 runner default) |
 | ECS exec scripts (S3-mediated, container `DATABASE_URL`) | `cis_app` | — | — | (inside the 90) | (in `cis_app` 90) | per session | per session |
 | `roles/` files, DB Migrate `set-password` / `run-script`, DB Tour Liveness Gate (nightly READ_ONLY run-script, seconds), break-glass | `aa_cis_admin` (master; its DSN is read only inside the migrator task, or for break-glass) | — | — | 10 (reserve) | none (break-glass, C2.3b) | per session | per session |
@@ -154,12 +154,12 @@ alarm (S18) next to `RoleConnectionLimitPct` > 80 %. Raise it only by an Infra `
 
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
-| C2.3a | Every LOGIN role except the RDS master MUST have a `CONNECTION LIMIT`, set by `ALTER ROLE` in a reviewed SQL file in git, never by hand. Target home: the X1 role bootstrap (with `db_migrator`, `cis_app` and every new `<app>_app`). Until X1 exists, N3 sets the limits (and the C2.3f role backstops) of `tripplanner`, `booking` and `aa_app_user` in **one CIS migration** applied through D8 (CIS created `aa_app_user` in `007b_create_app_user.sql`, and DB Migrate runs as the master, which has CREATEROLE), with the TP and Booking owners approving their rows in that PR. This is the single exception to Part A MIG-6 ("no `ALTER ROLE` in an owner migration"). Booking files MUST NOT carry it: Booking's own guard rejects `ALTER ROLE` (`AA-Booking/backend/tests/migration_guard.py`, rule `no-alter-role`). | A per-role cap turns one app's burst into its own connection errors instead of an instance-wide outage; role attributes are instance-level, not schema DDL. | To build (N3 for the 3 existing roles, X1 for new ones); X2 catalogue guard flags a LOGIN role with `rolconnlimit = -1` other than the master. |
-| C2.3b | `aa_cis_admin` MUST NOT get a `CONNECTION LIMIT` or a role-level `statement_timeout`. | It is the only break-glass login and, until X1, also the DB Migrate and worker role; a cap or a short timeout could lock out the rescue session or kill a migration. | Review checklist. |
-| C2.3c | For every pool whose role has a `CONNECTION LIMIT`, the sum of `max_size × max processes` over the role's pools MUST be ≤ that limit, and the C2.2 total MUST be ≤ 75 % of `max_connections`. Any PR that changes a pool size, ECS `max_capacity` / `worker_max_count`, `JOB_WORKER_MAX_PARALLEL`, Lambda reserved concurrency or the instance class MUST update the C2.2 table in the same PR (or a linked root PR). | The budget is only true if every input is changed together. | Review checklist; to build (N3): a CI script that parses the Terraform values and fails on an over-budget sum. |
+| C2.3a | Every LOGIN role except the RDS master MUST have a `CONNECTION LIMIT`, set by `ALTER ROLE` in a reviewed SQL file in git, never by hand. Home: the X1 role bootstrap, AA-CIS-Infra `db/migrations/roles/` (with `db_migrator`, `cis_app`, `crm_app` and every new `<app>_app`). Before X1, N3 set the limits of `tripplanner`, `booking` and `aa_app_user` in **one CIS migration** (234) applied through D8 (CIS created `aa_app_user` in `007b_create_app_user.sql`, and DB Migrate then ran as the master, which has CREATEROLE), with the TP and Booking owners approving their rows in that PR. That was the single exception to Part A MIG-6 ("no `ALTER ROLE` in an owner migration"). Booking files MUST NOT carry it: Booking's own guard rejects `ALTER ROLE` (`AA-Booking/backend/tests/migration_guard.py`, rule `no-alter-role`). | A per-role cap turns one app's burst into its own connection errors instead of an instance-wide outage; role attributes are instance-level, not schema DDL. | Exists (N3, X1): every LOGIN role except the master has a limit (schema reference *Roles*); to build (X2): a catalogue rule that flags a LOGIN role with `rolconnlimit = -1` other than the master. |
+| C2.3b | `aa_cis_admin` MUST NOT get a `CONNECTION LIMIT` or a role-level `statement_timeout`. | It is the only break-glass login (before X1 it was also the DB Migrate and worker role); a cap or a short timeout could lock out the rescue session or kill a long `run-script` or `roles/` session. | Review checklist. |
+| C2.3c | For every pool whose role has a `CONNECTION LIMIT`, the sum of `max_size × max processes` over the role's pools MUST be ≤ that limit, and the C2.2 total MUST be ≤ 75 % of `max_connections`. Any PR that changes a pool size, ECS `max_capacity` / `worker_max_count`, `JOB_WORKER_MAX_PARALLEL`, Lambda reserved concurrency or the instance class MUST update the C2.2 table in the same PR (or a linked root PR). | The budget is only true if every input is changed together. | Review checklist; CI: AA-CIS-Infra `connection-budget.yml` (`db/check_connection_budget.py` reads the Terraform values and `db/connection_budget.json`, checks each pool `max_size` in the owner app, and fails on an over-budget sum). |
 | C2.3d | Lambda pools MUST use `max_size = 1` per instance. | One Lambda instance serves one request at a time; extra connections are idle waste multiplied by concurrency. | Review checklist (TP `backend/shared/db.py`). |
 | C2.3e | `CONNECTION LIMIT` on `tripplanner` and TP pool max 1 MUST be merged **and applied** before the Lambda quota increase to 1000 takes effect. `reserved_concurrent_executions` on `aws_lambda_function.tripplanner_browse` / `tripplanner_assembly` (`accounts/aa365/tripplanner.tf`) MUST be merged as a variable that stays unset while the quota is 10 and is set to 10 in the first Terraform apply after the quota lands, before any load test. | AWS keeps at least 100 unreserved concurrency, so a reservation fails on a quota of 10; Terraform Apply is one manual workflow over all of `accounts/aa365`, so a hard-coded reservation on `main` would break every unrelated apply. S236 already saw 1,591 throttles on `/plan` tiles; without caps the quota raise converts throttles into a DB outage for every app on the instance. | Approved decision E6; review checklist on the quota case; N3. |
-| C2.3f | Every pool MUST set its own `statement_timeout` (asyncpg `server_settings`) below its caller's timeout (table C2.2). A role-level `ALTER ROLE … SET statement_timeout` is only a backstop, set to the **largest** pool value of that role, and only on single-purpose roles (`aa_app_user`, `tripplanner`, `booking`, later `db_migrator` with the runner override). `idle_in_transaction_session_timeout = 60s` is set in the parameter group; before it is enabled, a week of N1 `pg_stat_activity` samples MUST show no app session idle in transaction for > 60 s (a job handler holding a transaction across an LLM call would be killed). | A runaway query must die before the Lambda or HTTP caller gives up and retries on a new connection; shared roles (`aa_cis_admin`, later `cis_app` for API + worker, `tripplanner` for browse + assembly) cannot carry two role-level values. | To build (N3: parameter group, pool settings, `ALTER ROLE … SET`); review checklist on pool creation. |
+| C2.3f | Every pool MUST set its own `statement_timeout` (asyncpg `server_settings`) below its caller's timeout (table C2.2). A role-level `ALTER ROLE … SET statement_timeout` is only a backstop, set to the **largest** pool value of that role, and only on single-purpose roles (`aa_app_user`, `tripplanner`, `booking`, `crm_app`, `db_migrator` with the runner override). `idle_in_transaction_session_timeout = 60s` is set in the parameter group; before it is enabled, a week of N1 `pg_stat_activity` samples MUST show no app session idle in transaction for > 60 s (a job handler holding a transaction across an LLM call would be killed). | A runaway query must die before the Lambda or HTTP caller gives up and retries on a new connection; shared roles (`cis_app` for API + worker, `tripplanner` for browse + assembly) cannot carry two role-level values. | Parameter group: exists (C4.2a). Role-level backstops: not set yet (the schema reference *Roles* table shows no role settings). Pool settings: review checklist on pool creation. |
 | C2.3g | Pools MUST fail fast on exhaustion (bounded acquire timeout, ≤ 5 s) and MUST NOT fall back to another role's pool. A missing or exhausted tenant pool gives 503. The CIS tenant-pool flags fail closed globally (S241 D-12, CIS #792): an unreadable or missing flag means the tenant pool; only an explicit `"false"` moves that one route to the admin pool. Rollback path (DM-8.4): `SET <flag key> false` in Redis for one route, or the emergency task-definition variable `TENANT_POOL_FORCE_ADMIN_FLAGS` (survives a Redis restart; needs a redeploy). New apps fail closed from day one. | Silent fallback to the master pool hides saturation and breaks isolation (review P2). | Review checklist; CIS `aa544_tenant_pool.py` (fail closed since D-12). |
 | C2.3h | The `tripplanner` role SHOULD set `idle_session_timeout` (PostgreSQL 14+, start 10 min) so connections held by frozen or retired Lambda environments are reaped; the TP pool MUST tolerate a server-closed connection (retry the acquire once). Verify on Dev with a thawed Lambda before enabling. | Frozen environments keep their connection open, and after a TP deploy the old version's environments still count against the `CONNECTION LIMIT`. | To build (N3); TP smoke after the change. |
 
@@ -192,7 +192,7 @@ except rows marked **Now** (approved for immediate delivery).
 |---|---|---|---|
 | C3a | A scale action MUST cite the trigger row and the measured value (screenshot or query output) in its PR. | Prevents speculative spend and keeps the threshold table honest. | Review checklist. |
 | C3b | Cheaper levers MUST be tried first, in this order: query/index fix → retention → pool budget → materialized read model → instance resize → proxy → replica → split. | Each step costs more money or operational surface than the one before. | Capacity review (C8). |
-| C3c | Cost figures are rough us-west-1 estimates and MUST be checked in the AWS pricing calculator before the spend is approved by Nghiệp. | Review 7 ("dropped or downgraded"). | Review checklist. |
+| C3c | Cost figures are rough us-west-1 estimates and MUST be checked in the AWS pricing calculator before the spend is approved by the tech lead. | Review 7 ("dropped or downgraded"). | Review checklist. |
 
 ---
 
@@ -204,7 +204,9 @@ CIS has no recurring job scheduler today (Booking has recurring kinds in its wor
 "nightly" or "custom metric" item in this part (N1 dump, per-role connection metric, retention
 kinds, backlog age) is triggered by an EventBridge Scheduler rule that only **enqueues** a job
 (ADR 0003 decision 5; existing pattern `accounts/aa365/dfs_balance.tf` `aws_scheduler_schedule`).
-Built for the per-role metric (AA-832); N1/N4 still to build. Publishing a custom metric needs `cloudwatch:PutMetricData` on the CIS
+Built for the per-role metric (AA-832). CIS daily kinds (retention, photo sync, staff reconcile) are enqueued through
+admin schedule endpoints such as `POST /admin/job-runner/retention/schedule` (AA-825), which only enqueue; the N1
+dump runs as a nightly GitHub Actions workflow instead (DB Schema Dump). Publishing a custom metric needs `cloudwatch:PutMetricData` on the CIS
 task role (shared by api and worker), scoped by `cloudwatch:namespace`, added in the same Infra PR.
 
 | Alarm | Threshold | Status |
@@ -239,7 +241,7 @@ task role (shared by api and worker), scoped by `cloudwatch:namespace`, added in
 
 | Check | Cadence | Output |
 |---|---|---|
-| `pg_stat_statements` top 20 by `total_exec_time` and by `mean_exec_time`, per role | Weekly (and after every wave) | Note in the session log; regressions to Nghiệp (C1.2a) |
+| `pg_stat_statements` top 20 by `total_exec_time` and by `mean_exec_time`, per role | Weekly (and after every wave) | Note in the session log; regressions to the tech lead (C1.2a) |
 | Slow-query log (> 500 ms) and lock waits | Weekly | Same |
 | Performance Insights top SQL / wait events by `db.application.name` | Weekly once PI is on | Same |
 | Table/index sizes, `pg_stat_user_tables` activity, dead tuples | Nightly in the N1 dump; read monthly | Capacity review (C8) |
@@ -265,7 +267,7 @@ task role (shared by api and worker), scoped by `cloudwatch:namespace`, added in
 
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
-| C5.2a | The N1 nightly dump MUST record per table `n_live_tup`, `n_dead_tup`, `last_autovacuum`, size, and per index `idx_scan` and size. | Bloat and unused indexes are invisible without a time series. | To build (N1, AA-807). |
+| C5.2a | The N1 nightly dump MUST record per table `n_live_tup`, `n_dead_tup`, `last_autovacuum`, size, and per index `idx_scan` and size. | Bloat and unused indexes are invisible without a time series. | Exists for tables (*Table activity* of the schema reference, N1); to build: per-index `idx_scan` and size. |
 | C5.2b | A table with `n_dead_tup / n_live_tup` > 20 % after autovacuum, or an index > 2x its expected size, MUST be listed in the monthly capacity review with a fix (vacuum tuning, `REINDEX CONCURRENTLY`, or partitioning per C3). `pgstattuple_approx` MAY be used for the top 10 tables. | Catches bloat before it becomes a VACUUM FULL temptation. | C8 checklist. |
 | C5.2c | `REINDEX` and `CREATE INDEX` on tables > 100k rows MUST use `CONCURRENTLY` in a `-- migrate: no-transaction` file once N5 ships; what is allowed until then is Part A MIG-10 (one rule, not repeated here). | A plain build takes a lock that blocks writes for every app. | To build (N5: runner no-transaction mode; lint). |
 | C5.2d | An index with `idx_scan = 0` for 30 days that is not a PK, UNIQUE or constraint index is a drop candidate; it is dropped through expand/contract (review 5.3), never in the same PR that finds it. | Unused indexes cost write amplification and disk, but a 30-day window can miss monthly jobs. | C8 checklist; DRY RUN per `skill/aa-cis-schema/references/destructive-ops.md`. |
@@ -278,7 +280,7 @@ task role (shared by api and worker), scoped by `cloudwatch:namespace`, added in
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
 | C5.3a | `VACUUM FULL`, `CLUSTER` and plain `REINDEX` (non-concurrent) MUST NOT run on a table any app reads or writes on a request or job path. | They take ACCESS EXCLUSIVE locks; on one shared instance that is an outage for every app. | To build (N5 lint: reject these statements in migration files without a `-- migrate: destructive` header and a named approval). |
-| C5.3b | To reclaim space, use (in order) retention DELETE + regular vacuum, `REINDEX CONCURRENTLY`, partition-and-drop (L5). `pg_repack` MAY be considered only with Nghiệp's approval; it is not set up in the repo. | Reclaiming disk is rarely urgent once storage autoscaling is on. | Review checklist. |
+| C5.3b | To reclaim space, use (in order) retention DELETE + regular vacuum, `REINDEX CONCURRENTLY`, partition-and-drop (L5). `pg_repack` MAY be considered only with the tech lead's approval; it is not set up in the repo. | Reclaiming disk is rarely urgent once storage autoscaling is on. | Review checklist. |
 
 ### C5.4 Retention and batched deletes
 
@@ -293,7 +295,7 @@ kinds (`AA-Booking/backend/app/jobs/queue.py` `prune`, succeeded/cancelled rows 
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
 | C5.4a | Where DM-7 says "archive before delete", rows MUST be written to S3 as Parquet (partitioned by table / year / month) first; the job records the object key and row count, and the delete runs only after the count matches. | Approved E3: delete only what is recoverable for audit and cost history. | To build (N4). |
-| C5.4b | Retention runs as an **owner-run job kind** in the owner's job table (never a cross-owner script). Approval mechanics are Part B DM-7.2: the first run of each kind and the first run after a window change go through DRY RUN with Nghiệp's approval; later runs stop and report when they would touch more than 2x the previous run's count. | Owners delete only their own rows (schema-ownership rule 1); DRY RUN is the destructive-ops procedure. | To build (N4); review checklist. |
+| C5.4b | Retention runs as an **owner-run job kind** in the owner's job table (never a cross-owner script). Approval mechanics are Part B DM-7.2: the first run of each kind and the first run after a window change go through DRY RUN with the tech lead's approval; later runs stop and report when they would touch more than 2x the previous run's count. | Owners delete only their own rows (schema-ownership rule 1); DRY RUN is the destructive-ops procedure. | To build (N4); review checklist. |
 | C5.4c | Deletes MUST be batched: ≤ 10,000 rows per transaction, selected by keyset on the indexed retention column (`WHERE created_at < $cutoff AND (created_at, id) > ($last_ts, $last_id) ORDER BY created_at, id LIMIT n`), commit per batch, 100-500 ms pause, `statement_timeout` 30 s per batch, resumable from the last `(ts, id)` stored in the job's `progress`. Never page by `id` alone: `shared.llm_call_log.id` and `shared.tenant_api_usage.id` are random `uuid`s. | A single large DELETE holds locks, bloats WAL and stalls autovacuum on the shared instance; a uuid order scatters the batches across the table. | Review checklist on the job kind. |
 | C5.4d | Retention kinds MUST be declared `concurrency=1` and, in CIS, `background=True` (so `BACKGROUND_MAX_RUNNING = 1` keeps them from crowding foreground jobs), are enqueued nightly (C4.1 scheduler note), and are not enqueued while a wave runs (aa-wave-rerun runbook). | Keeps retention I/O off the hot path. | `registry.py` review; runbook. |
 | C5.4e | Every new log, event or job table MUST ship with its DM-7 retention row in the same PR (DM-7.1). | Unbounded growth is the default without one (review P5). | Playbook checklist (ADR 0008); review checklist. |
@@ -317,6 +319,7 @@ SKIP LOCKED`, autoscaling 1..`worker_max_count` (3) on CPU 70 % / memory 80 %, d
 the API process when `WORKER_ENABLED` is on: one job at a time, lease 300 s, on shutdown it stops the
 loop and waits `WORKER_STOP_TIMEOUT_S` = 20 s (`app/main.py`) inside an ECS `stopTimeout` of 30 s
 (`accounts/aa365/booking.tf:293`); an unfinished job is released back to `queued` on shutdown (Booking #25, S240), so it no longer waits for the lease to expire.
+AA-Partner runs its `crm.job` worker inside the API process (`aa-crm-dev-api`).
 
 ⚠️ The knobs below are underscore env vars (`JOB_WORKER_MAX_PARALLEL`, `WORKER_ENABLED`, …): edit
 them manually in VSCode, never through a generated script.
@@ -342,8 +345,8 @@ them manually in VSCode, never through a generated script.
 
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
-| C6.3a | A backend deploy MUST be blocked while (1) a CIS rerun wave is open (`shared.rerun_wave.status = 'open'`; CIS deploys only) or (2) a job of a **deploy-blocking kind** of the deploying owner is `running`, or `queued` and due within 15 minutes (the guard runs before the image build; the old task would claim it before its SIGTERM). Every other `queued` or `running` job MUST NOT block: the worker drains on SIGTERM and releases a job still running (C6.2a/c), and the new revision re-claims it; a queued row is claimed by whichever image is live. A kind is deploy-blocking when a release cannot re-run it safely (C6.2b not met): CIS `deploy_blocking` registry flag (today `data_erasure`, `s1_batch_ingest`), Booking `DEPLOY_BLOCKING_KINDS` (the retention kinds), Partner `DEPLOY_BLOCKING_KINDS` (`crm_dispatch`, until its send marker, AA-993 G4b). Override only by Nghiệp with a written reason. | Waves and non-re-runnable jobs must not be split across two images; blocking on every busy queue made deploys wait for work a drain already handles (AA-993 design D1, S252). | AA-993 G5: CIS `deploy-dev.yml` guard → `GET /admin/job-runner/deploy-gate` (`open_waves`, `blocking_running`, `blocking_due`, `blocked_by`); Booking `deploy-dev.yml` preflight (`.github/scripts/booking-deploy-preflight.sh`) → `GET /booking/ops/deploy-gate`, GitHub OIDC token (AA-751); Partner `deploy-dev.yml` preflight → `GET /crm/ci/deploy-gate`. Booking and Partner do not read CIS waves. Proof: AA-993 G5 live checks (queued + running jobs, no wave → passes; open wave → blocks; running retention / `crm_dispatch` row → blocks; a due queued row of a deploy-blocking kind blocks too, unit + integration tests). |
-| C6.3b | Instance-level changes (reboot, parameter group, resize, minor upgrade) and DB Migrate `apply` MUST check **all** job tables (`shared.job`, `booking.job`, any `<schema>.job`) are idle and no wave is running. | These affect every app, not just the deploying one. | Runbook C9.1; DB Migrate idle check **exists** (Infra #158, S240): `apply` refuses with exit 7 while any `<schema>.job` has non-exempt queued/running rows (exempt: `bk_inquiry_pull`; override input `override_busy_jobs`, Nghiệp only). Instance-level changes: runbook. |
+| C6.3a | A backend deploy MUST be blocked while (1) a CIS rerun wave is open (`shared.rerun_wave.status = 'open'`; CIS deploys only) or (2) a job of a **deploy-blocking kind** of the deploying owner is `running`, or `queued` and due within 15 minutes (the guard runs before the image build; the old task would claim it before its SIGTERM). Every other `queued` or `running` job MUST NOT block: the worker drains on SIGTERM and releases a job still running (C6.2a/c), and the new revision re-claims it; a queued row is claimed by whichever image is live. A kind is deploy-blocking when a release cannot re-run it safely (C6.2b not met): CIS `deploy_blocking` registry flag (today `data_erasure`, `s1_batch_ingest`), Booking `DEPLOY_BLOCKING_KINDS` (the retention kinds), Partner `DEPLOY_BLOCKING_KINDS` (`crm_dispatch`, until its send marker, AA-993 G4b). Override only by the tech lead with a written reason. | Waves and non-re-runnable jobs must not be split across two images; blocking on every busy queue made deploys wait for work a drain already handles (AA-993 design D1, S252). | AA-993 G5: CIS `deploy-dev.yml` guard → `GET /admin/job-runner/deploy-gate` (`open_waves`, `blocking_running`, `blocking_due`, `blocked_by`); Booking `deploy-dev.yml` preflight (`.github/scripts/booking-deploy-preflight.sh`) → `GET /booking/ops/deploy-gate`, GitHub OIDC token (AA-751); Partner `deploy-dev.yml` preflight → `GET /crm/ci/deploy-gate`. Booking and Partner do not read CIS waves. Proof: AA-993 G5 live checks (queued + running jobs, no wave → passes; open wave → blocks; running retention / `crm_dispatch` row → blocks; a due queued row of a deploy-blocking kind blocks too, unit + integration tests). |
+| C6.3b | Instance-level changes (reboot, parameter group, resize, minor upgrade) and DB Migrate `apply` MUST check **all** job tables (`shared.job`, `booking.job`, any `<schema>.job`) are idle and no wave is running. | These affect every app, not just the deploying one. | Runbook C9.1; DB Migrate idle check **exists** (Infra #158, S240): `apply` refuses with exit 7 while any `<schema>.job` has non-exempt queued/running rows (exempt: `bk_inquiry_pull`; override input `override_busy_jobs`, the tech lead only). Instance-level changes: runbook. |
 
 ---
 
@@ -360,8 +363,8 @@ them manually in VSCode, never through a generated script.
 | Final snapshot | `skip_final_snapshot = false`, `copy_tags_to_snapshot = true` | `false`, `copy_tags_to_snapshot = true` | N3 (done) |
 | Deletion protection | true | true | — |
 | Parameter group | custom `aa-cis-dev-pg15` | custom (C4.2a, C2.3f) | N3 (done) |
-| Restore drill | done once on 17/10/2026 (S241 D-10: PITR, about 22 minutes; evidence `docs/audits/2026-10-17-S241-restore-drill/`) | once now, record the RTO; again before prod (DM-9.3) | X10 |
-| DSN host | RDS endpoint in each secret | private CNAME | X10 |
+| Restore drill | done on 17/10/2026 (S241 D-10: PITR, about 22 minutes; evidence `docs/audits/2026-10-17-S241-restore-drill/`) and 24/10/2026 (`docs/audits/2026-10-24-S249-restore-drill/`) | once now, record the RTO; again before prod (DM-9.3) | X10 |
+| DSN host | private CNAME `db.dev.internal` in every DSN secret since 23/10/2026 (AA-829, Part B DM-9.5) | private CNAME | X10 (done) |
 | Real-data dumps | `docs/backups/2026-09-16` on a laptop | moved to an encrypted private S3 prefix, then removed locally (E10) | X10 |
 
 | # | Rule | Why | Enforced by |
@@ -375,8 +378,8 @@ them manually in VSCode, never through a generated script.
 |---|---|---|---|
 | C7.2a | Prod MUST be a separate RDS instance in acc2 (ADR 0001 as amended S235; no new account), Multi-AZ, starting at `db.t4g.medium`, gp3 with storage autoscaling. | Isolation from Dev experiments; Multi-AZ gives a 1-2 min failover. | Terraform review. |
 | C7.2b | Prod MUST have 14-day PITR, `skip_final_snapshot = false`, `deletion_protection = true`, AWS Backup daily with a **cross-region copy** (region chosen in the prod ADR), and a quarterly restore drill with a recorded RTO; RPO/RTO targets are those of DM-9.6. | Same-region same-account PITR is not DR. | Terraform; drill record in `docs/audits/`. |
-| C7.2c | Prod MUST live in its own Terraform root (`infra/AA-CIS-Infra/envs/prod/`, 0 bytes today) with its own security group, secrets prefix (`<app>/prod/...`), parameter group and alarms (C4.1 with prod thresholds and a paging route). | A shared root lets a Dev change reach prod. | Terraform review. |
-| C7.2d | DB Migrate MUST take an `environment` input (`dev` / `prod`) that selects cluster, task definition, log group and secret; prod applies require the GitHub `prod` environment approval. Today `db-migrate.yml` hardcodes Dev resources while using the environment name `prod`. | One workflow must not be able to apply to the wrong database. | To build (X1 separate migrator task def + `db_migrator`; L9 for prod). |
+| C7.2c | Prod MUST live in its own Terraform root (`infra/AA-CIS-Infra/envs/prod/`, does not exist yet) with its own security group, secrets prefix (`<app>/prod/...`), parameter group and alarms (C4.1 with prod thresholds and a paging route). | A shared root lets a Dev change reach prod. | Terraform review. |
+| C7.2d | DB Migrate MUST take an `environment` input (`dev` / `prod`) that selects cluster, task definition, log group and secret; prod applies require the GitHub `prod` environment approval. Today `db-migrate.yml` has the `environment` input with one choice, `dev` (from `db/owners.yaml`), and still runs in the GitHub environment named `prod`. | One workflow must not be able to apply to the wrong database. | Partly built (X1: own migrator task definition, `db_migrator`, the `environment` input); to build (L9 for prod). |
 | C7.2e | Prod runtime roles MUST be the split roles from day one (`cis_app`, `bk_owner`/`booking`, `tp_owner`/`tripplanner`, `db_migrator`); `aa_cis_admin` is break-glass only. Prod SHOULD enable Enhanced Monitoring (60 s) and pgaudit for forensics. | Prod must not inherit the Dev master-credential blast radius (review P1). | X1 Done is a prerequisite of L9. |
 | C7.2f | Prod DSNs MUST point at a private CNAME, not the RDS endpoint. | A split or restore then needs a DNS change, not a secret rotation in every app. | X10 pattern; Terraform. |
 
@@ -386,7 +389,7 @@ them manually in VSCode, never through a generated script.
 
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
-| C8a | A capacity review MUST run **monthly** (and after any wave that doubled a ledger), drafted by Claude Code, approved by Nghiệp, saved to `docs/audits/<date>-S<nnn>-capacity-review/` with a root PR. | Triggers in C3 only work if someone measures them on a schedule. | Session ritual; save-audits rule. |
+| C8a | A capacity review MUST run **monthly** (and after any wave that doubled a ledger), drafted by an agent, approved by the tech lead, saved to `docs/audits/<date>-S<nnn>-capacity-review/` with a root PR. | Triggers in C3 only work if someone measures them on a schedule. | Session ritual; save-audits rule. |
 | C8b | The review MUST cover: (1) CloudWatch 30-day CPU, `FreeableMemory`, `DatabaseConnections` p95/max, storage used and growth per day, IOPS/latency, credits charged; (2) PI / `pg_stat_statements` top 20 per role with C1.2 SLIs; (3) top 20 tables and indexes by size and 30-day growth, dead-tuple ratios, unused indexes (from the N1 dump); (4) ledger row counts vs C5.4 retention; (5) Lambda concurrency peaks and throttles; (6) job backlog and duration per owner; (7) the C2.2 budget recomputed from live Terraform values; (8) every C3 trigger with its measured value (fired / not fired); (9) RDS cost line vs budget. | A fixed checklist makes reviews comparable month to month. | This list is the review template. |
 | C8c | The review MUST end with a decision list (no action / tune / scale per C3 with the trigger row cited) and update this file's tables if a value changed. | Keeps the standard and reality in sync. | Review checklist. |
 
@@ -400,7 +403,7 @@ Full runbooks are written when first used; each must keep these steps.
 
 1. **Trigger:** cite the C3 row and the measured value.
 2. **Plan:** change `instance_class` in Terraform; `terraform plan` (MFA env per steering) and check: PI support for the class, parameter group family unchanged (`postgres15`), new `max_connections`, and that the alarm thresholds of C4.1b are changed in the same PR. Recompute C2.2.
-3. **Price:** confirm in the AWS pricing calculator; Nghiệp approves the spend.
+3. **Price:** confirm in the AWS pricing calculator; the tech lead approves the spend.
 4. **Pre-checks:** all job tables idle (C6.3b), no wave, no pending DB Migrate; take a manual snapshot.
 5. **Window:** announce a short outage for every app (single-AZ class change restarts the instance, several minutes; Multi-AZ fails over in ~1-2 min); apply in the maintenance window or with `apply_immediately` by explicit decision.
 6. **Verify:** `SHOW max_connections`; `DatabaseConnections` back to normal; CIS `/health` and worker `job_worker_started`, `/booking/health`, TripPlanner browse smoke; no `too many connections` in the log export.
@@ -420,6 +423,9 @@ Full runbooks are written when first used; each must keep these steps.
 ---
 
 ## Appendix: facts this part relies on
+
+These are the facts of the S237 review baseline (15/10/2026, S236 dump). Several have changed since (instance class,
+final snapshot, alarms, pool sizes, reserved concurrency); the current values are in the sections above.
 
 | Fact | Source |
 |---|---|

@@ -128,6 +128,43 @@ class PublicationRule(TreeCase):
         self.assertFalse((self.out / "pages/AA-Ecosys/docs/a.md").exists(), "a removed page must not linger")
         self.assertTrue((self.out / "pages/AA-Ecosys/docs/b.md").exists())
 
+    def test_translation_entry_and_english_entry_are_linked(self):
+        self.write("docs/guides/ceo.md", _page("GUIDE-04", "CEO guide"))
+        self.write("docs/guides/ceo.vi.md", _page("GUIDE-04", "Huong dan CEO",
+                                                  extra="lang: vi\ntranslation_of: docs/guides/ceo.md\n"))
+        self.write("docs/legal/register.md", _page("SEC-04", "Register"))
+        self.write("docs/legal/register.vi.md", _page("SEC-04", "So dang ky",
+                                                      extra="lang: vi\ntranslation_of: docs/legal/register.md\n"))
+        m = self.build()
+        by = {p["path"]: p for p in m["pages"]}
+        en, vi = by["docs/guides/ceo.md"], by["docs/guides/ceo.vi.md"]
+        self.assertEqual((en["lang"], en["translation_of"]), ("en", None))
+        self.assertEqual(en["translations"], [{"lang": "vi", "path": "docs/guides/ceo.vi.md",
+                                               "key": "pages/AA-Ecosys/docs/guides/ceo.vi.md",
+                                               "title": "Huong dan CEO"}])
+        self.assertEqual((vi["lang"], vi["translation_of"], vi["translations"]), ("vi", "docs/guides/ceo.md", []))
+        self.assertEqual(vi["id"], "GUIDE-04")
+        self.assertEqual(by["docs/legal/register.vi.md"]["access"], "owner", "a translation keeps the owner tier")
+        self.assertEqual(m["counts"]["translations"], 2)
+        self.assertTrue((self.out / vi["key"]).exists())
+
+    def test_translation_without_published_english_page_is_skipped(self):
+        self.write("docs/old.md", _page("OPS-02", status="archived"))
+        self.write("docs/old.vi.md", _page("OPS-02", extra="lang: vi\ntranslation_of: docs/old.md\n"))
+        self.write("docs/lonely.vi.md", _page("OPS-03", extra="lang: vi\ntranslation_of: docs/lonely.md\n"))
+        self.write("docs/a.md", _page("OPS-04"))
+        self.write("docs/a.vi.md", _page("OPS-05", extra="lang: vi\ntranslation_of: docs/a.md\n"))
+        m = self.build()
+        self.assertEqual(self.paths(m), {"docs/a.md"})
+        self.assertEqual(m["pages"][0]["translations"], [])
+        self.assertEqual(m["counts"]["skipped"], 4)
+
+    def test_adr_and_plain_pages_are_english(self):
+        self.write("docs/adr/0001-x.md", "# ADR 0001: X\n\n- **Status:** Accepted\n")
+        self.write("docs/b.md", _page("OPS-01"))
+        m = self.build()
+        self.assertEqual({(p["lang"], p["translation_of"]) for p in m["pages"]}, {("en", None)})
+
 
 class Redaction(TreeCase):
     def test_redacts_ids_in_body_title_and_description(self):

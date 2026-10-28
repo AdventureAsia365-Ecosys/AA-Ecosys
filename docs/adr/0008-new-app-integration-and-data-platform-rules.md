@@ -1,13 +1,13 @@
 # ADR 0008 — New-app integration and data platform rules
 
-- **Status:** Accepted (15/10/2026, S237 — Nghiệp approved every recommendation of the S237
-  data-architecture review, "đồng ý duyệt hết", decisions E1–E11 in
+- **Status:** Accepted (2026-10-15, S237 — the tech lead approved every recommendation of the S237
+  data-architecture review, decisions E1–E11 in
   `docs/audits/2026-10-14-S237-lane-backlog/00-orchestrator-journal.md`).
-- **Amended by:** [ADR 0008a](0008a-crm-separate-app-exceptions.md) (Accepted 22/10/2026, S247): the
+- **Amended by:** [ADR 0008a](0008a-crm-separate-app-exceptions.md) (Accepted 2026-10-22, S247): the
   partner CRM is a separate app (AA-Partner, ADR 0010), with playbook exceptions for traveller OTP (step 8) and an
   own LLM gateway (step 9); decision 8 preconditions and hand-off rewritten.
 - **Scope:** AA-Ecosys as a whole: every app that stores data on the shared PostgreSQL 15 RDS
-  (`aa-cis-dev-db`, acc2 `005097885195`, us-west-1, and the later prod instance on acc2):
+  (`aa-cis-dev-db`, acc2 ([account map](../onboarding.md#account-map)), us-west-1, and the later prod instance on acc2):
   AA-CIS-App, AA-TripPlanner-Web, AA-Booking, AA-CIS-Infra (instance, roles, DB Migrate), and any app
   that joins later (first candidate: tenant CRM, AA-821).
 - **Rule body:** the data standards v1.0 in `docs/architecture/data-standards/`
@@ -74,18 +74,18 @@ A fourth app (the tenant CRM, AA-821) would land in the same blast radius unless
 3. **Is it a new domain with its own lifecycle?** Then it gets its own schema and the playbook below.
 
 The gate's answer and the owning repo are written in a design doc in
-`docs/audits/<date>-S<nnn>-<slug>/` that cites this ADR, and Nghiệp approves it.
+`docs/audits/<date>-S<nnn>-<slug>/` that cites this ADR, and the tech lead approves it.
 
 ### 3. Playbook for a new domain (12 steps)
 
-1. **Design and ADR** (gate answered, owning repo named, Nghiệp's approval).
+1. **Design and ADR** (gate answered, owning repo named, the tech lead's approval).
 2. **Register the owner** in `infra/AA-CIS-Infra/db/owners.yaml` (*to build*, **X1**): dir, repo, path,
    key prefix, owner role, runtime role(s), allowed consumer grants, job-kind prefix. Until it exists,
    one Infra PR updates `db-migrate.yml`, `check_migration_copies.py` (`OWNERS`, `PATH_RE`) and
    `schema-ownership.md` together.
 3. **Roles in a reviewed bootstrap, never by hand:** `<app>_owner` NOLOGIN, `<app>_app` LOGIN with a
    `CONNECTION LIMIT` and its own `application_name`, optionally `<app>_reader` NOLOGIN owning the
-   app's contract views. The DSN goes to Secrets Manager at `<app>/<env>/database-url`, set by Nghiệp by
+   app's contract views. The DSN goes to Secrets Manager at `<app>/<env>/database-url`, set by the tech lead by
    hand. ⚠️ This contains underscore env vars — edit manually in VSCode.
 4. **First migration `<prefix>-001`** through the D8 flow: `CREATE SCHEMA <app> AUTHORIZATION
    <app>_owner`, per-object grants, self-registration in `shared.schema_versions`, timeout headers.
@@ -118,10 +118,10 @@ approves each change.
   there; each rule names how it is enforced, and controls that do not exist yet are marked *to build*
   with their roadmap id (review checklist until then).
 - **Precedence:** an accepted ADR wins over the standards; the standards win over skills and session
-  notes. A conflict is fixed by PR in the same session and reported to Nghiệp.
+  notes. A conflict is fixed by PR in the same session and reported to the tech lead.
 - **One home per number:** PII classes and retention windows in Part B; pool sizes, connection limits,
   timeouts and alarm thresholds in Part C; migration mechanics in Part A.
-- A change to the standards is a PR to the root repo approved by Nghiệp, with the version in the
+- A change to the standards is a PR to the root repo approved by the tech lead, with the version in the
   standards README bumped and steering/skills that restate a rule updated in the same PR.
 
 ### 5. Contracts: views only, and tenant contract views live in `catalog` (E4)
@@ -187,7 +187,7 @@ mixed `source_tour_id` (**X3**).
 ### 10. Spend and scaling (E5, E6)
 
 - Approved spend: Dev `db.t3.micro` → `db.t4g.small` + Performance Insights (~+$10–15/month, checked in
-  the AWS calculator; **X9**); per-app cost allocation tags (Nghiệp activates them in Billing).
+  the AWS calculator; **X9**); per-app cost allocation tags (the tech lead activates them in Billing).
 - Connection limits, TripPlanner pool max 1 and Lambda reserved concurrency ship and are applied
   **before** the Lambda concurrency quota of 1000 takes effect (**N3**).
 - RDS Proxy, read replica, partitioning, a materialized catalog, the S3/Athena query layer, an
@@ -232,10 +232,10 @@ accepted ADR are separate `<nnnn>a-<slug>.md` files (pattern 0004a).
 - **X7 (AA-826):** `owners.yaml`-driven playbook tooling, role bootstrap template, consumer contract
   hash guard. **X2:** catalogue CI guard. **N1:** generated schema reference with policies, grants and
   `pii:` tags.
-- **X1 done (19/10/2026, S244; AA-852 / AA-860):** decision 6 is in force. `booking.*` → `bk_owner` (bk-014),
+- **X1 done (2026-10-19, S244; AA-852 / AA-860):** decision 6 is in force. `booking.*` → `bk_owner` (bk-014),
   `tripplanner.*` → `tp_owner` (tp-013), CIS runtime on `cis_app` (S18), the 12 CIS schemas → `cis_owner` (CIS 245),
   DB Migrate logs in as `db_migrator` from its own task definition (S22), role attributes in the Infra `roles/` dir
   (`rl-001`, `rl-002`); `aa_cis_admin` is break-glass (data standards DM-8.9). One exception recorded in Part A §9:
   XD3 default privileges `FOR ROLE cis_owner … TO cis_app`. Plan and evidence:
   `docs/audits/2026-10-17-S241-x1/x1-plan.md`, isolation probe 58/58 after S22.
-- Open items for Nghiệp are listed in the standards README ("Open items").
+- Open items for the tech lead are listed in the standards README ("Open items").

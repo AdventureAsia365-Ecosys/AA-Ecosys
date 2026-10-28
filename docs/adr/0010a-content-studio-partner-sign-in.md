@@ -1,7 +1,7 @@
 # ADR 0010a — Amendment: Content studio sign-in through the partner pool and a CIS token exchange
 
-- **Status:** Proposed (26/10/2026, S252). The design's open questions Q1–Q13 were decided by the orchestrating
-  session on their proposed answers (critic-fixed design, S252); Nghiệp confirms this ADR.
+- **Status:** Proposed (2026-10-26, S252). The design's open questions Q1–Q13 were decided by the orchestrating
+  session on their proposed answers (critic-fixed design, S252); the tech lead confirms this ADR.
 - **Scope:** AA-Ecosys: AA-Partner (`portal/` Content studio, `web/` CRM web, the CRM API), AA-CIS-App (the token
   exchange, the Content studio roles, the membership directory), AA-CIS-Infra (the agency host edge, the studio's
   Fargate service, the partner-web client, the M2M scope), the root repo (contracts).
@@ -16,6 +16,10 @@
   C1–C6, S1–S12); merge / apply order, pre-cutover checks and the prepared cutover, rollback drill and `/trip` slice:
   [`RUNBOOK.md`](../audits/2026-10-26-S252-aa979-p2b/RUNBOOK.md).
 - **Related Linear:** AA-979 (CRM-P2), AA-978 (membership feed, Done), AA-813 (identity phase 3: tenant users).
+- **Implementation status (2026-10-28):** the DNS cutover ran on 2026-10-27 (S253), with a rollback drill both ways.
+  `portal.` points at the agency CloudFront distribution (Fargate); the Vercel project `aa-cis-portal` answers 301 to
+  `portal.` and stays the rollback path. The clean-up (decision 5: the API-key sign-in flag off, the Vercel project
+  removed) starts on 2026-11-03. Evidence: [cutover record](../audits/2026-10-27-S253-aa979-cutover/README.md).
 
 ## Context
 

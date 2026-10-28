@@ -7,14 +7,14 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-17
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [OPS-01, OPS-02-cis, OPS-04-5xx-spike, OPS-10, skill/aa-ship/SKILL.md, AA-869, AA-892]
 ---
 
 # Incident response
 
-Owner: Nghiệp (on call for everything during the dev phase). Created S241 (AA-869). Runbooks and playbooks:
+Owner: the tech lead (on call for everything during the dev phase). Created S241 (AA-869). Runbooks and playbooks:
 [operations index](README.md) (rollback runbooks moved there from `skill/aa-ship/SKILL.md` §5, AA-892). Alarms e-mail
 on ALARM and on OK (D-20).
 
@@ -22,8 +22,8 @@ on ALARM and on OK (D-20).
 
 | SEV | Meaning | Examples | Response |
 |---|---|---|---|
-| SEV1 | Customers or tenants cannot use a product, or data is exposed or lost | API 5xx for everyone, tenant sees another tenant's data, secret leaked, DB down | Start now, any hour. Tell Ms. Thư within 30 min. Tenants told within 2 h if they are affected. |
-| SEV2 | A feature is broken or degraded, with a workaround | One page 500s, pipeline jobs stuck, e-mail codes delayed, one alarm firing for > 30 min | Same working day. Ms. Thư told if a tenant noticed or a deadline is at risk. |
+| SEV1 | Customers or tenants cannot use a product, or data is exposed or lost | API 5xx for everyone, tenant sees another tenant's data, secret leaked, DB down | Start now, any hour. Tell the business owner within 30 min. Tenants told within 2 h if they are affected. |
+| SEV2 | A feature is broken or degraded, with a workaround | One page 500s, pipeline jobs stuck, e-mail codes delayed, one alarm firing for > 30 min | Same working day. The business owner is told if a tenant noticed or a deadline is at risk. |
 | SEV3 | Internal only, no customer impact | Dev-only error, flapping alarm, CI broken | Backlog item. |
 
 When unsure, pick the higher severity and lower it later.
@@ -31,11 +31,13 @@ When unsure, pick the higher severity and lower it later.
 ## First 15 minutes
 
 1. **Confirm.** Reproduce it on the live URL (curl or browser). Read the alarm e-mail and the app log
-   (`/ecs/aa-cis-dev`, `/ecs/aa-booking-dev`, Lambda logs). Note the start time.
+   (`/ecs/aa-cis-dev`, `/ecs/aa-booking-dev`, `/ecs/aa-crm-dev` for the CRM API, CRM web and portal, Lambda logs).
+   Note the start time.
 2. **Stop the bleeding.**
    - Bad deploy: roll back ([CIS](runbooks/rollback-cis.md), [Booking](runbooks/rollback-booking.md),
      [Vercel](runbooks/rollback-vercel.md), [TripPlanner Lambdas](runbooks/rollback-tp-lambda.md),
-     [Terraform](runbooks/rollback-terraform.md)).
+     [Terraform](runbooks/rollback-terraform.md)). The CRM API, CRM web and portal services on ECS have no rollback
+     runbook yet; until 2026-11-03 the portal can also fall back to its Vercel project ([Vercel](runbooks/rollback-vercel.md)).
    - Leaked secret: rotate it first and investigate second ([secret rotation](runbooks/secret-rotation.md)).
    - Runaway job or cost: cancel the job or lower its cost-guard budget ([queue stuck](playbooks/queue-stuck.md),
      [cost spike](playbooks/llm-cost-spike.md)). There is no per-kind pause switch ([job kinds](job-kinds.md)).
@@ -50,9 +52,9 @@ When unsure, pick the higher severity and lower it later.
 
 | Who | SEV1 | SEV2 | Channel |
 |---|---|---|---|
-| Ms. Thư | within 30 min | if a tenant noticed or a deadline is at risk | Zalo (plain text, short) |
-| Affected tenants | within 2 h, then on each change and on resolution | only if they reported it | E-mail from Nghiệp (no agent names, no internal issue keys) |
-| Customers (Booking/TripPlanner) | if personal data is involved: Ms. Thư decides with the lawyer (PDPD notice duties) | no | — |
+| Business owner | within 30 min | if a tenant noticed or a deadline is at risk | Zalo (plain text, short) |
+| Affected tenants | within 2 h, then on each change and on resolution | only if they reported it | E-mail from the tech lead (no agent names, no internal issue keys) |
+| Customers (Booking/TripPlanner) | if personal data is involved: the business owner decides with the lawyer (PDPD notice duties) | no | — |
 
 ## Notice template (tenant e-mail)
 
@@ -65,7 +67,7 @@ From <start time ICT> <product> <what the tenant sees, one sentence>.
 We are <what we are doing now, one sentence>. Your data <is / is not> affected.
 Next update by <time ICT>, or sooner when it is resolved.
 
-<Nghiệp>, Adventure Asia
+<tech lead name>, Adventure Asia
 ```
 
 Resolution notice: what happened (one sentence), when it ended, what the tenant needs to do (usually

@@ -1,8 +1,11 @@
 # ADR 0002 — Only CIS writes content; other apps read it through views
 
-- **Status:** Accepted (01/10/2026, S207 — Nghiệp: "không để các app khác ngoài CIS ghi nội dung").
+- **Status:** Accepted (01/10/2026, S207 — tech lead: "do not let any app other than CIS write content").
 - **Scope:** AA-Ecosys (AA-CIS-App, AA-TripPlanner-Web, AA-CIS-Infra, future AA-Booking).
 - **Implements / tightens:** ADR 0001 decision 1 ("CIS is the content system of record").
+- **Update 2026-10-28:** the first consequence is done. [ADR 0007](0007-place-pipeline-in-cis.md) moved the place
+  pipeline to CIS (schema `geo`, `catalog.*` views), and TripPlanner tp-018 dropped the frozen place tables
+  (`itinerary_components`, `tour_stop`, `tour_graph_*`).
 
 ## Context
 

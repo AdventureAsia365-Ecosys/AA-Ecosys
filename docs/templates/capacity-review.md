@@ -1,7 +1,7 @@
 ---
 id: OPS-08-yyyy-mm
 title: Capacity review <YYYY-MM>
-description: <One sentence - headroom of the shared RDS and ECS services, the C3 triggers that fired, and the decisions waiting for Nghiep.>
+description: <One sentence - headroom of the shared RDS and ECS services, the C3 triggers that fired, and the decisions waiting for the tech lead.>
 type: report
 status: draft
 owner: nghiep
@@ -16,7 +16,7 @@ related: [OPS-08, FIN-02, AA-838]
 
 <!-- The monthly review of data standards Part C, C8 (docs/architecture/data-standards/03-scaling.md).
 Save it as docs/audits/<date>-S<nnn>-capacity-review/README.md with a root PR (C8a). Claude Code drafts,
-Nghiep approves. The body MAY be written in Vietnamese (audits for Nghiep, language convention N-7).
+The tech lead approves. The body MAY be written in Vietnamese (audits for the tech lead, language convention N-7).
 The cost half (FinOps) uses templates/cost-report.md; item (9) below links to it instead of repeating it.
 Worked example and scripts: docs/audits/2026-10-28-S255-aa838-capacity/ (copy scripts/ into the new folder,
 change START/END, run the probe through DB Migrate run-script for full statement text).
@@ -149,19 +149,19 @@ If any value differs from the C2.2 table in `03-scaling.md`, fix the table in th
 
 1. <risk — evidence — consequence>
 
-## 4. Decision list (C8c) — proposed, waiting for Nghiep
+## 4. Decision list (C8c) — proposed, waiting for the tech lead
 
 | # | Proposed decision | Type (no action / tune / scale / investigate / docs) | C3 row or rule | Who / size / cost |
 |---|---|---|---|---|
 
 Cheaper levers first (C3b): query/index → retention → pool budget → materialized read model → resize → proxy →
-replica → split. Ask Nghiep before creating any Linear issue.
+replica → split. Ask the tech lead before creating any Linear issue.
 
 ## 5. Weekly check of this week (C4.3)
 
 <One "C4.3 week W<nn>" paragraph: top statements by total and mean per role, statements with mean > 200 ms, each C1.2
 SLI met / missed (first or second consecutive miss, C1.2a), locks and long transactions, slow log > 500 ms read or
-not. A second consecutive miss goes to Nghiep with the statement text and a proposed fix.>
+not. A second consecutive miss goes to the tech lead with the statement text and a proposed fix.>
 
 ## 6. How to reproduce / steps for the orchestrator
 

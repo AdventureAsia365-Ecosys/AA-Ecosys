@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [devops, engineer]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-25
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [GUIDE-01, OPS-01, OPS-04, OPS-03, SEC-02, FIN-01, AA-897, AA-892]
 ---
@@ -35,30 +35,32 @@ First get your access from [Onboarding](../onboarding.md) (account map, AWS prof
 The GitHub environment that gates Terraform apply is called `prod` but applies Dev. Renaming it belongs to the prod
 blueprint (AA-880, D-16, C7.2d), not to now.
 
-Live components on Dev (checked 2026-10-19): ECS cluster `aa-cis-dev-cluster` with services `aa-cis-dev-api`,
-`aa-cis-dev-worker` and `aa-booking-dev-api`; RDS `aa-cis-dev-db` (PostgreSQL, `db.t4g.small`, single-AZ, 7-day
-PITR); Lambdas `aa-tripplanner-dev-browse` and `aa-tripplanner-dev-assembly`; Cognito trigger Lambdas; the daily
-probe Lambda `aa-cis-dev-dfs-balance-check`; the snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry`.
+Live components on Dev (checked 2026-10-28): ECS cluster `aa-cis-dev-cluster` with services `aa-cis-dev-api`,
+`aa-cis-dev-worker`, `aa-booking-dev-api`, `aa-crm-dev-api`, `aa-crm-dev-web` and `aa-crm-dev-portal`; RDS
+`aa-cis-dev-db` (PostgreSQL, `db.t4g.small`, single-AZ, 7-day PITR); Lambdas `aa-tripplanner-dev-browse` and
+`aa-tripplanner-dev-assembly`; four Cognito trigger Lambdas (`aa-identity-dev-*`); the daily probe Lambda
+`aa-cis-dev-dfs-balance-check`; the snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry`. The AI models run on
+Amazon Bedrock in acc3; acc1 left the ecosystem on 2026-10-28 (AA-998).
 
 ## How each app deploys
 
 | App | Backend path | Frontend path | Gate |
 |---|---|---|---|
-| CIS | Merge to `main` → `Deploy Dev` (`deploy-dev.yml`): image `dev-<sha>` to ECR (immutable tags), new task definitions for api **and** worker on the same image | `vercel-deploy.yml` (admin, `aa-cis-frontend`), followed by a Playwright UI smoke. The portal is no longer deployed from here (AA-979, CIS #997) | Refuses only while a rerun wave is open or a deploy-blocking kind (`data_erasure`, `s1_batch_ingest`) runs or is due within 15 min (C6.3a, AA-993 G5); other queued/running jobs are drained and re-claimed |
-| Booking | Merge to `main` → `Deploy Dev`: image tagged with the git SHA, role `aa-booking-dev-app-deploy`, smoke `/booking/health` (same `git_sha`) and `/booking/health/ready` | `vercel-deploy.yml` (`aa-booking-admin`) | Asks `/booking/ops/deploy-gate`; refuses only while a retention job runs or is due within 15 min (C6.3a) |
+| CIS | Merge to `main` → `Deploy Dev` (`deploy-dev.yml`): image `dev-<sha>` to ECR (immutable tags), new task definitions for api **and** worker on the same image | `vercel-deploy.yml` (admin, `aa-cis-frontend`), followed by a Playwright UI smoke. The portal is no longer deployed from here (AA-979, CIS #997) | Refuses only while a rerun wave is open or a deploy-blocking kind (`data_erasure`, `s1_batch_ingest`, `writing_memory_r2`, `writing_memory_shadow`) runs or is due within 15 min (C6.3a, AA-993 G5); other queued/running jobs are released and re-claimed by the new task |
+| Booking | Merge to `main` → `Deploy Dev`: image tagged with the git SHA, role `aa-booking-dev-app-deploy`, smoke `/booking/health` (same `git_sha`) and `/booking/health/ready` | `vercel-deploy.yml` (`aa-booking-admin`) | Asks `/booking/ops/deploy-gate`; refuses only while a retention job (`bk_retention_job`, `bk_retention_inbox_redact`) runs or is due within 15 min (C6.3a, AA-993 G5) |
 | TripPlanner | Merge to `main` touching `backend/**` → `deploy-lambdas.yml`: zip to the artifacts bucket, `UpdateFunctionCode` on both Lambdas | `vercel-deploy.yml` | None (no job table yet, AA-861) |
-| Partner | Merge to `main` touching `api/**` → `Deploy Dev`: image tagged with the git SHA (native arm64), service `aa-crm-dev-api`; `web/**` → `Deploy Web Dev`, service `aa-crm-dev-web` | `vercel-deploy-portal.yml` (tenant portal, Vercel `aa-cis-portal`, `portal/**`; preview on a PR, production on `main`; AA-979). A PR preview is followed by the portal UI smoke `ui-smoke-portal.yml`; a production deploy gets only the `/tenant-login` 200 check | The API deploy refuses only while a `crm_dispatch` job runs or is due within 15 min (C6.3a); the portal deploy has no job gate |
-| Infra | PR → **Terraform Plan** (required) → merge → **Terraform Apply Prod** run by hand (`workflow_dispatch` on `main`) | - | Plan read in the PR; OIDC trust only for `refs/heads/main` |
+| Partner | Merge to `main` touching `api/**` → `Deploy Dev`: image tagged with the git SHA (native arm64), service `aa-crm-dev-api`; `web/**` → `Deploy Web Dev`, service `aa-crm-dev-web` | `portal/**` → `Deploy Portal Dev` (`deploy-portal-dev.yml`): the tenant portal (Content studio) to the Fargate service `aa-crm-dev-portal` behind `portal.lumiguides.it.com`, then post-deploy verify and the portal UI smoke. `vercel-deploy-portal.yml` (Vercel `aa-cis-portal`) stays as the rollback path until 2026-11-03 (AA-979) | The API deploy has the same guard, but no Partner kind blocks a deploy today (`crm_dispatch` stopped blocking in AA-993 G4b); web and portal deploys have no job gate |
+| Infra | PR → **Terraform Plan** (read it; Infra has no required checks) → merge → **Terraform Apply Prod** run by hand (`workflow_dispatch` on `main`) | - | Plan read in the PR; OIDC trust only for `refs/heads/main` |
 
 Boundary: *apps own code, Infra owns resources*. Infra creates the ECS services, Lambdas and roles; the apps ship
-code into them. Bootstrap IAM roles and policies, and the `accounts/acc1-bedrock` and `accounts/acc3-bedrock` roots,
-are applied by a human with the MFA profile, never by CI.
+code into them. Bootstrap IAM roles and policies and the `accounts/acc3-bedrock` root are applied by a human with the
+MFA profile, never by CI. The `accounts/acc1-bedrock` root is only waiting for its one-time destroy (AA-998).
 
 Vercel's Git integration is off in every repo; CI creates deploys with `VERCEL_TOKEN`, and only when frontend files
 change.
 
-The full pre-merge checklist, the live verify and the rollback commands are in `skill/aa-ship/SKILL.md` until the
-rollback runbooks move to `docs/ops/runbooks/` (AA-892).
+The full pre-merge checklist and the live verify are in `skill/aa-ship/SKILL.md`. Rollback steps per app are runbooks
+in [`ops/runbooks/`](../ops/runbooks/), listed on the [operations index](../ops/README.md) (AA-892).
 
 ## DB Migrate
 
@@ -73,22 +75,24 @@ rules: Infra `README.md` "DB Migrate" and [schema ownership](../database/schema-
 | `run-script` | Runs a reviewed `db/scripts/<name>.py` from `main` inside the VPC, as the master | Reviewed one-off tasks |
 
 `apply` waits, then refuses (exit 7) while any owner job table has queued or running work or a rerun wave is open.
-The input `override_busy_jobs=<reason>` is Nghiệp's call only. After `apply`, **DB Schema Dump** regenerates
+The input `override_busy_jobs=<reason>` is the tech lead's call only. After `apply`, **DB Schema Dump** regenerates
 [`db-schema-reference.md`](../architecture/db-schema-reference.md) through a root PR; **DB Isolation Probe** runs nightly
 and on demand.
 
 ## Alarms, runbooks and incidents
 
-- CloudWatch alarms (about 65 on acc2) e-mail through SNS on ALARM **and** on OK (D-20). Main ones: CIS API 5xx and
-  p95 latency, ECS health, RDS connections and storage, Booking, TripPlanner Lambda errors, job health, SES, Cognito
-  (14), log-write failures of the cost ledgers.
+- CloudWatch alarms (94 on acc2, counted 2026-10-28) e-mail through SNS on ALARM **and** on OK (D-20) to the
+  recipients on CIS admin → Platform → Alert recipients. Main ones: CIS API 5xx and p95 latency, ECS health, RDS
+  connections and storage, Booking, TripPlanner Lambda errors, the CRM api, web and portal, job health, SES, Cognito
+  and its WAF, log-write failures of the cost ledgers. The generated list is [alarms](../generated/alarms.md).
 - `TargetTracking-...-AlarmLow` alarms belong to ECS auto scaling and sit in ALARM on an idle Dev; that is normal.
 - Sentry: CIS backend and frontend errors, one uptime monitor on CIS `/health` (free plan). Booking and TripPlanner
-  rely on AWS alarms until AA-871.
-- Every alarm will name its runbook (AA-893). Start at the operations index [`ops/README.md`](../ops/README.md)
-  (AA-892): rollback per app, restore, break-glass, isolation probe, feature flags, job kinds.
-- Incidents: [incident response](../ops/incident-response.md) - severity, first 15 minutes, who is told. Nghiệp is on
-  call for everything during the dev phase.
+  also report errors to Sentry (AA-871, DSN set on Dev); AA-Partner has the code but no DSN yet.
+- Start at the operations index [`ops/README.md`](../ops/README.md) (AA-892): rollback per app, restore, break-glass,
+  isolation probe, feature flags, job kinds. Rows of the generated alarm list link the runbook their alarm e-mail
+  names, where one is set (AA-893).
+- Incidents: [incident response](../ops/incident-response.md) - severity, first 15 minutes, who is told. The tech lead
+  is on call for everything during the dev phase.
 
 Logs: `/ecs/aa-cis-dev` (api stream prefix `api/`), `/ecs/aa-booking-dev`, `/aws/lambda/<function>`. App logs are
 kept 30 days; security logs (VPC flow, WAF, ECS exec sessions, PostgreSQL) 365 days (D-09, AA-872).
@@ -110,8 +114,10 @@ session is logged for 365 days. Deleting data follows the DRY RUN procedure
 
 - RDS automated backups: 7-day point-in-time recovery on Dev (prod will keep 14, data standards DM-9.6).
 - Manual snapshots expire after 30 days (daily Lambda at 22:00 UTC), unless named `keep-` or tagged to retain.
-- A full PITR restore drill passed on 2026-10-17 in about 22 minutes
-  (`docs/audits/2026-10-17-S241-restore-drill/`). The single-schema restore runbook is still open (AA-829).
+- Full PITR restore drills passed on 2026-10-17 (about 22 minutes, `docs/audits/2026-10-17-S241-restore-drill/`)
+  and on 2026-10-23 (about 21 minutes, with a single-schema restore and a repoint of `db.dev.internal`,
+  `docs/audits/2026-10-24-S249-restore-drill/`). Runbooks: [PITR restore](../ops/runbooks/restore-rds-pitr.md),
+  [single-schema restore](../ops/runbooks/restore-schema.md).
 - Drill cadence (DM-9.3): on Dev, again when the procedure changes and once before prod; quarterly from prod.
   Evidence goes to `docs/audits/<date>-S<nnn>-<slug>/`.
 
@@ -123,14 +129,14 @@ session is logged for 365 days. Deleting data follows the DRY RUN procedure
   review), with a monthly drift check.
 - Rotate when a secret may be exposed, at go-live and after break-glass use (D-02, D-03, DM-8.9). There is no
   90-day rotation cycle on Dev.
-- Never print a secret value. Environment variable names with underscores are edited by Nghiệp by hand.
+- Never print a secret value. Environment variable names with underscores are edited by the tech lead by hand.
 
 ## Cost guardrails
 
 Rules: data standards [DM-10](../architecture/data-standards/02-data-management.md#10-cost-ownership). In practice:
 
-- AWS Budgets on acc2: 250 USD per month total, plus per `App` tag (CIS 90, shared 100, Booking 25, TripPlanner 10,
-  CRM 25; [FinOps](../ops/finops.md#budgets-and-alerts)).
+- AWS Budgets on acc2: 300 USD per month total, plus per `App` tag (shared 120, CIS 90, CRM 35, Booking 25,
+  identity 10, TripPlanner 10; read live 2026-10-28; [FinOps](../ops/finops.md#budgets-and-alerts)).
 - Every paid model or data call goes through its ledger (`shared.llm_call_log`, `decision_log`, `dfs_call_log`);
   ad-hoc scripts use `stage=adhoc_<issue>`.
 - Paid batches: trial about 3 items, then at most about 50 tours, never the whole catalog without approval.
@@ -155,14 +161,14 @@ Rules: data standards [DM-10](../architecture/data-standards/02-data-management.
 | Question | Open |
 |---|---|
 | What runs where, which roles | [Ecosystem architecture](../ecosystem-architecture.md), Infra `CONTEXT.md` |
-| How to deploy or roll back an app | `skill/aa-ship/SKILL.md`; later [`ops/README.md`](../ops/README.md) |
+| How to deploy or roll back an app | `skill/aa-ship/SKILL.md`; rollback runbooks on [`ops/README.md`](../ops/README.md) |
 | Migrations | Infra `README.md`, `db/README.md` |
 | Data rules | [Data standards](../architecture/data-standards/README.md) |
 | What is due | [Live backlog](../backlog/README.md) |
 
 ## Escalation
 
-Everything goes to Nghiệp during the dev phase. Ms. Thư is told per the severity table in
+Everything goes to the tech lead during the dev phase. The business owner is told per the severity table in
 [incident response](../ops/incident-response.md).
 
 ## Related

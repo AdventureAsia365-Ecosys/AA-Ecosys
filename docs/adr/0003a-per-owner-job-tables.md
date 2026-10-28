@@ -1,10 +1,10 @@
 # ADR 0003 — Amendment A1: one job table per owner schema, from a shared DDL template
 
-- **Status:** Accepted (15/10/2026, S237 — Nghiệp approved every recommendation of the S237
+- **Status:** Accepted (15/10/2026, S237 — the tech lead approved every recommendation of the S237
   data-architecture review, decision E1). Separate file, following the `0004a` pattern; ADR 0003 itself
   is not edited (follow-up below adds a pointer to it).
 - **Amends:** ADR 0003 decision 4 ("A non-CIS repo … enqueues into `shared.job` only when it has real
-  deferred work") and its consequence "Nac 6 (grant `shared.job` to a second repo)". The other ADR 0003
+  deferred work") and its consequence "Step 6" ("Nac 6" in the original text: grant `shared.job` to a second repo). The other ADR 0003
   decisions stay: one durable job model (1, read as "the owner's job table + its worker"), the three
   layers trigger / kind registry / write strategy (2), no partially recomputed sets (3), Lambdas as
   triggers (5).
@@ -14,6 +14,18 @@
   `docs/architecture/data-standards/` (Part A QRY-8, Part B DM-2.4 / DM-7, Part C C4.1 / C5.1b / C6).
 - **Design source:** `docs/audits/2026-10-14-S237-lane-backlog/data-architecture/README.md` (§3 P11,
   §4.3 "Background job", roadmap **X6**).
+- **Update 2026-10-28:**
+  - X6 shipped. The template is `apps/AA-CIS-App/shared/jobs/job_table_template.sql`. Booking caught up in bk-013,
+    and its integration tests compare `booking.job` with the template. AA-751 was re-scoped and ported the runner
+    rules to Booking (decision 8).
+  - X1 shipped: the kind prefixes are in `infra/AA-CIS-Infra/db/owners.yaml`.
+  - A third owner table exists: `crm.job` (AA-Partner, kinds `crm_*`, worker loop inside the API process).
+    TripPlanner still has no job table.
+  - Decision 5, deploys: since AA-993 G5 a backend deploy no longer waits for an idle job table. It blocks only
+    while a rerun wave is open or a deploy-blocking kind of that app runs or is due; other jobs are released on
+    shutdown and claimed again. DB Migrate `apply` still waits until no job table has a queued or running job of
+    a non-exempt kind.
+  - Decision 6: the Booking deploy has its job guard (`GET /booking/ops/deploy-gate`).
 
 ## Context
 
@@ -84,8 +96,8 @@ grant once they had real deferred work. Reality went the other way:
    the upload-batch entity (FK parent of `raw_tours.batch_id`), not a job model;
    `acp_contract.atom_decompose_jobs` (0 rows) goes to the Dead Table Registry (**N6**).
 8. **AA-751:** its premise (grant `shared.job` to a second repo) is superseded. The recommended path is to
-   re-scope it to deliver **X6** (template, Booking catch-up, guard); Nghiệp decides re-scope or close
-   when the X6 work is cut.
+   re-scope it to deliver **X6** (template, Booking catch-up, guard); the tech lead decides re-scope or
+   close when the X6 work is cut.
 
 ## Consequences
 

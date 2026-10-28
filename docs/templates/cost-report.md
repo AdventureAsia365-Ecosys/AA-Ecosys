@@ -15,12 +15,12 @@ related: [FIN-01, OPS-08, AA-896, AA-838]
 
 <!-- One monthly report = the C8 capacity review + the FinOps cost report (reconciliation K-05).
 Save it as docs/audits/<date>-S<nnn>-capacity-review/README.md with a root PR (C8a). Claude Code drafts,
-Nghiệp approves.
+The tech lead approves.
 Sources (DM-10.4, no new Cost Explorer script): shared.cost_explorer_snapshot (daily per account and service;
 add the App tag group-by in the existing CIS client), shared.llm_call_log (by stage, role, app), CloudWatch.
 Tags: App and Environment (DM-10.1); untagged spend is a finding. Delete this comment. -->
 
-## Tóm tắt cho chị Thư (VI)
+## Tóm tắt cho chủ doanh nghiệp (VI)
 
 <Năm dòng: tổng tháng (USD), so với tháng trước (+/- %), lý do chính, ngân sách còn bao nhiêu, có cần chị quyết gì không.>
 

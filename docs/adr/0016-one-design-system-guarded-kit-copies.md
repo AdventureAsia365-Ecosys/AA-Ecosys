@@ -1,6 +1,6 @@
 # ADR 0016 — One design system for the ecosystem frontends: a canonical kit core in AA-CIS-App, guarded byte copies, one token set for all five apps
 
-- **Status:** Accepted (27/10/2026, S252, Nghiệp, with the AA-994 plan). Proposed the same day as option B ("guarded
+- **Status:** Accepted (2026-10-27, S252, tech lead, with the AA-994 plan). Proposed the same day as option B ("guarded
   byte copies, CIS `frontend/app/_kit/core/` canonical") with the critic's fixes.
 - **Scope:** AA-CIS-App (`frontend/`, the canonical kit core and its guards), AA-Partner (`portal/`, `web/`),
   AA-Booking (`frontend/`), AA-TripPlanner-Web (`frontend/`, tokens only), the root repo (this ADR, `tools/kit/`,
@@ -15,7 +15,7 @@
 - **Design and evidence:** `docs/audits/2026-10-27-S252-aa994-design-system/` (`adr-draft.md`, `plan.md`: inventory
   in section 0, slice plan S0–S6f in section 2, guards G1–G19 in section 3, visual job in section 4). Evidence was read
   on origin/main: AA-CIS-App `5cc5fb4d`, AA-Partner `5a6de8b`, AA-Booking `e84d8c1`, AA-TripPlanner-Web `4b08949`,
-  AA-CIS-Infra `origin/main` (27/10/2026).
+  AA-CIS-Infra `origin/main` (2026-10-27).
 - **Related Linear:** AA-994 (this design system, phases 1–3), AA-655 (folded into AA-994), AA-760 (light contrast
   fixes), AA-812 (TripPlanner tokens), AA-885 (frozen CIS portal copy).
 
@@ -170,9 +170,10 @@ lockfile.
   barrels for one sync.
 - Sync PRs are normal-tier PRs (ADR 0011 section 4): the orchestrating agent merges them through each repo's merge
   queue (`tools/github/mergeq.sh`; TripPlanner by `gh pr merge --squash`). Bot auto-merge is **not** granted by this
-  ADR; it would change merge rights and needs Nghiệp's decision after about five clean syncs.
+  ADR; it would change merge rights and needs the tech lead's decision after about five clean syncs.
 - Sync PRs are frontend-only; each repo's job-busy guard (DM-11.4) must not block them. Verify the guard is
-  path-scoped before relying on daily syncs.
+  path-scoped before relying on daily syncs. *(Update 2026-10-28: since AA-993 G5 the deploy guard blocks only on an
+  open CIS wave or a deploy-blocking job kind, data standards Part C C6.3a.)*
 
 ### 7. Conformance rules shipped with the core, enforced as errors with a shrinking baseline
 
@@ -276,7 +277,7 @@ it becomes that package's `src/` without rework.
 - (−) Visible colour change in CIS admin and Booking when the canonical tokens land (one sign-off).
 - (−) Byte copies stop kit drift, not page drift; the legacy layers disappear only through the page migration and the
   shrinking suppressions.
-- (−) Hand steps for Nghiệp: required checks in AA-Partner (Portal Build, Web Build) and AA-CIS-App (Frontend Lint),
+- (−) Hand steps for the tech lead: required checks in AA-Partner (Portal Build, Web Build) and AA-CIS-App (Frontend Lint),
   later the integrity/provenance checks; an `e2e` environment in AA-Booking; the Infra mailbox-role trust gains the
   AA-Booking subject (`accounts/aa365/e2e_mailbox.tf:367-375` lists AA-CIS-App and AA-Partner only).
 
@@ -286,7 +287,7 @@ it becomes that package's `src/` without rework.
   publishing), fanned out by bump PRs.** Rejected for now: two hops for every change including CIS (AA-UI PR →
   release → bump PR per consumer, ~1 h wall clock), consumer breakage found only after publish, `package-lock.json`
   conflicts in the merge queues, kit source hidden in `node_modules` (agents write local workarounds), a new npm
-  supply-chain path and permanent releases (no unpublish after 72 h), and nothing ships until Nghiệp creates the repo,
+  supply-chain path and permanent releases (no unpublish after 72 h), and nothing ships until the tech lead creates the repo,
   the npm org and three trusted publishers. Its strengths (semver, neutral owner, an unauthenticated gallery) are kept
   as the decision-12 trigger and as the `KitGallery` route.
 - **GitHub Packages npm.** Requires a token even for public installs; Vercel's remote builders would need a long-lived

@@ -7,15 +7,15 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-dev-db]
-last_reviewed: 2026-10-23
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [OPS-01, OPS-05-ecs-exec, OPS-05-db-migrate, OPS-03-pitr, OPS-03-schema, OPS-11, docs/database/schema-ownership.md, AA-892]
 ---
 
 # Database operations index
 
-One PostgreSQL 15 instance, `aa-cis-dev-db`, database `aa_cis_dev`, is shared by CIS, Booking and TripPlanner, each in
-its own schemas (ownership: [schema ownership](../database/schema-ownership.md)). It is private: no public endpoint, no
+One PostgreSQL 15 instance, `aa-cis-dev-db`, database `aa_cis_dev`, is shared by CIS, Booking, TripPlanner and the
+partner CRM (AA-Partner), each in its own schemas (ownership: [schema ownership](../database/schema-ownership.md)). It is private: no public endpoint, no
 personal logins, no SSH (DM-8.8).
 
 ## I want to…
@@ -26,33 +26,35 @@ personal logins, no SSH (DM-8.8).
 | Run a read or a small one-off write on CIS schemas | [ECS exec + S3](runbooks/ecs-exec-s3-mediated.md) | engineer, agent |
 | Change a table, view, index, grant or role | a migration in the owning repo, applied by [DB Migrate](runbooks/db-migrate.md) (`check` → `apply`) | owner repo PR, then the operator |
 | Do master-level work (another app's data, roles, catalog) | a reviewed `db/scripts/<name>.py` in AA-CIS-Infra, [DB Migrate `run-script`](runbooks/db-migrate.md) | Infra PR, then the operator |
-| Set the password of `cis_app` / `db_migrator` | [DB Migrate `set-password`](runbooks/db-migrate.md) | Nghiệp writes the secret, operator runs the mode |
-| Delete tables or data for good | DRY RUN procedure, `skill/aa-cis-schema/references/destructive-ops.md`; afterwards a row in the Dead Table Registry (planned page, see the [catalog](../README.md)) | Nghiệp approves the COMMIT |
+| Set the password of `cis_app`, `crm_app` or `db_migrator` | [DB Migrate `set-password`](runbooks/db-migrate.md) | the tech lead writes the secret, the operator runs the mode |
+| Delete tables or data for good | DRY RUN procedure, `skill/aa-cis-schema/references/destructive-ops.md`; afterwards a row in the [Dead Table Registry](../architecture/dead-table-registry.md) | the tech lead approves the COMMIT |
 | Prove the apps cannot read each other's data | [Isolation probe](runbooks/isolation-probe.md) | anyone (read-only) |
-| Restore after data loss | [PITR to a copy](runbooks/restore-rds-pitr.md), then [single-schema restore](runbooks/restore-schema.md) | Nghiệp decides |
+| Restore after data loss | [PITR to a copy](runbooks/restore-rds-pitr.md), then [single-schema restore](runbooks/restore-schema.md) | the tech lead decides |
 | Rehearse a restore | [drills index](drills/README.md) | per DM-9.3 |
 | Understand the gotchas (PK names, status columns, views to read) | `skill/aa-cis-schema/SKILL.md` and `references/gotchas.md` | anyone |
 | Check connection budgets | data standards C2.2 ([`03-scaling.md`](../architecture/data-standards/03-scaling.md)); alarms `aa-cis-dev-rds-role-connections-*` | anyone |
 
-## Facts (read 19/10/2026)
+## Facts (read 2026-10-28)
 
-- `db.t4g.small`, 20 GB, single-AZ, encrypted, deletion protection on, automated backups 7 days, PostgreSQL log export
-  to CloudWatch (`/aws/rds/instance/aa-cis-dev-db/postgresql`, 365 days; connections and disconnections logged, D-08).
+- `db.t4g.small`, PostgreSQL 15.17, 20 GB (storage autoscaling up to 100 GB), single-AZ, encrypted, deletion protection on, automated backups 7 days,
+  PostgreSQL log export to CloudWatch (`/aws/rds/instance/aa-cis-dev-db/postgresql`, 365 days; connections and disconnections logged, D-08).
 - Manual snapshots expire after 30 days unless named `keep-…` or tagged `aa:retain=keep` /
   `aa:retain-until=YYYY-MM-DD` (snapshot-expiry Lambda, AA-869). A `-- migrate: destructive` migration gets a snapshot
   from DB Migrate first (DM-9.2).
-- Logins: since X1 S18 (19/10/2026) the CIS api + worker log in as `cis_app` (`aa-cis/dev/rds-cis-app`), and since S19
-  the CIS task role is denied the master secret (`aa-cis/dev/rds`). The master is break-glass only (DM-8.9); DB Migrate,
-  Schema Dump and the probe still use it until X1 S22 moves them to `db_migrator`. Booking (`booking`), TripPlanner (`tripplanner`) and the tenant pool
-  (`aa_app_user`) have their own logins; Booking and TripPlanner objects are owned by `bk_owner` / `tp_owner`.
+- Logins: since X1 S18 (2026-10-19) the CIS api + worker log in as `cis_app` (`aa-cis/dev/rds-cis-app`), and since S19
+  the CIS task role is denied the master secret (`aa-cis/dev/rds`). Since X1 S22, DB Migrate (`check`, `apply`), Schema
+  Dump and the isolation probe log in as `db_migrator`; only the DB Migrate modes `roles/`, `set-password` and
+  `run-script` still use the master, which is otherwise break-glass only (DM-8.9). Booking (`booking`), TripPlanner
+  (`tripplanner`), the CRM (`crm_app`) and the tenant pool (`aa_app_user`) have their own logins; Booking, TripPlanner
+  and CRM objects are owned by `bk_owner`, `tp_owner` and `crm_owner`.
 - The DSN CNAME of DM-9.5 exists since S248: `db.dev.internal` (Route 53 private zone, AA-CIS-Infra
-  `accounts/aa365/db_dns.tf`, AA-829). Every DSN secret names it since 23/10/2026 (AA-829 switch, 7/7 secrets,
+  `accounts/aa365/db_dns.tf`, AA-829). Every DSN secret names it since 2026-10-23 (AA-829 switch, 7/7 secrets,
   services restarted and verified). Repoint after a restore:
   [restore runbook](runbooks/restore-rds-pitr.md#repoint-dbdevinternal-after-a-restore).
-- Real-data dumps from 16/09/2026 sit outside git on a laptop (`docs/backups/`, ignored); securing or deleting them is
-  waiting on Nghiệp (AA-829, DM-6.10).
+- Real-data dumps from 2026-09-16 sit outside git on a laptop (`docs/backups/`, ignored); securing or deleting them is
+  waiting on the tech lead (AA-829, DM-6.10).
 
 ## Older pages
 
-`docs/db-access-ssm-tunnel.md` (bastion idea, superseded by the port-forward section of the ECS exec runbook) and the
-stray `docs/*.sql` / `docs/*.sh` files are cleaned up by AA-889.
+The bastion idea (`docs/db-access-ssm-tunnel.md`) and the stray `docs/*.sql` / `docs/*.sh` files are gone (AA-889). Use
+the port-forward section of the [ECS exec runbook](runbooks/ecs-exec-s3-mediated.md) instead.

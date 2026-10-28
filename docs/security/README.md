@@ -15,7 +15,7 @@ related: [SEC-01, SEC-02, SEC-03, SEC-05, SEC-06, SEC-07]
 # Security docs index
 
 Security pages live only in this private repo (SEC-06, D-25). They are not synced to the admin docs page
-unless Nghiệp decides who may read them there (N-3).
+unless the tech lead decides who may read them there (N-3).
 
 | ID | Page | What it answers |
 |---|---|---|
@@ -33,4 +33,4 @@ Quarterly, in the first session of each quarter (DM-8.10). Each review is a date
 
 | Quarter | Record | Notes |
 |---|---|---|
-| 2026-Q4 | [2026-10-20-S245-access-review](../audits/2026-10-20-S245-access-review/README.md) | First review (AA-878), 20/10/2026: 15 findings (F-1…F-15), 2 questions for Nghiệp. Next: first session of 2027-Q1 (cadence AA-838) |
+| 2026-Q4 | [2026-10-20-S245-access-review](../audits/2026-10-20-S245-access-review/README.md) | First review (AA-878), 20/10/2026: 15 findings (F-1…F-15), 2 questions for the tech lead. Next: first session of 2027-Q1 (cadence AA-838) |

@@ -1,11 +1,13 @@
 # ADR 0005 — Amendment: B2B resale by partner agencies (warn below the "from" price, no subscription line, VND quotes)
 
-- **Status:** Accepted (22/10/2026, S247, Nghiệp). Proposed the same day.
+- **Status:** Accepted (22/10/2026, S247, tech lead). Proposed the same day.
+- **Update 2026-10-28:** the agency table is `booking.b2b_partners` (plural). `price.from.v1` is not built yet;
+  `GET /price-parity` derives the "from" price from `booking.trip_plan_prices` (AA-Booking `backend/app/b2b/reads.py`).
 - **Scope:** AA-Booking (owner of prices and the B2B API), AA-Partner (consumer, [ADR 0010](0010-aa-partner-app.md)),
   CIS and TripPlanner (readers of `price.from.v1`, unchanged).
 - **Amends:** [ADR 0005](0005-pricing-and-supplier-rates.md) decision 9 (tenant resale), decision 5 (currencies) and
   the last sentence of decision 6 (how B2B price lists are exposed).
-- **Implements:** the owner's questionnaire answers Q1 1.1 (free for agencies now), Q2 1.1 (B2B price at the existing
+- **Implements:** the business owner's questionnaire answers Q1 1.1 (free for agencies now), Q2 1.1 (B2B price at the existing
   15 % margin, the agency sets its sell price), Q2 1.2 (AA bills the agency under the current B2B terms, outside the
   CRM), Q2 1.3 (below the public price: contract clause only); contradictions X10 and X11 of the CRM design.
 - **Design and evidence:**
@@ -19,7 +21,7 @@
 ## Context
 
 ADR 0005 decision 9 says: "a tenant **may not** advertise below AA's public B2C 'from' price. A second revenue line
-next to the subscription." The CRM design and the owner's answers say the opposite on both points: the system only
+next to the subscription." The CRM design and the business owner's answers say the opposite on both points: the system only
 **warns** below the public price (the rule lives in the partner contract), and agencies pay nothing for the CRM
 now, so there is no subscription for a B2B line to sit next to (X11). Decision 5 lists USD, EUR, GBP, AUD and SGD as
 selling currencies; Vietnamese agencies need **VND** quotes (X10). Decision 6 says B2B net price lists are exposed
@@ -31,7 +33,7 @@ selling currencies; Vietnamese agencies need **VND** quotes (X10). Decision 6 sa
 
 - Partner agencies resell AA products through the Booking B2B API, contract
   [`booking.b2b.v1`](../contracts/booking.b2b.v1.openapi.yaml), called by AA-Partner with an M2M token and the
-  agency's `tenant_id` in `X-AA-Tenant-Id`. Booking checks the agency in its own `b2b_partner` table.
+  agency's `tenant_id` in `X-AA-Tenant-Id`. Booking checks the agency in its own `b2b_partners` table.
 - The price Booking returns per line is the **B2B price**: net cost ÷ (1 − margin) with the `b2b` channel rule of
   decision 4 (15 % target, 10 % floor, policy data in `booking.pricing_rules`). The agency sets its own sell price in
   the CRM.
@@ -86,7 +88,7 @@ selling currencies; Vietnamese agencies need **VND** quotes (X10). Decision 6 sa
 
 ## Alternatives considered
 
-- **Keep the block below the "from" price.** Rejected: the owner answered "contract clause only" (Q2 1.3), and a hard
+- **Keep the block below the "from" price.** Rejected: the business owner answered "contract clause only" (Q2 1.3), and a hard
   block cannot see legitimate cases (an agency absorbing its own margin).
 - **Charge a subscription and keep the B2B margin as a second line.** Rejected for now: the CRM is free (Q1 1.1);
   tiers come only at measured triggers.
@@ -95,7 +97,7 @@ selling currencies; Vietnamese agencies need **VND** quotes (X10). Decision 6 sa
 
 ## Follow-ups
 
-- AA-972: `b2b_partner`, quotes with `b2b_price`, `GET /price-parity`.
+- AA-972: `b2b_partners`, quotes with `b2b_price`, `GET /price-parity`.
 - AA-974: VND, rounding, cancellation-fee policy with dry run, `extend` once per hold, re-hold limit.
 - AA-930: VND rate source.
-- On acceptance: status line here and in the index.
+- Done: status line here and in the index (Accepted).
