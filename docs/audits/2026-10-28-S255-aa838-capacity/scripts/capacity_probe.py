@@ -199,12 +199,15 @@ async def indexes(conn):
 
 
 async def ledgers(conn):
-    # C5.4 / DM-7 windows: llm_call_log 180 d, tenant_api_usage 90 d, jobs succeeded 30 d / failed 90 d.
+    # C5.4 / DM-7 windows, as coded in AA-CIS-App services/retention/policy.py (AA-825): llm_call_log 180 d,
+    # decision_log 180 d (unlabelled rows only; = max(180, Jev cache max age)), tenant_api_usage 90 d,
+    # jobs succeeded 30 d / failed 90 d on finished_at. older_than_window ignores the extra predicates
+    # (outcome, status, FK references), so it is an upper bound of the real candidates.
     checks = [
         ("shared.llm_call_log", "created_at", 180),
-        ("shared.decision_log", "created_at", None),
+        ("shared.decision_log", "created_at", 180),
         ("shared.tenant_api_usage", "called_at", 90),
-        ("shared.job", "created_at", 30),  # 30 d is the succeeded window; failed keep 90 d
+        ("shared.job", "finished_at", 30),  # 30 d is the succeeded window; failed keep 90 d
         ("booking.job", None, 30),
         ("crm.job", None, 30),
     ]
@@ -253,6 +256,33 @@ async def jobs(conn):
     )
     for x in rows:
         out(f"[job_cis_kind_30d] {x['kind']} n={x['n']} p50={x['p50_s']}s p95={x['p95_s']}s failed={x['failed']}")
+
+
+async def retention_runs(conn):
+    # Latest run of each CIS retention kind and its mode. A scheduled run stays a DRY RUN until a manual live
+    # run of that kind with the same windows has succeeded (DM-7.2); a manual_override proof run never counts.
+    rows = await conn.fetch(
+        """
+        SELECT DISTINCT ON (kind) kind, status, finished_at,
+               result ->> 'mode' AS mode, result ->> 'trigger' AS trig,
+               result ->> 'candidates_total' AS cand, result ->> 'deleted_total' AS deleted
+          FROM shared.job WHERE kind LIKE 'retention\\_%' ORDER BY kind, created_at DESC
+        """
+    )
+    for x in rows:
+        out(f"[retention] {x['kind']} last={x['status']} at={x['finished_at']} mode={x['mode']} "
+            f"trigger={x['trig']} candidates={x['cand']} deleted={x['deleted']}")
+    rows = await conn.fetch(
+        """
+        SELECT kind, max(finished_at) AS at FROM shared.job
+         WHERE kind LIKE 'retention\\_%' AND status = 'succeeded' AND result ->> 'mode' = 'live'
+           AND coalesce(result ->> 'trigger', 'manual') <> 'manual_override'
+         GROUP BY kind ORDER BY kind
+        """
+    )
+    out(f"[retention] kinds with an approved live run (schedule live): {len(rows)}")
+    for x in rows:
+        out(f"[retention] live_run {x['kind']} last_live={x['at']}")
 
 
 async def connections(conn):
@@ -390,7 +420,8 @@ async def statements(conn):
 
 async def main(conn):
     for name, fn in [("header", header), ("database", database), ("schemas", schemas), ("tables", tables),
-                     ("indexes", indexes), ("ledgers", ledgers), ("jobs", jobs), ("connections", connections),
+                     ("indexes", indexes), ("ledgers", ledgers), ("retention", retention_runs), ("jobs", jobs),
+                     ("connections", connections),
                      ("locks", locks), ("statements", statements)]:
         await section(conn, name, fn(conn))
     out("[done]")

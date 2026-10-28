@@ -43,9 +43,11 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      có dòng đó cách ≥ 7 ngày. Mục tiêu C1.2 trượt 2 tuần liên tiếp → báo Nghiệp (C1.2a).
    - **Tháng (C8):** phiên đầu mỗi tháng: rà soát dung lượng + chi phí (9 mục C8b, danh sách quyết định C8c), lưu
      `docs/audits/<date>-S<nnn>-capacity-review/` qua root PR. Hạn = folder `*capacity*` mới nhất trong `docs/audits/`
-     thuộc tháng trước. Cách làm + script: folder đầu tiên `docs/audits/2026-10-28-S255-aa838-capacity/`.
+     thuộc tháng trước. Mẫu `docs/templates/capacity-review.md`; cách làm + script: folder đầu tiên
+     `docs/audits/2026-10-28-S255-aa838-capacity/`.
    - **Quý (DM-8.10):** phiên đầu mỗi quý: rà soát quyền (role, grant, default ACL, IAM đọc secret DB, user Cognito
-     `aa-workforce`), lưu `docs/audits/<date>-S<nnn>-access-review/`. Hạn = folder `*access-review*` mới nhất thuộc quý trước.
+     `aa-workforce`), lưu `docs/audits/<date>-S<nnn>-access-review/` theo mẫu `docs/templates/access-review.md`. Hạn = folder
+     `*access-review*` mới nhất thuộc quý trước.
    - Không bao giờ chạy `pg_stat_statements_reset()` trừ ngay sau một rà soát tháng đã lưu snapshot top 50 (C4.3a).
 
 Đầu ra: một khối ngắn gồm trạng thái (3–5 dòng), lệch nếu có, danh sách việc kèm slot.
