@@ -1,0 +1,115 @@
+name: Docs sync
+# AA-898: publish the docs catalog to the CIS admin reader (/admin/docs, Platform > Developer > Docs).
+#
+# On a clean checkout of this repo (tracked files only, never a laptop) tools/docs/build_docs_reader.py builds
+# manifest.json + one redacted Markdown file per published page (publication rule v1 in the script header and in
+# docs/README.md "Docs reader": catalog pages and ADRs only; journals, audits, docs/security/ and templates never;
+# account / VPC / user-pool / API Gateway IDs redacted; a guard fails the build when one is left). Then, on master only:
+#
+#   s3://<bronze>/docs-reader/pages/...      aws s3 sync (new and changed pages first)
+#   s3://<bronze>/docs-reader/manifest.json  aws s3 cp (after the pages, so it never lists a page not uploaded yet)
+#   s3://<bronze>/docs-reader/pages/...      aws s3 sync --delete (pages dropped from the manifest go last)
+#
+# The CIS api reads those objects (cached 5 min), so a merged docs change shows up within minutes, with no Vercel or
+# ECS deploy. On a pull request the job only builds and checks (no AWS, no secret).
+#
+# AWS: role aa-cis-dev-docs-sync (AA-CIS-Infra accounts/aa365/docs_reader.tf; trusted only by this repo on
+# refs/heads/master; ListBucket + Put/Delete on docs-reader/ only). Repo secrets (secrets, not variables: this repo is
+# public for now and a variable is printed in the log): DOCS_SYNC_ROLE_ARN (Terraform output docs_sync_role_arn) and
+# DOCS_SYNC_BUCKET (the bronze bucket name). Until both exist the sync step is skipped with a notice, not failed.
+#
+# Cost: about 1 minute of Actions per docs merge; S3 < $0.10/month (docs_reader.tf header).
+on:
+  push:
+    branches: [master]
+    paths:
+      - "docs/**"
+      - "tools/docs/build_docs_reader.py"
+      - "tools/docs/docslib.py"
+      - "tools/docs/check_docs_text.py"
+      - "tools/docs/check_adr_index.py"
+      - ".github/workflows/docs-sync.yml"
+  pull_request:
+    branches: [master]
+    paths:
+      - "tools/docs/build_docs_reader.py"
+      - "tools/docs/test_docs_reader.py"
+      - "tools/docs/docslib.py"
+      - "tools/docs/check_docs_text.py"
+      - "tools/docs/check_adr_index.py"
+      - ".github/workflows/docs-sync.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-sync-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Docs sync
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      OUT: _site/docs-reader
+      PREFIX: docs-reader
+      HAS_AWS: ${{ secrets.DOCS_SYNC_ROLE_ARN != '' && secrets.DOCS_SYNC_BUCKET != '' }}
+      IS_MASTER: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tools/docs/requirements.txt
+
+      - name: Install dependencies
+        run: python -m pip install --quiet -r tools/docs/requirements.txt
+
+      - name: Unit tests of the bundle builder
+        run: python -m unittest tools/docs/test_docs_reader.py
+
+      - name: Build the reader bundle (redaction guard included)
+        run: python tools/docs/build_docs_reader.py --out "$OUT" --sha "$GITHUB_SHA" --ref "$GITHUB_REF_NAME"
+
+      - name: Summary
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, os
+          m = json.load(open(os.path.join(os.environ["OUT"], "manifest.json"), encoding="utf-8"))
+          c = m["counts"]
+          print("### Docs reader bundle")
+          print(f"- {c['published']} pages published ({c['owner_only']} owner only), {c['skipped']} not published")
+          print(f"- {sum(p['redactions'] for p in m['pages'])} values redacted")
+          print(f"- source `{m['source']['sha'][:12]}`")
+          PY
+
+      - name: Sync skipped
+        if: env.IS_MASTER == 'true' && env.HAS_AWS != 'true'
+        run: echo "::notice title=Docs sync::DOCS_SYNC_ROLE_ARN / DOCS_SYNC_BUCKET are not set yet; bundle built, nothing uploaded."
+
+      - name: AWS credentials (OIDC)
+        if: env.IS_MASTER == 'true' && env.HAS_AWS == 'true'
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.DOCS_SYNC_ROLE_ARN }}
+          aws-region: us-west-1
+          role-session-name: docs-sync-${{ github.run_id }}
+
+      - name: Upload to S3
+        if: env.IS_MASTER == 'true' && env.HAS_AWS == 'true'
+        env:
+          BUCKET: ${{ secrets.DOCS_SYNC_BUCKET }}
+        run: |
+          set -euo pipefail
+          dest="s3://${BUCKET}/${PREFIX}"
+          aws s3 sync "$OUT/pages" "$dest/pages" --only-show-errors --content-type "text/markdown; charset=utf-8"
+          aws s3 cp "$OUT/manifest.json" "$dest/manifest.json" --only-show-errors --content-type "application/json"
+          aws s3 sync "$OUT/pages" "$dest/pages" --only-show-errors --delete --content-type "text/markdown; charset=utf-8"
+          echo "uploaded $(find "$OUT/pages" -type f | wc -l) pages and the manifest" >> "$GITHUB_STEP_SUMMARY"
