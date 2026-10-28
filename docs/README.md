@@ -159,12 +159,23 @@ DM-6.10) and `docs/calib/` are never published anywhere.
 
 ## Admin docs page allowlist (AA-898)
 
-The CIS admin docs reader syncs **from a CI checkout** (tracked files only, never a laptop) and only the catalog
-entries above whose path is in root or INF. Always excluded: `docs/backups/`, `docs/calib/`, `docs/sessions/`.
-Security and audit pages (`docs/security/`, `docs/audits/`) are synced but served only to the `owner` role through a
-backend check (N-3).
-The bucket carries `App=cis`, server-side encryption and Block Public Access; the PR states the monthly cost
-(about 0.01 USD).
+The CIS admin docs reader (`/admin/docs`, Platform › Developer › Docs, admin only) shows a bundle that
+[`docs-sync.yml`](../.github/workflows/docs-sync.yml) builds **from a CI checkout** of `master` (tracked files only,
+never a laptop) with [`tools/docs/build_docs_reader.py`](../tools/docs/build_docs_reader.py) and uploads to the bronze
+bucket prefix `docs-reader/`. Publication rule v1 (the script header is the source):
+
+| Rule | What it means |
+|---|---|
+| Catalog pages and ADRs only | A page is published when it has catalog front-matter (`id`, `title`, `type`) or is an ADR (`docs/adr/NNNN-*.md`); everything else is a draft or a journal |
+| Never published | `docs/sessions/`, `docs/audits/`, `docs/implementation-notes/`, `docs/backlog/`, `docs/research/`, `docs/calib/`, `docs/backups/`, `docs/security/`, `docs/templates/`, `docs/archive/`, `docs/linear-export/`, and any page with `status: archived` |
+| Owner only (N-3) | Catalog IDs `SEC-*` outside `docs/security/` (privacy, legal, secret rotation) and the generated infrastructure maps `ARCH-02` (network), `ARCH-03` (inventory), `ARCH-04` (IAM roles): the API lists and serves them only to a staff member with the owner flag on a verified Cognito session |
+| Redacted | 12-digit account IDs (also inside bucket names and ARNs), VPC resource IDs, Cognito user-pool IDs, API Gateway host IDs and AWS access key IDs become `[redacted-…]`; a guard re-scans the bundle and fails the build if one is left |
+| Navigation only | `audience` filters the list; it is never an access control |
+
+v1 is stricter than the S243 wording for security and audit pages: they are not synced at all (security reports and
+audit evidence stay in git). Only this repo is published for now; Infra pages can be added as a second `repo` in the
+manifest later. The prefix lives in the existing bronze bucket (`App=cis`, SSE-S3, Block Public Access), so there is
+no new bucket; cost under 0.10 USD a month (AA-CIS-Infra `accounts/aa365/docs_reader.tf`).
 
 ## Decisions that shape this catalog
 
