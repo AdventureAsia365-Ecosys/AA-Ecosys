@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-24
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [SEC-04, SEC-04-packet, AA-886, AA-820, AA-839, AA-877]
 ---
@@ -15,7 +15,7 @@ related: [SEC-04, SEC-04-packet, AA-886, AA-820, AA-839, AA-877]
 # Data processing agreement template (draft)
 
 > **DRAFT FOR LAWYER REVIEW. THIS IS NOT LEGAL ADVICE AND IS NOT APPROVED.**
-> Engineering (Claude Code, for Pham Quoc Nghiep) prepared this outline from the product facts in the
+> The engineering team prepared this outline from the product facts in the
 > [compliance and privacy register](register.md). Counsel has not reviewed it and no tenant has seen it. Counsel
 > should rewrite it to fit the tenant agreement (defined terms, numbering, liability, governing law) and choose the
 > regimes that apply (Vietnam PDPL and its decree, GDPR with the SCCs, Australia APP 8). Every product fact in the
@@ -68,10 +68,11 @@ AA shall:
    authorities, taking into account the information available to AA.
 8. **Deletion or return.** At the end of the Services, at the Tenant's choice, delete or return Tenant personal data
    within [●] days, and delete existing copies unless the law requires storage. AA confirms deletion in writing.
-   *Drafting note: offboarding a tenant today is soft (revokes the key, cancels queued jobs) and reversible by AA. A
-   tested tenant erasure procedure does not exist yet (see the [DSAR and erasure runbook](dsar-erasure-runbook.md));
-   it is needed before AA can commit to a deletion deadline. Two facts bound any "delete existing copies" wording. The
-   7-day automated database backups (`backup_retention_period = 7`, `modules/rds/main.tf:143`) cannot be edited, so
+   *Drafting note: offboarding a tenant is soft (revokes the key, cancels queued jobs) and reversible by AA. Erasure
+   is a separate, approved step ([DSAR and erasure runbook](dsar-erasure-runbook.md), section 4). It ran once on Dev
+   on a synthetic tenant on 2026-10-23 (`docs/audits/2026-10-23-S248-aa839-erasure-drill/`); the tenant's CRM data in
+   AA-Partner has its own procedure. Two facts bound any "delete existing copies" wording. The 7-day automated
+   database backups (`backup_retention_period = 7` in AA-CIS-Infra `modules/rds/main.tf`) cannot be edited, so
    erased data leaves them only when they age out, within 7 days; the manual snapshot taken before an erasure is
    deleted once the erasure is verified (runbook section 3, step 8). And the runbook finds a person's records by a
    one-way hash of their e-mail address and erases by record id, so the address itself is never written into code,
@@ -80,9 +81,10 @@ AA shall:
    or an auditor it mandates, [●] (frequency, notice, cost).
 10. **Transfers.** Process Tenant data in the United States (AWS us-west-1) and with the sub-processors in Annex 3,
     under the transfer safeguards in [●] (for example SCC Module 2, the UK Addendum, a Vietnamese transfer impact
-    assessment). *Drafting note: counsel chooses the instruments per regime. Two facts limit "United States": the AI
-    accounts call Amazon Bedrock through `global.` cross-region inference profiles, which can process a prompt outside
-    the US, and the Vercel functions run in Vercel's default region, which is not pinned (register section (b)).*
+    assessment). *Drafting note: counsel chooses the instruments per regime. One fact limits "United States": the AI
+    account (acc3) calls Amazon Bedrock through `global.` cross-region inference profiles, which can process a prompt
+    outside the US. The Vercel functions of the CIS admin, the Booking admin and the Trip Planner are set to Vercel's
+    `sfo1` region (San Francisco) since 2026-10-28, and the tenant portal runs on AWS us-west-1 (register section (b)).*
 
 ## 3. Tenant obligations
 
@@ -113,21 +115,21 @@ Register rows 5 and 6 of [register.md](register.md) hold the table-level detail.
 
 | Measure | State | Evidence |
 |---|---|---|
-| Database encrypted at rest | Live | AA-CIS-Infra `modules/rds/main.tf:115` (`storage_encrypted = true`) |
-| Database backups and deletion protection | Live | 7-day automated backups (`backup_retention_period = 7`, `modules/rds/main.tf:143`); `deletion_protection = true` (`:140`) and a final snapshot on delete (`:133`) |
-| Database not reachable from the internet | Live | AA-CIS-Infra `modules/rds/main.tf:132` (`publicly_accessible = false`); DM-8.8 |
-| Encryption in transit (TLS) | Live | HTTPS at API Gateway and on the Vercel sites; RDS `rds.force_ssl` set (AA-CIS-Infra `modules/rds/main.tf:78`) and every app connects with SSL required |
-| Tenant isolation by row-level security; per-app database roles | Live | DM-8.4; X1 role split: the CIS runtime signs in as `cis_app`, and its task role is denied the master secret (AA-CIS-Infra `modules/ecs/main.tf:262-280`; DM-8.9) |
+| Database encrypted at rest | Live | AA-CIS-Infra `modules/rds/main.tf` (`storage_encrypted = true`) |
+| Database backups and deletion protection | Live | AA-CIS-Infra `modules/rds/main.tf`: 7-day automated backups (`backup_retention_period = 7`), `deletion_protection = true` and a final snapshot on delete (`skip_final_snapshot = false`) |
+| Database not reachable from the internet | Live | AA-CIS-Infra `modules/rds/main.tf` (`publicly_accessible = false`); DM-8.8 |
+| Encryption in transit (TLS) | Live | HTTPS at API Gateway and on the Vercel sites; RDS `rds.force_ssl` set (AA-CIS-Infra `modules/rds/main.tf`) and every app connects with SSL required |
+| Tenant isolation by row-level security; per-app database roles | Live | DM-8.4; X1 role split: the CIS runtime signs in as `cis_app`, and its task role is denied the master secret (AA-CIS-Infra `modules/ecs/main.tf`, statement `DenyMasterAndOtherAppSecrets`; DM-8.9) |
 | Credentials stored hashed or in Secrets Manager | Live | `shared.tenants.api_key_hash`; `booking.customer_otps.otp_hash`, `customer_sessions.refresh_token_hash`; channel credentials in Secrets Manager (dump; DM-6.9) |
 | TripPlanner guest token stored only as a hash | Live (AA-827) | Dump: `tripplanner.sessions.guest_token_hash bytea`, CHECK `sessions_guest_token_retired_chk (guest_token IS NULL)` ([`db-schema-reference.md`](../architecture/db-schema-reference.md) lines 3739, 3745) |
-| Error tracking without personal data | Live (AA-870) | AA-CIS-App `shared/sentry_init.py:96-108` (`send_default_pii=False`, no request bodies), `:66-79` (cookies dropped, header allowlist, key redaction). Open point: frame local variables (register note 1) |
-| Staff sign-in | Live | Cognito WORKFORCE pool: accounts are created by an admin only (no self sign-up), staff sign in with an e-mail one-time code, recovery is admin-only, the password policy is 16 characters with all four character classes. MFA is **optional**: TOTP is set up for the break-glass account only; it is not enforced for staff (AA-CIS-Infra `accounts/aa365/identity.tf:22-25`, `:344-375`) |
+| Error tracking without personal data | Live (AA-870, AA-941) | AA-CIS-App `shared/sentry_init.py`: `send_default_pii=False`, no request bodies, cookies dropped, header allowlist, key redaction, and no frame local variables (`include_local_variables=False`, AA-941). Booking and TripPlanner use the same settings (AA-871) |
+| Staff sign-in | Live | Cognito WORKFORCE pool: accounts are created by an admin only (no self sign-up), staff sign in with an e-mail one-time code, recovery is admin-only, the password policy is 16 characters with all four character classes. MFA is **optional**: TOTP is set up for the break-glass account only; it is not enforced for staff (AA-CIS-Infra `accounts/aa365/identity.tf`, WORKFORCE pool: `allow_admin_create_user_only = true`, `mfa_configuration = "OPTIONAL"`, `minimum_length = 16`) |
 | Audit trail of staff and tenant actions | Live | `booking.audit_logs` (actor, action, before/after); `acp_shared.audit_log` append-only with a sha256 hash chain (dump lines 500-530: triggers `audit_log_chain`, `audit_log_no_update`, `audit_log_no_delete`; CIS migration 248) |
 | Security log retention 365 days | Live | [§7 retention table](../architecture/data-standards/02-data-management.md#7-retention-and-archival) (CloudWatch security/audit class, AA-872) |
 | No personal data in AI prompts or AI call records | Live as a rule, checked by review | DM-6.4; no automated PII check exists |
 | Retention jobs for event payload PII | Planned | Booking job built, DRY RUN only; TripPlanner not built (DM-6.6; AA-825, AA-861). See the [retention log](retention-log.md) |
-| Tested erasure job for a traveller and a tenant | In progress | AA-839: the CIS erasure job is built and tested on synthetic data (DRY RUN; the apply stays off until approved); [DSAR and erasure runbook](dsar-erasure-runbook.md) covers travellers and tenant erasure (finds a traveller's records by a one-way hash of the e-mail address and erases by record id); the Dev drill and the Booking / TripPlanner scripts are still to do |
-| Machine-readable PII inventory (`pii:` column tags) | Planned | AA-877 (DM-6.1) |
+| Tested erasure job for a traveller and a tenant | In progress | AA-839: the CIS erasure job is built and tested on synthetic data in CI; the apply stays off except during an approved erasure. Tenant erasure ran once on Dev on a synthetic tenant (2026-10-23, `docs/audits/2026-10-23-S248-aa839-erasure-drill/`). The [DSAR and erasure runbook](dsar-erasure-runbook.md) covers travellers and tenants (it finds a traveller's records by a one-way hash of the e-mail address and erases by record id); the traveller drill and the Booking / TripPlanner scripts are still to do |
+| Machine-readable PII inventory (`pii:` column tags) | Live, partly | DM-6.1, AA-877: the 2026-10-28 schema dump counts 204 tagged columns and 38 untagged candidates in `booking`, `crm` and `tripplanner`; the register is not yet rebuilt from the tags |
 | Individual tenant user accounts and key rotation | Planned | AA-813 |
 
 ## Annex 3: Sub-processors

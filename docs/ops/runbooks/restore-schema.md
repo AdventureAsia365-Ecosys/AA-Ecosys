@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-dev-db]
-last_reviewed: 2026-10-24
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-24
 tested_where: drill
@@ -17,13 +17,12 @@ related: [OPS-03-pitr, OPS-05-db-migrate, OPS-03-drills, AA-829, AA-892]
 
 # Restore one schema or table from a point-in-time copy
 
-> [!NOTE]
-> Option A was rehearsed on Dev on 24/10/2026 (S249 drill, synthetic table): restore point between two marked writes,
-> 40 rows copied back in one transaction with a count guard. Option B (pg_dump task) is still untested.
-<!-- callout break -->
 > [!CAUTION]
 > This writes production-shaped data back into the live shared instance. It follows the DRY RUN procedure
-> (`skill/aa-cis-schema/references/destructive-ops.md`): counts first, Nghiệp's OK, then the write.
+> (`skill/aa-cis-schema/references/destructive-ops.md`): counts first, the tech lead's OK, then the write.
+
+Option A was rehearsed on Dev on 2026-10-24 (S249 drill, synthetic table): restore point between two marked writes,
+40 rows copied back in one transaction with a count guard. Option B (pg_dump task) is still untested.
 
 ## When to use
 
@@ -38,7 +37,7 @@ The container image has no `pg_dump`/`psql`, and no bastion is kept (DM-8.8). Tw
 | Option | How | Use when |
 |---|---|---|
 | A. Reviewed copy script (preferred) | A `db/scripts/<name>.py` in AA-CIS-Infra, run by [DB Migrate run-script](db-migrate.md) as the master: it opens a second connection to the temporary instance with the same master credentials, reads the affected rows (`COPY ... TO` into memory or `SELECT`), and writes them into the live tables inside one transaction (`INSERT ... ON CONFLICT DO NOTHING` or `UPDATE` by primary key) | A bounded set of tables and rows (thousands, not millions), within the 30-minute run-script ceiling |
-| B. One-off `pg_dump` task | A one-off Fargate task from the public `postgres:15` image in the migrator's subnets and security group, `pg_dump --schema <s>` from the copy and `pg_restore --data-only` into a staging schema on the live instance, then a reviewed script moves rows | A whole schema or large tables. Needs Nghiệp's approval: it creates a task definition and touches IAM |
+| B. One-off `pg_dump` task | A one-off Fargate task from the public `postgres:15` image in the migrator's subnets and security group, `pg_dump --schema <s>` from the copy and `pg_restore --data-only` into a staging schema on the live instance, then a reviewed script moves rows | A whole schema or large tables. Needs the tech lead's approval: it creates a task definition and touches IAM |
 
 Both read only from the copy; the live write is a separate, reviewed step.
 
@@ -64,7 +63,7 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 2. DRY RUN (read-only script, `READ_ONLY = True`): for each affected table, count the rows in the copy, in live, and
    the rows that would be inserted or updated (by primary key). Print counts only, never row values.
    Expected: numbers that match the damage report.
-   Verify: Nghiệp reads the counts and says OK in the issue.
+   Verify: the tech lead reads the counts and says OK in the issue.
    Rollback: none - read-only.
 
 3. Snapshot the live instance by hand (run-script takes none).
@@ -104,7 +103,7 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 ## Escalation
 
 - Data loss is SEV1 if a tenant or customer sees it ([incident response](../incident-response.md)). Personal data
-  involved: Ms. Thư decides with the lawyer on notice duties (Dev holds test data only, D-01).
+  involved: the business owner decides with legal counsel on notice duties (Dev holds test data only, D-01).
 
 ## Tested log
 

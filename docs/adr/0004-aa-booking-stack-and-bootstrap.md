@@ -1,7 +1,7 @@
 # ADR 0004 — AA-Booking: stack, repo layout, runtime and bootstrap on acc2
 
-- **Status:** Accepted (14/10/2026, Nghiệp, S235). Proposed the same day; the open decisions O1–O9
-  were answered by Nghiệp on 14/10/2026 (see "Open decisions", now "Decisions on the open items").
+- **Status:** Accepted (14/10/2026, tech lead, S235). Proposed the same day; the open decisions O1–O9
+  were answered by the tech lead on 14/10/2026 (see "Open decisions", now "Decisions on the open items").
   The health-only bootstrap is **done** (see "Bootstrap scope").
 - **Scope:** AA-Ecosys (new repo AA-Booking; AA-CIS-Infra for the runtime and DB Migrate; AA-CIS-App
   and AA-TripPlanner-Web only later, for the read grants they own).
@@ -12,10 +12,23 @@
 - **Related Linear:** AA-677 (ERD v2, done), AA-678 (bootstrap), AA-679 (catalog sync), AA-680
   (identity), AA-681 (trip case), AA-682 (operations), AA-683 (UI spec), AA-751 (second repo on
   `shared.job`).
+- **Update 2026-10-28** (checked against AA-Booking `CONTEXT.md`, AA-CIS-Infra and the live schema dump):
+  - O1 (staff identity) is replaced by [ADR 0006](0006-ecosystem-identity.md) / [0006a](0006a-identity-phase1-amendments.md):
+    Booking verifies Cognito WORKFORCE access tokens of the `booking-staff` and `breakglass` clients and takes the
+    role from the `booking-*` groups. It still accepts the CIS bridge token during the transition (AA-911 P6b).
+  - Decisions 4 and 8: Booking has jobs (`booking.job`, kinds `bk_*`). The worker loop runs inside the API task as
+    one lifespan background task, not as a separate worker service. Deploy Dev calls the Booking deploy gate
+    (`GET /booking/ops/deploy-gate`), which since AA-993 G5 blocks only on the retention kinds.
+  - Decision 6: since X1 (bk-014) schema `booking` is owned by the NOLOGIN role `bk_owner`. DB Migrate signs in as
+    `db_migrator` and runs each Booking file as the schema's live owner, not as `aa_cis_admin`. Latest Booking
+    migration on Dev: bk-032 ([DB schema reference](../architecture/db-schema-reference.md)).
+  - Decision 2: merges go through the GitHub merge queue; in the dev phase the orchestrating agent merges when CI
+    is green (S241 D-13).
+  - The staff admin frontend exists: Vercel project `aa-booking-admin` (AA-683).
 
 ## Context
 
-AA-Booking (AAA) is built in-house from scratch (Nghiệp, 28/09 and S226). The inputs are the
+AA-Booking (AAA) is built in-house from scratch (tech lead, 28/09 and S226). The inputs are the
 Quanskill PRD (09/06/2026), the v1 ERD, the handover review (10/06/2026), about 110 Figma screens and
 ERD v2 (`docs/AAA/erd-v2/`). No vendor code was delivered. ADR 0001 fixes where Booking runs: acc2,
 the shared RDS, schema `booking`, provisioned by AA-CIS-Infra, with no new accounts. It does not fix
@@ -50,7 +63,7 @@ program.
 ## Decisions
 
 The items that needed an explicit answer (O1–O9) are listed in "Decisions on the open items", with
-the answer Nghiệp gave on 14/10/2026.
+the answer the tech lead gave on 14/10/2026.
 
 1. **Stack = the CIS stack.** Confirmed (O4).
    - Backend: Python 3.12, FastAPI, Pydantic v2, asyncpg with plain SQL repositories (no ORM in
@@ -113,7 +126,7 @@ the answer Nghiệp gave on 14/10/2026.
    - Own execution role (GetSecretValue on `booking/dev/*` only) and own task role. No Bedrock and no
      CIS secrets; add only when a feature needs them.
    - Secret `booking/dev/database-url`: a placeholder in Terraform with `ignore_changes`; the value is
-     set out-of-band by Nghiệp.
+     set out-of-band by the tech lead.
    - ECS service `aa-booking-dev-api` on the existing `aa-cis-dev-cluster`:
      - 0.25 vCPU / 0.5 GB, FARGATE base 1 + FARGATE_SPOT;
      - circuit breaker with rollback;
@@ -131,7 +144,7 @@ the answer Nghiệp gave on 14/10/2026.
      - ALB target group (port 8000, health check `/booking/health`);
      - listener rule `path-pattern /booking/*` on the ALB **HTTP** listener (the NLB → ALB hop is
        port 80; the alb module only exports `https_listener_arn` today, hence the new output);
-     - entry: a separate REST API `aa-booking-dev-api` (id `9z3xnalp59`) reusing the existing VPC
+     - entry: a separate REST API `aa-booking-dev-api` reusing the existing VPC
        link, `ANY /booking/{proxy+}` → `http://<nlb>/booking/{proxy}`, reached on its execute-api URL
        for Dev until the custom sub-domain `api-booking.lumiguides.it.com` (O2) has an ACM certificate
        that covers it and a Namecheap DNS record.
@@ -143,7 +156,7 @@ the answer Nghiệp gave on 14/10/2026.
    - Login role `booking`: rights only on schema `booking`.
    - **Role creation:** `bk-001` creates role `booking` **NOLOGIN** if it is missing, so the file is
      self-contained and idempotent. A one-off approved step then sets `LOGIN PASSWORD` to the value
-     Nghiệp stores in `booking/dev/database-url`. No password is ever in Git or in a migration file.
+     the tech lead stores in `booking/dev/database-url`. No password is ever in Git or in a migration file.
    - **Default privileges must name the owner.** DB Migrate runs as `aa_cis_admin`, so every
      `booking.*` object is owned by `aa_cis_admin`. `bk-001` therefore states
      `ALTER DEFAULT PRIVILEGES FOR ROLE aa_cis_admin IN SCHEMA booking GRANT … TO booking` for tables,
@@ -208,11 +221,11 @@ the answer Nghiệp gave on 14/10/2026.
 
 **Done (AA-678, S235):** Infra #95 (narrowed `aa-cis-dev-role` OIDC trust, Booking IAM prep, ALB
 `http_listener_arn` output), Infra #96 (`booking.tf`: ECR, log group, roles, secret, task definition,
-target group, `/booking/*` listener rule, ECS service, REST API `9z3xnalp59`; plan/apply 24 added,
+target group, `/booking/*` listener rule, ECS service, REST API `aa-booking-dev-api`; plan/apply 24 added,
 0 changed) and Infra #97 (deploy-role trust pinned to the AA-Booking repo id `1418188499`). Repo
 `AdventureAsia365-Ecosys/AA-Booking` created with the five required checks and branch protection.
 `bk-001` applied by DB Migrate at 00:59:38Z on 14/10/2026 (registered, role `booking`, six Tier A
-tables). Nghiệp set the role password out-of-band; first Deploy Dev succeeded and
+tables). The tech lead set the role password out-of-band; first Deploy Dev succeeded and
 `/booking/health` and `/booking/health/ready` return 200 live (`db: ok`, `bk-001`).
 
 The first deliverable is a **health-only** service: repo scaffold, 5-check CI, the `bk-001`
@@ -243,12 +256,12 @@ Explicitly **out of scope** for the bootstrap:
 5. Apply `booking.tf` (`desired_count = 0`); the plan shows no change to CIS resources besides the
    listener rule.
 6. `bk-001` PR + byte-identical Infra copy; DB Migrate `check`, then `apply`.
-7. Nghiệp sets the role password and the `booking/dev/database-url` value out-of-band.
+7. The tech lead sets the role password and the `booking/dev/database-url` value out-of-band.
 8. `deploy-dev.yml`, scale to 1, first deploy, live verify.
 
 All eight steps were completed in this order on 14/10/2026.
 
-## Decisions on the open items (Nghiệp, 14/10/2026)
+## Decisions on the open items (tech lead, 14/10/2026)
 
 | # | Decision | Answer |
 |---|---|---|

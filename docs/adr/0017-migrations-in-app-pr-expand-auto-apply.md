@@ -1,8 +1,8 @@
 # ADR 0017 — Migrations ship in the app PR; expand files are auto-applied on Dev by an Infra pipeline before deploy
 
-- **Status:** Proposed (28/10/2026, S254). Drafted from the AA-993 design (S252); nothing of it is built yet. The
+- **Status:** Proposed (2026-10-28, S254). Drafted from the AA-993 design (S252); nothing of it is built yet. The
   answers to the design's open questions that this ADR depends on (Q5, Q7, Q8, Q11, Q14–Q17) take their proposed
-  answer; Q7 and Q16 were approved by Nghiệp on 26/10/2026 (S252).
+  answer; Q7 and Q16 were approved by the tech lead on 2026-10-26 (S252).
 - **Scope:** AA-CIS-App, AA-Booking, AA-Partner (app CI "Migration preflight", the readiness keys, a `schema-gate` job
   in Deploy Dev; AA-TripPlanner-Web optional, Q14), AA-CIS-Infra (`db/run_migration.py` classifier and locks, the
   migration-sync and migration-apply workflows, a narrow IAM role, an environment and a ruleset on `main`, schema-dump
@@ -28,7 +28,7 @@
 
 ## Context
 
-A schema change costs four hand steps and two waits today (design §3, last 15 PRs per repo, 24–26/10/2026):
+A schema change costs four hand steps and two waits today (design §3, last 15 PRs per repo, 24–2026-10-26):
 
 1. the owner repo merges a **migration-only PR** (MIG-4);
 2. a person makes a **byte copy PR** in AA-CIS-Infra `db/migrations/<owner>/` (8 of the last 15 Infra PRs; median
@@ -82,7 +82,7 @@ schema. The risky changes (constraints, policies, grants, data rewrites, drops) 
      apply transaction a dedicated catalog snapshot of every pre-existing object in the owner's schemas (including
      objects the owner role owns, which today's object snapshot drops) is diffed before / after, together with
      `pg_stat_xact_user_tables` insert / update / delete counts. A diff outside the allowed set rolls back with
-     **exit 14** "expand file changed an existing object: <object>". The same function runs as `--classify` in app CI
+     **exit 14** "expand file changed an existing object: `<object>`". The same function runs as `--classify` in app CI
      and on the copy PR, replaying against a CI Postgres in the order of the latest DB Schema Dump artifact (number
      order as the fallback, critic 19).
 4. **Lock risk is checked before the statements run.** Before an expand file executes, the runner reads the size of
@@ -117,10 +117,10 @@ schema. The risky changes (constraints, policies, grants, data rewrites, drops) 
    them to be green, probe included. Timeout 20 min, then red **before** rollout: "required X not applied
    (contract/destructive → manual apply)". CIS and Partner Deploy Dev path filters add `!api/migrations/**`.
 8. **Infra `main` is protected, or auto-apply is off.** A ruleset on AA-CIS-Infra `main`: PR required; required checks
-   Copy Guard, `check_migration_files`, classify, `terraform-plan`; no direct pushes, ci-bot included; bypass Nghiệp
+   Copy Guard, `check_migration_files`, classify, `terraform-plan`; no direct pushes, ci-bot included; bypass the tech lead
    only. On GitHub Free a ruleset and environment rules exist only on a public repo (ADR 0014): when Infra goes
    private, repo variable `DB_AUTO_APPLY=false` turns the apply into "list only" (expand files go back to a one-click
-   manual DB Migrate) until a paid plan or another gate exists (Q16). From the first prod, Nghiệp is the required
+   manual DB Migrate) until a paid plan or another gate exists (Q16). From the first prod, the tech lead is the required
    reviewer of the prod-DB equivalent (Q7).
 9. **The schema-dump PR merges itself** (`db-schema-dump.yml` `publish` job) when the dump was triggered by an apply,
    `DRIFT_CHANGED != true`, the design-ERD drift step (moved before the merge) is green and the root `docs-lint` /
@@ -146,7 +146,7 @@ schema. The risky changes (constraints, policies, grants, data rewrites, drops) 
 ## What stays manual
 
 - Contract files: migration-only PR → agent review → manual DB Migrate `apply` → code PR (MIG-4); from the first prod,
-  Nghiệp approves (DM-11.5). Destructive files: RDS snapshot, DRY RUN counts to Nghiệp, dead-table registry.
+  the tech lead approves (DM-11.5). Destructive files: RDS snapshot, DRY RUN counts to the tech lead, dead-table registry.
 - Out-of-order copies and INVALID-index clean-ups (exit 16).
 - `catalog.*` view changes, cross-owner grants (`owners.yaml` `consumer_grants` + the isolation probe), `roles/`
   files, `set-password`, `run-script`.

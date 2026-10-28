@@ -16,8 +16,8 @@ related: [SEC-01, SEC-02, SEC-05, AA-838]
 
 <!-- The quarterly access review of data standards Part B, DM-8.10 (docs/architecture/data-standards/02-data-management.md).
 Save it as docs/audits/<date>-S<nnn>-access-review/README.md with a root PR; list it in docs/security/README.md (SEC-05).
-Run it in the first session of each quarter. Claude Code drafts, Nghiep approves. The body MAY be written in
-Vietnamese (audits for Nghiep, language convention N-7). Worked example: docs/audits/2026-10-20-S245-access-review/.
+Run it in the first session of each quarter. Claude Code drafts, the tech lead approves. The body MAY be written in
+Vietnamese (audits for the tech lead, language convention N-7). Worked example: docs/audits/2026-10-20-S245-access-review/.
 Never write a secret value, e-mail address, account ID or ARN here: names of roles, pools, projects and secrets,
 counts, groups, enabled flags only; Cognito users by role and e-mail domain. Delete this comment. -->
 
@@ -92,7 +92,7 @@ Unused roles, grants wider than DM-8 allows, roles that can read another app's s
 
 ## 7. Findings
 
-| # | Finding | Severity | Action (who, needs Nghiep's approval?) | Issue |
+| # | Finding | Severity | Action (who, needs the tech lead's approval?) | Issue |
 |---|---|---|---|---|
 | F-1 | | | | |
 

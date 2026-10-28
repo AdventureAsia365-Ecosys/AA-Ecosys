@@ -40,4 +40,4 @@ never real customer data. Delete this comment. -->
 
 ## Tóm tắt (VI)
 
-<Hai, ba câu cho chị Thư: đã thử gì, kết quả, còn lỗi gì cần chị biết.>
+<Hai, ba câu cho chủ doanh nghiệp: đã thử gì, kết quả, còn lỗi gì cần chị biết.>

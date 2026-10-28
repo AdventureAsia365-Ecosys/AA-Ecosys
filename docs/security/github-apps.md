@@ -27,7 +27,7 @@ The decisions behind each setting are in [ADR 0011](../adr/0011-github-app-ident
 permissions, keys, merge rights) and [ADR 0014](../adr/0014-repo-visibility-and-github-plan.md) (what GitHub Free
 enforces where).
 
-> **Tóm tắt (VI):** Nghiệp tạo 2 GitHub App trên trình duyệt (`aa-agent` cho phiên agent, `aa-ci-bot` cho
+> **Tóm tắt (VI):** tech lead tạo 2 GitHub App trên trình duyệt (`aa-agent` cho phiên agent, `aa-ci-bot` cho
 > release-please và PR docs từ Infra), cài lên 5 repo, tải private key; key `aa-agent` cất vào Secrets Manager acc2,
 > key `aa-ci-bot` cất vào GitHub secret từng repo; xoá file `.pem`. Sau đó agent điều phối chạy PR thử bằng App và
 > thêm dòng vào secrets register. Không đổi branch protection.
@@ -36,9 +36,9 @@ enforces where).
 
 | Part | Who | Where |
 |---|---|---|
-| 1–3 Create and install `aa-agent`, download its key | Nghiệp | Browser, org admin `pqnghiep1354` |
-| 4 Store the `aa-agent` key, fill `apps.env` | Nghiệp or the orchestrator | WSL terminal |
-| 5 Create and install `aa-ci-bot`, store its key | Nghiệp (browser), Nghiệp or the orchestrator (CLI) | Browser, WSL terminal |
+| 1–3 Create and install `aa-agent`, download its key | The tech lead | Browser, org admin `pqnghiep1354` |
+| 4 Store the `aa-agent` key, fill `apps.env` | The tech lead or the orchestrator | WSL terminal |
+| 5 Create and install `aa-ci-bot`, store its key | The tech lead (browser), the tech lead or the orchestrator (CLI) | Browser, WSL terminal |
 | 6 Identity test PR | Orchestrator (main session; subagents are blocked by the hook) | WSL terminal |
 | 7 Secrets register rows | Orchestrator | Root repo PR |
 

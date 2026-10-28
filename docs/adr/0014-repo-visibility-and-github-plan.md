@@ -1,12 +1,12 @@
 # ADR 0014 — Repo visibility and GitHub plan: app repos public, root and Infra private, GitHub Free
 
-- **Status:** Proposed (22/10/2026, S247). Records S241 D-14 / D-25 as an ADR; Nghiệp accepts (AA-901).
-  Amended 22/10/2026 (S247): root and Infra made **public** for now, see "Amendment (S247, 22/10/2026)" below.
-  Amended 23/10/2026 (S248, AA-981): visibility-switch precondition and secret scanning, see "Amendment 2" below.
+- **Status:** Proposed (2026-10-22, S247). Records S241 D-14 / D-25 as an ADR; the tech lead accepts (AA-901).
+  Amended 2026-10-22 (S247): root and Infra made **public** for now, see "Amendment (S247, 2026-10-22)" below.
+  Amended 2026-10-23 (S248, AA-981): visibility-switch precondition and secret scanning, see "Amendment 2" below.
 - **Scope:** AA-Ecosys: org AdventureAsia365-Ecosys and its repos (AA-Ecosys, AA-CIS-App, AA-Booking,
   AA-TripPlanner-Web, AA-CIS-Infra, and AA-Partner when it is created under [ADR 0010](0010-aa-partner-app.md)).
 - **Amends / Supersedes:** none.
-- **Implements:** S241 D-14 / D-25 (app repos public, root private, GitHub Free; root made private 17/10/2026), DM-6.10
+- **Implements:** S241 D-14 / D-25 (app repos public, root private, GitHub Free; root made private 2026-10-17), DM-6.10
   (no account IDs, ARNs, network IDs, inventories or security reports in public repos), SEC-06
   ([where a page may live](../STYLE.md#where-a-page-may-live-sec-06)).
 - **Related:** [ADR 0011](0011-github-app-identity-and-merge-rights.md) (agent identity and merge rights; the prod gate
@@ -15,7 +15,7 @@
 
 ## Context
 
-The org is on **GitHub Free**. On Free, several controls work only in public repositories (checked 22/10/2026 with
+The org is on **GitHub Free**. On Free, several controls work only in public repositories (checked 2026-10-22 with
 read-only `gh api` calls):
 
 - Branch protection on AA-Ecosys and AA-CIS-Infra answers `403 Upgrade to GitHub Pro or make this repository public`.
@@ -39,7 +39,7 @@ and what stands in for it where GitHub cannot.
 | Repo | Visibility | Why |
 |---|---|---|
 | AA-CIS-App, AA-Booking, AA-TripPlanner-Web | **public** | Free CI minutes, branch protection and code owners on Free; code holds no account data (DM-6.10 scans in CI) |
-| AA-Partner (when created) | **public** | Same as the other apps (ADR 0010 decision 1) |
+| AA-Partner (created 2026-10-22) | **public** | Same as the other apps (ADR 0010 decision 1) |
 | AA-Ecosys (root) | **private** | Account map, security and infra reports, audits, registers by name, commercial notes (D-25) |
 | AA-CIS-Infra | **private** | Terraform with account IDs, ARNs and network IDs; generated IAM and network tables |
 
@@ -65,40 +65,40 @@ and what stands in for it where GitHub cannot.
 
 ### 4. Prod trigger: re-decide for the private repos
 
-At the first prod or the first paying tenant (AA-880), Nghiệp picks one of these for AA-CIS-Infra and the root repo,
+At the first prod or the first paying tenant (AA-880), the tech lead picks one of these for AA-CIS-Infra and the root repo,
 with this ADR amended to record it:
 
 | Option | What it gives | Cost (list price, check before buying) |
 |---|---|---|
 | **A. GitHub Team for the org** | Branch protection, code-owner review, rulesets and environment reviewers on the private repos | about 4 USD per user per month; 1–2 seats |
-| **B. Stay on Free, add compensating controls** | Terraform Apply and DB Migrate `apply` run only from a manual dispatch by Nghiệp (`github.actor` check in the job) or need a second, approver-held input; risky root PRs listed in the session report for review after merge | 0 USD |
+| **B. Stay on Free, add compensating controls** | Terraform Apply and DB Migrate `apply` run only from a manual dispatch by the tech lead (`github.actor` check in the job) or need a second, approver-held input; risky root PRs listed in the session report for review after merge | 0 USD |
 | C. Make Infra public | Free enforcement | Rejected: account IDs, ARNs and inventories would be public (DM-6.10) |
 
-- Default proposal at the trigger: **B** while Nghiệp is the only engineer; **A** when a second person gets write
+- Default proposal at the trigger: **B** while the tech lead is the only engineer; **A** when a second person gets write
   access or a customer audit asks for enforced review evidence.
 
-## Amendment (S247, 22/10/2026): root and Infra public until the coding phase ends
+## Amendment (S247, 2026-10-22): root and Infra public until the coding phase ends
 
-Decided by Nghiệp on 22/10/2026:
+Decided by the tech lead on 2026-10-22:
 
 - **What changed:** AA-Ecosys (root) and AA-CIS-Infra were switched from private to **public**. The private repos'
-  GitHub Free Actions minutes ran out on 22/10/2026, which blocked Terraform Apply and DB Migrate on AA-CIS-Infra.
+  GitHub Free Actions minutes ran out on 2026-10-22, which blocked Terraform Apply and DB Migrate on AA-CIS-Infra.
   Decision 1's table stays the target; this is a temporary exception to it.
 - **Consequence:** the DM-6.10 content of these two repos (account IDs, ARNs, network IDs, inventories, security
   reports, registers by name) is now public, in the current tree and in the whole git history.
 - **Scan before the switch:** a full-history gitleaks scan of the root repo found no credential. In AA-CIS-Infra the
   history holds an old committed variables file that contains a DataForSEO
-  API password and a `database_url` for the acc1 RDS that was destroyed on 09/07/2026 (AA-271), so that DSN no longer
-  opens anything. Rotating the DataForSEO password is recommended; Nghiệp accepted the risk and chose not to rotate
+  API password and a `database_url` for the acc1 RDS that was destroyed on 2026-07-09 (AA-271), so that DSN no longer
+  opens anything. Rotating the DataForSEO password is recommended; the tech lead accepted the risk and chose not to rotate
   now (tracked in the [secrets register](../security/secrets-register.md), DataForSEO vendor row).
 - **No secret in new commits:** while the repos are public, every commit to root and Infra is held to the public-repo
   rule (no credential, JWT, API key, cookie or tenant API key; gitleaks before committing audits and exports).
-- **Plan:** both repos go back to private when the coding phase ends (Nghiệp). At that point, re-decide between
+- **Plan:** both repos go back to private when the coding phase ends (tech lead). At that point, re-decide between
   paying for Actions minutes (budget) and a self-hosted runner for the private repos, and amend this ADR again.
 
-## Amendment 2 (S248, 23/10/2026): precondition for a visibility switch, secret scanning on
+## Amendment 2 (S248, 2026-10-23): precondition for a visibility switch, secret scanning on
 
-Why: on 22/10/2026 an external scanner (GitGuardian) flagged a credential in AA-CIS-Infra history a few hours after
+Why: on 2026-10-22 an external scanner (GitGuardian) flagged a credential in AA-CIS-Infra history a few hours after
 the switch to public. It sat in an old committed variables file that had left `main` earlier, but history kept it.
 The pre-switch scan of S247 missed it: it ran gitleaks with the default rules, which do not flag `name = "value"` in
 a tfvars file, and Infra's own PR check only reads the lines a PR adds. Handling of the historical findings is
@@ -121,15 +121,17 @@ tracked in the private record (Linear AA-981), not in this public page.
 - **Public → private** (the plan when the coding phase ends): GitHub secret scanning stops on Free private repos;
   the gitleaks PR and full-history jobs stay and become the only scanner. They use private Actions minutes (about a
   minute a night per repo), to count in the re-decision above.
-- **State on 23/10/2026:** all five repos are public with secret scanning and push protection on. Root and Infra
+- **State on 2026-10-23:** all five repos are public with secret scanning and push protection on. Root and Infra
   run `secret-scan.yml` and `secret-scan-history.yml`: a PR scan (on `pull_request_target`, so GitHub always runs the
   base branch's copy of it; it also scans a squash preview of the PR) that reads its rules and baseline from the base commit (a PR that changes them
   needs the label `secret-scan-baseline-reviewed`), and a nightly full-history scan over branches, tags and PR
   heads, merge commits, renames and type changes included. A red result means the value is public: rotate it, even
   if it was force-pushed away. Same rules in both, incl. `credential-key-literal` for credential-named keys with literal values in tfvars,
   `.env*`, JSON and YAML. Historical findings are pinned by fingerprint.
-- **Not yet covered:** the three app repos (AA-CIS-App, AA-Booking, AA-TripPlanner-Web) and AA-Partner have no
-  full-history job; their full-history check with these rules is still a manual step (lesson log, AA-981).
+- **Not yet covered (on 2026-10-23):** the three app repos (AA-CIS-App, AA-Booking, AA-TripPlanner-Web) and
+  AA-Partner had no full-history job; their full-history check with these rules was a manual step (lesson log,
+  AA-981). *Update 2026-10-28:* all six repos now run `secret-scan.yml` and `secret-scan-history.yml`, and all six
+  are public with GitHub secret scanning and push protection on.
 
 ## Consequences
 

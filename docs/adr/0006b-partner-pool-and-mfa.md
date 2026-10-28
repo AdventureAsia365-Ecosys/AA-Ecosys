@@ -1,6 +1,6 @@
 # ADR 0006 — Amendment: a partner pool with required MFA for agency people, and an M2M pool for service calls
 
-- **Status:** Accepted (22/10/2026, S247, Nghiệp). Proposed the same day.
+- **Status:** Accepted (2026-10-22, S247, tech lead). Proposed the same day.
 - **Scope:** AA-CIS-Infra (pools, clients, groups, domains), AA-Partner ([ADR 0010](0010-aa-partner-app.md): CRM and,
   after P2b, the tenant portal), AA-CIS-App (tenant membership, CIS admin calling `crm.ops.v1`), AA-Booking
   (B2B API receiving M2M tokens). TripPlanner and the Booking customer app are **not** affected.
@@ -25,7 +25,7 @@ agency owners and agents (Q1 3.13). Turning MFA on in EXTERNAL would change sign
 traveller (X16). ADR 0006 already named the way out as an "alternative kept open": split tenant users into their own
 pool.
 
-Two more facts: the tenant portal still signs in with the tenant API key (checked 21/10/2026), so no tenant user is
+Two more facts: the tenant portal still signs in with the tenant API key (checked 2026-10-21), so no tenant user is
 on EXTERNAL yet; and the CRM calls Booking and CIS server to server, which ADR 0006 decision 2 assumed would not need
 Cognito clients.
 

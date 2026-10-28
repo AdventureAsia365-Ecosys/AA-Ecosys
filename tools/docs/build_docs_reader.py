@@ -24,6 +24,11 @@ Publication rule (v1; docs/README.md "Docs reader" and docs/engineering-handbook
      [redacted-...] marker. After redaction the output is scanned again with the same patterns plus the
      resource-ids lint patterns (check_docs_text.py); any hit fails the build, so nothing is uploaded.
   7. Front-matter is stripped from the published body (the manifest carries the fields the page needs).
+  8. Translations (S255, docs/STYLE.md "Language"): a page body is English; a Vietnamese version is a sibling file
+     <same name>.vi.md with the same id plus `lang: vi` and `translation_of: <English path>`. It is published as its own
+     entry only when its English page is published, and it always takes the English page's access tier. Every entry
+     carries `lang`; an English entry lists its translations, a translation names its English page. ADRs have no
+     front-matter and therefore no translation.
 
 Output layout (OUT_DIR, default _site/docs-reader):
 
@@ -34,7 +39,14 @@ manifest.json:
   {"format": 1, "rule": "v1", "generated_at": ISO, "source": {"repo", "sha", "ref"},
    "counts": {"published", "owner_only", "skipped"},
    "pages": [{"repo", "path", "key", "id", "title", "description", "type", "status", "audience", "owner",
-              "last_reviewed", "generated", "access", "bytes", "sha256", "redactions"}]}
+              "last_reviewed", "generated", "access", "bytes", "sha256", "redactions",
+              "lang", "translation_of", "translations"}]}
+
+  lang            "en" for an English page (the source), "vi" for a translation.
+  translation_of  translations only: the `path` of the English entry (same repo); null on an English page.
+  translations    English pages only: [{"lang", "path", "key", "title"}] of the published translations, sorted by lang;
+                  [] when there is none and always [] on a translation. A reader lists entries with lang "en" and
+                  offers a language toggle from `translations` / `translation_of`.
 
 `key` is the object key relative to the S3 prefix (pages/<repo>/<path>); the API reads only keys listed here.
 Skipped pages are counted, never named, in the manifest.
@@ -63,7 +75,7 @@ import yaml
 
 from check_adr_index import ADR_FILE, find_status
 from check_docs_text import RESOURCE_PATTERNS
-from docslib import REPO_ROOT, list_markdown, split_front_matter
+from docslib import REPO_ROOT, SOURCE_LANG, list_markdown, source_of_translation, split_front_matter, translation_lang
 
 FORMAT = 1
 RULE = "v1"
@@ -115,6 +127,9 @@ class Page:
     body: str
     access: str
     redactions: int = 0
+    lang: str = SOURCE_LANG
+    translation_of: str | None = None
+    translations: list[dict] = field(default_factory=list)
 
 
 @dataclass
@@ -221,7 +236,35 @@ def collect(root: Path = REPO_ROOT) -> Result:
         if isinstance(meta.get("description"), str):
             meta["description"], nd = redact(meta["description"])
             n += nd
-        result.pages.append(Page(relpath, meta, body, access_for(str(meta["id"])), n + nt))
+        lang = translation_lang(relpath)
+        page = Page(relpath, meta, body, access_for(str(meta["id"])), n + nt)
+        if lang is not None:
+            page.lang, page.translation_of = lang, source_of_translation(relpath)
+        result.pages.append(page)
+    return _link_translations(result)
+
+
+def _link_translations(result: Result) -> Result:
+    """Rule 8: keep a translation only when its English page is published with the same id; give it that page's access
+    tier and list it on the English entry."""
+    english = {p.path: p for p in result.pages if p.translation_of is None}
+    kept: list[Page] = []
+    for page in result.pages:
+        if page.translation_of is None:
+            kept.append(page)
+            continue
+        source = english.get(page.translation_of)
+        if (source is None or page.meta.get("translation_of") != page.translation_of
+                or str(source.meta.get("id")) != str(page.meta.get("id"))):
+            result.skipped += 1
+            continue
+        page.access = source.access
+        source.translations.append({"lang": page.lang, "path": page.path, "key": f"pages/{REPO_NAME}/{page.path}",
+                                    "title": page.meta["title"]})
+        kept.append(page)
+    for page in kept:
+        page.translations.sort(key=lambda t: t["lang"])
+    result.pages = kept
     return result
 
 
@@ -246,6 +289,9 @@ def _entry(page: Page) -> dict:
         "bytes": len(data),
         "sha256": hashlib.sha256(data).hexdigest(),
         "redactions": page.redactions,
+        "lang": page.lang,
+        "translation_of": page.translation_of,
+        "translations": [dict(t) for t in page.translations],
     }
 
 
@@ -280,6 +326,7 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "") -> di
         "counts": {
             "published": len(entries),
             "owner_only": sum(1 for e in entries if e["access"] == "owner"),
+            "translations": sum(1 for e in entries if e["translation_of"]),
             "skipped": result.skipped,
         },
         "pages": entries,
@@ -310,7 +357,8 @@ def main(argv: list[str] | None = None) -> int:
         manifest = build(Path(args.out), sha=args.sha, ref=args.ref)
     c = manifest["counts"]
     redacted = sum(p["redactions"] for p in manifest["pages"])
-    print(f"docs reader: {c['published']} pages published ({c['owner_only']} owner only), {c['skipped']} skipped, "
+    print(f"docs reader: {c['published']} pages published ({c['owner_only']} owner only, {c['translations']} translations), "
+          f"{c['skipped']} skipped, "
           f"{redacted} values redacted, source {manifest['source']['sha'][:12] or 'unknown'}")
     return 0
 

@@ -10,7 +10,12 @@
   adds a second E2E address for the Booking staff admin. A10b (26/10/2026, S252) adds a third, Dev-only E2E address for
   the CIS admin, read-only except the content-quality sentence-apply routes. A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2).
-- **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) is unchanged and still pending.
+- **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
+- **Update 2026-10-28:** Booking Phase 2 has shipped in part: Booking verifies WORKFORCE tokens of the
+  `booking-staff` and `breakglass` clients and takes roles from the `booking-*` groups; the CIS bridge stays until
+  AA-911 P6b (A12). The A8 alarm is built (AA-CIS-Infra `identity_alerts.tf`, section 4). The staff invitation
+  email is built (`staff_invite_email` job). The daily reconcile is scheduled by the ops-probe Lambda
+  (`/admin/job-runner/staff-reconcile/schedule`).
 - **Plan and evidence:** `docs/audits/2026-10-18-S242-cognito-phase1/plan.md` (judged plan, stages A/B/S/D),
   `docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md` (Phase 0 done-when evidence).
   Implementation notes: AA-CIS-App `docs/implementation-notes/AA-816*.md`; AA-CIS-Infra
@@ -19,7 +24,7 @@
 
 ## Context
 
-Phase 0 finished on 18/10/2026: WORKFORCE pool `us-west-1_bCcFvbSOS` (`aa-workforce-dev`), a staff user signs in
+Phase 0 finished on 18/10/2026: WORKFORCE pool `aa-workforce-dev`, a staff user signs in
 with an email code through managed login, a user without a staff group is refused by the pre token trigger, self
 sign-up is refused, and break-glass signs in with password + TOTP and raises its alarm. A user created with
 `AdminCreateUser` (`MessageAction=SUPPRESS`, no password, `email_verified=true`) is `CONFIRMED` at once and signs
@@ -112,8 +117,8 @@ Details decision 3 and decision 7.
 
 Replaces decision 11's address and makes "readable only by the admin role, retrieval alerted" concrete.
 
-- **Address `admin@adventure.asia`** (Nghiệp, S241), not `breakglass@…`. Nghiệp's own staff account is
-  `nghieppham@adventure.asia`.
+- **Address `admin@adventure.asia`** (tech lead, S241), not `breakglass@…`. The tech lead's own staff account is a
+  separate personal `@adventure.asia` address.
   - The break-glass user has TOTP enrolled. With optional MFA, an enrolled TOTP removes the email code as a
     first factor (decision 1), so the mailbox alone does not sign in.
   - Groups: `cis-admin` + `booking-admin`. MFA `SOFTWARE_TOKEN_MFA`.
@@ -135,17 +140,19 @@ Replaces decision 11's address and makes "readable only by the admin role, retri
     is procedural.
 - **Directory row:** break-glass needs an active `admin_users` row (role `admin`, `password_hash` NULL), because
   the CIS API admits no WORKFORCE token without one.
-- **Runbook** (single-line commands, MFA admin profile; record every use in the session log):
+- **Runbook** (single-line commands, MFA admin profile; record every use in the session log). `<workforce-pool-id>`
+  is the id of the pool `aa-workforce-dev`, from the Terraform output of `identity.tf` or from
+  `aws cognito-idp list-user-pools --max-results 20 --profile aa365-admin --region us-west-1 --query "UserPools[?Name=='aa-workforce-dev'].Id" --output text`:
   1. Enable:
-     `aws cognito-idp admin-enable-user --user-pool-id us-west-1_bCcFvbSOS --username admin@adventure.asia --profile aa365-admin --region us-west-1`
+     `aws cognito-idp admin-enable-user --user-pool-id <workforce-pool-id> --username admin@adventure.asia --profile aa365-admin --region us-west-1`
   2. Read the secret in the Secrets Manager console. This sends an alert e-mail by design. Add `totp_seed`
      to an authenticator if it is not there yet.
   3. Open `https://aa-cis.lumiguides.it.com/api/auth/signin/cognito-breakglass` and sign in with password +
      TOTP. The token alarm fires. The refresh window is 1 h.
   4. When done, log out, then:
-     `aws cognito-idp admin-user-global-sign-out --user-pool-id us-west-1_bCcFvbSOS --username admin@adventure.asia --profile aa365-admin --region us-west-1`
+     `aws cognito-idp admin-user-global-sign-out --user-pool-id <workforce-pool-id> --username admin@adventure.asia --profile aa365-admin --region us-west-1`
      and
-     `aws cognito-idp admin-disable-user --user-pool-id us-west-1_bCcFvbSOS --username admin@adventure.asia --profile aa365-admin --region us-west-1`
+     `aws cognito-idp admin-disable-user --user-pool-id <workforce-pool-id> --username admin@adventure.asia --profile aa365-admin --region us-west-1`
   5. API-only check without the UI: `workforce_bootstrap.py breakglass-verify` (enable → sign in → revoke →
      disable; fails closed if cleanup fails). Rotation: `breakglass-init`.
 
@@ -188,7 +195,7 @@ Narrows the Phase 1 cutover text ("password login is switched off by a config fl
 - **Preview:** keeps password login. Preview hosts cannot be registered callbacks, and the sign-in route refuses
   any host outside its allow-list. So the BFF flag stays on for Preview.
 - **Open for the cutover (Stage S):** the API is one service for Production and Preview, so turning its flag off
-  would also end Preview password logins. Nghiệp decides at cutover between "API flag stays on, only the
+  would also end Preview password logins. The tech lead decides at cutover between "API flag stays on, only the
   Production BFF switches off" and "previews lose admin login".
 - **Superseded in part by A12 (S247):** the values above (default on) and the open cutover item. Since S2 the flag
   is off by default in the API and the BFF, and Preview signs in through Cognito (A11), not with a password.
@@ -252,7 +259,7 @@ mailbox or Google account". That is too strong.
 
 ### A10. Temporary exception: the E2E test mailbox as one staff address (19/10/2026, S243)
 
-- **Decision (Nghiệp, option B):** the Cognito email-code E2E test (AA-816 E1, AA-CIS-App `e2e-cognito.yml`) signs
+- **Decision (tech lead, option B):** the Cognito email-code E2E test (AA-816 E1, AA-CIS-App `e2e-cognito.yml`) signs
   in as a staff user whose address is the SES inbound test mailbox itself, `e2e@e2e-mail.lumiguides.it.com`
   (AA-CIS-Infra `e2e_mailbox.tf`). Option A, a company address forwarded to that mailbox, needed a manual
   change in the adventure.asia mail host. It was the only staff address outside `@adventure.asia` until A10a added the Booking E2E address. It is
@@ -291,7 +298,7 @@ mailbox or Google account". That is too strong.
 
 #### A10a. Second E2E address: the Booking staff admin (24/10/2026, S250, AA-910)
 
-- **Decision (Nghiệp, S250):** agents, and later CI, need a signed-in check of the Booking staff admin. A second
+- **Decision (tech lead, S250):** agents, and later CI, need a signed-in check of the Booking staff admin. A second
   dedicated E2E staff identity, `e2e-booking@e2e-mail.lumiguides.it.com`, may sign in with the staff groups exactly
   `booking-admin`. It is the least-privileged Booking group that reads every staff page, `/staff` and `/audit-log`
   included (AA-Booking `backend/app/auth/staff.py`). Temporary, like A10.
@@ -333,7 +340,7 @@ mailbox or Google account". That is too strong.
 
 #### A10b. Third E2E address: the CIS admin, Dev only, read-only (26/10/2026, S252, AA-816)
 
-- **Decision (S252, orchestrator under Nghiệp's standing approval; design reviewed in the S252 session):** the orchestrating agent must sign itself in to the CIS
+- **Decision (S252, orchestrator under the tech lead's standing approval; design reviewed in the S252 session):** the orchestrating agent must sign itself in to the CIS
   admin as an **admin** to screenshot the admin-only pages (`/admin/content-quality`, `/admin/writing-memory`) and to
   produce the AA-916 WM-07 sample (admin sentence actions through the UI, on synthetic Dev tenants). The A10 account is
   a reviewer only. A third dedicated WORKFORCE E2E identity, `e2e-cis-admin@e2e-mail.lumiguides.it.com`, signs in with
@@ -398,13 +405,13 @@ mailbox or Google account". That is too strong.
 
 ##### A10b-1. Amendment: Content studio invitations on synthetic tenants (26/10/2026, S252, AA-979)
 
-- **Decision (Nghiệp, S252, option (a)):** the A10b identity may call exactly two more write routes, the Content
+- **Decision (tech lead, S252, option (a)):** the A10b identity may call exactly two more write routes, the Content
   studio invitation routes of Tenant 360, so the AA-979 phase 2 re-enrolment E2E (AA-Partner `e2e/phase2/`, mode
   `a10b`) runs without a person:
   - POST `/admin/tenants/{tenant_id}/members/invitations` (create an `invited` membership, relay the mail once to
     the CRM);
   - POST `/admin/tenants/{tenant_id}/members/{membership_id}/invitation/send` (send the same invitation again).
-  Option (b), keeping A10b read-only and having Nghiệp send each invitation from his own staff session, was not
+  Option (b), keeping A10b read-only and having the tech lead send each invitation from their own staff session, was not
   chosen: every phase 2 run and every 7-day clean-up run would wait for a person.
 - **Scope, enforced by CIS (AA-CIS-App `api/core/e2e_staff.py`, `api/routers/admin_tenant360.py`):**
   - **Two routes only.** They join `E2E_ALLOWED_WRITES` (route templates, `staff_authz`) and

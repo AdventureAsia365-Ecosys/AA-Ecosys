@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [aa-cis-dev-db]
-last_reviewed: 2026-10-24
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-24
 tested_where: drill
@@ -23,22 +23,23 @@ related: [OPS-03, OPS-03-schema, OPS-03-drills, OPS-05, AA-829, AA-892]
 - First half of a [single-schema restore](restore-schema.md) after data loss in one app (DM-9.4).
 - Not for, on its own: replacing the live instance. A restore that replaces the shared instance rolls back every app;
   it needs every owner's agreement (DM-9.4). The DSN cutover for that case is the DM-9.5 CNAME (AA-829, S248); it moves
-  the apps because every DSN secret names it since 23/10/2026 (see Facts): see
+  the apps because every DSN secret names it since 2026-10-23 (see Facts): see
   [Repoint db.dev.internal after a restore](#repoint-dbdevinternal-after-a-restore) below.
 
-## Facts (read 19/10/2026)
+## Facts (read 2026-10-19, DNS facts 2026-10-23, Terraform re-checked 2026-10-28)
 
 - `aa-cis-dev-db`: PostgreSQL 15, `db.t4g.small`, single-AZ, encrypted, deletion protection on, automated backups
   **7 days** (PITR window), backup window 03:00-04:00 UTC, subnet group `aa-cis-dev-db-subnet-group`, parameter
   group `aa-cis-dev-pg15`, one security group (`aa-cis-dev-sg-rds`). `LatestRestorableTime` trails now by about
   5 minutes.
-- Drill on 17/10/2026: restore started 08:21:59Z, available 08:39:17Z, checked 08:43:37Z, about **22 minutes** end to
+- Drill on 2026-10-17: restore started 08:21:59Z, available 08:39:17Z, checked 08:43:37Z, about **22 minutes** end to
   end against the Dev target RTO < 1 h (C1.2). 148/148 tables, migration heads equal; 18 Booking and 25 shared rows
-  differed, all written after the restore point.
+  differed, all written after the restore point. Drill on 2026-10-24 (S249): restore 21 min 20 s, 164/164 tables,
+  migration heads equal.
 - Cost: a `db.t4g.micro` for under an hour, well under 1 USD.
 - Since S248 (AA-829) the private host **`db.dev.internal`** exists: a Route 53 CNAME (TTL 60 s, private zone
   `dev.internal`, VPC only) to the RDS endpoint (`accounts/aa365/db_dns.tf` in AA-CIS-Infra). Since the AA-829 DSN
-  switch (23/10/2026, 7/7 secrets, services restarted and verified) every DSN secret (master, `db-migrator`,
+  switch (2026-10-23, 7/7 secrets, services restarted and verified) every DSN secret (master, `db-migrator`,
   `rds-cis-app`, `rds-app-user`, Booking, TripPlanner, CRM) names that host. Pointing the apps at another instance =
   changing that one record, not seven secrets. Step R0 below still checks it before a cut-over.
 
@@ -83,20 +84,20 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 
    Expected: `creating`, then the wait returns (about 17 minutes in the drill). Note both times for the RTO.
    The S241 drill used the same settings (micro class, same subnet group and security group); this exact command
-   line was written from them on 19/10/2026 and has not been pasted as-is yet. Tags follow DM-10.1 (`App` +
+   line was written from them on 2026-10-19 and has not been pasted as-is yet. Tags follow DM-10.1 (`App` +
    the existing `Environment`, same values as the source instance).
    Verify: `aws rds describe-db-instances --db-instance-identifier aa-cis-dev-db-drill-<yyyymmdd> --profile aa365-admin --region us-west-1 --query "DBInstances[0].[DBInstanceStatus,Endpoint.Address]" --output text`
    shows `available` and an endpoint.
    Rollback: step 5 (delete the copy).
 
 4. Compare the copy with the source, per schema: table count, row count per table, latest
-   `shared.schema_versions`. The drill used `docs/audits/2026-10-17-S241-restore-drill/drill_check.py` through
-   [ECS exec](ecs-exec-s3-mediated.md), with the master login read from the secret.
-   - Until X1 S19 that still works.
-   - **From X1 S19 the CIS task role cannot read the master secret**, and `cis_app` cannot read `booking.*` /
-     `tripplanner.*`. Run the comparison as a reviewed **read-only** `db/scripts/` file through
-     [DB Migrate run-script](db-migrate.md). The migrator task holds the master DSN; the script connects a second time
-     with the same credentials and the drill host. This variant is UNTESTED.
+   `shared.schema_versions`. Run the comparison as a reviewed **read-only** `db/scripts/` file through
+   [DB Migrate run-script](db-migrate.md). The migrator task reads the master DSN; the script connects a second time
+   with the same credentials and the drill host. The S249 drill ran it this way (`db/scripts/s249_drill_compare.py`,
+   run 39991070753).
+   - Do not use [ECS exec](ecs-exec-s3-mediated.md) for this. Since X1 S19 (live since 2026-10-19) the CIS task role
+     cannot read the master secret, and `cis_app` cannot read `booking.*` / `tripplanner.*`. The S241 drill script
+     (`docs/audits/2026-10-17-S241-restore-drill/drill_check.py`) used that older path and no longer works.
 
    Expected: equal table counts, equal migration heads, row differences only in tables written after the restore point.
    Verify: save the JSON output in `docs/audits/<date>-S<nnn>-restore-drill/` (DM-8.10, C7.2b).
@@ -117,7 +118,7 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 ## Repoint db.dev.internal after a restore
 
 Use only when a restored instance must **take over** from `aa-cis-dev-db` (every owner agreed, DM-9.4). A drill copy is
-never repointed outside a drill. Tested 24/10/2026 (S249 drill: repoint to the copy and back, 4 services redeployed each way,
+never repointed outside a drill. Tested 2026-10-24 (S249 drill: repoint to the copy and back, 4 services redeployed each way,
 no Terraform drift afterwards). If the restored copy predates a migration a service requires, that service reports
 `not_ready` until the migration is re-applied with DB Migrate (readiness check, seen in the S249 drill).
 
@@ -160,7 +161,7 @@ R2. Point the CNAME at it: a targeted local apply with the override (the variabl
    Rollback: the same command without `-var db_dns_target_override=...` points the name back to `aa-cis-dev-db`.
 
 R3. Move the open connections. New connections follow within the 60 s TTL; pooled ones stay on the old instance until
-   they are recycled. With Nghiệp's go, force a new deployment of each running ECS service (CIS api + worker, Booking,
+   they are recycled. With the tech lead's go, force a new deployment of each running ECS service (CIS api + worker, Booking,
    CRM) and let the TripPlanner Lambdas cycle; then check CIS `/health/ready` and Booking `/booking/health`, and run
    [DB Migrate](db-migrate.md) `check` to see the restored instance's migration heads.
    Rollback: R2 rollback, then the same redeploys.
@@ -200,6 +201,6 @@ R4. Make it permanent before the next CI apply. Never leave the override only on
 
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
-| 2026-10-17 | drill (Dev acc2) | Claude Code (main session) + Nghiệp | `docs/audits/2026-10-17-S241-restore-drill/`, S241 decisions D-10, AA-829 comment | pass, ~22 min |
-| 2026-10-24 | drill (Dev acc2) incl. repoint R0–R3 and back | Claude Code (main session), approved by Nghiệp | `docs/audits/2026-10-24-S249-restore-drill/` | pass, restore 21 min 20 s |
+| 2026-10-17 | drill (Dev acc2) | Claude Code (main session) + tech lead | `docs/audits/2026-10-17-S241-restore-drill/`, S241 decisions D-10, AA-829 comment | pass, ~22 min |
+| 2026-10-24 | drill (Dev acc2) incl. repoint R0–R3 and back | Claude Code (main session), approved by the tech lead | `docs/audits/2026-10-24-S249-restore-drill/` | pass, restore 21 min 20 s |
 | 2026-10-19 | dev-acc2, step 1 only | Claude Code | `docs/audits/2026-10-19-S243-ops-runbooks/readonly-checks.md` | read-only |

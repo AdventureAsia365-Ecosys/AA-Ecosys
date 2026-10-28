@@ -1,13 +1,13 @@
 ---
 id: GUIDE-07
 title: PM guide
-description: How work is planned and tracked in AA-Ecosys - Linear projects and limits, Definition of Ready and Done, the live backlog, session rhythm, Jira with Ms. Thư, releases and UAT, feature flags, and how to write an issue an agent can execute.
+description: How work is planned and tracked in AA-Ecosys - Linear projects and limits, Definition of Ready and Done, the live backlog, session rhythm, Jira with the business owner, releases and UAT, feature flags, and how to write an issue an agent can execute.
 type: how-to
 status: draft
 owner: nghiep
 audience: [pm]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [TPL-01-dor, PLAT-01, APP-07, OPS-06, GUIDE-04, AA-897]
 ---
@@ -19,24 +19,26 @@ How the whole delivery system works: [engineering handbook](../engineering-handb
 ## Who this is for
 
 You plan and track work: you turn requests into issues, keep the queue in order and report progress to the
-business. Most code is written by AI agents (Kiro, Claude Code subagents) and gated by Claude Code and Nghiệp, so
+business. Most code is written by AI agents (Kiro, Claude Code subagents) and gated by Claude Code and the tech lead, so
 the quality of an issue decides the quality of the result. After this page you can write an issue an agent can
-execute, keep Linear and the backlog in step, and close the loop with Ms. Thư.
+execute, keep Linear and the backlog in step, and close the loop with the business owner.
 
 ## Where work lives
 
 | Tool | Holds | Rule |
 |---|---|---|
-| **Linear**, workspace and team `AA_Ecosys` | Every engineering work item | English. Ask Nghiệp before creating an issue (D-24) |
-| [Live backlog](../backlog/README.md) | The ordered queue, time-gated checks, decisions waiting on Nghiệp | Updated by hand at the end of each session (D-22) |
-| **Jira** (projects PR, KAN, CON) | Requests from Ms. Thư and the business side | Vietnamese, drafts approved before posting |
+| **Linear**, workspace and team `AA_Ecosys` | Every engineering work item | English. Ask the tech lead before creating an issue (D-24) |
+| [Live backlog](../backlog/README.md) | The ordered queue, time-gated checks, decisions waiting on the tech lead | Updated by hand at the end of each session (D-22) |
+| **Jira** (projects PR, KAN, CON) | Requests from the business owner and the business side | Vietnamese, drafts approved before posting |
 | Notion → Program Brain → memory.md | Short pointers between sessions | Vietnamese, newest first |
 | `docs/sessions/` | What each session did | Vietnamese |
 
-Linear projects (2026-10-19): **CIS Core — Pipeline, LLM & Platform**, **Data Platform — Schema, Ops & Scale**,
-**CIS Portal — Admin & Tenant UI**, **TripPlanner & AA-Booking**. Every issue belongs to one project. A project holds
-at most **100 unarchived issues**; CIS Core is close to it, so new platform work goes to Data Platform. Archive Done
-issues early (archiving is done by hand in Linear).
+Linear projects (2026-10-28): **CIS Core — Pipeline, LLM & Platform**, **Data Platform — Schema, Ops & Scale**,
+**CIS Portal — Admin & Tenant UI**, **TripPlanner & AA-Booking**, **Partner CRM — AA-Partner**. Every issue belongs to
+one project. A project holds at most **100 unarchived issues**, and the Free plan at most 250 in the workspace, so one
+issue is one deliverable slice (about one PR) and the detail lives in a local plan or checklist. At the end of each
+session, export closed issues to `docs/linear-export/` and archive them through the API
+(`python3 tools/linear/linear_export.py --archive --apply`); never delete an issue to make room.
 
 ## Writing an issue an agent can execute
 
@@ -66,29 +68,30 @@ An issue is Done only when it is merged, CI is green, the deploy finished (rollo
 
 ## Session rhythm
 
-1. **Start**: read memory and the live backlog §1-§3, check the real state, propose 5-10 issues from the queue;
-   Nghiệp picks (`skill/aa-session`). No full re-audit of Linear unless the backlog file is older than about two weeks.
-2. **During**: 3-5 issues per session, carried end to end. Explain each issue (what, who does it, how it is verified)
+1. **Start**: read memory and the live backlog §1-§3, check the real state, propose issues from the queue (3-5, or
+   8-10 in an Ultracode session); the tech lead picks (`skill/aa-session`). No full re-audit of Linear unless the backlog file is older than about two weeks.
+2. **During**: carry each picked issue end to end. Explain each issue (what, who does it, how it is verified)
    before starting it.
 3. **End**: update the backlog (status, closed items to §5, new items), session log, Notion memory, Linear; prepare
-   Jira drafts for Ms. Thư in one batch.
+   Jira drafts for the business owner in one batch.
 
-## Jira and Ms. Thư
+## Jira and the business owner
 
-- Every Jira comment is a draft first; Nghiệp approves it before it is posted (`skill/aa-jira-update`).
-- Write in Vietnamese, short, under Nghiệp's name, no internal Linear keys, tag her with a real mention.
+- Every Jira comment is a draft first; the tech lead approves it before it is posted (`skill/aa-jira-update`).
+- Write in Vietnamese, short, under the tech lead's name, no internal Linear keys, and tag the business owner with a
+  real mention.
 - Do not create Jira issues or change their status on your own.
 - Report a feature request on Jira only after it has shipped; note it in Linear meanwhile.
 - Every claim of "works" needs live evidence per channel tested, with screenshots; say what was not tested.
-- Business and legal questions go to her as calm proposals with options (her [CEO guide](ceo.md) lists the
-  decisions that are hers).
+- Business and legal questions go to the business owner as calm proposals with options (the [CEO guide](ceo.md)
+  lists the decisions that are the owner's).
 
 ## Releases and UAT
 
 - Every merge to `main` deploys to Dev. A "release" for the business is a short note of what users can now do:
   template [`templates/release-note.md`](../templates/release-note.md), posted as a Jira draft.
-- Version tags and generated changelogs come with AA-891 (release-please).
-- **UAT** is recorded as short videos for all apps, once the technical work is done or when Nghiệp says (AA-855);
+- Each app repo tags its versions and writes its `CHANGELOG.md` with release-please (AA-891).
+- **UAT** is recorded as short videos for all apps, once the technical work is done or when the tech lead says (AA-855);
   template [`templates/uat-report.md`](../templates/uat-report.md).
 
 ## Feature flags
@@ -100,14 +103,14 @@ tenant-pool flags, which are a security control and stay.
 ## Paid work and cost
 
 Paid AI or data runs start with a trial of about 3 items, then at most about 50 tours; never the whole catalog
-without Nghiệp's approval. Any new paid service needs a monthly price and approval before it is switched on.
+without the tech lead's approval. Any new paid service needs a monthly price and approval before it is switched on.
 
 ## Where truth lives
 
 | Question | Open |
 |---|---|
 | What is next? | [Live backlog](../backlog/README.md) §3 |
-| What waits on Nghiệp? | Live backlog §2 |
+| What waits on the tech lead? | Live backlog §2 |
 | Platform roadmap items (U-xx) | [Handbook §9](../engineering-handbook.md#9-roadmap); keys in [backlog §3a](../backlog/README.md#3a-platform-roadmap-keys-plat-01) |
 | Who approves what? | Data standards [Part B §11](../architecture/data-standards/02-data-management.md#11-change-management) (merge rights per D-13, DM-11.5 in v1.1) |
 | What does this term mean? | [Glossary](../glossary.md) |

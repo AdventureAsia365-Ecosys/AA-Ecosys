@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, cio]
 applies_to: [tripplanner-lambda, aa-booking]
-last_reviewed: 2026-10-21
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-20
 tested_where: dev-acc2
@@ -36,13 +36,13 @@ TripPlanner form (consent ticked). Evidence: the AA-886 Linear comment of 2026-1
 
 ## Where consent lives
 
-Column names are from [`db-schema-reference.md`](../architecture/db-schema-reference.md) (verified 2026-10-19).
+Column names are from [`db-schema-reference.md`](../architecture/db-schema-reference.md) (dump of 2026-10-28).
 
 | Step | Table | Value | Time | Source | Written by |
 |---|---|---|---|---|---|
 | 1. The traveller ticks the box and sends a trip | `tripplanner.customers` | `contact_consent` | `contact_consent_at` | implicit: the TripPlanner form | TripPanel form, then `backend/assembly/registration.py` (AA-676) |
 | 2. Hand-off event | `tripplanner.outbox.payload` then `booking.inbox_events.payload` | `customer.consent` | `customer.consent_at` | `booking.inbox_events.source` = `tripplanner` | `backend/assembly/handoff.py`, contract `inquiry.submitted` v1.1/v1.2 |
-| 3. Booking master | `booking.customers` | `contact_consent` | `contact_consent_at` | `source` = `tripplanner_lead` (CHECK `manual`, `otp`, `tripplanner_lead`) | AA-Booking `backend/app/inquiry/intake.py` |
+| 3. Booking master | `booking.customers` | `contact_consent` | `contact_consent_at` | `source` = `tripplanner_lead` (CHECK `manual`, `otp`, `tripplanner_lead`, `traveller_signin`) | AA-Booking `backend/app/inquiry/intake.py` |
 
 `booking.customers.external_ref` holds `tripplanner.customers.id` (as text) when TripPlanner linked a customer, so
 the two records join without comparing personal data. Each inquiry creates a new Booking lead row, so one

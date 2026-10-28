@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-infra, aa-cis-dev-db]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-18
 tested_where: dev-acc2
@@ -25,7 +25,8 @@ workflow wins and this page gets fixed.
 
 - `check` / `apply`: a migration file merged on its owner repo `main` and copied byte-for-byte into AA-CIS-Infra
   `db/migrations/<owner>/` (Migration Copy Guard green, PR merged).
-- `set-password`: give `cis_app` or `db_migrator` the password Nghiệp wrote into that role's DSN secret (X1).
+- `set-password`: give `cis_app`, `crm_app` or `db_migrator` the password the tech lead wrote into that role's DSN
+  secret (X1; allowlist `password_roles` in `db/owners.yaml`).
 - `run-script`: master-level work that is not a migration (another app's data, roles, a fix across owners), as a
   reviewed `db/scripts/<name>.py` on Infra `main`.
 - Not for: CIS-scope reads (use [ECS exec](ecs-exec-s3-mediated.md)), or a change that should replay in CI or exist in
@@ -38,17 +39,20 @@ workflow wins and this page gets fixed.
 - The SQL runs in a one-off Fargate task of the migrator family `aa-cis-dev-db-migrate` (container `migrate`,
   security group `aa-cis-dev-sg-db-migrate`), with the image the CIS api runs now. The revision is deregistered at the
   end. Its log is stream `migrate/migrate/<task id>` in `/ecs/aa-cis-dev` and is printed in the job.
-- Login: the RDS master until X1 S22, then `db_migrator`. Each file runs as the live owner of its directory's anchor
-  schema (`db/owners.yaml`); `roles/` files run as the master.
+- Login: `db_migrator` since X1 S22 (the RDS master before). Each file in an owner directory (`cis/`, `booking/`,
+  `tripplanner/`, `crm/`) runs as the live owner of that directory's anchor schema (`db/owners.yaml`). `roles/`
+  files, `set-password` and `run-script` use the master DSN, which the task reads itself.
 - Every session: `lock_timeout 5s`, `statement_timeout 15min`, `application_name db-migrate`. Header directives:
   `-- migrate: no-transaction`, `lock_timeout=…`, `statement_timeout=…`, `destructive` (the workflow takes a
   manual RDS snapshot first, DM-9.2).
-- Idle check: `apply` and a writing `run-script` refuse (exit 7) while any owner job table has a queued or running row
-  of a non-exempt kind, or a rerun wave is open. `override_busy_jobs` (one line, a reason, Nghiệp only) lets one run
-  through and is logged.
+- Idle check: `apply` and a writing `run-script` refuse (exit 7) while any owner job table (`shared.job`,
+  `booking.job`, `crm.job`) has a queued or running row of a non-exempt kind (`idle_exempt_kinds` in
+  `db/owners.yaml`), or a rerun wave is open. `override_busy_jobs` (one line, a reason, tech lead only) lets one run
+  through and is logged. App deploys no longer wait for idle job tables (AA-993 G5); DB Migrate still does.
 - A successful `apply` or `run-script` dispatches **DB Schema Dump** (root PR `bot/db-schema-reference`) and
   **DB Isolation Probe**.
-- `catalog.*` view DDL is frozen until X1 S22 (backlog §1); the runner refuses it.
+- A `cis/` file may change a `catalog.*` view only with the catalog recipe (`SET LOCAL ROLE catalog_owner`, then
+  back to `cis_owner` and `REVOKE CREATE`); the lint and the runner refuse it otherwise. The X1 S1-S22 freeze is over.
 - Cost: cents per run (one short Fargate task); a `destructive` snapshot is free while it fits the backup quota.
 
 ## Preconditions
@@ -83,7 +87,8 @@ Expected: logged in to github.com with access to `AdventureAsia365-Ecosys`.
    gh workflow run db-migrate.yml --repo AdventureAsia365-Ecosys/AA-CIS-Infra --ref main -f environment=dev -f mode=apply -f migration=<owner>/<NNN>_<name>.sql # WRITE
    ```
 
-   Expected: job green; the version key (`NNN`, `bk-NNN`, `tp-NNN`, `rl-NNN`) is in `shared.schema_versions`.
+   Expected: job green; the version key (`NNN`, `bk-NNN`, `tp-NNN`, `crm-NNN`, `rl-NNN`) is in
+   `shared.schema_versions`.
    Re-running apply is a no-op.
    Verify: Booking `curl -s https://api-booking.lumiguides.it.com/booking/health/ready` shows the new
    `schema_version`; CIS `curl -s https://api-cis.lumiguides.it.com/health/ready` 200; the Schema Dump PR appears in
@@ -95,12 +100,14 @@ Expected: logged in to github.com with access to `AdventureAsia365-Ecosys`.
 3. Set a role password (X1).
 
    ```bash
-   gh workflow run db-migrate.yml --repo AdventureAsia365-Ecosys/AA-CIS-Infra --ref main -f environment=dev -f mode=set-password -f role=<cis_app-or-db_migrator> # WRITE
+   gh workflow run db-migrate.yml --repo AdventureAsia365-Ecosys/AA-CIS-Infra --ref main -f environment=dev -f mode=set-password -f role=<role> # WRITE
    ```
+
+   `<role>` is `cis_app`, `crm_app` or `db_migrator`.
 
    Expected: the log prints `current_user` and `rolconnlimit` of a successful test login, never the password.
    Exit 11 = the secret was refused, 12 = the test login failed.
-   Rollback: write the previous DSN back into the secret (Nghiệp, by hand) and run the mode again.
+   Rollback: the tech lead writes the previous DSN back into the secret by hand; then run the mode again.
 
 4. Run a reviewed script.
 
@@ -127,7 +134,7 @@ Expected: logged in to github.com with access to `AdventureAsia365-Ecosys`.
 ## Escalation
 
 - A failed apply that left objects behind (exit 9 after COMMIT, or a `no-transaction` file): SEV2, stop all merges to
-  the owner repo, tell Nghiệp. Booking or TripPlanner broken by it: SEV1 ([incident response](../incident-response.md)).
+  the owner repo, tell the tech lead. Booking or TripPlanner broken by it: SEV1 ([incident response](../incident-response.md)).
 
 ## Tested log
 

@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [aa-cis-worker, aa-cis-api, tripplanner-lambda]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [OPS-04, OPS-04-queue-stuck, APP-09, FIN-01, APP-06, AA-649, AA-804, AA-896]
 ---
@@ -15,16 +15,21 @@ related: [OPS-04, OPS-04-queue-stuck, APP-09, FIN-01, APP-06, AA-649, AA-804, AA
 # LLM or paid-API cost spike
 
 > [!WARNING]
-> UNTESTED - written from the cost guard, ledgers and budgets as they are on 19/10/2026.
+> UNTESTED - do not follow in an incident without checking each step.
+> Written from the cost guard, ledgers and budgets; facts re-checked against code and Terraform on 2026-10-28.
 
 ## Triggers
 
-- An AWS Budgets e-mail: monthly budgets `aa-cis-dev-monthly-total` (250 USD) and per app `…-app-cis` (150),
-  `…-app-shared` (50), `…-app-booking` (25), `…-app-tripplanner` (25). These cover **acc2** only.
-- A Cost Anomaly Detection e-mail (monitor `Default-Services-Monitor`, free).
-- Bedrock runs mostly on the LLM satellite accounts (acc3 main, acc1 fallback; see the
-  [account map](../../onboarding.md#account-map)): their spend shows in those accounts' billing, not in the acc2 budgets.
-  The app ledger below covers every account.
+- An AWS Budgets alert on **acc2** (alerts topic e-mail). The account budget `aa-cis-dev-monthly-total` is 300 USD.
+  Each `App` tag has its own budget, `aa-cis-dev-monthly-app-<app>`: `shared` 120, `cis` 90, `crm` 35, `booking` 25,
+  `identity` 10, `tripplanner` 10 USD (AA-CIS-Infra `accounts/aa365`, `var.per_app_monthly_budgets`).
+- An AWS Budgets e-mail on **acc3**, the LLM account: `aa3-llm-monthly-total`, 250 USD, credits excluded
+  (`accounts/acc3-bedrock/cost_guard.tf`).
+- A Cost Anomaly Detection alert. On acc2, monitor `Default-Services-Monitor` sends any anomaly of 5 USD or more to
+  the alerts topic at once. On acc3, a daily e-mail covers anomalies from 10 USD, and the topic `aa3-cost-alerts`
+  sends anomalies from 15 USD at once (`accounts/acc3-bedrock/cost_anomaly_immediate.tf`).
+- Bedrock runs on acc3 only (AA-998; see the [account map](../../onboarding.md#account-map)). Its spend shows in the
+  acc3 bill and budget, not in the acc2 budgets. The app ledger below covers every call.
 - A job ended `stopped_budget`, or the admin **Budgets** page shows today's spend near a limit.
 
 ## Facts (the controls that exist)
@@ -38,16 +43,16 @@ related: [OPS-04, OPS-04-queue-stuck, APP-09, FIN-01, APP-06, AA-649, AA-804, AA
 | Jobs | admin Jobs page: cancel queued or running jobs; `/admin/job-runner/jobs/{id}/llm-calls` | Stop the spender |
 | Model routes | admin LLM config (`/admin/llm-config`) | Switch a stage to a cheaper model (admin, confirm-gated) |
 
-No new Cost Explorer script is needed or wanted: the monthly view is `shared.cost_explorer_snapshot` + the ledgers
-(DM-10.4; the FinOps page FIN-01 `docs/ops/finops.md` arrives with AA-896).
+No new Cost Explorer script is needed or wanted. The monthly view is `shared.cost_explorer_snapshot` plus the
+ledgers (DM-10.4; see the [FinOps process](../finops.md)).
 
 ## Steps
 
 1. Who is spending today (read-only, CIS [ECS exec](../runbooks/ecs-exec-s3-mediated.md)):
 
    ```sql
-   SELECT app, stage, model, account, sum(calls) AS calls, round(sum(cost_usd), 2) AS usd
-   FROM shared.llm_call_daily WHERE day >= current_date - 1 GROUP BY 1,2,3,4 ORDER BY usd DESC LIMIT 15;
+   SELECT app, tenant_id, stage, model, account, sum(calls) AS calls, round(sum(cost_usd), 2) AS usd
+   FROM shared.llm_call_daily WHERE day >= current_date - 1 GROUP BY 1,2,3,4,5 ORDER BY usd DESC LIMIT 15;
    ```
 
    For the last hour, by job: `SELECT job_id, stage, count(*), round(sum(cost_usd),2) FROM shared.llm_call_log WHERE created_at > now() - interval '1 hour' GROUP BY 1,2 ORDER BY 4 DESC LIMIT 10;`
@@ -58,17 +63,19 @@ No new Cost Explorer script is needed or wanted: the monthly view is `shared.cos
    - A wave: pause the wave (no new jobs), then cancel the queued ones ([queue stuck](queue-stuck.md)).
    - A provider in general: lower `per_day_usd` (or set `hard_stop`) for that provider on the Budgets page. # WRITE
    - One tenant driving T-series spend (`tenant_id` in step 1, usage in `shared.tenant_rewrite_usage` /
-     `shared.tenant_api_usage`): Nghiệp contacts the tenant; suspending a tenant is his call.
-   - A hand-run script: stop the ECS exec session; remind the rule (paid runs: trial about 3, then at most about 50).
+     `shared.tenant_api_usage`): the tech lead contacts the tenant. Suspending a tenant is the tech lead's call.
+   - A hand-run script: stop the ECS exec session. Remind the runner of the rule: paid runs start with a trial of
+     about 3, then at most about 50.
    Expected: step 1's numbers stop growing within minutes.
    Rollback: restore the previous budget value (the page shows `updated_by` / `updated_at`); re-queue cancelled jobs
    with **Retry** when the cause is fixed.
 
 3. Check the provider side if the ledger looks normal but the bill does not (a call path that does not log is a bug,
-   AA-635 rule): the Bedrock and OpenAI consoles' usage per day, and acc3 / acc1 billing.
+   AA-635 rule): the Bedrock and OpenAI consoles' usage per day, and the acc3 bill.
 
 ## Close
 
 - Spend back to normal, the cause fixed or a follow-up issue opened, the limit back to its agreed value.
-- Tell Ms. Thư when a budget e-mail fired (the amount and the cause, in Vietnamese, no internal issue keys); the
-  threshold for telling her is not decided yet (proposal for the FinOps page, AA-896).
+- Tell the business owner when a budget e-mail fired: the amount and the cause, in Vietnamese, with no internal
+  issue keys. The threshold for telling the business owner is not decided yet (open point for the
+  [FinOps process](../finops.md)).
