@@ -28,6 +28,7 @@ on:
       - "tools/docs/docslib.py"
       - "tools/docs/check_docs_text.py"
       - "tools/docs/check_adr_index.py"
+      - "tools/docs/requirements.txt"
       - ".github/workflows/docs-sync.yml"
   pull_request:
     branches: [master]
@@ -37,6 +38,7 @@ on:
       - "tools/docs/docslib.py"
       - "tools/docs/check_docs_text.py"
       - "tools/docs/check_adr_index.py"
+      - "tools/docs/requirements.txt"
       - ".github/workflows/docs-sync.yml"
   workflow_dispatch:
 
@@ -96,7 +98,7 @@ jobs:
 
       - name: AWS credentials (OIDC)
         if: env.IS_MASTER == 'true' && env.HAS_AWS == 'true'
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: ${{ secrets.DOCS_SYNC_ROLE_ARN }}
           aws-region: us-west-1
@@ -109,7 +111,10 @@ jobs:
         run: |
           set -euo pipefail
           dest="s3://${BUCKET}/${PREFIX}"
-          aws s3 sync "$OUT/pages" "$dest/pages" --only-show-errors --content-type "text/markdown; charset=utf-8"
+          # Only this repo's subtree: --delete never reaches pages/<other repo>/ if a second source is added later.
+          src_pages="$OUT/pages/AA-Ecosys"
+          dest_pages="$dest/pages/AA-Ecosys"
+          aws s3 sync "$src_pages" "$dest_pages" --only-show-errors --content-type "text/markdown; charset=utf-8"
           aws s3 cp "$OUT/manifest.json" "$dest/manifest.json" --only-show-errors --content-type "application/json"
-          aws s3 sync "$OUT/pages" "$dest/pages" --only-show-errors --delete --content-type "text/markdown; charset=utf-8"
+          aws s3 sync "$src_pages" "$dest_pages" --only-show-errors --delete --content-type "text/markdown; charset=utf-8"
           echo "uploaded $(find "$OUT/pages" -type f | wc -l) pages and the manifest" >> "$GITHUB_STEP_SUMMARY"
