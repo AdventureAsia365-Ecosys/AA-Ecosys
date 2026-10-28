@@ -112,7 +112,7 @@ guard inverted (final design §4.4). How P2b signs people in, re-enrols them and
 (S253): `portal.` serves the CRM and the Content studio on Fargate
 ([cutover record](../audits/2026-10-27-S253-aa979-cutover/README.md)). The clean-up ran on 2026-10-28 (S256, pulled
 ahead: Dev has no real users): Vercel project removed, CIS copy deleted, AA-885 guard inverted, `partner-dev.` → `portal.`
-301 except `/crm*`.
+301 except `/crm` and `/crm/*`.
 
 ### 7. "CIS App first" risk
 
