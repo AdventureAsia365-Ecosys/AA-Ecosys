@@ -29,18 +29,28 @@ Publication rule (v1; docs/README.md "Docs reader" and docs/engineering-handbook
      entry only when its English page is published, and it always takes the English page's access tier. Every entry
      carries `lang`; an English entry lists its translations, a translation names its English page. ADRs have no
      front-matter and therefore no translation.
+  9. SVG images (AA-697): a tracked docs/**/*.svg outside the never-published folders is published as an asset, byte for
+     byte, so a page can show it (the architecture diagrams under docs/architecture/diagrams/). It is never redacted
+     (a marker would break the inline icons); instead it must pass two checks or the build fails: (a) nothing a reader
+     could run or fetch: no script, foreignObject or other active element, no event-handler attribute, no javascript:
+     URL, no CSS url() or @import, no entity declarations, and every href is a fragment (#id) or an inline PNG
+     (data:image/png;base64); (b) its text outside those inline PNGs passes the same guard as a page body (no account
+     or resource ID). Assets are "staff" tier: an SVG must not carry owner-only content. An SVG larger than
+     MAX_ASSET_BYTES is skipped.
 
 Output layout (OUT_DIR, default _site/docs-reader):
 
   manifest.json                    format 1, below
   pages/<repo>/<repo-relative path> the redacted Markdown body of each published page
+  assets/<repo>/<repo-relative path> each published SVG, unchanged (rule 9)
 
 manifest.json:
   {"format": 1, "rule": "v1", "generated_at": ISO, "source": {"repo", "sha", "ref"},
-   "counts": {"published", "owner_only", "skipped"},
+   "counts": {"published", "owner_only", "translations", "skipped", "assets"},
    "pages": [{"repo", "path", "key", "id", "title", "description", "type", "status", "audience", "owner",
               "last_reviewed", "generated", "access", "bytes", "sha256", "redactions",
-              "lang", "translation_of", "translations"}]}
+              "lang", "translation_of", "translations"}],
+   "assets": [{"repo", "path", "key", "type", "bytes", "sha256", "access"}]}
 
   lang            "en" for an English page (the source), "vi" for a translation.
   translation_of  translations only: the `path` of the English entry (same repo); null on an English page.
@@ -48,7 +58,8 @@ manifest.json:
                   [] when there is none and always [] on a translation. A reader lists entries with lang "en" and
                   offers a language toggle from `translations` / `translation_of`.
 
-`key` is the object key relative to the S3 prefix (pages/<repo>/<path>); the API reads only keys listed here.
+`key` is the object key relative to the S3 prefix (pages/<repo>/<path>, assets/<repo>/<path>); the API reads only keys
+listed here. A reader that predates rule 9 ignores "assets".
 Skipped pages are counted, never named, in the manifest.
 
 Usage:
@@ -102,6 +113,9 @@ NEVER_PREFIXES = (
 OWNER_ONLY_ID_PREFIXES = ("SEC-", "ARCH-02", "ARCH-03", "ARCH-04")
 # A page bigger than this is skipped (the reader is not a file store; the API refuses larger objects too).
 MAX_PAGE_BYTES = 1_000_000
+# Rule 9: an SVG bigger than this is skipped (the diagrams with inline icons are 0.2-0.4 MB).
+MAX_ASSET_BYTES = 1_000_000
+ASSET_SUFFIXES = {".svg": "image/svg+xml"}
 
 # Rule 6: (marker, pattern). Order matters: the ARN / bucket forms are covered by the account pattern, which runs
 # last so the other patterns still see the full text.
@@ -118,6 +132,23 @@ REDACTIONS: list[tuple[str, re.Pattern[str]]] = [
 GUARD_PATTERNS: list[tuple[str, re.Pattern[str]]] = [(m, p) for m, p in REDACTIONS] + list(RESOURCE_PATTERNS)
 
 H1 = re.compile(r"^#\s+(.+?)\s*#*\s*$")
+
+# Rule 9 (a): what makes an SVG unsafe to show. The CIS API runs the same check again before it serves one
+# (api/services/docs_reader.py); docs/architecture/diagrams/_common.py runs it when a diagram is rendered.
+INLINE_PNG = re.compile(r"data:image/png;base64,[A-Za-z0-9+/=\s]*")
+SVG_FORBIDDEN: list[tuple[str, re.Pattern[str]]] = [
+    ("script element", re.compile(r"<\s*script", re.I)),
+    ("foreignObject element", re.compile(r"<\s*foreignObject", re.I)),
+    ("active element", re.compile(r"<\s*(?:iframe|object|embed|audio|video|animate\w*|set|handler|listener)\b", re.I)),
+    ("event handler attribute", re.compile(r"\son[a-z]+\s*=", re.I)),
+    ("javascript: URL", re.compile(r"javascript\s*:", re.I)),
+    ("CSS @import", re.compile(r"@import", re.I)),
+    ("CSS url() to a non-fragment", re.compile(r"url\(\s*['\"]?(?!#)", re.I)),
+    ("entity declaration", re.compile(r"<!ENTITY|<!DOCTYPE[^>]*\[", re.I)),
+]
+SVG_REF = re.compile(r"\s(?:xlink:)?href\s*=\s*(?:\"([^\"]*)\"|'([^']*)')", re.I)
+SVG_START = re.compile(
+    r"\s*(?:<\?xml[^>]*>\s*)?(?:<!--.*?-->\s*)*(?:<!DOCTYPE svg[^>\[]*>\s*)?(?:<!--.*?-->\s*)*<svg[\s>]", re.S)
 
 
 @dataclass
@@ -167,6 +198,20 @@ def redact(text: str) -> tuple[str, int]:
 def guard_hits(text: str) -> list[str]:
     """Labels of the patterns that still match after redaction (markers themselves never match)."""
     return [label for label, pattern in GUARD_PATTERNS if pattern.search(text)]
+
+
+def svg_problems(text: str) -> list[str]:
+    """Rule 9: why an SVG may not be published (empty list = publishable)."""
+    if not SVG_START.match(text):
+        return ["not an SVG document"]
+    problems = [label for label, pattern in SVG_FORBIDDEN if pattern.search(text)]
+    for m in SVG_REF.finditer(text):
+        ref = (m.group(1) if m.group(1) is not None else m.group(2)).strip()
+        if not (ref.startswith("#") or INLINE_PNG.fullmatch(ref)):
+            problems.append(f"outside reference {ref[:40]!r}")
+    visible = INLINE_PNG.sub("data:image/png;base64,", text)
+    problems += [f"{label} in the SVG text" for label in guard_hits(visible)]
+    return problems
 
 
 def _adr_meta(relpath: str, text: str) -> dict | None:
@@ -268,6 +313,66 @@ def _link_translations(result: Result) -> Result:
     return result
 
 
+@dataclass
+class Asset:
+    path: str
+    data: bytes
+
+    @property
+    def key(self) -> str:
+        return f"assets/{REPO_NAME}/{self.path}"
+
+    def entry(self) -> dict:
+        return {"repo": REPO_NAME, "path": self.path, "key": self.key,
+                "type": ASSET_SUFFIXES[Path(self.path).suffix.lower()], "bytes": len(self.data),
+                "sha256": hashlib.sha256(self.data).hexdigest(), "access": "staff"}
+
+
+def list_assets(root: Path = REPO_ROOT) -> list[str]:
+    """Tracked asset files under docs/ (git ls-files); a filesystem walk outside a git checkout (unit tests)."""
+    try:
+        out = subprocess.run(["git", "-C", str(root), "ls-files", "-z", "--", *SCOPE],
+                             check=True, capture_output=True).stdout.decode("utf-8")
+        files = [f for f in out.split("\0") if Path(f).suffix.lower() in ASSET_SUFFIXES]
+        if files or (root / ".git").exists():
+            return sorted(files)
+    except (OSError, subprocess.CalledProcessError):
+        pass
+    found: list[str] = []
+    for scope in SCOPE:
+        base = root / scope
+        if base.is_dir():
+            found += [p.relative_to(root).as_posix() for p in base.rglob("*")
+                      if p.is_file() and p.suffix.lower() in ASSET_SUFFIXES]
+    return sorted(found)
+
+
+def collect_assets(root: Path = REPO_ROOT) -> tuple[list[Asset], list[str]]:
+    """Rule 9: (publishable assets, problems that fail the build)."""
+    assets: list[Asset] = []
+    problems: list[str] = []
+    for relpath in list_assets(root):
+        if is_never(relpath):
+            continue
+        try:
+            data = (root / relpath).read_bytes()
+        except OSError:
+            continue
+        if len(data) > MAX_ASSET_BYTES:
+            continue
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            problems.append(f"{relpath}: not UTF-8")
+            continue
+        found = svg_problems(text)
+        if found:
+            problems += [f"{relpath}: {p}" for p in found]
+            continue
+        assets.append(Asset(relpath, data))
+    return assets, problems
+
+
 def _entry(page: Page) -> dict:
     data = page.body.encode("utf-8")
     m = page.meta
@@ -298,7 +403,7 @@ def _entry(page: Page) -> dict:
 def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "") -> dict:
     """Write the bundle to `out` (emptied first) and return the manifest. Raises SystemExit on a guard hit."""
     result = collect(root)
-    problems = []
+    assets, problems = collect_assets(root)
     for page in result.pages:
         # Everything a reader sees: the body and the manifest's text fields (not the sha256, which is hex).
         visible = {k: v for k, v in _entry(page).items() if k not in ("sha256", "bytes", "redactions")}
@@ -318,6 +423,10 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "") -> di
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(page.body, encoding="utf-8")
         entries.append(_entry(page))
+    for asset in assets:
+        target = out / asset.key
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(asset.data)
     manifest = {
         "format": FORMAT,
         "rule": RULE,
@@ -328,8 +437,10 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "") -> di
             "owner_only": sum(1 for e in entries if e["access"] == "owner"),
             "translations": sum(1 for e in entries if e["translation_of"]),
             "skipped": result.skipped,
+            "assets": len(assets),
         },
         "pages": entries,
+        "assets": [a.entry() for a in assets],
     }
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     return manifest
@@ -358,7 +469,7 @@ def main(argv: list[str] | None = None) -> int:
     c = manifest["counts"]
     redacted = sum(p["redactions"] for p in manifest["pages"])
     print(f"docs reader: {c['published']} pages published ({c['owner_only']} owner only, {c['translations']} translations), "
-          f"{c['skipped']} skipped, "
+          f"{c['skipped']} skipped, {c['assets']} SVG assets, "
           f"{redacted} values redacted, source {manifest['source']['sha'][:12] or 'unknown'}")
     return 0
 
