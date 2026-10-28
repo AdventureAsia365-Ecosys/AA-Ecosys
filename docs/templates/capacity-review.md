@@ -129,7 +129,7 @@ If any value differs from the C2.2 table in `03-scaling.md`, fix the table in th
 | t4g.medium → m7g.large | > 5 primary-path statements with mean > 200 ms | | |
 | m7g → r7g | cache hit < 99 % for a week; `FreeableMemory` < 10 % RAM | | |
 | Storage | > 80 % of `max_allocated_storage`, or > 1 GB/day for a week | | |
-| Retention | log table > 1 M rows or `FreeStorageSpace` < 10 GB before retention exists | | |
+| Retention | log table **without a retention job kind** > 1 M rows, or `FreeStorageSpace` < 10 GB before its retention exists (a ledger with a retention kind: Partitioning row) | | |
 | RDS Proxy | Lambda need > 20; `DatabaseConnections` p95 > 60 % for a week | | |
 | Materialized catalog read model | a `catalog.*` view p95 > 500 ms | | |
 | Read replica | reads > 30 % of primary CPU, or CPU > 60 % sustained | | |
