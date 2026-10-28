@@ -14,12 +14,12 @@ related: [ARCH-08-engineering, ARCH-08-data-management, ARCH-08-scaling, ARCH-08
 
 # AA_Ecosys data standards
 
-**Version 1.6** · S255 · 28/10/2026 · **v1.0 and v1.1 approved by the tech lead** (v1.0: S237 data-architecture review,
+**Version 1.7** · S256 · 28/10/2026 · **v1.0 and v1.1 approved by the tech lead** (v1.0: S237 data-architecture review,
 every recommendation approved, decisions E1–E11; v1.1: S243 N-1; v1.2: X1 close-out, the tech lead approves its root PR; v1.3:
 partner CRM, classes and windows approved in S246 decision D6, the tech lead approves its root PR; v1.4: tour liveness rule
 of ADR 0015, whose answers Q1–Q10 the tech lead decided in S248, root PR merged under DM-11.5 (dev phase); v1.5: enforcement
 facts only (AA-853), no rule change, root PR under DM-11.5; v1.6: facts only from the first capacity review (AA-838), root PR
-under DM-11.5; see the changelog below) · Host ADR:
+under DM-11.5; v1.7: the capacity review decisions D1–D13, approved by the tech lead in S256; see the changelog below) · Host ADR:
 [ADR 0008 — New-app integration and data platform rules](../../adr/0008-new-app-integration-and-data-platform-rules.md)
 (accepted 15/10/2026), with [ADR 0003a — one job table per owner](../../adr/0003a-per-owner-job-tables.md).
 
@@ -148,6 +148,7 @@ ADR 0008.
 | 1.4 | 23/10/2026 | S248 | Tour liveness, AA-986 slice L7b ([ADR 0015](../../adr/0015-tour-liveness-and-retirement-propagation.md), accepted S248; the tech lead decided Q1–Q10; root PR under DM-11.5, dev phase). **DM-4.9 new:** once a CIS catalog key is no longer served (`retired` / `paused`, derived by `gold_aa_internal.v_tour_liveness`), its derivatives MUST NOT stay live in the catalog, AA-Booking or TripPlanner (sold departures, confirmed holds, open trip cases and drafts kept and flagged, Q4); never two active Masters per group, no active Master over a dead source; the lifecycle record, the L4 tombstone and an all-superseded group's `retired` record agree with the derived state. Enforced by the nightly AA-CIS-Infra **DB Tour Liveness Gate**; the CIS and tenant layers are not in the gate yet (follow-up slice). **DM-8.9** and the **C2.2** master row name the gate as an automated READ_ONLY run-script use of the master (inside the existing reserve, no budget change). |
 | 1.5 | 25/10/2026 | S250 | Enforcement facts only, no rule change (AA-853; root PR under DM-11.5, dev phase). **MIG-6:** the Migration Copy Guard ownership lint (AA-CIS-Infra `db/check_migration_ownership.py`) fails an owner-dir copy that creates, alters, drops, comments on, grants on or writes to an object outside its owner's `owners.yaml` schemas; it is static (function bodies and dynamic SQL not read), the X1 owner-role switch stays the runtime boundary. **MIG-5:** DB Schema Dump replays every applied migration into a scratch PostgreSQL each night and writes the *Schema drift* section (unmanaged / missing / changed, owner decision or open) into `db-schema-reference.md`; report only, it fails nothing until the replay baseline (AA-ACP-Core lineage) and the owner decisions in `db/schema_drift_decisions.json` exist. Part A tooling table, MIG-5 / MIG-6 *Enforced* and the CI row above follow. |
 | 1.6 | 28/10/2026 | S255 | Facts only, no rule change (AA-838, first monthly capacity review C8, `docs/audits/2026-10-28-S255-aa838-capacity/`; root PR under DM-11.5, dev phase). **C2.2:** TripPlanner reserved concurrency is 15 (browse) / 5 (assembly) in live Terraform, not 10 / 10; target total recomputed to 133 of 135 (`tripplanner` 20 of 30 unchanged); a dated re-check note records the paper worst case 168 with today's `cis-api` pool 10, accepted until 15/12/2026. |
+| 1.7 | 28/10/2026 | S256 | Capacity review decisions D1–D13 (AA-838, `docs/audits/2026-10-28-S255-aa838-capacity/` §4 and §4a), approved by the tech lead in S256. **C3 Retention (rule wording):** the 1M-row hard stop applies to a log table without a retention job kind; a ledger with one is watched by the Partitioning row (D3). **C2.2:** the `cis-api` main pool stays 10 (its `aa859_main_pool_gauge` baseline does not support 5); api `max_capacity` 7 → 3; worst case 120 of 135, the two accepted overages removed (D2). **C1.1a:** `cis-job`, `cis-direct` (default of CIS `get_database_url()`) and `cis-exec` (ECS-exec scripts) added (D9). **C4.2a:** `pg_stat_statements.max = 10000`, pending the next planned reboot (D13). |
 
 ## Open items for the tech lead
 

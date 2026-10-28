@@ -81,7 +81,9 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
    import asyncio, json, os, boto3, asyncpg
 
    async def main():
-       conn = await asyncpg.connect(os.environ["DATABASE_URL"], ssl="require")
+       # application_name: data standards C1.1a (asyncpg ignores PGAPPNAME), so PI / pg_stat_activity show "cis-exec"
+       conn = await asyncpg.connect(os.environ["DATABASE_URL"], ssl="require",
+                                    server_settings={"application_name": "cis-exec"})
        rows = await conn.fetch("SELECT ...")  # always schema-qualify; CIS schemas only
        with open("/tmp/result.json", "w") as f:
            json.dump([dict(r) for r in rows], f, indent=2, default=str)

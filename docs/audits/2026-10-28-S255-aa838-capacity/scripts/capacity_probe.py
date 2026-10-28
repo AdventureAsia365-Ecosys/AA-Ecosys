@@ -3,15 +3,17 @@
 Two ways to run it, same file:
 
 1. S3-mediated ECS exec in the aa-cis-dev-api container (login `cis_app`, container DATABASE_URL):
-       python3 capacity_probe.py            # all sections
-       PROBE_TOP=50 python3 capacity_probe.py   # top-50 statements (C4.3a snapshot before any reset)
+       python3 capacity_probe.py            # all sections, top 50 statements (C4.3a snapshot)
+       PROBE_TOP=20 python3 capacity_probe.py   # shorter output for the weekly C4.3 check
    `cis_app` is not a member of pg_read_all_stats: pg_stat_statements rows of OTHER roles keep their
    timings but show no query text and no queryid; pg_stat_activity shows their role and
    application_name but not their state. The probe says so in its header.
 
 2. DB Migrate `mode=run-script` (master login, full text), after copying this file to AA-CIS-Infra
    `db/scripts/aa838_capacity_probe.py` through a reviewed PR. The runner awaits `main(conn)`;
-   READ_ONLY = True makes the runner open the session read-only.
+   READ_ONLY = True makes the runner open the session read-only. run-script passes no environment, so the
+   default PROBE_TOP is 50: every monthly run saves the top-50 snapshot that C4.3a requires before any
+   pg_stat_statements_reset() (AA-838 D7).
 
 Never writes, never calls pg_stat_statements_reset() (C4.3a). Prints aggregates, object names and
 normalised statement text only (constants are $n placeholders): no row values, no secrets, no DSN.
@@ -23,7 +25,7 @@ import os
 
 READ_ONLY = True
 
-TOP = int(os.environ.get("PROBE_TOP", "20"))
+TOP = int(os.environ.get("PROBE_TOP", "50"))
 QTEXT = int(os.environ.get("PROBE_QTEXT", "160"))
 
 # Statement-text patterns for the C1.2 SLIs (matched with ILIKE on the normalised text).
