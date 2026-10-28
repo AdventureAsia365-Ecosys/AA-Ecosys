@@ -1,0 +1,26 @@
+architecture-beta
+  group gh(logos:github-icon)[GitHub org]
+  service repos(logos:github-actions)[App and Infra repos] in gh
+
+  group acc2(logos:aws)[AWS acc2 us-west-1]
+  service oidc(logos:aws-iam)[GitHub OIDC deploy roles] in acc2
+  service cdn(logos:aws-cloudfront)[CloudFront partner portal] in acc2
+  service apigw(logos:aws-api-gateway)[API GW REST api-cis api-booking] in acc2
+  group vpc(logos:aws-vpc)[Shared VPC] in acc2
+  service ecs(logos:aws-fargate)[ECS Fargate CIS Booking CRM] in vpc
+  service lambda(logos:aws-lambda)[TripPlanner Lambdas] in vpc
+  service rds(logos:aws-rds)[RDS Postgres pgvector] in vpc
+  service s3(logos:aws-s3)[S3 bronze and docs] in acc2
+  service cognito(logos:aws-cognito)[Cognito staff and partner pools] in acc2
+
+  group acc3(logos:aws)[AWS acc3 LLM]
+  service bedrock(logos:aws-lambda)[Bedrock invoker] in acc3
+
+  repos:R --> L:oidc
+  oidc:R --> L:ecs
+  apigw:B --> T:ecs
+  ecs:B --> T:rds
+  lambda:R --> L:rds
+  ecs:R --> L:s3
+  cdn:B --> T:apigw
+  ecs:L --> R:bedrock

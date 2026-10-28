@@ -1099,11 +1099,11 @@
    "status": "Backlog",
    "priority": "Low",
    "project": "core",
-   "milestone": "parked",
-   "session": "parked",
+   "milestone": "M5",
+   "session": "S257",
    "size": "M",
-   "next": "Architecture diagrams — after M1",
-   "needs": "Scope"
+   "next": "S255: tech lead nhắc lại; bản thử Mermaid architecture-beta + icon AWS (Iconify logos) qua được lớp an toàn của trang Docs (thiếu icon Bedrock, bố cục tự động); reader chưa hiện ảnh. Kế hoạch: diagrams (icon chính thức) → SVG trong Docs sync + reader hiện SVG của bundle; bộ icon Mermaid cho sơ đồ nhỏ (docs/audits/2026-10-28-S255-aa697-aws-icons/)",
+   "needs": ""
   },
   {
    "id": "AA-804",

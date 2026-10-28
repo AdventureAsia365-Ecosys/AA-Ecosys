@@ -197,7 +197,7 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-782 | T9 cost: A/B a cheaper blog writer on 8 paired blogs | parked | parked. Cheaper T9 blog writer A/B (~$1.20) | Vendor rule |
 | AA-842 | Investigate OpenTelemetry gen_ai tracing for every LLM call (read-only report) | parked | parked. OTel gen_ai tracing — build option B only on a trigger | — |
 | AA-628 | Engagement feedback loop for T-series | parked | parked. Engagement feedback loop — needs real publish volume | Park or cancel |
-| AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | parked | parked. Architecture diagrams — after M1 | Scope |
+| AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S257 | S255: tech lead asked again; prototype Mermaid `architecture-beta` + Iconify AWS icons passes the docs reader's safety checks (no Bedrock icon, auto layout), reader shows no images yet (`docs/audits/2026-10-28-S255-aa697-aws-icons/`). Plan in the Linear comment: `diagrams` (official icons) → SVG in Docs sync + reader shows bundle SVGs; Mermaid icon pack for inline diagrams | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | parked | parked. Asian Trails B2B benchmark (KAN-20) — at B2B design start | Close or keep |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | ≥S263: not slotted before S262; re-plan at S262 from the real pace (blocked-by lists in `plan.blocked_by_relations`) | AA-964 and AA-971 need MFA; AA-971 needs Ms. Thư to name the second alarm recipient |
 
