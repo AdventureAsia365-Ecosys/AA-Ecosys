@@ -2,16 +2,20 @@
 
 Tác nhân: **Claude Code** (Ultracode; workflow nhiều sóng, tối đa 2 lane nặng, 1 workflow viết code một lúc). Bắt đầu
 22:57 27/10 (giờ VN), chạy qua đêm; Nghiệp quay lại khoảng 06:15–06:30 sáng 28/10. Một lần chạm hạn mức phiên
-(05:20–06:08). Số liệu cuối phiên lấy từ `docs/audits/2026-10-28-S254-session-close/state-snapshot.md` «SNAPSHOT: tên
-thư mục snapshot thật».
+(05:20–06:08). Số liệu cuối phiên lấy từ `docs/audits/2026-10-28-S254-session-close/state-snapshot.md` (chụp 11:40 +07).
+Nháp Jira không soạn ở S254: gom sang phiên kế tiếp cùng ngày (Nghiệp, 10:40).
 
 ## Trạng thái
 
 - Đầu phiên (khớp snapshot S253): cis api:867 / worker:433, booking:66, crm api:64, web:33, portal:9 — tất cả
   COMPLETED. PR mở: chỉ 4 release PR (CIS #1049, Booking #95, TP #155, Partner #64) + Infra Dependabot #411/#412.
 - Cuối phiên: 20 việc đã duyệt xong hoặc ship phần lớn; làm tiếp theo master plan (sóng 7–9: lát sửa từ audit Figma,
-  AA-919 R2, AA-990 chặng tự di chuyển, AA-996 lát 2). Còn chạy lúc soạn log: Booking #127/#128 trong merge queue,
-  chuỗi `chain_w9.sh` (bk-032), AA-919 R2 bước C `a720cfac` «SNAPSHOT: trạng thái cuối của 3 việc này».
+  AA-919 R2, AA-990 chặng tự di chuyển, AA-996 lát 2). Ba việc còn chạy lúc soạn nháp log đã xong trước snapshot:
+  Booking #128 `b5b2f8f4` + #127 `de3be3c3` merged + deploy; chuỗi `chain_w9.sh` áp bk-032 (DB Migrate check
+  40632088145 / apply 40632244244, root bot #294) rồi merge code lát 2 Booking #130 `d78ae200` + deploy (booking:76);
+  AA-919 R2 bước C `a720cfac`: informative / completed / tune, $0,375, sạch. **Regression sau #130:**
+  `GET /catalog/trip-plans` → 503 `catalog_unavailable` → hotfix Booking #131 đang merge lúc chốt «ORCH: SHA merge #131
+  + task def + verify 200».
 
 ## Quyết định của Nghiệp (trong phiên)
 
@@ -28,7 +32,9 @@ thư mục snapshot thật».
 
 ## Done (kèm bằng chứng)
 
-Trạng thái Linear từng issue «SNAPSHOT: Done / In Progress theo Linear lúc chốt».
+Trạng thái Linear lúc chốt: **AA-682 Done** (S254, S4 + S5 xong); **AA-996** In Progress, đóng sau khi verify hotfix
+#131 «ORCH: xác nhận Done»; **AA-997** tạo mới (Backlog, 11:25, Nghiệp đồng ý); các issue còn lại trong bảng
+(AA-993, AA-994, AA-979, AA-919, AA-995, AA-990, AA-790) vẫn In Progress «ORCH: xác nhận sau đồng bộ Linear».
 
 | Issue | Kết quả | Bằng chứng |
 |---|---|---|
@@ -38,14 +44,14 @@ Trạng thái Linear từng issue «SNAPSHOT: Done / In Progress theo Linear lú
 | AA-993 G4 | Booking `bk_noop_sleep` (Booking #121 `5aa2e69a`, Infra #449 TF apply 40564791553 có `JOB_TEST_KINDS`; Infra #454 bật → #455 về dry_run). | Job 300 s nhả đúng 1 lần, tiếp tục từ 215 s, `succeeded` — `g4-booking-proof.txt`. |
 | AA-993 G5 + Phase E | Guard deploy mới CIS #1081 `69dc6332`, Partner #99 `826df536`; root #290 `728ce9bd` (docs G5 + ADR 0017). | CIS Deploy Dev run 40577044359: `safe_to_deploy: true`, job đang chạy được nhả và nhận lại — `g5-cis-gate.txt`. |
 | AA-993 (log chi phí S1) | CIS #1079 `e22e5fb6`: slug `aa_internal` trong payload làm mất mọi dòng `llm_call_log` (bug cũ, không do G2). | Job `209d9e60` ghi đủ s1_generate / grounding / judge ($0,0514). |
-| AA-994 S1c + S2a | S1c eslint-kit CIS #1078 (bằng chứng đỏ run 40554868225 `aa-kit/no-raw-main`, rồi xanh); S2a vendor kit core vào Partner #102 `8af302ee`; kit core `"use client"` cho useMediaQuery CIS #1083 `a38efd49`. | Portal deploy xanh; check "Vendored CIS copies" «SNAPSHOT: xanh trên main Partner». |
+| AA-994 S1c + S2a | S1c eslint-kit CIS #1078 (bằng chứng đỏ run 40554868225 `aa-kit/no-raw-main`, rồi xanh); S2a vendor kit core vào Partner #102 `8af302ee`; kit core `"use client"` cho useMediaQuery CIS #1083 `a38efd49`. | Portal deploy xanh; check "Vendored CIS copies" xanh trên head Partner main `3d338504` (cùng Portal Build, Web Build). |
 | AA-979 §4.3 + §4.4 | `/trip`: Infra #451 apply 40573187449 (`CIS_API_URL` cho web), Partner #100 `2fb453f7`, CIS #1082 `0ef0d147` (307 → go-dev). Bỏ bridge EXTERNAL `cis-portal`: Partner #101 `c35ad2d5`, Infra #452 apply 40579274504 + redeploy crm api:69 (0 biến bridge). | Live: aa-cis `/trip` → 307 go-dev (giữ query), go-dev 200, partner-dev 404, robots `Allow /trip/`. |
 | AA-919 Releases tab | CIS #1076 `39dc01f0` (tab Releases, API có `evidence` + `summary`); sửa tràn bảng #1080 `1976bf94`; ô chọn tenant theo tên #1086 + `TenantSelect` cho 6 trang admin #1088; WM-19/WM-21 CIS #1084 + Infra #453 (mig 291/292). | Ảnh `docs/audits/2026-10-27-S254-aa919-releases/`. Vòng thử WM-22 qua API (E2E CIS admin): draft #2 (terra-family, t9_social) → evaluated → approved → active → rollback → release 0 active lại. R2 seeded-fault `3a72a697`: verdict fail / hard_stop / tune, $0,046 (đúng như mong đợi với lỗi cài sẵn). |
 | AA-784 (6 thẻ xuyên biên giới) | CIS #1074 `ecef8db1`; job `7f554a44` dọn 6/6, giữ country/tên. | $0,0039; comment Linear AA-784. |
-| AA-995 | Gộp ảnh trùng CIS #1073 `96eb3932` + TP #165 `1073dbc2` (deploy api:869 / worker:435); trang Golden Hour TP #168 `bb7d259b`; tràn 26 px ở `/destinations/bhutan` 390 → TP #169 `eae69868` + #170 `882f7b5d` (0 px); TP #171 (Poppins, giảm chuyển động, content-visibility, mở/đóng tất cả) «SNAPSHOT: SHA merge #171». | Cover điểm đến lệch id chuẩn = 0 (live); ảnh `docs/audits/2026-10-27-S254-aa995-pages/`. |
+| AA-995 | Gộp ảnh trùng CIS #1073 `96eb3932` + TP #165 `1073dbc2` (deploy api:869 / worker:435); trang Golden Hour TP #168 `bb7d259b`; tràn 26 px ở `/destinations/bhutan` 390 → TP #169 `eae69868` + #170 `882f7b5d` (0 px); TP #171 `be5cbc41` (Poppins, giảm chuyển động, content-visibility, mở/đóng tất cả; `/api/health` lúc chốt). | Cover điểm đến lệch id chuẩn = 0 (live); ảnh `docs/audits/2026-10-27-S254-aa995-pages/`. |
 | AA-990 (việc nhỏ) | Ảnh portal atom_replaced 4/4 (0 lỗi); `256f07bd` = nguồn chỉ 8 ngày (`source_skips_days`, không sửa); CIS #1089 `8aabaf0a` giữ chặng tự di chuyển (61 / 7.081 atom). | N1: 82/101 tour có route, BELOW_HALF 0; 2 tour transit-skip (Seoul–Busan, Oze–Nikko) cần luật mức tour; 14 tour chờ geocode — `docs/audits/2026-10-27-S254-aa990-close/`. |
 | Release PRs | TP #155 `f2024ad4`, Booking #95 `49871054`, Partner #64 `77df9ea2`, CIS #1049 `c3fae2c9` (release-only, không deploy). Dependabot gom vào Infra #446 `3a322860`, đóng #411/#412. | — |
-| Vercel | Region sfo1 cho CIS admin, Booking admin, TripPlanner (hiệu lực từ deploy kế). Retention 4 project: preview 2 tuần, production 1 tháng, canceled/errored 1 tuần (06:35). | Retention đặt xong 06:35 cho cả 4 project «SNAPSHOT: đọc lại cấu hình». |
+| Vercel | Region sfo1 cho CIS admin, Booking admin, TripPlanner (hiệu lực từ deploy kế). Retention 4 project: preview 2 tuần, production 1 tháng, canceled/errored 1 tuần (06:35). | Retention đặt xong 06:35 cho cả 4 project (checklist phiên; snapshot 11:40 không đọc lại cấu hình Vercel). |
 | H1 / H2 | AA-Partner main bắt buộc Portal Build + Web Build; AA-CIS-App main bắt buộc Frontend Lint. | Đặt xong 06:35 (checklist phiên). |
 
 ## Ship, chưa đóng issue (In Progress, còn slice)
@@ -61,19 +67,23 @@ Trạng thái Linear từng issue «SNAPSHOT: Done / In Progress theo Linear lú
     vì CIS chỉ sync Drive "CON" cho 7 nước — việc nội dung CIS) và #126 `7473755c` (DateField en-GB, thanh lọc 2 hàng,
     Export CSV 9 danh sách, bảng hoá đơn / trip-check vừa 1440).
   - Lát 4 + 5: Booking #127 (hồ sơ chuyến / proposals / trip checks; chặn approve version rỗng 422) và #128 (hoá đơn,
-    PDF, payment, thông báo, khoá staff bắt lý do, audit-log) — trong merge queue «SNAPSHOT: SHA merge + deploy».
-  - Lát 2 (Supplier + ma trận giá + picker): Booking #129 (bk-032) + Infra #458 → apply sau R2 → code PR, qua
-    `chain_w9.sh` «SNAPSHOT: bk-032 đã áp chưa».
+    PDF, payment, thông báo, khoá staff bắt lý do, audit-log): #128 `b5b2f8f4` + #127 `de3be3c3` merged, deploy xanh
+    (`/booking/health` git_sha `de3be3c3`).
+  - Lát 2 (Supplier + ma trận giá + picker): Booking #129 (bk-032) + Infra #458 `82400b9e` → DB Migrate check
+    40632088145 / apply 40632244244 (ready=bk-032, root bot #294) → code Booking #130 `d78ae200` deploy (booking:76).
+    Regression: `GET /catalog/trip-plans` → 503 `catalog_unavailable` (truy vấn LATERAL đọc view/cột CIS chưa grant cho
+    `booking`; stub CI che lỗi) → hotfix #131 (fail-soft + log SQLSTATE + stub khớp live) «ORCH: SHA + verify».
   - Còn: chụp lại 8 frame thiếu bằng chứng + chấm điểm audit cuối.
-- **AA-919 Writing memory.** Còn R2 bước C (≤ $2) `a720cfac` «SNAPSHOT: verdict + chi phí», rồi lượt R2 ≤ $10 thật +
-  targeted shadow run.
+- **AA-919 Writing memory.** R2 bước C (≤ $2) `a720cfac`: informative / completed / tune, $0,375 (khớp
+  `llm_call_log`), sạch. Còn: bước D (lượt R2 ≤ $10 thật) + targeted shadow run — S255.
 - **AA-990.** Luật mức tour cho chặng transit (2 tour N1) + kiểm lại sau lượt geocode retry 28–29/10.
 - **AA-790 vòng 7 (brand voice).** CIS #1085 merge, đối chứng r6b ($0,894, n=20) rồi r7; panel mù 9 arm (720 điểm):
   ai_tells đạt, brand_voice / reader_value không đạt luật ship → revert CIS #1087, vòng 6 giữ live —
   `docs/audits/2026-10-28-S254-aa790-r7-panel/`. Vòng sau sửa bộ sinh angle T8, không sửa prompt T9.
+- **AA-993.** G2–G5 chứng minh live; Phase E mới có ADR 0017 (Proposed). Còn G4b, Phase D, Phase E thực thi.
 - **AA-994.** Còn S2b trở đi.
 - **AA-979.** Đợt dọn từ 03/11.
-- **Audit geocode** (không issue riêng; đề xuất issue mới chờ Nghiệp đồng ý tạo): 9.545 tên = 7.924 resolved
+- **Audit geocode → AA-997** (tạo 11:25 khi Nghiệp đồng ý: "[Places] Geocode accuracy", Backlog, High): 9.545 tên = 7.924 resolved
   (7.272 Geoapify, 652 không ghi provider), 1.203 pending, 418 unknown. Độ đúng 7.924 tên ≈ 75% (CI 71–80%); Geoapify
   ≈ 91%, toạ độ LLM đề xuất ≈ 55–60% (3.770 dòng giữ ~1.400 / ~1.700 điểm sai). 1.621 tên chưa resolve chia 14 nhóm
   nguyên nhân; kế hoạch sửa 8 bước — `docs/audits/2026-10-28-S254-geocode-audit/` (§8). Chi phí audit $0.
@@ -95,26 +105,30 @@ Trạng thái Linear từng issue «SNAPSHOT: Done / In Progress theo Linear lú
 
 ## Trạng thái kiểm cuối phiên
 
-Xem `state-snapshot.md` «SNAPSHOT: đường dẫn». Tóm tắt (mốc giữa phiên 06:10: cis api:874 / worker:440 `0ef0d147`,
-schema 290; booking:72; crm api:69, web:37, portal:10; TP `eae69868`; bk-031 — đã cũ, thay bằng số cuối):
-- ECS: cis api «SNAPSHOT» / worker «SNAPSHOT» (`«SNAPSHOT SHA»`, api và worker cùng SHA), booking «SNAPSHOT»
-  (`«SNAPSHOT SHA»`), crm api «SNAPSHOT», web «SNAPSHOT», portal «SNAPSHOT». Rollout COMPLETED và là revision mới
-  nhất «SNAPSHOT».
-- Schema: CIS «SNAPSHOT» (292 sau 291/292), Booking «SNAPSHOT» (bk-031 hay bk-032), TripPlanner «SNAPSHOT tp-NNN»,
-  CRM «SNAPSHOT crm-NNN».
-- Vercel Production: CIS admin «SNAPSHOT», Booking admin «SNAPSHOT», TripPlanner «SNAPSHOT», portal «SNAPSHOT».
-- Bảng job: `shared.job` «SNAPSHOT queued/running», `booking.job` «SNAPSHOT», `crm.job` «SNAPSHOT»; wave mở «SNAPSHOT».
-- PR còn mở mỗi repo «SNAPSHOT».
-- Cố ý để BẬT cho phiên sau: «SNAPSHOT: cờ/route nào còn bật, nếu có».
+Xem `docs/audits/2026-10-28-S254-session-close/state-snapshot.md` (chụp 11:40 +07). Tóm tắt:
+- ECS: cis api :877 / worker :443 (`dev-8aabaf0a`, #1089; api và worker cùng SHA), booking :76 (`d78ae200`, #130),
+  crm api :69 (`c35ad2d5`), web :37 (`3d338504`), portal :10 (`8af302ee`). Cả 6 service 1/1, rollout COMPLETED, revision
+  đang chạy = revision mới nhất. Booking sau hotfix #131 «ORCH: task def + SHA».
+- Schema: CIS **292** (sau 291/292), Booking **bk-032**, TripPlanner **tp-020** (không đổi), CRM **crm-022** (không đổi).
+- Vercel Production: CIS admin `3e5976dc` (#1088), Booking admin `d78ae200` (#130), TripPlanner `be5cbc41` (#171);
+  portal chạy Fargate (`aa-crm-dev-portal:10`), Vercel `aa-cis-portal` chỉ là đường rollback tới 03/11.
+- Bảng job: `shared.job` 0 queued/running; `booking.job`, `crm.job`, wave mở «ORCH: xác nhận — snapshot chỉ đếm
+  `shared.job`».
+- PR còn mở: chỉ release (CIS #1075, Booking #116, TP #166, Partner #103) + bot root #291; Infra 0; Booking #131 hotfix
+  đang merge «ORCH».
+- Cố ý để BẬT cho phiên sau: `JOB_TEST_KINDS=1` trên Dev (CIS api + worker và Booking: `noop_sleep`, `bk_noop_sleep`);
+  Vercel retention 4 project; H1/H2 required checks; writer S1 v2 + `s1_generate` = sonnet-5-5; `PLACE_PIPELINE_AUTO=on`;
+  Writing memory release 0 active.
 
 ## Chi phí
 
 - LLM có log (`shared.llm_call_log`):
   - AA-790: r6b $0,894 + r7 $0,906 = **$1,80** (trần $2,00).
-  - AA-919 R2 seeded-fault `3a72a697`: $0,046; R2 bước C `a720cfac`: «SNAPSHOT $».
+  - AA-919 R2 seeded-fault `3a72a697`: $0,046; R2 bước C `a720cfac`: $0,375.
   - AA-993: G3 a3_atomize $0,0167; job S1 kiểm log `209d9e60` $0,0514.
   - AA-784 6 thẻ địa điểm: $0,0039.
-  - Mốc 06:10: tổng có log từ 23:00 = $1,0067 (r6b $0,894). Tổng cả phiên «SNAPSHOT $ từ `llm_call_log`».
+  - Mốc 06:10: tổng có log từ 23:00 = $1,0067 (r6b $0,894). Tổng các khoản đã biết ở trên ≈ $2,29 (AA-790 $1,80 + R2 $0,421 + AA-993 $0,068 + AA-784 $0,004); tổng cả phiên
+    theo `llm_call_log` «ORCH: $ từ `llm_call_log` 23:00 27/10 → chốt».
 - **Chi phí không có log:** 2 job S1 (17:18Z / 17:29Z, proof G2) mất dòng `llm_call_log` — đã trả tiền nhưng không đếm
   được; ước theo job `209d9e60` khoảng $0,05 mỗi job (ước, chưa verify).
 - Audit geocode và audit Figma Booking: $0 (agent đọc, không gọi geocoder / LLM trả tiền).
@@ -138,14 +152,15 @@ Chưa soạn — gom sang phiên kế tiếp cùng ngày (Nghiệp, 28/10).
 ## Việc cần làm đầu phiên sau (S255, theo thứ tự)
 
 1. **Nháp Jira S254** (gom từ phiên này) cùng nháp của S255, đưa Nghiệp duyệt một lần.
-2. **Kết các việc đang chạy lúc chốt S254:** Booking #127/#128 merge + deploy; bk-032 + code lát 2 AA-996; kết quả
-   AA-919 R2 bước C `a720cfac`.
-3. **Sửa độ chính xác geocode** theo kế hoạch `docs/audits/2026-10-28-S254-geocode-audit/` (§8) — tạo issue khi Nghiệp
-   đồng ý.
+2. **Kết AA-996:** nếu hotfix Booking #131 (503 `/catalog/trip-plans`) chưa verify live lúc chốt thì verify rồi đóng
+   AA-996 kèm bằng chứng; thêm test chạy truy vấn catalog trên DB thật (stub CI đã che lỗi grant).
+3. **AA-997 — sửa độ chính xác geocode** theo kế hoạch `docs/audits/2026-10-28-S254-geocode-audit/` (§8); kiểm lượt
+   geocode retry 28–29/10.
 4. **AA-919:** lượt R2 ≤ $10 + targeted shadow run.
 5. **AA-990:** luật mức tour cho chặng transit (Seoul–Busan, Oze–Nikko) + kiểm lại 14 tour sau lượt geocode retry
    28–29/10.
 6. **AA-790:** vòng sau qua bộ sinh angle T8.
-7. **AA-996:** chụp lại 8 frame thiếu bằng chứng + điểm audit Figma cuối.
+7. **Audit Figma Booking (sau AA-996):** chụp lại 8 frame thiếu bằng chứng + điểm audit cuối.
 8. **AA-994** S2b trở đi.
-9. **AA-979** đợt dọn từ 03/11; **rà chi phí AWS** khi phiên ≥ 01/11 (memory `infra-cost-audit-nov-2026`).
+9. **AA-993:** G4b, Phase D, Phase E thực thi (ADR 0017).
+10. **AA-979** đợt dọn từ 03/11; **rà chi phí AWS** khi phiên ≥ 01/11 (memory `infra-cost-audit-nov-2026`).
