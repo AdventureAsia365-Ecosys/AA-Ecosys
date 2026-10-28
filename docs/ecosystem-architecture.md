@@ -58,6 +58,16 @@ map in [onboarding](onboarding.md).
 
 ## 2. System diagram
 
+The deployment view with the official AWS Architecture Icons (AA-697). The same folder holds one view per repo:
+[AA-CIS-Infra](architecture/diagrams/infra.svg), [AA-CIS-App](architecture/diagrams/cis.svg),
+[AA-Booking](architecture/diagrams/booking.svg), [AA-TripPlanner-Web](architecture/diagrams/tripplanner.svg) and
+[AA-Partner](architecture/diagrams/partner.svg); sources, conventions and how to re-render them:
+[architecture diagrams](architecture/diagrams/README.md).
+
+![AA-Ecosys ecosystem architecture with AWS icons](architecture/diagrams/ecosystem.svg)
+
+The same view as a Mermaid flowchart (text, for readers that show no images):
+
 ```mermaid
 flowchart TB
   subgraph GH[GitHub org: AdventureAsia365-Ecosys]
