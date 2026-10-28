@@ -1,0 +1,15 @@
+AA-998 acc1 re-inventory after cleanup (28/10/2026 19:15 +07, SSO pqnghiep-admin, read-only)
+IAM roles (excluding AWSServiceRole*/AWSReservedSSO*): none
+IAM OIDC providers: 0
+S3 buckets: 0
+Lambda functions (us-west-1): 0
+CloudWatch log groups (us-west-1): 0
+Secrets Manager secrets (us-west-1): 0
+ECS task definitions (us-west-1): 0
+Budgets: acc1-any-spend-1usd = 1.0 USD (alarm only)
+Static access key of admin_nghiep: Inactive
+
+Follow-up 28/10 20:00 +07 (all regions scan):
+- Secrets Manager us-east-1: aa/dev/db_credentials (created 10/03/2026, last accessed 10/03/2026) -> scheduled for deletion, 7-day window (deletion date 04/11/2026).
+- CloudWatch Logs ap-southeast-1: RDSOSMetrics (0 bytes, leftover of an old RDS) -> deleted.
+- All other regions: 0 customer KMS keys, 0 Lambda, 0 log groups, 0 EC2, 0 EBS.

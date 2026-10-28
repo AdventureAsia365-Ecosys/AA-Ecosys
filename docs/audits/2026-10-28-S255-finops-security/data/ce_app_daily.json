@@ -1,0 +1,1414 @@
+{
+ "GroupDefinitions": [
+  {
+   "Type": "TAG",
+   "Key": "App"
+  }
+ ],
+ "ResultsByTime": [
+  {
+   "TimePeriod": {
+    "Start": "2026-10-01",
+    "End": "2026-10-02"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.5970688353",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-02",
+    "End": "2026-10-03"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.5044324168",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-03",
+    "End": "2026-10-04"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.2386220498",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-04",
+    "End": "2026-10-05"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.318755411",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-05",
+    "End": "2026-10-06"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.37663027",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-06",
+    "End": "2026-10-07"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.3647695041",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-07",
+    "End": "2026-10-08"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.3518338999",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-08",
+    "End": "2026-10-09"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.9802205545",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-09",
+    "End": "2026-10-10"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.7414238711",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-10",
+    "End": "2026-10-11"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.91845215",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-11",
+    "End": "2026-10-12"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.4713267154",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-12",
+    "End": "2026-10-13"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.6431566198",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-13",
+    "End": "2026-10-14"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "6.0040153",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-14",
+    "End": "2026-10-15"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "6.4049614141",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-15",
+    "End": "2026-10-16"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.4398092314",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.1321879724",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.8683596686",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.4912637896",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0304137824",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-16",
+    "End": "2026-10-17"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.4109458111",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3641417702",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.2164128562",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.1868440033",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0564503726",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-17",
+    "End": "2026-10-18"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.1624566481",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3586143457",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.1061063558",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0076033891",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$platform"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0102958024",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.0801323186",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0450990313",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-18",
+    "End": "2026-10-19"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.2534649931",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3566566756",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.1064605795",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0135780335",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.0768088786",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0462218237",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-19",
+    "End": "2026-10-20"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.4906870469",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3604075439",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.2242848618",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0139320016",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.2371426882",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0370210537",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-20",
+    "End": "2026-10-21"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.3781625722",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.357107725",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.1379745911",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0132728222",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.0626714895",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0320041242",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-21",
+    "End": "2026-10-22"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.5205521774",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3582335926",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.1139573684",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0132965384",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.1841799747",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0323833464",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-22",
+    "End": "2026-10-23"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.448102741",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3742607049",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.2157381274",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0004498485",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$ecosystem"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0102510632",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0135037346",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.2163379423",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0492940095",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-23",
+    "End": "2026-10-24"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.7512412831",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.381237186",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.1796587033",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.361592487",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$ecosystem"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0167232256",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0137482511",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.595258804",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0494203046",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-24",
+    "End": "2026-10-25"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.6415949708",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3804275252",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.284867342",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.7759671066",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$ecosystem"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0157832256",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0606180172",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.4203856889",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.049846173",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-25",
+    "End": "2026-10-26"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.7854228616",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3771744096",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.1987799328",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.6602559263",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$ecosystem"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0151582256",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3266973274",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.3405154235",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0520662018",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-26",
+    "End": "2026-10-27"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.8442455361",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.382031101",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.15524134",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.7609767906",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$ecosystem"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0144182256",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3304678599",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.4436763866",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.052733977",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-27",
+    "End": "2026-10-28"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.8016804439",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3744469381",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.1800384522",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.7436615156",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$ecosystem"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0148205912",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3178274415",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.2059457072",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0479565503",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  }
+ ],
+ "DimensionValueAttributes": []
+}

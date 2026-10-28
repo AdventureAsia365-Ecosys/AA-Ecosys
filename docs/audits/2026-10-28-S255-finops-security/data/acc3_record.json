@@ -1,0 +1,131 @@
+{
+ "GroupDefinitions": [
+  {
+   "Type": "DIMENSION",
+   "Key": "RECORD_TYPE"
+  }
+ ],
+ "ResultsByTime": [
+  {
+   "TimePeriod": {
+    "Start": "2026-08-01",
+    "End": "2026-09-01"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "Tax"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "1.68",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "1.68",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Usage"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "20.7179926571",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "20.7179926571",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": false
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-09-01",
+    "End": "2026-10-01"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "Tax"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Usage"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "51.4343503791",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "51.4343503791",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": false
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-01",
+    "End": "2026-10-28"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "Tax"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Usage"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "242.1298262176",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "242.1298262176",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  }
+ ],
+ "DimensionValueAttributes": []
+}

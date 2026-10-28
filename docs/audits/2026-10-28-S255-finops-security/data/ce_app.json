@@ -1,0 +1,206 @@
+{
+ "GroupDefinitions": [
+  {
+   "Type": "TAG",
+   "Key": "App"
+  }
+ ],
+ "ResultsByTime": [
+  {
+   "TimePeriod": {
+    "Start": "2026-08-01",
+    "End": "2026-09-01"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "140.2209643786",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "140.2209643786",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": false
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-09-01",
+    "End": "2026-10-01"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "134.9600578984",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "134.9600578984",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": false
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-01",
+    "End": "2026-10-28"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "98.8440353285",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "98.8440353285",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "4.5569274902",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "4.5569274902",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "26.9878801791",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "26.9878801791",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "3.3029036746",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "3.3029036746",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$ecosystem"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "0.0871545568",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "0.0871545568",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "1.1245454165",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "1.1245454165",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$platform"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "0.0102958024",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "0.0102958024",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "40.541163095",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "40.541163095",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner"
+     ],
+     "Metrics": {
+      "NetUnblendedCost": {
+       "Amount": "0.5809107505",
+       "Unit": "USD"
+      },
+      "UnblendedCost": {
+       "Amount": "0.5809107505",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  }
+ ],
+ "DimensionValueAttributes": []
+}

@@ -1,0 +1,889 @@
+{
+ "GroupDefinitions": [
+  {
+   "Type": "TAG",
+   "Key": "App"
+  },
+  {
+   "Type": "DIMENSION",
+   "Key": "SERVICE"
+  }
+ ],
+ "ResultsByTime": [
+  {
+   "TimePeriod": {
+    "Start": "2026-10-20",
+    "End": "2026-10-28"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "App$",
+      "AWS CloudTrail"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "AWS Cost Explorer"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "AWS Glue"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "AWS Key Management Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.002043",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.0674505751",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "AWS Step Functions"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000034",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon Cognito"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2565",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon DynamoDB"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000000279",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon ElastiCache"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.022",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon Elastic Container Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.1062786109",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon Relational Database Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0053366859",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon Simple Email Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0129",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon Simple Notification Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000772",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon Simple Queue Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000020132",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon Simple Storage Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2229910252",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Amazon Virtual Private Cloud"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.86865695",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "6.3397728462",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "CloudWatch Events"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000009",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Cohere Embed 4 Model (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.06706152",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$",
+      "Tax"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking",
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.1837723765",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking",
+      "Amazon API Gateway"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0326188687",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking",
+      "Amazon EC2 Container Registry (ECR)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0095454171",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking",
+      "Amazon Elastic Container Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.7390345566",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking",
+      "Amazon Simple Storage Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0013179887",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$booking",
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0186299748",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "AWS Certificate Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "AWS Lambda"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0003394",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.7246903552",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "Amazon API Gateway"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3546166619",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "Amazon CloudFront"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0137676502",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "Amazon EC2 Container Registry (ECR)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2871345226",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "Amazon ElastiCache"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.0216",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "Amazon Elastic Container Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "11.7724255273",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "Amazon Elastic File System"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000004775",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "Amazon Simple Queue Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00038",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "Amazon Simple Storage Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.1192751865",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.172026076",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$cis",
+      "CloudWatch Events"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm",
+      "AWS Certificate Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm",
+      "AWS Key Management Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.477620928",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm",
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.6086171501",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm",
+      "Amazon Bedrock"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2361",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm",
+      "Amazon CloudFront"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0896305347",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm",
+      "Amazon EC2 Container Registry (ECR)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0110584745",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm",
+      "Amazon Elastic Container Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.8305408089",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm",
+      "Amazon Simple Storage Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0291316279",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$crm",
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0202041505",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$ecosystem",
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0871545568",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity",
+      "AWS Lambda"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000934",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity",
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.1850755353",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity",
+      "AWS WAF"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.9041004906",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity",
+      "Amazon Cognito"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$identity",
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0001625664",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "AWS Certificate Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "AWS Lambda"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000016",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.1083431704",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "AWS WAF"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.6672344286",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "EC2 - Other"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.3801548486",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "Amazon Elastic Compute Cloud - Compute"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.9976968786",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "Amazon Elastic Load Balancing"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "9.6652284151",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "Amazon Relational Database Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "9.6666057577",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "Amazon Route 53"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.1099304",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "Amazon Simple Email Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0235424091",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "Amazon Simple Notification Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000274484",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "Amazon Simple Storage Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0547217093",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$shared",
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.7954843509",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner",
+      "AWS Lambda"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0013786",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner",
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2978555251",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner",
+      "Amazon API Gateway"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0161768294",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner",
+      "Amazon Simple Storage Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0477039481",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "App$tripplanner",
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0025897842",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  }
+ ],
+ "DimensionValueAttributes": []
+}
