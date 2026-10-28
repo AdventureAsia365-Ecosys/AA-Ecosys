@@ -22,8 +22,10 @@ CI làm, không ai chạy tay: workflow **DB Schema Dump** của AA-CIS-Infra (`
 chạy **mỗi đêm** và **sau mỗi lần DB Migrate `apply` thành công**. Nó chạy `db/schema_dump.py` (chỉ đọc catalog, không
 đọc dữ liệu dòng) trong một ECS task tạm, sinh Markdown bằng `db/gen_schema_reference.py`, và khi CẤU TRÚC đổi thì
 mở/cập nhật PR trên repo gốc (nhánh `bot/db-schema-reference`). Việc của agent:
-1. Sau một migration: chờ PR `bot/db-schema-reference` (hoặc chạy tay workflow `DB Schema Dump`), merge nó, rồi mới
-   viết code dựa trên cột mới (D8 bước 5, Part A MIG-4).
+1. Sau một migration: chờ PR `bot/db-schema-reference` (hoặc chạy tay workflow `DB Schema Dump`). Sau một DB Migrate
+   `apply`, PR đó tự merge (ci-bot, AA-993 M1, ADR 0017 d9 / 0011a) khi sạch: run này mở PR, drift không đổi, design
+   ERD xanh, chỉ file sinh tự động, mọi check root xanh. Không tự merge (run summary ghi lý do) → agent merge tay. Chỉ
+   sau khi PR đã merge mới viết code dựa trên cột mới (D8 bước 5, Part A MIG-4).
 2. Nghi file lỗi thời mà chưa có PR: chạy tay workflow (input `publish=true`), không tự viết script dump.
 Script cũ `.tmp-session/s209_*` đã thôi dùng.
 
