@@ -1,8 +1,8 @@
 {
  "updated": "2026-10-28",
- "session": "S254",
- "next_session": "S255",
- "source": "Linear (28/10/2026, S254 close) + docs/backlog/README.md + docs/audits/2026-10-28-S254-session-close/state-snapshot.md + docs/sessions/2026-10-28-S254-booking-figma-job-resume-releases-geocode-audit.md + .tmp-session/S254-checklist.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
+ "session": "S255",
+ "next_session": "S256",
+ "source": "Linear (28/10/2026, S255 close) + docs/backlog/README.md + docs/audits/2026-10-28-S255-session-close/state-snapshot.md + docs/sessions/2026-10-28-S255-acc1-removal-security-baseline-dead-tables-docs-reader.md + .tmp-session/S255-checklist.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -50,7 +50,7 @@
   {
    "id": "M1b",
    "name": "SDLC / FinOps",
-   "window": "S248–S257 (AA-896 theo ngày ≥01/11)",
+   "window": "S248–S257 (AA-896 theo ngày ≥01/11; AA-998 đóng đầu tháng 12)",
    "status": "active",
    "criteria": [
     {
@@ -331,14 +331,24 @@
    "text": "Dọn dẹp portal (runbook §4.5): PORTAL_API_KEY_SIGNIN=false, xoá project Vercel aa-cis-portal + biến VERCEL_PORTAL_*, xoá portal/ đông lạnh trong CIS, đảo guard test, 301 partner-dev. → portal., chuyển origin mail OAuth, cập nhật CONTEXT.md + ecosystem-architecture"
   },
   {
-   "due": "28–29/10 → S255",
+   "due": "hằng ngày (credit Geoapify) → S256",
    "issue": "AA-997",
-   "text": "Lượt geocode retry cho 1.203 tên pending (1.177 unknown_to_model, 20 outside_country_polygon, 4 Tibet): đọc kết quả, kiểm lại 14 tour N1 của AA-990, đưa số vào AA-997"
+   "text": "Job place_relocate (toạ độ chỉ từ geocoder) chạy theo credit Geoapify miễn phí mỗi ngày: dry run 3.842 dòng / 3.607 request / $0 (~3 ngày); Laos dừng ở trần ngày, tự chạy lại 29/10 00:11Z (1 dòng queued trong shared.job lúc chốt là có chủ đích). Laos xong → apply relocate mọi nước → audit lại (mục tiêu ≥ 90%) → AA-990 recheck_14. Lượt retry 28–29/10: 1.203 tên pending không đổi, nên đi đường relocate"
   },
   {
    "due": "phiên đầu ≥01/11 (≈S257)",
    "issue": "AA-896",
-   "text": "Audit cost tháng 8/9/10 theo tag App + dịch vụ (acc2) + acc3 Bedrock + credits, giải thích từng bước nhảy"
+   "text": "Audit cost tháng 8/9/10 theo tag App + dịch vụ (acc2) + acc3 Bedrock + credits, giải thích từng bước nhảy; cùng AA-838 + AA-665. S255 đã có budget + anomaly (AA-896), trang Cost Operations (AA-665), capacity review đầu (AA-838); acc2 ~8,7 USD/ngày ≈ 260 USD/tháng từ tháng 11"
+  },
+  {
+   "due": "04/11",
+   "issue": "AA-998",
+   "text": "Secret acc1 cuối (us-east-1) hết hạn chờ xoá; không làm gì trừ khi cần khôi phục trước hạn"
+  },
+  {
+   "due": "đầu tháng 12 (phiên đầu ≥01/12)",
+   "issue": "AA-998",
+   "text": "Cost Explorer acc1 tháng 11/2026 = 0 USD (tháng 10: 0,76 USD, toàn Bedrock dự phòng trước khi gỡ; budget cảnh báo 1 USD vẫn bật) → Done-when cuối của AA-998 → đóng"
   },
   {
    "due": "hằng tuần",
@@ -362,15 +372,30 @@
   },
   {
    "due": "trước prod",
+   "issue": "AA-873",
+   "text": "GuardDuty do tech lead quyết trước prod (~15–20 USD/tháng, báo giá docs/audits/2026-10-28-S255-finops-security/). Đang TẮT: S255 bật nhầm vài phút khi chưa có \"có\" riêng, đã gỡ (trong 30 ngày dùng thử, không phí). Không bật khi chưa có đồng ý riêng cho mục này"
+  },
+  {
+   "due": "trước prod",
    "issue": "",
    "text": "Xoay GitHub OAuth token và mật khẩu master RDS (lộ trong transcript S240; D-02/D-03: giữ tới prod)"
   }
  ],
  "waiting": [
   {
-   "who": "Nghiệp",
-   "text": "Nháp Jira S254 chưa soạn (Nghiệp 10:40: gom sang phiên kế tiếp cùng ngày) → S255 soạn nháp S254 + S255, duyệt một lần",
+   "who": "Tech lead",
+   "text": "Nháp Jira S254 + S255 (6 comment PR-22…PR-27, docs/audits/2026-10-28-S255-session-close/jira-drafts.md) chờ duyệt → agent đăng (S256 #1); chưa đăng",
    "issue": ""
+  },
+  {
+   "who": "Tech lead",
+   "text": "Duyệt danh sách quyết định D1–D13 của capacity review đầu tiên (D1 giữ db.t4g.small … D13 nâng pg_stat_statements.max 5.000 → 10.000 ở lần reboot kế), docs/audits/2026-10-28-S255-aa838-capacity/ §4",
+   "issue": "AA-838"
+  },
+  {
+   "who": "Tech lead",
+   "text": "GuardDuty có / không (~15–20 USD/tháng, báo giá docs/audits/2026-10-28-S255-finops-security/); tắt tới khi có \"có\" riêng cho mục này",
+   "issue": "AA-873"
   },
   {
    "who": "Nghiệp",
@@ -434,6 +459,27 @@
   }
  ],
  "log": [
+  {
+   "session": "S255",
+   "date": "28/10/2026",
+   "closed": [
+    "AA-850"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-998"
+   ],
+   "reopened": [],
+   "notes": [
+    "Done AA-850 (Claude Code, Ultracode; 12:50 → ~21:00, chạm hạn mức 2 lần, Claude Code khởi động lại ~19:10): registry (root #299/#300) → quarantine mig 294 (CIS #1098 + Infra #464, apply 40672078317; 10/10 bảng ở schema retired, 17 dòng giữ) → drop mig 296 không chờ 14 ngày (tech lead; CIS #1101 + Infra #469, apply 40681142155, snapshot db-migrate-296-40681142155-1 giữ tới 2027-04-26; 10/10 exists=f) → xoá 4 schema rỗng mig 299 (CIS #1103 + Infra #475, review độc lập ship + sửa S1, apply 40691807177, snapshot db-migrate-299-40691807177-1; 0 schema cũ, 299 đăng ký)",
+    "Tạo AA-998 (tech lead yêu cầu, duyệt mọi đề xuất xoá): gỡ acc1 khỏi hệ sinh thái — audit 99 tham chiếu; cắt đường gọi CIS #1102 + mig 295, TP #174, Infra #466; xoá acc1 đợt 1 + 2 (destroy 7 tài nguyên + bucket state), Infra #476 xoá thư mục root, secret us-east-1 lên lịch xoá 04/11; kiểm kê lại sạch; ADR 0001a. 4/5 Done-when, còn CE acc1 tháng 11 = 0 (đầu tháng 12)",
+    "Ship, chưa đóng: AA-997 geocoder-only + guard tuyến + lọc non-place (#1092), relocate theo credit ngày; AA-990 luật transit mức tour (#1091, 53 tour $0,057); AA-993 G4b (crm-023); AA-994 S2b (Partner #108) + bỏ mã issue khỏi UI 4 app; AA-995 polish #172; AA-919 bước D + shadow + sửa judge kappa 0,235; AA-920 WM-26 (#1099); AA-790 r8 FAIL → cờ tắt, r6 giữ ($1,629); AA-665 Cost Operations (#1094/#1097, mig 293); AA-896 budget + anomaly acc3; AA-838 capacity review (#298) + alarm crm_app; AA-873 BPA + Access Analyzer + trail đa vùng KMS + Object Lock, GuardDuty TẮT; AA-671 Marketplace (Partner #109); AA-898 /admin/docs (#1100, Docs sync 99 object, rà 98 trang root #303, #1104 EN/VI đang merge)",
+    "Không issue: AA-996 follow-up perf guard catalog Booking #132 + sửa câu đọc 994 ms #134 (15/16 đường đọc ≤ 152 ms); release ×4 (CIS 0.13.0, Booking 0.9.0, Partner 0.7.0, TP 0.10.0); Secret Scan báo giả #1090; công cụ docs lang/translation_of sync 4 repo. Luật mới: admin hiện ID tài khoản AWS (không nhãn acc1/2/3), UI không hiện mã issue, tài liệu công ty nói vai trò, docs thân tiếng Anh + bản .vi.md",
+    "Live lúc chốt (20:08 +07): CIS api :890 / worker :456 844ce1b1, schema 299; Booking :80 39a15d27 bk-032; CRM api :72 / web :40 2556d31a crm-023; portal :12 a33ccf4a; TP tp-020 (Lambda deploy AA-998); shared.job 1 place_relocate queued có chủ đích, 0 wave. LLM có log ≈ $2,18; AWS mới/tháng: KMS CloudTrail ~1 USD, alarm crm_app ~0,10 USD; acc1 0,76 USD tháng 10. Nháp Jira S254 + S255 chờ tech lead duyệt",
+    "Sự cố: agent tự bật GuardDuty khi chưa có \"có\" riêng → gỡ sau vài phút (không phí, bài học + memory); chạm hạn mức 2 lần (workflow resume được); KMS key CloudTrail phải tạo local bằng MFA admin (role CI vướng lockout check); chạy nhầm workflow rà docs với tham số giữ chỗ; zsh không tách từ (4 lần)",
+    "S256 theo thứ tự: duyệt + đăng nháp Jira → ship/verify CIS #1104 + chụp trang owner → đóng AA-898 → đóng trọn AA-665 (trigger 25/09), AA-920 (WM-25 mig 297 + Check now), AA-995 (ảnh 960w/AVIF, LCP mobile ≤ 2,5 s), AA-671 (bộ lọc + ảnh bìa), view catalog.v_tour_place_name cho Booking (mig 298) → i18n toàn admin trong kit → AA-997 relocate mọi nước + audit lại, rồi AA-990 recheck_14 → AA-919 rà 13 cặp hiệu chuẩn → AA-873 triage Access Analyzer + thử cảnh báo, GuardDuty (tech lead) → AA-993 Phase E → AA-838 D1–D13 (tech lead) → rà chi phí tháng 10 từ 01/11 → đầu tháng 12: acc1 tháng 11 = 0 → đóng AA-998"
+   ]
+  },
   {
    "session": "S254",
    "date": "28/10/2026",
@@ -919,6 +965,18 @@
  ],
  "issues": [
   {
+   "id": "AA-998",
+   "title": "[Infra] Remove acc1 (personal AWS account) from the whole ecosystem: audit, cut over to acc2/acc3, delete every acc1 resource",
+   "status": "In Progress",
+   "priority": "High",
+   "project": "data",
+   "milestone": "M1b",
+   "session": "later",
+   "size": "L",
+   "next": "L7 · tạo S255 (tech lead yêu cầu, duyệt mọi đề xuất xoá): audit 99 tham chiếu (CIS 35, Infra 23, root 23, TP 10; Booking/Partner sạch); cắt đường gọi CIS #1102 + mig 295 (chỉ acc3, admin hiện ID tài khoản lấy lúc chạy), TP #174, Infra #466; xoá trên acc1 đợt 1 + 2 (Terraform destroy 7 tài nguyên + bucket state), xoá thư mục root (Infra #476), secret cuối (us-east-1) lên lịch xoá 04/11; kiểm kê lại sạch; ADR 0001a. 4/5 Done-when. Còn: Cost Explorer acc1 tháng 11 = 0 (kiểm đầu tháng 12) → đóng",
+   "needs": ""
+  },
+  {
    "id": "AA-816",
    "title": "Staff user management UI + Cognito cutover (retire create_staff_user.py)",
    "status": "In Progress",
@@ -951,7 +1009,7 @@
    "milestone": "M1b",
    "session": "≥01/11",
    "size": "S",
-   "next": "L7 · First session ≥01/11 (≈S255, slotted by date): cost report Aug/Sep/Oct per App tag and service, acc3 Bedrock + credits, unit costs",
+   "next": "L7 · S255: budget tổng 300 USD + cảnh báo FORECASTED, budget identity; acc3 SNS aa3-cost-alerts (đã xác nhận) + anomaly IMMEDIATE ≥ 15 USD; tư vấn FinOps + bảo mật docs/audits/2026-10-28-S255-finops-security/ (acc2 ~8,7 USD/ngày ≈ 260 USD/tháng từ tháng 11). Tiếp: báo cáo tháng 8/9/10 theo tag App + dịch vụ + chi phí đơn vị ở phiên đầu ≥01/11",
    "needs": "Decision list"
   },
   {
@@ -981,13 +1039,13 @@
   {
    "id": "AA-665",
    "title": "Cost Operations — budgets, DFS/Jev/LLM/AWS spend, research triggers audit, alerts (reopened)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "portal",
    "milestone": "M5",
-   "session": "≥01/11",
+   "session": "S256",
    "size": "L",
-   "next": "L7 · First session ≥01/11 (≈S255): Cost Operations page (reopened)",
+   "next": "L7 · S255: trang Cost Operations CIS #1094 (mig 293) + #1097, verify live 200 (forecast, DFS runs). Done-when chưa đạt: vụ 25/09 ($49,02, 1.170 lệnh) chưa quy được trigger (attribution none). Tiếp: suy luận trigger từ pipeline_jobs + tenant_tour_versions + llm_call_log, rồi rà chi phí tháng 10 từ 01/11",
    "needs": ""
   },
   {
@@ -1005,14 +1063,14 @@
   {
    "id": "AA-898",
    "title": "Docs reader page in the CIS admin — S3 sync, manifest, /admin/docs",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "portal",
    "milestone": "M5",
-   "session": "later",
+   "session": "S256",
    "size": "M",
-   "next": "/admin/docs reader page",
-   "needs": "Bucket (~0.01 USD/month)"
+   "next": "L7 · S255: /admin/docs CIS #1100 + Infra #465 (role docs-sync, đọc prefix docs-reader/) + root #302 (Docs sync 99 object); live manifest 200 (88 trang, không trang owner), viewer 403; rà 98 trang (root #303: 55 sửa, 31 đúng, 12 cần quyết, 4 bản .vi.md). CIS #1104 (nút EN/VI, Mermaid, callout, quyền đọc owner Dev cho E2E admin) đang trong merge queue lúc chốt. Tiếp: ship/verify #1104, chạy spec admin-evidence chụp trang owner → đóng",
+   "needs": "12 trang cần quyết"
   },
   {
    "id": "AA-880",
@@ -1077,38 +1135,26 @@
   {
    "id": "AA-873",
    "title": "Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, CloudTrail",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "data",
    "milestone": "M5",
-   "session": "S259",
+   "session": "S256",
    "size": "M",
-   "next": "L3 · S259 after the GuardDuty quote; reuse the KMS/alarm pattern of AA-932",
-   "needs": "Cost per item"
-  },
-  {
-   "id": "AA-850",
-   "title": "Dead Table Registry + wave-1 quarantine",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M5",
-   "session": "later",
-   "size": "M",
-   "next": "Dead Table Registry + wave-1 quarantine (unblocked by S22)",
-   "needs": "Approve the DRY RUN"
+   "next": "L3 · S255: bootstrap IAM (apply local MFA), PR1 S3 BPA cấp account 4/4 + Access Analyzer ACTIVE + rule cảnh báo IAM/SG/root/trail, PR2 CloudTrail đa vùng + KMS + Object Lock GOVERNANCE 365 ngày (key tạo local vì role CI vướng lockout check), pin AMI NAT + tắt ECS agent trên NAT; GuardDuty TẮT (bật nhầm vài phút, đã gỡ, không phát sinh phí). Tiếp: triage phát hiện Access Analyzer, thử cảnh báo IAM/SG; GuardDuty do tech lead quyết trước prod",
+   "needs": "GuardDuty có / không (tech lead)"
   },
   {
    "id": "AA-838",
    "title": "Capacity review (monthly), pg_stat_statements (weekly), access review (quarterly); first capacity review",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Low",
    "project": "data",
    "milestone": "M5",
-   "session": "≥01/11",
+   "session": "S256",
    "size": "M",
-   "next": "L7 · First session ≥01/11 (≈S255): first capacity review",
-   "needs": ""
+   "next": "L7 · S255: capacity review đầu tiên + probe (root #298, docs/audits/2026-10-28-S255-aa838-capacity/), alarm kết nối crm_app (Infra #461), nhịp rà soát vào nghi thức phiên. Tiếp: tech lead duyệt danh sách D1–D13; rà chi phí/dung lượng tháng 10 từ 01/11",
+   "needs": "Duyệt D1–D13 (tech lead)"
   },
   {
    "id": "AA-881",
@@ -1177,22 +1223,22 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S255",
+   "session": "S257",
    "size": "L",
-   "next": "L1 · S254: round 7 (CIS #1085) so với đối chứng r6b ($0,894, n=20), panel mù 9 arm / 720 điểm: ai_tells đạt, brand_voice / reader_value không đạt luật ship → revert CIS #1087, vòng 6 giữ live; $1,80. Tiếp: sửa bộ sinh angle T8, không sửa prompt T9",
+   "next": "L1 · S255: vòng 8 qua bộ sinh angle T8 (cờ T8_ANGLE_BRIEF_MODE): A/B + panel mù $1,629 — ai_tells 5,8 đạt; brand_voice 6,83, reader_value −0,27, source_fidelity −0,30 trượt → FAIL, cờ tắt, vòng 6 giữ live (docs/audits/2026-10-28-S255-aa790-r8-panel/). Tiếp: không nằm trong thứ tự S256; chọn đòn bẩy kế tiếp từ báo cáo r8",
    "needs": "LLM judge vs deterministic rubric"
   },
   {
    "id": "AA-671",
    "title": "Marketplace redesign — catalog grid with filters, detail drawer",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "portal",
    "milestone": "M4",
-   "session": "S259",
+   "session": "S256",
    "size": "M",
-   "next": "LP · S259 Marketplace redesign in AA-Partner/portal (after P2a)",
-   "needs": "Merge with Browse Tours? (Ms. Thư)"
+   "next": "LP · S255: Marketplace redesign trong portal AA-Partner, Partner #109 a33ccf4a (portal :12). Tiếp: bộ lọc + ảnh bìa",
+   "needs": "Gộp với Browse Tours? (business owner)"
   },
   {
    "id": "AA-814",
@@ -1297,21 +1343,21 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S255",
+   "session": "S256",
    "size": "L",
-   "next": "L1 · S254: tab Releases CIS #1076 (API evidence + summary), sửa tràn #1080, TenantSelect #1086/#1088, WM-19/WM-21 #1084 + mig 291/292; vòng WM-22 qua API (draft #2 → active → rollback, release 0 active lại); R2 seeded-fault fail/hard_stop/tune $0,046; R2 bước C informative/completed/tune $0,375 sạch. Tiếp: R2 bước D (≤$10) + targeted shadow",
+   "next": "L1 · S255: R2 bước D run 7811e7c5 informative/completed/tune ($0,216); targeted shadow 575b462c 3/3 pass ($0,057); sửa judge CIS #1096 → chạy lại de6265e6 kappa −0,073 → 0,235 ($0,221), vẫn < 0,6 nên judge_counts=false. Tiếp: rà nhãn/rubric 13 cặp hiệu chuẩn",
    "needs": "Each release"
   },
   {
    "id": "AA-920",
    "title": "[Writing memory] Inject approved rules into the four writers with a post-activation check",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S257",
+   "session": "S256",
    "size": "M",
-   "next": "L1 · Writing Memory P2 at S257 if go",
+   "next": "L1 · S255: WM-26 tiêm luật vào writer CIS #1099; replay 0 byte diff cả 4 writer (a1/t2/t9_blog/t9_social); kiểm sau kích hoạt not_applicable, $0. Tiếp: WM-25 (mig 297) + nút \"Check now\"",
    "needs": ""
   },
   {
@@ -1669,9 +1715,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M2a",
-   "session": "S255",
+   "session": "S256",
    "size": "M",
-   "next": "L5 · S254: ảnh portal atom_replaced 4/4, 256f07bd = nguồn chỉ 8 ngày (không sửa), giữ chặng tự di chuyển CIS #1089 (61/7.081 atom); N1 82/101 tour có route, BELOW_HALF 0. Tiếp: luật mức tour cho chặng transit (Seoul–Busan, Oze–Nikko) + kiểm lại 14 tour sau lượt geocode retry 28–29/10",
+   "next": "L5 · S255: luật transit mức tour (Seoul–Busan, Oze–Nikko) CIS #1091; ảnh hưởng 53/892 tour, 157 chặng, 0 lỗi; rebuild 53 tour ($0,057). Tiếp: recheck_14 (14 tour chờ geocode) sau khi AA-997 relocate xong",
    "needs": ""
   },
   {
@@ -1681,9 +1727,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "S255",
+   "session": "S256",
    "size": "L",
-   "next": "L7 · S254 chứng minh live G2/G3 (CIS #1077: job S1 nhả ở writer_done và nhận lại đúng bước; a3_atomize nhả rồi tiếp tục sau 116 s, 0 fingerprint trùng), G4 (Booking bk_noop_sleep #121 + Infra #449: nhả 1 lần, tiếp tục từ 215 s, succeeded), G5 (guard deploy mới CIS #1081, Partner #99, Booking #121; run 40577044359 safe_to_deploy: true), Phase E = ADR 0017 (Proposed, root #290); sửa mất log chi phí S1 (#1079). Tiếp: G4b, Phase D, Phase E thực thi",
+   "next": "L7 · S255: G4b live — send marker crm-023 (Partner #105/#107, DB Migrate apply 40647798608, crm api :71), crm_dispatch không còn chặn deploy. Phase E (I1/M1/M2a) đã code + review, chưa ship. Tiếp: ship Phase E; Phase D chưa có trong kết quả S255",
    "needs": ""
   },
   {
@@ -1693,10 +1739,10 @@
    "priority": "High",
    "project": "portal",
    "milestone": "M4",
-   "session": "S255",
+   "session": "S256",
    "size": "XL",
-   "next": "LP · S254: S1c eslint-kit CIS #1078 (bằng chứng đỏ rồi xanh), S2a vendor kit core vào Partner #102 (\"Vendored CIS copies\" xanh), useMediaQuery \"use client\" #1083; H1 + H2 đã đặt. Tiếp: S2b trở đi, rồi H3",
-   "needs": "H3 branch protection (Nghiệp)"
+   "next": "LP · S255: S2b kit lint mức error ở Partner #108 (run đỏ/xanh 40651211722/40651704926); bỏ mã issue (AA-xxx) khỏi UI ở CIS #1102, Partner #110, Booking #136, TripPlanner #176. Tiếp: i18n toàn admin trong kit (EN mặc định, VI thứ hai), dọn chuỗi VI viết cứng; rồi S3 và H3",
+   "needs": "H3 branch protection (tech lead)"
   },
   {
    "id": "AA-995",
@@ -1705,21 +1751,21 @@
    "priority": "High",
    "project": "tpbk",
    "milestone": "M4",
-   "session": "S255",
+   "session": "S256",
    "size": "L",
-   "next": "L5 · S254: các trang còn lại theo Golden Hour TP #168, tràn 26 px /destinations/bhutan 390 → #169/#170 (0 px), polish TP #171 be5cbc41 (Poppins, giảm chuyển động, content-visibility, mở/đóng tất cả ngày); dedupe ảnh ở reader CIS #1073 + TP #165. Tiếp: rà cuối → đóng",
+   "next": "L5 · S255: polish TP #172 merged. Chưa đóng: LCP mobile chưa đạt. Tiếp: ảnh 960w / AVIF để LCP mobile ≤ 2,5 s, rồi đóng",
    "needs": ""
   },
   {
    "id": "AA-997",
    "title": "[Places] Geocode accuracy: coordinates from the geocoder only, route-coherence guard, pre-filter non-places",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "tpbk",
    "milestone": "M2b",
-   "session": "S255",
+   "session": "S256",
    "size": "L",
-   "next": "L2 · tạo S254 (Nghiệp đồng ý): audit toàn bộ 7.924 tên đã resolve ≈ 75% đúng (CI 71–80%); Geoapify ≈ 91%, toạ độ LLM đề xuất ≈ 55–60%; 1.621 tên chưa resolve chia 14 nhóm. Kế hoạch 8 bước: toạ độ chỉ từ geocoder, guard độ liền mạch tuyến, lọc trước tên không phải địa điểm (docs/audits/2026-10-28-S254-geocode-audit/ §8); kiểm lượt retry 28–29/10",
+   "next": "L2 · S255: toạ độ chỉ từ geocoder + guard liền mạch tuyến + lọc trước tên không phải địa điểm, CIS #1092 (review 2 lần), live api :879 / worker :445; relocate dry run 3.842 dòng / 3.607 request Geoapify / $0 (~3 ngày); Laos chạy theo credit Geoapify mỗi ngày (tự chạy lại 29/10 00:11Z). Tiếp: apply relocate mọi nước khi Laos xong, audit lại (mục tiêu ≥ 90%)",
    "needs": ""
   }
  ]
