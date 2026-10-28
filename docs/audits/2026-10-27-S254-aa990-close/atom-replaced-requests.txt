@@ -1,0 +1,12 @@
+TENANT aa_internal requests 0 not_live 0
+TENANT atlas-hearth requests 6 not_live 1
+REQ atlas-hearth e6919aa3-576e-420d-90eb-57c36cdbc513 approved linkedin 2026-10-12 07:40:08.284264+00:00
+TENANT exploreasia-co requests 0 not_live 0
+TENANT s235-throwaway-1791941379 requests 0 not_live 0
+TENANT terra-family requests 12 not_live 1
+REQ terra-family 9e957fac-596a-4238-8b89-4aa775dab78f approved linkedin 2026-10-12 07:40:48.956295+00:00
+TENANT test-1 requests 0 not_live 0
+TENANT trail-pulse requests 3 not_live 0
+TENANT wanderlux-travel requests 0 not_live 0
+TENANT wildkind-travel requests 4 not_live 1
+REQ wildkind-travel a7ba72cf-2777-4688-9e34-74b045524322 pending_choice linkedin 2026-10-12 09:53:23.826327+00:00

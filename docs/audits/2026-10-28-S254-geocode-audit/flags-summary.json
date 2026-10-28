@@ -1,0 +1,440 @@
+{
+ "audit": "S254 geocode audit, CIS geo.place_name",
+ "date": "2026-10-28",
+ "scope": {
+  "total": 9545,
+  "resolved": 7924,
+  "pending": 1203,
+  "unknown": 418
+ },
+ "rule_flags": {
+  "dup_coords": {
+   "rows": 927,
+   "coordinate_groups": 243
+  },
+  "precision_area_site": 755,
+  "provenance_null": 652,
+  "tour_spread": 260,
+  "country": 38,
+  "bbox": 0,
+  "null_island_zero_swapped": 0,
+  "rows_with_any_flag": 2321
+ },
+ "flag_combinations": {
+  "dup_coords only": 679,
+  "precision_area_site only": 619,
+  "provenance_null only": 522,
+  "tour_spread only": 168,
+  "dup+precision": 110,
+  "dup+provenance": 94,
+  "country only": 35,
+  "dup+spread": 31,
+  "provenance+spread": 25,
+  "precision+spread": 22,
+  "dup+provenance+spread": 10,
+  "dup+precision+spread": 3,
+  "country+provenance": 1,
+  "country+precision": 1,
+  "country+spread": 1
+ },
+ "pairwise": {
+  "dup&precision": 113,
+  "dup&provenance": 104,
+  "dup&spread": 44,
+  "provenance&spread": 35,
+  "precision&spread": 25
+ },
+ "country_flag_groups": {
+  "TZ in Kilimanjaro tours stored as India (source country wrong)": 24,
+  "VN in Bangkok-HCMC cycling tours stored as Thailand (true cross-border, TH-VN not in neighbour map)": 13,
+  "NP point in a Pakistan tour ('himalayas')": 1
+ },
+ "cross_border_accepted_as_neighbour": {
+  "rows": 443,
+  "top": {
+   "CN in NP tours": 116,
+   "VN in LA tours": 72,
+   "KH in TH tours": 51
+  }
+ },
+ "provenance_null": {
+  "rows": 652,
+  "located_by": {
+   "llm": 442,
+   "mapbox": 210
+  },
+  "geo_precision": {
+   "null": 649,
+   "line": 3
+  },
+  "confidence_null": 652,
+  "review_reason_null": 652,
+  "top_countries": {
+   "KR": 104,
+   "NP": 103,
+   "CN": 87,
+   "BT": 64,
+   "IN": 64,
+   "LA": 51,
+   "TH": 49,
+   "MN": 48,
+   "LK": 45,
+   "JP": 25
+  },
+  "other_flags": {
+   "dup_coords": 104,
+   "tour_spread": 35,
+   "country": 1
+  }
+ },
+ "verification": {
+  "design": "top-400 flagged by risk score (all 297 country/spread rows + 103 dup/precision/provenance) + 200 random unflagged (seed 254); 10 shards x 60",
+  "verifier": "LLM agent judgement only; no geocoder or paid call. Tolerance: site ~2-4 km, village/town ~5 km, area/line = point inside the feature.",
+  "random_unflagged_sample": {
+   "n": 200,
+   "correct": 154,
+   "errors": 38,
+   "unsure": 8,
+   "correct_rate": 0.77,
+   "correct_95ci": [
+    0.707,
+    0.823
+   ],
+   "error_rate": 0.19,
+   "error_95ci": [
+    0.142,
+    0.25
+   ],
+   "verdicts": {
+    "correct": 154,
+    "too_coarse": 11,
+    "not_a_place": 6,
+    "wrong_country": 2,
+    "unsure": 8,
+    "wrong_place": 19
+   }
+  },
+  "flagged_top400": {
+   "n": 400,
+   "correct": 286,
+   "errors": 103,
+   "unsure": 11,
+   "correct_rate": 0.715,
+   "correct_95ci": [
+    0.669,
+    0.757
+   ],
+   "error_rate": 0.258,
+   "error_95ci": [
+    0.217,
+    0.303
+   ],
+   "verdicts": {
+    "correct": 286,
+    "not_a_place": 22,
+    "too_coarse": 33,
+    "wrong_place": 44,
+    "unsure": 11,
+    "wrong_country": 4
+   }
+  },
+  "per_flag": {
+   "country": {
+    "n": 38,
+    "correct": 28,
+    "errors": 10,
+    "unsure": 0,
+    "correct_rate": 0.737,
+    "correct_95ci": [
+     0.58,
+     0.85
+    ],
+    "error_rate": 0.263,
+    "error_95ci": [
+     0.15,
+     0.42
+    ],
+    "verdicts": {
+     "correct": 28,
+     "not_a_place": 3,
+     "wrong_place": 5,
+     "too_coarse": 1,
+     "wrong_country": 1
+    }
+   },
+   "tour_spread": {
+    "n": 260,
+    "correct": 192,
+    "errors": 59,
+    "unsure": 9,
+    "correct_rate": 0.738,
+    "correct_95ci": [
+     0.682,
+     0.788
+    ],
+    "error_rate": 0.227,
+    "error_95ci": [
+     0.18,
+     0.282
+    ],
+    "verdicts": {
+     "correct": 192,
+     "too_coarse": 12,
+     "wrong_place": 33,
+     "not_a_place": 10,
+     "unsure": 9,
+     "wrong_country": 4
+    }
+   },
+   "dup_coords": {
+    "n": 147,
+    "correct": 101,
+    "errors": 42,
+    "unsure": 4,
+    "correct_rate": 0.687,
+    "correct_95ci": [
+     0.608,
+     0.756
+    ],
+    "error_rate": 0.286,
+    "error_95ci": [
+     0.219,
+     0.363
+    ],
+    "verdicts": {
+     "too_coarse": 23,
+     "not_a_place": 11,
+     "correct": 101,
+     "wrong_place": 8,
+     "unsure": 4
+    }
+   },
+   "precision_area_site": {
+    "n": 129,
+    "correct": 81,
+    "errors": 46,
+    "unsure": 2,
+    "correct_rate": 0.628,
+    "correct_95ci": [
+     0.542,
+     0.706
+    ],
+    "error_rate": 0.357,
+    "error_95ci": [
+     0.279,
+     0.442
+    ],
+    "verdicts": {
+     "not_a_place": 12,
+     "too_coarse": 23,
+     "correct": 81,
+     "wrong_place": 11,
+     "unsure": 2
+    }
+   },
+   "provenance_null": {
+    "n": 36,
+    "correct": 29,
+    "errors": 5,
+    "unsure": 2,
+    "correct_rate": 0.806,
+    "correct_95ci": [
+     0.65,
+     0.902
+    ],
+    "error_rate": 0.139,
+    "error_95ci": [
+     0.061,
+     0.287
+    ],
+    "verdicts": {
+     "correct": 29,
+     "wrong_place": 3,
+     "wrong_country": 1,
+     "unsure": 2,
+     "not_a_place": 1
+    }
+   }
+  },
+  "by_located_by": {
+   "geoapify": {
+    "population": 3944,
+    "verified_all": {
+     "n": 258,
+     "correct": 233,
+     "errors": 21,
+     "unsure": 4,
+     "correct_rate": 0.903,
+     "correct_95ci": [
+      0.861,
+      0.934
+     ],
+     "error_rate": 0.081,
+     "error_95ci": [
+      0.054,
+      0.121
+     ]
+    },
+    "verified_random_sample": {
+     "n": 125,
+     "correct": 114,
+     "errors": 8,
+     "unsure": 3,
+     "correct_rate": 0.912,
+     "correct_95ci": [
+      0.849,
+      0.95
+     ],
+     "error_rate": 0.064,
+     "error_95ci": [
+      0.033,
+      0.121
+     ]
+    }
+   },
+   "llm": {
+    "population": 3770,
+    "verified_all": {
+     "n": 333,
+     "correct": 199,
+     "errors": 119,
+     "unsure": 15,
+     "correct_rate": 0.598,
+     "correct_95ci": [
+      0.544,
+      0.649
+     ],
+     "error_rate": 0.357,
+     "error_95ci": [
+      0.308,
+      0.41
+     ]
+    },
+    "verified_random_sample": {
+     "n": 75,
+     "correct": 40,
+     "errors": 30,
+     "unsure": 5,
+     "correct_rate": 0.533,
+     "correct_95ci": [
+      0.422,
+      0.642
+     ],
+     "error_rate": 0.4,
+     "error_95ci": [
+      0.297,
+      0.513
+     ]
+    }
+   },
+   "mapbox": {
+    "population": 210,
+    "verified_all": {
+     "n": 9,
+     "correct": 8,
+     "errors": 1,
+     "unsure": 0,
+     "correct_rate": 0.889,
+     "correct_95ci": [
+      0.565,
+      0.98
+     ],
+     "error_rate": 0.111,
+     "error_95ci": [
+      0.02,
+      0.435
+     ]
+    },
+    "verified_random_sample": null
+   }
+  },
+  "overall_estimate_flag_stratified": {
+   "correct": 0.754,
+   "correct_95ci": [
+    0.712,
+    0.796
+   ],
+   "error": 0.21,
+   "error_95ci": [
+    0.17,
+    0.249
+   ],
+   "cells": {
+    "True": {
+     "population": 2321,
+     "verified": 400
+    },
+    "False": {
+     "population": 5603,
+     "verified": 200
+    }
+   }
+  },
+  "overall_estimate_provenance_stratified": {
+   "correct": 0.748,
+   "correct_95ci": [
+    0.709,
+    0.786
+   ],
+   "error": 0.215,
+   "error_95ci": [
+    0.179,
+    0.252
+   ],
+   "cells": {
+    "('llm', True)": {
+     "population": 1664,
+     "verified": 258
+    },
+    "('llm', False)": {
+     "population": 2106,
+     "verified": 75
+    },
+    "('mapbox', True)": {
+     "population": 210,
+     "verified": 9
+    },
+    "('geoapify', False)": {
+     "population": 3497,
+     "verified": 125
+    },
+    "('geoapify', True)": {
+     "population": 447,
+     "verified": 133
+    }
+   }
+  },
+  "projected_counts_over_resolved": {
+   "correct": 5974,
+   "wrong_place": 788,
+   "too_coarse": 500,
+   "not_a_place": 296,
+   "wrong_country": 79,
+   "unsure": 288
+  },
+  "error_causes_in_verified": {
+   "not_a_place": 28,
+   "centroid_instead_of_site": 44,
+   "off_target_same_region": 45,
+   "homonym_wrong_city": 20,
+   "hk_iso_as_cn": 4
+  }
+ },
+ "hong_kong_macau_iso": {
+  "rows_in_HK_box": 13,
+  "iso": {
+   "CN": 13
+  },
+  "rows_in_Macau_box": 7,
+  "iso_macau": {
+   "CN": 7
+  }
+ },
+ "name_norm_article_strip": {
+  "rows_with_leading_An_dropped": 25,
+  "proper_noun_examples": [
+   "An Binh Island -> binh island",
+   "An Ping Old Street -> ping old street"
+  ]
+ }
+}

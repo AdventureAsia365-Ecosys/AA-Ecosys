@@ -1,0 +1,28 @@
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+ROWS 1 for 256f07bd
+ROW {"published_id": "6d7bb2d4-186f-450c-ab0b-b88b5d7e8570", "raw_tour_id": "256f07bd-c09e-44d7-9efa-0b32b24b0d52", "country": "Sri Lanka", "name": "Beach and Wildlife Tour of Sri Lanka (Standard) Option II - 9 nights", "duration_raw": "10 days", "duration_exact_days": 10, "duration_day_count": 10, "master_status": "active", "updated_at": "2026-10-27 08:13:09.880753+00:00"}
+SRC_MARK 1 L0 Day 01
+SRC_MARK 2 L6 Day 02
+SRC_MARK 3 L12 Day 03
+SRC_MARK 4 L20 Day 04
+SRC_MARK 5 L26 Day 05
+SRC_MARK 5 L32 Day 05
+SRC_MARK 6 L38 Day 06
+SRC_MARK 7 L43 Day 07
+SRC_MARK 8 L48 Day 08
+SRC_NEAR L39 Full day Game Drive with picnic meals
+TRUSTED {}
+SRC_DAYS 8 [1, 2, 3, 4, 5, 6, 7, 8]
+OUT_BLOCK 1 Colombo airport to Tangalle
+OUT_BLOCK 2 Beach day at Tangalle
+OUT_BLOCK 3 Whale and dolphin watching at Mirissa
+OUT_BLOCK 4 Second beach day at Tangalle
+OUT_BLOCK 5 Tangalle to Yala National Park
+OUT_BLOCK 6 Full-day game drive in Yala National Park
+OUT_BLOCK 7 Yala National Park to Colombo
+OUT_BLOCK 8 Colombo to the airport for departure
+OUT_DAYS 8 [1, 2, 3, 4, 5, 6, 7, 8]
+GAP {"source_days": [1, 2, 3, 4, 5, 6, 7, 8], "output_days": [1, 2, 3, 4, 5, 6, 7, 8], "missing": []}
+ORACLE SOURCE_DAY_CONTRADICTION duration '10 days' says 10 days, the source has 8 day(s) (max day 8)
+VERDICT source_skips_days [9, 10] (duration 10, source covers 8)
+ecsx: rc=0 bytes=1348

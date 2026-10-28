@@ -1,0 +1,18 @@
+db/scripts/aa682_s5_live_check.py rc=0 run=40582771350
+MIGRATE run-script: file=db/scripts/aa682_s5_live_check.py sha256=a6826cd24466
+MIGRATE master login: run-script needs the RDS master aa_cis_admin and the task logs in as db_migrator: reading the master DSN in the task from aa-cis/dev/rds (X1 S22)
+MIGRATE master login: aa_cis_admin (in-task DSN from aa-cis/dev/rds)
+MIGRATE ran as: aa_cis_admin (run-script, READ_ONLY: default_transaction_read_only=on)
+MIGRATE idle: booking.job running=0 queued=0 (exempt: bk_inquiry_pull)
+MIGRATE idle: crm.job running=0 queued=0 (exempt: crm_booking_sync, crm_heartbeat, crm_membership_pull)
+MIGRATE idle: shared.job running=0 queued=0 later=1
+MIGRATE idle: shared.rerun_wave open=0
+MIGRATE run-script: READ_ONLY script, the idle check is report-only (no wait, no refusal)
+MIGRATE run-script: main(conn) starts; its output follows
+SCRIPT synthetic customer found; sign-in identities linked: 0 (expected 0: no live traveller sees it)
+SCRIPT invoices of the customer: 2; visible on My Payments: 2
+SCRIPT INV-000004 case TC-000023 status sent USD total 2400.00 paid 0.00 balance 2400.00 next_due 2026-10-25 overdue 2400.00 | schedule [(1, 'final', '2400.00', 'overdue')] | payments shown 0 (hidden: waiting 0, voided 0)
+SCRIPT INV-000003 case TC-000022 status partially_paid USD total 2400.00 paid 720.00 balance 1680.00 next_due 2026-11-06 overdue 0.00 | schedule [(1, 'deposit', '720.00', 'paid'), (2, 'final', '1680.00', 'scheduled')] | payments shown 1 (hidden: waiting 0, voided 2)
+SCRIPT another customer: sees 0 invoice(s); synthetic numbers visible to it: []
+SCRIPT OK: SYNTHETIC S253 AA-682 S3 invoices are visible to their own customer only, never as a draft
+MIGRATE run-script: done

@@ -571,6 +571,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-679](tripplanner-aa-booking/AA-679.md) | [AAA] Catalog read in Booking: sellable trip plans over the live CIS catalog (catalog.v_tour) + "Use for trip case" | Done | 2026-10-16 | TripPlanner & AA-Booking |
 | [AA-680](tripplanner-aa-booking/AA-680.md) | [AAA] Identity — customer OTP auth (shared with TripPlanner) + staff RBAC (admin / sales / content_creator) | Done | 2026-10-20 | TripPlanner & AA-Booking |
 | [AA-681](tripplanner-aa-booking/AA-681.md) | [AAA] Trip Case workflow MVP — inquiry → versions (V1..Vn) → approved → confirmed order; staff assignment; customer "My Trips" | Done | 2026-10-16 | TripPlanner & AA-Booking |
+| [AA-682](tripplanner-aa-booking/AA-682.md) | [AAA] Operations MVP — supplier bookings, trip checks, invoices + payment schedule, supplier bills | Done | 2026-10-28 | TripPlanner & AA-Booking |
 | [AA-683](tripplanner-aa-booking/AA-683.md) | [AAA] Figma review → UI spec aligned with the ecosystem design system (staff admin + customer app) | Done | 2026-10-16 | TripPlanner & AA-Booking |
 | [AA-689](tripplanner-aa-booking/AA-689.md) | [EPIC] TripPlanner — Trip.com-style planner on AA data (Jira PR-11) | Canceled | 2026-10-19 | TripPlanner & AA-Booking |
 | [AA-708](tripplanner-aa-booking/AA-708.md) | [Photos] Sync AA marketing photos from Google Drive (Jira CON PHOTOS) to S3 and match them to places/tours | Done | 2026-10-16 | TripPlanner & AA-Booking |
@@ -594,3 +595,4 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-909](tripplanner-aa-booking/AA-909.md) | [TripPlanner] Check the guest token on the read GETs (trip, suggestions, coverage, activities) | Done | 2026-10-22 | TripPlanner & AA-Booking |
 | [AA-910](tripplanner-aa-booking/AA-910.md) | [Booking] Staff admin at 1440 px (table overflow, FX column wrap, 1 px scrollbar) + audit rows for room type / rate and superseded V1 | Done | 2026-10-24 | TripPlanner & AA-Booking |
 | [AA-987](tripplanner-aa-booking/AA-987.md) | TripPlanner drops a retired tour at once: CIS lifecycle event triggers a TripPlanner cache purge | Done | 2026-10-24 | TripPlanner & AA-Booking |
+| [AA-996](tripplanner-aa-booking/AA-996.md) | [AAA] Booking covers every Figma screen: CIS content read-only with Edit in CIS, soft-delete dialogs, Sign-in & security, Destinations/Countries | Done | 2026-10-28 | TripPlanner & AA-Booking |
