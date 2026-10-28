@@ -37,6 +37,18 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
 4. **Báo lệch:** state thật khác memory (revision, job treo, issue đã đóng, PR mở) → nói ngay trước khi làm.
 5. **Đọc bài học:** mục liên quan trong `aa-lessons/lessons.md`, và `.tmp-session/S<nnn-1>-lessons-pending.md` nếu
    phiên trước chưa chuyển hết.
+6. **Rà soát định kỳ (AA-838, data standards C4.3 / C8 / DM-8.10)** — đến hạn thì đưa vào danh sách việc của phiên:
+   - **Tuần (C4.3):** phiên đầu mỗi tuần ISO, và sau mỗi wave: `pg_stat_statements` top 20 theo role (tổng + mean),
+     slow log > 500 ms, lock wait, PI top SQL. Ghi 1 đoạn trong log phiên ("C4.3 tuần W<nn>"); hạn = log phiên gần nhất
+     có dòng đó cách ≥ 7 ngày. Mục tiêu C1.2 trượt 2 tuần liên tiếp → báo Nghiệp (C1.2a).
+   - **Tháng (C8):** phiên đầu mỗi tháng: rà soát dung lượng + chi phí (9 mục C8b, danh sách quyết định C8c), lưu
+     `docs/audits/<date>-S<nnn>-capacity-review/` qua root PR. Hạn = folder `*capacity*` mới nhất trong `docs/audits/`
+     thuộc tháng trước. Mẫu `docs/templates/capacity-review.md`; cách làm + script: folder đầu tiên
+     `docs/audits/2026-10-28-S255-aa838-capacity/`.
+   - **Quý (DM-8.10):** phiên đầu mỗi quý: rà soát quyền (role, grant, default ACL, IAM đọc secret DB, user Cognito
+     `aa-workforce`), lưu `docs/audits/<date>-S<nnn>-access-review/` theo mẫu `docs/templates/access-review.md`. Hạn = folder
+     `*access-review*` mới nhất thuộc quý trước.
+   - Không bao giờ chạy `pg_stat_statements_reset()` trừ ngay sau một rà soát tháng đã lưu snapshot top 50 (C4.3a).
 
 Đầu ra: một khối ngắn gồm trạng thái (3–5 dòng), lệch nếu có, danh sách việc kèm slot.
 

@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-dev-db]
-last_reviewed: 2026-10-22
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [ARCH-08, ARCH-08-engineering, ARCH-08-data-management, ARCH-08-schema-ownership]
 ---
@@ -124,20 +124,22 @@ account Lambda quota of 10 and `desired_count = 1` hide it.
 
 **Re-checked 16/10/2026 (AA-832)** against the measured `max_connections` = 181 (75 % ceiling ≈ 135): the target total below (~136) sits at the ceiling, so any pool increase needs an offsetting cut (AA-859 sizing: tenant pool 2/task with api `max_capacity` 7). Live `CONNECTION LIMIT`s: `tripplanner` 30, `booking` **15** (migration 234; the row below still shows the target 10), `aa_app_user` 15. Per-role usage is now a CloudWatch metric (`AA/RDS RoleConnections` / `RoleConnectionLimitPct`, every 5 min).
 
+**Re-checked 28/10/2026 (AA-838, first capacity review):** TripPlanner reserved concurrency is **15 / 5** in live Terraform (browse / assembly), not 10 / 10; the `tripplanner` role total is still 20 of its limit 30 and the target total is **133** (≤ 135). With today's `cis-api` pool of 10 the worst case is 168 (`cis_app` 100 of 90), carried as `accepted_overages` in AA-CIS-Infra `db/connection_budget.json` until 15/12/2026; measured instance peak 30 (review: [`docs/audits/2026-10-28-S255-aa838-capacity/`](../../audits/2026-10-28-S255-aa838-capacity/README.md)).
+
 | Pool (`application_name`) | DB role (live since X1, 19/10/2026) | Pool `max_size` | Max processes | Worst case | `CONNECTION LIMIT` | Statement timeout (pool-level, C2.3f) | Lock timeout (pool-level) |
 |---|---|---|---|---|---|---|---|
 | `cis-api` (main) | `cis_app` (X1 S18; was `aa_cis_admin`) | **5** (today 10, `api/main.py:78`; shrink decided from the `aa859_main_pool_gauge` baseline) | **7** (`modules/ecs/main.tf` `max_capacity`, 10 → 7 in AA-CIS-Infra #156, AA-859) | 35 | `cis_app` **90** (shared with worker and the per-job pools; `rl-001`) | 30 s | 5 s |
 | `cis-tenant` | `aa_app_user` | **2** (`aa544_tenant_pool.py` `TENANT_POOL_MAX_SIZE`, AA-859 PR-S #774, 16/10/2026) = `floor(15 / 7)` | 7 | 14 | **15** (25 when AA-544 Stage 2 widens) | 15 s (also the role backstop) | 5 s |
 | `cis-worker` | `cis_app` (X1 S18) | `max(5, max_parallel + 2)` = 10 (`shared/jobs/worker.py:323`, default `max_parallel` 8) | 3 (`worker_max_count`) | 30 | in `cis_app` 90 | none at pool level; per job kind | per job kind (`SET LOCAL`) |
-| `tp-browse` | `tripplanner` | **1** (today 5, `backend/shared/db.py:60`) | reserved concurrency **10** | 10 | **30** (both TP pools + 10 for backfills and Lambda deploy overlap) | 10 s (Lambda timeout 30 s) | 3 s |
-| `tp-assembly` | `tripplanner` | **1** | reserved concurrency **10** | 10 | (in 30) | 20 s (Lambda timeout 60 s; also the role backstop) | 5 s |
+| `tp-browse` | `tripplanner` | **1** (today 5, `backend/shared/db.py:60`) | reserved concurrency **15** (`tripplanner_browse_reserved_concurrency`, `accounts/aa365/tripplanner_variables.tf`) | 15 | **30** (both TP pools + 10 for backfills and Lambda deploy overlap) | 10 s (Lambda timeout 30 s) | 3 s |
+| `tp-assembly` | `tripplanner` | **1** | reserved concurrency **5** (`tripplanner_lambda_reserved_concurrency`) | 5 | (in 30) | 20 s (Lambda timeout 60 s; also the role backstop) | 5 s |
 | `booking-api` (+ in-process `booking.job` worker) | `booking` | 5 (`backend/app/db.py:54`) | 2 (1 task + deploy overlap, `booking.tf` `deployment_maximum_percent = 200`) | 10 | **10** | 15 s (also the role backstop) | 5 s |
 | `crm-api` (+ in-process `crm.job` worker; AA-Partner, planned) | `crm_app` (planned: created by an Infra `roles/` file before the first `crm` migration, C2.3a; v1.3, AA-929) | **3** | 2 (1 task + deploy overlap) | 6 | **6** | set with the pool (C2.3f) | set with the pool |
 | `db-migrate`, DB Schema Dump, DB Isolation Probe | `db_migrator` (X1 S22) | 1 | 3 (three workflow concurrency groups can overlap) | 3 | `db_migrator` **5** (`rl-002`) | 15 min (N5 runner default, set per session) | 5 s (MIG-9 runner default) |
 | ECS exec scripts (S3-mediated, container `DATABASE_URL`) | `cis_app` | — | — | (inside the 90) | (in `cis_app` 90) | per session | per session |
 | `roles/` files, DB Migrate `set-password` / `run-script`, DB Tour Liveness Gate (nightly READ_ONLY run-script, seconds), break-glass | `aa_cis_admin` (master; its DSN is read only inside the migrator task, or for break-glass) | — | — | 10 (reserve) | none (break-glass, C2.3b) | per session | per session |
 | RDS internal + `superuser_reserved_connections` | `rdsadmin` | — | — | ~5 | — | — | — |
-| **Total** | | | | **~132** (after AA-859 sizing: api 35, tenant 14; `db_migrator` 3; `crm_app` 6 planned) | | ≤ 135 ceiling (75 % of 181) | |
+| **Total** | | | | **133** (api 35 + tenant 14 + worker 30 + TP 15 + 5 + Booking 10 + CRM 6 + `db_migrator` 3 + master reserve 10 + `rdsadmin` 5; target with `cis-api` at 5) | | ≤ 135 ceiling (75 % of 181) | |
 
 The partner CRM's NOLOGIN roles (`crm_owner`, `crm_ai_reader`, `crm_insights`, `crm_support_reader`, `crm_eraser`) open no connection: `crm_app` reaches them with `SET LOCAL ROLE` inside its own sessions. With limit 6 and pool 3 the total stays under the ceiling; a larger CRM pool needs an offsetting cut or the next trigger row (C3).
 

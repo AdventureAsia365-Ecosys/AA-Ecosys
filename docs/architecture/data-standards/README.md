@@ -7,18 +7,19 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-dev-db]
-last_reviewed: 2026-10-25
+last_reviewed: 2026-10-28
 review_every_days: 90
 related: [ARCH-08-engineering, ARCH-08-data-management, ARCH-08-scaling, ARCH-08-schema-ownership, ARCH-01, docs/adr/0008-new-app-integration-and-data-platform-rules.md]
 ---
 
 # AA_Ecosys data standards
 
-**Version 1.5** · S250 · 25/10/2026 · **v1.0 and v1.1 approved by Nghiệp** (v1.0: S237 data-architecture review,
+**Version 1.6** · S255 · 28/10/2026 · **v1.0 and v1.1 approved by Nghiệp** (v1.0: S237 data-architecture review,
 "đồng ý duyệt hết", decisions E1–E11; v1.1: S243 N-1; v1.2: X1 close-out, Nghiệp approves its root PR; v1.3:
 partner CRM, classes and windows approved in S246 decision D6, Nghiệp approves its root PR; v1.4: tour liveness rule
 of ADR 0015, whose answers Q1–Q10 Nghiệp decided in S248, root PR merged under DM-11.5 (dev phase); v1.5: enforcement
-facts only (AA-853), no rule change, root PR under DM-11.5; see the changelog below) · Host ADR:
+facts only (AA-853), no rule change, root PR under DM-11.5; v1.6: facts only from the first capacity review (AA-838), root PR
+under DM-11.5; see the changelog below) · Host ADR:
 [ADR 0008 — New-app integration and data platform rules](../../adr/0008-new-app-integration-and-data-platform-rules.md)
 (accepted 15/10/2026), with [ADR 0003a — one job table per owner](../../adr/0003a-per-owner-job-tables.md).
 
@@ -146,6 +147,7 @@ ADR 0008.
 | 1.3 | 22/10/2026 | S247 | Partner CRM, AA-929 (card CRM-01b of the CRM design v3, `docs/audits/2026-10-21-S246-crm-design-v3/`; decision D6 = a in S246). **DM-6.1:** new classes `government_id`, `health`, `emergency_contact`; DM-6.4 keeps them out of prompts (`health` only as unidentified closed-list codes); DM-6.2 note that a CRM traveller is the agency's record. **DM-6.8 rewritten:** the CRM is a separate app, AA-Partner (ADR 0008a, AA-928); Booking never creates a customer for a CRM trip (B2B trip case with counts only); ops data stays in the CRM (`ops_release`, trip end + 90 days); AA access layers L1–L3; the threat model stated honestly. **DM-7:** CRM rows in the retention table with the DM-7.5 windows approved in D6 (backups and DEK copies ≤ 30 days, audit 12 months in the DB + Object Lock archive to 7 years, ops release + 90 days, trash 7 days, archive suggestion 36 months, scrubbed prompts 30 days), the signed-agreement (claim-period) exception trip end + 3 years (est., counsel confirms) and the accounting exception; DM-7.1 a new app's tables have rows from their first migration, CI-checked; DM-7.3 does not apply to agency data. **C2.2:** `crm_app` connection limit 6, pool 3 (planned), total ~132 of 135. **Enforcement:** Infra Migration Copy Guard (DM-6.1 class lint, DM-7.1 retention-row check). |
 | 1.4 | 23/10/2026 | S248 | Tour liveness, AA-986 slice L7b ([ADR 0015](../../adr/0015-tour-liveness-and-retirement-propagation.md), accepted S248; Nghiệp decided Q1–Q10; root PR under DM-11.5, dev phase). **DM-4.9 new:** once a CIS catalog key is no longer served (`retired` / `paused`, derived by `gold_aa_internal.v_tour_liveness`), its derivatives MUST NOT stay live in the catalog, AA-Booking or TripPlanner (sold departures, confirmed holds, open trip cases and drafts kept and flagged, Q4); never two active Masters per group, no active Master over a dead source; the lifecycle record, the L4 tombstone and an all-superseded group's `retired` record agree with the derived state. Enforced by the nightly AA-CIS-Infra **DB Tour Liveness Gate**; the CIS and tenant layers are not in the gate yet (follow-up slice). **DM-8.9** and the **C2.2** master row name the gate as an automated READ_ONLY run-script use of the master (inside the existing reserve, no budget change). |
 | 1.5 | 25/10/2026 | S250 | Enforcement facts only, no rule change (AA-853; root PR under DM-11.5, dev phase). **MIG-6:** the Migration Copy Guard ownership lint (AA-CIS-Infra `db/check_migration_ownership.py`) fails an owner-dir copy that creates, alters, drops, comments on, grants on or writes to an object outside its owner's `owners.yaml` schemas; it is static (function bodies and dynamic SQL not read), the X1 owner-role switch stays the runtime boundary. **MIG-5:** DB Schema Dump replays every applied migration into a scratch PostgreSQL each night and writes the *Schema drift* section (unmanaged / missing / changed, owner decision or open) into `db-schema-reference.md`; report only, it fails nothing until the replay baseline (AA-ACP-Core lineage) and the owner decisions in `db/schema_drift_decisions.json` exist. Part A tooling table, MIG-5 / MIG-6 *Enforced* and the CI row above follow. |
+| 1.6 | 28/10/2026 | S255 | Facts only, no rule change (AA-838, first monthly capacity review C8, `docs/audits/2026-10-28-S255-aa838-capacity/`; root PR under DM-11.5, dev phase). **C2.2:** TripPlanner reserved concurrency is 15 (browse) / 5 (assembly) in live Terraform, not 10 / 10; target total recomputed to 133 of 135 (`tripplanner` 20 of 30 unchanged); a dated re-check note records the paper worst case 168 with today's `cis-api` pool 10, accepted until 15/12/2026. |
 
 ## Open items for Nghiệp
 
