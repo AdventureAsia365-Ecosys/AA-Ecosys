@@ -1,0 +1,21 @@
++ aws lambda delete-function --function-name aa-cis-dev-acp-s4-trigger --region us-west-1 --profile pqnghiep-admin
+    "StatusCode": 204
+}
++ aws logs delete-log-group --log-group-name /aws/lambda/aa-cis-dev-acp-s4-trigger --region us-west-1 --profile pqnghiep-admin
++ aws logs delete-log-group --log-group-name /ecs/aa-cis-dev-api --region us-west-1 --profile pqnghiep-admin
++ aws logs delete-log-group --log-group-name /ecs/aa-cis-dev-langfuse --region us-west-1 --profile pqnghiep-admin
++ task definitions deregistered/deleted
++ aws iam detach-role-policy --role-name aa-role-deploy-nonprod --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess --profile pqnghiep-admin
++ aws iam detach-role-policy --role-name aa-role-deploy-nonprod --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess --profile pqnghiep-admin
++ aws iam remove-role-from-instance-profile --instance-profile-name aa-role-deploy-nonprod --role-name aa-role-deploy-nonprod --profile pqnghiep-admin
++ aws iam delete-role --role-name aa-role-deploy-nonprod --profile pqnghiep-admin
++ aws iam detach-role-policy --role-name aa-role-readonly --policy-arn arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess --profile pqnghiep-admin
++ aws iam remove-role-from-instance-profile --instance-profile-name aa-role-readonly --role-name aa-role-readonly --profile pqnghiep-admin
++ aws iam delete-role --role-name aa-role-readonly --profile pqnghiep-admin
++ aws iam detach-role-policy --role-name rds-monitoring-role --policy-arn arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole --profile pqnghiep-admin
++ aws iam delete-role --role-name rds-monitoring-role --profile pqnghiep-admin
++ aws iam delete-open-id-connect-provider --open-id-connect-provider-arn arn:aws:iam::867490540162:oidc-provider/token.actions.githubusercontent.com --profile pqnghiep-admin
++ aws s3 rm s3://acp-gold-867490540162 --recursive --only-show-errors --profile pqnghiep-admin
++ aws s3api delete-bucket --bucket acp-gold-867490540162 --profile pqnghiep-admin
+Additional error details:
+BucketName: acp-gold-867490540162

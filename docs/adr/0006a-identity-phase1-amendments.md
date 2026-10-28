@@ -382,6 +382,9 @@ mailbox or Google account". That is too strong.
   code yields: CIS admin **reads** on Dev (tenant text in writing memory, the staff directory's emails and display
   names, the audit log, spend and AI settings, CRM ops reads) plus sentence Cut / Edit on synthetic Dev tenants. The CI
   apply role can still rewrite the bucket policy (true for every statement; PR review and the plan guard cover it).
+  Since S255 (AA-898) a code also yields read access to the owner-only pages of `/admin/docs` on Dev, through the
+  `docs.owner_read` permission (AA-CIS-App `staff_authz.docs_owner_read_via` returns `"e2e_dev"`); `is_owner` stays
+  false and no owner write opens.
 - **Cross-app:** no `booking-*` group, so Booking answers `no_booking_role`; the CIS to Booking bridge mints only from
   password sessions (A11), so no Booking token. AA-Partner `/crm/ops/v1` gives `cis-admin` reads only (writes need
   `crm-platform-admin`, which the trigger never allows on this address); a Preview-host session is the viewer (A11).
@@ -401,7 +404,9 @@ mailbox or Google account". That is too strong.
   procedure) and the Cognito user (console); the restore-247 migration (A10 step 3); drop the CIS constants
   (`api/core/e2e_staff.py`), the environment guard, the read-only cap and the allow-list; drop the trigger map and flag,
   the `E2E_DEV_ONLY_STAFF_ENABLED` env and precondition, the receipt rule `e2e-cognito-admin` and the two bucket
-  statements; Terraform Apply; a closing line here.
+  statements; Terraform Apply; a closing line here. Also drop the `docs.owner_read` E2E branch (AA-CIS-App
+  `staff_authz.docs_owner_read_via` `"e2e_dev"`, AA-898): owner-only `/admin/docs` pages are then read by verified
+  Cognito owners only.
 
 ##### A10b-1. Amendment: Content studio invitations on synthetic tenants (26/10/2026, S252, AA-979)
 

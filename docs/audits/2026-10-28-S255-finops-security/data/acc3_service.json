@@ -1,0 +1,437 @@
+{
+ "GroupDefinitions": [
+  {
+   "Type": "DIMENSION",
+   "Key": "SERVICE"
+  }
+ ],
+ "ResultsByTime": [
+  {
+   "TimePeriod": {
+    "Start": "2026-08-01",
+    "End": "2026-09-01"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "AWS Glue"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Key Management Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00003",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0016392",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Notification Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Queue Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000004",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0004835571",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Haiku 4.5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.486842",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Sonnet 4.6 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "18.2288127",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Palmyra X5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0001848",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": false
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-09-01",
+    "End": "2026-10-01"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "AWS Cost Explorer"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.06",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Secrets Manager"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00001",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Notification Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0003936941",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Haiku 4.5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "18.2729419",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Opus 5.5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0026796",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Sonnet 4.6 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "33.0479907",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Sonnet 5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0003524",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "OpenAI GPT-5.6 Luna (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.04787712",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "OpenAI GPT-6 Luna (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.002104965",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": false
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-01",
+    "End": "2026-10-28"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "AWS Cost Explorer"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.26",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0002013776",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00096",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Haiku 4.5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "104.115751",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Haiku 5.5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0723012",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Opus 5.5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.537388",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Sonnet 4.6 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "52.48339215",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Sonnet 5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.42629",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Claude Sonnet 5.5 (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "55.494112",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Cohere Embed 4 Model (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00083076",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "OpenAI GPT-5.6 Luna (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "16.89625875",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "OpenAI GPT-6 Luna (Amazon Bedrock Edition)"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "11.84234098",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  }
+ ],
+ "DimensionValueAttributes": []
+}

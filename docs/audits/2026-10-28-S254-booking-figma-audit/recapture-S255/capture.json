@@ -1,0 +1,58 @@
+[
+ {
+  "figma": "Assigned Trips.png",
+  "url": "https://booking.lumiguides.it.com/staff/2d8e5a2f-3722-4571-9327-177d10b74127?tab=cases",
+  "status": "ok",
+  "note": "staff 2d8e5a2f-3722-4571-9327-177d10b74127 cases tab",
+  "errors": []
+ },
+ {
+  "figma": "USER MANAGEMENT-4.png",
+  "url": "https://booking.lumiguides.it.com/customers",
+  "status": "ok",
+  "note": "first row action menu open (viewport)",
+  "errors": []
+ },
+ {
+  "figma": "USER  DETAILS-4.png",
+  "url": "https://booking.lumiguides.it.com/cases/TC-000013",
+  "status": "ok",
+  "note": "case TC-000013 (declined/cancelled)",
+  "errors": []
+ },
+ {
+  "figma": "ITINERARY BUILDER-4.png",
+  "url": "https://booking.lumiguides.it.com/cases/TC-000003/proposals/2",
+  "status": "ok",
+  "note": "approved version TC-000003/2",
+  "errors": []
+ },
+ {
+  "figma": "ITINERARY PREVIEW.png",
+  "url": "https://booking.lumiguides.it.com/cases/TC-000003/proposals/2/preview",
+  "status": "ok",
+  "note": "preview of TC-000003/2",
+  "errors": []
+ },
+ {
+  "figma": "EDIT HOTEL-1.png",
+  "url": "https://booking.lumiguides.it.com/hotels?hotel=HTL-000001",
+  "status": "ok",
+  "note": "hotel drawer HTL-000001 (viewport)",
+  "errors": []
+ },
+ {
+  "figma": "PAYMENT & INVOICE-3.png",
+  "url": "https://booking.lumiguides.it.com/billing?tab=payments",
+  "status": "ok",
+  "note": "payments tab (viewport); recaptured with no menu open: the payment rows have no row menu (0 found), actions live on /billing/payments/[ref]",
+  "errors": []
+ },
+ {
+  "figma": "View Details.png",
+  "url": "https://booking.lumiguides.it.com/billing/invoices/INV-000003",
+  "status": "ok",
+  "note": "paid invoice INV-000003",
+  "errors": []
+ }
+]

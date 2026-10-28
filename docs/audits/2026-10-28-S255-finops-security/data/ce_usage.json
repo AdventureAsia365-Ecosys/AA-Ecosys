@@ -1,0 +1,5795 @@
+{
+ "GroupDefinitions": [
+  {
+   "Type": "DIMENSION",
+   "Key": "SERVICE"
+  },
+  {
+   "Type": "DIMENSION",
+   "Key": "USAGE_TYPE"
+  }
+ ],
+ "ResultsByTime": [
+  {
+   "TimePeriod": {
+    "Start": "2026-09-01",
+    "End": "2026-10-01"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "AWS CloudTrail",
+      "USW1-FreeEventsRecorded"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Cost Explorer",
+      "USE1-APIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.08",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue",
+      "APS1-Catalog-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue",
+      "APS2-Catalog-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue",
+      "USE1-Catalog-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue",
+      "USW1-Catalog-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Key Management Service",
+      "us-west-1-KMS-Requests"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000015",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Lambda",
+      "USW1-Lambda-GB-Second"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Lambda",
+      "USW1-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0141622",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Secrets Manager",
+      "USW1-AWSSecretsManager-Secrets"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.3978378561",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Secrets Manager",
+      "USW1-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.02166",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Step Functions",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Step Functions",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000683617",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS WAF",
+      "USW1-RequestV2-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.4646334",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS WAF",
+      "USW1-RuleV2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.000000032",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS WAF",
+      "USW1-WebACLV2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.999999968",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon API Gateway",
+      "USW1-ApiGatewayHttpRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.18067959",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon API Gateway",
+      "USW1-ApiGatewayRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.1792595",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon API Gateway",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0237983404",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock",
+      "USW1-NovaPro-input-tokens"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00000309",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock",
+      "USW1-NovaPro-output-tokens"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00003296",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock",
+      "USW2-moonshotai.kimi-k2-thinking-mantle-input-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000033",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock",
+      "USW2-moonshotai.kimi-k2-thinking-mantle-output-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00038",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock",
+      "USW2-moonshotai.kimi-k2.5-mantle-input-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000348",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock",
+      "USW2-moonshotai.kimi-k2.5-mantle-output-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000009",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock",
+      "USW2-xai.grok-4.3-mantle-input-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00009625",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock",
+      "USW2-xai.grok-4.3-mantle-output-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0005175",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon DynamoDB",
+      "USW1-ReadRequestUnits"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000489645",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon DynamoDB",
+      "USW1-WriteRequestUnits"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000202245",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon EC2 Container Registry (ECR)",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.474205081",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon ElastiCache",
+      "USW1-NodeUsage:cache.t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "15.84",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "EC2 - Other",
+      "USW1-DataTransfer-Regional-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.5242276248",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "EC2 - Other",
+      "USW1-EBS:VolumeUsage.gp3"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.9120299269",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "EC2 - Other",
+      "USW1-USE1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "EC2 - Other",
+      "USW1-USE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000191857",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-BoxUsage:t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3722858944",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-BoxUsage:t4g.nano"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.6",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-CloudFront-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-CloudFront-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.010943938",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-DataTransfer-Regional-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.5429218612",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-Fargate-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.7051215382",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-Fargate-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "16.8796926429",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-SpotUsage-Fargate-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0006669565",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-SpotUsage-Fargate-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0030385024",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic File System",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000001872",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-AFS1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-AFS1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000033",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APE1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000078",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APN2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APN2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000008",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000077531",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000007071",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS3-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS3-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000028587",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-CAN1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-CAN1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000007636",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0195332332",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-DataTransfer-Regional-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000005245",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EU-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EU-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000000182",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUC1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUC1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000103604",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUN1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUN1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000028387",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUS2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUS2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000008",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUW2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUW2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000070684",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-ILC1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-ILC1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000001882",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-LCUUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.1052713787",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-LoadBalancerUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "36.288",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-SAE1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-SAE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000016",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USE1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000699666",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USE2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USE2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000151425",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USW2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USW2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000026682",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.001006045",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-InstanceUsage:db.t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "17.28",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-RDS:ChargedBackupUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3487851529",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-RDS:GP3-Storage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.759999976",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Notification Service",
+      "USW1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Queue Service",
+      "USW1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00081",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "APS1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00001",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "Global-Bucket-Hrs-FreeTier"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000115",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USE1-APS1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000034",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USE1-APS2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000034",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USE1-USW1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000002641",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0165780381",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.163174",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-Requests-Tier2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00805904",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-Requests-Tier3"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00036",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-TagStorage-TagHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000022707",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0449966452",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-TimedStorage-GDA-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000008322",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Virtual Private Cloud",
+      "USW1-PublicIPv4:IdleAddress"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.001116685",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Virtual Private Cloud",
+      "USW1-PublicIPv4:InUseAddress"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "10.809826385",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "DashboardsUsageHour-Basic"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.4000000192",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-CW:AlarmMonitorUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.68",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-CW:MetricMonitorUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.2504166906",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-CW:Requests"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-DataProcessing-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.1015993983",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-DataScanned-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0039191722",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-VendedLog-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.8682412815",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-VendedLog-Bytes-WAFLogs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.5607676993",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "CloudWatch Events",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "CloudWatch Events",
+      "USW1-Event-64K-Chunks"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000039",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "CloudWatch Events",
+      "USW1-ScheduledInvocation"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Cohere Embed 4 Model (Amazon Bedrock Edition)",
+      "USW1-MP:USW1_InputTokenCount-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.01843116",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Cohere Embed 4 Model (Amazon Bedrock Edition)",
+      "USW1-MP:USW1_InputTokenCount_Global-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00000072",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Palmyra X5 (Amazon Bedrock Edition)",
+      "USW1-MP:USW1_InputTokenCount-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000144",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Palmyra X5 (Amazon Bedrock Edition)",
+      "USW1-MP:USW1_OutputTokenCount-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000048",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "APS1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "DashboardsUsageHour-Basic"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USE1-APIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-APS1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-APS2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-APS3-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-AWSSecretsManager-Secrets"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-ApiGatewayHttpRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-ApiGatewayRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-BoxUsage:t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-BoxUsage:t4g.nano"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-CAN1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-CW:AlarmMonitorUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-CW:MetricMonitorUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-DataProcessing-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-DataScanned-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-DataTransfer-Regional-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-EBS:VolumeUsage.gp3"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-EUC1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-EUN1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-EUW2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Event-64K-Chunks"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Fargate-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Fargate-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-InstanceUsage:db.t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-LCUUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-LoadBalancerUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-MP:USW1_InputTokenCount-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-MP:USW1_InputTokenCount_Global-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-MP:USW1_OutputTokenCount-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-NodeUsage:cache.t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-NovaPro-input-tokens"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-NovaPro-output-tokens"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-PublicIPv4:IdleAddress"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-PublicIPv4:InUseAddress"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-RDS:ChargedBackupUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-RDS:GP3-Storage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-ReadRequestUnits"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-RequestV2-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Requests-Tier2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Requests-Tier3"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-RuleV2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-SpotUsage-Fargate-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-SpotUsage-Fargate-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-TagStorage-TagHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-TimedStorage-GDA-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-USE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-USE2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-USW2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-VendedLog-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-VendedLog-Bytes-WAFLogs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-WebACLV2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-WriteRequestUnits"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW2-moonshotai.kimi-k2-thinking-mantle-input-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW2-moonshotai.kimi-k2-thinking-mantle-output-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW2-moonshotai.kimi-k2.5-mantle-input-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW2-moonshotai.kimi-k2.5-mantle-output-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW2-xai.grok-4.3-mantle-input-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW2-xai.grok-4.3-mantle-output-tokens-standard"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "us-west-1-KMS-Requests"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": false
+  },
+  {
+   "TimePeriod": {
+    "Start": "2026-10-01",
+    "End": "2026-10-28"
+   },
+   "Total": {},
+   "Groups": [
+    {
+     "Keys": [
+      "AWS Certificate Manager",
+      "USE1-IssuePublicCertificateDomain"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Certificate Manager",
+      "USE1-IssuePublicCertificateWildcardDomain"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Certificate Manager",
+      "USW1-IssuePublicCertificateDomain"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS CloudTrail",
+      "USW1-FreeEventsRecorded"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Cost Explorer",
+      "USE1-APIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.52",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue",
+      "APS1-Catalog-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue",
+      "APS2-Catalog-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue",
+      "USE1-Catalog-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Glue",
+      "USW1-Catalog-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Key Management Service",
+      "us-east-1-KMS-Requests"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000063",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Key Management Service",
+      "us-west-1-KMS-Keys"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.467741928",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Key Management Service",
+      "us-west-1-KMS-Requests"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.01197",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Lambda",
+      "USW1-Lambda-GB-Second"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Lambda",
+      "USW1-Lambda-GB-Second-ARM"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Lambda",
+      "USW1-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0033592",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Lambda",
+      "USW1-Request-ARM"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0001104",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Secrets Manager",
+      "APS1-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000005",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Secrets Manager",
+      "USE1-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00001",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Secrets Manager",
+      "USW1-AWSSecretsManager-Secrets"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "8.8330387541",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Secrets Manager",
+      "USW1-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.175655",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Secrets Manager",
+      "USW2-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000005",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Step Functions",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS Step Functions",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000259321",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS WAF",
+      "USW1-RequestV2-Tier0"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0011034",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS WAF",
+      "USW1-RequestV2-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.5308524",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS WAF",
+      "USW1-RuleV2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.0623972568",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AWS WAF",
+      "USW1-WebACLV2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "4.854459028",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon API Gateway",
+      "USW1-ApiGatewayHttpRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.02940327",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon API Gateway",
+      "USW1-ApiGatewayRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.986783",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon API Gateway",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.1313487991",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Bedrock",
+      "USW1-Guardrail-SensitiveInformationPolicyPaidUnitsConsumed"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2361",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "AP-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0021954471",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "AP-DataTransfer-Out-OBytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0007122313",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "AP-Requests-HTTPS-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000768",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "AP-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000036",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "AP-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0039696",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "CA-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000009125",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "CA-Requests-HTTP-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00000225",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "CA-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000006",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "CA-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000005",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "EU-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0055494673",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "EU-DataTransfer-Out-OBytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000009568",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "EU-Requests-HTTP-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000702",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "EU-Requests-HTTPS-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0001152",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "EU-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0022464",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "EU-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0083964",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "Invalidations"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "JP-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000010795",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "JP-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000027",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "JP-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000096",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "ME-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000002668",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "ME-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000036",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "US-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0306812178",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "US-DataTransfer-Out-OBytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0002772558",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "US-Requests-HTTP-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00000225",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "US-Requests-HTTPS-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.001371",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "US-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00006375",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon CloudFront",
+      "US-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.047635",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Cognito",
+      "USW1-CUPM2MAppClientsFull"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Cognito",
+      "USW1-CUPM2MTokenRequestsFull"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2565",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Cognito",
+      "USW1-CognitoEssentialsMAU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon DynamoDB",
+      "USW1-ReadRequestUnits"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0001561005",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon DynamoDB",
+      "USW1-WriteRequestUnits"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000577545",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon EC2 Container Registry (ECR)",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000038667",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon EC2 Container Registry (ECR)",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.7082865803",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon ElastiCache",
+      "USW1-NodeUsage:cache.t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "14.0756",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "EC2 - Other",
+      "USW1-DataTransfer-Regional-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.5626827597",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "EC2 - Other",
+      "USW1-EBS:VolumeUsage.gp3"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.4967741531",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "EC2 - Other",
+      "USW1-USE1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "EC2 - Other",
+      "USW1-USE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000199626",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-BoxUsage:t4g.nano"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.227731945",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-CloudFront-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-CloudFront-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3380012935",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-USE1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Compute Cloud - Compute",
+      "USW1-USE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000894",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-DataTransfer-Regional-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.7085316711",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-Fargate-ARM-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2380204228",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-Fargate-ARM-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.0838949573",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-Fargate-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "7.0930074432",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-Fargate-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "32.3141317839",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-SpotUsage-Fargate-ARM-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0814231079",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-SpotUsage-Fargate-ARM-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3707837124",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-SpotUsage-Fargate-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0396410144",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Container Service",
+      "USW1-SpotUsage-Fargate-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.180595464",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic File System",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000016175",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APE1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000001208",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000027629",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000030755",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS3-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS3-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000016345",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS5-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-APS5-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000016",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-CAN1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-CAN1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000031265",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0145261607",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-DataTransfer-Regional-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000002406",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EU-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EU-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000906",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUC1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUC1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000033808",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUW2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUW2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000031609",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUW3-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-EUW3-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000008755",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-LCUUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2655946263",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-LoadBalancerUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "32.6088",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USE1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000321364",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USE2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USE2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000060022",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USW2-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Elastic Load Balancing",
+      "USW1-USW2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000119766",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Location Service",
+      "USW2-Usage-Default-Places-Core"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0002240464",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-InstanceUsage:db.t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "8.244546624",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-InstanceUsage:db.t4g.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.234494127",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-InstanceUsage:db.t4g.small"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "13.040000819",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-RDS:ChargedBackupUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.2550755814",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-RDS:GP3-Storage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "2.4407636691",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-USE1-AWS-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Relational Database Service",
+      "USW1-USE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000072556",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Route 53",
+      "DNS-Queries"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0145974",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Route 53",
+      "HostedZone"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Route 53",
+      "Intra-AWS-DNS-Queries"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Email Service",
+      "USW1-AttachmentsSize-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000224",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Email Service",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Email Service",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000271287",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Email Service",
+      "USW1-Essentials-Outbound-Email"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0272",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Email Service",
+      "USW1-Message"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0138",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Notification Service",
+      "Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Notification Service",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Notification Service",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000549667",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Notification Service",
+      "USW1-DeliveryAttempts-SMTP"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Notification Service",
+      "USW1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Notification Service",
+      "USW2-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Queue Service",
+      "Requests-RBP"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000004",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Queue Service",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000132",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Queue Service",
+      "USW1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0006708",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Queue Service",
+      "USW2-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000004",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "APS1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000008133",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "APS1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00002",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "APS2-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000165",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000001728",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "Global-Bucket-Hrs-FreeTier"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00009",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USE1-APS1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000034",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USE1-APS2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000000034",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USE1-USW1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000001381",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-CloudFront-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.3422733341",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.301015",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-Requests-Tier2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.06900036",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-Requests-Tier3"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00102",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-TagStorage-TagHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000731359",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2132811557",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-TimedStorage-GDA-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000049323",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-USW2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0000204888",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Simple Storage Service",
+      "USW1-Vectors-Request-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000063",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Virtual Private Cloud",
+      "USW1-PublicIPv4:IdleAddress"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.0014403",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Amazon Virtual Private Cloud",
+      "USW1-PublicIPv4:InUseAddress"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "9.7179875",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "DashboardsUsageHour-Basic"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.935483888",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-CW:AlarmMonitorUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "3.7926858716",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-CW:DatabaseInsights-API"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-CW:GMD-Metrics"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.00832",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-CW:MetricMonitorUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "5.9895158464",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-CW:Requests"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-DataProcessing-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.8401494889",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-DataScanned-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.2637943791",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-VendedLog-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "1.5252963519",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "AmazonCloudWatch",
+      "USW1-VendedLog-Bytes-WAFLogs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.8072168603",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "CloudWatch Events",
+      "USW1-DataTransfer-In-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "CloudWatch Events",
+      "USW1-Event-64K-Chunks"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.000033",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "CloudWatch Events",
+      "USW1-ScheduledInvocation"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Cohere Embed 4 Model (Amazon Bedrock Edition)",
+      "USW1-MP:USW1_InputTokenCount-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.06212532",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Cohere Embed 4 Model (Amazon Bedrock Edition)",
+      "USW1-MP:USW1_InputTokenCount_Global-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0.08017548",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "AP-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "AP-DataTransfer-Out-OBytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "AP-Requests-HTTPS-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "AP-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "AP-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "APS1-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "APS1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "APS1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "APS2-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "CA-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "CA-Requests-HTTP-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "CA-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "CA-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "DNS-Queries"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "DashboardsUsageHour-Basic"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "EU-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "EU-DataTransfer-Out-OBytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "EU-Requests-HTTP-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "EU-Requests-HTTPS-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "EU-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "EU-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "HostedZone"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "JP-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "JP-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "JP-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "ME-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "US-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "US-DataTransfer-Out-OBytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "US-Requests-HTTP-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "US-Requests-HTTPS-Proxy"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "US-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "US-Requests-Tier2-HTTPS"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USE1-APIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USE1-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-APS1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-APS2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-APS3-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-AWSSecretsManager-Secrets"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-ApiGatewayHttpRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-ApiGatewayRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-BoxUsage:t4g.nano"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-CAN1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-CUPM2MTokenRequestsFull"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-CW:AlarmMonitorUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-CW:GMD-Metrics"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-CW:MetricMonitorUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-DataProcessing-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-DataScanned-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-DataTransfer-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-DataTransfer-Regional-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-EBS:VolumeUsage.gp3"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-EUC1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-EUW2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-EUW3-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Essentials-Outbound-Email"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Event-64K-Chunks"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Fargate-ARM-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Fargate-ARM-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Fargate-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Fargate-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Guardrail-SensitiveInformationPolicyPaidUnitsConsumed"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-InstanceUsage:db.t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-InstanceUsage:db.t4g.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-InstanceUsage:db.t4g.small"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-LCUUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-LoadBalancerUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-MP:USW1_InputTokenCount-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-MP:USW1_InputTokenCount_Global-Units"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Message"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-NodeUsage:cache.t3.micro"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-PublicIPv4:IdleAddress"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-PublicIPv4:InUseAddress"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-RDS:ChargedBackupUsage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-RDS:GP3-Storage"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-ReadRequestUnits"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Request"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Request-ARM"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-RequestV2-Tier0"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-RequestV2-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Requests-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Requests-Tier2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Requests-Tier3"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-RuleV2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-SpotUsage-Fargate-ARM-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-SpotUsage-Fargate-ARM-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-SpotUsage-Fargate-GB-Hours"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-SpotUsage-Fargate-vCPU-Hours:perCPU"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-TagStorage-TagHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-TimedStorage-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-TimedStorage-GDA-ByteHrs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-USE1-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-USE2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-USW2-AWS-Out-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-Vectors-Request-Tier1"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-VendedLog-Bytes"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-VendedLog-Bytes-WAFLogs"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-WebACLV2"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW1-WriteRequestUnits"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "USW2-AWSSecretsManagerAPIRequest"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "us-east-1-KMS-Requests"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "us-west-1-KMS-Keys"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    },
+    {
+     "Keys": [
+      "Tax",
+      "us-west-1-KMS-Requests"
+     ],
+     "Metrics": {
+      "UnblendedCost": {
+       "Amount": "0",
+       "Unit": "USD"
+      }
+     }
+    }
+   ],
+   "Estimated": true
+  }
+ ],
+ "DimensionValueAttributes": []
+}
