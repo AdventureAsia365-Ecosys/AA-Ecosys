@@ -41,7 +41,7 @@ AA-Ecosys is a **multi-repo**. Each app deploys on its own. Locally the repos si
 |---|---|---|---|
 | `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series, the Content studio API `/v1/*`), durable job worker, admin frontend. The tenant portal UI moved to AA-Partner (AA-979 P2a); the `portal/` folder here is a frozen, undeployed copy until the P2b clean-up | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel `aa-cis-frontend` (admin) |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations, plan a trip, sign in and keep trips (Next.js FE + 2 Lambda BE) | Vercel `aa-tripplanner` (FE) + Lambda (BE) |
-| `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform: VPC, RDS, ECS, Lambda, API GW, CloudFront, Cognito, OIDC, alarms, the acc3 Bedrock satellite; DB Migrate and DB Schema Dump workflows | GitHub Actions (`accounts/aa365` root) + a human with MFA (`accounts/acc3-bedrock`; `accounts/acc1-bedrock` waits for its destroy, AA-998) |
+| `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform: VPC, RDS, ECS, Lambda, API GW, CloudFront, Cognito, OIDC, alarms, the acc3 Bedrock satellite; DB Migrate and DB Schema Dump workflows | GitHub Actions (`accounts/aa365` root) + a human with MFA (`accounts/acc3-bedrock` root) |
 | `apps/AA-Booking` | `AA-Booking` | AAA: advisor workflow and booking lifecycle. Live on Dev since 2026-10-14: inquiry intake, staff trip cases and proposals, pricing and FX, suppliers and supply, sellable trip plans, operations (supplier bookings, invoices, payments, supplier bills), the B2B API for AA-Partner; staff admin frontend (see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) + Vercel `aa-booking-admin` |
 | `apps/AA-Partner` (public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 2026-10-22): the agency CRM and the tenant Content studio (`portal/`, moved from AA-CIS-App with its history by AA-979 P2a). Own schema `crm` (`crm-001` to `crm-023`), own LLM gateway, partner Cognito pool with MFA (ADR 0006b). Integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign); AA provides the maps. The API runs the `crm.job` worker in its own process | ECS Fargate ARM64 on `aa-cis-dev-cluster`: `aa-crm-dev-api`, `aa-crm-dev-web` (CRM, behind CloudFront `partner-dev.` → VPC origin → NLB → ALB `/crm/*`) and `aa-crm-dev-portal` (Content studio, behind its own CloudFront distribution for `portal.`, live since the P2b cutover). Images in IMMUTABLE ECR repos tagged with the git SHA; deploy by the GitHub OIDC role `aa-crm-dev-app-deploy`. The Vercel project `aa-cis-portal` is the rollback target until 2026-11-03 |
 
@@ -52,9 +52,9 @@ Terraform `ignore_changes` covers the code attributes, so it never overwrites th
 `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md`.
 
 **AWS accounts [FACT]:** acc2 (us-west-1) holds all infrastructure. acc3 hosts only the Bedrock invoker role, the
-Bedrock Batch service role and the Cost Explorer reader. acc1, the personal account, left the ecosystem (AA-998): no
-LLM call and no cross-account fallback goes there, and its Terraform root waits for a manual destroy. Account IDs and
-profiles: the account map in [onboarding](onboarding.md).
+Bedrock Batch service role and the Cost Explorer reader. acc1 (a personal account) was removed from the ecosystem on
+2026-10-28 (AA-998, [ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)). Account IDs and profiles: the account
+map in [onboarding](onboarding.md).
 
 ## 2. System diagram
 
@@ -272,12 +272,14 @@ Contracts between apps (views, grants, events) are listed in each repo's `CONTEX
 
 ### 4.3 Bedrock [FACT]
 
-Source: `infra/AA-CIS-Infra/accounts/aa365/bedrock_satellite_assume.tf`, `accounts/acc3-bedrock`.
+Source: `infra/AA-CIS-Infra/accounts/aa365/bedrock_satellite_assume.tf`, `accounts/acc3-bedrock`,
+[ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md).
 
 - **Embeddings (Cohere Embed v4):** acc2 calls `bedrock:InvokeModel` directly, with no satellite.
 - **Claude and other chat models:** acc2 cannot call them directly, so it runs `sts:AssumeRole` into **acc3**,
-  role `AA3-Bedrock-Invoker`, ExternalId `aa296-satellite-bedrock-acc3`. acc3 is the only LLM account: the acc1
-  fallback was removed from Terraform, the task definitions and the Lambda config (AA-998).
+  role `AA3-Bedrock-Invoker`, ExternalId `aa296-satellite-bedrock-acc3`. acc3 is the only LLM account and there
+  is no cross-account fallback: when an acc3 call fails, the stage route falls back to another model on acc3, or the
+  job retries.
 - Cross-account trust references the **role ARNs** (`aa-tripplanner-dev-lambda-exec`, the ECS task role), never
   GitHub names, so the org rename did not affect them.
 - The satellite role trusts only the **ECS task role** and the TripPlanner Lambda exec role. Claude therefore
@@ -393,8 +395,6 @@ names), so only the `sub` match is affected.
   pre-build draft is archived at [`archive/2026/tripplanner-to-aaa-handoff.md`](archive/2026/tripplanner-to-aaa-handoff.md).
 - **AA-Partner Content studio (AA-979 P2b clean-up):** the Vercel project `aa-cis-portal` stays the rollback target
   until 2026-11-03. After that, the clean-up removes it and the frozen `portal/` copy in AA-CIS-App.
-- **acc1 destroy (AA-998):** the acc2 side no longer references acc1. Destroying `accounts/acc1-bedrock` is a manual
-  step with the MFA admin profile.
 - **Place pipeline in CIS (AA-712, [ADR 0007](adr/0007-place-pipeline-in-cis.md)):** done. TripPlanner reads the
   `catalog.*` views, its vector search runs on `catalog.v_component_embedding`, and its legacy tables are dropped
   (tp-018).

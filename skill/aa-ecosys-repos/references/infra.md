@@ -4,7 +4,8 @@ Nguồn sự thật: `infra/AA-CIS-Infra/.claude/CLAUDE.md` + `docs/`. Quy trìn
 
 - Roots: `accounts/aa365` (acc2: `main.tf` ECS CIS + RDS + S3; `booking.tf`; `tripplanner.tf`; `crm_*.tf` AA-Partner;
   `identity*.tf` Cognito WORKFORCE / M2M / partner; `cicd*.tf` role CI; `db_migrator.tf`; observability, cost, SES,
-  DNS…), `accounts/acc3-bedrock` và `accounts/acc1-bedrock` (role satellite Bedrock). Module dùng chung ở `modules/`.
+  DNS…), `accounts/acc3-bedrock` (role satellite Bedrock; root `accounts/acc1-bedrock` đã destroy theo AA-998, thư mục còn chờ xoá — không apply). Module dùng
+  chung ở `modules/`.
 - Workflow: `terraform-plan.yml` chạy tự động trên PR; `terraform-apply.yml` **chỉ chạy bằng workflow_dispatch trên
   `main`**, có plan guard (AA-846: từ chối khi plan đổi secret version / `random_password` / RDS instance, trừ khi
   `allow_guarded` + lý do). Không apply tay bằng CLI, trừ object bootstrap mà role CI bị cấm đổi (role CI, boundary,
@@ -28,6 +29,6 @@ Nguồn sự thật: `infra/AA-CIS-Infra/.claude/CLAUDE.md` + `docs/`. Quy trìn
   task migrator (`db_migrator.tf`, login `db_migrator`); master chỉ đọc trong task cho `roles/`, `set-password`,
   `run-script` (`db/scripts/`). Runbook: `docs/ops/runbooks/db-migrate.md` (repo gốc).
 - Terraform Apply không có guard job: apply roll ECS service / task def / Lambda → kiểm bảng job rảnh trước (`aa-ship`).
-- Bedrock satellite IAM: role invoker và batch trên acc3/acc1 trust ECS task role của acc2; ExternalId riêng từng
-  account. Policy assume ở `aa-cis-dev-ecs-assume-bedrock-invoker` (`bedrock_satellite_assume.tf`, khác
+- Bedrock satellite IAM: role invoker và batch trên acc3 trust ECS task role (và role Lambda TripPlanner) của acc2;
+  ExternalId riêng. acc1 không còn trong hệ sinh thái (AA-998). Policy assume ở `aa-cis-dev-ecs-assume-bedrock-invoker` (`bedrock_satellite_assume.tf`, khác
   `aa-cis-dev-ecs-task-policy`).

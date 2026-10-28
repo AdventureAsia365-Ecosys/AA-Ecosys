@@ -28,17 +28,20 @@ with the list of accounts you need.
 
 All infrastructure lives in **acc2**. acc3 only hosts the Bedrock "satellite" role that lets acc2 call chat models,
 the Bedrock batch roles, a read-only Cost Explorer role and its own budget and cost anomaly alerts (ecosystem
-architecture §4.3, §4.4). LLM calls run on acc3
-only; there is no cross-account fallback (AA-998).
+architecture §4.3, §4.4). The ecosystem uses these two accounts only. LLM calls run on acc3 only; there is no
+cross-account fallback ([ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)).
 
 | Name | AWS account ID | Region | CLI profile | Holds | Notes |
 |---|---|---|---|---|---|
 | **acc2** - main | 005097885195 | us-west-1 | `aa365-admin` (also `default`) | Everything: VPC, RDS, ECS, Lambda, API Gateway, S3, Cognito, SES, alarms, budgets | Member account under a reseller (TrueIDC); Bedrock chat models are blocked here, Cohere embeddings are allowed |
-| **acc3** - LLM satellite, primary | 786888028788 | us-west-1 | `nghiep_aa365` | Role `AA3-Bedrock-Invoker`, Bedrock batch roles, Cost Explorer reader `AA3-CostExplorer-Reader`, budget `aa3-llm-monthly-total` and cost anomaly alerts | Terraform root `accounts/acc3-bedrock/`, applied by a human |
-| **acc1** - removed | 867490540162 | us-west-1 | `pqnghiep-admin` | Nothing for AA-Ecosys | A personal account. It left the ecosystem on 2026-10-28 (AA-998): acc2 no longer grants it anything and no app calls it. Its Terraform root `accounts/acc1-bedrock/` waits for a manual destroy. Never use it for AA work |
+| **acc3** - LLM satellite (the only one) | 786888028788 | us-west-1 | `nghiep_aa365` | Role `AA3-Bedrock-Invoker`, Bedrock batch roles, Cost Explorer reader `AA3-CostExplorer-Reader`, budget `aa3-llm-monthly-total` and cost anomaly alerts | Terraform root `accounts/acc3-bedrock/`, applied by a human |
+
+History: acc1 (a personal account, ID 867490540162, profile `pqnghiep-admin`) was removed from the ecosystem on
+2026-10-28 (AA-998). Its ID stays here only as the source for the public-repo leak pattern in the
+[security baseline](security/baseline.md); never create resources there, route calls to it or use it for AA work.
 
 > [!WARNING]
-> The `default` profile points at **acc2** since AA-517 (2026-09-02). Before that it was a static acc1 key and caused
+> The `default` profile points at **acc2** since AA-517 (2026-09-02). Before that it was a static key of another account and caused
 > two wrong-account Secrets Manager writes. Do not point `default` anywhere else, and still pass `--profile` on every
 > command.
 

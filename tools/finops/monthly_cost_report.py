@@ -6,7 +6,8 @@ Offline and read-only. It makes NO AWS call: Cost Explorer data comes from what 
 
   --current FILE    JSON body of  GET /admin/platform/cost?month=YYYY-MM&refresh_if_stale=false  (AA-884,
                     api/services/platform_cost.py cost_by_app): acc2 spend by App tag and service, LLM spend
-                    by app, acc1/acc3 Bedrock from shared.cost_explorer_snapshot.
+                    by app, acc3 Bedrock from shared.cost_explorer_snapshot (acc1, retired by AA-998,
+                    only when a month still carries it).
   --previous FILE   the same JSON for the month before (optional; enables the change columns).
   --llm-csv FILE    optional CSV with columns stage,role,account,calls,cost_usd (one month), from the
                     read-only SQL printed by --print-sql (shared.llm_call_daily + shared.llm_call_log).
@@ -89,6 +90,15 @@ def services_total(data: Optional[dict[str, Any]]) -> dict[str, float]:
     return out
 
 
+# acc3 is the only LLM satellite (AA-998). acc1 (the old fallback) gets a row only while a month's JSON still
+# carries it, so the first report after the retirement still compares with the month before.
+SATELLITES = (("acc3", "acc3 (LLM satellite)"), ("acc1", "acc1 (retired, AA-998)"))
+
+
+def satellite_rows(cur: dict[str, Any], prev: dict[str, Any]) -> list[tuple[str, str]]:
+    return [(n, label) for n, label in SATELLITES if n == "acc3" or n in cur or n in prev]
+
+
 def section_totals(cur: dict[str, Any], prev: Optional[dict[str, Any]]) -> list[str]:
     lines = ["## Totals by account", "",
              "| Account | This month (USD) | Last month (USD) | Change | Note |",
@@ -101,7 +111,7 @@ def section_totals(cur: dict[str, Any], prev: Optional[dict[str, Any]]) -> list[
     lines.append(f"| acc2 (infra, all App tags) | {money(aws_c)} | {money(aws_p)} | {ch} | {note} |")
     sat_c = cur.get("llm_satellites") or {}
     sat_p = (prev or {}).get("llm_satellites") or {}
-    for name, label in (("acc3", "acc3 (LLM main)"), ("acc1", "acc1 (LLM fallback)")):
+    for name, label in satellite_rows(sat_c, sat_p):
         c = (sat_c.get(name) or {}).get("ce_bedrock_usd")
         p = (sat_p.get(name) or {}).get("ce_bedrock_usd") if prev else None
         est = (sat_c.get(name) or {}).get("llm_log_estimate_usd")

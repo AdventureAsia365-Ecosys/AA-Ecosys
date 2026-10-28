@@ -17,29 +17,31 @@
 # AA-ACP-App: ĐÃ XOÁ hẳn (S241, AA-867). AA-ACP-Core: archived, private, giữ nguyên (S241) — cả hai không còn trong workspace.
 # Repo app public → KHÔNG ghi account ID, ARN, SG/VPC ID, inventory, báo cáo bảo mật vào repo app (DM-6.10, D-25); để ở repo gốc / Infra.
 
-## AWS — CIS ACCOUNT (3-account map, confirmed live via sts get-caller-identity, AA-517 02/09/2026)
+## AWS — CIS ACCOUNT (account map, confirmed live via sts get-caller-identity, AA-517 02/09/2026; acc1 gỡ khỏi hệ sinh thái AA-998 28/10/2026)
 
 | Vai trò | Account | Region | Profile |
 |---|---|---|---|
 | **Acc2 — hạ tầng chính** (RDS/ECS/S3/Lambda thật, DUY NHẤT chứa hạ tầng) | 005097885195 | us-west-1 | `aa365-admin` |
-| Acc1 — LLM satellite FALLBACK (AA-296) | 867490540162 | us-west-1 | `pqnghiep-admin` |
-| Acc3 — LLM satellite CHÍNH | 786888028788 | us-west-1 | `nghiep_aa365` |
+| **Acc3 — LLM satellite** (Bedrock chat models; DUY NHẤT ngoài acc2 dùng cho LLM) | 786888028788 | us-west-1 | `nghiep_aa365` |
+| Acc1 — tài khoản CÁ NHÂN của Nghiệp, **ĐÃ GỠ khỏi hệ sinh thái** (AA-998, S255) | 867490540162 | — | `pqnghiep-admin` (chỉ việc cá nhân) |
+
+LLM chỉ chạy trên **acc3** (Bedrock satellite) + các model Bedrock native acc2 đang dùng hôm nay (vd. Cohere Embed v4).
+Không còn fallback chéo account: acc3 lỗi → fallback model cùng acc3 / job retry (Nghiệp chấp nhận, AA-998).
+KHÔNG tạo resource, deploy, ghi secret hay route LLM vào acc1; không thêm lại acc1 vào code/Terraform/catalog.
 
 Always verify: aws sts get-caller-identity --profile aa365-admin
 
 **`default` CLI profile = acc2** since AA-517 (02/09/2026) — trước đó `default` trỏ acc1 bằng
 static key, là nguyên nhân gốc của 2 lần ghi nhầm Secrets Manager (22/05, 25/08/2026). Đã đổi
-`default` để assume cùng role với `aa365-admin` (dùng chung STS cache 8h). Key acc1 cũ vẫn giữ,
-đổi tên `[acc1-legacy-default]` trong `~/.aws/credentials`, không xoá.
+`default` để assume cùng role với `aa365-admin` (dùng chung STS cache 8h). Key acc1 cũ đổi tên
+`[acc1-legacy-default]` trong `~/.aws/credentials`; không dùng cho việc hệ sinh thái (AA-998: access key tĩnh đã Inactive).
 
 History: account 1 (867490540162) — compute/network hạ tầng CŨ đã xoá 09/07/2026
-(AA-271, acc1-destroy-v3.tfplan), NHƯNG account vẫn ACTIVE, giữ lại có chủ đích
-(ADR-2026-022, amended) để chạy Bedrock cross-account satellite pattern (role
-AA-Bedrock-Invoker, dùng bởi AA-296 — xem shared/llm_client/bedrock_satellite.py
-trong AA-CIS-App). KHÔNG coi account này là "đã đóng" khi audit/plan hạ tầng mới.
-AA-Bedrock-Invoker đã nằm trong Terraform (accounts/acc1-bedrock/bedrock_invoker_import.tf) — S235.
-AA-517 (02/09/2026): dọn 1 RDS snapshot lạc + 20 Secrets Manager secrets lạc trên acc1 (nguyên
-nhân: `default` profile từng trỏ acc1) — xem memory `project_aa517_acc1_orphan_cleanup`.
+(AA-271, acc1-destroy-v3.tfplan); sau đó giữ làm Bedrock satellite FALLBACK (ADR-2026-022 amended, AA-296,
+role AA-Bedrock-Invoker, root Terraform `accounts/acc1-bedrock` từ S235). AA-517 (02/09/2026): dọn 1 RDS
+snapshot lạc + 20 Secrets Manager secrets lạc trên acc1 (nguyên nhân: `default` profile từng trỏ acc1).
+**AA-998 (S255, 28/10/2026): acc1 gỡ khỏi hệ sinh thái** — code CIS/TripPlanner/Infra bỏ mọi đường gọi acc1,
+root `accounts/acc1-bedrock` đã destroy cùng bucket state, tài nguyên sót đã xoá (kiểm kê lại 28/10: 0 role/bucket/Lambda/secret us-west-1; thư mục root còn trong Infra, chờ xoá); quyết định: ADR 0001a (`docs/adr/0001a-retire-acc1-llm-on-acc3-only.md`).
 
 ## LIVE ENDPOINTS (Dev, kiểm 19/10/2026)
 CIS API:       <https://api-cis.lumiguides.it.com>      (API Gateway REST → VPC link → ALB → ECS; `/health` 200)

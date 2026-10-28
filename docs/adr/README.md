@@ -7,7 +7,8 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 
 | ADR | Title | Status |
 |---|---|---|
-| [0001](0001-ecosystem-target-architecture.md) | Ecosystem target architecture: shared platform services and contracts between apps | Accepted (tightened by 0008) |
+| [0001](0001-ecosystem-target-architecture.md) | Ecosystem target architecture: shared platform services and contracts between apps | Accepted (tightened by 0008, amended by 0001a) |
+| [0001a](0001a-retire-acc1-llm-on-acc3-only.md) | Amendment: retire acc1; LLM chat models run on acc3 only, no cross-account fallback (AA-998) | Accepted |
 | [0002](0002-only-cis-writes-content.md) | Only CIS writes content; other apps read it through views | Accepted |
 | [0003](0003-one-durable-job-model.md) | One durable job model for all deferred work | Accepted (amended by 0003a) |
 | [0003a](0003a-per-owner-job-tables.md) | Amendment: one job table per owner schema, from a shared DDL template | Accepted |

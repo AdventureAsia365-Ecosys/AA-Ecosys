@@ -34,6 +34,17 @@ class ReportTest(unittest.TestCase):
         self.assertIn("Untagged acc2 spend 3.00 USD (DM-10.1): AWS Data Transfer.", out)
         self.assertIn("| n/a |", out)  # no previous month
 
+    def test_satellites_acc3_only_after_aa998(self):
+        out = self.run_main("--current", str(S / "platform-cost-2099-02.json"),
+                            "--previous", str(S / "platform-cost-2099-01.json"))
+        self.assertIn("| acc3 (LLM satellite) | 30.00 | 18.00 | +66.7 % |", out)
+        self.assertNotIn("acc1", out)
+
+    def test_retired_acc1_row_only_when_a_month_carries_it(self):
+        self.assertEqual(m.satellite_rows({}, {}), [("acc3", "acc3 (LLM satellite)")])
+        self.assertEqual(m.satellite_rows({"acc3": {}}, {"acc1": {"ce_bedrock_usd": 0.76}}),
+                         [("acc3", "acc3 (LLM satellite)"), ("acc1", "acc1 (retired, AA-998)")])
+
     def test_change(self):
         self.assertEqual(m.change(None, 1.0), ("n/a", False))
         self.assertEqual(m.change(5.0, 0.0), ("new", True))
