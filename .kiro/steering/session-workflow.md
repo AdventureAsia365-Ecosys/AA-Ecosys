@@ -18,6 +18,8 @@ Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo l�
   sắp thứ tự, mục "Time-gated checks" + "Waiting on Nghiệp"), kiểm trạng thái thật (STS, ECS api/worker cùng SHA,
   `shared.job` queued/running), rồi **đề xuất issue lấy từ backlog sống / master plan** (3–5 thường, 8–10 khi Ultracode; Nghiệp có thể giao số khác) chờ Nghiệp chốt. KHÔNG audit lại toàn bộ
   Linear (S238: tốn token) — chỉ audit lại khi file cũ > ~2 tuần.
+- Rà soát định kỳ (AA-838): `pg_stat_statements` hằng tuần (C4.3), dung lượng + chi phí hằng tháng (C8), quyền hằng
+  quý (DM-8.10) — đến hạn thì đưa vào danh sách việc; cách tính hạn ở `skill/aa-session` bước 6.
 - Trong phiên: giữ checklist sống `.tmp-session/S<nnn>-checklist.md` (Nghiệp xem bằng Markdown Preview), cập nhật sau
   mỗi bước xong; bài học chờ ở `.tmp-session/S<nnn>-lessons-pending.md` (S247, chi tiết: skill `aa-session`).
 - Cuối phiên: cập nhật `docs/backlog/README.md` (cột Status, chuyển issue đóng sang §5, thêm issue mới) cùng root PR.

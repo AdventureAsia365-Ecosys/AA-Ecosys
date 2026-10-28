@@ -1,0 +1,334 @@
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+PROBE [header] login=cis_app at=2026-10-28T06:53:47Z postmaster_start=2026-10-15 07:46:28.456331+00:00 read_all_stats=False
+PROBE [header] PostgreSQL 15.17 on aarch64-unknown-linux-gnu
+PROBE [setting] autovacuum_analyze_scale_factor=0.05
+PROBE [setting] autovacuum_naptime=15s
+PROBE [setting] autovacuum_vacuum_scale_factor=0.1
+PROBE [setting] effective_cache_size=1056918kB
+PROBE [setting] idle_in_transaction_session_timeout=60000ms
+PROBE [setting] log_lock_waits=on
+PROBE [setting] log_min_duration_statement=500ms
+PROBE [setting] maintenance_work_mem=65536kB
+PROBE [setting] max_connections=181
+PROBE [setting] pg_stat_statements.max=5000
+PROBE [setting] pg_stat_statements.track=top
+PROBE [setting] shared_buffers=528458kB
+PROBE [setting] statement_timeout=60000ms
+PROBE [setting] superuser_reserved_connections=3
+PROBE [setting] track_io_timing=on
+PROBE [setting] work_mem=4096kB
+PROBE [database] aa_cis_dev size=1527.4MB backends=6 commit=14582773 rollback=3097 cache_hit=99.05% temp_files=4938 temp=36275.8MB deadlocks=0 conflicts=0 xid_age=2516409 stats_reset=None
+PROBE [database] postgres size=7.6MB backends=0 commit=236900 rollback=0 cache_hit=99.98% temp_files=0 temp=0.0MB deadlocks=0 conflicts=0 xid_age=2516409 stats_reset=None
+PROBE [schema] shared tables=58 total=740.1MB heap=370.0MB indexes=352.4MB
+PROBE [schema] geo tables=18 total=360.8MB heap=84.5MB indexes=160.2MB
+PROBE [schema] acp_contract tables=16 total=310.7MB heap=60.3MB indexes=154.4MB
+PROBE [schema] silver_aa_internal tables=7 total=29.3MB heap=10.2MB indexes=2.9MB
+PROBE [schema] acp_shared tables=21 total=28.2MB heap=10.5MB indexes=8.4MB
+PROBE [schema] crm tables=78 total=19.7MB heap=5.6MB indexes=7.2MB
+PROBE [schema] booking tables=59 total=8.3MB heap=2.7MB indexes=4.9MB
+PROBE [schema] gold_aa_internal tables=7 total=7.8MB heap=3.1MB indexes=0.8MB
+PROBE [schema] tripplanner tables=9 total=0.9MB heap=0.3MB indexes=0.4MB
+PROBE [schema] acp_deliver tables=1 total=0.0MB heap=0.0MB indexes=0.0MB
+PROBE [schema] public tables=1 total=0.0MB heap=0.0MB indexes=0.0MB
+PROBE [table_size] shared.decision_log total=443.7MB heap=229.6MB idx=213.9MB toast=0.0MB live~434147 dead=3 dead_pct=0.0 seq=618 idx_scan=1147062 ins/upd/del=425285/6/695728 heap_cache_hit=76.9% last_autovac=2026-10-25 08:41:33.969481+00:00 autovac_n=9
+PROBE [table_size] geo.tour_place total=215.5MB heap=6.8MB idx=95.0MB toast=113.8MB live~13356 dead=497 dead_pct=3.7 seq=5966 idx_scan=2578671 ins/upd/del=29944/7996/16588 heap_cache_hit=99.7% last_autovac=2026-10-28 00:30:39.447579+00:00 autovac_n=31
+PROBE [table_size] shared.llm_call_log total=202.6MB heap=92.1MB idx=110.5MB toast=0.0MB live~386227 dead=200 dead_pct=0.1 seq=10081 idx_scan=25692775 ins/upd/del=269852/0/200 heap_cache_hit=99.1% last_autovac=2026-10-26 07:05:00.888398+00:00 autovac_n=11
+PROBE [table_size] acp_contract.atom_embedding total=175.2MB heap=0.9MB idx=87.0MB toast=87.3MB live~11036 dead=0 dead_pct=0.0 seq=459 idx_scan=112200 ins/upd/del=8456/0/0 heap_cache_hit=97.1% last_autovac=2026-10-24 20:45:24.301277+00:00 autovac_n=3
+PROBE [table_size] acp_contract.atom_ranking total=66.6MB heap=15.5MB idx=51.1MB toast=0.0MB live~97368 dead=0 dead_pct=0.0 seq=37821 idx_scan=11830 ins/upd/del=13508382/13419564/13443522 heap_cache_hit=99.9% last_autovac=2026-10-27 18:20:24.651077+00:00 autovac_n=702
+PROBE [table_size] geo.tour_leg total=65.9MB heap=41.9MB idx=24.0MB toast=0.0MB live~96123 dead=0 dead_pct=0.0 seq=2756 idx_scan=4 ins/upd/del=1144081/0/1047958 heap_cache_hit=99.2% last_autovac=2026-10-28 03:11:39.685745+00:00 autovac_n=68
+PROBE [table_size] geo.tour_junction total=55.1MB heap=22.8MB idx=32.2MB toast=0.0MB live~222234 dead=0 dead_pct=0.0 seq=1252 idx_scan=1 ins/upd/del=1845810/0/1623576 heap_cache_hit=99.7% last_autovac=2026-10-28 03:11:38.959453+00:00 autovac_n=69
+PROBE [table_size] shared.tenant_api_usage total=37.8MB heap=18.9MB idx=18.9MB toast=0.0MB live~156007 dead=206 dead_pct=0.1 seq=9 idx_scan=35446 ins/upd/del=114314/0/200 heap_cache_hit=97.7% last_autovac=2026-10-26 12:11:10.657833+00:00 autovac_n=9
+PROBE [table_size] acp_contract.tour_atoms total=31.8MB heap=28.4MB idx=3.2MB toast=0.2MB live~54976 dead=4816 dead_pct=8.8 seq=17907 idx_scan=17350145 ins/upd/del=43293/36142/0 heap_cache_hit=99.8% last_autovac=2026-10-25 06:54:25.360643+00:00 autovac_n=10
+PROBE [table_size] shared.job total=22.2MB heap=8.1MB idx=1.8MB toast=12.2MB live~7688 dead=141 dead_pct=1.8 seq=19096 idx_scan=2128150 ins/upd/del=7071/65911/0 heap_cache_hit=100.0% last_autovac=2026-10-28 02:52:21.759878+00:00 autovac_n=267
+PROBE [table_size] silver_aa_internal.generated_content total=18.8MB heap=3.8MB idx=2.1MB toast=12.8MB live~2309 dead=90 dead_pct=3.9 seq=4994 idx_scan=748465 ins/upd/del=1804/851/0 heap_cache_hit=98.5% last_autovac=2026-10-25 04:35:43.323400+00:00 autovac_n=3
+PROBE [table_size] shared.llm_shadow_log total=11.9MB heap=10.0MB idx=0.5MB toast=1.3MB live~5845 dead=0 dead_pct=0.0 seq=10 idx_scan=10 ins/upd/del=3024/0/0 heap_cache_hit=63.2% last_autovac=2026-10-08 07:37:51.612199+00:00 autovac_n=1
+PROBE [table_size] acp_shared.content_piece total=11.9MB heap=0.6MB idx=2.7MB toast=8.6MB live~349 dead=58 dead_pct=16.6 seq=17053 idx_scan=87541 ins/upd/del=348/717/0 heap_cache_hit=99.8% last_autovac=2026-10-25 12:12:23.490076+00:00 autovac_n=10
+PROBE [table_size] acp_contract.question_embedding total=8.4MB heap=0.2MB idx=0.1MB toast=8.0MB live~1012 dead=0 dead_pct=0.0 seq=102 idx_scan=129 ins/upd/del=99/0/0 heap_cache_hit=47.5% last_autovac=None autovac_n=0
+PROBE [table_size] geo.tour_stop total=7.8MB heap=3.1MB idx=4.7MB toast=0.0MB live~19422 dead=0 dead_pct=0.0 seq=5718 idx_scan=4883 ins/upd/del=232992/0/213570 heap_cache_hit=99.6% last_autovac=2026-10-28 03:11:40.232221+00:00 autovac_n=66
+PROBE [table_size] acp_contract.atom_segment_member total=7.8MB heap=2.6MB idx=5.1MB toast=0.0MB live~17506 dead=1257 dead_pct=7.2 seq=9452 idx_scan=1606084 ins/upd/del=55894/471/43204 heap_cache_hit=99.4% last_autovac=2026-10-27 05:42:48.216347+00:00 autovac_n=13
+PROBE [table_size] gold_aa_internal.published_tours total=6.8MB heap=3.0MB idx=0.5MB toast=3.3MB live~892 dead=131 dead_pct=14.7 seq=63966 idx_scan=19945192 ins/upd/del=497/2259/0 heap_cache_hit=100.0% last_autovac=2026-10-25 07:36:44.856392+00:00 autovac_n=9
+PROBE [table_size] acp_contract.route total=6.8MB heap=5.1MB idx=1.7MB toast=0.0MB live~11846 dead=298 dead_pct=2.5 seq=1474 idx_scan=8560031 ins/upd/del=11199/10249/0 heap_cache_hit=99.8% last_autovac=2026-10-27 07:15:12.901599+00:00 autovac_n=12
+PROBE [table_size] silver_aa_internal.raw_tours total=6.5MB heap=2.8MB idx=0.5MB toast=3.1MB live~987 dead=70 dead_pct=7.1 seq=62502 idx_scan=32672762 ins/upd/del=0/2645/0 heap_cache_hit=100.0% last_autovac=2026-10-25 07:44:45.351006+00:00 autovac_n=8
+PROBE [table_size] crm.aa_catalog_tour total=6.4MB heap=0.6MB idx=0.2MB toast=5.5MB live~892 dead=0 dead_pct=0.0 seq=559 idx_scan=22011 ins/upd/del=892/20899/0 heap_cache_hit=99.5% last_autovac=2026-10-28 06:00:22.828125+00:00 autovac_n=50
+PROBE [table_size] shared.destinations total=5.6MB heap=4.2MB idx=1.3MB toast=0.0MB live~8139 dead=21 dead_pct=0.3 seq=68001 idx_scan=18179302 ins/upd/del=6954/3462/0 heap_cache_hit=100.0% last_autovac=2026-10-27 01:24:01.251401+00:00 autovac_n=4
+PROBE [table_size] crm.job total=5.5MB heap=2.9MB idx=2.6MB toast=0.0MB live~7985 dead=51 dead_pct=0.6 seq=9126 idx_scan=687546 ins/upd/del=23137/46270/15152 heap_cache_hit=100.0% last_autovac=2026-10-28 06:49:52.524085+00:00 autovac_n=364
+PROBE [table_size] acp_shared.place_card total=4.5MB heap=3.9MB idx=0.5MB toast=0.0MB live~4785 dead=461 dead_pct=9.6 seq=23101 idx_scan=2227083 ins/upd/del=4803/4103/18 heap_cache_hit=99.9% last_autovac=2026-10-27 07:33:59.017848+00:00 autovac_n=7
+PROBE [table_size] acp_contract.atom_matches total=4.4MB heap=2.0MB idx=2.4MB toast=0.0MB live~15159 dead=507 dead_pct=3.3 seq=11 idx_scan=44051 ins/upd/del=9412/29537/0 heap_cache_hit=96.7% last_autovac=2026-10-24 12:48:28.294032+00:00 autovac_n=2
+PROBE [table_size] acp_contract.atom_segment total=3.9MB heap=2.8MB idx=1.1MB toast=0.0MB live~11606 dead=260 dead_pct=2.2 seq=5835 idx_scan=16052083 ins/upd/del=21485/160547/12892 heap_cache_hit=99.9% last_autovac=2026-10-27 09:31:53.970834+00:00 autovac_n=31
+PROBE [table_size] acp_shared.atom_place_card total=3.8MB heap=1.9MB idx=1.8MB toast=0.0MB live~26576 dead=4 dead_pct=0.0 seq=19141 idx_scan=1665035 ins/upd/del=26577/31/0 heap_cache_hit=99.9% last_autovac=2026-10-26 13:34:18.069111+00:00 autovac_n=7
+PROBE [table_size] booking.job total=3.5MB heap=2.2MB idx=1.3MB toast=0.0MB live~6869 dead=54 dead_pct=0.8 seq=18429 idx_scan=1351938 ins/upd/del=13906/27873/6999 heap_cache_hit=99.0% last_autovac=2026-10-28 06:27:21.185598+00:00 autovac_n=210
+PROBE [table_size] geo.graph_edge total=3.4MB heap=1.8MB idx=1.5MB toast=0.1MB live~8412 dead=0 dead_pct=0.0 seq=86 idx_scan=7 ins/upd/del=101891/0/93479 heap_cache_hit=99.5% last_autovac=2026-10-28 03:11:38.103288+00:00 autovac_n=66
+PROBE [table_size] acp_shared.place_card_alias total=3.2MB heap=1.7MB idx=1.5MB toast=0.0MB live~18875 dead=2 dead_pct=0.0 seq=1412 idx_scan=83812 ins/upd/del=18877/20/0 heap_cache_hit=98.6% last_autovac=2026-10-26 15:22:11.917728+00:00 autovac_n=7
+PROBE [table_size] geo.graph_node total=3.1MB heap=2.1MB idx=0.7MB toast=0.2MB live~5359 dead=0 dead_pct=0.0 seq=116 idx_scan=60 ins/upd/del=64402/0/59043 heap_cache_hit=99.1% last_autovac=2026-10-28 03:11:38.172450+00:00 autovac_n=66
+PROBE [table_rows] shared.decision_log live~434147 dead=3 total=443.7MB
+PROBE [table_rows] shared.llm_call_log live~386227 dead=200 total=202.6MB
+PROBE [table_rows] geo.tour_junction live~222234 dead=0 total=55.1MB
+PROBE [table_rows] shared.tenant_api_usage live~156007 dead=206 total=37.8MB
+PROBE [table_rows] acp_contract.atom_ranking live~97368 dead=0 total=66.6MB
+PROBE [table_rows] geo.tour_leg live~96123 dead=0 total=65.9MB
+PROBE [table_rows] acp_contract.tour_atoms live~54976 dead=4816 total=31.8MB
+PROBE [table_rows] acp_shared.atom_place_card live~26576 dead=4 total=3.8MB
+PROBE [table_rows] geo.tour_stop live~19422 dead=0 total=7.8MB
+PROBE [table_rows] acp_shared.place_card_alias live~18875 dead=2 total=3.2MB
+PROBE [table_rows] acp_contract.atom_segment_member live~17506 dead=1257 total=7.8MB
+PROBE [table_rows] acp_contract.atomize_day_fingerprint live~16534 dead=8 total=2.9MB
+PROBE [table_rows] acp_contract.atom_matches live~15159 dead=507 total=4.4MB
+PROBE [table_rows] geo.tour_place live~13356 dead=497 total=215.5MB
+PROBE [table_rows] acp_contract.route live~11846 dead=298 total=6.8MB
+PROBE [table_rows] acp_contract.atom_segment live~11606 dead=260 total=3.9MB
+PROBE [table_rows] acp_contract.atom_embedding live~11036 dead=0 total=175.2MB
+PROBE [table_rows] geo.place_name live~9545 dead=462 total=2.9MB
+PROBE [table_rows] shared.cost_explorer_app_snapshot live~9108 dead=0 total=2.2MB
+PROBE [table_rows] geo.graph_edge live~8412 dead=0 total=3.4MB
+PROBE [table_rows] shared.destinations live~8139 dead=21 total=5.6MB
+PROBE [table_rows] crm.job live~7985 dead=51 total=5.5MB
+PROBE [table_rows] shared.job live~7688 dead=141 total=22.2MB
+PROBE [table_rows] geo.tour_day live~6996 dead=284 total=2.8MB
+PROBE [table_rows] booking.job live~6869 dead=54 total=3.5MB
+PROBE [table_rows] shared.llm_shadow_log live~5845 dead=0 total=11.9MB
+PROBE [table_rows] geo.graph_node live~5359 dead=0 total=3.1MB
+PROBE [table_rows] acp_contract.search_demand live~5097 dead=237 total=1.7MB
+PROBE [table_rows] acp_shared.place_card live~4785 dead=461 total=4.5MB
+PROBE [table_rows] shared.place_photo live~3232 dead=187 total=3.0MB
+PROBE [bloat] tables with dead/live > 20% and >= 1000 dead rows: 0
+PROBE [index_size] geo.tour_place_embedding_hnsw on tour_place size=93.2MB scans=7 unique=False pk=False
+PROBE [index_size] acp_contract.idx_atom_embedding_vector on atom_embedding size=86.3MB scans=14 unique=False pk=False
+PROBE [index_size] shared.decision_log_cache_idx on decision_log size=58.3MB scans=1080064 unique=False pk=False
+PROBE [index_size] shared.decision_log_stage_created_cov_idx on decision_log size=54.7MB scans=2408 unique=False pk=False
+PROBE [index_size] shared.decision_log_question_created_cov_idx on decision_log size=50.2MB scans=18607 unique=False pk=False
+PROBE [index_size] geo.tour_junction_pkey on tour_junction size=32.2MB scans=1 unique=True pk=True
+PROBE [index_size] acp_contract.atom_ranking_pkey on atom_ranking size=30.0MB scans=747 unique=True pk=True
+PROBE [index_size] shared.decision_log_subject_idx on decision_log size=28.3MB scans=11732 unique=False pk=False
+PROBE [index_size] shared.idx_llm_call_log_stage_created on llm_call_log size=27.5MB scans=3604 unique=False pk=False
+PROBE [index_size] shared.idx_llm_call_log_model_created on llm_call_log size=26.8MB scans=0 unique=False pk=False
+PROBE [index_size] geo.tour_leg_pkey on tour_leg size=22.9MB scans=4 unique=True pk=True
+PROBE [index_size] shared.idx_llm_call_log_tenant_created on llm_call_log size=21.0MB scans=4347 unique=False pk=False
+PROBE [index_size] shared.llm_call_log_pkey on llm_call_log size=16.3MB scans=201 unique=True pk=True
+PROBE [index_size] acp_contract.idx_atom_ranking_current_identity on atom_ranking size=15.5MB scans=344 unique=True pk=False
+PROBE [index_size] shared.llm_call_log_created_id_idx on llm_call_log size=14.9MB scans=12296 unique=False pk=False
+PROBE [index_size] shared.decision_log_created_id_idx on decision_log size=13.1MB scans=34247 unique=False pk=False
+PROBE [index_size] shared.decision_log_pkey on decision_log size=9.3MB scans=4 unique=True pk=True
+PROBE [index_size] shared.tenant_api_usage_pkey on tenant_api_usage size=5.9MB scans=200 unique=True pk=True
+PROBE [index_size] shared.tenant_api_usage_tenant_called_idx on tenant_api_usage size=5.0MB scans=19733 unique=False pk=False
+PROBE [index_size] geo.tour_stop_pkey on tour_stop size=4.6MB scans=4883 unique=True pk=True
+PROBE [unused_index] count=178 total=33.4MB (C5.2d: drop candidate only after 30 days at 0)
+PROBE [unused_index] shared.idx_llm_call_log_model_created on llm_call_log size=26.8MB
+PROBE [unused_index] acp_shared.idx_content_piece_embedding on content_piece size=2.6MB
+PROBE [unused_index] geo.tour_leg_countries_gin on tour_leg size=1.1MB
+PROBE [unused_index] geo.tour_place_unlinked_idx on tour_place size=0.3MB
+PROBE [unused_index] gold_aa_internal.idx_pt_embedding on published_tours size=0.2MB
+PROBE [unused_index] shared.cost_explorer_app_snapshot_fetched_idx on cost_explorer_app_snapshot size=0.1MB
+PROBE [unused_index] shared.ix_pipeline_jobs_created on pipeline_jobs size=0.0MB
+PROBE [unused_index] shared.idx_dfs_call_log_live on dfs_call_log size=0.0MB
+PROBE [unused_index] booking.suppliers_categories_idx on suppliers size=0.0MB
+PROBE [unused_index] crm.traveler_name_token_bidx_idx on traveler size=0.0MB
+PROBE [unused_index] acp_contract.idx_s1_from_atom_runs_prompt_version on s1_from_atom_runs size=0.0MB
+PROBE [unused_index] booking.b2b_holds_quote_idx on b2b_holds size=0.0MB
+PROBE [unused_index] booking.trip_cases_party_idx on trip_cases size=0.0MB
+PROBE [unused_index] crm.trip_owner_idx on trip size=0.0MB
+PROBE [unused_index] acp_shared.idx_output_rules_active on acp_output_rules size=0.0MB
+PROBE [ledger] shared.llm_call_log live~386227 retention_days=180 oldest=2026-09-17 07:28:31.346449+00:00 rows_30d=375684 rows_7d=119980 older_than_window=0
+PROBE [ledger] shared.decision_log live~434147 retention_days=none yet oldest=2026-09-29 12:09:52.716112+00:00 rows_30d=434147 rows_7d=139431
+PROBE [ledger] shared.tenant_api_usage live~156007 retention_days=90 oldest=2026-09-16 13:53:00.669358+00:00 rows_30d=148489 rows_7d=14991 older_than_window=0
+PROBE [ledger] shared.job live~7688 retention_days=30 oldest=2026-09-28 16:34:54.440023+00:00 rows_30d=7688 rows_7d=4896 older_than_window=0
+PROBE [ledger] booking.job live~6869 retention_days=30
+PROBE [ledger] crm.job live~7985 retention_days=30
+PROBE [job_cis] status=cancelled n=6 oldest_due_queued_s=None
+PROBE [job_cis] status=failed n=7 oldest_due_queued_s=None
+PROBE [job_cis] status=succeeded n=7675 oldest_due_queued_s=None
+PROBE [job_cis_kind_30d] a3_atomize n=2071 p50=41.8s p95=152.3s failed=0
+PROBE [job_cis_kind_30d] place_extract n=1914 p50=1.5s p95=33.9s failed=0
+PROBE [job_cis_kind_30d] s1_rewrite n=1708 p50=148.7s p95=258.5s failed=1
+PROBE [job_cis_kind_30d] place_cards_build n=918 p50=19.8s p95=85.0s failed=0
+PROBE [job_cis_kind_30d] t9_write n=344 p50=72.2s p95=181.6s failed=0
+PROBE [job_cis_kind_30d] recompute n=127 p50=145.3s p95=295.9s failed=2
+PROBE [job_cis_kind_30d] ops_rds_role_connections n=75 p50=0.1s p95=0.3s failed=0
+PROBE [job_cis_kind_30d] tour_graph_build n=70 p50=24.5s p95=57.4s failed=0
+PROBE [job_cis_kind_30d] t2_rewrite n=62 p50=89.0s p95=330.7s failed=0
+PROBE [job_cis_kind_30d] place_geocode n=60 p50=60.1s p95=395.9s failed=0
+PROBE [job_cis_kind_30d] photo_sync n=55 p50=12.4s p95=629.0s failed=1
+PROBE [job_cis_kind_30d] s1_seo_prefetch n=45 p50=51.1s p95=1002.0s failed=0
+PROBE [job_cis_kind_30d] place_dedupe n=30 p50=162.8s p95=642.9s failed=0
+PROBE [job_cis_kind_30d] place_shape n=24 p50=284.1s p95=2674.8s failed=0
+PROBE [job_cis_kind_30d] t7_slate n=23 p50=10.5s p95=167.5s failed=0
+PROBE [job_cis_kind_30d] t8_angles n=18 p50=22.7s p95=44.4s failed=0
+PROBE [job_cis_kind_30d] retention_tenant_api_usage n=14 p50=0.0s p95=0.2s failed=0
+PROBE [job_cis_kind_30d] retention_cost_explorer_snapshot n=14 p50=0.1s p95=0.4s failed=0
+PROBE [job_cis_kind_30d] retention_llm_call_log n=14 p50=0.1s p95=0.4s failed=0
+PROBE [job_cis_kind_30d] staff_directory_reconcile n=13 p50=1.0s p95=1.2s failed=0
+PROBE [job_cis_kind_30d] retention_decision_log n=12 p50=0.1s p95=0.1s failed=0
+PROBE [job_cis_kind_30d] retention_job n=12 p50=0.0s p95=0.1s failed=0
+PROBE [job_cis_kind_30d] supply_content_draft n=10 p50=2.7s p95=3.3s failed=3
+PROBE [job_cis_kind_30d] revalidate n=7 p50=20.2s p95=23.6s failed=0
+PROBE [job_cis_kind_30d] writing_signal_fact_filter n=6 p50=0.1s p95=1.4s failed=0
+PROBE [conn] max_connections=181 superuser_reserved=3 ceiling75=135
+PROBE [conn_app] role=booking app=booking-api state=<not visible> n=1
+PROBE [conn_app] role=cis_app app=cis-api state=idle n=1
+PROBE [conn_app] role=cis_app app=cis-worker state=idle n=2
+PROBE [conn_app] role=crm_app app=crm-api state=<not visible> n=1
+PROBE [conn_app] role=rdsadmin app=<empty> state=<not visible> n=2
+PROBE [conn_app] role=rdsadmin app=PostgreSQL JDBC Driver state=<not visible> n=1
+PROBE [conn] client_sessions=8 (excluding this probe)
+PROBE [conn_role] aa_app_user sessions=0 rolconnlimit=15 pct=0%
+PROBE [conn_role] aa_cis_admin sessions=0 rolconnlimit=-1 pct=-
+PROBE [conn_role] booking sessions=1 rolconnlimit=15 pct=7%
+PROBE [conn_role] cis_app sessions=4 rolconnlimit=90 pct=4%
+PROBE [conn_role] crm_app sessions=1 rolconnlimit=6 pct=17%
+PROBE [conn_role] db_migrator sessions=0 rolconnlimit=5 pct=0%
+PROBE [conn_role] tripplanner sessions=0 rolconnlimit=30 pct=0%
+PROBE [long_xact] visible transactions open > 60 s: 0 (only sessions this login may see)
+PROBE [locks] held+waiting=9 waiting=0 blocked_sessions=0
+PROBE [pgss] schema=public statements=4928 dealloc=1466 stats_reset=2026-10-07 16:35:01.069635+00:00
+PROBE [pgss_role] cis_app stmts=486 calls=35249675 total=2310.2s share=43.8% mean=0.07ms blks_read=653040 temp_written=518988
+PROBE [pgss_role] tripplanner stmts=40 calls=230792 total=1748.8s share=33.1% mean=7.58ms blks_read=4743 temp_written=64163
+PROBE [pgss_role] rdsadmin stmts=2996 calls=14598727 total=556.8s share=10.6% mean=0.04ms blks_read=807 temp_written=0
+PROBE [pgss_role] aa_app_user stmts=821 calls=296629 total=436.6s share=8.3% mean=1.47ms blks_read=12352 temp_written=226760
+PROBE [pgss_role] booking stmts=148 calls=4419718 total=101.5s share=1.9% mean=0.02ms blks_read=1474 temp_written=0
+PROBE [pgss_role] crm_app stmts=224 calls=2500549 total=77.4s share=1.5% mean=0.03ms blks_read=9452 temp_written=0
+PROBE [pgss_role] db_migrator stmts=193 calls=24661 total=42.1s share=0.8% mean=1.71ms blks_read=9943 temp_written=0
+PROBE [pgss_role] aa_cis_admin stmts=8 calls=248898 total=2.2s share=0.0% mean=0.01ms blks_read=19 temp_written=0
+PROBE [pgss_role] bk_owner stmts=12 calls=180 total=0.0s share=0.0% mean=0.27ms blks_read=38 temp_written=0
+PROBE [pgss_role] cis_owner stmts=1 calls=4 total=0.0s share=0.0% mean=0.17ms blks_read=0 temp_written=0
+PROBE [pgss_total] role=tripplanner calls=4124 total=1379.3s mean=334.5ms p95~2502.0ms max=7750ms rows=79031 hit/read=5779735/99 temp=50136 qid=None q=<insufficient privilege>
+PROBE [pgss_total] role=cis_app calls=7706099 total=459.5s mean=0.1ms p95~0.3ms max=160ms rows=7706099 hit/read=184460586/15647 temp=0 qid=-2049398600283500477 q=INSERT INTO acp_contract.atom_ranking (market, tour_id, segment_id, demand_rank, recurrence_rank, questions_rank, said_rank, total_rank, demand_market, demand_v
+PROBE [pgss_total] role=cis_app calls=171260 total=249.9s mean=1.5ms p95~479.5ms max=45294ms rows=171260 hit/read=0/0 temp=0 qid=1238812706996916191 q=SELECT pg_advisory_xact_lock($1)
+PROBE [pgss_total] role=aa_app_user calls=4119 total=235.6s mean=57.2ms p95~323.7ms max=856ms rows=694187 hit/read=17491572/4963 temp=226760 qid=None q=<insufficient privilege>
+PROBE [pgss_total] role=tripplanner calls=2515 total=189.5s mean=75.3ms p95~97.1ms max=326ms rows=2514 hit/read=17147731/838 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_total] role=cis_app calls=1135 total=158.7s mean=139.8ms p95~210.7ms max=313ms rows=1892744 hit/read=4563742/0 temp=148829 qid=6203532069547232241 q=SELECT asg.segment_id, asg.canonical_place, asg.canonical_action, coalesce(mode() WITHIN GROUP (ORDER BY rt.country), $3) AS country, array_remove(array_agg(ta.
+PROBE [pgss_total] role=cis_app calls=470074 total=150.8s mean=0.3ms p95~4.0ms max=127ms rows=382565 hit/read=2861834/237731 temp=0 qid=6335191632319199341 q=SELECT DISTINCT ON (l.question_key) l.question_key, l.probability::float AS probability, l.choice, l.probabilities FROM shared.decision_log l JOIN unnest($2::te
+PROBE [pgss_total] role=cis_app calls=28977 total=128.0s mean=4.4ms p95~30.9ms max=620ms rows=28977 hit/read=38194209/60035 temp=0 qid=7200253820217445795 q=INSERT INTO geo.tour_place (component_id, source_id, tour_id, day_index, name, name_norm, country, country_norm, locality_norm, destination_id, place_card_id, a
+PROBE [pgss_total] role=cis_app calls=522 total=98.4s mean=188.5ms p95~229.8ms max=352ms rows=8759105 hit/read=70770540/4226 temp=0 qid=-85985826470011345 q=UPDATE acp_contract.atom_ranking SET superseded_at = now() WHERE market = $1 AND superseded_at IS NULL AND version < $2
+PROBE [pgss_total] role=cis_app calls=522 total=87.5s mean=167.6ms p95~261.9ms max=629ms rows=5616542 hit/read=3482058/22 temp=287484 qid=7486273179250024402 q=SELECT asg.segment_id, asg.canonical_place, asg.canonical_action, array_agg(DISTINCT ta.tour_id) AS tour_ids, COALESCE(SUM(LENGTH(COALESCE(ta.evidence, ta.text,
+PROBE [pgss_total] role=rdsadmin calls=1123959 total=81.7s mean=0.1ms p95~0.4ms max=80ms rows=12457 hit/read=22969/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_total] role=tripplanner calls=2514 total=80.2s mean=31.9ms p95~113.0ms max=418ms rows=19356 hit/read=2134850/205 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_total] role=cis_app calls=1365936 total=75.4s mean=0.1ms p95~0.3ms max=106ms rows=1365936 hit/read=29882800/125 temp=0 qid=6750045612912338597 q=INSERT INTO acp_contract.atom_ranking (market, tour_id, segment_id, recurrence, questions, said, excluded_reason, version, superseded_at) VALUES ($1, $2::uuid, 
+PROBE [pgss_total] role=cis_app calls=1842956 total=69.0s mean=0.0ms p95~0.2ms max=61ms rows=1842956 hit/read=37522542/17782 temp=0 qid=2349105741087282049 q=INSERT INTO geo.tour_junction (build_id, destination_a, destination_b, km, cross_border) VALUES ($1::uuid, $2, $3, $4, $5)
+PROBE [pgss_total] role=cis_app calls=601 total=66.1s mean=110.0ms p95~196.5ms max=415ms rows=21633 hit/read=22321851/4595 temp=0 qid=5206767337345401654 q=SELECT kind, status, count(*)::int AS n, coalesce(sum(j.cost_usd + (SELECT coalesce(sum(l.cost_usd), $1) FROM shared.llm_call_log l WHERE l.job_id = j.id)), $2)
+PROBE [pgss_total] role=rdsadmin calls=2963 total=65.0s mean=21.9ms p95~96.7ms max=354ms rows=2963 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_total] role=cis_app calls=117474 total=61.6s mean=0.5ms p95~2.4ms max=99ms rows=117474 hit/read=4788692/27766 temp=0 qid=1878784608918395788 q=INSERT INTO shared.llm_call_log (tenant_id, stage, role, model, tokens_in, tokens_out, cost_usd, quality_signal, content_piece_id, angle_gate_request_id, stop_r
+PROBE [pgss_total] role=rdsadmin calls=11178 total=58.0s mean=5.2ms p95~6.8ms max=27ms rows=453062 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_total] role=cis_app calls=325 total=50.8s mean=156.2ms p95~322.3ms max=536ms rows=2600 hit/read=2843259/4026 temp=82675 qid=8710588549669637105 q=WITH rolled AS ( SELECT d.app, d.provider, d.account, sum(d.calls)::bigint AS calls, sum(d.cost_usd)::float AS cost_usd FROM shared.llm_call_daily d WHERE d.day
+PROBE [pgss_total] role=cis_app calls=1142110 total=49.5s mean=0.0ms p95~0.2ms max=22ms rows=1142110 hit/read=25798000/25908 temp=0 qid=-5182499705050649392 q=INSERT INTO geo.tour_leg (build_id, source_id, day_from, day_to, days, start_destination_id, end_destination_id, destination_ids, countries, activities) VALUES 
+PROBE [pgss_mean] role=booking calls=9 total=14.5s mean=1611.0ms p95~1740.9ms max=1773ms rows=63 hit/read=33906/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_mean] role=tripplanner calls=26 total=10.7s mean=409.8ms p95~1384.9ms max=2337ms rows=18313 hit/read=841525/0 temp=14027 qid=None q=<insufficient privilege>
+PROBE [pgss_mean] role=tripplanner calls=4124 total=1379.3s mean=334.5ms p95~2502.0ms max=7750ms rows=79031 hit/read=5779735/99 temp=50136 qid=None q=<insufficient privilege>
+PROBE [pgss_mean] role=cis_app calls=12 total=3.7s mean=307.9ms p95~444.0ms max=376ms rows=12 hit/read=1267984/48015 temp=0 qid=2109798683364539735 q=DELETE FROM geo.graph_build WHERE build_id IN ( SELECT build_id FROM geo.graph_build ORDER BY built_at DESC, build_id OFFSET $1)
+PROBE [pgss_mean] role=cis_app calls=24 total=6.1s mean=252.7ms p95~310.3ms max=373ms rows=334860 hit/read=3353171/0 temp=0 qid=8735024104469557847 q=SELECT ar.segment_id, ar.tour_id::text AS tour_id, asg.canonical_place, asg.canonical_action, MIN(ta.itinerary_day) AS day FROM ( -- AA-734: current ranking row
+PROBE [pgss_mean] role=cis_app calls=10 total=1.9s mean=194.2ms p95~222.2ms max=232ms rows=10624 hit/read=163961/339 temp=0 qid=64715731852243901 q=WITH active_m AS ( SELECT DISTINCT m.segment_id FROM acp_contract.atom_segment_member m JOIN acp_contract.v_active_tour_atoms a ON a.atom_id = m.atom_id), live_
+PROBE [pgss_mean] role=cis_app calls=522 total=98.4s mean=188.5ms p95~229.8ms max=352ms rows=8759105 hit/read=70770540/4226 temp=0 qid=-85985826470011345 q=UPDATE acp_contract.atom_ranking SET superseded_at = now() WHERE market = $1 AND superseded_at IS NULL AND version < $2
+PROBE [pgss_mean] role=cis_app calls=23 total=4.1s mean=177.6ms p95~219.8ms max=209ms rows=240512 hit/read=228400/0 temp=0 qid=7299525558048773428 q=SELECT asg.segment_id, asg.canonical_place, asg.canonical_action, asg.questions_count, array_agg(DISTINCT ta.atom_id) AS atom_ids, array_remove(array_agg(DISTIN
+PROBE [pgss_mean] role=cis_app calls=522 total=87.5s mean=167.6ms p95~261.9ms max=629ms rows=5616542 hit/read=3482058/22 temp=287484 qid=7486273179250024402 q=SELECT asg.segment_id, asg.canonical_place, asg.canonical_action, array_agg(DISTINCT ta.tour_id) AS tour_ids, COALESCE(SUM(LENGTH(COALESCE(ta.evidence, ta.text,
+PROBE [pgss_mean] role=cis_app calls=325 total=50.8s mean=156.2ms p95~322.3ms max=536ms rows=2600 hit/read=2843259/4026 temp=82675 qid=8710588549669637105 q=WITH rolled AS ( SELECT d.app, d.provider, d.account, sum(d.calls)::bigint AS calls, sum(d.cost_usd)::float AS cost_usd FROM shared.llm_call_daily d WHERE d.day
+PROBE [pgss_mean] role=cis_app calls=1135 total=158.7s mean=139.8ms p95~210.7ms max=313ms rows=1892744 hit/read=4563742/0 temp=148829 qid=6203532069547232241 q=SELECT asg.segment_id, asg.canonical_place, asg.canonical_action, coalesce(mode() WITHIN GROUP (ORDER BY rt.country), $3) AS country, array_remove(array_agg(ta.
+PROBE [pgss_mean] role=cis_app calls=601 total=66.1s mean=110.0ms p95~196.5ms max=415ms rows=21633 hit/read=22321851/4595 temp=0 qid=5206767337345401654 q=SELECT kind, status, count(*)::int AS n, coalesce(sum(j.cost_usd + (SELECT coalesce(sum(l.cost_usd), $1) FROM shared.llm_call_log l WHERE l.job_id = j.id)), $2)
+PROBE [pgss_mean] role=cis_app calls=415 total=42.1s mean=101.4ms p95~201.9ms max=524ms rows=415 hit/read=3940662/67993 temp=0 qid=2841780495399993343 q=SELECT coalesce(sum(cost_usd), $2)::float AS spent FROM shared.llm_call_log WHERE provider = $3 AND $1::date IS NOT NULL AND created_at >= $1::date
+PROBE [pgss_mean] role=cis_app calls=77 total=7.6s mean=98.1ms p95~110.4ms max=135ms rows=77 hit/read=902608/0 temp=0 qid=149752707733412301 q=SELECT COALESCE(SUM(cost_usd), $5) FROM shared.llm_call_log WHERE (tenant_id = $1 OR ($2 AND tenant_id IS NULL)) AND created_at >= $3 AND created_at < $4
+PROBE [pgss_mean] role=cis_app calls=77 total=7.1s mean=91.8ms p95~125.0ms max=219ms rows=77 hit/read=901735/873 temp=0 qid=6939844014780353083 q=SELECT COALESCE(SUM(cost_usd), $3) FROM shared.llm_call_log WHERE tenant_id = $1 OR ($2 AND tenant_id IS NULL)
+PROBE [pgss_mean] role=cis_app calls=17 total=1.4s mean=80.3ms p95~194.4ms max=177ms rows=15589 hit/read=48811/2719 temp=0 qid=-672298246218585319 q=SELECT rt.tour_id::text, rt.src_name, rt.country, rt.pipeline_status::text, rt.ingest_at, rt.batch_id::text, rt.source_id::text, rs.filename, COUNT(gc.id) AS re
+PROBE [pgss_mean] role=cis_app calls=280 total=21.9s mean=78.4ms p95~135.6ms max=306ms rows=280 hit/read=1796430/4915 temp=0 qid=-6858434133788315188 q=SELECT (SELECT count(*) FROM acp_contract.tour_atoms WHERE NOT deleted AND NOT is_empty_marker) AS atom_count, (SELECT count(DISTINCT asm.segment_id) FROM acp_c
+PROBE [pgss_mean] role=tripplanner calls=2515 total=189.5s mean=75.3ms p95~97.1ms max=326ms rows=2514 hit/read=17147731/838 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_mean] role=db_migrator calls=122 total=9.0s mean=73.7ms p95~169.0ms max=312ms rows=30464 hit/read=2310206/2561 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_mean] role=db_migrator calls=122 total=8.0s mean=65.6ms p95~80.9ms max=106ms rows=122 hit/read=507980/301 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=cis_app calls=7706099 total=459.5s mean=0.1ms p95~0.3ms max=160ms rows=7706099 hit/read=184460586/15647 temp=0 qid=-2049398600283500477 q=INSERT INTO acp_contract.atom_ranking (market, tour_id, segment_id, demand_rank, recurrence_rank, questions_rank, said_rank, total_rank, demand_market, demand_v
+PROBE [pgss_role_total] role=cis_app calls=171260 total=249.9s mean=1.5ms p95~479.5ms max=45294ms rows=171260 hit/read=0/0 temp=0 qid=1238812706996916191 q=SELECT pg_advisory_xact_lock($1)
+PROBE [pgss_role_total] role=cis_app calls=1135 total=158.7s mean=139.8ms p95~210.7ms max=313ms rows=1892744 hit/read=4563742/0 temp=148829 qid=6203532069547232241 q=SELECT asg.segment_id, asg.canonical_place, asg.canonical_action, coalesce(mode() WITHIN GROUP (ORDER BY rt.country), $3) AS country, array_remove(array_agg(ta.
+PROBE [pgss_role_total] role=cis_app calls=470074 total=150.8s mean=0.3ms p95~4.0ms max=127ms rows=382565 hit/read=2861834/237731 temp=0 qid=6335191632319199341 q=SELECT DISTINCT ON (l.question_key) l.question_key, l.probability::float AS probability, l.choice, l.probabilities FROM shared.decision_log l JOIN unnest($2::te
+PROBE [pgss_role_total] role=cis_app calls=28977 total=128.0s mean=4.4ms p95~30.9ms max=620ms rows=28977 hit/read=38194209/60035 temp=0 qid=7200253820217445795 q=INSERT INTO geo.tour_place (component_id, source_id, tour_id, day_index, name, name_norm, country, country_norm, locality_norm, destination_id, place_card_id, a
+PROBE [pgss_role_mean] role=cis_app calls=12 total=3.7s mean=307.9ms p95~444.0ms max=376ms rows=12 hit/read=1267984/48015 temp=0 qid=2109798683364539735 q=DELETE FROM geo.graph_build WHERE build_id IN ( SELECT build_id FROM geo.graph_build ORDER BY built_at DESC, build_id OFFSET $1)
+PROBE [pgss_role_mean] role=cis_app calls=24 total=6.1s mean=252.7ms p95~310.3ms max=373ms rows=334860 hit/read=3353171/0 temp=0 qid=8735024104469557847 q=SELECT ar.segment_id, ar.tour_id::text AS tour_id, asg.canonical_place, asg.canonical_action, MIN(ta.itinerary_day) AS day FROM ( -- AA-734: current ranking row
+PROBE [pgss_role_mean] role=cis_app calls=10 total=1.9s mean=194.2ms p95~222.2ms max=232ms rows=10624 hit/read=163961/339 temp=0 qid=64715731852243901 q=WITH active_m AS ( SELECT DISTINCT m.segment_id FROM acp_contract.atom_segment_member m JOIN acp_contract.v_active_tour_atoms a ON a.atom_id = m.atom_id), live_
+PROBE [pgss_role_mean] role=cis_app calls=522 total=98.4s mean=188.5ms p95~229.8ms max=352ms rows=8759105 hit/read=70770540/4226 temp=0 qid=-85985826470011345 q=UPDATE acp_contract.atom_ranking SET superseded_at = now() WHERE market = $1 AND superseded_at IS NULL AND version < $2
+PROBE [pgss_role_mean] role=cis_app calls=23 total=4.1s mean=177.6ms p95~219.8ms max=209ms rows=240512 hit/read=228400/0 temp=0 qid=7299525558048773428 q=SELECT asg.segment_id, asg.canonical_place, asg.canonical_action, asg.questions_count, array_agg(DISTINCT ta.atom_id) AS atom_ids, array_remove(array_agg(DISTIN
+PROBE [pgss_role_total] role=tripplanner calls=4124 total=1379.3s mean=334.5ms p95~2502.0ms max=7750ms rows=79031 hit/read=5779735/99 temp=50136 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=tripplanner calls=2515 total=189.5s mean=75.3ms p95~97.1ms max=326ms rows=2514 hit/read=17147731/838 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=tripplanner calls=2514 total=80.2s mean=31.9ms p95~113.0ms max=418ms rows=19356 hit/read=2134850/205 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=tripplanner calls=578 total=36.9s mean=63.9ms p95~190.3ms max=773ms rows=295901 hit/read=2820248/2637 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=tripplanner calls=4349 total=14.7s mean=3.4ms p95~11.5ms max=32ms rows=0 hit/read=14190665/586 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=tripplanner calls=26 total=10.7s mean=409.8ms p95~1384.9ms max=2337ms rows=18313 hit/read=841525/0 temp=14027 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=tripplanner calls=4124 total=1379.3s mean=334.5ms p95~2502.0ms max=7750ms rows=79031 hit/read=5779735/99 temp=50136 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=tripplanner calls=2515 total=189.5s mean=75.3ms p95~97.1ms max=326ms rows=2514 hit/read=17147731/838 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=tripplanner calls=578 total=36.9s mean=63.9ms p95~190.3ms max=773ms rows=295901 hit/read=2820248/2637 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=tripplanner calls=35 total=1.6s mean=44.5ms p95~82.6ms max=120ms rows=490 hit/read=397489/177 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=rdsadmin calls=1123959 total=81.7s mean=0.1ms p95~0.4ms max=80ms rows=12457 hit/read=22969/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=rdsadmin calls=2963 total=65.0s mean=21.9ms p95~96.7ms max=354ms rows=2963 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=rdsadmin calls=11178 total=58.0s mean=5.2ms p95~6.8ms max=27ms rows=453062 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=rdsadmin calls=3246448 total=40.4s mean=0.0ms p95~0.9ms max=215ms rows=0 hit/read=9/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=rdsadmin calls=29618 total=32.2s mean=1.1ms p95~13.8ms max=601ms rows=43877 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=rdsadmin calls=2963 total=65.0s mean=21.9ms p95~96.7ms max=354ms rows=2963 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=rdsadmin calls=74 total=0.5s mean=6.8ms p95~16.3ms max=35ms rows=4215 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=rdsadmin calls=327 total=2.0s mean=6.0ms p95~12.2ms max=31ms rows=17102 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=rdsadmin calls=34 total=0.2s mean=5.9ms p95~9.2ms max=14ms rows=2015 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=rdsadmin calls=846 total=4.7s mean=5.6ms p95~9.8ms max=30ms rows=40394 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_app_user calls=4119 total=235.6s mean=57.2ms p95~323.7ms max=856ms rows=694187 hit/read=17491572/4963 temp=226760 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_app_user calls=1223 total=46.8s mean=38.2ms p95~66.4ms max=359ms rows=1223 hit/read=3553895/1643 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_app_user calls=4404 total=40.0s mean=9.1ms p95~14.3ms max=107ms rows=18610 hit/read=3295149/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_app_user calls=4119 total=34.3s mean=8.3ms p95~51.2ms max=205ms rows=210254 hit/read=255392/224 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_app_user calls=3659 total=21.1s mean=5.8ms p95~12.2ms max=153ms rows=3659 hit/read=2678715/34 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_app_user calls=4119 total=235.6s mean=57.2ms p95~323.7ms max=856ms rows=694187 hit/read=17491572/4963 temp=226760 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_app_user calls=1223 total=46.8s mean=38.2ms p95~66.4ms max=359ms rows=1223 hit/read=3553895/1643 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_app_user calls=434 total=8.8s mean=20.3ms p95~43.0ms max=139ms rows=21918 hit/read=2222276/2050 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_app_user calls=40 total=0.7s mean=16.6ms p95~22.9ms max=25ms rows=280 hit/read=144100/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_app_user calls=334 total=4.4s mean=13.2ms p95~17.5ms max=40ms rows=2072 hit/read=568799/17 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=booking calls=41748 total=15.5s mean=0.4ms p95~7.3ms max=407ms rows=13897 hit/read=294494/418 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=booking calls=9 total=14.5s mean=1611.0ms p95~1740.9ms max=1773ms rows=63 hit/read=33906/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=booking calls=514493 total=14.0s mean=0.0ms p95~0.4ms max=102ms rows=11452 hit/read=737910/71 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=booking calls=881682 total=12.6s mean=0.0ms p95~0.6ms max=117ms rows=0 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=booking calls=881682 total=10.2s mean=0.0ms p95~0.8ms max=133ms rows=881682 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=booking calls=9 total=14.5s mean=1611.0ms p95~1740.9ms max=1773ms rows=63 hit/read=33906/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=booking calls=36 total=1.9s mean=52.3ms p95~274.6ms max=489ms rows=36 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=booking calls=11 total=0.5s mean=47.8ms p95~51.6ms max=52ms rows=270 hit/read=177174/2 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=booking calls=7 total=0.3s mean=46.0ms p95~48.0ms max=48ms rows=14 hit/read=112889/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=booking calls=8 total=0.3s mean=37.5ms p95~38.3ms max=38ms rows=48 hit/read=71840/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=crm_app calls=37508 total=26.5s mean=0.7ms p95~2.3ms max=16ms rows=37508 hit/read=6163330/43 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=crm_app calls=246029 total=12.4s mean=0.1ms p95~0.9ms max=170ms rows=23135 hit/read=828061/52 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=crm_app calls=37650 total=7.6s mean=0.2ms p95~1.7ms max=108ms rows=23137 hit/read=405664/123 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=crm_app calls=23135 total=5.3s mean=0.2ms p95~1.1ms max=46ms rows=23135 hit/read=455567/39 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=crm_app calls=454529 total=4.5s mean=0.0ms p95~0.1ms max=8ms rows=0 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=crm_app calls=506 total=2.4s mean=4.8ms p95~20.8ms max=57ms rows=18206 hit/read=159888/4372 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=crm_app calls=7 total=0.0s mean=2.0ms p95~2.1ms max=2ms rows=0 hit/read=2576/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=crm_app calls=568 total=0.7s mean=1.3ms p95~5.2ms max=31ms rows=568 hit/read=29939/134 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=crm_app calls=42 total=0.0s mean=1.0ms p95~2.8ms max=4ms rows=483 hit/read=3306/14 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=crm_app calls=165 total=0.1s mean=0.8ms p95~2.7ms max=6ms rows=165 hit/read=2363/69 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=db_migrator calls=122 total=9.0s mean=73.7ms p95~169.0ms max=312ms rows=30464 hit/read=2310206/2561 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=db_migrator calls=122 total=8.0s mean=65.6ms p95~80.9ms max=106ms rows=122 hit/read=507980/301 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=db_migrator calls=122 total=4.4s mean=36.2ms p95~68.2ms max=64ms rows=106529 hit/read=1402152/57 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=db_migrator calls=122 total=3.9s mean=32.3ms p95~51.8ms max=55ms rows=75273 hit/read=2667083/5 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=db_migrator calls=122 total=3.8s mean=31.2ms p95~52.6ms max=85ms rows=373504 hit/read=841077/648 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=db_migrator calls=122 total=9.0s mean=73.7ms p95~169.0ms max=312ms rows=30464 hit/read=2310206/2561 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=db_migrator calls=122 total=8.0s mean=65.6ms p95~80.9ms max=106ms rows=122 hit/read=507980/301 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=db_migrator calls=122 total=4.4s mean=36.2ms p95~68.2ms max=64ms rows=106529 hit/read=1402152/57 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=db_migrator calls=122 total=3.9s mean=32.3ms p95~51.8ms max=55ms rows=75273 hit/read=2667083/5 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=db_migrator calls=122 total=3.8s mean=31.2ms p95~52.6ms max=85ms rows=373504 hit/read=841077/648 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_cis_admin calls=248778 total=2.0s mean=0.0ms p95~0.7ms max=88ms rows=0 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_cis_admin calls=11 total=0.1s mean=5.1ms p95~6.4ms max=6ms rows=11 hit/read=11365/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_cis_admin calls=11 total=0.0s mean=3.1ms p95~3.3ms max=3ms rows=0 hit/read=4048/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_cis_admin calls=11 total=0.0s mean=1.7ms p95~2.1ms max=2ms rows=0 hit/read=3091/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=aa_cis_admin calls=22 total=0.0s mean=0.7ms p95~2.9ms max=3ms rows=66 hit/read=416/15 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_cis_admin calls=11 total=0.1s mean=5.1ms p95~6.4ms max=6ms rows=11 hit/read=11365/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_cis_admin calls=11 total=0.0s mean=3.1ms p95~3.3ms max=3ms rows=0 hit/read=4048/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_cis_admin calls=11 total=0.0s mean=1.7ms p95~2.1ms max=2ms rows=0 hit/read=3091/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_cis_admin calls=22 total=0.0s mean=0.7ms p95~2.9ms max=3ms rows=66 hit/read=416/15 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=aa_cis_admin calls=22 total=0.0s mean=0.1ms p95~0.5ms max=1ms rows=22 hit/read=18/4 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=bk_owner calls=50 total=0.0s mean=0.5ms p95~3.4ms max=7ms rows=50 hit/read=747/36 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=bk_owner calls=10 total=0.0s mean=1.3ms p95~3.0ms max=3ms rows=10 hit/read=1384/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=bk_owner calls=12 total=0.0s mean=0.2ms p95~0.3ms max=0ms rows=12 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=bk_owner calls=23 total=0.0s mean=0.1ms p95~0.4ms max=0ms rows=23 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=bk_owner calls=7 total=0.0s mean=0.2ms p95~0.9ms max=1ms rows=2 hit/read=5/2 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=bk_owner calls=10 total=0.0s mean=1.3ms p95~3.0ms max=3ms rows=10 hit/read=1384/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=bk_owner calls=50 total=0.0s mean=0.5ms p95~3.4ms max=7ms rows=50 hit/read=747/36 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=bk_owner calls=7 total=0.0s mean=0.2ms p95~0.9ms max=1ms rows=2 hit/read=5/2 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=bk_owner calls=12 total=0.0s mean=0.2ms p95~0.3ms max=0ms rows=12 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_mean] role=bk_owner calls=23 total=0.0s mean=0.1ms p95~0.4ms max=0ms rows=23 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss_role_total] role=cis_owner calls=4 total=0.0s mean=0.2ms p95~0.2ms max=0ms rows=4 hit/read=0/0 temp=0 qid=None q=<insufficient privilege>
+PROBE [pgss] statements with calls>=20 and mean>200ms: 3
+PROBE [sli] cis_tenant_reads stmts=45 calls=124974 mean=0.7ms worst_stmt_p95~254.4ms
+PROBE [sli] cis_tenant_versions stmts=5 calls=5789 mean=0.5ms worst_stmt_p95~2.5ms
+PROBE [sli] catalog_views stmts=0 calls=None mean=0.0ms worst_stmt_p95~0.0ms
+PROBE [sli] cis_admin_usage stmts=4 calls=2946 mean=1.2ms worst_stmt_p95~21.5ms
+PROBE [sli] cis_llm_cost_aggregates stmts=19 calls=136133 mean=1.9ms worst_stmt_p95~322.3ms
+PROBE [sli] cis_job_claim stmts=2 calls=180252 mean=1.4ms worst_stmt_p95~479.5ms
+PROBE [sli] booking_trip_cases stmts=0 calls=None mean=0.0ms worst_stmt_p95~0.0ms
+PROBE [sli] booking_customers stmts=0 calls=None mean=0.0ms worst_stmt_p95~0.0ms
+PROBE [sli] tp_outbox stmts=0 calls=None mean=0.0ms worst_stmt_p95~0.0ms
+PROBE [done]
+ecsx: rc=0 bytes=47686

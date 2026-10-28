@@ -1,0 +1,99 @@
+== RDS hourly ==
+CPU avg (hourly avg) min 3.4 / avg 4.7 / p95 6.5 / max 12.0 (n=720)
+CPU max (hourly max) min 5.0 / avg 10.1 / p95 26.1 / max 79.6 (n=720)
+hours CPU avg >20%: 0 of 720
+per ISO week hours >20%: {40: [0, 155], 41: [0, 168], 42: [0, 168], 43: [0, 168], 44: [0, 61]}
+FreeableMemory min (MB) min 15 / avg 273 / p95 606 / max 780 (n=720)
+FreeableMemory avg (MB) min 31 / avg 296 / p95 626 / max 795 (n=720)
+days with hourly min <300MB (hours): {'2026-09-28': 11, '2026-09-29': 24, '2026-09-30': 24, '2026-10-01': 24, '2026-10-02': 24, '2026-10-03': 24, '2026-10-04': 24, '2026-10-05': 24, '2026-10-06': 24, '2026-10-07': 24, '2026-10-08': 24, '2026-10-09': 24, '2026-10-10': 24, '2026-10-11': 24, '2026-10-12': 24, '2026-10-13': 24, '2026-10-14': 24, '2026-10-15': 15, '2026-10-17': 1}
+FreeStorage GB first/last/min: 16.987701416015625 15.560001373291016 15.318248748779297
+storage growth GB/day (first->last): 0.047656190577733834
+storage growth GB/day last 7d: 0.09102957589285714
+daily min free GB: {'2026-09-28': 16.99, '2026-09-29': 16.83, '2026-09-30': 16.81, '2026-10-01': 16.8, '2026-10-02': 16.76, '2026-10-03': 16.53, '2026-10-04': 16.54, '2026-10-05': 16.44, '2026-10-06': 16.37, '2026-10-07': 16.35, '2026-10-08': 16.1, '2026-10-09': 15.77, '2026-10-10': 16.2, '2026-10-11': 16.22, '2026-10-12': 16.2, '2026-10-13': 16.21, '2026-10-14': 16.19, '2026-10-15': 16.16, '2026-10-16': 16.12, '2026-10-17': 16.17, '2026-10-18': 16.21, '2026-10-19': 16.06, '2026-10-20': 16.18, '2026-10-21': 16.04, '2026-10-22': 16.02, '2026-10-23': 16.0, '2026-10-24': 15.95, '2026-10-25': 15.87, '2026-10-26': 15.57, '2026-10-27': 15.32, '2026-10-28': 15.47}
+Conn hourly max min 1 / avg 8 / p95 20 / max 30 (n=720)
+Conn hourly avg min 0.2 / avg 3.9 / p95 9.4 / max 14.3 (n=720)
+Conn hourly p95 min 1.0 / avg 7.1 / p95 18.2 / max 25.9 (n=720)
+daily conn max: {'2026-09-28': 13.0, '2026-09-29': 17.0, '2026-09-30': 15.0, '2026-10-01': 14.0, '2026-10-02': 13.0, '2026-10-03': 16.0, '2026-10-04': 3.0, '2026-10-05': 13.0, '2026-10-06': 11.0, '2026-10-07': 11.0, '2026-10-08': 20.0, '2026-10-09': 22.0, '2026-10-10': 27.0, '2026-10-11': 17.0, '2026-10-12': 25.0, '2026-10-13': 25.0, '2026-10-14': 26.0, '2026-10-15': 28.0, '2026-10-16': 23.0, '2026-10-17': 17.0, '2026-10-18': 16.0, '2026-10-19': 26.0, '2026-10-20': 16.0, '2026-10-21': 23.0, '2026-10-22': 22.0, '2026-10-23': 20.0, '2026-10-24': 23.0, '2026-10-25': 30.0, '2026-10-26': 21.0, '2026-10-27': 22.0, '2026-10-28': 18.0}
+riops_avg min 0.27 / avg 4.69 / p95 19.51 / max 182.00 (n=720)
+riops_max min 1.30 / avg 51.08 / p95 258.10 / max 1170.86 (n=720)
+wiops_avg min 2.27 / avg 4.52 / p95 11.83 / max 48.51 (n=720)
+wiops_max min 9.37 / avg 19.67 / p95 54.39 / max 355.13 (n=720)
+dqd_max min 0.03 / avg 0.11 / p95 0.37 / max 2.63 (n=720)
+swap_max min 0.00 / avg 65892437.33 / p95 145823744.00 / max 271106048.00 (n=720)
+rlat_avg (ms) min 0.06 / avg 0.52 / p95 0.81 / max 0.95 (n=720)
+rlat_max (ms) min 0.98 / avg 3.95 / p95 10.00 / max 16.00 (n=720)
+wlat_avg (ms) min 0.51 / avg 0.80 / p95 1.07 / max 2.05 (n=720)
+wlat_max (ms) min 1.46 / avg 4.85 / p95 8.87 / max 62.17 (n=720)
+rthr avg KB/s min 0.2 / avg 163.2 / p95 604.3 / max 6095.0 (n=720) wthr avg KB/s min 223.5 / avg 269.9 / p95 441.9 / max 1232.3 (n=720)
+credit balance min min 0.0 / avg 389.3 / p95 576.0 / max 576.0 (n=720)
+surplus charged sum 30d 0.0 surplus bal max 1.4958055
+txid max 2514470.0
+== whole window ==
+w_conn_p95 [11.966203215658938]
+w_conn_p99 [16.883377750716505]
+w_conn_max [30.0]
+w_cpu_p95 [6.960619121105411]
+w_cpu_avg [4.68496862089183]
+w_surplus [0.0]
+w_rlat_p95 [0.0013693054596052928]
+w_wlat_p95 [0.0031325571697221424]
+w_riops_p95 [12.572565790069245]
+w_wiops_p95 [13.618950866689127]
+== ECS ==
+aa-cis-dev-api first 2026-09-28T13:00:00+07:00 hours 720
+  cpu avg min 0.5 / avg 2.9 / p95 7.4 / max 50.3 (n=720) | cpu max min 1.0 / avg 39.4 / p95 100.0 / max 100.0 (n=720)
+  mem avg min 16.4 / avg 20.7 / p95 28.0 / max 37.5 (n=720) | mem max min 17.0 / avg 24.0 / p95 39.0 / max 63.2 (n=720)
+aa-cis-dev-worker first 2026-10-05T10:00:00+07:00 hours 555
+  cpu avg min 0.1 / avg 2.9 / p95 17.1 / max 55.2 (n=555) | cpu max min 0.1 / avg 41.5 / p95 100.0 / max 100.0 (n=555)
+  mem avg min 8.1 / avg 18.3 / p95 30.6 / max 51.2 (n=555) | mem max min 8.9 / avg 20.4 / p95 40.3 / max 61.6 (n=555)
+aa-booking-dev-api first 2026-10-14T09:00:00+07:00 hours 340
+  cpu avg min 3.5 / avg 5.9 / p95 8.2 / max 38.4 (n=340) | cpu max min 9.4 / avg 23.4 / p95 63.8 / max 99.9 (n=340)
+  mem avg min 9.2 / avg 18.3 / p95 23.0 / max 32.9 (n=340) | mem max min 9.8 / avg 18.9 / p95 23.2 / max 56.7 (n=340)
+aa-crm-dev-api first 2026-10-23T10:00:00+07:00 hours 123
+  cpu avg min 3.4 / avg 4.4 / p95 5.6 / max 8.5 (n=123) | cpu max min 9.4 / avg 24.8 / p95 59.2 / max 77.8 (n=123)
+  mem avg min 16.1 / avg 22.6 / p95 27.5 / max 28.7 (n=123) | mem max min 16.8 / avg 23.6 / p95 29.1 / max 32.7 (n=123)
+aa-crm-dev-web first 2026-10-24T09:00:00+07:00 hours 100
+  cpu avg min 2.0 / avg 2.7 / p95 3.8 / max 4.6 (n=100) | cpu max min 6.0 / avg 17.7 / p95 56.3 / max 63.5 (n=100)
+  mem avg min 10.2 / avg 14.1 / p95 18.4 / max 19.6 (n=100) | mem max min 13.1 / avg 15.9 / p95 23.4 / max 26.4 (n=100)
+aa-crm-dev-portal first 2026-10-26T12:00:00+07:00 hours 49
+  cpu avg min 1.9 / avg 2.9 / p95 4.5 / max 10.2 (n=49) | cpu max min 5.7 / avg 14.4 / p95 51.3 / max 67.9 (n=49)
+  mem avg min 14.1 / avg 16.1 / p95 17.9 / max 21.5 (n=49) | mem max min 14.6 / avg 17.3 / p95 23.5 / max 28.7 (n=49)
+== roles ==
+cis_app conn min 0 / avg 6 / p95 13 / max 23 (n=258) | pct min 0.0 / avg 6.3 / p95 14.6 / max 25.6 (n=258)
+aa_app_user conn min 0 / avg 1 / p95 2 / max 4 (n=284) | pct min 0.0 / avg 4.0 / p95 13.3 / max 26.7 (n=284)
+tripplanner conn min 0 / avg 1 / p95 4 / max 8 (n=284) | pct min 0.0 / avg 4.5 / p95 13.3 / max 26.7 (n=284)
+booking conn min 1 / avg 1 / p95 3 / max 5 (n=284) | pct min 6.7 / avg 9.4 / p95 20.0 / max 33.3 (n=284)
+crm_app conn min 0 / avg 2 / p95 3 / max 5 (n=124) | pct min 0.0 / avg 28.8 / p95 50.0 / max 83.3 (n=124)
+db_migrator conn min 0 / avg 0 / p95 0 / max 1 (n=211) | pct min 0.0 / avg 0.1 / p95 0.0 / max 20.0 (n=211)
+== lambda ==
+browse conc max 15.0 throttles 16157.0 invocations 21067.0 errors 118.0 dur p95 hourly max ms 11811.02599336615
+  throttle hours [('2026-09-29T16:00:00+07:00', 5784.0), ('2026-09-29T18:00:00+07:00', 2341.0), ('2026-10-12T12:00:00+07:00', 2767.0), ('2026-10-13T10:00:00+07:00', 2401.0), ('2026-10-14T17:00:00+07:00', 1591.0), ('2026-10-14T18:00:00+07:00', 1052.0), ('2026-10-15T12:00:00+07:00', 3.0), ('2026-10-15T13:00:00+07:00', 27.0), ('2026-10-15T16:00:00+07:00', 75.0), ('2026-10-15T17:00:00+07:00', 17.0)]
+assembly conc max 10.0 throttles 14.0 invocations 969.0 errors 2.0 dur p95 hourly max ms 14605.554639660542
+  throttle hours [('2026-09-29T16:00:00+07:00', 2.0), ('2026-10-14T22:00:00+07:00', 1.0), ('2026-10-20T06:00:00+07:00', 11.0)]
+acct conc max 15.0
+== jobs ==
+CIS oldest queued age max s 1407.0 p95 2.0 overdue running max 0.0
+  hours with age >15min: 1 [('2026-10-17T00:00:00+07:00', 1407.0)]
+Booking oldest queued age max s 38746.199823 p95 0.0 overdue running max 0.0
+  hours with age >15min: 2 [('2026-10-17T13:00:00+07:00', 1356.662309), ('2026-10-24T10:00:00+07:00', 38746.199823)]
+== post-resize (>= 2026-10-16 local) ==
+mem_min MB min 257.1 avg 543.1 p95 622.3 max 779.8 n=301
+mem_avg MB min 452.9 avg 576.2 p95 640.1 max 786.4 n=301
+hours mem_min<300MB [('2026-10-17T15:00:00+07:00', 257)]
+hours mem_min<500MB 64
+swap MB min 0.5 avg 15.4 p95 40.8 max 48.2 n=301
+cpu_avg min 4.2 avg 4.8 p95 6.3 max 10.4 n=301
+cpu_max min 5.7 avg 10.4 p95 28.0 max 54.3 n=301
+hours cpu_max>50 4
+credit bal min min 157.7 avg 559.4 p95 576.0 max 576.0 n=301
+conn_max min 2.0 avg 9.8 p95 20.0 max 30.0 n=301
+riops_max min 1.3 avg 27.9 p95 166.5 max 276.7 n=301
+rlat_max ms min 1.0 avg 5.4 p95 10.0 max 10.0 n=301
+wlat_max ms min 2.3 avg 5.0 p95 8.5 max 41.4 n=301
+browse throttles post 99.0 inv 11575.0 err 118.0
+browse throttle hours post [('2026-10-16T10:00:00+07:00', 99.0)]
+assembly throttles post 11.0
+browse conc max post 15.0
+browse dur p95 hourly min 39.0 avg 1702.1 p95 2222.5 max 11811.0 n=181
+crm_app pct>80 hours [('2026-10-24T14:00:00+07:00', 83.33)]
+pre-resize hours mem<100MB: 359
