@@ -273,14 +273,15 @@ Contracts between apps (views, grants, events) are listed in each repo's `CONTEX
   `UpdateFunctionCode`. Terraform `ignore_changes` on code attributes. Artifacts bucket
   `aa-tripplanner-dev-lambda-artifacts-<acct>`.
 - **CIS:** Infra creates ECS / RDS / API GW; the app builds an image → ECR → new task definitions for api
-  and worker on the same image (`Deploy Dev`, blocked while `shared.job` has queued/running jobs).
+  and worker on the same image (`Deploy Dev`, blocked only while a rerun wave is open or a deploy-blocking kind runs
+  or is due; other jobs are drained and re-claimed, C6.3a / AA-993 G5).
 - **AA-Booking:** Infra creates ECR / ECS service / roles / REST API (`booking.tf`, task definition and
   desired count in `ignore_changes`); the app builds an image tagged with the git SHA and deploys through
   its own least-privilege role `aa-booking-dev-app-deploy`, then smoke-tests `/booking/health` (same `git_sha`) and
   `/booking/health/ready`. Booking has its own `booking.job` table (`bk-002`, ADR 0004 O3), so the CIS guard is
   unaffected. Its own deploy guard is built (AA-751 / X6, S240–S241): the `preflight` job of Booking
-  `deploy-dev.yml` calls `GET /booking/ops/deploy-gate` with its GitHub OIDC token and waits until `booking.job`
-  is idle (the always-queued `bk_inquiry_pull` singleton is not counted).
+  `deploy-dev.yml` calls `GET /booking/ops/deploy-gate` with its GitHub OIDC token and, since AA-993 G5, waits only
+  while a retention job (the deploy-blocking kinds) runs or is due within 15 min (C6.3a).
 - **Migrations:** the owner repo authors them; Infra's DB Migrate applies them to Dev before the app code
   that needs them merges.
 
