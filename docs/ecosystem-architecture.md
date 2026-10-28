@@ -39,11 +39,11 @@ AA-Ecosys is a **multi-repo**. Each app deploys on its own. Locally the repos si
 
 | Local folder | GitHub repo | Role | Deploy |
 |---|---|---|---|
-| `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series, the Content studio API `/v1/*`), durable job worker, admin frontend. The tenant portal UI moved to AA-Partner (AA-979 P2a); the `portal/` folder here is a frozen, undeployed copy until the P2b clean-up | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel `aa-cis-frontend` (admin) |
+| `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series, the Content studio API `/v1/*`), durable job worker, admin frontend. The tenant portal UI moved to AA-Partner (AA-979 P2a); the frozen copy left here was deleted at the P2b clean-up. The admin host answers `/portal*` and `/tenant-login` with 308 to `portal.` and `/trip/*` with 308 to the client host | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel `aa-cis-frontend` (admin) |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations, plan a trip, sign in and keep trips (Next.js FE + 2 Lambda BE) | Vercel `aa-tripplanner` (FE) + Lambda (BE) |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform: VPC, RDS, ECS, Lambda, API GW, CloudFront, Cognito, OIDC, alarms, the acc3 Bedrock satellite; DB Migrate and DB Schema Dump workflows | GitHub Actions (`accounts/aa365` root) + a human with MFA (`accounts/acc3-bedrock` root) |
 | `apps/AA-Booking` | `AA-Booking` | AAA: advisor workflow and booking lifecycle. Live on Dev since 2026-10-14: inquiry intake, staff trip cases and proposals, pricing and FX, suppliers and supply, sellable trip plans, operations (supplier bookings, invoices, payments, supplier bills), the B2B API for AA-Partner; staff admin frontend (see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) + Vercel `aa-booking-admin` |
-| `apps/AA-Partner` (public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 2026-10-22): the agency CRM and the tenant Content studio (`portal/`, moved from AA-CIS-App with its history by AA-979 P2a). Own schema `crm` (`crm-001` to `crm-023`), own LLM gateway, partner Cognito pool with MFA (ADR 0006b). Integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign); AA provides the maps. The API runs the `crm.job` worker in its own process | ECS Fargate ARM64 on `aa-cis-dev-cluster`: `aa-crm-dev-api`, `aa-crm-dev-web` (CRM, behind CloudFront `partner-dev.` → VPC origin → NLB → ALB `/crm/*`) and `aa-crm-dev-portal` (Content studio, behind its own CloudFront distribution for `portal.`, live since the P2b cutover). Images in IMMUTABLE ECR repos tagged with the git SHA; deploy by the GitHub OIDC role `aa-crm-dev-app-deploy`. The Vercel project `aa-cis-portal` is the rollback target until 2026-11-03 |
+| `apps/AA-Partner` (public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 2026-10-22): the agency CRM and the tenant Content studio (`portal/`, moved from AA-CIS-App with its history by AA-979 P2a). Own schema `crm` (`crm-001` to `crm-023`), own LLM gateway, partner Cognito pool with MFA (ADR 0006b). Integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign); AA provides the maps. The API runs the `crm.job` worker in its own process | ECS Fargate ARM64 on `aa-cis-dev-cluster`: `aa-crm-dev-api`, `aa-crm-dev-web` and `aa-crm-dev-portal` (Content studio), all on the agency host `portal.` (its own CloudFront distribution → VPC origin → NLB → ALB host rules: `/crm*` API, studio paths, the rest the CRM web). The old host `partner-dev.` keeps only the API paths `/crm*` and answers 301 to `portal.` for everything else (AA-979 P2b clean-up, a CloudFront Function). Images in IMMUTABLE ECR repos tagged with the git SHA; deploy by the GitHub OIDC role `aa-crm-dev-app-deploy`. No Vercel project (the P2a project `aa-cis-portal` was deleted at the clean-up) |
 
 **Boundary rule [FACT]:** *apps own code, Infra owns resources.* TripPlanner shows it best:
 `infra/AA-CIS-Infra/accounts/aa365/tripplanner.tf` creates the 2 Lambdas from a 209-byte placeholder zip.
@@ -89,7 +89,7 @@ flowchart TB
     end
     APIG[API GW REST: api-cis + api-booking → VPC Link → ALB]
     APIG2[API GW HTTP v2 → 2 Lambdas]
-    CF[CloudFront: partner-dev. + portal.]
+    CF[CloudFront: portal. agency host + partner-dev. 301 except /crm]
     OIDC[GitHub OIDC: one deploy role per repo]
   end
 
@@ -348,7 +348,7 @@ One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan,
 | CIS staff | WORKFORCE, client `cis-admin` | **Live.** Email one-time code on managed login at `https://staff-auth.lumiguides.it.com` (AA-branded). The CIS BFF runs auth code + PKCE. The CIS API verifies the access token (WORKFORCE issuer only, `client_id` ∈ {cis-admin, breakglass}, `token_use=access`) and resolves the `shared.admin_users` row by `(iss, sub)`; role = highest `cis-*` group. Legacy password login off since AA-816 S2 (2026-10-22; `LEGACY_ADMIN_LOGIN_ENABLED` off by default, ADR 0006a A12). Preview signs in on `aa-cis-preview.lumiguides.it.com` with client `cis-admin-preview`, capped at viewer (A11) |
 | Break-glass | WORKFORCE, client `breakglass` | **Live, disabled at rest.** `admin@adventure.asia`, password + TOTP. Secret `aa-identity/dev/breakglass` is readable only by the MFA admin role; every read, write and token issue alerts |
 | Booking staff | WORKFORCE, clients `booking-staff`, `booking-staff-preview` | **Phase 2, in transition.** The Booking API verifies WORKFORCE access tokens (roles from `cognito:groups`, mirrored from CIS `shared.staff_app_grant`). It still accepts the CIS bridge token (ADR 0004 O1, `aud=booking`) until AA-680 removes it (ADR 0006a A6) |
-| Content studio users | PARTNER pool (ADR 0006b, MFA) | **Live since the AA-979 P2b cutover.** People re-enrol through a CIS-created, CRM-delivered invitation; CIS exchanges the partner access token for a 15-minute tenant JWT ([ADR 0010a](adr/0010a-content-studio-partner-sign-in.md)). API keys stay for machines |
+| Content studio users | PARTNER pool (ADR 0006b, MFA) | **Live since the AA-979 P2b cutover.** People re-enrol through a CIS-created, CRM-delivered invitation; CIS exchanges the partner access token for a 15-minute tenant JWT ([ADR 0010a](adr/0010a-content-studio-partner-sign-in.md)). Since the P2b clean-up the studio has no API-key sign-in (`PORTAL_API_KEY_SIGNIN=false`, `/tenant-login` → 308 to the partner sign-in); API keys are for machines only |
 | Agency CRM users | PARTNER pool, AA-Partner web | **Live.** Membership in `crm.member` by `(iss, sub)`, then the CRM permission matrix |
 | Travellers | EXTERNAL, client `tripplanner` | **Built (AA-908, tp-019).** E-mail code sign-in and My Trips; the guest trip is claimed into `tripplanner.traveller_accounts` at first sign-in |
 | Booking customers | EXTERNAL, client `booking-customer` | Phase 4 (AA-680). No customer-facing Booking app yet |
@@ -403,8 +403,10 @@ names), so only the `sub` match is affected.
   (AA-680, 4.6), the customer-facing app and customer identity on Cognito (AA-680, ADR 0006), and a Playwright smoke
   of the staff admin in Booking CI. The hand-off from TripPlanner is live (outbox → `bk_inquiry_pull`); the
   pre-build draft is archived at [`archive/2026/tripplanner-to-aaa-handoff.md`](archive/2026/tripplanner-to-aaa-handoff.md).
-- **AA-Partner Content studio (AA-979 P2b clean-up):** the Vercel project `aa-cis-portal` stays the rollback target
-  until 2026-11-03. After that, the clean-up removes it and the frozen `portal/` copy in AA-CIS-App.
+- **AA-Partner Content studio (AA-979 P2b clean-up, S256):** done in code (runbook §4.5): Vercel project
+  `aa-cis-portal` and its workflow removed, frozen CIS `portal/` deleted, API-key sign-in off, `partner-dev.` → `portal.`
+  301 except `/crm*`, the CRM API's join-link and mail OAuth origins on `portal.`. Rollback to Vercel is no longer
+  possible; a bad studio deploy is rolled back on ECS (previous task definition revision).
 - **Place pipeline in CIS (AA-712, [ADR 0007](adr/0007-place-pipeline-in-cis.md)):** done. TripPlanner reads the
   `catalog.*` views, its vector search runs on `catalog.v_component_embedding`, and its legacy tables are dropped
   (tp-018).

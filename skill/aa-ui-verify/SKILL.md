@@ -41,9 +41,9 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
 
 ## 3. Kiểm trên preview hoặc Dev
 
-1. Deploy của PR xanh: Vercel không tự build từ Git — `vercel-deploy.yml` (CIS) / `vercel-deploy-portal.yml`
-   (Partner) tạo preview cho PR chạm `frontend/**` / `portal/**`; job deploy xanh và deployment READY. CRM web deploy lên ECS
-   (`deploy-web-dev.yml`) sau merge, không có preview.
+1. Deploy của PR xanh: Vercel không tự build từ Git — `vercel-deploy.yml` (CIS) tạo preview cho PR chạm `frontend/**`;
+   job deploy xanh và deployment READY. CRM web (`deploy-web-dev.yml`) và Content studio (`deploy-portal-dev.yml`) deploy
+   lên ECS sau merge, không có preview (preview Vercel của portal bỏ ở AA-979 dọn dẹp, S256).
 2. **Smoke tự động** (chỉ là sàn tối thiểu, trang vừa sửa vẫn kiểm tay các bước dưới):
    - **Preview riêng của từng PR** (`*.vercel.app`): `vercel-deploy.yml` gọi `ui-smoke.yml` sau khi preview xong,
      **chỉ spec công khai** (project `smoke-public`): Cognito không cho callback wildcard nên preview của PR không có
@@ -60,7 +60,8 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
      local** (role đọc hộp thư chỉ tin `refs/heads/main` + environment `e2e`).
    - Thêm trang = thêm 1 dòng vào danh sách trong `tests/e2e/smoke/ui-smoke.spec.ts`.
    - Portal: smoke ở AA-Partner (`e2e/smoke-portal/`, `e2e/playwright.portal.config.ts`), workflow `UI Smoke (portal)`
-     tự chạy trên preview của PR đụng `portal/**` (đăng nhập tenant bằng secret `E2E_TENANT_API_KEY`).
+     tự chạy sau `Deploy Portal Dev` trên `portal.` (đăng nhập partner pool + mã TOTP của user studio e2e, secret
+     `E2EPORTALEMAIL` / `E2EPORTALPASSWORD` / `E2EPORTALTOTP`; đăng nhập bằng API key đã tắt từ AA-979 dọn dẹp).
 3. Mở trang bằng browser (Claude in Chrome hoặc Playwright), đúng vai. **Không còn đăng nhập staff bằng mật khẩu ở bất kỳ
    host CIS nào** (AA-816 S2, root ADR 0006a A12): API từ chối mọi phiên HS256 (`/auth/verify-admin` → 401 "Password
    sessions are switched off"), `/login` chỉ có "Sign in with company email". Agent không đọc được hộp thư
@@ -109,8 +110,10 @@ Dùng khi cần rà cả portal chứ không chỉ trang vừa sửa.
 
 1. **Chụp:** chạy smoke portal của AA-Partner local (thư mục `e2e/`), trỏ vào production portal
    (`https://portal.lumiguides.it.com`), lần lượt từng tenant brand:
-   `BASE_URL=<portal> npx playwright test -c playwright.portal.config.ts --project=portal --workers=1`. Key mỗi tenant đọc
-   từ Secrets Manager `aa-cis/dev/e2e-tenant/<tenant>` vào biến `E2E_TENANT_API_KEY` ngay trong lệnh — không in, không ghi file.
+   `PORTAL_TARGET=fargate BASE_URL=<portal> npx playwright test -c playwright.portal.config.ts --project=portal --workers=1`.
+   Từ AA-979 dọn dẹp (S256) portal không còn đăng nhập bằng API key: mỗi tenant cần một user partner pool có membership
+   studio trên tenant đó; email / mật khẩu / TOTP seed đọc vào `E2EPORTALEMAIL` / `E2EPORTALPASSWORD` / `E2EPORTALTOTP`
+   ngay trong lệnh — không in, không ghi file.
 2. **Gom ảnh:** sau mỗi tenant, chép PNG từ AA-Partner `e2e/results/smoke-portal/` sang
    `.tmp-session/<issue>-shots/<tenant>/` (lần chạy sau ghi đè thư mục kết quả).
 3. **Review:** agent review mở **từng ảnh** theo nhóm trang và điền checklist: trạng thái (loading/lỗi), empty state,
