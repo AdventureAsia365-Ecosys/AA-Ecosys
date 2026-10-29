@@ -155,5 +155,10 @@ the staff directory reconcile; a second schedule enqueues the retention kinds) a
 
 ## Prod
 
-No prod environment exists. The prod blueprint, readiness checklist and environment naming (PROD-01) belong to AA-880 /
-ADR 0012 (D-16, D-17: prod on acc2 when go-live is dated).
+No prod environment exists. [ADR 0012](../adr/0012-environment-model.md) (accepted S257) sets the model: prod on acc2 next to Dev, with its own environment
+resources and the compensating controls of decision 4; Terraform root `accounts/aa365-prod` (decision 5); the
+GitHub environment `prod` renamed to `dev` first (decision 6); releases promote the Dev-verified backend image by
+digest through a Deploy Prod workflow that only the tech lead dispatches, frontends rebuilt in Vercel prod projects
+(decisions 7–8); personal data never leaves prod (decision 9); the go-live gate of decision 11. The build (phase 3)
+starts when the business owner sets a go-live date (D-16, D-17). The prod blueprint, readiness checklist and prod
+runbooks (PROD-01) are AA-880.

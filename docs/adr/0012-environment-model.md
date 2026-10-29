@@ -1,8 +1,9 @@
 # ADR 0012 — Environment model: Dev and prod on the infrastructure account, isolated per environment
 
-- **Status:** Proposed (2026-10-28, S256). Drafted ahead of the prod blueprint so that CRM Go-real (AA-980) and the
-  other prod-bound work can plan against it. Nothing in it is built; decisions 1–12 take effect when the tech lead
-  accepts this ADR, and the build (phase 3) starts only when a go-live date is set (D-16).
+- **Status:** Accepted (2026-10-29, S257; approved by the tech lead in the S257 session plan). Build (phase 3) still
+  starts only when a go-live date is set (D-16). Proposed 2026-10-28 (S256), drafted ahead of the prod blueprint so
+  that CRM Go-real (AA-980) and the other prod-bound work can plan against it. Decisions 1–12 are in force; nothing
+  in them is built yet.
 - **Reserving issue:** AA-880 (number 0012 was reserved for it in the ADR index, AA-928).
 - **Scope:** AA-CIS-Infra (Terraform layout, state, GitHub environments, OIDC roles, DB Migrate `environment`
   input), every app repo (Deploy Prod workflow, environment-scoped configuration, Vercel prod projects), root (data
@@ -10,9 +11,9 @@
 - **Implements:** ADR 0001 (amendment S235: "Production also runs on acc2 … no new AWS account is created for any
   environment"); engineering handbook decisions D-16 (prod layout and gate chosen with the go-live date) and D-17 (prod
   on acc2 by default); data standards DM-9.6 (prod targets) and C7.2a–f (prod blueprint).
-- **Amends on acceptance:** data standards C7.2c (the Terraform layout: `infra/AA-CIS-Infra/envs/prod/` becomes the
-  root named in decision 5) and C7.2d (the prod gate of decision 8). Infra `CONTEXT.md` (AA-841: "a new environment
-  gets its own `accounts/<name>/` root") is kept, not changed.
+- **Amends (applied on acceptance, data standards v1.8):** data standards C7.2c (the Terraform layout:
+  `infra/AA-CIS-Infra/envs/prod/` becomes the root named in decision 5) and C7.2d (the prod gate of decision 8).
+  Infra `CONTEXT.md` (AA-841: "a new environment gets its own `accounts/<name>/` root") is kept, not changed.
 - **Consistent with:** ADR 0001a (two AWS accounts: acc2 for all infrastructure, acc3 the only LLM account; the
   personal account left the ecosystem in AA-998), ADR 0004b (one security group per caller), ADR 0006 / 0006a /
   0006b (Cognito pools), ADR 0011 (merge rights per risk tier; the human gate from the first prod), ADR 0014
@@ -286,7 +287,11 @@ acceptable; or AA-864 decides to consolidate on an AA-controlled account, in whi
   needs prod.
 - **Docs to update on acceptance:** C7.2c and C7.2d (data standards), engineering handbook §5.5, §6.1, §8 (cost row)
   and the D-16 / D-17 rows, the DevOps guide's environment table, the ops README prod section, Infra `CONTEXT.md`
-  (the two roots), the skills that name the `prod` GitHub environment (`aa-ship`, `aa-cis-schema`).
+  (the two roots), the skills that name the `prod` GitHub environment (`aa-ship`, `aa-cis-schema`). Done at
+  acceptance (S257, one root PR): data standards v1.8 (C7.2c, C7.2d, and the C7.2b backup region), the handbook rows
+  above and their Vietnamese copy, the DevOps guide, the ops README prod section, the CTO, CIO and business-owner
+  guides, the security baseline and the DB Migrate runbook. Left: Infra `CONTEXT.md` (an AA-CIS-Infra PR); the
+  two skills name no GitHub environment today and change only with the phase 1 rename.
 - **Reversal:** before phase 3 nothing is built, so the ADR can change freely. After phase 3, moving prod to its own
   account is the decision-12 path: the module and the per-environment naming make it a new root and a data move, not
   a redesign.
@@ -295,7 +300,7 @@ acceptable; or AA-864 decides to consolidate on an AA-controlled account, in whi
 
 | Phase | When | What | Cost |
 |---|---|---|---|
-| 0 | Now | This ADR Proposed, then Accepted by the tech lead. New code and Terraform take the environment from configuration (no new `dev` literal); new resources get the `Environment` tag | 0 |
+| 0 | Now (Accepted 2026-10-29, S257) | This ADR Proposed, then Accepted by the tech lead. New code and Terraform take the environment from configuration (no new `dev` literal); new resources get the `Environment` tag | 0 |
 | 1 | After acceptance, any time before a date | Rename the Infra GitHub environment (decision 6); DB Migrate `environment` input prepared for `prod` (choice not yet offered); replace `dev` literals in CI roles and the boundary | 0 |
 | 2 | Before phase 3 | Terraform refactor of the environment-scoped resources into `modules/platform-env` with `moved` blocks and a zero-change Dev plan; agent role switch (U-53); management-account review (4.5) | 0 |
 | 3 | Go-live date set (decision 11) | `accounts/aa365-prod` root, prod state bucket, prod roles and boundaries; Terraform plan with the reconciled cost; apply after approval; Vercel Pro and prod projects; Deploy Prod workflows; seed job; prod restore drill | Reconciled figure (estimate above) |

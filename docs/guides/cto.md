@@ -81,8 +81,8 @@ flowchart TB
   partnerfe -.->|"agency sign-in"| cognito
 ```
 
-Diagrams here are a summary; the maintained C4 set belongs in `ecosystem-architecture.md` (AA-697, parked until
-the tech lead decides N-9). The tenant portal moved from Vercel to ECS Fargate in October 2026 (AA-979); the Vercel
+Diagrams here are a summary; the maintained views are in `ecosystem-architecture.md` and the AWS-icon set in
+[`architecture/diagrams/`](../architecture/diagrams/README.md) (AA-697, pilot approved by the tech lead in S257). The tenant portal moved from Vercel to ECS Fargate in October 2026 (AA-979); the Vercel
 project `aa-cis-portal` was removed at the clean-up on 2026-10-28, with the people-facing API-key sign-in.
 
 ## How decisions are recorded
@@ -98,12 +98,13 @@ project `aa-cis-portal` was removed at the clean-up on 2026-10-28, with the peop
 Accepted ecosystem ADRs: 0001 target architecture, 0002 only CIS writes content, 0003/0003a durable jobs per owner,
 0004/0004a/0004b Booking stack, supply ownership, one security group per caller, 0005/0005a pricing and B2B resale,
 0006/0006a/0006b identity and the partner and M2M pools, 0007 place pipeline in CIS, 0008/0008a new-app integration
-and data platform rules, 0010 the AA-Partner app, 0015 tour liveness, 0016 one design system. Proposed:
+and data platform rules, 0010 the AA-Partner app, [0012](../adr/0012-environment-model.md) environment model (prod on
+acc2, isolated per environment; build at the go-live date), 0015 tour liveness, 0016 one design system. Proposed:
 [0010a](../adr/0010a-content-studio-partner-sign-in.md) Content studio sign-in through the partner pool,
 [0011](../adr/0011-github-app-identity-and-merge-rights.md) GitHub App identity for agents and bots with merge rights
 per risk tier, [0014](../adr/0014-repo-visibility-and-github-plan.md) repo visibility and GitHub plan,
 [0017](../adr/0017-migrations-in-app-pr-expand-auto-apply.md) migrations in the app PR. Reserved: 0009 AI platform
-(AA-804), 0012 prod blueprint (AA-880), 0013 API conventions before any `/booking/v1` prefix (AA-899, N-11). The
+(AA-804), 0013 API conventions before any `/booking/v1` prefix (AA-899, N-11). The
 [ADR index](../adr/README.md) holds the current status of each.
 
 ## Data standards
@@ -189,7 +190,7 @@ hash guard (AA-826), place pipeline move to CIS (AA-712, ADR 0007).
 | Each new boundary or stack choice | ADR or amendment, CONTEXT.md in the same PR | [ADR index](../adr/README.md) |
 | Monthly | Read the cost and capacity review | `docs/audits/<date>-S<nnn>-capacity-review/` |
 | Quarterly | Review the risk table above and the open N-x decisions | reconciliation report |
-| Before prod | Prod blueprint ADR 0012 and readiness checklist | AA-880 |
+| Before prod | Prod blueprint and readiness checklist per ADR 0012 (go-live gate, decision 11) | AA-880 |
 
 ## Related
 

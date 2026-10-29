@@ -412,8 +412,10 @@ How release-please is set up (AA-891):
   only `refs/heads/main` (AA-866). Never apply from a worktree or branch before merge (that left `main` behind the
   real infrastructure once; see [`lessons.md`](../skill/aa-lessons/lessons.md)).
 - Every PR states what changes, the monthly cost and the rollback, with the plan attached.
-- The GitHub environment that applies Dev is still named `prod`. Renaming it belongs to ADR 0012 (AA-880, D-16,
-  C7.2d); do not rename it now.
+- The GitHub environment that applies Dev is still named `prod`. [ADR 0012](adr/0012-environment-model.md) (accepted S257) decision 6 renames it to `dev`
+  in phase 1, before any prod role exists, in a fixed four-step order (C7.2d); until that Infra PR, keep the name.
+  Prod gets its own root `accounts/aa365-prod` with its own state bucket, calling the same environment module as Dev
+  (decision 5, C7.2c); `accounts/aa365` keeps the account-wide layer and Dev.
 - Stray `.bak` and `.tfplan` files in Infra were removed (Infra #211, AA-890). Confirm versioning on the Terraform
   state bucket (not checked in S243). The full Terraform flow (plan comment, apply bound to the plan,
   drift check) is U-42, triggered before prod or by the next drift incident.
@@ -470,9 +472,12 @@ How release-please is set up (AA-891):
 | PR preview (Vercel) | See a frontend change before merge | Yes; Playwright UI smoke on CIS previews (the last three `ui-smoke.yml` runs were skipped: fix in AA-879) | Vercel Hobby until the first paying tenant (D-18) |
 | **Dev** (acc2) | Integration, allowed to break, demo | Yes | **Test data only** (D-01: exact counts on 17/10/2026; Part C C7.1a forbids prod PII on Dev). No grace windows or time-gated watches: generate evidence now |
 | Staging | — | No | Not planned. When prod exists, Dev acts as pre-prod; PR previews cover UI review |
-| **Prod** | Real users | No | A separate RDS instance and services **on acc2** (ADR 0001, Part C C7.2a, D-17); account consolidation research AA-864 feeds ADR 0012. Layout, gate and naming in ADR 0012 when go-live is dated (D-16, AA-880, U-40). Prod targets: DM-9.6, C7.2 |
+| **Prod** | Real users | No | Its own environment resources **on acc2** (ADR 0001, D-17; [ADR 0012](adr/0012-environment-model.md) decisions 2–4: own VPC, RDS instance, cluster, Cognito pools, secrets, KMS keys and roles, plus tag-based Deny, per-environment boundaries and no agent access). Built when a go-live date is set (ADR 0012 decision 11, D-16, AA-880, U-40); a separate prod account is reconsidered only on the triggers of decision 12 (AA-864 among them). Prod targets: DM-9.6, C7.2 |
 
-**Build once, deploy many:** the same image digest moves from Dev to prod; only configuration and secrets differ.
+**Build once, deploy many** (ADR 0012 decision 7): a backend image digest verified on Dev is copied to the prod ECR
+and deployed by a Deploy Prod workflow that the tech lead dispatches; only configuration and secrets differ.
+Frontends are rebuilt per environment in a separate Vercel prod project, because Next.js bakes public configuration
+at build time. Prod migrations are never auto-applied.
 
 ### 6.2 Deploy is not release: feature flags
 
@@ -603,7 +608,7 @@ with real traffic (prod).
   removal of the old laptop dumps are AA-829 (U-20); its Done-when is unchanged.
 - **Evidence stays in `docs/audits/<date>-S<nnn>-<slug>/`** (C7.2b, DM-8.10, C8a; N-10 kept the default). The drill
   and security indexes only link there.
-- Prod targets (Multi-AZ, 14-day PITR, cross-region backup copy, RPO/RTO): DM-9.6 and C7.2b, confirmed in ADR 0012.
+- Prod targets (Multi-AZ, 14-day PITR, cross-region backup copy, RPO/RTO): DM-9.6 and C7.2b, confirmed in ADR 0012 decision 10 (cross-region copy to us-west-2).
 - A backup that was never restored is not a backup.
 
 ### 7.5 Secrets
@@ -704,7 +709,7 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | Cognito alarms + break-glass secret | ~2.4 | Approved S241 ("Cognito $") |
 | Cognito WAF on the customer pool | ~7 | When customer sign-up opens (S241); Apple Developer 99 USD/year with the AA-680 customer login |
 | Vercel Pro | ~20 + usage | Only at the first paying tenant (D-18) |
-| Prod (U-40) | ~150-300 (rough) | One reconciled number in ADR 0012; the 300 USD account budget includes Dev today |
+| Prod (U-40) | ~400-550 at list price, ~280-380 with the levers (ADR 0012 estimate, 28/10/2026) | One reconciled number approved with the prod Terraform plan before apply (ADR 0012 go-live gate, D-19); the 300 USD account budget includes Dev today |
 
 ---
 
@@ -789,7 +794,7 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | U-32 | Erasure script and DSAR export | Tenant | Not doing now (D-11): manual runbook on request | AA-839 | 0 | Agent |
 | — | Manual data-subject request runbook (delete/export on request, DRY RUN), catalog OPS-09 | Tenant | Open | AA-839 (runbook part, does not wait for Phase 4) | 0 | Agent |
 | — | Not numbered in S241 (the tech lead may fold in): A14 body-size limits + `extra='forbid'` → U-19; E13 free S3 gateway endpoint on Dev → U-40 for the prod part | Tenant | Open (undecided) | AA-876 | 0 | Agent + tech lead |
-| U-40 | Prod blueprint, ADR 0012 (account, layout, gate, env rename), SLOs, second alert channel, prod budget, break-glass PDF, readiness checklist | Prod | Trigger: go-live date | AA-880 | ~150-300 | Agent + tech lead |
+| U-40 | Prod blueprint per ADR 0012 (accepted S257: account, layout, gate, env rename), SLOs, second alert channel, prod budget, break-glass PDF, readiness checklist | Prod | ADR accepted; build trigger: go-live date | AA-880 | ~280-550 (ADR 0012 estimate) | Agent + tech lead |
 | U-03 | Rotate the exposed GitHub token | Prod | Not doing now (D-02): at go-live | AA-880 | 0 | Tech lead |
 | U-17 | Rotate the RDS master password | Prod | Not doing now (D-03): at go-live | AA-880 | 0 | Tech lead |
 | U-41 | Managed master secret | Prod | Trigger: X1 done (D-04) | — | ~0.4 | Agent + tech lead |
@@ -812,7 +817,7 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | U-57 | Rest of L3 (traveller data, retention rows, erasure) | Trigger | Trigger: ADR 0006 Phase 4 / before prod | AA-839 | 0 | Agent |
 | U-58 | Tenant CRM through the new-app playbook | Trigger | Built (S255): AA-Partner (ADR 0010), schema `crm` through crm-023 | AA-821 | — | Agent + business owner |
 | U-59 | Reserved concurrency for TripPlanner Lambdas | Trigger | Trigger: Lambda quota 1000 | — | 0 | Agent |
-| — | Architecture diagrams C4 L1-L2, network page, access matrix | Later | Parked (N-9 kept); tables come from AA-893 | AA-697 | 0 | Agent |
+| — | Architecture diagrams C4 L1-L2, network page, access matrix | Later | AWS-icon views shipped (S256, `architecture/diagrams/`), pilot approved by the tech lead (S257); network page and access matrix prose still parked (N-9); tables come from AA-893 | AA-697 | 0 | Agent |
 | — | UAT videos for all apps | Later | After the technical work, on the tech lead's signal | AA-855 | 0 | Agent + business owner |
 | — | Monthly DORA numbers from the GitHub API; unit-cost dashboard | Later | Open | — | 0 | Agent |
 | — | Yearly Well-Architected self-review per app (with the Generative AI lens); NIST SSDF, NIST AI RMF, OWASP LLM Top 10 as reading checklists | Later | Open | — | 0 | Tech lead |
@@ -834,8 +839,7 @@ Each item is deliberate, with its reason. Reopening one needs a new decision in 
 | Do not | Why / until |
 |---|---|
 | A permanent staging environment, multi-region, active-active | Dev + previews + promoting the same image are enough until prod with large customers |
-| A separate AWS account for prod | ADR 0001, C7.2a, D-17; compensating controls go in ADR 0012 |
-| Rename the GitHub `prod` environment now | ADR 0012 (D-16, C7.2d) |
+| A separate AWS account for prod | ADR 0001, C7.2a, D-17; ADR 0012 decision 4 (compensating controls) and decision 12 (when to reconsider) |
 | GitHub Team or Enterprise, GHAS for private repos, making Infra public | D-14: Free plan, app repos public, root and Infra private; gitleaks and `main`-only OIDC instead |
 | Vercel Pro before the first paying tenant | D-18 |
 | A human approval on every PR during the dev phase | DM-11.5 / D-13 |
@@ -897,8 +901,8 @@ S243 session record for N-x. Where a decision changed a standard, the standard i
 | D-13 | Merge rights by risk and phase: dev phase agent self-merges incl. security/infra; human gate from prod or first paying tenant | DM-11.5 (v1.1); `.claude/CLAUDE.md`; `session-workflow.md`; subagent hook |
 | D-14 | App repos public, root private, GitHub Free | [STYLE, where a page may live](STYLE.md#where-a-page-may-live-sec-06); [ADR 0014](adr/0014-repo-visibility-and-github-plan.md); U-25 |
 | D-15 | Agent keeps the `aa365-admin` profile | DM-8.7; [§7.6](#76-access) |
-| D-16 | Prod layout and gate chosen with the go-live date | ADR 0012 (AA-880) |
-| D-17 | Prod on acc2 by default | ADR 0001; C7.2a; AA-880 |
+| D-16 | Prod layout and gate chosen with the go-live date | [ADR 0012](adr/0012-environment-model.md), accepted S257: layout decision 5, gate decision 8; build at the go-live date (decision 11); AA-880 |
+| D-17 | Prod on acc2 by default | ADR 0001; C7.2a; ADR 0012 decision 2; AA-880 |
 | D-18 | Vercel Hobby until the first paying tenant, then Pro | [§6.1](#61-environments); note for the business owner |
 | D-19 | New AWS spend approved item by item, quoted first | PR template cost section; [FinOps](ops/finops.md); DM-10.7 holds only the approval rule ("spend changes need the tech lead's approval") |
 | D-20 | Alarm e-mails on ALARM and OK | Infra alarms (`ok_actions`); AA-872 |

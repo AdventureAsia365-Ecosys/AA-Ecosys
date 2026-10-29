@@ -30,10 +30,11 @@ First get your access from [Onboarding](../onboarding.md) (account map, AWS prof
 | Environment | Where | Data | State |
 |---|---|---|---|
 | **Dev** | acc2, us-west-1 (see [account map](../onboarding.md#account-map)) | **Test data only** (D-01) | Live; the only environment |
-| Prod | acc2, separate RDS instance (ADR 0001, C7.2a, D-17) | Real | Not created; dated at go-live (AA-880, ADR 0012 to come) |
+| Prod | acc2, its own VPC, RDS instance, cluster, Cognito pools, secrets and roles (ADR 0001, C7.2a, D-17; [ADR 0012](../adr/0012-environment-model.md) decisions 2–3) | Real | Not created; built when a go-live date is set ([ADR 0012](../adr/0012-environment-model.md), accepted S257; AA-880) |
 
-The GitHub environment that gates Terraform apply is called `prod` but applies Dev. Renaming it belongs to the prod
-blueprint (AA-880, D-16, C7.2d), not to now.
+The GitHub environment that gates Terraform apply is called `prod` but applies Dev. ADR 0012 decision 6 renames it
+to `dev` in phase 1, before any prod role exists, in a fixed four-step order (C7.2d); until that Infra PR lands, the
+name stays `prod`. Prod Terraform will be its own root, `accounts/aa365-prod` (decision 5, C7.2c).
 
 Live components on Dev (checked 2026-10-28): ECS cluster `aa-cis-dev-cluster` with services `aa-cis-dev-api`,
 `aa-cis-dev-worker`, `aa-booking-dev-api`, `aa-crm-dev-api`, `aa-crm-dev-web` and `aa-crm-dev-portal`; RDS

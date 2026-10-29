@@ -166,7 +166,7 @@ Raised as calm proposals with options; whether a lawyer is needed is her call.
 ## Readiness list for prod (security and compliance part)
 
 Rotate the GitHub token and RDS master password; pgaudit; second alert channel; restore drill; Multi-AZ and
-cross-region backup; WAF before customer self sign-up; legal pack published. Owner: AA-880 with ADR 0012.
+cross-region backup; WAF before customer self sign-up; legal pack published. Owner: AA-880; the go-live gate of [ADR 0012](../adr/0012-environment-model.md) (decision 11) lists them.
 
 ## Recurring duties
 
