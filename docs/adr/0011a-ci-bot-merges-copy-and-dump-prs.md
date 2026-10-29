@@ -1,5 +1,9 @@
 # ADR 0011 — Amendment: ci-bot opens and merges migration-copy PRs in AA-CIS-Infra and schema-dump PRs in the root repo
 
+<!-- TODO(orchestrator, AA-993 M5): ONLY after the M4b proof (the bk-034 copy PR merged by ci-bot and the schema-dump
+     PR it triggered merged by ci-bot on Dev), replace the Status line below with "- **Status:** Accepted (<date>,
+     S<nnn>), with ADR 0017; proof: <copy PR URL>, <schema-dump PR URL>." and set the 0011a row of docs/adr/README.md
+     to Accepted. -->
 - **Status:** Proposed (28/10/2026, S255). Written with AA-993 Phase E slice I1, as [ADR 0017](0017-migrations-in-app-pr-expand-auto-apply.md)
   requires ("Needs: ADR 0011a"). Becomes Accepted with ADR 0017 in slice M5, after the first copy PR and the first
   schema-dump PR are merged by ci-bot on Dev.
