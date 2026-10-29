@@ -14,7 +14,9 @@ Rules for both families:
 - **Metric names and column lists are append-only**: add a metric or a column, never rename or drop one in place. A
   breaking change is a new view.
 - Aggregates only, except the key views named below, which carry catalog keys / component ids and nothing else (no
-  plan or trip id, no personal data, no `conf:commercial` column).
+  plan or trip id, no personal data, no `conf:commercial` column). The two inquiry key views (AA-1003) are the one
+  exception for ids: they carry the inquiry hand-off key `<trip id>:<hand-off id>` (internal ids, the key Booking
+  dedupes on), a state and timestamps, never the payload, an error text or a customer.
 - The CIS reader treats `UndefinedTable` / `InsufficientPrivilege` / `InvalidSchemaName` as
   `contract_view_missing` and shows the rows as `n/a`, so the CIS code may ship before the owner migration is applied.
 
@@ -25,6 +27,8 @@ Rules for both families:
 | `booking.v_ops_funnel_daily` | `day date, metric text, source_system text, n bigint` (UTC days, last 400) | `inquiry_received`, `inquiry_parked`, `inquiry_failed`, `trip_case_created`, `proposal_sent`, `confirmed`, `cancelled` (first reach) | bk-017 |
 | `booking.v_ops_case_status` | `status text, n bigint` | not soft-deleted trip cases per current status | bk-017 |
 | `tripplanner.v_ops_traffic_daily` | `day date, metric text, n bigint` (UTC days, last 400) | `planner_session_started`, `trip_started`, `trip_edited`, `inquiry_sent` | tp-015 |
+| `tripplanner.v_ops_inquiry_keys` | `idempotency_key text, created_at timestamptz` (last 30 days) | key view: one row per `inquiry.submitted` outbox row, the hand-off key and its time; read by the CIS TP-03 handoff check | tp-022 |
+| `booking.v_ops_inquiry_inbox` | `source text, idempotency_key text, status text, received_at timestamptz, processed_at timestamptz, has_trip_case boolean` (last 30 days) | key view: one row per `inquiry.submitted` inbox row (status `received` / `processed` / `parked` / `failed`), `has_trip_case` = a trip case carries the same key (soft-deleted cases count); matched with `tripplanner.v_ops_inquiry_keys` by key | bk-035 |
 
 ## Family ops.data_coverage.v1 (AA-992, CIS `/admin/data-coverage`)
 
