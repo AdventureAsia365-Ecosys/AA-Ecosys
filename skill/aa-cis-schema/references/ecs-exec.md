@@ -47,14 +47,27 @@ Script cần code app → `sys.path.insert(0, "/app")` (có `shared.secrets.get_
 
 ```bash
 tools/ecs/ecsx.sh .tmp-session/S<nnn>/script.py MODE=dry          # task api (mặc định)
-ECSX_SERVICE=aa-cis-dev-worker ECSX_CONTAINER=worker tools/ecs/ecsx.sh .tmp-session/S<nnn>/script.py
+ECSX_SERVICE=aa-cis-dev-worker tools/ecs/ecsx.sh .tmp-session/S<nnn>/script.py   # container worker tự chọn
+ECSX_SERVICE=aa-booking-dev-api tools/ecs/ecsx.sh .tmp-session/S<nnn>/bk.py        # chế độ local (không S3), S257
+ECSX_SERVICE=aa-crm-dev-api tools/ecs/ecsx.sh .tmp-session/S<nnn>/crm.py
+tools/ecs/ecsx.sh --help                                                          # mọi biến ECSX_*
 ```
 
 Công cụ đưa script + `tools/ecs/ecsx_runner.py` lên S3. Phiên SSM chỉ khởi động runner. Runner tự tách khỏi phiên
 (`setsid`), chạy script với cwd `/app` (đã có `/app` trên `sys.path`), rồi ghi toàn bộ stdout+stderr lên
 `scripts/out/` của bucket bronze. Máy local chờ file `.done`, in output, xoá object và thoát bằng exit code của script.
 Phiên SSM đứt cũng không mất output, và script không chết theo phiên. Script chỉ cần `print`, không phải tự upload S3.
-`VAR=value` thành biến môi trường của script. Chỉ cho container CIS (task role CRM không ghi được bucket bronze).
+`VAR=value` thành biến môi trường của script. Chế độ S3 chỉ cho container CIS (task role CRM/Booking không ghi được
+bucket bronze).
+
+**Chế độ local (S257, mặc định cho mọi service không phải `aa-cis-*`: Booking, CRM).** Output nằm lại
+`/tmp/ecsx-<id>.out` trong container (runner tách nền, ghi dần); máy local gọi các exec ngắn
+`ecsx_runner.py read <id> <offset> <len>` in từng dòng `ECSX_CHUNK` (base64 + CRC32), kiểm offset/độ dài/CRC, in ra,
+hỏi lại đoạn bị terminal SSM cắt; xong thì xoá file `/tmp`. Script tới container qua URL presign S3 (container tải
+bằng Python urllib — image Booking/CRM không có curl; GET presign không cần quyền task role) hoặc, nếu không được /
+`ECSX_SHIP=inline`, theo từng mẩu base64 ngay trong lệnh exec; cả hai kiểm sha256 trước khi chạy. Bỏ dở (hết
+`ECSX_TIMEOUT`) → đọc tiếp bằng `tools/ecs/ecsx.sh --resume <id> <offset>` (cùng `ECSX_SERVICE`). Output rất lớn đọc
+chậm (~1 KB mỗi exec, vài giây mỗi lần): script nên in tóm tắt gọn.
 
 (File tạm trên máy: dùng `.tmp-session/` trong workspace thay cho `/tmp` như runbook.)
 
@@ -62,8 +75,8 @@ Phiên SSM đứt cũng không mất output, và script không chết theo phiê
 
 - `--command` không qua shell: `;`, `&&`, pipe phải nằm trong `sh -c '…'`.
 - **Không đọc kết quả qua terminal SSM.** Output dài (JSON một dòng vài KB, nhiều dòng liền) làm phiên đóng sớm
-  (`Cannot perform start session: EOF`) và mất dữ liệu im lặng (S237, S248, S251, S253). Container CIS: `tools/ecs/ecsx.sh`. Container CRM (không có S3): in dòng ngắn, mỗi dòng một sự kiện, `flush=True`,
-  `LIMIT` nhỏ, cuối script `sleep` ngắn.
+  (`Cannot perform start session: EOF`) và mất dữ liệu im lặng (S237, S248, S251, S253). Mọi container: `tools/ecs/ecsx.sh` (CIS qua S3; Booking/CRM chế độ local
+  đọc theo đoạn, S257).
 - `execute-command` có thể treo tới ~120 giây → chạy nền, poll S3. Script > 5 phút không chạy qua exec (deploy thay task
   là chết giữa chừng; exec nền cũng tự ngắt) → one-off ECS task, job trên worker, hoặc chạy sau khi mọi PR backend đã merge.
 - zsh không word-split biến chứa nhiều flag → `bash -c` hoặc flag rời.
