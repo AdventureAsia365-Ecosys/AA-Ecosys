@@ -21,6 +21,9 @@ source next to its rendered `.svg`. The prose they illustrate is the source of t
 [ecosystem architecture](../../ecosystem-architecture.md) and each repo's `CONTEXT.md`. When a view and the prose
 disagree, fix the view.
 
+**Review:** pilot reviewed and approved by the tech lead (S257 session plan, 2026-10-29). The Infra view passed the
+Terraform drift check on 2026-10-28 (S256, [below](#aa-cis-infra)), and every repo's `CONTEXT.md` links this page.
+
 ## Conventions
 
 Groups follow the AWS order and look, outermost first:

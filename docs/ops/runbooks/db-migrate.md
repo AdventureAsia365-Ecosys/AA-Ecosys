@@ -35,7 +35,7 @@ workflow wins and this page gets fixed.
 ## Facts that shape this runbook
 
 - Runs only on Infra `main` (`if: github.ref == 'refs/heads/main'`), in the GitHub environment `prod` (the name is
-  historical; renaming it is AA-880 / ADR 0012, D-16). Concurrency group `db-migrate`, never cancelled.
+  historical; ADR 0012 decision 6 renames it to `dev` in phase 1, AA-880, D-16). Concurrency group `db-migrate`, never cancelled.
 - The SQL runs in a one-off Fargate task of the migrator family `aa-cis-dev-db-migrate` (container `migrate`,
   security group `aa-cis-dev-sg-db-migrate`), with the image the CIS api runs now. The revision is deregistered at the
   end. Its log is stream `migrate/migrate/<task id>` in `/ecs/aa-cis-dev` and is printed in the job.
