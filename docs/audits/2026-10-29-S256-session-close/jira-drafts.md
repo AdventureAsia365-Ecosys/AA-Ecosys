@@ -255,4 +255,17 @@ nguyên nhân đã giải thích 28/09. **Không đổi trạng thái** (tech le
 
 ## Kết quả đăng
 
-Chưa đăng. Ghi comment id / link vào đây sau khi tech lead duyệt và điều phối đăng.
+Tech lead duyệt 29/10 ~09:28: **đăng 5, bỏ KAN-90** (câu "Chi tiết ở KAN-90" đã bỏ khỏi PR-22). Đăng 29/10 09:29–09:32 +07, mention
+`@thule` bằng mention node, không đổi trạng thái issue nào:
+
+| Issue | Comment | Ảnh |
+|---|---|---|
+| PR-22 | 10521 | 2 (thẻ sự cố 25/09, phần chấm chi tiết) |
+| PR-24 | 10526 | — |
+| PR-25 | 10527 | — |
+| PR-23 | 10528 | 3 (Marketplace máy tính, điện thoại, ngăn chi tiết) |
+| PR-27 | 10529 | 2 (sơ đồ hệ thống, admin tiếng Việt) |
+| KAN-90 | chưa đăng — tech lead chọn bỏ | — |
+
+Lần đăng đầu PR-23/24/25/27 bị Jira trả 400 INVALID_INPUT vì bảng nằm trong mục danh sách (`<li><table>`); đưa bảng ra ngoài
+danh sách thì đăng được. Đã kiểm không có comment trùng.

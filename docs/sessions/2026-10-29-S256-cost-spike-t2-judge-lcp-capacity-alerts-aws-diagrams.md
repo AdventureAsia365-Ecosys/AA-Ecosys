@@ -92,7 +92,7 @@ Partner #114, root #308 / #312 / #315 / #316.
 ## Jira
 
 Nháp 29/10 08:15 ở `docs/audits/2026-10-29-S256-session-close/jira-drafts.md` (PR-22, PR-23, PR-24, PR-25, PR-27 + tuỳ chọn
-KAN-90). <JIRA>
+KAN-90). Jira: tech lead duyệt 29/10, đăng 5 comment (PR-22 #10521, PR-23 #10528, PR-24 #10526, PR-25 #10527, PR-27 #10529, kèm 7 ảnh live), KAN-90 bỏ theo tech lead — chi tiết docs/audits/2026-10-29-S256-session-close/jira-drafts.md
 
 ## Việc cần làm đầu phiên sau (S257, theo thứ tự)
 
