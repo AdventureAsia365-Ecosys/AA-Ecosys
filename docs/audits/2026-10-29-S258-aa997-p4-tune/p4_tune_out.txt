@@ -1,0 +1,59 @@
+SAMPLE rows=281 correct=251 wrong=30 keys=222 routes=674 anchored=395
+REPRO route mismatches=0 outcome mismatches=0 (OK)
+DIAG correct rows refused by aa997.2 (name|country|reason|routes anchored/all|km all/anchored)
+DIAG Malabar Hill|India|off_route|0/1|631/-|cand=Malabar Hill|suburb|full_match|judged=Malabar Hill
+DIAG Chawri Bazaar|India|off_route|0/2|489/-|cand=Chawri Bazaar|suburb|full_match|judged=Chawri Bazaar
+DIAG Lahore General Post Office|Pakistan|off_route|0/1|311/-|cand=General Post Office|amenity|full_match|judged=Lahore General Post Office
+DIAG agricultural flatlands surrounding Yangpyeong|South Korea|name|0/0|-/-|cand=양평|amenity|full_match|judged=양평
+DIAG Hong Kong|Hong Kong|ambiguous_route|0/11|131/-|cand=Hong Kong|city|full_match|judged=Hong Kong
+DIAG Dolma La|China|ambiguous_route|0/14|1/-|cand=Dolma Pass|amenity|full_match|judged=Dolma La
+DIAG Karol Bagh market|India|off_route|0/2|182/-|cand=Karol Bagh|amenity|full_match|judged=Karol Bagh market
+DIAG Horombo Hut|Tanzania|site_type|0/0|-/-|cand=Horombo Huts|city|full_match|judged=Horombo Hut
+DIAG Mount Kailash|China|ambiguous_route|15/24|5/5|cand=Mount Kailash|amenity|full_match|judged=Mount Kailash
+DIAG Delhi Airport|India|off_route|0/7|179/-|cand=Delhi Airport Bus Depot|amenity|full_match|judged=Delhi Airport
+DIAG Pingyao|China|off_route|0/1|438/-|cand=Pingyao|city|full_match|judged=Pingyao
+DIAG Doi Tung|Thailand|ambiguous_route|0/2|60/-|cand=Doi Tung|amenity|full_match|judged=Doi Tung
+DIAG Tribhuwan International Airport|Nepal|site_type|0/2|4/-|cand=Tribhuwan International Airport|city|full_match|judged=Tribhuwan International Airport
+DIAG Kibo Hut|Tanzania|site_type|0/0|-/-|cand=Kibo Huts|city|full_match|judged=Kibo Hut
+DIAG Jiancing Historic Trail|Taiwan|name|1/1|60/60|cand=見晴懷古步道|street|full_match|judged=見晴懷古步道
+DIAG Inwangsan Mountain|South Korea|site_type|3/3|3/3|cand=Inwangsan Mountain Park|suburb|full_match|judged=Inwangsan Mountain
+DIAG Coron|Philippines|ambiguous_route|1/4|127/300|cand=Coron|city|full_match|judged=Coron
+DIAG Koh Yao Noi|Thailand|ambiguous_route|0/2|26/-|cand=Coastal Escape Koh Yao Noi|amenity|full_match|judged=Koh Yao Noi
+DIAG Kunming Lake|China|ambiguous_route|1/4|14/14|cand=Kunming Lake|amenity|full_match|judged=Kunming Lake
+DIAG Boriam Temple|South Korea|off_route|0/1|326/-|cand=Boriam Temple|amenity|full_match|judged=Boriam Temple
+DIAG Moseulpo harbour|South Korea|name|0/1|25/-|cand=모슬포항|amenity|full_match|judged=모슬포항
+DIAG South Delhi|India|off_route|0/2|166/-|cand=South Delhi|suburb|full_match|judged=South Delhi
+DIAG New Delhi|India|off_route|1/3|178/178|cand=New Delhi|city|full_match|judged=New Delhi
+DIAG Shantang Street|China|ambiguous_route|1/2|1/1|cand=Shantang Street|street|full_match|judged=Shantang Street
+DIAG Gubei Water Town|China|ambiguous_route|1/2|111/1021|cand=Gubei Water Town|amenity|full_match|judged=Gubei Water Town
+DIAG Mae Sai|Thailand|ambiguous_route|1/3|58/59|cand=Mae Sai District|city|full_match|judged=Mae Sai
+DIAG Minar-e-Pakistan|Pakistan|off_route|0/1|312/-|cand=Minar-e-Pakistan|amenity|full_match|judged=Minar-e-Pakistan
+DIAG Indira Gandhi International Airport|India|off_route|0/2|177/-|cand=Indira Gandhi International Airport|amenity|full_match|judged=Indira Gandhi International Airport
+DIAG Qiao Family Compound|China|off_route|0/1|469/-|cand=Qiao Family Compound|amenity|full_match|judged=Qiao Family Compound
+DIAG Kunming|China|off_route|0/6|256/-|cand=Kunming|city|full_match|judged=Kunming
+DIAG Lahore|Pakistan|off_route|0/2|264/-|cand=Lahore|city|full_match|judged=Lahore
+DIAG Trident at Nariman Point|India|off_route|0/1|634/-|cand=Trident, Nariman-Point|amenity|full_match|judged=Trident at Nariman Point
+DIAG Lhasa airport|China|off_route|0/1|195/-|cand=Lhasa Gonggar Airport|amenity|full_match|judged=Lhasa airport
+DIAG Trident Nariman Point|India|off_route|0/1|634/-|cand=Trident, Nariman-Point|amenity|full_match|judged=Trident Nariman Point
+aa997.2 (deployed)                           correct refused  34/251 ( 13.5%) wrong refused  5/30 ( 16.7%) FAIL by {"C:off_route": 17, "C:ambiguous_route": 10, "C:site_type": 4, "E:site_type": 3, "C:name": 3, "E:ambiguous_route": 1, "E:off_route": 1}
+aa997.3 (branch preset)                      correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+aa997.3 correct still refused ["Horombo Hut|Tanzania|site_type", "Kibo Hut|Tanzania|site_type", "Gubei Water Town|China|off_route"]
+aa997.3 wrong catches lost vs aa997.2 ["Huashan|China"]
+SWEEP variants=576 passing=116 (gate correct refused <= 2%)
+  anchored_only=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_miss_div=3,anchored_only=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_miss_div=2,anchored_only=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_km=500.0,anchored_only=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_km=1000.0,anchored_only=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  anchored_only=True,per_tour=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_km=500.0,ambiguous_miss_div=3,anchored_only=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_km=500.0,ambiguous_miss_div=2,anchored_only=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_km=1000.0,ambiguous_miss_div=3,anchored_only=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_km=1000.0,ambiguous_miss_div=2,anchored_only=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_miss_div=3,anchored_only=True,per_tour=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_miss_div=2,anchored_only=True,per_tour=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_km=500.0,anchored_only=True,per_tour=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_km=1000.0,anchored_only=True,per_tour=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+  ambiguous_km=500.0,ambiguous_miss_div=3,anchored_only=True,per_tour=True,rejudge_off_route_km=500.0,rejudge_v1_checks=False,site_admin_named=True correct refused   3/251 (  1.2%) wrong refused  4/30 ( 13.3%) PASS by {"E:site_type": 3, "C:site_type": 2, "E:off_route": 1, "C:off_route": 1}
+BEST {"anchored_only": true, "rejudge_off_route_km": 500.0, "rejudge_v1_checks": false, "site_admin_named": true} wrong refused 4/30 correct refused 3/251
+P4 GATE aa997.3 PASS (correct refused 3/251 = 1.2%, wrong refused 4/30 vs aa997.2 5/30)
