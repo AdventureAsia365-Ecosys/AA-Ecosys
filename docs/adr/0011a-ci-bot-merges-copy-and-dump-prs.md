@@ -57,6 +57,24 @@ point 1: such a token could push `db/run_migration.py`, and the next auto-apply 
    of critic point 1 does not apply; the same key can already mint any installation token, so the narrowing in the
    workflow is the control. *(Clarified 2026-10-29, S257: the earlier wording "for another repo" contradicted ADR
    0016 decision 6, accepted the day before.)*
+   **Exception, the migration-sync doorbell** *(amended 2026-10-29, S258)*: each owner repo's
+   `migration-sync-wake.yml` (push to `main` touching its migrations folder) mints, in its `release` environment, a
+   token for AA-CIS-Infra with **Issues write only** and posts one REST comment on the open Infra issue labelled
+   `migration-sync-wake`. That environment holds the ci-bot key and must allow `main` only: it does in AA-CIS-App,
+   AA-Booking and AA-TripPlanner-Web; AA-Partner's had no deployment branch policy on 2026-10-29 and gets one before its
+   wake-up workflow merges (the workflow's own ref check is no substitute). Infra's `migration-sync.yml` runs on a
+   comment by exactly `aa-ecosys-ci-bot[bot]` on that issue, never reads its text, and still pulls the owners' `main`
+   anonymously, so the no-payload rule above holds. Why: GitHub runs the sync's `*/10` cron best effort (once in ~6 h
+   on 2026-10-29), which hid a hand step in the "no human step" path. Issues write cannot change Infra code, open or
+   merge a PR, or dispatch a workflow, and the App already holds it; `repository_dispatch` (Contents write) and
+   `workflow_dispatch` (Actions write, which would also let the key dispatch DB Migrate or Terraform Apply) stay out.
+   Issues write can label PRs, and on Infra one label is not informational: `secret-scan-baseline-reviewed` is the
+   reviewer override of the required `gitleaks` check (`secret-scan.yml`, `pull_request_target` on `labeled`), which
+   lets a PR that changes the gitleaks baseline or a guarded workflow be scanned with its own copies. A leaked minted
+   token could add it. That is accepted because it is no new reach: the same key can already mint Contents and Pull
+   requests write on Infra (decision 3 above); the label counts only on the run that adding it starts; and ci-bot
+   merges only a PR that adds one byte-identical copy file with every required check green, which never needs the
+   label, so any other PR still needs a person or the orchestrating agent to merge it. The cron stays as the backstop.
 
 4. **ci-bot cannot push to AA-CIS-Infra `main`.** The ruleset on `main` (AA-CIS-Infra
    `tools/github/infra-main-ruleset.json`, applied with the tech lead's login by `tools/github/db_auto_apply_gate.sh`)
