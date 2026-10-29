@@ -36,15 +36,33 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - [ ] Test xanh local, đỏ CI → so package đã cài (`pip list` local vs CI/image) trước khi sửa code.
 - [ ] Khẳng định "check xanh khi khớp / đỏ khi lệch" → chứng minh bằng nhánh thử hoặc draft PR có cài sẵn chỗ lệch rồi
   đóng không merge; không merge thứ sai để thử.
-- [ ] **PR có migration → luồng D8:** PR chỉ chứa file migration ở repo chủ merge trước → PR copy byte sang AA-CIS-Infra
-  `db/migrations/<owner>/` (Migration Copy Guard đỏ nếu PR repo chủ chưa vào `main`) → DB Migrate `check` → `apply`
-  (chờ mọi bảng job owner rảnh và không wave mở) → merge PR bot `bot/db-schema-reference` → DB Isolation Probe.
+- [ ] **PR có migration — chọn luồng theo loại file (ADR 0017, AA-993; Part A MIG-4):**
+  - **File expand** (header `-- migrate: expand`, chỉ thêm: object mới, cột nullable / default không volatile, index
+    không unique; không bảng nóng): **một PR app** gồm file + code cần nó + nâng readiness lên key đó. Check "Migration
+    preflight" của app phải xanh và ghi `expand`. Sau merge: bot migration-sync của Infra copy + merge PR copy (≤ 10′) →
+    Migration Apply (khi `DB_AUTO_APPLY=true`) apply theo đúng thứ tự số + Isolation Probe chặn → DB Schema Dump, PR
+    root tự merge khi sạch → Deploy Dev của app qua `schema-gate` (chờ key + job apply/probe của run Migration Apply
+    xanh, tối đa `SCHEMA_GATE_TIMEOUT_S`, mặc định 40′) rồi mới roll. `DB_AUTO_APPLY` chưa bật → bot vẫn copy, người
+    chạy DB Migrate `check` → `apply` cho file đó **trong cửa sổ của gate**; quá cửa sổ thì `schema-gate` đỏ (không
+    deploy) → sau khi apply, **chạy lại Deploy Dev bằng tay** (Actions → Run workflow, hoặc "Re-run all jobs").
+  - **File contract / destructive** (không header expand) → **luồng D8**: PR chỉ chứa file migration ở repo chủ merge
+    trước → bot copy sang AA-CIS-Infra `db/migrations/<owner>/` (Migration Copy Guard đỏ nếu PR repo chủ chưa vào
+    `main`; Migration Apply dừng ở file này, không bao giờ tự apply) → DB Migrate `check` → `apply` (chờ mọi bảng job
+    owner rảnh và không wave mở) → merge PR bot `bot/db-schema-reference` (nếu chưa tự merge) → DB Isolation Probe →
+    PR code. Preflight từ chối PR vừa thêm file contract vừa nâng readiness lên nó.
+  - File đã copy sang Infra là **bất biến**: sửa bằng file mới; số file mới = max trên `main` + 1 (số thấp hơn cố ý →
+    nhãn `migration:out-of-order`, không bao giờ tự apply).
   Log DB Migrate ghi login `db_migrator` và `ran as: <owner>` (`cis_owner` / `bk_owner` / `tp_owner` / `crm_owner`);
   `roles/` chạy bằng master. Chủ schema: `docs/database/schema-ownership.md`.
   - Migration đổi bảng/khoá/FK của schema có trang ERD thiết kế `enforce=true`
     (`docs/architecture/erd/design/<schema>.md`, repo gốc) → sửa trang đó trong cùng đợt thay đổi, không thì DB Schema
     Dump đêm đó đỏ bước drift.
-  - Booking và AA-Partner deploy ở mọi push vào `main` chạm backend → PR code cần migration mới chỉ merge sau `apply`.
+  - Booking và AA-Partner deploy ở mọi push vào `main` chạm backend; từ AA-993 M4b Deploy Dev của CIS, Booking,
+    Partner có `schema-gate` chặn trước khi roll (key chưa có, hoặc run Migration Apply gần nhất có apply/probe đỏ,
+    sau `SCHEMA_GATE_TIMEOUT_S` (mặc định 40′) → đỏ, không deploy; sửa xong thì "Re-run failed jobs" run Infra đó rồi
+    chạy lại Deploy Dev). PR code cần file
+    contract vẫn chỉ merge sau `apply`; push chỉ đổi `api/migrations/**` (CIS, Partner) / `migrations/` (Booking)
+    không deploy.
 - [ ] **Cờ fail-closed (thiếu key = BẬT) + migration:** đặt cờ TẮT rõ ràng trước khi deploy code → apply migration →
   BẬT cờ + verify lật cờ.
 - [ ] PR frontend → `npm run build` đầy đủ local (Node 22 qua nvm), rồi `aa-ui-verify`.
@@ -164,6 +182,8 @@ Thiếu bằng chứng nào → để In Review và ghi rõ còn thiếu gì. Li
 ## 5. Rollback
 
 Deploy hỏng mà circuit breaker ECS không tự lùi → lùi app trước, sửa sau. DB không lùi theo app (migration chỉ tiến).
+**Revert PR app có migration đã copy/apply = chỉ revert code**: giữ nguyên file migration (đã copy = bất biến, ADR
+0017); nâng readiness ngược lại trong cùng PR revert; bỏ object thì viết file contract mới theo luồng D8.
 
 - CIS api + worker: `docs/ops/runbooks/rollback-cis.md`.
 - Booking: `docs/ops/runbooks/rollback-booking.md`. AA-Partner (`aa-crm-dev-api`, `aa-crm-dev-web`) chưa có runbook

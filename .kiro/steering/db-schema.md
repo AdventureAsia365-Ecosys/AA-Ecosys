@@ -25,7 +25,8 @@ mở/cập nhật PR trên repo gốc (nhánh `bot/db-schema-reference`). Việc
 1. Sau một migration: chờ PR `bot/db-schema-reference` (hoặc chạy tay workflow `DB Schema Dump`). Sau một DB Migrate
    `apply`, PR đó tự merge (ci-bot, AA-993 M1, ADR 0017 d9 / 0011a) khi sạch: run này mở PR, drift không đổi, design
    ERD xanh, chỉ file sinh tự động, mọi check root xanh. Không tự merge (run summary ghi lý do) → agent merge tay. Chỉ
-   sau khi PR đã merge mới viết code dựa trên cột mới (D8 bước 5, Part A MIG-4).
+   sau khi PR đã merge mới viết code dựa trên cột mới (D8 bước 4, Part A MIG-4) — trừ file **expand** (ADR 0017): code
+   đi cùng file trong một PR app, Deploy Dev `schema-gate` chờ key được Migration Apply đăng ký.
 2. Nghi file lỗi thời mà chưa có PR: chạy tay workflow (input `publish=true`), không tự viết script dump.
 Script cũ `.tmp-session/s209_*` đã thôi dùng.
 

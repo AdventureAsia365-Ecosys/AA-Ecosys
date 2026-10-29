@@ -70,10 +70,20 @@ Script asyncpg ad-hoc: tham số ngày bind `$1::date` phải là `datetime.date
 
 ## Viết migration
 
-- Luồng merge → copy Infra → DB Migrate `check` → `apply` → PR schema dump: skill `aa-ship` (luồng D8). File ở repo chủ;
-  bản copy byte-identical ở Infra `db/migrations/<owner>/` (Migration Copy Guard đòi PR của repo chủ đã vào `main`).
+- Hai luồng (ADR 0017, Part A MIG-4; chi tiết skill `aa-ship`): file **expand** (header `-- migrate: expand`) đi cùng
+  code + nâng readiness trong một PR app, bot migration-sync copy, Migration Apply tự apply (khi `DB_AUTO_APPLY=true`),
+  `schema-gate` của Deploy Dev chờ key; file **contract / destructive** giữ luồng D8 (PR chỉ migration → bot copy →
+  DB Migrate `check` → `apply` bằng tay → PR schema dump → PR code). File ở repo chủ; bản copy byte-identical ở Infra
+  `db/migrations/<owner>/` (Migration Copy Guard đòi PR của repo chủ đã vào `main`; bot copy, không mở PR copy tay).
+- Expand chỉ được: tạo object mới (bảng mới trong schema bắt RLS phải `ENABLE` + `FORCE`), thêm cột nullable / default
+  không volatile, index không unique (bảng > 100k dòng: `CONCURRENTLY` trong file `no-transaction` riêng). Không `DO`
+  block, không `CREATE OR REPLACE`, không INSERT/UPDATE/DELETE vào bảng có sẵn, không đụng bảng nóng (`shared.job`,
+  `booking.job`, `crm.job`, `shared.job_worker`, ledger, `catalog.*`). Kiểm trước khi mở PR: Infra
+  `python3 db/run_migration.py --inspect db/migrations/<owner>/<file>` (exit 0, `"expand": true`); check "Migration
+  preflight" của app ghi kết quả classify.
   Input `migration` của DB Migrate có tiền tố owner (`cis/281_x.sql`). `apply` chờ **mọi** bảng job rảnh và không có
-  wave mở (`shared.rerun_wave`), trừ khi Nghiệp override có lý do.
+  wave mở (`shared.rerun_wave`), trừ khi Nghiệp override có lý do (file expand do Migration Apply chạy thì bỏ qua chờ
+  bảng job, nhưng file nhắc bảng nóng vẫn chờ wave đóng).
 - DB Migrate đăng nhập **`db_migrator`** và chạy mỗi file bằng role chủ sống của schema neo: `cis/` → `cis_owner`,
   `booking/` → `bk_owner`, `tripplanner/` → `tp_owner`, `crm/` → `crm_owner` (không cần `OWNER TO`). File `roles/`
   (key `rl-NNN`) chạy bằng master.
@@ -98,8 +108,9 @@ Script asyncpg ad-hoc: tham số ngày bind `$1::date` phải là `datetime.date
 - **ERD thiết kế:** schema có trang `docs/architecture/erd/design/<schema>.md` ở repo gốc với `enforce=true` → migration
   thêm/xoá bảng, đổi khoá hoặc FK phải sửa trang đó trong cùng đợt thay đổi (PR root đi kèm), nếu không bước "Design ERD
   drift" của DB Schema Dump đỏ.
-- Giá trị code mới ghi vào cột có CHECK phải có trong CHECK trước khi code đó deploy. Code Booking/Partner cần migration
-  mới → PR migration riêng, apply trước khi merge code (deploy chạy ở mọi push vào main).
+- Giá trị code mới ghi vào cột có CHECK phải có trong CHECK trước khi code đó deploy. Code cần file **contract** mới →
+  PR migration riêng, apply trước khi merge code; code cần file **expand** → cùng PR, `schema-gate` giữ deploy tới khi
+  key được apply (tối đa `SCHEMA_GATE_TIMEOUT_S`, mặc định 40′; quá hạn → đỏ, apply xong thì chạy lại Deploy Dev).
 - Bài học chi tiết vùng DB/migration: `skill/aa-lessons/lessons.md` mục "Dữ liệu" và "Vận hành" — đọc trước khi sửa.
 
 ## Xoá bảng hoặc dữ liệu vĩnh viễn

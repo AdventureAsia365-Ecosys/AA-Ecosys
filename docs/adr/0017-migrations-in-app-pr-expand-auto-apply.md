@@ -1,5 +1,9 @@
 # ADR 0017 — Migrations ship in the app PR; expand files are auto-applied on Dev by an Infra pipeline before deploy
 
+<!-- TODO(orchestrator, AA-993 M5): ONLY after the M4b end-to-end proof is green (Booking bk-034: merge -> copied ->
+     applied -> probe green -> schema-gate pass -> deploy -> verify, no human step), replace the Status line below with:
+     "- **Status:** Accepted (<date>, S<nnn>). Built in AA-993 Phase E (I1, M1, M2a, M2b, M4a, M3, M4b); proof: <Deploy
+     Dev run URL> and <Migration Apply run URL>." and set the 0017 row of docs/adr/README.md to Accepted. -->
 - **Status:** Proposed (2026-10-28, S254). Drafted from the AA-993 design (S252); nothing of it is built yet. The
   answers to the design's open questions that this ADR depends on (Q5, Q7, Q8, Q11, Q14–Q17) take their proposed
   answer; Q7 and Q16 were approved by the tech lead on 2026-10-26 (S252).
@@ -114,8 +118,12 @@ schema. The risky changes (constraints, policies, grants, data rewrites, drops) 
    reads the keys the deployed code requires and polls Dev readiness until every key up to the required one is
    registered (`registered_keys` on `/health/ready`, shipped first in its own PR, M4a; falls back to
    `missing_schema_versions` on an older task, critic 23), and requires the `migration-apply` run that registered
-   them to be green, probe included. Timeout 20 min, then red **before** rollout: "required X not applied
-   (contract/destructive → manual apply)". CIS and Partner Deploy Dev path filters add `!api/migrations/**`.
+   them to be green, probe included (judged on the apply and probe jobs only; the dump and summary jobs do not guard
+   the schema). Timeout from the app repo variable `SCHEMA_GATE_TIMEOUT_S`, default 40 min (amended S257 from 20 min:
+   the chain from merge to probe, with the */10 sync cron, the copy PR checks and the ci-bot merge, the plan, apply
+   and probe, does not fit 20 min; the bk-034 proof records the real times), then red **before** rollout: "required X
+   not applied (contract/destructive → manual apply)". A GitHub read the gate cannot decide on (rate limit, error) is
+   never a pass. CIS and Partner Deploy Dev path filters add `!api/migrations/**`.
 8. **Infra `main` is protected, or auto-apply is off.** A ruleset on AA-CIS-Infra `main`: PR required; required checks
    Copy Guard, `check_migration_files`, classify, `terraform-plan`; no direct pushes, ci-bot included; bypass the tech lead
    only. On GitHub Free a ruleset and environment rules exist only on a public repo (ADR 0014): when Infra goes
