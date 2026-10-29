@@ -1,0 +1,48 @@
+{
+ "no_filter": {
+  "count_ms_rows": [
+   3.7,
+   1
+  ],
+  "rows_ms_rows": [
+   6.8,
+   24
+  ]
+ },
+ "activity_trekking": {
+  "count_ms_rows": [
+   66.1,
+   1
+  ],
+  "rows_ms_rows": [
+   5.8,
+   24
+  ]
+ },
+ "intensity_challenging": {
+  "count_ms_rows": [
+   48.8,
+   1
+  ],
+  "rows_ms_rows": [
+   6.7,
+   24
+  ]
+ },
+ "added_30_days": {
+  "count_ms_rows": [
+   2.5,
+   1
+  ],
+  "rows_ms_rows": [
+   2.3,
+   24
+  ]
+ },
+ "coverage": {
+  "pool_tours": 892,
+  "with_activity": 877,
+  "with_intensity": 877,
+  "with_cover": 162
+ }
+}

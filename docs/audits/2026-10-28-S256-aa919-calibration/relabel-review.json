@@ -1,0 +1,14 @@
+{
+ "t9l-001": {
+  "from": "pass",
+  "verdict": "fail",
+  "grade": "heavy",
+  "reason": "S256 calibration review (rubric rules 1-2 and 5): the seo_title 'Punakha Dzong and Your Bhutan Meditation Retreat' tells the reader the trip is a meditation retreat, which the day-4 itinerary (courtyards and assembly hall) does not offer. 'Bhutan meditation retreat' is an SEO keyword the brief handed to the writer, but rule 5 still fails a keyword used as a trip promise the source does not make. The panel labelled the same kind of one-field claim heavy on t9l-002 and t9l-010, so this pass was inconsistent."
+ },
+ "t9l-003": {
+  "from": "pass",
+  "verdict": "fail",
+  "grade": "heavy",
+  "reason": "S256 calibration review (rubric rule 2): 'Children can watch a discipline being learned' promises an activity (watching students at work) that the itinerary does not make; the source only lists the school as one stop of a Thimphu morning of sightseeing. The panel flagged the same clause (facts and reader votes: needs a tweak; voice vote: heavy) and labelled the same kind of one-clause trip promise heavy on t9l-010, so the pass label was inconsistent. The brief-asked link to dzongs and monasteries stays a light point (rule 5)."
+ }
+}

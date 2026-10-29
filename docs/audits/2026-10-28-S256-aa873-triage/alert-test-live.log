@@ -1,0 +1,40 @@
+[23:40:26Z] account acc2 ok; MFA session ends 2026-10-29T01:36:24+00:00 (115 min left)
+[23:40:30Z] rule aa-sec-dev-security-group-change: ENABLED, 1 target(s)
+[23:40:33Z] rule aa-sec-dev-iam-change: ENABLED, 1 target(s)
+[23:40:36Z] rule aa-sec-dev-root-activity: ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS, 1 target(s)
+[23:40:38Z] rule aa-sec-dev-cloudtrail-tamper: ENABLED, 1 target(s)
+[23:40:42Z] rule aa-sec-dev-access-analyzer-finding: ENABLED, 1 target(s)
+[23:40:43Z] rule aa-sec-dev-global-forward (us-east-1): ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS
+[23:40:46Z] topic aa-cis-dev-acp-alerts: 2 confirmed e-mail subscriber(s)
+[23:40:47Z] iam-change rule already has the S256 widening: expect 6 iam_change e-mails
+[23:40:47Z] run 20261028234047 (t0 2026-10-28T23:40:47Z)
+[23:40:49Z] negative: describe-security-groups done
+[23:40:52Z] sg_change: created sg-072622551ba5a6508
+[23:40:54Z] sg_change: authorized tcp/9 from 192.0.2.10/32
+[23:40:56Z] sg_change: revoked
+[23:40:57Z] sg_change: deleted sg-072622551ba5a6508
+[23:40:59Z] iam_change: created policy
+[23:41:00Z] iam_change: tagged policy
+[23:41:02Z] iam_change: untagged policy
+[23:41:04Z] iam_change: deleted policy
+[23:41:05Z] access_analyzer: created role aa-sec-alert-test-20261028234047 (no policies; deleted by cleanup)
+[23:41:07Z] trail_tamper: no-op update-trail done
+[23:41:07Z] run done. Wait for the analyzer finding (verify), then: cleanup (deletes the role -> 1 more iam_change mail, DeleteRole).
+[23:44:17Z] access_analyzer: finding ACTIVE after ~4 min
+[23:44:24Z] cleanup: deleted role aa-sec-alert-test-20261028234047
+[23:44:24Z] cleanup: 1 object(s) removed
+[23:44:24Z] waiting 5 min for metrics
+[23:49:30Z] verify since 2026-10-28T23:40:47Z (metrics lag 1-5 min)
+[23:49:34Z]   aa-sec-dev-security-group-change: TriggeredRules=4.0 Invocations=4.0 FailedInvocations=0
+[23:49:38Z]   aa-sec-dev-iam-change: TriggeredRules=6.0 Invocations=6.0 FailedInvocations=0
+[23:49:42Z]   aa-sec-dev-root-activity: TriggeredRules=0 Invocations=0 FailedInvocations=0
+[23:49:46Z]   aa-sec-dev-cloudtrail-tamper: TriggeredRules=1.0 Invocations=1.0 FailedInvocations=0
+[23:49:50Z]   aa-sec-dev-access-analyzer-finding: TriggeredRules=1.0 Invocations=1.0 FailedInvocations=0
+[23:49:52Z]   topic aa-cis-dev-acp-alerts: NumberOfNotificationsDelivered=24.0 Failed=0.0
+[23:49:52Z]   (2 e-mail subscribers: delivered = 2 x alerts; other alarms on the topic in the window also count)
+[23:49:52Z]   expected TriggeredRules: security-group-change 4, iam-change 6(+1 DeleteRole after cleanup), cloudtrail-tamper 1, access-analyzer-finding 1, root-activity 0
+[23:49:55Z]   analyzer finding for the test role: RESOLVED
+[23:49:56Z]   ACTIVE findings in total (0 expected once the archive rules are applied + apply-archive-rule ran, besides the test role): 0
+[23:49:58Z]   CloudTrail IAM events on the test objects (us-east-1): GetRole GetRole DeleteRole GetPolicy GetRole CreateRole DeletePolicy UntagPolicy TagPolicy CreatePolicy
+[23:49:59Z]   CloudTrail EC2/trail events (us-west-1): UpdateTrail DeleteSecurityGroup RevokeSecurityGroupIngress AuthorizeSecurityGroupIngress CreateSecurityGroup
+[23:49:59Z]   Now check the inbox: count '[aa-sec]' mails per rule against the expected list in the header.

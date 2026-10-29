@@ -1,0 +1,77 @@
+# AA-665 spike 25/09 | union window 2026-09-24 17:00Z..2026-09-26 00:00Z | gap=10min
+T llm | utc_day | 7917 | $11.9853 | job_linked=0 | tenant=34
+T dfs | utc_day | 1169 | live=1169 | $49.0200 | tenant=0 | tour=0
+T llm | plus07_day | 7917 | $11.9853 | job_linked=0 | tenant=34
+T dfs | plus07_day | 1169 | live=1169 | $49.0200 | tenant=0 | tour=0
+T llm_by_day_20_29 | 21/09 122 $0.4443; 25/09 7917 $11.9853; 26/09 28 $0.4929; 28/09 87 $0.2470; 29/09 3104 $1.5159
+T dfs_by_day_20_29 | 20/09 1 $0.0000; 21/09 16 $0.9100; 22/09 31 $0.0600; 23/09 1 $0.0000; 24/09 1 $0.0000; 25/09 1169 $49.0200; 26/09 1 $0.0000; 27/09 1 $0.0000; 28/09 131 $1.1180; 29/09 24 $0.3860
+H llm | 05:00:00Z(+07 12:00) | 539 | $1.1657 | top=a3_search_demand 521 $0.7473
+H llm | 08:00:00Z(+07 15:00) | 1218 | $2.0704 | top=a3_search_demand 1201 $1.6454
+H llm | 09:00:00Z(+07 16:00) | 3549 | $4.5975 | top=a3_search_demand 3549 $4.5975
+H llm | 10:00:00Z(+07 17:00) | 2585 | $3.2818 | top=a3_search_demand 2585 $3.2818
+H llm | 14:00:00Z(+07 21:00) | 7 | $0.2362 | top=t2_generate 3 $0.1868
+H llm | 15:00:00Z(+07 22:00) | 19 | $0.6338 | top=t2_generate 7 $0.5449
+H dfs | 05:00:00Z(+07 12:00) | 563 | live=563 | hits=0 | $24.0400 | kw=1712
+H dfs | 06:00:00Z(+07 13:00) | 1 | live=1 | hits=0 | $0.0000 | kw=0
+H dfs | 08:00:00Z(+07 15:00) | 605 | live=605 | hits=0 | $24.9800 | kw=1778
+S a3_search_demand | writer | haiku-4-5 | bedrock-satellite | acc3 | - | 7856 | $10.2719 | job_linked=0 | fallback=0 | 05:04:56Z(+07 12:04) | 10:42:26Z(+07 17:42)
+S t2_generate | writer | sonnet-4-6 | bedrock-satellite | acc3 | wanderlux-travel | 19 | $1.3584 | job_linked=0 | fallback=0 | 05:00:39Z(+07 12:00) | 15:26:31Z(+07 22:26)
+S s1_flag_fix | writer | haiku-4-5 | bedrock-satellite | acc3 | wanderlux-travel | 12 | $0.2011 | job_linked=0 | fallback=0 | 05:01:09Z(+07 12:01) | 15:27:10Z(+07 22:27)
+S s1_brand_audit | judge | gpt-4.1 | openai | - | - | 13 | $0.0937 | job_linked=0 | fallback=0 | 05:00:43Z(+07 12:00) | 15:26:33Z(+07 22:26)
+S t9_write | writer | sonnet-4-6 | bedrock-satellite | acc3 | wanderlux-travel | 2 | $0.0198 | job_linked=0 | fallback=0 | 05:04:36Z(+07 12:04) | 05:04:48Z(+07 12:04)
+S t8_angle_gen | writer | sonnet-4-6 | bedrock-satellite | acc3 | wanderlux-travel | 1 | $0.0184 | job_linked=0 | fallback=0 | 05:04:25Z(+07 12:04) | 05:04:25Z(+07 12:04)
+S t10_judge | judge | gpt-4.1 | openai | - | - | 4 | $0.0136 | job_linked=0 | fallback=0 | 05:04:39Z(+07 12:04) | 05:04:52Z(+07 12:04)
+S s1_flag_fix | writer | haiku-4-5 | bedrock-satellite | acc3 | - | 7 | $0.0051 | job_linked=0 | fallback=0 | 08:29:52Z(+07 15:29) | 15:23:35Z(+07 22:23)
+S s1_itinerary_nudge | writer | haiku-4-5 | bedrock-satellite | acc3 | - | 3 | $0.0032 | job_linked=0 | fallback=0 | 05:02:07Z(+07 12:02) | 15:06:41Z(+07 22:06)
+ERR dfs | AmbiguousColumnError | column reference "created_at" is ambiguous
+B llm_a3_search_demand#1 | 05:04:56Z(+07 12:04) | 05:23:11Z(+07 12:23) | calls=521 | $0.7473
+B llm_a3_search_demand#2 | 08:33:09Z(+07 15:33) | 10:42:26Z(+07 17:42) | calls=7335 | $9.5246
+B dfs_live#1 | 05:05:05Z(+07 12:05) | 05:23:30Z(+07 12:23) | calls=563 | $24.0400 | endpoints=keywords_for_keywords,search_volume_bulk,serp_advanced
+B dfs_live#2 | 06:22:49Z(+07 13:22) | 06:22:49Z(+07 13:22) | calls=1 | $0.0000 | endpoints=appendix_user_data
+B dfs_live#3 | 08:33:17Z(+07 15:33) | 08:51:10Z(+07 15:51) | calls=605 | $24.9800 | endpoints=keywords_for_keywords,search_volume_bulk,serp_advanced
+R tenant_tour_versions_in_window | 0
+R tenant_llm | wanderlux-travel | t2_generate | 19 | $1.3584 | 05:00:39Z(+07 12:00) | 15:26:31Z(+07 22:26)
+R tenant_llm | wanderlux-travel | s1_flag_fix | 12 | $0.2011 | 05:01:09Z(+07 12:01) | 15:27:10Z(+07 22:27)
+R tenant_llm | wanderlux-travel | t8_angle_gen | 1 | $0.0184 | 05:04:25Z(+07 12:04) | 05:04:25Z(+07 12:04)
+R tenant_llm | wanderlux-travel | t9_write | 2 | $0.0198 | 05:04:36Z(+07 12:04) | 05:04:48Z(+07 12:04)
+R non_get_api_calls | 29
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 10ms | 00:17:32Z(+07 07:17)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 5ms | 00:18:56Z(+07 07:18)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 8ms | 00:28:14Z(+07 07:28)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 5ms | 00:44:37Z(+07 07:44)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 5ms | 04:30:42Z(+07 11:30)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 4ms | 04:59:45Z(+07 11:59)
+R api | wanderlux-travel | tenant | POST | /v1/tours/pool/3d3af05f-175f-46fa-bd29-a5dab90a2a41/rewrite | 200 | 19ms | 04:59:50Z(+07 11:59)
+R api | wanderlux-travel | tenant | POST | /v1/subjects/4ad9b520-6d29-402a-bdeb-f2ec779427a1/pick | 200 | 9ms | 05:04:06Z(+07 12:04)
+R api | wanderlux-travel | tenant | POST | /v1/angle-gate/requests/101a390d-1d48-46da-bb2c-6a21113f30f5/goal | 200 | 18327ms | 05:04:25Z(+07 12:04)
+R api | wanderlux-travel | tenant | POST | /v1/angle-gate/requests/101a390d-1d48-46da-bb2c-6a21113f30f5/choose | 200 | 9ms | 05:04:25Z(+07 12:04)
+R api | wanderlux-travel | tenant | POST | /v1/content-writing/requests/101a390d-1d48-46da-bb2c-6a21113f30f5/write | 422 | 5ms | 05:04:26Z(+07 12:04)
+R api | wanderlux-travel | tenant | POST | /v1/content-writing/requests/101a390d-1d48-46da-bb2c-6a21113f30f5/write | 202 | 18ms | 05:04:26Z(+07 12:04)
+R api | admin | admin | POST | /admin/dfs-balance/check | 200 | 996ms | 06:22:49Z(+07 13:22)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 8ms | 07:43:03Z(+07 14:43)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 12ms | 07:50:46Z(+07 14:50)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 8ms | 08:27:05Z(+07 15:27)
+R api | wanderlux-travel | tenant | POST | /v1/tours/pool/2adefa40-650b-47d1-bfa2-53198576e7ee/rewrite | 200 | 28ms | 08:27:12Z(+07 15:27)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 5ms | 08:53:03Z(+07 15:53)
+R api | wanderlux-travel | tenant | POST | /v1/tours/pool/0ccc9c97-94f3-44e8-bd90-565b13e9bfd8/rewrite | 200 | 12ms | 08:53:09Z(+07 15:53)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 4ms | 14:36:36Z(+07 21:36)
+R api | wanderlux-travel | tenant | POST | /v1/tours/pool/0947f124-8e88-492a-a3d1-1c8a6085e8e7/rewrite | 200 | 15ms | 14:36:42Z(+07 21:36)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 8ms | 14:45:55Z(+07 21:45)
+R api | wanderlux-travel | tenant | POST | /v1/tours/pool/2adefa40-650b-47d1-bfa2-53198576e7ee/rewrite | 200 | 53ms | 14:46:01Z(+07 21:46)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 4ms | 15:03:35Z(+07 22:03)
+R api | wanderlux-travel | tenant | POST | /v1/tours/pool/2adefa40-650b-47d1-bfa2-53198576e7ee/rewrite | 200 | 14ms | 15:03:41Z(+07 22:03)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 9ms | 15:21:40Z(+07 22:21)
+R api | wanderlux-travel | tenant | POST | /v1/tours/pool/2adefa40-650b-47d1-bfa2-53198576e7ee/rewrite | 200 | 25ms | 15:21:46Z(+07 22:21)
+R api | admin | admin | POST | /admin/tenants/<tenant-id>/generate-key | 200 | 8ms | 15:25:22Z(+07 22:25)
+R api | wanderlux-travel | tenant | POST | /v1/tours/pool/2adefa40-650b-47d1-bfa2-53198576e7ee/rewrite | 200 | 21ms | 15:25:26Z(+07 22:25)
+R before_burst | 05:04:56Z(+07 12:04) | last_tenant_llm=wanderlux-travel/s1_flag_fix lag=3s | last_version=none
+R before_burst | 05:05:05Z(+07 12:05) | last_tenant_llm=wanderlux-travel/s1_flag_fix lag=13s | last_version=none
+R before_burst | 06:22:49Z(+07 13:22) | last_tenant_llm=none | last_version=none
+R before_burst | 08:33:09Z(+07 15:33) | last_tenant_llm=wanderlux-travel/s1_flag_fix lag=7s | last_version=none
+R before_burst | 08:33:17Z(+07 15:33) | last_tenant_llm=wanderlux-travel/s1_flag_fix lag=15s | last_version=none
+J job | rows | 0
+J pipeline_jobs | rows | 0
+J shared.job_first_row_ever | 2026-09-28 16:34:54.440023+00:00
+C segment_research_log_25_09_left | AU 262 05:05:24Z(+07 12:05)..08:50:49Z(+07 15:50); UK 262 05:05:24Z(+07 12:05)..08:50:49Z(+07 15:50); US 262 05:05:24Z(+07 12:05)..08:50:49Z(+07 15:50)
+C search_demand_25_09_left | AU 998 null=634; UK 998 null=636; US 998 null=633
+C atom_segment_before_spike | places=0 | segments=0

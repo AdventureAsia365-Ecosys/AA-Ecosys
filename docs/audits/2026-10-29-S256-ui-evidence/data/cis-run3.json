@@ -1,0 +1,243 @@
+{
+ "labels": [
+  {
+   "kind": "text",
+   "lines": [
+    "AWS acc2 · us-west-1"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "GitHub org: AdventureAsia365-Ecosys"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "Shared VPC"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "OIDC"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "OIDC"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "OIDC"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "OIDC"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "OIDC"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "sts:AssumeRole"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "sts:AssumeRole"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "BFF to the CIS API"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "AA-CIS-App"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "AA-TripPlanner-Web"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "AA-CIS-Infra"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "AA-Booking"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "AA-Partner"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "ECS Fargate: aa-cis-dev-api +",
+    "worker"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "ECS Fargate:",
+    "aa-booking-dev-api"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "ECS Fargate: aa-crm-dev-api +",
+    "web + portal"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "RDS Postgres · pgvector"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "Lambdas:",
+    "aa-tripplanner-dev-browse +",
+    "assembly"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "One-off Fargate task: DB",
+    "Migrate"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "API GW REST: api-cis +",
+    "api-booking → VPC Link → ALB"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "API GW HTTP v2 → 2 Lambdas"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "CloudFront: portal. agency host",
+    "+ partner-dev. 301 except /crm"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "GitHub OIDC: one deploy role",
+    "per repo"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "Vercel: CIS admin, Booking",
+    "admin, TripPlanner FE"
+   ]
+  },
+  {
+   "kind": "text",
+   "lines": [
+    "acc3: AA3-Bedrock-Invoker"
+   ]
+  }
+ ],
+ "recs": [
+  {
+   "step": "overview-en-default",
+   "url": "https://aa-cis.lumiguides.it.com/admin/overview",
+   "console": [],
+   "failing": [],
+   "notes": [
+    "cis_lang cookie before: []",
+    "lang-switch visible: true",
+    "probe: {\"htmlLang\":\"en\",\"pressed\":[\"EN:true\",\"VI:false\"],\"h1\":[\"Overview\"],\"nav\":[\"Booking admin\",\"TripPlanner\"],\"leafCount\":63,\"viLeafCount\":0,\"viSample\":[],\"enSample\":[\"Overview\",\"Refresh\",\"· based on its health check and its traffic of the last 24 hours\",\"· based on its health check and its traffic of the last 24 hours\",\"Updated 09:20\",\"−78% vs the 7 days before\",\"−77.2% vs the 7 days before\",\"−100% vs the 7 days before\",\"−99.5% vs the 7 days before\",\"Planners opened\"]}"
+   ]
+  },
+  {
+   "step": "overview-vi",
+   "url": "https://aa-cis.lumiguides.it.com/admin/overview",
+   "console": [],
+   "failing": [],
+   "notes": [
+    "probe: {\"htmlLang\":\"vi\",\"pressed\":[\"EN:false\",\"VI:true\"],\"h1\":[\"Tổng quan\"],\"nav\":[\"Booking admin\",\"TripPlanner\"],\"leafCount\":62,\"viLeafCount\":28,\"viSample\":[\"Tổng quan\",\"Làm mới\",\"· dựa trên kiểm tra sức khoẻ và lưu lượng 24 giờ qua\",\"· dựa trên kiểm tra sức khoẻ và lưu lượng 24 giờ qua\",\"Cập nhật lúc 09:20\",\"−78% so với 7 ngày trước đó\",\"−77.2% so với 7 ngày trước đó\",\"−100% so với 7 ngày trước đó\",\"−99.5% so với 7 ngày trước đó\",\"Chuyến đi đã bắt đầu\"],\"enSample\":[\"CIS (content + catalog)\",\"Booking\",\"Partner CRM\",\"TripPlanner\",\"+176/7d\",\"+176/7d\",\"+119/7d\",\"+119/7d\",\"+117/7d\",\"+117/7d\"]}",
+    "cis_lang cookie after click: [\"vi\"]"
+   ]
+  },
+  {
+   "step": "review-vi",
+   "url": "https://aa-cis.lumiguides.it.com/admin/review",
+   "console": [],
+   "failing": [],
+   "notes": [
+    "probe: {\"htmlLang\":\"vi\",\"pressed\":[\"EN:false\",\"VI:true\"],\"h1\":[\"Hàng chờ duyệt\"],\"nav\":[\"Booking admin\",\"TripPlanner\"],\"leafCount\":248,\"viLeafCount\":59,\"viSample\":[\"Hàng chờ duyệt\",\"Màu lý do:\",\"Quốc gia\",\"Phiên bản\",\"Ngày viết\",\"Điểm\",\"Lý do\",\"Thao tác\",\"Từ chối\",\"Duyệt\"],\"enSample\":[\"Tour\",\"Sri Lanka: Coast, Kingdom & Wilderness — 21 Days\",\"Sri Lanka\",\"11 thg 10, 2026\",\"6.0\",\"Low quality: score 6.0 < 7.0\",\"LOW_QUALITY\",\"Sri Lanka and Maldives: Wildlife, Culture and Beach — 14 Days\",\"Sri Lanka\",\"11 thg 10, 2026\"]}"
+   ]
+  },
+  {
+   "step": "jobs-vi",
+   "url": "https://aa-cis.lumiguides.it.com/admin/jobs",
+   "console": [],
+   "failing": [],
+   "notes": [
+    "probe: {\"htmlLang\":\"vi\",\"pressed\":[\"EN:false\",\"VI:true\"],\"h1\":[\"Job\"],\"nav\":[\"Booking admin\",\"TripPlanner\"],\"leafCount\":177,\"viLeafCount\":11,\"viSample\":[\"Hàng đợi & worker\",\"Loại job\",\"Loại\",\"Trạng thái\",\"Lần chạy\",\"Tiến độ\",\"Thời lượng\",\"Chi phí\",\"Người tạo\",\"Huỷ\"],\"enSample\":[\"Job\",\"Job\",\"$215.5453\",\"7764\",\"place_relocate\",\"0/3\",\"$0.0000\",\"07:56 29 thg 10, 2026\",\"place_relocate\",\"place_relocate\"]}"
+   ]
+  },
+  {
+   "step": "back-to-en",
+   "url": "https://aa-cis.lumiguides.it.com/admin/jobs",
+   "console": [],
+   "failing": [],
+   "notes": [
+    "probe: {\"htmlLang\":\"en\",\"pressed\":[\"EN:true\",\"VI:false\"],\"h1\":[\"Jobs\"],\"nav\":[\"Booking admin\",\"TripPlanner\"],\"leafCount\":176,\"viLeafCount\":0,\"viSample\":[],\"enSample\":[\"Jobs\",\"Jobs\",\"Queue & workers\",\"Job kinds\",\"$215.5453\",\"7764\",\"Kind\",\"Status\",\"Attempt\",\"Progress\"]}",
+    "cis_lang cookie: []",
+    "after reload probe: {\"htmlLang\":\"en\",\"pressed\":[\"EN:true\",\"VI:false\"],\"h1\":[\"Jobs\"],\"nav\":[\"Booking admin\",\"TripPlanner\"],\"leafCount\":176,\"viLeafCount\":0,\"viSample\":[],\"enSample\":[\"Jobs\",\"Jobs\",\"Queue & workers\",\"Job kinds\",\"$215.5453\",\"7764\",\"Kind\",\"Status\",\"Attempt\",\"Progress\"]}"
+   ]
+  },
+  {
+   "step": "mermaid-after",
+   "url": "https://aa-cis.lumiguides.it.com/admin/docs?path=docs/ecosystem-architecture.md",
+   "console": [],
+   "failing": [],
+   "notes": [
+    "label count 28: [{\"kind\":\"text\",\"lines\":[\"AWS acc2 · us-west-1\"]},{\"kind\":\"text\",\"lines\":[\"GitHub org: AdventureAsia365-Ecosys\"]},{\"kind\":\"text\",\"lines\":[\"Shared VPC\"]},{\"kind\":\"text\",\"lines\":[\"OIDC\"]},{\"kind\":\"text\",\"lines\":[\"OIDC\"]},{\"kind\":\"text\",\"lines\":[\"OIDC\"]},{\"kind\":\"text\",\"lines\":[\"OIDC\"]},{\"kind\":\"text\",\"lines\":[\"OIDC\"]},{\"kind\":\"text\",\"lines\":[\"sts:AssumeRole\"]},{\"kind\":\"text\",\"lines\":[\"sts:AssumeRole\"]},{\"kind\":\"text\",\"lines\":[\"BFF to the CIS API\"]},{\"kind\":\"text\",\"lines\":[\"AA-CIS-App\"]},{\"kind\":\"text\",\"lines\":[\"AA-TripPlanner-Web\"]},{\"kind\":\"text\",\"lines\":[\"AA-CIS-Infra\"]},{\"kind\":\"text\",\"lines\":[\"AA-Booking\"]},{\"kind\":\"text\",\"lines\":[\"AA-Partner\"]},{\"kind\":\"text\",\"lines\":[\"ECS Fargate: aa-cis-dev-api +\",\"worker\"]},{\"kind\":\"text\",\"lines\":[\"ECS Fargate:\",\"aa-booking-dev-api\"]},{\"kind\":\"text\",\"lines\":[\"ECS Fargate: aa-crm-dev-api +\",\"web + portal\"]},{\"kind\":\"text\",\"lines\":[\"RDS Postgres · pgvector\"]},{\"kind\":\"text\",\"lines\":[\"Lambdas:\",\"aa-tripplanner-dev-browse +\",\"assembly\"]},{\"kind\":\"text\",\"lines\":[\"One-off Fargate task: DB\",\"Migrate\"]},{\"kind\":\"text\",\"lines\":[\"API GW REST: api-cis +\",\"api-booking → VPC Link → ALB\"]},{\"kind\":\"text\",\"lines\":[\"API GW HTTP v2 → 2 Lambdas\"]},{\"kind\":\"text\",\"lines\":[\"CloudFront: portal. agency host\",\"+ partner-dev. 301 except /crm\"]},{\"kind\":\"text\",\"lines\":[\"GitHub OIDC: one deploy role\",\"per repo\"]},{\"kind\":\"text\",\"lines\":[\"Vercel: CIS admin, Booking\",\"admin, TripPlanner FE\"]},{\"kind\":\"text\",\"lines\":[\"acc3: AA3-Bedrock-Invoker\"]}]"
+   ]
+  }
+ ]
+}

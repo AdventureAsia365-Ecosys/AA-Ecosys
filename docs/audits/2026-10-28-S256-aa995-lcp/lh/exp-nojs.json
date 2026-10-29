@@ -1,0 +1,19 @@
+{
+ "tour": {
+  "perf": 95,
+  "lcp": 2881.647,
+  "fcp": 904.3271,
+  "tbt": 0,
+  "cls": 0,
+  "lcp_runs": [
+   2.72,
+   2.88,
+   4.29
+  ],
+  "element": "div.relative > ul.tp-snap-row > li.relative > img.h-full",
+  "image": [
+   "1eIyF-AtunPHBNhJl5oOz9ywtqoBofWQ3-600.webp?v=bde509793577",
+   41954
+  ]
+ }
+}

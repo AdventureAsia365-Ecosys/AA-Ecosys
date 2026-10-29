@@ -1,0 +1,12 @@
+[
+ {
+  "step": "mermaid-word-split",
+  "url": "https://aa-cis.lumiguides.it.com/admin/docs?path=docs/ecosystem-architecture.md",
+  "console": [],
+  "failing": [],
+  "notes": [
+   "labels 0, words 0, words broken across lines 0: ",
+   "document fonts: Fahkwang:unloaded, Fahkwang:unloaded, Fahkwang:unloaded, Fahkwang:loaded, Fahkwang:unloaded, Fahkwang:unloaded, Fahkwang:unloaded, Fahkwang:loaded, Fahkwang:unloaded, Fahkwang:unloaded, Fahkwang:unloaded, Fahkwang:unloaded"
+  ]
+ }
+]

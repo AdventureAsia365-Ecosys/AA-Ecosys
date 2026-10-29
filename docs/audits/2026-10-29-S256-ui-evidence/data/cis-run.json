@@ -1,0 +1,38 @@
+[
+ {
+  "step": "docs-diagrams-readme",
+  "url": "https://aa-cis.lumiguides.it.com/admin/docs?path=docs/architecture/diagrams/README.md",
+  "console": [],
+  "failing": [],
+  "notes": [
+   "svg images: [{\"src\":\"asset\",\"w\":4037,\"h\":1755,\"done\":true},{\"src\":\"asset\",\"w\":4919,\"h\":2569,\"done\":true},{\"src\":\"asset\",\"w\":3500,\"h\":1877,\"done\":true},{\"src\":\"asset\",\"w\":3559,\"h\":1229,\"done\":true},{\"src\":\"asset\",\"w\":3245,\"h\":1673,\"done\":true},{\"src\":\"asset\",\"w\":3804,\"h\":1545,\"done\":true}]"
+  ]
+ },
+ {
+  "step": "docs-mermaid",
+  "url": "https://aa-cis.lumiguides.it.com/admin/docs?path=docs/ecosystem-architecture.md",
+  "console": [],
+  "failing": [],
+  "notes": [
+   "mermaid diagrams on page: 1; labels overflowing their box: 0"
+  ]
+ },
+ {
+  "step": "content-quality-t2-judge",
+  "url": "https://aa-cis.lumiguides.it.com/admin/content-quality?tab=versions&version=65ddf633-06be-4557-9999-5ad4b631d2b3",
+  "console": [],
+  "failing": [],
+  "notes": [
+   "list status 200, total 63, versions checked 1, picked 65ddf633-06be-4557-9999-5ad4b631d2b3"
+  ]
+ },
+ {
+  "step": "cost-ops-dfs-incident",
+  "url": "https://aa-cis.lumiguides.it.com/admin/cost-ops?tab=dfs",
+  "console": [],
+  "failing": [],
+  "notes": [
+   "window 2026-09-20 → 2026-09-30; incident card: RECORDED INCIDENT DataForSEO research sweep after a tenant rewrite (balance exhausted) 25 Sept 2026, 12:00 → 25 Sept 2026, 18:00 DataForSEO spend $49.02 1,169 calls (1,169 live) LLM spend (same run) $10.27 7,856 calls · a3_search_demand First paid call 25 Sept 2026, 12:05 Last paid call 25 Sept 2026, 15:51 where the spend stopped search_volume_bulk 678 · $39.24keywords_for_keywords 100 · $9.00serp"
+  ]
+ }
+]

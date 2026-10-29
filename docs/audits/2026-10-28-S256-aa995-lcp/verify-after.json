@@ -1,0 +1,122 @@
+[
+ {
+  "page": "home",
+  "width": 390,
+  "errors": [],
+  "overflow": 1,
+  "lcpImgs": [
+   {
+    "src": "/hero/home-port-756.avif",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true
+   }
+  ],
+  "foreignHero": []
+ },
+ {
+  "page": "destinations",
+  "width": 390,
+  "errors": [],
+  "overflow": 0,
+  "lcpImgs": [
+   {
+    "src": "/photo-cdn/sri-lanka/1eIyF-AtunPHBNhJl5oOz9ywtqoBofWQ3-600.webp?v=bde509793577",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true
+   }
+  ],
+  "foreignHero": []
+ },
+ {
+  "page": "bhutan",
+  "width": 390,
+  "errors": [],
+  "overflow": 0,
+  "lcpImgs": [
+   {
+    "src": "/photo-cdn/bhutan/1GcwUTa2SNGnIerRlikwcnl5wsz0W__E3-1600.webp?v=b9447b91556c",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true
+   }
+  ],
+  "foreignHero": []
+ },
+ {
+  "page": "tour",
+  "width": 390,
+  "errors": [],
+  "overflow": 0,
+  "lcpImgs": [
+   {
+    "src": "/photo-cdn/sri-lanka/1eIyF-AtunPHBNhJl5oOz9ywtqoBofWQ3-1600.webp?v=bde509793577",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true
+   }
+  ],
+  "foreignHero": []
+ },
+ {
+  "page": "home",
+  "width": 1440,
+  "errors": [],
+  "overflow": 0,
+  "lcpImgs": [
+   {
+    "src": "/hero/home-land-1080.avif",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true
+   }
+  ],
+  "foreignHero": []
+ },
+ {
+  "page": "destinations",
+  "width": 1440,
+  "errors": [],
+  "overflow": 0,
+  "lcpImgs": [
+   {
+    "src": "/photo-cdn/sri-lanka/1eIyF-AtunPHBNhJl5oOz9ywtqoBofWQ3-600.webp?v=bde509793577",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true
+   }
+  ],
+  "foreignHero": []
+ },
+ {
+  "page": "bhutan",
+  "width": 1440,
+  "errors": [],
+  "overflow": 0,
+  "lcpImgs": [
+   {
+    "src": "/photo-cdn/bhutan/1GcwUTa2SNGnIerRlikwcnl5wsz0W__E3-1600.webp?v=b9447b91556c",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true
+   }
+  ],
+  "foreignHero": []
+ },
+ {
+  "page": "tour",
+  "width": 1440,
+  "errors": [],
+  "overflow": 0,
+  "lcpImgs": [
+   {
+    "src": "/photo-cdn/sri-lanka/1eIyF-AtunPHBNhJl5oOz9ywtqoBofWQ3-1600.webp?v=bde509793577",
+    "loading": "eager",
+    "fp": "high",
+    "complete": true
+   }
+  ],
+  "foreignHero": []
+ }
+]
