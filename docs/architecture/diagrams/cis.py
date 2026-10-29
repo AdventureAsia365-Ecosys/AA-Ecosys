@@ -1,9 +1,8 @@
 """AA-CIS-App view: admin console, API and job worker, data and the LLM path (AA-697).
 
 Facts: apps/AA-CIS-App CONTEXT.md ("Architecture at a glance", "Deploy & CI", "Contracts with other apps") and
-docs/ecosystem-architecture.md sections 4.1, 4.3-4.6.
+docs/ecosystem-architecture.md sections 4.1, 4.3-4.6. Subnet tiers from AA-CIS-Infra modules/vpc.
 """
-from diagrams import Cluster, Diagram, Edge
 from diagrams.aws.compute import ECR, Fargate, Lambda
 from diagrams.aws.database import ElastiCache, RDSPostgresqlInstance
 from diagrams.aws.general import Users
@@ -17,64 +16,82 @@ from diagrams.onprem.ci import GithubActions
 from diagrams.onprem.network import Internet
 from diagrams.programming.framework import Vercel
 
-from _common import ACCOUNT, EDGE_ATTR, EXTERNAL, GRAPH_ATTR, GROUP, NODE_ATTR, VPC
-
-XACC = {"style": "dashed", "color": "#D86613", "fontcolor": "#D86613"}
+from _common import diagram, group, legend, link, place
 
 
 def draw(filename: str) -> None:
-    with Diagram("AA-CIS-App: content system of record (Dev)", filename=filename, outformat="svg", show=False,
-                 direction="LR", graph_attr=GRAPH_ATTR, node_attr=NODE_ATTR, edge_attr=EDGE_ATTR):
-        staff = Users("AA staff")
-        studio = Users("Content studio\n(AA-Partner portal)")
+    with diagram("AA-CIS-App: content system of record (Dev)", filename):
+        with group("people", "People"):
+            staff = Users("AA staff")
+            studio = Users("Content studio users\n(AA-Partner portal)")
 
-        with Cluster("Vercel", graph_attr=GROUP):
+        with group("vercel", "Vercel"):
             admin = Vercel("Admin console\nNext.js + BFF")
 
-        with Cluster("GitHub: AA-CIS-App", graph_attr=GROUP):
-            deploy = GithubActions("Deploy Dev")
+        with group("github", "GitHub: AA-CIS-App"):
+            deploy = GithubActions("GitHub Actions\nDeploy Dev")
 
-        with Cluster("AWS infrastructure account (acc2) · us-west-1", graph_attr=ACCOUNT):
-            cognito = Cognito("Cognito WORKFORCE\nstaff sign-in")
-            rest = APIGateway("REST API api-cis\n(VPC link)")
-            role = IAMRole("deploy role")
-            ecr = ECR("ECR\nimage per git SHA")
-            with Cluster("VPC", graph_attr=VPC):
-                alb = ElbApplicationLoadBalancer("NLB → ALB\n(regional WAF)")
-                with Cluster("ECS Fargate · one image", graph_attr=GROUP):
-                    api = Fargate("aa-cis-dev-api\nadmin API · /v1 studio API\nModel Gateway")
-                    worker = Fargate("aa-cis-dev-worker\nshared.job runner\nA-series · T-series jobs")
-                rds = RDSPostgresqlInstance("RDS Postgres\nsilver · gold · acp_*\ngeo · catalog · shared")
-                cache = ElastiCache("Valkey cache")
-                probe = Lambda("ops probe Lambda")
-            sched = EventbridgeScheduler("daily schedule")
-            s3 = S3("S3 bronze\nuploads · photos\ndocs bundle")
-            embed = Bedrock("Bedrock\nCohere Embed v4")
-            cw = Cloudwatch("CloudWatch\nlogs · metrics · alarms")
+        with group("cloud", "AWS Cloud", "infrastructure account (acc2)"):
+            role = IAMRole("AWS IAM\ndeploy role (OIDC)")
+            with group("region", "us-west-1"):
+                cognito = Cognito("Amazon Cognito\nWORKFORCE staff sign-in")
+                rest = APIGateway("Amazon API Gateway\nREST api-cis (VPC link)")
+                sched = EventbridgeScheduler("EventBridge Scheduler\ndaily schedule")
+                with group("vpc", "Shared VPC"):
+                    lb = ElbApplicationLoadBalancer("Elastic Load Balancing\nNLB → ALB, regional WAF")
+                    with group("private", "Private subnets", "workloads"):
+                        with group("ecs", "Amazon ECS cluster", "Fargate, one image") as ecs:
+                            api = Fargate("aa-cis-dev-api\nadmin API · /v1 studio · Model Gateway")
+                            worker = Fargate("aa-cis-dev-worker\nshared.job runner (A- and T-series)")
+                        cache = ElastiCache("Amazon ElastiCache\nValkey cache")
+                        probe = Lambda("AWS Lambda\nops probe")
+                    with group("private", "Private subnets", "database"):
+                        rds = RDSPostgresqlInstance(
+                            "Amazon RDS for PostgreSQL\nsilver · gold · acp_* · geo\ncatalog · shared")
+                ecr = ECR("Amazon ECR\nimage per git SHA")
+                s3 = S3("Amazon S3\nbronze: uploads · photos · docs")
+                embed = Bedrock("Amazon Bedrock\nCohere Embed v4")
+                cw = Cloudwatch("Amazon CloudWatch\nlogs · metrics · alarms")
 
-        with Cluster("AWS LLM account (acc3)", graph_attr=ACCOUNT):
-            invoker = IAMRole("Bedrock invoker role")
-            llm = Bedrock("Bedrock\nwriter + judge models")
+        with group("cloud", "AWS Cloud", "LLM account (acc3)"):
+            invoker = IAMRole("AWS IAM\nBedrock invoker role")
+            with group("region", "us-west-1"):
+                llm = Bedrock("Amazon Bedrock\nwriter + judge models")
 
-        with Cluster("Outside services", graph_attr=EXTERNAL):
+        with group("outside", "Outside services") as outside:
             apis = Internet("Decision + SEO APIs\nJev · DataForSEO\nOpenAI (judge fallback)")
-            channels = Internet("Photos + channels\nGoogle Drive\nWordPress · Facebook")
+            channels = Internet("Photos + channels\nGoogle Drive · WordPress · Facebook")
 
-        staff >> admin >> rest
-        admin >> Edge(label="sign-in", style="dotted") >> cognito
-        studio >> Edge(label="tenant JWT") >> rest
-        rest >> alb >> api
-        api >> Edge(label="enqueue", style="dashed") >> rds
-        worker >> rds
-        api >> cache
-        worker >> s3
-        [api, worker] >> embed
-        worker >> Edge(label="sts:AssumeRole", **XACC) >> invoker >> llm
-        worker >> [apis, channels]
-        sched >> probe >> Edge(label="admin checks") >> rest
-        api >> Edge(style="dotted") >> cw
-        deploy >> Edge(label="OIDC") >> role >> ecr
-        ecr >> Edge(style="dotted") >> [api, worker]
+        place({
+            cognito: (3, 0),
+            staff: (0, 1), admin: (1, 1), rest: (3, 1), lb: (4, 1), api: (5, 1), cache: (6, 1),
+            studio: (0, 2), worker: (5, 2), rds: (7, 2),
+            sched: (3, 3), probe: (6, 3), invoker: (8, 3), llm: (9, 3),
+            apis: (8, 4), channels: (9, 4),
+            deploy: (0, 5), role: (2, 5), ecr: (3, 5), s3: (5, 5), embed: (6, 5), cw: (7, 5),
+        })
+        legend((9, 5))
+
+        link(staff, admin)
+        link(admin, rest)
+        link(admin, cognito, "sign-in", "control")
+        link(studio, rest, "tenant JWT")
+        link(rest, lb, "VPC link")
+        link(lb, api)
+        link(api, cache)
+        link(api, rds, "enqueue jobs", "async")
+        link(worker, rds)
+        link(worker, s3)
+        link(api, embed, "embeddings", out_of=ecs)
+        link(worker, invoker, "sts:AssumeRole", "control")
+        link(invoker, llm)
+        link(worker, apis, into=outside)
+        link(sched, probe, "daily", "async")
+        link(probe, rest, "admin checks")
+        link(api, cw, "logs, metrics", "async", out_of=ecs)
+        link(deploy, role, "OIDC", "control")
+        link(role, ecr, "push image", "control")
+        link(ecr, api, "pull image", "control", into=ecs)
 
 
 if __name__ == "__main__":
