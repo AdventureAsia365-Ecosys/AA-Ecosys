@@ -1,0 +1,402 @@
+{
+ "fetched_at": "2026-10-29",
+ "source": "gh api repos/AdventureAsia365-Ecosys/<repo>/branches/main/protection and /rulesets/<id>",
+ "repos": {
+  "AA-CIS-App": {
+   "branch_protection": {
+    "required_checks": [
+     "Docker Build Check",
+     "Frontend Build",
+     "Frontend Lint",
+     "Integration Tests",
+     "Lint",
+     "Security Audit",
+     "Unit Tests",
+     "gitleaks"
+    ],
+    "strict_up_to_date": true,
+    "required_pull_request_reviews": null,
+    "enforce_admins": false,
+    "required_linear_history": false,
+    "allow_force_pushes": false,
+    "allow_deletions": false,
+    "required_conversation_resolution": false
+   },
+   "active_rulesets": [
+    {
+     "name": "main: no force-push, no deletion (AA-867)",
+     "include": [
+      "~DEFAULT_BRANCH"
+     ],
+     "bypass": [],
+     "rules": [
+      {
+       "type": "deletion"
+      },
+      {
+       "type": "non_fast_forward"
+      }
+     ]
+    },
+    {
+     "name": "preview-signin locked (AA-911)",
+     "include": [
+      "refs/heads/preview-signin"
+     ],
+     "bypass": [],
+     "rules": [
+      {
+       "type": "update"
+      },
+      {
+       "type": "deletion"
+      },
+      {
+       "type": "non_fast_forward"
+      }
+     ]
+    },
+    {
+     "name": "main: merge queue (AA-993)",
+     "include": [
+      "~DEFAULT_BRANCH"
+     ],
+     "bypass": [
+      {
+       "actor_type": "RepositoryRole",
+       "bypass_mode": "pull_request"
+      }
+     ],
+     "rules": [
+      {
+       "type": "merge_queue",
+       "parameters": {
+        "merge_method": "SQUASH",
+        "max_entries_to_build": 2,
+        "min_entries_to_merge": 1,
+        "max_entries_to_merge": 5,
+        "min_entries_to_merge_wait_minutes": 5,
+        "grouping_strategy": "ALLGREEN",
+        "check_response_timeout_minutes": 45
+       }
+      }
+     ]
+    }
+   ],
+   "latest_merged_pr_check_runs": {
+    "Analyze (actions)": "success",
+    "Analyze (javascript-typescript)": "success",
+    "Analyze (python)": "success",
+    "CodeQL": "success",
+    "Docker Build Check": "success",
+    "Frontend Build": "success",
+    "Frontend Lint": "success",
+    "Integration Tests": "success",
+    "Lint": "success",
+    "Migration preflight": "success",
+    "OpenAPI breaking changes": "success",
+    "Quality Paths (report)": "success",
+    "Security Audit": "success",
+    "Unit Tests": "success",
+    "gitleaks": "success"
+   },
+   "latest_merged_pr": 1149
+  },
+  "AA-Booking": {
+   "branch_protection": {
+    "required_checks": [
+     "Docker Build Check",
+     "Frontend Build",
+     "Integration Tests",
+     "Lint",
+     "Security Audit",
+     "Unit Tests",
+     "gitleaks"
+    ],
+    "strict_up_to_date": true,
+    "required_pull_request_reviews": null,
+    "enforce_admins": false,
+    "required_linear_history": false,
+    "allow_force_pushes": false,
+    "allow_deletions": false,
+    "required_conversation_resolution": false
+   },
+   "active_rulesets": [
+    {
+     "name": "main: no force-push, no deletion (AA-867)",
+     "include": [
+      "~DEFAULT_BRANCH"
+     ],
+     "bypass": [],
+     "rules": [
+      {
+       "type": "deletion"
+      },
+      {
+       "type": "non_fast_forward"
+      }
+     ]
+    },
+    {
+     "name": "preview-signin locked (AA-911)",
+     "include": [
+      "refs/heads/preview-signin"
+     ],
+     "bypass": [],
+     "rules": [
+      {
+       "type": "update"
+      },
+      {
+       "type": "deletion"
+      },
+      {
+       "type": "non_fast_forward"
+      }
+     ]
+    },
+    {
+     "name": "main: merge queue (AA-993)",
+     "include": [
+      "~DEFAULT_BRANCH"
+     ],
+     "bypass": [
+      {
+       "actor_type": "RepositoryRole",
+       "bypass_mode": "pull_request"
+      }
+     ],
+     "rules": [
+      {
+       "type": "merge_queue",
+       "parameters": {
+        "merge_method": "SQUASH",
+        "max_entries_to_build": 3,
+        "min_entries_to_merge": 1,
+        "max_entries_to_merge": 5,
+        "min_entries_to_merge_wait_minutes": 5,
+        "grouping_strategy": "ALLGREEN",
+        "check_response_timeout_minutes": 30
+       }
+      }
+     ]
+    }
+   ],
+   "latest_merged_pr_check_runs": {
+    "Analyze (actions)": "success",
+    "Analyze (javascript-typescript)": "success",
+    "Analyze (python)": "success",
+    "CodeQL": "success",
+    "Docker Build Check": "success",
+    "Docs freshness report": "skipped",
+    "Docs lint": "success",
+    "Frontend Build": "success",
+    "Integration Tests": "success",
+    "Lint": "success",
+    "Migration preflight": "success",
+    "OpenAPI breaking changes": "success",
+    "PR title": "success",
+    "Security Audit": "success",
+    "Unit Tests": "success",
+    "Vendored CIS copies": "success",
+    "gitleaks": "success"
+   },
+   "latest_merged_pr": 147
+  },
+  "AA-TripPlanner-Web": {
+   "branch_protection": {
+    "required_checks": [
+     "Backend (pytest)",
+     "Frontend (lint + build)",
+     "Migrations (lint, PG 15 replay)",
+     "Security Audit",
+     "gitleaks"
+    ],
+    "strict_up_to_date": false,
+    "required_pull_request_reviews": null,
+    "enforce_admins": false,
+    "required_linear_history": false,
+    "allow_force_pushes": false,
+    "allow_deletions": false,
+    "required_conversation_resolution": false
+   },
+   "active_rulesets": [
+    {
+     "name": "main: no force-push, no deletion (AA-867)",
+     "include": [
+      "~DEFAULT_BRANCH"
+     ],
+     "bypass": [],
+     "rules": [
+      {
+       "type": "deletion"
+      },
+      {
+       "type": "non_fast_forward"
+      }
+     ]
+    }
+   ],
+   "latest_merged_pr_check_runs": {
+    "Analyze (actions)": "success",
+    "Analyze (javascript-typescript)": "success",
+    "Analyze (python)": "success",
+    "Backend (pytest)": "success",
+    "CodeQL": "success",
+    "Docs freshness report": "skipped",
+    "Docs lint": "success",
+    "Frontend (lint + build)": "success",
+    "Migrations (lint, PG 15 replay)": "success",
+    "PR title": "success",
+    "Post-deploy verify": "skipped",
+    "Security Audit": "success",
+    "Vercel deploy": "success",
+    "Vercel deploy result": "success",
+    "gitleaks": "success"
+   },
+   "latest_merged_pr": 188
+  },
+  "AA-Partner": {
+   "branch_protection": {
+    "required_checks": [
+     "Docker Build Check",
+     "Docs lint",
+     "Integration Tests",
+     "Lint",
+     "PR title",
+     "Portal Build",
+     "Security Audit",
+     "Unit Tests",
+     "Web Build",
+     "gitleaks"
+    ],
+    "strict_up_to_date": true,
+    "required_pull_request_reviews": null,
+    "enforce_admins": false,
+    "required_linear_history": true,
+    "allow_force_pushes": false,
+    "allow_deletions": false,
+    "required_conversation_resolution": false
+   },
+   "active_rulesets": [
+    {
+     "name": "main: merge queue (AA-993)",
+     "include": [
+      "~DEFAULT_BRANCH"
+     ],
+     "bypass": [
+      {
+       "actor_type": "RepositoryRole",
+       "bypass_mode": "pull_request"
+      }
+     ],
+     "rules": [
+      {
+       "type": "merge_queue",
+       "parameters": {
+        "merge_method": "SQUASH",
+        "max_entries_to_build": 3,
+        "min_entries_to_merge": 1,
+        "max_entries_to_merge": 5,
+        "min_entries_to_merge_wait_minutes": 5,
+        "grouping_strategy": "ALLGREEN",
+        "check_response_timeout_minutes": 30
+       }
+      }
+     ]
+    }
+   ],
+   "latest_merged_pr_check_runs": {
+    "Docker Build Check": "success",
+    "Docs freshness report": "skipped",
+    "Docs lint": "success",
+    "Integration Tests": "success",
+    "Lint": "success",
+    "Migration preflight": "success",
+    "PR title": "success",
+    "Portal Build": "success",
+    "Portal Docker Build Check": "success",
+    "Security Audit": "success",
+    "Unit Tests": "success",
+    "Vendored CIS copies": "success",
+    "Web Build": "success",
+    "Web Docker Build Check": "success",
+    "gitleaks": "success"
+   },
+   "latest_merged_pr": 122
+  },
+  "AA-CIS-Infra": {
+   "branch_protection": null,
+   "active_rulesets": [
+    {
+     "name": "main: PR and required checks (AA-993 I1)",
+     "include": [
+      "~DEFAULT_BRANCH"
+     ],
+     "bypass": [
+      {
+       "actor_type": "OrganizationAdmin",
+       "bypass_mode": "pull_request"
+      }
+     ],
+     "rules": [
+      {
+       "type": "deletion"
+      },
+      {
+       "type": "non_fast_forward"
+      },
+      {
+       "type": "pull_request",
+       "parameters": {
+        "required_approving_review_count": 0,
+        "dismiss_stale_reviews_on_push": false,
+        "required_reviewers": [],
+        "require_code_owner_review": false,
+        "dismissal_restriction": {
+         "enabled": false,
+         "allowed_actors": []
+        },
+        "require_last_push_approval": false,
+        "required_review_thread_resolution": false,
+        "require_extra_approval_for_unattributed_changes": true,
+        "allowed_merge_methods": [
+         "squash"
+        ]
+       }
+      },
+      {
+       "type": "required_status_checks",
+       "parameters": {
+        "strict_required_status_checks_policy": false,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+         {
+          "context": "Terraform Plan (dev)",
+          "integration_id": 15368
+         },
+         {
+          "context": "gitleaks",
+          "integration_id": 15368
+         },
+         {
+          "context": "Copies match owner main",
+          "integration_id": 15368
+         },
+         {
+          "context": "Migration lint and unique numbers",
+          "integration_id": 15368
+         },
+         {
+          "context": "Expand classify",
+          "integration_id": 15368
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ }
+}
