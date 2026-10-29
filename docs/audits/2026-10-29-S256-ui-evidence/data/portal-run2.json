@@ -1,0 +1,16 @@
+[
+ {
+  "step": "portal-marketplace-covers",
+  "url": "https://portal.lumiguides.it.com/portal/tours",
+  "console": [],
+  "failing": [],
+  "notes": [
+   "pool rows read 892 of 892; with a cover URL 162; by country {\"Sri Lanka\":2,\"Bhutan\":29,\"Taiwan\":30,\"China\":69,\"Mongolia\":16,\"South Korea\":16}; by activity {\"cultural_heritage\":123,\"local_immersion\":97,\"trekking\":97,\"wildlife_nature\":19,\"wellness_relaxation\":25,\"culinary\":61,\"adventure_sport\":29,\"water_activities\":23}",
+   "first cover URL fetch: 200 image/webp",
+   "filters country=China activity=cultural_heritage: \"105 tours match · newest first\", cards 24, with photo 14, images loaded 14",
+   "drawer: Open Beijing Zoo, Hutongs and Temples — 1 Day",
+   "drawer images [{\"ok\":true,\"w\":520,\"cur\":\"size=small\"}]",
+   "390: scrollWidth 390 vs innerWidth 390"
+  ]
+ }
+]
