@@ -48,4 +48,4 @@ CIS admin production `f80429a9` (#1126; chứa #1127, #1128, #1129); TripPlanner
 
 ## PR còn mở lúc chụp
 
-Booking #143 (đồng bộ kit, CI), Booking #138 + CIS #1113 (release) — xem log phiên cho kết quả cuối.
+Booking #143 (đồng bộ kit) merge `afa2da93`; release CIS #1113 merge `92934598` (09:32) và Booking #138 merge `b2a2124e` (09:40), cả hai chỉ đổi version, không deploy lại.

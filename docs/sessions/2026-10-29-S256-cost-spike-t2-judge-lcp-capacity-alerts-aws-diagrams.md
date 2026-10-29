@@ -85,7 +85,9 @@ Xem `docs/audits/2026-10-29-S256-session-close/state-snapshot.md` (29/10 09:25 +
 - Bảng job: `shared.job` chỉ có chuỗi `place_relocate` (AA-997) cố ý để chạy theo credit Geoapify (~31/10), 0 wave mở;
   `booking.job` rỗng; `crm.job` rảnh lúc apply 301 (đọc qua guard DB Migrate).
 
-PR còn mở sau khi chốt (kiểm bằng `gh` 29/10 ~09:30): chỉ release CIS #1113 (0.15.0) và Booking #138 (0.11.0). Mọi PR khác
+PR còn mở sau khi chốt (kiểm bằng `gh` 29/10 ~09:30): chỉ release CIS #1113 (0.15.0) và Booking #138 (0.11.0). Sau đó: CIS #1113 merge 09:32 (`92934598`, chỉ version + CHANGELOG, không deploy lại; ECS vẫn `3994a1a8`), Booking #138 merge 09:40 (`b2a2124e`, chỉ version + CHANGELOG + pyproject, deploy Dev không chạy theo path filter; ECS vẫn `5a115023`). Không còn PR mở. Mọi PR khác
+
+Đóng sổ Linear: export 8 issue đóng trong S256 (AA-665, AA-671, AA-765, AA-795, AA-838, AA-898, AA-979, AA-995) ra `docs/linear-export/` rồi archive qua API (51 file cũ chỉ đổi thư mục theo tên project mới). Tracker HTML publish lại (bản 11). Skill đóng gói: aa-cis-schema, aa-ecosys-repos, aa-lessons, aa-ui-verify, ai-nghiep (`skill/dist/`).
 của phiên đã merge: CIS #1126/#1127/#1128/#1129, kit sync Partner #116 / TripPlanner #180 / Booking #143, release TP #179 /
 Partner #114, root #308 / #312 / #315 / #316.
 
@@ -97,7 +99,7 @@ KAN-90). Jira: tech lead duyệt 29/10, đăng 5 comment (PR-22 #10521, PR-23 #1
 ## Việc cần làm đầu phiên sau (S257, theo thứ tự)
 
 1. Jira S256 nếu chưa đăng: thay tên ảnh đề xuất bằng ảnh thật trong `docs/audits/2026-10-29-S256-ui-evidence/` → duyệt → đăng.
-2. Merge release còn mở theo aa-ship khi không có proof/wave chạy: CIS #1113 (0.15.0), Booking #138 (0.11.0).
+2. Release: CIS #1113 (0.15.0) đã merge cuối S256; Booking #138 (0.11.0) đã merge `b2a2124e`. Không còn PR release mở.
 3. Theo sau AA-979 (đã Done): thử cta-check bằng một user studio vai viewer riêng (CIS #1127; user E2E studio đang là owner);
    tuỳ chọn: một lần consent Gmail thật bằng hộp thư người.
 4. AA-997: để chuỗi relocate chạy theo credit Geoapify tới ~31/10, rồi audit lại (mục tiêu ≥ 90 %) + AA-990 `recheck_14`.
