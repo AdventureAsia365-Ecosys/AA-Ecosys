@@ -279,8 +279,9 @@ duplicates (007, 008, 019 and `007b`) are resolved in the registry, not renumber
   byte for byte and merges the copy PR; Migration Apply (environment `dev-db-auto`, repo variable `DB_AUTO_APPLY`)
   re-classifies and applies it in strict number order, runs the blocking Isolation Probe and dispatches DB Schema
   Dump, whose root PR merges itself when clean; the app's Deploy Dev `schema-gate` holds the rollout until the key is
-  registered and that run is green. While `DB_AUTO_APPLY` is not `true` (or AA-CIS-Infra is private) a person applies
-  the copied file with DB Migrate `check` then `apply`.
+  registered and that run's apply and probe are green, for at most `SCHEMA_GATE_TIMEOUT_S` (default 40 min), then
+  fails before the rollout. While `DB_AUTO_APPLY` is not `true` (or AA-CIS-Infra is private) a person applies the
+  copied file with DB Migrate `check` then `apply` within that window, or re-runs Deploy Dev after the apply.
 - **Contract or destructive file** (no expand header): the D8 flow, in order: (1) migration-file-only PR merged to the
   owner's `main`; (2) the byte copy in `infra/AA-CIS-Infra/db/migrations/<owner>/` (opened and merged by the
   migration-sync bot since AA-993 M3; Copy Guard green); (3) DB Migrate `mode=check` then `mode=apply` on `main`, by
