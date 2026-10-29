@@ -41,8 +41,10 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
     không unique; không bảng nóng): **một PR app** gồm file + code cần nó + nâng readiness lên key đó. Check "Migration
     preflight" của app phải xanh và ghi `expand`. Sau merge: bot migration-sync của Infra copy + merge PR copy (≤ 10′) →
     Migration Apply (khi `DB_AUTO_APPLY=true`) apply theo đúng thứ tự số + Isolation Probe chặn → DB Schema Dump, PR
-    root tự merge khi sạch → Deploy Dev của app qua `schema-gate` (chờ key ≤ 20′) rồi mới roll. `DB_AUTO_APPLY` chưa bật
-    → bot vẫn copy, người chạy DB Migrate `check` → `apply` cho file đó; `schema-gate` giữ deploy tới khi có key.
+    root tự merge khi sạch → Deploy Dev của app qua `schema-gate` (chờ key + job apply/probe của run Migration Apply
+    xanh, tối đa `SCHEMA_GATE_TIMEOUT_S`, mặc định 40′) rồi mới roll. `DB_AUTO_APPLY` chưa bật → bot vẫn copy, người
+    chạy DB Migrate `check` → `apply` cho file đó **trong cửa sổ của gate**; quá cửa sổ thì `schema-gate` đỏ (không
+    deploy) → sau khi apply, **chạy lại Deploy Dev bằng tay** (Actions → Run workflow, hoặc "Re-run all jobs").
   - **File contract / destructive** (không header expand) → **luồng D8**: PR chỉ chứa file migration ở repo chủ merge
     trước → bot copy sang AA-CIS-Infra `db/migrations/<owner>/` (Migration Copy Guard đỏ nếu PR repo chủ chưa vào
     `main`; Migration Apply dừng ở file này, không bao giờ tự apply) → DB Migrate `check` → `apply` (chờ mọi bảng job
@@ -56,7 +58,9 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
     (`docs/architecture/erd/design/<schema>.md`, repo gốc) → sửa trang đó trong cùng đợt thay đổi, không thì DB Schema
     Dump đêm đó đỏ bước drift.
   - Booking và AA-Partner deploy ở mọi push vào `main` chạm backend; từ AA-993 M4b Deploy Dev của CIS, Booking,
-    Partner có `schema-gate` chặn trước khi roll (key chưa có sau 20′ → đỏ, không deploy). PR code cần file
+    Partner có `schema-gate` chặn trước khi roll (key chưa có, hoặc run Migration Apply gần nhất có apply/probe đỏ,
+    sau `SCHEMA_GATE_TIMEOUT_S` (mặc định 40′) → đỏ, không deploy; sửa xong thì "Re-run failed jobs" run Infra đó rồi
+    chạy lại Deploy Dev). PR code cần file
     contract vẫn chỉ merge sau `apply`; push chỉ đổi `api/migrations/**` (CIS, Partner) / `migrations/` (Booking)
     không deploy.
 - [ ] **Cờ fail-closed (thiếu key = BẬT) + migration:** đặt cờ TẮT rõ ràng trước khi deploy code → apply migration →

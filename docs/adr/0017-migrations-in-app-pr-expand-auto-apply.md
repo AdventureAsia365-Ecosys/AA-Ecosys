@@ -118,8 +118,12 @@ schema. The risky changes (constraints, policies, grants, data rewrites, drops) 
    reads the keys the deployed code requires and polls Dev readiness until every key up to the required one is
    registered (`registered_keys` on `/health/ready`, shipped first in its own PR, M4a; falls back to
    `missing_schema_versions` on an older task, critic 23), and requires the `migration-apply` run that registered
-   them to be green, probe included. Timeout 20 min, then red **before** rollout: "required X not applied
-   (contract/destructive → manual apply)". CIS and Partner Deploy Dev path filters add `!api/migrations/**`.
+   them to be green, probe included (judged on the apply and probe jobs only; the dump and summary jobs do not guard
+   the schema). Timeout from the app repo variable `SCHEMA_GATE_TIMEOUT_S`, default 40 min (amended S257 from 20 min:
+   the chain from merge to probe, with the */10 sync cron, the copy PR checks and the ci-bot merge, the plan, apply
+   and probe, does not fit 20 min; the bk-034 proof records the real times), then red **before** rollout: "required X
+   not applied (contract/destructive → manual apply)". A GitHub read the gate cannot decide on (rate limit, error) is
+   never a pass. CIS and Partner Deploy Dev path filters add `!api/migrations/**`.
 8. **Infra `main` is protected, or auto-apply is off.** A ruleset on AA-CIS-Infra `main`: PR required; required checks
    Copy Guard, `check_migration_files`, classify, `terraform-plan`; no direct pushes, ci-bot included; bypass the tech lead
    only. On GitHub Free a ruleset and environment rules exist only on a public repo (ADR 0014): when Infra goes

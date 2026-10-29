@@ -110,7 +110,7 @@ Script asyncpg ad-hoc: tham số ngày bind `$1::date` phải là `datetime.date
   drift" của DB Schema Dump đỏ.
 - Giá trị code mới ghi vào cột có CHECK phải có trong CHECK trước khi code đó deploy. Code cần file **contract** mới →
   PR migration riêng, apply trước khi merge code; code cần file **expand** → cùng PR, `schema-gate` giữ deploy tới khi
-  key được apply.
+  key được apply (tối đa `SCHEMA_GATE_TIMEOUT_S`, mặc định 40′; quá hạn → đỏ, apply xong thì chạy lại Deploy Dev).
 - Bài học chi tiết vùng DB/migration: `skill/aa-lessons/lessons.md` mục "Dữ liệu" và "Vận hành" — đọc trước khi sửa.
 
 ## Xoá bảng hoặc dữ liệu vĩnh viễn
