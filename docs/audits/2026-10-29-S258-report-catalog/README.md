@@ -35,6 +35,8 @@ Các file trong thư mục này:
 | [templates/](templates/) | 11 template, mỗi nhóm báo cáo một template | Tiếng Anh |
 | [inventory.json](inventory.json) | Kiểm kê thô 145 báo cáo/trang/cảnh báo đang có (3 lane: 61 (docs, pages and process reports), 41 (automation: scheduled workflows, jobs, alerts), 43 (requirements and designed-but-not-built reports)) | Tiếng Anh |
 
+Trang đọc (artifact riêng tư, lọc và xem chi tiết từng báo cáo): <https://claude.ai/artifact/Jiz8KaJiWrpdrvi5eJWWJ4>
+
 ## 1. Tóm tắt và khuyến nghị
 
 **Hiện trạng một câu:** hệ thống có nhiều *trang xem trực tiếp* (overview, cost-ops, data coverage, jobs…) và nhiều
