@@ -63,6 +63,11 @@ schema. The risky changes (constraints, policies, grants, data rewrites, drops) 
    It runs the copy checks and the classifier (decision 3), labels the PR `migration:expand|contract|destructive`, or
    `out-of-order` when the number is below the owner's highest registered key (never auto-applied), and ci-bot
    squash-merges it after the required checks. Every class is copied; only the apply differs.
+   *(Amended 2026-10-29, S258.)* The sync does not wait for the cron, which GitHub runs best effort: it also starts on
+   an owner repo's doorbell comment (`migration-sync-wake.yml` after a push to `main` touching its migrations, ci-bot
+   token with Issues write on Infra only, comment text never read; ADR 0011a decision 3) and when a copy PR's
+   `Terraform Plan` / `Migration Copy Guard` run completes (`workflow_run`), so the merge pass follows the checks. The
+   cron stays as the backstop.
 3. **Classification: header, static lint, authoritative runtime post-check.**
    - Header `-- migrate: expand` (new runner flag). No header = contract. `expand` with `destructive` is a lint error;
      `expand` with `no-transaction` only for a non-unique `CREATE INDEX CONCURRENTLY IF NOT EXISTS`.
