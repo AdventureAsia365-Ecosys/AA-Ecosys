@@ -34,9 +34,9 @@ def draw(filename: str) -> None:
             internet = Internet("Outside APIs\nLLM · SEO · maps")
 
         with group("cloud", "AWS Cloud", "infrastructure account (acc2)"):
-            ci_roles = IAMRole("AWS IAM\nOIDC CI roles · deploy role per app")
+            ci_roles = IAMRole("AWS IAM\nOIDC CI roles: plan (read) · apply (boundary)\none deploy role per app")
             dns = Route53("Amazon Route 53\npublic + private zones")
-            cdn = CloudFront("Amazon CloudFront\npartner · agency · client · photos")
+            cdn = CloudFront("Amazon CloudFront\npartner · agency · client\nphotos (S3 origin)")
             with group("region", "us-west-1"):
                 with group("generic", "Edge"):
                     rest = APIGateway("Amazon API Gateway\nREST APIs: CIS · Booking")
@@ -47,7 +47,7 @@ def draw(filename: str) -> None:
                     with group("private", "Private subnets", "load balancer entry"):
                         nlb = ElbNetworkLoadBalancer("Network Load Balancer\ninternal: VPC link + origin")
                     with group("public", "Public subnets"):
-                        nat = EC2("Amazon EC2\nNAT instance (t4g.nano)")
+                        nat = EC2("Amazon EC2\nNAT instance (t4g.nano)\n+ Elastic IP")
                         alb = ElbApplicationLoadBalancer("Application LB\nreachable from the NLB only")
                     with group("private", "Private subnets", "workloads") as workloads:
                         with group("ecs", "Amazon ECS cluster", "aa-cis-dev-cluster, Fargate + Spot") as ecs:
@@ -55,7 +55,7 @@ def draw(filename: str) -> None:
                             svc_bk = ElasticContainerServiceService("ECS service\nBooking api + booking.job")
                             svc_crm = ElasticContainerServiceService("ECS service\nCRM api · web · portal")
                             migrate = ElasticContainerServiceTask("ECS task\none-off DB Migrate")
-                        lambdas = Lambda("AWS Lambda in the VPC\nTripPlanner · DFS balance probe")
+                        lambdas = Lambda("AWS Lambda in the VPC\nTripPlanner browse · assembly\nDFS balance probe")
                         cache = ElastiCache("Amazon ElastiCache\nValkey 8, TLS + AUTH")
                         efs = EFS("Amazon EFS\n(no task mounts it)")
                     with group("private", "Private subnets", "database"):
@@ -63,24 +63,25 @@ def draw(filename: str) -> None:
 
                 with group("generic", "Data, secrets, identity"):
                     ecr = ECR("Amazon ECR\n5 repos, immutable tags")
-                    s3 = S3("Amazon S3\n15 buckets (CIS, ACP, CRM, ...)")
+                    s3 = S3("Amazon S3, 15 buckets\nCIS + ACP tiers · CRM (SSE-KMS)\n"
+                            "Booking media · TP artifacts\nCloudTrail · ALB logs")
                     secrets = SecretsManager("AWS Secrets Manager\none DSN secret per app")
-                    kms = KMS("AWS KMS\n4 CMKs (CloudTrail, CRM x3)")
+                    kms = KMS("AWS KMS, 4 CMKs\nCloudTrail · CRM data\nCRM ingest · CRM seal")
                     bedrock2 = Bedrock("Amazon Bedrock\nembeddings · CRM guardrail")
                     cognito = Cognito("Amazon Cognito\nfour user pools")
                     waf_id = WAF("AWS WAF\non 3 user pools")
-                    triggers = Lambda("AWS Lambda\nCognito triggers · snapshot expiry")
-                    sched = EventbridgeScheduler("EventBridge Scheduler\naa-cis-dev-acp, 5 daily")
-                    ses = SES("Amazon SES\nno-reply · inbound test mail")
+                    triggers = Lambda("AWS Lambda outside the VPC\n4 Cognito triggers\nRDS snapshot expiry")
+                    sched = EventbridgeScheduler("EventBridge Scheduler\naa-cis-dev-acp group\n5 daily schedules")
+                    ses = SES("Amazon SES\nno-reply sender\ninbound test mail")
 
                 with group("generic", "Operations"):
                     budgets = Budgets("AWS Budgets\nper app + cost anomaly")
                     trail = Cloudtrail("AWS CloudTrail\n(KMS) + IAM Access Analyzer")
-                    rules = Eventbridge("Amazon EventBridge\nsecurity rules · ACP bus")
+                    rules = Eventbridge("Amazon EventBridge\nsecurity rules · ACP bus + DLQ")
                     cw = Cloudwatch("Amazon CloudWatch\nlogs · alarms · flow logs")
-                    sns = SNS("Amazon SNS\nalerts · SES feedback")
+                    sns = SNS("Amazon SNS\nalerts (e-mail) · SES feedback")
 
-        with group("cloud", "AWS Cloud", "LLM account (acc3)"):
+        with group("cloud", "AWS Cloud", "LLM account (acc3)") as acc3:
             invoker = IAMRole("AWS IAM\nBedrock invoker role")
             batch = IAMRole("AWS IAM\nBedrock Batch service role")
             ce_reader = CostExplorer("AWS IAM\nCost Explorer reader role")
@@ -107,7 +108,8 @@ def draw(filename: str) -> None:
         link(gha, tf_llm, kind="control")
         link(gha, ci_roles, "OIDC", "control")
         link(tf_main, ci_roles, "creates", "control")
-        link(tf_llm, invoker, "creates the acc3 roles", "control")
+        # all three acc3 roles: one arrow to the account border
+        link(tf_llm, invoker, "creates the acc3 roles", "control", into=acc3)
         link(ci_roles, ecr, "push image", "control")
         link(ci_roles, migrate, "run task", "control")
         # request path

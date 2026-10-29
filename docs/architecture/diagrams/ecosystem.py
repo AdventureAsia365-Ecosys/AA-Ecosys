@@ -59,7 +59,7 @@ def draw(filename: str) -> None:
                 with group("generic", "Platform services"):
                     ecr = ECR("Amazon ECR\ncontainer images")
                     cognito = Cognito("Amazon Cognito\nstaff · partner · traveller · M2M")
-                    s3 = S3("Amazon S3\nbronze · docs · media · CRM")
+                    s3 = S3("Amazon S3\nbronze · docs bundle\nmedia · CRM documents")
                     embed = Bedrock("Amazon Bedrock\nembeddings · CRM guardrail")
 
         with group("cloud", "AWS Cloud", "LLM account (acc3)"):

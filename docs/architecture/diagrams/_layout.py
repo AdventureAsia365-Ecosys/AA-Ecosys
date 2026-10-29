@@ -36,6 +36,8 @@ TOP = 64              # view title band
 PAD = 24
 EDGE_FONT = 10
 ARROW = 8             # arrowhead length
+RUN = 3               # grid cells of straight run before a bend costs no extra
+NEAR = 12             # clearance an arrow keeps from an icon that is not one of its ends
 LEGEND_TEXTS: list[str] = []   # set by _common (the legend rows)
 
 _DIRS = [(1, 0), (-1, 0), (0, -1), (0, 1)]   # E, W, N, S (y grows downwards)
@@ -213,6 +215,14 @@ class _Grid:
         self.occ_h = bytearray(self.nx * self.ny)
         self.occ_v = bytearray(self.nx * self.ny)
         self.owner_box: dict[int, Node] = {}
+        self.near: dict[int, Node] = {}   # cells just outside an icon: an arrow there looks attached to it
+        for n in view.nodes:
+            if not n.legend:
+                x1, y1, x2, y2 = n.icon_box()
+                for j in range(int((y1 - NEAR) // S), int((y2 + NEAR) // S) + 2):
+                    for i in range(int((x1 - NEAR) // S), int((x2 + NEAR) // S) + 2):
+                        if 0 <= i < self.nx and 0 <= j < self.ny:
+                            self.near[j * self.nx + i] = n
         for n in view.nodes:
             self._mark(n.icon_box(), 3, n)
             if not n.legend:
@@ -267,8 +277,8 @@ def _ports(end, view_side: str):
         x1, y1, x2, y2 = end.icon_box()
         if not end.legend:
             y2 = end.text_box()[3] + 2      # an arrow from below leaves (reaches) the service under its text
-        along_v = [end.y + o for o in (0, -12, 12)]
-        along_h = [end.x + o for o in (0, -12, 12)]
+        along_v = [end.y + o for o in (0, -12, 12, -24, 24)]
+        along_h = [end.x + o for o in (0, -12, 12, -24, 24)]
         mid_v, mid_h = end.y, end.x
     else:
         x1, y1, x2, y2 = end.box
@@ -307,6 +317,7 @@ def route(view: View) -> None:
     for e in view.edges:
         own = set(_chain_of(e.src)) | set(_chain_of(e.dst))
         foreign = [g.box for g in grid.groups if g not in own]
+        ends = {e.src, e.dst}
         starts = [p for p in _ports(e.src, "src") if _free(grid, p[0])]
         goals = {}
         for cell, (dx, dy), exact, cost in _ports(e.dst, "dst"):
@@ -321,6 +332,14 @@ def route(view: View) -> None:
         def h(i, j):
             return (max(bx1 - i, 0, i - bx2) + max(by1 - j, 0, j - by2))
 
+        def near_end(k, d):
+            # a run that would continue another arrow's run on the same line, a few points short of its end: the
+            # two would read as one arrow
+            occ, step = (grid.occ_h, 1) if d[1] == 0 else (grid.occ_v, nx)
+            if occ[k]:
+                return 0
+            return 40 if any(occ[k + o * step] for o in (-3, -2, -1, 1, 2, 3) if 0 <= k + o * step < len(occ)) else 0
+
         def cell_cost(i, j, d):
             k = j * nx + i
             c = 1.0
@@ -331,6 +350,7 @@ def route(view: View) -> None:
                 elif grid.occ_v[k]:
                     c += 30
                 c += grid.border_h[k]
+                c += near_end(k, d)
                 for dj, pen in ((-1, 10), (1, 10), (-2, 4), (2, 4)):
                     kk = k + dj * nx
                     if 0 <= kk < len(grid.occ_h) and grid.occ_h[kk]:
@@ -341,10 +361,14 @@ def route(view: View) -> None:
                 elif grid.occ_h[k]:
                     c += 30
                 c += grid.border_v[k]
+                c += near_end(k, d)
                 for di, pen in ((-1, 10), (1, 10), (-2, 4), (2, 4)):
                     kk = k + di
                     if 0 <= kk < len(grid.occ_v) and grid.occ_v[kk]:
                         c += pen
+            nb = grid.near.get(k)
+            if nb is not None and nb not in ends:
+                c += 20
             px, py = i * S, j * S
             for (x1, y1, x2, y2) in foreign:
                 if x1 < px < x2 and y1 < py < y2:
@@ -355,7 +379,8 @@ def route(view: View) -> None:
         tick = 0                              # tie-break: equal costs pop in push order (deterministic)
         best = {}
         for cell, d, exact, cost in starts:
-            state = (cell[0], cell[1], d)
+            state = (cell[0], cell[1], d, RUN)   # the port stub counts as a full run: the first bend is free
+            cost += near_end(cell[1] * nx + cell[0], d)   # a stub from an icon side can also touch a run
             if cost < best.get(state, 1e18):
                 best[state] = cost
                 tick += 1
@@ -371,7 +396,7 @@ def route(view: View) -> None:
                 continue
             if state not in parent:
                 parent[state] = prev
-            i, j, d = state
+            i, j, d, run = state
             if ((i, j), d) in goals:
                 done = g + goals[((i, j), d)][1]
                 if done < best.get(("done", state), 1e18):
@@ -386,8 +411,10 @@ def route(view: View) -> None:
                     continue
                 if grid.blocked[nj * nx + ni]:
                     continue
-                ng = g + cell_cost(ni, nj, nd) + (25 if nd != d else 0)
-                ns = (ni, nj, nd)
+                bend = nd != d
+                # a bend right after a bend (a run of two cells or less) draws a small kink: pay for it
+                ng = g + cell_cost(ni, nj, nd) + ((25 + (60 if run < RUN else 0)) if bend else 0)
+                ns = (ni, nj, nd, 1 if bend else min(run + 1, RUN))
                 if ng < best.get(ns, 1e18):
                     best[ns] = ng
                     parent.pop(ns, None)

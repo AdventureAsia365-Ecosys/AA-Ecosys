@@ -36,19 +36,19 @@ def draw(filename: str) -> None:
             role = IAMRole("AWS IAM\ndeploy role (OIDC)")
             with group("region", "us-west-1"):
                 cognito = Cognito("Amazon Cognito\nEXTERNAL e-mail code sign-in")
-                http = APIGateway("Amazon API Gateway\nHTTP /browse · /trip (API key)")
+                http = APIGateway("Amazon API Gateway\nHTTP /browse · /trip\n(X-TripPlanner-Key)")
                 key = SecretsManager("AWS Secrets Manager\nAPI key secret")
                 artifacts = S3("Amazon S3\nLambda artifacts")
                 embed = Bedrock("Amazon Bedrock\nCohere Embed v4")
                 with group("vpc", "Shared VPC"):
                     with group("private", "Private subnets", "TripPlanner Lambdas"):
                         with group("generic", "AWS Lambda functions") as fns:
-                            browse = Lambda("browse\nstateless reads · search embedding")
+                            browse = Lambda("browse\nstateless, cacheable reads\nsearch embedding")
                             assembly = Lambda("assembly\ntrip writes + AI narration")
                     with group("private", "Private subnets", "database"):
                         with group("generic", "Amazon RDS for PostgreSQL", "shared instance"):
-                            reads = RDSPostgresqlInstance("read only\ncatalog.* (CIS) · Model Gateway config")
-                            own = RDSPostgresqlInstance("schema tripplanner\nevent-sourced trips (tp-NNN)")
+                            reads = RDSPostgresqlInstance("read only\ncatalog.* views (CIS)\nModel Gateway config")
+                            own = RDSPostgresqlInstance("schema tripplanner\nevent-sourced trips\n(tp-NNN, owner)")
                     with group("private", "Private subnets", "ECS workloads"):
                         booking = Fargate("AA-Booking api\npulls the inquiry outbox")
 

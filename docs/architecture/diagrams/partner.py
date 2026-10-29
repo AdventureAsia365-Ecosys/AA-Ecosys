@@ -35,10 +35,10 @@ def draw(filename: str) -> None:
             with group("region", "us-west-1"):
                 ecr = ECR("Amazon ECR\nimage per git SHA")
                 cognito = Cognito("Amazon Cognito\nPARTNER pool (MFA) · M2M")
-                cis = APIGateway("Amazon API Gateway\nCIS API: catalog · /v1 studio")
+                cis = APIGateway("Amazon API Gateway\nCIS API: catalog · membership\nContent studio /v1")
                 booking = APIGateway("Amazon API Gateway\nBooking API: booking.b2b.v1")
                 guard = Bedrock("Amazon Bedrock Guardrails\nPII scrubber")
-                files = S3("Amazon S3\nCRM documents · ingest · audit")
+                files = S3("Amazon S3\nCRM documents · ingest · audit\n(SSE-KMS)")
                 kms = KMS("AWS KMS\n3 CMKs: data · ingest · seal")
                 with group("vpc", "Shared VPC"):
                     with group("private", "Private subnets", "load balancer entry"):
@@ -67,7 +67,8 @@ def draw(filename: str) -> None:
 
         link(agents, cf_agency)
         link(clients, cf_client)
-        link(cf_agency, nlb, "VPC origin", out_of=cdn)
+        # no "VPC origin" label: the NLB text says it, and two borders leave no room for a label there
+        link(cf_agency, nlb, out_of=cdn)
         link(nlb, alb)
         link(alb, web, into=ecs)
         link(web, api, "BFF")

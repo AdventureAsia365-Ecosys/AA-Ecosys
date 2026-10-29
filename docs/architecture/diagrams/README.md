@@ -104,8 +104,10 @@ Source: [`partner.py`](partner.py).
    one group need adjacent cells, and a service outside a group must not sit inside that group's cell range.
    [`_common.py`](_common.py) holds the group styles, the arrow kinds and the SVG clean-up;
    [`_layout.py`](_layout.py) computes the coordinates, routes every arrow on a 6 pt grid (it never crosses an icon,
-   a text, a group title or a group that holds neither of its ends when another way exists, and avoids running along
-   borders or other arrows) and writes a laid-out Graphviz file that `neato -n2` draws as is.
+   a text, a group title or a group that holds neither of its ends when another way exists, keeps clear of icons that
+   are not its ends, and avoids running along borders or other arrows, continuing another arrow's line and small
+   kinks), places each label beside its own arrow clear of everything else, and writes a laid-out Graphviz file that
+   `neato -n2` draws as is.
    [`_group_icons.py`](_group_icons.py) drew the two group icons the package does not ship (`icons/`).
 2. Render with Graphviz (`dot` and `neato`) on the `PATH` and a virtual environment that has `diagrams`, Pillow
    (smaller inline icons) and the docs tool requirements:
@@ -119,7 +121,10 @@ Source: [`partner.py`](partner.py).
    Without root rights, `apt-get download graphviz` and its libraries, unpack them with `dpkg -x` into a local folder
    and point `PATH`, `LD_LIBRARY_PATH` and `GVBINDIR` at it (run `dot -c` once).
 3. `render.py` prints the layout problems it finds in each view (an arrow through a node, a group title or a group
-   that holds neither of its ends, an arrow along a border, two arrows on one track); a clean view prints none. Look
+   that holds neither of its ends, an arrow along a border, two arrows on one track or on one line with a small gap,
+   a kink shorter than 13 pt, a label over a node, a title, a border, another arrow or another label); a clean view
+   prints none. When a label cannot sit clear (two borders too close together), drop it if a node text already says
+   it, or move a service to another cell. Look
    at the PNG previews, then commit the `.py` and the `.svg` together. The layout is deterministic: an unchanged
    view renders to the same file. `render.py` also inlines every icon as a PNG data URI and refuses an unsafe SVG.
 

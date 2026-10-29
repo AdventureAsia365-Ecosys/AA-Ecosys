@@ -27,7 +27,7 @@ def draw(filename: str) -> None:
             admin = Vercel("Booking admin\nNext.js + BFF")
 
         with group("github", "GitHub: AA-Booking"):
-            deploy = GithubActions("GitHub Actions\nDeploy Dev (deploy-gate)")
+            deploy = GithubActions("GitHub Actions\nDeploy Dev (deploy-gate preflight)")
 
         with group("cloud", "AWS Cloud", "infrastructure account (acc2)"):
             role = IAMRole("AWS IAM\ndeploy role (OIDC)")
@@ -55,7 +55,7 @@ def draw(filename: str) -> None:
             cognito: (3, 0),
             staff: (0, 1), admin: (1, 1), rest: (3, 1), lb: (4, 1), api: (5, 1), own: (6, 1),
             partner: (5, 2), reads: (6, 2),
-            deploy: (0, 4), role: (2, 4), ecr: (3, 4), media: (4, 4), ses: (5, 4), docs: (6, 4), kms: (7, 4),
+            deploy: (0, 4), role: (2, 4), ecr: (3, 4), ses: (4, 4), media: (5, 4), docs: (6, 4), kms: (7, 4),
             cw: (7, 2),
         })
         legend((8, 4))

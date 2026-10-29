@@ -46,7 +46,8 @@ def draw(filename: str) -> None:
                         cache = ElastiCache("Amazon ElastiCache\nValkey cache")
                         probe = Lambda("AWS Lambda\nops probe")
                     with group("private", "Private subnets", "database"):
-                        rds = RDSPostgresqlInstance("Amazon RDS for PostgreSQL\nsilver · gold · acp_* · geo · catalog")
+                        rds = RDSPostgresqlInstance(
+                            "Amazon RDS for PostgreSQL\nsilver · gold · acp_* · geo\ncatalog · shared")
                 ecr = ECR("Amazon ECR\nimage per git SHA")
                 s3 = S3("Amazon S3\nbronze: uploads · photos · docs")
                 embed = Bedrock("Amazon Bedrock\nCohere Embed v4")
@@ -58,7 +59,7 @@ def draw(filename: str) -> None:
                 llm = Bedrock("Amazon Bedrock\nwriter + judge models")
 
         with group("outside", "Outside services") as outside:
-            apis = Internet("Decision + SEO APIs\nJev · DataForSEO · OpenAI (judge)")
+            apis = Internet("Decision + SEO APIs\nJev · DataForSEO\nOpenAI (judge fallback)")
             channels = Internet("Photos + channels\nGoogle Drive · WordPress · Facebook")
 
         place({

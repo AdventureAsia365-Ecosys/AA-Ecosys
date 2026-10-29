@@ -294,7 +294,10 @@ def place_edge_labels(laid: str) -> str:
         for seg in sorted(own, key=lambda s: -(abs(s[0][0] - s[1][0]) + abs(s[0][1] - s[1][1]))):
             (ax, ay), (bx, by) = seg
             horizontal = abs(ay - by) < 0.5
-            for t in (0.5, 0.35, 0.65, 0.2, 0.8):
+            # every 3 pt along the run, the middle first: a short gap between two borders still takes the label
+            run = abs(bx - ax) + abs(by - ay)
+            steps = max(int(run // 3), 1)
+            for t in sorted((k / steps for k in range(1, steps)), key=lambda v: abs(v - 0.5)) or [0.5]:
                 px, py = ax + (bx - ax) * t, ay + (by - ay) * t
                 offsets = ([(0, h / 2 + 3), (0, -h / 2 - 3)] if horizontal
                            else [(w / 2 + 4, 0), (-w / 2 - 4, 0)])
@@ -303,7 +306,7 @@ def place_edge_labels(laid: str) -> str:
                     box = (cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2)
                     cost = (sum(_boxes_overlap(box, o) for o in obstacles) * 10
                             + sum(_boxes_overlap(box, p) for p in placed) * 10
-                            + sum(_box_hits_segment(box, s) for s in all_segments) * 3)
+                            + sum(_box_hits_segment(box, s, pad=1.5 if s in own else 5) for s in all_segments) * 3)
                     if best_cost is None or cost < best_cost:
                         best, best_cost = (cx, cy, box), cost
                     if cost == 0:
@@ -362,7 +365,7 @@ def _parse_layout(laid: str) -> dict:
             hd = m.group("arrow").split("->")[1].strip().strip('"')
             edges.append({"tail": tail, "head": hd, "pts": _points(_attr(attrs, "pos")),
                           "lhead": _attr(attrs, "lhead"), "ltail": _attr(attrs, "ltail"),
-                          "name": f"{tail}->{hd}", "label": _attr(attrs, "xlabel")})
+                          "name": f"{tail}->{hd}", "label": _attr(attrs, "xlabel"), "xlp": _attr(attrs, "xlp")})
         elif head not in ("node", "edge"):
             pos, w, h = _attr(attrs, "pos"), _attr(attrs, "width"), _attr(attrs, "height")
             if pos and w and h:
@@ -418,6 +421,17 @@ def layout_problems(laid: str) -> list[str]:
             if c:
                 end_paths.add(c)
         segs = _segments(e["pts"])
+        bends = [e["pts"][0]]       # the drawn polyline without its straight-through points (arrowhead base)
+        for q, r in zip(e["pts"][1:], e["pts"][2:]):
+            o = bends[-1]
+            same_x = abs(o[0] - q[0]) < 0.5 and abs(q[0] - r[0]) < 0.5
+            same_y = abs(o[1] - q[1]) < 0.5 and abs(q[1] - r[1]) < 0.5
+            if not (same_x or same_y):
+                bends.append(q)
+        bends.append(e["pts"][-1])
+        for a, b in _segments(bends)[1:-1]:      # a step shorter than 13 pt between two bends reads as a kink
+            if abs(a[0] - b[0]) + abs(a[1] - b[1]) < 13:
+                problems.append(f"{e['name']}: small jog")
         for seg in segs:
             for name, n in nodes.items():
                 if name in ends or name.startswith("legend_"):
@@ -438,6 +452,34 @@ def layout_problems(laid: str) -> list[str]:
                         and min(ay, by) < y2 and max(ay, by) > y1:
                     problems.append(f"{e['name']}: along the border of {name}")
             tracks.append((e["name"], e["tail"], seg))
+    # a label must sit clear of every icon, text, group title, group border, arrow and other label
+    label_boxes = []
+    for e in lay["edges"]:
+        if not (e["label"] and e["xlp"]):
+            continue
+        rows = e["label"].replace("\\n", "\n").split("\n")
+        w = max(len(r) for r in rows) * _EDGE_FONT_PT * 0.56 + 4
+        h = len(rows) * _EDGE_FONT_PT * 1.2 + 2
+        cx, cy = map(float, e["xlp"].split(","))
+        label_boxes.append((e, (cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2)))
+    for k, (e, box) in enumerate(label_boxes):
+        tag = f"label {e['label']!r}"
+        for name, n in nodes.items():
+            if not name.startswith("legend_") and _boxes_overlap(box, n["box"], pad=0):
+                problems.append(f"{tag}: over node {name}")
+        for name, c in clusters.items():
+            if c["title"] and _boxes_overlap(box, c["title"], pad=0):
+                problems.append(f"{tag}: over the title of {name}")
+            x1, y1, x2, y2 = c["box"]
+            border = _segments([(x1, y1), (x2, y1), (x2, y2), (x1, y2), (x1, y1)])
+            if any(_box_hits_segment(box, s, pad=2) for s in border):
+                problems.append(f"{tag}: over the border of {name}")
+        for other in lay["edges"]:
+            if any(_box_hits_segment(box, s, pad=0 if other is e else 2) for s in _segments(other["pts"])):
+                problems.append(f"{tag}: over the arrow {other['name']}")
+        for e2, box2 in label_boxes[k + 1:]:
+            if _boxes_overlap(box, box2, pad=0):
+                problems.append(f"{tag}: over label {e2['label']!r}")
     for i, (n1, t1, s1) in enumerate(tracks):
         for n2, t2, s2 in tracks[i + 1:]:
             if n1 == n2 or t1 == t2:
@@ -447,10 +489,14 @@ def layout_problems(laid: str) -> list[str]:
                 lo, hi = max(min(a1[0], b1[0]), min(a2[0], b2[0])), min(max(a1[0], b1[0]), max(a2[0], b2[0]))
                 if hi - lo > 6:
                     problems.append(f"{n1} and {n2}: share a track")
+                elif -18 < hi - lo <= 0:
+                    problems.append(f"{n1} and {n2}: runs on one line with a small gap (read as one arrow)")
             if abs(a1[0] - b1[0]) < 0.5 and abs(a2[0] - b2[0]) < 0.5 and abs(a1[0] - a2[0]) < 3:
                 lo, hi = max(min(a1[1], b1[1]), min(a2[1], b2[1])), min(max(a1[1], b1[1]), max(a2[1], b2[1]))
                 if hi - lo > 6:
                     problems.append(f"{n1} and {n2}: share a track")
+                elif -18 < hi - lo <= 0:
+                    problems.append(f"{n1} and {n2}: runs on one line with a small gap (read as one arrow)")
     return sorted(set(problems))
 
 
