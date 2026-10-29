@@ -106,6 +106,11 @@ class RegistryCheck(unittest.TestCase):
         errors, _ = self.messages(_catalog(), _kpis(alert={"amber_gte": "1"}))
         self.assertTrue(any("alert" in e for e in errors), errors)
 
+    def test_alert_refuses_an_unknown_bound(self):
+        # the CIS engine only reads amber_gte / red_gte: a red_lte would silently show "ok"
+        errors, _ = self.messages(_catalog(), _kpis(alert={"red_lte": 100}))
+        self.assertTrue(any("alert" in e for e in errors), errors)
+
     def test_copy_must_be_byte_identical(self):
         self.write(_catalog(), _kpis())
         copy = self.root / "copy"
@@ -126,6 +131,14 @@ class ImportHelpers(unittest.TestCase):
     def test_relations_skip_contract_names(self):
         self.assertEqual(rr._sources("shared.llm_call_daily.cost_usd and crm.ops.v1 and booking.job"),
                          ["shared.llm_call_daily", "booking.job"])
+
+    def test_unit_guess_matches_time_words_whole(self):
+        self.assertEqual(rr._unit_guess("Oldest queue age", ""), "hours")
+        self.assertEqual(rr._unit_guess("Time to first response", ""), "hours")
+        for name in ("Cover coverage", "Overage share", "Consent coverage"):
+            self.assertEqual(rr._unit_guess(name, ""), "ratio", name)
+        self.assertEqual(rr._unit_guess("Average quality score", ""), "score")
+        self.assertEqual(rr._unit_guess("Storage growth", ""), "count")
 
     def test_split_kpi_names(self):
         self.assertEqual(rr._split_kpi("K-TP-TRIPS / K-TP-INQ", "EX-04"),
@@ -148,6 +161,8 @@ class RepoRegistry(unittest.TestCase):
             self.assertIn(kid, kpis)
             self.assertEqual(kpis[kid]["unit"], spec["unit"])
             self.assertEqual(kpis[kid]["snapshot"]["job"], "kpi_snapshot_daily")
+            if "definition" in spec:
+                self.assertEqual(kpis[kid]["definition"], spec["definition"])
 
 
 if __name__ == "__main__":

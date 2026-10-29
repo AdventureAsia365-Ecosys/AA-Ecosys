@@ -100,7 +100,8 @@ TEMPLATE_DIR = f"{ADVISORY_DIR}/templates"
 FAMILY_TEMPLATE = {
     "executive": "business-review.md", "finops": "cost-finops-review.md", "app-ops": "app-ops-report.md",
     "ai-quality": "ai-content-quality.md", "reliability": "slo-db-performance.md", "security": "security-review.md",
-    "incident": "incident-postmortem.md", "release": "delivery-dora-report.md", "data-quality": "data-quality-report.md",
+    "incident": "incident-postmortem.md", "release": "delivery-dora-report.md",
+    "data-quality": "data-quality-report.md",
     "growth": "customer-growth-report.md", "customer": "customer-growth-report.md", "readiness": "readiness-signoff.md",
 }
 TEMPLATE_USED_BY = {
@@ -157,8 +158,11 @@ SNAPSHOT_KPIS: dict[str, dict[str, Any]] = {
     },
     "K-CAT-LIVE": {
         "unit": "count",
+        # the view's states are served / paused / retired (CIS 272): the advisory's word 'live' is not one of them
+        "definition": "Rows of gold_aa_internal.v_tour_liveness with state 'served' at the snapshot (the view's "
+                      "states: served, paused, retired); paused and retired counted the same way",
         "snapshot": {"job": "kpi_snapshot_daily", "scopes": ["all"],
-                     "computes": "rows of gold_aa_internal.v_tour_liveness with state 'live' when the job runs (a "
+                     "computes": "rows of gold_aa_internal.v_tour_liveness with state 'served' when the job runs (a "
                                  "point-in-time count: written for the latest day only, never back-filled)"},
     },
     "K-RPT-FAILED": {
@@ -210,7 +214,8 @@ def _unit_guess(name: str, definition: str) -> str:
         return "days"
     if any(w in n for w in ("lcp", "p95", "latency", "duration")):
         return "seconds"
-    if any(w in n for w in ("time to", "lead time", "age", "ttr", "ttd")):
+    # whole words only: "age" (queue age) must not match "coverage", "overage", "average" or "storage"
+    if any(re.search(rf"(?<![a-z]){re.escape(w)}(?![a-z])", n) for w in ("time to", "lead time", "age", "ttr", "ttd")):
         return "hours"
     if any(w in n for w in ("rate", "share", "coverage", "accuracy", "ratio", "margin", "utilisation", "vs ",
                             "variance", "pass", "on time", "depth", "conversion", " to ", "csat", "%", "/")):
@@ -306,6 +311,8 @@ def build(catalog: list[dict], reference: set[str]) -> tuple[dict, dict]:
         snap = SNAPSHOT_KPIS.get(kid)
         if snap:
             item["unit"] = snap["unit"]
+            if "definition" in snap:
+                item["definition"] = snap["definition"]
             item["snapshot"] = snap["snapshot"]
             if "alert" in snap:
                 item["alert"] = snap["alert"]
@@ -334,7 +341,9 @@ def build(catalog: list[dict], reference: set[str]) -> tuple[dict, dict]:
 
 
 # Person handles in the advisory text: the registry is vendored into the public CIS repo, so it names roles only.
-REPLACEMENTS = (("@thule mention node", "business owner mention node"),)
+# The retired personal account is not named either (CIS test_aa998_no_acc1_runtime scans the vendored copy).
+REPLACEMENTS = (("@thule mention node", "business owner mention node"),
+                ("retired acc1 = 0 check", "the retired account stays at 0"))
 
 
 def _scrub(value: Any) -> Any:
