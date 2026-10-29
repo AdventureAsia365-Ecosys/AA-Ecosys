@@ -1,0 +1,70 @@
+{
+  "probe": "S257 AA-814 facts",
+  "phase": "delete",
+  "at": "2026-10-29T07:08:06.562Z",
+  "portal": "https://portal.lumiguides.it.com",
+  "cis": "https://api-cis.lumiguides.it.com",
+  "session": {
+    "sub": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+    "csr": "owner",
+    "amr": "partner",
+    "mid": "cd7c8090-6c26-42b4-a961-8d77d9799b1a",
+    "exp": "2026-10-29T07:23:03.000Z"
+  },
+  "deleted": [
+    "fact_5e51d64df5"
+  ],
+  "checks": [
+    {
+      "name": "session.tenant",
+      "expected": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+      "actual": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "session.csr (needs a writer role)",
+      "expected": "owner | editor",
+      "actual": "owner",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "probe fact present before delete",
+      "expected": "state fact fact_5e51d64df5 listed",
+      "actual": "200 probe_ids=fact_5e51d64df5",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "bff.DELETE /v1/facts/fact_5e51d64df5",
+      "expected": "200 deleted=true",
+      "actual": "200 deleted=true",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.GET /v1/facts after delete",
+      "expected": "200, probe fact gone",
+      "actual": "200 left=0",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.DELETE again",
+      "expected": "404",
+      "actual": "404 \"Fact not found\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.GET account/activity fact.deleted",
+      "expected": "200 has resource_id=fact_5e51d64df5",
+      "actual": "200 found=true",
+      "pass": true,
+      "strict": false
+    }
+  ],
+  "strict_failures": [],
+  "verdict": "PASS"
+}

@@ -1,0 +1,251 @@
+{
+  "probe": "S257 portal UI evidence",
+  "at": "2026-10-29T07:07:35.740Z",
+  "portal": "https://portal.lumiguides.it.com",
+  "session": {
+    "sub": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+    "csr": "owner",
+    "amr": "partner"
+  },
+  "out_dir": "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence",
+  "shots": [
+    "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-facts-1440x900.png",
+    "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-tours-card-price-1440x900.png",
+    "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-tours-drawer-price-1440x900.png",
+    "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-tours-drawer-1440x900.png",
+    "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-facts-390x844.png",
+    "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-tours-card-price-390x844.png",
+    "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-tours-drawer-price-390x844.png",
+    "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-tours-drawer-390x844.png"
+  ],
+  "blocked_bff_writes": [],
+  "checks": [
+    {
+      "name": "session.tenant",
+      "expected": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+      "actual": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "facts-1440x900.probe fact shown",
+      "expected": "\"S257 probe price\" in Your facts",
+      "actual": "shown",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "portal-facts-1440x900.theme",
+      "expected": "light",
+      "actual": "light",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-facts-1440x900.no horizontal overflow",
+      "expected": "scrollWidth <= 1440",
+      "actual": "1440",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "tours-1440x900.multi-tier card found",
+      "expected": "a card whose price has several tiers",
+      "actual": "\"Beijing Zoo, Hutongs and Temples — 1 Day\" via search \"Beijing Zoo, Hutongs and Temples\": 2-5 Traveller : $178 · 6-9 Traveller : $100 · 10 + Traveller : $80",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "tours-1440x900.card price does not start with \"·\"",
+      "expected": "no leading \"·\"",
+      "actual": "\"2-5 Traveller : $178 · 6-9 Traveller : $\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "tours-1440x900.card price tiers in one text",
+      "expected": "no line break, tiers joined by \"·\"",
+      "actual": "\"2-5 Traveller : $178 · 6-9 Traveller : $100 · 10 + Traveller : $80\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-card-price-1440x900.theme",
+      "expected": "light",
+      "actual": "light",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-card-price-1440x900.no horizontal overflow",
+      "expected": "scrollWidth <= 1440",
+      "actual": "1440",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "tours-1440x900.drawer price chip does not start with \"·\"",
+      "expected": "no leading \"·\"",
+      "actual": "\"2-5 Traveller : $178 · 6-9 Traveller : $\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "tours-1440x900.drawer price tiers in one text",
+      "expected": "no line break, tiers joined by \"·\"",
+      "actual": "\"2-5 Traveller : $178 · 6-9 Traveller : $100 · 10 + Traveller : $80\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "tours-1440x900.drawer price icon keeps its width",
+      "expected": "wallet icon >= 10 px wide (not a dot)",
+      "actual": "11 px",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-drawer-price-1440x900.theme",
+      "expected": "light",
+      "actual": "light",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-drawer-price-1440x900.no horizontal overflow",
+      "expected": "scrollWidth <= 1440",
+      "actual": "1440",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "portal-tours-drawer-1440x900.theme",
+      "expected": "light",
+      "actual": "light",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-drawer-1440x900.no horizontal overflow",
+      "expected": "scrollWidth <= 1440",
+      "actual": "1440",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "facts-390x844.probe fact shown",
+      "expected": "\"S257 probe price\" in Your facts",
+      "actual": "shown",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "portal-facts-390x844.theme",
+      "expected": "light",
+      "actual": "light",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-facts-390x844.no horizontal overflow",
+      "expected": "scrollWidth <= 390",
+      "actual": "390",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "tours-390x844.multi-tier card found",
+      "expected": "a card whose price has several tiers",
+      "actual": "\"Beijing Zoo, Hutongs and Temples — 1 Day\" via search \"Beijing Zoo, Hutongs and Temples — 1 Day\": 2-5 Traveller : $178 · 6-9 Traveller : $100 · 10 + Traveller : $80",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "tours-390x844.card price does not start with \"·\"",
+      "expected": "no leading \"·\"",
+      "actual": "\"2-5 Traveller : $178 · 6-9 Traveller : $\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "tours-390x844.card price tiers in one text",
+      "expected": "no line break, tiers joined by \"·\"",
+      "actual": "\"2-5 Traveller : $178 · 6-9 Traveller : $100 · 10 + Traveller : $80\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-card-price-390x844.theme",
+      "expected": "light",
+      "actual": "light",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-card-price-390x844.no horizontal overflow",
+      "expected": "scrollWidth <= 390",
+      "actual": "390",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "tours-390x844.drawer price chip does not start with \"·\"",
+      "expected": "no leading \"·\"",
+      "actual": "\"2-5 Traveller : $178 · 6-9 Traveller : $\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "tours-390x844.drawer price tiers in one text",
+      "expected": "no line break, tiers joined by \"·\"",
+      "actual": "\"2-5 Traveller : $178 · 6-9 Traveller : $100 · 10 + Traveller : $80\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "tours-390x844.drawer price icon keeps its width",
+      "expected": "wallet icon >= 10 px wide (not a dot)",
+      "actual": "11 px",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-drawer-price-390x844.theme",
+      "expected": "light",
+      "actual": "light",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-drawer-price-390x844.no horizontal overflow",
+      "expected": "scrollWidth <= 390",
+      "actual": "390",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "portal-tours-drawer-390x844.theme",
+      "expected": "light",
+      "actual": "light",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "portal-tours-drawer-390x844.no horizontal overflow",
+      "expected": "scrollWidth <= 390",
+      "actual": "390",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "read-only: no BFF write attempted",
+      "expected": "0 non-GET /api/tenant/** requests",
+      "actual": "0",
+      "pass": true,
+      "strict": true
+    }
+  ],
+  "strict_failures": [],
+  "warnings": [],
+  "verdict": "PASS"
+}

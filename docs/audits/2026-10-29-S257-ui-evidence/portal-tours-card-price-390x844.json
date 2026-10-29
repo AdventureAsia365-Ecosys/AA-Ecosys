@@ -1,0 +1,32 @@
+{
+  "shot": "portal-tours-card-price-390x844",
+  "png": "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-tours-card-price-390x844.png",
+  "url": "https://portal.lumiguides.it.com/portal/tours",
+  "at": "2026-10-29T07:07:34.941Z",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "theme": "light",
+  "console_errors_app_origin": [],
+  "failed_requests_app_origin_ge_400": [],
+  "network_failures_app_origin": [],
+  "non_get_requests_app_origin_outside_bff": [],
+  "blocked_bff_writes_total": 0,
+  "layout": {
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "bodyScrollWidth": 390,
+    "horizontal_overflow": false
+  },
+  "route": "/portal/tours",
+  "source": "AA-Partner #117 (AA-671)",
+  "tour": "Beijing Zoo, Hutongs and Temples — 1 Day",
+  "found_via": "search \"Beijing Zoo, Hutongs and Temples — 1 Day\"",
+  "card_price_text": "2-5 Traveller : $178 · 6-9 Traveller : $100 · 10 + Traveller : $80",
+  "card_price_rendered_lines": 2,
+  "checks": {
+    "no_leading_dot": true,
+    "tiers_in_one_text": true
+  }
+}

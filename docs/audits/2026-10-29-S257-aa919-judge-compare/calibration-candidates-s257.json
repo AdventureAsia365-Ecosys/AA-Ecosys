@@ -1,0 +1,1490 @@
+{
+ "golden_set": "aa729@1.2.0",
+ "target_per_label": 5,
+ "stratum_target": 3,
+ "seed": 919,
+ "writers": {
+  "a1": {
+   "calibration_items": 50,
+   "strata": [
+    {
+     "dim": "all",
+     "value": "all",
+     "n": 50,
+     "labels": {
+      "pass": 6,
+      "fail": 44
+     },
+     "measurable_possible": true
+    },
+    {
+     "dim": "tenant",
+     "value": "platform",
+     "n": 50,
+     "labels": {
+      "pass": 6,
+      "fail": 44
+     },
+     "measurable_possible": true
+    },
+    {
+     "dim": "tier",
+     "value": "culinary",
+     "n": 1,
+     "labels": {
+      "pass": 0,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "cycle_bike",
+     "n": 11,
+     "labels": {
+      "pass": 2,
+      "fail": 9
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "fact_dense",
+     "n": 15,
+     "labels": {
+      "pass": 0,
+      "fail": 15
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "known_failure",
+     "n": 11,
+     "labels": {
+      "pass": 0,
+      "fail": 11
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "long_18d",
+     "n": 7,
+     "labels": {
+      "pass": 2,
+      "fail": 5
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "long_9d",
+     "n": 25,
+     "labels": {
+      "pass": 3,
+      "fail": 22
+     },
+     "measurable_possible": true
+    },
+    {
+     "dim": "tier",
+     "value": "poor_raw",
+     "n": 9,
+     "labels": {
+      "pass": 1,
+      "fail": 8
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "trek_hike",
+     "n": 8,
+     "labels": {
+      "pass": 1,
+      "fail": 7
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "untiered",
+     "n": 3,
+     "labels": {
+      "pass": 1,
+      "fail": 2
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "water",
+     "n": 1,
+     "labels": {
+      "pass": 0,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "wildlife",
+     "n": 5,
+     "labels": {
+      "pass": 0,
+      "fail": 5
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "split",
+     "value": "holdout",
+     "n": 15,
+     "labels": {
+      "pass": 2,
+      "fail": 13
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "split",
+     "value": "tune",
+     "n": 35,
+     "labels": {
+      "pass": 4,
+      "fail": 31
+     },
+     "measurable_possible": true
+    }
+   ],
+   "gaps": [
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "culinary",
+     "label": "pass",
+     "have": 0,
+     "need": 3
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "culinary",
+     "label": "fail",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "cycle_bike",
+     "label": "pass",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "fact_dense",
+     "label": "pass",
+     "have": 0,
+     "need": 3
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "known_failure",
+     "label": "pass",
+     "have": 0,
+     "need": 3
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "long_18d",
+     "label": "pass",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "poor_raw",
+     "label": "pass",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "trek_hike",
+     "label": "pass",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "water",
+     "label": "pass",
+     "have": 0,
+     "need": 3
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "water",
+     "label": "fail",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "a1",
+     "dim": "tier",
+     "value": "wildlife",
+     "label": "pass",
+     "have": 0,
+     "need": 3
+    }
+   ],
+   "pool": {
+    "candidates": 810,
+    "by_lean": {
+     "pass": 810
+    },
+    "by_channel": {
+     "None": 810
+    },
+    "by_tenant": {
+     "None": 810
+    }
+   },
+   "picks": [],
+   "unfilled": [
+    "tier:culinary:pass",
+    "tier:culinary:fail",
+    "tier:cycle_bike:pass",
+    "tier:fact_dense:pass",
+    "tier:known_failure:pass",
+    "tier:long_18d:pass",
+    "tier:poor_raw:pass",
+    "tier:trek_hike:pass",
+    "tier:water:pass",
+    "tier:water:fail",
+    "tier:wildlife:pass"
+   ]
+  },
+  "t2": {
+   "calibration_items": 8,
+   "strata": [
+    {
+     "dim": "all",
+     "value": "all",
+     "n": 8,
+     "labels": {
+      "pass": 3,
+      "fail": 5
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tenant",
+     "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "n": 3,
+     "labels": {
+      "pass": 0,
+      "fail": 3
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tenant",
+     "value": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "n": 2,
+     "labels": {
+      "pass": 2,
+      "fail": 0
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tenant",
+     "value": "885d4916-007b-415e-9261-909ad43c6d00",
+     "n": 1,
+     "labels": {
+      "pass": 0,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tenant",
+     "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "n": 2,
+     "labels": {
+      "pass": 1,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "fact_dense",
+     "n": 2,
+     "labels": {
+      "pass": 1,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "known_failure",
+     "n": 5,
+     "labels": {
+      "pass": 1,
+      "fail": 4
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "long_9d",
+     "n": 8,
+     "labels": {
+      "pass": 3,
+      "fail": 5
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "split",
+     "value": "holdout",
+     "n": 2,
+     "labels": {
+      "pass": 1,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "split",
+     "value": "tune",
+     "n": 6,
+     "labels": {
+      "pass": 2,
+      "fail": 4
+     },
+     "measurable_possible": false
+    }
+   ],
+   "gaps": [
+    {
+     "writer": "t2",
+     "dim": "all",
+     "value": "all",
+     "label": "pass",
+     "have": 3,
+     "need": 2
+    },
+    {
+     "writer": "t2",
+     "dim": "tenant",
+     "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "label": "pass",
+     "have": 0,
+     "need": 3
+    },
+    {
+     "writer": "t2",
+     "dim": "tenant",
+     "value": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "label": "pass",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "t2",
+     "dim": "tenant",
+     "value": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "label": "fail",
+     "have": 0,
+     "need": 3
+    },
+    {
+     "writer": "t2",
+     "dim": "tenant",
+     "value": "885d4916-007b-415e-9261-909ad43c6d00",
+     "label": "pass",
+     "have": 0,
+     "need": 3
+    },
+    {
+     "writer": "t2",
+     "dim": "tenant",
+     "value": "885d4916-007b-415e-9261-909ad43c6d00",
+     "label": "fail",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t2",
+     "dim": "tenant",
+     "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "label": "pass",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t2",
+     "dim": "tenant",
+     "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "label": "fail",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t2",
+     "dim": "tier",
+     "value": "fact_dense",
+     "label": "pass",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t2",
+     "dim": "tier",
+     "value": "fact_dense",
+     "label": "fail",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t2",
+     "dim": "tier",
+     "value": "known_failure",
+     "label": "pass",
+     "have": 1,
+     "need": 2
+    }
+   ],
+   "pool": {
+    "candidates": 10,
+    "by_lean": {
+     "None": 10
+    },
+    "by_channel": {
+     "None": 10
+    },
+    "by_tenant": {
+     "9149d3c6-fcaf-4400-8e7a-4ed5e557e146": 5,
+     "20d07d32-ed98-405f-81d5-0c2399c9fcdf": 3,
+     "692a3214-5cc2-46c6-a5ca-265389747269": 2
+    }
+   },
+   "picks": [
+    {
+     "id_kind": "version_id",
+     "id": "f4185e7e-f95d-469e-81bb-cd2f123b01b2",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": null,
+     "days": 8,
+     "fills": "all:all:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    },
+    {
+     "id_kind": "version_id",
+     "id": "49a48cfd-8d59-4c89-b2f2-20ef5c392abf",
+     "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "channel": null,
+     "days": 1,
+     "fills": "all:all:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    },
+    {
+     "id_kind": "version_id",
+     "id": "88f2ef94-79c6-493e-b7f4-42a185e4be3e",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": null,
+     "days": 1,
+     "fills": "all:all:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    },
+    {
+     "id_kind": "version_id",
+     "id": "65ddf633-06be-4557-9999-5ad4b631d2b3",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": null,
+     "days": 7,
+     "fills": "all:all:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    },
+    {
+     "id_kind": "version_id",
+     "id": "006c0047-9700-429d-9847-6f0fa8d1c378",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": null,
+     "days": 4,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    },
+    {
+     "id_kind": "version_id",
+     "id": "37c7fab7-dae1-43c7-b170-bd6ebe713143",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": null,
+     "days": 2,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    },
+    {
+     "id_kind": "version_id",
+     "id": "9c017a37-1ac6-42b6-8ffc-72b059eae4c8",
+     "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "channel": null,
+     "days": 15,
+     "fills": "tenant:692a3214-5cc2-46c6-a5ca-265389747269:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    },
+    {
+     "id_kind": "version_id",
+     "id": "ee5fa669-c169-407a-8fb5-e84df69fd9b7",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": null,
+     "days": 6,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    },
+    {
+     "id_kind": "version_id",
+     "id": "92de5ed6-6ad9-47d9-a712-cfd293766c99",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": null,
+     "days": 7,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    },
+    {
+     "id_kind": "version_id",
+     "id": "2dc60f30-9f6d-4db5-974b-292e3f83b511",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": null,
+     "days": 1,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:pass",
+     "lean": null,
+     "signals": {
+      "qa_failed": false,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "review": null
+     }
+    }
+   ],
+   "unfilled": [
+    "tenant:692a3214-5cc2-46c6-a5ca-265389747269:fail",
+    "tenant:885d4916-007b-415e-9261-909ad43c6d00:pass",
+    "tenant:885d4916-007b-415e-9261-909ad43c6d00:fail",
+    "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:fail",
+    "tier:fact_dense:pass",
+    "tier:fact_dense:fail",
+    "tier:known_failure:pass"
+   ]
+  },
+  "t9_blog": {
+   "calibration_items": 13,
+   "strata": [
+    {
+     "dim": "all",
+     "value": "all",
+     "n": 13,
+     "labels": {
+      "pass": 6,
+      "fail": 7
+     },
+     "measurable_possible": true
+    },
+    {
+     "dim": "channel",
+     "value": "blog",
+     "n": 13,
+     "labels": {
+      "pass": 6,
+      "fail": 7
+     },
+     "measurable_possible": true
+    },
+    {
+     "dim": "tenant",
+     "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "n": 7,
+     "labels": {
+      "pass": 5,
+      "fail": 2
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tenant",
+     "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "n": 6,
+     "labels": {
+      "pass": 1,
+      "fail": 5
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "held",
+     "n": 7,
+     "labels": {
+      "pass": 2,
+      "fail": 5
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "known_failure",
+     "n": 7,
+     "labels": {
+      "pass": 2,
+      "fail": 5
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "untiered",
+     "n": 6,
+     "labels": {
+      "pass": 4,
+      "fail": 2
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "split",
+     "value": "holdout",
+     "n": 3,
+     "labels": {
+      "pass": 2,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "split",
+     "value": "tune",
+     "n": 10,
+     "labels": {
+      "pass": 4,
+      "fail": 6
+     },
+     "measurable_possible": true
+    }
+   ],
+   "gaps": [
+    {
+     "writer": "t9_blog",
+     "dim": "tenant",
+     "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "label": "fail",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "t9_blog",
+     "dim": "tenant",
+     "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "label": "pass",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t9_blog",
+     "dim": "tier",
+     "value": "held",
+     "label": "pass",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "t9_blog",
+     "dim": "tier",
+     "value": "known_failure",
+     "label": "pass",
+     "have": 2,
+     "need": 1
+    }
+   ],
+   "pool": {
+    "candidates": 147,
+    "by_lean": {
+     "None": 74,
+     "fail": 70,
+     "pass": 3
+    },
+    "by_channel": {
+     "blog": 147
+    },
+    "by_tenant": {
+     "20d07d32-ed98-405f-81d5-0c2399c9fcdf": 67,
+     "9149d3c6-fcaf-4400-8e7a-4ed5e557e146": 70,
+     "692a3214-5cc2-46c6-a5ca-265389747269": 5,
+     "885d4916-007b-415e-9261-909ad43c6d00": 5
+    }
+   },
+   "picks": [
+    {
+     "id_kind": "piece_id",
+     "id": "be02eff4-885c-4df0-ab05-0606eb5f4867",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": "blog",
+     "days": null,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:fail",
+     "lean": "fail",
+     "signals": {
+      "held": true,
+      "approved": false,
+      "published": false,
+      "edited": true,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "2cb6986e-4f2c-4e21-b2c4-df26dd77cb53",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": "blog",
+     "days": null,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:fail",
+     "lean": "fail",
+     "signals": {
+      "held": true,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "37047c45-4940-4512-9023-7cda75a4106f",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": "blog",
+     "days": null,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "23d46bb8-ae1d-4253-83a0-e9a9915ffa74",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": "blog",
+     "days": null,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "ed42238d-25fb-4880-a619-fda465389b3a",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": "blog",
+     "days": null,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "f1f8cac9-ccbe-468b-b30d-179d542372e6",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": "blog",
+     "days": null,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    }
+   ],
+   "unfilled": [
+    "tier:held:pass",
+    "tier:known_failure:pass"
+   ]
+  },
+  "t9_social": {
+   "calibration_items": 13,
+   "strata": [
+    {
+     "dim": "all",
+     "value": "all",
+     "n": 13,
+     "labels": {
+      "pass": 8,
+      "fail": 5
+     },
+     "measurable_possible": true
+    },
+    {
+     "dim": "channel",
+     "value": "linkedin",
+     "n": 13,
+     "labels": {
+      "pass": 8,
+      "fail": 5
+     },
+     "measurable_possible": true
+    },
+    {
+     "dim": "tenant",
+     "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "n": 3,
+     "labels": {
+      "pass": 2,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tenant",
+     "value": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "n": 3,
+     "labels": {
+      "pass": 1,
+      "fail": 2
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tenant",
+     "value": "885d4916-007b-415e-9261-909ad43c6d00",
+     "n": 3,
+     "labels": {
+      "pass": 2,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tenant",
+     "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "n": 4,
+     "labels": {
+      "pass": 3,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "held",
+     "n": 5,
+     "labels": {
+      "pass": 2,
+      "fail": 3
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "known_failure",
+     "n": 5,
+     "labels": {
+      "pass": 2,
+      "fail": 3
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "tier",
+     "value": "untiered",
+     "n": 8,
+     "labels": {
+      "pass": 6,
+      "fail": 2
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "split",
+     "value": "holdout",
+     "n": 3,
+     "labels": {
+      "pass": 2,
+      "fail": 1
+     },
+     "measurable_possible": false
+    },
+    {
+     "dim": "split",
+     "value": "tune",
+     "n": 10,
+     "labels": {
+      "pass": 6,
+      "fail": 4
+     },
+     "measurable_possible": true
+    }
+   ],
+   "gaps": [
+    {
+     "writer": "t9_social",
+     "dim": "tenant",
+     "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "label": "pass",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "t9_social",
+     "dim": "tenant",
+     "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "label": "fail",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t9_social",
+     "dim": "tenant",
+     "value": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "label": "pass",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t9_social",
+     "dim": "tenant",
+     "value": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "label": "fail",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "t9_social",
+     "dim": "tenant",
+     "value": "885d4916-007b-415e-9261-909ad43c6d00",
+     "label": "pass",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "t9_social",
+     "dim": "tenant",
+     "value": "885d4916-007b-415e-9261-909ad43c6d00",
+     "label": "fail",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t9_social",
+     "dim": "tenant",
+     "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "label": "fail",
+     "have": 1,
+     "need": 2
+    },
+    {
+     "writer": "t9_social",
+     "dim": "tier",
+     "value": "held",
+     "label": "pass",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "t9_social",
+     "dim": "tier",
+     "value": "known_failure",
+     "label": "pass",
+     "have": 2,
+     "need": 1
+    },
+    {
+     "writer": "t9_social",
+     "dim": "channel",
+     "value": "facebook",
+     "label": "pass",
+     "have": 0,
+     "need": 3
+    },
+    {
+     "writer": "t9_social",
+     "dim": "channel",
+     "value": "facebook",
+     "label": "fail",
+     "have": 0,
+     "need": 3
+    }
+   ],
+   "pool": {
+    "candidates": 123,
+    "by_lean": {
+     "None": 110,
+     "fail": 12,
+     "pass": 1
+    },
+    "by_channel": {
+     "linkedin": 122,
+     "facebook": 1
+    },
+    "by_tenant": {
+     "20d07d32-ed98-405f-81d5-0c2399c9fcdf": 41,
+     "692a3214-5cc2-46c6-a5ca-265389747269": 29,
+     "885d4916-007b-415e-9261-909ad43c6d00": 24,
+     "9149d3c6-fcaf-4400-8e7a-4ed5e557e146": 29
+    }
+   },
+   "picks": [
+    {
+     "id_kind": "piece_id",
+     "id": "d67e3178-26e7-4a4d-882c-d6de65ce2593",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": "facebook",
+     "days": null,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:pass",
+     "lean": "pass",
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": true,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "1bec2b23-69b3-45d8-ad8d-259efcbb2d82",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "d075fa29-983c-4587-ac0f-8a2707cc90e8",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:fail",
+     "lean": "fail",
+     "signals": {
+      "held": true,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "17f6fa18-46bd-4157-8423-0f3fc625dc36",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:fail",
+     "lean": "fail",
+     "signals": {
+      "held": true,
+      "approved": false,
+      "published": false,
+      "edited": true,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "1dfce76b-9c80-4fcb-a224-952b301fa351",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:fail",
+     "lean": "fail",
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": true,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "5dc28ab1-fd49-4385-a5b9-0e5acb597d4b",
+     "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf:fail",
+     "lean": "fail",
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": true,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "a3d82ff1-d359-46c4-82d9-270d6d9655ad",
+     "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:692a3214-5cc2-46c6-a5ca-265389747269:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "6595dd19-4e8b-4739-a9c2-c92104adfa51",
+     "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:692a3214-5cc2-46c6-a5ca-265389747269:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "f6fc7e71-42c4-4b39-b270-84cdfd4d5662",
+     "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:692a3214-5cc2-46c6-a5ca-265389747269:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "ff010df4-79c3-4e3b-ba1f-0d5695cf4ec0",
+     "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:692a3214-5cc2-46c6-a5ca-265389747269:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "263e5a5a-e4d8-4cdc-ad9e-2545a26c757d",
+     "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:692a3214-5cc2-46c6-a5ca-265389747269:fail",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "8ce33dbc-1fc0-4d4f-b8c3-8eba06cd176a",
+     "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:692a3214-5cc2-46c6-a5ca-265389747269:fail",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "83d14812-c209-4690-a7a7-318d10ac152c",
+     "tenant_id": "885d4916-007b-415e-9261-909ad43c6d00",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:885d4916-007b-415e-9261-909ad43c6d00:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "85f7f3a2-8589-42c4-a72a-a250f1b1d76b",
+     "tenant_id": "885d4916-007b-415e-9261-909ad43c6d00",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:885d4916-007b-415e-9261-909ad43c6d00:pass",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "a1e1f1f4-2b2b-44ba-ba76-8e91641ce435",
+     "tenant_id": "885d4916-007b-415e-9261-909ad43c6d00",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:885d4916-007b-415e-9261-909ad43c6d00:fail",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "0151508d-1e53-4b64-bd3e-547a36b999e6",
+     "tenant_id": "885d4916-007b-415e-9261-909ad43c6d00",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:885d4916-007b-415e-9261-909ad43c6d00:fail",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "0541e181-8a24-4de3-88a8-48803514c029",
+     "tenant_id": "885d4916-007b-415e-9261-909ad43c6d00",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:885d4916-007b-415e-9261-909ad43c6d00:fail",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "8ad89553-21ff-4bb3-badb-f7022f55a1f3",
+     "tenant_id": "885d4916-007b-415e-9261-909ad43c6d00",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:885d4916-007b-415e-9261-909ad43c6d00:fail",
+     "lean": null,
+     "signals": {
+      "held": false,
+      "approved": true,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "b5943c24-bd04-47fe-9c9f-e54b6bd11e0c",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:fail",
+     "lean": "fail",
+     "signals": {
+      "held": true,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "a7e18faf-4b68-4453-8020-000e38109674",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:fail",
+     "lean": "fail",
+     "signals": {
+      "held": true,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "03248f56-2542-4e92-aed2-7db0193f1f9a",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:fail",
+     "lean": "fail",
+     "signals": {
+      "held": true,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    },
+    {
+     "id_kind": "piece_id",
+     "id": "e980728e-f77a-47ba-8b59-0b63a28e301c",
+     "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+     "channel": "linkedin",
+     "days": null,
+     "fills": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146:fail",
+     "lean": "fail",
+     "signals": {
+      "held": true,
+      "approved": false,
+      "published": false,
+      "edited": false,
+      "human_label": null
+     }
+    }
+   ],
+   "unfilled": [
+    "tier:held:pass",
+    "tier:known_failure:pass",
+    "channel:facebook:pass",
+    "channel:facebook:fail"
+   ]
+  }
+ }
+}

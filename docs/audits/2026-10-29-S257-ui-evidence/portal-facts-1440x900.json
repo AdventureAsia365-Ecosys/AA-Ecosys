@@ -1,0 +1,72 @@
+{
+  "shot": "portal-facts-1440x900",
+  "png": "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-facts-1440x900.png",
+  "url": "https://portal.lumiguides.it.com/portal/facts",
+  "at": "2026-10-29T07:07:18.086Z",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "theme": "light",
+  "console_errors_app_origin": [],
+  "failed_requests_app_origin_ge_400": [],
+  "network_failures_app_origin": [
+    {
+      "method": "GET",
+      "url": "https://portal.lumiguides.it.com/api/tenant/v1/billing",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "method": "GET",
+      "url": "https://portal.lumiguides.it.com/api/tenant/v1/quota",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "method": "GET",
+      "url": "https://portal.lumiguides.it.com/api/tenant/v1/tours/my-versions?page=1&page_size=100",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "method": "GET",
+      "url": "https://portal.lumiguides.it.com/portal/dashboard?_rsc=18PNG-OKjy3eeG1j",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "method": "GET",
+      "url": "https://portal.lumiguides.it.com/api/tenant/v1/tours/pool?page_size=1",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "method": "GET",
+      "url": "https://portal.lumiguides.it.com/portal/tours?_rsc=18PNG-OKjy3eeG1j",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "method": "GET",
+      "url": "https://portal.lumiguides.it.com/portal/brand?_rsc=18PNG-OKjy3eeG1j",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "method": "GET",
+      "url": "https://portal.lumiguides.it.com/portal/tours/mine?_rsc=18PNG-OKjy3eeG1j",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "method": "GET",
+      "url": "https://portal.lumiguides.it.com/api/tenant/v1/notifications?limit=20",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "non_get_requests_app_origin_outside_bff": [],
+  "blocked_bff_writes_total": 0,
+  "layout": {
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "bodyScrollWidth": 1440,
+    "horizontal_overflow": false
+  },
+  "route": "/portal/facts",
+  "source": "AA-Partner #120",
+  "probe_fact": "S257 probe price",
+  "probe_fact_shown": true
+}

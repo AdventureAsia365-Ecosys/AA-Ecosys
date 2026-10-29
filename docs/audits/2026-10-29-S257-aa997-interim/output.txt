@@ -1,0 +1,57 @@
+AA-997 interim audit (read-only) at 2026-10-29 04:03 rule aa997.1
+P1 jobs=10 by(mode,status,result)={"apply/queued/-": 1, "apply/succeeded/continuing": 3, "apply/succeeded/ok": 1, "apply/succeeded/stopped_credit_limit": 2, "dry_run/succeeded/-": 3}
+P1 apply sums {"rows": 2204, "done": 1621, "errors": 0, "confirmed": 325, "non_place": 99, "off_route": 193, "llm_point": 1004, "country_fixed": 3, "skipped": 0, "geocoder_requests": 1500} cost_usd=0.0000 moved_km_max=1190
+P1 last apply finished=2026-10-29 00:56 remaining=2221 waiting=[('queued', '2026-10-30 00:13')]
+P1 stamped outcomes (all) {"confirmed": 325, "non_place": 99, "off_route": 193, "llm_point": 1004} left_llm=2221
+P1 IN conf=38 np=10 off=36 llm=148 left=576
+P1 CN conf=74 np=47 off=82 llm=447 left=0
+P1 NP conf=22 np=3 off=7 llm=31 left=345
+P1 LA conf=67 np=24 off=28 llm=183 left=0
+P1 LK conf=8 np=4 off=12 llm=14 left=210
+P1 JP conf=11 np=1 off=1 llm=20 left=213
+P1 KR conf=10 np=1 off=4 llm=9 left=214
+P1 TH conf=12 np=0 off=2 llm=5 left=205
+P1 BT conf=58 np=4 off=1 llm=89 left=0
+P1 PH conf=5 np=0 off=3 llm=14 left=124
+P1 PK conf=3 np=0 off=1 llm=7 left=103
+P1 TW conf=2 np=0 off=1 llm=8 left=93
+P1 MN conf=9 np=1 off=9 llm=7 left=70
+P1 VN conf=0 np=0 off=1 llm=2 left=41
+P1 KH conf=4 np=3 off=3 llm=14 left=0
+P1 other conf=2 np=1 off=2 llm=6 left=27
+P1 confirmed moved_km {"<1": 61, "1-5": 63, "5-25": 86, "25-100": 82, ">100": 33}
+P1 destinations review_reason {"-": 6400, "llm_point": 770, "unconfirmed_hard_type": 728, "off_route": 193, "non_place": 99, "centroid_fallback": 9} located_by {"geoapify": 4167, "llm": 3517, "mapbox": 289, "-": 226}
+P2 verified=600 matched=600 tags={"kept": 425, "np_still_pinned": 20, "unchanged": 37, "moved_ok": 12, "unchanged_flagged": 63, "moved_still_wrong": 6, "np_flagged": 8, "unsure": 19, "regressed": 3, "fixed": 5, "iso_fixed": 2}
+P2 random200 before C=154 E=38 U=8 | now C=159 E=33 U=8 M=0 | correct 77.0% -> 79.5%
+P2 flagged400 before C=286 E=103 U=11 | now C=293 E=96 U=11 M=0 | correct 71.5% -> 73.2%
+P2 overall S254: flag-strat correct 75.4% ±4.2% error 21.0% | prov-strat correct 74.8% ±3.9%
+P2 overall now: flag-strat correct 77.7% ±4.1% error 18.7% | prov-strat correct 77.1% ±3.8%
+P2 touched n=185 (random 35) correct 57.8% -> 64.3%  err 36.8% -> 30.3%
+P2 untouched n=415 (random 165) correct 80.2% -> 80.2%  err 17.6% -> 17.6%
+P2 touched by outcome {"confirmed": "18/29", "llm_point": "84/132", "non_place": "8/9", "off_route": "9/15"}
+P2 touched transitions {"C>kept": 92, "WP>unchanged_flagged": 26, "TC>unchanged_flagged": 19, "C>moved_ok": 12, "U>unsure": 10, "NP>np_flagged": 8, "WP>moved_still_wrong": 6, "C>regressed": 3, "WP>fixed": 3, "WC>iso_fixed": 2, "WC>unchanged_flagged": 1, "WC>fixed": 1}
+P2 untouched S254-llm n=148 correct now 62.2% | untouched S254-geoapify n=258 correct now 90.3%
+P2 projection cells geoapify=4006@93%(n254) llm_untouched=2152@63%(n143) rl_flagged=1207@66%(n139) rl_confirmed=314@64%(n27) mapbox=210@89%(n9) rl_non_place=97@95%(n9)
+P2 projection correct now ~79.5% over 7986 of 7986 resolved rows
+P2 place_name status {"pending": 1011, "resolved": 7986, "unknown": 580} (S254: resolved 7924 pending 1203 unknown 418)
+P2 rules now (resolved 7986): dup_coords=927(S254 927) precision_area_site=730(S254 755) provenance_null=506(S254 652) tour_spread=259(S254 260) any4=2170(S254 ~2286)
+P3 live tours=892 all_confirmed(strict: linked all geoapify/manual + 0 unlinked)=57 all_linked_confirmed=76 with_llm=776 with_mapbox=479 with_flagged=662 no_places=8
+P3 tours by confirmed share {">=75%": 162, "<75%": 627, "100%": 76, ">=90%": 19}
+P3 all_linked_confirmed/tours by country India=9/218 Sri Lanka=13/122 China=16/121 Nepal=2/85 Japan=16/79 Laos=4/46 Philippines=8/44 Thailand=1/43 Taiwan=4/36 Bhutan=2/32 South Korea=0/30 Pakistan=1/18 Mongolia=0/17 Vietnam=0/1
+P3 0c608efd p14 build=ok days=2 stop_days=1 pinned=1 route=Y places=4/4 llm=0 flagged=0 unlinked=0 anchors_unresolved=1 all_confirmed=Y
+P3 2020d00f leg build=ok days=2 stop_days=2 pinned=2 route=Y places=3/5 llm=2 flagged=3 unlinked=5 anchors_unresolved=0 all_confirmed=N
+P3 229f2c60 p14 build=ok days=3 stop_days=2 pinned=2 route=Y places=0/4 llm=3 flagged=2 unlinked=0 anchors_unresolved=1 all_confirmed=N
+P3 2d9ccb23 p14 build=ok days=3 stop_days=3 pinned=3 route=Y places=5/8 llm=2 flagged=0 unlinked=6 anchors_unresolved=1 all_confirmed=N
+P3 3eda85ad p14 build=ok days=1 stop_days=0 pinned=0 route=N places=0/0 llm=0 flagged=0 unlinked=0 anchors_unresolved=1 all_confirmed=N
+P3 56e78342 p14 build=ok days=3 stop_days=2 pinned=2 route=Y places=2/4 llm=1 flagged=1 unlinked=1 anchors_unresolved=1 all_confirmed=N
+P3 90b88118 leg build=ok days=14 stop_days=12 pinned=11 route=Y places=11/15 llm=3 flagged=3 unlinked=1 anchors_unresolved=0 all_confirmed=N
+P3 a423e72e p14 build=ok days=1 stop_days=1 pinned=1 route=Y places=0/1 llm=1 flagged=0 unlinked=1 anchors_unresolved=1 all_confirmed=N
+P3 a44bf9c4 p14 build=ok days=1 stop_days=0 pinned=0 route=N places=0/0 llm=0 flagged=0 unlinked=0 anchors_unresolved=1 all_confirmed=N
+P3 ac1d5f9b p14 build=ok days=3 stop_days=2 pinned=2 route=Y places=4/5 llm=1 flagged=1 unlinked=0 anchors_unresolved=1 all_confirmed=N
+P3 b5c3c908 p14 build=ok days=1 stop_days=0 pinned=1 route=N places=0/0 llm=0 flagged=0 unlinked=1 anchors_unresolved=1 all_confirmed=N
+P3 b7188d60 p14 build=ok days=1 stop_days=1 pinned=1 route=Y places=5/6 llm=1 flagged=0 unlinked=0 anchors_unresolved=1 all_confirmed=N
+P3 b9b39260 p14 build=ok days=1 stop_days=1 pinned=1 route=Y places=5/6 llm=1 flagged=0 unlinked=0 anchors_unresolved=1 all_confirmed=N
+P3 c6b24380 p14 build=ok days=3 stop_days=1 pinned=2 route=Y places=0/2 llm=1 flagged=1 unlinked=1 anchors_unresolved=1 all_confirmed=N
+P3 c99a1434 p14 build=ok days=3 stop_days=2 pinned=3 route=Y places=2/4 llm=2 flagged=1 unlinked=0 anchors_unresolved=1 all_confirmed=N
+P3 e864ec99 p14 build=ok days=3 stop_days=3 pinned=3 route=Y places=3/7 llm=4 flagged=0 unlinked=5 anchors_unresolved=1 all_confirmed=N
+P3 recheck_14 summary: route=13/16 all_confirmed=1/16 missing=[]
