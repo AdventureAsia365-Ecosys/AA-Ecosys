@@ -1,5 +1,9 @@
 # ADR 0017 — Migrations ship in the app PR; expand files are auto-applied on Dev by an Infra pipeline before deploy
 
+<!-- TODO(orchestrator, AA-993 M5): ONLY after the M4b end-to-end proof is green (Booking bk-034: merge -> copied ->
+     applied -> probe green -> schema-gate pass -> deploy -> verify, no human step), replace the Status line below with:
+     "- **Status:** Accepted (<date>, S<nnn>). Built in AA-993 Phase E (I1, M1, M2a, M2b, M4a, M3, M4b); proof: <Deploy
+     Dev run URL> and <Migration Apply run URL>." and set the 0017 row of docs/adr/README.md to Accepted. -->
 - **Status:** Proposed (2026-10-28, S254). Drafted from the AA-993 design (S252); nothing of it is built yet. The
   answers to the design's open questions that this ADR depends on (Q5, Q7, Q8, Q11, Q14–Q17) take their proposed
   answer; Q7 and Q16 were approved by the tech lead on 2026-10-26 (S252).
