@@ -5,7 +5,9 @@
   schema-dump PR are merged by ci-bot on Dev.
 - **Scope:** AA-CIS-Infra (`db-schema-dump.yml` publish job, the coming `migration-sync.yml`), the root repo
   (`bot/db-schema-reference` PRs), the GitHub App `aa-ci-bot` (live name `aa-ecosys-ci-bot`). The app repos are
-  **not** affected: none of their workflows gets a token for another repo.
+  **not** affected: none of their workflows gets a token for AA-CIS-Infra or the root repo (the one cross-repo app
+  token, the CIS kit sync of [ADR 0016](0016-one-design-system-guarded-kit-copies.md) decision 6, reaches only the
+  three consumer app repos; decision 3).
 - **Amends:** [ADR 0011](0011-github-app-identity-and-merge-rights.md) decision 1 (what `aa-ci-bot` is used for) and
   decision 3 (who acts as which identity: the row "release-please release PR, Infra root docs PRs"). Decision 4 (merge
   rights per risk tier) is unchanged for every PR a person or an agent opens.
@@ -45,9 +47,17 @@ point 1: such a token could push `db/run_migration.py`, and the next auto-apply 
    Pull requests write** (`actions/create-github-app-token` with `repositories` and `permission-*`). The copy job's
    token covers AA-CIS-Infra only; the dump job's token covers the root repo only. No token gets Workflows, Actions,
    Administration or Secrets.
-3. **No app workflow mints a token for another repo.** The copy is pulled: Infra reads the public owner repos'
-   `main` anonymously (set difference of migration files) and never trusts a payload from an app. There is no
-   `repository_dispatch` from the apps.
+3. **No app workflow mints a token for AA-CIS-Infra or the root repo.** The copy is pulled: Infra reads the public
+   owner repos' `main` anonymously (set difference of migration files) and never trusts a payload from an app. There
+   is no `repository_dispatch` from the apps.
+   The one cross-repo token an app workflow mints is AA-CIS-App `kit-sync.yml` (ADR 0016 decision 6, AA-994 S3s):
+   per run, one token per consumer app repo (AA-Partner, AA-Booking, AA-TripPlanner-Web), Contents + Pull requests
+   write, in the main-only `release` environment, used to push branch `bot/kit-sync` and open its PR, which a person
+   or the orchestrating agent merges. It cannot reach AA-CIS-Infra or the root repo, so the database-rights concern
+   of critic point 1 does not apply; the same key can already mint any installation token, so the narrowing in the
+   workflow is the control. *(Clarified 2026-10-29, S257: the earlier wording "for another repo" contradicted ADR
+   0016 decision 6, accepted the day before.)*
+
 4. **ci-bot cannot push to AA-CIS-Infra `main`.** The ruleset on `main` (AA-CIS-Infra
    `tools/github/infra-main-ruleset.json`, applied with the tech lead's login by `tools/github/db_auto_apply_gate.sh`)
    requires a PR and green checks for every actor; ci-bot is not a bypass actor. Its merge of a copy PR is the only way

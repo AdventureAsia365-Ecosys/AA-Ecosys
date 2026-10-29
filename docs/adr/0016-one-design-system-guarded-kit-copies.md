@@ -164,6 +164,11 @@ lockfile.
   requests RW), regenerates branch `bot/kit-sync` from the consumer's `main`, copies with the lock's profile, and opens
   or updates one PR `chore: sync UI kit core to AA-CIS-App <sha7>` with the core log, the manifest diff and
   `Refs AA-994`. App-token PRs trigger the consumer's full CI, previews and `merge_group`.
+  *(Update 2026-10-29, AA-994 S3s: built as CIS `kit-sync.yml` + `.github/scripts/kit_sync_bot.py`; AA-Partner's
+  portal and CRM web share one PR; a repo whose copied files would not change except `MANIFEST.json` gets no PR; a
+  dispatch input `dry_run` copies and commits in the runner only. The copy code moved to CIS
+  `.github/scripts/kit-sync.sh`; `tools/kit/kit-sync.sh` runs it. "Kit consumers" is the CIS workflow
+  `kit-consumers.yml`.)*
 - A CIS PR that changes `core/` also runs **"Kit consumers"**: it overlays the new core on each consumer's `main` and
   runs that app's `tsc --noEmit` and kit lint. Non-required until the Booking catch-up is done, then required, so an
   API break is caught before the CIS merge. Core changes are additive by default; a rename keeps an alias in the
