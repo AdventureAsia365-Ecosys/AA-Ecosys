@@ -442,13 +442,21 @@ Cách cài release-please (AA-891):
 - **Mọi lần gọi tốn tiền đều đi qua gateway** và vào `shared.llm_call_log` (DM-10.4); script chạy tay dùng
   `stage = adhoc_<issue>` và một role trong writer, judge, validate.
 - **Phiên bản prompt:** một cột nullable `prompt_version` đi **cùng migration ledger v2 của AA-804** (một lần expand,
-  qua D8; N-5). Tới lúc đó, sổ đăng ký prompt (AA-900) ánh xạ id và phiên bản prompt tới file và stage.
-- **Eval:** bộ mẫu chuẩn khoảng 100 mẫu xây từ dữ liệu có sẵn là AA-729. Eval chạy **tay hoặc bằng dispatch** (D-23),
-  qua `LLMClient` với `stage = adhoc_aa900` và một trần chi tiêu. PR đổi prompt, model hay route ghi lại ID lần chạy
-  eval. Không bật trigger eval theo từng PR (N-4: đó sẽ là chi tiêu định kỳ mới).
-- **AA-900 sẽ được thu hẹp** (N-4, N-5) về sổ đăng ký prompt, runbook eval và một bảng route sinh tự động, để nó
-  không xây bộ mẫu chuẩn (AA-729) hay đụng tới ledger (AA-804). Issue Linear vẫn liệt kê migration `prompt_version`
-  và một workflow eval theo PR; phạm vi và Done-when của nó được cập nhật trước khi bắt đầu làm.
+  qua D8; N-5). Tới lúc đó, **sổ đăng ký prompt** (AA-900, CIS `docs/llm/prompt-register.md`, `APP-06-prompts`) ánh
+  xạ mỗi id prompt tới stage, file và symbol, quy tắc phiên bản và mốc eval; một unit test của CIS báo lỗi khi một dòng
+  trỏ tới file hoặc symbol không còn tồn tại.
+- **Route và model** được công bố qua **bảng route** sinh tự động [`generated/llm-routes.md`](generated/llm-routes.md)
+  (`APP-06-routes`): một bản chụp chỉ-đọc của hai bảng, render bằng `tools/docs/gen_llm_routes.py`. Sau khi đổi route
+  hay model, chụp bản mới và render lại trang; docs lint báo lỗi khi trang và bản chụp lệch nhau.
+- **Eval:** bộ mẫu chuẩn khoảng 100 mẫu xây từ dữ liệu có sẵn là AA-729 (các dòng trong `shared.eval_golden_set`,
+  AA-919). Eval chạy **tay** (D-23) dưới dạng một lần chạy R2 của bộ chạy writing-memory trong CIS, qua `LLMClient`,
+  ghi log với `stage = adhoc_aa900`, có trần mỗi lần chạy (tối đa 10 USD) và trần tháng của writing-memory. PR đổi
+  prompt, model hay route ghi ID lần chạy eval và chi phí của nó vào mục "LLM change" của mẫu PR. Không bật trigger eval
+  theo từng PR (N-4: đó sẽ là chi tiêu định kỳ mới). Quy trình: **runbook eval** của CIS `docs/llm/eval-runbook.md`
+  (`APP-06-eval`). Agent ship một PR như vậy làm theo runbook từ bước "Verify live" của `skill/aa-ship`, ghi ID lần
+  chạy sau khi deploy.
+- **Phạm vi AA-900** (thu hẹp theo N-4, N-5): sổ đăng ký prompt, runbook eval và bảng route sinh tự động. Nó không xây
+  bộ mẫu chuẩn (AA-729) và không đụng tới ledger (AA-804).
 - ADR 0009 về nền tảng AI, các cột `app` và `is_shadow` của ledger và AI Use Register là AA-804 (U-34).
 
 ### 5.8 Phiên bản tài liệu
