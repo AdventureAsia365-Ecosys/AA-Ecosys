@@ -1,0 +1,156 @@
+{
+ "main": "fb683750bb96093de9f32a3253a81ec7e162bd2c",
+ "points": [
+  {
+   "date": "2026-10-01",
+   "why": "4 weeks before today",
+   "rev": "b1c4b9d7",
+   "registry": null,
+   "main_active_gates_used_in_code": 8,
+   "main_active_gates_missing_in_code": [
+    "F0_complete",
+    "F11_brand_name",
+    "F12_scope",
+    "F13_hygiene",
+    "F13_leak",
+    "F13_repeat",
+    "F14_first_line",
+    "F14_social_shape",
+    "F15_voice",
+    "F16_faq",
+    "F17_trip_fact",
+    "F18_rarity",
+    "F19_authenticity",
+    "F2_lexicon",
+    "F2_platform_truth",
+    "F2_style_warn",
+    "F2_superlatives",
+    "T3_grounding"
+   ]
+  },
+  {
+   "date": "2026-10-21",
+   "why": "freeze start (S246)",
+   "rev": "47ae118f",
+   "registry": null,
+   "main_active_gates_used_in_code": 25,
+   "main_active_gates_missing_in_code": [
+    "F2_lexicon"
+   ]
+  },
+  {
+   "date": "2026-10-24",
+   "why": "day before the registry",
+   "rev": "32ca42d7",
+   "registry": null,
+   "main_active_gates_used_in_code": 25,
+   "main_active_gates_missing_in_code": [
+    "F2_lexicon"
+   ]
+  },
+  {
+   "date": "2026-10-25",
+   "why": "registry created (#982, #992)",
+   "rev": "520199cd",
+   "registry": {
+    "gates_total": 43,
+    "by_kind": {
+     "gate": 26,
+     "gate/retired": 8,
+     "flag": 5,
+     "telemetry": 4
+    },
+    "classes": 32,
+    "detectors": 81,
+    "enforce_detector_refs": 37
+   },
+   "main_active_gates_used_in_code": 26,
+   "main_active_gates_missing_in_code": []
+  },
+  {
+   "date": "2026-10-29",
+   "why": "today (origin/main)",
+   "rev": "fb683750",
+   "registry": {
+    "gates_total": 43,
+    "by_kind": {
+     "gate": 26,
+     "gate/retired": 8,
+     "flag": 5,
+     "telemetry": 4
+    },
+    "classes": 32,
+    "detectors": 81,
+    "enforce_detector_refs": 37
+   },
+   "main_active_gates_used_in_code": 26,
+   "main_active_gates_missing_in_code": []
+  }
+ ],
+ "registry_history": [
+  {
+   "commit": "3994a1a8 2026-10-29 feat: admin UI in English or Vietnamese (one switch, kit i18n) (#1129)",
+   "gates_total": 43,
+   "by_kind": {
+    "gate": 26,
+    "gate/retired": 8,
+    "flag": 5,
+    "telemetry": 4
+   },
+   "active_gates": 26,
+   "enforce_detector_refs": 37
+  },
+  {
+   "commit": "12b36a6b 2026-10-25 feat: per-finding gate severity, post-repair integrity guard and writing-signal capture (T",
+   "gates_total": 43,
+   "by_kind": {
+    "gate": 26,
+    "gate/retired": 8,
+    "flag": 5,
+    "telemetry": 4
+   },
+   "active_gates": 26,
+   "enforce_detector_refs": 37
+  },
+  {
+   "commit": "a8ec0fe4 2026-10-25 feat: quality registry, error taxonomy, single thresholds file and lint (Q-1) (#982)",
+   "gates_total": 42,
+   "by_kind": {
+    "gate": 28,
+    "gate/retired": 5,
+    "flag": 5,
+    "telemetry": 4
+   },
+   "active_gates": 28,
+   "enforce_detector_refs": 38
+  }
+ ],
+ "main_active_gate_names": [
+  "F0_complete",
+  "F10_cannibalization_cross_tenant",
+  "F11_brand_name",
+  "F12_scope",
+  "F13_hygiene",
+  "F13_leak",
+  "F13_repeat",
+  "F14_first_line",
+  "F14_social_shape",
+  "F15_voice",
+  "F16_faq",
+  "F17_trip_fact",
+  "F18_rarity",
+  "F19_authenticity",
+  "F1_grounding",
+  "F2_lexicon",
+  "F2_platform_truth",
+  "F2_style_warn",
+  "F2_superlatives",
+  "F4_extreme_length",
+  "F4_seo_surface",
+  "F6_cta_present",
+  "F9_brand_style",
+  "F9_cta_fact",
+  "FORBIDDEN_WORD",
+  "T3_grounding"
+ ]
+}
