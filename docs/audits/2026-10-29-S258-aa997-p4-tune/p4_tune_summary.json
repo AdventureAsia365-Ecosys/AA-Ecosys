@@ -1,0 +1,1389 @@
+{
+ "aa997.2": {
+  "nc": 251,
+  "rc": 34,
+  "ne": 30,
+  "rw": 5,
+  "kept_unjudged_c": 11,
+  "pass": false,
+  "refused_by": {
+   "C:off_route": 17,
+   "C:ambiguous_route": 10,
+   "C:site_type": 4,
+   "E:site_type": 3,
+   "C:name": 3,
+   "E:ambiguous_route": 1,
+   "E:off_route": 1
+  },
+  "refused_rows": [
+   [
+    "C",
+    "Malabar Hill",
+    "India",
+    "off_route"
+   ],
+   [
+    "C",
+    "Chawri Bazaar",
+    "India",
+    "off_route"
+   ],
+   [
+    "E",
+    "Mandara Hut",
+    "Tanzania",
+    "site_type"
+   ],
+   [
+    "C",
+    "Lahore General Post Office",
+    "Pakistan",
+    "off_route"
+   ],
+   [
+    "C",
+    "agricultural flatlands surrounding Yangpyeong",
+    "South Korea",
+    "name"
+   ],
+   [
+    "C",
+    "Hong Kong",
+    "Hong Kong",
+    "ambiguous_route"
+   ],
+   [
+    "C",
+    "Dolma La",
+    "China",
+    "ambiguous_route"
+   ],
+   [
+    "E",
+    "Mt. Palay-Palay",
+    "Philippines",
+    "site_type"
+   ],
+   [
+    "C",
+    "Karol Bagh market",
+    "India",
+    "off_route"
+   ],
+   [
+    "C",
+    "Horombo Hut",
+    "Tanzania",
+    "site_type"
+   ],
+   [
+    "C",
+    "Mount Kailash",
+    "China",
+    "ambiguous_route"
+   ],
+   [
+    "C",
+    "Delhi Airport",
+    "India",
+    "off_route"
+   ],
+   [
+    "C",
+    "Pingyao",
+    "China",
+    "off_route"
+   ],
+   [
+    "C",
+    "Doi Tung",
+    "Thailand",
+    "ambiguous_route"
+   ],
+   [
+    "C",
+    "Tribhuwan International Airport",
+    "Nepal",
+    "site_type"
+   ],
+   [
+    "C",
+    "Kibo Hut",
+    "Tanzania",
+    "site_type"
+   ],
+   [
+    "E",
+    "Urumqi airport",
+    "China",
+    "site_type"
+   ],
+   [
+    "C",
+    "Jiancing Historic Trail",
+    "Taiwan",
+    "name"
+   ],
+   [
+    "E",
+    "Huashan",
+    "China",
+    "ambiguous_route"
+   ],
+   [
+    "C",
+    "Inwangsan Mountain",
+    "South Korea",
+    "site_type"
+   ],
+   [
+    "C",
+    "Coron",
+    "Philippines",
+    "ambiguous_route"
+   ],
+   [
+    "E",
+    "Princess Street",
+    "India",
+    "off_route"
+   ],
+   [
+    "C",
+    "Koh Yao Noi",
+    "Thailand",
+    "ambiguous_route"
+   ],
+   [
+    "C",
+    "Kunming Lake",
+    "China",
+    "ambiguous_route"
+   ],
+   [
+    "C",
+    "Boriam Temple",
+    "South Korea",
+    "off_route"
+   ],
+   [
+    "C",
+    "Moseulpo harbour",
+    "South Korea",
+    "name"
+   ],
+   [
+    "C",
+    "South Delhi",
+    "India",
+    "off_route"
+   ],
+   [
+    "C",
+    "New Delhi",
+    "India",
+    "off_route"
+   ],
+   [
+    "C",
+    "Shantang Street",
+    "China",
+    "ambiguous_route"
+   ],
+   [
+    "C",
+    "Gubei Water Town",
+    "China",
+    "ambiguous_route"
+   ],
+   [
+    "C",
+    "Mae Sai",
+    "Thailand",
+    "ambiguous_route"
+   ],
+   [
+    "C",
+    "Minar-e-Pakistan",
+    "Pakistan",
+    "off_route"
+   ],
+   [
+    "C",
+    "Indira Gandhi International Airport",
+    "India",
+    "off_route"
+   ],
+   [
+    "C",
+    "Qiao Family Compound",
+    "China",
+    "off_route"
+   ],
+   [
+    "C",
+    "Kunming",
+    "China",
+    "off_route"
+   ],
+   [
+    "C",
+    "Lahore",
+    "Pakistan",
+    "off_route"
+   ],
+   [
+    "C",
+    "Trident at Nariman Point",
+    "India",
+    "off_route"
+   ],
+   [
+    "C",
+    "Lhasa airport",
+    "China",
+    "off_route"
+   ],
+   [
+    "C",
+    "Trident Nariman Point",
+    "India",
+    "off_route"
+   ]
+  ]
+ },
+ "aa997.3": {
+  "nc": 251,
+  "rc": 3,
+  "ne": 30,
+  "rw": 4,
+  "kept_unjudged_c": 15,
+  "pass": true,
+  "refused_by": {
+   "E:site_type": 3,
+   "C:site_type": 2,
+   "E:off_route": 1,
+   "C:off_route": 1
+  },
+  "refused_rows": [
+   [
+    "E",
+    "Mandara Hut",
+    "Tanzania",
+    "site_type"
+   ],
+   [
+    "E",
+    "Mt. Palay-Palay",
+    "Philippines",
+    "site_type"
+   ],
+   [
+    "C",
+    "Horombo Hut",
+    "Tanzania",
+    "site_type"
+   ],
+   [
+    "C",
+    "Kibo Hut",
+    "Tanzania",
+    "site_type"
+   ],
+   [
+    "E",
+    "Urumqi airport",
+    "China",
+    "site_type"
+   ],
+   [
+    "E",
+    "Princess Street",
+    "India",
+    "off_route"
+   ],
+   [
+    "C",
+    "Gubei Water Town",
+    "China",
+    "off_route"
+   ]
+  ]
+ },
+ "passing": [
+  {
+   "changed": {
+    "anchored_only": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "anchored_only": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "anchored_only": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 500.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 3,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "E:off_route": 1,
+    "C:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "anchored_only": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "anchored_only": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "anchored_only": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_off_route_km": 300.0,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 4,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:site_type": 2,
+    "C:off_route": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "anchored_only": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "anchored_only": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "anchored_only": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 3,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_miss_div": 2,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 500.0,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  },
+  {
+   "changed": {
+    "ambiguous_km": 1000.0,
+    "anchored_only": true,
+    "per_tour": true,
+    "rejudge_v1_checks": false,
+    "site_admin_named": true
+   },
+   "nc": 251,
+   "rc": 5,
+   "ne": 30,
+   "rw": 4,
+   "kept_unjudged_c": 15,
+   "pass": true,
+   "refused_by": {
+    "E:site_type": 3,
+    "C:off_route": 3,
+    "C:site_type": 2,
+    "E:off_route": 1
+   }
+  }
+ ],
+ "variants": 576
+}

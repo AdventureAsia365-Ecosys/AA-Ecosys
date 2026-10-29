@@ -117,13 +117,26 @@ def line(label, m):
             f"{'PASS' if m['pass'] else 'FAIL'} by {json.dumps(m['refused_by'])}")
 
 
+def _same_routes(a, b, tol: float = 1e-5) -> bool:
+    """Routes equal up to coordinate rounding (the dump carries 6 decimals, the DB 7: < 1 m)."""
+    if len(a) != len(b):
+        return False
+    for ra, rb in zip(a, b):
+        if len(ra) != len(rb):
+            return False
+        for pa, pb in zip(ra, rb):
+            if any(abs(x - y) > tol for x, y in zip(pa, pb)):
+                return False
+    return True
+
+
 def check_reproduction(sample, routes, relocate) -> tuple[int, int]:
     """(route mismatches, outcome mismatches) of the rebuild vs the deployed code's own result in the dump."""
     rmis = omis = 0
     for r in sample["rows"]:
         dep = r["deployed"]
         mine = [[list(p) for p in rt] for rt in routes[r["id"]]]
-        if mine != dep["routes"]:
+        if not _same_routes(mine, dep["routes"]):
             rmis += 1
             if rmis <= 5:
                 print(f"REPRO route mismatch {r['name']}|{r['country']} mine={len(mine)} deployed={len(dep['routes'])}")

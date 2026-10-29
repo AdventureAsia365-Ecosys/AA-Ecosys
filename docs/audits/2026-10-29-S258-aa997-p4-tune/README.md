@@ -77,16 +77,16 @@ would be the 3 `site_type` rows plus whichever route catches had anchored routes
 The rule sits behind the same switches as aa997.2: `accept_rule` (`place_relocate` payload and endpoint) and
 `GEOCODER_ACCEPT_RULE` (new names). Both default to `v1`. `relocate.RULE_VERSION` stays `aa997.2`.
 
-## 4. Live result (to fill in from `p4_tune_out.txt`)
+## 4. Live result (S258, 29/10 14:07 UTC dump, `p4_tune_out.txt`)
 
 | rule | correct refused | wrong refused | gate |
 |---|---|---|---|
-| aa997.2 (deployed; must match S257: 34/251, 5/30) | {{V2_C}} | {{V2_E}} | FAIL |
-| aa997.3 (branch preset) | {{V3_C}} | {{V3_E}} | {{V3_GATE}} |
-| best variant in the sweep | {{BEST_C}} | {{BEST_E}} | {{BEST_GATE}} ({{BEST_KNOBS}}) |
+| aa997.2 (deployed; must match S257: 34/251, 5/30) | 34/251 (13.5 %) | 5/30 | FAIL |
+| aa997.3 (branch preset) | 3/251 (1.2 %) | 4/30 | PASS |
+| best variant in the sweep | 3/251 | 4/30 | PASS (anchored_only, re-judge off-route 500 km, no v1 re-checks, site_admin_named; this is now the aa997.3 preset (commit `9b1365c0`)) |
 
-`REPRO` line: {{REPRO}}. aa997.3 still refuses these correct rows: {{V3_STILL}}. Wrong-row catches lost compared with
-aa997.2: {{V3_LOST}}.
+`REPRO` line: `route mismatches=0 outcome mismatches=0 (OK)` after comparing coordinates with a 1e-5 tolerance (the dump carries 6 decimals, the DB 7). aa997.3 still refuses these correct rows: Horombo Hut and Kibo Hut, Tanzania (site_type), Gubei Water Town, China (off_route). Wrong-row catches lost compared with
+aa997.2: Huashan, China.
 
 How to decide:
 - `P4 GATE aa997.3 PASS` with no important lost catch → the CIS PR can merge.
