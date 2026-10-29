@@ -132,7 +132,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <li>Công ty có hai tài khoản AWS. <strong>Tài khoản hạ tầng</strong> chạy toàn bộ hệ thống (máy chủ, cơ sở dữ liệu, file), do đại lý <strong>TrueIDC</strong> thanh toán hộ. <strong>Tài khoản AI</strong> chỉ dùng để gọi các model AI, trước đây nằm dưới đại lý <strong>eCloudvalley</strong>.</li>
     <li>Trên AWS, quyền dùng Claude phụ thuộc vào <strong>bên trả tiền</strong>: đại lý phải được Anthropic cho phép bán lại. TrueIDC chưa được duyệt (đã hỏi, xác nhận), nên tài khoản hạ tầng chưa bao giờ gọi được Claude.</li>
     <li>Ngày 29/10, gói hỗ trợ 250 USD của eCloudvalley kết thúc và tài khoản AI rời tổ chức của họ. Ngay sau đó AWS khoá AI trên tài khoản này, <strong>mọi model, mọi vùng</strong>. Đã mở case với AWS Support; gói hỗ trợ cơ bản nên phản hồi chậm, không biết khi nào gỡ.</li>
-    <li><strong>eCloudvalley đã trả lời bằng văn bản (Zalo, 29/10):</strong> hỗ trợ hình thức công ty tự giữ tổ chức AWS, họ chỉ thanh toán; bán được cả Claude và OpenAI cho khách Việt Nam; giá niêm yết AWS, không phí dịch vụ, không mức chi tiêu tối thiểu; hoá đơn VND có VAT điện tử. Chi tiết ở phương án C2.</li>
+    <li><strong>eCloudvalley đã trả lời bằng văn bản (Zalo, 29/10):</strong> hỗ trợ hình thức công ty tự giữ tổ chức AWS, họ chỉ thanh toán; bán được cả Claude và OpenAI cho khách Việt Nam; giá niêm yết AWS, không mức chi tiêu tối thiểu; hoá đơn VND có VAT điện tử. Trên Zalo họ nói không có phí dịch vụ, nhưng <strong>hợp đồng mẫu ghi phí 10 %</strong> và yêu cầu đặt cọc 2 tháng; đang hỏi lại. Chi tiết ở phương án C2.</li>
     <li>Chi phí hiện nay: tài khoản hạ tầng khoảng <strong>105–186 USD/tháng</strong> (tháng 7–10). AI khoảng <strong>1–5 USD/ngày</strong> lúc bình thường, khoảng <strong>250 USD/tháng</strong> trong tháng chạy viết lại nội dung hàng loạt.</li>
   </ul>
   <p class="note">Điểm mấu chốt: cái chặn AI là <em>ai trả tiền cho tài khoản</em>, không phải <em>hạ tầng đặt ở đâu</em>. Vì vậy dời hạ tầng sang tài khoản khác không tự giải quyết được vấn đề.</p>
@@ -142,9 +142,10 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   <span class="eyebrow">Khuyến nghị kỹ thuật</span>
   <h2>Ký eCloudvalley theo C2, bắt đầu với tài khoản AI; dùng D làm cầu nối; không làm A</h2>
   <ol>
-    <li><strong>Ký hợp đồng thanh toán với eCloudvalley theo hình thức C2</strong> (công ty tự giữ tổ chức AWS). Làm trước với tài khoản AI: tạo tài khoản quản lý của công ty, đưa tài khoản AI vào, đăng ký với eCloudvalley <strong>trước 25/11</strong> để hoá đơn bắt đầu từ <strong>01/12</strong>. Điều kiện eCloudvalley đưa ra đủ tốt (không phí, không tối thiểu, hoá đơn VND có VAT), nên không cần chờ báo giá đại lý khác.</li>
+    <li><strong>Ký hợp đồng thanh toán với eCloudvalley theo hình thức C2</strong> (công ty tự giữ tổ chức AWS). Làm trước với tài khoản AI: tạo tài khoản quản lý của công ty, đưa tài khoản AI vào, đăng ký với eCloudvalley <strong>trước 25/11</strong> để hoá đơn bắt đầu từ <strong>01/12</strong>. Điều kiện của eCloudvalley chấp nhận được (hoá đơn VND có VAT, họ lo thuế nhà thầu). Cần chốt lại trong hợp đồng: mức phí (10 % hay 0 %), hình thức Billing Transfer, điều khoản chấm dứt và hoàn cọc.</li>
     <li><strong>Tài khoản hạ tầng vào sau</strong>, khi TrueIDC xác nhận cho rời tổ chức của họ. Cùng hợp đồng, cùng hoá đơn.</li>
-    <li><strong>Phương án D làm cầu nối và dự phòng:</strong> AI trên AWS sẽ bị khoá ít nhất đến khi ký xong và AWS mở lại (eCloudvalley ước 1–2 tuần). Mua thẳng từ Anthropic giúp hệ thống chạy lại trong tuần, giữ làm dự phòng nếu sự cố lặp lại, và dùng cho batch. Nếu eCloudvalley mở lại sớm được thì D chỉ còn vai trò dự phòng.</li>
+    <li><strong>Tháng 11:</strong> eCloudvalley đồng ý cho tài khoản AI vào lại tổ chức của họ tạm thời để mở lại AI ngay, với điều kiện công ty xác nhận qua email sẽ trả phần chi phí đó. Sang tháng 12 chuyển sang Billing Transfer.</li>
+    <li><strong>Phương án D chỉ còn là dự phòng và dùng cho batch:</strong> làm sau, khi cần; không còn gấp.</li>
     <li><strong>Không chuyển toàn bộ hạ tầng</strong> (phương án A): tốn gấp khoảng 6 lần công sức, có gián đoạn, mà vẫn phải đổi bên thanh toán như C2 mới dùng được AI.</li>
   </ol>
 </div>
@@ -171,7 +172,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
           <td class="num">Hoá đơn từ 01/12<br>(đăng ký trước 25/11)</td>
           <td class="num">4–8 ngày</td>
           <td>Không</td>
-          <td>Giá niêm yết AWS, không phí dịch vụ (eCloudvalley xác nhận)</td>
+          <td>Giá niêm yết AWS + phí 10 % theo hợp đồng mẫu (đang hỏi lại); cọc 2 tháng</td>
           <td>Tài khoản hạ tầng cần TrueIDC cho rời; AWS có thể khoá AI khi đổi bên trả tiền</td>
           <td><span class="chip go">Đề xuất lâu dài</span></td>
         </tr>
@@ -250,16 +251,29 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         <li>Quyền bán Claude áp dụng cho khách Việt Nam và cho tài khoản theo Billing Transfer. Gọi được Claude Sonnet / Haiku 5.5 ở vùng us-west-1, nhưng phải mở yêu cầu với AWS để nâng hạn mức.</li>
         <li>Dùng được model OpenAI trên AWS; hình thức thanh toán ở Việt Nam không chặn AWS Marketplace.</li>
         <li>Hoá đơn VND có VAT điện tử cho mọi khoản, kể cả AI và Marketplace. Tỷ giá Vietcombank ngày đầu tháng; xuất hoá đơn ngày 5, hạn thanh toán 20 ngày.</li>
-        <li>Giá niêm yết AWS, không phí dịch vụ, không mức chi tiêu tối thiểu; nếu có phí phát sinh sẽ báo bằng email chính thức.</li>
-        <li>Hợp đồng 1 năm, báo trước 30 ngày khi chấm dứt (cần xác nhận lại trong hợp đồng).</li>
+        <li>Giá niêm yết AWS, không mức chi tiêu tối thiểu; trên Zalo nói không phí dịch vụ.</li>
+        <li>Hợp đồng 1 năm, báo trước 30 ngày. Khi chấm dứt, tài khoản vẫn thuộc tổ chức của công ty.</li>
+        <li>Quy trình: công ty tạo tài khoản quản lý, đưa tài khoản AI vào, ký hợp đồng (cần bản scan giấy phép kinh doanh), rồi đăng ký Billing Transfer trước 25/11.</li>
+        <li>Đặt cọc bằng 2 tháng sử dụng: hiện khoảng 500 USD (khoảng 13 triệu đồng).</li>
+        <li>Yêu cầu nâng hạn mức Claude 5.5: công ty tự mở với AWS, eCloudvalley hỗ trợ đẩy nhanh.</li>
+        <li>Tháng 11: cho tài khoản AI vào lại tổ chức của họ tạm thời để mở lại AI, công ty xác nhận qua email sẽ trả chi phí đó.</li>
         <li>Tài khoản AI bị khoá ngày 29/10 vì AWS chuyển sang bán AI qua đại lý; chính sách sau này có thể thay đổi. Ký lại thì eCloudvalley hỗ trợ mở lại, khoảng 1–2 tuần. Credit AWS Lift còn khoảng 249 USD vẫn được trừ vào chi phí như bình thường.</li>
+      </ul>
+      <p><span class="lbl">Hợp đồng mẫu (đọc ngày 29/10), những điểm cần sửa trước khi ký:</span></p>
+      <ul>
+        <li><strong>Phí 10 %:</strong> phụ lục ghi phí thanh toán tổng hợp bằng 10 % tiền AWS, cộng thêm VAT 10 % trên tổng, trái với "không phí dịch vụ" trên Zalo. Nếu giữ phí, mỗi tháng thêm khoảng 25 USD (chỉ tài khoản AI) đến 45 USD (cả hai tài khoản). VAT 10 % thì trả AWS trực tiếp cũng phải chịu, và hoá đơn VAT được khấu trừ.</li>
+        <li><strong>Hình thức:</strong> hợp đồng mô tả kiểu cũ (tài khoản nằm trong tổ chức của eCloudvalley) và có điều khoản eCloudvalley giữ tài khoản gốc nếu chưa thanh toán. Cần ghi rõ Billing Transfer, công ty giữ tài khoản quản lý, eCloudvalley không giữ tài khoản gốc.</li>
+        <li><strong>Chấm dứt:</strong> hợp đồng 12 tháng, tự gia hạn nếu không báo trước 1 tháng khi hết hạn. Đơn phương chấm dứt giữa chừng bị phạt 8 % giá trị hợp đồng. Cần thêm quyền chấm dứt báo trước 30 ngày không bị phạt, hoặc ít nhất khi eCloudvalley mất quyền bán Claude.</li>
+        <li><strong>Đặt cọc:</strong> chưa có trong hợp đồng. Cần ghi mức cọc, cách tính lại khi thêm tài khoản hạ tầng (khoảng 900 USD) và điều kiện hoàn cọc.</li>
+        <li><strong>Quyền dùng AI:</strong> hợp đồng không nhắc Claude, OpenAI hay Marketplace, và loại trừ trách nhiệm với dịch vụ do AWS cung cấp. Cần một phụ lục ghi quyền dùng Claude và OpenAI.</li>
+        <li><strong>Thanh toán:</strong> xuất hoá đơn ngày 5, trả trong 20 ngày; khiếu nại hoá đơn trong 5 ngày; trả chậm tính 0,05 %/ngày và eCloudvalley có quyền ngừng dịch vụ. eCloudvalley nộp thuế nhà thầu.</li>
       </ul>
       <p><span class="lbl">Rủi ro và điều kiện:</span></p>
       <ul>
         <li>TrueIDC phải cho tài khoản hạ tầng rời tổ chức của họ. Đây là điểm hợp đồng; nếu bị ràng buộc thì phải tính phương án A.</li>
         <li>Khi đổi bên trả tiền, AWS có thể khoá AI trên tài khoản hạ tầng như đã xảy ra với tài khoản AI. Làm D trước để có đường dự phòng.</li>
-        <li>Hạn mức Claude 5.5 phải xin AWS nâng; tài khoản hạ tầng hiện có hạn mức rất thấp. Cần rõ ai mở yêu cầu (công ty đang dùng gói hỗ trợ cơ bản của AWS).</li>
-        <li>Trong tháng 11, tài khoản AI vẫn bị khoá nếu không có cách mở sớm. Đang hỏi eCloudvalley có cho vào lại tổ chức của họ tạm thời trong tháng 11 không.</li>
+        <li>Hạn mức Claude 5.5 phải xin AWS nâng; tài khoản hạ tầng hiện có hạn mức rất thấp. Công ty tự mở yêu cầu (gói hỗ trợ cơ bản), eCloudvalley hỗ trợ đẩy nhanh.</li>
+        <li>Tài khoản AI vào lại tổ chức của eCloudvalley trong tháng 11, rồi tháng 12 rời ra để chuyển sang Billing Transfer. Cần eCloudvalley xác nhận bước rời ra này không làm AWS khoá AI lần nữa như ngày 29/10.</li>
         <li>Rời tổ chức của TrueIDC sẽ mất lịch sử chi phí trên AWS. Cần xuất lại trước. Cũng cần xác nhận email gốc của tài khoản hạ tầng thuộc công ty.</li>
       </ul>
     </article>
@@ -316,8 +330,8 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 <section>
   <h2>Lộ trình đề xuất</h2>
   <ol class="timeline">
-    <li><span class="when">Tuần 1 (đến 06/11)</span><span>Chủ doanh nghiệp duyệt hướng đi; xin mẫu hợp đồng eCloudvalley. Mở tài khoản Anthropic (và OpenAI), nạp khoản nhỏ; hệ thống gọi được Claude lại qua đường trực tiếp. Hỏi TrueIDC điều kiện rời tổ chức.</span></li>
-    <li><span class="when">Tuần 2–3</span><span>Ký hợp đồng eCloudvalley. Tạo tài khoản quản lý của công ty, đưa tài khoản AI vào. eCloudvalley hỗ trợ mở lại AI (khoảng 1–2 tuần), xin AWS nâng hạn mức Claude 5.5.</span></li>
+    <li><span class="when">Tuần 1 (đến 06/11)</span><span>Chủ doanh nghiệp duyệt hướng đi. Gửi email xác nhận thanh toán tháng 11; tài khoản AI vào lại tổ chức eCloudvalley tạm thời và AI chạy lại. Gửi eCloudvalley các điểm cần sửa trong hợp đồng. Hỏi TrueIDC điều kiện rời tổ chức.</span></li>
+    <li><span class="when">Tuần 2–3</span><span>Chốt và ký hợp đồng (scan giấy phép kinh doanh), đặt cọc. Tạo tài khoản quản lý của công ty. Xin AWS nâng hạn mức Claude 5.5.</span></li>
     <li><span class="when">Trước 25/11</span><span>Đăng ký Billing Transfer với eCloudvalley. Nếu TrueIDC đã cho rời: đưa luôn tài khoản hạ tầng vào (xuất lịch sử chi phí trước).</span></li>
     <li><span class="when">Từ 01/12</span><span>eCloudvalley bắt đầu thanh toán, hoá đơn VND đầu tiên ngày 05/01. Đường trực tiếp giữ làm dự phòng và cho batch.</span></li>
     <li><span class="when">Sau đó</span><span>Tài khoản hạ tầng vào cùng tổ chức khi TrueIDC cho rời (đăng ký trước ngày 25 của tháng bất kỳ).</span></li>
@@ -327,24 +341,26 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 <section>
   <h2>Cần chủ doanh nghiệp quyết</h2>
   <ol class="decide">
-    <li><span class="q">1. Ký hợp đồng thanh toán 1 năm với eCloudvalley theo hình thức Billing Transfer (phương án C2)?</span><span class="a">Đề xuất: đồng ý. Không phí dịch vụ, không mức tối thiểu, hoá đơn VND có VAT. Trong hợp đồng cần ghi rõ: công ty giữ tổ chức AWS, báo trước 30 ngày khi chấm dứt, eCloudvalley hỗ trợ mở lại AI và nâng hạn mức.</span></li>
-    <li><span class="q">2. Cho dùng AI mua thẳng từ Anthropic (và OpenAI) làm cầu nối và dự phòng (phương án D)?</span><span class="a">Đề xuất: đồng ý, với hạn mức chi tiêu tự đặt nhỏ (khoảng 100–150 USD/tháng). Kèm theo là chấp nhận dữ liệu tour đi ra ngoài AWS theo các cam kết ở trên. Phần này hoá đơn USD từ nước ngoài, cần hỏi kế toán về thuế nhà thầu.</span></li>
-    <li><span class="q">3. Ai đứng tên tài khoản quản lý AWS mới?</span><span class="a">Đề xuất: đăng ký bằng email chung của công ty (không dùng email cá nhân), thẻ công ty, thông tin pháp nhân của công ty.</span></li>
-    <li><span class="q">4. Hợp đồng với TrueIDC có cho tài khoản hạ tầng rời tổ chức của họ không?</span><span class="a">Cần xem lại hợp đồng hoặc hỏi TrueIDC. Câu trả lời quyết định giữa C2 và A.</span></li>
-    <li><span class="q">5. Không chuyển toàn bộ hạ tầng (phương án A), trừ khi TrueIDC không cho rời?</span><span class="a">Đề xuất: đồng ý.</span></li>
+    <li><span class="q">1. Ký hợp đồng thanh toán 1 năm với eCloudvalley theo hình thức Billing Transfer (phương án C2), sau khi sửa các điểm ở trên?</span><span class="a">Đề xuất: đồng ý. Phí 10 % nếu họ giữ thì vẫn chấp nhận được (thêm 25–45 USD/tháng); điều khoản không được nhượng là công ty giữ tài khoản quản lý và tài khoản gốc.</span></li>
+    <li><span class="q">2. Đặt cọc khoảng 13 triệu đồng (2 tháng sử dụng), tăng lên khoảng 23 triệu khi thêm tài khoản hạ tầng?</span><span class="a">Đề xuất: đồng ý, khi hợp đồng ghi rõ điều kiện hoàn cọc.</span></li>
+    <li><span class="q">3. Công ty gửi email xác nhận trả chi phí AI tháng 11 để eCloudvalley mở lại AI ngay?</span><span class="a">Đề xuất: đồng ý. Chi phí AI một tháng bình thường khoảng 30–150 USD.</span></li>
+    <li><span class="q">4. Giấy tờ: scan giấy phép kinh doanh, người đại diện ký, email và thẻ đứng tên tài khoản quản lý AWS mới?</span><span class="a">Đề xuất: tài khoản đăng ký bằng email chung của công ty (không dùng email cá nhân), thẻ công ty, thông tin pháp nhân của công ty.</span></li>
+    <li><span class="q">5. Hợp đồng với TrueIDC có cho tài khoản hạ tầng rời tổ chức của họ không?</span><span class="a">Cần xem lại hợp đồng hoặc hỏi TrueIDC. Câu trả lời quyết định giữa C2 và A.</span></li>
+    <li><span class="q">6. Không chuyển toàn bộ hạ tầng (phương án A), trừ khi TrueIDC không cho rời?</span><span class="a">Đề xuất: đồng ý.</span></li>
   </ol>
 </section>
 
 <section>
   <h2>Còn cần eCloudvalley xác nhận</h2>
   <ol>
-    <li>Quy trình: công ty tạo tài khoản quản lý mới, đưa tài khoản AI vào, rồi đăng ký Billing Transfer. eCloudvalley cần thông tin gì? Ký hợp đồng trước hay sau khi đăng ký?</li>
-    <li>Trong tháng 11 có cách mở lại AI cho tài khoản AI sớm hơn không (ví dụ cho vào lại tổ chức của eCloudvalley tạm thời, sang tháng 12 chuyển qua Billing Transfer)?</li>
-    <li>Ai mở yêu cầu nâng hạn mức Claude 5.5 với AWS: eCloudvalley hay công ty?</li>
-    <li>Hợp đồng 1 năm, báo trước 30 ngày là chính xác? Khi chấm dứt, tài khoản vẫn thuộc tổ chức của công ty?</li>
-    <li>Hạn thanh toán 20 ngày: có cần đặt cọc hay hạn mức tín dụng không?</li>
+    <li>Phí 10 % trong phụ lục có áp dụng không, khi trên Zalo nói không có phí dịch vụ? Giá đã gồm VAT hay cộng VAT trên tổng?</li>
+    <li>Ghi rõ Billing Transfer (công ty giữ tài khoản quản lý), bỏ điều khoản eCloudvalley giữ tài khoản gốc.</li>
+    <li>Quyền chấm dứt báo trước 30 ngày không bị phạt 8 %.</li>
+    <li>Mức cọc, cách tính lại và điều kiện hoàn cọc trong hợp đồng.</li>
+    <li>Phụ lục ghi quyền dùng Claude và OpenAI trên AWS.</li>
+    <li>Chuyển tài khoản AI từ tổ chức của eCloudvalley (tháng 11) sang Billing Transfer (tháng 12) có làm AWS khoá AI lại không? Chi phí tháng 11 tính theo điều khoản nào?</li>
   </ol>
-  <p class="note">Bảy câu hỏi ban đầu (quyền bán Claude, OpenAI, Billing Transfer, hoá đơn, phí, hợp đồng, mở lại AI) eCloudvalley đã trả lời ngày 29/10, tóm tắt ở phương án C2.</p>
+  <p class="note">Các câu hỏi trước đó (quyền bán Claude, OpenAI, Billing Transfer, hoá đơn, phí, hợp đồng, mở lại AI, quy trình, hạn mức, cọc) eCloudvalley đã trả lời ngày 29/10, tóm tắt ở phương án C2.</p>
 </section>
 
 <p class="note">Nguồn: tài liệu chính thức của AWS (Billing Transfer, danh sách dịch vụ đại lý được bán), Anthropic (giá, batch, lưu dữ liệu, điều khoản thuế), thông cáo của Renova Cloud và eCloudvalley; kết quả thử trực tiếp trên hai tài khoản ngày 29/10/2026. Bản phân tích chi tiết bằng tiếng Anh lưu trong kho tài liệu kỹ thuật.</p>
