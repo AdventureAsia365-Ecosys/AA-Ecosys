@@ -273,6 +273,7 @@ duplicates (007, 008, 019 and `007b`) are resolved in the registry, not renumber
 (`[0-9]{3}_[a-z0-9_]+\.sql`); unique-number check (*to build*, **N5**).
 
 **MIG-4 (MUST)** Two flows, chosen by the file's class (root ADR 0017, AA-993):
+
 - **Expand file** (header `-- migrate: expand`; only additions: new objects, a new nullable column or one with a
   non-volatile default, a new non-unique index; never a hot table; ADR 0017 d3): **one app PR** holds the file, the
   code that needs it and the readiness raise to its key. After the merge the AA-CIS-Infra migration-sync bot copies it
