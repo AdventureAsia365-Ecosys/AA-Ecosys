@@ -1,0 +1,70 @@
+{
+ "bhutan": {
+  "perf": 87,
+  "lcp": 3947.0815000000002,
+  "fcp": 1063.2585,
+  "tbt": 27.5,
+  "cls": 0,
+  "lcp_runs": [
+   4.25,
+   3.95,
+   2.7
+  ],
+  "element": "div.aa-site > main#main > section.tp-page-hero > img.tp-hero-img",
+  "image": [
+   "1GcwUTa2SNGnIerRlikwcnl5wsz0W__E3-960.webp?v=b9447b91556c",
+   107835
+  ]
+ },
+ "destinations": {
+  "perf": 97,
+  "lcp": 2457.8450000000003,
+  "fcp": 954.845,
+  "tbt": 17,
+  "cls": 0,
+  "lcp_runs": [
+   2.31,
+   2.46,
+   3.08
+  ],
+  "element": "ul.grid > li > a.tp-lift > img.tp-lift-img",
+  "image": [
+   "1eIyF-AtunPHBNhJl5oOz9ywtqoBofWQ3-600.webp?v=bde509793577",
+   41656
+  ]
+ },
+ "home": {
+  "perf": 100,
+  "lcp": 1616.016,
+  "fcp": 1016.121,
+  "tbt": 27,
+  "cls": 0,
+  "lcp_runs": [
+   2.38,
+   1.62,
+   1.54
+  ],
+  "element": "main#main > section.tp-hero > picture > img.tp-hero-img",
+  "image": [
+   "home-port-756.avif",
+   60469
+  ]
+ },
+ "tour": {
+  "perf": 100,
+  "lcp": 1540.2649999999999,
+  "fcp": 970.265,
+  "tbt": 20.5,
+  "cls": 0,
+  "lcp_runs": [
+   1.54,
+   1.54,
+   2.29
+  ],
+  "element": "div.relative > ul.tp-snap-row > li.relative > img.h-full",
+  "image": [
+   "1eIyF-AtunPHBNhJl5oOz9ywtqoBofWQ3-600.webp?v=bde509793577",
+   41715
+  ]
+ }
+}

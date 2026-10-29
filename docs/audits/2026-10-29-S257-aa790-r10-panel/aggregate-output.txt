@@ -1,0 +1,54 @@
+scores 160 / 160
+
+ai_tells
+arm    all | Terra Family | Trail Pulse | WildKind Tra | blog | linkedin
+r6     6.25 | 5.75 | 6.75 | 6.75 | 6.3 | 6.17
+r9     5.75 | 5.62 | 5.5 | 6.25 | 5.5 | 6.17
+r10c   5.5 | 5.5 | 6 | 5 | 5.3 | 5.83
+r10c2  5.56 | 5.38 | 5.5 | 6 | 5.5 | 5.67
+r10    5.75 | 5.88 | 6.5 | 4.75 | 5.7 | 5.83
+
+brand_voice
+arm    all | Terra Family | Trail Pulse | WildKind Tra | blog | linkedin
+r6     6.94 | 7.0 | 6.25 | 7.5 | 7.0 | 6.83
+r9     6.44 | 6.25 | 5.5 | 7.75 | 6.6 | 6.17
+r10c   6.81 | 7.0 | 6.25 | 7 | 6.9 | 6.67
+r10c2  6.5 | 6.25 | 7.0 | 6.5 | 6.9 | 5.83
+r10    6.5 | 6.12 | 6.5 | 7.25 | 6.8 | 6.0
+
+source_fidelity
+arm    all | Terra Family | Trail Pulse | WildKind Tra | blog | linkedin
+r6     7.88 | 7.38 | 8.5 | 8.25 | 7.9 | 7.83
+r9     8.0 | 7.88 | 8.25 | 8.0 | 7.7 | 8.5
+r10c   7.12 | 7.5 | 7.25 | 6.25 | 6.6 | 8.0
+r10c2  7.81 | 7.88 | 7 | 8.5 | 7.5 | 8.33
+r10    7.81 | 8.0 | 7.75 | 7.5 | 7.5 | 8.33
+
+reader_value
+arm    all | Terra Family | Trail Pulse | WildKind Tra | blog | linkedin
+r6     7.0 | 6.5 | 7.5 | 7.5 | 7.6 | 6
+r9     6.56 | 6.25 | 6.5 | 7.25 | 6.8 | 6.17
+r10c   6.94 | 6.75 | 7.5 | 6.75 | 7.3 | 6.33
+r10c2  6.81 | 6.25 | 7.5 | 7.25 | 7.4 | 5.83
+r10    6.69 | 6.0 | 7.5 | 7.25 | 7.1 | 6.0
+
+paired deltas (mean, W/T/L):   r10 - r10c | r10c2 - r10c (noise) | r10 - r9 (checklist alone) | r10 - r6
+  ai_tells         +0.250   3/2/3 | 0.062 | +0.000   3/0/5 | -0.500   2/1/5
+  brand_voice      -0.312   3/1/4 | 0.312 | +0.062   3/1/4 | -0.438   2/2/4
+  source_fidelity  +0.688   7/1/0 | 0.688 | -0.188   2/3/3 | -0.062   3/0/5
+  reader_value     -0.250   3/2/3 | 0.125 | +0.125   4/1/3 | -0.312   1/4/3
+
+BARS (set before the run)
+  PASS  1 source_fidelity r10 - r10c = +0.688 >= -0.688
+  FAIL  2 reader_value r10 - r10c = -0.250 >= -0.150  [tier: loss; target >= +0.150]
+  PASS  3 brand_voice r10 - r10c = -0.312 >= -0.312
+  PASS  4 ai_tells r10 = 5.75 >= 5.5 and r10 - r10c = +0.250 >= -0.150
+  PASS  5 checklist block in r10 only: 8 / 8; brief changed by the grounding: 8 / 8
+  FAIL  6 a gain beyond noise: reader_value -0.250 >= +0.150 or source_fidelity +0.688 > 0.688
+
+Informational: brand_voice per tenant (Done-when >= 7 each)
+  Terra Family Expeditions     r10 6.12  r10c 7.0  r9 6.25  r6 7.0
+  Trail Pulse                  r10 6.5  r10c 6.25  r9 5.5  r6 6.25
+  WildKind Travel              r10 7.25  r10c 7  r9 7.75  r6 7.5
+
+round 10: FAIL -> keep both flags off

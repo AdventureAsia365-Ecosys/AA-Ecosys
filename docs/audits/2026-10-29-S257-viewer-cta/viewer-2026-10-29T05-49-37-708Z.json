@@ -1,0 +1,138 @@
+{
+  "probe": "S257 viewer cta-check",
+  "expect_role": "viewer",
+  "at": "2026-10-29T05:49:52.581Z",
+  "portal": "https://portal.lumiguides.it.com",
+  "cis": "https://api-cis.lumiguides.it.com",
+  "session": {
+    "sub": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+    "csr": "viewer",
+    "amr": "partner",
+    "client": "portal",
+    "mid": "cd7c8090-6c26-42b4-a961-8d77d9799b1a",
+    "exp": "2026-10-29T06:04:45.000Z"
+  },
+  "checks": [
+    {
+      "name": "session.tenant",
+      "expected": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+      "actual": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "session.amr",
+      "expected": "partner",
+      "actual": "partner",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "session.csr",
+      "expected": "viewer",
+      "actual": "viewer",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "ui.cta-check (portal BFF, live while typing)",
+      "expected": "200",
+      "actual": "200",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "ui.review notice shown",
+      "expected": "visible",
+      "actual": "visible",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "ui.no cta-check refused on the page",
+      "expected": "every status 200",
+      "actual": "200,200",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "bff.cta-check",
+      "expected": "200",
+      "actual": "200",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "bff.POST requests/{random}/write",
+      "expected": "403 \"studio_role_forbidden\"",
+      "actual": "403 \"studio_role_forbidden\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "bff.PATCH pieces/{random}",
+      "expected": "403 \"studio_role_forbidden\"",
+      "actual": "403 \"studio_role_forbidden\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.cta-check (review claim)",
+      "expected": "200 cta_warning.code=cta_review_claim",
+      "actual": "200 code=cta_review_claim",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.cta-check (plain CTA)",
+      "expected": "200 cta_warning=null",
+      "actual": "200 cta_warning=null",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.POST requests/{random}/write",
+      "expected": "403 \"studio_role_forbidden\"",
+      "actual": "403 \"studio_role_forbidden\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.PATCH pieces/{random}",
+      "expected": "403 \"studio_role_forbidden\"",
+      "actual": "403 \"studio_role_forbidden\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.PUT cta-check (method not on the list)",
+      "expected": "403 \"studio_role_forbidden\"",
+      "actual": "403 \"studio_role_forbidden\"",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "cis.POST cta-check/ (trailing slash)",
+      "expected": "403 \"studio_role_forbidden\"",
+      "actual": "200",
+      "pass": false,
+      "strict": false
+    },
+    {
+      "name": "cis.GET content-writing/reviews (read)",
+      "expected": "200",
+      "actual": "200",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.GET account/members (own row)",
+      "expected": "200 role=viewer",
+      "actual": "200 role=viewer",
+      "pass": true,
+      "strict": true
+    }
+  ],
+  "strict_failures": [],
+  "verdict": "PASS"
+}

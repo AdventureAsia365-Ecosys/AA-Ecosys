@@ -1,0 +1,10 @@
+AA790COST arm=r10 mode=repanel_write checklist=r10 calls=8 usd=0.3312
+AA790COST arm=r10c mode=repanel_write checklist=off calls=8 usd=0.3313
+AA790COST arm=r10c2 mode=repanel_write checklist=off calls=8 usd=0.3258
+AA790COST arm=r8 mode=repanel_t8 checklist=- calls=26 usd=0.7699
+AA790COST arm=r8 mode=repanel_write checklist=- calls=20 usd=0.8588
+AA790COST arm=r9 mode=repanel_write checklist=- calls=8 usd=0.3097
+AA790COST arm=r9c mode=repanel_t8 checklist=- calls=4 usd=0.1346
+AA790COST arm=r9c mode=repanel_write checklist=- calls=8 usd=0.3276
+AA790COST arm=r9c2 mode=repanel_write checklist=- calls=8 usd=0.3252
+AA790COST total_1d usd=3.7141 (round-10 cap 1.70)
