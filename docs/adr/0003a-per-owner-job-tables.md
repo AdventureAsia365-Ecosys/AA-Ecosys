@@ -21,6 +21,9 @@
   - X1 shipped: the kind prefixes are in `infra/AA-CIS-Infra/db/owners.yaml`.
   - A third owner table exists: `crm.job` (AA-Partner, kinds `crm_*`, worker loop inside the API process).
     TripPlanner still has no job table.
+  - AA-861 (29/10/2026): TripPlanner's `tripplanner.job` comes with tp-021 (template, kinds `tp_*`), its worker
+    is the scheduled jobs Lambda of decision 4 (AA-CIS-Infra `tripplanner_jobs.tf`, daily EventBridge tick), and
+    the first kind is the outbox payload redaction `tp_retention_outbox_redact` (DM-6.6 / DM-7.2).
   - Decision 5, deploys: since AA-993 G5 a backend deploy no longer waits for an idle job table. It blocks only
     while a rerun wave is open or a deploy-blocking kind of that app runs or is due; other jobs are released on
     shutdown and claimed again. DB Migrate `apply` still waits until no job table has a queued or running job of
