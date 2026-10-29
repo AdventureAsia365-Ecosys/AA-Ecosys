@@ -9,6 +9,7 @@ name: Docs lint
 #   - internal links, offline (lychee): no network, no external sites
 #   - every alarm row of docs/generated/alarms.md links to an existing runbook (AA-893)
 #   - PRDs (docs/product/): required PRD fields, acceptance criteria, and every referenced path exists (AA-894)
+#   - the report registry docs/reports/*.yaml (AA-1003): shape, KPI references, templates, source tables
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
 # secret-scan-history.yml (AA-981),
 # so it is not repeated here (secret names are fine in docs, values never are).
@@ -86,6 +87,12 @@ jobs:
       - name: Alarm runbook links
         if: ${{ !cancelled() }}
         run: python tools/docs/check_alarm_runbooks.py
+
+      # AA-1003 R1: the report registry (docs/reports/catalog.yaml + kpis.yaml): shape, KPI references, template
+      # paths, and every KPI source table against docs/architecture/db-schema-reference.md.
+      - name: Report registry
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/docs/report_registry.py check
 
       - name: Literal resource IDs (warn-only)
         if: ${{ !cancelled() }}
