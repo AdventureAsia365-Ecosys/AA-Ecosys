@@ -74,9 +74,9 @@ Khi hai nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Bá
 
 - **AA-CIS-App** — FastAPI api + job worker (`shared.job`) + admin Next.js. Admin tier A0–A4 (ingest → rewrite → QA →
   Master → atomize/segment/score/route) và Content studio API `/v1/*` cho tenant (T-tier: viết lại theo brand,
-  Slate → Angle → Write → Gate → Publish). Thư mục `portal/` là bản đóng băng, không deploy.
+  Slate → Angle → Write → Gate → Publish). Bản `portal/` đông lạnh đã xoá (AA-979 dọn dẹp, S256).
 - **AA-Partner** — CRM cho đại lý đối tác (api chạy cả `crm.job` worker trong process + web, ECS ARM64) và tenant
-  portal / Content studio (Vercel `aa-cis-portal` deploy từ repo này).
+  portal / Content studio (ECS `aa-crm-dev-portal`, cùng host `portal.` với CRM web; deploy từ repo này).
 - **AA-Booking (AAA)** — back office đặt tour (api + `booking.job` worker, staff admin trên Vercel), nhận catalog từ CIS.
 - **AA-TripPlanner-Web** — B2C map-first planner (Next.js + 2 Lambda), đọc catalog/atom từ CIS.
 - **AA-CIS-Infra** — Terraform acc2 (ECS, RDS, S3, Lambda, API Gateway, Cognito) + workflow DB Migrate / DB Schema Dump.

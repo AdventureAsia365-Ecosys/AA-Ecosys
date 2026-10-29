@@ -39,7 +39,7 @@ owner. Dev only for now; a future prod also lives on acc2 by default (ADR 0001, 
 | `apps/AA-CIS-App` | `AdventureAsia365-Ecosys/AA-CIS-App` | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image per git SHA) via `Deploy Dev`; Vercel `aa-cis-frontend` (admin). Its `portal/` is a frozen, undeployed copy since AA-979 |
 | `apps/AA-TripPlanner-Web` | `AdventureAsia365-Ecosys/AA-TripPlanner-Web` | Vercel (frontend); Lambdas via `deploy-lambdas.yml` |
 | `apps/AA-Booking` | `AdventureAsia365-Ecosys/AA-Booking` | ECS Fargate (`aa-booking-dev-api`, same cluster) via `Deploy Dev`; Vercel (staff admin); live `/booking/health` since S235 |
-| `apps/AA-Partner` | `AdventureAsia365-Ecosys/AA-Partner` | ECS Fargate ARM64 (`aa-crm-dev-api` via `Deploy Dev`, `aa-crm-dev-web` via `Deploy Web Dev`, same cluster); Vercel `aa-cis-portal` (tenant portal, `portal.lumiguides.it.com`) via `Vercel Deploy (portal)` since AA-979 |
+| `apps/AA-Partner` | `AdventureAsia365-Ecosys/AA-Partner` | ECS Fargate ARM64 (`aa-crm-dev-api` via `Deploy Dev`, `aa-crm-dev-web` via `Deploy Web Dev`, `aa-crm-dev-portal` (tenant Content studio) via `Deploy Portal Dev`, same cluster), all on `portal.lumiguides.it.com` since AA-979 P2b |
 | `infra/AA-CIS-Infra` | `AdventureAsia365-Ecosys/AA-CIS-Infra` | `Terraform Apply Prod` (acc2 stack, manual dispatch); acc3 by a human with MFA; `DB Migrate` for every app's migrations; `DB Schema Dump` regenerates the schema reference |
 
 Each repo's `CONTEXT.md` is the source of truth for its stack, boundaries and ownership; read it before

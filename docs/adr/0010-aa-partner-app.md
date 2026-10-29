@@ -109,9 +109,10 @@ AA-978) → P2b (host to CloudFront → Fargate, partner-pool sign-in, re-enrolm
 Vercel kept at least 7 calendar days after P2b with a rollback drill, then the CIS copy is deleted and the AA-885
 guard inverted (final design §4.4). How P2b signs people in, re-enrols them and cuts the host over:
 [ADR 0010a](0010a-content-studio-partner-sign-in.md) (S252). Status of the stage: the P2b cutover ran on 2026-10-27
-(S253): `portal.` serves the CRM and the Content studio on Fargate, and the Vercel project `aa-cis-portal` answers 301
-and stays the rollback path until the clean-up that starts on 2026-11-03
-([cutover record](../audits/2026-10-27-S253-aa979-cutover/README.md)).
+(S253): `portal.` serves the CRM and the Content studio on Fargate
+([cutover record](../audits/2026-10-27-S253-aa979-cutover/README.md)). The clean-up ran on 2026-10-28 (S256, pulled
+ahead: Dev has no real users): Vercel project removed, CIS copy deleted, AA-885 guard inverted, `partner-dev.` → `portal.`
+301 except `/crm` and `/crm/*`.
 
 ### 7. "CIS App first" risk
 
