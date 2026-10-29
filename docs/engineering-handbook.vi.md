@@ -414,8 +414,10 @@ Cách cài release-please (AA-891):
   `refs/heads/main` (AA-866). Không bao giờ apply từ worktree hay nhánh trước khi merge (từng làm `main` tụt sau hạ
   tầng thật một lần; xem [`lessons.md`](../skill/aa-lessons/lessons.md)).
 - Mỗi PR nêu cái gì đổi, chi phí hằng tháng và cách rollback, kèm plan.
-- GitHub environment dùng để apply Dev vẫn tên là `prod`. Đổi tên thuộc ADR 0012 (AA-880, D-16, C7.2d); không đổi
-  bây giờ.
+- GitHub environment dùng để apply Dev vẫn tên là `prod`. Quyết định 6 của [ADR 0012](adr/0012-environment-model.md) (chấp nhận ở S257) đổi tên nó thành
+  `dev` ở giai đoạn 1, trước khi có bất kỳ role prod nào, theo đúng thứ tự bốn bước (C7.2d); cho tới PR Infra đó, giữ
+  nguyên tên. Prod có root riêng `accounts/aa365-prod` với bucket state riêng, gọi cùng module môi trường như Dev
+  (quyết định 5, C7.2c); `accounts/aa365` giữ lớp dùng chung cho cả tài khoản và Dev.
 - Các file `.bak` và `.tfplan` lạc trong Infra đã được xoá (Infra #211, AA-890). Cần xác nhận versioning trên bucket
   state Terraform (chưa kiểm ở S243). Luồng Terraform đầy đủ (comment plan, apply gắn với plan, kiểm drift) là U-42,
   kích hoạt trước prod hoặc khi có sự cố drift tiếp theo.
@@ -472,9 +474,12 @@ Cách cài release-please (AA-891):
 | PR preview (Vercel) | Xem thay đổi frontend trước khi merge | Có; Playwright UI smoke trên preview của CIS (ba lần chạy `ui-smoke.yml` gần nhất bị bỏ qua: sửa ở AA-879) | Vercel Hobby tới tenant trả tiền đầu tiên (D-18) |
 | **Dev** (acc2) | Tích hợp, được phép hỏng, demo | Có | **Chỉ dữ liệu test** (D-01: số đếm chính xác ngày 17/10/2026; Phần C C7.1a cấm PII prod trên Dev). Không có thời gian ân hạn hay theo dõi theo mốc: tạo bằng chứng ngay |
 | Staging | — | Không | Không có kế hoạch. Khi có prod, Dev đóng vai pre-prod; PR preview lo phần review UI |
-| **Prod** | Người dùng thật | Không | Một instance RDS và các service riêng **trên acc2** (ADR 0001, Phần C C7.2a, D-17); nghiên cứu gộp tài khoản AA-864 làm đầu vào cho ADR 0012. Bố cục, cổng và cách đặt tên trong ADR 0012 khi có ngày go-live (D-16, AA-880, U-40). Mục tiêu prod: DM-9.6, C7.2 |
+| **Prod** | Người dùng thật | Không | Tài nguyên môi trường riêng **trên acc2** (ADR 0001, D-17; [ADR 0012](adr/0012-environment-model.md) quyết định 2–4: VPC, instance RDS, cluster, pool Cognito, secret, khoá KMS và role riêng, cùng Deny theo tag, permission boundary theo môi trường và agent không truy cập prod). Xây khi có ngày go-live (ADR 0012 quyết định 11, D-16, AA-880, U-40); tài khoản prod riêng chỉ được xem lại khi gặp các điều kiện của quyết định 12 (trong đó có AA-864). Mục tiêu prod: DM-9.6, C7.2 |
 
-**Build một lần, deploy nhiều nơi:** cùng một digest image đi từ Dev tới prod; chỉ cấu hình và secret khác nhau.
+**Build một lần, deploy nhiều nơi** (ADR 0012 quyết định 7): digest image backend đã kiểm trên Dev được chép sang ECR
+prod và deploy bằng workflow Deploy Prod do tech lead chạy; chỉ cấu hình và secret khác nhau. Frontend được build lại
+cho từng môi trường trong một project Vercel prod riêng, vì Next.js đóng cấu hình public vào lúc build. Migration prod
+không bao giờ tự áp.
 
 ### 6.2 Deploy không phải là phát hành: feature flag
 
@@ -607,7 +612,7 @@ nghĩa khi có traffic thật (prod).
   việc xoá các bản dump cũ trên laptop là AA-829 (U-20); Done-when của nó không đổi.
 - **Bằng chứng nằm trong `docs/audits/<date>-S<nnn>-<slug>/`** (C7.2b, DM-8.10, C8a; N-10 giữ mặc định). Mục lục diễn
   tập và bảo mật chỉ dẫn link tới đó.
-- Mục tiêu prod (Multi-AZ, PITR 14 ngày, bản sao backup khác vùng, RPO/RTO): DM-9.6 và C7.2b, xác nhận trong ADR 0012.
+- Mục tiêu prod (Multi-AZ, PITR 14 ngày, bản sao backup khác vùng, RPO/RTO): DM-9.6 và C7.2b, xác nhận trong ADR 0012 quyết định 10 (bản sao khác vùng sang us-west-2).
 - Một bản backup chưa từng được khôi phục thì không phải là backup.
 
 ### 7.5 Secret
@@ -711,7 +716,7 @@ trình quanh các luật là [trang FinOps](ops/finops.md) (FIN-01).
 | Alarm Cognito + secret break-glass | ~2,4 | Đã duyệt ở S241 ("Cognito $") |
 | WAF Cognito trên pool khách hàng | ~7 | Khi mở đăng ký khách hàng (S241); Apple Developer 99 USD/năm cùng đăng nhập khách hàng AA-680 |
 | Vercel Pro | ~20 + mức dùng | Chỉ khi có tenant trả tiền đầu tiên (D-18) |
-| Prod (U-40) | ~150-300 (ước lượng) | Một con số thống nhất trong ADR 0012; ngân sách tài khoản 300 USD hiện đã gồm Dev |
+| Prod (U-40) | ~400-550 theo giá niêm yết, ~280-380 khi dùng các đòn bẩy (ước lượng của ADR 0012, 28/10/2026) | Một con số thống nhất được duyệt cùng plan Terraform prod trước khi apply (cổng go-live của ADR 0012, D-19); ngân sách tài khoản 300 USD hiện đã gồm Dev |
 
 ---
 
@@ -796,7 +801,7 @@ trình quanh các luật là [trang FinOps](ops/finops.md) (FIN-01).
 | U-32 | Script xoá dữ liệu và export DSAR | Tenant | Chưa làm (D-11): runbook thủ công khi có yêu cầu | AA-839 | 0 | Agent |
 | — | Runbook yêu cầu của chủ thể dữ liệu làm tay (xoá/export khi có yêu cầu, DRY RUN), danh mục OPS-09 | Tenant | Open | AA-839 (phần runbook, không chờ Phase 4) | 0 | Agent |
 | — | Chưa đánh số ở S241 (tech lead có thể gộp vào): A14 giới hạn kích thước body + `extra='forbid'` → U-19; E13 S3 gateway endpoint miễn phí trên Dev → U-40 cho phần prod | Tenant | Open (chưa quyết) | AA-876 | 0 | Agent + tech lead |
-| U-40 | Bản thiết kế prod, ADR 0012 (tài khoản, bố cục, cổng, đổi tên environment), SLO, kênh cảnh báo thứ hai, ngân sách prod, PDF break-glass, checklist sẵn sàng | Prod | Trigger: ngày go-live | AA-880 | ~150-300 | Agent + tech lead |
+| U-40 | Bản thiết kế prod theo ADR 0012 (chấp nhận ở S257: tài khoản, bố cục, cổng, đổi tên environment), SLO, kênh cảnh báo thứ hai, ngân sách prod, PDF break-glass, checklist sẵn sàng | Prod | ADR đã chấp nhận; trigger xây: ngày go-live | AA-880 | ~280-550 (ước lượng ADR 0012) | Agent + tech lead |
 | U-03 | Xoay token GitHub bị lộ | Prod | Chưa làm (D-02): khi go-live | AA-880 | 0 | Tech lead |
 | U-17 | Xoay mật khẩu RDS master | Prod | Chưa làm (D-03): khi go-live | AA-880 | 0 | Tech lead |
 | U-41 | Secret master được quản lý tự động | Prod | Trigger: X1 xong (D-04) | — | ~0,4 | Agent + tech lead |
@@ -819,7 +824,7 @@ trình quanh các luật là [trang FinOps](ops/finops.md) (FIN-01).
 | U-57 | Phần còn lại của L3 (dữ liệu khách du lịch, các dòng lưu giữ, xoá dữ liệu) | Trigger | Trigger: ADR 0006 Phase 4 / trước prod | AA-839 | 0 | Agent |
 | U-58 | CRM cho tenant theo playbook app mới | Trigger | Đã xây (S255): AA-Partner (ADR 0010), schema `crm` tới crm-023 | AA-821 | — | Agent + chủ doanh nghiệp |
 | U-59 | Reserved concurrency cho Lambda TripPlanner | Trigger | Trigger: quota Lambda 1000 | — | 0 | Agent |
-| — | Sơ đồ kiến trúc C4 L1-L2, trang network, ma trận quyền truy cập | Later | Tạm gác (N-9 giữ nguyên); bảng lấy từ AA-893 | AA-697 | 0 | Agent |
+| — | Sơ đồ kiến trúc C4 L1-L2, trang network, ma trận quyền truy cập | Later | Các sơ đồ icon AWS đã phát hành (S256, `architecture/diagrams/`), bản thử được tech lead duyệt (S257); phần chữ của trang network và ma trận quyền truy cập vẫn tạm gác (N-9); bảng lấy từ AA-893 | AA-697 | 0 | Agent |
 | — | Video UAT cho mọi app | Later | Sau phần việc kỹ thuật, khi tech lead ra hiệu | AA-855 | 0 | Agent + chủ doanh nghiệp |
 | — | Số liệu DORA hằng tháng từ GitHub API; dashboard chi phí đơn vị | Later | Open | — | 0 | Agent |
 | — | Tự review Well-Architected hằng năm cho từng app (kèm lăng kính Generative AI); NIST SSDF, NIST AI RMF, OWASP LLM Top 10 làm checklist đọc | Later | Open | — | 0 | Tech lead |
@@ -841,8 +846,7 @@ Mỗi mục là có chủ đích, kèm lý do. Mở lại một mục cần mộ
 | Không làm | Vì sao / cho tới khi |
 |---|---|
 | Một môi trường staging cố định, nhiều vùng, active-active | Dev + preview + đẩy cùng một image là đủ cho tới khi có prod với khách hàng lớn |
-| Một tài khoản AWS riêng cho prod | ADR 0001, C7.2a, D-17; biện pháp bù đắp nằm trong ADR 0012 |
-| Đổi tên GitHub environment `prod` bây giờ | ADR 0012 (D-16, C7.2d) |
+| Một tài khoản AWS riêng cho prod | ADR 0001, C7.2a, D-17; ADR 0012 quyết định 4 (biện pháp bù đắp) và quyết định 12 (khi nào xem lại) |
 | GitHub Team hoặc Enterprise, GHAS cho repo private, chuyển Infra thành public | D-14: gói Free, repo app public, repo gốc và Infra private; thay bằng gitleaks và OIDC chỉ cho `main` |
 | Vercel Pro trước tenant trả tiền đầu tiên | D-18 |
 | Người duyệt mọi PR trong giai đoạn dev | DM-11.5 / D-13 |
@@ -904,8 +908,8 @@ phiên S243 cho N-x. Khi một quyết định đã đổi một chuẩn, chuẩ
 | D-13 | Quyền merge theo rủi ro và giai đoạn: giai đoạn dev agent tự merge kể cả bảo mật/hạ tầng; cổng người từ prod hoặc tenant trả tiền đầu tiên | DM-11.5 (v1.1); `.claude/CLAUDE.md`; `session-workflow.md`; hook subagent |
 | D-14 | Repo app public, repo gốc private, GitHub Free | [STYLE, trang được đặt ở đâu](STYLE.md#where-a-page-may-live-sec-06); [ADR 0014](adr/0014-repo-visibility-and-github-plan.md); U-25 |
 | D-15 | Agent giữ profile `aa365-admin` | DM-8.7; [§7.6](#76-quyền-truy-cập) |
-| D-16 | Bố cục và cổng prod chọn cùng ngày go-live | ADR 0012 (AA-880) |
-| D-17 | Prod mặc định trên acc2 | ADR 0001; C7.2a; AA-880 |
+| D-16 | Bố cục và cổng prod chọn cùng ngày go-live | [ADR 0012](adr/0012-environment-model.md), chấp nhận ở S257: bố cục quyết định 5, cổng quyết định 8; xây khi có ngày go-live (quyết định 11); AA-880 |
+| D-17 | Prod mặc định trên acc2 | ADR 0001; C7.2a; ADR 0012 quyết định 2; AA-880 |
 | D-18 | Vercel Hobby tới tenant trả tiền đầu tiên, sau đó Pro | [§6.1](#61-môi-trường); ghi chú cho chủ doanh nghiệp |
 | D-19 | Chi tiêu AWS mới được duyệt từng mục, báo giá trước | Mục chi phí trong mẫu PR; [FinOps](ops/finops.md); DM-10.7 chỉ giữ luật phê duyệt ("thay đổi chi tiêu cần tech lead duyệt") |
 | D-20 | E-mail alarm khi ALARM và OK | Alarm của Infra (`ok_actions`); AA-872 |
