@@ -261,7 +261,10 @@ two kinds of PR; every other PR it opens is merged by a person or the orchestrat
 - No App is a bypass actor of the AA-CIS-Infra ruleset on `main` (`tools/github/infra-main-ruleset.json`, applied by
   `tools/github/db_auto_apply_gate.sh` with the tech lead's login): ci-bot reaches `main` only by merging a PR whose required
   checks are green.
-- No app repo workflow mints a token for another repo.
+- No app repo workflow mints a token for AA-CIS-Infra or the root repo. The one cross-repo app token is AA-CIS-App
+  `kit-sync.yml` (ADR 0016 decision 6, AA-994 S3s): one token per consumer app repo (AA-Partner, AA-Booking,
+  AA-TripPlanner-Web), Contents + Pull requests write, `release` environment (main only); it opens `bot/kit-sync`
+  PRs and never merges them (ADR 0011a decision 3).
 - Check: `gh pr view <n> --repo <repo> --json mergedBy --jq .mergedBy.login` shows `app/aa-ecosys-ci-bot`.
 - Stop: revert the workflow change, or suspend the installation (part "Emergency stop").
 

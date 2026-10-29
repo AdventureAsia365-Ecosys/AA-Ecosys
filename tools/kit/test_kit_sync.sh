@@ -1,6 +1,7 @@
 #!/bin/bash
 # Fixture test for kit-sync.sh (AA-994, root ADR 0016 decision 6). No network, no real app checkout.
-# Run: bash tools/kit/test_kit_sync.sh   (exit 0 = all pass)
+# Run: bash tools/kit/test_kit_sync.sh   (exit 0 = all pass). Since AA-994 S3s it runs the wrapper, so it needs
+# AA-CIS-App .github/scripts/kit-sync.sh on CIS main, or KIT_SYNC_IMPL=<a CIS worktree>/.github/scripts/kit-sync.sh.
 set -u
 S="$(cd "$(dirname "$0")" && pwd)/kit-sync.sh"
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
