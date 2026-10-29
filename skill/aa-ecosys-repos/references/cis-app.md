@@ -40,7 +40,7 @@
 
 ## Trang portal tenant — ở AA-Partner
 
-UI portal nằm ở AA-Partner `portal/app/portal/*` (Vercel `aa-cis-portal`); API phía sau vẫn là router `/v1/*` +
+UI portal nằm ở AA-Partner `portal/app/portal/*` (ECS `aa-crm-dev-portal` trên `portal.`); API phía sau vẫn là router `/v1/*` +
 `/auth` của repo này. Slug (AA-759, slug `t*` trước AA-759 trả 308): `dashboard`, `brand`, `tours` (`mine`, `marketplace`),
 `create` (`social`, `article`, `write`), `content` (+ `publish`), `account` (`activity`, `api`, `billing`,
 `integrations`, `settings`), `help/facebook`; ngoài gate: `/tenant-login`, `/privacy`, `/terms`.

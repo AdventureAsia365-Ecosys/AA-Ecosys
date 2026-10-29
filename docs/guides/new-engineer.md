@@ -49,7 +49,7 @@ on acc2 (ADR 0001, C7.2a, D-17), dated when go-live is set. Read the
 | `.` (root) | `AA-Ecosys` | public (since 2026-10-22) | `master` | [docs catalog](../README.md), [ADRs](../adr/README.md) | nothing (docs, skills, audits) |
 | `apps/AA-CIS-App` | `AA-CIS-App` | public | `main` | `CONTEXT.md` | ECS `aa-cis-dev-api` + `aa-cis-dev-worker`; Vercel `aa-cis-frontend` (admin) |
 | `apps/AA-Booking` | `AA-Booking` | public | `main` | `CONTEXT.md`, ADR 0004 | ECS `aa-booking-dev-api`; Vercel `aa-booking-admin` |
-| `apps/AA-Partner` | `AA-Partner` | public | `main` | `CONTEXT.md`, ADR 0010 | ECS `aa-crm-dev-api`, `aa-crm-dev-web` and `aa-crm-dev-portal` (tenant portal); Vercel `aa-cis-portal` only as the portal rollback until 2026-11-03 |
+| `apps/AA-Partner` | `AA-Partner` | public | `main` | `CONTEXT.md`, ADR 0010 | ECS `aa-crm-dev-api`, `aa-crm-dev-web` and `aa-crm-dev-portal` (tenant portal), all on `portal.lumiguides.it.com` |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | public | `main` | `CONTEXT.md` | Lambdas `aa-tripplanner-dev-browse` / `-assembly`; Vercel |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | public (since 2026-10-22) | `main` | `CONTEXT.md`, `README.md` | AWS acc2 (root `accounts/aa365/`) |
 

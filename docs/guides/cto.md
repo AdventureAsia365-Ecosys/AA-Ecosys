@@ -83,7 +83,7 @@ flowchart TB
 
 Diagrams here are a summary; the maintained C4 set belongs in `ecosystem-architecture.md` (AA-697, parked until
 the tech lead decides N-9). The tenant portal moved from Vercel to ECS Fargate in October 2026 (AA-979); the Vercel
-project `aa-cis-portal` stays as the rollback path until 2026-11-03.
+project `aa-cis-portal` was removed at the clean-up on 2026-10-28, with the people-facing API-key sign-in.
 
 ## How decisions are recorded
 

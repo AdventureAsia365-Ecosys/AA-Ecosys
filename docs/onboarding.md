@@ -59,7 +59,7 @@ D-17), dated when go-live is set (AA-880). Dev holds **test data only** (D-01).
 | 2 | AWS acc3 | Only for the Bedrock satellite Terraform root `accounts/acc3-bedrock/` | Tech lead, rarely needed | `aws sts get-caller-identity --profile nghiep_aa365` prints the acc3 ID |
 | 3 | **GitHub** org `AdventureAsia365-Ecosys` | Code, PRs, CI | Tech lead (org owner) | You can push branches to `AA-Ecosys`, `AA-CIS-Infra` and the four app repos (`AA-CIS-App`, `AA-Booking`, `AA-TripPlanner-Web`, `AA-Partner`). The app repos are public; the root repo is public for now (ADR 0014 amendment) |
 | 4 | **CIS staff account** (Cognito WORKFORCE) | Admin console, Booking admin | An owner, on CIS admin → Platform → Staff | The invite e-mail arrives; "Sign in with company email" works |
-| 5 | Vercel team | Frontend deploy logs, env var names | Tech lead | You see `aa-cis-frontend`, `aa-booking-admin`, the TripPlanner project and `aa-cis-portal` (the portal's rollback path until 2026-11-03; the portal itself runs on ECS) |
+| 5 | Vercel team | Frontend deploy logs, env var names | Tech lead | You see `aa-cis-frontend`, `aa-booking-admin` and the TripPlanner project (the tenant portal runs on ECS; its Vercel project was removed in October 2026) |
 | 6 | **Linear** workspace and team `AA_Ecosys` | Work items | Tech lead | You see the four projects (see the [PM guide](guides/pm.md)) |
 | 7 | Notion workspace `AA_Ecosys`, page Program Brain | Session memory (`memory.md`) | Tech lead | You can open Program Brain → memory.md |
 | 8 | Jira (Adventure Asia site, projects PR, KAN, CON) | Requests from the business owner | The tech lead asks the business owner | You can read the PR project |

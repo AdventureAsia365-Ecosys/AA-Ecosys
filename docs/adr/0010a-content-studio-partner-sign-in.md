@@ -17,9 +17,9 @@
   [`RUNBOOK.md`](../audits/2026-10-26-S252-aa979-p2b/RUNBOOK.md).
 - **Related Linear:** AA-979 (CRM-P2), AA-978 (membership feed, Done), AA-813 (identity phase 3: tenant users).
 - **Implementation status (2026-10-28):** the DNS cutover ran on 2026-10-27 (S253), with a rollback drill both ways.
-  `portal.` points at the agency CloudFront distribution (Fargate); the Vercel project `aa-cis-portal` answers 301 to
-  `portal.` and stays the rollback path. The clean-up (decision 5: the API-key sign-in flag off, the Vercel project
-  removed) starts on 2026-11-03. Evidence: [cutover record](../audits/2026-10-27-S253-aa979-cutover/README.md).
+  `portal.` points at the agency CloudFront distribution (Fargate). The clean-up (decision 5: the API-key sign-in flag
+  off, `/tenant-login` 308 to the partner sign-in, the Vercel project removed) ran on 2026-10-28 (S256), ahead of the
+  planned 2026-11-03 because Dev has no real users. Evidence: [cutover record](../audits/2026-10-27-S253-aa979-cutover/README.md).
 
 ## Context
 
