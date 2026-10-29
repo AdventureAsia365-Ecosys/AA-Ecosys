@@ -1,0 +1,342 @@
+<title>Phương án AI và AWS</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:wght@500;600&display=swap">
+<style>
+/* Layout: one reading column; a comparison table that scrolls inside itself; option cards stacked by recommendation order. */
+:root {
+  --bg: #f5f6f3;
+  --surface: #ffffff;
+  --fg: #1c2320;
+  --muted: #5b655f;
+  --line: #d8ddd8;
+  --accent: #1d6b58;
+  --accent-soft: #e2efe9;
+  --warn: #9a5b00;
+  --warn-soft: #f8ecd9;
+  --bad: #a03a2c;
+  --bad-soft: #f6e1dd;
+  --neutral-soft: #eceeea;
+  --font-display: "Lora", Georgia, "Times New Roman", serif;
+  --font-body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121614; --surface: #1a201d; --fg: #e3e8e4; --muted: #9aa59f; --line: #2e3632;
+    --accent: #6cc3a8; --accent-soft: #1d332b; --warn: #e3a64d; --warn-soft: #36291a;
+    --bad: #ec8a7a; --bad-soft: #3a211d; --neutral-soft: #232a26; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121614; --surface: #1a201d; --fg: #e3e8e4; --muted: #9aa59f; --line: #2e3632;
+  --accent: #6cc3a8; --accent-soft: #1d332b; --warn: #e3a64d; --warn-soft: #36291a;
+  --bad: #ec8a7a; --bad-soft: #3a211d; --neutral-soft: #232a26; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body);
+  font-size: 16px; line-height: 1.6;
+}
+.wrap {
+  max-width: 880px; margin: 0 auto;
+  padding-block: 40px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 40px;
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.25; margin: 0; }
+h1 { font-size: 2rem; font-weight: 600; }
+h2 { font-size: 1.4rem; font-weight: 600; }
+h3 { font-size: 1.12rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+ul, ol { margin: 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 6px; max-width: 70ch; }
+section { display: flex; flex-direction: column; gap: 14px; }
+.eyebrow { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.lede { color: var(--muted); font-size: 1.05rem; }
+header { display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 24px; }
+.meta { font-size: .88rem; color: var(--muted); }
+
+.rec {
+  background: var(--accent-soft); border-radius: 10px; padding: 20px 22px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.rec h2 { color: var(--accent); font-size: 1.2rem; }
+
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: .9rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-weight: 600; color: var(--muted); font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; background: var(--neutral-soft); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+td strong { font-weight: 600; }
+
+.chip {
+  display: inline-block; font-size: .74rem; font-weight: 600; letter-spacing: .02em;
+  padding: 2px 9px; border-radius: 999px; white-space: nowrap;
+}
+.chip.go { background: var(--accent-soft); color: var(--accent); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.neutral { background: var(--neutral-soft); color: var(--muted); }
+
+.opts { display: flex; flex-direction: column; gap: 18px; }
+.opt {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px 22px; display: flex; flex-direction: column; gap: 12px;
+}
+.opt-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
+.opt-head .code { font-family: var(--font-display); font-weight: 600; color: var(--muted); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px 18px; }
+.fact { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.fact .k { font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.fact .v { font-size: .95rem; font-variant-numeric: tabular-nums; }
+.opt .lbl { font-weight: 600; }
+
+.timeline { list-style: none; padding: 0; gap: 0; max-width: none; }
+.timeline li {
+  display: grid; grid-template-columns: 130px 1fr; gap: 14px; padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.timeline li:first-child { border-top: 0; }
+.timeline .when { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--accent); }
+@media (max-width: 520px) {
+  .timeline li { grid-template-columns: 1fr; gap: 2px; }
+  h1 { font-size: 1.6rem; }
+}
+
+.decide { counter-reset: d; list-style: none; padding: 0; gap: 12px; }
+.decide li {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.decide li .q { font-weight: 600; }
+.decide li .a { color: var(--muted); font-size: .94rem; }
+.note { font-size: .88rem; color: var(--muted); }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">Tài liệu trao đổi · 29/10/2026</span>
+  <h1>Phương án dùng AI (Claude, OpenAI) và tài khoản AWS</h1>
+  <p class="lede">Hệ thống đang không gọi được AI trên AWS. Trang này nêu nguyên nhân, năm phương án với thời gian, chi phí và rủi ro, cùng khuyến nghị kỹ thuật và những việc cần chủ doanh nghiệp quyết.</p>
+  <p class="meta">Người soạn: trưởng nhóm kỹ thuật. Hiện chỉ có môi trường thử nghiệm (Dev), chưa có khách thật dùng hệ thống.</p>
+</header>
+
+<section>
+  <h2>Chuyện gì đang xảy ra</h2>
+  <ul>
+    <li>Công ty có hai tài khoản AWS. <strong>Tài khoản hạ tầng</strong> chạy toàn bộ hệ thống (máy chủ, cơ sở dữ liệu, file), do đại lý <strong>TrueIDC</strong> thanh toán hộ. <strong>Tài khoản AI</strong> chỉ dùng để gọi các model AI, trước đây nằm dưới đại lý <strong>eCloudvalley</strong>.</li>
+    <li>Trên AWS, quyền dùng Claude phụ thuộc vào <strong>bên trả tiền</strong>: đại lý phải được Anthropic cho phép bán lại. TrueIDC chưa được duyệt (đã hỏi, xác nhận), nên tài khoản hạ tầng chưa bao giờ gọi được Claude.</li>
+    <li>Ngày 29/10, gói hỗ trợ 250 USD của eCloudvalley kết thúc và tài khoản AI rời tổ chức của họ. Ngay sau đó AWS khoá AI trên tài khoản này, <strong>mọi model, mọi vùng</strong>. Đã mở case với AWS Support; gói hỗ trợ cơ bản nên phản hồi chậm, không biết khi nào gỡ.</li>
+    <li>eCloudvalley cho biết muốn tiếp tục trong tổ chức của họ thì <strong>cần ký hợp đồng thanh toán</strong>. Đã gửi danh sách câu hỏi chi tiết, đang chờ trả lời.</li>
+    <li>Chi phí AI: khoảng <strong>1–5 USD/ngày</strong> lúc bình thường, khoảng <strong>250 USD/tháng</strong> trong tháng chạy viết lại nội dung hàng loạt.</li>
+  </ul>
+  <p class="note">Điểm mấu chốt: cái chặn AI là <em>ai trả tiền cho tài khoản</em>, không phải <em>hạ tầng đặt ở đâu</em>. Vì vậy dời hạ tầng sang tài khoản khác không tự giải quyết được vấn đề.</p>
+</section>
+
+<div class="rec">
+  <span class="eyebrow">Khuyến nghị kỹ thuật</span>
+  <h2>Làm D ngay, song song chuẩn bị C2; không làm A</h2>
+  <ol>
+    <li><strong>Tuần này:</strong> mua AI thẳng từ Anthropic và OpenAI (phương án D) để hệ thống chạy lại và có đường dự phòng không phụ thuộc AWS hay đại lý.</li>
+    <li><strong>Song song:</strong> hỏi báo giá bằng văn bản từ hai đại lý có quyền bán Claude (eCloudvalley, Renova Cloud), hỏi TrueIDC điều kiện rời tổ chức của họ, rồi chuyển sang mô hình công ty tự giữ tổ chức AWS, đại lý chỉ thanh toán (phương án C2).</li>
+    <li><strong>Không chuyển toàn bộ hạ tầng</strong> (phương án A): tốn gấp khoảng 6 lần công sức, có gián đoạn, mà vẫn phải đổi đại lý như C2 mới dùng được AI.</li>
+  </ol>
+</div>
+
+<section>
+  <h2>So sánh nhanh</h2>
+  <div class="tbl">
+    <table>
+      <thead>
+        <tr><th>Phương án</th><th>Thời gian</th><th>Công sức kỹ sư</th><th>Gián đoạn</th><th>Chi phí</th><th>Rủi ro chính</th><th>Đánh giá</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>D.</strong> Mua AI thẳng từ hãng</td>
+          <td class="num">~1 tuần</td>
+          <td class="num">~4 ngày<br>+3 ngày batch</td>
+          <td>Không</td>
+          <td>Giá niêm yết, batch giảm 50 %</td>
+          <td>Hoá đơn USD nước ngoài, thuế nhà thầu</td>
+          <td><span class="chip go">Làm ngay</span></td>
+        </tr>
+        <tr>
+          <td><strong>C2.</strong> Tổ chức AWS riêng, đại lý chỉ thanh toán</td>
+          <td class="num">4–10 tuần</td>
+          <td class="num">4–8 ngày</td>
+          <td>Không</td>
+          <td>Giá AWS + phí đại lý</td>
+          <td>Cần TrueIDC cho rời; AWS có thể khoá AI khi đổi bên trả tiền</td>
+          <td><span class="chip go">Đề xuất lâu dài</span></td>
+        </tr>
+        <tr>
+          <td><strong>E1.</strong> Đưa tài khoản hạ tầng vào tổ chức của eCloudvalley</td>
+          <td class="num">2–6 tuần</td>
+          <td class="num">3–5 ngày</td>
+          <td>Không</td>
+          <td>Giá AWS + phí eCloudvalley</td>
+          <td>Lặp lại sự cố 29/10, lần này trên tài khoản chứa cả hệ thống</td>
+          <td><span class="chip warn">Chỉ khi C2 không được</span></td>
+        </tr>
+        <tr>
+          <td><strong>B.</strong> Giữ TrueIDC, chỉ đưa tài khoản AI về đại lý có quyền bán Claude</td>
+          <td class="num">1–4 tuần</td>
+          <td class="num">0–1 ngày</td>
+          <td>Không</td>
+          <td>Phí đại lý trên phần AI</td>
+          <td>Hai đại lý, hai hoá đơn; chờ AWS gỡ khoá</td>
+          <td><span class="chip neutral">Tạm thời</span></td>
+        </tr>
+        <tr>
+          <td><strong>A.</strong> Chuyển toàn bộ hạ tầng sang tài khoản AI, ký một đại lý</td>
+          <td class="num">7–10 tuần</td>
+          <td class="num">33–43 ngày</td>
+          <td>4–8 giờ + ≥ 7 lần ngắt ngắn</td>
+          <td>+150–200 USD chạy song song + phí đại lý</td>
+          <td>Vẫn có thể bị khoá AI; dễ sót cấu hình; mọi người dùng đặt lại mật khẩu</td>
+          <td><span class="chip bad">Không khuyến nghị</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Thời gian tính theo lịch, gồm thương lượng với đại lý. Công sức tính bằng ngày làm việc của một kỹ sư.</p>
+</section>
+
+<section>
+  <h2>Chi tiết từng phương án</h2>
+  <div class="opts">
+
+    <article class="opt">
+      <div class="opt-head"><span class="code">D</span><h3>Mua AI thẳng từ Anthropic và OpenAI</h3><span class="chip go">Làm ngay</span></div>
+      <p>Công ty mở tài khoản trên trang của Anthropic và OpenAI, nạp tiền bằng thẻ công ty. Hệ thống gọi AI qua internet thay vì qua AWS. Hạ tầng trên AWS giữ nguyên. Không cần đại lý, không cần AWS cấp quyền.</p>
+      <div class="facts">
+        <div class="fact"><span class="k">Thời gian</span><span class="v">~1 tuần có đường dự phòng</span></div>
+        <div class="fact"><span class="k">Công sức</span><span class="v">~4 ngày, thêm ~3 ngày cho batch</span></div>
+        <div class="fact"><span class="k">Chi phí</span><span class="v">Bằng giá AWS; batch giảm 50 %</span></div>
+        <div class="fact"><span class="k">Gián đoạn</span><span class="v">Không</span></div>
+      </div>
+      <p><span class="lbl">Lợi ích:</span> có ngay một đường gọi Claude không phụ thuộc bất kỳ tài khoản AWS hay đại lý nào. Dùng được <strong>batch</strong>: gửi cả lô yêu cầu một lần, giá giảm 50 %, kết quả trong vòng 24 giờ. Trên AWS, batch cần cấu hình phức tạp và đã chờ duyệt khoảng 40 ngày chưa xong.</p>
+      <p><span class="lbl">Tiết kiệm thực tế:</span> vừa phải. Viết lại toàn bộ khoảng 810 tour tốn khoảng 62 USD khi gọi thường, khoảng 38 USD khi dùng batch (tiết kiệm ~24 USD mỗi lần). Tháng chạy hàng loạt nặng tiết kiệm tối đa khoảng 106 USD. Giá trị chính là có đường dự phòng, không phải tiết kiệm.</p>
+      <p><span class="lbl">Rủi ro và điều kiện:</span></p>
+      <ul>
+        <li>Hoá đơn USD từ nước ngoài, không có hoá đơn VAT điện tử Việt Nam. Điều khoản của Anthropic để bên mua chịu thuế khấu trừ (thuế nhà thầu). Cần hỏi kế toán trước lần nạp tiền đầu tiên.</li>
+        <li>Tiền nạp trước hết hạn sau 1 năm, không hoàn lại. Nạp từng khoản nhỏ.</li>
+        <li>Tài khoản mới có trần chi tiêu 500 USD/tháng, đủ cho mức dùng hiện nay; muốn cao hơn thì xin nâng.</li>
+        <li>Dữ liệu (nội dung tour) đi ra khỏi AWS. Anthropic cam kết không dùng dữ liệu API để huấn luyện model. Gọi thường thì không lưu; batch lưu kết quả 29 ngày; nội dung bị gắn cờ vi phạm có thể lưu tới 2 năm.</li>
+        <li>Điều khoản với khách thuê hệ thống đang ghi "Claude qua Amazon Web Services", cần sửa câu này.</li>
+        <li>Đăng ký bằng email chung của công ty và khai mã số thuế ngay từ đầu.</li>
+      </ul>
+    </article>
+
+    <article class="opt">
+      <div class="opt-head"><span class="code">C2</span><h3>Công ty tự giữ tổ chức AWS, đại lý chỉ thanh toán (Billing Transfer)</h3><span class="chip go">Đề xuất lâu dài</span></div>
+      <p>Công ty tạo một tài khoản quản lý AWS của riêng mình (miễn phí), đưa tài khoản AI và tài khoản hạ tầng vào. Một đại lý có quyền bán Claude nhận phần thanh toán qua tính năng Billing Transfer của AWS: đại lý trả tiền AWS và xuất hoá đơn cho công ty, còn quyền quản trị vẫn ở công ty.</p>
+      <div class="facts">
+        <div class="fact"><span class="k">Thời gian</span><span class="v">4–10 tuần</span></div>
+        <div class="fact"><span class="k">Công sức</span><span class="v">4–8 ngày</span></div>
+        <div class="fact"><span class="k">Chi phí</span><span class="v">Giá AWS + phí đại lý</span></div>
+        <div class="fact"><span class="k">Gián đoạn</span><span class="v">Không, không chuyển dữ liệu</span></div>
+      </div>
+      <p><span class="lbl">Lợi ích:</span> một nơi quản lý toàn bộ AWS, một hoá đơn. Đổi đại lý chỉ là đổi bên thanh toán; bên nào cũng chấm dứt được vào cuối tháng. Không lặp lại chuyện tài khoản bị tách ra như ngày 29/10. Ứng viên: <strong>eCloudvalley</strong> (tài khoản AI từng chạy tốt dưới họ) và <strong>Renova Cloud</strong> (công bố là đại lý được Anthropic uỷ quyền tại Việt Nam).</p>
+      <p><span class="lbl">Rủi ro và điều kiện:</span></p>
+      <ul>
+        <li>TrueIDC phải cho tài khoản hạ tầng rời tổ chức của họ. Đây là điểm hợp đồng; nếu bị ràng buộc thì phải tính phương án A.</li>
+        <li>Khi đổi bên trả tiền, AWS có thể khoá AI trên tài khoản hạ tầng như đã xảy ra với tài khoản AI. Làm D trước để có đường dự phòng.</li>
+        <li>Đại lý phải xác nhận quyền bán Claude áp dụng cho tài khoản theo Billing Transfer, và đã được AWS mở hạn mức nhận Billing Transfer (mặc định chưa mở).</li>
+        <li>Billing Transfer bắt đầu từ ngày 1 hằng tháng: sớm nhất 01/12 nếu ký trong tháng 11. Có thể có một tháng công ty tự trả AWS bằng thẻ.</li>
+        <li>Rời tổ chức của TrueIDC sẽ mất lịch sử chi phí trên AWS. Cần xuất lại trước. Cũng cần xác nhận email gốc của tài khoản hạ tầng thuộc công ty.</li>
+      </ul>
+    </article>
+
+    <article class="opt">
+      <div class="opt-head"><span class="code">E1</span><h3>Đưa tài khoản hạ tầng vào tổ chức của eCloudvalley</h3><span class="chip warn">Chỉ khi C2 không được</span></div>
+      <p>Đổi đại lý của tài khoản hạ tầng từ TrueIDC sang eCloudvalley theo cách tài khoản AI từng làm: tài khoản nằm trong tổ chức của eCloudvalley, họ trả tiền và có quyền quản trị.</p>
+      <div class="facts">
+        <div class="fact"><span class="k">Thời gian</span><span class="v">2–6 tuần</span></div>
+        <div class="fact"><span class="k">Công sức</span><span class="v">3–5 ngày</span></div>
+        <div class="fact"><span class="k">Chi phí</span><span class="v">Giá AWS + phí eCloudvalley</span></div>
+        <div class="fact"><span class="k">Gián đoạn</span><span class="v">Không</span></div>
+      </div>
+      <p><span class="lbl">Rủi ro:</span> đúng kịch bản ngày 29/10: hết hợp đồng thì tài khoản bị tách ra và có thể mất AI, lần này trên tài khoản chứa toàn bộ hệ thống. Đại lý có quyền áp chính sách lên tài khoản. Vẫn cần TrueIDC cho rời. Chỉ nên chọn nếu có điều khoản rút lui bằng văn bản và đại lý không hỗ trợ Billing Transfer.</p>
+    </article>
+
+    <article class="opt">
+      <div class="opt-head"><span class="code">B</span><h3>Giữ TrueIDC cho hạ tầng, chỉ đưa tài khoản AI về đại lý có quyền bán Claude</h3><span class="chip neutral">Tạm thời</span></div>
+      <p>Ký hợp đồng thanh toán với eCloudvalley (hoặc Renova) chỉ cho tài khoản AI. Hạ tầng giữ nguyên ở TrueIDC.</p>
+      <div class="facts">
+        <div class="fact"><span class="k">Thời gian</span><span class="v">1–4 tuần</span></div>
+        <div class="fact"><span class="k">Công sức</span><span class="v">0–1 ngày</span></div>
+        <div class="fact"><span class="k">Chi phí</span><span class="v">Phí đại lý trên phần AI</span></div>
+        <div class="fact"><span class="k">Gián đoạn</span><span class="v">Không</span></div>
+      </div>
+      <p><span class="lbl">Rủi ro:</span> vẫn hai đại lý, hai hoá đơn. Phụ thuộc AWS gỡ khoá tài khoản AI, chưa biết khi nào. Nếu dùng hình thức thành viên tổ chức như trước thì vẫn có nguy cơ lặp lại sự cố.</p>
+    </article>
+
+    <article class="opt">
+      <div class="opt-head"><span class="code">A</span><h3>Chuyển toàn bộ hạ tầng sang tài khoản AI, ký một đại lý</h3><span class="chip bad">Không khuyến nghị</span></div>
+      <p>Dựng lại khoảng 785 thành phần hạ tầng trên tài khoản AI, chuyển cơ sở dữ liệu, file và tài khoản đăng nhập, rồi ký một đại lý cho tài khoản đó. Ưu điểm duy nhất: gom về một tài khoản.</p>
+      <div class="facts">
+        <div class="fact"><span class="k">Thời gian</span><span class="v">7–10 tuần</span></div>
+        <div class="fact"><span class="k">Công sức</span><span class="v">33–43 ngày, gần như dừng làm tính năng</span></div>
+        <div class="fact"><span class="k">Chi phí</span><span class="v">+150–200 USD chạy song song + phí đại lý</span></div>
+        <div class="fact"><span class="k">Gián đoạn</span><span class="v">4–8 giờ + ≥ 7 lần ngắt ngắn</span></div>
+      </div>
+      <p><span class="lbl">Rủi ro:</span> chuyển xong, tài khoản AI vẫn có thể bị khoá AI vì vẫn phải đổi bên trả tiền như C2. Mọi người dùng phải đặt lại mật khẩu và MFA. Dễ sót cấu hình gây lỗi ngầm; có lỗ hổng bảo mật tạm thời trong lúc chuyển. C2 đạt cùng mục tiêu "một nơi quản lý" mà không phải chuyển gì.</p>
+    </article>
+
+  </div>
+</section>
+
+<section>
+  <h2>Đã thử và không dùng được</h2>
+  <ul>
+    <li><strong>Nhờ TrueIDC mở Claude:</strong> đã hỏi; TrueIDC chưa được Anthropic duyệt bán lại.</li>
+    <li><strong>Gọi model qua công cụ lập trình Kiro:</strong> Kiro chỉ dùng cho việc viết code, không cho hệ thống gọi model như một dịch vụ.</li>
+    <li><strong>Model cũ hơn hoặc vùng AWS khác trên tài khoản AI:</strong> đã thử 6 vùng và nhiều model, kể cả model của Amazon; đều bị khoá. Đây là khoá ở cấp tài khoản.</li>
+    <li><strong>Mua qua đối tác Microsoft Azure trong nước:</strong> bán được GPT nhưng không bán được Claude.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Lộ trình đề xuất</h2>
+  <ol class="timeline">
+    <li><span class="when">Tuần 1 (đến 06/11)</span><span>Mở tài khoản Anthropic và OpenAI, nạp khoản nhỏ; hệ thống gọi được Claude lại qua đường trực tiếp. Gửi câu hỏi cho eCloudvalley, Renova và TrueIDC.</span></li>
+    <li><span class="when">Tuần 2</span><span>Batch cho lần viết lại nội dung kế tiếp. So sánh báo giá và điều khoản đại lý.</span></li>
+    <li><span class="when">Giữa tháng 11</span><span>Chốt đại lý và hình thức (ưu tiên Billing Transfer). Tạo tài khoản quản lý của công ty, đưa tài khoản AI vào.</span></li>
+    <li><span class="when">Trước 29/11</span><span>Ký hợp đồng; TrueIDC xác nhận cho tài khoản hạ tầng rời; xuất lịch sử chi phí.</span></li>
+    <li><span class="when">Từ 01/12</span><span>Đại lý bắt đầu thanh toán. Thử AI trên AWS; đường trực tiếp giữ làm dự phòng.</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>Cần chủ doanh nghiệp quyết</h2>
+  <ol class="decide">
+    <li><span class="q">1. Cho dùng AI mua thẳng từ Anthropic và OpenAI (phương án D)?</span><span class="a">Đề xuất: đồng ý. Kèm theo là chấp nhận dữ liệu tour đi ra ngoài AWS theo các cam kết ở trên, và dùng thẻ công ty với hạn mức chi tiêu tự đặt khoảng 250 USD/tháng.</span></li>
+    <li><span class="q">2. Kế toán xử lý hoá đơn USD từ nước ngoài và thuế nhà thầu thế nào?</span><span class="a">Đề xuất: hỏi kế toán trước lần nạp tiền đầu tiên. Tình huống giống khi trả thẳng cho AWS bằng thẻ.</span></li>
+    <li><span class="q">3. Cho hỏi báo giá eCloudvalley và Renova theo hình thức Billing Transfer (phương án C2)?</span><span class="a">Đề xuất: đồng ý; chỉ ký khi có xác nhận bằng văn bản về quyền bán Claude và điều khoản rút lui.</span></li>
+    <li><span class="q">4. Hợp đồng với TrueIDC có cho tài khoản hạ tầng rời tổ chức của họ không?</span><span class="a">Cần xem lại hợp đồng hoặc hỏi TrueIDC. Câu trả lời quyết định giữa C2 và A.</span></li>
+    <li><span class="q">5. Không chuyển toàn bộ hạ tầng (phương án A), trừ khi TrueIDC không cho rời?</span><span class="a">Đề xuất: đồng ý.</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>Câu hỏi gửi đại lý</h2>
+  <ol>
+    <li>Bên bạn có được Anthropic uỷ quyền bán Claude trên AWS cho khách tại Việt Nam không (xác nhận bằng văn bản)? Có gọi được Claude Sonnet / Haiku 5.5 ở vùng us-west-1 không?</li>
+    <li>Có dùng được model OpenAI trên AWS không? Có chính sách nào chặn AWS Marketplace hay Bedrock không?</li>
+    <li>Có hỗ trợ Billing Transfer (công ty giữ tổ chức AWS) không, hay bắt buộc vào tổ chức của bên bạn? Hạn mức nhận Billing Transfer đã mở chưa? Sớm nhất bắt đầu tháng nào?</li>
+    <li>Có xuất hoá đơn VND và VAT điện tử cho mọi khoản, kể cả phí AI và Marketplace không? Tỷ giá và hạn thanh toán?</li>
+    <li>Giá AI theo niêm yết AWS hay có cộng phí? Có phí dịch vụ hay mức chi tiêu tối thiểu không? Có hỗ trợ xin credit AWS không?</li>
+    <li>Thời hạn hợp đồng, báo trước bao lâu khi chấm dứt? Khi hết hợp đồng, tài khoản và quyền dùng AI xử lý thế nào để không lặp lại sự cố 29/10?</li>
+    <li>Ai mở và theo dõi case AWS Support cho tài khoản? Có giúp gỡ khoá AI cho tài khoản AI hiện tại không, mất bao lâu?</li>
+  </ol>
+</section>
+
+<p class="note">Nguồn: tài liệu chính thức của AWS (Billing Transfer, danh sách dịch vụ đại lý được bán), Anthropic (giá, batch, lưu dữ liệu, điều khoản thuế), thông cáo của Renova Cloud và eCloudvalley; kết quả thử trực tiếp trên hai tài khoản ngày 29/10/2026. Bản phân tích chi tiết bằng tiếng Anh lưu trong kho tài liệu kỹ thuật.</p>
+
+</div>
