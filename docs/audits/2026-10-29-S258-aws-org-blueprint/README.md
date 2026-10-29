@@ -21,6 +21,114 @@ sánh đại lý): <https://claude.ai/artifact/6XpQ8YUU7w7HsZ9AoGfnRb>. Điều 
 
 Mọi chi phí là ước tính theo giá niêm yết us-west-1; số Dev hiện tại chưa ổn định.
 
+## 0. Bản gọn cho startup (khuyến nghị)
+
+Quyết định của tech lead (S258, 29/10): đội 2–3 lập trình viên nên dùng 2 môi trường (dev+staging chung, prod riêng) và 3–4 tài khoản; phần 1–14 bên dưới là đích xa khi công ty lớn.
+
+Đội 2–3 lập trình viên: chỉ 2 môi trường (dev+staging chung, prod riêng) và 3–4 tài khoản. Công ty vẫn giữ tài khoản quản trị và quyền gốc; mọi thứ dựng bằng Terraform nên khi lớn lên chỉ cần thêm tài khoản theo điều kiện ở bảng cuối, không phải làm lại.
+
+```text
+AWS Organization của công ty
+├── aa-management ...... (mới, anh vừa tạo) chỉ quản trị: Organizations, Identity Center, billing, budget, org CloudTrail
+├── OU NonProd
+│   └── aa-nonprod ..... (đã có 005097885195, tài khoản hạ tầng hôm nay) dev + staging dùng chung
+├── OU Prod
+│   └── aa-prod ........ (tạo khi có ngày go-live) khách thật
+└── aa-ai .............. (đã có 786888028788) chỉ Bedrock; vào org nếu mô hình thanh toán cho phép;
+                         gộp vào nonprod/prod khi 2 tài khoản đó gọi được Bedrock
+```
+
+### So với bản đầy đủ
+
+| Mục | Bản đầy đủ (9 tài khoản) | Bản gọn (khuyến nghị) | Vì sao đủ |
+|---|---|---|---|
+| Số tài khoản | 9 | 3 ngay (management, nonprod, ai) + prod khi go-live | Ít tài khoản thì 2–3 người quản lý được; ranh giới quan trọng nhất (prod tách khỏi thử nghiệm) vẫn giữ |
+| Môi trường | dev / staging / prod, 3 tài khoản | dev + staging chung tài khoản nonprod; prod riêng | Staging chỉ bật khi cần (trước release, UAT), không tốn tiền chạy liên tục |
+| Log, security, backup, shared | 4 tài khoản riêng | Nằm trong management (log CloudTrail) và prod (backup); thêm tài khoản khi chạm điều kiện | Chưa có yêu cầu kiểm toán hay khách doanh nghiệp đòi tách |
+| OU | 7 OU | 2 OU (NonProd, Prod) + Suspended | Đủ để gắn SCP khác nhau cho prod |
+| SCP | ~9 | 3 | Các chặn quan trọng nhất; thêm khi cần |
+| Nhóm quyền | 6 nhóm, 8 permission set | 3 nhóm, 3 permission set | Đúng số người |
+| Thời gian kỹ sư | ~30+ ngày công | ~5–8 ngày công (prod tính riêng khi go-live) | Dùng lại Terraform hiện có, không tái cấu trúc lớn |
+
+### Tài khoản
+
+| Tài khoản | ID | Chứa gì | Ai vào | Chi phí/tháng (ước tính) | Khi nào |
+|---|---|---|---|---|---|
+| aa-management | (anh vừa tạo — cần ghi ID) | Organizations, IAM Identity Center, billing + budget, org CloudTrail + bucket log, không chạy ứng dụng | Tech lead (Admin), chủ doanh nghiệp (Billing, chỉ xem) | 0–3 USD | Ngay (ngày 1) |
+| aa-nonprod | 005097885195 | Toàn bộ dev hiện tại + staging bật khi cần (cùng RDS, database riêng `aa_stg`; ECS service stg để 0 task khi không dùng) | Tech lead, lập trình viên (toàn quyền), agent/CI (role riêng) | Như hôm nay ~255–265; staging bật vài ngày/tháng +20–60 | Đã có; vào org khi xong mô hình thanh toán |
+| aa-prod | (mới) | Khách thật: VPC, RDS Multi-AZ, ECS 2 task, CloudFront/WAF, Cognito prod, backup + bản sao sang us-west-2 | Tech lead (Admin 1 giờ), lập trình viên (chỉ đọc), CI qua GitHub environment có người duyệt; không agent | 280–410 có tiết kiệm / 410–580 giá niêm yết | Khi chị chốt ngày go-live; dựng 3–5 ngày bằng cùng module |
+| aa-ai | 786888028788 | Chỉ Bedrock, role invoker cho nonprod và prod | Tech lead, lập trình viên | Theo lượng gọi | Đã có; giữ tới khi nonprod/prod tự gọi được Bedrock |
+
+### Hai môi trường
+
+| Tiêu chí | dev + staging (tài khoản nonprod) | prod (tài khoản prod) |
+|---|---|---|
+| Dữ liệu | Dữ liệu mẫu, tour thật của công ty; staging dùng bản sao có ẩn danh khi cần | Dữ liệu thật của khách và đại lý |
+| Quy mô | 1 task mỗi dịch vụ; RDS db.t4g.small một AZ; staging tắt khi không dùng | 2 task mỗi dịch vụ khách dùng; RDS Multi-AZ; tự scale theo tải |
+| Sao lưu | 7 ngày tự động | 14 ngày, khôi phục theo thời điểm, bản sao sang us-west-2; diễn tập khôi phục mỗi quý |
+| Deploy | Merge vào main → tự deploy dev; staging deploy bằng tay khi cần thử release | Cùng bản build (image) đã chạy ở dev/staging, bấm duyệt trong GitHub environment `production` |
+| Tên miền | *.lumiguides.it.com (hôm nay), stg-*.lumiguides.it.com | Tên miền chính thức của công ty |
+| Đăng nhập | Cognito dev (E2E, thử) | Cognito prod riêng, bắt MFA |
+| AI | Qua LLM gateway, mọi đường bật thử được | Qua LLM gateway, chỉ đường đã duyệt, có trần chi |
+
+### Quản trị tối thiểu
+
+| Hạng mục | Cấu hình | Ghi chú |
+|---|---|---|
+| Identity Center — Admin | Tech lead; mọi tài khoản; phiên 1 giờ ở prod | Không dùng IAM user / khoá cố định |
+| Identity Center — Developer | 2–3 lập trình viên; toàn quyền nonprod, chỉ đọc prod | Thêm người = thêm vào nhóm |
+| Identity Center — Billing | Chủ doanh nghiệp; xem chi phí, hoá đơn | Không quyền kỹ thuật |
+| CI / agent | GitHub OIDC role theo tài khoản; agent chỉ có role nonprod | Prod: chỉ CI có người duyệt |
+| SCP 1 | Cấm rời tổ chức, cấm đóng tài khoản (AWS tự gắn nếu tạo org bằng console sau 10/07/2026) | Mọi tài khoản thành viên |
+| SCP 2 | Cấm tắt CloudTrail / đổi cấu hình billing ở tài khoản thành viên | Mọi tài khoản thành viên |
+| SCP 3 | Chỉ cho vùng us-west-1, us-west-2, us-east-1 (+ ngoại lệ dịch vụ toàn cầu và định tuyến AI chéo vùng) | Gắn OU NonProd, Prod |
+| Break-glass | Root của management có khoá MFA phần cứng (2 khoá: dùng + cất két); root tài khoản thành viên xoá tập trung | Chỉ dùng khi Identity Center hỏng |
+| Ngân sách | Budget mỗi tài khoản + tổng, cảnh báo theo dự báo; Cost Anomaly Detection ở management | Miễn phí |
+
+### Terraform: thay đổi tối thiểu
+
+| Bước | Làm gì | Công |
+|---|---|---|
+| 1 | Giữ repo AA-CIS-Infra; root `accounts/aa365` thành root của nonprod (đổi tên dần, không dời state ngay) | 0 |
+| 2 | Thêm root `accounts/management` (Organizations, OU, SCP, Identity Center, budget, org CloudTrail) | 1–2 ngày |
+| 3 | Tách phần môi trường trong `accounts/aa365` thành `modules/environment` (VPC, RDS, ECS, edge) bằng `moved` block, plan không đổi gì | 2–3 ngày (làm dần) |
+| 4 | Khi go-live: root `accounts/prod` gọi cùng `modules/environment` với biến prod; state bucket riêng | 3–5 ngày |
+| 5 | CI: plan khi mở PR theo root bị đổi, apply khi merge; prod qua GitHub environment có người duyệt; job drift hằng đêm (đang làm) | 1 ngày |
+| 6 | Bỏ account ID viết cứng trong module (đọc từ data source / biến) | 0,5 ngày |
+
+### Profile CLI
+
+| Profile | Tài khoản | Quyền | Thay cho |
+|---|---|---|---|
+| aa-mgmt | aa-management | Admin | (mới) |
+| aa-nonprod | aa-nonprod | Admin / Developer | aa365-admin, default, aa365-admin-session, aa365-admin-toolkit |
+| aa-prod | aa-prod | ReadOnly; Admin khi cần | (mới) |
+| aa-ai | aa-ai | Developer | nghiep_aa365 |
+| (gỡ) | — | — | aa-dev/stg/prod(-admin) cũ của Quanskill, pqnghiep-admin, acc1-legacy-default |
+
+### Lộ trình gọn
+
+| Bước | Khi nào | Công | Phụ thuộc |
+|---|---|---|---|
+| Bật Organizations + Identity Center + budget ở aa-management, tạo 3 nhóm | Ngày 1 (2–3 giờ) | 0,5 ngày | Có ID tài khoản quản trị |
+| Root Terraform `accounts/management` | Tuần 1 | 1–2 ngày | — |
+| Mời aa-ai vào org (sau khi hỏi AWS về credit Lift và Bedrock) | Khi chốt mô hình thanh toán AI | 0,5 ngày | Quyết định của chị Thư |
+| Mời aa-nonprod vào org (rời tổ chức TrueIDC / Billing Transfer) | Khi TrueIDC hoặc đại lý mới xác nhận | 1 ngày + thời gian giấy tờ | Trả lời của đại lý |
+| Staging bật-khi-cần trong nonprod | Trước release lớn đầu tiên | 1–2 ngày | — |
+| Tạo aa-prod + dựng bằng module | 3–4 tuần trước go-live | 3–5 ngày | Ngày go-live, duyệt chi phí |
+
+### Khi nào mới mở rộng (điều kiện)
+
+| Thêm gì | Khi nào |
+|---|---|
+| Tài khoản log-archive + security riêng | Có khách doanh nghiệp / kiểm toán đòi, hoặc > 5 kỹ sư |
+| Tài khoản staging riêng | Staging phải bật liên tục hoặc khách UAT trên staging |
+| Tài khoản backup riêng | Dữ liệu prod có giá trị lớn / yêu cầu chống xoá |
+| Tài khoản shared-services | Nhiều tài khoản cùng cần ECR/DNS chung |
+| Tách tài khoản theo app | Một app có đội riêng hoặc chi phí/quyền cần tách hẳn |
+| Dịch vụ bảo mật trả phí (GuardDuty, Security Hub, Config) | Trước go-live hoặc khi có dữ liệu nhạy cảm; chờ duyệt riêng từng mục |
+
+
 ## 1. Tổng quan: hôm nay → mục tiêu
 
 Hôm nay mọi app chạy trên 1 account infra (005097885195). Account này là thành viên org của nhà bán TrueIDC. Account AI (786888028788) đứng riêng và đang bị AWS khoá Bedrock (Error 002). Công ty chưa có AWS Organization của mình. Mục tiêu là lấy account quản trị vừa tạo (aa-management) làm gốc Organization của công ty. dev / staging / prod nằm ở 3 account riêng, cạnh các account nền (log, security, backup, shared-services, shared-ai). Quản trị bằng Identity Center + SCP; IaC là Terraform tách theo stack, mỗi account một bucket state. Account AI nằm ở đâu và có vào org hay không phụ thuộc mô hình thanh toán (mục 5).
