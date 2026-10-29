@@ -7,23 +7,47 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, cis, booking, tripplanner, partner, infra]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-10-29
 review_every_days: 90
 related: [ARCH-01, ARCH-06, AA-697]
 ---
 
 # Architecture diagrams with AWS icons
 
-Six deployment views of the Dev platform, drawn as code with the Python [`diagrams`](https://diagrams.mingrammer.com/)
-package, which ships the official AWS Architecture Icons and lays out with Graphviz. Each view is a `.py` source next
-to its rendered `.svg`. The prose they illustrate is the source of truth:
+Six deployment views of the Dev platform, drawn as code in the style of the AWS Architecture Icons deck (the AWS
+reference-architecture look): the official service icons and group shapes shipped by the Python
+[`diagrams`](https://diagrams.mingrammer.com/) package, laid out on a grid and drawn by Graphviz. Each view is a `.py`
+source next to its rendered `.svg`. The prose they illustrate is the source of truth:
 [ecosystem architecture](../../ecosystem-architecture.md) and each repo's `CONTEXT.md`. When a view and the prose
 disagree, fix the view.
 
-Conventions: account boxes are outlined dark, the VPC is purple, outside services are orange and dashed. A solid arrow is
-a request or a write, a dashed arrow is a contract or an outside call, an orange dashed arrow crosses into the LLM
-account (`sts:AssumeRole`), a dotted arrow is a supporting link (sign-in, secret, deploy). Labels name services and
-roles only: never an account ID, an ARN or a network ID.
+## Conventions
+
+Groups follow the AWS order and look, outermost first:
+
+| Group | Look | Holds |
+|---|---|---|
+| AWS Cloud (one per account) | dark solid border, AWS logo | the infrastructure account (acc2) and the LLM account (acc3), side by side, never nested; global services (CloudFront, Route 53, IAM roles) sit here, outside the Region |
+| Region | teal dashed border, flag | `us-west-1` |
+| VPC | purple border, VPC icon | the shared VPC |
+| Public subnets | green fill, green lock | ALB, NAT instance |
+| Private subnets | blue fill, blue lock | "load balancer entry" (NLB), "workloads" (ECS tasks, VPC Lambdas, Valkey, EFS), "database" (RDS) |
+| Amazon ECS cluster | orange dashed border, ECS icon | the ECS services |
+| Generic group | grey dashed border | a logical set (Edge, Platform services, Operations, Legend) |
+| People, Vercel, GitHub, Outside services | grey solid border with the owner's icon | everything outside AWS |
+
+Every service shows its official icon with the AWS service name and a short role line under it. Arrows read left to
+right (people, edge, compute, data), are orthogonal, end on an icon side or on a group border (an arrow from a group
+border stands for all its members, one arrow instead of a fan), and carry the arrowhead on the target only. Labels
+sit beside their arrow. Every view draws this legend:
+
+| Line | Meaning |
+|---|---|
+| solid | a request, a read or a write (also an HTTP contract between apps) |
+| dashed | control or identity: sign-in, OIDC, `sts:AssumeRole`, deploy (push and pull of images, `UpdateFunctionCode`) |
+| dotted | asynchronous or optional: events, logs and metrics, a call that is not provisioned yet |
+
+Labels name services and roles only: never an account ID, an ARN or a network ID.
 
 ## Ecosystem
 
@@ -74,21 +98,35 @@ Source: [`partner.py`](partner.py).
 
 ## Change a diagram
 
-1. Edit the `.py` file (or add one and list it in `VIEWS` in [`render.py`](render.py)). Shared styles and the SVG
-   clean-up live in [`_common.py`](_common.py).
-2. Render with Graphviz `dot` on the `PATH` and a virtual environment that has `diagrams`, Pillow (smaller inline
-   icons) and the docs tool requirements:
+1. Edit the `.py` file (or add one and list it in `VIEWS` in [`render.py`](render.py)): declare the groups with
+   `group(kind, title, note)`, the services with the `diagrams` node classes, put each service on a grid cell with
+   `place({node: (column, row)})` and draw the arrows with `link(src, dst, label, kind, into=, out_of=)`. Members of
+   one group need adjacent cells, and a service outside a group must not sit inside that group's cell range.
+   [`_common.py`](_common.py) holds the group styles, the arrow kinds and the SVG clean-up;
+   [`_layout.py`](_layout.py) computes the coordinates, routes every arrow on a 6 pt grid (it never crosses an icon,
+   a text, a group title or a group that holds neither of its ends when another way exists, keeps clear of icons that
+   are not its ends, and avoids running along borders or other arrows, continuing another arrow's line and small
+   kinks), places each label beside its own arrow clear of everything else, and writes a laid-out Graphviz file that
+   `neato -n2` draws as is.
+   [`_group_icons.py`](_group_icons.py) drew the two group icons the package does not ship (`icons/`).
+2. Render with Graphviz (`dot` and `neato`) on the `PATH` and a virtual environment that has `diagrams`, Pillow
+   (smaller inline icons) and the docs tool requirements:
 
    ```bash
    python3 -m venv .tmp-session/diagrams-venv
    .tmp-session/diagrams-venv/bin/pip install diagrams pillow -r tools/docs/requirements.txt
-   .tmp-session/diagrams-venv/bin/python docs/architecture/diagrams/render.py
+   .tmp-session/diagrams-venv/bin/python docs/architecture/diagrams/render.py --png .tmp-session/diagram-previews
    ```
 
    Without root rights, `apt-get download graphviz` and its libraries, unpack them with `dpkg -x` into a local folder
    and point `PATH`, `LD_LIBRARY_PATH` and `GVBINDIR` at it (run `dot -c` once).
-3. `render.py` inlines every icon as a PNG data URI, numbers the node ids (an unchanged view renders to the same file)
-   and refuses an unsafe SVG. Commit the `.py` and the `.svg` together.
+3. `render.py` prints the layout problems it finds in each view (an arrow through a node, a group title or a group
+   that holds neither of its ends, an arrow along a border, two arrows on one track or on one line with a small gap,
+   a kink shorter than 13 pt, a label over a node, a title, a border, another arrow or another label); a clean view
+   prints none. When a label cannot sit clear (two borders too close together), drop it if a node text already says
+   it, or move a service to another cell. Look
+   at the PNG previews, then commit the `.py` and the `.svg` together. The layout is deterministic: an unchanged
+   view renders to the same file. `render.py` also inlines every icon as a PNG data URI and refuses an unsafe SVG.
 
 The docs reader publishes each SVG byte for byte only when it passes rule 9 of
 [`build_docs_reader.py`](../../../tools/docs/build_docs_reader.py): no script, `foreignObject`, event handler or
