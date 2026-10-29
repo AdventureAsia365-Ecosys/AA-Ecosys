@@ -95,11 +95,17 @@ Tracker HTML: publish lại cùng URL cuối phiên. Skill đóng gói: aa-cis-s
 
 ## Jira
 
-Nháp ở `docs/audits/2026-10-29-S257-session-close/jira-drafts.md`. Chưa đăng: nháp chờ tech lead duyệt (`docs/audits/2026-10-29-S257-session-close/jira-drafts.md`) — duyệt trong tin nhắn cuối phiên.
+Nháp ở `docs/audits/2026-10-29-S257-session-close/jira-drafts.md`. Jira đã đăng sau khi tech lead duyệt: PR-24 #10530, PR-22 #10531, PR-27 #10532, PR-23 #10533 (4 ảnh). — duyệt trong tin nhắn cuối phiên.
+
+## Sau chốt phiên (29/10 ~15:15–15:35)
+
+- Tech lead duyệt Jira → đã đăng 4 comment (xem mục Jira).
+- Tech lead gửi ảnh Payment methods acc3: Mastercard mặc định, còn hạn → không phải lỗi thẻ. Probe lại 15:2x: **mọi model Bedrock trên acc3 (cả Claude) trả "Error 002: Access to Bedrock models is not allowed for this account"** → toàn bộ LLM của hệ thống không gọi được tới khi AWS gỡ chặn; cần case AWS Support (tech lead mở). Không có lệnh production lỗi thêm sau 07:11 UTC (Dev rảnh).
+- Tạo **AA-999** (nghiên cứu gọi LLM qua Kiro thay Bedrock) theo yêu cầu tech lead; nghiên cứu chỉ đọc đang chạy.
 
 ## Việc cần làm đầu phiên sau (S258, theo thứ tự)
 
-1. Jira S257 nếu chưa đăng (nháp chờ tech lead duyệt (`docs/audits/2026-10-29-S257-session-close/jira-drafts.md`)).
+1. Jira S257: đã đăng sau khi tech lead duyệt: PR-24 #10530, PR-22 #10531, PR-27 #10532, PR-23 #10533 (4 ảnh) — không còn việc.
 2. **acc3 / judge luna**: theo dõi trả lời của reseller (tech lead hỏi) về việc acc3 rời Organization; khi luna chạy lại → probe
    gpt-6-luna / gpt-5.6-luna; tới lúc đó coi mọi stage judge trên luna là không tin được (đừng chạy eval trả tiền dựa trên luna);
    push + merge guard test `fix/aa-900-adhoc-label-account` nếu chưa. (Release CIS #1134, Booking #147, TP #186, Partner #122,
