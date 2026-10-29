@@ -1,13 +1,13 @@
 ---
 id: OPS-05-ecs-exec
 title: Query the database through ECS exec and S3
-description: The canonical way for a person or agent to run a Python (asyncpg) script against the shared RDS from inside the CIS api container, with the result returned through S3.
+description: The canonical way for a person or agent to run a Python (asyncpg) script against the shared RDS from inside an app container (CIS through S3; Booking and CRM through range reads of /tmp), with the whole result returned.
 type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [aa-cis-api, aa-cis-dev-db]
-last_reviewed: 2026-10-28
+applies_to: [aa-cis-api, aa-booking-api, aa-crm-api, aa-cis-dev-db]
+last_reviewed: 2026-10-29
 review_every_days: 90
 last_tested: 2026-10-17
 tested_where: dev-acc2
@@ -18,12 +18,12 @@ related: [OPS-05, OPS-05-db-migrate, skill/aa-cis-schema/references/ecs-exec.md,
 # Query the database through ECS exec and S3
 
 > [!TIP]
-> For CIS containers, run `tools/ecs/ecsx.sh <script.py> [VAR=value ...]` from the root repo (S253). It starts the
-> script detached from the SSM session (`tools/ecs/ecsx_runner.py`) and writes the whole output to
-> `s3://aa-cis-bronze-005097885195/scripts/out/`. Then it prints the output and removes the objects, so a dropped
-> session (`Cannot perform start session: EOF`) loses nothing. The script header shows how to target the worker.
-> It works on CIS containers only: the CRM task role cannot write the bronze bucket. The manual steps below show
-> what it does.
+> Run `tools/ecs/ecsx.sh <script.py> [VAR=value ...]` from the root repo (S253; `--help` lists every option). It
+> starts the script detached from the SSM session (`tools/ecs/ecsx_runner.py`), so a dropped session
+> (`Cannot perform start session: EOF`) loses nothing. On CIS containers it writes the whole output to
+> `s3://aa-cis-bronze-005097885195/scripts/out/`, prints it and removes the objects; the manual steps below show
+> what it does. On Booking and CRM containers, whose task roles cannot write the bronze bucket, it uses the
+> [local mode](#booking-and-crm-containers-local-mode).
 
 This page is the canonical copy of the pattern (data standard DM-8.8). The agent quick reference in
 `skill/aa-cis-schema/references/ecs-exec.md`, the global `CLAUDE.md` block and older notes point here.
@@ -121,6 +121,48 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 
    Expected: the JSON locally, nothing left under `scripts/` from this run.
    Rollback: none needed (the bucket is versioned; a deleted object can be restored from its previous version).
+
+## Booking and CRM containers: local mode
+
+The local mode of `tools/ecs/ecsx.sh` (S257) keeps the output in the container and reads it back in short pieces.
+It is the default for every service whose name does not start with `aa-cis-`; `ECSX_MODE=local` forces it anywhere.
+
+```bash
+ECSX_SERVICE=aa-booking-dev-api tools/ecs/ecsx.sh /home/nghiep/projects/AA-Ecosys/.tmp-session/bk_check.py LIMIT=20
+ECSX_SERVICE=aa-crm-dev-api tools/ecs/ecsx.sh /home/nghiep/projects/AA-Ecosys/.tmp-session/crm_check.py
+```
+
+Both task definitions name their container `api` (`infra/AA-CIS-Infra/accounts/aa365/booking.tf`, `crm_app.tf`),
+the default; `ECSX_CONTAINER` overrides it. The script reads the container's own `DATABASE_URL`: role `booking`
+(schema `booking`) or `crm_app` (schema `crm`).
+
+How it works (`tools/ecs/ecsx_local.py` on this side, `ecsx_runner.py` in the container):
+
+1. **Ship.** The script and the runner reach `/tmp` of the container. Default (`ECSX_SHIP=auto`): they are uploaded
+   to `scripts/ecsx/` of the bronze bucket, and the container fetches the presigned GET URLs with Python `urllib`
+   (the Booking and CRM images have no curl; a presigned GET needs no task-role permission). If that is not
+   confirmed, or with `ECSX_SHIP=inline`, they travel as base64 pieces inside the exec commands, one file per piece
+   (a retried call cannot duplicate data), `ECSX_INLINE_CHUNK` characters each (default 2000). The ECS API sets no
+   length limit on `--command`; the S3 mode already sends about 3 KB (two presigned URLs) per command. Either way the
+   container checks both files against their sha256 before anything runs, and the S3 objects are removed at once.
+2. **Start.** The runner forks into its own session and streams stdout + stderr into `/tmp/ecsx-<id>.out`. At the
+   end it writes `/tmp/ecsx-<id>.done` (`rc=<n> bytes=<m>`).
+3. **Read.** Short exec calls run `ecsx_runner.py read <id> <offset> <length>`. Each prints `ECSX_CHUNK` lines
+   (offset, length, file size, state, CRC32, base64 of `ECSX_READ_CHUNK` bytes, default 1024). This side accepts only
+   lines that continue at the expected offset with the right length and CRC, prints the bytes as they come, and asks
+   again for anything the SSM terminal dropped. Output appears while the script still runs.
+4. **Clean.** After the `.done` marker and the last byte, `/tmp/ecsx-<id>.*` is removed (`ECSX_KEEP=1` keeps it).
+   The exit code is the script's.
+
+Limits and recovery:
+
+- Each exec call is cut after `ECSX_EXEC_TIMEOUT` seconds (default 60) with its whole process group.
+- About 1 KB per exec call, a few seconds each: a 100 KB output takes minutes. Print a compact summary, not raw rows.
+- If no result arrives within `ECSX_TIMEOUT` seconds (default 900), the run keeps going in the container and the
+  tool prints a resume command: `ECSX_SERVICE=<same service> tools/ecs/ecsx.sh --resume <id> <offset>`.
+- Eight reads in a row with no usable line (task replaced, runner not shipped) stop the tool with exit code 4; the
+  files stay in the container until the task is replaced.
+- Long work (more than about 5 minutes) still belongs in a job (`booking.job`, `crm.job`), not in exec.
 
 ## Port-forward for a GUI client (optional)
 
