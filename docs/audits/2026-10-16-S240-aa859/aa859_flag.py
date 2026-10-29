@@ -26,6 +26,8 @@ ALLOWED = {
     "aa544:integration_disconnect_pool", "aa817:content_piece_reads_pool",
     # AA-986 L3 (S248): GET /v1/notifications + mark read, needs CIS 274
     "aa986:tenant_notifications_pool",
+    # AA-814 (S257): GET / POST / PATCH / DELETE /v1/facts (tenant Facts Entries), needs CIS 302
+    "aa814:facts_pool",
 }
 ON_VALUE, OFF_VALUE = "true", "false"   # must match FLAG_ON_VALUE / FLAG_OFF_VALUE in aa544_tenant_pool.py
 
