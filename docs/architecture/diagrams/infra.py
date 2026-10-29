@@ -2,10 +2,12 @@
 
 Facts: infra/AA-CIS-Infra CONTEXT.md ("Account model", "Main stack modules", "CI/CD and OIDC") and
 docs/ecosystem-architecture.md sections 4.2-4.4 and 5, cross-checked against the live aa365 state on 2026-10-28
-(TerraVision + a no-refresh plan, docs/audits/2026-10-28-S256-aa697-drift/). Names only; IDs come from Terraform outputs.
+(TerraVision + a no-refresh plan, docs/audits/2026-10-28-S256-aa697-drift/). Subnet tiers from modules/vpc (public:
+NAT instance, ALB; private: NLB, ECS tasks, VPC Lambdas, Valkey, EFS; database: RDS). Names only; IDs come from
+Terraform outputs.
 """
-from diagrams import Cluster, Diagram, Edge
 from diagrams.aws.compute import EC2, ECR, ElasticContainerServiceService, ElasticContainerServiceTask, Lambda
+from diagrams.aws.cost import Budgets, CostExplorer
 from diagrams.aws.database import ElastiCache, RDSPostgresqlInstance
 from diagrams.aws.engagement import SES
 from diagrams.aws.integration import Eventbridge, EventbridgeScheduler, SNS
@@ -13,108 +15,130 @@ from diagrams.aws.management import Cloudtrail, Cloudwatch
 from diagrams.aws.ml import Bedrock
 from diagrams.aws.network import APIGateway, CloudFront, ElbApplicationLoadBalancer, ElbNetworkLoadBalancer, Route53
 from diagrams.aws.security import IAMRole, Cognito, KMS, SecretsManager, WAF
-from diagrams.aws.cost import Budgets, CostExplorer
 from diagrams.aws.storage import EFS, S3
 from diagrams.onprem.ci import GithubActions
 from diagrams.onprem.iac import Terraform
 from diagrams.onprem.network import Internet
 
-from _common import ACCOUNT, EDGE_ATTR, GRAPH_ATTR, GROUP, NODE_ATTR, VPC, cluster_ref
-
-XACC = {"style": "dashed", "color": "#D86613", "fontcolor": "#D86613"}
+from _common import diagram, group, legend, link, place
 
 
 def draw(filename: str) -> None:
-    with Diagram("AA-CIS-Infra: Terraform roots and the Dev platform", filename=filename, outformat="svg",
-                 show=False, direction="TB", graph_attr=GRAPH_ATTR, node_attr=NODE_ATTR, edge_attr=EDGE_ATTR):
-        with Cluster("AA-CIS-Infra repo", graph_attr=GROUP):
-            gha = GithubActions("Terraform Plan / Apply\nDB Migrate · Schema Dump")
-            tf_main = Terraform("aa365 root\n(CI apply)")
-            tf_llm = Terraform("acc3-bedrock root\n(human, MFA)")
+    with diagram("AA-CIS-Infra: Terraform roots and the Dev platform", filename):
+        with group("github", "AA-CIS-Infra repo"):
+            gha = GithubActions("GitHub Actions\nPlan / Apply · DB Migrate · Schema Dump")
+            tf_main = Terraform("aa365 root\nCI apply")
+            tf_llm = Terraform("acc3-bedrock root\nhuman apply, MFA")
 
-        with Cluster("AWS infrastructure account (acc2) · us-west-1", graph_attr=ACCOUNT):
-            ci_roles = IAMRole("OIDC CI roles\nplan (read) · apply (boundary)\none deploy role per app")
+        with group("outside", "Internet"):
+            internet = Internet("Outside APIs\nLLM · SEO · maps")
 
-            with Cluster("DNS and edge", graph_attr=GROUP):
-                dns = Route53("Route 53\npublic + private zones")
-                waf = WAF("Regional WAF\non the ALB")
-                rest = APIGateway("REST APIs\nCIS · Booking")
-                http = APIGateway("HTTP API\nTripPlanner")
-                cdn = CloudFront("CloudFront\npartner · agency · client\n+ photos (S3 origin)")
+        with group("cloud", "AWS Cloud", "infrastructure account (acc2)"):
+            ci_roles = IAMRole("AWS IAM\nOIDC CI roles · deploy role per app")
+            dns = Route53("Amazon Route 53\npublic + private zones")
+            cdn = CloudFront("Amazon CloudFront\npartner · agency · client · photos")
+            with group("region", "us-west-1"):
+                with group("generic", "Edge"):
+                    rest = APIGateway("Amazon API Gateway\nREST APIs: CIS · Booking")
+                    waf = WAF("AWS WAF\nregional, on the ALB")
+                    http = APIGateway("Amazon API Gateway\nHTTP API: TripPlanner")
 
-            with Cluster("VPC", graph_attr=VPC):
-                nat = EC2("NAT instance\nt4g.nano + Elastic IP")
-                nlb = ElbNetworkLoadBalancer("Internal NLB\nVPC link + VPC origin")
-                alb = ElbApplicationLoadBalancer("ALB\n(reachable from the NLB only)")
-                with Cluster("ECS cluster aa-cis-dev-cluster (Fargate + Spot)", graph_attr=GROUP) as ecs:
-                    svc_cis = ElasticContainerServiceService("CIS api + worker")
-                    svc_bk = ElasticContainerServiceService("Booking api\n+ booking.job")
-                    svc_crm = ElasticContainerServiceService("CRM api · web · portal")
-                    migrate = ElasticContainerServiceTask("one-off task\nDB Migrate")
-                lambdas = Lambda("Lambdas in the VPC\nTripPlanner browse · assembly\nDFS balance probe")
-                rds = RDSPostgresqlInstance("RDS Postgres 15\ndeletion protection")
-                cache = ElastiCache("Valkey 8\nTLS + AUTH")
-                efs = EFS("EFS\n(no task mounts it)")
+                with group("vpc", "Shared VPC"):
+                    with group("private", "Private subnets", "load balancer entry"):
+                        nlb = ElbNetworkLoadBalancer("Network Load Balancer\ninternal: VPC link + origin")
+                    with group("public", "Public subnets"):
+                        nat = EC2("Amazon EC2\nNAT instance (t4g.nano)")
+                        alb = ElbApplicationLoadBalancer("Application LB\nreachable from the NLB only")
+                    with group("private", "Private subnets", "workloads") as workloads:
+                        with group("ecs", "Amazon ECS cluster", "aa-cis-dev-cluster, Fargate + Spot") as ecs:
+                            svc_cis = ElasticContainerServiceService("ECS service\nCIS api + worker")
+                            svc_bk = ElasticContainerServiceService("ECS service\nBooking api + booking.job")
+                            svc_crm = ElasticContainerServiceService("ECS service\nCRM api · web · portal")
+                            migrate = ElasticContainerServiceTask("ECS task\none-off DB Migrate")
+                        lambdas = Lambda("AWS Lambda in the VPC\nTripPlanner · DFS balance probe")
+                        cache = ElastiCache("Amazon ElastiCache\nValkey 8, TLS + AUTH")
+                        efs = EFS("Amazon EFS\n(no task mounts it)")
+                    with group("private", "Private subnets", "database"):
+                        rds = RDSPostgresqlInstance("Amazon RDS for PostgreSQL 15\ndeletion protection")
 
-            with Cluster("Data, secrets, identity", graph_attr=GROUP):
-                ecr = ECR("ECR, 5 repos\nimmutable tags")
-                s3 = S3("S3, 15 buckets\nCIS + ACP tiers · CRM (SSE-KMS)\nBooking media · TP artifacts\nCloudTrail · ALB logs")
-                secrets = SecretsManager("Secrets Manager\none DSN secret per app")
-                kms = KMS("KMS, 4 CMKs\nCloudTrail · CRM data\nCRM ingest · CRM seal")
-                cognito = Cognito("Cognito\nfour user pools")
-                waf_id = WAF("WAF\non 3 user pools")
-                triggers = Lambda("Lambdas outside the VPC\n4 Cognito triggers\nRDS snapshot expiry")
-                ses = SES("SES\nno-reply sender\ninbound test mail")
-                bedrock2 = Bedrock("Bedrock (acc2)\nembeddings\nCRM scrub guardrail")
+                with group("generic", "Data, secrets, identity"):
+                    ecr = ECR("Amazon ECR\n5 repos, immutable tags")
+                    s3 = S3("Amazon S3\n15 buckets (CIS, ACP, CRM, ...)")
+                    secrets = SecretsManager("AWS Secrets Manager\none DSN secret per app")
+                    kms = KMS("AWS KMS\n4 CMKs (CloudTrail, CRM x3)")
+                    bedrock2 = Bedrock("Amazon Bedrock\nembeddings · CRM guardrail")
+                    cognito = Cognito("Amazon Cognito\nfour user pools")
+                    waf_id = WAF("AWS WAF\non 3 user pools")
+                    triggers = Lambda("AWS Lambda\nCognito triggers · snapshot expiry")
+                    sched = EventbridgeScheduler("EventBridge Scheduler\naa-cis-dev-acp, 5 daily")
+                    ses = SES("Amazon SES\nno-reply · inbound test mail")
 
-            with Cluster("Operations", graph_attr=GROUP):
-                sched = EventbridgeScheduler("Scheduler group\naa-cis-dev-acp\n5 daily schedules")
-                rules = Eventbridge("EventBridge\nsecurity rules\nACP bus + DLQ")
-                trail = Cloudtrail("CloudTrail (KMS)\n+ IAM Access Analyzer")
-                cw = Cloudwatch("CloudWatch\nlogs · alarms\nflow logs")
-                sns = SNS("SNS\nalerts (e-mail)\nSES feedback")
-                budgets = Budgets("Budgets per App\n+ cost anomaly")
+                with group("generic", "Operations"):
+                    budgets = Budgets("AWS Budgets\nper app + cost anomaly")
+                    trail = Cloudtrail("AWS CloudTrail\n(KMS) + IAM Access Analyzer")
+                    rules = Eventbridge("Amazon EventBridge\nsecurity rules · ACP bus")
+                    cw = Cloudwatch("Amazon CloudWatch\nlogs · alarms · flow logs")
+                    sns = SNS("Amazon SNS\nalerts · SES feedback")
 
-        with Cluster("AWS LLM account (acc3) · us-west-1", graph_attr=ACCOUNT):
-            invoker = IAMRole("Bedrock invoker role")
-            batch = IAMRole("Bedrock Batch\nservice role")
-            ce_reader = CostExplorer("Cost Explorer\nreader role")
-            bedrock = Bedrock("Bedrock")
-            budget3 = Budgets("Budget + anomaly\nalerts")
+        with group("cloud", "AWS Cloud", "LLM account (acc3)"):
+            invoker = IAMRole("AWS IAM\nBedrock invoker role")
+            batch = IAMRole("AWS IAM\nBedrock Batch service role")
+            ce_reader = CostExplorer("AWS IAM\nCost Explorer reader role")
+            with group("region", "us-west-1"):
+                bedrock = Bedrock("Amazon Bedrock\nchat models")
+                budget3 = Budgets("AWS Budgets\nbudget + anomaly alerts")
 
-        internet = Internet("Internet\n(LLM, SEO, map APIs)")
+        place({
+            internet: (4, 0),
+            gha: (0, 1), tf_main: (1, 1), tf_llm: (2, 1),
+            ci_roles: (1, 3), nat: (4, 3), svc_cis: (5, 3), cache: (6, 3), budgets: (8, 3),
+            dns: (1, 4), rest: (2, 4), nlb: (3, 4), alb: (4, 4), svc_bk: (5, 4), rds: (7, 4), trail: (8, 4),
+            rules: (9, 4), invoker: (11, 4), bedrock: (12, 4),
+            cdn: (1, 5), waf: (2, 5), svc_crm: (5, 5), efs: (6, 5), cw: (8, 5), sns: (9, 5), batch: (11, 5),
+            http: (2, 6), migrate: (5, 6), ce_reader: (11, 6), budget3: (12, 6),
+            lambdas: (5, 7),
+            ecr: (2, 9), s3: (3, 9), secrets: (4, 9), kms: (5, 9), bedrock2: (6, 9),
+            waf_id: (2, 10), cognito: (3, 10), triggers: (4, 10), sched: (5, 10), ses: (6, 10),
+        })
+        legend((12, 9))
 
-        gha >> Edge(label="OIDC") >> ci_roles
-        gha >> [tf_main, tf_llm]
-        tf_main >> Edge(style="dotted") >> ci_roles
-        ci_roles >> Edge(style="dotted") >> [ecr, migrate]
-        dns >> [rest, cdn]
-        waf - Edge(style="dotted") - alb
-        waf_id - Edge(style="dotted") - cognito
-        cognito >> Edge(label="triggers", style="dotted") >> triggers
-        cdn >> Edge(label="OAC") >> s3
-        rest >> Edge(label="VPC link") >> nlb
-        cdn >> Edge(label="VPC origin") >> nlb
-        http >> lambdas
-        nlb >> alb >> Edge(**cluster_ref(ecs)) >> svc_bk
-        [svc_cis, svc_bk, svc_crm, migrate, lambdas] >> rds
-        svc_cis >> cache
-        svc_cis >> Edge(style="dotted") >> secrets
-        svc_crm >> Edge(style="dotted") >> kms
-        [svc_cis, svc_crm, lambdas] >> Edge(style="dotted") >> bedrock2
-        [svc_cis, lambdas] >> nat >> internet
-        sched >> [lambdas, triggers]
-        trail >> rules >> sns
-        cw >> sns
-        tf_llm >> Edge(style="dotted") >> invoker
-        [svc_cis, lambdas] >> Edge(label="sts:AssumeRole", **XACC) >> invoker >> bedrock
-        svc_cis >> Edge(label="cost read", **XACC) >> ce_reader
-        batch >> bedrock
-        budget3 - Edge(style="invis") - ce_reader
-        ecr - Edge(style="invis") - s3
-        cognito - Edge(style="invis") - ses
-        cache - Edge(style="invis") - efs
-        budgets - Edge(style="invis") - sns
+        # CI/CD and the two Terraform roots
+        link(gha, tf_main, "plan / apply", "control")
+        link(gha, tf_llm, kind="control")
+        link(gha, ci_roles, "OIDC", "control")
+        link(tf_main, ci_roles, "creates", "control")
+        link(tf_llm, invoker, "creates the acc3 roles", "control")
+        link(ci_roles, ecr, "push image", "control")
+        link(ci_roles, migrate, "run task", "control")
+        # request path
+        link(dns, rest)
+        link(dns, cdn)
+        link(rest, nlb, "VPC link")
+        link(cdn, nlb, "VPC origin")
+        link(cdn, s3, "OAC")
+        link(nlb, alb)
+        link(alb, svc_bk, into=ecs)
+        link(waf, alb, "protects", "control")
+        link(http, lambdas)
+        # workloads (ECS services, the DB Migrate task, the VPC Lambdas)
+        link(svc_cis, rds, out_of=workloads)
+        link(svc_cis, cache)
+        link(svc_cis, secrets, "DSN secret", "control")
+        link(svc_crm, kms, "CRM keys", "control")
+        link(svc_cis, bedrock2, "CIS, CRM, TripPlanner", out_of=workloads)
+        link(svc_cis, nat, "egress (CIS, TripPlanner)", out_of=workloads)
+        link(nat, internet)
+        link(svc_cis, invoker, "sts:AssumeRole (CIS, TripPlanner)", "control", out_of=workloads)
+        link(svc_cis, ce_reader, "cost read", "control")
+        link(batch, bedrock)
+        # identity and operations
+        link(waf_id, cognito, "protects", "control")
+        link(cognito, triggers, "triggers", "async")
+        link(sched, triggers, kind="async")
+        link(sched, lambdas, "daily", "async")
+        link(trail, rules, kind="async")
+        link(rules, sns, kind="async")
+        link(cw, sns, "alarms", "async")
 
 
 if __name__ == "__main__":

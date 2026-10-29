@@ -1,9 +1,9 @@
 """AA-Booking view: staff admin, API with its booking.job worker, data and contracts (AA-697).
 
 Facts: apps/AA-Booking CONTEXT.md ("Role in the ecosystem", "Runtime and request path", "Staff authentication",
-"B2B API", "Deferred work") and docs/ecosystem-architecture.md sections 3.4, 4.1, 4.2, 4.6.
+"B2B API", "Deferred work") and docs/ecosystem-architecture.md sections 3.4, 4.1, 4.2, 4.6. Subnet tiers from
+AA-CIS-Infra modules/vpc; AA-Partner's API runs on the same ECS cluster (ecosystem view).
 """
-from diagrams import Cluster, Diagram, Edge
 from diagrams.aws.compute import ECR, Fargate
 from diagrams.aws.database import RDSPostgresqlInstance
 from diagrams.aws.engagement import SES
@@ -15,51 +15,67 @@ from diagrams.aws.storage import S3
 from diagrams.onprem.ci import GithubActions
 from diagrams.programming.framework import Vercel
 
-from _common import ACCOUNT, EDGE_ATTR, GRAPH_ATTR, GROUP, NODE_ATTR, VPC
+from _common import diagram, group, legend, link, place
 
 
 def draw(filename: str) -> None:
-    with Diagram("AA-Booking: advisor workflow and booking lifecycle (Dev)", filename=filename, outformat="svg",
-                 show=False, direction="LR", graph_attr=GRAPH_ATTR, node_attr=NODE_ATTR, edge_attr=EDGE_ATTR):
-        staff = Users("AA staff\n(advisors, operations)")
+    with diagram("AA-Booking: advisor workflow and booking lifecycle (Dev)", filename):
+        with group("people", "People"):
+            staff = Users("AA staff\n(advisors, operations)")
 
-        with Cluster("Vercel", graph_attr=GROUP):
+        with group("vercel", "Vercel"):
             admin = Vercel("Booking admin\nNext.js + BFF")
 
-        with Cluster("GitHub: AA-Booking", graph_attr=GROUP):
-            deploy = GithubActions("Deploy Dev\n(deploy-gate preflight)")
+        with group("github", "GitHub: AA-Booking"):
+            deploy = GithubActions("GitHub Actions\nDeploy Dev (deploy-gate)")
 
-        with Cluster("AWS infrastructure account (acc2) · us-west-1", graph_attr=ACCOUNT):
-            cognito = Cognito("Cognito\nWORKFORCE staff\nM2M · EXTERNAL")
-            partner = Fargate("AA-Partner api\n(B2B client)")
-            rest = APIGateway("REST API\naa-booking-dev")
-            role = IAMRole("deploy role")
-            ecr = ECR("ECR\nimage per git SHA")
-            with Cluster("Shared VPC", graph_attr=VPC):
-                alb = ElbApplicationLoadBalancer("VPC link → NLB → ALB\nrule /booking/*")
-                api = Fargate("aa-booking-dev-api\nFastAPI + booking.job worker")
-                with Cluster("RDS Postgres (shared instance)", graph_attr=GROUP):
-                    own = RDSPostgresqlInstance("schema booking\n(bk-NNN, owner)")
-                    reads = RDSPostgresqlInstance(
-                        "read through grants\ncatalog.* views (CIS)\ninquiry outbox (TripPlanner)")
-            media = S3("S3\nsupplier media")
-            docs = S3("S3 ops documents\n(not provisioned yet)")
-            kms = KMS("KMS CMK\n(not provisioned yet)")
-            ses = SES("SES\nstaff e-mail")
-            cw = Cloudwatch("CloudWatch\nlogs · AA/Jobs/Booking")
+        with group("cloud", "AWS Cloud", "infrastructure account (acc2)"):
+            role = IAMRole("AWS IAM\ndeploy role (OIDC)")
+            with group("region", "us-west-1"):
+                cognito = Cognito("Amazon Cognito\nWORKFORCE staff · M2M · EXTERNAL")
+                rest = APIGateway("Amazon API Gateway\nREST aa-booking-dev")
+                ecr = ECR("Amazon ECR\nimage per git SHA")
+                with group("vpc", "Shared VPC"):
+                    lb = ElbApplicationLoadBalancer("Elastic Load Balancing\nVPC link → NLB → ALB /booking/*")
+                    with group("private", "Private subnets", "workloads"):
+                        with group("ecs", "Amazon ECS cluster", "Fargate"):
+                            api = Fargate("aa-booking-dev-api\nFastAPI + booking.job worker")
+                            partner = Fargate("AA-Partner api\nB2B client")
+                    with group("private", "Private subnets", "database"):
+                        with group("generic", "Amazon RDS for PostgreSQL", "shared instance"):
+                            own = RDSPostgresqlInstance("schema booking\nowner (bk-NNN)")
+                            reads = RDSPostgresqlInstance("read through grants\ncatalog.* (CIS) · inquiry outbox (TP)")
+                media = S3("Amazon S3\nsupplier media")
+                ses = SES("Amazon SES\nstaff e-mail")
+                docs = S3("Amazon S3\nops documents (not provisioned)")
+                kms = KMS("AWS KMS\nCMK (not provisioned)")
+                cw = Cloudwatch("Amazon CloudWatch\nlogs · AA/Jobs/Booking")
 
-        staff >> admin >> rest
-        admin >> Edge(label="sign-in", style="dotted") >> cognito
-        partner >> Edge(label="booking.b2b.v1 (M2M token)") >> rest
-        rest >> alb >> api
-        api >> own
-        api >> Edge(label="read only", style="dashed") >> reads
-        api >> [media, ses]
-        api >> Edge(label="uploads answer 503\nuntil provisioned", style="dashed") >> docs
-        docs >> Edge(style="dotted") >> kms
-        api >> Edge(style="dotted") >> cw
-        deploy >> Edge(label="OIDC") >> role >> ecr
-        ecr >> Edge(style="dotted") >> api
+        place({
+            cognito: (3, 0),
+            staff: (0, 1), admin: (1, 1), rest: (3, 1), lb: (4, 1), api: (5, 1), own: (6, 1),
+            partner: (5, 2), reads: (6, 2),
+            deploy: (0, 4), role: (2, 4), ecr: (3, 4), media: (4, 4), ses: (5, 4), docs: (6, 4), kms: (7, 4),
+            cw: (7, 2),
+        })
+        legend((8, 4))
+
+        link(staff, admin)
+        link(admin, rest)
+        link(admin, cognito, "sign-in", "control")
+        link(partner, rest, "booking.b2b.v1 (M2M token)")
+        link(rest, lb, "VPC link")
+        link(lb, api)
+        link(api, own)
+        link(api, reads, "read only")
+        link(api, media)
+        link(api, ses)
+        link(api, docs, "uploads: 503 until provisioned", "async")
+        link(docs, kms, kind="async")
+        link(api, cw, "logs, metrics", "async")
+        link(deploy, role, "OIDC", "control")
+        link(role, ecr, "push image", "control")
+        link(ecr, api, "pull image", "control")
 
 
 if __name__ == "__main__":
