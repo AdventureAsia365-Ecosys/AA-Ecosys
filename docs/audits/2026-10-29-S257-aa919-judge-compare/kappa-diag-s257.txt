@@ -1,0 +1,219 @@
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+runs: ['39096169', 'cc0f75cf', 'de6265e6']
+golden set: {'name': 'aa729', 'version': '1.2.0', 'status': 'active', 'created_at': datetime.datetime(2026, 10, 28, 15, 29, 2, 987056, tzinfo=datetime.timezone.utc)}
+golden set: {'name': 'aa729', 'version': '1.1.0', 'status': 'superseded', 'created_at': datetime.datetime(2026, 10, 26, 1, 11, 28, 750709, tzinfo=datetime.timezone.utc)}
+
+==============================================================================================================
+### run 39096169-dabf-41a3-a6c0-0af05482e6ab  r2 / t9_social  created 2026-10-28 18:39  prompt_version t9_social:judge-73e641a99aca
+verdict=informative stop=completed phase=tune kappa=0.316 counts=False cost=$0.2511 cap=$0.40 release=None
+details: {"calibration_run_id": "1973a133-a801-4068-ac74-a291629f81de", "control_mode": "rejudge", "goal": "non_inferior", "candidate": "current", "planned": {"tune": 10, "probe": 3, "holdout": 4}, "calibration_items": 13, "kappa_pairs": 13, "kappa_labels": {"fail": 5, "pass": 8}, "limit": null, "golden_set": "aa729@1.2.0", "counts": {"errors": 0, "attempted": 13, "hard_stops": {}, "no_control": 15, "control_errors": 0, "controls_judged": 0, "skipped_post_edit": 0, "calibration_errors": 0, "calibration_judged": 13}, "tune": {"fixed": 0, "paired": 0, "decision": "informative", "new_fail": 0}}
+
+sample     chan     split   label src          grade  | judge score codes                                        | aa729 | src/out chars  cal
+t9l-001    linkedin tune    fail  agent_panel  heavy  | fail    5.0 fact.embellish,fact.inclusion                | fail  | 8174/2316    only
+t9l-002    linkedin tune    fail  agent_panel  heavy  | fail    4.0 fact.embellish,fact.inclusion                | fail  | 7725/1466    only
+t9l-003    linkedin tune    fail  agent_panel  heavy  | fail    5.0 fact.embellish,fact.inclusion                | fail  | 6845/1149    only
+t9l-004    linkedin tune    pass  agent_panel  light  | fail    4.0 fact.embellish,fact.inclusion,fact.misbindin | fail  | 8216/1144 <> only
+t9l-005    linkedin tune    pass  agent_panel  light  | fail    6.0 fact.embellish,fact.number                   | fail  | 8437/1202 <> only
+t9l-008    linkedin tune    pass  agent_panel  light  | pass    7.0 fact.embellish,fact.name,fact.number         | pass  | 7794/1057    only
+t9l-009    linkedin holdout fail  agent_panel  heavy  | fail    4.0 fact.embellish,fact.inclusion,scope.framing, | pass  | 7129/1077    only
+t9l-010    linkedin tune    fail  agent_panel  heavy  | fail    4.0 fact.embellish,fact.inclusion,scope.framing  | pass  | 7338/1157    only
+t9l-011    linkedin holdout pass  agent_panel  light  | fail    4.0 fact.embellish,fact.misbinding,fact.number   | pass  | 6679/1005 <> only
+t9l-012    linkedin tune    pass  agent_panel  light  | pass    8.0 fact.embellish                               | pass  | 7897/812    only
+t9l-013    linkedin holdout pass  agent_panel  light  | fail    6.0 fact.embellish,fact.inclusion,fact.misbindin | pass  | 8216/1261 <> only
+t9l-014    linkedin tune    pass  agent_panel  light  | pass    8.0                                              | pass  | 7979/1293    only
+t9l-015    linkedin tune    pass  agent_panel  light  | fail    6.0 fact.embellish                               | pass  | 8123/1380 <> only
+
+judge_version per row: {'73e641a99aca': 13}  judge_model: {'satellite-gpt-5.6-luna': 13}  (current image judge_version 73e641a99aca)
+
+KAPPA recomputed 0.316 vs stored 0.316 on 13 pairs (stored kappa_pairs 13) -> MATCH
+confusion (label -> judge): pass->pass 3  pass->fail 5  fail->fail 5  fail->pass 0
+labels {'pass': 8, 'fail': 5}  recall pass 0.375 fail 1.0  kappa_max 0.316  counts False  leave-one-out [0.25, 0.385]  score AUC 0.825
+pass iff score >= t: {4: 0.0, 5: 0.35, 6: 0.698, 7: 0.316, 8: 0.204, 9: 0.0}
+failure codes (all): {'fact.embellish': 12, 'fact.inclusion': 7, 'fact.misbinding': 3, 'fact.number': 4, 'fact.name': 1, 'scope.framing': 2, 'scope.persona_promise': 1}
+failure codes on PASS-labelled texts: {'fact.embellish': 7, 'fact.inclusion': 2, 'fact.misbinding': 3, 'fact.number': 4, 'fact.name': 1}
+by label_source: {'agent_panel': '8/13 agree'}
+by grade: {'heavy': '5/5 agree', 'light': '3/8 agree'}
+AA-729 baseline score_only verdict vs label on the same texts: kappa 0.35 on 13
+counterfactual: fail only on a HARD class -> kappa 0.316
+
+KAPPA PER STRATUM (gate = the overall row; measurable = >= 10 pairs and >= 3 of each label):
+  all:all                                              n= 13 pass/fail=8/5  kappa=0.316  recall pass=0.375 fail=1.0 BELOW
+  channel:linkedin                                     n= 13 pass/fail=8/5  kappa=0.316  recall pass=0.375 fail=1.0 BELOW
+  tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf          n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+  tenant:692a3214-5cc2-46c6-a5ca-265389747269          n=  3 pass/fail=1/2  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  tenant:885d4916-007b-415e-9261-909ad43c6d00          n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+  tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146          n=  4 pass/fail=3/1  kappa=0.200  recall pass=0.333 fail=1.0 (too few to measure)
+  tier:held                                            n=  5 pass/fail=2/3  kappa=0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  tier:known_failure                                   n=  5 pass/fail=2/3  kappa=0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  tier:untiered                                        n=  8 pass/fail=6/2  kappa=0.333  recall pass=0.5 fail=1.0 (too few to measure)
+  split:holdout                                        n=  3 pass/fail=2/1  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  split:tune                                           n= 10 pass/fail=6/4  kappa=0.444  recall pass=0.5 fail=1.0 BELOW
+measurable strata under 0.6: ['channel:linkedin', 'split:tune']
+
+DISAGREEMENTS (label reason, judge codes, panel fields the current judge source lacks):
+- t9l-004 label pass (agent_panel, light) judge fail 4.0 ['fact.embellish', 'fact.inclusion', 'fact.misbinding'] hidden-from-judge {}
+    reason: verifier (full source): Every fact (1637, more than three centuries as capital until 1955, the Je Khenpo's winter return, utse, woodcarving, gilded roofs, courtyards and assembly hall) is in full_source. The post stays within the day-4 Punakha Dzong scope and matches the brand voice. The only fixes…
+    judge claim [fact.embellish] '"The site carried symbolic weight inseparable from its institutional purpose."' -- The source confirms the confluence, the site's institutional role, and the brief's interpretive angle, but does not establish that the site carried this specif…
+    judge claim [fact.misbinding] '"the Je Khenpo ... still returns here each winter with the Central Monk Body"' -- The source says they relocate to Punakha Dzong from Thimphu each year; "returns" implies an unsupported prior departure/return framing, though the underlying w…
+    judge claim [fact.inclusion] '"the sacred relics housed within"' -- The source supports a sacred relic singular (the relic of Zhabdrung Ngawang Namgyal) and important religious artefacts, but not the plural wording "sacred reli…
+    judge claim [fact.inclusion] '"where the context arrived with shapes everything encountered after."' -- The source does not support this claim about context shaping everything encountered after, and the sentence is also garbled.
+- t9l-005 label pass (agent_panel, light) judge fail 6.0 ['fact.embellish', 'fact.number'] hidden-from-judge {}
+    reason: Decided by Nghiệp (S245 approval page) after a split panel. verifier (full source): Every fact in the post (checkpoint rules, dress code, 2-3 hours each way, 8th century, 1692, 1998, 2004, four temples) is in full_source, and the post stays within the Tiger's Nest scope as the brief requires. The p…
+    judge claim [fact.number] 'the return takes most visitors around two to three hours each way' -- The source says the hike to the monastery from the base-area car park takes most visitors roughly two to three hours each way; describing only the return as ta…
+    judge claim [fact.embellish] 'carefully restored by 2004' -- The source says the complex was subsequently restored and reopened in 2004, but does not characterize the restoration as 'careful'.
+    judge claim [fact.embellish] 'the site itself demands' -- The source supports entry rules and logistical demands, but does not support this rhetorical claim that the site itself demands the same level of attention to …
+- t9l-011 label pass (agent_panel, light) judge fail 4.0 ['fact.embellish', 'fact.misbinding', 'fact.number'] hidden-from-judge {}
+    reason: verifier (full source): Every concrete fact in the output is backed by full_source: the short trek, the travertine pools, the calcium carbonate colour, the 50 m fall and "time to swim and rest there before lunch". The post stays on Day 2 and does not name any other part of the trip. The only proble…
+    judge claim [fact.embellish] '"before your body has had a chance to register the trek"' -- The source says a short trek leads to the falls, but does not support this claim about the body's response or timing.
+    judge claim [fact.misbinding] '"The vivid turquoise pools are shaped by the same limestone that feeds the waterfall."' -- The source says the falls cascade over limestone terraces and that calcium carbonate from surrounding limestone causes the water colour; it does not say limest…
+    judge claim [fact.number] '"each one a different shade of turquoise"' -- The source says the pools are in varying colours, but does not state that each pool has a different shade.
+    judge claim [fact.embellish] '"so the energy holds"' -- The source supports that time to swim and rest is scheduled, but does not support this outcome or broader claim about maintaining energy.
+    judge claim [fact.embellish] '"already slowed down in the best way"' -- The source says time is left for swimming and resting before lunch, but does not support this evaluative description.
+- t9l-013 label pass (agent_panel, light) judge fail 6.0 ['fact.embellish', 'fact.inclusion', 'fact.misbinding', 'fact.number'] hidden-from-judge {}
+    reason: verifier (full source): Every fact in the post matches full_source, including 'narrow strip of land', which the brief itself calls 'the narrow peninsula'. The post stays on the Punakha Dzong scope, makes no tour promises, and keeps the brand voice. Its one gap is that it never adds the courtyard an…
+    judge claim [fact.misbinding] '"where the Pho Chhu and Mo Chhu converge"' -- The source says the dzong is at the confluence of the two rivers, but more precisely that the building spans a peninsula between them; the output attaches the …
+    judge claim [fact.embellish] '"bounded, protected, given a presence that a hilltop or a valley floor could not provide in the same way"' -- The source supports the riverside peninsula and the angle's symbolic/protective significance, but does not support this comparative claim about hilltops or val…
+    judge claim [fact.number] '"return here from Thimphu each winter"' -- The source says the Je Khenpo and Central Monk Body relocate there from Thimphu each year; it does not specify that they return in winter.
+    judge claim [fact.inclusion] '"The setting is part of the meaning."' -- This is a broad interpretive claim presented as a conclusion; the source supports the setting's significance and the brief asks for reflection, but does not es…
+- t9l-015 label pass (agent_panel, light) judge fail 6.0 ['fact.embellish'] hidden-from-judge {}
+    reason: verifier (full source): Every fact in the output comes from the place background or the writer brief: the peninsula, 1637–1638, 'over three centuries' as seat of government, the Je Khenpo's yearly move from Thimphu, and the dress requirement. It promises no tour activity and stays within the day 4 …
+    judge claim [fact.embellish] 'a single structure meant to hold governance and spiritual life together' -- The source says the dzong was founded as the administrative and religious centre of Bhutan, but does not support the interpretive claim that it was a single st…
+    judge claim [fact.embellish] 'That dual role is written into its architecture' -- The source lists architectural features and the dzong's administrative and religious roles, but does not state that the dual role is expressed or 'written into…
+    judge claim [fact.embellish] 'a requirement that signals clearly that this is not a monument but a place still in use' -- Traditional dress is required for entry, and the dzong remains a functioning institution, but the source does not support the claim that the dress requirement …
+
+==============================================================================================================
+### run cc0f75cf-6f35-426d-bcf7-a594733d7f1c  r2 / t9_social  created 2026-10-28 15:29  prompt_version t9_social:judge-34fcbdbb0e23
+verdict=informative stop=completed phase=tune kappa=0.316 counts=False cost=$0.2399 cap=$0.30 release=None
+details: {"calibration_run_id": "1973a133-a801-4068-ac74-a291629f81de", "control_mode": "rejudge", "goal": "non_inferior", "candidate": "current", "planned": {"tune": 10, "probe": 3, "holdout": 4}, "calibration_items": 13, "kappa_pairs": 13, "kappa_labels": {"fail": 5, "pass": 8}, "limit": null, "golden_set": "aa729@1.2.0", "counts": {"errors": 0, "attempted": 13, "hard_stops": {}, "no_control": 15, "control_errors": 0, "controls_judged": 0, "skipped_post_edit": 0, "calibration_errors": 0, "calibration_judged": 13}, "tune": {"fixed": 0, "paired": 0, "decision": "informative", "new_fail": 0}}
+
+sample     chan     split   label src          grade  | judge score codes                                        | aa729 | src/out chars  cal
+t9l-001    linkedin tune    fail  agent_panel  heavy  | fail    6.0 fact.embellish,scope.persona_promise         | fail  | 8174/2316    only
+t9l-002    linkedin tune    fail  agent_panel  heavy  | fail    4.0 fact.embellish,fact.inclusion,fact.misbindin | fail  | 7725/1466    only
+t9l-003    linkedin tune    fail  agent_panel  heavy  | fail    7.0 fact.embellish,fact.inclusion                | fail  | 6845/1149    only
+t9l-004    linkedin tune    pass  agent_panel  light  | fail    4.0 fact.embellish,fact.inclusion,fact.number,st | fail  | 8216/1144 <> only
+t9l-005    linkedin tune    pass  agent_panel  light  | fail    7.0 fact.misbinding,fact.number                  | fail  | 8437/1202 <> only
+t9l-008    linkedin tune    pass  agent_panel  light  | pass    7.0 fact.embellish,fact.name                     | pass  | 7794/1057    only
+t9l-009    linkedin holdout fail  agent_panel  heavy  | fail    4.0 fact.inclusion,fact.number,scope.framing     | pass  | 7129/1077    only
+t9l-010    linkedin tune    fail  agent_panel  heavy  | fail    4.0 fact.inclusion,scope.framing,scope.persona_p | pass  | 7338/1157    only
+t9l-011    linkedin holdout pass  agent_panel  light  | fail    6.0 fact.embellish,scope.framing                 | pass  | 6679/1005 <> only
+t9l-012    linkedin tune    pass  agent_panel  light  | pass    8.0 fact.embellish                               | pass  | 7897/812    only
+t9l-013    linkedin holdout pass  agent_panel  light  | fail    4.0 fact.embellish,fact.misbinding,struct.leaked | pass  | 8216/1261 <> only
+t9l-014    linkedin tune    pass  agent_panel  light  | pass    8.0 fact.embellish                               | pass  | 7979/1293    only
+t9l-015    linkedin tune    pass  agent_panel  light  | fail    6.0 fact.embellish,fact.inclusion,fact.number,sc | pass  | 8123/1380 <> only
+
+judge_version per row: {'34fcbdbb0e23': 13}  judge_model: {'satellite-gpt-5.6-luna': 13}  (current image judge_version 73e641a99aca)
+
+KAPPA recomputed 0.316 vs stored 0.316 on 13 pairs (stored kappa_pairs 13) -> MATCH
+confusion (label -> judge): pass->pass 3  pass->fail 5  fail->fail 5  fail->pass 0
+labels {'pass': 8, 'fail': 5}  recall pass 0.375 fail 1.0  kappa_max 0.316  counts False  leave-one-out [0.25, 0.385]  score AUC 0.725
+pass iff score >= t: {4: 0.0, 5: 0.35, 6: 0.35, 7: 0.27, 8: 0.204, 9: 0.0}
+failure codes (all): {'fact.embellish': 10, 'scope.persona_promise': 2, 'fact.inclusion': 6, 'fact.misbinding': 3, 'fact.self_contradiction': 1, 'scope.framing': 5, 'fact.number': 4, 'struct.truncated': 1, 'fact.name': 1, 'struct.leaked_instruction': 1}
+failure codes on PASS-labelled texts: {'fact.embellish': 7, 'fact.inclusion': 2, 'fact.number': 3, 'struct.truncated': 1, 'fact.misbinding': 2, 'fact.name': 1, 'scope.framing': 2, 'struct.leaked_instruction': 1}
+by label_source: {'agent_panel': '8/13 agree'}
+by grade: {'heavy': '5/5 agree', 'light': '3/8 agree'}
+AA-729 baseline score_only verdict vs label on the same texts: kappa 0.35 on 13
+counterfactual: fail only on a HARD class -> kappa 0.316
+
+KAPPA PER STRATUM (gate = the overall row; measurable = >= 10 pairs and >= 3 of each label):
+  all:all                                              n= 13 pass/fail=8/5  kappa=0.316  recall pass=0.375 fail=1.0 BELOW
+  channel:linkedin                                     n= 13 pass/fail=8/5  kappa=0.316  recall pass=0.375 fail=1.0 BELOW
+  tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf          n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+  tenant:692a3214-5cc2-46c6-a5ca-265389747269          n=  3 pass/fail=1/2  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  tenant:885d4916-007b-415e-9261-909ad43c6d00          n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+  tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146          n=  4 pass/fail=3/1  kappa=0.200  recall pass=0.333 fail=1.0 (too few to measure)
+  tier:held                                            n=  5 pass/fail=2/3  kappa=0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  tier:known_failure                                   n=  5 pass/fail=2/3  kappa=0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  tier:untiered                                        n=  8 pass/fail=6/2  kappa=0.333  recall pass=0.5 fail=1.0 (too few to measure)
+  split:holdout                                        n=  3 pass/fail=2/1  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  split:tune                                           n= 10 pass/fail=6/4  kappa=0.444  recall pass=0.5 fail=1.0 BELOW
+measurable strata under 0.6: ['channel:linkedin', 'split:tune']
+
+DISAGREEMENTS (label reason, judge codes, panel fields the current judge source lacks):
+- t9l-004 label pass (agent_panel, light) judge fail 4.0 ['fact.embellish', 'fact.inclusion', 'fact.number', 'struct.truncated'] hidden-from-judge {}
+    reason: verifier (full source): Every fact (1637, more than three centuries as capital until 1955, the Je Khenpo's winter return, utse, woodcarving, gilded roofs, courtyards and assembly hall) is in full_source. The post stays within the day-4 Punakha Dzong scope and matches the brand voice. The only fixes…
+- t9l-005 label pass (agent_panel, light) judge fail 7.0 ['fact.misbinding', 'fact.number'] hidden-from-judge {}
+    reason: Decided by Nghiệp (S245 approval page) after a split panel. verifier (full source): Every fact in the post (checkpoint rules, dress code, 2-3 hours each way, 8th century, 1692, 1998, 2004, four temples) is in full_source, and the post stays within the Tiger's Nest scope as the brief requires. The p…
+- t9l-011 label pass (agent_panel, light) judge fail 6.0 ['fact.embellish', 'scope.framing'] hidden-from-judge {}
+    reason: verifier (full source): Every concrete fact in the output is backed by full_source: the short trek, the travertine pools, the calcium carbonate colour, the 50 m fall and "time to swim and rest there before lunch". The post stays on Day 2 and does not name any other part of the trip. The only proble…
+- t9l-013 label pass (agent_panel, light) judge fail 4.0 ['fact.embellish', 'fact.misbinding', 'struct.leaked_instruction'] hidden-from-judge {}
+    reason: verifier (full source): Every fact in the post matches full_source, including 'narrow strip of land', which the brief itself calls 'the narrow peninsula'. The post stays on the Punakha Dzong scope, makes no tour promises, and keeps the brand voice. Its one gap is that it never adds the courtyard an…
+- t9l-015 label pass (agent_panel, light) judge fail 6.0 ['fact.embellish', 'fact.inclusion', 'fact.number', 'scope.framing'] hidden-from-judge {}
+    reason: verifier (full source): Every fact in the output comes from the place background or the writer brief: the peninsula, 1637–1638, 'over three centuries' as seat of government, the Je Khenpo's yearly move from Thimphu, and the dress requirement. It promises no tour activity and stays within the day 4 …
+
+==============================================================================================================
+### run de6265e6-4bbc-4829-babc-563e99e172af  r2 / t9_social  created 2026-10-28 08:04  prompt_version t9_social:judge-33aa7af275c8
+verdict=informative stop=completed phase=tune kappa=0.235 counts=False cost=$0.2214 cap=$10.00 release=None
+details: {"calibration_run_id": "fdace84a-9dd9-449c-a76f-b0eabfee5818", "control_mode": "rejudge", "goal": "non_inferior", "candidate": "current", "planned": {"tune": 9, "probe": 3, "holdout": 5}, "calibration_items": 13, "kappa_pairs": 13, "kappa_labels": {"fail": 3, "pass": 10}, "limit": null, "golden_set": "aa729@1.1.0", "counts": {"errors": 0, "attempted": 12, "hard_stops": {}, "no_control": 2, "control_errors": 0, "controls_judged": 13, "skipped_post_edit": 0, "calibration_errors": 0, "calibration_judged": 13}, "tune": {"fixed": 3, "paired": 9, "decision": "informative", "new_fail": 1}}
+
+sample     chan     split   label src          grade  | judge score codes                                        | aa729 | src/out chars  cal
+t9l-001    linkedin holdout pass  agent_panel  light  | fail    4.0 fact.embellish,scope.framing,scope.persona_p | fail  | 8174/2316 <> same_row
+t9l-002    linkedin tune    fail  agent_panel  heavy  | fail    5.0 fact.embellish,fact.inclusion,scope.framing  | fail  | 7725/1466    same_row
+t9l-003    linkedin tune    pass  agent_panel  light  | pass    7.0 fact.embellish,fact.inclusion                | fail  | 6845/1149    same_row
+t9l-004    linkedin tune    pass  agent_panel  light  | fail    4.0 fact.embellish,fact.inclusion,fact.number,st | fail  | 8216/1144 <> same_row
+t9l-005    linkedin tune    pass  agent_panel  light  | fail    6.0 fact.embellish,fact.number,scope.persona_pro | fail  | 8437/1202 <> same_row
+t9l-008    linkedin tune    pass  agent_panel  light  | pass    8.0 fact.name                                    | pass  | 7794/1057    same_row
+t9l-009    linkedin holdout fail  agent_panel  heavy  | fail    4.0 fact.inclusion,scope.framing                 | pass  | 7129/1077    same_row
+t9l-010    linkedin tune    fail  agent_panel  heavy  | fail    4.0 fact.inclusion,scope.framing,scope.persona_p | pass  | 7338/1157    same_row
+t9l-011    linkedin holdout pass  agent_panel  light  | fail    5.0 fact.embellish,fact.inclusion,scope.framing  | pass  | 6679/1005 <> same_row
+t9l-012    linkedin tune    pass  agent_panel  light  | pass    7.0 fact.embellish,struct.leaked_instruction     | pass  | 7897/812    same_row
+t9l-013    linkedin holdout pass  agent_panel  light  | fail    4.0 fact.embellish,fact.misbinding,struct.leaked | pass  | 8216/1261 <> same_row
+t9l-014    linkedin tune    pass  agent_panel  light  | pass    8.0 fact.embellish                               | pass  | 7979/1293    same_row
+t9l-015    linkedin tune    pass  agent_panel  light  | fail    6.0 fact.embellish,scope.framing                 | pass  | 8123/1380 <> same_row
+
+judge_version per row: {'33aa7af275c8': 13}  judge_model: {'satellite-gpt-5.6-luna': 13}  (current image judge_version 73e641a99aca)
+
+KAPPA recomputed 0.235 vs stored 0.235 on 13 pairs (stored kappa_pairs 13) -> MATCH
+confusion (label -> judge): pass->pass 4  pass->fail 6  fail->fail 3  fail->pass 0
+labels {'pass': 10, 'fail': 3}  recall pass 0.4 fail 1.0  kappa_max 0.235  counts False  leave-one-out [0.182, 0.286]  score AUC 0.783
+pass iff score >= t: {4: 0.0, 5: 0.297, 6: 0.409, 7: 0.235, 8: 0.103, 9: 0.0}
+failure codes (all): {'fact.embellish': 10, 'scope.framing': 6, 'scope.persona_promise': 3, 'fact.inclusion': 6, 'fact.number': 2, 'struct.leaked_instruction': 3, 'fact.name': 1, 'fact.misbinding': 1}
+failure codes on PASS-labelled texts: {'fact.embellish': 9, 'scope.framing': 3, 'scope.persona_promise': 2, 'fact.inclusion': 3, 'fact.number': 2, 'struct.leaked_instruction': 3, 'fact.name': 1, 'fact.misbinding': 1}
+by label_source: {'agent_panel': '7/13 agree'}
+by grade: {'heavy': '3/3 agree', 'light': '4/10 agree'}
+AA-729 baseline score_only verdict vs label on the same texts: kappa -0.054 on 13
+counterfactual: fail only on a HARD class -> kappa 0.103
+
+KAPPA PER STRATUM (gate = the overall row; measurable = >= 10 pairs and >= 3 of each label):
+  all:all                                              n= 13 pass/fail=10/3  kappa=0.235  recall pass=0.4 fail=1.0 BELOW
+  channel:linkedin                                     n= 13 pass/fail=10/3  kappa=0.235  recall pass=0.4 fail=1.0 BELOW
+  tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf          n=  3 pass/fail=3/0  kappa=-  recall pass=0.667 fail=None (too few to measure)
+  tenant:692a3214-5cc2-46c6-a5ca-265389747269          n=  3 pass/fail=1/2  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  tenant:885d4916-007b-415e-9261-909ad43c6d00          n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+  tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146          n=  4 pass/fail=4/0  kappa=-  recall pass=0.25 fail=None (too few to measure)
+  tier:held                                            n=  5 pass/fail=4/1  kappa=0.118  recall pass=0.25 fail=1.0 (too few to measure)
+  tier:known_failure                                   n=  5 pass/fail=4/1  kappa=0.118  recall pass=0.25 fail=1.0 (too few to measure)
+  tier:untiered                                        n=  8 pass/fail=6/2  kappa=0.333  recall pass=0.5 fail=1.0 (too few to measure)
+  split:holdout                                        n=  4 pass/fail=3/1  kappa=0.000  recall pass=0.0 fail=1.0 (too few to measure)
+  split:tune                                           n=  9 pass/fail=7/2  kappa=0.372  recall pass=0.571 fail=1.0 (too few to measure)
+measurable strata under 0.6: ['channel:linkedin']
+
+DISAGREEMENTS (label reason, judge codes, panel fields the current judge source lacks):
+- t9l-001 label pass (agent_panel, light) judge fail 4.0 ['fact.embellish', 'scope.framing', 'scope.persona_promise'] hidden-from-judge {}
+    reason: verifier (full source): The body's facts all come from the full_source place background. It stays within the scope of day 4 at Punakha Dzong and matches the calm, on-brand voice, without inventing activities, times or access. The only problems are quick fixes: the seo_title "Your Bhutan Meditation …
+- t9l-004 label pass (agent_panel, light) judge fail 4.0 ['fact.embellish', 'fact.inclusion', 'fact.number', 'struct.leaked_instruction'] hidden-from-judge {}
+    reason: verifier (full source): Every fact (1637, more than three centuries as capital until 1955, the Je Khenpo's winter return, utse, woodcarving, gilded roofs, courtyards and assembly hall) is in full_source. The post stays within the day-4 Punakha Dzong scope and matches the brand voice. The only fixes…
+- t9l-005 label pass (agent_panel, light) judge fail 6.0 ['fact.embellish', 'fact.number', 'scope.persona_promise'] hidden-from-judge {}
+    reason: Decided by Nghiệp (S245 approval page) after a split panel. verifier (full source): Every fact in the post (checkpoint rules, dress code, 2-3 hours each way, 8th century, 1692, 1998, 2004, four temples) is in full_source, and the post stays within the Tiger's Nest scope as the brief requires. The p…
+- t9l-011 label pass (agent_panel, light) judge fail 5.0 ['fact.embellish', 'fact.inclusion', 'scope.framing'] hidden-from-judge {}
+    reason: verifier (full source): Every concrete fact in the output is backed by full_source: the short trek, the travertine pools, the calcium carbonate colour, the 50 m fall and "time to swim and rest there before lunch". The post stays on Day 2 and does not name any other part of the trip. The only proble…
+- t9l-013 label pass (agent_panel, light) judge fail 4.0 ['fact.embellish', 'fact.misbinding', 'struct.leaked_instruction'] hidden-from-judge {}
+    reason: verifier (full source): Every fact in the post matches full_source, including 'narrow strip of land', which the brief itself calls 'the narrow peninsula'. The post stays on the Punakha Dzong scope, makes no tour promises, and keeps the brand voice. Its one gap is that it never adds the courtyard an…
+- t9l-015 label pass (agent_panel, light) judge fail 6.0 ['fact.embellish', 'scope.framing'] hidden-from-judge {}
+    reason: verifier (full source): Every fact in the output comes from the place background or the writer brief: the peninsula, 1637–1638, 'over three centuries' as seat of government, the Je Khenpo's yearly move from Thimphu, and the dress requirement. It promises no tour activity and stays within the day 4 …
+
+==============================================================================================================
+CROSS-RUN judge verdict on the same calibration items:
+  t9l-001    label fail  39096169=fail/5.0  cc0f75cf=fail/6.0  de6265e6=fail/4.0
+  t9l-002    label fail  39096169=fail/4.0  cc0f75cf=fail/4.0  de6265e6=fail/5.0
+  t9l-003    label fail  39096169=fail/5.0  cc0f75cf=fail/7.0  de6265e6=pass/7.0
+  t9l-004    label pass  39096169=fail/4.0  cc0f75cf=fail/4.0  de6265e6=fail/4.0
+  t9l-005    label pass  39096169=fail/6.0  cc0f75cf=fail/7.0  de6265e6=fail/6.0
+  t9l-008    label pass  39096169=pass/7.0  cc0f75cf=pass/7.0  de6265e6=pass/8.0
+  t9l-009    label fail  39096169=fail/4.0  cc0f75cf=fail/4.0  de6265e6=fail/4.0
+  t9l-010    label fail  39096169=fail/4.0  cc0f75cf=fail/4.0  de6265e6=fail/4.0
+  t9l-011    label pass  39096169=fail/4.0  cc0f75cf=fail/6.0  de6265e6=fail/5.0
+  t9l-012    label pass  39096169=pass/8.0  cc0f75cf=pass/8.0  de6265e6=pass/7.0
+  t9l-013    label pass  39096169=fail/6.0  cc0f75cf=fail/4.0  de6265e6=fail/4.0
+  t9l-014    label pass  39096169=pass/8.0  cc0f75cf=pass/8.0  de6265e6=pass/8.0
+  t9l-015    label pass  39096169=fail/6.0  cc0f75cf=fail/6.0  de6265e6=fail/6.0
+ecsx: rc=0 bytes=30736

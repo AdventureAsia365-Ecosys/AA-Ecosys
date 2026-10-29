@@ -1,0 +1,942 @@
+SCRIPT setting jit=off
+SCRIPT setting jit_above_cost=100000
+SCRIPT setting jit_inline_above_cost=500000
+SCRIPT setting jit_optimize_above_cost=500000
+SCRIPT setting plan_cache_mode=auto
+SCRIPT setting work_mem=4MB
+SCRIPT setting shared_buffers=422760kB
+SCRIPT setting random_page_cost=4
+SCRIPT setting effective_cache_size=845528kB
+SCRIPT setting default_statistics_target=100
+SCRIPT pgss role=tripplanner calls=4141 mean_ms=335.4 max_ms=7750.2 sd_ms=1081.8 plan_ms=0.0 plans=0 hit=6391835 read=99 temp_w=50136 rows=92836 q=SELECT p.tour_id::text AS tour_id, p.destination_id::text AS destination_id, p.destination_name, p.day_number FROM catalog.v_tour_place p WHERE p.tour
+SCRIPT pgss role=aa_app_user calls=4811 mean_ms=77.2 max_ms=1225.6 sd_ms=158.9 plan_ms=0.0 plans=0 hit=26652712 read=7347 temp_w=226760 rows=947724 q=SELECT source_id, day_number, position, place_name, place_display_name, destination_id, destination_name, country, lat, lng, precision FROM catalog.v_
+SCRIPT pgss role=tripplanner calls=34 mean_ms=450.7 max_ms=2337.0 sd_ms=455.7 plan_ms=0.0 plans=0 hit=1159750 read=207 temp_w=14027 rows=25688 q=SELECT p.destination_id::text AS destination_id, p.destination_name, p.lat, p.lng, p.tour_id::text AS tour_id, p.activity_types, p.located_by, p.preci
+SCRIPT pgss role=tripplanner calls=2518 mean_ms=5.0 max_ms=85.0 sd_ms=5.8 plan_ms=0.0 plans=0 hit=1093808 read=72 temp_w=0 rows=63970 q=SELECT day_number, position, place_name, place_card_id::text AS place_card_id, place_display_name, locality, region, country, destination_id::text AS 
+SCRIPT pgss role=booking calls=8 mean_ms=747.2 max_ms=1181.6 sd_ms=353.0 plan_ms=0.0 plans=0 hit=350204 read=0 temp_w=0 rows=0 q=EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT x.tour_id::text AS key, (array_agg(x.place ORDER BY x.first_seen, x.place))[1:8] AS places FROM ( SELEC
+SCRIPT pgss role=booking calls=8 mean_ms=709.4 max_ms=1124.0 sd_ms=338.9 plan_ms=0.0 plans=0 hit=343612 read=0 temp_w=0 rows=500 q=SELECT x.tour_id::text AS key, (array_agg(x.place ORDER BY x.first_seen, x.place))[$2:$3] AS places FROM ( SELECT p.tour_id, btrim(p.place_name) AS pl
+SCRIPT pgss role=booking calls=24 mean_ms=132.9 max_ms=263.8 sd_ms=59.3 plan_ms=0.0 plans=0 hit=102792 read=0 temp_w=0 rows=900 q=SELECT x.tour_id::text AS key, (array_agg(x.place ORDER BY x.first_seen, x.place))[$2:$3] AS places FROM ( SELECT p.tour_id, btrim(p.place_name) AS pl
+SCRIPT pgss role=booking calls=8 mean_ms=193.6 max_ms=279.2 sd_ms=82.8 plan_ms=0.0 plans=0 hit=37540 read=0 temp_w=0 rows=0 q=EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT x.tour_id::text AS key, (array_agg(x.place ORDER BY x.first_seen, x.place))[1:8] AS places FROM ( SELEC
+SCRIPT pgss role=tripplanner calls=349 mean_ms=3.1 max_ms=28.7 sd_ms=3.5 plan_ms=0.0 plans=0 hit=121178 read=17 temp_w=0 rows=769 q=SELECT day_number, position, destination_id::text AS destination_id, destination_name AS name, lat, lng, country FROM catalog.v_tour_place WHERE tour_
+SCRIPT sets tours=892 top_country=India n25=25 n100=100 country=218
+SCRIPT timing label=view reader=tour_destinations set=n25 ids=25 mode=custom rows=387 median_ms=2554.1 runs=2554/2532/2633 explain_exec_ms=2790.4 plan_ms=7.2 hit=18871 read=0 temp_w=0 jit_ms=3363.9 jit_functions=141
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom node=Seq Scan:tour_atoms self_ms=3374.6 loops=3 rows=8667
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom node=Index Scan:tour_place self_ms=163.8 loops=587 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom node=Sort:- self_ms=58.7 loops=3 rows=8667
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom node=Function Scan:generate_series self_ms=18.5 loops=165 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom node=Nested Loop:- self_ms=12.3 loops=25 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom node=Function Scan:regexp_split_to_table self_ms=9.0 loops=25 rows=7
+SCRIPT timing label=view reader=tour_destinations set=n25 ids=25 mode=generic rows=387 median_ms=2470.0 runs=2486/2470/2435 explain_exec_ms=2599.0 plan_ms=3.8 hit=19524 read=0 temp_w=0 jit_ms=3041.7 jit_functions=137
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic node=Seq Scan:tour_atoms self_ms=3054.0 loops=3 rows=8667
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic node=Sort:- self_ms=35.5 loops=3 rows=8611
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic node=Function Scan:generate_series self_ms=18.6 loops=165 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic node=Nested Loop:- self_ms=12.4 loops=25 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic node=Function Scan:regexp_split_to_table self_ms=8.6 loops=25 rows=7
+SCRIPT timing label=view reader=tour_destinations set=n25 ids=25 mode=custom_nojit rows=387 median_ms=308.4 runs=308/307/309 explain_exec_ms=316.2 plan_ms=3.8 hit=18828 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom_nojit node=Sort:- self_ms=34.9 loops=3 rows=8447
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom_nojit node=Seq Scan:tour_atoms self_ms=29.7 loops=3 rows=8667
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom_nojit node=Function Scan:generate_series self_ms=18.8 loops=165 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom_nojit node=Nested Loop:- self_ms=12.6 loops=25 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=8.5 loops=25 rows=7
+SCRIPT timing label=view reader=tour_destinations set=n25 ids=25 mode=generic_nojit rows=387 median_ms=306.8 runs=308/306/307 explain_exec_ms=379.5 plan_ms=0.1 hit=19524 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=163.8 loops=587 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic_nojit node=Sort:- self_ms=62.3 loops=3 rows=8447
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic_nojit node=Function Scan:generate_series self_ms=30.5 loops=165 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic_nojit node=Seq Scan:tour_atoms self_ms=28.0 loops=3 rows=8667
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic_nojit node=Nested Loop:- self_ms=23.9 loops=25 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n25 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=16.9 loops=25 rows=7
+SCRIPT timing label=old_inline reader=tour_destinations set=n25 ids=25 mode=custom rows=387 median_ms=2511.0 runs=2511/2681/2455 explain_exec_ms=2751.9 plan_ms=3.6 hit=18828 read=0 temp_w=0 jit_ms=3061.4 jit_functions=139
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom node=Seq Scan:tour_atoms self_ms=3073.3 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom node=Index Scan:tour_place self_ms=172.6 loops=587 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom node=Sort:- self_ms=35.4 loops=3 rows=8614
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom node=Function Scan:generate_series self_ms=20.3 loops=165 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom node=Nested Loop:- self_ms=13.1 loops=25 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom node=Function Scan:regexp_split_to_table self_ms=9.0 loops=25 rows=7
+SCRIPT timing label=old_inline reader=tour_destinations set=n25 ids=25 mode=generic rows=387 median_ms=2484.6 runs=2480/2525/2485 explain_exec_ms=3091.5 plan_ms=3.7 hit=18828 read=0 temp_w=0 jit_ms=3450.3 jit_functions=140
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic node=Seq Scan:tour_atoms self_ms=3485.9 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic node=Index Scan:tour_place self_ms=193.1 loops=587 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic node=Sort:- self_ms=46.3 loops=3 rows=8614
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic node=Function Scan:generate_series self_ms=22.1 loops=165 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic node=Nested Loop:- self_ms=14.4 loops=25 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic node=Aggregate:- self_ms=10.1 loops=1 rows=587
+SCRIPT timing label=old_inline reader=tour_destinations set=n25 ids=25 mode=custom_nojit rows=387 median_ms=310.8 runs=340/311/310 explain_exec_ms=317.5 plan_ms=3.8 hit=18828 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom_nojit node=Sort:- self_ms=35.0 loops=3 rows=8447
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom_nojit node=Seq Scan:tour_atoms self_ms=27.4 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom_nojit node=Function Scan:generate_series self_ms=19.3 loops=165 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom_nojit node=Nested Loop:- self_ms=12.9 loops=25 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=8.8 loops=25 rows=7
+SCRIPT timing label=old_inline reader=tour_destinations set=n25 ids=25 mode=generic_nojit rows=387 median_ms=309.6 runs=310/311/309 explain_exec_ms=322.4 plan_ms=0.1 hit=18828 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=165.5 loops=587 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic_nojit node=Sort:- self_ms=44.7 loops=3 rows=8447
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic_nojit node=Seq Scan:tour_atoms self_ms=27.8 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic_nojit node=Function Scan:generate_series self_ms=19.6 loops=165 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic_nojit node=Nested Loop:- self_ms=13.0 loops=25 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n25 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=9.1 loops=25 rows=7
+SCRIPT parity label=old_inline reader=tour_destinations set=n25 view_rows=387 body_rows=387 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_a reader=tour_destinations set=n25 ids=25 mode=custom rows=387 median_ms=139.3 runs=139/141/138 explain_exec_ms=139.0 plan_ms=2.3 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom node=Index Scan:tour_place self_ms=79.2 loops=587 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom node=Aggregate:- self_ms=33.6 loops=1 rows=587
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom node=Seq Scan:place_card self_ms=2.1 loops=1 rows=4785
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom node=Index Scan:destinations self_ms=1.8 loops=1761 rows=0
+SCRIPT timing label=cand_a reader=tour_destinations set=n25 ids=25 mode=generic rows=387 median_ms=137.2 runs=136/137/138 explain_exec_ms=139.0 plan_ms=2.1 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic node=Index Scan:tour_place self_ms=79.2 loops=587 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic node=Aggregate:- self_ms=33.7 loops=1 rows=587
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic node=Index Scan:destinations self_ms=1.8 loops=1761 rows=0
+SCRIPT timing label=cand_a reader=tour_destinations set=n25 ids=25 mode=custom_nojit rows=387 median_ms=139.1 runs=138/142/139 explain_exec_ms=139.2 plan_ms=2.2 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=79.2 loops=587 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom_nojit node=Aggregate:- self_ms=33.5 loops=1 rows=587
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom_nojit node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom_nojit node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=custom_nojit node=Index Scan:destinations self_ms=1.8 loops=1761 rows=0
+SCRIPT timing label=cand_a reader=tour_destinations set=n25 ids=25 mode=generic_nojit rows=387 median_ms=137.3 runs=137/137/136 explain_exec_ms=138.9 plan_ms=0.0 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=79.2 loops=587 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic_nojit node=Aggregate:- self_ms=33.4 loops=1 rows=587
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic_nojit node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic_nojit node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT plan label=cand_a reader=tour_destinations set=n25 mode=generic_nojit node=Index Scan:destinations self_ms=1.8 loops=1761 rows=0
+SCRIPT parity label=cand_a reader=tour_destinations set=n25 view_rows=387 body_rows=387 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_b reader=tour_destinations set=n25 ids=25 mode=custom rows=386 median_ms=61.3 runs=62/61/61 explain_exec_ms=62.0 plan_ms=2.1 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom node=Aggregate:- self_ms=34.0 loops=1 rows=587
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT timing label=cand_b reader=tour_destinations set=n25 ids=25 mode=generic rows=386 median_ms=58.8 runs=59/59/59 explain_exec_ms=60.9 plan_ms=2.0 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic node=Aggregate:- self_ms=33.4 loops=1 rows=587
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic node=Nested Loop:- self_ms=1.9 loops=587 rows=1
+SCRIPT timing label=cand_b reader=tour_destinations set=n25 ids=25 mode=custom_nojit rows=386 median_ms=61.5 runs=62/62/61 explain_exec_ms=60.8 plan_ms=2.1 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom_nojit node=Aggregate:- self_ms=33.5 loops=1 rows=587
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom_nojit node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom_nojit node=Nested Loop:- self_ms=1.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=custom_nojit node=Seq Scan:place_card self_ms=1.9 loops=1 rows=4785
+SCRIPT timing label=cand_b reader=tour_destinations set=n25 ids=25 mode=generic_nojit rows=386 median_ms=59.1 runs=59/59/59 explain_exec_ms=61.1 plan_ms=0.0 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic_nojit node=Aggregate:- self_ms=33.3 loops=1 rows=587
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic_nojit node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic_nojit node=Seq Scan:place_card self_ms=1.9 loops=1 rows=4785
+SCRIPT plan label=cand_b reader=tour_destinations set=n25 mode=generic_nojit node=Nested Loop:- self_ms=1.9 loops=587 rows=1
+SCRIPT parity label=cand_b reader=tour_destinations set=n25 view_rows=387 body_rows=386 only_view=10 only_body=9 verdict=FAIL
+SCRIPT timing label=view reader=country_places_old set=n25 ids=25 mode=custom rows=387 median_ms=2728.8 runs=2790/2713/2729 explain_exec_ms=2699.7 plan_ms=4.1 hit=18828 read=0 temp_w=0 jit_ms=3020.2 jit_functions=141
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom node=Seq Scan:tour_atoms self_ms=3032.4 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom node=Index Scan:tour_place self_ms=163.8 loops=587 rows=1
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom node=Sort:- self_ms=39.0 loops=3 rows=8631
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom node=Function Scan:generate_series self_ms=19.0 loops=165 rows=1
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom node=Nested Loop:- self_ms=12.6 loops=25 rows=7
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom node=Function Scan:regexp_split_to_table self_ms=8.5 loops=25 rows=7
+SCRIPT timing label=view reader=country_places_old set=n25 ids=25 mode=generic rows=387 median_ms=2595.3 runs=2533/2595/2766 explain_exec_ms=2568.7 plan_ms=3.9 hit=19524 read=0 temp_w=0 jit_ms=3024.6 jit_functions=137
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic node=Seq Scan:tour_atoms self_ms=3037.0 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic node=Sort:- self_ms=40.1 loops=3 rows=8631
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic node=Function Scan:generate_series self_ms=19.3 loops=165 rows=1
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic node=Nested Loop:- self_ms=12.6 loops=25 rows=7
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic node=Function Scan:regexp_split_to_table self_ms=8.8 loops=25 rows=7
+SCRIPT timing label=view reader=country_places_old set=n25 ids=25 mode=custom_nojit rows=387 median_ms=313.7 runs=310/314/314 explain_exec_ms=336.5 plan_ms=4.7 hit=18828 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=163.8 loops=587 rows=1
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom_nojit node=Sort:- self_ms=47.8 loops=3 rows=8447
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom_nojit node=Seq Scan:tour_atoms self_ms=34.6 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom_nojit node=Function Scan:generate_series self_ms=19.3 loops=165 rows=1
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom_nojit node=Nested Loop:- self_ms=12.6 loops=25 rows=7
+SCRIPT plan label=view reader=country_places_old set=n25 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=8.8 loops=25 rows=7
+SCRIPT timing label=view reader=country_places_old set=n25 ids=25 mode=generic_nojit rows=387 median_ms=311.2 runs=312/310/311 explain_exec_ms=320.9 plan_ms=0.1 hit=19524 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic_nojit node=Sort:- self_ms=38.3 loops=3 rows=8447
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic_nojit node=Seq Scan:tour_atoms self_ms=27.3 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic_nojit node=Function Scan:generate_series self_ms=19.5 loops=165 rows=1
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic_nojit node=Nested Loop:- self_ms=12.9 loops=25 rows=7
+SCRIPT plan label=view reader=country_places_old set=n25 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=9.1 loops=25 rows=7
+SCRIPT timing label=old_inline reader=country_places_old set=n25 ids=25 mode=custom rows=387 median_ms=2534.0 runs=2531/2534/2681 explain_exec_ms=2644.2 plan_ms=3.8 hit=18828 read=0 temp_w=0 jit_ms=3342.9 jit_functions=139
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom node=Seq Scan:tour_atoms self_ms=3354.5 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom node=Sort:- self_ms=38.2 loops=3 rows=8631
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom node=Function Scan:generate_series self_ms=19.5 loops=165 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom node=Nested Loop:- self_ms=12.7 loops=25 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom node=Function Scan:regexp_split_to_table self_ms=8.8 loops=25 rows=7
+SCRIPT timing label=old_inline reader=country_places_old set=n25 ids=25 mode=generic rows=387 median_ms=2599.8 runs=2600/2629/2515 explain_exec_ms=2642.0 plan_ms=3.6 hit=18828 read=0 temp_w=0 jit_ms=3049.8 jit_functions=140
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic node=Seq Scan:tour_atoms self_ms=3061.5 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic node=Sort:- self_ms=38.1 loops=3 rows=8631
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic node=Function Scan:generate_series self_ms=19.3 loops=165 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic node=Nested Loop:- self_ms=12.6 loops=25 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic node=Function Scan:regexp_split_to_table self_ms=8.9 loops=25 rows=7
+SCRIPT timing label=old_inline reader=country_places_old set=n25 ids=25 mode=custom_nojit rows=387 median_ms=319.1 runs=337/318/319 explain_exec_ms=326.7 plan_ms=3.7 hit=18828 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=164.4 loops=587 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom_nojit node=Sort:- self_ms=37.8 loops=3 rows=8447
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom_nojit node=Seq Scan:tour_atoms self_ms=27.7 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom_nojit node=Function Scan:generate_series self_ms=20.3 loops=165 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom_nojit node=Nested Loop:- self_ms=13.1 loops=25 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=custom_nojit node=Aggregate:- self_ms=9.2 loops=1 rows=587
+SCRIPT timing label=old_inline reader=country_places_old set=n25 ids=25 mode=generic_nojit rows=387 median_ms=313.0 runs=312/313/326 explain_exec_ms=323.1 plan_ms=0.1 hit=18828 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=162.6 loops=587 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic_nojit node=Sort:- self_ms=37.6 loops=3 rows=8447
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic_nojit node=Seq Scan:tour_atoms self_ms=27.6 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic_nojit node=Function Scan:generate_series self_ms=20.0 loops=165 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic_nojit node=Nested Loop:- self_ms=13.1 loops=25 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n25 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=9.2 loops=25 rows=7
+SCRIPT parity label=old_inline reader=country_places_old set=n25 view_rows=387 body_rows=387 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_a reader=country_places_old set=n25 ids=25 mode=custom rows=387 median_ms=139.9 runs=140/140/140 explain_exec_ms=139.3 plan_ms=2.2 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom node=Index Scan:tour_place self_ms=78.7 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom node=Aggregate:- self_ms=34.2 loops=1 rows=587
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom node=Seq Scan:place_card self_ms=1.9 loops=1 rows=4785
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom node=Index Scan:destinations self_ms=1.8 loops=1761 rows=0
+SCRIPT timing label=cand_a reader=country_places_old set=n25 ids=25 mode=generic rows=387 median_ms=137.8 runs=139/138/138 explain_exec_ms=139.1 plan_ms=2.2 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic node=Index Scan:tour_place self_ms=78.7 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic node=Aggregate:- self_ms=34.2 loops=1 rows=587
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic node=Seq Scan:place_card self_ms=1.9 loops=1 rows=4785
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic node=Index Scan:destinations self_ms=1.8 loops=1761 rows=0
+SCRIPT timing label=cand_a reader=country_places_old set=n25 ids=25 mode=custom_nojit rows=387 median_ms=139.5 runs=140/139/139 explain_exec_ms=140.5 plan_ms=2.2 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=79.2 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom_nojit node=Aggregate:- self_ms=34.4 loops=1 rows=587
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom_nojit node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom_nojit node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=custom_nojit node=Index Scan:destinations self_ms=1.8 loops=1761 rows=0
+SCRIPT timing label=cand_a reader=country_places_old set=n25 ids=25 mode=generic_nojit rows=387 median_ms=142.9 runs=146/143/143 explain_exec_ms=163.9 plan_ms=0.0 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=86.3 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic_nojit node=Aggregate:- self_ms=43.4 loops=1 rows=587
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic_nojit node=Bitmap Index Scan:- self_ms=4.1 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic_nojit node=Nested Loop:- self_ms=3.9 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n25 mode=generic_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT parity label=cand_a reader=country_places_old set=n25 view_rows=387 body_rows=387 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_b reader=country_places_old set=n25 ids=25 mode=custom rows=386 median_ms=63.1 runs=64/63/63 explain_exec_ms=62.9 plan_ms=2.1 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom node=Aggregate:- self_ms=34.4 loops=1 rows=587
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT timing label=cand_b reader=country_places_old set=n25 ids=25 mode=generic rows=386 median_ms=60.7 runs=61/61/61 explain_exec_ms=62.0 plan_ms=2.1 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic node=Aggregate:- self_ms=33.9 loops=1 rows=587
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic node=Seq Scan:place_card self_ms=1.9 loops=1 rows=4785
+SCRIPT timing label=cand_b reader=country_places_old set=n25 ids=25 mode=custom_nojit rows=386 median_ms=63.2 runs=63/63/63 explain_exec_ms=62.9 plan_ms=2.1 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom_nojit node=Aggregate:- self_ms=34.3 loops=1 rows=587
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom_nojit node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=custom_nojit node=Seq Scan:place_card self_ms=1.9 loops=1 rows=4785
+SCRIPT timing label=cand_b reader=country_places_old set=n25 ids=25 mode=generic_nojit rows=386 median_ms=60.6 runs=61/60/61 explain_exec_ms=62.8 plan_ms=0.1 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic_nojit node=Aggregate:- self_ms=34.4 loops=1 rows=587
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic_nojit node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n25 mode=generic_nojit node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT parity label=cand_b reader=country_places_old set=n25 view_rows=387 body_rows=386 only_view=10 only_body=9 verdict=FAIL
+SCRIPT timing label=view reader=country_places_new set=n25 ids=25 mode=custom rows=387 median_ms=2706.8 runs=2674/2724/2707 explain_exec_ms=2747.8 plan_ms=3.8 hit=18828 read=0 temp_w=0 jit_ms=3095.1 jit_functions=141
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom node=Seq Scan:tour_atoms self_ms=3105.3 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom node=Index Scan:tour_place self_ms=164.4 loops=587 rows=1
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom node=Sort:- self_ms=40.8 loops=3 rows=8631
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom node=Function Scan:generate_series self_ms=19.8 loops=165 rows=1
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom node=Nested Loop:- self_ms=12.8 loops=25 rows=7
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom node=Function Scan:regexp_split_to_table self_ms=9.1 loops=25 rows=7
+SCRIPT timing label=view reader=country_places_new set=n25 ids=25 mode=generic rows=387 median_ms=2674.1 runs=2713/2659/2674 explain_exec_ms=2604.2 plan_ms=3.8 hit=19524 read=0 temp_w=0 jit_ms=2996.0 jit_functions=137
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic node=Seq Scan:tour_atoms self_ms=3007.7 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic node=Index Scan:tour_place self_ms=176.7 loops=587 rows=1
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic node=Sort:- self_ms=51.9 loops=3 rows=8630
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic node=Function Scan:generate_series self_ms=19.8 loops=165 rows=1
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic node=Nested Loop:- self_ms=12.9 loops=25 rows=7
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic node=Aggregate:- self_ms=9.8 loops=1 rows=587
+SCRIPT timing label=view reader=country_places_new set=n25 ids=25 mode=custom_nojit rows=387 median_ms=315.0 runs=315/316/314 explain_exec_ms=321.1 plan_ms=3.9 hit=18828 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom_nojit node=Sort:- self_ms=37.7 loops=3 rows=8451
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom_nojit node=Seq Scan:tour_atoms self_ms=27.9 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom_nojit node=Function Scan:generate_series self_ms=20.0 loops=165 rows=1
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom_nojit node=Nested Loop:- self_ms=12.9 loops=25 rows=7
+SCRIPT plan label=view reader=country_places_new set=n25 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=9.0 loops=25 rows=7
+SCRIPT timing label=view reader=country_places_new set=n25 ids=25 mode=generic_nojit rows=387 median_ms=314.3 runs=312/314/322 explain_exec_ms=320.0 plan_ms=0.1 hit=19524 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=162.6 loops=587 rows=1
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic_nojit node=Sort:- self_ms=37.6 loops=3 rows=8447
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic_nojit node=Seq Scan:tour_atoms self_ms=27.1 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic_nojit node=Function Scan:generate_series self_ms=19.8 loops=165 rows=1
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic_nojit node=Nested Loop:- self_ms=12.9 loops=25 rows=7
+SCRIPT plan label=view reader=country_places_new set=n25 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=9.0 loops=25 rows=7
+SCRIPT timing label=old_inline reader=country_places_new set=n25 ids=25 mode=custom rows=387 median_ms=2685.1 runs=2973/2685/2573 explain_exec_ms=2582.3 plan_ms=3.6 hit=18828 read=0 temp_w=0 jit_ms=2951.3 jit_functions=139
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom node=Seq Scan:tour_atoms self_ms=2976.6 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom node=Sort:- self_ms=41.7 loops=3 rows=8630
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom node=Function Scan:generate_series self_ms=19.8 loops=165 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom node=Nested Loop:- self_ms=13.0 loops=25 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom node=Function Scan:regexp_split_to_table self_ms=9.2 loops=25 rows=7
+SCRIPT timing label=old_inline reader=country_places_new set=n25 ids=25 mode=generic rows=387 median_ms=2645.2 runs=2617/2748/2645 explain_exec_ms=2562.6 plan_ms=3.6 hit=18828 read=0 temp_w=0 jit_ms=2919.2 jit_functions=140
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic node=Seq Scan:tour_atoms self_ms=2966.6 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic node=Index Scan:tour_place self_ms=162.6 loops=587 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic node=Sort:- self_ms=49.7 loops=3 rows=8630
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic node=Function Scan:generate_series self_ms=19.5 loops=165 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic node=Nested Loop:- self_ms=13.0 loops=25 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic node=Function Scan:regexp_split_to_table self_ms=9.0 loops=25 rows=7
+SCRIPT timing label=old_inline reader=country_places_new set=n25 ids=25 mode=custom_nojit rows=387 median_ms=316.0 runs=316/316/319 explain_exec_ms=327.6 plan_ms=5.4 hit=18828 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=165.5 loops=587 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom_nojit node=Sort:- self_ms=46.0 loops=3 rows=8518
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom_nojit node=Seq Scan:tour_atoms self_ms=43.8 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom_nojit node=Function Scan:generate_series self_ms=19.8 loops=165 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom_nojit node=Nested Loop:- self_ms=12.9 loops=25 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=9.2 loops=25 rows=7
+SCRIPT timing label=old_inline reader=country_places_new set=n25 ids=25 mode=generic_nojit rows=387 median_ms=313.7 runs=312/314/314 explain_exec_ms=322.1 plan_ms=0.1 hit=18828 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=163.2 loops=587 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic_nojit node=Sort:- self_ms=47.8 loops=3 rows=8447
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic_nojit node=Seq Scan:tour_atoms self_ms=27.7 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic_nojit node=Function Scan:generate_series self_ms=19.6 loops=165 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic_nojit node=Nested Loop:- self_ms=12.9 loops=25 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n25 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=8.9 loops=25 rows=7
+SCRIPT parity label=old_inline reader=country_places_new set=n25 view_rows=387 body_rows=387 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_a reader=country_places_new set=n25 ids=25 mode=custom rows=387 median_ms=141.4 runs=141/141/206 explain_exec_ms=141.6 plan_ms=2.3 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom node=Index Scan:tour_place self_ms=79.8 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom node=Aggregate:- self_ms=34.7 loops=1 rows=587
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT timing label=cand_a reader=country_places_new set=n25 ids=25 mode=generic rows=387 median_ms=138.8 runs=139/139/138 explain_exec_ms=146.2 plan_ms=2.6 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic node=Index Scan:tour_place self_ms=80.4 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic node=Aggregate:- self_ms=35.9 loops=1 rows=587
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic node=Index Scan:atom_place_card self_ms=3.3 loops=652 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic node=Seq Scan:place_card self_ms=2.3 loops=1 rows=4785
+SCRIPT timing label=cand_a reader=country_places_new set=n25 ids=25 mode=custom_nojit rows=387 median_ms=144.7 runs=142/147/145 explain_exec_ms=139.6 plan_ms=2.2 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=78.7 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom_nojit node=Aggregate:- self_ms=34.2 loops=1 rows=587
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom_nojit node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom_nojit node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=custom_nojit node=Index Scan:destinations self_ms=1.8 loops=1761 rows=0
+SCRIPT timing label=cand_a reader=country_places_new set=n25 ids=25 mode=generic_nojit rows=387 median_ms=140.0 runs=140/140/140 explain_exec_ms=143.0 plan_ms=0.1 hit=12056 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=80.4 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic_nojit node=Aggregate:- self_ms=34.8 loops=1 rows=587
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic_nojit node=Bitmap Index Scan:- self_ms=3.5 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n25 mode=generic_nojit node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT parity label=cand_a reader=country_places_new set=n25 view_rows=387 body_rows=387 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_b reader=country_places_new set=n25 ids=25 mode=custom rows=386 median_ms=64.4 runs=67/64/64 explain_exec_ms=64.3 plan_ms=2.3 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom node=Aggregate:- self_ms=34.4 loops=1 rows=587
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom node=Index Scan:atom_place_card self_ms=3.3 loops=652 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom node=Seq Scan:place_card self_ms=2.2 loops=1 rows=4785
+SCRIPT timing label=cand_b reader=country_places_new set=n25 ids=25 mode=generic rows=386 median_ms=61.8 runs=62/66/62 explain_exec_ms=62.7 plan_ms=2.1 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic node=Aggregate:- self_ms=34.2 loops=1 rows=587
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT timing label=cand_b reader=country_places_new set=n25 ids=25 mode=custom_nojit rows=386 median_ms=65.0 runs=64/65/67 explain_exec_ms=62.5 plan_ms=2.2 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom_nojit node=Aggregate:- self_ms=34.2 loops=1 rows=587
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom_nojit node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom_nojit node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=custom_nojit node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT timing label=cand_b reader=country_places_new set=n25 ids=25 mode=generic_nojit rows=386 median_ms=63.2 runs=63/65/62 explain_exec_ms=63.6 plan_ms=0.1 hit=11675 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic_nojit node=Aggregate:- self_ms=34.5 loops=1 rows=587
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic_nojit node=Index Scan:tour_place self_ms=2.9 loops=587 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic_nojit node=Bitmap Index Scan:- self_ms=2.9 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic_nojit node=Index Scan:atom_place_card self_ms=2.6 loops=652 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=2.3 loops=587 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n25 mode=generic_nojit node=Seq Scan:place_card self_ms=2.0 loops=1 rows=4785
+SCRIPT parity label=cand_b reader=country_places_new set=n25 view_rows=387 body_rows=386 only_view=10 only_body=9 verdict=FAIL
+SCRIPT timing label=view reader=tour_destinations set=n100 ids=100 mode=custom rows=1562 median_ms=3520.4 runs=3990/3520/3308 explain_exec_ms=3313.1 plan_ms=4.1 hit=64649 read=0 temp_w=0 jit_ms=2880.9 jit_functions=139
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom node=Seq Scan:tour_atoms self_ms=2910.4 loops=3 rows=8667
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom node=Index Scan:tour_place self_ms=642.9 loops=2355 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom node=Function Scan:generate_series self_ms=89.4 loops=733 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom node=Nested Loop:- self_ms=58.3 loops=100 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom node=Function Scan:regexp_split_to_table self_ms=42.7 loops=100 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom node=Sort:- self_ms=36.1 loops=3 rows=8667
+SCRIPT timing label=view reader=tour_destinations set=n100 ids=100 mode=generic rows=1562 median_ms=3245.9 runs=3295/3246/3224 explain_exec_ms=3349.4 plan_ms=3.9 hit=68983 read=0 temp_w=0 jit_ms=2906.1 jit_functions=137
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic node=Seq Scan:tour_atoms self_ms=2938.5 loops=3 rows=8667
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic node=Index Scan:tour_place self_ms=659.4 loops=2355 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic node=Function Scan:generate_series self_ms=90.2 loops=733 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic node=Nested Loop:- self_ms=58.4 loops=100 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic node=Function Scan:regexp_split_to_table self_ms=40.7 loops=100 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic node=Sort:- self_ms=33.6 loops=3 rows=8667
+SCRIPT timing label=view reader=tour_destinations set=n100 ids=100 mode=custom_nojit rows=1562 median_ms=1058.9 runs=1059/1063/1056 explain_exec_ms=1082.7 plan_ms=4.0 hit=64649 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=652.3 loops=2355 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom_nojit node=Function Scan:generate_series self_ms=88.0 loops=733 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom_nojit node=Nested Loop:- self_ms=57.2 loops=100 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=38.6 loops=100 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom_nojit node=Sort:- self_ms=35.2 loops=3 rows=8601
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=custom_nojit node=Aggregate:- self_ms=33.7 loops=1 rows=2355
+SCRIPT timing label=view reader=tour_destinations set=n100 ids=100 mode=generic_nojit rows=1562 median_ms=1041.6 runs=1045/1042/1039 explain_exec_ms=1078.3 plan_ms=0.1 hit=68983 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=652.3 loops=2355 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic_nojit node=Function Scan:generate_series self_ms=86.5 loops=733 rows=1
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic_nojit node=Nested Loop:- self_ms=56.3 loops=100 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=38.2 loops=100 rows=7
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic_nojit node=Sort:- self_ms=35.2 loops=3 rows=8601
+SCRIPT plan label=view reader=tour_destinations set=n100 mode=generic_nojit node=Aggregate:- self_ms=31.7 loops=1 rows=2355
+SCRIPT timing label=old_inline reader=tour_destinations set=n100 ids=100 mode=custom rows=1562 median_ms=3311.0 runs=3467/3311/3295 explain_exec_ms=3508.2 plan_ms=3.7 hit=49742 read=0 temp_w=0 jit_ms=3389.4 jit_functions=193
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom node=Seq Scan:tour_atoms self_ms=3385.0 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom node=Index Scan:tour_place self_ms=734.8 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom node=Function Scan:generate_series self_ms=85.8 loops=733 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom node=Sort:- self_ms=58.1 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom node=Nested Loop:- self_ms=56.5 loops=100 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom node=Function Scan:regexp_split_to_table self_ms=36.9 loops=100 rows=7
+SCRIPT timing label=old_inline reader=tour_destinations set=n100 ids=100 mode=generic rows=1562 median_ms=3253.8 runs=3254/3368/3253 explain_exec_ms=3300.7 plan_ms=3.6 hit=64649 read=0 temp_w=0 jit_ms=2861.0 jit_functions=140
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic node=Seq Scan:tour_atoms self_ms=2893.6 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic node=Index Scan:tour_place self_ms=678.2 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic node=Function Scan:generate_series self_ms=87.2 loops=733 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic node=Nested Loop:- self_ms=56.8 loops=100 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic node=Sort:- self_ms=45.6 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic node=Function Scan:regexp_split_to_table self_ms=38.7 loops=100 rows=7
+SCRIPT timing label=old_inline reader=tour_destinations set=n100 ids=100 mode=custom_nojit rows=1562 median_ms=1044.7 runs=1044/1046/1045 explain_exec_ms=1073.6 plan_ms=3.7 hit=49742 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=640.6 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom_nojit node=Function Scan:generate_series self_ms=87.2 loops=733 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom_nojit node=Nested Loop:- self_ms=57.8 loops=100 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=38.4 loops=100 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom_nojit node=Sort:- self_ms=37.2 loops=3 rows=8601
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=custom_nojit node=Aggregate:- self_ms=32.4 loops=1 rows=2355
+SCRIPT timing label=old_inline reader=tour_destinations set=n100 ids=100 mode=generic_nojit rows=1562 median_ms=1043.6 runs=1044/1071/1035 explain_exec_ms=1093.1 plan_ms=0.1 hit=64649 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=650.0 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic_nojit node=Function Scan:generate_series self_ms=90.9 loops=733 rows=1
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic_nojit node=Nested Loop:- self_ms=61.3 loops=100 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=41.2 loops=100 rows=7
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic_nojit node=Sort:- self_ms=35.3 loops=3 rows=8601
+SCRIPT plan label=old_inline reader=tour_destinations set=n100 mode=generic_nojit node=Aggregate:- self_ms=31.8 loops=1 rows=2355
+SCRIPT parity label=old_inline reader=tour_destinations set=n100 view_rows=1562 body_rows=1562 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_a reader=tour_destinations set=n100 ids=100 mode=custom rows=1562 median_ms=669.2 runs=669/659/684 explain_exec_ms=676.8 plan_ms=2.3 hit=31918 read=0 temp_w=0 jit_ms=135.2 jit_functions=103
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom node=Index Scan:tour_place self_ms=320.3 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom node=Aggregate:- self_ms=137.1 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom node=Bitmap Heap Scan:raw_tours self_ms=125.6 loops=1 rows=100
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom node=Index Scan:destinations self_ms=6.2 loops=2059 rows=1
+SCRIPT timing label=cand_a reader=tour_destinations set=n100 ids=100 mode=generic rows=1562 median_ms=535.4 runs=535/537/534 explain_exec_ms=546.3 plan_ms=2.2 hit=48476 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic node=Index Scan:tour_place self_ms=317.9 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic node=Aggregate:- self_ms=135.6 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic node=Index Scan:destinations self_ms=7.1 loops=7065 rows=0
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic node=Bitmap Heap Scan:destinations self_ms=7.1 loops=2355 rows=1
+SCRIPT timing label=cand_a reader=tour_destinations set=n100 ids=100 mode=custom_nojit rows=1562 median_ms=527.6 runs=526/528/528 explain_exec_ms=533.9 plan_ms=2.3 hit=31918 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=317.9 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom_nojit node=Aggregate:- self_ms=136.0 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom_nojit node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=7.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom_nojit node=Index Scan:destinations self_ms=6.2 loops=2059 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=custom_nojit node=Nested Loop:- self_ms=5.6 loops=2355 rows=1
+SCRIPT timing label=cand_a reader=tour_destinations set=n100 ids=100 mode=generic_nojit rows=1562 median_ms=535.6 runs=536/536/535 explain_exec_ms=549.2 plan_ms=0.1 hit=48476 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=317.9 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic_nojit node=Aggregate:- self_ms=135.6 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic_nojit node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic_nojit node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic_nojit node=Index Scan:destinations self_ms=7.1 loops=7065 rows=0
+SCRIPT plan label=cand_a reader=tour_destinations set=n100 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=7.1 loops=2355 rows=1
+SCRIPT parity label=cand_a reader=tour_destinations set=n100 view_rows=1562 body_rows=1562 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_b reader=tour_destinations set=n100 ids=100 mode=custom rows=1556 median_ms=351.8 runs=350/358/352 explain_exec_ms=358.6 plan_ms=2.3 hit=31060 read=0 temp_w=0 jit_ms=129.1 jit_functions=103
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom node=Aggregate:- self_ms=137.0 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom node=Bitmap Heap Scan:raw_tours self_ms=119.8 loops=1 rows=100
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom node=Bitmap Index Scan:- self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom node=Nested Loop:- self_ms=7.7 loops=2355 rows=1
+SCRIPT timing label=cand_b reader=tour_destinations set=n100 ids=100 mode=generic rows=1556 median_ms=238.2 runs=259/231/238 explain_exec_ms=246.0 plan_ms=2.2 hit=46742 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic node=Aggregate:- self_ms=140.3 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic node=Nested Loop:- self_ms=7.7 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic node=Index Scan:destinations self_ms=7.1 loops=7065 rows=0
+SCRIPT timing label=cand_b reader=tour_destinations set=n100 ids=100 mode=custom_nojit rows=1556 median_ms=224.3 runs=224/228/216 explain_exec_ms=227.3 plan_ms=2.3 hit=31060 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom_nojit node=Aggregate:- self_ms=136.7 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom_nojit node=Bitmap Index Scan:- self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom_nojit node=Nested Loop:- self_ms=7.7 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=custom_nojit node=Hash Join:- self_ms=5.3 loops=1 rows=2646
+SCRIPT timing label=cand_b reader=tour_destinations set=n100 ids=100 mode=generic_nojit rows=1556 median_ms=226.6 runs=227/228/226 explain_exec_ms=235.8 plan_ms=0.1 hit=46742 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic_nojit node=Aggregate:- self_ms=135.1 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic_nojit node=Bitmap Index Scan:- self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic_nojit node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=tour_destinations set=n100 mode=generic_nojit node=Index Scan:destinations self_ms=7.1 loops=7065 rows=0
+SCRIPT parity label=cand_b reader=tour_destinations set=n100 view_rows=1562 body_rows=1556 only_view=17 only_body=11 verdict=FAIL
+SCRIPT timing label=view reader=country_places_old set=n100 ids=100 mode=custom rows=1562 median_ms=3470.9 runs=3471/3447/3569 explain_exec_ms=3344.8 plan_ms=4.0 hit=64649 read=0 temp_w=0 jit_ms=2965.7 jit_functions=139
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom node=Seq Scan:tour_atoms self_ms=2998.4 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom node=Index Scan:tour_place self_ms=642.9 loops=2355 rows=1
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom node=Function Scan:generate_series self_ms=87.2 loops=733 rows=1
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom node=Sort:- self_ms=61.7 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom node=Nested Loop:- self_ms=56.8 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom node=Function Scan:regexp_split_to_table self_ms=38.8 loops=100 rows=7
+SCRIPT timing label=view reader=country_places_old set=n100 ids=100 mode=generic rows=1562 median_ms=3606.7 runs=3607/3502/3868 explain_exec_ms=3524.3 plan_ms=4.0 hit=68983 read=0 temp_w=0 jit_ms=3119.3 jit_functions=137
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic node=Seq Scan:tour_atoms self_ms=3147.5 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic node=Index Scan:tour_place self_ms=640.6 loops=2355 rows=1
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic node=Function Scan:generate_series self_ms=87.2 loops=733 rows=1
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic node=Nested Loop:- self_ms=56.9 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic node=Sort:- self_ms=49.1 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic node=Function Scan:regexp_split_to_table self_ms=39.2 loops=100 rows=7
+SCRIPT timing label=view reader=country_places_old set=n100 ids=100 mode=custom_nojit rows=1562 median_ms=1172.0 runs=1172/1107/1215 explain_exec_ms=1103.3 plan_ms=4.0 hit=64649 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=645.3 loops=2355 rows=1
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom_nojit node=Function Scan:generate_series self_ms=93.8 loops=733 rows=1
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom_nojit node=Nested Loop:- self_ms=60.1 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=42.7 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom_nojit node=Sort:- self_ms=38.6 loops=3 rows=8601
+SCRIPT plan label=view reader=country_places_old set=n100 mode=custom_nojit node=Aggregate:- self_ms=35.7 loops=1 rows=2355
+SCRIPT timing label=view reader=country_places_old set=n100 ids=100 mode=generic_nojit rows=1562 median_ms=1092.5 runs=1092/1179/1061 explain_exec_ms=1107.8 plan_ms=0.1 hit=68983 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=652.3 loops=2355 rows=1
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic_nojit node=Function Scan:generate_series self_ms=90.9 loops=733 rows=1
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic_nojit node=Nested Loop:- self_ms=58.1 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=41.0 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic_nojit node=Sort:- self_ms=38.9 loops=3 rows=8601
+SCRIPT plan label=view reader=country_places_old set=n100 mode=generic_nojit node=Aggregate:- self_ms=35.4 loops=1 rows=2355
+SCRIPT timing label=old_inline reader=country_places_old set=n100 ids=100 mode=custom rows=1562 median_ms=3677.5 runs=3569/3678/4319 explain_exec_ms=3571.5 plan_ms=3.8 hit=49742 read=0 temp_w=0 jit_ms=3588.9 jit_functions=193
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom node=Seq Scan:tour_atoms self_ms=3599.4 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom node=Index Scan:tour_place self_ms=642.9 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom node=Function Scan:generate_series self_ms=87.2 loops=733 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom node=Nested Loop:- self_ms=57.2 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom node=Sort:- self_ms=44.0 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom node=Function Scan:regexp_split_to_table self_ms=37.9 loops=100 rows=7
+SCRIPT timing label=old_inline reader=country_places_old set=n100 ids=100 mode=generic rows=1562 median_ms=3489.7 runs=3490/3641/3381 explain_exec_ms=3463.0 plan_ms=4.7 hit=64649 read=0 temp_w=0 jit_ms=3115.8 jit_functions=140
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic node=Seq Scan:tour_atoms self_ms=3122.1 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic node=Index Scan:tour_place self_ms=642.9 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic node=Function Scan:generate_series self_ms=88.0 loops=733 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic node=Nested Loop:- self_ms=57.0 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic node=Sort:- self_ms=49.2 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic node=Function Scan:regexp_split_to_table self_ms=38.7 loops=100 rows=7
+SCRIPT timing label=old_inline reader=country_places_old set=n100 ids=100 mode=custom_nojit rows=1562 median_ms=1066.8 runs=1078/1067/1058 explain_exec_ms=1082.7 plan_ms=3.8 hit=49742 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=640.6 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom_nojit node=Function Scan:generate_series self_ms=86.5 loops=733 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom_nojit node=Sort:- self_ms=57.3 loops=3 rows=8608
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom_nojit node=Nested Loop:- self_ms=57.0 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=38.9 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=custom_nojit node=Aggregate:- self_ms=35.3 loops=1 rows=2355
+SCRIPT timing label=old_inline reader=country_places_old set=n100 ids=100 mode=generic_nojit rows=1562 median_ms=1063.8 runs=1064/1063/1252 explain_exec_ms=1071.6 plan_ms=0.1 hit=64649 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=642.9 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic_nojit node=Function Scan:generate_series self_ms=87.2 loops=733 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic_nojit node=Nested Loop:- self_ms=57.0 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=39.1 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic_nojit node=Sort:- self_ms=38.1 loops=3 rows=8601
+SCRIPT plan label=old_inline reader=country_places_old set=n100 mode=generic_nojit node=Aggregate:- self_ms=33.6 loops=1 rows=2355
+SCRIPT parity label=old_inline reader=country_places_old set=n100 view_rows=1562 body_rows=1562 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_a reader=country_places_old set=n100 ids=100 mode=custom rows=1562 median_ms=768.2 runs=768/785/705 explain_exec_ms=834.9 plan_ms=2.8 hit=31918 read=0 temp_w=0 jit_ms=170.8 jit_functions=103
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom node=Index Scan:tour_place self_ms=376.8 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom node=Aggregate:- self_ms=170.6 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom node=Bitmap Heap Scan:raw_tours self_ms=158.2 loops=1 rows=100
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom node=Bitmap Index Scan:- self_ms=18.8 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom node=Bitmap Heap Scan:destinations self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom node=Nested Loop:- self_ms=10.6 loops=2355 rows=1
+SCRIPT timing label=cand_a reader=country_places_old set=n100 ids=100 mode=generic rows=1562 median_ms=550.4 runs=550/545/588 explain_exec_ms=556.3 plan_ms=2.3 hit=48476 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic node=Index Scan:tour_place self_ms=320.3 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic node=Aggregate:- self_ms=139.2 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic node=Index Scan:destinations self_ms=7.1 loops=7065 rows=0
+SCRIPT timing label=cand_a reader=country_places_old set=n100 ids=100 mode=custom_nojit rows=1562 median_ms=576.5 runs=580/576/538 explain_exec_ms=591.0 plan_ms=2.4 hit=31918 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=343.8 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom_nojit node=Aggregate:- self_ms=152.1 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom_nojit node=Bitmap Index Scan:- self_ms=16.5 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom_nojit node=Nested Loop:- self_ms=8.0 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=custom_nojit node=Index Scan:destinations self_ms=6.2 loops=2059 rows=1
+SCRIPT timing label=cand_a reader=country_places_old set=n100 ids=100 mode=generic_nojit rows=1562 median_ms=547.5 runs=549/547/547 explain_exec_ms=556.1 plan_ms=0.1 hit=48476 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=320.3 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic_nojit node=Aggregate:- self_ms=139.3 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic_nojit node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic_nojit node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=n100 mode=generic_nojit node=Index Scan:destinations self_ms=7.1 loops=7065 rows=0
+SCRIPT parity label=cand_a reader=country_places_old set=n100 view_rows=1562 body_rows=1562 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_b reader=country_places_old set=n100 ids=100 mode=custom rows=1556 median_ms=417.7 runs=418/404/427 explain_exec_ms=415.1 plan_ms=2.3 hit=31060 read=0 temp_w=0 jit_ms=135.8 jit_functions=103
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom node=Aggregate:- self_ms=170.9 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom node=Bitmap Heap Scan:raw_tours self_ms=125.9 loops=1 rows=100
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom node=Bitmap Heap Scan:destinations self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom node=Nested Loop:- self_ms=8.2 loops=2355 rows=1
+SCRIPT timing label=cand_b reader=country_places_old set=n100 ids=100 mode=generic rows=1556 median_ms=238.9 runs=234/239/336 explain_exec_ms=246.1 plan_ms=2.2 hit=46742 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic node=Aggregate:- self_ms=141.4 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic node=Nested Loop:- self_ms=7.7 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic node=Index Scan:destinations self_ms=7.1 loops=7065 rows=0
+SCRIPT timing label=cand_b reader=country_places_old set=n100 ids=100 mode=custom_nojit rows=1556 median_ms=233.0 runs=225/233/254 explain_exec_ms=245.4 plan_ms=2.4 hit=31060 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom_nojit node=Aggregate:- self_ms=147.0 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=14.1 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom_nojit node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom_nojit node=Index Scan:destinations self_ms=6.2 loops=2059 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=custom_nojit node=Nested Loop:- self_ms=5.6 loops=2355 rows=1
+SCRIPT timing label=cand_b reader=country_places_old set=n100 ids=100 mode=generic_nojit rows=1556 median_ms=234.1 runs=234/234/234 explain_exec_ms=241.9 plan_ms=0.1 hit=46742 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic_nojit node=Aggregate:- self_ms=138.5 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic_nojit node=Bitmap Index Scan:- self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic_nojit node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=n100 mode=generic_nojit node=Nested Loop:- self_ms=7.7 loops=2355 rows=1
+SCRIPT parity label=cand_b reader=country_places_old set=n100 view_rows=1562 body_rows=1556 only_view=17 only_body=11 verdict=FAIL
+SCRIPT timing label=view reader=country_places_new set=n100 ids=100 mode=custom rows=1562 median_ms=3478.3 runs=3478/3411/3626 explain_exec_ms=3430.9 plan_ms=4.0 hit=64649 read=0 temp_w=0 jit_ms=3070.0 jit_functions=139
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom node=Seq Scan:tour_atoms self_ms=3076.2 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom node=Index Scan:tour_place self_ms=666.5 loops=2355 rows=1
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom node=Function Scan:generate_series self_ms=86.5 loops=733 rows=1
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom node=Nested Loop:- self_ms=56.8 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom node=Aggregate:- self_ms=48.0 loops=1 rows=2355
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom node=Sort:- self_ms=47.7 loops=3 rows=8667
+SCRIPT timing label=view reader=country_places_new set=n100 ids=100 mode=generic rows=1562 median_ms=3284.4 runs=3284/3218/3397 explain_exec_ms=3438.3 plan_ms=3.9 hit=68983 read=0 temp_w=0 jit_ms=3013.6 jit_functions=137
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic node=Seq Scan:tour_atoms self_ms=3048.3 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic node=Index Scan:tour_place self_ms=640.6 loops=2355 rows=1
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic node=Function Scan:generate_series self_ms=87.2 loops=733 rows=1
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic node=Nested Loop:- self_ms=56.4 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic node=Sort:- self_ms=39.5 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic node=Function Scan:regexp_split_to_table self_ms=39.0 loops=100 rows=7
+SCRIPT timing label=view reader=country_places_new set=n100 ids=100 mode=custom_nojit rows=1562 median_ms=1039.0 runs=1108/1039/1036 explain_exec_ms=1103.1 plan_ms=4.1 hit=64649 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=680.6 loops=2355 rows=1
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom_nojit node=Function Scan:generate_series self_ms=80.6 loops=733 rows=1
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom_nojit node=Nested Loop:- self_ms=53.4 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom_nojit node=Sort:- self_ms=38.3 loops=3 rows=8601
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom_nojit node=Aggregate:- self_ms=37.2 loops=1 rows=2355
+SCRIPT plan label=view reader=country_places_new set=n100 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=35.3 loops=100 rows=7
+SCRIPT timing label=view reader=country_places_new set=n100 ids=100 mode=generic_nojit rows=1562 median_ms=1041.8 runs=1051/1039/1042 explain_exec_ms=1055.5 plan_ms=0.1 hit=68983 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=640.6 loops=2355 rows=1
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic_nojit node=Function Scan:generate_series self_ms=81.4 loops=733 rows=1
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic_nojit node=Nested Loop:- self_ms=53.1 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic_nojit node=Sort:- self_ms=38.3 loops=3 rows=8601
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=35.6 loops=100 rows=7
+SCRIPT plan label=view reader=country_places_new set=n100 mode=generic_nojit node=Aggregate:- self_ms=33.8 loops=1 rows=2355
+SCRIPT timing label=old_inline reader=country_places_new set=n100 ids=100 mode=custom rows=1562 median_ms=3544.6 runs=3373/3768/3545 explain_exec_ms=3388.2 plan_ms=4.1 hit=49742 read=0 temp_w=0 jit_ms=3314.8 jit_functions=193
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom node=Seq Scan:tour_atoms self_ms=3323.3 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom node=Index Scan:tour_place self_ms=642.9 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom node=Function Scan:generate_series self_ms=80.6 loops=733 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom node=Nested Loop:- self_ms=54.0 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom node=Sort:- self_ms=40.9 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom node=Function Scan:regexp_split_to_table self_ms=35.4 loops=100 rows=7
+SCRIPT timing label=old_inline reader=country_places_new set=n100 ids=100 mode=generic rows=1562 median_ms=3562.8 runs=3403/3563/3800 explain_exec_ms=3345.3 plan_ms=3.8 hit=64649 read=0 temp_w=0 jit_ms=2944.8 jit_functions=140
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic node=Seq Scan:tour_atoms self_ms=2967.9 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic node=Index Scan:tour_place self_ms=652.3 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic node=Function Scan:generate_series self_ms=81.4 loops=733 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic node=Nested Loop:- self_ms=53.4 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic node=Sort:- self_ms=38.9 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic node=Function Scan:regexp_split_to_table self_ms=36.0 loops=100 rows=7
+SCRIPT timing label=old_inline reader=country_places_new set=n100 ids=100 mode=custom_nojit rows=1562 median_ms=1150.2 runs=1150/1187/1071 explain_exec_ms=1141.0 plan_ms=4.1 hit=49742 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=678.2 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom_nojit node=Function Scan:generate_series self_ms=87.2 loops=733 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom_nojit node=Nested Loop:- self_ms=58.4 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom_nojit node=Sort:- self_ms=42.3 loops=3 rows=8601
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=38.8 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=custom_nojit node=Aggregate:- self_ms=37.6 loops=1 rows=2355
+SCRIPT timing label=old_inline reader=country_places_new set=n100 ids=100 mode=generic_nojit rows=1562 median_ms=1101.7 runs=1095/1169/1102 explain_exec_ms=1114.1 plan_ms=0.1 hit=64649 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=671.2 loops=2355 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic_nojit node=Function Scan:generate_series self_ms=87.2 loops=733 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic_nojit node=Nested Loop:- self_ms=56.2 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=38.9 loops=100 rows=7
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic_nojit node=Sort:- self_ms=38.7 loops=3 rows=8601
+SCRIPT plan label=old_inline reader=country_places_new set=n100 mode=generic_nojit node=Aggregate:- self_ms=36.3 loops=1 rows=2355
+SCRIPT parity label=old_inline reader=country_places_new set=n100 view_rows=1562 body_rows=1562 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_a reader=country_places_new set=n100 ids=100 mode=custom rows=1562 median_ms=711.6 runs=712/731/675 explain_exec_ms=713.0 plan_ms=2.4 hit=31918 read=0 temp_w=0 jit_ms=146.5 jit_functions=103
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom node=Index Scan:tour_place self_ms=329.7 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom node=Aggregate:- self_ms=145.8 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom node=Bitmap Heap Scan:raw_tours self_ms=137.9 loops=1 rows=100
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom node=Nested Loop:- self_ms=8.0 loops=2355 rows=1
+SCRIPT timing label=cand_a reader=country_places_new set=n100 ids=100 mode=generic rows=1562 median_ms=546.3 runs=545/546/548 explain_exec_ms=556.2 plan_ms=2.3 hit=48476 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic node=Index Scan:tour_place self_ms=320.3 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic node=Aggregate:- self_ms=141.2 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic node=Index Scan:destinations self_ms=7.1 loops=7065 rows=0
+SCRIPT timing label=cand_a reader=country_places_new set=n100 ids=100 mode=custom_nojit rows=1562 median_ms=533.8 runs=534/534/534 explain_exec_ms=545.3 plan_ms=2.4 hit=31918 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=320.3 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom_nojit node=Aggregate:- self_ms=140.7 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom_nojit node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=7.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom_nojit node=Index Scan:destinations self_ms=6.2 loops=2059 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=custom_nojit node=Nested Loop:- self_ms=5.6 loops=2355 rows=1
+SCRIPT timing label=cand_a reader=country_places_new set=n100 ids=100 mode=generic_nojit rows=1562 median_ms=543.4 runs=543/542/556 explain_exec_ms=552.1 plan_ms=0.1 hit=48476 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=317.9 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic_nojit node=Aggregate:- self_ms=138.8 loops=1 rows=2355
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic_nojit node=Bitmap Index Scan:- self_ms=14.1 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic_nojit node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=n100 mode=generic_nojit node=Index Scan:destinations self_ms=7.1 loops=7065 rows=0
+SCRIPT parity label=cand_a reader=country_places_new set=n100 view_rows=1562 body_rows=1562 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_b reader=country_places_new set=n100 ids=100 mode=custom rows=1556 median_ms=366.1 runs=364/366/368 explain_exec_ms=376.7 plan_ms=2.3 hit=31060 read=0 temp_w=0 jit_ms=133.5 jit_functions=103
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom node=Aggregate:- self_ms=144.9 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom node=Bitmap Heap Scan:raw_tours self_ms=121.9 loops=1 rows=100
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom node=Bitmap Index Scan:- self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom node=Nested Loop:- self_ms=8.0 loops=2355 rows=1
+SCRIPT timing label=cand_b reader=country_places_new set=n100 ids=100 mode=generic rows=1556 median_ms=233.9 runs=234/233/234 explain_exec_ms=245.0 plan_ms=2.3 hit=46742 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic node=Aggregate:- self_ms=141.2 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic node=Bitmap Index Scan:- self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic node=Nested Loop:- self_ms=7.7 loops=2355 rows=1
+SCRIPT timing label=cand_b reader=country_places_new set=n100 ids=100 mode=custom_nojit rows=1556 median_ms=223.6 runs=222/224/224 explain_exec_ms=230.8 plan_ms=2.3 hit=31060 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom_nojit node=Aggregate:- self_ms=139.9 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom_nojit node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom_nojit node=Bitmap Index Scan:- self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom_nojit node=Nested Loop:- self_ms=7.7 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=custom_nojit node=Hash Join:- self_ms=5.3 loops=1 rows=2646
+SCRIPT timing label=cand_b reader=country_places_new set=n100 ids=100 mode=generic_nojit rows=1556 median_ms=233.4 runs=233/235/233 explain_exec_ms=241.3 plan_ms=0.1 hit=46742 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic_nojit node=Aggregate:- self_ms=138.8 loops=1 rows=2355
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic_nojit node=Index Scan:tour_place self_ms=11.8 loops=2355 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic_nojit node=Bitmap Index Scan:- self_ms=11.8 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic_nojit node=Index Scan:atom_place_card self_ms=10.6 loops=2646 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=9.4 loops=2355 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=n100 mode=generic_nojit node=Nested Loop:- self_ms=7.7 loops=2355 rows=1
+SCRIPT parity label=cand_b reader=country_places_new set=n100 view_rows=1562 body_rows=1556 only_view=17 only_body=11 verdict=FAIL
+SCRIPT timing label=view reader=country_places_old set=country ids=218 mode=custom rows=4796 median_ms=5359.1 runs=5359/5273/5960 explain_exec_ms=5293.1 plan_ms=4.4 hit=150940 read=0 temp_w=536 jit_ms=3294.5 jit_functions=151
+SCRIPT plan label=view reader=country_places_old set=country mode=custom node=Seq Scan:tour_atoms self_ms=3325.4 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=country mode=custom node=Index Scan:tour_place self_ms=1823.1 loops=6511 rows=1
+SCRIPT plan label=view reader=country_places_old set=country mode=custom node=Function Scan:generate_series self_ms=208.5 loops=1862 rows=1
+SCRIPT plan label=view reader=country_places_old set=country mode=custom node=Nested Loop:- self_ms=137.0 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_old set=country mode=custom node=Function Scan:regexp_split_to_table self_ms=92.0 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_old set=country mode=custom node=Aggregate:- self_ms=88.1 loops=1 rows=6511
+SCRIPT timing label=view reader=country_places_old set=country ids=218 mode=generic rows=4796 median_ms=5218.6 runs=5451/5219/5127 explain_exec_ms=5133.1 plan_ms=4.2 hit=184742 read=0 temp_w=536 jit_ms=3048.8 jit_functions=137
+SCRIPT plan label=view reader=country_places_old set=country mode=generic node=Seq Scan:tour_atoms self_ms=3070.3 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_old set=country mode=generic node=Index Scan:tour_place self_ms=1810.1 loops=6511 rows=1
+SCRIPT plan label=view reader=country_places_old set=country mode=generic node=Function Scan:generate_series self_ms=210.4 loops=1862 rows=1
+SCRIPT plan label=view reader=country_places_old set=country mode=generic node=Nested Loop:- self_ms=138.4 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_old set=country mode=generic node=Function Scan:regexp_split_to_table self_ms=94.2 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_old set=country mode=generic node=Aggregate:- self_ms=89.4 loops=1 rows=6511
+SCRIPT timing label=view reader=country_places_old set=country ids=218 mode=custom_nojit rows=4796 median_ms=2742.0 runs=2787/2742/2733 explain_exec_ms=2772.8 plan_ms=4.3 hit=150940 read=0 temp_w=536 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_old set=country mode=custom_nojit node=Index Scan:tour_place self_ms=1810.1 loops=6511 rows=1
+SCRIPT plan label=view reader=country_places_old set=country mode=custom_nojit node=Function Scan:generate_series self_ms=210.4 loops=1862 rows=1
+SCRIPT plan label=view reader=country_places_old set=country mode=custom_nojit node=Nested Loop:- self_ms=139.7 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_old set=country mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=91.8 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_old set=country mode=custom_nojit node=Aggregate:- self_ms=89.2 loops=1 rows=6511
+SCRIPT plan label=view reader=country_places_old set=country mode=custom_nojit node=Sort:- self_ms=39.8 loops=1 rows=7185
+SCRIPT timing label=view reader=country_places_old set=country ids=218 mode=generic_nojit rows=4796 median_ms=2866.1 runs=2795/2907/2866 explain_exec_ms=2857.2 plan_ms=0.2 hit=184742 read=0 temp_w=536 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_old set=country mode=generic_nojit node=Index Scan:tour_place self_ms=1810.1 loops=6511 rows=1
+SCRIPT plan label=view reader=country_places_old set=country mode=generic_nojit node=Function Scan:generate_series self_ms=221.6 loops=1862 rows=1
+SCRIPT plan label=view reader=country_places_old set=country mode=generic_nojit node=Nested Loop:- self_ms=143.1 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_old set=country mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=98.1 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_old set=country mode=generic_nojit node=Aggregate:- self_ms=89.8 loops=1 rows=6511
+SCRIPT plan label=view reader=country_places_old set=country mode=generic_nojit node=Sort:- self_ms=40.5 loops=1 rows=7185
+SCRIPT timing label=old_inline reader=country_places_old set=country ids=218 mode=custom rows=4796 median_ms=5272.7 runs=5106/5366/5273 explain_exec_ms=5202.7 plan_ms=4.1 hit=115664 read=0 temp_w=536 jit_ms=3518.7 jit_functions=191
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom node=Seq Scan:tour_atoms self_ms=3536.7 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom node=Index Scan:tour_place self_ms=1803.5 loops=6511 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom node=Function Scan:generate_series self_ms=210.4 loops=1862 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom node=Nested Loop:- self_ms=137.3 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom node=Function Scan:regexp_split_to_table self_ms=90.7 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom node=Aggregate:- self_ms=89.3 loops=1 rows=6511
+SCRIPT timing label=old_inline reader=country_places_old set=country ids=218 mode=generic rows=4796 median_ms=5207.6 runs=5192/5315/5208 explain_exec_ms=5176.8 plan_ms=3.9 hit=170961 read=0 temp_w=536 jit_ms=2902.0 jit_functions=140
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic node=Seq Scan:tour_atoms self_ms=2914.0 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic node=Index Scan:tour_place self_ms=1868.7 loops=6511 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic node=Function Scan:generate_series self_ms=219.7 loops=1862 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic node=Nested Loop:- self_ms=159.8 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic node=Function Scan:regexp_split_to_table self_ms=102.7 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic node=Aggregate:- self_ms=92.1 loops=1 rows=6511
+SCRIPT timing label=old_inline reader=country_places_old set=country ids=218 mode=custom_nojit rows=4796 median_ms=2710.3 runs=2720/2706/2710 explain_exec_ms=2816.9 plan_ms=4.1 hit=115664 read=0 temp_w=536 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom_nojit node=Index Scan:tour_place self_ms=1849.1 loops=6511 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom_nojit node=Function Scan:generate_series self_ms=216.0 loops=1862 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom_nojit node=Nested Loop:- self_ms=139.6 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom_nojit node=Aggregate:- self_ms=95.9 loops=1 rows=6511
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=92.6 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=custom_nojit node=Sort:- self_ms=41.6 loops=3 rows=8667
+SCRIPT timing label=old_inline reader=country_places_old set=country ids=218 mode=generic_nojit rows=4796 median_ms=2809.5 runs=2852/2773/2810 explain_exec_ms=2822.5 plan_ms=0.2 hit=170961 read=0 temp_w=536 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic_nojit node=Index Scan:tour_place self_ms=1816.6 loops=6511 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic_nojit node=Function Scan:generate_series self_ms=216.0 loops=1862 rows=1
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic_nojit node=Nested Loop:- self_ms=142.4 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=96.6 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic_nojit node=Aggregate:- self_ms=89.3 loops=1 rows=6511
+SCRIPT plan label=old_inline reader=country_places_old set=country mode=generic_nojit node=Sort:- self_ms=40.4 loops=1 rows=7185
+SCRIPT parity label=old_inline reader=country_places_old set=country view_rows=4796 body_rows=4796 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_a reader=country_places_old set=country ids=218 mode=custom rows=4796 median_ms=1594.5 runs=1595/1583/1599 explain_exec_ms=1607.5 plan_ms=2.5 hit=75890 read=0 temp_w=0 jit_ms=133.2 jit_functions=106
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom node=Index Scan:tour_place self_ms=911.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom node=Aggregate:- self_ms=357.5 loops=1 rows=6511
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom node=Seq Scan:published_tours self_ms=124.7 loops=1 rows=892
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom node=Bitmap Index Scan:- self_ms=39.1 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom node=Nested Loop:- self_ms=21.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom node=Bitmap Heap Scan:destinations self_ms=19.5 loops=6511 rows=1
+SCRIPT timing label=cand_a reader=country_places_old set=country ids=218 mode=generic rows=4796 median_ms=1545.4 runs=1613/1481/1545 explain_exec_ms=1589.2 plan_ms=2.4 hit=132714 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic node=Index Scan:tour_place self_ms=924.6 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic node=Aggregate:- self_ms=371.2 loops=1 rows=6511
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic node=Index Scan:atom_place_card self_ms=43.1 loops=7185 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic node=Bitmap Index Scan:- self_ms=39.1 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic node=Nested Loop:- self_ms=21.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic node=Index Scan:destinations self_ms=19.5 loops=19533 rows=0
+SCRIPT timing label=cand_a reader=country_places_old set=country ids=218 mode=custom_nojit rows=4796 median_ms=1428.1 runs=1427/1428/1429 explain_exec_ms=1444.1 plan_ms=2.6 hit=75890 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom_nojit node=Index Scan:tour_place self_ms=898.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom_nojit node=Aggregate:- self_ms=350.1 loops=1 rows=6511
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom_nojit node=Bitmap Index Scan:- self_ms=39.1 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=19.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom_nojit node=Index Scan:destinations self_ms=17.6 loops=5853 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=custom_nojit node=Nested Loop:- self_ms=15.0 loops=6511 rows=1
+SCRIPT timing label=cand_a reader=country_places_old set=country ids=218 mode=generic_nojit rows=4796 median_ms=1513.2 runs=1513/1553/1481 explain_exec_ms=1540.2 plan_ms=0.2 hit=132714 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic_nojit node=Index Scan:tour_place self_ms=911.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic_nojit node=Aggregate:- self_ms=353.9 loops=1 rows=6511
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic_nojit node=Bitmap Index Scan:- self_ms=39.1 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic_nojit node=Index Scan:atom_place_card self_ms=28.7 loops=7185 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=26.0 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_old set=country mode=generic_nojit node=Index Scan:destinations self_ms=19.5 loops=19533 rows=0
+SCRIPT parity label=cand_a reader=country_places_old set=country view_rows=4796 body_rows=4796 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_b reader=country_places_old set=country ids=218 mode=custom rows=4779 median_ms=730.1 runs=697/755/730 explain_exec_ms=706.2 plan_ms=2.5 hit=75020 read=0 temp_w=0 jit_ms=134.1 jit_functions=106
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom node=Aggregate:- self_ms=351.7 loops=1 rows=6511
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom node=Seq Scan:published_tours self_ms=125.5 loops=1 rows=892
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom node=Index Scan:tour_place self_ms=32.6 loops=6511 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom node=Bitmap Index Scan:- self_ms=32.6 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom node=Nested Loop:- self_ms=20.8 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom node=Bitmap Heap Scan:destinations self_ms=19.5 loops=6511 rows=1
+SCRIPT timing label=cand_b reader=country_places_old set=country ids=218 mode=generic rows=4779 median_ms=616.0 runs=666/616/607 explain_exec_ms=674.1 plan_ms=2.4 hit=128418 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic node=Aggregate:- self_ms=376.1 loops=1 rows=6511
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic node=Index Scan:tour_place self_ms=32.6 loops=6511 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic node=Bitmap Index Scan:- self_ms=32.6 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic node=Index Scan:atom_place_card self_ms=28.7 loops=7185 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic node=Bitmap Heap Scan:destinations self_ms=26.0 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic node=Nested Loop:- self_ms=21.5 loops=6511 rows=1
+SCRIPT timing label=cand_b reader=country_places_old set=country ids=218 mode=custom_nojit rows=4779 median_ms=574.0 runs=569/576/574 explain_exec_ms=571.5 plan_ms=2.5 hit=75020 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom_nojit node=Aggregate:- self_ms=351.9 loops=1 rows=6511
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom_nojit node=Index Scan:tour_place self_ms=32.6 loops=6511 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom_nojit node=Bitmap Index Scan:- self_ms=32.6 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=26.0 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom_nojit node=Nested Loop:- self_ms=14.3 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=custom_nojit node=Sort:- self_ms=13.0 loops=6511 rows=1
+SCRIPT timing label=cand_b reader=country_places_old set=country ids=218 mode=generic_nojit rows=4779 median_ms=598.1 runs=598/597/600 explain_exec_ms=625.2 plan_ms=0.2 hit=128418 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic_nojit node=Aggregate:- self_ms=352.4 loops=1 rows=6511
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic_nojit node=Index Scan:tour_place self_ms=32.6 loops=6511 rows=0
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic_nojit node=Bitmap Index Scan:- self_ms=32.6 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic_nojit node=Index Scan:atom_place_card self_ms=28.7 loops=7185 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic_nojit node=Nested Loop:- self_ms=20.8 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_old set=country mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=19.5 loops=6511 rows=1
+SCRIPT parity label=cand_b reader=country_places_old set=country view_rows=4796 body_rows=4779 only_view=226 only_body=209 verdict=FAIL
+SCRIPT timing label=view reader=country_places_new set=country ids=218 mode=custom rows=4796 median_ms=5263.6 runs=5215/5264/5294 explain_exec_ms=5274.2 plan_ms=4.2 hit=150940 read=0 temp_w=536 jit_ms=3187.4 jit_functions=151
+SCRIPT plan label=view reader=country_places_new set=country mode=custom node=Seq Scan:tour_atoms self_ms=3204.4 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_new set=country mode=custom node=Index Scan:tour_place self_ms=1842.6 loops=6511 rows=1
+SCRIPT plan label=view reader=country_places_new set=country mode=custom node=Function Scan:generate_series self_ms=212.3 loops=1862 rows=1
+SCRIPT plan label=view reader=country_places_new set=country mode=custom node=Nested Loop:- self_ms=140.2 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_new set=country mode=custom node=Function Scan:regexp_split_to_table self_ms=93.3 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_new set=country mode=custom node=Aggregate:- self_ms=89.4 loops=1 rows=6511
+SCRIPT timing label=view reader=country_places_new set=country ids=218 mode=generic rows=4796 median_ms=5299.8 runs=5202/5300/5343 explain_exec_ms=5085.5 plan_ms=4.0 hit=184742 read=0 temp_w=536 jit_ms=2972.4 jit_functions=137
+SCRIPT plan label=view reader=country_places_new set=country mode=generic node=Seq Scan:tour_atoms self_ms=2989.6 loops=3 rows=8667
+SCRIPT plan label=view reader=country_places_new set=country mode=generic node=Index Scan:tour_place self_ms=1803.5 loops=6511 rows=1
+SCRIPT plan label=view reader=country_places_new set=country mode=generic node=Function Scan:generate_series self_ms=212.3 loops=1862 rows=1
+SCRIPT plan label=view reader=country_places_new set=country mode=generic node=Nested Loop:- self_ms=139.8 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_new set=country mode=generic node=Function Scan:regexp_split_to_table self_ms=94.4 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_new set=country mode=generic node=Aggregate:- self_ms=88.2 loops=1 rows=6511
+SCRIPT timing label=view reader=country_places_new set=country ids=218 mode=custom_nojit rows=4796 median_ms=2862.4 runs=2862/2743/2875 explain_exec_ms=2945.2 plan_ms=4.2 hit=150940 read=0 temp_w=536 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_new set=country mode=custom_nojit node=Index Scan:tour_place self_ms=1914.2 loops=6511 rows=1
+SCRIPT plan label=view reader=country_places_new set=country mode=custom_nojit node=Function Scan:generate_series self_ms=216.0 loops=1862 rows=1
+SCRIPT plan label=view reader=country_places_new set=country mode=custom_nojit node=Nested Loop:- self_ms=141.5 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_new set=country mode=custom_nojit node=Aggregate:- self_ms=115.0 loops=1 rows=6511
+SCRIPT plan label=view reader=country_places_new set=country mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=96.4 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_new set=country mode=custom_nojit node=Seq Scan:tour_atoms self_ms=50.6 loops=3 rows=8667
+SCRIPT timing label=view reader=country_places_new set=country ids=218 mode=generic_nojit rows=4796 median_ms=2824.5 runs=2809/2824/3162 explain_exec_ms=2849.0 plan_ms=0.2 hit=184742 read=0 temp_w=536 jit_ms=None jit_functions=None
+SCRIPT plan label=view reader=country_places_new set=country mode=generic_nojit node=Index Scan:tour_place self_ms=1810.1 loops=6511 rows=1
+SCRIPT plan label=view reader=country_places_new set=country mode=generic_nojit node=Function Scan:generate_series self_ms=221.6 loops=1862 rows=1
+SCRIPT plan label=view reader=country_places_new set=country mode=generic_nojit node=Nested Loop:- self_ms=144.0 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_new set=country mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=99.4 loops=218 rows=9
+SCRIPT plan label=view reader=country_places_new set=country mode=generic_nojit node=Aggregate:- self_ms=90.5 loops=1 rows=6511
+SCRIPT plan label=view reader=country_places_new set=country mode=generic_nojit node=Sort:- self_ms=40.1 loops=1 rows=7185
+SCRIPT timing label=old_inline reader=country_places_new set=country ids=218 mode=custom rows=4796 median_ms=5773.8 runs=6399/5022/5774 explain_exec_ms=6306.7 plan_ms=4.7 hit=115664 read=0 temp_w=536 jit_ms=4165.9 jit_functions=191
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom node=Seq Scan:tour_atoms self_ms=4169.5 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom node=Index Scan:tour_place self_ms=2129.1 loops=6511 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom node=Function Scan:generate_series self_ms=255.1 loops=1862 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom node=Nested Loop:- self_ms=164.3 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom node=Aggregate:- self_ms=116.8 loops=1 rows=6511
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom node=Function Scan:regexp_split_to_table self_ms=113.8 loops=218 rows=9
+SCRIPT timing label=old_inline reader=country_places_new set=country ids=218 mode=generic rows=4796 median_ms=5120.5 runs=5111/5760/5121 explain_exec_ms=5399.6 plan_ms=3.9 hit=170961 read=0 temp_w=536 jit_ms=3096.1 jit_functions=140
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic node=Seq Scan:tour_atoms self_ms=3118.9 loops=3 rows=8667
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic node=Index Scan:tour_place self_ms=1920.7 loops=6511 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic node=Function Scan:generate_series self_ms=223.4 loops=1862 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic node=Nested Loop:- self_ms=152.2 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic node=Aggregate:- self_ms=102.7 loops=1 rows=6511
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic node=Function Scan:regexp_split_to_table self_ms=102.2 loops=218 rows=9
+SCRIPT timing label=old_inline reader=country_places_new set=country ids=218 mode=custom_nojit rows=4796 median_ms=2798.7 runs=2824/2799/2754 explain_exec_ms=2853.0 plan_ms=4.0 hit=115664 read=0 temp_w=536 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom_nojit node=Index Scan:tour_place self_ms=1855.6 loops=6511 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom_nojit node=Function Scan:generate_series self_ms=217.9 loops=1862 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom_nojit node=Nested Loop:- self_ms=142.5 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom_nojit node=Aggregate:- self_ms=103.5 loops=1 rows=6511
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom_nojit node=Function Scan:regexp_split_to_table self_ms=95.7 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=custom_nojit node=Sort:- self_ms=40.7 loops=3 rows=8667
+SCRIPT timing label=old_inline reader=country_places_new set=country ids=218 mode=generic_nojit rows=4796 median_ms=2770.8 runs=2795/2770/2771 explain_exec_ms=3077.5 plan_ms=0.2 hit=170961 read=0 temp_w=536 jit_ms=None jit_functions=None
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic_nojit node=Index Scan:tour_place self_ms=1959.8 loops=6511 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic_nojit node=Function Scan:generate_series self_ms=230.9 loops=1862 rows=1
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic_nojit node=Nested Loop:- self_ms=149.3 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic_nojit node=Function Scan:regexp_split_to_table self_ms=104.9 loops=218 rows=9
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic_nojit node=Aggregate:- self_ms=102.9 loops=1 rows=6511
+SCRIPT plan label=old_inline reader=country_places_new set=country mode=generic_nojit node=Bitmap Index Scan:- self_ms=45.6 loops=6511 rows=1
+SCRIPT parity label=old_inline reader=country_places_new set=country view_rows=4796 body_rows=4796 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_a reader=country_places_new set=country ids=218 mode=custom rows=4796 median_ms=1631.2 runs=1690/1631/1596 explain_exec_ms=1595.3 plan_ms=2.5 hit=75890 read=0 temp_w=0 jit_ms=134.4 jit_functions=106
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom node=Index Scan:tour_place self_ms=898.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom node=Aggregate:- self_ms=355.9 loops=1 rows=6511
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom node=Seq Scan:published_tours self_ms=125.9 loops=1 rows=892
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom node=Bitmap Index Scan:- self_ms=39.1 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom node=Bitmap Heap Scan:destinations self_ms=19.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom node=Index Scan:destinations self_ms=17.6 loops=5853 rows=1
+SCRIPT timing label=cand_a reader=country_places_new set=country ids=218 mode=generic rows=4796 median_ms=1483.9 runs=1484/1477/1522 explain_exec_ms=1502.5 plan_ms=2.4 hit=132714 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic node=Index Scan:tour_place self_ms=898.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic node=Aggregate:- self_ms=348.5 loops=1 rows=6511
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic node=Bitmap Index Scan:- self_ms=39.1 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic node=Index Scan:atom_place_card self_ms=28.7 loops=7185 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic node=Index Scan:destinations self_ms=19.5 loops=19533 rows=0
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic node=Bitmap Heap Scan:destinations self_ms=19.5 loops=6511 rows=1
+SCRIPT timing label=cand_a reader=country_places_new set=country ids=218 mode=custom_nojit rows=4796 median_ms=1457.7 runs=1519/1456/1458 explain_exec_ms=1549.5 plan_ms=2.7 hit=75890 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom_nojit node=Index Scan:tour_place self_ms=950.6 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom_nojit node=Aggregate:- self_ms=378.4 loops=1 rows=6511
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom_nojit node=Bitmap Index Scan:- self_ms=39.1 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=26.0 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom_nojit node=Nested Loop:- self_ms=21.5 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=custom_nojit node=Index Scan:destinations self_ms=17.6 loops=5853 rows=1
+SCRIPT timing label=cand_a reader=country_places_new set=country ids=218 mode=generic_nojit rows=4796 median_ms=1524.4 runs=1611/1476/1524 explain_exec_ms=1781.8 plan_ms=0.2 hit=132714 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic_nojit node=Index Scan:tour_place self_ms=1048.3 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic_nojit node=Aggregate:- self_ms=412.0 loops=1 rows=6511
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic_nojit node=Bitmap Index Scan:- self_ms=39.1 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=32.6 loops=6511 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic_nojit node=Index Scan:atom_place_card self_ms=28.7 loops=7185 rows=1
+SCRIPT plan label=cand_a reader=country_places_new set=country mode=generic_nojit node=Index Scan:destinations self_ms=23.4 loops=5853 rows=1
+SCRIPT parity label=cand_a reader=country_places_new set=country view_rows=4796 body_rows=4796 only_view=0 only_body=0 verdict=PASS
+SCRIPT timing label=cand_b reader=country_places_new set=country ids=218 mode=custom rows=4779 median_ms=698.7 runs=699/712/698 explain_exec_ms=714.6 plan_ms=2.5 hit=75020 read=0 temp_w=0 jit_ms=135.4 jit_functions=106
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom node=Aggregate:- self_ms=353.0 loops=1 rows=6511
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom node=Seq Scan:published_tours self_ms=126.5 loops=1 rows=892
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom node=Index Scan:tour_place self_ms=32.6 loops=6511 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom node=Bitmap Index Scan:- self_ms=32.6 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom node=Bitmap Heap Scan:destinations self_ms=26.0 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom node=Nested Loop:- self_ms=14.3 loops=6511 rows=1
+SCRIPT timing label=cand_b reader=country_places_new set=country ids=218 mode=generic rows=4779 median_ms=603.0 runs=644/598/603 explain_exec_ms=620.7 plan_ms=2.5 hit=128418 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic node=Aggregate:- self_ms=347.4 loops=1 rows=6511
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic node=Index Scan:tour_place self_ms=32.6 loops=6511 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic node=Bitmap Index Scan:- self_ms=32.6 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic node=Index Scan:atom_place_card self_ms=28.7 loops=7185 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic node=Nested Loop:- self_ms=20.8 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic node=Bitmap Heap Scan:destinations self_ms=19.5 loops=6511 rows=1
+SCRIPT timing label=cand_b reader=country_places_new set=country ids=218 mode=custom_nojit rows=4779 median_ms=551.6 runs=552/605/551 explain_exec_ms=564.7 plan_ms=2.4 hit=75020 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom_nojit node=Aggregate:- self_ms=348.7 loops=1 rows=6511
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom_nojit node=Index Scan:tour_place self_ms=32.6 loops=6511 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom_nojit node=Bitmap Index Scan:- self_ms=32.6 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom_nojit node=Nested Loop:- self_ms=20.8 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom_nojit node=Bitmap Heap Scan:destinations self_ms=19.5 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=custom_nojit node=Index Scan:destinations self_ms=11.7 loops=5853 rows=1
+SCRIPT timing label=cand_b reader=country_places_new set=country ids=218 mode=generic_nojit rows=4779 median_ms=637.2 runs=597/704/637 explain_exec_ms=618.8 plan_ms=0.2 hit=128418 read=0 temp_w=0 jit_ms=None jit_functions=None
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic_nojit node=Aggregate:- self_ms=347.7 loops=1 rows=6511
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic_nojit node=Index Scan:tour_place self_ms=32.6 loops=6511 rows=0
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic_nojit node=Bitmap Index Scan:- self_ms=32.6 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic_nojit node=Index Scan:atom_place_card self_ms=28.7 loops=7185 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic_nojit node=Nested Loop:- self_ms=20.8 loops=6511 rows=1
+SCRIPT plan label=cand_b reader=country_places_new set=country mode=generic_nojit node=Bitmap Heap Scan:destinations self_ms=19.5 loops=6511 rows=1
+SCRIPT parity label=cand_b reader=country_places_new set=country view_rows=4796 body_rows=4779 only_view=226 only_body=209 verdict=FAIL
+SCRIPT name_norm rows=13510 differ=5615 differ_linked=5370
+SCRIPT done elapsed_s=747

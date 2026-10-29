@@ -1,0 +1,26 @@
+{
+  "shot": "portal-facts-390x844",
+  "png": "/home/nghiep/projects/AA-Ecosys/.tmp-session/S257/audits/2026-10-29-S257-ui-evidence/portal-facts-390x844.png",
+  "url": "https://portal.lumiguides.it.com/portal/facts",
+  "at": "2026-10-29T07:07:28.633Z",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "theme": "light",
+  "console_errors_app_origin": [],
+  "failed_requests_app_origin_ge_400": [],
+  "network_failures_app_origin": [],
+  "non_get_requests_app_origin_outside_bff": [],
+  "blocked_bff_writes_total": 0,
+  "layout": {
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "bodyScrollWidth": 390,
+    "horizontal_overflow": false
+  },
+  "route": "/portal/facts",
+  "source": "AA-Partner #120",
+  "probe_fact": "S257 probe price",
+  "probe_fact_shown": true
+}

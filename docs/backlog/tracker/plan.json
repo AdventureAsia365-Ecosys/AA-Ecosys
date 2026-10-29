@@ -1,8 +1,8 @@
 {
  "updated": "2026-10-29",
- "session": "S256",
- "next_session": "S257",
- "source": "Linear (29/10/2026, S256 close) + docs/backlog/README.md + docs/audits/2026-10-29-S256-session-close/state-snapshot.md + docs/sessions/2026-10-29-S256-cost-spike-t2-judge-lcp-capacity-alerts-aws-diagrams.md + .tmp-session/S256-checklist.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.",
+ "session": "S257",
+ "next_session": "S258",
+ "source": "Linear (29/10/2026, S257 close) + docs/backlog/README.md + docs/audits/2026-10-29-S257-session-close/state-snapshot.md + docs/sessions/2026-10-29-S257-facts-entry-tp-jobs-migration-sync-kit-sync-geocode-v2.md + .tmp-session/S257-checklist.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -278,7 +278,7 @@
      "done": false
     },
     {
-     "text": "AA-880 ADR 0012 Accepted trước W8; AA-969 không còn finding High; AA-980 đại lý thật đầu tiên được mời trên prod",
+     "text": "AA-880 ADR 0012 Accepted trước W8; AA-969 không còn finding High; AA-980 đại lý thật đầu tiên được mời trên prod — ADR 0012 đã Accepted S257 (root #320); còn AA-969, AA-980",
      "done": false
     }
    ]
@@ -326,17 +326,32 @@
    "text": "DB Isolation Probe phủ bảng đợt 4 (58/58); 3 bảng chưa có dòng — đọc lại khi tenant tạo plan/page"
   },
   {
+   "due": "hằng ngày",
+   "issue": "AA-861",
+   "text": "Done S257: Lambda aa-tripplanner-dev-jobs + lịch aa-tripplanner-dev-jobs-daily chạy tp_retention_outbox_redact chế độ dry run mỗi ngày; alarm -errors / -not-run. Dòng outbox đầu tiên đủ 90 ngày ~01/2027. Đỏ = runner lỗi hoặc không chạy"
+  },
+  {
+   "due": "đầu S258",
+   "issue": "AA-919",
+   "text": "acc3 rời AWS Organization lúc 06:50 UTC (CloudTrail: organizations.amazonaws.com xoá AWSServiceRoleForOrganizations; describe-organization → không còn là thành viên); ngay sau đó gpt-5.6-luna / gpt-6-luna (OpenAI-on-Bedrock) trên acc3 trả AccessDenied \"not available for this account\", Claude trên acc3 vẫn chạy; mọi stage judge route sang luna (t2_judge, t10_judge, s1_judge, writing_memory_eval, …) có rủi ro; lối cuối OpenAI API hết credit (429); R2 AA-900 228447e7 không hợp lệ vì lý do này ($0,107); probe nhỏ gpt-6-luna sau đó không ra kết quả (chưa kiểm được). Trước mọi eval trả tiền / việc dựa vào judge: probe gpt-6-luna / gpt-5.6-luna qua LLMClient.generate() (stage adhoc_) và đọc trả lời của reseller; tới khi luna chạy lại, coi mọi kết quả judge luna là không tin được"
+  },
+  {
+   "due": "đầu S258",
+   "issue": "AA-993",
+   "text": "Cron */10 của migration-sync.yml chưa chạy theo lịch lần nào ở S257 (6 run đều workflow_dispatch; copy #495 / #496 / #498 chỉ do bot mở + merge sau dispatch tay → Done-when \"không bước tay\" chưa đạt): kiểm gh run list --event schedule trước proof bk-034 và trước khi đặt DB_AUTO_APPLY"
+  },
+  {
    "due": "xong S256",
    "issue": "AA-979",
    "text": "AA-979 Done S256: dọn §4.5 chạy sớm (Infra #484, Partner #115, CIS #1126 xoá portal/ đông lạnh + /trip 308, xoá project Vercel aa-cis-portal + 3 secret + 1 biến, token Vercel aa-partner-ci do tech lead thu hồi, root #316); redirect URI Google cho portal. đã có sẵn, Connect Gmail tới bước Google đúng redirect. Theo sau: kiểm cta-check bằng user studio vai viewer riêng (CIS #1127)"
   },
   {
-   "due": "hằng ngày (credit Geoapify) → ~31/10",
+   "due": "hằng ngày (credit Geoapify) → kiểm đầu S258",
    "issue": "AA-997",
-   "text": "S256: dry run mọi nước ce96dfa5 (3.842 dòng / $0, ~3 ngày credit); Laos chạy lại 71781806 từ 07:11 +07 29/10, apply mọi nước 445f9770 xếp sau. Dòng place_relocate trong shared.job là cố ý — để chạy tới ~31/10, rồi audit lại (≥ 90 %) + AA-990 recheck_14"
+   "text": "S257: audit giữa chừng (chỉ đọc, $0) — chuỗi 1.621 / 3.842 dòng; độ đúng mẫu 600 dòng 75,4 → 77,7 %, dự phóng khi xong ≈ 79,5 % (chuỗi một mình không tới 90 %). v2 CIS #1139 tắt (luật chặt aa997.2 off); P4 FAIL (13,5 % dòng đúng bị từ chối) → không bật, không apply. Còn 1 job chuỗi aa997.1 xếp 30/10 00:13Z — kiểm đầu S258 (có thể từ chối khi đổi phiên bản luật)"
   },
   {
-   "due": "phiên đầu ≥01/11 (≈S257)",
+   "due": "phiên đầu ≥01/11 (≈S258–S259)",
    "issue": "AA-896",
    "text": "Audit cost tháng 8/9/10 theo tag App + dịch vụ (acc2) + acc3 Bedrock + credits, giải thích từng bước nhảy; cùng AA-838 + AA-665. S255 đã có budget + anomaly (AA-896), trang Cost Operations (AA-665), capacity review đầu (AA-838); acc2 ~8,7 USD/ngày ≈ 260 USD/tháng từ tháng 11"
   },
@@ -373,7 +388,7 @@
   {
    "due": "trước prod",
    "issue": "AA-873",
-   "text": "GuardDuty do tech lead quyết trước prod (~15–20 USD/tháng, báo giá docs/audits/2026-10-28-S255-finops-security/). Đang TẮT: S255 bật nhầm vài phút khi chưa có \"có\" riêng, đã gỡ (trong 30 ngày dùng thử, không phí). Không bật khi chưa có đồng ý riêng cho mục này"
+   "text": "GuardDuty do tech lead quyết trước prod (~15–20 USD/tháng, báo giá docs/audits/2026-10-28-S255-finops-security/). Đang TẮT: S255 bật nhầm vài phút khi chưa có \"có\" riêng, đã gỡ (trong 30 ngày dùng thử, không phí). Không bật khi chưa có đồng ý riêng cho mục này S257: tech lead nói \"chưa dùng\"."
   },
   {
    "due": "trước prod",
@@ -384,22 +399,22 @@
  "waiting": [
   {
    "who": "Tech lead",
-   "text": "Chấp nhận (hoặc sửa) ADR 0012 \"Environment model\" (Proposed, root #310)",
-   "issue": "AA-880"
+   "text": "acc3 rời AWS Organization (S257, 06:50 UTC): hỏi reseller (eCloudvalley / TrueIDC) vì sao (billing, credit AWS Lift) và quyết nạp credit OpenAI API (đang 429). Tới lúc đó judge luna trên acc3 trả AccessDenied. Guard test nhãn ↛ route / account ở nhánh CIS fix/aa-900-adhoc-label-account (7fbbbc6e)",
+   "issue": "AA-919"
   },
   {
    "who": "Tech lead",
-   "text": "Duyệt pilot sơ đồ kiến trúc chuẩn AWS ở /admin/docs?path=docs/architecture/diagrams/README.md (root #315) → Done",
-   "issue": "AA-697"
+   "text": "Đóng AA-789 Done-with-scope? Phần regex đã hết (rev 4 CIS #1140, verifier thứ tư 0 FP); phần còn lại cần integrity check sau sửa bằng LLM",
+   "issue": "AA-789"
   },
   {
    "who": "Tech lead",
-   "text": "EFS aa-cis-dev-efs không task nào mount (phát hiện drift AA-697): xoá sau DRY RUN nếu tech lead đồng ý",
-   "issue": ""
+   "text": "Duyệt spike OTel (1 lệnh Bedrock thật với ConsoleSpanExporter) trước khi dựng phương án B (docs/audits/2026-10-29-S257-aa842-otel/)",
+   "issue": "AA-842"
   },
   {
    "who": "Tech lead",
-   "text": "GuardDuty có / không (~15–20 USD/tháng, báo giá docs/audits/2026-10-28-S255-finops-security/); tắt tới khi có \"có\" riêng cho mục này",
+   "text": "GuardDuty có / không (~15–20 USD/tháng, báo giá docs/audits/2026-10-28-S255-finops-security/); tắt tới khi có \"có\" riêng cho mục này — S257: \"chưa dùng\"",
    "issue": "AA-873"
   },
   {
@@ -464,6 +479,26 @@
   }
  ],
  "log": [
+  {
+   "session": "S257",
+   "date": "29/10/2026",
+   "closed": [
+    "AA-814",
+    "AA-861",
+    "AA-697"
+   ],
+   "canceled": [],
+   "created": [],
+   "reopened": [],
+   "notes": [
+    "Done AA-814 (Claude Code, Ultracode; 29/10 10:16 → ~14:45, chạm hạn mức 11:50–12:10, workflow resume): mig 302 CIS #1138 (copy Infra #495 do bot migration-sync mở + merge, apply 40827788951), CIS #1141 API + trang Facts admin, Partner #120 trang Facts portal, root #324; live tenant 201/200/409/404/422, RLS tenant khác 0, seed T9 trích fact, $0",
+    "Done AA-861 (tp-021 tripplanner.job TP #183, copy #496 bot, apply 40828480157; Lambda jobs + lịch + 2 alarm Infra #497, TP #185; dry run 0, override 7, chạy thật 0 dòng; relay Booking OK; ≈ $0,20/tháng) và AA-697 (pilot duyệt theo kế hoạch phiên, root #320); ADR 0012 Accepted (root #320, data standards v1.8), AA-880 còn blueprint L9",
+    "Ship, chưa đóng: AA-993 M3 Infra #493 (bot mở + merge #495/#496/#498), M1 tự merge #325/#326/#329, M4b CIS #1145 / Booking #146 / Partner #121 (Schema gate Partner xanh) — cron chưa chạy theo lịch, copy chỉ mở + merge sau dispatch tay → Done-when \"không bước tay\" chưa đạt, proof bk-034 + DB_AUTO_APPLY dời S258; AA-994 S3s CIS #1133 + root #321, S4a CIS #1137, PR sync thật Partner #119 / Booking #144 / TP #184, S4b Booking #145, CIS #1142 652b255f (Kit consumers strict cho Booking); AA-998 Infra #491 + grep root #319; AA-919 so model judge $0,665 (luna 0,562 < 0,6); AA-790 r10 FAIL (~$0,99), cờ tắt; AA-789 rev 4 CIS #1140 0 FP; AA-900 CIS #1136 + root #322, R2 eval 228447e7 (job 462f72ee) không hợp lệ ($0,107, judge luna AccessDenied); AA-997 audit 77,7 % (dự phóng 79,5 %), v2 CIS #1139 tắt, P4 FAIL (13,5 % dòng đúng bị từ chối) → aa997.2 giữ tắt",
+    "Không issue: EFS xoá (Infra #492 + apply local trong cửa sổ tắt auto mode ~13:10); ecsx local mode root #318; viewer cta-check live (200 / ghi 403); Partner #117 chip giá; CIS #1131 + mig 303 #1143 khớp ảnh ↔ điểm đến + CIS #1144 2e8e10a3 (dry run 6e8b5043 khớp 1.593; apply 69659af9 ghi 1.593, 283 điểm đến; ảnh bìa 162 → 302 / 892 tour); C4.3 W44 → TP #181 (25 tour 2,5 → 0,31 s; /destinations LCP 2,46 s perf 97, Bhutan 3,95 s không đổi, trang chủ 1,62 s, tour 1,54 s), TP #187 test HNSW; CIS #1130 thứ tự feed (ORDER BY alias text của xid8); báo cáo AA-842 OTel; release TP 0.12.0, Partner 0.9.1; lúc chốt merge release CIS #1134 (0.16.0), Booking #147 (0.12.0), TP #186 (0.13.0), Partner #122 (0.10.0) + root bot #327. GuardDuty: tech lead \"chưa dùng\"",
+    "Sự cố: hạn mức 5 giờ giết nhiều lane (resume); push giữa lúc rebase dở (CIS #1144); test HNSW chặn Deploy Lambdas; bước kiểm Kit consumers trước npm ci che lỗi; cron migration-sync không chạy; acc3 rời AWS Organization lúc 06:50 UTC (CloudTrail: organizations.amazonaws.com xoá AWSServiceRoleForOrganizations; describe-organization → không còn là thành viên); ngay sau đó gpt-5.6-luna / gpt-6-luna (OpenAI-on-Bedrock) trên acc3 trả AccessDenied \"not available for this account\", Claude trên acc3 vẫn chạy; mọi stage judge route sang luna (t2_judge, t10_judge, s1_judge, writing_memory_eval, …) có rủi ro; lối cuối OpenAI API hết credit (429); R2 AA-900 228447e7 không hợp lệ vì lý do này ($0,107); probe nhỏ gpt-6-luna sau đó không ra kết quả (chưa kiểm được). LLM khoảng $1,77 (AA-919 $0,665, AA-790 ≈ $0,99, AA-900 $0,107, probe luna ≈ $0); AWS mới/tháng: Lambda jobs TP + 2 alarm ≈ $0,20, EFS đã xoá",
+    "Live lúc chốt: 14:45 +07 (STS acc2 OK): ECS CIS api :913 / worker :479 dev-2e8e10a3, Booking :86 216cb5e6, CRM api :77 03918c0b, CRM web :49 04756799 (portal 0.9.1), cả 5 COMPLETED, revision mới nhất = đang chạy; /health/ready CIS ok schema 303, Booking ok bk-033; TripPlanner /api/health ok d98ebef7 (0.11.1; commit release không deploy lại); Lambda browse / assembly / jobs deploy 07:04 UTC cùng CodeSha256; migration CIS 303 (302, 303 áp hôm nay), bk-033, tp-021 (áp hôm nay), crm-023; DB_AUTO_APPLY chưa đặt; shared.job chỉ 1 place_relocate queued (30/10 00:13 UTC), 0 wave; PR mở lúc chụp: release CIS #1134, Booking #147, TP #186, Partner #122, root #327 (merge lúc chốt) + root #328 (M5, cố ý để mở). Jira S257: nháp chờ tech lead duyệt (docs/audits/2026-10-29-S257-session-close/jira-drafts.md)"
+   ]
+  },
   {
    "session": "S256",
    "date": "29/10/2026",
@@ -1002,9 +1037,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "later",
+   "session": "đầu tháng 12",
    "size": "L",
-   "next": "L7 · tạo S255 (tech lead yêu cầu, duyệt mọi đề xuất xoá): audit 99 tham chiếu (CIS 35, Infra 23, root 23, TP 10; Booking/Partner sạch); cắt đường gọi CIS #1102 + mig 295 (chỉ acc3, admin hiện ID tài khoản lấy lúc chạy), TP #174, Infra #466; xoá trên acc1 đợt 1 + 2 (Terraform destroy 7 tài nguyên + bucket state), xoá thư mục root (Infra #476), secret cuối (us-east-1) lên lịch xoá 04/11; kiểm kê lại sạch; ADR 0001a. 4/5 Done-when. Còn: Cost Explorer acc1 tháng 11 = 0 (kiểm đầu tháng 12) → đóng",
+   "next": "L7 · S257: Infra #491 (bỏ tham chiếu acc1-bedrock cũ) + grep 6 repo root #319 (0 đường code/config sống; docs/audits/2026-10-29-S257-aa998-acc1-grep/). Done-when 1, 2, 3, 5 đạt. Còn: Cost Explorer acc1 tháng 11 = 0 (đầu tháng 12)",
    "needs": ""
   },
   {
@@ -1058,13 +1093,13 @@
   {
    "id": "AA-900",
    "title": "LLM operations docs, prompt versioning and eval gate",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Low",
    "project": "data",
    "milestone": "M2a",
-   "session": "later",
+   "session": "S258",
    "size": "M",
-   "next": "L1 · LLM ops docs, prompt register, manual eval gate; after the S251 go/no-go",
+   "next": "L1 · S257: prompt register + runbook eval + nhãn adhoc_aa900 CIS #1136 22d1b704; bảng route LLM sinh tự động + dòng catalog APP-06 root #322. R2 eval 228447e7 (job 462f72ee) không hợp lệ (~$0,107): judge luna trên acc3 AccessDenied sau khi acc3 rời Organization → chạy lại khi luna chạy lại; guard test nhãn ↛ route / account nhánh CIS fix/aa-900-adhoc-label-account (7fbbbc6e)",
    "needs": ""
   },
   {
@@ -1074,9 +1109,9 @@
    "priority": "Low",
    "project": "data",
    "milestone": "M5",
-   "session": "tech lead",
+   "session": "go-live date",
    "size": "L",
-   "next": "L7 · S256: ADR 0012 \"Environment model\" Proposed, root #310 (4 môi trường, prod cùng account hạ tầng, cách ly theo môi trường). Done khi tech lead chấp nhận + blueprint L9 khi có ngày go-live",
+   "next": "L7 · S257: ADR 0012 \"Environment model\" Accepted (duyệt theo kế hoạch phiên), root #320 daf49f7a; data standards v1.8 (C7.2b/c/d), handbook + guide vai trò + runbook DB Migrate. Còn: blueprint L9 (Terraform plan prod + chi phí) khi có ngày go-live",
    "needs": "Date; account (AA-864)"
   },
   {
@@ -1104,18 +1139,6 @@
    "needs": "Go signal"
   },
   {
-   "id": "AA-697",
-   "title": "Architecture diagrams with official AWS icons — ecosystem + each repo",
-   "status": "In Progress",
-   "priority": "Low",
-   "project": "core",
-   "milestone": "M5",
-   "session": "tech lead",
-   "size": "M",
-   "next": "S256: sơ đồ icon AWS chính thức (root #311), reader hiện SVG bundle (CIS #1110), đối chiếu TerraVision (root #313), vẽ lại chuẩn AWS theo yêu cầu tech lead (root #315), link CONTEXT.md 5 repo; tìm ra bucket ops-docs Booking thiếu (đã tạo) + EFS không ai mount. Còn: tech lead duyệt pilot",
-   "needs": "Duyệt pilot (tech lead)"
-  },
-  {
    "id": "AA-804",
    "title": "AI platform ADR + ledger v2 — one gateway library, attempt-level llm_call_log, AI Use Register",
    "status": "Backlog",
@@ -1136,7 +1159,7 @@
    "milestone": "M5",
    "session": "tech lead",
    "size": "M",
-   "next": "L3 · S256: triage 12 phát hiện (11 ACTIVE có chủ đích, 1 RESOLVED, 0 lộ thật), Infra #483 (3 archive rule + IAM tag/untag), bootstrap tf_apply_sec local + CI apply 40788053737 → 0 ACTIVE; sec_alert_check 44/0 lỗi; thử thật SG 4/4, IAM 6/6, trail 1/1, analyzer 1/1, SNS 0 lỗi. Còn: GuardDuty (tech lead quyết)",
+   "next": "L3 · S256: triage 12 phát hiện → 0 ACTIVE, cảnh báo thử thật đạt (SG 4/4, IAM 6/6, trail 1/1, analyzer 1/1). Còn: GuardDuty — S257 tech lead nói \"chưa dùng\"",
    "needs": "GuardDuty có / không (tech lead)"
   },
   {
@@ -1164,18 +1187,6 @@
    "needs": "Still wanted?"
   },
   {
-   "id": "AA-861",
-   "title": "TripPlanner outbox payload PII redaction after 90 days",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "tpbk",
-   "milestone": "M5",
-   "session": "later",
-   "size": "S",
-   "next": "L5 · Chưa đụng S253: cần dựng tripplanner.job + runner Lambda theo lịch (AA-751), cỡ L; dòng outbox đầu tiên đủ 90 ngày ~01/2027 → làm trước 01/2027",
-   "needs": "Approve the first real run"
-  },
-  {
    "id": "AA-842",
    "title": "Investigate OpenTelemetry gen_ai tracing for every LLM call (read-only report)",
    "status": "Backlog",
@@ -1184,8 +1195,8 @@
    "milestone": "parked",
    "session": "parked",
    "size": "M",
-   "next": "OTel gen_ai tracing — build option B only on a trigger",
-   "needs": ""
+   "next": "S257: báo cáo xong (docs/audits/2026-10-29-S257-aa842-otel/, Notion): chưa có tracing LLM, 41 call site qua một gateway; đề xuất phương án B (span gen_ai mỗi lệnh logic + span con mỗi attempt, X-Ray Transaction Search < ~$2/tháng Dev). Spike chờ tech lead; trạng thái giữ theo Done-when",
+   "needs": "Duyệt spike (tech lead)"
   },
   {
    "id": "AA-741",
@@ -1206,34 +1217,22 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S257",
+   "session": "S258",
    "size": "L",
-   "next": "L1 · S256 vòng 9 (grounding brief, cờ T9_BRIEF_GROUNDING_MODE, CIS #1108): A/B $1,10 + panel mù 32 mục — source_fidelity +0,50, brand_voice +0,38, ai_tells 5,62 đạt; reader_value −0,25 → FAIL, cờ tắt, vòng 6 giữ. Tiếp: vòng 10 = giữ grounding + checklist reader-value trong brief",
+   "next": "L1 · S257 vòng 10 (cờ T9_READER_CHECKLIST_MODE, CIS #1135, mặc định tắt): A/B ≈ $0,99 + panel mù 40 mục — reader_value −0,25 (ngưỡng ≥ −0,15) → FAIL, cờ tắt, vòng 6 giữ. Đề xuất: dừng vòng prompt trên harness 8 bài; mẫu cố định ≥ 20 bài + hiệu chuẩn judge trước",
    "needs": "LLM judge vs deterministic rubric"
-  },
-  {
-   "id": "AA-814",
-   "title": "Facts Entry API + UI — platform and tenant-scope facts used by T2/T9",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "M5",
-   "session": "later",
-   "size": "L",
-   "next": "Facts Entry API + UI (after AA-859 / AA-813)",
-   "needs": "Priority vs place cards"
   },
   {
    "id": "AA-789",
    "title": "T10 gates recall tunes (F17, F18, F15, F13, F16)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "tech lead",
    "size": "M",
-   "next": "L1 · Gate recall tunes, lexical part only; not slotted in the S1-first plan (no new gates for 4 weeks)",
-   "needs": ""
+   "next": "L1 · S257: rev 4 chỉ giữ pattern chính xác, CIS #1140 0c4dd6a6 (3 vòng verifier 13 → 8 → 10 FP, vòng thứ tư 0 FP; 194 unit test). Đề xuất đóng Done-with-scope (phần regex đã hết; phần còn lại cần integrity check sau sửa bằng LLM)",
+   "needs": "Done-with-scope? (tech lead)"
   },
   {
    "id": "AA-788",
@@ -1302,9 +1301,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S257",
+   "session": "S258",
    "size": "L",
-   "next": "L1 · S256: rà 13 cặp hiệu chuẩn (2 nhãn sai, 3 rubric mơ hồ, 4 lỗi judge cũ, 4 khớp), rubric CIS #1107, golden 1.2.0 trên Dev, source parity CIS #1120; R2 cc0f75cf ($0,24) + 39096169 ($0,25) kappa 0,316 cả hai → judge_counts=false. Tiếp: thêm cặp hiệu chuẩn theo stratum + kappa theo stratum, so model judge, sửa script kappa diag",
+   "next": "L1 · S257: CIS #1132 (kappa theo stratum, sửa diag, harness so model); so model 21ca49c6 ($0,665): gpt-5.6-luna 0,562 (tốt + rẻ nhất), gpt-6-astra 0,435, gpt-6-luna 0,054 — chưa ≥ 0,6, judge_counts false. Tiếp: gán thêm cặp theo stratum (thiếu Facebook 3 đạt + 3 trượt), chạy lại so model trước khi đổi route writing_memory_eval",
    "needs": "Each release"
   },
   {
@@ -1662,9 +1661,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M2a",
-   "session": "~31/10",
+   "session": "sau AA-997",
    "size": "M",
-   "next": "L5 · S256: recheck_14 chưa chạy (chờ chuỗi relocate AA-997, ~31/10). Tiếp: recheck_14 sau audit lại",
+   "next": "L5 · S257: recheck_14 chỉ đọc trong audit AA-997: route 13/16, xác nhận hết 1/16 — chờ chỉnh v2 của AA-997",
    "needs": ""
   },
   {
@@ -1674,9 +1673,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "S257",
+   "session": "S258",
    "size": "L",
-   "next": "L7 · S256 Phase E: I1 Infra #477 (role hẹp db auto-apply apply local MFA; gate env dev-db-auto + secret + ruleset 26049881; IAM simulate đúng, role check 40710037045), M2a #478, M1 #480 + root ADR 0011a #309, M2b Infra #485 (ruleset 26049881 áp lại bằng login tech lead, classify bắt buộc), M4a CIS #1121 / Booking #139 / Partner #112 (registered_keys trên /health/ready); copy guard bắt bk-032 sửa sau khi áp → bk-033. Khoá M2a chứng minh live (apply 301: \"MIGRATE apply lock: taken\"; guard bảng job bận exit 7 chặn đúng, override tech lead duyệt); M1 fail-closed vì fingerprint drift đổi → schema dump #308 merge tay. DB_AUTO_APPLY chưa bật. Tiếp: thấy M1 tự merge trên lượt dump sạch, rồi M3, M4b, M5",
+   "next": "L7 · S257: M3 Infra #493 9a069a99 (migration-sync + migration-apply, expand auto-apply mặc định tắt; review: 1 blocker + 5 lỗi nhỏ đã sửa); bot aa-ecosys-ci-bot mở + merge copy Infra #495/#496/#498; M1 schema dump tự merge #325/#326/#329; M4b schema-gate + Migration preflight CIS #1145, Booking #146, Partner #121. Cron */10 chưa chạy theo lịch (~2 giờ sau merge; copy chỉ sau dispatch tay → Done-when \"không bước tay\" chưa đạt) → chưa bật DB_AUTO_APPLY; Schema gate Partner Deploy Dev xanh. Tiếp: kiểm cron, proof Booking bk-034 với DB_AUTO_APPLY, M5 (root #328, cố ý để mở), đo lead time ≥ 5 PR",
    "needs": ""
   },
   {
@@ -1686,9 +1685,9 @@
    "priority": "High",
    "project": "portal",
    "milestone": "M4",
-   "session": "S257",
+   "session": "S258",
    "size": "XL",
-   "next": "LP · S256: i18n toàn admin trong kit (EN mặc định, VI chỉ qua nút trên topbar, cookie cis_lang) — CIS #1129 3994a1a8 live (api :906, Vercel f80429a9), kiểm EN/VI đạt 09:20 (ui-evidence 07a–07c, ảnh 4 trang ở docs/audits/2026-10-29-S256-aa994-i18n/); kit core đồng bộ sang Partner #116, TripPlanner #180, Booking #143. Tiếp: S3 và H3; text do API gửi vẫn tiếng Anh tới khi API trả mã",
+   "next": "LP · S257: S3s bot đồng bộ kit CIS #1133 + root #321 (dry run 40823853268 đạt); S4a CIS #1137 fc224ff6; PR sync thật đầu tiên Partner #119, Booking #144, TP #184; S4b Booking #145 216cb5e6 (frontend Booking dùng kit core vendored). CIS #1142 652b255f (Kit consumers strict cho Booking) đã merge. Tiếp: S5a/S5b token TripPlanner, phase 6, H3",
    "needs": "H3 branch protection (tech lead)"
   },
   {
@@ -1698,9 +1697,9 @@
    "priority": "High",
    "project": "tpbk",
    "milestone": "M2b",
-   "session": "~31/10",
+   "session": "S258",
    "size": "L",
-   "next": "L2 · S256: dry run mọi nước ce96dfa5 (3.842 dòng / 3.607 request / $0); Laos 2b1fb176 dừng ở trần credit (0/302), chạy lại 71781806 07:11 +07 29/10; apply mọi nước 445f9770 xếp sau Laos. Tiếp: để chuỗi chạy tới ~31/10, audit lại (≥ 90 %), rồi AA-990 recheck_14",
+   "next": "L2 · S257: audit giữa chừng 75,4 → 77,7 % (dự phóng ≈ 79,5 %, chuỗi một mình không tới 90 %); v2 CIS #1139 070dd7ba sau công tắc (luật chặt aa997.2, biến thể truy vấn, recheck, ẩn/hiện; mặc định không đổi); P4 FAIL (34/251 = 13,5 % dòng đúng bị từ chối) → aa997.2 giữ tắt, không apply. Tiếp: kiểm job chuỗi aa997.1 đang xếp; chỉnh off_route / bán kính route trên mẫu P4 offline ($0); cân nhắc LLM phân xử llm_point; rồi AA-990 recheck_14",
    "needs": ""
   }
  ]

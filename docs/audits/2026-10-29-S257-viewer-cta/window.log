@@ -1,0 +1,140 @@
+== 1 check (expect role=owner)
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+TENANT Atlas & Hearth MEMBERSHIP cd7c8090-6c26-42b4-a961-8d77d9799b1a NOW role=owner status=active fp=5d6ee12ce763 updated_at=2026-10-29 00:45:27
+OTHER active memberships on the tenant: 0
+AUDIT tenant.member_role_changed (latest 1):
+  2026-10-29 00:45:27 admin:s256-aa979-orchestrator viewer -> owner
+FEED events for the membership (latest 3):
+  seq=16 2026-10-29 00:45:27 membership.role_changed role=owner status=active
+  seq=15 2026-10-27 06:57:04 membership.activated role=viewer status=active
+  seq=14 2026-10-27 06:56:43 membership.invited role=viewer status=invited
+ecsx: rc=0 bytes=573
+== 2 owner control probe
+
+Running 1 test using 1 worker
+
+session claims: {"sub":"9149d3c6-fcaf-4400-8e7a-4ed5e557e146","csr":"owner","amr":"partner","client":"portal","mid":"cd7c8090-6c26-42b4-a961-8d77d9799b1a","exp":"2026-10-29T06:03:48.000Z"}
+PASS session.tenant: expected 9149d3c6-fcaf-4400-8e7a-4ed5e557e146; got 9149d3c6-fcaf-4400-8e7a-4ed5e557e146
+PASS session.amr: expected partner; got partner
+PASS session.csr: expected owner; got owner
+PASS ui.cta-check (portal BFF, live while typing): expected 200; got 200
+PASS ui.review notice shown: expected visible; got visible
+PASS ui.no cta-check refused on the page: expected every status 200; got 200,200
+PASS bff.cta-check: expected 200; got 200
+PASS bff.POST requests/{random}/write: expected 404 (route reached; nothing to write); got 404 "request_id=04e142c6-c00c-4b65-ab9c-819f088cbb48 not found for this tenant"
+PASS bff.PATCH pieces/{random}: expected 404 (route reached; nothing to write); got 404 "piece_id=983761e7-d475-4a8c-9488-7e0072e5c482 not found for this tenant, or not in an editable state"
+PASS cis.cta-check (review claim): expected 200 cta_warning.code=cta_review_claim; got 200 code=cta_review_claim
+PASS cis.cta-check (plain CTA): expected 200 cta_warning=null; got 200 cta_warning=null
+PASS cis.POST requests/{random}/write: expected 404 (route reached; nothing to write); got 404 "request_id=04e142c6-c00c-4b65-ab9c-819f088cbb48 not found for this tenant"
+PASS cis.PATCH pieces/{random}: expected 404 (route reached; nothing to write); got 404 "piece_id=983761e7-d475-4a8c-9488-7e0072e5c482 not found for this tenant, or not in an editable state"
+PASS cis.PUT cta-check (method not on the list): expected not 403 (405 expected); got 405 "Method Not Allowed"
+PASS cis.POST cta-check/ (trailing slash): expected not 403 (307/404 expected); got 200
+PASS cis.GET content-writing/reviews (read): expected 200; got 200
+PASS cis.GET account/members (own row): expected 200 role=owner; got 200 role=owner
+verdict PASS; summary /home/nghiep/projects/AA-Ecosys/.tmp-session/S257/viewer_cta/results/owner-2026-10-29T05-48-39-270Z.json
+  ✓  1 viewer-cta.spec.ts:163:5 › studio role vs the cta-check allow-list (16.6s)
+
+  1 passed (17.7s)
+== 3 dry run owner -> viewer
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+TENANT Atlas & Hearth MEMBERSHIP cd7c8090-6c26-42b4-a961-8d77d9799b1a NOW role=owner status=active fp=5d6ee12ce763 updated_at=2026-10-29 00:45:27
+OTHER active memberships on the tenant: 0
+DRY RUN: would set content_studio_role owner -> viewer (change + audit row + feed event)
+ecsx: rc=0 bytes=277
+== 4 apply owner -> viewer
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+TENANT Atlas & Hearth MEMBERSHIP cd7c8090-6c26-42b4-a961-8d77d9799b1a NOW role=owner status=active fp=5d6ee12ce763 updated_at=2026-10-29 00:45:27
+OTHER active memberships on the tenant: 0
+APPLIED changed role=viewer status=active updated_at=2026-10-29T05:49:24.660826Z
+AUDIT tenant.member_role_changed (latest 2):
+  2026-10-29 05:49:24 admin:s257-viewer-cta-orchestrator owner -> viewer
+  2026-10-29 00:45:27 admin:s256-aa979-orchestrator viewer -> owner
+FEED events for the membership (latest 4):
+  seq=17 2026-10-29 05:49:24 membership.role_changed role=viewer status=active
+  seq=16 2026-10-29 00:45:27 membership.role_changed role=owner status=active
+  seq=15 2026-10-27 06:57:04 membership.activated role=viewer status=active
+  seq=14 2026-10-27 06:56:43 membership.invited role=viewer status=invited
+ecsx: rc=0 bytes=806
+== 5 viewer probe
+
+Running 1 test using 1 worker
+
+session claims: {"sub":"9149d3c6-fcaf-4400-8e7a-4ed5e557e146","csr":"viewer","amr":"partner","client":"portal","mid":"cd7c8090-6c26-42b4-a961-8d77d9799b1a","exp":"2026-10-29T06:04:45.000Z"}
+PASS session.tenant: expected 9149d3c6-fcaf-4400-8e7a-4ed5e557e146; got 9149d3c6-fcaf-4400-8e7a-4ed5e557e146
+PASS session.amr: expected partner; got partner
+PASS session.csr: expected viewer; got viewer
+PASS ui.cta-check (portal BFF, live while typing): expected 200; got 200
+PASS ui.review notice shown: expected visible; got visible
+PASS ui.no cta-check refused on the page: expected every status 200; got 200,200
+PASS bff.cta-check: expected 200; got 200
+PASS bff.POST requests/{random}/write: expected 403 "studio_role_forbidden"; got 403 "studio_role_forbidden"
+PASS bff.PATCH pieces/{random}: expected 403 "studio_role_forbidden"; got 403 "studio_role_forbidden"
+PASS cis.cta-check (review claim): expected 200 cta_warning.code=cta_review_claim; got 200 code=cta_review_claim
+PASS cis.cta-check (plain CTA): expected 200 cta_warning=null; got 200 cta_warning=null
+PASS cis.POST requests/{random}/write: expected 403 "studio_role_forbidden"; got 403 "studio_role_forbidden"
+PASS cis.PATCH pieces/{random}: expected 403 "studio_role_forbidden"; got 403 "studio_role_forbidden"
+PASS cis.PUT cta-check (method not on the list): expected 403 "studio_role_forbidden"; got 403 "studio_role_forbidden"
+WARN cis.POST cta-check/ (trailing slash): expected 403 "studio_role_forbidden"; got 200
+PASS cis.GET content-writing/reviews (read): expected 200; got 200
+PASS cis.GET account/members (own row): expected 200 role=viewer; got 200 role=viewer
+verdict PASS; summary /home/nghiep/projects/AA-Ecosys/.tmp-session/S257/viewer_cta/results/viewer-2026-10-29T05-49-37-708Z.json
+  ✓  1 viewer-cta.spec.ts:163:5 › studio role vs the cta-check allow-list (14.9s)
+
+  1 passed (15.5s)
+== restore: viewer -> owner
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+TENANT Atlas & Hearth MEMBERSHIP cd7c8090-6c26-42b4-a961-8d77d9799b1a NOW role=viewer status=active fp=5d6ee12ce763 updated_at=2026-10-29 05:49:24
+OTHER active memberships on the tenant: 0
+APPLIED changed role=owner status=active updated_at=2026-10-29T05:50:03.055949Z
+AUDIT tenant.member_role_changed (latest 3):
+  2026-10-29 05:50:03 admin:s257-viewer-cta-orchestrator viewer -> owner
+  2026-10-29 05:49:24 admin:s257-viewer-cta-orchestrator owner -> viewer
+  2026-10-29 00:45:27 admin:s256-aa979-orchestrator viewer -> owner
+FEED events for the membership (latest 5):
+  seq=18 2026-10-29 05:50:03 membership.role_changed role=owner status=active
+  seq=17 2026-10-29 05:49:24 membership.role_changed role=viewer status=active
+  seq=16 2026-10-29 00:45:27 membership.role_changed role=owner status=active
+  seq=15 2026-10-27 06:57:04 membership.activated role=viewer status=active
+  seq=14 2026-10-27 06:56:43 membership.invited role=viewer status=invited
+ecsx: rc=0 bytes=957
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+TENANT Atlas & Hearth MEMBERSHIP cd7c8090-6c26-42b4-a961-8d77d9799b1a NOW role=owner status=active fp=5d6ee12ce763 updated_at=2026-10-29 05:50:03
+OTHER active memberships on the tenant: 0
+AUDIT tenant.member_role_changed (latest 3):
+  2026-10-29 05:50:03 admin:s257-viewer-cta-orchestrator viewer -> owner
+  2026-10-29 05:49:24 admin:s257-viewer-cta-orchestrator owner -> viewer
+  2026-10-29 00:45:27 admin:s256-aa979-orchestrator viewer -> owner
+FEED events for the membership (latest 5):
+  seq=18 2026-10-29 05:50:03 membership.role_changed role=owner status=active
+  seq=17 2026-10-29 05:49:24 membership.role_changed role=viewer status=active
+  seq=16 2026-10-29 00:45:27 membership.role_changed role=owner status=active
+  seq=15 2026-10-27 06:57:04 membership.activated role=viewer status=active
+  seq=14 2026-10-27 06:56:43 membership.invited role=viewer status=invited
+ecsx: rc=0 bytes=876
+== 7 owner re-probe (portal smoke state restored)
+
+Running 1 test using 1 worker
+
+session claims: {"sub":"9149d3c6-fcaf-4400-8e7a-4ed5e557e146","csr":"owner","amr":"partner","client":"portal","mid":"cd7c8090-6c26-42b4-a961-8d77d9799b1a","exp":"2026-10-29T06:05:42.000Z"}
+PASS session.tenant: expected 9149d3c6-fcaf-4400-8e7a-4ed5e557e146; got 9149d3c6-fcaf-4400-8e7a-4ed5e557e146
+PASS session.amr: expected partner; got partner
+PASS session.csr: expected owner; got owner
+PASS ui.cta-check (portal BFF, live while typing): expected 200; got 200
+PASS ui.review notice shown: expected visible; got visible
+PASS ui.no cta-check refused on the page: expected every status 200; got 200,200
+PASS bff.cta-check: expected 200; got 200
+PASS bff.POST requests/{random}/write: expected 404 (route reached; nothing to write); got 404 "request_id=7f0a19bf-aecd-444e-8876-bab641b50f09 not found for this tenant"
+PASS bff.PATCH pieces/{random}: expected 404 (route reached; nothing to write); got 404 "piece_id=538d5bb0-f09c-4d9a-97f1-4c53bfdabfc1 not found for this tenant, or not in an editable state"
+PASS cis.cta-check (review claim): expected 200 cta_warning.code=cta_review_claim; got 200 code=cta_review_claim
+PASS cis.cta-check (plain CTA): expected 200 cta_warning=null; got 200 cta_warning=null
+PASS cis.POST requests/{random}/write: expected 404 (route reached; nothing to write); got 404 "request_id=7f0a19bf-aecd-444e-8876-bab641b50f09 not found for this tenant"
+PASS cis.PATCH pieces/{random}: expected 404 (route reached; nothing to write); got 404 "piece_id=538d5bb0-f09c-4d9a-97f1-4c53bfdabfc1 not found for this tenant, or not in an editable state"
+PASS cis.PUT cta-check (method not on the list): expected not 403 (405 expected); got 405 "Method Not Allowed"
+PASS cis.POST cta-check/ (trailing slash): expected not 403 (307/404 expected); got 200
+PASS cis.GET content-writing/reviews (read): expected 200; got 200
+PASS cis.GET account/members (own row): expected 200 role=owner; got 200 role=owner
+verdict PASS; summary /home/nghiep/projects/AA-Ecosys/.tmp-session/S257/viewer_cta/results/owner-2026-10-29T05-50-32-938Z.json
+  ✓  1 viewer-cta.spec.ts:163:5 › studio role vs the cta-check allow-list (16.2s)
+
+  1 passed (16.8s)
+RESULT viewer_probe_rc=0 owner_reprobe_rc=0 (0 = PASS); summaries in .tmp-session/S257/viewer_cta/results/

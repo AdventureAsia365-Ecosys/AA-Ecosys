@@ -1,0 +1,141 @@
+{
+  "probe": "S257 AA-814 facts",
+  "phase": "create",
+  "at": "2026-10-29T07:00:58.625Z",
+  "portal": "https://portal.lumiguides.it.com",
+  "cis": "https://api-cis.lumiguides.it.com",
+  "session": {
+    "sub": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+    "csr": "owner",
+    "amr": "partner",
+    "mid": "cd7c8090-6c26-42b4-a961-8d77d9799b1a",
+    "exp": "2026-10-29T07:15:53.000Z"
+  },
+  "country": "Bhutan",
+  "country_source": "my-versions",
+  "versions_in_country": 4,
+  "fact_id": "fact_5e51d64df5",
+  "checks": [
+    {
+      "name": "session.tenant",
+      "expected": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+      "actual": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "session.csr (needs a writer role)",
+      "expected": "owner | editor",
+      "actual": "owner",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.GET /v1/facts (before)",
+      "expected": "200",
+      "actual": "200",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.GET tours/my-versions (country source)",
+      "expected": "200 with >= 1 A&H version that has a country",
+      "actual": "200 versions=19 countries={\"Nepal\":1,\"Sri Lanka\":2,\"India\":4,\"Mongolia\":4,\"Laos\":4,\"Bhutan\":4}",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "country picked",
+      "expected": "a country of an Atlas & Hearth tour",
+      "actual": "Bhutan (my-versions)",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "bff.POST /v1/facts",
+      "expected": "201 scope=tenant kind=price fact_<10 hex>",
+      "actual": "201 scope=tenant kind=price id=fact_5e51d64df5",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "bff.POST response hides internal fields",
+      "expected": "no tenant_id / updated_by keys",
+      "actual": "(none)",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.GET /v1/facts lists it in own",
+      "expected": "200 own has fact_5e51d64df5",
+      "actual": "200 own=1 found=true country=Bhutan",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.GET /v1/facts platform = platform rows only",
+      "expected": "every platform row scope=platform, probe not in it",
+      "actual": "platform=1 non_platform=0",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.GET /v1/facts kinds/max_own",
+      "expected": "kinds has price, max_own=200",
+      "actual": "kinds=price|season|visa_entry|transfer_time|booking_terms|other max_own=200",
+      "pass": true,
+      "strict": false
+    },
+    {
+      "name": "bff.GET /v1/facts lists it",
+      "expected": "200 own has fact_5e51d64df5",
+      "actual": "200 found=true",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.PATCH /v1/facts/{id}",
+      "expected": "200 body changed, valid_until=2026-11-28, updated_at moved",
+      "actual": "200 body=\"From USD 2 per person (probe, delete me)\" valid_until=2026-11-28 moved=true",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.PATCH with the old expected_updated_at",
+      "expected": "409",
+      "actual": "409 \"this fact changed since it was loaded; reload and try again\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.PATCH unknown fact id",
+      "expected": "404",
+      "actual": "404 \"Fact not found\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.POST with tenant_id in the body",
+      "expected": "422 (extra=forbid, nothing written)",
+      "actual": "422 [{\"type\":\"extra_forbidden\",\"loc\":[\"body\",\"tenant_id\"],\"msg\":\"Extra inputs are not permitted\",\"input\":\"00000000-0000-4000-8000-000000000814\"}]",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "exactly one probe fact after the edits",
+      "expected": "1 own fact titled the probe, body = edit 1",
+      "actual": "1 body=\"From USD 2 per person (probe, delete me)\"",
+      "pass": true,
+      "strict": true
+    },
+    {
+      "name": "cis.GET account/activity fact.created",
+      "expected": "200 has resource_id=fact_5e51d64df5",
+      "actual": "200 found=true",
+      "pass": true,
+      "strict": false
+    }
+  ],
+  "strict_failures": [],
+  "verdict": "PASS"
+}

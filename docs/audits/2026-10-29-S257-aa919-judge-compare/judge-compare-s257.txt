@@ -1,0 +1,260 @@
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+{
+ "writer": "t9_social",
+ "golden_set": "aa729@1.2.0",
+ "pairs": 13,
+ "labels": {
+  "pass": 8,
+  "fail": 5
+ },
+ "calibrated_possible": true,
+ "requested": [
+  "gpt-5.6-luna",
+  "gpt-6-luna",
+  "gpt-6-astra"
+ ],
+ "models": [
+  "gpt-5.6-luna",
+  "gpt-6-luna",
+  "gpt-6-astra"
+ ],
+ "refused": {},
+ "judge_version": "73e641a99aca",
+ "stage": "adhoc_aa919",
+ "estimate": {
+  "per_model": {
+   "gpt-5.6-luna": {
+    "calls": 13,
+    "expected_usd": 0.0224,
+    "max_usd": 0.0302
+   },
+   "gpt-6-luna": {
+    "calls": 13,
+    "expected_usd": 0.0103,
+    "max_usd": 0.0136
+   },
+   "gpt-6-astra": {
+    "calls": 13,
+    "expected_usd": 1.0302,
+    "max_usd": 1.3552
+   }
+  },
+  "total_expected_usd": 1.0629,
+  "total_max_usd": 1.399
+ },
+ "strata": [
+  {
+   "dim": "all",
+   "value": "all",
+   "n": 13,
+   "labels": {
+    "pass": 8,
+    "fail": 5
+   },
+   "measurable_possible": true
+  },
+  {
+   "dim": "channel",
+   "value": "linkedin",
+   "n": 13,
+   "labels": {
+    "pass": 8,
+    "fail": 5
+   },
+   "measurable_possible": true
+  },
+  {
+   "dim": "tenant",
+   "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+   "n": 3,
+   "labels": {
+    "pass": 2,
+    "fail": 1
+   },
+   "measurable_possible": false
+  },
+  {
+   "dim": "tenant",
+   "value": "692a3214-5cc2-46c6-a5ca-265389747269",
+   "n": 3,
+   "labels": {
+    "pass": 1,
+    "fail": 2
+   },
+   "measurable_possible": false
+  },
+  {
+   "dim": "tenant",
+   "value": "885d4916-007b-415e-9261-909ad43c6d00",
+   "n": 3,
+   "labels": {
+    "pass": 2,
+    "fail": 1
+   },
+   "measurable_possible": false
+  },
+  {
+   "dim": "tenant",
+   "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+   "n": 4,
+   "labels": {
+    "pass": 3,
+    "fail": 1
+   },
+   "measurable_possible": false
+  },
+  {
+   "dim": "tier",
+   "value": "held",
+   "n": 5,
+   "labels": {
+    "pass": 2,
+    "fail": 3
+   },
+   "measurable_possible": false
+  },
+  {
+   "dim": "tier",
+   "value": "known_failure",
+   "n": 5,
+   "labels": {
+    "pass": 2,
+    "fail": 3
+   },
+   "measurable_possible": false
+  },
+  {
+   "dim": "tier",
+   "value": "untiered",
+   "n": 8,
+   "labels": {
+    "pass": 6,
+    "fail": 2
+   },
+   "measurable_possible": false
+  },
+  {
+   "dim": "split",
+   "value": "holdout",
+   "n": 3,
+   "labels": {
+    "pass": 2,
+    "fail": 1
+   },
+   "measurable_possible": false
+  },
+  {
+   "dim": "split",
+   "value": "tune",
+   "n": 10,
+   "labels": {
+    "pass": 6,
+    "fail": 4
+   },
+   "measurable_possible": true
+  }
+ ]
+}
+comparison 21ca49c6-de0b-4331-a03c-6855b53e309a: 3 models x 13 pairs, max $2.0
+2026-10-29 04:30:59 [warning  ] llm_role_config_stage_missing  hint=no active row — using SAFE_DEFAULTS, check migration 137 seeded stage=adhoc_aa919
+2026-10-29 04:30:59 [warning  ] llm_role_config_stage_missing  hint=no active row — using SAFE_DEFAULTS, check migration 137 seeded stage=adhoc_aa919
+2026-10-29 04:30:59 [warning  ] llm_role_config_stage_missing  hint=no active row — using SAFE_DEFAULTS, check migration 137 seeded stage=adhoc_aa919
+2026-10-29 04:31:02 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2600 cost_usd=0.000965 in_tokens=2731 model=gpt-5.6-luna out_tokens=241 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:02 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2890 cost_usd=0.001201 in_tokens=3021 model=gpt-5.6-luna out_tokens=377 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:03 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3029 cost_usd=0.000941 in_tokens=3160 model=gpt-5.6-luna out_tokens=131 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:04 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3007 cost_usd=0.001143 in_tokens=3138 model=gpt-5.6-luna out_tokens=304 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:04 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3212 cost_usd=0.001642 in_tokens=3343 model=gpt-5.6-luna out_tokens=677 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:04 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2909 cost_usd=0.000997 in_tokens=3040 model=gpt-5.6-luna out_tokens=203 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:05 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2676 cost_usd=0.000968 in_tokens=2807 model=gpt-5.6-luna out_tokens=227 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:06 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2763 cost_usd=0.001052 in_tokens=2894 model=gpt-5.6-luna out_tokens=279 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:06 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2594 cost_usd=0.00094 in_tokens=2725 model=gpt-5.6-luna out_tokens=221 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:06 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2879 cost_usd=0.000933 in_tokens=3010 model=gpt-5.6-luna out_tokens=156 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:07 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2951 cost_usd=0.001017 in_tokens=3082 model=gpt-5.6-luna out_tokens=211 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:08 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3004 cost_usd=0.00109 in_tokens=3135 model=gpt-5.6-luna out_tokens=261 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:08 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3039 cost_usd=0.0013 in_tokens=3170 model=gpt-5.6-luna out_tokens=428 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=131
+2026-10-29 04:31:17 [warning  ] converse_schema_retry          error=gpt-6-luna returned no tool call for schema 'writing_eval_verdict' model=gpt-6-luna stage=adhoc_aa919
+2026-10-29 04:31:19 [warning  ] converse_schema_retry          error=gpt-6-luna returned no tool call for schema 'writing_eval_verdict' model=gpt-6-luna stage=adhoc_aa919
+2026-10-29 04:31:22 [warning  ] converse_schema_retry          error=gpt-6-luna output does not match schema 'writing_eval_verdict': $: missing required key 'verdict' model=gpt-6-luna stage=adhoc_aa919
+2026-10-29 04:31:28 [info     ] llm_success                    account=acc3 api=converse cache_read=3209 cache_write=3259 cost_usd=0.001662 in_tokens=6736 model=gpt-6-luna out_tokens=2392 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=268
+2026-10-29 04:31:28 [warning  ] llm_role_config_stage_missing  hint=no active row — using SAFE_DEFAULTS, check migration 137 seeded stage=adhoc_aa919
+  error gpt-6-luna t9l-003: BilledUnusableReply: gpt-6-luna returned no tool call for schema 'writing_eval_verdict'
+  error gpt-6-luna t9l-002: BilledUnusableReply: gpt-6-luna output does not match schema 'writing_eval_verdict': $.unsupported_claims[1]: missing required key 'why'
+2026-10-29 04:31:41 [warning  ] converse_schema_retry          error=gpt-6-luna output does not match schema 'writing_eval_verdict': $: missing required key 'verdict' model=gpt-6-luna stage=adhoc_aa919
+2026-10-29 04:31:41 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3026 cost_usd=0.000986 in_tokens=3160 model=gpt-6-luna out_tokens=1189 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:31:46 [warning  ] converse_schema_retry          error=gpt-6-luna output does not match schema 'writing_eval_verdict': $: missing required key 'verdict' model=gpt-6-luna stage=adhoc_aa919
+2026-10-29 04:31:48 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2673 cost_usd=0.000782 in_tokens=2807 model=gpt-6-luna out_tokens=869 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:31:49 [info     ] llm_success                    account=acc3 api=converse cache_read=2906 cache_write=2956 cost_usd=0.00118 in_tokens=6130 model=gpt-6-luna out_tokens=1509 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=268
+2026-10-29 04:31:49 [warning  ] llm_role_config_stage_missing  hint=no active row — using SAFE_DEFAULTS, check migration 137 seeded stage=adhoc_aa919
+2026-10-29 04:31:50 [info     ] llm_success                    account=acc3 api=converse cache_read=3004 cache_write=3054 cost_usd=0.001476 in_tokens=6326 model=gpt-6-luna out_tokens=2074 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=268
+2026-10-29 04:32:01 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2876 cost_usd=0.000884 in_tokens=3010 model=gpt-6-luna out_tokens=1023 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:02 [warning  ] converse_schema_retry          error=gpt-6-luna returned no tool call for schema 'writing_eval_verdict' model=gpt-6-luna stage=adhoc_aa919
+2026-10-29 04:32:03 [warning  ] converse_schema_retry          error=gpt-6-luna returned no tool call for schema 'writing_eval_verdict' model=gpt-6-luna stage=adhoc_aa919
+2026-10-29 04:32:04 [info     ] llm_success                    account=acc3 api=converse cache_read=2591 cache_write=2641 cost_usd=0.001079 in_tokens=5500 model=gpt-6-luna out_tokens=1392 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=268
+2026-10-29 04:32:12 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3036 cost_usd=0.000898 in_tokens=3170 model=gpt-6-luna out_tokens=1011 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:12 [warning  ] llm_role_config_stage_missing  hint=no active row — using SAFE_DEFAULTS, check migration 137 seeded stage=adhoc_aa919
+2026-10-29 04:32:13 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2948 cost_usd=0.000803 in_tokens=3082 model=gpt-6-luna out_tokens=843 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+  error gpt-6-luna t9l-010: BilledUnusableReply: gpt-6-luna output does not match schema 'writing_eval_verdict': $.unsupported_claims[0]: missing required key 'why'
+2026-10-29 04:32:17 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3209 cost_usd=0.054153 in_tokens=3343 model=gpt-6-astra out_tokens=254 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:20 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2887 cost_usd=0.048278 in_tokens=3021 model=gpt-6-astra out_tokens=217 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:21 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2597 cost_usd=0.046602 in_tokens=2731 model=gpt-6-astra out_tokens=256 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:23 [warning  ] converse_schema_retry          error=gpt-6-luna output does not match schema 'writing_eval_verdict': $: missing required key 'verdict' model=gpt-6-luna stage=adhoc_aa919
+2026-10-29 04:32:24 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3004 cost_usd=0.05209 in_tokens=3138 model=gpt-6-astra out_tokens=264 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:25 [info     ] llm_success                    account=acc3 api=converse cache_read=3001 cache_write=3051 cost_usd=0.001196 in_tokens=6320 model=gpt-6-luna out_tokens=1516 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=268
+2026-10-29 04:32:27 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3026 cost_usd=0.051765 in_tokens=3160 model=gpt-6-astra out_tokens=252 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:29 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2906 cost_usd=0.052265 in_tokens=3040 model=gpt-6-astra out_tokens=292 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:33 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2673 cost_usd=0.052253 in_tokens=2807 model=gpt-6-astra out_tokens=350 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:33 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2760 cost_usd=0.04984 in_tokens=2894 model=gpt-6-astra out_tokens=280 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:33 [warning  ] llm_role_config_stage_missing  hint=no active row — using SAFE_DEFAULTS, check migration 137 seeded stage=adhoc_aa919
+2026-10-29 04:32:33 [warning  ] llm_role_config_stage_missing  hint=no active row — using SAFE_DEFAULTS, check migration 137 seeded stage=adhoc_aa919
+2026-10-29 04:32:35 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2591 cost_usd=0.048478 in_tokens=2725 model=gpt-6-astra out_tokens=295 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:36 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3036 cost_usd=0.04654 in_tokens=3170 model=gpt-6-astra out_tokens=145 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:37 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2876 cost_usd=0.04449 in_tokens=3010 model=gpt-6-astra out_tokens=144 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:37 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=2948 cost_usd=0.04324 in_tokens=3082 model=gpt-6-astra out_tokens=101 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+2026-10-29 04:32:41 [info     ] llm_success                    account=acc3 api=converse cache_read=0 cache_write=3001 cost_usd=0.050153 in_tokens=3135 model=gpt-6-astra out_tokens=226 provider=bedrock-satellite stop_reason=tool_use uncached_in_tokens=134
+
+=== gpt-5.6-luna: kappa 0.562 on 13 pairs  counts=False  errors 0  confusion {'pass_pass': 5, 'pass_fail': 3, 'fail_fail': 5, 'fail_pass': 0}  recall pass 0.625 fail 1.0  kappa_max 0.562  AUC 0.787
+    disagreements: ['t9l-004', 't9l-011', 't9l-013']
+    all:all                                              n= 13 pass/fail=8/5  kappa=0.562  recall pass=0.625 fail=1.0 BELOW
+    channel:linkedin                                     n= 13 pass/fail=8/5  kappa=0.562  recall pass=0.625 fail=1.0 BELOW
+    tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf          n=  3 pass/fail=2/1  kappa=1.000  recall pass=1.0 fail=1.0 (too few to measure)
+    tenant:692a3214-5cc2-46c6-a5ca-265389747269          n=  3 pass/fail=1/2  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+    tenant:885d4916-007b-415e-9261-909ad43c6d00          n=  3 pass/fail=2/1  kappa=1.000  recall pass=1.0 fail=1.0 (too few to measure)
+    tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146          n=  4 pass/fail=3/1  kappa=0.200  recall pass=0.333 fail=1.0 (too few to measure)
+    tier:held                                            n=  5 pass/fail=2/3  kappa=0.545  recall pass=0.5 fail=1.0 (too few to measure)
+    tier:known_failure                                   n=  5 pass/fail=2/3  kappa=0.545  recall pass=0.5 fail=1.0 (too few to measure)
+    tier:untiered                                        n=  8 pass/fail=6/2  kappa=0.500  recall pass=0.667 fail=1.0 (too few to measure)
+    split:holdout                                        n=  3 pass/fail=2/1  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+    split:tune                                           n= 10 pass/fail=6/4  kappa=0.800  recall pass=0.833 fail=1.0
+
+=== gpt-6-luna: kappa 0.054 on 10 pairs  counts=False  errors 3  confusion {'pass_pass': 1, 'pass_fail': 7, 'fail_fail': 2, 'fail_pass': 0}  recall pass 0.125 fail 1.0  kappa_max 0.054  AUC 0.75
+    disagreements: ['t9l-005', 't9l-008', 't9l-011', 't9l-012', 't9l-013', 't9l-014', 't9l-015']
+    all:all                                              n= 10 pass/fail=8/2  kappa=0.054  recall pass=0.125 fail=1.0 (too few to measure)
+    channel:linkedin                                     n= 10 pass/fail=8/2  kappa=0.054  recall pass=0.125 fail=1.0 (too few to measure)
+    tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf          n=  2 pass/fail=2/0  kappa=-  recall pass=0.0 fail=None (too few to measure)
+    tenant:692a3214-5cc2-46c6-a5ca-265389747269          n=  2 pass/fail=1/1  kappa=0.000  recall pass=0.0 fail=1.0 (too few to measure)
+    tenant:885d4916-007b-415e-9261-909ad43c6d00          n=  2 pass/fail=2/0  kappa=-  recall pass=0.0 fail=None (too few to measure)
+    tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146          n=  4 pass/fail=3/1  kappa=0.200  recall pass=0.333 fail=1.0 (too few to measure)
+    tier:held                                            n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+    tier:known_failure                                   n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+    tier:untiered                                        n=  7 pass/fail=6/1  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+    split:holdout                                        n=  3 pass/fail=2/1  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+    split:tune                                           n=  7 pass/fail=6/1  kappa=0.054  recall pass=0.167 fail=1.0 (too few to measure)
+
+=== gpt-6-astra: kappa 0.435 on 13 pairs  counts=False  errors 0  confusion {'pass_pass': 4, 'pass_fail': 4, 'fail_fail': 5, 'fail_pass': 0}  recall pass 0.5 fail 1.0  kappa_max 0.435  AUC 0.8
+    disagreements: ['t9l-004', 't9l-005', 't9l-011', 't9l-015']
+    all:all                                              n= 13 pass/fail=8/5  kappa=0.435  recall pass=0.5 fail=1.0 BELOW
+    channel:linkedin                                     n= 13 pass/fail=8/5  kappa=0.435  recall pass=0.5 fail=1.0 BELOW
+    tenant:20d07d32-ed98-405f-81d5-0c2399c9fcdf          n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+    tenant:692a3214-5cc2-46c6-a5ca-265389747269          n=  3 pass/fail=1/2  kappa=-0.000  recall pass=0.0 fail=1.0 (too few to measure)
+    tenant:885d4916-007b-415e-9261-909ad43c6d00          n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+    tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146          n=  4 pass/fail=3/1  kappa=0.500  recall pass=0.667 fail=1.0 (too few to measure)
+    tier:held                                            n=  5 pass/fail=2/3  kappa=0.000  recall pass=0.0 fail=1.0 (too few to measure)
+    tier:known_failure                                   n=  5 pass/fail=2/3  kappa=0.000  recall pass=0.0 fail=1.0 (too few to measure)
+    tier:untiered                                        n=  8 pass/fail=6/2  kappa=0.500  recall pass=0.667 fail=1.0 (too few to measure)
+    split:holdout                                        n=  3 pass/fail=2/1  kappa=0.400  recall pass=0.5 fail=1.0 (too few to measure)
+    split:tune                                           n= 10 pass/fail=6/4  kappa=0.444  recall pass=0.5 fail=1.0 BELOW
+
+model-vs-model agreement: {"gpt-5.6-luna|gpt-6-astra": {"n": 13, "agree": 10, "kappa": 0.494}, "gpt-5.6-luna|gpt-6-luna": {"n": 10, "agree": 4, "kappa": -0.2}, "gpt-6-astra|gpt-6-luna": {"n": 10, "agree": 5, "kappa": -0.19}}
+llm_call_log rows 36 for 39 calls (a call that failed before billing writes none), logged $0.6653; skipped by the budget 0
+JSON {"comparison_id": "21ca49c6-de0b-4331-a03c-6855b53e309a", "writer": "t9_social", "golden_set": "aa729@1.2.0", "judge_version": "73e641a99aca", "seconds": 102.9, "spent_usd_by_reply": 0.668366, "skipped_by_budget": 0, "llm_call_log": {"rows": 36, "usd": 0.665282, "calls_made": 39}, "models": {"gpt-5.6-luna": {"kappa": 0.562, "counts": false, "pairs": 13, "errors": 0, "confusion": {"pass_pass": 5, "pass_fail": 3, "fail_fail": 5, "fail_pass": 0}, "pass_recall": 0.625, "fail_recall": 1.0, "kappa_max": 0.562, "score_auc": 0.787, "loo_kappa": [0.526, 0.676], "disagreements": ["t9l-004", "t9l-011", "t9l-013"], "strata_below": ["channel:linkedin"], "models_used": ["satellite-gpt-5.6-luna"], "strata": [{"dim": "all", "value": "all", "n": 13, "labels": {"pass": 8, "fail": 5}, "agree": 10, "kappa": 0.562, "kappa_max": 0.562, "pass_recall": 0.625, "fail_recall": 1.0, "measurable": true, "below": true}, {"dim": "channel", "value": "linkedin", "n": 13, "labels": {"pass": 8, "fail": 5}, "agree": 10, "kappa": 0.562, "kappa_max": 0.562, "pass_recall": 0.625, "fail_recall": 1.0, "measurable": true, "below": true}, {"dim": "tenant", "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf", "n": 3, "labels": {"pass": 2, "fail": 1}, "agree": 3, "kappa": 1.0, "kappa_max": 1.0, "pass_recall": 1.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tenant", "value": "692a3214-5cc2-46c6-a5ca-265389747269", "n": 3, "labels": {"pass": 1, "fail": 2}, "agree": 2, "kappa": -0.0, "kappa_max": 0.0, "pass_recall": 0.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tenant", "value": "885d4916-007b-415e-9261-909ad43c6d00", "n": 3, "labels": {"pass": 2, "fail": 1}, "agree": 3, "kappa": 1.0, "kappa_max": 1.0, "pass_recall": 1.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tenant", "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146", "n": 4, "labels": {"pass": 3, "fail": 1}, "agree": 2, "kappa": 0.2, "kappa_max": 0.2, "pass_recall": 0.333, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tier", "value": "held", "n": 5, "labels": {"pass": 2, "fail": 3}, "agree": 4, "kappa": 0.545, "kappa_max": 0.545, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tier", "value": "known_failure", "n": 5, "labels": {"pass": 2, "fail": 3}, "agree": 4, "kappa": 0.545, "kappa_max": 0.545, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tier", "value": "untiered", "n": 8, "labels": {"pass": 6, "fail": 2}, "agree": 6, "kappa": 0.5, "kappa_max": 0.5, "pass_recall": 0.667, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "split", "value": "holdout", "n": 3, "labels": {"pass": 2, "fail": 1}, "agree": 1, "kappa": -0.0, "kappa_max": 0.0, "pass_recall": 0.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "split", "value": "tune", "n": 10, "labels": {"pass": 6, "fail": 4}, "agree": 9, "kappa": 0.8, "kappa_max": 0.8, "pass_recall": 0.833, "fail_recall": 1.0, "measurable": true, "below": false}]}, "gpt-6-luna": {"kappa": 0.054, "counts": false, "pairs": 10, "errors": 3, "confusion": {"pass_pass": 1, "pass_fail": 7, "fail_fail": 2, "fail_pass": 0}, "pass_recall": 0.125, "fail_recall": 1.0, "kappa_max": 0.054, "score_auc": 0.75, "loo_kappa": [0.0, 0.069], "disagreements": ["t9l-005", "t9l-008", "t9l-011", "t9l-012", "t9l-013", "t9l-014", "t9l-015"], "strata_below": [], "models_used": ["satellite-gpt-6-luna"], "strata": [{"dim": "all", "value": "all", "n": 10, "labels": {"pass": 8, "fail": 2}, "agree": 3, "kappa": 0.054, "kappa_max": 0.054, "pass_recall": 0.125, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "channel", "value": "linkedin", "n": 10, "labels": {"pass": 8, "fail": 2}, "agree": 3, "kappa": 0.054, "kappa_max": 0.054, "pass_recall": 0.125, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tenant", "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf", "n": 2, "labels": {"pass": 2, "fail": 0}, "agree": 0, "kappa": null, "kappa_max": null, "pass_recall": 0.0, "fail_recall": null, "measurable": false, "below": false}, {"dim": "tenant", "value": "692a3214-5cc2-46c6-a5ca-265389747269", "n": 2, "labels": {"pass": 1, "fail": 1}, "agree": 1, "kappa": 0.0, "kappa_max": 0.0, "pass_recall": 0.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tenant", "value": "885d4916-007b-415e-9261-909ad43c6d00", "n": 2, "labels": {"pass": 2, "fail": 0}, "agree": 0, "kappa": null, "kappa_max": null, "pass_recall": 0.0, "fail_recall": null, "measurable": false, "below": false}, {"dim": "tenant", "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146", "n": 4, "labels": {"pass": 3, "fail": 1}, "agree": 2, "kappa": 0.2, "kappa_max": 0.2, "pass_recall": 0.333, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tier", "value": "held", "n": 3, "labels": {"pass": 2, "fail": 1}, "agree": 2, "kappa": 0.4, "kappa_max": 0.4, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tier", "value": "known_failure", "n": 3, "labels": {"pass": 2, "fail": 1}, "agree": 2, "kappa": 0.4, "kappa_max": 0.4, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tier", "value": "untiered", "n": 7, "labels": {"pass": 6, "fail": 1}, "agree": 1, "kappa": -0.0, "kappa_max": 0.0, "pass_recall": 0.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "split", "value": "holdout", "n": 3, "labels": {"pass": 2, "fail": 1}, "agree": 1, "kappa": -0.0, "kappa_max": 0.0, "pass_recall": 0.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "split", "value": "tune", "n": 7, "labels": {"pass": 6, "fail": 1}, "agree": 2, "kappa": 0.054, "kappa_max": 0.054, "pass_recall": 0.167, "fail_recall": 1.0, "measurable": false, "below": false}]}, "gpt-6-astra": {"kappa": 0.435, "counts": false, "pairs": 13, "errors": 0, "confusion": {"pass_pass": 4, "pass_fail": 4, "fail_fail": 5, "fail_pass": 0}, "pass_recall": 0.5, "fail_recall": 1.0, "kappa_max": 0.435, "score_auc": 0.8, "loo_kappa": [0.385, 0.526], "disagreements": ["t9l-004", "t9l-005", "t9l-011", "t9l-015"], "strata_below": ["channel:linkedin", "split:tune"], "models_used": ["satellite-gpt-6-astra"], "strata": [{"dim": "all", "value": "all", "n": 13, "labels": {"pass": 8, "fail": 5}, "agree": 9, "kappa": 0.435, "kappa_max": 0.435, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": true, "below": true}, {"dim": "channel", "value": "linkedin", "n": 13, "labels": {"pass": 8, "fail": 5}, "agree": 9, "kappa": 0.435, "kappa_max": 0.435, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": true, "below": true}, {"dim": "tenant", "value": "20d07d32-ed98-405f-81d5-0c2399c9fcdf", "n": 3, "labels": {"pass": 2, "fail": 1}, "agree": 2, "kappa": 0.4, "kappa_max": 0.4, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tenant", "value": "692a3214-5cc2-46c6-a5ca-265389747269", "n": 3, "labels": {"pass": 1, "fail": 2}, "agree": 2, "kappa": -0.0, "kappa_max": 0.0, "pass_recall": 0.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tenant", "value": "885d4916-007b-415e-9261-909ad43c6d00", "n": 3, "labels": {"pass": 2, "fail": 1}, "agree": 2, "kappa": 0.4, "kappa_max": 0.4, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tenant", "value": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146", "n": 4, "labels": {"pass": 3, "fail": 1}, "agree": 3, "kappa": 0.5, "kappa_max": 0.5, "pass_recall": 0.667, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tier", "value": "held", "n": 5, "labels": {"pass": 2, "fail": 3}, "agree": 3, "kappa": 0.0, "kappa_max": 0.0, "pass_recall": 0.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tier", "value": "known_failure", "n": 5, "labels": {"pass": 2, "fail": 3}, "agree": 3, "kappa": 0.0, "kappa_max": 0.0, "pass_recall": 0.0, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "tier", "value": "untiered", "n": 8, "labels": {"pass": 6, "fail": 2}, "agree": 6, "kappa": 0.5, "kappa_max": 0.5, "pass_recall": 0.667, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "split", "value": "holdout", "n": 3, "labels": {"pass": 2, "fail": 1}, "agree": 2, "kappa": 0.4, "kappa_max": 0.4, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": false, "below": false}, {"dim": "split", "value": "tune", "n": 10, "labels": {"pass": 6, "fail": 4}, "agree": 7, "kappa": 0.444, "kappa_max": 0.444, "pass_recall": 0.5, "fail_recall": 1.0, "measurable": true, "below": true}]}}, "agreement": {"gpt-5.6-luna|gpt-6-astra": {"n": 13, "agree": 10, "kappa": 0.494}, "gpt-5.6-luna|gpt-6-luna": {"n": 10, "agree": 4, "kappa": -0.2}, "gpt-6-astra|gpt-6-luna": {"n": 10, "agree": 5, "kappa": -0.19}}, "verdicts": {"gpt-5.6-luna": {"t9l-003": "fail", "t9l-002": "fail", "t9l-005": "pass", "t9l-004": "fail", "t9l-001": "fail", "t9l-008": "pass", "t9l-009": "fail", "t9l-010": "fail", "t9l-011": "fail", "t9l-012": "pass", "t9l-014": "pass", "t9l-015": "pass", "t9l-013": "fail"}, "gpt-6-luna": {"t9l-001": "fail", "t9l-005": "fail", "t9l-009": "fail", "t9l-008": "fail", "t9l-004": "pass", "t9l-012": "fail", "t9l-011": "fail", "t9l-013": "fail", "t9l-014": "fail", "t9l-015": "fail"}, "gpt-6-astra": {"t9l-001": "fail", "t9l-002": "fail", "t9l-003": "fail", "t9l-004": "fail", "t9l-005": "fail", "t9l-008": "pass", "t9l-009": "fail", "t9l-010": "fail", "t9l-011": "fail", "t9l-013": "pass", "t9l-012": "pass", "t9l-014": "pass", "t9l-015": "fail"}}}
+ecsx: rc=0 bytes=30094
