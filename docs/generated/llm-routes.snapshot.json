@@ -1,7 +1,820 @@
 {
- "captured_at": null,
- "models": [],
- "routes": [],
+ "captured_at": "2026-10-29T05:33Z",
+ "models": [
+  {
+   "api_style": "embed",
+   "bedrock_accounts": [
+    "acc2"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "embed"
+   ],
+   "enabled": true,
+   "label": "Cohere Embed v4",
+   "max_output_tokens": null,
+   "model_key": "cohere-embed-v4",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.1200",
+   "price_out_per_mtok": "0.0000",
+   "price_source": "AWS Bedrock pricing, us-west-1 (28/09/2026)",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "cohere",
+   "wire_model": null
+  },
+  {
+   "api_style": "embed",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "embed"
+   ],
+   "enabled": true,
+   "label": "Cohere Embed v4 (LLM account)",
+   "max_output_tokens": null,
+   "model_key": "cohere-embed-v4-acc3",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.1200",
+   "price_out_per_mtok": "0.0000",
+   "price_source": "AWS Bedrock pricing, us-west-1 (28/09/2026)",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "cohere",
+   "wire_model": null
+  },
+  {
+   "api_style": "openai_chat",
+   "bedrock_accounts": [],
+   "blocked_reason": "S235: retired; OpenAI API kept only as last-resort fallback via gpt-6-luna-openai",
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": false,
+   "label": "GPT-4.1 (OpenAI direct)",
+   "max_output_tokens": null,
+   "model_key": "gpt-4.1",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "2.0000",
+   "price_out_per_mtok": "8.0000",
+   "price_source": "pricing.py",
+   "provider": "openai",
+   "supports_temperature": true,
+   "vendor": "openai",
+   "wire_model": "gpt-4.1"
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "GPT-5.6 Luna (Bedrock)",
+   "max_output_tokens": null,
+   "model_key": "gpt-5.6-luna",
+   "price_cache_read_per_mtok": "0.0200",
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.2000",
+   "price_out_per_mtok": "1.2000",
+   "price_source": "OpenAI API list price (28/09/2026); Bedrock price not published. Migration 169 had $0.10/$0.50, which is GPT-6 Luna.",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "openai",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "GPT-6 Astra (Bedrock)",
+   "max_output_tokens": null,
+   "model_key": "gpt-6-astra",
+   "price_cache_read_per_mtok": "1.0000",
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "10.0000",
+   "price_out_per_mtok": "50.0000",
+   "price_source": "OpenAI API list price (28/09/2026); Bedrock price not published",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "openai",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "GPT-6 Luna (Bedrock)",
+   "max_output_tokens": null,
+   "model_key": "gpt-6-luna",
+   "price_cache_read_per_mtok": "0.0100",
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.1000",
+   "price_out_per_mtok": "0.5000",
+   "price_source": "AWS Bedrock offer rate card, global standard (28/09/2026)",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "openai",
+   "wire_model": null
+  },
+  {
+   "api_style": "openai_chat",
+   "bedrock_accounts": [],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "GPT-6 Luna (OpenAI API)",
+   "max_output_tokens": null,
+   "model_key": "gpt-6-luna-openai",
+   "price_cache_read_per_mtok": "0.0100",
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.1000",
+   "price_out_per_mtok": "0.5000",
+   "price_source": "OpenAI API list price (28/09/2026)",
+   "provider": "openai",
+   "supports_temperature": false,
+   "vendor": "openai",
+   "wire_model": "gpt-6-luna"
+  },
+  {
+   "api_style": "anthropic_native",
+   "bedrock_accounts": [
+    "acc2",
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Claude Haiku 4.5",
+   "max_output_tokens": null,
+   "model_key": "haiku",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "1.0000",
+   "price_out_per_mtok": "5.0000",
+   "price_source": "pricing.py",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Claude Haiku 5.5",
+   "max_output_tokens": 128000,
+   "model_key": "haiku-5-5",
+   "price_cache_read_per_mtok": "0.0100",
+   "price_cache_write_per_mtok": "0.1250",
+   "price_in_per_mtok": "0.1000",
+   "price_out_per_mtok": "0.5000",
+   "price_source": "Anthropic first-party list price (prompts <= 100K tokens), S246 21/10/2026; Bedrock is partner-priced: confirm on the AWS Bedrock pricing page",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "decide",
+   "bedrock_accounts": [],
+   "blocked_reason": null,
+   "callable_via": [
+    "decide"
+   ],
+   "enabled": true,
+   "label": "Jev (TypeSafe System One)",
+   "max_output_tokens": null,
+   "model_key": "jev-latest",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.0420",
+   "price_out_per_mtok": "0.0000",
+   "price_source": "typesafe.ai pricing (24/09/2026): input only, output free",
+   "provider": "typesafe",
+   "supports_temperature": false,
+   "vendor": "typesafe",
+   "wire_model": "jev-latest"
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Claude Opus 5.5",
+   "max_output_tokens": null,
+   "model_key": "opus-5-5",
+   "price_cache_read_per_mtok": "0.2000",
+   "price_cache_write_per_mtok": "5.0000",
+   "price_in_per_mtok": "4.0000",
+   "price_out_per_mtok": "20.0000",
+   "price_source": "Anthropic API list price, claude.com/pricing (28/09/2026); Bedrock Global price not published yet (Geo/in-region: $4.40/$22)",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "anthropic_native",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Claude Sonnet 4.6",
+   "max_output_tokens": null,
+   "model_key": "sonnet",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "3.0000",
+   "price_out_per_mtok": "15.0000",
+   "price_source": "pricing.py",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Claude Sonnet 5",
+   "max_output_tokens": null,
+   "model_key": "sonnet-5",
+   "price_cache_read_per_mtok": "0.2000",
+   "price_cache_write_per_mtok": "2.5000",
+   "price_in_per_mtok": "2.0000",
+   "price_out_per_mtok": "10.0000",
+   "price_source": "AWS Bedrock pricing, Global cross-region, us-west-1 (28/09/2026)",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Claude Sonnet 5.5",
+   "max_output_tokens": 128000,
+   "model_key": "sonnet-5-5",
+   "price_cache_read_per_mtok": "0.2000",
+   "price_cache_write_per_mtok": "2.5000",
+   "price_in_per_mtok": "2.0000",
+   "price_out_per_mtok": "10.0000",
+   "price_source": "Anthropic first-party list price, S246 21/10/2026; Bedrock is partner-priced: confirm on the AWS Bedrock pricing page",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "anthropic",
+   "wire_model": null
+  }
+ ],
+ "routes": [
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "a0_column_map",
+   "updated_at": "2026-09-28"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "haiku"
+   ],
+   "is_active": true,
+   "model_id": "gpt-6-luna",
+   "provider": "openai",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "a3_atomize",
+   "updated_at": "2026-10-10"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "gpt-5.6-luna"
+   ],
+   "is_active": true,
+   "model_id": "gpt-6-luna",
+   "provider": "openai",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "a3_place_card",
+   "updated_at": "2026-10-26"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "sonnet"
+   ],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "a3_place_card_check",
+   "updated_at": "2026-10-13"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "sonnet"
+   ],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "a3_place_days",
+   "updated_at": "2026-10-21"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
+   "is_active": true,
+   "model_id": "gpt-6-luna",
+   "provider": "openai",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "a3_place_dedupe",
+   "updated_at": "2026-10-21"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "a3_place_dedupe_check",
+   "updated_at": "2026-10-21"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "cohere-embed-v4-acc3"
+   ],
+   "is_active": true,
+   "model_id": "cohere-embed-v4",
+   "provider": "cohere",
+   "role": "embed",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "a3_place_embed",
+   "updated_at": "2026-10-16"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "haiku"
+   ],
+   "is_active": true,
+   "model_id": "sonnet",
+   "provider": "claude",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "a3_place_locate",
+   "updated_at": "2026-10-22"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "cohere-embed-v4-acc3"
+   ],
+   "is_active": true,
+   "model_id": "cohere-embed-v4",
+   "provider": "cohere",
+   "role": "embed",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "f10_embed",
+   "updated_at": "2026-10-16"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "sonnet",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "s1_atom_writer",
+   "updated_at": "2026-09-02"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "gpt-6-luna"
+   ],
+   "is_active": true,
+   "model_id": "gpt-5.6-luna",
+   "provider": "openai",
+   "role": "judge",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "s1_brand_audit",
+   "updated_at": "2026-10-16"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "s1_flag_fix",
+   "updated_at": "2026-09-02"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "sonnet-5-5",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "s1_generate",
+   "updated_at": "2026-10-24"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "s1_itinerary_nudge",
+   "updated_at": "2026-09-02"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "gpt-6-luna",
+    "gpt-6-luna-openai"
+   ],
+   "is_active": true,
+   "model_id": "gpt-5.6-luna",
+   "provider": "openai",
+   "role": "judge",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "s1_judge",
+   "updated_at": "2026-10-16"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "haiku"
+   ],
+   "is_active": true,
+   "model_id": "gpt-6-luna",
+   "provider": "openai",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "s1_source_facts",
+   "updated_at": "2026-10-10"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "sonnet"
+   ],
+   "is_active": true,
+   "model_id": "sonnet-5-5",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "supply_content_writer",
+   "updated_at": "2026-10-25"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "gpt-5.6-luna"
+   ],
+   "is_active": true,
+   "model_id": "gpt-6-luna",
+   "provider": "openai",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t10_claims",
+   "updated_at": "2026-10-13"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "gpt-6-luna",
+    "gpt-6-luna-openai"
+   ],
+   "is_active": true,
+   "model_id": "gpt-5.6-luna",
+   "provider": "openai",
+   "role": "judge",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t10_judge",
+   "updated_at": "2026-10-16"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "gpt-6-luna"
+   ],
+   "is_active": true,
+   "model_id": "gpt-5.6-luna",
+   "provider": "openai",
+   "role": "judge",
+   "shadow_model_id": "gpt-6-luna",
+   "shadow_sample_pct": 10,
+   "stage": "t2_brand_audit",
+   "updated_at": "2026-10-12"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t2_flag_fix",
+   "updated_at": "2026-10-12"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "sonnet",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t2_generate",
+   "updated_at": "2026-09-18"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t2_itinerary_nudge",
+   "updated_at": "2026-10-12"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "gpt-6-luna",
+    "gpt-6-luna-openai"
+   ],
+   "is_active": true,
+   "model_id": "gpt-5.6-luna",
+   "provider": "openai",
+   "role": "judge",
+   "shadow_model_id": "gpt-6-luna",
+   "shadow_sample_pct": 10,
+   "stage": "t2_judge",
+   "updated_at": "2026-10-12"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "gpt-6-luna",
+    "gpt-6-luna-openai"
+   ],
+   "is_active": true,
+   "model_id": "gpt-5.6-luna",
+   "provider": "openai",
+   "role": "judge",
+   "shadow_model_id": "gpt-6-luna",
+   "shadow_sample_pct": 10,
+   "stage": "t7_debate_judge",
+   "updated_at": "2026-10-12"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "sonnet",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t8_angle_gen",
+   "updated_at": "2026-09-02"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "sonnet",
+   "provider": "claude",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t9_faq_answer_fit",
+   "updated_at": "2026-10-22"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "validate",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t9_faq_filter",
+   "updated_at": "2026-10-22"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "sonnet"
+   ],
+   "is_active": true,
+   "model_id": "haiku",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t9_repair",
+   "updated_at": "2026-10-13"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "sonnet",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t9_write",
+   "updated_at": "2026-09-02"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "cohere-embed-v4-acc3"
+   ],
+   "is_active": true,
+   "model_id": "cohere-embed-v4",
+   "provider": "cohere",
+   "role": "embed",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "tp_component_embed",
+   "updated_at": "2026-10-16"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "sonnet",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "tp_compose",
+   "updated_at": "2026-09-28"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "sonnet",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "tp_extract",
+   "updated_at": "2026-09-28"
+  },
+  {
+   "account_route": null,
+   "fallback_model_ids": [
+    "cohere-embed-v4-acc3"
+   ],
+   "is_active": true,
+   "model_id": "cohere-embed-v4",
+   "provider": "cohere",
+   "role": "embed",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "tp_search_embed",
+   "updated_at": "2026-10-16"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "gpt-6-luna",
+    "gpt-6-luna-openai"
+   ],
+   "is_active": true,
+   "model_id": "gpt-5.6-luna",
+   "provider": "openai",
+   "role": "judge",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "writing_memory_eval",
+   "updated_at": "2026-10-28"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "gpt-6-luna",
+    "gpt-6-luna-openai"
+   ],
+   "is_active": true,
+   "model_id": "gpt-5.6-luna",
+   "provider": "openai",
+   "role": "judge",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "writing_memory_mine",
+   "updated_at": "2026-10-25"
+  }
+ ],
  "schema": "aa900-llm-routes/1",
- "source": null
+ "source": "shared.llm_role_config + shared.llm_model_catalog (aa-cis-dev-db, read as cis_app)"
 }
