@@ -103,13 +103,31 @@ Nháp ở `docs/audits/2026-10-29-S257-session-close/jira-drafts.md`. Jira đã 
 - Tech lead gửi ảnh Payment methods acc3: Mastercard mặc định, còn hạn → không phải lỗi thẻ. Probe lại 15:2x: **mọi model Bedrock trên acc3 (cả Claude) trả "Error 002: Access to Bedrock models is not allowed for this account"** → toàn bộ LLM của hệ thống không gọi được tới khi AWS gỡ chặn; cần case AWS Support (tech lead mở). Không có lệnh production lỗi thêm sau 07:11 UTC (Dev rảnh).
 - Tạo **AA-999** (nghiên cứu gọi LLM qua Kiro thay Bedrock) theo yêu cầu tech lead; nghiên cứu chỉ đọc đang chạy.
 
+## Sau chốt phiên, phần 2 (29/10 ~15:35–19:40)
+
+- **AA-789:** tech lead quyết giữ và xử lý triệt để (không Done-with-scope), duyệt thiết kế root #333 (`docs/audits/2026-10-29-S257-aa789-design/PLAN.md`): tier 0 sửa input writer; tier 1 spaCy + SeedGraph + cue word, cả ba cùng thoả, finding prefix `sa:` dưới F17/F18/F13, mode theo lớp off/shadow/repair/hold; tier 2 LLM cho phần còn lại, không bao giờ hold. Ngưỡng: 0 FP trên 246 câu sạch; shadow ≥ 50 lần bắn có nhãn, sai ≤ 1; hold chỉ sau ~18/11. Bộ eval `.tmp-session/S257/aa789-design/eval/` không commit (trích nội dung thật).
+- **AA-842 spike OTel + GuardDuty:** giữ tắt (tốn tiền, chưa hiệu quả); issue để mở, không hỏi lại.
+- **AA-999** (gọi LLM qua Kiro): nghiên cứu xong root #332 (`docs/research/2026-10-29-kiro-llm-provider.md`) — Kiro không dùng làm provider cho hệ thống.
+- **acc3 (tiếp):** Error 002 với mọi model ở 6 vùng (cả Nova, model cũ); thẻ thanh toán ổn, agreement Marketplace đủ, form Anthropic có. Tech lead mở case AWS Support 179326606700328 (gói Basic). Thử acc1 (tài khoản cá nhân, ngoài hệ sinh thái): Claude 4.x / Nova chạy, Claude 5.5 / OpenAI bị từ chối — không dùng. Credit AWS Lift acc3 còn $249,94 (hết hạn 31/12); `freetier get-account-plan-state` không phản ánh credit này.
+- **Nguyên nhân gốc:** quyền dùng Claude trên Bedrock phụ thuộc bên trả tiền (đại lý phải được Anthropic duyệt). TrueIDC chưa được duyệt (tech lead đã hỏi).
+- **Nghiên cứu phương án** (`docs/audits/2026-10-29-S257-llm-access-options/`, root #334): đại lý VN (Renova, eCloudvalley VN, CMC); chuyển hạ tầng acc2 → acc3 (33–43 ngày kỹ sư, 7–10 tuần, không khuyến nghị); API Anthropic trực tiếp (~7,5 ngày kỹ sư: dự phòng ~4 ngày + batch ~3 ngày; batch tiết kiệm ~$24 mỗi lần viết lại catalogue, tối đa ~$106 tháng nặng).
+- **eCloudvalley (Zalo 17:59–19:11):** hỗ trợ Billing Transfer (đăng ký trước ngày 25 → tính từ ngày 1 tháng sau), bán Claude + OpenAI cho khách VN, hoá đơn VND có VAT, giá niêm yết; Claude 5.5 cần ticket nâng quota (mình mở, họ escalate). Hợp đồng mẫu (bản 18:40) đã rà; điều khoản phí / cọc / chấm dứt đang thương lượng (chi tiết trong memory agent `acc2-bedrock-claude-gpt-blocked`, không ghi vào repo public). Điểm 5 (phụ lục quyền dùng Claude/OpenAI) và 6 (acc3 vào lại org họ tháng 11 rồi chuyển Billing Transfer có bị khoá lại không) chờ họ hỏi pháp lý. Tháng 11 họ có thể cho acc3 vào lại org tạm thời nếu công ty xác nhận trả chi phí qua email.
+- **Business owner:** tech lead gửi tin Zalo nêu 5 phương án trung lập (mua trực tiếp từ hãng / eCloudvalley cho acc3 / cả hai tài khoản về eCloudvalley / chờ / chuyển toàn bộ hạ tầng), chờ chị chọn. Trang phương án là artifact riêng tư, không để trong repo (root #337 gỡ bản HTML).
+- **Chi phí acc2** (Cost Explorer): T7 ~$106, T8 ~$140, T9 ~$135, T10 ~$186 (tới 28/10).
+- **Partner #122** (release 0.10.0) thực ra chưa merge lúc chốt (check bắt buộc "PR title" bị cancel) → chạy lại check, merge queue `f6fb2c80` ~19:25; Deploy Web Dev xong, CRM web :50 COMPLETED, `/crm/health/ready` ok crm-023.
+- Root merge sau chốt: #331–#337. Memory agent: điều khoản eCloudvalley, quy tắc "nêu đủ phương án cho business owner chọn, không đẩy ký hợp đồng", giọng văn tin Zalo của tech lead, trang báo cáo cho business owner không đẩy lên repo.
+
 ## Việc cần làm đầu phiên sau (S258, theo thứ tự)
 
 1. Jira S257: đã đăng sau khi tech lead duyệt: PR-24 #10530, PR-22 #10531, PR-27 #10532, PR-23 #10533 (4 ảnh) — không còn việc.
-2. **acc3 / judge luna**: theo dõi trả lời của reseller (tech lead hỏi) về việc acc3 rời Organization; khi luna chạy lại → probe
-   gpt-6-luna / gpt-5.6-luna; tới lúc đó coi mọi stage judge trên luna là không tin được (đừng chạy eval trả tiền dựa trên luna);
-   push + merge guard test `fix/aa-900-adhoc-label-account` nếu chưa. (Release CIS #1134, Booking #147, TP #186, Partner #122,
-   root #327 đã merge lúc chốt S257.)
+2. **LLM / acc3:** chờ business owner chọn phương án (1–5, tin Zalo 29/10). Theo lựa chọn: (1) build provider `anthropic`
+   theo `docs/audits/2026-10-29-S257-llm-access-options/anthropic-api-evaluation.md` (PR1 migration CHECK + catalog tắt sẵn,
+   PR2 adapter + fallback, sau đó batch); (2)/(3) tạo management account (email chung công ty), hợp đồng eCloudvalley (điểm
+   5/6 chờ), email xác nhận tháng 11; (4) theo dõi case AWS 179326606700328. Tới khi có đường AI: mọi stage LLM (writer,
+   judge luna) không chạy — không lên lịch eval / wave trả phí; push + merge guard test `fix/aa-900-adhoc-label-account`
+   nếu chưa. (Partner #122 merge muộn 19:25 S257, các release khác đã merge lúc chốt.)
+2b. **AA-789 (đã duyệt):** các lát $0 S1–S8 theo `docs/audits/2026-10-29-S257-aa789-design/PLAN.md` (tier 0/1 offline +
+   shadow; hold chỉ sau ~18/11).
 3. Theo sau AA-671: CIS #1144 xong (ảnh bìa 162 → 302 / 892); xem nhóm weak 137 / ambiguous 120 / no_match 779 và 590 tour
    còn thiếu ảnh bìa. CIS #1142 đã merge.
 4. AA-993: kiểm cron `migration-sync` có chạy theo lịch (actor bot / throttle) → proof Booking bk-034 với `DB_AUTO_APPLY`
@@ -124,5 +142,5 @@ Nháp ở `docs/audits/2026-10-29-S257-session-close/jira-drafts.md`. Jira đã 
 10. Follow-up: LCP `/destinations/bhutan` 3,95 s; AA-814 theo sau (T2 chưa nối facts, nhãn `Source:` chưa vào kiểm nhãn rò
     rỉ, tạo/sửa fact platform trên admin chưa thử live).
 11. Phiên đầu ≥ 01/11: audit chi phí tháng 8/9/10 (AA-896); C4.3 tuần W45; 04/11 secret acc1 cuối hết hạn xoá.
-12. Chờ tech lead: hỏi reseller (eCloudvalley / TrueIDC) vì sao acc3 rời Organization (billing, credit AWS Lift) + quyết nạp
-    credit OpenAI; GuardDuty (đang "chưa dùng"), H3 Kit provenance, spike OTel (AA-842), đóng AA-789 Done-with-scope.
+12. Chờ: business owner chọn phương án LLM (mục 2); H3 Kit provenance. Đã chốt sau phiên: GuardDuty + spike OTel
+    (AA-842) giữ tắt; AA-789 xử lý triệt để (mục 2b); reseller đã hỏi (mục 2).
