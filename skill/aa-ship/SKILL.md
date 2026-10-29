@@ -52,8 +52,11 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - [ ] **Docs:** "Docs impact" của issue làm trong cùng PR (CONTEXT.md / ADR / runbook / contract / trang catalog
   `docs/README.md`), hoặc ghi "N/A". Trang catalog theo `docs/STYLE.md`; chỉ bump `last_reviewed` khi đã kiểm với hệ thật.
 - [ ] **Changelog:** PR `feat`/`fix` người dùng thấy → tiêu đề PR đọc được như một dòng CHANGELOG (release-please lấy từ đây).
-- [ ] **LLM:** đổi prompt/model/route → ghi run ID eval chạy tay/dispatch trên golden set (AA-729) vào PR (D-23).
-  `prompt_version` chỉ khi ledger v2 (AA-804) đã có.
+- [ ] **LLM:** đổi prompt/model/route → điền mục "LLM change" của mẫu PR CIS (id prompt trong sổ đăng ký
+  `docs/llm/prompt-register.md`, loại eval); eval chạy tay theo runbook CIS `docs/llm/eval-runbook.md` (R2 trên golden
+  set AA-729, `--stage adhoc_aa900`, trần mỗi lần chạy) — run ID + chi phí ghi vào PR (D-23, handbook §5.7).
+  `prompt_version` chỉ khi ledger v2 (AA-804) đã có. Đổi route/model → chụp lại bảng route
+  (`tools/docs/gen_llm_routes.py`, root `docs/generated/llm-routes.md`).
 - [ ] **Cost:** thêm resource AWS hoặc lượt chạy trả phí → ước tính USD/tháng trong PR body (DM-10.7); resource mới có tag `App` (DM-10.1).
 
 ### Cách merge
@@ -137,6 +140,10 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
    `rls.enable_only_has_cis_app_policy`, `rls.force_parity.cis_app`, `sessions.master_break_glass_only`. Đổi
    `DATABASE_URL` / task def → bảng Connections của dump: `cis-api` / `cis-worker` là `cis_app`, `db-migrate` là `db_migrator`.
    Kiểm DB qua ECS exec là việc của điều phối: in dòng ngắn có flush hoặc ghi ra S3 (`aa-cis-schema/references/ecs-exec.md`).
+8. **LLM (PR đổi prompt/model/route, AA-900):** sau deploy chạy eval theo runbook CIS `docs/llm/eval-runbook.md`
+   (DRY RUN rồi `--enqueue`, job `writing_memory_r2` chạy trên worker — chặn deploy khi đang chạy), đọc kết quả bằng
+   `scripts/llm_ops/eval_run_report.py`, rồi comment vào PR: id prompt, run ID, verdict, chi phí log được. Verdict `fail`
+   → revert PR.
 
 ## 4. Đánh Done
 

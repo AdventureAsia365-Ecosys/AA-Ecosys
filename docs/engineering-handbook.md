@@ -443,13 +443,21 @@ How release-please is set up (AA-891):
 - **Every paid call goes through the gateway** and lands in `shared.llm_call_log` (DM-10.4); ad-hoc scripts use
   `stage = adhoc_<issue>` and a role in writer, judge, validate.
 - **Prompt version:** a nullable `prompt_version` column ships **inside the AA-804 ledger v2 migration** (one
-  expand, through D8; N-5). Until then the prompt register (AA-900) maps prompt id and version to file and stage.
-- **Evals:** the golden set of about 100 samples built from existing data is AA-729. Evals run **by hand or by
-  dispatch** (D-23), through `LLMClient` with `stage = adhoc_aa900` and a spend cap. A PR that changes a prompt,
-  model or route records the eval run ID. A per-PR eval trigger is not enabled (N-4: it would be new recurring spend).
-- **AA-900 is to be narrowed** (N-4, N-5) to the prompt register, the eval runbook and a generated route table, so it
-  does not build the golden set (AA-729) or touch the ledger (AA-804). The Linear issue still lists the
-  `prompt_version` migration and a per-PR eval workflow; its scope and Done-when are updated before work starts.
+  expand, through D8; N-5). Until then the **prompt register** (AA-900, CIS `docs/llm/prompt-register.md`,
+  `APP-06-prompts`) maps each prompt id to its stage, file and symbol, version rule and eval baseline; a CIS unit test
+  fails when a row points at a file or symbol that no longer exists.
+- **Routes and models** are published as the generated **route table** [`generated/llm-routes.md`](generated/llm-routes.md)
+  (`APP-06-routes`): a read-only snapshot of both tables, rendered by `tools/docs/gen_llm_routes.py`. After a route or
+  model change, capture a new snapshot and render the page; the docs lint fails when page and snapshot disagree.
+- **Evals:** the golden set of about 100 samples built from existing data is AA-729 (rows in `shared.eval_golden_set`,
+  AA-919). Evals run **by hand** (D-23) as an R2 run of the CIS writing-memory runner through `LLMClient`, logged under
+  `stage = adhoc_aa900`, with a per-run cap (at most 10 USD) and the writing-memory month cap. A PR that changes a
+  prompt, model or route records the eval run ID and its cost in the PR template section "LLM change". A per-PR eval
+  trigger is not enabled (N-4: it would be new recurring spend). Procedure: the CIS **eval runbook**
+  `docs/llm/eval-runbook.md` (`APP-06-eval`). Agents shipping such a PR follow it from the "Verify live" step of
+  `skill/aa-ship`, recording the run ID after deploy.
+- **AA-900 scope** (narrowed by N-4, N-5): the prompt register, the eval runbook and the generated route table. It
+  does not build the golden set (AA-729) or touch the ledger (AA-804).
 - The AI platform ADR 0009, the ledger's `app` and `is_shadow` columns and the AI Use Register are AA-804 (U-34).
 
 ### 5.8 Docs versions
