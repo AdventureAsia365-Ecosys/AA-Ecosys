@@ -333,8 +333,24 @@ def build(catalog: list[dict], reference: set[str]) -> tuple[dict, dict]:
     return catalog_doc, kpis_doc
 
 
+# Person handles in the advisory text: the registry is vendored into the public CIS repo, so it names roles only.
+REPLACEMENTS = (("@thule mention node", "business owner mention node"),)
+
+
+def _scrub(value: Any) -> Any:
+    if isinstance(value, str):
+        for old, new in REPLACEMENTS:
+            value = value.replace(old, new)
+        return value
+    if isinstance(value, list):
+        return [_scrub(v) for v in value]
+    if isinstance(value, dict):
+        return {k: _scrub(v) for k, v in value.items()}
+    return value
+
+
 def dump(doc: dict, header: str) -> str:
-    body = yaml.safe_dump(doc, sort_keys=False, allow_unicode=True, width=118, default_flow_style=False)
+    body = yaml.safe_dump(_scrub(doc), sort_keys=False, allow_unicode=True, width=118, default_flow_style=False)
     return header + "\n" + body
 
 

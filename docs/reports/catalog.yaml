@@ -24,8 +24,8 @@ reports:
     now?
   cadence: 'weekly: auto-draft Monday 01:30 UTC (08:30 ICT) for the previous ISO week in ICT; approved and posted by Tuesday'
   schedule: weekly
-  channel: Jira comment under the weekly platform report epic PR-20 (Vietnamese, @thule mention node, no Linear IDs, no
-    'ạ'); draft JSON + Markdown in S3 and /admin/reports; Jira draft copy in docs/audits/<date>-S<nnn>-session-close/jira-drafts.md
+  channel: Jira comment under the weekly platform report epic PR-20 (Vietnamese, business owner mention node, no Linear
+    IDs, no 'ạ'); draft JSON + Markdown in S3 and /admin/reports; Jira draft copy in docs/audits/<date>-S<nnn>-session-close/jira-drafts.md
     without commercial numbers while the root repo is public
   automation: semi
   status: partial
