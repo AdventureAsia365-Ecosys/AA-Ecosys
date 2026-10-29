@@ -1,0 +1,24 @@
+[
+ {
+  "step": "portal-marketplace",
+  "url": "https://portal.lumiguides.it.com/portal/tours",
+  "console": [],
+  "failing": [],
+  "notes": [
+   "unfiltered: count \"892 tours available · newest first\", cards 24, with photo 0, images loaded 0",
+   "activity options: 8 (Adventure sports, Culture & heritage, Food & cooking, Local life, Trekking & hiking, On the water, Wellness & relaxation, Wildlife & nature)",
+   "filter Activity = \"Trekking & hiking\" (trekking): count \"454 tours match · newest first\", cards 24, with photo 0, images loaded 0; URL /portal/tours",
+   "drawer: Open Sri Lanka Honeymoon Tour, Option I: Culture, Tea Country, Yala and Thalpe — 14 Days; images []",
+   "390: scrollWidth 390 vs innerWidth 390 (no sideways scroll)"
+  ]
+ },
+ {
+  "step": "portal-brand",
+  "url": "https://portal.lumiguides.it.com/portal/brand",
+  "console": [],
+  "failing": [],
+  "notes": [
+   "/api/ calls: 200 GET /api/tenant/me | 200 GET /api/tenant/v1/billing | 200 GET /api/tenant/admin/brand-identity | 200 GET /api/tenant/v1/notifications | 200 GET /api/tenant/v1/tours/my-versions | 200 GET /api/tenant/v1/tours/pool | 200 POST /api/tenant/v1/content-writing/cta-check"
+  ]
+ }
+]

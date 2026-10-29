@@ -1,0 +1,23 @@
+{
+ "total": 892,
+ "read": 892,
+ "withCover": 162,
+ "byCountry": {
+  "Sri Lanka": 2,
+  "Bhutan": 29,
+  "Taiwan": 30,
+  "China": 69,
+  "Mongolia": 16,
+  "South Korea": 16
+ },
+ "byAct": {
+  "cultural_heritage": 123,
+  "local_immersion": 97,
+  "trekking": 97,
+  "wildlife_nature": 19,
+  "wellness_relaxation": 25,
+  "culinary": 61,
+  "adventure_sport": 29,
+  "water_activities": 23
+ }
+}

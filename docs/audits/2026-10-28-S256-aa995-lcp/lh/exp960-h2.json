@@ -1,0 +1,19 @@
+{
+ "bhutan": {
+  "perf": 99,
+  "lcp": 2106.042,
+  "fcp": 948.202,
+  "tbt": 26,
+  "cls": 0,
+  "lcp_runs": [
+   2.56,
+   2.11,
+   2.1
+  ],
+  "element": "div.aa-site > main#main > section.tp-page-hero > img.tp-hero-img",
+  "image": [
+   "bhutan-960-q85.webp",
+   99504
+  ]
+ }
+}

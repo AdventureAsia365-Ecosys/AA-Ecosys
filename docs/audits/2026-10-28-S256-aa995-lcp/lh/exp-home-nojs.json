@@ -1,0 +1,19 @@
+{
+ "home": {
+  "perf": 99,
+  "lcp": 2257.0324499999997,
+  "fcp": 904.6883,
+  "tbt": 0,
+  "cls": 0,
+  "lcp_runs": [
+   2.26,
+   2.26,
+   2.26
+  ],
+  "element": "main#main > section.tp-hero > picture > img.tp-hero-img",
+  "image": [
+   "home-port-756.avif",
+   60877
+  ]
+ }
+}
