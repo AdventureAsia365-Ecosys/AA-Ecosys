@@ -6,218 +6,40 @@
 # Usage:
 #   tools/kit/kit-sync.sh <consumer> [--from-local] [--ref <git-ref>] [--cis <path>] [--dest-repo <path>]
 #                                    [--no-fetch] [--dry-run]
+#   tools/kit/kit-sync.sh --list
 #
-# Consumers (ADR 0016 decision 2):
-#   portal       AA-Partner          portal/app/_kit/core   portal/kit.lock.json     full
-#   crm-web      AA-Partner          web/app/_kit/core      web/kit.lock.json        full
-#   booking      AA-Booking          frontend/ui/core       frontend/kit.lock.json   full
-#   tripplanner  AA-TripPlanner-Web  frontend/ui/core       frontend/kit.lock.json   tokens
+# Since AA-994 S3s this is a wrapper: the copy code lives in AA-CIS-App `.github/scripts/kit-sync.sh`, the same file
+# the CIS Kit Sync bot and Kit Consumers check run, so a hand sync and a bot sync cannot differ. Options, consumers,
+# profiles, the lock format and the exit codes are that script's (run with --help).
 #
-# Source (AA-CIS-App `frontend/app/_kit/core/`):
-#   default        the commit at CIS `origin/main` (fetched first unless --no-fetch); the lock records its sha.
-#   --ref <ref>    a given CIS commit instead (it should be on CIS main: the Provenance check rejects anything else).
-#   --from-local   the files in the CIS checkout as they are (tracked + untracked, .gitignore respected), for a
-#                  try-out; the lock records `"ref": "local"`, which the Provenance check rejects in CI by design.
-# Checkouts: --cis defaults to <workspace>/apps/AA-CIS-App, --dest-repo to <workspace>/apps/<repo>; pass a worktree
-# path to sync into a branch checkout. <workspace> is the main checkout of the root repo (or $AA_WORKSPACE).
-#
-# Profiles: `full` copies every file of core/. `tokens` copies only the token files: the list in MANIFEST.json
-# `profiles.tokens` when the manifest has one, else ADR 0016's list (tokens.css, tokens.ts, brand.ts, theme.ts,
-# check-kit-copy.mjs, eslint-kit.mjs, MANIFEST.json).
-#
-# MANIFEST.json (written by CIS `scripts/kit-manifest.mjs`, AA-994 S1a) must be in core/. When it lists file hashes as
-# `"files": {"<path>": "<sha256>" | {"sha256": "<sha256>"}}` or `"files": [{"path": …, "sha256": …}]`, every copied
-# file is checked against it and a `full` copy must hold exactly the listed files; otherwise only a warning is printed.
-#
-# The consumer's core/ folder is replaced as a whole (stale files are removed). The lock is deterministic (no time
-# stamp), so re-running on the same ref changes nothing.
-#
-# Exit codes: 0 synced (or dry run), 2 usage error, 3 CIS has no core/ yet (before AA-994 S1a), 4 source or manifest
-# problem, 5 destination problem.
+# Which copy of the script runs: $KIT_SYNC_IMPL when set (a CIS worktree's file, for a try-out), else
+# <workspace>/apps/AA-CIS-App/.github/scripts/kit-sync.sh, else that checkout's `origin/main` version. <workspace> is
+# the main checkout of the root repo. Defaults kept from before: --cis is $AA_WORKSPACE/apps/AA-CIS-App (or
+# <workspace>/apps/AA-CIS-App), --dest-repo is <that workspace>/apps/<repo>.
 set -euo pipefail
 
-die() { local code=$1; shift; echo "kit-sync: $*" >&2; exit "$code"; }
-usage() { sed -n '2,8p' "$0" >&2; exit 2; }
-
-CANON_REPO="AdventureAsia365-Ecosys/AA-CIS-App"
-CANON_PATH="frontend/app/_kit/core"
-TOKENS_DEFAULT="tokens.css tokens.ts brand.ts theme.ts check-kit-copy.mjs eslint-kit.mjs MANIFEST.json"
-
-consumer="" from_local=0 ref_arg="" cis="" dest_repo="" fetch=1 dry=0
-while [ $# -gt 0 ]; do
-  case "$1" in
-    --from-local) from_local=1 ;;
-    --ref) [ $# -ge 2 ] || usage; ref_arg=$2; shift ;;
-    --cis) [ $# -ge 2 ] || usage; cis=$2; shift ;;
-    --dest-repo) [ $# -ge 2 ] || usage; dest_repo=$2; shift ;;
-    --no-fetch) fetch=0 ;;
-    --dry-run) dry=1 ;;
-    -h|--help) sed -n '2,40p' "$0"; exit 0 ;;
-    -*) echo "kit-sync: unknown option $1" >&2; usage ;;
-    *) [ -z "$consumer" ] || usage; consumer=$1 ;;
-  esac
-  shift
-done
-[ -n "$consumer" ] || usage
-[ "$from_local" = 1 ] && [ -n "$ref_arg" ] && die 2 "--from-local and --ref exclude each other"
-
-case "$consumer" in
-  portal)      repo=AA-Partner;         dest_rel=portal/app/_kit/core; lock_rel=portal/kit.lock.json;   profile=full ;;
-  crm-web)     repo=AA-Partner;         dest_rel=web/app/_kit/core;    lock_rel=web/kit.lock.json;      profile=full ;;
-  booking)     repo=AA-Booking;         dest_rel=frontend/ui/core;     lock_rel=frontend/kit.lock.json; profile=full ;;
-  tripplanner) repo=AA-TripPlanner-Web; dest_rel=frontend/ui/core;     lock_rel=frontend/kit.lock.json; profile=tokens ;;
-  *) die 2 "unknown consumer '$consumer' (portal, crm-web, booking, tripplanner)" ;;
-esac
+die() { echo "kit-sync: $*" >&2; exit 2; }
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [ -n "${AA_WORKSPACE:-}" ]; then
-  ws=$AA_WORKSPACE
-else
-  common=$(git -C "$script_dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) \
-    || die 2 "cannot find the root repo from $script_dir; set AA_WORKSPACE"
-  ws=$(dirname "$common")
-fi
-cis=${cis:-$ws/apps/AA-CIS-App}
-dest_repo=${dest_repo:-$ws/apps/$repo}
-git -C "$cis" rev-parse --git-dir >/dev/null 2>&1 || die 2 "AA-CIS-App checkout not found at $cis (use --cis)"
-[ -d "$dest_repo" ] || die 5 "$repo checkout not found at $dest_repo (use --dest-repo)"
+common=$(git -C "$script_dir" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) \
+  || die "cannot find the root repo from $script_dir"
+real_ws=$(dirname "$common")
+ws=${AA_WORKSPACE:-$real_ws}
+canon_cis=$real_ws/apps/AA-CIS-App
+rel=.github/scripts/kit-sync.sh
 
-stage=$(mktemp -d)
-trap 'rm -rf "$stage"' EXIT
-src="$stage/core"
-mkdir -p "$src"
-
-# --- 1. source files into $stage/core ----------------------------------------------------------------------------
-if [ "$from_local" = 1 ]; then
-  ref=local
-  label="local checkout $cis"
-  [ -d "$cis/$CANON_PATH" ] || die 3 "AA-CIS-App $CANON_PATH/ does not exist in $cis yet. It is created by AA-994 slice S1a (root ADR 0016 decision 1); nothing to sync."
-  (cd "$cis" && git ls-files -z --cached --others --exclude-standard -- "$CANON_PATH") \
-    | while IFS= read -r -d '' f; do
-        [ -f "$cis/$f" ] || continue # deleted in the working tree
-        mkdir -p "$src/$(dirname "${f#"$CANON_PATH"/}")"
-        cp -p "$cis/$f" "$src/${f#"$CANON_PATH"/}"
-      done
-else
-  if [ -n "$ref_arg" ]; then
-    want=$ref_arg
-  else
-    want=origin/main
-    if [ "$fetch" = 1 ]; then
-      git -C "$cis" fetch -q origin main || die 4 "git fetch origin main failed in $cis (use --no-fetch to sync from the last fetched origin/main)"
-    fi
-  fi
-  ref=$(git -C "$cis" rev-parse --verify -q "$want^{commit}") || die 4 "CIS ref '$want' not found in $cis"
-  label="AA-CIS-App $want ($ref)"
-  if [ -n "$ref_arg" ] && git -C "$cis" rev-parse -q --verify origin/main >/dev/null \
-     && ! git -C "$cis" merge-base --is-ancestor "$ref" origin/main; then
-    echo "kit-sync: warning: $ref is not on CIS origin/main; the Provenance check will reject this lock" >&2
-  fi
-  if [ -z "$(git -C "$cis" ls-tree -r --name-only "$ref" -- "$CANON_PATH/")" ]; then
-    die 3 "AA-CIS-App $CANON_PATH/ does not exist at $label yet. It is created by AA-994 slice S1a (root ADR 0016 decision 1); nothing to sync."
-  fi
-  git -C "$cis" archive --format=tar "$ref" -- "$CANON_PATH" | tar -x -C "$stage"
-  rm -rf "$src"
-  mv "$stage/$CANON_PATH" "$src"
-fi
-[ -n "$(find "$src" -type f -print -quit)" ] \
-  || die 3 "AA-CIS-App $CANON_PATH/ is empty at $label. It is created by AA-994 slice S1a (root ADR 0016 decision 1); nothing to sync."
-[ -f "$src/MANIFEST.json" ] || die 4 "$CANON_PATH/MANIFEST.json is missing at $label (CIS: run scripts/kit-manifest.mjs and merge)"
-
-# --- 2. profile selection + manifest check (python: stdlib only) -------------------------------------------------
-out="$stage/out"
-mkdir -p "$out"
-python3 - "$src" "$out" "$profile" "$TOKENS_DEFAULT" <<'PY' || exit $?
-import hashlib, json, os, shutil, sys
-
-src, out, profile, tokens_default = sys.argv[1:5]
-
-def fail(msg):
-    print(f"kit-sync: {msg}", file=sys.stderr)
-    sys.exit(4)
-
-files = sorted(
-    os.path.relpath(os.path.join(d, f), src).replace(os.sep, "/")
-    for d, _, fs in os.walk(src) for f in fs
-)
-try:
-    manifest = json.load(open(os.path.join(src, "MANIFEST.json"), encoding="utf-8"))
-except ValueError as e:
-    fail(f"MANIFEST.json is not valid JSON: {e}")
-
-if profile == "tokens":
-    listed = (manifest.get("profiles") or {}).get("tokens") if isinstance(manifest, dict) else None
-    selected = sorted(set(listed if isinstance(listed, list) else tokens_default.split()) | {"MANIFEST.json"})
-    missing = [f for f in selected if f not in files]
-    if missing:
-        fail("tokens profile files missing from core: " + ", ".join(missing))
-else:
-    selected = files
-
-hashes = None
-mf = manifest.get("files") if isinstance(manifest, dict) else None
-if isinstance(mf, dict):
-    hashes = {k: (v.get("sha256") if isinstance(v, dict) else v) for k, v in mf.items()}
-elif isinstance(mf, list):
-    hashes = {e.get("path"): e.get("sha256") for e in mf if isinstance(e, dict)}
-
-if hashes is None:
-    print("kit-sync: warning: MANIFEST.json has no recognised 'files' hash list; copied files were not verified",
-          file=sys.stderr)
-else:
-    def sha(p):
-        return hashlib.sha256(open(os.path.join(src, p), "rb").read()).hexdigest()
-    bad = [p for p in selected if p != "MANIFEST.json" and hashes.get(p) != sha(p)]
-    if bad:
-        fail("MANIFEST.json does not match core/ for: " + ", ".join(bad)
-             + " (CIS: re-run scripts/kit-manifest.mjs; never sync a stale manifest)")
-    if profile == "full":
-        extra = sorted(set(hashes) - set(files))
-        if extra:
-            fail("MANIFEST.json lists files that are not in core/: " + ", ".join(extra))
-
-for p in selected:
-    os.makedirs(os.path.dirname(os.path.join(out, p)), exist_ok=True)
-    shutil.copy2(os.path.join(src, p), os.path.join(out, p))
-PY
-count=$(find "$out" -type f | wc -l | tr -d ' ')
-manifest_sha=$(sha256sum "$out/MANIFEST.json" | cut -d' ' -f1)
-
-lock_json=$(python3 - "$CANON_REPO" "$CANON_PATH" "$ref" "$profile" "$dest_rel" "$manifest_sha" <<'PY'
-import json, sys
-repo, path, ref, profile, dest, msha = sys.argv[1:7]
-print(json.dumps({
-    "adr": "root ADR 0016",
-    "canonical": {"repo": repo, "path": path},
-    "ref": ref,
-    "profile": profile,
-    "dest": dest,
-    "manifest_sha256": msha,
-}, indent=2))
-PY
-)
-
-echo "kit-sync: $consumer <- $label"
-echo "kit-sync: profile $profile, $count files -> $dest_repo/$dest_rel"
-if [ "$dry" = 1 ]; then
-  (cd "$out" && find . -type f | sed 's|^\./|  |' | sort)
-  echo "kit-sync: dry run; $lock_rel would be:"
-  echo "$lock_json"
-  exit 0
+impl=${KIT_SYNC_IMPL:-$canon_cis/$rel}
+if [ ! -f "$impl" ]; then
+  tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' EXIT
+  git -C "$canon_cis" show "origin/main:$rel" > "$tmp/kit-sync.sh" 2>/dev/null \
+    || die "AA-CIS-App $rel not found in $canon_cis (working tree or origin/main); pull AA-CIS-App main (AA-994 S3s)"
+  impl=$tmp/kit-sync.sh
 fi
 
-# --- 3. replace the consumer's core/ and write the lock -----------------------------------------------------------
-case "$dest_rel" in */_kit/core|*/ui/core) ;; *) die 5 "refusing to replace $dest_rel (not a kit core folder)" ;; esac
-dest="$dest_repo/$dest_rel"
-[ -L "$dest" ] && die 5 "$dest is a symlink; refusing to replace it"
-mkdir -p "$(dirname "$dest")"
-rm -rf "$dest"
-cp -R "$out" "$dest"
-printf '%s\n' "$lock_json" > "$dest_repo/$lock_rel"
+has_cis=0
+for a in "$@"; do [ "$a" = --cis ] && has_cis=1; done
+extra=()
+[ "$has_cis" = 1 ] || extra=(--cis "$ws/apps/AA-CIS-App")
 
-echo "kit-sync: wrote $dest_rel/ and $lock_rel (ref $ref)"
-if git -C "$dest_repo" rev-parse --git-dir >/dev/null 2>&1; then
-  changes=$(git -C "$dest_repo" status --porcelain -- "$dest_rel" "$lock_rel" | wc -l | tr -d ' ')
-  echo "kit-sync: $changes path(s) changed in $repo; review with: git -C $dest_repo status -- $dest_rel $lock_rel"
-fi
-echo "kit-sync: next: node $dest_rel/check-kit-copy.mjs (integrity), the app build, then a PR 'chore: sync UI kit core to AA-CIS-App ${ref:0:7}' with Refs AA-994"
+AA_WORKSPACE=$ws bash "$impl" "$@" "${extra[@]}"
