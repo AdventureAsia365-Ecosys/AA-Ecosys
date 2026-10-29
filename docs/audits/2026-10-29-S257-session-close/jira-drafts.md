@@ -1,4 +1,4 @@
-# Nháp Jira S257 (29/10/2026) — CHƯA ĐĂNG, chờ tech lead duyệt
+# Nháp Jira S257 (29/10/2026) — đã đăng sau khi tech lead duyệt
 
 Soạn cuối phiên S257 (Claude Code), chỉ đọc Jira, không đăng gì. Mỗi comment đứng tên tech lead; khi đăng thay `@thule`
 bằng mention node (`<span data-type="mention" data-user-id="70121:5793bdd5-44b1-4623-97d4-43c35d440869">@thule</span>`,
@@ -167,4 +167,9 @@ Ghi chú: Booking 0.11.0 chủ yếu gồm hai việc đã báo sáng 29/10 (dan
 
 ## Kết quả đăng
 
-Chưa đăng — chờ tech lead duyệt.
+Tech lead duyệt 29/10 (~15:25 +07), đăng cùng ngày:
+
+- PR-24 comment #10530 (không ảnh)
+- PR-22 comment #10531 (không ảnh)
+- PR-27 comment #10532 (không ảnh)
+- PR-23 comment #10533, kèm 4 ảnh nhúng: nhãn giá thẻ tour, nhãn giá ô chi tiết, trang Brand vai "chỉ xem", trang Facts đại lý
