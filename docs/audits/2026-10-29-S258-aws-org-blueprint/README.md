@@ -1,5 +1,5 @@
 ---
-id: OPS-AWS-ORG-blueprint-s258
+id: ARCH-01-aws-org-blueprint-s258
 title: "AWS organization, governance, environments and IaC blueprint (S258)"
 description: "Bản thiết kế tổ chức và quản trị AWS cho hệ sinh thái: tài khoản quản trị + thành viên, OU, SCP, Identity Center, thanh toán, dev/staging/prod, tổ chức lại Terraform, profile CLI, LLM gateway nhiều nguồn, lộ trình, kiểm thử, chi phí, vận hành, rủi ro, quyết định."
 type: report
