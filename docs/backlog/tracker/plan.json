@@ -210,8 +210,8 @@
      "done": false
     },
     {
-     "text": "Sau ≥7 ngày: xoá portal/ khỏi CIS, đảo guard test, cập nhật CONTEXT.md + ecosystem-architecture",
-     "done": false
+     "text": "Sau ≥7 ngày: xoá portal/ khỏi CIS, đảo guard test, cập nhật CONTEXT.md + ecosystem-architecture — xong sớm S256: CIS #1126 f80429a9 (xoá portal/, guard AA-885 đảo chiều, CONTEXT.md CIS gọn lại, /trip 308), docs hệ sinh thái root #316",
+     "done": true
     }
    ]
   },
@@ -326,9 +326,9 @@
    "text": "DB Isolation Probe phủ bảng đợt 4 (58/58); 3 bảng chưa có dòng — đọc lại khi tenant tạo plan/page"
   },
   {
-   "due": "xong sớm S256",
+   "due": "xong S256",
    "issue": "AA-979",
-   "text": "Dọn §4.5 đã chạy sớm ở S256 (Infra #484, Partner #115, xoá project Vercel aa-cis-portal + 3 secret + 1 biến, root #316). Còn ở §3 hàng 0m: CIS #1126, deploy CRM, redirect URI Google + thử Gmail, thu hồi token Vercel"
+   "text": "AA-979 Done S256: dọn §4.5 chạy sớm (Infra #484, Partner #115, CIS #1126 xoá portal/ đông lạnh + /trip 308, xoá project Vercel aa-cis-portal + 3 secret + 1 biến, token Vercel aa-partner-ci do tech lead thu hồi, root #316); redirect URI Google cho portal. đã có sẵn, Connect Gmail tới bước Google đúng redirect. Theo sau: kiểm cta-check bằng user studio vai viewer riêng (CIS #1127)"
   },
   {
    "due": "hằng ngày (credit Geoapify) → ~31/10",
@@ -391,11 +391,6 @@
    "who": "Tech lead",
    "text": "Duyệt pilot sơ đồ kiến trúc chuẩn AWS ở /admin/docs?path=docs/architecture/diagrams/README.md (root #315) → Done",
    "issue": "AA-697"
-  },
-  {
-   "who": "Tech lead",
-   "text": "Thêm redirect URI Google https://portal.lumiguides.it.com/connect/mail/callback (rồi agent thử kết nối Gmail trên portal.), thu hồi token Vercel portal cũ; tuỳ chọn: một lần đồng ý Gmail thật",
-   "issue": "AA-979"
   },
   {
    "who": "Tech lead",
@@ -477,18 +472,20 @@
     "AA-765",
     "AA-795",
     "AA-838",
-    "AA-995"
+    "AA-995",
+    "AA-979",
+    "AA-671"
    ],
    "canceled": [],
    "created": [],
    "reopened": [],
    "notes": [
     "Done AA-665 (Claude Code, Ultracode; 28/10 21:20 → sáng 29/10, Claude Code khởi động lại ~02:45): vụ 25/09 $49,02 / 1.169 lệnh là DataForSEO sau rewrite của tenant thử WanderLux (task nền API, không job), + ~7,9k lệnh Haiku a3_search_demand $10,27; thẻ sự cố Cost Operations CIS #1106, live 200 incidents[0] = 2026-09-25-dfs-research-sweep",
-    "Done AA-765 (CIS #1116 một judge client, #1117 T11 dispatch; api :902 / worker :468 b6b6ea82; 11 t2_judge + 1 T9 → 2 t10_judge PASS), AA-795 (mig 300, CIS #1119/#1123; live PASS, quét 61 → 9 cờ), AA-838 (D1–D13 tech lead duyệt; Infra #481, reboot RDS 06:40 29/10, pgss.max 10000, CIS #1109, root #314), AA-995 (mig 301 ảnh 960w + backfill 3.229, TP #178; LCP mobile prod home 1,54 s / tour 1,57 s, perf 100; apply 301 có override của tech lead)",
-    "Ship, chưa đóng: AA-920 WM-25 (mig 297, CIS #1114) live PASS; AA-919 golden 1.2.0 + source parity, kappa 0,316; AA-790 r9 FAIL (reader_value −0,25), cờ tắt; AA-873 triage 0 ACTIVE + cảnh báo thử thật đạt, còn GuardDuty; AA-993 Phase E I1/M1/M2a/M2b/M4a; AA-697 sơ đồ icon AWS chuẩn (root #311/#313/#315, CIS #1110), chờ duyệt pilot; AA-880 ADR 0012 Proposed (root #310); AA-671 bộ lọc + ảnh bìa (CIS #1111, Partner #111); AA-979 dọn P2b sớm → In Review (Infra #484, Partner #115, root #316, CIS #1127); AA-994 i18n admin CIS #1129 mở; AA-997 chuỗi relocate mọi nước xếp theo credit ngày",
-    "Không issue: view catalog.v_tour_place_name (mig 298, Booking #141; 100 tour 1.176 → 274 ms); bucket ops-docs Booking (Infra #489 + Booking #142, upload/download/remove verify); release CIS 0.14.0, Booking 0.10.0, Partner 0.8.0, TP 0.11.0",
+    "Done AA-765 (CIS #1116 một judge client, #1117 T11 dispatch; api :902 / worker :468 b6b6ea82; 11 t2_judge + 1 T9 → 2 t10_judge PASS), AA-795 (mig 300, CIS #1119/#1123; live PASS, quét 61 → 9 cờ), AA-838 (D1–D13 tech lead duyệt; Infra #481, reboot RDS 06:40 29/10, pgss.max 10000, CIS #1109, root #314), AA-995 (mig 301 ảnh 960w + backfill 3.229, TP #178; LCP mobile prod home 1,54 s / tour 1,57 s, perf 100; apply 301 có override của tech lead); AA-979 (dọn §4.5 sớm: Infra #484, Partner #115, CIS #1126 xoá portal/ đông lạnh + /trip 308, CIS #1127 viewer cta-check, xoá project Vercel aa-cis-portal + secret/biến, tech lead thu hồi token aa-partner-ci, root #316; redirect URI Google đã có sẵn), AA-671 (bộ lọc + ảnh bìa CIS #1111 + Partner #111; live 892 / 454 / 105, 0 lỗi; ảnh bìa 162/892 là khoảng trống dữ liệu)",
+    "Ship, chưa đóng: AA-920 WM-25 (mig 297, CIS #1114) live PASS; AA-919 golden 1.2.0 + source parity, kappa 0,316; AA-790 r9 FAIL (reader_value −0,25), cờ tắt; AA-873 triage 0 ACTIVE + cảnh báo thử thật đạt, còn GuardDuty; AA-993 Phase E I1/M1/M2a/M2b/M4a (ruleset M2b áp lại, classify bắt buộc; khoá M2a chứng minh live khi apply 301; #308 merge tay vì fingerprint drift đổi); AA-697 sơ đồ icon AWS chuẩn (root #311/#313/#315, CIS #1110), chờ duyệt pilot; AA-880 ADR 0012 Proposed (root #310); AA-994 i18n admin CIS #1129 live (kiểm EN/VI đạt 09:20) + kit sync Partner #116 / TP #180 / Booking #143; AA-997 chuỗi relocate mọi nước xếp theo credit ngày",
+    "Không issue: view catalog.v_tour_place_name (mig 298, Booking #141; 100 tour 1.176 → 274 ms); bucket ops-docs Booking (Infra #489 + Booking #142, upload/download/remove verify); Mermaid CIS #1128 (live 28/28 nhãn); release CIS 0.14.0, Booking 0.10.0, Partner 0.8.0 → 0.9.0 (#114), TP 0.11.0 → 0.11.1 (#179); root #315 sơ đồ chuẩn AWS (tech lead yêu cầu), #316 docs AA-979, bot #312, schema dump #308 merge tay; MFA nhập lại ~08:40",
     "Sự cố: bk-032 sửa sau khi áp → bk-033 (Booking #137); 4 guard CI đỏ (gitleaks DSN giả, resource-ids, golden text AA-919, Vendored CIS copies); Claude Code khởi động lại ~02:45 dừng mọi tác vụ nền; output ECS exec bị cắt; auto mode chặn huỷ job Laos. LLM có log ≈ $1,78; AWS mới/tháng: bucket ops-docs ~$0, secret crm/dev/e2e-test-studio/viewer $0,40",
-    "Live lúc chốt: <SNAPSHOT>. Jira S256: <JIRA>"
+    "Live lúc chốt: 29/10 09:25 +07 — CIS api :906 / worker :472 dev-3994a1a8, schema 301; Booking :84 5a115023 bk-033; CRM api :76 a6d6f282 crm-023, web :47 1e32e7f1 (0.9.0); portal 87f8bb47; TP 0aead2b7, Lambda không đổi; Vercel CIS admin f80429a9; RDS in-sync (pgss.max 10000); shared.job chỉ chuỗi place_relocate AA-997, 0 wave; booking.job rỗng; PR còn mở: release CIS #1113, Booking #138. Jira S256: <JIRA>"
    ]
   },
   {
@@ -1215,18 +1212,6 @@
    "needs": "LLM judge vs deterministic rubric"
   },
   {
-   "id": "AA-671",
-   "title": "Marketplace redesign — catalog grid with filters, detail drawer",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "portal",
-   "milestone": "M4",
-   "session": "S257",
-   "size": "M",
-   "next": "LP · S256: bộ lọc hoạt động / độ khó / mới thêm + ảnh bìa (CIS #1111 + Partner #111, portal deploy 40794245317); live 892 tour, lọc nặng nhất 66,1 ms, 0 lỗi console (ảnh ui-evidence 01a–01l). Tiếp: ảnh bìa mới có 162/892 tour (khoảng trống dữ liệu), dấu \"·\" thừa trên chip giá → đóng",
-   "needs": "Gộp với Browse Tours? (business owner)"
-  },
-  {
    "id": "AA-814",
    "title": "Facts Entry API + UI — platform and tenant-scope facts used by T2/T9",
    "status": "Backlog",
@@ -1659,18 +1644,6 @@
    "needs": "MFA; Ms. Thư names the second alarm recipient"
   },
   {
-   "id": "AA-979",
-   "title": "[CRM LP] CRM-P2 Move `portal/` into AA-Partner",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "P-M1",
-   "session": "S257",
-   "size": "L",
-   "next": "LP · S256: dọn §4.5 sớm — Infra #484 (301 partner-dev → portal, tắt đăng nhập khoá API), Partner #115 (Deploy Portal Dev, smoke 63/63 sau khi user E2E thành owner — quyết định của agent), xoá 3 secret + 1 biến + project Vercel aa-cis-portal, root #316; sửa viewer cta-check CIS #1127. Còn: CIS #1126 (mở), deploy CRM, redirect URI Google + thử Gmail, thu hồi token Vercel (tech lead), kiểm bằng user viewer",
-   "needs": ""
-  },
-  {
    "id": "AA-980",
    "title": "[CRM W8] CRM-38 Go-real",
    "status": "Backlog",
@@ -1703,7 +1676,7 @@
    "milestone": "M1b",
    "session": "S257",
    "size": "L",
-   "next": "L7 · S256 Phase E: I1 Infra #477 (role hẹp db auto-apply apply local MFA; gate env dev-db-auto + secret + ruleset 26049881; IAM simulate đúng, role check 40710037045), M2a #478, M1 #480 + root ADR 0011a #309, M2b Infra #485, M4a CIS #1121 / Booking #139 / Partner #112; copy guard bắt bk-032 sửa sau khi áp → bk-033. DB_AUTO_APPLY chưa bật. Tiếp: M2b gate (ruleset + show), chứng minh M1 live (PR schema dump tự merge sau apply), rồi M3, M4b, M5",
+   "next": "L7 · S256 Phase E: I1 Infra #477 (role hẹp db auto-apply apply local MFA; gate env dev-db-auto + secret + ruleset 26049881; IAM simulate đúng, role check 40710037045), M2a #478, M1 #480 + root ADR 0011a #309, M2b Infra #485 (ruleset 26049881 áp lại bằng login tech lead, classify bắt buộc), M4a CIS #1121 / Booking #139 / Partner #112 (registered_keys trên /health/ready); copy guard bắt bk-032 sửa sau khi áp → bk-033. Khoá M2a chứng minh live (apply 301: \"MIGRATE apply lock: taken\"; guard bảng job bận exit 7 chặn đúng, override tech lead duyệt); M1 fail-closed vì fingerprint drift đổi → schema dump #308 merge tay. DB_AUTO_APPLY chưa bật. Tiếp: thấy M1 tự merge trên lượt dump sạch, rồi M3, M4b, M5",
    "needs": ""
   },
   {
@@ -1715,7 +1688,7 @@
    "milestone": "M4",
    "session": "S257",
    "size": "XL",
-   "next": "LP · S256: i18n toàn admin trong kit (EN mặc định, VI thứ hai) ở CIS #1129 — còn mở lúc chốt; ảnh EN/VI 4 trang docs/audits/2026-10-29-S256-aa994-i18n/. Tiếp: ship #1129, rồi S3 và H3",
+   "next": "LP · S256: i18n toàn admin trong kit (EN mặc định, VI chỉ qua nút trên topbar, cookie cis_lang) — CIS #1129 3994a1a8 live (api :906, Vercel f80429a9), kiểm EN/VI đạt 09:20 (ui-evidence 07a–07c, ảnh 4 trang ở docs/audits/2026-10-29-S256-aa994-i18n/); kit core đồng bộ sang Partner #116, TripPlanner #180, Booking #143. Tiếp: S3 và H3; text do API gửi vẫn tiếng Anh tới khi API trả mã",
    "needs": "H3 branch protection (tech lead)"
   },
   {
