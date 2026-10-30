@@ -77,6 +77,14 @@ class RegistryCheck(unittest.TestCase):
         for word in ("schedule", "priority", "generator", "unit"):
             self.assertTrue(any(word in e for e in errors), (word, errors))
 
+    def test_automated_from_is_a_day_on_a_cis_report(self):
+        errors, _ = self.messages(_catalog(automated_from="2026-10-31"), _kpis())
+        self.assertEqual(errors, [])
+        errors, _ = self.messages(_catalog(automated_from="soon"), _kpis())
+        self.assertTrue(any("automated_from" in e and "YYYY-MM-DD" in e for e in errors), errors)
+        errors, _ = self.messages(_catalog(automated_from="2026-10-31", generator=None), _kpis())
+        self.assertTrue(any("needs generator cis" in e for e in errors), errors)
+
     def test_duplicate_report_id_fails(self):
         cat = _catalog()
         cat["reports"].append(dict(cat["reports"][0]))
