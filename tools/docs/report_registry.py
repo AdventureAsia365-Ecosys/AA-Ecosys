@@ -36,6 +36,7 @@ import argparse
 import json
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -50,6 +51,7 @@ ADVISORY_DIR = "docs/audits/2026-10-29-S258-report-catalog"
 ADVISORY_JSON = f"{ADVISORY_DIR}/catalog.json"
 
 REPORT_ID = re.compile(r"^[A-Z]{2,4}-\d{2}$")
+DAY = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 KPI_ID = re.compile(r"^K-[A-Z0-9]+(?:-[A-Z0-9]+)*$")
 FAMILIES = ("executive", "finops", "app-ops", "ai-quality", "reliability", "security", "incident", "release",
             "data-quality", "growth", "customer", "agency", "readiness", "on-demand")
@@ -80,7 +82,9 @@ HEADER_CATALOG = """\
 # (words), schedule (one of hourly/daily/weekly/monthly/quarterly/live/event/on_demand), channel, automation
 # (auto/semi/manual/on_demand), status (state of the report today: exists/partial/planned/missing), priority (P0-P3),
 # template (path of its Markdown template, or null for a product page), generator (cis = the CIS engine renders it
-# with job kind report_generate; null = not automated yet), kpis (IDs in kpis.yaml), sections (what it contains).
+# with job kind report_generate; null = not automated yet), automated_from (optional, generator cis only: the first
+# snapshot day YYYY-MM-DD whose daily chain can create the report's scheduled period, the deploy day of its generator,
+# so the register does not call earlier periods overdue), kpis (IDs in kpis.yaml), sections (what it contains).
 """
 
 HEADER_KPIS = """\
@@ -463,6 +467,12 @@ def check(root: Path, copy_dir: Path | None = None) -> tuple[list[Finding], list
         for f in ("name_en", "name_vi", "owner_role", "cadence", "channel"):
             if f in r and (not isinstance(r[f], str) or not r[f].strip()):
                 err(CATALOG, f"report {rid}: {f} must be a non-empty string")
+        if "automated_from" in r:
+            af = r["automated_from"]
+            if not isinstance(af, date) and not (isinstance(af, str) and DAY.match(af)):
+                err(CATALOG, f"report {rid}: automated_from {af!r} must be a YYYY-MM-DD date")
+            if r.get("generator") != "cis":
+                err(CATALOG, f"report {rid}: automated_from needs generator cis")
         tpl = r.get("template")
         if tpl is not None and (not isinstance(tpl, str) or not (root / tpl).is_file()):
             err(CATALOG, f"report {rid}: template {tpl!r} does not exist")
