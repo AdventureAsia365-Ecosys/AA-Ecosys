@@ -1,0 +1,299 @@
+{
+  "status": 200,
+  "top_level_keys": [
+    "stages"
+  ],
+  "row_keys": [
+    "stage",
+    "role",
+    "provider",
+    "model_id",
+    "account_route",
+    "is_active",
+    "updated_at",
+    "updated_by",
+    "fallback_model_ids",
+    "shadow_model_id",
+    "shadow_sample_pct",
+    "allowed_scopes",
+    "options",
+    "account_route_options",
+    "route"
+  ],
+  "stages": [
+    {
+      "stage": "a0_column_map",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "a3_atomize",
+      "model_id": "gpt-6-luna",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "a3_place_card",
+      "model_id": "gpt-6-luna",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "a3_place_card_check",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "a3_place_days",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "a3_place_dedupe",
+      "model_id": "gpt-6-luna",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ]
+    },
+    {
+      "stage": "a3_place_dedupe_check",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "a3_place_embed",
+      "model_id": "cohere-embed-v4",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "a3_place_locate",
+      "model_id": "sonnet",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "f10_embed",
+      "model_id": "cohere-embed-v4",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "s1_atom_writer",
+      "model_id": "sonnet",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "s1_brand_audit",
+      "model_id": "gpt-5.6-luna",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "s1_flag_fix",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "s1_generate",
+      "model_id": "sonnet-5-5",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "s1_itinerary_nudge",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "s1_judge",
+      "model_id": "gpt-5.6-luna",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ]
+    },
+    {
+      "stage": "s1_source_facts",
+      "model_id": "gpt-6-luna",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "supply_content_writer",
+      "model_id": "sonnet-5-5",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t10_adjudicate",
+      "model_id": "gpt-6-luna",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ]
+    },
+    {
+      "stage": "t10_claims",
+      "model_id": "gpt-6-luna",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t10_judge",
+      "model_id": "gpt-5.6-luna",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ]
+    },
+    {
+      "stage": "t2_brand_audit",
+      "model_id": "gpt-5.6-luna",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t2_flag_fix",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t2_generate",
+      "model_id": "sonnet",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t2_itinerary_nudge",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t2_judge",
+      "model_id": "gpt-5.6-luna",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ]
+    },
+    {
+      "stage": "t7_debate_judge",
+      "model_id": "gpt-5.6-luna",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ]
+    },
+    {
+      "stage": "t8_angle_gen",
+      "model_id": "sonnet",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t9_faq_answer_fit",
+      "model_id": "sonnet",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t9_faq_filter",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t9_repair",
+      "model_id": "haiku",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "t9_write",
+      "model_id": "sonnet",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "tp_component_embed",
+      "model_id": "cohere-embed-v4",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "tp_compose",
+      "model_id": "sonnet",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "tp_extract",
+      "model_id": "sonnet",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "tp_search_embed",
+      "model_id": "cohere-embed-v4",
+      "allowed_scopes": [
+        "aws_only"
+      ]
+    },
+    {
+      "stage": "writing_memory_eval",
+      "model_id": "gpt-5.6-luna",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ]
+    },
+    {
+      "stage": "writing_memory_mine",
+      "model_id": "gpt-5.6-luna",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ]
+    }
+  ]
+}

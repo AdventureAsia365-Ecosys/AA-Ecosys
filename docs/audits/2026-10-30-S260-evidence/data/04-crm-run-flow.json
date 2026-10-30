@@ -1,0 +1,963 @@
+{
+  "started": "2026-10-30T11:13:14.458Z",
+  "trip": "<trip id redacted>",
+  "steps": [
+    {
+      "step": "owner-session",
+      "status": 200,
+      "role": "owner"
+    },
+    {
+      "step": "trip-before",
+      "stage": "proposal",
+      "schedule": [
+        {
+          "kind": "deposit",
+          "status": "due",
+          "amount": "540.00",
+          "currency": "USD"
+        },
+        {
+          "kind": "balance",
+          "status": "due",
+          "amount": "1260.00",
+          "currency": "USD"
+        }
+      ]
+    },
+    {
+      "step": "create-draft",
+      "status": 201,
+      "invoice_status": "draft",
+      "kind": "deposit",
+      "message": "Draft invoice saved. Check it, then issue it."
+    },
+    {
+      "step": "issue",
+      "status": 200,
+      "invoice_status": "open",
+      "number": "INV-000001",
+      "message": "Invoice issued."
+    },
+    {
+      "step": "issued-numbers",
+      "numbers": []
+    },
+    {
+      "step": "mark-paid-negative",
+      "status": 409,
+      "body": {
+        "detail": "invoice_issued_for_row",
+        "message": "<str>"
+      }
+    },
+    {
+      "step": "mark-paid-negative-ui",
+      "status": 409,
+      "messages": [
+        "This payment has an issued invoice. Record the payment on the invoice, or void the invoice first.",
+        "Invoice issued."
+      ]
+    },
+    {
+      "step": "document",
+      "opened": true,
+      "url": "blob",
+      "title": "INV-000001"
+    },
+    {
+      "step": "payment-partial",
+      "status": 201,
+      "invoice_status": "open",
+      "balance_text": "Paid 200.00 USD · refunded 0.00 USD · still owed 340.00 USD"
+    },
+    {
+      "step": "payment-rest",
+      "status": 201,
+      "invoice_row_status": "paid",
+      "balance_text": "Paid 540.00 USD · refunded 0.00 USD · still owed 0.00 USD",
+      "trip_stage": "booked",
+      "schedule": [
+        {
+          "kind": "deposit",
+          "status": "paid",
+          "amount": "540.00",
+          "currency": "USD"
+        },
+        {
+          "kind": "balance",
+          "status": "due",
+          "amount": "1260.00",
+          "currency": "USD"
+        }
+      ]
+    },
+    {
+      "step": "refund-request",
+      "status": 201,
+      "body": {
+        "refund_id": "<uuid>",
+        "invoice_id": "<uuid>",
+        "payment_id": "<uuid>",
+        "amount": "50.00",
+        "currency": "USD",
+        "reason": "<str>",
+        "status": "proposed",
+        "requested_by": "<uuid>",
+        "decided_by": null,
+        "decided_at": null,
+        "decision_note": null,
+        "executed_at": null
+      }
+    },
+    {
+      "step": "agent-session",
+      "status": 200,
+      "role": "agent"
+    },
+    {
+      "step": "refund-approve-agent",
+      "status": 200,
+      "body": {
+        "refund_id": "<uuid>",
+        "invoice_id": "<uuid>",
+        "payment_id": "<uuid>",
+        "amount": "50.00",
+        "currency": "USD",
+        "reason": "<str>",
+        "status": "approved",
+        "requested_by": "<uuid>",
+        "decided_by": "<uuid>",
+        "decided_at": "2026-10-30T11:14:13.092160+00:00",
+        "decision_note": null,
+        "executed_at": null
+      },
+      "message": "Refund approved. Return the money, then mark it refunded."
+    },
+    {
+      "step": "refund-execute-agent",
+      "status": 200,
+      "body": {
+        "refund_id": "<uuid>",
+        "invoice_id": "<uuid>",
+        "payment_id": "<uuid>",
+        "amount": "50.00",
+        "currency": "USD",
+        "reason": "<str>",
+        "status": "executed",
+        "requested_by": "<uuid>",
+        "decided_by": "<uuid>",
+        "decided_at": "2026-10-30T11:14:13.092160+00:00",
+        "decision_note": null,
+        "executed_at": "2026-10-30T11:14:17.122263+00:00"
+      },
+      "message": "Refund recorded."
+    },
+    {
+      "step": "payments-390",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "refund-requests-list",
+      "status": 422,
+      "rows": []
+    },
+    {
+      "step": "document-api",
+      "status": 200,
+      "keys": [
+        "invoice_id",
+        "filename",
+        "html"
+      ],
+      "html_chars": 2708,
+      "csp": true,
+      "script_tags": 0
+    }
+  ],
+  "responses": [
+    {
+      "who": "crm",
+      "method": "GET",
+      "path": "/bff/trips/<uuid>/lifecycle",
+      "status": 200,
+      "body": {
+        "trip_id": "<uuid>",
+        "stage": "proposal",
+        "proposals": [
+          {
+            "proposal_id": "<uuid>",
+            "version": 1,
+            "status": "accepted",
+            "kind": "builder",
+            "published_at": "2026-10-29T17:10:43.784124+00:00",
+            "body": "<str>",
+            "currency": "USD",
+            "total_amount": "1800.00",
+            "deposit_amount": "540.00",
+            "balance_due_on": "2026-11-09",
+            "terms_doc_id": null,
+            "price_hash": "<str>",
+            "sent_at": "2026-10-29T17:10:44.341270+00:00",
+            "accepted_at": "2026-10-29T17:10:47.972106+00:00",
+            "view_count": 2,
+            "last_viewed_at": "2026-10-29T17:10:47.311707+00:00",
+            "hold_expires_at": "2026-10-31T17:10:46.708541+00:00",
+            "hold_count": 1,
+            "accepted_total_amount": "1800.00",
+            "accepted_deposit_amount": "540.00"
+          }
+        ],
+        "schedule": [
+          {
+            "schedule_id": "<uuid>",
+            "proposal_id": "<uuid>",
+            "kind": "deposit",
+            "amount": "540.00",
+            "currency": "USD",
+            "due_on": "2026-10-30",
+            "status": "due",
+            "paid_at": null
+          },
+          {
+            "schedule_id": "<uuid>",
+            "proposal_id": "<uuid>",
+            "kind": "balance",
+            "amount": "1260.00",
+            "currency": "USD",
+            "due_on": "2026-11-09",
+            "status": "due",
+            "paid_at": null
+          }
+        ],
+        "payments": [],
+        "deposit_paid": false,
+        "portal_unlocked": false,
+        "portal": {
+          "s3": 0,
+          "waiver_required": true,
+          "travellers": [
+            {
+              "traveler_id": "<uuid>",
+              "role": "lead",
+              "details_done": false,
+              "missing": [
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>"
+              ],
+              "waiver_signed": false,
+              "portal": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "who": "crm",
+      "method": "POST",
+      "path": "/bff/trips/<uuid>/invoices",
+      "status": 201,
+      "body": {
+        "invoice_id": "<uuid>",
+        "trip_id": "<uuid>",
+        "kind": "deposit",
+        "status": "draft",
+        "number": null,
+        "schedule_id": "<uuid>",
+        "proposal_id": "<uuid>",
+        "currency": "USD",
+        "subtotal_amount": "540.00",
+        "tax_amount": "0.00",
+        "total_amount": "540.00",
+        "tax_rate": "0",
+        "tax_label": "<str>",
+        "tax_inclusive": true,
+        "memo": null,
+        "due_on": "2026-10-30",
+        "issue_date": null,
+        "issued_at": null,
+        "paid_at": null,
+        "voided_at": null,
+        "void_reason": null,
+        "created_at": "2026-10-30T11:13:25.202459+00:00",
+        "actions": [
+          "edit",
+          "issue",
+          "void"
+        ],
+        "lines": [
+          {
+            "line_id": "<uuid>",
+            "position": 1,
+            "kind": "charge",
+            "source": "<str>",
+            "description": "<str>",
+            "quantity": "<str>",
+            "unit_amount": "540.00",
+            "amount": "540.00"
+          },
+          {
+            "line_id": "<uuid>",
+            "position": 2,
+            "kind": "included",
+            "source": "<str>",
+            "description": "<str>",
+            "quantity": null,
+            "unit_amount": null,
+            "amount": null
+          }
+        ],
+        "paid_amount": "0.00",
+        "refunded_amount": "0.00",
+        "balance_amount": "540.00",
+        "payments": [],
+        "refund_requests": []
+      }
+    },
+    {
+      "who": "crm",
+      "method": "POST",
+      "path": "/bff/invoices/<uuid>/issue",
+      "status": 200,
+      "body": {
+        "invoice_id": "<uuid>",
+        "trip_id": "<uuid>",
+        "kind": "deposit",
+        "status": "open",
+        "number": "INV-000001",
+        "schedule_id": "<uuid>",
+        "proposal_id": "<uuid>",
+        "currency": "USD",
+        "subtotal_amount": "540.00",
+        "tax_amount": "0.00",
+        "total_amount": "540.00",
+        "tax_rate": "0",
+        "tax_label": "<str>",
+        "tax_inclusive": true,
+        "memo": null,
+        "due_on": "2026-10-30",
+        "issue_date": "<str>",
+        "issued_at": "2026-10-30T11:13:29.120400+00:00",
+        "paid_at": null,
+        "voided_at": null,
+        "void_reason": null,
+        "created_at": "2026-10-30T11:13:25.202459+00:00",
+        "actions": [
+          "record_payment",
+          "void"
+        ],
+        "lines": [
+          {
+            "line_id": "<uuid>",
+            "position": 1,
+            "kind": "charge",
+            "source": "<str>",
+            "description": "<str>",
+            "quantity": "<str>",
+            "unit_amount": "540.00",
+            "amount": "540.00"
+          },
+          {
+            "line_id": "<uuid>",
+            "position": 2,
+            "kind": "included",
+            "source": "<str>",
+            "description": "<str>",
+            "quantity": null,
+            "unit_amount": null,
+            "amount": null
+          }
+        ],
+        "paid_amount": "0.00",
+        "refunded_amount": "0.00",
+        "balance_amount": "540.00",
+        "payments": [],
+        "refund_requests": []
+      }
+    },
+    {
+      "who": "crm",
+      "method": "GET",
+      "path": "/bff/invoices",
+      "status": 422,
+      "body": {
+        "detail": "invalid_status",
+        "message": "<str>"
+      }
+    },
+    {
+      "who": "crm",
+      "method": "POST",
+      "path": "/bff/schedule/<uuid>/mark-paid",
+      "status": 409,
+      "body": {
+        "detail": "invoice_issued_for_row",
+        "message": "<str>"
+      }
+    },
+    {
+      "who": "crm",
+      "method": "POST",
+      "path": "/bff/schedule/<uuid>/mark-paid",
+      "status": 409,
+      "body": {
+        "detail": "invoice_issued_for_row",
+        "message": "<str>"
+      }
+    },
+    {
+      "who": "crm",
+      "method": "GET",
+      "path": "/bff/invoices/<uuid>/document",
+      "status": 200,
+      "body": {
+        "invoice_id": "<uuid>",
+        "filename": "INV-000001.html",
+        "html": "<html 2592 chars>"
+      }
+    },
+    {
+      "who": "crm",
+      "method": "POST",
+      "path": "/bff/invoices/<uuid>/payments",
+      "status": 201,
+      "body": {
+        "payment_id": "<uuid>",
+        "trip_moved": null,
+        "portal": null,
+        "invoice": {
+          "invoice_id": "<uuid>",
+          "trip_id": "<uuid>",
+          "kind": "deposit",
+          "status": "open",
+          "number": "INV-000001",
+          "schedule_id": "<uuid>",
+          "proposal_id": "<uuid>",
+          "currency": "USD",
+          "subtotal_amount": "540.00",
+          "tax_amount": "0.00",
+          "total_amount": "540.00",
+          "tax_rate": "0",
+          "tax_label": "<str>",
+          "tax_inclusive": true,
+          "memo": null,
+          "due_on": "2026-10-30",
+          "issue_date": "<str>",
+          "issued_at": "2026-10-30T11:13:29.120400+00:00",
+          "paid_at": null,
+          "voided_at": null,
+          "void_reason": null,
+          "created_at": "2026-10-30T11:13:25.202459+00:00",
+          "actions": [
+            "record_payment"
+          ],
+          "lines": [
+            {
+              "line_id": "<uuid>",
+              "position": 1,
+              "kind": "charge",
+              "source": "<str>",
+              "description": "<str>",
+              "quantity": "<str>",
+              "unit_amount": "540.00",
+              "amount": "540.00"
+            },
+            {
+              "line_id": "<uuid>",
+              "position": 2,
+              "kind": "included",
+              "source": "<str>",
+              "description": "<str>",
+              "quantity": null,
+              "unit_amount": null,
+              "amount": null
+            }
+          ],
+          "paid_amount": "200.00",
+          "refunded_amount": "0.00",
+          "balance_amount": "340.00",
+          "payments": [
+            {
+              "payment_id": "<uuid>",
+              "entry_kind": "payment",
+              "amount": "200.00",
+              "currency": "USD",
+              "method": "bank_transfer",
+              "received_on": "2026-10-30",
+              "provider": "manual",
+              "reference": "<str>",
+              "refund_of": null,
+              "refundable_amount": "200.00"
+            }
+          ],
+          "refund_requests": []
+        }
+      }
+    },
+    {
+      "who": "crm",
+      "method": "POST",
+      "path": "/bff/invoices/<uuid>/payments",
+      "status": 201,
+      "body": {
+        "payment_id": "<uuid>",
+        "trip_moved": {
+          "from_stage": "<str>",
+          "stage": "booked",
+          "waiting_on": "aa"
+        },
+        "portal": {
+          "invited": [
+            {
+              "access_id": "<uuid>",
+              "traveler_id": "<uuid>",
+              "role": "lead",
+              "link_path": "<str>",
+              "expires_at": "2026-11-29T11:13:45.056060+00:00",
+              "dispatch_id": "<uuid>",
+              "reissued_from": null
+            }
+          ],
+          "skipped": []
+        },
+        "invoice": {
+          "invoice_id": "<uuid>",
+          "trip_id": "<uuid>",
+          "kind": "deposit",
+          "status": "paid",
+          "number": "INV-000001",
+          "schedule_id": "<uuid>",
+          "proposal_id": "<uuid>",
+          "currency": "USD",
+          "subtotal_amount": "540.00",
+          "tax_amount": "0.00",
+          "total_amount": "540.00",
+          "tax_rate": "0",
+          "tax_label": "<str>",
+          "tax_inclusive": true,
+          "memo": null,
+          "due_on": "2026-10-30",
+          "issue_date": "<str>",
+          "issued_at": "2026-10-30T11:13:29.120400+00:00",
+          "paid_at": "2026-10-30T11:13:45.056060+00:00",
+          "voided_at": null,
+          "void_reason": null,
+          "created_at": "2026-10-30T11:13:25.202459+00:00",
+          "actions": [],
+          "lines": [
+            {
+              "line_id": "<uuid>",
+              "position": 1,
+              "kind": "charge",
+              "source": "<str>",
+              "description": "<str>",
+              "quantity": "<str>",
+              "unit_amount": "540.00",
+              "amount": "540.00"
+            },
+            {
+              "line_id": "<uuid>",
+              "position": 2,
+              "kind": "included",
+              "source": "<str>",
+              "description": "<str>",
+              "quantity": null,
+              "unit_amount": null,
+              "amount": null
+            }
+          ],
+          "paid_amount": "540.00",
+          "refunded_amount": "0.00",
+          "balance_amount": "0.00",
+          "payments": [
+            {
+              "payment_id": "<uuid>",
+              "entry_kind": "payment",
+              "amount": "200.00",
+              "currency": "USD",
+              "method": "bank_transfer",
+              "received_on": "2026-10-30",
+              "provider": "manual",
+              "reference": "<str>",
+              "refund_of": null,
+              "refundable_amount": "200.00"
+            },
+            {
+              "payment_id": "<uuid>",
+              "entry_kind": "payment",
+              "amount": "340.00",
+              "currency": "USD",
+              "method": "bank_transfer",
+              "received_on": "2026-10-30",
+              "provider": "manual",
+              "reference": "<str>",
+              "refund_of": null,
+              "refundable_amount": "340.00"
+            }
+          ],
+          "refund_requests": []
+        }
+      }
+    },
+    {
+      "who": "crm",
+      "method": "GET",
+      "path": "/bff/trips/<uuid>/lifecycle",
+      "status": 200,
+      "body": {
+        "trip_id": "<uuid>",
+        "stage": "booked",
+        "proposals": [
+          {
+            "proposal_id": "<uuid>",
+            "version": 1,
+            "status": "accepted",
+            "kind": "builder",
+            "published_at": "2026-10-29T17:10:43.784124+00:00",
+            "body": "<str>",
+            "currency": "USD",
+            "total_amount": "1800.00",
+            "deposit_amount": "540.00",
+            "balance_due_on": "2026-11-09",
+            "terms_doc_id": null,
+            "price_hash": "<str>",
+            "sent_at": "2026-10-29T17:10:44.341270+00:00",
+            "accepted_at": "2026-10-29T17:10:47.972106+00:00",
+            "view_count": 2,
+            "last_viewed_at": "2026-10-29T17:10:47.311707+00:00",
+            "hold_expires_at": "2026-10-31T17:10:46.708541+00:00",
+            "hold_count": 1,
+            "accepted_total_amount": "1800.00",
+            "accepted_deposit_amount": "540.00"
+          }
+        ],
+        "schedule": [
+          {
+            "schedule_id": "<uuid>",
+            "proposal_id": "<uuid>",
+            "kind": "deposit",
+            "amount": "540.00",
+            "currency": "USD",
+            "due_on": "2026-10-30",
+            "status": "paid",
+            "paid_at": "2026-10-30T11:13:45.056060+00:00"
+          },
+          {
+            "schedule_id": "<uuid>",
+            "proposal_id": "<uuid>",
+            "kind": "balance",
+            "amount": "1260.00",
+            "currency": "USD",
+            "due_on": "2026-11-09",
+            "status": "due",
+            "paid_at": null
+          }
+        ],
+        "payments": [
+          {
+            "payment_id": "<uuid>",
+            "schedule_id": "<uuid>",
+            "invoice_id": "<uuid>",
+            "amount": "200.00",
+            "currency": "USD",
+            "method": "bank_transfer",
+            "received_on": "2026-10-30"
+          },
+          {
+            "payment_id": "<uuid>",
+            "schedule_id": "<uuid>",
+            "invoice_id": "<uuid>",
+            "amount": "340.00",
+            "currency": "USD",
+            "method": "bank_transfer",
+            "received_on": "2026-10-30"
+          }
+        ],
+        "deposit_paid": true,
+        "portal_unlocked": true,
+        "portal": {
+          "s3": 0,
+          "waiver_required": true,
+          "travellers": [
+            {
+              "traveler_id": "<uuid>",
+              "role": "lead",
+              "details_done": false,
+              "missing": [
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>",
+                "<str>"
+              ],
+              "waiver_signed": false,
+              "portal": {
+                "access_id": "<uuid>",
+                "status": "invited",
+                "last_sign_in_at": null,
+                "stage3_submitted_at": null
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "who": "crm",
+      "method": "POST",
+      "path": "/bff/payments/<uuid>/refund-requests",
+      "status": 201,
+      "body": {
+        "refund_id": "<uuid>",
+        "invoice_id": "<uuid>",
+        "payment_id": "<uuid>",
+        "amount": "50.00",
+        "currency": "USD",
+        "reason": "<str>",
+        "status": "proposed",
+        "requested_by": "<uuid>",
+        "decided_by": null,
+        "decided_at": null,
+        "decision_note": null,
+        "executed_at": null
+      }
+    },
+    {
+      "who": "crm-agent",
+      "method": "POST",
+      "path": "/bff/refund-requests/<uuid>/approve",
+      "status": 200,
+      "body": {
+        "refund_id": "<uuid>",
+        "invoice_id": "<uuid>",
+        "payment_id": "<uuid>",
+        "amount": "50.00",
+        "currency": "USD",
+        "reason": "<str>",
+        "status": "approved",
+        "requested_by": "<uuid>",
+        "decided_by": "<uuid>",
+        "decided_at": "2026-10-30T11:14:13.092160+00:00",
+        "decision_note": null,
+        "executed_at": null
+      }
+    },
+    {
+      "who": "crm-agent",
+      "method": "POST",
+      "path": "/bff/refund-requests/<uuid>/execute",
+      "status": 200,
+      "body": {
+        "refund_id": "<uuid>",
+        "invoice_id": "<uuid>",
+        "payment_id": "<uuid>",
+        "amount": "50.00",
+        "currency": "USD",
+        "reason": "<str>",
+        "status": "executed",
+        "requested_by": "<uuid>",
+        "decided_by": "<uuid>",
+        "decided_at": "2026-10-30T11:14:13.092160+00:00",
+        "decision_note": null,
+        "executed_at": "2026-10-30T11:14:17.122263+00:00"
+      }
+    },
+    {
+      "who": "crm",
+      "method": "GET",
+      "path": "/bff/refund-requests",
+      "status": 422,
+      "body": {
+        "detail": "invalid_status",
+        "message": "<str>"
+      }
+    },
+    {
+      "who": "crm",
+      "method": "GET",
+      "path": "/bff/invoices/<uuid>",
+      "status": 200,
+      "body": {
+        "invoice_id": "<uuid>",
+        "trip_id": "<uuid>",
+        "kind": "deposit",
+        "status": "paid",
+        "number": "INV-000001",
+        "schedule_id": "<uuid>",
+        "proposal_id": "<uuid>",
+        "currency": "USD",
+        "subtotal_amount": "540.00",
+        "tax_amount": "0.00",
+        "total_amount": "540.00",
+        "tax_rate": "0",
+        "tax_label": "<str>",
+        "tax_inclusive": true,
+        "memo": null,
+        "due_on": "2026-10-30",
+        "issue_date": "<str>",
+        "issued_at": "2026-10-30T11:13:29.120400+00:00",
+        "paid_at": "2026-10-30T11:13:45.056060+00:00",
+        "voided_at": null,
+        "void_reason": null,
+        "created_at": "2026-10-30T11:13:25.202459+00:00",
+        "actions": [],
+        "lines": [
+          {
+            "line_id": "<uuid>",
+            "position": 1,
+            "kind": "charge",
+            "source": "<str>",
+            "description": "<str>",
+            "quantity": "<str>",
+            "unit_amount": "540.00",
+            "amount": "540.00"
+          },
+          {
+            "line_id": "<uuid>",
+            "position": 2,
+            "kind": "included",
+            "source": "<str>",
+            "description": "<str>",
+            "quantity": null,
+            "unit_amount": null,
+            "amount": null
+          }
+        ],
+        "paid_amount": "540.00",
+        "refunded_amount": "50.00",
+        "balance_amount": "0.00",
+        "payments": [
+          {
+            "payment_id": "<uuid>",
+            "entry_kind": "payment",
+            "amount": "200.00",
+            "currency": "USD",
+            "method": "bank_transfer",
+            "received_on": "2026-10-30",
+            "provider": "manual",
+            "reference": "<str>",
+            "refund_of": null,
+            "refundable_amount": "150.00"
+          },
+          {
+            "payment_id": "<uuid>",
+            "entry_kind": "payment",
+            "amount": "340.00",
+            "currency": "USD",
+            "method": "bank_transfer",
+            "received_on": "2026-10-30",
+            "provider": "manual",
+            "reference": "<str>",
+            "refund_of": null,
+            "refundable_amount": "340.00"
+          },
+          {
+            "payment_id": "<uuid>",
+            "entry_kind": "refund",
+            "amount": "50.00",
+            "currency": "USD",
+            "method": "bank_transfer",
+            "received_on": "2026-10-30",
+            "provider": "manual",
+            "reference": "<str>",
+            "refund_of": "<uuid>"
+          }
+        ],
+        "refund_requests": [
+          {
+            "refund_id": "<uuid>",
+            "invoice_id": "<uuid>",
+            "payment_id": "<uuid>",
+            "amount": "50.00",
+            "currency": "USD",
+            "reason": "<str>",
+            "status": "executed",
+            "requested_by": "<uuid>",
+            "decided_by": "<uuid>",
+            "decided_at": "2026-10-30T11:14:13.092160+00:00",
+            "decision_note": null,
+            "executed_at": "2026-10-30T11:14:17.122263+00:00"
+          }
+        ]
+      }
+    },
+    {
+      "who": "crm",
+      "method": "GET",
+      "path": "/bff/invoices/<uuid>/document",
+      "status": 200,
+      "body": {
+        "invoice_id": "<uuid>",
+        "filename": "INV-000001.html",
+        "html": "<html 2708 chars>"
+      }
+    }
+  ],
+  "agent_console": [
+    {
+      "url": "https://portal.lumiguides.it.com/pipeline/<uuid>",
+      "text": "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+    }
+  ],
+  "agent_failing": [],
+  "console": [
+    {
+      "url": "https://portal.lumiguides.it.com/pipeline/<uuid>",
+      "text": "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+    },
+    {
+      "url": "https://portal.lumiguides.it.com/pipeline/<uuid>",
+      "text": "Failed to load resource: the server responded with a status of 422 ()"
+    },
+    {
+      "url": "https://portal.lumiguides.it.com/pipeline/<uuid>",
+      "text": "Failed to load resource: the server responded with a status of 409 ()"
+    },
+    {
+      "url": "https://portal.lumiguides.it.com/pipeline/<uuid>",
+      "text": "Failed to load resource: the server responded with a status of 409 ()"
+    },
+    {
+      "url": "https://portal.lumiguides.it.com/pipeline/<uuid>",
+      "text": "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+    },
+    {
+      "url": "https://portal.lumiguides.it.com/payments",
+      "text": "Failed to load resource: the server responded with a status of 422 ()"
+    }
+  ],
+  "failing": [
+    {
+      "method": "GET",
+      "path": "/bff/invoices",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/bff/schedule/<uuid>/mark-paid",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/bff/schedule/<uuid>/mark-paid",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/bff/refund-requests",
+      "status": 422
+    }
+  ]
+}
