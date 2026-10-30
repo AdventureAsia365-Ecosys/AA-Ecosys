@@ -1,8 +1,12 @@
 # ADR 0017 — Migrations ship in the app PR; expand files are auto-applied on Dev by an Infra pipeline before deploy
 
-- **Status:** Proposed (2026-10-28, S254). Drafted from the AA-993 design (S252); nothing of it is built yet. The
-  answers to the design's open questions that this ADR depends on (Q5, Q7, Q8, Q11, Q14–Q17) take their proposed
-  answer; Q7 and Q16 were approved by the tech lead on 2026-10-26 (S252).
+- **Status:** Accepted (2026-10-30, S259, under the tech lead's session plan), after it was built (AA-993 Phase E,
+  S255–S258) and proven live: CIS 305 (S258) and CIS 307 (S259: app PR #1168 merged 03:24Z → bot copy PR Infra #516
+  opened 03:25Z and merged 03:27Z → Migration Apply 40997477090 green → Deploy Dev schema gate passed, no hand step);
+  the S259 gate fix accepts a newer green standalone Isolation Probe after a probe-only red run (CIS #1167, Booking
+  #153, Partner #126). Proposed 2026-10-28 (S254), drafted from the AA-993 design (S252); the answers to the design's
+  open questions that this ADR depends on (Q5, Q7, Q8, Q11, Q14–Q17) take their proposed answer; Q7 and Q16 were
+  approved by the tech lead on 2026-10-26 (S252).
 - **Scope:** AA-CIS-App, AA-Booking, AA-Partner (app CI "Migration preflight", the readiness keys, a `schema-gate` job
   in Deploy Dev; AA-TripPlanner-Web optional, Q14), AA-CIS-Infra (`db/run_migration.py` classifier and locks, the
   migration-sync and migration-apply workflows, a narrow IAM role, an environment and a ruleset on `main`, schema-dump
