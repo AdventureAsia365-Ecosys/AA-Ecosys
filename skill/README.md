@@ -46,7 +46,7 @@ ai-nghiep/        SKILL.md + references/{aws, adr, stakeholders-english, handoff
 aa-lessons/       SKILL.md + lessons.md (sổ bài học — ghi ngay khi gặp lỗi do làm sai cách)
 aa-session/       SKILL.md
 aa-ship/          SKILL.md
-aa-ui-verify/     SKILL.md
+aa-ui-verify/     SKILL.md + references/evidence-report.md
 aa-linear-issue/  SKILL.md
 aa-jira-update/   SKILL.md
 aa-wave-rerun/    SKILL.md

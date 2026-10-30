@@ -99,7 +99,9 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
    - Network: API của trang 2xx. Có 401/403/500 → đọc response body, đừng đoán (500 thật từng bị tưởng là 401).
    - Dữ liệu: bảng có dòng thật, hoặc đúng empty state. Số đếm khớp với query DB. Dữ liệu > 1 trang → đổi page size,
      sang trang 2, đếm option filter.
-   - Mobile 390px: không tràn ngang (`scrollWidth <= clientWidth` của cả trang lẫn khung cuộn chứa bảng).
+   - Mobile 390px: không tràn ngang (`scrollWidth <= clientWidth` của cả trang lẫn khung cuộn chứa bảng). Shell admin
+     và CRM cuộn trong `main`: đo trên `main`, không chỉ trên document — document = viewport vẫn có thể giấu một tab
+     rộng hơn `main` (S260 F3). Portal: §3b.
    - Hành động chính (nút, filter, drawer, bulk) bấm được và có tác dụng; sau thao tác, chờ trạng thái server (đọc lại
      API hoặc phần tử đích), không chờ chữ thông báo tạm.
 5. Nút hay panel phụ thuộc trạng thái (ví dụ Live view chỉ hiện với job do trang tự kích) → thử cả trạng thái có và không.
@@ -139,6 +141,9 @@ UI verify <trang> — <PR #n>, deploy <xanh / READY>
 - Đã thử: <hành động>
 - Còn thiếu / ngoài phạm vi: <…>
 ```
+
+Lane bằng chứng live nhiều mục (mỗi mục = issue + PR, PASS/FAIL từng mục con, findings F1..Fn) → khung và luật ở
+`references/evidence-report.md`.
 
 Không có ảnh hoặc chưa mở được trang → không báo "xong"; nói rõ còn thiếu bước nào. Câu "chạy được" chỉ cho đúng kênh/
 vai đã thử thật, có ảnh.
