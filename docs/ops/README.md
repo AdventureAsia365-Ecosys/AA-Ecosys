@@ -33,6 +33,7 @@ Everything runs on **acc2** (us-west-1) except the LLM calls, which run on acc3;
 | Jobs not starting or never finishing, a deploy blocked by the gate | [Job queue stuck](playbooks/queue-stuck.md) |
 | A budget or anomaly e-mail, a job `stopped_budget` | [LLM or paid-API cost spike](playbooks/llm-cost-spike.md) |
 | Staff cannot sign in | [Staff cannot sign in (Cognito)](playbooks/cognito-login.md) |
+| LLM calls refused, `llm_access_denied`, Bedrock "Error 002" | [LLM calls refused](playbooks/llm-access-denied.md) |
 | SES bounce or complaint alarm | [SES bounce or complaint](runbooks/ses-bounce.md) |
 
 ## Runbooks

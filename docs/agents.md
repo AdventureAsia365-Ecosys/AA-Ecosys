@@ -52,16 +52,17 @@ Each skill's `SKILL.md` says when to load it. Map of skills to load: `skill/ai-n
 
 | Skill | Use when | Last changed |
 |---|---|---|
-| `ai-nghiep` | Any AA_Ecosys work: hard rules, tool split, which skill to load; ADR placement in `references/adr.md` | 2026-10-25 |
-| `aa-session` | Start or end a session | 2026-10-28 |
-| `aa-ship` | Merge, deploy, live verify, Done, rollback | 2026-10-28 |
+| `ai-nghiep` | Any AA_Ecosys work: hard rules, tool split, which skill to load; ADR placement in `references/adr.md` | 2026-10-30 |
+| `aa-session` | Start or end a session | 2026-10-30 |
+| `aa-ship` | Merge, deploy, live verify, Done, rollback | 2026-10-30 |
 | `aa-linear-issue` | Create, update or close a Linear issue | 2026-10-25 |
 | `aa-jira-update` | Draft a Jira update for the business owner | 2026-10-25 |
 | `aa-cis-schema` | Query the DB, ECS exec, migrations, destructive ops | 2026-10-27 |
 | `aa-ecosys-repos` | Find code across repos | 2026-10-28 |
-| `aa-ui-verify` | Verify an admin or portal UI change | 2026-10-26 |
+| `aa-ui-verify` | Verify an admin or portal UI change | 2026-10-30 |
 | `aa-wave-rerun` | Rerun the pipeline for a country | 2026-10-28 |
-| `aa-lessons` | Record or read lessons (`lessons.md`) | 2026-10-28 |
+| `aa-lessons` | Record or read lessons (`lessons.md`) | 2026-10-30 |
+| `aa-uat-video` | Record UAT or product-intro videos (Playwright + local TTS), package and upload | 2026-10-30 |
 
 `skill/README.md`, `REVIEW-CHECKLIST.md` and `VERIFY-LOG.md` describe how skills are reviewed.
 

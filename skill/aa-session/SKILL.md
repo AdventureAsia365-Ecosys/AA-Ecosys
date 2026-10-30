@@ -1,6 +1,6 @@
 ---
 name: aa-session
-description: Nghi thức bắt đầu và kết thúc một phiên làm việc AA_Ecosys — đầu phiên đọc memory HOT + backlog sống + master plan, kiểm STS/ECS/bảng job, đề xuất danh sách issue theo slot; trong phiên giữ checklist sống và bài học chờ; cuối phiên chụp snapshot trạng thái live, soạn draft Jira cho Nghiệp duyệt, rồi mới ghi log/memory/tracker, đóng gói skill đã đổi, để nguyên môi trường. Dùng khi Nghiệp nói "bắt đầu session mới", "dừng session này", "đầu phiên", "kết thúc/chốt phiên", "wrap up", nêu số phiên (ví dụ S251), hoặc khi một phiên AA bắt đầu mà chưa có bối cảnh.
+description: Nghi thức bắt đầu và kết thúc một phiên làm việc AA_Ecosys — đầu phiên đọc memory HOT + backlog sống + master plan, kiểm STS/ECS/bảng job, đề xuất danh sách issue theo slot; trong phiên giữ checklist sống và bài học chờ, chạy lane code song song (Ultracode); cuối phiên chụp snapshot trạng thái live, soạn draft Jira cho Nghiệp duyệt, rồi mới ghi log/memory/tracker, đóng gói skill đã đổi, để nguyên môi trường. Dùng khi Nghiệp nói "bắt đầu session mới", "dừng session này", "đầu phiên", "kết thúc/chốt phiên", "wrap up", nêu số phiên (ví dụ S251), hoặc khi một phiên AA bắt đầu mà chưa có bối cảnh.
 ---
 
 # aa-session
@@ -64,7 +64,8 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
   (hook `.claude/hooks/subagent-guardrails.sh`; hook chỉ đọc dòng lệnh nên brief phải nói rõ, kể cả khi gọi qua
   script helper). Brief lane kết thúc bằng mục "bước live cho điều phối"; lane "verify live" chỉ chuẩn bị runbook/
   script, điều phối chạy. Mỗi lane một thư mục scratch riêng; script dùng lâu hơn một lượt để trong
-  `.tmp-session/S<nnn>/`, không để trong scratchpad. Số lane theo RAM (`free -h`, chừa ≥ ~2 GB).
+  `.tmp-session/S<nnn>/`, không để trong scratchpad. Lane song song dưới Ultracode (Workflow `tools/workflows/lane.js`,
+  RAM, resume) → `references/parallel-lanes.md`.
 - **Push / PR / merge** chỉ điều phối, qua `tools/github/as-app.sh` (GitHub App `aa-agent`), theo `aa-ship`.
 - **Bước auto mode chặn** (đổi quyền IAM/Cognito, ghi secret…) → gom vào một cửa sổ, báo trước bước nào cần, xong thì
   báo ngay "bật lại auto mode được rồi".

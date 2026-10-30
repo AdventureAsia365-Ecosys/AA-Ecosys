@@ -1,0 +1,304 @@
+{
+  "id": "TripPlanner-intro",
+  "title": {
+    "en": "Adventure Asia Trip Planner",
+    "vi": "Adventure Asia Trip Planner"
+  },
+  "subtitle": {
+    "en": "A short tour of the product",
+    "vi": "Giới thiệu nhanh sản phẩm"
+  },
+  "steps": [
+    {
+      "key": "open",
+      "segment": "desktop",
+      "scene": "Opening: home page hero",
+      "en": [
+        "Welcome to the Adventure Asia Trip Planner.",
+        "It is a website for travellers who dream of a trip in Asia, and want to shape it themselves.",
+        "Everything they see comes from real Adventure Asia tours, and an Adventure Asia advisor turns their plan into a real trip."
+      ],
+      "vi": [
+        "Chào mừng anh chị đến với trang lên kế hoạch chuyến đi của Adventure Asia.",
+        "Đây là trang web dành cho khách du lịch muốn đi châu Á, và muốn tự tay sắp xếp chuyến đi của mình.",
+        "Mọi thứ khách thấy ở đây đều lấy từ các tour thật của Adventure Asia, và tư vấn viên của Adventure Asia sẽ giúp biến kế hoạch đó thành chuyến đi thật."
+      ]
+    },
+    {
+      "key": "search",
+      "segment": "desktop",
+      "scene": "Home: search card (where, how long, travellers)",
+      "en": [
+        "Right on the first screen, a traveller says where they want to go, for how long, and how many people are travelling.",
+        "One click on Plan my trip opens the planner with those choices."
+      ],
+      "vi": [
+        "Ngay màn hình đầu tiên, khách chọn nơi muốn đến, đi mấy ngày, và đi bao nhiêu người.",
+        "Bấm nút lên kế hoạch màu cam là mở công cụ lên kế hoạch với đúng những lựa chọn đó."
+      ]
+    },
+    {
+      "key": "featured",
+      "segment": "desktop",
+      "scene": "Home: ways in and featured tours row",
+      "en": [
+        "Or they can begin from a ready-made trip.",
+        "These are real tours from the Adventure Asia catalogue, each with its country, its length and its highlights."
+      ],
+      "vi": [
+        "Hoặc khách có thể bắt đầu từ một chuyến đi có sẵn.",
+        "Đây là các tour thật trong danh mục của Adventure Asia, tour nào cũng ghi rõ quốc gia, số ngày và điểm nổi bật."
+      ]
+    },
+    {
+      "key": "where",
+      "segment": "desktop",
+      "scene": "Home: proof line and destinations grid",
+      "en": [
+        "Further down, every destination shows how many tours it has and how long they run.",
+        "Today that is hundreds of tours in fourteen countries."
+      ],
+      "vi": [
+        "Kéo xuống dưới, mỗi điểm đến đều cho biết có bao nhiêu tour và tour dài mấy ngày.",
+        "Hiện có hàng trăm tour ở mười bốn quốc gia."
+      ]
+    },
+    {
+      "key": "country",
+      "segment": "desktop",
+      "scene": "Destination page: Bhutan hero",
+      "en": [
+        "Let's choose Bhutan.",
+        "Each country has its own page, with a short welcome, the number of tours, and the kind of days to expect."
+      ],
+      "vi": [
+        "Mình thử chọn Bhutan nha.",
+        "Mỗi quốc gia có trang riêng, có lời giới thiệu ngắn, số lượng tour, và kiểu hành trình khách sẽ trải nghiệm."
+      ]
+    },
+    {
+      "key": "country-tours",
+      "segment": "desktop",
+      "scene": "Destination page: tours carousel",
+      "en": [
+        "Here are the Bhutan tours, shown as cards with photos and trip lengths.",
+        "Travellers can flip through them, or see them all in the planner."
+      ],
+      "vi": [
+        "Đây là các tour ở Bhutan, hiện thành từng thẻ có hình và số ngày.",
+        "Khách có thể lướt qua từng tour, hoặc xem hết trong công cụ lên kế hoạch."
+      ]
+    },
+    {
+      "key": "country-places",
+      "segment": "desktop",
+      "scene": "Destination page: places map and list",
+      "en": [
+        "Below, a map shows the places these tours visit, with how many tours stop at each one."
+      ],
+      "vi": [
+        "Bên dưới là bản đồ các địa điểm mà những tour này đi qua, kèm số tour dừng chân ở mỗi nơi."
+      ]
+    },
+    {
+      "key": "open-tour",
+      "segment": "desktop",
+      "scene": "Open one tour from the carousel",
+      "en": [
+        "Now let's open one tour: seven days in western Bhutan."
+      ],
+      "vi": [
+        "Giờ mình mở thử một tour: bảy ngày ở miền tây Bhutan."
+      ]
+    },
+    {
+      "key": "tour-top",
+      "segment": "desktop",
+      "scene": "Tour page: gallery, title, key facts",
+      "en": [
+        "The tour page gives the full picture: photos, a short summary, the number of days and places, and the best months to go."
+      ],
+      "vi": [
+        "Trang tour cho thấy đầy đủ: hình ảnh, phần tóm tắt ngắn, số ngày, số địa điểm, và những tháng đi đẹp nhất."
+      ]
+    },
+    {
+      "key": "tour-days",
+      "segment": "desktop",
+      "scene": "Tour page: highlights and day-by-day itinerary",
+      "en": [
+        "Then come the highlights, and the plan day by day.",
+        "Each day opens to show where the group goes and what they do."
+      ],
+      "vi": [
+        "Kế đến là các điểm nổi bật, rồi lịch trình từng ngày.",
+        "Bấm vào mỗi ngày là thấy ngày đó đi đâu, làm gì."
+      ]
+    },
+    {
+      "key": "tour-map",
+      "segment": "desktop",
+      "scene": "Tour page: route map with numbered stops, included / not included",
+      "en": [
+        "The route is drawn on a map, with every stop numbered in the order of the trip.",
+        "And the traveller can see clearly what is included and what is not."
+      ],
+      "vi": [
+        "Lộ trình được vẽ trên bản đồ, mỗi điểm dừng có đánh số theo đúng thứ tự chuyến đi.",
+        "Khách cũng thấy rõ cái gì đã bao gồm, cái gì chưa."
+      ]
+    },
+    {
+      "key": "customise",
+      "segment": "desktop",
+      "scene": "Tour page: Make it yours card, Customise this trip",
+      "en": [
+        "If the trip is close, but not quite right, the traveller clicks Customise this trip.",
+        "There is nothing to pay to send a draft."
+      ],
+      "vi": [
+        "Nếu tour gần đúng ý mà chưa vừa hẳn, khách bấm nút tuỳ chỉnh chuyến đi màu cam.",
+        "Gửi bản nháp thì không cần trả tiền."
+      ]
+    },
+    {
+      "key": "planner",
+      "segment": "desktop",
+      "scene": "Planner: the tour laid out as the traveller's trip",
+      "en": [
+        "The planner opens with that tour already laid out as the traveller's own trip.",
+        "It shows the days, the distance by road, and the best airport to fly into."
+      ],
+      "vi": [
+        "Công cụ lên kế hoạch mở ra, tour đó đã được xếp sẵn thành chuyến đi của riêng khách.",
+        "Ở đây có số ngày, quãng đường đi bằng xe, và sân bay nên bay tới."
+      ]
+    },
+    {
+      "key": "map",
+      "segment": "desktop",
+      "scene": "Planner: activity filters, zoom into the map",
+      "en": [
+        "Activity filters, like trekking, culture or food, help narrow the choice.",
+        "On the map, the traveller can explore every place that Adventure Asia tours go to."
+      ],
+      "vi": [
+        "Các bộ lọc như đi bộ đường dài, văn hoá hay ẩm thực giúp khách chọn nhanh hơn.",
+        "Trên bản đồ, khách xem được mọi địa điểm mà tour của Adventure Asia đi qua."
+      ]
+    },
+    {
+      "key": "suggest",
+      "segment": "desktop",
+      "scene": "Planner: suggestion, pick an experience, add it to the trip",
+      "en": [
+        "The planner also suggests where Adventure Asia tours often go next.",
+        "The traveller opens a suggestion, picks an experience, and adds it to the trip."
+      ],
+      "vi": [
+        "Công cụ còn gợi ý những nơi mà tour của Adventure Asia thường ghé tiếp theo.",
+        "Khách mở một gợi ý, chọn một trải nghiệm, rồi thêm vào chuyến đi."
+      ]
+    },
+    {
+      "key": "days",
+      "segment": "desktop",
+      "scene": "Planner: extra night, activities per stop, free day",
+      "en": [
+        "Every day can be changed.",
+        "They can add an extra night at a stop, choose the activities at each stop, add a free day, and drag the days into a new order."
+      ],
+      "vi": [
+        "Ngày nào cũng chỉnh được.",
+        "Khách có thể thêm một đêm ở một điểm, chọn hoạt động ở từng điểm, thêm ngày tự do, và kéo thả để đổi thứ tự các ngày."
+      ]
+    },
+    {
+      "key": "list",
+      "segment": "desktop",
+      "scene": "Planner: Map / List of tours switch",
+      "en": [
+        "A switch at the bottom shows the same country as a list of tours, each ready to plan with one click."
+      ],
+      "vi": [
+        "Nút chuyển ở phía dưới cho xem cùng quốc gia đó dưới dạng danh sách tour, bấm một cái là lên kế hoạch được liền."
+      ]
+    },
+    {
+      "key": "send",
+      "segment": "desktop",
+      "scene": "Planner: Send to an advisor, contact form with demo data (not submitted)",
+      "en": [
+        "When the trip feels right, the traveller sends it to an advisor.",
+        "They leave a name, a phone number or email, and agree to be contacted.",
+        "In this demo we stop here, before sending."
+      ],
+      "vi": [
+        "Khi thấy chuyến đi đã ưng ý, khách gửi cho tư vấn viên.",
+        "Khách để lại tên, số điện thoại hoặc email, và đồng ý cho bên mình liên lạc.",
+        "Trong video này mình dừng ở đây, chưa bấm gửi."
+      ]
+    },
+    {
+      "key": "saved",
+      "segment": "desktop",
+      "scene": "Planner: nothing booked yet; trip kept in the browser; Sign in",
+      "en": [
+        "Nothing is booked or paid at this point: an advisor checks every detail first.",
+        "The trip stays saved in this browser, and travellers can also sign in with a code sent to their email, to find their trips on any device."
+      ],
+      "vi": [
+        "Tới bước này chưa có gì được đặt hay thanh toán, tư vấn viên sẽ kiểm tra lại mọi chi tiết trước.",
+        "Chuyến đi được lưu sẵn trên trình duyệt, và khách cũng có thể đăng nhập bằng mã gửi qua email, để mở lại chuyến đi trên bất kỳ thiết bị nào."
+      ]
+    },
+    {
+      "key": "mobile",
+      "segment": "mobile",
+      "scene": "Phone view (390 px): home page and folded menu",
+      "en": [
+        "The site also works well on a phone, and the menu folds away."
+      ],
+      "vi": [
+        "Trang web cũng dùng tốt trên điện thoại, menu được thu gọn lại."
+      ]
+    },
+    {
+      "key": "mobile-tour",
+      "segment": "mobile",
+      "scene": "Phone view (390 px): tour page with the bottom bar",
+      "en": [
+        "On a tour page, the Customise button stays at the bottom of the screen."
+      ],
+      "vi": [
+        "Ở trang tour, nút tuỳ chỉnh luôn nằm ở cuối màn hình."
+      ]
+    },
+    {
+      "key": "value-leads",
+      "segment": "closing",
+      "scene": "Closing: How it works",
+      "en": [
+        "So how does this help Adventure Asia?",
+        "Every trip sent from the planner reaches the team as a new enquiry, with the planned trip already attached."
+      ],
+      "vi": [
+        "Vậy Adventure Asia được lợi gì?",
+        "Mỗi chuyến đi gửi từ đây sẽ tới đội ngũ như một yêu cầu tư vấn mới, có sẵn kế hoạch chuyến đi đi kèm."
+      ]
+    },
+    {
+      "key": "value-sync",
+      "segment": "closing",
+      "scene": "Closing: advisor call-to-action band",
+      "en": [
+        "And the tours come straight from the Adventure Asia catalogue and stay in sync with it, so travellers always see what the company really offers.",
+        "Real tours, shaped by the traveller, checked by an advisor."
+      ],
+      "vi": [
+        "Và tour được lấy thẳng từ danh mục của Adventure Asia, luôn cập nhật theo, nên khách luôn thấy đúng những gì công ty đang bán.",
+        "Tour thật, khách tự chỉnh, tư vấn viên kiểm tra."
+      ]
+    }
+  ]
+}

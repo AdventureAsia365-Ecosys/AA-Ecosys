@@ -30,21 +30,20 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - [ ] **PR rủi ro → vòng review trước merge** (auth/quyền, migration/RLS, CI/workflow/secret, xoá dữ liệu, middleware
   trên đường request): commit local → subagent review độc lập (chỉ đọc, nhiệm vụ "phá nó") → sửa mọi blocker/should-fix
   → điều phối push, chờ CI, merge.
-- [ ] **Required check xanh:** `gh pr checks <n> --required` (danh sách theo branch protection từng repo, không nhớ
-  cứng). Infra và repo gốc không có required check → đọc đủ `gh pr checks <n>` (Docs lint, Terraform Plan) trước merge.
-  Vercel deploy + UI smoke không phải required → PR frontend kiểm riêng (`aa-ui-verify`).
+- [ ] **Gate mọi check:** chỉ merge khi không còn check nào đỏ hoặc pending trong `gh pr checks <n>` (đọc đủ, không chỉ
+  `--required`; Infra và repo gốc không có required check). Có gì push vào PR (bot, restack, release-please) → gate lại,
+  lần xanh trước không còn tính. Vercel deploy + UI smoke → PR frontend kiểm thêm `aa-ui-verify`.
 - [ ] Test xanh local, đỏ CI → so package đã cài (`pip list` local vs CI/image) trước khi sửa code.
 - [ ] Khẳng định "check xanh khi khớp / đỏ khi lệch" → chứng minh bằng nhánh thử hoặc draft PR có cài sẵn chỗ lệch rồi
   đóng không merge; không merge thứ sai để thử.
-- [ ] **PR có migration → luồng D8:** PR chỉ chứa file migration ở repo chủ merge trước → PR copy byte sang AA-CIS-Infra
-  `db/migrations/<owner>/` (Migration Copy Guard đỏ nếu PR repo chủ chưa vào `main`) → DB Migrate `check` → `apply`
-  (chờ mọi bảng job owner rảnh và không wave mở) → merge PR bot `bot/db-schema-reference` → DB Isolation Probe.
-  Log DB Migrate ghi login `db_migrator` và `ran as: <owner>` (`cis_owner` / `bk_owner` / `tp_owner` / `crm_owner`);
-  `roles/` chạy bằng master. Chủ schema: `docs/database/schema-ownership.md`.
+- [ ] **PR có migration (ADR 0017; chủ schema `docs/database/schema-ownership.md`):** file **expand** (`-- migrate:
+  expand`) → một PR app (file + code + bump readiness); PR copy ci-bot sang Infra tự merge, Migration Apply tự chạy, job
+  schema gate của Deploy Dev chờ nó. File **contract/destructive** (không header = contract) giữ MIG-4: PR chỉ migration
+  → review → PR copy nhãn contract KHÔNG tự merge → gate + merge tay → `tools/github/dbmig.sh <owner>/<NNN> check` rồi
+  `apply` → PR code. Bước, idle check, log `ran as: <owner>`, Schema Dump/Isolation Probe: `docs/ops/runbooks/db-migrate.md`.
   - Migration đổi bảng/khoá/FK của schema có trang ERD thiết kế `enforce=true`
     (`docs/architecture/erd/design/<schema>.md`, repo gốc) → sửa trang đó trong cùng đợt thay đổi, không thì DB Schema
     Dump đêm đó đỏ bước drift.
-  - Booking và AA-Partner deploy ở mọi push vào `main` chạm backend → PR code cần migration mới chỉ merge sau `apply`.
 - [ ] **Cờ fail-closed (thiếu key = BẬT) + migration:** đặt cờ TẮT rõ ràng trước khi deploy code → apply migration →
   BẬT cờ + verify lật cờ.
 - [ ] PR frontend → `npm run build` đầy đủ local (Node 22 qua nvm), rồi `aa-ui-verify`.
@@ -76,7 +75,8 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - Nhiều PR backend cùng repo: xếp hàng cùng lúc được; queue có thể đẩy cả nhóm trong một push → một Deploy Dev cho cả
   nhóm, verify live (§3) cho từng PR của nhóm theo `git_sha` cuối. Deploy đỏ → tìm PR gây lỗi trong nhóm trước khi xếp
   tiếp.
-- Chờ CI: `gh pr checks <n> --watch` (CI ~3–5′), kiểm một lần, không poll dồn.
+- Chờ CI: `gh pr checks <n> --watch` (CI ~3–5′), kiểm một lần, không poll dồn. Nhiều PR phụ thuộc nhau (migration →
+  copy → code, nhánh xếp chồng) → merge train chạy nền: `references/merge-trains.md`.
 
 ### Ngoại lệ: PR release (release-please, AA-891)
 

@@ -117,6 +117,7 @@ acc3), to be re-run once access is back.
 | Daily digest prints the LLM route status and failures (OPS-12) | alarm | tech lead | S259 | AA-1003 | in review |
 | Track supplier credit and package end dates as time-gated checks in the live backlog | runbook | tech lead | next session | — | open |
 | Re-run the invalid AA-900 R2 evaluation once access is back | test | tech lead | after restore | AA-900 | open |
+| Symptom-driven playbook, account-level cause first, with read-only helpers (`tools/llm/llm_last_ok.py`, `tools/llm/llm_connections_probe.py`): [LLM calls refused](../playbooks/llm-access-denied.md) | runbook | tech lead | S260 | — | done (S260) |
 
 ## 10. Communication
 

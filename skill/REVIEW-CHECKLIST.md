@@ -4,7 +4,7 @@ Claude Chat dùng checklist này khi Nghiệp upload bản đã qua Claude Code/
 
 ## Cấu trúc
 
-- [ ] Đủ 10 skill (9 skill + `aa-lessons`). Mỗi `SKILL.md` có frontmatter `name` + `description`. `name` khớp tên thư mục.
+- [ ] Đủ 11 skill (10 skill + `aa-lessons`). Mỗi `SKILL.md` có frontmatter `name` + `description`. `name` khớp tên thư mục.
 - [ ] Mỗi `SKILL.md` ≤ ~150 dòng. Ghi tổng kích thước (không tính `aa-lessons/lessons.md`) vào VERIFY-LOG và so với lần
   trước; mục tiêu ban đầu ~55 KB (S215), bộ đang lớn hơn — tăng mạnh thì phải có lý do.
 - [ ] Mọi file trong `references/` được trỏ tới từ `SKILL.md` của skill đó. Không có file mồ côi.
@@ -21,10 +21,11 @@ Claude Chat dùng checklist này khi Nghiệp upload bản đã qua Claude Code/
 
 ## Trigger
 
-- [ ] Description của 10 skill không chồng nhau. Đặc biệt: `aa-ship` với `aa-ui-verify`; `aa-session` với `ai-nghiep`;
-  `aa-ecosys-repos` với `aa-ui-verify` / `aa-ship`; `ai-nghiep` với `aa-jira-update`.
-- [ ] Thử 9 câu: "bắt đầu phiên S213", "merge PR này được chưa", "sửa trang Tenants", "tạo issue cho bug X", "báo chị Thư
-  tiến độ Laos", "chạy lại Nepal", "deploy CRM", "sửa portal tenant", "kiểm drift schema". Mỗi câu kích đúng một skill
+- [ ] Description của 11 skill không chồng nhau. Đặc biệt: `aa-ship` với `aa-ui-verify`; `aa-session` với `ai-nghiep`;
+  `aa-ecosys-repos` với `aa-ui-verify` / `aa-ship`; `ai-nghiep` với `aa-jira-update`; `aa-ui-verify` với `aa-uat-video`.
+- [ ] Thử 10 câu: "bắt đầu phiên S213", "merge PR này được chưa", "sửa trang Tenants", "tạo issue cho bug X", "báo chị Thư
+  tiến độ Laos", "chạy lại Nepal", "deploy CRM", "sửa portal tenant", "kiểm drift schema", "quay video UAT
+  TripPlanner". Mỗi câu kích đúng một skill
   chính (`aa-lessons` được đi kèm như skill phụ khi sửa code).
 
 ## An toàn
