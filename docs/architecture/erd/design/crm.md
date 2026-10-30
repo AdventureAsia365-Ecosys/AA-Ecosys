@@ -1,7 +1,7 @@
 ---
 id: APP-04-erd-design-crm
 title: "ERD design: crm schema"
-description: "Hand-written design ERD of the crm schema of AA-Partner (88 tables and one view in ten groups); the schema is live, the page is not in sync with it yet, and the drift check reports the gap."
+description: "Hand-written design ERD of the crm schema of AA-Partner (90 tables and one view in ten groups); the schema is live, the page is not in sync with it yet, and the drift check reports the gap."
 type: reference
 status: draft
 owner: nghiep
@@ -22,11 +22,13 @@ Design ERD of schema `crm`, owned by AA-Partner (migrations `crm-NNN`, byte copy
 AA-933) the first tables, and the slices after it the rest (78 tables and 6 views at `crm-023`, schema reference of
 28/10/2026). This page is the diagram the migration PRs are reviewed against.
 
-**Not in sync with the live schema yet** (28/10/2026, table names only; the drift check stays report only):
+**Not in sync with the live schema yet** (28/10/2026, table names only; the drift check stays report only; group F
+redrawn for crm-024, AA-952, 30/10/2026: `invoice`, `invoice_line`, `invoice_sequence`, `payment`, `refund_request`
+and `payment_provider_account` match the migration once it is applied):
 
 - On this page, not live: `ai_draft`, `calendar_connection`, `campaign`, `campaign_recipient`, `commission`,
-  `export_job`, `incident_flag`, `insight_aggregate`, `insight_fact`, `invoice`, `metric_daily`, `ops_release`,
-  `outbox`, `payment_provider_account`, `refund_request`, `release_note`, `signature_event`, `spend_budget`,
+  `export_job`, `incident_flag`, `insight_aggregate`, `insight_fact`, `metric_daily`, `ops_release`,
+  `outbox`, `release_note`, `signature_event`, `spend_budget`,
   `supplier_manifest_export`, `support_grant`, `support_session`, `tag`, `tag_link`, `terms_acceptance`,
   `traveler_flight`, `trip_stage_transition`, `unsubscribe_token`, `voice_profile`, `workflow_rule`, `workflow_run`,
   `workflow_template` (slices not built yet, or renamed).
@@ -553,26 +555,46 @@ erDiagram
         uuid invoice_id PK
         uuid tenant_id FK
         uuid trip_id FK
-        uuid payer_traveler_id FK
+        uuid schedule_id FK
+        uuid proposal_id FK
+        text kind
         text status
+        text number UK
+    }
+    invoice_line {
+        uuid line_id PK
+        uuid tenant_id FK
+        uuid invoice_id FK
+        uuid trip_id
+        text kind
+    }
+    invoice_sequence {
+        uuid tenant_id PK, FK
+        bigint last_number
     }
     payment_schedule {
-        uuid payment_schedule_id PK
+        uuid schedule_id PK
         uuid tenant_id FK
         uuid trip_id FK
+        uuid proposal_id FK
     }
     payment {
         uuid payment_id PK
         uuid tenant_id FK
+        uuid trip_id
+        uuid schedule_id FK
         uuid invoice_id FK
         uuid refund_of FK
-        text status
+        text entry_kind
+        text provider
     }
     refund_request {
-        uuid refund_request_id PK
+        uuid refund_id PK
         uuid tenant_id FK
+        uuid trip_id
+        uuid invoice_id FK
         uuid payment_id FK
-        uuid approved_by FK
+        uuid refund_payment_id FK
         text status
     }
     commission {
@@ -582,9 +604,10 @@ erDiagram
         text status
     }
     payment_provider_account {
-        uuid payment_provider_account_id PK
+        uuid account_id PK
         uuid tenant_id FK
         text provider
+        text status
     }
     trip ||--o{ booking_line : "trip_id"
     agency_supplier |o--o{ booking_line : "agency_supplier_id"
@@ -592,19 +615,28 @@ erDiagram
     booking_line_money |o--o| booking_line_money : "supersedes_id"
     member ||--o{ fx_rate_override : "set_by"
     trip ||--o{ invoice : "trip_id"
-    traveler |o--o{ invoice : "payer_traveler_id"
+    payment_schedule |o--o{ invoice : "schedule_id"
+    proposal |o--o{ invoice : "proposal_id"
+    proposal ||--o{ payment_schedule : "proposal_id"
+    invoice ||--o{ invoice_line : "invoice_id"
     trip ||--o{ payment_schedule : "trip_id"
-    invoice ||--o{ payment : "invoice_id"
+    payment_schedule |o--o{ payment : "schedule_id"
+    invoice |o--o{ payment : "invoice_id"
     payment |o--o{ payment : "refund_of"
     payment ||--o{ refund_request : "payment_id"
-    member |o--o{ refund_request : "approved_by"
+    payment |o--o| refund_request : "refund_payment_id"
+    invoice ||--o{ refund_request : "invoice_id"
     booking_line ||--o| commission : "booking_line_id"
 ```
 
 `booking_line_money` carries the margin (RLS adds `app.member_role IN ('owner', 'agent')`). Money rows freeze
 their FX block; a correction is a new row with `supersedes_id`. `invoice.status` is
 `draft|open|payment_claimed|paid|paid_unfulfillable|void|expired`. `fx_rate_platform` is reference data without
-`tenant_id`.
+`tenant_id`. crm-024 (AA-952): an invoice names no traveller (the bill-to is the trip lead, read at render time);
+`invoice_sequence` is the agency's gapless number; a refund is a `payment` row with `entry_kind = refund` and
+`refund_of`, written only from an approved `refund_request` (`refund_payment_id`); `refund_request.decided_by` is
+the deciding member's actor text, not a foreign key. The same-agency keys carry `trip_id` too
+(`(tenant_id, invoice_id, trip_id)` and the like); the edges show the leading column only.
 
 ## G. Messages and channels (M5, M9)
 
