@@ -1,6 +1,6 @@
 ---
 name: aa-ui-verify
-description: Kiểm tra giao diện trước khi báo xong — admin AA-CIS (frontend/), tenant portal / Content studio (AA-Partner portal/) và CRM web (AA-Partner web/), Next.js với UI kit app/_kit — build, Vercel preview, UI smoke, mở trang bằng browser, screenshot desktop/mobile/light/dark, console và network lỗi, dữ liệu thật, tuân thủ kit. Dùng mỗi khi sửa hoặc thêm trang, component, bảng, drawer, khi rà ảnh toàn portal, hoặc khi Nghiệp báo "UI không hiện / sai". Merge, deploy backend và đánh Done thuộc aa-ship.
+description: Kiểm tra giao diện trước khi báo xong — admin AA-CIS (frontend/), tenant portal / Content studio (AA-Partner portal/) và CRM web (AA-Partner web/), Next.js với UI kit app/_kit — build, Vercel preview, UI smoke, mở trang bằng browser, screenshot desktop/mobile/light/dark, console và network lỗi, dữ liệu thật, tuân thủ kit. Dùng mỗi khi sửa hoặc thêm trang, component, bảng, drawer, khi rà ảnh toàn portal, hoặc khi Nghiệp báo "UI không hiện / sai". Merge, deploy backend và đánh Done thuộc aa-ship. Video UAT / video giới thiệu thuộc aa-uat-video.
 ---
 
 # aa-ui-verify

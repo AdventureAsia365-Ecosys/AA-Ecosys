@@ -91,6 +91,7 @@ Khi hai nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Bá
 | Bắt đầu / kết thúc phiên | `aa-session` |
 | Chuẩn bị merge, deploy, Terraform apply, đánh Done | `aa-ship` |
 | Sửa hoặc thêm trang UI | `aa-ui-verify` |
+| Quay video UAT / video giới thiệu, giọng đọc | `aa-uat-video` |
 | Tạo, cập nhật, đóng issue Linear | `aa-linear-issue` |
 | Báo cáo cho chị Thư trên Jira | `aa-jira-update` |
 | Chạy lại pipeline cho một nước / wave | `aa-wave-rerun` |
