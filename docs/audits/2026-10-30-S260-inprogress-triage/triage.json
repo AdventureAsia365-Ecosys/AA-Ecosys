@@ -1,0 +1,982 @@
+[
+ {
+  "id": "AA-919",
+  "title": "[Writing memory] Eval and release gate: golden set, R2 runner, targeted shadow, Releases tab",
+  "category": "RESCOPE",
+  "done_when_summary": "WM-17..WM-22 each meet their Done-when, merged + deployed + verified live per aa-ship. A later S245 comment folded in Q-6 judge calibration (kappa >= 0.6 for release judges).",
+  "met": [
+   "WM-17: migration 284 golden set tables + importer + no-tenant-text CI guard; set 1.1.0 imported with counts per tier (S252 comment, CIS #1021). Now at 1.3.0, 134 items (S259 comment).",
+   "WM-18: activate-requires-eval enforced in both DB and API; rollback drill on Dev for terra-family t9_social (release 1 retired, release 0 active) (S252 comment 27/10, ADR 0010).",
+   "WM-19: seeded-fault R2 run 3a72a697 ended fail / hard_stop / tune at $0.046 (S254 session log). Runs within the cap: 7811e7c5, cc0f75cf, 39096169 (S255/S256 comments).",
+   "WM-20: release 0 replay showed 0 byte diffs for a1 (25), t2 (21), t9_blog (25) and t9_social (25); release 0 is active for all four writers (S252 comment, docs/audits/2026-10-26-S252-wm20-release0/).",
+   "WM-21: targeted shadow run 575b462c, 3/3 pass, $0.057 in llm_call_log (S255 comment). Size-rule unit tests came with CIS #1084.",
+   "WM-22: Releases tab live (CIS #1076/#1080) with screenshots at 1440/390 light/dark (docs/audits/2026-10-27-S254-aa919-releases/). Draft -> evaluated -> approved -> active -> rollback round trip done through the tab's API (S254 comment)."
+  ],
+  "remaining": [
+   "WM-22 'AA-900 updated to point here (comment)': no such comment exists on AA-900. AA-900 shipped the prompt register itself (CIS #1136), so one reconciling comment is needed.",
+   "Folded Q-6 calibration: judge kappa is 0.316 overall, and the best model (gpt-5.6-luna) reached 0.562, still under 0.6. The Facebook stratum has n=1 and t2 has no new pass labels. Both need LLM runs.",
+   "Per-item WM-18/19/21 unit-test proof is assumed from the PR CI (#1084 and the WM-18 PR); I did not open the test runs."
+  ],
+  "evidence": [
+   "Linear comments on AA-919: S252 (WM-17, WM-20, WM-18 drill), S254 (WM-22), S255-S259 (R2, shadow, kappa)",
+   "docs/sessions/2026-10-28-S254-*.md line 49: R2 seeded-fault 3a72a697 fail/hard_stop/tune",
+   "docs/audits/2026-10-27-S254-aa919-releases/ screenshots",
+   "docs/backlog/README.md row 23 and row 0k",
+   "AA-900 comments (S257, S258): no pointer to AA-919"
+  ],
+  "next_steps": [
+   "S261 ($0): post one comment on AA-900 and AA-919 saying the prompt register lives in AA-900 (CIS #1136), which settles the WM-22 pointer item.",
+   "Close AA-919 as Done-with-scope, worded: 'WM-17..WM-22 machinery shipped and verified live; the judge calibration (kappa >= 0.6, judge_counts=true) moved to <follow-up>'.",
+   "Move the calibration remainder into one follow-up: '[Writing memory] Judge calibration to kappa >= 0.6 per stratum for writing_memory_eval'. Scope: Facebook pairs (3 pass + 3 fail), t2 pass labels, a re-run of the judge-model comparison, and moving the route. Blocked on the LLM path (~04-06/11). To save Linear quota, these could go into AA-920's Done-when instead, since release 1 needs a calibrated judge anyway."
+  ],
+  "proposal": "Done-with-scope: the eval/release gate (WM-17..22) is live and verified. Follow-up issue: '[Writing memory] Judge calibration kappa >= 0.6 (writing_memory_eval)', blocked on the LLM path; or fold it into AA-920.",
+  "size": "S",
+  "verify": null
+ },
+ {
+  "id": "AA-920",
+  "title": "[Writing memory] Inject approved rules into the four writers with a post-activation check",
+  "category": "BLOCKED",
+  "done_when_summary": "WM-23 (A1 HOUSE RULES: release 1 passes R2, cost <= +1%), WM-24 (T9 rules: release 1 passes R2 + shadow, 0 leak, cost <= +7%, two CloudWatch cache checks), WM-25 (T2 generation_meta hidden from tenants), WM-26 (post-activation check with automatic rollback, no LLM call).",
+  "met": [
+   "WM-25: migration 297 + CIS #1114. Live T2 rewrite job 7924adda stamped generation_meta; tenant curl and the RLS reads found 0 forbidden keys; agent review done (S256 comment, docs/audits/2026-10-28-S256-aa920-wm25/).",
+   "WM-26: CIS #1099 job + route. Dev drill: activated -> rolled back, next write used the previous release, llm_call_log delta 0 (S255 + S256 comments).",
+   "WM-23/24 injection code is live behind a shared builder (CIS #1099), with a 0-byte replay for all 4 writers."
+  ],
+  "remaining": [
+   "WM-23: a release 1 for A1 built from real approved rules, then R2 with 0 new B-class/C1 on the fact-dense and >= 9-day tiers, and cost per tour <= +1% in llm_call_log.",
+   "WM-24: a release 1 for T9 social or blog that passes R2 + shadow (0 tenant leak, 0 QA traces), cost <= +7%, and the two CloudWatch cache checks posted.",
+   "No approved rules exist (Candidates 0, 1 rejected; S260 evidence item 7). Drafting rules (drafter.py) and R2 both need the LLM path, and a calibrated judge (AA-919 kappa follow-up)."
+  ],
+  "evidence": [
+   "Linear comments on AA-920: S255 (CIS #1099), S256 (WM-25/26 live PASS)",
+   "docs/audits/2026-10-28-S256-aa920-wm25/",
+   "docs/audits/2026-10-30-S260-evidence/README.md item 7 (Candidates 0, 1 rejected)",
+   "backlog row 24"
+  ],
+  "next_steps": [
+   "Move AA-920 back to Backlog. Blocker: 'LLM path (acc3 Error 002, AWS case 179326606700328, ~04-06/11) + judge calibration kappa >= 0.6 (AA-919 follow-up) + first approved rules'.",
+   "Add a comment saying WM-25 and WM-26 are done and WM-23/24 code is live, so only live release-1 proof remains.",
+   "When the LLM path is back: mine/draft candidates, approve release 1 for A1 and one T9 writer, run R2 <= $10 + shadow, read cost from llm_call_log, run the two CloudWatch cache queries (cost-cuts §2 #7)."
+  ],
+  "blocker": "LLM path (acc3 Bedrock Error 002 until ~04-06/11) and a calibrated eval judge; no approved rules exist to build release 1.",
+  "depends_on": [
+   "AA-919"
+  ],
+  "size": "M",
+  "verify": null
+ },
+ {
+  "id": "AA-921",
+  "title": "[Writing memory] Pinned example sets and tenant preference summaries",
+  "category": "BLOCKED",
+  "done_when_summary": "WM-27 (cis_app isolation test + R2 paired result with lower edit distance and 0 carried-over facts + agent review), WM-28 (quarantine test + one approved summary for a synthetic tenant with R2), WM-29 (aa-ui-verify; a pin change shows in the next draft release).",
+  "met": [
+   "CIS #1186 a70bb7a3 + migration 313 live (S260 comment on AA-922 covers both issues; evidence README item 7).",
+   "WM-27 isolation test as cis_app and the WM-28 unsourced-promise quarantine test: tests/integration/test_aa921_exemplars.py and test_aa921_preference.py (implementation notes AA-921.md).",
+   "WM-29 Exemplars tab live at 1440/390 light/dark, 0 console errors, APIs 200 (docs/audits/2026-10-30-S260-evidence/ 07-wm-exemplars-*)."
+  ],
+  "remaining": [
+   "WM-27: an R2 paired result for >= 1 tenant writer showing lower edit distance and 0 carried-over facts. Needs a paid R2 (LLM).",
+   "WM-28: one approved preference summary for a synthetic tenant with R2 results. Needs WRITING_MEMORY_PREF_SUMMARY=true + a judge route (LLM).",
+   "WM-29 live part: 'pin change shows in the next draft release'. So far it is proved only by test_a_pin_change_shows_in_the_next_draft_release; the live session was read-only, no candidates added, and the exemplar list is empty.",
+   "Agent review on PR #1186 (migration + tenant data): no Linear comment confirms it."
+  ],
+  "evidence": [
+   "Linear AA-922 comment S260 (#1186 live PASS)",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-921.md 'Done-when still open'",
+   "docs/audits/2026-10-30-S260-evidence/README.md item 7 (exemplars items: [])"
+  ],
+  "next_steps": [
+   "S261 ($0, doable): with a write-capable admin path (tech lead click, or the API through S3-mediated ECS exec), run Exemplars 'Find candidates (dry run)' -> 'Add candidates' for one E2E tenant, pin/unpin with a reason, and check that the 'Next draft' preview shows the change. Save screenshots and post them.",
+   "Confirm or run the independent agent review of #1186 (migration 313 + tenant data), and comment on the result.",
+   "Then move AA-921 to Backlog with blocker 'LLM path: WM-27 R2 paired run, WM-28 preference summary drafting + R2'."
+  ],
+  "blocker": "LLM path (acc3 Error 002, ~04-06/11) for WM-27 R2 and WM-28 summary drafting/R2.",
+  "depends_on": [
+   "AA-919"
+  ],
+  "size": "S",
+  "verify": null
+ },
+ {
+  "id": "AA-922",
+  "title": "[Writing memory] Weekly KPIs, soft-stop rollback and the disagreement queue",
+  "category": "FINISH",
+  "done_when_summary": "WM-30: two automated weekly reports stored, one rule expired by the job (row), trend written to docs/audits once. WM-31: aa-ui-verify of the Metrics tab and disagreement queue with WM-30 data.",
+  "met": [
+   "CIS #1187 5e3e2b3d + migration 314 live; independent review proved the soft-stop window after a rollback, with a regression test (S260 comment).",
+   "WM-31: Metrics tab verified live with WM-30 data, showing 1 report for the week of 2026-10-19 with KPIs per writer (evidence item 7). The F3 overflow was fixed in CIS #1192 and checked live at 1440 and 390 (evidence §9c, S260 final comment).",
+   "One weekly report stored (week of 2026-10-19), queued by ops_metrics_sampler."
+  ],
+  "remaining": [
+   "A second automated weekly report. The sampler queues the last full ISO week, so week 2026-10-26 lands on or after Monday 02/11. A manual run via POST /admin/writing-memory/metrics/run for a past week would be a 'manual' trigger, not 'automated'.",
+   "Trend written to docs/audits/ once, after two reports (trend script in kpi.py).",
+   "'One rule expired by the job (row)': no active or approved rule exists on Dev (Candidates 0). Rule drafting needs the LLM, so this live row is blocked. The behaviour is proved in tests/integration/test_aa922_kpi_weekly.py."
+  ],
+  "evidence": [
+   "Linear comments on AA-922: S260 13:55 (shipped, live PASS) and S260 15:51 (F3 fixed)",
+   "docs/audits/2026-10-30-S260-evidence/README.md item 7 and §9c",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-922.md 'Done-when still open (live)'",
+   "apps/AA-CIS-App/api/core/ops_metrics_sampler.py:50 (weekly queueing)"
+  ],
+  "next_steps": [
+   "In the first session on or after 02/11: read shared writing-memory metrics (GET /admin/writing-memory/metrics) and confirm a second report with trigger=schedule for week 2026-10-26.",
+   "Run the trend script on the two reports and commit its output to docs/audits/<date>-S26x-aa922-trend/ in the root PR.",
+   "Propose Done-with-scope for the expiry item: proved by the integration test, with the first live expiry moved to AA-920 (release 1 creates the first rules; an expiry needs 60 days anyway). The tech lead accepts, or the item is kept open.",
+   "Then close with an evidence comment."
+  ],
+  "proposal": "Done-with-scope after the second scheduled report and the trend file: 'rule expiry proven by test_aa922_kpi_weekly; first live expiry tracked in AA-920'.",
+  "size": "S",
+  "verify": null
+ },
+ {
+  "id": "AA-923",
+  "title": "[Writing memory] Labels for T2/A1, offboarding deletion, retire the old lesson paths",
+  "category": "FINISH",
+  "done_when_summary": "WM-32: one label of each type on Dev, T9 labels unchanged. WM-33: DRY RUN + real run of the offboarding deletion for a synthetic tenant, with counts before/after and other tenants untouched, + agent review. WM-34: DRY RUN evidence in a comment, /v1/rules 404 after deploy, staff_authz tests green, schema reference shows the tables gone.",
+  "met": [
+   "WM-34 /v1/rules: 404 live on every method without credentials, with a live staff route as control (evidence §9b, S260 final Linear comment).",
+   "WM-34 schema reference: the latest live dump (Verified 2026-10-30 15:16 UTC, CIS 317) lists pipeline_lessons and acp_output_rules only under schema `retired`; they are gone from shared/acp_shared (docs/architecture/db-schema-reference.md:7310).",
+   "WM-32 label form for T2 versions is live (GET label 200, form renders; evidence item 7). CIS #1188 + #1189 merged, migrations 315/316 applied (DB Migrate 41070702600)."
+  ],
+  "remaining": [
+   "WM-32: no label has been saved yet. One T2-version label and one A1 label must be written on Dev (the S260 session was read-only), and T9 labels must be confirmed unchanged.",
+   "WM-33: no live DRY RUN + apply of data_erasure for a synthetic tenant is evidenced (counts before/after, other tenant untouched). Agent review of #1188 for data deletion is not confirmed in Linear.",
+   "WM-34: the scripts/aa923/wm34_dry_run.py output was never posted to Linear. The PR #1189 body required it before the apply, and the apply has already run, so it can only be posted after the fact now.",
+   "WM-34 'staff_authz tests green': assumed from CI on #1188; not checked here.",
+   "Outside the Done-when: dropping the quarantined tables after >= 14 days (~13/11) per DM-3.9 / Dead Table Registry, with a DRY RUN first."
+  ],
+  "evidence": [
+   "Linear AA-923 comment S260 22:38 (/v1/rules PASS)",
+   "docs/audits/2026-10-30-S260-evidence/README.md §9b, item 7",
+   "docs/architecture/db-schema-reference.md (retired schema section)",
+   "CIS PR #1189 body ('paste its output into the Linear comment before the apply')",
+   "apps/AA-CIS-App/docs/implementation-notes/AA-923.md"
+  ],
+  "next_steps": [
+   "Run scripts/aa923/wm34_dry_run.py read-only as cis_app (S3-mediated ECS exec) and post its output to AA-923, noting it runs after the quarantine apply.",
+   "WM-33: create or reuse a synthetic E2E tenant with one row per learned store (or reuse the integration-test seed shape). Run the data_erasure job as a DRY RUN, then apply; post counts before/after and a check that another tenant keeps every row. Confirm or run the agent review of #1188.",
+   "WM-32: save one label on a T2 version and one on an A1 rewrite through a write-capable admin path (tech lead click, or the API via ECS exec). Query content_piece_label / the new label table to prove both rows exist and the T9 label count is unchanged.",
+   "Check the staff_authz test job is green on #1188 CI (gh pr checks 1188).",
+   "Close with an evidence comment. Leave the table DROP (after 13/11) to the Dead Table Registry flow (AA-850 pattern) or a small follow-up."
+  ],
+  "size": "M",
+  "verify": null
+ },
+ {
+  "id": "AA-788",
+  "title": "[T10 gates] Promote F12_scope, F14 under-length and F9_brand_style (repair once, never hold) to blocking",
+  "category": "BLOCKED",
+  "done_when_summary": "A 20-piece pilot with F12 blocking, F14 regenerated from unused seed facts and F9_brand_style repaired once: Trail Pulse false passes go down and panel-light pieces get no new holds.",
+  "met": [
+   "CIS #1184 484e0924 is deployed: per-check env modes T10_F12_SCOPE_MODE / T10_F9_BRAND_STYLE_MODE / T10_F14_FLOOR_MODE, all default to today's behaviour; the F14 rewrite feedback lists unused seed facts; tests are in place (implementation notes AA-788.md, S260 session log line 42)."
+  ],
+  "remaining": [
+   "The $0 hold-rate replay (scripts/aa788/promotion_replay.py) never returned. It hit the ECS exec timeout after 900 s (rc=3), and the smaller run exited rc=124 (.tmp-session/S260/aa788-replay*.txt).",
+   "Switching F12 to block and F9_brand_style to repair goes against the standing 'no new blocking gate for 4 weeks' freeze (S246, until ~19/11, tech-lead rule).",
+   "The 20-piece pilot with blind panel needs LLM writes, repairs and judges, so it is blocked by the LLM path."
+  ],
+  "evidence": [
+   "apps/AA-CIS-App/docs/implementation-notes/AA-788.md (Should know: the pilot needs LLM paths)",
+   "docs/sessions/2026-10-30-S260-*.md line 42 (default OFF until the freeze ends, replay unfinished)",
+   ".tmp-session/S260/aa788-replay.txt (no result after 900 s)",
+   "No Linear comments on AA-788"
+  ],
+  "next_steps": [
+   "S261 ($0, doable): re-run promotion_replay as a background job or with a smaller --limit and a longer wait. Post the new-hold upper bound per gate and attempt1_extra_repairs_by_gate to AA-788.",
+   "Then move AA-788 to Backlog. Blocker: 'gate freeze until ~19/11 + LLM path for the 20-piece pilot'.",
+   "After 19/11 with the LLM back: flip the env modes via the Terraform task def, run the 20-piece pilot + panel, and set taxonomy.yaml detectors to enforce in the PR that flips the defaults."
+  ],
+  "blocker": "Tech-lead gate freeze (no new blocking gates until ~19/11) and the LLM path for the 20-piece pilot.",
+  "size": "S",
+  "verify": null
+ },
+ {
+  "id": "AA-790",
+  "title": "[T10 gates] New tenant-voice rubric gate + post-repair integrity check (orphans, split paragraphs, grammar)",
+  "category": "BLOCKED",
+  "done_when_summary": "20-piece pilot: >= 4 of 6 Trail Pulse-type false passes caught and 0 orphan/split residues in approved pieces; panel AI-tells >= 5.5 at the next n=20 T9 checkpoint; S232 LinkedIn set re-run with 4-lens brand_voice >= 7 overall and per tenant.",
+  "met": [
+   "0 orphan/split residues: the S251 paid pilot (n=20) census found 0 split/open paragraphs, 0 dangling tails and 0 hits on approved pieces (S251 comment).",
+   "AI-tells >= 5.5 on n=20: round 6 scored 5.95 on the 20 pilot pieces in the S252 7-arm blind panel (S252 comment); r6 is live (CIS #1035)."
+  ],
+  "remaining": [
+   "Tenant-voice rubric gate catching >= 4 of 6 Trail Pulse false passes: not built. The gate freeze (~19/11) keeps it offline (S251 comment, go/no-go 6b).",
+   "brand_voice >= 7 overall and per tenant: r6 is at 6.75; rounds 7-10 all failed (S254-S257 comments). The S258 fixed sample of >= 20 pieces is prepared but needs an LLM run (backlog row 0j).",
+   "Every remaining item needs paid LLM writes and panels, blocked until ~04-06/11."
+  ],
+  "evidence": [
+   "Linear AA-790 comments S251 (pilot census), S252 (r6 table), S254-S257 (rounds 7-10 FAIL)",
+   "docs/audits/2026-10-29-S258-aa790-fixed-sample/",
+   "backlog rows 0j and 6"
+  ],
+  "next_steps": [
+   "Move AA-790 to Backlog. Blocker: 'LLM path (~04-06/11) + gate freeze until ~19/11 for the rubric gate'.",
+   "Comment that the integrity-check and AI-tells items are met (S251 census, S252 r6 5.95), so the remaining Done-when is the rubric gate and brand_voice >= 7.",
+   "When the LLM is back: run the S258 fixed >= 20-piece sample + judge calibration before any new prompt round, as the S257 recommendation says."
+  ],
+  "blocker": "LLM path (acc3 Error 002, ~04-06/11) for panels/pilots, and the tech-lead gate freeze until ~19/11 for the new rubric gate.",
+  "size": "L",
+  "verify": null
+ },
+ {
+  "id": "AA-1000",
+  "title": "[T10] Tier-2 LLM adjudicator for the recall classes the seed-alignment tier cannot reach (never holds)",
+  "category": "BLOCKED",
+  "done_when_summary": "On the AA-789 eval set: precision >= 0.98 on clean copy for tier-2 classes, recall per class; Dev shadow with >= 50 labelled findings and <= 1 wrong; cost per piece and per month reported.",
+  "met": [
+   "Code live with mode off: CIS #1172 a38b3dc5, migration 308 (Infra #517, DB Migrate apply 40999747238), independent review fixes applied, $5-capped calibration runner built (S259 comment)."
+  ],
+  "remaining": [
+   "Calibration on the AA-789 eval set (precision >= 0.98) needs LLM calls on the t10_adjudicate stage.",
+   "Dev shadow with >= 50 labelled findings and <= 1 wrong needs LLM calls.",
+   "Cost report needs both runs above."
+  ],
+  "evidence": [
+   "Linear AA-1000 comment S259 (built, mode off, still open list)",
+   "backlog row 0ag ('when the LLM path is back')"
+  ],
+  "next_steps": [
+   "Move AA-1000 back to Backlog (or Todo). The 'Blocked by' section already names the LLM path; add the AWS case number and ~04-06/11.",
+   "When the LLM path is back: run the calibration runner (cap $5), then shadow on Dev, label >= 50 findings, and post cost per piece and per month."
+  ],
+  "blocker": "LLM path: acc3 Bedrock Error 002 (AWS Support case 179326606700328, ~04-06/11); OpenAI direct has no credits.",
+  "size": "M",
+  "verify": null
+ },
+ {
+  "id": "AA-1002",
+  "title": "[Infra] AWS organization + governance blueprint, IaC reorganization, dev/staging/prod, plug-and-play multi-provider LLM gateway",
+  "category": "RESCOPE",
+  "done_when_summary": "Report page updated with all sections + business-owner email and question list; blueprint saved under docs/audits/2026-10-29-S258-aws-org-blueprint/ via root PR; gateway slices listed and the first slice (provider kinds + catalog rows disabled) shipped and verified live; decision list recorded.",
+  "met": [
+   "Report page 6XpQ8YUU7w7HsZ9AoGfnRb updated: lean tab, LLM gateway tab, editable reseller comparison, AWS needs email, 30 reseller questions (S258 comment 30/10 00:21; not re-read in this triage)",
+   "Blueprint in root docs/audits/2026-10-29-S258-aws-org-blueprint/README.md (sections 0-14) + blueprint.json, root #346, on master",
+   "Slice table S0-S11 in the blueprint ('Các lát xây LLM gateway', ~line 1366); S1 CIS #1158 (mig 304, DB Migrate 40920297097) + #1159 live (S258 comment)",
+   "Decision list: blueprint section 14 'Việc cần chủ doanh nghiệp và tech lead quyết' (line 1106)"
+  ],
+  "remaining": [
+   "None against the written Done-when. The S260 comment's 'remaining for Done' (a reconciled cost row, budget enforcement) belongs to slices S9/S10, which the Done-when does not require",
+   "Slices not built yet: S7 (batch), S8 (aa_llm core for TripPlanner + CRM), S11 (legacy stages to 5.5, eval-gated); S9/S10 still need live proof with billed traffic"
+  ],
+  "evidence": [
+   "Root master a743cdc has docs/audits/2026-10-29-S258-aws-org-blueprint/README.md (1439 lines, section 14 = decisions)",
+   "Linear AA-1002 comments S258 (00:21), S259 (06:24, S3/S4), S260 (11:17, S5/S6; 15:51, S9/S10 live check, CIS 041ba9a2, schema 317)",
+   "CIS origin/main head 041ba9a2 = gateway S9 (#1191)"
+  ],
+  "next_steps": [
+   "Close AA-1002 as Done. In the closing comment, cite root #346, blueprint section 14, CIS #1158/#1159 live, and S2-S6/S9/S10 shipped",
+   "Move the open gateway slices (S7, S8, S11, live proof of S9/S10) to AA-642 once it is rescoped (see AA-642), so no new issue is needed"
+  ],
+  "size": "XS",
+  "verify": {
+   "id": "AA-1002",
+   "holds": false,
+   "corrected_category": "RESCOPE",
+   "missing": [
+    "The issue's own latest comment (S260, 30/10 15:51) records that Done still needs 'a real reconciled cost row and budget enforcement once an LLM route is live again (acc3 unblock)'. No such row exists: /admin/llm-connections/costs has 5 rows and none reconciled, and no connection has a budget. That bar is blocked on the LLM path (acc3 Error 002, ~04-06/11; OpenAI has no credits; no Anthropic key).",
+    "Scope item 6 is not proven live: 'plug-and-play: a new path = add a credential + enable in admin, no code; cross-provider fallback per stage'. Every text model is refused, so no path has served real traffic through the gateway and fallback between providers has not been shown.",
+    "Gateway slices S7 (batch interface), S8 (aa_llm core for TripPlanner and CRM), S11 (move legacy-key stages to 5.5 models behind an eval) and S1-infra (org-scoped AA-LLM-Invoker AssumeRole module) are not built. The blueprint lists them, and the backlog row 0ad plans 'S261 #4: AA-1002 S7 + remaining slices'.",
+    "S1 is migration 304, a risky schema PR. I found no independent review record for it in the CIS #1158 / #1159 bodies or comments, or in the S1 section of apps/AA-CIS-App/docs/implementation-notes/AA-1002.md. S2-S6 and S10 do have review records.",
+    "S1 has no dedicated live-verify record. #1159 lists only a 'Live verification plan', and the S258 snapshot shows api :921 on the #1159 SHA. Only the S259 comment (GET /admin/llm-connections 200, 5 connections) proves it live indirectly.",
+    "Scope items 4 and 5 were moved to AA-1004 (on hold, no billing). The blueprint sections 7-8 cover them as design only. That fits the Done-when, but the issue should say so explicitly when it closes."
+   ],
+   "note": "The 4 literal Done-when bullets have evidence:\n- Report page: I re-read artifact 6XpQ8YUU7w7HsZ9AoGfnRb. It has sections 1-14, a lean variant tab and an AI gateway tab, and mentions the email.\n- Blueprint: docs/audits/2026-10-29-S258-aws-org-blueprint/README.md and blueprint.json are on master.\n- Slices: the slice table S0-S11 is at about line 1366.\n- First slice: S1 CIS #1158 / #1159 are merged and deployed.\n- Decisions: section 14 is at line 1106.\n\nSo a literal CLOSE is close to valid. Three things refute it:\n1. The issue's own latest comment moves the Done bar to a live reconciled cost row and budget enforcement. That needs the LLM path, which is blocked.\n2. S1 (migration 304) has no independent review record.\n3. The umbrella scope (plug-and-play paths, cross-provider fallback, S7/S8/S11/S1-infra) is still open.\n\nRecommended RESCOPE: close AA-1002 as Done-with-scope, with this wording: \"Blueprint (full + lean) + report page + decision list delivered; LLM gateway S1-S6, S9, S10 shipped and live on Dev with no billed traffic; IaC/CLI/org implementation moved to AA-1004.\" Before closing, add a short S1 review note, or link a post-hoc review of migration 304.\n\nFollow-up 1 (FINISH, not blocked): \"[LLM] Gateway S7 batch interface, S8 shared aa_llm core for TripPlanner and CRM, S1-infra org invoker role\". S11 needs an eval, so it is LLM-blocked; it can go here or under AA-642. Given the Linear Free quota, this can be a child of the existing AA-642 Model Gateway epic instead of a new issue.\n\nFollow-up 2 (BLOCKED, LLM path): \"[LLM] Gateway live proof once a path opens: reconciled cost row, budget enforcement, cross-provider fallback per stage, S11 eval\". This also fits under AA-642 or AA-900.\n\nI did not re-verify the 30 reseller questions or the 7x18 sheet content cell by cell. The page has the sections, and the S258 log says they are filled."
+  }
+ },
+ {
+  "id": "AA-1003",
+  "title": "[Reporting] Build the ecosystem report engine and the 63-report catalog, slices R0-R7",
+  "category": "RESCOPE",
+  "done_when_summary": "Each slice: merged, deployed, report generated live on Dev from real data (report_run row + file/page/e-mail), with a screenshot or output in docs/audits. R0-R3 come first; R4-R7 follow the business milestones; the registry shows every report's status.",
+  "met": [
+   "R0 CIS #1157; R1 root #348 + CIS #1161 (mig 305); R2 CIS #1162 + root #351/#353: live since CIS #1167 (S259 comment: EX-04, EX-06, TP-03 and OPS-12 generated on the 02:03Z schedule)",
+   "R3 CIS #1169 + root #361: EX-01, FI-02..FI-06 and OPS-08 ran live, $0 (S259 comment)",
+   "R4 part 1 CIS #1174 + root #366 (CIS-01/06/07, OPS-13/14 live); part 2 CIS #1182 + Infra #521 + root #371 (TP-01, SEC-08, SEC-03 draft, DEV-03, DEV-01, OPS-15 succeeded at 11:18Z, S260 comment)",
+   "Registry docs/reports/catalog.yaml: 63 reports, 26 with generator cis, plus a status field"
+  ],
+  "remaining": [
+   "FI-01 (monthly cost) is still provisional; its October run needs a Cost Explorer snapshot stored at least 3 days after month end, so on or after 03/11",
+   "DATA-02/03/04 were only 'queued at check time' (S259); no proof yet that they succeeded",
+   "Done-when asks for screenshot/output in docs/audits per slice. No report-run evidence file was found in docs/audits (outputs sit only in Linear comments)",
+   "First scheduled run of the R4 part 2 reports (automated_from 2026-10-31) not yet seen",
+   "CIS-05 belongs to AA-922. R5 rest waits for the go-live date. R6/R7 follow business milestones"
+  ],
+  "evidence": [
+   "Linear AA-1003 comments S258-S260",
+   "root docs/reports/catalog.yaml (generator cis = 26, null = 37)",
+   "root docs/audits/2026-10-29-S258-report-catalog/README.md section 7 (R0-R7 roadmap)",
+   "grep found no report_run evidence in docs/audits/2026-10-30-S2*"
+  ],
+  "next_steps": [
+   "S261: GET /admin/reports and the report_run list (read). Confirm DATA-02/03/04 and the 31/10 scheduled runs of TP-01/SEC-08/SEC-03/DEV-01/DEV-03/OPS-15 succeeded",
+   "Save a /admin/reports screenshot (1440 light/dark) plus a JSON export of the latest report_run per report under docs/audits/<date>-S261-evidence/",
+   "On or after 03/11: run FI-01 for October from the stored Cost Explorer snapshot. This can share work with AA-896",
+   "Then mark AA-1003 Done with scope: R0-R4 (CIS-05 moved to AA-922; OPS-17/SEC-10 checklists already shipped)",
+   "Proposed follow-up (ask first): '[Reporting] Catalog slices R5-R7: go-live and Booking ops, partners and agencies, growth' in Backlog, triggered by the go-live date / first external tenant / marketing go-live"
+  ],
+  "proposal": "Done-with-scope: 'R0-R4 built and generated live on Dev (CIS-05 under AA-922); FI-01 October run done on or after 03/11.' Follow-up for R5-R7 (one Backlog issue, milestone-triggered).",
+  "size": "S (evidence export + FI-01 run; FI-01 is time-gated ≥03/11)",
+  "verify": null
+ },
+ {
+  "id": "AA-1004",
+  "title": "[Infra] Implement the lean AWS model: company organization, Identity Center, nonprod/ai accounts in the org, prod at go-live, Bedrock path",
+  "category": "BLOCKED",
+  "done_when_summary": "Organizations + Identity Center live with sign-in, SCPs attached and tested; aa-ai and aa-nonprod are members (or a written reason why one waits on billing), with budgets per account; AI works on Dev through one path, proven in shared.llm_call_log; accounts/management applied by CI, nonprod plan shows no change after the module extraction; ADR merged; profiles and skills updated; prod items at go-live.",
+  "met": [
+   "Organization + OUs + 3 SCPs attached + org trail + management budgets/anomaly monitor (Infra #513, apply 1)",
+   "Identity Center: groups, permission sets, tech lead signed in as AA-Admin; AA-Bootstrap deleted (S259 comment 03:14)",
+   "CI wiring Infra #515; drift run 40995976788 plan exit 0",
+   "ADR 0018 merged as Proposed (root #360); docs/adr/0018-lean-aws-account-model.md present"
+  ],
+  "remaining": [
+   "SCP tests (needs a member account in an OU)",
+   "Member invites aa-ai / aa-nonprod: waits on the billing decision (the backlog notes 'waits until the account has billing'). Budgets per member account",
+   "AI path back on Dev: blocked by the acc3 Error 002 account hold (AWS case, ~04-06/11)",
+   "CI apply of accounts/management (only a drift plan so far); modules/environment extraction with moved blocks + nonprod no-change plan",
+   "ADR 0018 Proposed → Accepted; sso-session CLI profiles + skills/docs update",
+   "Prod items (go-live trigger)"
+  ],
+  "evidence": [
+   "Linear AA-1004 comments S259 (02:20, 03:14)",
+   "root docs/backlog/README.md line 42 ('AA-1004 billing decision ... S260 15:25: not started, waits until the account has billing')",
+   "root docs/adr/0018-lean-aws-account-model.md"
+  ],
+  "next_steps": [
+   "Do not work on it in S261: the tech lead put it on hold",
+   "Move to Backlog (or Todo). Write the blocker: 'On hold by the tech lead until the management account has billing; then member invites → SCP test → AI path. acc3 AI path waits on AWS case 179326606700328.'",
+   "When unblocked, the non-billing items are small: CLI sso profiles + skills (S), ADR 0018 acceptance (XS), CI apply of accounts/management (S, needs the tech lead's reviewer click), module extraction (L)"
+  ],
+  "blocker": "Tech-lead hold: the new accounts have no billing yet (billing / reseller decision). Also LLM access (acc3 Error 002) for the AI-path Done-when.",
+  "size": "L (when unblocked)",
+  "verify": null
+ },
+ {
+  "id": "AA-642",
+  "title": "[EPIC] Model Gateway — one routing layer for Claude/Bedrock, OpenAI, Jev, driven by admin UI settings",
+  "category": "RESCOPE",
+  "done_when_summary": "Epic with no explicit Done-when. Phases P0 catalog + UI, P1 mechanisms behind the gateway, P2 remove hardcoded judge paths, P3 shadow mode, P4 decide() + Jev + decision_log, P5 TripPlanner on the same catalog/route config.",
+  "met": [
+   "P0: shared.llm_model_catalog (mig 170 stage routes and prices) drives the UI and pricing; S6 pricing.quote (CIS #1181)",
+   "P1/P2: the S257 AA-842 report counts 41 call sites through one gateway (shared/llm_client). On CIS origin/main, git grep finds no non-test GPT41_MODEL or model_tier=\"gpt-4.1\"",
+   "P3: shared.llm_shadow_log exists (db-schema steering, AA-900 route table)",
+   "P4: Jev decide() + decision_log (migrations 181, 184, 205, 206)",
+   "Blueprint gateway S1-S6, S9, S10 shipped (CIS #1158/#1164/#1168/#1176/#1180/#1181/#1190/#1191)"
+  ],
+  "remaining": [
+   "P5 = blueprint S8: aa_llm core vendored into TripPlanner + CRM (no packages/ dir in CIS yet)",
+   "S7 batch interface + Anthropic Message Batches (nothing on main)",
+   "S11 legacy stages to 5.5, eval-gated (needs paid LLM eval)",
+   "Live proof of S9/S10 with billed traffic (reconciled cost row, budget enforcement)"
+  ],
+  "evidence": [
+   "AA-642 description (S198 design); only one comment (S199)",
+   "CIS origin/main 041ba9a2; git grep on api/migrations for decision_log/llm_shadow_log",
+   "root blueprint slice table (docs/audits/2026-10-29-S258-aws-org-blueprint/README.md ~1366-1381)",
+   "root docs/audits/2026-10-29-S257-aa842-otel/README.md (call-site count)"
+  ],
+  "next_steps": [
+   "Rewrite AA-642 from an epic into one deliverable issue: '[LLM] Gateway remaining slices: S7 batch, S8 aa_llm core for TripPlanner + CRM, S11 legacy stages to 5.5, live proof of S9/S10'. Write a Done-when per slice. Move it to Todo",
+   "Comment that P0-P4 were delivered by AA-518, AA-1002 S1-S6/S9/S10 and the Jev decide layer",
+   "S8 code can start without LLM (contract tests, TP/CRM vendoring), but its live smoke (tp_compose) needs an LLM path, as do S7 live and S11. Plan S8 for after acc3 unblocks, or build it behind a switch now"
+  ],
+  "proposal": "Done-with-scope for the epic phases P0-P4. The remaining work becomes either AA-642 itself, rewritten as above (preferred: no new issue, saves Linear quota), or one follow-up issue '[LLM] Gateway slices S7/S8/S11 + live S9/S10 proof' if Nghiệp prefers to close the epic.",
+  "size": "L (S7 ~4 d, S8 3-4 d, S11 1 d + paid eval)",
+  "verify": null
+ },
+ {
+  "id": "AA-880",
+  "title": "[Platform] L9 prod blueprint + ADR 0012 environment model (trigger: go-live date)",
+  "category": "RESCOPE",
+  "done_when_summary": "ADR 0012 accepted; prod Terraform plan reviewed with the cost figure; nothing applied before the go-live decision.",
+  "met": [
+   "ADR 0012 Accepted, root #320 daf49f7a (S257 comment), with data standards v1.8 amendments"
+  ],
+  "remaining": [
+   "Prod Terraform plan + reconciled monthly cost: waits for the go-live date",
+   "ADR 0018 (Proposed, root #360) supersedes ADR 0012 decisions 1/2/5 (prod in its own account). The prod part of AA-880 now overlaps AA-1004 scope item 6 ('Prod at go-live')"
+  ],
+  "evidence": [
+   "Linear AA-880 comments S256 and S257",
+   "root docs/adr/0012-environment-model.md + docs/adr/0018-lean-aws-account-model.md",
+   "AA-1004 description scope 6"
+  ],
+  "next_steps": [
+   "Close AA-880 Done-with-scope: 'ADR 0012 accepted (root #320); prod blueprint moved to AA-1004 item 6 under ADR 0018'",
+   "Add one comment to AA-1004 that carries the L9 prod checklist from AA-880 into its prod items: Multi-AZ, PITR 14 d, cross-region backup, quarterly drill, roles split, Enhanced Monitoring, pgaudit, private CNAME DSN, NAT per AZ, internal ALB, Security Hub/Config (paid, separate yes), cost quote before apply",
+   "Alternative if Nghiệp wants to keep it: move AA-880 to Backlog with the trigger 'go-live date set'"
+  ],
+  "proposal": "Done-with-scope (ADR 0012 accepted). The remaining prod plan + cost lives in AA-1004 item 6, triggered by the go-live date. No new issue.",
+  "blocker": "Remaining part is time-triggered by the go-live date (no date set).",
+  "size": "XS",
+  "verify": null
+ },
+ {
+  "id": "AA-998",
+  "title": "[Infra] Remove acc1 (personal AWS account) from the whole ecosystem",
+  "category": "BLOCKED",
+  "done_when_summary": "Audit merged with zero unexplained acc1 references; no acc1 LLM path; acc1 inventory clean; Cost Explorer on acc1 shows 0 USD for ecosystem services in the following month; agent files no longer list acc1.",
+  "met": [
+   "Audit: root docs/audits/2026-10-28-S255-aa998-acc1-removal/ + grep proof root #319 docs/audits/2026-10-29-S257-aa998-acc1-grep/README.md (0 live code/config paths)",
+   "No acc1 path: CIS #1102, mig 295, 0 acc1 calls in llm_call_log since deploy (S255 comment)",
+   "Re-inventory after deletion: 0 roles/OIDC/buckets/Lambdas/log groups/secrets us-west-1 (S255 comment); us-east-1 secret deletion date 04/11",
+   "CLAUDE.md/skills/memory updated (S255; global CLAUDE.md shows the AA-998 note)"
+  ],
+  "remaining": [
+   "Cost Explorer on acc1 for November 2026 = 0 USD, checked in the first session on or after 01/12. October was 0.76 USD from before the cutover, so October cannot meet this line"
+  ],
+  "evidence": [
+   "Linear AA-998 comments S255 (13:08) and S257 (05:35)",
+   "root docs/backlog/README.md lines 31-32 (time-gated rows 04/11 and early December)"
+  ],
+  "next_steps": [
+   "Move to Backlog/Todo with due date 01/12. Blocker: 'Only Done-when left: acc1 Cost Explorer November = 0 USD, check in the first session ≥01/12 (backlog time-gated row).'",
+   "Or, if Nghiepp prefers fewer open issues: Done-with-scope now and rely on the existing time-gated backlog row for the December check (reopen if not 0)",
+   "Nothing to do on 04/11 unless the us-east-1 secret must be restored"
+  ],
+  "blocker": "Time trigger: November acc1 cost is only final in early December.",
+  "size": "XS",
+  "verify": null
+ },
+ {
+  "id": "AA-896",
+  "title": "[FinOps] FinOps doc, Cost Anomaly Detection and the monthly cost report with unit costs",
+  "category": "FINISH",
+  "done_when_summary": "Anomaly monitor live; docs/ops/cost/2026-10.md report with a 5-line Vietnamese summary for Ms. Thư.",
+  "met": [
+   "Anomaly monitor live: Infra #213 applied (subscription aa-cis-dev-cost-anomaly-to-alerts, IMMEDIATE, ≥5 USD → alerts SNS), S243 comment",
+   "docs/ops/finops.md, docs/ops/cost/README.md and tools/finops/monthly_cost_report.py exist (root #105)"
+  ],
+  "remaining": [
+   "docs/ops/cost/2026-10.md with unit costs (USD/tour published, USD LLM/tour, USD/booking) and the 5-line Vietnamese summary. Due only on or after 01/11; Cost Explorer October numbers settle ~03/11"
+  ],
+  "evidence": [
+   "Linear AA-896 comment S243 (19/10)",
+   "root docs/ops/cost/ contains only README.md (no 2026-10.md yet)",
+   "root docs/backlog/README.md line 22 (due at S261 if it runs ≥01/11)"
+  ],
+  "next_steps": [
+   "If S261 runs on or after 01/11: export /admin/platform/cost (read) and run tools/finops/monthly_cost_report.py for 2026-10. Add the shared.llm_call_log per-stage cost (read-only SQL via ECS exec DATABASE_URL), the unit costs and acc3 Lift credit use",
+   "Do the infra cost audit from memory infra-cost-audit-nov-2026 in the same pass: Aug/Sep/Oct per App tag and service, explain the jumps. Reuse the result for AA-1003 FI-01 and for AA-873's first-month cost line",
+   "Write the 5-line Vietnamese summary for Ms. Thư (Jira draft at session end, after approval). Land it in the root PR. Mark it provisional if run before 03/11 and refresh on or after 03/11",
+   "Close AA-896 with the PR link"
+  ],
+  "blocker": "Time gate only: October must be closed (≥01/11; final figures ≥03/11).",
+  "size": "S",
+  "verify": null
+ },
+ {
+  "id": "AA-873",
+  "title": "[Security] Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, CloudTrail",
+  "category": "BLOCKED",
+  "done_when_summary": "GuardDuty detector with its feature list; Access Analyzer active with findings triaged; account S3 BPA all four flags true; CloudTrail multi-region + KMS with a test IAM change triggering the alarm e-mail; actual first-month cost recorded next to the quote.",
+  "met": [
+   "Access Analyzer aa-sec-dev-external-access ACTIVE; 12 findings triaged, 0 ACTIVE after archive rules (Infra #483, root docs/audits/2026-10-28-S256-aa873-triage/)",
+   "Account S3 BPA all four flags true (Infra #462, S255 comment)",
+   "CloudTrail multi-region + KMS, bucket versioning + Object Lock 365 d (Infra #468); live alert test: iam-change 6/6, SG 4/4, trail tamper 1/1, SNS delivered (alert-test-live.log in the S256 triage folder)"
+  ],
+  "remaining": [
+   "GuardDuty: OFF by the tech lead's decision (paid ~15-20 USD/month, memory paid-observability-hold, backlog 'before prod')",
+   "Actual first-month cost next to the quote. Not recorded yet. For the free/near-free items (KMS key, CloudTrail, Access Analyzer) this can be taken from the October/November cost report"
+  ],
+  "evidence": [
+   "Linear AA-873 comments S255 (12:33) and S256 (23:51)",
+   "root docs/backlog/README.md lines 33 and 70 (GuardDuty off until a separate yes, 'chưa dùng')"
+  ],
+  "next_steps": [
+   "Non-blocked part in S261: while doing AA-896, write the actual Oct (28-31/10) cost of the KMS key/CloudTrail/Access Analyzer next to the S255 quote (docs/audits/2026-10-28-S255-finops-security/) and comment it on AA-873",
+   "Then move AA-873 to Backlog with the blocker 'Only GuardDuty left: tech lead yes needed (~15-20 USD/month), planned before prod / first paying tenant'. Keep it open per memory paid-observability-hold; do not re-ask"
+  ],
+  "blocker": "Tech-lead decision on a paid service (GuardDuty), on hold until before prod.",
+  "size": "XS (cost line) — GuardDuty itself S when approved",
+  "verify": null
+ },
+ {
+  "id": "AA-842",
+  "title": "[Observability] Investigate OpenTelemetry gen_ai tracing for every LLM call — read-only report, options, backend, pilot plan",
+  "category": "BLOCKED",
+  "done_when_summary": "Report docs/investigations/llm-otel-tracing.md (local) with the required sections and citations; Notion page if over 200 lines; 5-line summary comment posted; ConsoleSpanExporter spike only after approval.",
+  "met": [
+   "Report done S257: root docs/audits/2026-10-29-S257-aa842-otel/README.md (648 lines) + untracked AA-CIS-App docs/investigations/llm-otel-tracing.md",
+   "Notion summary published (S238 + S257 links in comments)",
+   "Summary comment posted (S257, 29/10 04:05)"
+  ],
+  "remaining": [
+   "Spike / pilot: the tech lead decided (S257, 29/10 08:47) not to enable tracing or run the spike now, and to keep the issue open"
+  ],
+  "evidence": [
+   "Linear AA-842 comments S238, S257 report, S257 tech-lead decision",
+   "root docs/backlog/README.md line 65 ('OTel spike and GuardDuty stay off; issues stay open, not re-asked') and row 265 'parked'"
+  ],
+  "next_steps": [
+   "Move from In Progress to Backlog (still open, as the tech lead asked). Blocker: 'Report done; spike/pilot on hold by the tech lead (cost, no proven need); revisit with a concrete debugging need or AA-804 ledger work'",
+   "No work in S261; do not re-ask"
+  ],
+  "blocker": "Tech-lead hold on paid observability (memory paid-observability-hold).",
+  "size": "XS (status move only)",
+  "verify": null
+ },
+ {
+  "id": "AA-900",
+  "title": "[LLM] LLM operations docs, prompt versioning and eval gate",
+  "category": "BLOCKED",
+  "done_when_summary": "Prompt register and eval runbook exist and the route table regenerates without manual edits; one prompt-change PR shows a manual eval run ID and its cost.",
+  "met": [
+   "Prompt register docs/llm/prompt-register.md + eval runbook docs/llm/eval-runbook.md + adhoc_aa900 label + PR template field (CIS #1136 22d1b704, live api :913 / worker :479)",
+   "Generated route table docs/generated/llm-routes.md from a live snapshot, gen_llm_routes.py check passes (root #322 63fa7e77)",
+   "Extra: LLM availability card + fail-fast on account-level refusals (CIS #1148, #1160, live after the S259 gate fix)"
+  ],
+  "remaining": [
+   "One prompt-change PR with a valid manual eval run ID + cost. Run R2 228447e7 (t9_blog) came back invalid ($0.107) because every judge call was refused (acc3 left its org on 29/10; OpenAI 429 no credits)"
+  ],
+  "evidence": [
+   "Linear AA-900 comments S257 (07:48) and S258 (17:50)",
+   "root docs/backlog/README.md line 35 (S260: every text model still refused, AWS case ~04-06/11)"
+  ],
+  "next_steps": [
+   "Move to Todo with the blocker 'Re-run eval R2 (t9_blog, --stage adhoc_aa900, cap $2) once an LLM judge path works (acc3 unblock or OpenAI top-up / Anthropic key); attach run ID + cost to a prompt-change PR'",
+   "At each session start, check the LLM probe; when a path works, run the eval first (≤ $2) and close AA-900"
+  ],
+  "blocker": "LLM access: acc3 Error 002 account hold (AWS Support case 179326606700328, ~04-06/11); OpenAI no credits; no Anthropic key.",
+  "size": "S (once unblocked)",
+  "verify": null
+ },
+ {
+  "id": "AA-952",
+  "title": "[CRM W5] CRM-23 Module 7 invoices and payments",
+  "category": "FINISH",
+  "size": "L",
+  "done_when_summary": "Checklist: Stripe Connect Standard (test) + manual; schedules, reminders, refunds with approval matrix; idempotent webhooks; bank transfer payment_claimed -> one hold extend -> verify task; paid_unfulfillable; pay-on-arrival excluded; service fee off by default. R: bad webhook signature -> 400; pay link after hold expiry -> expired page, no session. E: transfer marked received after extended expiry -> re-hold or refund request; webhook replay idempotent. Plus Global Done (merge+CI+rollout+live, impl notes, review for risky PRs).",
+  "met": [
+   "Manual payment method + refunds with approval matrix live (Partner #132 8525a211; evidence §4: refund 50 proposed 201 -> agent approve 200 -> executed 200)",
+   "Invoices from schedule rows, gapless INV-000001, printable doc, 409 invoice_issued_for_row (Partner #130/#131, crm-024, DB Migrate apply 41039061497; evidence §4)",
+   "C-M3 confirm slice 16/16 PASS (Booking #155, Partner #128; Linear comment 30/10 04:38)",
+   "Implementation notes docs/implementation-notes/AA-952.md exist in AA-Partner"
+  ],
+  "remaining": [
+   "Bank transfer: 'I have paid' -> payment_claimed -> one POST /holds/{id}/extend -> 'Verify transfer' task (C31 / Fix A8)",
+   "paid_unfulfillable status path + E: transfer received after the extended expiry -> re-hold, else refund request",
+   "Payment reminders (schedule reminders + bell)",
+   "R: pay link after hold expiry -> expired page, no payment session (C-12 for the deposit link)",
+   "Stripe Connect Standard test mode + idempotent webhooks: R bad signature -> 400, E webhook replay idempotent (needs a Stripe test-mode platform account from the tech lead, notes line 179 'B4 a')",
+   "Not yet exercised live: void, refund rejection, approval above threshold, typed-line / service-fee invoices (evidence 'Not covered')",
+   "Confirm intended: deposit invoice due date = schedule row date (comment 30/10 11:17)"
+  ],
+  "evidence": [
+   "Linear comments 30/10 11:17 (slices 2+3) and 30/10 04:38 (slice 1)",
+   "docs/audits/2026-10-30-S260-evidence/README.md §4 + Findings + Not covered",
+   "apps/AA-Partner docs/implementation-notes/AA-952.md lines 177-179, 232-234 (Stripe, webhooks, payment_claimed, paid_unfulfillable, C-10, reminders, FX block not built)",
+   "docs/backlog/README.md §3b S261 slot: 'CRM-23 slice 4 ... Stripe Connect slice only with a Stripe test-mode platform account (tech lead)'"
+  ],
+  "next_steps": [
+   "S261: build slice 4 in AA-Partner (bank-transfer payment_claimed -> Booking hold extend -> verify task, paid_unfulfillable, reminders, expired-link page); migration PR first if invoice.status enum / claimed_at / hold_extended_at are missing (check db-schema-reference crm-024)",
+   "Live proof on synthetic agency Sen Vang: claim -> extend -> task; past-expiry receipt -> re-hold or refund request; expired link page; also run void, refund rejection and above-threshold approval",
+   "Propose Done-with-scope after slice 4 and split Stripe into a follow-up: '[CRM W5] CRM-23b Stripe Connect Standard (test mode) + idempotent webhooks' — scope: Checkout on the agency's Connect account, webhook signature 400, replay idempotent; Backlog, blocker = Stripe test-mode platform account (tech lead)",
+   "Client payments page C-10 stays with AA-953 (backlog S261 slot)"
+  ],
+  "blocker": "Stripe portion only: Stripe test-mode platform account (tech lead). Rest is not blocked.",
+  "proposal": "Finish slice 4 in S261, then Done-with-scope (manual/bank-transfer payments) with Stripe + webhook R/E moved to a new follow-up issue CRM-23b.",
+  "verify": null
+ },
+ {
+  "id": "AA-955",
+  "title": "[CRM W5] CRM-25 Module 12 contracts and waivers",
+  "category": "FINISH",
+  "size": "S",
+  "done_when_summary": "Checklist: versioned docs; acceptance pinned to version + price_hash; e-sign v1 with PAdES via seal; waiver + decline in one envelope; per-adult signing, guardian for minors; gate. R: an expired code is refused and logged. E: terms updated after viewing -> re-accept before payment. Plus Global Done.",
+  "met": [
+   "Per-traveller sealed envelopes, guardian signs for minor, minor alone 403 guardian_signs, tampered hash 409 document_changed, wrong code 422 + code_refused log, re-sign already_signed, seal.verified true (evidence §5; Partner #135 crm-025 + #136 021d68e6, Infra #525/#526, root #376)",
+   "Merged + CI + rollout + live check for e-sign v1 (Linear comment 30/10 13:50)",
+   "Implementation notes AA-955.md exist"
+  ],
+  "remaining": [
+   "R live: an EXPIRED signing code refused and logged as code_refused/code_expired (only code_invalid was shown live; code path exists per notes line 61-63)",
+   "E live: publish a new booking terms version after the client viewed -> deposit Mark paid 409 terms_reaccept_required -> client re-accepts (POST /crm/public/v1/proposal/terms) -> payment allowed (not in evidence §5)",
+   "Waiver + insurance decline in one envelope live (E2E agency publishes no insurance declination, so the question was never asked)",
+   "PAdES PDF: not built (detached KMS RSASSA-PSS seal over text envelope); notes line 139-144 say keep In Progress until a follow-up issue tracks PAdES-B-B or the tech lead accepts the narrowed scope"
+  ],
+  "evidence": [
+   "Linear comment 30/10 13:50 (S260 e-sign v1)",
+   "docs/audits/2026-10-30-S260-evidence/README.md §5 + Findings (second lane)",
+   "apps/AA-Partner docs/implementation-notes/AA-955.md lines 61-72 (card R/E design), 82-87 and 139-144 (PAdES not done)"
+  ],
+  "next_steps": [
+   "S261 live run on Sen Vang: request a signing code, wait past its TTL, submit -> expect 422 + code_refused reason code_expired in the signing log",
+   "Publish a new terms version on a trip with accepted proposal + unpaid deposit -> Mark paid 409 terms_reaccept_required -> re-accept on client page -> Mark paid 200",
+   "Publish an insurance declination doc, sign one envelope with waiver + decline, check agreements panel",
+   "Propose follow-up issue '[CRM] CRM-25b PAdES-B-B signed PDF (pyHanko external signer over kms:Sign, embedded EN/VI font, X.509 for seal key)' and close AA-955 as Done-with-scope 'e-sign v1 = KMS-sealed text envelope'"
+  ],
+  "proposal": "Three small live checks, then Done-with-scope; PAdES PDF moves to a new follow-up (v1.1).",
+  "verify": null
+ },
+ {
+  "id": "AA-961",
+  "title": "[CRM W6] CRM-30 Duty of care + calendar",
+  "category": "FINISH",
+  "size": "S",
+  "done_when_summary": "Implements R37 + R15 sync. R: bulk reveal above a threshold needs a reason and is rate-limited. E: a revoked calendar token pauses sync with a banner. Card Done-when (impl notes): a synthetic incident on a departure shows the affected trips only for agencies that have them; E also: a traveller on two overlapping trips appears once with both. Plus Global Done.",
+  "met": [
+   "R: reason required above 5 travellers (422 reason_required) and hourly limit (call 61/62 -> 429 reveal_rate_limited, denied audit rows) live (evidence §8a, §9a; Linear comment 30/10 15:51)",
+   "ICS feed revoke -> 404 feed_not_found + 'calendar link was stopped' banner live (evidence §8d)",
+   "Calendar kinds + timezone fix F4 live (Partner #142 3a116512, evidence §9a)",
+   "Merged + CI + rollout: root #385, Partner #139 crm-027 (apply 41073903296) + #140 3718242a, Infra #533"
+  ],
+  "remaining": [
+   "Card Done-when live: a synthetic AA incident on a departure (Booking departure.incident via booking.b2b.v1 1.1, Booking #80) shows the banner/badge + aa_incident task on the affected trip, and nothing for a second agency without a line — not seen live (evidence §8b: no incident on Dev)",
+   "E 'traveller on two overlapping trips appears once with both' — only integration test; live data had no overlap",
+   "E 'revoked calendar token pauses sync': met only in its ICS-feed form; OAuth calendar sync (R15 Google calendar.events / Graph, crm calendar_connection) is not built (notes: BYO card later, errata S247)"
+  ],
+  "evidence": [
+   "Linear comments 30/10 15:09 and 15:51",
+   "docs/audits/2026-10-30-S260-evidence/README.md §8a-8d, §9a",
+   "apps/AA-Partner docs/implementation-notes/AA-961.md (Decisions 'Card E', 'Not done here: Google / Microsoft calendar write (BYO card)')",
+   "AA-Booking origin/main 4fb0eaf (#80) departure incident flag"
+  ],
+  "next_steps": [
+   "S261: raise a synthetic incident on the departure of a Sen Vang trip that has an AA line (e.g. the S259 C-M3 trip, booking 963177e5) via Booking staff admin 'Flag incident on departure' (needs a write-capable Booking staff session; the E2E Booking session is read-only) or a Booking dev seed; check banner + task on Sen Vang and nothing on Atlas & Hearth; then clear it",
+   "Optionally add the lead to an overlapping second trip and check duty/travelling lists them once with both trip_ids",
+   "Close Done-with-scope: 'R15 sync delivered as the revocable ICS feed'; propose follow-up '[CRM] Calendar OAuth sync (Google calendar.events / Microsoft Graph, BYO)' in Backlog — Graph part blocked on the M365 app (AA-945 split)"
+  ],
+  "proposal": "One live incident check, then Done-with-scope; OAuth calendar sync to a new BYO follow-up.",
+  "verify": null
+ },
+ {
+  "id": "AA-967",
+  "title": "[CRM W7] CRM-35 Module 18 portability + deletion",
+  "category": "FINISH",
+  "size": "M",
+  "done_when_summary": "Checklist: export; DRY RUN -> run -> verify; crm.erase_subject() + crm_eraser; signed-agreement exception. R: AA staff download -> 403; DELETE on signature_event as crm_app -> error. E: erasure during the claim period keeps only signed evidence and the receipt says so; verify proves ciphertext unreadable. Lane plan also: export re-imports into a fresh agency with equal counts. Plus Global Done (risky -> review done: 5 major fixed).",
+  "met": [
+   "Export: one-client export ready, single-use link (2nd use 403 link_invalid, forged 403), SHA-256 matches (evidence §6)",
+   "Erasure DRY RUN: 409 traveler_on_trip on live trip; 200 dry_run counts/kept/exceptions on a client without a trip (evidence §6)",
+   "Data-request log (due +30 / max +92) live",
+   "Merged + CI + rollout: root #380, Partner #137 crm-026 (apply 41061975356) + #138 7e9d8db0, F2 copy fix #141 80870f8; independent review done",
+   "DELETE on signature_event as crm_app -> error: integration test only (tests/integration/test_crm026_schema.py, notes line 107-108)"
+  ],
+  "remaining": [
+   "Real erasure run + verify on a synthetic client (only dry runs live; 'Erase this client now' never clicked), incl. receipt and second dry run subject_not_found; respect DEK cache TTL 300 s (AA-934 comment 23/10)",
+   "R live: AA staff (CIS staff token) download of an export -> 403 — not in evidence",
+   "R live (or accept CI test): DELETE on crm.signature_event as crm_app -> error",
+   "E: erasure during claim period keeps only signed evidence + receipt says so — currently unreachable: a trip with a signature cannot be deleted and cancelled/completed trips still block erasure (notes lines 150-157: product decision on CRM12 needed)",
+   "E: deferred erasure of a client on a Travelling trip + verify ciphertext unreadable — not built (comment 30/10 13:50)",
+   "Re-import into a fresh agency with equal counts — not built; logging a forwarded request from CIS L1 console — not built"
+  ],
+  "evidence": [
+   "Linear comments 30/10 13:50 and 23/10 18:40",
+   "docs/audits/2026-10-30-S260-evidence/README.md §6 + F2",
+   "apps/AA-Partner docs/implementation-notes/AA-967.md (lines 1-12 card R/E, 100-120, 150-157)"
+  ],
+  "next_steps": [
+   "S261: real client erasure of a synthetic client with no live trip -> receipt -> verify -> second dry run subject_not_found",
+   "Call the export download route with a CIS staff Cognito token (E2E reviewer) -> expect 403; record in an evidence file",
+   "Either accept test_crm026_schema.py as evidence for the crm_app DELETE refusal or run a rolled-back DELETE as crm_app through DB Migrate run-script",
+   "Ask the tech lead (proposed answer: treat cancelled/completed trips past claim start as closed for CRM12, keeping signed evidence) and split into follow-up '[CRM] CRM-35b claim-period erasure, deferred erasure on Travelling trips, re-import into a fresh agency' ; then Done-with-scope"
+  ],
+  "blocker": "Claim-period E line needs a tech-lead/product decision on CRM12 (cancelled/completed trips as closed); not blocking the rest.",
+  "proposal": "Finish the live real-erasure + AA-staff-403 checks in S261, Done-with-scope; claim-period/travelling erasure and re-import to follow-up CRM-35b.",
+  "verify": null
+ },
+ {
+  "id": "AA-945",
+  "title": "[CRM W3] CRM-17 Module 5 email",
+  "category": "RESCOPE",
+  "size": "S",
+  "done_when_summary": "Checklist: SES ingest; send-as Gmail + Outlook; saved replies, notes, autosaved drafts; sender table; held_reconnect; allow_platform_sender opt-in owner-only logged (Fix B18); forwarding code; history import. R: unknown slug -> discarded, count-only log; revoked token -> held, not sent via SES. E: thread without References matched by trip token. Plus Global Done.",
+  "met": [
+   "SES ingest + forward-in live (comment 25/10 04:43; Partner #45/#47, Infra #375/#376)",
+   "Gmail send-as live (Infra #415, comment 26/10 12:17); send + Undo, trip-token threading (E), unknown slug dropped count-only (R), revoked -> held_reconnect not via SES (R), reconnect requeue, header threading after Partner #86 (comments 26/10 13:11, 13:25, 13:47)",
+   "History import UI live (Partner #88, comment 26/10 14:35)",
+   "crm_mail_health nightly job succeeded (comment 25/10 19:07)",
+   "allow_platform_sender removed by errata S247 (notes AA-945.md lines 17-20), so that checklist line is superseded"
+  ],
+  "remaining": [
+   "Microsoft 365 (Outlook) send-as: needs an Entra app registration + values in crm/dev/mail-oauth, then a browser sign-in",
+   "SMTP send-as live check: needs a mailbox app password (human step, notes line 174, 222)",
+   "No live evidence found in comments/evidence for saved replies, notes and autosaved drafts UI (unit/web tests exist)"
+  ],
+  "evidence": [
+   "Linear comments 25/10-26/10 (7 comments listed above)",
+   "apps/AA-Partner docs/implementation-notes/AA-945.md lines 17-20, 174, 200-222",
+   "docs/backlog/README.md §3 row 0l ('only Microsoft 365 left, blocked on the M365 app') and C22 row"
+  ],
+  "next_steps": [
+   "S261 (S): quick Playwright check on Sen Vang of saved reply insert, internal note and autosaved draft restore; record screenshots",
+   "Close Done-with-scope: 'Gmail send-as + SES forward-in + history import; allow_platform_sender dropped by errata S247'",
+   "Propose follow-up '[CRM] Mail send-as for Microsoft 365 and SMTP' — scope: Entra app (Mail.Send + offline_access), M365 connect + send live, SMTP app-password send live, M365 history import; Backlog, blocker = Entra app registration + SMTP app password (tech lead)"
+  ],
+  "blocker": "M365 Entra app registration and SMTP app password (tech lead human steps); backlog says M365 waits until an agency needs it.",
+  "proposal": "Done-with-scope on the Gmail path after a 15-minute drafts/saved-replies check; M365 + SMTP into a Backlog follow-up.",
+  "verify": null
+ },
+ {
+  "id": "AA-703",
+  "title": "[AUTH] Identity epic (ADR 0006): Cognito workforce + external pools, email-code staff login, tenant/traveller sign-in",
+  "category": "RESCOPE",
+  "size": "S",
+  "done_when_summary": "Pools listed; staff email-code sign-in to CIS + Booking, no Google for staff, no-group user denied, break-glass tested; invited tenant user signs in by email code; traveller signs in to TripPlanner and Booking customer app by email code or Google; staff password + tenant API-key human login off by flag, verified live; abuse limits (wrong-code lockout, resend cooldown, WAF per-IP) tested live and recorded in docs/audits; Booking accepts Cognito workforce issuer and the CIS#721 bridge issuer is removed by config; CONTEXT.md + ecosystem-architecture describe Cognito.",
+  "met": [
+   "Phase 0 pools + triggers + break-glass (comment 23/10 01:28; S244 B1-B7)",
+   "Phase 1 CIS staff (AA-816 S1 S244, S2 S247/S248: legacy login 404, HS256 401)",
+   "Phase 2 Booking staff: AA-680 Done 20/10 (workforce user without booking-* group refused live)",
+   "Phase 3 tenant users: AA-813 delivered via AA-939 + AA-978 (Done S250)",
+   "Phase 4 TripPlanner travellers by email code: AA-908 Done 25/10 (docs/audits/2026-10-25-S250-aa908-live/, wrong code 400 code_invalid)",
+   "docs/ecosystem-architecture.md references ADR 0006 / Cognito"
+  ],
+  "remaining": [
+   "Bridge issuer removal (CIS /auth/booking-token, Booking bridge verifier) — AA-911 P5-P8, deferred to end of project code (tech lead S246)",
+   "Traveller Google sign-in and Booking customer app sign-in — no evidence found (AA-908 covered TripPlanner email code only); Facebook waits for the Facebook app",
+   "Abuse limits recorded in docs/audits (wrong-code lockout, resend cooldown, WAF per-IP rate) — no single audit found; only wrong-code error (AA-908) and staff invite resend 429 (AA-816 comment 18/10)",
+   "A10/A10a/A10b E2E exception removal (AA-816) at end of project code"
+  ],
+  "evidence": [
+   "Linear comment 23/10 01:28 (phase status), 19/10 14:11",
+   "AA-680 Done 2026-10-20, AA-908 Done 2026-10-25 (Linear)",
+   "docs/audits/2026-10-25-S250-aa908-live/README.md",
+   "docs/backlog/README.md line 254 (epic closes when AA-816 and AA-911 land)"
+  ],
+  "next_steps": [
+   "Close the epic as Done-with-scope: phases 0-4 delivered (pools, staff CIS + Booking, tenant users, TripPlanner travellers by email code, legacy login off)",
+   "Move 'bridge issuer removed by config' + A10/A10b into AA-911 (end-of-project identity clean-up)",
+   "Propose follow-up '[Identity] Traveller Google/Facebook sign-in, Booking customer app sign-in and a live abuse-limit audit (lockout, resend cooldown, WAF per-IP)' — Backlog; trigger = Booking customer app exists / Facebook app live",
+   "Optional S261 (S, no money): run the abuse-limit probes against EXTERNAL pool on Dev and write docs/audits/<date>-S261-identity-abuse-limits/ so that line is met before closing"
+  ],
+  "proposal": "Umbrella is effectively delivered; close with scope and leave the end-of-project leftovers in AA-911 plus one new Backlog follow-up for traveller social sign-in + abuse-limit audit.",
+  "verify": null
+ },
+ {
+  "id": "AA-911",
+  "title": "[Identity] Staff sign-in for Booking (and CIS) Vercel Previews, then retire the CIS -> Booking bridge",
+  "category": "BLOCKED",
+  "size": "M",
+  "done_when_summary": "Booking Preview lets a booking-* staff user sign in and refuses one without; POST /auth/booking-token returns 404/405 and a bridge token is refused by Booking (401); booking JWT signing-key secret scheduled for deletion + register row; booking.staff_users has no active unlinked row.",
+  "met": [
+   "Line 1: P1-P4 shipped S246 — CIS #899, CIS #900, Infra #260 (Preview-only Cognito clients + DNS), Booking #54 (Preview sign-in through a read-only client; verified) — backlog row 2, comment 23/10 01:28",
+   "P6a (CIS Preview viewer-capped sign-in) shipped via AA-816 S247 (CIS #911)"
+  ],
+  "remaining": [
+   "P5-P8: remove /auth/booking-token (CIS) + Booking bridge verifier, delete the legacy chromium live-verify specs + helpers/auth.ts, schedule deletion of the booking JWT signing-key secret + secrets register, link/deactivate the 3 bridge-era booking.staff_users rows",
+   "Parked branches exist (backlog row 0q): CIS refactor/aa-911-retire-booking-bridge, Booking refactor/aa-911-retire-bridge, Infra feat/aa-911-bridge-staff-rows, root docs/aa-911-preview-staff-signin"
+  ],
+  "evidence": [
+   "Linear comment 23/10 01:28 (P5-P8 deferred to end of project, Nghiep S246)",
+   "docs/backlog/README.md row 2, row 0q, line 84 (S246 settled decision)"
+  ],
+  "next_steps": [
+   "Move back to Backlog with blocker text: 'P5-P8 wait for the end of project code (tech lead decision S246); parked branches listed in backlog row 0q'",
+   "Absorb AA-816 A10/A10a/A10b and AA-703's 'bridge issuer removed by config' line here, so one issue holds the end-of-project identity clean-up",
+   "When picked up: rebase parked branches on main, independent review (auth), then the 4 Done-when checks"
+  ],
+  "blocker": "Tech-lead decision S246: bridge retirement only after all project code is done (time trigger).",
+  "proposal": "Backlog with blocker; becomes the single end-of-project identity clean-up issue.",
+  "verify": null
+ },
+ {
+  "id": "AA-816",
+  "title": "[Admin] Staff user management UI — create/disable staff, roles, reset password; retire create_staff_user.py",
+  "category": "RESCOPE",
+  "size": "S",
+  "done_when_summary": "Original: admin creates a sales staff user in the UI; that user logs in to CIS and receives a Booking JWT with role sales; a disabled user cannot log in. Restated S243: Booking-JWT-sales line moved to AA-680; AA-816 Done = directory create/role/disable in UI + Cognito sign-in + disabled user refused + cutover S1. S246: A10 lines moved out of current scope.",
+  "met": [
+   "Directory create/role change/disable via UI on Cognito (S242 C6/C7: thu@ created, roles synced; comment 18/10 12:12)",
+   "Cognito staff sign-in live (S242, comment 18/10 05:42); E2E 7/7 runs",
+   "Cutover S1 on Production (S244, docs/audits/2026-10-19-S244-aa816-cutover/) and S2 API legacy off (CIS #922, S248 live: login 404, HS256 401)",
+   "create_staff_user.py retired (CIS #858, comment 19/10 13:33)",
+   "Legacy accounts disabled on the Staff page with audit rows (comments 19/10 14:12, 22/10 04:59)",
+   "Booking JWT role line delivered by AA-680 (Done 20/10)",
+   "Reconcile drift 1 -> 0 (CIS #1063, comment 27/10 09:19)"
+  ],
+  "remaining": [
+   "A10/A10a/A10b E2E exception removal — at end of project code (tech lead S246); parked branches (backlog row 0q, migration 252 needs renumber)",
+   "'Disabled user cannot log in': no explicit live sign-in attempt by a disabled Cognito-linked account found in comments/audits (only UI status 'sign-in is blocked' and design notes in S242 reader-maps.md)"
+  ],
+  "evidence": [
+   "Linear comments 18/10-27/10 (12 comments)",
+   "docs/audits/2026-10-19-S244-aa816-cutover/",
+   "docs/backlog/README.md rows 0n and 4"
+  ],
+  "next_steps": [
+   "Optional S261 (S): disable a Cognito-linked test staff account, attempt managed-login sign-in -> refused, re-enable; record evidence",
+   "Close as Done-with-scope (restated S243 Done-when met)",
+   "Move A10/A10a/A10b to AA-911 (end-of-project identity clean-up) instead of keeping AA-816 open"
+  ],
+  "proposal": "Done-with-scope now (after optional disabled-sign-in check); A10/A10b leftovers go to AA-911 in Backlog.",
+  "verify": null
+ },
+ {
+  "id": "AA-994",
+  "title": "[UI] One design system for the staff and partner apps: kit coverage, conformance guards, every page migrated",
+  "category": "RESCOPE",
+  "done_when_summary": "ADR merged + shared tokens in all 5 apps; kit reference page in each staff/partner app; guards in CI in 4 repos green and a planted violation fails each; 0 pages outside kit frame/header (guard-proven); visual job green on every page (no overflow at 390, 0 console errors, screenshots as artifacts).",
+  "met": [
+   "ADR 0016 merged (root #277, S252); canonical tokens in CIS core (CIS #1071, S253) and TripPlanner on the tokens profile (TP #189, S258); Booking and Partner vendor the core (Booking #145, Partner #102)",
+   "KitGallery is in the vendored core of CIS frontend, Partner portal + web and Booking frontend (origin/main)",
+   "Kit lint at error level in all four staff/partner repos (CIS #1078, Partner #108 with red/green runs 40651211722 / 40651704926, Booking S4b #145); kit sync bot live (CIS #1133, first sync PRs merged)",
+   "Booking migration done: suppressions 4 left, all no-hex-colour (S6d, Booking #156/#158, layout-mock 282/282)"
+  ],
+  "remaining": [
+   "S6b CIS admin migration: frontend/eslint-suppressions.json on main still has 659 entries in 73 files (no-raw-form-control 239, no-raw-aa-var 158, no-hand-styled-button 137, no-raw-table 45, no-legacy-kit 10); adminUi.tsx still exists",
+   "S6c Partner: portal 182 suppressions (no-legacy-kit 39, no-raw-main 3; portal/_components/ui.tsx still exists), CRM web 111 (no-raw-main 5, no-raw-table 8, no-raw-dialog 3)",
+   "S6e ShellFrame in core: not started (no Shell file in CIS _kit/core)",
+   "S1d / S2c visual jobs: no visual workflow in CIS, Partner or Booking (only TripPlanner .github/workflows/visual.yml, S5b)",
+   "S6f close-out (empty suppressions, gallery visual job + Kit consumers required) and H3 branch protection (tech lead login)",
+   "'0 pages outside the kit frame' not guard-proven yet (no-raw-main suppressions remain in Partner)"
+  ],
+  "evidence": [
+   "Linear comments S252-S260 on AA-994 (S260: CIS #1177 539fc587, Booking #158 048c4981, CIS #1183 14c63eb9; evidence docs/audits/2026-10-30-S260-evidence/ 01-*, 02-*)",
+   "Suppression counts read from origin/main eslint-suppressions.json in apps/AA-CIS-App, AA-Partner (portal, web), AA-Booking, AA-TripPlanner-Web on 30/10",
+   "docs/audits/2026-10-27-S252-aa994-design-system/plan.md rows S1d, S2c, S6a-S6f, H3"
+  ],
+  "next_steps": [
+   "Propose Done-with-scope: 'Phases 1-5 shipped: ADR 0016, canonical kit core + tokens in all 5 apps, kit lint at error in 4 repos, kit sync bot, KitGallery everywhere, Booking fully migrated (S6d), CIS S6a + S6b PR1/PR2.' Close AA-994 with that scope after the tech lead agrees",
+   "Follow-up 1: [UI] CIS admin pages on the kit (S6b rest) - drive CIS suppressions 659 -> 0 and delete adminUi.tsx (~4 PRs by area)",
+   "Follow-up 2: [UI] Partner portal + CRM web on the kit (S6c) - delete portal ui.tsx, portal 182 + web 111 suppressions -> 0",
+   "Follow-up 3: [UI] Shared ShellFrame in kit core (S6e) - CIS, Booking, Portal, CRM shells become configurations",
+   "Follow-up 4: [UI] Visual job for CIS, portal and CRM web (S1d + S2c) - 1440/390 light/dark, overflow + console assertions, artifacts (risky workflow PR, review first)",
+   "Follow-up 5: [UI] Kit close-out + required checks (S6f + H3) - empty suppressions, Kit provenance/visual required; H3 needs the tech lead's login",
+   "Note for AA-855: its round-1 gate 'AA-994 page migration done' should then point at follow-ups 1+2"
+  ],
+  "size": "XL (remaining ~15 agent days across the follow-ups)",
+  "proposal": "Close AA-994 as Done-with-scope (phases 1-5 + Booking S6d + CIS S6a/S6b PR1-2) and split the page migration, shell, visual job and close-out into 4-5 deliverable-sized issues (ask the tech lead before creating them; Linear Free quota).",
+  "verify": null
+ },
+ {
+  "id": "AA-997",
+  "title": "[Places] Geocode accuracy: coordinates from the geocoder only, route-coherence guard, pre-filter non-places",
+  "category": "FINISH",
+  "done_when_summary": "Fresh blind sample (>=200 resolved names, split by provenance) >= 90% correct; unresolved names reduced by the pre-filter with before/after counts; geocoder spend within free tier.",
+  "met": [
+   "Geocoder spend within the free tier: every dry run and apply so far $0 on the 1,500/day Geoapify credit (comments S255-S260)",
+   "System fixes 1-6 shipped and live: CIS #1092 (geocoder-only, route guard, non-place pre-filter, HK/MO), #1139 / #1147 (v2, aa997.3), #1178 (hide_flagged), readers hide suspect points (CIS #1185, Booking #160, TP #195)"
+  ],
+  "remaining": [
+   "Accuracy gate FAIL: 78.4% +-4.0 on the S254 600-row sample (projection ~80% after the chain); served pins 80.6%, 86.6% if hide_flagged, 88.7% with non_place - all below 90%",
+   "The gate sample is the S254 labelled sample, not a 'fresh blind sample split by provenance' as Done-when asks - no fresh sample exists yet",
+   "No explicit before/after count of unresolved names (S254: 1,621 unresolved) after the pre-filter found in the evidence",
+   "Last chain job dac718c6 (1,005 rows) runs 31/10 00:12Z, may spill into 01/11",
+   "hide_flagged confirm is a tech-lead decision (1,015 tour-linked pins disappear from maps)",
+   "Item 7 (hand pins, alias table) not started; LLM-assisted adjudication for llm_point rows blocked (no LLM until ~04-06/11)"
+  ],
+  "evidence": [
+   "docs/audits/2026-10-30-S260-aa997-interim/README.md sections 1, 3, 5, 7 (GATE flag-strat 78.4% FAIL, served 80.6 -> 86.6 -> 88.7)",
+   "Linear comment S260 (CIS #1178 b1dbfca0, report job 31b5617a = 2,017 rows, confirm 409 while dac718c6 queued)",
+   "docs/backlog/README.md row 0t and 'Time-gated checks' line 30"
+  ],
+  "next_steps": [
+   "S261 start: check dac718c6 and any follow-on job; when no place_relocate apply is open and left_for_chain ~0, re-run audit_relocated.py + recheck_14.py (RUNBOOK.md, $0, ECS exec read-only)",
+   "Run relocate recheck dry run on the 1,197 aa997.1 rows (strategy v2, aa997.3), then apply on the daily credit - the only lever that moves the gate number (README section 7 item 3); read the 6 'regressed' rows first",
+   "Produce the unresolved-names before/after table (pending/unknown/non_place counts vs S254 1,621) from the DB, read-only",
+   "Fresh blind sample >=200 resolved names split by provenance (new draw, label with agent panel), to satisfy the Done-when literally",
+   "Bring the hide_flagged decision (new report <6 h, 25 samples) to the tech lead on a decision page; confirm only on yes",
+   "If the gate stays < 90% after the recheck: propose Done-with-scope on served-pin accuracy (target ~88-89% with hide + non_place) and a follow-up '[Places] Reach 90%: LLM-assisted adjudication of llm_point rows + alias table + hand pins' (blocked on LLM, item 7)"
+  ],
+  "size": "M (chain wait + recheck apply ~1-2 days of free credit; audits $0)",
+  "proposal": "Finish the $0 remainder in S261 (re-audit, recheck aa997.1 rows, fresh sample, unresolved counts). If 90% is still out of reach, Done-with-scope on 'system fixes 1-6 + served-pin accuracy measured' and split the LLM-dependent adjudication + content pins (item 7) into a follow-up parked in Backlog until acc3 is back.",
+  "verify": null
+ },
+ {
+  "id": "AA-990",
+  "title": "[S1 propagation] Trip building and readers on S1 v2 data - TripPlanner parity, saved trips, CRM catalog cache, Booking proposals, SEO context",
+  "category": "FINISH",
+  "done_when_summary": "Parity report with 1440/390 screenshots, 0 broken trips, 0 5xx; saved-trip mapping proven with a pre-rewrite trip; CRM, Booking and tenant checks each with live evidence in a comment; 0 expired SEO contexts for active tours.",
+  "met": [
+   "Parity report docs/audits/2026-10-26-S252-aa990-parity/ (43 tours, 14 countries = every country in the planner list, 0 5xx/4xx, 0 console errors, screenshots 1440/390) plus N4 re-read 137/137 200 (docs/audits/2026-10-27-S253-aa990-n4/)",
+   "Saved-trip mapping: migration 285 component_redirect + TP #154, 6-pin backfill applied 26/10 (run 40258487387) - comments S252",
+   "Tenant check: master_newer live on /v1/tours/my-versions (2 of 16 true, CIS #1042 + Partner #89); atom_replaced portal screenshots 1440/390 light/dark in docs/audits/2026-10-27-S254-aa990-close/",
+   "CRM cache 892/892 via Infra aa990_reader_checks.py (comment 26/10)",
+   "0 expired SEO contexts (expires_at aligned, comment S252 item 6)"
+  ],
+  "remaining": [
+   "Booking: 'proposal read-back shows the new published text' - no live evidence found (S252 comment lists 'Booking trip-plan text check' as left; not found later)",
+   "CRM: 'an AA line quote on a rewritten tour works' - AA-947 is Done but no comment on AA-990 proves the quote on a rewritten tour",
+   "Portal screenshot of the master_newer badge pending (S252: portal domain served an old Vercel copy; AA-979 cutover since)",
+   "recheck_14 (N1): interim routes 13/16, all-confirmed 0/16; waits for the AA-997 chain (31/10) and fixes of the 16 tours' places (35 unlinked names)",
+   "Narrate/compose parity was explicitly excluded in the $0 sample (guards blocked narrate/compose) - needs LLM, blocked",
+   "256f07bd day-coverage look (S253 left item)"
+  ],
+  "evidence": [
+   "Linear comments on AA-990 (S251-S255), docs/audits/2026-10-26-S252-aa990-parity/README.md, docs/audits/2026-10-27-S253-aa990-n4/, docs/audits/2026-10-27-S254-aa990-close/ (atom-replaced shots, 256f07bd-day-check.txt)",
+   "docs/audits/2026-10-30-S260-aa997-interim/README.md section 4 (recheck_14 13/16, 0/16, 65 unconfirmed places by next step)",
+   "docs/backlog/README.md row 0i"
+  ],
+  "next_steps": [
+   "Booking: open a trip case proposal on a rewritten tour (Dev, E2E staff) and screenshot the read-back text vs v_tour; post as a comment",
+   "CRM: build an AA line quote on a rewritten tour in CRM web (E2E agency) and comment with the result",
+   "Portal: screenshot the master_newer badge on portal.lumiguides.it.com (atlas-hearth versions)",
+   "After AA-997 chain + recheck: fix the 16 tours' places (relocate recheck for 10 aa997.1 rows, mapbox 6, admin review 7, split 'A to B' legs for the 35 unlinked), re-run recheck_14; close N1 for route=Y and all_confirmed=Y tours",
+   "Propose Done-with-scope excluding narrate/compose parity (LLM) - move that check into the post-LLM regression list or AA-855 dry runs"
+  ],
+  "size": "M",
+  "depends_on": [
+   "AA-997"
+  ],
+  "proposal": "Most Done-when items are met with evidence; finish the Booking/CRM/portal live comments ($0) in S261 and recheck_14 after the AA-997 chain. Close with scope 'narration parity deferred until an LLM path exists' rather than holding the issue open for the acc3 unblock.",
+  "verify": null
+ },
+ {
+  "id": "AA-855",
+  "title": "[UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, TripPlanner, AA-Booking",
+  "category": "BLOCKED",
+  "done_when_summary": "One recorded video per scenario for all 4 surfaces, stored and linked; every scenario pass/fail with timestamps and each fail owned by an issue; tech lead (and business owner if wanted) watched and signed off, recorded on the issue.",
+  "met": [
+   "Plan + scenario catalogue + design-audit plan: docs/audits/2026-10-30-S260-uat-video-plan/ (EN + .vi.md)",
+   "Pilot recordings PORTAL-PUB-01 6/6 and TP-PUB-01 v1/v2 7/7 PASS with free local TTS (comment S260)",
+   "Pipeline already moved to the root repo tools/uat/ (record.cjs, overlay, tts.py, build.py, run.sh, 2 scenarios, own-voice guide) via root #389"
+  ],
+  "remaining": [
+   "Official round 1 gated by the tech lead decision (comment 30/10 09:05): AA-994 page migration done, an LLM path back (acc3 ~04-06/11), Dev-only UAT write permission for the E2E CIS admin merged",
+   "~58 of ~60 scenarios not written/recorded; no per-app index docs/audits/<date>-S<nnn>-uat/<app>.md",
+   "No sign-off possible before round 1"
+  ],
+  "evidence": [
+   "Linear comments S260 (plan + pilot; tech lead recording order)",
+   "docs/audits/2026-10-30-S260-uat-video-plan/README.md sections 4 and timeline (S261-S263)",
+   "git ls-tree origin/master tools/uat (root repo)"
+  ],
+  "blocker": "Tech-lead gate for round 1: AA-994 page migration (XL, see AA-994 rescope), LLM path on acc3 (AWS case, ~04-06/11), and the Dev-only UAT write permission (risky auth PR). Sign-off needs the tech lead after round 1.",
+  "next_steps": [
+   "Move AA-855 back to Backlog (or Todo) with the three round-1 gates written in the description",
+   "Do the unblocked part as its own slice: propose follow-up '[UAT] Dry-run scenario harness: fast mode + sign-in setup per identity + ~20 public/read-only scenarios run every session as regression' (S261 plan row) - or run it under AA-855 while it sits in Todo",
+   "Propose follow-up '[Auth] Dev-only UAT write permission for the E2E CIS admin' as a reviewed auth PR (one of the three gates)",
+   "Re-point the gate 'AA-994 page migration done' to the AA-994 follow-up issues for CIS admin and Partner pages"
+  ],
+  "size": "L (round 1 ~45 recordable scenarios over S261-S263)",
+  "depends_on": [
+   "AA-994"
+  ],
+  "proposal": "Back to Backlog with the gates recorded; the dry-run harness and the UAT write-permission PR are the doable parts and should be tracked as separate slices so AA-855 does not sit In Progress for weeks.",
+  "verify": null
+ },
+ {
+  "id": "AA-820",
+  "title": "[Legal] Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2026) + legal confirmations on AI-content attribution",
+  "category": "BLOCKED",
+  "done_when_summary": "Clause added to the tenant Terms/contract template (document link), legal confirmations recorded, existing tenants notified (date), Booking CONTEXT updated.",
+  "met": [
+   "Booking CONTEXT updated with the high-risk AI boundary: AA-Booking #19 f503cbb (comment 16/10)",
+   "Draft clause v0.2 docs/legal/tenant-terms-ai-clause-draft.md (root #72, #74, #240) with live AUP wording re-read 24/10",
+   "Portal /terms section 3 'AI-generated content and acceptable use' live (CIS #981 32ca42d7, Draft v0.2; live 200 on portal.lumiguides.it.com/terms, comment S250)"
+  ],
+  "remaining": [
+   "Business owner picks option A/B/C (readiness packet section 12) and decides whether counsel reviews",
+   "Legal confirmations (a) T2/T9 without AI label, (b) TripPlanner badge sufficiency, (c) local AI-labelling law - need counsel or business-owner acceptance",
+   "Clause into the final tenant contract template / partner agreement Schedule (after the decision)",
+   "Notify existing tenants: there are no real or paying tenants today (S250 comment) - record 'none to notify, Schedule accepted at onboarding' with the date"
+  ],
+  "evidence": [
+   "Linear comments on AA-820 (S237, 16/10, S250)",
+   "docs/audits/2026-10-30-S260-legal-readiness/README.md (topic 12 decision needed by 2026-11-11)",
+   "docs/backlog/README.md row 16 and 'Waiting on Ms. Thư' line 56"
+  ],
+  "blocker": "Business owner decision (option A/B/C + whether counsel is involved) with a hard date: decision by 11/11/2026, policy effective 12/11/2026.",
+  "next_steps": [
+   "Move back to Todo (keep the 11/11 due date visible; set dueDate 2026-11-11 if not set) with the blocker 'business owner picks A/B/C + counsel call'",
+   "Make sure the S260 legal-readiness page (topic 12) reached the business owner via the session-end Jira draft; no new chasing beyond that (memory: tech focus, business to the owner)",
+   "When the decision comes: finalise the Schedule text from the draft, bump LEGAL_VERSION, record confirmations and 'no existing tenants to notify' on the issue, then close (S)"
+  ],
+  "size": "S after the decision",
+  "proposal": "Not doable by engineering in S261; move out of In Progress to Todo with the dated business-owner blocker. Engineering slices (Booking CONTEXT, draft v0.2, portal /terms section 3) are already shipped.",
+  "verify": null
+ }
+]
