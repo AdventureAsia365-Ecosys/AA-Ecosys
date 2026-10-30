@@ -26,10 +26,11 @@ AA-933) the first tables, and the slices after it the rest (78 tables and 6 view
 redrawn for crm-024, AA-952, 30/10/2026: `invoice`, `invoice_line`, `invoice_sequence`, `payment`, `refund_request`
 and `payment_provider_account` match the migration once it is applied; the agreements part of group E redrawn for
 crm-025, AA-955, 30/10/2026: `agreement_doc`, `terms_acceptance`, `signature_request` and `signature_event` match the
-migration once it is applied):
+migration once it is applied; group J redrawn for crm-026, AA-967, 30/10/2026: `export_job` and `data_request` match
+the migration once it is applied):
 
 - On this page, not live: `ai_draft`, `calendar_connection`, `campaign`, `campaign_recipient`, `commission`,
-  `export_job`, `incident_flag`, `insight_aggregate`, `insight_fact`, `metric_daily`, `ops_release`,
+  `incident_flag`, `insight_aggregate`, `insight_fact`, `metric_daily`, `ops_release`,
   `outbox`, `release_note`, `spend_budget`,
   `supplier_manifest_export`, `support_grant`, `support_session`, `tag`, `tag_link`,
   `traveler_flight`, `trip_stage_transition`, `unsubscribe_token`, `voice_profile`, `workflow_rule`, `workflow_run`,
@@ -899,7 +900,20 @@ erDiagram
     export_job {
         uuid export_job_id PK
         uuid tenant_id FK
-        uuid confirmed_by FK
+        uuid data_request_id FK
+        text scope "tenant | traveler"
+        uuid subject_id "no FK: outlives the erasure"
+        text status
+        text content_sha256
+    }
+    data_request {
+        uuid data_request_id PK
+        uuid tenant_id FK
+        uuid erasure_request_id FK
+        text kind
+        uuid traveler_id "no FK: outlives the erasure"
+        date due_on
+        text status
     }
     job {
         uuid id PK "ADR 0003a template"
@@ -915,13 +929,17 @@ erDiagram
         uuid release_note_id PK
     }
     member |o--o{ erasure_request : "confirmed_by"
-    member |o--o{ export_job : "confirmed_by"
+    data_request |o--o{ export_job : "data_request_id"
+    erasure_request |o--o{ data_request : "erasure_request_id"
     job |o--o{ job : "parent_job_id"
 ```
 
 `job`, `outbox` and `inbox_events` follow the ADR 0003a and contracts templates (`id` keys, ids-only payloads,
 `inbox_events` unique on `(source, contract, idempotency_key)`); `crm.job` has no RLS. `audit_event` is partitioned
-by month, so its primary key includes `at`. `release_note` is platform data without `tenant_id`.
+by month, so its primary key includes `at`. `release_note` is platform data without `tenant_id`. `export_job` (one
+portability ZIP of the agency or of one client, AA-967 crm-026) and `data_request` (the agency's data-request log)
+hold ids, codes, hashes and dates only and stay with the erasure receipts at offboarding (keep list of
+`crm.erase_subject`).
 
 ### Platform: AA content cache (crm-022, AA-951)
 
