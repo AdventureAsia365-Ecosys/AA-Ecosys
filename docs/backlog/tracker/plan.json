@@ -1495,9 +1495,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "C-M3",
-   "session": "S260",
+   "session": "S261",
    "size": "L",
-   "next": "L6 · W5 · S259 lát 1 = bước confirm của C-M3: Booking #155 5f2b3203 + root #363 + Partner #128 c572c6e; proof live 16/16 PASS (Booking confirm cả bộ dưới 1 booking, chuyến giữ Booked) → C-M3 đạt. Tiếp: lát kế tiếp (hoá đơn / thanh toán)",
+   "next": "L6 · kế hoạch lại S260 · W5 · S259 lát 1 confirm (C-M3); S260 lát 2 hoá đơn (Partner #130/#131, crm-024) + lát 3 thanh toán / hoàn tiền (#132), proof live PASS. S261: lát 4 = chuyển khoản `payment_claimed` → gia hạn hold → task kiểm, nhắc hạn, `paid_unfulfillable`. Stripe Connect (lát 5) chỉ khi tech lead có tài khoản Stripe test-mode (B4 a); không chặn các issue khác",
    "needs": ""
   },
   {
@@ -1507,9 +1507,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S261",
    "size": "L",
-   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-946, AA-952",
+   "next": "L6 · kế hoạch lại S260 · W5 · S261 #1 CRM: portal theo từng người (kèm trang thanh toán C-10 của khách). Phụ thuộc đã đủ: AA-946 Done, AA-952 lát 1–3 live S260. Mở đường cho AA-954, AA-956, AA-959",
    "needs": ""
   },
   {
@@ -1519,9 +1519,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S262",
    "size": "M",
-   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-953",
+   "next": "L6 · kế hoạch lại S260 · W5 · S262: PWA offline (lịch trình offline cho khách). Chặn bởi AA-953 (S261)",
    "needs": ""
   },
   {
@@ -1531,9 +1531,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S260",
    "size": "M",
-   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-946",
+   "next": "L6 · W5 · Done-candidate S260 (đã verify live): e-sign v1 — root #376, Partner #135 (crm-025) + #136, Infra #525/#526, crm-api :83; proof live PASS (guardian ký thay, sai mã 422, sửa hash 409, seal.verified=true). Chưa làm: PDF PAdES (v1.1, thêm cạnh phong bì văn bản, không di chuyển dữ liệu) — điều phối chốt trạng thái cuối",
    "needs": ""
   },
   {
@@ -1543,9 +1543,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S262",
    "size": "M",
-   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-953, AA-975",
+   "next": "L6 · kế hoạch lại S260 · W5 · S262: ops release (Module 8). Chặn bởi AA-953 (S261); AA-975 Done",
    "needs": ""
   },
   {
@@ -1555,9 +1555,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S263",
    "size": "M",
-   "next": "L6 · W5, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-952, AA-956, AA-974",
+   "next": "L6 · kế hoạch lại S260 · W5 · S263: hoa hồng + huỷ chuyến. Chặn bởi AA-956 (S262); AA-952 lát 1–3 live, AA-974 Done",
    "needs": ""
   },
   {
@@ -1567,9 +1567,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S262",
    "size": "L",
-   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-930, AA-945",
+   "next": "L6 · kế hoạch lại S260 · W6 · S262: WhatsApp + SMS (Twilio của đại lý, BYO). Phụ thuộc đã đủ: AA-930 Done (ISV giải bằng BYO), AA-945 phần Gmail live (M365 không cần cho module này). Proof live cần 1 tài khoản Twilio trial miễn phí (tech lead đăng ký). Mở đường cho AA-959, AA-964 và nháp WhatsApp sự cố của AA-961",
    "needs": ""
   },
   {
@@ -1579,9 +1579,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S263",
    "size": "L",
-   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-943, AA-953, AA-958",
+   "next": "L6 · kế hoạch lại S260 · W6 · S263: engine workflow + task (Module 10). Chặn bởi AA-953 (S261), AA-958 (S262); AA-943 Done",
    "needs": ""
   },
   {
@@ -1591,9 +1591,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S263",
    "size": "M",
-   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-959, AA-976",
+   "next": "L6 · kế hoạch lại S260 · W6 · S263 (sau AA-959, cùng phiên, PR nối tiếp): tag, system tag, coverage, ready-to-travel. Chặn bởi AA-959; AA-976 Done",
    "needs": ""
   },
   {
@@ -1603,9 +1603,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S260",
    "size": "M",
-   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-945, AA-975",
+   "next": "L6 · W6 · đang merge S260: duty of care + lịch — root #385 → Partner #139 (crm-027) → bot copy → DB Migrate → Infra #533 → #140 code (feed ICS mỗi thành viên). Phần còn lại: nháp WhatsApp khi có sự cố → cùng AA-958; đồng bộ lịch OAuth (Google / Graph qua tài khoản của đại lý) để sau, Graph cần app M365 của AA-945 — điều phối chốt trạng thái cuối",
    "needs": ""
   },
   {
@@ -1615,9 +1615,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S261",
    "size": "L",
-   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-939, AA-945",
+   "next": "L6 · kế hoạch lại S260 · W6 · S261: onboarding + import. Phụ thuộc đã đủ: AA-939 Done, AA-945 phần Gmail live (import qua M365 thêm khi có app M365, không chặn)",
    "needs": ""
   },
   {
@@ -1627,9 +1627,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S264",
    "size": "M",
-   "next": "L6 · W6, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-947, AA-959, AA-977",
+   "next": "L6 · kế hoạch lại S260 · W6 · S264: search + thư viện. Chặn bởi AA-959 (S263); AA-947, AA-977 Done",
    "needs": ""
   },
   {
@@ -1639,9 +1639,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S264",
    "size": "L",
-   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-938, AA-940, AA-945, AA-949, AA-958",
+   "next": "L6 · kế hoạch lại S260 · W7 · S264 (có điều kiện): AI gateway CRM + nháp + guardrails. Chặn bởi AA-958 (S262); AA-938/940/949 Done, AA-945 phần Gmail đủ. Cần đường LLM: acc3 Bedrock Error 002, case AWS chờ mở ~04–06/11; cần MFA role acc3. Chưa có LLM → làm phần $0 (bộ lọc PII F3, ngân sách, tắt mặc định) và để proof live tới khi acc3 mở",
    "needs": "MFA (acc3 role)"
   },
   {
@@ -1651,9 +1651,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S265",
    "size": "L",
-   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-964",
+   "next": "L6 · kế hoạch lại S260 · W7 · S265: AI xác nhận supplier, ghi chú → phương án, giọng. Chặn bởi AA-964 + đường LLM (chạy thử ~3 rồi ≤50)",
    "needs": ""
   },
   {
@@ -1663,9 +1663,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S261",
    "size": "M",
-   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-950, AA-952",
+   "next": "L6 · kế hoạch lại S260 · W7 · S261 (kéo lên): báo cáo + insight. Phụ thuộc đã đủ: AA-950 Done, AA-952 hoá đơn / thanh toán live S260",
    "needs": ""
   },
   {
@@ -1675,9 +1675,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S260",
    "size": "M",
-   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-941, AA-942",
+   "next": "L6 · W7 · Done-candidate S260 (đã verify live): portability + xoá — root #380, Partner #137 (crm-026) + #138 7e9d8db0; proof live PASS (export 24/24, link dùng 1 lần, SHA khớp, erasure dry run) — điều phối chốt trạng thái cuối",
    "needs": ""
   },
   {
@@ -1687,9 +1687,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S264",
    "size": "M",
-   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-945, AA-959, AA-977",
+   "next": "L6 · kế hoạch lại S260 · W7 · S264: campaign (R14). Chặn bởi AA-959 (S263); AA-977 Done, AA-945 phần Gmail đủ để gửi",
    "needs": ""
   },
   {
@@ -1699,9 +1699,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "M5",
-   "session": "≥S263",
+   "session": "S265",
    "size": "L",
-   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-954, AA-955, AA-957, AA-960, AA-961, AA-962, AA-963, AA-965, AA-966, AA-967, AA-968, AA-971, AA-979",
+   "next": "L6 · kế hoạch lại S260 · W7 · S265–S266: security review, SLO, load test có giới hạn — sau khi mọi module W5–W7 lên Dev. Chặn bởi AA-954, AA-957, AA-960, AA-962, AA-963, AA-965, AA-966, AA-968, AA-971 (AA-955, AA-961, AA-967, AA-979 xong / đang chốt S260). AA-965 trễ vì LLM → review phần còn lại trước, AI review riêng sau",
    "needs": ""
   },
   {
@@ -1711,9 +1711,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "M5",
-   "session": "≥S263",
+   "session": "S266",
    "size": "M",
-   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-969",
+   "next": "L6 · kế hoạch lại S260 · W7 · S266: release train, help, trang data (sub-processor). Chặn bởi AA-969",
    "needs": ""
   },
   {
@@ -1723,9 +1723,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "≥S263",
+   "session": "S262",
    "size": "L",
-   "next": "L6 · W7, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-939, AA-940, AA-941",
+   "next": "L6 · kế hoạch lại S260 · W7 · S262 (kéo lên, gộp cửa sổ MFA): AA support L2 + break-glass L3. Phụ thuộc đã đủ: AA-939/940/941 Done. Cần MFA; người nhận cảnh báo thứ hai do chủ doanh nghiệp đặt tên — build với giá trị cấu hình (hộp thư E2E tạm), tên thật trước AA-980",
    "needs": "MFA; Ms. Thư names the second alarm recipient"
   },
   {
@@ -1735,9 +1735,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "M5",
-   "session": "≥S263",
+   "session": "≥S267",
    "size": "L",
-   "next": "L6 · W8, not slotted before S260: re-plan at S260 from the real pace; blocked by AA-969, AA-970, AA-971, AA-979, AA-880, AA-873, AA-874",
+   "next": "L6 · kế hoạch lại S260 · W8 · Go-real: mở khi chủ doanh nghiệp chọn đại lý thật đầu tiên. Chặn bởi AA-969, AA-970 (S265–S266), AA-971 (S262), AA-880 (ngày go-live + blueprint prod), AA-873, AA-874; tài khoản prod theo AA-1004 (chờ quyết billing); AA-979 Done",
    "needs": ""
   },
   {

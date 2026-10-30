@@ -209,6 +209,36 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | C22 | AA-945 | CRM-17 Module 5 email | L6 | L | W3 · **In Progress**: forward-in live; S252 Gmail send-as live, R2 pass, history import UI, `crm_mail_health` OK; Microsoft 365 left (§2, §3 row 0l), blocked on the M365 app | M365 app |
 | C25 | AA-948 | CRM-20 Builder map fork (enhancement) | L6 | M | W4 · S259: blocked (needs the T13 issue + Mapbox), left for later. Enhancement, does not block C-M3; needs T13 (no issue yet) + AA-906 + 6d; AA-935 Done S249, AA-906 Done S248, AA-847 Done S247 | — |
 
+### Kế hoạch CRM W5–W8 sau S260
+
+Re-plan made at the S260 close from the real pace: S259 shipped one CRM slice, S260 shipped four CRM modules in one session with parallel lanes (≤ 3 lanes; AA-952 slices 2 + 3 crm-024, AA-955 crm-025, AA-967 crm-026, AA-961 crm-027). The plan assumes about 3–4 CRM issues per session next to the other lanes, stacked PRs where one issue opens the next. Every Lane B and W0–W4 blocker is Done (AA-972…AA-977, AA-930, AA-938…AA-943, AA-946, AA-947, AA-949, AA-950, AA-979), so only W5–W8 issues still block each other. AA-945 (M365 still open) no longer blocks AA-958, AA-962, AA-964 or AA-968: they use the Gmail path that is live; only the Microsoft 365 parts wait for the M365 app. The first session on or after 01/11 also carries AA-896 + C8 (monthly cost), so S261 or S262 has less CRM room. `plan.json` `session` / `next` match this table.
+
+| Slot | Issue | Work | Dependencies after S260 | Tech-lead / business-owner input |
+|---|---|---|---|---|
+| S260 | AA-955 | CRM-25 e-sign v1 | — | **Done candidate** (verified live); PAdES PDF is a v1.1 follow-up |
+| S260 | AA-967 | CRM-35 portability + deletion | — | **Done candidate** (verified live) |
+| S260 | AA-961 | CRM-30 duty of care + calendar (ICS feed) | — | **Merging S260**; incident WhatsApp draft moves with AA-958; OAuth calendar sync later (Graph needs the M365 app) |
+| S261 | AA-952 | CRM-23 slice 4: bank-transfer `payment_claimed` → hold extend → verify task, reminders, `paid_unfulfillable` | slices 1–3 live | Stripe Connect slice only with a Stripe test-mode platform account (tech lead); does not block others |
+| S261 | AA-953 | CRM-24a client portal per person (+ client payments page C-10) | satisfied (AA-946 Done, AA-952 slices 1–3 live) | — |
+| S261 | AA-966 | CRM-34 reports + insights (pulled ahead) | satisfied (AA-950 Done, invoices/payments live) | — |
+| S261 | AA-962 | CRM-31 onboarding + import | satisfied (AA-939 Done, Gmail path live) | M365 import waits for the M365 app (AA-945), not blocking |
+| S262 | AA-954 | CRM-24b offline PWA | AA-953 (S261) | — |
+| S262 | AA-956 | CRM-26 ops release | AA-953 (S261) | — |
+| S262 | AA-958 | CRM-28 WhatsApp + SMS (agency's own Twilio) | satisfied (AA-930 Done, Gmail path of AA-945 live) | A free Twilio trial account for the live proof (tech lead) |
+| S262 | AA-971 | CRM-13b AA support L2 + break-glass L3 (pulled ahead) | satisfied (AA-939/940/941 Done) | MFA window; **second alarm recipient** named by the business owner (built as a setting, E2E mailbox until then; real name before AA-980) |
+| S263 | AA-957 | CRM-27 commission + cancel trip | AA-956 (S262) | — |
+| S263 | AA-959 | CRM-29a workflow engine + tasks | AA-953 (S261), AA-958 (S262) | — |
+| S263 | AA-960 | CRM-29b tags, coverage, ready-to-travel | AA-959 (same session, stacked PR) | — |
+| S264 | AA-963 | CRM-32 search + library | AA-959 (S263) | — |
+| S264 | AA-968 | CRM-36 campaigns (R14) | AA-959 (S263) | — |
+| S264 | AA-964 | CRM-33a AI gateway + drafts + guardrails | AA-958 (S262) | **LLM path** (acc3 Bedrock Error 002, AWS case expected ~04–06/11) + MFA for the acc3 role; without it build the $0 parts (F3 PII filter, budget cap, AI off by default), live proof when acc3 opens |
+| S265 | AA-965 | CRM-33b AI supplier confirmations, notes → options, voices | AA-964 + LLM path | LLM path; paid trial ~3, then ≤ 50 |
+| S265–S266 | AA-969 | CRM-37a security review, SLOs, bounded load test | every W5–W7 module on Dev | If AA-965 is late on the LLM path, review the rest first and the AI part after |
+| S266 | AA-970 | CRM-37b release train, help, data page | AA-969 | — |
+| ≥S267 | AA-980 | CRM-38 go-real (W8) | AA-969, AA-970, AA-971, AA-880, AA-873, AA-874 | Business owner names the first real agency; go-live date (AA-880); prod account per AA-1004 (billing decision) |
+
+Outside W5–W8 but still waiting: AA-945 needs the **Microsoft 365 app** (tech lead); AA-948 (W4 enhancement) needs a T13 issue + **Mapbox**. Neither blocks a slot above.
+
 ## 4. Later / parked
 
 | Issue | Work | Milestone | Status / trigger | Needs Nghiệp |
@@ -231,7 +261,7 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-628 | Engagement feedback loop for T-series | parked | parked. Engagement feedback loop — needs real publish volume | Park or cancel |
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5b): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | parked | parked. Asian Trails B2B benchmark (KAN-20) — at B2B design start | Close or keep |
-| AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 AA-952 **In Progress** since S259 (slice 1 = C-M3 confirm, §3 row 0ah); the rest ≥S263: not slotted before S262; re-plan at S262 from the real pace (blocked-by lists in `plan.blocked_by_relations`) | AA-964 and AA-971 need MFA; AA-971 needs Ms. Thư to name the second alarm recipient |
+| AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 AA-952 **In Progress** since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-964 and AA-971 need MFA; AA-971 needs Ms. Thư to name the second alarm recipient |
 
 ## 5. Closed in S259
 
