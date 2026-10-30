@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.1"
+  version: "1.2"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -16,10 +16,14 @@ info:
     ADR 0013 (AA-899) fixes HTTP conventions; the contract name and major do not change with it.
     Minor 1.1 (AA-975, additive): Event types departure.cancelled and departure.incident_cleared, Event.decline_code,
     and the GET /events cursor and delivery rules.
+    Minor 1.2 (AA-952, additive): every Hold answer also carries the quote it holds (price_hash, currency, fx, and
+    each HoldLine's b2b_price), so the CRM writes the agency's AA lines of an accepted proposal (net = b2b_price, the
+    quote's FX lock) and presents the right hash at confirm. Optional in the schema (left out only when Booking cannot
+    read the quote row); never a net cost or a supplier rate.
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-928, AA-972, AA-973, AA-974, AA-975, AA-986]
+  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986]
 servers:
   - url: /booking/b2b/v1
 security:
@@ -615,6 +619,9 @@ components:
       properties:
         line_ref: {type: string, maxLength: 64}
         line_status: {type: string, enum: [available, on_request]}
+        b2b_price:
+          $ref: "#/components/schemas/Money"
+          description: 1.2 (AA-952). The line's price in the held quote.
     Hold:
       type: object
       additionalProperties: false
@@ -632,6 +639,17 @@ components:
         lines:
           type: array
           items: {$ref: "#/components/schemas/HoldLine"}
+        price_hash:
+          type: string
+          pattern: "^[a-f0-9]{64}$"
+          description: 1.2 (AA-952). The held quote's hash; POST /holds/{hold_id}/confirm presents it.
+        currency:
+          type: string
+          pattern: "^[A-Z]{3}$"
+          description: 1.2 (AA-952). The held quote's currency.
+        fx:
+          $ref: "#/components/schemas/FxLock"
+          description: 1.2 (AA-952). The held quote's FX lock, as POST /quotes answered it.
     ExtendRequest:
       type: object
       additionalProperties: false
