@@ -27,10 +27,11 @@ redrawn for crm-024, AA-952, 30/10/2026: `invoice`, `invoice_line`, `invoice_seq
 and `payment_provider_account` match the migration once it is applied; the agreements part of group E redrawn for
 crm-025, AA-955, 30/10/2026: `agreement_doc`, `terms_acceptance`, `signature_request` and `signature_event` match the
 migration once it is applied; group J redrawn for crm-026, AA-967, 30/10/2026: `export_job` and `data_request` match
-the migration once it is applied):
+the migration once it is applied; `incident_flag` (group I) and `calendar_feed` (group G) drawn for crm-027, AA-961,
+30/10/2026, match the migration once it is applied):
 
 - On this page, not live: `ai_draft`, `calendar_connection`, `campaign`, `campaign_recipient`, `commission`,
-  `incident_flag`, `insight_aggregate`, `insight_fact`, `metric_daily`, `ops_release`,
+  `insight_aggregate`, `insight_fact`, `metric_daily`, `ops_release`,
   `outbox`, `release_note`, `spend_budget`,
   `supplier_manifest_export`, `support_grant`, `support_session`, `tag`, `tag_link`,
   `traveler_flight`, `trip_stage_transition`, `unsubscribe_token`, `voice_profile`, `workflow_rule`, `workflow_run`,
@@ -763,6 +764,14 @@ erDiagram
         uuid credential_id FK
         text provider
     }
+    calendar_feed {
+        uuid calendar_feed_id PK
+        uuid tenant_id FK
+        uuid member_id FK
+        bytea token_hash UK "conf:credential"
+        text scope "mine | agency"
+        text status
+    }
     meeting_slot {
         uuid meeting_slot_id PK
         uuid tenant_id FK
@@ -776,7 +785,12 @@ erDiagram
     integration_credential ||--o{ calendar_connection : "credential_id"
     trip |o--o{ meeting_slot : "trip_id"
     calendar_connection |o--o{ meeting_slot : "calendar_connection_id"
+    member ||--o{ calendar_feed : "member_id"
 ```
+
+`calendar_feed` (crm-027, AA-961) is one member's ICS subscription (the R15 fallback of design §5.10: a signed,
+revocable URL; only the token's SHA-256 is stored). `calendar_connection` stays for the bring-your-own Google /
+Microsoft calendar sync (errata S247).
 
 ## H. Automation and AI (M10, M14)
 
@@ -856,7 +870,10 @@ erDiagram
     incident_flag {
         uuid incident_flag_id PK
         uuid tenant_id FK
-        text departure_id
+        text departure_id "Booking's id, no FK"
+        text incident_code "booking.b2b.v1 list"
+        text status "open | cleared"
+        text raised_event_id UK
     }
     insight_fact {
         uuid tenant_id "view for crm_insights"
@@ -873,7 +890,9 @@ erDiagram
     member ||--o{ supplier_manifest_export : "exported_by"
 ```
 
-`insight_fact` is a view (no keys). `insight_aggregate` has **no `tenant_id`**: a cell is published only when
+`incident_flag` (crm-027, AA-961) holds what the Booking event feed reported for one departure (ids, codes, times);
+the affected trips are read at view time through `booking_line.departure_id`, not stored. `insight_fact` is a view
+(no keys). `insight_aggregate` has **no `tenant_id`**: a cell is published only when
 n ≥ 10 travellers and ≥ 3 agencies.
 
 ## J. Audit, deletion and platform (F5, M18)
